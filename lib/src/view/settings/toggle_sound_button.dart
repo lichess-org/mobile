@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
@@ -14,7 +13,7 @@ class ToggleSoundButton extends ConsumerWidget {
       ),
     );
 
-    switch (defaultTargetPlatform) {
+    switch (Theme.of(context).platform) {
       case TargetPlatform.android:
         return IconButton(
           // TODO translate
@@ -38,7 +37,7 @@ class ToggleSoundButton extends ConsumerWidget {
               .toggleSoundEnabled(),
         );
       default:
-        assert(false, 'Unexpected platform $defaultTargetPlatform');
+        assert(false, 'Unexpected platform $Theme.of(context).platform');
         return const SizedBox.shrink();
     }
   }

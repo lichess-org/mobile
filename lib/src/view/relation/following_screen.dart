@@ -1,6 +1,5 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -73,7 +72,7 @@ class _Body extends ConsumerWidget {
             }
             return SafeArea(
               child: ColoredBox(
-                color: defaultTargetPlatform == TargetPlatform.iOS
+                color: Theme.of(context).platform == TargetPlatform.iOS
                     ? CupertinoColors.systemBackground.resolveFrom(context)
                     : Colors.transparent,
                 child: ListView.separated(

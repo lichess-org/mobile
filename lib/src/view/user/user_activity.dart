@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -70,8 +69,8 @@ class UserActivityEntry extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final leadingIconSize =
-        defaultTargetPlatform == TargetPlatform.iOS ? 26.0 : 36.0;
-    final emptySubtitle = defaultTargetPlatform == TargetPlatform.iOS
+    Theme.of(context).platform == TargetPlatform.iOS ? 26.0 : 36.0;
+    final emptySubtitle = Theme.of(context).platform == TargetPlatform.iOS
         ? const SizedBox.shrink()
         : null;
     return Column(

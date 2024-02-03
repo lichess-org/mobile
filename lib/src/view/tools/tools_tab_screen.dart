@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
@@ -72,7 +71,7 @@ class _Body extends StatelessWidget {
       ),
     ];
 
-    return defaultTargetPlatform == TargetPlatform.iOS
+    return Theme.of(context).platform == TargetPlatform.iOS
         ? SliverList(delegate: SliverChildListDelegate(content))
         : ListView(
             controller: puzzlesScrollController,

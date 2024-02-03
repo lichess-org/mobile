@@ -1,6 +1,5 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
@@ -177,7 +176,7 @@ class _ChoiceChip extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: defaultTargetPlatform == TargetPlatform.iOS
+        color: Theme.of(context).platform == TargetPlatform.iOS
             ? CupertinoColors.secondarySystemGroupedBackground
                 .resolveFrom(context)
             : Theme.of(context).colorScheme.surfaceVariant,
@@ -185,7 +184,7 @@ class _ChoiceChip extends StatelessWidget {
         border: selected
             ? Border.fromBorderSide(
                 BorderSide(
-                  color: defaultTargetPlatform == TargetPlatform.iOS
+                  color: Theme.of(context).platform == TargetPlatform.iOS
                       ? CupertinoColors.activeBlue.resolveFrom(context)
                       : Theme.of(context).colorScheme.primary,
                   width: 2.0,
