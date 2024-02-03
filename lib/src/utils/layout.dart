@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/constants.dart';
 
+/// Returns the estimated height of screen left the board
 double estimateRemainingHeightLeftBoard(BuildContext context) {
   final size = MediaQuery.sizeOf(context);
   final padding = MediaQuery.paddingOf(context);
   final safeViewportHeight = size.height - padding.top - padding.bottom;
   final boardSize = size.width;
-  /// Returns the estimated height of screen left the board
   final appBarHeight = Theme.of(context).platform == TargetPlatform.iOS ? 44.0 : 56.0;
   return safeViewportHeight - boardSize - appBarHeight - kBottomBarHeight;
 }
