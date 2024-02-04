@@ -30,13 +30,10 @@ class ClockTile extends ConsumerWidget {
     final themeData = Theme.of(context);
     final state = ref.watch(clockControllerProvider);
 
-    bool isActive() => state.activePlayer == playerType;
-    bool isLoser() => state.loser == playerType;
-
     Color getBackgroundColor() {
-      if (isLoser()) {
+      if (state.isLoser(playerType)) {
         return Colors.redAccent;
-      } else if (isActive()) {
+      } else if (state.isPlayersTurn(playerType)) {
         return themeData.colorScheme.primary;
       } else {
         return Colors.grey;
@@ -52,7 +49,7 @@ class ClockTile extends ConsumerWidget {
       child: Material(
         color: getBackgroundColor(),
         child: InkWell(
-          onTap: isActive() || (state.activePlayer == null && state.loser == null)
+          onTap: state.isPlayersTurnAllowed(playerType)
               ? () {
                   ref.read(clockControllerProvider.notifier).endTurn(playerType);
                 }
@@ -69,7 +66,7 @@ class ClockTile extends ConsumerWidget {
                     lightColorStyle: _lightClock,
                     darkColorStyle: _darkClockStyle,
                     duration: state.getDuration(playerType),
-                    active: isActive(),
+                    active: state.isActivePlayer(playerType),
                     onFlag: () {
                       ref.read(clockControllerProvider.notifier).setLoser(playerType);
                     },
@@ -78,7 +75,7 @@ class ClockTile extends ConsumerWidget {
                     },
                   ),
                   secondChild: const Icon(Icons.flag),
-                  crossFadeState: isLoser() ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+                  crossFadeState: state.isLoser(playerType) ? CrossFadeState.showSecond : CrossFadeState.showFirst,
                 ),
               ),
             ),

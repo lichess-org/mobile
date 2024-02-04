@@ -26,8 +26,9 @@ class ClockState with _$ClockState {
     required ClockOptions options,
     required Duration playerTopTime,
     required Duration playerBottomTime,
-    ClockPlayerType? activePlayer,
+    ClockPlayerType? currentPlayer,
     ClockPlayerType? loser,
+    @Default(false) bool paused,
   }) = _ClockState;
 
   factory ClockState.fromTimeIncrement(TimeIncrement timeIncrement) {
@@ -55,6 +56,15 @@ class ClockState with _$ClockState {
 
   Duration getDuration(ClockPlayerType playerType) =>
       playerType == ClockPlayerType.top ? playerTopTime : playerBottomTime;
+
+  bool isPlayersTurn(ClockPlayerType playerType) =>
+      currentPlayer == playerType || (currentPlayer == null && loser == null);
+
+  bool isPlayersTurnAllowed(ClockPlayerType playerType) => isPlayersTurn(playerType) && !paused;
+
+  bool isActivePlayer(ClockPlayerType playerType) => currentPlayer == playerType && !paused;
+
+  bool isLoser(ClockPlayerType playerType) => loser == playerType;
 }
 
 @riverpod
@@ -69,12 +79,13 @@ class ClockController extends _$ClockController {
   }
 
   void endTurn(ClockPlayerType playerType) {
-    state =
-        state.copyWith(activePlayer: playerType == ClockPlayerType.top ? ClockPlayerType.bottom : ClockPlayerType.top);
+    state = state.copyWith(
+      currentPlayer: playerType == ClockPlayerType.top ? ClockPlayerType.bottom : ClockPlayerType.top,
+    );
   }
 
   void updateDuration(ClockPlayerType playerType, Duration duration) {
-    if (state.loser != null || state.activePlayer == null) return;
+    if (state.loser != null || state.currentPlayer == null || state.paused) return;
 
     if (playerType == ClockPlayerType.top) {
       state = state.copyWith(playerTopTime: duration + state.options.increment);
@@ -83,11 +94,11 @@ class ClockController extends _$ClockController {
     }
   }
 
-  void setLoser(ClockPlayerType playerType) {
-    state = state.copyWith(activePlayer: null, loser: playerType);
-  }
+  void setLoser(ClockPlayerType playerType) => state = state.copyWith(currentPlayer: null, loser: playerType);
 
-  void reset() {
-    state = ClockState.fromOptions(state.options);
-  }
+  void reset() => state = ClockState.fromOptions(state.options);
+
+  void pause() => state = state.copyWith(paused: true);
+
+  void resume() => state = state.copyWith(paused: false);
 }

@@ -11,12 +11,32 @@ class ClockSettings extends ConsumerWidget {
     return Row(
       children: [
         const Expanded(child: SizedBox.shrink()),
+        const _PlayResumeButton(),
         IconButton(
           onPressed: () => controller.reset(),
           icon: const Icon(Icons.repeat),
         ),
         const Expanded(child: SizedBox.shrink()),
       ],
+    );
+  }
+}
+
+class _PlayResumeButton extends ConsumerWidget {
+  const _PlayResumeButton();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final controller = ref.read(clockControllerProvider.notifier);
+    if (ref.watch(clockControllerProvider).paused) {
+      return IconButton(
+        onPressed: () => controller.resume(),
+        icon: const Icon(Icons.play_arrow),
+      );
+    }
+    return IconButton(
+      onPressed: () => controller.pause(),
+      icon: const Icon(Icons.pause),
     );
   }
 }
