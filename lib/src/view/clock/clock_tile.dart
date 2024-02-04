@@ -12,7 +12,7 @@ const _darkClockStyle = ClockStyle(
   emergencyBackgroundColor: Color(0xFF673431),
 );
 
-const _lightClock = ClockStyle(
+const _lightClockStyle = ClockStyle(
   textColor: Colors.white,
   activeTextColor: Colors.black,
   emergencyTextColor: Colors.black,
@@ -23,18 +23,18 @@ const _lightClock = ClockStyle(
 
 class ClockTile extends ConsumerWidget {
   final ClockPlayerType playerType;
+
   const ClockTile({required this.playerType, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeData = Theme.of(context);
     final state = ref.watch(clockControllerProvider);
 
     Color getBackgroundColor() {
       if (state.isLoser(playerType)) {
         return Colors.redAccent;
       } else if (state.isPlayersTurn(playerType)) {
-        return themeData.colorScheme.primary;
+        return Theme.of(context).colorScheme.primary;
       } else {
         return Colors.grey;
       }
@@ -51,7 +51,9 @@ class ClockTile extends ConsumerWidget {
         child: InkWell(
           onTap: state.isPlayersTurnAllowed(playerType)
               ? () {
-                  ref.read(clockControllerProvider.notifier).endTurn(playerType);
+                  ref
+                      .read(clockControllerProvider.notifier)
+                      .endTurn(playerType);
                 }
               : null,
           child: Padding(
@@ -63,19 +65,25 @@ class ClockTile extends ConsumerWidget {
                   duration: const Duration(milliseconds: 300),
                   firstChild: CountdownClock(
                     key: Key('${state.id}-$playerType'),
-                    lightColorStyle: _lightClock,
+                    lightColorStyle: _lightClockStyle,
                     darkColorStyle: _darkClockStyle,
                     duration: state.getDuration(playerType),
                     active: state.isActivePlayer(playerType),
                     onFlag: () {
-                      ref.read(clockControllerProvider.notifier).setLoser(playerType);
+                      ref
+                          .read(clockControllerProvider.notifier)
+                          .setLoser(playerType);
                     },
                     onStop: (remaining) {
-                      ref.read(clockControllerProvider.notifier).updateDuration(playerType, remaining);
+                      ref
+                          .read(clockControllerProvider.notifier)
+                          .updateDuration(playerType, remaining);
                     },
                   ),
                   secondChild: const Icon(Icons.flag),
-                  crossFadeState: state.isLoser(playerType) ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+                  crossFadeState: state.isLoser(playerType)
+                      ? CrossFadeState.showSecond
+                      : CrossFadeState.showFirst,
                 ),
               ),
             ),

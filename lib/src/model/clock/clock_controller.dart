@@ -62,9 +62,11 @@ class ClockState with _$ClockState {
   bool isPlayersTurn(ClockPlayerType playerType) =>
       currentPlayer == playerType || (currentPlayer == null && loser == null);
 
-  bool isPlayersTurnAllowed(ClockPlayerType playerType) => isPlayersTurn(playerType) && !paused;
+  bool isPlayersTurnAllowed(ClockPlayerType playerType) =>
+      isPlayersTurn(playerType) && !paused;
 
-  bool isActivePlayer(ClockPlayerType playerType) => currentPlayer == playerType && !paused;
+  bool isActivePlayer(ClockPlayerType playerType) =>
+      currentPlayer == playerType && !paused;
 
   bool isLoser(ClockPlayerType playerType) => loser == playerType;
 
@@ -83,22 +85,27 @@ class ClockController extends _$ClockController {
 
   void endTurn(ClockPlayerType playerType) {
     state = state.copyWith(
-      currentPlayer: playerType == ClockPlayerType.top ? ClockPlayerType.bottom : ClockPlayerType.top,
+      currentPlayer: playerType == ClockPlayerType.top
+          ? ClockPlayerType.bottom
+          : ClockPlayerType.top,
       turns: state.turns + 1,
     );
   }
 
   void updateDuration(ClockPlayerType playerType, Duration duration) {
-    if (state.loser != null || state.currentPlayer == null || state.paused) return;
+    if (state.loser != null || state.currentPlayer == null || state.paused)
+      return;
 
     if (playerType == ClockPlayerType.top) {
       state = state.copyWith(playerTopTime: duration + state.options.increment);
     } else {
-      state = state.copyWith(playerBottomTime: duration + state.options.increment);
+      state =
+          state.copyWith(playerBottomTime: duration + state.options.increment);
     }
   }
 
-  void setLoser(ClockPlayerType playerType) => state = state.copyWith(currentPlayer: null, loser: playerType);
+  void setLoser(ClockPlayerType playerType) =>
+      state = state.copyWith(currentPlayer: null, loser: playerType);
 
   void reset() => state = ClockState.fromOptions(state.options);
 
