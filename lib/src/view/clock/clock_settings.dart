@@ -45,7 +45,7 @@ class ClockSettings extends ConsumerWidget {
           icon: RotatedBox(
             quarterTurns: 1,
             child: Text(
-              ref.watch(clockControllerProvider).moveCount.toString(),
+              ref.watch(clockControllerProvider.select((value) => value.moveCount)).toString(),
               style: Styles.bold,
             ),
           ),
