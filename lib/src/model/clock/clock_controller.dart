@@ -29,6 +29,7 @@ class ClockState with _$ClockState {
     ClockPlayerType? currentPlayer,
     ClockPlayerType? loser,
     @Default(false) bool paused,
+    @Default(0) int turns,
   }) = _ClockState;
 
   factory ClockState.fromTimeIncrement(TimeIncrement timeIncrement) {
@@ -65,6 +66,8 @@ class ClockState with _$ClockState {
   bool isActivePlayer(ClockPlayerType playerType) => currentPlayer == playerType && !paused;
 
   bool isLoser(ClockPlayerType playerType) => loser == playerType;
+
+  int get moveCount => (turns / 2).floor();
 }
 
 @riverpod
@@ -81,6 +84,7 @@ class ClockController extends _$ClockController {
   void endTurn(ClockPlayerType playerType) {
     state = state.copyWith(
       currentPlayer: playerType == ClockPlayerType.top ? ClockPlayerType.bottom : ClockPlayerType.top,
+      turns: state.turns + 1,
     );
   }
 

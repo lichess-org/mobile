@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/clock/clock_controller.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 
 class ClockSettings extends ConsumerWidget {
   const ClockSettings({super.key});
@@ -19,6 +20,16 @@ class ClockSettings extends ConsumerWidget {
         IconButton(
           onPressed: () => Navigator.of(context).pop(),
           icon: const Icon(Icons.home),
+        ),
+        IconButton(
+          onPressed: null,
+          icon: RotatedBox(
+            quarterTurns: 1,
+            child: Text(
+              ref.watch(clockControllerProvider).moveCount.toString(),
+              style: Styles.bold,
+            ),
+          ),
         ),
         const Expanded(child: SizedBox.shrink()),
       ],
