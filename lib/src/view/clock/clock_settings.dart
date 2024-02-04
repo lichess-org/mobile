@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/clock/clock_controller.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/view/play/time_control_modal.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 
 class ClockSettings extends ConsumerWidget {
   const ClockSettings({super.key});
@@ -16,6 +18,23 @@ class ClockSettings extends ConsumerWidget {
         IconButton(
           onPressed: () => controller.reset(),
           icon: const Icon(Icons.repeat),
+        ),
+        IconButton(
+          onPressed: () {
+            final double screenHeight = MediaQuery.sizeOf(context).height;
+            showAdaptiveBottomSheet<void>(
+              context: context,
+              isScrollControlled: true,
+              showDragHandle: true,
+              constraints: BoxConstraints(
+                maxHeight: screenHeight - (screenHeight / 10),
+              ),
+              builder: (BuildContext context) {
+                return const TimeControlModal();
+              },
+            );
+          },
+          icon: const Icon(Icons.settings),
         ),
         IconButton(
           onPressed: () => Navigator.of(context).pop(),

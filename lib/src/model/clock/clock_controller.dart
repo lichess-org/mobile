@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
+import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'clock_controller.freezed.dart';
@@ -74,11 +75,10 @@ class ClockState with _$ClockState {
 class ClockController extends _$ClockController {
   @override
   ClockState build() {
-    final initial = ClockState.fromTimeIncrement(
-      const TimeIncrement(5, 2),
+    final timeControlPref = ref.watch(
+      gameSetupPreferencesProvider.select((prefs) => prefs.timeIncrement),
     );
-
-    return initial;
+    return ClockState.fromTimeIncrement(timeControlPref);
   }
 
   void endTurn(ClockPlayerType playerType) {
