@@ -2,8 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/clock/clock_controller.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/play/time_control_modal.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
+
+const _iconSize = 45.0;
+const _iconSpacer = SizedBox(width: 16);
 
 class ClockSettings extends ConsumerWidget {
   const ClockSettings({super.key});
@@ -12,15 +17,21 @@ class ClockSettings extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = ref.read(clockControllerProvider.notifier);
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Expanded(child: SizedBox.shrink()),
         const _PlayResumeButton(),
-        IconButton(
-          onPressed: () => controller.reset(),
-          icon: const Icon(Icons.repeat),
+        _iconSpacer,
+        PlatformIconButton(
+          semanticsLabel: context.l10n.reset,
+          iconSize: _iconSize,
+          onTap: () => controller.reset(),
+          icon: Icons.cached,
         ),
-        IconButton(
-          onPressed: () {
+        _iconSpacer,
+        PlatformIconButton(
+          semanticsLabel: context.l10n.settingsSettings,
+          iconSize: _iconSize,
+          onTap: () {
             final double screenHeight = MediaQuery.sizeOf(context).height;
             showAdaptiveBottomSheet<void>(
               context: context,
@@ -34,23 +45,23 @@ class ClockSettings extends ConsumerWidget {
               },
             );
           },
-          icon: const Icon(Icons.settings),
+          icon: Icons.settings,
         ),
-        IconButton(
-          onPressed: () => Navigator.of(context).pop(),
-          icon: const Icon(Icons.home),
+        _iconSpacer,
+        PlatformIconButton(
+          semanticsLabel: context.l10n.close,
+          iconSize: _iconSize,
+          onTap: () => Navigator.of(context).pop(),
+          icon: Icons.home,
         ),
-        IconButton(
-          onPressed: null,
-          icon: RotatedBox(
-            quarterTurns: 1,
-            child: Text(
-              ref.watch(clockControllerProvider.select((value) => value.moveCount)).toString(),
-              style: Styles.bold,
-            ),
+        _iconSpacer,
+        RotatedBox(
+          quarterTurns: 1,
+          child: Text(
+            ref.watch(clockControllerProvider.select((value) => value.moveCount)).toString(),
+            style: Styles.bold.copyWith(fontSize: 24),
           ),
         ),
-        const Expanded(child: SizedBox.shrink()),
       ],
     );
   }
@@ -64,14 +75,18 @@ class _PlayResumeButton extends ConsumerWidget {
     final controller = ref.read(clockControllerProvider.notifier);
     final state = ref.watch(clockControllerProvider);
     if (state.paused) {
-      return IconButton(
-        onPressed: () => controller.resume(),
-        icon: const Icon(Icons.play_arrow),
+      return PlatformIconButton(
+        semanticsLabel: context.l10n.resume,
+        iconSize: 35,
+        onTap: () => controller.resume(),
+        icon: Icons.play_arrow,
       );
     }
-    return IconButton(
-      onPressed: state.currentPlayer != null ? () => controller.pause() : null,
-      icon: const Icon(Icons.pause),
+    return PlatformIconButton(
+      semanticsLabel: context.l10n.pause,
+      iconSize: 35,
+      onTap: state.currentPlayer != null ? () => controller.pause() : null,
+      icon: Icons.pause,
     );
   }
 }
