@@ -93,8 +93,9 @@ class ClockController extends _$ClockController {
   }
 
   void updateDuration(ClockPlayerType playerType, Duration duration) {
-    if (state.loser != null || state.currentPlayer == null || state.paused)
+    if (state.loser != null || state.currentPlayer == null || state.paused) {
       return;
+    }
 
     if (playerType == ClockPlayerType.top) {
       state = state.copyWith(playerTopTime: duration + state.options.increment);
