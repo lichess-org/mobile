@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/chat_controller.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
@@ -238,10 +239,11 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
 
   @override
   Widget build(BuildContext context) {
+    final session = ref.watch(authSessionProvider);
     final sendButton = ValueListenableBuilder<TextEditingValue>(
       valueListenable: _textController,
       builder: (context, value, child) => PlatformIconButton(
-        onTap: value.text.isNotEmpty
+        onTap: session != null && value.text.isNotEmpty
             ? () {
                 ref
                     .read(chatControllerProvider(widget.chatContext).notifier)
