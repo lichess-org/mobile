@@ -268,7 +268,9 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
             border: const OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(20.0)),
             ),
-            hintText: context.l10n.talkInChat,
+            hintText: session != null
+                ? context.l10n.talkInChat
+                : context.l10n.loginToChat,
           ),
           cupertinoDecoration: BoxDecoration(
             border: Border.all(
@@ -280,9 +282,9 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
           keyboardType: TextInputType.text,
           minLines: 1,
           maxLines: 4,
-          placeholder: context.l10n.talkInChat,
           suffix: sendButton,
           enableSuggestions: true,
+          readOnly: session == null,
         ),
       ),
     );

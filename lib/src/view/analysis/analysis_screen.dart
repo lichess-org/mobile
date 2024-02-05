@@ -12,6 +12,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/engine/engine.dart';
@@ -29,6 +30,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:popover/popover.dart';
@@ -930,16 +932,23 @@ class ServerAnalysisSummary extends ConsumerWidget {
                           return SecondaryButton(
                             semanticsLabel:
                                 context.l10n.requestAComputerAnalysis,
-                            onPressed: snapshot.connectionState ==
-                                    ConnectionState.waiting
-                                ? null
-                                : () {
-                                    setState(() {
-                                      pendingRequest = ref
-                                          .read(ctrlProvider.notifier)
-                                          .requestServerAnalysis();
-                                    });
-                                  },
+                            onPressed: ref.watch(authSessionProvider) == null
+                                ? () {
+                                    showPlatformSnackbar(
+                                      context,
+                                      context.l10n.youNeedAnAccountToDoThat,
+                                    );
+                                  }
+                                : snapshot.connectionState ==
+                                        ConnectionState.waiting
+                                    ? null
+                                    : () {
+                                        setState(() {
+                                          pendingRequest = ref
+                                              .read(ctrlProvider.notifier)
+                                              .requestServerAnalysis();
+                                        });
+                                      },
                             child: Text(context.l10n.requestAComputerAnalysis),
                           );
                         },
