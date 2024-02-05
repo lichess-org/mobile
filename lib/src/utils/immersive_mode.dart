@@ -1,4 +1,5 @@
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
@@ -42,7 +43,7 @@ mixin ImmersiveMode<T extends StatefulWidget> on State<T>
   }
 
   Future<void> _setImmersiveMode() async {
-    if (Theme.of(context).platform == TargetPlatform.android) {
+    if (defaultTargetPlatform == TargetPlatform.android) {
       final androidInfo = await _deviceInfoPlugin.androidInfo;
       if (androidInfo.version.sdkInt >= 29) {
         SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
@@ -51,7 +52,7 @@ mixin ImmersiveMode<T extends StatefulWidget> on State<T>
   }
 
   Future<void> _disableImmersiveMode() async {
-    if (Theme.of(context).platform == TargetPlatform.android) {
+    if (defaultTargetPlatform == TargetPlatform.android) {
       final androidInfo = await _deviceInfoPlugin.androidInfo;
       if (androidInfo.version.sdkInt >= 29) {
         SystemChrome.setEnabledSystemUIMode(
