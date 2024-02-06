@@ -23,7 +23,19 @@ class PuzzleDashboardWidget extends ConsumerWidget {
         final chartData =
             data.themes.take(9).sortedBy((e) => e.theme.name).toList();
         return ListSection(
-          header: Text(context.l10n.puzzlePuzzleDashboard),
+          header: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(context.l10n.puzzlePuzzleDashboard),
+              Text(
+                context.l10n.nbDays(30),
+                style: TextStyle(
+                  fontSize: 14,
+                  color: textShade(context, Styles.subtitleOpacity),
+                ),
+              ),
+            ],
+          ),
           // hack to make the divider take full length or row
           cupertinoAdditionalDividerMargin: -14,
           children: [
