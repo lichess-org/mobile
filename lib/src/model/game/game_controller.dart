@@ -872,6 +872,7 @@ class GameController extends _$GameController {
       clocks: data.clocks,
       meta: game.meta.copyWith(
         opening: data.meta.opening,
+        division: data.meta.division,
       ),
       white: game.white.copyWith(
         analysis: data.white.analysis,
