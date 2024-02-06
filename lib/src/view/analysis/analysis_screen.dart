@@ -804,6 +804,8 @@ class ServerAnalysisSummary extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 AcplChart(options),
+                // may be removed if game phases text is displayed vertically instead of horizontally
+                const SizedBox(height: 10.0),
                 Center(
                   child: SizedBox(
                     width: math.min(MediaQuery.sizeOf(context).width, 500),
@@ -1041,6 +1043,17 @@ class AcplChart extends ConsumerWidget {
     final belowLineColor = Colors.white.withOpacity(0.7);
     final aboveLineColor = Colors.grey.shade800.withOpacity(0.8);
 
+    VerticalLine phaseVerticalBar(double x, String label) => VerticalLine(
+          x: x,
+          color: const Color(0xFF707070),
+          strokeWidth: 0.5,
+          label: VerticalLineLabel(
+            style: const TextStyle(fontSize: 10),
+            labelResolver: (line) => label,
+            show: true,
+          ),
+        );
+
     final data = ref.watch(
       analysisControllerProvider(options)
           .select((value) => value.acplChartData),
@@ -1126,6 +1139,17 @@ class AcplChart extends ConsumerWidget {
                       x: (currentNode.position.ply - 1).toDouble(),
                       color: mainLineColor,
                       strokeWidth: 1.0,
+                    ),
+                  phaseVerticalBar(0.0, context.l10n.opening),
+                  if (options.division?.endgame != null)
+                    phaseVerticalBar(
+                      options.division!.endgame!,
+                      context.l10n.endgame,
+                    ),
+                  if (options.division?.middlegame != null)
+                    phaseVerticalBar(
+                      options.division!.middlegame!,
+                      context.l10n.middlegame,
                     ),
                 ],
               ),

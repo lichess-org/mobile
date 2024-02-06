@@ -286,6 +286,7 @@ class _BottomBar extends ConsumerWidget {
                                 id: gameData.id,
                                 opening: gameData.opening,
                                 serverAnalysis: game.serverAnalysis,
+                                division: game.meta.division,
                               ),
                             ),
                           );
