@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -21,7 +20,7 @@ Future<T?> showAdaptiveActionSheet<T>({
   required List<BottomSheetAction> actions,
   bool isDismissible = true,
 }) async {
-  if (defaultTargetPlatform == TargetPlatform.iOS) {
+  if (Theme.of(context).platform == TargetPlatform.iOS) {
     return showCupertinoActionSheet(
       context: context,
       title: title,
@@ -46,7 +45,7 @@ Future<T?> showConfirmDialog<T>(
   /// Only for iOS
   bool isDestructiveAction = false,
 }) {
-  if (defaultTargetPlatform == TargetPlatform.iOS) {
+  if (Theme.of(context).platform == TargetPlatform.iOS) {
     return showCupertinoActionSheet(
       context: context,
       actions: [

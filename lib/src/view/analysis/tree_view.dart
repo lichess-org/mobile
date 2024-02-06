@@ -1,7 +1,6 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
@@ -258,7 +257,7 @@ Color? _textColor(
   bool isLichessGameAnalysis = true,
   int? nag,
 }) {
-  final defaultColor = defaultTargetPlatform == TargetPlatform.android
+  final defaultColor = Theme.of(context).platform == TargetPlatform.android
       ? Theme.of(context).textTheme.bodyLarge?.color?.withOpacity(opacity)
       : CupertinoTheme.of(context)
           .textTheme
@@ -693,7 +692,7 @@ class _Opening extends ConsumerWidget {
             height: kOpeningHeaderHeight,
             width: double.infinity,
             decoration: BoxDecoration(
-              color: defaultTargetPlatform == TargetPlatform.iOS
+              color: Theme.of(context).platform == TargetPlatform.iOS
                   ? CupertinoDynamicColor.resolve(
                       CupertinoColors.systemGrey5,
                       context,

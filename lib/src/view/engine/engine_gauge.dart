@@ -49,14 +49,14 @@ class EngineGauge extends ConsumerWidget {
   final EngineGaugeParams params;
 
   static Color backgroundColor(BuildContext context, Brightness brightness) =>
-      defaultTargetPlatform == TargetPlatform.iOS
+      Theme.of(context).platform == TargetPlatform.iOS
           ? _kEvalGaugeBackgroundColor
           : brightness == Brightness.dark
               ? lighten(Theme.of(context).colorScheme.background, .07)
               : lighten(Theme.of(context).colorScheme.onBackground, .17);
 
   static Color valueColor(BuildContext context, Brightness brightness) =>
-      defaultTargetPlatform == TargetPlatform.iOS
+      Theme.of(context).platform == TargetPlatform.iOS
           ? brightness == Brightness.dark
               ? _kEvalGaugeValueColorDarkBg
               : _kEvalGaugeValueColorLightBg

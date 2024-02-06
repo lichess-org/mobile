@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -70,7 +69,9 @@ class GameListTile extends StatelessWidget {
       leading: icon != null
           ? Icon(
               icon,
-              size: defaultTargetPlatform == TargetPlatform.iOS ? 26.0 : 36.0,
+              size: Theme.of(context).platform == TargetPlatform.iOS
+                  ? 26.0
+                  : 36.0,
             )
           : null,
       title: playerTitle,
@@ -151,6 +152,7 @@ class _ContextMenu extends ConsumerWidget {
                                         id: game.id,
                                         opening: game.opening,
                                         serverAnalysis: serverAnalysis,
+                                        division: archivedGame.meta.division,
                                       ),
                                     ),
                                   );

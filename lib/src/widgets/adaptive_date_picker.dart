@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 void showAdaptiveDatePicker(
@@ -9,7 +8,7 @@ void showAdaptiveDatePicker(
   required DateTime lastDate,
   required void Function(DateTime?) onDateTimeChanged,
 }) {
-  switch (defaultTargetPlatform) {
+  switch (Theme.of(context).platform) {
     case TargetPlatform.iOS:
       showCupertinoModalPopup<DateTime?>(
         context: context,

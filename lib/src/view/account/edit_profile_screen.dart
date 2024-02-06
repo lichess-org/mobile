@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
@@ -364,7 +363,7 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                 const SizedBox(height: 6.0),
                 Text(description, style: Styles.formDescription),
               ],
-              if (defaultTargetPlatform == TargetPlatform.iOS &&
+              if (Theme.of(context).platform == TargetPlatform.iOS &&
                   field.errorText != null)
                 Padding(
                   padding: const EdgeInsets.only(top: 6.0),
@@ -423,7 +422,7 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                   field.didChange(int.tryParse(value));
                 },
               ),
-              if (defaultTargetPlatform == TargetPlatform.iOS &&
+              if (Theme.of(context).platform == TargetPlatform.iOS &&
                   field.errorText != null)
                 Padding(
                   padding: const EdgeInsets.only(top: 6.0),

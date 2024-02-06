@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/chat_controller.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
@@ -147,7 +147,7 @@ class _MessageBubble extends ConsumerWidget {
   const _MessageBubble({required this.you, required this.message});
 
   Color _bubbleColor(BuildContext context, Brightness brightness) =>
-      defaultTargetPlatform == TargetPlatform.iOS
+      Theme.of(context).platform == TargetPlatform.iOS
           ? you
               ? LichessColors.green
               : CupertinoColors.systemGrey4.resolveFrom(context)
@@ -158,7 +158,7 @@ class _MessageBubble extends ConsumerWidget {
                   : darken(LichessColors.grey, 0.5);
 
   Color _textColor(BuildContext context, Brightness brightness) =>
-      defaultTargetPlatform == TargetPlatform.iOS
+      Theme.of(context).platform == TargetPlatform.iOS
           ? you
               ? Colors.white
               : CupertinoColors.label.resolveFrom(context)
@@ -238,10 +238,11 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
 
   @override
   Widget build(BuildContext context) {
+    final session = ref.watch(authSessionProvider);
     final sendButton = ValueListenableBuilder<TextEditingValue>(
       valueListenable: _textController,
       builder: (context, value, child) => PlatformIconButton(
-        onTap: value.text.isNotEmpty
+        onTap: session != null && value.text.isNotEmpty
             ? () {
                 ref
                     .read(chatControllerProvider(widget.chatContext).notifier)
@@ -266,7 +267,9 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
             border: const OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(20.0)),
             ),
-            hintText: context.l10n.talkInChat,
+            hintText: session != null
+                ? context.l10n.talkInChat
+                : context.l10n.loginToChat,
           ),
           cupertinoDecoration: BoxDecoration(
             border: Border.all(
@@ -278,9 +281,9 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
           keyboardType: TextInputType.text,
           minLines: 1,
           maxLines: 4,
-          placeholder: context.l10n.talkInChat,
           suffix: sendButton,
           enableSuggestions: true,
+          readOnly: session == null,
         ),
       ),
     );

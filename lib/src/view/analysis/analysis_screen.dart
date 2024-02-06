@@ -6,12 +6,12 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/engine/engine.dart';
@@ -29,6 +29,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:popover/popover.dart';
@@ -544,7 +545,7 @@ class _BottomBar extends ConsumerWidget {
         ref.watch(ctrlProvider.select((value) => value.canShowGameSummary));
 
     return Container(
-      color: defaultTargetPlatform == TargetPlatform.iOS
+      color: Theme.of(context).platform == TargetPlatform.iOS
           ? CupertinoTheme.of(context).barBackgroundColor
           : Theme.of(context).bottomAppBarTheme.color,
       child: SafeArea(
@@ -700,12 +701,13 @@ class _EngineDepth extends ConsumerWidget {
                 },
                 direction: PopoverDirection.top,
                 width: 240,
-                backgroundColor: defaultTargetPlatform == TargetPlatform.android
-                    ? Theme.of(context).dialogBackgroundColor
-                    : CupertinoDynamicColor.resolve(
-                        CupertinoColors.tertiarySystemBackground,
-                        context,
-                      ),
+                backgroundColor:
+                    Theme.of(context).platform == TargetPlatform.android
+                        ? Theme.of(context).dialogBackgroundColor
+                        : CupertinoDynamicColor.resolve(
+                            CupertinoColors.tertiarySystemBackground,
+                            context,
+                          ),
                 transitionDuration: Duration.zero,
                 popoverTransitionBuilder: (_, child) => child,
               );
@@ -716,7 +718,7 @@ class _EngineDepth extends ConsumerWidget {
                 height: 20.0,
                 padding: const EdgeInsets.all(2.0),
                 decoration: BoxDecoration(
-                  color: defaultTargetPlatform == TargetPlatform.android
+                  color: Theme.of(context).platform == TargetPlatform.android
                       ? Theme.of(context).colorScheme.secondary
                       : CupertinoTheme.of(context).primaryColor,
                   borderRadius: BorderRadius.circular(4.0),
@@ -726,7 +728,8 @@ class _EngineDepth extends ConsumerWidget {
                   child: Text(
                     '${math.min(99, depth)}',
                     style: TextStyle(
-                      color: defaultTargetPlatform == TargetPlatform.android
+                      color: Theme.of(context).platform ==
+                              TargetPlatform.android
                           ? Theme.of(context).colorScheme.onSecondary
                           : CupertinoTheme.of(context).primaryContrastingColor,
                       fontFeatures: const [
@@ -801,6 +804,8 @@ class ServerAnalysisSummary extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 AcplChart(options),
+                // may be removed if game phases text is displayed vertically instead of horizontally
+                const SizedBox(height: 10.0),
                 Center(
                   child: SizedBox(
                     width: math.min(MediaQuery.sizeOf(context).width, 500),
@@ -930,16 +935,23 @@ class ServerAnalysisSummary extends ConsumerWidget {
                           return SecondaryButton(
                             semanticsLabel:
                                 context.l10n.requestAComputerAnalysis,
-                            onPressed: snapshot.connectionState ==
-                                    ConnectionState.waiting
-                                ? null
-                                : () {
-                                    setState(() {
-                                      pendingRequest = ref
-                                          .read(ctrlProvider.notifier)
-                                          .requestServerAnalysis();
-                                    });
-                                  },
+                            onPressed: ref.watch(authSessionProvider) == null
+                                ? () {
+                                    showPlatformSnackbar(
+                                      context,
+                                      context.l10n.youNeedAnAccountToDoThat,
+                                    );
+                                  }
+                                : snapshot.connectionState ==
+                                        ConnectionState.waiting
+                                    ? null
+                                    : () {
+                                        setState(() {
+                                          pendingRequest = ref
+                                              .read(ctrlProvider.notifier)
+                                              .requestServerAnalysis();
+                                        });
+                                      },
                             child: Text(context.l10n.requestAComputerAnalysis),
                           );
                         },
@@ -1024,12 +1036,23 @@ class AcplChart extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final mainLineColor = defaultTargetPlatform == TargetPlatform.iOS
+    final mainLineColor = Theme.of(context).platform == TargetPlatform.iOS
         ? Colors.orange
         : Theme.of(context).colorScheme.secondary;
     // yes it looks like below/above are inverted in fl_chart
     final belowLineColor = Colors.white.withOpacity(0.7);
     final aboveLineColor = Colors.grey.shade800.withOpacity(0.8);
+
+    VerticalLine phaseVerticalBar(double x, String label) => VerticalLine(
+          x: x,
+          color: const Color(0xFF707070),
+          strokeWidth: 0.5,
+          label: VerticalLineLabel(
+            style: const TextStyle(fontSize: 10),
+            labelResolver: (line) => label,
+            show: true,
+          ),
+        );
 
     final data = ref.watch(
       analysisControllerProvider(options)
@@ -1116,6 +1139,17 @@ class AcplChart extends ConsumerWidget {
                       x: (currentNode.position.ply - 1).toDouble(),
                       color: mainLineColor,
                       strokeWidth: 1.0,
+                    ),
+                  phaseVerticalBar(0.0, context.l10n.opening),
+                  if (options.division?.endgame != null)
+                    phaseVerticalBar(
+                      options.division!.endgame!,
+                      context.l10n.endgame,
+                    ),
+                  if (options.division?.middlegame != null)
+                    phaseVerticalBar(
+                      options.division!.middlegame!,
+                      context.l10n.middlegame,
                     ),
                 ],
               ),

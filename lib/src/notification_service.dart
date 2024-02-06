@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
+import 'package:lichess_mobile/src/utils/badge_service.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -86,6 +87,16 @@ class NotificationService {
         ref.invalidate(ongoingGamesProvider);
       }
       ref.read(correspondenceServiceProvider).updateGame(fullId, game);
+    }
+
+    // update badge
+    final badge = message.data['lichess.iosBadge'] as String?;
+    if (badge != null) {
+      try {
+        badgeService.setBadge(int.parse(badge));
+      } catch (e) {
+        _log.severe('Could not parse badge: $badge');
+      }
     }
   }
 }

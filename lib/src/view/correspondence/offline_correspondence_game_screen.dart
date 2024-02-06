@@ -2,7 +2,6 @@ import 'package:chessground/chessground.dart' as cg;
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -260,7 +259,7 @@ class _BodyState extends ConsumerState<_Body> {
           ),
         ),
         Container(
-          color: defaultTargetPlatform == TargetPlatform.iOS
+          color: Theme.of(context).platform == TargetPlatform.iOS
               ? CupertinoTheme.of(context).barBackgroundColor
               : Theme.of(context).bottomAppBarTheme.color,
           child: SafeArea(
@@ -295,6 +294,7 @@ class _BodyState extends ConsumerState<_Body> {
                               initialMoveCursor: stepCursor,
                               orientation: game.youAre,
                               id: game.id,
+                              division: game.meta.division,
                             ),
                             title: context.l10n.analysis,
                           ),

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
+import 'package:intl/intl.dart';
 
 final _random = Random.secure();
 
@@ -10,6 +11,15 @@ String genRandomString(int len) {
 
 extension StringExtension on String {
   String capitalize() {
-    return '${this[0].toUpperCase()}${substring(1).toLowerCase()}';
+    return '${this[0].toUpperCase()}${substring(1)}';
+  }
+}
+
+extension NumberLocalizationExtension on String {
+  String localizeNumbers() {
+    return replaceAllMapped(
+      RegExp(r'\d+(\.\d+)?'),
+      (m) => NumberFormat().format(double.parse(m.group(0)!)),
+    );
   }
 }

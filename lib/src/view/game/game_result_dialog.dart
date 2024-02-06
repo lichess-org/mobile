@@ -6,7 +6,6 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -43,7 +42,7 @@ class GameResultDialog extends ConsumerStatefulWidget {
 }
 
 Widget _adaptiveDialog(BuildContext context, Widget content) {
-  if (defaultTargetPlatform == TargetPlatform.iOS) {
+  if (Theme.of(context).platform == TargetPlatform.iOS) {
     return CupertinoAlertDialog(
       content: content,
     );
@@ -88,6 +87,7 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
   Widget build(BuildContext context) {
     final ctrlProvider = gameControllerProvider(widget.id);
     final gameState = ref.watch(ctrlProvider).requireValue;
+    final session = ref.watch(authSessionProvider);
 
     final content = Column(
       mainAxisSize: MainAxisSize.min,
@@ -156,26 +156,33 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
             builder: (context, snapshot) {
               return SecondaryButton(
                 semanticsLabel: context.l10n.requestAComputerAnalysis,
-                onPressed: _activateButtons
-                    ? snapshot.connectionState == ConnectionState.waiting
-                        ? null
-                        : () {
-                            setState(() {
-                              _pendingAnalysisRequestFuture = ref
-                                  .read(ctrlProvider.notifier)
-                                  .requestServerAnalysis()
-                                  .catchError((Object e) {
-                                if (context.mounted) {
-                                  showPlatformSnackbar(
-                                    context,
-                                    e.toString(),
-                                    type: SnackBarType.error,
-                                  );
-                                }
-                              });
-                            });
-                          }
-                    : null,
+                onPressed: session == null
+                    ? () {
+                        showPlatformSnackbar(
+                          context,
+                          context.l10n.youNeedAnAccountToDoThat,
+                        );
+                      }
+                    : _activateButtons
+                        ? snapshot.connectionState == ConnectionState.waiting
+                            ? null
+                            : () {
+                                setState(() {
+                                  _pendingAnalysisRequestFuture = ref
+                                      .read(ctrlProvider.notifier)
+                                      .requestServerAnalysis()
+                                      .catchError((Object e) {
+                                    if (context.mounted) {
+                                      showPlatformSnackbar(
+                                        context,
+                                        e.toString(),
+                                        type: SnackBarType.error,
+                                      );
+                                    }
+                                  });
+                                });
+                              }
+                        : null,
                 child: Text(
                   context.l10n.requestAComputerAnalysis,
                   textAlign: TextAlign.center,

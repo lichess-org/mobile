@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
@@ -87,7 +86,7 @@ class _Body extends ConsumerWidget {
                 settingsLabel: Text(context.l10n.sound),
                 settingsValue: soundThemeL10n(context, soundTheme),
                 onTap: () {
-                  if (defaultTargetPlatform == TargetPlatform.android) {
+                  if (Theme.of(context).platform == TargetPlatform.android) {
                     showChoicePicker(
                       context,
                       choices: SoundTheme.values,
@@ -117,7 +116,7 @@ class _Body extends ConsumerWidget {
                 settingsLabel: Text(context.l10n.background),
                 settingsValue: ThemeModeScreen.themeTitle(context, themeMode),
                 onTap: () {
-                  if (defaultTargetPlatform == TargetPlatform.android) {
+                  if (Theme.of(context).platform == TargetPlatform.android) {
                     showChoicePicker(
                       context,
                       choices: ThemeMode.values,
@@ -164,7 +163,7 @@ class _Body extends ConsumerWidget {
               PlatformListTile(
                 leading: const Icon(LichessIcons.chess_board),
                 title: const Text('Chessboard'),
-                trailing: defaultTargetPlatform == TargetPlatform.iOS
+                trailing: Theme.of(context).platform == TargetPlatform.iOS
                     ? const CupertinoListTileChevron()
                     : null,
                 onTap: () {
@@ -185,7 +184,7 @@ class _Body extends ConsumerWidget {
                 PlatformListTile(
                   leading: const Icon(Icons.person),
                   title: Text(context.l10n.preferencesPreferences),
-                  trailing: defaultTargetPlatform == TargetPlatform.iOS
+                  trailing: Theme.of(context).platform == TargetPlatform.iOS
                       ? const CupertinoListTileChevron()
                       : null,
                   onTap: () {
@@ -233,7 +232,7 @@ class _Body extends ConsumerWidget {
   }
 
   Future<void> _showSignOutConfirmDialog(BuildContext context, WidgetRef ref) {
-    if (defaultTargetPlatform == TargetPlatform.iOS) {
+    if (Theme.of(context).platform == TargetPlatform.iOS) {
       return showCupertinoActionSheet(
         context: context,
         actions: [

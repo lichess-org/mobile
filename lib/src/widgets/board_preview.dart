@@ -1,6 +1,5 @@
 import 'package:chessground/chessground.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -90,7 +89,7 @@ class _SmallBoardPreviewState extends ConsumerState<SmallBoardPreview> {
     );
 
     return widget.onTap != null
-        ? defaultTargetPlatform == TargetPlatform.iOS
+        ? Theme.of(context).platform == TargetPlatform.iOS
             ? GestureDetector(
                 onTapDown: (_) => setState(() => _isPressed = true),
                 onTapUp: (_) => setState(() => _isPressed = false),

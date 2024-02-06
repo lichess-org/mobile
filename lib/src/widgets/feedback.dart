@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -78,7 +77,7 @@ void showPlatformSnackbar(
   String message, {
   SnackBarType type = SnackBarType.info,
 }) {
-  switch (defaultTargetPlatform) {
+  switch (Theme.of(context).platform) {
     case TargetPlatform.android:
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -96,7 +95,7 @@ void showPlatformSnackbar(
         type: type,
       );
     default:
-      assert(false, 'Unexpected platform $defaultTargetPlatform');
+      assert(false, 'Unexpected platform ${Theme.of(context).platform}');
   }
 }
 

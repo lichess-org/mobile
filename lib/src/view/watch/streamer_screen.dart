@@ -1,6 +1,5 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/model/user/streamer.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
@@ -91,7 +90,7 @@ class StreamerListTile extends StatelessWidget {
         }
       },
       leading: Padding(
-        padding: defaultTargetPlatform == TargetPlatform.android
+        padding: Theme.of(context).platform == TargetPlatform.android
             ? const EdgeInsets.all(5.0)
             : EdgeInsets.zero,
         child: Image.network(streamer.image),

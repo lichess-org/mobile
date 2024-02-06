@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 
@@ -37,15 +36,15 @@ class BottomBarButton extends StatelessWidget {
     final materialThemeData = Theme.of(context);
     final cupertinoThemeData = CupertinoTheme.of(context);
 
-    final primary = defaultTargetPlatform == TargetPlatform.iOS
+    final primary = Theme.of(context).platform == TargetPlatform.iOS
         ? cupertinoThemeData.primaryColor
         : materialThemeData.colorScheme.primary;
 
-    final chipColor = defaultTargetPlatform == TargetPlatform.iOS
+    final chipColor = Theme.of(context).platform == TargetPlatform.iOS
         ? CupertinoColors.activeBlue.resolveFrom(context)
         : materialThemeData.colorScheme.primary;
 
-    final labelFontSize = defaultTargetPlatform == TargetPlatform.iOS
+    final labelFontSize = Theme.of(context).platform == TargetPlatform.iOS
         ? 11.0
         : materialThemeData.textTheme.bodySmall?.fontSize;
 
@@ -106,7 +105,8 @@ class BottomBarButton extends StatelessWidget {
                           fit: BoxFit.contain,
                           child: DefaultTextStyle.merge(
                             style: TextStyle(
-                              color: defaultTargetPlatform == TargetPlatform.iOS
+                              color: Theme.of(context).platform ==
+                                      TargetPlatform.iOS
                                   ? Colors.white
                                   : materialThemeData.colorScheme.onPrimary,
                               fontWeight: FontWeight.bold,
@@ -124,7 +124,7 @@ class BottomBarButton extends StatelessWidget {
       ),
     );
 
-    switch (defaultTargetPlatform) {
+    switch (Theme.of(context).platform) {
       case TargetPlatform.android:
         return Theme(
           data: materialThemeData,
@@ -138,7 +138,7 @@ class BottomBarButton extends StatelessWidget {
           child: button,
         );
       default:
-        assert(false, 'Unexpected platform $defaultTargetPlatform');
+        assert(false, 'Unexpected platform $Theme.of(context).platform');
         return const SizedBox.shrink();
     }
   }

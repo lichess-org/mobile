@@ -1,6 +1,5 @@
 import 'package:collection/collection.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/errors.dart';
@@ -24,7 +23,19 @@ class PuzzleDashboardWidget extends ConsumerWidget {
         final chartData =
             data.themes.take(9).sortedBy((e) => e.theme.name).toList();
         return ListSection(
-          header: Text(context.l10n.puzzlePuzzleDashboard),
+          header: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(context.l10n.puzzlePuzzleDashboard),
+              Text(
+                context.l10n.nbDays(30),
+                style: TextStyle(
+                  fontSize: 14,
+                  color: textShade(context, Styles.subtitleOpacity),
+                ),
+              ),
+            ],
+          ),
           // hack to make the divider take full length or row
           cupertinoAdditionalDividerMargin: -14,
           children: [
@@ -39,7 +50,7 @@ class PuzzleDashboardWidget extends ConsumerWidget {
                     .replaceAll(RegExp(r'\d+'), '')
                     .trim()
                     .capitalize(),
-                value: data.global.nb.toString(),
+                value: data.global.nb.toString().localizeNumbers(),
               ),
               StatCard(
                 context.l10n.puzzleSolved.capitalize(),
@@ -140,11 +151,12 @@ class PuzzleChart extends StatelessWidget {
         radarShape: RadarShape.polygon,
         dataSets: [
           RadarDataSet(
-            fillColor: defaultTargetPlatform == TargetPlatform.iOS
+            fillColor: Theme.of(context).platform == TargetPlatform.iOS
                 ? null
                 : chartColor.withOpacity(0.2),
-            borderColor:
-                defaultTargetPlatform == TargetPlatform.iOS ? null : chartColor,
+            borderColor: Theme.of(context).platform == TargetPlatform.iOS
+                ? null
+                : chartColor,
             dataEntries: puzzleData
                 .map((theme) => RadarEntry(value: theme.performance.toDouble()))
                 .toList(),

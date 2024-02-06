@@ -51,6 +51,7 @@ class ServerAnalysisService {
 
     final completer = Completer<void>();
 
+    _socketSubscription?.$2.cancel();
     _socketSubscription = (
       id,
       stream.listen((event) {

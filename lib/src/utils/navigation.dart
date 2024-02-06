@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 /// Push a new route using Navigator
@@ -16,7 +15,7 @@ Future<void> pushPlatformRoute(
     context,
     rootNavigator: rootNavigator,
   ).push<void>(
-    defaultTargetPlatform == TargetPlatform.iOS
+    Theme.of(context).platform == TargetPlatform.iOS
         ? CupertinoPageRoute(
             builder: builder,
             title: title,
@@ -40,7 +39,7 @@ Future<void> pushReplacementPlatformRoute(
     context,
     rootNavigator: rootNavigator,
   ).pushReplacement<void, void>(
-    defaultTargetPlatform == TargetPlatform.iOS
+    Theme.of(context).platform == TargetPlatform.iOS
         ? CupertinoPageRoute(
             builder: builder,
             title: title,

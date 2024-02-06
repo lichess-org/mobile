@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
@@ -63,7 +62,7 @@ class UserListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return PlatformListTile(
       onTap: onTap != null ? () => onTap?.call() : null,
-      padding: defaultTargetPlatform == TargetPlatform.iOS
+      padding: Theme.of(context).platform == TargetPlatform.iOS
           ? Styles.bodyPadding
           : null,
       leading: Icon(
