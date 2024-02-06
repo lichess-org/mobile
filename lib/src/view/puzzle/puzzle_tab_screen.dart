@@ -21,6 +21,7 @@ import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/layout.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/puzzle/history_boards.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_dashboard_widget.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_history_screen.dart';
@@ -449,7 +450,9 @@ class _DailyPuzzle extends ConsumerWidget {
                 style: Styles.boardPreviewTitle,
               ),
               Text(
-                context.l10n.puzzlePlayedXTimes(data.puzzle.plays),
+                context.l10n
+                    .puzzlePlayedXTimes(data.puzzle.plays)
+                    .localizeNumbers(),
               ),
             ],
           ),
@@ -522,7 +525,9 @@ class _OfflinePuzzlePreview extends ConsumerWidget {
                 style: Styles.boardPreviewTitle,
               ),
               Text(
-                context.l10n.puzzlePlayedXTimes(data?.puzzle.puzzle.plays ?? 0),
+                context.l10n
+                    .puzzlePlayedXTimes(data?.puzzle.puzzle.plays ?? 0)
+                    .localizeNumbers(),
               ),
             ],
           ),

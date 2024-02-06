@@ -39,7 +39,7 @@ class PuzzleDashboardWidget extends ConsumerWidget {
                     .replaceAll(RegExp(r'\d+'), '')
                     .trim()
                     .capitalize(),
-                value: data.global.nb.toString(),
+                value: data.global.nb.toString().localizeNumbers(),
               ),
               StatCard(
                 context.l10n.puzzleSolved.capitalize(),

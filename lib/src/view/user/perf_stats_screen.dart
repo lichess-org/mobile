@@ -17,6 +17,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -209,10 +210,13 @@ class _Body extends ConsumerWidget {
                   textBaseline: TextBaseline.alphabetic,
                   children: [
                     Text(
-                      '${context.l10n.perfStatTotalGames} ',
+                      '${context.l10n.perfStatTotalGames} '.localizeNumbers(),
                       style: Styles.sectionTitle,
                     ),
-                    Text(data.totalGames.toString(), style: _mainValueStyle),
+                    Text(
+                      data.totalGames.toString().localizeNumbers(),
+                      style: _mainValueStyle,
+                    ),
                   ],
                 ),
               ),
@@ -463,7 +467,7 @@ class _PercentageValueWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          value.toString(),
+          value.toString().localizeNumbers(),
           style: const TextStyle(fontSize: _defaultValueFontSize),
         ),
         Text(
