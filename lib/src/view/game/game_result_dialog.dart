@@ -88,6 +88,7 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
   Widget build(BuildContext context) {
     final ctrlProvider = gameControllerProvider(widget.id);
     final gameState = ref.watch(ctrlProvider).requireValue;
+    final session = ref.watch(authSessionProvider);
 
     final content = Column(
       mainAxisSize: MainAxisSize.min,
@@ -156,26 +157,33 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
             builder: (context, snapshot) {
               return SecondaryButton(
                 semanticsLabel: context.l10n.requestAComputerAnalysis,
-                onPressed: _activateButtons
-                    ? snapshot.connectionState == ConnectionState.waiting
-                        ? null
-                        : () {
-                            setState(() {
-                              _pendingAnalysisRequestFuture = ref
-                                  .read(ctrlProvider.notifier)
-                                  .requestServerAnalysis()
-                                  .catchError((Object e) {
-                                if (context.mounted) {
-                                  showPlatformSnackbar(
-                                    context,
-                                    e.toString(),
-                                    type: SnackBarType.error,
-                                  );
-                                }
-                              });
-                            });
-                          }
-                    : null,
+                onPressed: session == null
+                    ? () {
+                        showPlatformSnackbar(
+                          context,
+                          context.l10n.youNeedAnAccountToDoThat,
+                        );
+                      }
+                    : _activateButtons
+                        ? snapshot.connectionState == ConnectionState.waiting
+                            ? null
+                            : () {
+                                setState(() {
+                                  _pendingAnalysisRequestFuture = ref
+                                      .read(ctrlProvider.notifier)
+                                      .requestServerAnalysis()
+                                      .catchError((Object e) {
+                                    if (context.mounted) {
+                                      showPlatformSnackbar(
+                                        context,
+                                        e.toString(),
+                                        type: SnackBarType.error,
+                                      );
+                                    }
+                                  });
+                                });
+                              }
+                        : null,
                 child: Text(
                   context.l10n.requestAComputerAnalysis,
                   textAlign: TextAlign.center,
