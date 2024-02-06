@@ -127,6 +127,7 @@ ArchivedGame _archivedGameFromPick(RequiredPick pick) {
   final clocks = pick('clocks').asListOrNull<Duration>(
     (p0) => Duration(milliseconds: p0.asIntOrThrow() * 10),
   );
+  final division = pick('division').letOrNull(_divisionFromPick);
 
   final initialFen = pick('initialFen').asStringOrNull();
 
@@ -147,6 +148,7 @@ ArchivedGame _archivedGameFromPick(RequiredPick pick) {
             )
           : null,
       opening: data.opening,
+      division: division,
     ),
     data: data,
     status: data.status,
@@ -241,5 +243,12 @@ PlayerAnalysis _playerAnalysisFromPick(RequiredPick pick) {
     blunders: pick('blunder').asIntOrThrow(),
     acpl: pick('acpl').asIntOrNull(),
     accuracy: pick('accuracy').asIntOrNull(),
+  );
+}
+
+Division _divisionFromPick(RequiredPick pick) {
+  return Division(
+    middlegame: pick('middle').asDoubleOrNull(),
+    endgame: pick('end').asDoubleOrNull(),
   );
 }

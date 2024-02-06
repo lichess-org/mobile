@@ -294,6 +294,7 @@ class _BodyState extends ConsumerState<_Body> {
                               initialMoveCursor: stepCursor,
                               orientation: game.youAre,
                               id: game.id,
+                              division: game.meta.division,
                             ),
                             title: context.l10n.analysis,
                           ),

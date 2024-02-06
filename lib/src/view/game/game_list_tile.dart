@@ -152,6 +152,7 @@ class _ContextMenu extends ConsumerWidget {
                                         id: game.id,
                                         opening: game.opening,
                                         serverAnalysis: serverAnalysis,
+                                        division: archivedGame.meta.division,
                                       ),
                                     ),
                                   );
