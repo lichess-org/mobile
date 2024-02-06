@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/string.dart';
 
 class PuzzleFeedbackWidget extends ConsumerWidget {
   const PuzzleFeedbackWidget({
@@ -37,8 +38,9 @@ class PuzzleFeedbackWidget extends ConsumerWidget {
       case PuzzleMode.view:
         final puzzleRating =
             context.l10n.puzzleRatingX(puzzle.puzzle.rating.toString());
-        final playedXTimes =
-            context.l10n.puzzlePlayedXTimes(puzzle.puzzle.plays);
+        final playedXTimes = context.l10n
+            .puzzlePlayedXTimes(puzzle.puzzle.plays)
+            .localizeNumbers();
         return _FeedbackTile(
           leading: state.result == PuzzleResult.win
               ? const Icon(Icons.check, size: 36, color: LichessColors.good)
