@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/clock/clock_controller.dart';
+import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
 
 const _darkClockStyle = ClockStyle(
-  textColor: Colors.white,
-  activeTextColor: Colors.black,
+  textColor: Colors.black,
+  activeTextColor: Colors.white,
   emergencyTextColor: Colors.white,
   backgroundColor: Colors.transparent,
   activeBackgroundColor: Colors.transparent,
@@ -13,8 +14,8 @@ const _darkClockStyle = ClockStyle(
 );
 
 const _lightClockStyle = ClockStyle(
-  textColor: Colors.white,
-  activeTextColor: Colors.black,
+  textColor: Colors.black,
+  activeTextColor: Colors.white,
   emergencyTextColor: Colors.black,
   backgroundColor: Colors.transparent,
   activeBackgroundColor: Colors.transparent,
@@ -32,9 +33,10 @@ class ClockTile extends ConsumerWidget {
 
     Color getBackgroundColor() {
       if (state.isLoser(playerType)) {
-        return Colors.redAccent;
-      } else if (state.isPlayersTurn(playerType)) {
-        return Theme.of(context).colorScheme.primary;
+        return LichessColors.red;
+      } else if (state.isPlayersTurn(playerType) &&
+          state.currentPlayer != null) {
+        return LichessColors.green;
       } else {
         return Colors.grey;
       }

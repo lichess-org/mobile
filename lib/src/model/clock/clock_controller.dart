@@ -1,6 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
-import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'clock_controller.freezed.dart';
@@ -35,7 +34,8 @@ class ClockState with _$ClockState {
 
   factory ClockState.fromTimeIncrement(TimeIncrement timeIncrement) {
     final options = ClockOptions(
-      time: Duration(seconds: timeIncrement.time),
+      // special handling if time is 0 - in reality it is 3s
+      time: Duration(seconds: timeIncrement.time == 0 ? 3 : timeIncrement.time),
       increment: Duration(seconds: timeIncrement.increment),
     );
 
@@ -77,10 +77,9 @@ class ClockState with _$ClockState {
 class ClockController extends _$ClockController {
   @override
   ClockState build() {
-    final timeControlPref = ref.watch(
-      gameSetupPreferencesProvider.select((prefs) => prefs.timeIncrement),
+    return ClockState.fromOptions(
+      const ClockOptions(time: Duration(minutes: 5), increment: Duration.zero),
     );
-    return ClockState.fromTimeIncrement(timeControlPref);
   }
 
   void endTurn(ClockPlayerType playerType) {
@@ -104,6 +103,9 @@ class ClockController extends _$ClockController {
           state.copyWith(playerBottomTime: duration + state.options.increment);
     }
   }
+
+  void updateOptions(TimeIncrement timeIncrement) =>
+      state = ClockState.fromTimeIncrement(timeIncrement);
 
   void setLoser(ClockPlayerType playerType) =>
       state = state.copyWith(currentPlayer: null, loser: playerType);

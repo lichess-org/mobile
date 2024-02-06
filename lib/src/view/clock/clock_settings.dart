@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/clock/clock_controller.dart';
+import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/play/time_control_modal.dart';
@@ -16,6 +17,11 @@ class ClockSettings extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = ref.read(clockControllerProvider.notifier);
+    final buttonsEnabled = ref.watch(
+      clockControllerProvider
+          .select((value) => value.paused || value.currentPlayer == null),
+    );
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -24,34 +30,48 @@ class ClockSettings extends ConsumerWidget {
         PlatformIconButton(
           semanticsLabel: context.l10n.reset,
           iconSize: _iconSize,
-          onTap: () => controller.reset(),
+          onTap: buttonsEnabled ? () => controller.reset() : null,
           icon: Icons.cached,
         ),
         _iconSpacer,
         PlatformIconButton(
           semanticsLabel: context.l10n.settingsSettings,
           iconSize: _iconSize,
-          onTap: () {
-            final double screenHeight = MediaQuery.sizeOf(context).height;
-            showAdaptiveBottomSheet<void>(
-              context: context,
-              isScrollControlled: true,
-              showDragHandle: true,
-              constraints: BoxConstraints(
-                maxHeight: screenHeight - (screenHeight / 10),
-              ),
-              builder: (BuildContext context) {
-                return const TimeControlModal();
-              },
-            );
-          },
+          onTap: buttonsEnabled
+              ? () {
+                  final double screenHeight = MediaQuery.sizeOf(context).height;
+                  showAdaptiveBottomSheet<void>(
+                    context: context,
+                    isScrollControlled: true,
+                    showDragHandle: true,
+                    constraints: BoxConstraints(
+                      maxHeight: screenHeight - (screenHeight / 10),
+                    ),
+                    builder: (BuildContext context) {
+                      final options = ref.watch(
+                        clockControllerProvider
+                            .select((value) => value.options),
+                      );
+                      return TimeControlModal(
+                        value: TimeIncrement(
+                          options.time.inSeconds,
+                          options.increment.inSeconds,
+                        ),
+                        onSelected: (choice) {
+                          controller.updateOptions(choice);
+                        },
+                      );
+                    },
+                  );
+                }
+              : null,
           icon: Icons.settings,
         ),
         _iconSpacer,
         PlatformIconButton(
           semanticsLabel: context.l10n.close,
           iconSize: _iconSize,
-          onTap: () => Navigator.of(context).pop(),
+          onTap: buttonsEnabled ? () => Navigator.of(context).pop() : null,
           icon: Icons.home,
         ),
         _iconSpacer,
