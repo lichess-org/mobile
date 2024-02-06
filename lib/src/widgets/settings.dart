@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -43,7 +42,7 @@ class SettingsListTile extends StatelessWidget {
         leading: icon,
         title: _SettingsTitle(title: settingsLabel),
         additionalInfo: showCupertinoTrailingValue ? Text(settingsValue) : null,
-        subtitle: defaultTargetPlatform == TargetPlatform.android
+        subtitle: Theme.of(context).platform == TargetPlatform.android
             ? Text(
                 settingsValue,
                 style: TextStyle(
@@ -54,7 +53,7 @@ class SettingsListTile extends StatelessWidget {
                 ? Text(explanation!, maxLines: 5)
                 : null,
         onTap: onTap,
-        trailing: defaultTargetPlatform == TargetPlatform.iOS
+        trailing: Theme.of(context).platform == TargetPlatform.iOS
             ? const CupertinoListTileChevron()
             : explanation != null
                 ? _SettingsInfoTooltip(
@@ -176,7 +175,7 @@ class ChoicePicker<T extends Enum> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    switch (defaultTargetPlatform) {
+    switch (Theme.of(context).platform) {
       case TargetPlatform.android:
         final tiles = choices.map((value) {
           return ListTile(
@@ -230,7 +229,7 @@ class ChoicePicker<T extends Enum> extends StatelessWidget {
           ),
         );
       default:
-        assert(false, 'Unexpected platform $defaultTargetPlatform');
+        assert(false, 'Unexpected platform ${Theme.of(context).platform}');
         return const SizedBox.shrink();
     }
   }

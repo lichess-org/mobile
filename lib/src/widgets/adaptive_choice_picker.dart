@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
@@ -10,7 +9,7 @@ Future<void> showChoicePicker<T>(
   required Widget Function(T choice) labelBuilder,
   void Function(T choice)? onSelectedItemChanged,
 }) {
-  switch (defaultTargetPlatform) {
+  switch (Theme.of(context).platform) {
     case TargetPlatform.android:
       return showDialog<void>(
         context: context,
@@ -78,7 +77,7 @@ Future<void> showChoicePicker<T>(
         },
       );
     default:
-      throw Exception('Unexpected platform $defaultTargetPlatform');
+      throw Exception('Unexpected platform $Theme.of(context).platform');
   }
 }
 
@@ -117,7 +116,7 @@ Future<Set<T>?> showMultipleChoicesPicker<T extends Enum>(
             );
           },
         ),
-        actions: defaultTargetPlatform == TargetPlatform.iOS
+        actions: Theme.of(context).platform == TargetPlatform.iOS
             ? [
                 CupertinoDialogAction(
                   onPressed: () => Navigator.of(context).pop(),

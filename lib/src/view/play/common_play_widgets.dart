@@ -1,5 +1,3 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
@@ -63,7 +61,7 @@ class _PlayRatingRangeState extends State<PlayRatingRange> {
                   NonLinearSlider(
                     value: _subtract,
                     values: kSubtractingRatingRange,
-                    onChange: defaultTargetPlatform == TargetPlatform.iOS
+                    onChange: Theme.of(context).platform == TargetPlatform.iOS
                         ? (num value) {
                             setState(() {
                               _subtract = value.toInt();
@@ -95,7 +93,7 @@ class _PlayRatingRangeState extends State<PlayRatingRange> {
                   NonLinearSlider(
                     value: _add,
                     values: kAddingRatingRange,
-                    onChange: defaultTargetPlatform == TargetPlatform.iOS
+                    onChange: Theme.of(context).platform == TargetPlatform.iOS
                         ? (num value) {
                             setState(() {
                               _add = value.toInt();

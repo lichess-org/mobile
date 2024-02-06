@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 
@@ -66,7 +65,7 @@ class ListSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    switch (defaultTargetPlatform) {
+    switch (Theme.of(context).platform) {
       case TargetPlatform.android:
         return _isLoading
             ? Padding(
@@ -191,7 +190,7 @@ class ListSection extends StatelessWidget {
                 ),
               );
       default:
-        assert(false, 'Unexpected platform $defaultTargetPlatform');
+        assert(false, 'Unexpected platform ${Theme.of(context).platform}');
         return const SizedBox.shrink();
     }
   }
@@ -221,7 +220,7 @@ class PlatformDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return defaultTargetPlatform == TargetPlatform.android
+    return Theme.of(context).platform == TargetPlatform.android
         ? Divider(
             height: height,
             thickness: thickness,
@@ -292,7 +291,7 @@ class PlatformListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    switch (defaultTargetPlatform) {
+    switch (Theme.of(context).platform) {
       case TargetPlatform.android:
         return ListTile(
           leading: leading,
@@ -343,7 +342,7 @@ class PlatformListTile extends StatelessWidget {
         );
 
       default:
-        assert(false, 'Unexpected platform $defaultTargetPlatform');
+        assert(false, 'Unexpected platform ${Theme.of(context).platform}');
         return const SizedBox.shrink();
     }
   }

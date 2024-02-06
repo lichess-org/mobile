@@ -1,6 +1,5 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
@@ -204,7 +203,7 @@ class _HomeBody extends ConsumerWidget {
         if (data.isOnline) {
           final onlineWidgets = _onlineWidgets(isTablet);
 
-          return defaultTargetPlatform == TargetPlatform.android
+          return Theme.of(context).platform == TargetPlatform.android
               ? ListView(
                   controller: homeScrollController,
                   children: onlineWidgets,
@@ -214,7 +213,7 @@ class _HomeBody extends ConsumerWidget {
                 );
         } else {
           final offlineWidgets = _offlineWidgets(isTablet);
-          return defaultTargetPlatform == TargetPlatform.android
+          return Theme.of(context).platform == TargetPlatform.android
               ? ListView(
                   controller: homeScrollController,
                   children: offlineWidgets,
@@ -226,13 +225,13 @@ class _HomeBody extends ConsumerWidget {
       },
       loading: () {
         const child = CenterLoadingIndicator();
-        return defaultTargetPlatform == TargetPlatform.android
+        return Theme.of(context).platform == TargetPlatform.android
             ? child
             : const SliverFillRemaining(child: child);
       },
       error: (error, stack) {
         const child = SizedBox.shrink();
-        return defaultTargetPlatform == TargetPlatform.android
+        return Theme.of(context).platform == TargetPlatform.android
             ? child
             : const SliverFillRemaining(child: child);
       },
@@ -576,7 +575,8 @@ class _QuickGameButton extends ConsumerWidget {
       padding:
           Styles.horizontalBodyPadding.add(const EdgeInsets.only(top: 6.0)),
       child: PlatformCard(
-        elevation: defaultTargetPlatform == TargetPlatform.iOS ? 0.2 : null,
+        elevation:
+            Theme.of(context).platform == TargetPlatform.iOS ? 0.2 : null,
         child: Row(
           children: [
             SizedBox(
@@ -607,7 +607,7 @@ class _QuickGameButton extends ConsumerWidget {
             Expanded(
               child: SizedBox(
                 height: buttonHeight,
-                child: defaultTargetPlatform == TargetPlatform.iOS
+                child: Theme.of(context).platform == TargetPlatform.iOS
                     ? CupertinoButton.filled(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 6.0,

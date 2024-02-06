@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -17,13 +16,13 @@ class PlatformWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    switch (defaultTargetPlatform) {
+    switch (Theme.of(context).platform) {
       case TargetPlatform.android:
         return androidBuilder(context);
       case TargetPlatform.iOS:
         return iosBuilder(context);
       default:
-        assert(false, 'Unexpected platform $defaultTargetPlatform');
+        assert(false, 'Unexpected platform ${Theme.of(context).platform}');
         return const SizedBox.shrink();
     }
   }
@@ -49,13 +48,13 @@ class ConsumerPlatformWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    switch (defaultTargetPlatform) {
+    switch (Theme.of(context).platform) {
       case TargetPlatform.android:
         return androidBuilder(context, ref);
       case TargetPlatform.iOS:
         return iosBuilder(context, ref);
       default:
-        assert(false, 'Unexpected platform $defaultTargetPlatform');
+        assert(false, 'Unexpected platform ${Theme.of(context).platform}');
         return const SizedBox.shrink();
     }
   }
@@ -92,7 +91,7 @@ class PlatformCard extends StatelessWidget {
         CupertinoTheme.maybeBrightnessOf(context) ?? Brightness.light;
     return MediaQuery.withClampedTextScaling(
       maxScaleFactor: kCardTextScaleFactor,
-      child: defaultTargetPlatform == TargetPlatform.iOS
+      child: Theme.of(context).platform == TargetPlatform.iOS
           ? Card(
               margin: margin ?? EdgeInsets.zero,
               elevation: elevation ?? 0,

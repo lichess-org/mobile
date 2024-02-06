@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../widgets/feedback.dart';
@@ -6,7 +5,7 @@ import '../widgets/feedback.dart';
 extension AsyncValueUI on AsyncValue<Object?> {
   void showSnackbarOnError(BuildContext context) {
     if (!isRefreshing && hasError) {
-      switch (defaultTargetPlatform) {
+      switch (Theme.of(context).platform) {
         case TargetPlatform.android:
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(error.toString())),
@@ -18,7 +17,7 @@ extension AsyncValueUI on AsyncValue<Object?> {
             type: SnackBarType.error,
           );
         default:
-          assert(false, 'Unexpected platform $defaultTargetPlatform');
+          assert(false, 'Unexpected platform ${Theme.of(context).platform}');
           break;
       }
     }

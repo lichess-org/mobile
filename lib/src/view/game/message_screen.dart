@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
@@ -148,7 +147,7 @@ class _MessageBubble extends ConsumerWidget {
   const _MessageBubble({required this.you, required this.message});
 
   Color _bubbleColor(BuildContext context, Brightness brightness) =>
-      defaultTargetPlatform == TargetPlatform.iOS
+      Theme.of(context).platform == TargetPlatform.iOS
           ? you
               ? LichessColors.green
               : CupertinoColors.systemGrey4.resolveFrom(context)
@@ -159,7 +158,7 @@ class _MessageBubble extends ConsumerWidget {
                   : darken(LichessColors.grey, 0.5);
 
   Color _textColor(BuildContext context, Brightness brightness) =>
-      defaultTargetPlatform == TargetPlatform.iOS
+      Theme.of(context).platform == TargetPlatform.iOS
           ? you
               ? Colors.white
               : CupertinoColors.label.resolveFrom(context)

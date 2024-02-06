@@ -6,7 +6,6 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -546,7 +545,7 @@ class _BottomBar extends ConsumerWidget {
         ref.watch(ctrlProvider.select((value) => value.canShowGameSummary));
 
     return Container(
-      color: defaultTargetPlatform == TargetPlatform.iOS
+      color: Theme.of(context).platform == TargetPlatform.iOS
           ? CupertinoTheme.of(context).barBackgroundColor
           : Theme.of(context).bottomAppBarTheme.color,
       child: SafeArea(
@@ -702,12 +701,13 @@ class _EngineDepth extends ConsumerWidget {
                 },
                 direction: PopoverDirection.top,
                 width: 240,
-                backgroundColor: defaultTargetPlatform == TargetPlatform.android
-                    ? Theme.of(context).dialogBackgroundColor
-                    : CupertinoDynamicColor.resolve(
-                        CupertinoColors.tertiarySystemBackground,
-                        context,
-                      ),
+                backgroundColor:
+                    Theme.of(context).platform == TargetPlatform.android
+                        ? Theme.of(context).dialogBackgroundColor
+                        : CupertinoDynamicColor.resolve(
+                            CupertinoColors.tertiarySystemBackground,
+                            context,
+                          ),
                 transitionDuration: Duration.zero,
                 popoverTransitionBuilder: (_, child) => child,
               );
@@ -718,7 +718,7 @@ class _EngineDepth extends ConsumerWidget {
                 height: 20.0,
                 padding: const EdgeInsets.all(2.0),
                 decoration: BoxDecoration(
-                  color: defaultTargetPlatform == TargetPlatform.android
+                  color: Theme.of(context).platform == TargetPlatform.android
                       ? Theme.of(context).colorScheme.secondary
                       : CupertinoTheme.of(context).primaryColor,
                   borderRadius: BorderRadius.circular(4.0),
@@ -728,7 +728,8 @@ class _EngineDepth extends ConsumerWidget {
                   child: Text(
                     '${math.min(99, depth)}',
                     style: TextStyle(
-                      color: defaultTargetPlatform == TargetPlatform.android
+                      color: Theme.of(context).platform ==
+                              TargetPlatform.android
                           ? Theme.of(context).colorScheme.onSecondary
                           : CupertinoTheme.of(context).primaryContrastingColor,
                       fontFeatures: const [
@@ -1033,7 +1034,7 @@ class AcplChart extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final mainLineColor = defaultTargetPlatform == TargetPlatform.iOS
+    final mainLineColor = Theme.of(context).platform == TargetPlatform.iOS
         ? Colors.orange
         : Theme.of(context).colorScheme.secondary;
     // yes it looks like below/above are inverted in fl_chart

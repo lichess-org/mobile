@@ -1,7 +1,6 @@
 import 'package:chessground/chessground.dart' as cg;
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -288,7 +287,7 @@ class _BottomBar extends ConsumerWidget {
     final puzzleState = ref.watch(ctrlProvider);
 
     return Container(
-      color: defaultTargetPlatform == TargetPlatform.iOS
+      color: Theme.of(context).platform == TargetPlatform.iOS
           ? CupertinoTheme.of(context).barBackgroundColor
           : Theme.of(context).bottomAppBarTheme.color,
       child: SafeArea(
@@ -324,7 +323,7 @@ class _BottomBar extends ConsumerWidget {
                       );
                     },
                     label: 'Share this puzzle',
-                    icon: defaultTargetPlatform == TargetPlatform.iOS
+                    icon: Theme.of(context).platform == TargetPlatform.iOS
                         ? CupertinoIcons.share
                         : Icons.share,
                   ),
@@ -371,7 +370,7 @@ class _BottomBar extends ConsumerWidget {
     return showAdaptiveDialog(
       context: context,
       builder: (context) {
-        return defaultTargetPlatform == TargetPlatform.iOS
+        return Theme.of(context).platform == TargetPlatform.iOS
             ? CupertinoAlertDialog(
                 title: Text(context.l10n.aboutX('Puzzle Streak')),
                 content: Text(context.l10n.puzzleStreakDescription),
@@ -430,7 +429,7 @@ class _RetryFetchPuzzleDialog extends ConsumerWidget {
     final canRetry = state.nextPuzzleStreakFetchError &&
         !state.nextPuzzleStreakFetchIsRetrying;
 
-    if (defaultTargetPlatform == TargetPlatform.iOS) {
+    if (Theme.of(context).platform == TargetPlatform.iOS) {
       return CupertinoAlertDialog(
         title: const Text(title),
         content: const Text(content),

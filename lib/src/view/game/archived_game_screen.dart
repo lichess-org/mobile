@@ -1,7 +1,6 @@
 import 'package:chessground/chessground.dart' as cg;
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -225,7 +224,7 @@ class _BottomBar extends ConsumerWidget {
     final gameCursor = ref.watch(gameCursorProvider(gameData.id));
 
     return Container(
-      color: defaultTargetPlatform == TargetPlatform.iOS
+      color: Theme.of(context).platform == TargetPlatform.iOS
           ? CupertinoTheme.of(context).barBackgroundColor
           : Theme.of(context).bottomAppBarTheme.color,
       child: SafeArea(

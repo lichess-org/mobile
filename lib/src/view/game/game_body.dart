@@ -5,7 +5,6 @@ import 'package:chessground/chessground.dart' as cg;
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -355,7 +354,7 @@ class _GameBottomBar extends ConsumerWidget {
             : null;
 
     return Container(
-      color: defaultTargetPlatform == TargetPlatform.iOS
+      color: Theme.of(context).platform == TargetPlatform.iOS
           ? CupertinoTheme.of(context).barBackgroundColor
           : Theme.of(context).bottomAppBarTheme.color,
       child: SafeArea(
@@ -504,7 +503,7 @@ class _GameBottomBar extends ConsumerWidget {
                         },
                       );
                     },
-                    icon: defaultTargetPlatform == TargetPlatform.iOS
+                    icon: Theme.of(context).platform == TargetPlatform.iOS
                         ? CupertinoIcons.chat_bubble
                         : Icons.chat_bubble_outline,
                     chip: chatState.unreadMessages > 0
@@ -775,7 +774,7 @@ class _GameNegotiationDialog extends StatelessWidget {
       onAccept();
     }
 
-    if (defaultTargetPlatform == TargetPlatform.iOS) {
+    if (Theme.of(context).platform == TargetPlatform.iOS) {
       return CupertinoAlertDialog(
         content: title,
         actions: [
@@ -827,7 +826,7 @@ class _ThreefoldDialog extends ConsumerWidget {
       ref.read(gameControllerProvider(id).notifier).claimDraw();
     }
 
-    if (defaultTargetPlatform == TargetPlatform.iOS) {
+    if (Theme.of(context).platform == TargetPlatform.iOS) {
       return CupertinoAlertDialog(
         content: content,
         actions: [
@@ -883,7 +882,7 @@ class _ClaimWinDialog extends ConsumerWidget {
       ref.read(ctrlProvider.notifier).forceDraw();
     }
 
-    if (defaultTargetPlatform == TargetPlatform.iOS) {
+    if (Theme.of(context).platform == TargetPlatform.iOS) {
       return CupertinoAlertDialog(
         content: content,
         actions: [

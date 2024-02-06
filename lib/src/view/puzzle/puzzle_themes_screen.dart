@@ -1,6 +1,5 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
@@ -84,7 +83,7 @@ class _Body extends ConsumerWidget {
     // skip recommended category since we display it on the puzzle tab screen
     final list = ref.watch(puzzleThemeCategoriesProvider).skip(1).toList();
     final themes = ref.watch(_themesProvider);
-    final expansionTileColor = defaultTargetPlatform == TargetPlatform.iOS
+    final expansionTileColor = Theme.of(context).platform == TargetPlatform.iOS
         ? CupertinoColors.secondaryLabel.resolveFrom(context)
         : null;
 
@@ -152,10 +151,10 @@ class _Category extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final collapsedIconColor = defaultTargetPlatform == TargetPlatform.iOS
+    final collapsedIconColor = Theme.of(context).platform == TargetPlatform.iOS
         ? CupertinoColors.secondaryLabel.resolveFrom(context)
         : null;
-    final tileColor = defaultTargetPlatform == TargetPlatform.iOS
+    final tileColor = Theme.of(context).platform == TargetPlatform.iOS
         ? CupertinoColors.systemBlue.resolveFrom(context)
         : null;
 
@@ -205,12 +204,12 @@ class _Category extends ConsumerWidget {
                               )
                             : null,
                     title: Padding(
-                      padding: defaultTargetPlatform == TargetPlatform.iOS
+                      padding: Theme.of(context).platform == TargetPlatform.iOS
                           ? const EdgeInsets.only(top: 6.0)
                           : EdgeInsets.zero,
                       child: Text(
                         puzzleThemeL10n(context, theme).name,
-                        style: defaultTargetPlatform == TargetPlatform.iOS
+                        style: Theme.of(context).platform == TargetPlatform.iOS
                             ? TextStyle(
                                 color: CupertinoTheme.of(context)
                                     .textTheme

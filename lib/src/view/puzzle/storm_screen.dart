@@ -2,7 +2,6 @@ import 'package:chessground/chessground.dart' as cg;
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -276,7 +275,7 @@ Future<void> _stormInfoDialogBuilder(BuildContext context) {
           ),
         ),
       );
-      return defaultTargetPlatform == TargetPlatform.iOS
+      return Theme.of(context).platform == TargetPlatform.iOS
           ? CupertinoAlertDialog(
               title: Text(context.l10n.aboutX('Puzzle Storm')),
               content: content,
@@ -463,7 +462,7 @@ class _ComboState extends ConsumerState<_Combo>
                         fontSize: 26,
                         height: 1.0,
                         fontWeight: FontWeight.bold,
-                        color: defaultTargetPlatform == TargetPlatform.iOS
+                        color: Theme.of(context).platform == TargetPlatform.iOS
                             ? CupertinoTheme.of(context)
                                 .textTheme
                                 .textStyle
@@ -474,7 +473,7 @@ class _ComboState extends ConsumerState<_Combo>
                     Text(
                       context.l10n.stormCombo,
                       style: TextStyle(
-                        color: defaultTargetPlatform == TargetPlatform.iOS
+                        color: Theme.of(context).platform == TargetPlatform.iOS
                             ? CupertinoTheme.of(context)
                                 .textTheme
                                 .textStyle
@@ -604,7 +603,7 @@ class _BottomBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final puzzleState = ref.watch(ctrl);
     return Container(
-      color: defaultTargetPlatform == TargetPlatform.iOS
+      color: Theme.of(context).platform == TargetPlatform.iOS
           ? CupertinoTheme.of(context).barBackgroundColor
           : Theme.of(context).bottomAppBarTheme.color,
       child: SafeArea(
@@ -662,7 +661,7 @@ class _RunStats extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return defaultTargetPlatform == TargetPlatform.iOS
+    return Theme.of(context).platform == TargetPlatform.iOS
         ? CupertinoPageScaffold(
             navigationBar: CupertinoNavigationBar(
               leading: CupertinoButton(
@@ -795,7 +794,7 @@ class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
                       message: context.l10n.stormFailedPuzzles,
                       child: PlatformIconButton(
                         semanticsLabel: context.l10n.stormFailedPuzzles,
-                        icon: defaultTargetPlatform == TargetPlatform.iOS
+                        icon: Theme.of(context).platform == TargetPlatform.iOS
                             ? CupertinoIcons.clear_fill
                             : Icons.close,
                         onTap: () => setState(
@@ -810,7 +809,7 @@ class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
                       excludeFromSemantics: true,
                       child: PlatformIconButton(
                         semanticsLabel: context.l10n.stormSlowPuzzles,
-                        icon: defaultTargetPlatform == TargetPlatform.iOS
+                        icon: Theme.of(context).platform == TargetPlatform.iOS
                             ? CupertinoIcons.hourglass
                             : Icons.hourglass_bottom,
                         onTap: () => setState(
@@ -876,7 +875,7 @@ class _StormDashboardButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final session = ref.watch(authSessionProvider);
     if (session != null) {
-      switch (defaultTargetPlatform) {
+      switch (Theme.of(context).platform) {
         case TargetPlatform.iOS:
           return CupertinoIconButton(
             padding: EdgeInsets.zero,
@@ -891,7 +890,7 @@ class _StormDashboardButton extends ConsumerWidget {
             icon: const Icon(Icons.history),
           );
         default:
-          assert(false, 'Unexpected platform $defaultTargetPlatform');
+          assert(false, 'Unexpected platform $Theme.of(context).platform');
           return const SizedBox.shrink();
       }
     }

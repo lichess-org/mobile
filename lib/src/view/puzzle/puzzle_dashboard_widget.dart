@@ -1,6 +1,5 @@
 import 'package:collection/collection.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/errors.dart';
@@ -140,11 +139,12 @@ class PuzzleChart extends StatelessWidget {
         radarShape: RadarShape.polygon,
         dataSets: [
           RadarDataSet(
-            fillColor: defaultTargetPlatform == TargetPlatform.iOS
+            fillColor: Theme.of(context).platform == TargetPlatform.iOS
                 ? null
                 : chartColor.withOpacity(0.2),
-            borderColor:
-                defaultTargetPlatform == TargetPlatform.iOS ? null : chartColor,
+            borderColor: Theme.of(context).platform == TargetPlatform.iOS
+                ? null
+                : chartColor,
             dataEntries: puzzleData
                 .map((theme) => RadarEntry(value: theme.performance.toDouble()))
                 .toList(),

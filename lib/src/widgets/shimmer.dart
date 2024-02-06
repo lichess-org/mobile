@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class Shimmer extends StatefulWidget {
@@ -22,7 +21,7 @@ class ShimmerState extends State<Shimmer> with SingleTickerProviderStateMixin {
   late AnimationController _shimmerController;
 
   LinearGradient get _defaultGradient {
-    switch (defaultTargetPlatform) {
+    switch (Theme.of(context).platform) {
       case TargetPlatform.android:
         final brightness = Theme.of(context).brightness;
         switch (brightness) {
@@ -41,7 +40,7 @@ class ShimmerState extends State<Shimmer> with SingleTickerProviderStateMixin {
             return iOSDarkShimmerGradient;
         }
       default:
-        throw 'Unexpected platform $defaultTargetPlatform';
+        throw 'Unexpected platform $Theme.of(context).platform';
     }
   }
 
