@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
+import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_loading_board.dart';
@@ -45,8 +46,7 @@ class StandaloneGameScreen extends ConsumerStatefulWidget {
       _StandaloneGameScreenState();
 }
 
-class _StandaloneGameScreenState extends ConsumerState<StandaloneGameScreen>
-    with ImmersiveMode {
+class _StandaloneGameScreenState extends ConsumerState<StandaloneGameScreen> {
   final _whiteClockKey = GlobalKey(debugLabel: 'whiteClockOnGameScreen');
   final _blackClockKey = GlobalKey(debugLabel: 'blackClockOnGameScreen');
 
@@ -60,41 +60,45 @@ class _StandaloneGameScreenState extends ConsumerState<StandaloneGameScreen>
 
   @override
   Widget build(BuildContext context) {
-    return PlatformWidget(
-      androidBuilder: (context) => Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: GameAppBar(id: _gameId),
-        body: GameBody(
-          id: _gameId,
-          loadingBoardWidget: widget.params.id == _gameId
-              ? StandaloneGameLoadingBoard(
-                  fen: widget.params.fen,
-                  orientation: widget.params.orientation,
-                  lastMove: widget.params.lastMove,
-                )
-              : const StandaloneGameLoadingBoard(),
-          whiteClockKey: _whiteClockKey,
-          blackClockKey: _blackClockKey,
-          onLoadGameCallback: _loadGame,
-          onNewOpponentCallback: _onNewOpponent,
+    return FocusDetector(
+      onVisibilityGained: () => immersiveModeService.enable(),
+      onVisibilityLost: () => immersiveModeService.disable(),
+      child: PlatformWidget(
+        androidBuilder: (context) => Scaffold(
+          resizeToAvoidBottomInset: false,
+          appBar: GameAppBar(id: _gameId),
+          body: GameBody(
+            id: _gameId,
+            loadingBoardWidget: widget.params.id == _gameId
+                ? StandaloneGameLoadingBoard(
+                    fen: widget.params.fen,
+                    orientation: widget.params.orientation,
+                    lastMove: widget.params.lastMove,
+                  )
+                : const StandaloneGameLoadingBoard(),
+            whiteClockKey: _whiteClockKey,
+            blackClockKey: _blackClockKey,
+            onLoadGameCallback: _loadGame,
+            onNewOpponentCallback: _onNewOpponent,
+          ),
         ),
-      ),
-      iosBuilder: (context) => CupertinoPageScaffold(
-        resizeToAvoidBottomInset: false,
-        navigationBar: GameCupertinoNavBar(id: _gameId),
-        child: GameBody(
-          id: _gameId,
-          loadingBoardWidget: widget.params.id == _gameId
-              ? StandaloneGameLoadingBoard(
-                  fen: widget.params.fen,
-                  orientation: widget.params.orientation,
-                  lastMove: widget.params.lastMove,
-                )
-              : const StandaloneGameLoadingBoard(),
-          whiteClockKey: _whiteClockKey,
-          blackClockKey: _blackClockKey,
-          onLoadGameCallback: _loadGame,
-          onNewOpponentCallback: _onNewOpponent,
+        iosBuilder: (context) => CupertinoPageScaffold(
+          resizeToAvoidBottomInset: false,
+          navigationBar: GameCupertinoNavBar(id: _gameId),
+          child: GameBody(
+            id: _gameId,
+            loadingBoardWidget: widget.params.id == _gameId
+                ? StandaloneGameLoadingBoard(
+                    fen: widget.params.fen,
+                    orientation: widget.params.orientation,
+                    lastMove: widget.params.lastMove,
+                  )
+                : const StandaloneGameLoadingBoard(),
+            whiteClockKey: _whiteClockKey,
+            blackClockKey: _blackClockKey,
+            onLoadGameCallback: _loadGame,
+            onNewOpponentCallback: _onNewOpponent,
+          ),
         ),
       ),
     );

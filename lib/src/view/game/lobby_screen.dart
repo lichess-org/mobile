@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/lobby/create_game_service.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/navigation.dart';
+import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/view/game/game_body.dart';
 import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
@@ -45,8 +46,7 @@ class LobbyScreen extends ConsumerStatefulWidget {
   ConsumerState<LobbyScreen> createState() => _LobbyScreenState();
 }
 
-class _LobbyScreenState extends ConsumerState<LobbyScreen>
-    with RouteAware, ImmersiveMode {
+class _LobbyScreenState extends ConsumerState<LobbyScreen> with RouteAware {
   final _whiteClockKey = GlobalKey(debugLabel: 'whiteClockOnGameScreen');
   final _blackClockKey = GlobalKey(debugLabel: 'blackClockOnGameScreen');
 
@@ -79,74 +79,78 @@ class _LobbyScreenState extends ConsumerState<LobbyScreen>
     final gameIdAsync =
         ref.watch(_lobbyGameProvider(widget.seek)).unwrapPrevious();
 
-    return gameIdAsync.when(
-      data: (data) {
-        final (gameId, fromRematch: isRematch) = data;
-        final body = GameBody(
-          id: gameId,
-          loadingBoardWidget: isRematch
-              ? const StandaloneGameLoadingBoard()
-              : LobbyGameLoadingBoard(widget.seek),
-          whiteClockKey: _whiteClockKey,
-          blackClockKey: _blackClockKey,
-          onLoadGameCallback: (id) {
-            ref.read(_lobbyGameProvider(widget.seek).notifier).rematch(id);
-          },
-          onNewOpponentCallback: (_) {
-            ref.invalidate(_lobbyGameProvider(widget.seek));
-          },
-        );
-        return PlatformWidget(
-          androidBuilder: (context) => Scaffold(
-            resizeToAvoidBottomInset: false,
-            appBar: GameAppBar(id: gameId),
-            body: body,
-          ),
-          iosBuilder: (context) => CupertinoPageScaffold(
-            resizeToAvoidBottomInset: false,
-            navigationBar: GameCupertinoNavBar(id: gameId),
-            child: body,
-          ),
-        );
-      },
-      loading: () => PlatformWidget(
-        androidBuilder: (context) => Scaffold(
-          resizeToAvoidBottomInset: false,
-          appBar: GameAppBar(seek: widget.seek),
-          body: PopScope(
-            canPop: false,
-            child: LobbyGameLoadingBoard(widget.seek),
-          ),
-        ),
-        iosBuilder: (context) => CupertinoPageScaffold(
-          resizeToAvoidBottomInset: false,
-          navigationBar: GameCupertinoNavBar(seek: widget.seek),
-          child: PopScope(
-            canPop: false,
-            child: LobbyGameLoadingBoard(widget.seek),
-          ),
-        ),
-      ),
-      error: (e, s) {
-        debugPrint(
-          'SEVERE: [LobbyGameScreen] could not create game; $e\n$s',
-        );
-        const body = PopScope(
-          child: LoadGameError(),
-        );
-        return PlatformWidget(
+    return FocusDetector(
+      onVisibilityGained: () => immersiveModeService.enable(),
+      onVisibilityLost: () => immersiveModeService.disable(),
+      child: gameIdAsync.when(
+        data: (data) {
+          final (gameId, fromRematch: isRematch) = data;
+          final body = GameBody(
+            id: gameId,
+            loadingBoardWidget: isRematch
+                ? const StandaloneGameLoadingBoard()
+                : LobbyGameLoadingBoard(widget.seek),
+            whiteClockKey: _whiteClockKey,
+            blackClockKey: _blackClockKey,
+            onLoadGameCallback: (id) {
+              ref.read(_lobbyGameProvider(widget.seek).notifier).rematch(id);
+            },
+            onNewOpponentCallback: (_) {
+              ref.invalidate(_lobbyGameProvider(widget.seek));
+            },
+          );
+          return PlatformWidget(
+            androidBuilder: (context) => Scaffold(
+              resizeToAvoidBottomInset: false,
+              appBar: GameAppBar(id: gameId),
+              body: body,
+            ),
+            iosBuilder: (context) => CupertinoPageScaffold(
+              resizeToAvoidBottomInset: false,
+              navigationBar: GameCupertinoNavBar(id: gameId),
+              child: body,
+            ),
+          );
+        },
+        loading: () => PlatformWidget(
           androidBuilder: (context) => Scaffold(
             resizeToAvoidBottomInset: false,
             appBar: GameAppBar(seek: widget.seek),
-            body: body,
+            body: PopScope(
+              canPop: false,
+              child: LobbyGameLoadingBoard(widget.seek),
+            ),
           ),
           iosBuilder: (context) => CupertinoPageScaffold(
             resizeToAvoidBottomInset: false,
             navigationBar: GameCupertinoNavBar(seek: widget.seek),
-            child: body,
+            child: PopScope(
+              canPop: false,
+              child: LobbyGameLoadingBoard(widget.seek),
+            ),
           ),
-        );
-      },
+        ),
+        error: (e, s) {
+          debugPrint(
+            'SEVERE: [LobbyGameScreen] could not create game; $e\n$s',
+          );
+          const body = PopScope(
+            child: LoadGameError(),
+          );
+          return PlatformWidget(
+            androidBuilder: (context) => Scaffold(
+              resizeToAvoidBottomInset: false,
+              appBar: GameAppBar(seek: widget.seek),
+              body: body,
+            ),
+            iosBuilder: (context) => CupertinoPageScaffold(
+              resizeToAvoidBottomInset: false,
+              navigationBar: GameCupertinoNavBar(seek: widget.seek),
+              child: body,
+            ),
+          );
+        },
+      ),
     );
   }
 }
