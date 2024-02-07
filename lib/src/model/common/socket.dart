@@ -32,6 +32,306 @@ const _kResendAckDelay = Duration(milliseconds: 1500);
 const _kIdleTimeout = Duration(seconds: 5);
 const _kDisconnectOnBackgroundTimeout = Duration(minutes: 20);
 
+class SocketClient {
+  SocketClient(
+    this._ref,
+    this._log, {
+    required this.route,
+    this.onOpen,
+    this.pingDelay = _kPingDelay,
+    this.pingMaxLag = _kPingMaxLag,
+    this.autoReconnectDelay = _kAutoReconnectDelay,
+    this.resendAckDelay = _kResendAckDelay,
+    this.idleTimeout = _kIdleTimeout,
+  });
+
+  /// The route to connect to.
+  final Uri route;
+
+  /// A callback to be called whenever the socket is opened.
+  final VoidCallback? onOpen;
+
+  /// The delay between the next ping after receiving a pong.
+  final Duration pingDelay;
+
+  /// The maximum lag before considering the connection as lost.
+  final Duration pingMaxLag;
+
+  /// The delay before reconnecting after a connection failure.
+  final Duration autoReconnectDelay;
+
+  /// The delay before resending an ack.
+  final Duration resendAckDelay;
+
+  /// The delay before closing the socket if idle (no subscription).
+  ///
+  /// This is a short delay to allow for reconnections when changing screen.
+  final Duration idleTimeout;
+
+  final _firstConnection = Completer<void>();
+
+  late final StreamController<SocketEvent> _streamController =
+      StreamController<SocketEvent>.broadcast(
+    onListen: _onStreamListen,
+    onCancel: _onStreamCancel,
+  );
+
+  final Logger _log;
+  final SocketServiceRef _ref;
+
+  Timer? _pingTimer;
+  Timer? _reconnectTimer;
+  Timer? _ackResendTimer;
+  Timer? _closeTimer;
+  int _pongCount = 0;
+  DateTime _lastPing = DateTime.now();
+
+  final _averageLag = ValueNotifier(Duration.zero);
+
+  StreamSubscription<SocketEvent>? _socketStreamSubscription;
+
+  /// The list of acknowledgeable messages.
+  final List<(DateTime, int, Map<String, dynamic>)> _acks = [];
+
+  /// The current number of connections.
+  int _nbConnections = 0;
+
+  /// The current ack id. Incremented for each ack.
+  int _ackId = 1;
+
+  /// The current WebSocket channel.
+  WebSocketChannel? _channel;
+
+  /// Gets the current WebSocket sink
+  WebSocketSink? get _sink => _channel?.sink;
+
+  /// The socket events broadcast stream.
+  Stream<SocketEvent> get stream => _streamController.stream;
+
+  /// The Socket Random Identifier.
+  String get sri => _ref.read(sriProvider);
+
+  /// The average lag computed from ping/pong protocol.
+  ///
+  /// A duration of zero means the socket is not connected.
+  ValueListenable<Duration> get averageLag => _averageLag;
+
+  /// Whether the socket is connected.
+  bool get isConnected => averageLag.value != Duration.zero;
+
+  /// A [Future] that completes when the first connection is established.
+  Future<void> get firstConnection => _firstConnection.future;
+
+  /// Connect or reconnect the WebSocket.
+  Future<void> connect() async {
+    disconnect();
+    _pongCount = 0;
+    _reconnectTimer?.cancel();
+    _ackResendTimer?.cancel();
+    _ackResendTimer = Timer.periodic(resendAckDelay, (_) => _resendAcks());
+
+    final session = _ref.read(authSessionProvider);
+    final pInfo = _ref.read(packageInfoProvider);
+    final deviceInfo = _ref.read(deviceInfoProvider);
+    final uri = Uri.parse('$kLichessWSHost$route');
+    final Map<String, String> headers = session != null
+        ? {
+            'Authorization': 'Bearer ${signBearerToken(session.token)}',
+          }
+        : {};
+    WebSocket.userAgent = makeUserAgent(pInfo, deviceInfo, sri, session?.user);
+
+    _log.info('Creating WebSocket connection to $uri');
+
+    try {
+      final channel = await _ref.read(webSocketChannelFactoryProvider).create(
+            uri.toString(),
+            headers: headers,
+            timeout: _kDefaultConnectTimeout,
+          );
+
+      _channel = channel;
+
+      _socketStreamSubscription?.cancel();
+      _socketStreamSubscription = channel.stream.map((raw) {
+        if (raw == '0') {
+          return SocketEvent.pong;
+        }
+        return SocketEvent.fromJson(
+          jsonDecode(raw as String) as Map<String, dynamic>,
+        );
+      }).listen(_handleEvent);
+
+      _log.info('WebSocket connection established.');
+
+      _nbConnections++;
+      if (_nbConnections == 1) {
+        _firstConnection.complete();
+      }
+
+      _averageLag.value = Duration.zero;
+      _sendPing();
+      _schedulePing(pingDelay);
+
+      onOpen?.call();
+      _resendAcks();
+    } catch (error) {
+      _log.severe('WebSocket connection failed.', error);
+      _averageLag.value = Duration.zero;
+      _scheduleReconnect(autoReconnectDelay);
+    }
+  }
+
+  /// Sends a message to the websocket.
+  void send(
+    String topic,
+    Object? data, {
+    bool? ackable,
+    bool? withLag,
+  }) {
+    Map<String, Object> message;
+
+    if (ackable == true) {
+      final ackId = _ackId++;
+      message = {
+        't': topic,
+        'd': {
+          if (data != null && data is Map<String, Object>) ...data,
+          'a': ackId,
+          if (withLag == true) 'l': _averageLag.value.inMilliseconds,
+        },
+      };
+      _acks.add((DateTime.now(), ackId, message));
+    } else {
+      message = {
+        't': topic,
+        if (data != null && data is Map<String, Object>)
+          'd': {
+            ...data,
+            if (withLag == true) 'l': _averageLag.value.inMilliseconds,
+          }
+        else if (data != null)
+          'd': data,
+      };
+    }
+
+    _sink?.add(jsonEncode(message));
+  }
+
+  void dispose() {
+    disconnect();
+    _streamController.close();
+  }
+
+  /// Disconnects websocket connection
+  ///
+  /// Returns a [Future] that completes when the connection is closed.
+  Future<void> disconnect() {
+    final future = _sink?.close().then((_) {
+          _log.fine('WebSocket connection was closed by client.');
+          _averageLag.value = Duration.zero;
+        }).catchError((Object? error) {
+          _averageLag.value = Duration.zero;
+          _log.warning('WebSocket connection could not be closed.', error);
+        }) ??
+        Future.value();
+    _channel = null;
+    _socketStreamSubscription?.cancel();
+    _pingTimer?.cancel();
+    _reconnectTimer?.cancel();
+    _ackResendTimer?.cancel();
+
+    return future;
+  }
+
+  /// Called when the first listener is added to the socket stream.
+  void _onStreamListen() {
+    _log.fine('WebSocket event stream subscribed.');
+    _closeTimer?.cancel();
+  }
+
+  /// Called when the last listener is removed from the socket stream.
+  void _onStreamCancel() {
+    _log.fine('WebSocket event stream idle.');
+  }
+
+  void _handleEvent(SocketEvent event) {
+    switch (event.topic) {
+      case '_pong':
+      case 'n':
+        _handlePong(pingDelay);
+      case 'ack':
+        _onServerAck(event);
+    }
+
+    if (event != SocketEvent.pong && event.topic != 'ack') {
+      _streamController.add(event);
+    }
+  }
+
+  void _schedulePing(Duration delay) {
+    _pingTimer?.cancel();
+    _pingTimer = Timer(delay, _sendPing);
+  }
+
+  /// Sends a ping to the server.
+  void _sendPing() {
+    _sink?.add(
+      _pongCount % 10 == 2
+          ? jsonEncode({
+              't': 'p',
+              'l': (_averageLag.value.inMilliseconds * 0.1).round(),
+            })
+          : 'p',
+    );
+    _lastPing = DateTime.now();
+    _scheduleReconnect(pingMaxLag);
+  }
+
+  void _handlePong(Duration pingDelay) {
+    _reconnectTimer?.cancel();
+    if (_pongCount == 0) {
+      _log.info('Ping/pong protocol established.');
+    }
+    _schedulePing(pingDelay);
+    _pongCount++;
+    final currentLag = Duration(
+      milliseconds:
+          math.min(DateTime.now().difference(_lastPing).inMilliseconds, 10000),
+    );
+
+    // Average first 4 pings, then switch to decaying average.
+    final mix = _pongCount > 4 ? 0.1 : 1 / _pongCount;
+    _averageLag.value += (currentLag - _averageLag.value) * mix;
+  }
+
+  void _scheduleReconnect(Duration delay) {
+    _reconnectTimer?.cancel();
+    _reconnectTimer = Timer(delay, () {
+      _averageLag.value = Duration.zero;
+      _log.info('Reconnecting WebSocket.');
+      connect();
+    });
+  }
+
+  void _onServerAck(SocketEvent event) {
+    if (event.data is! int) {
+      return;
+    }
+    _acks.removeWhere((rec) => rec.$2 == event.data);
+  }
+
+  void _resendAcks() {
+    final resendCutoff =
+        DateTime.now().subtract(const Duration(milliseconds: 2500));
+    for (final (at, _, ack) in _acks) {
+      if (at.isBefore(resendCutoff)) {
+        _sink?.add(jsonEncode(ack));
+      }
+    }
+  }
+}
+
 /// Lichess websocket client.
 ///
 /// Handles authentication:
@@ -76,8 +376,6 @@ class SocketService {
   final Duration resendAckDelay;
 
   /// The delay before closing the socket if idle (no subscription).
-  ///
-  /// This is a short delay to allow for reconnections when changing screen.
   final Duration idleTimeout;
 
   late final StreamController<SocketEvent> _streamController =
