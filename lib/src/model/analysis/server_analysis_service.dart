@@ -46,7 +46,7 @@ class ServerAnalysisService {
       }
     }
 
-    final socket = ref.read(socketClientProvider);
+    final socket = ref.read(socketServiceProvider);
     final (stream, _) = socket.connect(Uri(path: '/play/$id/v6'));
 
     final completer = Completer<void>();

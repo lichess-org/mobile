@@ -210,7 +210,7 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
     super.dispose();
   }
 
-  SocketClient get _socket => ref.read(socketClientProvider);
+  SocketService get _socket => ref.read(socketServiceProvider);
 
   @override
   Widget build(BuildContext context) {

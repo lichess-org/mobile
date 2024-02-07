@@ -65,7 +65,7 @@ class GameController extends _$GameController {
 
   @override
   Future<GameState> build(GameFullId gameFullId) {
-    final socket = ref.watch(socketClientProvider);
+    final socket = ref.watch(socketServiceProvider);
     final chatNotifier = ref.watch(chatControllerProvider(gameFullId).notifier);
     final (stream, _) =
         socket.connect(Uri(path: '/play/$gameFullId/v6'), forceReconnect: true);
@@ -890,7 +890,7 @@ class GameController extends _$GameController {
     );
   }
 
-  SocketClient get _socket => ref.read(socketClientProvider);
+  SocketService get _socket => ref.read(socketServiceProvider);
 }
 
 @freezed

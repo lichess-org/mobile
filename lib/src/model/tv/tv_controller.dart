@@ -40,7 +40,7 @@ class TvController extends _$TvController {
     return _connectWebsocket(initialGame);
   }
 
-  SocketClient get _socket => ref.read(socketClientProvider);
+  SocketService get _socket => ref.read(socketServiceProvider);
   SoundService get _soundService => ref.read(soundServiceProvider);
 
   Future<void> startWatching() async {

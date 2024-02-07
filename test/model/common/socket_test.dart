@@ -8,8 +8,8 @@ import 'package:logging/logging.dart';
 import '../../test_container.dart';
 import 'fake_websocket_channel.dart';
 
-SocketClient _makeSocketClient(ProviderRef<SocketClient> ref) {
-  final client = SocketClient(
+SocketService _makeSocketClient(ProviderRef<SocketService> ref) {
+  final client = SocketService(
     ref,
     Logger('TestSocketClient'),
     pingDelay: const Duration(milliseconds: 50),
@@ -34,11 +34,11 @@ void main() {
           webSocketChannelFactoryProvider.overrideWith(
             (_) => FakeWebSocketChannelFactory(() => fakeChannel),
           ),
-          socketClientProvider.overrideWith(_makeSocketClient),
+          socketServiceProvider.overrideWith(_makeSocketClient),
         ],
       );
 
-      final socketClient = container.read(socketClientProvider);
+      final socketClient = container.read(socketServiceProvider);
       final (_, readyStream) = socketClient.connect(testUri);
 
       // before the connection is ready the average lag is zero
@@ -94,11 +94,11 @@ void main() {
           webSocketChannelFactoryProvider.overrideWith(
             (_) => FakeWebSocketChannelFactory(() => fakeChannel),
           ),
-          socketClientProvider.overrideWith(_makeSocketClient),
+          socketServiceProvider.overrideWith(_makeSocketClient),
         ],
       );
 
-      final socketClient = container.read(socketClientProvider);
+      final socketClient = container.read(socketServiceProvider);
       final (_, readyStream) = socketClient.connect(testUri);
 
       int sentPingCount = 0;
@@ -133,11 +133,11 @@ void main() {
               return FakeWebSocketChannel();
             }),
           ),
-          socketClientProvider.overrideWith(_makeSocketClient),
+          socketServiceProvider.overrideWith(_makeSocketClient),
         ],
       );
 
-      final socketClient = container.read(socketClientProvider);
+      final socketClient = container.read(socketServiceProvider);
       final (_, readyStream) = socketClient.connect(testUri);
 
       // The first connection attempt will fail, but the second one will succeed
@@ -174,11 +174,11 @@ void main() {
               return channel;
             }),
           ),
-          socketClientProvider.overrideWith(_makeSocketClient),
+          socketServiceProvider.overrideWith(_makeSocketClient),
         ],
       );
 
-      final socketClient = container.read(socketClientProvider);
+      final socketClient = container.read(socketServiceProvider);
       final (_, readyStream) = socketClient.connect(testUri);
 
       await readyStream.first;
@@ -205,11 +205,11 @@ void main() {
           webSocketChannelFactoryProvider.overrideWith(
             (_) => FakeWebSocketChannelFactory(() => fakeChannel),
           ),
-          socketClientProvider.overrideWith(_makeSocketClient),
+          socketServiceProvider.overrideWith(_makeSocketClient),
         ],
       );
 
-      final socketClient = container.read(socketClientProvider);
+      final socketClient = container.read(socketServiceProvider);
       final (_, readyStream) = socketClient.connect(testUri);
 
       await readyStream.first;

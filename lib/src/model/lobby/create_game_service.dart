@@ -31,7 +31,7 @@ class CreateGameService {
       throw StateError('Already creating a game.');
     }
 
-    final socket = ref.read(socketClientProvider);
+    final socket = ref.read(socketServiceProvider);
     final (stream, readyStream) = socket.connect(Uri(path: '/lobby/socket/v5'));
 
     // ensure the pending game connection is closed in any case
@@ -84,7 +84,7 @@ class CreateGameService {
     await ref.withClient(
       (client) => LobbyRepository(client).createSeek(
         seek,
-        sri: ref.read(socketClientProvider).sri,
+        sri: ref.read(socketServiceProvider).sri,
       ),
     );
   }

@@ -82,7 +82,7 @@ class RelationCtrl extends _$RelationCtrl {
     }
   }
 
-  SocketClient get _socket => ref.read(socketClientProvider);
+  SocketService get _socket => ref.read(socketServiceProvider);
 
   LightUser _parseFriend(String friend) {
     final splitted = friend.split(' ');

@@ -32,7 +32,7 @@ class LiveTvChannels extends _$LiveTvChannels {
     return _doStartWatching();
   }
 
-  SocketClient get _socket => ref.read(socketClientProvider);
+  SocketService get _socket => ref.read(socketServiceProvider);
 
   /// Start watching the TV games
   Future<void> startWatching() async {

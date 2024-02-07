@@ -13,7 +13,7 @@ part 'chat_controller.g.dart';
 class ChatController extends _$ChatController {
   StreamSubscription<SocketEvent>? _socketSubscription;
 
-  SocketClient get _socket => ref.read(socketClientProvider);
+  SocketService get _socket => ref.read(socketServiceProvider);
 
   @override
   ChatState build(StringId chatContext) {

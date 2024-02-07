@@ -52,8 +52,8 @@ const _kDisconnectOnBackgroundTimeout = Duration(minutes: 20);
 /// the route changes, or when the socket is no longer needed.
 /// The socket will close itself after a short delay when there are no more
 /// subscriptions.
-class SocketClient {
-  SocketClient(
+class SocketService {
+  SocketService(
     this._ref,
     this._log, {
     this.pingDelay = _kPingDelay,
@@ -90,7 +90,7 @@ class SocketClient {
       StreamController<Uri>.broadcast();
 
   final Logger _log;
-  final SocketClientRef _ref;
+  final SocketServiceRef _ref;
 
   Timer? _pingTimer;
   Timer? _reconnectTimer;
@@ -433,9 +433,9 @@ class SocketClient {
 }
 
 @Riverpod(keepAlive: true)
-SocketClient socketClient(SocketClientRef ref) {
-  final logger = Logger('SocketClient');
-  final client = SocketClient(ref, logger);
+SocketService socketService(SocketServiceRef ref) {
+  final logger = Logger('SocketService');
+  final client = SocketService(ref, logger);
   Timer? closeInBackgroundTimer;
 
   final appLifecycleListener = AppLifecycleListener(
@@ -477,7 +477,7 @@ String sri(SriRef ref) {
 class AverageLag extends _$AverageLag {
   @override
   Duration build() {
-    final listenable = ref.watch(socketClientProvider).averageLag;
+    final listenable = ref.watch(socketServiceProvider).averageLag;
 
     listenable.addListener(_listener);
 
@@ -489,7 +489,7 @@ class AverageLag extends _$AverageLag {
   }
 
   void _listener() {
-    final newLag = ref.read(socketClientProvider).averageLag.value;
+    final newLag = ref.read(socketServiceProvider).averageLag.value;
     if (state != newLag) {
       state = newLag;
     }

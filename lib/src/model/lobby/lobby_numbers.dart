@@ -13,7 +13,7 @@ class LobbyNumbers extends _$LobbyNumbers {
 
   @override
   ({int nbPlayers, int nbGames})? build() {
-    final stream = ref.watch(socketClientProvider).stream;
+    final stream = ref.watch(socketServiceProvider).stream;
 
     ref.onDispose(() {
       _socketSubscription?.cancel();
