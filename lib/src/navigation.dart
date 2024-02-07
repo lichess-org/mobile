@@ -81,6 +81,9 @@ final RouteObserver<PageRoute<void>> rootNavPageRouteObserver =
 final RouteObserver<PageRoute<void>> homeRouteObserver =
     RouteObserver<PageRoute<void>>();
 
+final RouteObserver<PageRoute<void>> watchRouteObserver =
+    RouteObserver<PageRoute<void>>();
+
 final tabsProvider = Provider<List<_Tab>>((ref) {
   final l10n = ref.watch(l10nProvider);
 
@@ -181,9 +184,7 @@ class BottomNavScaffold extends ConsumerWidget {
       case 0:
         return _MaterialTabView(
           navigatorKey: homeNavigatorKey,
-          navigatorObservers: [
-            homeRouteObserver,
-          ],
+          navigatorObservers: [homeRouteObserver],
           builder: (context) => const HomeTabScreen(),
         );
       case 1:
@@ -200,6 +201,7 @@ class BottomNavScaffold extends ConsumerWidget {
         return _MaterialTabView(
           navigatorKey: watchNavigatorKey,
           builder: (context) => const WatchTabScreen(),
+          navigatorObservers: [watchRouteObserver],
         );
       default:
         assert(false, 'Unexpected tab');
@@ -213,9 +215,7 @@ class BottomNavScaffold extends ConsumerWidget {
         return CupertinoTabView(
           defaultTitle: context.l10n.play,
           navigatorKey: homeNavigatorKey,
-          navigatorObservers: [
-            homeRouteObserver,
-          ],
+          navigatorObservers: [homeRouteObserver],
           builder: (context) => const HomeTabScreen(),
         );
       case 1:
@@ -235,6 +235,7 @@ class BottomNavScaffold extends ConsumerWidget {
           defaultTitle: context.l10n.watch,
           navigatorKey: watchNavigatorKey,
           builder: (context) => const WatchTabScreen(),
+          navigatorObservers: [watchRouteObserver],
         );
       default:
         assert(false, 'Unexpected tab');
