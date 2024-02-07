@@ -106,6 +106,14 @@ class _UserProfileListView extends StatelessWidget {
   final User user;
   @override
   Widget build(BuildContext context) {
+    if (user.disabled == true) {
+      return Center(
+        child: Text(
+          context.l10n.settingsThisAccountIsClosed,
+          style: Styles.bold,
+        ),
+      );
+    }
     return ListView(
       children: [
         UserProfile(user: user),
