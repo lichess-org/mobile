@@ -11,10 +11,12 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 class TimeControlModal extends ConsumerWidget {
   final ValueSetter<TimeIncrement> onSelected;
   final TimeIncrement value;
+  final bool excludeUltraBullet;
 
   const TimeControlModal({
     required this.onSelected,
     required this.value,
+    this.excludeUltraBullet = false,
     super.key,
   });
 
@@ -38,11 +40,11 @@ class TimeControlModal extends ConsumerWidget {
             const SizedBox(height: 26.0),
             _SectionChoices(
               value,
-              choices: const [
-                TimeIncrement(0, 1),
-                TimeIncrement(60, 0),
-                TimeIncrement(60, 1),
-                TimeIncrement(120, 1),
+              choices: [
+                if (!excludeUltraBullet) const TimeIncrement(0, 1),
+                const TimeIncrement(60, 0),
+                const TimeIncrement(60, 1),
+                const TimeIncrement(120, 1),
               ],
               title: const _SectionTitle(
                 title: 'Bullet',

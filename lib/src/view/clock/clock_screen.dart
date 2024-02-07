@@ -62,20 +62,22 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.watch(clockControllerProvider);
+    final state = ref.watch(clockControllerProvider);
 
-    return const Column(
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Expanded(
           child: ClockTile(
             playerType: ClockPlayerType.top,
+            clockState: state,
           ),
         ),
-        ClockSettings(),
+        const ClockSettings(),
         Expanded(
           child: ClockTile(
             playerType: ClockPlayerType.bottom,
+            clockState: state,
           ),
         ),
       ],

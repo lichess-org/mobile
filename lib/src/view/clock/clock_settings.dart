@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/clock/clock_controller.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/play/time_control_modal.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
@@ -53,6 +52,7 @@ class ClockSettings extends ConsumerWidget {
                             .select((value) => value.options),
                       );
                       return TimeControlModal(
+                        excludeUltraBullet: true,
                         value: TimeIncrement(
                           options.time.inSeconds,
                           options.increment.inSeconds,
@@ -73,18 +73,6 @@ class ClockSettings extends ConsumerWidget {
           iconSize: _iconSize,
           onTap: buttonsEnabled ? () => Navigator.of(context).pop() : null,
           icon: Icons.home,
-        ),
-        _iconSpacer,
-        RotatedBox(
-          quarterTurns: 1,
-          child: Text(
-            ref
-                .watch(
-                  clockControllerProvider.select((value) => value.moveCount),
-                )
-                .toString(),
-            style: Styles.bold.copyWith(fontSize: 24),
-          ),
         ),
       ],
     );
