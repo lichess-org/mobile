@@ -765,7 +765,7 @@ class _RelationButton extends ConsumerWidget {
         if (!wasOnline) {
           showPlatformSnackbar(
             context,
-            'Cannot load friend list without internet connectivity',
+            'Not available in offline mode',
             type: SnackBarType.error,
           );
         } else {

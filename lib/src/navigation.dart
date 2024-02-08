@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/styles/puzzle_icons.dart';
+import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_tab_screen.dart';
 import 'package:lichess_mobile/src/view/tools/tools_tab_screen.dart';
 import 'package:lichess_mobile/src/view/watch/watch_tab_screen.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 
 enum BottomTab {
   home(Icons.home),
@@ -106,6 +108,12 @@ class BottomNavScaffold extends ConsumerWidget {
     final currentTab = ref.watch(currentBottomTabProvider);
     final tabs = ref.watch(tabsProvider);
 
+    bool isOnline = true;
+
+    ref.listen(connectivityChangesProvider, (_, connectivity) {
+      isOnline = connectivity.value!.isOnline;
+    });
+
     switch (Theme.of(context).platform) {
       case TargetPlatform.android:
         return NavigatorPopHandler(
@@ -124,7 +132,8 @@ class BottomNavScaffold extends ConsumerWidget {
                 for (final tab in tabs)
                   NavigationDestination(icon: tab.icon, label: tab.label),
               ],
-              onDestinationSelected: (i) => _onItemTapped(ref, i),
+              onDestinationSelected: (i) =>
+                  _onItemTapped(context, ref, i, isOnline),
             ),
           ),
         );
@@ -137,7 +146,7 @@ class BottomNavScaffold extends ConsumerWidget {
               for (final tab in tabs)
                 BottomNavigationBarItem(icon: tab.icon, label: tab.label),
             ],
-            onTap: (i) => _onItemTapped(ref, i),
+            onTap: (i) => _onItemTapped(context, ref, i, isOnline),
           ),
         );
       default:
@@ -151,9 +160,20 @@ class BottomNavScaffold extends ConsumerWidget {
   /// If the route is already at the first route, scroll the tab's root
   /// scrollable to the top.
   /// Otherwise, switch to the tapped tab.
-  void _onItemTapped(WidgetRef ref, int index) {
+  void _onItemTapped(
+      BuildContext context, WidgetRef ref, int index, bool isOnline) {
     final curTab = ref.read(currentBottomTabProvider);
     final tappedTab = BottomTab.values[index];
+
+    if (!isOnline && tappedTab == BottomTab.watch) {
+      showPlatformSnackbar(
+        context,
+        'Not available in offline mode',
+        type: SnackBarType.error,
+      );
+      return;
+    }
+
     if (tappedTab == curTab) {
       final navState = ref.read(currentNavigatorKeyProvider).currentState;
       if (navState?.canPop() == true) {
