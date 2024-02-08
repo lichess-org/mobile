@@ -1,11 +1,29 @@
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
+import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 final _deviceInfoPlugin = DeviceInfoPlugin();
 
 final immersiveModeService = ImmersiveModeService();
+
+/// A widget that enables immersive mode when focused.
+class ImmersiveModeWidget extends StatelessWidget {
+  const ImmersiveModeWidget({required this.child, super.key});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return FocusDetector(
+      onVisibilityGained: () => immersiveModeService.enable(),
+      onVisibilityLost: () => immersiveModeService.disable(),
+      child: child,
+    );
+  }
+}
 
 /// Immersive mode is a way to hide the system UI (status bar and navigation bar)
 /// on Android 10 and above, and to force the device to stay awake.
@@ -14,6 +32,10 @@ final immersiveModeService = ImmersiveModeService();
 /// They conflict with board game gestures, and we must set immersive mode
 /// to disable them.
 class ImmersiveModeService {
+  /// Enable immersive mode.
+  ///
+  /// This hides the system UI (status bar and navigation bar) and forces the
+  /// device to stay awake.
   Future<void> enable() async {
     WakelockPlus.enable();
     if (defaultTargetPlatform == TargetPlatform.android) {
@@ -24,6 +46,10 @@ class ImmersiveModeService {
     }
   }
 
+  /// Disable immersive mode.
+  ///
+  /// This shows the system UI (status bar and navigation bar) and allows the
+  /// device to sleep.
   Future<void> disable() async {
     WakelockPlus.disable();
     if (defaultTargetPlatform == TargetPlatform.android) {
