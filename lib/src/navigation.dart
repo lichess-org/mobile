@@ -161,7 +161,11 @@ class BottomNavScaffold extends ConsumerWidget {
   /// scrollable to the top.
   /// Otherwise, switch to the tapped tab.
   void _onItemTapped(
-      BuildContext context, WidgetRef ref, int index, bool isOnline) {
+    BuildContext context,
+    WidgetRef ref,
+    int index,
+    bool isOnline,
+  ) {
     final curTab = ref.read(currentBottomTabProvider);
     final tappedTab = BottomTab.values[index];
 
