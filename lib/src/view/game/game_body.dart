@@ -17,6 +17,8 @@ import 'package:lichess_mobile/src/model/game/game_preferences.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
+import 'package:lichess_mobile/src/utils/focus_detector.dart';
+import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
@@ -29,6 +31,7 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 import 'game_common_widgets.dart';
 import 'game_loading_board.dart';
@@ -202,84 +205,97 @@ class GameBody extends ConsumerWidget {
         final bottomPlayer = youAre == Side.white ? white : black;
         final isBoardTurned = ref.watch(isBoardTurnedProvider);
 
-        return PopScope(
-          canPop: gameState.game.meta.speed == Speed.correspondence ||
-              !gameState.game.playable,
-          child: Column(
-            children: [
-              Expanded(
-                child: SafeArea(
-                  bottom: false,
-                  child: BoardTable(
-                    boardSettingsOverrides: BoardSettingsOverrides(
-                      autoQueenPromotion: gameState.canAutoQueen,
-                      autoQueenPromotionOnPremove:
-                          gameState.canAutoQueenOnPremove,
-                      blindfoldMode: blindfoldMode,
+        return FocusDetector(
+          onVisibilityGained: () {
+            _enableImmersiveMode(gameState.game);
+          },
+          onVisibilityLost: () {
+            ImmersiveMode.instance.disable();
+          },
+          child: PopScope(
+            canPop: gameState.game.meta.speed == Speed.correspondence ||
+                !gameState.game.playable,
+            child: Column(
+              children: [
+                Expanded(
+                  child: SafeArea(
+                    bottom: false,
+                    child: BoardTable(
+                      boardSettingsOverrides: BoardSettingsOverrides(
+                        autoQueenPromotion: gameState.canAutoQueen,
+                        autoQueenPromotionOnPremove:
+                            gameState.canAutoQueenOnPremove,
+                        blindfoldMode: blindfoldMode,
+                      ),
+                      onMove: (move, {isDrop, isPremove}) {
+                        ref.read(ctrlProvider.notifier).onUserMove(
+                              Move.fromUci(move.uci)!,
+                              isPremove: isPremove,
+                              isDrop: isDrop,
+                            );
+                      },
+                      onPremove: gameState.canPremove
+                          ? (move) {
+                              ref.read(ctrlProvider.notifier).setPremove(move);
+                            }
+                          : null,
+                      boardData: cg.BoardData(
+                        interactableSide:
+                            gameState.game.playable && !gameState.isReplaying
+                                ? youAre == Side.white
+                                    ? cg.InteractableSide.white
+                                    : cg.InteractableSide.black
+                                : cg.InteractableSide.none,
+                        orientation:
+                            isBoardTurned ? youAre.opposite.cg : youAre.cg,
+                        fen: position.fen,
+                        lastMove:
+                            gameState.game.moveAt(gameState.stepCursor)?.cg,
+                        isCheck: position.isCheck,
+                        sideToMove: sideToMove.cg,
+                        validMoves: algebraicLegalMoves(position),
+                        premove: gameState.premove,
+                      ),
+                      topTable: topPlayer,
+                      bottomTable: gameState.canShowClaimWinCountdown &&
+                              gameState.opponentLeftCountdown != null
+                          ? _ClaimWinCountdown(
+                              duration: gameState.opponentLeftCountdown!,
+                            )
+                          : bottomPlayer,
+                      moves: gameState.game.steps
+                          .skip(1)
+                          .map((e) => e.sanMove!.san)
+                          .toList(growable: false),
+                      currentMoveIndex: gameState.stepCursor,
+                      onSelectMove: (moveIndex) {
+                        ref.read(ctrlProvider.notifier).cursorAt(moveIndex);
+                      },
                     ),
-                    onMove: (move, {isDrop, isPremove}) {
-                      ref.read(ctrlProvider.notifier).onUserMove(
-                            Move.fromUci(move.uci)!,
-                            isPremove: isPremove,
-                            isDrop: isDrop,
-                          );
-                    },
-                    onPremove: gameState.canPremove
-                        ? (move) {
-                            ref.read(ctrlProvider.notifier).setPremove(move);
-                          }
-                        : null,
-                    boardData: cg.BoardData(
-                      interactableSide:
-                          gameState.game.playable && !gameState.isReplaying
-                              ? youAre == Side.white
-                                  ? cg.InteractableSide.white
-                                  : cg.InteractableSide.black
-                              : cg.InteractableSide.none,
-                      orientation:
-                          isBoardTurned ? youAre.opposite.cg : youAre.cg,
-                      fen: position.fen,
-                      lastMove: gameState.game.moveAt(gameState.stepCursor)?.cg,
-                      isCheck: position.isCheck,
-                      sideToMove: sideToMove.cg,
-                      validMoves: algebraicLegalMoves(position),
-                      premove: gameState.premove,
-                    ),
-                    topTable: topPlayer,
-                    bottomTable: gameState.canShowClaimWinCountdown &&
-                            gameState.opponentLeftCountdown != null
-                        ? _ClaimWinCountdown(
-                            duration: gameState.opponentLeftCountdown!,
-                          )
-                        : bottomPlayer,
-                    moves: gameState.game.steps
-                        .skip(1)
-                        .map((e) => e.sanMove!.san)
-                        .toList(growable: false),
-                    currentMoveIndex: gameState.stepCursor,
-                    onSelectMove: (moveIndex) {
-                      ref.read(ctrlProvider.notifier).cursorAt(moveIndex);
-                    },
                   ),
                 ),
-              ),
-              _GameBottomBar(
-                id: id,
-                gameState: gameState,
-                onLoadGameCallback: onLoadGameCallback,
-                onNewOpponentCallback: onNewOpponentCallback,
-              ),
-            ],
+                _GameBottomBar(
+                  id: id,
+                  gameState: gameState,
+                  onLoadGameCallback: onLoadGameCallback,
+                  onNewOpponentCallback: onNewOpponentCallback,
+                ),
+              ],
+            ),
           ),
         );
       },
-      loading: () => PopScope(canPop: true, child: loadingBoardWidget),
+      loading: () => FocusDetector(
+        child: PopScope(canPop: true, child: loadingBoardWidget),
+      ),
       error: (e, s) {
         debugPrint(
           'SEVERE: [GameBody] could not load game data; $e\n$s',
         );
-        return const PopScope(
-          child: LoadGameError(),
+        return const FocusDetector(
+          child: PopScope(
+            child: LoadGameError(),
+          ),
         );
       },
     );
@@ -311,6 +327,16 @@ class GameBody extends ConsumerWidget {
           }
         });
       }
+
+      // true when the game was loaded, playable, and just finished
+      if (prev?.valueOrNull?.game.playable == true &&
+          state.requireValue.game.playable == false) {
+        ImmersiveMode.instance.disable();
+      }
+      // true when the game was not loaded: handles rematches
+      else if (prev?.hasValue != true) {
+        _enableImmersiveMode(state.requireValue.game);
+      }
     }
 
     if (prev?.hasValue == true && state.hasValue) {
@@ -331,6 +357,16 @@ class GameBody extends ConsumerWidget {
         Navigator.of(context).popUntil((route) => route is! PopupRoute);
         onLoadGameCallback(state.requireValue.redirectGameId!);
       }
+    }
+  }
+
+  void _enableImmersiveMode(PlayableGame game) {
+    // Enable immersive mode when the game is in real time and playable.
+    if (game.meta.speed != Speed.correspondence && game.playable) {
+      ImmersiveMode.instance.enable();
+    } else if (game.playable) {
+      // Correspondence: just enable the wakelock when the game is playable.
+      WakelockPlus.enable();
     }
   }
 }
