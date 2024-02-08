@@ -7,7 +7,6 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
-import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_loading_board.dart';
 import 'package:lichess_mobile/src/view/game/lobby_screen.dart';
@@ -45,8 +44,7 @@ class StandaloneGameScreen extends ConsumerStatefulWidget {
       _StandaloneGameScreenState();
 }
 
-class _StandaloneGameScreenState extends ConsumerState<StandaloneGameScreen>
-    with ImmersiveMode {
+class _StandaloneGameScreenState extends ConsumerState<StandaloneGameScreen> {
   final _whiteClockKey = GlobalKey(debugLabel: 'whiteClockOnGameScreen');
   final _blackClockKey = GlobalKey(debugLabel: 'blackClockOnGameScreen');
 

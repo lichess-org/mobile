@@ -1,48 +1,43 @@
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
+import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 final _deviceInfoPlugin = DeviceInfoPlugin();
 
-/// State mixin that sets immersive mode for board screens.
-///
-/// Mixin user must subscribe to the [NavigatorObserver] and call `super`.
-///
+final immersiveModeService = ImmersiveModeService();
+
+/// A widget that enables immersive mode when focused.
+class ImmersiveModeWidget extends StatelessWidget {
+  const ImmersiveModeWidget({required this.child, super.key});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return FocusDetector(
+      onVisibilityGained: () => immersiveModeService.enable(),
+      onVisibilityLost: () => immersiveModeService.disable(),
+      child: child,
+    );
+  }
+}
+
 /// Immersive mode is a way to hide the system UI (status bar and navigation bar)
 /// on Android 10 and above, and to force the device to stay awake.
 ///
 /// Navigation gestures start with Android 10 (API 29).
 /// They conflict with board game gestures, and we must set immersive mode
 /// to disable them.
-mixin ImmersiveMode<T extends StatefulWidget> on State<T>
-    implements RouteAware {
-  @override
-  void didPopNext() {
-    _setImmersiveMode();
+class ImmersiveModeService {
+  /// Enable immersive mode.
+  ///
+  /// This hides the system UI (status bar and navigation bar) and forces the
+  /// device to stay awake.
+  Future<void> enable() async {
     WakelockPlus.enable();
-  }
-
-  @override
-  void didPush() {
-    _setImmersiveMode();
-    WakelockPlus.enable();
-  }
-
-  @override
-  void didPop() {
-    _disableImmersiveMode();
-    WakelockPlus.disable();
-  }
-
-  @override
-  void didPushNext() {
-    _disableImmersiveMode();
-    WakelockPlus.disable();
-  }
-
-  Future<void> _setImmersiveMode() async {
     if (defaultTargetPlatform == TargetPlatform.android) {
       final androidInfo = await _deviceInfoPlugin.androidInfo;
       if (androidInfo.version.sdkInt >= 29) {
@@ -51,7 +46,12 @@ mixin ImmersiveMode<T extends StatefulWidget> on State<T>
     }
   }
 
-  Future<void> _disableImmersiveMode() async {
+  /// Disable immersive mode.
+  ///
+  /// This shows the system UI (status bar and navigation bar) and allows the
+  /// device to sleep.
+  Future<void> disable() async {
+    WakelockPlus.disable();
     if (defaultTargetPlatform == TargetPlatform.android) {
       final androidInfo = await _deviceInfoPlugin.androidInfo;
       if (androidInfo.version.sdkInt >= 29) {

@@ -23,6 +23,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:soundpool/soundpool.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 import './fake_crashlytics.dart';
 import './model/auth/fake_auth_repository.dart';
@@ -46,6 +47,8 @@ Future<Widget> buildTestApp(
   AuthSessionState? userSession,
 }) async {
   await tester.binding.setSurfaceSize(kTestSurfaceSize);
+
+  VisibilityDetectorController.instance.updateInterval = Duration.zero;
 
   SharedPreferences.setMockInitialValues({});
 

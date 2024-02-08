@@ -66,6 +66,7 @@ dependencies:
   system_info_plus: ^0.0.5
   timeago: ^3.6.0
   url_launcher: ^6.1.9
+  visibility_detector: ^0.3.3
   wakelock_plus: ^1.1.1
   web_socket_channel: ^2.4.0
 

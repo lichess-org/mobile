@@ -52,8 +52,7 @@ class PuzzleScreen extends ConsumerStatefulWidget {
   ConsumerState<PuzzleScreen> createState() => _PuzzleScreenState();
 }
 
-class _PuzzleScreenState extends ConsumerState<PuzzleScreen>
-    with RouteAware, ImmersiveMode {
+class _PuzzleScreenState extends ConsumerState<PuzzleScreen> with RouteAware {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -79,9 +78,11 @@ class _PuzzleScreenState extends ConsumerState<PuzzleScreen>
 
   @override
   Widget build(BuildContext context) {
-    return PlatformWidget(
-      androidBuilder: _androidBuilder,
-      iosBuilder: _iosBuilder,
+    return ImmersiveModeWidget(
+      child: PlatformWidget(
+        androidBuilder: _androidBuilder,
+        iosBuilder: _iosBuilder,
+      ),
     );
   }
 

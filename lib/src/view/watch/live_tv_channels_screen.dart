@@ -4,30 +4,34 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/tv/live_tv_channels.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
-import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
+import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
-class LiveTvChannelsScreen extends ConsumerStatefulWidget {
+class LiveTvChannelsScreen extends ConsumerWidget {
   const LiveTvChannelsScreen({super.key});
 
   @override
-  ConsumerState<LiveTvChannelsScreen> createState() => _TvChannelsScreenState();
-}
-
-class _TvChannelsScreenState extends ConsumerState<LiveTvChannelsScreen>
-    with RouteAware, WidgetsBindingObserver {
-  @override
-  Widget build(BuildContext context) {
-    return PlatformWidget(
-      androidBuilder: _androidBuilder,
-      iosBuilder: _iosBuilder,
+  Widget build(BuildContext context, WidgetRef ref) {
+    return FocusDetector(
+      onFocusRegained: () {
+        ref.read(liveTvChannelsProvider.notifier).startWatching();
+      },
+      onFocusLost: () {
+        if (context.mounted) {
+          ref.read(liveTvChannelsProvider.notifier).stopWatching();
+        }
+      },
+      child: PlatformWidget(
+        androidBuilder: _androidBuilder,
+        iosBuilder: _iosBuilder,
+      ),
     );
   }
 
@@ -51,55 +55,6 @@ class _TvChannelsScreenState extends ConsumerState<LiveTvChannelsScreen>
       ),
       child: _Body(),
     );
-  }
-
-  @override
-  void initState() {
-    WidgetsBinding.instance.addObserver(this);
-    super.initState();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      ref.read(liveTvChannelsProvider.notifier).startWatching();
-    } else {
-      ref.read(liveTvChannelsProvider.notifier).stopWatching();
-    }
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final route = ModalRoute.of(context);
-    if (route != null && route is PageRoute) {
-      rootNavPageRouteObserver.subscribe(this, route);
-    }
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    rootNavPageRouteObserver.unsubscribe(this);
-    super.dispose();
-  }
-
-  @override
-  void didPushNext() {
-    ref.read(liveTvChannelsProvider.notifier).stopWatching();
-    super.didPushNext();
-  }
-
-  @override
-  void didPopNext() {
-    ref.read(liveTvChannelsProvider.notifier).startWatching();
-    super.didPopNext();
-  }
-
-  @override
-  void didPop() {
-    ref.read(liveTvChannelsProvider.notifier).stopWatching();
-    super.didPop();
   }
 }
 
