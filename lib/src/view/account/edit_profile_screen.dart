@@ -356,7 +356,7 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                 textInputAction: textInputAction,
                 controller: controller,
                 onChanged: (value) {
-                  field.didChange(value);
+                  field.didChange(value.trim());
                 },
               ),
               if (description != null) ...[
