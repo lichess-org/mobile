@@ -33,22 +33,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.11.3"
-  android_gesture_exclusion:
-    dependency: transitive
-    description:
-      name: android_gesture_exclusion
-      sha256: "30845204a9a5d83c00af5f3a3714ae5fb9e3169bf2369206edd27a3692fd4739"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.0"
-  android_gesture_exclusion_platform_interface:
-    dependency: transitive
-    description:
-      name: android_gesture_exclusion_platform_interface
-      sha256: "319b37672bb9e26b50f46bf32e3c891caaf5a52f28f9fe9255135ad3e6df1b01"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.1.0"
   ansicolor:
     dependency: transitive
     description:
@@ -197,10 +181,10 @@ packages:
     dependency: "direct main"
     description:
       name: chessground
-      sha256: f40ba7696be7e856442ffede294ad010e2651c3d3be3eb81c09ad9a6355a5cf2
+      sha256: "4c6150821ee6675f1c9a2e9184578ca112575f08f6fa568eb0745e952f5517db"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.1"
+    version: "2.3.0"
   ci:
     dependency: transitive
     description:
@@ -1456,10 +1440,10 @@ packages:
     dependency: "direct main"
     description:
       name: visibility_detector
-      sha256: "15c54a459ec2c17b4705450483f3d5a2858e733aee893dcee9d75fd04814940d"
+      sha256: dd5cc11e13494f432d15939c3aa8ae76844c42b723398643ce9addb88a5ed420
       url: "https://pub.dev"
     source: hosted
-    version: "0.3.3"
+    version: "0.4.0+2"
   vm_service:
     dependency: transitive
     description:

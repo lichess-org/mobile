@@ -4,12 +4,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:logging/logging.dart';
 
-final badgeService = BadgeService(Logger('BadgeService'));
-
 class BadgeService {
   static const _channel = MethodChannel('mobile.lichess.org/badge');
 
-  const BadgeService(this._log);
+  const BadgeService._(this._log);
+
+  static final instance = BadgeService._(Logger('BadgeService'));
 
   final Logger _log;
 

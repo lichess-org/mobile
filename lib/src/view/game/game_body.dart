@@ -210,7 +210,7 @@ class GameBody extends ConsumerWidget {
             _enableImmersiveMode(gameState.game);
           },
           onVisibilityLost: () {
-            immersiveModeService.disable();
+            ImmersiveMode.instance.disable();
           },
           child: PopScope(
             canPop: gameState.game.meta.speed == Speed.correspondence ||
@@ -331,7 +331,7 @@ class GameBody extends ConsumerWidget {
       // true when the game was loaded, playable, and just finished
       if (prev?.valueOrNull?.game.playable == true &&
           state.requireValue.game.playable == false) {
-        immersiveModeService.disable();
+        ImmersiveMode.instance.disable();
       }
       // true when the game was not loaded: handles rematches
       else if (prev?.hasValue != true) {
@@ -363,7 +363,7 @@ class GameBody extends ConsumerWidget {
   void _enableImmersiveMode(PlayableGame game) {
     // Enable immersive mode when the game is in real time and playable.
     if (game.meta.speed != Speed.correspondence && game.playable) {
-      immersiveModeService.enable();
+      ImmersiveMode.instance.enable();
     } else if (game.playable) {
       // Correspondence: just enable the wakelock when the game is playable.
       WakelockPlus.enable();

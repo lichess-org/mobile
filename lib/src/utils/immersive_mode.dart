@@ -7,8 +7,6 @@ import 'package:wakelock_plus/wakelock_plus.dart';
 
 final _deviceInfoPlugin = DeviceInfoPlugin();
 
-final immersiveModeService = ImmersiveModeService();
-
 /// A widget that enables immersive mode when focused.
 class ImmersiveModeWidget extends StatelessWidget {
   const ImmersiveModeWidget({required this.child, super.key});
@@ -18,8 +16,8 @@ class ImmersiveModeWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FocusDetector(
-      onVisibilityGained: () => immersiveModeService.enable(),
-      onVisibilityLost: () => immersiveModeService.disable(),
+      onVisibilityGained: () => ImmersiveMode.instance.enable(),
+      onVisibilityLost: () => ImmersiveMode.instance.disable(),
       child: child,
     );
   }
@@ -31,7 +29,11 @@ class ImmersiveModeWidget extends StatelessWidget {
 /// Navigation gestures start with Android 10 (API 29).
 /// They conflict with board game gestures, and we must set immersive mode
 /// to disable them.
-class ImmersiveModeService {
+class ImmersiveMode {
+  const ImmersiveMode._();
+
+  static const instance = ImmersiveMode._();
+
   /// Enable immersive mode.
   ///
   /// This hides the system UI (status bar and navigation bar) and forces the

@@ -124,7 +124,7 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   final badge = message.data['lichess.iosBadge'] as String?;
   if (badge != null) {
     try {
-      badgeService.setBadge(int.parse(badge));
+      BadgeService.instance.setBadge(int.parse(badge));
     } catch (e) {
       debugPrint('Could not parse badge: $badge');
     }
