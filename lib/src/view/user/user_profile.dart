@@ -99,9 +99,8 @@ class UserProfile extends ConsumerWidget {
               text: user.profile!.bio!.replaceAll('\n', ' '),
               options: const LinkifyOptions(
                 defaultToHttps: true,
-                looseUrl: true,
               ),
-              maxLines: 10,
+              maxLines: bioMaxLines,
               style: bioStyle,
               overflow: TextOverflow.ellipsis,
               linkStyle: Theme.of(context)
