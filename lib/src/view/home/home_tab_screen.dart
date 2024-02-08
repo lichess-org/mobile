@@ -93,7 +93,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
           const _SearchButton(),
           const _SettingsButton(),
           if (session != null)
-            const _RelationButton()
+            _RelationButton(wasOnline)
           else
             const SignInWidget(),
         ],
@@ -137,7 +137,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
               children: [
                 const _SearchButton(),
                 const _SettingsButton(),
-                if (session != null) const _RelationButton(),
+                if (session != null) _RelationButton(wasOnline),
               ],
             ),
           ),
@@ -749,20 +749,33 @@ class _GamePreview<T> extends StatelessWidget {
 }
 
 class _RelationButton extends ConsumerWidget {
-  const _RelationButton();
+  const _RelationButton(this.wasOnline);
+
+  final bool wasOnline;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AppBarIconButton(
-      icon: const Icon(Icons.people),
+      icon: Icon(
+        Icons.people,
+        color: !wasOnline ? Colors.grey : null,
+      ),
       semanticsLabel: context.l10n.friends,
       onPressed: () {
-        pushPlatformRoute(
-          context,
-          title: context.l10n.friends,
-          builder: (_) => const RelationScreen(),
-          fullscreenDialog: true,
-        );
+        if (!wasOnline) {
+          showPlatformSnackbar(
+            context,
+            'Cannot load friend list without internet connectivity',
+            type: SnackBarType.error,
+          );
+        } else {
+          pushPlatformRoute(
+            context,
+            title: context.l10n.friends,
+            builder: (_) => const RelationScreen(),
+            fullscreenDialog: true,
+          );
+        }
       },
     );
   }
