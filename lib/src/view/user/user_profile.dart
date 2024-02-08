@@ -97,9 +97,6 @@ class UserProfile extends ConsumerWidget {
                 UserTagLinkifier(),
               ],
               text: user.profile!.bio!.replaceAll('\n', ' '),
-              options: const LinkifyOptions(
-                defaultToHttps: true,
-              ),
               maxLines: bioMaxLines,
               style: bioStyle,
               overflow: TextOverflow.ellipsis,
