@@ -47,7 +47,8 @@ class Profile with _$Profile {
       uscfRating: pick('uscfRating').asIntOrNull(),
       ecfRating: pick('ecfRating').asIntOrNull(),
       links: rawLinks
-          ?.map((e) {
+          ?.where((e) => e.trim().isNotEmpty)
+          .map((e) {
             final link = SocialLink.fromUrl(e);
             if (link == null) {
               final uri = Uri.tryParse(e);
