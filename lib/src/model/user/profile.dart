@@ -74,7 +74,10 @@ class SocialLink with _$SocialLink {
   const SocialLink._();
 
   static SocialLink? fromUrl(String url) {
-    final uri = Uri.tryParse(url);
+    final updatedUrl = url.startsWith('http://') || url.startsWith('https://')
+        ? url
+        : 'https://$url';
+    final uri = Uri.tryParse(updatedUrl);
     if (uri == null) return null;
     final host = uri.host.replaceAll(RegExp(r'www\.'), '');
     final site =

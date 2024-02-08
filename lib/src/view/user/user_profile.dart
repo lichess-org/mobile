@@ -27,12 +27,12 @@ const _userNameStyle = TextStyle(fontSize: 20, fontWeight: FontWeight.w500);
 class UserProfile extends ConsumerWidget {
   const UserProfile({
     required this.user,
-    this.bioMaxLines,
+    this.bioMaxLines = 10,
   });
 
   final User user;
 
-  final int? bioMaxLines;
+  final int bioMaxLines;
   static const bioStyle = TextStyle(fontStyle: FontStyle.italic);
 
   @override
@@ -96,8 +96,12 @@ class UserProfile extends ConsumerWidget {
                 EmailLinkifier(),
                 UserTagLinkifier(),
               ],
-              text: user.profile!.bio!,
-              maxLines: bioMaxLines,
+              text: user.profile!.bio!.replaceAll('\n', ' '),
+              options: const LinkifyOptions(
+                defaultToHttps: true,
+                looseUrl: true,
+              ),
+              maxLines: 10,
               style: bioStyle,
               overflow: TextOverflow.ellipsis,
               linkStyle: Theme.of(context)
