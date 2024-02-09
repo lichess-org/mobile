@@ -47,7 +47,8 @@ class Profile with _$Profile {
       uscfRating: pick('uscfRating').asIntOrNull(),
       ecfRating: pick('ecfRating').asIntOrNull(),
       links: rawLinks
-          ?.map((e) {
+          ?.where((e) => e.trim().isNotEmpty)
+          .map((e) {
             final link = SocialLink.fromUrl(e);
             if (link == null) {
               final uri = Uri.tryParse(e);
@@ -74,7 +75,10 @@ class SocialLink with _$SocialLink {
   const SocialLink._();
 
   static SocialLink? fromUrl(String url) {
-    final uri = Uri.tryParse(url);
+    final updatedUrl = url.startsWith('http://') || url.startsWith('https://')
+        ? url
+        : 'https://$url';
+    final uri = Uri.tryParse(updatedUrl);
     if (uri == null) return null;
     final host = uri.host.replaceAll(RegExp(r'www\.'), '');
     final site =
