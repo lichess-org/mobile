@@ -537,7 +537,6 @@ class _GameBottomBar extends ConsumerWidget {
                     onTap: () {
                       pushPlatformRoute(
                         context,
-                        fullscreenDialog: true,
                         builder: (BuildContext context) {
                           return MessageScreen(
                             title: UserFullNameWidget(
