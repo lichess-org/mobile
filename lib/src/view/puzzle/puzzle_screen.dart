@@ -78,7 +78,7 @@ class _PuzzleScreenState extends ConsumerState<PuzzleScreen> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
-    return ImmersiveModeWidget(
+    return WakelockWidget(
       child: PlatformWidget(
         androidBuilder: _androidBuilder,
         iosBuilder: _iosBuilder,

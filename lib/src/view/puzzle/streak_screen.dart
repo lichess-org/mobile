@@ -32,7 +32,7 @@ class StreakScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ImmersiveModeWidget(
+    return WakelockWidget(
       child: PlatformWidget(
         androidBuilder: _androidBuilder,
         iosBuilder: _iosBuilder,

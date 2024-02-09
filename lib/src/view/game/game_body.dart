@@ -56,6 +56,7 @@ class GameBody extends ConsumerWidget {
     required this.onLoadGameCallback,
     required this.onNewOpponentCallback,
     required this.loadingBoardWidget,
+    this.boardKey,
   });
 
   /// The [GameFullId] of the game.
@@ -72,6 +73,11 @@ class GameBody extends ConsumerWidget {
   /// This parameter is mandatory because the clock state needs to be preserved
   /// when the orientation changes on tablet.
   final GlobalKey blackClockKey;
+
+  /// [GlobalKey] for the board.
+  ///
+  /// Used to set gestures exclusion on android.
+  final GlobalKey? boardKey;
 
   /// Callback to load a new game. Used when the game is finished and the user
   /// wants to play a rematch, or when switching through games in correspondence
@@ -205,12 +211,10 @@ class GameBody extends ConsumerWidget {
         final bottomPlayer = youAre == Side.white ? white : black;
         final isBoardTurned = ref.watch(isBoardTurnedProvider);
 
-        return FocusDetector(
-          onVisibilityGained: () {
+        return ImmersiveModeWidget(
+          boardKey: boardKey,
+          onFocusGained: () {
             _enableImmersiveMode(gameState.game);
-          },
-          onVisibilityLost: () {
-            ImmersiveMode.instance.disable();
           },
           child: PopScope(
             canPop: gameState.game.meta.speed == Speed.correspondence ||
@@ -221,6 +225,7 @@ class GameBody extends ConsumerWidget {
                   child: SafeArea(
                     bottom: false,
                     child: BoardTable(
+                      key: boardKey,
                       boardSettingsOverrides: BoardSettingsOverrides(
                         autoQueenPromotion: gameState.canAutoQueen,
                         autoQueenPromotionOnPremove:
