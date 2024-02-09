@@ -35,8 +35,6 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
-final isHomeRootProvider = StateProvider<bool>((ref) => true);
-
 class HomeTabScreen extends ConsumerStatefulWidget {
   const HomeTabScreen({super.key});
 
@@ -44,7 +42,7 @@ class HomeTabScreen extends ConsumerStatefulWidget {
   ConsumerState<HomeTabScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
+class _HomeScreenState extends ConsumerState<HomeTabScreen> {
   final _androidRefreshKey = GlobalKey<RefreshIndicatorState>();
 
   bool wasOnline = true;
@@ -70,33 +68,6 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
       androidBuilder: _androidBuilder,
       iosBuilder: _iosBuilder,
     );
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final route = ModalRoute.of(context);
-    if (route != null && route is PageRoute) {
-      homeRouteObserver.subscribe(this, route);
-    }
-  }
-
-  @override
-  void dispose() {
-    homeRouteObserver.unsubscribe(this);
-    super.dispose();
-  }
-
-  @override
-  void didPushNext() {
-    ref.read(isHomeRootProvider.notifier).state = false;
-    super.didPushNext();
-  }
-
-  @override
-  void didPopNext() {
-    ref.read(isHomeRootProvider.notifier).state = true;
-    super.didPopNext();
   }
 
   Widget _androidBuilder(BuildContext context) {

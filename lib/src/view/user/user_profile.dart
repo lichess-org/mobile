@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/user/profile.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -26,12 +27,12 @@ const _userNameStyle = TextStyle(fontSize: 20, fontWeight: FontWeight.w500);
 class UserProfile extends ConsumerWidget {
   const UserProfile({
     required this.user,
-    this.bioMaxLines,
+    this.bioMaxLines = 10,
   });
 
   final User user;
 
-  final int? bioMaxLines;
+  final int bioMaxLines;
   static const bioStyle = TextStyle(fontStyle: FontStyle.italic);
 
   @override
@@ -48,6 +49,25 @@ class UserProfile extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          if (user.tosViolation == true)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 5),
+              child: Row(
+                children: [
+                  const Icon(Icons.error, color: LichessColors.error),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  Text(
+                    context.l10n.thisAccountViolatedTos,
+                    style: const TextStyle(
+                      color: LichessColors.error,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           if (userFullName != null)
             Padding(
               padding: const EdgeInsets.only(bottom: 5),
@@ -76,7 +96,7 @@ class UserProfile extends ConsumerWidget {
                 EmailLinkifier(),
                 UserTagLinkifier(),
               ],
-              text: user.profile!.bio!,
+              text: user.profile!.bio!.replaceAll('\n', ' '),
               maxLines: bioMaxLines,
               style: bioStyle,
               overflow: TextOverflow.ellipsis,

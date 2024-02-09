@@ -78,9 +78,6 @@ final watchScrollController = ScrollController(debugLabel: 'WatchScroll');
 final RouteObserver<PageRoute<void>> rootNavPageRouteObserver =
     RouteObserver<PageRoute<void>>();
 
-final RouteObserver<PageRoute<void>> homeRouteObserver =
-    RouteObserver<PageRoute<void>>();
-
 final tabsProvider = Provider<List<_Tab>>((ref) {
   final l10n = ref.watch(l10nProvider);
 
@@ -181,9 +178,6 @@ class BottomNavScaffold extends ConsumerWidget {
       case 0:
         return _MaterialTabView(
           navigatorKey: homeNavigatorKey,
-          navigatorObservers: [
-            homeRouteObserver,
-          ],
           builder: (context) => const HomeTabScreen(),
         );
       case 1:
@@ -213,9 +207,6 @@ class BottomNavScaffold extends ConsumerWidget {
         return CupertinoTabView(
           defaultTitle: context.l10n.play,
           navigatorKey: homeNavigatorKey,
-          navigatorObservers: [
-            homeRouteObserver,
-          ],
           builder: (context) => const HomeTabScreen(),
         );
       case 1:

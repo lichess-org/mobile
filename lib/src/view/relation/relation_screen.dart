@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/relation/relation_ctrl.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/navigation.dart';
+import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/relation/following_screen.dart';
@@ -22,13 +22,22 @@ class RelationScreen extends ConsumerStatefulWidget {
   ConsumerState<RelationScreen> createState() => _RelationScreenState();
 }
 
-class _RelationScreenState extends ConsumerState<RelationScreen>
-    with RouteAware {
+class _RelationScreenState extends ConsumerState<RelationScreen> {
   @override
   Widget build(BuildContext context) {
-    return PlatformWidget(
-      androidBuilder: _androidBuilder,
-      iosBuilder: _iosBuilder,
+    return FocusDetector(
+      onFocusRegained: () {
+        ref.read(relationCtrlProvider.notifier).startWatchingFriends();
+      },
+      onFocusLost: () {
+        if (context.mounted) {
+          ref.read(relationCtrlProvider.notifier).stopWatchingFriends();
+        }
+      },
+      child: PlatformWidget(
+        androidBuilder: _androidBuilder,
+        iosBuilder: _iosBuilder,
+      ),
     );
   }
 
@@ -46,33 +55,6 @@ class _RelationScreenState extends ConsumerState<RelationScreen>
       navigationBar: const CupertinoNavigationBar(),
       child: _Body(),
     );
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final route = ModalRoute.of(context);
-    if (route != null && route is PageRoute) {
-      homeRouteObserver.subscribe(this, route);
-    }
-  }
-
-  @override
-  void dispose() {
-    homeRouteObserver.unsubscribe(this);
-    super.dispose();
-  }
-
-  @override
-  void didPushNext() {
-    ref.read(relationCtrlProvider.notifier).stopWatchingFriends();
-    super.didPushNext();
-  }
-
-  @override
-  void didPopNext() {
-    ref.read(relationCtrlProvider.notifier).startWatchingFriends();
-    super.didPopNext();
   }
 }
 

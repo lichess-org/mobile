@@ -2,6 +2,7 @@ import 'package:chessground/chessground.dart' as cg;
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,7 +14,6 @@ import 'package:lichess_mobile/src/model/puzzle/storm.dart';
 import 'package:lichess_mobile/src/model/puzzle/storm_controller.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
-import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -41,27 +41,19 @@ class StormScreen extends StatefulWidget {
   State<StormScreen> createState() => _StormScreenState();
 }
 
-class _StormScreenState extends State<StormScreen> with ImmersiveMode {
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final route = ModalRoute.of(context);
-    if (route != null && route is PageRoute) {
-      rootNavPageRouteObserver.subscribe(this, route);
-    }
-  }
-
-  @override
-  void dispose() {
-    rootNavPageRouteObserver.unsubscribe(this);
-    super.dispose();
-  }
+class _StormScreenState extends State<StormScreen> {
+  final _boardKey = defaultTargetPlatform == TargetPlatform.android
+      ? GlobalKey(debugLabel: 'boardOnStormScreen')
+      : null;
 
   @override
   Widget build(BuildContext context) {
-    return PlatformWidget(
-      androidBuilder: _androidBuilder,
-      iosBuilder: _iosBuilder,
+    return ImmersiveModeWidget(
+      boardKey: _boardKey,
+      child: PlatformWidget(
+        androidBuilder: _androidBuilder,
+        iosBuilder: _iosBuilder,
+      ),
     );
   }
 
@@ -71,7 +63,7 @@ class _StormScreenState extends State<StormScreen> with ImmersiveMode {
         actions: [_StormDashboardButton(), ToggleSoundButton()],
         title: const Text('Puzzle Storm'),
       ),
-      body: const _Load(),
+      body: _Load(_boardKey),
     );
   }
 
@@ -86,19 +78,22 @@ class _StormScreenState extends State<StormScreen> with ImmersiveMode {
           children: [_StormDashboardButton(), ToggleSoundButton()],
         ),
       ),
-      child: const _Load(),
+      child: _Load(_boardKey),
     );
   }
 }
 
 class _Load extends ConsumerWidget {
-  const _Load();
+  const _Load(this.boardKey);
+
+  final GlobalKey? boardKey;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final storm = ref.watch(stormProvider);
     return storm.when(
       data: (data) {
-        return _Body(data: data);
+        return _Body(data: data, boardKey: boardKey);
       },
       loading: () => const CenterLoadingIndicator(),
       error: (e, s) {
@@ -123,8 +118,11 @@ class _Load extends ConsumerWidget {
 }
 
 class _Body extends ConsumerWidget {
-  const _Body({required this.data});
+  const _Body({required this.data, this.boardKey});
+
   final PuzzleStormResponse data;
+
+  final GlobalKey? boardKey;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -145,6 +143,7 @@ class _Body extends ConsumerWidget {
             child: SafeArea(
               bottom: false,
               child: BoardTable(
+                boardKey: boardKey,
                 onMove: (move, {isDrop, isPremove}) => ref
                     .read(ctrlProvider.notifier)
                     .onUserMove(Move.fromUci(move.uci)!),

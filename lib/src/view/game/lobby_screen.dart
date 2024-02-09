@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
@@ -6,7 +7,6 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/lobby/create_game_service.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/navigation.dart';
-import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/view/game/game_body.dart';
 import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
 import 'package:lichess_mobile/src/view/game/game_loading_board.dart';
@@ -45,10 +45,12 @@ class LobbyScreen extends ConsumerStatefulWidget {
   ConsumerState<LobbyScreen> createState() => _LobbyScreenState();
 }
 
-class _LobbyScreenState extends ConsumerState<LobbyScreen>
-    with RouteAware, ImmersiveMode {
+class _LobbyScreenState extends ConsumerState<LobbyScreen> with RouteAware {
   final _whiteClockKey = GlobalKey(debugLabel: 'whiteClockOnGameScreen');
   final _blackClockKey = GlobalKey(debugLabel: 'blackClockOnGameScreen');
+  final _boardKey = defaultTargetPlatform == TargetPlatform.android
+      ? GlobalKey(debugLabel: 'boardOnGameScreen')
+      : null;
 
   @override
   void didChangeDependencies() {
@@ -89,6 +91,7 @@ class _LobbyScreenState extends ConsumerState<LobbyScreen>
               : LobbyGameLoadingBoard(widget.seek),
           whiteClockKey: _whiteClockKey,
           blackClockKey: _blackClockKey,
+          boardKey: _boardKey,
           onLoadGameCallback: (id) {
             ref.read(_lobbyGameProvider(widget.seek).notifier).rematch(id);
           },

@@ -40,6 +40,7 @@ class BoardTable extends ConsumerWidget {
     this.boardOverlay,
     this.errorMessage,
     this.showMoveListPlaceholder = false,
+    this.boardKey,
     super.key,
   }) : assert(
           moves == null || currentMoveIndex != null,
@@ -52,6 +53,11 @@ class BoardTable extends ConsumerWidget {
   final BoardData boardData;
 
   final BoardSettingsOverrides? boardSettingsOverrides;
+
+  /// [GlobalKey] for the board.
+  ///
+  /// Used to set gestures exclusion on android.
+  final GlobalKey? boardKey;
 
   /// Widget that will appear at the top of the board.
   final Widget topTable;
@@ -138,6 +144,7 @@ class BoardTable extends ConsumerWidget {
             : defaultSettings;
 
         final board = Board(
+          key: boardKey,
           size: boardSize,
           data: boardData,
           settings: settings,

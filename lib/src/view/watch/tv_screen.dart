@@ -7,9 +7,9 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/model/tv/tv_controller.dart';
-import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
+import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_player.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
@@ -29,8 +29,7 @@ class TvScreen extends ConsumerStatefulWidget {
   ConsumerState<TvScreen> createState() => _TvScreenState();
 }
 
-class _TvScreenState extends ConsumerState<TvScreen>
-    with RouteAware, WidgetsBindingObserver {
+class _TvScreenState extends ConsumerState<TvScreen> {
   TvControllerProvider get _tvGameCtrl =>
       tvControllerProvider(widget.channel, widget.initialGame);
 
@@ -39,9 +38,19 @@ class _TvScreenState extends ConsumerState<TvScreen>
 
   @override
   Widget build(BuildContext context) {
-    return PlatformWidget(
-      androidBuilder: _androidBuilder,
-      iosBuilder: _iosBuilder,
+    return FocusDetector(
+      onFocusRegained: () {
+        ref.read(_tvGameCtrl.notifier).startWatching();
+      },
+      onFocusLost: () {
+        if (context.mounted) {
+          ref.read(_tvGameCtrl.notifier).stopWatching();
+        }
+      },
+      child: PlatformWidget(
+        androidBuilder: _androidBuilder,
+        iosBuilder: _iosBuilder,
+      ),
     );
   }
 
@@ -80,55 +89,6 @@ class _TvScreenState extends ConsumerState<TvScreen>
         blackClockKey: _blackClockKey,
       ),
     );
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      ref.read(_tvGameCtrl.notifier).startWatching();
-    } else {
-      ref.read(_tvGameCtrl.notifier).stopWatching();
-    }
-  }
-
-  @override
-  void initState() {
-    WidgetsBinding.instance.addObserver(this);
-    super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final route = ModalRoute.of(context);
-    if (route != null && route is PageRoute) {
-      rootNavPageRouteObserver.subscribe(this, route);
-    }
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    rootNavPageRouteObserver.unsubscribe(this);
-    super.dispose();
-  }
-
-  @override
-  void didPushNext() {
-    ref.read(_tvGameCtrl.notifier).stopWatching();
-    super.didPushNext();
-  }
-
-  @override
-  void didPopNext() {
-    ref.read(_tvGameCtrl.notifier).startWatching();
-    super.didPopNext();
-  }
-
-  @override
-  void didPop() {
-    ref.read(_tvGameCtrl.notifier).stopWatching();
-    super.didPop();
   }
 }
 

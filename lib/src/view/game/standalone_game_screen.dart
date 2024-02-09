@@ -1,5 +1,6 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -7,7 +8,6 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
-import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_loading_board.dart';
 import 'package:lichess_mobile/src/view/game/lobby_screen.dart';
@@ -45,10 +45,12 @@ class StandaloneGameScreen extends ConsumerStatefulWidget {
       _StandaloneGameScreenState();
 }
 
-class _StandaloneGameScreenState extends ConsumerState<StandaloneGameScreen>
-    with ImmersiveMode {
+class _StandaloneGameScreenState extends ConsumerState<StandaloneGameScreen> {
   final _whiteClockKey = GlobalKey(debugLabel: 'whiteClockOnGameScreen');
   final _blackClockKey = GlobalKey(debugLabel: 'blackClockOnGameScreen');
+  final _boardKey = defaultTargetPlatform == TargetPlatform.android
+      ? GlobalKey(debugLabel: 'boardOnGameScreen')
+      : null;
 
   late GameFullId _gameId;
 
@@ -75,6 +77,7 @@ class _StandaloneGameScreenState extends ConsumerState<StandaloneGameScreen>
               : const StandaloneGameLoadingBoard(),
           whiteClockKey: _whiteClockKey,
           blackClockKey: _blackClockKey,
+          boardKey: _boardKey,
           onLoadGameCallback: _loadGame,
           onNewOpponentCallback: _onNewOpponent,
         ),
@@ -93,6 +96,7 @@ class _StandaloneGameScreenState extends ConsumerState<StandaloneGameScreen>
               : const StandaloneGameLoadingBoard(),
           whiteClockKey: _whiteClockKey,
           blackClockKey: _blackClockKey,
+          boardKey: _boardKey,
           onLoadGameCallback: _loadGame,
           onNewOpponentCallback: _onNewOpponent,
         ),

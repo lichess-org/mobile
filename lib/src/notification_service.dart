@@ -93,7 +93,7 @@ class NotificationService {
     final badge = message.data['lichess.iosBadge'] as String?;
     if (badge != null) {
       try {
-        badgeService.setBadge(int.parse(badge));
+        BadgeService.instance.setBadge(int.parse(badge));
       } catch (e) {
         _log.severe('Could not parse badge: $badge');
       }

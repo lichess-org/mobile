@@ -53,7 +53,7 @@ class ChatController extends _$ChatController {
       case 'message':
         final data = event.data as Map<String, dynamic>;
         final message = data['t'] as String;
-        final username = data['u'] as String;
+        final username = data['u'] as String?;
         state = state.copyWith(
           messages: state.messages.add(
             (
@@ -77,4 +77,4 @@ class ChatState with _$ChatState {
   }) = _ChatState;
 }
 
-typedef Message = ({String username, String message});
+typedef Message = ({String? username, String message});
