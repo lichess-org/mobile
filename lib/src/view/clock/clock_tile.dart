@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/clock/clock_controller.dart';
+import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
@@ -65,6 +66,8 @@ class ClockTile extends ConsumerWidget {
                         ref
                             .read(clockControllerProvider.notifier)
                             .endTurn(playerType);
+
+                        ref.read(soundServiceProvider).play(Sound.clock);
                       }
                     : null,
                 child: Padding(
