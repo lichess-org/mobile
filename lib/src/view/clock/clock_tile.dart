@@ -61,6 +61,7 @@ class ClockTile extends ConsumerWidget {
             child: Material(
               color: getBackgroundColor(),
               child: InkWell(
+                splashFactory: NoSplash.splashFactory,
                 onTap: clockState.isPlayersTurnAllowed(playerType)
                     ? () {
                         ref

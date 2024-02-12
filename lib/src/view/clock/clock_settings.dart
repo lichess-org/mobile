@@ -8,7 +8,6 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 
 const _iconSize = 45.0;
-const _iconSpacer = SizedBox(width: 16);
 
 class ClockSettings extends ConsumerWidget {
   const ClockSettings({super.key});
@@ -22,17 +21,15 @@ class ClockSettings extends ConsumerWidget {
     );
 
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         const _PlayResumeButton(),
-        _iconSpacer,
         PlatformIconButton(
           semanticsLabel: context.l10n.reset,
           iconSize: _iconSize,
           onTap: buttonsEnabled ? () => controller.reset() : null,
           icon: Icons.cached,
         ),
-        _iconSpacer,
         PlatformIconButton(
           semanticsLabel: context.l10n.settingsSettings,
           iconSize: _iconSize,
@@ -67,7 +64,6 @@ class ClockSettings extends ConsumerWidget {
               : null,
           icon: Icons.settings,
         ),
-        _iconSpacer,
         PlatformIconButton(
           semanticsLabel: context.l10n.close,
           iconSize: _iconSize,
