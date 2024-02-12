@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -14,18 +15,19 @@ class ClockController extends _$ClockController {
     );
   }
 
-  void endTurn(ClockPlayerType playerType) {
+  void onMove(ClockPlayerType playerType) {
     if (playerType == ClockPlayerType.top) {
       state = state.copyWith(
         currentPlayer: ClockPlayerType.bottom,
-        playerTopTurns: state.playerTopTurns + 1,
+        playerTopMoves: state.playerTopMoves + 1,
       );
     } else {
       state = state.copyWith(
         currentPlayer: ClockPlayerType.top,
-        playerBottomTurns: state.playerBottomTurns + 1,
+        playerBottomMoves: state.playerBottomMoves + 1,
       );
     }
+    ref.read(soundServiceProvider).play(Sound.clock);
   }
 
   void updateDuration(ClockPlayerType playerType, Duration duration) {
@@ -78,8 +80,8 @@ class ClockState with _$ClockState {
     ClockPlayerType? currentPlayer,
     ClockPlayerType? loser,
     @Default(false) bool paused,
-    @Default(0) int playerTopTurns,
-    @Default(0) int playerBottomTurns,
+    @Default(0) int playerTopMoves,
+    @Default(0) int playerBottomMoves,
   }) = _ClockState;
 
   factory ClockState.fromTimeIncrement(TimeIncrement timeIncrement) {
@@ -108,13 +110,13 @@ class ClockState with _$ClockState {
   Duration getDuration(ClockPlayerType playerType) =>
       playerType == ClockPlayerType.top ? playerTopTime : playerBottomTime;
 
-  int getTurnCount(ClockPlayerType playerType) =>
-      playerType == ClockPlayerType.top ? playerTopTurns : playerBottomTurns;
+  int getMovesCount(ClockPlayerType playerType) =>
+      playerType == ClockPlayerType.top ? playerTopMoves : playerBottomMoves;
 
   bool isPlayersTurn(ClockPlayerType playerType) =>
       currentPlayer == playerType || (currentPlayer == null && loser == null);
 
-  bool isPlayersTurnAllowed(ClockPlayerType playerType) =>
+  bool isPlayersMoveAllowed(ClockPlayerType playerType) =>
       isPlayersTurn(playerType) && !paused;
 
   bool isActivePlayer(ClockPlayerType playerType) =>

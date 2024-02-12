@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/clock/clock_controller.dart';
-import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
@@ -62,13 +61,11 @@ class ClockTile extends ConsumerWidget {
               color: getBackgroundColor(),
               child: InkWell(
                 splashFactory: NoSplash.splashFactory,
-                onTap: clockState.isPlayersTurnAllowed(playerType)
+                onTap: clockState.isPlayersMoveAllowed(playerType)
                     ? () {
                         ref
                             .read(clockControllerProvider.notifier)
-                            .endTurn(playerType);
-
-                        ref.read(soundServiceProvider).play(Sound.clock);
+                            .onMove(playerType);
                       }
                     : null,
                 child: Padding(
@@ -107,7 +104,7 @@ class ClockTile extends ConsumerWidget {
             bottom: 24,
             right: 24,
             child: Text(
-              clockState.getTurnCount(playerType).toString(),
+              clockState.getMovesCount(playerType).toString(),
               style: clockState.isActivePlayer(playerType)
                   ? Styles.bold.copyWith(color: Colors.white)
                   : Styles.bold.copyWith(color: Colors.black),
