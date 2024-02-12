@@ -52,47 +52,51 @@ class _Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final content = [
-      CardButton(
-        icon: const Icon(
-          Icons.biotech,
-          size: 44,
-          color: LichessColors.brag,
-        ),
-        title: Text(
-          context.l10n.analysis,
-          style: Styles.callout,
-        ),
-        onTap: () => pushPlatformRoute(
-          context,
-          builder: (context) => const AnalysisPositionChoiceScreen(),
+      const SizedBox(height: 16.0),
+      Padding(
+        padding: Styles.bodySectionBottomPadding,
+        child: CardButton(
+          icon: const Icon(
+            Icons.biotech,
+            size: 44,
+            color: LichessColors.brag,
+          ),
+          title: Text(
+            context.l10n.analysis,
+            style: Styles.callout,
+          ),
+          onTap: () => pushPlatformRoute(
+            context,
+            builder: (context) => const AnalysisPositionChoiceScreen(),
+          ),
         ),
       ),
-      CardButton(
-        icon: const Icon(
-          Icons.alarm,
-          size: 44,
-          color: LichessColors.brag,
-        ),
-        title: Text(
-          context.l10n.clock,
-          style: Styles.callout,
-        ),
-        onTap: () => pushPlatformRoute(
-          context,
-          builder: (context) => const ClockScreen(),
-          rootNavigator: true,
+      Padding(
+        padding: Styles.bodySectionBottomPadding,
+        child: CardButton(
+          icon: const Icon(
+            Icons.alarm,
+            size: 44,
+            color: LichessColors.brag,
+          ),
+          title: Text(
+            context.l10n.clock,
+            style: Styles.callout,
+          ),
+          onTap: () => pushPlatformRoute(
+            context,
+            builder: (context) => const ClockScreen(),
+            rootNavigator: true,
+          ),
         ),
       ),
     ];
 
-    return Padding(
-      padding: Styles.bodySectionPadding,
-      child: Theme.of(context).platform == TargetPlatform.iOS
-          ? SliverList(delegate: SliverChildListDelegate(content))
-          : ListView(
-              controller: puzzlesScrollController,
-              children: content,
-            ),
-    );
+    return Theme.of(context).platform == TargetPlatform.iOS
+        ? SliverList(delegate: SliverChildListDelegate(content))
+        : ListView(
+            controller: puzzlesScrollController,
+            children: content,
+          );
   }
 }

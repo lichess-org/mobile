@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/clock/clock_controller.dart';
@@ -16,14 +15,9 @@ class ClockScreen extends StatefulWidget {
 }
 
 class _ClockScreenState extends State<ClockScreen> {
-  final _boardKey = defaultTargetPlatform == TargetPlatform.android
-      ? GlobalKey(debugLabel: 'clockScreen')
-      : null;
-
   @override
   Widget build(BuildContext context) {
     return ImmersiveModeWidget(
-      boardKey: _boardKey,
       child: PlatformWidget(
         androidBuilder: _androidBuilder,
         iosBuilder: _iosBuilder,
