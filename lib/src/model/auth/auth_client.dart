@@ -118,23 +118,6 @@ class AuthClient {
         (response) => _validateResponseStatusResult('DELETE', url, response),
       );
 
-  Future<StreamedResponse> stream(
-    Uri url, {
-    Map<String, String>? headers,
-  }) async {
-    final request = Request('GET', url);
-    if (headers != null) {
-      request.headers.addAll(headers);
-    }
-    return Result.capture(_client.send(request))
-        .mapError((error, stackTrace) {
-          _recordError('GET', error, stackTrace, url, headers);
-          return GenericIOException();
-        })
-        .flatMap((r) => _validateResponseStatusResult('GET', url, r))
-        .then((r) => r.getOrThrow());
-  }
-
   Result<T> _validateResponseStatusResult<T extends BaseResponse>(
     String method,
     Uri url,
@@ -227,6 +210,31 @@ class _AuthClient extends BaseClient {
     _logger.info('${request.method} ${request.url}', request.headers);
 
     return _inner.send(request);
+  }
+
+  @override
+  Future<Response> get(Uri url, {Map<String, String>? headers}) {
+    return _inner.get(url, headers: headers);
+  }
+
+  @override
+  Future<Response> post(
+    Uri url, {
+    Map<String, String>? headers,
+    Object? body,
+    Encoding? encoding,
+  }) {
+    return _inner.post(url, headers: headers, body: body, encoding: encoding);
+  }
+
+  @override
+  Future<Response> delete(
+    Uri url, {
+    Map<String, String>? headers,
+    Object? body,
+    Encoding? encoding,
+  }) {
+    return _inner.delete(url, headers: headers, body: body, encoding: encoding);
   }
 }
 
