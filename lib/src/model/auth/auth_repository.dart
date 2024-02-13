@@ -2,6 +2,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/bearer.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -26,8 +30,8 @@ class AuthRepository {
   final Logger _log = Logger('AuthRepository');
   final FlutterAppAuth _appAuth;
 
-  Future<AuthorizationTokenResponse> signIn() async {
-    final result = await _appAuth.authorizeAndExchangeCode(
+  Future<AuthSessionState> signIn() async {
+    final authResp = await _appAuth.authorizeAndExchangeCode(
       AuthorizationTokenRequest(
         kLichessClientId,
         redirectUri,
@@ -39,14 +43,36 @@ class AuthRepository {
         scopes: oauthScopes,
       ),
     );
-    if (result != null) {
-      _log.fine('Got oAuth response $result');
-      return result;
-    } else {
+
+    if (authResp == null) {
       throw Exception(
         'FlutterAppAuth.authorizeAndExchangeCode failed to get token',
       );
     }
+
+    _log.fine('Got oAuth response $authResp');
+
+    final token = authResp.accessToken;
+
+    if (token == null) {
+      throw Exception('Access token not found.');
+    }
+
+    return _client.readBytes(
+      Uri.parse('$kLichessHost/api/account'),
+      headers: {
+        'Authorization': 'Bearer ${signBearerToken(token)}',
+      },
+    ).then((bytes) {
+      final user = readJsonObjectFromBytes(
+        bytes,
+        mapper: User.fromServerJson,
+      );
+      return AuthSessionState(
+        token: token,
+        user: user.lightUser,
+      );
+    });
   }
 
   Future<void> signOut() {

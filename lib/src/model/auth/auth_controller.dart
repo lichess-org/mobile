@@ -1,13 +1,9 @@
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
-import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/notification_service.dart';
-import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'auth_repository.dart';
-import 'bearer.dart';
 
 part 'auth_controller.g.dart';
 
@@ -26,25 +22,7 @@ class AuthController extends _$AuthController {
     final repo = AuthRepository(client, appAuth);
 
     try {
-      final authResp = await repo.signIn();
-      if (authResp.accessToken == null) {
-        throw Exception('Access token not found.');
-      }
-      final session = await client.readBytes(
-        Uri.parse('$kLichessHost/api/account'),
-        headers: {
-          'Authorization': 'Bearer ${signBearerToken(authResp.accessToken!)}',
-        },
-      ).then((bytes) {
-        final user = readJsonObjectFromBytes(
-          bytes,
-          mapper: User.fromServerJson,
-        );
-        return AuthSessionState(
-          token: authResp.accessToken!,
-          user: user.lightUser,
-        );
-      });
+      final session = await repo.signIn();
 
       ref.read(authSessionProvider.notifier).update(session);
       ref.read(notificationServiceProvider).registerDevice();
