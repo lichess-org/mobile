@@ -39,13 +39,21 @@ const _maxCacheSize = 2 * 1024 * 1024;
 
 /// Creates the appropriate http client for the platform.
 Client httpClient(String userAgent) {
+  // TODO wait for https://github.com/dart-lang/http/pull/1111
+  // to be merged and released before using embedded Cronet on Android.
+  // if (Platform.isAndroid) {
+  //   final engine = CronetEngine.build(
+  //     cacheMode: CacheMode.memory,
+  //     cacheMaxSize: _maxCacheSize,
+  //     userAgent: userAgent,
+  //   );
+  //   return CronetClient.fromCronetEngine(engine);
+  // }
+
   if (Platform.isIOS || Platform.isMacOS) {
     final config = URLSessionConfiguration.ephemeralSessionConfiguration()
       ..cache = URLCache.withCapacity(memoryCapacity: _maxCacheSize)
-      ..httpAdditionalHeaders = {
-        'User-Agent': userAgent,
-        'Accept': 'application/json',
-      };
+      ..httpAdditionalHeaders = {'User-Agent': userAgent};
     return CupertinoClient.fromSessionConfiguration(config);
   }
   return IOClient(HttpClient()..userAgent = userAgent);
