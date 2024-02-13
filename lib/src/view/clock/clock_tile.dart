@@ -46,72 +46,75 @@ class ClockTile extends ConsumerWidget {
       }
     }
 
-    return RotatedBox(
-      quarterTurns: playerType == ClockPlayerType.top ? 2 : 0,
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          Container(
-            margin: const EdgeInsets.all(8),
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(10.0)),
-            ),
-            clipBehavior: Clip.hardEdge,
-            child: Opacity(
-              opacity: clockState.paused ? 0.7 : 1,
-              child: Material(
-                color: getBackgroundColor(),
-                child: InkWell(
-                  splashFactory: NoSplash.splashFactory,
-                  onTap: clockState.isPlayersMoveAllowed(playerType)
-                      ? () {
-                          ref
-                              .read(clockControllerProvider.notifier)
-                              .onTap(playerType);
-                        }
-                      : null,
-                  child: Padding(
-                    padding: const EdgeInsets.all(40),
-                    child: FittedBox(
-                      child: AnimatedCrossFade(
-                        duration: const Duration(milliseconds: 300),
-                        firstChild: CountdownClock(
-                          key: Key('${clockState.id}-$playerType'),
-                          lightColorStyle: _lightClockStyle,
-                          darkColorStyle: _darkClockStyle,
-                          duration: clockState.getDuration(playerType),
-                          active: clockState.isActivePlayer(playerType),
-                          onFlag: () {
+    return PopScope(
+      canPop: false,
+      child: RotatedBox(
+        quarterTurns: playerType == ClockPlayerType.top ? 2 : 0,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            Container(
+              margin: const EdgeInsets.all(8),
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+              ),
+              clipBehavior: Clip.hardEdge,
+              child: Opacity(
+                opacity: clockState.paused ? 0.7 : 1,
+                child: Material(
+                  color: getBackgroundColor(),
+                  child: InkWell(
+                    splashFactory: NoSplash.splashFactory,
+                    onTap: clockState.isPlayersMoveAllowed(playerType)
+                        ? () {
                             ref
                                 .read(clockControllerProvider.notifier)
-                                .setLoser(playerType);
-                          },
-                          onStop: (remaining) {
-                            ref
-                                .read(clockControllerProvider.notifier)
-                                .updateDuration(playerType, remaining);
-                          },
+                                .onTap(playerType);
+                          }
+                        : null,
+                    child: Padding(
+                      padding: const EdgeInsets.all(40),
+                      child: FittedBox(
+                        child: AnimatedCrossFade(
+                          duration: const Duration(milliseconds: 300),
+                          firstChild: CountdownClock(
+                            key: Key('${clockState.id}-$playerType'),
+                            lightColorStyle: _lightClockStyle,
+                            darkColorStyle: _darkClockStyle,
+                            duration: clockState.getDuration(playerType),
+                            active: clockState.isActivePlayer(playerType),
+                            onFlag: () {
+                              ref
+                                  .read(clockControllerProvider.notifier)
+                                  .setLoser(playerType);
+                            },
+                            onStop: (remaining) {
+                              ref
+                                  .read(clockControllerProvider.notifier)
+                                  .updateDuration(playerType, remaining);
+                            },
+                          ),
+                          secondChild: const Icon(Icons.flag),
+                          crossFadeState: clockState.isLoser(playerType)
+                              ? CrossFadeState.showSecond
+                              : CrossFadeState.showFirst,
                         ),
-                        secondChild: const Icon(Icons.flag),
-                        crossFadeState: clockState.isLoser(playerType)
-                            ? CrossFadeState.showSecond
-                            : CrossFadeState.showFirst,
                       ),
                     ),
                   ),
                 ),
               ),
             ),
-          ),
-          Positioned(
-            bottom: 24,
-            right: 24,
-            child: Text(
-              '${context.l10n.stormMoves}: ${clockState.getMovesCount(playerType)}',
-              style: const TextStyle(fontSize: 13, color: Colors.black),
+            Positioned(
+              bottom: 24,
+              right: 24,
+              child: Text(
+                '${context.l10n.stormMoves}: ${clockState.getMovesCount(playerType)}',
+                style: const TextStyle(fontSize: 13, color: Colors.black),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
