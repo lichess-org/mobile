@@ -6,7 +6,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
 
 const _darkClockStyle = ClockStyle(
-  textColor: Colors.black,
+  textColor: Colors.black87,
   activeTextColor: Colors.white,
   emergencyTextColor: Colors.white,
   backgroundColor: Colors.transparent,
@@ -15,7 +15,7 @@ const _darkClockStyle = ClockStyle(
 );
 
 const _lightClockStyle = ClockStyle(
-  textColor: Colors.black,
+  textColor: Colors.black87,
   activeTextColor: Colors.white,
   emergencyTextColor: Colors.black,
   backgroundColor: Colors.transparent,
