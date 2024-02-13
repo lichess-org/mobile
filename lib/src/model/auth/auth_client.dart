@@ -211,31 +211,6 @@ class _AuthClient extends BaseClient {
 
     return _inner.send(request);
   }
-
-  @override
-  Future<Response> get(Uri url, {Map<String, String>? headers}) {
-    return _inner.get(url, headers: headers);
-  }
-
-  @override
-  Future<Response> post(
-    Uri url, {
-    Map<String, String>? headers,
-    Object? body,
-    Encoding? encoding,
-  }) {
-    return _inner.post(url, headers: headers, body: body, encoding: encoding);
-  }
-
-  @override
-  Future<Response> delete(
-    Uri url, {
-    Map<String, String>? headers,
-    Object? body,
-    Encoding? encoding,
-  }) {
-    return _inner.delete(url, headers: headers, body: body, encoding: encoding);
-  }
 }
 
 const defaultRetries = [
