@@ -65,7 +65,7 @@ class ClockTile extends ConsumerWidget {
                     ? () {
                         ref
                             .read(clockControllerProvider.notifier)
-                            .onMove(playerType);
+                            .onTap(playerType);
                       }
                     : null,
                 child: Padding(

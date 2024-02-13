@@ -15,16 +15,19 @@ class ClockController extends _$ClockController {
     );
   }
 
-  void onMove(ClockPlayerType playerType) {
+  void onTap(ClockPlayerType playerType) {
+    final started = state.started;
     if (playerType == ClockPlayerType.top) {
       state = state.copyWith(
+        started: true,
         currentPlayer: ClockPlayerType.bottom,
-        playerTopMoves: state.playerTopMoves + 1,
+        playerTopMoves: started ? state.playerTopMoves + 1 : 0,
       );
     } else {
       state = state.copyWith(
+        started: true,
         currentPlayer: ClockPlayerType.top,
-        playerBottomMoves: state.playerBottomMoves + 1,
+        playerBottomMoves: started ? state.playerBottomMoves + 1 : 0,
       );
     }
     ref.read(soundServiceProvider).play(Sound.clock);
@@ -79,6 +82,7 @@ class ClockState with _$ClockState {
     required Duration playerBottomTime,
     ClockPlayerType? currentPlayer,
     ClockPlayerType? loser,
+    @Default(false) bool started,
     @Default(false) bool paused,
     @Default(0) int playerTopMoves,
     @Default(0) int playerBottomMoves,
