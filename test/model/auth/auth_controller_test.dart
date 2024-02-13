@@ -1,13 +1,13 @@
-import 'package:async/async.dart';
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
-import 'package:lichess_mobile/src/http_client.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/session_storage.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:mocktail/mocktail.dart';
@@ -15,7 +15,7 @@ import 'package:mocktail/mocktail.dart';
 import '../../test_container.dart';
 import '../../test_utils.dart';
 
-class MockAuthRepository extends Mock implements AuthRepository {}
+class MockFlutterAppAuth extends Mock implements FlutterAppAuth {}
 
 class MockSessionStorage extends Mock implements SessionStorage {}
 
@@ -23,18 +23,24 @@ class Listener<T> extends Mock {
   void call(T? previous, T value);
 }
 
+class FakeClientFactory implements HttpClientFactory {
+  @override
+  http.Client call() {
+    return MockClient((request) {
+      if (request.url.path == '/api/account') {
+        return mockResponse(testAccountResponse, 200);
+      } else if (request.method == 'DELETE' &&
+          request.url.path == '/api/token') {
+        return mockResponse('ok', 200);
+      }
+      return mockResponse('', 404);
+    });
+  }
+}
+
 void main() {
   final mockSessionStorage = MockSessionStorage();
-  final mockAuthRepository = MockAuthRepository();
-
-  final mockClient = MockClient((request) {
-    if (request.url.path == '/api/account') {
-      return mockResponse(testAccountResponse, 200);
-    } else if (request.method == 'DELETE' && request.url.path == '/api/token') {
-      return mockResponse('ok', 200);
-    }
-    return mockResponse('', 404);
-  });
+  final mockFlutterAppAuth = MockFlutterAppAuth();
 
   const testUserSession = AuthSessionState(
     token: 'testToken',
@@ -49,12 +55,20 @@ void main() {
   const nullData = AsyncData<void>(null);
 
   setUpAll(() {
+    registerFallbackValue(
+      AuthorizationTokenRequest(
+        'testClientId',
+        'testRedirectUrl',
+        discoveryUrl: 'testDiscoveryUrl',
+        scopes: ['testScope'],
+      ),
+    );
     registerFallbackValue(testUserSession);
     registerFallbackValue(const AsyncLoading<void>());
   });
 
   setUp(() {
-    reset(mockAuthRepository);
+    reset(mockFlutterAppAuth);
     reset(mockSessionStorage);
   });
 
@@ -62,7 +76,7 @@ void main() {
     test('sign in', () async {
       when(() => mockSessionStorage.read())
           .thenAnswer((_) => delayedAnswer(null));
-      when(() => mockAuthRepository.signIn())
+      when(() => mockFlutterAppAuth.authorizeAndExchangeCode(any()))
           .thenAnswer((_) => delayedAnswer(signInResponse));
       when(
         () => mockSessionStorage.write(any()),
@@ -70,9 +84,9 @@ void main() {
 
       final container = await makeContainer(
         overrides: [
-          authRepositoryProvider.overrideWithValue(mockAuthRepository),
+          appAuthProvider.overrideWithValue(mockFlutterAppAuth),
           sessionStorageProvider.overrideWithValue(mockSessionStorage),
-          httpClientProvider.overrideWithValue(mockClient),
+          httpClientFactoryProvider.overrideWithValue(FakeClientFactory()),
         ],
       );
 
@@ -96,7 +110,6 @@ void main() {
         () => listener(loading, nullData),
       ]);
       verifyNoMoreInteractions(listener);
-      verify(mockAuthRepository.signIn).called(1);
 
       // it should successfully write the session
       verify(
@@ -107,17 +120,15 @@ void main() {
     test('sign out', () async {
       when(() => mockSessionStorage.read())
           .thenAnswer((_) => delayedAnswer(testUserSession));
-      when(() => mockAuthRepository.signOut())
-          .thenAnswer((_) => delayedAnswer(Result.value(null)));
       when(
         () => mockSessionStorage.delete(),
       ).thenAnswer((_) => delayedAnswer(null));
 
       final container = await makeContainer(
         overrides: [
-          authRepositoryProvider.overrideWithValue(mockAuthRepository),
+          appAuthProvider.overrideWithValue(mockFlutterAppAuth),
           sessionStorageProvider.overrideWithValue(mockSessionStorage),
-          httpClientProvider.overrideWithValue(mockClient),
+          httpClientFactoryProvider.overrideWithValue(FakeClientFactory()),
         ],
       );
 
@@ -141,7 +152,6 @@ void main() {
         () => listener(loading, nullData),
       ]);
       verifyNoMoreInteractions(listener);
-      verify(mockAuthRepository.signOut).called(1);
 
       // session should be deleted
       verify(
@@ -191,15 +201,13 @@ const testAccountResponse = '''
 }
 ''';
 
-final signInResponse = Result.value(
-  AuthorizationTokenResponse(
-    'testToken',
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-  ),
+final signInResponse = AuthorizationTokenResponse(
+  'testToken',
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
+  null,
 );

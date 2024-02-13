@@ -1,20 +1,47 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
-import 'package:lichess_mobile/src/http_client.dart';
+import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/view/auth/sign_in_widget.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:mocktail/mocktail.dart';
 
 import '../../test_app.dart';
 import '../../test_utils.dart';
 
-void main() {
-  final mockClient = MockClient((request) {
-    if (request.url.path != '/api/account') {
+class MockFlutterAppAuth extends Mock implements FlutterAppAuth {}
+
+class FakeClientFactory implements HttpClientFactory {
+  @override
+  http.Client call() {
+    return MockClient((request) {
+      if (request.url.path == '/api/account') {
+        return mockResponse(testAccountResponse, 200);
+      }
+      if (request.method == 'DELETE' && request.url.path == '/api/token') {
+        return mockResponse('ok', 200);
+      }
       return mockResponse('', 404);
-    }
-    return mockResponse(testAccountResponse, 200);
+    });
+  }
+}
+
+void main() {
+  setUpAll(() {
+    registerFallbackValue(
+      AuthorizationTokenRequest(
+        'testClientId',
+        'testRedirectUrl',
+        discoveryUrl: 'testDiscoveryUrl',
+        scopes: ['testScope'],
+      ),
+    );
   });
+
+  final mockFlutterAppAuth = MockFlutterAppAuth();
 
   group('SignInWidget', () {
     testWidgets(
@@ -31,7 +58,7 @@ void main() {
             ),
           ),
           overrides: [
-            httpClientProvider.overrideWithValue(mockClient),
+            httpClientFactoryProvider.overrideWithValue(FakeClientFactory()),
           ],
         );
 
@@ -59,9 +86,24 @@ void main() {
             ),
           ),
           overrides: [
-            httpClientProvider.overrideWithValue(mockClient),
+            appAuthProvider.overrideWithValue(mockFlutterAppAuth),
+            httpClientFactoryProvider.overrideWithValue(FakeClientFactory()),
           ],
         );
+
+        final signInResponse = AuthorizationTokenResponse(
+          'testToken',
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+        );
+
+        when(() => mockFlutterAppAuth.authorizeAndExchangeCode(any()))
+            .thenAnswer((_) => delayedAnswer(signInResponse));
 
         await tester.pumpWidget(app);
 

@@ -17,21 +17,23 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'http.g.dart';
 
 @Riverpod(keepAlive: true)
-ClientFactory httpClientFactory(HttpClientFactoryRef ref) {
-  return ClientFactory(ref);
+HttpClientFactory httpClientFactory(HttpClientFactoryRef ref) {
+  final pInfo = ref.read(packageInfoProvider);
+  final deviceInfo = ref.read(deviceInfoProvider);
+  final sri = ref.read(sriProvider);
+  final userAgent = makeUserAgent(pInfo, deviceInfo, sri);
+  return HttpClientFactory(ref, userAgent);
 }
 
-class ClientFactory {
-  ClientFactory(this._ref);
+class HttpClientFactory {
+  HttpClientFactory(this._ref, this._userAgent);
 
   final HttpClientFactoryRef _ref;
 
+  final String _userAgent;
+
   Client call() {
-    final pInfo = _ref.read(packageInfoProvider);
-    final deviceInfo = _ref.read(deviceInfoProvider);
-    final sri = _ref.read(sriProvider);
-    final userAgent = makeUserAgent(pInfo, deviceInfo, sri);
-    return AuthClient(httpClient(userAgent), _ref);
+    return AuthClient(httpClient(_userAgent), _ref);
   }
 }
 

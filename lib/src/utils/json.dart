@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:async/async.dart';
 import 'package:deep_pick/deep_pick.dart';
@@ -23,6 +24,19 @@ Result<T> readJsonObject<T>(
     },
   );
   return result;
+}
+
+T readJsonObjectFromBytes<T>(
+  Uint8List bytes, {
+  required Mapper<T> mapper,
+  Logger? logger,
+}) {
+  final json = jsonDecode(utf8.decode(bytes));
+  if (json is! Map<String, dynamic>) {
+    logger?.severe('Could not read json object as $T: expected an object.');
+    throw DataFormatException();
+  }
+  return mapper(json);
 }
 
 /// Reads a [T] object from a [Response] returning a JSON object.

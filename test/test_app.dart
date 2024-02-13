@@ -6,14 +6,15 @@ import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/app_dependencies.dart';
 import 'package:lichess_mobile/src/crashlytics.dart';
 import 'package:lichess_mobile/src/db/shared_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
-import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/session_storage.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/notification_service.dart';
@@ -26,7 +27,6 @@ import 'package:sqflite/sqflite.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 import './fake_crashlytics.dart';
-import './model/auth/fake_auth_repository.dart';
 import './model/auth/fake_session_storage.dart';
 import './model/common/service/fake_sound_service.dart';
 import 'fake_notification_service.dart';
@@ -34,6 +34,15 @@ import 'fake_notification_service.dart';
 class MockSoundPool extends Mock implements Soundpool {}
 
 class MockDatabase extends Mock implements Database {}
+
+class MockHttpClient extends Mock implements http.Client {}
+
+class FakeClientFactory implements HttpClientFactory {
+  @override
+  http.Client call() {
+    return MockHttpClient();
+  }
+}
 
 // iPhone 14 screen size
 const double _kTestScreenWidth = 390.0;
@@ -73,6 +82,8 @@ Future<Widget> buildTestApp(
   return ProviderScope(
     overrides: [
       // ignore: scoped_providers_should_specify_dependencies
+      httpClientFactoryProvider.overrideWithValue(FakeClientFactory()),
+      // ignore: scoped_providers_should_specify_dependencies
       showRatingsPrefProvider.overrideWith((ref) {
         return true;
       }),
@@ -84,8 +95,6 @@ Future<Widget> buildTestApp(
       soundServiceProvider.overrideWithValue(FakeSoundService()),
       // ignore: scoped_providers_should_specify_dependencies
       sharedPreferencesProvider.overrideWithValue(sharedPreferences),
-      // ignore: scoped_providers_should_specify_dependencies
-      authRepositoryProvider.overrideWithValue(FakeAuthRepository()),
       // ignore: scoped_providers_should_specify_dependencies
       sessionStorageProvider.overrideWithValue(FakeSessionStorage(userSession)),
       // ignore: scoped_providers_should_specify_dependencies

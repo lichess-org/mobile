@@ -144,11 +144,11 @@ class AuthClient {
     return response.statusCode < 400
         ? Result.value(response)
         : response.statusCode == 404
-            ? Result.error(NotFoundException())
+            ? Result.error(const NotFoundException())
             : response.statusCode == 401
-                ? Result.error(UnauthorizedException())
+                ? Result.error(const UnauthorizedException())
                 : response.statusCode == 403
-                    ? Result.error(ForbiddenException())
+                    ? Result.error(const ForbiddenException())
                     : Result.error(
                         ApiRequestException(
                           response.statusCode,
