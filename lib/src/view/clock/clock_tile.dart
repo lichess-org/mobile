@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/clock/clock_controller.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
 
 const _darkClockStyle = ClockStyle(
@@ -40,7 +40,7 @@ class ClockTile extends ConsumerWidget {
         return LichessColors.red;
       } else if (clockState.isPlayersTurn(playerType) &&
           clockState.currentPlayer != null) {
-        return LichessColors.green;
+        return LichessColors.brag;
       } else {
         return Colors.grey;
       }
@@ -104,10 +104,8 @@ class ClockTile extends ConsumerWidget {
             bottom: 24,
             right: 24,
             child: Text(
-              clockState.getMovesCount(playerType).toString(),
-              style: clockState.isActivePlayer(playerType)
-                  ? Styles.bold.copyWith(color: Colors.white)
-                  : Styles.bold.copyWith(color: Colors.black),
+              '${context.l10n.stormMoves}: ${clockState.getMovesCount(playerType)}',
+              style: const TextStyle(fontSize: 13, color: Colors.black),
             ),
           ),
         ],
