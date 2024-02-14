@@ -39,7 +39,7 @@ class StormController extends _$StormController {
 
   @override
   StormState build(IList<LitePuzzle> puzzles) {
-    _client = ref.read(httpClientFactoryProvider)();
+    _client = ref.read(authClientFactoryProvider)();
 
     ref.onDispose(() {
       _client.close();

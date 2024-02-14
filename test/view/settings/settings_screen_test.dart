@@ -12,7 +12,7 @@ import '../../model/auth/fake_session_storage.dart';
 import '../../test_app.dart';
 import '../../test_utils.dart';
 
-class FakeClientFactory implements HttpClientFactory {
+class FakeClientFactory implements AuthClientFactory {
   @override
   http.Client call() {
     return MockClient((request) {
@@ -71,7 +71,7 @@ void main() {
           home: const SettingsScreen(),
           userSession: fakeSession,
           overrides: [
-            httpClientFactoryProvider.overrideWithValue(FakeClientFactory()),
+            authClientFactoryProvider.overrideWithValue(FakeClientFactory()),
           ],
         );
 

@@ -23,7 +23,7 @@ class Listener<T> extends Mock {
   void call(T? previous, T value);
 }
 
-class FakeClientFactory implements HttpClientFactory {
+class FakeClientFactory implements AuthClientFactory {
   @override
   http.Client call() {
     return MockClient((request) {
@@ -86,7 +86,7 @@ void main() {
         overrides: [
           appAuthProvider.overrideWithValue(mockFlutterAppAuth),
           sessionStorageProvider.overrideWithValue(mockSessionStorage),
-          httpClientFactoryProvider.overrideWithValue(FakeClientFactory()),
+          authClientFactoryProvider.overrideWithValue(FakeClientFactory()),
         ],
       );
 
@@ -128,7 +128,7 @@ void main() {
         overrides: [
           appAuthProvider.overrideWithValue(mockFlutterAppAuth),
           sessionStorageProvider.overrideWithValue(mockSessionStorage),
-          httpClientFactoryProvider.overrideWithValue(FakeClientFactory()),
+          authClientFactoryProvider.overrideWithValue(FakeClientFactory()),
         ],
       );
 

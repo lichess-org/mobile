@@ -19,18 +19,18 @@ part 'http.g.dart';
 final _logger = Logger('HttpClient');
 
 @Riverpod(keepAlive: true)
-HttpClientFactory httpClientFactory(HttpClientFactoryRef ref) {
+AuthClientFactory authClientFactory(AuthClientFactoryRef ref) {
   final pInfo = ref.read(packageInfoProvider);
   final deviceInfo = ref.read(deviceInfoProvider);
   final sri = ref.read(sriProvider);
   final userAgent = makeUserAgent(pInfo, deviceInfo, sri);
-  return HttpClientFactory(ref, userAgent);
+  return AuthClientFactory(ref, userAgent);
 }
 
-class HttpClientFactory {
-  HttpClientFactory(this._ref, this._userAgent);
+class AuthClientFactory {
+  AuthClientFactory(this._ref, this._userAgent);
 
-  final HttpClientFactoryRef _ref;
+  final AuthClientFactoryRef _ref;
 
   final String _userAgent;
 
@@ -73,7 +73,7 @@ Client httpClient(String userAgent) {
 class AuthClient extends BaseClient {
   AuthClient(this._inner, this._ref);
 
-  final HttpClientFactoryRef _ref;
+  final AuthClientFactoryRef _ref;
   final Client _inner;
 
   @override

@@ -36,7 +36,7 @@ class CreateGameService {
     final completer = Completer<GameFullId>();
 
     _pendingGameConnection = (
-      ref.read(httpClientFactoryProvider)(),
+      ref.read(authClientFactoryProvider)(),
       stream.listen((event) {
         if (event.topic == 'redirect') {
           final data = event.data as Map<String, dynamic>;
@@ -76,7 +76,7 @@ class CreateGameService {
   }
 
   Future<void> newCorrespondenceGame(GameSeek seek) async {
-    final client = ref.read(httpClientFactoryProvider)();
+    final client = ref.read(authClientFactoryProvider)();
     final lobbyRepo = LobbyRepository(client);
 
     _log.info('Creating new correspondence game');

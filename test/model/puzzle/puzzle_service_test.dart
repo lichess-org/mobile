@@ -20,7 +20,7 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import '../../test_container.dart';
 import '../../test_utils.dart';
 
-class FakeClientFactory implements HttpClientFactory {
+class FakeClientFactory implements AuthClientFactory {
   FakeClientFactory(this._client);
 
   final http.Client _client;
@@ -44,7 +44,7 @@ void main() {
           ref.onDispose(db.close);
           return db;
         }),
-        httpClientFactoryProvider.overrideWith((ref) {
+        authClientFactoryProvider.overrideWith((ref) {
           return FakeClientFactory(mockClient);
         }),
       ],

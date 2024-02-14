@@ -17,7 +17,7 @@ part 'lobby_repository.g.dart';
 Future<IList<CorrespondenceChallenge>> correspondenceChallenges(
   CorrespondenceChallengesRef ref,
 ) {
-  final client = ref.read(httpClientFactoryProvider)();
+  final client = ref.read(authClientFactoryProvider)();
   ref.onDispose(client.close);
 
   final lobbyRepository = LobbyRepository(client);

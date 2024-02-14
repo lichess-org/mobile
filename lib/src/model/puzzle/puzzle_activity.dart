@@ -21,7 +21,7 @@ const _maxPuzzles = 500;
 Future<IList<PuzzleHistoryEntry>> puzzleRecentActivity(
   PuzzleRecentActivityRef ref,
 ) {
-  final client = ref.watch(httpClientFactoryProvider)();
+  final client = ref.watch(authClientFactoryProvider)();
   final repo = PuzzleRepository(client);
   ref.onDispose(client.close);
   // we need to fetch enough puzzles to fill the history screen
@@ -35,7 +35,7 @@ class PuzzleActivity extends _$PuzzleActivity {
 
   @override
   Future<PuzzleActivityState> build() async {
-    _client = ref.read(httpClientFactoryProvider)();
+    _client = ref.read(authClientFactoryProvider)();
 
     ref.cacheFor(const Duration(minutes: 30));
     ref.onDispose(() {

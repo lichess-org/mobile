@@ -14,7 +14,7 @@ import '../../test_utils.dart';
 
 class MockFlutterAppAuth extends Mock implements FlutterAppAuth {}
 
-class FakeClientFactory implements HttpClientFactory {
+class FakeClientFactory implements AuthClientFactory {
   @override
   http.Client call() {
     return MockClient((request) {
@@ -58,7 +58,7 @@ void main() {
             ),
           ),
           overrides: [
-            httpClientFactoryProvider.overrideWithValue(FakeClientFactory()),
+            authClientFactoryProvider.overrideWithValue(FakeClientFactory()),
           ],
         );
 
@@ -87,7 +87,7 @@ void main() {
           ),
           overrides: [
             appAuthProvider.overrideWithValue(mockFlutterAppAuth),
-            httpClientFactoryProvider.overrideWithValue(FakeClientFactory()),
+            authClientFactoryProvider.overrideWithValue(FakeClientFactory()),
           ],
         );
 

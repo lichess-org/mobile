@@ -9,7 +9,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import '../../test_container.dart';
 import '../../test_utils.dart';
 
-class FakeClientFactory implements HttpClientFactory {
+class FakeClientFactory implements AuthClientFactory {
   FakeClientFactory(this._client);
 
   final http.Client _client;
@@ -24,7 +24,7 @@ void main() {
   Future<ProviderContainer> makeTestContainer(MockClient mockClient) async {
     return makeContainer(
       overrides: [
-        httpClientFactoryProvider.overrideWith((ref) {
+        authClientFactoryProvider.overrideWith((ref) {
           return FakeClientFactory(mockClient);
         }),
       ],
@@ -46,7 +46,7 @@ void main() {
       });
 
       final container = await makeTestContainer(mockClient);
-      final client = container.read(httpClientFactoryProvider)();
+      final client = container.read(authClientFactoryProvider)();
       final repo = PuzzleRepository(client);
 
       final response = await repo.selectBatch(nb: 3);
@@ -69,7 +69,7 @@ void main() {
       });
 
       final container = await makeTestContainer(mockClient);
-      final client = container.read(httpClientFactoryProvider)();
+      final client = container.read(authClientFactoryProvider)();
       final repo = PuzzleRepository(client);
 
       final response = await repo.selectBatch(nb: 1);
@@ -92,7 +92,7 @@ void main() {
         return mockResponse('', 404);
       });
       final container = await makeTestContainer(mockClient);
-      final client = container.read(httpClientFactoryProvider)();
+      final client = container.read(authClientFactoryProvider)();
       final repo = PuzzleRepository(client);
 
       final result = await repo.selectBatch(nb: 1);
@@ -116,7 +116,7 @@ void main() {
       });
 
       final container = await makeTestContainer(mockClient);
-      final client = container.read(httpClientFactoryProvider)();
+      final client = container.read(authClientFactoryProvider)();
       final repo = PuzzleRepository(client);
       final result = await repo.streak();
 
@@ -137,7 +137,7 @@ void main() {
       });
 
       final container = await makeTestContainer(mockClient);
-      final client = container.read(httpClientFactoryProvider)();
+      final client = container.read(authClientFactoryProvider)();
       final repo = PuzzleRepository(client);
       final result = await repo.puzzleDashboard();
 

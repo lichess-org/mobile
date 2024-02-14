@@ -50,7 +50,7 @@ class PuzzleController extends _$PuzzleController {
     PuzzleContext initialContext, {
     PuzzleStreak? initialStreak,
   }) {
-    _client = ref.read(httpClientFactoryProvider)();
+    _client = ref.read(authClientFactoryProvider)();
     _repository = PuzzleRepository(_client);
     _service = ref.read(puzzleServiceFactoryProvider)(
       _client,

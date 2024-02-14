@@ -17,7 +17,7 @@ class AuthController extends _$AuthController {
   Future<void> signIn() async {
     state = const AsyncLoading();
 
-    final client = ref.read(httpClientFactoryProvider)();
+    final client = ref.read(authClientFactoryProvider)();
     final appAuth = ref.read(appAuthProvider);
     final repo = AuthRepository(client, appAuth);
 
@@ -39,7 +39,7 @@ class AuthController extends _$AuthController {
     state = const AsyncLoading();
     await Future<void>.delayed(const Duration(milliseconds: 500));
 
-    final client = ref.read(httpClientFactoryProvider)();
+    final client = ref.read(authClientFactoryProvider)();
     final repo = AuthRepository(client, ref.read(appAuthProvider));
     try {
       await repo.signOut();
