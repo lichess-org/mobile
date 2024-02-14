@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:cupertino_http/cupertino_http.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:http/http.dart';
 import 'package:http/io_client.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
@@ -15,6 +16,8 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'http.g.dart';
+
+final _logger = Logger('HttpClient');
 
 @Riverpod(keepAlive: true)
 HttpClientFactory httpClientFactory(HttpClientFactoryRef ref) {
@@ -52,12 +55,13 @@ Client httpClient(String userAgent) {
   //   return CronetClient.fromCronetEngine(engine);
   // }
 
-  if (Platform.isIOS || Platform.isMacOS) {
-    final config = URLSessionConfiguration.ephemeralSessionConfiguration()
-      ..cache = URLCache.withCapacity(memoryCapacity: _maxCacheSize)
-      ..httpAdditionalHeaders = {'User-Agent': userAgent};
-    return CupertinoClient.fromSessionConfiguration(config);
-  }
+  // if (Platform.isIOS || Platform.isMacOS) {
+  //   final config = URLSessionConfiguration.ephemeralSessionConfiguration()
+  //     ..cache = URLCache.withCapacity(memoryCapacity: _maxCacheSize)
+  //     ..httpAdditionalHeaders = {'User-Agent': userAgent};
+  //   return CupertinoClient.fromSessionConfiguration(config);
+  // }
+
   return IOClient(HttpClient()..userAgent = userAgent);
 }
 
@@ -72,7 +76,6 @@ class AuthClient extends BaseClient {
 
   final HttpClientFactoryRef _ref;
   final Client _inner;
-  final Logger _logger = Logger('AuthClient');
 
   @override
   Future<StreamedResponse> send(BaseRequest request) async {
@@ -84,70 +87,16 @@ class AuthClient extends BaseClient {
       request.headers['X-User'] = session.user.id.toString();
     }
 
-    _logger.info('${request.method} ${request.url}', request.headers);
+    _logger.info('${request.method} ${request.url} ${request.headers}');
 
-    return _inner.send(request);
+    final response = await _inner.send(request);
+
+    _logIfError(response);
+
+    return response;
   }
 
-  @override
-  Future<Response> head(Uri url, {Map<String, String>? headers}) {
-    return _inner.head(url, headers: headers).then(_logIfError);
-  }
-
-  @override
-  Future<Response> get(Uri url, {Map<String, String>? headers}) {
-    return _inner.get(url, headers: headers).then(_logIfError);
-  }
-
-  @override
-  Future<Response> post(
-    Uri url, {
-    Map<String, String>? headers,
-    Object? body,
-    Encoding? encoding,
-  }) {
-    return _inner
-        .post(url, headers: headers, body: body, encoding: encoding)
-        .then(_logIfError);
-  }
-
-  @override
-  Future<Response> put(
-    Uri url, {
-    Map<String, String>? headers,
-    Object? body,
-    Encoding? encoding,
-  }) {
-    return _inner
-        .put(url, headers: headers, body: body, encoding: encoding)
-        .then(_logIfError);
-  }
-
-  @override
-  Future<Response> patch(
-    Uri url, {
-    Map<String, String>? headers,
-    Object? body,
-    Encoding? encoding,
-  }) {
-    return _inner
-        .patch(url, headers: headers, body: body, encoding: encoding)
-        .then(_logIfError);
-  }
-
-  @override
-  Future<Response> delete(
-    Uri url, {
-    Map<String, String>? headers,
-    Object? body,
-    Encoding? encoding,
-  }) {
-    return _inner
-        .delete(url, headers: headers, body: body, encoding: encoding)
-        .then(_logIfError);
-  }
-
-  FutureOr<Response> _logIfError(Response response) {
+  void _logIfError(BaseResponse response) {
     if (response.request != null && response.statusCode >= 400) {
       final request = response.request!;
       final method = request.method;
@@ -155,11 +104,83 @@ class AuthClient extends BaseClient {
       // TODD for now logging isn't much useful
       // We could use improve it later to create an http logger in the app.
       _logger.warning(
-        '$method $url responded with status ${response.statusCode}\n${response.body}',
+        '$method $url responded with status ${response.statusCode} ${response.reasonPhrase}',
+      );
+    }
+  }
+
+  @override
+  void close() {
+    _inner.close();
+  }
+}
+
+extension ClientExtension on Client {
+  /// Sends an HTTP GET request with the given headers to the given URL and
+  /// returns a Future that completes to the body of the response as a JSON object
+  /// mapped to [T].
+  ///
+  /// The Future will emit a [ClientException] if the response doesn't have a
+  /// success status code or if the response body can't be read as a json object.
+  Future<T> readJson<T>(
+    Uri url, {
+    Map<String, String>? headers,
+    required T Function(Map<String, dynamic>) mapper,
+  }) async {
+    final response = await this.get(url, headers: headers);
+    _checkResponseSuccess(url, response);
+    final json = jsonDecode(utf8.decode(response.bodyBytes));
+    if (json is! Map<String, dynamic>) {
+      _logger.severe('Could not read json object as $T: expected an object.');
+      throw ClientException(
+        'Could not read json object as $T: expected an object.',
+        url,
+      );
+    }
+    return mapper(json);
+  }
+
+  /// Sends an HTTP GET request with the given headers to the given URL and
+  /// returns a Future that completes to the body of the response as a JSON list
+  /// of objects mapped to [T].
+  ///
+  /// The Future will emit a [ClientException] if the response doesn't have a
+  /// success status code or if the response body can't be read as a json list.
+  Future<IList<T>> readJsonList<T>(
+    Uri url, {
+    Map<String, String>? headers,
+    required T Function(Map<String, dynamic>) mapper,
+  }) async {
+    final response = await this.get(url, headers: headers);
+    _checkResponseSuccess(url, response);
+    final json = jsonDecode(utf8.decode(response.bodyBytes));
+    if (json is! List<dynamic>) {
+      _logger.severe('Could not read json object as List: expected a list.');
+      throw ClientException(
+        'Could not read json object as List: expected a list.',
+        url,
       );
     }
 
-    return response;
+    return IList(
+      json.map((e) {
+        if (e is! Map<String, dynamic>) {
+          _logger.severe('Could not read json object as $T');
+          throw ClientException('Could not read json object as $T', url);
+        }
+        return mapper(e);
+      }),
+    );
+  }
+
+  /// Throws an error if [response] is not successful.
+  void _checkResponseSuccess(Uri url, Response response) {
+    if (response.statusCode < 400) return;
+    var message = 'Request to $url failed with status ${response.statusCode}';
+    if (response.reasonPhrase != null) {
+      message = '$message: ${response.reasonPhrase}';
+    }
+    throw ClientException('$message.', url);
   }
 }
 

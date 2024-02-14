@@ -82,6 +82,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                 tooltip: context.l10n.profile,
                 onPressed: () {
                   ref.invalidate(accountProvider);
+                  ref.invalidate(accountActivityProvider);
                   Navigator.of(context).push(
                     MaterialPageRoute<void>(
                       builder: (context) => const ProfileScreen(),
@@ -123,6 +124,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                     semanticsLabel: context.l10n.profile,
                     onPressed: () {
                       ref.invalidate(accountProvider);
+                      ref.invalidate(accountActivityProvider);
                       Navigator.of(context).push(
                         CupertinoPageRoute<void>(
                           builder: (context) => const ProfileScreen(),

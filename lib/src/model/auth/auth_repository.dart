@@ -4,8 +4,8 @@ import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -30,6 +30,12 @@ class AuthRepository {
   final Logger _log = Logger('AuthRepository');
   final FlutterAppAuth _appAuth;
 
+  /// Sign in with Lichess.
+  ///
+  /// This method uses the [FlutterAppAuth] package to sign in with Lichess using
+  /// OAuth 2.0. It first calls [FlutterAppAuth.authorizeAndExchangeCode] to
+  /// get an access token, and then calls the Lichess API to get the user's
+  /// account information.
   Future<AuthSessionState> signIn() async {
     final authResp = await _appAuth.authorizeAndExchangeCode(
       AuthorizationTokenRequest(
@@ -58,21 +64,17 @@ class AuthRepository {
       throw Exception('Access token not found.');
     }
 
-    return _client.readBytes(
+    final user = await _client.readJson(
       Uri.parse('$kLichessHost/api/account'),
       headers: {
         'Authorization': 'Bearer ${signBearerToken(token)}',
       },
-    ).then((bytes) {
-      final user = readJsonObjectFromBytes(
-        bytes,
-        mapper: User.fromServerJson,
-      );
-      return AuthSessionState(
-        token: token,
-        user: user.lightUser,
-      );
-    });
+      mapper: User.fromServerJson,
+    );
+    return AuthSessionState(
+      token: token,
+      user: user.lightUser,
+    );
   }
 
   Future<void> signOut() {
