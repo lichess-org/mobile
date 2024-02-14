@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/testing.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/app_dependencies.dart';
 import 'package:lichess_mobile/src/crashlytics.dart';
@@ -35,12 +36,12 @@ class MockSoundPool extends Mock implements Soundpool {}
 
 class MockDatabase extends Mock implements Database {}
 
-class MockHttpClient extends Mock implements http.Client {}
-
 class FakeClientFactory implements HttpClientFactory {
   @override
   http.Client call() {
-    return MockHttpClient();
+    return MockClient((request) async {
+      return http.Response('', 200);
+    });
   }
 }
 

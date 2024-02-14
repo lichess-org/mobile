@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:async/async.dart';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
@@ -9,14 +8,11 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/auth/auth_client.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
-import 'package:logging/logging.dart';
-import 'package:result_extensions/result_extensions.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'puzzle.dart';
 import 'puzzle_angle.dart';
@@ -27,124 +23,101 @@ import 'puzzle_theme.dart';
 import 'storm.dart';
 
 part 'puzzle_repository.freezed.dart';
-part 'puzzle_repository.g.dart';
 
-@Riverpod(keepAlive: true)
-PuzzleRepository puzzleRepository(PuzzleRepositoryRef ref) {
-  final apiClient = ref.watch(authClientProvider);
-  return PuzzleRepository(Logger('PuzzleRepository'), apiClient: apiClient);
-}
-
-/// Repository that interacts with lichess.org puzzle API
 class PuzzleRepository {
-  const PuzzleRepository(
-    Logger log, {
-    required this.apiClient,
-  }) : _log = log;
+  PuzzleRepository(this.client);
 
-  final AuthClient apiClient;
-  final Logger _log;
+  final http.Client client;
 
-  FutureResult<PuzzleBatchResponse> selectBatch({
+  Future<PuzzleBatchResponse> selectBatch({
     required int nb,
     PuzzleAngle angle = const PuzzleTheme(PuzzleThemeKey.mix),
     PuzzleDifficulty difficulty = PuzzleDifficulty.normal,
   }) {
-    return apiClient
-        .get(
-          Uri.parse(
-            '$kLichessHost/api/puzzle/batch/${angle.key}?nb=$nb&difficulty=${difficulty.name}',
-          ),
-          retryOnError: false,
-        )
-        .flatMap(_decodeBatchResponse);
+    return client.readJson(
+      Uri.parse(
+        '$kLichessHost/api/puzzle/batch/${angle.key}?nb=$nb&difficulty=${difficulty.name}',
+      ),
+      mapper: _decodeBatchResponse,
+    );
   }
 
-  FutureResult<PuzzleBatchResponse> solveBatch({
+  Future<PuzzleBatchResponse> solveBatch({
     required int nb,
     required IList<PuzzleSolution> solved,
     PuzzleAngle angle = const PuzzleTheme(PuzzleThemeKey.mix),
     PuzzleDifficulty difficulty = PuzzleDifficulty.normal,
   }) {
-    return apiClient
-        .post(
-          Uri.parse(
-            '$kLichessHost/api/puzzle/batch/${angle.key}?nb=$nb&difficulty=${difficulty.name}',
-          ),
-          headers: {'Content-type': 'application/json'},
-          body: jsonEncode({
-            'solutions': solved
-                .map(
-                  (e) => {
-                    'id': e.id.value,
-                    'win': e.win,
-                    'rated': e.rated,
-                  },
-                )
-                .toList(),
-          }),
-          retryOnError: false,
-        )
-        .flatMap(_decodeBatchResponse);
-  }
-
-  FutureResult<Puzzle> fetch(PuzzleId id) {
-    return apiClient.get(Uri.parse('$kLichessHost/api/puzzle/$id')).flatMap(
-          (response) => readJsonObjectFromResponse(
-            response,
-            mapper: _puzzleFromJson,
-            logger: _log,
-          ),
-        );
-  }
-
-  FutureResult<PuzzleStreakResponse> streak() {
-    return apiClient
-        .get(Uri.parse('$kLichessHost/api/streak'))
-        .flatMap((response) {
-      return readJsonObjectFromResponse(
-        response,
-        mapper: (Map<String, dynamic> json) {
-          return PuzzleStreakResponse(
-            puzzle: _puzzleFromPick(pick(json).required()),
-            streak: IList(
-              pick(json['streak']).asStringOrThrow().split(' ').map(
-                    (e) => PuzzleId(e),
-                  ),
-            ),
-          );
-        },
-        logger: _log,
-      );
-    });
-  }
-
-  FutureResult<void> postStreakRun(int run) {
-    return apiClient.post(
-      Uri.parse('$kLichessHost/api/streak/$run'),
+    return client.postReadJson(
+      Uri.parse(
+        '$kLichessHost/api/puzzle/batch/${angle.key}?nb=$nb&difficulty=${difficulty.name}',
+      ),
+      headers: {'Content-type': 'application/json'},
+      body: jsonEncode({
+        'solutions': solved
+            .map(
+              (e) => {
+                'id': e.id.value,
+                'win': e.win,
+                'rated': e.rated,
+              },
+            )
+            .toList(),
+      }),
+      mapper: _decodeBatchResponse,
     );
   }
 
-  FutureResult<PuzzleStormResponse> storm() {
-    return apiClient.get(Uri.parse('$kLichessHost/api/storm')).flatMap(
-      (response) {
-        return readJsonObjectFromResponse(
-          response,
-          mapper: (Map<String, dynamic> json) {
-            return PuzzleStormResponse(
-              puzzles: IList(
-                pick(json['puzzles']).asListOrThrow(_litePuzzleFromPick),
-              ),
-              highscore: pick(json['high']).letOrNull(_stormHighScoreFromPick),
-              key: pick(json['key']).asStringOrNull(),
-            );
-          },
+  Future<Puzzle> fetch(PuzzleId id) {
+    return client.readJson(
+      Uri.parse('$kLichessHost/api/puzzle/$id'),
+      mapper: _puzzleFromJson,
+    );
+  }
+
+  Future<PuzzleStreakResponse> streak() {
+    return client.readJson(
+      Uri.parse('$kLichessHost/api/streak'),
+      mapper: (Map<String, dynamic> json) {
+        return PuzzleStreakResponse(
+          puzzle: _puzzleFromPick(pick(json).required()),
+          streak: IList(
+            pick(json['streak']).asStringOrThrow().split(' ').map(
+                  (e) => PuzzleId(e),
+                ),
+          ),
         );
       },
     );
   }
 
-  FutureResult<StormNewHigh?> postStormRun(StormRunStats stats) {
+  Future<void> postStreakRun(int run) async {
+    final uri = Uri.parse('$kLichessHost/api/streak/$run');
+    final response = await client.post(uri);
+    if (response.statusCode >= 400) {
+      throw http.ClientException(
+        'Failed to post streak run: ${response.statusCode}',
+        uri,
+      );
+    }
+  }
+
+  Future<PuzzleStormResponse> storm() {
+    return client.readJson(
+      Uri.parse('$kLichessHost/api/storm'),
+      mapper: (Map<String, dynamic> json) {
+        return PuzzleStormResponse(
+          puzzles: IList(
+            pick(json['puzzles']).asListOrThrow(_litePuzzleFromPick),
+          ),
+          highscore: pick(json['high']).letOrNull(_stormHighScoreFromPick),
+          key: pick(json['key']).asStringOrNull(),
+        );
+      },
+    );
+  }
+
+  Future<StormNewHigh?> postStormRun(StormRunStats stats) {
     final Map<String, String> body = {
       'puzzles': stats.history.length.toString(),
       'score': stats.score.toString(),
@@ -157,137 +130,97 @@ class PuzzleRepository {
           "Yes, we know that you can send whatever score you like. That's why there's no leaderboards and no competition.",
     };
 
-    return apiClient
-        .post(
+    return client.postReadJson(
       Uri.parse('$kLichessHost/storm'),
       body: body,
-    )
-        .flatMap((response) {
-      return readJsonObjectFromResponse(
-        response,
-        mapper: (Map<String, dynamic> json) {
-          return pick(json['newHigh']).letOrNull(
-            (p) => StormNewHigh(
-              key: p('key').asStormNewHighTypeOrThrow(),
-              prev: p('prev').asIntOrThrow(),
-            ),
-          );
-        },
-      );
-    });
+      mapper: (Map<String, dynamic> json) {
+        return pick(json['newHigh']).letOrNull(
+          (p) => StormNewHigh(
+            key: p('key').asStormNewHighTypeOrThrow(),
+            prev: p('prev').asIntOrThrow(),
+          ),
+        );
+      },
+    );
   }
 
-  FutureResult<Puzzle> daily() {
-    return apiClient.get(Uri.parse('$kLichessHost/api/puzzle/daily')).flatMap(
-          (response) => readJsonObjectFromResponse(
-            response,
-            mapper: _puzzleFromJson,
-            logger: _log,
-          ).map(
-            (puzzle) => puzzle.copyWith(
-              isDailyPuzzle: true,
-            ),
+  Future<Puzzle> daily() {
+    return client
+        .readJson(
+          Uri.parse('$kLichessHost/api/puzzle/daily'),
+          mapper: _puzzleFromJson,
+        )
+        .then(
+          (puzzle) => puzzle.copyWith(
+            isDailyPuzzle: true,
           ),
         );
   }
 
-  FutureResult<PuzzleDashboard> puzzleDashboard() {
-    return apiClient
-        .get(Uri.parse('$kLichessHost/api/puzzle/dashboard/30'))
-        .flatMap((response) {
-      return readJsonObjectFromResponse(
-        response,
-        mapper: _puzzleDashboardFromJson,
-        logger: _log,
-      );
-    });
+  Future<PuzzleDashboard> puzzleDashboard() {
+    return client.readJson(
+      Uri.parse('$kLichessHost/api/puzzle/dashboard/30'),
+      mapper: _puzzleDashboardFromJson,
+    );
   }
 
-  FutureResult<IList<PuzzleHistoryEntry>> puzzleActivity(
+  Future<IList<PuzzleHistoryEntry>> puzzleActivity(
     int max, {
     DateTime? before,
   }) {
     final beforeQuery =
         before != null ? '&before=${before.millisecondsSinceEpoch}' : '';
-    return apiClient
-        .get(
-          Uri.parse('$kLichessHost/api/puzzle/activity?max=$max$beforeQuery'),
-        )
-        .flatMap(
-          (response) => readNdJsonListFromResponse(
-            response,
-            mapper: _puzzleActivityFromJson,
-            logger: _log,
-          ),
-        );
+    return client.readNdJsonList(
+      Uri.parse('$kLichessHost/api/puzzle/activity?max=$max$beforeQuery'),
+      mapper: _puzzleActivityFromJson,
+    );
   }
 
-  FutureResult<StormDashboard> stormDashboard(UserId userId) {
-    return apiClient
-        .get(Uri.parse('$kLichessHost/api/storm/dashboard/${userId.value}'))
-        .flatMap(
-          (response) => readJsonObjectFromResponse(
-            response,
-            mapper: _stormDashboardFromJson,
-            logger: _log,
-          ),
-        );
+  Future<StormDashboard> stormDashboard(UserId userId) {
+    return client.readJson(
+      Uri.parse('$kLichessHost/api/storm/dashboard/${userId.value}'),
+      mapper: _stormDashboardFromJson,
+    );
   }
 
-  FutureResult<IMap<PuzzleThemeKey, PuzzleThemeData>> puzzleThemes() {
-    return apiClient.get(
+  Future<IMap<PuzzleThemeKey, PuzzleThemeData>> puzzleThemes() {
+    return client.readJson(
       Uri.parse('$kLichessHost/training/themes'),
       headers: {'Accept': 'application/json'},
-    ).flatMap(
-      (response) => readJsonObjectFromResponse(
-        response,
-        mapper: _puzzleThemeFromJson,
-        logger: _log,
-      ),
+      mapper: _puzzleThemeFromJson,
     );
   }
 
-  FutureResult<IList<PuzzleOpeningFamily>> puzzleOpenings() {
-    return apiClient.get(
+  Future<IList<PuzzleOpeningFamily>> puzzleOpenings() {
+    return client.readJson(
       Uri.parse('$kLichessHost/training/openings'),
       headers: {'Accept': 'application/json'},
-    ).flatMap(
-      (response) => readJsonObjectFromResponse(
-        response,
-        mapper: _puzzleOpeningFromJson,
-        logger: _log,
-      ),
+      mapper: _puzzleOpeningFromJson,
     );
   }
 
-  Result<PuzzleBatchResponse> _decodeBatchResponse(http.Response response) {
-    return readJsonObjectFromResponse(
-      response,
-      mapper: (Map<String, dynamic> json) {
-        final puzzles = json['puzzles'];
-        if (puzzles is! List<dynamic>) {
-          throw const FormatException('puzzles: expected a list');
-        }
-        return PuzzleBatchResponse(
-          puzzles: IList(
-            puzzles.map((e) {
-              if (e is! Map<String, dynamic>) {
-                throw const FormatException('Expected an object');
-              }
-              return _puzzleFromJson(e);
-            }),
+  PuzzleBatchResponse _decodeBatchResponse(Map<String, dynamic> json) {
+    final puzzles = json['puzzles'];
+    if (puzzles is! List<dynamic>) {
+      throw const FormatException('puzzles: expected a list');
+    }
+    return PuzzleBatchResponse(
+      puzzles: IList(
+        puzzles.map((e) {
+          if (e is! Map<String, dynamic>) {
+            throw const FormatException('Expected an object');
+          }
+          return _puzzleFromJson(e);
+        }),
+      ),
+      glicko: pick(json['glicko']).letOrNull(_puzzleGlickoFromPick),
+      rounds: pick(json['rounds']).letOrNull(
+        (p0) => IList(
+          p0.asListOrNull(
+            (p1) => _puzzleRoundFromPick(p1),
           ),
-          glicko: pick(json['glicko']).letOrNull(_puzzleGlickoFromPick),
-          rounds: pick(json['rounds']).letOrNull(
-            (p0) => IList(
-              p0.asListOrNull(
-                (p1) => _puzzleRoundFromPick(p1),
-              ),
-            ),
-          ),
-        );
-      },
-      logger: _log,
+        ),
+      ),
     );
   }
 }

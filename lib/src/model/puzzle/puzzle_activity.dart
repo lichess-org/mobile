@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:async/async.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:http/http.dart' as http;
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/utils/riverpod.dart';
@@ -19,19 +21,25 @@ const _maxPuzzles = 500;
 Future<IList<PuzzleHistoryEntry>> puzzleRecentActivity(
   PuzzleRecentActivityRef ref,
 ) {
-  final repo = ref.watch(puzzleRepositoryProvider);
+  final client = ref.watch(httpClientFactoryProvider)();
+  final repo = PuzzleRepository(client);
+  ref.onDispose(client.close);
   // we need to fetch enough puzzles to fill the history screen
-  return Result.release(repo.puzzleActivity(20));
+  return repo.puzzleActivity(20);
 }
 
 @riverpod
 class PuzzleActivity extends _$PuzzleActivity {
   final _list = <PuzzleHistoryEntry>[];
+  late final http.Client _client;
 
   @override
   Future<PuzzleActivityState> build() async {
+    _client = ref.read(httpClientFactoryProvider)();
+
     ref.cacheFor(const Duration(minutes: 30));
     ref.onDispose(() {
+      _client.close();
       _list.clear();
     });
     _list.addAll(await ref.watch(puzzleRecentActivityProvider.future));
@@ -64,10 +72,10 @@ class PuzzleActivity extends _$PuzzleActivity {
     final currentVal = state.requireValue;
     if (_list.length < _maxPuzzles) {
       state = AsyncData(currentVal.copyWith(isLoading: true));
-      ref
-          .read(puzzleRepositoryProvider)
-          .puzzleActivity(_nbPerPage, before: _list.last.date)
-          .fold(
+      Result.capture(
+        PuzzleRepository(_client)
+            .puzzleActivity(_nbPerPage, before: _list.last.date),
+      ).fold(
         (value) {
           if (value.isEmpty) {
             state = AsyncData(

@@ -1,18 +1,31 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
-import 'package:lichess_mobile/src/http_client.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 
 import '../../test_container.dart';
 import '../../test_utils.dart';
 
+class FakeClientFactory implements HttpClientFactory {
+  FakeClientFactory(this._client);
+
+  final http.Client _client;
+
+  @override
+  http.Client call() {
+    return _client;
+  }
+}
+
 void main() {
   Future<ProviderContainer> makeTestContainer(MockClient mockClient) async {
     return makeContainer(
       overrides: [
-        httpClientProvider.overrideWith((ref) {
-          return mockClient;
+        httpClientFactoryProvider.overrideWith((ref) {
+          return FakeClientFactory(mockClient);
         }),
       ],
     );
@@ -33,11 +46,13 @@ void main() {
       });
 
       final container = await makeTestContainer(mockClient);
-      final repo = container.read(puzzleRepositoryProvider);
+      final client = container.read(httpClientFactoryProvider)();
+      final repo = PuzzleRepository(client);
 
-      final result = await repo.selectBatch(nb: 3);
+      final response = await repo.selectBatch(nb: 3);
 
-      expect(result.isValue, true);
+      expect(response, isA<PuzzleBatchResponse>());
+      expect(response.puzzles.length, 3);
     });
 
     test('selectBatch with glicko', () async {
@@ -54,11 +69,14 @@ void main() {
       });
 
       final container = await makeTestContainer(mockClient);
-      final repo = container.read(puzzleRepositoryProvider);
+      final client = container.read(httpClientFactoryProvider)();
+      final repo = PuzzleRepository(client);
 
-      final result = await repo.selectBatch(nb: 1);
+      final response = await repo.selectBatch(nb: 1);
 
-      expect(result.isValue, true);
+      expect(response, isA<PuzzleBatchResponse>());
+      expect(response.puzzles.length, 1);
+      expect(response.glicko?.rating, 1834.54);
     });
 
     test('selectBatch with rounds', () async {
@@ -74,11 +92,14 @@ void main() {
         return mockResponse('', 404);
       });
       final container = await makeTestContainer(mockClient);
-      final repo = container.read(puzzleRepositoryProvider);
+      final client = container.read(httpClientFactoryProvider)();
+      final repo = PuzzleRepository(client);
 
       final result = await repo.selectBatch(nb: 1);
 
-      expect(result.isValue, true);
+      expect(result, isA<PuzzleBatchResponse>());
+      expect(result.puzzles.length, 1);
+      expect(result.rounds?.length, 2);
     });
 
     test('streak', () async {
@@ -95,10 +116,11 @@ void main() {
       });
 
       final container = await makeTestContainer(mockClient);
-      final repo = container.read(puzzleRepositoryProvider);
+      final client = container.read(httpClientFactoryProvider)();
+      final repo = PuzzleRepository(client);
       final result = await repo.streak();
 
-      expect(result.isValue, true);
+      expect(result, isA<PuzzleStreakResponse>());
     });
 
     test('puzzle dashboard', () async {
@@ -115,10 +137,11 @@ void main() {
       });
 
       final container = await makeTestContainer(mockClient);
-      final repo = container.read(puzzleRepositoryProvider);
+      final client = container.read(httpClientFactoryProvider)();
+      final repo = PuzzleRepository(client);
       final result = await repo.puzzleDashboard();
 
-      expect(result.isValue, true);
+      expect(result, isA<PuzzleDashboard>());
     });
   });
 }

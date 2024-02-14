@@ -3,6 +3,7 @@ import 'dart:math' show max;
 import 'package:async/async.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
 import 'package:logging/logging.dart';
@@ -23,24 +24,25 @@ part 'puzzle_service.g.dart';
 const kPuzzleLocalQueueLength = 50;
 
 @Riverpod(keepAlive: true)
-PuzzleService puzzleService(PuzzleServiceRef ref, {required int queueLength}) {
-  final batchStorage = ref.watch(puzzleBatchStorageProvider);
-  final repository = ref.watch(puzzleRepositoryProvider);
-  final puzzleStorage = ref.watch(puzzleStorageProvider);
-  return PuzzleService(
-    ref,
-    Logger('PuzzleService'),
-    batchStorage: batchStorage,
-    puzzleStorage: puzzleStorage,
-    repository: repository,
-    queueLength: queueLength,
-  );
+PuzzleServiceFactory puzzleServiceFactory(PuzzleServiceFactoryRef ref) {
+  return PuzzleServiceFactory(ref);
 }
 
-/// Puzzle service provider with the default queue length.
-final defaultPuzzleServiceProvider = puzzleServiceProvider(
-  queueLength: kPuzzleLocalQueueLength,
-);
+class PuzzleServiceFactory {
+  PuzzleServiceFactory(this._ref);
+
+  final PuzzleServiceFactoryRef _ref;
+
+  PuzzleService call(http.Client client, {required int queueLength}) {
+    return PuzzleService(
+      _ref,
+      client,
+      batchStorage: _ref.read(puzzleBatchStorageProvider),
+      puzzleStorage: _ref.read(puzzleStorageProvider),
+      queueLength: queueLength,
+    );
+  }
+}
 
 @freezed
 class PuzzleContext with _$PuzzleContext {
@@ -58,21 +60,20 @@ class PuzzleContext with _$PuzzleContext {
 }
 
 class PuzzleService {
-  const PuzzleService(
+  PuzzleService(
     this._ref,
-    this._log, {
+    this._client, {
     required this.batchStorage,
     required this.puzzleStorage,
-    required this.repository,
     required this.queueLength,
   });
 
-  final PuzzleServiceRef _ref;
+  final PuzzleServiceFactoryRef _ref;
   final int queueLength;
   final PuzzleBatchStorage batchStorage;
   final PuzzleStorage puzzleStorage;
-  final PuzzleRepository repository;
-  final Logger _log;
+  final http.Client _client;
+  final Logger _log = Logger('PuzzleService');
 
   /// Loads the next puzzle from database and the glicko rating if available.
   ///
@@ -163,20 +164,24 @@ class PuzzleService {
 
     final difficulty = _ref.read(puzzlePreferencesProvider(userId)).difficulty;
 
+    final repository = PuzzleRepository(_client);
+
     // anonymous users can't solve puzzles so we just download the deficit
     // we send the request even if the deficit is 0 to get the glicko rating
-    final batchResponse = solved.isNotEmpty && userId != null
-        ? repository.solveBatch(
-            nb: deficit,
-            solved: solved,
-            angle: angle,
-            difficulty: difficulty,
-          )
-        : repository.selectBatch(
-            nb: deficit,
-            angle: angle,
-            difficulty: difficulty,
-          );
+    final batchResponse = Result.capture(
+      solved.isNotEmpty && userId != null
+          ? repository.solveBatch(
+              nb: deficit,
+              solved: solved,
+              angle: angle,
+              difficulty: difficulty,
+            )
+          : repository.selectBatch(
+              nb: deficit,
+              angle: angle,
+              difficulty: difficulty,
+            ),
+    );
 
     return batchResponse
         .fold(

@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:cupertino_http/cupertino_http.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:http/http.dart';
@@ -40,7 +39,7 @@ class HttpClientFactory {
   }
 }
 
-const _maxCacheSize = 2 * 1024 * 1024;
+// const _maxCacheSize = 2 * 1024 * 1024;
 
 /// Creates the appropriate http client for the platform.
 Client httpClient(String userAgent) {
@@ -171,6 +170,60 @@ extension ClientExtension on Client {
         return mapper(e);
       }),
     );
+  }
+
+  /// Sends an HTTP GET request with the given headers to the given URL and
+  /// returns a Future that completes to the body of the response as a ND-JSON
+  /// list of objects mapped to [T].
+  ///
+  /// The Future will emit a [ClientException] if the response doesn't have a
+  /// success status code or if the response body can't be read as a ND-JSON list.
+  Future<IList<T>> readNdJsonList<T>(
+    Uri url, {
+    Map<String, String>? headers,
+    required T Function(Map<String, dynamic>) mapper,
+  }) async {
+    final response = await this.get(url, headers: headers);
+    _checkResponseSuccess(url, response);
+    try {
+      final json = LineSplitter.split(utf8.decode(response.bodyBytes))
+          .where((e) => e.isNotEmpty && e != '\n')
+          .map((e) => jsonDecode(e) as Map<String, dynamic>);
+      return IList(json.map(mapper));
+    } catch (e) {
+      _logger.severe('Could not read nd-json objects as List<$T>.');
+      throw ClientException(
+        'Could not read nd-json objects as List<$T>.',
+        url,
+      );
+    }
+  }
+
+  /// Sends an HTTP POST request with the given headers and body to the given URL and
+  /// returns a Future that completes to the body of the response as a JSON object
+  /// mapped to [T].
+  ///
+  /// The Future will emit a [ClientException] if the response doesn't have a
+  /// success status code or if the response body can't be read as a json object.
+  Future<T> postReadJson<T>(
+    Uri url, {
+    Map<String, String>? headers,
+    Object? body,
+    Encoding? encoding,
+    required T Function(Map<String, dynamic>) mapper,
+  }) async {
+    final response =
+        await this.post(url, headers: headers, body: body, encoding: encoding);
+    _checkResponseSuccess(url, response);
+    final json = jsonDecode(utf8.decode(response.bodyBytes));
+    if (json is! Map<String, dynamic>) {
+      _logger.severe('Could not read json object as $T: expected an object.');
+      throw ClientException(
+        'Could not read json object as $T: expected an object.',
+        url,
+      );
+    }
+    return mapper(json);
   }
 
   /// Throws an error if [response] is not successful.
