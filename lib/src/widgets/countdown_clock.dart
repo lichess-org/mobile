@@ -25,11 +25,23 @@ class CountdownClock extends ConsumerStatefulWidget {
   /// Callback when the clock reaches zero.
   final VoidCallback? onFlag;
 
+  /// Callback with the remaining duration when the clock stops
+  final ValueSetter<Duration>? onStop;
+
+  /// Custom light color style
+  final ClockStyle? lightColorStyle;
+
+  /// Custom dark color style
+  final ClockStyle? darkColorStyle;
+
   const CountdownClock({
     required this.duration,
     required this.active,
     this.emergencyThreshold,
     this.onFlag,
+    this.onStop,
+    this.lightColorStyle,
+    this.darkColorStyle,
     super.key,
   });
 
@@ -69,6 +81,9 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
   void stopClock() {
     _timer?.cancel();
     _stopwatch.stop();
+    scheduleMicrotask(() {
+      widget.onStop?.call(timeLeft);
+    });
   }
 
   void _playEmergencyFeedback() {
@@ -86,6 +101,14 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
     }
   }
 
+  ClockStyle getStyle(Brightness brightness) {
+    if (brightness == Brightness.dark) {
+      return widget.darkColorStyle ?? ClockStyle.darkThemeStyle;
+    }
+
+    return widget.lightColorStyle ?? ClockStyle.lightThemeStyle;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -101,10 +124,9 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
     if (widget.duration != oldClock.duration) {
       timeLeft = widget.duration;
     }
-    if (widget.active) {
-      startClock();
-    } else {
-      stopClock();
+
+    if (widget.active != oldClock.active) {
+      widget.active ? startClock() : stopClock();
     }
   }
 
@@ -123,9 +145,7 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
     final isEmergency = widget.emergencyThreshold != null &&
         timeLeft <= widget.emergencyThreshold!;
     final brightness = ref.watch(currentBrightnessProvider);
-    final clockStyle = brightness == Brightness.dark
-        ? ClockStyle.darkThemeStyle
-        : ClockStyle.lightThemeStyle;
+    final clockStyle = getStyle(brightness);
     final remainingHeight = estimateRemainingHeightLeftBoard(context);
 
     return RepaintBoundary(
