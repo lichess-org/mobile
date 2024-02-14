@@ -192,9 +192,14 @@ abstract class Node {
     bool prepend = false,
   }) {
     final pos = nodeAt(path).position;
-    final (newPos, newSan) = pos.makeSan(move);
+    final alternativeCastlingMove = altCastles.containsValue(move.uci)
+        ? Move.fromUci(
+            altCastles.entries.firstWhere((e) => e.value == move.uci).key,
+          )
+        : null;
+    final (newPos, newSan) = pos.makeSan(alternativeCastlingMove ?? move);
     final newNode = Branch(
-      sanMove: SanMove(newSan, move),
+      sanMove: SanMove(newSan, alternativeCastlingMove ?? move),
       position: newPos,
     );
     return addNodeAt(path, newNode, prepend: prepend);
