@@ -6,6 +6,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/utils/riverpod.dart';
 import 'package:result_extensions/result_extensions.dart';
@@ -16,17 +17,6 @@ part 'puzzle_activity.g.dart';
 
 const _nbPerPage = 50;
 const _maxPuzzles = 500;
-
-@Riverpod(keepAlive: true)
-Future<IList<PuzzleHistoryEntry>> puzzleRecentActivity(
-  PuzzleRecentActivityRef ref,
-) {
-  final client = ref.watch(authClientFactoryProvider)();
-  final repo = PuzzleRepository(client);
-  ref.onDispose(client.close);
-  // we need to fetch enough puzzles to fill the history screen
-  return repo.puzzleActivity(20);
-}
 
 @riverpod
 class PuzzleActivity extends _$PuzzleActivity {
@@ -42,7 +32,9 @@ class PuzzleActivity extends _$PuzzleActivity {
       _client.close();
       _list.clear();
     });
-    _list.addAll(await ref.watch(puzzleRecentActivityProvider.future));
+    final data = await ref.watch(puzzleDashboardActivityProvider.future);
+    final (_, recentActivity) = data;
+    _list.addAll(recentActivity);
     return PuzzleActivityState(
       historyByDay: _groupByDay(_list),
       isLoading: false,

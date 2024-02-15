@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_activity.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
@@ -90,10 +89,7 @@ class _PuzzleTabScreenState extends ConsumerState<PuzzleTabScreen> {
   }
 
   Future<void> _refreshData() {
-    return Future.wait([
-      ref.refresh(puzzleRecentActivityProvider.future),
-      ref.refresh(puzzleDashboardProvider.future),
-    ]);
+    return ref.refresh(puzzleDashboardActivityProvider.future);
   }
 }
 
@@ -196,40 +192,17 @@ class PuzzleButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     const angle = PuzzleTheme(PuzzleThemeKey.mix);
-    final nextPuzzle = ref.watch(nextPuzzleProvider(angle));
     return Padding(
       padding:
           Styles.horizontalBodyPadding.add(const EdgeInsets.only(top: 8.0)),
-      child: nextPuzzle.when(
-        data: (data) {
-          if (data == null) {
-            return const _PuzzleButton(
-              subtitle: 'Could not find any puzzle! Go online to get more.',
-            );
-          } else {
-            return _PuzzleButton(
-              onTap: () {
-                pushPlatformRoute(
-                  context,
-                  title: context.l10n.puzzleDesc,
-                  rootNavigator: true,
-                  builder: (context) => PuzzleScreen(
-                    angle: angle,
-                    initialPuzzleContext: data,
-                  ),
-                ).then((_) {
-                  ref.invalidate(nextPuzzleProvider(angle));
-                });
-              },
-            );
-          }
-        },
-        loading: () => const _PuzzleButton(),
-        error: (e, s) {
-          debugPrint(
-            'SEVERE: [PuzzleScreen] could not load next puzzle; $e\n$s',
+      child: _PuzzleButton(
+        onTap: () {
+          pushPlatformRoute(
+            context,
+            title: context.l10n.puzzleDesc,
+            rootNavigator: true,
+            builder: (context) => const PuzzleScreen(angle: angle),
           );
-          return const _PuzzleButton();
         },
       ),
     );
@@ -347,10 +320,11 @@ class PuzzleThemeButton extends StatelessWidget {
 class PuzzleHistoryWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final history = ref.watch(puzzleRecentActivityProvider);
-    return history.when(
+    final asyncData = ref.watch(puzzleDashboardActivityProvider);
+    return asyncData.when(
       data: (data) {
-        if (data.isEmpty) {
+        final (_, recentActivity) = data;
+        if (recentActivity.isEmpty) {
           return ListSection(
             header: Text(context.l10n.puzzleHistory),
             children: [
@@ -375,7 +349,7 @@ class PuzzleHistoryWidget extends ConsumerWidget {
           children: [
             Padding(
               padding: Styles.bodySectionPadding,
-              child: PuzzleHistoryBoards(data.take(8).toIList()),
+              child: PuzzleHistoryBoards(recentActivity.take(8).toIList()),
             ),
           ],
         );
@@ -400,13 +374,9 @@ class PuzzleHistoryWidget extends ConsumerWidget {
 }
 
 class _PuzzleButton extends StatelessWidget {
-  const _PuzzleButton({
-    this.onTap,
-    this.subtitle,
-  });
+  const _PuzzleButton({this.onTap});
 
   final VoidCallback? onTap;
-  final String? subtitle;
 
   @override
   Widget build(BuildContext context) {
@@ -420,9 +390,7 @@ class _PuzzleButton extends StatelessWidget {
         context.l10n.puzzles,
         style: Styles.sectionTitle,
       ),
-      subtitle: Text(
-        subtitle ?? context.l10n.puzzleDesc,
-      ),
+      subtitle: Text(context.l10n.puzzleDesc),
       onTap: onTap,
     );
   }
@@ -469,11 +437,7 @@ class _DailyPuzzle extends ConsumerWidget {
                   userId: session?.user.id,
                 ),
               ),
-            ).then((_) {
-              ref.invalidate(
-                nextPuzzleProvider(const PuzzleTheme(PuzzleThemeKey.mix)),
-              );
-            });
+            );
           },
         );
       },

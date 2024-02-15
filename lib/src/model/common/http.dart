@@ -92,7 +92,9 @@ class AuthClient extends BaseClient {
       );
     }
 
-    _logger.info('${request.method} ${request.url} ${request.headers}');
+    _logger.info(
+      '${request.method} ${request.url} ${request.headers['User-Agent']}',
+    );
 
     try {
       final response = await _inner.send(request);

@@ -16,12 +16,13 @@ import 'package:lichess_mobile/src/widgets/stat_card.dart';
 class PuzzleDashboardWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final puzzleDashboard = ref.watch(puzzleDashboardProvider);
+    final puzzleDashboard = ref.watch(puzzleDashboardActivityProvider);
 
     return puzzleDashboard.when(
       data: (data) {
+        final (dashboard, _) = data;
         final chartData =
-            data.themes.take(9).sortedBy((e) => e.theme.name).toList();
+            dashboard.themes.take(9).sortedBy((e) => e.theme.name).toList();
         return ListSection(
           header: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,20 +43,20 @@ class PuzzleDashboardWidget extends ConsumerWidget {
             StatCardRow([
               StatCard(
                 context.l10n.performance,
-                value: data.global.performance.toString(),
+                value: dashboard.global.performance.toString(),
               ),
               StatCard(
                 context.l10n
-                    .puzzleNbPlayed(data.global.nb)
+                    .puzzleNbPlayed(dashboard.global.nb)
                     .replaceAll(RegExp(r'\d+'), '')
                     .trim()
                     .capitalize(),
-                value: data.global.nb.toString().localizeNumbers(),
+                value: dashboard.global.nb.toString().localizeNumbers(),
               ),
               StatCard(
                 context.l10n.puzzleSolved.capitalize(),
                 value:
-                    '${((data.global.firstWins / data.global.nb) * 100).round()}%',
+                    '${((dashboard.global.firstWins / dashboard.global.nb) * 100).round()}%',
               ),
             ]),
             if (chartData.length >= 3)

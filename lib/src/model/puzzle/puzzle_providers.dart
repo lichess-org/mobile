@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
@@ -24,23 +23,17 @@ Future<PuzzleContext?> nextPuzzle(
   PuzzleAngle angle,
 ) {
   final session = ref.watch(authSessionProvider);
-  final client = ref.watch(authClientFactoryProvider)();
 
-  ref.onDispose(client.close);
-
-  final puzzleService = ref.watch(puzzleServiceFactoryProvider)(
-    client,
-    queueLength: kPuzzleLocalQueueLength,
-  );
-  final userId = session?.user.id;
-  try {
+  return ref.withAuthClient((client) {
+    final puzzleService = ref.read(puzzleServiceFactoryProvider)(
+      client,
+      queueLength: kPuzzleLocalQueueLength,
+    );
     return puzzleService.nextPuzzle(
-      userId: userId,
+      userId: session?.user.id,
       angle: angle,
     );
-  } finally {
-    client.close();
-  }
+  });
 }
 
 @riverpod
@@ -86,12 +79,23 @@ Future<IMap<String, int>> savedOpeningBatches(
 }
 
 @riverpod
-Future<PuzzleDashboard> puzzleDashboard(
-  PuzzleDashboardRef ref,
+Future<(PuzzleDashboard, IList<PuzzleHistoryEntry>)> puzzleDashboardActivity(
+  PuzzleDashboardActivityRef ref,
 ) {
   return ref.withAuthClientCacheFor(
-    (client) => PuzzleRepository(client).puzzleDashboard(),
-    const Duration(minutes: 30),
+    (client) {
+      final repo = PuzzleRepository(client);
+      return Future.wait([
+        repo.puzzleDashboard(),
+        repo.puzzleActivity(20),
+      ]).then(
+        (value) => (
+          value[0] as PuzzleDashboard,
+          value[1] as IList<PuzzleHistoryEntry>
+        ),
+      );
+    },
+    const Duration(hours: 3),
   );
 }
 
