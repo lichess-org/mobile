@@ -8,11 +8,10 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/services.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
+import 'package:lichess_mobile/src/utils/riverpod.dart';
 import 'package:result_extensions/result_extensions.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -35,14 +34,9 @@ class StormController extends _$StormController {
   final _history = <PuzzleHistoryEntry>[];
   Timer? _firstMoveTimer;
 
-  late final http.Client _client;
-
   @override
   StormState build(IList<LitePuzzle> puzzles) {
-    _client = ref.read(authClientFactoryProvider)();
-
     ref.onDispose(() {
-      _client.close();
       _firstMoveTimer?.cancel();
       state.clock.dispose();
     });
@@ -140,9 +134,12 @@ class StormController extends _$StormController {
 
     final session = ref.read(authSessionProvider);
     if (session != null) {
-      final repo = PuzzleRepository(_client);
-      final res = await Result.capture(
-        repo.postStormRun(stats).timeout(const Duration(seconds: 2)),
+      final res = await ref.withAuthClient(
+        (client) => Result.capture(
+          PuzzleRepository(client)
+              .postStormRun(stats)
+              .timeout(const Duration(seconds: 2)),
+        ),
       );
 
       final newState = state.copyWith(

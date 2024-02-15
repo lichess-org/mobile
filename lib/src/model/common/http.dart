@@ -8,6 +8,7 @@ import 'package:http/io_client.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/device_info.dart';
 import 'package:lichess_mobile/src/utils/package_info.dart';
 import 'package:logging/logging.dart';
@@ -23,7 +24,7 @@ AuthClientFactory authClientFactory(AuthClientFactoryRef ref) {
   final pInfo = ref.read(packageInfoProvider);
   final deviceInfo = ref.read(deviceInfoProvider);
   final sri = ref.read(sriProvider);
-  final userAgent = makeUserAgent(pInfo, deviceInfo, sri);
+  final userAgent = makeUserAgent(pInfo, deviceInfo, sri, null);
   return AuthClientFactory(ref, userAgent);
 }
 
@@ -83,16 +84,26 @@ class AuthClient extends BaseClient {
     if (session != null && !request.headers.containsKey('Authorization')) {
       final bearer = signBearerToken(session.token);
       request.headers['Authorization'] = 'Bearer $bearer';
-      request.headers['X-User'] = session.user.id.toString();
+      request.headers['User-Agent'] = makeUserAgent(
+        _ref.read(packageInfoProvider),
+        _ref.read(deviceInfoProvider),
+        _ref.read(sriProvider),
+        session.user,
+      );
     }
 
     _logger.info('${request.method} ${request.url} ${request.headers}');
 
-    final response = await _inner.send(request);
+    try {
+      final response = await _inner.send(request);
 
-    _logIfError(response);
+      _logIfError(response);
 
-    return response;
+      return response;
+    } catch (e, st) {
+      _logger.warning('Request to ${request.url} failed: $e', e, st);
+      rethrow;
+    }
   }
 
   void _logIfError(BaseResponse response) {
@@ -241,8 +252,10 @@ String makeUserAgent(
   PackageInfo info,
   BaseDeviceInfo deviceInfo,
   String sri,
+  LightUser? user,
 ) {
-  final base = 'Lichess Mobile/${info.version} (${info.buildNumber}) sri:$sri';
+  final base =
+      'Lichess Mobile/${info.version} as:${user?.id ?? 'anon'} sri:$sri';
 
   if (deviceInfo is AndroidDeviceInfo) {
     return '$base os:Android/${deviceInfo.version.release} dev:${deviceInfo.model}';
