@@ -23,7 +23,8 @@ enum Perf {
   racingKings('Racing Kings', 'Racing', LichessIcons.racing_kings),
   crazyhouse('Crazyhouse', 'Crazy', LichessIcons.h_square),
   puzzle('Puzzle', 'Puzzle', LichessIcons.target),
-  storm('Storm', 'Storm', LichessIcons.storm);
+  storm('Storm', 'Storm', LichessIcons.storm),
+  streak('Streak', 'Streak', LichessIcons.streak);
 
   const Perf(this.title, this.shortTitle, this.icon);
 

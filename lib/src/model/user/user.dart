@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/utils/json.dart';
 import 'profile.dart';
 
 part 'user.freezed.dart';
+
 part 'user.g.dart';
 
 @Freezed(fromJson: true, toJson: true)
@@ -107,8 +108,10 @@ class User with _$User {
       profile: pick('profile').letOrNull(Profile.fromPick),
       perfs: IMap({
         for (final entry in receivedPerfsMap.entries)
-          if (Perf.nameMap.containsKey(entry.key) && entry.key != 'storm')
-            Perf.nameMap.get(entry.key)!: UserPerf.fromJson(entry.value),
+          if (Perf.nameMap.containsKey(entry.key))
+            Perf.nameMap.get(entry.key)!: (['storm' , 'streak'].contains(entry.key))
+                ? UserPerf.fromJsonStreak(entry.value)
+                : UserPerf.fromJson(entry.value),
       }),
     );
   }
@@ -151,6 +154,14 @@ class UserPerf with _$UserPerf {
         progression: pick('prog').asIntOrThrow(),
         numberOfGames: pick('games').asIntOrThrow(),
         provisional: pick('prov').asBoolOrNull(),
+      );
+
+  factory UserPerf.fromJsonStreak(Map<String, dynamic> json) => UserPerf(
+        rating: UserActivityStreak.fromJson(json).score,
+        ratingDeviation: 0,
+        progression: 0,
+        numberOfGames: UserActivityStreak.fromJson(json).runs,
+        provisional: null,
       );
 }
 
@@ -328,6 +339,7 @@ class UserStreak with _$UserStreak {
 @freezed
 class UserPerfGame with _$UserPerfGame {
   const UserPerfGame._();
+
   const factory UserPerfGame({
     required DateTime finishedAt,
     required GameId gameId,
