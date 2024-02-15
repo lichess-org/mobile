@@ -109,9 +109,10 @@ class User with _$User {
       perfs: IMap({
         for (final entry in receivedPerfsMap.entries)
           if (Perf.nameMap.containsKey(entry.key))
-            Perf.nameMap.get(entry.key)!: (['storm' , 'streak'].contains(entry.key))
-                ? UserPerf.fromJsonStreak(entry.value)
-                : UserPerf.fromJson(entry.value),
+            Perf.nameMap.get(entry.key)!:
+                (['storm', 'streak'].contains(entry.key))
+                    ? UserPerf.fromJsonStreak(entry.value)
+                    : UserPerf.fromJson(entry.value),
       }),
     );
   }
