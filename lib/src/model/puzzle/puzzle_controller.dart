@@ -347,7 +347,6 @@ class PuzzleController extends _$PuzzleController {
 
       if (next != null &&
           result == PuzzleResult.win &&
-          initialContext.userId != null &&
           ref.read(
             puzzlePreferencesProvider(initialContext.userId)
                 .select((state) => state.autoNext),
