@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:async/async.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/tv/tv_socket_events.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -50,8 +50,8 @@ class LiveTvChannels extends _$LiveTvChannels {
     _socketSubscription?.cancel();
     _socketReadySubscription?.cancel();
 
-    final repo = ref.read(tvRepositoryProvider);
-    final repoGames = await Result.release(repo.channels());
+    final repoGames =
+        await ref.withAuthClient((client) => TvRepository(client).channels());
 
     final (stream, readyStream) =
         _socket.connect(Uri(path: kDefaultSocketRoute));

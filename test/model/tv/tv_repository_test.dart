@@ -1,26 +1,11 @@
-import 'package:async/async.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:http/http.dart' as http;
-import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/auth/auth_client.dart';
+import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/model/tv/tv_repository.dart';
-import 'package:logging/logging.dart';
-import 'package:mocktail/mocktail.dart';
 
-class MockAuthClient extends Mock implements AuthClient {}
-
-class MockLogger extends Mock implements Logger {}
+import '../../test_utils.dart';
 
 void main() {
-  final mockLogger = MockLogger();
-  final mockAuthClient = MockAuthClient();
-  final repo = TvRepository(mockLogger, apiClient: mockAuthClient);
-
-  setUpAll(() {
-    reset(mockAuthClient);
-  });
-
   group('TvRepository.channels', () {
     test('correctly parse JSON', () async {
       const response = '''
@@ -179,23 +164,27 @@ void main() {
 }
 ''';
 
-      when(
-        () => mockAuthClient.get(
-          Uri.parse(
-            '$kLichessHost/api/tv/channels',
-          ),
-        ),
-      ).thenAnswer((_) async => Result.value(http.Response(response, 200)));
+      final mockClient = MockClient((request) {
+        if (request.url.path == '/api/tv/channels') {
+          return mockResponse(
+            response,
+            200,
+          );
+        }
+        return mockResponse('', 404);
+      });
+
+      final repo = TvRepository(mockClient);
 
       final result = await repo.channels();
 
-      expect(result.isValue, true);
+      expect(result, isA<TvChannels>());
 
       // supported channels only
-      expect(result.asValue?.value.length, 13);
+      expect(result.length, 13);
 
       expect(
-        result.asValue?.value[TvChannel.best]?.user.name,
+        result[TvChannel.best]?.user.name,
         'Chessisnotfair',
       );
     });

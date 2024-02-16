@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
-import 'package:lichess_mobile/src/model/auth/auth_client.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
@@ -43,31 +43,32 @@ class NotificationService {
       return;
     }
     _log.info('will register fcmToken: $token');
-    final authClient = ref.read(authClientProvider);
     final session = ref.read(authSessionProvider);
     if (session == null) {
       return;
     }
-    final result = await authClient
-        .post(Uri.parse('$kLichessHost/mobile/register/firebase/$token'));
-    if (result.isError) {
-      _log.severe(
-        'could not register device; ${result.asError!.error}',
+    try {
+      await ref.withAuthClient(
+        (client) => client
+            .post(Uri.parse('$kLichessHost/mobile/register/firebase/$token')),
       );
+    } catch (e, st) {
+      _log.severe('could not register device; $e', e, st);
     }
   }
 
   Future<void> unregister() async {
     _log.info('will unregister');
-    final authClient = ref.read(authClientProvider);
     final session = ref.read(authSessionProvider);
     if (session == null) {
       return;
     }
-    final result =
-        await authClient.post(Uri.parse('$kLichessHost/mobile/unregister'));
-    if (result.isError) {
-      _log.severe('could not unregister');
+    try {
+      await ref.withAuthClient(
+        (client) => client.post(Uri.parse('$kLichessHost/mobile/unregister')),
+      );
+    } catch (e, st) {
+      _log.severe('could not unregister device; $e', e, st);
     }
   }
 

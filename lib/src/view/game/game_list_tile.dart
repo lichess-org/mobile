@@ -1,16 +1,13 @@
-import 'dart:convert';
-
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/http_client.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
-import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
@@ -22,7 +19,6 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:share_plus/share_plus.dart';
 
 /// A list tile that shows game info.
 class GameListTile extends StatelessWidget {
@@ -108,8 +104,6 @@ class _ContextMenu extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final boardTheme = ref.watch(boardPreferencesProvider).boardTheme;
-    final pieceTheme = ref.watch(boardPreferencesProvider).pieceSet;
     final orientation = mySide;
 
     final serverAnalysis =
@@ -180,20 +174,7 @@ class _ContextMenu extends ConsumerWidget {
         child: Text(context.l10n.gameAsGIF),
         onPressed: () async {
           try {
-            final resp = await ref
-                .read(httpClientProvider)
-                .get(
-                  Uri.parse(
-                    '$kLichessCDNHost/game/export/gif/${orientation.name}/${game.id}.gif?theme=${boardTheme.name}&piece=${pieceTheme.name}',
-                  ),
-                )
-                .timeout(const Duration(seconds: 1));
-
-            if (resp.statusCode != 200) {
-              throw Exception('Failed to get GIF');
-            }
-            final gif = XFile.fromData(resp.bodyBytes, mimeType: 'image/gif');
-            Share.shareXFiles([gif]);
+            ref.read(gameShareServiceProvider).gameGif(game.id, orientation);
           } catch (e) {
             debugPrint(e.toString());
             if (context.mounted) {
@@ -212,20 +193,12 @@ class _ContextMenu extends ConsumerWidget {
           child: Text(context.l10n.screenshotCurrentPosition),
           onPressed: () async {
             try {
-              final resp = await ref
-                  .read(httpClientProvider)
-                  .get(
-                    Uri.parse(
-                      '$kLichessCDNHost/export/fen.gif?fen=${Uri.encodeComponent(game.lastFen!)}&color=${orientation.name}&lastMove=${game.lastMove!.uci}&theme=${boardTheme.name}&piece=${pieceTheme.name}',
-                    ),
-                  )
-                  .timeout(const Duration(seconds: 1));
-              if (resp.statusCode != 200) {
-                throw Exception('Failed to get GIF');
-              }
-              Share.shareXFiles(
-                [XFile.fromData(resp.bodyBytes, mimeType: 'image/gif')],
-              );
+              ref.read(gameShareServiceProvider).screenshotPosition(
+                    game.id,
+                    orientation,
+                    game.lastFen!,
+                    game.lastMove!,
+                  );
             } catch (e) {
               if (context.mounted) {
                 showPlatformSnackbar(
@@ -242,18 +215,7 @@ class _ContextMenu extends ConsumerWidget {
         child: Text('PGN: ${context.l10n.downloadAnnotated}'),
         onPressed: () async {
           try {
-            final resp = await ref
-                .read(httpClientProvider)
-                .get(
-                  Uri.parse(
-                    '$kLichessHost/game/export/${game.id}?literate=1',
-                  ),
-                )
-                .timeout(const Duration(seconds: 1));
-            if (resp.statusCode != 200) {
-              throw Exception('Failed to get PGN');
-            }
-            Share.share(utf8.decode(resp.bodyBytes));
+            ref.read(gameShareServiceProvider).annotatedPgn(game.id);
           } catch (e) {
             if (context.mounted) {
               showPlatformSnackbar(
@@ -267,21 +229,11 @@ class _ContextMenu extends ConsumerWidget {
       ),
       BottomSheetContextMenuAction(
         icon: CupertinoIcons.share,
+        // TODO improve translation
         child: Text('PGN: ${context.l10n.downloadRaw}'),
         onPressed: () async {
           try {
-            final resp = await ref
-                .read(httpClientProvider)
-                .get(
-                  Uri.parse(
-                    '$kLichessHost/game/export/${game.id}?evals=0&clocks=0',
-                  ),
-                )
-                .timeout(const Duration(seconds: 1));
-            if (resp.statusCode != 200) {
-              throw Exception('Failed to get PGN');
-            }
-            Share.share(utf8.decode(resp.bodyBytes));
+            ref.read(gameShareServiceProvider).rawPgn(game.id);
           } catch (e) {
             if (context.mounted) {
               showPlatformSnackbar(

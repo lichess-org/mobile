@@ -3,6 +3,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/tv/featured_player.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/model/tv/tv_game.dart';
@@ -12,7 +13,6 @@ import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/utils/riverpod.dart';
 import 'package:lichess_mobile/src/view/watch/live_tv_channels_screen.dart';
 import 'package:lichess_mobile/src/view/watch/streamer_screen.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
@@ -21,7 +21,6 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
-import 'package:result_extensions/result_extensions.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'watch_tab_screen.g.dart';
@@ -35,30 +34,27 @@ const _featuredChannelsSet = ISetConst({
 
 @riverpod
 Future<IList<TvGameSnapshot>> featuredChannels(FeaturedChannelsRef ref) async {
-  final link = ref.cacheFor(const Duration(seconds: 5));
-  final repo = ref.watch(tvRepositoryProvider);
-  final result = await repo.channels();
-  if (result.isError) {
-    link.close();
-  }
-  return result.fold(
-    (value) => value.entries
-        .where((channel) => _featuredChannelsSet.contains(channel.key))
-        .map(
-          (entry) => TvGameSnapshot(
-            channel: entry.key,
-            id: entry.value.id,
-            orientation: entry.value.side ?? Side.white,
-            player: FeaturedPlayer(
-              name: entry.value.user.name,
-              title: entry.value.user.title,
-              side: entry.value.side ?? Side.white,
-              rating: entry.value.rating,
+  return ref.withAuthClientCacheFor(
+    (client) async {
+      final channels = await TvRepository(client).channels();
+      return channels.entries
+          .where((channel) => _featuredChannelsSet.contains(channel.key))
+          .map(
+            (entry) => TvGameSnapshot(
+              channel: entry.key,
+              id: entry.value.id,
+              orientation: entry.value.side ?? Side.white,
+              player: FeaturedPlayer(
+                name: entry.value.user.name,
+                title: entry.value.user.title,
+                side: entry.value.side ?? Side.white,
+                rating: entry.value.rating,
+              ),
             ),
-          ),
-        )
-        .toIList(),
-    (Object error, _) => throw error,
+          )
+          .toIList();
+    },
+    const Duration(minutes: 5),
   );
 }
 

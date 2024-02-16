@@ -1,47 +1,27 @@
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/auth/auth_client.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/utils/json.dart';
-import 'package:logging/logging.dart';
-import 'package:result_extensions/result_extensions.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import './tv_channel.dart';
 import './tv_game.dart';
 
-part 'tv_repository.g.dart';
-
 typedef TvChannels = IMap<TvChannel, TvGame>;
 
-@Riverpod(keepAlive: true)
-TvRepository tvRepository(TvRepositoryRef ref) {
-  final apiClient = ref.watch(authClientProvider);
-  return TvRepository(Logger('TvRepository'), apiClient: apiClient);
-}
-
 class TvRepository {
-  const TvRepository(
-    Logger log, {
-    required this.apiClient,
-  }) : _log = log;
+  const TvRepository(this.client);
 
-  final AuthClient apiClient;
-  final Logger _log;
+  final http.Client client;
 
-  FutureResult<TvChannels> channels() {
-    return apiClient
-        .get(Uri.parse('$kLichessHost/api/tv/channels'))
-        .flatMap((response) {
-      return readJsonObjectFromResponse(
-        response,
-        mapper: _tvGamesFromJson,
-        logger: _log,
-      );
-    });
+  Future<TvChannels> channels() {
+    return client.readJson(
+      Uri.parse('$kLichessHost/api/tv/channels'),
+      mapper: _tvGamesFromJson,
+    );
   }
 }
 

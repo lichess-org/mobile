@@ -31,29 +31,23 @@ final _logger = Logger('HttpClient');
 
 @Riverpod(keepAlive: true)
 AuthClientFactory authClientFactory(AuthClientFactoryRef ref) {
-  final pInfo = ref.read(packageInfoProvider);
-  final deviceInfo = ref.read(deviceInfoProvider);
-  final sri = ref.read(sriProvider);
-  final userAgent = makeUserAgent(pInfo, deviceInfo, sri, null);
-  return AuthClientFactory(ref, userAgent);
+  return AuthClientFactory(ref);
 }
 
 class AuthClientFactory {
-  AuthClientFactory(this._ref, this._userAgent);
+  AuthClientFactory(this._ref);
 
   final AuthClientFactoryRef _ref;
 
-  final String _userAgent;
-
   Client call() {
-    return AuthClient(httpClient(_userAgent), _ref);
+    return AuthClient(httpClient(_ref.read(packageInfoProvider)), _ref);
   }
 }
 
 // const _maxCacheSize = 2 * 1024 * 1024;
 
 /// Creates the appropriate http client for the platform.
-Client httpClient(String userAgent) {
+Client httpClient(PackageInfo pInfo) {
   // TODO wait for https://github.com/dart-lang/http/pull/1111
   // to be merged and released before using embedded Cronet on Android.
   // if (Platform.isAndroid) {
@@ -65,6 +59,10 @@ Client httpClient(String userAgent) {
   //   return CronetClient.fromCronetEngine(engine);
   // }
 
+  // CupertinoClient doesn't close the connection when the client is closed.
+  // See: https://github.com/dart-lang/http/issues/1131
+  // TODO: We might want to still use it and fallback to IOClient for creating
+  // game seeks which must be cancellable.
   // if (Platform.isIOS || Platform.isMacOS) {
   //   final config = URLSessionConfiguration.ephemeralSessionConfiguration()
   //     ..cache = URLCache.withCapacity(memoryCapacity: _maxCacheSize)
@@ -72,7 +70,7 @@ Client httpClient(String userAgent) {
   //   return CupertinoClient.fromSessionConfiguration(config);
   // }
 
-  return IOClient(HttpClient()..userAgent = userAgent);
+  return IOClient(HttpClient()..userAgent = 'Lichess Mobile/${pInfo.version}');
 }
 
 @Riverpod(keepAlive: true)
@@ -106,13 +104,13 @@ class AuthClient extends BaseClient {
     if (session != null && !request.headers.containsKey('Authorization')) {
       final bearer = signBearerToken(session.token);
       request.headers['Authorization'] = 'Bearer $bearer';
-      request.headers['User-Agent'] = makeUserAgent(
-        _ref.read(packageInfoProvider),
-        _ref.read(deviceInfoProvider),
-        _ref.read(sriProvider),
-        session.user,
-      );
     }
+    request.headers['User-Agent'] = makeUserAgent(
+      _ref.read(packageInfoProvider),
+      _ref.read(deviceInfoProvider),
+      _ref.read(sriProvider),
+      session?.user,
+    );
 
     _logger.info(
       '${request.method} ${request.url} ${request.headers['User-Agent']}',
