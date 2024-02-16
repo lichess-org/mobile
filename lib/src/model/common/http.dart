@@ -75,6 +75,18 @@ Client httpClient(String userAgent) {
   return IOClient(HttpClient()..userAgent = userAgent);
 }
 
+@Riverpod(keepAlive: true)
+String userAgent(UserAgentRef ref) {
+  final session = ref.watch(authSessionProvider);
+
+  return makeUserAgent(
+    ref.read(packageInfoProvider),
+    ref.read(deviceInfoProvider),
+    ref.read(sriProvider),
+    session?.user,
+  );
+}
+
 /// Http client that sets the Authorization header when a token has been stored.
 ///
 /// Also sets the user-agent header with the app version, build number, and device info.
@@ -159,7 +171,15 @@ extension ClientExtension on Client {
         url,
       );
     }
-    return mapper(json);
+    try {
+      return mapper(json);
+    } catch (e, st) {
+      _logger.severe('Could not read json object as $T: $e', e, st);
+      throw ClientException(
+        'Could not read json object as $T: $e',
+        url,
+      );
+    }
   }
 
   /// Sends an HTTP GET request with the given headers to the given URL and
@@ -190,7 +210,12 @@ extension ClientExtension on Client {
           _logger.severe('Could not read json object as $T');
           throw ClientException('Could not read json object as $T', url);
         }
-        return mapper(e);
+        try {
+          return mapper(e);
+        } catch (e, st) {
+          _logger.severe('Could not read json object as $T: $e', e, st);
+          throw ClientException('Could not read json object as $T: $e', url);
+        }
       }),
     );
   }
@@ -246,7 +271,45 @@ extension ClientExtension on Client {
         url,
       );
     }
-    return mapper(json);
+    try {
+      return mapper(json);
+    } catch (e, st) {
+      _logger.severe('Could not read json as $T: $e', e, st);
+      throw ClientException(
+        'Could not read json as $T: $e',
+        url,
+      );
+    }
+  }
+
+  /// Sends an HTTP POST request with the given headers and body to the given URL and
+  /// returns a Future that completes to the body of the response as a JSON list
+  /// of objects mapped to [T].
+  ///
+  /// The Future will emit a [ClientException] if the response doesn't have a
+  /// success status code or if the response body can't be read as a json list.
+  Future<IList<T>> postReadNdJsonList<T>(
+    Uri url, {
+    Map<String, String>? headers,
+    Object? body,
+    Encoding? encoding,
+    required T Function(Map<String, dynamic>) mapper,
+  }) async {
+    final response =
+        await post(url, headers: headers, body: body, encoding: encoding);
+    _checkResponseSuccess(url, response);
+    try {
+      final json = LineSplitter.split(utf8.decode(response.bodyBytes))
+          .where((e) => e.isNotEmpty && e != '\n')
+          .map((e) => jsonDecode(e) as Map<String, dynamic>);
+      return IList(json.map(mapper));
+    } catch (e) {
+      _logger.severe('Could not read nd-json objects as List<$T>.');
+      throw ClientException(
+        'Could not read nd-json objects as List<$T>.',
+        url,
+      );
+    }
   }
 
   /// Throws an error if [response] is not successful.
@@ -257,6 +320,20 @@ extension ClientExtension on Client {
       message = '$message: ${response.reasonPhrase}';
     }
     throw ClientException('$message.', url);
+  }
+}
+
+extension ClientWidgetRefExtension on WidgetRef {
+  /// Runs [fn] with an [AuthClient].
+  ///
+  /// The client is automatically closed after [fn] completes.
+  Future<T> withAuthClient<T>(Future<T> Function(Client) fn) async {
+    final client = read(authClientFactoryProvider)();
+    try {
+      return await fn(client);
+    } finally {
+      client.close();
+    }
   }
 }
 

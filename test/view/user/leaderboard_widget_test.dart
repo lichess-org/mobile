@@ -1,21 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
-import 'package:lichess_mobile/src/http_client.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/view/user/leaderboard_screen.dart';
 import 'package:lichess_mobile/src/view/user/leaderboard_widget.dart';
 
 import '../../test_app.dart';
 import '../../test_utils.dart';
 
-void main() {
-  final mockClient = MockClient((request) {
-    if (request.url.path == '/api/player/top/1/standard') {
-      return mockResponse(top1Response, 200);
-    }
-    return mockResponse('', 404);
-  });
+class FakeClientFactory implements AuthClientFactory {
+  @override
+  http.Client call() {
+    return MockClient((request) {
+      if (request.url.path == '/api/player/top/1/standard') {
+        return mockResponse(top1Response, 200);
+      }
+      return mockResponse('', 404);
+    });
+  }
+}
 
+void main() {
   group('LeaderboardWidget', () {
     testWidgets(
       'accessibility and basic info showing test',
@@ -24,7 +30,9 @@ void main() {
         final app = await buildTestApp(
           tester,
           home: Column(children: [LeaderboardWidget()]),
-          overrides: [httpClientProvider.overrideWithValue(mockClient)],
+          overrides: [
+            authClientFactoryProvider.overrideWithValue(FakeClientFactory()),
+          ],
         );
 
         await tester.pumpWidget(app);

@@ -1,106 +1,68 @@
-import 'dart:convert';
-
-import 'package:async/async.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/auth/auth_client.dart';
-import 'package:lichess_mobile/src/model/common/errors.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
-import 'package:lichess_mobile/src/utils/json.dart';
-import 'package:logging/logging.dart';
-import 'package:result_extensions/result_extensions.dart';
 
 class GameRepository {
-  const GameRepository(
-    Logger log, {
-    required this.apiClient,
-  }) : _log = log;
+  const GameRepository(this.client);
 
-  final AuthClient apiClient;
-  final Logger _log;
+  final http.Client client;
 
-  FutureResult<ArchivedGame> getGame(GameId id) {
-    return apiClient.get(
+  Future<ArchivedGame> getGame(GameId id) {
+    return client.readJson(
       Uri.parse('$kLichessHost/game/export/$id?accuracy=1&clocks=1'),
       headers: {'Accept': 'application/json'},
-    ).flatMap((response) {
-      return readJsonObjectFromResponse(
-        response,
-        mapper: ArchivedGame.fromServerJson,
-        logger: _log,
-      );
-    });
-  }
-
-  FutureResult<void> requestServerAnalysis(GameId id) {
-    return apiClient.post(
-      Uri.parse('$kLichessHost/$id/request-analysis'),
+      mapper: ArchivedGame.fromServerJson,
     );
   }
 
-  FutureResult<IList<LightArchivedGame>> getRecentGames(UserId userId) {
-    return apiClient.get(
+  Future<void> requestServerAnalysis(GameId id) async {
+    final uri = Uri.parse('$kLichessHost/$id/request-analysis');
+    final response = await client.post(
+      Uri.parse('$kLichessHost/$id/request-analysis'),
+    );
+    if (response.statusCode >= 400) {
+      throw http.ClientException(
+        'Failed to request analysis: ${response.statusCode}',
+        uri,
+      );
+    }
+  }
+
+  Future<IList<LightArchivedGame>> getRecentGames(UserId userId) {
+    return client.readNdJsonList(
       Uri.parse(
         '$kLichessHost/api/games/user/$userId?max=10&moves=false&lastFen=true&accuracy=true&opening=true',
       ),
       headers: {'Accept': 'application/x-ndjson'},
-    ).flatMap(
-      (r) => readNdJsonListFromResponse(
-        r,
-        mapper: LightArchivedGame.fromServerJson,
-        logger: _log,
-      ),
+      mapper: LightArchivedGame.fromServerJson,
     );
   }
 
   /// Returns the games of the current user, given a list of ids.
-  FutureResult<IList<PlayableGame>> getMyGamesByIds(ISet<GameId> ids) {
+  Future<IList<PlayableGame>> getMyGamesByIds(ISet<GameId> ids) {
     if (ids.isEmpty) {
-      return Future.value(Result.value(IList<PlayableGame>()));
+      return Future.value(IList<PlayableGame>());
     }
-    return apiClient
-        .get(
-          Uri.parse(
-            '$kLichessHost/api/mobile/my-games?ids=${ids.join(',')}',
-          ),
-        )
-        .flatMap(
-          (resp) => Result(() {
-            final dynamic list = jsonDecode(utf8.decode(resp.bodyBytes));
-            if (list is! List<dynamic>) {
-              _log.severe(
-                'Could not read games from response: ${resp.body}',
-              );
-              throw DataFormatException();
-            }
-            return list;
-          }).flatMap(
-            (list) => readJsonListOfObjects(
-              list,
-              mapper: PlayableGame.fromServerJson,
-              logger: _log,
-            ),
-          ),
-        );
+    return client.readJsonList(
+      Uri.parse(
+        '$kLichessHost/api/mobile/my-games?ids=${ids.join(',')}',
+      ),
+      mapper: PlayableGame.fromServerJson,
+    );
   }
 
-  FutureResult<IList<LightArchivedGame>> getGamesByIds(ISet<GameId> ids) {
-    return apiClient
-        .post(
-          Uri.parse(
-            '$kLichessHost/api/games/export/_ids?moves=false&lastFen=true',
-          ),
-          headers: {'Accept': 'application/x-ndjson'},
-          body: ids.join(','),
-        )
-        .flatMap(
-          (r) => readNdJsonListFromResponse(
-            r,
-            mapper: LightArchivedGame.fromServerJson,
-            logger: _log,
-          ),
-        );
+  Future<IList<LightArchivedGame>> getGamesByIds(ISet<GameId> ids) {
+    return client.postReadNdJsonList(
+      Uri.parse(
+        '$kLichessHost/api/games/export/_ids?moves=false&lastFen=true',
+      ),
+      headers: {'Accept': 'application/x-ndjson'},
+      body: ids.join(','),
+      mapper: LightArchivedGame.fromServerJson,
+    );
   }
 }

@@ -1,7 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
-import 'package:lichess_mobile/src/http_client.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/view/user/perf_stats_screen.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -10,14 +11,20 @@ import '../../model/auth/fake_auth_repository.dart';
 import '../../test_app.dart';
 import '../../test_utils.dart';
 
-void main() {
-  final mockClient = MockClient((request) {
-    if (request.url.path == '/api/user/${fakeUser.id}/perf/${testPerf.name}') {
-      return mockResponse(userPerfStatsResponse, 200);
-    }
-    return mockResponse('', 404);
-  });
+class FakeClientFactory implements AuthClientFactory {
+  @override
+  http.Client call() {
+    return MockClient((request) {
+      if (request.url.path ==
+          '/api/user/${fakeUser.id}/perf/${testPerf.name}') {
+        return mockResponse(userPerfStatsResponse, 200);
+      }
+      return mockResponse('', 404);
+    });
+  }
+}
 
+void main() {
   group('PerfStatsScreen', () {
     testWidgets(
       'meets accessibility guidelines',
@@ -31,7 +38,7 @@ void main() {
             perf: testPerf,
           ),
           overrides: [
-            httpClientProvider.overrideWithValue(mockClient),
+            authClientFactoryProvider.overrideWithValue(FakeClientFactory()),
           ],
         );
 
@@ -61,7 +68,7 @@ void main() {
             perf: testPerf,
           ),
           overrides: [
-            httpClientProvider.overrideWithValue(mockClient),
+            authClientFactoryProvider.overrideWithValue(FakeClientFactory()),
           ],
         );
 

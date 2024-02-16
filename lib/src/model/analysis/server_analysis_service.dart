@@ -1,9 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
-import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
+import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -47,7 +48,6 @@ class ServerAnalysisService {
 
     final socket = ref.read(socketClientProvider);
     final (stream, _) = socket.connect(Uri(path: '/play/$id/v6'));
-    final repo = ref.read(gameRepositoryProvider);
 
     final completer = Completer<void>();
 
@@ -73,12 +73,14 @@ class ServerAnalysisService {
       })
     );
 
-    final result = await repo.requestServerAnalysis(id.gameId);
-
-    if (result.isError) {
+    try {
+      await ref.withAuthClient(
+        (client) => GameRepository(client).requestServerAnalysis(id.gameId),
+      );
+    } catch (e) {
       _socketSubscription?.$2.cancel();
       _socketSubscription = null;
-      completer.completeError(result.asError!.error);
+      completer.completeError(e);
     }
 
     _analysisCompleter = completer;

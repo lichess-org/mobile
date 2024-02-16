@@ -2,25 +2,31 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
-import 'package:lichess_mobile/src/http_client.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/view/home/search_screen.dart';
 import 'package:lichess_mobile/src/widgets/user_list_tile.dart';
 
 import '../../test_app.dart';
 import '../../test_utils.dart';
 
-void main() {
-  final mockClient = MockClient((request) {
-    if (request.url.path == '/api/player/autocomplete') {
-      if (request.url.queryParameters['term'] == 'joh') {
-        return mockResponse(johResponse, 200);
+class FakeClientFactory implements AuthClientFactory {
+  @override
+  http.Client call() {
+    return MockClient((request) {
+      if (request.url.path == '/api/player/autocomplete') {
+        if (request.url.queryParameters['term'] == 'joh') {
+          return mockResponse(johResponse, 200);
+        }
+        return mockResponse(emptyResponse, 200);
       }
-      return mockResponse(emptyResponse, 200);
-    }
-    return mockResponse('', 404);
-  });
+      return mockResponse('', 404);
+    });
+  }
+}
 
+void main() {
   group('SearchScreen', () {
     testWidgets(
       'should see search results',
@@ -29,7 +35,7 @@ void main() {
           tester,
           home: const SearchScreen(),
           overrides: [
-            httpClientProvider.overrideWithValue(mockClient),
+            authClientFactoryProvider.overrideWithValue(FakeClientFactory()),
           ],
         );
 
@@ -69,7 +75,7 @@ void main() {
           tester,
           home: const SearchScreen(),
           overrides: [
-            httpClientProvider.overrideWithValue(mockClient),
+            authClientFactoryProvider.overrideWithValue(FakeClientFactory()),
           ],
         );
 

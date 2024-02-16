@@ -77,7 +77,14 @@ class AuthRepository {
     );
   }
 
-  Future<void> signOut() {
-    return _client.delete(Uri.parse('$kLichessHost/api/token'));
+  Future<void> signOut() async {
+    final url = Uri.parse('$kLichessHost/api/token');
+    final response = await _client.delete(Uri.parse('$kLichessHost/api/token'));
+    if (response.statusCode >= 400) {
+      throw http.ClientException(
+        'Failed to delete token: ${response.statusCode}',
+        url,
+      );
+    }
   }
 }

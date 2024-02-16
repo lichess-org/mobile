@@ -1,26 +1,11 @@
-import 'package:async/async.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:http/http.dart' as http;
-import 'package:lichess_mobile/src/constants.dart';
+import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
-import 'package:lichess_mobile/src/model/auth/auth_client.dart';
-import 'package:logging/logging.dart';
-import 'package:mocktail/mocktail.dart';
 
-class MockAuthClient extends Mock implements AuthClient {}
-
-class MockLogger extends Mock implements Logger {}
+import '../../test_utils.dart';
 
 void main() {
-  final mockLogger = MockLogger();
-  final mockAuthClient = MockAuthClient();
-  final repo = AccountRepository(apiClient: mockAuthClient, logger: mockLogger);
-
-  setUpAll(() {
-    reset(mockAuthClient);
-  });
-
   group('AccountRepository', () {
     test('getPreferences', () async {
       const response = '''
@@ -67,18 +52,19 @@ void main() {
 }
 ''';
 
-      when(
-        () => mockAuthClient
-            .get(Uri.parse('$kLichessHost/api/account/preferences')),
-      ).thenAnswer(
-        (_) async => Result.value(http.Response(response, 200)),
-      );
+      final mockClient = MockClient((request) {
+        if (request.url.path == '/api/account/preferences') {
+          return mockResponse(response, 200);
+        }
+        return mockResponse('', 404);
+      });
 
+      final repo = AccountRepository(mockClient);
       final result = await repo.getPreferences();
 
-      expect(result.isValue, true);
+      expect(result, isA<AccountPrefState>());
 
-      expect(result.asValue!.value.autoQueen, AutoQueen.premove);
+      expect(result.autoQueen, AutoQueen.premove);
     });
   });
 }

@@ -2,9 +2,10 @@ import 'package:chessground/chessground.dart' as cg;
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
-import 'package:lichess_mobile/src/http_client.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
@@ -20,14 +21,19 @@ import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import '../../test_app.dart';
 import '../../test_utils.dart';
 
-void main() {
-  final mockClient = MockClient((request) {
-    if (request.url.path == '/game/export/qVChCOTc') {
-      return mockResponse(gameResponse, 200);
-    }
-    return mockResponse('', 404);
-  });
+class FakeClientFactory implements AuthClientFactory {
+  @override
+  http.Client call() {
+    return MockClient((request) {
+      if (request.url.path == '/game/export/qVChCOTc') {
+        return mockResponse(gameResponse, 200);
+      }
+      return mockResponse('', 404);
+    });
+  }
+}
 
+void main() {
   group('ArchivedGameScreen', () {
     testWidgets(
       'displays game data and last fen immediately, then moves',
@@ -39,7 +45,7 @@ void main() {
             orientation: Side.white,
           ),
           overrides: [
-            httpClientProvider.overrideWithValue(mockClient),
+            authClientFactoryProvider.overrideWithValue(FakeClientFactory()),
           ],
         );
 
@@ -111,7 +117,7 @@ void main() {
           orientation: Side.white,
         ),
         overrides: [
-          httpClientProvider.overrideWithValue(mockClient),
+          authClientFactoryProvider.overrideWithValue(FakeClientFactory()),
         ],
       );
 
