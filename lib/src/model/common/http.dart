@@ -1,9 +1,19 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:http/http.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart'
+    show
+        BaseClient,
+        BaseRequest,
+        BaseResponse,
+        Client,
+        ClientException,
+        Response,
+        StreamedResponse;
 import 'package:http/io_client.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
@@ -139,7 +149,7 @@ extension ClientExtension on Client {
     Map<String, String>? headers,
     required T Function(Map<String, dynamic>) mapper,
   }) async {
-    final response = await this.get(url, headers: headers);
+    final response = await get(url, headers: headers);
     _checkResponseSuccess(url, response);
     final json = jsonDecode(utf8.decode(response.bodyBytes));
     if (json is! Map<String, dynamic>) {
@@ -163,7 +173,7 @@ extension ClientExtension on Client {
     Map<String, String>? headers,
     required T Function(Map<String, dynamic>) mapper,
   }) async {
-    final response = await this.get(url, headers: headers);
+    final response = await get(url, headers: headers);
     _checkResponseSuccess(url, response);
     final json = jsonDecode(utf8.decode(response.bodyBytes));
     if (json is! List<dynamic>) {
@@ -196,7 +206,7 @@ extension ClientExtension on Client {
     Map<String, String>? headers,
     required T Function(Map<String, dynamic>) mapper,
   }) async {
-    final response = await this.get(url, headers: headers);
+    final response = await get(url, headers: headers);
     _checkResponseSuccess(url, response);
     try {
       final json = LineSplitter.split(utf8.decode(response.bodyBytes))
@@ -226,7 +236,7 @@ extension ClientExtension on Client {
     required T Function(Map<String, dynamic>) mapper,
   }) async {
     final response =
-        await this.post(url, headers: headers, body: body, encoding: encoding);
+        await post(url, headers: headers, body: body, encoding: encoding);
     _checkResponseSuccess(url, response);
     final json = jsonDecode(utf8.decode(response.bodyBytes));
     if (json is! Map<String, dynamic>) {
@@ -247,6 +257,53 @@ extension ClientExtension on Client {
       message = '$message: ${response.reasonPhrase}';
     }
     throw ClientException('$message.', url);
+  }
+}
+
+extension ClientRefExtension on Ref {
+  /// Runs [fn] with an [AuthClient].
+  ///
+  /// The client is automatically closed after [fn] completes or when the
+  /// provider is disposed.
+  Future<T> withAuthClient<T>(Future<T> Function(Client) fn) async {
+    final client = read(authClientFactoryProvider)();
+    onDispose(client.close);
+    try {
+      return await fn(client);
+    } finally {
+      client.close();
+    }
+  }
+}
+
+extension ClientAutoDisposeRefExtension<T> on AutoDisposeRef<T> {
+  /// Runs [fn] with an [AuthClient] and keeps the provider alive for [duration].
+  /// This is primarily used for caching network requests in a [FutureProvider].
+  ///
+  /// The client is automatically closed after [fn] completes or when the
+  /// provider is disposed.
+  ///
+  /// If [fn] throws with a [SocketException], the provider is not kept alive, this
+  /// allows to retry the request later.
+  Future<U> withAuthClientCacheFor<U>(
+    Future<U> Function(Client) fn,
+    Duration duration,
+  ) async {
+    final link = keepAlive();
+    final timer = Timer(duration, link.close);
+    final client = read(authClientFactoryProvider)();
+    onDispose(() {
+      client.close();
+      timer.cancel();
+    });
+    try {
+      return await fn(client);
+    } on SocketException catch (_) {
+      link.close();
+      rethrow;
+    } finally {
+      client.close();
+    }
   }
 }
 
