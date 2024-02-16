@@ -900,6 +900,6 @@ class _StormDashboardButton extends ConsumerWidget {
         context,
         rootNavigator: true,
         fullscreenDialog: true,
-        builder: (_) => StormDashboardModal(),
+        builder: (_) => const StormDashboardModal(),
       );
 }
