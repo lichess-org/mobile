@@ -8,8 +8,7 @@ import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
-import 'package:lichess_mobile/src/view/puzzle/storm_screen.dart';
-import 'package:lichess_mobile/src/view/puzzle/streak_screen.dart';
+import 'package:lichess_mobile/src/view/puzzle/storm_dashboard.dart';
 import 'package:lichess_mobile/src/view/user/perf_stats_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -51,7 +50,8 @@ class PerfCards extends StatelessWidget {
             itemBuilder: (context, index) {
               final perf = userPerfs[index];
               final userPerf = user.perfs[perf]!;
-              final bool isPerfWithoutStats = Perf.puzzle == perf;
+              final bool isPerfWithoutStats =
+                  Perf.puzzle == perf || Perf.streak == perf;
               return SizedBox(
                 height: 100,
                 width: 100,
@@ -124,10 +124,8 @@ class PerfCards extends StatelessWidget {
       context,
       builder: (context) {
         switch (perf) {
-          case Perf.streak:
-            return const StreakScreen();
           case Perf.storm:
-            return const StormScreen();
+            return const StormDashboardModal();
           default:
             return PerfStatsScreen(
               user: user,
