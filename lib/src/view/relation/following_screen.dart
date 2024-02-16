@@ -3,7 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/relation/relation_ctrl.dart';
+import 'package:lichess_mobile/src/model/relation/relation_repository.dart';
 import 'package:lichess_mobile/src/model/relation/relation_repository_providers.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
@@ -96,11 +98,12 @@ class _Body extends ConsumerWidget {
                                   (v) => v.id == user.id,
                                 );
                               });
-
-                              final res = await ref
-                                  .read(relationRepositoryProvider)
-                                  .unfollow(user.username);
-                              if (res.isError) {
+                              try {
+                                await ref.withAuthClient(
+                                  (client) => RelationRepository(client)
+                                      .unfollow(user.username),
+                                );
+                              } catch (_) {
                                 setState(() {
                                   following = oldState;
                                 });

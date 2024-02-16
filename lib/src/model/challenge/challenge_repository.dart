@@ -1,33 +1,34 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/auth/auth_client.dart';
-import 'package:result_extensions/result_extensions.dart';
 
 import './challenge_request.dart';
 
 class ChallengeRepository {
-  const ChallengeRepository({
-    required this.apiClient,
-  });
+  const ChallengeRepository(this.client);
 
-  final AuthClient apiClient;
+  final http.Client client;
 
-  FutureResult<void> challenge(String username, ChallengeRequest req) {
-    return apiClient.post(
-      Uri.parse('$kLichessHost/api/challenge/$username'),
-      body: req.toRequestBody,
-    );
+  Future<void> challenge(String username, ChallengeRequest req) async {
+    final uri = Uri.parse('$kLichessHost/api/challenge/$username');
+    final response = await client.post(uri, body: req.toRequestBody);
+
+    if (response.statusCode >= 400) {
+      throw http.ClientException(
+        'Failed to challenge user: ${response.statusCode}',
+        uri,
+      );
+    }
   }
 
-  FutureResult<void> challengeAI(AiChallengeRequest req) {
-    return apiClient.post(
-      Uri.parse('$kLichessHost/api/challenge/ai'),
-      body: req.toRequestBody,
-    );
+  Future<void> challengeAI(AiChallengeRequest req) async {
+    final uri = Uri.parse('$kLichessHost/api/challenge/ai');
+    final response = await client.post(uri, body: req.toRequestBody);
+
+    if (response.statusCode >= 400) {
+      throw http.ClientException(
+        'Failed to challenge AI: ${response.statusCode}',
+        uri,
+      );
+    }
   }
 }
-
-final challengeRepositoryProvider = Provider<ChallengeRepository>((ref) {
-  final apiClient = ref.watch(authClientProvider);
-  return ChallengeRepository(apiClient: apiClient);
-});
