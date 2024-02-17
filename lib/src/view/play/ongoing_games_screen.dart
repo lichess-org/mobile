@@ -63,7 +63,9 @@ class _Body extends ConsumerWidget {
 
 class OngoingGamePreview extends ConsumerWidget {
   const OngoingGamePreview({required this.game, super.key});
+
   final OngoingGame game;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SmallBoardPreview(
@@ -86,6 +88,12 @@ class OngoingGamePreview extends ConsumerWidget {
                 DateTime.now().add(Duration(seconds: game.secondsLeft!)),
                 allowFromNow: true,
               ),
+            ),
+          if (game.secondsLeft! > 0)
+            Text(
+              game.isMyTurn
+                  ? context.l10n.yourTurn
+                  : context.l10n.waitingForOpponent,
             ),
           Icon(
             game.perf.icon,
