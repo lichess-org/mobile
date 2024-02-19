@@ -1,6 +1,7 @@
 import 'dart:convert';
 
-import 'package:chessground/chessground.dart';
+import 'package:chessground/chessground.dart' hide BoardTheme;
+import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/db/shared_preferences.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -87,9 +88,36 @@ class BoardPrefs with _$BoardPrefs {
     required bool blindfoldMode,
   }) = _BoardPrefs;
 
+  static BoardColorScheme colorSchemeOf(BuildContext context) {
+    return BoardColorScheme(
+      darkSquare: Theme.of(context).colorScheme.primary,
+      lightSquare: Theme.of(context).colorScheme.onPrimary,
+      // TODO add system colors here
+      background: SolidColorBackground(
+        lightSquare: Color(0xfff0d9b6),
+        darkSquare: Color(0xffb58863),
+      ),
+      whiteCoordBackground: SolidColorBackground(
+        lightSquare: Color(0xfff0d9b6),
+        darkSquare: Color(0xffb58863),
+        coordinates: true,
+      ),
+      blackCoordBackground: SolidColorBackground(
+        lightSquare: Color(0xfff0d9b6),
+        darkSquare: Color(0xffb58863),
+        coordinates: true,
+        orientation: Side.black,
+      ),
+      lastMove: HighlightDetails(solidColor: Color(0x809cc700)),
+      selected: HighlightDetails(solidColor: Color(0x6014551e)),
+      validMoves: Color(0x4014551e),
+      validPremoves: Color(0x40203085),
+    );
+  }
+
   static const defaults = BoardPrefs(
     pieceSet: PieceSet.staunty,
-    boardTheme: BoardTheme.brown,
+    boardTheme: BoardTheme.system,
     hapticFeedback: true,
     showLegalMoves: true,
     boardHighlights: true,
@@ -109,4 +137,38 @@ class BoardPrefs with _$BoardPrefs {
 
   Duration get pieceAnimationDuration =>
       pieceAnimation ? const Duration(milliseconds: 150) : Duration.zero;
+}
+
+/// The chessboard theme.
+enum BoardTheme {
+  system('System', BoardColorScheme.brown),
+  blue('Blue', BoardColorScheme.blue),
+  blue2('Blue2', BoardColorScheme.blue2),
+  blue3('Blue3', BoardColorScheme.blue3),
+  blueMarble('Blue Marble', BoardColorScheme.blueMarble),
+  canvas('Canvas', BoardColorScheme.canvas),
+  wood('Wood', BoardColorScheme.wood),
+  wood2('Wood2', BoardColorScheme.wood2),
+  wood3('Wood3', BoardColorScheme.wood3),
+  wood4('Wood4', BoardColorScheme.wood4),
+  maple('Maple', BoardColorScheme.maple),
+  maple2('Maple 2', BoardColorScheme.maple2),
+  brown('Brown', BoardColorScheme.brown),
+  leather('Leather', BoardColorScheme.leather),
+  green('Green', BoardColorScheme.green),
+  marble('Marble', BoardColorScheme.marble),
+  greenPlastic('Green Plastic', BoardColorScheme.greenPlastic),
+  grey('Grey', BoardColorScheme.grey),
+  metal('Metal', BoardColorScheme.metal),
+  olive('Olive', BoardColorScheme.olive),
+  newspaper('Newspaper', BoardColorScheme.newspaper),
+  purpleDiag('Purple-Diag', BoardColorScheme.purpleDiag),
+  pinkPyramid('Pink', BoardColorScheme.pinkPyramid),
+  horsey('Horsey', BoardColorScheme.horsey);
+
+  final String label;
+
+  final BoardColorScheme colors;
+
+  const BoardTheme(this.label, this.colors);
 }

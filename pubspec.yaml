@@ -11,7 +11,7 @@ environment:
 dependencies:
   async: ^2.10.0
   cached_network_image: ^3.2.2
-  chessground: ^2.3.0
+  chessground: ^2.4.0
   collection: ^1.17.0
   connectivity_plus: ^5.0.0
   crypto: ^3.0.3
@@ -20,6 +20,7 @@ dependencies:
   dartchess: ^0.6.1
   deep_pick: ^1.0.0
   device_info_plus: ^9.0.2
+  dynamic_color: ^1.6.9
   fast_immutable_collections: ^10.0.0
   firebase_core: ^2.15.0
   firebase_crashlytics: ^3.3.4

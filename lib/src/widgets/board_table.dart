@@ -1,4 +1,4 @@
-import 'package:chessground/chessground.dart';
+import 'package:chessground/chessground.dart' hide BoardTheme;
 import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -130,9 +130,13 @@ class BoardTable extends ConsumerWidget {
               )
             : null;
 
+        final boardColors = boardPrefs.boardTheme == BoardTheme.system
+            ? BoardPrefs.colorSchemeOf(context)
+            : boardPrefs.boardTheme.colors;
+
         final defaultSettings = BoardSettings(
           pieceAssets: boardPrefs.pieceSet.assets,
-          colorScheme: boardPrefs.boardTheme.colors,
+          colorScheme: boardColors,
           showValidMoves: boardPrefs.showLegalMoves,
           showLastMove: boardPrefs.boardHighlights,
           enableCoordinates: boardPrefs.coordinates,

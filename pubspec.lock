@@ -181,10 +181,10 @@ packages:
     dependency: "direct main"
     description:
       name: chessground
-      sha256: "4c6150821ee6675f1c9a2e9184578ca112575f08f6fa568eb0745e952f5517db"
+      sha256: "3a080f1d40e3082dbab043cd72d4881faf134dbfc042884d6c062262a0d25ff9"
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.0"
+    version: "2.4.0"
   ci:
     dependency: transitive
     description:
@@ -361,6 +361,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.0.0"
+  dynamic_color:
+    dependency: "direct main"
+    description:
+      name: dynamic_color
+      sha256: a866f1f8947bfdaf674d7928e769eac7230388a2e7a2542824fad4bb5b87be3b
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.6.9"
   equatable:
     dependency: transitive
     description:
