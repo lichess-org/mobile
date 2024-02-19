@@ -130,13 +130,11 @@ class BoardTable extends ConsumerWidget {
               )
             : null;
 
-        final boardColors = boardPrefs.boardTheme == BoardTheme.system
-            ? BoardPrefs.colorSchemeOf(context)
-            : boardPrefs.boardTheme.colors;
-
         final defaultSettings = BoardSettings(
           pieceAssets: boardPrefs.pieceSet.assets,
-          colorScheme: boardColors,
+          colorScheme: boardPrefs.boardTheme == BoardTheme.system
+              ? BoardTheme.colorSchemeOf(context)
+              : boardPrefs.boardTheme.colors,
           showValidMoves: boardPrefs.showLegalMoves,
           showLastMove: boardPrefs.boardHighlights,
           enableCoordinates: boardPrefs.coordinates,

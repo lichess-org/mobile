@@ -88,33 +88,6 @@ class BoardPrefs with _$BoardPrefs {
     required bool blindfoldMode,
   }) = _BoardPrefs;
 
-  static BoardColorScheme colorSchemeOf(BuildContext context) {
-    return BoardColorScheme(
-      darkSquare: Theme.of(context).colorScheme.primary,
-      lightSquare: Theme.of(context).colorScheme.onPrimary,
-      // TODO add system colors here
-      background: SolidColorBackground(
-        lightSquare: Color(0xfff0d9b6),
-        darkSquare: Color(0xffb58863),
-      ),
-      whiteCoordBackground: SolidColorBackground(
-        lightSquare: Color(0xfff0d9b6),
-        darkSquare: Color(0xffb58863),
-        coordinates: true,
-      ),
-      blackCoordBackground: SolidColorBackground(
-        lightSquare: Color(0xfff0d9b6),
-        darkSquare: Color(0xffb58863),
-        coordinates: true,
-        orientation: Side.black,
-      ),
-      lastMove: HighlightDetails(solidColor: Color(0x809cc700)),
-      selected: HighlightDetails(solidColor: Color(0x6014551e)),
-      validMoves: Color(0x4014551e),
-      validPremoves: Color(0x40203085),
-    );
-  }
-
   static const defaults = BoardPrefs(
     pieceSet: PieceSet.staunty,
     boardTheme: BoardTheme.system,
@@ -171,4 +144,34 @@ enum BoardTheme {
   final BoardColorScheme colors;
 
   const BoardTheme(this.label, this.colors);
+
+  static BoardColorScheme colorSchemeOf(BuildContext context) {
+    // TODO should use TonalPalette instead of colorScheme
+    final darkSquare = Theme.of(context).colorScheme.primary.withOpacity(0.6);
+    final lightSquare = Theme.of(context).colorScheme.primaryContainer;
+    return BoardColorScheme(
+      darkSquare: darkSquare,
+      lightSquare: lightSquare,
+      // TODO add system colors here
+      background: SolidColorBackground(
+        lightSquare: lightSquare,
+        darkSquare: darkSquare,
+      ),
+      whiteCoordBackground: SolidColorBackground(
+        lightSquare: lightSquare,
+        darkSquare: darkSquare,
+        coordinates: true,
+      ),
+      blackCoordBackground: SolidColorBackground(
+        lightSquare: lightSquare,
+        darkSquare: darkSquare,
+        coordinates: true,
+        orientation: Side.black,
+      ),
+      lastMove: const HighlightDetails(solidColor: Color(0x809cc700)),
+      selected: const HighlightDetails(solidColor: Color(0x6014551e)),
+      validMoves: const Color(0x4014551e),
+      validPremoves: const Color(0x40203085),
+    );
+  }
 }

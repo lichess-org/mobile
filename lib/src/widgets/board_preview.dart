@@ -1,4 +1,4 @@
-import 'package:chessground/chessground.dart';
+import 'package:chessground/chessground.dart' hide BoardTheme;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -75,7 +75,9 @@ class _SmallBoardPreviewState extends ConsumerState<SmallBoardPreview> {
                       enableCoordinates: false,
                       animationDuration: const Duration(milliseconds: 150),
                       pieceAssets: boardPrefs.pieceSet.assets,
-                      colorScheme: boardPrefs.boardTheme.colors,
+                      colorScheme: boardPrefs.boardTheme == BoardTheme.system
+                          ? BoardTheme.colorSchemeOf(context)
+                          : boardPrefs.boardTheme.colors,
                     ),
                   ),
                   const SizedBox(width: 10.0),
