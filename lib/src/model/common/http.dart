@@ -29,21 +29,6 @@ part 'http.g.dart';
 
 final _logger = Logger('HttpClient');
 
-@Riverpod(keepAlive: true)
-AuthClientFactory authClientFactory(AuthClientFactoryRef ref) {
-  return AuthClientFactory(ref);
-}
-
-class AuthClientFactory {
-  AuthClientFactory(this._ref);
-
-  final AuthClientFactoryRef _ref;
-
-  Client call() {
-    return AuthClient(httpClient(_ref.read(packageInfoProvider)), _ref);
-  }
-}
-
 // const _maxCacheSize = 2 * 1024 * 1024;
 
 /// Creates the appropriate http client for the platform.
@@ -71,6 +56,21 @@ Client httpClient(PackageInfo pInfo) {
   // }
 
   return IOClient(HttpClient()..userAgent = 'Lichess Mobile/${pInfo.version}');
+}
+
+@Riverpod(keepAlive: true)
+AuthClientFactory authClientFactory(AuthClientFactoryRef ref) {
+  return AuthClientFactory(ref);
+}
+
+class AuthClientFactory {
+  AuthClientFactory(this._ref);
+
+  final AuthClientFactoryRef _ref;
+
+  Client call() {
+    return AuthClient(httpClient(_ref.read(packageInfoProvider)), _ref);
+  }
 }
 
 @Riverpod(keepAlive: true)
