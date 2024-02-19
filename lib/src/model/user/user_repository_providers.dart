@@ -15,9 +15,8 @@ const _kAutoCompleteDebounceTimer = Duration(milliseconds: 300);
 
 @riverpod
 Future<User> user(UserRef ref, {required UserId id}) async {
-  return ref.withAuthClientCacheFor(
+  return ref.withAuthClient(
     (client) => UserRepository(client).getUser(id),
-    const Duration(minutes: 5),
   );
 }
 
@@ -26,7 +25,7 @@ Future<(User, UserStatus)> userAndStatus(
   UserAndStatusRef ref, {
   required UserId id,
 }) async {
-  return ref.withAuthClientCacheFor(
+  return ref.withAuthClient(
     (client) async {
       final repo = UserRepository(client);
       return Future.wait(
@@ -39,7 +38,6 @@ Future<(User, UserStatus)> userAndStatus(
         (value) => (value[0] as User, (value[1] as IList<UserStatus>).first),
       );
     },
-    const Duration(minutes: 5),
   );
 }
 
@@ -49,9 +47,8 @@ Future<UserPerfStats> userPerfStats(
   required UserId id,
   required Perf perf,
 }) async {
-  return ref.withAuthClientCacheFor(
+  return ref.withAuthClient(
     (client) => UserRepository(client).getPerfStats(id, perf),
-    const Duration(minutes: 5),
   );
 }
 
@@ -60,9 +57,8 @@ Future<IList<UserActivity>> userActivity(
   UserActivityRef ref, {
   required UserId id,
 }) async {
-  return ref.withAuthClientCacheFor(
+  return ref.withAuthClient(
     (client) => UserRepository(client).getActivity(id),
-    const Duration(minutes: 5),
   );
 }
 
@@ -71,9 +67,8 @@ Future<IList<UserStatus>> userStatuses(
   UserStatusesRef ref, {
   required ISet<UserId> ids,
 }) async {
-  return ref.withAuthClientCacheFor(
+  return ref.withAuthClient(
     (client) => UserRepository(client).getUsersStatuses(ids),
-    const Duration(seconds: 30),
   );
 }
 
@@ -81,7 +76,7 @@ Future<IList<UserStatus>> userStatuses(
 Future<IList<Streamer>> liveStreamers(LiveStreamersRef ref) async {
   return ref.withAuthClientCacheFor(
     (client) => UserRepository(client).getLiveStreamers(),
-    const Duration(minutes: 5),
+    const Duration(minutes: 1),
   );
 }
 
@@ -114,8 +109,7 @@ Future<IList<LightUser>> autoCompleteUser(
     throw Exception('Cancelled');
   }
 
-  return ref.withAuthClientCacheFor(
+  return ref.withAuthClient(
     (client) => UserRepository(client).autocompleteUser(term),
-    const Duration(seconds: 30),
   );
 }

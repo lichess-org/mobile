@@ -20,9 +20,8 @@ Future<IList<LightArchivedGame>> userRecentGames(
   UserRecentGamesRef ref, {
   required UserId userId,
 }) {
-  return ref.withAuthClientCacheFor(
+  return ref.withAuthClient(
     (client) => GameRepository(client).getRecentGames(userId),
-    const Duration(minutes: 5),
   );
 }
 
@@ -31,8 +30,7 @@ Future<IList<LightArchivedGame>> gamesById(
   GamesByIdRef ref, {
   required ISet<GameId> ids,
 }) {
-  return ref.withAuthClientCacheFor(
+  return ref.withAuthClient(
     (client) => GameRepository(client).getGamesByIds(ids),
-    const Duration(minutes: 5),
   );
 }
