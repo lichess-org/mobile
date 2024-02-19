@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:async/async.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
@@ -21,15 +20,11 @@ const _maxPuzzles = 500;
 @riverpod
 class PuzzleActivity extends _$PuzzleActivity {
   final _list = <PuzzleHistoryEntry>[];
-  late final http.Client _client;
 
   @override
   Future<PuzzleActivityState> build() async {
-    _client = ref.read(authClientFactoryProvider)();
-
     ref.cacheFor(const Duration(minutes: 30));
     ref.onDispose(() {
-      _client.close();
       _list.clear();
     });
     final data = await ref.watch(puzzleDashboardActivityProvider.future);
@@ -65,8 +60,10 @@ class PuzzleActivity extends _$PuzzleActivity {
     if (_list.length < _maxPuzzles) {
       state = AsyncData(currentVal.copyWith(isLoading: true));
       Result.capture(
-        PuzzleRepository(_client)
-            .puzzleActivity(_nbPerPage, before: _list.last.date),
+        ref.withAuthClient(
+          (client) => PuzzleRepository(client)
+              .puzzleActivity(_nbPerPage, before: _list.last.date),
+        ),
       ).fold(
         (value) {
           if (value.isEmpty) {
