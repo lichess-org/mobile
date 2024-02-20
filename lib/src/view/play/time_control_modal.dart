@@ -3,24 +3,28 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
-import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 
 class TimeControlModal extends ConsumerWidget {
-  const TimeControlModal({super.key});
+  final ValueSetter<TimeIncrement> onSelected;
+  final TimeIncrement value;
+  final bool excludeUltraBullet;
+
+  const TimeControlModal({
+    required this.onSelected,
+    required this.value,
+    this.excludeUltraBullet = false,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final timeControlPref = ref.watch(
-      gameSetupPreferencesProvider.select((prefs) => prefs.timeIncrement),
-    );
-
     void onSelected(TimeIncrement choice) {
       Navigator.pop(context);
-      ref.read(gameSetupPreferencesProvider.notifier).setTimeControl(choice);
+      this.onSelected(choice);
     }
 
     return SafeArea(
@@ -35,12 +39,12 @@ class TimeControlModal extends ConsumerWidget {
             ),
             const SizedBox(height: 26.0),
             _SectionChoices(
-              timeControlPref,
-              choices: const [
-                TimeIncrement(0, 1),
-                TimeIncrement(60, 0),
-                TimeIncrement(60, 1),
-                TimeIncrement(120, 1),
+              value,
+              choices: [
+                if (!excludeUltraBullet) const TimeIncrement(0, 1),
+                const TimeIncrement(60, 0),
+                const TimeIncrement(60, 1),
+                const TimeIncrement(120, 1),
               ],
               title: const _SectionTitle(
                 title: 'Bullet',
@@ -50,7 +54,7 @@ class TimeControlModal extends ConsumerWidget {
             ),
             const SizedBox(height: 20.0),
             _SectionChoices(
-              timeControlPref,
+              value,
               choices: const [
                 TimeIncrement(180, 0),
                 TimeIncrement(180, 2),
@@ -65,7 +69,7 @@ class TimeControlModal extends ConsumerWidget {
             ),
             const SizedBox(height: 20.0),
             _SectionChoices(
-              timeControlPref,
+              value,
               choices: const [
                 TimeIncrement(600, 0),
                 TimeIncrement(600, 5),
@@ -80,7 +84,7 @@ class TimeControlModal extends ConsumerWidget {
             ),
             const SizedBox(height: 20.0),
             _SectionChoices(
-              timeControlPref,
+              value,
               choices: const [
                 TimeIncrement(1500, 0),
                 TimeIncrement(1800, 0),

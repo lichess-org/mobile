@@ -1,6 +1,5 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -48,9 +47,7 @@ class StandaloneGameScreen extends ConsumerStatefulWidget {
 class _StandaloneGameScreenState extends ConsumerState<StandaloneGameScreen> {
   final _whiteClockKey = GlobalKey(debugLabel: 'whiteClockOnGameScreen');
   final _blackClockKey = GlobalKey(debugLabel: 'blackClockOnGameScreen');
-  final _boardKey = defaultTargetPlatform == TargetPlatform.android
-      ? GlobalKey(debugLabel: 'boardOnGameScreen')
-      : null;
+  final _boardKey = GlobalKey(debugLabel: 'boardOnGameScreen');
 
   late GameFullId _gameId;
 
