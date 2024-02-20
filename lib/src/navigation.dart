@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_tab_screen.dart';
@@ -361,16 +360,6 @@ class _TabSwitchingViewState extends State<_TabSwitchingView> {
       }),
     );
   }
-}
-
-class _Tab {
-  const _Tab({
-    required this.label,
-    required this.icon,
-  });
-
-  final String label;
-  final Icon icon;
 }
 
 // Following code copied and adapted from
