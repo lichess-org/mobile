@@ -16,16 +16,6 @@ Future<ArchivedGame> archivedGame(ArchivedGameRef ref, {required GameId id}) {
 }
 
 @riverpod
-Future<IList<LightArchivedGame>> userRecentGames(
-  UserRecentGamesRef ref, {
-  required UserId userId,
-}) {
-  return ref.withAuthClient(
-    (client) => GameRepository(client).getRecentGames(userId),
-  );
-}
-
-@riverpod
 Future<IList<LightArchivedGame>> gamesById(
   GamesByIdRef ref, {
   required ISet<GameId> ids,

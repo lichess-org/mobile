@@ -53,16 +53,6 @@ Future<UserPerfStats> userPerfStats(
 }
 
 @riverpod
-Future<IList<UserActivity>> userActivity(
-  UserActivityRef ref, {
-  required UserId id,
-}) async {
-  return ref.withAuthClient(
-    (client) => UserRepository(client).getActivity(id),
-  );
-}
-
-@riverpod
 Future<IList<UserStatus>> userStatuses(
   UserStatusesRef ref, {
   required ISet<UserId> ids,

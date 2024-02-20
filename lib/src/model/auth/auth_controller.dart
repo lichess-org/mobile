@@ -17,12 +17,11 @@ class AuthController extends _$AuthController {
   Future<void> signIn() async {
     state = const AsyncLoading();
 
-    final client = ref.read(authClientFactoryProvider)();
     final appAuth = ref.read(appAuthProvider);
-    final repo = AuthRepository(client, appAuth);
 
     try {
-      final session = await repo.signIn();
+      final session = await ref
+          .withAuthClient((client) => AuthRepository(client, appAuth).signIn());
 
       ref.read(authSessionProvider.notifier).update(session);
       ref.read(notificationServiceProvider).registerDevice();
@@ -30,8 +29,6 @@ class AuthController extends _$AuthController {
       state = const AsyncValue.data(null);
     } catch (e, st) {
       state = AsyncValue.error(e, st);
-    } finally {
-      client.close();
     }
   }
 
@@ -39,17 +36,17 @@ class AuthController extends _$AuthController {
     state = const AsyncLoading();
     await Future<void>.delayed(const Duration(milliseconds: 500));
 
-    final client = ref.read(authClientFactoryProvider)();
-    final repo = AuthRepository(client, ref.read(appAuthProvider));
+    final appAuth = ref.read(appAuthProvider);
+
     try {
-      await repo.signOut();
+      await ref.withAuthClient(
+        (client) => AuthRepository(client, appAuth).signOut(),
+      );
       ref.read(notificationServiceProvider).unregister();
       await ref.read(authSessionProvider.notifier).delete();
       state = const AsyncValue.data(null);
     } catch (e, st) {
       state = AsyncValue.error(e, st);
-    } finally {
-      client.close();
     }
   }
 }

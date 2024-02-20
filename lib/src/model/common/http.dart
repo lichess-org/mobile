@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart'
     show
@@ -321,16 +322,61 @@ extension ClientExtension on Client {
   }
 }
 
+/// A service that reuses the same http client for multiple requests at the same
+/// time, and closes it when there are no more pending requests.
+///
+/// This only work with [AuthClient] because it is only useful when sending
+/// requests to lichess server.
+class _ReuseClientService {
+  _ReuseClientService._();
+
+  static final instance = _ReuseClientService._();
+
+  Client? _client;
+  List<UniqueKey> _clientKeys = [];
+
+  /// Returns the client and a unique key to be used to close it later.
+  ///
+  /// If the client is null, it creates a new one.
+  (Client, UniqueKey) get(AuthClientFactory factory) {
+    if (_client == null) {
+      _logger.info('Creating a new client.');
+    }
+    if (_client == null) {
+      _client = factory();
+      _clientKeys = [];
+    }
+    final key = UniqueKey();
+    _clientKeys.add(key);
+    return (_client!, key);
+  }
+
+  /// Asks to close the client with the given key.
+  ///
+  /// If there are no more keys, it closes the client.
+  void close(UniqueKey key) {
+    _clientKeys.remove(key);
+    if (_clientKeys.isEmpty && _client != null) {
+      _logger.info('All users have closed the client. Closing it.');
+      _client!.close();
+      _client = null;
+    }
+  }
+}
+
 extension ClientWidgetRefExtension on WidgetRef {
   /// Runs [fn] with an [AuthClient].
   ///
-  /// The client is automatically closed after [fn] completes.
+  /// It handles the creation and closing of the client, while trying to reuse
+  /// the same client for multiple requests at the same time.
+  /// Will try to close the client after [fn] completes.
   Future<T> withAuthClient<T>(Future<T> Function(Client) fn) async {
-    final client = read(authClientFactoryProvider)();
+    final (client, key) =
+        _ReuseClientService.instance.get(read(authClientFactoryProvider));
     try {
       return await fn(client);
     } finally {
-      client.close();
+      _ReuseClientService.instance.close(key);
     }
   }
 }
@@ -338,15 +384,18 @@ extension ClientWidgetRefExtension on WidgetRef {
 extension ClientRefExtension on Ref {
   /// Runs [fn] with an [AuthClient].
   ///
-  /// The client is automatically closed after [fn] completes or when the
-  /// provider is disposed.
+  /// It handles the creation and closing of the client, while trying to reuse
+  /// the same client for multiple requests at the same time.
+  /// Will try to close the client after [fn] completes, or when the provider is
+  /// disposed.
   Future<T> withAuthClient<T>(Future<T> Function(Client) fn) async {
-    final client = read(authClientFactoryProvider)();
-    onDispose(client.close);
+    final (client, key) =
+        _ReuseClientService.instance.get(read(authClientFactoryProvider));
+    onDispose(() => _ReuseClientService.instance.close(key));
     try {
       return await fn(client);
     } finally {
-      client.close();
+      _ReuseClientService.instance.close(key);
     }
   }
 }
@@ -355,8 +404,10 @@ extension ClientAutoDisposeRefExtension<T> on AutoDisposeRef<T> {
   /// Runs [fn] with an [AuthClient] and keeps the provider alive for [duration].
   /// This is primarily used for caching network requests in a [FutureProvider].
   ///
-  /// The client is automatically closed after [fn] completes or when the
-  /// provider is disposed.
+  /// It handles the creation and closing of the client, while trying to reuse
+  /// the same client for multiple requests at the same time.
+  /// Will try to close the client after [fn] completes, or when the provider is
+  /// disposed.
   ///
   /// If [fn] throws with a [SocketException], the provider is not kept alive, this
   /// allows to retry the request later.
@@ -366,9 +417,10 @@ extension ClientAutoDisposeRefExtension<T> on AutoDisposeRef<T> {
   ) async {
     final link = keepAlive();
     final timer = Timer(duration, link.close);
-    final client = read(authClientFactoryProvider)();
+    final (client, key) =
+        _ReuseClientService.instance.get(read(authClientFactoryProvider));
     onDispose(() {
-      client.close();
+      _ReuseClientService.instance.close(key);
       timer.cancel();
     });
     try {
@@ -377,7 +429,7 @@ extension ClientAutoDisposeRefExtension<T> on AutoDisposeRef<T> {
       link.close();
       rethrow;
     } finally {
-      client.close();
+      _ReuseClientService.instance.close(key);
     }
   }
 }
