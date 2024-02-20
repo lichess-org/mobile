@@ -2,8 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/styles/puzzle_icons.dart';
-import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_tab_screen.dart';
@@ -11,14 +9,10 @@ import 'package:lichess_mobile/src/view/tools/tools_tab_screen.dart';
 import 'package:lichess_mobile/src/view/watch/watch_tab_screen.dart';
 
 enum BottomTab {
-  home(Icons.home),
-  puzzles(PuzzleIcons.mix),
-  tools(Icons.build),
-  watch(Icons.live_tv);
-
-  const BottomTab(this.icon);
-
-  final IconData icon;
+  home,
+  puzzles,
+  tools,
+  watch;
 
   String label(AppLocalizations strings) {
     switch (this) {
@@ -30,6 +24,32 @@ enum BottomTab {
         return strings.tools;
       case BottomTab.watch:
         return strings.watch;
+    }
+  }
+
+  IconData get icon {
+    switch (this) {
+      case BottomTab.home:
+        return Icons.home_outlined;
+      case BottomTab.puzzles:
+        return Icons.extension_outlined;
+      case BottomTab.tools:
+        return Icons.handyman_outlined;
+      case BottomTab.watch:
+        return Icons.live_tv_outlined;
+    }
+  }
+
+  IconData get activeIcon {
+    switch (this) {
+      case BottomTab.home:
+        return Icons.home;
+      case BottomTab.puzzles:
+        return Icons.extension;
+      case BottomTab.tools:
+        return Icons.handyman;
+      case BottomTab.watch:
+        return Icons.live_tv;
     }
   }
 }
@@ -78,20 +98,6 @@ final watchScrollController = ScrollController(debugLabel: 'WatchScroll');
 final RouteObserver<PageRoute<void>> rootNavPageRouteObserver =
     RouteObserver<PageRoute<void>>();
 
-final tabsProvider = Provider<List<_Tab>>((ref) {
-  final l10n = ref.watch(l10nProvider);
-
-  return BottomTab.values.map((tab) {
-    return _Tab(
-      label: tab.label(l10n.strings),
-      icon: Icon(
-        tab.icon,
-        size: tab == BottomTab.tools ? 22 : null,
-      ),
-    );
-  }).toList();
-});
-
 /// Implements a tabbed (iOS style) root layout and behavior structure.
 ///
 /// This widget is intended to be used as the root of the app, and it provides
@@ -104,7 +110,6 @@ class BottomNavScaffold extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentTab = ref.watch(currentBottomTabProvider);
-    final tabs = ref.watch(tabsProvider);
 
     switch (Theme.of(context).platform) {
       case TargetPlatform.android:
@@ -121,8 +126,11 @@ class BottomNavScaffold extends ConsumerWidget {
             bottomNavigationBar: NavigationBar(
               selectedIndex: currentTab.index,
               destinations: [
-                for (final tab in tabs)
-                  NavigationDestination(icon: tab.icon, label: tab.label),
+                for (final tab in BottomTab.values)
+                  NavigationDestination(
+                    icon: Icon(tab == currentTab ? tab.activeIcon : tab.icon),
+                    label: tab.label(context.l10n),
+                  ),
               ],
               onDestinationSelected: (i) => _onItemTapped(ref, i),
             ),
@@ -134,8 +142,11 @@ class BottomNavScaffold extends ConsumerWidget {
           tabBar: CupertinoTabBar(
             currentIndex: currentTab.index,
             items: [
-              for (final tab in tabs)
-                BottomNavigationBarItem(icon: tab.icon, label: tab.label),
+              for (final tab in BottomTab.values)
+                BottomNavigationBarItem(
+                  icon: Icon(tab == currentTab ? tab.activeIcon : tab.icon),
+                  label: tab.label(context.l10n),
+                ),
             ],
             onTap: (i) => _onItemTapped(ref, i),
           ),
@@ -349,16 +360,6 @@ class _TabSwitchingViewState extends State<_TabSwitchingView> {
       }),
     );
   }
-}
-
-class _Tab {
-  const _Tab({
-    required this.label,
-    required this.icon,
-  });
-
-  final String label;
-  final Icon icon;
 }
 
 // Following code copied and adapted from
