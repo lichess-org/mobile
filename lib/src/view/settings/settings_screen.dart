@@ -81,9 +81,7 @@ class _Body extends ConsumerWidget {
     final packageInfo = ref.watch(packageInfoProvider);
     final boardPrefs = ref.watch(boardPreferencesProvider);
 
-    final androidVersion = ref.watch(androidVersionProvider).whenOrNull(
-          data: (v) => v,
-        );
+    final androidVersionAsync = ref.watch(androidVersionProvider);
 
     return SafeArea(
       child: ListView(
@@ -122,32 +120,37 @@ class _Body extends ConsumerWidget {
                   }
                 },
               ),
-              if (Theme.of(context).platform == TargetPlatform.android &&
-                  androidVersion != null &&
-                  androidVersion.sdkInt >= 31)
-                SettingsListTile(
-                  icon: const Icon(Icons.palette),
-                  settingsLabel: const Text('Colors'),
-                  settingsValue: colorPalette == ColorPalette.system
-                      ? context.l10n.deviceTheme
-                      : 'Chessboard',
-                  onTap: () {
-                    showChoicePicker(
-                      context,
-                      choices: ColorPalette.values,
-                      selectedItem: colorPalette,
-                      labelBuilder: (t) => Text(
-                        t == ColorPalette.system
-                            ? context.l10n.deviceTheme
-                            : 'Chessboard',
-                      ),
-                      onSelectedItemChanged: (ColorPalette? value) {
-                        ref
-                            .read(generalPreferencesProvider.notifier)
-                            .setColorPalette(value ?? ColorPalette.system);
-                      },
-                    );
-                  },
+              if (Theme.of(context).platform == TargetPlatform.android)
+                androidVersionAsync.maybeWhen(
+                  data: (version) => version.sdkInt >= 31
+                      ? SettingsListTile(
+                          icon: const Icon(Icons.palette),
+                          settingsLabel: const Text('Colors'),
+                          settingsValue: colorPalette == ColorPalette.system
+                              ? context.l10n.deviceTheme
+                              : 'Chessboard',
+                          onTap: () {
+                            showChoicePicker(
+                              context,
+                              choices: ColorPalette.values,
+                              selectedItem: colorPalette,
+                              labelBuilder: (t) => Text(
+                                t == ColorPalette.system
+                                    ? context.l10n.deviceTheme
+                                    : 'Chessboard',
+                              ),
+                              onSelectedItemChanged: (ColorPalette? value) {
+                                ref
+                                    .read(generalPreferencesProvider.notifier)
+                                    .setColorPalette(
+                                      value ?? ColorPalette.system,
+                                    );
+                              },
+                            );
+                          },
+                        )
+                      : const SizedBox.shrink(),
+                  orElse: () => const SizedBox.shrink(),
                 ),
               SettingsListTile(
                 icon: const Icon(Icons.brightness_medium),
