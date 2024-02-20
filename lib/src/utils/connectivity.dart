@@ -24,35 +24,49 @@ class ConnectivityStatus with _$ConnectivityStatus {
 Future<ConnectivityStatus> connectivity(ConnectivityRef ref) async {
   final client = httpClient(ref.read(packageInfoProvider));
   ref.onDispose(client.close);
-  final connectivityResult = await Connectivity().checkConnectivity();
-  return ConnectivityStatus(
-    connectivityResult: connectivityResult,
-    isOnline: await isOnline(client),
-  );
+  try {
+    final isOnline = await onlineCheck(client);
+    final connectivityResult = await Connectivity().checkConnectivity();
+    return ConnectivityStatus(
+      connectivityResult: connectivityResult,
+      isOnline: isOnline,
+    );
+  } finally {
+    client.close();
+  }
 }
 
 @riverpod
 Stream<ConnectivityStatus> connectivityChanges(ConnectivityChangesRef ref) {
-  final client = httpClient(ref.read(packageInfoProvider));
-  ref.onDispose(client.close);
   // some android devices needs to check connectivity on start
   final firstCheck =
       Stream.fromFuture(Connectivity().checkConnectivity()).asyncMap(
-    (result) async => ConnectivityStatus(
-      connectivityResult: result,
-      isOnline: await isOnline(client),
-    ),
+    (result) async {
+      final client = httpClient(ref.read(packageInfoProvider));
+      try {
+        return ConnectivityStatus(
+          connectivityResult: result,
+          isOnline: await onlineCheck(client),
+        );
+      } finally {
+        client.close();
+      }
+    },
   );
 
-  return Connectivity()
-      .onConnectivityChanged
-      .asyncMap(
-        (result) async => ConnectivityStatus(
+  return Connectivity().onConnectivityChanged.asyncMap(
+    (result) async {
+      final client = httpClient(ref.read(packageInfoProvider));
+      try {
+        return ConnectivityStatus(
           connectivityResult: result,
-          isOnline: await isOnline(client),
-        ),
-      )
-      .startWithStream(firstCheck);
+          isOnline: await onlineCheck(client),
+        );
+      } finally {
+        client.close();
+      }
+    },
+  ).startWithStream(firstCheck);
 }
 
 final _internetCheckUris = [
@@ -60,7 +74,7 @@ final _internetCheckUris = [
   Uri.parse('$kLichessCDNHost/assets/logo/lichess-favicon-32.png'),
 ];
 
-Future<bool> isOnline(Client client) {
+Future<bool> onlineCheck(Client client) {
   final completer = Completer<bool>();
   try {
     int remaining = _internetCheckUris.length;
