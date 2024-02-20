@@ -13,7 +13,7 @@ import 'package:lichess_mobile/src/view/watch/watch_tab_screen.dart';
 enum BottomTab {
   home(Icons.home),
   puzzles(PuzzleIcons.mix),
-  tools(CupertinoIcons.wrench),
+  tools(Icons.build),
   watch(Icons.live_tv);
 
   const BottomTab(this.icon);
