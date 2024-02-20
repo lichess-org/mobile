@@ -2,7 +2,6 @@ import 'package:chessground/chessground.dart' as cg;
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,6 +17,7 @@ import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
+import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -42,14 +42,11 @@ class StormScreen extends StatefulWidget {
 }
 
 class _StormScreenState extends State<StormScreen> {
-  final _boardKey = defaultTargetPlatform == TargetPlatform.android
-      ? GlobalKey(debugLabel: 'boardOnStormScreen')
-      : null;
+  final _boardKey = GlobalKey(debugLabel: 'boardOnStormScreen');
 
   @override
   Widget build(BuildContext context) {
-    return ImmersiveModeWidget(
-      boardKey: _boardKey,
+    return WakelockWidget(
       child: PlatformWidget(
         androidBuilder: _androidBuilder,
         iosBuilder: _iosBuilder,
@@ -58,12 +55,15 @@ class _StormScreenState extends State<StormScreen> {
   }
 
   Widget _androidBuilder(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        actions: [_StormDashboardButton(), ToggleSoundButton()],
-        title: const Text('Puzzle Storm'),
+    return AndroidGesturesExclusionWidget(
+      boardKey: _boardKey,
+      child: Scaffold(
+        appBar: AppBar(
+          actions: [_StormDashboardButton(), ToggleSoundButton()],
+          title: const Text('Puzzle Storm'),
+        ),
+        body: _Load(_boardKey),
       ),
-      body: _Load(_boardKey),
     );
   }
 
@@ -900,6 +900,6 @@ class _StormDashboardButton extends ConsumerWidget {
         context,
         rootNavigator: true,
         fullscreenDialog: true,
-        builder: (_) => StormDashboardModal(),
+        builder: (_) => const StormDashboardModal(),
       );
 }

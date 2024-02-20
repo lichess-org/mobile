@@ -569,7 +569,14 @@ class _QuickGameButton extends ConsumerWidget {
                       maxHeight: screenHeight - (screenHeight / 10),
                     ),
                     builder: (BuildContext context) {
-                      return const TimeControlModal();
+                      return TimeControlModal(
+                        value: playPrefs.timeIncrement,
+                        onSelected: (choice) {
+                          ref
+                              .read(gameSetupPreferencesProvider.notifier)
+                              .setTimeControl(choice);
+                        },
+                      );
                     },
                   );
                 },

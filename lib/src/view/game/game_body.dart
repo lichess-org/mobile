@@ -18,6 +18,7 @@ import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
+import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -31,7 +32,6 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
-import 'package:wakelock_plus/wakelock_plus.dart';
 
 import 'game_common_widgets.dart';
 import 'game_loading_board.dart';
@@ -56,7 +56,7 @@ class GameBody extends ConsumerWidget {
     required this.onLoadGameCallback,
     required this.onNewOpponentCallback,
     required this.loadingBoardWidget,
-    this.boardKey,
+    required this.boardKey,
   });
 
   /// The [GameFullId] of the game.
@@ -77,7 +77,7 @@ class GameBody extends ConsumerWidget {
   /// [GlobalKey] for the board.
   ///
   /// Used to set gestures exclusion on android.
-  final GlobalKey? boardKey;
+  final GlobalKey boardKey;
 
   /// Callback to load a new game. Used when the game is finished and the user
   /// wants to play a rematch, or when switching through games in correspondence
@@ -211,11 +211,8 @@ class GameBody extends ConsumerWidget {
         final bottomPlayer = youAre == Side.white ? white : black;
         final isBoardTurned = ref.watch(isBoardTurnedProvider);
 
-        return ImmersiveModeWidget(
-          boardKey: boardKey,
-          onFocusGained: () {
-            _enableImmersiveMode(gameState.game);
-          },
+        final content = WakelockWidget(
+          shouldEnableOnFocusGained: () => gameState.game.playable,
           child: PopScope(
             canPop: gameState.game.meta.speed == Speed.correspondence ||
                 !gameState.game.playable,
@@ -289,6 +286,16 @@ class GameBody extends ConsumerWidget {
             ),
           ),
         );
+
+        return Theme.of(context).platform == TargetPlatform.android
+            ? AndroidGesturesExclusionWidget(
+                boardKey: boardKey,
+                shouldExcludeGesturesOnFocusGained: () =>
+                    gameState.game.meta.speed != Speed.correspondence &&
+                    gameState.game.playable,
+                child: content,
+              )
+            : content;
       },
       loading: () => FocusDetector(
         child: PopScope(canPop: true, child: loadingBoardWidget),
@@ -336,11 +343,14 @@ class GameBody extends ConsumerWidget {
       // true when the game was loaded, playable, and just finished
       if (prev?.valueOrNull?.game.playable == true &&
           state.requireValue.game.playable == false) {
-        ImmersiveMode.instance.disable();
+        clearAndroidBoardGesturesExclusion();
       }
       // true when the game was not loaded: handles rematches
       else if (prev?.hasValue != true) {
-        _enableImmersiveMode(state.requireValue.game);
+        final game = state.requireValue.game;
+        if (game.meta.speed != Speed.correspondence && game.playable) {
+          setAndroidBoardGesturesExclusion(boardKey);
+        }
       }
     }
 
@@ -362,16 +372,6 @@ class GameBody extends ConsumerWidget {
         Navigator.of(context).popUntil((route) => route is! PopupRoute);
         onLoadGameCallback(state.requireValue.redirectGameId!);
       }
-    }
-  }
-
-  void _enableImmersiveMode(PlayableGame game) {
-    // Enable immersive mode when the game is in real time and playable.
-    if (game.meta.speed != Speed.correspondence && game.playable) {
-      ImmersiveMode.instance.enable();
-    } else if (game.playable) {
-      // Correspondence: just enable the wakelock when the game is playable.
-      WakelockPlus.enable();
     }
   }
 }
