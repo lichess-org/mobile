@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -22,6 +23,7 @@ import 'package:sqflite/sqflite.dart';
 
 import 'firebase_options.dart';
 import 'src/app.dart';
+import 'src/utils/color_palette.dart';
 
 Future<void> main() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -45,6 +47,15 @@ Future<void> main() async {
       FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
       return true;
     };
+  }
+
+  // Get android 12+ core palette
+  try {
+    await DynamicColorPlugin.getCorePalette().then((value) {
+      setCorePalette(value);
+    });
+  } catch (e) {
+    debugPrint('Could not get core palette: $e');
   }
 
   // Show splash screen until app is ready

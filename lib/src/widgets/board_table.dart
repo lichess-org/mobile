@@ -132,9 +132,7 @@ class BoardTable extends ConsumerWidget {
 
         final defaultSettings = BoardSettings(
           pieceAssets: boardPrefs.pieceSet.assets,
-          colorScheme: boardPrefs.boardTheme == BoardTheme.system
-              ? BoardTheme.colorSchemeOf(context)
-              : boardPrefs.boardTheme.colors,
+          colorScheme: boardPrefs.boardTheme.colors,
           showValidMoves: boardPrefs.showLegalMoves,
           showLastMove: boardPrefs.boardHighlights,
           enableCoordinates: boardPrefs.coordinates,

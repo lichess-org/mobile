@@ -75,9 +75,7 @@ class _SmallBoardPreviewState extends ConsumerState<SmallBoardPreview> {
                       enableCoordinates: false,
                       animationDuration: const Duration(milliseconds: 150),
                       pieceAssets: boardPrefs.pieceSet.assets,
-                      colorScheme: boardPrefs.boardTheme == BoardTheme.system
-                          ? BoardTheme.colorSchemeOf(context)
-                          : boardPrefs.boardTheme.colors,
+                      colorScheme: boardPrefs.boardTheme.colors,
                     ),
                   ),
                   const SizedBox(width: 10.0),

@@ -4,6 +4,7 @@ import 'package:chessground/chessground.dart' hide BoardTheme;
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/db/shared_preferences.dart';
+import 'package:lichess_mobile/src/utils/color_palette.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'board_preferences.freezed.dart';
@@ -90,7 +91,7 @@ class BoardPrefs with _$BoardPrefs {
 
   static const defaults = BoardPrefs(
     pieceSet: PieceSet.staunty,
-    boardTheme: BoardTheme.system,
+    boardTheme: BoardTheme.brown,
     hapticFeedback: true,
     showLegalMoves: true,
     boardHighlights: true,
@@ -114,41 +115,98 @@ class BoardPrefs with _$BoardPrefs {
 
 /// The chessboard theme.
 enum BoardTheme {
-  system('System', BoardColorScheme.brown),
-  blue('Blue', BoardColorScheme.blue),
-  blue2('Blue2', BoardColorScheme.blue2),
-  blue3('Blue3', BoardColorScheme.blue3),
-  blueMarble('Blue Marble', BoardColorScheme.blueMarble),
-  canvas('Canvas', BoardColorScheme.canvas),
-  wood('Wood', BoardColorScheme.wood),
-  wood2('Wood2', BoardColorScheme.wood2),
-  wood3('Wood3', BoardColorScheme.wood3),
-  wood4('Wood4', BoardColorScheme.wood4),
-  maple('Maple', BoardColorScheme.maple),
-  maple2('Maple 2', BoardColorScheme.maple2),
-  brown('Brown', BoardColorScheme.brown),
-  leather('Leather', BoardColorScheme.leather),
-  green('Green', BoardColorScheme.green),
-  marble('Marble', BoardColorScheme.marble),
-  greenPlastic('Green Plastic', BoardColorScheme.greenPlastic),
-  grey('Grey', BoardColorScheme.grey),
-  metal('Metal', BoardColorScheme.metal),
-  olive('Olive', BoardColorScheme.olive),
-  newspaper('Newspaper', BoardColorScheme.newspaper),
-  purpleDiag('Purple-Diag', BoardColorScheme.purpleDiag),
-  pinkPyramid('Pink', BoardColorScheme.pinkPyramid),
-  horsey('Horsey', BoardColorScheme.horsey);
+  system('System'),
+  blue('Blue'),
+  blue2('Blue2'),
+  blue3('Blue3'),
+  blueMarble('Blue Marble'),
+  canvas('Canvas'),
+  wood('Wood'),
+  wood2('Wood2'),
+  wood3('Wood3'),
+  wood4('Wood4'),
+  maple('Maple'),
+  maple2('Maple 2'),
+  brown('Brown'),
+  leather('Leather'),
+  green('Green'),
+  marble('Marble'),
+  greenPlastic('Green Plastic'),
+  grey('Grey'),
+  metal('Metal'),
+  olive('Olive'),
+  newspaper('Newspaper'),
+  purpleDiag('Purple-Diag'),
+  pinkPyramid('Pink'),
+  horsey('Horsey');
 
   final String label;
 
-  final BoardColorScheme colors;
+  const BoardTheme(this.label);
 
-  const BoardTheme(this.label, this.colors);
+  BoardColorScheme get colors {
+    switch (this) {
+      case BoardTheme.system:
+        return BoardTheme.systemColors;
+      case BoardTheme.blue:
+        return BoardColorScheme.blue;
+      case BoardTheme.blue2:
+        return BoardColorScheme.blue2;
+      case BoardTheme.blue3:
+        return BoardColorScheme.blue3;
+      case BoardTheme.blueMarble:
+        return BoardColorScheme.blueMarble;
+      case BoardTheme.canvas:
+        return BoardColorScheme.canvas;
+      case BoardTheme.wood:
+        return BoardColorScheme.wood;
+      case BoardTheme.wood2:
+        return BoardColorScheme.wood2;
+      case BoardTheme.wood3:
+        return BoardColorScheme.wood3;
+      case BoardTheme.wood4:
+        return BoardColorScheme.wood4;
+      case BoardTheme.maple:
+        return BoardColorScheme.maple;
+      case BoardTheme.maple2:
+        return BoardColorScheme.maple2;
+      case BoardTheme.brown:
+        return BoardColorScheme.brown;
+      case BoardTheme.leather:
+        return BoardColorScheme.leather;
+      case BoardTheme.green:
+        return BoardColorScheme.green;
+      case BoardTheme.marble:
+        return BoardColorScheme.marble;
+      case BoardTheme.greenPlastic:
+        return BoardColorScheme.greenPlastic;
+      case BoardTheme.grey:
+        return BoardColorScheme.grey;
+      case BoardTheme.metal:
+        return BoardColorScheme.metal;
+      case BoardTheme.olive:
+        return BoardColorScheme.olive;
+      case BoardTheme.newspaper:
+        return BoardColorScheme.newspaper;
+      case BoardTheme.purpleDiag:
+        return BoardColorScheme.purpleDiag;
+      case BoardTheme.pinkPyramid:
+        return BoardColorScheme.pinkPyramid;
+      case BoardTheme.horsey:
+        return BoardColorScheme.horsey;
+    }
+  }
 
-  static BoardColorScheme colorSchemeOf(BuildContext context) {
-    // TODO should use TonalPalette instead of colorScheme
-    final darkSquare = Theme.of(context).colorScheme.primary.withOpacity(0.6);
-    final lightSquare = Theme.of(context).colorScheme.primaryContainer;
+  /// Get the [BoardColorScheme] based on system colors on Android 12+.
+  ///
+  /// If the system colors are not available, the default brown theme is used.
+  static BoardColorScheme get systemColors {
+    final corePalette = getCorePalette();
+    if (corePalette == null) {
+      return brown.colors;
+    }
+    final darkSquare = Color(corePalette.primary.get(70));
+    final lightSquare = Color(corePalette.secondary.get(90));
     return BoardColorScheme(
       darkSquare: darkSquare,
       lightSquare: lightSquare,

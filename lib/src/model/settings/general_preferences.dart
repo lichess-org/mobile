@@ -41,6 +41,10 @@ class GeneralPreferences extends _$GeneralPreferences {
     return _save(state.copyWith(soundTheme: soundTheme));
   }
 
+  Future<void> setColorPalette(ColorPalette colorPalette) {
+    return _save(state.copyWith(colorPalette: colorPalette));
+  }
+
   Future<void> _save(GeneralPrefsState newState) async {
     final prefs = ref.read(sharedPreferencesProvider);
     await prefs.setString(
@@ -51,18 +55,24 @@ class GeneralPreferences extends _$GeneralPreferences {
   }
 }
 
+enum ColorPalette { system, board }
+
 @Freezed(fromJson: true, toJson: true)
 class GeneralPrefsState with _$GeneralPrefsState {
   const factory GeneralPrefsState({
     required ThemeMode themeMode,
     required bool isSoundEnabled,
     required SoundTheme soundTheme,
+
+    /// The origin of the color palette (android 12+ only)
+    required ColorPalette colorPalette,
   }) = _GeneralPrefsState;
 
   static const defaults = GeneralPrefsState(
     themeMode: ThemeMode.system,
     isSoundEnabled: true,
     soundTheme: SoundTheme.standard,
+    colorPalette: ColorPalette.system,
   );
 
   factory GeneralPrefsState.fromJson(Map<String, dynamic> json) {

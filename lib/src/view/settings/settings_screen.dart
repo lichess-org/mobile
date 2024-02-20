@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/sound_theme.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/android.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/package_info.dart';
@@ -69,10 +70,20 @@ class _Body extends ConsumerWidget {
       ),
     );
 
+    final colorPalette = ref.watch(
+      generalPreferencesProvider.select(
+        (state) => state.colorPalette,
+      ),
+    );
+
     final authController = ref.watch(authControllerProvider);
     final userSession = ref.watch(authSessionProvider);
     final packageInfo = ref.watch(packageInfoProvider);
     final boardPrefs = ref.watch(boardPreferencesProvider);
+
+    final androidVersion = ref.watch(androidVersionProvider).whenOrNull(
+          data: (v) => v,
+        );
 
     return SafeArea(
       child: ListView(
@@ -111,6 +122,33 @@ class _Body extends ConsumerWidget {
                   }
                 },
               ),
+              if (Theme.of(context).platform == TargetPlatform.android &&
+                  androidVersion != null &&
+                  androidVersion.sdkInt >= 31)
+                SettingsListTile(
+                  icon: const Icon(Icons.palette),
+                  settingsLabel: const Text('Colors'),
+                  settingsValue: colorPalette == ColorPalette.system
+                      ? context.l10n.deviceTheme
+                      : 'Chessboard',
+                  onTap: () {
+                    showChoicePicker(
+                      context,
+                      choices: ColorPalette.values,
+                      selectedItem: colorPalette,
+                      labelBuilder: (t) => Text(
+                        t == ColorPalette.system
+                            ? context.l10n.deviceTheme
+                            : 'Chessboard',
+                      ),
+                      onSelectedItemChanged: (ColorPalette? value) {
+                        ref
+                            .read(generalPreferencesProvider.notifier)
+                            .setColorPalette(value ?? ColorPalette.system);
+                      },
+                    );
+                  },
+                ),
               SettingsListTile(
                 icon: const Icon(Icons.brightness_medium),
                 settingsLabel: Text(context.l10n.background),

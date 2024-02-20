@@ -69,9 +69,7 @@ class _BoardThumbnailState extends ConsumerState<BoardThumbnail> {
         enableCoordinates: false,
         animationDuration: const Duration(milliseconds: 150),
         pieceAssets: boardPrefs.pieceSet.assets,
-        colorScheme: boardPrefs.boardTheme == BoardTheme.system
-            ? BoardTheme.colorSchemeOf(context)
-            : boardPrefs.boardTheme.colors,
+        colorScheme: boardPrefs.boardTheme.colors,
       ),
     );
 
