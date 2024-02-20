@@ -192,17 +192,22 @@ abstract class Node {
     bool prepend = false,
   }) {
     final pos = nodeAt(path).position;
-    final alternativeCastlingMove = altCastles.containsValue(move.uci)
-        ? Move.fromUci(
-            altCastles.entries.firstWhere((e) => e.value == move.uci).key,
-          )
-        : null;
-    final (newPos, newSan) = pos.makeSan(alternativeCastlingMove ?? move);
+    final (newPos, newSan) = pos.makeSan(convertAltCastlingMove(move) ?? move);
     final newNode = Branch(
-      sanMove: SanMove(newSan, alternativeCastlingMove ?? move),
+      sanMove: SanMove(newSan, convertAltCastlingMove(move) ?? move),
       position: newPos,
     );
     return addNodeAt(path, newNode, prepend: prepend);
+  }
+
+  /// The function `convertAltCastlingMove` checks if a move is an alternative
+  /// castling move and converts it to the corresponding standard castling move if so.
+  Move? convertAltCastlingMove(Move move) {
+    return altCastles.containsValue(move.uci)
+        ? Move.fromUci(
+            altCastles.entries.firstWhere((e) => e.value == move.uci).key,
+          )
+        : move;
   }
 
   /// Deletes the node at the given path.
@@ -291,18 +296,14 @@ abstract class Node {
 
     while (stack.isNotEmpty) {
       final frame = stack.removeLast();
-      for (int childIdx = 0;
-          childIdx < frame.from.children.length;
-          childIdx++) {
+      for (int childIdx = 0; childIdx < frame.from.children.length; childIdx++) {
         final childFrom = frame.from.children[childIdx];
         final childTo = PgnChildNode(
           PgnNodeData(
             san: childFrom.sanMove.san,
-            startingComments: childFrom.startingComments
-                ?.map((c) => c.makeComment())
-                .toList(),
-            comments:
-                (childFrom.lichessAnalysisComments ?? childFrom.comments)?.map(
+            startingComments:
+                childFrom.startingComments?.map((c) => c.makeComment()).toList(),
+            comments: (childFrom.lichessAnalysisComments ?? childFrom.comments)?.map(
               (c) {
                 final eval = childFrom.eval;
                 final pgnEval = eval?.cp != null
@@ -466,9 +467,7 @@ class Root extends Node {
 
     while (stack.isNotEmpty) {
       final frame = stack.removeLast();
-      for (int childIdx = 0;
-          childIdx < frame.from.children.length;
-          childIdx++) {
+      for (int childIdx = 0; childIdx < frame.from.children.length; childIdx++) {
         final childFrom = frame.from.children[childIdx];
         final move = frame.to.position.parseSan(childFrom.data.san);
         if (move != null) {
@@ -480,13 +479,10 @@ class Root extends Node {
             sanMove: SanMove(childFrom.data.san, move),
             position: newPos,
             isHidden: hideVariations && childIdx > 0,
-            lichessAnalysisComments:
-                isLichessAnalysis ? comments?.toList() : null,
+            lichessAnalysisComments: isLichessAnalysis ? comments?.toList() : null,
             startingComments: isLichessAnalysis
                 ? null
-                : childFrom.data.startingComments
-                    ?.map(PgnComment.fromPgn)
-                    .toList(),
+                : childFrom.data.startingComments?.map(PgnComment.fromPgn).toList(),
             comments: isLichessAnalysis ? null : comments?.toList(),
             nags: childFrom.data.nags,
           );
@@ -571,22 +567,21 @@ class ViewBranch with _$ViewBranch implements ViewNode {
       startingComments?.any((c) => c.text?.isNotEmpty == true) == true;
 
   /// Has at least one non empty comment text.
-  bool get hasTextComment =>
-      comments?.any((c) => c.text?.isNotEmpty == true) == true;
+  bool get hasTextComment => comments?.any((c) => c.text?.isNotEmpty == true) == true;
 
   /// Has at least one non empty lichess analysis comment text.
   bool get hasLichessAnalysisTextComment =>
       lichessAnalysisComments?.any((c) => c.text?.isNotEmpty == true) == true;
 
   Duration? get clock {
-    final clockComment = (lichessAnalysisComments ?? comments)
-        ?.firstWhereOrNull((c) => c.clock != null);
+    final clockComment =
+        (lichessAnalysisComments ?? comments)?.firstWhereOrNull((c) => c.clock != null);
     return clockComment?.clock;
   }
 
   Duration? get elapsedMoveTime {
-    final clockComment = (lichessAnalysisComments ?? comments)
-        ?.firstWhereOrNull((c) => c.emt != null);
+    final clockComment =
+        (lichessAnalysisComments ?? comments)?.firstWhereOrNull((c) => c.emt != null);
     return clockComment?.emt;
   }
 

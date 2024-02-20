@@ -453,6 +453,59 @@ void main() {
         ),
       );
     });
+    group('convert alternative castling move', () {
+      void makeTestAltCastlingMove(String pgn, String alt1, String alt2) {
+        final root = Root.fromPgnGame(PgnGame.parsePgn(pgn));
+        final initialPath = root.mainlinePath;
+        final initialPng = root.makePgn();
+
+        final move = Move.fromUci(alt1);
+        expect(move, isNotNull);
+
+        final newMove = root.convertAltCastlingMove(move!);
+        expect(newMove, isNotNull);
+        expect(newMove, Move.fromUci(alt2));
+        expect(root.mainline.last.sanMove.move, newMove);
+
+        final previousUciPath = root.mainlinePath.penultimate;
+        final (newPath, isNewNode) = root.addMoveAt(previousUciPath, move);
+        expect(newPath, initialPath);
+        expect(isNewNode, isFalse);
+        expect(root.makePgn(), initialPng);
+      }
+
+      test('e1g1 -> e1h1', () {
+        makeTestAltCastlingMove(
+          '1. e4 e5 2. Nf3 Nf6 3. Bc4 Bc5 4. O-O',
+          'e1g1',
+          'e1h1',
+        );
+      });
+
+      test('e8g8 -> e8h8', () {
+        makeTestAltCastlingMove(
+          '1. e4 e5 2. Nf3 Nf6 3. Bc4 Bc5 4. O-O O-O',
+          'e8g8',
+          'e8h8',
+        );
+      });
+
+      test('e1c1 -> e1a1', () {
+        makeTestAltCastlingMove(
+          '1. d4 d5 2. Nc3 Nc6 3. Be3 Be6 4. Qd3 Qd6 5. O-O-O',
+          'e1c1',
+          'e1a1',
+        );
+      });
+
+      test('e8c8 -> e8a8', () {
+        makeTestAltCastlingMove(
+          '1. d4 d5 2. Nc3 Nc6 3. Be3 Be6 4. Qd3 Qd6 5. O-O-O O-O-O',
+          'e8c8',
+          'e8a8',
+        );
+      });
+    });
   });
 }
 
