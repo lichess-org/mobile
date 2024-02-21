@@ -354,10 +354,11 @@ class _ReuseClientService {
   /// Asks to close the client with the given key.
   ///
   /// If there are no more keys, it closes the client.
-  void close(UniqueKey key) {
+  Future<void> close(UniqueKey key) async {
+    await Future<void>.delayed(const Duration(milliseconds: 100));
     _clientKeys.remove(key);
     if (_clientKeys.isEmpty && _client != null) {
-      _logger.info('All users have closed the client. Closing it.');
+      _logger.info('All callers have closed the client, closing it.');
       _client!.close();
       _client = null;
     }
