@@ -85,8 +85,8 @@ class _Body extends ConsumerWidget {
                             Container(
                               width: 32,
                               color: c.isEven
-                                  ? BoardTheme.systemColors.darkSquare
-                                  : BoardTheme.systemColors.lightSquare,
+                                  ? BoardTheme.system.colors.darkSquare
+                                  : BoardTheme.system.colors.lightSquare,
                             ),
                         ],
                       ),
