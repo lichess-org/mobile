@@ -89,7 +89,7 @@ class OngoingGamePreview extends ConsumerWidget {
                 allowFromNow: true,
               ),
             ),
-          if (game.secondsLeft! > 0)
+          if (game.secondsLeft != null && game.secondsLeft! > 0)
             Text(
               game.isMyTurn
                   ? context.l10n.yourTurn
