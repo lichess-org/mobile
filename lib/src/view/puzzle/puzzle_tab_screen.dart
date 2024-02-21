@@ -135,7 +135,8 @@ class _Body extends ConsumerWidget {
           ],
         ),
       ),
-      if (session != null) ...[PuzzleDashboardWidget(), PuzzleHistoryWidget()],
+      PuzzleDashboardWidget(),
+      PuzzleHistoryWidget(),
     ];
 
     final tabletChildren = [
@@ -166,10 +167,8 @@ class _Body extends ConsumerWidget {
           Expanded(
             child: Column(
               children: [
-                if (session != null) ...[
-                  PuzzleDashboardWidget(),
-                  PuzzleHistoryWidget(),
-                ],
+                PuzzleDashboardWidget(),
+                PuzzleHistoryWidget(),
               ],
             ),
           ),
@@ -323,6 +322,9 @@ class PuzzleHistoryWidget extends ConsumerWidget {
     final asyncData = ref.watch(puzzleDashboardActivityProvider);
     return asyncData.when(
       data: (data) {
+        if (data == null) {
+          return const SizedBox.shrink();
+        }
         final (_, recentActivity) = data;
         if (recentActivity.isEmpty) {
           return ListSection(

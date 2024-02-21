@@ -79,9 +79,11 @@ Future<IMap<String, int>> savedOpeningBatches(
 }
 
 @riverpod
-Future<(PuzzleDashboard, IList<PuzzleHistoryEntry>)> puzzleDashboardActivity(
+Future<(PuzzleDashboard, IList<PuzzleHistoryEntry>)?> puzzleDashboardActivity(
   PuzzleDashboardActivityRef ref,
-) {
+) async {
+  final session = ref.watch(authSessionProvider);
+  if (session == null) return null;
   return ref.withAuthClientCacheFor(
     (client) {
       final repo = PuzzleRepository(client);

@@ -20,6 +20,9 @@ class PuzzleDashboardWidget extends ConsumerWidget {
 
     return puzzleDashboard.when(
       data: (data) {
+        if (data == null) {
+          return const SizedBox.shrink();
+        }
         final (dashboard, _) = data;
         final chartData =
             dashboard.themes.take(9).sortedBy((e) => e.theme.name).toList();

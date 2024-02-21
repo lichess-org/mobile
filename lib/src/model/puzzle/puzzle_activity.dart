@@ -28,6 +28,14 @@ class PuzzleActivity extends _$PuzzleActivity {
       _list.clear();
     });
     final data = await ref.watch(puzzleDashboardActivityProvider.future);
+    if (data == null) {
+      return const PuzzleActivityState(
+        historyByDay: {},
+        isLoading: false,
+        hasMore: false,
+        hasError: false,
+      );
+    }
     final (_, recentActivity) = data;
     _list.addAll(recentActivity);
     return PuzzleActivityState(
