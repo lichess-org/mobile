@@ -24,7 +24,7 @@ Future<PuzzleContext?> nextPuzzle(
 ) {
   final session = ref.watch(authSessionProvider);
 
-  return ref.withAuthClient((client) {
+  return ref.withClient((client) {
     final puzzleService = ref.read(puzzleServiceFactoryProvider)(
       client,
       queueLength: kPuzzleLocalQueueLength,
@@ -38,12 +38,12 @@ Future<PuzzleContext?> nextPuzzle(
 
 @riverpod
 Future<PuzzleStreakResponse> streak(StreakRef ref) {
-  return ref.withAuthClient((client) => PuzzleRepository(client).streak());
+  return ref.withClient((client) => PuzzleRepository(client).streak());
 }
 
 @riverpod
 Future<PuzzleStormResponse> storm(StormRef ref) {
-  return ref.withAuthClient((client) => PuzzleRepository(client).storm());
+  return ref.withClient((client) => PuzzleRepository(client).storm());
 }
 
 @riverpod
@@ -51,12 +51,12 @@ Future<Puzzle> puzzle(PuzzleRef ref, PuzzleId id) async {
   final puzzleStorage = ref.watch(puzzleStorageProvider);
   final puzzle = await puzzleStorage.fetch(puzzleId: id);
   if (puzzle != null) return puzzle;
-  return ref.withAuthClient((client) => PuzzleRepository(client).fetch(id));
+  return ref.withClient((client) => PuzzleRepository(client).fetch(id));
 }
 
 @riverpod
 Future<Puzzle> dailyPuzzle(DailyPuzzleRef ref) {
-  return ref.withAuthClientCacheFor(
+  return ref.withClientCacheFor(
     (client) => PuzzleRepository(client).daily(),
     const Duration(hours: 6),
   );
@@ -84,7 +84,7 @@ Future<(PuzzleDashboard, IList<PuzzleHistoryEntry>)?> puzzleDashboardActivity(
 ) async {
   final session = ref.watch(authSessionProvider);
   if (session == null) return null;
-  return ref.withAuthClientCacheFor(
+  return ref.withClientCacheFor(
     (client) {
       final repo = PuzzleRepository(client);
       return Future.wait([
@@ -105,7 +105,7 @@ Future<(PuzzleDashboard, IList<PuzzleHistoryEntry>)?> puzzleDashboardActivity(
 Future<StormDashboard?> stormDashboard(StormDashboardRef ref) async {
   final session = ref.watch(authSessionProvider);
   if (session == null) return null;
-  return ref.withAuthClientCacheFor(
+  return ref.withClientCacheFor(
     (client) => PuzzleRepository(client).stormDashboard(session.user.id),
     const Duration(minutes: 30),
   );
@@ -115,7 +115,7 @@ Future<StormDashboard?> stormDashboard(StormDashboardRef ref) async {
 Future<IMap<PuzzleThemeKey, PuzzleThemeData>> puzzleThemes(
   PuzzleThemesRef ref,
 ) {
-  return ref.withAuthClientCacheFor(
+  return ref.withClientCacheFor(
     (client) => PuzzleRepository(client).puzzleThemes(),
     const Duration(days: 1),
   );
@@ -123,7 +123,7 @@ Future<IMap<PuzzleThemeKey, PuzzleThemeData>> puzzleThemes(
 
 @riverpod
 Future<IList<PuzzleOpeningFamily>> puzzleOpenings(PuzzleOpeningsRef ref) {
-  return ref.withAuthClientCacheFor(
+  return ref.withClientCacheFor(
     (client) => PuzzleRepository(client).puzzleOpenings(),
     const Duration(days: 1),
   );

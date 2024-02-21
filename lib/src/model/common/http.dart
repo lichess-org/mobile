@@ -16,6 +16,7 @@ import 'package:http/http.dart'
         Response,
         StreamedResponse;
 import 'package:http/io_client.dart';
+import 'package:http/retry.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
@@ -60,17 +61,32 @@ Client httpClient(PackageInfo pInfo) {
 }
 
 @Riverpod(keepAlive: true)
-AuthClientFactory authClientFactory(AuthClientFactoryRef ref) {
-  return AuthClientFactory(ref);
+LichessClientFactory lichessClientFactory(LichessClientFactoryRef ref) {
+  return LichessClientFactory(ref);
 }
 
-class AuthClientFactory {
-  AuthClientFactory(this._ref);
+/// Factory for the default [Client] used to send requests to lichess server.
+///
+/// It creates a client that:
+/// - Retries just once, after 500ms, on 429 Too Many Requests.
+/// - Sets the Authorization header when a token has been stored.
+/// - Sets the user-agent header with the app version, build number, and device info.
+/// - Logs all requests and responses with status code >= 400.
+///
+/// This class should be overridden in tests to provide a mock client.
+class LichessClientFactory {
+  LichessClientFactory(this._ref);
 
-  final AuthClientFactoryRef _ref;
+  final LichessClientFactoryRef _ref;
 
   Client call() {
-    return AuthClient(httpClient(_ref.read(packageInfoProvider)), _ref);
+    // Retry just once, after 500ms, on 429 Too Many Requests.
+    // TODO consider throttling the requests, instead of retrying.
+    return RetryClient(
+      AuthClient(httpClient(_ref.read(packageInfoProvider)), _ref),
+      retries: 1,
+      when: (response) => response.statusCode == 429,
+    );
   }
 }
 
@@ -95,7 +111,7 @@ String userAgent(UserAgentRef ref) {
 class AuthClient extends BaseClient {
   AuthClient(this._inner, this._ref);
 
-  final AuthClientFactoryRef _ref;
+  final LichessClientFactoryRef _ref;
   final Client _inner;
 
   @override
@@ -338,7 +354,7 @@ class _ReuseClientService {
   /// Returns the client and a unique key to be used to close it later.
   ///
   /// If the client is null, it creates a new one.
-  (Client, UniqueKey) get(AuthClientFactory factory) {
+  (Client, UniqueKey) get(LichessClientFactory factory) {
     if (_client == null) {
       _logger.info('Creating a new client.');
     }
@@ -370,14 +386,14 @@ class _ReuseClientService {
 }
 
 extension ClientWidgetRefExtension on WidgetRef {
-  /// Runs [fn] with an [AuthClient].
+  /// Runs [fn] with a [Client] configured to send requests to lichess server.
   ///
   /// It handles the creation and closing of the client, while trying to reuse
   /// the same client for multiple requests at the same time.
   /// Will try to close the client after [fn] completes.
-  Future<T> withAuthClient<T>(Future<T> Function(Client) fn) async {
+  Future<T> withClient<T>(Future<T> Function(Client) fn) async {
     final (client, key) =
-        _ReuseClientService.instance.get(read(authClientFactoryProvider));
+        _ReuseClientService.instance.get(read(lichessClientFactoryProvider));
     try {
       return await fn(client);
     } finally {
@@ -387,15 +403,15 @@ extension ClientWidgetRefExtension on WidgetRef {
 }
 
 extension ClientRefExtension on Ref {
-  /// Runs [fn] with an [AuthClient].
+  /// Runs [fn] with an [Client] configured to send requests to lichess server.
   ///
   /// It handles the creation and closing of the client, while trying to reuse
   /// the same client for multiple requests at the same time.
   /// Will try to close the client after [fn] completes, or when the provider is
   /// disposed.
-  Future<T> withAuthClient<T>(Future<T> Function(Client) fn) async {
+  Future<T> withClient<T>(Future<T> Function(Client) fn) async {
     final (client, key) =
-        _ReuseClientService.instance.get(read(authClientFactoryProvider));
+        _ReuseClientService.instance.get(read(lichessClientFactoryProvider));
     onDispose(() => _ReuseClientService.instance.close(key));
     try {
       return await fn(client);
@@ -406,7 +422,9 @@ extension ClientRefExtension on Ref {
 }
 
 extension ClientAutoDisposeRefExtension<T> on AutoDisposeRef<T> {
-  /// Runs [fn] with an [AuthClient] and keeps the provider alive for [duration].
+  /// Runs [fn] with an [Client] configured to send requests to lichess server,
+  /// and keeps the provider alive for [duration].
+  ///
   /// This is primarily used for caching network requests in a [FutureProvider].
   ///
   /// It handles the creation and closing of the client, while trying to reuse
@@ -416,14 +434,14 @@ extension ClientAutoDisposeRefExtension<T> on AutoDisposeRef<T> {
   ///
   /// If [fn] throws with a [SocketException], the provider is not kept alive, this
   /// allows to retry the request later.
-  Future<U> withAuthClientCacheFor<U>(
+  Future<U> withClientCacheFor<U>(
     Future<U> Function(Client) fn,
     Duration duration,
   ) async {
     final link = keepAlive();
     final timer = Timer(duration, link.close);
     final (client, key) =
-        _ReuseClientService.instance.get(read(authClientFactoryProvider));
+        _ReuseClientService.instance.get(read(lichessClientFactoryProvider));
     onDispose(() {
       _ReuseClientService.instance.close(key);
       timer.cancel();

@@ -14,7 +14,7 @@ import 'package:lichess_mobile/src/view/puzzle/storm_screen.dart';
 import '../../test_app.dart';
 import '../../test_utils.dart';
 
-class FakeClientFactory implements AuthClientFactory {
+class FakeClientFactory implements LichessClientFactory {
   @override
   http.Client call() {
     return MockClient((request) {
@@ -38,7 +38,7 @@ void main() {
           home: const StormScreen(),
           overrides: [
             stormProvider.overrideWith((ref) => mockStromRun),
-            authClientFactoryProvider.overrideWithValue(FakeClientFactory()),
+            lichessClientFactoryProvider.overrideWithValue(FakeClientFactory()),
           ],
         );
 
@@ -58,7 +58,7 @@ void main() {
           home: const StormScreen(),
           overrides: [
             stormProvider.overrideWith((ref) => mockStromRun),
-            authClientFactoryProvider.overrideWithValue(FakeClientFactory()),
+            lichessClientFactoryProvider.overrideWithValue(FakeClientFactory()),
           ],
         );
 
@@ -81,7 +81,7 @@ void main() {
           home: const StormScreen(),
           overrides: [
             stormProvider.overrideWith((ref) => mockStromRun),
-            authClientFactoryProvider.overrideWithValue(FakeClientFactory()),
+            lichessClientFactoryProvider.overrideWithValue(FakeClientFactory()),
           ],
         );
 
@@ -135,7 +135,7 @@ void main() {
         home: const StormScreen(),
         overrides: [
           stormProvider.overrideWith((ref) => mockStromRun),
-          authClientFactoryProvider.overrideWithValue(FakeClientFactory()),
+          lichessClientFactoryProvider.overrideWithValue(FakeClientFactory()),
         ],
       );
 
@@ -179,7 +179,7 @@ void main() {
         home: const StormScreen(),
         overrides: [
           stormProvider.overrideWith((ref) => mockStromRun),
-          authClientFactoryProvider.overrideWithValue(FakeClientFactory()),
+          lichessClientFactoryProvider.overrideWithValue(FakeClientFactory()),
         ],
       );
 

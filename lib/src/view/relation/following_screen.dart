@@ -99,7 +99,7 @@ class _Body extends ConsumerWidget {
                                 );
                               });
                               try {
-                                await ref.withAuthClient(
+                                await ref.withClient(
                                   (client) => RelationRepository(client)
                                       .unfollow(user.username),
                                 );

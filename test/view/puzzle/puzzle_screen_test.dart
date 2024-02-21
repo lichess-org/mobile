@@ -27,7 +27,7 @@ class MockPuzzleBatchStorage extends Mock implements PuzzleBatchStorage {}
 
 class MockPuzzleStorage extends Mock implements PuzzleStorage {}
 
-class FakeClientFactory implements AuthClientFactory {
+class FakeClientFactory implements LichessClientFactory {
   FakeClientFactory(this._client);
 
   final http.Client _client;
@@ -168,7 +168,7 @@ void main() {
             ),
           ),
           overrides: [
-            authClientFactoryProvider.overrideWith((ref) {
+            lichessClientFactoryProvider.overrideWith((ref) {
               return FakeClientFactory(mockClient);
             }),
             puzzleBatchStorageProvider.overrideWith((ref) {
@@ -280,7 +280,7 @@ void main() {
             ),
           ),
           overrides: [
-            authClientFactoryProvider.overrideWith((ref) {
+            lichessClientFactoryProvider.overrideWith((ref) {
               return FakeClientFactory(mockClient);
             }),
             puzzleBatchStorageProvider.overrideWith((ref) {
@@ -381,7 +381,7 @@ void main() {
             ),
           ),
           overrides: [
-            authClientFactoryProvider.overrideWith((ref) {
+            lichessClientFactoryProvider.overrideWith((ref) {
               return FakeClientFactory(mockClient);
             }),
             puzzleBatchStorageProvider.overrideWith((ref) {

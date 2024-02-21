@@ -11,7 +11,7 @@ import 'package:lichess_mobile/src/widgets/user_list_tile.dart';
 import '../../test_app.dart';
 import '../../test_utils.dart';
 
-class FakeClientFactory implements AuthClientFactory {
+class FakeClientFactory implements LichessClientFactory {
   @override
   http.Client call() {
     return MockClient((request) {
@@ -35,7 +35,7 @@ void main() {
           tester,
           home: const SearchScreen(),
           overrides: [
-            authClientFactoryProvider.overrideWithValue(FakeClientFactory()),
+            lichessClientFactoryProvider.overrideWithValue(FakeClientFactory()),
           ],
         );
 
@@ -75,7 +75,7 @@ void main() {
           tester,
           home: const SearchScreen(),
           overrides: [
-            authClientFactoryProvider.overrideWithValue(FakeClientFactory()),
+            lichessClientFactoryProvider.overrideWithValue(FakeClientFactory()),
           ],
         );
 

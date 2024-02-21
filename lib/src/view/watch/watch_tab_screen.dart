@@ -34,7 +34,7 @@ const _featuredChannelsSet = ISetConst({
 
 @riverpod
 Future<IList<TvGameSnapshot>> featuredChannels(FeaturedChannelsRef ref) async {
-  return ref.withAuthClientCacheFor(
+  return ref.withClientCacheFor(
     (client) async {
       final channels = await TvRepository(client).channels();
       return channels.entries

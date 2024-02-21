@@ -11,7 +11,7 @@ import '../../model/auth/fake_auth_repository.dart';
 import '../../test_app.dart';
 import '../../test_utils.dart';
 
-class FakeClientFactory implements AuthClientFactory {
+class FakeClientFactory implements LichessClientFactory {
   @override
   http.Client call() {
     return MockClient((request) {
@@ -38,7 +38,7 @@ void main() {
             perf: testPerf,
           ),
           overrides: [
-            authClientFactoryProvider.overrideWithValue(FakeClientFactory()),
+            lichessClientFactoryProvider.overrideWithValue(FakeClientFactory()),
           ],
         );
 
@@ -68,7 +68,7 @@ void main() {
             perf: testPerf,
           ),
           overrides: [
-            authClientFactoryProvider.overrideWithValue(FakeClientFactory()),
+            lichessClientFactoryProvider.overrideWithValue(FakeClientFactory()),
           ],
         );
 

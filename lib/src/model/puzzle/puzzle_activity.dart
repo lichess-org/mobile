@@ -68,7 +68,7 @@ class PuzzleActivity extends _$PuzzleActivity {
     if (_list.length < _maxPuzzles) {
       state = AsyncData(currentVal.copyWith(isLoading: true));
       Result.capture(
-        ref.withAuthClient(
+        ref.withClient(
           (client) => PuzzleRepository(client)
               .puzzleActivity(_nbPerPage, before: _list.last.date),
         ),

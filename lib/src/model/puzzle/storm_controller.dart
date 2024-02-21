@@ -134,7 +134,7 @@ class StormController extends _$StormController {
 
     final session = ref.read(authSessionProvider);
     if (session != null) {
-      final res = await ref.withAuthClient(
+      final res = await ref.withClient(
         (client) => Result.capture(
           PuzzleRepository(client)
               .postStormRun(stats)

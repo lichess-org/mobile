@@ -9,7 +9,7 @@ part 'relation_repository_providers.g.dart';
 
 @riverpod
 Future<IList<User>> following(FollowingRef ref) async {
-  return ref.withAuthClientCacheFor(
+  return ref.withClientCacheFor(
     (client) => RelationRepository(client).getFollowing(),
     const Duration(hours: 1),
   );

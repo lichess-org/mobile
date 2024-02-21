@@ -38,7 +38,7 @@ class CreateGameService {
     final completer = Completer<GameFullId>()..future.whenComplete(_close);
 
     _pendingGameConnection = (
-      ref.read(authClientFactoryProvider)(),
+      ref.read(lichessClientFactoryProvider)(),
       stream.listen((event) {
         if (event.topic == 'redirect') {
           final data = event.data as Map<String, dynamic>;
@@ -81,7 +81,7 @@ class CreateGameService {
   Future<void> newCorrespondenceGame(GameSeek seek) async {
     _log.info('Creating new correspondence game');
 
-    await ref.withAuthClient(
+    await ref.withClient(
       (client) => LobbyRepository(client).createSeek(
         seek,
         sri: ref.read(socketClientProvider).sri,

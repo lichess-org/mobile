@@ -51,7 +51,7 @@ class LiveTvChannels extends _$LiveTvChannels {
     _socketReadySubscription?.cancel();
 
     final repoGames =
-        await ref.withAuthClient((client) => TvRepository(client).channels());
+        await ref.withClient((client) => TvRepository(client).channels());
 
     final (stream, readyStream) =
         _socket.connect(Uri(path: kDefaultSocketRoute));

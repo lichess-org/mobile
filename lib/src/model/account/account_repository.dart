@@ -26,7 +26,7 @@ Future<User?> account(AccountRef ref) async {
   final session = ref.watch(authSessionProvider);
   if (session == null) return null;
 
-  return ref.withAuthClientCacheFor(
+  return ref.withClientCacheFor(
     (client) => AccountRepository(client).getProfile(),
     const Duration(hours: 1),
   );
@@ -41,7 +41,7 @@ Future<LightUser?> accountUser(AccountUserRef ref) async {
 Future<IList<UserActivity>> accountActivity(AccountActivityRef ref) async {
   final session = ref.watch(authSessionProvider);
   if (session == null) return IList();
-  return ref.withAuthClientCacheFor(
+  return ref.withClientCacheFor(
     (client) => UserRepository(client).getActivity(session.user.id),
     const Duration(hours: 1),
   );
@@ -53,7 +53,7 @@ Future<IList<LightArchivedGame>> accountRecentGames(
 ) async {
   final session = ref.watch(authSessionProvider);
   if (session == null) return IList();
-  return ref.withAuthClientCacheFor(
+  return ref.withClientCacheFor(
     (client) => GameRepository(client).getRecentGames(session.user.id),
     const Duration(hours: 1),
   );
@@ -64,7 +64,7 @@ Future<IList<OngoingGame>> ongoingGames(OngoingGamesRef ref) async {
   final session = ref.watch(authSessionProvider);
   if (session == null) return IList();
 
-  return ref.withAuthClientCacheFor(
+  return ref.withClientCacheFor(
     (client) => AccountRepository(client).getOngoingGames(),
     const Duration(hours: 1),
   );

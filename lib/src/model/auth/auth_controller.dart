@@ -21,7 +21,7 @@ class AuthController extends _$AuthController {
 
     try {
       final session = await ref
-          .withAuthClient((client) => AuthRepository(client, appAuth).signIn());
+          .withClient((client) => AuthRepository(client, appAuth).signIn());
 
       ref.read(authSessionProvider.notifier).update(session);
       ref.read(notificationServiceProvider).registerDevice();
@@ -39,7 +39,7 @@ class AuthController extends _$AuthController {
     final appAuth = ref.read(appAuthProvider);
 
     try {
-      await ref.withAuthClient(
+      await ref.withClient(
         (client) => AuthRepository(client, appAuth).signOut(),
       );
       ref.read(notificationServiceProvider).unregister();

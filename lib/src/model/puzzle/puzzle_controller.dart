@@ -215,7 +215,7 @@ class PuzzleController extends _$PuzzleController {
         .setDifficulty(difficulty);
 
     // ignore: avoid_manual_providers_as_generated_provider_dependency
-    final nextPuzzle = await ref.withAuthClient(
+    final nextPuzzle = await ref.withClient(
       (client) => _service(client).resetBatch(
         userId: initialContext.userId,
         angle: initialContext.angle,
@@ -239,7 +239,7 @@ class PuzzleController extends _$PuzzleController {
     if (initialContext.userId != null) {
       final streak = state.streak?.index;
       if (streak != null && streak > 0) {
-        ref.withAuthClient(
+        ref.withClient(
           (client) => _repository(client).postStreakRun(streak),
         );
       }
@@ -285,7 +285,7 @@ class PuzzleController extends _$PuzzleController {
   FutureResult<PuzzleContext?> _fetchNextStreakPuzzle(PuzzleStreak streak) {
     return streak.nextId != null
         ? Result.capture(
-            ref.withAuthClient(
+            ref.withClient(
               (client) => _repository(client).fetch(streak.nextId!).then(
                     (puzzle) => PuzzleContext(
                       angle: const PuzzleTheme(PuzzleThemeKey.mix),
@@ -332,7 +332,7 @@ class PuzzleController extends _$PuzzleController {
     final soundService = ref.read(soundServiceProvider);
 
     if (state.streak == null) {
-      final next = await ref.withAuthClient(
+      final next = await ref.withClient(
         (client) => _service(client).solve(
           userId: initialContext.userId,
           angle: initialContext.angle,

@@ -12,7 +12,7 @@ import '../../model/auth/fake_session_storage.dart';
 import '../../test_app.dart';
 import '../../test_utils.dart';
 
-class FakeClientFactory implements AuthClientFactory {
+class FakeClientFactory implements LichessClientFactory {
   @override
   http.Client call() {
     return MockClient((request) {
@@ -71,7 +71,7 @@ void main() {
           home: const SettingsScreen(),
           userSession: fakeSession,
           overrides: [
-            authClientFactoryProvider.overrideWithValue(FakeClientFactory()),
+            lichessClientFactoryProvider.overrideWithValue(FakeClientFactory()),
           ],
         );
 

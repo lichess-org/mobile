@@ -839,7 +839,7 @@ class GameController extends _$GameController {
 
   FutureResult<ArchivedGame> _getPostGameData() {
     return Result.capture(
-      ref.withAuthClient(
+      ref.withClient(
         (client) => GameRepository(client).getGame(gameFullId.gameId),
       ),
     );

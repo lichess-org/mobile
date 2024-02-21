@@ -48,7 +48,7 @@ class CorrespondenceService {
     final storedOngoingGames =
         await _storage.fetchOngoingGames(_session?.user.id);
 
-    ref.withAuthClient((client) async {
+    ref.withClient((client) async {
       try {
         final accountRepository = AccountRepository(client);
         final gameRepository = GameRepository(client);

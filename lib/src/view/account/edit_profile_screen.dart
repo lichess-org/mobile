@@ -270,7 +270,7 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                               return value == null;
                             });
                             final future = Result.capture(
-                              ref.withAuthClient(
+                              ref.withClient(
                                 (client) =>
                                     AccountRepository(client).saveProfile(
                                   _formData.map(

@@ -17,7 +17,7 @@ part 'lobby_repository.g.dart';
 Future<IList<CorrespondenceChallenge>> correspondenceChallenges(
   CorrespondenceChallengesRef ref,
 ) {
-  final client = ref.read(authClientFactoryProvider)();
+  final client = ref.read(lichessClientFactoryProvider)();
   ref.onDispose(client.close);
 
   final lobbyRepository = LobbyRepository(client);

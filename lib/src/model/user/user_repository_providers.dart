@@ -15,7 +15,7 @@ const _kAutoCompleteDebounceTimer = Duration(milliseconds: 300);
 
 @riverpod
 Future<User> user(UserRef ref, {required UserId id}) async {
-  return ref.withAuthClient(
+  return ref.withClient(
     (client) => UserRepository(client).getUser(id),
   );
 }
@@ -25,7 +25,7 @@ Future<(User, UserStatus)> userAndStatus(
   UserAndStatusRef ref, {
   required UserId id,
 }) async {
-  return ref.withAuthClient(
+  return ref.withClient(
     (client) async {
       final repo = UserRepository(client);
       return Future.wait(
@@ -47,7 +47,7 @@ Future<UserPerfStats> userPerfStats(
   required UserId id,
   required Perf perf,
 }) async {
-  return ref.withAuthClient(
+  return ref.withClient(
     (client) => UserRepository(client).getPerfStats(id, perf),
   );
 }
@@ -57,14 +57,14 @@ Future<IList<UserStatus>> userStatuses(
   UserStatusesRef ref, {
   required ISet<UserId> ids,
 }) async {
-  return ref.withAuthClient(
+  return ref.withClient(
     (client) => UserRepository(client).getUsersStatuses(ids),
   );
 }
 
 @riverpod
 Future<IList<Streamer>> liveStreamers(LiveStreamersRef ref) async {
-  return ref.withAuthClientCacheFor(
+  return ref.withClientCacheFor(
     (client) => UserRepository(client).getLiveStreamers(),
     const Duration(minutes: 1),
   );
@@ -72,7 +72,7 @@ Future<IList<Streamer>> liveStreamers(LiveStreamersRef ref) async {
 
 @riverpod
 Future<IMap<Perf, LeaderboardUser>> top1(Top1Ref ref) async {
-  return ref.withAuthClientCacheFor(
+  return ref.withClientCacheFor(
     (client) => UserRepository(client).getTop1(),
     const Duration(hours: 12),
   );
@@ -80,7 +80,7 @@ Future<IMap<Perf, LeaderboardUser>> top1(Top1Ref ref) async {
 
 @riverpod
 Future<Leaderboard> leaderboard(LeaderboardRef ref) async {
-  return ref.withAuthClientCacheFor(
+  return ref.withClientCacheFor(
     (client) => UserRepository(client).getLeaderboard(),
     const Duration(hours: 2),
   );
@@ -99,7 +99,7 @@ Future<IList<LightUser>> autoCompleteUser(
     throw Exception('Cancelled');
   }
 
-  return ref.withAuthClient(
+  return ref.withClient(
     (client) => UserRepository(client).autocompleteUser(term),
   );
 }

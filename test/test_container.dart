@@ -35,7 +35,7 @@ class MockHttpClient extends Mock implements http.Client {}
 
 const shouldLog = false;
 
-class FakeClientFactory implements AuthClientFactory {
+class FakeClientFactory implements LichessClientFactory {
   @override
   http.Client call() {
     return MockHttpClient();
@@ -64,7 +64,7 @@ Future<ProviderContainer> makeContainer({
 
   final container = ProviderContainer(
     overrides: [
-      authClientFactoryProvider.overrideWithValue(FakeClientFactory()),
+      lichessClientFactoryProvider.overrideWithValue(FakeClientFactory()),
       crashlyticsProvider.overrideWithValue(FakeCrashlytics()),
       notificationServiceProvider.overrideWithValue(FakeNotificationService()),
       soundServiceProvider.overrideWithValue(FakeSoundService()),

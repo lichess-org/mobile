@@ -9,7 +9,7 @@ import 'package:lichess_mobile/src/view/user/leaderboard_widget.dart';
 import '../../test_app.dart';
 import '../../test_utils.dart';
 
-class FakeClientFactory implements AuthClientFactory {
+class FakeClientFactory implements LichessClientFactory {
   @override
   http.Client call() {
     return MockClient((request) {
@@ -31,7 +31,7 @@ void main() {
           tester,
           home: Column(children: [LeaderboardWidget()]),
           overrides: [
-            authClientFactoryProvider.overrideWithValue(FakeClientFactory()),
+            lichessClientFactoryProvider.overrideWithValue(FakeClientFactory()),
           ],
         );
 

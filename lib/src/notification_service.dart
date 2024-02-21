@@ -48,7 +48,7 @@ class NotificationService {
       return;
     }
     try {
-      await ref.withAuthClient(
+      await ref.withClient(
         (client) => client
             .post(Uri.parse('$kLichessHost/mobile/register/firebase/$token')),
       );
@@ -64,7 +64,7 @@ class NotificationService {
       return;
     }
     try {
-      await ref.withAuthClient(
+      await ref.withClient(
         (client) => client.post(Uri.parse('$kLichessHost/mobile/unregister')),
       );
     } catch (e, st) {

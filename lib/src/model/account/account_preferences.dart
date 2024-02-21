@@ -64,7 +64,7 @@ class AccountPreferences extends _$AccountPreferences {
     }
 
     try {
-      return ref.withAuthClient(
+      return ref.withClient(
         (client) => AccountRepository(client).getPreferences(),
       );
     } catch (e) {
@@ -91,7 +91,7 @@ class AccountPreferences extends _$AccountPreferences {
 
   Future<void> _setPref<T>(String key, AccountPref<T> value) async {
     await Future<void>.delayed(const Duration(milliseconds: 200));
-    await ref.withAuthClient(
+    await ref.withClient(
       (client) => AccountRepository(client).setPreference(key, value),
     );
     ref.invalidateSelf();

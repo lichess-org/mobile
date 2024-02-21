@@ -36,7 +36,7 @@ class MockSoundPool extends Mock implements Soundpool {}
 
 class MockDatabase extends Mock implements Database {}
 
-class FakeClientFactory implements AuthClientFactory {
+class FakeClientFactory implements LichessClientFactory {
   @override
   http.Client call() {
     return MockClient((request) async {
@@ -83,7 +83,7 @@ Future<Widget> buildTestApp(
   return ProviderScope(
     overrides: [
       // ignore: scoped_providers_should_specify_dependencies
-      authClientFactoryProvider.overrideWithValue(FakeClientFactory()),
+      lichessClientFactoryProvider.overrideWithValue(FakeClientFactory()),
       // ignore: scoped_providers_should_specify_dependencies
       showRatingsPrefProvider.overrideWith((ref) {
         return true;

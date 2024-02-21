@@ -10,7 +10,7 @@ part 'game_repository_providers.g.dart';
 
 @riverpod
 Future<ArchivedGame> archivedGame(ArchivedGameRef ref, {required GameId id}) {
-  return ref.withAuthClient(
+  return ref.withClient(
     (client) => GameRepository(client).getGame(id),
   );
 }
@@ -20,7 +20,7 @@ Future<IList<LightArchivedGame>> gamesById(
   GamesByIdRef ref, {
   required ISet<GameId> ids,
 }) {
-  return ref.withAuthClient(
+  return ref.withClient(
     (client) => GameRepository(client).getGamesByIds(ids),
   );
 }

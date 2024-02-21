@@ -63,7 +63,7 @@ class TvController extends _$TvController {
       orientation = game.$2;
     } else {
       final channels =
-          await ref.withAuthClient((client) => TvRepository(client).channels());
+          await ref.withClient((client) => TvRepository(client).channels());
       final channelGame = channels[channel]!;
       id = channelGame.id;
       orientation = channelGame.side ?? Side.white;

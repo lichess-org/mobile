@@ -8,7 +8,7 @@ import 'package:lichess_mobile/src/view/user/leaderboard_screen.dart';
 import '../../test_app.dart';
 import '../../test_utils.dart';
 
-class FakeClientFactory implements AuthClientFactory {
+class FakeClientFactory implements LichessClientFactory {
   @override
   http.Client call() {
     return MockClient((request) {
@@ -30,7 +30,7 @@ void main() {
         final app = await buildTestApp(
           tester,
           overrides: [
-            authClientFactoryProvider.overrideWithValue(FakeClientFactory()),
+            lichessClientFactoryProvider.overrideWithValue(FakeClientFactory()),
           ],
           home: const LeaderboardScreen(),
         );

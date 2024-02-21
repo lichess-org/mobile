@@ -31,7 +31,7 @@ Future<IList<LightArchivedGame>> _userRecentGames(
   _UserRecentGamesRef ref, {
   required UserId userId,
 }) {
-  return ref.withAuthClientCacheFor(
+  return ref.withClientCacheFor(
     (client) => GameRepository(client).getRecentGames(userId),
     // cache is important because the associated widget is in a [ListView] and
     // the provider may be instanciated multiple times in a short period of time

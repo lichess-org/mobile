@@ -74,7 +74,7 @@ class ServerAnalysisService {
     );
 
     try {
-      await ref.withAuthClient(
+      await ref.withClient(
         (client) => GameRepository(client).requestServerAnalysis(id.gameId),
       );
     } catch (e) {

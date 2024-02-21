@@ -22,7 +22,7 @@ class GameShareService {
 
   /// Fetches the raw PGN of a game and launches the share dialog.
   Future<void> rawPgn(GameId id) async {
-    final resp = await _ref.withAuthClient(
+    final resp = await _ref.withClient(
       (client) => client
           .get(
             Uri.parse(
@@ -39,7 +39,7 @@ class GameShareService {
 
   /// Fetches the annotated PGN of a game and launches the share dialog.
   Future<void> annotatedPgn(GameId id) async {
-    final resp = await _ref.withAuthClient(
+    final resp = await _ref.withClient(
       (client) => client
           .get(
             Uri.parse(
@@ -63,7 +63,7 @@ class GameShareService {
   ) async {
     final boardTheme = _ref.read(boardPreferencesProvider).boardTheme;
     final pieceTheme = _ref.read(boardPreferencesProvider).pieceSet;
-    final resp = await _ref.withAuthClient(
+    final resp = await _ref.withClient(
       (client) => client
           .get(
             Uri.parse(
@@ -84,7 +84,7 @@ class GameShareService {
   Future<void> gameGif(GameId id, Side orientation) async {
     final boardTheme = _ref.read(boardPreferencesProvider).boardTheme;
     final pieceTheme = _ref.read(boardPreferencesProvider).pieceSet;
-    final resp = await _ref.withAuthClient(
+    final resp = await _ref.withClient(
       (client) => client
           .get(
             Uri.parse(

@@ -26,7 +26,7 @@ Future<IList<UserActivity>> _userActivity(
   _UserActivityRef ref, {
   required UserId id,
 }) async {
-  return ref.withAuthClientCacheFor(
+  return ref.withClientCacheFor(
     (client) => UserRepository(client).getActivity(id),
     // cache is important because the associated widget is in a [ListView] and
     // the provider may be instanciated multiple times in a short period of time
