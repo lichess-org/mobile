@@ -192,12 +192,22 @@ abstract class Node {
     bool prepend = false,
   }) {
     final pos = nodeAt(path).position;
-    final (newPos, newSan) = pos.makeSan(move);
+    final (newPos, newSan) = pos.makeSan(convertAltCastlingMove(move) ?? move);
     final newNode = Branch(
-      sanMove: SanMove(newSan, move),
+      sanMove: SanMove(newSan, convertAltCastlingMove(move) ?? move),
       position: newPos,
     );
     return addNodeAt(path, newNode, prepend: prepend);
+  }
+
+  /// The function `convertAltCastlingMove` checks if a move is an alternative
+  /// castling move and converts it to the corresponding standard castling move if so.
+  Move? convertAltCastlingMove(Move move) {
+    return altCastles.containsValue(move.uci)
+        ? Move.fromUci(
+            altCastles.entries.firstWhere((e) => e.value == move.uci).key,
+          )
+        : move;
   }
 
   /// Deletes the node at the given path.
