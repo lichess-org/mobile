@@ -357,53 +357,6 @@ extension ClientExtension on Client {
   }
 }
 
-/// A service that reuses the same http client for multiple requests at the same
-/// time, and closes it when there are no more pending requests.
-///
-/// This only work with [AuthClient] because it is only useful when sending
-/// requests to lichess server.
-class _ReuseClientService {
-  _ReuseClientService._();
-
-  static final instance = _ReuseClientService._();
-
-  Client? _client;
-  List<UniqueKey> _clientKeys = [];
-
-  /// Returns the client and a unique key to be used to close it later.
-  ///
-  /// If the client is null, it creates a new one.
-  (Client, UniqueKey) get(LichessClientFactory factory) {
-    if (_client == null) {
-      _logger.info('Creating a new client.');
-    }
-    if (_client == null) {
-      _client = factory();
-      _clientKeys = [];
-    }
-    final key = UniqueKey();
-    _clientKeys.add(key);
-    return (_client!, key);
-  }
-
-  /// Asks to close the client with the given key.
-  ///
-  /// If there are no more keys, it closes the client.
-  Future<void> close(UniqueKey key) async {
-    // give some time for other requests to reuse the client, unless we are
-    // running tests, as we don't want the timer to interfere with them.
-    if (!Platform.environment.containsKey('FLUTTER_TEST')) {
-      await Future<void>.delayed(const Duration(milliseconds: 100));
-    }
-    _clientKeys.remove(key);
-    if (_clientKeys.isEmpty && _client != null) {
-      _logger.info('All callers have closed the client, closing it.');
-      _client!.close();
-      _client = null;
-    }
-  }
-}
-
 extension ClientWidgetRefExtension on WidgetRef {
   /// Runs [fn] with a [Client] configured to send requests to lichess server.
   ///
@@ -472,6 +425,50 @@ extension ClientAutoDisposeRefExtension<T> on AutoDisposeRef<T> {
       rethrow;
     } finally {
       _ReuseClientService.instance.close(key);
+    }
+  }
+}
+
+/// A service that reuses the same http client for multiple requests at the same
+/// time, and closes it when there are no more pending requests.
+class _ReuseClientService {
+  _ReuseClientService._();
+
+  static final instance = _ReuseClientService._();
+
+  Client? _client;
+  List<UniqueKey> _clientKeys = [];
+
+  /// Returns the client and a unique key to be used to close it later.
+  ///
+  /// If the client is null, it creates a new one.
+  (Client, UniqueKey) get(LichessClientFactory factory) {
+    if (_client == null) {
+      _logger.info('Creating a new client.');
+    }
+    if (_client == null) {
+      _client = factory();
+      _clientKeys = [];
+    }
+    final key = UniqueKey();
+    _clientKeys.add(key);
+    return (_client!, key);
+  }
+
+  /// Asks to close the client with the given key.
+  ///
+  /// If there are no more keys, it closes the client.
+  Future<void> close(UniqueKey key) async {
+    // give some time for other requests to reuse the client, unless we are
+    // running tests, as we don't want the timer to interfere with them.
+    if (!Platform.environment.containsKey('FLUTTER_TEST')) {
+      await Future<void>.delayed(const Duration(milliseconds: 100));
+    }
+    _clientKeys.remove(key);
+    if (_clientKeys.isEmpty && _client != null) {
+      _logger.info('All callers have closed the client, closing it.');
+      _client!.close();
+      _client = null;
     }
   }
 }
