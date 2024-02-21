@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:chessground/chessground.dart' hide BoardTheme;
-import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/db/shared_preferences.dart';
 import 'package:lichess_mobile/src/utils/color_palette.dart';
@@ -200,40 +199,6 @@ enum BoardTheme {
   /// Get the [BoardColorScheme] based on system colors on Android 12+.
   ///
   /// If the system colors are not available, the default brown theme is used.
-  static BoardColorScheme get systemColors {
-    final corePalette = getCorePalette();
-    if (corePalette == null) {
-      return brown.colors;
-    }
-    final darkSquare = Color(corePalette.secondary.get(60));
-    final lightSquare = Color(corePalette.primary.get(95));
-    return BoardColorScheme(
-      darkSquare: darkSquare,
-      lightSquare: lightSquare,
-      background: SolidColorBackground(
-        lightSquare: lightSquare,
-        darkSquare: darkSquare,
-      ),
-      whiteCoordBackground: SolidColorBackground(
-        lightSquare: lightSquare,
-        darkSquare: darkSquare,
-        coordinates: true,
-      ),
-      blackCoordBackground: SolidColorBackground(
-        lightSquare: lightSquare,
-        darkSquare: darkSquare,
-        coordinates: true,
-        orientation: Side.black,
-      ),
-      lastMove: HighlightDetails(
-        solidColor: Color(corePalette.tertiary.get(80)).withOpacity(0.8),
-      ),
-      selected: HighlightDetails(
-        solidColor: Color(corePalette.tertiary.get(80)).withOpacity(0.6),
-      ),
-      validMoves: Color(corePalette.neutral.get(60)).withOpacity(0.45),
-      validPremoves:
-          Color(corePalette.neutralVariant.get(60)).withOpacity(0.45),
-    );
-  }
+  static BoardColorScheme get systemColors =>
+      getBoardColorScheme() ?? BoardColorScheme.brown;
 }
