@@ -358,7 +358,10 @@ class PuzzleHistoryWidget extends ConsumerWidget {
         debugPrint(
           'SEVERE: [PuzzleHistoryWidget] could not load puzzle history',
         );
-        return const Center(child: Text('Could not load Puzzle History'));
+        return Padding(
+          padding: Styles.bodySectionPadding,
+          child: const Text('Could not load Puzzle history.'),
+        );
       },
       loading: () => Shimmer(
         child: ShimmerLoading(
