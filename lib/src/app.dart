@@ -98,14 +98,10 @@ class _AppState extends ConsumerState<Application> {
     );
     final brightness = ref.watch(currentBrightnessProvider);
     final boardTheme = ref.watch(
-      boardPreferencesProvider.select(
-        (state) => state.boardTheme,
-      ),
+      boardPreferencesProvider.select((state) => state.boardTheme),
     );
-    final colorPalette = ref.watch(
-      generalPreferencesProvider.select(
-        (state) => state.colorPalette,
-      ),
+    final hasSystemColors = ref.watch(
+      generalPreferencesProvider.select((state) => state.systemColors),
     );
 
     final remainingHeight = estimateRemainingHeightLeftBoard(context);
@@ -130,13 +126,12 @@ class _AppState extends ConsumerState<Application> {
                     ? Typography.blackCupertino
                     : Typography.whiteCupertino
                 : null,
-            colorScheme:
-                colorPalette == ColorPalette.system && colorScheme != null
-                    ? colorScheme.harmonized()
-                    : ColorScheme.fromSeed(
-                        seedColor: boardTheme.colors.darkSquare,
-                        brightness: brightness,
-                      ),
+            colorScheme: hasSystemColors && colorScheme != null
+                ? colorScheme.harmonized()
+                : ColorScheme.fromSeed(
+                    seedColor: boardTheme.colors.darkSquare,
+                    brightness: brightness,
+                  ),
             // colorSchemeSeed: boardTheme.colors.darkSquare,
             useMaterial3: true,
             brightness: brightness,

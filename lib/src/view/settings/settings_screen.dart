@@ -59,21 +59,15 @@ class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(
-      generalPreferencesProvider.select(
-        (state) => state.themeMode,
-      ),
+      generalPreferencesProvider.select((state) => state.themeMode),
     );
 
     final soundTheme = ref.watch(
-      generalPreferencesProvider.select(
-        (state) => state.soundTheme,
-      ),
+      generalPreferencesProvider.select((state) => state.soundTheme),
     );
 
-    final colorPalette = ref.watch(
-      generalPreferencesProvider.select(
-        (state) => state.colorPalette,
-      ),
+    final hasSystemColors = ref.watch(
+      generalPreferencesProvider.select((state) => state.systemColors),
     );
 
     final authController = ref.watch(authControllerProvider);
@@ -123,30 +117,14 @@ class _Body extends ConsumerWidget {
               if (Theme.of(context).platform == TargetPlatform.android)
                 androidVersionAsync.maybeWhen(
                   data: (version) => version.sdkInt >= 31
-                      ? SettingsListTile(
-                          icon: const Icon(Icons.palette),
-                          settingsLabel: const Text('Colors'),
-                          settingsValue: colorPalette == ColorPalette.system
-                              ? context.l10n.deviceTheme
-                              : 'Chessboard',
-                          onTap: () {
-                            showChoicePicker(
-                              context,
-                              choices: ColorPalette.values,
-                              selectedItem: colorPalette,
-                              labelBuilder: (t) => Text(
-                                t == ColorPalette.system
-                                    ? context.l10n.deviceTheme
-                                    : 'Chessboard',
-                              ),
-                              onSelectedItemChanged: (ColorPalette? value) {
-                                ref
-                                    .read(generalPreferencesProvider.notifier)
-                                    .setColorPalette(
-                                      value ?? ColorPalette.system,
-                                    );
-                              },
-                            );
+                      ? SwitchSettingTile(
+                          leading: const Icon(Icons.palette),
+                          title: const Text('System colors'),
+                          value: hasSystemColors,
+                          onChanged: (value) {
+                            ref
+                                .read(generalPreferencesProvider.notifier)
+                                .toggleSystemColors();
                           },
                         )
                       : const SizedBox.shrink(),

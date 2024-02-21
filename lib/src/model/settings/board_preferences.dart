@@ -205,12 +205,11 @@ enum BoardTheme {
     if (corePalette == null) {
       return brown.colors;
     }
-    final darkSquare = Color(corePalette.primary.get(70));
-    final lightSquare = Color(corePalette.secondary.get(90));
+    final darkSquare = Color(corePalette.secondary.get(60));
+    final lightSquare = Color(corePalette.primary.get(95));
     return BoardColorScheme(
       darkSquare: darkSquare,
       lightSquare: lightSquare,
-      // TODO add system colors here
       background: SolidColorBackground(
         lightSquare: lightSquare,
         darkSquare: darkSquare,
@@ -226,10 +225,15 @@ enum BoardTheme {
         coordinates: true,
         orientation: Side.black,
       ),
-      lastMove: const HighlightDetails(solidColor: Color(0x809cc700)),
-      selected: const HighlightDetails(solidColor: Color(0x6014551e)),
-      validMoves: const Color(0x4014551e),
-      validPremoves: const Color(0x40203085),
+      lastMove: HighlightDetails(
+        solidColor: Color(corePalette.tertiary.get(80)).withOpacity(0.8),
+      ),
+      selected: HighlightDetails(
+        solidColor: Color(corePalette.tertiary.get(80)).withOpacity(0.6),
+      ),
+      validMoves: Color(corePalette.neutral.get(60)).withOpacity(0.45),
+      validPremoves:
+          Color(corePalette.neutralVariant.get(60)).withOpacity(0.45),
     );
   }
 }
