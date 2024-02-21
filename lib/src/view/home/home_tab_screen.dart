@@ -102,7 +102,12 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
       body: RefreshIndicator(
         key: _androidRefreshKey,
         onRefresh: () => _refreshData(),
-        child: const _HomeBody(),
+        child: const Column(
+          children: [
+            Expanded(child: _HomeBody()),
+            _ConnectivityBanner(),
+          ],
+        ),
       ),
     );
   }

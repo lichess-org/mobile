@@ -24,12 +24,11 @@ class ConnectivityStatus with _$ConnectivityStatus {
 Future<ConnectivityStatus> connectivity(ConnectivityRef ref) async {
   final client = httpClient(ref.read(packageInfoProvider));
   ref.onDispose(client.close);
+  final connectivityResult = await Connectivity().checkConnectivity();
   try {
-    final isOnline = await onlineCheck(client);
-    final connectivityResult = await Connectivity().checkConnectivity();
     return ConnectivityStatus(
       connectivityResult: connectivityResult,
-      isOnline: isOnline,
+      isOnline: await onlineCheck(client),
     );
   } finally {
     client.close();
