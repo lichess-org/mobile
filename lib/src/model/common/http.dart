@@ -102,6 +102,25 @@ String userAgent(UserAgentRef ref) {
   );
 }
 
+/// Creates a user-agent string with the app version, build number, and device info and possibly the user ID if a user is logged in.
+String makeUserAgent(
+  PackageInfo info,
+  BaseDeviceInfo deviceInfo,
+  String sri,
+  LightUser? user,
+) {
+  final base =
+      'Lichess Mobile/${info.version} as:${user?.id ?? 'anon'} sri:$sri';
+
+  if (deviceInfo is AndroidDeviceInfo) {
+    return '$base os:Android/${deviceInfo.version.release} dev:${deviceInfo.model}';
+  } else if (deviceInfo is IosDeviceInfo) {
+    return '$base os:iOS/${deviceInfo.systemVersion} dev:${deviceInfo.model}';
+  }
+
+  return base;
+}
+
 /// Http client that sets the Authorization header when a token has been stored.
 ///
 /// Also sets the user-agent header with the app version, build number, and device info.
@@ -455,22 +474,4 @@ extension ClientAutoDisposeRefExtension<T> on AutoDisposeRef<T> {
       _ReuseClientService.instance.close(key);
     }
   }
-}
-
-String makeUserAgent(
-  PackageInfo info,
-  BaseDeviceInfo deviceInfo,
-  String sri,
-  LightUser? user,
-) {
-  final base =
-      'Lichess Mobile/${info.version} as:${user?.id ?? 'anon'} sri:$sri';
-
-  if (deviceInfo is AndroidDeviceInfo) {
-    return '$base os:Android/${deviceInfo.version.release} dev:${deviceInfo.model}';
-  } else if (deviceInfo is IosDeviceInfo) {
-    return '$base os:iOS/${deviceInfo.systemVersion} dev:${deviceInfo.model}';
-  }
-
-  return base;
 }
