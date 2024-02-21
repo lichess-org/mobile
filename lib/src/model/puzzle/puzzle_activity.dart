@@ -27,8 +27,8 @@ class PuzzleActivity extends _$PuzzleActivity {
     ref.onDispose(() {
       _list.clear();
     });
-    final data = await ref.watch(puzzleDashboardActivityProvider.future);
-    if (data == null) {
+    final recentActivity = await ref.watch(puzzleRecentActivityProvider.future);
+    if (recentActivity == null) {
       return const PuzzleActivityState(
         historyByDay: {},
         isLoading: false,
@@ -36,7 +36,6 @@ class PuzzleActivity extends _$PuzzleActivity {
         hasError: false,
       );
     }
-    final (_, recentActivity) = data;
     _list.addAll(recentActivity);
     return PuzzleActivityState(
       historyByDay: _groupByDay(_list),

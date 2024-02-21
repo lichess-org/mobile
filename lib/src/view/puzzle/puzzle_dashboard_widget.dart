@@ -2,7 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/common/errors.dart';
+import 'package:http/http.dart' show ClientException;
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
@@ -16,14 +16,13 @@ import 'package:lichess_mobile/src/widgets/stat_card.dart';
 class PuzzleDashboardWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final puzzleDashboard = ref.watch(puzzleDashboardActivityProvider);
+    final puzzleDashboard = ref.watch(puzzleDashboardProvider);
 
     return puzzleDashboard.when(
-      data: (data) {
-        if (data == null) {
+      data: (dashboard) {
+        if (dashboard == null) {
           return const SizedBox.shrink();
         }
-        final (dashboard, _) = data;
         final chartData =
             dashboard.themes.take(9).sortedBy((e) => e.theme.name).toList();
         return ListSection(
@@ -86,7 +85,7 @@ class PuzzleDashboardWidget extends ConsumerWidget {
                 context.l10n.puzzlePuzzleDashboard,
                 style: Styles.sectionTitle,
               ),
-              if (e is NotFoundException)
+              if (e is ClientException && e.message.contains('404'))
                 Text(context.l10n.puzzleNoPuzzlesToShow)
               else
                 const Text('Could not load dashboard.'),

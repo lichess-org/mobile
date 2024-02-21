@@ -79,24 +79,25 @@ Future<IMap<String, int>> savedOpeningBatches(
 }
 
 @riverpod
-Future<(PuzzleDashboard, IList<PuzzleHistoryEntry>)?> puzzleDashboardActivity(
-  PuzzleDashboardActivityRef ref,
+Future<PuzzleDashboard?> puzzleDashboard(
+  PuzzleDashboardRef ref,
 ) async {
   final session = ref.watch(authSessionProvider);
   if (session == null) return null;
   return ref.withClientCacheFor(
-    (client) {
-      final repo = PuzzleRepository(client);
-      return Future.wait([
-        repo.puzzleDashboard(),
-        repo.puzzleActivity(20),
-      ]).then(
-        (value) => (
-          value[0] as PuzzleDashboard,
-          value[1] as IList<PuzzleHistoryEntry>
-        ),
-      );
-    },
+    (client) => PuzzleRepository(client).puzzleDashboard(),
+    const Duration(hours: 3),
+  );
+}
+
+@riverpod
+Future<IList<PuzzleHistoryEntry>?> puzzleRecentActivity(
+  PuzzleRecentActivityRef ref,
+) async {
+  final session = ref.watch(authSessionProvider);
+  if (session == null) return null;
+  return ref.withClientCacheFor(
+    (client) => PuzzleRepository(client).puzzleActivity(20),
     const Duration(hours: 3),
   );
 }

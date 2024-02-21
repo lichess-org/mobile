@@ -89,7 +89,10 @@ class _PuzzleTabScreenState extends ConsumerState<PuzzleTabScreen> {
   }
 
   Future<void> _refreshData() {
-    return ref.refresh(puzzleDashboardActivityProvider.future);
+    return Future.wait([
+      ref.refresh(puzzleDashboardProvider.future),
+      ref.refresh(puzzleRecentActivityProvider.future),
+    ]);
   }
 }
 
@@ -319,13 +322,12 @@ class PuzzleThemeButton extends StatelessWidget {
 class PuzzleHistoryWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final asyncData = ref.watch(puzzleDashboardActivityProvider);
+    final asyncData = ref.watch(puzzleRecentActivityProvider);
     return asyncData.when(
-      data: (data) {
-        if (data == null) {
+      data: (recentActivity) {
+        if (recentActivity == null) {
           return const SizedBox.shrink();
         }
-        final (_, recentActivity) = data;
         if (recentActivity.isEmpty) {
           return ListSection(
             header: Text(context.l10n.puzzleHistory),
