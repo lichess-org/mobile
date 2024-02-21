@@ -33,7 +33,9 @@ class CreateGameService {
 
     final socket = ref.read(socketClientProvider);
     final (stream, readyStream) = socket.connect(Uri(path: '/lobby/socket/v5'));
-    final completer = Completer<GameFullId>();
+
+    // ensure the pending game connection is closed in any case
+    final completer = Completer<GameFullId>()..future.whenComplete(_close);
 
     _pendingGameConnection = (
       ref.read(authClientFactoryProvider)(),
@@ -41,7 +43,6 @@ class CreateGameService {
         if (event.topic == 'redirect') {
           final data = event.data as Map<String, dynamic>;
           completer.complete(pick(data['id']).asGameFullIdOrThrow());
-          cancel();
         }
       })
     );
@@ -68,31 +69,33 @@ class CreateGameService {
       await lobbyRepo.createSeek(actualSeek, sri: socket.sri);
     } catch (e) {
       _log.warning('Failed to create seek', e);
-      cancel();
-      completer.completeError(e);
+      // if the completer is not yet completed, complete it with an error
+      if (!completer.isCompleted) {
+        completer.completeError(e);
+      }
     }
 
     return completer.future;
   }
 
   Future<void> newCorrespondenceGame(GameSeek seek) async {
-    final client = ref.read(authClientFactoryProvider)();
-    final lobbyRepo = LobbyRepository(client);
-
     _log.info('Creating new correspondence game');
 
-    try {
-      await lobbyRepo.createSeek(
+    await ref.withAuthClient(
+      (client) => LobbyRepository(client).createSeek(
         seek,
         sri: ref.read(socketClientProvider).sri,
-      );
-    } finally {
-      client.close();
-    }
+      ),
+    );
   }
 
   /// Cancel the current game creation.
   void cancel() {
+    _log.info('Cancelling game creation');
+    _close();
+  }
+
+  void _close() {
     // close the http client
     _pendingGameConnection?.$1.close();
     // cancel the socket subscription
