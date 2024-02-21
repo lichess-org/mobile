@@ -355,7 +355,11 @@ class _ReuseClientService {
   ///
   /// If there are no more keys, it closes the client.
   Future<void> close(UniqueKey key) async {
-    await Future<void>.delayed(const Duration(milliseconds: 100));
+    // give some time for other requests to reuse the client, unless we are
+    // running tests, as we don't want the timer to interfere with them.
+    if (!Platform.environment.containsKey('FLUTTER_TEST')) {
+      await Future<void>.delayed(const Duration(milliseconds: 100));
+    }
     _clientKeys.remove(key);
     if (_clientKeys.isEmpty && _client != null) {
       _logger.info('All callers have closed the client, closing it.');
