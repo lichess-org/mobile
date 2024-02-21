@@ -146,7 +146,7 @@ enum BoardTheme {
   BoardColorScheme get colors {
     switch (this) {
       case BoardTheme.system:
-        return BoardTheme.systemColors;
+        return getBoardColorScheme() ?? BoardColorScheme.brown;
       case BoardTheme.blue:
         return BoardColorScheme.blue;
       case BoardTheme.blue2:
@@ -195,10 +195,4 @@ enum BoardTheme {
         return BoardColorScheme.horsey;
     }
   }
-
-  /// Get the [BoardColorScheme] based on system colors on Android 12+.
-  ///
-  /// If the system colors are not available, the default brown theme is used.
-  static BoardColorScheme get systemColors =>
-      getBoardColorScheme() ?? BoardColorScheme.brown;
 }

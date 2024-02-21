@@ -79,7 +79,7 @@ class GeneralPrefsState with _$GeneralPrefsState {
     required bool isSoundEnabled,
     required SoundTheme soundTheme,
 
-    /// The origin of the color palette (android 12+ only)
+    /// Should enable system color palette (android 12+ only)
     required bool systemColors,
   }) = _GeneralPrefsState;
 
