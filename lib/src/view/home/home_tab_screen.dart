@@ -78,7 +78,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
         leading: session == null
             ? null
             : IconButton(
-                icon: const Icon(Icons.person),
+                icon: const Icon(Icons.account_circle),
                 tooltip: context.l10n.profile,
                 onPressed: () {
                   ref.invalidate(accountProvider);
@@ -761,7 +761,7 @@ class _RelationButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AppBarIconButton(
-      icon: const Icon(Icons.people),
+      icon: const Icon(Icons.group),
       semanticsLabel: context.l10n.friends,
       onPressed: () {
         pushPlatformRoute(
