@@ -437,7 +437,7 @@ class _ReuseClientService {
   static final instance = _ReuseClientService._();
 
   Client? _client;
-  List<UniqueKey> _clientKeys = [];
+  Set<UniqueKey> _clientKeys = {};
 
   /// Returns the client and a unique key to be used to close it later.
   ///
@@ -448,7 +448,7 @@ class _ReuseClientService {
     }
     if (_client == null) {
       _client = factory();
-      _clientKeys = [];
+      _clientKeys = {};
     }
     final key = UniqueKey();
     _clientKeys.add(key);
