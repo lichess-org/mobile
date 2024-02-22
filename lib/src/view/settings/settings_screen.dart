@@ -118,7 +118,7 @@ class _Body extends ConsumerWidget {
                 androidVersionAsync.maybeWhen(
                   data: (version) => version.sdkInt >= 31
                       ? SwitchSettingTile(
-                          leading: const Icon(Icons.palette),
+                          leading: const Icon(Icons.colorize),
                           title: const Text('System colors'),
                           value: hasSystemColors,
                           onChanged: (value) {
@@ -156,7 +156,7 @@ class _Body extends ConsumerWidget {
                 },
               ),
               SettingsListTile(
-                icon: const Icon(LichessIcons.chess_board),
+                icon: const Icon(Icons.palette),
                 settingsLabel: Text(context.l10n.boardTheme),
                 settingsValue: boardPrefs.boardTheme.label,
                 onTap: () {
@@ -168,7 +168,7 @@ class _Body extends ConsumerWidget {
                 },
               ),
               SettingsListTile(
-                icon: const Icon(LichessIcons.chess_knight),
+                icon: const Icon(LichessIcons.chess_pawn),
                 settingsLabel: Text(context.l10n.pieceSet),
                 settingsValue: boardPrefs.pieceSet.label,
                 onTap: () {

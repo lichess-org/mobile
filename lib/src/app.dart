@@ -127,12 +127,11 @@ class _AppState extends ConsumerState<Application> {
                     : Typography.whiteCupertino
                 : null,
             colorScheme: hasSystemColors && colorScheme != null
-                ? colorScheme.harmonized()
+                ? colorScheme
                 : ColorScheme.fromSeed(
                     seedColor: boardTheme.colors.darkSquare,
                     brightness: brightness,
                   ),
-            // colorSchemeSeed: boardTheme.colors.darkSquare,
             useMaterial3: true,
             brightness: brightness,
             cardTheme: CardTheme(
