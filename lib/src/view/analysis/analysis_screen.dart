@@ -284,6 +284,8 @@ class _Board extends ConsumerWidget {
 
     final bestMoves = evalBestMoves ?? currentNode.eval?.bestMoves;
 
+    final sanMove = currentNode.sanMove;
+
     return cg.Board(
       size: boardSize,
       onMove: (move, {isDrop, isPremove}) =>
@@ -314,8 +316,13 @@ class _Board extends ConsumerWidget {
                     ),
               )
             : null,
-        annotations: currentNode.sanMove != null && annotation != null
-            ? IMap({currentNode.sanMove!.move.cg.to: annotation})
+        annotations: sanMove != null && annotation != null
+            ? altCastles.containsKey(sanMove.move.uci)
+                ? IMap({
+                    Move.fromUci(altCastles[sanMove.move.uci]!)!.cg.to:
+                        annotation,
+                  })
+                : IMap({sanMove.move.cg.to: annotation})
             : null,
       ),
       settings: cg.BoardSettings(
