@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:chessground/chessground.dart' hide BoardTheme;
+import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/db/shared_preferences.dart';
 import 'package:lichess_mobile/src/utils/color_palette.dart';
@@ -195,4 +196,26 @@ enum BoardTheme {
         return BoardColorScheme.horsey;
     }
   }
+
+  Widget get thumbnail => this == BoardTheme.system
+      ? SizedBox(
+          height: 32,
+          width: 32 * 6,
+          child: Row(
+            children: [
+              for (final c in const [1, 2, 3, 4, 5, 6])
+                Container(
+                  width: 32,
+                  color: c.isEven
+                      ? BoardTheme.system.colors.darkSquare
+                      : BoardTheme.system.colors.lightSquare,
+                ),
+            ],
+          ),
+        )
+      : Image.asset(
+          'assets/board-thumbnails/$name.jpg',
+          height: 32,
+          errorBuilder: (context, o, st) => const SizedBox.shrink(),
+        );
 }

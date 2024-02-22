@@ -75,27 +75,7 @@ class _Body extends ConsumerWidget {
             titleBuilder: (t) => Text(t.label),
             subtitleBuilder: (t) => Align(
               alignment: Alignment.topLeft,
-              child: t == BoardTheme.system
-                  ? SizedBox(
-                      height: 32,
-                      width: 32 * 6,
-                      child: Row(
-                        children: [
-                          for (final c in [1, 2, 3, 4, 5, 6])
-                            Container(
-                              width: 32,
-                              color: c.isEven
-                                  ? BoardTheme.system.colors.darkSquare
-                                  : BoardTheme.system.colors.lightSquare,
-                            ),
-                        ],
-                      ),
-                    )
-                  : Image.asset(
-                      'assets/board-thumbnails/${t.name}.jpg',
-                      height: 32,
-                      errorBuilder: (context, o, st) => const SizedBox.shrink(),
-                    ),
+              child: t.thumbnail,
             ),
             onSelectedItemChanged: onChanged,
           ),
