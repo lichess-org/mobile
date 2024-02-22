@@ -1,8 +1,10 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/db/shared_preferences.dart';
+import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/sound_theme.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -41,6 +43,25 @@ class GeneralPreferences extends _$GeneralPreferences {
     return _save(state.copyWith(soundTheme: soundTheme));
   }
 
+  Future<void> toggleSystemColors() async {
+    if (defaultTargetPlatform != TargetPlatform.android) {
+      return;
+    }
+    await _save(state.copyWith(systemColors: !state.systemColors));
+    if (state.systemColors == false) {
+      final boardTheme = ref.read(boardPreferencesProvider).boardTheme;
+      if (boardTheme == BoardTheme.system) {
+        await ref
+            .read(boardPreferencesProvider.notifier)
+            .setBoardTheme(BoardTheme.brown);
+      }
+    } else {
+      await ref
+          .read(boardPreferencesProvider.notifier)
+          .setBoardTheme(BoardTheme.system);
+    }
+  }
+
   Future<void> _save(GeneralPrefsState newState) async {
     final prefs = ref.read(sharedPreferencesProvider);
     await prefs.setString(
@@ -57,12 +78,16 @@ class GeneralPrefsState with _$GeneralPrefsState {
     required ThemeMode themeMode,
     required bool isSoundEnabled,
     required SoundTheme soundTheme,
+
+    /// Should enable system color palette (android 12+ only)
+    required bool systemColors,
   }) = _GeneralPrefsState;
 
   static const defaults = GeneralPrefsState(
     themeMode: ThemeMode.system,
     isSoundEnabled: true,
     soundTheme: SoundTheme.standard,
+    systemColors: false,
   );
 
   factory GeneralPrefsState.fromJson(Map<String, dynamic> json) {

@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/sound_theme.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/android.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/package_info.dart';
@@ -58,21 +59,23 @@ class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(
-      generalPreferencesProvider.select(
-        (state) => state.themeMode,
-      ),
+      generalPreferencesProvider.select((state) => state.themeMode),
     );
 
     final soundTheme = ref.watch(
-      generalPreferencesProvider.select(
-        (state) => state.soundTheme,
-      ),
+      generalPreferencesProvider.select((state) => state.soundTheme),
+    );
+
+    final hasSystemColors = ref.watch(
+      generalPreferencesProvider.select((state) => state.systemColors),
     );
 
     final authController = ref.watch(authControllerProvider);
     final userSession = ref.watch(authSessionProvider);
     final packageInfo = ref.watch(packageInfoProvider);
     final boardPrefs = ref.watch(boardPreferencesProvider);
+
+    final androidVersionAsync = ref.watch(androidVersionProvider);
 
     return SafeArea(
       child: ListView(
@@ -111,6 +114,22 @@ class _Body extends ConsumerWidget {
                   }
                 },
               ),
+              if (Theme.of(context).platform == TargetPlatform.android)
+                androidVersionAsync.maybeWhen(
+                  data: (version) => version.sdkInt >= 31
+                      ? SwitchSettingTile(
+                          leading: const Icon(Icons.colorize),
+                          title: const Text('System colors'),
+                          value: hasSystemColors,
+                          onChanged: (value) {
+                            ref
+                                .read(generalPreferencesProvider.notifier)
+                                .toggleSystemColors();
+                          },
+                        )
+                      : const SizedBox.shrink(),
+                  orElse: () => const SizedBox.shrink(),
+                ),
               SettingsListTile(
                 icon: const Icon(Icons.brightness_medium),
                 settingsLabel: Text(context.l10n.background),
@@ -137,7 +156,7 @@ class _Body extends ConsumerWidget {
                 },
               ),
               SettingsListTile(
-                icon: const Icon(LichessIcons.chess_board),
+                icon: const Icon(Icons.palette),
                 settingsLabel: Text(context.l10n.boardTheme),
                 settingsValue: boardPrefs.boardTheme.label,
                 onTap: () {
@@ -149,7 +168,7 @@ class _Body extends ConsumerWidget {
                 },
               ),
               SettingsListTile(
-                icon: const Icon(LichessIcons.chess_knight),
+                icon: const Icon(LichessIcons.chess_pawn),
                 settingsLabel: Text(context.l10n.pieceSet),
                 settingsValue: boardPrefs.pieceSet.label,
                 onTap: () {

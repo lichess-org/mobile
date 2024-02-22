@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -97,62 +98,76 @@ class _AppState extends ConsumerState<Application> {
     );
     final brightness = ref.watch(currentBrightnessProvider);
     final boardTheme = ref.watch(
-      boardPreferencesProvider.select(
-        (state) => state.boardTheme,
-      ),
+      boardPreferencesProvider.select((state) => state.boardTheme),
     );
+    final hasSystemColors = ref.watch(
+      generalPreferencesProvider.select((state) => state.systemColors),
+    );
+
     final remainingHeight = estimateRemainingHeightLeftBoard(context);
 
-    return MaterialApp(
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: kSupportedLocales,
-      onGenerateTitle: (BuildContext context) => 'lichess.org',
-      theme: ThemeData(
-        navigationBarTheme: NavigationBarTheme.of(context).copyWith(
-          height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold
-              ? 60
-              : null,
-        ),
-        textTheme: Theme.of(context).platform == TargetPlatform.iOS
-            ? brightness == Brightness.light
-                ? Typography.blackCupertino
-                : Typography.whiteCupertino
-            : null,
-        colorSchemeSeed: boardTheme.colors.darkSquare,
-        useMaterial3: true,
-        brightness: brightness,
-        cardTheme: CardTheme(
-          surfaceTintColor:
-              brightness == Brightness.light ? Colors.black : Colors.white,
-        ),
-      ),
-      themeMode: themeMode,
-      builder: (context, child) {
-        return CupertinoTheme(
-          data: CupertinoThemeData(
-            primaryColor: brightness == Brightness.light
-                ? LichessColors.primary
-                : const Color(0xFF3692E7),
-            brightness: brightness,
-            barBackgroundColor: const CupertinoDynamicColor.withBrightness(
-              color: Color(0xC8F9F9F9),
-              darkColor: Color(0xC81D1D1D),
+    return DynamicColorBuilder(
+      builder: (lightColorScheme, darkColorScheme) {
+        final colorScheme =
+            brightness == Brightness.light ? lightColorScheme : darkColorScheme;
+
+        return MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: kSupportedLocales,
+          onGenerateTitle: (BuildContext context) => 'lichess.org',
+          theme: ThemeData(
+            navigationBarTheme: NavigationBarTheme.of(context).copyWith(
+              height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold
+                  ? 60
+                  : null,
             ),
-            scaffoldBackgroundColor: brightness == Brightness.light
-                ? CupertinoColors.systemGroupedBackground
+            textTheme: Theme.of(context).platform == TargetPlatform.iOS
+                ? brightness == Brightness.light
+                    ? Typography.blackCupertino
+                    : Typography.whiteCupertino
                 : null,
+            colorScheme: hasSystemColors && colorScheme != null
+                ? colorScheme
+                : ColorScheme.fromSeed(
+                    seedColor: boardTheme.colors.darkSquare,
+                    brightness: brightness,
+                  ),
+            useMaterial3: true,
+            brightness: brightness,
+            cardTheme: CardTheme(
+              surfaceTintColor:
+                  brightness == Brightness.light ? Colors.black : Colors.white,
+            ),
           ),
-          child: IconTheme(
-            // This is needed to avoid the icon color being overridden by the cupertino theme (blue)
-            data: IconTheme.of(context),
-            child: Material(child: child),
-          ),
+          themeMode: themeMode,
+          builder: (context, child) {
+            return CupertinoTheme(
+              data: CupertinoThemeData(
+                primaryColor: brightness == Brightness.light
+                    ? LichessColors.primary
+                    : const Color(0xFF3692E7),
+                brightness: brightness,
+                barBackgroundColor: const CupertinoDynamicColor.withBrightness(
+                  color: Color(0xC8F9F9F9),
+                  darkColor: Color(0xC81D1D1D),
+                ),
+                scaffoldBackgroundColor: brightness == Brightness.light
+                    ? CupertinoColors.systemGroupedBackground
+                    : null,
+              ),
+              child: IconTheme(
+                // This is needed to avoid the icon color being overridden by the cupertino theme (blue)
+                data: IconTheme.of(context),
+                child: Material(child: child),
+              ),
+            );
+          },
+          home: const _EntryPointWidget(),
+          navigatorObservers: [
+            rootNavPageRouteObserver,
+          ],
         );
       },
-      home: const _EntryPointWidget(),
-      navigatorObservers: [
-        rootNavPageRouteObserver,
-      ],
     );
   }
 
