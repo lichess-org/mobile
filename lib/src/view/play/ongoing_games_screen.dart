@@ -74,7 +74,7 @@ class OngoingGamePreview extends ConsumerWidget {
       fen: game.fen,
       description: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           UserFullNameWidget.player(
             user: game.opponent,
@@ -82,24 +82,24 @@ class OngoingGamePreview extends ConsumerWidget {
             aiLevel: game.opponentAiLevel,
             style: Styles.boardPreviewTitle,
           ),
-          if (game.secondsLeft != null)
-            Text(
-              timeago.format(
-                DateTime.now().add(Duration(seconds: game.secondsLeft!)),
-                allowFromNow: true,
-              ),
-            ),
+          Icon(
+            game.perf.icon,
+            size: 34,
+            color: DefaultTextStyle.of(context).style.color,
+          ),
           if (game.secondsLeft != null && game.secondsLeft! > 0)
             Text(
               game.isMyTurn
                   ? context.l10n.yourTurn
                   : context.l10n.waitingForOpponent,
             ),
-          Icon(
-            game.perf.icon,
-            size: 40,
-            color: DefaultTextStyle.of(context).style.color,
-          ),
+          if (game.isMyTurn && game.secondsLeft != null)
+            Text(
+              timeago.format(
+                DateTime.now().add(Duration(seconds: game.secondsLeft!)),
+                allowFromNow: true,
+              ),
+            ),
         ],
       ),
       onTap: () {

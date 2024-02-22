@@ -244,7 +244,7 @@ class _HomeBody extends ConsumerWidget {
         const SizedBox(height: 8.0),
         const _HelloWidget(),
         const _CreateAGameSection(isExpanded: false),
-        const _OngoingGamesPreview(maxGamesToShow: 1),
+        const _OngoingGamesPreview(maxGamesToShow: 4),
         const RecentGames(),
         RatingPrefAware(child: LeaderboardWidget()),
       ];
