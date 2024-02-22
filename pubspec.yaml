@@ -49,7 +49,7 @@ dependencies:
   meta: ^1.8.0
   package_info_plus: ^5.0.1
   path: ^1.8.2
-  popover: ^0.2.8+2
+  popover: ^0.3.0
   result_extensions: ^0.1.0
   riverpod_annotation: ^2.3.0
   share_plus: ^7.0.0
