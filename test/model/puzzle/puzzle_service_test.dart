@@ -4,9 +4,10 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/db/database.dart';
-import 'package:lichess_mobile/src/http_client.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
@@ -18,6 +19,17 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import '../../test_container.dart';
 import '../../test_utils.dart';
+
+class FakeClientFactory implements LichessClientFactory {
+  FakeClientFactory(this._client);
+
+  final http.Client _client;
+
+  @override
+  http.Client call() {
+    return _client;
+  }
+}
 
 void main() {
   final dbFactory = databaseFactoryFfi;
@@ -32,8 +44,8 @@ void main() {
           ref.onDispose(db.close);
           return db;
         }),
-        httpClientProvider.overrideWith((ref) {
-          return mockClient;
+        lichessClientFactoryProvider.overrideWith((ref) {
+          return FakeClientFactory(mockClient);
         }),
       ],
     );
@@ -52,7 +64,10 @@ void main() {
 
       final container = await makeTestContainer(mockClient);
       final storage = container.read(puzzleBatchStorageProvider);
-      final service = container.read(puzzleServiceProvider(queueLength: 3));
+      final service = container.read(puzzleServiceFactoryProvider)(
+        mockClient,
+        queueLength: 3,
+      );
 
       final next = await service.nextPuzzle(
         userId: null,
@@ -78,7 +93,10 @@ void main() {
 
       final container = await makeTestContainer(mockClient);
       final storage = container.read(puzzleBatchStorageProvider);
-      final service = container.read(puzzleServiceProvider(queueLength: 1));
+      final service = container.read(puzzleServiceFactoryProvider)(
+        mockClient,
+        queueLength: 1,
+      );
 
       await storage.save(
         userId: null,
@@ -107,7 +125,10 @@ void main() {
 
       final container = await makeTestContainer(mockClient);
       final storage = container.read(puzzleBatchStorageProvider);
-      final service = container.read(puzzleServiceProvider(queueLength: 2));
+      final service = container.read(puzzleServiceFactoryProvider)(
+        mockClient,
+        queueLength: 2,
+      );
       await storage.save(
         userId: null,
         data: _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
@@ -132,7 +153,10 @@ void main() {
 
       final container = await makeTestContainer(mockClient);
       final storage = container.read(puzzleBatchStorageProvider);
-      final service = container.read(puzzleServiceProvider(queueLength: 1));
+      final service = container.read(puzzleServiceFactoryProvider)(
+        mockClient,
+        queueLength: 1,
+      );
       await storage.save(
         userId: null,
         data: _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
@@ -161,7 +185,10 @@ void main() {
       });
 
       final container = await makeTestContainer(mockClient);
-      final service = container.read(puzzleServiceProvider(queueLength: 1));
+      final service = container.read(puzzleServiceFactoryProvider)(
+        mockClient,
+        queueLength: 1,
+      );
 
       final nextPuzzle = await service.nextPuzzle(
         userId: null,
@@ -182,7 +209,10 @@ void main() {
 
       final container = await makeTestContainer(mockClient);
       final storage = container.read(puzzleBatchStorageProvider);
-      final service = container.read(puzzleServiceProvider(queueLength: 1));
+      final service = container.read(puzzleServiceFactoryProvider)(
+        mockClient,
+        queueLength: 1,
+      );
       await storage.save(
         userId: null,
         data: _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
@@ -213,7 +243,10 @@ void main() {
 
       final container = await makeTestContainer(mockClient);
       final storage = container.read(puzzleBatchStorageProvider);
-      final service = container.read(puzzleServiceProvider(queueLength: 1));
+      final service = container.read(puzzleServiceFactoryProvider)(
+        mockClient,
+        queueLength: 1,
+      );
       await storage.save(
         userId: null,
         data: _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
@@ -248,7 +281,10 @@ void main() {
 
       final container = await makeTestContainer(mockClient);
       final storage = container.read(puzzleBatchStorageProvider);
-      final service = container.read(puzzleServiceProvider(queueLength: 1));
+      final service = container.read(puzzleServiceFactoryProvider)(
+        mockClient,
+        queueLength: 1,
+      );
       await storage.save(
         userId: null,
         data: _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
@@ -292,7 +328,10 @@ void main() {
 
       final container = await makeTestContainer(mockClient);
       final storage = container.read(puzzleBatchStorageProvider);
-      final service = container.read(puzzleServiceProvider(queueLength: 1));
+      final service = container.read(puzzleServiceFactoryProvider)(
+        mockClient,
+        queueLength: 1,
+      );
       await storage.save(
         userId: const UserId('testUserId'),
         data: _makeUnsolvedPuzzles([const PuzzleId('pId3')]),
@@ -339,7 +378,10 @@ void main() {
 
       final container = await makeTestContainer(mockClient);
       final storage = container.read(puzzleBatchStorageProvider);
-      final service = container.read(puzzleServiceProvider(queueLength: 2));
+      final service = container.read(puzzleServiceFactoryProvider)(
+        mockClient,
+        queueLength: 2,
+      );
       await storage.save(
         userId: const UserId('testUserId'),
         data: _makeUnsolvedPuzzles([
@@ -377,7 +419,10 @@ void main() {
 
       final container = await makeTestContainer(mockClient);
       final storage = container.read(puzzleBatchStorageProvider);
-      final service = container.read(puzzleServiceProvider(queueLength: 2));
+      final service = container.read(puzzleServiceFactoryProvider)(
+        mockClient,
+        queueLength: 2,
+      );
 
       await storage.save(
         userId: const UserId('testUserId'),

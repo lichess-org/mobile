@@ -4,8 +4,9 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
-import 'package:lichess_mobile/src/http_client.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
@@ -25,6 +26,17 @@ import '../../test_utils.dart';
 class MockPuzzleBatchStorage extends Mock implements PuzzleBatchStorage {}
 
 class MockPuzzleStorage extends Mock implements PuzzleStorage {}
+
+class FakeClientFactory implements LichessClientFactory {
+  FakeClientFactory(this._client);
+
+  final http.Client _client;
+
+  @override
+  http.Client call() {
+    return _client;
+  }
+}
 
 void main() {
   setUpAll(() {
@@ -57,6 +69,10 @@ void main() {
               userId: null,
             ),
           ),
+          overrides: [
+            puzzleBatchStorageProvider.overrideWith((ref) => mockBatchStorage),
+            puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
+          ],
         );
 
         await tester.pumpWidget(app);
@@ -82,6 +98,10 @@ void main() {
               userId: null,
             ),
           ),
+          overrides: [
+            puzzleBatchStorageProvider.overrideWith((ref) => mockBatchStorage),
+            puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
+          ],
         );
 
         await tester.pumpWidget(app);
@@ -99,9 +119,7 @@ void main() {
           angle: PuzzleTheme(PuzzleThemeKey.mix),
         ),
         overrides: [
-          puzzleBatchStorageProvider.overrideWith((ref) {
-            return mockBatchStorage;
-          }),
+          puzzleBatchStorageProvider.overrideWith((ref) => mockBatchStorage),
           puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
         ],
       );
@@ -150,8 +168,8 @@ void main() {
             ),
           ),
           overrides: [
-            httpClientProvider.overrideWith((ref) {
-              return mockClient;
+            lichessClientFactoryProvider.overrideWith((ref) {
+              return FakeClientFactory(mockClient);
             }),
             puzzleBatchStorageProvider.overrideWith((ref) {
               return mockBatchStorage;
@@ -262,8 +280,8 @@ void main() {
             ),
           ),
           overrides: [
-            httpClientProvider.overrideWith((ref) {
-              return mockClient;
+            lichessClientFactoryProvider.overrideWith((ref) {
+              return FakeClientFactory(mockClient);
             }),
             puzzleBatchStorageProvider.overrideWith((ref) {
               return mockBatchStorage;
@@ -363,8 +381,8 @@ void main() {
             ),
           ),
           overrides: [
-            httpClientProvider.overrideWith((ref) {
-              return mockClient;
+            lichessClientFactoryProvider.overrideWith((ref) {
+              return FakeClientFactory(mockClient);
             }),
             puzzleBatchStorageProvider.overrideWith((ref) {
               return mockBatchStorage;
@@ -435,6 +453,10 @@ void main() {
               userId: userId,
             ),
           ),
+          overrides: [
+            puzzleBatchStorageProvider.overrideWith((ref) => mockBatchStorage),
+            puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
+          ],
         );
 
         await tester.pumpWidget(app);
@@ -468,6 +490,10 @@ void main() {
               userId: null,
             ),
           ),
+          overrides: [
+            puzzleBatchStorageProvider.overrideWith((ref) => mockBatchStorage),
+            puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
+          ],
         );
 
         await tester.pumpWidget(app);

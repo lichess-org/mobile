@@ -6,18 +6,17 @@ import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
-import 'package:lichess_mobile/src/model/auth/auth_client.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
 import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_game.dart';
-import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
+import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:logging/logging.dart';
-import 'package:result_extensions/result_extensions.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'correspondence_service.g.dart';
@@ -49,12 +48,15 @@ class CorrespondenceService {
     final storedOngoingGames =
         await _storage.fetchOngoingGames(_session?.user.id);
 
-    // user can have more than 50 ongoing games, but we only sync the 50 most
-    // recent ones
-    ref.read(accountRepositoryProvider).getOngoingGames(nb: 50).forEach(
-      (games) {
+    ref.withClient((client) async {
+      try {
+        final accountRepository = AccountRepository(client);
+        final gameRepository = GameRepository(client);
+        // user can have more than 50 ongoing games, but we only sync the 50 most
+        // recent ones
+        final ongoingGames = await accountRepository.getOngoingGames(nb: 50);
         for (final sg in storedOngoingGames) {
-          final game = games.firstWhereOrNull((e) => e.id == sg.$2.id);
+          final game = ongoingGames.firstWhereOrNull((e) => e.id == sg.$2.id);
           if (game == null) {
             _log.info(
               'Deleting correspondence game ${sg.$2.id} because it is not present on the server anymore',
@@ -63,24 +65,21 @@ class CorrespondenceService {
           }
         }
 
-        ref
-            .read(gameRepositoryProvider)
-            .getMyGamesByIds(
-              ISet(games.map((e) => e.id)),
-            )
-            .forEach((playableGames) {
-          for (final playableGame in playableGames) {
-            final fullId =
-                games.firstWhere((e) => e.id == playableGame.id).fullId;
+        final playableGames = await gameRepository.getMyGamesByIds(
+          ISet(ongoingGames.map((e) => e.id)),
+        );
 
+        await Future.wait([
+          for (final playableGame in playableGames)
             updateGame(
-              fullId,
+              ongoingGames.firstWhere((e) => e.id == playableGame.id).fullId,
               playableGame,
-            );
-          }
-        });
-      },
-    );
+            ),
+        ]);
+      } catch (e, s) {
+        _log.warning('Failed to sync correspondence games', e, s);
+      }
+    });
   }
 
   /// Plays correspondence moves that were registered while the user was offline.

@@ -1,8 +1,9 @@
 import 'dart:async';
 
-import 'package:async/async.dart';
 import 'package:deep_pick/deep_pick.dart';
+import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
@@ -23,26 +24,30 @@ class CreateGameService {
   final CreateGameServiceRef ref;
   final Logger _log;
 
-  StreamSubscription<SocketEvent>? _socketSubscription;
+  (http.Client, StreamSubscription<SocketEvent>)? _pendingGameConnection;
 
   Future<GameFullId> newLobbyGame(GameSeek seek) async {
-    if (_socketSubscription != null) {
+    if (_pendingGameConnection != null) {
       throw StateError('Already creating a game.');
     }
 
     final socket = ref.read(socketClientProvider);
-    final lobbyRepo = ref.read(lobbyRepositoryProvider);
     final (stream, readyStream) = socket.connect(Uri(path: '/lobby/socket/v5'));
-    final completer = Completer<GameFullId>();
 
-    _socketSubscription = stream.listen((event) {
-      if (event.topic == 'redirect') {
-        final data = event.data as Map<String, dynamic>;
-        completer.complete(pick(data['id']).asGameFullIdOrThrow());
-        _socketSubscription?.cancel();
-        _socketSubscription = null;
-      }
-    });
+    // ensure the pending game connection is closed in any case
+    final completer = Completer<GameFullId>()..future.whenComplete(_close);
+
+    _pendingGameConnection = (
+      ref.read(lichessClientFactoryProvider)(),
+      stream.listen((event) {
+        if (event.topic == 'redirect') {
+          final data = event.data as Map<String, dynamic>;
+          completer.complete(pick(data['id']).asGameFullIdOrThrow());
+        }
+      })
+    );
+
+    final lobbyRepo = LobbyRepository(_pendingGameConnection!.$1);
 
     _log.info('Creating new online game');
 
@@ -60,24 +65,24 @@ class CreateGameService {
       }
     }
 
-    final result = await lobbyRepo.createSeek(actualSeek, sri: socket.sri);
-
-    if (result.isError) {
-      _socketSubscription?.cancel();
-      _socketSubscription = null;
-      completer.completeError(result.asError!.error);
+    try {
+      await lobbyRepo.createSeek(actualSeek, sri: socket.sri);
+    } catch (e) {
+      _log.warning('Failed to create seek', e);
+      // if the completer is not yet completed, complete it with an error
+      if (!completer.isCompleted) {
+        completer.completeError(e);
+      }
     }
 
     return completer.future;
   }
 
   Future<void> newCorrespondenceGame(GameSeek seek) async {
-    final lobbyRepo = ref.read(lobbyRepositoryProvider);
-
     _log.info('Creating new correspondence game');
 
-    await Result.release(
-      lobbyRepo.createSeek(
+    await ref.withClient(
+      (client) => LobbyRepository(client).createSeek(
         seek,
         sri: ref.read(socketClientProvider).sri,
       ),
@@ -86,11 +91,15 @@ class CreateGameService {
 
   /// Cancel the current game creation.
   void cancel() {
-    _socketSubscription?.cancel();
-    _socketSubscription = null;
-    // we need to invalidate lobbyRepositoryProvider to cancel the seek
-    // (it closes client connection)
-    // cf: https://lichess.org/api#tag/Board/operation/apiBoardSeek
-    ref.invalidate(lobbyRepositoryProvider);
+    _log.info('Cancelling game creation');
+    _close();
+  }
+
+  void _close() {
+    // close the http client
+    _pendingGameConnection?.$1.close();
+    // cancel the socket subscription
+    _pendingGameConnection?.$2.cancel();
+    _pendingGameConnection = null;
   }
 }

@@ -5,10 +5,10 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/db/secure_storage.dart';
-import 'package:lichess_mobile/src/http_client.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
 import 'package:lichess_mobile/src/model/auth/session_storage.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
@@ -38,7 +38,6 @@ Future<AppDependencies> appDependencies(
   final prefs = await SharedPreferences.getInstance();
   final soundTheme = GeneralPreferences.fetchFromStorage(prefs).soundTheme;
   final soundPool = await ref.watch(soundPoolProvider(soundTheme).future);
-  final client = ref.read(httpClientProvider);
 
   // Clear secure storage on first run because it is not deleted on app uninstall
   if (prefs.getBool('first_run') ?? true) {
@@ -61,12 +60,13 @@ Future<AppDependencies> appDependencies(
 
   final storedSession = await sessionStorage.read();
   if (storedSession != null) {
+    final client = httpClient(pInfo);
     try {
       final response = await client.get(
         Uri.parse('$kLichessHost/api/account'),
         headers: {
           'Authorization': 'Bearer ${signBearerToken(storedSession.token)}',
-          'user-agent':
+          'User-Agent':
               makeUserAgent(pInfo, deviceInfo, sri, storedSession.user),
         },
       ).timeout(const Duration(seconds: 3));
@@ -75,6 +75,8 @@ Future<AppDependencies> appDependencies(
       }
     } catch (e) {
       debugPrint('WARNING: [AppDependencies] Error while checking session: $e');
+    } finally {
+      client.close();
     }
   }
 

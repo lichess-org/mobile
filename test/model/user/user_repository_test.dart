@@ -1,33 +1,23 @@
-import 'package:async/async.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:http/http.dart' as http;
-import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/auth/auth_client.dart';
+import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
+import 'package:lichess_mobile/src/model/user/leaderboard.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository.dart';
-import 'package:logging/logging.dart';
-import 'package:mocktail/mocktail.dart';
 
-class MockAuthClient extends Mock implements AuthClient {}
-
-class MockLogger extends Mock implements Logger {}
+import '../../test_utils.dart';
 
 const testUserId = UserId('test');
 
 void main() {
-  final mockLogger = MockLogger();
-  final mockAuthClient = MockAuthClient();
-  final repo = UserRepository(apiClient: mockAuthClient, logger: mockLogger);
-
-  setUpAll(() {
-    reset(mockAuthClient);
-  });
-
-  group('UserRepository.getUserTask', () {
+  group('UserRepository.getUser', () {
     test('json read, minimal example', () async {
-      final testUserResponseMinimal = '''
+      final mockClient = MockClient((request) {
+        if (request.url.path == '/api/user/$testUserId') {
+          return mockResponse(
+            '''
 {
   "id": "$testUserId",
   "username": "$testUserId",
@@ -36,21 +26,26 @@ void main() {
   "perfs": {
   }
 }
-''';
-      when(
-        () =>
-            mockAuthClient.get(Uri.parse('$kLichessHost/api/user/$testUserId')),
-      ).thenAnswer(
-        (_) async => Result.value(http.Response(testUserResponseMinimal, 200)),
-      );
+''',
+            200,
+          );
+        }
+        return mockResponse('', 404);
+      });
+
+      final repo = UserRepository(mockClient);
 
       final result = await repo.getUser(testUserId);
 
-      expect(result.isValue, true);
+      expect(result, isA<User>());
+      expect(result.id, testUserId);
     });
 
     test('json read, full example', () async {
-      final testUserResponse = '''
+      final mockClient = MockClient((request) {
+        if (request.url.path == '/api/user/$testUserId') {
+          return mockResponse(
+            '''
 {
   "id": "$testUserId",
   "username": "$testUserId",
@@ -88,27 +83,33 @@ void main() {
     "links": "http://test.com"
   }
 }
-''';
-      when(
-        () =>
-            mockAuthClient.get(Uri.parse('$kLichessHost/api/user/$testUserId')),
-      ).thenAnswer(
-        (_) async => Result.value(http.Response(testUserResponse, 200)),
-      );
+''',
+            200,
+          );
+        }
+        return mockResponse('', 404);
+      });
 
+      final repo = UserRepository(mockClient);
       final result = await repo.getUser(testUserId);
 
-      expect(result.isValue, true);
+      expect(result, isA<User>());
+      expect(result.id, testUserId);
+      expect(result.title, 'GM');
+      expect(result.profile?.country, 'France');
     });
   });
 
-  group('UserRepository.getUserPerfStatsTask', () {
+  group('UserRepository.getPerfStats', () {
     const testPerf = Perf.rapid;
-    final uriString =
-        '$kLichessHost/api/user/$testUserId/perf/${testPerf.name}';
+    final path = '/api/user/$testUserId/perf/${testPerf.name}';
+
     test('json read, minimal example', () async {
-      final responseMinimal = '''
-      {
+      final mockClient = MockClient((request) {
+        if (request.url.path == path) {
+          return mockResponse(
+            '''
+{
   "user": {
     "name": "$testUserId"
   },
@@ -136,18 +137,26 @@ void main() {
     }
   }
 }
-''';
-      when(() => mockAuthClient.get(Uri.parse(uriString))).thenAnswer(
-        (_) async => Result.value(http.Response(responseMinimal, 200)),
-      );
+''',
+            200,
+          );
+        }
+        return mockResponse('', 404);
+      });
 
-      final result = await repo.getUserPerfStats(testUserId, testPerf);
+      final repo = UserRepository(mockClient);
 
-      expect(result.isValue, true);
+      final result = await repo.getPerfStats(testUserId, testPerf);
+
+      expect(result, isA<UserPerfStats>());
+      expect(result.rating, 1500);
     });
 
     test('json read, full example', () async {
-      final responseFull = '''
+      final mockClient = MockClient((request) {
+        if (request.url.path == path) {
+          return mockResponse(
+            '''
 {
   "user": {
     "name": "testOpponentName"
@@ -383,14 +392,22 @@ void main() {
     }
   }
 }
-''';
-      when(() => mockAuthClient.get(Uri.parse(uriString))).thenAnswer(
-        (_) async => Result.value(http.Response(responseFull, 200)),
-      );
+''',
+            200,
+          );
+        }
+        return mockResponse('', 404);
+      });
 
-      final result = await repo.getUserPerfStats(testUserId, testPerf);
+      final repo = UserRepository(mockClient);
 
-      expect(result.isValue, true);
+      final result = await repo.getPerfStats(testUserId, testPerf);
+
+      expect(result, isA<UserPerfStats>());
+      expect(result.rating, 1500.42);
+      expect(result.bestWins?.length, 5);
+      expect(result.worstLosses?.length, 5);
+      expect(result.rank, 1000);
     });
   });
 
@@ -399,19 +416,32 @@ void main() {
       final ids = ISet(
         {const UserId('maia1'), const UserId('maia5'), const UserId('maia9')},
       );
-      when(
-        () => mockAuthClient.get(
-          Uri.parse('$kLichessHost/api/users/status?ids=${ids.join(',')}'),
-        ),
-      ).thenAnswer((_) async => Result.value(http.Response('[]', 200)));
 
+      final mockClient = MockClient((request) {
+        if (request.url.path == '/api/users/status') {
+          return mockResponse(
+            '[]',
+            200,
+          );
+        }
+        return mockResponse('', 404);
+      });
+
+      final repo = UserRepository(mockClient);
       final result = await repo.getUsersStatuses(ids);
 
-      expect(result.isValue, true);
+      expect(result, isA<IList<UserStatus>>());
+      expect(result.isEmpty, true);
     });
 
     test('json read, full example', () async {
-      const response = '''
+      final ids = ISet(
+        {const UserId('maia1'), const UserId('maia5'), const UserId('maia9')},
+      );
+      final mockClient = MockClient((request) {
+        if (request.url.path == '/api/users/status') {
+          return mockResponse(
+            '''
 [
   {
     "id": "maia1",
@@ -430,19 +460,18 @@ void main() {
     "online": true
   }
 ]
-''';
-      final ids = ISet(
-        {const UserId('maia1'), const UserId('maia5'), const UserId('maia9')},
-      );
-      when(
-        () => mockAuthClient.get(
-          Uri.parse('$kLichessHost/api/users/status?ids=${ids.join(',')}'),
-        ),
-      ).thenAnswer((_) async => Result.value(http.Response(response, 200)));
+''',
+            200,
+          );
+        }
+        return mockResponse('', 404);
+      });
 
+      final repo = UserRepository(mockClient);
       final result = await repo.getUsersStatuses(ids);
 
-      expect(result.isValue, true);
+      expect(result, isA<IList<UserStatus>>());
+      expect(result.length, 3);
     });
   });
 
@@ -452,14 +481,18 @@ void main() {
       ''';
 
     test('json read, minimal example', () async {
-      when(
-        () => mockAuthClient
-            .get(Uri.parse('$kLichessHost/api/player/top/1/standard')),
-      ).thenAnswer((_) async => Result.value(http.Response(res, 200)));
+      final mockClient = MockClient((request) {
+        if (request.url.path == '/api/player/top/1/standard') {
+          return mockResponse(res, 200);
+        }
+        return mockResponse('', 404);
+      });
 
+      final repo = UserRepository(mockClient);
       final result = await repo.getTop1();
 
-      expect(result.isValue, true);
+      expect(result, isA<IMap<Perf, LeaderboardUser>>());
+      expect(result.length, 5);
     });
   });
 
@@ -480,35 +513,34 @@ void main() {
 "racingKings":[{"id":"royalmaniac","username":"RoyalManiac","perfs":{"racingKings":{"rating":2499,"progress":13}},"patron":true},{"id":"cybershredder","username":"CyberShredder","perfs":{"racingKings":{"rating":2408,"progress":20}}},{"id":"queeneatingdragon","username":"QueenEatingDragon","perfs":{"racingKings":{"rating":2388,"progress":-14}}},{"id":"seth_7777777","username":"seth_7777777","perfs":{"racingKings":{"rating":2387,"progress":7}}},{"id":"huangyudong","username":"huangyudong","perfs":{"racingKings":{"rating":2342,"progress":-8}}},{"id":"natso","username":"Natso","perfs":{"racingKings":{"rating":2339,"progress":13}},"patron":true},{"id":"imakemanymistakes","username":"IMakeManyMistakes","perfs":{"racingKings":{"rating":2333,"progress":-7}}},{"id":"peanutbutter12345","username":"Peanutbutter12345","perfs":{"racingKings":{"rating":2321,"progress":-3}},"patron":true},{"id":"walker_22","username":"Walker_22","perfs":{"racingKings":{"rating":2316,"progress":-1}}},{"id":"artem_medvedev-04","username":"Artem_Medvedev-04","perfs":{"racingKings":{"rating":2274,"progress":10}}}]}
 ''';
     test('get leaderboard', () async {
-      when(() => mockAuthClient.get(Uri.parse('$kLichessHost/api/player')))
-          .thenAnswer((_) async => Result.value(http.Response(testRes, 200)));
+      final mockClient = MockClient((request) {
+        if (request.url.path == '/api/player') {
+          return mockResponse(testRes, 200);
+        }
+        return mockResponse('', 404);
+      });
 
+      final repo = UserRepository(mockClient);
       final result = await repo.getLeaderboard();
 
-      expect(result.isValue, true);
+      expect(result, isA<Leaderboard>());
+      expect(result.bullet.length, 10);
     });
   });
 
   test('UserRepository.getUserActivity minimal example', () async {
-    when(
-      () => mockAuthClient.get(
-        Uri.parse('$kLichessHost/api/user/testUser/activity'),
-      ),
-    ).thenAnswer(
-      (_) async => Result.value(
-        http.Response(
-          userActivityResponse,
-          200,
-          headers: {
-            'content-type': 'application/json; charset=utf-8',
-          },
-        ),
-      ),
-    );
+    final mockClient = MockClient((request) {
+      if (request.url.path == '/api/user/testUser/activity') {
+        return mockResponse(userActivityResponse, 200);
+      }
+      return mockResponse('', 404);
+    });
 
-    final result = await repo.getUserActivity(const UserId('testUser'));
+    final repo = UserRepository(mockClient);
+    final result = await repo.getActivity(const UserId('testUser'));
 
-    expect(result.isValue, true);
+    expect(result, isA<IList<UserActivity>>());
+    expect(result.length, 7);
   });
 }
 

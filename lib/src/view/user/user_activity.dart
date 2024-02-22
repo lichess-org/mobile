@@ -1,9 +1,12 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
+import 'package:lichess_mobile/src/model/user/user_repository.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -12,8 +15,27 @@ import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/rating.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'user_activity.g.dart';
 
 final _dateFormatter = DateFormat.yMMMd(Intl.getCurrentLocale());
+
+@riverpod
+Future<IList<UserActivity>> _userActivity(
+  _UserActivityRef ref, {
+  required UserId id,
+}) async {
+  return ref.withClientCacheFor(
+    (client) => UserRepository(client).getActivity(id),
+    // cache is important because the associated widget is in a [ListView] and
+    // the provider may be instanciated multiple times in a short period of time
+    // (e.g. when scrolling)
+    // TODO: consider debouncing the request instead of caching it, or make the
+    // request in the parent widget and pass the result to the child
+    const Duration(minutes: 1),
+  );
+}
 
 class UserActivityWidget extends ConsumerWidget {
   const UserActivityWidget({this.user, super.key});
@@ -23,7 +45,7 @@ class UserActivityWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final activity = user != null
-        ? ref.watch(userActivityProvider(id: user!.id))
+        ? ref.watch(_userActivityProvider(id: user!.id))
         : ref.watch(accountActivityProvider);
 
     return activity.when(

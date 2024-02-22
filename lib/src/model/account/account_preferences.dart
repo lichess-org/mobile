@@ -1,8 +1,8 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:result_extensions/result_extensions.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'account_repository.dart';
@@ -63,15 +63,16 @@ class AccountPreferences extends _$AccountPreferences {
       return null;
     }
 
-    return _repo.getPreferences().fold(
-      (value) => value,
-      (e, __) {
-        debugPrint(
-          '[AccountPreferences] Error getting account preferences: $e',
-        );
-        return defaultAccountPreferences;
-      },
-    );
+    try {
+      return ref.withClient(
+        (client) => AccountRepository(client).getPreferences(),
+      );
+    } catch (e) {
+      debugPrint(
+        '[AccountPreferences] Error getting account preferences: $e',
+      );
+      return defaultAccountPreferences;
+    }
   }
 
   Future<void> setZen(Zen value) => _setPref('zen', value);
@@ -90,11 +91,11 @@ class AccountPreferences extends _$AccountPreferences {
 
   Future<void> _setPref<T>(String key, AccountPref<T> value) async {
     await Future<void>.delayed(const Duration(milliseconds: 200));
-    await _repo.setPreference(key, value);
+    await ref.withClient(
+      (client) => AccountRepository(client).setPreference(key, value),
+    );
     ref.invalidateSelf();
   }
-
-  AccountRepository get _repo => ref.read(accountRepositoryProvider);
 }
 
 abstract class AccountPref<T> {

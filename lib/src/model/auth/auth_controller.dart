@@ -1,16 +1,9 @@
-import 'package:async/async.dart';
-import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/auth/auth_client.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/common/errors.dart';
-import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/notification_service.dart';
-import 'package:lichess_mobile/src/utils/json.dart';
-import 'package:result_extensions/result_extensions.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'auth_repository.dart';
-import 'bearer.dart';
 
 part 'auth_controller.g.dart';
 
@@ -24,58 +17,36 @@ class AuthController extends _$AuthController {
   Future<void> signIn() async {
     state = const AsyncLoading();
 
-    final Result<AuthSessionState> result =
-        await ref.read(authRepositoryProvider).signIn().flatMap(
-      (oAuthResp) {
-        if (oAuthResp.accessToken != null) {
-          final apiClient = ref.read(authClientProvider);
-          return apiClient.get(
-            Uri.parse('$kLichessHost/api/account'),
-            headers: {
-              'Authorization':
-                  'Bearer ${signBearerToken(oAuthResp.accessToken!)}',
-            },
-          ).flatMap((response) {
-            return readJsonObjectFromResponse(
-              response,
-              mapper: User.fromServerJson,
-            ).map((user) {
-              return AuthSessionState(
-                token: oAuthResp.accessToken!,
-                user: user.lightUser,
-              );
-            });
-          });
-        } else {
-          return Future.value(
-            Result<AuthSessionState>.error(
-              const ApiRequestException(500, 'Access token not found.'),
-            ),
-          );
-        }
-      },
-    );
+    final appAuth = ref.read(appAuthProvider);
 
-    state = result.fold(
-      (session) {
-        ref.read(authSessionProvider.notifier).update(session);
-        ref.read(notificationServiceProvider).registerDevice();
-        return const AsyncValue.data(null);
-      },
-      (e, st) {
-        return AsyncValue.error(e, st ?? StackTrace.current);
-      },
-    );
+    try {
+      final session = await ref
+          .withClient((client) => AuthRepository(client, appAuth).signIn());
+
+      ref.read(authSessionProvider.notifier).update(session);
+      ref.read(notificationServiceProvider).registerDevice();
+
+      state = const AsyncValue.data(null);
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
+    }
   }
 
   Future<void> signOut() async {
     state = const AsyncLoading();
     await Future<void>.delayed(const Duration(milliseconds: 500));
-    final result = await ref.read(authRepositoryProvider).signOut();
-    if (result.isValue) {
+
+    final appAuth = ref.read(appAuthProvider);
+
+    try {
+      await ref.withClient(
+        (client) => AuthRepository(client, appAuth).signOut(),
+      );
       ref.read(notificationServiceProvider).unregister();
       await ref.read(authSessionProvider.notifier).delete();
+      state = const AsyncValue.data(null);
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
     }
-    state = result.asAsyncValue;
   }
 }

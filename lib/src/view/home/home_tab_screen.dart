@@ -82,6 +82,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                 tooltip: context.l10n.profile,
                 onPressed: () {
                   ref.invalidate(accountProvider);
+                  ref.invalidate(accountActivityProvider);
                   Navigator.of(context).push(
                     MaterialPageRoute<void>(
                       builder: (context) => const ProfileScreen(),
@@ -101,7 +102,12 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
       body: RefreshIndicator(
         key: _androidRefreshKey,
         onRefresh: () => _refreshData(),
-        child: const _HomeBody(),
+        child: const Column(
+          children: [
+            Expanded(child: _HomeBody()),
+            _ConnectivityBanner(),
+          ],
+        ),
       ),
     );
   }
@@ -123,6 +129,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                     semanticsLabel: context.l10n.profile,
                     onPressed: () {
                       ref.invalidate(accountProvider);
+                      ref.invalidate(accountActivityProvider);
                       Navigator.of(context).push(
                         CupertinoPageRoute<void>(
                           builder: (context) => const ProfileScreen(),

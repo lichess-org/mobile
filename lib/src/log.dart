@@ -6,8 +6,7 @@ import 'package:logging/logging.dart';
 
 // to see http requests and websocket connections in terminal
 const _loggersToShowInTerminal = {
-  'AuthClient',
-  'LobbyAuthClient',
+  'HttpClient',
   'SocketClient',
 };
 

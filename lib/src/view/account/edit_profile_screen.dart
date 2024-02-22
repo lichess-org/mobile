@@ -1,7 +1,9 @@
+import 'package:async/async.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -267,13 +269,17 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                             _formData.removeWhere((key, value) {
                               return value == null;
                             });
-                            final future =
-                                ref.read(accountRepositoryProvider).saveProfile(
-                                      _formData.map(
-                                        (key, value) =>
-                                            MapEntry(key, value.toString()),
-                                      ),
-                                    );
+                            final future = Result.capture(
+                              ref.withClient(
+                                (client) =>
+                                    AccountRepository(client).saveProfile(
+                                  _formData.map(
+                                    (key, value) =>
+                                        MapEntry(key, value.toString()),
+                                  ),
+                                ),
+                              ),
+                            );
 
                             setState(() {
                               _pendingSaveProfile = future;

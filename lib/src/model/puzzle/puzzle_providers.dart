@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:async/async.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
@@ -13,7 +13,6 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/storm.dart';
-import 'package:lichess_mobile/src/utils/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'puzzle_providers.g.dart';
@@ -24,25 +23,27 @@ Future<PuzzleContext?> nextPuzzle(
   PuzzleAngle angle,
 ) {
   final session = ref.watch(authSessionProvider);
-  // ignore: avoid_manual_providers_as_generated_provider_dependency
-  final puzzleService = ref.watch(defaultPuzzleServiceProvider);
-  final userId = session?.user.id;
-  return puzzleService.nextPuzzle(
-    userId: userId,
-    angle: angle,
-  );
+
+  return ref.withClient((client) {
+    final puzzleService = ref.read(puzzleServiceFactoryProvider)(
+      client,
+      queueLength: kPuzzleLocalQueueLength,
+    );
+    return puzzleService.nextPuzzle(
+      userId: session?.user.id,
+      angle: angle,
+    );
+  });
 }
 
 @riverpod
 Future<PuzzleStreakResponse> streak(StreakRef ref) {
-  final repo = ref.watch(puzzleRepositoryProvider);
-  return Result.release(repo.streak());
+  return ref.withClient((client) => PuzzleRepository(client).streak());
 }
 
 @riverpod
 Future<PuzzleStormResponse> storm(StormRef ref) {
-  final repo = ref.watch(puzzleRepositoryProvider);
-  return Result.release(repo.storm());
+  return ref.withClient((client) => PuzzleRepository(client).storm());
 }
 
 @riverpod
@@ -50,19 +51,15 @@ Future<Puzzle> puzzle(PuzzleRef ref, PuzzleId id) async {
   final puzzleStorage = ref.watch(puzzleStorageProvider);
   final puzzle = await puzzleStorage.fetch(puzzleId: id);
   if (puzzle != null) return puzzle;
-  final repo = ref.watch(puzzleRepositoryProvider);
-  return Result.release(repo.fetch(id));
+  return ref.withClient((client) => PuzzleRepository(client).fetch(id));
 }
 
 @riverpod
-Future<Puzzle> dailyPuzzle(DailyPuzzleRef ref) async {
-  final link = ref.cacheFor(const Duration(days: 1));
-  final repo = ref.watch(puzzleRepositoryProvider);
-  final result = await repo.daily();
-  if (result.isError) {
-    link.close();
-  }
-  return result.asFuture;
+Future<Puzzle> dailyPuzzle(DailyPuzzleRef ref) {
+  return ref.withClientCacheFor(
+    (client) => PuzzleRepository(client).daily(),
+    const Duration(hours: 6),
+  );
 }
 
 @riverpod
@@ -82,50 +79,53 @@ Future<IMap<String, int>> savedOpeningBatches(
 }
 
 @riverpod
-Future<PuzzleDashboard> puzzleDashboard(
+Future<PuzzleDashboard?> puzzleDashboard(
   PuzzleDashboardRef ref,
 ) async {
-  final link = ref.cacheFor(const Duration(minutes: 5));
-  final repo = ref.watch(puzzleRepositoryProvider);
-  final result = await repo.puzzleDashboard();
-  if (result.isError) {
-    link.close();
-  }
-  return result.asFuture;
+  final session = ref.watch(authSessionProvider);
+  if (session == null) return null;
+  return ref.withClientCacheFor(
+    (client) => PuzzleRepository(client).puzzleDashboard(),
+    const Duration(hours: 3),
+  );
 }
 
 @riverpod
-Future<StormDashboard> stormDashboard(StormDashboardRef ref) async {
-  final link = ref.cacheFor(const Duration(minutes: 30));
+Future<IList<PuzzleHistoryEntry>?> puzzleRecentActivity(
+  PuzzleRecentActivityRef ref,
+) async {
   final session = ref.watch(authSessionProvider);
-  final repo = ref.watch(puzzleRepositoryProvider);
-  final result = await repo.stormDashboard(session!.user.id);
-  if (result.isError) {
-    link.close();
-  }
-  return result.asFuture;
+  if (session == null) return null;
+  return ref.withClientCacheFor(
+    (client) => PuzzleRepository(client).puzzleActivity(20),
+    const Duration(hours: 3),
+  );
+}
+
+@riverpod
+Future<StormDashboard?> stormDashboard(StormDashboardRef ref) async {
+  final session = ref.watch(authSessionProvider);
+  if (session == null) return null;
+  return ref.withClientCacheFor(
+    (client) => PuzzleRepository(client).stormDashboard(session.user.id),
+    const Duration(minutes: 30),
+  );
 }
 
 @riverpod
 Future<IMap<PuzzleThemeKey, PuzzleThemeData>> puzzleThemes(
   PuzzleThemesRef ref,
-) async {
-  final link = ref.cacheFor(const Duration(days: 1));
-  final repo = ref.watch(puzzleRepositoryProvider);
-  final result = await repo.puzzleThemes();
-  if (result.isError) {
-    link.close();
-  }
-  return result.asFuture;
+) {
+  return ref.withClientCacheFor(
+    (client) => PuzzleRepository(client).puzzleThemes(),
+    const Duration(days: 1),
+  );
 }
 
 @riverpod
-Future<IList<PuzzleOpeningFamily>> puzzleOpenings(PuzzleOpeningsRef ref) async {
-  final link = ref.cacheFor(const Duration(days: 1));
-  final repo = ref.watch(puzzleRepositoryProvider);
-  final result = await repo.puzzleOpenings();
-  if (result.isError) {
-    link.close();
-  }
-  return result.asFuture;
+Future<IList<PuzzleOpeningFamily>> puzzleOpenings(PuzzleOpeningsRef ref) {
+  return ref.withClientCacheFor(
+    (client) => PuzzleRepository(client).puzzleOpenings(),
+    const Duration(days: 1),
+  );
 }

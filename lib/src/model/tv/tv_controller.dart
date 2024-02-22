@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:async/async.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
@@ -41,7 +41,6 @@ class TvController extends _$TvController {
   }
 
   SocketClient get _socket => ref.read(socketClientProvider);
-  TvRepository get _tvRepository => ref.read(tvRepositoryProvider);
   SoundService get _soundService => ref.read(soundServiceProvider);
 
   Future<void> startWatching() async {
@@ -63,7 +62,8 @@ class TvController extends _$TvController {
       id = game.$1;
       orientation = game.$2;
     } else {
-      final channels = await Result.release(_tvRepository.channels());
+      final channels =
+          await ref.withClient((client) => TvRepository(client).channels());
       final channelGame = channels[channel]!;
       id = channelGame.id;
       orientation = channelGame.side ?? Side.white;

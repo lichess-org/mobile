@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/common/errors.dart';
+import 'package:http/http.dart' show ClientException;
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -46,7 +46,7 @@ class UserScreen extends ConsumerWidget {
         data: (data) => _UserProfileListView(data.$1),
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, _) {
-          if (error is NotFoundException) {
+          if (error is ClientException && error.message.contains('404')) {
             return Center(
               child: Text(
                 textAlign: TextAlign.center,
@@ -83,7 +83,7 @@ class UserScreen extends ConsumerWidget {
         loading: () =>
             const Center(child: CircularProgressIndicator.adaptive()),
         error: (error, _) {
-          if (error is NotFoundException) {
+          if (error is ClientException && error.message.contains('404')) {
             return Center(
               child: Text(
                 textAlign: TextAlign.center,

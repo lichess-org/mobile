@@ -1,16 +1,11 @@
-import 'package:async/async.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/crashlytics.dart';
-import 'package:lichess_mobile/src/model/auth/auth_client.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
-import 'package:lichess_mobile/src/utils/json.dart';
-import 'package:logging/logging.dart';
-import 'package:result_extensions/result_extensions.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'correspondence_challenge.dart';
@@ -18,65 +13,38 @@ import 'game_seek.dart';
 
 part 'lobby_repository.g.dart';
 
-@Riverpod(keepAlive: true)
-LobbyRepository lobbyRepository(LobbyRepositoryRef ref) {
-  // lobbyRepository gets its own httpClient because we need to be able to
-  // close it independently from the rest of the app to be able to cancel a seek.
-  // See [CreateGameService] for more details.
-  final httpClient = http.Client();
-  final crashlytics = ref.watch(crashlyticsProvider);
-  final logger = Logger('LobbyAuthClient');
-  final authClient = AuthClient(
-    httpClient,
-    ref,
-    logger,
-    crashlytics,
-  );
-  ref.onDispose(() {
-    httpClient.close();
-  });
-  return LobbyRepository(
-    authClient: authClient,
-    logger: Logger('LobbyRepository'),
-  );
-}
-
 @riverpod
 Future<IList<CorrespondenceChallenge>> correspondenceChallenges(
   CorrespondenceChallengesRef ref,
 ) {
-  final lobbyRepository = ref.watch(lobbyRepositoryProvider);
-  return Result.release(lobbyRepository.getCorrespondenceChallenges());
+  final client = ref.read(lichessClientFactoryProvider)();
+  ref.onDispose(client.close);
+
+  final lobbyRepository = LobbyRepository(client);
+  return lobbyRepository.getCorrespondenceChallenges();
 }
 
 class LobbyRepository {
-  const LobbyRepository({
-    required this.authClient,
-    required Logger logger,
-  }) : _log = logger;
+  LobbyRepository(this.client);
 
-  final AuthClient authClient;
-  final Logger _log;
+  final http.Client client;
 
-  FutureResult<void> createSeek(GameSeek seek, {required String sri}) {
-    return authClient.post(
-      Uri.parse(
-        '$kLichessHost/api/board/seek?sri=$sri',
-      ),
-      body: seek.requestBody,
-    );
+  Future<void> createSeek(GameSeek seek, {required String sri}) async {
+    final uri = Uri.parse('$kLichessHost/api/board/seek?sri=$sri');
+    final response = await client.post(uri, body: seek.requestBody);
+    if (response.statusCode >= 400) {
+      throw http.ClientException(
+        'Failed to create seek: ${response.statusCode}',
+        uri,
+      );
+    }
   }
 
-  FutureResult<IList<CorrespondenceChallenge>> getCorrespondenceChallenges() {
-    return authClient.get(
+  Future<IList<CorrespondenceChallenge>> getCorrespondenceChallenges() {
+    return client.readJsonList(
       Uri.parse('$kLichessHost/lobby/seeks'),
       headers: {'Accept': 'application/vnd.lichess.v5+json'},
-    ).flatMap(
-      (response) => readJsonListOfObjectsFromResponse(
-        response,
-        mapper: _correspondenceSeekFromJson,
-        logger: _log,
-      ),
+      mapper: _correspondenceSeekFromJson,
     );
   }
 }

@@ -5,7 +5,9 @@ import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
@@ -30,7 +32,6 @@ part 'puzzle_controller.g.dart';
 
 @riverpod
 class PuzzleController extends _$PuzzleController {
-  // ignore: avoid-late-keyword
   late Branch _gameTree;
   Timer? _firstMoveTimer;
   Timer? _enableSolutionButtonTimer;
@@ -58,6 +59,14 @@ class PuzzleController extends _$PuzzleController {
 
     return _loadNewContext(initialContext, initialStreak);
   }
+
+  PuzzleService _service(http.Client client) =>
+      ref.read(puzzleServiceFactoryProvider)(
+        client,
+        queueLength: kPuzzleLocalQueueLength,
+      );
+
+  PuzzleRepository _repository(http.Client client) => PuzzleRepository(client);
 
   PuzzleState _loadNewContext(
     PuzzleContext context,
@@ -206,10 +215,12 @@ class PuzzleController extends _$PuzzleController {
         .setDifficulty(difficulty);
 
     // ignore: avoid_manual_providers_as_generated_provider_dependency
-    final nextPuzzle = await ref.read(defaultPuzzleServiceProvider).resetBatch(
-          userId: initialContext.userId,
-          angle: initialContext.angle,
-        );
+    final nextPuzzle = await ref.withClient(
+      (client) => _service(client).resetBatch(
+        userId: initialContext.userId,
+        angle: initialContext.angle,
+      ),
+    );
 
     state = state.copyWith(
       isChangingDifficulty: false,
@@ -226,10 +237,11 @@ class PuzzleController extends _$PuzzleController {
 
   void sendStreakResult() {
     if (initialContext.userId != null) {
-      final repo = ref.read(puzzleRepositoryProvider);
       final streak = state.streak?.index;
       if (streak != null && streak > 0) {
-        repo.postStreakRun(streak);
+        ref.withClient(
+          (client) => _repository(client).postStreakRun(streak),
+        );
       }
     }
   }
@@ -272,13 +284,17 @@ class PuzzleController extends _$PuzzleController {
 
   FutureResult<PuzzleContext?> _fetchNextStreakPuzzle(PuzzleStreak streak) {
     return streak.nextId != null
-        ? ref.read(puzzleRepositoryProvider).fetch(streak.nextId!).map(
-              (puzzle) => PuzzleContext(
-                angle: const PuzzleTheme(PuzzleThemeKey.mix),
-                puzzle: puzzle,
-                userId: initialContext.userId,
-              ),
-            )
+        ? Result.capture(
+            ref.withClient(
+              (client) => _repository(client).fetch(streak.nextId!).then(
+                    (puzzle) => PuzzleContext(
+                      angle: const PuzzleTheme(PuzzleThemeKey.mix),
+                      puzzle: puzzle,
+                      userId: initialContext.userId,
+                    ),
+                  ),
+            ),
+          )
         : Future.value(Result.value(null));
   }
 
@@ -313,19 +329,19 @@ class PuzzleController extends _$PuzzleController {
         puzzleSessionProvider(initialContext.userId, initialContext.angle)
             .notifier;
 
-    // ignore: avoid_manual_providers_as_generated_provider_dependency
-    final service = ref.read(defaultPuzzleServiceProvider);
     final soundService = ref.read(soundServiceProvider);
 
     if (state.streak == null) {
-      final next = await service.solve(
-        userId: initialContext.userId,
-        angle: initialContext.angle,
-        puzzle: state.puzzle,
-        solution: PuzzleSolution(
-          id: state.puzzle.puzzle.id,
-          win: state.result == PuzzleResult.win,
-          rated: initialContext.userId != null,
+      final next = await ref.withClient(
+        (client) => _service(client).solve(
+          userId: initialContext.userId,
+          angle: initialContext.angle,
+          puzzle: state.puzzle,
+          solution: PuzzleSolution(
+            id: state.puzzle.puzzle.id,
+            win: state.result == PuzzleResult.win,
+            rated: initialContext.userId != null,
+          ),
         ),
       );
 

@@ -2,7 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/common/errors.dart';
+import 'package:http/http.dart' show ClientException;
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
@@ -19,9 +19,12 @@ class PuzzleDashboardWidget extends ConsumerWidget {
     final puzzleDashboard = ref.watch(puzzleDashboardProvider);
 
     return puzzleDashboard.when(
-      data: (data) {
+      data: (dashboard) {
+        if (dashboard == null) {
+          return const SizedBox.shrink();
+        }
         final chartData =
-            data.themes.take(9).sortedBy((e) => e.theme.name).toList();
+            dashboard.themes.take(9).sortedBy((e) => e.theme.name).toList();
         return ListSection(
           header: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,20 +45,20 @@ class PuzzleDashboardWidget extends ConsumerWidget {
             StatCardRow([
               StatCard(
                 context.l10n.performance,
-                value: data.global.performance.toString(),
+                value: dashboard.global.performance.toString(),
               ),
               StatCard(
                 context.l10n
-                    .puzzleNbPlayed(data.global.nb)
+                    .puzzleNbPlayed(dashboard.global.nb)
                     .replaceAll(RegExp(r'\d+'), '')
                     .trim()
                     .capitalize(),
-                value: data.global.nb.toString().localizeNumbers(),
+                value: dashboard.global.nb.toString().localizeNumbers(),
               ),
               StatCard(
                 context.l10n.puzzleSolved.capitalize(),
                 value:
-                    '${((data.global.firstWins / data.global.nb) * 100).round()}%',
+                    '${((dashboard.global.firstWins / dashboard.global.nb) * 100).round()}%',
               ),
             ]),
             if (chartData.length >= 3)
@@ -82,7 +85,7 @@ class PuzzleDashboardWidget extends ConsumerWidget {
                 context.l10n.puzzlePuzzleDashboard,
                 style: Styles.sectionTitle,
               ),
-              if (e is NotFoundException)
+              if (e is ClientException && e.message.contains('404'))
                 Text(context.l10n.puzzleNoPuzzlesToShow)
               else
                 const Text('Could not load dashboard.'),

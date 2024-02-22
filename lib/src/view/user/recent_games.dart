@@ -1,11 +1,14 @@
 import 'package:dartchess/dartchess.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
-import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
+import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
@@ -18,7 +21,26 @@ import 'package:lichess_mobile/src/view/game/standalone_game_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:timeago/timeago.dart' as timeago;
+
+part 'recent_games.g.dart';
+
+@riverpod
+Future<IList<LightArchivedGame>> _userRecentGames(
+  _UserRecentGamesRef ref, {
+  required UserId userId,
+}) {
+  return ref.withClientCacheFor(
+    (client) => GameRepository(client).getRecentGames(userId),
+    // cache is important because the associated widget is in a [ListView] and
+    // the provider may be instanciated multiple times in a short period of time
+    // (e.g. when scrolling)
+    // TODO: consider debouncing the request instead of caching it, or make the
+    // request in the parent widget and pass the result to the child
+    const Duration(minutes: 1),
+  );
+}
 
 class RecentGames extends ConsumerWidget {
   const RecentGames({this.user, super.key});
@@ -28,7 +50,7 @@ class RecentGames extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final recentGames = user != null
-        ? ref.watch(userRecentGamesProvider(userId: user!.id))
+        ? ref.watch(_userRecentGamesProvider(userId: user!.id))
         : ref.watch(accountRecentGamesProvider);
 
     final userId = user?.id ?? ref.watch(authSessionProvider)?.user.id;

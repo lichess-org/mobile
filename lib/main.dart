@@ -19,6 +19,7 @@ import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/utils/badge_service.dart';
 import 'package:lichess_mobile/src/utils/layout.dart';
 import 'package:path/path.dart' as path;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'firebase_options.dart';
@@ -33,6 +34,8 @@ Future<void> main() async {
 
   // Intl and timeago setup
   await setupIntl();
+
+  SharedPreferences.setPrefix('lichess.');
 
   // Firebase setup
   await Firebase.initializeApp(

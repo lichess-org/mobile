@@ -2,12 +2,14 @@ import 'dart:async';
 import 'dart:core';
 import 'dart:math' as math;
 
+import 'package:async/async.dart';
 import 'package:chessground/chessground.dart' as cg;
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/services.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:result_extensions/result_extensions.dart';
@@ -38,6 +40,7 @@ class StormController extends _$StormController {
       _firstMoveTimer?.cancel();
       state.clock.dispose();
     });
+
     final pov = Chess.fromSetup(Setup.parseFen(puzzles.first.fen));
     final newState = StormState(
       firstMovePlayed: false,
@@ -131,10 +134,13 @@ class StormController extends _$StormController {
 
     final session = ref.read(authSessionProvider);
     if (session != null) {
-      final res = await ref
-          .read(puzzleRepositoryProvider)
-          .postStormRun(stats)
-          .timeout(const Duration(seconds: 2));
+      final res = await ref.withClient(
+        (client) => Result.capture(
+          PuzzleRepository(client)
+              .postStormRun(stats)
+              .timeout(const Duration(seconds: 2)),
+        ),
+      );
 
       final newState = state.copyWith(
         stats: stats,

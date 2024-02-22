@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:async/async.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/utils/riverpod.dart';
 import 'package:result_extensions/result_extensions.dart';
@@ -15,15 +17,6 @@ part 'puzzle_activity.g.dart';
 const _nbPerPage = 50;
 const _maxPuzzles = 500;
 
-@Riverpod(keepAlive: true)
-Future<IList<PuzzleHistoryEntry>> puzzleRecentActivity(
-  PuzzleRecentActivityRef ref,
-) {
-  final repo = ref.watch(puzzleRepositoryProvider);
-  // we need to fetch enough puzzles to fill the history screen
-  return Result.release(repo.puzzleActivity(20));
-}
-
 @riverpod
 class PuzzleActivity extends _$PuzzleActivity {
   final _list = <PuzzleHistoryEntry>[];
@@ -34,7 +27,16 @@ class PuzzleActivity extends _$PuzzleActivity {
     ref.onDispose(() {
       _list.clear();
     });
-    _list.addAll(await ref.watch(puzzleRecentActivityProvider.future));
+    final recentActivity = await ref.watch(puzzleRecentActivityProvider.future);
+    if (recentActivity == null) {
+      return const PuzzleActivityState(
+        historyByDay: {},
+        isLoading: false,
+        hasMore: false,
+        hasError: false,
+      );
+    }
+    _list.addAll(recentActivity);
     return PuzzleActivityState(
       historyByDay: _groupByDay(_list),
       isLoading: false,
@@ -64,10 +66,12 @@ class PuzzleActivity extends _$PuzzleActivity {
     final currentVal = state.requireValue;
     if (_list.length < _maxPuzzles) {
       state = AsyncData(currentVal.copyWith(isLoading: true));
-      ref
-          .read(puzzleRepositoryProvider)
-          .puzzleActivity(_nbPerPage, before: _list.last.date)
-          .fold(
+      Result.capture(
+        ref.withClient(
+          (client) => PuzzleRepository(client)
+              .puzzleActivity(_nbPerPage, before: _list.last.date),
+        ),
+      ).fold(
         (value) {
           if (value.isEmpty) {
             state = AsyncData(

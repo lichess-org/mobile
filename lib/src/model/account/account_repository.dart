@@ -1,25 +1,19 @@
-import 'dart:convert';
-
-import 'package:async/async.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/auth/auth_client.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/common/errors.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
-import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
+import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
-import 'package:lichess_mobile/src/utils/json.dart';
-import 'package:lichess_mobile/src/utils/riverpod.dart';
+import 'package:lichess_mobile/src/model/user/user_repository.dart';
 import 'package:logging/logging.dart';
-import 'package:result_extensions/result_extensions.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'account_preferences.dart';
@@ -27,28 +21,15 @@ import 'ongoing_game.dart';
 
 part 'account_repository.g.dart';
 
-@Riverpod(keepAlive: true)
-AccountRepository accountRepository(AccountRepositoryRef ref) {
-  final apiClient = ref.watch(authClientProvider);
-  return AccountRepository(
-    logger: Logger('UserRepository'),
-    apiClient: apiClient,
-  );
-}
-
 @riverpod
 Future<User?> account(AccountRef ref) async {
   final session = ref.watch(authSessionProvider);
-  final link = ref.cacheFor(const Duration(hours: 1));
-  final repo = ref.watch(accountRepositoryProvider);
-  if (session != null) {
-    final result = await repo.getProfile();
-    if (result.isError) {
-      link.close();
-    }
-    return result.asFuture;
-  }
-  return null;
+  if (session == null) return null;
+
+  return ref.withClientCacheFor(
+    (client) => AccountRepository(client).getProfile(),
+    const Duration(hours: 1),
+  );
 }
 
 @riverpod
@@ -59,16 +40,11 @@ Future<LightUser?> accountUser(AccountUserRef ref) async {
 @riverpod
 Future<IList<UserActivity>> accountActivity(AccountActivityRef ref) async {
   final session = ref.watch(authSessionProvider);
-  final link = ref.cacheFor(const Duration(hours: 1));
-  final repo = ref.watch(userRepositoryProvider);
-  if (session != null) {
-    final result = await repo.getUserActivity(session.user.id);
-    if (result.isError) {
-      link.close();
-    }
-    return result.asFuture;
-  }
-  return IList();
+  if (session == null) return IList();
+  return ref.withClientCacheFor(
+    (client) => UserRepository(client).getActivity(session.user.id),
+    const Duration(hours: 1),
+  );
 }
 
 @riverpod
@@ -76,123 +52,95 @@ Future<IList<LightArchivedGame>> accountRecentGames(
   AccountRecentGamesRef ref,
 ) async {
   final session = ref.watch(authSessionProvider);
-  final link = ref.cacheFor(const Duration(hours: 1));
-  final repo = ref.watch(gameRepositoryProvider);
-  if (session != null) {
-    final result = await repo.getRecentGames(session.user.id);
-    if (result.isError) {
-      link.close();
-    }
-    return result.asFuture;
-  }
-
-  return IList();
+  if (session == null) return IList();
+  return ref.withClientCacheFor(
+    (client) => GameRepository(client).getRecentGames(session.user.id),
+    const Duration(hours: 1),
+  );
 }
 
 @riverpod
 Future<IList<OngoingGame>> ongoingGames(OngoingGamesRef ref) async {
   final session = ref.watch(authSessionProvider);
-  final link = ref.cacheFor(const Duration(hours: 1));
-  final repo = ref.watch(accountRepositoryProvider);
-  if (session != null) {
-    final result = await repo.getOngoingGames();
-    if (result.isError) {
-      link.close();
-    }
-    return result.asFuture;
-  }
-  return IList();
+  if (session == null) return IList();
+
+  return ref.withClientCacheFor(
+    (client) => AccountRepository(client).getOngoingGames(),
+    const Duration(hours: 1),
+  );
 }
 
 class AccountRepository {
-  const AccountRepository({
-    required AuthClient apiClient,
-    required Logger logger,
-  })  : _apiClient = apiClient,
-        _log = logger;
+  AccountRepository(this.client);
 
-  final AuthClient _apiClient;
-  final Logger _log;
+  final http.Client client;
+  final Logger _log = Logger('AccountRepository');
 
-  FutureResult<User> getProfile() {
-    return _apiClient.get(Uri.parse('$kLichessHost/api/account')).then(
-          (result) => result.flatMap(
-            (response) => readJsonObjectFromResponse(
-              response,
-              mapper: User.fromServerJson,
-              logger: _log,
-            ),
-          ),
-        );
+  Future<User> getProfile() {
+    return client.readJson(
+      Uri.parse('$kLichessHost/api/account'),
+      mapper: User.fromServerJson,
+    );
   }
 
-  FutureResult<void> saveProfile(Map<String, String> profile) {
-    return _apiClient.post(
-      Uri.parse('$kLichessHost/account/profile'),
+  Future<void> saveProfile(Map<String, String> profile) async {
+    final uri = Uri.parse('$kLichessHost/account/profile');
+    final response = await client.post(
+      uri,
       headers: {'Accept': 'application/json'},
       body: profile,
     );
+
+    if (response.statusCode >= 400) {
+      throw http.ClientException(
+        'Failed to post save profile: ${response.statusCode}',
+        uri,
+      );
+    }
   }
 
-  FutureResult<IList<OngoingGame>> getOngoingGames({int? nb}) {
-    return _apiClient
-        .get(
-          Uri.parse(
-            '$kLichessHost/api/account/playing${nb != null ? '?nb=$nb' : ''}',
-          ),
-        )
-        .then(
-          (result) => result.flatMap(
-            (response) => Result(() {
-              final dynamic obj = jsonDecode(utf8.decode(response.bodyBytes));
-              if (obj is! Map<String, dynamic>) {
-                _log.severe(
-                  'Could not read json object as {nowPlaying: []}: expected an object.',
-                );
-                throw DataFormatException();
-              }
-              final list = obj['nowPlaying'];
-              if (list is! List<dynamic>) {
-                _log.severe(
-                  'Could not read json object as {nowPlaying: []}: expected a list.',
-                );
-                throw DataFormatException();
-              }
-              return list;
-            }).flatMap(
-              (list) => readJsonListOfObjects(
-                list,
-                mapper: _ongoingGameFromJson,
-                logger: _log,
-              ),
-            ),
-          ),
+  Future<IList<OngoingGame>> getOngoingGames({int? nb}) {
+    return client.readJson(
+      Uri.parse(
+        '$kLichessHost/api/account/playing${nb != null ? '?nb=$nb' : ''}',
+      ),
+      mapper: (Map<String, dynamic> json) {
+        final list = json['nowPlaying'];
+        if (list is! List<dynamic>) {
+          _log.severe(
+            'Could not read json object as {nowPlaying: []}: expected a list.',
+          );
+          throw Exception('Could not read json object as {nowPlaying: []}');
+        }
+        return IList(
+          list.map((e) => _ongoingGameFromJson(e as Map<String, dynamic>)),
         );
-  }
-
-  FutureResult<AccountPrefState> getPreferences() {
-    return _apiClient
-        .get(Uri.parse('$kLichessHost/api/account/preferences'))
-        .then(
-          (result) => result.flatMap(
-            (response) => readJsonObjectFromResponse(
-              response,
-              mapper: (Map<String, dynamic> json) {
-                return _accountPreferencesFromPick(
-                  pick(json, 'prefs').required(),
-                );
-              },
-              logger: _log,
-            ),
-          ),
-        );
-  }
-
-  FutureResult<void> setPreference<T>(String prefKey, AccountPref<T> pref) {
-    return _apiClient.post(
-      Uri.parse('$kLichessHost/api/account/preferences/$prefKey'),
-      body: {prefKey: pref.toFormData},
+      },
     );
+  }
+
+  Future<AccountPrefState> getPreferences() {
+    return client.readJson(
+      Uri.parse('$kLichessHost/api/account/preferences'),
+      mapper: (Map<String, dynamic> json) {
+        return _accountPreferencesFromPick(
+          pick(json, 'prefs').required(),
+        );
+      },
+    );
+  }
+
+  Future<void> setPreference<T>(String prefKey, AccountPref<T> pref) async {
+    final uri = Uri.parse('$kLichessHost/api/account/preferences/$prefKey');
+
+    final response = await client.post(uri, body: {prefKey: pref.toFormData});
+
+    if (response.statusCode >= 400) {
+      throw http.ClientException(
+        'Failed to set preference: ${response.statusCode}',
+        uri,
+      );
+    }
   }
 }
 

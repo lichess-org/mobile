@@ -1,42 +1,43 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/auth/auth_client.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/utils/json.dart';
-import 'package:logging/logging.dart';
-import 'package:result_extensions/result_extensions.dart';
 
 class RelationRepository {
-  const RelationRepository({required this.apiClient, required Logger logger})
-      : _log = logger;
+  const RelationRepository(this.client);
 
-  final AuthClient apiClient;
-  final Logger _log;
+  final http.Client client;
 
-  FutureResult<IList<User>> getFollowing() async {
-    return apiClient.get(
+  Future<IList<User>> getFollowing() async {
+    return client.readNdJsonList(
       Uri.parse('$kLichessHost/api/rel/following'),
       headers: {'Accept': 'application/x-ndjson'},
-    ).then(
-      (result) => result.flatMap(
-        (response) => readNdJsonListFromResponse<User>(
-          response,
-          mapper: (json) => User.fromServerJson(json),
-          logger: _log,
-        ),
-      ),
+      mapper: User.fromServerJson,
     );
   }
 
-  FutureResult<void> follow(String username) async {
-    return apiClient.post(
-      Uri.parse('$kLichessHost/api/rel/follow/$username'),
-    );
+  Future<void> follow(String username) async {
+    final uri = Uri.parse('$kLichessHost/api/rel/follow/$username');
+    final response = await client.post(uri);
+
+    if (response.statusCode >= 400) {
+      throw http.ClientException(
+        'Failed to follow user: ${response.statusCode}',
+        uri,
+      );
+    }
   }
 
-  FutureResult<void> unfollow(String username) async {
-    return apiClient.post(
-      Uri.parse('$kLichessHost/api/rel/unfollow/$username'),
-    );
+  Future<void> unfollow(String username) async {
+    final uri = Uri.parse('$kLichessHost/api/rel/unfollow/$username');
+    final response = await client.post(uri);
+
+    if (response.statusCode >= 400) {
+      throw http.ClientException(
+        'Failed to unfollow user: ${response.statusCode}',
+        uri,
+      );
+    }
   }
 }

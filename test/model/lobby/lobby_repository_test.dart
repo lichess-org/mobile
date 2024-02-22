@@ -1,28 +1,34 @@
-import 'package:async/async.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:http/http.dart' as http;
-import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/auth/auth_client.dart';
+import 'package:http/testing.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/lobby/correspondence_challenge.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_repository.dart';
-import 'package:logging/logging.dart';
-import 'package:mocktail/mocktail.dart';
 
-class MockAuthClient extends Mock implements AuthClient {}
-
-class MockLogger extends Mock implements Logger {}
+import '../../test_utils.dart';
 
 void main() {
-  final mockLogger = MockLogger();
-  final mockAuthClient = MockAuthClient();
-  final repo = LobbyRepository(authClient: mockAuthClient, logger: mockLogger);
-
-  setUpAll(() {
-    reset(mockAuthClient);
+  final mockClient = MockClient((request) {
+    if (request.url.path == '/lobby/seeks') {
+      return mockResponse(seeksResponse, 200);
+    }
+    return mockResponse('', 404);
   });
 
-  group('LobbyRepository.getCorrespondenceSeeks', () {
+  final repo = LobbyRepository(mockClient);
+
+  group('LobbyRepository.getCorrespondenceChallenges', () {
     test('read json', () async {
-      const response = '''
+      final data = await repo.getCorrespondenceChallenges();
+
+      expect(data, isA<IList<CorrespondenceChallenge>>());
+      expect(data.length, 2);
+      expect(data[0].id, const GameId('OIBZi6bn'));
+    });
+  });
+}
+
+const seeksResponse = '''
 [
     {
         "color": "black",
@@ -55,18 +61,3 @@ void main() {
     }
 ]
 ''';
-      when(
-        () => mockAuthClient.get(
-          Uri.parse('$kLichessHost/lobby/seeks'),
-          headers: any(named: 'headers'),
-        ),
-      ).thenAnswer(
-        (_) async => Result.value(http.Response(response, 200)),
-      );
-
-      final result = await repo.getCorrespondenceChallenges();
-
-      expect(result.isValue, true);
-    });
-  });
-}

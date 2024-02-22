@@ -51,6 +51,9 @@ class _Body extends ConsumerWidget {
     final stormDashboard = ref.watch(stormDashboardProvider);
     return stormDashboard.when(
       data: (data) {
+        if (data == null) {
+          return const Center(child: Text('Could not load dashboard.'));
+        }
         final dateFormat = DateFormat('MMMM d, yyyy');
         return SafeArea(
           child: Column(
