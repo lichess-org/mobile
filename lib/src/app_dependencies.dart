@@ -51,9 +51,12 @@ Future<AppDependencies> appDependencies(
     await deleteDatabase(dbPath);
   }
 
-  final db = await openDb(databaseFactory, dbPath);
+  if (installedVersion == null ||
+      Version.parse(installedVersion) != appVersion) {
+    prefs.setString('installed_version', appVersion.canonicalizedVersion);
+  }
 
-  prefs.setString('installed_version', pInfo.version);
+  final db = await openDb(databaseFactory, dbPath);
 
   // Clear secure storage on first run because it is not deleted on app uninstall
   if (prefs.getBool('first_run') ?? true) {
