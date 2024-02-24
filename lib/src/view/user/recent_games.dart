@@ -1,4 +1,3 @@
-import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,20 +8,16 @@ import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
-import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
-import 'package:lichess_mobile/src/view/game/standalone_game_screen.dart';
+import 'package:lichess_mobile/src/view/user/full_games_screen.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
-import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 part 'recent_games.g.dart';
 
@@ -32,7 +27,7 @@ Future<IList<LightArchivedGame>> _userRecentGames(
   required UserId userId,
 }) {
   return ref.withClientCacheFor(
-    (client) => GameRepository(client).getRecentGames(userId),
+    (client) => GameRepository(client).getRecentGames(userId, 10),
     // cache is important because the associated widget is in a [ListView] and
     // the provider may be instanciated multiple times in a short period of time
     // (e.g. when scrolling)
@@ -51,34 +46,9 @@ class RecentGames extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final recentGames = user != null
         ? ref.watch(_userRecentGamesProvider(userId: user!.id))
-        : ref.watch(accountRecentGamesProvider);
+        : ref.watch(accountRecentGamesProvider(10));
 
     final userId = user?.id ?? ref.watch(authSessionProvider)?.user.id;
-
-    Widget getResultIcon(LightArchivedGame game, Side mySide) {
-      if (game.status == GameStatus.aborted ||
-          game.status == GameStatus.noStart) {
-        return const Icon(
-          CupertinoIcons.xmark_square_fill,
-          color: LichessColors.grey,
-        );
-      } else {
-        return game.winner == null
-            ? const Icon(
-                CupertinoIcons.equal_square_fill,
-                color: LichessColors.brag,
-              )
-            : game.winner == mySide
-                ? const Icon(
-                    CupertinoIcons.plus_square_fill,
-                    color: LichessColors.good,
-                  )
-                : const Icon(
-                    CupertinoIcons.minus_square_fill,
-                    color: LichessColors.red,
-                  );
-      }
-    }
 
     return recentGames.when(
       data: (data) {
@@ -88,71 +58,19 @@ class RecentGames extends ConsumerWidget {
         return ListSection(
           header: Text(context.l10n.recentGames),
           hasLeading: true,
+          headerTrailing: NoPaddingTextButton(
+            onPressed: () {
+              pushPlatformRoute(
+                context,
+                builder: (context) => FullGameScreen(user: user),
+              );
+            },
+            child: Text(
+              context.l10n.more,
+            ),
+          ),
           children: data.map((game) {
-            final mySide =
-                game.white.user?.id == userId ? Side.white : Side.black;
-            final me = game.white.user?.id == userId ? game.white : game.black;
-            final opponent =
-                game.white.user?.id == userId ? game.black : game.white;
-
-            return GameListTile(
-              game: game,
-              mySide: userId == game.white.user?.id ? Side.white : Side.black,
-              onTap: game.variant.isSupported
-                  ? () {
-                      pushPlatformRoute(
-                        context,
-                        rootNavigator: true,
-                        builder: (context) => game.fullId != null
-                            ? StandaloneGameScreen(
-                                params: InitialStandaloneGameParams(
-                                  id: game.fullId!,
-                                ),
-                              )
-                            : ArchivedGameScreen(
-                                gameData: game,
-                                orientation: userId == game.white.user?.id
-                                    ? Side.white
-                                    : Side.black,
-                              ),
-                      );
-                    }
-                  : null,
-              icon: game.perf.icon,
-              playerTitle: UserFullNameWidget.player(
-                user: opponent.user,
-                aiLevel: opponent.aiLevel,
-                rating: opponent.rating,
-              ),
-              subtitle: Text(
-                timeago.format(game.lastMoveAt),
-              ),
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (me.analysis != null) ...[
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          CupertinoIcons.chart_bar_alt_fill,
-                          color: textShade(context, 0.5),
-                        ),
-                        Text(
-                          me.analysis!.accuracy.toString(),
-                          style: TextStyle(
-                            fontSize: 10,
-                            color: textShade(context, Styles.subtitleOpacity),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(width: 5),
-                  ],
-                  getResultIcon(game, mySide),
-                ],
-              ),
-            );
+            return ExtendedGameListTile(game: game, userId: userId);
           }).toList(),
         );
       },

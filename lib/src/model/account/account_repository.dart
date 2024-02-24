@@ -50,11 +50,13 @@ Future<IList<UserActivity>> accountActivity(AccountActivityRef ref) async {
 @riverpod
 Future<IList<LightArchivedGame>> accountRecentGames(
   AccountRecentGamesRef ref,
+  int gameCount,
 ) async {
   final session = ref.watch(authSessionProvider);
   if (session == null) return IList();
   return ref.withClientCacheFor(
-    (client) => GameRepository(client).getRecentGames(session.user.id),
+    (client) =>
+        GameRepository(client).getRecentGames(session.user.id, gameCount),
     const Duration(hours: 1),
   );
 }
