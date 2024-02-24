@@ -42,6 +42,10 @@ class PuzzleController extends _$PuzzleController {
 
   final _engineEvalDebounce = Debouncer(const Duration(milliseconds: 100));
 
+  late final _service = ref.read(puzzleServiceFactoryProvider)(
+    queueLength: kPuzzleLocalQueueLength,
+  );
+
   @override
   PuzzleState build(
     PuzzleContext initialContext, {
@@ -59,12 +63,6 @@ class PuzzleController extends _$PuzzleController {
 
     return _loadNewContext(initialContext, initialStreak);
   }
-
-  PuzzleService _service(http.Client client) =>
-      ref.read(puzzleServiceFactoryProvider)(
-        client,
-        queueLength: kPuzzleLocalQueueLength,
-      );
 
   PuzzleRepository _repository(http.Client client) => PuzzleRepository(client);
 
@@ -214,12 +212,9 @@ class PuzzleController extends _$PuzzleController {
         )
         .setDifficulty(difficulty);
 
-    // ignore: avoid_manual_providers_as_generated_provider_dependency
-    final nextPuzzle = await ref.withClient(
-      (client) => _service(client).resetBatch(
-        userId: initialContext.userId,
-        angle: initialContext.angle,
-      ),
+    final nextPuzzle = _service.resetBatch(
+      userId: initialContext.userId,
+      angle: initialContext.angle,
     );
 
     state = state.copyWith(
@@ -332,16 +327,14 @@ class PuzzleController extends _$PuzzleController {
     final soundService = ref.read(soundServiceProvider);
 
     if (state.streak == null) {
-      final next = await ref.withClient(
-        (client) => _service(client).solve(
-          userId: initialContext.userId,
-          angle: initialContext.angle,
-          puzzle: state.puzzle,
-          solution: PuzzleSolution(
-            id: state.puzzle.puzzle.id,
-            win: state.result == PuzzleResult.win,
-            rated: initialContext.userId != null,
-          ),
+      final next = await _service.solve(
+        userId: initialContext.userId,
+        angle: initialContext.angle,
+        puzzle: state.puzzle,
+        solution: PuzzleSolution(
+          id: state.puzzle.puzzle.id,
+          win: state.result == PuzzleResult.win,
+          rated: initialContext.userId != null,
         ),
       );
 

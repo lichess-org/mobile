@@ -2,11 +2,8 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_layout_grid/flutter_layout_grid.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
@@ -15,23 +12,15 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
-import 'package:lichess_mobile/src/widgets/feedback.dart';
 
-class PuzzleHistoryBoards extends ConsumerStatefulWidget {
+class PuzzleHistoryBoards extends ConsumerWidget {
   const PuzzleHistoryBoards(this.history, {this.maxRows, super.key});
 
   final IList<PuzzleHistoryEntry> history;
   final int? maxRows;
 
   @override
-  ConsumerState createState() => _PuzzleHistoryState();
-}
-
-class _PuzzleHistoryState extends ConsumerState<PuzzleHistoryBoards> {
-  bool isLoading = false;
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return LayoutBuilder(
       builder: (context, constraints) {
         final crossAxisCount = constraints.maxWidth > FormFactor.tablet ? 4 : 2;
@@ -42,51 +31,25 @@ class _PuzzleHistoryState extends ConsumerState<PuzzleHistoryBoards> {
         return LayoutGrid(
           columnSizes: List.generate(crossAxisCount, (_) => 1.fr),
           rowSizes: List.generate(
-            (widget.history.length / crossAxisCount).ceil(),
+            (history.length / crossAxisCount).ceil(),
             (_) => auto,
           ),
           rowGap: 16.0,
           columnGap: columnGap,
-          children: widget.history.map((e) {
+          children: history.map((e) {
             final (fen, side, lastMove) = e.preview;
             return BoardThumbnail(
               size: boardWidth,
-              onTap: isLoading
-                  ? null
-                  : () async {
-                      final session = ref.read(authSessionProvider);
-                      Puzzle? puzzle;
-                      try {
-                        setState(() => isLoading = true);
-                        puzzle = await ref.read(puzzleProvider(e.id).future);
-                      } catch (e) {
-                        if (context.mounted) {
-                          showPlatformSnackbar(
-                            context,
-                            e.toString(),
-                            type: SnackBarType.error,
-                          );
-                        }
-                      } finally {
-                        if (context.mounted) {
-                          setState(() => isLoading = false);
-                          if (puzzle != null) {
-                            pushPlatformRoute(
-                              context,
-                              rootNavigator: true,
-                              builder: (_) => PuzzleScreen(
-                                angle: const PuzzleTheme(PuzzleThemeKey.mix),
-                                initialPuzzleContext: PuzzleContext(
-                                  angle: const PuzzleTheme(PuzzleThemeKey.mix),
-                                  puzzle: puzzle!,
-                                  userId: session?.user.id,
-                                ),
-                              ),
-                            );
-                          }
-                        }
-                      }
-                    },
+              onTap: () {
+                pushPlatformRoute(
+                  context,
+                  rootNavigator: true,
+                  builder: (_) => PuzzleScreen(
+                    angle: const PuzzleTheme(PuzzleThemeKey.mix),
+                    puzzleId: e.id,
+                  ),
+                );
+              },
               orientation: side.cg,
               fen: fen,
               lastMove: lastMove.cg,

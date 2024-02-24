@@ -4,6 +4,7 @@ import 'package:async/async.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:http/http.dart' as http;
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
 import 'package:logging/logging.dart';
@@ -33,10 +34,9 @@ class PuzzleServiceFactory {
 
   final PuzzleServiceFactoryRef _ref;
 
-  PuzzleService call(http.Client client, {required int queueLength}) {
+  PuzzleService call({required int queueLength}) {
     return PuzzleService(
       _ref,
-      client,
       batchStorage: _ref.read(puzzleBatchStorageProvider),
       puzzleStorage: _ref.read(puzzleStorageProvider),
       queueLength: queueLength,
@@ -61,8 +61,7 @@ class PuzzleContext with _$PuzzleContext {
 
 class PuzzleService {
   PuzzleService(
-    this._ref,
-    this._client, {
+    this._ref, {
     required this.batchStorage,
     required this.puzzleStorage,
     required this.queueLength,
@@ -72,7 +71,6 @@ class PuzzleService {
   final int queueLength;
   final PuzzleBatchStorage batchStorage;
   final PuzzleStorage puzzleStorage;
-  final http.Client _client;
   final Logger _log = Logger('PuzzleService');
 
   /// Loads the next puzzle from database and the glicko rating if available.
@@ -164,23 +162,23 @@ class PuzzleService {
 
     final difficulty = _ref.read(puzzlePreferencesProvider(userId)).difficulty;
 
-    final repository = PuzzleRepository(_client);
-
     // anonymous users can't solve puzzles so we just download the deficit
     // we send the request even if the deficit is 0 to get the glicko rating
-    final batchResponse = Result.capture(
-      solved.isNotEmpty && userId != null
-          ? repository.solveBatch(
-              nb: deficit,
-              solved: solved,
-              angle: angle,
-              difficulty: difficulty,
-            )
-          : repository.selectBatch(
-              nb: deficit,
-              angle: angle,
-              difficulty: difficulty,
-            ),
+    final batchResponse = _ref.withClient(
+      (client) => Result.capture(
+        solved.isNotEmpty && userId != null
+            ? PuzzleRepository(client).solveBatch(
+                nb: deficit,
+                solved: solved,
+                angle: angle,
+                difficulty: difficulty,
+              )
+            : PuzzleRepository(client).selectBatch(
+                nb: deficit,
+                angle: angle,
+                difficulty: difficulty,
+              ),
+      ),
     );
 
     return batchResponse

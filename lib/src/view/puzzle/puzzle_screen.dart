@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
@@ -41,11 +42,13 @@ class PuzzleScreen extends ConsumerStatefulWidget {
   const PuzzleScreen({
     required this.angle,
     this.initialPuzzleContext,
+    this.puzzleId,
     super.key,
   });
 
   final PuzzleAngle angle;
   final PuzzleContext? initialPuzzleContext;
+  final PuzzleId? puzzleId;
 
   @override
   ConsumerState<PuzzleScreen> createState() => _PuzzleScreenState();
@@ -100,7 +103,9 @@ class _PuzzleScreenState extends ConsumerState<PuzzleScreen> with RouteAware {
           ? _Body(
               initialPuzzleContext: widget.initialPuzzleContext!,
             )
-          : _LoadPuzzle(angle: widget.angle),
+          : widget.puzzleId != null
+              ? _LoadPuzzleFromId(angle: widget.angle, id: widget.puzzleId!)
+              : _LoadNextPuzzle(angle: widget.angle),
     );
   }
 
@@ -123,7 +128,9 @@ class _PuzzleScreenState extends ConsumerState<PuzzleScreen> with RouteAware {
           ? _Body(
               initialPuzzleContext: widget.initialPuzzleContext!,
             )
-          : _LoadPuzzle(angle: widget.angle),
+          : widget.puzzleId != null
+              ? _LoadPuzzleFromId(angle: widget.angle, id: widget.puzzleId!)
+              : _LoadNextPuzzle(angle: widget.angle),
     );
   }
 }
@@ -154,8 +161,8 @@ class _Title extends ConsumerWidget {
   }
 }
 
-class _LoadPuzzle extends ConsumerWidget {
-  const _LoadPuzzle({required this.angle});
+class _LoadNextPuzzle extends ConsumerWidget {
+  const _LoadNextPuzzle({required this.angle});
 
   final PuzzleAngle angle;
 
@@ -183,6 +190,49 @@ class _LoadPuzzle extends ConsumerWidget {
             initialPuzzleContext: data,
           );
         }
+      },
+      loading: () => const Center(child: CircularProgressIndicator.adaptive()),
+      error: (e, s) {
+        debugPrint(
+          'SEVERE: [PuzzleScreen] could not load next puzzle; $e\n$s',
+        );
+        return Center(
+          child: BoardTable(
+            topTable: kEmptyWidget,
+            bottomTable: kEmptyWidget,
+            boardData: const cg.BoardData(
+              fen: kEmptyFen,
+              interactableSide: cg.InteractableSide.none,
+              orientation: cg.Side.white,
+            ),
+            errorMessage: e.toString(),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _LoadPuzzleFromId extends ConsumerWidget {
+  const _LoadPuzzleFromId({required this.angle, required this.id});
+
+  final PuzzleAngle angle;
+  final PuzzleId id;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final puzzle = ref.watch(puzzleProvider(id));
+    final session = ref.watch(authSessionProvider);
+
+    return puzzle.when(
+      data: (data) {
+        return _Body(
+          initialPuzzleContext: PuzzleContext(
+            angle: const PuzzleTheme(PuzzleThemeKey.mix),
+            puzzle: data,
+            userId: session?.user.id,
+          ),
+        );
       },
       loading: () => const Center(child: CircularProgressIndicator.adaptive()),
       error: (e, s) {

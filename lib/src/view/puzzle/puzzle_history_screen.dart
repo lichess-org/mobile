@@ -3,12 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_activity.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -24,7 +21,6 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 final _dateFormatter = DateFormat.yMMMd(Intl.getCurrentLocale());
-final _puzzleLoadingProvider = StateProvider<bool>((ref) => false);
 
 class PuzzleHistoryScreen extends StatelessWidget {
   @override
@@ -176,7 +172,6 @@ class _HistoryBoard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final (fen, turn, lastMove) = puzzle.preview;
-    final isLoading = ref.watch(_puzzleLoadingProvider);
     final customColors = Theme.of(context).extension<CustomColors>();
     return Padding(
       padding: const EdgeInsets.only(
@@ -186,33 +181,16 @@ class _HistoryBoard extends ConsumerWidget {
       ),
       child: BoardThumbnail(
         size: boardWidth,
-        onTap: isLoading
-            ? null
-            : () async {
-                Puzzle? puzzleData;
-                ref
-                    .read(_puzzleLoadingProvider.notifier)
-                    .update((state) => true);
-                puzzleData = await ref.read(puzzleProvider(puzzle.id).future);
-                ref
-                    .read(_puzzleLoadingProvider.notifier)
-                    .update((state) => false);
-                final session = ref.read(authSessionProvider);
-                if (context.mounted) {
-                  pushPlatformRoute(
-                    context,
-                    rootNavigator: true,
-                    builder: (ctx) => PuzzleScreen(
-                      angle: const PuzzleTheme(PuzzleThemeKey.mix),
-                      initialPuzzleContext: PuzzleContext(
-                        puzzle: puzzleData!,
-                        angle: const PuzzleTheme(PuzzleThemeKey.mix),
-                        userId: session?.user.id,
-                      ),
-                    ),
-                  );
-                }
-              },
+        onTap: () {
+          pushPlatformRoute(
+            context,
+            rootNavigator: true,
+            builder: (ctx) => PuzzleScreen(
+              angle: const PuzzleTheme(PuzzleThemeKey.mix),
+              puzzleId: puzzle.id,
+            ),
+          );
+        },
         orientation: turn.cg,
         fen: fen,
         lastMove: lastMove.cg,

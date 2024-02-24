@@ -16,6 +16,7 @@ PuzzleStorage puzzleStorage(PuzzleStorageRef ref) {
 
 const _tableName = 'puzzle';
 
+/// Local storage for puzzles.
 class PuzzleStorage {
   const PuzzleStorage(this._db);
   final Database _db;

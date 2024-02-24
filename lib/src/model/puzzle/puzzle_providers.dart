@@ -23,17 +23,14 @@ Future<PuzzleContext?> nextPuzzle(
   PuzzleAngle angle,
 ) {
   final session = ref.watch(authSessionProvider);
+  final puzzleService = ref.read(puzzleServiceFactoryProvider)(
+    queueLength: kPuzzleLocalQueueLength,
+  );
 
-  return ref.withClient((client) {
-    final puzzleService = ref.read(puzzleServiceFactoryProvider)(
-      client,
-      queueLength: kPuzzleLocalQueueLength,
-    );
-    return puzzleService.nextPuzzle(
-      userId: session?.user.id,
-      angle: angle,
-    );
-  });
+  return puzzleService.nextPuzzle(
+    userId: session?.user.id,
+    angle: angle,
+  );
 }
 
 @riverpod
@@ -46,6 +43,7 @@ Future<PuzzleStormResponse> storm(StormRef ref) {
   return ref.withClient((client) => PuzzleRepository(client).storm());
 }
 
+/// Fetches a puzzle from the local storage if available, otherwise fetches it from the server.
 @riverpod
 Future<Puzzle> puzzle(PuzzleRef ref, PuzzleId id) async {
   final puzzleStorage = ref.watch(puzzleStorageProvider);
