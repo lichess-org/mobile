@@ -7,8 +7,9 @@ import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
-import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
+import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
@@ -593,7 +594,11 @@ class _GameListWidget extends ConsumerWidget {
           _GameListTile(
             onTap: () {
               final gameIds = ISet(games.map((g) => g.gameId));
-              ref.read(gamesByIdProvider(ids: gameIds).future).then((list) {
+              ref
+                  .withClient(
+                (client) => GameRepository(client).getGamesByIds(gameIds),
+              )
+                  .then((list) {
                 final gameData =
                     list.firstWhereOrNull((g) => g.id == game.gameId);
                 if (gameData != null && gameData.variant.isSupported) {

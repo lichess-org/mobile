@@ -5,8 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
-import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
+import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -128,8 +129,9 @@ class _ContextMenu extends ConsumerWidget {
                         snapshot.connectionState == ConnectionState.waiting
                             ? null
                             : () async {
-                                final future = ref.read(
-                                  archivedGameProvider(id: game.id).future,
+                                final future = ref.withClient(
+                                  (client) =>
+                                      GameRepository(client).getGame(game.id),
                                 );
                                 setState(() {
                                   gameFuture = future;
