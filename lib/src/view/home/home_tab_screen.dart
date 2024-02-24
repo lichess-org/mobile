@@ -8,7 +8,6 @@ import 'package:lichess_mobile/src/model/correspondence/correspondence_game_stor
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
 import 'package:lichess_mobile/src/navigation.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
@@ -348,7 +347,11 @@ class _HelloWidget extends ConsumerWidget {
             padding: Styles.bodyPadding.add(const EdgeInsets.only(top: 8.0)),
             child: Row(
               children: [
-                const Icon(Icons.wb_sunny, size: 28, color: LichessColors.brag),
+                Icon(
+                  Icons.wb_sunny,
+                  size: 28,
+                  color: context.lichessColors.brag,
+                ),
                 const SizedBox(width: 5.0),
                 const Text(
                   'Hello, ',

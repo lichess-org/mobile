@@ -1,5 +1,7 @@
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 
 // ignore: avoid_classes_with_only_static_members
@@ -97,4 +99,68 @@ Color lighten(Color color, [double amount = .1]) {
   final hslLight = hsl.withLightness((hsl.lightness + amount).clamp(0.0, 1.0));
 
   return hslLight.toColor();
+}
+
+@immutable
+class CustomColors extends ThemeExtension<CustomColors> {
+  const CustomColors({
+    required this.brag,
+    required this.good,
+    required this.error,
+    required this.fancy,
+  });
+
+  final Color brag;
+  final Color good;
+  final Color error;
+  final Color fancy;
+
+  @override
+  CustomColors copyWith({
+    Color? brag,
+    Color? good,
+    Color? error,
+    Color? fancy,
+  }) {
+    return CustomColors(
+      brag: brag ?? this.brag,
+      good: good ?? this.good,
+      error: error ?? this.error,
+      fancy: fancy ?? this.fancy,
+    );
+  }
+
+  @override
+  CustomColors lerp(ThemeExtension<CustomColors>? other, double t) {
+    if (other is! CustomColors) {
+      return this;
+    }
+    return CustomColors(
+      brag: Color.lerp(brag, other.brag, t) ?? brag,
+      good: Color.lerp(good, other.good, t) ?? good,
+      error: Color.lerp(error, other.error, t) ?? error,
+      fancy: Color.lerp(fancy, other.fancy, t) ?? fancy,
+    );
+  }
+
+  CustomColors harmonized(ColorScheme colorScheme) {
+    return copyWith(
+      brag: brag.harmonizeWith(colorScheme.primary),
+      good: good.harmonizeWith(colorScheme.primary),
+      error: error.harmonizeWith(colorScheme.primary),
+      fancy: fancy.harmonizeWith(colorScheme.primary),
+    );
+  }
+}
+
+const lichessCustomColors = CustomColors(
+  brag: LichessColors.brag,
+  good: LichessColors.good,
+  error: LichessColors.error,
+  fancy: LichessColors.fancy,
+);
+
+extension CustomColorsBuildContext on BuildContext {
+  CustomColors get lichessColors =>
+      Theme.of(this).extension<CustomColors>() ?? lichessCustomColors;
 }

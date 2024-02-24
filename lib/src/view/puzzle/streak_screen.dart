@@ -11,7 +11,6 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_streak.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
@@ -117,8 +116,6 @@ class _Body extends ConsumerWidget {
   final PuzzleContext initialPuzzleContext;
   final PuzzleStreak streak;
 
-  static const streakColor = LichessColors.brag;
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = puzzleControllerProvider(
@@ -189,18 +186,18 @@ class _Body extends ConsumerWidget {
                     children: [
                       Row(
                         children: [
-                          const Icon(
+                          Icon(
                             LichessIcons.streak,
                             size: 40.0,
-                            color: _Body.streakColor,
+                            color: context.lichessColors.brag,
                           ),
                           const SizedBox(width: 8.0),
                           Text(
                             puzzleState.streak!.index.toString(),
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 30.0,
                               fontWeight: FontWeight.bold,
-                              color: _Body.streakColor,
+                              color: context.lichessColors.brag,
                             ),
                           ),
                         ],

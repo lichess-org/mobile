@@ -11,7 +11,6 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/navigation.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/puzzle_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -391,7 +390,7 @@ class _PuzzleButton extends StatelessWidget {
       icon: Icon(
         PuzzleIcons.mix,
         size: 44,
-        color: Theme.of(context).extension<CustomColors>()?.brag,
+        color: context.lichessColors.brag,
       ),
       title: Text(
         context.l10n.puzzles,

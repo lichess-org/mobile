@@ -1,47 +1,4 @@
-import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
-
-@immutable
-class CustomColors extends ThemeExtension<CustomColors> {
-  const CustomColors({
-    required this.brag,
-    required this.good,
-    required this.error,
-  });
-
-  final Color? brag;
-  final Color? good;
-  final Color? error;
-
-  @override
-  CustomColors copyWith({Color? brag, Color? good, Color? error}) {
-    return CustomColors(
-      brag: brag ?? this.brag,
-      good: good ?? this.good,
-      error: error ?? this.error,
-    );
-  }
-
-  @override
-  CustomColors lerp(ThemeExtension<CustomColors>? other, double t) {
-    if (other is! CustomColors) {
-      return this;
-    }
-    return CustomColors(
-      brag: Color.lerp(brag, other.brag, t),
-      good: Color.lerp(good, other.good, t),
-      error: Color.lerp(error, other.error, t),
-    );
-  }
-
-  CustomColors harmonized(ColorScheme dynamic) {
-    return copyWith(
-      brag: brag?.harmonizeWith(dynamic.primary),
-      good: good?.harmonizeWith(dynamic.primary),
-      error: error?.harmonizeWith(dynamic.primary),
-    );
-  }
-}
 
 class LichessColors {
   // This class is not meant to be instantiated or extended; this constructor

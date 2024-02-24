@@ -20,6 +20,7 @@ import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/notification_service.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/layout.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -120,12 +121,6 @@ class _AppState extends ConsumerState<Application> {
 
         final theme = Theme.of(context);
 
-        const customColors = CustomColors(
-          brag: LichessColors.brag,
-          good: LichessColors.green,
-          error: LichessColors.red,
-        );
-
         return MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: kSupportedLocales,
@@ -145,9 +140,9 @@ class _AppState extends ConsumerState<Application> {
             ),
             extensions: [
               if (theme.platform == TargetPlatform.android)
-                customColors.harmonized(colorScheme)
+                lichessCustomColors.harmonized(colorScheme)
               else
-                customColors,
+                lichessCustomColors,
             ],
           ),
           themeMode: themeMode,

@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/tv/live_tv_channels.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
@@ -99,7 +98,7 @@ class _Body extends ConsumerWidget {
                   ),
                   Icon(
                     game.channel.icon,
-                    color: LichessColors.brag,
+                    color: context.lichessColors.brag,
                     size: 30,
                   ),
                   UserFullNameWidget.player(

@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/navigation.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -56,10 +55,10 @@ class _Body extends StatelessWidget {
       Padding(
         padding: Styles.bodySectionBottomPadding,
         child: CardButton(
-          icon: const Icon(
+          icon: Icon(
             Icons.biotech,
             size: 44,
-            color: LichessColors.brag,
+            color: context.lichessColors.brag,
           ),
           title: Text(
             context.l10n.analysis,
@@ -74,10 +73,10 @@ class _Body extends StatelessWidget {
       Padding(
         padding: Styles.bodySectionBottomPadding,
         child: CardButton(
-          icon: const Icon(
+          icon: Icon(
             Icons.alarm,
             size: 44,
-            color: LichessColors.brag,
+            color: context.lichessColors.brag,
           ),
           title: Text(
             context.l10n.clock,

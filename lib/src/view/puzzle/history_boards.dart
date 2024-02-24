@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/layout.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -59,7 +59,9 @@ class PuzzleHistoryBoards extends ConsumerWidget {
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     ColoredBox(
-                      color: e.win ? LichessColors.good : LichessColors.red,
+                      color: e.win
+                          ? context.lichessColors.good
+                          : context.lichessColors.error,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                           vertical: 1,

@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/user/leaderboard.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
@@ -150,8 +151,8 @@ class LeaderboardListTile extends StatelessWidget {
             if (user.title != null) ...[
               Text(
                 user.title!,
-                style: const TextStyle(
-                  color: LichessColors.brag,
+                style: TextStyle(
+                  color: context.lichessColors.brag,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -240,7 +241,7 @@ class _Leaderboard extends StatelessWidget {
         showDivider: showDivider,
         header: Row(
           children: [
-            Icon(iconData, color: LichessColors.brag),
+            Icon(iconData, color: context.lichessColors.brag),
             const SizedBox(width: 10.0),
             Text(title),
           ],

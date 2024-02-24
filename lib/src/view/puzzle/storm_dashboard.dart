@@ -162,8 +162,8 @@ class _Body extends ConsumerWidget {
                                     textAlign: TextAlign.center,
                                     data.dayHighscores[entryIndex].score
                                         .toString(),
-                                    style: const TextStyle(
-                                      color: LichessColors.brag,
+                                    style: TextStyle(
+                                      color: context.lichessColors.brag,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),

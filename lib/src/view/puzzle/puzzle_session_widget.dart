@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -178,6 +179,8 @@ class _SessionItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return GestureDetector(
       onTap: attempt != null ? () => onTap?.call(attempt!.id) : null,
       child: Container(
@@ -189,8 +192,8 @@ class _SessionItem extends StatelessWidget {
               ? Colors.grey
               : attempt != null
                   ? attempt!.win
-                      ? good
-                      : error
+                      ? good.harmonizeWith(colorScheme.primary)
+                      : error.harmonizeWith(colorScheme.primary)
                   : next,
           borderRadius: const BorderRadius.all(Radius.circular(5)),
         ),

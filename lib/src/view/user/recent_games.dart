@@ -64,18 +64,18 @@ class RecentGames extends ConsumerWidget {
         );
       } else {
         return game.winner == null
-            ? const Icon(
+            ? Icon(
                 CupertinoIcons.equal_square_fill,
-                color: LichessColors.brag,
+                color: context.lichessColors.brag,
               )
             : game.winner == mySide
-                ? const Icon(
+                ? Icon(
                     CupertinoIcons.plus_square_fill,
-                    color: LichessColors.good,
+                    color: context.lichessColors.good,
                   )
-                : const Icon(
+                : Icon(
                     CupertinoIcons.minus_square_fill,
-                    color: LichessColors.red,
+                    color: context.lichessColors.error,
                   );
       }
     }

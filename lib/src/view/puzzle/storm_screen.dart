@@ -13,7 +13,6 @@ import 'package:lichess_mobile/src/model/puzzle/storm.dart';
 import 'package:lichess_mobile/src/model/puzzle/storm_controller.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
@@ -356,18 +355,18 @@ class _TopTable extends ConsumerWidget {
               ),
             )
           else ...[
-            const Icon(
+            Icon(
               LichessIcons.storm,
               size: 50.0,
-              color: LichessColors.brag,
+              color: context.lichessColors.brag,
             ),
             const SizedBox(width: 8),
             Text(
               puzzleState.numSolved.toString(),
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 30.0,
                 fontWeight: FontWeight.bold,
-                color: LichessColors.brag,
+                color: context.lichessColors.brag,
               ),
             ),
             const Spacer(),
@@ -703,23 +702,23 @@ class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
         ? [
             const SizedBox(height: 16),
             ListTile(
-              leading: const Icon(
+              leading: Icon(
                 LichessIcons.storm,
                 size: 46,
-                color: LichessColors.brag,
+                color: context.lichessColors.brag,
               ),
               title: Text(
                 newHighTitle(context, widget.stats.newHigh!),
                 style: Styles.sectionTitle.copyWith(
-                  color: LichessColors.brag,
+                  color: context.lichessColors.brag,
                 ),
               ),
               subtitle: Text(
                 context.l10n.stormPreviousHighscoreWasX(
                   widget.stats.newHigh!.prev.toString(),
                 ),
-                style: const TextStyle(
-                  color: LichessColors.brag,
+                style: TextStyle(
+                  color: context.lichessColors.brag,
                 ),
               ),
             ),

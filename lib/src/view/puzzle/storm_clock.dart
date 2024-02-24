@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/puzzle/storm_controller.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 
 const _kClockFontSize = 26.0;
 
@@ -149,8 +150,8 @@ class _ClockState extends ConsumerState<StormClockWidget>
                     '$minutes:$seconds',
                     style: TextStyle(
                       color: currentBonusSeconds! < 0
-                          ? Colors.red
-                          : LichessColors.good,
+                          ? context.lichessColors.error
+                          : context.lichessColors.good,
                       fontSize: _kClockFontSize,
                       fontFeatures: const [
                         FontFeature.tabularFigures(),

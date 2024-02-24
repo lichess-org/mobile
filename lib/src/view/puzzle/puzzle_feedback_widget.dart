@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_controller.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 
@@ -43,7 +44,7 @@ class PuzzleFeedbackWidget extends ConsumerWidget {
             .localizeNumbers();
         return _FeedbackTile(
           leading: state.result == PuzzleResult.win
-              ? const Icon(Icons.check, size: 36, color: LichessColors.good)
+              ? Icon(Icons.check, size: 36, color: context.lichessColors.good)
               : null,
           title: onStreak && state.result == PuzzleResult.lose
               ? const Text(
@@ -78,7 +79,7 @@ class PuzzleFeedbackWidget extends ConsumerWidget {
         } else if (state.feedback == PuzzleFeedback.good) {
           return _FeedbackTile(
             leading:
-                const Icon(Icons.check, size: 36, color: LichessColors.good),
+                Icon(Icons.check, size: 36, color: context.lichessColors.good),
             title: Text(context.l10n.puzzleBestMove),
             subtitle: Text(context.l10n.puzzleKeepGoing),
           );
