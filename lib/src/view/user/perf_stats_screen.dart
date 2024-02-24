@@ -332,18 +332,6 @@ class _Body extends ConsumerWidget {
                   ),
                 ),
               ],
-              if (data.worstLosses != null && data.worstLosses!.isNotEmpty) ...[
-                statGroupSpace,
-                _GameListWidget(
-                  games: data.worstLosses!,
-                  perf: perf,
-                  user: user,
-                  header: Text(
-                    context.l10n.perfStatWorstRated,
-                    style: Styles.sectionTitle,
-                  ),
-                ),
-              ],
             ],
           ),
         );
