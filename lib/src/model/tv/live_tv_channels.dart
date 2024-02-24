@@ -136,7 +136,7 @@ class LiveTvChannels extends _$LiveTvChannels {
             state.requireValue.update(selectEvent.channel, (_) => newSnaphot),
           );
 
-          _socket.send('startWatching', newSnaphot.id.value);
+          _socket.send('startWatching', newSnaphot.id);
         }
     }
   }

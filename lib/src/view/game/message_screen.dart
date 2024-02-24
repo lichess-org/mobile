@@ -15,7 +15,7 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
 class MessageScreen extends ConsumerStatefulWidget {
-  final ID chatContext;
+  final StringId chatContext;
   final Widget title;
   final LightUser? me;
 
@@ -91,7 +91,7 @@ class _MessageScreenState extends ConsumerState<MessageScreen> with RouteAware {
 }
 
 class _Body extends ConsumerWidget {
-  final ID chatContext;
+  final StringId chatContext;
   final LightUser? me;
 
   const _Body({
@@ -220,7 +220,7 @@ class _MessageAction extends StatelessWidget {
 }
 
 class _ChatBottomBar extends ConsumerStatefulWidget {
-  final ID chatContext;
+  final StringId chatContext;
   const _ChatBottomBar({required this.chatContext});
 
   @override

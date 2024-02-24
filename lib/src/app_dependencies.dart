@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart' as p;
+import 'package:pub_semver/pub_semver.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:soundpool/soundpool.dart';
@@ -38,6 +39,20 @@ Future<AppDependencies> appDependencies(
   final prefs = await SharedPreferences.getInstance();
   final soundTheme = GeneralPreferences.fetchFromStorage(prefs).soundTheme;
   final soundPool = await ref.watch(soundPoolProvider(soundTheme).future);
+
+  final dbPath = p.join(await getDatabasesPath(), kLichessDatabaseName);
+
+  final appVersion = Version.parse(pInfo.version);
+  final installedVersion = prefs.getString('installed_version');
+  // 0.7.0: id migration, just delete everything
+  if (installedVersion == null && appVersion == Version(0, 7, 0)) {
+    await prefs.clear();
+    await deleteDatabase(dbPath);
+  }
+
+  final db = await openDb(databaseFactory, dbPath);
+
+  prefs.setString('installed_version', pInfo.version);
 
   // Clear secure storage on first run because it is not deleted on app uninstall
   if (prefs.getBool('first_run') ?? true) {
@@ -79,9 +94,6 @@ Future<AppDependencies> appDependencies(
       client.close();
     }
   }
-
-  final dbPath = p.join(await getDatabasesPath(), kLichessDatabaseName);
-  final db = await openDb(databaseFactory, dbPath);
 
   final physicalMemory = await SystemInfoPlus.physicalMemory ?? 256.0;
   final engineMaxMemory = (physicalMemory / 10).ceil();

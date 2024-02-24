@@ -57,7 +57,7 @@ class PuzzleRepository {
         'solutions': solved
             .map(
               (e) => {
-                'id': e.id.value,
+                'id': e.id,
                 'win': e.win,
                 'rated': e.rated,
               },
@@ -178,7 +178,7 @@ class PuzzleRepository {
 
   Future<StormDashboard> stormDashboard(UserId userId) {
     return client.readJson(
-      Uri.parse('$kLichessHost/api/storm/dashboard/${userId.value}'),
+      Uri.parse('$kLichessHost/api/storm/dashboard/$userId'),
       mapper: _stormDashboardFromJson,
     );
   }

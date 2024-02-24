@@ -126,7 +126,7 @@ class _BodyState extends State<_Body> {
         variant: Variant.standard,
         orientation: Side.white,
         pgn: '',
-        id: ValueId('standalone_analysis'),
+        id: StringId('standalone_analysis'),
       );
     }
 
@@ -138,7 +138,7 @@ class _BodyState extends State<_Body> {
         variant: Variant.standard,
         orientation: Side.white,
         pgn: '[FEN "${pos.fen}"]',
-        id: const ValueId('standalone_analysis'),
+        id: const StringId('standalone_analysis'),
       );
     } catch (_, __) {}
 
@@ -159,7 +159,7 @@ class _BodyState extends State<_Body> {
         pgn: textInput!,
         initialMoveCursor: 1,
         orientation: Side.white,
-        id: const ValueId('standalone_analysis'),
+        id: const StringId('standalone_analysis'),
       );
     } catch (_, __) {}
 

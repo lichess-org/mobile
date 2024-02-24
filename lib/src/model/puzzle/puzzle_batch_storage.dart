@@ -41,7 +41,7 @@ class PuzzleBatchStorage {
       angle = ?
     ''',
       whereArgs: [
-        userId?.value ?? _anonUserKey,
+        userId ?? _anonUserKey,
         angle.key,
       ],
     );
@@ -68,7 +68,7 @@ class PuzzleBatchStorage {
     await _db.insert(
       _tableName,
       {
-        'userId': userId?.value ?? _anonUserKey,
+        'userId': userId ?? _anonUserKey,
         'angle': angle.key,
         'data': jsonEncode(data.toJson()),
       },
@@ -87,7 +87,7 @@ class PuzzleBatchStorage {
       angle = ?
     ''',
       whereArgs: [
-        userId?.value ?? _anonUserKey,
+        userId ?? _anonUserKey,
         angle.key,
       ],
     );
@@ -100,7 +100,7 @@ class PuzzleBatchStorage {
       _tableName,
       where: 'userId = ?',
       whereArgs: [
-        userId?.value ?? _anonUserKey,
+        userId ?? _anonUserKey,
       ],
     );
 
@@ -139,7 +139,7 @@ class PuzzleBatchStorage {
       _tableName,
       where: 'userId = ?',
       whereArgs: [
-        userId?.value ?? _anonUserKey,
+        userId ?? _anonUserKey,
       ],
     );
 
