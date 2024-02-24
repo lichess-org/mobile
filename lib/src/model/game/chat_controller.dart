@@ -16,7 +16,7 @@ class ChatController extends _$ChatController {
   SocketClient get _socket => ref.read(socketClientProvider);
 
   @override
-  ChatState build(ID chatContext) {
+  ChatState build(StringId chatContext) {
     _socketSubscription = _socket.stream.listen(_handleSocketTopic);
 
     ref.onDispose(() {

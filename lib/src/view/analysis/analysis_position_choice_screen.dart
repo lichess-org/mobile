@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -126,7 +125,7 @@ class _BodyState extends State<_Body> {
         variant: Variant.standard,
         orientation: Side.white,
         pgn: '',
-        id: ValueId('standalone_analysis'),
+        id: standaloneAnalysisId,
       );
     }
 
@@ -138,7 +137,7 @@ class _BodyState extends State<_Body> {
         variant: Variant.standard,
         orientation: Side.white,
         pgn: '[FEN "${pos.fen}"]',
-        id: const ValueId('standalone_analysis'),
+        id: standaloneAnalysisId,
       );
     } catch (_, __) {}
 
@@ -159,7 +158,7 @@ class _BodyState extends State<_Body> {
         pgn: textInput!,
         initialMoveCursor: 1,
         orientation: Side.white,
-        id: const ValueId('standalone_analysis'),
+        id: standaloneAnalysisId,
       );
     } catch (_, __) {}
 

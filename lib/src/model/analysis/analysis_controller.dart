@@ -24,11 +24,13 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'analysis_controller.freezed.dart';
 part 'analysis_controller.g.dart';
 
+const standaloneAnalysisId = StringId('standalone_analysis');
+
 @freezed
 class AnalysisOptions with _$AnalysisOptions {
   const AnalysisOptions._();
   const factory AnalysisOptions({
-    required ID id,
+    required StringId id,
     required bool isLocalEvaluationAllowed,
     required Side orientation,
     required Variant variant,
@@ -47,7 +49,7 @@ class AnalysisOptions with _$AnalysisOptions {
   }) = _AnalysisOptions;
 
   /// Whether the analysis is for a lichess game.
-  bool get isLichessGameAnalysis => id is GameFullId || id is GameId;
+  bool get isLichessGameAnalysis => id != standaloneAnalysisId;
 }
 
 @riverpod
@@ -322,7 +324,7 @@ class AnalysisController extends _$AnalysisController {
   }
 
   Future<void> requestServerAnalysis() {
-    if (options.id is GameFullId && state.canRequestServerAnalysis) {
+    if (state.canRequestServerAnalysis) {
       final service = ref.read(serverAnalysisServiceProvider);
       return service.requestAnalysis(options.id as GameFullId);
     }
@@ -585,7 +587,7 @@ class AnalysisState with _$AnalysisState {
 
   const factory AnalysisState({
     /// Analysis ID
-    required ID id,
+    required StringId id,
 
     /// The variant of the analysis.
     required Variant variant,
@@ -646,10 +648,12 @@ class AnalysisState with _$AnalysisState {
       algebraicLegalMoves(currentNode.position);
 
   bool get canRequestServerAnalysis =>
-      id is GameFullId && !hasServerAnalysis && pgnHeaders['Result'] != '*';
+      id != standaloneAnalysisId &&
+      id.length == 12 &&
+      !hasServerAnalysis &&
+      pgnHeaders['Result'] != '*';
 
-  bool get canShowGameSummary =>
-      hasServerAnalysis || (id is GameFullId && canRequestServerAnalysis);
+  bool get canShowGameSummary => hasServerAnalysis || canRequestServerAnalysis;
 
   bool get hasServerAnalysis => playersAnalysis != null;
 
