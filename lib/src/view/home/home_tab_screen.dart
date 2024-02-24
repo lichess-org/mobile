@@ -163,7 +163,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
 
   Future<void> _refreshData() {
     return Future.wait([
-      ref.refresh(accountRecentGamesProvider.future),
+      ref.refresh(accountRecentGamesProvider(10).future),
       ref.refresh(ongoingGamesProvider.future),
     ]);
   }

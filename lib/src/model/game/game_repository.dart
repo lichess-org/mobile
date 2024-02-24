@@ -32,10 +32,15 @@ class GameRepository {
     }
   }
 
-  Future<IList<LightArchivedGame>> getRecentGames(UserId userId) {
+  Future<IList<LightArchivedGame>> getRecentGames(
+    UserId userId,
+    int gameCount,
+  ) {
     return client.readNdJsonList(
       Uri.parse(
-        '$kLichessHost/api/games/user/$userId?max=10&moves=false&lastFen=true&accuracy=true&opening=true',
+        gameCount == -1
+            ? '$kLichessHost/api/games/user/$userId?moves=false&lastFen=true&accuracy=true&opening=true'
+            : '$kLichessHost/api/games/user/$userId?max=$gameCount&moves=false&lastFen=true&accuracy=true&opening=true',
       ),
       headers: {'Accept': 'application/x-ndjson'},
       mapper: LightArchivedGame.fromServerJson,
