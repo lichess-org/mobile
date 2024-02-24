@@ -444,7 +444,7 @@ class _ReuseClientService {
   /// If the client is null, it creates a new one.
   (Client, UniqueKey) get(LichessClientFactory factory) {
     if (_client == null) {
-      _logger.info('Creating a new client.');
+      _logger.fine('Creating a new client.');
     }
     if (_client == null) {
       _client = factory();
@@ -466,7 +466,7 @@ class _ReuseClientService {
     }
     _clientKeys.remove(key);
     if (_clientKeys.isEmpty && _client != null) {
-      _logger.info('All callers have closed the client, closing it.');
+      _logger.fine('Closing client after all users have closed.');
       _client!.close();
       _client = null;
     }
