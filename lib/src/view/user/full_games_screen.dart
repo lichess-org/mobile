@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
@@ -81,11 +82,11 @@ class _Body extends ConsumerWidget {
       },
       error: (error, stackTrace) {
         debugPrint(
-          'SEVERE: [RecentGames] could not recent games; $error\n$stackTrace',
+          'SEVERE: [FullGames] could not load game history; $error\n$stackTrace',
         );
         return Padding(
           padding: Styles.bodySectionPadding,
-          child: const Text('Could not load recent games.'),
+          child: const Text('Could not load game history.'),
         );
       },
       loading: () => const Center(child: CircularProgressIndicator.adaptive()),
@@ -132,9 +133,17 @@ class _GameListState extends State<_GameList> {
         child: ListView.builder(
           controller: controller,
           itemBuilder: (context, index) {
-            return ExtendedGameListTile(
-              game: displayGames[index],
-              userId: userId,
+            return _SlideMenu(
+              menuItems: <Widget>[
+                IconButton(
+                  icon: const Icon(Icons.bookmark_add_outlined),
+                  onPressed: () {},
+                ),
+              ],
+              child: ExtendedGameListTile(
+                game: displayGames[index],
+                userId: userId,
+              ),
             );
           },
           itemCount: displayGames.length,
@@ -152,5 +161,90 @@ class _GameListState extends State<_GameList> {
         }
       });
     }
+  }
+}
+
+class _SlideMenu extends StatefulWidget {
+  const _SlideMenu({required this.child, required this.menuItems});
+  final Widget child;
+  final List<Widget> menuItems;
+
+  @override
+  _SlideMenuState createState() => _SlideMenuState();
+}
+
+class _SlideMenuState extends State<_SlideMenu>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 200),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final animation = Tween(begin: Offset.zero, end: const Offset(-0.15, 0.0))
+        .animate(CurveTween(curve: Curves.decelerate).animate(_controller));
+
+    return GestureDetector(
+      onHorizontalDragUpdate: (data) {
+        setState(() {
+          _controller.value -= data.primaryDelta! / context.size!.width * 1.5;
+        });
+      },
+      onHorizontalDragEnd: (data) {
+        if (data.primaryVelocity! > 1500) {
+          _controller.animateTo(0);
+        } else if (_controller.value >= 0.3 || data.primaryVelocity! < -1500) {
+          _controller.animateTo(1.0);
+        } else {
+          _controller.animateTo(0);
+        }
+      },
+      child: Stack(
+        children: <Widget>[
+          SlideTransition(position: animation, child: widget.child),
+          Positioned.fill(
+            child: LayoutBuilder(
+              builder: (context, constraint) {
+                return AnimatedBuilder(
+                  animation: _controller,
+                  builder: (context, child) {
+                    return Stack(
+                      children: <Widget>[
+                        Positioned(
+                          right: 0.1,
+                          top: 0,
+                          bottom: 0,
+                          width: constraint.maxWidth * animation.value.dx * -1,
+                          child: Row(
+                            children: widget.menuItems.map((child) {
+                              return Expanded(
+                                child: child,
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
