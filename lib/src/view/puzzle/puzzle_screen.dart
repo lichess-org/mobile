@@ -234,22 +234,52 @@ class _LoadPuzzleFromId extends ConsumerWidget {
           ),
         );
       },
-      loading: () => const Center(child: CircularProgressIndicator.adaptive()),
+      loading: () => const Column(
+        children: [
+          Expanded(
+            child: Center(
+              child: SafeArea(
+                bottom: false,
+                child: BoardTable(
+                  boardData: cg.BoardData(
+                    fen: kEmptyFen,
+                    interactableSide: cg.InteractableSide.none,
+                    orientation: cg.Side.white,
+                  ),
+                  topTable: kEmptyWidget,
+                  bottomTable: kEmptyWidget,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(height: kBottomBarHeight),
+        ],
+      ),
       error: (e, s) {
         debugPrint(
           'SEVERE: [PuzzleScreen] could not load next puzzle; $e\n$s',
         );
-        return Center(
-          child: BoardTable(
-            topTable: kEmptyWidget,
-            bottomTable: kEmptyWidget,
-            boardData: const cg.BoardData(
-              fen: kEmptyFen,
-              interactableSide: cg.InteractableSide.none,
-              orientation: cg.Side.white,
+        return Column(
+          children: [
+            Expanded(
+              child: Center(
+                child: SafeArea(
+                  bottom: false,
+                  child: BoardTable(
+                    boardData: const cg.BoardData(
+                      fen: kEmptyFen,
+                      interactableSide: cg.InteractableSide.none,
+                      orientation: cg.Side.white,
+                    ),
+                    topTable: kEmptyWidget,
+                    bottomTable: kEmptyWidget,
+                    errorMessage: e.toString(),
+                  ),
+                ),
+              ),
             ),
-            errorMessage: e.toString(),
-          ),
+            const SizedBox(height: kBottomBarHeight),
+          ],
         );
       },
     );
