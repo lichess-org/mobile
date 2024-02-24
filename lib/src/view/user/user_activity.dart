@@ -90,11 +90,14 @@ class UserActivityEntry extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final leadingIconSize =
-        Theme.of(context).platform == TargetPlatform.iOS ? 26.0 : 36.0;
-    final emptySubtitle = Theme.of(context).platform == TargetPlatform.iOS
-        ? const SizedBox.shrink()
-        : null;
+    final theme = Theme.of(context);
+    final leadingIconSize = theme.platform == TargetPlatform.iOS ? 26.0 : 36.0;
+    final emptySubtitle =
+        theme.platform == TargetPlatform.iOS ? const SizedBox.shrink() : null;
+
+    final redColor = theme.extension<CustomColors>()?.error;
+    final greenColor = theme.extension<CustomColors>()?.good;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -107,8 +110,8 @@ class UserActivityEntry extends ConsumerWidget {
           ),
           child: Text(
             _dateFormatter.format(entry.startTime),
-            style: const TextStyle(
-              color: LichessColors.brag,
+            style: TextStyle(
+              color: theme.extension<CustomColors>()?.brag,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -146,8 +149,8 @@ class UserActivityEntry extends ConsumerWidget {
                         color: gameEntry.value.ratingAfter -
                                     gameEntry.value.ratingBefore >
                                 0
-                            ? LichessColors.good
-                            : LichessColors.red,
+                            ? greenColor
+                            : redColor,
                         size: 12,
                       ),
                       Text(
@@ -159,8 +162,8 @@ class UserActivityEntry extends ConsumerWidget {
                           color: gameEntry.value.ratingAfter -
                                       gameEntry.value.ratingBefore >
                                   0
-                              ? LichessColors.good
-                              : LichessColors.red,
+                              ? greenColor
+                              : redColor,
                           fontSize: 11,
                         ),
                       ),
@@ -202,8 +205,8 @@ class UserActivityEntry extends ConsumerWidget {
                       color: entry.puzzles!.ratingAfter -
                                   entry.puzzles!.ratingBefore >
                               0
-                          ? LichessColors.good
-                          : LichessColors.red,
+                          ? greenColor
+                          : redColor,
                       size: 12,
                     ),
                     Text(
@@ -214,8 +217,8 @@ class UserActivityEntry extends ConsumerWidget {
                         color: entry.puzzles!.ratingAfter -
                                     entry.puzzles!.ratingBefore >
                                 0
-                            ? LichessColors.good
-                            : LichessColors.red,
+                            ? greenColor
+                            : redColor,
                         fontSize: 11,
                       ),
                     ),
@@ -427,7 +430,8 @@ class BriefGameResultBox extends StatelessWidget {
             if (win != 0)
               _ResultBox(
                 number: win,
-                color: LichessColors.good,
+                color: Theme.of(context).extension<CustomColors>()?.good ??
+                    LichessColors.green,
               ),
             if (win != 0 && draw != 0)
               const SizedBox(
@@ -436,7 +440,8 @@ class BriefGameResultBox extends StatelessWidget {
             if (draw != 0)
               _ResultBox(
                 number: draw,
-                color: LichessColors.warn,
+                color: Theme.of(context).extension<CustomColors>()?.brag ??
+                    LichessColors.brag,
               ),
             if ((draw != 0 && loss != 0) || (win != 0 && loss != 0))
               const SizedBox(
@@ -445,7 +450,8 @@ class BriefGameResultBox extends StatelessWidget {
             if (loss != 0)
               _ResultBox(
                 number: loss,
-                color: LichessColors.red,
+                color: Theme.of(context).extension<CustomColors>()?.error ??
+                    LichessColors.red,
               ),
           ],
         ),

@@ -108,60 +108,74 @@ class _AppState extends ConsumerState<Application> {
 
     return DynamicColorBuilder(
       builder: (lightColorScheme, darkColorScheme) {
-        final colorScheme =
+        final dynamicColorScheme =
             brightness == Brightness.light ? lightColorScheme : darkColorScheme;
+
+        final colorScheme = hasSystemColors && dynamicColorScheme != null
+            ? dynamicColorScheme
+            : ColorScheme.fromSeed(
+                seedColor: boardTheme.colors.darkSquare,
+                brightness: brightness,
+              );
+
+        final theme = Theme.of(context);
+
+        const customColors = CustomColors(
+          brag: LichessColors.brag,
+          good: LichessColors.green,
+          error: LichessColors.red,
+        );
 
         return MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: kSupportedLocales,
           onGenerateTitle: (BuildContext context) => 'lichess.org',
-          theme: ThemeData(
+          theme: ThemeData.from(
+            colorScheme: colorScheme,
+            textTheme: theme.platform == TargetPlatform.iOS
+                ? brightness == Brightness.light
+                    ? Typography.blackCupertino
+                    : Typography.whiteCupertino
+                : null,
+          ).copyWith(
             navigationBarTheme: NavigationBarTheme.of(context).copyWith(
               height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold
                   ? 60
                   : null,
             ),
-            textTheme: Theme.of(context).platform == TargetPlatform.iOS
-                ? brightness == Brightness.light
-                    ? Typography.blackCupertino
-                    : Typography.whiteCupertino
-                : null,
-            colorScheme: hasSystemColors && colorScheme != null
-                ? colorScheme
-                : ColorScheme.fromSeed(
-                    seedColor: boardTheme.colors.darkSquare,
-                    brightness: brightness,
-                  ),
-            useMaterial3: true,
-            brightness: brightness,
-            cardTheme: CardTheme(
-              surfaceTintColor:
-                  brightness == Brightness.light ? Colors.black : Colors.white,
-            ),
+            extensions: [
+              if (theme.platform == TargetPlatform.android)
+                customColors.harmonized(colorScheme)
+              else
+                customColors,
+            ],
           ),
           themeMode: themeMode,
-          builder: (context, child) {
-            return CupertinoTheme(
-              data: CupertinoThemeData(
-                primaryColor: brightness == Brightness.light
-                    ? LichessColors.primary
-                    : const Color(0xFF3692E7),
-                brightness: brightness,
-                barBackgroundColor: const CupertinoDynamicColor.withBrightness(
-                  color: Color(0xC8F9F9F9),
-                  darkColor: Color(0xC81D1D1D),
-                ),
-                scaffoldBackgroundColor: brightness == Brightness.light
-                    ? CupertinoColors.systemGroupedBackground
-                    : null,
-              ),
-              child: IconTheme(
-                // This is needed to avoid the icon color being overridden by the cupertino theme (blue)
-                data: IconTheme.of(context),
-                child: Material(child: child),
-              ),
-            );
-          },
+          builder: theme.platform == TargetPlatform.iOS
+              ? (context, child) {
+                  return CupertinoTheme(
+                    data: CupertinoThemeData(
+                      primaryColor: brightness == Brightness.light
+                          ? LichessColors.primary
+                          : const Color(0xFF3692E7),
+                      brightness: brightness,
+                      barBackgroundColor:
+                          const CupertinoDynamicColor.withBrightness(
+                        color: Color(0xC8F9F9F9),
+                        darkColor: Color(0xC81D1D1D),
+                      ),
+                      scaffoldBackgroundColor: brightness == Brightness.light
+                          ? CupertinoColors.systemGroupedBackground
+                          : null,
+                    ),
+                    child: IconTheme(
+                      // This is needed to avoid the icon color being overridden by the cupertino theme (blue)
+                      data: IconTheme.of(context),
+                      child: Material(child: child),
+                    ),
+                  );
+                }
+              : null,
           home: const _EntryPointWidget(),
           navigatorObservers: [
             rootNavPageRouteObserver,

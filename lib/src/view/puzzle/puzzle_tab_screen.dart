@@ -388,10 +388,10 @@ class _PuzzleButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CardButton(
-      icon: const Icon(
+      icon: Icon(
         PuzzleIcons.mix,
         size: 44,
-        color: LichessColors.brag,
+        color: Theme.of(context).extension<CustomColors>()?.brag,
       ),
       title: Text(
         context.l10n.puzzles,

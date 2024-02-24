@@ -111,6 +111,8 @@ class _ContextMenu extends ConsumerWidget {
             ? (white: game.white.analysis!, black: game.black.analysis!)
             : null;
 
+    final customColors = Theme.of(context).extension<CustomColors>();
+
     final actions = [
       Builder(
         builder: (context) {
@@ -328,10 +330,10 @@ class _ContextMenu extends ConsumerWidget {
                                       ),
                                       style: TextStyle(
                                         color: game.winner == null
-                                            ? LichessColors.brag
+                                            ? customColors?.brag
                                             : game.winner == mySide
-                                                ? LichessColors.good
-                                                : LichessColors.red,
+                                                ? customColors?.good
+                                                : customColors?.error,
                                       ),
                                     ),
                                   if (game.opening != null)

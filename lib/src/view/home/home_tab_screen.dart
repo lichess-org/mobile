@@ -527,6 +527,7 @@ class _QuickGameButton extends ConsumerWidget {
     final playPrefs = ref.watch(gameSetupPreferencesProvider);
     final session = ref.watch(authSessionProvider);
     const buttonHeight = 55.0;
+    final iconColor = Theme.of(context).textTheme.bodyMedium?.color;
 
     final timeControl = Row(
       mainAxisSize: MainAxisSize.min,
@@ -537,6 +538,7 @@ class _QuickGameButton extends ConsumerWidget {
             Icon(
               playPrefs.timeIncrement.speed.icon,
               size: 28,
+              color: iconColor,
             ),
             const SizedBox(width: 6.0),
             Text(
@@ -545,7 +547,11 @@ class _QuickGameButton extends ConsumerWidget {
             ),
           ],
         ),
-        const Icon(Icons.keyboard_arrow_down, size: 28.0),
+        Icon(
+          Icons.keyboard_arrow_down,
+          size: 28.0,
+          color: iconColor,
+        ),
       ],
     );
 

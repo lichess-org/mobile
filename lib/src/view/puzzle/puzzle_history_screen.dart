@@ -177,6 +177,7 @@ class _HistoryBoard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final (fen, turn, lastMove) = puzzle.preview;
     final isLoading = ref.watch(_puzzleLoadingProvider);
+    final customColors = Theme.of(context).extension<CustomColors>();
     return Padding(
       padding: const EdgeInsets.only(
         left: _kPuzzlePadding,
@@ -220,7 +221,9 @@ class _HistoryBoard extends ConsumerWidget {
           child: Row(
             children: [
               ColoredBox(
-                color: puzzle.win ? LichessColors.good : LichessColors.red,
+                color: puzzle.win
+                    ? customColors?.good ?? LichessColors.green
+                    : customColors?.error ?? LichessColors.red,
                 child: Icon(
                   size: 20,
                   color: Colors.white,
