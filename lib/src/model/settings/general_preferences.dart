@@ -87,7 +87,7 @@ class GeneralPrefsState with _$GeneralPrefsState {
     themeMode: ThemeMode.system,
     isSoundEnabled: true,
     soundTheme: SoundTheme.standard,
-    systemColors: false,
+    systemColors: true,
   );
 
   factory GeneralPrefsState.fromJson(Map<String, dynamic> json) {

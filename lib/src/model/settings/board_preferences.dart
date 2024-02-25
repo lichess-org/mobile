@@ -91,7 +91,7 @@ class BoardPrefs with _$BoardPrefs {
 
   static const defaults = BoardPrefs(
     pieceSet: PieceSet.staunty,
-    boardTheme: BoardTheme.brown,
+    boardTheme: BoardTheme.system,
     hapticFeedback: true,
     showLegalMoves: true,
     boardHighlights: true,
