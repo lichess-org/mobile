@@ -41,7 +41,7 @@ class LobbyGameLoadingBoard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text('${context.l10n.waitingForOpponent}...'),
+                      const Text('Waiting for opponent to join...'),
                       if (isRematch == false) ...[
                         const SizedBox(height: 26.0),
                         Row(
