@@ -228,6 +228,9 @@ class _SessionItem extends StatelessWidget {
                           style: const TextStyle(
                             color: Colors.white,
                             height: 1,
+                            fontFeatures: [
+                              FontFeature.tabularFigures(),
+                            ],
                           ),
                         ),
                       ),
