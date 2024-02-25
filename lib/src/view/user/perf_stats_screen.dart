@@ -171,13 +171,14 @@ class _Body extends ConsumerWidget {
                 child: _ProgressionWidget(data.progress),
               ),
               StatCardRow([
-                StatCard(
-                  context.l10n.rank,
-                  value: data.rank == null
-                      ? '?'
-                      : NumberFormat.decimalPattern(Intl.getCurrentLocale())
-                          .format(data.rank),
-                ),
+                if (data.rank != null)
+                  StatCard(
+                    context.l10n.rank,
+                    value: data.rank == null
+                        ? '?'
+                        : NumberFormat.decimalPattern(Intl.getCurrentLocale())
+                            .format(data.rank),
+                  ),
                 StatCard(
                   context.l10n
                       .perfStatRatingDeviation('')
