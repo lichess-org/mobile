@@ -50,13 +50,24 @@ Future<IList<UserActivity>> accountActivity(AccountActivityRef ref) async {
 @riverpod
 Future<IList<LightArchivedGame>> accountRecentGames(
   AccountRecentGamesRef ref,
-  int gameCount,
 ) async {
   final session = ref.watch(authSessionProvider);
   if (session == null) return IList();
   return ref.withClientCacheFor(
-    (client) =>
-        GameRepository(client).getRecentGames(session.user.id, gameCount),
+    (client) => GameRepository(client).getRecentGames(session.user.id),
+    const Duration(hours: 1),
+  );
+}
+
+@riverpod
+Future<FullGamePaginator?> accountFullGames(
+  AccountFullGamesRef ref,
+  int page,
+) async {
+  final session = ref.watch(authSessionProvider);
+  if (session == null) return null;
+  return ref.withClientCacheFor(
+    (client) => GameRepository(client).getFullGames(session.user.id, page),
     const Duration(hours: 1),
   );
 }

@@ -103,6 +103,25 @@ class LightArchivedGame with _$LightArchivedGame {
   }
 }
 
+@freezed
+class FullGamePaginator with _$FullGamePaginator {
+  const FullGamePaginator._();
+
+  const factory FullGamePaginator({
+    int? currentPage,
+    int? maxPerPage,
+    int? previousPage,
+    int? nextPage,
+    int? nbResults,
+    int? nbPages,
+    required IList<LightArchivedGame> games,
+  }) = _FullGamePaginator;
+
+  factory FullGamePaginator.fromServerJson(Map<String, dynamic> json) {
+    return _fullGamePaginatorFromPick(pick(json, 'paginator').required());
+  }
+}
+
 IList<ExternalEval>? gameEvalsFromPick(RequiredPick pick) {
   return pick('analysis')
       .asListOrNull<ExternalEval>(
@@ -198,17 +217,33 @@ LightArchivedGame _lightArchivedGameFromPick(RequiredPick pick) {
     rated: pick('rated').asBoolOrThrow(),
     speed: pick('speed').asSpeedOrThrow(),
     perf: pick('perf').asPerfOrThrow(),
-    createdAt: pick('createdAt').asDateTimeFromMillisecondsOrThrow(),
-    lastMoveAt: pick('lastMoveAt').asDateTimeFromMillisecondsOrThrow(),
+    createdAt: pick('timestamp').asDateTimeFromMillisecondsOrNull() ??
+        pick('createdAt').asDateTimeFromMillisecondsOrThrow(),
+    lastMoveAt: pick('timestamp').asDateTimeFromMillisecondsOrNull() ??
+        pick('lastMoveAt').asDateTimeFromMillisecondsOrThrow(),
     status: pick('status').asGameStatusOrThrow(),
     white: pick('players', 'white').letOrThrow(_playerFromUserGamePick),
     black: pick('players', 'black').letOrThrow(_playerFromUserGamePick),
     winner: pick('winner').asSideOrNull(),
     variant: pick('variant').asVariantOrThrow(),
-    lastFen: pick('lastFen').asStringOrNull(),
+    lastFen: pick('lastFen').asStringOrNull() ?? pick('fen').asStringOrNull(),
     lastMove: pick('lastMove').asUciMoveOrNull(),
     clock: pick('clock').letOrNull(_clockDataFromPick),
     opening: pick('opening').letOrNull(_openingFromPick),
+  );
+}
+
+FullGamePaginator _fullGamePaginatorFromPick(RequiredPick pick) {
+  return FullGamePaginator(
+    currentPage: pick('currentPage').asIntOrNull(),
+    maxPerPage: pick('maxPerPage').asIntOrNull(),
+    previousPage: pick('previousPage').asIntOrNull(),
+    nextPage: pick('nextPage').asIntOrNull(),
+    nbResults: pick('nbResults').asIntOrNull(),
+    nbPages: pick('nbPages').asIntOrNull(),
+    games: IList(
+      pick('currentPageResults').asListOrThrow(_lightArchivedGameFromPick),
+    ),
   );
 }
 

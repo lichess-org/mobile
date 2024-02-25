@@ -1,5 +1,3 @@
-import 'package:collection/collection.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -48,12 +46,13 @@ class FullGameScreen extends StatelessWidget {
 }
 
 @riverpod
-Future<IList<LightArchivedGame>> _userFullGames(
+Future<FullGamePaginator> _userFullGames(
   _UserFullGamesRef ref, {
   required UserId userId,
+  required int page,
 }) {
   return ref.withClientCacheFor(
-    (client) => GameRepository(client).getRecentGames(userId, -1),
+    (client) => GameRepository(client).getFullGames(userId, page),
     // cache is important because the associated widget is in a [ListView] and
     // the provider may be instanciated multiple times in a short period of time
     // (e.g. when scrolling)
@@ -69,15 +68,25 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final fullGames = user != null
-        ? ref.watch(_userFullGamesProvider(userId: user!.id))
-        : ref.watch(accountRecentGamesProvider(-1));
-
     final userId = user?.id ?? ref.watch(authSessionProvider)?.user.id;
-
-    return fullGames.when(
+    final initialGame = (userId != null
+        ? ref.watch(
+            _userFullGamesProvider(
+              page: 1,
+              userId: userId,
+            ),
+          )
+        : ref.watch(accountFullGamesProvider(1)));
+    return initialGame.when(
       data: (data) {
-        return _GameList(gameListData: data, userId: userId);
+        if (data != null) {
+          return _GameList(
+            userId: userId,
+            initialPage: data,
+          );
+        } else {
+          return const Text('nothing');
+        }
       },
       error: (error, stackTrace) {
         debugPrint(
@@ -93,29 +102,30 @@ class _Body extends ConsumerWidget {
   }
 }
 
-class _GameList extends StatefulWidget {
-  const _GameList({required this.gameListData, this.userId});
-  final IList<LightArchivedGame> gameListData;
+class _GameList extends ConsumerStatefulWidget {
+  const _GameList({this.userId, required this.initialPage});
   final UserId? userId;
+  final FullGamePaginator initialPage;
 
   @override
   _GameListState createState() => _GameListState();
 }
 
-class _GameListState extends State<_GameList> {
+class _GameListState extends ConsumerState<_GameList> {
   ScrollController controller = ScrollController();
 
-  late IList<List<LightArchivedGame>> gameListData;
-  late List<LightArchivedGame> displayGames;
+  late List<LightArchivedGame> games;
+  late FullGamePaginator page;
   late UserId? userId;
-  int count = 0;
+  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
+
     userId = widget.userId;
-    gameListData = widget.gameListData.slices(10).toIList();
-    displayGames = gameListData[0];
+    page = widget.initialPage;
+    games = page.games.toList();
     controller = ScrollController()..addListener(_scrollListener);
   }
 
@@ -132,33 +142,48 @@ class _GameListState extends State<_GameList> {
         child: ListView.builder(
           controller: controller,
           itemBuilder: (context, index) {
-            return _SlideMenu(
-              menuItems: <Widget>[
-                IconButton(
-                  icon: const Icon(Icons.bookmark_add_outlined),
-                  onPressed: () {},
+            if (index == games.length) {
+              return const Center(child: CircularProgressIndicator.adaptive());
+            } else {
+              return _SlideMenu(
+                menuItems: <Widget>[
+                  IconButton(
+                    icon: const Icon(Icons.bookmark_add_outlined),
+                    onPressed: () {},
+                  ),
+                ],
+                child: ExtendedGameListTile(
+                  game: games[index],
+                  userId: userId,
                 ),
-              ],
-              child: ExtendedGameListTile(
-                game: displayGames[index],
-                userId: userId,
-              ),
-            );
+              );
+            }
           },
-          itemCount: displayGames.length,
+          itemCount: games.length + 1,
         ),
       ),
     );
   }
 
-  void _scrollListener() {
-    if (controller.position.extentAfter < 500) {
+  Future<void> _scrollListener() async {
+    if (controller.position.extentAfter < 500 &&
+        page.nextPage != null &&
+        !isLoading) {
+      isLoading = true;
+      final nextPage = (userId != null
+          ? await ref.read(
+              _userFullGamesProvider(
+                page: page.nextPage!,
+                userId: userId!,
+              ).future,
+            )
+          : await ref.read(accountFullGamesProvider(page.nextPage!).future));
+      if (nextPage != null) page = nextPage;
+
       setState(() {
-        if (count < gameListData.length - 1) {
-          count++;
-          displayGames.addAll(gameListData[count]);
-        }
+        games.addAll(nextPage?.games ?? []);
       });
+      isLoading = false;
     }
   }
 }

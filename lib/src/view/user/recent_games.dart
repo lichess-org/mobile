@@ -27,7 +27,7 @@ Future<IList<LightArchivedGame>> _userRecentGames(
   required UserId userId,
 }) {
   return ref.withClientCacheFor(
-    (client) => GameRepository(client).getRecentGames(userId, 10),
+    (client) => GameRepository(client).getRecentGames(userId),
     // cache is important because the associated widget is in a [ListView] and
     // the provider may be instanciated multiple times in a short period of time
     // (e.g. when scrolling)
@@ -46,7 +46,7 @@ class RecentGames extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final recentGames = user != null
         ? ref.watch(_userRecentGamesProvider(userId: user!.id))
-        : ref.watch(accountRecentGamesProvider(10));
+        : ref.watch(accountRecentGamesProvider);
 
     final userId = user?.id ?? ref.watch(authSessionProvider)?.user.id;
 

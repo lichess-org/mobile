@@ -32,18 +32,24 @@ class GameRepository {
     }
   }
 
-  Future<IList<LightArchivedGame>> getRecentGames(
-    UserId userId,
-    int gameCount,
-  ) {
+  Future<IList<LightArchivedGame>> getRecentGames(UserId userId) {
     return client.readNdJsonList(
       Uri.parse(
-        gameCount == -1
-            ? '$kLichessHost/api/games/user/$userId?moves=false&lastFen=true&accuracy=true&opening=true'
-            : '$kLichessHost/api/games/user/$userId?max=$gameCount&moves=false&lastFen=true&accuracy=true&opening=true',
+        '$kLichessHost/api/games/user/$userId?max=10&moves=false&lastFen=true&accuracy=true&opening=true',
       ),
       headers: {'Accept': 'application/x-ndjson'},
       mapper: LightArchivedGame.fromServerJson,
+    );
+  }
+
+  Future<FullGamePaginator> getFullGames(
+    UserId userId,
+    int page,
+  ) {
+    return client.readJson(
+      Uri.parse('$kLichessHost/@/$userId/all?page=$page'),
+      headers: {'Accept': 'application/json'},
+      mapper: FullGamePaginator.fromServerJson,
     );
   }
 

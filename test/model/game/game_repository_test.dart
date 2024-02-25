@@ -26,7 +26,7 @@ void main() {
 
       final repo = GameRepository(mockClient);
 
-      final result = await repo.getRecentGames(const UserId('testUser'), 10);
+      final result = await repo.getRecentGames(const UserId('testUser'));
       expect(result, isA<IList<LightArchivedGame>>());
       expect(result.length, 3);
       expect(result[0].id, const GameId('Huk88k3D'));
