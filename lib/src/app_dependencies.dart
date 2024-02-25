@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
@@ -11,7 +13,9 @@ import 'package:lichess_mobile/src/model/auth/session_storage.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
+import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
+import 'package:lichess_mobile/src/utils/color_palette.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -58,9 +62,21 @@ Future<AppDependencies> appDependencies(
 
   final db = await openDb(databaseFactory, dbPath);
 
-  // Clear secure storage on first run because it is not deleted on app uninstall
   if (prefs.getBool('first_run') ?? true) {
+    // Clear secure storage on first run because it is not deleted on app uninstall
     await secureStorage.deleteAll();
+
+    // on android 12+ set the default board theme as system
+    if (getCorePalette() != null) {
+      prefs.setString(
+        BoardPreferences.prefKey,
+        jsonEncode(
+          BoardPrefs.defaults.copyWith(
+            boardTheme: BoardTheme.system,
+          ),
+        ),
+      );
+    }
 
     await prefs.setBool('first_run', false);
   }
