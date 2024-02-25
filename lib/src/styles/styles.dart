@@ -83,22 +83,25 @@ Color? dividerColor(BuildContext context) =>
         ? CupertinoColors.separator.resolveFrom(context)
         : null;
 
-Color darken(Color color, [double amount = .1]) {
+Color darken(Color c, [double amount = .1]) {
   assert(amount >= 0 && amount <= 1);
-
-  final hsl = HSLColor.fromColor(color);
-  final hslDark = hsl.withLightness((hsl.lightness - amount).clamp(0.0, 1.0));
-
-  return hslDark.toColor();
+  final f = 1 - amount;
+  return Color.fromARGB(
+    c.alpha,
+    (c.red * f).round(),
+    (c.green * f).round(),
+    (c.blue * f).round(),
+  );
 }
 
-Color lighten(Color color, [double amount = .1]) {
+Color lighten(Color c, [double amount = .1]) {
   assert(amount >= 0 && amount <= 1);
-
-  final hsl = HSLColor.fromColor(color);
-  final hslLight = hsl.withLightness((hsl.lightness + amount).clamp(0.0, 1.0));
-
-  return hslLight.toColor();
+  return Color.fromARGB(
+    c.alpha,
+    c.red + ((255 - c.red) * amount).round(),
+    c.green + ((255 - c.green) * amount).round(),
+    c.blue + ((255 - c.blue) * amount).round(),
+  );
 }
 
 @immutable
