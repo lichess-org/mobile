@@ -104,7 +104,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
         child: const Column(
           children: [
             Expanded(child: _HomeBody()),
-            _ConnectivityBanner(),
+            ConnectivityBanner(),
           ],
         ),
       ),
@@ -150,7 +150,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
           CupertinoSliverRefreshControl(
             onRefresh: () => _refreshData(),
           ),
-          const SliverToBoxAdapter(child: _ConnectivityBanner()),
+          const SliverToBoxAdapter(child: ConnectivityBanner()),
           const SliverSafeArea(
             top: false,
             sliver: _HomeBody(),
@@ -365,46 +365,6 @@ class _HelloWidget extends ConsumerWidget {
             ),
           )
         : const SizedBox.shrink();
-  }
-}
-
-class _ConnectivityBanner extends ConsumerWidget {
-  const _ConnectivityBanner();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final connectivity = ref.watch(connectivityChangesProvider);
-    final themeData = CupertinoTheme.of(context);
-    return connectivity.when(
-      data: (data) {
-        if (data.isOnline) {
-          return const SizedBox.shrink();
-        }
-        return Container(
-          height: 45,
-          color: themeData.barBackgroundColor,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.report, color: themeData.textTheme.textStyle.color),
-                const SizedBox(width: 5),
-                const Flexible(
-                  child: Text(
-                    'Network connectivity unavailable.',
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-      loading: () => const SizedBox.shrink(),
-      error: (error, stack) => const SizedBox.shrink(),
-    );
   }
 }
 

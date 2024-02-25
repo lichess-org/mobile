@@ -25,6 +25,7 @@ import 'package:lichess_mobile/src/view/puzzle/puzzle_dashboard_widget.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_history_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
@@ -54,15 +55,23 @@ class _PuzzleTabScreenState extends ConsumerState<PuzzleTabScreen> {
   }
 
   Widget _androidBuilder(BuildContext context, AuthSessionState? userSession) {
+    final body = Column(
+      children: [
+        Expanded(
+          child: _Body(userSession),
+        ),
+        const ConnectivityBanner(),
+      ],
+    );
     return Scaffold(
       appBar: AppBar(title: Text(context.l10n.puzzles)),
       body: userSession != null
           ? RefreshIndicator(
               key: _androidRefreshKey,
               onRefresh: _refreshData,
-              child: Center(child: _Body(userSession)),
+              child: body,
             )
-          : Center(child: _Body(userSession)),
+          : body,
     );
   }
 
@@ -78,6 +87,7 @@ class _PuzzleTabScreenState extends ConsumerState<PuzzleTabScreen> {
             CupertinoSliverRefreshControl(
               onRefresh: _refreshData,
             ),
+          const SliverToBoxAdapter(child: ConnectivityBanner()),
           SliverSafeArea(
             top: false,
             sliver: _Body(userSession),
