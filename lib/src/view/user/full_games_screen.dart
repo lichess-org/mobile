@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
@@ -143,7 +144,14 @@ class _GameListState extends ConsumerState<_GameList> {
           controller: controller,
           itemBuilder: (context, index) {
             if (index == games.length) {
-              return const Center(child: CircularProgressIndicator.adaptive());
+              if (isLoading || page.currentPage == 1) {
+                return const Center(
+                  heightFactor: 2.0,
+                  child: CircularProgressIndicator.adaptive(),
+                );
+              } else {
+                return kEmptyWidget;
+              }
             } else {
               return _SlideMenu(
                 menuItems: <Widget>[
