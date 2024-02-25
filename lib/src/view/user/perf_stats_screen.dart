@@ -141,7 +141,7 @@ class _Body extends ConsumerWidget {
                         ),
                       ],
                     ),
-                    if (data.percentile != null)
+                    if (data.percentile != null && data.percentile! > 0.0)
                       Text(
                         (loggedInUser != null &&
                                 loggedInUser.user.id == user.id)
