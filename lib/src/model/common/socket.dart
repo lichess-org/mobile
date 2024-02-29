@@ -139,6 +139,9 @@ class SocketClient {
   /// A duration of zero means the socket is not connected.
   ValueListenable<Duration> get averageLag => _averageLag;
 
+  /// Whether the socket is actively trying to connect or is connected.
+  bool get isActive => nbConnectionAttempts > 0;
+
   /// Whether the socket is connected.
   bool get isConnected => averageLag.value != Duration.zero;
 
@@ -171,7 +174,7 @@ class SocketClient {
     WebSocket.userAgent =
         makeUserAgent(packageInfo, deviceInfo, sri, session?.user);
 
-    _logger.info('Creating WebSocket connection to $uri');
+    _logger.info('Creating WebSocket connection to $route');
 
     nbConnectionAttempts++;
 
@@ -194,7 +197,7 @@ class SocketClient {
         );
       }).listen(_handleEvent);
 
-      _logger.fine('WebSocket connection established.');
+      _logger.fine('WebSocket connection to $route established.');
 
       nbConnectionSuccess++;
 
@@ -284,11 +287,20 @@ class SocketClient {
   /// Returns a [Future] that completes when the connection is closed.
   Future<void> _disconnect() {
     final future = _sink?.close().then((_) {
-          _logger.fine('WebSocket connection was properly closed.');
+          _logger.fine('WebSocket connection to $route was properly closed.');
+          if (_streamController.isClosed) {
+            return;
+          }
           _averageLag.value = Duration.zero;
         }).catchError((Object? error) {
+          _logger.warning(
+            'WebSocket connection to $route could not be closed: $error',
+            error,
+          );
+          if (_streamController.isClosed) {
+            return;
+          }
           _averageLag.value = Duration.zero;
-          _logger.warning('WebSocket connection could not be closed.', error);
         }) ??
         Future.value();
     _channel = null;
@@ -341,7 +353,7 @@ class SocketClient {
   void _handlePong(Duration pingDelay) {
     _reconnectTimer?.cancel();
     if (_pongCount == 0) {
-      _logger.fine('Ping/pong protocol established.');
+      _logger.fine('Ping/pong protocol for $route established.');
     }
     _schedulePing(pingDelay);
     _pongCount++;
@@ -382,6 +394,20 @@ class SocketClient {
   }
 }
 
+/// Service that manages a pool of socket clients.
+///
+/// The pool is used to manage multiple socket connections to different routes.
+/// It ensures that only one connection is active at a time, and that a client
+/// created for a route other than the lichess default socket route is disposed
+/// when it becomes idle.
+///
+/// A client for the default route is created upon initialization and is never
+/// disposed.
+/// The pool is responsible for creating and disposing other clients and for ensuring
+/// that only one client is active at a time and that there is always an active
+/// client.
+/// When a requested client is disposed, the pool will automatically reconnect
+/// the default client.
 class SocketPool {
   SocketPool(
     this._ref, {
@@ -403,7 +429,7 @@ class SocketPool {
       pingMaxLag: pingMaxLag,
       autoReconnectDelay: autoReconnectDelay,
       resendAckDelay: resendAckDelay,
-    )..connect();
+    );
 
     client.averageLag.addListener(() {
       if (_activeRoute == client.route) {
@@ -478,9 +504,13 @@ class SocketPool {
             _logger.fine('Closing idle socket.');
             _pool[route]?._dispose();
             _pool.remove(route);
+            // if during the idle time no new socket is requested, we reconnect
+            // the default socket
             if (route == _activeRoute) {
               _activeRoute = Uri(path: kDefaultSocketRoute);
-              activeClient.connect();
+              if (activeClient.nbConnectionAttempts == 0) {
+                activeClient.connect();
+              }
             }
           });
         },
@@ -496,7 +526,7 @@ class SocketPool {
 
     final client = _pool[route]!;
 
-    if (forceReconnect == true || client.nbConnectionAttempts == 0) {
+    if (forceReconnect == true || !client.isActive) {
       client.connect();
     }
 

@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/app_dependencies.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
@@ -72,8 +73,8 @@ class _AppState extends ConsumerState<Application> {
     // Sync correspondence games on app start, just once.
     ref.read(correspondenceServiceProvider).syncGames();
 
-    // Play registered moves whenever the app comes back online.
     ref.listenManual(connectivityChangesProvider, (prev, current) async {
+      // Play registered moves whenever the app comes back online.
       if (prev?.hasValue == true &&
           !prev!.value!.isOnline &&
           !current.isRefreshing &&
@@ -83,6 +84,15 @@ class _AppState extends ConsumerState<Application> {
             await ref.read(correspondenceServiceProvider).playRegisteredMoves();
         if (nbMovesPlayed > 0) {
           ref.invalidate(ongoingGamesProvider);
+        }
+      }
+
+      final socketClient = ref.read(socketPoolProvider).activeClient;
+      if (socketClient.route == Uri(path: kDefaultSocketRoute)) {
+        if (current.value?.isOnline == true && !socketClient.isActive) {
+          socketClient.connect();
+        } else if (current.value?.isOnline == false) {
+          socketClient.close();
         }
       }
     });
