@@ -37,7 +37,7 @@ class ChatController extends _$ChatController {
   }
 
   void onUserMessage(String message) {
-    _socketPool.send(
+    _socketPool.activeClient.send(
       'talk',
       message,
     );

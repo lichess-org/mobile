@@ -41,6 +41,14 @@ final _globalStreamController = StreamController<SocketEvent>.broadcast();
 /// The global socket events broadcast stream.
 final socketGlobalStream = _globalStreamController.stream;
 
+/// A lichess WebSocket client.
+///
+/// Handles authentication:
+///  - adds the following headers on connect:
+///   - Authorization header when a token has been stored,
+///   - User-Agent header
+///
+/// Handles low-level ping/pong protocol, message acks, and automatic reconnections.
 class SocketClient {
   SocketClient(
     this.route, {
@@ -155,7 +163,7 @@ class SocketClient {
   /// Connect or reconnect the WebSocket.
   Future<void> connect() async {
     if (isDisposed) {
-      throw StateError('SocketClient is disposed.');
+      throw StateError('SocketClient is disposed, cannot connect.');
     }
 
     _disconnect();
@@ -412,10 +420,6 @@ class SocketPool {
   SocketPool(
     this._ref, {
     this.idleTimeout = _kIdleTimeout,
-    this.pingDelay = _kPingDelay,
-    this.pingMaxLag = _kPingMaxLag,
-    this.autoReconnectDelay = _kAutoReconnectDelay,
-    this.resendAckDelay = _kResendAckDelay,
   }) {
     // Create a default socket client. This one is never disposed.
     final client = SocketClient(
@@ -426,9 +430,6 @@ class SocketPool {
       packageInfo: _ref.read(packageInfoProvider),
       deviceInfo: _ref.read(deviceInfoProvider),
       pingDelay: const Duration(seconds: 25),
-      pingMaxLag: pingMaxLag,
-      autoReconnectDelay: autoReconnectDelay,
-      resendAckDelay: resendAckDelay,
     );
 
     client.averageLag.addListener(() {
@@ -441,18 +442,6 @@ class SocketPool {
   }
 
   final SocketPoolRef _ref;
-
-  /// The delay between the next ping after receiving a pong.
-  final Duration pingDelay;
-
-  /// The maximum lag before considering the connection as lost.
-  final Duration pingMaxLag;
-
-  /// The delay before reconnecting after a connection failure.
-  final Duration autoReconnectDelay;
-
-  /// The delay before resending an ack.
-  final Duration resendAckDelay;
 
   /// The delay before closing the socket if idle (no subscription).
   final Duration idleTimeout;
@@ -475,6 +464,9 @@ class SocketPool {
   final Map<Uri, Timer?> _disposeTimers = {};
 
   /// Creates a new WebSocket connection to the given [route].
+  ///
+  /// It will reuse an existing connection if it is already active.
+  /// It will close any other active connection.
   SocketClient connect(
     Uri route, {
     bool? forceReconnect,
@@ -489,10 +481,6 @@ class SocketPool {
         packageInfo: _ref.read(packageInfoProvider),
         deviceInfo: _ref.read(deviceInfoProvider),
         sri: _ref.read(sriProvider),
-        pingDelay: pingDelay,
-        pingMaxLag: pingMaxLag,
-        autoReconnectDelay: autoReconnectDelay,
-        resendAckDelay: resendAckDelay,
         onStreamListen: () {
           _disposeTimers[route]?.cancel();
         },
@@ -542,16 +530,6 @@ class SocketPool {
   void dispose() {
     _averageLag.dispose();
     _pool.forEach((_, c) => c._dispose());
-  }
-
-  /// Sends a message to the current active client
-  void send(
-    String topic,
-    Object? data, {
-    bool? ackable,
-    bool? withLag,
-  }) {
-    activeClient.send(topic, data, ackable: ackable, withLag: withLag);
   }
 }
 

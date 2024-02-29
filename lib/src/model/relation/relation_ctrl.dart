@@ -15,11 +15,13 @@ class RelationCtrl extends _$RelationCtrl {
   StreamSubscription<SocketEvent>? _socketSubscription;
   StreamSubscription<void>? _socketOpenSubscription;
 
+  late final SocketClient _socketClient;
+
   @override
   Future<RelationCtrlState> build() {
-    final socketClient = _socket.connect(Uri(path: '/lobby/socket/v5'));
+    _socketClient = _socket.connect(Uri(path: '/lobby/socket/v5'));
 
-    final state = socketClient.stream
+    final state = _socketClient.stream
         .firstWhere((e) => e.topic == 'following_onlines')
         .then(
           (event) => RelationCtrlState(
@@ -27,11 +29,11 @@ class RelationCtrl extends _$RelationCtrl {
           ),
         );
 
-    _socketSubscription = socketClient.stream.listen(_handleSocketTopic);
+    _socketSubscription = _socketClient.stream.listen(_handleSocketTopic);
 
     _socketOpenSubscription?.cancel();
-    _socketOpenSubscription = socketClient.openStream.listen((_) {
-      _socket.send('following_onlines', null);
+    _socketOpenSubscription = _socketClient.openStream.listen((_) {
+      _socketClient.send('following_onlines', null);
     });
 
     ref.onDispose(() {
@@ -43,13 +45,13 @@ class RelationCtrl extends _$RelationCtrl {
   }
 
   void startWatchingFriends() {
-    final socketClient = _socket.connect(Uri(path: '/lobby/socket/v5'));
     _socketSubscription?.cancel();
-    _socketSubscription = socketClient.stream.listen(_handleSocketTopic);
+    _socketSubscription = _socketClient.stream.listen(_handleSocketTopic);
     _socketOpenSubscription?.cancel();
-    _socketOpenSubscription = socketClient.openStream.listen((_) {
-      _socket.send('following_onlines', null);
+    _socketOpenSubscription = _socketClient.openStream.listen((_) {
+      _socketClient.send('following_onlines', null);
     });
+    _socketClient.connect();
   }
 
   void stopWatchingFriends() {

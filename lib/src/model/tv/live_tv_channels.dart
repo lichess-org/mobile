@@ -22,6 +22,8 @@ class LiveTvChannels extends _$LiveTvChannels {
   StreamSubscription<SocketEvent>? _socketSubscription;
   StreamSubscription<void>? _socketReadySubscription;
 
+  late final SocketClient _socketClient;
+
   @override
   Future<LiveTvChannelsState> build() async {
     ref.onDispose(() {
@@ -53,13 +55,11 @@ class LiveTvChannels extends _$LiveTvChannels {
     final repoGames =
         await ref.withClient((client) => TvRepository(client).channels());
 
-    final socketClient = _socket.connect(
-      Uri(path: kDefaultSocketRoute),
-    );
+    _socketClient = _socket.connect(Uri(path: kDefaultSocketRoute));
     _socketReadySubscription?.cancel();
-    _socketReadySubscription = socketClient.openStream.listen((_) {
-      socketClient.send('startWatchingTvChannels', null);
-      socketClient.send(
+    _socketReadySubscription = _socketClient.openStream.listen((_) {
+      _socketClient.send('startWatchingTvChannels', null);
+      _socketClient.send(
         'startWatching',
         repoGames.entries
             .where((e) => TvChannel.values.contains(e.key))
@@ -68,7 +68,7 @@ class LiveTvChannels extends _$LiveTvChannels {
       );
     });
 
-    _socketSubscription = socketClient.stream.listen(_handleSocketEvent);
+    _socketSubscription = _socketClient.stream.listen(_handleSocketEvent);
 
     return repoGames.map((channel, game) {
       return MapEntry(
@@ -139,7 +139,7 @@ class LiveTvChannels extends _$LiveTvChannels {
             state.requireValue.update(selectEvent.channel, (_) => newSnaphot),
           );
 
-          _socket.send('startWatching', newSnaphot.id);
+          _socketClient.send('startWatching', newSnaphot.id);
         }
     }
   }
