@@ -63,15 +63,19 @@ class GameController extends _$GameController {
   /// Last move time
   DateTime? _lastMoveTime;
 
+  late final SocketClient _socketClient;
+
   @override
   Future<GameState> build(GameFullId gameFullId) {
-    final socket = ref.watch(socketServiceProvider);
+    final socketPool = ref.watch(socketPoolProvider);
     final chatNotifier = ref.watch(chatControllerProvider(gameFullId).notifier);
-    final (stream, _) =
-        socket.connect(Uri(path: '/play/$gameFullId/v6'), forceReconnect: true);
+    _socketClient = socketPool.connect(
+      Uri(path: '/play/$gameFullId/v6'),
+      forceReconnect: true,
+    );
     _socketEventVersion = null;
     _socketSubscription?.cancel();
-    _socketSubscription = stream.listen(_handleSocketEvent);
+    _socketSubscription = _socketClient.stream.listen(_handleSocketEvent);
 
     ref.onDispose(() {
       _socketSubscription?.cancel();
@@ -79,7 +83,7 @@ class GameController extends _$GameController {
       _transientMoveTimer?.cancel();
     });
 
-    return stream.firstWhere((e) => e.topic == 'full').then(
+    return _socketClient.stream.firstWhere((e) => e.topic == 'full').then(
       (event) async {
         final fullEvent =
             GameFullEvent.fromJson(event.data as Map<String, dynamic>);
@@ -267,62 +271,62 @@ class GameController extends _$GameController {
   void onFlag() {
     _onFlagThrottler(() {
       if (state.hasValue) {
-        _socket.send('flag', state.requireValue.game.sideToMove.name);
+        _socketClient.send('flag', state.requireValue.game.sideToMove.name);
       }
     });
   }
 
   void moreTime() {
-    _socket.send('moretime', null);
+    _socketClient.send('moretime', null);
   }
 
   void abortGame() {
-    _socket.send('abort', null);
+    _socketClient.send('abort', null);
   }
 
   void resignGame() {
-    _socket.send('resign', null);
+    _socketClient.send('resign', null);
   }
 
   void forceResign() {
-    _socket.send('resign-force', null);
+    _socketClient.send('resign-force', null);
   }
 
   void forceDraw() {
-    _socket.send('draw-force', null);
+    _socketClient.send('draw-force', null);
   }
 
   void claimDraw() {
-    _socket.send('draw-claim', null);
+    _socketClient.send('draw-claim', null);
   }
 
   void offerOrAcceptDraw() {
-    _socket.send('draw-yes', null);
+    _socketClient.send('draw-yes', null);
   }
 
   void cancelOrDeclineDraw() {
-    _socket.send('draw-no', null);
+    _socketClient.send('draw-no', null);
   }
 
   void offerTakeback() {
-    _socket.send('takeback-yes', null);
+    _socketClient.send('takeback-yes', null);
   }
 
   void acceptTakeback() {
-    _socket.send('takeback-yes', null);
+    _socketClient.send('takeback-yes', null);
     setPremove(null);
   }
 
   void cancelOrDeclineTakeback() {
-    _socket.send('takeback-no', null);
+    _socketClient.send('takeback-no', null);
   }
 
   void proposeOrAcceptRematch() {
-    _socket.send('rematch-yes', null);
+    _socketClient.send('rematch-yes', null);
   }
 
   void declineRematch() {
-    _socket.send('rematch-no', null);
+    _socketClient.send('rematch-no', null);
   }
 
   Future<void> requestServerAnalysis() {
@@ -353,7 +357,7 @@ class GameController extends _$GameController {
                 ? DateTime.now().difference(_lastMoveTime!)
                 : null
         : null;
-    _socket.send(
+    _socketClient.send(
       'move',
       {
         'u': move.uci,
@@ -405,7 +409,7 @@ class GameController extends _$GameController {
   /// Resync full game data with the server
   void _resyncGameData() {
     _logger.info('Resyncing game data');
-    _socket.connect(Uri(path: '/play/$gameFullId/v6'), forceReconnect: true);
+    _socketClient.connect();
   }
 
   void _handleSocketEvent(SocketEvent event) {
@@ -889,8 +893,6 @@ class GameController extends _$GameController {
       evals: data.evals,
     );
   }
-
-  SocketService get _socket => ref.read(socketServiceProvider);
 }
 
 @freezed

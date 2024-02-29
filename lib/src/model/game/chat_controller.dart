@@ -13,11 +13,11 @@ part 'chat_controller.g.dart';
 class ChatController extends _$ChatController {
   StreamSubscription<SocketEvent>? _socketSubscription;
 
-  SocketService get _socket => ref.read(socketServiceProvider);
+  SocketPool get _socketPool => ref.read(socketPoolProvider);
 
   @override
   ChatState build(StringId chatContext) {
-    _socketSubscription = _socket.stream.listen(_handleSocketTopic);
+    _socketSubscription = socketGlobalStream.listen(_handleSocketTopic);
 
     ref.onDispose(() {
       _socketSubscription?.cancel();
@@ -37,7 +37,7 @@ class ChatController extends _$ChatController {
   }
 
   void onUserMessage(String message) {
-    _socket.send(
+    _socketPool.send(
       'talk',
       message,
     );

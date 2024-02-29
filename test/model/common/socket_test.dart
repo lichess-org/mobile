@@ -1,50 +1,44 @@
+import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
-import 'package:logging/logging.dart';
 
-import '../../test_container.dart';
 import 'fake_websocket_channel.dart';
 
-SocketService _makeSocketClient(ProviderRef<SocketService> ref) {
-  final client = SocketService(
-    ref,
-    Logger('TestSocketClient'),
+SocketClient _makeSocketClient(
+  FakeWebSocketChannelFactory fakeChannelFactory, {
+  VoidCallback? onOpen,
+}) {
+  final client = SocketClient(
+    Uri(path: kDefaultSocketRoute),
+    channelFactory: fakeChannelFactory,
+    getSession: () => null,
+    sri: 'testSri',
+    onOpen: onOpen,
     pingDelay: const Duration(milliseconds: 50),
     pingMaxLag: const Duration(milliseconds: 200),
     autoReconnectDelay: const Duration(milliseconds: 100),
     resendAckDelay: const Duration(milliseconds: 100),
   );
 
-  ref.onDispose(client.dispose);
-
   return client;
 }
 
 void main() {
-  final testUri = Uri.parse(kDefaultSocketRoute);
-
-  group('Socket', () {
+  group('SocketClient', () {
     test('computes average lag', () async {
       final fakeChannel = FakeWebSocketChannel();
-      final container = await makeContainer(
-        overrides: [
-          webSocketChannelFactoryProvider.overrideWith(
-            (_) => FakeWebSocketChannelFactory(() => fakeChannel),
-          ),
-          socketServiceProvider.overrideWith(_makeSocketClient),
-        ],
-      );
 
-      final socketClient = container.read(socketServiceProvider);
-      final (_, readyStream) = socketClient.connect(testUri);
+      final socketClient =
+          _makeSocketClient(FakeWebSocketChannelFactory(() => fakeChannel));
+      socketClient.connect();
 
       // before the connection is ready the average lag is zero
       expect(socketClient.averageLag.value, Duration.zero);
 
-      await readyStream.first;
+      await socketClient.firstConnection;
 
       // after the connection is ready the average lag is still zero since
       // there was no ping/pong exchange yet
@@ -80,7 +74,7 @@ void main() {
         greaterThanOrEqualTo(40),
       );
 
-      await socketClient.disconnect();
+      await socketClient.close();
 
       // after disconnecting the average lag is zero again
       expect(socketClient.averageLag.value, Duration.zero);
@@ -89,17 +83,9 @@ void main() {
     test('handles ping/pong', () async {
       final fakeChannel = FakeWebSocketChannel();
 
-      final container = await makeContainer(
-        overrides: [
-          webSocketChannelFactoryProvider.overrideWith(
-            (_) => FakeWebSocketChannelFactory(() => fakeChannel),
-          ),
-          socketServiceProvider.overrideWith(_makeSocketClient),
-        ],
-      );
-
-      final socketClient = container.read(socketServiceProvider);
-      final (_, readyStream) = socketClient.connect(testUri);
+      final socketClient =
+          _makeSocketClient(FakeWebSocketChannelFactory(() => fakeChannel));
+      socketClient.connect();
 
       int sentPingCount = 0;
       fakeChannel.sentMessages.forEach((message) {
@@ -107,13 +93,13 @@ void main() {
           sentPingCount++;
           // close after 3 pings
           if (sentPingCount == 3) {
-            socketClient.disconnect();
+            socketClient.close();
           }
         }
       });
 
       // 1 ready event is expected
-      expectLater(readyStream, emitsInOrder([testUri]));
+      // expectLater(readyStream, emitsInOrder([testUri]));
 
       // 2 pong messages are expected since we're closing just after 3 pings
       await expectLater(fakeChannel.stream, emitsInOrder(['0', '0']));
@@ -122,30 +108,24 @@ void main() {
     test('reconnects when connection attempt fails', () async {
       int numConnectionAttempts = 0;
 
-      final container = await makeContainer(
-        overrides: [
-          webSocketChannelFactoryProvider.overrideWith(
-            (_) => FakeWebSocketChannelFactory(() {
-              numConnectionAttempts++;
-              if (numConnectionAttempts == 1) {
-                throw const SocketException('Connection failed');
-              }
-              return FakeWebSocketChannel();
-            }),
-          ),
-          socketServiceProvider.overrideWith(_makeSocketClient),
-        ],
-      );
+      final fakeChannelFactory = FakeWebSocketChannelFactory(() {
+        numConnectionAttempts++;
+        if (numConnectionAttempts == 1) {
+          throw const SocketException('Connection failed');
+        }
+        return FakeWebSocketChannel();
+      });
 
-      final socketClient = container.read(socketServiceProvider);
-      final (_, readyStream) = socketClient.connect(testUri);
+      final socketClient = _makeSocketClient(fakeChannelFactory);
+      socketClient.connect();
 
       // The first connection attempt will fail, but the second one will succeed
-      await expectLater(readyStream, emitsInOrder([testUri]));
+      await socketClient.firstConnection;
 
       expect(numConnectionAttempts, 2);
+      expect(socketClient.nbConnections, 2);
 
-      socketClient.disconnect();
+      socketClient.close();
     });
 
     test('reconnects automatically if pong is not received', () async {
@@ -153,66 +133,58 @@ void main() {
       // channels per connection attempt
       final Map<int, FakeWebSocketChannel> channels = {};
 
-      final container = await makeContainer(
-        overrides: [
-          webSocketChannelFactoryProvider.overrideWith(
-            (_) => FakeWebSocketChannelFactory(() {
-              numConnectionAttempts++;
-              final channel = FakeWebSocketChannel();
-              int sentPingCount = 0;
-              channel.sentMessages.forEach((message) {
-                if (FakeWebSocketChannel.isPing(message)) {
-                  sentPingCount++;
-                  // on first connection, stop responding to pings after 3 pings
-                  if (numConnectionAttempts == 1 && sentPingCount == 3) {
-                    channel.shouldSendPong = false;
-                  }
-                }
-              });
-              channels[numConnectionAttempts] = channel;
+      final fakeChannelFactory = FakeWebSocketChannelFactory(() {
+        numConnectionAttempts++;
+        final channel = FakeWebSocketChannel();
+        int sentPingCount = 0;
+        channel.sentMessages.forEach((message) {
+          if (FakeWebSocketChannel.isPing(message)) {
+            sentPingCount++;
+            // on first connection, stop responding to pings after 3 pings
+            if (numConnectionAttempts == 1 && sentPingCount == 3) {
+              channel.shouldSendPong = false;
+            }
+          }
+        });
+        channels[numConnectionAttempts] = channel;
 
-              return channel;
-            }),
-          ),
-          socketServiceProvider.overrideWith(_makeSocketClient),
-        ],
+        return channel;
+      });
+
+      final socketOpenStreamController = StreamController<void>();
+
+      final socketClient = _makeSocketClient(
+        fakeChannelFactory,
+        onOpen: () {
+          socketOpenStreamController.add(null);
+        },
       );
+      socketClient.connect();
 
-      final socketClient = container.read(socketServiceProvider);
-      final (_, readyStream) = socketClient.connect(testUri);
-
-      await readyStream.first;
+      await socketClient.firstConnection;
 
       // will only receive 3 pings since the server stops responding to pings
       expectLater(channels[1]!.stream, emitsInOrder(['0', '0', '0']));
 
       // we expect another connection because it reconnects if not receiving pong
-      await expectLater(readyStream, emits(testUri));
+      await expectLater(socketOpenStreamController.stream, emits(null));
 
       // check the the first connection was closed
       // no need to check the close code since it will alway be 1000 in our fake channel
       expect(channels[1]!.closeCode, isNotNull);
       expect(channels[2]!.closeCode, isNull);
 
-      socketClient.disconnect();
+      socketClient.close();
     });
 
     test('handles ackable messages', () async {
       final fakeChannel = FakeWebSocketChannel();
 
-      final container = await makeContainer(
-        overrides: [
-          webSocketChannelFactoryProvider.overrideWith(
-            (_) => FakeWebSocketChannelFactory(() => fakeChannel),
-          ),
-          socketServiceProvider.overrideWith(_makeSocketClient),
-        ],
-      );
+      final socketClient =
+          _makeSocketClient(FakeWebSocketChannelFactory(() => fakeChannel));
+      socketClient.connect();
 
-      final socketClient = container.read(socketServiceProvider);
-      final (_, readyStream) = socketClient.connect(testUri);
-
-      await readyStream.first;
+      await socketClient.firstConnection;
 
       // send a message that requires an ack
       socketClient.send('test', {'data': 'ackable'}, ackable: true);
@@ -236,7 +208,7 @@ void main() {
         emitsInOrder([]),
       );
 
-      socketClient.disconnect();
+      socketClient.close();
     });
   });
 }

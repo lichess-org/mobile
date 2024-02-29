@@ -32,7 +32,7 @@ class LiveTvChannels extends _$LiveTvChannels {
     return _doStartWatching();
   }
 
-  SocketService get _socket => ref.read(socketServiceProvider);
+  SocketPool get _socket => ref.read(socketPoolProvider);
 
   /// Start watching the TV games
   Future<void> startWatching() async {
@@ -53,19 +53,21 @@ class LiveTvChannels extends _$LiveTvChannels {
     final repoGames =
         await ref.withClient((client) => TvRepository(client).channels());
 
-    final (stream, readyStream) =
-        _socket.connect(Uri(path: kDefaultSocketRoute));
-    _socketSubscription = stream.listen(_handleSocketEvent);
-    _socketReadySubscription = readyStream.listen((_) {
-      _socket.send('startWatchingTvChannels', null);
-      _socket.send(
+    final socketClient = _socket.connect(
+      Uri(path: kDefaultSocketRoute),
+    );
+    socketClient.onOpen = () {
+      socketClient.send('startWatchingTvChannels', null);
+      socketClient.send(
         'startWatching',
         repoGames.entries
             .where((e) => TvChannel.values.contains(e.key))
             .map((e) => e.value.id)
             .join(' '),
       );
-    });
+    };
+
+    _socketSubscription = socketClient.stream.listen(_handleSocketEvent);
 
     return repoGames.map((channel, game) {
       return MapEntry(

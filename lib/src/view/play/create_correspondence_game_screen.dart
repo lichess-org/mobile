@@ -174,12 +174,15 @@ class _ChallengesBody extends ConsumerStatefulWidget {
 class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
   StreamSubscription<SocketEvent>? _socketSubscription;
 
+  late final SocketClient socketClient;
+
   @override
   void initState() {
     super.initState();
-    final (stream, _) = _socket.connect(Uri(path: '/lobby/socket/v5'));
 
-    _socketSubscription = stream.listen((event) {
+    socketClient = _socket.connect(Uri(path: '/lobby/socket/v5'));
+
+    _socketSubscription = socketClient.stream.listen((event) {
       switch (event.topic) {
         // redirect after accepting a correpondence challenge
         case 'redirect':
@@ -210,7 +213,7 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
     super.dispose();
   }
 
-  SocketService get _socket => ref.read(socketServiceProvider);
+  SocketPool get _socket => ref.read(socketPoolProvider);
 
   @override
   Widget build(BuildContext context) {
@@ -247,7 +250,7 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
                         children: [
                           SlidableAction(
                             onPressed: (BuildContext context) {
-                              _socket.send(
+                              socketClient.send(
                                 'cancelSeek',
                                 challenge.id.toString(),
                               );
@@ -295,7 +298,7 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
                                 title: Text(context.l10n.accept),
                                 isDestructiveAction: true,
                                 onConfirm: (_) {
-                                  _socket.send(
+                                  socketClient.send(
                                     'joinSeek',
                                     challenge.id.toString(),
                                   );

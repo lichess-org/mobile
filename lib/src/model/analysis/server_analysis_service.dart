@@ -46,15 +46,15 @@ class ServerAnalysisService {
       }
     }
 
-    final socket = ref.read(socketServiceProvider);
-    final (stream, _) = socket.connect(Uri(path: '/play/$id/v6'));
+    final socketPool = ref.read(socketPoolProvider);
+    final socketClient = socketPool.connect(Uri(path: '/play/$id/v6'));
 
     final completer = Completer<void>();
 
     _socketSubscription?.$2.cancel();
     _socketSubscription = (
       id,
-      stream.listen((event) {
+      socketClient.stream.listen((event) {
         // complete on first analysisProgress event
         if (event.topic == 'analysisProgress') {
           if (!completer.isCompleted) {
