@@ -13,6 +13,7 @@ part 'relation_ctrl.g.dart';
 @riverpod
 class RelationCtrl extends _$RelationCtrl {
   StreamSubscription<SocketEvent>? _socketSubscription;
+  StreamSubscription<void>? _socketOpenSubscription;
 
   @override
   Future<RelationCtrlState> build() {
@@ -28,12 +29,14 @@ class RelationCtrl extends _$RelationCtrl {
 
     _socketSubscription = socketClient.stream.listen(_handleSocketTopic);
 
-    socketClient.onOpen = () {
+    _socketOpenSubscription?.cancel();
+    _socketOpenSubscription = socketClient.openStream.listen((_) {
       _socket.send('following_onlines', null);
-    };
+    });
 
     ref.onDispose(() {
       _socketSubscription?.cancel();
+      _socketOpenSubscription?.cancel();
     });
 
     return state;
@@ -43,9 +46,10 @@ class RelationCtrl extends _$RelationCtrl {
     final socketClient = _socket.connect(Uri(path: '/lobby/socket/v5'));
     _socketSubscription?.cancel();
     _socketSubscription = socketClient.stream.listen(_handleSocketTopic);
-    socketClient.onOpen = () {
+    _socketOpenSubscription?.cancel();
+    _socketOpenSubscription = socketClient.openStream.listen((_) {
       _socket.send('following_onlines', null);
-    };
+    });
   }
 
   void stopWatchingFriends() {

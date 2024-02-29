@@ -12,6 +12,8 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
+import 'package:lichess_mobile/src/utils/device_info.dart';
+import 'package:lichess_mobile/src/utils/package_info.dart';
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -44,8 +46,9 @@ class SocketClient {
     this.route, {
     required this.channelFactory,
     required this.getSession,
+    required this.packageInfo,
+    required this.deviceInfo,
     required this.sri,
-    this.onOpen,
     this.onStreamListen,
     this.onStreamCancel,
     this.pingDelay = _kPingDelay,
@@ -58,14 +61,15 @@ class SocketClient {
 
   final AuthSessionState? Function() getSession;
 
+  final PackageInfo packageInfo;
+
+  final BaseDeviceInfo deviceInfo;
+
   /// The Socket Random Identifier.
   final String sri;
 
   /// The route to connect to.
   final Uri route;
-
-  /// A callback to be called whenever the socket is (re)opened.
-  VoidCallback? onOpen;
 
   /// The delay between the next ping after receiving a pong.
   final Duration pingDelay;
@@ -93,6 +97,9 @@ class SocketClient {
     onCancel: onStreamCancel,
   );
 
+  late final StreamController<void> _socketOpenController =
+      StreamController<void>.broadcast();
+
   Timer? _pingTimer;
   Timer? _reconnectTimer;
   Timer? _ackResendTimer;
@@ -107,7 +114,10 @@ class SocketClient {
   final List<(DateTime, int, Map<String, dynamic>)> _acks = [];
 
   /// The current number of connections attempted.
-  int nbConnections = 0;
+  int nbConnectionAttempts = 0;
+
+  /// The current number of successful connections.
+  int nbConnectionSuccess = 0;
 
   /// The current ack id. Incremented for each ack.
   int _ackId = 1;
@@ -120,6 +130,9 @@ class SocketClient {
 
   /// The socket events broadcast stream.
   Stream<SocketEvent> get stream => _streamController.stream;
+
+  /// The stream that emits each time the socket is open.
+  Stream<void> get openStream => _socketOpenController.stream;
 
   /// The average lag computed from ping/pong protocol.
   ///
@@ -149,19 +162,18 @@ class SocketClient {
     _ackResendTimer = Timer.periodic(resendAckDelay, (_) => _resendAcks());
 
     final session = getSession();
-    final pInfo = await PackageInfo.fromPlatform();
-    final deviceInfo = await DeviceInfoPlugin().deviceInfo;
     final uri = Uri.parse('$kLichessWSHost$route');
     final Map<String, String> headers = session != null
         ? {
             'Authorization': 'Bearer ${signBearerToken(session.token)}',
           }
         : {};
-    WebSocket.userAgent = makeUserAgent(pInfo, deviceInfo, sri, session?.user);
+    WebSocket.userAgent =
+        makeUserAgent(packageInfo, deviceInfo, sri, session?.user);
 
     _logger.info('Creating WebSocket connection to $uri');
 
-    nbConnections++;
+    nbConnectionAttempts++;
 
     try {
       final channel = await channelFactory.create(
@@ -184,7 +196,9 @@ class SocketClient {
 
       _logger.fine('WebSocket connection established.');
 
-      if (nbConnections == 1) {
+      nbConnectionSuccess++;
+
+      if (nbConnectionSuccess == 1) {
         _firstConnection.complete();
       }
 
@@ -192,7 +206,9 @@ class SocketClient {
       _sendPing();
       _schedulePing(pingDelay);
 
-      onOpen?.call();
+      if (_socketOpenController.hasListener) {
+        _socketOpenController.add(null);
+      }
       _resendAcks();
     } catch (error) {
       _logger.severe('WebSocket connection failed.', error);
@@ -255,9 +271,10 @@ class SocketClient {
   /// this is when we open another one).
   ///
   /// The connection can be reopend later by calling [connect]. This will reset
-  /// the [firstConnection] future and the [nbConnections] counter.
+  /// the [firstConnection] future and the [nbConnectionAttempts] and [nbConnectionSuccess] counters.
   Future<void> close() {
-    nbConnections = 0;
+    nbConnectionAttempts = 0;
+    nbConnectionSuccess = 0;
     _firstConnection = Completer<void>();
     return _disconnect();
   }
@@ -380,7 +397,12 @@ class SocketPool {
       sri: _ref.read(sriProvider),
       channelFactory: _ref.read(webSocketChannelFactoryProvider),
       getSession: () => _ref.read(authSessionProvider),
+      packageInfo: _ref.read(packageInfoProvider),
+      deviceInfo: _ref.read(deviceInfoProvider),
       pingDelay: const Duration(seconds: 25),
+      pingMaxLag: pingMaxLag,
+      autoReconnectDelay: autoReconnectDelay,
+      resendAckDelay: resendAckDelay,
     )..connect();
 
     client.averageLag.addListener(() {
@@ -438,6 +460,8 @@ class SocketPool {
         route,
         channelFactory: _ref.read(webSocketChannelFactoryProvider),
         getSession: () => _ref.read(authSessionProvider),
+        packageInfo: _ref.read(packageInfoProvider),
+        deviceInfo: _ref.read(deviceInfoProvider),
         sri: _ref.read(sriProvider),
         pingDelay: pingDelay,
         pingMaxLag: pingMaxLag,
@@ -472,7 +496,7 @@ class SocketPool {
 
     final client = _pool[route]!;
 
-    if (forceReconnect == true || client.nbConnections == 0) {
+    if (forceReconnect == true || client.nbConnectionAttempts == 0) {
       client.connect();
     }
 
@@ -521,7 +545,7 @@ SocketPool socketPool(SocketPoolRef ref) {
     },
     onShow: () {
       closeInBackgroundTimer?.cancel();
-      if (pool.activeClient.nbConnections == 0) {
+      if (pool.activeClient.nbConnectionAttempts == 0) {
         pool.activeClient.connect();
       }
     },

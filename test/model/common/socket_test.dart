@@ -1,22 +1,33 @@
-import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import 'fake_websocket_channel.dart';
 
-SocketClient _makeSocketClient(
-  FakeWebSocketChannelFactory fakeChannelFactory, {
-  VoidCallback? onOpen,
-}) {
+SocketClient _makeSocketClient(FakeWebSocketChannelFactory fakeChannelFactory) {
   final client = SocketClient(
     Uri(path: kDefaultSocketRoute),
     channelFactory: fakeChannelFactory,
     getSession: () => null,
     sri: 'testSri',
-    onOpen: onOpen,
+    packageInfo: PackageInfo(
+      appName: 'lichess_mobile_test',
+      version: 'test',
+      buildNumber: '0.0.0',
+      packageName: 'lichess_mobile_test',
+    ),
+    deviceInfo: BaseDeviceInfo({
+      'name': 'test',
+      'model': 'test',
+      'manufacturer': 'test',
+      'systemName': 'test',
+      'systemVersion': 'test',
+      'identifierForVendor': 'test',
+      'isPhysicalDevice': true,
+    }),
     pingDelay: const Duration(milliseconds: 50),
     pingMaxLag: const Duration(milliseconds: 200),
     autoReconnectDelay: const Duration(milliseconds: 100),
@@ -99,7 +110,7 @@ void main() {
       });
 
       // 1 ready event is expected
-      // expectLater(readyStream, emitsInOrder([testUri]));
+      expectLater(socketClient.openStream, emitsInOrder([null]));
 
       // 2 pong messages are expected since we're closing just after 3 pings
       await expectLater(fakeChannel.stream, emitsInOrder(['0', '0']));
@@ -123,7 +134,8 @@ void main() {
       await socketClient.firstConnection;
 
       expect(numConnectionAttempts, 2);
-      expect(socketClient.nbConnections, 2);
+      expect(socketClient.nbConnectionAttempts, 2);
+      expect(socketClient.nbConnectionSuccess, 1);
 
       socketClient.close();
     });
@@ -151,14 +163,7 @@ void main() {
         return channel;
       });
 
-      final socketOpenStreamController = StreamController<void>();
-
-      final socketClient = _makeSocketClient(
-        fakeChannelFactory,
-        onOpen: () {
-          socketOpenStreamController.add(null);
-        },
-      );
+      final socketClient = _makeSocketClient(fakeChannelFactory);
       socketClient.connect();
 
       await socketClient.firstConnection;
@@ -167,7 +172,7 @@ void main() {
       expectLater(channels[1]!.stream, emitsInOrder(['0', '0', '0']));
 
       // we expect another connection because it reconnects if not receiving pong
-      await expectLater(socketOpenStreamController.stream, emits(null));
+      await expectLater(socketClient.openStream, emits(null));
 
       // check the the first connection was closed
       // no need to check the close code since it will alway be 1000 in our fake channel

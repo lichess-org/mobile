@@ -56,7 +56,8 @@ class LiveTvChannels extends _$LiveTvChannels {
     final socketClient = _socket.connect(
       Uri(path: kDefaultSocketRoute),
     );
-    socketClient.onOpen = () {
+    _socketReadySubscription?.cancel();
+    _socketReadySubscription = socketClient.openStream.listen((_) {
       socketClient.send('startWatchingTvChannels', null);
       socketClient.send(
         'startWatching',
@@ -65,7 +66,7 @@ class LiveTvChannels extends _$LiveTvChannels {
             .map((e) => e.value.id)
             .join(' '),
       );
-    };
+    });
 
     _socketSubscription = socketClient.stream.listen(_handleSocketEvent);
 
