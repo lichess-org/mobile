@@ -18,8 +18,8 @@ class RelationCtrl extends _$RelationCtrl {
   late final SocketClient _socketClient;
 
   @override
-  Future<RelationCtrlState> build() {
-    _socketClient = _socket.connect(Uri(path: '/lobby/socket/v5'));
+  Future<RelationCtrlState> build() async {
+    _socketClient = _socketPool.connect(Uri(path: kDefaultSocketRoute));
 
     final state = _socketClient.stream
         .firstWhere((e) => e.topic == 'following_onlines')
@@ -29,10 +29,17 @@ class RelationCtrl extends _$RelationCtrl {
           ),
         );
 
+    await _socketClient.firstConnection;
+
+    // Request the list of online friends once the socket is connected.
+    _socketClient.send('following_onlines', null);
+
+    // Start watching for online friends.
     _socketSubscription = _socketClient.stream.listen(_handleSocketTopic);
 
     _socketOpenSubscription?.cancel();
-    _socketOpenSubscription = _socketClient.openStream.listen((_) {
+    // Request again the list of online friends every time the socket is reconnected.
+    _socketOpenSubscription = _socketClient.connectedStream.listen((_) {
       _socketClient.send('following_onlines', null);
     });
 
@@ -48,14 +55,17 @@ class RelationCtrl extends _$RelationCtrl {
     _socketSubscription?.cancel();
     _socketSubscription = _socketClient.stream.listen(_handleSocketTopic);
     _socketOpenSubscription?.cancel();
-    _socketOpenSubscription = _socketClient.openStream.listen((_) {
+    _socketOpenSubscription = _socketClient.connectedStream.listen((_) {
       _socketClient.send('following_onlines', null);
     });
-    _socketClient.connect();
+    if (!_socketClient.isActive) {
+      _socketClient.connect();
+    }
   }
 
   void stopWatchingFriends() {
     _socketSubscription?.cancel();
+    _socketOpenSubscription?.cancel();
   }
 
   void _handleSocketTopic(SocketEvent event) {
@@ -88,7 +98,7 @@ class RelationCtrl extends _$RelationCtrl {
     }
   }
 
-  SocketPool get _socket => ref.read(socketPoolProvider);
+  SocketPool get _socketPool => ref.read(socketPoolProvider);
 
   LightUser _parseFriend(String friend) {
     final splitted = friend.split(' ');

@@ -71,6 +71,11 @@ class GameController extends _$GameController {
   @override
   Future<GameState> build(GameFullId gameFullId) {
     final socketPool = ref.watch(socketPoolProvider);
+
+    // watch the chat notifier to keep it alive
+    // TODO find a better way to keep the chat state alive
+    ref.watch(chatControllerProvider(gameFullId).notifier);
+
     _socketClient = socketPool.connect(
       Uri(path: '/play/$gameFullId/v6'),
       forceReconnect: true,
@@ -84,9 +89,6 @@ class GameController extends _$GameController {
       _opponentLeftCountdownTimer?.cancel();
       _transientMoveTimer?.cancel();
     });
-
-    // ensure keeping chat state
-    ref.watch(chatControllerProvider(gameFullId));
 
     return _socketClient.stream.firstWhere((e) => e.topic == 'full').then(
       (event) async {
@@ -104,7 +106,7 @@ class GameController extends _$GameController {
           game = result.fold(
               (data) => _mergePostGameData(game, data, rewriteSteps: true),
               (e, s) {
-            _logger.warning('Could not get post game data', e, s);
+            _logger.warning('Could not get post game data: $e', e, s);
             return game;
           });
         }

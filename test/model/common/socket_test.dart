@@ -110,7 +110,7 @@ void main() {
       });
 
       // 1 ready event is expected
-      expectLater(socketClient.openStream, emitsInOrder([null]));
+      expectLater(socketClient.connectedStream, emitsInOrder([null]));
 
       // 2 pong messages are expected since we're closing just after 3 pings
       await expectLater(fakeChannel.stream, emitsInOrder(['0', '0']));
@@ -172,7 +172,7 @@ void main() {
       expectLater(channels[1]!.stream, emitsInOrder(['0', '0', '0']));
 
       // we expect another connection because it reconnects if not receiving pong
-      await expectLater(socketClient.openStream, emits(null));
+      await expectLater(socketClient.connectedStream, emits(null));
 
       // check the the first connection was closed
       // no need to check the close code since it will alway be 1000 in our fake channel

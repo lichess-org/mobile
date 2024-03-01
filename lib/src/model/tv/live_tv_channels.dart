@@ -61,7 +61,7 @@ class LiveTvChannels extends _$LiveTvChannels {
     _socketWatch(repoGames);
 
     _socketReadySubscription?.cancel();
-    _socketReadySubscription = _socketClient.openStream.listen((_) async {
+    _socketReadySubscription = _socketClient.connectedStream.listen((_) async {
       final repoGames =
           await ref.withClient((client) => TvRepository(client).channels());
       _socketWatch(repoGames);

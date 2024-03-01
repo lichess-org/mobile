@@ -144,8 +144,8 @@ class SocketClient {
   /// The socket events broadcast stream.
   Stream<SocketEvent> get stream => _streamController.stream;
 
-  /// The stream that emits each time the socket is open.
-  Stream<void> get openStream => _socketOpenController.stream;
+  /// The stream that emits each time the socket is (re)connected.
+  Stream<void> get connectedStream => _socketOpenController.stream;
 
   /// The average lag computed from ping/pong protocol.
   ///
