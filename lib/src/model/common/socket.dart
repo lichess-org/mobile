@@ -36,6 +36,11 @@ const _kDisconnectOnBackgroundTimeout = Duration(minutes: 10);
 
 final _logger = Logger('Socket');
 
+const _globalSocketStreamAllowedTopics = {
+  'n',
+  'message',
+};
+
 final _globalStreamController = StreamController<SocketEvent>.broadcast();
 
 /// The global socket events broadcast stream.
@@ -91,8 +96,6 @@ class SocketClient {
   /// The delay before resending an ack.
   final Duration resendAckDelay;
 
-  Completer<void> _firstConnection = Completer<void>();
-
   /// Called when the first listener is added to the socket stream.
   final VoidCallback? onStreamListen;
 
@@ -107,6 +110,8 @@ class SocketClient {
 
   late final StreamController<void> _socketOpenController =
       StreamController<void>.broadcast();
+
+  Completer<void> _firstConnection = Completer<void>();
 
   Timer? _pingTimer;
   Timer? _reconnectTimer;
@@ -333,7 +338,8 @@ class SocketClient {
       if (_streamController.hasListener) {
         _streamController.add(event);
       }
-      if (_globalStreamController.hasListener) {
+      if (_globalStreamController.hasListener &&
+          _globalSocketStreamAllowedTopics.contains(event.topic)) {
         _globalStreamController.add(event);
       }
     }
@@ -411,9 +417,8 @@ class SocketClient {
 ///
 /// A client for the default route is created upon initialization and is never
 /// disposed.
-/// The pool is responsible for creating and disposing other clients and for ensuring
-/// that only one client is active at a time and that there is always an active
-/// client.
+/// The pool is responsible for creating and disposing other clients and that
+/// there is always an active client.
 /// When a requested client is disposed, the pool will automatically reconnect
 /// the default client.
 class SocketPool {
@@ -423,7 +428,7 @@ class SocketPool {
   }) {
     // Create a default socket client. This one is never disposed.
     final client = SocketClient(
-      _activeRoute,
+      _currentRoute,
       sri: _ref.read(sriProvider),
       channelFactory: _ref.read(webSocketChannelFactoryProvider),
       getSession: () => _ref.read(authSessionProvider),
@@ -433,12 +438,12 @@ class SocketPool {
     );
 
     client.averageLag.addListener(() {
-      if (_activeRoute == client.route) {
+      if (_currentRoute == client.route) {
         _averageLag.value = client.averageLag.value;
       }
     });
 
-    _pool[_activeRoute] = client;
+    _pool[_currentRoute] = client;
   }
 
   final SocketPoolRef _ref;
@@ -453,11 +458,11 @@ class SocketPool {
   /// A duration of zero means the socket is not connected.
   ValueListenable<Duration> get averageLag => _averageLag;
 
-  /// The active socket route.
-  Uri _activeRoute = Uri(path: kDefaultSocketRoute);
+  /// The current socket route.
+  Uri _currentRoute = Uri(path: kDefaultSocketRoute);
 
-  /// The active socket client.
-  SocketClient get activeClient => _pool[_activeRoute]!;
+  /// The current socket client.
+  SocketClient get currentClient => _pool[_currentRoute]!;
 
   /// The socket clients pool.
   final Map<Uri, SocketClient> _pool = {};
@@ -471,7 +476,7 @@ class SocketPool {
     Uri route, {
     bool? forceReconnect,
   }) {
-    _activeRoute = route;
+    _currentRoute = route;
 
     if (_pool[route] == null) {
       _pool[route] = SocketClient(
@@ -489,15 +494,15 @@ class SocketPool {
           // avoid unnecessary reconnections.
           _disposeTimers[route]?.cancel();
           _disposeTimers[route] = Timer(idleTimeout, () {
-            _logger.fine('Closing idle socket.');
+            _logger.fine('Disposing idle socket on $route.');
             _pool[route]?._dispose();
             _pool.remove(route);
             // if during the idle time no new socket is requested, we reconnect
             // the default socket
-            if (route == _activeRoute) {
-              _activeRoute = Uri(path: kDefaultSocketRoute);
-              if (activeClient.nbConnectionAttempts == 0) {
-                activeClient.connect();
+            if (route == _currentRoute) {
+              _currentRoute = Uri(path: kDefaultSocketRoute);
+              if (!currentClient.isActive) {
+                currentClient.connect();
               }
             }
           });
@@ -519,7 +524,7 @@ class SocketPool {
     }
 
     client.averageLag.addListener(() {
-      if (_activeRoute == client.route) {
+      if (_currentRoute == client.route) {
         _averageLag.value = client.averageLag.value;
       }
     });
@@ -545,16 +550,16 @@ SocketPool socketPool(SocketPoolRef ref) {
         _kDisconnectOnBackgroundTimeout,
         () {
           _logger.info(
-            'App is in background for ${_kDisconnectOnBackgroundTimeout.inMinutes}m, terminating socket.',
+            'App is in background for ${_kDisconnectOnBackgroundTimeout.inMinutes}m, closing socket.',
           );
-          pool.activeClient.close();
+          pool.currentClient.close();
         },
       );
     },
     onShow: () {
       closeInBackgroundTimer?.cancel();
-      if (pool.activeClient.nbConnectionAttempts == 0) {
-        pool.activeClient.connect();
+      if (!pool.currentClient.isActive) {
+        pool.currentClient.connect();
       }
     },
   );
@@ -564,6 +569,7 @@ SocketPool socketPool(SocketPoolRef ref) {
     closeInBackgroundTimer?.cancel();
     appLifecycleListener.dispose();
   });
+
   return pool;
 }
 

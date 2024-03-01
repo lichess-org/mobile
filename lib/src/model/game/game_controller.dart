@@ -65,10 +65,12 @@ class GameController extends _$GameController {
 
   late final SocketClient _socketClient;
 
+  ChatController get _chatNotifier =>
+      ref.read(chatControllerProvider(gameFullId).notifier);
+
   @override
   Future<GameState> build(GameFullId gameFullId) {
     final socketPool = ref.watch(socketPoolProvider);
-    final chatNotifier = ref.watch(chatControllerProvider(gameFullId).notifier);
     _socketClient = socketPool.connect(
       Uri(path: '/play/$gameFullId/v6'),
       forceReconnect: true,
@@ -83,6 +85,9 @@ class GameController extends _$GameController {
       _transientMoveTimer?.cancel();
     });
 
+    // ensure keeping chat state
+    ref.watch(chatControllerProvider(gameFullId));
+
     return _socketClient.stream.firstWhere((e) => e.topic == 'full').then(
       (event) async {
         final fullEvent =
@@ -91,7 +96,7 @@ class GameController extends _$GameController {
         PlayableGame game = fullEvent.game;
 
         if (fullEvent.game.messages != null) {
-          chatNotifier.setMessages(fullEvent.game.messages!);
+          _chatNotifier.setMessages(fullEvent.game.messages!);
         }
 
         if (fullEvent.game.finished) {
@@ -479,9 +484,7 @@ class GameController extends _$GameController {
         _lastMoveTime = null;
 
         if (fullEvent.game.messages != null) {
-          ref
-              .read(chatControllerProvider(gameFullId).notifier)
-              .setMessages(fullEvent.game.messages!);
+          _chatNotifier.setMessages(fullEvent.game.messages!);
         }
 
         state = AsyncValue.data(
@@ -836,6 +839,17 @@ class GameController extends _$GameController {
               analysis: data.analysis?.black,
             ),
             evals: data.evals,
+          ),
+        );
+
+      case 'message':
+        final data = event.data as Map<String, dynamic>;
+        final message = data['t'] as String;
+        final username = data['u'] as String?;
+        _chatNotifier.addMessage(
+          (
+            message: message,
+            username: username,
           ),
         );
     }

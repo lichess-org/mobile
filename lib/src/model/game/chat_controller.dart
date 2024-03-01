@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -11,18 +9,10 @@ part 'chat_controller.g.dart';
 
 @riverpod
 class ChatController extends _$ChatController {
-  StreamSubscription<SocketEvent>? _socketSubscription;
-
   SocketPool get _socketPool => ref.read(socketPoolProvider);
 
   @override
   ChatState build(StringId chatContext) {
-    _socketSubscription = socketGlobalStream.listen(_handleSocketTopic);
-
-    ref.onDispose(() {
-      _socketSubscription?.cancel();
-    });
-
     return ChatState(
       messages: IList(),
       unreadMessages: 0,
@@ -36,8 +26,15 @@ class ChatController extends _$ChatController {
     );
   }
 
-  void onUserMessage(String message) {
-    _socketPool.activeClient.send(
+  void addMessage(Message message) {
+    state = state.copyWith(
+      messages: state.messages.add(message),
+      unreadMessages: state.unreadMessages + 1,
+    );
+  }
+
+  void sendMessage(String message) {
+    _socketPool.currentClient.send(
       'talk',
       message,
     );
@@ -45,25 +42,6 @@ class ChatController extends _$ChatController {
 
   void resetUnreadMessages() {
     state = state.copyWith(unreadMessages: 0);
-  }
-
-  void _handleSocketTopic(SocketEvent event) {
-    switch (event.topic) {
-      // Called when a message is received
-      case 'message':
-        final data = event.data as Map<String, dynamic>;
-        final message = data['t'] as String;
-        final username = data['u'] as String?;
-        state = state.copyWith(
-          messages: state.messages.add(
-            (
-              message: message,
-              username: username,
-            ),
-          ),
-          unreadMessages: state.unreadMessages + 1,
-        );
-    }
   }
 }
 

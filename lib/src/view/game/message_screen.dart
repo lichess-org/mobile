@@ -246,7 +246,7 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
             ? () {
                 ref
                     .read(chatControllerProvider(widget.chatContext).notifier)
-                    .onUserMessage(_textController.text);
+                    .sendMessage(_textController.text);
                 _textController.clear();
               }
             : null,
