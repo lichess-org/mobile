@@ -510,6 +510,14 @@ class SocketPool {
       );
     }
 
+    final client = _pool[route]!;
+
+    client.averageLag.addListener(() {
+      if (_currentRoute == client.route) {
+        _averageLag.value = client.averageLag.value;
+      }
+    });
+
     // ensure there is only one active connection
     _pool.forEach((k, c) {
       if (k != route) {
@@ -517,17 +525,9 @@ class SocketPool {
       }
     });
 
-    final client = _pool[route]!;
-
     if (forceReconnect == true || !client.isActive) {
       client.connect();
     }
-
-    client.averageLag.addListener(() {
-      if (_currentRoute == client.route) {
-        _averageLag.value = client.averageLag.value;
-      }
-    });
 
     return client;
   }
