@@ -25,7 +25,9 @@ class RelationScreen extends ConsumerWidget {
         ref.read(relationCtrlProvider.notifier).startWatchingFriends();
       },
       onFocusLost: () {
-        ref.read(relationCtrlProvider.notifier).stopWatchingFriends();
+        if (context.mounted) {
+          ref.read(relationCtrlProvider.notifier).stopWatchingFriends();
+        }
       },
       child: PlatformWidget(
         androidBuilder: _androidBuilder,
