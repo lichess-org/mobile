@@ -22,7 +22,7 @@ class LiveTvChannels extends _$LiveTvChannels {
   StreamSubscription<SocketEvent>? _socketSubscription;
   StreamSubscription<void>? _socketReadySubscription;
 
-  late final SocketClient _socketClient;
+  late SocketClient _socketClient;
 
   @override
   Future<LiveTvChannelsState> build() async {

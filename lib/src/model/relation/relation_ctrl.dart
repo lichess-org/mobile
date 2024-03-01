@@ -15,7 +15,7 @@ class RelationCtrl extends _$RelationCtrl {
   StreamSubscription<SocketEvent>? _socketSubscription;
   StreamSubscription<void>? _socketOpenSubscription;
 
-  late final SocketClient _socketClient;
+  late SocketClient _socketClient;
 
   @override
   Future<RelationCtrlState> build() async {

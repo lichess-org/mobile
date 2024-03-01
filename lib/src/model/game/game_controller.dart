@@ -63,7 +63,7 @@ class GameController extends _$GameController {
   /// Last move time
   DateTime? _lastMoveTime;
 
-  late final SocketClient _socketClient;
+  late SocketClient _socketClient;
 
   ChatController get _chatNotifier =>
       ref.read(chatControllerProvider(gameFullId).notifier);
