@@ -694,6 +694,12 @@ class _EloChartState extends State<_EloChart> {
     return (_points.map((e) => e.y).reduce(max) / 100).ceilToDouble() * 100;
   }
 
+  String _formatDateFromTimestamp(double date) {
+    return DateFormat('yyyy-MM-dd').format(
+      DateTime.fromMillisecondsSinceEpoch(date.toInt()),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -749,10 +755,30 @@ class _EloChartState extends State<_EloChart> {
                   strokeWidth: 0.5,
                 ),
               ),
-              lineTouchData: const LineTouchData(
+              lineTouchData: LineTouchData(
                 touchTooltipData: LineTouchTooltipData(
+                  tooltipBgColor: chartColor.withOpacity(0.2),
                   fitInsideHorizontally: true,
                   fitInsideVertically: true,
+                  getTooltipItems: (touchedSpots) {
+                    return touchedSpots
+                        .map(
+                          (LineBarSpot touchedSpot) => LineTooltipItem(
+                            '${touchedSpot.y.toInt()}\n',
+                            Styles.bold,
+                            children: [
+                              TextSpan(
+                                text: _formatDateFromTimestamp(touchedSpot.x),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 10,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                        .toList();
+                  },
                 ),
               ),
               // it seems that it is not possible to draw side titles inside chart with a reservedSize of 0
@@ -766,12 +792,8 @@ class _EloChartState extends State<_EloChart> {
           min: _allPoints.first.x,
           max: _allPoints.last.x,
           labels: RangeLabels(
-            DateFormat('yyyy-MM-dd').format(
-              DateTime.fromMillisecondsSinceEpoch(_startDate.toInt()),
-            ),
-            DateFormat('yyyy-MM-dd').format(
-              DateTime.fromMillisecondsSinceEpoch(_endDate.toInt()),
-            ),
+            _formatDateFromTimestamp(_startDate),
+            _formatDateFromTimestamp(_endDate),
           ),
           onChanged: (value) {
             setState(() {
