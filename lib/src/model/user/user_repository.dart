@@ -96,9 +96,9 @@ UserRatingHistoryPerf _ratingHistoryFromPick(
     points: perf('points').asListOrThrow((point) {
       final values = point.asListOrThrow((point) => point.asIntOrThrow());
       return UserRatingHistoryPoint(
-        date: DateTime(
+        date: DateTime.utc(
           values[0],
-          values[1],
+          values[1] + 1,
           values[2],
         ),
         elo: values[3],
