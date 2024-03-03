@@ -12,11 +12,10 @@ import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
-class LobbyGameLoadingBoard extends StatelessWidget {
-  const LobbyGameLoadingBoard(this.seek, {this.isRematch = false});
+class LobbyScreenLoadingContent extends StatelessWidget {
+  const LobbyScreenLoadingContent(this.seek);
 
   final GameSeek seek;
-  final bool isRematch;
 
   @override
   Widget build(BuildContext context) {
@@ -42,34 +41,32 @@ class LobbyGameLoadingBoard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const Text('Waiting for opponent to join...'),
-                      if (isRematch == false) ...[
-                        const SizedBox(height: 26.0),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              seek.perf.icon,
-                              color: DefaultTextStyle.of(context).style.color,
-                            ),
-                            const SizedBox(width: 8.0),
-                            Text(
-                              seek.timeIncrement?.display ??
-                                  '${context.l10n.daysPerTurn}: ${seek.days}',
-                              style: Theme.of(context).textTheme.titleLarge,
-                            ),
-                          ],
-                        ),
-                        if (seek.ratingRange != null) ...[
-                          const SizedBox(height: 8.0),
+                      const SizedBox(height: 26.0),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            seek.perf.icon,
+                            color: DefaultTextStyle.of(context).style.color,
+                          ),
+                          const SizedBox(width: 8.0),
                           Text(
-                            '${seek.ratingRange!.$1}-${seek.ratingRange!.$2}',
-                            style: Theme.of(context).textTheme.titleMedium,
+                            seek.timeIncrement?.display ??
+                                '${context.l10n.daysPerTurn}: ${seek.days}',
+                            style: Theme.of(context).textTheme.titleLarge,
                           ),
                         ],
-                        const SizedBox(height: 16.0),
-                        _LobbyNumbers(),
+                      ),
+                      if (seek.ratingRange != null) ...[
+                        const SizedBox(height: 8.0),
+                        Text(
+                          '${seek.ratingRange!.$1}-${seek.ratingRange!.$2}',
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
                       ],
+                      const SizedBox(height: 16.0),
+                      _LobbyNumbers(),
                     ],
                   ),
                 ),
@@ -79,13 +76,12 @@ class LobbyGameLoadingBoard extends StatelessWidget {
         ),
         _BottomBar(
           children: [
-            if (isRematch == false)
-              BottomBarButton(
-                onTap: () => Navigator.of(context, rootNavigator: true).pop(),
-                label: context.l10n.cancel,
-                showLabel: true,
-                icon: CupertinoIcons.xmark,
-              ),
+            BottomBarButton(
+              onTap: () => Navigator.of(context, rootNavigator: true).pop(),
+              label: context.l10n.cancel,
+              showLabel: true,
+              icon: CupertinoIcons.xmark,
+            ),
           ],
         ),
       ],
@@ -107,53 +103,42 @@ class StandaloneGameLoadingBoard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return BoardTable(
+      boardData: cg.BoardData(
+        interactableSide: cg.InteractableSide.none,
+        orientation: orientation?.cg ?? cg.Side.white,
+        fen: fen ?? kEmptyFen,
+        lastMove: lastMove?.cg,
+      ),
+      topTable: const SizedBox.shrink(),
+      bottomTable: const SizedBox.shrink(),
+      showMoveListPlaceholder: true,
+    );
+  }
+}
+
+class LoadGameError extends StatelessWidget {
+  const LoadGameError(this.errorMessage);
+
+  final String errorMessage;
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       children: [
         Expanded(
           child: SafeArea(
             bottom: false,
             child: BoardTable(
-              boardData: cg.BoardData(
-                interactableSide: cg.InteractableSide.none,
-                orientation: orientation?.cg ?? cg.Side.white,
-                fen: fen ?? kEmptyFen,
-                lastMove: lastMove?.cg,
-              ),
-              topTable: const SizedBox.shrink(),
-              bottomTable: const SizedBox.shrink(),
-              showMoveListPlaceholder: true,
-            ),
-          ),
-        ),
-        const _BottomBar(
-          children: [],
-        ),
-      ],
-    );
-  }
-}
-
-class LoadGameError extends StatelessWidget {
-  const LoadGameError();
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const Expanded(
-          child: SafeArea(
-            bottom: false,
-            child: BoardTable(
-              boardData: cg.BoardData(
+              boardData: const cg.BoardData(
                 interactableSide: cg.InteractableSide.none,
                 orientation: cg.Side.white,
                 fen: kEmptyFen,
               ),
-              topTable: SizedBox.shrink(),
-              bottomTable: SizedBox.shrink(),
+              topTable: const SizedBox.shrink(),
+              bottomTable: const SizedBox.shrink(),
               showMoveListPlaceholder: true,
-              errorMessage:
-                  'Sorry, we could not load the game. Please try again later.',
+              errorMessage: errorMessage,
             ),
           ),
         ),

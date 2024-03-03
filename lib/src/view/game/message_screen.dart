@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/chat_controller.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
@@ -15,12 +14,12 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
 class MessageScreen extends ConsumerStatefulWidget {
-  final StringId chatContext;
+  final Uri gameSocketUri;
   final Widget title;
   final LightUser? me;
 
   const MessageScreen({
-    required this.chatContext,
+    required this.gameSocketUri,
     required this.title,
     this.me,
   });
@@ -48,14 +47,14 @@ class _MessageScreenState extends ConsumerState<MessageScreen> with RouteAware {
   @override
   void didPop() {
     ref
-        .read(chatControllerProvider(widget.chatContext).notifier)
+        .read(chatControllerProvider(widget.gameSocketUri).notifier)
         .resetUnreadMessages();
     super.didPop();
   }
 
   @override
   Widget build(BuildContext context) {
-    final body = _Body(me: widget.me, chatContext: widget.chatContext);
+    final body = _Body(me: widget.me, gameSocketUri: widget.gameSocketUri);
 
     return PlatformWidget(
       androidBuilder: (context) =>
@@ -91,17 +90,17 @@ class _MessageScreenState extends ConsumerState<MessageScreen> with RouteAware {
 }
 
 class _Body extends ConsumerWidget {
-  final StringId chatContext;
+  final Uri gameSocketUri;
   final LightUser? me;
 
   const _Body({
-    required this.chatContext,
+    required this.gameSocketUri,
     required this.me,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final chatState = ref.watch(chatControllerProvider(chatContext));
+    final chatState = ref.watch(chatControllerProvider(gameSocketUri));
 
     return Column(
       mainAxisSize: MainAxisSize.max,
@@ -134,7 +133,7 @@ class _Body extends ConsumerWidget {
             ),
           ),
         ),
-        _ChatBottomBar(chatContext: chatContext),
+        _ChatBottomBar(gameSocketUri: gameSocketUri),
       ],
     );
   }
@@ -220,8 +219,8 @@ class _MessageAction extends StatelessWidget {
 }
 
 class _ChatBottomBar extends ConsumerStatefulWidget {
-  final StringId chatContext;
-  const _ChatBottomBar({required this.chatContext});
+  final Uri gameSocketUri;
+  const _ChatBottomBar({required this.gameSocketUri});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _ChatBottomBarState();
@@ -245,7 +244,7 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
         onTap: session != null && value.text.isNotEmpty
             ? () {
                 ref
-                    .read(chatControllerProvider(widget.chatContext).notifier)
+                    .read(chatControllerProvider(widget.gameSocketUri).notifier)
                     .sendMessage(_textController.text);
                 _textController.clear();
               }
@@ -255,6 +254,8 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
         semanticsLabel: context.l10n.send,
       ),
     );
+    final placeholder =
+        session != null ? context.l10n.talkInChat : context.l10n.loginToChat;
     return SafeArea(
       top: false,
       child: Padding(
@@ -267,9 +268,7 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
             border: const OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(20.0)),
             ),
-            hintText: session != null
-                ? context.l10n.talkInChat
-                : context.l10n.loginToChat,
+            hintText: placeholder,
           ),
           cupertinoDecoration: BoxDecoration(
             border: Border.all(
@@ -277,6 +276,7 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
             ),
             borderRadius: const BorderRadius.all(Radius.circular(30.0)),
           ),
+          placeholder: placeholder,
           controller: _textController,
           keyboardType: TextInputType.text,
           minLines: 1,

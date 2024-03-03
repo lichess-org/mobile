@@ -80,12 +80,10 @@ class _LobbyScreenState extends ConsumerState<LobbyScreen> with RouteAware {
 
     return gameIdAsync.when(
       data: (data) {
-        final (gameId, fromRematch: isRematch) = data;
+        final (gameId, fromRematch: _) = data;
         final body = GameBody(
           id: gameId,
-          loadingBoardWidget: isRematch
-              ? const StandaloneGameLoadingBoard()
-              : LobbyGameLoadingBoard(widget.seek),
+          loadingBoardWidget: const StandaloneGameLoadingBoard(),
           whiteClockKey: _whiteClockKey,
           blackClockKey: _blackClockKey,
           boardKey: _boardKey,
@@ -115,7 +113,7 @@ class _LobbyScreenState extends ConsumerState<LobbyScreen> with RouteAware {
           appBar: GameAppBar(seek: widget.seek),
           body: PopScope(
             canPop: false,
-            child: LobbyGameLoadingBoard(widget.seek),
+            child: LobbyScreenLoadingContent(widget.seek),
           ),
         ),
         iosBuilder: (context) => CupertinoPageScaffold(
@@ -123,7 +121,7 @@ class _LobbyScreenState extends ConsumerState<LobbyScreen> with RouteAware {
           navigationBar: GameCupertinoNavBar(seek: widget.seek),
           child: PopScope(
             canPop: false,
-            child: LobbyGameLoadingBoard(widget.seek),
+            child: LobbyScreenLoadingContent(widget.seek),
           ),
         ),
       ),
@@ -132,7 +130,9 @@ class _LobbyScreenState extends ConsumerState<LobbyScreen> with RouteAware {
           'SEVERE: [LobbyGameScreen] could not create game; $e\n$s',
         );
         const body = PopScope(
-          child: LoadGameError(),
+          child: LoadGameError(
+            'Sorry, we could not create the game. Please try again later.',
+          ),
         );
         return PlatformWidget(
           androidBuilder: (context) => Scaffold(

@@ -468,16 +468,11 @@ class SocketPool {
   final Map<Uri, SocketClient> _pool = {};
   final Map<Uri, Timer?> _disposeTimers = {};
 
-  /// Creates a new WebSocket connection to the given [route].
+  /// Returns a [SocketClient] for the given [route].
   ///
-  /// It will reuse an existing connection if it is already active.
-  /// It will close any other active connection.
-  SocketClient connect(
-    Uri route, {
-    bool? forceReconnect,
-  }) {
-    _currentRoute = route;
-
+  /// It will create a new client if it does not exist, or reuse an existing
+  /// client if it is already active.
+  SocketClient _getClient(Uri route) {
     if (_pool[route] == null) {
       _pool[route] = SocketClient(
         route,
@@ -518,6 +513,21 @@ class SocketPool {
       }
     });
 
+    return client;
+  }
+
+  /// Creates a new WebSocket connection to the given [route].
+  ///
+  /// It will reuse an existing connection if it is already active.
+  /// It will close any other active connection.
+  SocketClient connect(
+    Uri route, {
+    bool? forceReconnect,
+  }) {
+    _currentRoute = route;
+
+    final client = _getClient(route);
+
     // ensure there is only one active connection
     _pool.forEach((k, c) {
       if (k != route) {
@@ -532,6 +542,30 @@ class SocketPool {
     return client;
   }
 
+  /// Subscribes to the socket stream of the given [route].
+  ///
+  /// This method does not connect the socket, it only returns a [StreamSubscription].
+  /// Users of this method should also make sure [connect] is called with the same
+  /// route to ensure the socket is connected.
+  ///
+  /// If the [SocketClient] for the given [route] does not exist, it will be created.
+  StreamSubscription<SocketEvent> subscribe(
+    Uri route, {
+    required void Function(SocketEvent) onData,
+    void Function(Object? error, StackTrace? stackTrace)? onError,
+    void Function()? onDone,
+    bool? cancelOnError,
+  }) {
+    final client = _getClient(route);
+    return client.stream.listen(
+      onData,
+      onError: onError,
+      onDone: onDone,
+      cancelOnError: cancelOnError,
+    );
+  }
+
+  /// Disposes the pool and all its clients.
   void dispose() {
     _averageLag.dispose();
     _pool.forEach((_, c) => c._dispose());

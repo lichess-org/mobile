@@ -21,7 +21,6 @@ import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
-import 'package:lichess_mobile/src/model/game/chat_controller.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
@@ -65,21 +64,15 @@ class GameController extends _$GameController {
 
   late SocketClient _socketClient;
 
-  ChatController get _chatNotifier =>
-      ref.read(chatControllerProvider(gameFullId).notifier);
+  static Uri gameSocketUri(GameFullId gameFullId) =>
+      Uri(path: '/play/$gameFullId/v6');
 
   @override
   Future<GameState> build(GameFullId gameFullId) {
     final socketPool = ref.watch(socketPoolProvider);
 
-    // watch the chat notifier to keep it alive
-    // TODO find a better way to keep the chat state alive
-    ref.watch(chatControllerProvider(gameFullId).notifier);
-
-    _socketClient = socketPool.connect(
-      Uri(path: '/play/$gameFullId/v6'),
-      forceReconnect: true,
-    );
+    _socketClient =
+        socketPool.connect(gameSocketUri(gameFullId), forceReconnect: true);
     _socketEventVersion = null;
     _socketSubscription?.cancel();
     _socketSubscription = _socketClient.stream.listen(_handleSocketEvent);
@@ -96,10 +89,6 @@ class GameController extends _$GameController {
             GameFullEvent.fromJson(event.data as Map<String, dynamic>);
 
         PlayableGame game = fullEvent.game;
-
-        if (fullEvent.game.messages != null) {
-          _chatNotifier.setMessages(fullEvent.game.messages!);
-        }
 
         if (fullEvent.game.finished) {
           final result = await _getPostGameData();
@@ -273,6 +262,13 @@ class GameController extends _$GameController {
         zenModeGameSetting: !(curState.zenModeGameSetting ?? false),
       ),
     );
+  }
+
+  void onToggleChat(bool isChatEnabled) {
+    if (isChatEnabled) {
+      // if chat is enabled, we need to resync the game data to get the chat messages
+      _resyncGameData();
+    }
   }
 
   void onFlag() {
@@ -484,10 +480,6 @@ class GameController extends _$GameController {
         }
         _socketEventVersion = fullEvent.socketEventVersion;
         _lastMoveTime = null;
-
-        if (fullEvent.game.messages != null) {
-          _chatNotifier.setMessages(fullEvent.game.messages!);
-        }
 
         state = AsyncValue.data(
           GameState(
@@ -841,17 +833,6 @@ class GameController extends _$GameController {
               analysis: data.analysis?.black,
             ),
             evals: data.evals,
-          ),
-        );
-
-      case 'message':
-        final data = event.data as Map<String, dynamic>;
-        final message = data['t'] as String;
-        final username = data['u'] as String?;
-        _chatNotifier.addMessage(
-          (
-            message: message,
-            username: username,
           ),
         );
     }
