@@ -121,16 +121,16 @@ class _Body extends ConsumerWidget {
       data: (data) {
         return ratingHistory.when(
           data: (ratingHistoryData) {
+            final ratingHistoryPerfData = ratingHistoryData
+                .where((element) => element.perf == perf.title)
+                .first;
             return SafeArea(
               child: ListView(
                 padding: Styles.bodyPadding,
                 scrollDirection: Axis.vertical,
                 children: [
-                  _EloChart(
-                    ratingHistoryData
-                        .where((element) => element.perf == perf.title)
-                        .first,
-                  ),
+                  if (ratingHistoryPerfData.points.isNotEmpty)
+                    _EloChart(ratingHistoryPerfData),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.baseline,
                     textBaseline: TextBaseline.alphabetic,
