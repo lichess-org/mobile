@@ -1,10 +1,11 @@
+import 'dart:math';
+
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -57,6 +58,7 @@ class PerfStatsScreen extends StatelessWidget {
   Widget _androidBuilder(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        clipBehavior: Clip.none,
         titleSpacing: 0,
         title: _Title(user: user, perf: perf),
       ),
@@ -124,13 +126,10 @@ class _Body extends ConsumerWidget {
                 padding: Styles.bodyPadding,
                 scrollDirection: Axis.vertical,
                 children: [
-                  AspectRatio(
-                    aspectRatio: 16 / 9,
-                    child: _EloChart(
-                      history
-                          .where((element) => element.perf == perf.title)
-                          .first,
-                    ),
+                  _EloChart(
+                    history
+                        .where((element) => element.perf == perf.title)
+                        .first,
                   ),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -269,7 +268,9 @@ class _Body extends ConsumerWidget {
                     ),
                     StatCard(
                       context.l10n.perfStatBerserkedGames.replaceAll(
-                          ' ${context.l10n.games.toLowerCase()}', ''),
+                        ' ${context.l10n.games.toLowerCase()}',
+                        '',
+                      ),
                       child: _PercentageValueWidget(
                         data.berserkGames,
                         data.totalGames,
@@ -668,48 +669,138 @@ class _GameListTile extends StatelessWidget {
   }
 }
 
-class _EloChart extends StatelessWidget {
+class _EloChart extends StatefulWidget {
   final UserRatingHistoryPerf value;
 
   const _EloChart(this.value);
 
   @override
+  State<_EloChart> createState() => _EloChartState();
+}
+
+class _EloChartState extends State<_EloChart> {
+  late List<FlSpot> _allPoints;
+  late List<FlSpot> _points;
+  late double _startDate;
+  late double _endDate;
+  late double _minY;
+  late double _maxY;
+
+  double minimumY() {
+    return (_points.map((e) => e.y).reduce(min) / 100).floorToDouble() * 100;
+  }
+
+  double maximumY() {
+    return (_points.map((e) => e.y).reduce(max) / 100).ceilToDouble() * 100;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _allPoints = widget.value.points
+        .map(
+          (element) => FlSpot(
+            element.date.millisecondsSinceEpoch.toDouble(),
+            element.elo.toDouble(),
+          ),
+        )
+        .toList();
+    _points = _allPoints;
+    _startDate = _allPoints.first.x;
+    _endDate = _allPoints.last.x;
+    _minY = minimumY();
+    _maxY = maximumY();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return LineChart(
-      LineChartData(
-        lineBarsData: [
-          LineChartBarData(
-            spots: value.points
-                .map(
-                  (element) => FlSpot(
-                    element.date.millisecondsSinceEpoch.toDouble(),
-                    element.elo.toDouble(),
+    final borderColor =
+        Theme.of(context).colorScheme.onBackground.withOpacity(0.5);
+    final chartColor = Theme.of(context).colorScheme.tertiary;
+    return Column(
+      children: [
+        AspectRatio(
+          aspectRatio: 16 / 9,
+          child: LineChart(
+            LineChartData(
+              minY: _minY,
+              maxY: _maxY,
+              lineBarsData: [
+                LineChartBarData(
+                  spots: _points,
+                  dotData: const FlDotData(show: false),
+                  color: Theme.of(context).platform == TargetPlatform.iOS
+                      ? null
+                      : chartColor,
+                ),
+              ],
+              borderData: FlBorderData(
+                show: true,
+                border: Border(
+                  bottom: BorderSide(color: borderColor),
+                  left: BorderSide(color: borderColor),
+                ),
+              ),
+              gridData: FlGridData(
+                show: true,
+                drawVerticalLine: false,
+                getDrawingHorizontalLine: (value) => FlLine(
+                  color: borderColor,
+                  strokeWidth: 0.5,
+                ),
+              ),
+              lineTouchData: const LineTouchData(
+                touchTooltipData: LineTouchTooltipData(
+                  fitInsideHorizontally: true,
+                  fitInsideVertically: true,
+                ),
+              ),
+              titlesData: FlTitlesData(
+                rightTitles:
+                    const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                topTitles:
+                    const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                bottomTitles: AxisTitles(
+                  sideTitles: SideTitles(
+                    showTitles: false,
+                    getTitlesWidget: bottomTitleWidgets,
                   ),
-                )
-                .toList(),
-            dotData: const FlDotData(show: false),
-          ),
-        ],
-        titlesData: FlTitlesData(
-          rightTitles:
-              const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          topTitles:
-              const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          bottomTitles: AxisTitles(
-            sideTitles: SideTitles(
-              showTitles: false,
-              getTitlesWidget: bottomTitleWidgets,
-            ),
-          ),
-          leftTitles: const AxisTitles(
-            sideTitles: SideTitles(
-              showTitles: false,
-              getTitlesWidget: leftTitleWidgets,
+                ),
+                leftTitles: const AxisTitles(
+                  sideTitles: SideTitles(
+                    reservedSize: 50,
+                    showTitles: false,
+                    getTitlesWidget: leftTitleWidgets,
+                    interval: 300,
+                  ),
+                ),
+              ),
             ),
           ),
         ),
-        gridData: const FlGridData(show: false),
-      ),
+        RangeSlider(
+          min: widget.value.points.first.date.millisecondsSinceEpoch.toDouble(),
+          max: widget.value.points.last.date.millisecondsSinceEpoch.toDouble(),
+          onChanged: (value) {
+            setState(() {
+              _startDate = value.start;
+              _endDate = value.end;
+              _points = _allPoints
+                  .where(
+                    (element) =>
+                        element.x >= _startDate && element.x <= _endDate,
+                  )
+                  .toList();
+              _minY = minimumY();
+              _maxY = maximumY();
+            });
+          },
+          values: RangeValues(
+            _startDate,
+            _endDate,
+          ),
+        ),
+      ],
     );
   }
 
