@@ -755,32 +755,24 @@ class _EloChartState extends State<_EloChart> {
                   fitInsideVertically: true,
                 ),
               ),
-              titlesData: FlTitlesData(
-                rightTitles:
-                    const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                topTitles:
-                    const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                bottomTitles: AxisTitles(
-                  sideTitles: SideTitles(
-                    showTitles: false,
-                    getTitlesWidget: bottomTitleWidgets,
-                  ),
-                ),
-                leftTitles: const AxisTitles(
-                  sideTitles: SideTitles(
-                    reservedSize: 50,
-                    showTitles: false,
-                    getTitlesWidget: leftTitleWidgets,
-                    interval: 300,
-                  ),
-                ),
-              ),
+              // it seems that it is not possible to draw side titles inside chart with a reservedSize of 0
+              // related Github issue https://github.com/imaNNeo/fl_chart/issues/1176
+              titlesData: const FlTitlesData(show: false),
             ),
           ),
         ),
         RangeSlider(
-          min: widget.value.points.first.date.millisecondsSinceEpoch.toDouble(),
-          max: widget.value.points.last.date.millisecondsSinceEpoch.toDouble(),
+          divisions: (_allPoints.last.x - _allPoints.first.y) ~/ 86400000,
+          min: _allPoints.first.x,
+          max: _allPoints.last.x,
+          labels: RangeLabels(
+            DateFormat('yyyy-MM-dd').format(
+              DateTime.fromMillisecondsSinceEpoch(_startDate.toInt()),
+            ),
+            DateFormat('yyyy-MM-dd').format(
+              DateTime.fromMillisecondsSinceEpoch(_endDate.toInt()),
+            ),
+          ),
           onChanged: (value) {
             setState(() {
               _startDate = value.start;
@@ -803,21 +795,4 @@ class _EloChartState extends State<_EloChart> {
       ],
     );
   }
-
-  Widget bottomTitleWidgets(double value, TitleMeta meta) {
-    final dateFormatted = DateFormat('dd/MM')
-        .format(DateTime.fromMillisecondsSinceEpoch(value.toInt()));
-
-    return SideTitleWidget(
-      axisSide: meta.axisSide,
-      child: Text(dateFormatted),
-    );
-  }
-}
-
-Widget leftTitleWidgets(double value, TitleMeta meta) {
-  return SideTitleWidget(
-    axisSide: meta.axisSide,
-    child: Text(value.toInt().toString()),
-  );
 }
