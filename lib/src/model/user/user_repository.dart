@@ -74,6 +74,37 @@ class UserRepository {
       mapper: _autocompleteFromJson,
     );
   }
+
+  Future<IList<UserRatingHistoryPerf>> getRatingHistory(UserId id) {
+    return client.readJsonList(
+      Uri.parse('$kLichessHost/api/user/$id/rating-history'),
+      mapper: _ratingHistoryFromJson,
+    );
+  }
+}
+
+UserRatingHistoryPerf _ratingHistoryFromJson(
+  Map<String, dynamic> json,
+) =>
+    _ratingHistoryFromPick(pick(json).required());
+
+UserRatingHistoryPerf _ratingHistoryFromPick(
+  RequiredPick perf,
+) {
+  return UserRatingHistoryPerf(
+    perf: perf('name').asStringOrThrow(),
+    points: perf('points').asListOrThrow((point) {
+      final values = point.asListOrThrow((point) => point.asIntOrThrow());
+      return UserRatingHistoryPoint(
+        date: DateTime(
+          values[0],
+          values[1],
+          values[2],
+        ),
+        elo: values[3],
+      );
+    }).toIList(),
+  );
 }
 
 // --
