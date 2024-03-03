@@ -20,6 +20,7 @@ class ChatController extends _$ChatController {
   @override
   ChatState build(Uri socketRoute) {
     // The socket should be connected in the game controller
+    _subscription?.cancel();
     _subscription = _socketPool.subscribe(
       socketRoute,
       onData: (event) {
