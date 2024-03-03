@@ -112,22 +112,22 @@ class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final perfStats = ref.watch(userPerfStatsProvider(id: user.id, perf: perf));
-    final score = ref.watch(userRatingHistoryProvider(id: user.id));
+    final ratingHistory = ref.watch(userRatingHistoryProvider(id: user.id));
     final loggedInUser = ref.watch(authSessionProvider);
     const statGroupSpace = SizedBox(height: 15.0);
     const subStatSpace = SizedBox(height: 10);
 
     return perfStats.when(
       data: (data) {
-        return score.when(
-          data: (history) {
+        return ratingHistory.when(
+          data: (ratingHistoryData) {
             return SafeArea(
               child: ListView(
                 padding: Styles.bodyPadding,
                 scrollDirection: Axis.vertical,
                 children: [
                   _EloChart(
-                    history
+                    ratingHistoryData
                         .where((element) => element.perf == perf.title)
                         .first,
                   ),
@@ -679,26 +679,28 @@ class _EloChart extends StatefulWidget {
 }
 
 class _EloChartState extends State<_EloChart> {
+  static const millisecondsInDay = 86400000;
+
   late List<FlSpot> _allPoints;
-  late List<FlSpot> _points;
   late double _startDate;
   late double _endDate;
-  late double _minY;
-  late double _maxY;
 
-  double minimumY() {
-    return (_points.map((e) => e.y).reduce(min) / 100).floorToDouble() * 100;
-  }
+  List<FlSpot> get _points => _allPoints
+      .where(
+        (element) => element.x >= _startDate && element.x <= _endDate,
+      )
+      .toList();
 
-  double maximumY() {
-    return (_points.map((e) => e.y).reduce(max) / 100).ceilToDouble() * 100;
-  }
+  double get _minY =>
+      (_points.map((e) => e.y).reduce(min) / 100).floorToDouble() * 100;
 
-  String _formatDateFromTimestamp(double date) {
-    return DateFormat('yyyy-MM-dd').format(
-      DateTime.fromMillisecondsSinceEpoch(date.toInt()),
-    );
-  }
+  double get _maxY =>
+      (_points.map((e) => e.y).reduce(max) / 100).ceilToDouble() * 100;
+
+  String _formatDateFromTimestamp(double timestamp) =>
+      DateFormat('yyyy-MM-dd').format(
+        DateTime.fromMillisecondsSinceEpoch(timestamp.toInt()),
+      );
 
   @override
   void initState() {
@@ -711,11 +713,8 @@ class _EloChartState extends State<_EloChart> {
           ),
         )
         .toList();
-    _points = _allPoints;
     _startDate = _allPoints.first.x;
     _endDate = _allPoints.last.x;
-    _minY = minimumY();
-    _maxY = maximumY();
   }
 
   @override
@@ -757,7 +756,10 @@ class _EloChartState extends State<_EloChart> {
               ),
               lineTouchData: LineTouchData(
                 touchTooltipData: LineTouchTooltipData(
-                  tooltipBgColor: chartColor.withOpacity(0.2),
+                  tooltipBgColor:
+                      Theme.of(context).platform == TargetPlatform.iOS
+                          ? const Color.fromRGBO(96, 125, 139, 1)
+                          : chartColor.withOpacity(0.2),
                   fitInsideHorizontally: true,
                   fitInsideVertically: true,
                   getTooltipItems: (touchedSpots) {
@@ -788,7 +790,8 @@ class _EloChartState extends State<_EloChart> {
           ),
         ),
         RangeSlider(
-          divisions: (_allPoints.last.x - _allPoints.first.y) ~/ 86400000,
+          divisions:
+              (_allPoints.last.x - _allPoints.first.y) ~/ millisecondsInDay,
           min: _allPoints.first.x,
           max: _allPoints.last.x,
           labels: RangeLabels(
@@ -799,14 +802,6 @@ class _EloChartState extends State<_EloChart> {
             setState(() {
               _startDate = value.start;
               _endDate = value.end;
-              _points = _allPoints
-                  .where(
-                    (element) =>
-                        element.x >= _startDate && element.x <= _endDate,
-                  )
-                  .toList();
-              _minY = minimumY();
-              _maxY = maximumY();
             });
           },
           values: RangeValues(
