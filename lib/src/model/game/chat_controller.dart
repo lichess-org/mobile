@@ -17,13 +17,15 @@ class ChatController extends _$ChatController {
 
   bool _firstLoad = true;
 
+  late SocketClient _socketClient;
+
   @override
   ChatState build(Uri socketRoute) {
-    // The socket should be connected in the game controller
+    _socketClient = _socketPool.connect(socketRoute);
+
     _subscription?.cancel();
-    _subscription = _socketPool.subscribe(
-      socketRoute,
-      onData: (event) {
+    _subscription = _socketClient.stream.listen(
+      (event) {
         if (event.topic == 'full') {
           final messages = pick(event.data, 'chat', 'lines')
               .asListOrNull(_messageFromPick)
@@ -58,7 +60,7 @@ class ChatController extends _$ChatController {
 
   /// Sends a message to the chat.
   void sendMessage(String message) {
-    _socketPool.currentClient.send(
+    _socketClient.send(
       'talk',
       message,
     );
