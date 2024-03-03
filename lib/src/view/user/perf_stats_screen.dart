@@ -705,7 +705,33 @@ class _EloChartState extends State<_EloChart> {
   @override
   void initState() {
     super.initState();
-    _allPoints = widget.value.points
+
+    // We need to fill in the missing days in the rating history
+
+    final List<UserRatingHistoryPoint> pointsHistoryRatingCompleted = [];
+    final pointsHistoryRating = widget.value.points;
+    final numberOfDays = pointsHistoryRating.last.date
+            .difference(pointsHistoryRating.first.date)
+            .inDays +
+        1;
+
+    int j = 0;
+    for (int i = 0; i < numberOfDays; i++) {
+      final currentDate = pointsHistoryRating.first.date.add(Duration(days: i));
+      if (pointsHistoryRating[j].date == currentDate) {
+        pointsHistoryRatingCompleted.add(pointsHistoryRating[j]);
+        j += 1;
+      } else {
+        pointsHistoryRatingCompleted.add(
+          UserRatingHistoryPoint(
+            date: currentDate,
+            elo: pointsHistoryRating[j - 1].elo,
+          ),
+        );
+      }
+    }
+
+    _allPoints = pointsHistoryRatingCompleted
         .map(
           (element) => FlSpot(
             element.date.millisecondsSinceEpoch.toDouble(),
@@ -755,6 +781,7 @@ class _EloChartState extends State<_EloChart> {
                 ),
               ),
               lineTouchData: LineTouchData(
+                touchSpotThreshold: double.infinity,
                 touchTooltipData: LineTouchTooltipData(
                   tooltipBgColor:
                       Theme.of(context).platform == TargetPlatform.iOS
@@ -790,8 +817,7 @@ class _EloChartState extends State<_EloChart> {
           ),
         ),
         RangeSlider(
-          divisions:
-              (_allPoints.last.x - _allPoints.first.y) ~/ millisecondsInDay,
+          divisions: _allPoints.length - 1,
           min: _allPoints.first.x,
           max: _allPoints.last.x,
           labels: RangeLabels(
@@ -799,10 +825,12 @@ class _EloChartState extends State<_EloChart> {
             _formatDateFromTimestamp(_endDate),
           ),
           onChanged: (value) {
-            setState(() {
-              _startDate = value.start;
-              _endDate = value.end;
-            });
+            if (value.end - value.start >= millisecondsInDay) {
+              setState(() {
+                _startDate = value.start;
+                _endDate = value.end;
+              });
+            }
           },
           values: RangeValues(
             _startDate,
