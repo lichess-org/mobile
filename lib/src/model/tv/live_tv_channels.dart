@@ -49,9 +49,6 @@ class LiveTvChannels extends _$LiveTvChannels {
   }
 
   Future<IMap<TvChannel, TvGameSnapshot>> _doStartWatching() async {
-    _socketSubscription?.cancel();
-    _socketReadySubscription?.cancel();
-
     final repoGames =
         await ref.withClient((client) => TvRepository(client).channels());
 
@@ -67,6 +64,7 @@ class LiveTvChannels extends _$LiveTvChannels {
       _socketWatch(repoGames);
     });
 
+    _socketSubscription?.cancel();
     _socketSubscription = _socketClient.stream.listen(_handleSocketEvent);
 
     return repoGames.map((channel, game) {
