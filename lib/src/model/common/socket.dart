@@ -32,7 +32,7 @@ const _kPingMaxLag = Duration(seconds: 9);
 const _kAutoReconnectDelay = Duration(milliseconds: 3500);
 const _kResendAckDelay = Duration(milliseconds: 1500);
 const _kIdleTimeout = Duration(seconds: 2);
-const _kDisconnectOnBackgroundTimeout = Duration(minutes: 10);
+const _kDisconnectOnBackgroundTimeout = Duration(minutes: 5);
 
 final _logger = Logger('Socket');
 
