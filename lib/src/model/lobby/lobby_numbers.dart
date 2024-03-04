@@ -13,14 +13,12 @@ class LobbyNumbers extends _$LobbyNumbers {
 
   @override
   ({int nbPlayers, int nbGames})? build() {
-    final stream = ref.watch(socketClientProvider).stream;
-
     ref.onDispose(() {
       _socketSubscription?.cancel();
     });
 
     _socketSubscription?.cancel();
-    _socketSubscription = stream.listen((event) {
+    _socketSubscription = socketGlobalStream.listen((event) {
       if (event.topic == 'n') {
         final data = event.data as Map<String, int>;
         state = (

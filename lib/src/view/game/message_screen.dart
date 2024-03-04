@@ -15,12 +15,12 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
 class MessageScreen extends ConsumerStatefulWidget {
-  final StringId chatContext;
+  final GameFullId id;
   final Widget title;
   final LightUser? me;
 
   const MessageScreen({
-    required this.chatContext,
+    required this.id,
     required this.title,
     this.me,
   });
@@ -47,15 +47,13 @@ class _MessageScreenState extends ConsumerState<MessageScreen> with RouteAware {
 
   @override
   void didPop() {
-    ref
-        .read(chatControllerProvider(widget.chatContext).notifier)
-        .resetUnreadMessages();
+    ref.read(chatControllerProvider(widget.id).notifier).markMessagesAsRead();
     super.didPop();
   }
 
   @override
   Widget build(BuildContext context) {
-    final body = _Body(me: widget.me, chatContext: widget.chatContext);
+    final body = _Body(me: widget.me, id: widget.id);
 
     return PlatformWidget(
       androidBuilder: (context) =>
@@ -91,17 +89,17 @@ class _MessageScreenState extends ConsumerState<MessageScreen> with RouteAware {
 }
 
 class _Body extends ConsumerWidget {
-  final StringId chatContext;
+  final GameFullId id;
   final LightUser? me;
 
   const _Body({
-    required this.chatContext,
+    required this.id,
     required this.me,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final chatState = ref.watch(chatControllerProvider(chatContext));
+    final chatStateAsync = ref.watch(chatControllerProvider(id));
 
     return Column(
       mainAxisSize: MainAxisSize.max,
@@ -109,32 +107,40 @@ class _Body extends ConsumerWidget {
         Expanded(
           child: GestureDetector(
             onTap: () => FocusScope.of(context).unfocus(),
-            child: ListView.builder(
-              // remove the automatic bottom padding of the ListView, which on iOS
-              // corresponds to the safe area insets
-              // and which is here taken care of by the _ChatBottomBar
-              padding: MediaQuery.of(context).padding.copyWith(bottom: 0),
-              reverse: true,
-              itemCount: chatState.messages.length,
-              itemBuilder: (context, index) {
-                final message =
-                    chatState.messages[chatState.messages.length - index - 1];
-                return (message.username == 'lichess')
-                    ? _MessageAction(message: message.message)
-                    : (message.username == me?.name)
-                        ? _MessageBubble(
-                            you: true,
-                            message: message.message,
-                          )
-                        : _MessageBubble(
-                            you: false,
-                            message: message.message,
-                          );
-              },
+            child: chatStateAsync.when(
+              data: (chatState) => ListView.builder(
+                // remove the automatic bottom padding of the ListView, which on iOS
+                // corresponds to the safe area insets
+                // and which is here taken care of by the _ChatBottomBar
+                padding: MediaQuery.of(context).padding.copyWith(bottom: 0),
+                reverse: true,
+                itemCount: chatState.messages.length,
+                itemBuilder: (context, index) {
+                  final message =
+                      chatState.messages[chatState.messages.length - index - 1];
+                  return (message.username == 'lichess')
+                      ? _MessageAction(message: message.message)
+                      : (message.username == me?.name)
+                          ? _MessageBubble(
+                              you: true,
+                              message: message.message,
+                            )
+                          : _MessageBubble(
+                              you: false,
+                              message: message.message,
+                            );
+                },
+              ),
+              loading: () => const Center(
+                child: CircularProgressIndicator(),
+              ),
+              error: (error, _) => Center(
+                child: Text(error.toString()),
+              ),
             ),
           ),
         ),
-        _ChatBottomBar(chatContext: chatContext),
+        _ChatBottomBar(id: id),
       ],
     );
   }
@@ -220,8 +226,8 @@ class _MessageAction extends StatelessWidget {
 }
 
 class _ChatBottomBar extends ConsumerStatefulWidget {
-  final StringId chatContext;
-  const _ChatBottomBar({required this.chatContext});
+  final GameFullId id;
+  const _ChatBottomBar({required this.id});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _ChatBottomBarState();
@@ -245,8 +251,8 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
         onTap: session != null && value.text.isNotEmpty
             ? () {
                 ref
-                    .read(chatControllerProvider(widget.chatContext).notifier)
-                    .onUserMessage(_textController.text);
+                    .read(chatControllerProvider(widget.id).notifier)
+                    .sendMessage(_textController.text);
                 _textController.clear();
               }
             : null,
@@ -255,6 +261,8 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
         semanticsLabel: context.l10n.send,
       ),
     );
+    final placeholder =
+        session != null ? context.l10n.talkInChat : context.l10n.loginToChat;
     return SafeArea(
       top: false,
       child: Padding(
@@ -267,9 +275,7 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
             border: const OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(20.0)),
             ),
-            hintText: session != null
-                ? context.l10n.talkInChat
-                : context.l10n.loginToChat,
+            hintText: placeholder,
           ),
           cupertinoDecoration: BoxDecoration(
             border: Border.all(
@@ -277,6 +283,7 @@ class _ChatBottomBarState extends ConsumerState<_ChatBottomBar> {
             ),
             borderRadius: const BorderRadius.all(Radius.circular(30.0)),
           ),
+          placeholder: placeholder,
           controller: _textController,
           keyboardType: TextInputType.text,
           minLines: 1,

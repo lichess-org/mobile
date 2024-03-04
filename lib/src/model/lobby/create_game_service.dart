@@ -31,15 +31,15 @@ class CreateGameService {
       throw StateError('Already creating a game.');
     }
 
-    final socket = ref.read(socketClientProvider);
-    final (stream, readyStream) = socket.connect(Uri(path: '/lobby/socket/v5'));
+    final socketPool = ref.read(socketPoolProvider);
+    final socketClient = socketPool.open(Uri(path: '/lobby/socket/v5'));
 
     // ensure the pending game connection is closed in any case
     final completer = Completer<GameFullId>()..future.whenComplete(_close);
 
     _pendingGameConnection = (
       ref.read(lichessClientFactoryProvider)(),
-      stream.listen((event) {
+      socketClient.stream.listen((event) {
         if (event.topic == 'redirect') {
           final data = event.data as Map<String, dynamic>;
           completer.complete(pick(data['id']).asGameFullIdOrThrow());
@@ -52,7 +52,7 @@ class CreateGameService {
     _log.info('Creating new online game');
 
     // wait for the socket to be ready
-    await readyStream.first;
+    await socketClient.firstConnection;
 
     GameSeek actualSeek = seek;
 
@@ -66,7 +66,7 @@ class CreateGameService {
     }
 
     try {
-      await lobbyRepo.createSeek(actualSeek, sri: socket.sri);
+      await lobbyRepo.createSeek(actualSeek, sri: socketClient.sri);
     } catch (e) {
       _log.warning('Failed to create seek', e);
       // if the completer is not yet completed, complete it with an error
@@ -84,7 +84,7 @@ class CreateGameService {
     await ref.withClient(
       (client) => LobbyRepository(client).createSeek(
         seek,
-        sri: ref.read(socketClientProvider).sri,
+        sri: ref.read(sriProvider),
       ),
     );
   }

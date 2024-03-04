@@ -521,9 +521,13 @@ class _OfflinePuzzlePreview extends ConsumerWidget {
                       initialPuzzleContext: data,
                     ),
                   ).then((_) {
-                    ref.invalidate(
-                      nextPuzzleProvider(const PuzzleTheme(PuzzleThemeKey.mix)),
-                    );
+                    if (context.mounted) {
+                      ref.invalidate(
+                        nextPuzzleProvider(
+                          const PuzzleTheme(PuzzleThemeKey.mix),
+                        ),
+                      );
+                    }
                   });
                 }
               : null,

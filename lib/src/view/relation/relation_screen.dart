@@ -15,16 +15,11 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
-class RelationScreen extends ConsumerStatefulWidget {
+class RelationScreen extends ConsumerWidget {
   const RelationScreen({super.key});
 
   @override
-  ConsumerState<RelationScreen> createState() => _RelationScreenState();
-}
-
-class _RelationScreenState extends ConsumerState<RelationScreen> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return FocusDetector(
       onFocusRegained: () {
         ref.read(relationCtrlProvider.notifier).startWatchingFriends();

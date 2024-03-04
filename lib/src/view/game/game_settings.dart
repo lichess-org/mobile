@@ -62,6 +62,7 @@ class GameSettings extends ConsumerWidget {
           value: gamePrefs.enableChat ?? false,
           onChanged: (value) {
             ref.read(gamePreferencesProvider.notifier).toggleChat();
+            ref.read(gameControllerProvider(id).notifier).onToggleChat(value);
           },
         ),
         ...userPrefsAsync.maybeWhen(

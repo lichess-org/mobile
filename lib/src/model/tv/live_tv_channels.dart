@@ -22,6 +22,8 @@ class LiveTvChannels extends _$LiveTvChannels {
   StreamSubscription<SocketEvent>? _socketSubscription;
   StreamSubscription<void>? _socketReadySubscription;
 
+  late SocketClient _socketClient;
+
   @override
   Future<LiveTvChannelsState> build() async {
     ref.onDispose(() {
@@ -31,8 +33,6 @@ class LiveTvChannels extends _$LiveTvChannels {
 
     return _doStartWatching();
   }
-
-  SocketClient get _socket => ref.read(socketClientProvider);
 
   /// Start watching the TV games
   Future<void> startWatching() async {
@@ -47,25 +47,24 @@ class LiveTvChannels extends _$LiveTvChannels {
   }
 
   Future<IMap<TvChannel, TvGameSnapshot>> _doStartWatching() async {
-    _socketSubscription?.cancel();
-    _socketReadySubscription?.cancel();
-
     final repoGames =
         await ref.withClient((client) => TvRepository(client).channels());
 
-    final (stream, readyStream) =
-        _socket.connect(Uri(path: kDefaultSocketRoute));
-    _socketSubscription = stream.listen(_handleSocketEvent);
-    _socketReadySubscription = readyStream.listen((_) {
-      _socket.send('startWatchingTvChannels', null);
-      _socket.send(
-        'startWatching',
-        repoGames.entries
-            .where((e) => TvChannel.values.contains(e.key))
-            .map((e) => e.value.id)
-            .join(' '),
-      );
+    _socketClient =
+        ref.read(socketPoolProvider).open(Uri(path: kDefaultSocketRoute));
+
+    await _socketClient.firstConnection;
+    _socketWatch(repoGames);
+
+    _socketReadySubscription?.cancel();
+    _socketReadySubscription = _socketClient.connectedStream.listen((_) async {
+      final repoGames =
+          await ref.withClient((client) => TvRepository(client).channels());
+      _socketWatch(repoGames);
     });
+
+    _socketSubscription?.cancel();
+    _socketSubscription = _socketClient.stream.listen(_handleSocketEvent);
 
     return repoGames.map((channel, game) {
       return MapEntry(
@@ -83,6 +82,17 @@ class LiveTvChannels extends _$LiveTvChannels {
         ),
       );
     });
+  }
+
+  void _socketWatch(IMap<TvChannel, TvGame> games) {
+    _socketClient.send('startWatchingTvChannels', null);
+    _socketClient.send(
+      'startWatching',
+      games.entries
+          .where((e) => TvChannel.values.contains(e.key))
+          .map((e) => e.value.id)
+          .join(' '),
+    );
   }
 
   void _handleSocketEvent(SocketEvent event) {
@@ -136,7 +146,7 @@ class LiveTvChannels extends _$LiveTvChannels {
             state.requireValue.update(selectEvent.channel, (_) => newSnaphot),
           );
 
-          _socket.send('startWatching', newSnaphot.id);
+          _socketClient.send('startWatching', newSnaphot.id);
         }
     }
   }

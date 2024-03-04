@@ -13,43 +13,59 @@ part 'relation_ctrl.g.dart';
 @riverpod
 class RelationCtrl extends _$RelationCtrl {
   StreamSubscription<SocketEvent>? _socketSubscription;
+  StreamSubscription<void>? _socketOpenSubscription;
+
+  late SocketClient _socketClient;
 
   @override
-  Future<RelationCtrlState> build() {
-    final (stream, readyStream) =
-        _socket.connect(Uri(path: '/lobby/socket/v5'));
+  Future<RelationCtrlState> build() async {
+    _socketClient = _socketPool.open(Uri(path: kDefaultSocketRoute));
 
-    final state = stream.firstWhere((e) => e.topic == 'following_onlines').then(
+    final state = _socketClient.stream
+        .firstWhere((e) => e.topic == 'following_onlines')
+        .then(
           (event) => RelationCtrlState(
             followingOnlines: _parseFriendsList(event.data as List<dynamic>),
           ),
         );
 
-    _socketSubscription = stream.listen(_handleSocketTopic);
+    await _socketClient.firstConnection;
 
-    readyStream.forEach((_) {
-      _socket.send('following_onlines', null);
+    // Request the list of online friends once the socket is connected.
+    _socketClient.send('following_onlines', null);
+
+    // Start watching for online friends.
+    _socketSubscription = _socketClient.stream.listen(_handleSocketTopic);
+
+    _socketOpenSubscription?.cancel();
+    // Request again the list of online friends every time the socket is reconnected.
+    _socketOpenSubscription = _socketClient.connectedStream.listen((_) {
+      _socketClient.send('following_onlines', null);
     });
 
     ref.onDispose(() {
       _socketSubscription?.cancel();
+      _socketOpenSubscription?.cancel();
     });
 
     return state;
   }
 
   void startWatchingFriends() {
-    final (stream, readyStream) =
-        _socket.connect(Uri(path: '/lobby/socket/v5'));
     _socketSubscription?.cancel();
-    _socketSubscription = stream.listen(_handleSocketTopic);
-    readyStream.forEach((_) {
-      _socket.send('following_onlines', null);
+    _socketSubscription = _socketClient.stream.listen(_handleSocketTopic);
+    _socketOpenSubscription?.cancel();
+    _socketOpenSubscription = _socketClient.connectedStream.listen((_) {
+      _socketClient.send('following_onlines', null);
     });
+    if (!_socketClient.isActive) {
+      _socketClient.connect();
+    }
   }
 
   void stopWatchingFriends() {
     _socketSubscription?.cancel();
+    _socketOpenSubscription?.cancel();
   }
 
   void _handleSocketTopic(SocketEvent event) {
@@ -82,7 +98,7 @@ class RelationCtrl extends _$RelationCtrl {
     }
   }
 
-  SocketClient get _socket => ref.read(socketClientProvider);
+  SocketPool get _socketPool => ref.read(socketPoolProvider);
 
   LightUser _parseFriend(String friend) {
     final splitted = friend.split(' ');

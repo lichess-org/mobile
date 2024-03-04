@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math' as math;
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
@@ -85,10 +86,14 @@ class LichessClientFactory {
     return RetryClient(
       AuthClient(httpClient(_ref.read(packageInfoProvider)), _ref),
       retries: 1,
+      delay: _defaultDelay,
       when: (response) => response.statusCode == 429,
     );
   }
 }
+
+Duration _defaultDelay(int retryCount) =>
+    const Duration(milliseconds: 900) * math.pow(1.5, retryCount);
 
 @Riverpod(keepAlive: true)
 String userAgent(UserAgentRef ref) {
