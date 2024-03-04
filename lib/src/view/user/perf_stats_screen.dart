@@ -141,7 +141,7 @@ class _Body extends ConsumerWidget {
                         ),
                       ],
                     ),
-                    if (data.percentile != null)
+                    if (data.percentile != null && data.percentile! > 0.0)
                       Text(
                         (loggedInUser != null &&
                                 loggedInUser.user.id == user.id)
@@ -171,13 +171,14 @@ class _Body extends ConsumerWidget {
                 child: _ProgressionWidget(data.progress),
               ),
               StatCardRow([
-                StatCard(
-                  context.l10n.rank,
-                  value: data.rank == null
-                      ? '?'
-                      : NumberFormat.decimalPattern(Intl.getCurrentLocale())
-                          .format(data.rank),
-                ),
+                if (data.rank != null)
+                  StatCard(
+                    context.l10n.rank,
+                    value: data.rank == null
+                        ? '?'
+                        : NumberFormat.decimalPattern(Intl.getCurrentLocale())
+                            .format(data.rank),
+                  ),
                 StatCard(
                   context.l10n
                       .perfStatRatingDeviation('')
