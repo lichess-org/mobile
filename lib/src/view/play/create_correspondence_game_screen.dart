@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/lobby/create_game_service.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
@@ -340,7 +341,7 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
 
     return accountAsync.when(
       data: (account) {
-        final userPerf = account?.perfs[preferences.perfFromCustom];
+        final userPerf = account?.perfs[Perf.correspondence];
         return Center(
           child: ListView(
             shrinkWrap: true,
