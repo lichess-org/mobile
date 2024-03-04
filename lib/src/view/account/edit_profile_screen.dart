@@ -298,8 +298,8 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                                 }
                               },
                               onSuccess: (_) {
-                                ref.invalidate(accountProvider);
                                 if (context.mounted) {
+                                  ref.invalidate(accountProvider);
                                   showPlatformSnackbar(
                                     context,
                                     context.l10n.success,

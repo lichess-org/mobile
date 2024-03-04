@@ -202,7 +202,9 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
           widget.setViewMode(_ViewMode.create);
 
         case 'reload_seeks':
-          ref.invalidate(correspondenceChallengesProvider);
+          if (mounted) {
+            ref.invalidate(correspondenceChallengesProvider);
+          }
       }
     });
   }

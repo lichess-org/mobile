@@ -402,13 +402,24 @@ class _GameBottomBar extends ConsumerWidget {
     final ongoingGames = ref.watch(ongoingGamesProvider);
     final gamePrefs = ref.watch(gamePreferencesProvider);
     final gameStateAsync = ref.watch(gameControllerProvider(id));
-    final chatState = gamePrefs.enableChat == true
-        ? ref.watch(chatControllerProvider(GameController.gameSocketUri(id)))
+    final chatStateAsync = gamePrefs.enableChat == true
+        ? ref.watch(chatControllerProvider(id))
         : null;
 
     final List<Widget> children = gameStateAsync.when(
       data: (gameState) {
-        final isChatEnabled = chatState != null && !gameState.isZenModeEnabled;
+        final isChatEnabled =
+            chatStateAsync != null && !gameState.isZenModeEnabled;
+
+        final chatUnreadChip = isChatEnabled
+            ? chatStateAsync.maybeWhen(
+                data: (s) => s.unreadMessages > 0
+                    ? Text(math.min(9, s.unreadMessages).toString())
+                    : null,
+                orElse: () => null,
+              )
+            : null;
+
         return [
           Expanded(
             child: BottomBarButton(
@@ -543,7 +554,7 @@ class _GameBottomBar extends ConsumerWidget {
                               user: gameState.game.opponent?.user,
                             ),
                             me: gameState.game.me?.user,
-                            gameSocketUri: GameController.gameSocketUri(id),
+                            id: id,
                           );
                         },
                       );
@@ -552,9 +563,7 @@ class _GameBottomBar extends ConsumerWidget {
               icon: Theme.of(context).platform == TargetPlatform.iOS
                   ? CupertinoIcons.chat_bubble
                   : Icons.chat_bubble_outline,
-              chip: isChatEnabled && chatState.unreadMessages > 0
-                  ? Text(math.min(9, chatState.unreadMessages).toString())
-                  : null,
+              chip: chatUnreadChip,
             ),
           ),
           Expanded(

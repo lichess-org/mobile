@@ -67,7 +67,9 @@ class _LobbyScreenState extends ConsumerState<LobbyScreen> with RouteAware {
   @override
   void didPop() {
     super.didPop();
-    ref.invalidate(accountRecentGamesProvider);
+    if (mounted) {
+      ref.invalidate(accountRecentGamesProvider);
+    }
   }
 
   @override
