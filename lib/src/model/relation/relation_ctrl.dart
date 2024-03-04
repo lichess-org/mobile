@@ -19,7 +19,7 @@ class RelationCtrl extends _$RelationCtrl {
 
   @override
   Future<RelationCtrlState> build() async {
-    _socketClient = _socketPool.connect(Uri(path: kDefaultSocketRoute));
+    _socketClient = _socketPool.open(Uri(path: kDefaultSocketRoute));
 
     final state = _socketClient.stream
         .firstWhere((e) => e.topic == 'following_onlines')

@@ -180,7 +180,8 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
   void initState() {
     super.initState();
 
-    socketClient = _socket.connect(Uri(path: '/lobby/socket/v5'));
+    socketClient =
+        ref.read(socketPoolProvider).open(Uri(path: '/lobby/socket/v5'));
 
     _socketSubscription = socketClient.stream.listen((event) {
       switch (event.topic) {
@@ -214,8 +215,6 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
     _socketSubscription?.cancel();
     super.dispose();
   }
-
-  SocketPool get _socket => ref.read(socketPoolProvider);
 
   @override
   Widget build(BuildContext context) {

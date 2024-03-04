@@ -468,11 +468,12 @@ class SocketPool {
   final Map<Uri, SocketClient> _pool = {};
   final Map<Uri, Timer?> _disposeTimers = {};
 
-  /// Creates a new WebSocket connection to the given [route].
+  /// Opens a socket connection to the given [route].
   ///
-  /// It will reuse an existing connection if it is already active.
-  /// It will close any other active connection.
-  SocketClient connect(
+  /// It will use an existing connection if it is already active, unless
+  /// [forceReconnect] is set to true.
+  /// Any other active connection will be closed.
+  SocketClient open(
     Uri route, {
     bool? forceReconnect,
   }) {

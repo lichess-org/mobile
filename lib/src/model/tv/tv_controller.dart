@@ -40,7 +40,6 @@ class TvController extends _$TvController {
     return _connectWebsocket(initialGame);
   }
 
-  SocketPool get _socket => ref.read(socketPoolProvider);
   SoundService get _soundService => ref.read(soundServiceProvider);
 
   Future<void> startWatching() async {
@@ -69,12 +68,12 @@ class TvController extends _$TvController {
       orientation = channelGame.side ?? Side.white;
     }
 
-    final socketClient = _socket.connect(
-      Uri(
-        path: '/watch/$id/${orientation.name}/v6',
-      ),
-      forceReconnect: true,
-    );
+    final socketClient = ref.read(socketPoolProvider).open(
+          Uri(
+            path: '/watch/$id/${orientation.name}/v6',
+          ),
+          forceReconnect: true,
+        );
 
     _socketSubscription?.cancel();
     _socketEventVersion = null;

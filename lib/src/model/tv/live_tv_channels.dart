@@ -34,8 +34,6 @@ class LiveTvChannels extends _$LiveTvChannels {
     return _doStartWatching();
   }
 
-  SocketPool get _socket => ref.read(socketPoolProvider);
-
   /// Start watching the TV games
   Future<void> startWatching() async {
     final newState = await _doStartWatching();
@@ -52,7 +50,8 @@ class LiveTvChannels extends _$LiveTvChannels {
     final repoGames =
         await ref.withClient((client) => TvRepository(client).channels());
 
-    _socketClient = _socket.connect(Uri(path: kDefaultSocketRoute));
+    _socketClient =
+        ref.read(socketPoolProvider).open(Uri(path: kDefaultSocketRoute));
 
     await _socketClient.firstConnection;
     _socketWatch(repoGames);

@@ -25,7 +25,7 @@ class ChatController extends _$ChatController {
   @override
   Future<ChatState> build(GameFullId id) async {
     _socketClient =
-        ref.read(socketPoolProvider).connect(GameController.gameSocketUri(id));
+        ref.read(socketPoolProvider).open(GameController.gameSocketUri(id));
 
     _subscription?.cancel();
     _subscription = _socketClient.stream.listen(_handleSocketEvent);

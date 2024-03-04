@@ -72,7 +72,7 @@ class GameController extends _$GameController {
     final socketPool = ref.watch(socketPoolProvider);
 
     _socketClient =
-        socketPool.connect(gameSocketUri(gameFullId), forceReconnect: true);
+        socketPool.open(gameSocketUri(gameFullId), forceReconnect: true);
     _socketEventVersion = null;
     _socketSubscription?.cancel();
     _socketSubscription = _socketClient.stream.listen(_handleSocketEvent);

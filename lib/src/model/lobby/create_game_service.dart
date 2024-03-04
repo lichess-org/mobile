@@ -32,7 +32,7 @@ class CreateGameService {
     }
 
     final socketPool = ref.read(socketPoolProvider);
-    final socketClient = socketPool.connect(Uri(path: '/lobby/socket/v5'));
+    final socketClient = socketPool.open(Uri(path: '/lobby/socket/v5'));
 
     // ensure the pending game connection is closed in any case
     final completer = Completer<GameFullId>()..future.whenComplete(_close);
