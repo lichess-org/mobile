@@ -50,7 +50,6 @@ class ServerAnalysisService {
       id,
       socketClient.stream.listen(
         (event) {
-          // complete on first analysisProgress event
           if (event.topic == 'analysisProgress') {
             final data =
                 ServerEvalEvent.fromJson(event.data as Map<String, dynamic>);
