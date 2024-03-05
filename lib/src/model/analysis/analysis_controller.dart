@@ -103,6 +103,8 @@ class AnalysisController extends _$AnalysisController {
     final pgnHeaders = IMap(game.headers);
     final rootComments = IList(game.comments.map((c) => PgnComment.fromPgn(c)));
 
+    Future<void>? openingFuture;
+
     _root = Root.fromPgnGame(
       game,
       isLichessAnalysis: options.isLichessGameAnalysis,
@@ -114,11 +116,16 @@ class AnalysisController extends _$AnalysisController {
           path = path + branch.id;
           lastMove = branch.sanMove.move;
         }
-        if (isMainline && options.opening == null && branch.position.ply <= 2) {
-          _fetchOpening(root, path);
+        if (isMainline && options.opening == null && branch.position.ply <= 5) {
+          openingFuture = _fetchOpening(root, path);
         }
       },
     );
+
+    // wait for the opening to be fetched to recompute the branch opening
+    openingFuture?.then((_) {
+      _setPath(state.currentPath);
+    });
 
     final currentPath =
         options.initialMoveCursor == null ? _root.mainlinePath : path;
