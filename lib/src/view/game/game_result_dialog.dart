@@ -9,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -88,6 +89,7 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
     final ctrlProvider = gameControllerProvider(widget.id);
     final gameState = ref.watch(ctrlProvider).requireValue;
     final session = ref.watch(authSessionProvider);
+    final currentGameAnalysis = ref.watch(currentAnalysisProvider);
 
     final content = Column(
       mainAxisSize: MainAxisSize.min,
@@ -97,6 +99,11 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
           padding: const EdgeInsets.only(bottom: 16.0),
           child: GameResult(game: gameState.game),
         ),
+        if (currentGameAnalysis == gameState.game.id)
+          const Padding(
+            padding: EdgeInsets.only(bottom: 16.0),
+            child: WaitingForServerAnalysis(),
+          ),
         if (gameState.game.evals != null)
           Padding(
             padding: const EdgeInsets.only(bottom: 8.0),
@@ -148,7 +155,8 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
               textAlign: TextAlign.center,
             ),
           ),
-        if (gameState.game.userAnalysable &&
+        if (currentGameAnalysis != gameState.game.id &&
+            gameState.game.userAnalysable &&
             gameState.game.evals == null &&
             gameState.game.white.analysis == null)
           FutureBuilder(

@@ -49,7 +49,11 @@ class AnalysisOptions with _$AnalysisOptions {
   }) = _AnalysisOptions;
 
   /// Whether the analysis is for a lichess game.
-  bool get isLichessGameAnalysis => id != standaloneAnalysisId;
+  bool get isLichessGameAnalysis => gameAnyId != null;
+
+  /// The game ID of the analysis, if it's a lichess game.
+  GameAnyId? get gameAnyId =>
+      id != standaloneAnalysisId ? GameAnyId(id.value) : null;
 }
 
 @riverpod
@@ -326,7 +330,10 @@ class AnalysisController extends _$AnalysisController {
   Future<void> requestServerAnalysis() {
     if (state.canRequestServerAnalysis) {
       final service = ref.read(serverAnalysisServiceProvider);
-      return service.requestAnalysis(options.id as GameFullId);
+      return service.requestAnalysis(
+        options.id as GameAnyId,
+        options.orientation,
+      );
     }
     return Future.error('Cannot request server analysis');
   }
@@ -647,9 +654,12 @@ class AnalysisState with _$AnalysisState {
   IMap<String, ISet<String>> get validMoves =>
       algebraicLegalMoves(currentNode.position);
 
+  /// Whether the user can request server analysis.
+  ///
+  /// It must be a lichess game, which is finished and not already analyzed.
   bool get canRequestServerAnalysis =>
       id != standaloneAnalysisId &&
-      id.length == 12 &&
+      (id.length == 8 || id.length == 12) &&
       !hasServerAnalysis &&
       pgnHeaders['Result'] != '*';
 
