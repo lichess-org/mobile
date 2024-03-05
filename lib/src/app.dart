@@ -88,12 +88,10 @@ class _AppState extends ConsumerState<Application> {
       }
 
       final socketClient = ref.read(socketPoolProvider).currentClient;
-      if (socketClient.route == Uri(path: kDefaultSocketRoute)) {
-        if (current.value?.isOnline == true && !socketClient.isActive) {
-          socketClient.connect();
-        } else if (current.value?.isOnline == false) {
-          socketClient.close();
-        }
+      if (current.value?.isOnline == true && !socketClient.isActive) {
+        socketClient.connect();
+      } else if (current.value?.isOnline == false) {
+        socketClient.close();
       }
     });
 
