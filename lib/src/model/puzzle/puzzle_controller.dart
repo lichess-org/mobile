@@ -342,7 +342,6 @@ class PuzzleController extends _$PuzzleController {
         nextContext: next,
       );
 
-      // ignore: avoid_manual_providers_as_generated_provider_dependency
       ref.read(sessionNotifier).addAttempt(
             state.puzzle.puzzle.id,
             win: result == PuzzleResult.win,
@@ -350,7 +349,6 @@ class PuzzleController extends _$PuzzleController {
 
       final rounds = next?.rounds;
       if (rounds != null) {
-        // ignore: avoid_manual_providers_as_generated_provider_dependency
         ref.read(sessionNotifier).setRatingDiffs(rounds);
       }
 

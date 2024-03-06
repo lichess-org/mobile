@@ -120,9 +120,8 @@ class PuzzleService {
               data.unsolved.removeWhere((e) => e.puzzle.id == solution.id),
         ),
       );
-      return nextPuzzle(userId: userId, angle: angle);
     }
-    return Future.value(null);
+    return nextPuzzle(userId: userId, angle: angle);
   }
 
   /// Clears the current puzzle batch, fetches a new one and returns the next puzzle.
