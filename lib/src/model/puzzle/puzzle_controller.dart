@@ -45,7 +45,6 @@ class PuzzleController extends _$PuzzleController {
   late final _service = ref.read(puzzleServiceFactoryProvider)(
     queueLength: kPuzzleLocalQueueLength,
   );
-
   @override
   PuzzleState build(
     PuzzleContext initialContext, {
@@ -320,10 +319,6 @@ class PuzzleController extends _$PuzzleController {
       resultSent: true,
     );
 
-    final sessionNotifier =
-        puzzleSessionProvider(initialContext.userId, initialContext.angle)
-            .notifier;
-
     final soundService = ref.read(soundServiceProvider);
 
     if (state.streak == null) {
@@ -342,14 +337,24 @@ class PuzzleController extends _$PuzzleController {
         nextContext: next,
       );
 
-      ref.read(sessionNotifier).addAttempt(
+      ref
+          .read(
+            puzzleSessionProvider(initialContext.userId, initialContext.angle)
+                .notifier,
+          )
+          .addAttempt(
             state.puzzle.puzzle.id,
             win: result == PuzzleResult.win,
           );
 
       final rounds = next?.rounds;
       if (rounds != null) {
-        ref.read(sessionNotifier).setRatingDiffs(rounds);
+        ref
+            .read(
+              puzzleSessionProvider(initialContext.userId, initialContext.angle)
+                  .notifier,
+            )
+            .setRatingDiffs(rounds);
       }
 
       if (next != null &&
