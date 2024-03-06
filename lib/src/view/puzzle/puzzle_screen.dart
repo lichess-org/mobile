@@ -23,6 +23,7 @@ import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_settings_screen.dart';
@@ -33,7 +34,6 @@ import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:share_plus/share_plus.dart';
 
 import 'puzzle_feedback_widget.dart';
 import 'puzzle_session_widget.dart';
@@ -463,8 +463,10 @@ class _BottomBar extends ConsumerWidget {
                 Expanded(
                   child: BottomBarButton(
                     onTap: () {
-                      Share.share(
-                        '$kLichessHost/training/${puzzleState.puzzle.puzzle.id}',
+                      launchShareDialog(
+                        context,
+                        text:
+                            '$kLichessHost/training/${puzzleState.puzzle.puzzle.id}',
                       );
                     },
                     label: 'Share this puzzle',

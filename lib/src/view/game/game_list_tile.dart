@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/status_l10n.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
@@ -177,7 +178,19 @@ class _ContextMenu extends ConsumerWidget {
         child: Text(context.l10n.gameAsGIF),
         onPressed: () async {
           try {
-            ref.read(gameShareServiceProvider).gameGif(game.id, orientation);
+            final gif = await ref
+                .read(gameShareServiceProvider)
+                .gameGif(game.id, orientation);
+            if (context.mounted) {
+              launchShareDialog(
+                context,
+                files: [gif],
+                subject: context.l10n.resVsX(
+                  game.white.fullName(context),
+                  game.black.fullName(context),
+                ),
+              );
+            }
           } catch (e) {
             debugPrint(e.toString());
             if (context.mounted) {
@@ -196,12 +209,22 @@ class _ContextMenu extends ConsumerWidget {
           child: Text(context.l10n.screenshotCurrentPosition),
           onPressed: () async {
             try {
-              ref.read(gameShareServiceProvider).screenshotPosition(
-                    game.id,
-                    orientation,
-                    game.lastFen!,
-                    game.lastMove!,
-                  );
+              final image =
+                  await ref.read(gameShareServiceProvider).screenshotPosition(
+                        game.id,
+                        orientation,
+                        game.lastFen!,
+                        game.lastMove!,
+                      );
+              if (context.mounted) {
+                launchShareDialog(
+                  context,
+                  files: [image],
+                  subject: context.l10n.puzzleFromGameLink(
+                    '$kLichessHost/${game.id}',
+                  ),
+                );
+              }
             } catch (e) {
               if (context.mounted) {
                 showPlatformSnackbar(
@@ -218,7 +241,14 @@ class _ContextMenu extends ConsumerWidget {
         child: Text('PGN: ${context.l10n.downloadAnnotated}'),
         onPressed: () async {
           try {
-            ref.read(gameShareServiceProvider).annotatedPgn(game.id);
+            final pgn =
+                await ref.read(gameShareServiceProvider).annotatedPgn(game.id);
+            if (context.mounted) {
+              launchShareDialog(
+                context,
+                text: pgn,
+              );
+            }
           } catch (e) {
             if (context.mounted) {
               showPlatformSnackbar(
@@ -236,7 +266,14 @@ class _ContextMenu extends ConsumerWidget {
         child: Text('PGN: ${context.l10n.downloadRaw}'),
         onPressed: () async {
           try {
-            ref.read(gameShareServiceProvider).rawPgn(game.id);
+            final pgn =
+                await ref.read(gameShareServiceProvider).rawPgn(game.id);
+            if (context.mounted) {
+              launchShareDialog(
+                context,
+                text: pgn,
+              );
+            }
           } catch (e) {
             if (context.mounted) {
               showPlatformSnackbar(

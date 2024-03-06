@@ -24,6 +24,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/layout.dart';
+import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
@@ -34,7 +35,6 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:popover/popover.dart';
-import 'package:share_plus/share_plus.dart';
 
 import 'analysis_pgn_tags.dart';
 import 'analysis_settings.dart';
@@ -657,8 +657,9 @@ class _BottomBar extends ConsumerWidget {
                         semanticsLabel: 'Share PGN',
                         onPressed: () {
                           Navigator.of(context).pop();
-                          Share.share(
-                            ref
+                          launchShareDialog(
+                            context,
+                            text: ref
                                 .read(
                                   analysisControllerProvider(options).notifier,
                                 )

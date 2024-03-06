@@ -21,7 +21,7 @@ class GameShareService {
   final GameShareServiceRef _ref;
 
   /// Fetches the raw PGN of a game and launches the share dialog.
-  Future<void> rawPgn(GameId id) async {
+  Future<String> rawPgn(GameId id) async {
     final resp = await _ref.withClient(
       (client) => client
           .get(
@@ -34,11 +34,11 @@ class GameShareService {
     if (resp.statusCode != 200) {
       throw Exception('Failed to get PGN');
     }
-    Share.share(utf8.decode(resp.bodyBytes));
+    return utf8.decode(resp.bodyBytes);
   }
 
   /// Fetches the annotated PGN of a game and launches the share dialog.
-  Future<void> annotatedPgn(GameId id) async {
+  Future<String> annotatedPgn(GameId id) async {
     final resp = await _ref.withClient(
       (client) => client
           .get(
@@ -51,11 +51,11 @@ class GameShareService {
     if (resp.statusCode != 200) {
       throw Exception('Failed to get PGN');
     }
-    Share.share(utf8.decode(resp.bodyBytes));
+    return utf8.decode(resp.bodyBytes);
   }
 
   /// Fetches the GIF screenshot of a game and launches the share dialog.
-  Future<void> screenshotPosition(
+  Future<XFile> screenshotPosition(
     GameId id,
     Side orientation,
     String fen,
@@ -75,13 +75,11 @@ class GameShareService {
     if (resp.statusCode != 200) {
       throw Exception('Failed to get GIF');
     }
-    Share.shareXFiles(
-      [XFile.fromData(resp.bodyBytes, mimeType: 'image/gif')],
-    );
+    return XFile.fromData(resp.bodyBytes, mimeType: 'image/gif');
   }
 
   /// Fetches the GIF animation of a game and launches the share dialog.
-  Future<void> gameGif(GameId id, Side orientation) async {
+  Future<XFile> gameGif(GameId id, Side orientation) async {
     final boardTheme = _ref.read(boardPreferencesProvider).boardTheme;
     final pieceTheme = _ref.read(boardPreferencesProvider).pieceSet;
     final resp = await _ref.withClient(
@@ -96,8 +94,6 @@ class GameShareService {
     if (resp.statusCode != 200) {
       throw Exception('Failed to get GIF');
     }
-    Share.shareXFiles(
-      [XFile.fromData(resp.bodyBytes, mimeType: 'image/gif')],
-    );
+    return XFile.fromData(resp.bodyBytes, mimeType: 'image/gif');
   }
 }
