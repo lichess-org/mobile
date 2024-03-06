@@ -308,13 +308,40 @@ class _Board extends ConsumerWidget {
                 bestMoves != null
             ? ISet(
                 bestMoves.where((move) => move != null).mapIndexed(
-                      (i, move) => cg.Arrow(
-                        color:
-                            const Color(0x40003088).withOpacity(0.4 - 0.15 * i),
-                        orig: move!.cg.from,
-                        dest: move.cg.to,
-                      ),
-                    ),
+                  (i, move) {
+                    switch (move!) {
+                      case NormalMove(
+                          from: _,
+                          to: _,
+                          promotion: final promRole
+                        ):
+                        return [
+                          cg.Arrow(
+                            color: const Color(0x40003088)
+                                .withOpacity(0.4 - 0.15 * i),
+                            orig: move.cg.from,
+                            dest: move.cg.to,
+                          ),
+                          if (promRole != null)
+                            cg.PieceShape(
+                              color: const Color(0x40003088)
+                                  .withOpacity(0.4 - 0.15 * i),
+                              orig: move.cg.to,
+                              role: promRole.cg,
+                            ),
+                        ];
+                      case DropMove(role: final role, to: _):
+                        return [
+                          cg.PieceShape(
+                            color: const Color(0x40003088)
+                                .withOpacity(0.4 - 0.15 * i),
+                            orig: move.cg.to,
+                            role: role.cg,
+                          ),
+                        ];
+                    }
+                  },
+                ).expand((e) => e),
               )
             : null,
         annotations: sanMove != null && annotation != null
