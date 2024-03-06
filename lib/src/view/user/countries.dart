@@ -236,7 +236,7 @@ const Map<String, String> countries = {
   'TM': 'Turkmenistan',
   'TN': 'Tunisia',
   'TO': 'Tonga',
-  'TR': 'Turkey',
+  'TR': 'Turkiye',
   'TT': 'Trinidad and Tobago',
   'TV': 'Tuvalu',
   'TW': 'Taiwan',
