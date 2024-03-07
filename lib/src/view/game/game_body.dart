@@ -627,7 +627,7 @@ class _GameBottomBar extends ConsumerWidget {
       context: context,
       actions: [
         BottomSheetAction(
-          label: Text(context.l10n.flipBoard),
+          makeLabel: (context) => Text(context.l10n.flipBoard),
           onPressed: (context) {
             ref.read(isBoardTurnedProvider.notifier).toggle();
           },
@@ -635,7 +635,7 @@ class _GameBottomBar extends ConsumerWidget {
         if (gameState.game.playable &&
             gameState.game.meta.speed == Speed.correspondence)
           BottomSheetAction(
-            label: Text(context.l10n.analysis),
+            makeLabel: (context) => Text(context.l10n.analysis),
             onPressed: (context) {
               pushPlatformRoute(
                 context,
@@ -650,14 +650,14 @@ class _GameBottomBar extends ConsumerWidget {
           ),
         if (gameState.game.abortable)
           BottomSheetAction(
-            label: Text(context.l10n.abortGame),
+            makeLabel: (context) => Text(context.l10n.abortGame),
             onPressed: (context) {
               ref.read(gameControllerProvider(id).notifier).abortGame();
             },
           ),
         if (gameState.game.meta.clock != null && gameState.game.canGiveTime)
           BottomSheetAction(
-            label: Text(
+            makeLabel: (context) => Text(
               context.l10n.giveNbSeconds(
                 gameState.game.meta.clock!.moreTime?.inSeconds ?? 15,
               ),
@@ -668,14 +668,14 @@ class _GameBottomBar extends ConsumerWidget {
           ),
         if (gameState.game.canTakeback)
           BottomSheetAction(
-            label: Text(context.l10n.takeback),
+            makeLabel: (context) => Text(context.l10n.takeback),
             onPressed: (context) {
               ref.read(gameControllerProvider(id).notifier).offerTakeback();
             },
           ),
         if (gameState.game.me?.proposingTakeback == true)
           BottomSheetAction(
-            label: const Text('Cancel takeback offer'),
+            makeLabel: (context) => const Text('Cancel takeback offer'),
             isDestructiveAction: true,
             onPressed: (context) {
               ref
@@ -685,7 +685,7 @@ class _GameBottomBar extends ConsumerWidget {
           ),
         if (gameState.game.me?.offeringDraw == true)
           BottomSheetAction(
-            label: const Text('Cancel draw offer'),
+            makeLabel: (context) => const Text('Cancel draw offer'),
             isDestructiveAction: true,
             onPressed: (context) {
               ref
@@ -695,7 +695,7 @@ class _GameBottomBar extends ConsumerWidget {
           )
         else if (gameState.canOfferDraw)
           BottomSheetAction(
-            label: Text(context.l10n.offerDraw),
+            makeLabel: (context) => Text(context.l10n.offerDraw),
             onPressed: gameState.shouldConfirmResignAndDrawOffer
                 ? (context) => _showConfirmDialog(
                       context,
@@ -714,7 +714,7 @@ class _GameBottomBar extends ConsumerWidget {
           ),
         if (gameState.game.resignable)
           BottomSheetAction(
-            label: Text(context.l10n.resign),
+            makeLabel: (context) => Text(context.l10n.resign),
             onPressed: gameState.shouldConfirmResignAndDrawOffer
                 ? (context) => _showConfirmDialog(
                       context,
@@ -731,14 +731,14 @@ class _GameBottomBar extends ConsumerWidget {
           ),
         if (gameState.game.canClaimWin) ...[
           BottomSheetAction(
-            label: Text(context.l10n.forceDraw),
+            makeLabel: (context) => Text(context.l10n.forceDraw),
             dismissOnPress: true,
             onPressed: (context) {
               ref.read(gameControllerProvider(id).notifier).forceDraw();
             },
           ),
           BottomSheetAction(
-            label: Text(context.l10n.forceResignation),
+            makeLabel: (context) => Text(context.l10n.forceResignation),
             dismissOnPress: true,
             onPressed: (context) {
               ref.read(gameControllerProvider(id).notifier).forceResign();
@@ -747,7 +747,7 @@ class _GameBottomBar extends ConsumerWidget {
         ],
         if (gameState.game.me?.offeringRematch == true)
           BottomSheetAction(
-            label: Text(context.l10n.cancelRematchOffer),
+            makeLabel: (context) => Text(context.l10n.cancelRematchOffer),
             dismissOnPress: true,
             isDestructiveAction: true,
             onPressed: (context) {
@@ -757,7 +757,7 @@ class _GameBottomBar extends ConsumerWidget {
         else if (gameState.canOfferRematch &&
             gameState.game.opponent?.onGame == true)
           BottomSheetAction(
-            label: Text(context.l10n.rematch),
+            makeLabel: (context) => Text(context.l10n.rematch),
             dismissOnPress: true,
             onPressed: (context) {
               ref
@@ -767,12 +767,12 @@ class _GameBottomBar extends ConsumerWidget {
           ),
         if (gameState.canGetNewOpponent)
           BottomSheetAction(
-            label: Text(context.l10n.newOpponent),
+            makeLabel: (context) => Text(context.l10n.newOpponent),
             onPressed: (_) => onNewOpponentCallback(gameState.game),
           ),
         if (gameState.game.finished)
           BottomSheetAction(
-            label: const Text('Show result'),
+            makeLabel: (context) => const Text('Show result'),
             onPressed: (_) {
               showAdaptiveDialog<void>(
                 context: context,

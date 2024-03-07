@@ -132,7 +132,7 @@ List<BottomSheetAction> makeFinishedGameShareActions(
 }) {
   return [
     BottomSheetAction(
-      label: const Text('Share game URL'),
+      makeLabel: (_) => const Text('Share game URL'),
       dismissOnPress: false,
       onPressed: (context) {
         launchShareDialog(
@@ -142,7 +142,7 @@ List<BottomSheetAction> makeFinishedGameShareActions(
       },
     ),
     BottomSheetAction(
-      label: Text(context.l10n.gameAsGIF),
+      makeLabel: (context) => Text(context.l10n.gameAsGIF),
       dismissOnPress: false,
       onPressed: (context) async {
         try {
@@ -173,7 +173,7 @@ List<BottomSheetAction> makeFinishedGameShareActions(
     ),
     if (lastMove != null)
       BottomSheetAction(
-        label: Text(context.l10n.screenshotCurrentPosition),
+        makeLabel: (context) => Text(context.l10n.screenshotCurrentPosition),
         dismissOnPress: false,
         onPressed: (context) async {
           try {
@@ -205,7 +205,7 @@ List<BottomSheetAction> makeFinishedGameShareActions(
         },
       ),
     BottomSheetAction(
-      label: Text('PGN: ${context.l10n.downloadAnnotated}'),
+      makeLabel: (context) => Text('PGN: ${context.l10n.downloadAnnotated}'),
       dismissOnPress: false,
       onPressed: (context) async {
         try {
@@ -229,7 +229,7 @@ List<BottomSheetAction> makeFinishedGameShareActions(
       },
     ),
     BottomSheetAction(
-      label: Text('PGN: ${context.l10n.downloadRaw}'),
+      makeLabel: (context) => Text('PGN: ${context.l10n.downloadRaw}'),
       dismissOnPress: false,
       onPressed: (context) async {
         try {

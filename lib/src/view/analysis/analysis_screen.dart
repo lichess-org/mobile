@@ -654,7 +654,7 @@ class _BottomBar extends ConsumerWidget {
       context: context,
       actions: [
         BottomSheetAction(
-          label: Text(context.l10n.flipBoard),
+          makeLabel: (context) => Text(context.l10n.flipBoard),
           onPressed: (context) {
             ref
                 .read(analysisControllerProvider(options).notifier)
@@ -662,7 +662,7 @@ class _BottomBar extends ConsumerWidget {
           },
         ),
         BottomSheetAction(
-          label: Text(context.l10n.studyShareAndExport),
+          makeLabel: (context) => Text(context.l10n.studyShareAndExport),
           onPressed: (_) {
             showAdaptiveBottomSheet<void>(
               context: context,
