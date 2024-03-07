@@ -49,8 +49,8 @@ Future<AppDependencies> appDependencies(
   final appVersion = Version.parse(pInfo.version);
   final installedVersion = prefs.getString('installed_version');
   // 0.7.0: id migration, just delete everything
-  // TODO: remove this after a few versions
-  if (installedVersion == null && appVersion == Version(0, 7, 0)) {
+  // TODO: remove this after the next release
+  if (installedVersion == null) {
     await prefs.clear();
     await deleteDatabase(dbPath);
   }
