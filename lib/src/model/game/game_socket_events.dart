@@ -146,8 +146,11 @@ ServerEvalEvent _serverEvalEventFromPick(RequiredPick pick) {
 
   bool isAnalysisIncomplete = false;
 
+  String? nextVariation;
+
   while (node != null) {
     final ply = node['ply'] as int;
+    final san = node['san'] as String?;
     final children = node['children'] as List<dynamic>?;
     final firstChild = children?.firstOrNull as Map<String, dynamic>?;
     final eval = node['eval'] as Map<String, dynamic>?;
@@ -166,6 +169,9 @@ ServerEvalEvent _serverEvalEventFromPick(RequiredPick pick) {
             comment: comment['text'] as String,
           )
         : null;
+
+    final variation = nextVariation;
+
     final buffer = StringBuffer();
     if (children != null && children.length > 1) {
       Map<String, dynamic>? variationNode = children[1] as Map<String, dynamic>;
@@ -184,16 +190,22 @@ ServerEvalEvent _serverEvalEventFromPick(RequiredPick pick) {
         }
       }
     }
-    final variation = buffer.isEmpty ? null : buffer.toString();
-    evals.add(
-      ExternalEval(
-        cp: eval?['cp'] as int?,
-        mate: eval?['mate'] as int?,
-        bestMove: eval?['best'] as String?,
-        judgment: judgment,
-        variation: variation,
-      ),
-    );
+    nextVariation = buffer.isEmpty ? null : buffer.toString();
+    // make it compatible with lichess API GET /game/export which doesn't return
+    // an eval of the starting position
+    // also make sure to not add an empty eval for checkmate (or stalemate) which
+    // would be the leaf node with no eval
+    if (san != null && (eval != null || firstChild != null)) {
+      evals.add(
+        ExternalEval(
+          cp: eval?['cp'] as int?,
+          mate: eval?['mate'] as int?,
+          bestMove: eval?['best'] as String?,
+          judgment: judgment,
+          variation: variation,
+        ),
+      );
+    }
     node = firstChild;
   }
 
