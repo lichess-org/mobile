@@ -15,7 +15,6 @@ import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
-import 'package:share_plus/share_plus.dart';
 
 import 'game_screen_providers.dart';
 import 'game_settings.dart';
@@ -134,14 +133,17 @@ List<BottomSheetAction> makeFinishedGameShareActions(
   return [
     BottomSheetAction(
       label: const Text('Share game URL'),
+      dismissOnPress: false,
       onPressed: (context) {
-        Share.shareUri(
-          Uri.parse('$kLichessHost/${game.id}'),
+        launchShareDialog(
+          context,
+          uri: Uri.parse('$kLichessHost/${game.id}'),
         );
       },
     ),
     BottomSheetAction(
       label: Text(context.l10n.gameAsGIF),
+      dismissOnPress: false,
       onPressed: (context) async {
         try {
           final gif = await ref
@@ -172,6 +174,7 @@ List<BottomSheetAction> makeFinishedGameShareActions(
     if (lastMove != null)
       BottomSheetAction(
         label: Text(context.l10n.screenshotCurrentPosition),
+        dismissOnPress: false,
         onPressed: (context) async {
           try {
             final image =
@@ -203,6 +206,7 @@ List<BottomSheetAction> makeFinishedGameShareActions(
       ),
     BottomSheetAction(
       label: Text('PGN: ${context.l10n.downloadAnnotated}'),
+      dismissOnPress: false,
       onPressed: (context) async {
         try {
           final pgn =
@@ -226,6 +230,7 @@ List<BottomSheetAction> makeFinishedGameShareActions(
     ),
     BottomSheetAction(
       label: Text('PGN: ${context.l10n.downloadRaw}'),
+      dismissOnPress: false,
       onPressed: (context) async {
         try {
           final pgn = await ref.read(gameShareServiceProvider).rawPgn(game.id);

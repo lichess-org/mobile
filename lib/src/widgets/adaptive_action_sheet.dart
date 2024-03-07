@@ -103,15 +103,22 @@ Future<T?> showCupertinoActionSheet<T>({
         title: title,
         actions: actions
             .map(
-              (action) => CupertinoActionSheetAction(
-                onPressed: () {
-                  if (action.dismissOnPress) {
-                    Navigator.of(context).pop();
-                  }
-                  action.onPressed(context);
+              // Builder is used to retrieve the context immediately surrounding the button
+              // This is necessary to get the correct context for the iPad share dialog
+              // which needs the position of the action to display the share dialog
+              (action) => Builder(
+                builder: (context) {
+                  return CupertinoActionSheetAction(
+                    onPressed: () {
+                      if (action.dismissOnPress) {
+                        Navigator.of(context).pop();
+                      }
+                      action.onPressed(context);
+                    },
+                    isDestructiveAction: action.isDestructiveAction,
+                    child: action.label,
+                  );
                 },
-                isDestructiveAction: action.isDestructiveAction,
-                child: action.label,
               ),
             )
             .toList(),

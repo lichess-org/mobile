@@ -680,20 +680,24 @@ class _BottomBar extends ConsumerWidget {
                     ),
                     Padding(
                       padding: const EdgeInsets.all(24.0),
-                      child: FatButton(
-                        semanticsLabel: 'Share PGN',
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                          launchShareDialog(
-                            context,
-                            text: ref
-                                .read(
-                                  analysisControllerProvider(options).notifier,
-                                )
-                                .makeGamePgn(),
+                      child: Builder(
+                        builder: (context) {
+                          return FatButton(
+                            semanticsLabel: 'Share PGN',
+                            onPressed: () {
+                              launchShareDialog(
+                                context,
+                                text: ref
+                                    .read(
+                                      analysisControllerProvider(options)
+                                          .notifier,
+                                    )
+                                    .makeGamePgn(),
+                              );
+                            },
+                            child: const Text('Share PGN'),
                           );
                         },
-                        child: const Text('Share PGN'),
                       ),
                     ),
                   ],
