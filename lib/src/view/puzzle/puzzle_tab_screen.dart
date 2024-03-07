@@ -441,6 +441,7 @@ class _DailyPuzzle extends ConsumerWidget {
             ],
           ),
           onTap: () {
+            if (!context.mounted) return;
             final session = ref.read(authSessionProvider);
             pushPlatformRoute(
               context,
