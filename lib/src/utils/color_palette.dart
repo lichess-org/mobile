@@ -7,12 +7,16 @@ CorePalette? _corePalette;
 
 BoardColorScheme? _boardColorScheme;
 
+/// Set the system core palette if available (android 12+ only).
+///
+/// It also defines the system board colors based on the core palette.
 void setCorePalette(CorePalette? palette) {
   _corePalette = palette;
 
   if (palette != null) {
     final darkSquare = Color(palette.secondary.get(60));
     final lightSquare = Color(palette.primary.get(95));
+
     _boardColorScheme = BoardColorScheme(
       darkSquare: darkSquare,
       lightSquare: lightSquare,
@@ -32,13 +36,13 @@ void setCorePalette(CorePalette? palette) {
         orientation: Side.black,
       ),
       lastMove: HighlightDetails(
-        solidColor: Color(palette.tertiary.get(80)).withOpacity(0.8),
-      ),
-      selected: HighlightDetails(
         solidColor: Color(palette.tertiary.get(80)).withOpacity(0.6),
       ),
-      validMoves: Color(palette.tertiary.get(30)).withOpacity(0.30),
-      validPremoves: Color(palette.tertiary.get(30)).withOpacity(0.30),
+      selected: HighlightDetails(
+        solidColor: Color(palette.neutral.get(40)).withOpacity(0.80),
+      ),
+      validMoves: Color(palette.neutral.get(40)).withOpacity(0.40),
+      validPremoves: Color(palette.error.get(40)).withOpacity(0.30),
     );
   }
 }
