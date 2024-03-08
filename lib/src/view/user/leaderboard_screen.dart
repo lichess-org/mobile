@@ -25,12 +25,9 @@ class LeaderboardScreen extends StatelessWidget {
   }
 
   Widget _buildIos(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        previousPageTitle: 'Home',
-        middle: Text(context.l10n.leaderboard),
-      ),
-      child: const _Body(),
+    return const CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(),
+      child: _Body(),
     );
   }
 
