@@ -80,18 +80,15 @@ class GameSettings extends ConsumerWidget {
                         .toggleMoveConfirmation();
                   },
                 ),
-              if (data.prefs?.zenMode == Zen.gameAuto)
-                SwitchSettingTile(
-                  title: Text(
-                    context.l10n.preferencesZenMode,
-                  ),
-                  value: data.isZenModeEnabled,
-                  onChanged: (value) {
-                    ref
-                        .read(gameControllerProvider(id).notifier)
-                        .toggleZenMode();
-                  },
+              SwitchSettingTile(
+                title: Text(
+                  context.l10n.preferencesZenMode,
                 ),
+                value: data.isZenModeEnabled,
+                onChanged: (value) {
+                  ref.read(gameControllerProvider(id).notifier).toggleZenMode();
+                },
+              ),
             ];
           },
           orElse: () => [],

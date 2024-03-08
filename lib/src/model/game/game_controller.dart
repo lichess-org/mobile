@@ -920,7 +920,8 @@ class GameState with _$GameState {
 
   // preferences
   bool get isZenModeEnabled =>
-      zenModeGameSetting ?? game.prefs?.zenMode == Zen.yes;
+      zenModeGameSetting ??
+      game.prefs?.zenMode == Zen.yes || game.prefs?.zenMode == Zen.gameAuto;
   bool get canPremove => game.prefs?.enablePremove ?? true;
   bool get canAutoQueen => game.prefs?.autoQueen == AutoQueen.always;
   bool get canAutoQueenOnPremove => game.prefs?.autoQueen == AutoQueen.premove;
