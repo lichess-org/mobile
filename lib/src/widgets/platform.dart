@@ -69,13 +69,18 @@ class PlatformCard extends StatelessWidget {
     this.semanticContainer = true,
     this.borderRadius,
     this.elevation,
+    this.color,
+    this.surfaceTintColor,
+    this.shadowColor,
   });
 
   final Widget child;
   final bool semanticContainer;
   final BorderRadius? borderRadius;
-
   final double? elevation;
+  final Color? color;
+  final Color? surfaceTintColor;
+  final Color? shadowColor;
 
   /// The empty space that surrounds the card.
   ///
@@ -95,10 +100,11 @@ class PlatformCard extends StatelessWidget {
           ? Card(
               margin: margin ?? EdgeInsets.zero,
               elevation: elevation ?? 0,
-              color: cupertinoBrightness == Brightness.light
-                  ? CupertinoColors.systemBackground
-                  : CupertinoColors.secondarySystemBackground
-                      .resolveFrom(context),
+              color: color ??
+                  (cupertinoBrightness == Brightness.light
+                      ? CupertinoColors.systemBackground
+                      : CupertinoColors.secondarySystemBackground
+                          .resolveFrom(context)),
               shape: borderRadius != null
                   ? RoundedRectangleBorder(
                       borderRadius: borderRadius!,
@@ -117,6 +123,9 @@ class PlatformCard extends StatelessWidget {
                   : const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(10.0)),
                     ),
+              color: color,
+              surfaceTintColor: surfaceTintColor,
+              shadowColor: shadowColor,
               semanticContainer: semanticContainer,
               elevation: elevation,
               margin: margin,

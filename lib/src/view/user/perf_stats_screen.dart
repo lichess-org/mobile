@@ -23,6 +23,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -126,7 +127,7 @@ class _Body extends ConsumerWidget {
                 .first;
             return SafeArea(
               child: ListView(
-                padding: Styles.bodyPadding,
+                padding: Styles.horizontalBodyPadding,
                 scrollDirection: Axis.vertical,
                 children: [
                   if (ratingHistoryPerfData.points.isNotEmpty)
@@ -681,6 +682,8 @@ class _EloChart extends StatefulWidget {
 class _EloChartState extends State<_EloChart> {
   static const millisecondsInDay = 86400000;
 
+  DateRange selectedRange = DateRange.threeMonths;
+
   late List<FlSpot> _allPoints;
   late double _startDate;
   late double _endDate;
@@ -698,7 +701,7 @@ class _EloChartState extends State<_EloChart> {
       (_points.map((e) => e.y).reduce(max) / 100).ceilToDouble() * 100;
 
   String _formatDateFromTimestamp(double timestamp) =>
-      DateFormat('yyyy-MM-dd').format(
+      DateFormat.yMMMd('en_US').format(
         DateTime.fromMillisecondsSinceEpoch(timestamp.toInt()),
       );
 
@@ -739,7 +742,10 @@ class _EloChartState extends State<_EloChart> {
           ),
         )
         .toList();
-    _startDate = _allPoints.first.x;
+    _startDate = widget.value.points.last.date
+        .copyWith(month: widget.value.points.last.date.month - 3)
+        .millisecondsSinceEpoch
+        .toDouble();
     _endDate = _allPoints.last.x;
   }
 
@@ -748,8 +754,62 @@ class _EloChartState extends State<_EloChart> {
     final borderColor =
         Theme.of(context).colorScheme.onBackground.withOpacity(0.5);
     final chartColor = Theme.of(context).colorScheme.tertiary;
+
+    void onPressed(DateRange date) {
+      switch (date) {
+        case DateRange.oneWeek:
+          setState(() {
+            _startDate = widget.value.points.last.date
+                .subtract(const Duration(days: 7))
+                .millisecondsSinceEpoch
+                .toDouble();
+          });
+        case DateRange.oneMonth:
+          setState(() {
+            _startDate = widget.value.points.last.date
+                .copyWith(month: widget.value.points.last.date.month - 1)
+                .millisecondsSinceEpoch
+                .toDouble();
+          });
+        case DateRange.threeMonths:
+          setState(() {
+            _startDate = widget.value.points.last.date
+                .copyWith(month: widget.value.points.last.date.month - 3)
+                .millisecondsSinceEpoch
+                .toDouble();
+          });
+        case DateRange.oneYear:
+          setState(() {
+            _startDate = widget.value.points.last.date
+                .copyWith(year: widget.value.points.last.date.year - 1)
+                .millisecondsSinceEpoch
+                .toDouble();
+          });
+        case DateRange.allTime:
+          setState(() {
+            _startDate = _allPoints.first.x;
+          });
+      }
+      selectedRange = date;
+    }
+
     return Column(
       children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            const SizedBox(
+              width: 25,
+            ),
+            ...DateRange.values.map(
+              (date) => _RangeButton(
+                text: date.toString(),
+                onPressed: () => onPressed(date),
+                selected: selectedRange == date,
+              ),
+            ),
+          ],
+        ),
         AspectRatio(
           aspectRatio: 16 / 9,
           child: LineChart(
@@ -763,6 +823,11 @@ class _EloChartState extends State<_EloChart> {
                   color: Theme.of(context).platform == TargetPlatform.iOS
                       ? null
                       : chartColor,
+                  belowBarData: BarAreaData(
+                    color: chartColor.withOpacity(0.2),
+                    show: true,
+                  ),
+                  barWidth: 1.5,
                 ),
               ],
               borderData: FlBorderData(
@@ -809,35 +874,138 @@ class _EloChartState extends State<_EloChart> {
                         .toList();
                   },
                 ),
+                getTouchedSpotIndicator: (barData, spotIndexes) {
+                  return spotIndexes.map((spotIndex) {
+                    return TouchedSpotIndicatorData(
+                      FlLine(
+                        color: chartColor,
+                        strokeWidth: 2,
+                      ),
+                      FlDotData(
+                        show: true,
+                        getDotPainter: (spot, percent, barData, index) {
+                          return FlDotCirclePainter(
+                            radius: 5,
+                            color: chartColor,
+                          );
+                        },
+                      ),
+                    );
+                  }).toList();
+                },
               ),
               // it seems that it is not possible to draw side titles inside chart with a reservedSize of 0
               // related Github issue https://github.com/imaNNeo/fl_chart/issues/1176
-              titlesData: const FlTitlesData(show: false),
+              titlesData: FlTitlesData(
+                rightTitles:
+                    const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                topTitles:
+                    const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                bottomTitles: AxisTitles(
+                  sideTitles: SideTitles(
+                    showTitles: true,
+                    reservedSize: 20,
+                    getTitlesWidget: bottomTitlesWidget,
+                    interval: millisecondsInDay * 500,
+                  ),
+                ),
+                leftTitles: AxisTitles(
+                  sideTitles: SideTitles(
+                    showTitles: true,
+                    reservedSize: 35,
+                    getTitlesWidget: leftTitlesWidget,
+                  ),
+                ),
+              ),
             ),
-          ),
-        ),
-        RangeSlider(
-          divisions: _allPoints.length - 1,
-          min: _allPoints.first.x,
-          max: _allPoints.last.x,
-          labels: RangeLabels(
-            _formatDateFromTimestamp(_startDate),
-            _formatDateFromTimestamp(_endDate),
-          ),
-          onChanged: (value) {
-            if (value.end - value.start >= millisecondsInDay) {
-              setState(() {
-                _startDate = value.start;
-                _endDate = value.end;
-              });
-            }
-          },
-          values: RangeValues(
-            _startDate,
-            _endDate,
           ),
         ),
       ],
     );
+  }
+
+  Widget leftTitlesWidget(double value, TitleMeta meta) {
+    return SideTitleWidget(
+      axisSide: meta.axisSide,
+      child: Text(
+        value.toInt().toString(),
+        style: const TextStyle(
+          color: Colors.grey,
+          fontSize: 10,
+        ),
+      ),
+    );
+  }
+
+  Widget bottomTitlesWidget(double value, TitleMeta meta) {
+    final date = DateTime.fromMillisecondsSinceEpoch(value.toInt());
+    return SideTitleWidget(
+      axisSide: meta.axisSide,
+      child: Text(
+        date.year.toString(),
+        style: const TextStyle(
+          color: Colors.grey,
+          fontSize: 10,
+        ),
+      ),
+    );
+  }
+}
+
+class _RangeButton extends StatelessWidget {
+  const _RangeButton({
+    required this.text,
+    required this.onPressed,
+    this.selected = false,
+  });
+
+  final String text;
+  final VoidCallback onPressed;
+  final bool selected;
+
+  @override
+  Widget build(BuildContext context) {
+    final chartColor = Theme.of(context).colorScheme.tertiary;
+
+    return PlatformCard(
+      color: selected ? chartColor.withOpacity(0.2) : null,
+      surfaceTintColor: selected ? Colors.transparent : null,
+      shadowColor: selected ? Colors.transparent : null,
+      child: AdaptiveInkWell(
+        borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+        onTap: onPressed,
+        child: Center(
+          child: Padding(
+            padding:
+                const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+            child: Text(text),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+enum DateRange {
+  oneWeek,
+  oneMonth,
+  threeMonths,
+  oneYear,
+  allTime;
+
+  @override
+  String toString() {
+    switch (this) {
+      case DateRange.oneWeek:
+        return '1W';
+      case DateRange.oneMonth:
+        return '1M';
+      case DateRange.threeMonths:
+        return '3M';
+      case DateRange.oneYear:
+        return '1Y';
+      case DateRange.allTime:
+        return 'ALL';
+    }
   }
 }
