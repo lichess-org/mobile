@@ -86,7 +86,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                 ),
               ),
           ],
-          hintText: 'Search Lichess',
+          hintText: context.l10n.searchSearch,
           controller: _searchController,
           autoFocus: true,
         ),
@@ -102,7 +102,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
         middle: SizedBox(
           height: 36.0,
           child: CupertinoSearchTextField(
-            placeholder: 'Search Lichess',
+            placeholder: context.l10n.searchSearch,
             controller: _searchController,
             autofocus: true,
           ),

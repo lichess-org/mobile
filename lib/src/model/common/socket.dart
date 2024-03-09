@@ -160,7 +160,7 @@ class SocketClient {
 
   /// Whether the client is disposed. If true the client cannot be reconnected, or
   /// be listened to.
-  bool get isDisposed => _streamController.isClosed;
+  bool isDisposed = false;
 
   /// A [Future] that completes when the first connection is established.
   Future<void> get firstConnection => _firstConnection.future;
@@ -279,8 +279,9 @@ class SocketClient {
   /// the client [stream].
   void _dispose() {
     _disconnect();
-    _averageLag.dispose();
     _streamController.close();
+    _averageLag.dispose();
+    isDisposed = true;
   }
 
   /// Closes the WebSocket connection when temporarily not needed (by default
@@ -301,7 +302,7 @@ class SocketClient {
   Future<void> _disconnect() {
     final future = _sink?.close().then((_) {
           _logger.fine('WebSocket connection to $route was properly closed.');
-          if (_streamController.isClosed) {
+          if (isDisposed) {
             return;
           }
           _averageLag.value = Duration.zero;
@@ -310,7 +311,7 @@ class SocketClient {
             'WebSocket connection to $route could not be closed: $error',
             error,
           );
-          if (_streamController.isClosed) {
+          if (isDisposed) {
             return;
           }
           _averageLag.value = Duration.zero;
