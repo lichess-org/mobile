@@ -351,6 +351,7 @@ class _Body extends ConsumerWidget {
                         savedEval: puzzleState.node.eval,
                       )
                     : null,
+                showEngineGaugePlaceholder: true,
                 topTable: Center(
                   child: PuzzleFeedbackWidget(
                     puzzle: puzzleState.puzzle,
