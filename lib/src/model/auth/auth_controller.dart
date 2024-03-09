@@ -24,8 +24,10 @@ class AuthController extends _$AuthController {
       final session = await ref
           .withClient((client) => AuthRepository(client, appAuth).signIn());
 
+      await ref.read(authSessionProvider.notifier).update(session);
+
+      // register device and reconnect to the current socket once the session token is updated
       await Future.wait([
-        ref.read(authSessionProvider.notifier).update(session),
         ref.read(notificationServiceProvider).registerDevice(),
         // force reconnect to the current socket with the new token
         ref.read(socketPoolProvider).currentClient.connect(),
