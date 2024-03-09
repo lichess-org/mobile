@@ -31,6 +31,7 @@ import './fake_crashlytics.dart';
 import './model/auth/fake_session_storage.dart';
 import './model/common/service/fake_sound_service.dart';
 import 'fake_notification_service.dart';
+import 'model/common/fake_websocket_channel.dart';
 
 class MockSoundPool extends Mock implements Soundpool {}
 
@@ -84,6 +85,16 @@ Future<Widget> buildTestApp(
     overrides: [
       // ignore: scoped_providers_should_specify_dependencies
       lichessClientFactoryProvider.overrideWithValue(FakeClientFactory()),
+      // ignore: scoped_providers_should_specify_dependencies
+      webSocketChannelFactoryProvider.overrideWith((ref) {
+        return FakeWebSocketChannelFactory(() => FakeWebSocketChannel());
+      }),
+      // ignore: scoped_providers_should_specify_dependencies
+      socketPoolProvider.overrideWith((ref) {
+        final pool = SocketPool(ref);
+        ref.onDispose(pool.dispose);
+        return pool;
+      }),
       // ignore: scoped_providers_should_specify_dependencies
       showRatingsPrefProvider.overrideWith((ref) {
         return true;

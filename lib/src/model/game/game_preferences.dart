@@ -21,10 +21,23 @@ class GamePreferences extends _$GamePreferences {
         : GamePrefState.defaults;
   }
 
-  Future<void> toggleChat() async {
+  Future<void> toggleChat() {
     final newState = state.copyWith(enableChat: !(state.enableChat ?? false));
+    return _save(newState);
+  }
+
+  Future<void> toggleBlindfoldMode() {
+    return _save(
+      state.copyWith(blindfoldMode: !(state.blindfoldMode ?? false)),
+    );
+  }
+
+  Future<void> _save(GamePrefState newState) async {
     final prefs = ref.read(sharedPreferencesProvider);
-    await prefs.setString(_prefKey, jsonEncode(newState.toJson()));
+    await prefs.setString(
+      _prefKey,
+      jsonEncode(newState.toJson()),
+    );
     state = newState;
   }
 }
@@ -33,6 +46,7 @@ class GamePreferences extends _$GamePreferences {
 class GamePrefState with _$GamePrefState {
   const factory GamePrefState({
     bool? enableChat,
+    bool? blindfoldMode,
   }) = _GamePrefState;
 
   static const defaults = GamePrefState(

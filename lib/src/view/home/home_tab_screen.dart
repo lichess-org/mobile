@@ -16,9 +16,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/layout.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
-import 'package:lichess_mobile/src/view/auth/sign_in_widget.dart';
 import 'package:lichess_mobile/src/view/game/lobby_screen.dart';
-import 'package:lichess_mobile/src/view/home/search_screen.dart';
 import 'package:lichess_mobile/src/view/play/create_correspondence_game_screen.dart';
 import 'package:lichess_mobile/src/view/play/create_custom_game_screen.dart';
 import 'package:lichess_mobile/src/view/play/offline_correspondence_games_screen.dart';
@@ -89,7 +87,6 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                 },
               ),
         actions: const [
-          _SearchButton(),
           _SettingsButton(),
           _PlayerScreenButton(),
         ],
@@ -137,7 +134,6 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
             trailing: const Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                _SearchButton(),
                 _SettingsButton(),
                 _PlayerScreenButton(),
               ],
@@ -325,25 +321,6 @@ class _SignInWidget extends ConsumerWidget {
           );
 
     return session == null ? button : const SizedBox.shrink();
-  }
-}
-
-class _SearchButton extends StatelessWidget {
-  const _SearchButton();
-
-  @override
-  Widget build(BuildContext context) {
-    return AppBarIconButton(
-      icon: const Icon(Icons.search),
-      semanticsLabel: 'Search Lichess',
-      onPressed: () {
-        pushPlatformRoute(
-          context,
-          fullscreenDialog: true,
-          builder: (_) => const SearchScreen(),
-        );
-      },
-    );
   }
 }
 

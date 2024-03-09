@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_preferences.dart';
@@ -92,6 +91,13 @@ class GameSettings extends ConsumerWidget {
             ];
           },
           orElse: () => [],
+        ),
+        SwitchSettingTile(
+          title: const Text('Blindfold'),
+          value: gamePrefs.blindfoldMode ?? false,
+          onChanged: (value) {
+            ref.read(gamePreferencesProvider.notifier).toggleBlindfoldMode();
+          },
         ),
         const SizedBox(height: 16.0),
       ],

@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/view/relation/following_screen.dart';
 import 'package:lichess_mobile/src/view/user/leaderboard_screen.dart';
 import 'package:lichess_mobile/src/view/user/leaderboard_widget.dart';
+import 'package:lichess_mobile/src/view/user/search_screen.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -66,6 +67,10 @@ class _Body extends ConsumerWidget {
     return SafeArea(
       child: ListView(
         children: [
+          Padding(
+            padding: Styles.bodySectionPadding,
+            child: const _SearchButton(),
+          ),
           if (session != null) _OnlineFriendsWidget(),
           if (session == null)
             RatingPrefAware(child: LeaderboardWidget())
@@ -85,6 +90,40 @@ class _Body extends ConsumerWidget {
               ),
             ),
         ],
+      ),
+    );
+  }
+}
+
+class AlwaysDisabledFocusNode extends FocusNode {
+  @override
+  bool get hasFocus => false;
+}
+
+class _SearchButton extends StatelessWidget {
+  const _SearchButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return PlatformWidget(
+      androidBuilder: (context) => SearchBar(
+        leading: const Icon(Icons.search),
+        hintText: context.l10n.searchSearch,
+        focusNode: AlwaysDisabledFocusNode(),
+        onTap: () => pushPlatformRoute(
+          context,
+          fullscreenDialog: true,
+          builder: (_) => const SearchScreen(),
+        ),
+      ),
+      iosBuilder: (context) => CupertinoSearchTextField(
+        placeholder: context.l10n.searchSearch,
+        focusNode: AlwaysDisabledFocusNode(),
+        onTap: () => pushPlatformRoute(
+          context,
+          fullscreenDialog: true,
+          builder: (_) => const SearchScreen(),
+        ),
       ),
     );
   }

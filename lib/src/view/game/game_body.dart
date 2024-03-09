@@ -109,7 +109,7 @@ class GameBody extends ConsumerWidget {
       ),
     );
     final blindfoldMode = ref.watch(
-      boardPreferencesProvider.select(
+      gamePreferencesProvider.select(
         (prefs) => prefs.blindfoldMode,
       ),
     );

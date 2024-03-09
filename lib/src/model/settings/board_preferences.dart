@@ -59,10 +59,6 @@ class BoardPreferences extends _$BoardPreferences {
     );
   }
 
-  Future<void> toggleBlindfoldMode() {
-    return _save(state.copyWith(blindfoldMode: !state.blindfoldMode));
-  }
-
   Future<void> _save(BoardPrefs newState) async {
     final prefs = ref.read(sharedPreferencesProvider);
     await prefs.setString(
@@ -86,7 +82,6 @@ class BoardPrefs with _$BoardPrefs {
     required bool coordinates,
     required bool pieceAnimation,
     required bool showMaterialDifference,
-    required bool blindfoldMode,
   }) = _BoardPrefs;
 
   static const defaults = BoardPrefs(
@@ -98,7 +93,6 @@ class BoardPrefs with _$BoardPrefs {
     coordinates: true,
     pieceAnimation: true,
     showMaterialDifference: true,
-    blindfoldMode: false,
   );
 
   factory BoardPrefs.fromJson(Map<String, dynamic> json) {
