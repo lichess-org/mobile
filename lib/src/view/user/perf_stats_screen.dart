@@ -680,8 +680,6 @@ class _EloChart extends StatefulWidget {
 }
 
 class _EloChartState extends State<_EloChart> {
-  static const millisecondsInDay = 86400000;
-
   DateRange selectedRange = DateRange.threeMonths;
 
   late List<FlSpot> _allPoints;
@@ -894,8 +892,6 @@ class _EloChartState extends State<_EloChart> {
                   }).toList();
                 },
               ),
-              // it seems that it is not possible to draw side titles inside chart with a reservedSize of 0
-              // related Github issue https://github.com/imaNNeo/fl_chart/issues/1176
               titlesData: FlTitlesData(
                 rightTitles:
                     const AxisTitles(sideTitles: SideTitles(showTitles: false)),
@@ -904,9 +900,9 @@ class _EloChartState extends State<_EloChart> {
                 bottomTitles: AxisTitles(
                   sideTitles: SideTitles(
                     showTitles: true,
-                    reservedSize: 20,
+                    reservedSize: 25,
                     getTitlesWidget: bottomTitlesWidget,
-                    interval: millisecondsInDay * 500,
+                    interval: (_endDate - _startDate) / 3,
                   ),
                 ),
                 leftTitles: AxisTitles(
@@ -938,11 +934,30 @@ class _EloChartState extends State<_EloChart> {
   }
 
   Widget bottomTitlesWidget(double value, TitleMeta meta) {
-    final date = DateTime.fromMillisecondsSinceEpoch(value.toInt());
+    if (value == meta.min || value == meta.max) {
+      return const SizedBox();
+    }
+    final text = switch (selectedRange) {
+      DateRange.oneWeek => DateFormat.MMMd('en_US').format(
+          DateTime.fromMillisecondsSinceEpoch(value.toInt()),
+        ),
+      DateRange.oneMonth => DateFormat.MMMd('en_US').format(
+          DateTime.fromMillisecondsSinceEpoch(value.toInt()),
+        ),
+      DateRange.threeMonths => DateFormat.yMMM('en_US').format(
+          DateTime.fromMillisecondsSinceEpoch(value.toInt()),
+        ),
+      DateRange.oneYear => DateFormat.yMMM('en_US')
+          .format(DateTime.fromMillisecondsSinceEpoch(value.toInt())),
+      DateRange.allTime => DateFormat.yMMM('en_US').format(
+          DateTime.fromMillisecondsSinceEpoch(value.toInt()),
+        ),
+    };
+
     return SideTitleWidget(
       axisSide: meta.axisSide,
       child: Text(
-        date.year.toString(),
+        text,
         style: const TextStyle(
           color: Colors.grey,
           fontSize: 10,
@@ -995,17 +1010,12 @@ enum DateRange {
 
   @override
   String toString() {
-    switch (this) {
-      case DateRange.oneWeek:
-        return '1W';
-      case DateRange.oneMonth:
-        return '1M';
-      case DateRange.threeMonths:
-        return '3M';
-      case DateRange.oneYear:
-        return '1Y';
-      case DateRange.allTime:
-        return 'ALL';
-    }
+    return switch (this) {
+      DateRange.oneWeek => '1W',
+      DateRange.oneMonth => '1M',
+      DateRange.threeMonths => '3M',
+      DateRange.oneYear => '1Y',
+      DateRange.allTime => 'ALL',
+    };
   }
 }
