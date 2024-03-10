@@ -993,7 +993,7 @@ class _ClaimWinCountdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final secs = duration.inSeconds.remainder(60);
+    final secs = duration.inSeconds;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(10.0),
