@@ -757,6 +757,11 @@ class _EloChartState extends State<_EloChart> {
           DateTime.fromMillisecondsSinceEpoch(timestamp.toInt()),
         );
 
+    String formatDateFromTimestampForTooltip(double timestamp) =>
+        DateFormat.yMMMd(_currentLocale).format(
+          DateTime.fromMillisecondsSinceEpoch(timestamp.toInt()),
+        );
+
     void onPressed(DateRange dateRange) {
       switch (dateRange) {
         case DateRange.oneWeek:
@@ -894,7 +899,9 @@ class _EloChartState extends State<_EloChart> {
                             Styles.bold,
                             children: [
                               TextSpan(
-                                text: formatDateFromTimestamp(touchedSpot.x),
+                                text: formatDateFromTimestampForTooltip(
+                                  touchedSpot.x,
+                                ),
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 10,
