@@ -58,11 +58,13 @@ class UserProfile extends ConsumerWidget {
                   const SizedBox(
                     width: 5,
                   ),
-                  Text(
-                    context.l10n.thisAccountViolatedTos,
-                    style: const TextStyle(
-                      color: LichessColors.error,
-                      fontWeight: FontWeight.bold,
+                  Flexible(
+                    child: Text(
+                      context.l10n.thisAccountViolatedTos,
+                      style: const TextStyle(
+                        color: LichessColors.error,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ],
