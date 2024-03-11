@@ -192,9 +192,14 @@ abstract class Node {
     bool prepend = false,
   }) {
     final pos = nodeAt(path).position;
-    final (newPos, newSan) = pos.makeSan(convertAltCastlingMove(move) ?? move);
+    final isKingMove =
+        pos.board.roleAt(parseSquare(move.uci.substring(0, 2)) ?? 0) ==
+            Role.king;
+    final convertedMove =
+        isKingMove ? convertAltCastlingMove(move) ?? move : move;
+    final (newPos, newSan) = pos.makeSan(convertedMove);
     final newNode = Branch(
-      sanMove: SanMove(newSan, convertAltCastlingMove(move) ?? move),
+      sanMove: SanMove(newSan, convertedMove),
       position: newPos,
     );
     return addNodeAt(path, newNode, prepend: prepend);
