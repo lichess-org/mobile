@@ -31,7 +31,8 @@ import 'package:lichess_mobile/src/widgets/rating.dart';
 import 'package:lichess_mobile/src/widgets/stat_card.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
-final _dateFormatter = DateFormat.yMMMd(Intl.getCurrentLocale());
+final _currentLocale = Intl.getCurrentLocale();
+final _dateFormatter = DateFormat.yMMMd(_currentLocale);
 
 const _customOpacity = 0.6;
 const _defaultStatFontSize = 12.0;
@@ -685,6 +686,7 @@ class _EloChartState extends State<_EloChart> {
   late List<FlSpot> _allPoints;
   late double _startDate;
   late double _endDate;
+  late DateFormat _chartDateFormatter;
 
   List<FlSpot> get _points => _allPoints
       .where(
@@ -699,7 +701,7 @@ class _EloChartState extends State<_EloChart> {
       (_points.map((e) => e.y).reduce(max) / 100).ceilToDouble() * 100;
 
   String _formatDateFromTimestamp(double timestamp) =>
-      DateFormat.yMMMd('en_US').format(
+      _chartDateFormatter.format(
         DateTime.fromMillisecondsSinceEpoch(timestamp.toInt()),
       );
 
@@ -745,6 +747,14 @@ class _EloChartState extends State<_EloChart> {
         .millisecondsSinceEpoch
         .toDouble();
     _endDate = _allPoints.last.x;
+
+    _chartDateFormatter = switch (selectedRange) {
+      DateRange.oneWeek => DateFormat.MMMd(_currentLocale),
+      DateRange.oneMonth => DateFormat.MMMd(_currentLocale),
+      DateRange.threeMonths => DateFormat.yMMM(_currentLocale),
+      DateRange.oneYear => DateFormat.yMMM(_currentLocale),
+      DateRange.allTime => DateFormat.yMMM(_currentLocale),
+    };
   }
 
   @override
@@ -937,27 +947,11 @@ class _EloChartState extends State<_EloChart> {
     if (value == meta.min || value == meta.max) {
       return const SizedBox();
     }
-    final text = switch (selectedRange) {
-      DateRange.oneWeek => DateFormat.MMMd('en_US').format(
-          DateTime.fromMillisecondsSinceEpoch(value.toInt()),
-        ),
-      DateRange.oneMonth => DateFormat.MMMd('en_US').format(
-          DateTime.fromMillisecondsSinceEpoch(value.toInt()),
-        ),
-      DateRange.threeMonths => DateFormat.yMMM('en_US').format(
-          DateTime.fromMillisecondsSinceEpoch(value.toInt()),
-        ),
-      DateRange.oneYear => DateFormat.yMMM('en_US')
-          .format(DateTime.fromMillisecondsSinceEpoch(value.toInt())),
-      DateRange.allTime => DateFormat.yMMM('en_US').format(
-          DateTime.fromMillisecondsSinceEpoch(value.toInt()),
-        ),
-    };
 
     return SideTitleWidget(
       axisSide: meta.axisSide,
       child: Text(
-        text,
+        _formatDateFromTimestamp(value),
         style: const TextStyle(
           color: Colors.grey,
           fontSize: 10,
