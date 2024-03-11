@@ -677,12 +677,11 @@ class _EloChart extends StatefulWidget {
 }
 
 class _EloChartState extends State<_EloChart> {
-  DateRange selectedRange = DateRange.threeMonths;
+  DateRange _selectedRange = DateRange.threeMonths;
 
   late List<FlSpot> _allPoints;
   late double _startDate;
   late double _endDate;
-  late DateFormat _chartDateFormatter;
 
   List<FlSpot> get _points => _allPoints
       .where(
@@ -695,11 +694,6 @@ class _EloChartState extends State<_EloChart> {
 
   double get _maxY =>
       (_points.map((e) => e.y).reduce(max) / 100).ceilToDouble() * 100;
-
-  String _formatDateFromTimestamp(double timestamp) =>
-      _chartDateFormatter.format(
-        DateTime.fromMillisecondsSinceEpoch(timestamp.toInt()),
-      );
 
   @override
   void initState() {
@@ -743,14 +737,6 @@ class _EloChartState extends State<_EloChart> {
         .millisecondsSinceEpoch
         .toDouble();
     _endDate = _allPoints.last.x;
-
-    _chartDateFormatter = switch (selectedRange) {
-      DateRange.oneWeek => DateFormat.MMMd(_currentLocale),
-      DateRange.oneMonth => DateFormat.MMMd(_currentLocale),
-      DateRange.threeMonths => DateFormat.yMMM(_currentLocale),
-      DateRange.oneYear => DateFormat.yMMM(_currentLocale),
-      DateRange.allTime => DateFormat.yMMM(_currentLocale),
-    };
   }
 
   @override
@@ -758,6 +744,18 @@ class _EloChartState extends State<_EloChart> {
     final borderColor =
         Theme.of(context).colorScheme.onBackground.withOpacity(0.5);
     final chartColor = Theme.of(context).colorScheme.tertiary;
+    final chartDateFormatter = switch (_selectedRange) {
+      DateRange.oneWeek => DateFormat.MMMd(_currentLocale),
+      DateRange.oneMonth => DateFormat.MMMd(_currentLocale),
+      DateRange.threeMonths => DateFormat.yMMM(_currentLocale),
+      DateRange.oneYear => DateFormat.yMMM(_currentLocale),
+      DateRange.allTime => DateFormat.yMMM(_currentLocale),
+    };
+
+    String formatDateFromTimestamp(double timestamp) =>
+        chartDateFormatter.format(
+          DateTime.fromMillisecondsSinceEpoch(timestamp.toInt()),
+        );
 
     void onPressed(DateRange dateRange) {
       switch (dateRange) {
@@ -794,7 +792,37 @@ class _EloChartState extends State<_EloChart> {
             _startDate = _allPoints.first.x;
           });
       }
-      selectedRange = dateRange;
+      _selectedRange = dateRange;
+    }
+
+    Widget leftTitlesWidget(double value, TitleMeta meta) {
+      return SideTitleWidget(
+        axisSide: meta.axisSide,
+        child: Text(
+          value.toInt().toString(),
+          style: const TextStyle(
+            color: Colors.grey,
+            fontSize: 10,
+          ),
+        ),
+      );
+    }
+
+    Widget bottomTitlesWidget(double value, TitleMeta meta) {
+      if (value == meta.min || value == meta.max) {
+        return const SizedBox.shrink();
+      }
+
+      return SideTitleWidget(
+        axisSide: meta.axisSide,
+        child: Text(
+          formatDateFromTimestamp(value),
+          style: const TextStyle(
+            color: Colors.grey,
+            fontSize: 10,
+          ),
+        ),
+      );
     }
 
     return Column(
@@ -809,7 +837,7 @@ class _EloChartState extends State<_EloChart> {
               (dateRange) => _RangeButton(
                 text: dateRange.toString(),
                 onPressed: () => onPressed(dateRange),
-                selected: selectedRange == dateRange,
+                selected: _selectedRange == dateRange,
               ),
             ),
           ],
@@ -866,7 +894,7 @@ class _EloChartState extends State<_EloChart> {
                             Styles.bold,
                             children: [
                               TextSpan(
-                                text: _formatDateFromTimestamp(touchedSpot.x),
+                                text: formatDateFromTimestamp(touchedSpot.x),
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 10,
@@ -924,36 +952,6 @@ class _EloChartState extends State<_EloChart> {
         ),
         const SizedBox(height: 10),
       ],
-    );
-  }
-
-  Widget leftTitlesWidget(double value, TitleMeta meta) {
-    return SideTitleWidget(
-      axisSide: meta.axisSide,
-      child: Text(
-        value.toInt().toString(),
-        style: const TextStyle(
-          color: Colors.grey,
-          fontSize: 10,
-        ),
-      ),
-    );
-  }
-
-  Widget bottomTitlesWidget(double value, TitleMeta meta) {
-    if (value == meta.min || value == meta.max) {
-      return const SizedBox.shrink();
-    }
-
-    return SideTitleWidget(
-      axisSide: meta.axisSide,
-      child: Text(
-        _formatDateFromTimestamp(value),
-        style: const TextStyle(
-          color: Colors.grey,
-          fontSize: 10,
-        ),
-      ),
     );
   }
 }
