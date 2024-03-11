@@ -804,6 +804,8 @@ class _EloChartState extends State<_EloChart> {
     }
 
     Widget bottomTitlesWidget(double value, TitleMeta meta) {
+      if (value == _minX || value == _maxX) return const SizedBox.shrink();
+
       return SideTitleWidget(
         axisSide: meta.axisSide,
         child: Text(
@@ -937,6 +939,7 @@ class _EloChartState extends State<_EloChart> {
                     showTitles: true,
                     reservedSize: 25,
                     getTitlesWidget: bottomTitlesWidget,
+                    interval: (_maxX - _minX) / 3,
                   ),
                 ),
                 leftTitles: AxisTitles(
