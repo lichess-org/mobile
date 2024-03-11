@@ -105,6 +105,8 @@ class PlatformCard extends StatelessWidget {
                       ? CupertinoColors.systemBackground
                       : CupertinoColors.secondarySystemBackground
                           .resolveFrom(context)),
+              surfaceTintColor: surfaceTintColor,
+              shadowColor: shadowColor,
               shape: borderRadius != null
                   ? RoundedRectangleBorder(
                       borderRadius: borderRadius!,
