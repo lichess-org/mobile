@@ -759,8 +759,8 @@ class _EloChartState extends State<_EloChart> {
         Theme.of(context).colorScheme.onBackground.withOpacity(0.5);
     final chartColor = Theme.of(context).colorScheme.tertiary;
 
-    void onPressed(DateRange date) {
-      switch (date) {
+    void onPressed(DateRange dateRange) {
+      switch (dateRange) {
         case DateRange.oneWeek:
           setState(() {
             _startDate = widget.value.points.last.date
@@ -794,7 +794,7 @@ class _EloChartState extends State<_EloChart> {
             _startDate = _allPoints.first.x;
           });
       }
-      selectedRange = date;
+      selectedRange = dateRange;
     }
 
     return Column(
@@ -806,10 +806,10 @@ class _EloChartState extends State<_EloChart> {
               width: 25,
             ),
             ...DateRange.values.map(
-              (date) => _RangeButton(
-                text: date.toString(),
-                onPressed: () => onPressed(date),
-                selected: selectedRange == date,
+              (dateRange) => _RangeButton(
+                text: dateRange.toString(),
+                onPressed: () => onPressed(dateRange),
+                selected: selectedRange == dateRange,
               ),
             ),
           ],
