@@ -11,7 +11,6 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/view/relation/following_screen.dart';
-import 'package:lichess_mobile/src/view/user/leaderboard_screen.dart';
 import 'package:lichess_mobile/src/view/user/leaderboard_widget.dart';
 import 'package:lichess_mobile/src/view/user/search_screen.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
@@ -72,23 +71,7 @@ class _Body extends ConsumerWidget {
             child: const _SearchButton(),
           ),
           if (session != null) _OnlineFriendsWidget(),
-          if (session == null)
-            RatingPrefAware(child: LeaderboardWidget())
-          else
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Padding(
-                padding: Styles.bodySectionPadding,
-                child: NoPaddingTextButton(
-                  onPressed: () => pushPlatformRoute(
-                    context,
-                    title: context.l10n.leaderboard,
-                    builder: (_) => const LeaderboardScreen(),
-                  ),
-                  child: Text(context.l10n.leaderboard),
-                ),
-              ),
-            ),
+          RatingPrefAware(child: LeaderboardWidget()),
         ],
       ),
     );
