@@ -677,29 +677,52 @@ class _EloChart extends StatefulWidget {
 }
 
 class _EloChartState extends State<_EloChart> {
-  DateRange _selectedRange = DateRange.threeMonths;
+  late DateRange _selectedRange;
 
-  late List<FlSpot> _allPoints;
-  late double _startDate;
-  late double _endDate;
+  late List<FlSpot> _allFlSpot;
 
-  List<FlSpot> get _points => _allPoints
+  List<FlSpot> get _flSpot => _allFlSpot
       .where(
-        (element) => element.x >= _startDate && element.x <= _endDate,
+        (element) => element.x >= _minX && element.x <= _maxX,
       )
       .toList();
 
   double get _minY =>
-      (_points.map((e) => e.y).reduce(min) / 100).floorToDouble() * 100;
+      (_flSpot.map((e) => e.y).reduce(min) / 100).floorToDouble() * 100;
 
   double get _maxY =>
-      (_points.map((e) => e.y).reduce(max) / 100).ceilToDouble() * 100;
+      (_flSpot.map((e) => e.y).reduce(max) / 100).ceilToDouble() * 100;
+
+  double get _minX =>
+      _startDate(_selectedRange).millisecondsSinceEpoch.toDouble();
+
+  double get _maxX => _allFlSpot.last.x;
+
+  DateTime _startDate(DateRange dateRange) {
+    final firstDate = widget.value.points.first.date;
+    final lastDate = widget.value.points.last.date;
+
+    return switch (dateRange) {
+      DateRange.oneWeek => lastDate.subtract(const Duration(days: 7)),
+      DateRange.oneMonth => lastDate.copyWith(month: lastDate.month - 1),
+      DateRange.threeMonths => lastDate.copyWith(month: lastDate.month - 3),
+      DateRange.oneYear => lastDate.copyWith(year: lastDate.year - 1),
+      DateRange.allTime => firstDate,
+    };
+  }
+
+  bool _dateIsInRange(DateRange dateRange) {
+    final firstDate = widget.value.points.first.date;
+
+    return firstDate.isBefore(_startDate(dateRange)) ||
+        firstDate.isAtSameMomentAs(_startDate(dateRange));
+  }
 
   @override
   void initState() {
     super.initState();
 
-    // We need to fill in the missing days in the rating history
+    // We need to fill in the missing days in the rating history because rating should be constant for days where no games were played
 
     final List<UserRatingHistoryPoint> pointsHistoryRatingCompleted = [];
     final pointsHistoryRating = widget.value.points;
@@ -724,7 +747,7 @@ class _EloChartState extends State<_EloChart> {
       }
     }
 
-    _allPoints = pointsHistoryRatingCompleted
+    _allFlSpot = pointsHistoryRatingCompleted
         .map(
           (element) => FlSpot(
             element.date.millisecondsSinceEpoch.toDouble(),
@@ -732,11 +755,16 @@ class _EloChartState extends State<_EloChart> {
           ),
         )
         .toList();
-    _startDate = widget.value.points.last.date
-        .copyWith(month: widget.value.points.last.date.month - 3)
-        .millisecondsSinceEpoch
-        .toDouble();
-    _endDate = _allPoints.last.x;
+
+    if (_dateIsInRange(DateRange.threeMonths)) {
+      _selectedRange = DateRange.threeMonths;
+    } else if (_dateIsInRange(DateRange.oneMonth)) {
+      _selectedRange = DateRange.oneMonth;
+    } else if (_dateIsInRange(DateRange.oneWeek)) {
+      _selectedRange = DateRange.oneWeek;
+    } else {
+      _selectedRange = DateRange.allTime;
+    }
   }
 
   @override
@@ -762,44 +790,6 @@ class _EloChartState extends State<_EloChart> {
           DateTime.fromMillisecondsSinceEpoch(timestamp.toInt()),
         );
 
-    void onPressed(DateRange dateRange) {
-      switch (dateRange) {
-        case DateRange.oneWeek:
-          setState(() {
-            _startDate = widget.value.points.last.date
-                .subtract(const Duration(days: 7))
-                .millisecondsSinceEpoch
-                .toDouble();
-          });
-        case DateRange.oneMonth:
-          setState(() {
-            _startDate = widget.value.points.last.date
-                .copyWith(month: widget.value.points.last.date.month - 1)
-                .millisecondsSinceEpoch
-                .toDouble();
-          });
-        case DateRange.threeMonths:
-          setState(() {
-            _startDate = widget.value.points.last.date
-                .copyWith(month: widget.value.points.last.date.month - 3)
-                .millisecondsSinceEpoch
-                .toDouble();
-          });
-        case DateRange.oneYear:
-          setState(() {
-            _startDate = widget.value.points.last.date
-                .copyWith(year: widget.value.points.last.date.year - 1)
-                .millisecondsSinceEpoch
-                .toDouble();
-          });
-        case DateRange.allTime:
-          setState(() {
-            _startDate = _allPoints.first.x;
-          });
-      }
-      _selectedRange = dateRange;
-    }
-
     Widget leftTitlesWidget(double value, TitleMeta meta) {
       return SideTitleWidget(
         axisSide: meta.axisSide,
@@ -814,10 +804,6 @@ class _EloChartState extends State<_EloChart> {
     }
 
     Widget bottomTitlesWidget(double value, TitleMeta meta) {
-      if (value == meta.min || value == meta.max) {
-        return const SizedBox.shrink();
-      }
-
       return SideTitleWidget(
         axisSide: meta.axisSide,
         child: Text(
@@ -838,24 +824,32 @@ class _EloChartState extends State<_EloChart> {
             const SizedBox(
               width: 25,
             ),
-            ...DateRange.values.map(
-              (dateRange) => _RangeButton(
-                text: dateRange.toString(),
-                onPressed: () => onPressed(dateRange),
-                selected: _selectedRange == dateRange,
-              ),
-            ),
+            ...DateRange.values
+                .where((dateRange) => _dateIsInRange(dateRange))
+                .map(
+                  (dateRange) => _RangeButton(
+                    text: dateRange.toString(),
+                    onPressed: () {
+                      setState(() {
+                        _selectedRange = dateRange;
+                      });
+                    },
+                    selected: _selectedRange == dateRange,
+                  ),
+                ),
           ],
         ),
         AspectRatio(
           aspectRatio: 16 / 9,
           child: LineChart(
             LineChartData(
+              minX: _minX,
+              maxX: _maxX,
               minY: _minY,
               maxY: _maxY,
               lineBarsData: [
                 LineChartBarData(
-                  spots: _points,
+                  spots: _flSpot,
                   dotData: const FlDotData(show: false),
                   color: Theme.of(context).platform == TargetPlatform.iOS
                       ? null
@@ -943,7 +937,6 @@ class _EloChartState extends State<_EloChart> {
                     showTitles: true,
                     reservedSize: 25,
                     getTitlesWidget: bottomTitlesWidget,
-                    interval: (_endDate - _startDate) / 3,
                   ),
                 ),
                 leftTitles: AxisTitles(
@@ -1005,13 +998,11 @@ enum DateRange {
   allTime;
 
   @override
-  String toString() {
-    return switch (this) {
-      DateRange.oneWeek => '1W',
-      DateRange.oneMonth => '1M',
-      DateRange.threeMonths => '3M',
-      DateRange.oneYear => '1Y',
-      DateRange.allTime => 'ALL',
-    };
-  }
+  String toString() => switch (this) {
+        DateRange.oneWeek => '1W',
+        DateRange.oneMonth => '1M',
+        DateRange.threeMonths => '3M',
+        DateRange.oneYear => '1Y',
+        DateRange.allTime => 'ALL',
+      };
 }
