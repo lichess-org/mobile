@@ -926,6 +926,7 @@ class _EloChartState extends State<_EloChart> {
             ),
           ),
         ),
+        const SizedBox(height: 10),
       ],
     );
   }
