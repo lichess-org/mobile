@@ -60,7 +60,6 @@ class PerfStatsScreen extends StatelessWidget {
   Widget _androidBuilder(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        clipBehavior: Clip.none,
         titleSpacing: 0,
         title: _Title(user: user, perf: perf),
       ),
