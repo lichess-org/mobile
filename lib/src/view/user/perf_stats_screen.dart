@@ -687,6 +687,12 @@ class _EloChartState extends State<_EloChart> {
       )
       .toList();
 
+  IList<UserRatingHistoryPoint> get _points => widget.value.points;
+
+  DateTime get _firstDate => _points.first.date;
+
+  DateTime get _lastDate => _points.last.date;
+
   double get _minY =>
       (_flSpot.map((e) => e.y).reduce(min) / 100).floorToDouble() * 100;
 
@@ -694,29 +700,21 @@ class _EloChartState extends State<_EloChart> {
       (_flSpot.map((e) => e.y).reduce(max) / 100).ceilToDouble() * 100;
 
   double get _minX =>
-      _startDate(_selectedRange).millisecondsSinceEpoch.toDouble();
+      _startDate(_selectedRange).difference(_firstDate).inDays.toDouble();
 
   double get _maxX => _allFlSpot.last.x;
 
-  DateTime _startDate(DateRange dateRange) {
-    final firstDate = widget.value.points.first.date;
-    final lastDate = widget.value.points.last.date;
+  DateTime _startDate(DateRange dateRange) => switch (dateRange) {
+        DateRange.oneWeek => _lastDate.subtract(const Duration(days: 7)),
+        DateRange.oneMonth => _lastDate.copyWith(month: _lastDate.month - 1),
+        DateRange.threeMonths => _lastDate.copyWith(month: _lastDate.month - 3),
+        DateRange.oneYear => _lastDate.copyWith(year: _lastDate.year - 1),
+        DateRange.allTime => _firstDate,
+      };
 
-    return switch (dateRange) {
-      DateRange.oneWeek => lastDate.subtract(const Duration(days: 7)),
-      DateRange.oneMonth => lastDate.copyWith(month: lastDate.month - 1),
-      DateRange.threeMonths => lastDate.copyWith(month: lastDate.month - 3),
-      DateRange.oneYear => lastDate.copyWith(year: lastDate.year - 1),
-      DateRange.allTime => firstDate,
-    };
-  }
-
-  bool _dateIsInRange(DateRange dateRange) {
-    final firstDate = widget.value.points.first.date;
-
-    return firstDate.isBefore(_startDate(dateRange)) ||
-        firstDate.isAtSameMomentAs(_startDate(dateRange));
-  }
+  bool _dateIsInRange(DateRange dateRange) =>
+      _firstDate.isBefore(_startDate(dateRange)) ||
+      _firstDate.isAtSameMomentAs(_startDate(dateRange));
 
   @override
   void initState() {
@@ -725,23 +723,19 @@ class _EloChartState extends State<_EloChart> {
     // We need to fill in the missing days in the rating history because rating should be constant for days where no games were played
 
     final List<UserRatingHistoryPoint> pointsHistoryRatingCompleted = [];
-    final pointsHistoryRating = widget.value.points;
-    final numberOfDays = pointsHistoryRating.last.date
-            .difference(pointsHistoryRating.first.date)
-            .inDays +
-        1;
+    final numberOfDays = _lastDate.difference(_firstDate).inDays + 1;
 
     int j = 0;
     for (int i = 0; i < numberOfDays; i++) {
-      final currentDate = pointsHistoryRating.first.date.add(Duration(days: i));
-      if (pointsHistoryRating[j].date == currentDate) {
-        pointsHistoryRatingCompleted.add(pointsHistoryRating[j]);
+      final currentDate = _firstDate.add(Duration(days: i));
+      if (_points[j].date == currentDate) {
+        pointsHistoryRatingCompleted.add(_points[j]);
         j += 1;
       } else {
         pointsHistoryRatingCompleted.add(
           UserRatingHistoryPoint(
             date: currentDate,
-            elo: pointsHistoryRating[j - 1].elo,
+            elo: _points[j - 1].elo,
           ),
         );
       }
@@ -750,7 +744,7 @@ class _EloChartState extends State<_EloChart> {
     _allFlSpot = pointsHistoryRatingCompleted
         .map(
           (element) => FlSpot(
-            element.date.millisecondsSinceEpoch.toDouble(),
+            element.date.difference(_firstDate).inDays.toDouble(),
             element.elo.toDouble(),
           ),
         )
@@ -780,14 +774,13 @@ class _EloChartState extends State<_EloChart> {
       DateRange.allTime => DateFormat.yMMM(_currentLocale),
     };
 
-    String formatDateFromTimestamp(double timestamp) =>
-        chartDateFormatter.format(
-          DateTime.fromMillisecondsSinceEpoch(timestamp.toInt()),
+    String formatDateFromTimestamp(double nbDays) => chartDateFormatter.format(
+          _firstDate.add(Duration(days: nbDays.toInt())),
         );
 
-    String formatDateFromTimestampForTooltip(double timestamp) =>
+    String formatDateFromTimestampForTooltip(double nbDays) =>
         DateFormat.yMMMd(_currentLocale).format(
-          DateTime.fromMillisecondsSinceEpoch(timestamp.toInt()),
+          _firstDate.add(Duration(days: nbDays.toInt())),
         );
 
     Widget leftTitlesWidget(double value, TitleMeta meta) {
