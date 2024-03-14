@@ -193,8 +193,7 @@ abstract class Node {
   }) {
     final pos = nodeAt(path).position;
     final isKingMove =
-        pos.board.roleAt(parseSquare(move.uci.substring(0, 2)) ?? 0) ==
-            Role.king;
+        move is NormalMove && pos.board.roleAt(move.from) == Role.king;
     final convertedMove =
         isKingMove ? convertAltCastlingMove(move) ?? move : move;
     final (newPos, newSan) = pos.makeSan(convertedMove);
