@@ -52,8 +52,8 @@ class EngineGauge extends ConsumerWidget {
       Theme.of(context).platform == TargetPlatform.iOS
           ? _kEvalGaugeBackgroundColor
           : brightness == Brightness.dark
-              ? lighten(Theme.of(context).colorScheme.background, .07)
-              : lighten(Theme.of(context).colorScheme.onBackground, .17);
+              ? lighten(Theme.of(context).colorScheme.surface, .07)
+              : lighten(Theme.of(context).colorScheme.onSurface, .17);
 
   static Color valueColor(BuildContext context, Brightness brightness) =>
       Theme.of(context).platform == TargetPlatform.iOS
@@ -61,8 +61,8 @@ class EngineGauge extends ConsumerWidget {
               ? _kEvalGaugeValueColorDarkBg
               : _kEvalGaugeValueColorLightBg
           : brightness == Brightness.dark
-              ? darken(Theme.of(context).colorScheme.onBackground, .03)
-              : darken(Theme.of(context).colorScheme.background, .01);
+              ? darken(Theme.of(context).colorScheme.onSurface, .03)
+              : darken(Theme.of(context).colorScheme.surface, .01);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

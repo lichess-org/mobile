@@ -120,7 +120,7 @@ class BoardTable extends ConsumerWidget {
                         color: Theme.of(context).platform == TargetPlatform.iOS
                             ? CupertinoColors.secondarySystemBackground
                                 .resolveFrom(context)
-                            : Theme.of(context).colorScheme.background,
+                            : Theme.of(context).colorScheme.surface,
                         borderRadius:
                             const BorderRadius.all(Radius.circular(10.0)),
                       ),
