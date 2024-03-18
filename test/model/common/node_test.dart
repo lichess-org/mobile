@@ -506,6 +506,16 @@ void main() {
         );
       });
     });
+    test('only convert king moves in altCastlingMove', () {
+      const pgn =
+          '1. e4 e5 2. Bc4 Qh4 3. Nf3 Qxh2 4. Ke2 Qxh1 5. Qe1 Qh5 6. Qh1';
+      final root = Root.fromPgnGame(PgnGame.parsePgn(pgn));
+      final initialPng = root.makePgn();
+      final previousUciPath = root.mainlinePath.penultimate;
+      final move = Move.fromUci('e1g1');
+      root.addMoveAt(previousUciPath, move!);
+      expect(root.makePgn(), isNot(initialPng));
+    });
   });
 }
 
