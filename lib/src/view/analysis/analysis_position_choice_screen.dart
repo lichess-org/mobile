@@ -148,9 +148,10 @@ class _BodyState extends State<_Body> {
       final rule = Rule.fromPgn(game.headers['Variant']);
 
       final mainlineMoves = game.moves.mainline();
-      //if there is a first move, require it to be valid
-      if (mainlineMoves.isNotEmpty &&
-          (initialPosition.parseSan(mainlineMoves.first.san) == null)) {
+      //if there is a first move, require it to be valid, otherwise require a FEN
+      if ((mainlineMoves.isNotEmpty &&
+              (initialPosition.parseSan(mainlineMoves.first.san) == null)) ||
+          (mainlineMoves.isEmpty && game.headers['FEN'] == null)) {
         return null;
       }
 
