@@ -118,6 +118,7 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
       nodes: root.children,
       shouldShowComments: shouldShowComments,
       inMainline: true,
+      startMainline: true,
       startSideline: false,
       initialPath: UciPath.empty,
     );
@@ -169,6 +170,7 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
     required ViewNode parent,
     required IList<ViewBranch> nodes,
     required bool inMainline,
+    required bool startMainline,
     required bool startSideline,
     required bool shouldShowComments,
     required UciPath initialPath,
@@ -191,6 +193,7 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
         key: currentMove ? currentMoveKey : null,
         shouldShowComments: shouldShowComments,
         isSideline: !inMainline,
+        startMainline: startMainline,
         startSideline: startSideline,
         endSideline: !inMainline && firstChild.children.isEmpty,
       ),
@@ -213,6 +216,7 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
                 nodes: [nodes[i]].lockUnsafe,
                 shouldShowComments: shouldShowComments,
                 inMainline: false,
+                startMainline: false,
                 startSideline: true,
                 initialPath: initialPath,
               ),
@@ -227,6 +231,7 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
             nodes: [nodes[i]].lockUnsafe,
             shouldShowComments: shouldShowComments,
             inMainline: false,
+            startMainline: false,
             startSideline: true,
             initialPath: initialPath,
           ),
@@ -242,6 +247,7 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
         nodes: firstChild.children,
         shouldShowComments: shouldShowComments,
         inMainline: inMainline,
+        startMainline: false,
         startSideline: false,
         initialPath: newPath,
       ),
@@ -278,6 +284,7 @@ class InlineMove extends ConsumerWidget {
     required this.isCurrentMove,
     required this.isSideline,
     super.key,
+    this.startMainline = false,
     this.startSideline = false,
     this.endSideline = false,
   });
@@ -289,6 +296,7 @@ class InlineMove extends ConsumerWidget {
   final bool shouldShowComments;
   final bool isCurrentMove;
   final bool isSideline;
+  final bool startMainline;
   final bool startSideline;
   final bool endSideline;
 
@@ -323,7 +331,7 @@ class InlineMove extends ConsumerWidget {
             '${(ply / 2).ceil()}.',
             style: indexTextStyle,
           )
-        : (startSideline
+        : ((startMainline || startSideline)
             ? Text(
                 '${(ply / 2).ceil()}...',
                 style: indexTextStyle,
