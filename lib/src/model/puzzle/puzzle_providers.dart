@@ -101,11 +101,12 @@ Future<IList<PuzzleHistoryEntry>?> puzzleRecentActivity(
 }
 
 @riverpod
-Future<StormDashboard?> stormDashboard(StormDashboardRef ref) async {
-  final session = ref.watch(authSessionProvider);
-  if (session == null) return null;
+Future<StormDashboard?> stormDashboard(
+  StormDashboardRef ref, {
+  required UserId id,
+}) async {
   return ref.withClientCacheFor(
-    (client) => PuzzleRepository(client).stormDashboard(session.user.id),
+    (client) => PuzzleRepository(client).stormDashboard(id),
     const Duration(minutes: 30),
   );
 }

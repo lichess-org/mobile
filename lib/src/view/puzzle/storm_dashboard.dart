@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -10,45 +11,66 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/stat_card.dart';
+import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 class StormDashboardModal extends StatelessWidget {
-  const StormDashboardModal({super.key});
+  const StormDashboardModal({super.key, required this.user});
 
+  final LightUser user;
   @override
   Widget build(BuildContext context) {
     return Theme.of(context).platform == TargetPlatform.iOS
         ? CupertinoPageScaffold(
             navigationBar: CupertinoNavigationBar(
-              middle: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(LichessIcons.storm, size: 20),
-                  const SizedBox(width: 8.0),
-                  Text(context.l10n.stormHighscores),
-                ],
-              ),
+              middle: _Title(user: user),
             ),
-            child: _Body(),
+            child: _Body(user: user),
           )
         : Scaffold(
-            body: _Body(),
             appBar: AppBar(
-              title: Row(
-                children: [
-                  const Icon(LichessIcons.storm, size: 20),
-                  const SizedBox(width: 8.0),
-                  Text(context.l10n.stormHighscores),
-                ],
-              ),
+              titleSpacing: 0,
+              title: _Title(user: user),
             ),
+            body: _Body(user: user),
           );
   }
 }
 
+class _Title extends StatelessWidget {
+  const _Title({required this.user});
+
+  final LightUser user;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Flexible(
+          child: UserFullNameWidget(user: user),
+        ),
+        Flexible(
+          child: Row(
+            children: [
+              const SizedBox(width: 8.0),
+              const Icon(LichessIcons.storm, size: 20),
+              const SizedBox(width: 8.0),
+              Text(context.l10n.stormHighscores),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 class _Body extends ConsumerWidget {
+  const _Body({required this.user});
+
+  final LightUser user;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final stormDashboard = ref.watch(stormDashboardProvider);
+    final stormDashboard = ref.watch(stormDashboardProvider(id: user.id));
     return stormDashboard.when(
       data: (data) {
         if (data == null) {
