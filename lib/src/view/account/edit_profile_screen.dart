@@ -208,8 +208,8 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
               text: widget.user.profile?.fideRating?.toString(),
             ),
             validator: (value) {
-              if (value != null && (value < 1000 || value > 3000)) {
-                return 'Rating must be between 1000 and 3000';
+              if (value != null && (value < 1400 || value > 3000)) {
+                return 'Rating must be between 1400 and 3000';
               }
               return null;
             },
