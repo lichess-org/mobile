@@ -79,16 +79,13 @@ class StatCardRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: Styles.horizontalBodyPadding,
-      child: IntrinsicHeight(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: _divideRow(cards)
-              .map((e) => Expanded(child: e))
-              .toList(growable: false),
-        ),
+    return IntrinsicHeight(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: _divideRow(cards)
+            .map((e) => Expanded(child: e))
+            .toList(growable: false),
       ),
     );
   }

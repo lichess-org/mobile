@@ -358,3 +358,25 @@ class UserPerfGame with _$UserPerfGame {
         )
       : null;
 }
+
+@immutable
+class UserRatingHistoryPerf {
+  final String perf;
+  final IList<UserRatingHistoryPoint> points;
+
+  const UserRatingHistoryPerf({
+    required this.perf,
+    required this.points,
+  });
+}
+
+@immutable
+class UserRatingHistoryPoint {
+  final DateTime date;
+  final int elo;
+
+  const UserRatingHistoryPoint({
+    required this.date,
+    required this.elo,
+  });
+}
