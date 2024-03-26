@@ -8,8 +8,10 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
+import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_controller.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
@@ -29,6 +31,7 @@ import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
+import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_settings_screen.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
@@ -569,6 +572,25 @@ class _BottomBar extends ConsumerWidget {
                 ),
               ),
             );
+          },
+        ),
+        BottomSheetAction(
+          makeLabel: (context) => const Text('Puzzle Source Game'),
+          onPressed: (_) {
+            ref
+                .withClient(
+              (client) =>
+                  GameRepository(client).getGame(puzzleState.puzzle.game.id),
+            )
+                .then((game) {
+              pushPlatformRoute(
+                context,
+                builder: (context) => ArchivedGameScreen(
+                  gameData: game.data,
+                  orientation: puzzleState.pov,
+                ),
+              );
+            });
           },
         ),
       ],
