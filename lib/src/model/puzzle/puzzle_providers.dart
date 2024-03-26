@@ -105,9 +105,8 @@ Future<StormDashboard?> stormDashboard(
   StormDashboardRef ref, {
   required UserId id,
 }) async {
-  return ref.withClientCacheFor(
+  return ref.withClient(
     (client) => PuzzleRepository(client).stormDashboard(id),
-    const Duration(minutes: 30),
   );
 }
 
