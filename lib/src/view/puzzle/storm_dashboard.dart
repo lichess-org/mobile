@@ -11,55 +11,40 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/stat_card.dart';
-import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 class StormDashboardModal extends StatelessWidget {
   const StormDashboardModal({super.key, required this.user});
 
   final LightUser user;
+
   @override
   Widget build(BuildContext context) {
     return Theme.of(context).platform == TargetPlatform.iOS
         ? CupertinoPageScaffold(
             navigationBar: CupertinoNavigationBar(
-              middle: _Title(user: user),
+              middle: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(LichessIcons.storm, size: 20),
+                  const SizedBox(width: 8.0),
+                  Text(context.l10n.stormHighscores),
+                ],
+              ),
             ),
             child: _Body(user: user),
           )
         : Scaffold(
-            appBar: AppBar(
-              titleSpacing: 0,
-              title: _Title(user: user),
-            ),
             body: _Body(user: user),
+            appBar: AppBar(
+              title: Row(
+                children: [
+                  const Icon(LichessIcons.storm, size: 20),
+                  const SizedBox(width: 8.0),
+                  Text(context.l10n.stormHighscores),
+                ],
+              ),
+            ),
           );
-  }
-}
-
-class _Title extends StatelessWidget {
-  const _Title({required this.user});
-
-  final LightUser user;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Flexible(
-          child: UserFullNameWidget(user: user),
-        ),
-        Flexible(
-          child: Row(
-            children: [
-              const SizedBox(width: 8.0),
-              const Icon(LichessIcons.storm, size: 20),
-              const SizedBox(width: 8.0),
-              Text(context.l10n.stormHighscores),
-            ],
-          ),
-        ),
-      ],
-    );
   }
 }
 
