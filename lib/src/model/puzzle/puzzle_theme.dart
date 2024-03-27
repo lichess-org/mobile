@@ -193,8 +193,8 @@ IList<PuzzleThemeCategory> puzzleThemeCategories(
       l10n.strings.puzzleLengths,
       [
         PuzzleThemeKey.oneMove,
-        PuzzleThemeKey.long,
         PuzzleThemeKey.short,
+        PuzzleThemeKey.long,
         PuzzleThemeKey.veryLong,
       ],
     ),
