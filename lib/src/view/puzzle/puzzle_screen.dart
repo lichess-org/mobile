@@ -575,7 +575,9 @@ class _BottomBar extends ConsumerWidget {
           },
         ),
         BottomSheetAction(
-          makeLabel: (context) => const Text('Puzzle Source Game'),
+          makeLabel: (context) => Text(
+            context.l10n.puzzleFromGameLink(puzzleState.puzzle.game.id.value),
+          ),
           onPressed: (_) {
             ref
                 .withClient(
