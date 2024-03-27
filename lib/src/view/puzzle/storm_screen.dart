@@ -877,14 +877,14 @@ class _StormDashboardButton extends ConsumerWidget {
         case TargetPlatform.iOS:
           return CupertinoIconButton(
             padding: EdgeInsets.zero,
-            onPressed: () => _showDashboard(context),
+            onPressed: () => _showDashboard(context, session),
             semanticsLabel: 'Storm History',
             icon: const Icon(Icons.history),
           );
         case TargetPlatform.android:
           return IconButton(
             tooltip: 'Storm History',
-            onPressed: () => _showDashboard(context),
+            onPressed: () => _showDashboard(context, session),
             icon: const Icon(Icons.history),
           );
         default:
@@ -895,10 +895,11 @@ class _StormDashboardButton extends ConsumerWidget {
     return const SizedBox.shrink();
   }
 
-  void _showDashboard(BuildContext context) => pushPlatformRoute(
+  void _showDashboard(BuildContext context, AuthSessionState session) =>
+      pushPlatformRoute(
         context,
         rootNavigator: true,
         fullscreenDialog: true,
-        builder: (_) => const StormDashboardModal(),
+        builder: (_) => StormDashboardModal(user: session.user),
       );
 }

@@ -56,7 +56,7 @@ class PerfStatsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         titleSpacing: 0,
-        title: _Title(user: user, perf: perf),
+        title: _Title(perf: perf),
       ),
       body: _Body(user: user, perf: perf),
     );
@@ -65,7 +65,7 @@ class PerfStatsScreen extends StatelessWidget {
   Widget _iosBuilder(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: _Title(user: user, perf: perf),
+        middle: _Title(perf: perf),
       ),
       child: _Body(user: user, perf: perf),
     );
@@ -73,23 +73,18 @@ class PerfStatsScreen extends StatelessWidget {
 }
 
 class _Title extends StatelessWidget {
-  const _Title({required this.user, required this.perf});
+  const _Title({required this.perf});
 
-  final User user;
   final Perf perf;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Flexible(
-          child: UserFullNameWidget(user: user.lightUser),
-        ),
-        Flexible(
-          child: Text(
-            ' ${context.l10n.perfStatPerfStats(perf.title)}',
-            overflow: TextOverflow.ellipsis,
-          ),
+        Icon(perf.icon),
+        Text(
+          ' ${context.l10n.perfStatPerfStats(perf.title)}',
+          overflow: TextOverflow.ellipsis,
         ),
       ],
     );
