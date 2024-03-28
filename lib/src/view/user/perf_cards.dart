@@ -124,7 +124,7 @@ class PerfCards extends StatelessWidget {
       builder: (context) {
         switch (perf) {
           case Perf.storm:
-            return const StormDashboardModal();
+            return StormDashboardModal(user: user.lightUser);
           default:
             return PerfStatsScreen(
               user: user,
