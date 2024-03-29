@@ -847,8 +847,6 @@ class ServerAnalysisSummary extends ConsumerWidget {
                   child: WaitingForServerAnalysis(),
                 ),
               AcplChart(options),
-              // may be removed if game phases text is displayed vertically instead of horizontally
-              const SizedBox(height: 10.0),
               Center(
                 child: SizedBox(
                   width: math.min(MediaQuery.sizeOf(context).width, 500),
