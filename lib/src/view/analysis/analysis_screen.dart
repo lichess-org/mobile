@@ -1144,7 +1144,7 @@ class AcplChart extends ConsumerWidget {
                   .textTheme
                   .labelMedium
                   ?.color
-                  ?.withOpacity(0.2),
+                  ?.withOpacity(0.3),
             ),
             labelResolver: (line) => label,
             padding: const EdgeInsets.only(right: 1),
