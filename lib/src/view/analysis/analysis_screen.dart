@@ -1138,7 +1138,14 @@ class AcplChart extends ConsumerWidget {
           color: const Color(0xFF707070),
           strokeWidth: 0.5,
           label: VerticalLineLabel(
-            style: const TextStyle(fontSize: 10),
+            style: TextStyle(
+              fontSize: 10,
+              color: Theme.of(context)
+                  .textTheme
+                  .labelMedium
+                  ?.color
+                  ?.withOpacity(0.2),
+            ),
             labelResolver: (line) => label,
             padding: const EdgeInsets.only(right: 1),
             alignment: Alignment.topRight,
