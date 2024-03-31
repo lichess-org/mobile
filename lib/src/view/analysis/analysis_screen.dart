@@ -847,8 +847,6 @@ class ServerAnalysisSummary extends ConsumerWidget {
                   child: WaitingForServerAnalysis(),
                 ),
               AcplChart(options),
-              // may be removed if game phases text is displayed vertically instead of horizontally
-              const SizedBox(height: 10.0),
               Center(
                 child: SizedBox(
                   width: math.min(MediaQuery.sizeOf(context).width, 500),
@@ -1140,8 +1138,18 @@ class AcplChart extends ConsumerWidget {
           color: const Color(0xFF707070),
           strokeWidth: 0.5,
           label: VerticalLineLabel(
-            style: const TextStyle(fontSize: 10),
+            style: TextStyle(
+              fontSize: 10,
+              color: Theme.of(context)
+                  .textTheme
+                  .labelMedium
+                  ?.color
+                  ?.withOpacity(0.3),
+            ),
             labelResolver: (line) => label,
+            padding: const EdgeInsets.only(right: 1),
+            alignment: Alignment.topRight,
+            direction: LabelDirection.vertical,
             show: true,
           ),
         );
