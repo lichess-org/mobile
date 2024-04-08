@@ -869,7 +869,14 @@ class ServerAnalysisSummary extends ConsumerWidget {
                           ),
                           children: [
                             _SummaryPlayerName(Side.white, pgnHeaders),
-                            const SizedBox.shrink(),
+                            Center(
+                              child: Text(
+                                pgnHeaders.get('Result') ?? '',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
                             _SummaryPlayerName(Side.black, pgnHeaders),
                           ],
                         ),
@@ -1087,7 +1094,7 @@ class _SummaryPlayerName extends StatelessWidget {
     final brightness = Theme.of(context).brightness;
 
     return TableCell(
-      verticalAlignment: TableCellVerticalAlignment.bottom,
+      verticalAlignment: TableCellVerticalAlignment.top,
       child: Center(
         child: Padding(
           padding: const EdgeInsets.only(bottom: 5),
