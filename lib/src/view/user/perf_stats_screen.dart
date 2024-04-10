@@ -933,6 +933,8 @@ class _EloChartState extends State<_EloChart> {
                     reservedSize: 25,
                     getTitlesWidget: bottomTitlesWidget,
                     interval: (_maxX - _minX) / 3,
+                    // The placement of the bottom titles is not perfect
+                    // See the issue https://github.com/imaNNeo/fl_chart/issues/1605
                   ),
                 ),
                 leftTitles: AxisTitles(
