@@ -183,7 +183,7 @@ class _ChoiceChip extends StatelessWidget {
         color: Theme.of(context).platform == TargetPlatform.iOS
             ? CupertinoColors.secondarySystemGroupedBackground
                 .resolveFrom(context)
-            : Theme.of(context).colorScheme.tertiary.withOpacity(0.15),
+            : Theme.of(context).colorScheme.surfaceVariant,
         borderRadius: const BorderRadius.all(Radius.circular(5.0)),
         border: selected
             ? Border.fromBorderSide(
