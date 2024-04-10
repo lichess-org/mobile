@@ -117,8 +117,12 @@ class _AppState extends ConsumerState<Application> {
 
     return DynamicColorBuilder(
       builder: (lightColorScheme, darkColorScheme) {
-        final dynamicColorScheme =
-            brightness == Brightness.light ? lightColorScheme : darkColorScheme;
+        // final dynamicColorScheme =
+        //     brightness == Brightness.light ? lightColorScheme : darkColorScheme;
+        // TODO remove this line and uncomment the above line
+        // when the dynamic_color colorScheme bug is fixed
+        // See: https://github.com/material-foundation/flutter-packages/issues/574
+        const ColorScheme? dynamicColorScheme = null;
 
         final colorScheme = hasSystemColors && dynamicColorScheme != null
             ? dynamicColorScheme
