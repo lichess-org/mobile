@@ -227,7 +227,7 @@ class SocketClient {
       }
       _resendAcks();
     } catch (error) {
-      _logger.severe('WebSocket connection failed.', error);
+      _logger.severe('WebSocket connection failed: $error', error);
       _averageLag.value = Duration.zero;
       _scheduleReconnect(autoReconnectDelay);
     }
