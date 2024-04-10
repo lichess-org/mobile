@@ -599,7 +599,7 @@ class _QuickGameButton extends ConsumerWidget {
                     : FilledButtonTheme(
                         data: FilledButtonThemeData(
                           style: ButtonStyle(
-                            shape: MaterialStateProperty.all(
+                            shape: WidgetStateProperty.all(
                               const RoundedRectangleBorder(
                                 borderRadius: BorderRadius.only(
                                   topRight: Radius.circular(10),

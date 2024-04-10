@@ -55,7 +55,7 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final stormDashboard = ref.watch(stormDashboardProvider(id: user.id));
+    final stormDashboard = ref.watch(stormDashboardProvider(user.id));
     return stormDashboard.when(
       data: (data) {
         if (data == null) {
