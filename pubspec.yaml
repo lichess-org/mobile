@@ -13,13 +13,13 @@ dependencies:
   cached_network_image: ^3.2.2
   chessground: ^2.5.0
   collection: ^1.17.0
-  connectivity_plus: ^5.0.0
+  connectivity_plus: ^6.0.2
   crypto: ^3.0.3
   cupertino_http: ^1.1.0
   cupertino_icons: ^1.0.2
   dartchess: ^0.6.1
   deep_pick: ^1.0.0
-  device_info_plus: ^9.0.2
+  device_info_plus: ^10.1.0
   dynamic_color: ^1.6.9
   fast_immutable_collections: ^10.0.0
   firebase_core: ^2.15.0
@@ -47,13 +47,13 @@ dependencies:
   logging: ^1.1.0
   material_color_utilities: ^0.8.0
   meta: ^1.8.0
-  package_info_plus: ^5.0.1
+  package_info_plus: ^7.0.0
   path: ^1.8.2
   popover: ^0.3.0
   pub_semver: ^2.1.4
   result_extensions: ^0.1.0
   riverpod_annotation: ^2.3.0
-  share_plus: ^7.0.0
+  share_plus: ^8.0.3
   shared_preferences: ^2.1.0
   signal_strength_indicator: ^0.4.1
   soundpool:
