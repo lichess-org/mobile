@@ -30,6 +30,9 @@ jobs:
       - name: Code generation
         run: dart run build_runner build
 
+      - name: Generate l10n
+        run: flutter gen-l10n
+
       - name: Verify formatting
         run: |
           dart format --output=none --set-exit-if-changed $(find lib -name "*.dart" -not \( -name "*.*freezed.dart" -o -name "*.*g.dart" \) )
