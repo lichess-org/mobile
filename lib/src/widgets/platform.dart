@@ -70,7 +70,6 @@ class PlatformCard extends StatelessWidget {
     this.borderRadius,
     this.elevation,
     this.color,
-    this.surfaceTintColor,
     this.shadowColor,
   });
 
@@ -79,7 +78,6 @@ class PlatformCard extends StatelessWidget {
   final BorderRadius? borderRadius;
   final double? elevation;
   final Color? color;
-  final Color? surfaceTintColor;
   final Color? shadowColor;
 
   /// The empty space that surrounds the card.
@@ -105,7 +103,6 @@ class PlatformCard extends StatelessWidget {
                       ? CupertinoColors.systemBackground
                       : CupertinoColors.secondarySystemBackground
                           .resolveFrom(context)),
-              surfaceTintColor: surfaceTintColor,
               shadowColor: shadowColor,
               shape: borderRadius != null
                   ? RoundedRectangleBorder(
@@ -126,7 +123,6 @@ class PlatformCard extends StatelessWidget {
                       borderRadius: BorderRadius.all(Radius.circular(10.0)),
                     ),
               color: color,
-              surfaceTintColor: surfaceTintColor,
               shadowColor: shadowColor,
               semanticContainer: semanticContainer,
               elevation: elevation,

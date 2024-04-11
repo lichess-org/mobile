@@ -117,7 +117,7 @@ class _Body extends ConsumerWidget {
       data: (data) {
         return SafeArea(
           child: ListView(
-            padding: Styles.horizontalBodyPadding,
+            padding: Styles.horizontalBodyPadding.add(Styles.sectionTopPadding),
             scrollDirection: Axis.vertical,
             children: [
               ratingHistory.when(
@@ -594,6 +594,7 @@ class _GameListWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return ListSection(
       header: header,
+      margin: const EdgeInsets.symmetric(vertical: 10.0),
       hasLeading: false,
       children: [
         for (final game in games)
@@ -759,8 +760,10 @@ class _EloChartState extends State<_EloChart> {
   @override
   Widget build(BuildContext context) {
     final borderColor =
-        Theme.of(context).colorScheme.onBackground.withOpacity(0.5);
-    final chartColor = Theme.of(context).colorScheme.tertiary;
+        Theme.of(context).colorScheme.onSurface.withOpacity(0.5);
+    final chartColor = Theme.of(context).platform == TargetPlatform.iOS
+        ? Colors.cyan
+        : Theme.of(context).colorScheme.tertiary;
     final chartDateFormatter = switch (_selectedRange) {
       DateRange.oneWeek => DateFormat.MMMd(_currentLocale),
       DateRange.oneMonth => DateFormat.MMMd(_currentLocale),
@@ -841,9 +844,7 @@ class _EloChartState extends State<_EloChart> {
                 LineChartBarData(
                   spots: _flSpot,
                   dotData: const FlDotData(show: false),
-                  color: Theme.of(context).platform == TargetPlatform.iOS
-                      ? null
-                      : chartColor,
+                  color: chartColor,
                   belowBarData: BarAreaData(
                     color: chartColor.withOpacity(0.2),
                     show: true,
@@ -869,10 +870,7 @@ class _EloChartState extends State<_EloChart> {
               lineTouchData: LineTouchData(
                 touchSpotThreshold: double.infinity,
                 touchTooltipData: LineTouchTooltipData(
-                  tooltipBgColor:
-                      Theme.of(context).platform == TargetPlatform.iOS
-                          ? const Color.fromRGBO(96, 125, 139, 1)
-                          : chartColor.withOpacity(0.2),
+                  getTooltipColor: (_) => chartColor.withOpacity(0.5),
                   fitInsideHorizontally: true,
                   fitInsideVertically: true,
                   getTooltipItems: (touchedSpots) {
@@ -962,11 +960,12 @@ class _RangeButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final chartColor = Theme.of(context).colorScheme.tertiary;
+    final chartColor = Theme.of(context).platform == TargetPlatform.iOS
+        ? Colors.cyan
+        : Theme.of(context).colorScheme.tertiary;
 
     return PlatformCard(
       color: selected ? chartColor.withOpacity(0.2) : null,
-      surfaceTintColor: selected ? Colors.transparent : null,
       shadowColor: selected ? Colors.transparent : null,
       child: AdaptiveInkWell(
         borderRadius: const BorderRadius.all(Radius.circular(8.0)),

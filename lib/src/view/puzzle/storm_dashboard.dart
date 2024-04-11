@@ -67,7 +67,8 @@ class _Body extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: Styles.sectionTopPadding,
+                padding:
+                    Styles.sectionTopPadding.add(Styles.horizontalBodyPadding),
                 child: StatCardRow(
                   [
                     StatCard(
@@ -82,7 +83,8 @@ class _Body extends ConsumerWidget {
                 ),
               ),
               Padding(
-                padding: Styles.sectionTopPadding,
+                padding:
+                    Styles.sectionTopPadding.add(Styles.horizontalBodyPadding),
                 child: StatCardRow(
                   [
                     StatCard(
