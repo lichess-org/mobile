@@ -4,7 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_controller.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
@@ -16,7 +18,9 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
@@ -306,6 +310,29 @@ class _BottomBar extends ConsumerWidget {
                     icon: Theme.of(context).platform == TargetPlatform.iOS
                         ? CupertinoIcons.share
                         : Icons.share,
+                  ),
+                ),
+              if (puzzleState.streak!.finished)
+                Expanded(
+                  child: BottomBarButton(
+                    onTap: () {
+                      pushPlatformRoute(
+                        context,
+                        builder: (context) => AnalysisScreen(
+                          title: context.l10n.analysis,
+                          options: AnalysisOptions(
+                            isLocalEvaluationAllowed: true,
+                            variant: Variant.standard,
+                            pgn: ref.read(ctrlProvider.notifier).makePgn(),
+                            orientation: puzzleState.pov,
+                            id: standaloneAnalysisId,
+                            initialMoveCursor: 0,
+                          ),
+                        ),
+                      );
+                    },
+                    label: context.l10n.analysis,
+                    icon: Icons.biotech,
                   ),
                 ),
               if (puzzleState.streak!.finished)

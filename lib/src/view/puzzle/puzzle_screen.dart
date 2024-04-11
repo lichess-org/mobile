@@ -5,9 +5,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
+import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_controller.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
@@ -25,9 +29,12 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
+import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_settings_screen.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
@@ -462,17 +469,11 @@ class _BottomBar extends ConsumerWidget {
               if (puzzleState.mode == PuzzleMode.view)
                 Expanded(
                   child: BottomBarButton(
+                    label: context.l10n.menu,
                     onTap: () {
-                      launchShareDialog(
-                        context,
-                        text:
-                            '$kLichessHost/training/${puzzleState.puzzle.puzzle.id}',
-                      );
+                      _showPuzzleMenu(context, ref);
                     },
-                    label: 'Share this puzzle',
-                    icon: Theme.of(context).platform == TargetPlatform.iOS
-                        ? CupertinoIcons.share
-                        : Icons.share,
+                    icon: Icons.menu,
                   ),
                 ),
               if (puzzleState.mode == PuzzleMode.view)
@@ -536,6 +537,64 @@ class _BottomBar extends ConsumerWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> _showPuzzleMenu(BuildContext context, WidgetRef ref) {
+    final puzzleState = ref.watch(ctrlProvider);
+    return showAdaptiveActionSheet(
+      context: context,
+      actions: [
+        BottomSheetAction(
+          makeLabel: (context) => const Text('Share this puzzle'),
+          onPressed: (context) {
+            launchShareDialog(
+              context,
+              text: '$kLichessHost/training/${puzzleState.puzzle.puzzle.id}',
+            );
+          },
+        ),
+        BottomSheetAction(
+          makeLabel: (context) => Text(context.l10n.analysis),
+          onPressed: (context) {
+            pushPlatformRoute(
+              context,
+              builder: (context) => AnalysisScreen(
+                title: context.l10n.analysis,
+                options: AnalysisOptions(
+                  isLocalEvaluationAllowed: true,
+                  variant: Variant.standard,
+                  pgn: ref.read(ctrlProvider.notifier).makePgn(),
+                  orientation: puzzleState.pov,
+                  id: standaloneAnalysisId,
+                  initialMoveCursor: 0,
+                ),
+              ),
+            );
+          },
+        ),
+        BottomSheetAction(
+          makeLabel: (context) => Text(
+            context.l10n.puzzleFromGameLink(puzzleState.puzzle.game.id.value),
+          ),
+          onPressed: (_) {
+            ref
+                .withClient(
+              (client) =>
+                  GameRepository(client).getGame(puzzleState.puzzle.game.id),
+            )
+                .then((game) {
+              pushPlatformRoute(
+                context,
+                builder: (context) => ArchivedGameScreen(
+                  gameData: game.data,
+                  orientation: puzzleState.pov,
+                ),
+              );
+            });
+          },
+        ),
+      ],
     );
   }
 
