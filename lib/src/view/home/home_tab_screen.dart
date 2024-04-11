@@ -400,11 +400,11 @@ class _CreateAGameSection extends StatelessWidget {
   }
 }
 
-class _CustomGameButton extends StatelessWidget {
+class _CustomGameButton extends ConsumerWidget {
   const _CustomGameButton();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: Styles.bodySectionBottomPadding,
       child: CardButton(
@@ -420,6 +420,7 @@ class _CustomGameButton extends StatelessWidget {
           ],
         ),
         onTap: () {
+          ref.invalidate(accountProvider);
           pushPlatformRoute(
             context,
             title: context.l10n.custom,
