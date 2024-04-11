@@ -12,6 +12,10 @@ abstract class Styles {
     fontSize: 20.0,
     fontWeight: FontWeight.bold,
   );
+  static const subtitle = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+  );
   static const callout = TextStyle(
     fontSize: 18.0,
     fontWeight: FontWeight.w600,
@@ -111,12 +115,16 @@ class CustomColors extends ThemeExtension<CustomColors> {
     required this.good,
     required this.error,
     required this.fancy,
+    required this.purple,
+    required this.primary,
   });
 
   final Color brag;
   final Color good;
   final Color error;
   final Color fancy;
+  final Color purple;
+  final Color primary;
 
   @override
   CustomColors copyWith({
@@ -124,12 +132,16 @@ class CustomColors extends ThemeExtension<CustomColors> {
     Color? good,
     Color? error,
     Color? fancy,
+    Color? purple,
+    Color? primary,
   }) {
     return CustomColors(
       brag: brag ?? this.brag,
       good: good ?? this.good,
       error: error ?? this.error,
       fancy: fancy ?? this.fancy,
+      purple: purple ?? this.purple,
+      primary: primary ?? this.primary,
     );
   }
 
@@ -143,6 +155,8 @@ class CustomColors extends ThemeExtension<CustomColors> {
       good: Color.lerp(good, other.good, t) ?? good,
       error: Color.lerp(error, other.error, t) ?? error,
       fancy: Color.lerp(fancy, other.fancy, t) ?? fancy,
+      purple: Color.lerp(purple, other.purple, t) ?? purple,
+      primary: Color.lerp(primary, other.primary, t) ?? primary,
     );
   }
 
@@ -152,6 +166,8 @@ class CustomColors extends ThemeExtension<CustomColors> {
       good: good.harmonizeWith(colorScheme.primary),
       error: error.harmonizeWith(colorScheme.primary),
       fancy: fancy.harmonizeWith(colorScheme.primary),
+      purple: purple.harmonizeWith(colorScheme.primary),
+      primary: primary.harmonizeWith(colorScheme.primary),
     );
   }
 }
@@ -161,6 +177,8 @@ const lichessCustomColors = CustomColors(
   good: LichessColors.good,
   error: LichessColors.error,
   fancy: LichessColors.fancy,
+  purple: LichessColors.purple,
+  primary: LichessColors.primary,
 );
 
 extension CustomColorsBuildContext on BuildContext {

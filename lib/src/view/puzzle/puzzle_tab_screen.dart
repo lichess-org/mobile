@@ -20,8 +20,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/layout.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
-import 'package:lichess_mobile/src/view/puzzle/history_boards.dart';
-import 'package:lichess_mobile/src/view/puzzle/puzzle_dashboard_widget.dart';
+import 'package:lichess_mobile/src/view/puzzle/dashboard_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_history_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -64,7 +63,12 @@ class _PuzzleTabScreenState extends ConsumerState<PuzzleTabScreen> {
       ],
     );
     return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.puzzles)),
+      appBar: AppBar(
+        title: Text(context.l10n.puzzles),
+        actions: [
+          _DashboardButton(),
+        ],
+      ),
       body: userSession != null
           ? RefreshIndicator(
               key: _androidRefreshKey,
@@ -81,7 +85,12 @@ class _PuzzleTabScreenState extends ConsumerState<PuzzleTabScreen> {
         controller: puzzlesScrollController,
         slivers: [
           CupertinoSliverNavigationBar(
+            padding: const EdgeInsetsDirectional.only(
+              start: 16.0,
+              end: 8.0,
+            ),
             largeTitle: Text(context.l10n.puzzles),
+            trailing: _DashboardButton(),
           ),
           if (userSession != null)
             CupertinoSliverRefreshControl(
@@ -99,7 +108,6 @@ class _PuzzleTabScreenState extends ConsumerState<PuzzleTabScreen> {
 
   Future<void> _refreshData() {
     return Future.wait([
-      ref.refresh(puzzleDashboardProvider.future),
       ref.refresh(puzzleRecentActivityProvider.future),
     ]);
   }
@@ -114,9 +122,11 @@ class _Body extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final connectivity = ref.watch(connectivityChangesProvider);
 
-    final expansionTileColor = Styles.expansionTileColor(context);
-
     final isTablet = getScreenType(context) == ScreenType.tablet;
+
+    final separator = Theme.of(context).platform == TargetPlatform.iOS
+        ? const SizedBox(height: 14.0)
+        : const SizedBox(height: 8.0);
 
     final handsetChildren = [
       const SizedBox(height: 8.0),
@@ -128,26 +138,13 @@ class _Body extends ConsumerWidget {
         error: (_, __) => const SizedBox.shrink(),
       ),
       PuzzleButton(),
-      Theme(
-        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-        child: ExpansionTile(
-          title: Text(
-            context.l10n.more,
-          ),
-          tilePadding: Styles.horizontalBodyPadding,
-          iconColor: expansionTileColor,
-          collapsedIconColor: expansionTileColor,
-          textColor: expansionTileColor,
-          collapsedTextColor: expansionTileColor,
-          controlAffinity: ListTileControlAffinity.leading,
-          children: [
-            const PuzzleThemeButton(),
-            StreakButton(connectivity: connectivity),
-            StormButton(connectivity: connectivity),
-          ],
-        ),
-      ),
-      PuzzleDashboardWidget(),
+      separator,
+      const PuzzleThemeButton(),
+      separator,
+      StreakButton(connectivity: connectivity),
+      separator,
+      StormButton(connectivity: connectivity),
+      separator,
       PuzzleHistoryWidget(),
     ];
 
@@ -179,7 +176,6 @@ class _Body extends ConsumerWidget {
           Expanded(
             child: Column(
               children: [
-                PuzzleDashboardWidget(),
                 PuzzleHistoryWidget(),
               ],
             ),
@@ -220,6 +216,11 @@ class PuzzleButton extends ConsumerWidget {
   }
 }
 
+const _subPuzzleButtonTitleStyle = TextStyle(
+  fontSize: 18.0,
+  fontWeight: FontWeight.w500,
+);
+
 class StreakButton extends StatelessWidget {
   const StreakButton({required this.connectivity, super.key});
 
@@ -228,15 +229,16 @@ class StreakButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: Styles.bodySectionBottomPadding,
+      padding: Styles.horizontalBodyPadding,
       child: CardButton(
-        icon: const Icon(
+        icon: Icon(
           LichessIcons.streak,
           size: 44,
+          color: context.lichessColors.fancy,
         ),
         title: const Text(
           'Puzzle Streak',
-          style: Styles.callout,
+          style: _subPuzzleButtonTitleStyle,
         ),
         subtitle: Text(
           context.l10n.puzzleStreakDescription.characters
@@ -270,15 +272,16 @@ class StormButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: Styles.bodySectionBottomPadding,
+      padding: Styles.horizontalBodyPadding,
       child: CardButton(
-        icon: const Icon(
+        icon: Icon(
           LichessIcons.storm,
           size: 44,
+          color: context.lichessColors.purple,
         ),
         title: const Text(
           'Puzzle Storm',
-          style: Styles.callout,
+          style: _subPuzzleButtonTitleStyle,
         ),
         subtitle: const Text(
           'Solve as many puzzles as possible in 3 minutes.',
@@ -307,15 +310,19 @@ class PuzzleThemeButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: Styles.bodySectionBottomPadding,
+      padding: Styles.horizontalBodyPadding,
       child: CardButton(
-        icon: const Icon(PuzzleIcons.mix, size: 44),
+        icon: Icon(
+          PuzzleIcons.opening,
+          size: 44,
+          color: context.lichessColors.primary,
+        ),
         title: Text(
           context.l10n.puzzlePuzzleThemes,
-          style: Styles.callout,
+          style: _subPuzzleButtonTitleStyle,
         ),
         subtitle: const Text(
-          'Choose puzzles by theme or opening.',
+          'Play puzzles from your favorite openings, or choose a theme.',
         ),
         onTap: () {
           pushPlatformRoute(
@@ -362,7 +369,7 @@ class PuzzleHistoryWidget extends ConsumerWidget {
           children: [
             Padding(
               padding: Styles.bodySectionPadding,
-              child: PuzzleHistoryBoards(recentActivity.take(8).toIList()),
+              child: PuzzleHistoryPreview(recentActivity.take(8).toIList()),
             ),
           ],
         );
@@ -389,6 +396,47 @@ class PuzzleHistoryWidget extends ConsumerWidget {
   }
 }
 
+class _DashboardButton extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final session = ref.watch(authSessionProvider);
+    if (session != null) {
+      switch (Theme.of(context).platform) {
+        case TargetPlatform.iOS:
+          return CupertinoIconButton(
+            padding: EdgeInsets.zero,
+            onPressed: () {
+              ref.invalidate(puzzleDashboardProvider);
+              _showDashboard(context, session);
+            },
+            semanticsLabel: context.l10n.puzzlePuzzleDashboard,
+            icon: const Icon(Icons.history),
+          );
+        case TargetPlatform.android:
+          return IconButton(
+            tooltip: context.l10n.puzzlePuzzleDashboard,
+            onPressed: () {
+              ref.invalidate(puzzleDashboardProvider);
+              _showDashboard(context, session);
+            },
+            icon: const Icon(Icons.history),
+          );
+        default:
+          assert(false, 'Unexpected platform $Theme.of(context).platform');
+          return const SizedBox.shrink();
+      }
+    }
+    return const SizedBox.shrink();
+  }
+
+  void _showDashboard(BuildContext context, AuthSessionState session) =>
+      pushPlatformRoute(
+        context,
+        title: context.l10n.puzzlePuzzleDashboard,
+        builder: (_) => PuzzleDashboardScreen(user: session.user),
+      );
+}
+
 class _PuzzleButton extends StatelessWidget {
   const _PuzzleButton({this.onTap});
 
@@ -400,13 +448,13 @@ class _PuzzleButton extends StatelessWidget {
       icon: Icon(
         PuzzleIcons.mix,
         size: 44,
-        color: context.lichessColors.brag,
+        color: context.lichessColors.good,
       ),
       title: Text(
         context.l10n.puzzles,
         style: Styles.sectionTitle,
       ),
-      subtitle: Text(context.l10n.puzzleDesc),
+      subtitle: Text('${context.l10n.puzzleDesc}.'),
       onTap: onTap,
     );
   }

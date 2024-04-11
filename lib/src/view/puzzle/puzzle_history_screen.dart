@@ -1,19 +1,20 @@
 import 'package:collection/collection.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_layout_grid/flutter_layout_grid.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_activity.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart' as cg;
+import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/layout.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -41,6 +42,62 @@ class PuzzleHistoryScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text(context.l10n.puzzleHistory)),
       body: _Body(),
+    );
+  }
+}
+
+class PuzzleHistoryPreview extends ConsumerWidget {
+  const PuzzleHistoryPreview(this.history, {this.maxRows, super.key});
+
+  final IList<PuzzleHistoryEntry> history;
+  final int? maxRows;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final crossAxisCount = constraints.maxWidth > FormFactor.tablet ? 4 : 2;
+        const columnGap = 12.0;
+        final boardWidth =
+            (constraints.maxWidth - (columnGap * crossAxisCount - columnGap)) /
+                crossAxisCount;
+        return LayoutGrid(
+          columnSizes: List.generate(crossAxisCount, (_) => 1.fr),
+          rowSizes: List.generate(
+            (history.length / crossAxisCount).ceil(),
+            (_) => auto,
+          ),
+          rowGap: 16.0,
+          columnGap: columnGap,
+          children: history.map((e) {
+            final (fen, side, lastMove) = e.preview;
+            return BoardThumbnail(
+              size: boardWidth,
+              onTap: () {
+                pushPlatformRoute(
+                  context,
+                  rootNavigator: true,
+                  builder: (_) => PuzzleScreen(
+                    angle: const PuzzleTheme(PuzzleThemeKey.mix),
+                    puzzleId: e.id,
+                  ),
+                );
+              },
+              orientation: side.cg,
+              fen: fen,
+              lastMove: lastMove.cg,
+              footer: Padding(
+                padding: const EdgeInsets.only(top: 2.0),
+                child: Row(
+                  children: [
+                    _PuzzleResult(e),
+                  ],
+                ),
+              ),
+            );
+          }).toList(),
+        );
+      },
     );
   }
 }
@@ -172,7 +229,6 @@ class _HistoryBoard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final (fen, turn, lastMove) = puzzle.preview;
-    final customColors = Theme.of(context).extension<CustomColors>();
     return Padding(
       padding: const EdgeInsets.only(
         left: _kPuzzlePadding,
@@ -195,23 +251,69 @@ class _HistoryBoard extends ConsumerWidget {
         fen: fen,
         lastMove: lastMove.cg,
         footer: Padding(
-          padding: const EdgeInsets.only(top: 8),
-          child: Row(
-            children: [
-              ColoredBox(
-                color: puzzle.win
-                    ? customColors?.good ?? LichessColors.green
-                    : customColors?.error ?? LichessColors.red,
-                child: Icon(
-                  size: 20,
+          padding: const EdgeInsets.only(top: 2),
+          child: _PuzzleResult(puzzle),
+        ),
+      ),
+    );
+  }
+}
+
+class _PuzzleResult extends StatelessWidget {
+  const _PuzzleResult(this.entry);
+
+  final PuzzleHistoryEntry entry;
+
+  @override
+  Widget build(BuildContext context) {
+    return ColoredBox(
+      color: entry.win
+          ? context.lichessColors.good.withOpacity(0.7)
+          : context.lichessColors.error.withOpacity(0.7),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          vertical: 1,
+          horizontal: 3,
+        ),
+        child: Row(
+          children: [
+            Text(
+              entry.win
+                  ? String.fromCharCode(Icons.done.codePoint)
+                  : String.fromCharCode(Icons.close.codePoint),
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'MaterialIcons',
+                color: Colors.white,
+                height: 1.0,
+              ),
+            ),
+            const SizedBox(width: 2),
+            if (entry.solvingTime != null)
+              Text(
+                '${entry.solvingTime!.inSeconds}s',
+                overflow: TextOverflow.fade,
+                style: const TextStyle(
                   color: Colors.white,
-                  (puzzle.win) ? Icons.done : Icons.close,
+                  fontSize: 10,
+                  height: 1.0,
+                ),
+              )
+            else
+              Text(
+                (entry.win
+                        ? context.l10n.puzzleSolved
+                        : context.l10n.puzzleFailed)
+                    .toUpperCase(),
+                overflow: TextOverflow.fade,
+                style: const TextStyle(
+                  fontSize: 10,
+                  color: Colors.white,
+                  height: 1.0,
                 ),
               ),
-              const SizedBox(width: 8),
-              RatingPrefAware(child: Text(puzzle.rating.toString())),
-            ],
-          ),
+          ],
         ),
       ),
     );

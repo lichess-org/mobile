@@ -79,11 +79,12 @@ Future<IMap<String, int>> savedOpeningBatches(
 @riverpod
 Future<PuzzleDashboard?> puzzleDashboard(
   PuzzleDashboardRef ref,
+  int days,
 ) async {
   final session = ref.watch(authSessionProvider);
   if (session == null) return null;
   return ref.withClientCacheFor(
-    (client) => PuzzleRepository(client).puzzleDashboard(),
+    (client) => PuzzleRepository(client).puzzleDashboard(days),
     const Duration(hours: 3),
   );
 }

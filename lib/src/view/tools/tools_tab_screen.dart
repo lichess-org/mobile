@@ -58,7 +58,7 @@ class _Body extends StatelessWidget {
           icon: Icon(
             Icons.biotech,
             size: 44,
-            color: context.lichessColors.brag,
+            color: context.lichessColors.good,
           ),
           title: Text(
             context.l10n.analysis,
@@ -76,7 +76,7 @@ class _Body extends StatelessWidget {
           icon: Icon(
             Icons.alarm,
             size: 44,
-            color: context.lichessColors.brag,
+            color: context.lichessColors.primary,
           ),
           title: Text(
             context.l10n.clock,
