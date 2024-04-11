@@ -563,9 +563,9 @@ class PuzzleState with _$PuzzleState {
 
   Position get position => node.position;
   String get fen => node.position.fen;
-  bool get canGoNext => mode == PuzzleMode.view && node.children.isNotEmpty;
-  bool get canGoBack =>
-      mode == PuzzleMode.view && currentPath.size > initialPath.size;
+  bool get canPlayMove => mode == PuzzleMode.view || node.children.isNotEmpty;
+  bool get canGoNext => node.children.isNotEmpty;
+  bool get canGoBack => currentPath.size > initialPath.size;
 
   IMap<String, ISet<String>> get validMoves => algebraicLegalMoves(position);
 }

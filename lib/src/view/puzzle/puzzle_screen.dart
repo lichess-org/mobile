@@ -324,9 +324,11 @@ class _Body extends ConsumerWidget {
                       ? cg.InteractableSide.none
                       : puzzleState.mode == PuzzleMode.view
                           ? cg.InteractableSide.both
-                          : puzzleState.pov == Side.white
-                              ? cg.InteractableSide.white
-                              : cg.InteractableSide.black,
+                          : puzzleState.canPlayMove
+                              ? cg.InteractableSide.none
+                              : puzzleState.pov == Side.white
+                                  ? cg.InteractableSide.white
+                                  : cg.InteractableSide.black,
                   fen: puzzleState.fen,
                   isCheck: puzzleState.position.isCheck,
                   lastMove: puzzleState.lastMove?.cg,
@@ -446,9 +448,11 @@ class _BottomBar extends ConsumerWidget {
               if (initialPuzzleContext.userId != null &&
                   !isDailyPuzzle &&
                   puzzleState.mode != PuzzleMode.view)
-                _DifficultySelector(
-                  initialPuzzleContext: initialPuzzleContext,
-                  ctrlProvider: ctrlProvider,
+                Expanded(
+                  child: _DifficultySelector(
+                    initialPuzzleContext: initialPuzzleContext,
+                    ctrlProvider: ctrlProvider,
+                  ),
                 ),
               if (puzzleState.mode != PuzzleMode.view)
                 BottomBarButton(
@@ -486,38 +490,34 @@ class _BottomBar extends ConsumerWidget {
                     highlighted: puzzleState.isLocalEvalEnabled,
                   ),
                 ),
-              if (puzzleState.mode == PuzzleMode.view)
-                Expanded(
-                  child: RepeatButton(
-                    triggerDelays: _repeatTriggerDelays,
-                    onLongPress:
+              Expanded(
+                child: RepeatButton(
+                  triggerDelays: _repeatTriggerDelays,
+                  onLongPress:
+                      puzzleState.canGoBack ? () => _moveBackward(ref) : null,
+                  child: BottomBarButton(
+                    onTap:
                         puzzleState.canGoBack ? () => _moveBackward(ref) : null,
-                    child: BottomBarButton(
-                      onTap: puzzleState.canGoBack
-                          ? () => _moveBackward(ref)
-                          : null,
-                      label: 'Previous',
-                      icon: CupertinoIcons.chevron_back,
-                      showTooltip: false,
-                    ),
+                    label: 'Previous',
+                    icon: CupertinoIcons.chevron_back,
+                    showTooltip: false,
                   ),
                 ),
-              if (puzzleState.mode == PuzzleMode.view)
-                Expanded(
-                  child: RepeatButton(
-                    triggerDelays: _repeatTriggerDelays,
-                    onLongPress:
+              ),
+              Expanded(
+                child: RepeatButton(
+                  triggerDelays: _repeatTriggerDelays,
+                  onLongPress:
+                      puzzleState.canGoNext ? () => _moveForward(ref) : null,
+                  child: BottomBarButton(
+                    onTap:
                         puzzleState.canGoNext ? () => _moveForward(ref) : null,
-                    child: BottomBarButton(
-                      onTap: puzzleState.canGoNext
-                          ? () => _moveForward(ref)
-                          : null,
-                      label: context.l10n.next,
-                      icon: CupertinoIcons.chevron_forward,
-                      showTooltip: false,
-                    ),
+                    label: context.l10n.next,
+                    icon: CupertinoIcons.chevron_forward,
+                    showTooltip: false,
                   ),
                 ),
+              ),
               if (puzzleState.mode == PuzzleMode.view)
                 Expanded(
                   child: BottomBarButton(
