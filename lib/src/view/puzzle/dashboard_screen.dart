@@ -38,7 +38,7 @@ class PuzzleDashboardScreen extends StatelessWidget {
         : Scaffold(
             body: _Body(user: user),
             appBar: AppBar(
-              title: Text(context.l10n.puzzlePuzzleDashboard),
+              title: const SizedBox.shrink(),
               actions: const [DaysSelector()],
             ),
           );
