@@ -286,6 +286,7 @@ class _PuzzleResult extends StatelessWidget {
                 fontWeight: FontWeight.bold,
                 fontFamily: 'MaterialIcons',
                 color: Colors.white,
+                height: 1.0,
               ),
             ),
             const SizedBox(width: 2),
@@ -295,6 +296,8 @@ class _PuzzleResult extends StatelessWidget {
                 overflow: TextOverflow.fade,
                 style: const TextStyle(
                   color: Colors.white,
+                  fontSize: 10,
+                  height: 1.0,
                 ),
               )
             else
@@ -307,6 +310,7 @@ class _PuzzleResult extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 10,
                   color: Colors.white,
+                  height: 1.0,
                 ),
               ),
           ],
