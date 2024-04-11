@@ -133,7 +133,9 @@ void showPlatformSnackbar(
         SnackBar(
           content: Text(
             message,
-            style: const TextStyle(color: Colors.white),
+            style: type == SnackBarType.error
+                ? const TextStyle(color: Colors.white)
+                : null,
           ),
           backgroundColor: type == SnackBarType.error ? Colors.red : null,
         ),

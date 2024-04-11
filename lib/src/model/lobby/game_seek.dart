@@ -74,17 +74,16 @@ class GameSeek with _$GameSeek {
   /// Construct a correspondence seek from saved [GameSetup].
   factory GameSeek.correspondence(GameSetup setup, User? account) {
     return GameSeek(
-      days: setup.correspondenceDaysPerTurn,
-      rated: account != null && setup.correspondenceRated,
-      variant: setup.correspondenceVariant,
-      side: setup.correspondenceRated == true ||
-              setup.correspondenceSide == PlayableSide.random
+      days: setup.customDaysPerTurn,
+      rated: account != null && setup.customRated,
+      variant: setup.customVariant,
+      side: setup.customRated == true || setup.customSide == PlayableSide.random
           ? null
-          : setup.correspondenceSide == PlayableSide.white
+          : setup.customSide == PlayableSide.white
               ? Side.white
               : Side.black,
       ratingRange:
-          account != null ? setup.ratingRangeFromCorrespondence(account) : null,
+          account != null ? setup.ratingRangeFromCustom(account) : null,
     );
   }
 

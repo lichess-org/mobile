@@ -18,6 +18,8 @@ enum PlayableSide { random, white, black }
 
 enum SeekMode { fast, custom }
 
+enum TimeControl { realTime, correspondence }
+
 @Freezed(fromJson: true, toJson: true)
 class GameSetup with _$GameSetup {
   const GameSetup._();
@@ -26,20 +28,17 @@ class GameSetup with _$GameSetup {
     // fast game
     required TimeIncrement timeIncrement,
 
+    // custom time control choice
+    required TimeControl customTimeControl,
+
     // custom game
     required int customTimeSeconds,
     required int customIncrementSeconds,
+    int? customDaysPerTurn,
     required Variant customVariant,
     required bool customRated,
     required PlayableSide customSide,
     required (int, int) customRatingDelta,
-
-    // correspondence game
-    int? correspondenceDaysPerTurn,
-    required Variant correspondenceVariant,
-    required bool correspondenceRated,
-    required PlayableSide correspondenceSide,
-    required (int, int) correspondenceRatingDelta,
 
     // prefered seek mode, set after a seek is made
     required SeekMode seekMode,
@@ -47,17 +46,14 @@ class GameSetup with _$GameSetup {
 
   static const defaults = GameSetup(
     timeIncrement: TimeIncrement(600, 0),
+    customTimeControl: TimeControl.realTime,
     customTimeSeconds: 180,
     customIncrementSeconds: 0,
     customVariant: Variant.standard,
     customRated: false,
     customSide: PlayableSide.random,
     customRatingDelta: (-500, 500),
-    correspondenceDaysPerTurn: 3,
-    correspondenceVariant: Variant.standard,
-    correspondenceRated: false,
-    correspondenceSide: PlayableSide.random,
-    correspondenceRatingDelta: (-500, 500),
+    customDaysPerTurn: 3,
     seekMode: SeekMode.fast,
   );
 
@@ -81,17 +77,6 @@ class GameSetup with _$GameSetup {
     if (perf.provisional == true) return null;
     final min = math.max(0, perf.rating + customRatingDelta.$1);
     final max = perf.rating + customRatingDelta.$2;
-    return (min, max);
-  }
-
-  /// Returns the rating range for the correspondence setup, or null if the user
-  /// doesn't have a rating for the correspondence setup perf.
-  (int, int)? ratingRangeFromCorrespondence(User user) {
-    final perf = user.perfs[Perf.correspondence];
-    if (perf == null) return null;
-    if (perf.provisional == true) return null;
-    final min = math.max(0, perf.rating + correspondenceRatingDelta.$1);
-    final max = perf.rating + correspondenceRatingDelta.$2;
     return (min, max);
   }
 
@@ -121,8 +106,12 @@ class GameSetupPreferences extends _$GameSetupPreferences {
         : GameSetup.defaults;
   }
 
-  Future<void> setTimeControl(TimeIncrement timeInc) {
+  Future<void> setTimeIncrement(TimeIncrement timeInc) {
     return _save(state.copyWith(timeIncrement: timeInc));
+  }
+
+  Future<void> setCustomTimeControl(TimeControl control) {
+    return _save(state.copyWith(customTimeControl: control));
   }
 
   Future<void> setCustomTimeSeconds(int seconds) {
@@ -153,24 +142,8 @@ class GameSetupPreferences extends _$GameSetupPreferences {
     return _save(state.copyWith(customRatingDelta: (min, max)));
   }
 
-  Future<void> setCorrespondenceDaysPerTurn(int? days) {
-    return _save(state.copyWith(correspondenceDaysPerTurn: days));
-  }
-
-  Future<void> setCorrespondenceVariant(Variant variant) {
-    return _save(state.copyWith(correspondenceVariant: variant));
-  }
-
-  Future<void> setCorrespondenceRated(bool rated) {
-    return _save(state.copyWith(correspondenceRated: rated));
-  }
-
-  Future<void> setCorrespondenceSide(PlayableSide side) {
-    return _save(state.copyWith(correspondenceSide: side));
-  }
-
-  Future<void> setCorrespondenceRatingRange(int min, int max) {
-    return _save(state.copyWith(correspondenceRatingDelta: (min, max)));
+  Future<void> setCustomDaysPerTurn(int? days) {
+    return _save(state.copyWith(customDaysPerTurn: days));
   }
 
   Future<void> _save(GameSetup newState) async {
