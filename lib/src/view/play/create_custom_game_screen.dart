@@ -93,7 +93,7 @@ class _AndroidBodyState extends State<_AndroidBody>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.l10n.correspondence),
+        title: Text(context.l10n.custom),
         bottom: TabBar(
           controller: _tabController,
           tabs: <Widget>[
@@ -497,6 +497,9 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
         return Center(
           child: ListView(
             shrinkWrap: true,
+            padding: Theme.of(context).platform == TargetPlatform.iOS
+                ? Styles.sectionBottomPadding
+                : Styles.verticalBodyPadding,
             children: [
               PlatformListTile(
                 harmonizeCupertinoTitleStyle: true,
@@ -607,9 +610,7 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                 future: _pendingCreateGame,
                 builder: (context, snapshot) {
                   return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0).add(
-                      const EdgeInsets.only(bottom: 16.0),
-                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: FatButton(
                       semanticsLabel: context.l10n.createAGame,
                       onPressed: timeControl == TimeControl.realTime
