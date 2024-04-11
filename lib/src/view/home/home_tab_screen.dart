@@ -307,11 +307,12 @@ class _SignInWidget extends ConsumerWidget {
             alignment: Alignment.centerLeft,
             child: Padding(
               padding: Styles.bodySectionPadding,
-              child: NoPaddingTextButton(
+              child: FilledButton.tonalIcon(
+                icon: const Icon(Icons.account_circle),
                 onPressed: authController.isLoading
                     ? null
                     : () => ref.read(authControllerProvider.notifier).signIn(),
-                child: Text(
+                label: Text(
                   context.l10n.signIn.toUpperCase(),
                 ),
               ),

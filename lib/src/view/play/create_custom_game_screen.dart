@@ -342,8 +342,6 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
     final isValidTimeControl = preferences.customTimeSeconds > 0 ||
         preferences.customIncrementSeconds > 0;
 
-    final timeControl = preferences.customTimeControl;
-
     final realTimeSelector = [
       Builder(
         builder: (context) {
@@ -491,6 +489,10 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
 
     return accountAsync.when(
       data: (account) {
+        final timeControl = account == null
+            ? TimeControl.realTime
+            : preferences.customTimeControl;
+
         final userPerf = account?.perfs[timeControl == TimeControl.realTime
             ? preferences.perfFromCustom
             : Perf.correspondence];
@@ -501,37 +503,38 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                 ? Styles.sectionBottomPadding
                 : Styles.verticalBodyPadding,
             children: [
-              PlatformListTile(
-                harmonizeCupertinoTitleStyle: true,
-                title: Text(context.l10n.timeControl),
-                trailing: AdaptiveTextButton(
-                  onPressed: () {
-                    showChoicePicker(
-                      context,
-                      choices: [
-                        TimeControl.realTime,
-                        TimeControl.correspondence,
-                      ],
-                      selectedItem: preferences.customTimeControl,
-                      labelBuilder: (TimeControl timeControl) => Text(
-                        timeControl == TimeControl.realTime
-                            ? context.l10n.realTime
-                            : context.l10n.correspondence,
-                      ),
-                      onSelectedItemChanged: (TimeControl value) {
-                        ref
-                            .read(gameSetupPreferencesProvider.notifier)
-                            .setCustomTimeControl(value);
-                      },
-                    );
-                  },
-                  child: Text(
-                    preferences.customTimeControl == TimeControl.realTime
-                        ? context.l10n.realTime
-                        : context.l10n.correspondence,
+              if (account != null)
+                PlatformListTile(
+                  harmonizeCupertinoTitleStyle: true,
+                  title: Text(context.l10n.timeControl),
+                  trailing: AdaptiveTextButton(
+                    onPressed: () {
+                      showChoicePicker(
+                        context,
+                        choices: [
+                          TimeControl.realTime,
+                          TimeControl.correspondence,
+                        ],
+                        selectedItem: preferences.customTimeControl,
+                        labelBuilder: (TimeControl timeControl) => Text(
+                          timeControl == TimeControl.realTime
+                              ? context.l10n.realTime
+                              : context.l10n.correspondence,
+                        ),
+                        onSelectedItemChanged: (TimeControl value) {
+                          ref
+                              .read(gameSetupPreferencesProvider.notifier)
+                              .setCustomTimeControl(value);
+                        },
+                      );
+                    },
+                    child: Text(
+                      preferences.customTimeControl == TimeControl.realTime
+                          ? context.l10n.realTime
+                          : context.l10n.correspondence,
+                    ),
                   ),
                 ),
-              ),
               if (timeControl == TimeControl.realTime)
                 ...realTimeSelector
               else
