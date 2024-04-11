@@ -405,14 +405,20 @@ class _DashboardButton extends ConsumerWidget {
         case TargetPlatform.iOS:
           return CupertinoIconButton(
             padding: EdgeInsets.zero,
-            onPressed: () => _showDashboard(context, session),
+            onPressed: () {
+              ref.invalidate(puzzleDashboardProvider);
+              _showDashboard(context, session);
+            },
             semanticsLabel: context.l10n.puzzlePuzzleDashboard,
             icon: const Icon(Icons.history),
           );
         case TargetPlatform.android:
           return IconButton(
             tooltip: context.l10n.puzzlePuzzleDashboard,
-            onPressed: () => _showDashboard(context, session),
+            onPressed: () {
+              ref.invalidate(puzzleDashboardProvider);
+              _showDashboard(context, session);
+            },
             icon: const Icon(Icons.history),
           );
         default:
