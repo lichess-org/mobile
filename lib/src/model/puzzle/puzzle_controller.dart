@@ -6,6 +6,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:http/http.dart' as http;
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
@@ -462,6 +463,24 @@ class PuzzleController extends _$PuzzleController {
     } else {
       ref.read(evaluationServiceProvider).disposeEngine();
     }
+  }
+
+  String makePgn() {
+    final initPosition = _gameTree.nodeAt(state.initialPath).position;
+    var currentPosition = initPosition;
+    final pgnMoves = state.puzzle.puzzle.solution.fold<List<String>>([],
+        (List<String> acc, move) {
+      final moveObj = Move.fromUci(move);
+      if (moveObj != null) {
+        final String san;
+        (currentPosition, san) = currentPosition.makeSan(moveObj);
+        return acc..add(san);
+      }
+      return acc;
+    });
+    final pgn =
+        '[FEN "${initPosition.fen}"][Site "$kLichessHost/training/${state.puzzle.puzzle.id}"]${pgnMoves.join(' ')}';
+    return pgn;
   }
 
   void _startEngineEval() {
