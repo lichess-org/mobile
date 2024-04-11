@@ -166,11 +166,6 @@ class _AppState extends ConsumerState<Application> {
                           ? LichessColors.primary
                           : const Color(0xFF3692E7),
                       brightness: brightness,
-                      barBackgroundColor:
-                          const CupertinoDynamicColor.withBrightness(
-                        color: Color(0xC8F9F9F9),
-                        darkColor: Color(0xC81D1D1D),
-                      ),
                       scaffoldBackgroundColor: brightness == Brightness.light
                           ? CupertinoColors.systemGroupedBackground
                           : null,
