@@ -109,7 +109,6 @@ class _PuzzleTabScreenState extends ConsumerState<PuzzleTabScreen> {
 
   Future<void> _refreshData() {
     return Future.wait([
-      ref.refresh(puzzleDashboardProvider.future),
       ref.refresh(puzzleRecentActivityProvider.future),
     ]);
   }

@@ -139,7 +139,7 @@ void main() {
       final container = await makeTestContainer(mockClient);
       final client = container.read(lichessClientFactoryProvider)();
       final repo = PuzzleRepository(client);
-      final result = await repo.puzzleDashboard();
+      final result = await repo.puzzleDashboard(30);
 
       expect(result, isA<PuzzleDashboard>());
     });

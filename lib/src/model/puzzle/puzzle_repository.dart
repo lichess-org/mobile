@@ -157,9 +157,9 @@ class PuzzleRepository {
         );
   }
 
-  Future<PuzzleDashboard> puzzleDashboard() {
+  Future<PuzzleDashboard> puzzleDashboard(int days) {
     return client.readJson(
-      Uri.parse('$kLichessHost/api/puzzle/dashboard/30'),
+      Uri.parse('$kLichessHost/api/puzzle/dashboard/$days'),
       mapper: _puzzleDashboardFromJson,
     );
   }
