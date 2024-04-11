@@ -12,6 +12,10 @@ abstract class Styles {
     fontSize: 20.0,
     fontWeight: FontWeight.bold,
   );
+  static const subtitle = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+  );
   static const callout = TextStyle(
     fontSize: 18.0,
     fontWeight: FontWeight.w600,

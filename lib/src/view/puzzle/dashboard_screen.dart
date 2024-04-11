@@ -1,17 +1,60 @@
 import 'package:collection/collection.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' show ClientException;
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/stat_card.dart';
+
+class PuzzleDashboardScreen extends StatelessWidget {
+  const PuzzleDashboardScreen({super.key, required this.user});
+
+  final LightUser user;
+
+  @override
+  Widget build(BuildContext context) {
+    return Theme.of(context).platform == TargetPlatform.iOS
+        ? CupertinoPageScaffold(
+            navigationBar: const CupertinoNavigationBar(
+              middle: SizedBox.shrink(),
+            ),
+            child: _Body(user: user),
+          )
+        : Scaffold(
+            body: _Body(user: user),
+            appBar: AppBar(
+              title: Text(context.l10n.puzzlePuzzleDashboard),
+            ),
+          );
+  }
+}
+
+class _Body extends ConsumerWidget {
+  const _Body({required this.user});
+
+  final LightUser user;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SafeArea(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          PuzzleDashboardWidget(),
+        ],
+      ),
+    );
+  }
+}
 
 class PuzzleDashboardWidget extends ConsumerWidget {
   @override
@@ -31,9 +74,8 @@ class PuzzleDashboardWidget extends ConsumerWidget {
             children: [
               Text(context.l10n.puzzlePuzzleDashboard),
               Text(
-                context.l10n.nbDays(30),
-                style: TextStyle(
-                  fontSize: 14,
+                context.l10n.puzzlePuzzleDashboardDescription,
+                style: Styles.subtitle.copyWith(
                   color: textShade(context, Styles.subtitleOpacity),
                 ),
               ),

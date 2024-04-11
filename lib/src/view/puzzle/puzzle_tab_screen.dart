@@ -20,8 +20,8 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/layout.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
+import 'package:lichess_mobile/src/view/puzzle/dashboard_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/history_boards.dart';
-import 'package:lichess_mobile/src/view/puzzle/puzzle_dashboard_widget.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_history_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -64,7 +64,12 @@ class _PuzzleTabScreenState extends ConsumerState<PuzzleTabScreen> {
       ],
     );
     return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.puzzles)),
+      appBar: AppBar(
+        title: Text(context.l10n.puzzles),
+        actions: [
+          _DashboardButton(),
+        ],
+      ),
       body: userSession != null
           ? RefreshIndicator(
               key: _androidRefreshKey,
@@ -81,7 +86,12 @@ class _PuzzleTabScreenState extends ConsumerState<PuzzleTabScreen> {
         controller: puzzlesScrollController,
         slivers: [
           CupertinoSliverNavigationBar(
+            padding: const EdgeInsetsDirectional.only(
+              start: 16.0,
+              end: 8.0,
+            ),
             largeTitle: Text(context.l10n.puzzles),
+            trailing: _DashboardButton(),
           ),
           if (userSession != null)
             CupertinoSliverRefreshControl(
@@ -137,7 +147,6 @@ class _Body extends ConsumerWidget {
       separator,
       StormButton(connectivity: connectivity),
       separator,
-      PuzzleDashboardWidget(),
       PuzzleHistoryWidget(),
     ];
 
@@ -169,7 +178,6 @@ class _Body extends ConsumerWidget {
           Expanded(
             child: Column(
               children: [
-                PuzzleDashboardWidget(),
                 PuzzleHistoryWidget(),
               ],
             ),
@@ -388,6 +396,41 @@ class PuzzleHistoryWidget extends ConsumerWidget {
       ),
     );
   }
+}
+
+class _DashboardButton extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final session = ref.watch(authSessionProvider);
+    if (session != null) {
+      switch (Theme.of(context).platform) {
+        case TargetPlatform.iOS:
+          return CupertinoIconButton(
+            padding: EdgeInsets.zero,
+            onPressed: () => _showDashboard(context, session),
+            semanticsLabel: context.l10n.puzzlePuzzleDashboard,
+            icon: const Icon(Icons.history),
+          );
+        case TargetPlatform.android:
+          return IconButton(
+            tooltip: context.l10n.puzzlePuzzleDashboard,
+            onPressed: () => _showDashboard(context, session),
+            icon: const Icon(Icons.history),
+          );
+        default:
+          assert(false, 'Unexpected platform $Theme.of(context).platform');
+          return const SizedBox.shrink();
+      }
+    }
+    return const SizedBox.shrink();
+  }
+
+  void _showDashboard(BuildContext context, AuthSessionState session) =>
+      pushPlatformRoute(
+        context,
+        title: context.l10n.puzzlePuzzleDashboard,
+        builder: (_) => PuzzleDashboardScreen(user: session.user),
+      );
 }
 
 class _PuzzleButton extends StatelessWidget {
