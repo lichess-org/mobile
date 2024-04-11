@@ -20,6 +20,7 @@ import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/puzzle/puzzle_history_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/storm_clock.dart';
 import 'package:lichess_mobile/src/view/puzzle/storm_dashboard.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
@@ -30,8 +31,6 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
-
-import 'history_boards.dart';
 
 class StormScreen extends StatefulWidget {
   const StormScreen({super.key});
@@ -820,7 +819,7 @@ class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
                 ),
                 const SizedBox(height: 3.0),
                 if (puzzleList.isNotEmpty)
-                  PuzzleHistoryBoards(puzzleList)
+                  PuzzleHistoryPreview(puzzleList)
                 else
                   const Center(
                     child: Text('Nothing to show, go change the filters'),

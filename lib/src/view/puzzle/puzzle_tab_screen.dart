@@ -21,7 +21,6 @@ import 'package:lichess_mobile/src/utils/layout.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/puzzle/dashboard_screen.dart';
-import 'package:lichess_mobile/src/view/puzzle/history_boards.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_history_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -370,7 +369,7 @@ class PuzzleHistoryWidget extends ConsumerWidget {
           children: [
             Padding(
               padding: Styles.bodySectionPadding,
-              child: PuzzleHistoryBoards(recentActivity.take(8).toIList()),
+              child: PuzzleHistoryPreview(recentActivity.take(8).toIList()),
             ),
           ],
         );
