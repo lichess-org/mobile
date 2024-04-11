@@ -1,6 +1,9 @@
+import 'dart:math';
+
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,6 +23,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -27,7 +31,8 @@ import 'package:lichess_mobile/src/widgets/rating.dart';
 import 'package:lichess_mobile/src/widgets/stat_card.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
-final _dateFormatter = DateFormat.yMMMd(Intl.getCurrentLocale());
+final _currentLocale = Intl.getCurrentLocale();
+final _dateFormatter = DateFormat.yMMMd(_currentLocale);
 
 const _customOpacity = 0.6;
 const _defaultStatFontSize = 12.0;
@@ -103,8 +108,8 @@ class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final perfStats = ref.watch(userPerfStatsProvider(id: user.id, perf: perf));
+    final ratingHistory = ref.watch(userRatingHistoryProvider(id: user.id));
     final loggedInUser = ref.watch(authSessionProvider);
-
     const statGroupSpace = SizedBox(height: 15.0);
     const subStatSpace = SizedBox(height: 10);
 
@@ -112,57 +117,66 @@ class _Body extends ConsumerWidget {
       data: (data) {
         return SafeArea(
           child: ListView(
-            padding: Styles.verticalBodyPadding,
+            padding: Styles.bodyPadding,
             scrollDirection: Axis.vertical,
             children: [
-              Padding(
-                padding: Styles.horizontalBodyPadding,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.baseline,
-                      textBaseline: TextBaseline.alphabetic,
-                      children: [
-                        Text(
-                          '${context.l10n.rating} ',
-                          style: Styles.sectionTitle,
-                        ),
-                        RatingWidget(
-                          rating: data.rating,
-                          deviation: data.deviation,
-                          provisional: data.provisional,
-                          style: _mainValueStyle,
-                        ),
-                      ],
-                    ),
-                    if (data.percentile != null && data.percentile! > 0.0)
-                      Text(
-                        (loggedInUser != null &&
-                                loggedInUser.user.id == user.id)
-                            ? context.l10n
-                                .youAreBetterThanPercentOfPerfTypePlayers(
-                                '${data.percentile!.toStringAsFixed(2)}%',
-                                perf.title,
-                              )
-                            : context.l10n
-                                .userIsBetterThanPercentOfPerfTypePlayers(
-                                user.username,
-                                '${data.percentile!.toStringAsFixed(2)}%',
-                                perf.title,
-                              ),
-                        style: TextStyle(color: textShade(context, 0.7)),
-                      ),
-                  ],
-                ),
+              ratingHistory.when(
+                data: (ratingHistoryData) {
+                  final ratingHistoryPerfData = ratingHistoryData
+                      .where((element) => element.perf == perf.title)
+                      .first;
+
+                  if (ratingHistoryPerfData.points.isEmpty) {
+                    return const SizedBox.shrink();
+                  }
+                  return _EloChart(ratingHistoryPerfData);
+                },
+                error: (error, stackTrace) {
+                  debugPrint(
+                    'SEVERE: [PerfStatsScreen] could not load rating history data; $error\n$stackTrace',
+                  );
+                  return const Text('Could not show chart elo chart');
+                },
+                loading: () {
+                  return const SizedBox.shrink();
+                },
               ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.baseline,
+                textBaseline: TextBaseline.alphabetic,
+                children: [
+                  Text(
+                    '${context.l10n.rating} ',
+                    style: Styles.sectionTitle,
+                  ),
+                  RatingWidget(
+                    rating: data.rating,
+                    deviation: data.deviation,
+                    provisional: data.provisional,
+                    style: _mainValueStyle,
+                  ),
+                ],
+              ),
+              if (data.percentile != null && data.percentile! > 0.0)
+                Text(
+                  (loggedInUser != null && loggedInUser.user.id == user.id)
+                      ? context.l10n.youAreBetterThanPercentOfPerfTypePlayers(
+                          '${data.percentile!.toStringAsFixed(2)}%',
+                          perf.title,
+                        )
+                      : context.l10n.userIsBetterThanPercentOfPerfTypePlayers(
+                          user.username,
+                          '${data.percentile!.toStringAsFixed(2)}%',
+                          perf.title,
+                        ),
+                  style: TextStyle(color: textShade(context, 0.7)),
+                ),
               subStatSpace,
               // The number '12' here is not arbitrary, since the API returns the progression for the last 12 games (as far as I know).
               StatCard(
                 context.l10n
                     .perfStatProgressOverLastXGames('12')
                     .replaceAll(':', ''),
-                padding: Styles.horizontalBodyPadding,
                 child: _ProgressionWidget(data.progress),
               ),
               StatCardRow([
@@ -171,8 +185,9 @@ class _Body extends ConsumerWidget {
                     context.l10n.rank,
                     value: data.rank == null
                         ? '?'
-                        : NumberFormat.decimalPattern(Intl.getCurrentLocale())
-                            .format(data.rank),
+                        : NumberFormat.decimalPattern(
+                            Intl.getCurrentLocale(),
+                          ).format(data.rank),
                   ),
                 StatCard(
                   context.l10n
@@ -200,22 +215,19 @@ class _Body extends ConsumerWidget {
                 ),
               ]),
               statGroupSpace,
-              Padding(
-                padding: Styles.horizontalBodyPadding,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.baseline,
-                  textBaseline: TextBaseline.alphabetic,
-                  children: [
-                    Text(
-                      '${context.l10n.perfStatTotalGames} '.localizeNumbers(),
-                      style: Styles.sectionTitle,
-                    ),
-                    Text(
-                      data.totalGames.toString().localizeNumbers(),
-                      style: _mainValueStyle,
-                    ),
-                  ],
-                ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.baseline,
+                textBaseline: TextBaseline.alphabetic,
+                children: [
+                  Text(
+                    '${context.l10n.perfStatTotalGames} '.localizeNumbers(),
+                    style: Styles.sectionTitle,
+                  ),
+                  Text(
+                    data.totalGames.toString().localizeNumbers(),
+                    style: _mainValueStyle,
+                  ),
+                ],
               ),
               subStatSpace,
               StatCardRow([
@@ -261,8 +273,10 @@ class _Body extends ConsumerWidget {
                   ),
                 ),
                 StatCard(
-                  context.l10n.perfStatBerserkedGames
-                      .replaceAll(' ${context.l10n.games.toLowerCase()}', ''),
+                  context.l10n.perfStatBerserkedGames.replaceAll(
+                    ' ${context.l10n.games.toLowerCase()}',
+                    '',
+                  ),
                   child: _PercentageValueWidget(
                     data.berserkGames,
                     data.totalGames,
@@ -290,7 +304,6 @@ class _Body extends ConsumerWidget {
                 ),
               ]),
               StatCard(
-                padding: Styles.horizontalBodyPadding,
                 context.l10n.perfStatWinningStreak,
                 child: _StreakWidget(
                   data.maxWinStreak,
@@ -299,7 +312,6 @@ class _Body extends ConsumerWidget {
                 ),
               ),
               StatCard(
-                padding: Styles.horizontalBodyPadding,
                 context.l10n.perfStatLosingStreak,
                 child: _StreakWidget(
                   data.maxLossStreak,
@@ -308,12 +320,10 @@ class _Body extends ConsumerWidget {
                 ),
               ),
               StatCard(
-                padding: Styles.horizontalBodyPadding,
                 context.l10n.perfStatGamesInARow,
                 child: _StreakWidget(data.maxPlayStreak, data.curPlayStreak),
               ),
               StatCard(
-                padding: Styles.horizontalBodyPadding,
                 context.l10n.perfStatMaxTimePlaying,
                 child: _StreakWidget(data.maxTimeStreak, data.curTimeStreak),
               ),
@@ -584,6 +594,7 @@ class _GameListWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return ListSection(
       header: header,
+      margin: const EdgeInsets.only(top: 10.0),
       hasLeading: false,
       children: [
         for (final game in games)
@@ -650,4 +661,340 @@ class _GameListTile extends StatelessWidget {
           : null,
     );
   }
+}
+
+class _EloChart extends StatefulWidget {
+  final UserRatingHistoryPerf value;
+
+  const _EloChart(this.value);
+
+  @override
+  State<_EloChart> createState() => _EloChartState();
+}
+
+class _EloChartState extends State<_EloChart> {
+  late DateRange _selectedRange;
+
+  late List<FlSpot> _allFlSpot;
+
+  List<FlSpot> get _flSpot => _allFlSpot
+      .where(
+        (element) => element.x >= _minX && element.x <= _maxX,
+      )
+      .toList();
+
+  IList<UserRatingHistoryPoint> get _points => widget.value.points;
+
+  DateTime get _firstDate => _points.first.date;
+
+  DateTime get _lastDate => _points.last.date;
+
+  double get _minY =>
+      (_flSpot.map((e) => e.y).reduce(min) / 100).floorToDouble() * 100;
+
+  double get _maxY =>
+      (_flSpot.map((e) => e.y).reduce(max) / 100).ceilToDouble() * 100;
+
+  double get _minX =>
+      _startDate(_selectedRange).difference(_firstDate).inDays.toDouble();
+
+  double get _maxX => _allFlSpot.last.x;
+
+  DateTime _startDate(DateRange dateRange) => switch (dateRange) {
+        DateRange.oneWeek => _lastDate.subtract(const Duration(days: 7)),
+        DateRange.oneMonth => _lastDate.copyWith(month: _lastDate.month - 1),
+        DateRange.threeMonths => _lastDate.copyWith(month: _lastDate.month - 3),
+        DateRange.oneYear => _lastDate.copyWith(year: _lastDate.year - 1),
+        DateRange.allTime => _firstDate,
+      };
+
+  bool _dateIsInRange(DateRange dateRange) =>
+      _firstDate.isBefore(_startDate(dateRange)) ||
+      _firstDate.isAtSameMomentAs(_startDate(dateRange));
+
+  @override
+  void initState() {
+    super.initState();
+
+    // We need to fill in the missing days in the rating history because rating should be constant for days where no games were played
+
+    final List<UserRatingHistoryPoint> pointsHistoryRatingCompleted = [];
+    final numberOfDays = _lastDate.difference(_firstDate).inDays + 1;
+
+    int j = 0;
+    for (int i = 0; i < numberOfDays; i++) {
+      final currentDate = _firstDate.add(Duration(days: i));
+      if (_points[j].date == currentDate) {
+        pointsHistoryRatingCompleted.add(_points[j]);
+        j += 1;
+      } else {
+        pointsHistoryRatingCompleted.add(
+          UserRatingHistoryPoint(
+            date: currentDate,
+            elo: _points[j - 1].elo,
+          ),
+        );
+      }
+    }
+
+    _allFlSpot = pointsHistoryRatingCompleted
+        .map(
+          (element) => FlSpot(
+            element.date.difference(_firstDate).inDays.toDouble(),
+            element.elo.toDouble(),
+          ),
+        )
+        .toList();
+
+    if (_dateIsInRange(DateRange.threeMonths)) {
+      _selectedRange = DateRange.threeMonths;
+    } else if (_dateIsInRange(DateRange.oneMonth)) {
+      _selectedRange = DateRange.oneMonth;
+    } else if (_dateIsInRange(DateRange.oneWeek)) {
+      _selectedRange = DateRange.oneWeek;
+    } else {
+      _selectedRange = DateRange.allTime;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final borderColor =
+        Theme.of(context).colorScheme.onSurface.withOpacity(0.5);
+    final chartColor = Theme.of(context).platform == TargetPlatform.iOS
+        ? Colors.cyan
+        : Theme.of(context).colorScheme.tertiary;
+    final chartDateFormatter = switch (_selectedRange) {
+      DateRange.oneWeek => DateFormat.MMMd(_currentLocale),
+      DateRange.oneMonth => DateFormat.MMMd(_currentLocale),
+      DateRange.threeMonths => DateFormat.yMMM(_currentLocale),
+      DateRange.oneYear => DateFormat.yMMM(_currentLocale),
+      DateRange.allTime => DateFormat.yMMM(_currentLocale),
+    };
+
+    String formatDateFromTimestamp(double nbDays) => chartDateFormatter.format(
+          _firstDate.add(Duration(days: nbDays.toInt())),
+        );
+
+    String formatDateFromTimestampForTooltip(double nbDays) =>
+        DateFormat.yMMMd(_currentLocale).format(
+          _firstDate.add(Duration(days: nbDays.toInt())),
+        );
+
+    Widget leftTitlesWidget(double value, TitleMeta meta) {
+      return SideTitleWidget(
+        axisSide: meta.axisSide,
+        child: Text(
+          value.toInt().toString(),
+          style: const TextStyle(
+            color: Colors.grey,
+            fontSize: 10,
+          ),
+        ),
+      );
+    }
+
+    Widget bottomTitlesWidget(double value, TitleMeta meta) {
+      if (value == _minX || value == _maxX) return const SizedBox.shrink();
+
+      return SideTitleWidget(
+        axisSide: meta.axisSide,
+        child: Text(
+          formatDateFromTimestamp(value),
+          style: const TextStyle(
+            color: Colors.grey,
+            fontSize: 10,
+          ),
+        ),
+      );
+    }
+
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            const SizedBox(
+              width: 25,
+            ),
+            ...DateRange.values
+                .where((dateRange) => _dateIsInRange(dateRange))
+                .map(
+                  (dateRange) => _RangeButton(
+                    text: dateRange.toString(),
+                    onPressed: () {
+                      setState(() {
+                        _selectedRange = dateRange;
+                      });
+                    },
+                    selected: _selectedRange == dateRange,
+                  ),
+                ),
+          ],
+        ),
+        AspectRatio(
+          aspectRatio: 16 / 9,
+          child: LineChart(
+            LineChartData(
+              minX: _minX,
+              maxX: _maxX,
+              minY: _minY,
+              maxY: _maxY,
+              lineBarsData: [
+                LineChartBarData(
+                  spots: _flSpot,
+                  dotData: const FlDotData(show: false),
+                  color: chartColor,
+                  belowBarData: BarAreaData(
+                    color: chartColor.withOpacity(0.2),
+                    show: true,
+                  ),
+                  barWidth: 1.5,
+                ),
+              ],
+              borderData: FlBorderData(
+                show: true,
+                border: Border(
+                  bottom: BorderSide(color: borderColor),
+                  left: BorderSide(color: borderColor),
+                ),
+              ),
+              gridData: FlGridData(
+                show: true,
+                drawVerticalLine: false,
+                getDrawingHorizontalLine: (value) => FlLine(
+                  color: borderColor,
+                  strokeWidth: 0.5,
+                ),
+              ),
+              lineTouchData: LineTouchData(
+                touchSpotThreshold: double.infinity,
+                touchTooltipData: LineTouchTooltipData(
+                  getTooltipColor: (_) => chartColor.withOpacity(0.5),
+                  fitInsideHorizontally: true,
+                  fitInsideVertically: true,
+                  getTooltipItems: (touchedSpots) {
+                    return touchedSpots
+                        .map(
+                          (LineBarSpot touchedSpot) => LineTooltipItem(
+                            '${touchedSpot.y.toInt()}\n',
+                            Styles.bold,
+                            children: [
+                              TextSpan(
+                                text: formatDateFromTimestampForTooltip(
+                                  touchedSpot.x,
+                                ),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 10,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                        .toList();
+                  },
+                ),
+                getTouchedSpotIndicator: (barData, spotIndexes) {
+                  return spotIndexes.map((spotIndex) {
+                    return TouchedSpotIndicatorData(
+                      FlLine(
+                        color: chartColor,
+                        strokeWidth: 2,
+                      ),
+                      FlDotData(
+                        show: true,
+                        getDotPainter: (spot, percent, barData, index) {
+                          return FlDotCirclePainter(
+                            radius: 5,
+                            color: chartColor,
+                          );
+                        },
+                      ),
+                    );
+                  }).toList();
+                },
+              ),
+              titlesData: FlTitlesData(
+                rightTitles:
+                    const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                topTitles:
+                    const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                bottomTitles: AxisTitles(
+                  sideTitles: SideTitles(
+                    showTitles: true,
+                    reservedSize: 25,
+                    getTitlesWidget: bottomTitlesWidget,
+                    interval: (_maxX - _minX) / 3,
+                    // The placement of the bottom titles is not perfect
+                    // See the issue https://github.com/imaNNeo/fl_chart/issues/1605
+                  ),
+                ),
+                leftTitles: AxisTitles(
+                  sideTitles: SideTitles(
+                    showTitles: true,
+                    reservedSize: 35,
+                    getTitlesWidget: leftTitlesWidget,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 10),
+      ],
+    );
+  }
+}
+
+class _RangeButton extends StatelessWidget {
+  const _RangeButton({
+    required this.text,
+    required this.onPressed,
+    this.selected = false,
+  });
+
+  final String text;
+  final VoidCallback onPressed;
+  final bool selected;
+
+  @override
+  Widget build(BuildContext context) {
+    final chartColor = Theme.of(context).platform == TargetPlatform.iOS
+        ? Colors.cyan
+        : Theme.of(context).colorScheme.tertiary;
+
+    return PlatformCard(
+      color: selected ? chartColor.withOpacity(0.2) : null,
+      shadowColor: selected ? Colors.transparent : null,
+      child: AdaptiveInkWell(
+        borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+        onTap: onPressed,
+        child: Center(
+          child: Padding(
+            padding:
+                const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+            child: Text(text),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+enum DateRange {
+  oneWeek,
+  oneMonth,
+  threeMonths,
+  oneYear,
+  allTime;
+
+  @override
+  String toString() => switch (this) {
+        DateRange.oneWeek => '1W',
+        DateRange.oneMonth => '1M',
+        DateRange.threeMonths => '3M',
+        DateRange.oneYear => '1Y',
+        DateRange.allTime => 'ALL',
+      };
 }

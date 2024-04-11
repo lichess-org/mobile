@@ -19,6 +19,9 @@ class FakeClientFactory implements LichessClientFactory {
           '/api/user/${fakeUser.id}/perf/${testPerf.name}') {
         return mockResponse(userPerfStatsResponse, 200);
       }
+      if (request.url.path == '/api/user/${fakeUser.id}/rating-history') {
+        return mockResponse(userRatingHistoryResponse, 200);
+      }
       return mockResponse('', 404);
     });
   }
@@ -341,4 +344,75 @@ final userPerfStatsResponse = '''
     }
   }
 }
+''';
+const userRatingHistoryResponse = '''
+[
+  {
+    "name": "Bullet",
+    "points": [
+      [
+        2016,
+        0,
+        2,
+        2617
+      ]
+    ]
+  },
+  {
+    "name": "Blitz",
+    "points": []
+  },
+  {
+    "name": "Rapid",
+    "points": []
+  },
+  {
+    "name": "Classical",
+    "points": []
+  },
+  {
+    "name": "Correspondence",
+    "points": []
+  },
+  {
+    "name": "Chess960",
+    "points": []
+  },
+  {
+    "name": "King of the Hill",
+    "points": []
+  },
+  {
+    "name": "Three-check",
+    "points": []
+  },
+  {
+    "name": "Antichess",
+    "points": []
+  },
+  {
+    "name": "Atomic",
+    "points": []
+  },
+  {
+    "name": "Horde",
+    "points": []
+  },
+  {
+    "name": "Racing Kings",
+    "points": []
+  },
+  {
+    "name": "Crazyhouse",
+    "points": []
+  },
+  {
+    "name": "Puzzles",
+    "points": []
+  },
+  {
+    "name": "UltraBullet",
+    "points": []
+  }
+]
 ''';
