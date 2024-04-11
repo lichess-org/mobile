@@ -103,3 +103,13 @@ Future<IList<LightUser>> autoCompleteUser(
     (client) => UserRepository(client).autocompleteUser(term),
   );
 }
+
+@riverpod
+Future<IList<UserRatingHistoryPerf>> userRatingHistory(
+  UserRatingHistoryRef ref, {
+  required UserId id,
+}) async {
+  return ref.withClient(
+    (client) => UserRepository(client).getRatingHistory(id),
+  );
+}
