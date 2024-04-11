@@ -117,7 +117,7 @@ class _Body extends ConsumerWidget {
       data: (data) {
         return SafeArea(
           child: ListView(
-            padding: Styles.horizontalBodyPadding.add(Styles.sectionTopPadding),
+            padding: Styles.bodyPadding,
             scrollDirection: Axis.vertical,
             children: [
               ratingHistory.when(
@@ -594,7 +594,7 @@ class _GameListWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return ListSection(
       header: header,
-      margin: const EdgeInsets.symmetric(vertical: 10.0),
+      margin: const EdgeInsets.only(top: 10.0),
       hasLeading: false,
       children: [
         for (final game in games)
