@@ -42,25 +42,30 @@ class PuzzleDashboardWidget extends ConsumerWidget {
           // hack to make the divider take full length or row
           cupertinoAdditionalDividerMargin: -14,
           children: [
-            StatCardRow([
-              StatCard(
-                context.l10n.performance,
-                value: dashboard.global.performance.toString(),
-              ),
-              StatCard(
-                context.l10n
-                    .puzzleNbPlayed(dashboard.global.nb)
-                    .replaceAll(RegExp(r'\d+'), '')
-                    .trim()
-                    .capitalize(),
-                value: dashboard.global.nb.toString().localizeNumbers(),
-              ),
-              StatCard(
-                context.l10n.puzzleSolved.capitalize(),
-                value:
-                    '${((dashboard.global.firstWins / dashboard.global.nb) * 100).round()}%',
-              ),
-            ]),
+            Padding(
+              padding: Theme.of(context).platform == TargetPlatform.iOS
+                  ? EdgeInsets.zero
+                  : Styles.horizontalBodyPadding,
+              child: StatCardRow([
+                StatCard(
+                  context.l10n.performance,
+                  value: dashboard.global.performance.toString(),
+                ),
+                StatCard(
+                  context.l10n
+                      .puzzleNbPlayed(dashboard.global.nb)
+                      .replaceAll(RegExp(r'\d+'), '')
+                      .trim()
+                      .capitalize(),
+                  value: dashboard.global.nb.toString().localizeNumbers(),
+                ),
+                StatCard(
+                  context.l10n.puzzleSolved.capitalize(),
+                  value:
+                      '${((dashboard.global.firstWins / dashboard.global.nb) * 100).round()}%',
+                ),
+              ]),
+            ),
             if (chartData.length >= 3)
               Padding(
                 padding: const EdgeInsets.all(10.0),
