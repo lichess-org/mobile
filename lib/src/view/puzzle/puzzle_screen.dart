@@ -332,10 +332,10 @@ class _Body extends ConsumerWidget {
                       : puzzleState.mode == PuzzleMode.view
                           ? cg.InteractableSide.both
                           : puzzleState.canPlayMove
-                              ? cg.InteractableSide.none
-                              : puzzleState.pov == Side.white
+                              ? puzzleState.pov == Side.white
                                   ? cg.InteractableSide.white
-                                  : cg.InteractableSide.black,
+                                  : cg.InteractableSide.black
+                              : cg.InteractableSide.none,
                   fen: puzzleState.fen,
                   isCheck: puzzleState.position.isCheck,
                   lastMove: puzzleState.lastMove?.cg,

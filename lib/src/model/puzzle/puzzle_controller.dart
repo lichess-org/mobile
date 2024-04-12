@@ -583,7 +583,7 @@ class PuzzleState with _$PuzzleState {
 
   Position get position => node.position;
   String get fen => node.position.fen;
-  bool get canPlayMove => mode == PuzzleMode.view || node.children.isNotEmpty;
+  bool get canPlayMove => mode == PuzzleMode.play && node.children.isEmpty;
   bool get canGoNext => node.children.isNotEmpty;
   bool get canGoBack => currentPath.size > 0;
 
