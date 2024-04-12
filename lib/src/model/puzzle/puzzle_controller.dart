@@ -151,6 +151,7 @@ class PuzzleController extends _$PuzzleController {
         _onFailOrWin(PuzzleResult.lose);
         if (initialStreak == null) {
           await Future<void>.delayed(const Duration(milliseconds: 500));
+          _gameTree.deleteAt(state.currentPath);
           _setPath(state.currentPath.penultimate);
         }
       }
@@ -584,7 +585,7 @@ class PuzzleState with _$PuzzleState {
   String get fen => node.position.fen;
   bool get canPlayMove => mode == PuzzleMode.view || node.children.isNotEmpty;
   bool get canGoNext => node.children.isNotEmpty;
-  bool get canGoBack => currentPath.size > initialPath.size;
+  bool get canGoBack => currentPath.size > 0;
 
   IMap<String, ISet<String>> get validMoves => algebraicLegalMoves(position);
 }
