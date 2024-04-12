@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math' as math;
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
@@ -85,10 +86,14 @@ class LichessClientFactory {
     return RetryClient(
       AuthClient(httpClient(_ref.read(packageInfoProvider)), _ref),
       retries: 1,
+      delay: _defaultDelay,
       when: (response) => response.statusCode == 429,
     );
   }
 }
+
+Duration _defaultDelay(int retryCount) =>
+    const Duration(milliseconds: 900) * math.pow(1.5, retryCount);
 
 @Riverpod(keepAlive: true)
 String userAgent(UserAgentRef ref) {
@@ -444,7 +449,7 @@ class _ReuseClientService {
   /// If the client is null, it creates a new one.
   (Client, UniqueKey) get(LichessClientFactory factory) {
     if (_client == null) {
-      _logger.info('Creating a new client.');
+      _logger.fine('Creating a new client.');
     }
     if (_client == null) {
       _client = factory();
@@ -466,7 +471,7 @@ class _ReuseClientService {
     }
     _clientKeys.remove(key);
     if (_clientKeys.isEmpty && _client != null) {
-      _logger.info('All callers have closed the client, closing it.');
+      _logger.fine('Closing client after all users have closed.');
       _client!.close();
       _client = null;
     }

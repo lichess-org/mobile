@@ -24,11 +24,13 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'analysis_controller.freezed.dart';
 part 'analysis_controller.g.dart';
 
+const standaloneAnalysisId = StringId('standalone_analysis');
+
 @freezed
 class AnalysisOptions with _$AnalysisOptions {
   const AnalysisOptions._();
   const factory AnalysisOptions({
-    required ID id,
+    required StringId id,
     required bool isLocalEvaluationAllowed,
     required Side orientation,
     required Variant variant,
@@ -47,12 +49,16 @@ class AnalysisOptions with _$AnalysisOptions {
   }) = _AnalysisOptions;
 
   /// Whether the analysis is for a lichess game.
-  bool get isLichessGameAnalysis => id is GameFullId || id is GameId;
+  bool get isLichessGameAnalysis => gameAnyId != null;
+
+  /// The game ID of the analysis, if it's a lichess game.
+  GameAnyId? get gameAnyId =>
+      id != standaloneAnalysisId ? GameAnyId(id.value) : null;
 }
 
 @riverpod
 class AnalysisController extends _$AnalysisController {
-  late final Root _root;
+  late Root _root;
 
   final _engineEvalDebounce = Debouncer(const Duration(milliseconds: 150));
 
@@ -97,6 +103,8 @@ class AnalysisController extends _$AnalysisController {
     final pgnHeaders = IMap(game.headers);
     final rootComments = IList(game.comments.map((c) => PgnComment.fromPgn(c)));
 
+    Future<void>? openingFuture;
+
     _root = Root.fromPgnGame(
       game,
       isLichessAnalysis: options.isLichessGameAnalysis,
@@ -108,11 +116,16 @@ class AnalysisController extends _$AnalysisController {
           path = path + branch.id;
           lastMove = branch.sanMove.move;
         }
-        if (isMainline && options.opening == null && branch.position.ply <= 2) {
-          _fetchOpening(root, path);
+        if (isMainline && options.opening == null && branch.position.ply <= 5) {
+          openingFuture = _fetchOpening(root, path);
         }
       },
     );
+
+    // wait for the opening to be fetched to recompute the branch opening
+    openingFuture?.then((_) {
+      _setPath(state.currentPath);
+    });
 
     final currentPath =
         options.initialMoveCursor == null ? _root.mainlinePath : path;
@@ -322,9 +335,12 @@ class AnalysisController extends _$AnalysisController {
   }
 
   Future<void> requestServerAnalysis() {
-    if (options.id is GameFullId && state.canRequestServerAnalysis) {
+    if (state.canRequestServerAnalysis) {
       final service = ref.read(serverAnalysisServiceProvider);
-      return service.requestAnalysis(options.id as GameFullId);
+      return service.requestAnalysis(
+        options.id as GameAnyId,
+        options.orientation,
+      );
     }
     return Future.error('Cannot request server analysis');
   }
@@ -585,7 +601,7 @@ class AnalysisState with _$AnalysisState {
 
   const factory AnalysisState({
     /// Analysis ID
-    required ID id,
+    required StringId id,
 
     /// The variant of the analysis.
     required Variant variant,
@@ -645,11 +661,16 @@ class AnalysisState with _$AnalysisState {
   IMap<String, ISet<String>> get validMoves =>
       algebraicLegalMoves(currentNode.position);
 
+  /// Whether the user can request server analysis.
+  ///
+  /// It must be a lichess game, which is finished and not already analyzed.
   bool get canRequestServerAnalysis =>
-      id is GameFullId && !hasServerAnalysis && pgnHeaders['Result'] != '*';
+      id != standaloneAnalysisId &&
+      (id.length == 8 || id.length == 12) &&
+      !hasServerAnalysis &&
+      pgnHeaders['Result'] != '*';
 
-  bool get canShowGameSummary =>
-      hasServerAnalysis || (id is GameFullId && canRequestServerAnalysis);
+  bool get canShowGameSummary => hasServerAnalysis || canRequestServerAnalysis;
 
   bool get hasServerAnalysis => playersAnalysis != null;
 

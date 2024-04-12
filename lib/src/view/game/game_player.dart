@@ -78,7 +78,7 @@ class GamePlayer extends StatelessWidget {
                 style: TextStyle(
                   fontSize: playerFontSize,
                   fontWeight: FontWeight.bold,
-                  color: LichessColors.brag,
+                  color: context.lichessColors.brag,
                 ),
               ),
               const SizedBox(width: 5),

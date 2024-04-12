@@ -256,7 +256,7 @@ class _Body extends ConsumerWidget {
         context: context,
         actions: [
           BottomSheetAction(
-            label: Text(context.l10n.logOut),
+            makeLabel: (context) => Text(context.l10n.logOut),
             isDestructiveAction: true,
             onPressed: (context) async {
               await ref.read(authControllerProvider.notifier).signOut();

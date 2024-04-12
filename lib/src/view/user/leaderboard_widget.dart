@@ -29,6 +29,7 @@ class LeaderboardWidget extends ConsumerWidget {
             onPressed: () {
               pushPlatformRoute(
                 context,
+                title: context.l10n.leaderboard,
                 builder: (context) => const LeaderboardScreen(),
               );
             },

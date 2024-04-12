@@ -5,14 +5,15 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
-import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/main.dart';
 import 'package:lichess_mobile/src/app_dependencies.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
@@ -20,6 +21,7 @@ import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/notification_service.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/layout.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -71,8 +73,8 @@ class _AppState extends ConsumerState<Application> {
     // Sync correspondence games on app start, just once.
     ref.read(correspondenceServiceProvider).syncGames();
 
-    // Play registered moves whenever the app comes back online.
     ref.listenManual(connectivityChangesProvider, (prev, current) async {
+      // Play registered moves whenever the app comes back online.
       if (prev?.hasValue == true &&
           !prev!.value!.isOnline &&
           !current.isRefreshing &&
@@ -83,6 +85,13 @@ class _AppState extends ConsumerState<Application> {
         if (nbMovesPlayed > 0) {
           ref.invalidate(ongoingGamesProvider);
         }
+      }
+
+      final socketClient = ref.read(socketPoolProvider).currentClient;
+      if (current.value?.isOnline == true && !socketClient.isActive) {
+        socketClient.connect();
+      } else if (current.value?.isOnline == false) {
+        socketClient.close();
       }
     });
 
@@ -108,60 +117,67 @@ class _AppState extends ConsumerState<Application> {
 
     return DynamicColorBuilder(
       builder: (lightColorScheme, darkColorScheme) {
-        final colorScheme =
-            brightness == Brightness.light ? lightColorScheme : darkColorScheme;
+        // final dynamicColorScheme =
+        //     brightness == Brightness.light ? lightColorScheme : darkColorScheme;
+        // TODO remove this line and uncomment the above line
+        // when the dynamic_color colorScheme bug is fixed
+        // See: https://github.com/material-foundation/flutter-packages/issues/574
+        const ColorScheme? dynamicColorScheme = null;
+
+        final colorScheme = hasSystemColors && dynamicColorScheme != null
+            ? dynamicColorScheme
+            : ColorScheme.fromSeed(
+                seedColor: boardTheme.colors.darkSquare,
+                brightness: brightness,
+              );
+
+        final theme = Theme.of(context);
 
         return MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: kSupportedLocales,
           onGenerateTitle: (BuildContext context) => 'lichess.org',
-          theme: ThemeData(
+          theme: ThemeData.from(
+            colorScheme: colorScheme,
+            textTheme: theme.platform == TargetPlatform.iOS
+                ? brightness == Brightness.light
+                    ? Typography.blackCupertino
+                    : Typography.whiteCupertino
+                : null,
+          ).copyWith(
             navigationBarTheme: NavigationBarTheme.of(context).copyWith(
               height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold
                   ? 60
                   : null,
             ),
-            textTheme: Theme.of(context).platform == TargetPlatform.iOS
-                ? brightness == Brightness.light
-                    ? Typography.blackCupertino
-                    : Typography.whiteCupertino
-                : null,
-            colorScheme: hasSystemColors && colorScheme != null
-                ? colorScheme
-                : ColorScheme.fromSeed(
-                    seedColor: boardTheme.colors.darkSquare,
-                    brightness: brightness,
-                  ),
-            useMaterial3: true,
-            brightness: brightness,
-            cardTheme: CardTheme(
-              surfaceTintColor:
-                  brightness == Brightness.light ? Colors.black : Colors.white,
-            ),
+            extensions: [
+              if (theme.platform == TargetPlatform.android)
+                lichessCustomColors.harmonized(colorScheme)
+              else
+                lichessCustomColors,
+            ],
           ),
           themeMode: themeMode,
-          builder: (context, child) {
-            return CupertinoTheme(
-              data: CupertinoThemeData(
-                primaryColor: brightness == Brightness.light
-                    ? LichessColors.primary
-                    : const Color(0xFF3692E7),
-                brightness: brightness,
-                barBackgroundColor: const CupertinoDynamicColor.withBrightness(
-                  color: Color(0xC8F9F9F9),
-                  darkColor: Color(0xC81D1D1D),
-                ),
-                scaffoldBackgroundColor: brightness == Brightness.light
-                    ? CupertinoColors.systemGroupedBackground
-                    : null,
-              ),
-              child: IconTheme(
-                // This is needed to avoid the icon color being overridden by the cupertino theme (blue)
-                data: IconTheme.of(context),
-                child: Material(child: child),
-              ),
-            );
-          },
+          builder: theme.platform == TargetPlatform.iOS
+              ? (context, child) {
+                  return CupertinoTheme(
+                    data: CupertinoThemeData(
+                      primaryColor: brightness == Brightness.light
+                          ? LichessColors.primary
+                          : const Color(0xFF3692E7),
+                      brightness: brightness,
+                      scaffoldBackgroundColor: brightness == Brightness.light
+                          ? CupertinoColors.systemGroupedBackground
+                          : null,
+                    ),
+                    child: IconTheme(
+                      // This is needed to avoid the icon color being overridden by the cupertino theme (blue)
+                      data: IconTheme.of(context),
+                      child: Material(child: child),
+                    ),
+                  );
+                }
+              : null,
           home: const _EntryPointWidget(),
           navigatorObservers: [
             rootNavPageRouteObserver,

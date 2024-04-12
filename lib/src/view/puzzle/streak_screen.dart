@@ -4,26 +4,29 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_controller.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_streak.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/utils/share.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 import 'package:result_extensions/result_extensions.dart';
-import 'package:share_plus/share_plus.dart';
 
 import 'puzzle_feedback_widget.dart';
 
@@ -117,8 +120,6 @@ class _Body extends ConsumerWidget {
   final PuzzleContext initialPuzzleContext;
   final PuzzleStreak streak;
 
-  static const streakColor = LichessColors.brag;
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = puzzleControllerProvider(
@@ -189,18 +190,18 @@ class _Body extends ConsumerWidget {
                     children: [
                       Row(
                         children: [
-                          const Icon(
+                          Icon(
                             LichessIcons.streak,
                             size: 40.0,
-                            color: _Body.streakColor,
+                            color: context.lichessColors.brag,
                           ),
                           const SizedBox(width: 8.0),
                           Text(
                             puzzleState.streak!.index.toString(),
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 30.0,
                               fontWeight: FontWeight.bold,
-                              color: _Body.streakColor,
+                              color: context.lichessColors.brag,
                             ),
                           ),
                         ],
@@ -299,14 +300,39 @@ class _BottomBar extends ConsumerWidget {
                 Expanded(
                   child: BottomBarButton(
                     onTap: () {
-                      Share.share(
-                        '$kLichessHost/training/${puzzleState.puzzle.puzzle.id}',
+                      launchShareDialog(
+                        context,
+                        text:
+                            '$kLichessHost/training/${puzzleState.puzzle.puzzle.id}',
                       );
                     },
                     label: 'Share this puzzle',
                     icon: Theme.of(context).platform == TargetPlatform.iOS
                         ? CupertinoIcons.share
                         : Icons.share,
+                  ),
+                ),
+              if (puzzleState.streak!.finished)
+                Expanded(
+                  child: BottomBarButton(
+                    onTap: () {
+                      pushPlatformRoute(
+                        context,
+                        builder: (context) => AnalysisScreen(
+                          title: context.l10n.analysis,
+                          options: AnalysisOptions(
+                            isLocalEvaluationAllowed: true,
+                            variant: Variant.standard,
+                            pgn: ref.read(ctrlProvider.notifier).makePgn(),
+                            orientation: puzzleState.pov,
+                            id: standaloneAnalysisId,
+                            initialMoveCursor: 0,
+                          ),
+                        ),
+                      );
+                    },
+                    label: context.l10n.analysis,
+                    icon: Icons.biotech,
                   ),
                 ),
               if (puzzleState.streak!.finished)

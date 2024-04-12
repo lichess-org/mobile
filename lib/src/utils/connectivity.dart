@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:http/http.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -15,7 +16,7 @@ part 'connectivity.g.dart';
 @freezed
 class ConnectivityStatus with _$ConnectivityStatus {
   const factory ConnectivityStatus({
-    required ConnectivityResult connectivityResult,
+    required IList<ConnectivityResult> connectivityResult,
     required bool isOnline,
   }) = _ConnectivityStatus;
 }
@@ -27,7 +28,7 @@ Future<ConnectivityStatus> connectivity(ConnectivityRef ref) async {
   final connectivityResult = await Connectivity().checkConnectivity();
   try {
     return ConnectivityStatus(
-      connectivityResult: connectivityResult,
+      connectivityResult: connectivityResult.lock,
       isOnline: await onlineCheck(client),
     );
   } finally {
@@ -44,7 +45,7 @@ Stream<ConnectivityStatus> connectivityChanges(ConnectivityChangesRef ref) {
       final client = httpClient(ref.read(packageInfoProvider));
       try {
         return ConnectivityStatus(
-          connectivityResult: result,
+          connectivityResult: result.lock,
           isOnline: await onlineCheck(client),
         );
       } finally {
@@ -58,7 +59,7 @@ Stream<ConnectivityStatus> connectivityChanges(ConnectivityChangesRef ref) {
       final client = httpClient(ref.read(packageInfoProvider));
       try {
         return ConnectivityStatus(
-          connectivityResult: result,
+          connectivityResult: result.lock,
           isOnline: await onlineCheck(client),
         );
       } finally {

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -89,16 +88,16 @@ class PerfCards extends StatelessWidget {
                                       ? LichessIcons.arrow_full_upperright
                                       : LichessIcons.arrow_full_lowerright,
                                   color: userPerf.progression > 0
-                                      ? LichessColors.good
-                                      : LichessColors.red,
+                                      ? context.lichessColors.good
+                                      : context.lichessColors.error,
                                   size: 12,
                                 ),
                                 Text(
                                   userPerf.progression.abs().toString(),
                                   style: TextStyle(
                                     color: userPerf.progression > 0
-                                        ? LichessColors.good
-                                        : LichessColors.red,
+                                        ? context.lichessColors.good
+                                        : context.lichessColors.error,
                                     fontSize: 11,
                                   ),
                                 ),
@@ -125,7 +124,7 @@ class PerfCards extends StatelessWidget {
       builder: (context) {
         switch (perf) {
           case Perf.storm:
-            return const StormDashboardModal();
+            return StormDashboardModal(user: user.lightUser);
           default:
             return PerfStatsScreen(
               user: user,

@@ -46,7 +46,7 @@ class FollowingScreen extends StatelessWidget {
   Widget _buildAndroid(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.l10n.following),
+        title: Text(context.l10n.friends),
       ),
       body: const _Body(),
     );

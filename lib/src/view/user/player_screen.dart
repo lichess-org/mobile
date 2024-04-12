@@ -2,12 +2,17 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/relation/relation_ctrl.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/view/relation/following_screen.dart';
+import 'package:lichess_mobile/src/view/user/leaderboard_widget.dart';
+import 'package:lichess_mobile/src/view/user/search_screen.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -15,16 +20,11 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
-class RelationScreen extends ConsumerStatefulWidget {
-  const RelationScreen({super.key});
+class PlayerScreen extends ConsumerWidget {
+  const PlayerScreen({super.key});
 
   @override
-  ConsumerState<RelationScreen> createState() => _RelationScreenState();
-}
-
-class _RelationScreenState extends ConsumerState<RelationScreen> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return FocusDetector(
       onFocusRegained: () {
         ref.read(relationCtrlProvider.notifier).startWatchingFriends();
@@ -44,7 +44,7 @@ class _RelationScreenState extends ConsumerState<RelationScreen> {
   Widget _androidBuilder(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.l10n.friends),
+        title: Text(context.l10n.players),
       ),
       body: _Body(),
     );
@@ -58,12 +58,55 @@ class _RelationScreenState extends ConsumerState<RelationScreen> {
   }
 }
 
-class _Body extends StatelessWidget {
+class _Body extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final session = ref.watch(authSessionProvider);
+
     return SafeArea(
       child: ListView(
-        children: [_OnlineFriendsWidget()],
+        children: [
+          Padding(
+            padding: Styles.bodySectionPadding,
+            child: const _SearchButton(),
+          ),
+          if (session != null) _OnlineFriendsWidget(),
+          RatingPrefAware(child: LeaderboardWidget()),
+        ],
+      ),
+    );
+  }
+}
+
+class AlwaysDisabledFocusNode extends FocusNode {
+  @override
+  bool get hasFocus => false;
+}
+
+class _SearchButton extends StatelessWidget {
+  const _SearchButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return PlatformWidget(
+      androidBuilder: (context) => SearchBar(
+        leading: const Icon(Icons.search),
+        hintText: context.l10n.searchSearch,
+        focusNode: AlwaysDisabledFocusNode(),
+        onTap: () => pushPlatformRoute(
+          context,
+          fullscreenDialog: true,
+          builder: (_) => const SearchScreen(),
+        ),
+      ),
+      iosBuilder: (context) => CupertinoSearchTextField(
+        placeholder: context.l10n.searchSearch,
+        focusNode: AlwaysDisabledFocusNode(),
+        onTap: () => pushPlatformRoute(
+          context,
+          fullscreenDialog: true,
+          builder: (_) => const SearchScreen(),
+        ),
       ),
     );
   }
@@ -90,7 +133,7 @@ class _OnlineFriendsWidget extends ConsumerWidget {
           children: [
             if (data.followingOnlines.isEmpty)
               PlatformListTile(
-                title: Text(context.l10n.following),
+                title: Text(context.l10n.friends),
                 trailing: const Icon(
                   Icons.chevron_right,
                 ),
@@ -115,7 +158,7 @@ class _OnlineFriendsWidget extends ConsumerWidget {
       },
       error: (error, stackTrace) {
         debugPrint(
-          'SEVERE: [RelationScreen] could not load following online users; $error\n $stackTrace',
+          'SEVERE: [PlayerScreen] could not load following online users; $error\n $stackTrace',
         );
         return const Center(
           child: Text('Could not load online friends'),
@@ -136,7 +179,7 @@ class _OnlineFriendsWidget extends ConsumerWidget {
   void _handleTap(BuildContext context, IList<LightUser> followingOnlines) {
     pushPlatformRoute(
       context,
-      title: context.l10n.following,
+      title: context.l10n.friends,
       builder: (_) => const FollowingScreen(),
     );
   }

@@ -50,7 +50,7 @@ Future<T?> showConfirmDialog<T>(
       context: context,
       actions: [
         BottomSheetAction(
-          label: title,
+          makeLabel: (_) => title,
           isDestructiveAction: isDestructiveAction,
           onPressed: onConfirm,
         ),
@@ -103,15 +103,22 @@ Future<T?> showCupertinoActionSheet<T>({
         title: title,
         actions: actions
             .map(
-              (action) => CupertinoActionSheetAction(
-                onPressed: () {
-                  if (action.dismissOnPress) {
-                    Navigator.of(context).pop();
-                  }
-                  action.onPressed(context);
+              // Builder is used to retrieve the context immediately surrounding the button
+              // This is necessary to get the correct context for the iPad share dialog
+              // which needs the position of the action to display the share dialog
+              (action) => Builder(
+                builder: (context) {
+                  return CupertinoActionSheetAction(
+                    onPressed: () {
+                      if (action.dismissOnPress) {
+                        Navigator.of(context).pop();
+                      }
+                      action.onPressed(context);
+                    },
+                    isDestructiveAction: action.isDestructiveAction,
+                    child: action.makeLabel(context),
+                  );
                 },
-                isDestructiveAction: action.isDestructiveAction,
-                child: action.label,
               ),
             )
             .toList(),
@@ -185,7 +192,7 @@ Future<T?> showMaterialActionSheet<T>({
                               textAlign: action.leading != null
                                   ? TextAlign.start
                                   : TextAlign.center,
-                              child: action.label,
+                              child: action.makeLabel(context),
                             ),
                           ),
                           if (action.trailing != null) ...[
@@ -208,13 +215,13 @@ Future<T?> showMaterialActionSheet<T>({
 
 /// The Actions model that will use on the ActionSheet.
 class BottomSheetAction {
-  /// The primary content of the action sheet.
+  /// A function that returns the label widget. (required)
   ///
   /// Typically a [Text] widget.
   ///
   /// This should not wrap. To enforce the single line limit, use
   /// [Text.maxLines].
-  final Widget label;
+  final Widget Function(BuildContext context) makeLabel;
 
   /// The callback that is called when the action item is tapped. (required)
   final void Function(BuildContext context) onPressed;
@@ -237,7 +244,7 @@ class BottomSheetAction {
   final bool isDestructiveAction;
 
   BottomSheetAction({
-    required this.label,
+    required this.makeLabel,
     required this.onPressed,
     this.dismissOnPress = true,
     this.trailing,

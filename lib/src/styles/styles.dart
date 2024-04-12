@@ -1,5 +1,7 @@
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 
 // ignore: avoid_classes_with_only_static_members
@@ -9,6 +11,10 @@ abstract class Styles {
   static const title = TextStyle(
     fontSize: 20.0,
     fontWeight: FontWeight.bold,
+  );
+  static const subtitle = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
   );
   static const callout = TextStyle(
     fontSize: 18.0,
@@ -81,20 +87,101 @@ Color? dividerColor(BuildContext context) =>
         ? CupertinoColors.separator.resolveFrom(context)
         : null;
 
-Color darken(Color color, [double amount = .1]) {
+Color darken(Color c, [double amount = .1]) {
   assert(amount >= 0 && amount <= 1);
-
-  final hsl = HSLColor.fromColor(color);
-  final hslDark = hsl.withLightness((hsl.lightness - amount).clamp(0.0, 1.0));
-
-  return hslDark.toColor();
+  final f = 1 - amount;
+  return Color.fromARGB(
+    c.alpha,
+    (c.red * f).round(),
+    (c.green * f).round(),
+    (c.blue * f).round(),
+  );
 }
 
-Color lighten(Color color, [double amount = .1]) {
+Color lighten(Color c, [double amount = .1]) {
   assert(amount >= 0 && amount <= 1);
+  return Color.fromARGB(
+    c.alpha,
+    c.red + ((255 - c.red) * amount).round(),
+    c.green + ((255 - c.green) * amount).round(),
+    c.blue + ((255 - c.blue) * amount).round(),
+  );
+}
 
-  final hsl = HSLColor.fromColor(color);
-  final hslLight = hsl.withLightness((hsl.lightness + amount).clamp(0.0, 1.0));
+@immutable
+class CustomColors extends ThemeExtension<CustomColors> {
+  const CustomColors({
+    required this.brag,
+    required this.good,
+    required this.error,
+    required this.fancy,
+    required this.purple,
+    required this.primary,
+  });
 
-  return hslLight.toColor();
+  final Color brag;
+  final Color good;
+  final Color error;
+  final Color fancy;
+  final Color purple;
+  final Color primary;
+
+  @override
+  CustomColors copyWith({
+    Color? brag,
+    Color? good,
+    Color? error,
+    Color? fancy,
+    Color? purple,
+    Color? primary,
+  }) {
+    return CustomColors(
+      brag: brag ?? this.brag,
+      good: good ?? this.good,
+      error: error ?? this.error,
+      fancy: fancy ?? this.fancy,
+      purple: purple ?? this.purple,
+      primary: primary ?? this.primary,
+    );
+  }
+
+  @override
+  CustomColors lerp(ThemeExtension<CustomColors>? other, double t) {
+    if (other is! CustomColors) {
+      return this;
+    }
+    return CustomColors(
+      brag: Color.lerp(brag, other.brag, t) ?? brag,
+      good: Color.lerp(good, other.good, t) ?? good,
+      error: Color.lerp(error, other.error, t) ?? error,
+      fancy: Color.lerp(fancy, other.fancy, t) ?? fancy,
+      purple: Color.lerp(purple, other.purple, t) ?? purple,
+      primary: Color.lerp(primary, other.primary, t) ?? primary,
+    );
+  }
+
+  CustomColors harmonized(ColorScheme colorScheme) {
+    return copyWith(
+      brag: brag.harmonizeWith(colorScheme.primary),
+      good: good.harmonizeWith(colorScheme.primary),
+      error: error.harmonizeWith(colorScheme.primary),
+      fancy: fancy.harmonizeWith(colorScheme.primary),
+      purple: purple.harmonizeWith(colorScheme.primary),
+      primary: primary.harmonizeWith(colorScheme.primary),
+    );
+  }
+}
+
+const lichessCustomColors = CustomColors(
+  brag: LichessColors.brag,
+  good: LichessColors.good,
+  error: LichessColors.error,
+  fancy: LichessColors.fancy,
+  purple: LichessColors.purple,
+  primary: LichessColors.primary,
+);
+
+extension CustomColorsBuildContext on BuildContext {
+  CustomColors get lichessColors =>
+      Theme.of(this).extension<CustomColors>() ?? lichessCustomColors;
 }

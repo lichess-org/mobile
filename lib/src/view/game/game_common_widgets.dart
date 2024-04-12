@@ -11,10 +11,10 @@ import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
-import 'package:share_plus/share_plus.dart';
 
 import 'game_screen_providers.dart';
 import 'game_settings.dart';
@@ -132,18 +132,33 @@ List<BottomSheetAction> makeFinishedGameShareActions(
 }) {
   return [
     BottomSheetAction(
-      label: const Text('Share game URL'),
+      makeLabel: (_) => const Text('Share game URL'),
+      dismissOnPress: false,
       onPressed: (context) {
-        Share.shareUri(
-          Uri.parse('$kLichessHost/${game.id}'),
+        launchShareDialog(
+          context,
+          uri: Uri.parse('$kLichessHost/${game.id}'),
         );
       },
     ),
     BottomSheetAction(
-      label: Text(context.l10n.gameAsGIF),
+      makeLabel: (context) => Text(context.l10n.gameAsGIF),
+      dismissOnPress: false,
       onPressed: (context) async {
         try {
-          ref.read(gameShareServiceProvider).gameGif(game.id, orientation);
+          final gif = await ref
+              .read(gameShareServiceProvider)
+              .gameGif(game.id, orientation);
+          if (context.mounted) {
+            launchShareDialog(
+              context,
+              files: [gif],
+              subject: context.l10n.resVsX(
+                game.white.fullName(context),
+                game.black.fullName(context),
+              ),
+            );
+          }
         } catch (e) {
           debugPrint(e.toString());
           if (context.mounted) {
@@ -158,15 +173,26 @@ List<BottomSheetAction> makeFinishedGameShareActions(
     ),
     if (lastMove != null)
       BottomSheetAction(
-        label: Text(context.l10n.screenshotCurrentPosition),
+        makeLabel: (context) => Text(context.l10n.screenshotCurrentPosition),
+        dismissOnPress: false,
         onPressed: (context) async {
           try {
-            ref.read(gameShareServiceProvider).screenshotPosition(
-                  game.id,
-                  orientation,
-                  currentGamePosition.fen,
-                  lastMove,
-                );
+            final image =
+                await ref.read(gameShareServiceProvider).screenshotPosition(
+                      game.id,
+                      orientation,
+                      currentGamePosition.fen,
+                      lastMove,
+                    );
+            if (context.mounted) {
+              launchShareDialog(
+                context,
+                files: [image],
+                subject: context.l10n.puzzleFromGameLink(
+                  '$kLichessHost/${game.id}',
+                ),
+              );
+            }
           } catch (e) {
             if (context.mounted) {
               showPlatformSnackbar(
@@ -179,10 +205,18 @@ List<BottomSheetAction> makeFinishedGameShareActions(
         },
       ),
     BottomSheetAction(
-      label: Text('PGN: ${context.l10n.downloadAnnotated}'),
+      makeLabel: (context) => Text('PGN: ${context.l10n.downloadAnnotated}'),
+      dismissOnPress: false,
       onPressed: (context) async {
         try {
-          ref.read(gameShareServiceProvider).annotatedPgn(game.id);
+          final pgn =
+              await ref.read(gameShareServiceProvider).annotatedPgn(game.id);
+          if (context.mounted) {
+            launchShareDialog(
+              context,
+              text: pgn,
+            );
+          }
         } catch (e) {
           if (context.mounted) {
             showPlatformSnackbar(
@@ -195,10 +229,17 @@ List<BottomSheetAction> makeFinishedGameShareActions(
       },
     ),
     BottomSheetAction(
-      label: Text('PGN: ${context.l10n.downloadRaw}'),
+      makeLabel: (context) => Text('PGN: ${context.l10n.downloadRaw}'),
+      dismissOnPress: false,
       onPressed: (context) async {
         try {
-          ref.read(gameShareServiceProvider).rawPgn(game.id);
+          final pgn = await ref.read(gameShareServiceProvider).rawPgn(game.id);
+          if (context.mounted) {
+            launchShareDialog(
+              context,
+              text: pgn,
+            );
+          }
         } catch (e) {
           if (context.mounted) {
             showPlatformSnackbar(

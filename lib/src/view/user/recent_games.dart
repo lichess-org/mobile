@@ -50,6 +50,31 @@ class RecentGames extends ConsumerWidget {
 
     final userId = user?.id ?? ref.watch(authSessionProvider)?.user.id;
 
+    Widget getResultIcon(LightArchivedGame game, Side mySide) {
+      if (game.status == GameStatus.aborted ||
+          game.status == GameStatus.noStart) {
+        return const Icon(
+          CupertinoIcons.xmark_square_fill,
+          color: LichessColors.grey,
+        );
+      } else {
+        return game.winner == null
+            ? Icon(
+                CupertinoIcons.equal_square_fill,
+                color: context.lichessColors.brag,
+              )
+            : game.winner == mySide
+                ? Icon(
+                    CupertinoIcons.plus_square_fill,
+                    color: context.lichessColors.good,
+                  )
+                : Icon(
+                    CupertinoIcons.minus_square_fill,
+                    color: context.lichessColors.error,
+                  );
+      }
+    }
+
     return recentGames.when(
       data: (data) {
         if (data.isEmpty) {

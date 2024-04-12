@@ -13,7 +13,6 @@ import 'package:lichess_mobile/src/model/puzzle/storm.dart';
 import 'package:lichess_mobile/src/model/puzzle/storm_controller.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
@@ -21,6 +20,7 @@ import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/puzzle/puzzle_history_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/storm_clock.dart';
 import 'package:lichess_mobile/src/view/puzzle/storm_dashboard.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
@@ -31,8 +31,6 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
-
-import 'history_boards.dart';
 
 class StormScreen extends StatefulWidget {
   const StormScreen({super.key});
@@ -356,18 +354,18 @@ class _TopTable extends ConsumerWidget {
               ),
             )
           else ...[
-            const Icon(
+            Icon(
               LichessIcons.storm,
               size: 50.0,
-              color: LichessColors.brag,
+              color: context.lichessColors.brag,
             ),
             const SizedBox(width: 8),
             Text(
               puzzleState.numSolved.toString(),
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 30.0,
                 fontWeight: FontWeight.bold,
-                color: LichessColors.brag,
+                color: context.lichessColors.brag,
               ),
             ),
             const Spacer(),
@@ -703,23 +701,23 @@ class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
         ? [
             const SizedBox(height: 16),
             ListTile(
-              leading: const Icon(
+              leading: Icon(
                 LichessIcons.storm,
                 size: 46,
-                color: LichessColors.brag,
+                color: context.lichessColors.brag,
               ),
               title: Text(
                 newHighTitle(context, widget.stats.newHigh!),
                 style: Styles.sectionTitle.copyWith(
-                  color: LichessColors.brag,
+                  color: context.lichessColors.brag,
                 ),
               ),
               subtitle: Text(
                 context.l10n.stormPreviousHighscoreWasX(
                   widget.stats.newHigh!.prev.toString(),
                 ),
-                style: const TextStyle(
-                  color: LichessColors.brag,
+                style: TextStyle(
+                  color: context.lichessColors.brag,
                 ),
               ),
             ),
@@ -821,7 +819,7 @@ class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
                 ),
                 const SizedBox(height: 3.0),
                 if (puzzleList.isNotEmpty)
-                  PuzzleHistoryBoards(puzzleList)
+                  PuzzleHistoryPreview(puzzleList)
                 else
                   const Center(
                     child: Text('Nothing to show, go change the filters'),
@@ -878,14 +876,14 @@ class _StormDashboardButton extends ConsumerWidget {
         case TargetPlatform.iOS:
           return CupertinoIconButton(
             padding: EdgeInsets.zero,
-            onPressed: () => _showDashboard(context),
+            onPressed: () => _showDashboard(context, session),
             semanticsLabel: 'Storm History',
             icon: const Icon(Icons.history),
           );
         case TargetPlatform.android:
           return IconButton(
             tooltip: 'Storm History',
-            onPressed: () => _showDashboard(context),
+            onPressed: () => _showDashboard(context, session),
             icon: const Icon(Icons.history),
           );
         default:
@@ -896,10 +894,11 @@ class _StormDashboardButton extends ConsumerWidget {
     return const SizedBox.shrink();
   }
 
-  void _showDashboard(BuildContext context) => pushPlatformRoute(
+  void _showDashboard(BuildContext context, AuthSessionState session) =>
+      pushPlatformRoute(
         context,
         rootNavigator: true,
         fullscreenDialog: true,
-        builder: (_) => const StormDashboardModal(),
+        builder: (_) => StormDashboardModal(user: session.user),
       );
 }

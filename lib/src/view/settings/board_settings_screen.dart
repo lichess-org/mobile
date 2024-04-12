@@ -111,17 +111,6 @@ class _Body extends ConsumerWidget {
                       .toggleShowMaterialDifference();
                 },
               ),
-              SwitchSettingTile(
-                title: Text(
-                  context.l10n.preferencesBlindfoldChess,
-                ),
-                value: boardPrefs.blindfoldMode,
-                onChanged: (value) {
-                  ref
-                      .read(boardPreferencesProvider.notifier)
-                      .toggleBlindfoldMode();
-                },
-              ),
             ],
           ),
         ],

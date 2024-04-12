@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/l10n.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/user/profile.dart';
@@ -58,11 +58,13 @@ class UserProfile extends ConsumerWidget {
                   const SizedBox(
                     width: 5,
                   ),
-                  Text(
-                    context.l10n.thisAccountViolatedTos,
-                    style: const TextStyle(
-                      color: LichessColors.error,
-                      fontWeight: FontWeight.bold,
+                  Flexible(
+                    child: Text(
+                      context.l10n.thisAccountViolatedTos,
+                      style: const TextStyle(
+                        color: LichessColors.error,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ],

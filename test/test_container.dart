@@ -26,6 +26,7 @@ import './fake_crashlytics.dart';
 import './model/auth/fake_session_storage.dart';
 import './model/common/service/fake_sound_service.dart';
 import 'fake_notification_service.dart';
+import 'model/common/fake_websocket_channel.dart';
 
 class MockSoundPool extends Mock implements Soundpool {}
 
@@ -64,6 +65,14 @@ Future<ProviderContainer> makeContainer({
 
   final container = ProviderContainer(
     overrides: [
+      webSocketChannelFactoryProvider.overrideWith((ref) {
+        return FakeWebSocketChannelFactory(() => FakeWebSocketChannel());
+      }),
+      socketPoolProvider.overrideWith((ref) {
+        final pool = SocketPool(ref);
+        ref.onDispose(pool.dispose);
+        return pool;
+      }),
       lichessClientFactoryProvider.overrideWithValue(FakeClientFactory()),
       crashlyticsProvider.overrideWithValue(FakeCrashlytics()),
       notificationServiceProvider.overrideWithValue(FakeNotificationService()),

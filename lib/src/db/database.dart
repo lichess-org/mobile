@@ -8,6 +8,7 @@ const kLichessDatabaseName = 'lichess_mobile.db';
 
 const puzzleTTL = Duration(days: 60);
 const corresGameTTL = Duration(days: 60);
+const chatReadMessagesTTL = Duration(days: 60);
 
 @Riverpod(keepAlive: true)
 Database database(DatabaseRef ref) {
@@ -40,34 +41,34 @@ Future<Database> openDb(DatabaseFactory dbFactory, String path) async {
   return dbFactory.openDatabase(
     path,
     options: OpenDatabaseOptions(
-      version: 4,
+      version: 1,
       onOpen: (db) async {
         await _deleteOldEntries(db, 'puzzle', puzzleTTL);
         await _deleteOldEntries(db, 'correspondence_game', corresGameTTL);
+        await _deleteOldEntries(
+          db,
+          'chat_read_messages',
+          chatReadMessagesTTL,
+        );
       },
       onCreate: (db, version) async {
         final batch = db.batch();
-        _createPuzzleBatchTableV4(batch);
-        _createPuzzleTableV4(batch);
-        _createCorrespondenceGameTableV4(batch);
+        _createPuzzleBatchTableV1(batch);
+        _createPuzzleTableV1(batch);
+        _createCorrespondenceGameTableV1(batch);
+        _createChatReadMessagesTableV1(batch);
         await batch.commit();
       },
-      onUpgrade: (db, oldVersion, newVersion) async {
-        final batch = db.batch();
-        if (oldVersion == 1) {
-          _createPuzzleTableV4(batch);
-          _createCorrespondenceGameTableV4(batch);
-        }
-        if (oldVersion == 2 || oldVersion == 3) {
-          _createCorrespondenceGameTableV4(batch);
-        }
-        await batch.commit();
-      },
+      // onUpgrade: (db, oldVersion, newVersion) async {
+      //   final batch = db.batch();
+      //   await batch.commit();
+      // },
+      onDowngrade: onDatabaseDowngradeDelete,
     ),
   );
 }
 
-void _createPuzzleBatchTableV4(Batch batch) {
+void _createPuzzleBatchTableV1(Batch batch) {
   batch.execute('DROP TABLE IF EXISTS puzzle_batchs');
   batch.execute('''
     CREATE TABLE puzzle_batchs(
@@ -79,7 +80,7 @@ void _createPuzzleBatchTableV4(Batch batch) {
     ''');
 }
 
-void _createPuzzleTableV4(Batch batch) {
+void _createPuzzleTableV1(Batch batch) {
   batch.execute('DROP TABLE IF EXISTS puzzle');
   batch.execute('''
     CREATE TABLE puzzle(
@@ -91,7 +92,7 @@ void _createPuzzleTableV4(Batch batch) {
     ''');
 }
 
-void _createCorrespondenceGameTableV4(Batch batch) {
+void _createCorrespondenceGameTableV1(Batch batch) {
   batch.execute('DROP TABLE IF EXISTS correspondence_game');
   batch.execute('''
     CREATE TABLE correspondence_game(
@@ -100,6 +101,18 @@ void _createCorrespondenceGameTableV4(Batch batch) {
     lastModified TEXT NOT NULL,
     data TEXT NOT NULL,
     PRIMARY KEY (gameId)
+  )
+    ''');
+}
+
+void _createChatReadMessagesTableV1(Batch batch) {
+  batch.execute('DROP TABLE IF EXISTS chat_read_messages');
+  batch.execute('''
+    CREATE TABLE chat_read_messages(
+    id TEXT NOT NULL,
+    lastModified TEXT NOT NULL,
+    nbRead INTEGER NOT NULL,
+    PRIMARY KEY (id)
   )
     ''');
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_preferences.dart';
@@ -62,6 +61,7 @@ class GameSettings extends ConsumerWidget {
           value: gamePrefs.enableChat ?? false,
           onChanged: (value) {
             ref.read(gamePreferencesProvider.notifier).toggleChat();
+            ref.read(gameControllerProvider(id).notifier).onToggleChat(value);
           },
         ),
         ...userPrefsAsync.maybeWhen(
@@ -79,21 +79,25 @@ class GameSettings extends ConsumerWidget {
                         .toggleMoveConfirmation();
                   },
                 ),
-              if (data.prefs?.zenMode == Zen.gameAuto)
-                SwitchSettingTile(
-                  title: Text(
-                    context.l10n.preferencesZenMode,
-                  ),
-                  value: data.isZenModeEnabled,
-                  onChanged: (value) {
-                    ref
-                        .read(gameControllerProvider(id).notifier)
-                        .toggleZenMode();
-                  },
+              SwitchSettingTile(
+                title: Text(
+                  context.l10n.preferencesZenMode,
                 ),
+                value: data.isZenModeEnabled,
+                onChanged: (value) {
+                  ref.read(gameControllerProvider(id).notifier).toggleZenMode();
+                },
+              ),
             ];
           },
           orElse: () => [],
+        ),
+        SwitchSettingTile(
+          title: const Text('Blindfold'),
+          value: gamePrefs.blindfoldMode ?? false,
+          onChanged: (value) {
+            ref.read(gamePreferencesProvider.notifier).toggleBlindfoldMode();
+          },
         ),
         const SizedBox(height: 16.0),
       ],

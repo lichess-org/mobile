@@ -4,8 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 
@@ -71,7 +71,7 @@ class UserFullNameWidget extends ConsumerWidget {
               user?.isOnline == true ? Icons.cloud : Icons.cloud_off,
               size: style?.fontSize ??
                   DefaultTextStyle.of(context).style.fontSize,
-              color: user?.isOnline == true ? LichessColors.good : null,
+              color: user?.isOnline == true ? context.lichessColors.good : null,
             ),
           ),
         if (user?.isPatron == true)
@@ -89,8 +89,8 @@ class UserFullNameWidget extends ConsumerWidget {
             user!.title!,
             style: (style ?? const TextStyle()).copyWith(
               color: user?.title == 'BOT'
-                  ? LichessColors.fancy
-                  : LichessColors.brag,
+                  ? context.lichessColors.fancy
+                  : context.lichessColors.brag,
               fontWeight: FontWeight.bold,
             ),
           ),

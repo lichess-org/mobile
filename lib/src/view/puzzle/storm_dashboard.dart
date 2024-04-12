@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -12,7 +13,9 @@ import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/stat_card.dart';
 
 class StormDashboardModal extends StatelessWidget {
-  const StormDashboardModal({super.key});
+  const StormDashboardModal({super.key, required this.user});
+
+  final LightUser user;
 
   @override
   Widget build(BuildContext context) {
@@ -28,10 +31,10 @@ class StormDashboardModal extends StatelessWidget {
                 ],
               ),
             ),
-            child: _Body(),
+            child: _Body(user: user),
           )
         : Scaffold(
-            body: _Body(),
+            body: _Body(user: user),
             appBar: AppBar(
               title: Row(
                 children: [
@@ -46,9 +49,13 @@ class StormDashboardModal extends StatelessWidget {
 }
 
 class _Body extends ConsumerWidget {
+  const _Body({required this.user});
+
+  final LightUser user;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final stormDashboard = ref.watch(stormDashboardProvider);
+    final stormDashboard = ref.watch(stormDashboardProvider(user.id));
     return stormDashboard.when(
       data: (data) {
         if (data == null) {
@@ -60,7 +67,8 @@ class _Body extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: Styles.sectionTopPadding,
+                padding:
+                    Styles.sectionTopPadding.add(Styles.horizontalBodyPadding),
                 child: StatCardRow(
                   [
                     StatCard(
@@ -75,7 +83,8 @@ class _Body extends ConsumerWidget {
                 ),
               ),
               Padding(
-                padding: Styles.sectionTopPadding,
+                padding:
+                    Styles.sectionTopPadding.add(Styles.horizontalBodyPadding),
                 child: StatCardRow(
                   [
                     StatCard(
@@ -162,8 +171,8 @@ class _Body extends ConsumerWidget {
                                     textAlign: TextAlign.center,
                                     data.dayHighscores[entryIndex].score
                                         .toString(),
-                                    style: const TextStyle(
-                                      color: LichessColors.brag,
+                                    style: TextStyle(
+                                      color: context.lichessColors.brag,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),

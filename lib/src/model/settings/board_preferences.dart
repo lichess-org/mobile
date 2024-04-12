@@ -10,14 +10,14 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'board_preferences.freezed.dart';
 part 'board_preferences.g.dart';
 
-const _prefKey = 'preferences.board';
-
 @Riverpod(keepAlive: true)
 class BoardPreferences extends _$BoardPreferences {
+  static const String prefKey = 'preferences.board';
+
   @override
   BoardPrefs build() {
     final prefs = ref.watch(sharedPreferencesProvider);
-    final stored = prefs.getString(_prefKey);
+    final stored = prefs.getString(prefKey);
     return stored != null
         ? BoardPrefs.fromJson(
             jsonDecode(stored) as Map<String, dynamic>,
@@ -29,8 +29,8 @@ class BoardPreferences extends _$BoardPreferences {
     return _save(state.copyWith(pieceSet: pieceSet));
   }
 
-  Future<void> setBoardTheme(BoardTheme boardTheme) {
-    return _save(state.copyWith(boardTheme: boardTheme));
+  Future<void> setBoardTheme(BoardTheme boardTheme) async {
+    await _save(state.copyWith(boardTheme: boardTheme));
   }
 
   Future<void> toggleHapticFeedback() {
@@ -59,14 +59,10 @@ class BoardPreferences extends _$BoardPreferences {
     );
   }
 
-  Future<void> toggleBlindfoldMode() {
-    return _save(state.copyWith(blindfoldMode: !state.blindfoldMode));
-  }
-
   Future<void> _save(BoardPrefs newState) async {
     final prefs = ref.read(sharedPreferencesProvider);
     await prefs.setString(
-      _prefKey,
+      prefKey,
       jsonEncode(newState.toJson()),
     );
     state = newState;
@@ -86,7 +82,6 @@ class BoardPrefs with _$BoardPrefs {
     required bool coordinates,
     required bool pieceAnimation,
     required bool showMaterialDifference,
-    required bool blindfoldMode,
   }) = _BoardPrefs;
 
   static const defaults = BoardPrefs(
@@ -98,7 +93,6 @@ class BoardPrefs with _$BoardPrefs {
     coordinates: true,
     pieceAnimation: true,
     showMaterialDifference: true,
-    blindfoldMode: false,
   );
 
   factory BoardPrefs.fromJson(Map<String, dynamic> json) {

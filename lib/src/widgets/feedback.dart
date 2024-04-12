@@ -1,8 +1,58 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+
+class ConnectivityBanner extends ConsumerWidget {
+  const ConnectivityBanner();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final connectivity = ref.watch(connectivityChangesProvider);
+    final cupertinoTheme = CupertinoTheme.of(context);
+    final theme = Theme.of(context);
+    return connectivity.when(
+      data: (data) {
+        if (data.isOnline) {
+          return const SizedBox.shrink();
+        }
+        return Container(
+          height: 45,
+          color: theme.platform == TargetPlatform.iOS
+              ? cupertinoTheme.barBackgroundColor
+              : theme.colorScheme.surfaceContainerHighest,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.report),
+                const SizedBox(width: 5),
+                Flexible(
+                  child: Text(
+                    'Network connectivity unavailable.',
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: theme.platform == TargetPlatform.iOS
+                          ? null
+                          : theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+      loading: () => const SizedBox.shrink(),
+      error: (error, stack) => const SizedBox.shrink(),
+    );
+  }
+}
 
 /// A adaptive circular progress indicator which size is constrained so it can fit
 /// in buttons.
@@ -83,7 +133,9 @@ void showPlatformSnackbar(
         SnackBar(
           content: Text(
             message,
-            style: const TextStyle(color: Colors.white),
+            style: type == SnackBarType.error
+                ? const TextStyle(color: Colors.white)
+                : null,
           ),
           backgroundColor: type == SnackBarType.error ? Colors.red : null,
         ),

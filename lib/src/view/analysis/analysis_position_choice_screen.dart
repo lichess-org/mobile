@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -126,7 +125,7 @@ class _BodyState extends State<_Body> {
         variant: Variant.standard,
         orientation: Side.white,
         pgn: '',
-        id: ValueId('standalone_analysis'),
+        id: standaloneAnalysisId,
       );
     }
 
@@ -138,7 +137,7 @@ class _BodyState extends State<_Body> {
         variant: Variant.standard,
         orientation: Side.white,
         pgn: '[FEN "${pos.fen}"]',
-        id: const ValueId('standalone_analysis'),
+        id: standaloneAnalysisId,
       );
     } catch (_, __) {}
 
@@ -148,18 +147,21 @@ class _BodyState extends State<_Body> {
       final initialPosition = PgnGame.startingPosition(game.headers);
       final rule = Rule.fromPgn(game.headers['Variant']);
 
-      // require at least 1 valid move
-      if (game.moves.mainline().isEmpty) return null;
-      final move = initialPosition.parseSan(game.moves.mainline().first.san);
-      if (move == null) return null;
+      final mainlineMoves = game.moves.mainline();
+      //if there is a first move, require it to be valid, otherwise require a FEN
+      if ((mainlineMoves.isNotEmpty &&
+              (initialPosition.parseSan(mainlineMoves.first.san) == null)) ||
+          (mainlineMoves.isEmpty && game.headers['FEN'] == null)) {
+        return null;
+      }
 
       return AnalysisOptions(
         isLocalEvaluationAllowed: true,
         variant: rule != null ? Variant.fromRule(rule) : Variant.standard,
         pgn: textInput!,
-        initialMoveCursor: 1,
+        initialMoveCursor: mainlineMoves.isEmpty ? 0 : 1,
         orientation: Side.white,
-        id: const ValueId('standalone_analysis'),
+        id: standaloneAnalysisId,
       );
     } catch (_, __) {}
 

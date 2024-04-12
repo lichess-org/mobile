@@ -17,11 +17,9 @@ part 'lobby_repository.g.dart';
 Future<IList<CorrespondenceChallenge>> correspondenceChallenges(
   CorrespondenceChallengesRef ref,
 ) {
-  final client = ref.read(lichessClientFactoryProvider)();
-  ref.onDispose(client.close);
-
-  final lobbyRepository = LobbyRepository(client);
-  return lobbyRepository.getCorrespondenceChallenges();
+  return ref.withClient(
+    (client) => LobbyRepository(client).getCorrespondenceChallenges(),
+  );
 }
 
 class LobbyRepository {

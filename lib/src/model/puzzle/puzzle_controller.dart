@@ -6,6 +6,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:http/http.dart' as http;
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
@@ -42,6 +43,9 @@ class PuzzleController extends _$PuzzleController {
 
   final _engineEvalDebounce = Debouncer(const Duration(milliseconds: 100));
 
+  late final _service = ref.read(puzzleServiceFactoryProvider)(
+    queueLength: kPuzzleLocalQueueLength,
+  );
   @override
   PuzzleState build(
     PuzzleContext initialContext, {
@@ -59,12 +63,6 @@ class PuzzleController extends _$PuzzleController {
 
     return _loadNewContext(initialContext, initialStreak);
   }
-
-  PuzzleService _service(http.Client client) =>
-      ref.read(puzzleServiceFactoryProvider)(
-        client,
-        queueLength: kPuzzleLocalQueueLength,
-      );
 
   PuzzleRepository _repository(http.Client client) => PuzzleRepository(client);
 
@@ -214,12 +212,9 @@ class PuzzleController extends _$PuzzleController {
         )
         .setDifficulty(difficulty);
 
-    // ignore: avoid_manual_providers_as_generated_provider_dependency
-    final nextPuzzle = await ref.withClient(
-      (client) => _service(client).resetBatch(
-        userId: initialContext.userId,
-        angle: initialContext.angle,
-      ),
+    final nextPuzzle = _service.resetBatch(
+      userId: initialContext.userId,
+      angle: initialContext.angle,
     );
 
     state = state.copyWith(
@@ -325,23 +320,17 @@ class PuzzleController extends _$PuzzleController {
       resultSent: true,
     );
 
-    final sessionNotifier =
-        puzzleSessionProvider(initialContext.userId, initialContext.angle)
-            .notifier;
-
     final soundService = ref.read(soundServiceProvider);
 
     if (state.streak == null) {
-      final next = await ref.withClient(
-        (client) => _service(client).solve(
-          userId: initialContext.userId,
-          angle: initialContext.angle,
-          puzzle: state.puzzle,
-          solution: PuzzleSolution(
-            id: state.puzzle.puzzle.id,
-            win: state.result == PuzzleResult.win,
-            rated: initialContext.userId != null,
-          ),
+      final next = await _service.solve(
+        userId: initialContext.userId,
+        angle: initialContext.angle,
+        puzzle: state.puzzle,
+        solution: PuzzleSolution(
+          id: state.puzzle.puzzle.id,
+          win: state.result == PuzzleResult.win,
+          rated: initialContext.userId != null,
         ),
       );
 
@@ -349,16 +338,24 @@ class PuzzleController extends _$PuzzleController {
         nextContext: next,
       );
 
-      // ignore: avoid_manual_providers_as_generated_provider_dependency
-      ref.read(sessionNotifier).addAttempt(
+      ref
+          .read(
+            puzzleSessionProvider(initialContext.userId, initialContext.angle)
+                .notifier,
+          )
+          .addAttempt(
             state.puzzle.puzzle.id,
             win: result == PuzzleResult.win,
           );
 
       final rounds = next?.rounds;
       if (rounds != null) {
-        // ignore: avoid_manual_providers_as_generated_provider_dependency
-        ref.read(sessionNotifier).setRatingDiffs(rounds);
+        ref
+            .read(
+              puzzleSessionProvider(initialContext.userId, initialContext.angle)
+                  .notifier,
+            )
+            .setRatingDiffs(rounds);
       }
 
       if (next != null &&
@@ -466,6 +463,24 @@ class PuzzleController extends _$PuzzleController {
     } else {
       ref.read(evaluationServiceProvider).disposeEngine();
     }
+  }
+
+  String makePgn() {
+    final initPosition = _gameTree.nodeAt(state.initialPath).position;
+    var currentPosition = initPosition;
+    final pgnMoves = state.puzzle.puzzle.solution.fold<List<String>>([],
+        (List<String> acc, move) {
+      final moveObj = Move.fromUci(move);
+      if (moveObj != null) {
+        final String san;
+        (currentPosition, san) = currentPosition.makeSan(moveObj);
+        return acc..add(san);
+      }
+      return acc;
+    });
+    final pgn =
+        '[FEN "${initPosition.fen}"][Site "$kLichessHost/training/${state.puzzle.puzzle.id}"]${pgnMoves.join(' ')}';
+    return pgn;
   }
 
   void _startEngineEval() {

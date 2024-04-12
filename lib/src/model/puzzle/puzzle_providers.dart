@@ -23,17 +23,14 @@ Future<PuzzleContext?> nextPuzzle(
   PuzzleAngle angle,
 ) {
   final session = ref.watch(authSessionProvider);
+  final puzzleService = ref.read(puzzleServiceFactoryProvider)(
+    queueLength: kPuzzleLocalQueueLength,
+  );
 
-  return ref.withClient((client) {
-    final puzzleService = ref.read(puzzleServiceFactoryProvider)(
-      client,
-      queueLength: kPuzzleLocalQueueLength,
-    );
-    return puzzleService.nextPuzzle(
-      userId: session?.user.id,
-      angle: angle,
-    );
-  });
+  return puzzleService.nextPuzzle(
+    userId: session?.user.id,
+    angle: angle,
+  );
 }
 
 @riverpod
@@ -46,6 +43,7 @@ Future<PuzzleStormResponse> storm(StormRef ref) {
   return ref.withClient((client) => PuzzleRepository(client).storm());
 }
 
+/// Fetches a puzzle from the local storage if available, otherwise fetches it from the server.
 @riverpod
 Future<Puzzle> puzzle(PuzzleRef ref, PuzzleId id) async {
   final puzzleStorage = ref.watch(puzzleStorageProvider);
@@ -81,11 +79,12 @@ Future<IMap<String, int>> savedOpeningBatches(
 @riverpod
 Future<PuzzleDashboard?> puzzleDashboard(
   PuzzleDashboardRef ref,
+  int days,
 ) async {
   final session = ref.watch(authSessionProvider);
   if (session == null) return null;
   return ref.withClientCacheFor(
-    (client) => PuzzleRepository(client).puzzleDashboard(),
+    (client) => PuzzleRepository(client).puzzleDashboard(days),
     const Duration(hours: 3),
   );
 }
@@ -103,12 +102,9 @@ Future<IList<PuzzleHistoryEntry>?> puzzleRecentActivity(
 }
 
 @riverpod
-Future<StormDashboard?> stormDashboard(StormDashboardRef ref) async {
-  final session = ref.watch(authSessionProvider);
-  if (session == null) return null;
-  return ref.withClientCacheFor(
-    (client) => PuzzleRepository(client).stormDashboard(session.user.id),
-    const Duration(minutes: 30),
+Future<StormDashboard?> stormDashboard(StormDashboardRef ref, UserId id) async {
+  return ref.withClient(
+    (client) => PuzzleRepository(client).stormDashboard(id),
   );
 }
 

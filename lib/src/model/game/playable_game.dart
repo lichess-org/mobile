@@ -8,7 +8,6 @@ import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
-import 'package:lichess_mobile/src/model/game/chat_controller.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
@@ -48,7 +47,6 @@ class PlayableGame
     required Player black,
     required bool moretimeable,
     required bool takebackable,
-    IList<Message>? messages,
     IList<ExternalEval>? evals,
     IList<Duration>? clocks,
 
@@ -194,7 +192,6 @@ PlayableGame _playableGameFromPick(RequiredPick pick) {
       },
     ),
     rematch: pick('game', 'rematch').asGameIdOrNull(),
-    messages: pick('chat', 'lines').asListOrNull(_messageFromPick)?.toIList(),
   );
 }
 
@@ -265,13 +262,6 @@ CorrespondenceClockData _correspondenceClockDataFromPick(RequiredPick pick) {
   return CorrespondenceClockData(
     white: pick('white').asDurationFromSecondsOrThrow(),
     black: pick('black').asDurationFromSecondsOrThrow(),
-  );
-}
-
-Message _messageFromPick(RequiredPick pick) {
-  return (
-    message: pick('t').asStringOrThrow(),
-    username: pick('u').asStringOrThrow(),
   );
 }
 

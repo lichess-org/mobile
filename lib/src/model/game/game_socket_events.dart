@@ -132,10 +132,8 @@ class ServerEvalEvent with _$ServerEvalEvent {
     required Map<String, dynamic> tree,
     ServerAnalysis? analysis,
     GameDivision? division,
+    required bool isAnalysisComplete,
   }) = _ServerEvalEvent;
-
-  bool get isAnalysisIncomplete =>
-      evals.any((e) => e.cp == null || e.mate != null);
 
   factory ServerEvalEvent.fromJson(Map<String, dynamic> json) =>
       _serverEvalEventFromPick(pick(json).required());
@@ -143,16 +141,27 @@ class ServerEvalEvent with _$ServerEvalEvent {
 
 ServerEvalEvent _serverEvalEventFromPick(RequiredPick pick) {
   final tree = pick('tree').asMapOrThrow<String, dynamic>();
-  Map<String, dynamic> node = tree;
+  Map<String, dynamic>? node = tree;
   final List<ExternalEval> evals = [];
 
-  while ((node['children'] as List<dynamic>).isNotEmpty) {
-    final children = node['children'] as List<dynamic>;
-    final firstChild = children.first as Map<String, dynamic>;
-    final eval = firstChild['eval'] as Map<String, dynamic>?;
-    final glyphs = firstChild['glyphs'] as List<dynamic>?;
+  bool isAnalysisIncomplete = false;
+
+  String? nextVariation;
+
+  while (node != null) {
+    final ply = node['ply'] as int;
+    final san = node['san'] as String?;
+    final children = node['children'] as List<dynamic>?;
+    final firstChild = children?.firstOrNull as Map<String, dynamic>?;
+    final eval = node['eval'] as Map<String, dynamic>?;
+
+    if (eval == null && firstChild != null && ply <= 300 && ply > 0) {
+      isAnalysisIncomplete = true;
+    }
+
+    final glyphs = node['glyphs'] as List<dynamic>?;
     final glyph = glyphs?.first as Map<String, dynamic>?;
-    final comments = firstChild['comments'] as List<dynamic>?;
+    final comments = node['comments'] as List<dynamic>?;
     final comment = comments?.first as Map<String, dynamic>?;
     final judgment = glyph != null && comment != null
         ? (
@@ -160,8 +169,11 @@ ServerEvalEvent _serverEvalEventFromPick(RequiredPick pick) {
             comment: comment['text'] as String,
           )
         : null;
+
+    final variation = nextVariation;
+
     final buffer = StringBuffer();
-    if (children.length > 1) {
+    if (children != null && children.length > 1) {
       Map<String, dynamic>? variationNode = children[1] as Map<String, dynamic>;
       while (variationNode != null) {
         final san = variationNode['san'] as String;
@@ -178,16 +190,22 @@ ServerEvalEvent _serverEvalEventFromPick(RequiredPick pick) {
         }
       }
     }
-    final variation = buffer.isEmpty ? null : buffer.toString();
-    evals.add(
-      ExternalEval(
-        cp: eval?['cp'] as int?,
-        mate: eval?['mate'] as int?,
-        bestMove: eval?['best'] as String?,
-        judgment: judgment,
-        variation: variation,
-      ),
-    );
+    nextVariation = buffer.isEmpty ? null : buffer.toString();
+    // make it compatible with lichess API GET /game/export which doesn't return
+    // an eval of the starting position
+    // also make sure to not add an empty eval for checkmate (or stalemate) which
+    // would be the leaf node with no eval
+    if (san != null && (eval != null || firstChild != null)) {
+      evals.add(
+        ExternalEval(
+          cp: eval?['cp'] as int?,
+          mate: eval?['mate'] as int?,
+          bestMove: eval?['best'] as String?,
+          judgment: judgment,
+          variation: variation,
+        ),
+      );
+    }
     node = firstChild;
   }
 
@@ -217,6 +235,7 @@ ServerEvalEvent _serverEvalEventFromPick(RequiredPick pick) {
         ),
       ),
     ),
+    isAnalysisComplete: !isAnalysisIncomplete,
     division: pick('division').letOrNull(
       (it) => (
         middle: it('middle').asIntOrNull(),

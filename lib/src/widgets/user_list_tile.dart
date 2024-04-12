@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
@@ -67,7 +66,7 @@ class UserListTile extends StatelessWidget {
           : null,
       leading: Icon(
         isOnline == true ? Icons.cloud : Icons.cloud_off,
-        color: isOnline == true ? LichessColors.good : null,
+        color: isOnline == true ? context.lichessColors.good : null,
       ),
       title: Padding(
         padding: const EdgeInsets.only(right: 5.0),
@@ -80,8 +79,8 @@ class UserListTile extends StatelessWidget {
             if (title != null) ...[
               Text(
                 title!,
-                style: const TextStyle(
-                  color: LichessColors.brag,
+                style: TextStyle(
+                  color: context.lichessColors.brag,
                   fontWeight: FontWeight.bold,
                 ),
               ),

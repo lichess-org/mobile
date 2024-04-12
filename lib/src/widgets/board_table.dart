@@ -40,6 +40,7 @@ class BoardTable extends ConsumerWidget {
     this.boardOverlay,
     this.errorMessage,
     this.showMoveListPlaceholder = false,
+    this.showEngineGaugePlaceholder = false,
     this.boardKey,
     super.key,
   }) : assert(
@@ -86,6 +87,9 @@ class BoardTable extends ConsumerWidget {
   /// Whether to show the move list placeholder. Useful when loading.
   final bool showMoveListPlaceholder;
 
+  /// Whether to show the engine gauge placeholder.
+  final bool showEngineGaugePlaceholder;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
@@ -116,7 +120,7 @@ class BoardTable extends ConsumerWidget {
                         color: Theme.of(context).platform == TargetPlatform.iOS
                             ? CupertinoColors.secondarySystemBackground
                                 .resolveFrom(context)
-                            : Theme.of(context).colorScheme.background,
+                            : Theme.of(context).colorScheme.surface,
                         borderRadius:
                             const BorderRadius.all(Radius.circular(10.0)),
                       ),
@@ -205,7 +209,9 @@ class BoardTable extends ConsumerWidget {
                           EngineGauge(
                             params: engineGauge!,
                             displayMode: EngineGaugeDisplayMode.vertical,
-                          ),
+                          )
+                        else if (showEngineGaugePlaceholder)
+                          const SizedBox(width: kEvalGaugeSize),
                       ],
                     ),
                   ),
@@ -281,7 +287,9 @@ class BoardTable extends ConsumerWidget {
                         params: engineGauge!,
                         displayMode: EngineGaugeDisplayMode.horizontal,
                       ),
-                    ),
+                    )
+                  else if (showEngineGaugePlaceholder)
+                    const SizedBox(height: kEvalGaugeSize),
                   boardWidget,
                   Expanded(
                     child: Padding(

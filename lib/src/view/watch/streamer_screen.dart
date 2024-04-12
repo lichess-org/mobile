@@ -2,8 +2,8 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/model/user/streamer.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/social_icons.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -102,8 +102,8 @@ class StreamerListTile extends StatelessWidget {
             if (streamer.title != null) ...[
               Text(
                 streamer.title!,
-                style: const TextStyle(
-                  color: LichessColors.brag,
+                style: TextStyle(
+                  color: context.lichessColors.brag,
                   fontWeight: FontWeight.bold,
                 ),
               ),

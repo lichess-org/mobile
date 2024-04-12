@@ -3,31 +3,25 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
 import 'package:lichess_mobile/src/navigation.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
-import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/layout.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
-import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
-import 'package:lichess_mobile/src/view/auth/sign_in_widget.dart';
 import 'package:lichess_mobile/src/view/game/lobby_screen.dart';
-import 'package:lichess_mobile/src/view/home/search_screen.dart';
-import 'package:lichess_mobile/src/view/play/create_correspondence_game_screen.dart';
 import 'package:lichess_mobile/src/view/play/create_custom_game_screen.dart';
 import 'package:lichess_mobile/src/view/play/offline_correspondence_games_screen.dart';
 import 'package:lichess_mobile/src/view/play/ongoing_games_screen.dart';
 import 'package:lichess_mobile/src/view/play/time_control_modal.dart';
-import 'package:lichess_mobile/src/view/relation/relation_screen.dart';
 import 'package:lichess_mobile/src/view/settings/settings_screen.dart';
-import 'package:lichess_mobile/src/view/user/leaderboard_widget.dart';
+import 'package:lichess_mobile/src/view/user/player_screen.dart';
 import 'package:lichess_mobile/src/view/user/recent_games.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -90,13 +84,9 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                   );
                 },
               ),
-        actions: [
-          const _SearchButton(),
-          const _SettingsButton(),
-          if (session != null)
-            const _RelationButton()
-          else
-            const SignInWidget(),
+        actions: const [
+          _SettingsButton(),
+          _PlayerScreenButton(),
         ],
       ),
       body: RefreshIndicator(
@@ -105,7 +95,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
         child: const Column(
           children: [
             Expanded(child: _HomeBody()),
-            _ConnectivityBanner(),
+            ConnectivityBanner(),
           ],
         ),
       ),
@@ -124,7 +114,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
               end: 8.0,
             ),
             leading: session == null
-                ? const SignInWidget()
+                ? const _SignInWidget()
                 : AppBarIconButton(
                     semanticsLabel: context.l10n.profile,
                     onPressed: () {
@@ -139,19 +129,18 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                     icon: const Icon(CupertinoIcons.profile_circled),
                   ),
             largeTitle: Text(context.l10n.play),
-            trailing: Row(
+            trailing: const Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const _SearchButton(),
-                const _SettingsButton(),
-                if (session != null) const _RelationButton(),
+                _SettingsButton(),
+                _PlayerScreenButton(),
               ],
             ),
           ),
           CupertinoSliverRefreshControl(
             onRefresh: () => _refreshData(),
           ),
-          const SliverToBoxAdapter(child: _ConnectivityBanner()),
+          const SliverToBoxAdapter(child: ConnectivityBanner()),
           const SliverSafeArea(
             top: false,
             sliver: _HomeBody(),
@@ -179,7 +168,7 @@ class _HomeBody extends ConsumerWidget {
       data: (data) {
         final isTablet = getScreenType(context) == ScreenType.tablet;
         if (data.isOnline) {
-          final onlineWidgets = _onlineWidgets(isTablet);
+          final onlineWidgets = _onlineWidgets(context, isTablet);
 
           return Theme.of(context).platform == TargetPlatform.android
               ? ListView(
@@ -216,18 +205,20 @@ class _HomeBody extends ConsumerWidget {
     );
   }
 
-  List<Widget> _onlineWidgets(bool isTablet) {
+  List<Widget> _onlineWidgets(BuildContext context, bool isTablet) {
     if (isTablet) {
       return [
+        if (Theme.of(context).platform == TargetPlatform.android)
+          const _SignInWidget(),
         const _HelloWidget(),
-        Row(
+        const Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Expanded(
+            Expanded(
               child: Column(
                 children: [
                   SizedBox(height: 8.0),
-                  _CreateAGameSection(isExpanded: true),
+                  _CreateAGameSection(),
                   _OngoingGamesPreview(maxGamesToShow: 4),
                 ],
               ),
@@ -237,9 +228,8 @@ class _HomeBody extends ConsumerWidget {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 8.0),
-                  const RecentGames(),
-                  RatingPrefAware(child: LeaderboardWidget()),
+                  SizedBox(height: 8.0),
+                  RecentGames(),
                 ],
               ),
             ),
@@ -249,11 +239,12 @@ class _HomeBody extends ConsumerWidget {
     } else {
       return [
         const SizedBox(height: 8.0),
+        if (Theme.of(context).platform == TargetPlatform.android)
+          const _SignInWidget(),
         const _HelloWidget(),
-        const _CreateAGameSection(isExpanded: false),
+        const _CreateAGameSection(),
         const _OngoingGamesPreview(maxGamesToShow: 4),
         const RecentGames(),
-        RatingPrefAware(child: LeaderboardWidget()),
       ];
     }
   }
@@ -295,22 +286,40 @@ class _HomeBody extends ConsumerWidget {
   }
 }
 
-class _SearchButton extends StatelessWidget {
-  const _SearchButton();
+class _SignInWidget extends ConsumerWidget {
+  const _SignInWidget();
 
   @override
-  Widget build(BuildContext context) {
-    return AppBarIconButton(
-      icon: const Icon(Icons.search),
-      semanticsLabel: 'Search Lichess',
-      onPressed: () {
-        pushPlatformRoute(
-          context,
-          fullscreenDialog: true,
-          builder: (_) => const SearchScreen(),
-        );
-      },
-    );
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authController = ref.watch(authControllerProvider);
+    final session = ref.watch(authSessionProvider);
+
+    final button = Theme.of(context).platform == TargetPlatform.iOS
+        ? AppBarTextButton(
+            onPressed: authController.isLoading
+                ? null
+                : () => ref.read(authControllerProvider.notifier).signIn(),
+            child: Text(
+              context.l10n.signIn,
+            ),
+          )
+        : Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: Styles.bodySectionPadding,
+              child: FilledButton.tonalIcon(
+                icon: const Icon(Icons.account_circle),
+                onPressed: authController.isLoading
+                    ? null
+                    : () => ref.read(authControllerProvider.notifier).signIn(),
+                label: Text(
+                  context.l10n.signIn.toUpperCase(),
+                ),
+              ),
+            ),
+          );
+
+    return session == null ? button : const SizedBox.shrink();
   }
 }
 
@@ -348,7 +357,11 @@ class _HelloWidget extends ConsumerWidget {
             padding: Styles.bodyPadding.add(const EdgeInsets.only(top: 8.0)),
             child: Row(
               children: [
-                const Icon(Icons.wb_sunny, size: 28, color: LichessColors.brag),
+                Icon(
+                  Icons.wb_sunny,
+                  size: 28,
+                  color: context.lichessColors.brag,
+                ),
                 const SizedBox(width: 5.0),
                 const Text(
                   'Hello, ',
@@ -365,55 +378,11 @@ class _HelloWidget extends ConsumerWidget {
   }
 }
 
-class _ConnectivityBanner extends ConsumerWidget {
-  const _ConnectivityBanner();
+class _CreateAGameSection extends StatelessWidget {
+  const _CreateAGameSection();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final connectivity = ref.watch(connectivityChangesProvider);
-    final themeData = CupertinoTheme.of(context);
-    return connectivity.when(
-      data: (data) {
-        if (data.isOnline) {
-          return const SizedBox.shrink();
-        }
-        return Container(
-          height: 45,
-          color: themeData.barBackgroundColor,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.report, color: themeData.textTheme.textStyle.color),
-                const SizedBox(width: 5),
-                const Flexible(
-                  child: Text(
-                    'Network connectivity unavailable.',
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-      loading: () => const SizedBox.shrink(),
-      error: (error, stack) => const SizedBox.shrink(),
-    );
-  }
-}
-
-class _CreateAGameSection extends ConsumerWidget {
-  const _CreateAGameSection({this.isExpanded = false});
-
-  final bool isExpanded;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final expansionTileColor = Styles.expansionTileColor(context);
-
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 16.0),
       child: Column(
@@ -424,41 +393,19 @@ class _CreateAGameSection extends ConsumerWidget {
             child: Text(context.l10n.createAGame, style: Styles.sectionTitle),
           ),
           const _QuickGameButton(),
-          if (isExpanded) ...const [
-            SizedBox(height: 16.0),
-            _CustomGameButton(),
-            _CorrespondenceGameButton(),
-          ] else
-            Theme(
-              data:
-                  Theme.of(context).copyWith(dividerColor: Colors.transparent),
-              child: ExpansionTile(
-                title: Text(
-                  context.l10n.more,
-                ),
-                tilePadding: Styles.horizontalBodyPadding,
-                iconColor: expansionTileColor,
-                collapsedIconColor: expansionTileColor,
-                textColor: expansionTileColor,
-                collapsedTextColor: expansionTileColor,
-                controlAffinity: ListTileControlAffinity.leading,
-                children: const [
-                  _CustomGameButton(),
-                  _CorrespondenceGameButton(),
-                ],
-              ),
-            ),
+          const SizedBox(height: 16.0),
+          const _CustomGameButton(),
         ],
       ),
     );
   }
 }
 
-class _CustomGameButton extends StatelessWidget {
+class _CustomGameButton extends ConsumerWidget {
   const _CustomGameButton();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: Styles.bodySectionBottomPadding,
       child: CardButton(
@@ -474,44 +421,11 @@ class _CustomGameButton extends StatelessWidget {
           ],
         ),
         onTap: () {
+          ref.invalidate(accountProvider);
           pushPlatformRoute(
             context,
             title: context.l10n.custom,
             builder: (_) => const CreateCustomGameScreen(),
-          );
-        },
-      ),
-    );
-  }
-}
-
-class _CorrespondenceGameButton extends StatelessWidget {
-  const _CorrespondenceGameButton();
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: Styles.bodySectionBottomPadding,
-      child: CardButton(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(
-              LichessIcons.correspondence,
-              size: 28,
-            ),
-            const SizedBox(width: 8.0),
-            Text(
-              context.l10n.correspondence,
-              style: Styles.callout,
-            ),
-          ],
-        ),
-        onTap: () {
-          pushPlatformRoute(
-            context,
-            title: context.l10n.correspondence,
-            builder: (_) => const CreateCorrespondenceGameScreen(),
           );
         },
       ),
@@ -527,6 +441,7 @@ class _QuickGameButton extends ConsumerWidget {
     final playPrefs = ref.watch(gameSetupPreferencesProvider);
     final session = ref.watch(authSessionProvider);
     const buttonHeight = 55.0;
+    final iconColor = Theme.of(context).textTheme.bodyMedium?.color;
 
     final timeControl = Row(
       mainAxisSize: MainAxisSize.min,
@@ -537,6 +452,7 @@ class _QuickGameButton extends ConsumerWidget {
             Icon(
               playPrefs.timeIncrement.speed.icon,
               size: 28,
+              color: iconColor,
             ),
             const SizedBox(width: 6.0),
             Text(
@@ -545,7 +461,11 @@ class _QuickGameButton extends ConsumerWidget {
             ),
           ],
         ),
-        const Icon(Icons.keyboard_arrow_down, size: 28.0),
+        Icon(
+          Icons.keyboard_arrow_down,
+          size: 28.0,
+          color: iconColor,
+        ),
       ],
     );
 
@@ -581,7 +501,7 @@ class _QuickGameButton extends ConsumerWidget {
                         onSelected: (choice) {
                           ref
                               .read(gameSetupPreferencesProvider.notifier)
-                              .setTimeControl(choice);
+                              .setTimeIncrement(choice);
                         },
                       );
                     },
@@ -618,7 +538,7 @@ class _QuickGameButton extends ConsumerWidget {
                     : FilledButtonTheme(
                         data: FilledButtonThemeData(
                           style: ButtonStyle(
-                            shape: MaterialStateProperty.all(
+                            shape: WidgetStateProperty.all(
                               const RoundedRectangleBorder(
                                 borderRadius: BorderRadius.only(
                                   topRight: Radius.circular(10),
@@ -762,20 +682,19 @@ class _GamePreview<T> extends StatelessWidget {
   }
 }
 
-class _RelationButton extends ConsumerWidget {
-  const _RelationButton();
+class _PlayerScreenButton extends ConsumerWidget {
+  const _PlayerScreenButton();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AppBarIconButton(
       icon: const Icon(Icons.group),
-      semanticsLabel: context.l10n.friends,
+      semanticsLabel: context.l10n.players,
       onPressed: () {
         pushPlatformRoute(
           context,
-          title: context.l10n.friends,
-          builder: (_) => const RelationScreen(),
-          fullscreenDialog: true,
+          title: context.l10n.players,
+          builder: (_) => const PlayerScreen(),
         );
       },
     );
