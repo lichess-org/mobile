@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/clock/clock_controller.dart';
@@ -17,7 +16,7 @@ class _ClockScreenState extends State<ClockScreen> {
   @override
   Widget build(BuildContext context) {
     return const ImmersiveModeWidget(
-      child: _Body(),
+      child: Scaffold(body: _Body()),
     );
   }
 }
