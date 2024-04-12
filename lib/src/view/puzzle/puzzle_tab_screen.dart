@@ -479,14 +479,24 @@ class _DailyPuzzle extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Text(
-                context.l10n.puzzlePuzzleOfTheDay,
-                style: Styles.boardPreviewTitle,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    context.l10n.puzzlePuzzleOfTheDay,
+                    style: Styles.boardPreviewTitle,
+                  ),
+                  Text(
+                    context.l10n
+                        .puzzlePlayedXTimes(data.puzzle.plays)
+                        .localizeNumbers(),
+                  ),
+                ],
               ),
               Text(
-                context.l10n
-                    .puzzlePlayedXTimes(data.puzzle.plays)
-                    .localizeNumbers(),
+                data.puzzle.initialPly.isOdd
+                    ? context.l10n.whitePlays
+                    : context.l10n.blackPlays,
               ),
             ],
           ),
