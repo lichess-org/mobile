@@ -125,7 +125,7 @@ class _Body extends ConsumerWidget {
     final isTablet = getScreenType(context) == ScreenType.tablet;
 
     final separator = Theme.of(context).platform == TargetPlatform.iOS
-        ? const SizedBox(height: 14.0)
+        ? const SizedBox(height: 16.0)
         : const SizedBox(height: 8.0);
 
     final handsetChildren = [
@@ -166,9 +166,11 @@ class _Body extends ConsumerWidget {
                   error: (_, __) => const SizedBox.shrink(),
                 ),
                 PuzzleButton(),
-                const SizedBox(height: 16.0),
+                separator,
                 const PuzzleThemeButton(),
+                separator,
                 StreakButton(connectivity: connectivity),
+                separator,
                 StormButton(connectivity: connectivity),
               ],
             ),
