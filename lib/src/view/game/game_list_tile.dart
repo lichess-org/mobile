@@ -458,36 +458,36 @@ class ExtendedGameListTile extends StatelessWidget {
   final LightArchivedGame game;
   final UserId? userId;
 
-  Widget getResultIcon(LightArchivedGame game, Side mySide) {
-    if (game.status == GameStatus.aborted ||
-        game.status == GameStatus.noStart) {
-      return const Icon(
-        CupertinoIcons.xmark_square_fill,
-        color: LichessColors.grey,
-      );
-    } else {
-      return game.winner == null
-          ? const Icon(
-              CupertinoIcons.equal_square_fill,
-              color: LichessColors.brag,
-            )
-          : game.winner == mySide
-              ? const Icon(
-                  CupertinoIcons.plus_square_fill,
-                  color: LichessColors.good,
-                )
-              : const Icon(
-                  CupertinoIcons.minus_square_fill,
-                  color: LichessColors.red,
-                );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final mySide = game.white.user?.id == userId ? Side.white : Side.black;
     final me = game.white.user?.id == userId ? game.white : game.black;
     final opponent = game.white.user?.id == userId ? game.black : game.white;
+
+    Widget getResultIcon(LightArchivedGame game, Side mySide) {
+      if (game.status == GameStatus.aborted ||
+          game.status == GameStatus.noStart) {
+        return const Icon(
+          CupertinoIcons.xmark_square_fill,
+          color: LichessColors.grey,
+        );
+      } else {
+        return game.winner == null
+            ? Icon(
+                CupertinoIcons.equal_square_fill,
+                color: context.lichessColors.brag,
+              )
+            : game.winner == mySide
+                ? Icon(
+                    CupertinoIcons.plus_square_fill,
+                    color: context.lichessColors.good,
+                  )
+                : Icon(
+                    CupertinoIcons.minus_square_fill,
+                    color: context.lichessColors.error,
+                  );
+      }
+    }
 
     return GameListTile(
       game: game,
