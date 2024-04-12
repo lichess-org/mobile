@@ -113,27 +113,21 @@ class BottomNavScaffold extends ConsumerWidget {
 
     switch (Theme.of(context).platform) {
       case TargetPlatform.android:
-        return NavigatorPopHandler(
-          onPop: () async {
-            final navState = ref.read(currentNavigatorKeyProvider).currentState;
-            return navState?.pop();
-          },
-          child: Scaffold(
-            body: _TabSwitchingView(
-              currentTab: currentTab,
-              tabBuilder: _androidTabBuilder,
-            ),
-            bottomNavigationBar: NavigationBar(
-              selectedIndex: currentTab.index,
-              destinations: [
-                for (final tab in BottomTab.values)
-                  NavigationDestination(
-                    icon: Icon(tab == currentTab ? tab.activeIcon : tab.icon),
-                    label: tab.label(context.l10n),
-                  ),
-              ],
-              onDestinationSelected: (i) => _onItemTapped(ref, i),
-            ),
+        return Scaffold(
+          body: _TabSwitchingView(
+            currentTab: currentTab,
+            tabBuilder: _androidTabBuilder,
+          ),
+          bottomNavigationBar: NavigationBar(
+            selectedIndex: currentTab.index,
+            destinations: [
+              for (final tab in BottomTab.values)
+                NavigationDestination(
+                  icon: Icon(tab == currentTab ? tab.activeIcon : tab.icon),
+                  label: tab.label(context.l10n),
+                ),
+            ],
+            onDestinationSelected: (i) => _onItemTapped(ref, i),
           ),
         );
       case TargetPlatform.iOS:
@@ -189,21 +183,25 @@ class BottomNavScaffold extends ConsumerWidget {
       case 0:
         return _MaterialTabView(
           navigatorKey: homeNavigatorKey,
+          tab: BottomTab.home,
           builder: (context) => const HomeTabScreen(),
         );
       case 1:
         return _MaterialTabView(
           navigatorKey: puzzlesNavigatorKey,
+          tab: BottomTab.puzzles,
           builder: (context) => const PuzzleTabScreen(),
         );
       case 2:
         return _MaterialTabView(
           navigatorKey: toolsNavigatorKey,
+          tab: BottomTab.tools,
           builder: (context) => const ToolsTabScreen(),
         );
       case 3:
         return _MaterialTabView(
           navigatorKey: watchNavigatorKey,
+          tab: BottomTab.watch,
           builder: (context) => const WatchTabScreen(),
         );
       default:
@@ -365,10 +363,11 @@ class _TabSwitchingViewState extends State<_TabSwitchingView> {
 // Following code copied and adapted from
 // https://github.com/flutter/flutter/blob/2ad6cd72c040113b47ee9055e722606a490ef0da/packages/flutter/lib/src/cupertino/tab_view.dart#L41
 
-class _MaterialTabView extends StatefulWidget {
+class _MaterialTabView extends ConsumerStatefulWidget {
   const _MaterialTabView({
     // ignore: unused_element
     super.key,
+    required this.tab,
     this.builder,
     this.navigatorKey,
     // ignore: unused_element
@@ -382,6 +381,8 @@ class _MaterialTabView extends StatefulWidget {
     // ignore: unused_element
     this.restorationScopeId,
   });
+
+  final BottomTab tab;
 
   final WidgetBuilder? builder;
 
@@ -398,10 +399,10 @@ class _MaterialTabView extends StatefulWidget {
   final String? restorationScopeId;
 
   @override
-  State<_MaterialTabView> createState() => _MaterialTabViewState();
+  ConsumerState<_MaterialTabView> createState() => _MaterialTabViewState();
 }
 
-class _MaterialTabViewState extends State<_MaterialTabView> {
+class _MaterialTabViewState extends ConsumerState<_MaterialTabView> {
   // ignore: avoid-late-keyword
   late HeroController _heroController;
 
@@ -431,12 +432,22 @@ class _MaterialTabViewState extends State<_MaterialTabView> {
 
   @override
   Widget build(BuildContext context) {
-    return Navigator(
-      key: widget.navigatorKey,
-      onGenerateRoute: _onGenerateRoute,
-      onUnknownRoute: _onUnknownRoute,
-      observers: _navigatorObservers,
-      restorationScopeId: widget.restorationScopeId,
+    final currentTab = ref.watch(currentBottomTabProvider);
+    final enablePopHandler = currentTab == widget.tab;
+    return NavigatorPopHandler(
+      onPop: enablePopHandler
+          ? () {
+              widget.navigatorKey?.currentState?.maybePop();
+            }
+          : null,
+      enabled: enablePopHandler,
+      child: Navigator(
+        key: widget.navigatorKey,
+        onGenerateRoute: _onGenerateRoute,
+        onUnknownRoute: _onUnknownRoute,
+        observers: _navigatorObservers,
+        restorationScopeId: widget.restorationScopeId,
+      ),
     );
   }
 
