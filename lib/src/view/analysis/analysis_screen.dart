@@ -188,9 +188,11 @@ class _Body extends ConsumerWidget {
                             ),
                             child: Row(
                               children: [
-                                _Board(options, boardSize),
-                                if (hasEval && showEvaluationGauge)
+                                _Board(options, boardSize, isTablet: isTablet),
+                                if (hasEval && showEvaluationGauge) ...[
+                                  const SizedBox(width: 4.0),
                                   _EngineGaugeVertical(ctrlProvider),
+                                ],
                               ],
                             ),
                           ),
@@ -234,10 +236,14 @@ class _Body extends ConsumerWidget {
                               padding: const EdgeInsets.all(
                                 kTabletBoardTableSidePadding,
                               ),
-                              child: _Board(options, boardSize),
+                              child: _Board(
+                                options,
+                                boardSize,
+                                isTablet: isTablet,
+                              ),
                             )
                           else
-                            _Board(options, boardSize),
+                            _Board(options, boardSize, isTablet: isTablet),
                           if (showAnalysisSummary)
                             Expanded(child: ServerAnalysisSummary(options))
                           else
@@ -260,10 +266,11 @@ class _Body extends ConsumerWidget {
 }
 
 class _Board extends ConsumerWidget {
-  const _Board(this.options, this.boardSize);
+  const _Board(this.options, this.boardSize, {required this.isTablet});
 
   final AnalysisOptions options;
   final double boardSize;
+  final bool isTablet;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -360,6 +367,10 @@ class _Board extends ConsumerWidget {
         showLastMove: boardPrefs.boardHighlights,
         enableCoordinates: boardPrefs.coordinates,
         animationDuration: boardPrefs.pieceAnimationDuration,
+        borderRadius: isTablet
+            ? const BorderRadius.all(Radius.circular(4.0))
+            : BorderRadius.zero,
+        boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
       ),
     );
   }
@@ -374,9 +385,15 @@ class _EngineGaugeVertical extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final analysisState = ref.watch(ctrlProvider);
 
-    return EngineGauge(
-      displayMode: EngineGaugeDisplayMode.vertical,
-      params: analysisState.engineGaugeParams,
+    return Container(
+      clipBehavior: Clip.hardEdge,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(4.0),
+      ),
+      child: EngineGauge(
+        displayMode: EngineGaugeDisplayMode.vertical,
+        params: analysisState.engineGaugeParams,
+      ),
     );
   }
 }

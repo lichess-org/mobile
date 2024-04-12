@@ -11,7 +11,7 @@ environment:
 dependencies:
   async: ^2.10.0
   cached_network_image: ^3.2.2
-  chessground: ^2.5.0
+  chessground: ^2.6.1
   collection: ^1.17.0
   connectivity_plus: ^6.0.2
   crypto: ^3.0.3
