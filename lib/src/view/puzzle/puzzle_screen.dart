@@ -492,30 +492,38 @@ class _BottomBar extends ConsumerWidget {
                   ),
                 ),
               Expanded(
-                child: RepeatButton(
-                  triggerDelays: _repeatTriggerDelays,
-                  onLongPress:
-                      puzzleState.canGoBack ? () => _moveBackward(ref) : null,
-                  child: BottomBarButton(
-                    onTap:
+                child: Semantics(
+                  label: 'Previous Button',
+                  child: RepeatButton(
+                    triggerDelays: _repeatTriggerDelays,
+                    onLongPress:
                         puzzleState.canGoBack ? () => _moveBackward(ref) : null,
-                    label: 'Previous',
-                    icon: CupertinoIcons.chevron_back,
-                    showTooltip: false,
+                    child: BottomBarButton(
+                      onTap: puzzleState.canGoBack
+                          ? () => _moveBackward(ref)
+                          : null,
+                      label: 'Previous',
+                      icon: CupertinoIcons.chevron_back,
+                      showTooltip: false,
+                    ),
                   ),
                 ),
               ),
               Expanded(
-                child: RepeatButton(
-                  triggerDelays: _repeatTriggerDelays,
-                  onLongPress:
-                      puzzleState.canGoNext ? () => _moveForward(ref) : null,
-                  child: BottomBarButton(
-                    onTap:
+                child: Semantics(
+                  label: 'Next Button',
+                  child: RepeatButton(
+                    triggerDelays: _repeatTriggerDelays,
+                    onLongPress:
                         puzzleState.canGoNext ? () => _moveForward(ref) : null,
-                    label: context.l10n.next,
-                    icon: CupertinoIcons.chevron_forward,
-                    showTooltip: false,
+                    child: BottomBarButton(
+                      onTap: puzzleState.canGoNext
+                          ? () => _moveForward(ref)
+                          : null,
+                      label: context.l10n.next,
+                      icon: CupertinoIcons.chevron_forward,
+                      showTooltip: false,
+                    ),
                   ),
                 ),
               ),
