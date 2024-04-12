@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 const kLichessHost = String.fromEnvironment(
@@ -32,6 +33,12 @@ const kProvisionalDeviation = 110;
 const kClueLessDeviation = 230;
 
 // UI
+
+/// Use same box shadows as material widgets with elevation 1.
+final List<BoxShadow> boardShadows = defaultTargetPlatform == TargetPlatform.iOS
+    ? <BoxShadow>[]
+    : kElevationToShadow[1]!;
+
 const kCardTextScaleFactor = 1.64;
 const kMaxClockTextScaleFactor = 1.94;
 const kEmptyWidget = SizedBox.shrink();

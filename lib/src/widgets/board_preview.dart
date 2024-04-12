@@ -2,6 +2,7 @@ import 'package:chessground/chessground.dart' hide BoardTheme;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 
@@ -73,6 +74,9 @@ class _SmallBoardPreviewState extends ConsumerState<SmallBoardPreview> {
                     ),
                     settings: BoardSettings(
                       enableCoordinates: false,
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(4.0)),
+                      boxShadow: boardShadows,
                       animationDuration: const Duration(milliseconds: 150),
                       pieceAssets: boardPrefs.pieceSet.assets,
                       colorScheme: boardPrefs.boardTheme.colors,

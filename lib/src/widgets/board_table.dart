@@ -141,6 +141,10 @@ class BoardTable extends ConsumerWidget {
           showLastMove: boardPrefs.boardHighlights,
           enableCoordinates: boardPrefs.coordinates,
           animationDuration: boardPrefs.pieceAnimationDuration,
+          borderRadius: isTablet
+              ? const BorderRadius.all(Radius.circular(4.0))
+              : BorderRadius.zero,
+          boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
         );
 
         final settings = boardSettingsOverrides != null
