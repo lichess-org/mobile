@@ -54,11 +54,6 @@ Future<FullGamePaginator> _userFullGames(
 }) {
   return ref.withClientCacheFor(
     (client) => GameRepository(client).getFullGames(userId, page),
-    // cache is important because the associated widget is in a [ListView] and
-    // the provider may be instanciated multiple times in a short period of time
-    // (e.g. when scrolling)
-    // TODO: consider debouncing the request instead of caching it, or make the
-    // request in the parent widget and pass the result to the child
     const Duration(minutes: 1),
   );
 }
