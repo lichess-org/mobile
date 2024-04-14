@@ -219,7 +219,7 @@ class _HomeBody extends ConsumerWidget {
                 children: [
                   SizedBox(height: 8.0),
                   _CreateAGameSection(),
-                  _OngoingGamesPreview(maxGamesToShow: 4),
+                  _OngoingGamesPreview(maxGamesToShow: 5),
                 ],
               ),
             ),
@@ -243,7 +243,7 @@ class _HomeBody extends ConsumerWidget {
           const _SignInWidget(),
         const _HelloWidget(),
         const _CreateAGameSection(),
-        const _OngoingGamesPreview(maxGamesToShow: 4),
+        const _OngoingGamesPreview(maxGamesToShow: 5),
         const RecentGames(),
       ];
     }
@@ -260,7 +260,7 @@ class _HomeBody extends ConsumerWidget {
               child: Column(
                 children: [
                   SizedBox(height: 8.0),
-                  _OfflineCorrespondencePreview(maxGamesToShow: 4),
+                  _OfflineCorrespondencePreview(maxGamesToShow: 5),
                 ],
               ),
             ),
@@ -280,7 +280,7 @@ class _HomeBody extends ConsumerWidget {
       return const [
         SizedBox(height: 8.0),
         _HelloWidget(),
-        _OfflineCorrespondencePreview(maxGamesToShow: 2),
+        _OfflineCorrespondencePreview(maxGamesToShow: 5),
       ];
     }
   }
