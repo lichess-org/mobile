@@ -10,8 +10,9 @@ part 'game_repository_providers.g.dart';
 
 @riverpod
 Future<ArchivedGame> archivedGame(ArchivedGameRef ref, {required GameId id}) {
-  return ref.withClient(
+  return ref.withClientCacheFor(
     (client) => GameRepository(client).getGame(id),
+    const Duration(seconds: 10),
   );
 }
 

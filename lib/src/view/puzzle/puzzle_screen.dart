@@ -8,10 +8,9 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
-import 'package:lichess_mobile/src/model/game/game_repository.dart';
+import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_controller.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
@@ -579,9 +578,8 @@ class _BottomBar extends ConsumerWidget {
           ),
           onPressed: (_) {
             ref
-                .withClient(
-              (client) =>
-                  GameRepository(client).getGame(puzzleState.puzzle.game.id),
+                .read(
+              archivedGameProvider(id: puzzleState.puzzle.game.id).future,
             )
                 .then((game) {
               pushPlatformRoute(
@@ -589,6 +587,7 @@ class _BottomBar extends ConsumerWidget {
                 builder: (context) => ArchivedGameScreen(
                   gameData: game.data,
                   orientation: puzzleState.pov,
+                  initialCursor: puzzleState.puzzle.puzzle.initialPly + 1,
                 ),
               );
             });

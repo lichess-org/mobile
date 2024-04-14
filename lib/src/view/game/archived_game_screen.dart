@@ -28,11 +28,13 @@ class ArchivedGameScreen extends ConsumerWidget {
   const ArchivedGameScreen({
     required this.gameData,
     required this.orientation,
+    this.initialCursor,
     super.key,
   });
 
   final LightArchivedGame gameData;
   final Side orientation;
+  final int? initialCursor;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -54,6 +56,7 @@ class ArchivedGameScreen extends ConsumerWidget {
       body: _BoardBody(
         gameData: gameData,
         orientation: orientation,
+        initialCursor: initialCursor,
       ),
       bottomNavigationBar:
           _BottomBar(gameData: gameData, orientation: orientation),
@@ -75,6 +78,7 @@ class ArchivedGameScreen extends ConsumerWidget {
               child: _BoardBody(
                 gameData: gameData,
                 orientation: orientation,
+                initialCursor: initialCursor,
               ),
             ),
             _BottomBar(gameData: gameData, orientation: orientation),
@@ -114,13 +118,25 @@ class _BoardBody extends ConsumerWidget {
   const _BoardBody({
     required this.gameData,
     required this.orientation,
+    this.initialCursor,
   });
 
   final LightArchivedGame gameData;
   final Side orientation;
+  final int? initialCursor;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    if (initialCursor != null) {
+      ref.listen(gameCursorProvider(gameData.id), (prev, cursor) {
+        if (prev?.isLoading == true && cursor.hasValue) {
+          ref
+              .read(gameCursorProvider(gameData.id).notifier)
+              .cursorAt(initialCursor!);
+        }
+      });
+    }
+
     final isBoardTurned = ref.watch(isBoardTurnedProvider);
     final gameCursor = ref.watch(gameCursorProvider(gameData.id));
     final black = GamePlayer(

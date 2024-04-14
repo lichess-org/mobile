@@ -49,6 +49,7 @@ class GameCursor extends _$GameCursor {
   }
 
   void cursorAt(int newPosition) {
+    assert(newPosition >= 0);
     if (state.hasValue) {
       final (game, _) = state.value!;
       state = AsyncValue.data((game, newPosition));
