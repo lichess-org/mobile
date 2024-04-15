@@ -275,8 +275,6 @@ class _EntryPointState extends ConsumerState<_EntryPointWidget> {
     final RemoteMessage? initialMessage =
         await FirebaseMessaging.instance.getInitialMessage();
 
-    // If the message also contains a data property with a "type" of "chat",
-    // navigate to a chat screen
     if (initialMessage != null) {
       _handleMessage(initialMessage);
     }
@@ -300,6 +298,12 @@ class _EntryPointState extends ConsumerState<_EntryPointWidget> {
       case 'gameFinish':
         final gameFullId = message.data['lichess.fullId'] as String?;
         if (gameFullId != null) {
+          // remove any existing routes before navigating to the game
+          // screen to avoid stacking multiple game screens
+          final navState = Navigator.of(context);
+          if (navState.canPop()) {
+            navState.popUntil((route) => route.isFirst);
+          }
           pushPlatformRoute(
             context,
             rootNavigator: true,
