@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
@@ -19,7 +20,9 @@ part 'evaluation_service.g.dart';
 part 'evaluation_service.freezed.dart';
 
 const kMaxEngineDepth = 22;
-final maxEngineCores = Platform.numberOfProcessors - 1;
+final maxEngineCores = max(Platform.numberOfProcessors - 1, 1);
+final defaultEngineCores =
+    min((Platform.numberOfProcessors / 2).ceil(), maxEngineCores);
 
 const engineSupportedVariants = {
   Variant.standard,
@@ -38,7 +41,7 @@ class EvaluationService {
   EvaluationContext? _context;
   EvaluationOptions _options = EvaluationOptions(
     multiPv: 1,
-    cores: maxEngineCores,
+    cores: defaultEngineCores,
   );
 
   /// Initialize the engine with the given context and options.

@@ -1,14 +1,12 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/db/shared_preferences.dart';
+import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'analysis_preferences.freezed.dart';
 part 'analysis_preferences.g.dart';
-
-final maxEngineCores = Platform.numberOfProcessors - 1;
 
 @Riverpod(keepAlive: true)
 class AnalysisPreferences extends _$AnalysisPreferences {
@@ -106,7 +104,7 @@ class AnalysisPrefState with _$AnalysisPrefState {
     showBestMoveArrow: true,
     showPgnComments: true,
     numEvalLines: 2,
-    numEngineCores: maxEngineCores,
+    numEngineCores: defaultEngineCores,
   );
 
   factory AnalysisPrefState.fromJson(Map<String, dynamic> json) {
