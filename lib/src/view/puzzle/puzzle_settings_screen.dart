@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
+import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -48,6 +49,7 @@ class _Body extends ConsumerWidget {
     final autoNext = ref.watch(
       PuzzlePreferencesProvider(userId).select((value) => value.autoNext),
     );
+    final boardPrefs = ref.watch(boardPreferencesProvider);
 
     return SafeArea(
       child: ListView(
@@ -61,8 +63,19 @@ class _Body extends ConsumerWidget {
                 value: autoNext,
                 onChanged: (value) {
                   ref
-                      .read(PuzzlePreferencesProvider(userId).notifier)
+                      .read(puzzlePreferencesProvider(userId).notifier)
                       .setAutoNext(value);
+                },
+              ),
+              SwitchSettingTile(
+                title: Text(
+                  context.l10n.preferencesPieceAnimation,
+                ),
+                value: boardPrefs.pieceAnimation,
+                onChanged: (value) {
+                  ref
+                      .read(boardPreferencesProvider.notifier)
+                      .togglePieceAnimation();
                 },
               ),
             ],
