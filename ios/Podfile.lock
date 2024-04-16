@@ -1,9 +1,9 @@
 PODS:
-  - AppAuth (1.7.2):
-    - AppAuth/Core (= 1.7.2)
-    - AppAuth/ExternalUserAgent (= 1.7.2)
-  - AppAuth/Core (1.7.2)
-  - AppAuth/ExternalUserAgent (1.7.2):
+  - AppAuth (1.7.4):
+    - AppAuth/Core (= 1.7.4)
+    - AppAuth/ExternalUserAgent (= 1.7.4)
+  - AppAuth/Core (1.7.4)
+  - AppAuth/ExternalUserAgent (1.7.4):
     - AppAuth/Core
   - connectivity_plus (0.0.1):
     - Flutter
@@ -71,7 +71,7 @@ PODS:
     - PromisesSwift (~> 2.1)
   - Flutter (1.0.0)
   - flutter_appauth (0.0.1):
-    - AppAuth (= 1.7.2)
+    - AppAuth (= 1.7.4)
     - Flutter
   - flutter_native_splash (0.0.1):
     - Flutter
@@ -220,7 +220,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/wakelock_plus/ios"
 
 SPEC CHECKSUMS:
-  AppAuth: ca2458caccec349cc1e26d8d9e8fd7d22f1d01f3
+  AppAuth: 182c5b88630569df5acb672720534756c29b3358
   connectivity_plus: ddd7f30999e1faaef5967c23d5b6d503d10434db
   cupertino_http: 5f8b1161107fe6c8d94a0c618735a033d93fa7db
   device_info_plus: 97af1d7e84681a90d0693e63169a5d50e0839a0d
@@ -236,7 +236,7 @@ SPEC CHECKSUMS:
   FirebaseMessaging: 9f71037fd9db3376a4caa54e5a3949d1027b4b6e
   FirebaseSessions: 2651b464e241c93fd44112f995d5ab663c970487
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  flutter_appauth: c5e36e22af413d4b5b2997d61c97f7350d9bd25b
+  flutter_appauth: 1ce438877bc111c5d8f42da47729909290624886
   flutter_native_splash: edf599c81f74d093a4daf8e17bd7a018854bc778
   flutter_secure_storage: 23fc622d89d073675f2eaa109381aefbcf5a49be
   GoogleDataTransport: 6c09b596d841063d76d4288cc2d2f42cc36e1e2a
