@@ -43,39 +43,65 @@ Future<void> showChoicePicker<T>(
         },
       );
     case TargetPlatform.iOS:
-      return showCupertinoModalPopup<void>(
-        context: context,
-        builder: (context) {
-          return NotificationListener(
-            onNotification: (ScrollEndNotification notification) {
-              if (onSelectedItemChanged != null) {
-                final index =
-                    (notification.metrics as FixedExtentMetrics).itemIndex;
-                onSelectedItemChanged(choices[index]);
-              }
-              return false;
-            },
-            child: SizedBox(
-              height: 250,
-              child: CupertinoPicker(
-                backgroundColor: Theme.of(context).canvasColor,
-                useMagnifier: true,
-                magnification: 1.1,
-                itemExtent: 40,
-                scrollController: FixedExtentScrollController(
-                  initialItem: choices.indexWhere((t) => t == selectedItem),
-                ),
-                children: choices.map((value) {
-                  return Center(
-                    child: labelBuilder(value),
-                  );
-                }).toList(),
-                onSelectedItemChanged: (_) {},
+      if (choices.length <= 6) {
+        return showCupertinoModalPopup<void>(
+          context: context,
+          builder: (context) {
+            return CupertinoActionSheet(
+              actions: choices.map((value) {
+                return CupertinoActionSheetAction(
+                  onPressed: () {
+                    if (onSelectedItemChanged != null) {
+                      onSelectedItemChanged(value);
+                    }
+                    Navigator.of(context).pop();
+                  },
+                  child: labelBuilder(value),
+                );
+              }).toList(),
+              cancelButton: CupertinoActionSheetAction(
+                isDefaultAction: true,
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text(context.l10n.cancel),
               ),
-            ),
-          );
-        },
-      );
+            );
+          },
+        );
+      } else {
+        return showCupertinoModalPopup<void>(
+          context: context,
+          builder: (context) {
+            return NotificationListener(
+              onNotification: (ScrollEndNotification notification) {
+                if (onSelectedItemChanged != null) {
+                  final index =
+                      (notification.metrics as FixedExtentMetrics).itemIndex;
+                  onSelectedItemChanged(choices[index]);
+                }
+                return false;
+              },
+              child: SizedBox(
+                height: 250,
+                child: CupertinoPicker(
+                  backgroundColor: Theme.of(context).canvasColor,
+                  useMagnifier: true,
+                  magnification: 1.1,
+                  itemExtent: 40,
+                  scrollController: FixedExtentScrollController(
+                    initialItem: choices.indexWhere((t) => t == selectedItem),
+                  ),
+                  children: choices.map((value) {
+                    return Center(
+                      child: labelBuilder(value),
+                    );
+                  }).toList(),
+                  onSelectedItemChanged: (_) {},
+                ),
+              ),
+            );
+          },
+        );
+      }
     default:
       throw Exception('Unexpected platform $Theme.of(context).platform');
   }
