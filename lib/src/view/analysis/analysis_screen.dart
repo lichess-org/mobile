@@ -809,7 +809,7 @@ class _StockfishInfo extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final (eval: eval, state: engineState) =
+    final (engineName: engineName, eval: eval, state: engineState) =
         ref.watch(engineEvaluationProvider);
 
     final currentEval = eval ?? currentNode.eval;
@@ -829,7 +829,7 @@ class _StockfishInfo extends ConsumerWidget {
             width: 44,
             height: 44,
           ),
-          title: const Text('Stockfish 16'),
+          title: Text(engineName),
           subtitle: Text(
             context.l10n.depthX(
               '$depth/$maxDepth$knps',
