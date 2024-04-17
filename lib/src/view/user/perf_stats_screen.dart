@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
@@ -23,6 +24,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -61,7 +63,7 @@ class PerfStatsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         titleSpacing: 0,
-        title: _Title(perf: perf),
+        title: _Title(user: user, perf: perf),
       ),
       body: _Body(user: user, perf: perf),
     );
@@ -70,7 +72,7 @@ class PerfStatsScreen extends StatelessWidget {
   Widget _iosBuilder(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: _Title(perf: perf),
+        middle: _Title(user: user, perf: perf),
       ),
       child: _Body(user: user, perf: perf),
     );
@@ -78,20 +80,57 @@ class PerfStatsScreen extends StatelessWidget {
 }
 
 class _Title extends StatelessWidget {
-  const _Title({required this.perf});
+  const _Title({required this.user, required this.perf});
 
   final Perf perf;
+  final User user;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Icon(perf.icon),
-        Text(
-          ' ${context.l10n.perfStatPerfStats(perf.title)}',
-          overflow: TextOverflow.ellipsis,
-        ),
-      ],
+    final allPerfs = Perf.values.where((element) {
+      final p = user.perfs[element];
+      return p != null &&
+          p.numberOfGames > 0 &&
+          p.ratingDeviation < kClueLessDeviation;
+    }).toList(growable: false);
+    return AppBarTextButton(
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(perf.icon),
+          Text(
+            ' ${context.l10n.perfStatPerfStats(perf.title)}',
+            overflow: TextOverflow.ellipsis,
+          ),
+          const Icon(Icons.arrow_drop_down),
+        ],
+      ),
+      onPressed: () {
+        showAdaptiveActionSheet<void>(
+          context: context,
+          actions: allPerfs.map((p) {
+            return BottomSheetAction(
+              makeLabel: (context) => Text(
+                context.l10n.perfStatPerfStats(p.title),
+                overflow: TextOverflow.ellipsis,
+              ),
+              trailing: Icon(
+                LichessIcons.circle,
+                color: perf == p ? LichessColors.good : LichessColors.grey,
+                size: 16,
+              ),
+              onPressed: (ctx) {
+                pushReplacementPlatformRoute(
+                  context,
+                  builder: (ctx) {
+                    return PerfStatsScreen(user: user, perf: p);
+                  },
+                );
+              },
+            );
+          }).toList(growable: false),
+        );
+      },
     );
   }
 }
