@@ -64,7 +64,7 @@ dependencies:
   stockfish:
    git:
      url: https://github.com/lichess-org/dart-stockfish.git
-     ref: 63a93c24dd42e4a650091a826cc552e3cb60a704
+     ref: f7abbbd5e330fbc278f75bb49f61c66bb681e8fa
   stream_transform: ^2.1.0
   system_info_plus: ^0.0.5
   timeago: ^3.6.0
