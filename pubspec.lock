@@ -1271,11 +1271,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: dc160c6ae339e4aa0b64ce50980a1b5ca5597d42
-      resolved-ref: dc160c6ae339e4aa0b64ce50980a1b5ca5597d42
+      ref: "63a93c24dd42e4a650091a826cc552e3cb60a704"
+      resolved-ref: "63a93c24dd42e4a650091a826cc552e3cb60a704"
       url: "https://github.com/lichess-org/dart-stockfish.git"
     source: git
-    version: "1.4.0"
+    version: "1.5.0"
   stream_channel:
     dependency: "direct dev"
     description:
