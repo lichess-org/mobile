@@ -44,6 +44,13 @@ class EvaluationService {
     cores: defaultEngineCores,
   );
 
+  static const _defaultState =
+      (engineName: 'Stockfish', state: EngineState.initial, eval: null);
+
+  final ValueNotifier<EngineEvaluationState> _state =
+      ValueNotifier(_defaultState);
+  ValueListenable<EngineEvaluationState> get state => _state;
+
   /// Initialize the engine with the given context and options.
   ///
   /// An optional [engineFactory] can be provided, it defaults to Stockfish.
@@ -64,12 +71,14 @@ class EvaluationService {
       debugPrint('Engine state: ${_engine?.state.value}');
       if (_engine?.state.value == EngineState.initial ||
           _engine?.state.value == EngineState.disposed) {
-        ref.read(engineEvaluationProvider.notifier).reset();
+        _state.value = _defaultState;
       }
       if (_engine?.state != null) {
-        ref
-            .read(engineEvaluationProvider.notifier)
-            .setEngineState(_engine!.state.value);
+        _state.value = (
+          engineName: _engine!.name,
+          state: _engine!.state.value,
+          eval: _state.value.eval
+        );
       }
     });
   }
@@ -129,7 +138,11 @@ class EvaluationService {
     final cachedEval =
         work.steps.isEmpty ? initialPositionEval : work.evalCache;
     if (cachedEval != null && cachedEval.depth >= kMaxEngineDepth) {
-      ref.read(engineEvaluationProvider.notifier).setEval(cachedEval);
+      _state.value = (
+        engineName: _state.value.engineName,
+        state: _state.value.state,
+        eval: cachedEval,
+      );
       return null;
     }
 
@@ -141,7 +154,11 @@ class EvaluationService {
     evalStream.forEach((t) {
       final (work, eval) = t;
       if (shouldEmit(work)) {
-        ref.read(engineEvaluationProvider.notifier).setEval(eval);
+        _state.value = (
+          engineName: _state.value.engineName,
+          state: _state.value.state,
+          eval: eval,
+        );
       }
     });
 
@@ -167,26 +184,33 @@ EvaluationService evaluationService(EvaluationServiceRef ref) {
   return service;
 }
 
-typedef EngineEvaluationState = ({EngineState state, ClientEval? eval});
+typedef EngineEvaluationState = ({
+  String engineName,
+  EngineState state,
+  ClientEval? eval
+});
 
 /// A provider that holds the state of the engine and the current evaluation.
 @riverpod
 class EngineEvaluation extends _$EngineEvaluation {
   @override
   EngineEvaluationState build() {
-    return (state: EngineState.initial, eval: null);
+    final listenable = ref.watch(evaluationServiceProvider).state;
+
+    listenable.addListener(_listener);
+
+    ref.onDispose(() {
+      listenable.removeListener(_listener);
+    });
+
+    return listenable.value;
   }
 
-  void setEngineState(EngineState engineState) {
-    state = (state: engineState, eval: state.eval);
-  }
-
-  void setEval(ClientEval eval) {
-    state = (state: state.state, eval: eval);
-  }
-
-  void reset() {
-    state = (state: EngineState.initial, eval: null);
+  void _listener() {
+    final newState = ref.read(evaluationServiceProvider).state.value;
+    if (state != newState) {
+      state = newState;
+    }
   }
 }
 
