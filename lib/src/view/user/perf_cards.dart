@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
+import 'package:lichess_mobile/src/view/puzzle/dashboard_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/storm_dashboard.dart';
 import 'package:lichess_mobile/src/view/user/perf_stats_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -49,8 +50,7 @@ class PerfCards extends StatelessWidget {
             itemBuilder: (context, index) {
               final perf = userPerfs[index];
               final userPerf = user.perfs[perf]!;
-              final bool isPerfWithoutStats =
-                  Perf.puzzle == perf || Perf.streak == perf;
+              final bool isPerfWithoutStats = Perf.streak == perf;
               return SizedBox(
                 height: 100,
                 width: 100,
@@ -125,6 +125,8 @@ class PerfCards extends StatelessWidget {
         switch (perf) {
           case Perf.storm:
             return StormDashboardModal(user: user.lightUser);
+          case Perf.puzzle:
+            return PuzzleDashboardScreen(user: user.lightUser);
           default:
             return PerfStatsScreen(
               user: user,
