@@ -52,8 +52,7 @@ class PerfCards extends StatelessWidget {
             itemBuilder: (context, index) {
               final perf = userPerfs[index];
               final userPerf = user.perfs[perf]!;
-              final bool isPerfWithoutStats =
-                  Perf.streak == perf || (!isMe && Perf.puzzle == perf);
+              final bool isPerfWithoutStats = Perf.streak == perf;
               return SizedBox(
                 height: 100,
                 width: 100,
@@ -128,8 +127,6 @@ class PerfCards extends StatelessWidget {
         switch (perf) {
           case Perf.storm:
             return StormDashboardModal(user: user.lightUser);
-          case Perf.puzzle:
-            return const PuzzleDashboardScreen();
           default:
             return PerfStatsScreen(
               user: user,

@@ -94,6 +94,10 @@ extension PerfExtension on Pick {
       if (_lowerCaseTitleMap.containsKey(valueKey)) {
         return _lowerCaseTitleMap[valueKey]!;
       }
+      switch (valueKey) {
+        case 'puzzles':
+          return Perf.puzzle;
+      }
     } else if (value is Map<String, dynamic>) {
       final perf = Perf.nameMap[value['key'] as String];
       if (perf != null) {

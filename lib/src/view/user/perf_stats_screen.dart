@@ -88,7 +88,7 @@ class _Title extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final allPerfs = Perf.values.where((element) {
-      if ([perf, Perf.storm, Perf.puzzle, Perf.streak, Perf.fromPosition]
+      if ([perf, Perf.storm, Perf.streak, Perf.fromPosition]
           .contains(element)) {
         return false;
       }
@@ -200,187 +200,189 @@ class _Body extends ConsumerWidget {
                   ),
                 ],
               ),
-              if (data.percentile != null && data.percentile! > 0.0)
-                Text(
-                  (loggedInUser != null && loggedInUser.user.id == user.id)
-                      ? context.l10n.youAreBetterThanPercentOfPerfTypePlayers(
-                          '${data.percentile!.toStringAsFixed(2)}%',
-                          perf.title,
-                        )
-                      : context.l10n.userIsBetterThanPercentOfPerfTypePlayers(
-                          user.username,
-                          '${data.percentile!.toStringAsFixed(2)}%',
-                          perf.title,
-                        ),
-                  style: TextStyle(color: textShade(context, 0.7)),
-                ),
-              subStatSpace,
-              // The number '12' here is not arbitrary, since the API returns the progression for the last 12 games (as far as I know).
-              StatCard(
-                context.l10n
-                    .perfStatProgressOverLastXGames('12')
-                    .replaceAll(':', ''),
-                child: _ProgressionWidget(data.progress),
-              ),
-              StatCardRow([
-                if (data.rank != null)
-                  StatCard(
-                    context.l10n.rank,
-                    value: data.rank == null
-                        ? '?'
-                        : NumberFormat.decimalPattern(
-                            Intl.getCurrentLocale(),
-                          ).format(data.rank),
+              if (perf != Perf.puzzle) ...[
+                if (data.percentile != null && data.percentile! > 0.0)
+                  Text(
+                    (loggedInUser != null && loggedInUser.user.id == user.id)
+                        ? context.l10n.youAreBetterThanPercentOfPerfTypePlayers(
+                            '${data.percentile!.toStringAsFixed(2)}%',
+                            perf.title,
+                          )
+                        : context.l10n.userIsBetterThanPercentOfPerfTypePlayers(
+                            user.username,
+                            '${data.percentile!.toStringAsFixed(2)}%',
+                            perf.title,
+                          ),
+                    style: TextStyle(color: textShade(context, 0.7)),
                   ),
+                subStatSpace,
+                // The number '12' here is not arbitrary, since the API returns the progression for the last 12 games (as far as I know).
                 StatCard(
                   context.l10n
-                      .perfStatRatingDeviation('')
-                      .replaceAll(': .', ''),
-                  value: data.deviation.toStringAsFixed(2),
+                      .perfStatProgressOverLastXGames('12')
+                      .replaceAll(':', ''),
+                  child: _ProgressionWidget(data.progress),
                 ),
-              ]),
-              StatCardRow([
-                StatCard(
-                  context.l10n.perfStatHighestRating('').replaceAll(':', ''),
-                  child: _RatingWidget(
-                    data.highestRating,
-                    data.highestRatingGame,
-                    LichessColors.good,
+                StatCardRow([
+                  if (data.rank != null)
+                    StatCard(
+                      context.l10n.rank,
+                      value: data.rank == null
+                          ? '?'
+                          : NumberFormat.decimalPattern(
+                              Intl.getCurrentLocale(),
+                            ).format(data.rank),
+                    ),
+                  StatCard(
+                    context.l10n
+                        .perfStatRatingDeviation('')
+                        .replaceAll(': .', ''),
+                    value: data.deviation.toStringAsFixed(2),
                   ),
+                ]),
+                StatCardRow([
+                  StatCard(
+                    context.l10n.perfStatHighestRating('').replaceAll(':', ''),
+                    child: _RatingWidget(
+                      data.highestRating,
+                      data.highestRatingGame,
+                      LichessColors.good,
+                    ),
+                  ),
+                  StatCard(
+                    context.l10n.perfStatLowestRating('').replaceAll(':', ''),
+                    child: _RatingWidget(
+                      data.lowestRating,
+                      data.lowestRatingGame,
+                      LichessColors.red,
+                    ),
+                  ),
+                ]),
+                statGroupSpace,
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  textBaseline: TextBaseline.alphabetic,
+                  children: [
+                    Text(
+                      '${context.l10n.perfStatTotalGames} '.localizeNumbers(),
+                      style: Styles.sectionTitle,
+                    ),
+                    Text(
+                      data.totalGames.toString().localizeNumbers(),
+                      style: _mainValueStyle,
+                    ),
+                  ],
                 ),
+                subStatSpace,
+                StatCardRow([
+                  StatCard(
+                    context.l10n.wins,
+                    child: _PercentageValueWidget(
+                      data.wonGames,
+                      data.totalGames,
+                      color: LichessColors.good,
+                    ),
+                  ),
+                  StatCard(
+                    context.l10n.draws,
+                    child: _PercentageValueWidget(
+                      data.drawnGames,
+                      data.totalGames,
+                      color: textShade(context, _customOpacity),
+                      isShaded: true,
+                    ),
+                  ),
+                  StatCard(
+                    context.l10n.losses,
+                    child: _PercentageValueWidget(
+                      data.lostGames,
+                      data.totalGames,
+                      color: LichessColors.red,
+                    ),
+                  ),
+                ]),
+                StatCardRow([
+                  StatCard(
+                    context.l10n.rated,
+                    child: _PercentageValueWidget(
+                      data.ratedGames,
+                      data.totalGames,
+                    ),
+                  ),
+                  StatCard(
+                    context.l10n.tournament,
+                    child: _PercentageValueWidget(
+                      data.tournamentGames,
+                      data.totalGames,
+                    ),
+                  ),
+                  StatCard(
+                    context.l10n.perfStatBerserkedGames.replaceAll(
+                      ' ${context.l10n.games.toLowerCase()}',
+                      '',
+                    ),
+                    child: _PercentageValueWidget(
+                      data.berserkGames,
+                      data.totalGames,
+                    ),
+                  ),
+                  StatCard(
+                    context.l10n.perfStatDisconnections,
+                    child: _PercentageValueWidget(
+                      data.disconnections,
+                      data.totalGames,
+                    ),
+                  ),
+                ]),
+                StatCardRow([
+                  StatCard(
+                    context.l10n.averageOpponent,
+                    value: data.avgOpponent == null
+                        ? '?'
+                        : data.avgOpponent.toString(),
+                  ),
+                  StatCard(
+                    context.l10n.perfStatTimeSpentPlaying,
+                    value: data.timePlayed
+                        .toDaysHoursMinutes(AppLocalizations.of(context)),
+                  ),
+                ]),
                 StatCard(
-                  context.l10n.perfStatLowestRating('').replaceAll(':', ''),
-                  child: _RatingWidget(
-                    data.lowestRating,
-                    data.lowestRatingGame,
-                    LichessColors.red,
-                  ),
-                ),
-              ]),
-              statGroupSpace,
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.baseline,
-                textBaseline: TextBaseline.alphabetic,
-                children: [
-                  Text(
-                    '${context.l10n.perfStatTotalGames} '.localizeNumbers(),
-                    style: Styles.sectionTitle,
-                  ),
-                  Text(
-                    data.totalGames.toString().localizeNumbers(),
-                    style: _mainValueStyle,
-                  ),
-                ],
-              ),
-              subStatSpace,
-              StatCardRow([
-                StatCard(
-                  context.l10n.wins,
-                  child: _PercentageValueWidget(
-                    data.wonGames,
-                    data.totalGames,
+                  context.l10n.perfStatWinningStreak,
+                  child: _StreakWidget(
+                    data.maxWinStreak,
+                    data.curWinStreak,
                     color: LichessColors.good,
                   ),
                 ),
                 StatCard(
-                  context.l10n.draws,
-                  child: _PercentageValueWidget(
-                    data.drawnGames,
-                    data.totalGames,
-                    color: textShade(context, _customOpacity),
-                    isShaded: true,
-                  ),
-                ),
-                StatCard(
-                  context.l10n.losses,
-                  child: _PercentageValueWidget(
-                    data.lostGames,
-                    data.totalGames,
+                  context.l10n.perfStatLosingStreak,
+                  child: _StreakWidget(
+                    data.maxLossStreak,
+                    data.curLossStreak,
                     color: LichessColors.red,
                   ),
                 ),
-              ]),
-              StatCardRow([
                 StatCard(
-                  context.l10n.rated,
-                  child: _PercentageValueWidget(
-                    data.ratedGames,
-                    data.totalGames,
-                  ),
+                  context.l10n.perfStatGamesInARow,
+                  child: _StreakWidget(data.maxPlayStreak, data.curPlayStreak),
                 ),
                 StatCard(
-                  context.l10n.tournament,
-                  child: _PercentageValueWidget(
-                    data.tournamentGames,
-                    data.totalGames,
+                  context.l10n.perfStatMaxTimePlaying,
+                  child: _StreakWidget(data.maxTimeStreak, data.curTimeStreak),
+                ),
+                if (data.bestWins != null && data.bestWins!.isNotEmpty) ...[
+                  statGroupSpace,
+                  _GameListWidget(
+                    games: data.bestWins!,
+                    perf: perf,
+                    user: user,
+                    header: Text(
+                      context.l10n.perfStatBestRated,
+                      style: Styles.sectionTitle,
+                    ),
                   ),
-                ),
-                StatCard(
-                  context.l10n.perfStatBerserkedGames.replaceAll(
-                    ' ${context.l10n.games.toLowerCase()}',
-                    '',
-                  ),
-                  child: _PercentageValueWidget(
-                    data.berserkGames,
-                    data.totalGames,
-                  ),
-                ),
-                StatCard(
-                  context.l10n.perfStatDisconnections,
-                  child: _PercentageValueWidget(
-                    data.disconnections,
-                    data.totalGames,
-                  ),
-                ),
-              ]),
-              StatCardRow([
-                StatCard(
-                  context.l10n.averageOpponent,
-                  value: data.avgOpponent == null
-                      ? '?'
-                      : data.avgOpponent.toString(),
-                ),
-                StatCard(
-                  context.l10n.perfStatTimeSpentPlaying,
-                  value: data.timePlayed
-                      .toDaysHoursMinutes(AppLocalizations.of(context)),
-                ),
-              ]),
-              StatCard(
-                context.l10n.perfStatWinningStreak,
-                child: _StreakWidget(
-                  data.maxWinStreak,
-                  data.curWinStreak,
-                  color: LichessColors.good,
-                ),
-              ),
-              StatCard(
-                context.l10n.perfStatLosingStreak,
-                child: _StreakWidget(
-                  data.maxLossStreak,
-                  data.curLossStreak,
-                  color: LichessColors.red,
-                ),
-              ),
-              StatCard(
-                context.l10n.perfStatGamesInARow,
-                child: _StreakWidget(data.maxPlayStreak, data.curPlayStreak),
-              ),
-              StatCard(
-                context.l10n.perfStatMaxTimePlaying,
-                child: _StreakWidget(data.maxTimeStreak, data.curTimeStreak),
-              ),
-              if (data.bestWins != null && data.bestWins!.isNotEmpty) ...[
-                statGroupSpace,
-                _GameListWidget(
-                  games: data.bestWins!,
-                  perf: perf,
-                  user: user,
-                  header: Text(
-                    context.l10n.perfStatBestRated,
-                    style: Styles.sectionTitle,
-                  ),
-                ),
+                ],
               ],
             ],
           ),
