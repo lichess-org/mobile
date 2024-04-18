@@ -246,11 +246,9 @@ extension ClientExtension on Client {
     final List<T> list = [];
     for (final e in json) {
       if (e is! Map<String, dynamic>) {
-        _logger.severe(
-          'Could not read json object as List: expected a list of objects.',
-        );
+        _logger.severe('Could not read json object as $T: expected an object.');
         throw ClientException(
-          'Could not read json object as List: expected a list of objects.',
+          'Could not read json object as $T: expected an object.',
           url,
         );
       }
