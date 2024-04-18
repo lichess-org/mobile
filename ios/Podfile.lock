@@ -129,7 +129,7 @@ PODS:
   - sqflite (0.0.3):
     - Flutter
     - FlutterMacOS
-  - stockfish (1.5.0):
+  - stockfish (1.6.0):
     - Flutter
   - system_info_plus (0.0.1):
     - Flutter
@@ -250,7 +250,7 @@ SPEC CHECKSUMS:
   shared_preferences_foundation: b4c3b4cddf1c21f02770737f147a3f5da9d39695
   soundpool: c7f4422ca206e77f8900ed3c4ee6a6ff5a0e38a9
   sqflite: 673a0e54cc04b7d6dba8d24fb8095b31c3a99eec
-  stockfish: 819bf4544d1e76a01da13af56324c69b3bf7928f
+  stockfish: 1cee686b12e2541a977d062746d2eb3f794d891c
   system_info_plus: 5393c8da281d899950d751713575fbf91c7709aa
   url_launcher_ios: 6116280ddcfe98ab8820085d8d76ae7449447586
   wakelock_plus: 78ec7c5b202cab7761af8e2b2b3d0671be6c4ae1
