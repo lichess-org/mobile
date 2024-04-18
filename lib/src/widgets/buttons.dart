@@ -5,7 +5,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
 /// Platform agnostic button which is used for important actions.
@@ -193,25 +192,6 @@ class AppBarIconButton extends StatelessWidget {
             icon: icon,
             onPressed: onPressed,
           );
-  }
-}
-
-/// A cogs icon button in the app bar
-class SettingsButton extends StatelessWidget {
-  const SettingsButton({
-    required this.onPressed,
-    super.key,
-  });
-
-  final VoidCallback? onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return AppBarIconButton(
-      onPressed: onPressed,
-      semanticsLabel: context.l10n.settingsSettings,
-      icon: const Icon(Icons.settings),
-    );
   }
 }
 

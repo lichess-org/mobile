@@ -51,12 +51,14 @@ class GameAppBar extends ConsumerWidget implements PreferredSizeWidget {
           : StandaloneGameTitle(id: id!),
       actions: [
         if (id != null)
-          SettingsButton(
+          AppBarIconButton(
             onPressed: () => pushPlatformRoute(
               context,
               fullscreenDialog: true,
               builder: (_) => GameSettings(id: id!),
             ),
+            semanticsLabel: context.l10n.settingsSettings,
+            icon: const Icon(Icons.settings),
           ),
       ],
     );
@@ -98,13 +100,15 @@ class GameCupertinoNavBar extends ConsumerWidget
           ? _LobbyGameTitle(seek: seek!)
           : StandaloneGameTitle(id: id!),
       trailing: id != null
-          ? SettingsButton(
+          ? AppBarIconButton(
               onPressed: () => pushPlatformRoute(
                 context,
                 fullscreenDialog: true,
                 title: context.l10n.settingsSettings,
                 builder: (_) => GameSettings(id: id!),
               ),
+              semanticsLabel: context.l10n.settingsSettings,
+              icon: const Icon(Icons.settings),
             )
           : null,
     );

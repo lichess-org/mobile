@@ -68,12 +68,14 @@ class AnalysisScreen extends ConsumerWidget {
         title: _Title(options: options, title: title),
         actions: [
           _EngineDepth(ctrlProvider),
-          SettingsButton(
+          AppBarIconButton(
             onPressed: () => showAdaptiveBottomSheet<void>(
               context: context,
               isScrollControlled: true,
               builder: (_) => AnalysisSettings(options),
             ),
+            semanticsLabel: context.l10n.settingsSettings,
+            icon: const Icon(Icons.settings),
           ),
         ],
       ),
@@ -93,12 +95,14 @@ class AnalysisScreen extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             _EngineDepth(ctrlProvider),
-            SettingsButton(
+            AppBarIconButton(
               onPressed: () => showAdaptiveBottomSheet<void>(
                 context: context,
                 isScrollControlled: true,
                 builder: (_) => AnalysisSettings(options),
               ),
+              semanticsLabel: context.l10n.settingsSettings,
+              icon: const Icon(Icons.settings),
             ),
           ],
         ),

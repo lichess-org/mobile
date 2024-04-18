@@ -461,9 +461,9 @@ void main() {
 
         await tester.pumpWidget(app);
 
-        expect(find.byType(SettingsButton), findsOneWidget);
+        expect(find.byType(AppBarIconButton), findsOneWidget);
 
-        await tester.tap(find.byType(SettingsButton));
+        await tester.tap(find.byType(AppBarIconButton));
         await tester.pumpAndSettle();
 
         expect(
@@ -498,7 +498,7 @@ void main() {
 
         await tester.pumpWidget(app);
 
-        expect(find.byType(SettingsButton), findsOneWidget);
+        expect(find.byType(AppBarIconButton), findsOneWidget);
       },
     );
   });

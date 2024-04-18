@@ -680,13 +680,15 @@ class _PuzzleSettingsButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SettingsButton(
+    return AppBarIconButton(
       onPressed: () => pushPlatformRoute(
         context,
         title: context.l10n.settingsSettings,
         fullscreenDialog: true,
         builder: (_) => PuzzleSettingsScreen(userId: userId),
       ),
+      semanticsLabel: context.l10n.settingsSettings,
+      icon: const Icon(Icons.settings),
     );
   }
 }

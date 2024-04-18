@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
-import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
@@ -14,13 +13,13 @@ import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/layout.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/view/account/profile_screen.dart';
+import 'package:lichess_mobile/src/view/account/profile_button.dart';
 import 'package:lichess_mobile/src/view/game/lobby_screen.dart';
 import 'package:lichess_mobile/src/view/play/create_custom_game_screen.dart';
 import 'package:lichess_mobile/src/view/play/offline_correspondence_games_screen.dart';
 import 'package:lichess_mobile/src/view/play/ongoing_games_screen.dart';
 import 'package:lichess_mobile/src/view/play/time_control_modal.dart';
-import 'package:lichess_mobile/src/view/settings/settings_screen.dart';
+import 'package:lichess_mobile/src/view/settings/settings_button.dart';
 import 'package:lichess_mobile/src/view/user/player_screen.dart';
 import 'package:lichess_mobile/src/view/user/recent_games.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
@@ -65,27 +64,13 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
   }
 
   Widget _androidBuilder(BuildContext context) {
-    final session = ref.watch(authSessionProvider);
+    final isLoggedIn = ref.watch(authSessionProvider) != null;
     return Scaffold(
       appBar: AppBar(
         title: const Text('lichess.org'),
-        leading: session == null
-            ? null
-            : IconButton(
-                icon: const Icon(Icons.account_circle),
-                tooltip: context.l10n.profile,
-                onPressed: () {
-                  ref.invalidate(accountProvider);
-                  ref.invalidate(accountActivityProvider);
-                  Navigator.of(context).push(
-                    MaterialPageRoute<void>(
-                      builder: (context) => const ProfileScreen(),
-                    ),
-                  );
-                },
-              ),
+        leading: isLoggedIn ? const ProfileButton() : null,
         actions: const [
-          _SettingsButton(),
+          SettingsButton(),
           _PlayerScreenButton(),
         ],
       ),
@@ -113,26 +98,12 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
               start: session == null ? 16.0 : 8.0,
               end: 8.0,
             ),
-            leading: session == null
-                ? const _SignInWidget()
-                : AppBarIconButton(
-                    semanticsLabel: context.l10n.profile,
-                    onPressed: () {
-                      ref.invalidate(accountProvider);
-                      ref.invalidate(accountActivityProvider);
-                      Navigator.of(context).push(
-                        CupertinoPageRoute<void>(
-                          builder: (context) => const ProfileScreen(),
-                        ),
-                      );
-                    },
-                    icon: const Icon(CupertinoIcons.profile_circled),
-                  ),
+            leading: session == null ? null : const ProfileButton(),
             largeTitle: Text(context.l10n.play),
             trailing: const Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                _SettingsButton(),
+                SettingsButton(),
                 _PlayerScreenButton(),
               ],
             ),
@@ -208,8 +179,6 @@ class _HomeBody extends ConsumerWidget {
   List<Widget> _onlineWidgets(BuildContext context, bool isTablet) {
     if (isTablet) {
       return [
-        if (Theme.of(context).platform == TargetPlatform.android)
-          const _SignInWidget(),
         const _HelloWidget(),
         const Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -239,8 +208,6 @@ class _HomeBody extends ConsumerWidget {
     } else {
       return [
         const SizedBox(height: 8.0),
-        if (Theme.of(context).platform == TargetPlatform.android)
-          const _SignInWidget(),
         const _HelloWidget(),
         const _CreateAGameSection(),
         const _OngoingGamesPreview(maxGamesToShow: 5),
@@ -283,58 +250,6 @@ class _HomeBody extends ConsumerWidget {
         _OfflineCorrespondencePreview(maxGamesToShow: 5),
       ];
     }
-  }
-}
-
-class _SignInWidget extends ConsumerWidget {
-  const _SignInWidget();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final authController = ref.watch(authControllerProvider);
-    final session = ref.watch(authSessionProvider);
-
-    final button = Theme.of(context).platform == TargetPlatform.iOS
-        ? AppBarTextButton(
-            onPressed: authController.isLoading
-                ? null
-                : () => ref.read(authControllerProvider.notifier).signIn(),
-            child: Text(
-              context.l10n.signIn,
-            ),
-          )
-        : Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: Styles.bodySectionPadding,
-              child: FilledButton.tonalIcon(
-                icon: const Icon(Icons.account_circle),
-                onPressed: authController.isLoading
-                    ? null
-                    : () => ref.read(authControllerProvider.notifier).signIn(),
-                label: Text(
-                  context.l10n.signIn.toUpperCase(),
-                ),
-              ),
-            ),
-          );
-
-    return session == null ? button : const SizedBox.shrink();
-  }
-}
-
-class _SettingsButton extends StatelessWidget {
-  const _SettingsButton();
-
-  @override
-  Widget build(BuildContext context) {
-    return SettingsButton(
-      onPressed: () => pushPlatformRoute(
-        context,
-        title: context.l10n.settingsSettings,
-        builder: (_) => const SettingsScreen(),
-      ),
-    );
   }
 }
 

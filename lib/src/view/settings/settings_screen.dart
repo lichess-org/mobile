@@ -19,6 +19,7 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
+import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 import 'account_preferences_screen.dart';
 import 'board_settings_screen.dart';
@@ -80,9 +81,62 @@ class _Body extends ConsumerWidget {
     return SafeArea(
       child: ListView(
         children: [
+          if (userSession != null)
+            ListSection(
+              header: UserFullNameWidget(user: userSession.user),
+              hasLeading: true,
+              showDivider: true,
+              children: [
+                PlatformListTile(
+                  leading: const Icon(Icons.manage_accounts),
+                  title: Text(context.l10n.preferencesPreferences),
+                  trailing: Theme.of(context).platform == TargetPlatform.iOS
+                      ? const CupertinoListTileChevron()
+                      : null,
+                  onTap: () {
+                    pushPlatformRoute(
+                      context,
+                      title: context.l10n.preferencesPreferences,
+                      builder: (context) => const AccountPreferencesScreen(),
+                    );
+                  },
+                ),
+                if (authController.isLoading)
+                  const PlatformListTile(
+                    leading: Icon(Icons.logout),
+                    title: Center(child: ButtonLoadingIndicator()),
+                  )
+                else
+                  PlatformListTile(
+                    leading: const Icon(Icons.logout),
+                    title: Text(context.l10n.logOut),
+                    onTap: () {
+                      _showSignOutConfirmDialog(context, ref);
+                    },
+                  ),
+              ],
+            )
+          else
+            ListSection(
+              showDivider: true,
+              children: [
+                if (authController.isLoading)
+                  const PlatformListTile(
+                    leading: Icon(Icons.login),
+                    title: Center(child: ButtonLoadingIndicator()),
+                  )
+                else
+                  PlatformListTile(
+                    leading: const Icon(Icons.login),
+                    title: Text(context.l10n.signIn),
+                    onTap: () {
+                      ref.read(authControllerProvider.notifier).signIn();
+                    },
+                  ),
+              ],
+            ),
           ListSection(
             hasLeading: true,
-            showDivider: true,
             children: [
               SettingsListTile(
                 icon: const Icon(Icons.music_note),
@@ -195,51 +249,8 @@ class _Body extends ConsumerWidget {
               ),
             ],
           ),
-          if (userSession != null)
-            ListSection(
-              hasLeading: true,
-              showDivider: true,
-              children: [
-                PlatformListTile(
-                  leading: const Icon(Icons.person),
-                  title: Text(context.l10n.preferencesPreferences),
-                  trailing: Theme.of(context).platform == TargetPlatform.iOS
-                      ? const CupertinoListTileChevron()
-                      : null,
-                  onTap: () {
-                    pushPlatformRoute(
-                      context,
-                      title: context.l10n.preferencesPreferences,
-                      builder: (context) => const AccountPreferencesScreen(),
-                    );
-                  },
-                ),
-              ],
-            ),
-          if (userSession != null)
-            if (authController.isLoading)
-              const ListSection(
-                children: [
-                  PlatformListTile(
-                    leading: Icon(Icons.exit_to_app),
-                    title: Center(child: ButtonLoadingIndicator()),
-                  ),
-                ],
-              )
-            else
-              ListSection(
-                children: [
-                  PlatformListTile(
-                    leading: const Icon(Icons.exit_to_app),
-                    title: Text(context.l10n.logOut),
-                    onTap: () {
-                      _showSignOutConfirmDialog(context, ref);
-                    },
-                  ),
-                ],
-              ),
           Padding(
-            padding: Styles.horizontalBodyPadding,
+            padding: Styles.bodySectionPadding,
             child: Text(
               'v${packageInfo.version}',
               style: Theme.of(context).textTheme.bodySmall,
