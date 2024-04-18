@@ -1,8 +1,5 @@
 name: Builds
-on:
-  push:
-    branches:
-      - main
+on: workflow_dispatch
 
 # Declare default permissions as read only.
 permissions: read-all
