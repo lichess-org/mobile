@@ -8,7 +8,6 @@ import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
-import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
@@ -21,22 +20,20 @@ import 'package:lichess_mobile/src/widgets/stat_card.dart';
 final daysProvider = StateProvider<Days>((ref) => Days.month);
 
 class PuzzleDashboardScreen extends StatelessWidget {
-  const PuzzleDashboardScreen({super.key, required this.user});
-
-  final LightUser user;
+  const PuzzleDashboardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Theme.of(context).platform == TargetPlatform.iOS
-        ? CupertinoPageScaffold(
-            navigationBar: const CupertinoNavigationBar(
+        ? const CupertinoPageScaffold(
+            navigationBar: CupertinoNavigationBar(
               middle: SizedBox.shrink(),
               trailing: DaysSelector(),
             ),
-            child: _Body(user: user),
+            child: _Body(),
           )
         : Scaffold(
-            body: _Body(user: user),
+            body: const _Body(),
             appBar: AppBar(
               title: const SizedBox.shrink(),
               actions: const [DaysSelector()],
@@ -46,9 +43,7 @@ class PuzzleDashboardScreen extends StatelessWidget {
 }
 
 class _Body extends ConsumerWidget {
-  const _Body({required this.user});
-
-  final LightUser user;
+  const _Body();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

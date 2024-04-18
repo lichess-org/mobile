@@ -435,7 +435,7 @@ class _DashboardButton extends ConsumerWidget {
       pushPlatformRoute(
         context,
         title: context.l10n.puzzlePuzzleDashboard,
-        builder: (_) => PuzzleDashboardScreen(user: session.user),
+        builder: (_) => const PuzzleDashboardScreen(),
       );
 }
 
