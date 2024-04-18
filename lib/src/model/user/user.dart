@@ -361,7 +361,7 @@ class UserPerfGame with _$UserPerfGame {
 
 @immutable
 class UserRatingHistoryPerf {
-  final String perf;
+  final Perf perf;
   final IList<UserRatingHistoryPoint> points;
 
   const UserRatingHistoryPerf({
