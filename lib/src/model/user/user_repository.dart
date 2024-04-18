@@ -83,17 +83,23 @@ class UserRepository {
   }
 }
 
-UserRatingHistoryPerf _ratingHistoryFromJson(
+UserRatingHistoryPerf? _ratingHistoryFromJson(
   Map<String, dynamic> json,
 ) =>
     _ratingHistoryFromPick(pick(json).required());
 
-UserRatingHistoryPerf _ratingHistoryFromPick(
-  RequiredPick perf,
+UserRatingHistoryPerf? _ratingHistoryFromPick(
+  RequiredPick pick,
 ) {
+  final perf = pick('name').asPerfOrNull();
+
+  if (perf == null) {
+    return null;
+  }
+
   return UserRatingHistoryPerf(
-    perf: perf('name').asStringOrThrow(),
-    points: perf('points').asListOrThrow((point) {
+    perf: perf,
+    points: pick('points').asListOrThrow((point) {
       final values = point.asListOrThrow((point) => point.asIntOrThrow());
       return UserRatingHistoryPoint(
         date: DateTime.utc(

@@ -166,10 +166,10 @@ class _Body extends ConsumerWidget {
               ratingHistory.when(
                 data: (ratingHistoryData) {
                   final ratingHistoryPerfData = ratingHistoryData
-                      .where((element) => element.perf == perf.title)
-                      .first;
+                      .firstWhereOrNull((element) => element.perf == perf);
 
-                  if (ratingHistoryPerfData.points.isEmpty) {
+                  if (ratingHistoryPerfData == null ||
+                      ratingHistoryPerfData.points.isEmpty) {
                     return const SizedBox.shrink();
                   }
                   return _EloChart(ratingHistoryPerfData);

@@ -230,7 +230,7 @@ extension ClientExtension on Client {
   Future<IList<T>> readJsonList<T>(
     Uri url, {
     Map<String, String>? headers,
-    required T Function(Map<String, dynamic>) mapper,
+    required T? Function(Map<String, dynamic>) mapper,
   }) async {
     final response = await get(url, headers: headers);
     _checkResponseSuccess(url, response);
@@ -243,20 +243,26 @@ extension ClientExtension on Client {
       );
     }
 
-    return IList(
-      json.map((e) {
-        if (e is! Map<String, dynamic>) {
-          _logger.severe('Could not read json object as $T');
-          throw ClientException('Could not read json object as $T', url);
+    final List<T> list = [];
+    for (final e in json) {
+      if (e is! Map<String, dynamic>) {
+        _logger.severe('Could not read json object as $T: expected an object.');
+        throw ClientException(
+          'Could not read json object as $T: expected an object.',
+          url,
+        );
+      }
+      try {
+        final mapped = mapper(e);
+        if (mapped != null) {
+          list.add(mapped);
         }
-        try {
-          return mapper(e);
-        } catch (e, st) {
-          _logger.severe('Could not read json object as $T: $e', e, st);
-          throw ClientException('Could not read json object as $T: $e', url);
-        }
-      }),
-    );
+      } catch (e, st) {
+        _logger.severe('Could not read json object as $T: $e', e, st);
+        throw ClientException('Could not read json object as $T: $e', url);
+      }
+    }
+    return IList(list);
   }
 
   /// Sends an HTTP GET request with the given headers to the given URL and
