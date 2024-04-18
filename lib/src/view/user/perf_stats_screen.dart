@@ -88,7 +88,7 @@ class _Title extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final allPerfs = Perf.values.where((element) {
-      if ([Perf.storm, Perf.puzzle, Perf.streak, Perf.fromPosition]
+      if ([perf, Perf.storm, Perf.puzzle, Perf.streak, Perf.fromPosition]
           .contains(element)) {
         return false;
       }
