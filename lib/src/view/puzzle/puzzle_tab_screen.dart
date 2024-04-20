@@ -20,7 +20,6 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/layout.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
-import 'package:lichess_mobile/src/view/account/profile_button.dart';
 import 'package:lichess_mobile/src/view/puzzle/dashboard_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_history_screen.dart';
 import 'package:lichess_mobile/src/view/settings/settings_button.dart';
@@ -56,7 +55,6 @@ class _PuzzleTabScreenState extends ConsumerState<PuzzleTabScreen> {
   }
 
   Widget _androidBuilder(BuildContext context, AuthSessionState? userSession) {
-    final session = ref.watch(authSessionProvider);
     final body = Column(
       children: [
         Expanded(
@@ -67,7 +65,6 @@ class _PuzzleTabScreenState extends ConsumerState<PuzzleTabScreen> {
     );
     return Scaffold(
       appBar: AppBar(
-        leading: session != null ? const ProfileButton() : null,
         title: Text(context.l10n.puzzles),
         actions: const [
           SettingsButton(),
@@ -85,15 +82,13 @@ class _PuzzleTabScreenState extends ConsumerState<PuzzleTabScreen> {
   }
 
   Widget _iosBuilder(BuildContext context, AuthSessionState? userSession) {
-    final session = ref.watch(authSessionProvider);
     return CupertinoPageScaffold(
       child: CustomScrollView(
         controller: puzzlesScrollController,
         slivers: [
           CupertinoSliverNavigationBar(
-            leading: session != null ? const ProfileButton() : null,
-            padding: EdgeInsetsDirectional.only(
-              start: session == null ? 16.0 : 8.0,
+            padding: const EdgeInsetsDirectional.only(
+              start: 16.0,
               end: 8.0,
             ),
             largeTitle: Text(context.l10n.puzzles),

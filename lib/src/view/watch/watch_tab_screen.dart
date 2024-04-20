@@ -3,7 +3,6 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/tv/featured_player.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
@@ -14,7 +13,6 @@ import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/view/account/profile_button.dart';
 import 'package:lichess_mobile/src/view/settings/settings_button.dart';
 import 'package:lichess_mobile/src/view/watch/live_tv_channels_screen.dart';
 import 'package:lichess_mobile/src/view/watch/streamer_screen.dart';
@@ -87,10 +85,8 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
   }
 
   Widget _buildAndroid(BuildContext context, WidgetRef ref) {
-    final session = ref.watch(authSessionProvider);
     return Scaffold(
       appBar: AppBar(
-        leading: session != null ? const ProfileButton() : null,
         title: Text(context.l10n.watch),
         actions: const [
           SettingsButton(),
@@ -124,20 +120,18 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
   }
 
   Widget _buildIos(BuildContext context, WidgetRef ref) {
-    final session = ref.watch(authSessionProvider);
     return CupertinoPageScaffold(
       child: OrientationBuilder(
         builder: (context, orientation) {
           return CustomScrollView(
             controller: watchScrollController,
             slivers: [
-              CupertinoSliverNavigationBar(
-                leading: session != null ? const ProfileButton() : null,
+              const CupertinoSliverNavigationBar(
                 padding: EdgeInsetsDirectional.only(
-                  start: session == null ? 16.0 : 8.0,
+                  start: 16.0,
                   end: 8.0,
                 ),
-                trailing: const Row(
+                trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     SettingsButton(),
