@@ -34,7 +34,7 @@ class AnalysisSettings extends ConsumerWidget {
       initialChildSize: .7,
       expand: false,
       snap: true,
-      snapSizes: const [.5, .7],
+      snapSizes: const [.7],
       builder: (context, scrollController) => ListView(
         controller: scrollController,
         children: [
