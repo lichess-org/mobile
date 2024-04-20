@@ -60,7 +60,7 @@ class AnalysisScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GameId(pgnOrId).isValid
+    return pgnOrId.length == 8 && GameId(pgnOrId).isValid
         ? _LoadGame(GameId(pgnOrId), options, title)
         : _LoadedAnalysisScreen(
             options: options,
