@@ -15,8 +15,10 @@ import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
+import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
@@ -41,13 +43,81 @@ import 'analysis_settings.dart';
 import 'annotations.dart';
 import 'tree_view.dart';
 
-class AnalysisScreen extends ConsumerWidget {
+class AnalysisScreen extends StatelessWidget {
   const AnalysisScreen({
     required this.options,
+    required this.pgnOrId,
+    this.title,
+  });
+
+  /// The analysis options.
+  final AnalysisOptions options;
+
+  /// The PGN or game ID to load.
+  final String pgnOrId;
+
+  final String? title;
+
+  @override
+  Widget build(BuildContext context) {
+    return GameId(pgnOrId).isValid
+        ? _LoadGame(GameId(pgnOrId), options, title)
+        : _LoadedAnalysisScreen(
+            options: options,
+            pgn: pgnOrId,
+            title: title,
+          );
+  }
+}
+
+class _LoadGame extends ConsumerWidget {
+  const _LoadGame(this.gameId, this.options, this.title);
+
+  final AnalysisOptions options;
+  final GameId gameId;
+  final String? title;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final gameAsync = ref.watch(archivedGameProvider(id: gameId));
+
+    return gameAsync.when(
+      data: (game) {
+        final serverAnalysis =
+            game.white.analysis != null && game.black.analysis != null
+                ? (white: game.white.analysis!, black: game.black.analysis!)
+                : null;
+        return _LoadedAnalysisScreen(
+          options: options.copyWith(
+            id: game.id,
+            opening: game.meta.opening,
+            division: game.meta.division,
+            serverAnalysis: serverAnalysis,
+          ),
+          pgn: game.makePgn(),
+          title: title,
+        );
+      },
+      loading: () => const Center(child: CircularProgressIndicator.adaptive()),
+      error: (error, _) {
+        return Center(
+          child: Text('Cannot load game analysis: $error'),
+        );
+      },
+    );
+  }
+}
+
+class _LoadedAnalysisScreen extends ConsumerWidget {
+  const _LoadedAnalysisScreen({
+    required this.options,
+    required this.pgn,
     this.title,
   });
 
   final AnalysisOptions options;
+  final String pgn;
+
   final String? title;
 
   @override
@@ -60,7 +130,7 @@ class AnalysisScreen extends ConsumerWidget {
   }
 
   Widget _androidBuilder(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = analysisControllerProvider(options);
+    final ctrlProvider = analysisControllerProvider(pgn, options);
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -72,19 +142,19 @@ class AnalysisScreen extends ConsumerWidget {
             onPressed: () => showAdaptiveBottomSheet<void>(
               context: context,
               isScrollControlled: true,
-              builder: (_) => AnalysisSettings(options),
+              builder: (_) => AnalysisSettings(pgn, options),
             ),
             semanticsLabel: context.l10n.settingsSettings,
             icon: const Icon(Icons.settings),
           ),
         ],
       ),
-      body: _Body(options: options),
+      body: _Body(pgn: pgn, options: options),
     );
   }
 
   Widget _iosBuilder(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = analysisControllerProvider(options);
+    final ctrlProvider = analysisControllerProvider(pgn, options);
 
     return CupertinoPageScaffold(
       resizeToAvoidBottomInset: false,
@@ -99,7 +169,7 @@ class AnalysisScreen extends ConsumerWidget {
               onPressed: () => showAdaptiveBottomSheet<void>(
                 context: context,
                 isScrollControlled: true,
-                builder: (_) => AnalysisSettings(options),
+                builder: (_) => AnalysisSettings(pgn, options),
               ),
               semanticsLabel: context.l10n.settingsSettings,
               icon: const Icon(Icons.settings),
@@ -107,7 +177,7 @@ class AnalysisScreen extends ConsumerWidget {
           ],
         ),
       ),
-      child: _Body(options: options),
+      child: _Body(pgn: pgn, options: options),
     );
   }
 }
@@ -138,13 +208,14 @@ class _Title extends StatelessWidget {
 }
 
 class _Body extends ConsumerWidget {
-  const _Body({required this.options});
+  const _Body({required this.pgn, required this.options});
 
+  final String pgn;
   final AnalysisOptions options;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = analysisControllerProvider(options);
+    final ctrlProvider = analysisControllerProvider(pgn, options);
     final showEvaluationGauge = ref.watch(
       analysisPreferencesProvider.select((value) => value.showEvaluationGauge),
     );
@@ -192,7 +263,12 @@ class _Body extends ConsumerWidget {
                             ),
                             child: Row(
                               children: [
-                                _Board(options, boardSize, isTablet: isTablet),
+                                _Board(
+                                  pgn,
+                                  options,
+                                  boardSize,
+                                  isTablet: isTablet,
+                                ),
                                 if (hasEval && showEvaluationGauge) ...[
                                   const SizedBox(width: 4.0),
                                   _EngineGaugeVertical(ctrlProvider),
@@ -217,8 +293,9 @@ class _Body extends ConsumerWidget {
                                     ),
                                     semanticContainer: false,
                                     child: showAnalysisSummary
-                                        ? ServerAnalysisSummary(options)
+                                        ? ServerAnalysisSummary(pgn, options)
                                         : AnalysisTreeView(
+                                            pgn,
                                             options,
                                             Orientation.landscape,
                                           ),
@@ -241,18 +318,20 @@ class _Body extends ConsumerWidget {
                                 kTabletBoardTableSidePadding,
                               ),
                               child: _Board(
+                                pgn,
                                 options,
                                 boardSize,
                                 isTablet: isTablet,
                               ),
                             )
                           else
-                            _Board(options, boardSize, isTablet: isTablet),
+                            _Board(pgn, options, boardSize, isTablet: isTablet),
                           if (showAnalysisSummary)
-                            Expanded(child: ServerAnalysisSummary(options))
+                            Expanded(child: ServerAnalysisSummary(pgn, options))
                           else
                             Expanded(
                               child: AnalysisTreeView(
+                                pgn,
                                 options,
                                 Orientation.portrait,
                               ),
@@ -263,22 +342,28 @@ class _Body extends ConsumerWidget {
             ),
           ),
         ),
-        _BottomBar(options: options),
+        _BottomBar(pgn: pgn, options: options),
       ],
     );
   }
 }
 
 class _Board extends ConsumerWidget {
-  const _Board(this.options, this.boardSize, {required this.isTablet});
+  const _Board(
+    this.pgn,
+    this.options,
+    this.boardSize, {
+    required this.isTablet,
+  });
 
+  final String pgn;
   final AnalysisOptions options;
   final double boardSize;
   final bool isTablet;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = analysisControllerProvider(options);
+    final ctrlProvider = analysisControllerProvider(pgn, options);
     final analysisState = ref.watch(ctrlProvider);
     final boardPrefs = ref.watch(boardPreferencesProvider);
     final showBestMoveArrow = ref.watch(
@@ -583,14 +668,16 @@ class _Engineline extends ConsumerWidget {
 
 class _BottomBar extends ConsumerWidget {
   const _BottomBar({
+    required this.pgn,
     required this.options,
   });
 
+  final String pgn;
   final AnalysisOptions options;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = analysisControllerProvider(options);
+    final ctrlProvider = analysisControllerProvider(pgn, options);
     final canGoBack =
         ref.watch(ctrlProvider.select((value) => value.canGoBack));
     final canGoNext =
@@ -666,9 +753,10 @@ class _BottomBar extends ConsumerWidget {
   }
 
   void _moveForward(WidgetRef ref) =>
-      ref.read(analysisControllerProvider(options).notifier).userNext();
-  void _moveBackward(WidgetRef ref) =>
-      ref.read(analysisControllerProvider(options).notifier).userPrevious();
+      ref.read(analysisControllerProvider(pgn, options).notifier).userNext();
+  void _moveBackward(WidgetRef ref) => ref
+      .read(analysisControllerProvider(pgn, options).notifier)
+      .userPrevious();
 
   Future<void> _showAnalysisMenu(BuildContext context, WidgetRef ref) {
     return showAdaptiveActionSheet(
@@ -678,7 +766,7 @@ class _BottomBar extends ConsumerWidget {
           makeLabel: (context) => Text(context.l10n.flipBoard),
           onPressed: (context) {
             ref
-                .read(analysisControllerProvider(options).notifier)
+                .read(analysisControllerProvider(pgn, options).notifier)
                 .toggleBoard();
           },
         ),
@@ -697,6 +785,7 @@ class _BottomBar extends ConsumerWidget {
                   shrinkWrap: true,
                   children: [
                     AnalysisPgnTags(
+                      pgn: pgn,
                       options: options,
                     ),
                     Padding(
@@ -710,7 +799,7 @@ class _BottomBar extends ConsumerWidget {
                                 context,
                                 text: ref
                                     .read(
-                                      analysisControllerProvider(options)
+                                      analysisControllerProvider(pgn, options)
                                           .notifier,
                                     )
                                     .makeGamePgn(),
@@ -846,13 +935,14 @@ class _StockfishInfo extends ConsumerWidget {
 }
 
 class ServerAnalysisSummary extends ConsumerWidget {
-  const ServerAnalysisSummary(this.options);
+  const ServerAnalysisSummary(this.pgn, this.options);
 
+  final String pgn;
   final AnalysisOptions options;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = analysisControllerProvider(options);
+    final ctrlProvider = analysisControllerProvider(pgn, options);
     final playersAnalysis =
         ref.watch(ctrlProvider.select((value) => value.playersAnalysis));
     final pgnHeaders =
@@ -867,7 +957,7 @@ class ServerAnalysisSummary extends ConsumerWidget {
                   padding: EdgeInsets.only(top: 16.0),
                   child: WaitingForServerAnalysis(),
                 ),
-              AcplChart(options),
+              AcplChart(pgn, options),
               Center(
                 child: SizedBox(
                   width: math.min(MediaQuery.sizeOf(context).width, 500),
@@ -1148,8 +1238,9 @@ class _SummaryPlayerName extends StatelessWidget {
 }
 
 class AcplChart extends ConsumerWidget {
-  const AcplChart(this.options);
+  const AcplChart(this.pgn, this.options);
 
+  final String pgn;
   final AnalysisOptions options;
 
   @override
@@ -1183,16 +1274,18 @@ class AcplChart extends ConsumerWidget {
         );
 
     final data = ref.watch(
-      analysisControllerProvider(options)
+      analysisControllerProvider(pgn, options)
           .select((value) => value.acplChartData),
     );
 
     final currentNode = ref.watch(
-      analysisControllerProvider(options).select((value) => value.currentNode),
+      analysisControllerProvider(pgn, options)
+          .select((value) => value.currentNode),
     );
 
     final isOnMainline = ref.watch(
-      analysisControllerProvider(options).select((value) => value.isOnMainline),
+      analysisControllerProvider(pgn, options)
+          .select((value) => value.isOnMainline),
     );
 
     if (data == null) {
@@ -1232,7 +1325,7 @@ class AcplChart extends ConsumerWidget {
                     );
                     final closestNodeIndex = closestSpot.x.round();
                     ref
-                        .read(analysisControllerProvider(options).notifier)
+                        .read(analysisControllerProvider(pgn, options).notifier)
                         .jumpToNthNodeOnMainline(closestNodeIndex);
                   }
                 },

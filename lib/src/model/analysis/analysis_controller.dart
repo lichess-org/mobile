@@ -30,16 +30,11 @@ const standaloneAnalysisId = StringId('standalone_analysis');
 class AnalysisOptions with _$AnalysisOptions {
   const AnalysisOptions._();
   const factory AnalysisOptions({
+    /// The ID of the analysis. Can be a game ID or a standalone analysis ID.
     required StringId id,
     required bool isLocalEvaluationAllowed,
     required Side orientation,
     required Variant variant,
-
-    /// The PGN of the game to analyze.
-    /// The move list can be empty.
-    /// It can contain a FEN header for initial position.
-    /// If it contains a Variant header, it will be ignored.
-    required String pgn,
     int? initialMoveCursor,
     LightOpening? opening,
     Division? division,
@@ -65,7 +60,7 @@ class AnalysisController extends _$AnalysisController {
   Timer? _startEngineEvalTimer;
 
   @override
-  AnalysisState build(AnalysisOptions options) {
+  AnalysisState build(String pgn, AnalysisOptions options) {
     final evaluationService = ref.watch(evaluationServiceProvider);
     final serverAnalysisService = ref.watch(serverAnalysisServiceProvider);
 
@@ -84,7 +79,7 @@ class AnalysisController extends _$AnalysisController {
     Move? lastMove;
 
     final game = PgnGame.parsePgn(
-      options.pgn,
+      pgn,
       initHeaders: () => options.isLichessGameAnalysis
           ? {}
           : {

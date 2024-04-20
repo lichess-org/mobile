@@ -11,13 +11,14 @@ import 'package:lichess_mobile/src/widgets/adaptive_text_field.dart';
 final _dateFormat = DateFormat('yyyy.MM.dd');
 
 class AnalysisPgnTags extends ConsumerWidget {
-  const AnalysisPgnTags({required this.options});
+  const AnalysisPgnTags({required this.pgn, required this.options});
 
+  final String pgn;
   final AnalysisOptions options;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = analysisControllerProvider(options);
+    final ctrlProvider = analysisControllerProvider(pgn, options);
     final pgnHeaders = ref.watch(ctrlProvider.select((c) => c.pgnHeaders));
 
     return SizedBox(
@@ -83,8 +84,12 @@ class AnalysisPgnTags extends ConsumerWidget {
                   } else {
                     showAdaptiveDialog<void>(
                       context: context,
-                      builder: (context) =>
-                          _EditDialog(e.key, e.value, options: options),
+                      builder: (context) => _EditDialog(
+                        e.key,
+                        e.value,
+                        pgn: pgn,
+                        options: options,
+                      ),
                     );
                   }
                 },
@@ -98,8 +103,14 @@ class AnalysisPgnTags extends ConsumerWidget {
 }
 
 class _EditDialog extends ConsumerWidget {
-  const _EditDialog(this.fieldKey, this.fieldValue, {required this.options});
+  const _EditDialog(
+    this.fieldKey,
+    this.fieldValue, {
+    required this.pgn,
+    required this.options,
+  });
 
+  final String pgn;
   final AnalysisOptions options;
   final String fieldKey;
   final String fieldValue;
@@ -123,7 +134,7 @@ class _EditDialog extends ConsumerWidget {
           ),
           onSubmitted: (value) {
             ref
-                .read(analysisControllerProvider(options).notifier)
+                .read(analysisControllerProvider(pgn, options).notifier)
                 .updatePgnHeader(fieldKey, value);
             Navigator.of(context).pop();
           },

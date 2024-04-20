@@ -205,6 +205,7 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
               pushPlatformRoute(
                 context,
                 builder: (_) => AnalysisScreen(
+                  pgnOrId: gameState.analysisPgn,
                   options: gameState.analysisOptions,
                   title: context.l10n.gameAnalysis,
                 ),

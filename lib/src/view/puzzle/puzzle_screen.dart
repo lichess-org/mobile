@@ -560,10 +560,10 @@ class _BottomBar extends ConsumerWidget {
               context,
               builder: (context) => AnalysisScreen(
                 title: context.l10n.analysis,
+                pgnOrId: ref.read(ctrlProvider.notifier).makePgn(),
                 options: AnalysisOptions(
                   isLocalEvaluationAllowed: true,
                   variant: Variant.standard,
-                  pgn: ref.read(ctrlProvider.notifier).makePgn(),
                   orientation: puzzleState.pov,
                   id: standaloneAnalysisId,
                   initialMoveCursor: 0,

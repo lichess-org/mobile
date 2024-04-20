@@ -4,9 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
-import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
@@ -106,62 +104,27 @@ class _ContextMenu extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final orientation = mySide;
 
-    final serverAnalysis =
-        game.white.analysis != null && game.black.analysis != null
-            ? (white: game.white.analysis!, black: game.black.analysis!)
-            : null;
-
     final customColors = Theme.of(context).extension<CustomColors>();
 
     final actions = [
-      Builder(
-        builder: (context) {
-          Future<void>? gameFuture;
-          return StatefulBuilder(
-            builder: (context, setState) {
-              return FutureBuilder(
-                future: gameFuture,
-                builder: (context, snapshot) {
-                  return BottomSheetContextMenuAction(
-                    icon: Icons.biotech,
-                    onPressed:
-                        snapshot.connectionState == ConnectionState.waiting
-                            ? null
-                            : () async {
-                                final future = ref.withClient(
-                                  (client) =>
-                                      GameRepository(client).getGame(game.id),
-                                );
-                                setState(() {
-                                  gameFuture = future;
-                                });
-                                final archivedGame = await future;
-                                if (context.mounted) {
-                                  pushPlatformRoute(
-                                    context,
-                                    builder: (context) => AnalysisScreen(
-                                      title: context.l10n.gameAnalysis,
-                                      options: AnalysisOptions(
-                                        isLocalEvaluationAllowed: true,
-                                        variant: game.variant,
-                                        pgn: archivedGame.makePgn(),
-                                        orientation: orientation,
-                                        id: game.id,
-                                        opening: game.opening,
-                                        serverAnalysis: serverAnalysis,
-                                        division: archivedGame.meta.division,
-                                      ),
-                                    ),
-                                  );
-                                }
-                              },
-                    child: Text(context.l10n.gameAnalysis),
-                  );
-                },
-              );
-            },
+      BottomSheetContextMenuAction(
+        icon: Icons.biotech,
+        onPressed: () {
+          pushPlatformRoute(
+            context,
+            builder: (context) => AnalysisScreen(
+              title: context.l10n.gameAnalysis,
+              pgnOrId: game.id.value,
+              options: AnalysisOptions(
+                isLocalEvaluationAllowed: true,
+                variant: game.variant,
+                orientation: orientation,
+                id: game.id,
+              ),
+            ),
           );
         },
+        child: Text(context.l10n.gameAnalysis),
       ),
       BottomSheetContextMenuAction(
         onPressed: () {
