@@ -990,10 +990,11 @@ class GameState with _$GameState {
     return null;
   }
 
+  String get analysisPgn => game.makePgn();
+
   AnalysisOptions get analysisOptions => AnalysisOptions(
         isLocalEvaluationAllowed: true,
         variant: game.meta.variant,
-        pgn: game.makePgn(),
         initialMoveCursor: stepCursor,
         orientation: game.youAre ?? Side.white,
         id: gameFullId,
