@@ -5,8 +5,8 @@ import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
@@ -30,11 +30,19 @@ class AnalysisSettings extends ConsumerWidget {
       generalPreferencesProvider.select((pref) => pref.isSoundEnabled),
     );
 
-    return ModalSheetScaffold(
-      title: Text(context.l10n.analysisOptions),
-      child: ListView(
-        shrinkWrap: true,
+    return DraggableScrollableSheet(
+      initialChildSize: .7,
+      expand: false,
+      snap: true,
+      snapSizes: const [.5, .7],
+      builder: (context, scrollController) => ListView(
+        controller: scrollController,
         children: [
+          PlatformListTile(
+            title:
+                Text(context.l10n.settingsSettings, style: Styles.sectionTitle),
+            subtitle: const SizedBox.shrink(),
+          ),
           const SizedBox(height: 8.0),
           SwitchSettingTile(
             title: Text(context.l10n.toggleLocalEvaluation),

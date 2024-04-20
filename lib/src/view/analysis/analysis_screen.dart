@@ -142,6 +142,8 @@ class _LoadedAnalysisScreen extends ConsumerWidget {
             onPressed: () => showAdaptiveBottomSheet<void>(
               context: context,
               isScrollControlled: true,
+              showDragHandle: true,
+              isDismissible: true,
               builder: (_) => AnalysisSettings(pgn, options),
             ),
             semanticsLabel: context.l10n.settingsSettings,
@@ -169,6 +171,8 @@ class _LoadedAnalysisScreen extends ConsumerWidget {
               onPressed: () => showAdaptiveBottomSheet<void>(
                 context: context,
                 isScrollControlled: true,
+                showDragHandle: true,
+                isDismissible: true,
                 builder: (_) => AnalysisSettings(pgn, options),
               ),
               semanticsLabel: context.l10n.settingsSettings,

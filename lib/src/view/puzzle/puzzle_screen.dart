@@ -34,6 +34,7 @@ import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_settings_screen.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
@@ -681,10 +682,11 @@ class _PuzzleSettingsButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppBarIconButton(
-      onPressed: () => pushPlatformRoute(
-        context,
-        title: context.l10n.settingsSettings,
-        fullscreenDialog: true,
+      onPressed: () => showAdaptiveBottomSheet<void>(
+        context: context,
+        isDismissible: true,
+        isScrollControlled: true,
+        showDragHandle: true,
         builder: (_) => PuzzleSettingsScreen(userId: userId),
       ),
       semanticsLabel: context.l10n.settingsSettings,
