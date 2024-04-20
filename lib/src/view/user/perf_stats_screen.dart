@@ -121,7 +121,7 @@ class _Title extends StatelessWidget {
                   Text(
                     ' ${context.l10n.perfStatPerfStats(p.title)}',
                     overflow: TextOverflow.ellipsis,
-                  )
+                  ),
                 ],
               ),
               onPressed: (ctx) {

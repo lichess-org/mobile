@@ -21,7 +21,10 @@ class AnalysisPgnTags extends ConsumerWidget {
   final AnalysisOptions options;
 
   void _openNextDialog(
-      IMap<String, String> pgnHeaders, int index, BuildContext context) {
+    IMap<String, String> pgnHeaders,
+    int index,
+    BuildContext context,
+  ) {
     if (index < pgnHeaders.entries.length - 1 && context.mounted) {
       final entry = pgnHeaders.entries.elementAt(index + 1);
       showAdaptiveDialog<void>(
