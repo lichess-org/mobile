@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math' as math;
 
+import 'package:cronet_http/cronet_http.dart';
+import 'package:cupertino_http/cupertino_http.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
@@ -32,33 +34,28 @@ part 'http.g.dart';
 
 final _logger = Logger('HttpClient');
 
-// const _maxCacheSize = 2 * 1024 * 1024;
+const _maxCacheSize = 2 * 1024 * 1024;
 
 /// Creates the appropriate http client for the platform.
 Client httpClient(PackageInfo pInfo) {
-  // TODO wait for https://github.com/dart-lang/http/pull/1111
-  // to be merged and released before using embedded Cronet on Android.
-  // if (Platform.isAndroid) {
-  //   final engine = CronetEngine.build(
-  //     cacheMode: CacheMode.memory,
-  //     cacheMaxSize: _maxCacheSize,
-  //     userAgent: userAgent,
-  //   );
-  //   return CronetClient.fromCronetEngine(engine);
-  // }
+  final userAgent = 'Lichess Mobile/${pInfo.version}';
+  if (Platform.isAndroid) {
+    final engine = CronetEngine.build(
+      cacheMode: CacheMode.memory,
+      cacheMaxSize: _maxCacheSize,
+      userAgent: userAgent,
+    );
+    return CronetClient.fromCronetEngine(engine);
+  }
 
-  // CupertinoClient doesn't close the connection when the client is closed.
-  // See: https://github.com/dart-lang/http/issues/1131
-  // TODO: We might want to still use it and fallback to IOClient for creating
-  // game seeks which must be cancellable.
-  // if (Platform.isIOS || Platform.isMacOS) {
-  //   final config = URLSessionConfiguration.ephemeralSessionConfiguration()
-  //     ..cache = URLCache.withCapacity(memoryCapacity: _maxCacheSize)
-  //     ..httpAdditionalHeaders = {'User-Agent': userAgent};
-  //   return CupertinoClient.fromSessionConfiguration(config);
-  // }
+  if (Platform.isIOS || Platform.isMacOS) {
+    final config = URLSessionConfiguration.ephemeralSessionConfiguration()
+      ..cache = URLCache.withCapacity(memoryCapacity: _maxCacheSize)
+      ..httpAdditionalHeaders = {'User-Agent': userAgent};
+    return CupertinoClient.fromSessionConfiguration(config);
+  }
 
-  return IOClient(HttpClient()..userAgent = 'Lichess Mobile/${pInfo.version}');
+  return IOClient(HttpClient()..userAgent = userAgent);
 }
 
 @Riverpod(keepAlive: true)
