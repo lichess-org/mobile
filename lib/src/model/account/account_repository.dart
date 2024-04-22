@@ -1,7 +1,6 @@
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:http/http.dart' as http;
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
@@ -102,7 +101,10 @@ class AccountRepository {
   Future<IList<OngoingGame>> getOngoingGames({int? nb}) {
     return client.readJson(
       Uri(
-        path: '/api/account/playing${nb != null ? '?nb=$nb' : ''}',
+        path: '/api/account/playing',
+        queryParameters: {
+          if (nb != null) 'nb': nb.toString(),
+        },
       ),
       mapper: (Map<String, dynamic> json) {
         final list = json['nowPlaying'];
