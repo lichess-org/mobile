@@ -1,7 +1,6 @@
 import 'package:flutter_appauth/flutter_appauth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_repository.dart';
@@ -23,20 +22,14 @@ class Listener<T> extends Mock {
   void call(T? previous, T value);
 }
 
-class FakeClientFactory implements LichessClientFactory {
-  @override
-  http.Client call() {
-    return MockClient((request) {
-      if (request.url.path == '/api/account') {
-        return mockResponse(testAccountResponse, 200);
-      } else if (request.method == 'DELETE' &&
-          request.url.path == '/api/token') {
-        return mockResponse('ok', 200);
-      }
-      return mockResponse('', 404);
-    });
+final lichessClient = MockClient((request) {
+  if (request.url.path == '/api/account') {
+    return mockResponse(testAccountResponse, 200);
+  } else if (request.method == 'DELETE' && request.url.path == '/api/token') {
+    return mockResponse('ok', 200);
   }
-}
+  return mockResponse('', 404);
+});
 
 void main() {
   final mockSessionStorage = MockSessionStorage();
@@ -86,7 +79,7 @@ void main() {
         overrides: [
           appAuthProvider.overrideWithValue(mockFlutterAppAuth),
           sessionStorageProvider.overrideWithValue(mockSessionStorage),
-          lichessClientFactoryProvider.overrideWithValue(FakeClientFactory()),
+          lichessClientProvider.overrideWithValue(lichessClient),
         ],
       );
 
@@ -128,7 +121,7 @@ void main() {
         overrides: [
           appAuthProvider.overrideWithValue(mockFlutterAppAuth),
           sessionStorageProvider.overrideWithValue(mockSessionStorage),
-          lichessClientFactoryProvider.overrideWithValue(FakeClientFactory()),
+          lichessClientProvider.overrideWithValue(lichessClient),
         ],
       );
 

@@ -42,9 +42,9 @@ class AuthRepository {
         kLichessClientId,
         redirectUri,
         allowInsecureConnections: kDebugMode,
-        serviceConfiguration: const AuthorizationServiceConfiguration(
-          authorizationEndpoint: '$kLichessHost/oauth',
-          tokenEndpoint: '$kLichessHost/api/token',
+        serviceConfiguration: AuthorizationServiceConfiguration(
+          authorizationEndpoint: lichessUri('/oauth').toString(),
+          tokenEndpoint: lichessUri('/api/token').toString(),
         ),
         scopes: oauthScopes,
       ),
@@ -65,7 +65,7 @@ class AuthRepository {
     }
 
     final user = await _client.readJson(
-      Uri.parse('$kLichessHost/api/account'),
+      Uri(path: '/api/account'),
       headers: {
         'Authorization': 'Bearer ${signBearerToken(token)}',
       },
@@ -78,8 +78,8 @@ class AuthRepository {
   }
 
   Future<void> signOut() async {
-    final url = Uri.parse('$kLichessHost/api/token');
-    final response = await _client.delete(Uri.parse('$kLichessHost/api/token'));
+    final url = Uri(path: '/api/token');
+    final response = await _client.delete(Uri(path: '/api/token'));
     if (response.statusCode >= 400) {
       throw http.ClientException(
         'Failed to delete token: ${response.statusCode}',

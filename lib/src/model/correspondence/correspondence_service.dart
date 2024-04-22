@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
@@ -106,7 +105,7 @@ class CorrespondenceService {
       if (gameToSync.registeredMoveAtPgn == null) {
         continue;
       }
-      final uri = Uri.parse('$kLichessWSHost/play/${gameToSync.fullId}/v6');
+      final uri = lichessWSUri('/play/${gameToSync.fullId}/v6');
       WebSocket? socket;
       StreamSubscription<SocketEvent>? streamSubscription;
       try {

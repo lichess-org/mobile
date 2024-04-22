@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/view/user/leaderboard_screen.dart';
@@ -9,17 +8,12 @@ import 'package:lichess_mobile/src/view/user/leaderboard_widget.dart';
 import '../../test_app.dart';
 import '../../test_utils.dart';
 
-class FakeClientFactory implements LichessClientFactory {
-  @override
-  http.Client call() {
-    return MockClient((request) {
-      if (request.url.path == '/api/player/top/1/standard') {
-        return mockResponse(top1Response, 200);
-      }
-      return mockResponse('', 404);
-    });
+final lichessClient = MockClient((request) {
+  if (request.url.path == '/api/player/top/1/standard') {
+    return mockResponse(top1Response, 200);
   }
-}
+  return mockResponse('', 404);
+});
 
 void main() {
   group('LeaderboardWidget', () {
@@ -31,7 +25,7 @@ void main() {
           tester,
           home: Column(children: [LeaderboardWidget()]),
           overrides: [
-            lichessClientFactoryProvider.overrideWithValue(FakeClientFactory()),
+            lichessClientProvider.overrideWithValue(lichessClient),
           ],
         );
 

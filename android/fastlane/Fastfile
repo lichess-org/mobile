@@ -30,7 +30,7 @@ platform :android do
 end
 
 def deploy_to_play_store(track)
-  sh "flutter build appbundle -v --obfuscate --split-debug-info=./split-debug-info --dart-define=LICHESS_HOST=https://lichess.org --dart-define=LICHESS_WS_HOST=wss://socket.lichess.org --dart-define=LICHESS_WS_SECRET=#{ENV['WS_SECRET']}"
+  sh "flutter build appbundle -v --obfuscate --split-debug-info=./split-debug-info --dart-define=no_default_http_client=true --dart-define=cronetHttpNoPlay=true --dart-define=LICHESS_HOST=lichess.org --dart-define=LICHESS_WS_HOST=socket.lichess.org --dart-define=LICHESS_WS_SECRET=#{ENV['WS_SECRET']}"
   upload_to_play_store(
     track: track,
     aab: '../build/app/outputs/bundle/release/app-release.aab',

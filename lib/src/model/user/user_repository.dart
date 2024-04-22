@@ -2,7 +2,6 @@ import 'package:collection/collection.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:http/http.dart' as http;
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
@@ -19,57 +18,61 @@ class UserRepository {
 
   Future<User> getUser(UserId id) {
     return client.readJson(
-      Uri.parse('$kLichessHost/api/user/$id'),
+      Uri(path: '/api/user/$id'),
       mapper: User.fromServerJson,
     );
   }
 
   Future<UserPerfStats> getPerfStats(UserId id, Perf perf) {
     return client.readJson(
-      Uri.parse('$kLichessHost/api/user/$id/perf/${perf.name}'),
+      Uri(path: '/api/user/$id/perf/${perf.name}'),
       mapper: _userPerfStatsFromJson,
     );
   }
 
   Future<IList<UserStatus>> getUsersStatuses(ISet<UserId> ids) {
     return client.readJsonList(
-      Uri.parse('$kLichessHost/api/users/status?ids=${ids.join(',')}'),
+      Uri(
+        path: '/api/users/status',
+        queryParameters: {'ids': ids.join(',')},
+      ),
       mapper: UserStatus.fromJson,
     );
   }
 
   Future<IList<UserActivity>> getActivity(UserId id) {
     return client.readJsonList(
-      Uri.parse('$kLichessHost/api/user/$id/activity'),
+      Uri(path: '/api/user/$id/activity'),
       mapper: _userActivityFromJson,
     );
   }
 
   Future<IList<Streamer>> getLiveStreamers() {
     return client.readJsonList(
-      Uri.parse('$kLichessHost/api/streamer/live'),
+      Uri(path: '/api/streamer/live'),
       mapper: _streamersFromJson,
     );
   }
 
   Future<IMap<Perf, LeaderboardUser>> getTop1() {
     return client.readJson(
-      Uri.parse('$kLichessHost/api/player/top/1/standard'),
+      Uri(path: '/api/player/top/1/standard'),
       mapper: _top1FromJson,
     );
   }
 
   Future<Leaderboard> getLeaderboard() {
     return client.readJson(
-      Uri.parse('$kLichessHost/api/player'),
+      Uri(path: '/api/player'),
       mapper: _leaderboardFromJson,
     );
   }
 
   Future<IList<LightUser>> autocompleteUser(String term) {
     return client.readJson(
-      Uri.parse(
-        '$kLichessHost/api/player/autocomplete?term=$term&friend=1&object=1',
+      Uri(
+        path: '/api/player/autocomplete',
+        queryParameters: {'term': term, 'friend': '1', 'object': '1'},
       ),
       mapper: _autocompleteFromJson,
     );
@@ -77,7 +80,7 @@ class UserRepository {
 
   Future<IList<UserRatingHistoryPerf>> getRatingHistory(UserId id) {
     return client.readJsonList(
-      Uri.parse('$kLichessHost/api/user/$id/rating-history'),
+      Uri(path: '/api/user/$id/rating-history'),
       mapper: _ratingHistoryFromJson,
     );
   }

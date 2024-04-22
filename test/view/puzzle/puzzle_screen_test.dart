@@ -4,7 +4,6 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -24,17 +23,6 @@ import '../../test_utils.dart';
 class MockPuzzleBatchStorage extends Mock implements PuzzleBatchStorage {}
 
 class MockPuzzleStorage extends Mock implements PuzzleStorage {}
-
-class FakeClientFactory implements LichessClientFactory {
-  FakeClientFactory(this._client);
-
-  final http.Client _client;
-
-  @override
-  http.Client call() {
-    return _client;
-  }
-}
 
 void main() {
   setUpAll(() {
@@ -166,8 +154,8 @@ void main() {
             ),
           ),
           overrides: [
-            lichessClientFactoryProvider.overrideWith((ref) {
-              return FakeClientFactory(mockClient);
+            lichessClientProvider.overrideWith((ref) {
+              return mockClient;
             }),
             puzzleBatchStorageProvider.overrideWith((ref) {
               return mockBatchStorage;
@@ -278,8 +266,8 @@ void main() {
             ),
           ),
           overrides: [
-            lichessClientFactoryProvider.overrideWith((ref) {
-              return FakeClientFactory(mockClient);
+            lichessClientProvider.overrideWith((ref) {
+              return mockClient;
             }),
             puzzleBatchStorageProvider.overrideWith((ref) {
               return mockBatchStorage;
@@ -379,8 +367,8 @@ void main() {
             ),
           ),
           overrides: [
-            lichessClientFactoryProvider.overrideWith((ref) {
-              return FakeClientFactory(mockClient);
+            lichessClientProvider.overrideWith((ref) {
+              return mockClient;
             }),
             puzzleBatchStorageProvider.overrideWith((ref) {
               return mockBatchStorage;

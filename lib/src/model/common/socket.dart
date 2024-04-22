@@ -46,6 +46,26 @@ final _globalStreamController = StreamController<SocketEvent>.broadcast();
 /// The global socket events broadcast stream.
 final socketGlobalStream = _globalStreamController.stream;
 
+/// Creates a WebSocket URI for the lichess server.
+Uri lichessWSUri(
+  String unencodedPath, [
+  Map<String, String>? queryParameters,
+]) =>
+    kLichessWSHost.startsWith('localhost')
+        ? Uri(
+            scheme: 'ws',
+            host: kLichessWSHost.split(':')[0],
+            port: int.parse(kLichessWSHost.split(':')[1]),
+            path: unencodedPath,
+            queryParameters: queryParameters,
+          )
+        : Uri(
+            scheme: 'wss',
+            host: kLichessWSHost,
+            path: unencodedPath,
+            queryParameters: queryParameters,
+          );
+
 /// A lichess WebSocket client.
 ///
 /// Handles authentication:
@@ -178,7 +198,7 @@ class SocketClient {
     _ackResendTimer = Timer.periodic(resendAckDelay, (_) => _resendAcks());
 
     final session = getSession();
-    final uri = Uri.parse('$kLichessWSHost$route');
+    final uri = lichessWSUri(route.path);
     final Map<String, String> headers = session != null
         ? {
             'Authorization': 'Bearer ${signBearerToken(session.token)}',

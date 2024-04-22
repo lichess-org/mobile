@@ -1,7 +1,6 @@
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:http/http.dart' as http;
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -28,7 +27,7 @@ class LobbyRepository {
   final http.Client client;
 
   Future<void> createSeek(GameSeek seek, {required String sri}) async {
-    final uri = Uri.parse('$kLichessHost/api/board/seek?sri=$sri');
+    final uri = Uri(path: '/api/board/seek', queryParameters: {'sri': sri});
     final response = await client.post(uri, body: seek.requestBody);
     if (response.statusCode >= 400) {
       throw http.ClientException(
@@ -38,9 +37,20 @@ class LobbyRepository {
     }
   }
 
+  Future<void> cancelSeek({required String sri}) async {
+    final uri = Uri(path: '/api/board/seek', queryParameters: {'sri': sri});
+    final response = await client.delete(uri);
+    if (response.statusCode >= 400) {
+      throw http.ClientException(
+        'Failed to cancel seek: ${response.statusCode}',
+        uri,
+      );
+    }
+  }
+
   Future<IList<CorrespondenceChallenge>> getCorrespondenceChallenges() {
     return client.readJsonList(
-      Uri.parse('$kLichessHost/lobby/seeks'),
+      Uri(path: '/lobby/seeks'),
       headers: {'Accept': 'application/vnd.lichess.v5+json'},
       mapper: _correspondenceSeekFromJson,
     );

@@ -2,10 +2,10 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intl/intl.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
@@ -157,7 +157,7 @@ abstract mixin class BaseGame {
     final pgn = node.makePgn(
       IMap({
         'Event': '${meta.rated ? 'Rated' : ''} ${meta.perf.title} game',
-        'Site': '$kLichessHost/$id',
+        'Site': lichessUri('/$id').toString(),
         'Date': _dateFormat.format(meta.createdAt),
         'White': white.user?.name ??
             (white.aiLevel != null

@@ -1,5 +1,4 @@
 import 'package:http/http.dart' as http;
-import 'package:lichess_mobile/src/constants.dart';
 
 import './challenge_request.dart';
 
@@ -9,7 +8,7 @@ class ChallengeRepository {
   final http.Client client;
 
   Future<void> challenge(String username, ChallengeRequest req) async {
-    final uri = Uri.parse('$kLichessHost/api/challenge/$username');
+    final uri = Uri(path: '/api/challenge/$username');
     final response = await client.post(uri, body: req.toRequestBody);
 
     if (response.statusCode >= 400) {
@@ -21,7 +20,7 @@ class ChallengeRepository {
   }
 
   Future<void> challengeAI(AiChallengeRequest req) async {
-    final uri = Uri.parse('$kLichessHost/api/challenge/ai');
+    final uri = Uri(path: '/api/challenge/ai');
     final response = await client.post(uri, body: req.toRequestBody);
 
     if (response.statusCode >= 400) {
