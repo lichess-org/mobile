@@ -8,7 +8,7 @@ const kLichessHost = String.fromEnvironment(
 
 const kLichessWSHost = String.fromEnvironment(
   'LICHESS_WS_HOST',
-  defaultValue: 'ws://localhost:9664',
+  defaultValue: 'localhost:9664',
 );
 
 const kLichessWSSecret = String.fromEnvironment(
