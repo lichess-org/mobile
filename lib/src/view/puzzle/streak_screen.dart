@@ -304,8 +304,8 @@ class _BottomBar extends ConsumerWidget {
                       launchShareDialog(
                         context,
                         text: lichessUri(
-                                '/training/${puzzleState.puzzle.puzzle.id}')
-                            .toString(),
+                          '/training/${puzzleState.puzzle.puzzle.id}',
+                        ).toString(),
                       );
                     },
                     label: 'Share this puzzle',
