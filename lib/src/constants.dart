@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 const kLichessHost = String.fromEnvironment(
   'LICHESS_HOST',
-  defaultValue: 'http://localhost:9663',
+  defaultValue: 'localhost:9663',
 );
 
 const kLichessWSHost = String.fromEnvironment(

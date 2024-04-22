@@ -78,13 +78,13 @@ class AccountRepository {
 
   Future<User> getProfile() {
     return client.readJson(
-      Uri.parse('$kLichessHost/api/account'),
+      Uri(path: '/api/account'),
       mapper: User.fromServerJson,
     );
   }
 
   Future<void> saveProfile(Map<String, String> profile) async {
-    final uri = Uri.parse('$kLichessHost/account/profile');
+    final uri = Uri(path: '/account/profile');
     final response = await client.post(
       uri,
       headers: {'Accept': 'application/json'},
@@ -101,8 +101,8 @@ class AccountRepository {
 
   Future<IList<OngoingGame>> getOngoingGames({int? nb}) {
     return client.readJson(
-      Uri.parse(
-        '$kLichessHost/api/account/playing${nb != null ? '?nb=$nb' : ''}',
+      Uri(
+        path: '/api/account/playing${nb != null ? '?nb=$nb' : ''}',
       ),
       mapper: (Map<String, dynamic> json) {
         final list = json['nowPlaying'];
@@ -121,7 +121,7 @@ class AccountRepository {
 
   Future<AccountPrefState> getPreferences() {
     return client.readJson(
-      Uri.parse('$kLichessHost/api/account/preferences'),
+      Uri(path: '/api/account/preferences'),
       mapper: (Map<String, dynamic> json) {
         return _accountPreferencesFromPick(
           pick(json, 'prefs').required(),
@@ -131,7 +131,7 @@ class AccountRepository {
   }
 
   Future<void> setPreference<T>(String prefKey, AccountPref<T> pref) async {
-    final uri = Uri.parse('$kLichessHost/api/account/preferences/$prefKey');
+    final uri = Uri(path: '/api/account/preferences/$prefKey');
 
     final response = await client.post(uri, body: {prefKey: pref.toFormData});
 

@@ -1,7 +1,6 @@
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:http/http.dart' as http;
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -19,7 +18,7 @@ class TvRepository {
 
   Future<TvChannels> channels() {
     return client.readJson(
-      Uri.parse('$kLichessHost/api/tv/channels'),
+      Uri(path: '/api/tv/channels'),
       mapper: _tvGamesFromJson,
     );
   }

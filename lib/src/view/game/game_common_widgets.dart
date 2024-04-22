@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
@@ -144,7 +145,7 @@ List<BottomSheetAction> makeFinishedGameShareActions(
       onPressed: (context) {
         launchShareDialog(
           context,
-          uri: Uri.parse('$kLichessHost/${game.id}'),
+          uri: lichessUri('/${game.id}'),
         );
       },
     ),
@@ -196,7 +197,7 @@ List<BottomSheetAction> makeFinishedGameShareActions(
                 context,
                 files: [image],
                 subject: context.l10n.puzzleFromGameLink(
-                  '$kLichessHost/${game.id}',
+                  lichessUri('/${game.id}').toString(),
                 ),
               );
             }

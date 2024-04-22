@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
@@ -9,23 +8,12 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import '../../test_container.dart';
 import '../../test_utils.dart';
 
-class FakeClientFactory implements LichessClientFactory {
-  FakeClientFactory(this._client);
-
-  final http.Client _client;
-
-  @override
-  http.Client call() {
-    return _client;
-  }
-}
-
 void main() {
   Future<ProviderContainer> makeTestContainer(MockClient mockClient) async {
     return makeContainer(
       overrides: [
-        lichessClientFactoryProvider.overrideWith((ref) {
-          return FakeClientFactory(mockClient);
+        lichessClientProvider.overrideWith((ref) {
+          return mockClient;
         }),
       ],
     );
@@ -46,7 +34,7 @@ void main() {
       });
 
       final container = await makeTestContainer(mockClient);
-      final client = container.read(lichessClientFactoryProvider)();
+      final client = container.read(lichessClientProvider);
       final repo = PuzzleRepository(client);
 
       final response = await repo.selectBatch(nb: 3);
@@ -69,7 +57,7 @@ void main() {
       });
 
       final container = await makeTestContainer(mockClient);
-      final client = container.read(lichessClientFactoryProvider)();
+      final client = container.read(lichessClientProvider);
       final repo = PuzzleRepository(client);
 
       final response = await repo.selectBatch(nb: 1);
@@ -92,7 +80,7 @@ void main() {
         return mockResponse('', 404);
       });
       final container = await makeTestContainer(mockClient);
-      final client = container.read(lichessClientFactoryProvider)();
+      final client = container.read(lichessClientProvider);
       final repo = PuzzleRepository(client);
 
       final result = await repo.selectBatch(nb: 1);
@@ -116,7 +104,7 @@ void main() {
       });
 
       final container = await makeTestContainer(mockClient);
-      final client = container.read(lichessClientFactoryProvider)();
+      final client = container.read(lichessClientProvider);
       final repo = PuzzleRepository(client);
       final result = await repo.streak();
 
@@ -137,7 +125,7 @@ void main() {
       });
 
       final container = await makeTestContainer(mockClient);
-      final client = container.read(lichessClientFactoryProvider)();
+      final client = container.read(lichessClientProvider);
       final repo = PuzzleRepository(client);
       final result = await repo.puzzleDashboard(30);
 

@@ -4,7 +4,6 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/db/secure_storage.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
@@ -98,7 +97,7 @@ Future<AppDependencies> appDependencies(
     final client = httpClient(pInfo);
     try {
       final response = await client.get(
-        Uri.parse('$kLichessHost/api/account'),
+        lichessUri('/api/account'),
         headers: {
           'Authorization': 'Bearer ${signBearerToken(storedSession.token)}',
           'User-Agent':

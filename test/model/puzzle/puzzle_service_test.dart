@@ -4,7 +4,6 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
@@ -20,17 +19,6 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import '../../test_container.dart';
 import '../../test_utils.dart';
 
-class FakeClientFactory implements LichessClientFactory {
-  FakeClientFactory(this._client);
-
-  final http.Client _client;
-
-  @override
-  http.Client call() {
-    return _client;
-  }
-}
-
 void main() {
   final dbFactory = databaseFactoryFfi;
   sqfliteFfiInit();
@@ -44,8 +32,8 @@ void main() {
           ref.onDispose(db.close);
           return db;
         }),
-        lichessClientFactoryProvider.overrideWith((ref) {
-          return FakeClientFactory(mockClient);
+        lichessClientProvider.overrideWith((ref) {
+          return mockClient;
         }),
       ],
     );

@@ -37,14 +37,9 @@ class MockSoundPool extends Mock implements Soundpool {}
 
 class MockDatabase extends Mock implements Database {}
 
-class FakeClientFactory implements LichessClientFactory {
-  @override
-  http.Client call() {
-    return MockClient((request) async {
-      return http.Response('', 200);
-    });
-  }
-}
+final mockClient = MockClient((request) async {
+  return http.Response('', 200);
+});
 
 // iPhone 14 screen size
 const double _kTestScreenWidth = 390.0;
@@ -84,7 +79,9 @@ Future<Widget> buildTestApp(
   return ProviderScope(
     overrides: [
       // ignore: scoped_providers_should_specify_dependencies
-      lichessClientFactoryProvider.overrideWithValue(FakeClientFactory()),
+      lichessClientProvider.overrideWithValue(mockClient),
+      // ignore: scoped_providers_should_specify_dependencies
+      defaultClientProvider.overrideWithValue(mockClient),
       // ignore: scoped_providers_should_specify_dependencies
       webSocketChannelFactoryProvider.overrideWith((ref) {
         return FakeWebSocketChannelFactory(() => FakeWebSocketChannel());

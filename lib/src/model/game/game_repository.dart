@@ -1,6 +1,5 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:http/http.dart' as http;
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
@@ -13,16 +12,19 @@ class GameRepository {
 
   Future<ArchivedGame> getGame(GameId id) {
     return client.readJson(
-      Uri.parse('$kLichessHost/game/export/$id?accuracy=1&clocks=1'),
+      Uri(
+        path: '/game/export/$id',
+        queryParameters: {'clocks': '1', 'accuracy': '1'},
+      ),
       headers: {'Accept': 'application/json'},
       mapper: ArchivedGame.fromServerJson,
     );
   }
 
   Future<void> requestServerAnalysis(GameId id) async {
-    final uri = Uri.parse('$kLichessHost/$id/request-analysis');
+    final uri = Uri(path: '/$id/request-analysis');
     final response = await client.post(
-      Uri.parse('$kLichessHost/$id/request-analysis'),
+      Uri(path: '/$id/request-analysis'),
     );
     if (response.statusCode >= 400) {
       throw http.ClientException(
@@ -34,8 +36,15 @@ class GameRepository {
 
   Future<IList<LightArchivedGame>> getRecentGames(UserId userId) {
     return client.readNdJsonList(
-      Uri.parse(
-        '$kLichessHost/api/games/user/$userId?max=10&moves=false&lastFen=true&accuracy=true&opening=true',
+      Uri(
+        path: '/api/games/user/$userId',
+        queryParameters: {
+          'max': '10',
+          'moves': 'false',
+          'lastFen': 'true',
+          'accuracy': 'true',
+          'opening': 'true',
+        },
       ),
       headers: {'Accept': 'application/x-ndjson'},
       mapper: LightArchivedGame.fromServerJson,
@@ -48,8 +57,11 @@ class GameRepository {
       return Future.value(IList<PlayableGame>());
     }
     return client.readJsonList(
-      Uri.parse(
-        '$kLichessHost/api/mobile/my-games?ids=${ids.join(',')}',
+      Uri(
+        path: '/api/mobile/my-games',
+        queryParameters: {
+          'ids': ids.join(','),
+        },
       ),
       mapper: PlayableGame.fromServerJson,
     );
@@ -57,8 +69,9 @@ class GameRepository {
 
   Future<IList<LightArchivedGame>> getGamesByIds(ISet<GameId> ids) {
     return client.postReadNdJsonList(
-      Uri.parse(
-        '$kLichessHost/api/games/export/_ids?moves=false&lastFen=true',
+      Uri(
+        path: '/api/games/export/_ids',
+        queryParameters: {'moves': 'false', 'lastFen': 'true'},
       ),
       headers: {'Accept': 'application/x-ndjson'},
       body: ids.join(','),

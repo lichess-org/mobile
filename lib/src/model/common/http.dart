@@ -11,15 +11,16 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart'
     show
-        BaseClient,
         BaseRequest,
         BaseResponse,
         Client,
         ClientException,
+        Request,
         Response,
         StreamedResponse;
 import 'package:http/io_client.dart';
 import 'package:http/retry.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
@@ -35,6 +36,12 @@ part 'http.g.dart';
 final _logger = Logger('HttpClient');
 
 const _maxCacheSize = 2 * 1024 * 1024;
+
+/// Creates a Uri pointing to lichess server with the given unencoded path and query parameters.
+Uri lichessUri(String unencodedPath, [Map<String, dynamic>? queryParameters]) =>
+    kLichessHost.startsWith('localhost')
+        ? Uri.http(kLichessHost, unencodedPath, queryParameters)
+        : Uri.https(kLichessHost, unencodedPath, queryParameters);
 
 /// Creates the appropriate http client for the platform.
 Client httpClient(PackageInfo pInfo) {
@@ -58,35 +65,35 @@ Client httpClient(PackageInfo pInfo) {
   return IOClient(HttpClient()..userAgent = userAgent);
 }
 
+/// The default http client.
+///
+/// This client is used for all requests that don't go to the lichess server, for
+/// example, requests to lichess CDN, or other APIs.
+/// Only one instance of this client is created and kept alive for the whole app.
 @Riverpod(keepAlive: true)
-LichessClientFactory lichessClientFactory(LichessClientFactoryRef ref) {
-  return LichessClientFactory(ref);
+Client defaultClient(DefaultClientRef ref) {
+  final client = httpClient(ref.read(packageInfoProvider));
+  ref.onDispose(() => client.close());
+  return client;
 }
 
-/// Factory for the default [Client] used to send requests to lichess server.
+/// The http client configured to make requests to the lichess API.
 ///
-/// It creates a client that:
-/// - Retries just once, after 500ms, on 429 Too Many Requests.
-/// - Sets the Authorization header when a token has been stored.
-/// - Sets the user-agent header with the app version, build number, and device info.
-/// - Logs all requests and responses with status code >= 400.
-///
-/// This class should be overridden in tests to provide a mock client.
-class LichessClientFactory {
-  LichessClientFactory(this._ref);
-
-  final LichessClientFactoryRef _ref;
-
-  Client call() {
+/// Only one instance of this client is created and kept alive for the whole app.
+@Riverpod(keepAlive: true)
+Client lichessClient(LichessClientRef ref) {
+  final client = LichessClient(
     // Retry just once, after 500ms, on 429 Too Many Requests.
-    // TODO consider throttling the requests, instead of retrying.
-    return RetryClient(
-      AuthClient(httpClient(_ref.read(packageInfoProvider)), _ref),
+    RetryClient(
+      httpClient(ref.read(packageInfoProvider)),
       retries: 1,
       delay: _defaultDelay,
       when: (response) => response.statusCode == 429,
-    );
-  }
+    ),
+    ref,
+  );
+  ref.onDispose(() => client.close());
+  return client;
 }
 
 Duration _defaultDelay(int retryCount) =>
@@ -123,16 +130,16 @@ String makeUserAgent(
   return base;
 }
 
-/// Http client that sets the Authorization header when a token has been stored.
+/// Lichess HTTP client.
 ///
-/// Also sets the user-agent header with the app version, build number, and device info.
-/// If the user is logged in, it also includes the user's id.
-///
-/// Logs all requests and responses with status code >= 400.
-class AuthClient extends BaseClient {
-  AuthClient(this._inner, this._ref);
+/// - All requests go to the lichess server, defined in [kLichessHost].
+/// - Sets the Authorization header when a token has been stored.
+/// - Sets the user-agent header with the app version, build number, and device info. If the user is logged in, it also includes the user's id.
+/// - Logs all requests and responses with status code >= 400.
+class LichessClient implements Client {
+  LichessClient(this._inner, this._ref);
 
-  final LichessClientFactoryRef _ref;
+  final LichessClientRef _ref;
   final Client _inner;
 
   @override
@@ -182,6 +189,107 @@ class AuthClient extends BaseClient {
   @override
   void close() {
     _inner.close();
+  }
+
+  @override
+  Future<Response> head(
+    Uri url, {
+    Map<String, String>? headers,
+  }) =>
+      _sendUnstreamed('HEAD', url, headers);
+
+  @override
+  Future<Response> get(
+    Uri url, {
+    Map<String, String>? headers,
+  }) =>
+      _sendUnstreamed('GET', url, headers);
+
+  @override
+  Future<Response> post(
+    Uri url, {
+    Map<String, String>? headers,
+    Object? body,
+    Encoding? encoding,
+  }) =>
+      _sendUnstreamed('POST', url, headers, body, encoding);
+
+  @override
+  Future<Response> put(
+    Uri url, {
+    Map<String, String>? headers,
+    Object? body,
+    Encoding? encoding,
+  }) =>
+      _sendUnstreamed('PUT', url, headers, body, encoding);
+
+  @override
+  Future<Response> patch(
+    Uri url, {
+    Map<String, String>? headers,
+    Object? body,
+    Encoding? encoding,
+  }) =>
+      _sendUnstreamed('PATCH', url, headers, body, encoding);
+
+  @override
+  Future<Response> delete(
+    Uri url, {
+    Map<String, String>? headers,
+    Object? body,
+    Encoding? encoding,
+  }) =>
+      _sendUnstreamed('DELETE', url, headers, body, encoding);
+
+  @override
+  Future<String> read(Uri url, {Map<String, String>? headers}) async {
+    final response = await get(url, headers: headers);
+    _checkResponseSuccess(url, response);
+    return response.body;
+  }
+
+  @override
+  Future<Uint8List> readBytes(Uri url, {Map<String, String>? headers}) async {
+    final response = await get(url, headers: headers);
+    _checkResponseSuccess(url, response);
+    return response.bodyBytes;
+  }
+
+  /// Sends a non-streaming [Request] and returns a non-streaming [Response].
+  Future<Response> _sendUnstreamed(
+    String method,
+    Uri url,
+    Map<String, String>? headers, [
+    Object? body,
+    Encoding? encoding,
+  ]) async {
+    final request = Request(method, lichessUri(url.path, url.queryParameters));
+
+    if (headers != null) request.headers.addAll(headers);
+    if (encoding != null) request.encoding = encoding;
+    if (body != null) {
+      if (body is String) {
+        request.body = body;
+      } else if (body is List) {
+        request.bodyBytes = body.cast<int>();
+      } else if (body is Map) {
+        request.bodyFields = body.cast<String, String>();
+      } else {
+        throw ArgumentError('Invalid request body "$body".');
+      }
+    }
+
+    return Response.fromStream(await send(request));
+  }
+
+  /// Throws an error if [response] is not successful.
+  void _checkResponseSuccess(Uri url, Response response) {
+    if (response.statusCode < 400) return;
+    var message = 'Request to $url failed with status ${response.statusCode}';
+    if (response.reasonPhrase != null) {
+      message = '$message: ${response.reasonPhrase}';
+    }
+    throw ClientException('$message.', url);
   }
 }
 
@@ -366,51 +474,25 @@ extension ClientExtension on Client {
 }
 
 extension ClientWidgetRefExtension on WidgetRef {
-  /// Runs [fn] with a [Client] configured to send requests to lichess server.
-  ///
-  /// It handles the creation and closing of the client, while trying to reuse
-  /// the same client for multiple requests at the same time.
-  /// Will try to close the client after [fn] completes.
+  /// Runs [fn] with a [LichessClient].
   Future<T> withClient<T>(Future<T> Function(Client) fn) async {
-    final (client, key) =
-        _ReuseClientService.instance.get(read(lichessClientFactoryProvider));
-    try {
-      return await fn(client);
-    } finally {
-      _ReuseClientService.instance.close(key);
-    }
+    final client = read(lichessClientProvider);
+    return await fn(client);
   }
 }
 
 extension ClientRefExtension on Ref {
-  /// Runs [fn] with an [Client] configured to send requests to lichess server.
-  ///
-  /// It handles the creation and closing of the client, while trying to reuse
-  /// the same client for multiple requests at the same time.
-  /// Will try to close the client after [fn] completes, or when the provider is
-  /// disposed.
+  /// Runs [fn] with a [LichessClient].
   Future<T> withClient<T>(Future<T> Function(Client) fn) async {
-    final (client, key) =
-        _ReuseClientService.instance.get(read(lichessClientFactoryProvider));
-    onDispose(() => _ReuseClientService.instance.close(key));
-    try {
-      return await fn(client);
-    } finally {
-      _ReuseClientService.instance.close(key);
-    }
+    final client = read(lichessClientProvider);
+    return await fn(client);
   }
 }
 
 extension ClientAutoDisposeRefExtension<T> on AutoDisposeRef<T> {
-  /// Runs [fn] with an [Client] configured to send requests to lichess server,
-  /// and keeps the provider alive for [duration].
+  /// Runs [fn] with a [LichessClient] and keeps the provider alive for [duration].
   ///
   /// This is primarily used for caching network requests in a [FutureProvider].
-  ///
-  /// It handles the creation and closing of the client, while trying to reuse
-  /// the same client for multiple requests at the same time.
-  /// Will try to close the client after [fn] completes, or when the provider is
-  /// disposed.
   ///
   /// If [fn] throws with a [SocketException], the provider is not kept alive, this
   /// allows to retry the request later.
@@ -420,10 +502,8 @@ extension ClientAutoDisposeRefExtension<T> on AutoDisposeRef<T> {
   ) async {
     final link = keepAlive();
     final timer = Timer(duration, link.close);
-    final (client, key) =
-        _ReuseClientService.instance.get(read(lichessClientFactoryProvider));
+    final client = read(lichessClientProvider);
     onDispose(() {
-      _ReuseClientService.instance.close(key);
       timer.cancel();
     });
     try {
@@ -431,52 +511,6 @@ extension ClientAutoDisposeRefExtension<T> on AutoDisposeRef<T> {
     } on SocketException catch (_) {
       link.close();
       rethrow;
-    } finally {
-      _ReuseClientService.instance.close(key);
-    }
-  }
-}
-
-/// A service that reuses the same http client for multiple requests at the same
-/// time, and closes it when there are no more pending requests.
-class _ReuseClientService {
-  _ReuseClientService._();
-
-  static final instance = _ReuseClientService._();
-
-  Client? _client;
-  Set<UniqueKey> _clientKeys = {};
-
-  /// Returns the client and a unique key to be used to close it later.
-  ///
-  /// If the client is null, it creates a new one.
-  (Client, UniqueKey) get(LichessClientFactory factory) {
-    if (_client == null) {
-      _logger.fine('Creating a new client.');
-    }
-    if (_client == null) {
-      _client = factory();
-      _clientKeys = {};
-    }
-    final key = UniqueKey();
-    _clientKeys.add(key);
-    return (_client!, key);
-  }
-
-  /// Asks to close the client with the given key.
-  ///
-  /// If there are no more keys, it closes the client.
-  Future<void> close(UniqueKey key) async {
-    // give some time for other requests to reuse the client, unless we are
-    // running tests, as we don't want the timer to interfere with them.
-    if (!Platform.environment.containsKey('FLUTTER_TEST')) {
-      await Future<void>.delayed(const Duration(milliseconds: 100));
-    }
-    _clientKeys.remove(key);
-    if (_clientKeys.isEmpty && _client != null) {
-      _logger.fine('Closing client after all users have closed.');
-      _client!.close();
-      _client = null;
     }
   }
 }

@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
@@ -550,7 +551,8 @@ class _BottomBar extends ConsumerWidget {
           onPressed: (context) {
             launchShareDialog(
               context,
-              text: '$kLichessHost/training/${puzzleState.puzzle.puzzle.id}',
+              text: lichessUri('/training/${puzzleState.puzzle.puzzle.id}')
+                  .toString(),
             );
           },
         ),

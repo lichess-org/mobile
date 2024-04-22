@@ -2,7 +2,6 @@ import 'package:chessground/chessground.dart' as cg;
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
@@ -21,17 +20,12 @@ import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import '../../test_app.dart';
 import '../../test_utils.dart';
 
-class FakeClientFactory implements LichessClientFactory {
-  @override
-  http.Client call() {
-    return MockClient((request) {
-      if (request.url.path == '/game/export/qVChCOTc') {
-        return mockResponse(gameResponse, 200);
-      }
-      return mockResponse('', 404);
-    });
+final lichessClient = MockClient((request) {
+  if (request.url.path == '/game/export/qVChCOTc') {
+    return mockResponse(gameResponse, 200);
   }
-}
+  return mockResponse('', 404);
+});
 
 void main() {
   group('ArchivedGameScreen', () {
@@ -45,7 +39,7 @@ void main() {
             orientation: Side.white,
           ),
           overrides: [
-            lichessClientFactoryProvider.overrideWithValue(FakeClientFactory()),
+            lichessClientProvider.overrideWithValue(lichessClient),
           ],
         );
 
@@ -117,7 +111,7 @@ void main() {
           orientation: Side.white,
         ),
         overrides: [
-          lichessClientFactoryProvider.overrideWithValue(FakeClientFactory()),
+          lichessClientProvider.overrideWithValue(lichessClient),
         ],
       );
 

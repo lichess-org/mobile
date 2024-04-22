@@ -36,13 +36,6 @@ class MockHttpClient extends Mock implements http.Client {}
 
 const shouldLog = false;
 
-class FakeClientFactory implements LichessClientFactory {
-  @override
-  http.Client call() {
-    return MockHttpClient();
-  }
-}
-
 Future<ProviderContainer> makeContainer({
   List<Override>? overrides,
   AuthSessionState? userSession,
@@ -73,7 +66,8 @@ Future<ProviderContainer> makeContainer({
         ref.onDispose(pool.dispose);
         return pool;
       }),
-      lichessClientFactoryProvider.overrideWithValue(FakeClientFactory()),
+      lichessClientProvider.overrideWithValue(MockHttpClient()),
+      defaultClientProvider.overrideWithValue(MockHttpClient()),
       crashlyticsProvider.overrideWithValue(FakeCrashlytics()),
       notificationServiceProvider.overrideWithValue(FakeNotificationService()),
       soundServiceProvider.overrideWithValue(FakeSoundService()),

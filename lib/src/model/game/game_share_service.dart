@@ -25,8 +25,9 @@ class GameShareService {
     final resp = await _ref.withClient(
       (client) => client
           .get(
-            Uri.parse(
-              '$kLichessHost/game/export/$id?evals=0&clocks=0',
+            Uri(
+              path: '/game/export/$id',
+              queryParameters: {'evals': '0', 'clocks': '0'},
             ),
           )
           .timeout(const Duration(seconds: 1)),
@@ -42,8 +43,9 @@ class GameShareService {
     final resp = await _ref.withClient(
       (client) => client
           .get(
-            Uri.parse(
-              '$kLichessHost/game/export/$id?literate=1',
+            Uri(
+              path: '/game/export/$id',
+              queryParameters: {'literate': '1'},
             ),
           )
           .timeout(const Duration(seconds: 1)),
@@ -63,15 +65,14 @@ class GameShareService {
   ) async {
     final boardTheme = _ref.read(boardPreferencesProvider).boardTheme;
     final pieceTheme = _ref.read(boardPreferencesProvider).pieceSet;
-    final resp = await _ref.withClient(
-      (client) => client
-          .get(
-            Uri.parse(
-              '$kLichessCDNHost/export/fen.gif?fen=${Uri.encodeComponent(fen)}&color=${orientation.name}&lastMove=${lastMove.uci}&theme=${boardTheme.name}&piece=${pieceTheme.name}',
-            ),
-          )
-          .timeout(const Duration(seconds: 1)),
-    );
+    final resp = await _ref
+        .read(defaultClientProvider)
+        .get(
+          Uri.parse(
+            '$kLichessCDNHost/export/fen.gif?fen=${Uri.encodeComponent(fen)}&color=${orientation.name}&lastMove=${lastMove.uci}&theme=${boardTheme.name}&piece=${pieceTheme.name}',
+          ),
+        )
+        .timeout(const Duration(seconds: 1));
     if (resp.statusCode != 200) {
       throw Exception('Failed to get GIF');
     }
@@ -82,15 +83,14 @@ class GameShareService {
   Future<XFile> gameGif(GameId id, Side orientation) async {
     final boardTheme = _ref.read(boardPreferencesProvider).boardTheme;
     final pieceTheme = _ref.read(boardPreferencesProvider).pieceSet;
-    final resp = await _ref.withClient(
-      (client) => client
-          .get(
-            Uri.parse(
-              '$kLichessCDNHost/game/export/gif/${orientation.name}/$id.gif?theme=${boardTheme.name}&piece=${pieceTheme.name}',
-            ),
-          )
-          .timeout(const Duration(seconds: 1)),
-    );
+    final resp = await _ref
+        .read(defaultClientProvider)
+        .get(
+          Uri.parse(
+            '$kLichessCDNHost/game/export/gif/${orientation.name}/$id.gif?theme=${boardTheme.name}&piece=${pieceTheme.name}',
+          ),
+        )
+        .timeout(const Duration(seconds: 1));
     if (resp.statusCode != 200) {
       throw Exception('Failed to get GIF');
     }

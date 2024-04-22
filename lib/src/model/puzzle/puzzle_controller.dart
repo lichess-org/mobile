@@ -6,7 +6,6 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:http/http.dart' as http;
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
@@ -479,7 +478,7 @@ class PuzzleController extends _$PuzzleController {
       return acc;
     });
     final pgn =
-        '[FEN "${initPosition.fen}"][Site "$kLichessHost/training/${state.puzzle.puzzle.id}"]${pgnMoves.join(' ')}';
+        '[FEN "${initPosition.fen}"][Site "${lichessUri('/training/${state.puzzle.puzzle.id}')}"]${pgnMoves.join(' ')}';
     return pgn;
   }
 
