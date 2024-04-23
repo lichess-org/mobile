@@ -166,9 +166,17 @@ class _AppState extends ConsumerState<Application> {
                           ? LichessColors.primary
                           : const Color(0xFF3692E7),
                       brightness: brightness,
+                      textTheme: CupertinoTheme.of(context).textTheme.copyWith(
+                            primaryColor: brightness == Brightness.light
+                                ? LichessColors.primary
+                                : const Color(0xFF3692E7),
+                          ),
                       scaffoldBackgroundColor: brightness == Brightness.light
                           ? CupertinoColors.systemGroupedBackground
-                          : null,
+                          : const Color.fromARGB(255, 20, 20, 21),
+                      barBackgroundColor: brightness == Brightness.light
+                          ? const Color.fromARGB(220, 242, 242, 247)
+                          : const Color.fromARGB(220, 20, 20, 21),
                     ),
                     child: IconTheme(
                       // This is needed to avoid the icon color being overridden by the cupertino theme (blue)

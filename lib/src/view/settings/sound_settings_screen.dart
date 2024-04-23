@@ -60,6 +60,7 @@ class _Body extends ConsumerWidget {
       child: ListView(
         children: [
           ChoicePicker(
+            notchedTile: true,
             choices: SoundTheme.values,
             selectedItem: soundTheme,
             titleBuilder: (t) => Text(soundThemeL10n(context, t)),

@@ -150,7 +150,7 @@ class ChoicePicker<T extends Enum> extends StatelessWidget {
     required this.onSelectedItemChanged,
     this.tileContentPadding,
     this.margin,
-    this.notchedTile = false,
+    this.notchedTile = true,
     this.showDividerBetweenTiles = false,
   });
 
@@ -207,25 +207,30 @@ class ChoicePicker<T extends Enum> extends StatelessWidget {
       case TargetPlatform.iOS:
         final tileConstructor =
             notchedTile ? CupertinoListTile.notched : CupertinoListTile.new;
-        return Opacity(
-          opacity: onSelectedItemChanged != null ? 1.0 : 0.5,
-          child: CupertinoListSection.insetGrouped(
-            additionalDividerMargin: notchedTile ? null : 6.0,
-            hasLeading: leadingBuilder != null,
-            margin: margin,
-            children: choices.map((value) {
-              return tileConstructor(
-                trailing: selectedItem == value
-                    ? const Icon(CupertinoIcons.check_mark_circled_solid)
-                    : null,
-                title: titleBuilder(value),
-                subtitle: subtitleBuilder?.call(value),
-                leading: leadingBuilder?.call(value),
-                onTap: onSelectedItemChanged != null
-                    ? () => onSelectedItemChanged!(value)
-                    : null,
-              );
-            }).toList(growable: false),
+        return Padding(
+          padding: margin ?? Styles.bodySectionPadding,
+          child: Opacity(
+            opacity: onSelectedItemChanged != null ? 1.0 : 0.5,
+            child: CupertinoListSection.insetGrouped(
+              backgroundColor:
+                  CupertinoTheme.of(context).scaffoldBackgroundColor,
+              margin: EdgeInsets.zero,
+              additionalDividerMargin: notchedTile ? null : 6.0,
+              hasLeading: leadingBuilder != null,
+              children: choices.map((value) {
+                return tileConstructor(
+                  trailing: selectedItem == value
+                      ? const Icon(CupertinoIcons.check_mark_circled_solid)
+                      : null,
+                  title: titleBuilder(value),
+                  subtitle: subtitleBuilder?.call(value),
+                  leading: leadingBuilder?.call(value),
+                  onTap: onSelectedItemChanged != null
+                      ? () => onSelectedItemChanged!(value)
+                      : null,
+                );
+              }).toList(growable: false),
+            ),
           ),
         );
       default:
