@@ -20,7 +20,6 @@ import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/notification_service.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/layout.dart';
@@ -132,6 +131,7 @@ class _AppState extends ConsumerState<Application> {
               );
 
         final theme = Theme.of(context);
+        final cupertinoTheme = CupertinoTheme.of(context);
 
         return MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -142,7 +142,7 @@ class _AppState extends ConsumerState<Application> {
             textTheme: theme.platform == TargetPlatform.iOS
                 ? brightness == Brightness.light
                     ? Typography.blackCupertino
-                    : Typography.whiteCupertino
+                    : Styles.whiteCupertinoTextTheme
                 : null,
           ).copyWith(
             navigationBarTheme: NavigationBarTheme.of(context).copyWith(
@@ -162,21 +162,21 @@ class _AppState extends ConsumerState<Application> {
               ? (context, child) {
                   return CupertinoTheme(
                     data: CupertinoThemeData(
-                      primaryColor: brightness == Brightness.light
-                          ? LichessColors.primary
-                          : const Color(0xFF3692E7),
+                      primaryColor: Styles.cupertinoPrimaryColor,
                       brightness: brightness,
-                      textTheme: CupertinoTheme.of(context).textTheme.copyWith(
-                            primaryColor: brightness == Brightness.light
-                                ? LichessColors.primary
-                                : const Color(0xFF3692E7),
-                          ),
-                      scaffoldBackgroundColor: brightness == Brightness.light
-                          ? CupertinoColors.systemGroupedBackground
-                          : const Color.fromARGB(255, 20, 20, 21),
-                      barBackgroundColor: brightness == Brightness.light
-                          ? const Color.fromARGB(220, 242, 242, 247)
-                          : const Color.fromARGB(220, 20, 20, 21),
+                      textTheme: cupertinoTheme.textTheme.copyWith(
+                        primaryColor: Styles.cupertinoPrimaryColor,
+                        textStyle: cupertinoTheme.textTheme.textStyle
+                            .copyWith(color: Styles.cupertinoLabelColor),
+                        navTitleTextStyle: cupertinoTheme
+                            .textTheme.navTitleTextStyle
+                            .copyWith(color: Styles.cupertinoTitleColor),
+                        navLargeTitleTextStyle: cupertinoTheme
+                            .textTheme.navLargeTitleTextStyle
+                            .copyWith(color: Styles.cupertinoTitleColor),
+                      ),
+                      scaffoldBackgroundColor: Styles.cupertinoScaffoldColor,
+                      barBackgroundColor: Styles.cupertinoAppBarColor,
                     ),
                     child: IconTheme(
                       // This is needed to avoid the icon color being overridden by the cupertino theme (blue)

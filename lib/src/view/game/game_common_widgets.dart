@@ -93,6 +93,8 @@ class GameCupertinoNavBar extends ConsumerWidget
         : const AsyncValue.data(true);
 
     return CupertinoNavigationBar(
+      backgroundColor: Styles.cupertinoScaffoldColor.resolveFrom(context),
+      border: null,
       padding: Styles.cupertinoAppBarTrailingWidgetPadding,
       leading: shouldPreventGoingBackAsync.maybeWhen<Widget?>(
         data: (prevent) => prevent ? pingRating : null,

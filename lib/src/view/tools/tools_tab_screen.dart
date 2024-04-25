@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/cupertino.dart' hide CupertinoSliverNavigationBar;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/navigation.dart';
@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/view/analysis/analysis_position_choice_screen
 import 'package:lichess_mobile/src/view/clock/clock_screen.dart';
 import 'package:lichess_mobile/src/view/settings/settings_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/cupertino_nav_bar.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
 class ToolsTabScreen extends ConsumerWidget {

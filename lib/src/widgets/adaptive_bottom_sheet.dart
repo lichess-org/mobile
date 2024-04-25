@@ -56,6 +56,8 @@ class BottomSheetContextMenuAction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformListTile(
+      cupertinoBackgroundColor:
+          CupertinoColors.tertiarySystemGroupedBackground.resolveFrom(context),
       leading: Icon(icon),
       title: child,
       onTap: () {

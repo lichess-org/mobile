@@ -255,6 +255,7 @@ class PlatformListTile extends StatelessWidget {
     this.selected = false,
     this.isThreeLine = false,
     this.padding,
+    this.cupertinoBackgroundColor,
     this.visualDensity,
     this.harmonizeCupertinoTitleStyle = false,
   });
@@ -265,6 +266,8 @@ class PlatformListTile extends StatelessWidget {
   final Widget? trailing;
 
   final EdgeInsetsGeometry? padding;
+
+  final Color? cupertinoBackgroundColor;
 
   /// only on iOS
   final Widget? additionalInfo;
@@ -321,10 +324,8 @@ class PlatformListTile extends StatelessWidget {
           child: GestureDetector(
             onLongPress: onLongPress,
             child: CupertinoListTile.notched(
-              // backgroundColor: const CupertinoDynamicColor.withBrightness(
-              //   color: Color(0xFFFFFFFF),
-              //   darkColor: Color.fromARGB(255, 38, 36, 33),
-              // ).resolveFrom(context),
+              backgroundColor: cupertinoBackgroundColor ??
+                  Styles.cupertinoCardColor.resolveFrom(context),
               leading: leading,
               title: harmonizeCupertinoTitleStyle
                   ? DefaultTextStyle.merge(
