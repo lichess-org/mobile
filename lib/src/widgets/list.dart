@@ -181,6 +181,13 @@ class ListSection extends StatelessWidget {
                     CupertinoListSection.insetGrouped(
                       backgroundColor:
                           CupertinoTheme.of(context).scaffoldBackgroundColor,
+                      decoration: BoxDecoration(
+                        color: Styles.cupertinoCardColor.resolveFrom(context),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10.0)),
+                      ),
+                      separatorColor:
+                          Styles.cupertinoSeparatorColor.resolveFrom(context),
                       margin: EdgeInsets.zero,
                       hasLeading: hasLeading,
                       additionalDividerMargin: cupertinoAdditionalDividerMargin,

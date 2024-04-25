@@ -82,6 +82,11 @@ abstract class Styles {
     color: Color(0xFFFFFFFF),
     darkColor: Color.fromARGB(255, 36, 36, 37),
   );
+  static const cupertinoSeparatorColor = CupertinoDynamicColor.withBrightness(
+    debugLabel: 'separator',
+    color: Color.fromARGB(73, 60, 60, 67),
+    darkColor: Color.fromARGB(153, 101, 101, 105),
+  );
 
   /// A Material Design text theme with light glyphs based on San Francisco.
   ///

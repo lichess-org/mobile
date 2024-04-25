@@ -214,6 +214,12 @@ class ChoicePicker<T extends Enum> extends StatelessWidget {
             child: CupertinoListSection.insetGrouped(
               backgroundColor:
                   CupertinoTheme.of(context).scaffoldBackgroundColor,
+              decoration: BoxDecoration(
+                color: Styles.cupertinoCardColor.resolveFrom(context),
+                borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+              ),
+              separatorColor:
+                  Styles.cupertinoSeparatorColor.resolveFrom(context),
               margin: EdgeInsets.zero,
               additionalDividerMargin: notchedTile ? null : 6.0,
               hasLeading: leadingBuilder != null,
