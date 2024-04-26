@@ -26,7 +26,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/layout.dart';
-import 'package:lichess_mobile/src/utils/share.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
@@ -38,8 +38,8 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:popover/popover.dart';
 
-import 'analysis_pgn_tags.dart';
 import 'analysis_settings.dart';
+import 'analysis_share_screen.dart';
 import 'annotations.dart';
 import 'tree_view.dart';
 
@@ -777,46 +777,10 @@ class _BottomBar extends ConsumerWidget {
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.studyShareAndExport),
           onPressed: (_) {
-            showAdaptiveBottomSheet<void>(
-              context: context,
-              showDragHandle: true,
-              isScrollControlled: true,
-              constraints: BoxConstraints(
-                maxHeight: MediaQuery.of(context).size.height * 0.9,
-              ),
-              builder: (_) => SafeArea(
-                child: ListView(
-                  shrinkWrap: true,
-                  children: [
-                    AnalysisPgnTags(
-                      pgn: pgn,
-                      options: options,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(24.0),
-                      child: Builder(
-                        builder: (context) {
-                          return FatButton(
-                            semanticsLabel: 'Share PGN',
-                            onPressed: () {
-                              launchShareDialog(
-                                context,
-                                text: ref
-                                    .read(
-                                      analysisControllerProvider(pgn, options)
-                                          .notifier,
-                                    )
-                                    .makeGamePgn(),
-                              );
-                            },
-                            child: const Text('Share PGN'),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+            pushPlatformRoute(
+              context,
+              title: context.l10n.studyShareAndExport,
+              builder: (_) => AnalysisShareScreen(pgn: pgn, options: options),
             );
           },
         ),

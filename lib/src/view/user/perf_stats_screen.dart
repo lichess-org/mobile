@@ -114,14 +114,20 @@ class _Title extends StatelessWidget {
           context: context,
           actions: allPerfs.map((p) {
             return BottomSheetAction(
-              makeLabel: (context) => Text(
-                context.l10n.perfStatPerfStats(p.title),
-                overflow: TextOverflow.ellipsis,
-              ),
-              trailing: Icon(
-                LichessIcons.circle,
-                color: perf == p ? LichessColors.good : LichessColors.grey,
-                size: 16,
+              makeLabel: (context) => Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    p.icon,
+                    color: Theme.of(context).platform == TargetPlatform.iOS
+                        ? CupertinoTheme.of(context).primaryColor
+                        : null,
+                  ),
+                  Text(
+                    ' ${context.l10n.perfStatPerfStats(p.title)}',
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
               ),
               onPressed: (ctx) {
                 pushReplacementPlatformRoute(

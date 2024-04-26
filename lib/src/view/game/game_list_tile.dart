@@ -106,189 +106,6 @@ class _ContextMenu extends ConsumerWidget {
 
     final customColors = Theme.of(context).extension<CustomColors>();
 
-    final actions = [
-      BottomSheetContextMenuAction(
-        icon: Icons.biotech,
-        onPressed: () {
-          pushPlatformRoute(
-            context,
-            builder: (context) => AnalysisScreen(
-              title: context.l10n.gameAnalysis,
-              pgnOrId: game.id.value,
-              options: AnalysisOptions(
-                isLocalEvaluationAllowed: true,
-                variant: game.variant,
-                orientation: orientation,
-                id: game.id,
-              ),
-            ),
-          );
-        },
-        child: Text(context.l10n.gameAnalysis),
-      ),
-      BottomSheetContextMenuAction(
-        onPressed: () {
-          launchShareDialog(
-            context,
-            uri: lichessUri('/${game.id}'),
-          );
-        },
-        icon: CupertinoIcons.link,
-        closeOnPressed: false,
-        child: const Text('Share game URL'),
-      ),
-      // Builder is used to retrieve the context immediately surrounding the
-      // BottomSheetContextMenuAction
-      // This is necessary to get the correct context for the iPad share dialog
-      // which needs the position of the action to display the share dialog
-      Builder(
-        builder: (context) {
-          return BottomSheetContextMenuAction(
-            icon: Icons.gif,
-            closeOnPressed: false, // needed for the share dialog on iPad
-            child: Text(context.l10n.gameAsGIF),
-            onPressed: () async {
-              try {
-                final gif = await ref
-                    .read(gameShareServiceProvider)
-                    .gameGif(game.id, orientation);
-                if (context.mounted) {
-                  launchShareDialog(
-                    context,
-                    files: [gif],
-                    subject: '${game.perf.title} • ${context.l10n.resVsX(
-                      game.white.fullName(context),
-                      game.black.fullName(context),
-                    )}',
-                  );
-                }
-              } catch (e) {
-                debugPrint(e.toString());
-                if (context.mounted) {
-                  showPlatformSnackbar(
-                    context,
-                    'Failed to get GIF',
-                    type: SnackBarType.error,
-                  );
-                }
-              }
-            },
-          );
-        },
-      ),
-      if (game.lastFen != null && game.lastMove != null)
-        // Builder is used to retrieve the context immediately surrounding the
-        // BottomSheetContextMenuAction
-        // This is necessary to get the correct context for the iPad share dialog
-        // which needs the position of the action to display the share dialog
-        Builder(
-          builder: (context) {
-            return BottomSheetContextMenuAction(
-              icon: Icons.image,
-              closeOnPressed: false, // needed for the share dialog on iPad
-              child: Text(context.l10n.screenshotCurrentPosition),
-              onPressed: () async {
-                try {
-                  final image = await ref
-                      .read(gameShareServiceProvider)
-                      .screenshotPosition(
-                        game.id,
-                        orientation,
-                        game.lastFen!,
-                        game.lastMove!,
-                      );
-                  if (context.mounted) {
-                    launchShareDialog(
-                      context,
-                      files: [image],
-                      subject: context.l10n.puzzleFromGameLink(
-                        lichessUri('/${game.id}').toString(),
-                      ),
-                    );
-                  }
-                } catch (e) {
-                  if (context.mounted) {
-                    showPlatformSnackbar(
-                      context,
-                      'Failed to get GIF',
-                      type: SnackBarType.error,
-                    );
-                  }
-                }
-              },
-            );
-          },
-        ),
-      // Builder is used to retrieve the context immediately surrounding the
-      // BottomSheetContextMenuAction
-      // This is necessary to get the correct context for the iPad share dialog
-      // which needs the position of the action to display the share dialog
-      Builder(
-        builder: (context) {
-          return BottomSheetContextMenuAction(
-            icon: CupertinoIcons.share,
-            closeOnPressed: false, // needed for the share dialog on iPad
-            child: Text('PGN: ${context.l10n.downloadAnnotated}'),
-            onPressed: () async {
-              try {
-                final pgn = await ref
-                    .read(gameShareServiceProvider)
-                    .annotatedPgn(game.id);
-                if (context.mounted) {
-                  launchShareDialog(
-                    context,
-                    text: pgn,
-                  );
-                }
-              } catch (e) {
-                if (context.mounted) {
-                  showPlatformSnackbar(
-                    context,
-                    'Failed to get PGN',
-                    type: SnackBarType.error,
-                  );
-                }
-              }
-            },
-          );
-        },
-      ),
-      // Builder is used to retrieve the context immediately surrounding the
-      // BottomSheetContextMenuAction
-      // This is necessary to get the correct context for the iPad share dialog
-      // which needs the position of the action to display the share dialog
-      Builder(
-        builder: (context) {
-          return BottomSheetContextMenuAction(
-            icon: CupertinoIcons.share,
-            closeOnPressed: false, // needed for the share dialog on iPad
-            // TODO improve translation
-            child: Text('PGN: ${context.l10n.downloadRaw}'),
-            onPressed: () async {
-              try {
-                final pgn =
-                    await ref.read(gameShareServiceProvider).rawPgn(game.id);
-                if (context.mounted) {
-                  launchShareDialog(
-                    context,
-                    text: pgn,
-                  );
-                }
-              } catch (e) {
-                if (context.mounted) {
-                  showPlatformSnackbar(
-                    context,
-                    'Failed to get PGN',
-                    type: SnackBarType.error,
-                  );
-                }
-              }
-            },
-          );
-        },
-      ),
-    ];
-
     return DraggableScrollableSheet(
       initialChildSize: .5,
       expand: false,
@@ -399,7 +216,192 @@ class _ContextMenu extends ConsumerWidget {
                   },
                 ),
               ),
-              ...actions,
+              BottomSheetContextMenuAction(
+                icon: Icons.biotech,
+                onPressed: () {
+                  pushPlatformRoute(
+                    context,
+                    builder: (context) => AnalysisScreen(
+                      title: context.l10n.gameAnalysis,
+                      pgnOrId: game.id.value,
+                      options: AnalysisOptions(
+                        isLocalEvaluationAllowed: true,
+                        variant: game.variant,
+                        orientation: orientation,
+                        id: game.id,
+                      ),
+                    ),
+                  );
+                },
+                child: Text(context.l10n.gameAnalysis),
+              ),
+              BottomSheetContextMenuAction(
+                onPressed: () {
+                  launchShareDialog(
+                    context,
+                    uri: lichessUri('/${game.id}'),
+                  );
+                },
+                icon: CupertinoIcons.link,
+                closeOnPressed: false,
+                child: const Text('Share game URL'),
+              ),
+              // Builder is used to retrieve the context immediately surrounding the
+              // BottomSheetContextMenuAction
+              // This is necessary to get the correct context for the iPad share dialog
+              // which needs the position of the action to display the share dialog
+              Builder(
+                builder: (context) {
+                  return BottomSheetContextMenuAction(
+                    icon: Icons.gif,
+                    closeOnPressed:
+                        false, // needed for the share dialog on iPad
+                    child: Text(context.l10n.gameAsGIF),
+                    onPressed: () async {
+                      try {
+                        final gif = await ref
+                            .read(gameShareServiceProvider)
+                            .gameGif(game.id, orientation);
+                        if (context.mounted) {
+                          launchShareDialog(
+                            context,
+                            files: [gif],
+                            subject:
+                                '${game.perf.title} • ${context.l10n.resVsX(
+                              game.white.fullName(context),
+                              game.black.fullName(context),
+                            )}',
+                          );
+                        }
+                      } catch (e) {
+                        debugPrint(e.toString());
+                        if (context.mounted) {
+                          showPlatformSnackbar(
+                            context,
+                            'Failed to get GIF',
+                            type: SnackBarType.error,
+                          );
+                        }
+                      }
+                    },
+                  );
+                },
+              ),
+              if (game.lastFen != null && game.lastMove != null)
+                // Builder is used to retrieve the context immediately surrounding the
+                // BottomSheetContextMenuAction
+                // This is necessary to get the correct context for the iPad share dialog
+                // which needs the position of the action to display the share dialog
+                Builder(
+                  builder: (context) {
+                    return BottomSheetContextMenuAction(
+                      icon: Icons.image,
+                      closeOnPressed:
+                          false, // needed for the share dialog on iPad
+                      child: Text(context.l10n.screenshotCurrentPosition),
+                      onPressed: () async {
+                        try {
+                          final image = await ref
+                              .read(gameShareServiceProvider)
+                              .screenshotPosition(
+                                game.id,
+                                orientation,
+                                game.lastFen!,
+                                game.lastMove!,
+                              );
+                          if (context.mounted) {
+                            launchShareDialog(
+                              context,
+                              files: [image],
+                              subject: context.l10n.puzzleFromGameLink(
+                                lichessUri('/${game.id}').toString(),
+                              ),
+                            );
+                          }
+                        } catch (e) {
+                          if (context.mounted) {
+                            showPlatformSnackbar(
+                              context,
+                              'Failed to get GIF',
+                              type: SnackBarType.error,
+                            );
+                          }
+                        }
+                      },
+                    );
+                  },
+                ),
+              // Builder is used to retrieve the context immediately surrounding the
+              // BottomSheetContextMenuAction
+              // This is necessary to get the correct context for the iPad share dialog
+              // which needs the position of the action to display the share dialog
+              Builder(
+                builder: (context) {
+                  return BottomSheetContextMenuAction(
+                    icon: CupertinoIcons.share,
+                    closeOnPressed:
+                        false, // needed for the share dialog on iPad
+                    child: Text('PGN: ${context.l10n.downloadAnnotated}'),
+                    onPressed: () async {
+                      try {
+                        final pgn = await ref
+                            .read(gameShareServiceProvider)
+                            .annotatedPgn(game.id);
+                        if (context.mounted) {
+                          launchShareDialog(
+                            context,
+                            text: pgn,
+                          );
+                        }
+                      } catch (e) {
+                        if (context.mounted) {
+                          showPlatformSnackbar(
+                            context,
+                            'Failed to get PGN',
+                            type: SnackBarType.error,
+                          );
+                        }
+                      }
+                    },
+                  );
+                },
+              ),
+              // Builder is used to retrieve the context immediately surrounding the
+              // BottomSheetContextMenuAction
+              // This is necessary to get the correct context for the iPad share dialog
+              // which needs the position of the action to display the share dialog
+              Builder(
+                builder: (context) {
+                  return BottomSheetContextMenuAction(
+                    icon: CupertinoIcons.share,
+                    closeOnPressed:
+                        false, // needed for the share dialog on iPad
+                    // TODO improve translation
+                    child: Text('PGN: ${context.l10n.downloadRaw}'),
+                    onPressed: () async {
+                      try {
+                        final pgn = await ref
+                            .read(gameShareServiceProvider)
+                            .rawPgn(game.id);
+                        if (context.mounted) {
+                          launchShareDialog(
+                            context,
+                            text: pgn,
+                          );
+                        }
+                      } catch (e) {
+                        if (context.mounted) {
+                          showPlatformSnackbar(
+                            context,
+                            'Failed to get PGN',
+                            type: SnackBarType.error,
+                          );
+                        }
+                      }
+                    },
+                  );
+                },
+              ),
             ],
           ),
         ),

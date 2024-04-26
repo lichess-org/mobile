@@ -4,6 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
 import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
@@ -25,6 +26,7 @@ part 'analysis_controller.freezed.dart';
 part 'analysis_controller.g.dart';
 
 const standaloneAnalysisId = StringId('standalone_analysis');
+final _dateFormat = DateFormat('yyyy.MM.dd');
 
 @freezed
 class AnalysisOptions with _$AnalysisOptions {
@@ -85,7 +87,7 @@ class AnalysisController extends _$AnalysisController {
           : {
               'Event': '?',
               'Site': '?',
-              'Date': '????.??.??',
+              'Date': _dateFormat.format(DateTime.now()),
               'Round': '?',
               'White': '?',
               'Black': '?',
