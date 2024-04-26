@@ -117,7 +117,12 @@ class _Title extends StatelessWidget {
               makeLabel: (context) => Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(p.icon),
+                  Icon(
+                    p.icon,
+                    color: Theme.of(context).platform == TargetPlatform.iOS
+                        ? CupertinoTheme.of(context).primaryColor
+                        : null,
+                  ),
                   Text(
                     ' ${context.l10n.perfStatPerfStats(p.title)}',
                     overflow: TextOverflow.ellipsis,
