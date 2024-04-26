@@ -6,7 +6,19 @@ import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 
 import '../test_utils.dart';
 
-enum TestEnumLarge { one, two, three, four, five, six, seven, eight, nine, ten }
+enum TestEnumLarge {
+  one,
+  two,
+  three,
+  four,
+  five,
+  six,
+  seven,
+  eight,
+  nine,
+  ten,
+  eleven
+}
 
 enum TestEnumSmall { one, two, three }
 

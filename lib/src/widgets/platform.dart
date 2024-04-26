@@ -1,7 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 
 /// A simple widget that builds different things on different platforms.
 class PlatformWidget extends StatelessWidget {
@@ -90,19 +90,13 @@ class PlatformCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cupertinoBrightness =
-        CupertinoTheme.maybeBrightnessOf(context) ?? Brightness.light;
     return MediaQuery.withClampedTextScaling(
       maxScaleFactor: kCardTextScaleFactor,
       child: Theme.of(context).platform == TargetPlatform.iOS
           ? Card(
               margin: margin ?? EdgeInsets.zero,
               elevation: elevation ?? 0,
-              color: color ??
-                  (cupertinoBrightness == Brightness.light
-                      ? CupertinoColors.systemBackground
-                      : CupertinoColors.secondarySystemBackground
-                          .resolveFrom(context)),
+              color: color ?? Styles.cupertinoCardColor.resolveFrom(context),
               shadowColor: shadowColor,
               shape: borderRadius != null
                   ? RoundedRectangleBorder(

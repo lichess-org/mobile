@@ -96,6 +96,26 @@ class SwitchSettingTile extends StatelessWidget {
   }
 }
 
+class SettingsSectionTitle extends StatelessWidget {
+  const SettingsSectionTitle(this.title, {super.key});
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      title,
+      style: Theme.of(context).platform == TargetPlatform.iOS
+          ? TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: CupertinoColors.secondaryLabel.resolveFrom(context),
+            )
+          : null,
+    );
+  }
+}
+
 class _SettingsInfoTooltip extends StatelessWidget {
   const _SettingsInfoTooltip({
     required this.message,
@@ -125,6 +145,12 @@ class _SettingsTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTextStyle.merge(
+      // forces iOS default font size
+      style: Theme.of(context).platform == TargetPlatform.iOS
+          ? CupertinoTheme.of(context).textTheme.textStyle.copyWith(
+                fontSize: 17.0,
+              )
+          : null,
       maxLines: 2,
       overflow: TextOverflow.ellipsis,
       child: Text.rich(
@@ -150,7 +176,7 @@ class ChoicePicker<T extends Enum> extends StatelessWidget {
     required this.onSelectedItemChanged,
     this.tileContentPadding,
     this.margin,
-    this.notchedTile = false,
+    this.notchedTile = true,
     this.showDividerBetweenTiles = false,
   });
 
@@ -207,25 +233,36 @@ class ChoicePicker<T extends Enum> extends StatelessWidget {
       case TargetPlatform.iOS:
         final tileConstructor =
             notchedTile ? CupertinoListTile.notched : CupertinoListTile.new;
-        return Opacity(
-          opacity: onSelectedItemChanged != null ? 1.0 : 0.5,
-          child: CupertinoListSection.insetGrouped(
-            additionalDividerMargin: notchedTile ? null : 6.0,
-            hasLeading: leadingBuilder != null,
-            margin: margin,
-            children: choices.map((value) {
-              return tileConstructor(
-                trailing: selectedItem == value
-                    ? const Icon(CupertinoIcons.check_mark_circled_solid)
-                    : null,
-                title: titleBuilder(value),
-                subtitle: subtitleBuilder?.call(value),
-                leading: leadingBuilder?.call(value),
-                onTap: onSelectedItemChanged != null
-                    ? () => onSelectedItemChanged!(value)
-                    : null,
-              );
-            }).toList(growable: false),
+        return Padding(
+          padding: margin ?? Styles.bodySectionPadding,
+          child: Opacity(
+            opacity: onSelectedItemChanged != null ? 1.0 : 0.5,
+            child: CupertinoListSection.insetGrouped(
+              backgroundColor:
+                  CupertinoTheme.of(context).scaffoldBackgroundColor,
+              decoration: BoxDecoration(
+                color: Styles.cupertinoCardColor.resolveFrom(context),
+                borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+              ),
+              separatorColor:
+                  Styles.cupertinoSeparatorColor.resolveFrom(context),
+              margin: EdgeInsets.zero,
+              additionalDividerMargin: notchedTile ? null : 6.0,
+              hasLeading: leadingBuilder != null,
+              children: choices.map((value) {
+                return tileConstructor(
+                  trailing: selectedItem == value
+                      ? const Icon(CupertinoIcons.check_mark_circled_solid)
+                      : null,
+                  title: titleBuilder(value),
+                  subtitle: subtitleBuilder?.call(value),
+                  leading: leadingBuilder?.call(value),
+                  onTap: onSelectedItemChanged != null
+                      ? () => onSelectedItemChanged!(value)
+                      : null,
+                );
+              }).toList(growable: false),
+            ),
           ),
         );
       default:

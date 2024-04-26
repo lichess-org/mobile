@@ -1,10 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
+import 'package:lichess_mobile/src/widgets/cupertino.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
@@ -49,9 +49,7 @@ class _AccountPreferencesScreenState
           child: ListView(
             children: [
               ListSection(
-                header: Text(
-                  context.l10n.preferencesDisplay,
-                ),
+                header: SettingsSectionTitle(context.l10n.preferencesDisplay),
                 hasLeading: false,
                 children: [
                   SettingsListTile(
@@ -109,9 +107,8 @@ class _AccountPreferencesScreenState
                 ],
               ),
               ListSection(
-                header: Text(
-                  context.l10n.preferencesGameBehavior,
-                ),
+                header:
+                    SettingsSectionTitle(context.l10n.preferencesGameBehavior),
                 hasLeading: false,
                 children: [
                   SwitchSettingTile(
@@ -284,9 +281,8 @@ class _AccountPreferencesScreenState
                 ],
               ),
               ListSection(
-                header: Text(
-                  context.l10n.preferencesChessClock,
-                ),
+                header:
+                    SettingsSectionTitle(context.l10n.preferencesChessClock),
                 hasLeading: false,
                 children: [
                   SettingsListTile(
@@ -327,9 +323,7 @@ class _AccountPreferencesScreenState
                 ],
               ),
               ListSection(
-                header: Text(
-                  context.l10n.preferencesPrivacy,
-                ),
+                header: SettingsSectionTitle(context.l10n.preferencesPrivacy),
                 hasLeading: false,
                 children: [
                   SwitchSettingTile(

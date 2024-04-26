@@ -20,12 +20,11 @@ abstract class Styles {
     fontSize: 18.0,
     fontWeight: FontWeight.w600,
   );
-  static TextStyle get sectionTitle => TextStyle(
-        fontSize: defaultTargetPlatform == TargetPlatform.iOS ? 20 : 18,
-        letterSpacing:
-            defaultTargetPlatform == TargetPlatform.iOS ? -0.41 : null,
-        fontWeight: FontWeight.bold,
-      );
+  static final sectionTitle = TextStyle(
+    fontSize: defaultTargetPlatform == TargetPlatform.iOS ? 20 : 18,
+    letterSpacing: defaultTargetPlatform == TargetPlatform.iOS ? -0.41 : null,
+    fontWeight: FontWeight.bold,
+  );
   static const boardPreviewTitle = TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.bold,
@@ -56,6 +55,135 @@ abstract class Styles {
       defaultTargetPlatform == TargetPlatform.iOS
           ? CupertinoColors.secondaryLabel.resolveFrom(context)
           : null;
+  static const cupertinoAppBarColor = CupertinoDynamicColor.withBrightness(
+    color: Color(0xE6F9F9F9),
+    darkColor: Color(0xE61D1D1D),
+  );
+  static const cupertinoScaffoldColor = CupertinoDynamicColor.withBrightness(
+    color: Color.fromARGB(255, 242, 242, 247),
+    darkColor: Color.fromARGB(255, 20, 20, 21),
+  );
+  static const cupertinoPrimaryColor = CupertinoDynamicColor.withBrightness(
+    color: LichessColors.primary,
+    darkColor: Color(0xFF3692E7),
+  );
+
+  static const _cupertinoDarkLabelColor = Color(0xFFDCDCDC);
+  static const cupertinoLabelColor = CupertinoDynamicColor.withBrightness(
+    color: Color(0xFF000000),
+    darkColor: _cupertinoDarkLabelColor,
+  );
+  static const cupertinoTitleColor = CupertinoDynamicColor.withBrightness(
+    color: Color(0xFF000000),
+    darkColor: Color(0xFFF5F5F5),
+  );
+  static const cupertinoCardColor = CupertinoDynamicColor.withBrightness(
+    color: Color(0xFFFFFFFF),
+    darkColor: Color.fromARGB(255, 36, 36, 37),
+  );
+  static const cupertinoSeparatorColor = CupertinoDynamicColor.withBrightness(
+    debugLabel: 'separator',
+    color: Color.fromARGB(73, 60, 60, 67),
+    darkColor: Color.fromARGB(153, 101, 101, 105),
+  );
+
+  /// A Material Design text theme with light glyphs based on San Francisco.
+  ///
+  /// This [TextTheme] provides color but not geometry (font size, weight, etc).
+  ///
+  /// This theme uses the iOS version of the font names.
+  static const TextTheme whiteCupertinoTextTheme = TextTheme(
+    displayLarge: TextStyle(
+      debugLabel: 'whiteCupertino displayLarge',
+      fontFamily: 'CupertinoSystemDisplay',
+      color: Color(0xFFF5F5F5),
+      decoration: TextDecoration.none,
+    ),
+    displayMedium: TextStyle(
+      debugLabel: 'whiteCupertino displayMedium',
+      fontFamily: 'CupertinoSystemDisplay',
+      color: Color(0xFFF5F5F5),
+      decoration: TextDecoration.none,
+    ),
+    displaySmall: TextStyle(
+      debugLabel: 'whiteCupertino displaySmall',
+      fontFamily: 'CupertinoSystemDisplay',
+      color: Color(0xFFF5F5F5),
+      decoration: TextDecoration.none,
+    ),
+    headlineLarge: TextStyle(
+      debugLabel: 'whiteCupertino headlineLarge',
+      fontFamily: 'CupertinoSystemDisplay',
+      color: Color(0xFFF5F5F5),
+      decoration: TextDecoration.none,
+    ),
+    headlineMedium: TextStyle(
+      debugLabel: 'whiteCupertino headlineMedium',
+      fontFamily: 'CupertinoSystemDisplay',
+      color: Color(0xFFF5F5F5),
+      decoration: TextDecoration.none,
+    ),
+    headlineSmall: TextStyle(
+      debugLabel: 'whiteCupertino headlineSmall',
+      fontFamily: 'CupertinoSystemDisplay',
+      color: Color(0xFFF5F5F5),
+      decoration: TextDecoration.none,
+    ),
+    titleLarge: TextStyle(
+      debugLabel: 'whiteCupertino titleLarge',
+      fontFamily: 'CupertinoSystemDisplay',
+      color: _cupertinoDarkLabelColor,
+      decoration: TextDecoration.none,
+    ),
+    titleMedium: TextStyle(
+      debugLabel: 'whiteCupertino titleMedium',
+      fontFamily: 'CupertinoSystemText',
+      color: _cupertinoDarkLabelColor,
+      decoration: TextDecoration.none,
+    ),
+    titleSmall: TextStyle(
+      debugLabel: 'whiteCupertino titleSmall',
+      fontFamily: 'CupertinoSystemText',
+      color: _cupertinoDarkLabelColor,
+      decoration: TextDecoration.none,
+    ),
+    bodyLarge: TextStyle(
+      debugLabel: 'whiteCupertino bodyLarge',
+      fontFamily: 'CupertinoSystemText',
+      color: _cupertinoDarkLabelColor,
+      decoration: TextDecoration.none,
+    ),
+    bodyMedium: TextStyle(
+      debugLabel: 'whiteCupertino bodyMedium',
+      fontFamily: 'CupertinoSystemText',
+      color: _cupertinoDarkLabelColor,
+      decoration: TextDecoration.none,
+    ),
+    bodySmall: TextStyle(
+      debugLabel: 'whiteCupertino bodySmall',
+      fontFamily: 'CupertinoSystemText',
+      color: _cupertinoDarkLabelColor,
+      decoration: TextDecoration.none,
+    ),
+    labelLarge: TextStyle(
+      debugLabel: 'whiteCupertino labelLarge',
+      fontFamily: 'CupertinoSystemText',
+      color: _cupertinoDarkLabelColor,
+      decoration: TextDecoration.none,
+    ),
+    labelMedium: TextStyle(
+      debugLabel: 'whiteCupertino labelMedium',
+      fontFamily: 'CupertinoSystemText',
+      color: _cupertinoDarkLabelColor,
+      decoration: TextDecoration.none,
+    ),
+    labelSmall: TextStyle(
+      debugLabel: 'whiteCupertino labelSmall',
+      fontFamily: 'CupertinoSystemText',
+      color: _cupertinoDarkLabelColor,
+      decoration: TextDecoration.none,
+    ),
+  );
 
   /// Gets horizontal padding according to platform.
   static const horizontalBodyPadding = EdgeInsets.symmetric(horizontal: 16.0);

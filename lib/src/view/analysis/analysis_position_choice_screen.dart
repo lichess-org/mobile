@@ -35,6 +35,8 @@ class AnalysisPositionChoiceScreen extends StatelessWidget {
   Widget _iosBuilder(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
+        backgroundColor: Styles.cupertinoScaffoldColor.resolveFrom(context),
+        border: null,
         middle: Text(context.l10n.analysis),
       ),
       child: const _Body(),

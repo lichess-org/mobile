@@ -1,10 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/sound_theme.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/widgets/cupertino.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
@@ -60,6 +60,7 @@ class _Body extends ConsumerWidget {
       child: ListView(
         children: [
           ChoicePicker(
+            notchedTile: true,
             choices: SoundTheme.values,
             selectedItem: soundTheme,
             titleBuilder: (t) => Text(soundThemeL10n(context, t)),

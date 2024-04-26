@@ -68,6 +68,8 @@ class _StormScreenState extends State<StormScreen> {
   Widget _iosBuilder(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
+        backgroundColor: Styles.cupertinoScaffoldColor.resolveFrom(context),
+        border: null,
         padding: Styles.cupertinoAppBarTrailingWidgetPadding,
         middle: const Text('Puzzle Storm'),
         trailing: Row(

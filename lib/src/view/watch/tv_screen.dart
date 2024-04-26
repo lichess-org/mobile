@@ -1,6 +1,7 @@
 import 'package:chessground/chessground.dart' as cg;
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/cupertino.dart'
+    hide CupertinoNavigationBar, CupertinoPageScaffold;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -17,6 +18,7 @@ import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
+import 'package:lichess_mobile/src/widgets/cupertino.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
 class TvScreen extends ConsumerStatefulWidget {
@@ -218,7 +220,7 @@ class _BottomBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       color: Theme.of(context).platform == TargetPlatform.iOS
-          ? CupertinoTheme.of(context).barBackgroundColor
+          ? null
           : Theme.of(context).bottomAppBarTheme.color,
       child: SafeArea(
         top: false,

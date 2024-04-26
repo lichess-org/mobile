@@ -181,6 +181,13 @@ class ListSection extends StatelessWidget {
                     CupertinoListSection.insetGrouped(
                       backgroundColor:
                           CupertinoTheme.of(context).scaffoldBackgroundColor,
+                      decoration: BoxDecoration(
+                        color: Styles.cupertinoCardColor.resolveFrom(context),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10.0)),
+                      ),
+                      separatorColor:
+                          Styles.cupertinoSeparatorColor.resolveFrom(context),
                       margin: EdgeInsets.zero,
                       hasLeading: hasLeading,
                       additionalDividerMargin: cupertinoAdditionalDividerMargin,
@@ -255,6 +262,7 @@ class PlatformListTile extends StatelessWidget {
     this.selected = false,
     this.isThreeLine = false,
     this.padding,
+    this.cupertinoBackgroundColor,
     this.visualDensity,
     this.harmonizeCupertinoTitleStyle = false,
   });
@@ -265,6 +273,8 @@ class PlatformListTile extends StatelessWidget {
   final Widget? trailing;
 
   final EdgeInsetsGeometry? padding;
+
+  final Color? cupertinoBackgroundColor;
 
   /// only on iOS
   final Widget? additionalInfo;
@@ -321,6 +331,7 @@ class PlatformListTile extends StatelessWidget {
           child: GestureDetector(
             onLongPress: onLongPress,
             child: CupertinoListTile.notched(
+              backgroundColor: cupertinoBackgroundColor,
               leading: leading,
               title: harmonizeCupertinoTitleStyle
                   ? DefaultTextStyle.merge(

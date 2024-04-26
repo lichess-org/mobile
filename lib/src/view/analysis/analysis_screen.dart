@@ -161,6 +161,8 @@ class _LoadedAnalysisScreen extends ConsumerWidget {
     return CupertinoPageScaffold(
       resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
+        backgroundColor: Styles.cupertinoScaffoldColor.resolveFrom(context),
+        border: null,
         padding: Styles.cupertinoAppBarTrailingWidgetPadding,
         middle: _Title(options: options, title: title),
         trailing: Row(

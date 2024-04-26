@@ -57,6 +57,8 @@ class StreakScreen extends StatelessWidget {
   Widget _iosBuilder(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
+        backgroundColor: Styles.cupertinoScaffoldColor.resolveFrom(context),
+        border: null,
         padding: Styles.cupertinoAppBarTrailingWidgetPadding,
         middle: const Text('Puzzle Streak'),
         trailing: ToggleSoundButton(),

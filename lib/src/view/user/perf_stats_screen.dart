@@ -123,8 +123,9 @@ class _Title extends StatelessWidget {
                         ? CupertinoTheme.of(context).primaryColor
                         : null,
                   ),
+                  const SizedBox(width: 6),
                   Text(
-                    ' ${context.l10n.perfStatPerfStats(p.title)}',
+                    context.l10n.perfStatPerfStats(p.title),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ],
