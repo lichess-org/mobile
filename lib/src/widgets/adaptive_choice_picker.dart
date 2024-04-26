@@ -43,7 +43,7 @@ Future<void> showChoicePicker<T>(
         },
       );
     case TargetPlatform.iOS:
-      if (choices.length <= 6) {
+      if (choices.length <= 10) {
         return showCupertinoModalPopup<void>(
           context: context,
           builder: (context) {

@@ -118,11 +118,6 @@ class _Title extends StatelessWidget {
                 context.l10n.perfStatPerfStats(p.title),
                 overflow: TextOverflow.ellipsis,
               ),
-              trailing: Icon(
-                LichessIcons.circle,
-                color: perf == p ? LichessColors.good : LichessColors.grey,
-                size: 16,
-              ),
               onPressed: (ctx) {
                 pushReplacementPlatformRoute(
                   context,
