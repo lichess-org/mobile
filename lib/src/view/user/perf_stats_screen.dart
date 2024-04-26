@@ -114,9 +114,21 @@ class _Title extends StatelessWidget {
           context: context,
           actions: allPerfs.map((p) {
             return BottomSheetAction(
-              makeLabel: (context) => Text(
-                context.l10n.perfStatPerfStats(p.title),
-                overflow: TextOverflow.ellipsis,
+              makeLabel: (context) => Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    p.icon,
+                    color: Theme.of(context).platform == TargetPlatform.iOS
+                        ? CupertinoTheme.of(context).primaryColor
+                        : null,
+                  ),
+                  const SizedBox(width: 6),
+                  Text(
+                    context.l10n.perfStatPerfStats(p.title),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
               ),
               onPressed: (ctx) {
                 pushReplacementPlatformRoute(
