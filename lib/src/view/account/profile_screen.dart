@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart'
-    hide CupertinoPageScaffold, CupertinoSliverNavigationBar;
+    hide CupertinoNavigationBar, CupertinoPageScaffold;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
@@ -81,60 +81,49 @@ class ProfileScreen extends ConsumerWidget {
   Widget _buildIos(BuildContext context, WidgetRef ref) {
     final account = ref.watch(accountProvider);
     return CupertinoPageScaffold(
-      child: CustomScrollView(
-        slivers: [
-          CupertinoSliverNavigationBar(
-            automaticallyImplyTitle: false,
-            middle: account.when(
-              data: (user) => user == null
-                  ? const SizedBox.shrink()
-                  : UserFullNameWidget(user: user.lightUser),
-              loading: () => const SizedBox.shrink(),
-              error: (error, _) => const SizedBox.shrink(),
-            ),
-            trailing: AppBarIconButton(
-              icon: const Icon(CupertinoIcons.square_pencil),
-              semanticsLabel: context.l10n.editProfile,
-              onPressed: () => pushPlatformRoute(
-                title: context.l10n.editProfile,
-                context,
-                builder: (_) => const EditProfileScreen(),
-              ),
-            ),
+      navigationBar: CupertinoNavigationBar(
+        middle: account.when(
+          data: (user) => user == null
+              ? const SizedBox.shrink()
+              : UserFullNameWidget(user: user.lightUser),
+          loading: () => const SizedBox.shrink(),
+          error: (error, _) => const SizedBox.shrink(),
+        ),
+        trailing: AppBarIconButton(
+          icon: const Icon(CupertinoIcons.square_pencil),
+          semanticsLabel: context.l10n.editProfile,
+          onPressed: () => pushPlatformRoute(
+            title: context.l10n.editProfile,
+            context,
+            builder: (_) => const EditProfileScreen(),
           ),
-          account.when(
-            data: (user) {
-              if (user == null) {
-                return const SliverToBoxAdapter(
-                  child: Center(
-                    child: Text('You must be logged in to view this page.'),
-                  ),
-                );
-              }
-              return SliverSafeArea(
-                top: false,
-                sliver: SliverList(
-                  delegate: SliverChildListDelegate.fixed([
-                    UserProfile(user: user),
-                    const _PerfCards(),
-                    const UserActivityWidget(),
-                    const RecentGames(),
-                  ]),
-                ),
-              );
-            },
-            loading: () => const SliverToBoxAdapter(
-              child: Center(child: CircularProgressIndicator.adaptive()),
+        ),
+      ),
+      child: account.when(
+        data: (user) {
+          if (user == null) {
+            return const Center(
+              child: Text('You must be logged in to view this page.'),
+            );
+          }
+          return SafeArea(
+            child: ListView(
+              children: [
+                UserProfile(user: user),
+                const _PerfCards(),
+                const UserActivityWidget(),
+                const RecentGames(),
+              ],
             ),
-            error: (error, _) {
-              return SliverToBoxAdapter(
-                child: FullScreenRetryRequest(
-                  onRetry: () => ref.invalidate(accountProvider),
-                ),
-              );
-            },
-          ),
-        ],
+          );
+        },
+        loading: () =>
+            const Center(child: CircularProgressIndicator.adaptive()),
+        error: (error, _) {
+          return FullScreenRetryRequest(
+            onRetry: () => ref.invalidate(accountProvider),
+          );
+        },
       ),
     );
   }
