@@ -2,7 +2,8 @@ import 'dart:async';
 
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/cupertino.dart'
+    hide CupertinoNavigationBar, CupertinoPageScaffold;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -27,6 +28,7 @@ import 'package:lichess_mobile/src/view/game/standalone_game_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/cupertino.dart';
 import 'package:lichess_mobile/src/widgets/expanded_section.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';

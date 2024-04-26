@@ -3,6 +3,8 @@
 // Modified to allow transparent background color for the expanded state of the CupertinoSliverNavigationBar.
 // Modified to allow an optional `largeTitle` widget for the CupertinoSliverNavigationBar
 
+// ignore_for_file: require_trailing_commas
+
 // Copyright 2014 The Flutter Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
@@ -27,6 +29,8 @@ const double _kNavBarLargeTitleHeightExtension = 52.0;
 /// Number of logical pixels scrolled down before the title text is transferred
 /// from the normal navigation bar to a big title below the navigation bar.
 const double _kNavBarShowLargeTitleThreshold = 10.0;
+
+const double _kNavBarScrollUnderRefreshExtent = 10.0;
 
 const double _kNavBarEdgePadding = 16.0;
 
@@ -443,7 +447,7 @@ class _CupertinoNavigationBarState extends State<CupertinoNavigationBar> {
   late _NavigationBarStaticComponentsKeys keys;
 
   ScrollNotificationObserverState? _scrollNotificationObserver;
-  double _scrollExtent = 0.0;
+  double _transparentAnimationValue = 0.0;
 
   @override
   void initState() {
@@ -471,12 +475,14 @@ class _CupertinoNavigationBarState extends State<CupertinoNavigationBar> {
   void _handleScrollNotification(ScrollNotification notification) {
     if (notification is ScrollUpdateNotification && notification.depth == 0) {
       final ScrollMetrics metrics = notification.metrics;
+      final oldTransparentAnimationValue = _transparentAnimationValue;
+      double scrollExtent = 0.0;
       switch (metrics.axisDirection) {
         case AxisDirection.up:
           // Scroll view is reversed
-          _scrollExtent = metrics.extentAfter;
+          scrollExtent = metrics.extentAfter;
         case AxisDirection.down:
-          _scrollExtent = metrics.extentBefore;
+          scrollExtent = metrics.extentBefore;
         case AxisDirection.right:
         case AxisDirection.left:
           // Scrolled under is only supported in the vertical axis, and should
@@ -485,9 +491,20 @@ class _CupertinoNavigationBarState extends State<CupertinoNavigationBar> {
           break;
       }
 
-      if (_scrollExtent >= 0 && _scrollExtent < 10) {
+      if (scrollExtent >= 0 &&
+          scrollExtent < _kNavBarScrollUnderRefreshExtent) {
         setState(() {
-          // Rebuild the nav bar with the new scrolled extent state.
+          _transparentAnimationValue = Curves.easeOut.transform(clampDouble(
+              scrollExtent / _kNavBarScrollUnderRefreshExtent, 0, 1));
+        });
+      } else if (scrollExtent > _kNavBarScrollUnderRefreshExtent &&
+          oldTransparentAnimationValue != 1.0) {
+        setState(() {
+          _transparentAnimationValue = 1.0;
+        });
+      } else if (scrollExtent <= 0 && oldTransparentAnimationValue != 0.0) {
+        setState(() {
+          _transparentAnimationValue = 0.0;
         });
       }
     }
@@ -495,16 +512,13 @@ class _CupertinoNavigationBarState extends State<CupertinoNavigationBar> {
 
   @override
   Widget build(BuildContext context) {
-    final double transparentAnimationValue = Curves.easeOut.transform(
-        _scrollExtent > 0 ? clampDouble(_scrollExtent - 10 / 10, 0, 1) : 0);
-
     final Color backgroundColor =
         CupertinoDynamicColor.maybeResolve(widget.backgroundColor, context) ??
             CupertinoTheme.of(context).barBackgroundColor;
 
     final effectiveBorder = widget.transparentUnscrolledBackground
         ? Border.lerp(
-            widget.border?.scale(0), widget.border, transparentAnimationValue)
+            widget.border?.scale(0), widget.border, _transparentAnimationValue)
         : widget.border;
 
     final unscrolledBackgroundColor = widget.transparentUnscrolledBackground
@@ -516,7 +530,7 @@ class _CupertinoNavigationBarState extends State<CupertinoNavigationBar> {
         ? Color.lerp(
             CupertinoDynamicColor.resolve(unscrolledBackgroundColor, context),
             CupertinoDynamicColor.resolve(backgroundColor, context),
-            transparentAnimationValue,
+            _transparentAnimationValue,
           )!
         : backgroundColor;
 
@@ -904,11 +918,11 @@ class _LargeTitleNavigationBarSliverDelegate
                 (components.largeTitle != null
                     ? _kNavBarShowLargeTitleThreshold
                     : 0)
-        ? Curves.easeOut.transform(clampDouble(
+        ? clampDouble(
             (shrinkOffset - scrollTransparentThreshold) /
                 scrollTransparentThreshold,
             0,
-            1))
+            1)
         : 0;
 
     final _PersistentNavigationBar persistentNavigationBar =

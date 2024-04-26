@@ -20,12 +20,11 @@ abstract class Styles {
     fontSize: 18.0,
     fontWeight: FontWeight.w600,
   );
-  static TextStyle get sectionTitle => TextStyle(
-        fontSize: defaultTargetPlatform == TargetPlatform.iOS ? 20 : 18,
-        letterSpacing:
-            defaultTargetPlatform == TargetPlatform.iOS ? -0.41 : null,
-        fontWeight: FontWeight.bold,
-      );
+  static final sectionTitle = TextStyle(
+    fontSize: defaultTargetPlatform == TargetPlatform.iOS ? 20 : 18,
+    letterSpacing: defaultTargetPlatform == TargetPlatform.iOS ? -0.41 : null,
+    fontWeight: FontWeight.bold,
+  );
   static const boardPreviewTitle = TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.bold,

@@ -331,8 +331,7 @@ class PlatformListTile extends StatelessWidget {
           child: GestureDetector(
             onLongPress: onLongPress,
             child: CupertinoListTile.notched(
-              backgroundColor: cupertinoBackgroundColor ??
-                  Styles.cupertinoCardColor.resolveFrom(context),
+              backgroundColor: cupertinoBackgroundColor,
               leading: leading,
               title: harmonizeCupertinoTitleStyle
                   ? DefaultTextStyle.merge(

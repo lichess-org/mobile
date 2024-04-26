@@ -19,7 +19,6 @@ analyzer:
     - "**/*.freezed.dart"
     - lib/src/styles/lichess_icons.dart
     - lib/src/styles/social_icons.dart
-    # - lib/src/widgets/cupertino_nav_bar.dart
     - lib/firebase_options.dart
     - lib/l10n/*.dart
   errors:

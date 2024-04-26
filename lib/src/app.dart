@@ -130,8 +130,27 @@ class _AppState extends ConsumerState<Application> {
                 brightness: brightness,
               );
 
-        final theme = Theme.of(context);
-        final cupertinoTheme = CupertinoTheme.of(context);
+        final cupertinoThemeData = CupertinoThemeData(
+          primaryColor: Styles.cupertinoPrimaryColor,
+          brightness: brightness,
+          textTheme: CupertinoTheme.of(context).textTheme.copyWith(
+                primaryColor: Styles.cupertinoPrimaryColor,
+                textStyle: CupertinoTheme.of(context)
+                    .textTheme
+                    .textStyle
+                    .copyWith(color: Styles.cupertinoLabelColor),
+                navTitleTextStyle: CupertinoTheme.of(context)
+                    .textTheme
+                    .navTitleTextStyle
+                    .copyWith(color: Styles.cupertinoTitleColor),
+                navLargeTitleTextStyle: CupertinoTheme.of(context)
+                    .textTheme
+                    .navLargeTitleTextStyle
+                    .copyWith(color: Styles.cupertinoTitleColor),
+              ),
+          scaffoldBackgroundColor: Styles.cupertinoScaffoldColor,
+          barBackgroundColor: Styles.cupertinoAppBarColor,
+        );
 
         return MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -139,45 +158,30 @@ class _AppState extends ConsumerState<Application> {
           onGenerateTitle: (BuildContext context) => 'lichess.org',
           theme: ThemeData.from(
             colorScheme: colorScheme,
-            textTheme: theme.platform == TargetPlatform.iOS
+            textTheme: Theme.of(context).platform == TargetPlatform.iOS
                 ? brightness == Brightness.light
                     ? Typography.blackCupertino
                     : Styles.whiteCupertinoTextTheme
                 : null,
           ).copyWith(
+            cupertinoOverrideTheme: cupertinoThemeData,
             navigationBarTheme: NavigationBarTheme.of(context).copyWith(
               height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold
                   ? 60
                   : null,
             ),
             extensions: [
-              if (theme.platform == TargetPlatform.android)
+              if (Theme.of(context).platform == TargetPlatform.android)
                 lichessCustomColors.harmonized(colorScheme)
               else
                 lichessCustomColors,
             ],
           ),
           themeMode: themeMode,
-          builder: theme.platform == TargetPlatform.iOS
+          builder: Theme.of(context).platform == TargetPlatform.iOS
               ? (context, child) {
                   return CupertinoTheme(
-                    data: CupertinoThemeData(
-                      primaryColor: Styles.cupertinoPrimaryColor,
-                      brightness: brightness,
-                      textTheme: cupertinoTheme.textTheme.copyWith(
-                        primaryColor: Styles.cupertinoPrimaryColor,
-                        textStyle: cupertinoTheme.textTheme.textStyle
-                            .copyWith(color: Styles.cupertinoLabelColor),
-                        navTitleTextStyle: cupertinoTheme
-                            .textTheme.navTitleTextStyle
-                            .copyWith(color: Styles.cupertinoTitleColor),
-                        navLargeTitleTextStyle: cupertinoTheme
-                            .textTheme.navLargeTitleTextStyle
-                            .copyWith(color: Styles.cupertinoTitleColor),
-                      ),
-                      scaffoldBackgroundColor: Styles.cupertinoScaffoldColor,
-                      barBackgroundColor: Styles.cupertinoAppBarColor,
-                    ),
+                    data: cupertinoThemeData,
                     child: IconTheme(
                       // This is needed to avoid the icon color being overridden by the cupertino theme (blue)
                       data: IconTheme.of(context),
