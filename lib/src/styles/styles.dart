@@ -56,8 +56,8 @@ abstract class Styles {
           ? CupertinoColors.secondaryLabel.resolveFrom(context)
           : null;
   static const cupertinoAppBarColor = CupertinoDynamicColor.withBrightness(
-    color: Color(0xF0F9F9F9),
-    darkColor: Color(0xF01D1D1D),
+    color: Color(0xE6F9F9F9),
+    darkColor: Color(0xE61D1D1D),
   );
   static const cupertinoScaffoldColor = CupertinoDynamicColor.withBrightness(
     color: Color.fromARGB(255, 242, 242, 247),
