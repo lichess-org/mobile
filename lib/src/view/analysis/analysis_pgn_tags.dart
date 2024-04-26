@@ -1,12 +1,16 @@
+import 'package:collection/collection.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_date_picker.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_text_field.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 
 final _dateFormat = DateFormat('yyyy.MM.dd');
 
@@ -15,6 +19,26 @@ class AnalysisPgnTags extends ConsumerWidget {
 
   final String pgn;
   final AnalysisOptions options;
+
+  void _openNextDialog(
+    IMap<String, String> pgnHeaders,
+    int index,
+    BuildContext context,
+  ) {
+    if (index < pgnHeaders.entries.length - 1 && context.mounted) {
+      final entry = pgnHeaders.entries.elementAt(index + 1);
+      showAdaptiveDialog<void>(
+        context: context,
+        builder: (context) => _EditDialog(
+          entry.key,
+          entry.value,
+          pgn: pgn,
+          options: options,
+          onNext: () => _openNextDialog(pgnHeaders, index + 1, context),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -32,7 +56,7 @@ class AnalysisPgnTags extends ConsumerWidget {
             label: Icon(Icons.edit, color: Colors.grey),
           ),
         ],
-        rows: pgnHeaders.entries.map((e) {
+        rows: pgnHeaders.entries.mapIndexed((index, e) {
           return DataRow(
             cells: [
               DataCell(
@@ -89,6 +113,8 @@ class AnalysisPgnTags extends ConsumerWidget {
                         e.value,
                         pgn: pgn,
                         options: options,
+                        onNext: () =>
+                            _openNextDialog(pgnHeaders, index, context),
                       ),
                     );
                   }
@@ -102,52 +128,105 @@ class AnalysisPgnTags extends ConsumerWidget {
   }
 }
 
-class _EditDialog extends ConsumerWidget {
+class _EditDialog extends ConsumerStatefulWidget {
   const _EditDialog(
     this.fieldKey,
     this.fieldValue, {
     required this.pgn,
     required this.options,
+    required this.onNext,
   });
 
   final String pgn;
   final AnalysisOptions options;
   final String fieldKey;
   final String fieldValue;
+  final VoidCallback onNext;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_EditDialog> createState() => _EditDialogState();
+}
+
+class _EditDialogState extends ConsumerState<_EditDialog> {
+  bool isValidInput = true;
+  late final TextEditingController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = TextEditingController.fromValue(
+      TextEditingValue(
+        text: widget.fieldValue,
+        selection: TextSelection(
+          baseOffset: 0,
+          extentOffset: widget.fieldValue.length,
+        ),
+      ),
+    );
+  }
+
+  void submitValue() {
+    if (widget.fieldKey == 'Date') {
+      try {
+        _dateFormat.parse(controller.value.text);
+      } catch (_) {
+        setState(() {
+          isValidInput = false;
+        });
+        return;
+      }
+    }
+    ref
+        .read(
+          analysisControllerProvider(widget.pgn, widget.options).notifier,
+        )
+        .updatePgnHeader(widget.fieldKey, controller.value.text);
+    Navigator.of(context).pop();
+    widget.onNext();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final content = Column(
       mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        AdaptiveTextField(
-          autofocus: true,
-          keyboardType: fieldKey == 'WhiteElo' || fieldKey == 'BlackElo'
-              ? TextInputType.number
-              : TextInputType.text,
-          controller: TextEditingController.fromValue(
-            TextEditingValue(
-              text: fieldValue,
-              selection:
-                  TextSelection(baseOffset: 0, extentOffset: fieldValue.length),
-            ),
+        if (widget.fieldKey == 'Date')
+          const Align(
+            alignment: Alignment.topLeft,
+            child: Text('Format: yyyy.MM.dd'),
           ),
+        AdaptiveTextField(
+          materialDecoration:
+              InputDecoration(errorText: !isValidInput ? 'Invalid Date' : null),
+          autofocus: true,
+          keyboardType:
+              widget.fieldKey == 'WhiteElo' || widget.fieldKey == 'BlackElo'
+                  ? TextInputType.number
+                  : TextInputType.text,
+          controller: controller,
           onSubmitted: (value) {
-            ref
-                .read(analysisControllerProvider(pgn, options).notifier)
-                .updatePgnHeader(fieldKey, value);
+            submitValue();
             Navigator.of(context).pop();
           },
+        ),
+        AdaptiveTextButton(
+          onPressed: () {
+            submitValue();
+          },
+          child: Text(context.l10n.next),
         ),
       ],
     );
 
     if (Theme.of(context).platform == TargetPlatform.iOS) {
       return CupertinoAlertDialog(
+        title: Text(widget.fieldKey),
         content: content,
       );
     } else {
       return AlertDialog(
+        title: Text(widget.fieldKey),
         content: content,
       );
     }
