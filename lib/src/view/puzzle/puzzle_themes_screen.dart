@@ -178,6 +178,7 @@ class _Category extends ConsumerWidget {
         title: Text(categoryName),
         children: [
           ListSection(
+            hasLeading: true,
             children: themes.map(
               (theme) {
                 final isThemeAvailable =

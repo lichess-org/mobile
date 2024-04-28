@@ -85,7 +85,7 @@ class OngoingGamePreview extends ConsumerWidget {
           Icon(
             game.perf.icon,
             size: 34,
-            color: DefaultTextStyle.of(context).style.color,
+            color: DefaultTextStyle.of(context).style.color?.withOpacity(0.6),
           ),
           if (game.secondsLeft != null && game.secondsLeft! > 0)
             Text(

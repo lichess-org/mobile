@@ -419,8 +419,6 @@ class _QuickGameButton extends ConsumerWidget {
       padding:
           Styles.horizontalBodyPadding.add(const EdgeInsets.only(top: 6.0)),
       child: PlatformCard(
-        elevation:
-            Theme.of(context).platform == TargetPlatform.iOS ? 0.1 : null,
         child: Row(
           children: [
             SizedBox(

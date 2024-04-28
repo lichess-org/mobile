@@ -353,7 +353,6 @@ class _CardButtonState extends State<CardButton> {
             child: Opacity(
               opacity: widget.onTap == null ? 0.4 : 1.0,
               child: PlatformCard(
-                elevation: 0.1,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 6.0),
                   child: ListTileTheme(

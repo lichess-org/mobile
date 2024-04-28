@@ -134,10 +134,6 @@ class _Body extends ConsumerWidget {
 
     final isTablet = getScreenType(context) == ScreenType.tablet;
 
-    final separator = Theme.of(context).platform == TargetPlatform.iOS
-        ? const SizedBox(height: 16.0)
-        : const SizedBox(height: 8.0);
-
     final handsetChildren = [
       const SizedBox(height: 8.0),
       connectivity.when(
@@ -147,14 +143,9 @@ class _Body extends ConsumerWidget {
         loading: () => const SizedBox.shrink(),
         error: (_, __) => const SizedBox.shrink(),
       ),
-      PuzzleButton(),
-      separator,
-      const PuzzleThemeButton(),
-      separator,
-      StreakButton(connectivity: connectivity),
-      separator,
-      StormButton(connectivity: connectivity),
-      separator,
+      if (Theme.of(context).platform == TargetPlatform.android)
+        const SizedBox(height: 8.0),
+      PuzzleMenu(connectivity: connectivity),
       PuzzleHistoryWidget(),
     ];
 
@@ -175,13 +166,7 @@ class _Body extends ConsumerWidget {
                   loading: () => const SizedBox.shrink(),
                   error: (_, __) => const SizedBox.shrink(),
                 ),
-                PuzzleButton(),
-                separator,
-                const PuzzleThemeButton(),
-                separator,
-                StreakButton(connectivity: connectivity),
-                separator,
-                StormButton(connectivity: connectivity),
+                PuzzleMenu(connectivity: connectivity),
               ],
             ),
           ),
@@ -207,142 +192,157 @@ class _Body extends ConsumerWidget {
   }
 }
 
-class PuzzleButton extends ConsumerWidget {
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    const angle = PuzzleTheme(PuzzleThemeKey.mix);
-    return Padding(
-      padding:
-          Styles.horizontalBodyPadding.add(const EdgeInsets.only(top: 8.0)),
-      child: _PuzzleButton(
-        onTap: () {
-          pushPlatformRoute(
-            context,
-            title: context.l10n.puzzleDesc,
-            rootNavigator: true,
-            builder: (context) => const PuzzleScreen(angle: angle),
-          );
-        },
-      ),
-    );
-  }
-}
-
-const _subPuzzleButtonTitleStyle = TextStyle(
-  fontSize: 18.0,
-  fontWeight: FontWeight.w500,
-);
-
-class StreakButton extends StatelessWidget {
-  const StreakButton({required this.connectivity, super.key});
+class PuzzleMenu extends StatelessWidget {
+  const PuzzleMenu({required this.connectivity, super.key});
 
   final AsyncValue<ConnectivityStatus> connectivity;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: Styles.horizontalBodyPadding,
-      child: CardButton(
-        icon: Icon(
-          LichessIcons.streak,
-          size: 44,
-          color: context.lichessColors.fancy,
-        ),
-        title: const Text(
-          'Puzzle Streak',
-          style: _subPuzzleButtonTitleStyle,
-        ),
-        subtitle: Text(
-          context.l10n.puzzleStreakDescription.characters
-                  .takeWhile((c) => c != '.')
-                  .toString() +
-              (context.l10n.puzzleStreakDescription.contains('.') ? '.' : ''),
-        ),
-        onTap: connectivity.when(
-          data: (data) => data.isOnline
-              ? () {
-                  pushPlatformRoute(
-                    context,
-                    rootNavigator: true,
-                    builder: (context) => const StreakScreen(),
-                  );
-                }
+    final topPadding = Theme.of(context).platform == TargetPlatform.iOS
+        ? const EdgeInsets.only(top: 8.0)
+        : EdgeInsets.zero;
+
+    final titleStyle = Theme.of(context).platform == TargetPlatform.iOS
+        ? null
+        : Theme.of(context).textTheme.titleMedium;
+
+    return ListSection(
+      hasLeading: true,
+      children: [
+        PlatformListTile(
+          leading: Icon(
+            LichessIcons.target,
+            size: 32,
+            color: context.lichessColors.good,
+          ),
+          title: Padding(
+            padding: topPadding,
+            child: Text(context.l10n.puzzlePuzzles, style: titleStyle),
+          ),
+          subtitle: Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: Text(context.l10n.puzzleDesc, maxLines: 3),
+          ),
+          trailing: Theme.of(context).platform == TargetPlatform.iOS
+              ? const CupertinoListTileChevron()
               : null,
-          loading: () => null,
-          error: (_, __) => null,
+          onTap: () {
+            pushPlatformRoute(
+              context,
+              title: context.l10n.puzzleDesc,
+              rootNavigator: true,
+              builder: (context) =>
+                  const PuzzleScreen(angle: PuzzleTheme(PuzzleThemeKey.mix)),
+            );
+          },
         ),
-      ),
-    );
-  }
-}
-
-class StormButton extends StatelessWidget {
-  const StormButton({required this.connectivity, super.key});
-
-  final AsyncValue<ConnectivityStatus> connectivity;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: Styles.horizontalBodyPadding,
-      child: CardButton(
-        icon: Icon(
-          LichessIcons.storm,
-          size: 44,
-          color: context.lichessColors.purple,
-        ),
-        title: const Text(
-          'Puzzle Storm',
-          style: _subPuzzleButtonTitleStyle,
-        ),
-        subtitle: const Text(
-          'Solve as many puzzles as possible in 3 minutes.',
-        ),
-        onTap: connectivity.when(
-          data: (data) => data.isOnline
-              ? () {
-                  pushPlatformRoute(
-                    context,
-                    rootNavigator: true,
-                    builder: (context) => const StormScreen(),
-                  );
-                }
+        PlatformListTile(
+          leading: Icon(
+            PuzzleIcons.opening,
+            size: 32,
+            color: context.lichessColors.primary,
+          ),
+          title: Padding(
+            padding: topPadding,
+            child: Text(context.l10n.puzzlePuzzleThemes, style: titleStyle),
+          ),
+          subtitle: const Padding(
+            padding: EdgeInsets.only(bottom: 8.0),
+            child: Text(
+              'Play puzzles from your favorite openings, or choose a theme.',
+              maxLines: 3,
+            ),
+          ),
+          trailing: Theme.of(context).platform == TargetPlatform.iOS
+              ? const CupertinoListTileChevron()
               : null,
-          loading: () => null,
-          error: (_, __) => null,
+          isThreeLine: true,
+          onTap: () {
+            pushPlatformRoute(
+              context,
+              title: context.l10n.puzzlePuzzleThemes,
+              rootNavigator: true,
+              builder: (context) => const PuzzleThemesScreen(),
+            );
+          },
         ),
-      ),
-    );
-  }
-}
-
-class PuzzleThemeButton extends StatelessWidget {
-  const PuzzleThemeButton({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: Styles.horizontalBodyPadding,
-      child: CardButton(
-        icon: Icon(
-          PuzzleIcons.opening,
-          size: 44,
-          color: context.lichessColors.primary,
+        PlatformListTile(
+          leading: Icon(
+            LichessIcons.streak,
+            size: 32,
+            color: context.lichessColors.fancy,
+          ),
+          title: Padding(
+            padding: topPadding,
+            child: Text('Puzzle Streak', style: titleStyle),
+          ),
+          subtitle: Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: Text(
+              context.l10n.puzzleStreakDescription.characters
+                      .takeWhile((c) => c != '.')
+                      .toString() +
+                  (context.l10n.puzzleStreakDescription.contains('.')
+                      ? '.'
+                      : ''),
+              maxLines: 3,
+            ),
+          ),
+          trailing: Theme.of(context).platform == TargetPlatform.iOS
+              ? const CupertinoListTileChevron()
+              : null,
+          isThreeLine: true,
+          onTap: connectivity.when(
+            data: (data) => data.isOnline
+                ? () {
+                    pushPlatformRoute(
+                      context,
+                      rootNavigator: true,
+                      builder: (context) => const StreakScreen(),
+                    );
+                  }
+                : null,
+            loading: () => null,
+            error: (_, __) => null,
+          ),
         ),
-        title: Text(
-          context.l10n.puzzlePuzzleThemes,
-          style: _subPuzzleButtonTitleStyle,
+        PlatformListTile(
+          leading: Icon(
+            LichessIcons.storm,
+            size: 32,
+            color: context.lichessColors.purple,
+          ),
+          title: Padding(
+            padding: topPadding,
+            child: Text('Puzzle Storm', style: titleStyle),
+          ),
+          subtitle: const Padding(
+            padding: EdgeInsets.only(bottom: 8.0),
+            child: Text(
+              'Solve as many puzzles as possible in 3 minutes.',
+              maxLines: 3,
+            ),
+          ),
+          trailing: Theme.of(context).platform == TargetPlatform.iOS
+              ? const CupertinoListTileChevron()
+              : null,
+          isThreeLine: true,
+          onTap: connectivity.when(
+            data: (data) => data.isOnline
+                ? () {
+                    pushPlatformRoute(
+                      context,
+                      rootNavigator: true,
+                      builder: (context) => const StormScreen(),
+                    );
+                  }
+                : null,
+            loading: () => null,
+            error: (_, __) => null,
+          ),
         ),
-        subtitle: const Text(
-          'Play puzzles from your favorite openings, or choose a theme.',
-        ),
-        onTap: () {
-          pushPlatformRoute(
-            context,
-            builder: (context) => const PuzzleThemesScreen(),
-          );
-        },
-      ),
+      ],
     );
   }
 }
@@ -451,29 +451,6 @@ class _DashboardButton extends ConsumerWidget {
       );
 }
 
-class _PuzzleButton extends StatelessWidget {
-  const _PuzzleButton({this.onTap});
-
-  final VoidCallback? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return CardButton(
-      icon: Icon(
-        PuzzleIcons.mix,
-        size: 44,
-        color: context.lichessColors.good,
-      ),
-      title: Text(
-        context.l10n.puzzles,
-        style: Styles.sectionTitle,
-      ),
-      subtitle: Text('${context.l10n.puzzleDesc}.'),
-      onTap: onTap,
-    );
-  }
-}
-
 class _DailyPuzzle extends ConsumerWidget {
   const _DailyPuzzle();
 
@@ -489,7 +466,7 @@ class _DailyPuzzle extends ConsumerWidget {
           lastMove: preview.initialMove.cg,
           description: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -504,6 +481,12 @@ class _DailyPuzzle extends ConsumerWidget {
                         .localizeNumbers(),
                   ),
                 ],
+              ),
+              Icon(
+                Icons.today,
+                size: 34,
+                color:
+                    DefaultTextStyle.of(context).style.color?.withOpacity(0.6),
               ),
               Text(
                 data.puzzle.initialPly.isOdd
