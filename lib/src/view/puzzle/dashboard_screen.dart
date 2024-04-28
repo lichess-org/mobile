@@ -62,7 +62,7 @@ class PuzzleDashboardWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final puzzleDashboard =
-        ref.watch(puzzleDashboardProvider(ref.read(daysProvider).days));
+        ref.watch(puzzleDashboardProvider(ref.watch(daysProvider).days));
 
     return puzzleDashboard.when(
       data: (dashboard) {
