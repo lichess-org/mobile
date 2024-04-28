@@ -6,7 +6,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:http/http.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
-import 'package:lichess_mobile/src/utils/package_info.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:stream_transform/stream_transform.dart';
 
@@ -23,7 +22,7 @@ class ConnectivityStatus with _$ConnectivityStatus {
 
 @riverpod
 Future<ConnectivityStatus> connectivity(ConnectivityRef ref) async {
-  final client = httpClient(ref.read(packageInfoProvider));
+  final client = httpClientFactory();
   ref.onDispose(client.close);
   final connectivityResult = await Connectivity().checkConnectivity();
   try {
@@ -42,7 +41,7 @@ Stream<ConnectivityStatus> connectivityChanges(ConnectivityChangesRef ref) {
   final firstCheck =
       Stream.fromFuture(Connectivity().checkConnectivity()).asyncMap(
     (result) async {
-      final client = httpClient(ref.read(packageInfoProvider));
+      final client = httpClientFactory();
       try {
         return ConnectivityStatus(
           connectivityResult: result.lock,
@@ -56,7 +55,7 @@ Stream<ConnectivityStatus> connectivityChanges(ConnectivityChangesRef ref) {
 
   return Connectivity().onConnectivityChanged.asyncMap(
     (result) async {
-      final client = httpClient(ref.read(packageInfoProvider));
+      final client = httpClientFactory();
       try {
         return ConnectivityStatus(
           connectivityResult: result.lock,

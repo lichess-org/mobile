@@ -94,7 +94,7 @@ Future<AppDependencies> appDependencies(
 
   final storedSession = await sessionStorage.read();
   if (storedSession != null) {
-    final client = httpClient(pInfo);
+    final client = httpClientFactory();
     try {
       final response = await client.get(
         lichessUri('/api/account'),

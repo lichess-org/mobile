@@ -44,8 +44,8 @@ Uri lichessUri(String unencodedPath, [Map<String, dynamic>? queryParameters]) =>
         : Uri.https(kLichessHost, unencodedPath, queryParameters);
 
 /// Creates the appropriate http client for the platform.
-Client httpClient(PackageInfo pInfo) {
-  final userAgent = 'Lichess Mobile/${pInfo.version}';
+Client httpClientFactory() {
+  const userAgent = 'Lichess Mobile';
   if (Platform.isAndroid) {
     final engine = CronetEngine.build(
       cacheMode: CacheMode.memory,
@@ -72,7 +72,7 @@ Client httpClient(PackageInfo pInfo) {
 /// Only one instance of this client is created and kept alive for the whole app.
 @Riverpod(keepAlive: true)
 Client defaultClient(DefaultClientRef ref) {
-  final client = httpClient(ref.read(packageInfoProvider));
+  final client = httpClientFactory();
   ref.onDispose(() => client.close());
   return client;
 }
@@ -85,7 +85,7 @@ Client lichessClient(LichessClientRef ref) {
   final client = LichessClient(
     // Retry just once, after 500ms, on 429 Too Many Requests.
     RetryClient(
-      httpClient(ref.read(packageInfoProvider)),
+      httpClientFactory(),
       retries: 1,
       delay: _defaultDelay,
       when: (response) => response.statusCode == 429,
