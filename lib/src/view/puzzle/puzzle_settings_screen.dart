@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -10,12 +10,12 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
 class PuzzleSettingsScreen extends ConsumerWidget {
-  const PuzzleSettingsScreen({super.key, required this.userId});
-
-  final UserId? userId;
+  const PuzzleSettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final userId = ref.watch(authSessionProvider)?.user.id;
+
     final autoNext = ref.watch(
       PuzzlePreferencesProvider(userId).select((value) => value.autoNext),
     );

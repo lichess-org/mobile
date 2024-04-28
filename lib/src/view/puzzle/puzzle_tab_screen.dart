@@ -9,7 +9,6 @@ import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
@@ -232,8 +231,9 @@ class PuzzleMenu extends StatelessWidget {
               context,
               title: context.l10n.puzzleDesc,
               rootNavigator: true,
-              builder: (context) =>
-                  const PuzzleScreen(angle: PuzzleTheme(PuzzleThemeKey.mix)),
+              builder: (context) => const PuzzleScreen(
+                angle: PuzzleTheme(PuzzleThemeKey.mix),
+              ),
             );
           },
         ),
@@ -497,17 +497,12 @@ class _DailyPuzzle extends ConsumerWidget {
           ),
           onTap: () {
             if (!context.mounted) return;
-            final session = ref.read(authSessionProvider);
             pushPlatformRoute(
               context,
               rootNavigator: true,
               builder: (context) => PuzzleScreen(
                 angle: const PuzzleTheme(PuzzleThemeKey.mix),
-                initialPuzzleContext: PuzzleContext(
-                  angle: const PuzzleTheme(PuzzleThemeKey.mix),
-                  puzzle: data,
-                  userId: session?.user.id,
-                ),
+                puzzleId: data.puzzle.id,
               ),
             );
           },
@@ -572,9 +567,8 @@ class _OfflinePuzzlePreview extends ConsumerWidget {
                   pushPlatformRoute(
                     context,
                     rootNavigator: true,
-                    builder: (context) => PuzzleScreen(
-                      angle: const PuzzleTheme(PuzzleThemeKey.mix),
-                      initialPuzzleContext: data,
+                    builder: (context) => const PuzzleScreen(
+                      angle: PuzzleTheme(PuzzleThemeKey.mix),
                     ),
                   ).then((_) {
                     if (context.mounted) {

@@ -11,7 +11,6 @@ import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_batch_storage.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
@@ -49,11 +48,7 @@ void main() {
           tester,
           home: PuzzleScreen(
             angle: const PuzzleTheme(PuzzleThemeKey.mix),
-            initialPuzzleContext: PuzzleContext(
-              puzzle: puzzle,
-              angle: const PuzzleTheme(PuzzleThemeKey.mix),
-              userId: null,
-            ),
+            puzzleId: puzzle.puzzle.id,
           ),
           overrides: [
             puzzleBatchStorageProvider.overrideWith((ref) => mockBatchStorage),
@@ -61,7 +56,13 @@ void main() {
           ],
         );
 
+        when(() => mockHistoryStorage.fetch(puzzleId: puzzle.puzzle.id))
+            .thenAnswer((_) async => puzzle);
+
         await tester.pumpWidget(app);
+
+        // wait for the puzzle to load
+        await tester.pump(const Duration(milliseconds: 200));
 
         await meetsTapTargetGuideline(tester);
 
@@ -71,18 +72,14 @@ void main() {
     );
 
     testWidgets(
-      'Loads puzzle directly by passing PuzzleContext',
+      'Loads puzzle directly by passing a puzzleId',
       variant: kPlatformVariant,
       (tester) async {
         final app = await buildTestApp(
           tester,
           home: PuzzleScreen(
             angle: const PuzzleTheme(PuzzleThemeKey.mix),
-            initialPuzzleContext: PuzzleContext(
-              puzzle: puzzle,
-              angle: const PuzzleTheme(PuzzleThemeKey.mix),
-              userId: null,
-            ),
+            puzzleId: puzzle.puzzle.id,
           ),
           overrides: [
             puzzleBatchStorageProvider.overrideWith((ref) => mockBatchStorage),
@@ -90,15 +87,20 @@ void main() {
           ],
         );
 
+        when(() => mockHistoryStorage.fetch(puzzleId: puzzle.puzzle.id))
+            .thenAnswer((_) async => puzzle);
+
         await tester.pumpWidget(app);
+
+        // wait for the puzzle to load
+        await tester.pump(const Duration(milliseconds: 200));
 
         expect(find.byType(cg.Board), findsOneWidget);
         expect(find.text('Your turn'), findsOneWidget);
       },
     );
 
-    testWidgets('Loads next puzzle when no initialPuzzleContext is passed',
-        (tester) async {
+    testWidgets('Loads next puzzle when no puzzleId is passed', (tester) async {
       final app = await buildTestApp(
         tester,
         home: const PuzzleScreen(
@@ -143,15 +145,14 @@ void main() {
           return mockResponse('', 404);
         });
 
+        when(() => mockHistoryStorage.fetch(puzzleId: puzzle2.puzzle.id))
+            .thenAnswer((_) async => puzzle2);
+
         final app = await buildTestApp(
           tester,
           home: PuzzleScreen(
             angle: const PuzzleTheme(PuzzleThemeKey.mix),
-            initialPuzzleContext: PuzzleContext(
-              puzzle: puzzle2,
-              angle: const PuzzleTheme(PuzzleThemeKey.mix),
-              userId: null,
-            ),
+            puzzleId: puzzle2.puzzle.id,
           ),
           overrides: [
             lichessClientProvider.overrideWith((ref) {
@@ -181,6 +182,9 @@ void main() {
             .thenAnswer((_) async {});
 
         await tester.pumpWidget(app);
+
+        // wait for the puzzle to load
+        await tester.pump(const Duration(milliseconds: 200));
 
         expect(find.byType(cg.Board), findsOneWidget);
         expect(find.text('Your turn'), findsOneWidget);
@@ -255,15 +259,14 @@ void main() {
           return mockResponse('', 404);
         });
 
+        when(() => mockHistoryStorage.fetch(puzzleId: puzzle2.puzzle.id))
+            .thenAnswer((_) async => puzzle2);
+
         final app = await buildTestApp(
           tester,
           home: PuzzleScreen(
             angle: const PuzzleTheme(PuzzleThemeKey.mix),
-            initialPuzzleContext: PuzzleContext(
-              puzzle: puzzle2,
-              angle: const PuzzleTheme(PuzzleThemeKey.mix),
-              userId: null,
-            ),
+            puzzleId: puzzle2.puzzle.id,
           ),
           overrides: [
             lichessClientProvider.overrideWith((ref) {
@@ -293,6 +296,9 @@ void main() {
         ).thenAnswer((_) async => batch);
 
         await tester.pumpWidget(app);
+
+        // wait for the puzzle to load
+        await tester.pump(const Duration(milliseconds: 200));
 
         expect(find.byType(cg.Board), findsOneWidget);
         expect(find.text('Your turn'), findsOneWidget);
@@ -360,11 +366,7 @@ void main() {
           tester,
           home: PuzzleScreen(
             angle: const PuzzleTheme(PuzzleThemeKey.mix),
-            initialPuzzleContext: PuzzleContext(
-              puzzle: puzzle2,
-              angle: const PuzzleTheme(PuzzleThemeKey.mix),
-              userId: null,
-            ),
+            puzzleId: puzzle2.puzzle.id,
           ),
           overrides: [
             lichessClientProvider.overrideWith((ref) {
@@ -376,6 +378,9 @@ void main() {
             puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
           ],
         );
+
+        when(() => mockHistoryStorage.fetch(puzzleId: puzzle2.puzzle.id))
+            .thenAnswer((_) async => puzzle2);
 
         when(() => mockHistoryStorage.save(puzzle: any(named: 'puzzle')))
             .thenAnswer((_) async {});
@@ -394,6 +399,9 @@ void main() {
         ).thenAnswer((_) async => batch);
 
         await tester.pumpWidget(app);
+
+        // wait for the puzzle to load
+        await tester.pump(const Duration(milliseconds: 200));
 
         expect(find.byType(cg.Board), findsOneWidget);
         expect(find.text('Your turn'), findsOneWidget);

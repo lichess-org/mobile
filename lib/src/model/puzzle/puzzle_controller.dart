@@ -359,11 +359,7 @@ class PuzzleController extends _$PuzzleController {
 
       if (next != null &&
           result == PuzzleResult.win &&
-          ref.read(
-            puzzlePreferencesProvider(initialContext.userId)
-                .select((state) => state.autoNext),
-          )) {
-        await Future<void>.delayed(const Duration(milliseconds: 500));
+          ref.read(puzzlePreferencesProvider(initialContext.userId)).autoNext) {
         loadPuzzle(next);
       }
     } else {
