@@ -237,18 +237,16 @@ class _LoadPuzzleFromId extends ConsumerWidget {
       loading: () => const Column(
         children: [
           Expanded(
-            child: Center(
-              child: SafeArea(
-                bottom: false,
-                child: BoardTable(
-                  boardData: cg.BoardData(
-                    fen: kEmptyFen,
-                    interactableSide: cg.InteractableSide.none,
-                    orientation: cg.Side.white,
-                  ),
-                  topTable: kEmptyWidget,
-                  bottomTable: kEmptyWidget,
+            child: SafeArea(
+              bottom: false,
+              child: BoardTable(
+                boardData: cg.BoardData(
+                  fen: kEmptyFen,
+                  interactableSide: cg.InteractableSide.none,
+                  orientation: cg.Side.white,
                 ),
+                topTable: kEmptyWidget,
+                bottomTable: kEmptyWidget,
               ),
             ),
           ),
@@ -262,19 +260,17 @@ class _LoadPuzzleFromId extends ConsumerWidget {
         return Column(
           children: [
             Expanded(
-              child: Center(
-                child: SafeArea(
-                  bottom: false,
-                  child: BoardTable(
-                    boardData: const cg.BoardData(
-                      fen: kEmptyFen,
-                      interactableSide: cg.InteractableSide.none,
-                      orientation: cg.Side.white,
-                    ),
-                    topTable: kEmptyWidget,
-                    bottomTable: kEmptyWidget,
-                    errorMessage: e.toString(),
+              child: SafeArea(
+                bottom: false,
+                child: BoardTable(
+                  boardData: const cg.BoardData(
+                    fen: kEmptyFen,
+                    interactableSide: cg.InteractableSide.none,
+                    orientation: cg.Side.white,
                   ),
+                  topTable: kEmptyWidget,
+                  bottomTable: kEmptyWidget,
+                  errorMessage: e.toString(),
                 ),
               ),
             ),
@@ -307,97 +303,94 @@ class _Body extends ConsumerWidget {
     return Column(
       children: [
         Expanded(
-          child: Center(
-            child: SafeArea(
-              bottom: false,
-              child: BoardTable(
-                onMove: (move, {isDrop, isPremove}) {
-                  ref
-                      .read(ctrlProvider.notifier)
-                      .onUserMove(Move.fromUci(move.uci)!);
-                },
-                boardData: cg.BoardData(
-                  orientation: puzzleState.pov.cg,
-                  interactableSide: puzzleState.mode == PuzzleMode.load ||
-                          puzzleState.position.isGameOver
-                      ? cg.InteractableSide.none
-                      : puzzleState.mode == PuzzleMode.view
-                          ? cg.InteractableSide.both
-                          : puzzleState.pov == Side.white
-                              ? cg.InteractableSide.white
-                              : cg.InteractableSide.black,
-                  fen: puzzleState.fen,
-                  isCheck: puzzleState.position.isCheck,
-                  lastMove: puzzleState.lastMove?.cg,
-                  sideToMove: puzzleState.position.turn.cg,
-                  validMoves: puzzleState.validMoves,
-                  shapes: puzzleState.isEngineEnabled && evalBestMove != null
-                      ? ISet([
-                          cg.Arrow(
-                            color: const Color(0x40003088),
-                            orig: evalBestMove.from,
-                            dest: evalBestMove.to,
-                          ),
-                        ])
-                      : null,
-                ),
-                engineGauge: puzzleState.isEngineEnabled
-                    ? EngineGaugeParams(
-                        orientation: puzzleState.pov,
-                        isLocalEngineAvailable: true,
-                        position: puzzleState.position,
-                        savedEval: puzzleState.node.eval,
-                      )
+          child: SafeArea(
+            bottom: false,
+            child: BoardTable(
+              onMove: (move, {isDrop, isPremove}) {
+                ref
+                    .read(ctrlProvider.notifier)
+                    .onUserMove(Move.fromUci(move.uci)!);
+              },
+              boardData: cg.BoardData(
+                orientation: puzzleState.pov.cg,
+                interactableSide: puzzleState.mode == PuzzleMode.load ||
+                        puzzleState.position.isGameOver
+                    ? cg.InteractableSide.none
+                    : puzzleState.mode == PuzzleMode.view
+                        ? cg.InteractableSide.both
+                        : puzzleState.pov == Side.white
+                            ? cg.InteractableSide.white
+                            : cg.InteractableSide.black,
+                fen: puzzleState.fen,
+                isCheck: puzzleState.position.isCheck,
+                lastMove: puzzleState.lastMove?.cg,
+                sideToMove: puzzleState.position.turn.cg,
+                validMoves: puzzleState.validMoves,
+                shapes: puzzleState.isEngineEnabled && evalBestMove != null
+                    ? ISet([
+                        cg.Arrow(
+                          color: const Color(0x40003088),
+                          orig: evalBestMove.from,
+                          dest: evalBestMove.to,
+                        ),
+                      ])
                     : null,
-                showEngineGaugePlaceholder: true,
-                topTable: Center(
-                  child: PuzzleFeedbackWidget(
-                    puzzle: puzzleState.puzzle,
-                    state: puzzleState,
-                    onStreak: false,
-                  ),
+              ),
+              engineGauge: puzzleState.isEngineEnabled
+                  ? EngineGaugeParams(
+                      orientation: puzzleState.pov,
+                      isLocalEngineAvailable: true,
+                      position: puzzleState.position,
+                      savedEval: puzzleState.node.eval,
+                    )
+                  : null,
+              showEngineGaugePlaceholder: true,
+              topTable: Center(
+                child: PuzzleFeedbackWidget(
+                  puzzle: puzzleState.puzzle,
+                  state: puzzleState,
+                  onStreak: false,
                 ),
-                bottomTable: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    if (puzzleState.glicko != null)
-                      RatingPrefAware(
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                            top: 10.0,
-                          ),
-                          child: Row(
-                            children: [
-                              Text(context.l10n.rating),
-                              const SizedBox(width: 5.0),
-                              TweenAnimationBuilder<double>(
-                                tween: Tween<double>(
-                                  begin: puzzleState.glicko!.rating,
-                                  end:
-                                      puzzleState.nextContext?.glicko?.rating ??
-                                          puzzleState.glicko!.rating,
-                                ),
-                                duration: const Duration(milliseconds: 500),
-                                builder: (context, double rating, _) {
-                                  return Text(
-                                    rating.truncate().toString(),
-                                    style: const TextStyle(
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  );
-                                },
+              ),
+              bottomTable: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  if (puzzleState.glicko != null)
+                    RatingPrefAware(
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          top: 10.0,
+                        ),
+                        child: Row(
+                          children: [
+                            Text(context.l10n.rating),
+                            const SizedBox(width: 5.0),
+                            TweenAnimationBuilder<double>(
+                              tween: Tween<double>(
+                                begin: puzzleState.glicko!.rating,
+                                end: puzzleState.nextContext?.glicko?.rating ??
+                                    puzzleState.glicko!.rating,
                               ),
-                            ],
-                          ),
+                              duration: const Duration(milliseconds: 500),
+                              builder: (context, double rating, _) {
+                                return Text(
+                                  rating.truncate().toString(),
+                                  style: const TextStyle(
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
                         ),
                       ),
-                    PuzzleSessionWidget(
-                      initialPuzzleContext: initialPuzzleContext,
-                      ctrlProvider: ctrlProvider,
                     ),
-                  ],
-                ),
+                  PuzzleSessionWidget(
+                    initialPuzzleContext: initialPuzzleContext,
+                    ctrlProvider: ctrlProvider,
+                  ),
+                ],
               ),
             ),
           ),
