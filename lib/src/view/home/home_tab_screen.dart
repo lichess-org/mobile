@@ -603,20 +603,31 @@ class _PlayerScreenButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final connectivity = ref.watch(connectivityChangesProvider);
-    final isOnline = connectivity.value?.isOnline ?? false;
 
-    return AppBarIconButton(
-      icon: const Icon(Icons.group),
-      semanticsLabel: context.l10n.players,
-      onPressed: !isOnline
-          ? null
-          : () {
-              pushPlatformRoute(
-                context,
-                title: context.l10n.players,
-                builder: (_) => const PlayerScreen(),
-              );
-            },
+    return connectivity.when(
+      data: (connectivity) => AppBarIconButton(
+        icon: const Icon(Icons.group),
+        semanticsLabel: context.l10n.players,
+        onPressed: !connectivity.isOnline
+            ? null
+            : () {
+                pushPlatformRoute(
+                  context,
+                  title: context.l10n.players,
+                  builder: (_) => const PlayerScreen(),
+                );
+              },
+      ),
+      error: (_, __) => AppBarIconButton(
+        icon: const Icon(Icons.group),
+        semanticsLabel: context.l10n.players,
+        onPressed: null,
+      ),
+      loading: () => AppBarIconButton(
+        icon: const Icon(Icons.group),
+        semanticsLabel: context.l10n.players,
+        onPressed: null,
+      ),
     );
   }
 }

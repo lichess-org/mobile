@@ -100,7 +100,7 @@ final watchScrollController = ScrollController(debugLabel: 'WatchScroll');
 final RouteObserver<PageRoute<void>> rootNavPageRouteObserver =
     RouteObserver<PageRoute<void>>();
 
-final cupertinoTabControllerProvider =
+final _cupertinoTabControllerProvider =
     StateProvider<CupertinoTabController>((ref) {
   return CupertinoTabController();
 });
@@ -117,8 +117,6 @@ class BottomNavScaffold extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentTab = ref.watch(currentBottomTabProvider);
-    final connectivity = ref.watch(connectivityChangesProvider);
-    final isOnline = connectivity.value?.isOnline ?? false;
 
     switch (Theme.of(context).platform) {
       case TargetPlatform.android:
@@ -127,20 +125,28 @@ class BottomNavScaffold extends ConsumerWidget {
             currentTab: currentTab,
             tabBuilder: _androidTabBuilder,
           ),
-          bottomNavigationBar: NavigationBar(
-            selectedIndex: currentTab.index,
-            destinations: [
-              for (final tab in BottomTab.values)
-                NavigationDestination(
-                  icon: Icon(tab == currentTab ? tab.activeIcon : tab.icon),
-                  label: tab.label(context.l10n),
-                ),
-            ],
-            onDestinationSelected: (i) => _onItemTapped(ref, i, isOnline),
+          bottomNavigationBar: Consumer(
+            builder: (context, ref, _) {
+              final connectivity = ref.watch(connectivityChangesProvider);
+              final isOnline = connectivity.value?.isOnline ?? true;
+              return NavigationBar(
+                selectedIndex: currentTab.index,
+                destinations: [
+                  for (final tab in BottomTab.values)
+                    NavigationDestination(
+                      icon: Icon(tab == currentTab ? tab.activeIcon : tab.icon),
+                      label: tab.label(context.l10n),
+                    ),
+                ],
+                onDestinationSelected: (i) => _onItemTapped(ref, i, isOnline),
+              );
+            },
           ),
         );
       case TargetPlatform.iOS:
-        final tabController = ref.watch(cupertinoTabControllerProvider);
+        final tabController = ref.watch(_cupertinoTabControllerProvider);
+        final connectivity = ref.watch(connectivityChangesProvider);
+        final isOnline = connectivity.value?.isOnline ?? true;
 
         return CupertinoTabScaffold(
           tabBuilder: _iOSTabBuilder,
