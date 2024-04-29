@@ -98,8 +98,7 @@ class BoardTable extends ConsumerWidget {
       builder: (context, constraints) {
         final aspectRatio = constraints.biggest.aspectRatio;
         final defaultBoardSize = constraints.biggest.shortestSide;
-
-        final isTablet = defaultBoardSize > FormFactor.tablet;
+        final isTablet = getScreenType(context) == ScreenType.tablet;
         final boardSize = isTablet
             ? defaultBoardSize - kTabletBoardTableSidePadding * 2
             : defaultBoardSize;
@@ -197,7 +196,6 @@ class BoardTable extends ConsumerWidget {
 
         return aspectRatio > 1
             ? Row(
-                mainAxisAlignment: MainAxisAlignment.start,
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   Padding(
