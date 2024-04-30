@@ -172,9 +172,7 @@ void showCupertinoSnackBar({
               : type == SnackBarType.success
                   ? CupertinoColors.systemGreen
                   : CupertinoColors.systemBlue,
-          textStyle: type == SnackBarType.error
-              ? const TextStyle(color: Colors.white)
-              : null,
+          textStyle: const TextStyle(color: Colors.white),
         ),
         duration: duration,
       ),

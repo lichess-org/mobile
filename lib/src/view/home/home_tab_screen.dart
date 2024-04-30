@@ -633,7 +633,7 @@ class _PlayerScreenButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final connectivity = ref.watch(connectivityChangesProvider);
 
-    return connectivity.when(
+    return connectivity.maybeWhen(
       data: (connectivity) => AppBarIconButton(
         icon: const Icon(Icons.group),
         semanticsLabel: context.l10n.players,
@@ -647,12 +647,7 @@ class _PlayerScreenButton extends ConsumerWidget {
                 );
               },
       ),
-      error: (_, __) => AppBarIconButton(
-        icon: const Icon(Icons.group),
-        semanticsLabel: context.l10n.players,
-        onPressed: null,
-      ),
-      loading: () => AppBarIconButton(
+      orElse: () => AppBarIconButton(
         icon: const Icon(Icons.group),
         semanticsLabel: context.l10n.players,
         onPressed: null,

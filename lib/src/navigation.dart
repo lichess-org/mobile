@@ -100,10 +100,7 @@ final watchScrollController = ScrollController(debugLabel: 'WatchScroll');
 final RouteObserver<PageRoute<void>> rootNavPageRouteObserver =
     RouteObserver<PageRoute<void>>();
 
-final _cupertinoTabControllerProvider =
-    StateProvider<CupertinoTabController>((ref) {
-  return CupertinoTabController();
-});
+final _cupertinoTabController = CupertinoTabController();
 
 /// Implements a tabbed (iOS style) root layout and behavior structure.
 ///
@@ -127,8 +124,7 @@ class BottomNavScaffold extends ConsumerWidget {
           ),
           bottomNavigationBar: Consumer(
             builder: (context, ref, _) {
-              final connectivity = ref.watch(connectivityChangesProvider);
-              final isOnline = connectivity.value?.isOnline ?? true;
+              final isOnline = ref.watch(isOnlineProvider).valueOrNull ?? true;
               return NavigationBar(
                 selectedIndex: currentTab.index,
                 destinations: [
@@ -138,19 +134,17 @@ class BottomNavScaffold extends ConsumerWidget {
                       label: tab.label(context.l10n),
                     ),
                 ],
-                onDestinationSelected: (i) => _onItemTapped(ref, i, isOnline),
+                onDestinationSelected: (i) =>
+                    _onItemTapped(ref, i, isOnline: isOnline),
               );
             },
           ),
         );
       case TargetPlatform.iOS:
-        final tabController = ref.watch(_cupertinoTabControllerProvider);
-        final connectivity = ref.watch(connectivityChangesProvider);
-        final isOnline = connectivity.value?.isOnline ?? true;
-
+        final isOnline = ref.watch(isOnlineProvider).valueOrNull ?? true;
         return CupertinoTabScaffold(
           tabBuilder: _iOSTabBuilder,
-          controller: tabController,
+          controller: _cupertinoTabController,
           tabBar: CupertinoTabBar(
             currentIndex: currentTab.index,
             items: [
@@ -160,18 +154,7 @@ class BottomNavScaffold extends ConsumerWidget {
                   label: tab.label(context.l10n),
                 ),
             ],
-            onTap: (i) {
-              if (i == BottomTab.watch.index && !isOnline) {
-                showPlatformSnackbar(
-                  ref.context,
-                  'Not available in offline mode',
-                  type: SnackBarType.error,
-                );
-                tabController.index = currentTab.index;
-                return;
-              }
-              _onItemTapped(ref, i, isOnline);
-            },
+            onTap: (i) => _onItemTapped(ref, i, isOnline: isOnline),
           ),
         );
       default:
@@ -185,7 +168,17 @@ class BottomNavScaffold extends ConsumerWidget {
   /// If the route is already at the first route, scroll the tab's root
   /// scrollable to the top.
   /// Otherwise, switch to the tapped tab.
-  void _onItemTapped(WidgetRef ref, int index, bool isOnline) {
+  void _onItemTapped(WidgetRef ref, int index, {required bool isOnline}) {
+    if (index == BottomTab.watch.index && !isOnline) {
+      _cupertinoTabController.index = ref.read(currentBottomTabProvider).index;
+      showPlatformSnackbar(
+        ref.context,
+        'Not available in offline mode',
+        type: SnackBarType.info,
+      );
+      return;
+    }
+
     final curTab = ref.read(currentBottomTabProvider);
     final tappedTab = BottomTab.values[index];
 
@@ -204,17 +197,8 @@ class BottomNavScaffold extends ConsumerWidget {
         }
       }
     } else {
-      if (tappedTab == BottomTab.watch && !isOnline) {
-        showPlatformSnackbar(
-          ref.context,
-          'Not available in offline mode',
-          type: SnackBarType.error,
-        );
-        ref.read(currentBottomTabProvider.notifier).state = curTab;
-        return;
-      }
+      ref.read(currentBottomTabProvider.notifier).state = tappedTab;
     }
-    ref.read(currentBottomTabProvider.notifier).state = tappedTab;
   }
 }
 
