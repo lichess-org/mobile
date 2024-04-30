@@ -31,7 +31,7 @@ class CreateGameOptions extends ConsumerWidget {
                   ref.invalidate(accountProvider);
                   pushPlatformRoute(
                     context,
-                    title: context.l10n.puzzlePuzzles,
+                    title: context.l10n.custom,
                     builder: (_) => const CreateCustomGameScreen(),
                   );
                 },
