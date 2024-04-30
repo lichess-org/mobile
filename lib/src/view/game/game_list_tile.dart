@@ -107,7 +107,7 @@ class _ContextMenu extends ConsumerWidget {
     final customColors = Theme.of(context).extension<CustomColors>();
 
     return DraggableScrollableSheet(
-      initialChildSize: .5,
+      initialChildSize: .7,
       expand: false,
       snap: true,
       snapSizes: const [.5, .7],

@@ -58,10 +58,10 @@ class _PuzzleTabScreenState extends ConsumerState<PuzzleTabScreen> {
   Widget _androidBuilder(BuildContext context, AuthSessionState? userSession) {
     final body = Column(
       children: [
+        const ConnectivityBanner(),
         Expanded(
           child: _Body(userSession),
         ),
-        const ConnectivityBanner(),
       ],
     );
     return Scaffold(
@@ -144,7 +144,7 @@ class _Body extends ConsumerWidget {
       ),
       if (Theme.of(context).platform == TargetPlatform.android)
         const SizedBox(height: 8.0),
-      PuzzleMenu(connectivity: connectivity),
+      _PuzzleMenu(connectivity: connectivity),
       PuzzleHistoryWidget(),
     ];
 
@@ -165,7 +165,7 @@ class _Body extends ConsumerWidget {
                   loading: () => const SizedBox.shrink(),
                   error: (_, __) => const SizedBox.shrink(),
                 ),
-                PuzzleMenu(connectivity: connectivity),
+                _PuzzleMenu(connectivity: connectivity),
               ],
             ),
           ),
@@ -191,8 +191,8 @@ class _Body extends ConsumerWidget {
   }
 }
 
-class PuzzleMenu extends StatelessWidget {
-  const PuzzleMenu({required this.connectivity, super.key});
+class _PuzzleMenu extends StatelessWidget {
+  const _PuzzleMenu({required this.connectivity});
 
   final AsyncValue<ConnectivityStatus> connectivity;
 
@@ -202,9 +202,8 @@ class PuzzleMenu extends StatelessWidget {
         ? const EdgeInsets.only(top: 8.0)
         : EdgeInsets.zero;
 
-    final titleStyle = Theme.of(context).platform == TargetPlatform.iOS
-        ? null
-        : Theme.of(context).textTheme.titleMedium;
+    final titleStyle = Styles.mainListTileTitle;
+    final bool isOnline = connectivity.value?.isOnline ?? false;
 
     return ListSection(
       hasLeading: true,
@@ -257,7 +256,6 @@ class PuzzleMenu extends StatelessWidget {
           trailing: Theme.of(context).platform == TargetPlatform.iOS
               ? const CupertinoListTileChevron()
               : null,
-          isThreeLine: true,
           onTap: () {
             pushPlatformRoute(
               context,
@@ -267,34 +265,34 @@ class PuzzleMenu extends StatelessWidget {
             );
           },
         ),
-        PlatformListTile(
-          leading: Icon(
-            LichessIcons.streak,
-            size: 32,
-            color: context.lichessColors.fancy,
-          ),
-          title: Padding(
-            padding: topPadding,
-            child: Text('Puzzle Streak', style: titleStyle),
-          ),
-          subtitle: Padding(
-            padding: const EdgeInsets.only(bottom: 8.0),
-            child: Text(
-              context.l10n.puzzleStreakDescription.characters
-                      .takeWhile((c) => c != '.')
-                      .toString() +
-                  (context.l10n.puzzleStreakDescription.contains('.')
-                      ? '.'
-                      : ''),
-              maxLines: 3,
+        Opacity(
+          opacity: isOnline ? 1 : 0.5,
+          child: PlatformListTile(
+            leading: Icon(
+              LichessIcons.streak,
+              size: 32,
+              color: context.lichessColors.fancy,
             ),
-          ),
-          trailing: Theme.of(context).platform == TargetPlatform.iOS
-              ? const CupertinoListTileChevron()
-              : null,
-          isThreeLine: true,
-          onTap: connectivity.when(
-            data: (data) => data.isOnline
+            title: Padding(
+              padding: topPadding,
+              child: Text('Puzzle Streak', style: titleStyle),
+            ),
+            subtitle: Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: Text(
+                context.l10n.puzzleStreakDescription.characters
+                        .takeWhile((c) => c != '.')
+                        .toString() +
+                    (context.l10n.puzzleStreakDescription.contains('.')
+                        ? '.'
+                        : ''),
+                maxLines: 3,
+              ),
+            ),
+            trailing: Theme.of(context).platform == TargetPlatform.iOS
+                ? const CupertinoListTileChevron()
+                : null,
+            onTap: isOnline
                 ? () {
                     pushPlatformRoute(
                       context,
@@ -303,33 +301,31 @@ class PuzzleMenu extends StatelessWidget {
                     );
                   }
                 : null,
-            loading: () => null,
-            error: (_, __) => null,
           ),
         ),
-        PlatformListTile(
-          leading: Icon(
-            LichessIcons.storm,
-            size: 32,
-            color: context.lichessColors.purple,
-          ),
-          title: Padding(
-            padding: topPadding,
-            child: Text('Puzzle Storm', style: titleStyle),
-          ),
-          subtitle: const Padding(
-            padding: EdgeInsets.only(bottom: 8.0),
-            child: Text(
-              'Solve as many puzzles as possible in 3 minutes.',
-              maxLines: 3,
+        Opacity(
+          opacity: isOnline ? 1 : 0.5,
+          child: PlatformListTile(
+            leading: Icon(
+              LichessIcons.storm,
+              size: 32,
+              color: context.lichessColors.purple,
             ),
-          ),
-          trailing: Theme.of(context).platform == TargetPlatform.iOS
-              ? const CupertinoListTileChevron()
-              : null,
-          isThreeLine: true,
-          onTap: connectivity.when(
-            data: (data) => data.isOnline
+            title: Padding(
+              padding: topPadding,
+              child: Text('Puzzle Storm', style: titleStyle),
+            ),
+            subtitle: const Padding(
+              padding: EdgeInsets.only(bottom: 8.0),
+              child: Text(
+                'Solve as many puzzles as possible in 3 minutes.',
+                maxLines: 3,
+              ),
+            ),
+            trailing: Theme.of(context).platform == TargetPlatform.iOS
+                ? const CupertinoListTileChevron()
+                : null,
+            onTap: isOnline
                 ? () {
                     pushPlatformRoute(
                       context,
@@ -338,8 +334,6 @@ class PuzzleMenu extends StatelessWidget {
                     );
                   }
                 : null,
-            loading: () => null,
-            error: (_, __) => null,
           ),
         ),
       ],

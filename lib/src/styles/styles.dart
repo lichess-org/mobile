@@ -16,9 +16,15 @@ abstract class Styles {
     fontSize: 16,
     fontWeight: FontWeight.w500,
   );
-  static const callout = TextStyle(
-    fontSize: 18.0,
+  static final callout = TextStyle(
+    fontSize: defaultTargetPlatform == TargetPlatform.iOS ? 20 : 18,
+    letterSpacing: defaultTargetPlatform == TargetPlatform.iOS ? -0.41 : null,
     fontWeight: FontWeight.w600,
+  );
+  static final mainListTileTitle = TextStyle(
+    fontSize: 18,
+    letterSpacing: defaultTargetPlatform == TargetPlatform.iOS ? -0.41 : null,
+    fontWeight: FontWeight.w500,
   );
   static final sectionTitle = TextStyle(
     fontSize: defaultTargetPlatform == TargetPlatform.iOS ? 20 : 18,
