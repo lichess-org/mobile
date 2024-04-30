@@ -1,5 +1,4 @@
-import 'package:flutter/cupertino.dart'
-    hide CupertinoPageScaffold, CupertinoSliverNavigationBar;
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/navigation.dart';
@@ -8,7 +7,6 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_position_choice_screen.dart';
 import 'package:lichess_mobile/src/view/clock/clock_screen.dart';
-import 'package:lichess_mobile/src/widgets/cupertino.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 

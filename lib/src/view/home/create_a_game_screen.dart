@@ -1,8 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/home/create_game_options.dart';
 import 'package:lichess_mobile/src/view/home/quick_game_button.dart';
-import 'package:lichess_mobile/src/widgets/cupertino.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
 class CreateAGameScreen extends StatelessWidget {
