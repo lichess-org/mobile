@@ -20,21 +20,11 @@ class ConnectivityStatus with _$ConnectivityStatus {
   }) = _ConnectivityStatus;
 }
 
-@riverpod
-Future<ConnectivityStatus> connectivity(ConnectivityRef ref) async {
-  final client = httpClientFactory();
-  ref.onDispose(client.close);
-  final connectivityResult = await Connectivity().checkConnectivity();
-  try {
-    return ConnectivityStatus(
-      connectivityResult: connectivityResult.lock,
-      isOnline: await onlineCheck(client),
-    );
-  } finally {
-    client.close();
-  }
-}
-
+/// This provider is used to listen to connectivity changes and check if the
+/// device is online.
+///
+/// It uses the [Connectivity] plugin to listen to changes and make HEAD requests
+/// to some known URIs.
 @riverpod
 Stream<ConnectivityStatus> connectivityChanges(ConnectivityChangesRef ref) {
   // some android devices needs to check connectivity on start
@@ -66,6 +56,16 @@ Stream<ConnectivityStatus> connectivityChanges(ConnectivityChangesRef ref) {
       }
     },
   ).startWithStream(firstCheck);
+}
+
+/// This provider is used to check if the device is online.
+///
+/// It will react to connectivity status changes.
+@riverpod
+Future<bool> isOnline(IsOnlineRef ref) async {
+  return ref.watch(
+    connectivityChangesProvider.selectAsync((status) => status.isOnline),
+  );
 }
 
 final _internetCheckUris = [
