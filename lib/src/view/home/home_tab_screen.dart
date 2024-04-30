@@ -12,13 +12,11 @@ import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/layout.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/home/create_a_game_screen.dart';
 import 'package:lichess_mobile/src/view/home/create_game_options.dart';
 import 'package:lichess_mobile/src/view/home/quick_game_button.dart';
 import 'package:lichess_mobile/src/view/play/offline_correspondence_games_screen.dart';
 import 'package:lichess_mobile/src/view/play/ongoing_games_screen.dart';
-import 'package:lichess_mobile/src/view/settings/settings_button.dart';
 import 'package:lichess_mobile/src/view/user/player_screen.dart';
 import 'package:lichess_mobile/src/view/user/recent_games.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -63,13 +61,10 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
   }
 
   Widget _androidBuilder(BuildContext context) {
-    final isLoggedIn = ref.watch(authSessionProvider) != null;
     return Scaffold(
       appBar: AppBar(
         title: const Text('lichess.org'),
-        leading: isLoggedIn ? const _ProfileButton() : null,
         actions: const [
-          SettingsButton(),
           _PlayerScreenButton(),
         ],
       ),
@@ -97,7 +92,6 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
   }
 
   Widget _iosBuilder(BuildContext context) {
-    final session = ref.watch(authSessionProvider);
     return CupertinoPageScaffold(
       child: Stack(
         alignment: Alignment.bottomCenter,
@@ -110,12 +104,10 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
                   start: 16.0,
                   end: 8.0,
                 ),
-                leading: session == null ? null : const _ProfileButton(),
                 largeTitle: Text(context.l10n.play),
                 trailing: const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    SettingsButton(),
                     _PlayerScreenButton(),
                   ],
                 ),
@@ -169,35 +161,6 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> {
       ref.refresh(accountRecentGamesProvider.future),
       ref.refresh(ongoingGamesProvider.future),
     ]);
-  }
-}
-
-class _ProfileButton extends ConsumerWidget {
-  const _ProfileButton();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    void onPressed() {
-      ref.invalidate(accountProvider);
-      ref.invalidate(accountActivityProvider);
-      pushPlatformRoute(
-        context,
-        title: context.l10n.profile,
-        builder: (_) => const ProfileScreen(),
-      );
-    }
-
-    return PlatformWidget(
-      androidBuilder: (context) => IconButton(
-        icon: const Icon(Icons.account_circle),
-        tooltip: context.l10n.profile,
-        onPressed: onPressed,
-      ),
-      iosBuilder: (context) => AppBarTextButton(
-        onPressed: onPressed,
-        child: Text(context.l10n.profile),
-      ),
-    );
   }
 }
 

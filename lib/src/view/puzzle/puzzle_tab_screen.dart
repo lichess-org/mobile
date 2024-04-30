@@ -22,7 +22,6 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/puzzle/dashboard_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_history_screen.dart';
-import 'package:lichess_mobile/src/view/settings/settings_button.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/cupertino.dart';
@@ -68,7 +67,6 @@ class _PuzzleTabScreenState extends ConsumerState<PuzzleTabScreen> {
       appBar: AppBar(
         title: Text(context.l10n.puzzles),
         actions: const [
-          SettingsButton(),
           _DashboardButton(),
         ],
       ),
@@ -96,7 +94,6 @@ class _PuzzleTabScreenState extends ConsumerState<PuzzleTabScreen> {
             trailing: const Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                SettingsButton(),
                 _DashboardButton(),
               ],
             ),

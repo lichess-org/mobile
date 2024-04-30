@@ -5,6 +5,7 @@ import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_tab_screen.dart';
+import 'package:lichess_mobile/src/view/settings/settings_screen.dart';
 import 'package:lichess_mobile/src/view/tools/tools_tab_screen.dart';
 import 'package:lichess_mobile/src/view/watch/watch_tab_screen.dart';
 
@@ -12,7 +13,8 @@ enum BottomTab {
   home,
   puzzles,
   tools,
-  watch;
+  watch,
+  settings;
 
   String label(AppLocalizations strings) {
     switch (this) {
@@ -24,6 +26,8 @@ enum BottomTab {
         return strings.tools;
       case BottomTab.watch:
         return strings.watch;
+      case BottomTab.settings:
+        return strings.settingsSettings;
     }
   }
 
@@ -37,6 +41,8 @@ enum BottomTab {
         return Icons.handyman_outlined;
       case BottomTab.watch:
         return Icons.live_tv_outlined;
+      case BottomTab.settings:
+        return Icons.settings_outlined;
     }
   }
 
@@ -50,6 +56,8 @@ enum BottomTab {
         return Icons.handyman;
       case BottomTab.watch:
         return Icons.live_tv;
+      case BottomTab.settings:
+        return Icons.settings;
     }
   }
 }
@@ -68,6 +76,8 @@ final currentNavigatorKeyProvider = Provider<GlobalKey<NavigatorState>>((ref) {
       return toolsNavigatorKey;
     case BottomTab.watch:
       return watchNavigatorKey;
+    case BottomTab.settings:
+      return settingsNavigatorKey;
   }
 });
 
@@ -82,6 +92,8 @@ final currentRootScrollControllerProvider = Provider<ScrollController>((ref) {
       return toolsScrollController;
     case BottomTab.watch:
       return watchScrollController;
+    case BottomTab.settings:
+      return settingsScrollController;
   }
 });
 
@@ -89,11 +101,13 @@ final homeNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'home');
 final puzzlesNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'puzzles');
 final toolsNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'tools');
 final watchNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'watch');
+final settingsNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'settings');
 
 final homeScrollController = ScrollController(debugLabel: 'HomeScroll');
 final puzzlesScrollController = ScrollController(debugLabel: 'PuzzlesScroll');
 final toolsScrollController = ScrollController(debugLabel: 'ToolsScroll');
 final watchScrollController = ScrollController(debugLabel: 'WatchScroll');
+final settingsScrollController = ScrollController(debugLabel: 'SettingsScroll');
 
 final RouteObserver<PageRoute<void>> rootNavPageRouteObserver =
     RouteObserver<PageRoute<void>>();
@@ -204,6 +218,12 @@ class BottomNavScaffold extends ConsumerWidget {
           tab: BottomTab.watch,
           builder: (context) => const WatchTabScreen(),
         );
+      case 4:
+        return _MaterialTabView(
+          navigatorKey: settingsNavigatorKey,
+          tab: BottomTab.settings,
+          builder: (context) => const SettingsScreen(),
+        );
       default:
         assert(false, 'Unexpected tab');
         return const SizedBox.shrink();
@@ -235,6 +255,12 @@ class BottomNavScaffold extends ConsumerWidget {
           defaultTitle: context.l10n.watch,
           navigatorKey: watchNavigatorKey,
           builder: (context) => const WatchTabScreen(),
+        );
+      case 4:
+        return CupertinoTabView(
+          defaultTitle: context.l10n.settingsSettings,
+          navigatorKey: settingsNavigatorKey,
+          builder: (context) => const SettingsScreen(),
         );
       default:
         assert(false, 'Unexpected tab');

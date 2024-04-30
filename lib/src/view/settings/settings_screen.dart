@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart'
-    hide CupertinoNavigationBar, CupertinoPageScaffold;
+    hide CupertinoPageScaffold, CupertinoSliverNavigationBar;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/utils/android.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/package_info.dart';
+import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/cupertino.dart';
@@ -46,14 +47,21 @@ class SettingsScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(context.l10n.settingsSettings),
       ),
-      body: _Body(),
+      body: SafeArea(child: _Body()),
     );
   }
 
   Widget _iosBuilder(BuildContext context) {
     return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(),
-      child: _Body(),
+      child: CustomScrollView(
+        slivers: [
+          const CupertinoSliverNavigationBar(),
+          SliverSafeArea(
+            top: false,
+            sliver: _Body(),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -80,187 +88,201 @@ class _Body extends ConsumerWidget {
 
     final androidVersionAsync = ref.watch(androidVersionProvider);
 
-    return SafeArea(
-      child: ListView(
-        children: [
-          if (userSession != null)
-            ListSection(
-              header: UserFullNameWidget(user: userSession.user),
-              hasLeading: true,
-              showDivider: true,
-              children: [
-                PlatformListTile(
-                  leading: const Icon(Icons.manage_accounts),
-                  title: Text(context.l10n.preferencesPreferences),
-                  trailing: Theme.of(context).platform == TargetPlatform.iOS
-                      ? const CupertinoListTileChevron()
-                      : null,
-                  onTap: () {
-                    pushPlatformRoute(
-                      context,
-                      title: context.l10n.preferencesPreferences,
-                      builder: (context) => const AccountPreferencesScreen(),
-                    );
-                  },
-                ),
-                if (authController.isLoading)
-                  const PlatformListTile(
-                    leading: Icon(Icons.logout),
-                    title: Center(child: ButtonLoadingIndicator()),
-                  )
-                else
-                  PlatformListTile(
-                    leading: const Icon(Icons.logout),
-                    title: Text(context.l10n.logOut),
-                    onTap: () {
-                      _showSignOutConfirmDialog(context, ref);
-                    },
-                  ),
-              ],
-            )
-          else
-            ListSection(
-              showDivider: true,
-              children: [
-                if (authController.isLoading)
-                  const PlatformListTile(
-                    leading: Icon(Icons.login),
-                    title: Center(child: ButtonLoadingIndicator()),
-                  )
-                else
-                  PlatformListTile(
-                    leading: const Icon(Icons.login),
-                    title: Text(context.l10n.signIn),
-                    onTap: () {
-                      ref.read(authControllerProvider.notifier).signIn();
-                    },
-                  ),
-              ],
+    final List<Widget> content = [
+      if (userSession != null)
+        ListSection(
+          header: UserFullNameWidget(user: userSession.user),
+          hasLeading: true,
+          showDivider: true,
+          children: [
+            PlatformListTile(
+              leading: const Icon(Icons.person),
+              title: Text(context.l10n.profile),
+              trailing: Theme.of(context).platform == TargetPlatform.iOS
+                  ? const CupertinoListTileChevron()
+                  : null,
+              onTap: () {
+                pushPlatformRoute(
+                  context,
+                  title: context.l10n.profile,
+                  builder: (context) => const ProfileScreen(),
+                );
+              },
             ),
-          ListSection(
-            hasLeading: true,
-            children: [
-              SettingsListTile(
-                icon: const Icon(Icons.music_note),
-                settingsLabel: Text(context.l10n.sound),
-                settingsValue: soundThemeL10n(context, soundTheme),
+            PlatformListTile(
+              leading: const Icon(Icons.manage_accounts),
+              title: Text(context.l10n.preferencesPreferences),
+              trailing: Theme.of(context).platform == TargetPlatform.iOS
+                  ? const CupertinoListTileChevron()
+                  : null,
+              onTap: () {
+                pushPlatformRoute(
+                  context,
+                  title: context.l10n.preferencesPreferences,
+                  builder: (context) => const AccountPreferencesScreen(),
+                );
+              },
+            ),
+            if (authController.isLoading)
+              const PlatformListTile(
+                leading: Icon(Icons.logout),
+                title: Center(child: ButtonLoadingIndicator()),
+              )
+            else
+              PlatformListTile(
+                leading: const Icon(Icons.logout),
+                title: Text(context.l10n.logOut),
                 onTap: () {
-                  if (Theme.of(context).platform == TargetPlatform.android) {
-                    showChoicePicker(
-                      context,
-                      choices: SoundTheme.values,
-                      selectedItem: soundTheme,
-                      labelBuilder: (t) => Text(soundThemeL10n(context, t)),
-                      onSelectedItemChanged: (SoundTheme? value) {
+                  _showSignOutConfirmDialog(context, ref);
+                },
+              ),
+          ],
+        )
+      else
+        ListSection(
+          showDivider: true,
+          children: [
+            if (authController.isLoading)
+              const PlatformListTile(
+                leading: Icon(Icons.login),
+                title: Center(child: ButtonLoadingIndicator()),
+              )
+            else
+              PlatformListTile(
+                leading: const Icon(Icons.login),
+                title: Text(context.l10n.signIn),
+                onTap: () {
+                  ref.read(authControllerProvider.notifier).signIn();
+                },
+              ),
+          ],
+        ),
+      ListSection(
+        hasLeading: true,
+        children: [
+          SettingsListTile(
+            icon: const Icon(Icons.music_note),
+            settingsLabel: Text(context.l10n.sound),
+            settingsValue: soundThemeL10n(context, soundTheme),
+            onTap: () {
+              if (Theme.of(context).platform == TargetPlatform.android) {
+                showChoicePicker(
+                  context,
+                  choices: SoundTheme.values,
+                  selectedItem: soundTheme,
+                  labelBuilder: (t) => Text(soundThemeL10n(context, t)),
+                  onSelectedItemChanged: (SoundTheme? value) {
+                    ref
+                        .read(generalPreferencesProvider.notifier)
+                        .setSoundTheme(value ?? SoundTheme.standard);
+                    ref.read(soundServiceProvider).changeTheme(
+                          value ?? SoundTheme.standard,
+                          playSound: true,
+                        );
+                  },
+                );
+              } else {
+                pushPlatformRoute(
+                  context,
+                  title: context.l10n.sound,
+                  builder: (context) => const SoundSettingsScreen(),
+                );
+              }
+            },
+          ),
+          if (Theme.of(context).platform == TargetPlatform.android)
+            androidVersionAsync.maybeWhen(
+              data: (version) => version.sdkInt >= 31
+                  ? SwitchSettingTile(
+                      leading: const Icon(Icons.colorize),
+                      title: const Text('System colors'),
+                      value: hasSystemColors,
+                      onChanged: (value) {
                         ref
                             .read(generalPreferencesProvider.notifier)
-                            .setSoundTheme(value ?? SoundTheme.standard);
-                        ref.read(soundServiceProvider).changeTheme(
-                              value ?? SoundTheme.standard,
-                              playSound: true,
-                            );
+                            .toggleSystemColors();
                       },
-                    );
-                  } else {
-                    pushPlatformRoute(
-                      context,
-                      title: context.l10n.sound,
-                      builder: (context) => const SoundSettingsScreen(),
-                    );
-                  }
-                },
-              ),
-              if (Theme.of(context).platform == TargetPlatform.android)
-                androidVersionAsync.maybeWhen(
-                  data: (version) => version.sdkInt >= 31
-                      ? SwitchSettingTile(
-                          leading: const Icon(Icons.colorize),
-                          title: const Text('System colors'),
-                          value: hasSystemColors,
-                          onChanged: (value) {
-                            ref
-                                .read(generalPreferencesProvider.notifier)
-                                .toggleSystemColors();
-                          },
-                        )
-                      : const SizedBox.shrink(),
-                  orElse: () => const SizedBox.shrink(),
-                ),
-              SettingsListTile(
-                icon: const Icon(Icons.brightness_medium),
-                settingsLabel: Text(context.l10n.background),
-                settingsValue: ThemeModeScreen.themeTitle(context, themeMode),
-                onTap: () {
-                  if (Theme.of(context).platform == TargetPlatform.android) {
-                    showChoicePicker(
-                      context,
-                      choices: ThemeMode.values,
-                      selectedItem: themeMode,
-                      labelBuilder: (t) =>
-                          Text(ThemeModeScreen.themeTitle(context, t)),
-                      onSelectedItemChanged: (ThemeMode? value) => ref
-                          .read(generalPreferencesProvider.notifier)
-                          .setThemeMode(value ?? ThemeMode.system),
-                    );
-                  } else {
-                    pushPlatformRoute(
-                      context,
-                      title: context.l10n.background,
-                      builder: (context) => const ThemeModeScreen(),
-                    );
-                  }
-                },
-              ),
-              SettingsListTile(
-                icon: const Icon(Icons.palette),
-                settingsLabel: Text(context.l10n.boardTheme),
-                settingsValue: boardPrefs.boardTheme.label,
-                onTap: () {
-                  pushPlatformRoute(
-                    context,
-                    title: context.l10n.boardTheme,
-                    builder: (context) => const BoardThemeScreen(),
-                  );
-                },
-              ),
-              SettingsListTile(
-                icon: const Icon(LichessIcons.chess_pawn),
-                settingsLabel: Text(context.l10n.pieceSet),
-                settingsValue: boardPrefs.pieceSet.label,
-                onTap: () {
-                  pushPlatformRoute(
-                    context,
-                    title: context.l10n.pieceSet,
-                    builder: (context) => const PieceSetScreen(),
-                  );
-                },
-              ),
-              PlatformListTile(
-                leading: const Icon(LichessIcons.chess_board),
-                title: const Text('Chessboard'),
-                trailing: Theme.of(context).platform == TargetPlatform.iOS
-                    ? const CupertinoListTileChevron()
-                    : null,
-                onTap: () {
-                  pushPlatformRoute(
-                    context,
-                    title: 'Chessboard',
-                    builder: (context) => const BoardSettingsScreen(),
-                  );
-                },
-              ),
-            ],
-          ),
-          Padding(
-            padding: Styles.bodySectionPadding,
-            child: Text(
-              'v${packageInfo.version}',
-              style: Theme.of(context).textTheme.bodySmall,
+                    )
+                  : const SizedBox.shrink(),
+              orElse: () => const SizedBox.shrink(),
             ),
+          SettingsListTile(
+            icon: const Icon(Icons.brightness_medium),
+            settingsLabel: Text(context.l10n.background),
+            settingsValue: ThemeModeScreen.themeTitle(context, themeMode),
+            onTap: () {
+              if (Theme.of(context).platform == TargetPlatform.android) {
+                showChoicePicker(
+                  context,
+                  choices: ThemeMode.values,
+                  selectedItem: themeMode,
+                  labelBuilder: (t) =>
+                      Text(ThemeModeScreen.themeTitle(context, t)),
+                  onSelectedItemChanged: (ThemeMode? value) => ref
+                      .read(generalPreferencesProvider.notifier)
+                      .setThemeMode(value ?? ThemeMode.system),
+                );
+              } else {
+                pushPlatformRoute(
+                  context,
+                  title: context.l10n.background,
+                  builder: (context) => const ThemeModeScreen(),
+                );
+              }
+            },
+          ),
+          SettingsListTile(
+            icon: const Icon(Icons.palette),
+            settingsLabel: Text(context.l10n.boardTheme),
+            settingsValue: boardPrefs.boardTheme.label,
+            onTap: () {
+              pushPlatformRoute(
+                context,
+                title: context.l10n.boardTheme,
+                builder: (context) => const BoardThemeScreen(),
+              );
+            },
+          ),
+          SettingsListTile(
+            icon: const Icon(LichessIcons.chess_pawn),
+            settingsLabel: Text(context.l10n.pieceSet),
+            settingsValue: boardPrefs.pieceSet.label,
+            onTap: () {
+              pushPlatformRoute(
+                context,
+                title: context.l10n.pieceSet,
+                builder: (context) => const PieceSetScreen(),
+              );
+            },
+          ),
+          PlatformListTile(
+            leading: const Icon(LichessIcons.chess_board),
+            title: const Text('Chessboard'),
+            trailing: Theme.of(context).platform == TargetPlatform.iOS
+                ? const CupertinoListTileChevron()
+                : null,
+            onTap: () {
+              pushPlatformRoute(
+                context,
+                title: 'Chessboard',
+                builder: (context) => const BoardSettingsScreen(),
+              );
+            },
           ),
         ],
       ),
-    );
+      Padding(
+        padding: Styles.bodySectionPadding,
+        child: Text(
+          'v${packageInfo.version}',
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
+      ),
+    ];
+
+    return Theme.of(context).platform == TargetPlatform.iOS
+        ? SliverList(delegate: SliverChildListDelegate(content))
+        : ListView(children: content);
   }
 
   Future<void> _showSignOutConfirmDialog(BuildContext context, WidgetRef ref) {

@@ -8,7 +8,6 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_position_choice_screen.dart';
 import 'package:lichess_mobile/src/view/clock/clock_screen.dart';
-import 'package:lichess_mobile/src/view/settings/settings_button.dart';
 import 'package:lichess_mobile/src/widgets/cupertino.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -29,9 +28,6 @@ class ToolsTabScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(context.l10n.tools),
-        actions: const [
-          SettingsButton(),
-        ],
       ),
       body: const Center(child: _Body()),
     );
@@ -42,19 +38,7 @@ class ToolsTabScreen extends ConsumerWidget {
       child: CustomScrollView(
         controller: puzzlesScrollController,
         slivers: [
-          CupertinoSliverNavigationBar(
-            padding: const EdgeInsetsDirectional.only(
-              start: 16.0,
-              end: 8.0,
-            ),
-            largeTitle: Text(context.l10n.tools),
-            trailing: const Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SettingsButton(),
-              ],
-            ),
-          ),
+          CupertinoSliverNavigationBar(largeTitle: Text(context.l10n.tools)),
           const SliverSafeArea(
             top: false,
             sliver: _Body(),
