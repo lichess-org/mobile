@@ -23,7 +23,7 @@ part 'opening_screen.g.dart';
 Future<(bool, IMap<String, int>, IList<PuzzleOpeningFamily>?)> _openings(
   _OpeningsRef ref,
 ) async {
-  final connectivity = await ref.watch(connectivityProvider.future);
+  final isOnline = await ref.watch(isOnlineProvider.future);
   final savedOpenings = await ref.watch(savedOpeningBatchesProvider.future);
   IList<PuzzleOpeningFamily>? onlineOpenings;
   try {
@@ -31,7 +31,7 @@ Future<(bool, IMap<String, int>, IList<PuzzleOpeningFamily>?)> _openings(
   } catch (e) {
     onlineOpenings = null;
   }
-  return (connectivity.isOnline, savedOpenings, onlineOpenings);
+  return (isOnline, savedOpenings, onlineOpenings);
 }
 
 class OpeningThemeScreen extends StatelessWidget {
