@@ -1334,12 +1334,12 @@ class AcplChart extends ConsumerWidget {
                   phaseVerticalBar(0.0, context.l10n.opening),
                   if (options.division?.endgame != null)
                     phaseVerticalBar(
-                      options.division!.endgame!,
+                      options.division!.endgame! - 1,
                       context.l10n.endgame,
                     ),
                   if (options.division?.middlegame != null)
                     phaseVerticalBar(
-                      options.division!.middlegame!,
+                      options.division!.middlegame! - 1,
                       context.l10n.middlegame,
                     ),
                 ],
