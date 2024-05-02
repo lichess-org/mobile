@@ -357,6 +357,8 @@ class PuzzleHistoryWidget extends ConsumerWidget {
         }
 
         return ListSection(
+          cupertinoBackgroundColor:
+              CupertinoTheme.of(context).scaffoldBackgroundColor,
           header: Text(context.l10n.puzzleHistory),
           headerTrailing: NoPaddingTextButton(
             onPressed: () => pushPlatformRoute(
@@ -369,7 +371,9 @@ class PuzzleHistoryWidget extends ConsumerWidget {
           ),
           children: [
             Padding(
-              padding: Styles.bodySectionPadding,
+              padding: Theme.of(context).platform == TargetPlatform.iOS
+                  ? EdgeInsets.zero
+                  : Styles.horizontalBodyPadding,
               child: PuzzleHistoryPreview(recentActivity.take(8).toIList()),
             ),
           ],
