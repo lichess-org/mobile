@@ -327,7 +327,7 @@ class _HelloWidget extends ConsumerWidget {
 
     return session != null
         ? Padding(
-            padding: Styles.bodyPadding,
+            padding: Styles.horizontalBodyPadding,
             child: Row(
               children: [
                 Icon(

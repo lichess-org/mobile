@@ -22,12 +22,11 @@ class ConnectivityBanner extends ConsumerWidget {
         return Container(
           height: 45,
           color: theme.platform == TargetPlatform.iOS
-              ? cupertinoTheme.barBackgroundColor
+              ? cupertinoTheme.scaffoldBackgroundColor
               : theme.colorScheme.surfaceContainerHighest,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            padding: Styles.horizontalBodyPadding,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Icon(Icons.report),
                 const SizedBox(width: 5),
@@ -167,11 +166,13 @@ void showCupertinoSnackBar({
       child: _CupertinoSnackBarManager(
         snackBar: CupertinoSnackBar(
           message: message,
-          backgroundColor: type == SnackBarType.error
-              ? CupertinoColors.systemRed
-              : type == SnackBarType.success
-                  ? CupertinoColors.systemGreen
-                  : CupertinoColors.systemBlue,
+          backgroundColor: (type == SnackBarType.error
+                  ? CupertinoColors.systemRed
+                  : type == SnackBarType.success
+                      ? CupertinoColors.systemGreen
+                      : CupertinoColors.systemGrey)
+              .resolveFrom(context)
+              .withOpacity(0.6),
           textStyle: const TextStyle(color: Colors.white),
         ),
         duration: duration,

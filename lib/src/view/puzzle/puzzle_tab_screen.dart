@@ -129,7 +129,6 @@ class _Body extends ConsumerWidget {
     final isTablet = getScreenType(context) == ScreenType.tablet;
 
     final handsetChildren = [
-      const SizedBox(height: 8.0),
       connectivity.when(
         data: (data) => data.isOnline
             ? const _DailyPuzzle()
