@@ -63,11 +63,11 @@ abstract class Styles {
           : null;
   static const cupertinoAppBarColor = CupertinoDynamicColor.withBrightness(
     color: Color(0xE6F9F9F9),
-    darkColor: Color(0xE61D1D1D),
+    darkColor: Color.fromARGB(210, 36, 36, 38),
   );
   static const cupertinoScaffoldColor = CupertinoDynamicColor.withBrightness(
     color: Color.fromARGB(255, 242, 242, 247),
-    darkColor: Color.fromARGB(255, 20, 20, 21),
+    darkColor: Color.fromARGB(255, 23, 23, 23),
   );
   static const cupertinoPrimaryColor = CupertinoDynamicColor.withBrightness(
     color: LichessColors.primary,
@@ -85,7 +85,7 @@ abstract class Styles {
   );
   static const cupertinoCardColor = CupertinoDynamicColor.withBrightness(
     color: Color(0xFFFFFFFF),
-    darkColor: Color.fromARGB(255, 36, 36, 37),
+    darkColor: Color.fromARGB(255, 44, 44, 46),
   );
   static const cupertinoSeparatorColor = CupertinoDynamicColor.withBrightness(
     debugLabel: 'separator',
