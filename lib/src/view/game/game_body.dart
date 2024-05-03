@@ -203,9 +203,12 @@ class GameBody extends ConsumerWidget {
                   : null,
         );
 
-        final topPlayer = youAre == Side.white ? black : white;
-        final bottomPlayer = youAre == Side.white ? white : black;
         final isBoardTurned = ref.watch(isBoardTurnedProvider);
+
+        final topPlayerIsBlack = youAre == Side.white && !isBoardTurned ||
+            youAre == Side.black && isBoardTurned;
+        final topPlayer = topPlayerIsBlack ? black : white;
+        final bottomPlayer = topPlayerIsBlack ? white : black;
 
         final content = WakelockWidget(
           shouldEnableOnFocusGained: () => gameState.game.playable,
