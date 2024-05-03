@@ -603,7 +603,7 @@ class _BottomBar extends ConsumerWidget {
     final puzzleState = ref.watch(ctrl);
     return Container(
       color: Theme.of(context).platform == TargetPlatform.iOS
-          ? CupertinoTheme.of(context).barBackgroundColor
+          ? null
           : Theme.of(context).bottomAppBarTheme.color,
       child: SafeArea(
         top: false,
