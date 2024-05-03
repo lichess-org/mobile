@@ -25,6 +25,8 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
+final isHomeRootProvider = StateProvider<bool>((ref) => true);
+
 class HomeTabScreen extends ConsumerStatefulWidget {
   const HomeTabScreen({super.key});
 
@@ -37,6 +39,33 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
 
   bool wasOnline = true;
   bool hasRefreshed = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final route = ModalRoute.of(context);
+    if (route != null && route is PageRoute) {
+      homeRouteObserver.subscribe(this, route);
+    }
+  }
+
+  @override
+  void dispose() {
+    homeRouteObserver.unsubscribe(this);
+    super.dispose();
+  }
+
+  @override
+  void didPushNext() {
+    ref.read(isHomeRootProvider.notifier).state = false;
+    super.didPushNext();
+  }
+
+  @override
+  void didPopNext() {
+    ref.read(isHomeRootProvider.notifier).state = true;
+    super.didPopNext();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -132,6 +161,13 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
                       color: CupertinoDynamicColor.resolve(
                         CupertinoTheme.of(context).barBackgroundColor,
                         context,
+                      ),
+                      border: Border(
+                        top: BorderSide(
+                          color: Styles.cupertinoDefaultTabBarBorderColor
+                              .resolveFrom(context),
+                          width: 0.0,
+                        ),
                       ),
                     ),
                     child: Center(

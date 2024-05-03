@@ -116,6 +116,9 @@ final settingsScrollController = ScrollController(debugLabel: 'SettingsScroll');
 final RouteObserver<PageRoute<void>> rootNavPageRouteObserver =
     RouteObserver<PageRoute<void>>();
 
+final RouteObserver<PageRoute<void>> homeRouteObserver =
+    RouteObserver<PageRoute<void>>();
+
 final _cupertinoTabController = CupertinoTabController();
 
 /// Implements a tabbed (iOS style) root layout and behavior structure.
@@ -157,13 +160,24 @@ class BottomNavScaffold extends ConsumerWidget {
           ),
         );
       case TargetPlatform.iOS:
+        final isHomeRoot = ref.watch(isHomeRootProvider);
+        final isHandset = getScreenType(context) == ScreenType.handset;
+        final shouldRemoveTabBarBorder =
+            isHandset && currentTab == BottomTab.home && isHomeRoot;
         final isOnline = ref.watch(isOnlineProvider).valueOrNull ?? true;
         return CupertinoTabScaffold(
           tabBuilder: _iOSTabBuilder,
           controller: _cupertinoTabController,
           tabBar: CupertinoTabBar(
             currentIndex: currentTab.index,
-            border: const Border(),
+            border: shouldRemoveTabBarBorder
+                ? const Border(top: BorderSide.none)
+                : const Border(
+                    top: BorderSide(
+                      color: Styles.cupertinoDefaultTabBarBorderColor,
+                      width: 0.0, // 0.0 means one physical pixel
+                    ),
+                  ),
             items: [
               for (final tab in BottomTab.values)
                 BottomNavigationBarItem(
@@ -224,6 +238,7 @@ Widget _androidTabBuilder(BuildContext context, int index) {
     case 0:
       return _MaterialTabView(
         navigatorKey: homeNavigatorKey,
+        navigatorObservers: [homeRouteObserver],
         tab: BottomTab.home,
         builder: (context) => const HomeTabScreen(),
       );
@@ -263,6 +278,7 @@ Widget _iOSTabBuilder(BuildContext context, int index) {
       return CupertinoTabView(
         defaultTitle: context.l10n.play,
         navigatorKey: homeNavigatorKey,
+        navigatorObservers: [homeRouteObserver],
         builder: (context) => const HomeTabScreen(),
       );
     case 1:
