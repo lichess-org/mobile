@@ -263,7 +263,10 @@ class LichessClient implements Client {
     Object? body,
     Encoding? encoding,
   ]) async {
-    final request = Request(method, lichessUri(url.path, url.queryParameters));
+    final request = Request(
+      method,
+      lichessUri(url.path, url.hasQuery ? url.queryParameters : null),
+    );
 
     if (headers != null) request.headers.addAll(headers);
     if (encoding != null) request.encoding = encoding;
