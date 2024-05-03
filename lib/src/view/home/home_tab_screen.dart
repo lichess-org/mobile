@@ -22,6 +22,7 @@ import 'package:lichess_mobile/src/view/user/player_screen.dart';
 import 'package:lichess_mobile/src/view/user/recent_games.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
@@ -128,13 +129,13 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
           CustomScrollView(
             controller: homeScrollController,
             slivers: [
-              CupertinoSliverNavigationBar(
-                padding: const EdgeInsetsDirectional.only(
+              const CupertinoSliverNavigationBar(
+                padding: EdgeInsetsDirectional.only(
                   start: 16.0,
                   end: 8.0,
                 ),
-                largeTitle: Text(context.l10n.play),
-                trailing: const Row(
+                largeTitle: Text('lichess.org'),
+                trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     _PlayerScreenButton(),
@@ -396,19 +397,22 @@ class _CreateAGameSection extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
-    return Padding(
-      padding: const EdgeInsets.only(top: 16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: Styles.horizontalBodyPadding,
-            child: Text(context.l10n.createAGame, style: Styles.sectionTitle),
-          ),
-          const QuickGameButton(),
-          const CreateGameOptions(),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ListSection(
+          header: Text(context.l10n.createAGame),
+          children: [
+            Padding(
+              padding: Theme.of(context).platform == TargetPlatform.android
+                  ? const EdgeInsets.symmetric(horizontal: 16.0)
+                  : const EdgeInsets.only(right: 2.0),
+              child: const QuickGameButton(),
+            ),
+          ],
+        ),
+        const CreateGameOptions(),
+      ],
     );
   }
 }

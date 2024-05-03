@@ -21,100 +21,88 @@ class QuickGameButton extends ConsumerWidget {
     final playPrefs = ref.watch(gameSetupPreferencesProvider);
     final session = ref.watch(authSessionProvider);
 
-    return Padding(
-      padding:
-          Styles.horizontalBodyPadding.add(const EdgeInsets.only(top: 6.0)),
-      child: Row(
-        children: [
-          Flexible(
-            flex: kFlexGoldenRatioBase,
-            child: AdaptiveTextButton(
-              child: Center(
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(playPrefs.timeIncrement.speed.icon),
-                        const SizedBox(width: 2.0),
-                        Text(
-                          playPrefs.timeIncrement.display,
-                        ),
-                      ],
-                    ),
-                    const Icon(Icons.keyboard_arrow_down),
-                  ],
-                ),
-              ),
-              onPressed: () {
-                final double screenHeight = MediaQuery.sizeOf(context).height;
-                showAdaptiveBottomSheet<void>(
-                  context: context,
-                  isScrollControlled: true,
-                  showDragHandle: true,
-                  constraints: BoxConstraints(
-                    maxHeight: screenHeight - (screenHeight / 10),
+    return Row(
+      children: [
+        Flexible(
+          flex: kFlexGoldenRatioBase,
+          child: AdaptiveTextButton(
+            child: Center(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(playPrefs.timeIncrement.speed.icon),
+                      const SizedBox(width: 2.0),
+                      Text(playPrefs.timeIncrement.display),
+                    ],
                   ),
-                  builder: (BuildContext context) {
-                    return TimeControlModal(
-                      value: playPrefs.timeIncrement,
-                      onSelected: (choice) {
-                        ref
-                            .read(gameSetupPreferencesProvider.notifier)
-                            .setTimeIncrement(choice);
-                      },
+                  const Icon(Icons.keyboard_arrow_down),
+                ],
+              ),
+            ),
+            onPressed: () {
+              final double screenHeight = MediaQuery.sizeOf(context).height;
+              showAdaptiveBottomSheet<void>(
+                context: context,
+                isScrollControlled: true,
+                showDragHandle: true,
+                constraints: BoxConstraints(
+                  maxHeight: screenHeight - (screenHeight / 10),
+                ),
+                builder: (BuildContext context) {
+                  return TimeControlModal(
+                    value: playPrefs.timeIncrement,
+                    onSelected: (choice) {
+                      ref
+                          .read(gameSetupPreferencesProvider.notifier)
+                          .setTimeIncrement(choice);
+                    },
+                  );
+                },
+              );
+            },
+          ),
+        ),
+        if (Theme.of(context).platform == TargetPlatform.android)
+          const SizedBox(width: 8.0),
+        Expanded(
+          flex: kFlexGoldenRatio,
+          child: Theme.of(context).platform == TargetPlatform.iOS
+              ? CupertinoButton.filled(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 4.0,
+                    vertical: 16.0,
+                  ),
+                  onPressed: () {
+                    pushPlatformRoute(
+                      context,
+                      rootNavigator: true,
+                      builder: (_) => LobbyScreen(
+                        seek: GameSeek.fastPairing(playPrefs, session),
+                      ),
                     );
                   },
-                );
-              },
-            ),
-          ),
-          if (Theme.of(context).platform == TargetPlatform.android)
-            const SizedBox(width: 8.0),
-          Expanded(
-            flex: kFlexGoldenRatio,
-            child: Theme.of(context).platform == TargetPlatform.iOS
-                ? CupertinoButton.filled(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 6.0,
-                      vertical: 16.0,
-                    ),
-                    onPressed: () {
-                      pushPlatformRoute(
-                        context,
-                        rootNavigator: true,
-                        builder: (_) => LobbyScreen(
-                          seek: GameSeek.fastPairing(playPrefs, session),
-                        ),
-                      );
-                    },
-                    child: Text(
-                      context.l10n.studyStart,
-                      style: Styles.callout,
-                    ),
-                  )
-                : FilledButton(
-                    onPressed: () {
-                      pushPlatformRoute(
-                        context,
-                        rootNavigator: true,
-                        builder: (_) => LobbyScreen(
-                          seek: GameSeek.fastPairing(playPrefs, session),
-                        ),
-                      );
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Text(
-                        context.l10n.studyStart,
-                        style: Styles.callout,
+                  child: Text(context.l10n.studyStart, style: Styles.bold),
+                )
+              : FilledButton(
+                  onPressed: () {
+                    pushPlatformRoute(
+                      context,
+                      rootNavigator: true,
+                      builder: (_) => LobbyScreen(
+                        seek: GameSeek.fastPairing(playPrefs, session),
                       ),
-                    ),
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Text(context.l10n.studyStart, style: Styles.bold),
                   ),
-          ),
-        ],
-      ),
+                ),
+        ),
+      ],
     );
   }
 }

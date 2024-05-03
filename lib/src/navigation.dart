@@ -23,7 +23,7 @@ enum BottomTab {
   String label(AppLocalizations strings) {
     switch (this) {
       case BottomTab.home:
-        return strings.play;
+        return 'Home';
       case BottomTab.puzzles:
         return strings.puzzles;
       case BottomTab.tools:
@@ -276,7 +276,7 @@ Widget _iOSTabBuilder(BuildContext context, int index) {
   switch (index) {
     case 0:
       return CupertinoTabView(
-        defaultTitle: context.l10n.play,
+        defaultTitle: 'Home',
         navigatorKey: homeNavigatorKey,
         navigatorObservers: [homeRouteObserver],
         builder: (context) => const HomeTabScreen(),
