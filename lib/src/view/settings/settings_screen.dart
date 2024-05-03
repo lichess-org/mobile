@@ -53,7 +53,9 @@ class SettingsScreen extends StatelessWidget {
     return CupertinoPageScaffold(
       child: CustomScrollView(
         slivers: [
-          const CupertinoSliverNavigationBar(),
+          CupertinoSliverNavigationBar(
+            largeTitle: Text(context.l10n.settingsSettings),
+          ),
           SliverSafeArea(
             top: false,
             sliver: _Body(),

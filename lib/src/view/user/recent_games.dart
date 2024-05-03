@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
+import 'package:lichess_mobile/src/model/game/game_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -49,11 +50,16 @@ class RecentGames extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final session = ref.watch(authSessionProvider);
+    final userId = user?.id ?? session?.user.id;
+
     final recentGames = user != null
         ? ref.watch(_userRecentGamesProvider(userId: user!.id))
-        : ref.watch(accountRecentGamesProvider);
-
-    final userId = user?.id ?? ref.watch(authSessionProvider)?.user.id;
+        : session != null
+            ? ref.watch(accountRecentGamesProvider)
+            : ref.watch(recentStoredGamesProvider).whenData((data) {
+                return data.map((e) => e.game.data).toIList();
+              });
 
     Widget getResultIcon(LightArchivedGame game, Side mySide) {
       if (game.status == GameStatus.aborted ||

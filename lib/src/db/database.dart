@@ -8,7 +8,10 @@ const kLichessDatabaseName = 'lichess_mobile.db';
 
 const puzzleTTL = Duration(days: 60);
 const corresGameTTL = Duration(days: 60);
+const gameTTL = Duration(days: 90);
 const chatReadMessagesTTL = Duration(days: 60);
+
+const kStorageAnonId = '**anonymous**';
 
 @Riverpod(keepAlive: true)
 Database database(DatabaseRef ref) {
@@ -41,15 +44,18 @@ Future<Database> openDb(DatabaseFactory dbFactory, String path) async {
   return dbFactory.openDatabase(
     path,
     options: OpenDatabaseOptions(
-      version: 1,
+      version: 2,
       onOpen: (db) async {
-        await _deleteOldEntries(db, 'puzzle', puzzleTTL);
-        await _deleteOldEntries(db, 'correspondence_game', corresGameTTL);
-        await _deleteOldEntries(
-          db,
-          'chat_read_messages',
-          chatReadMessagesTTL,
-        );
+        await Future.wait([
+          _deleteOldEntries(db, 'puzzle', puzzleTTL),
+          _deleteOldEntries(db, 'correspondence_game', corresGameTTL),
+          _deleteOldEntries(db, 'game', gameTTL),
+          _deleteOldEntries(
+            db,
+            'chat_read_messages',
+            chatReadMessagesTTL,
+          ),
+        ]);
       },
       onCreate: (db, version) async {
         final batch = db.batch();
@@ -57,12 +63,16 @@ Future<Database> openDb(DatabaseFactory dbFactory, String path) async {
         _createPuzzleTableV1(batch);
         _createCorrespondenceGameTableV1(batch);
         _createChatReadMessagesTableV1(batch);
+        _createGameTableV2(batch);
         await batch.commit();
       },
-      // onUpgrade: (db, oldVersion, newVersion) async {
-      //   final batch = db.batch();
-      //   await batch.commit();
-      // },
+      onUpgrade: (db, oldVersion, newVersion) async {
+        final batch = db.batch();
+        if (oldVersion == 1) {
+          _createGameTableV2(batch);
+        }
+        await batch.commit();
+      },
       onDowngrade: onDatabaseDowngradeDelete,
     ),
   );
@@ -96,6 +106,19 @@ void _createCorrespondenceGameTableV1(Batch batch) {
   batch.execute('DROP TABLE IF EXISTS correspondence_game');
   batch.execute('''
     CREATE TABLE correspondence_game(
+    gameId TEXT NOT NULL,
+    userId TEXT NOT NULL,
+    lastModified TEXT NOT NULL,
+    data TEXT NOT NULL,
+    PRIMARY KEY (gameId)
+  )
+    ''');
+}
+
+void _createGameTableV2(Batch batch) {
+  batch.execute('DROP TABLE IF EXISTS game');
+  batch.execute('''
+    CREATE TABLE game(
     gameId TEXT NOT NULL,
     userId TEXT NOT NULL,
     lastModified TEXT NOT NULL,

@@ -362,29 +362,26 @@ class _HelloWidget extends ConsumerWidget {
           orElse: () => null,
         );
 
-    return session != null
-        ? Padding(
-            padding: Styles.bodySectionPadding,
-            child: Row(
-              children: [
-                Icon(
-                  Icons.wb_sunny,
-                  size: 28,
-                  color: context.lichessColors.brag,
-                ),
-                const SizedBox(width: 5.0),
-                const Text(
-                  'Hello, ',
-                  style: style,
-                ),
-                UserFullNameWidget(
-                  user: accountUser ?? session.user,
-                  style: style,
-                ),
-              ],
-            ),
-          )
-        : const SizedBox.shrink();
+    final user = accountUser ?? session?.user;
+
+    return Padding(
+      padding: Styles.bodySectionPadding,
+      child: Row(
+        children: [
+          Icon(
+            Icons.wb_sunny,
+            size: 28,
+            color: context.lichessColors.brag,
+          ),
+          const SizedBox(width: 5.0),
+          Text(
+            'Hello${user != null ? ', ' : ''}',
+            style: style,
+          ),
+          if (user != null) UserFullNameWidget(user: user, style: style),
+        ],
+      ),
+    );
   }
 }
 

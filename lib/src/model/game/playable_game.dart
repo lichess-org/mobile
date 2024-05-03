@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
+import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
@@ -128,6 +129,42 @@ class PlayableGame
   bool get userAnalysable =>
       finished && steps.length > 4 ||
       (playable && (clock == null || youAre == null));
+
+  ArchivedGame toArchivedGame({required DateTime finishedAt}) {
+    return ArchivedGame(
+      id: id,
+      meta: meta,
+      data: LightArchivedGame(
+        id: id,
+        variant: meta.variant,
+        lastMoveAt: finishedAt,
+        lastFen: lastPosition.fen,
+        lastMove: lastMove,
+        createdAt: meta.createdAt,
+        perf: meta.perf,
+        speed: meta.speed,
+        rated: meta.rated,
+        winner: winner,
+        status: status,
+        white: white,
+        black: black,
+        clock: meta.clock != null
+            ? (
+                initial: meta.clock!.initial,
+                increment: meta.clock!.increment,
+              )
+            : null,
+        opening: meta.opening,
+      ),
+      steps: steps,
+      status: status,
+      white: white,
+      black: black,
+      youAre: youAre,
+      evals: evals,
+      clocks: clocks,
+    );
+  }
 }
 
 PlayableGame _playableGameFromPick(RequiredPick pick) {
