@@ -5,8 +5,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
+import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
+import 'package:lichess_mobile/src/model/game/game_storage.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
@@ -23,8 +25,10 @@ import 'package:lichess_mobile/src/view/user/recent_games.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 final isHomeRootProvider = StateProvider<bool>((ref) => true);
 
@@ -134,7 +138,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
                   start: 16.0,
                   end: 8.0,
                 ),
-                largeTitle: Text('lichess.org'),
+                largeTitle: Text('Home'),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -222,37 +226,135 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
   }
 }
 
+class _SignInWidget extends ConsumerWidget {
+  const _SignInWidget();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authController = ref.watch(authControllerProvider);
+
+    return SecondaryButton(
+      semanticsLabel: context.l10n.signIn,
+      onPressed: authController.isLoading
+          ? null
+          : () => ref.read(authControllerProvider.notifier).signIn(),
+      child: Text(context.l10n.signIn),
+    );
+  }
+}
+
 class _HomeBody extends ConsumerWidget {
   const _HomeBody();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final connectivity = ref.watch(connectivityChangesProvider);
-    return connectivity.when(
-      data: (data) {
+    final isOnlineAsync = ref.watch(isOnlineProvider);
+    return isOnlineAsync.when(
+      data: (isOnline) {
+        final session = ref.watch(authSessionProvider);
         final isTablet = getScreenType(context) == ScreenType.tablet;
-        if (data.isOnline) {
-          final onlineWidgets = _onlineWidgets(context, isTablet);
+        final emptyRecent = ref.watch(accountRecentGamesProvider).maybeWhen(
+              data: (data) => data.isEmpty,
+              orElse: () => false,
+            );
+        final emptyStored = ref.watch(recentStoredGamesProvider).maybeWhen(
+              data: (data) => data.isEmpty,
+              orElse: () => false,
+            );
+
+        if (emptyRecent && emptyStored) {
+          final messageWidget = Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const _HelloWidget(),
+                const Padding(
+                  padding: Styles.bodyPadding,
+                  child: LichessMessage(),
+                ),
+                const SizedBox(height: 16.0),
+                Center(
+                  child: SecondaryButton(
+                    semanticsLabel: context.l10n.aboutX('Lichess...'),
+                    onPressed: () {
+                      launchUrl(Uri.parse('https://lichess.org/about'));
+                    },
+                    child: Text(context.l10n.aboutX('Lichess...')),
+                  ),
+                ),
+                if (session == null) ...[
+                  const SizedBox(height: 16.0),
+                  const Center(child: _SignInWidget()),
+                ],
+              ],
+            ),
+          );
 
           return Theme.of(context).platform == TargetPlatform.android
-              ? ListView(
-                  controller: homeScrollController,
-                  children: onlineWidgets,
-                )
-              : SliverList(
-                  delegate: SliverChildListDelegate(onlineWidgets),
-                );
-        } else {
-          final offlineWidgets = _offlineWidgets(isTablet);
-          return Theme.of(context).platform == TargetPlatform.android
-              ? ListView(
-                  controller: homeScrollController,
-                  children: offlineWidgets,
-                )
-              : SliverList(
-                  delegate: SliverChildListDelegate.fixed(offlineWidgets),
+              ? messageWidget
+              : SliverFillRemaining(
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 72.0 + 50.0),
+                    child: messageWidget,
+                  ),
                 );
         }
+
+        final widgets = isTablet
+            ? [
+                const _HelloWidget(),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 8.0),
+                          if (isOnline) const _CreateAGameSection(),
+                          if (isOnline)
+                            const _OngoingGamesPreview(maxGamesToShow: 5)
+                          else
+                            const _OfflineCorrespondencePreview(
+                              maxGamesToShow: 5,
+                            ),
+                        ],
+                      ),
+                    ),
+                    const Expanded(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 8.0),
+                          RecentGames(),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ]
+            : [
+                const _HelloWidget(),
+                if (isOnline)
+                  const _OngoingGamesPreview(maxGamesToShow: 5)
+                else
+                  const _OfflineCorrespondencePreview(maxGamesToShow: 5),
+                const SafeArea(top: false, child: RecentGames()),
+                if (Theme.of(context).platform == TargetPlatform.iOS)
+                  const SizedBox(height: 70.0)
+                else
+                  const SizedBox(height: 54.0),
+              ];
+
+        return Theme.of(context).platform == TargetPlatform.android
+            ? ListView(
+                controller: homeScrollController,
+                children: widgets,
+              )
+            : SliverList(
+                delegate: SliverChildListDelegate(widgets),
+              );
       },
       loading: () {
         const child = CenterLoadingIndicator();
@@ -267,84 +369,6 @@ class _HomeBody extends ConsumerWidget {
             : const SliverFillRemaining(child: child);
       },
     );
-  }
-
-  List<Widget> _onlineWidgets(BuildContext context, bool isTablet) {
-    if (isTablet) {
-      return [
-        const _HelloWidget(),
-        const Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Column(
-                children: [
-                  SizedBox(height: 8.0),
-                  _CreateAGameSection(),
-                  _OngoingGamesPreview(maxGamesToShow: 5),
-                ],
-              ),
-            ),
-            Expanded(
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  SizedBox(height: 8.0),
-                  RecentGames(),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ];
-    } else {
-      return [
-        const _HelloWidget(),
-        const _OngoingGamesPreview(maxGamesToShow: 5),
-        const SafeArea(top: false, child: RecentGames()),
-        if (Theme.of(context).platform == TargetPlatform.iOS)
-          const SizedBox(height: 70.0)
-        else
-          const SizedBox(height: 54.0),
-      ];
-    }
-  }
-
-  List<Widget> _offlineWidgets(bool isTablet) {
-    if (isTablet) {
-      return const [
-        _HelloWidget(),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Column(
-                children: [
-                  SizedBox(height: 8.0),
-                  _OfflineCorrespondencePreview(maxGamesToShow: 5),
-                ],
-              ),
-            ),
-            Expanded(
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  SizedBox(height: 8.0),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ];
-    } else {
-      return const [
-        SizedBox(height: 8.0),
-        _HelloWidget(),
-        _OfflineCorrespondencePreview(maxGamesToShow: 5),
-      ];
-    }
   }
 }
 
@@ -367,6 +391,7 @@ class _HelloWidget extends ConsumerWidget {
     return Padding(
       padding: Styles.bodySectionPadding,
       child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Icon(
             Icons.wb_sunny,

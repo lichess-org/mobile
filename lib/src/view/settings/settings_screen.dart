@@ -21,6 +21,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'account_preferences_screen.dart';
 import 'board_settings_screen.dart';
@@ -159,6 +160,7 @@ class _Body extends ConsumerWidget {
         ),
       ListSection(
         hasLeading: true,
+        showDivider: true,
         children: [
           SettingsListTile(
             icon: const Icon(Icons.music_note),
@@ -267,6 +269,78 @@ class _Body extends ConsumerWidget {
                 title: 'Chessboard',
                 builder: (context) => const BoardSettingsScreen(),
               );
+            },
+          ),
+        ],
+      ),
+      ListSection(
+        hasLeading: true,
+        showDivider: true,
+        children: [
+          PlatformListTile(
+            leading: const Icon(Icons.info),
+            title: Text(context.l10n.aboutX('Lichess')),
+            trailing: Theme.of(context).platform == TargetPlatform.iOS
+                ? const CupertinoListTileChevron()
+                : null,
+            onTap: () {
+              launchUrl(Uri.parse('https://lichess.org/about'));
+            },
+          ),
+          PlatformListTile(
+            leading: const Icon(Icons.feedback),
+            title: const Text('Feedback'),
+            trailing: Theme.of(context).platform == TargetPlatform.iOS
+                ? const CupertinoListTileChevron()
+                : null,
+            onTap: () {
+              launchUrl(Uri.parse('https://lichess.org/contact'));
+            },
+          ),
+          PlatformListTile(
+            leading: const Icon(Icons.article),
+            title: Text(context.l10n.termsOfService),
+            trailing: Theme.of(context).platform == TargetPlatform.iOS
+                ? const CupertinoListTileChevron()
+                : null,
+            onTap: () {
+              launchUrl(Uri.parse('https://lichess.org/terms-of-service'));
+            },
+          ),
+          PlatformListTile(
+            leading: const Icon(Icons.privacy_tip),
+            title: Text(context.l10n.privacyPolicy),
+            trailing: Theme.of(context).platform == TargetPlatform.iOS
+                ? const CupertinoListTileChevron()
+                : null,
+            onTap: () {
+              launchUrl(Uri.parse('https://lichess.org/privacy'));
+            },
+          ),
+        ],
+      ),
+      ListSection(
+        hasLeading: true,
+        showDivider: true,
+        children: [
+          PlatformListTile(
+            leading: const Icon(Icons.code),
+            title: Text(context.l10n.sourceCode),
+            trailing: Theme.of(context).platform == TargetPlatform.iOS
+                ? const CupertinoListTileChevron()
+                : null,
+            onTap: () {
+              launchUrl(Uri.parse('https://lichess.org/source'));
+            },
+          ),
+          PlatformListTile(
+            leading: const Icon(Icons.bug_report),
+            title: Text(context.l10n.contribute),
+            trailing: Theme.of(context).platform == TargetPlatform.iOS
+                ? const CupertinoListTileChevron()
+                : null,
+            onTap: () {
+              launchUrl(Uri.parse('https://lichess.org/help/contribute'));
             },
           ),
         ],
