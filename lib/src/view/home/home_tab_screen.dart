@@ -142,6 +142,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
   Future<void> _refreshData() {
     return Future.wait([
       ref.refresh(accountRecentGamesProvider.future),
+      ref.refresh(recentStoredGamesProvider.future),
       ref.refresh(ongoingGamesProvider.future),
     ]);
   }
