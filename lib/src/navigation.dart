@@ -114,9 +114,6 @@ final settingsScrollController = ScrollController(debugLabel: 'SettingsScroll');
 final RouteObserver<PageRoute<void>> rootNavPageRouteObserver =
     RouteObserver<PageRoute<void>>();
 
-final RouteObserver<PageRoute<void>> homeRouteObserver =
-    RouteObserver<PageRoute<void>>();
-
 final _cupertinoTabController = CupertinoTabController();
 
 /// Implements a tabbed (iOS style) root layout and behavior structure.
@@ -224,7 +221,6 @@ Widget _androidTabBuilder(BuildContext context, int index) {
     case 0:
       return _MaterialTabView(
         navigatorKey: homeNavigatorKey,
-        navigatorObservers: [homeRouteObserver],
         tab: BottomTab.home,
         builder: (context) => const HomeTabScreen(),
       );
@@ -264,7 +260,6 @@ Widget _iOSTabBuilder(BuildContext context, int index) {
       return CupertinoTabView(
         defaultTitle: 'Home',
         navigatorKey: homeNavigatorKey,
-        navigatorObservers: [homeRouteObserver],
         builder: (context) => const HomeTabScreen(),
       );
     case 1:

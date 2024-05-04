@@ -26,8 +26,11 @@ typedef ClockData = ({
 
 /// A lichess game exported from the API.
 ///
-/// This represents a game that is finished.
-/// See also [PlayableGame] for a game that is in progress and owned by the current user.
+/// This represents a game that is finished and can be viewed by anyone, or accessed
+/// offline.
+///
+/// See also [PlayableGame] for a game owned by the current user and that can be
+/// played unless finished.
 @Freezed(fromJson: true, toJson: true)
 class ArchivedGame
     with _$ArchivedGame, BaseGame, IndexableSteps
