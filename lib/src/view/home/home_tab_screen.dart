@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -30,8 +28,6 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-final isHomeRootProvider = StateProvider<bool>((ref) => true);
-
 class HomeTabScreen extends ConsumerStatefulWidget {
   const HomeTabScreen({super.key});
 
@@ -44,33 +40,6 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
 
   bool wasOnline = true;
   bool hasRefreshed = false;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final route = ModalRoute.of(context);
-    if (route != null && route is PageRoute) {
-      homeRouteObserver.subscribe(this, route);
-    }
-  }
-
-  @override
-  void dispose() {
-    homeRouteObserver.unsubscribe(this);
-    super.dispose();
-  }
-
-  @override
-  void didPushNext() {
-    ref.read(isHomeRootProvider.notifier).state = false;
-    super.didPushNext();
-  }
-
-  @override
-  void didPopNext() {
-    ref.read(isHomeRootProvider.notifier).state = true;
-    super.didPopNext();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -116,6 +85,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
         onPressed: () {
           pushPlatformRoute(
             context,
+            fullscreenDialog: true,
             builder: (_) => const CreateAGameScreen(),
           );
         },
@@ -126,93 +96,44 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
   }
 
   Widget _iosBuilder(BuildContext context) {
+    final isHandset = getScreenType(context) == ScreenType.handset;
     return CupertinoPageScaffold(
-      child: Stack(
-        alignment: Alignment.bottomCenter,
-        children: [
-          CustomScrollView(
-            controller: homeScrollController,
-            slivers: [
-              const CupertinoSliverNavigationBar(
-                padding: EdgeInsetsDirectional.only(
-                  start: 16.0,
-                  end: 8.0,
-                ),
-                largeTitle: Text('Home'),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _PlayerScreenButton(),
-                  ],
-                ),
-              ),
-              CupertinoSliverRefreshControl(
-                onRefresh: () => _refreshData(),
-              ),
-              const SliverToBoxAdapter(child: ConnectivityBanner()),
-              const _HomeBody(),
-            ],
-          ),
-          if (getScreenType(context) == ScreenType.handset)
-            Positioned(
-              bottom: MediaQuery.paddingOf(context).bottom,
-              child: ClipRect(
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-                  child: Container(
-                    width: MediaQuery.sizeOf(context).width,
-                    height: 72.0,
-                    decoration: BoxDecoration(
-                      color: CupertinoDynamicColor.resolve(
-                        CupertinoTheme.of(context).barBackgroundColor,
-                        context,
-                      ),
-                      border: Border(
-                        top: BorderSide(
-                          color: Styles.cupertinoDefaultTabBarBorderColor
-                              .resolveFrom(context),
-                          width: 0.0,
-                        ),
-                      ),
-                    ),
-                    child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: CupertinoDynamicColor.resolve(
-                              CupertinoTheme.of(context).barBackgroundColor,
-                              context,
-                            ),
-                            borderRadius: BorderRadius.circular(8.0),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.2),
-                                blurRadius: 14.0,
-                              ),
-                            ],
-                          ),
-                          child: FatButton(
-                            semanticsLabel: context.l10n.createAGame,
-                            onPressed: () {
-                              pushPlatformRoute(
-                                context,
-                                title: context.l10n.createAGame,
-                                builder: (_) => const CreateAGameScreen(),
-                              );
-                            },
-                            child: Text(
-                              context.l10n.createAGame,
-                              style: const TextStyle(fontSize: 18),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+      child: CustomScrollView(
+        controller: homeScrollController,
+        slivers: [
+          CupertinoSliverNavigationBar(
+            padding: const EdgeInsetsDirectional.only(
+              start: 16.0,
+              end: 8.0,
             ),
+            largeTitle: const Text('Home'),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const _PlayerScreenButton(),
+                if (isHandset) ...[
+                  const SizedBox(width: 6.0),
+                  AppBarIconButton(
+                    semanticsLabel: context.l10n.createAGame,
+                    icon: const Icon(CupertinoIcons.plus_circle_fill),
+                    onPressed: () {
+                      pushPlatformRoute(
+                        context,
+                        fullscreenDialog: true,
+                        title: context.l10n.createAGame,
+                        builder: (_) => const CreateAGameScreen(),
+                      );
+                    },
+                  ),
+                ],
+              ],
+            ),
+          ),
+          CupertinoSliverRefreshControl(
+            onRefresh: () => _refreshData(),
+          ),
+          const SliverToBoxAdapter(child: ConnectivityBanner()),
+          const SliverSafeArea(top: false, sliver: _HomeBody()),
         ],
       ),
     );
@@ -341,9 +262,7 @@ class _HomeBody extends ConsumerWidget {
                 else
                   const _OfflineCorrespondencePreview(maxGamesToShow: 5),
                 const SafeArea(top: false, child: RecentGames()),
-                if (Theme.of(context).platform == TargetPlatform.iOS)
-                  const SizedBox(height: 70.0)
-                else
+                if (Theme.of(context).platform == TargetPlatform.android)
                   const SizedBox(height: 54.0),
               ];
 
@@ -551,10 +470,13 @@ class _PlayerScreenButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final connectivity = ref.watch(connectivityChangesProvider);
+    final icon = Theme.of(context).platform == TargetPlatform.iOS
+        ? CupertinoIcons.person_2
+        : Icons.group;
 
     return connectivity.maybeWhen(
       data: (connectivity) => AppBarIconButton(
-        icon: const Icon(Icons.group),
+        icon: Icon(icon),
         semanticsLabel: context.l10n.players,
         onPressed: !connectivity.isOnline
             ? null
@@ -567,7 +489,7 @@ class _PlayerScreenButton extends ConsumerWidget {
               },
       ),
       orElse: () => AppBarIconButton(
-        icon: const Icon(Icons.group),
+        icon: Icon(icon),
         semanticsLabel: context.l10n.players,
         onPressed: null,
       ),

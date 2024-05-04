@@ -2,10 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/layout.dart';
 import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_tab_screen.dart';
 import 'package:lichess_mobile/src/view/settings/settings_screen.dart';
@@ -160,24 +158,12 @@ class BottomNavScaffold extends ConsumerWidget {
           ),
         );
       case TargetPlatform.iOS:
-        final isHomeRoot = ref.watch(isHomeRootProvider);
-        final isHandset = getScreenType(context) == ScreenType.handset;
-        final shouldRemoveTabBarBorder =
-            isHandset && currentTab == BottomTab.home && isHomeRoot;
         final isOnline = ref.watch(isOnlineProvider).valueOrNull ?? true;
         return CupertinoTabScaffold(
           tabBuilder: _iOSTabBuilder,
           controller: _cupertinoTabController,
           tabBar: CupertinoTabBar(
             currentIndex: currentTab.index,
-            border: shouldRemoveTabBarBorder
-                ? const Border(top: BorderSide.none)
-                : const Border(
-                    top: BorderSide(
-                      color: Styles.cupertinoDefaultTabBarBorderColor,
-                      width: 0.0, // 0.0 means one physical pixel
-                    ),
-                  ),
             items: [
               for (final tab in BottomTab.values)
                 BottomNavigationBarItem(
