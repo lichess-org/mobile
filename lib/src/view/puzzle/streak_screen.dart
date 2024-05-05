@@ -363,13 +363,7 @@ class _BottomBar extends ConsumerWidget {
                 Expanded(
                   child: BottomBarButton(
                     onTap: ref.read(streakProvider).isLoading == false
-                        ? () {
-                            ref.invalidate(streakProvider);
-                            // Since the API sends the same streak during an
-                            // interval of time, the provider will receive the
-                            // same arguments and so will not be recomputed
-                            ref.invalidate(ctrlProvider);
-                          }
+                        ? () => ref.invalidate(streakProvider)
                         : null,
                     highlighted: true,
                     label: context.l10n.puzzleNewStreak,
