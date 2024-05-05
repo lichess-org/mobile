@@ -6,6 +6,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 
 part 'eval.freezed.dart';
+part 'eval.g.dart';
 
 sealed class Eval {
   String get evalString;
@@ -13,7 +14,7 @@ sealed class Eval {
 }
 
 /// The eval from an external engine, typically lichess server side stockfish.
-@freezed
+@Freezed(fromJson: true, toJson: true)
 class ExternalEval with _$ExternalEval implements Eval {
   const ExternalEval._();
 
@@ -25,6 +26,9 @@ class ExternalEval with _$ExternalEval implements Eval {
     String? variation,
     ({String name, String comment})? judgment,
   }) = _ExternalEval;
+
+  factory ExternalEval.fromJson(Map<String, dynamic> json) =>
+      _$ExternalEvalFromJson(json);
 
   @override
   String get evalString => _evalString(cp, mate);

@@ -191,6 +191,12 @@ class AppLocalizationsId extends AppLocalizations {
   }
 
   @override
+  String get contactContact => 'Kontak';
+
+  @override
+  String get contactContactLichess => 'Kontak Lichess';
+
+  @override
   String get playWithAFriend => 'Bermain dengan teman';
 
   @override
@@ -869,7 +875,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get standard => 'Standar';
 
   @override
-  String get customPosition => 'Custom position';
+  String get customPosition => 'Posisi kustom';
 
   @override
   String get unlimited => 'Tak terbatas';
@@ -1321,7 +1327,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get blackWins => 'Hitam Menang';
 
   @override
-  String get drawRate => 'Draw rate';
+  String get drawRate => 'Persentase imbang';
 
   @override
   String get draws => 'Remis';
@@ -1975,7 +1981,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get variationArrowsInfo => 'Variation arrows let you navigate without using the move list.';
 
   @override
-  String get playSelectedMove => 'play selected move';
+  String get playSelectedMove => 'mainkan gerakan terpilih';
 
   @override
   String get newTournament => 'Turnamen baru';
@@ -2228,13 +2234,22 @@ class AppLocalizationsId extends AppLocalizations {
   String get backgroundImageUrl => 'URL gambar latar belakang:';
 
   @override
-  String get boardGeometry => 'Geometri Papan';
+  String get board => 'Board';
 
   @override
-  String get boardTheme => 'Tema Papan';
+  String get size => 'Size';
 
   @override
-  String get boardSize => 'Ukuran Papan';
+  String get opacity => 'Opacity';
+
+  @override
+  String get brightness => 'Brightness';
+
+  @override
+  String get hue => 'Hue';
+
+  @override
+  String get boardReset => 'Reset colors to default';
 
   @override
   String get pieceSet => 'Susunan buah catur';
@@ -3246,6 +3261,12 @@ class AppLocalizationsId extends AppLocalizations {
   }
 
   @override
+  String get patronDonate => 'Donasi';
+
+  @override
+  String get patronLichessPatron => 'Patron Lichess';
+
+  @override
   String get preferencesPreferences => 'Pengaturan';
 
   @override
@@ -4206,105 +4227,6 @@ class AppLocalizationsId extends AppLocalizations {
   String get searchSearch => 'Cari';
 
   @override
-  String get searchAdvancedSearch => 'Pencarian lanjutan';
-
-  @override
-  String get searchOpponentName => 'Nama lawan pemain';
-
-  @override
-  String get searchLoser => 'Kalah';
-
-  @override
-  String get searchFrom => 'Dari';
-
-  @override
-  String get searchTo => 'Ke';
-
-  @override
-  String get searchHumanOrComputer => 'Apakah lawan pemain adalah manusia atau komputer';
-
-  @override
-  String get searchAiLevel => 'Kekuatan A.I.';
-
-  @override
-  String get searchSource => 'Sumber';
-
-  @override
-  String get searchNbTurns => 'Jumlah langkah';
-
-  @override
-  String get searchResult => 'Hasil';
-
-  @override
-  String get searchWinnerColor => 'Warna pemenang';
-
-  @override
-  String get searchDate => 'Tanggal';
-
-  @override
-  String get searchSortBy => 'Urut berdasarkan';
-
-  @override
-  String get searchAnalysis => 'Analisa';
-
-  @override
-  String get searchOnlyAnalysed => 'Hanya permainan di mana analisa komputer tersedia';
-
-  @override
-  String get searchColor => 'Warna';
-
-  @override
-  String get searchEvaluation => 'Evaluasi';
-
-  @override
-  String get searchMaxNumber => 'Jumlah maksimum';
-
-  @override
-  String get searchMaxNumberExplanation => 'Jumlah maksimal permainan untuk kembali';
-
-  @override
-  String get searchInclude => 'Termasuk';
-
-  @override
-  String get searchDescending => 'Sortir turun';
-
-  @override
-  String get searchAscending => 'Sortir naik';
-
-  @override
-  String get searchRatingExplanation => 'Rating rata rata kedua pemain';
-
-  @override
-  String searchSearchInXGames(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Cari dalam $count permainan catur',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String searchXGamesFound(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count permainan ditemukan',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String searchGamesFound(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count permainan ditemukan',
-    );
-    return '$_temp0';
-  }
-
-  @override
   String get settingsSettings => 'Pengaturan';
 
   @override
@@ -4330,159 +4252,6 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get streamerLichessStreamers => 'Streamer Lichess';
-
-  @override
-  String get streamerLichessStreamer => 'Streamer Lichess';
-
-  @override
-  String get streamerLive => 'LANGSUNG!';
-
-  @override
-  String get streamerOffline => 'OFFLINE';
-
-  @override
-  String streamerCurrentlyStreaming(String param) {
-    return 'Streaming saat ini: $param';
-  }
-
-  @override
-  String streamerLastStream(String param) {
-    return 'Terakhir stream $param';
-  }
-
-  @override
-  String get streamerBecomeStreamer => 'Menjadi streamer Lichess';
-
-  @override
-  String get streamerDoYouHaveStream => 'Apakah Anda memiliki Twitch atau Kanal YouTube?';
-
-  @override
-  String get streamerHereWeGo => 'Kita mulai sekarang!';
-
-  @override
-  String get streamerAllStreamers => 'Semua streamer';
-
-  @override
-  String get streamerEditPage => 'Ubah halaman streamer';
-
-  @override
-  String get streamerYourPage => 'Halaman streamer Anda';
-
-  @override
-  String get streamerDownloadKit => 'Unduh streamer kit';
-
-  @override
-  String streamerXIsStreaming(String param) {
-    return '$param sedang streaming';
-  }
-
-  @override
-  String get streamerRules => 'Aturan streaming';
-
-  @override
-  String get streamerRule1 => 'Sertakan kata kunci \"lichess.org\" dalam judul stream Anda saat Anda streaming di Lichess.';
-
-  @override
-  String get streamerRule2 => 'Hapus kata kunci saat Anda streaming hal-hal yang bukan Lichess.';
-
-  @override
-  String get streamerRule3 => 'Lichess akan mendeteksi stream Anda secara otomatis dan mengaktifkan fasilitas berikut:';
-
-  @override
-  String streamerRule4(String param) {
-    return 'Baca $param untuk menjaga sportivitas untuk semua orang saat anda streaming.';
-  }
-
-  @override
-  String get streamerStreamingFairplayFAQ => 'pertanyaan umum streaming fairplay';
-
-  @override
-  String get streamerPerks => 'Manfaat streaming dengan kata kunci';
-
-  @override
-  String get streamerPerk1 => 'Dapatkan ikon api streamer di profil Lichess Anda.';
-
-  @override
-  String get streamerPerk2 => 'Masuk ke dalam list top streamer.';
-
-  @override
-  String get streamerPerk3 => 'Beri tahu pengikut Lichess Anda.';
-
-  @override
-  String get streamerPerk4 => 'Tunjukkan streaming Anda di game, turnamen, dan studi Anda.';
-
-  @override
-  String get streamerApproved => 'Stream Anda telah disetujui.';
-
-  @override
-  String get streamerPendingReview => 'Stream Anda telah ditinjau oleh moderator.';
-
-  @override
-  String get streamerPleaseFillIn => 'Silakan isi informasi streamer Anda, dan unggah gambar.';
-
-  @override
-  String streamerWhenReady(String param) {
-    return 'Kapan Anda siap terdaftar sebagai streamer Lichess, $param';
-  }
-
-  @override
-  String get streamerRequestReview => 'meminta tinjauan moderator';
-
-  @override
-  String get streamerStreamerLanguageSettings => 'The Lichess streamer page targets your audience with the language provided by your streaming platform. Set the correct default language for your chess streams in the app or service you use to broadcast.';
-
-  @override
-  String get streamerTwitchUsername => 'Nama pengguna Twitch Anda atau URL';
-
-  @override
-  String get streamerOptionalOrEmpty => 'Opsional. Biarkan kosong jika tidak ada';
-
-  @override
-  String get streamerYouTubeChannelId => 'Your YouTube channel ID';
-
-  @override
-  String get streamerStreamerName => 'Nama streamer Anda di Lichess';
-
-  @override
-  String get streamerVisibility => 'Terlihat di halaman streamer';
-
-  @override
-  String get streamerWhenApproved => 'Kapan disetujui oleh moderator';
-
-  @override
-  String get streamerHeadline => 'Berita utama';
-
-  @override
-  String get streamerTellUsAboutTheStream => 'Dalam satu kalimat, beri tahu kami tentang stream Anda';
-
-  @override
-  String get streamerLongDescription => 'Deskripsi panjang';
-
-  @override
-  String streamerXStreamerPicture(String param) {
-    return '$param foto streamer';
-  }
-
-  @override
-  String get streamerChangePicture => 'Ubah/hapus foto Anda';
-
-  @override
-  String get streamerUploadPicture => 'Unggah foto';
-
-  @override
-  String streamerMaxSize(String param) {
-    return 'Ukuran maksimal: $param';
-  }
-
-  @override
-  String streamerKeepItShort(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Usahakan pendek: maksimal $count karakter',
-    );
-    return '$_temp0';
-  }
 
   @override
   String get stormMoveToStart => 'Melangkah untuk memulai';
@@ -4664,512 +4433,8 @@ class AppLocalizationsId extends AppLocalizations {
   }
 
   @override
-  String get studyPrivate => 'Pribadi';
-
-  @override
-  String get studyMyStudies => 'Studi saya';
-
-  @override
-  String get studyStudiesIContributeTo => 'Studi yang saya ikut berkontribusi';
-
-  @override
-  String get studyMyPublicStudies => 'Studi publik saya';
-
-  @override
-  String get studyMyPrivateStudies => 'Studi pribadi saya';
-
-  @override
-  String get studyMyFavoriteStudies => 'Studi favorit saya';
-
-  @override
-  String get studyWhatAreStudies => 'Apa itu studi?';
-
-  @override
-  String get studyAllStudies => 'Semua studi';
-
-  @override
-  String studyStudiesCreatedByX(String param) {
-    return 'Studi dibuat oleh $param';
-  }
-
-  @override
-  String get studyNoneYet => 'Tidak ada.';
-
-  @override
-  String get studyHot => 'Terhangat';
-
-  @override
-  String get studyDateAddedNewest => 'Tanggal ditambahkan (terbaru)';
-
-  @override
-  String get studyDateAddedOldest => 'Tanggal ditambahkan (terlama)';
-
-  @override
-  String get studyRecentlyUpdated => 'Baru saja diperbarui';
-
-  @override
-  String get studyMostPopular => 'Paling populer';
-
-  @override
-  String get studyAlphabetical => 'Menurut abjad';
-
-  @override
-  String get studyAddNewChapter => 'Tambahkan bab baru';
-
-  @override
-  String get studyAddMembers => 'Tambahkan anggota';
-
-  @override
-  String get studyInviteToTheStudy => 'Ajak untuk studi';
-
-  @override
-  String get studyPleaseOnlyInvitePeopleYouKnow => 'Harap hanya mengundang orang yang Anda kenal, dan yang secara aktif ingin bergabung dengan studi ini.';
-
-  @override
-  String get studySearchByUsername => 'Cari berdasarkan nama pengguna';
-
-  @override
-  String get studySpectator => 'Penonton';
-
-  @override
-  String get studyContributor => 'Kontributor';
-
-  @override
-  String get studyKick => 'Diusir';
-
-  @override
-  String get studyLeaveTheStudy => 'Tinggalkan studi';
-
-  @override
-  String get studyYouAreNowAContributor => 'Sekarang Anda menjadi kontributor';
-
-  @override
-  String get studyYouAreNowASpectator => 'Sekarang Anda adalah penonton';
-
-  @override
-  String get studyPgnTags => 'Tagar PGN';
-
-  @override
-  String get studyLike => 'Suka';
-
-  @override
-  String get studyUnlike => 'Batal Suka';
-
-  @override
-  String get studyNewTag => 'Tagar baru';
-
-  @override
-  String get studyCommentThisPosition => 'Komentar di posisi ini';
-
-  @override
-  String get studyCommentThisMove => 'Komentari langkah ini';
-
-  @override
-  String get studyAnnotateWithGlyphs => 'Anotasikan dengan glif';
-
-  @override
-  String get studyTheChapterIsTooShortToBeAnalysed => 'Bab ini terlalu pendek untuk di analisa.';
-
-  @override
-  String get studyOnlyContributorsCanRequestAnalysis => 'Hanya kontributor yang dapat meminta analisa komputer.';
-
-  @override
-  String get studyGetAFullComputerAnalysis => 'Dapatkan analisis komputer penuh di pihak server dari jalur utama.';
-
-  @override
-  String get studyMakeSureTheChapterIsComplete => 'Pastikan bab ini selesai. Anda hanya dapat meminta analisis satu kali.';
-
-  @override
-  String get studyAllSyncMembersRemainOnTheSamePosition => 'Semua anggota yang ter-sinkron tetap pada posisi yang sama';
-
-  @override
-  String get studyShareChanges => 'Bagikan perubahan dengan penonton dan simpan di server';
-
-  @override
-  String get studyPlaying => 'Memainkan';
-
-  @override
-  String get studyShowEvalBar => 'Evaluation bars';
-
-  @override
-  String get studyFirst => 'Pertama';
-
-  @override
-  String get studyPrevious => 'Sebelumnya';
-
-  @override
-  String get studyNext => 'Berikutnya';
-
-  @override
-  String get studyLast => 'Terakhir';
-
-  @override
   String get studyShareAndExport => 'Bagikan & ekspor';
 
   @override
-  String get studyCloneStudy => 'Gandakan';
-
-  @override
-  String get studyStudyPgn => 'Studi PGN';
-
-  @override
-  String get studyDownloadAllGames => 'Unduh semua permainan';
-
-  @override
-  String get studyChapterPgn => 'Bab PGN';
-
-  @override
-  String get studyCopyChapterPgn => 'Salin PGN';
-
-  @override
-  String get studyCopyChapterPgnDescription => 'Salin PGN ke clipboard.';
-
-  @override
-  String get studyDownloadGame => 'Unduh permainan';
-
-  @override
-  String get studyStudyUrl => 'URL studi';
-
-  @override
-  String get studyCurrentChapterUrl => 'URL Bab saat ini';
-
-  @override
-  String get studyYouCanPasteThisInTheForumToEmbed => 'Anda dapat menempelkan ini di forum untuk disematkan';
-
-  @override
-  String get studyStartAtInitialPosition => 'Mulai saat posisi awal';
-
-  @override
-  String studyStartAtX(String param) {
-    return 'Mulai dari $param';
-  }
-
-  @override
-  String get studyEmbedInYourWebsite => 'Sematkan di blog atau website Anda';
-
-  @override
-  String get studyReadMoreAboutEmbedding => 'Baca lebih tentang penyematan';
-
-  @override
-  String get studyOnlyPublicStudiesCanBeEmbedded => 'Hanya pelajaran publik yang dapat di sematkan!';
-
-  @override
-  String get studyOpen => 'Buka';
-
-  @override
-  String studyXBroughtToYouByY(String param1, String param2) {
-    return '$param1 dibawakan kepadamu dari $param2';
-  }
-
-  @override
-  String get studyStudyNotFound => 'Studi tidak ditemukan';
-
-  @override
-  String get studyEditChapter => 'Ubah bab';
-
-  @override
-  String get studyNewChapter => 'Bab baru';
-
-  @override
-  String studyImportFromChapterX(String param) {
-    return 'Impor dari $param';
-  }
-
-  @override
-  String get studyOrientation => 'Orientasi';
-
-  @override
-  String get studyAnalysisMode => 'Mode analisa';
-
-  @override
-  String get studyPinnedChapterComment => 'Sematkan komentar bagian bab';
-
-  @override
-  String get studySaveChapter => 'Simpan bab';
-
-  @override
-  String get studyClearAnnotations => 'Hapus anotasi';
-
-  @override
-  String get studyClearVariations => 'Hapus variasi';
-
-  @override
-  String get studyDeleteChapter => 'Hapus bab';
-
-  @override
-  String get studyDeleteThisChapter => 'Hapus bab ini? Ini tidak akan dapat mengulangkan kembali!';
-
-  @override
-  String get studyClearAllCommentsInThisChapter => 'Hapus semua komentar dan bentuk di bab ini?';
-
-  @override
-  String get studyRightUnderTheBoard => 'Kanan dibawah papan';
-
-  @override
-  String get studyNoPinnedComment => 'Tidak ada';
-
-  @override
-  String get studyNormalAnalysis => 'Analisa biasa';
-
-  @override
-  String get studyHideNextMoves => 'Sembunyikan langkah selanjutnya';
-
-  @override
-  String get studyInteractiveLesson => 'Pelajaran interaktif';
-
-  @override
-  String studyChapterX(String param) {
-    return 'Bab $param';
-  }
-
-  @override
-  String get studyEmpty => 'Kosong';
-
-  @override
-  String get studyStartFromInitialPosition => 'Mulai dari posisi awal';
-
-  @override
-  String get studyEditor => 'Penyunting';
-
-  @override
-  String get studyStartFromCustomPosition => 'Mulai dari posisi yang disesuaikan';
-
-  @override
-  String get studyLoadAGameByUrl => 'Muat permainan dari URL';
-
-  @override
-  String get studyLoadAPositionFromFen => 'Muat posisi dari FEN';
-
-  @override
-  String get studyLoadAGameFromPgn => 'Muat permainan dari PGN';
-
-  @override
-  String get studyAutomatic => 'Otomatis';
-
-  @override
-  String get studyUrlOfTheGame => 'URL permainan';
-
-  @override
-  String studyLoadAGameFromXOrY(String param1, String param2) {
-    return 'Muat permainan dari $param1 atau $param2';
-  }
-
-  @override
-  String get studyCreateChapter => 'Buat bab';
-
-  @override
-  String get studyCreateStudy => 'Buat studi';
-
-  @override
-  String get studyEditStudy => 'Ubah studi';
-
-  @override
-  String get studyVisibility => 'Visibilitas';
-
-  @override
-  String get studyPublic => 'Publik';
-
-  @override
-  String get studyUnlisted => 'Tidak terdaftar';
-
-  @override
-  String get studyInviteOnly => 'Hanya yang diundang';
-
-  @override
-  String get studyAllowCloning => 'Perbolehkan kloning';
-
-  @override
-  String get studyNobody => 'Tidak ada seorangpun';
-
-  @override
-  String get studyOnlyMe => 'Hanya saya';
-
-  @override
-  String get studyContributors => 'Kontributor';
-
-  @override
-  String get studyMembers => 'Anggota';
-
-  @override
-  String get studyEveryone => 'Semua orang';
-
-  @override
-  String get studyEnableSync => 'Aktifkan sinkronisasi';
-
-  @override
-  String get studyYesKeepEveryoneOnTheSamePosition => 'Ya: atur semua orang dalam posisi yang sama';
-
-  @override
-  String get studyNoLetPeopleBrowseFreely => 'Tidak: Bolehkan untuk menjelajah dengan bebas';
-
-  @override
-  String get studyPinnedStudyComment => 'Sematkan komentar studi';
-
-  @override
   String get studyStart => 'Mulai';
-
-  @override
-  String get studySave => 'Simpan';
-
-  @override
-  String get studyClearChat => 'Bersihkan obrolan';
-
-  @override
-  String get studyDeleteTheStudyChatHistory => 'Hapus riwayat obrolan studi? Ini tidak akan dapat mengulangkan kembali!';
-
-  @override
-  String get studyDeleteStudy => 'Hapus studi';
-
-  @override
-  String studyConfirmDeleteStudy(String param) {
-    return 'Hapus seluruh studi? Tidak dapat kembal lagi! Tuliskan nama studi untuk konfirmasi: $param';
-  }
-
-  @override
-  String get studyWhereDoYouWantToStudyThat => 'Dimana Anda ingin mempelajarinya?';
-
-  @override
-  String get studyGoodMove => 'Langkah bagus';
-
-  @override
-  String get studyMistake => 'Kesalahan';
-
-  @override
-  String get studyBrilliantMove => 'Langkah Brilian';
-
-  @override
-  String get studyBlunder => 'Blunder';
-
-  @override
-  String get studyInterestingMove => 'Langkah menarik';
-
-  @override
-  String get studyDubiousMove => 'Langkah meragukan';
-
-  @override
-  String get studyOnlyMove => 'Langkah satu-satunya';
-
-  @override
-  String get studyZugzwang => 'Zugzwang';
-
-  @override
-  String get studyEqualPosition => 'Posisi imbang';
-
-  @override
-  String get studyUnclearPosition => 'Posisi tidak jelas';
-
-  @override
-  String get studyWhiteIsSlightlyBetter => 'Putih sedikit lebih unggul';
-
-  @override
-  String get studyBlackIsSlightlyBetter => 'Hitam sedikit lebih unggul';
-
-  @override
-  String get studyWhiteIsBetter => 'Putih lebih unggul';
-
-  @override
-  String get studyBlackIsBetter => 'Hitam lebih unggul';
-
-  @override
-  String get studyWhiteIsWinning => 'Putih menang telak';
-
-  @override
-  String get studyBlackIsWinning => 'Hitam menang telak';
-
-  @override
-  String get studyNovelty => 'Langkah baru';
-
-  @override
-  String get studyDevelopment => 'Pengembangan';
-
-  @override
-  String get studyInitiative => 'Inisiatif';
-
-  @override
-  String get studyAttack => 'Serangan';
-
-  @override
-  String get studyCounterplay => 'Serangan balik';
-
-  @override
-  String get studyTimeTrouble => 'Tekanan waktu';
-
-  @override
-  String get studyWithCompensation => 'Dengan kompensasi';
-
-  @override
-  String get studyWithTheIdea => 'Dengan ide';
-
-  @override
-  String get studyNextChapter => 'Bab selanjutnya';
-
-  @override
-  String get studyPrevChapter => 'Bab sebelumnya';
-
-  @override
-  String get studyStudyActions => 'Pembelajaran';
-
-  @override
-  String get studyTopics => 'Topik';
-
-  @override
-  String get studyMyTopics => 'Topik saya';
-
-  @override
-  String get studyPopularTopics => 'Topik populer';
-
-  @override
-  String get studyManageTopics => 'Kelola topik';
-
-  @override
-  String get studyBack => 'Kembali';
-
-  @override
-  String get studyPlayAgain => 'Main lagi';
-
-  @override
-  String get studyWhatWouldYouPlay => 'What would you play in this position?';
-
-  @override
-  String get studyYouCompletedThisLesson => 'Selamat. Anda telah menyelesaikan pelajaran ini.';
-
-  @override
-  String studyNbChapters(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count Bab',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String studyNbGames(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count Permainan',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String studyNbMembers(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count Anggota',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String studyPasteYourPgnTextHereUpToNbGames(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Tempelkan PGN kamu disini, lebih dari $count permainan',
-    );
-    return '$_temp0';
-  }
 }

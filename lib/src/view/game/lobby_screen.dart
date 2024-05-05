@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/game/game_storage.dart';
 import 'package:lichess_mobile/src/model/lobby/create_game_service.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/navigation.dart';
@@ -69,6 +70,7 @@ class _LobbyScreenState extends ConsumerState<LobbyScreen> with RouteAware {
     super.didPop();
     if (mounted) {
       ref.invalidate(accountRecentGamesProvider);
+      ref.invalidate(recentStoredGamesProvider);
     }
   }
 

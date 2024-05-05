@@ -615,7 +615,7 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: FatButton(
-                      semanticsLabel: context.l10n.createAGame,
+                      semanticsLabel: context.l10n.studyStart,
                       onPressed: timeControl == TimeControl.realTime
                           ? isValidTimeControl
                               ? () {
@@ -653,7 +653,7 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                                   await _pendingCreateGame;
                                   widget.setViewMode(_ViewMode.challenges);
                                 },
-                      child: Text(context.l10n.createAGame, style: Styles.bold),
+                      child: Text(context.l10n.studyStart, style: Styles.bold),
                     ),
                   );
                 },

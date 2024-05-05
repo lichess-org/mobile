@@ -13,7 +13,6 @@ import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/view/settings/settings_button.dart';
 import 'package:lichess_mobile/src/view/watch/live_tv_channels_screen.dart';
 import 'package:lichess_mobile/src/view/watch/streamer_screen.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
@@ -88,9 +87,6 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(context.l10n.watch),
-        actions: const [
-          SettingsButton(),
-        ],
       ),
       body: RefreshIndicator(
         key: _androidRefreshKey,
@@ -130,12 +126,6 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
                 padding: EdgeInsetsDirectional.only(
                   start: 16.0,
                   end: 8.0,
-                ),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    SettingsButton(),
-                  ],
                 ),
               ),
               CupertinoSliverRefreshControl(

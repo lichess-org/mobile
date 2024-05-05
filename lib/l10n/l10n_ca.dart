@@ -49,9 +49,9 @@ class AppLocalizationsCa extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Has resolt $count exercicis de tàctica',
-      one: 'Has resolt $count exercici de tàctica',
-      zero: 'Has resolt $count exercici de tàctica',
+      other: 'Ha resolt $count exercicis de tàctica',
+      one: 'Ha resolt $count exercici de tàctica',
+      zero: 'Ha resolt $count exercici de tàctica',
     );
     return '$_temp0';
   }
@@ -61,7 +61,7 @@ class AppLocalizationsCa extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Has jugat $count partides $param2',
+      other: 'Ha jugat $count partides $param2',
       one: 'Has jugat $count partida $param2',
       zero: 'Has jugat $count partida $param2',
     );
@@ -73,9 +73,9 @@ class AppLocalizationsCa extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Has publicat $count missatges a $param2',
-      one: 'Has publicat $count missatge a $param2',
-      zero: 'Has publicat $count missatge a $param2',
+      other: 'Ha publicat $count missatges a $param2',
+      one: 'Ha publicat $count missatge a $param2',
+      zero: 'Ha publicat $count missatge a $param2',
     );
     return '$_temp0';
   }
@@ -109,9 +109,9 @@ class AppLocalizationsCa extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Has jugat $count partides per correspondència',
-      one: 'Has jugat $count partida per correspondència',
-      zero: 'Has jugat $count partida per correspondència',
+      other: 'Ha jugat $count partides per correspondència',
+      one: 'Ha jugat $count partida per correspondència',
+      zero: 'Ha jugat $count partida per correspondència',
     );
     return '$_temp0';
   }
@@ -133,9 +133,9 @@ class AppLocalizationsCa extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Tens $count seguidors nous',
-      one: 'Tens $count seguidor nou',
-      zero: 'Tens $count seguidor nou',
+      other: 'Té $count seguidors nous',
+      one: 'Té $count seguidor nou',
+      zero: 'Té $count seguidor nou',
     );
     return '$_temp0';
   }
@@ -205,9 +205,9 @@ class AppLocalizationsCa extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Va competir en els tornejos $count suïssos',
-      one: 'Has jugat en $count tornejos suïssos',
-      zero: 'Has jugat en $count tornejos suïssos',
+      other: 'Ha jugat en $count tornejos suïssos',
+      one: 'Ha jugat en $count tornejos suïssos',
+      zero: 'Ha jugat en $count tornejos suïssos',
     );
     return '$_temp0';
   }
@@ -225,6 +225,12 @@ class AppLocalizationsCa extends AppLocalizations {
   }
 
   @override
+  String get contactContact => 'Contacte';
+
+  @override
+  String get contactContactLichess => 'Contacte Lichess';
+
+  @override
   String get playWithAFriend => 'Juga amb un amic';
 
   @override
@@ -237,7 +243,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get gameOver => 'Partida finalitzada';
 
   @override
-  String get waitingForOpponent => 'Esperant un adversari';
+  String get waitingForOpponent => 'Esperant a l\'oponent';
 
   @override
   String get orLetYourOpponentScanQrCode => 'O deixeu que el vostre oponent escanegi aquest codi QR';
@@ -1518,7 +1524,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get posts => 'Entrades';
 
   @override
-  String get lastPost => 'Darrer post';
+  String get lastPost => 'Última publicació';
 
   @override
   String get views => 'Visites';
@@ -2003,7 +2009,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get toggleGlyphAnnotations => 'Mostra/amaga les anotacions glif';
 
   @override
-  String get togglePositionAnnotations => 'Toggle position annotations';
+  String get togglePositionAnnotations => 'Mostra/amaga les anotacions de la posició';
 
   @override
   String get variationArrowsInfo => 'Les fletxes de variants et permeten navegar sense utilitzar la llista de moviments.';
@@ -2262,13 +2268,22 @@ class AppLocalizationsCa extends AppLocalizations {
   String get backgroundImageUrl => 'Imatge de fons URL:';
 
   @override
-  String get boardGeometry => 'Geometria del tauler';
+  String get board => 'Tauler';
 
   @override
-  String get boardTheme => 'Temàtica del tauler';
+  String get size => 'Mida';
 
   @override
-  String get boardSize => 'Mida del tauler';
+  String get opacity => 'Opacitat';
+
+  @override
+  String get brightness => 'Brillantor';
+
+  @override
+  String get hue => 'Tonalitat';
+
+  @override
+  String get boardReset => 'Restableix els colors per defecte';
 
   @override
   String get pieceSet => 'Conjunt de peces';
@@ -3297,8 +3312,8 @@ class AppLocalizationsCa extends AppLocalizations {
       count,
       locale: localeName,
       other: '$count Missatges al Fòrum',
-      one: '$count Missatges al Fòrum',
-      zero: '$count Missatges al Fòrum',
+      one: '$count Missatge al Fòrum',
+      zero: '$count Missatge al Fòrum',
     );
     return '$_temp0';
   }
@@ -3362,6 +3377,12 @@ class AppLocalizationsCa extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get patronDonate => 'Donar';
+
+  @override
+  String get patronLichessPatron => 'Patró de Lichess';
 
   @override
   String get preferencesPreferences => 'Configuracions';
@@ -3797,8 +3818,8 @@ class AppLocalizationsCa extends AppLocalizations {
       count,
       locale: localeName,
       other: 'Intentat $count vegades',
-      one: 'Jugat $count vegades',
-      zero: 'Jugat $count vegades',
+      one: 'Intentat $count vegada',
+      zero: 'Intentat $count vegada',
     );
     return '$_temp0';
   }
@@ -4334,111 +4355,6 @@ class AppLocalizationsCa extends AppLocalizations {
   String get searchSearch => 'Cerca';
 
   @override
-  String get searchAdvancedSearch => 'Cerca avançada';
-
-  @override
-  String get searchOpponentName => 'Nom de l\'adversari';
-
-  @override
-  String get searchLoser => 'Perdedor';
-
-  @override
-  String get searchFrom => 'Des de';
-
-  @override
-  String get searchTo => 'a';
-
-  @override
-  String get searchHumanOrComputer => 'Si l\'oponent era humà o un ordinador';
-
-  @override
-  String get searchAiLevel => 'Nivell I.A.';
-
-  @override
-  String get searchSource => 'Origen';
-
-  @override
-  String get searchNbTurns => 'Nombre de torns';
-
-  @override
-  String get searchResult => 'Resultat';
-
-  @override
-  String get searchWinnerColor => 'Color guanyador';
-
-  @override
-  String get searchDate => 'Data';
-
-  @override
-  String get searchSortBy => 'Ordena per';
-
-  @override
-  String get searchAnalysis => 'Anàlisi';
-
-  @override
-  String get searchOnlyAnalysed => 'Només partides on hi ha disponible l\'anàlisi computeritzat';
-
-  @override
-  String get searchColor => 'Color';
-
-  @override
-  String get searchEvaluation => 'Avaluació';
-
-  @override
-  String get searchMaxNumber => 'Nombre màxim';
-
-  @override
-  String get searchMaxNumberExplanation => 'Nombre màxim de partides per mostrar als resultats';
-
-  @override
-  String get searchInclude => 'Incloure';
-
-  @override
-  String get searchDescending => 'Descendent';
-
-  @override
-  String get searchAscending => 'Ascendent';
-
-  @override
-  String get searchRatingExplanation => 'La puntuació mitjana dels dos jugadors';
-
-  @override
-  String searchSearchInXGames(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Cerca en $count partides',
-      one: 'Cerca en $count partida',
-      zero: 'Cerca en $count partida',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String searchXGamesFound(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'S\'han trobat $count partides',
-      one: 'S\'ha trobat una partida',
-      zero: 'S\'ha trobat una partida',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String searchGamesFound(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'S\'han trobat $count partides',
-      one: 'S\'ha trobat $count partida',
-      zero: 'S\'ha trobat $count partida',
-    );
-    return '$_temp0';
-  }
-
-  @override
   String get settingsSettings => 'Configuració';
 
   @override
@@ -4464,161 +4380,6 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get streamerLichessStreamers => 'Retransmissors de Lichess';
-
-  @override
-  String get streamerLichessStreamer => 'Retransmissor de Lichess';
-
-  @override
-  String get streamerLive => 'EN DIRECTE!';
-
-  @override
-  String get streamerOffline => 'FORA DE LÍNIA';
-
-  @override
-  String streamerCurrentlyStreaming(String param) {
-    return 'Retransmetent ara: $param';
-  }
-
-  @override
-  String streamerLastStream(String param) {
-    return 'Última retransmissió $param';
-  }
-
-  @override
-  String get streamerBecomeStreamer => 'Fes-te un retransmissor de Lichess';
-
-  @override
-  String get streamerDoYouHaveStream => 'Tens un canal de Twitch o de YouTube?';
-
-  @override
-  String get streamerHereWeGo => 'Som-hi!';
-
-  @override
-  String get streamerAllStreamers => 'Tots els retransmissors';
-
-  @override
-  String get streamerEditPage => 'Editar pàgina de retransmissor';
-
-  @override
-  String get streamerYourPage => 'La teva pàgina de retransmissor';
-
-  @override
-  String get streamerDownloadKit => 'Baixar l\'equip de retransmissor';
-
-  @override
-  String streamerXIsStreaming(String param) {
-    return '$param està retransmetent';
-  }
-
-  @override
-  String get streamerRules => 'Normes de retransmissió';
-
-  @override
-  String get streamerRule1 => 'Inclou la paraula clau \"lichess.org\" en el títol de la teva retransmissió quan retransmetis a Lichess.';
-
-  @override
-  String get streamerRule2 => 'Elimina la paraula clau quan retransmetis un contingut no relacionat a Lichess.';
-
-  @override
-  String get streamerRule3 => 'Lichess detectarà la teva retransmissió automàticament i habilitarà els següents incentius:';
-
-  @override
-  String streamerRule4(String param) {
-    return 'Llegeix el nostre $param per assegurar el joc nét per a tothom durant la teva transmissió.';
-  }
-
-  @override
-  String get streamerStreamingFairplayFAQ => '\"streaming Fairplay FAQ\"';
-
-  @override
-  String get streamerPerks => 'Beneficis de retransmetre amb la paraula clau';
-
-  @override
-  String get streamerPerk1 => 'Obtens una icona de retransmissor al teu perfil de Lichess.';
-
-  @override
-  String get streamerPerk2 => 'Ascendeixes al principi de la llista de retransmissors.';
-
-  @override
-  String get streamerPerk3 => 'Notifica als teus seguidors de Lichess.';
-
-  @override
-  String get streamerPerk4 => 'Mostra la teva retransmissió en les teves partides, tornejos i estudis.';
-
-  @override
-  String get streamerApproved => 'La teva retransmissió està aprovada.';
-
-  @override
-  String get streamerPendingReview => 'La teva retransmissió està sent revisada pels moderadors.';
-
-  @override
-  String get streamerPleaseFillIn => 'Emplena la informació com a retransmissor i puja una foto.';
-
-  @override
-  String streamerWhenReady(String param) {
-    return 'Quan estiguis llest per ser enumerat com a retransmissor de Lichess, $param';
-  }
-
-  @override
-  String get streamerRequestReview => 'sol·licita una revisió d\'un moderador';
-
-  @override
-  String get streamerStreamerLanguageSettings => 'La pàgina de comunicadors de Lichess es dirigeix al públic amb el mateix idioma que el que dona la vostra plataforma de vídeo en temps real. Establiu l\'idioma correcte de les vostres directes d\'escacs a l\'aplicació o servei que utilitzeu per comunicar.';
-
-  @override
-  String get streamerTwitchUsername => 'El teu nom d\'usuari o URL de Twitch';
-
-  @override
-  String get streamerOptionalOrEmpty => 'Opcional. Deixa-ho en blanc si no hi ha';
-
-  @override
-  String get streamerYouTubeChannelId => 'L\'ID del vostre canal de YouTube';
-
-  @override
-  String get streamerStreamerName => 'El teu nom de retransmissor a Lichess';
-
-  @override
-  String get streamerVisibility => 'Visible a la pàgina de retransmissors';
-
-  @override
-  String get streamerWhenApproved => 'Quan aprovat pels moderadors';
-
-  @override
-  String get streamerHeadline => 'Encapçalament';
-
-  @override
-  String get streamerTellUsAboutTheStream => 'En una frase, explica\'ns sobre la teva retransmissió';
-
-  @override
-  String get streamerLongDescription => 'Descripció llarga';
-
-  @override
-  String streamerXStreamerPicture(String param) {
-    return 'imatge de retransmissor de $param';
-  }
-
-  @override
-  String get streamerChangePicture => 'Canvia/elimina la teva imatge';
-
-  @override
-  String get streamerUploadPicture => 'Puja una imatge';
-
-  @override
-  String streamerMaxSize(String param) {
-    return 'Mida màxim: $param';
-  }
-
-  @override
-  String streamerKeepItShort(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Mantingues-ho breu: màxim $count caràcters',
-      one: 'Mantingues-ho breu: màxim $count caràcters',
-      zero: 'Mantingues-ho breu: màxim $count caràcters',
-    );
-    return '$_temp0';
-  }
 
   @override
   String get stormMoveToStart => 'Fes una jugada per començar';
@@ -4796,528 +4557,16 @@ class AppLocalizationsCa extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Has jugat $count rondes de $param2',
-      one: 'Has jugat una ronda de $param2',
-      zero: 'Has jugat una ronda de $param2',
+      other: 'Ha jugat $count rondes de $param2',
+      one: 'Ha jugat una ronda de $param2',
+      zero: 'Ha jugat una ronda de $param2',
     );
     return '$_temp0';
   }
-
-  @override
-  String get studyPrivate => 'Privat';
-
-  @override
-  String get studyMyStudies => 'Els meus estudis';
-
-  @override
-  String get studyStudiesIContributeTo => 'Estudis on jo hi contribueixo';
-
-  @override
-  String get studyMyPublicStudies => 'Els meus estudis públics';
-
-  @override
-  String get studyMyPrivateStudies => 'Els meus estudis privats';
-
-  @override
-  String get studyMyFavoriteStudies => 'Els meus estudis favorits';
-
-  @override
-  String get studyWhatAreStudies => 'Què són els estudis?';
-
-  @override
-  String get studyAllStudies => 'Tots els estudis';
-
-  @override
-  String studyStudiesCreatedByX(String param) {
-    return 'Estudis creats per $param';
-  }
-
-  @override
-  String get studyNoneYet => 'Res encara.';
-
-  @override
-  String get studyHot => 'Candent';
-
-  @override
-  String get studyDateAddedNewest => 'Data d’inclusió (més nous)';
-
-  @override
-  String get studyDateAddedOldest => 'Data d’inclusió (més antics)';
-
-  @override
-  String get studyRecentlyUpdated => 'Actualitzat darrerament';
-
-  @override
-  String get studyMostPopular => 'Més popular';
-
-  @override
-  String get studyAlphabetical => 'Alfabètic';
-
-  @override
-  String get studyAddNewChapter => 'Afegir un nou capítol';
-
-  @override
-  String get studyAddMembers => 'Afegeix membres';
-
-  @override
-  String get studyInviteToTheStudy => 'Convida a l’estudi';
-
-  @override
-  String get studyPleaseOnlyInvitePeopleYouKnow => 'Si us plau, convida gent que coneixes, i que vólen unir-se activament a l’estudi.';
-
-  @override
-  String get studySearchByUsername => 'Cerca per nom d\'usuari';
-
-  @override
-  String get studySpectator => 'Espectador';
-
-  @override
-  String get studyContributor => 'Contribuïdor';
-
-  @override
-  String get studyKick => 'Expulsa';
-
-  @override
-  String get studyLeaveTheStudy => 'Deixar l’estudi';
-
-  @override
-  String get studyYouAreNowAContributor => 'Ara ets un contribuïdor';
-
-  @override
-  String get studyYouAreNowASpectator => 'Actualment ets un espectador';
-
-  @override
-  String get studyPgnTags => 'Etiquetes PGN';
-
-  @override
-  String get studyLike => 'M’agrada';
-
-  @override
-  String get studyUnlike => 'Ja no m\'agrada';
-
-  @override
-  String get studyNewTag => 'Nova etiqueta';
-
-  @override
-  String get studyCommentThisPosition => 'Comentar en aquesta posició';
-
-  @override
-  String get studyCommentThisMove => 'Comentar en aquest moviment';
-
-  @override
-  String get studyAnnotateWithGlyphs => 'Anotar amb signes';
-
-  @override
-  String get studyTheChapterIsTooShortToBeAnalysed => 'El capítol és massa curt per ser analitzat.';
-
-  @override
-  String get studyOnlyContributorsCanRequestAnalysis => 'Només els contribuïdors de l’estudi poden demanar un anàlisis computeritzat.';
-
-  @override
-  String get studyGetAFullComputerAnalysis => 'Obté un anàlisi complert desde el servidor de la línia principal.';
-
-  @override
-  String get studyMakeSureTheChapterIsComplete => 'Segura’t que el capítol és complert. Només pots requerir l’anàlisi una sola vegada.';
-
-  @override
-  String get studyAllSyncMembersRemainOnTheSamePosition => 'Tots els membres sincronitzats es mantenen a la mateixa posició';
-
-  @override
-  String get studyShareChanges => 'Comparteix els canvis amb els espectadors i guarda’ls al servidor';
-
-  @override
-  String get studyPlaying => 'Jugant';
-
-  @override
-  String get studyShowEvalBar => 'Barres d\'avaluació';
-
-  @override
-  String get studyFirst => 'Primer';
-
-  @override
-  String get studyPrevious => 'Anterior';
-
-  @override
-  String get studyNext => 'Següent';
-
-  @override
-  String get studyLast => 'Últim';
 
   @override
   String get studyShareAndExport => 'Comparteix i exporta';
 
   @override
-  String get studyCloneStudy => 'Clona';
-
-  @override
-  String get studyStudyPgn => 'PGN de l’estudi';
-
-  @override
-  String get studyDownloadAllGames => 'Descarrega tots els jocs';
-
-  @override
-  String get studyChapterPgn => 'PGN del capítol';
-
-  @override
-  String get studyCopyChapterPgn => 'Copiar PGN';
-
-  @override
-  String get studyCopyChapterPgnDescription => 'Copia el capítol PGN al porta-retalls.';
-
-  @override
-  String get studyDownloadGame => 'Descarrega partida';
-
-  @override
-  String get studyStudyUrl => 'URL de l’estudi';
-
-  @override
-  String get studyCurrentChapterUrl => 'URL del capítol actual';
-
-  @override
-  String get studyYouCanPasteThisInTheForumToEmbed => 'Pots enganxar això en el forum per insertar';
-
-  @override
-  String get studyStartAtInitialPosition => 'Comnçar a la posició inicial';
-
-  @override
-  String studyStartAtX(String param) {
-    return 'Començar a $param';
-  }
-
-  @override
-  String get studyEmbedInYourWebsite => 'Inserta en la teva web o blog';
-
-  @override
-  String get studyReadMoreAboutEmbedding => 'Llegeix més sobre insertar';
-
-  @override
-  String get studyOnlyPublicStudiesCanBeEmbedded => 'Només els estudis públics poden ser inserits!';
-
-  @override
-  String get studyOpen => 'Obrir';
-
-  @override
-  String studyXBroughtToYouByY(String param1, String param2) {
-    return '$param1, presentat per $param2';
-  }
-
-  @override
-  String get studyStudyNotFound => 'Estudi no trobat';
-
-  @override
-  String get studyEditChapter => 'Editar capítol';
-
-  @override
-  String get studyNewChapter => 'Nou capítol';
-
-  @override
-  String studyImportFromChapterX(String param) {
-    return 'Importar de $param';
-  }
-
-  @override
-  String get studyOrientation => 'Orientaciò';
-
-  @override
-  String get studyAnalysisMode => 'Mode d\'anàlisi';
-
-  @override
-  String get studyPinnedChapterComment => 'Comentari del capítol fixat';
-
-  @override
-  String get studySaveChapter => 'Guarda el capítol';
-
-  @override
-  String get studyClearAnnotations => 'Netejar anotacions';
-
-  @override
-  String get studyClearVariations => 'Netejar variacions';
-
-  @override
-  String get studyDeleteChapter => 'Eliminar capítol';
-
-  @override
-  String get studyDeleteThisChapter => 'Eliminar aquest capítol? No hi ha volta enrera!';
-
-  @override
-  String get studyClearAllCommentsInThisChapter => 'Esborrar tots els comentaris, signes i marques en aquest capítol?';
-
-  @override
-  String get studyRightUnderTheBoard => 'Just a sota el tauler';
-
-  @override
-  String get studyNoPinnedComment => 'Cap';
-
-  @override
-  String get studyNormalAnalysis => 'Análisis normal';
-
-  @override
-  String get studyHideNextMoves => 'Oculta els següents moviments';
-
-  @override
-  String get studyInteractiveLesson => 'Lliçó interactiva';
-
-  @override
-  String studyChapterX(String param) {
-    return 'Capítol $param';
-  }
-
-  @override
-  String get studyEmpty => 'Buit';
-
-  @override
-  String get studyStartFromInitialPosition => 'Començar a la posició inicial';
-
-  @override
-  String get studyEditor => 'Editor';
-
-  @override
-  String get studyStartFromCustomPosition => 'Començar a una posició personalitzada';
-
-  @override
-  String get studyLoadAGameByUrl => 'Carregar una partida desde una URL';
-
-  @override
-  String get studyLoadAPositionFromFen => 'Carregar una posició via codi FEN';
-
-  @override
-  String get studyLoadAGameFromPgn => 'Carregar una partida PGN';
-
-  @override
-  String get studyAutomatic => 'Automàtic';
-
-  @override
-  String get studyUrlOfTheGame => 'URL del joc';
-
-  @override
-  String studyLoadAGameFromXOrY(String param1, String param2) {
-    return 'Carregar una partida desde $param1 o $param2';
-  }
-
-  @override
-  String get studyCreateChapter => 'Crear capítol';
-
-  @override
-  String get studyCreateStudy => 'Crear estudi';
-
-  @override
-  String get studyEditStudy => 'Editar estudi';
-
-  @override
-  String get studyVisibility => 'Visibilitat';
-
-  @override
-  String get studyPublic => 'Públic';
-
-  @override
-  String get studyUnlisted => 'No llistats';
-
-  @override
-  String get studyInviteOnly => 'Només per invitació';
-
-  @override
-  String get studyAllowCloning => 'Permitir clonat';
-
-  @override
-  String get studyNobody => 'Ningú';
-
-  @override
-  String get studyOnlyMe => 'Només jo';
-
-  @override
-  String get studyContributors => 'Col·laboradors';
-
-  @override
-  String get studyMembers => 'Membres';
-
-  @override
-  String get studyEveryone => 'Tothom';
-
-  @override
-  String get studyEnableSync => 'Habilita la sincronització';
-
-  @override
-  String get studyYesKeepEveryoneOnTheSamePosition => 'Sí: tothom veu la mateixa posició';
-
-  @override
-  String get studyNoLetPeopleBrowseFreely => 'No: permetre que la gent navegui lliurement';
-
-  @override
-  String get studyPinnedStudyComment => 'Comentar estudi fixat';
-
-  @override
   String get studyStart => 'Inici';
-
-  @override
-  String get studySave => 'Desa';
-
-  @override
-  String get studyClearChat => 'Neteja el Chat';
-
-  @override
-  String get studyDeleteTheStudyChatHistory => 'Eliminar el xat de l’estudi? No hi ha volta enrera!';
-
-  @override
-  String get studyDeleteStudy => 'Eliminar estudi';
-
-  @override
-  String studyConfirmDeleteStudy(String param) {
-    return 'Esteu segurs que voleu eliminar el estudi? Tingues en compte que no es pot desfer. Per a confirmar-ho escriu el nom del estudi: $param';
-  }
-
-  @override
-  String get studyWhereDoYouWantToStudyThat => 'A on vols estudiar-ho?';
-
-  @override
-  String get studyGoodMove => 'Bona jugada';
-
-  @override
-  String get studyMistake => 'Errada';
-
-  @override
-  String get studyBrilliantMove => 'Jugada brillant';
-
-  @override
-  String get studyBlunder => 'Error greu';
-
-  @override
-  String get studyInterestingMove => 'Jugada interessant';
-
-  @override
-  String get studyDubiousMove => 'Jugada dubtosa';
-
-  @override
-  String get studyOnlyMove => 'Única jugada';
-
-  @override
-  String get studyZugzwang => 'Zugzwang (atzucac)';
-
-  @override
-  String get studyEqualPosition => 'Posició igualada';
-
-  @override
-  String get studyUnclearPosition => 'Posició poc clara';
-
-  @override
-  String get studyWhiteIsSlightlyBetter => 'El blanc està lleugerament millor';
-
-  @override
-  String get studyBlackIsSlightlyBetter => 'El negre està lleugerament millor';
-
-  @override
-  String get studyWhiteIsBetter => 'El blanc està millor';
-
-  @override
-  String get studyBlackIsBetter => 'El negre està millor';
-
-  @override
-  String get studyWhiteIsWinning => 'El blanc està guanyant';
-
-  @override
-  String get studyBlackIsWinning => 'El negre està guanyant';
-
-  @override
-  String get studyNovelty => 'Novetat';
-
-  @override
-  String get studyDevelopment => 'Desenvolupament';
-
-  @override
-  String get studyInitiative => 'Iniciativa';
-
-  @override
-  String get studyAttack => 'Atac';
-
-  @override
-  String get studyCounterplay => 'Contra atac';
-
-  @override
-  String get studyTimeTrouble => 'Problema de temps';
-
-  @override
-  String get studyWithCompensation => 'Amb compensació';
-
-  @override
-  String get studyWithTheIdea => 'Amb la idea';
-
-  @override
-  String get studyNextChapter => 'Capítol següent';
-
-  @override
-  String get studyPrevChapter => 'Capítol Anterior';
-
-  @override
-  String get studyStudyActions => 'Acions de l\'estudi';
-
-  @override
-  String get studyTopics => 'Temes';
-
-  @override
-  String get studyMyTopics => 'Els meus temes';
-
-  @override
-  String get studyPopularTopics => 'Temes populars';
-
-  @override
-  String get studyManageTopics => 'Gestiona els temes';
-
-  @override
-  String get studyBack => 'Enrere';
-
-  @override
-  String get studyPlayAgain => 'Torna a jugar';
-
-  @override
-  String get studyWhatWouldYouPlay => 'Que jugaríeu en aquesta posició?';
-
-  @override
-  String get studyYouCompletedThisLesson => 'Enhorabona, heu completat aquesta lliçó.';
-
-  @override
-  String studyNbChapters(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count Capítols',
-      one: '$count Capítol',
-      zero: '$count Capítol',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String studyNbGames(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count Jocs',
-      one: '$count Joc',
-      zero: '$count Joc',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String studyNbMembers(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count Membres',
-      one: '$count Membre',
-      zero: '$count Membre',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String studyPasteYourPgnTextHereUpToNbGames(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Enganxa el teu PGN aquí, fins a $count partides',
-      one: 'Enganxa el teu PGN aquí, fins a $count partida',
-      zero: 'Enganxa el teu PGN aquí, fins a $count partida',
-    );
-    return '$_temp0';
-  }
 }

@@ -2,7 +2,6 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
@@ -10,9 +9,11 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
+import 'package:lichess_mobile/src/model/game/game_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
@@ -49,11 +50,17 @@ class RecentGames extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isOnline = ref.watch(isOnlineProvider);
+    final session = ref.watch(authSessionProvider);
+    final userId = user?.id ?? session?.user.id;
+
     final recentGames = user != null
         ? ref.watch(_userRecentGamesProvider(userId: user!.id))
-        : ref.watch(accountRecentGamesProvider);
-
-    final userId = user?.id ?? ref.watch(authSessionProvider)?.user.id;
+        : session != null && (isOnline.valueOrNull ?? false) == true
+            ? ref.watch(accountRecentGamesProvider)
+            : ref.watch(recentStoredGamesProvider).whenData((data) {
+                return data.map((e) => e.game.data).toIList();
+              });
 
     Widget getResultIcon(LightArchivedGame game, Side mySide) {
       if (game.status == GameStatus.aborted ||
@@ -83,11 +90,12 @@ class RecentGames extends ConsumerWidget {
     return recentGames.when(
       data: (data) {
         if (data.isEmpty) {
-          return kEmptyWidget;
+          return const SizedBox.shrink();
         }
         return ListSection(
           header: Text(context.l10n.recentGames),
           hasLeading: true,
+          showDividerBetweenTiles: true,
           children: data.map((game) {
             final mySide =
                 game.white.user?.id == userId ? Side.white : Side.black;

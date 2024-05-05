@@ -82,6 +82,7 @@ class UserFullNameWidget extends ConsumerWidget {
               size: style?.fontSize ??
                   DefaultTextStyle.of(context).style.fontSize,
               color: style?.color ?? DefaultTextStyle.of(context).style.color,
+              semanticLabel: context.l10n.patronLichessPatron,
             ),
           ),
         if (user?.title != null) ...[

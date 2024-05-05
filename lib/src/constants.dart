@@ -34,6 +34,12 @@ const kClueLessDeviation = 230;
 
 // UI
 
+/// Flex golden ratio base (flex has to be an int).
+const kFlexGoldenRatioBase = 100000000000;
+
+/// Flex golden ratio (flex has to be an int).
+const kFlexGoldenRatio = 161803398875;
+
 /// Use same box shadows as material widgets with elevation 1.
 final List<BoxShadow> boardShadows = defaultTargetPlatform == TargetPlatform.iOS
     ? <BoxShadow>[]

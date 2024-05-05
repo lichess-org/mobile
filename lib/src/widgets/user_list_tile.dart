@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 
@@ -73,7 +74,10 @@ class UserListTile extends StatelessWidget {
         child: Row(
           children: [
             if (isPatron == true) ...[
-              const Icon(LichessIcons.patron),
+              Icon(
+                LichessIcons.patron,
+                semanticLabel: context.l10n.patronLichessPatron,
+              ),
               const SizedBox(width: 5),
             ],
             if (title != null) ...[

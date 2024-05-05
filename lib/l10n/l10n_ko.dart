@@ -191,6 +191,12 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
+  String get contactContact => '문의';
+
+  @override
+  String get contactContactLichess => 'Lichess에 문의하기';
+
+  @override
   String get playWithAFriend => '친구와 게임하기';
 
   @override
@@ -480,7 +486,7 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get playFirstOpeningEndgameExplorerMove => 'Play first opening/endgame-explorer move';
+  String get playFirstOpeningEndgameExplorerMove => '첫 번째 오프닝/엔드게임 탐색기 수 두기';
 
   @override
   String get winPreventedBy50MoveRule => '50수 규칙에 의하여 승리가 불가능합니다.';
@@ -869,7 +875,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get standard => '표준';
 
   @override
-  String get customPosition => 'Custom position';
+  String get customPosition => '사용자 지정 포지션';
 
   @override
   String get unlimited => '무제한';
@@ -2228,13 +2234,22 @@ class AppLocalizationsKo extends AppLocalizations {
   String get backgroundImageUrl => '배경 이미지 URL:';
 
   @override
-  String get boardGeometry => '보드 모양';
+  String get board => 'Board';
 
   @override
-  String get boardTheme => '보드 테마';
+  String get size => 'Size';
 
   @override
-  String get boardSize => '보드 크기';
+  String get opacity => 'Opacity';
+
+  @override
+  String get brightness => 'Brightness';
+
+  @override
+  String get hue => 'Hue';
+
+  @override
+  String get boardReset => 'Reset colors to default';
 
   @override
   String get pieceSet => '기물 세트';
@@ -3246,6 +3261,12 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
+  String get patronDonate => '기부';
+
+  @override
+  String get patronLichessPatron => 'Lichess 후원자';
+
+  @override
   String get preferencesPreferences => '설정';
 
   @override
@@ -4206,105 +4227,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get searchSearch => '검색';
 
   @override
-  String get searchAdvancedSearch => '고급 검색';
-
-  @override
-  String get searchOpponentName => '상대 이름';
-
-  @override
-  String get searchLoser => '패배자';
-
-  @override
-  String get searchFrom => 'From';
-
-  @override
-  String get searchTo => 'To';
-
-  @override
-  String get searchHumanOrComputer => '플레이어의 상대가 인간인지 컴퓨터인지 여부';
-
-  @override
-  String get searchAiLevel => '인공지능 레벨';
-
-  @override
-  String get searchSource => '출처';
-
-  @override
-  String get searchNbTurns => '턴 수';
-
-  @override
-  String get searchResult => '결과';
-
-  @override
-  String get searchWinnerColor => '승리한 색';
-
-  @override
-  String get searchDate => '날짜';
-
-  @override
-  String get searchSortBy => '다음으로 정렬:';
-
-  @override
-  String get searchAnalysis => '분석';
-
-  @override
-  String get searchOnlyAnalysed => '컴퓨터 분석이 가능한 게임만';
-
-  @override
-  String get searchColor => '색';
-
-  @override
-  String get searchEvaluation => '평가';
-
-  @override
-  String get searchMaxNumber => '최대 개수';
-
-  @override
-  String get searchMaxNumberExplanation => '반환할 최대 게임 수';
-
-  @override
-  String get searchInclude => '포함';
-
-  @override
-  String get searchDescending => '내림차순';
-
-  @override
-  String get searchAscending => '오름차순';
-
-  @override
-  String get searchRatingExplanation => '두 플레이어의 평균 레이팅';
-
-  @override
-  String searchSearchInXGames(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count 체스 게임에서 검색한 결과',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String searchXGamesFound(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count개의 게임을 찾았습니다',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String searchGamesFound(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count 게임 검색됨',
-    );
-    return '$_temp0';
-  }
-
-  @override
   String get settingsSettings => '설정';
 
   @override
@@ -4330,159 +4252,6 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get streamerLichessStreamers => 'Lichess 스트리머';
-
-  @override
-  String get streamerLichessStreamer => 'Lichess 스트리머';
-
-  @override
-  String get streamerLive => 'LIVE!';
-
-  @override
-  String get streamerOffline => 'OFFLINE';
-
-  @override
-  String streamerCurrentlyStreaming(String param) {
-    return '현재 스트리밍 중: $param';
-  }
-
-  @override
-  String streamerLastStream(String param) {
-    return '최근 스트리밍 $param';
-  }
-
-  @override
-  String get streamerBecomeStreamer => 'Lichess 스트리머가 되세요';
-
-  @override
-  String get streamerDoYouHaveStream => '트위치나 유튜브 채널이 있으신가요?';
-
-  @override
-  String get streamerHereWeGo => '시작합시다!';
-
-  @override
-  String get streamerAllStreamers => '모든 스트리머';
-
-  @override
-  String get streamerEditPage => '스트리머 페이지 편집';
-
-  @override
-  String get streamerYourPage => '당신의 스트리머 페이지';
-
-  @override
-  String get streamerDownloadKit => '스트리머 키트 다운로드';
-
-  @override
-  String streamerXIsStreaming(String param) {
-    return '$param가 스트리밍 중입니다';
-  }
-
-  @override
-  String get streamerRules => '스트리밍 규칙';
-
-  @override
-  String get streamerRule1 => 'Lichess로 스트리밍을 할 경우 스트리밍 제목에 \"lichess.org\" 키워드를 포함하고 카테고리를 \"Chess\"로 합니다.';
-
-  @override
-  String get streamerRule2 => 'Lichess를 이용하지 않는 경우 키워드를 삭제합니다.';
-
-  @override
-  String get streamerRule3 => 'Lichess는 스트림을 자동으로 감지하고 다음 특전을 활성화합니다:';
-
-  @override
-  String streamerRule4(String param) {
-    return '스트리밍하는 동안 모두에게 공정한 플레이를 보장하려면 $param를 읽어보세요.';
-  }
-
-  @override
-  String get streamerStreamingFairplayFAQ => '스트리밍 페어플레이 FAQ';
-
-  @override
-  String get streamerPerks => '키워드를 넣을 경우 특전';
-
-  @override
-  String get streamerPerk1 => 'Lichess 프로필에 스트리머 아이콘을 얻습니다.';
-
-  @override
-  String get streamerPerk2 => '스트리머 목록의 맨 위로 올라갑니다.';
-
-  @override
-  String get streamerPerk3 => 'Lichess 팔로워에게 안내가 갑니다.';
-
-  @override
-  String get streamerPerk4 => '당신의 게임, 대회, 연구를 스트리밍할 수 있습니다.';
-
-  @override
-  String get streamerApproved => '스트리밍이 승인되었습니다.';
-
-  @override
-  String get streamerPendingReview => '운영진이 스트리밍을 검토하고 있습니다.';
-
-  @override
-  String get streamerPleaseFillIn => '스트리머 정보를 채우고 사진을 업로드해주세요.';
-
-  @override
-  String streamerWhenReady(String param) {
-    return 'Lichess 스트리머가 될 준비가 되셨다면, $param';
-  }
-
-  @override
-  String get streamerRequestReview => '운영진 검토 요청을 해주세요.';
-
-  @override
-  String get streamerStreamerLanguageSettings => '체스 스트리머 페이지에서는 내 스트리밍 플랫폼에서 제공하는 언어로 시청자를 타겟팅합니다. 생방송에 사용하는 앱 또는 서비스에서 체스 스트림의 기본 언어를 올바르게 설정하세요.';
-
-  @override
-  String get streamerTwitchUsername => '트위치 유저네임 또는 URL';
-
-  @override
-  String get streamerOptionalOrEmpty => '선택. 없는 경우 비워둡니다';
-
-  @override
-  String get streamerYouTubeChannelId => '당신의 YouTube 채널ID';
-
-  @override
-  String get streamerStreamerName => 'Lichess의 스트리머 이름';
-
-  @override
-  String get streamerVisibility => '스트리머 페이지에 표시합니다';
-
-  @override
-  String get streamerWhenApproved => '운영진이 승인한 경우';
-
-  @override
-  String get streamerHeadline => '헤드라인';
-
-  @override
-  String get streamerTellUsAboutTheStream => '당신의 스트리밍을 한 문장으로 요약해주세요';
-
-  @override
-  String get streamerLongDescription => '상세설명';
-
-  @override
-  String streamerXStreamerPicture(String param) {
-    return '$param 스트리머 사진';
-  }
-
-  @override
-  String get streamerChangePicture => '사진 변경/삭제';
-
-  @override
-  String get streamerUploadPicture => '사진 업로드';
-
-  @override
-  String streamerMaxSize(String param) {
-    return '최대 사이즈: $param';
-  }
-
-  @override
-  String streamerKeepItShort(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '짧게 유지하세요: 최대 $count자',
-    );
-    return '$_temp0';
-  }
 
   @override
   String get stormMoveToStart => '기물을 움직이면 시작';
@@ -4664,512 +4433,8 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get studyPrivate => '개인';
-
-  @override
-  String get studyMyStudies => '나의 연구';
-
-  @override
-  String get studyStudiesIContributeTo => '내가 기여한 연구';
-
-  @override
-  String get studyMyPublicStudies => '내 공개 연구';
-
-  @override
-  String get studyMyPrivateStudies => '내 개인 연구';
-
-  @override
-  String get studyMyFavoriteStudies => '내가 즐겨찾는 연구';
-
-  @override
-  String get studyWhatAreStudies => '연구가 무엇인가요?';
-
-  @override
-  String get studyAllStudies => '모든 연구';
-
-  @override
-  String studyStudiesCreatedByX(String param) {
-    return '$param가 만든 연구';
-  }
-
-  @override
-  String get studyNoneYet => '아직 없음';
-
-  @override
-  String get studyHot => '인기있는';
-
-  @override
-  String get studyDateAddedNewest => '추가된 날짜(새로운 순)';
-
-  @override
-  String get studyDateAddedOldest => '추가된 날짜(오래된 순)';
-
-  @override
-  String get studyRecentlyUpdated => '최근에 업데이트된 순';
-
-  @override
-  String get studyMostPopular => '인기 많은 순';
-
-  @override
-  String get studyAlphabetical => '알파벳 순';
-
-  @override
-  String get studyAddNewChapter => '새 챕터 추가하기';
-
-  @override
-  String get studyAddMembers => '멤버 추가';
-
-  @override
-  String get studyInviteToTheStudy => '연구에 초대';
-
-  @override
-  String get studyPleaseOnlyInvitePeopleYouKnow => '당신이 아는 사람, 연구에 적극적으로 참여하고 싶은 사람만 초대해주세요.';
-
-  @override
-  String get studySearchByUsername => '사용자 이름으로 검색';
-
-  @override
-  String get studySpectator => '관전자';
-
-  @override
-  String get studyContributor => '기여자';
-
-  @override
-  String get studyKick => '강제 퇴장';
-
-  @override
-  String get studyLeaveTheStudy => '연구에서 나가기';
-
-  @override
-  String get studyYouAreNowAContributor => '당신은 이제 기여자입니다';
-
-  @override
-  String get studyYouAreNowASpectator => '당신은 이제 관전자입니다';
-
-  @override
-  String get studyPgnTags => 'PGN 태그';
-
-  @override
-  String get studyLike => '좋아요';
-
-  @override
-  String get studyUnlike => '좋아요 취소';
-
-  @override
-  String get studyNewTag => '새 태그';
-
-  @override
-  String get studyCommentThisPosition => '이 포지션에 댓글 달기';
-
-  @override
-  String get studyCommentThisMove => '이 수에 댓글 달기';
-
-  @override
-  String get studyAnnotateWithGlyphs => '기호로 주석 달기';
-
-  @override
-  String get studyTheChapterIsTooShortToBeAnalysed => '분석되기 너무 짧은 챕터입니다.';
-
-  @override
-  String get studyOnlyContributorsCanRequestAnalysis => '연구 기여자만이 컴퓨터 분석을 요청할 수 있습니다.';
-
-  @override
-  String get studyGetAFullComputerAnalysis => '메인라인에 대한 전체 서버 컴퓨터 분석을 가져옵니다.';
-
-  @override
-  String get studyMakeSureTheChapterIsComplete => '챕터가 완료되었는지 확인하세요. 분석은 한번만 요청할 수 있습니다.';
-
-  @override
-  String get studyAllSyncMembersRemainOnTheSamePosition => '동기화된 모든 멤버들은 같은 포지션을 공유합니다';
-
-  @override
-  String get studyShareChanges => '관전자와 변경 사항을 공유하고 서버에 저장';
-
-  @override
-  String get studyPlaying => '플레이중';
-
-  @override
-  String get studyShowEvalBar => '평가 막대';
-
-  @override
-  String get studyFirst => '처음';
-
-  @override
-  String get studyPrevious => '이전';
-
-  @override
-  String get studyNext => '다음';
-
-  @override
-  String get studyLast => '마지막';
-
-  @override
   String get studyShareAndExport => '공유 및 내보내기';
 
   @override
-  String get studyCloneStudy => '복제';
-
-  @override
-  String get studyStudyPgn => '연구 PGN';
-
-  @override
-  String get studyDownloadAllGames => '모든 게임 다운로드';
-
-  @override
-  String get studyChapterPgn => '챕터 PGN';
-
-  @override
-  String get studyCopyChapterPgn => 'PGN 복사';
-
-  @override
-  String get studyCopyChapterPgnDescription => '클립보드에 챕터 PGN 복사';
-
-  @override
-  String get studyDownloadGame => '게임 다운로드';
-
-  @override
-  String get studyStudyUrl => '연구 URL';
-
-  @override
-  String get studyCurrentChapterUrl => '현재 챕터 URL';
-
-  @override
-  String get studyYouCanPasteThisInTheForumToEmbed => '포럼에 공유하려면 이 주소를 붙여넣으세요';
-
-  @override
-  String get studyStartAtInitialPosition => '처음 포지션에서 시작';
-
-  @override
-  String studyStartAtX(String param) {
-    return '$param에서 시작';
-  }
-
-  @override
-  String get studyEmbedInYourWebsite => '웹사이트 또는 블로그에 공유하기';
-
-  @override
-  String get studyReadMoreAboutEmbedding => '공유에 대한 상세 정보';
-
-  @override
-  String get studyOnlyPublicStudiesCanBeEmbedded => '공개 연구만 공유할 수 있습니다!';
-
-  @override
-  String get studyOpen => '열기';
-
-  @override
-  String studyXBroughtToYouByY(String param1, String param2) {
-    return '$param1. $param2에서 가져옴';
-  }
-
-  @override
-  String get studyStudyNotFound => '연구를 찾을 수 없습니다';
-
-  @override
-  String get studyEditChapter => '챕터 편집하기';
-
-  @override
-  String get studyNewChapter => '새 챕터';
-
-  @override
-  String studyImportFromChapterX(String param) {
-    return '$param에서 가져오기';
-  }
-
-  @override
-  String get studyOrientation => '방향';
-
-  @override
-  String get studyAnalysisMode => '분석 모드';
-
-  @override
-  String get studyPinnedChapterComment => '챕터 댓글 고정하기';
-
-  @override
-  String get studySaveChapter => '챕터 저장';
-
-  @override
-  String get studyClearAnnotations => '주석 지우기';
-
-  @override
-  String get studyClearVariations => '파생 초기화';
-
-  @override
-  String get studyDeleteChapter => '챕터 지우기';
-
-  @override
-  String get studyDeleteThisChapter => '이 챕터를 지울까요? 되돌릴 수 없습니다!';
-
-  @override
-  String get studyClearAllCommentsInThisChapter => '이 챕터의 모든 코멘트와 기호를 지울까요?';
-
-  @override
-  String get studyRightUnderTheBoard => '보드 우하단에';
-
-  @override
-  String get studyNoPinnedComment => '없음';
-
-  @override
-  String get studyNormalAnalysis => '일반 분석';
-
-  @override
-  String get studyHideNextMoves => '다음 수 숨기기';
-
-  @override
-  String get studyInteractiveLesson => '상호 대화형 레슨';
-
-  @override
-  String studyChapterX(String param) {
-    return '챕터 $param';
-  }
-
-  @override
-  String get studyEmpty => '비어있음';
-
-  @override
-  String get studyStartFromInitialPosition => '초기 포지션에서 시작';
-
-  @override
-  String get studyEditor => '편집기';
-
-  @override
-  String get studyStartFromCustomPosition => '커스텀 포지션에서 시작';
-
-  @override
-  String get studyLoadAGameByUrl => 'URL로 게임 가져오기';
-
-  @override
-  String get studyLoadAPositionFromFen => 'FEN으로 포지션 가져오기';
-
-  @override
-  String get studyLoadAGameFromPgn => 'PGN으로 게임 가져오기';
-
-  @override
-  String get studyAutomatic => '자동';
-
-  @override
-  String get studyUrlOfTheGame => '한 줄에 하나씩, 게임의 URL';
-
-  @override
-  String studyLoadAGameFromXOrY(String param1, String param2) {
-    return '$param1 또는 $param2에서 게임 로드';
-  }
-
-  @override
-  String get studyCreateChapter => '챕터 만들기';
-
-  @override
-  String get studyCreateStudy => '연구 만들기';
-
-  @override
-  String get studyEditStudy => '연구 편집하기';
-
-  @override
-  String get studyVisibility => '공개 설정';
-
-  @override
-  String get studyPublic => '공개';
-
-  @override
-  String get studyUnlisted => '비공개';
-
-  @override
-  String get studyInviteOnly => '초대만';
-
-  @override
-  String get studyAllowCloning => '복제 허용';
-
-  @override
-  String get studyNobody => '아무도';
-
-  @override
-  String get studyOnlyMe => '나만';
-
-  @override
-  String get studyContributors => '기여자만';
-
-  @override
-  String get studyMembers => '멤버만';
-
-  @override
-  String get studyEveryone => '모두';
-
-  @override
-  String get studyEnableSync => '동기화 사용';
-
-  @override
-  String get studyYesKeepEveryoneOnTheSamePosition => '예: 모두가 같은 위치를 봅니다';
-
-  @override
-  String get studyNoLetPeopleBrowseFreely => '아니요: 사람들이 자유롭게 이동할 수 있습니다';
-
-  @override
-  String get studyPinnedStudyComment => '고정된 댓글';
-
-  @override
   String get studyStart => '시작';
-
-  @override
-  String get studySave => '저장';
-
-  @override
-  String get studyClearChat => '채팅 기록 지우기';
-
-  @override
-  String get studyDeleteTheStudyChatHistory => '연구 채팅 히스토리를 지울까요? 되돌릴 수 없습니다!';
-
-  @override
-  String get studyDeleteStudy => '연구 삭제';
-
-  @override
-  String studyConfirmDeleteStudy(String param) {
-    return '모든 연구를 삭제할까요? 복구할 수 없습니다! 확인을 위해서 연구의 이름을 입력하세요: $param';
-  }
-
-  @override
-  String get studyWhereDoYouWantToStudyThat => '어디에서 연구를 시작하시겠습니까?';
-
-  @override
-  String get studyGoodMove => '좋은 수';
-
-  @override
-  String get studyMistake => '실수';
-
-  @override
-  String get studyBrilliantMove => '매우 좋은 수';
-
-  @override
-  String get studyBlunder => '블런더';
-
-  @override
-  String get studyInterestingMove => '흥미로운 수';
-
-  @override
-  String get studyDubiousMove => '애매한 수';
-
-  @override
-  String get studyOnlyMove => '유일한 수';
-
-  @override
-  String get studyZugzwang => '추크추방';
-
-  @override
-  String get studyEqualPosition => '동등한 포지션';
-
-  @override
-  String get studyUnclearPosition => '불확실한 포지션';
-
-  @override
-  String get studyWhiteIsSlightlyBetter => '백이 미세하게 좋음';
-
-  @override
-  String get studyBlackIsSlightlyBetter => '흑이 미세하게 좋음';
-
-  @override
-  String get studyWhiteIsBetter => '백이 유리함';
-
-  @override
-  String get studyBlackIsBetter => '흑이 유리함';
-
-  @override
-  String get studyWhiteIsWinning => '백이 이기고 있음';
-
-  @override
-  String get studyBlackIsWinning => '흑이 이기고 있음';
-
-  @override
-  String get studyNovelty => '새로운 수';
-
-  @override
-  String get studyDevelopment => '발전';
-
-  @override
-  String get studyInitiative => '주도권';
-
-  @override
-  String get studyAttack => '공격';
-
-  @override
-  String get studyCounterplay => '카운터플레이';
-
-  @override
-  String get studyTimeTrouble => '시간이 부족함';
-
-  @override
-  String get studyWithCompensation => '보상이 있음';
-
-  @override
-  String get studyWithTheIdea => '아이디어';
-
-  @override
-  String get studyNextChapter => '다음 챕터';
-
-  @override
-  String get studyPrevChapter => '이전 챕터';
-
-  @override
-  String get studyStudyActions => '연구 옵션';
-
-  @override
-  String get studyTopics => '주제';
-
-  @override
-  String get studyMyTopics => '내 주제';
-
-  @override
-  String get studyPopularTopics => '인기 주제';
-
-  @override
-  String get studyManageTopics => '주제 관리';
-
-  @override
-  String get studyBack => '뒤로';
-
-  @override
-  String get studyPlayAgain => '다시 플레이';
-
-  @override
-  String get studyWhatWouldYouPlay => '이 포지션에서 무엇을 하시겠습니까?';
-
-  @override
-  String get studyYouCompletedThisLesson => '축하합니다! 이 레슨을 완료했습니다.';
-
-  @override
-  String studyNbChapters(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count 챕터',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String studyNbGames(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count 게임',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String studyNbMembers(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '멤버 $count명',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String studyPasteYourPgnTextHereUpToNbGames(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'PGN을 여기에 붙여넣으세요. 최대 $count 게임까지 가능합니다.',
-    );
-    return '$_temp0';
-  }
 }

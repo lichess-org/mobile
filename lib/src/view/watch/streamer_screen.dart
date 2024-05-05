@@ -26,6 +26,7 @@ class StreamerScreen extends StatelessWidget {
       body: ListView(
         children: [
           ListSection(
+            showDividerBetweenTiles: true,
             children: streamers
                 .map(
                   (e) => StreamerListTile(

@@ -259,6 +259,12 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
+  String get contactContact => 'Контакти';
+
+  @override
+  String get contactContactLichess => 'Зв\'язатися з Lichess';
+
+  @override
   String get playWithAFriend => 'Грати з другом';
 
   @override
@@ -449,7 +455,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get inLocalBrowser => 'у браузері';
 
   @override
-  String get toggleLocalEvaluation => 'Включити аналіз на комп\'ютері';
+  String get toggleLocalEvaluation => 'Включити локальний аналіз';
 
   @override
   String get promoteVariation => 'Підвищити пріоритет варіанта';
@@ -1187,7 +1193,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get importGame => 'Імпортувати гру';
 
   @override
-  String get importGameExplanation => 'Вставте PGN гри щоб отримати повтор в браузері,\nкомп\'ютерний аналіз, ігровий чат та посилання, яким можна поділитися.';
+  String get importGameExplanation => 'Вставте PGN гри щоб отримати повтор в браузері, комп\'ютерний аналіз, ігровий чат та посилання, яким можна поділитися.';
 
   @override
   String get importGameCaveat => 'Варіації будуть видалені. Для збереження імпортуйте PGN через дослідження.';
@@ -1371,7 +1377,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get winRate => 'Відсоток перемог';
 
   @override
-  String get berserkRate => 'Ігор як берсерк';
+  String get berserkRate => 'Ігор з берсерком';
 
   @override
   String get performance => 'Ефективність';
@@ -1462,13 +1468,13 @@ class AppLocalizationsUk extends AppLocalizations {
   String get lastName => 'Прізвище';
 
   @override
-  String get setFlair => 'Оберіть свій тотем';
+  String get setFlair => 'Оберіть свій символ';
 
   @override
-  String get flair => 'Аватар';
+  String get flair => 'Символ';
 
   @override
-  String get youCanHideFlair => 'Це налаштування вимикає аватари всіх користувачів сайту.';
+  String get youCanHideFlair => 'Це налаштування вимикає символи всіх користувачів сайту.';
 
   @override
   String get biography => 'Біографія';
@@ -1998,7 +2004,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get keyGoToStartOrEnd => 'перейти до початку/кінця';
 
   @override
-  String get keyCycleSelectedVariation => 'Cycle selected variation';
+  String get keyCycleSelectedVariation => 'Прокрутити вибраний варіант';
 
   @override
   String get keyShowOrHideComments => 'показати/приховати коментарі';
@@ -2031,7 +2037,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get toggleVariationArrows => 'Показати стрілки варіантів';
 
   @override
-  String get cyclePreviousOrNextVariation => 'Cycle previous/next variation';
+  String get cyclePreviousOrNextVariation => 'Прокрутити попередній/наступний варіант';
 
   @override
   String get toggleGlyphAnnotations => 'Перемкнути анотації ходів';
@@ -2040,7 +2046,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get togglePositionAnnotations => 'Перемкнути анотації позицій';
 
   @override
-  String get variationArrowsInfo => 'Variation arrows let you navigate without using the move list.';
+  String get variationArrowsInfo => 'Стрілки варіантів дозволяють переміщуватись без використання списку ходів.';
 
   @override
   String get playSelectedMove => 'зіграти обраний хід';
@@ -2231,7 +2237,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get bulletBlitzClassical => 'Куля, бліц, класичні шахи';
 
   @override
-  String get correspondenceChess => 'Заочна';
+  String get correspondenceChess => 'Заочні';
 
   @override
   String get onlineAndOfflinePlay => 'Гра онлайн та оффлайн';
@@ -2293,16 +2299,25 @@ class AppLocalizationsUk extends AppLocalizations {
   String get deviceTheme => 'Тема пристрою';
 
   @override
-  String get backgroundImageUrl => 'URL фонового зображення:';
+  String get backgroundImageUrl => 'Посилання фонового зображення:';
 
   @override
-  String get boardGeometry => 'Вигляд шахівниці';
+  String get board => 'Дошка';
 
   @override
-  String get boardTheme => 'Оформлення шахівниці';
+  String get size => 'Розмір';
 
   @override
-  String get boardSize => 'Розмір дошки';
+  String get opacity => 'Прозорість';
+
+  @override
+  String get brightness => 'Яскравість';
+
+  @override
+  String get hue => 'Відтінок';
+
+  @override
+  String get boardReset => 'Застосувати кольори за замовчуванням';
 
   @override
   String get pieceSet => 'Набір фігур';
@@ -2565,7 +2580,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get edit => 'Змінити';
 
   @override
-  String get bullet => 'Bullet';
+  String get bullet => 'Куля';
 
   @override
   String get blitz => 'Бліц';
@@ -2784,7 +2799,7 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
-  String get embedsAvailable => 'Вставте URL-адресу гри чи розділ дослідження, щоб вставити його.';
+  String get embedsAvailable => 'Вставте посилання на гру чи розділ дослідження, щоб вставити його.';
 
   @override
   String get inYourLocalTimezone => 'У вашому місцевому часовому поясі';
@@ -2870,7 +2885,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get until => 'До';
 
   @override
-  String get lichessDbExplanation => 'Рейтингові партії усiх гравців Lichess';
+  String get lichessDbExplanation => 'Рейтингові партії всіх гравців Lichess';
 
   @override
   String get switchSides => 'Змінити сторону';
@@ -2888,7 +2903,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get showMeEverything => 'Показати все';
 
   @override
-  String get lichessPatronInfo => 'Lichess - це благодійне і абсолютно безкоштовне програмне забезпечення з відкритим кодом. Усі витрати на обслуговування, розробка та вміст фінансуються виключно за рахунок пожертвувань користувачів.';
+  String get lichessPatronInfo => 'Lichess — це благодійне й абсолютно безкоштовне програмне забезпечення з відкритим кодом.\nУсі витрати на обслуговування, розробку й контент фінансуються виключно пожертвуваннями користувачів.';
 
   @override
   String get nothingToSeeHere => 'Поки тут нічого немає.';
@@ -3482,6 +3497,12 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
+  String get patronDonate => 'Зробити внесок';
+
+  @override
+  String get patronLichessPatron => 'Покровитель Lichess';
+
+  @override
   String get preferencesPreferences => 'Налаштування';
 
   @override
@@ -3527,7 +3548,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get preferencesShowPlayerRatings => 'Показувати рейтинги гравців';
 
   @override
-  String get preferencesShowFlairs => 'Показувати аватари гравців';
+  String get preferencesShowFlairs => 'Показувати символи гравців';
 
   @override
   String get preferencesExplainShowPlayerRatings => 'Дає змогу приховувати всі рейтинги з сайту, щоб допомогти зосередитись на шахах. Ігри все ще рейтингові, це лише для відображення.';
@@ -3710,7 +3731,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get puzzleGoals => 'Цілі';
 
   @override
-  String get puzzleOrigin => 'Походження';
+  String get puzzleOrigin => 'Джерело';
 
   @override
   String get puzzleSpecialMoves => 'Спеціальні ходи';
@@ -3722,10 +3743,10 @@ class AppLocalizationsUk extends AppLocalizations {
   String get puzzleVoteToLoadNextOne => 'Голосуйте, щоб перейти далі!';
 
   @override
-  String get puzzleUpVote => 'Вподобати головоломку';
+  String get puzzleUpVote => 'Вподобати задачу';
 
   @override
-  String get puzzleDownVote => 'Не вподобати головоломку';
+  String get puzzleDownVote => 'Не вподобати задачу';
 
   @override
   String get puzzleYourPuzzleRatingWillNotChange => 'Ваш рейтинг у задачах не зміниться. Зверніть увагу, що задачі - це не змагання. Ваш рейтинг допомагає підбирати задачі за вашими вміннями.';
@@ -3737,7 +3758,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get puzzleFindTheBestMoveForBlack => 'Знайдіть найкращий хід за чорних.';
 
   @override
-  String get puzzleToGetPersonalizedPuzzles => 'Щоб отримати персоналізовані задачі:';
+  String get puzzleToGetPersonalizedPuzzles => 'Для отримання персоналізованих задач:';
 
   @override
   String puzzlePuzzleId(String param) {
@@ -3766,7 +3787,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get puzzlePuzzleSuccess => 'Успіх!';
 
   @override
-  String get puzzlePuzzleComplete => 'Задача вирішена!';
+  String get puzzlePuzzleComplete => 'Задачу вирішено!';
 
   @override
   String get puzzleByOpenings => 'За дебютами';
@@ -3830,7 +3851,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get puzzleAddAnotherTheme => 'Додати іншу тему';
 
   @override
-  String get puzzleNextPuzzle => 'Наступна головоломка';
+  String get puzzleNextPuzzle => 'Наступна задача';
 
   @override
   String get puzzleJumpToNextPuzzleImmediately => 'Одразу перейти до наступної задачі';
@@ -3901,7 +3922,7 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
-  String get puzzleNoPuzzlesToShow => 'Немає що показати, спочатку спробуйте вирішити пару задач!';
+  String get puzzleNoPuzzlesToShow => 'Немає що показати, спочатку вирішіть кілька задач!';
 
   @override
   String get puzzleImprovementAreasDescription => 'Тренуйтеся, щоб покращити ваш прогрес!';
@@ -4392,7 +4413,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get perfStatTournamentGames => 'Турнірні ігри';
 
   @override
-  String get perfStatBerserkedGames => 'Ігри з берсерком';
+  String get perfStatBerserkedGames => 'Партії з берсерком';
 
   @override
   String get perfStatTimeSpentPlaying => 'Проведено часу у грі';
@@ -4462,117 +4483,6 @@ class AppLocalizationsUk extends AppLocalizations {
   String get searchSearch => 'Пошук';
 
   @override
-  String get searchAdvancedSearch => 'Розширений пошук';
-
-  @override
-  String get searchOpponentName => 'Ім\'я суперника';
-
-  @override
-  String get searchLoser => 'Той, хто програв';
-
-  @override
-  String get searchFrom => 'З';
-
-  @override
-  String get searchTo => 'До';
-
-  @override
-  String get searchHumanOrComputer => 'Суперник був людиною чи комп\'ютером';
-
-  @override
-  String get searchAiLevel => 'Рівень A. I';
-
-  @override
-  String get searchSource => 'Джерело';
-
-  @override
-  String get searchNbTurns => 'Кількість ходів';
-
-  @override
-  String get searchResult => 'Результат';
-
-  @override
-  String get searchWinnerColor => 'Колір переможця';
-
-  @override
-  String get searchDate => 'Дата';
-
-  @override
-  String get searchSortBy => 'Сортувати по';
-
-  @override
-  String get searchAnalysis => 'Аналіз';
-
-  @override
-  String get searchOnlyAnalysed => 'Лише ігри з комп\'ютерним аналізом';
-
-  @override
-  String get searchColor => 'Колір';
-
-  @override
-  String get searchEvaluation => 'Оцінка';
-
-  @override
-  String get searchMaxNumber => 'Максимальне число';
-
-  @override
-  String get searchMaxNumberExplanation => 'Максимальна кількість ігор для пошуку';
-
-  @override
-  String get searchInclude => 'Включаючи';
-
-  @override
-  String get searchDescending => 'За спаданням';
-
-  @override
-  String get searchAscending => 'За зростанням';
-
-  @override
-  String get searchRatingExplanation => 'Середній рейтинг обох гравців';
-
-  @override
-  String searchSearchInXGames(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Шукати у $count іграх',
-      many: 'Шукати у $count іграх',
-      few: 'Шукати у $count іграх',
-      one: 'Шукати у $count грі',
-      zero: 'Шукати у $count грі',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String searchXGamesFound(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'знайдено $count ігор',
-      many: 'знайдено $count ігор',
-      few: 'знайдено $count гри',
-      one: 'Знайдено одну гру',
-      zero: 'Знайдено одну гру',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String searchGamesFound(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count гри знайдено',
-      many: '$count ігор знайдено',
-      few: '$count гри знайдено',
-      one: '$count гра знайдена',
-      zero: '$count гра знайдена',
-    );
-    return '$_temp0';
-  }
-
-  @override
   String get settingsSettings => 'Налаштування';
 
   @override
@@ -4598,163 +4508,6 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get streamerLichessStreamers => 'Стримери Lichess';
-
-  @override
-  String get streamerLichessStreamer => 'Стример Lichess';
-
-  @override
-  String get streamerLive => 'НАЖИВО!';
-
-  @override
-  String get streamerOffline => 'ОФЛАЙН';
-
-  @override
-  String streamerCurrentlyStreaming(String param) {
-    return 'Зараз транслює: $param';
-  }
-
-  @override
-  String streamerLastStream(String param) {
-    return 'Остання трансляція $param';
-  }
-
-  @override
-  String get streamerBecomeStreamer => 'Стати стримером Lichess';
-
-  @override
-  String get streamerDoYouHaveStream => 'У вас є канал на Twitch чи YouTube?';
-
-  @override
-  String get streamerHereWeGo => 'Приступаємо!';
-
-  @override
-  String get streamerAllStreamers => 'Всі стримери';
-
-  @override
-  String get streamerEditPage => 'Редагувати сторінку стримера';
-
-  @override
-  String get streamerYourPage => 'Ваша сторінка стримера';
-
-  @override
-  String get streamerDownloadKit => 'Завантажити набір інструментів стримера';
-
-  @override
-  String streamerXIsStreaming(String param) {
-    return '$param транслює';
-  }
-
-  @override
-  String get streamerRules => 'Правила трансляцій';
-
-  @override
-  String get streamerRule1 => 'Додайте ключове слово \"lichess.org\" у заголовку вашої трансляції і використовуйте категорію \"Chess\" під час трансляції на Lichess.';
-
-  @override
-  String get streamerRule2 => 'Видаліть ключове слово, коли транслюєте щось не пов\'язане з Lichess.';
-
-  @override
-  String get streamerRule3 => 'Lichess буде автоматично виявляти вашу трансляцію і включати наступні переваги:';
-
-  @override
-  String streamerRule4(String param) {
-    return 'Прочитайте наші $param для забезпечення справедливої гри для всіх протягом вашої трансляції.';
-  }
-
-  @override
-  String get streamerStreamingFairplayFAQ => 'правила чесної гри для трансляцій';
-
-  @override
-  String get streamerPerks => 'Переваги трансляції з ключовим словом';
-
-  @override
-  String get streamerPerk1 => 'Ви отримуєте значок стримера у вашому обліковому записі Lichess.';
-
-  @override
-  String get streamerPerk2 => 'Ви будете переміщені вверх по списку стримерів.';
-
-  @override
-  String get streamerPerk3 => 'Сповіщення ваших підписників Lichess.';
-
-  @override
-  String get streamerPerk4 => 'Відображення вашої трансляції у ваших іграх, турнірах та дослідженнях.';
-
-  @override
-  String get streamerApproved => 'Вашу трансляцію затверджено.';
-
-  @override
-  String get streamerPendingReview => 'Вашу трансляцію перевіряють модератори.';
-
-  @override
-  String get streamerPleaseFillIn => 'Будь ласка, заповніть інформацію про трансляцію та завантажте фотографію.';
-
-  @override
-  String streamerWhenReady(String param) {
-    return 'Коли ви будете готові числитися як стример Lichess, $param';
-  }
-
-  @override
-  String get streamerRequestReview => 'запитати огляд модератора';
-
-  @override
-  String get streamerStreamerLanguageSettings => 'Сторінка стримера Lichess націлена на глядачів за мовою, наданою вашою стримінговою платформою. Встановіть правильну мову за замовчуванням для ваших шахових трансляцій в додатку чи сервісі, який ви використовуєте для трансляцій.';
-
-  @override
-  String get streamerTwitchUsername => 'Ваше ім\'я користувача Twitch або посилання';
-
-  @override
-  String get streamerOptionalOrEmpty => 'За бажанням. Залиште порожнім, якщо немає';
-
-  @override
-  String get streamerYouTubeChannelId => 'ID вашого YouTube каналу';
-
-  @override
-  String get streamerStreamerName => 'Ваше ім\'я для трансляцій на Lichess';
-
-  @override
-  String get streamerVisibility => 'Видимий на сторінці стримерів';
-
-  @override
-  String get streamerWhenApproved => 'Після затвердження модераторами';
-
-  @override
-  String get streamerHeadline => 'Заголовок';
-
-  @override
-  String get streamerTellUsAboutTheStream => 'Розкажіть нам про вашу трансляцію одним реченням';
-
-  @override
-  String get streamerLongDescription => 'Довгий опис';
-
-  @override
-  String streamerXStreamerPicture(String param) {
-    return '$param зображення стримера';
-  }
-
-  @override
-  String get streamerChangePicture => 'Змінити/видалити своє зображення';
-
-  @override
-  String get streamerUploadPicture => 'Завантажити зображення';
-
-  @override
-  String streamerMaxSize(String param) {
-    return 'Максимальний розмір: $param';
-  }
-
-  @override
-  String streamerKeepItShort(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Скоротіть: максимум $count символів',
-      many: 'Скоротіть: максимум $count символів',
-      few: 'Скоротіть: максимум $count символи',
-      one: 'Скоротіть: максимум $count символ',
-      zero: 'Скоротіть: максимум $count символ',
-    );
-    return '$_temp0';
-  }
 
   @override
   String get stormMoveToStart => 'Зробіть хід, щоб почати';
@@ -4794,7 +4547,7 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
-  String get stormScore => 'Оцінка';
+  String get stormScore => 'Рахунок';
 
   @override
   String get stormMoves => 'Ходів';
@@ -4944,528 +4697,8 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
-  String get studyPrivate => 'Приватне';
-
-  @override
-  String get studyMyStudies => 'Мої дослідження';
-
-  @override
-  String get studyStudiesIContributeTo => 'Дослідження, яким я сприяю';
-
-  @override
-  String get studyMyPublicStudies => 'Мої публічні дослідження';
-
-  @override
-  String get studyMyPrivateStudies => 'Мої приватні дослідження';
-
-  @override
-  String get studyMyFavoriteStudies => 'Мої улюблені дослідження';
-
-  @override
-  String get studyWhatAreStudies => 'Що таке дослідження?';
-
-  @override
-  String get studyAllStudies => 'Усі дослідження';
-
-  @override
-  String studyStudiesCreatedByX(String param) {
-    return 'Дослідження, створені $param';
-  }
-
-  @override
-  String get studyNoneYet => 'Ще немає.';
-
-  @override
-  String get studyHot => 'Активні';
-
-  @override
-  String get studyDateAddedNewest => 'Дата додавання (старіші)';
-
-  @override
-  String get studyDateAddedOldest => 'Дата додавання (старіші)';
-
-  @override
-  String get studyRecentlyUpdated => 'Нещодавно оновлені';
-
-  @override
-  String get studyMostPopular => 'Найпопулярніші';
-
-  @override
-  String get studyAlphabetical => 'За алфавітом';
-
-  @override
-  String get studyAddNewChapter => 'Додати новий розділ';
-
-  @override
-  String get studyAddMembers => 'Додати учасників';
-
-  @override
-  String get studyInviteToTheStudy => 'Запросити до дослідження';
-
-  @override
-  String get studyPleaseOnlyInvitePeopleYouKnow => 'Будь ласка запрошуйте лише людей, яких ви знаєте, і які хочуть активно долучитися до цього дослідження.';
-
-  @override
-  String get studySearchByUsername => 'Пошук за іменем користувача';
-
-  @override
-  String get studySpectator => 'Глядач';
-
-  @override
-  String get studyContributor => 'Співавтор';
-
-  @override
-  String get studyKick => 'Вигнати';
-
-  @override
-  String get studyLeaveTheStudy => 'Покинути дослідження';
-
-  @override
-  String get studyYouAreNowAContributor => 'Тепер ви співавтор';
-
-  @override
-  String get studyYouAreNowASpectator => 'Тепер ви глядач';
-
-  @override
-  String get studyPgnTags => 'Теги PGN';
-
-  @override
-  String get studyLike => 'Подобається';
-
-  @override
-  String get studyUnlike => 'Не подобається';
-
-  @override
-  String get studyNewTag => 'Новий тег';
-
-  @override
-  String get studyCommentThisPosition => 'Коментувати цю позицію';
-
-  @override
-  String get studyCommentThisMove => 'Коментувати цей хід';
-
-  @override
-  String get studyAnnotateWithGlyphs => 'Додати символьну анотацію';
-
-  @override
-  String get studyTheChapterIsTooShortToBeAnalysed => 'Розділ занадто короткий для аналізу.';
-
-  @override
-  String get studyOnlyContributorsCanRequestAnalysis => 'Лише співавтори дослідження можуть дати запит на комп\'ютерний аналіз.';
-
-  @override
-  String get studyGetAFullComputerAnalysis => 'Отримати повний серверний комп\'ютерний аналіз головної лінії.';
-
-  @override
-  String get studyMakeSureTheChapterIsComplete => 'Переконайтесь, що розділ завершено. Ви можете дати запит на аналіз лише один раз.';
-
-  @override
-  String get studyAllSyncMembersRemainOnTheSamePosition => 'Усі синхронізовані учасники залишаються на тій же позиції';
-
-  @override
-  String get studyShareChanges => 'Поділитися змінами з глядачами та зберегти їх на сервері';
-
-  @override
-  String get studyPlaying => 'Активні';
-
-  @override
-  String get studyShowEvalBar => 'Шкала оцінки';
-
-  @override
-  String get studyFirst => 'Перша';
-
-  @override
-  String get studyPrevious => 'Попередня';
-
-  @override
-  String get studyNext => 'Наступна';
-
-  @override
-  String get studyLast => 'Остання';
-
-  @override
   String get studyShareAndExport => 'Надсилання та експорт';
 
   @override
-  String get studyCloneStudy => 'Клонувати';
-
-  @override
-  String get studyStudyPgn => 'PGN дослідження';
-
-  @override
-  String get studyDownloadAllGames => 'Завантажити всі партії';
-
-  @override
-  String get studyChapterPgn => 'PGN розділу';
-
-  @override
-  String get studyCopyChapterPgn => 'Скопіювати PGN';
-
-  @override
-  String get studyCopyChapterPgnDescription => 'Скопіювати PGN розділу в буфер обміну.';
-
-  @override
-  String get studyDownloadGame => 'Завантажити гру';
-
-  @override
-  String get studyStudyUrl => 'Посилання на дослідження';
-
-  @override
-  String get studyCurrentChapterUrl => 'Посилання на цей розділ';
-
-  @override
-  String get studyYouCanPasteThisInTheForumToEmbed => 'Ви можете вставити цей код на форумі для вбудування';
-
-  @override
-  String get studyStartAtInitialPosition => 'Старт з початкової позиції';
-
-  @override
-  String studyStartAtX(String param) {
-    return 'Почати з $param';
-  }
-
-  @override
-  String get studyEmbedInYourWebsite => 'Вбудувати на своєму сайті';
-
-  @override
-  String get studyReadMoreAboutEmbedding => 'Докладніше про вбудовування';
-
-  @override
-  String get studyOnlyPublicStudiesCanBeEmbedded => 'Лише публічні дослідження можна вбудовувати!';
-
-  @override
-  String get studyOpen => 'Відкрити';
-
-  @override
-  String studyXBroughtToYouByY(String param1, String param2) {
-    return '$param1 надано вам $param2';
-  }
-
-  @override
-  String get studyStudyNotFound => 'Дослідження не знайдено';
-
-  @override
-  String get studyEditChapter => 'Редагувати розділ';
-
-  @override
-  String get studyNewChapter => 'Новий розділ';
-
-  @override
-  String studyImportFromChapterX(String param) {
-    return 'Імпортувати з $param';
-  }
-
-  @override
-  String get studyOrientation => 'Орієнтація';
-
-  @override
-  String get studyAnalysisMode => 'Режим аналізу';
-
-  @override
-  String get studyPinnedChapterComment => 'Закріплений коментар розділу';
-
-  @override
-  String get studySaveChapter => 'Зберегти розділ';
-
-  @override
-  String get studyClearAnnotations => 'Очистити анотацію';
-
-  @override
-  String get studyClearVariations => 'Очистити анотацію';
-
-  @override
-  String get studyDeleteChapter => 'Видалити розділ';
-
-  @override
-  String get studyDeleteThisChapter => 'Видалити цей розділ? Відновити буде неможливо!';
-
-  @override
-  String get studyClearAllCommentsInThisChapter => 'Очистити всі коментарі та позначки з цього розділу?';
-
-  @override
-  String get studyRightUnderTheBoard => 'Відразу під шахівницею';
-
-  @override
-  String get studyNoPinnedComment => 'Немає';
-
-  @override
-  String get studyNormalAnalysis => 'Звичайний аналіз';
-
-  @override
-  String get studyHideNextMoves => 'Приховати наступні ходи';
-
-  @override
-  String get studyInteractiveLesson => 'Інтерактивний урок';
-
-  @override
-  String studyChapterX(String param) {
-    return 'Розділ $param';
-  }
-
-  @override
-  String get studyEmpty => 'Порожній';
-
-  @override
-  String get studyStartFromInitialPosition => 'Старт з початкової позиції';
-
-  @override
-  String get studyEditor => 'Редактор';
-
-  @override
-  String get studyStartFromCustomPosition => 'Почати з обраної позиції';
-
-  @override
-  String get studyLoadAGameByUrl => 'Завантажте гру за URL-адресою';
-
-  @override
-  String get studyLoadAPositionFromFen => 'Завантажити позицію з FEN';
-
-  @override
-  String get studyLoadAGameFromPgn => 'Завантажити гру з PGN';
-
-  @override
-  String get studyAutomatic => 'Автоматично';
-
-  @override
-  String get studyUrlOfTheGame => 'URL-адреса гри';
-
-  @override
-  String studyLoadAGameFromXOrY(String param1, String param2) {
-    return 'Завантажити гру з $param1 або $param2';
-  }
-
-  @override
-  String get studyCreateChapter => 'Створити розділ';
-
-  @override
-  String get studyCreateStudy => 'Створити дослідження';
-
-  @override
-  String get studyEditStudy => 'Редагування дослідження';
-
-  @override
-  String get studyVisibility => 'Видимість';
-
-  @override
-  String get studyPublic => 'Публічне';
-
-  @override
-  String get studyUnlisted => 'Поза списком';
-
-  @override
-  String get studyInviteOnly => 'Лише за запрошенням';
-
-  @override
-  String get studyAllowCloning => 'Дозволити копіювання';
-
-  @override
-  String get studyNobody => 'Ніхто';
-
-  @override
-  String get studyOnlyMe => 'Лише я';
-
-  @override
-  String get studyContributors => 'Співавтори';
-
-  @override
-  String get studyMembers => 'Учасники';
-
-  @override
-  String get studyEveryone => 'Всі';
-
-  @override
-  String get studyEnableSync => 'Увімкнути синхронізацію';
-
-  @override
-  String get studyYesKeepEveryoneOnTheSamePosition => 'Так: однакова позиція для всіх';
-
-  @override
-  String get studyNoLetPeopleBrowseFreely => 'Ні: дозволити вільний перегляд';
-
-  @override
-  String get studyPinnedStudyComment => 'Закріплений коментар дослідження';
-
-  @override
   String get studyStart => 'Почати';
-
-  @override
-  String get studySave => 'Зберегти';
-
-  @override
-  String get studyClearChat => 'Очистити чат';
-
-  @override
-  String get studyDeleteTheStudyChatHistory => 'Видалити історію чату дослідження? Відновити буде неможливо!';
-
-  @override
-  String get studyDeleteStudy => 'Видалити дослідження';
-
-  @override
-  String studyConfirmDeleteStudy(String param) {
-    return 'Ви дійсно бажаєте видалити все дослідження? Назад дороги немає! Введіть назву дослідження для підтвердження: $param';
-  }
-
-  @override
-  String get studyWhereDoYouWantToStudyThat => 'Де ви хочете це дослідити?';
-
-  @override
-  String get studyGoodMove => 'Хороший хід';
-
-  @override
-  String get studyMistake => 'Помилка';
-
-  @override
-  String get studyBrilliantMove => 'Блискучий хід';
-
-  @override
-  String get studyBlunder => 'Груба помилка';
-
-  @override
-  String get studyInterestingMove => 'Цікавий хід';
-
-  @override
-  String get studyDubiousMove => 'Сумнівний хід';
-
-  @override
-  String get studyOnlyMove => 'Єдиний хід';
-
-  @override
-  String get studyZugzwang => 'Цугцванг';
-
-  @override
-  String get studyEqualPosition => 'Рівна позиція';
-
-  @override
-  String get studyUnclearPosition => 'Незрозуміла позиція';
-
-  @override
-  String get studyWhiteIsSlightlyBetter => 'Позиція білих трохи краще';
-
-  @override
-  String get studyBlackIsSlightlyBetter => 'Позиція чорних трохи краще';
-
-  @override
-  String get studyWhiteIsBetter => 'Позиція білих краще';
-
-  @override
-  String get studyBlackIsBetter => 'Позиція чорних краще';
-
-  @override
-  String get studyWhiteIsWinning => 'Білі перемагають';
-
-  @override
-  String get studyBlackIsWinning => 'Чорні перемагають';
-
-  @override
-  String get studyNovelty => 'Новинка';
-
-  @override
-  String get studyDevelopment => 'Розвиток';
-
-  @override
-  String get studyInitiative => 'Ініціатива';
-
-  @override
-  String get studyAttack => 'Атака';
-
-  @override
-  String get studyCounterplay => 'Контргра';
-
-  @override
-  String get studyTimeTrouble => 'Цейтнот';
-
-  @override
-  String get studyWithCompensation => 'З компенсацією';
-
-  @override
-  String get studyWithTheIdea => 'З ідеєю';
-
-  @override
-  String get studyNextChapter => 'Наступний розділ';
-
-  @override
-  String get studyPrevChapter => 'Попередній розділ';
-
-  @override
-  String get studyStudyActions => 'Команди дослідження';
-
-  @override
-  String get studyTopics => 'Теми';
-
-  @override
-  String get studyMyTopics => 'Мої теми';
-
-  @override
-  String get studyPopularTopics => 'Популярні теми';
-
-  @override
-  String get studyManageTopics => 'Управління темами';
-
-  @override
-  String get studyBack => 'Назад';
-
-  @override
-  String get studyPlayAgain => 'Грати знову';
-
-  @override
-  String get studyWhatWouldYouPlay => 'Що б ви грали в цій позиції?';
-
-  @override
-  String get studyYouCompletedThisLesson => 'Вітаємо! Ви завершили цей урок.';
-
-  @override
-  String studyNbChapters(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count розділи',
-      many: '$count розділів',
-      few: '$count розділи',
-      one: '$count розділ',
-      zero: '$count розділ',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String studyNbGames(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count Партій',
-      many: '$count Партій',
-      few: '$count Партії',
-      one: '$count Партія',
-      zero: '$count Партія',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String studyNbMembers(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count учасників',
-      many: '$count учасників',
-      few: '$count учасники',
-      one: '$count учасник',
-      zero: '$count учасник',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String studyPasteYourPgnTextHereUpToNbGames(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Вставте ваш PGN текст тут, до $count ігор',
-      many: 'Вставте ваш PGN текст тут, до $count ігор',
-      few: 'Вставте ваш PGN текст тут, до $count ігор',
-      one: 'Вставте ваш PGN текст тут, до $count гри',
-      zero: 'Вставте ваш PGN текст тут, до $count гри',
-    );
-    return '$_temp0';
-  }
 }

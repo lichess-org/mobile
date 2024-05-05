@@ -25,6 +25,7 @@ import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
+import 'package:lichess_mobile/src/model/game/game_storage.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -638,6 +639,10 @@ class GameController extends _$GameController {
             state = AsyncValue.data(
               state.requireValue.copyWith(game: game),
             );
+
+            ref
+                .read(gameStorageProvider)
+                .save(game.toArchivedGame(finishedAt: DateTime.now()));
           }, (e, s) {
             _logger.warning('Could not get post game data', e, s);
           });
