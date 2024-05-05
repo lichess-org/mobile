@@ -260,13 +260,13 @@ class _Body extends ConsumerWidget {
             },
           ),
           SettingsListTile(
-            icon: const Icon(Icons.palette),
-            settingsLabel: Text(context.l10n.boardTheme),
+            icon: const Icon(LichessIcons.chess_board),
+            settingsLabel: Text(context.l10n.board),
             settingsValue: boardPrefs.boardTheme.label,
             onTap: () {
               pushPlatformRoute(
                 context,
-                title: context.l10n.boardTheme,
+                title: context.l10n.board,
                 builder: (context) => const BoardThemeScreen(),
               );
             },
@@ -284,15 +284,15 @@ class _Body extends ConsumerWidget {
             },
           ),
           PlatformListTile(
-            leading: const Icon(LichessIcons.chess_board),
-            title: const Text('Chessboard'),
+            leading: const Icon(Icons.gamepad),
+            title: Text(context.l10n.preferencesGameBehavior),
             trailing: Theme.of(context).platform == TargetPlatform.iOS
                 ? const CupertinoListTileChevron()
                 : null,
             onTap: () {
               pushPlatformRoute(
                 context,
-                title: 'Chessboard',
+                title: context.l10n.preferencesGameBehavior,
                 builder: (context) => const BoardSettingsScreen(),
               );
             },

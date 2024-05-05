@@ -32,6 +32,9 @@ const locales = ['af-ZA', 'ar-SA', 'az-AZ', 'be-BY', 'bg-BG', 'bn-BD', 'br-FR', 
 const whiteLists = {
   'patron': ['donate', 'lichessPatron'],
   'contact': ['contact', 'contactLichess'],
+  'search': ['search'],
+  'streamer': ['lichessStreamers'],
+  'study': ['start', 'shareAndExport'],
 }
 
 async function main() {
