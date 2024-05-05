@@ -159,29 +159,30 @@ class _Body extends ConsumerWidget {
               ),
           ],
         ),
-      ListSection(
-        hasLeading: true,
-        showDivider: true,
-        children: [
-          PlatformListTile(
-            leading: Icon(
-              LichessIcons.patron,
-              semanticLabel: context.l10n.patronLichessPatron,
-              color: context.lichessColors.brag,
+      if (userSession == null || userSession.user.isPatron != true)
+        ListSection(
+          hasLeading: true,
+          showDivider: true,
+          children: [
+            PlatformListTile(
+              leading: Icon(
+                LichessIcons.patron,
+                semanticLabel: context.l10n.patronLichessPatron,
+                color: context.lichessColors.brag,
+              ),
+              title: Text(
+                context.l10n.patronDonate,
+                style: TextStyle(color: context.lichessColors.brag),
+              ),
+              trailing: Theme.of(context).platform == TargetPlatform.iOS
+                  ? const CupertinoListTileChevron()
+                  : null,
+              onTap: () {
+                launchUrl(Uri.parse('https://lichess.org/patron'));
+              },
             ),
-            title: Text(
-              context.l10n.patronDonate,
-              style: TextStyle(color: context.lichessColors.brag),
-            ),
-            trailing: Theme.of(context).platform == TargetPlatform.iOS
-                ? const CupertinoListTileChevron()
-                : null,
-            onTap: () {
-              launchUrl(Uri.parse('https://lichess.org/patron'));
-            },
-          ),
-        ],
-      ),
+          ],
+        ),
       ListSection(
         hasLeading: true,
         showDivider: true,
