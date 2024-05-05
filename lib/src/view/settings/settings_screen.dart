@@ -90,13 +90,36 @@ class _Body extends ConsumerWidget {
 
     final androidVersionAsync = ref.watch(androidVersionProvider);
 
+    final Widget? donateButton =
+        userSession == null || userSession.user.isPatron != true
+            ? PlatformListTile(
+                leading: Icon(
+                  LichessIcons.patron,
+                  semanticLabel: context.l10n.patronLichessPatron,
+                  color: context.lichessColors.brag,
+                ),
+                title: Text(
+                  context.l10n.patronDonate,
+                  style: TextStyle(color: context.lichessColors.brag),
+                ),
+                trailing: Theme.of(context).platform == TargetPlatform.iOS
+                    ? const CupertinoListTileChevron()
+                    : null,
+                onTap: () {
+                  launchUrl(Uri.parse('https://lichess.org/patron'));
+                },
+              )
+            : null;
+
     final List<Widget> content = [
-      if (userSession != null)
-        ListSection(
-          header: UserFullNameWidget(user: userSession.user),
-          hasLeading: true,
-          showDivider: true,
-          children: [
+      ListSection(
+        header: userSession != null
+            ? UserFullNameWidget(user: userSession.user)
+            : null,
+        hasLeading: true,
+        showDivider: true,
+        children: [
+          if (userSession != null) ...[
             PlatformListTile(
               leading: const Icon(Icons.person),
               title: Text(context.l10n.profile),
@@ -138,12 +161,7 @@ class _Body extends ConsumerWidget {
                   _showSignOutConfirmDialog(context, ref);
                 },
               ),
-          ],
-        )
-      else
-        ListSection(
-          showDivider: true,
-          children: [
+          ] else ...[
             if (authController.isLoading)
               const PlatformListTile(
                 leading: Icon(Icons.login),
@@ -158,31 +176,14 @@ class _Body extends ConsumerWidget {
                 },
               ),
           ],
-        ),
-      if (userSession == null || userSession.user.isPatron != true)
-        ListSection(
-          hasLeading: true,
-          showDivider: true,
-          children: [
-            PlatformListTile(
-              leading: Icon(
-                LichessIcons.patron,
-                semanticLabel: context.l10n.patronLichessPatron,
-                color: context.lichessColors.brag,
-              ),
-              title: Text(
-                context.l10n.patronDonate,
-                style: TextStyle(color: context.lichessColors.brag),
-              ),
-              trailing: Theme.of(context).platform == TargetPlatform.iOS
-                  ? const CupertinoListTileChevron()
-                  : null,
-              onTap: () {
-                launchUrl(Uri.parse('https://lichess.org/patron'));
-              },
-            ),
-          ],
-        ),
+          if (Theme.of(context).platform == TargetPlatform.android &&
+              donateButton != null)
+            donateButton,
+        ],
+      ),
+      if (Theme.of(context).platform == TargetPlatform.iOS &&
+          donateButton != null)
+        ListSection(hasLeading: true, children: [donateButton]),
       ListSection(
         hasLeading: true,
         showDivider: true,
