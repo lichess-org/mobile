@@ -626,6 +626,10 @@ class _BottomBar extends ConsumerWidget {
                 onTap: () {
                   puzzleState.clock.reset();
                   ref.invalidate(stormProvider);
+                  // Since the API sends the same storm during an
+                  // interval of time, the provider will receive the
+                  // same arguments and so will not be recomputed
+                  ref.invalidate(stormControllerProvider);
                 },
               ),
               if (puzzleState.clock.isActive)
