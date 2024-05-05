@@ -119,7 +119,6 @@ class GameBody extends ConsumerWidget {
     return gameStateAsync.when(
       data: (gameState) {
         final position = gameState.game.positionAt(gameState.stepCursor);
-        final sideToMove = position.turn;
         final youAre = gameState.game.youAre ?? Side.white;
         final archivedBlackClock =
             gameState.game.archivedBlackClockAt(gameState.stepCursor);
@@ -131,7 +130,9 @@ class GameBody extends ConsumerWidget {
           materialDiff: shouldShowMaterialDiff
               ? gameState.game.materialDiffAt(gameState.stepCursor, Side.black)
               : null,
-          timeToMove: sideToMove == Side.black ? gameState.timeToMove : null,
+          timeToMove: gameState.game.sideToMove == Side.black
+              ? gameState.timeToMove
+              : null,
           shouldLinkToUserProfile: youAre != Side.black,
           mePlaying: youAre == Side.black,
           zenMode: gameState.isZenModeEnabled,
@@ -169,7 +170,9 @@ class GameBody extends ConsumerWidget {
           materialDiff: shouldShowMaterialDiff
               ? gameState.game.materialDiffAt(gameState.stepCursor, Side.white)
               : null,
-          timeToMove: sideToMove == Side.white ? gameState.timeToMove : null,
+          timeToMove: gameState.game.sideToMove == Side.white
+              ? gameState.timeToMove
+              : null,
           shouldLinkToUserProfile: youAre != Side.white,
           mePlaying: youAre == Side.white,
           zenMode: gameState.isZenModeEnabled,
@@ -250,7 +253,7 @@ class GameBody extends ConsumerWidget {
                         lastMove:
                             gameState.game.moveAt(gameState.stepCursor)?.cg,
                         isCheck: position.isCheck,
-                        sideToMove: sideToMove.cg,
+                        sideToMove: position.turn.cg,
                         validMoves: algebraicLegalMoves(position),
                         premove: gameState.premove,
                       ),
