@@ -36,12 +36,14 @@ class StormController extends _$StormController {
 
   @override
   StormState build(IList<LitePuzzle> puzzles) {
+    final pov = Chess.fromSetup(Setup.parseFen(puzzles.first.fen));
+    final clock = StormClock();
+
     ref.onDispose(() {
       _firstMoveTimer?.cancel();
-      state.clock.dispose();
+      clock.dispose();
     });
 
-    final pov = Chess.fromSetup(Setup.parseFen(puzzles.first.fen));
     final newState = StormState(
       firstMovePlayed: false,
       runOver: false,
@@ -51,7 +53,7 @@ class StormController extends _$StormController {
       pov: pov.turn.opposite,
       moveIndex: -1,
       numSolved: 0,
-      clock: StormClock(),
+      clock: clock,
       combo: const StormCombo(current: 0, best: 0),
       stats: null,
       lastSolvedTime: null,
