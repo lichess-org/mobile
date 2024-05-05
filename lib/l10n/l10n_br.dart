@@ -276,6 +276,12 @@ class AppLocalizationsBr extends AppLocalizations {
   }
 
   @override
+  String get contactContact => 'Darempred';
+
+  @override
+  String get contactContactLichess => 'Mont e darempred gant Lichess';
+
+  @override
   String get playWithAFriend => 'C\'hoari a-enep ur mignon';
 
   @override
@@ -3536,6 +3542,12 @@ class AppLocalizationsBr extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get patronDonate => 'Ober un donezon';
+
+  @override
+  String get patronLichessPatron => 'Lichess Patron';
 
   @override
   String get preferencesPreferences => 'Dibaboù';

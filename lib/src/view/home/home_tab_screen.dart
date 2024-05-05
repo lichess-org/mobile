@@ -193,9 +193,25 @@ class _HomeBody extends ConsumerWidget {
                 const _HelloWidget(),
                 const Padding(
                   padding: Styles.bodyPadding,
-                  child: LichessMessage(),
+                  child: LichessMessage(style: TextStyle(fontSize: 18)),
                 ),
                 const SizedBox(height: 16.0),
+                if (session == null) ...[
+                  const Center(child: _SignInWidget()),
+                  const SizedBox(height: 16.0),
+                ],
+                if (session == null || session.user.isPatron != true) ...[
+                  Center(
+                    child: SecondaryButton(
+                      semanticsLabel: context.l10n.patronDonate,
+                      onPressed: () {
+                        launchUrl(Uri.parse('https://lichess.org/patron'));
+                      },
+                      child: Text(context.l10n.patronDonate),
+                    ),
+                  ),
+                  const SizedBox(height: 16.0),
+                ],
                 Center(
                   child: SecondaryButton(
                     semanticsLabel: context.l10n.aboutX('Lichess...'),
@@ -205,10 +221,6 @@ class _HomeBody extends ConsumerWidget {
                     child: Text(context.l10n.aboutX('Lichess...')),
                   ),
                 ),
-                if (session == null) ...[
-                  const SizedBox(height: 16.0),
-                  const Center(child: _SignInWidget()),
-                ],
               ],
             ),
           );

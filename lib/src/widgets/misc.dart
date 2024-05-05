@@ -6,7 +6,9 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LichessMessage extends StatefulWidget {
-  const LichessMessage({super.key});
+  const LichessMessage({super.key, this.style});
+
+  final TextStyle? style;
 
   @override
   State<LichessMessage> createState() => _LichessMessageState();
@@ -62,23 +64,11 @@ class _LichessMessageState extends State<LichessMessage> {
       children: [
         Text.rich(
           TextSpan(
-            style: const TextStyle(fontSize: 18),
+            style: widget.style,
             children: spans,
           ),
         ),
         const SizedBox(height: 8.0),
-        // GestureDetector(
-        //   onTap: () {
-        //     launchUrl(Uri.parse('https://lichess.org/about'));
-        //   },
-        //   child: Text(
-        //     '${context.l10n.aboutX('Lichess')}...',
-        //     style: TextStyle(
-        //       fontSize: 18,
-        //       color: context.lichessColors.primary,
-        //     ),
-        //   ),
-        // ),
       ],
     );
   }

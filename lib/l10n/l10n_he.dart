@@ -259,6 +259,12 @@ class AppLocalizationsHe extends AppLocalizations {
   }
 
   @override
+  String get contactContact => 'צרו קשר';
+
+  @override
+  String get contactContactLichess => 'צרו קשר עם ליצ\'ס';
+
+  @override
   String get playWithAFriend => 'שחק/י עם חבר/ה';
 
   @override
@@ -3480,6 +3486,12 @@ class AppLocalizationsHe extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get patronDonate => 'תרמו';
+
+  @override
+  String get patronLichessPatron => 'תומך/ת ליצ\'ס';
 
   @override
   String get preferencesPreferences => 'העדפות';

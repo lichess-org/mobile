@@ -225,6 +225,12 @@ class AppLocalizationsFo extends AppLocalizations {
   }
 
   @override
+  String get contactContact => 'Samband';
+
+  @override
+  String get contactContactLichess => 'Set teg í samband við Lichess';
+
+  @override
   String get playWithAFriend => 'Telva móti einum vini';
 
   @override
@@ -3362,6 +3368,12 @@ class AppLocalizationsFo extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get patronDonate => 'Stuðla';
+
+  @override
+  String get patronLichessPatron => 'Lichess stuðul';
 
   @override
   String get preferencesPreferences => 'Stillingar';

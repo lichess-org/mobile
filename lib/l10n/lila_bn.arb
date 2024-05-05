@@ -20,6 +20,8 @@
   "activityRankedInTournament": "{count, plural, =0{অনুপাত #{count} (সর্বোচ্চ {param2}%) সাথে {param3} খেলায় {param4}} =1{অনুপাত #{count} (সর্বোচ্চ {param2}%) সাথে {param3} খেলায় {param4}} other{অনুপাত #{count} (সর্বোচ্চ {param2}%) সাথে {param3} খেলায় {param4}}}",
   "activityCompetedInNbSwissTournaments": "{count, plural, =0{সুইস টুর্নামেন্ট শেষ করেছেন {count} এর ভেতর} =1{সুইস টুর্নামেন্ট শেষ করেছেন {count} এর ভেতর} other{সুইস টুর্নামেন্ট শেষ করেছেন {count} এর ভেতর}}",
   "activityJoinedNbTeams": "{count, plural, =0{যুক্ত হয়েছে {count} দল} =1{যুক্ত হয়েছে {count} দল} other{যুক্ত হয়েছে {count} দল}}",
+  "contactContact": "লাইকেস. আর. সি. / এর যোগাযোগের সংক্ষিপ্ত লিঙ্ক, হোমপেজে দৃশ্যমান",
+  "contactContactLichess": "পৃষ্ঠার শিরোনাম lichess. org/contact",
   "playWithAFriend": "বন্ধুর সাথে খেলো",
   "playWithTheMachine": "কম্পিউটারের সাথে খেলতে চান",
   "toInviteSomeoneToPlayGiveThisUrl": "কাউকে খেলার জন্য আমন্ত্রণ জানাতে চাইলে এই URL টি দিন",

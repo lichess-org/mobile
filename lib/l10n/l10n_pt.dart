@@ -225,6 +225,12 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
+  String get contactContact => 'Contacto';
+
+  @override
+  String get contactContactLichess => 'Contactar o Lichess';
+
+  @override
   String get playWithAFriend => 'Jogar com um amigo';
 
   @override
@@ -3364,6 +3370,12 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
+  String get patronDonate => 'Doar';
+
+  @override
+  String get patronLichessPatron => 'Patrono do Lichess';
+
+  @override
   String get preferencesPreferences => 'Preferências';
 
   @override
@@ -5543,6 +5555,12 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
     );
     return '$_temp0';
   }
+
+  @override
+  String get contactContact => 'Contato';
+
+  @override
+  String get contactContactLichess => 'Entrar em contato com Lichess';
 
   @override
   String get playWithAFriend => 'Jogar contra um amigo';
@@ -8682,6 +8700,12 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
     );
     return '$_temp0';
   }
+
+  @override
+  String get patronDonate => 'Doação';
+
+  @override
+  String get patronLichessPatron => 'Apoie o Lichess';
 
   @override
   String get preferencesPreferences => 'Preferências';

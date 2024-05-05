@@ -18,6 +18,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/misc.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
@@ -158,6 +159,29 @@ class _Body extends ConsumerWidget {
               ),
           ],
         ),
+      ListSection(
+        hasLeading: true,
+        showDivider: true,
+        children: [
+          PlatformListTile(
+            leading: Icon(
+              LichessIcons.patron,
+              semanticLabel: context.l10n.patronLichessPatron,
+              color: context.lichessColors.brag,
+            ),
+            title: Text(
+              context.l10n.patronDonate,
+              style: TextStyle(color: context.lichessColors.brag),
+            ),
+            trailing: Theme.of(context).platform == TargetPlatform.iOS
+                ? const CupertinoListTileChevron()
+                : null,
+            onTap: () {
+              launchUrl(Uri.parse('https://lichess.org/patron'));
+            },
+          ),
+        ],
+      ),
       ListSection(
         hasLeading: true,
         showDivider: true,
@@ -343,13 +367,30 @@ class _Body extends ConsumerWidget {
               launchUrl(Uri.parse('https://lichess.org/help/contribute'));
             },
           ),
+          PlatformListTile(
+            leading: const Icon(Icons.star),
+            title: Text(context.l10n.thankYou),
+            trailing: Theme.of(context).platform == TargetPlatform.iOS
+                ? const CupertinoListTileChevron()
+                : null,
+            onTap: () {
+              launchUrl(Uri.parse('https://lichess.org/thanks'));
+            },
+          ),
         ],
       ),
       Padding(
         padding: Styles.bodySectionPadding,
-        child: Text(
-          'v${packageInfo.version}',
-          style: Theme.of(context).textTheme.bodySmall,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            LichessMessage(style: Theme.of(context).textTheme.bodyMedium),
+            const SizedBox(height: 10),
+            Text(
+              'v${packageInfo.version}',
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+          ],
         ),
       ),
     ];

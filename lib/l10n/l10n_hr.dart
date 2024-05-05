@@ -242,6 +242,12 @@ class AppLocalizationsHr extends AppLocalizations {
   }
 
   @override
+  String get contactContact => 'Kontaktirajte nas';
+
+  @override
+  String get contactContactLichess => 'Kontaktiraj Lichess';
+
+  @override
   String get playWithAFriend => 'Igraj protiv prijatelja';
 
   @override
@@ -3419,6 +3425,12 @@ class AppLocalizationsHr extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get patronDonate => 'Donirajte';
+
+  @override
+  String get patronLichessPatron => 'Lichess donacijska stranica';
 
   @override
   String get preferencesPreferences => 'Postavke';

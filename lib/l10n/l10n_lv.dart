@@ -225,6 +225,12 @@ class AppLocalizationsLv extends AppLocalizations {
   }
 
   @override
+  String get contactContact => 'Kontakti';
+
+  @override
+  String get contactContactLichess => 'Sazināties ar Lichess';
+
+  @override
   String get playWithAFriend => 'Spēlēt ar draugu';
 
   @override
@@ -3362,6 +3368,12 @@ class AppLocalizationsLv extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get patronDonate => 'Ziedot';
+
+  @override
+  String get patronLichessPatron => 'Lichess Sponsors';
 
   @override
   String get preferencesPreferences => 'Uzstādījumi';

@@ -191,6 +191,12 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String get contactContact => '各種連絡先';
+
+  @override
+  String get contactContactLichess => 'Lichess に連絡する';
+
+  @override
   String get playWithAFriend => '友達と対局する';
 
   @override
@@ -3244,6 +3250,12 @@ class AppLocalizationsJa extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get patronDonate => '寄付';
+
+  @override
+  String get patronLichessPatron => 'Lichess パトロン';
 
   @override
   String get preferencesPreferences => '設定';

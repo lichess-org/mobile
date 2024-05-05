@@ -225,6 +225,12 @@ class AppLocalizationsHu extends AppLocalizations {
   }
 
   @override
+  String get contactContact => 'Kapcsolat';
+
+  @override
+  String get contactContactLichess => 'Lépj velünk kapcsolatba';
+
+  @override
   String get playWithAFriend => 'Játék egy ismerőssel';
 
   @override
@@ -3362,6 +3368,12 @@ class AppLocalizationsHu extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get patronDonate => 'Adakozz';
+
+  @override
+  String get patronLichessPatron => 'Lichess Patron';
 
   @override
   String get preferencesPreferences => 'Testreszabás';

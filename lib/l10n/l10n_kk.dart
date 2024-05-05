@@ -225,6 +225,12 @@ class AppLocalizationsKk extends AppLocalizations {
   }
 
   @override
+  String get contactContact => 'Байланыс';
+
+  @override
+  String get contactContactLichess => 'Личеспен байланыс';
+
+  @override
   String get playWithAFriend => 'Доспен ойнау';
 
   @override
@@ -3362,6 +3368,12 @@ class AppLocalizationsKk extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get patronDonate => 'Демеу жасау';
+
+  @override
+  String get patronLichessPatron => 'Личес Қамқоршысы';
 
   @override
   String get preferencesPreferences => 'Баптаулар';

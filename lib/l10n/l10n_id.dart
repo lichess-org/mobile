@@ -191,6 +191,12 @@ class AppLocalizationsId extends AppLocalizations {
   }
 
   @override
+  String get contactContact => 'Kontak';
+
+  @override
+  String get contactContactLichess => 'Kontak Lichess';
+
+  @override
   String get playWithAFriend => 'Bermain dengan teman';
 
   @override
@@ -3244,6 +3250,12 @@ class AppLocalizationsId extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get patronDonate => 'Donasi';
+
+  @override
+  String get patronLichessPatron => 'Patron Lichess';
 
   @override
   String get preferencesPreferences => 'Pengaturan';

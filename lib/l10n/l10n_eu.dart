@@ -225,6 +225,12 @@ class AppLocalizationsEu extends AppLocalizations {
   }
 
   @override
+  String get contactContact => 'Harremana';
+
+  @override
+  String get contactContactLichess => 'Jarri kontaktuan Lichessekin';
+
+  @override
   String get playWithAFriend => 'Lagun baten aurka jokatu';
 
   @override
@@ -3362,6 +3368,12 @@ class AppLocalizationsEu extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get patronDonate => 'Dirua eman';
+
+  @override
+  String get patronLichessPatron => 'Lichess babeslea';
 
   @override
   String get preferencesPreferences => 'Lehentasunak';

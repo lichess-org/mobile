@@ -259,6 +259,12 @@ class AppLocalizationsUk extends AppLocalizations {
   }
 
   @override
+  String get contactContact => 'Контакти';
+
+  @override
+  String get contactContactLichess => 'Зв\'язатися з Lichess';
+
+  @override
   String get playWithAFriend => 'Грати з другом';
 
   @override
@@ -3480,6 +3486,12 @@ class AppLocalizationsUk extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get patronDonate => 'Зробити внесок';
+
+  @override
+  String get patronLichessPatron => 'Покровитель Lichess';
 
   @override
   String get preferencesPreferences => 'Налаштування';

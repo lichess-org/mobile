@@ -191,6 +191,12 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
+  String get contactContact => '문의';
+
+  @override
+  String get contactContactLichess => 'Lichess에 문의하기';
+
+  @override
   String get playWithAFriend => '친구와 게임하기';
 
   @override
@@ -3244,6 +3250,12 @@ class AppLocalizationsKo extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get patronDonate => '기부';
+
+  @override
+  String get patronLichessPatron => 'Lichess 후원자';
 
   @override
   String get preferencesPreferences => '설정';

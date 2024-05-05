@@ -225,6 +225,12 @@ class AppLocalizationsDa extends AppLocalizations {
   }
 
   @override
+  String get contactContact => 'Kontakt';
+
+  @override
+  String get contactContactLichess => 'Kontakt Lichess';
+
+  @override
   String get playWithAFriend => 'Spil mod en ven';
 
   @override
@@ -3362,6 +3368,12 @@ class AppLocalizationsDa extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get patronDonate => 'Donér';
+
+  @override
+  String get patronLichessPatron => 'Lichess Protektor';
 
   @override
   String get preferencesPreferences => 'Indstillinger';

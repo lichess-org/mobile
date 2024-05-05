@@ -276,6 +276,12 @@ class AppLocalizationsGa extends AppLocalizations {
   }
 
   @override
+  String get contactContact => 'Teagmháil';
+
+  @override
+  String get contactContactLichess => 'Déan teagmháil le Lichess';
+
+  @override
   String get playWithAFriend => 'Imir le cara';
 
   @override
@@ -3533,6 +3539,12 @@ class AppLocalizationsGa extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get patronDonate => 'Deonaigh';
+
+  @override
+  String get patronLichessPatron => 'Pátrún Lichess';
 
   @override
   String get preferencesPreferences => 'Socruithe';

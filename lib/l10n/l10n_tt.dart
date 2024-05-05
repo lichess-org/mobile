@@ -191,6 +191,12 @@ class AppLocalizationsTt extends AppLocalizations {
   }
 
   @override
+  String get contactContact => 'Контакт';
+
+  @override
+  String get contactContactLichess => 'Элемтә Lichess';
+
+  @override
   String get playWithAFriend => 'Дустың белән уйнарга';
 
   @override
@@ -3248,6 +3254,12 @@ class AppLocalizationsTt extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get patronDonate => 'Хәйрия колмак';
+
+  @override
+  String get patronLichessPatron => 'Lichess иганәче';
 
   @override
   String get preferencesPreferences => 'Көйләүләр';

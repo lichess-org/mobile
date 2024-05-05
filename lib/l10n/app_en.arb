@@ -170,6 +170,8 @@
       }
     }
   },
+  "contactContact": "Contact",
+  "contactContactLichess": "Contact Lichess",
   "playWithAFriend": "Play with a friend",
   "playWithTheMachine": "Play with the computer",
   "toInviteSomeoneToPlayGiveThisUrl": "To invite someone to play, give this URL",
@@ -2075,6 +2077,8 @@
       }
     }
   },
+  "patronDonate": "Donate",
+  "patronLichessPatron": "Lichess Patron",
   "preferencesPreferences": "Preferences",
   "preferencesDisplay": "Display",
   "preferencesPrivacy": "Privacy",

@@ -69,6 +69,7 @@ class GamePlayer extends StatelessWidget {
               Icon(
                 LichessIcons.patron,
                 size: playerFontSize,
+                semanticLabel: context.l10n.patronLichessPatron,
               ),
               const SizedBox(width: 5),
             ],

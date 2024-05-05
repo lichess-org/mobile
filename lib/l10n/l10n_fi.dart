@@ -225,6 +225,12 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
+  String get contactContact => 'Ota yhteyttä';
+
+  @override
+  String get contactContactLichess => 'Ota yhteyttä Lichessiin';
+
+  @override
   String get playWithAFriend => 'Pelaa kaveria vastaan';
 
   @override
@@ -3362,6 +3368,12 @@ class AppLocalizationsFi extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get patronDonate => 'Lahjoita';
+
+  @override
+  String get patronLichessPatron => 'Lichessin tukija';
 
   @override
   String get preferencesPreferences => 'Asetukset';

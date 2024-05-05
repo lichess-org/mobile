@@ -191,6 +191,12 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
+  String get contactContact => 'Liên hệ';
+
+  @override
+  String get contactContactLichess => 'Liên hệ Lichess';
+
+  @override
   String get playWithAFriend => 'Chơi với bạn bè';
 
   @override
@@ -3244,6 +3250,12 @@ class AppLocalizationsVi extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get patronDonate => 'Ủng hộ';
+
+  @override
+  String get patronLichessPatron => 'Người bảo trợ Lichess';
 
   @override
   String get preferencesPreferences => 'Sửa giao diện';

@@ -191,6 +191,12 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get contactContact => '联系';
+
+  @override
+  String get contactContactLichess => '联系 Lichess';
+
+  @override
   String get playWithAFriend => '与好友下棋';
 
   @override
@@ -3246,6 +3252,12 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get patronDonate => '捐赠';
+
+  @override
+  String get patronLichessPatron => '赞助 Lichess';
+
+  @override
   String get preferencesPreferences => '偏好设置';
 
   @override
@@ -5361,6 +5373,12 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
     );
     return '$_temp0';
   }
+
+  @override
+  String get contactContact => '聯繫我們';
+
+  @override
+  String get contactContactLichess => '聯繫 Lichess';
 
   @override
   String get playWithAFriend => '和好友下棋';
@@ -8392,6 +8410,12 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
     );
     return '$_temp0';
   }
+
+  @override
+  String get patronDonate => '捐款';
+
+  @override
+  String get patronLichessPatron => 'Lichess 贊助者';
 
   @override
   String get preferencesPreferences => '偏好設置';

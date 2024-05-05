@@ -328,6 +328,18 @@ abstract class AppLocalizations {
   /// **'{count, plural, =0{Joined {count} team} =1{Joined {count} team} other{Joined {count} teams}}'**
   String activityJoinedNbTeams(int count);
 
+  /// No description provided for @contactContact.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact'**
+  String get contactContact;
+
+  /// No description provided for @contactContactLichess.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact Lichess'**
+  String get contactContactLichess;
+
   /// No description provided for @playWithAFriend.
   ///
   /// In en, this message translates to:
@@ -5481,6 +5493,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, =0{and save {count} premove line} =1{and save {count} premove line} other{and save {count} premove lines}}'**
   String andSaveNbPremoveLines(int count);
+
+  /// No description provided for @patronDonate.
+  ///
+  /// In en, this message translates to:
+  /// **'Donate'**
+  String get patronDonate;
+
+  /// No description provided for @patronLichessPatron.
+  ///
+  /// In en, this message translates to:
+  /// **'Lichess Patron'**
+  String get patronLichessPatron;
 
   /// No description provided for @preferencesPreferences.
   ///

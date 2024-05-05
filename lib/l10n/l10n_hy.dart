@@ -225,6 +225,12 @@ class AppLocalizationsHy extends AppLocalizations {
   }
 
   @override
+  String get contactContact => 'Կոնտակտներ';
+
+  @override
+  String get contactContactLichess => 'Lichess-ի կոնտակտներ';
+
+  @override
   String get playWithAFriend => 'Խաղալ ընկերոջ հետ';
 
   @override
@@ -3362,6 +3368,12 @@ class AppLocalizationsHy extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get patronDonate => 'Նվիրաբերել';
+
+  @override
+  String get patronLichessPatron => 'Lichess-ի հովանավոր';
 
   @override
   String get preferencesPreferences => 'Կարգավորումներ';

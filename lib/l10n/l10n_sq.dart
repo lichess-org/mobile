@@ -225,6 +225,12 @@ class AppLocalizationsSq extends AppLocalizations {
   }
 
   @override
+  String get contactContact => 'Kontakt';
+
+  @override
+  String get contactContactLichess => 'Kontaktoni me Lichess-in';
+
+  @override
   String get playWithAFriend => 'Luani me një shok';
 
   @override
@@ -3362,6 +3368,12 @@ class AppLocalizationsSq extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get patronDonate => 'Dhuroni';
+
+  @override
+  String get patronLichessPatron => 'Bamirës Lichess-i';
 
   @override
   String get preferencesPreferences => 'Parapëlqime';

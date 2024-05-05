@@ -225,6 +225,12 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get contactContact => 'Contact';
+
+  @override
+  String get contactContactLichess => 'Contact Lichess';
+
+  @override
   String get playWithAFriend => 'Play with a friend';
 
   @override
@@ -3364,6 +3370,12 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get patronDonate => 'Donate';
+
+  @override
+  String get patronLichessPatron => 'Lichess Patron';
+
+  @override
   String get preferencesPreferences => 'Preferences';
 
   @override
@@ -5539,6 +5551,12 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
     );
     return '$_temp0';
   }
+
+  @override
+  String get contactContact => 'Contact';
+
+  @override
+  String get contactContactLichess => 'Contact Lichess';
 
   @override
   String get playWithAFriend => 'Play with a friend';
@@ -8678,6 +8696,12 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
     );
     return '$_temp0';
   }
+
+  @override
+  String get patronDonate => 'Donate';
+
+  @override
+  String get patronLichessPatron => 'Lichess Patron';
 
   @override
   String get preferencesPreferences => 'Preferences';

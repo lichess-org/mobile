@@ -225,6 +225,12 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
+  String get contactContact => 'লাইকেস. আর. সি. / এর যোগাযোগের সংক্ষিপ্ত লিঙ্ক, হোমপেজে দৃশ্যমান';
+
+  @override
+  String get contactContactLichess => 'পৃষ্ঠার শিরোনাম lichess. org/contact';
+
+  @override
   String get playWithAFriend => 'বন্ধুর সাথে খেলো';
 
   @override
@@ -3362,6 +3368,12 @@ class AppLocalizationsBn extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get patronDonate => 'Donate';
+
+  @override
+  String get patronLichessPatron => 'Lichess Patron';
 
   @override
   String get preferencesPreferences => 'পছন্দসমূহ';

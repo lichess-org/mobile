@@ -259,6 +259,12 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
+  String get contactContact => 'Контакты';
+
+  @override
+  String get contactContactLichess => 'Контакты Lichess';
+
+  @override
   String get playWithAFriend => 'Сыграть с другом';
 
   @override
@@ -3480,6 +3486,12 @@ class AppLocalizationsRu extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get patronDonate => 'Поддержать проект';
+
+  @override
+  String get patronLichessPatron => 'Lichess-спонсор';
 
   @override
   String get preferencesPreferences => 'Настройки';
