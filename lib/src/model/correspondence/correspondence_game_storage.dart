@@ -28,7 +28,16 @@ Future<IList<(DateTime, OfflineCorrespondenceGame)>>
   // cannot use ref.watch because it would create a circular dependency
   // as we invalidate this provider in the storage save and delete methods
   final storage = ref.read(correspondenceGameStorageProvider);
-  return storage.fetchOngoingGames(session?.user.id);
+  final data = await storage.fetchOngoingGames(session?.user.id);
+  return data.sort(
+    (a, b) {
+      final aIsMyTurn = a.$2.isMyTurn;
+      final bIsMyTurn = b.$2.isMyTurn;
+      if (aIsMyTurn && !bIsMyTurn) return -1;
+      if (!aIsMyTurn && bIsMyTurn) return 1;
+      return b.$1.compareTo(a.$1);
+    },
+  );
 }
 
 const kCorrespondenceStorageTable = 'correspondence_game';
