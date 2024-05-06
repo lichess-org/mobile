@@ -25,7 +25,7 @@ Future<IList<StoredGame>> recentStoredGames(RecentStoredGamesRef ref) async {
   return storage.page(userId: session?.user.id);
 }
 
-const kGameStorageTable = 'correspondence_game';
+const kGameStorageTable = 'game';
 
 typedef StoredGame = ({
   UserId userId,
