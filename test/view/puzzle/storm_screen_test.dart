@@ -213,4 +213,5 @@ final mockStromRun = PuzzleStormResponse(
   ]),
   key: null,
   highscore: null,
+  timestamp: DateTime.now(),
 );
