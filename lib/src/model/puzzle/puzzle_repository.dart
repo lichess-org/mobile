@@ -253,6 +253,8 @@ class PuzzleStreakResponse with _$PuzzleStreakResponse {
   const factory PuzzleStreakResponse({
     required Puzzle puzzle,
     required Streak streak,
+    // This field is not returned by the API but it is used to force the
+    // [puzzleControllerProvider] to recompute
     required DateTime timestamp,
   }) = _PuzzleStreakResponse;
 }
@@ -263,6 +265,8 @@ class PuzzleStormResponse with _$PuzzleStormResponse {
     required IList<LitePuzzle> puzzles,
     required String? key,
     required PuzzleStormHighScore? highscore,
+    // This field is not returned by the API but it is used to force the
+    // stormControllerProvider to recompute
     required DateTime timestamp,
   }) = _PuzzleStormResponse;
 }
