@@ -31,7 +31,7 @@ class StormController extends _$StormController {
   Timer? _firstMoveTimer;
 
   @override
-  StormState build(IList<LitePuzzle> puzzles) {
+  StormState build(IList<LitePuzzle> puzzles, DateTime timestamp) {
     final pov = Chess.fromSetup(Setup.parseFen(puzzles.first.fen));
     final clock = StormClock();
 

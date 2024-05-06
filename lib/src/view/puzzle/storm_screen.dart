@@ -126,7 +126,7 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = stormControllerProvider(data.puzzles);
+    final ctrlProvider = stormControllerProvider(data.puzzles, data.timestamp);
     final puzzleState = ref.watch(ctrlProvider);
     ref.listen(ctrlProvider.select((state) => state.runOver), (_, s) {
       if (s) {
@@ -626,10 +626,6 @@ class _BottomBar extends ConsumerWidget {
                 onTap: () {
                   puzzleState.clock.reset();
                   ref.invalidate(stormProvider);
-                  // Since the API sends the same storm during an
-                  // interval of time, the provider will receive the
-                  // same arguments and so will not be recomputed
-                  ref.invalidate(stormControllerProvider);
                 },
               ),
               if (puzzleState.clock.isActive)

@@ -35,16 +35,12 @@ Future<PuzzleContext?> nextPuzzle(
 
 @riverpod
 Future<PuzzleStreakResponse> streak(StreakRef ref) {
-  return Future.delayed(const Duration(seconds: 3), () {
-    return ref.withClient((client) => PuzzleRepository(client).streak());
-  });
+  return ref.withClient((client) => PuzzleRepository(client).streak());
 }
 
 @riverpod
 Future<PuzzleStormResponse> storm(StormRef ref) {
-  return Future.delayed(const Duration(seconds: 3), () {
-    return ref.withClient((client) => PuzzleRepository(client).storm());
-  });
+  return ref.withClient((client) => PuzzleRepository(client).storm());
 }
 
 /// Fetches a puzzle from the local storage if available, otherwise fetches it from the server.
