@@ -482,7 +482,7 @@ class _GamesCarousel<T> extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(left: 8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: CarouselSlider.builder(
             options: CarouselOptions(
               aspectRatio: 1.04,
