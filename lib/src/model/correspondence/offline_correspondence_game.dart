@@ -59,6 +59,8 @@ class OfflineCorrespondenceGame
 
   Side get sideToMove => lastPosition.turn;
 
+  bool get isMyTurn => sideToMove == youAre;
+
   Duration? myTimeLeft(DateTime lastModifiedTime) =>
       estimatedTimeLeft(youAre, lastModifiedTime);
 
