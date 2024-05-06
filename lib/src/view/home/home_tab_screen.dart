@@ -194,9 +194,9 @@ class _HomeBody extends ConsumerWidget {
 
         if (emptyRecent && emptyStored) {
           final messageWidget = [
-            const _HelloWidget(),
+            const Center(child: _HelloWidget()),
             const Padding(
-              padding: Styles.bodyPadding,
+              padding: Styles.horizontalBodyPadding,
               child: LichessMessage(style: TextStyle(fontSize: 18)),
             ),
             const SizedBox(height: 16.0),
@@ -228,9 +228,11 @@ class _HomeBody extends ConsumerWidget {
           ];
 
           return Theme.of(context).platform == TargetPlatform.android
-              ? ListView(
-                  shrinkWrap: true,
-                  children: messageWidget,
+              ? Center(
+                  child: ListView(
+                    shrinkWrap: true,
+                    children: messageWidget,
+                  ),
                 )
               : SliverFillRemaining(
                   child: Padding(
@@ -240,7 +242,7 @@ class _HomeBody extends ConsumerWidget {
                     child: Center(
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: messageWidget,
                       ),
                     ),
