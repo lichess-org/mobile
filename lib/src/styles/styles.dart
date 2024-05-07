@@ -22,7 +22,7 @@ abstract class Styles {
     fontWeight: FontWeight.w600,
   );
   static final mainListTileTitle = TextStyle(
-    fontSize: 20,
+    fontSize: defaultTargetPlatform == TargetPlatform.iOS ? 19 : 18,
     letterSpacing: defaultTargetPlatform == TargetPlatform.iOS ? -0.41 : null,
     fontWeight: FontWeight.w500,
   );
