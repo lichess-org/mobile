@@ -185,6 +185,40 @@ class _Body extends ConsumerWidget {
   }
 }
 
+class _PuzzleMenuListTile extends StatelessWidget {
+  const _PuzzleMenuListTile({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    this.onTap,
+  });
+
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return PlatformListTile(
+      padding: Theme.of(context).platform == TargetPlatform.iOS
+          ? const EdgeInsets.symmetric(vertical: 12.0, horizontal: 14.0)
+          : null,
+      leading: Icon(
+        icon,
+        size: Styles.mainListTileIconSize,
+        color: Theme.of(context).colorScheme.primary,
+      ),
+      title: Text(title, style: Styles.mainListTileTitle),
+      subtitle: Text(subtitle, maxLines: 3),
+      trailing: Theme.of(context).platform == TargetPlatform.iOS
+          ? const CupertinoListTileChevron()
+          : null,
+      onTap: onTap,
+    );
+  }
+}
+
 class _PuzzleMenu extends StatelessWidget {
   const _PuzzleMenu({required this.connectivity});
 
@@ -192,36 +226,15 @@ class _PuzzleMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final topPadding = Theme.of(context).platform == TargetPlatform.iOS
-        ? const EdgeInsets.only(top: 8.0)
-        : EdgeInsets.zero;
-
-    final titleStyle = Styles.mainListTileTitle;
     final bool isOnline = connectivity.value?.isOnline ?? false;
 
     return ListSection(
       hasLeading: true,
       children: [
-        PlatformListTile(
-          leading: Icon(
-            LichessIcons.target,
-            size: 32,
-            color: Theme.of(context).colorScheme.primary,
-          ),
-          title: Padding(
-            padding: topPadding,
-            child: Text(
-              context.l10n.puzzlePuzzles,
-              style: titleStyle.copyWith(fontSize: 20),
-            ),
-          ),
-          subtitle: Padding(
-            padding: const EdgeInsets.only(bottom: 8.0),
-            child: Text(context.l10n.puzzleDesc, maxLines: 3),
-          ),
-          trailing: Theme.of(context).platform == TargetPlatform.iOS
-              ? const CupertinoListTileChevron()
-              : null,
+        _PuzzleMenuListTile(
+          icon: PuzzleIcons.mix,
+          title: context.l10n.puzzlePuzzles,
+          subtitle: context.l10n.puzzleDesc,
           onTap: () {
             pushPlatformRoute(
               context,
@@ -233,26 +246,11 @@ class _PuzzleMenu extends StatelessWidget {
             );
           },
         ),
-        PlatformListTile(
-          leading: Icon(
-            PuzzleIcons.opening,
-            size: 32,
-            color: Theme.of(context).colorScheme.secondary,
-          ),
-          title: Padding(
-            padding: topPadding,
-            child: Text(context.l10n.puzzlePuzzleThemes, style: titleStyle),
-          ),
-          subtitle: const Padding(
-            padding: EdgeInsets.only(bottom: 8.0),
-            child: Text(
+        _PuzzleMenuListTile(
+          icon: PuzzleIcons.opening,
+          title: context.l10n.puzzlePuzzleThemes,
+          subtitle:
               'Play puzzles from your favorite openings, or choose a theme.',
-              maxLines: 3,
-            ),
-          ),
-          trailing: Theme.of(context).platform == TargetPlatform.iOS
-              ? const CupertinoListTileChevron()
-              : null,
           onTap: () {
             pushPlatformRoute(
               context,
@@ -264,31 +262,13 @@ class _PuzzleMenu extends StatelessWidget {
         ),
         Opacity(
           opacity: isOnline ? 1 : 0.5,
-          child: PlatformListTile(
-            leading: Icon(
-              LichessIcons.streak,
-              size: 32,
-              color: Theme.of(context).colorScheme.secondary,
-            ),
-            title: Padding(
-              padding: topPadding,
-              child: Text('Puzzle Streak', style: titleStyle),
-            ),
-            subtitle: Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
-              child: Text(
-                context.l10n.puzzleStreakDescription.characters
-                        .takeWhile((c) => c != '.')
-                        .toString() +
-                    (context.l10n.puzzleStreakDescription.contains('.')
-                        ? '.'
-                        : ''),
-                maxLines: 3,
-              ),
-            ),
-            trailing: Theme.of(context).platform == TargetPlatform.iOS
-                ? const CupertinoListTileChevron()
-                : null,
+          child: _PuzzleMenuListTile(
+            icon: LichessIcons.streak,
+            title: 'Puzzle Streak',
+            subtitle: context.l10n.puzzleStreakDescription.characters
+                    .takeWhile((c) => c != '.')
+                    .toString() +
+                (context.l10n.puzzleStreakDescription.contains('.') ? '.' : ''),
             onTap: isOnline
                 ? () {
                     pushPlatformRoute(
@@ -302,26 +282,10 @@ class _PuzzleMenu extends StatelessWidget {
         ),
         Opacity(
           opacity: isOnline ? 1 : 0.5,
-          child: PlatformListTile(
-            leading: Icon(
-              LichessIcons.storm,
-              size: 32,
-              color: Theme.of(context).colorScheme.secondary,
-            ),
-            title: Padding(
-              padding: topPadding,
-              child: Text('Puzzle Storm', style: titleStyle),
-            ),
-            subtitle: const Padding(
-              padding: EdgeInsets.only(bottom: 8.0),
-              child: Text(
-                'Solve as many puzzles as possible in 3 minutes.',
-                maxLines: 3,
-              ),
-            ),
-            trailing: Theme.of(context).platform == TargetPlatform.iOS
-                ? const CupertinoListTileChevron()
-                : null,
+          child: _PuzzleMenuListTile(
+            icon: LichessIcons.storm,
+            title: 'Puzzle Storm',
+            subtitle: 'Solve as many puzzles as possible in 3 minutes.',
             onTap: isOnline
                 ? () {
                     pushPlatformRoute(

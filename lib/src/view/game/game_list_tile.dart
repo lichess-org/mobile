@@ -60,14 +60,7 @@ class GameListTile extends StatelessWidget {
           ),
         );
       },
-      leading: icon != null
-          ? Icon(
-              icon,
-              size: Theme.of(context).platform == TargetPlatform.iOS
-                  ? 26.0
-                  : 36.0,
-            )
-          : null,
+      leading: icon != null ? Icon(icon) : null,
       title: playerTitle,
       subtitle: subtitle != null
           ? DefaultTextStyle.merge(

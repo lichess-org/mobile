@@ -64,7 +64,7 @@ class _Body extends StatelessWidget {
           PlatformListTile(
             leading: Icon(
               Icons.biotech,
-              size: 32,
+              size: Styles.mainListTileIconSize,
               color: Theme.of(context).colorScheme.primary,
             ),
             title: Padding(
@@ -84,7 +84,7 @@ class _Body extends StatelessWidget {
           PlatformListTile(
             leading: Icon(
               Icons.alarm,
-              size: 32,
+              size: Styles.mainListTileIconSize,
               color: Theme.of(context).colorScheme.primary,
             ),
             title: Padding(

@@ -34,7 +34,7 @@ class BottomBarButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final primary = Theme.of(context).colorScheme.primary;
 
-    final chipColor = primary;
+    final chipColor = Theme.of(context).colorScheme.secondary;
 
     final labelFontSize = Theme.of(context).platform == TargetPlatform.iOS
         ? 11.0
@@ -97,7 +97,7 @@ class BottomBarButton extends StatelessWidget {
                           fit: BoxFit.contain,
                           child: DefaultTextStyle.merge(
                             style: TextStyle(
-                              color: Theme.of(context).colorScheme.onPrimary,
+                              color: Theme.of(context).colorScheme.onSecondary,
                               fontWeight: FontWeight.bold,
                             ),
                             child: chip!,

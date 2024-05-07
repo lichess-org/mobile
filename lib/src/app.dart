@@ -178,7 +178,7 @@ class _AppState extends ConsumerState<Application> {
                   return CupertinoTheme(
                     data: cupertinoThemeData,
                     child: IconTheme(
-                      // This is needed to avoid the icon color being overridden by the cupertino theme (blue)
+                      // This is needed to avoid the icon color being overridden by the cupertino theme
                       data: IconTheme.of(context),
                       child: Material(child: child),
                     ),
