@@ -146,13 +146,6 @@ class _Category extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final collapsedIconColor = Theme.of(context).platform == TargetPlatform.iOS
-        ? CupertinoColors.secondaryLabel.resolveFrom(context)
-        : null;
-    final tileColor = Theme.of(context).platform == TargetPlatform.iOS
-        ? CupertinoColors.systemBlue.resolveFrom(context)
-        : null;
-
     final themeCountStyle = TextStyle(
       fontSize: 12,
       color: textShade(
@@ -166,8 +159,6 @@ class _Category extends ConsumerWidget {
     return Theme(
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
       child: ExpansionTile(
-        iconColor: tileColor,
-        collapsedIconColor: collapsedIconColor,
         title: Text(categoryName),
         children: [
           ListSection(

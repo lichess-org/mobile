@@ -194,12 +194,16 @@ class _HomeBody extends ConsumerWidget {
 
         if (emptyRecent && emptyStored) {
           final messageWidget = [
-            const Center(child: _HelloWidget()),
-            const Padding(
+            Padding(
               padding: Styles.horizontalBodyPadding,
-              child: LichessMessage(style: TextStyle(fontSize: 18)),
+              child: LichessMessage(
+                style: Theme.of(context).platform == TargetPlatform.iOS
+                    ? const TextStyle(fontSize: 18)
+                    : Theme.of(context).textTheme.bodyLarge,
+                textAlign: TextAlign.justify,
+              ),
             ),
-            const SizedBox(height: 16.0),
+            const SizedBox(height: 24.0),
             if (session == null) ...[
               const Center(child: _SignInWidget()),
               const SizedBox(height: 16.0),
@@ -329,6 +333,9 @@ class _HelloWidget extends ConsumerWidget {
         ? const TextStyle(fontSize: 20)
         : Theme.of(context).textTheme.bodyLarge;
 
+    final iconSize =
+        Theme.of(context).platform == TargetPlatform.iOS ? 26.0 : 24.0;
+
     // fetch the account user to be sure we have the latest data (flair, etc.)
     final accountUser = ref.watch(accountProvider).maybeWhen(
           data: (data) => data?.lightUser,
@@ -347,7 +354,7 @@ class _HelloWidget extends ConsumerWidget {
         children: [
           Icon(
             Icons.wb_sunny,
-            size: 26,
+            size: iconSize,
             color: context.lichessColors.brag,
           ),
           const SizedBox(width: 5.0),

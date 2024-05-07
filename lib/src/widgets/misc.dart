@@ -1,14 +1,17 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LichessMessage extends StatefulWidget {
-  const LichessMessage({super.key, this.style});
+  const LichessMessage({
+    super.key,
+    this.style,
+    this.textAlign = TextAlign.start,
+  });
 
   final TextStyle? style;
+  final TextAlign textAlign;
 
   @override
   State<LichessMessage> createState() => _LichessMessageState();
@@ -48,9 +51,7 @@ class _LichessMessageState extends State<LichessMessage> {
           TextSpan(
             text: match[i],
             style: i == 2
-                ? TextStyle(
-                    color: context.lichessColors.primary,
-                  )
+                ? TextStyle(color: Theme.of(context).colorScheme.primary)
                 : null,
             recognizer: i == 2 ? _recognizer : null,
           ),
@@ -60,16 +61,12 @@ class _LichessMessageState extends State<LichessMessage> {
       spans.add(TextSpan(text: trans));
     }
 
-    return Column(
-      children: [
-        Text.rich(
-          TextSpan(
-            style: widget.style,
-            children: spans,
-          ),
-        ),
-        const SizedBox(height: 8.0),
-      ],
+    return Text.rich(
+      TextSpan(
+        style: widget.style,
+        children: spans,
+      ),
+      textAlign: widget.textAlign,
     );
   }
 }

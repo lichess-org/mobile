@@ -258,7 +258,7 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
                                 challenge.id.toString(),
                               );
                             },
-                            backgroundColor: LichessColors.red,
+                            backgroundColor: context.lichessColors.error,
                             foregroundColor: Colors.white,
                             icon: Icons.cancel,
                             label: context.l10n.cancel,

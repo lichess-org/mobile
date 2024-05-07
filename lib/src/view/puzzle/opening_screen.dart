@@ -123,19 +123,10 @@ class _OpeningFamily extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final collapsedIconColor = Theme.of(context).platform == TargetPlatform.iOS
-        ? CupertinoColors.secondaryLabel.resolveFrom(context)
-        : null;
-    final tileColor = Theme.of(context).platform == TargetPlatform.iOS
-        ? CupertinoColors.systemBlue.resolveFrom(context)
-        : null;
-
     return Theme(
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
       child: openingFamily.openings.isNotEmpty
           ? ExpansionTile(
-              iconColor: tileColor,
-              collapsedIconColor: collapsedIconColor,
               title: Text(
                 openingFamily.name,
                 overflow: TextOverflow.ellipsis,

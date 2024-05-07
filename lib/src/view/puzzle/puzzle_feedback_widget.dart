@@ -6,7 +6,6 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_controller.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
@@ -68,10 +67,10 @@ class PuzzleFeedbackWidget extends ConsumerWidget {
       case PuzzleMode.play:
         if (state.feedback == PuzzleFeedback.bad) {
           return _FeedbackTile(
-            leading: const Icon(
+            leading: Icon(
               Icons.close,
               size: 36,
-              color: LichessColors.error,
+              color: context.lichessColors.error,
             ),
             title: Text(context.l10n.puzzleNotTheMove),
             subtitle: Text(context.l10n.puzzleTrySomethingElse),

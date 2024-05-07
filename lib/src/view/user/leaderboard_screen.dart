@@ -6,7 +6,6 @@ import 'package:flutter_layout_grid/flutter_layout_grid.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/user/leaderboard.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -179,14 +178,18 @@ class _Progress extends StatelessWidget {
               ? LichessIcons.arrow_full_upperright
               : LichessIcons.arrow_full_lowerright,
           size: 16,
-          color: progress > 0 ? LichessColors.good : LichessColors.red,
+          color: progress > 0
+              ? context.lichessColors.good
+              : context.lichessColors.error,
         ),
         Text(
           '${progress.abs()}',
           maxLines: 1,
           style: TextStyle(
             fontSize: 12,
-            color: progress > 0 ? LichessColors.good : LichessColors.red,
+            color: progress > 0
+                ? context.lichessColors.good
+                : context.lichessColors.error,
           ),
         ),
       ],

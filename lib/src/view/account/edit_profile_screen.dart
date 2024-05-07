@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/user/countries.dart';
@@ -350,7 +349,7 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                   border: Border.all(
                     color: field.errorText == null
                         ? CupertinoColors.systemGrey4
-                        : LichessColors.red,
+                        : context.lichessColors.error,
                     width: 1,
                   ),
                 ),
@@ -413,7 +412,7 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
                   border: Border.all(
                     color: field.errorText == null
                         ? CupertinoColors.systemGrey4
-                        : LichessColors.red,
+                        : context.lichessColors.error,
                     width: 1,
                   ),
                 ),

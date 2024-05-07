@@ -167,11 +167,10 @@ void showCupertinoSnackBar({
         snackBar: CupertinoSnackBar(
           message: message,
           backgroundColor: (type == SnackBarType.error
-                  ? CupertinoColors.systemRed
+                  ? context.lichessColors.error
                   : type == SnackBarType.success
-                      ? CupertinoColors.systemGreen
-                      : CupertinoColors.systemGrey)
-              .resolveFrom(context)
+                      ? context.lichessColors.good
+                      : CupertinoColors.systemGrey.resolveFrom(context))
               .withOpacity(0.6),
           textStyle: const TextStyle(color: Colors.white),
         ),

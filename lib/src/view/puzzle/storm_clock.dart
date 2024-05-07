@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/puzzle/storm_controller.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 
 const _kClockFontSize = 26.0;
@@ -124,8 +123,8 @@ class _ClockState extends ConsumerState<StormClockWidget>
                       '${currentBonusSeconds! > 0 ? '+' : ''}$currentBonusSeconds',
                       style: TextStyle(
                         color: currentBonusSeconds! < 0
-                            ? Colors.red
-                            : LichessColors.good,
+                            ? context.lichessColors.error
+                            : context.lichessColors.good,
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
                         fontFeatures: const [FontFeature.tabularFigures()],

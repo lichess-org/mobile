@@ -450,7 +450,7 @@ class BriefGameResultBox extends StatelessWidget {
               _ResultBox(
                 number: loss,
                 color: Theme.of(context).extension<CustomColors>()?.error ??
-                    LichessColors.red,
+                    context.lichessColors.error,
               ),
           ],
         ),

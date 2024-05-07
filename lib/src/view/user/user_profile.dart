@@ -8,7 +8,6 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/user/profile.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -54,15 +53,15 @@ class UserProfile extends ConsumerWidget {
               padding: const EdgeInsets.only(bottom: 5),
               child: Row(
                 children: [
-                  const Icon(Icons.error, color: LichessColors.error),
+                  Icon(Icons.error, color: context.lichessColors.error),
                   const SizedBox(
                     width: 5,
                   ),
                   Flexible(
                     child: Text(
                       context.l10n.thisAccountViolatedTos,
-                      style: const TextStyle(
-                        color: LichessColors.error,
+                      style: TextStyle(
+                        color: context.lichessColors.error,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

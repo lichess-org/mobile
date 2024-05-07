@@ -68,10 +68,6 @@ class AdaptiveTextField extends StatelessWidget {
           enableSuggestions: enableSuggestions,
           autofocus: autofocus,
           suffix: suffix,
-          cursorColor: const CupertinoDynamicColor.withBrightness(
-            color: CupertinoColors.activeBlue,
-            darkColor: CupertinoColors.activeOrange,
-          ),
         );
       default:
         return TextField(
