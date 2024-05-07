@@ -93,6 +93,7 @@ class PuzzleRepository {
                   (e) => PuzzleId(e),
                 ),
           ),
+          timestamp: DateTime.now(),
         );
       },
     );
@@ -119,6 +120,7 @@ class PuzzleRepository {
           ),
           highscore: pick(json['high']).letOrNull(_stormHighScoreFromPick),
           key: pick(json['key']).asStringOrNull(),
+          timestamp: DateTime.now(),
         );
       },
     );
@@ -251,6 +253,13 @@ class PuzzleStreakResponse with _$PuzzleStreakResponse {
   const factory PuzzleStreakResponse({
     required Puzzle puzzle,
     required Streak streak,
+
+    /// Timestamp of the response, used as streak unique identifier.
+    ///
+    /// This field is not returned by the API but it is used to force the
+    /// [puzzleControllerProvider] to recompute when the streak provider is invalidated
+    /// and the server sends again the exact same streak data.
+    required DateTime timestamp,
   }) = _PuzzleStreakResponse;
 }
 
@@ -260,6 +269,13 @@ class PuzzleStormResponse with _$PuzzleStormResponse {
     required IList<LitePuzzle> puzzles,
     required String? key,
     required PuzzleStormHighScore? highscore,
+
+    /// Timestamp of the response, used as storm unique identifier.
+    ///
+    /// This field is not returned by the API but it is used to force the
+    /// stormControllerProvider to recompute when the storm provider is invalidated
+    /// and the server sends again the exact same storm data.
+    required DateTime timestamp,
   }) = _PuzzleStormResponse;
 }
 

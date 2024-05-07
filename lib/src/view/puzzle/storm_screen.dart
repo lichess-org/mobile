@@ -126,7 +126,7 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = stormControllerProvider(data.puzzles);
+    final ctrlProvider = stormControllerProvider(data.puzzles, data.timestamp);
     final puzzleState = ref.watch(ctrlProvider);
     ref.listen(ctrlProvider.select((state) => state.runOver), (_, s) {
       if (s) {
