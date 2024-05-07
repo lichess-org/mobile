@@ -206,11 +206,14 @@ class _PuzzleMenu extends StatelessWidget {
           leading: Icon(
             LichessIcons.target,
             size: 32,
-            color: context.lichessColors.good,
+            color: Theme.of(context).colorScheme.primary,
           ),
           title: Padding(
             padding: topPadding,
-            child: Text(context.l10n.puzzlePuzzles, style: titleStyle),
+            child: Text(
+              context.l10n.puzzlePuzzles,
+              style: titleStyle.copyWith(fontSize: 20),
+            ),
           ),
           subtitle: Padding(
             padding: const EdgeInsets.only(bottom: 8.0),
@@ -234,7 +237,7 @@ class _PuzzleMenu extends StatelessWidget {
           leading: Icon(
             PuzzleIcons.opening,
             size: 32,
-            color: context.lichessColors.primary,
+            color: Theme.of(context).colorScheme.secondary,
           ),
           title: Padding(
             padding: topPadding,
@@ -265,7 +268,7 @@ class _PuzzleMenu extends StatelessWidget {
             leading: Icon(
               LichessIcons.streak,
               size: 32,
-              color: context.lichessColors.fancy,
+              color: Theme.of(context).colorScheme.secondary,
             ),
             title: Padding(
               padding: topPadding,
@@ -303,7 +306,7 @@ class _PuzzleMenu extends StatelessWidget {
             leading: Icon(
               LichessIcons.storm,
               size: 32,
-              color: context.lichessColors.purple,
+              color: Theme.of(context).colorScheme.secondary,
             ),
             title: Padding(
               padding: topPadding,

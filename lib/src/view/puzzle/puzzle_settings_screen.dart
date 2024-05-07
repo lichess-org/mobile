@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -16,6 +17,9 @@ class PuzzleSettingsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final userId = ref.watch(authSessionProvider)?.user.id;
 
+    final isSoundEnabled = ref.watch(
+      generalPreferencesProvider.select((pref) => pref.isSoundEnabled),
+    );
     final autoNext = ref.watch(
       PuzzlePreferencesProvider(userId).select((value) => value.autoNext),
     );
@@ -35,6 +39,15 @@ class PuzzleSettingsScreen extends ConsumerWidget {
             subtitle: const SizedBox.shrink(),
           ),
           const SizedBox(height: 8.0),
+          SwitchSettingTile(
+            title: Text(context.l10n.sound),
+            value: isSoundEnabled,
+            onChanged: (value) {
+              ref
+                  .read(generalPreferencesProvider.notifier)
+                  .toggleSoundEnabled();
+            },
+          ),
           SwitchSettingTile(
             title: Text(context.l10n.puzzleJumpToNextPuzzleImmediately),
             value: autoNext,

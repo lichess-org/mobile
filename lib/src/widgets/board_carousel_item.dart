@@ -35,7 +35,7 @@ class BoardCarouselItem extends ConsumerWidget {
       builder: (context, constraints) {
         final boardSize = constraints.biggest.shortestSide - 16.0;
         final card = PlatformCard(
-          color: Theme.of(context).colorScheme.surfaceContainerHigh,
+          color: Theme.of(context).colorScheme.surfaceContainerHighest,
           margin: Theme.of(context).platform == TargetPlatform.iOS
               ? EdgeInsets.zero
               : const EdgeInsets.all(8.0),

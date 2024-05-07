@@ -65,7 +65,7 @@ class _Body extends StatelessWidget {
             leading: Icon(
               Icons.biotech,
               size: 32,
-              color: context.lichessColors.good,
+              color: Theme.of(context).colorScheme.primary,
             ),
             title: Padding(
               padding: tilePadding,
@@ -85,7 +85,7 @@ class _Body extends StatelessWidget {
             leading: Icon(
               Icons.alarm,
               size: 32,
-              color: context.lichessColors.primary,
+              color: Theme.of(context).colorScheme.primary,
             ),
             title: Padding(
               padding: tilePadding,

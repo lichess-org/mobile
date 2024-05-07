@@ -69,10 +69,6 @@ abstract class Styles {
     color: Color.fromARGB(255, 242, 242, 247),
     darkColor: Color.fromARGB(255, 23, 23, 23),
   );
-  static const cupertinoPrimaryColor = CupertinoDynamicColor.withBrightness(
-    color: LichessColors.primary,
-    darkColor: Color(0xFF3692E7),
-  );
 
   static const _cupertinoDarkLabelColor = Color(0xFFDCDCDC);
   static const cupertinoLabelColor = CupertinoDynamicColor.withBrightness(

@@ -33,7 +33,6 @@ import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_settings_screen.dart';
-import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
@@ -101,9 +100,8 @@ class _PuzzleScreenState extends ConsumerState<PuzzleScreen> with RouteAware {
   Widget _androidBuilder(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        actions: [
-          ToggleSoundButton(),
-          const _PuzzleSettingsButton(),
+        actions: const [
+          _PuzzleSettingsButton(),
         ],
         title: _Title(angle: widget.angle),
       ),
@@ -120,11 +118,10 @@ class _PuzzleScreenState extends ConsumerState<PuzzleScreen> with RouteAware {
         border: null,
         padding: Styles.cupertinoAppBarTrailingWidgetPadding,
         middle: _Title(angle: widget.angle),
-        trailing: Row(
+        trailing: const Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            ToggleSoundButton(),
-            const _PuzzleSettingsButton(),
+            _PuzzleSettingsButton(),
           ],
         ),
       ),

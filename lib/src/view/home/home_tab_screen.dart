@@ -469,17 +469,19 @@ class _GamesCarousel<T> extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              const SizedBox(width: 6.0),
-              NoPaddingTextButton(
-                onPressed: () {
-                  pushPlatformRoute(
-                    context,
-                    title: context.l10n.nbGamesInPlay(list.length),
-                    builder: (_) => const OngoingGamesScreen(),
-                  );
-                },
-                child: Text(context.l10n.more),
-              ),
+              if (list.length > 2) ...[
+                const SizedBox(width: 6.0),
+                NoPaddingTextButton(
+                  onPressed: () {
+                    pushPlatformRoute(
+                      context,
+                      title: context.l10n.nbGamesInPlay(list.length),
+                      builder: (_) => const OngoingGamesScreen(),
+                    );
+                  },
+                  child: Text(context.l10n.more),
+                ),
+              ],
             ],
           ),
         ),
@@ -490,6 +492,7 @@ class _GamesCarousel<T> extends StatelessWidget {
               aspectRatio: 1.04,
               viewportFraction: 0.65,
               enableInfiniteScroll: false,
+              pageSnapping: list.length > 2,
               padEnds: false,
             ),
             itemCount: list.length,
@@ -525,13 +528,16 @@ class _GamePreviewCarouselItem extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 if (game.secondsLeft != null && game.secondsLeft! > 0)
-                  Text(
-                    game.isMyTurn
-                        ? context.l10n.yourTurn
-                        : context.l10n.waitingForOpponent,
-                    style: TextStyle(color: textShade(context, 0.6)),
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
+                  Opacity(
+                    opacity: 0.7,
+                    child: Text(
+                      game.isMyTurn
+                          ? context.l10n.yourTurn
+                          : context.l10n.waitingForOpponent,
+                      style: const TextStyle(fontSize: 13),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
                   ),
                 UserFullNameWidget.player(
                   user: game.opponent,
@@ -542,13 +548,15 @@ class _GamePreviewCarouselItem extends StatelessWidget {
                 const SizedBox(height: 2.0),
                 if (game.secondsLeft != null)
                   Opacity(
-                    opacity: game.isMyTurn ? 1.0 : 0.5,
+                    opacity: game.isMyTurn ? 1.0 : 0.4,
                     child: Chip(
                       avatar: Icon(
                         game.isMyTurn
                             ? Icons.timer_outlined
                             : Icons.timer_off_outlined,
                       ),
+                      backgroundColor:
+                          Theme.of(context).colorScheme.surfaceContainer,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(25.0),
                       ),
@@ -620,13 +628,16 @@ class _OfflineCorrespondenceCarouselItem extends ConsumerWidget {
               children: [
                 if (game.myTimeLeft(lastModified) != null &&
                     game.myTimeLeft(lastModified)! > Duration.zero)
-                  Text(
-                    game.isMyTurn
-                        ? context.l10n.yourTurn
-                        : context.l10n.waitingForOpponent,
-                    style: TextStyle(color: textShade(context, 0.6)),
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
+                  Opacity(
+                    opacity: 0.7,
+                    child: Text(
+                      game.isMyTurn
+                          ? context.l10n.yourTurn
+                          : context.l10n.waitingForOpponent,
+                      style: const TextStyle(fontSize: 13),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
                   ),
                 UserFullNameWidget.player(
                   user: game.opponent.user,
@@ -637,7 +648,7 @@ class _OfflineCorrespondenceCarouselItem extends ConsumerWidget {
                 const SizedBox(height: 2.0),
                 if (game.myTimeLeft(lastModified) != null)
                   Opacity(
-                    opacity: game.isMyTurn ? 1.0 : 0.5,
+                    opacity: game.isMyTurn ? 1.0 : 0.4,
                     child: Chip(
                       avatar: Icon(
                         game.isMyTurn

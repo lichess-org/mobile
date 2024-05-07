@@ -131,10 +131,10 @@ class _AppState extends ConsumerState<Application> {
               );
 
         final cupertinoThemeData = CupertinoThemeData(
-          primaryColor: Styles.cupertinoPrimaryColor,
+          primaryColor: colorScheme.primary,
           brightness: brightness,
           textTheme: CupertinoTheme.of(context).textTheme.copyWith(
-                primaryColor: Styles.cupertinoPrimaryColor,
+                primaryColor: colorScheme.primary,
                 textStyle: CupertinoTheme.of(context)
                     .textTheme
                     .textStyle
@@ -170,12 +170,7 @@ class _AppState extends ConsumerState<Application> {
                   ? 60
                   : null,
             ),
-            extensions: [
-              if (Theme.of(context).platform == TargetPlatform.android)
-                lichessCustomColors.harmonized(colorScheme)
-              else
-                lichessCustomColors,
-            ],
+            extensions: [lichessCustomColors.harmonized(colorScheme)],
           ),
           themeMode: themeMode,
           builder: Theme.of(context).platform == TargetPlatform.iOS

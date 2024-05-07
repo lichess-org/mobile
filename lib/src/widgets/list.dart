@@ -18,6 +18,7 @@ class ListSection extends StatelessWidget {
     this.dense = false,
     this.cupertinoAdditionalDividerMargin,
     this.cupertinoBackgroundColor,
+    this.cupertinoClipBehavior = Clip.none,
   }) : _isLoading = false;
 
   ListSection.loading({
@@ -35,6 +36,7 @@ class ListSection extends StatelessWidget {
         dense = false,
         cupertinoAdditionalDividerMargin = null,
         cupertinoBackgroundColor = null,
+        cupertinoClipBehavior = Clip.none,
         _isLoading = true;
 
   /// Usually a list of [PlatformListTile] widgets
@@ -64,6 +66,8 @@ class ListSection extends StatelessWidget {
   final double? cupertinoAdditionalDividerMargin;
 
   final Color? cupertinoBackgroundColor;
+
+  final Clip cupertinoClipBehavior;
 
   final bool _isLoading;
 
@@ -183,6 +187,7 @@ class ListSection extends StatelessWidget {
                         ),
                       ),
                     CupertinoListSection.insetGrouped(
+                      clipBehavior: cupertinoClipBehavior,
                       backgroundColor: cupertinoBackgroundColor ??
                           CupertinoTheme.of(context).scaffoldBackgroundColor,
                       decoration: BoxDecoration(

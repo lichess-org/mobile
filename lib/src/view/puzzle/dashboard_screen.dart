@@ -203,12 +203,8 @@ class PuzzleChart extends StatelessWidget {
         radarShape: RadarShape.polygon,
         dataSets: [
           RadarDataSet(
-            fillColor: Theme.of(context).platform == TargetPlatform.iOS
-                ? null
-                : chartColor.withOpacity(0.2),
-            borderColor: Theme.of(context).platform == TargetPlatform.iOS
-                ? null
-                : chartColor,
+            fillColor: chartColor.withOpacity(0.2),
+            borderColor: chartColor,
             dataEntries: puzzleData
                 .map((theme) => RadarEntry(value: theme.performance.toDouble()))
                 .toList(),
