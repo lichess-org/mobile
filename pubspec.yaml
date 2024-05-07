@@ -3,7 +3,7 @@ description: Lichess mobile app V2
 
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
-version: 0.8.0+000800 # see README.md for details about versioning
+version: 0.8.1+000801 # see README.md for details about versioning
 
 environment:
   sdk: ">=3.3.0 <4.0.0"
@@ -49,13 +49,13 @@ dependencies:
   logging: ^1.1.0
   material_color_utilities: ^0.8.0
   meta: ^1.8.0
-  package_info_plus: ^7.0.0
+  package_info_plus: ^8.0.0
   path: ^1.8.2
   popover: ^0.3.0
   pub_semver: ^2.1.4
   result_extensions: ^0.1.0
   riverpod_annotation: ^2.3.0
-  share_plus: ^8.0.3
+  share_plus: ^9.0.0
   shared_preferences: ^2.1.0
   signal_strength_indicator: ^0.4.1
   soundpool:
