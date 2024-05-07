@@ -202,7 +202,7 @@ class _PuzzleMenuListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return PlatformListTile(
       padding: Theme.of(context).platform == TargetPlatform.iOS
-          ? const EdgeInsets.symmetric(vertical: 12.0, horizontal: 14.0)
+          ? const EdgeInsets.symmetric(vertical: 10.0, horizontal: 14.0)
           : null,
       leading: Icon(
         icon,
