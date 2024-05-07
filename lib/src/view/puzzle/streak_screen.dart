@@ -89,6 +89,7 @@ class _Load extends ConsumerWidget {
             index: 0,
             hasSkipped: false,
             finished: false,
+            timestamp: data.timestamp,
           ),
         );
       },
