@@ -42,13 +42,16 @@ class ClockController extends _$ClockController {
       state = state.copyWith(playerTopTime: duration + state.options.increment);
     } else {
       state = state.copyWith(
-          playerBottomTime:
-              duration + (state.bottomOptions ?? state.options).increment,);
+        playerBottomTime:
+            duration + (state.bottomOptions ?? state.options).increment,
+      );
     }
   }
 
-  void updateOptions(TimeIncrement timeIncrement,
-          [TimeIncrement? bottomTimeIncrement,]) =>
+  void updateOptions(
+    TimeIncrement timeIncrement, [
+    TimeIncrement? bottomTimeIncrement,
+  ]) =>
       state = ClockState.fromTimeIncrement(timeIncrement, bottomTimeIncrement);
 
   void setLoser(ClockPlayerType playerType) =>
@@ -92,8 +95,10 @@ class ClockState with _$ClockState {
     @Default(0) int playerBottomMoves,
   }) = _ClockState;
 
-  factory ClockState.fromTimeIncrement(TimeIncrement timeIncrement,
-      [TimeIncrement? bottomTimeIncrement,]) {
+  factory ClockState.fromTimeIncrement(
+    TimeIncrement timeIncrement, [
+    TimeIncrement? bottomTimeIncrement,
+  ]) {
     final options = ClockOptions(
       time: Duration(seconds: timeIncrement.time),
       increment: Duration(seconds: timeIncrement.increment),
@@ -114,8 +119,10 @@ class ClockState with _$ClockState {
     );
   }
 
-  factory ClockState.fromOptions(ClockOptions options,
-      [ClockOptions? bottomOptions,]) {
+  factory ClockState.fromOptions(
+    ClockOptions options, [
+    ClockOptions? bottomOptions,
+  ]) {
     return ClockState(
       id: DateTime.now().millisecondsSinceEpoch,
       options: options,

@@ -54,9 +54,11 @@ class TimeControlModal extends ConsumerWidget {
                         maxHeight: screenHeight - (screenHeight / 10),
                       ),
                       builder: (BuildContext context) {
-                        return CustomTimeControlModal(onSet: () {
-                          Navigator.pop(context);
-                        },);
+                        return CustomTimeControlModal(
+                          onSet: () {
+                            Navigator.pop(context);
+                          },
+                        );
                       },
                     );
                   },

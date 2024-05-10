@@ -54,9 +54,13 @@ class CustomTimeControlModal extends ConsumerWidget {
                 onPressed: () {
                   controller.updateOptions(
                     TimeIncrement(
-                        topClockTime * secondsPerMinute, topClockIncrement,),
-                    TimeIncrement(bottomClockTime * secondsPerMinute,
-                        bottomClockIncrement,),
+                      topClockTime * secondsPerMinute,
+                      topClockIncrement,
+                    ),
+                    TimeIncrement(
+                      bottomClockTime * secondsPerMinute,
+                      bottomClockIncrement,
+                    ),
                   );
                   Navigator.pop(context);
                   onSet();
