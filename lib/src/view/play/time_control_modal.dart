@@ -56,7 +56,7 @@ class TimeControlModal extends ConsumerWidget {
                       builder: (BuildContext context) {
                         return CustomTimeControlModal(onSet: () {
                           Navigator.pop(context);
-                        });
+                        },);
                       },
                     );
                   },
