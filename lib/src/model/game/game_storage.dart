@@ -15,7 +15,7 @@ GameStorage gameStorage(
   GameStorageRef ref,
 ) {
   final db = ref.watch(databaseProvider);
-  return GameStorage(db, ref);
+  return GameStorage(db);
 }
 
 @riverpod
@@ -34,9 +34,8 @@ typedef StoredGame = ({
 });
 
 class GameStorage {
-  const GameStorage(this._db, this.ref);
+  const GameStorage(this._db);
   final Database _db;
-  final GameStorageRef ref;
 
   Future<IList<StoredGame>> page({
     UserId? userId,
