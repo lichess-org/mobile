@@ -37,41 +37,44 @@ class TimeControlModal extends ConsumerWidget {
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-            Text(
-              context.l10n.timeControl,
-              style: Styles.title,
-            ),
-              FilledButton(
-                onPressed: (){
-
-                final double screenHeight = MediaQuery.sizeOf(context).height;
-                showAdaptiveBottomSheet<void>(context: context,
-                    isScrollControlled: true,
-                    showDragHandle: true,
-                    constraints: BoxConstraints(
-                      maxHeight: screenHeight - (screenHeight/10),
-                    ),
-                    builder: (BuildContext context){
-                  return CustomTimeControlModal(onSet:(){Navigator.pop(context);});
-                    },
-                );
-
-                },
-                  child:  Row(
+              children: [
+                Text(
+                  context.l10n.timeControl,
+                  style: Styles.title,
+                ),
+                FilledButton(
+                  onPressed: () {
+                    final double screenHeight =
+                        MediaQuery.sizeOf(context).height;
+                    showAdaptiveBottomSheet<void>(
+                      context: context,
+                      isScrollControlled: true,
+                      showDragHandle: true,
+                      constraints: BoxConstraints(
+                        maxHeight: screenHeight - (screenHeight / 10),
+                      ),
+                      builder: (BuildContext context) {
+                        return CustomTimeControlModal(onSet: () {
+                          Navigator.pop(context);
+                        });
+                      },
+                    );
+                  },
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Icon(
                         Icons.tune,
                         size: 18,
                       ),
-                      Text(context.l10n.custom,
+                      Text(
+                        context.l10n.custom,
                         style: Styles.bold,
                       ),
                     ],
-                  ) ,
-              ),
-            ],
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 26.0),
             _SectionChoices(
