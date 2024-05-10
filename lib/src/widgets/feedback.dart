@@ -23,7 +23,7 @@ class ConnectivityBanner extends ConsumerWidget {
           height: 45,
           color: theme.platform == TargetPlatform.iOS
               ? cupertinoTheme.scaffoldBackgroundColor
-              : theme.colorScheme.surfaceContainerHighest,
+              : theme.colorScheme.surfaceContainer,
           child: Padding(
             padding: Styles.horizontalBodyPadding,
             child: Row(
@@ -38,7 +38,7 @@ class ConnectivityBanner extends ConsumerWidget {
                     style: TextStyle(
                       color: theme.platform == TargetPlatform.iOS
                           ? null
-                          : theme.colorScheme.onSurfaceVariant,
+                          : theme.colorScheme.onSurface,
                     ),
                   ),
                 ),

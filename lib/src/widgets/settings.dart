@@ -91,6 +91,7 @@ class SwitchSettingTile extends StatelessWidget {
       trailing: Switch.adaptive(
         value: value,
         onChanged: onChanged,
+        applyCupertinoTheme: true,
       ),
     );
   }

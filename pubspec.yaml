@@ -3,7 +3,7 @@ description: Lichess mobile app V2
 
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
-version: 0.8.3+000803 # see README.md for details about versioning
+version: 0.8.4+000804 # see README.md for details about versioning
 
 environment:
   sdk: ">=3.3.0 <4.0.0"
@@ -11,7 +11,6 @@ environment:
 dependencies:
   async: ^2.10.0
   cached_network_image: ^3.2.2
-  carousel_slider: ^4.2.1
   chessground: ^2.6.1
   collection: ^1.17.0
   connectivity_plus: ^6.0.2

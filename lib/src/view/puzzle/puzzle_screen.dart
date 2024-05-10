@@ -20,6 +20,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
+import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
@@ -291,6 +292,8 @@ class _Body extends ConsumerWidget {
     final ctrlProvider = puzzleControllerProvider(initialPuzzleContext);
     final puzzleState = ref.watch(ctrlProvider);
 
+    final boardPreferences = ref.watch(boardPreferencesProvider);
+
     final currentEvalBest = ref.watch(
       engineEvaluationProvider.select((s) => s.eval?.bestMove),
     );
@@ -319,7 +322,8 @@ class _Body extends ConsumerWidget {
                             ? cg.InteractableSide.white
                             : cg.InteractableSide.black,
                 fen: puzzleState.fen,
-                isCheck: puzzleState.position.isCheck,
+                isCheck: boardPreferences.boardHighlights &&
+                    puzzleState.position.isCheck,
                 lastMove: puzzleState.lastMove?.cg,
                 sideToMove: puzzleState.position.turn.cg,
                 validMoves: puzzleState.validMoves,

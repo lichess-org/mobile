@@ -132,6 +132,7 @@ class _AppState extends ConsumerState<Application> {
 
         final cupertinoThemeData = CupertinoThemeData(
           primaryColor: colorScheme.primary,
+          primaryContrastingColor: colorScheme.onPrimary,
           brightness: brightness,
           textTheme: CupertinoTheme.of(context).textTheme.copyWith(
                 primaryColor: colorScheme.primary,

@@ -401,7 +401,7 @@ class _Board extends ConsumerWidget {
                 ? cg.InteractableSide.white
                 : cg.InteractableSide.black,
         fen: analysisState.position.fen,
-        isCheck: analysisState.position.isCheck,
+        isCheck: boardPrefs.boardHighlights && analysisState.position.isCheck,
         lastMove: analysisState.lastMove?.cg,
         sideToMove: analysisState.position.turn.cg,
         validMoves: analysisState.validMoves,
