@@ -122,7 +122,8 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
                   const SizedBox(width: 6.0),
                   AppBarIconButton(
                     semanticsLabel: context.l10n.createAGame,
-                    icon: const Icon(CupertinoIcons.plus_circle_fill),
+                    icon:
+                        const Icon(CupertinoIcons.plus_circle_fill, size: 30.0),
                     onPressed: () {
                       pushPlatformRoute(
                         context,
