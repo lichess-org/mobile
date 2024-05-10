@@ -6,6 +6,8 @@ import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/view/play/custom_time_control_modal.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 
 class TimeControlModal extends ConsumerWidget {
@@ -33,9 +35,43 @@ class TimeControlModal extends ConsumerWidget {
         child: ListView(
           shrinkWrap: true,
           children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
             Text(
               context.l10n.timeControl,
               style: Styles.title,
+            ),
+              FilledButton(
+                onPressed: (){
+
+                final double screenHeight = MediaQuery.sizeOf(context).height;
+                showAdaptiveBottomSheet<void>(context: context,
+                    isScrollControlled: true,
+                    showDragHandle: true,
+                    constraints: BoxConstraints(
+                      maxHeight: screenHeight - (screenHeight/10),
+                    ),
+                    builder: (BuildContext context){
+                  return CustomTimeControlModal(onSet:(){Navigator.pop(context);});
+                    },
+                );
+
+                },
+                  child:  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.tune,
+                        size: 18,
+                      ),
+                      Text(context.l10n.custom,
+                        style: Styles.bold,
+                      ),
+                    ],
+                  ) ,
+              ),
+            ],
             ),
             const SizedBox(height: 26.0),
             _SectionChoices(

@@ -42,17 +42,17 @@ class ClockController extends _$ClockController {
       state = state.copyWith(playerTopTime: duration + state.options.increment);
     } else {
       state =
-          state.copyWith(playerBottomTime: duration + state.options.increment);
+          state.copyWith(playerBottomTime: duration + (state.bottomOptions?? state.options).increment);
     }
   }
 
-  void updateOptions(TimeIncrement timeIncrement) =>
-      state = ClockState.fromTimeIncrement(timeIncrement);
+  void updateOptions(TimeIncrement timeIncrement,[TimeIncrement? bottomTimeIncrement]) =>
+      state = ClockState.fromTimeIncrement(timeIncrement,bottomTimeIncrement);
 
   void setLoser(ClockPlayerType playerType) =>
       state = state.copyWith(currentPlayer: null, loser: playerType);
 
-  void reset() => state = ClockState.fromOptions(state.options);
+  void reset() => state = ClockState.fromOptions(state.options,state.bottomOptions);
 
   void pause() => state = state.copyWith(paused: true);
 
@@ -82,32 +82,39 @@ class ClockState with _$ClockState {
     required Duration playerBottomTime,
     ClockPlayerType? currentPlayer,
     ClockPlayerType? loser,
+    @Default(null)ClockOptions? bottomOptions,
     @Default(false) bool started,
     @Default(false) bool paused,
     @Default(0) int playerTopMoves,
     @Default(0) int playerBottomMoves,
   }) = _ClockState;
 
-  factory ClockState.fromTimeIncrement(TimeIncrement timeIncrement) {
+  factory ClockState.fromTimeIncrement(TimeIncrement timeIncrement,[TimeIncrement? bottomTimeIncrement]) {
     final options = ClockOptions(
       time: Duration(seconds: timeIncrement.time),
       increment: Duration(seconds: timeIncrement.increment),
     );
+    final bottomOptions = bottomTimeIncrement==null?options:ClockOptions(
+    time: Duration(seconds: bottomTimeIncrement.time),
+    increment: Duration(seconds: bottomTimeIncrement.increment),
+  );
 
     return ClockState(
       id: DateTime.now().millisecondsSinceEpoch,
       options: options,
+      bottomOptions:bottomOptions,
       playerTopTime: options.time,
-      playerBottomTime: options.time,
+      playerBottomTime: bottomOptions.time,
     );
   }
 
-  factory ClockState.fromOptions(ClockOptions options) {
+  factory ClockState.fromOptions(ClockOptions options,[ClockOptions? bottomOptions]) {
     return ClockState(
       id: DateTime.now().millisecondsSinceEpoch,
       options: options,
+      bottomOptions:bottomOptions ?? options ,
       playerTopTime: options.time,
-      playerBottomTime: options.time,
+      playerBottomTime: (bottomOptions ?? options).time,
     );
   }
 
