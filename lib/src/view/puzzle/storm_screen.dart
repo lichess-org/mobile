@@ -127,6 +127,7 @@ class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = stormControllerProvider(data.puzzles, data.timestamp);
+    final boardPreferences = ref.watch(boardPreferencesProvider);
     final puzzleState = ref.watch(ctrlProvider);
     ref.listen(ctrlProvider.select((state) => state.runOver), (_, s) {
       if (s) {
@@ -159,7 +160,8 @@ class _Body extends ConsumerWidget {
                           ? cg.InteractableSide.white
                           : cg.InteractableSide.black,
                   fen: puzzleState.position.fen,
-                  isCheck: puzzleState.position.isCheck,
+                  isCheck: boardPreferences.boardHighlights &&
+                      puzzleState.position.isCheck,
                   lastMove: puzzleState.lastMove?.cg,
                   sideToMove: puzzleState.position.turn.cg,
                   validMoves: puzzleState.validMoves,

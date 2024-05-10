@@ -103,11 +103,8 @@ class GameBody extends ConsumerWidget {
       ),
     );
 
-    final shouldShowMaterialDiff = ref.watch(
-      boardPreferencesProvider.select(
-        (prefs) => prefs.showMaterialDifference,
-      ),
-    );
+    final boardPreferences = ref.watch(boardPreferencesProvider);
+
     final blindfoldMode = ref.watch(
       gamePreferencesProvider.select(
         (prefs) => prefs.blindfoldMode,
@@ -127,7 +124,7 @@ class GameBody extends ConsumerWidget {
 
         final black = GamePlayer(
           player: gameState.game.black,
-          materialDiff: shouldShowMaterialDiff
+          materialDiff: boardPreferences.showMaterialDifference
               ? gameState.game.materialDiffAt(gameState.stepCursor, Side.black)
               : null,
           timeToMove: gameState.game.sideToMove == Side.black
@@ -167,7 +164,7 @@ class GameBody extends ConsumerWidget {
         );
         final white = GamePlayer(
           player: gameState.game.white,
-          materialDiff: shouldShowMaterialDiff
+          materialDiff: boardPreferences.showMaterialDifference
               ? gameState.game.materialDiffAt(gameState.stepCursor, Side.white)
               : null,
           timeToMove: gameState.game.sideToMove == Side.white
@@ -255,7 +252,8 @@ class GameBody extends ConsumerWidget {
                         fen: position.fen,
                         lastMove:
                             gameState.game.moveAt(gameState.stepCursor)?.cg,
-                        isCheck: position.isCheck,
+                        isCheck: boardPreferences.boardHighlights &&
+                            position.isCheck,
                         sideToMove: position.turn.cg,
                         validMoves: algebraicLegalMoves(position),
                         premove: gameState.premove,
