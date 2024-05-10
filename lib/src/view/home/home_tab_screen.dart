@@ -1,4 +1,3 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -446,7 +445,7 @@ class _OfflineCorrespondenceCarousel extends ConsumerWidget {
   }
 }
 
-class _GamesCarousel<T> extends StatelessWidget {
+class _GamesCarousel<T> extends StatefulWidget {
   const _GamesCarousel({
     required this.list,
     required this.builder,
@@ -457,6 +456,13 @@ class _GamesCarousel<T> extends StatelessWidget {
   final Widget Function(T data) builder;
   final Widget Function(BuildContext) moreScreenBuilder;
   final int maxGamesToShow;
+
+  @override
+  State<_GamesCarousel<T>> createState() => _GamesCarouselState<T>();
+}
+
+class _GamesCarouselState<T> extends State<_GamesCarousel<T>> {
+  final _pageController = PageController(viewportFraction: 0.65);
 
   @override
   Widget build(BuildContext context) {
@@ -471,18 +477,18 @@ class _GamesCarousel<T> extends StatelessWidget {
             children: [
               Flexible(
                 child: Text(
-                  context.l10n.nbGamesInPlay(list.length),
+                  context.l10n.nbGamesInPlay(widget.list.length),
                   style: Styles.sectionTitle,
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              if (list.length > 2) ...[
+              if (widget.list.length > 2) ...[
                 const SizedBox(width: 6.0),
                 NoPaddingTextButton(
                   onPressed: () {
                     pushPlatformRoute(
                       context,
-                      title: context.l10n.nbGamesInPlay(list.length),
+                      title: context.l10n.nbGamesInPlay(widget.list.length),
                       builder: (_) => const OngoingGamesScreen(),
                     );
                   },
@@ -492,19 +498,16 @@ class _GamesCarousel<T> extends StatelessWidget {
             ],
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: CarouselSlider.builder(
-            options: CarouselOptions(
-              aspectRatio: 1.04,
-              viewportFraction: 0.65,
-              enableInfiniteScroll: false,
-              pageSnapping: list.length > 2,
-              padEnds: false,
-            ),
-            itemCount: list.length,
-            itemBuilder: (context, index, _) {
-              return builder(list[index]);
+        AspectRatio(
+          aspectRatio: 1.04,
+          child: BoardsPageView.builder(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            controller: _pageController,
+            pageSnapping: widget.list.length > 2,
+            allowImplicitScrolling: true,
+            itemCount: widget.list.length,
+            itemBuilder: (context, index) {
+              return widget.builder(widget.list[index]);
             },
           ),
         ),
