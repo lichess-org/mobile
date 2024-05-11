@@ -439,7 +439,7 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
     final correspondenceSelector = [
       Builder(
         builder: (context) {
-          int daysPerTurn = preferences.customDaysPerTurn ?? -1;
+          int daysPerTurn = preferences.customDaysPerTurn;
           return StatefulBuilder(
             builder: (context, setState) {
               return PlatformListTile(
@@ -475,9 +475,7 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                     });
                     ref
                         .read(gameSetupPreferencesProvider.notifier)
-                        .setCustomDaysPerTurn(
-                          value == -1 ? null : value.toInt(),
-                        );
+                        .setCustomDaysPerTurn(value.toInt());
                   },
                 ),
               );
@@ -616,7 +614,7 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: FatButton(
-                      semanticsLabel: context.l10n.play,
+                      semanticsLabel: context.l10n.create,
                       onPressed: timeControl == TimeControl.realTime
                           ? isValidTimeControl
                               ? () {
@@ -654,7 +652,7 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                                   await _pendingCreateGame;
                                   widget.setViewMode(_ViewMode.challenges);
                                 },
-                      child: Text(context.l10n.play, style: Styles.bold),
+                      child: Text(context.l10n.create, style: Styles.bold),
                     ),
                   );
                 },

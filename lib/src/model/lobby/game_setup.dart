@@ -34,7 +34,7 @@ class GameSetup with _$GameSetup {
     // custom game
     required int customTimeSeconds,
     required int customIncrementSeconds,
-    int? customDaysPerTurn,
+    required int customDaysPerTurn,
     required Variant customVariant,
     required bool customRated,
     required PlayableSide customSide,
@@ -142,7 +142,7 @@ class GameSetupPreferences extends _$GameSetupPreferences {
     return _save(state.copyWith(customRatingDelta: (min, max)));
   }
 
-  Future<void> setCustomDaysPerTurn(int? days) {
+  Future<void> setCustomDaysPerTurn(int days) {
     return _save(state.copyWith(customDaysPerTurn: days));
   }
 
@@ -259,4 +259,4 @@ const kAvailableIncrementsInSeconds = [
   180,
 ];
 
-const kAvailableDaysPerTurn = [1, 2, 3, 5, 7, 10, 14, -1];
+const kAvailableDaysPerTurn = [1, 2, 3, 5, 7, 10, 14];

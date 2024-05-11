@@ -24,7 +24,12 @@ class GameSeek with _$GameSeek {
   const GameSeek._();
 
   @Assert(
-    '(clock != null || days != null) && (ratingDelta == null || ratingRange == null)',
+    'ratingDelta == null || ratingRange == null',
+    'Rating delta and rating range cannot be used together',
+  )
+  @Assert(
+    'clock != null || days != null',
+    'Either clock or days must be set',
   )
   const factory GameSeek({
     (Duration time, Duration increment)? clock,
