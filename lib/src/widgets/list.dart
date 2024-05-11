@@ -18,7 +18,7 @@ class ListSection extends StatelessWidget {
     this.dense = false,
     this.cupertinoAdditionalDividerMargin,
     this.cupertinoBackgroundColor,
-    this.cupertinoClipBehavior = Clip.none,
+    this.cupertinoClipBehavior = Clip.hardEdge,
   }) : _isLoading = false;
 
   ListSection.loading({
@@ -36,7 +36,7 @@ class ListSection extends StatelessWidget {
         dense = false,
         cupertinoAdditionalDividerMargin = null,
         cupertinoBackgroundColor = null,
-        cupertinoClipBehavior = Clip.none,
+        cupertinoClipBehavior = Clip.hardEdge,
         _isLoading = true;
 
   /// Usually a list of [PlatformListTile] widgets

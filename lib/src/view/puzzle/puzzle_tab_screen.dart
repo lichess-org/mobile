@@ -325,6 +325,7 @@ class PuzzleHistoryWidget extends ConsumerWidget {
         return ListSection(
           cupertinoBackgroundColor:
               CupertinoTheme.of(context).scaffoldBackgroundColor,
+          cupertinoClipBehavior: Clip.none,
           header: Text(context.l10n.puzzleHistory),
           headerTrailing: NoPaddingTextButton(
             onPressed: () => pushPlatformRoute(
