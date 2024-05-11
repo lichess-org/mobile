@@ -72,7 +72,7 @@ class QuickGameButton extends ConsumerWidget {
           child: Theme.of(context).platform == TargetPlatform.iOS
               ? CupertinoButton.filled(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 4.0,
+                    horizontal: 8.0,
                     vertical: 16.0,
                   ),
                   onPressed: () {
@@ -84,7 +84,7 @@ class QuickGameButton extends ConsumerWidget {
                       ),
                     );
                   },
-                  child: Text(context.l10n.studyStart, style: Styles.bold),
+                  child: Text(context.l10n.play, style: Styles.bold),
                 )
               : FilledButton(
                   onPressed: () {
@@ -98,7 +98,7 @@ class QuickGameButton extends ConsumerWidget {
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Text(context.l10n.studyStart, style: Styles.bold),
+                    child: Text(context.l10n.play, style: Styles.bold),
                   ),
                 ),
         ),

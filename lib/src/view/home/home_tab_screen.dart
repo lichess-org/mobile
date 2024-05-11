@@ -381,16 +381,9 @@ class _CreateAGameSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ListSection(
-          header: Text(context.l10n.createAGame),
-          children: [
-            Padding(
-              padding: Theme.of(context).platform == TargetPlatform.android
-                  ? const EdgeInsets.symmetric(horizontal: 16.0)
-                  : const EdgeInsets.only(right: 2.0),
-              child: const QuickGameButton(),
-            ),
-          ],
+        Padding(
+          padding: Styles.bodySectionPadding,
+          child: const QuickGameButton(),
         ),
         const CreateGameOptions(),
       ],
