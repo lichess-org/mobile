@@ -109,7 +109,8 @@ class AnalysisController extends _$AnalysisController {
       onVisitNode: (root, branch, isMainline) {
         if (isMainline &&
             options.initialMoveCursor != null &&
-            branch.position.ply <= options.initialMoveCursor!) {
+            branch.position.ply <=
+                root.position.ply + options.initialMoveCursor!) {
           path = path + branch.id;
           lastMove = branch.sanMove.move;
         }
