@@ -400,6 +400,9 @@ class _OngoingGamesCarousel extends ConsumerWidget {
     final ongoingGames = ref.watch(ongoingGamesProvider);
     return ongoingGames.maybeWhen(
       data: (data) {
+        if (data.isEmpty) {
+          return const SizedBox.shrink();
+        }
         return _GamesCarousel<OngoingGame>(
           list: data,
           builder: (game) => _GamePreviewCarouselItem(game: game),
@@ -423,6 +426,9 @@ class _OfflineCorrespondenceCarousel extends ConsumerWidget {
         ref.watch(offlineOngoingCorrespondenceGamesProvider);
     return offlineCorresGames.maybeWhen(
       data: (data) {
+        if (data.isEmpty) {
+          return const SizedBox.shrink();
+        }
         return _GamesCarousel(
           list: data,
           builder: (el) => _OfflineCorrespondenceCarouselItem(
