@@ -6,8 +6,8 @@ import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
-import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_game.dart';
 import 'package:lichess_mobile/src/model/game/game_storage.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -16,7 +16,6 @@ import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/layout.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/view/correspondence/offline_correspondence_game_screen.dart';
 import 'package:lichess_mobile/src/view/game/standalone_game_screen.dart';
 import 'package:lichess_mobile/src/view/home/create_a_game_screen.dart';
 import 'package:lichess_mobile/src/view/home/create_game_options.dart';
@@ -431,9 +430,22 @@ class _OfflineCorrespondenceCarousel extends ConsumerWidget {
         }
         return _GamesCarousel(
           list: data,
-          builder: (el) => _OfflineCorrespondenceCarouselItem(
-            game: el.$2,
-            lastModified: el.$1,
+          builder: (el) => _GamePreviewCarouselItem(
+            game: OngoingGame(
+              id: el.$2.id,
+              fullId: el.$2.fullId,
+              orientation: el.$2.orientation,
+              fen: el.$2.lastPosition.fen,
+              perf: el.$2.perf,
+              speed: el.$2.speed,
+              variant: el.$2.variant,
+              opponent: el.$2.opponent.user,
+              isMyTurn: el.$2.isMyTurn,
+              opponentRating: el.$2.opponent.rating,
+              opponentAiLevel: el.$2.opponent.aiLevel,
+              lastMove: el.$2.lastMove,
+              secondsLeft: el.$2.myTimeLeft(el.$1)?.inSeconds,
+            ),
           ),
           moreScreenBuilder: (_) => const OfflineCorrespondenceGamesScreen(),
           maxGamesToShow: maxGamesToShow,
@@ -498,7 +510,7 @@ class _GamesCarouselState<T> extends State<_GamesCarousel<T>> {
           ),
         ),
         AspectRatio(
-          aspectRatio: 1.04,
+          aspectRatio: 1.05,
           child: BoardsPageView.builder(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
             controller: _pageController,
@@ -526,69 +538,83 @@ class _GamePreviewCarouselItem extends StatelessWidget {
       fen: game.fen,
       orientation: game.orientation.cg,
       lastMove: game.lastMove?.cg,
-      description: Expanded(
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 10.0, vertical: 8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (game.secondsLeft != null && game.secondsLeft! > 0)
-                  Opacity(
-                    opacity: 0.7,
-                    child: Text(
-                      game.isMyTurn
-                          ? context.l10n.yourTurn
-                          : context.l10n.waitingForOpponent,
-                      style: const TextStyle(fontSize: 13),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
-                  ),
-                UserFullNameWidget.player(
-                  user: game.opponent,
-                  rating: game.opponentRating,
-                  aiLevel: game.opponentAiLevel,
-                  style: Styles.boardPreviewTitle,
+      description: Align(
+        alignment: Alignment.centerLeft,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                game.isMyTurn
+                    ? context.l10n.yourTurn
+                    : context.l10n.waitingForOpponent,
+                style: TextStyle(
+                  fontSize: 13,
+                  color:
+                      Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
                 ),
-                const SizedBox(height: 2.0),
-                if (game.secondsLeft != null)
-                  Opacity(
-                    opacity: game.isMyTurn ? 1.0 : 0.4,
-                    child: Chip(
-                      avatar: Icon(
-                        game.isMyTurn
-                            ? Icons.timer_outlined
-                            : Icons.timer_off_outlined,
-                      ),
-                      backgroundColor:
-                          Theme.of(context).colorScheme.surfaceContainer,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25.0),
-                      ),
-                      side: BorderSide.none,
-                      label: Text(
-                        game.isMyTurn
-                            ? timeago.format(
-                                DateTime.now()
-                                    .add(Duration(seconds: game.secondsLeft!)),
-                                allowFromNow: true,
-                              )
-                            : context.l10n.nbDays(
-                                Duration(seconds: game.secondsLeft!).inDays,
-                              ),
-                      ),
-                      labelStyle:
-                          Theme.of(context).platform == TargetPlatform.iOS
-                              ? const TextStyle(fontSize: 12)
-                              : Theme.of(context).textTheme.labelMedium,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+              ),
+              UserFullNameWidget.player(
+                user: game.opponent,
+                rating: game.opponentRating,
+                aiLevel: game.opponentAiLevel,
+                style: Styles.boardPreviewTitle,
+              ),
+              const SizedBox(height: 2.0),
+              if (game.secondsLeft != null)
+                Opacity(
+                  opacity: game.isMyTurn ? 1.0 : 0.4,
+                  child: Chip(
+                    avatar: Icon(
+                      game.isMyTurn
+                          ? Icons.timer_outlined
+                          : Icons.timer_off_outlined,
                     ),
+                    backgroundColor:
+                        Theme.of(context).colorScheme.surfaceContainer,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25.0),
+                    ),
+                    side: BorderSide.none,
+                    label: Text(
+                      game.isMyTurn
+                          ? timeago.format(
+                              DateTime.now().add(
+                                Duration(seconds: game.secondsLeft!),
+                              ),
+                              allowFromNow: true,
+                            )
+                          : context.l10n.nbDays(
+                              Duration(seconds: game.secondsLeft!).inDays,
+                            ),
+                    ),
+                    labelStyle: Theme.of(context).platform == TargetPlatform.iOS
+                        ? const TextStyle(fontSize: 12)
+                        : Theme.of(context).textTheme.labelMedium,
                   ),
-              ],
-            ),
+                )
+              else if (game.speed == Speed.correspondence)
+                Opacity(
+                  opacity: game.isMyTurn ? 1.0 : 0.4,
+                  child: Chip(
+                    avatar: const Icon(Icons.timer_outlined),
+                    backgroundColor:
+                        Theme.of(context).colorScheme.surfaceContainer,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25.0),
+                    ),
+                    side: BorderSide.none,
+                    label: Text(context.l10n.unlimited),
+                    labelStyle: Theme.of(context).platform == TargetPlatform.iOS
+                        ? const TextStyle(fontSize: 12)
+                        : Theme.of(context).textTheme.labelMedium,
+                  ),
+                ),
+            ],
           ),
         ),
       ),
@@ -603,101 +629,6 @@ class _GamePreviewCarouselItem extends StatelessWidget {
               orientation: game.orientation,
               lastMove: game.lastMove,
             ),
-          ),
-        );
-      },
-    );
-  }
-}
-
-class _OfflineCorrespondenceCarouselItem extends ConsumerWidget {
-  const _OfflineCorrespondenceCarouselItem({
-    required this.game,
-    required this.lastModified,
-  });
-
-  final DateTime lastModified;
-  final OfflineCorrespondenceGame game;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return BoardCarouselItem(
-      fen: game.lastPosition.fen,
-      orientation: game.orientation.cg,
-      lastMove: game.lastMove?.cg,
-      description: Expanded(
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 10.0, vertical: 8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (game.myTimeLeft(lastModified) != null &&
-                    game.myTimeLeft(lastModified)! > Duration.zero)
-                  Opacity(
-                    opacity: 0.7,
-                    child: Text(
-                      game.isMyTurn
-                          ? context.l10n.yourTurn
-                          : context.l10n.waitingForOpponent,
-                      style: const TextStyle(fontSize: 13),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
-                  ),
-                UserFullNameWidget.player(
-                  user: game.opponent.user,
-                  aiLevel: game.opponent.aiLevel,
-                  rating: game.opponent.rating,
-                  style: Styles.boardPreviewTitle,
-                ),
-                const SizedBox(height: 2.0),
-                if (game.myTimeLeft(lastModified) != null)
-                  Opacity(
-                    opacity: game.isMyTurn ? 1.0 : 0.4,
-                    child: Chip(
-                      avatar: Icon(
-                        game.isMyTurn
-                            ? Icons.timer_outlined
-                            : Icons.timer_off_outlined,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25.0),
-                      ),
-                      side: BorderSide.none,
-                      label: Text(
-                        game.isMyTurn
-                            ? timeago.format(
-                                DateTime.now()
-                                    .add(game.myTimeLeft(lastModified)!),
-                                allowFromNow: true,
-                              )
-                            : game.daysPerTurn != null
-                                ? context.l10n.nbDays(
-                                    game.daysPerTurn!,
-                                  )
-                                : context.l10n.unlimited,
-                      ),
-                      labelStyle:
-                          Theme.of(context).platform == TargetPlatform.iOS
-                              ? const TextStyle(fontSize: 12)
-                              : Theme.of(context).textTheme.labelMedium,
-                    ),
-                  ),
-              ],
-            ),
-          ),
-        ),
-      ),
-      onTap: () {
-        pushPlatformRoute(
-          context,
-          rootNavigator: true,
-          builder: (_) => OfflineCorrespondenceGameScreen(
-            initialGame: (lastModified, game),
           ),
         );
       },

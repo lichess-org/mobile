@@ -8,7 +8,6 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
-import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository.dart';
@@ -114,9 +113,10 @@ class AccountRepository {
           );
           throw Exception('Could not read json object as {nowPlaying: []}');
         }
-        return IList(
-          list.map((e) => _ongoingGameFromJson(e as Map<String, dynamic>)),
-        );
+        return list
+            .map((e) => _ongoingGameFromJson(e as Map<String, dynamic>))
+            .where((e) => e.variant.isSupported)
+            .toIList();
       },
     );
   }
@@ -188,10 +188,7 @@ OngoingGame _ongoingGameFromPick(RequiredPick pick) {
     lastMove: pick('lastMove').asUciMoveOrNull(),
     perf: pick('perf').asPerfOrThrow(),
     speed: pick('speed').asSpeedOrThrow(),
-    source: pick('source').letOrThrow(
-      (pick) =>
-          GameSource.nameMap[pick.asStringOrThrow()] ?? GameSource.unknown,
-    ),
+    variant: pick('variant').asVariantOrThrow(),
     opponent: pick('opponent').asLightUserOrNull(),
     opponentRating: pick('opponent', 'rating').asIntOrNull(),
     opponentAiLevel: pick('opponent', 'aiLevel').asIntOrNull(),

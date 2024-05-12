@@ -51,32 +51,64 @@ class BoardCarouselItem extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
-                  height: boardSize,
-                  child: Board(
-                    size: boardSize,
-                    data: BoardData(
-                      interactableSide: InteractableSide.none,
-                      fen: fen,
-                      orientation: orientation,
-                      lastMove: lastMove,
-                    ),
-                    settings: BoardSettings(
-                      enableCoordinates: false,
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(10.0),
-                        topRight: Radius.circular(10.0),
+                ShaderMask(
+                  blendMode: BlendMode.dstOut,
+                  shaderCallback: (bounds) {
+                    return LinearGradient(
+                      begin: const Alignment(0.0, 0.6),
+                      end: const Alignment(0.0, 1.03),
+                      colors: [
+                        Colors.transparent,
+                        Theme.of(context)
+                            .colorScheme
+                            .surfaceContainerHighest
+                            .withOpacity(0.1),
+                        Theme.of(context)
+                            .colorScheme
+                            .surfaceContainerHighest
+                            .withOpacity(0.3),
+                        Theme.of(context)
+                            .colorScheme
+                            .surfaceContainerHighest
+                            .withOpacity(0.5),
+                        Theme.of(context)
+                            .colorScheme
+                            .surfaceContainerHighest
+                            .withOpacity(1.0),
+                      ],
+                      stops: const [0.1, 0.3, 0.6, 0.8, 1.0],
+                      tileMode: TileMode.clamp,
+                    ).createShader(bounds);
+                  },
+                  child: SizedBox(
+                    height: boardSize,
+                    child: Board(
+                      size: boardSize,
+                      data: BoardData(
+                        interactableSide: InteractableSide.none,
+                        fen: fen,
+                        orientation: orientation,
+                        lastMove: lastMove,
                       ),
-                      pieceAssets: boardPrefs.pieceSet.assets,
-                      colorScheme: boardPrefs.boardTheme.colors,
+                      settings: BoardSettings(
+                        enableCoordinates: false,
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(10.0),
+                          topRight: Radius.circular(10.0),
+                        ),
+                        pieceAssets: boardPrefs.pieceSet.assets,
+                        colorScheme: boardPrefs.boardTheme.colors,
+                      ),
                     ),
                   ),
                 ),
-                DefaultTextStyle.merge(
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onSurface,
+                Expanded(
+                  child: DefaultTextStyle.merge(
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                    child: description,
                   ),
-                  child: description,
                 ),
               ],
             ),
