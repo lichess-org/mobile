@@ -6,7 +6,6 @@ import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
 import 'package:lichess_mobile/src/model/game/game_storage.dart';
 import 'package:lichess_mobile/src/navigation.dart';
@@ -510,7 +509,7 @@ class _GamesCarouselState<T> extends State<_GamesCarousel<T>> {
           ),
         ),
         AspectRatio(
-          aspectRatio: 1.05,
+          aspectRatio: 1.3,
           child: BoardsPageView.builder(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
             controller: _pageController,
@@ -546,74 +545,31 @@ class _GamePreviewCarouselItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                game.isMyTurn
-                    ? context.l10n.yourTurn
-                    : context.l10n.waitingForOpponent,
-                style: TextStyle(
-                  fontSize: 13,
-                  color:
-                      Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
-                ),
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-              ),
               UserFullNameWidget.player(
                 user: game.opponent,
                 rating: game.opponentRating,
                 aiLevel: game.opponentAiLevel,
                 style: Styles.boardPreviewTitle,
               ),
-              const SizedBox(height: 2.0),
-              if (game.secondsLeft != null)
-                Opacity(
-                  opacity: game.isMyTurn ? 1.0 : 0.4,
-                  child: Chip(
-                    avatar: Icon(
-                      game.isMyTurn
-                          ? Icons.timer_outlined
-                          : Icons.timer_off_outlined,
-                    ),
-                    backgroundColor:
-                        Theme.of(context).colorScheme.surfaceContainer,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25.0),
-                    ),
-                    side: BorderSide.none,
-                    label: Text(
-                      game.isMyTurn
-                          ? timeago.format(
-                              DateTime.now().add(
-                                Duration(seconds: game.secondsLeft!),
-                              ),
-                              allowFromNow: true,
-                            )
-                          : context.l10n.nbDays(
-                              Duration(seconds: game.secondsLeft!).inDays,
-                            ),
-                    ),
-                    labelStyle: Theme.of(context).platform == TargetPlatform.iOS
-                        ? const TextStyle(fontSize: 12)
-                        : Theme.of(context).textTheme.labelMedium,
-                  ),
-                )
-              else if (game.speed == Speed.correspondence)
-                Opacity(
-                  opacity: game.isMyTurn ? 1.0 : 0.4,
-                  child: Chip(
-                    avatar: const Icon(Icons.timer_outlined),
-                    backgroundColor:
-                        Theme.of(context).colorScheme.surfaceContainer,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25.0),
-                    ),
-                    side: BorderSide.none,
-                    label: Text(context.l10n.unlimited),
-                    labelStyle: Theme.of(context).platform == TargetPlatform.iOS
-                        ? const TextStyle(fontSize: 12)
-                        : Theme.of(context).textTheme.labelMedium,
-                  ),
+              const SizedBox(height: 4.0),
+              Opacity(
+                opacity: game.isMyTurn ? 1.0 : 0.6,
+                child: Text(
+                  game.secondsLeft != null && game.isMyTurn
+                      ? timeago.format(
+                          DateTime.now().add(
+                            Duration(seconds: game.secondsLeft!),
+                          ),
+                          allowFromNow: true,
+                        )
+                      : game.isMyTurn
+                          ? context.l10n.yourTurn
+                          : context.l10n.waitingForOpponent,
+                  style: Theme.of(context).platform == TargetPlatform.iOS
+                      ? const TextStyle(fontSize: 12)
+                      : Theme.of(context).textTheme.labelMedium,
                 ),
+              ),
             ],
           ),
         ),

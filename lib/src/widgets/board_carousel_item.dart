@@ -36,47 +36,32 @@ class BoardCarouselItem extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
 
+    final backgroundColor = Theme.of(context).colorScheme.secondaryContainer;
+
     return LayoutBuilder(
       builder: (context, constraints) {
         final boardSize = constraints.biggest.shortestSide -
             _kBoardCarouselItemMargin.horizontal;
         final card = PlatformCard(
-          color: Theme.of(context).colorScheme.surfaceContainerHighest,
+          color: backgroundColor,
           margin: Theme.of(context).platform == TargetPlatform.iOS
               ? EdgeInsets.zero
               : _kBoardCarouselItemMargin,
           child: AdaptiveInkWell(
             borderRadius: BorderRadius.circular(10),
             onTap: onTap,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Stack(
               children: [
                 ShaderMask(
                   blendMode: BlendMode.dstOut,
                   shaderCallback: (bounds) {
                     return LinearGradient(
-                      begin: const Alignment(0.0, 0.6),
-                      end: const Alignment(0.0, 1.03),
+                      begin: Alignment.center,
+                      end: Alignment.bottomCenter,
                       colors: [
-                        Colors.transparent,
-                        Theme.of(context)
-                            .colorScheme
-                            .surfaceContainerHighest
-                            .withOpacity(0.1),
-                        Theme.of(context)
-                            .colorScheme
-                            .surfaceContainerHighest
-                            .withOpacity(0.3),
-                        Theme.of(context)
-                            .colorScheme
-                            .surfaceContainerHighest
-                            .withOpacity(0.5),
-                        Theme.of(context)
-                            .colorScheme
-                            .surfaceContainerHighest
-                            .withOpacity(1.0),
+                        backgroundColor.withOpacity(0.0),
+                        backgroundColor.withOpacity(1.0),
                       ],
-                      stops: const [0.1, 0.3, 0.6, 0.8, 1.0],
                       tileMode: TileMode.clamp,
                     ).createShader(bounds);
                   },
@@ -102,10 +87,12 @@ class BoardCarouselItem extends ConsumerWidget {
                     ),
                   ),
                 ),
-                Expanded(
+                Positioned(
+                  left: 0,
+                  bottom: 8,
                   child: DefaultTextStyle.merge(
                     style: TextStyle(
-                      color: Theme.of(context).colorScheme.onSurface,
+                      color: Theme.of(context).colorScheme.onSecondaryContainer,
                     ),
                     child: description,
                   ),
