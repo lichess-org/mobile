@@ -1279,8 +1279,10 @@ class AcplChart extends ConsumerWidget {
                 enabled: false,
                 touchCallback:
                     (FlTouchEvent event, LineTouchResponse? touchResponse) {
-                  if (event is FlTapUpEvent) {
-                    final touchX = event.localPosition.dx;
+                  if (event is FlTapDownEvent ||
+                      event is FlPanUpdateEvent ||
+                      event is FlLongPressMoveUpdate) {
+                    final touchX = event.localPosition!.dx;
                     final chartWidth = context.size!.width -
                         32; // Insets on both sides of the chart of 16
                     final minX = spots.first.x;
