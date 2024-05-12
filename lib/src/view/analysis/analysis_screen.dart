@@ -1248,6 +1248,11 @@ class AcplChart extends ConsumerWidget {
           .select((value) => value.acplChartData),
     );
 
+    final rootPly = ref.watch(
+      analysisControllerProvider(pgn, options)
+          .select((value) => value.root.position.ply),
+    );
+
     final currentNode = ref.watch(
       analysisControllerProvider(pgn, options)
           .select((value) => value.currentNode),
@@ -1329,7 +1334,7 @@ class AcplChart extends ConsumerWidget {
                 verticalLines: [
                   if (isOnMainline)
                     VerticalLine(
-                      x: (currentNode.position.ply - 1).toDouble(),
+                      x: (currentNode.position.ply - 1 - rootPly).toDouble(),
                       color: mainLineColor,
                       strokeWidth: 1.0,
                     ),
