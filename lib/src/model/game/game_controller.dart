@@ -948,6 +948,7 @@ class GameState with _$GameState {
 
   bool get canGetNewOpponent =>
       !game.playable &&
+      game.meta.speed != Speed.correspondence &&
       (game.source == GameSource.lobby || game.source == GameSource.pool);
 
   bool get canOfferDraw =>
