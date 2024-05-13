@@ -1273,6 +1273,39 @@ class AcplChart extends ConsumerWidget {
         )
         .toList(growable: false);
 
+    final divisionLines = <VerticalLine>[];
+
+    if (options.division?.middlegame != null) {
+      if (options.division!.middlegame! > 0) {
+        divisionLines.add(phaseVerticalBar(0.0, context.l10n.opening));
+        divisionLines.add(
+          phaseVerticalBar(
+            options.division!.middlegame! - 1,
+            context.l10n.middlegame,
+          ),
+        );
+      } else {
+        divisionLines.add(phaseVerticalBar(0.0, context.l10n.middlegame));
+      }
+    }
+
+    if (options.division?.endgame != null) {
+      if (options.division!.endgame! > 0) {
+        divisionLines.add(
+          phaseVerticalBar(
+            options.division!.endgame! - 1,
+            context.l10n.endgame,
+          ),
+        );
+      } else {
+        divisionLines.add(
+          phaseVerticalBar(
+            0.0,
+            context.l10n.endgame,
+          ),
+        );
+      }
+    }
     return Center(
       child: AspectRatio(
         aspectRatio: 2.5,
@@ -1338,18 +1371,7 @@ class AcplChart extends ConsumerWidget {
                       color: mainLineColor,
                       strokeWidth: 1.0,
                     ),
-                  if (options.division != null)
-                    phaseVerticalBar(0.0, context.l10n.opening),
-                  if (options.division?.middlegame != null)
-                    phaseVerticalBar(
-                      options.division!.middlegame! - 1,
-                      context.l10n.middlegame,
-                    ),
-                  if (options.division?.endgame != null)
-                    phaseVerticalBar(
-                      options.division!.endgame! - 1,
-                      context.l10n.endgame,
-                    ),
+                  ...divisionLines,
                 ],
               ),
               gridData: const FlGridData(show: false),

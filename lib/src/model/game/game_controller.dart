@@ -633,20 +633,22 @@ class GameController extends _$GameController {
 
         state = AsyncValue.data(newState);
 
-        _getPostGameData().then((result) {
-          result.fold((data) {
-            final game = _mergePostGameData(state.requireValue.game, data);
-            state = AsyncValue.data(
-              state.requireValue.copyWith(game: game),
-            );
+        if (!newState.game.aborted) {
+          _getPostGameData().then((result) {
+            result.fold((data) {
+              final game = _mergePostGameData(state.requireValue.game, data);
+              state = AsyncValue.data(
+                state.requireValue.copyWith(game: game),
+              );
 
-            ref
-                .read(gameStorageProvider)
-                .save(game.toArchivedGame(finishedAt: DateTime.now()));
-          }, (e, s) {
-            _logger.warning('Could not get post game data', e, s);
+              ref
+                  .read(gameStorageProvider)
+                  .save(game.toArchivedGame(finishedAt: DateTime.now()));
+            }, (e, s) {
+              _logger.warning('Could not get post game data', e, s);
+            });
           });
-        });
+        }
 
       case 'clockInc':
         final data = event.data as Map<String, dynamic>;
@@ -948,6 +950,7 @@ class GameState with _$GameState {
 
   bool get canGetNewOpponent =>
       !game.playable &&
+      game.meta.speed != Speed.correspondence &&
       (game.source == GameSource.lobby || game.source == GameSource.pool);
 
   bool get canOfferDraw =>
