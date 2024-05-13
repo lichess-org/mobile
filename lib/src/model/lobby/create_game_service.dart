@@ -37,7 +37,7 @@ class CreateGameService {
     final socketClient = socketPool.open(Uri(path: '/lobby/socket/v5'));
 
     // ensure the pending game connection is closed in any case
-    final completer = Completer<GameFullId>()..future.whenComplete(_close);
+    final completer = Completer<GameFullId>()..future.whenComplete(dispose);
 
     _pendingGameConnection = socketClient.stream.listen((event) {
       if (event.topic == 'redirect') {
@@ -93,14 +93,13 @@ class CreateGameService {
     final sri = ref.read(sriProvider);
     try {
       await LobbyRepository(lichessClient).cancelSeek(sri: sri);
-      _close();
     } catch (e) {
       _log.warning('Failed to cancel seek: $e', e);
     }
   }
 
-  void _close() {
-    // cancel the socket subscription
+  /// Dispose the service.
+  void dispose() {
     _pendingGameConnection?.cancel();
     _pendingGameConnection = null;
   }
