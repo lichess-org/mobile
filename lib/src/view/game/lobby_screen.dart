@@ -19,17 +19,16 @@ part 'lobby_screen.g.dart';
 class _LobbyGame extends _$LobbyGame {
   @override
   Future<(GameFullId, {bool fromRematch})> build(GameSeek seek) {
+    final service = ref.read(createGameServiceProvider);
     ref.onDispose(() {
-      _service.cancel();
+      service.dispose();
     });
-    return _service.newLobbyGame(seek).then((id) => (id, fromRematch: false));
+    return service.newLobbyGame(seek).then((id) => (id, fromRematch: false));
   }
 
   void rematch(GameFullId id) {
     state = AsyncValue.data((id, fromRematch: true));
   }
-
-  CreateGameService get _service => ref.read(createGameServiceProvider);
 }
 
 /// Screen for games created from the lobby.
@@ -117,7 +116,10 @@ class _LobbyScreenState extends ConsumerState<LobbyScreen> with RouteAware {
           appBar: GameAppBar(seek: widget.seek),
           body: PopScope(
             canPop: false,
-            child: LobbyScreenLoadingContent(widget.seek),
+            child: LobbyScreenLoadingContent(
+              widget.seek,
+              () => ref.read(createGameServiceProvider).cancel(),
+            ),
           ),
         ),
         iosBuilder: (context) => CupertinoPageScaffold(
@@ -125,7 +127,10 @@ class _LobbyScreenState extends ConsumerState<LobbyScreen> with RouteAware {
           navigationBar: GameCupertinoNavBar(seek: widget.seek),
           child: PopScope(
             canPop: false,
-            child: LobbyScreenLoadingContent(widget.seek),
+            child: LobbyScreenLoadingContent(
+              widget.seek,
+              () => ref.read(createGameServiceProvider).cancel(),
+            ),
           ),
         ),
       ),

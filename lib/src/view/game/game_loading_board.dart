@@ -13,9 +13,10 @@ import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
 class LobbyScreenLoadingContent extends StatelessWidget {
-  const LobbyScreenLoadingContent(this.seek);
+  const LobbyScreenLoadingContent(this.seek, this.cancelGameCreation);
 
   final GameSeek seek;
+  final Future<void> Function() cancelGameCreation;
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +78,12 @@ class LobbyScreenLoadingContent extends StatelessWidget {
         _BottomBar(
           children: [
             BottomBarButton(
-              onTap: () => Navigator.of(context, rootNavigator: true).pop(),
+              onTap: () async {
+                await cancelGameCreation();
+                if (context.mounted) {
+                  Navigator.of(context, rootNavigator: true).pop();
+                }
+              },
               label: context.l10n.cancel,
               showLabel: true,
               icon: CupertinoIcons.xmark,
