@@ -59,9 +59,10 @@ class BoardCarouselItem extends ConsumerWidget {
                       begin: Alignment.center,
                       end: Alignment.bottomCenter,
                       colors: [
-                        backgroundColor.withOpacity(0.0),
+                        backgroundColor.withOpacity(0.25),
                         backgroundColor.withOpacity(1.0),
                       ],
+                      stops: const [0.5, 1.00],
                       tileMode: TileMode.clamp,
                     ).createShader(bounds);
                   },
