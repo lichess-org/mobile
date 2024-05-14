@@ -60,7 +60,7 @@ dependencies:
   soundpool:
     git:
      url: https://github.com/lichess-org/flutter-soundpool.git
-     ref: 3900871fd9b6eec4a2437dbdc2946c96ca1f58fd
+     ref: 575ba7e5c55986caeef66101f49fa695d65e5a5a
   sqflite: ^2.2.5
   stockfish:
    git:
