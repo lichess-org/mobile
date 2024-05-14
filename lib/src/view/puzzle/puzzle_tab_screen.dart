@@ -354,7 +354,7 @@ class PuzzleHistoryWidget extends ConsumerWidget {
           'SEVERE: [PuzzleHistoryWidget] could not load puzzle history',
         );
 
-        if (!isOnline) {
+        if (isOnline) {
           return Padding(
             padding: Styles.bodySectionPadding,
             child: const Text('Could not load Puzzle history.'),

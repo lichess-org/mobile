@@ -131,7 +131,7 @@ class PuzzleDashboardWidget extends ConsumerWidget {
           'SEVERE: [PuzzleDashboardWidget] could not load puzzle dashboard; $e\n$s',
         );
 
-        if (!isOnline) {
+        if (isOnline) {
           return Padding(
             padding: Styles.bodySectionPadding,
             child: Column(
