@@ -95,7 +95,6 @@ class RecentGames extends ConsumerWidget {
         return ListSection(
           header: Text(context.l10n.recentGames),
           hasLeading: true,
-          showDividerBetweenTiles: true,
           children: data.map((game) {
             final mySide =
                 game.white.user?.id == userId ? Side.white : Side.black;
