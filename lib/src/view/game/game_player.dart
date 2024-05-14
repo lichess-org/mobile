@@ -231,6 +231,7 @@ class ConfirmMove extends StatelessWidget {
             context.l10n.confirmMove,
             overflow: TextOverflow.ellipsis,
             maxLines: 2,
+            textAlign: TextAlign.center,
           ),
         ),
         PlatformIconButton(
