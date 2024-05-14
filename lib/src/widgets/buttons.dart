@@ -319,6 +319,7 @@ class _AdaptiveInkWellState extends State<AdaptiveInkWell> {
           onTap: widget.onTap,
           onLongPress: widget.onLongPress,
           borderRadius: widget.borderRadius,
+          splashColor: widget.splashColor,
           child: widget.child,
         );
       case TargetPlatform.iOS:

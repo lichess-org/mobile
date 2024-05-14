@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
-import 'package:lichess_mobile/src/utils/colors.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
@@ -36,8 +36,17 @@ class BoardCarouselItem extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
+    final brightness = Theme.of(context).colorScheme.brightness;
 
-    final backgroundColor = ref.watch(boardColorsProvider).secondaryContainer;
+    final backgroundColor = lighten(
+      boardPrefs.boardTheme.colors.darkSquare,
+      brightness == Brightness.light ? 0.25 : 0.0,
+    );
+
+    final splashColor = lighten(
+      boardPrefs.boardTheme.colors.darkSquare,
+      brightness == Brightness.light ? 0.40 : 0.2,
+    );
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -49,6 +58,7 @@ class BoardCarouselItem extends ConsumerWidget {
               ? EdgeInsets.zero
               : _kBoardCarouselItemMargin,
           child: AdaptiveInkWell(
+            splashColor: splashColor,
             borderRadius: BorderRadius.circular(10),
             onTap: onTap,
             child: Stack(
@@ -63,7 +73,7 @@ class BoardCarouselItem extends ConsumerWidget {
                         backgroundColor.withOpacity(0.25),
                         backgroundColor.withOpacity(1.0),
                       ],
-                      stops: const [0.5, 1.00],
+                      stops: const [0.3, 1.00],
                       tileMode: TileMode.clamp,
                     ).createShader(bounds);
                   },
@@ -93,8 +103,8 @@ class BoardCarouselItem extends ConsumerWidget {
                   left: 0,
                   bottom: 8,
                   child: DefaultTextStyle.merge(
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.onSecondaryContainer,
+                    style: const TextStyle(
+                      color: Colors.white,
                     ),
                     child: description,
                   ),

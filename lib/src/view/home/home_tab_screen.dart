@@ -541,35 +541,54 @@ class _GamePreviewCarouselItem extends StatelessWidget {
       description: Align(
         alignment: Alignment.centerLeft,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+          padding: const EdgeInsets.symmetric(horizontal: 10.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
+              Opacity(
+                opacity: game.isMyTurn ? 1.0 : 0.6,
+                child: Row(
+                  children: [
+                    Icon(
+                      game.isMyTurn ? Icons.timer : Icons.timer_off,
+                      size: 16.0,
+                      color: Colors.white,
+                    ),
+                    const SizedBox(width: 4.0),
+                    Text(
+                      game.secondsLeft != null && game.isMyTurn
+                          ? timeago.format(
+                              DateTime.now().add(
+                                Duration(seconds: game.secondsLeft!),
+                              ),
+                              allowFromNow: true,
+                            )
+                          : game.isMyTurn
+                              ? context.l10n.yourTurn
+                              : context.l10n.waitingForOpponent,
+                      style: Theme.of(context).platform == TargetPlatform.iOS
+                          ? const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                            )
+                          : TextStyle(
+                              fontSize: Theme.of(context)
+                                  .textTheme
+                                  .labelMedium
+                                  ?.fontSize,
+                              fontWeight: FontWeight.w500,
+                            ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 4.0),
               UserFullNameWidget.player(
                 user: game.opponent,
                 rating: game.opponentRating,
                 aiLevel: game.opponentAiLevel,
                 style: Styles.boardPreviewTitle,
-              ),
-              const SizedBox(height: 4.0),
-              Opacity(
-                opacity: game.isMyTurn ? 1.0 : 0.6,
-                child: Text(
-                  game.secondsLeft != null && game.isMyTurn
-                      ? timeago.format(
-                          DateTime.now().add(
-                            Duration(seconds: game.secondsLeft!),
-                          ),
-                          allowFromNow: true,
-                        )
-                      : game.isMyTurn
-                          ? context.l10n.yourTurn
-                          : context.l10n.waitingForOpponent,
-                  style: Theme.of(context).platform == TargetPlatform.iOS
-                      ? const TextStyle(fontSize: 12)
-                      : Theme.of(context).textTheme.labelMedium,
-                ),
               ),
             ],
           ),
