@@ -205,7 +205,8 @@ class _HomeBody extends ConsumerWidget {
               const Center(child: _SignInWidget()),
               const SizedBox(height: 16.0),
             ],
-            if (session == null || session.user.isPatron != true) ...[
+            if (Theme.of(context).platform != TargetPlatform.iOS &&
+                (session == null || session.user.isPatron != true)) ...[
               Center(
                 child: SecondaryButton(
                   semanticsLabel: context.l10n.patronDonate,

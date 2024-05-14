@@ -181,9 +181,6 @@ class _Body extends ConsumerWidget {
             donateButton,
         ],
       ),
-      if (Theme.of(context).platform == TargetPlatform.iOS &&
-          donateButton != null)
-        ListSection(hasLeading: true, children: [donateButton]),
       ListSection(
         hasLeading: true,
         showDivider: true,
