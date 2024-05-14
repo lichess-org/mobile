@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/utils/colors.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
@@ -36,7 +37,7 @@ class BoardCarouselItem extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
 
-    final backgroundColor = Theme.of(context).colorScheme.secondaryContainer;
+    final backgroundColor = ref.watch(boardColorsProvider).secondaryContainer;
 
     return LayoutBuilder(
       builder: (context, constraints) {
