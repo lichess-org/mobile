@@ -175,12 +175,6 @@ class _AppState extends ConsumerState<Application> {
               height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold
                   ? 60
                   : null,
-              labelTextStyle: const WidgetStatePropertyAll(
-                TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
             ),
             extensions: [lichessCustomColors.harmonized(colorScheme)],
           ),

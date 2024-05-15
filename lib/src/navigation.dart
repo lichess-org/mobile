@@ -18,18 +18,19 @@ enum BottomTab {
   watch,
   settings;
 
+  // TODO use translations when short strings are available
   String label(AppLocalizations strings) {
     switch (this) {
       case BottomTab.home:
         return 'Home';
       case BottomTab.puzzles:
-        return strings.puzzles;
+        return 'Puzzles';
       case BottomTab.tools:
-        return strings.tools;
+        return 'Tools';
       case BottomTab.watch:
-        return strings.watch;
+        return 'Watch';
       case BottomTab.settings:
-        return strings.settingsSettings;
+        return 'Settings';
     }
   }
 
