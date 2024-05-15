@@ -215,22 +215,21 @@ class _Body extends ConsumerWidget {
               }
             },
           ),
-          if (Theme.of(context).platform == TargetPlatform.android)
-            androidVersionAsync.maybeWhen(
-              data: (version) => version.sdkInt >= 31
-                  ? SwitchSettingTile(
-                      leading: const Icon(Icons.colorize),
-                      title: const Text('System colors'),
-                      value: hasSystemColors,
-                      onChanged: (value) {
-                        ref
-                            .read(generalPreferencesProvider.notifier)
-                            .toggleSystemColors();
-                      },
-                    )
-                  : const SizedBox.shrink(),
-              orElse: () => const SizedBox.shrink(),
-            ),
+          androidVersionAsync.maybeWhen(
+            data: (version) => version != null && version.sdkInt >= 31
+                ? SwitchSettingTile(
+                    leading: const Icon(Icons.colorize),
+                    title: const Text('System colors'),
+                    value: hasSystemColors,
+                    onChanged: (value) {
+                      ref
+                          .read(generalPreferencesProvider.notifier)
+                          .toggleSystemColors();
+                    },
+                  )
+                : const SizedBox.shrink(),
+            orElse: () => const SizedBox.shrink(),
+          ),
           SettingsListTile(
             icon: const Icon(Icons.brightness_medium),
             settingsLabel: Text(context.l10n.background),
