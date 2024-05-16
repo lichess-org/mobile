@@ -115,7 +115,8 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
               mainAxisSize: MainAxisSize.min,
               children: [
                 const _PlayerScreenButton(),
-                if (isHandset) ...[
+                // if (isHandset)
+                  ...[
                   const SizedBox(width: 6.0),
                   AppBarIconButton(
                     semanticsLabel: context.l10n.createAGame,
