@@ -132,7 +132,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
           if (getScreenType(context) == ScreenType.handset)
             Positioned(
               bottom: MediaQuery.paddingOf(context).bottom + 16.0,
-              right: 10.0,
+              right: 8.0,
               child: FloatingActionButton.extended(
                 backgroundColor: CupertinoTheme.of(context).primaryColor,
                 foregroundColor:
