@@ -68,6 +68,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
   }
 
   Widget _androidBuilder(BuildContext context) {
+    final isTablet = getScreenType(context) == ScreenType.tablet;
     return Scaffold(
       appBar: AppBar(
         title: const Text('lichess.org'),
@@ -85,16 +86,18 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          pushPlatformRoute(
-            context,
-            builder: (_) => const CreateAGameScreen(),
-          );
-        },
-        icon: const Icon(Icons.add),
-        label: Text(context.l10n.createAGame),
-      ),
+      floatingActionButton: isTablet
+          ? null
+          : FloatingActionButton.extended(
+              onPressed: () {
+                pushPlatformRoute(
+                  context,
+                  builder: (_) => const CreateAGameScreen(),
+                );
+              },
+              icon: const Icon(Icons.add),
+              label: Text(context.l10n.createAGame),
+            ),
     );
   }
 
@@ -195,14 +198,14 @@ class _HomeBody extends ConsumerWidget {
             );
 
         if (emptyRecent && emptyStored) {
-          final messageWidget = [
+          final welcomeWidgets = [
             Padding(
               padding: Styles.horizontalBodyPadding,
               child: LichessMessage(
                 style: Theme.of(context).platform == TargetPlatform.iOS
                     ? const TextStyle(fontSize: 18)
                     : Theme.of(context).textTheme.bodyLarge,
-                textAlign: TextAlign.justify,
+                textAlign: TextAlign.center,
               ),
             ),
             const SizedBox(height: 24.0),
@@ -234,11 +237,29 @@ class _HomeBody extends ConsumerWidget {
             ),
           ];
 
+          final emptyScreenWidgets = [
+            if (isTablet)
+              Row(
+                children: [
+                  const Flexible(
+                    child: _TabletCreateAGameSection(),
+                  ),
+                  Flexible(
+                    child: Column(
+                      children: welcomeWidgets,
+                    ),
+                  ),
+                ],
+              )
+            else
+              ...welcomeWidgets,
+          ];
+
           return Theme.of(context).platform == TargetPlatform.android
               ? Center(
                   child: ListView(
                     shrinkWrap: true,
-                    children: messageWidget,
+                    children: emptyScreenWidgets,
                   ),
                 )
               : SliverFillRemaining(
@@ -250,7 +271,7 @@ class _HomeBody extends ConsumerWidget {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: messageWidget,
+                        children: emptyScreenWidgets,
                       ),
                     ),
                   ),
@@ -267,7 +288,7 @@ class _HomeBody extends ConsumerWidget {
                       child: Column(
                         children: [
                           const SizedBox(height: 8.0),
-                          if (isOnline) const _CreateAGameSection(),
+                          if (isOnline) const _TabletCreateAGameSection(),
                           if (isOnline)
                             const _OngoingGamesPreview(maxGamesToShow: 5)
                           else
@@ -374,17 +395,13 @@ class _HelloWidget extends ConsumerWidget {
   }
 }
 
-class _CreateAGameSection extends StatelessWidget {
-  const _CreateAGameSection();
+class _TabletCreateAGameSection extends StatelessWidget {
+  const _TabletCreateAGameSection();
 
   @override
   Widget build(BuildContext context) {
-    if (Theme.of(context).platform != TargetPlatform.iOS) {
-      return const SizedBox.shrink();
-    }
-
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
           padding: Styles.bodySectionPadding,
