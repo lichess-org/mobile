@@ -37,7 +37,7 @@ dependencies:
     sdk: flutter
   flutter_native_splash: ^2.3.5
   flutter_riverpod: ^2.3.4
-  flutter_secure_storage: 9.0.0
+  flutter_secure_storage: ^9.2.0
   flutter_slidable: ^3.0.0
   flutter_spinkit: ^5.2.0
   freezed_annotation: ^2.2.0
