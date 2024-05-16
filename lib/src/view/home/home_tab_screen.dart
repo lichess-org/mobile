@@ -8,6 +8,8 @@ import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
 import 'package:lichess_mobile/src/model/game/game_storage.dart';
+import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
+import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
@@ -15,6 +17,7 @@ import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/layout.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/game/lobby_screen.dart';
 import 'package:lichess_mobile/src/view/game/standalone_game_screen.dart';
 import 'package:lichess_mobile/src/view/home/create_a_game_screen.dart';
 import 'package:lichess_mobile/src/view/home/create_game_options.dart';
@@ -88,15 +91,28 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
       ),
       floatingActionButton: isTablet
           ? null
-          : FloatingActionButton.extended(
-              onPressed: () {
+          : GestureDetector(
+              onLongPress: () {
+                final playPrefs = ref.read(gameSetupPreferencesProvider);
+                final session = ref.read(authSessionProvider);
                 pushPlatformRoute(
                   context,
-                  builder: (_) => const CreateAGameScreen(),
+                  rootNavigator: true,
+                  builder: (_) => LobbyScreen(
+                    seek: GameSeek.fastPairing(playPrefs, session),
+                  ),
                 );
               },
-              icon: const Icon(Icons.add),
-              label: Text(context.l10n.createAGame),
+              child: FloatingActionButton.extended(
+                onPressed: () {
+                  pushPlatformRoute(
+                    context,
+                    builder: (_) => const CreateAGameScreen(),
+                  );
+                },
+                icon: const Icon(Icons.add),
+                label: Text(context.l10n.createAGame),
+              ),
             ),
     );
   }
@@ -133,18 +149,31 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
             Positioned(
               bottom: MediaQuery.paddingOf(context).bottom + 16.0,
               right: 8.0,
-              child: FloatingActionButton.extended(
-                backgroundColor: CupertinoTheme.of(context).primaryColor,
-                foregroundColor:
-                    CupertinoTheme.of(context).primaryContrastingColor,
-                onPressed: () {
+              child: GestureDetector(
+                onLongPress: () {
+                  final playPrefs = ref.read(gameSetupPreferencesProvider);
+                  final session = ref.read(authSessionProvider);
                   pushPlatformRoute(
                     context,
-                    builder: (_) => const CreateAGameScreen(),
+                    rootNavigator: true,
+                    builder: (_) => LobbyScreen(
+                      seek: GameSeek.fastPairing(playPrefs, session),
+                    ),
                   );
                 },
-                icon: const Icon(Icons.add),
-                label: Text(context.l10n.createAGame),
+                child: FloatingActionButton.extended(
+                  backgroundColor: CupertinoTheme.of(context).primaryColor,
+                  foregroundColor:
+                      CupertinoTheme.of(context).primaryContrastingColor,
+                  onPressed: () {
+                    pushPlatformRoute(
+                      context,
+                      builder: (_) => const CreateAGameScreen(),
+                    );
+                  },
+                  icon: const Icon(Icons.add),
+                  label: Text(context.l10n.createAGame),
+                ),
               ),
             ),
         ],
