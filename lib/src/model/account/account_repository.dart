@@ -58,19 +58,6 @@ Future<IList<LightArchivedGame>> accountRecentGames(
 }
 
 @riverpod
-Future<FullGamePaginator?> accountFullGames(
-  AccountFullGamesRef ref,
-  int page,
-) async {
-  final session = ref.watch(authSessionProvider);
-  if (session == null) return null;
-  return ref.withClientCacheFor(
-    (client) => GameRepository(client).getFullGames(session.user.id, page),
-    const Duration(hours: 1),
-  );
-}
-
-@riverpod
 Future<IList<OngoingGame>> ongoingGames(OngoingGamesRef ref) async {
   final session = ref.watch(authSessionProvider);
   if (session == null) return IList();

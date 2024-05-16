@@ -2,24 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/account/account_repository.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/game/archived_game.dart';
-import 'package:lichess_mobile/src/model/game/game_repository.dart';
+import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-part 'full_games_screen.g.dart';
 
 class FullGameScreen extends StatelessWidget {
-  const FullGameScreen({this.user, super.key});
-  final LightUser? user;
+  const FullGameScreen({required this.user, super.key});
+  final LightUser user;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +23,7 @@ class FullGameScreen extends StatelessWidget {
       navigationBar: const CupertinoNavigationBar(
         middle: Text('Full Game History'),
       ),
-      child: _Body(user: user),
+      child: _Body(userId: user.id),
     );
   }
 
@@ -40,156 +32,99 @@ class FullGameScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Full Game History'),
       ),
-      body: _Body(user: user),
+      body: _Body(userId: user.id),
     );
   }
 }
 
-@riverpod
-Future<FullGamePaginator> _userFullGames(
-  _UserFullGamesRef ref, {
-  required UserId userId,
-  required int page,
-}) {
-  return ref.withClientCacheFor(
-    (client) => GameRepository(client).getFullGames(userId, page),
-    const Duration(minutes: 1),
-  );
-}
-
-class _Body extends ConsumerWidget {
-  const _Body({this.user});
-  final LightUser? user;
-
+class _Body extends ConsumerStatefulWidget {
+  const _Body({required this.userId});
+  final UserId userId;
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final userId = user?.id ?? ref.watch(authSessionProvider)?.user.id;
-    final initialGame = (userId != null
-        ? ref.watch(
-            _userFullGamesProvider(
-              page: 1,
-              userId: userId,
-            ),
-          )
-        : ref.watch(accountFullGamesProvider(1)));
-    return initialGame.when(
-      data: (data) {
-        if (data != null) {
-          return _GameList(
-            userId: userId,
-            initialPage: data,
-          );
-        } else {
-          return const Text('nothing');
-        }
-      },
-      error: (error, stackTrace) {
-        debugPrint(
-          'SEVERE: [FullGames] could not load game history; $error\n$stackTrace',
-        );
-        return Padding(
-          padding: Styles.bodySectionPadding,
-          child: const Text('Could not load game history.'),
-        );
-      },
-      loading: () => const Center(child: CircularProgressIndicator.adaptive()),
-    );
-  }
+  ConsumerState<_Body> createState() => _BodyState();
 }
 
-class _GameList extends ConsumerStatefulWidget {
-  const _GameList({this.userId, required this.initialPage});
-  final UserId? userId;
-  final FullGamePaginator initialPage;
-
-  @override
-  _GameListState createState() => _GameListState();
-}
-
-class _GameListState extends ConsumerState<_GameList> {
-  ScrollController controller = ScrollController();
-
-  late List<LightArchivedGame> games;
-  late FullGamePaginator page;
-  late UserId? userId;
-  bool isLoading = false;
+class _BodyState extends ConsumerState<_Body> {
+  final ScrollController _scrollController = ScrollController();
+  bool _hasMore = true;
+  bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
-
-    userId = widget.userId;
-    page = widget.initialPage;
-    games = page.games.toList();
-    controller = ScrollController()..addListener(_scrollListener);
+    _scrollController.addListener(_scrollListener);
   }
 
   @override
   void dispose() {
-    controller.removeListener(_scrollListener);
+    _scrollController.removeListener(_scrollListener);
+    _scrollController.dispose();
     super.dispose();
+  }
+
+  void _scrollListener() {
+    if (_scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent) {
+      if (_hasMore && !_isLoading) {
+        ref.read(userGameHistoryProvider(widget.userId).notifier).getNext();
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Scrollbar(
-        child: ListView.builder(
-          controller: controller,
+    final gameListState = ref.watch(userGameHistoryProvider(widget.userId));
+
+    return gameListState.when(
+      data: (state) {
+        _hasMore = state.hasMore;
+        _isLoading = state.isLoading;
+        if (state.hasError) {
+          showPlatformSnackbar(
+            context,
+            'Error loading Game History',
+            type: SnackBarType.error,
+          );
+        }
+
+        final list = state.gameList;
+        return ListView.builder(
+          controller: _scrollController,
+          itemCount: list.length + (state.isLoading ? 1 : 0),
           itemBuilder: (context, index) {
-            if (index == games.length) {
-              if (isLoading || page.currentPage == 1) {
-                return const Center(
-                  heightFactor: 2.0,
-                  child: CircularProgressIndicator.adaptive(),
-                );
-              } else {
-                return kEmptyWidget;
-              }
-            } else {
-              return Slidable(
-                endActionPane: const ActionPane(
-                  motion: ScrollMotion(),
-                  children: [
-                    SlidableAction(
-                      onPressed: null,
-                      icon: Icons.bookmark_add_outlined,
-                      label: 'Bookmark',
-                    ),
-                  ],
-                ),
-                child: ExtendedGameListTile(
-                  game: games[index],
-                  userId: userId,
-                ),
+            if (state.isLoading && index == list.length) {
+              return const Padding(
+                padding: EdgeInsets.symmetric(vertical: 32.0),
+                child: CenterLoadingIndicator(),
               );
             }
+
+            return Slidable(
+              endActionPane: const ActionPane(
+                motion: ScrollMotion(),
+                children: [
+                  SlidableAction(
+                    onPressed: null,
+                    icon: Icons.bookmark_add_outlined,
+                    label: 'Bookmark',
+                  ),
+                ],
+              ),
+              child: ExtendedGameListTile(
+                game: list[index],
+                userId: widget.userId,
+              ),
+            );
           },
-          itemCount: games.length + 1,
-        ),
-      ),
+        );
+      },
+      error: (e, s) {
+        debugPrint(
+          'SEVERE: [FullGameHistoryScreen] could not load game list',
+        );
+        return const Center(child: Text('Could not load Game History'));
+      },
+      loading: () => const CenterLoadingIndicator(),
     );
-  }
-
-  Future<void> _scrollListener() async {
-    if (controller.position.extentAfter < 500 &&
-        page.nextPage != null &&
-        !isLoading) {
-      isLoading = true;
-      final nextPage = (userId != null
-          ? await ref.read(
-              _userFullGamesProvider(
-                page: page.nextPage!,
-                userId: userId!,
-              ).future,
-            )
-          : await ref.read(accountFullGamesProvider(page.nextPage!).future));
-      if (nextPage != null) page = nextPage;
-
-      setState(() {
-        games.addAll(nextPage?.games ?? []);
-      });
-      isLoading = false;
-    }
   }
 }

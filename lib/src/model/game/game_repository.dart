@@ -51,14 +51,25 @@ class GameRepository {
     );
   }
 
-  Future<FullGamePaginator> getFullGames(
+  Future<IList<LightArchivedGame>> getFullGames(
     UserId userId,
-    int page,
-  ) {
-    return client.readJson(
-      Uri.parse('$kLichessHost/@/$userId/all?page=$page'),
-      headers: {'Accept': 'application/json'},
-      mapper: FullGamePaginator.fromServerJson,
+    int max, {
+    DateTime? until,
+  }) {
+    return client.readNdJsonList(
+      Uri(
+        path: '/api/games/user/$userId',
+        queryParameters: {
+          'max': max.toString(),
+          if (until != null) 'until': until.millisecondsSinceEpoch.toString(),
+          'moves': 'false',
+          'lastFen': 'true',
+          'accuracy': 'true',
+          'opening': 'true',
+        },
+      ),
+      headers: {'Accept': 'application/x-ndjson'},
+      mapper: LightArchivedGame.fromServerJson,
     );
   }
 
