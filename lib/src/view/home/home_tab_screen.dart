@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -34,8 +32,6 @@ import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:url_launcher/url_launcher.dart';
 
-final isHomeRootProvider = StateProvider<bool>((ref) => true);
-
 class HomeTabScreen extends ConsumerStatefulWidget {
   const HomeTabScreen({super.key});
 
@@ -48,33 +44,6 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
 
   bool wasOnline = true;
   bool hasRefreshed = false;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final route = ModalRoute.of(context);
-    if (route != null && route is PageRoute) {
-      homeNavPageRouteObserver.subscribe(this, route);
-    }
-  }
-
-  @override
-  void dispose() {
-    homeNavPageRouteObserver.unsubscribe(this);
-    super.dispose();
-  }
-
-  @override
-  void didPushNext() {
-    ref.read(isHomeRootProvider.notifier).state = false;
-    super.didPushNext();
-  }
-
-  @override
-  void didPopNext() {
-    ref.read(isHomeRootProvider.notifier).state = true;
-    super.didPopNext();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -159,62 +128,20 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
           ),
           if (getScreenType(context) == ScreenType.handset)
             Positioned(
-              bottom: MediaQuery.paddingOf(context).bottom,
-              child: ClipRect(
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-                  child: Container(
-                    width: MediaQuery.sizeOf(context).width,
-                    height: 72.0,
-                    decoration: BoxDecoration(
-                      color: CupertinoDynamicColor.resolve(
-                        CupertinoTheme.of(context).barBackgroundColor,
-                        context,
-                      ),
-                      border: Border(
-                        top: BorderSide(
-                          color: Styles.cupertinoDefaultTabBarBorderColor
-                              .resolveFrom(context),
-                          width: 0.0,
-                        ),
-                      ),
-                    ),
-                    child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: CupertinoDynamicColor.resolve(
-                              CupertinoTheme.of(context).barBackgroundColor,
-                              context,
-                            ),
-                            borderRadius: BorderRadius.circular(8.0),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.2),
-                                blurRadius: 14.0,
-                              ),
-                            ],
-                          ),
-                          child: FatButton(
-                            semanticsLabel: context.l10n.createAGame,
-                            onPressed: () {
-                              pushPlatformRoute(
-                                context,
-                                title: context.l10n.createAGame,
-                                builder: (_) => const CreateAGameScreen(),
-                              );
-                            },
-                            child: Text(
-                              context.l10n.createAGame,
-                              style: const TextStyle(fontSize: 18),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+              bottom: MediaQuery.paddingOf(context).bottom + 16.0,
+              right: 10.0,
+              child: FloatingActionButton.extended(
+                backgroundColor: CupertinoTheme.of(context).primaryColor,
+                foregroundColor:
+                    CupertinoTheme.of(context).primaryContrastingColor,
+                onPressed: () {
+                  pushPlatformRoute(
+                    context,
+                    builder: (_) => const CreateAGameScreen(),
+                  );
+                },
+                icon: const Icon(Icons.add),
+                label: Text(context.l10n.createAGame),
               ),
             ),
         ],
