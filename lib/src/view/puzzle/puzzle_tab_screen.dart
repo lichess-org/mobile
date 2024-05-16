@@ -8,7 +8,6 @@ import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
@@ -56,16 +55,16 @@ class _PuzzleTabScreenState extends ConsumerState<PuzzleTabScreen> {
   Widget _androidBuilder(BuildContext context, AuthSessionState? userSession) {
     final body = Column(
       children: [
+        const ConnectivityBanner(),
         Expanded(
           child: _Body(userSession),
         ),
-        const ConnectivityBanner(),
       ],
     );
     return Scaffold(
       appBar: AppBar(
         title: Text(context.l10n.puzzles),
-        actions: [
+        actions: const [
           _DashboardButton(),
         ],
       ),
@@ -90,7 +89,12 @@ class _PuzzleTabScreenState extends ConsumerState<PuzzleTabScreen> {
               end: 8.0,
             ),
             largeTitle: Text(context.l10n.puzzles),
-            trailing: _DashboardButton(),
+            trailing: const Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _DashboardButton(),
+              ],
+            ),
           ),
           if (userSession != null)
             CupertinoSliverRefreshControl(
@@ -124,12 +128,7 @@ class _Body extends ConsumerWidget {
 
     final isTablet = getScreenType(context) == ScreenType.tablet;
 
-    final separator = Theme.of(context).platform == TargetPlatform.iOS
-        ? const SizedBox(height: 14.0)
-        : const SizedBox(height: 8.0);
-
     final handsetChildren = [
-      const SizedBox(height: 8.0),
       connectivity.when(
         data: (data) => data.isOnline
             ? const _DailyPuzzle()
@@ -137,14 +136,9 @@ class _Body extends ConsumerWidget {
         loading: () => const SizedBox.shrink(),
         error: (_, __) => const SizedBox.shrink(),
       ),
-      PuzzleButton(),
-      separator,
-      const PuzzleThemeButton(),
-      separator,
-      StreakButton(connectivity: connectivity),
-      separator,
-      StormButton(connectivity: connectivity),
-      separator,
+      if (Theme.of(context).platform == TargetPlatform.android)
+        const SizedBox(height: 8.0),
+      _PuzzleMenu(connectivity: connectivity),
       PuzzleHistoryWidget(),
     ];
 
@@ -165,11 +159,7 @@ class _Body extends ConsumerWidget {
                   loading: () => const SizedBox.shrink(),
                   error: (_, __) => const SizedBox.shrink(),
                 ),
-                PuzzleButton(),
-                const SizedBox(height: 16.0),
-                const PuzzleThemeButton(),
-                StreakButton(connectivity: connectivity),
-                StormButton(connectivity: connectivity),
+                _PuzzleMenu(connectivity: connectivity),
               ],
             ),
           ),
@@ -195,142 +185,119 @@ class _Body extends ConsumerWidget {
   }
 }
 
-class PuzzleButton extends ConsumerWidget {
+class _PuzzleMenuListTile extends StatelessWidget {
+  const _PuzzleMenuListTile({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    this.onTap,
+  });
+
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final VoidCallback? onTap;
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    const angle = PuzzleTheme(PuzzleThemeKey.mix);
-    return Padding(
-      padding:
-          Styles.horizontalBodyPadding.add(const EdgeInsets.only(top: 8.0)),
-      child: _PuzzleButton(
-        onTap: () {
-          pushPlatformRoute(
-            context,
-            title: context.l10n.puzzleDesc,
-            rootNavigator: true,
-            builder: (context) => const PuzzleScreen(angle: angle),
-          );
-        },
+  Widget build(BuildContext context) {
+    return PlatformListTile(
+      padding: Theme.of(context).platform == TargetPlatform.iOS
+          ? const EdgeInsets.symmetric(vertical: 10.0, horizontal: 14.0)
+          : null,
+      leading: Icon(
+        icon,
+        size: Styles.mainListTileIconSize,
+        color: Theme.of(context).colorScheme.primary,
       ),
+      title: Text(title, style: Styles.mainListTileTitle),
+      subtitle: Text(subtitle, maxLines: 3),
+      trailing: Theme.of(context).platform == TargetPlatform.iOS
+          ? const CupertinoListTileChevron()
+          : null,
+      onTap: onTap,
     );
   }
 }
 
-const _subPuzzleButtonTitleStyle = TextStyle(
-  fontSize: 18.0,
-  fontWeight: FontWeight.w500,
-);
-
-class StreakButton extends StatelessWidget {
-  const StreakButton({required this.connectivity, super.key});
+class _PuzzleMenu extends StatelessWidget {
+  const _PuzzleMenu({required this.connectivity});
 
   final AsyncValue<ConnectivityStatus> connectivity;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: Styles.horizontalBodyPadding,
-      child: CardButton(
-        icon: Icon(
-          LichessIcons.streak,
-          size: 44,
-          color: context.lichessColors.fancy,
-        ),
-        title: const Text(
-          'Puzzle Streak',
-          style: _subPuzzleButtonTitleStyle,
-        ),
-        subtitle: Text(
-          context.l10n.puzzleStreakDescription.characters
-                  .takeWhile((c) => c != '.')
-                  .toString() +
-              (context.l10n.puzzleStreakDescription.contains('.') ? '.' : ''),
-        ),
-        onTap: connectivity.when(
-          data: (data) => data.isOnline
-              ? () {
-                  pushPlatformRoute(
-                    context,
-                    rootNavigator: true,
-                    builder: (context) => const StreakScreen(),
-                  );
-                }
-              : null,
-          loading: () => null,
-          error: (_, __) => null,
-        ),
-      ),
-    );
-  }
-}
+    final bool isOnline = connectivity.value?.isOnline ?? false;
 
-class StormButton extends StatelessWidget {
-  const StormButton({required this.connectivity, super.key});
-
-  final AsyncValue<ConnectivityStatus> connectivity;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: Styles.horizontalBodyPadding,
-      child: CardButton(
-        icon: Icon(
-          LichessIcons.storm,
-          size: 44,
-          color: context.lichessColors.purple,
+    return ListSection(
+      hasLeading: true,
+      children: [
+        _PuzzleMenuListTile(
+          icon: PuzzleIcons.mix,
+          title: context.l10n.puzzlePuzzles,
+          subtitle: context.l10n.puzzleDesc,
+          onTap: () {
+            pushPlatformRoute(
+              context,
+              title: context.l10n.puzzleDesc,
+              rootNavigator: true,
+              builder: (context) => const PuzzleScreen(
+                angle: PuzzleTheme(PuzzleThemeKey.mix),
+              ),
+            );
+          },
         ),
-        title: const Text(
-          'Puzzle Storm',
-          style: _subPuzzleButtonTitleStyle,
+        _PuzzleMenuListTile(
+          icon: PuzzleIcons.opening,
+          title: context.l10n.puzzlePuzzleThemes,
+          subtitle:
+              'Play puzzles from your favorite openings, or choose a theme.',
+          onTap: () {
+            pushPlatformRoute(
+              context,
+              title: context.l10n.puzzlePuzzleThemes,
+              rootNavigator: true,
+              builder: (context) => const PuzzleThemesScreen(),
+            );
+          },
         ),
-        subtitle: const Text(
-          'Solve as many puzzles as possible in 3 minutes.',
+        Opacity(
+          opacity: isOnline ? 1 : 0.5,
+          child: _PuzzleMenuListTile(
+            icon: LichessIcons.streak,
+            title: 'Puzzle Streak',
+            subtitle: context.l10n.puzzleStreakDescription.characters
+                    .takeWhile((c) => c != '.')
+                    .toString() +
+                (context.l10n.puzzleStreakDescription.contains('.') ? '.' : ''),
+            onTap: isOnline
+                ? () {
+                    pushPlatformRoute(
+                      context,
+                      rootNavigator: true,
+                      builder: (context) => const StreakScreen(),
+                    );
+                  }
+                : null,
+          ),
         ),
-        onTap: connectivity.when(
-          data: (data) => data.isOnline
-              ? () {
-                  pushPlatformRoute(
-                    context,
-                    rootNavigator: true,
-                    builder: (context) => const StormScreen(),
-                  );
-                }
-              : null,
-          loading: () => null,
-          error: (_, __) => null,
+        Opacity(
+          opacity: isOnline ? 1 : 0.5,
+          child: _PuzzleMenuListTile(
+            icon: LichessIcons.storm,
+            title: 'Puzzle Storm',
+            subtitle: 'Solve as many puzzles as possible in 3 minutes.',
+            onTap: isOnline
+                ? () {
+                    pushPlatformRoute(
+                      context,
+                      rootNavigator: true,
+                      builder: (context) => const StormScreen(),
+                    );
+                  }
+                : null,
+          ),
         ),
-      ),
-    );
-  }
-}
-
-class PuzzleThemeButton extends StatelessWidget {
-  const PuzzleThemeButton({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: Styles.horizontalBodyPadding,
-      child: CardButton(
-        icon: Icon(
-          PuzzleIcons.opening,
-          size: 44,
-          color: context.lichessColors.primary,
-        ),
-        title: Text(
-          context.l10n.puzzlePuzzleThemes,
-          style: _subPuzzleButtonTitleStyle,
-        ),
-        subtitle: const Text(
-          'Play puzzles from your favorite openings, or choose a theme.',
-        ),
-        onTap: () {
-          pushPlatformRoute(
-            context,
-            builder: (context) => const PuzzleThemesScreen(),
-          );
-        },
-      ),
+      ],
     );
   }
 }
@@ -356,6 +323,9 @@ class PuzzleHistoryWidget extends ConsumerWidget {
         }
 
         return ListSection(
+          cupertinoBackgroundColor:
+              CupertinoTheme.of(context).scaffoldBackgroundColor,
+          cupertinoClipBehavior: Clip.none,
           header: Text(context.l10n.puzzleHistory),
           headerTrailing: NoPaddingTextButton(
             onPressed: () => pushPlatformRoute(
@@ -368,7 +338,9 @@ class PuzzleHistoryWidget extends ConsumerWidget {
           ),
           children: [
             Padding(
-              padding: Styles.bodySectionPadding,
+              padding: Theme.of(context).platform == TargetPlatform.iOS
+                  ? EdgeInsets.zero
+                  : Styles.horizontalBodyPadding,
               child: PuzzleHistoryPreview(recentActivity.take(8).toIList()),
             ),
           ],
@@ -397,6 +369,8 @@ class PuzzleHistoryWidget extends ConsumerWidget {
 }
 
 class _DashboardButton extends ConsumerWidget {
+  const _DashboardButton();
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final session = ref.watch(authSessionProvider);
@@ -433,31 +407,8 @@ class _DashboardButton extends ConsumerWidget {
       pushPlatformRoute(
         context,
         title: context.l10n.puzzlePuzzleDashboard,
-        builder: (_) => PuzzleDashboardScreen(user: session.user),
+        builder: (_) => const PuzzleDashboardScreen(),
       );
-}
-
-class _PuzzleButton extends StatelessWidget {
-  const _PuzzleButton({this.onTap});
-
-  final VoidCallback? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return CardButton(
-      icon: Icon(
-        PuzzleIcons.mix,
-        size: 44,
-        color: context.lichessColors.good,
-      ),
-      title: Text(
-        context.l10n.puzzles,
-        style: Styles.sectionTitle,
-      ),
-      subtitle: Text('${context.l10n.puzzleDesc}.'),
-      onTap: onTap,
-    );
-  }
 }
 
 class _DailyPuzzle extends ConsumerWidget {
@@ -475,32 +426,43 @@ class _DailyPuzzle extends ConsumerWidget {
           lastMove: preview.initialMove.cg,
           description: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                context.l10n.puzzlePuzzleOfTheDay,
-                style: Styles.boardPreviewTitle,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    context.l10n.puzzlePuzzleOfTheDay,
+                    style: Styles.boardPreviewTitle,
+                  ),
+                  Text(
+                    context.l10n
+                        .puzzlePlayedXTimes(data.puzzle.plays)
+                        .localizeNumbers(),
+                  ),
+                ],
+              ),
+              Icon(
+                Icons.today,
+                size: 34,
+                color:
+                    DefaultTextStyle.of(context).style.color?.withOpacity(0.6),
               ),
               Text(
-                context.l10n
-                    .puzzlePlayedXTimes(data.puzzle.plays)
-                    .localizeNumbers(),
+                data.puzzle.initialPly.isOdd
+                    ? context.l10n.whitePlays
+                    : context.l10n.blackPlays,
               ),
             ],
           ),
           onTap: () {
             if (!context.mounted) return;
-            final session = ref.read(authSessionProvider);
             pushPlatformRoute(
               context,
               rootNavigator: true,
               builder: (context) => PuzzleScreen(
                 angle: const PuzzleTheme(PuzzleThemeKey.mix),
-                initialPuzzleContext: PuzzleContext(
-                  angle: const PuzzleTheme(PuzzleThemeKey.mix),
-                  puzzle: data,
-                  userId: session?.user.id,
-                ),
+                puzzleId: data.puzzle.id,
               ),
             );
           },
@@ -565,9 +527,8 @@ class _OfflinePuzzlePreview extends ConsumerWidget {
                   pushPlatformRoute(
                     context,
                     rootNavigator: true,
-                    builder: (context) => PuzzleScreen(
-                      angle: const PuzzleTheme(PuzzleThemeKey.mix),
-                      initialPuzzleContext: data,
+                    builder: (context) => const PuzzleScreen(
+                      angle: PuzzleTheme(PuzzleThemeKey.mix),
                     ),
                   ).then((_) {
                     if (context.mounted) {

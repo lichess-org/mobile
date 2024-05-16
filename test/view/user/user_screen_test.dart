@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -10,17 +9,14 @@ import '../../model/user/user_repository_test.dart';
 import '../../test_app.dart';
 import '../../test_utils.dart';
 
-class FakeClientFactory implements LichessClientFactory {
-  @override
-  http.Client call() {
-    return MockClient((request) {
-      if (request.url.path == '/api/games/user/$testUserId') {
-        return mockResponse(userGameResponse, 200);
-      } else if (request.url.path == '/api/user/$testUserId') {
-        return mockResponse(testUserResponse, 200);
-      } else if (request.url.path == '/api/users/status') {
-        return mockResponse(
-          '''
+final lichessClient = MockClient((request) {
+  if (request.url.path == '/api/games/user/$testUserId') {
+    return mockResponse(userGameResponse, 200);
+  } else if (request.url.path == '/api/user/$testUserId') {
+    return mockResponse(testUserResponse, 200);
+  } else if (request.url.path == '/api/users/status') {
+    return mockResponse(
+      '''
 [
   {
     "id": "$testUserId",
@@ -29,15 +25,13 @@ class FakeClientFactory implements LichessClientFactory {
   }
 ]
 ''',
-          200,
-        );
-      } else if (request.url.path == '/api/user/$testUserId/activity') {
-        return mockResponse(userActivityResponse, 200);
-      }
-      return mockResponse('', 404);
-    });
+      200,
+    );
+  } else if (request.url.path == '/api/user/$testUserId/activity') {
+    return mockResponse(userActivityResponse, 200);
   }
-}
+  return mockResponse('', 404);
+});
 
 void main() {
   group('UserScreen', () {
@@ -48,7 +42,7 @@ void main() {
           tester,
           home: const UserScreen(user: testUser),
           overrides: [
-            lichessClientFactoryProvider.overrideWithValue(FakeClientFactory()),
+            lichessClientProvider.overrideWithValue(lichessClient),
           ],
         );
 

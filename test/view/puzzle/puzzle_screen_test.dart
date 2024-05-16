@@ -4,7 +4,6 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -12,12 +11,9 @@ import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_batch_storage.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
-import 'package:lichess_mobile/src/view/puzzle/puzzle_settings_screen.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../test_app.dart';
@@ -26,17 +22,6 @@ import '../../test_utils.dart';
 class MockPuzzleBatchStorage extends Mock implements PuzzleBatchStorage {}
 
 class MockPuzzleStorage extends Mock implements PuzzleStorage {}
-
-class FakeClientFactory implements LichessClientFactory {
-  FakeClientFactory(this._client);
-
-  final http.Client _client;
-
-  @override
-  http.Client call() {
-    return _client;
-  }
-}
 
 void main() {
   setUpAll(() {
@@ -63,11 +48,7 @@ void main() {
           tester,
           home: PuzzleScreen(
             angle: const PuzzleTheme(PuzzleThemeKey.mix),
-            initialPuzzleContext: PuzzleContext(
-              puzzle: puzzle,
-              angle: const PuzzleTheme(PuzzleThemeKey.mix),
-              userId: null,
-            ),
+            puzzleId: puzzle.puzzle.id,
           ),
           overrides: [
             puzzleBatchStorageProvider.overrideWith((ref) => mockBatchStorage),
@@ -75,7 +56,13 @@ void main() {
           ],
         );
 
+        when(() => mockHistoryStorage.fetch(puzzleId: puzzle.puzzle.id))
+            .thenAnswer((_) async => puzzle);
+
         await tester.pumpWidget(app);
+
+        // wait for the puzzle to load
+        await tester.pump(const Duration(milliseconds: 200));
 
         await meetsTapTargetGuideline(tester);
 
@@ -85,18 +72,14 @@ void main() {
     );
 
     testWidgets(
-      'Loads puzzle directly by passing PuzzleContext',
+      'Loads puzzle directly by passing a puzzleId',
       variant: kPlatformVariant,
       (tester) async {
         final app = await buildTestApp(
           tester,
           home: PuzzleScreen(
             angle: const PuzzleTheme(PuzzleThemeKey.mix),
-            initialPuzzleContext: PuzzleContext(
-              puzzle: puzzle,
-              angle: const PuzzleTheme(PuzzleThemeKey.mix),
-              userId: null,
-            ),
+            puzzleId: puzzle.puzzle.id,
           ),
           overrides: [
             puzzleBatchStorageProvider.overrideWith((ref) => mockBatchStorage),
@@ -104,15 +87,20 @@ void main() {
           ],
         );
 
+        when(() => mockHistoryStorage.fetch(puzzleId: puzzle.puzzle.id))
+            .thenAnswer((_) async => puzzle);
+
         await tester.pumpWidget(app);
+
+        // wait for the puzzle to load
+        await tester.pump(const Duration(milliseconds: 200));
 
         expect(find.byType(cg.Board), findsOneWidget);
         expect(find.text('Your turn'), findsOneWidget);
       },
     );
 
-    testWidgets('Loads next puzzle when no initialPuzzleContext is passed',
-        (tester) async {
+    testWidgets('Loads next puzzle when no puzzleId is passed', (tester) async {
       final app = await buildTestApp(
         tester,
         home: const PuzzleScreen(
@@ -157,19 +145,18 @@ void main() {
           return mockResponse('', 404);
         });
 
+        when(() => mockHistoryStorage.fetch(puzzleId: puzzle2.puzzle.id))
+            .thenAnswer((_) async => puzzle2);
+
         final app = await buildTestApp(
           tester,
           home: PuzzleScreen(
             angle: const PuzzleTheme(PuzzleThemeKey.mix),
-            initialPuzzleContext: PuzzleContext(
-              puzzle: puzzle2,
-              angle: const PuzzleTheme(PuzzleThemeKey.mix),
-              userId: null,
-            ),
+            puzzleId: puzzle2.puzzle.id,
           ),
           overrides: [
-            lichessClientFactoryProvider.overrideWith((ref) {
-              return FakeClientFactory(mockClient);
+            lichessClientProvider.overrideWith((ref) {
+              return mockClient;
             }),
             puzzleBatchStorageProvider.overrideWith((ref) {
               return mockBatchStorage;
@@ -195,6 +182,9 @@ void main() {
             .thenAnswer((_) async {});
 
         await tester.pumpWidget(app);
+
+        // wait for the puzzle to load
+        await tester.pump(const Duration(milliseconds: 200));
 
         expect(find.byType(cg.Board), findsOneWidget);
         expect(find.text('Your turn'), findsOneWidget);
@@ -269,19 +259,18 @@ void main() {
           return mockResponse('', 404);
         });
 
+        when(() => mockHistoryStorage.fetch(puzzleId: puzzle2.puzzle.id))
+            .thenAnswer((_) async => puzzle2);
+
         final app = await buildTestApp(
           tester,
           home: PuzzleScreen(
             angle: const PuzzleTheme(PuzzleThemeKey.mix),
-            initialPuzzleContext: PuzzleContext(
-              puzzle: puzzle2,
-              angle: const PuzzleTheme(PuzzleThemeKey.mix),
-              userId: null,
-            ),
+            puzzleId: puzzle2.puzzle.id,
           ),
           overrides: [
-            lichessClientFactoryProvider.overrideWith((ref) {
-              return FakeClientFactory(mockClient);
+            lichessClientProvider.overrideWith((ref) {
+              return mockClient;
             }),
             puzzleBatchStorageProvider.overrideWith((ref) {
               return mockBatchStorage;
@@ -307,6 +296,9 @@ void main() {
         ).thenAnswer((_) async => batch);
 
         await tester.pumpWidget(app);
+
+        // wait for the puzzle to load
+        await tester.pump(const Duration(milliseconds: 200));
 
         expect(find.byType(cg.Board), findsOneWidget);
         expect(find.text('Your turn'), findsOneWidget);
@@ -374,15 +366,11 @@ void main() {
           tester,
           home: PuzzleScreen(
             angle: const PuzzleTheme(PuzzleThemeKey.mix),
-            initialPuzzleContext: PuzzleContext(
-              puzzle: puzzle2,
-              angle: const PuzzleTheme(PuzzleThemeKey.mix),
-              userId: null,
-            ),
+            puzzleId: puzzle2.puzzle.id,
           ),
           overrides: [
-            lichessClientFactoryProvider.overrideWith((ref) {
-              return FakeClientFactory(mockClient);
+            lichessClientProvider.overrideWith((ref) {
+              return mockClient;
             }),
             puzzleBatchStorageProvider.overrideWith((ref) {
               return mockBatchStorage;
@@ -390,6 +378,9 @@ void main() {
             puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
           ],
         );
+
+        when(() => mockHistoryStorage.fetch(puzzleId: puzzle2.puzzle.id))
+            .thenAnswer((_) async => puzzle2);
 
         when(() => mockHistoryStorage.save(puzzle: any(named: 'puzzle')))
             .thenAnswer((_) async {});
@@ -408,6 +399,9 @@ void main() {
         ).thenAnswer((_) async => batch);
 
         await tester.pumpWidget(app);
+
+        // wait for the puzzle to load
+        await tester.pump(const Duration(milliseconds: 200));
 
         expect(find.byType(cg.Board), findsOneWidget);
         expect(find.text('Your turn'), findsOneWidget);
@@ -435,70 +429,6 @@ void main() {
 
         // called once to save solution and once after fetching a new puzzle
         verify(saveDBReq).called(2);
-      },
-    );
-
-    testWidgets(
-      'shows settings icon if user is logged in',
-      variant: kPlatformVariant,
-      (tester) async {
-        const userId = UserId('test_userId');
-        final app = await buildTestApp(
-          tester,
-          home: PuzzleScreen(
-            angle: const PuzzleTheme(PuzzleThemeKey.mix),
-            initialPuzzleContext: PuzzleContext(
-              puzzle: puzzle,
-              angle: const PuzzleTheme(PuzzleThemeKey.mix),
-              userId: userId,
-            ),
-          ),
-          overrides: [
-            puzzleBatchStorageProvider.overrideWith((ref) => mockBatchStorage),
-            puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
-          ],
-        );
-
-        await tester.pumpWidget(app);
-
-        expect(find.byType(SettingsButton), findsOneWidget);
-
-        await tester.tap(find.byType(SettingsButton));
-        await tester.pumpAndSettle();
-
-        expect(
-          find.byWidgetPredicate(
-            (widget) =>
-                widget is PuzzleSettingsScreen && widget.userId == userId,
-          ),
-          findsOneWidget,
-        );
-      },
-    );
-
-    testWidgets(
-      'show settings icon if user is not logged in',
-      variant: kPlatformVariant,
-      (tester) async {
-        final app = await buildTestApp(
-          tester,
-          home: PuzzleScreen(
-            angle: const PuzzleTheme(PuzzleThemeKey.mix),
-            initialPuzzleContext: PuzzleContext(
-              puzzle: puzzle,
-              angle: const PuzzleTheme(PuzzleThemeKey.mix),
-              userId: null,
-            ),
-          ),
-          overrides: [
-            puzzleBatchStorageProvider.overrideWith((ref) => mockBatchStorage),
-            puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
-          ],
-        );
-
-        await tester.pumpWidget(app);
-
-        expect(find.byType(SettingsButton), findsOneWidget);
       },
     );
   });

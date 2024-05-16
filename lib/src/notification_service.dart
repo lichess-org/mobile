@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
@@ -49,8 +48,7 @@ class NotificationService {
     }
     try {
       await ref.withClient(
-        (client) => client
-            .post(Uri.parse('$kLichessHost/mobile/register/firebase/$token')),
+        (client) => client.post(Uri(path: '/mobile/register/firebase/$token')),
       );
     } catch (e, st) {
       _log.severe('could not register device; $e', e, st);
@@ -65,7 +63,7 @@ class NotificationService {
     }
     try {
       await ref.withClient(
-        (client) => client.post(Uri.parse('$kLichessHost/mobile/unregister')),
+        (client) => client.post(Uri(path: '/mobile/unregister')),
       );
     } catch (e, st) {
       _log.severe('could not unregister device; $e', e, st);

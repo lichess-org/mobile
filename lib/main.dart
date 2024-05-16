@@ -9,9 +9,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart';
 import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/intl.dart';
 import 'package:lichess_mobile/src/log.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
 import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_game.dart';
@@ -26,7 +28,11 @@ import 'firebase_options.dart';
 import 'src/app.dart';
 import 'src/utils/color_palette.dart';
 
-Future<void> main() async {
+void main() {
+  runWithClient(_startFlutterApp, httpClientFactory);
+}
+
+Future<void> _startFlutterApp() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
 
   // logging setup

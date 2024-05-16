@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_controller.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
@@ -56,6 +57,8 @@ class StreakScreen extends StatelessWidget {
   Widget _iosBuilder(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
+        backgroundColor: Styles.cupertinoScaffoldColor.resolveFrom(context),
+        border: null,
         padding: Styles.cupertinoAppBarTrailingWidgetPadding,
         middle: const Text('Puzzle Streak'),
         trailing: ToggleSoundButton(),
@@ -86,6 +89,7 @@ class _Load extends ConsumerWidget {
             index: 0,
             hasSkipped: false,
             finished: false,
+            timestamp: data.timestamp,
           ),
         );
       },
@@ -270,7 +274,7 @@ class _BottomBar extends ConsumerWidget {
 
     return Container(
       color: Theme.of(context).platform == TargetPlatform.iOS
-          ? CupertinoTheme.of(context).barBackgroundColor
+          ? null
           : Theme.of(context).bottomAppBarTheme.color,
       child: SafeArea(
         top: false,
@@ -302,8 +306,9 @@ class _BottomBar extends ConsumerWidget {
                     onTap: () {
                       launchShareDialog(
                         context,
-                        text:
-                            '$kLichessHost/training/${puzzleState.puzzle.puzzle.id}',
+                        text: lichessUri(
+                          '/training/${puzzleState.puzzle.puzzle.id}',
+                        ).toString(),
                       );
                     },
                     label: 'Share this puzzle',
@@ -320,10 +325,10 @@ class _BottomBar extends ConsumerWidget {
                         context,
                         builder: (context) => AnalysisScreen(
                           title: context.l10n.analysis,
+                          pgnOrId: ref.read(ctrlProvider.notifier).makePgn(),
                           options: AnalysisOptions(
                             isLocalEvaluationAllowed: true,
                             variant: Variant.standard,
-                            pgn: ref.read(ctrlProvider.notifier).makePgn(),
                             orientation: puzzleState.pov,
                             id: standaloneAnalysisId,
                             initialMoveCursor: 0,

@@ -2,7 +2,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
@@ -10,9 +10,9 @@ import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 
@@ -51,12 +51,16 @@ class GameAppBar extends ConsumerWidget implements PreferredSizeWidget {
           : StandaloneGameTitle(id: id!),
       actions: [
         if (id != null)
-          SettingsButton(
-            onPressed: () => pushPlatformRoute(
-              context,
-              fullscreenDialog: true,
+          AppBarIconButton(
+            onPressed: () => showAdaptiveBottomSheet<void>(
+              context: context,
+              isDismissible: true,
+              isScrollControlled: true,
+              showDragHandle: true,
               builder: (_) => GameSettings(id: id!),
             ),
+            semanticsLabel: context.l10n.settingsSettings,
+            icon: const Icon(Icons.settings),
           ),
       ],
     );
@@ -89,6 +93,8 @@ class GameCupertinoNavBar extends ConsumerWidget
         : const AsyncValue.data(true);
 
     return CupertinoNavigationBar(
+      backgroundColor: Styles.cupertinoScaffoldColor.resolveFrom(context),
+      border: null,
       padding: Styles.cupertinoAppBarTrailingWidgetPadding,
       leading: shouldPreventGoingBackAsync.maybeWhen<Widget?>(
         data: (prevent) => prevent ? pingRating : null,
@@ -98,13 +104,16 @@ class GameCupertinoNavBar extends ConsumerWidget
           ? _LobbyGameTitle(seek: seek!)
           : StandaloneGameTitle(id: id!),
       trailing: id != null
-          ? SettingsButton(
-              onPressed: () => pushPlatformRoute(
-                context,
-                fullscreenDialog: true,
-                title: context.l10n.settingsSettings,
+          ? AppBarIconButton(
+              onPressed: () => showAdaptiveBottomSheet<void>(
+                context: context,
+                isDismissible: true,
+                isScrollControlled: true,
+                showDragHandle: true,
                 builder: (_) => GameSettings(id: id!),
               ),
+              semanticsLabel: context.l10n.settingsSettings,
+              icon: const Icon(Icons.settings),
             )
           : null,
     );
@@ -137,7 +146,7 @@ List<BottomSheetAction> makeFinishedGameShareActions(
       onPressed: (context) {
         launchShareDialog(
           context,
-          uri: Uri.parse('$kLichessHost/${game.id}'),
+          uri: lichessUri('/${game.id}'),
         );
       },
     ),
@@ -189,7 +198,7 @@ List<BottomSheetAction> makeFinishedGameShareActions(
                 context,
                 files: [image],
                 subject: context.l10n.puzzleFromGameLink(
-                  '$kLichessHost/${game.id}',
+                  lichessUri('/${game.id}').toString(),
                 ),
               );
             }

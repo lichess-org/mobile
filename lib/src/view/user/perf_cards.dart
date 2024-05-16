@@ -14,9 +14,11 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/rating.dart';
 
 class PerfCards extends StatelessWidget {
-  const PerfCards({required this.user, super.key});
+  const PerfCards({required this.user, required this.isMe, super.key});
 
   final User user;
+
+  final bool isMe;
 
   @override
   Widget build(BuildContext context) {
@@ -49,8 +51,7 @@ class PerfCards extends StatelessWidget {
             itemBuilder: (context, index) {
               final perf = userPerfs[index];
               final userPerf = user.perfs[perf]!;
-              final bool isPerfWithoutStats =
-                  Perf.puzzle == perf || Perf.streak == perf;
+              final bool isPerfWithoutStats = Perf.streak == perf;
               return SizedBox(
                 height: 100,
                 width: 100,

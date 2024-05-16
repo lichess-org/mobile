@@ -1,6 +1,5 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:http/http.dart' as http;
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 
@@ -11,14 +10,14 @@ class RelationRepository {
 
   Future<IList<User>> getFollowing() async {
     return client.readNdJsonList(
-      Uri.parse('$kLichessHost/api/rel/following'),
+      Uri(path: '/api/rel/following'),
       headers: {'Accept': 'application/x-ndjson'},
       mapper: User.fromServerJson,
     );
   }
 
   Future<void> follow(String username) async {
-    final uri = Uri.parse('$kLichessHost/api/rel/follow/$username');
+    final uri = Uri(path: '/api/rel/follow/$username');
     final response = await client.post(uri);
 
     if (response.statusCode >= 400) {
@@ -30,7 +29,7 @@ class RelationRepository {
   }
 
   Future<void> unfollow(String username) async {
-    final uri = Uri.parse('$kLichessHost/api/rel/unfollow/$username');
+    final uri = Uri(path: '/api/rel/unfollow/$username');
     final response = await client.post(uri);
 
     if (response.statusCode >= 400) {

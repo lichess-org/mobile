@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
@@ -18,7 +19,9 @@ import 'package:lichess_mobile/src/model/auth/session_storage.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
+import 'package:lichess_mobile/src/model/game/game_storage.dart';
 import 'package:lichess_mobile/src/notification_service.dart';
+import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:logging/logging.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -32,19 +35,15 @@ import './model/auth/fake_session_storage.dart';
 import './model/common/service/fake_sound_service.dart';
 import 'fake_notification_service.dart';
 import 'model/common/fake_websocket_channel.dart';
+import 'model/game/mock_game_storage.dart';
 
 class MockSoundPool extends Mock implements Soundpool {}
 
 class MockDatabase extends Mock implements Database {}
 
-class FakeClientFactory implements LichessClientFactory {
-  @override
-  http.Client call() {
-    return MockClient((request) async {
-      return http.Response('', 200);
-    });
-  }
-}
+final mockClient = MockClient((request) async {
+  return http.Response('', 200);
+});
 
 // iPhone 14 screen size
 const double _kTestScreenWidth = 390.0;
@@ -84,7 +83,9 @@ Future<Widget> buildTestApp(
   return ProviderScope(
     overrides: [
       // ignore: scoped_providers_should_specify_dependencies
-      lichessClientFactoryProvider.overrideWithValue(FakeClientFactory()),
+      lichessClientProvider.overrideWithValue(mockClient),
+      // ignore: scoped_providers_should_specify_dependencies
+      defaultClientProvider.overrideWithValue(mockClient),
       // ignore: scoped_providers_should_specify_dependencies
       webSocketChannelFactoryProvider.overrideWith((ref) {
         return FakeWebSocketChannelFactory(() => FakeWebSocketChannel());
@@ -94,6 +95,15 @@ Future<Widget> buildTestApp(
         final pool = SocketPool(ref);
         ref.onDispose(pool.dispose);
         return pool;
+      }),
+      // ignore: scoped_providers_should_specify_dependencies
+      connectivityChangesProvider.overrideWith((ref) {
+        return Stream.value(
+          const ConnectivityStatus(
+            connectivityResult: IListConst([ConnectivityResult.wifi]),
+            isOnline: true,
+          ),
+        );
       }),
       // ignore: scoped_providers_should_specify_dependencies
       showRatingsPrefProvider.overrideWith((ref) {
@@ -109,6 +119,8 @@ Future<Widget> buildTestApp(
       sharedPreferencesProvider.overrideWithValue(sharedPreferences),
       // ignore: scoped_providers_should_specify_dependencies
       sessionStorageProvider.overrideWithValue(FakeSessionStorage(userSession)),
+      // ignore: scoped_providers_should_specify_dependencies
+      gameStorageProvider.overrideWithValue(MockGameStorage()),
       // ignore: scoped_providers_should_specify_dependencies
       appDependenciesProvider.overrideWith((ref) {
         return AppDependencies(

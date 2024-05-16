@@ -22,12 +22,11 @@ class ConnectivityBanner extends ConsumerWidget {
         return Container(
           height: 45,
           color: theme.platform == TargetPlatform.iOS
-              ? cupertinoTheme.barBackgroundColor
-              : theme.colorScheme.surfaceContainerHighest,
+              ? cupertinoTheme.scaffoldBackgroundColor
+              : theme.colorScheme.surfaceContainer,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            padding: Styles.horizontalBodyPadding,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Icon(Icons.report),
                 const SizedBox(width: 5),
@@ -39,7 +38,7 @@ class ConnectivityBanner extends ConsumerWidget {
                     style: TextStyle(
                       color: theme.platform == TargetPlatform.iOS
                           ? null
-                          : theme.colorScheme.onSurfaceVariant,
+                          : theme.colorScheme.onSurface,
                     ),
                   ),
                 ),
@@ -167,14 +166,13 @@ void showCupertinoSnackBar({
       child: _CupertinoSnackBarManager(
         snackBar: CupertinoSnackBar(
           message: message,
-          backgroundColor: type == SnackBarType.error
-              ? CupertinoColors.systemRed
-              : type == SnackBarType.success
-                  ? CupertinoColors.systemGreen
-                  : CupertinoColors.systemBlue,
-          textStyle: type == SnackBarType.error
-              ? const TextStyle(color: Colors.white)
-              : null,
+          backgroundColor: (type == SnackBarType.error
+                  ? context.lichessColors.error
+                  : type == SnackBarType.success
+                      ? context.lichessColors.good
+                      : CupertinoColors.systemGrey.resolveFrom(context))
+              .withOpacity(0.6),
+          textStyle: const TextStyle(color: Colors.white),
         ),
         duration: duration,
       ),

@@ -15,8 +15,10 @@ import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
+import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
@@ -24,7 +26,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/layout.dart';
-import 'package:lichess_mobile/src/utils/share.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
@@ -36,18 +38,86 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:popover/popover.dart';
 
-import 'analysis_pgn_tags.dart';
 import 'analysis_settings.dart';
+import 'analysis_share_screen.dart';
 import 'annotations.dart';
 import 'tree_view.dart';
 
-class AnalysisScreen extends ConsumerWidget {
+class AnalysisScreen extends StatelessWidget {
   const AnalysisScreen({
     required this.options,
+    required this.pgnOrId,
+    this.title,
+  });
+
+  /// The analysis options.
+  final AnalysisOptions options;
+
+  /// The PGN or game ID to load.
+  final String pgnOrId;
+
+  final String? title;
+
+  @override
+  Widget build(BuildContext context) {
+    return pgnOrId.length == 8 && GameId(pgnOrId).isValid
+        ? _LoadGame(GameId(pgnOrId), options, title)
+        : _LoadedAnalysisScreen(
+            options: options,
+            pgn: pgnOrId,
+            title: title,
+          );
+  }
+}
+
+class _LoadGame extends ConsumerWidget {
+  const _LoadGame(this.gameId, this.options, this.title);
+
+  final AnalysisOptions options;
+  final GameId gameId;
+  final String? title;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final gameAsync = ref.watch(archivedGameProvider(id: gameId));
+
+    return gameAsync.when(
+      data: (game) {
+        final serverAnalysis =
+            game.white.analysis != null && game.black.analysis != null
+                ? (white: game.white.analysis!, black: game.black.analysis!)
+                : null;
+        return _LoadedAnalysisScreen(
+          options: options.copyWith(
+            id: game.id,
+            opening: game.meta.opening,
+            division: game.meta.division,
+            serverAnalysis: serverAnalysis,
+          ),
+          pgn: game.makePgn(),
+          title: title,
+        );
+      },
+      loading: () => const Center(child: CircularProgressIndicator.adaptive()),
+      error: (error, _) {
+        return Center(
+          child: Text('Cannot load game analysis: $error'),
+        );
+      },
+    );
+  }
+}
+
+class _LoadedAnalysisScreen extends ConsumerWidget {
+  const _LoadedAnalysisScreen({
+    required this.options,
+    required this.pgn,
     this.title,
   });
 
   final AnalysisOptions options;
+  final String pgn;
+
   final String? title;
 
   @override
@@ -60,7 +130,7 @@ class AnalysisScreen extends ConsumerWidget {
   }
 
   Widget _androidBuilder(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = analysisControllerProvider(options);
+    final ctrlProvider = analysisControllerProvider(pgn, options);
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -68,42 +138,52 @@ class AnalysisScreen extends ConsumerWidget {
         title: _Title(options: options, title: title),
         actions: [
           _EngineDepth(ctrlProvider),
-          SettingsButton(
+          AppBarIconButton(
             onPressed: () => showAdaptiveBottomSheet<void>(
               context: context,
               isScrollControlled: true,
-              builder: (_) => AnalysisSettings(options),
+              showDragHandle: true,
+              isDismissible: true,
+              builder: (_) => AnalysisSettings(pgn, options),
             ),
+            semanticsLabel: context.l10n.settingsSettings,
+            icon: const Icon(Icons.settings),
           ),
         ],
       ),
-      body: _Body(options: options),
+      body: _Body(pgn: pgn, options: options),
     );
   }
 
   Widget _iosBuilder(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = analysisControllerProvider(options);
+    final ctrlProvider = analysisControllerProvider(pgn, options);
 
     return CupertinoPageScaffold(
       resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
+        backgroundColor: Styles.cupertinoScaffoldColor.resolveFrom(context),
+        border: null,
         padding: Styles.cupertinoAppBarTrailingWidgetPadding,
         middle: _Title(options: options, title: title),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             _EngineDepth(ctrlProvider),
-            SettingsButton(
+            AppBarIconButton(
               onPressed: () => showAdaptiveBottomSheet<void>(
                 context: context,
                 isScrollControlled: true,
-                builder: (_) => AnalysisSettings(options),
+                showDragHandle: true,
+                isDismissible: true,
+                builder: (_) => AnalysisSettings(pgn, options),
               ),
+              semanticsLabel: context.l10n.settingsSettings,
+              icon: const Icon(Icons.settings),
             ),
           ],
         ),
       ),
-      child: _Body(options: options),
+      child: _Body(pgn: pgn, options: options),
     );
   }
 }
@@ -134,13 +214,14 @@ class _Title extends StatelessWidget {
 }
 
 class _Body extends ConsumerWidget {
-  const _Body({required this.options});
+  const _Body({required this.pgn, required this.options});
 
+  final String pgn;
   final AnalysisOptions options;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = analysisControllerProvider(options);
+    final ctrlProvider = analysisControllerProvider(pgn, options);
     final showEvaluationGauge = ref.watch(
       analysisPreferencesProvider.select((value) => value.showEvaluationGauge),
     );
@@ -167,7 +248,7 @@ class _Body extends ConsumerWidget {
               builder: (context, constraints) {
                 final aspectRatio = constraints.biggest.aspectRatio;
                 final defaultBoardSize = constraints.biggest.shortestSide;
-                final isTablet = defaultBoardSize > FormFactor.tablet;
+                final isTablet = getScreenType(context) == ScreenType.tablet;
                 final remainingHeight =
                     constraints.maxHeight - defaultBoardSize;
                 final isSmallScreen =
@@ -188,9 +269,16 @@ class _Body extends ConsumerWidget {
                             ),
                             child: Row(
                               children: [
-                                _Board(options, boardSize),
-                                if (hasEval && showEvaluationGauge)
+                                _Board(
+                                  pgn,
+                                  options,
+                                  boardSize,
+                                  isTablet: isTablet,
+                                ),
+                                if (hasEval && showEvaluationGauge) ...[
+                                  const SizedBox(width: 4.0),
                                   _EngineGaugeVertical(ctrlProvider),
+                                ],
                               ],
                             ),
                           ),
@@ -211,8 +299,9 @@ class _Body extends ConsumerWidget {
                                     ),
                                     semanticContainer: false,
                                     child: showAnalysisSummary
-                                        ? ServerAnalysisSummary(options)
+                                        ? ServerAnalysisSummary(pgn, options)
                                         : AnalysisTreeView(
+                                            pgn,
                                             options,
                                             Orientation.landscape,
                                           ),
@@ -234,15 +323,21 @@ class _Body extends ConsumerWidget {
                               padding: const EdgeInsets.all(
                                 kTabletBoardTableSidePadding,
                               ),
-                              child: _Board(options, boardSize),
+                              child: _Board(
+                                pgn,
+                                options,
+                                boardSize,
+                                isTablet: isTablet,
+                              ),
                             )
                           else
-                            _Board(options, boardSize),
+                            _Board(pgn, options, boardSize, isTablet: isTablet),
                           if (showAnalysisSummary)
-                            Expanded(child: ServerAnalysisSummary(options))
+                            Expanded(child: ServerAnalysisSummary(pgn, options))
                           else
                             Expanded(
                               child: AnalysisTreeView(
+                                pgn,
                                 options,
                                 Orientation.portrait,
                               ),
@@ -253,21 +348,28 @@ class _Body extends ConsumerWidget {
             ),
           ),
         ),
-        _BottomBar(options: options),
+        _BottomBar(pgn: pgn, options: options),
       ],
     );
   }
 }
 
 class _Board extends ConsumerWidget {
-  const _Board(this.options, this.boardSize);
+  const _Board(
+    this.pgn,
+    this.options,
+    this.boardSize, {
+    required this.isTablet,
+  });
 
+  final String pgn;
   final AnalysisOptions options;
   final double boardSize;
+  final bool isTablet;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = analysisControllerProvider(options);
+    final ctrlProvider = analysisControllerProvider(pgn, options);
     final analysisState = ref.watch(ctrlProvider);
     final boardPrefs = ref.watch(boardPreferencesProvider);
     final showBestMoveArrow = ref.watch(
@@ -299,7 +401,7 @@ class _Board extends ConsumerWidget {
                 ? cg.InteractableSide.white
                 : cg.InteractableSide.black,
         fen: analysisState.position.fen,
-        isCheck: analysisState.position.isCheck,
+        isCheck: boardPrefs.boardHighlights && analysisState.position.isCheck,
         lastMove: analysisState.lastMove?.cg,
         sideToMove: analysisState.position.turn.cg,
         validMoves: analysisState.validMoves,
@@ -360,6 +462,10 @@ class _Board extends ConsumerWidget {
         showLastMove: boardPrefs.boardHighlights,
         enableCoordinates: boardPrefs.coordinates,
         animationDuration: boardPrefs.pieceAnimationDuration,
+        borderRadius: isTablet
+            ? const BorderRadius.all(Radius.circular(4.0))
+            : BorderRadius.zero,
+        boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
       ),
     );
   }
@@ -374,9 +480,15 @@ class _EngineGaugeVertical extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final analysisState = ref.watch(ctrlProvider);
 
-    return EngineGauge(
-      displayMode: EngineGaugeDisplayMode.vertical,
-      params: analysisState.engineGaugeParams,
+    return Container(
+      clipBehavior: Clip.hardEdge,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(4.0),
+      ),
+      child: EngineGauge(
+        displayMode: EngineGaugeDisplayMode.vertical,
+        params: analysisState.engineGaugeParams,
+      ),
     );
   }
 }
@@ -562,14 +674,16 @@ class _Engineline extends ConsumerWidget {
 
 class _BottomBar extends ConsumerWidget {
   const _BottomBar({
+    required this.pgn,
     required this.options,
   });
 
+  final String pgn;
   final AnalysisOptions options;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = analysisControllerProvider(options);
+    final ctrlProvider = analysisControllerProvider(pgn, options);
     final canGoBack =
         ref.watch(ctrlProvider.select((value) => value.canGoBack));
     final canGoNext =
@@ -645,9 +759,10 @@ class _BottomBar extends ConsumerWidget {
   }
 
   void _moveForward(WidgetRef ref) =>
-      ref.read(analysisControllerProvider(options).notifier).userNext();
-  void _moveBackward(WidgetRef ref) =>
-      ref.read(analysisControllerProvider(options).notifier).userPrevious();
+      ref.read(analysisControllerProvider(pgn, options).notifier).userNext();
+  void _moveBackward(WidgetRef ref) => ref
+      .read(analysisControllerProvider(pgn, options).notifier)
+      .userPrevious();
 
   Future<void> _showAnalysisMenu(BuildContext context, WidgetRef ref) {
     return showAdaptiveActionSheet(
@@ -657,52 +772,17 @@ class _BottomBar extends ConsumerWidget {
           makeLabel: (context) => Text(context.l10n.flipBoard),
           onPressed: (context) {
             ref
-                .read(analysisControllerProvider(options).notifier)
+                .read(analysisControllerProvider(pgn, options).notifier)
                 .toggleBoard();
           },
         ),
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.studyShareAndExport),
           onPressed: (_) {
-            showAdaptiveBottomSheet<void>(
-              context: context,
-              showDragHandle: true,
-              isScrollControlled: true,
-              constraints: BoxConstraints(
-                maxHeight: MediaQuery.of(context).size.height * 0.9,
-              ),
-              builder: (_) => SafeArea(
-                child: ListView(
-                  shrinkWrap: true,
-                  children: [
-                    AnalysisPgnTags(
-                      options: options,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(24.0),
-                      child: Builder(
-                        builder: (context) {
-                          return FatButton(
-                            semanticsLabel: 'Share PGN',
-                            onPressed: () {
-                              launchShareDialog(
-                                context,
-                                text: ref
-                                    .read(
-                                      analysisControllerProvider(options)
-                                          .notifier,
-                                    )
-                                    .makeGamePgn(),
-                              );
-                            },
-                            child: const Text('Share PGN'),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+            pushPlatformRoute(
+              context,
+              title: context.l10n.studyShareAndExport,
+              builder: (_) => AnalysisShareScreen(pgn: pgn, options: options),
             );
           },
         ),
@@ -792,7 +872,7 @@ class _StockfishInfo extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final (eval: eval, state: engineState) =
+    final (engineName: engineName, eval: eval, state: engineState) =
         ref.watch(engineEvaluationProvider);
 
     final currentEval = eval ?? currentNode.eval;
@@ -812,7 +892,7 @@ class _StockfishInfo extends ConsumerWidget {
             width: 44,
             height: 44,
           ),
-          title: const Text('Stockfish 16'),
+          title: Text(engineName),
           subtitle: Text(
             context.l10n.depthX(
               '$depth/$maxDepth$knps',
@@ -825,13 +905,14 @@ class _StockfishInfo extends ConsumerWidget {
 }
 
 class ServerAnalysisSummary extends ConsumerWidget {
-  const ServerAnalysisSummary(this.options);
+  const ServerAnalysisSummary(this.pgn, this.options);
 
+  final String pgn;
   final AnalysisOptions options;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = analysisControllerProvider(options);
+    final ctrlProvider = analysisControllerProvider(pgn, options);
     final playersAnalysis =
         ref.watch(ctrlProvider.select((value) => value.playersAnalysis));
     final pgnHeaders =
@@ -846,7 +927,7 @@ class ServerAnalysisSummary extends ConsumerWidget {
                   padding: EdgeInsets.only(top: 16.0),
                   child: WaitingForServerAnalysis(),
                 ),
-              AcplChart(options),
+              AcplChart(pgn, options),
               Center(
                 child: SizedBox(
                   width: math.min(MediaQuery.sizeOf(context).width, 500),
@@ -1127,8 +1208,9 @@ class _SummaryPlayerName extends StatelessWidget {
 }
 
 class AcplChart extends ConsumerWidget {
-  const AcplChart(this.options);
+  const AcplChart(this.pgn, this.options);
 
+  final String pgn;
   final AnalysisOptions options;
 
   @override
@@ -1162,16 +1244,23 @@ class AcplChart extends ConsumerWidget {
         );
 
     final data = ref.watch(
-      analysisControllerProvider(options)
+      analysisControllerProvider(pgn, options)
           .select((value) => value.acplChartData),
     );
 
+    final rootPly = ref.watch(
+      analysisControllerProvider(pgn, options)
+          .select((value) => value.root.position.ply),
+    );
+
     final currentNode = ref.watch(
-      analysisControllerProvider(options).select((value) => value.currentNode),
+      analysisControllerProvider(pgn, options)
+          .select((value) => value.currentNode),
     );
 
     final isOnMainline = ref.watch(
-      analysisControllerProvider(options).select((value) => value.isOnMainline),
+      analysisControllerProvider(pgn, options)
+          .select((value) => value.isOnMainline),
     );
 
     if (data == null) {
@@ -1184,6 +1273,39 @@ class AcplChart extends ConsumerWidget {
         )
         .toList(growable: false);
 
+    final divisionLines = <VerticalLine>[];
+
+    if (options.division?.middlegame != null) {
+      if (options.division!.middlegame! > 0) {
+        divisionLines.add(phaseVerticalBar(0.0, context.l10n.opening));
+        divisionLines.add(
+          phaseVerticalBar(
+            options.division!.middlegame! - 1,
+            context.l10n.middlegame,
+          ),
+        );
+      } else {
+        divisionLines.add(phaseVerticalBar(0.0, context.l10n.middlegame));
+      }
+    }
+
+    if (options.division?.endgame != null) {
+      if (options.division!.endgame! > 0) {
+        divisionLines.add(
+          phaseVerticalBar(
+            options.division!.endgame! - 1,
+            context.l10n.endgame,
+          ),
+        );
+      } else {
+        divisionLines.add(
+          phaseVerticalBar(
+            0.0,
+            context.l10n.endgame,
+          ),
+        );
+      }
+    }
     return Center(
       child: AspectRatio(
         aspectRatio: 2.5,
@@ -1195,8 +1317,10 @@ class AcplChart extends ConsumerWidget {
                 enabled: false,
                 touchCallback:
                     (FlTouchEvent event, LineTouchResponse? touchResponse) {
-                  if (event is FlTapUpEvent) {
-                    final touchX = event.localPosition.dx;
+                  if (event is FlTapDownEvent ||
+                      event is FlPanUpdateEvent ||
+                      event is FlLongPressMoveUpdate) {
+                    final touchX = event.localPosition!.dx;
                     final chartWidth = context.size!.width -
                         32; // Insets on both sides of the chart of 16
                     final minX = spots.first.x;
@@ -1211,7 +1335,7 @@ class AcplChart extends ConsumerWidget {
                     );
                     final closestNodeIndex = closestSpot.x.round();
                     ref
-                        .read(analysisControllerProvider(options).notifier)
+                        .read(analysisControllerProvider(pgn, options).notifier)
                         .jumpToNthNodeOnMainline(closestNodeIndex);
                   }
                 },
@@ -1243,21 +1367,11 @@ class AcplChart extends ConsumerWidget {
                 verticalLines: [
                   if (isOnMainline)
                     VerticalLine(
-                      x: (currentNode.position.ply - 1).toDouble(),
+                      x: (currentNode.position.ply - 1 - rootPly).toDouble(),
                       color: mainLineColor,
                       strokeWidth: 1.0,
                     ),
-                  phaseVerticalBar(0.0, context.l10n.opening),
-                  if (options.division?.endgame != null)
-                    phaseVerticalBar(
-                      options.division!.endgame!,
-                      context.l10n.endgame,
-                    ),
-                  if (options.division?.middlegame != null)
-                    phaseVerticalBar(
-                      options.division!.middlegame!,
-                      context.l10n.middlegame,
-                    ),
+                  ...divisionLines,
                 ],
               ),
               gridData: const FlGridData(show: false),

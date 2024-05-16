@@ -42,7 +42,6 @@ Future<(Soundpool, SoundMap)> soundPool(
       iosOptions: SoundpoolOptionsIos(
         enableRate: false,
         audioSessionCategory: AudioSessionCategory.ambient,
-        audioSessionMode: AudioSessionMode.normal,
       ),
     ),
   );

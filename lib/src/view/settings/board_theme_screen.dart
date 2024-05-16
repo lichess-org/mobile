@@ -21,7 +21,7 @@ class BoardThemeScreen extends StatelessWidget {
 
   Widget _androidBuilder(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.boardTheme)),
+      appBar: AppBar(title: Text(context.l10n.board)),
       body: _Body(),
     );
   }

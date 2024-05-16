@@ -200,7 +200,10 @@ class _BodyState extends ConsumerState<_Body> {
                     .add(Styles.sectionTopPadding),
                 child: Text(
                   title,
-                  style: Styles.sectionTitle,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 18,
+                  ),
                 ),
               );
             } else {

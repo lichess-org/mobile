@@ -26,11 +26,13 @@ class StreamerScreen extends StatelessWidget {
       body: ListView(
         children: [
           ListSection(
+            showDividerBetweenTiles: true,
             children: streamers
                 .map(
                   (e) => StreamerListTile(
                     streamer: e,
                     showSubtitle: true,
+                    maxSubtitleLines: 4,
                   ),
                 )
                 .toList(growable: false),
@@ -57,6 +59,7 @@ class StreamerScreen extends StatelessWidget {
                         (e) => StreamerListTile(
                           streamer: e,
                           showSubtitle: true,
+                          maxSubtitleLines: 4,
                         ),
                       )
                       .toList(),
@@ -71,10 +74,15 @@ class StreamerScreen extends StatelessWidget {
 }
 
 class StreamerListTile extends StatelessWidget {
-  const StreamerListTile({required this.streamer, this.showSubtitle = false});
+  const StreamerListTile({
+    required this.streamer,
+    this.showSubtitle = false,
+    this.maxSubtitleLines = 1,
+  });
 
   final Streamer streamer;
   final bool showSubtitle;
+  final int maxSubtitleLines;
 
   @override
   Widget build(BuildContext context) {
@@ -115,8 +123,10 @@ class StreamerListTile extends StatelessWidget {
           ],
         ),
       ),
-      subtitle: showSubtitle ? Text(streamer.status) : null,
-      isThreeLine: showSubtitle,
+      subtitle: showSubtitle
+          ? Text(streamer.status, maxLines: maxSubtitleLines)
+          : null,
+      isThreeLine: showSubtitle && maxSubtitleLines >= 2,
       trailing: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         mainAxisSize: MainAxisSize.max,

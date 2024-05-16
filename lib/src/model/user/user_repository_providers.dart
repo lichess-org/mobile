@@ -109,7 +109,8 @@ Future<IList<UserRatingHistoryPerf>> userRatingHistory(
   UserRatingHistoryRef ref, {
   required UserId id,
 }) async {
-  return ref.withClient(
+  return ref.withClientCacheFor(
     (client) => UserRepository(client).getRatingHistory(id),
+    const Duration(minutes: 1),
   );
 }

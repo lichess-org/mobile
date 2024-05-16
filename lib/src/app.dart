@@ -20,7 +20,6 @@ import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/notification_service.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/layout.dart';
@@ -117,12 +116,17 @@ class _AppState extends ConsumerState<Application> {
 
     return DynamicColorBuilder(
       builder: (lightColorScheme, darkColorScheme) {
-        // final dynamicColorScheme =
-        //     brightness == Brightness.light ? lightColorScheme : darkColorScheme;
-        // TODO remove this line and uncomment the above line
-        // when the dynamic_color colorScheme bug is fixed
+        // TODO remove this workaround when the dynamic_color colorScheme bug is fixed
         // See: https://github.com/material-foundation/flutter-packages/issues/574
-        const ColorScheme? dynamicColorScheme = null;
+        final (
+          fixedLightScheme,
+          fixedDarkScheme
+        ) = lightColorScheme != null && darkColorScheme != null
+            ? _generateDynamicColourSchemes(lightColorScheme, darkColorScheme)
+            : (null, null);
+
+        final dynamicColorScheme =
+            brightness == Brightness.light ? fixedLightScheme : fixedDarkScheme;
 
         final colorScheme = hasSystemColors && dynamicColorScheme != null
             ? dynamicColorScheme
@@ -131,7 +135,28 @@ class _AppState extends ConsumerState<Application> {
                 brightness: brightness,
               );
 
-        final theme = Theme.of(context);
+        final cupertinoThemeData = CupertinoThemeData(
+          primaryColor: colorScheme.primary,
+          primaryContrastingColor: colorScheme.onPrimary,
+          brightness: brightness,
+          textTheme: CupertinoTheme.of(context).textTheme.copyWith(
+                primaryColor: colorScheme.primary,
+                textStyle: CupertinoTheme.of(context)
+                    .textTheme
+                    .textStyle
+                    .copyWith(color: Styles.cupertinoLabelColor),
+                navTitleTextStyle: CupertinoTheme.of(context)
+                    .textTheme
+                    .navTitleTextStyle
+                    .copyWith(color: Styles.cupertinoTitleColor),
+                navLargeTitleTextStyle: CupertinoTheme.of(context)
+                    .textTheme
+                    .navLargeTitleTextStyle
+                    .copyWith(color: Styles.cupertinoTitleColor),
+              ),
+          scaffoldBackgroundColor: Styles.cupertinoScaffoldColor,
+          barBackgroundColor: Styles.cupertinoAppBarColor,
+        );
 
         return MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -139,39 +164,27 @@ class _AppState extends ConsumerState<Application> {
           onGenerateTitle: (BuildContext context) => 'lichess.org',
           theme: ThemeData.from(
             colorScheme: colorScheme,
-            textTheme: theme.platform == TargetPlatform.iOS
+            textTheme: Theme.of(context).platform == TargetPlatform.iOS
                 ? brightness == Brightness.light
                     ? Typography.blackCupertino
-                    : Typography.whiteCupertino
+                    : Styles.whiteCupertinoTextTheme
                 : null,
           ).copyWith(
+            cupertinoOverrideTheme: cupertinoThemeData,
             navigationBarTheme: NavigationBarTheme.of(context).copyWith(
               height: remainingHeight < kSmallRemainingHeightLeftBoardThreshold
                   ? 60
                   : null,
             ),
-            extensions: [
-              if (theme.platform == TargetPlatform.android)
-                lichessCustomColors.harmonized(colorScheme)
-              else
-                lichessCustomColors,
-            ],
+            extensions: [lichessCustomColors.harmonized(colorScheme)],
           ),
           themeMode: themeMode,
-          builder: theme.platform == TargetPlatform.iOS
+          builder: Theme.of(context).platform == TargetPlatform.iOS
               ? (context, child) {
                   return CupertinoTheme(
-                    data: CupertinoThemeData(
-                      primaryColor: brightness == Brightness.light
-                          ? LichessColors.primary
-                          : const Color(0xFF3692E7),
-                      brightness: brightness,
-                      scaffoldBackgroundColor: brightness == Brightness.light
-                          ? CupertinoColors.systemGroupedBackground
-                          : null,
-                    ),
+                    data: cupertinoThemeData,
                     child: IconTheme(
-                      // This is needed to avoid the icon color being overridden by the cupertino theme (blue)
+                      // This is needed to avoid the icon color being overridden by the cupertino theme
                       data: IconTheme.of(context),
                       child: Material(child: child),
                     ),
@@ -275,8 +288,6 @@ class _EntryPointState extends ConsumerState<_EntryPointWidget> {
     final RemoteMessage? initialMessage =
         await FirebaseMessaging.instance.getInitialMessage();
 
-    // If the message also contains a data property with a "type" of "chat",
-    // navigate to a chat screen
     if (initialMessage != null) {
       _handleMessage(initialMessage);
     }
@@ -300,6 +311,12 @@ class _EntryPointState extends ConsumerState<_EntryPointWidget> {
       case 'gameFinish':
         final gameFullId = message.data['lichess.fullId'] as String?;
         if (gameFullId != null) {
+          // remove any existing routes before navigating to the game
+          // screen to avoid stacking multiple game screens
+          final navState = Navigator.of(context);
+          if (navState.canPop()) {
+            navState.popUntil((route) => route.isFirst);
+          }
           pushPlatformRoute(
             context,
             rootNavigator: true,
@@ -313,3 +330,51 @@ class _EntryPointState extends ConsumerState<_EntryPointWidget> {
     }
   }
 }
+
+// --
+
+(ColorScheme light, ColorScheme dark) _generateDynamicColourSchemes(
+  ColorScheme lightDynamic,
+  ColorScheme darkDynamic,
+) {
+  final lightBase = ColorScheme.fromSeed(seedColor: lightDynamic.primary);
+  final darkBase = ColorScheme.fromSeed(
+    seedColor: darkDynamic.primary,
+    brightness: Brightness.dark,
+  );
+
+  final lightAdditionalColours = _extractAdditionalColours(lightBase);
+  final darkAdditionalColours = _extractAdditionalColours(darkBase);
+
+  final lightScheme =
+      _insertAdditionalColours(lightBase, lightAdditionalColours);
+  final darkScheme = _insertAdditionalColours(darkBase, darkAdditionalColours);
+
+  return (lightScheme.harmonized(), darkScheme.harmonized());
+}
+
+List<Color> _extractAdditionalColours(ColorScheme scheme) => [
+      scheme.surface,
+      scheme.surfaceDim,
+      scheme.surfaceBright,
+      scheme.surfaceContainerLowest,
+      scheme.surfaceContainerLow,
+      scheme.surfaceContainer,
+      scheme.surfaceContainerHigh,
+      scheme.surfaceContainerHighest,
+    ];
+
+ColorScheme _insertAdditionalColours(
+  ColorScheme scheme,
+  List<Color> additionalColours,
+) =>
+    scheme.copyWith(
+      surface: additionalColours[0],
+      surfaceDim: additionalColours[1],
+      surfaceBright: additionalColours[2],
+      surfaceContainerLowest: additionalColours[3],
+      surfaceContainerLow: additionalColours[4],
+      surfaceContainer: additionalColours[5],
+      surfaceContainerHigh: additionalColours[6],
+      surfaceContainerHighest: additionalColours[7],
+    );

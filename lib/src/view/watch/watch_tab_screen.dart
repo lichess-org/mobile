@@ -122,7 +122,12 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
           return CustomScrollView(
             controller: watchScrollController,
             slivers: [
-              const CupertinoSliverNavigationBar(),
+              const CupertinoSliverNavigationBar(
+                padding: EdgeInsetsDirectional.only(
+                  start: 16.0,
+                  end: 8.0,
+                ),
+              ),
               CupertinoSliverRefreshControl(
                 onRefresh: refreshData,
               ),
@@ -261,7 +266,7 @@ class _StreamerWidget extends ConsumerWidget {
           children: [
             ...data
                 .take(numberOfItems)
-                .map((e) => StreamerListTile(streamer: e)),
+                .map((e) => StreamerListTile(streamer: e, showSubtitle: true)),
           ],
         );
       },

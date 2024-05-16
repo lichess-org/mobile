@@ -32,10 +32,10 @@ void main() {
       final app = await buildTestApp(
         tester,
         home: AnalysisScreen(
+          pgnOrId: sanMoves,
           options: AnalysisOptions(
             isLocalEvaluationAllowed: false,
             variant: Variant.standard,
-            pgn: sanMoves,
             opening: opening,
             orientation: Side.white,
             id: gameData.id,
@@ -59,10 +59,10 @@ void main() {
       final app = await buildTestApp(
         tester,
         home: AnalysisScreen(
+          pgnOrId: sanMoves,
           options: AnalysisOptions(
             isLocalEvaluationAllowed: false,
             variant: Variant.standard,
-            pgn: sanMoves,
             opening: opening,
             orientation: Side.white,
             id: gameData.id,

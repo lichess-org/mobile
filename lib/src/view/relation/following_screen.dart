@@ -8,7 +8,7 @@ import 'package:lichess_mobile/src/model/relation/relation_ctrl.dart';
 import 'package:lichess_mobile/src/model/relation/relation_repository.dart';
 import 'package:lichess_mobile/src/model/relation/relation_repository_providers.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
@@ -109,7 +109,7 @@ class _Body extends ConsumerWidget {
                                 });
                               }
                             },
-                            backgroundColor: LichessColors.red,
+                            backgroundColor: context.lichessColors.error,
                             foregroundColor: Colors.white,
                             icon: Icons.person_remove,
                             label: 'Unfollow',

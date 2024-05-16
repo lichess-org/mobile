@@ -20,7 +20,7 @@ class BoardSettingsScreen extends StatelessWidget {
 
   Widget _androidBuilder(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Chessboard')),
+      appBar: AppBar(title: Text(context.l10n.preferencesGameBehavior)),
       body: const _Body(),
     );
   }

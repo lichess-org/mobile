@@ -11,7 +11,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
-import 'package:lichess_mobile/src/model/game/game_repository.dart';
+import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_controller.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
@@ -20,6 +20,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
+import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
@@ -33,8 +34,8 @@ import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_settings_screen.dart';
-import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
@@ -46,15 +47,16 @@ import 'puzzle_feedback_widget.dart';
 import 'puzzle_session_widget.dart';
 
 class PuzzleScreen extends ConsumerStatefulWidget {
+  /// Creates a new puzzle screen.
+  ///
+  /// If [puzzleId] is provided, the screen will load the puzzle with that id. Otherwise, it will load the next puzzle from the queue.
   const PuzzleScreen({
     required this.angle,
-    this.initialPuzzleContext,
     this.puzzleId,
     super.key,
   });
 
   final PuzzleAngle angle;
-  final PuzzleContext? initialPuzzleContext;
   final PuzzleId? puzzleId;
 
   @override
@@ -97,48 +99,36 @@ class _PuzzleScreenState extends ConsumerState<PuzzleScreen> with RouteAware {
   }
 
   Widget _androidBuilder(BuildContext context) {
-    final userId = widget.initialPuzzleContext?.userId;
-
     return Scaffold(
       appBar: AppBar(
-        actions: [
-          ToggleSoundButton(),
-          _PuzzleSettingsButton(userId: userId),
+        actions: const [
+          _PuzzleSettingsButton(),
         ],
         title: _Title(angle: widget.angle),
       ),
-      body: widget.initialPuzzleContext != null
-          ? _Body(
-              initialPuzzleContext: widget.initialPuzzleContext!,
-            )
-          : widget.puzzleId != null
-              ? _LoadPuzzleFromId(angle: widget.angle, id: widget.puzzleId!)
-              : _LoadNextPuzzle(angle: widget.angle),
+      body: widget.puzzleId != null
+          ? _LoadPuzzleFromId(angle: widget.angle, id: widget.puzzleId!)
+          : _LoadNextPuzzle(angle: widget.angle),
     );
   }
 
   Widget _iosBuilder(BuildContext context) {
-    final userId = widget.initialPuzzleContext?.userId;
-
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
+        backgroundColor: Styles.cupertinoScaffoldColor.resolveFrom(context),
+        border: null,
         padding: Styles.cupertinoAppBarTrailingWidgetPadding,
         middle: _Title(angle: widget.angle),
-        trailing: Row(
+        trailing: const Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            ToggleSoundButton(),
-            _PuzzleSettingsButton(userId: userId),
+            _PuzzleSettingsButton(),
           ],
         ),
       ),
-      child: widget.initialPuzzleContext != null
-          ? _Body(
-              initialPuzzleContext: widget.initialPuzzleContext!,
-            )
-          : widget.puzzleId != null
-              ? _LoadPuzzleFromId(angle: widget.angle, id: widget.puzzleId!)
-              : _LoadNextPuzzle(angle: widget.angle),
+      child: widget.puzzleId != null
+          ? _LoadPuzzleFromId(angle: widget.angle, id: widget.puzzleId!)
+          : _LoadNextPuzzle(angle: widget.angle),
     );
   }
 }
@@ -245,18 +235,16 @@ class _LoadPuzzleFromId extends ConsumerWidget {
       loading: () => const Column(
         children: [
           Expanded(
-            child: Center(
-              child: SafeArea(
-                bottom: false,
-                child: BoardTable(
-                  boardData: cg.BoardData(
-                    fen: kEmptyFen,
-                    interactableSide: cg.InteractableSide.none,
-                    orientation: cg.Side.white,
-                  ),
-                  topTable: kEmptyWidget,
-                  bottomTable: kEmptyWidget,
+            child: SafeArea(
+              bottom: false,
+              child: BoardTable(
+                boardData: cg.BoardData(
+                  fen: kEmptyFen,
+                  interactableSide: cg.InteractableSide.none,
+                  orientation: cg.Side.white,
                 ),
+                topTable: kEmptyWidget,
+                bottomTable: kEmptyWidget,
               ),
             ),
           ),
@@ -270,19 +258,17 @@ class _LoadPuzzleFromId extends ConsumerWidget {
         return Column(
           children: [
             Expanded(
-              child: Center(
-                child: SafeArea(
-                  bottom: false,
-                  child: BoardTable(
-                    boardData: const cg.BoardData(
-                      fen: kEmptyFen,
-                      interactableSide: cg.InteractableSide.none,
-                      orientation: cg.Side.white,
-                    ),
-                    topTable: kEmptyWidget,
-                    bottomTable: kEmptyWidget,
-                    errorMessage: e.toString(),
+              child: SafeArea(
+                bottom: false,
+                child: BoardTable(
+                  boardData: const cg.BoardData(
+                    fen: kEmptyFen,
+                    interactableSide: cg.InteractableSide.none,
+                    orientation: cg.Side.white,
                   ),
+                  topTable: kEmptyWidget,
+                  bottomTable: kEmptyWidget,
+                  errorMessage: e.toString(),
                 ),
               ),
             ),
@@ -306,6 +292,8 @@ class _Body extends ConsumerWidget {
     final ctrlProvider = puzzleControllerProvider(initialPuzzleContext);
     final puzzleState = ref.watch(ctrlProvider);
 
+    final boardPreferences = ref.watch(boardPreferencesProvider);
+
     final currentEvalBest = ref.watch(
       engineEvaluationProvider.select((s) => s.eval?.bestMove),
     );
@@ -315,97 +303,95 @@ class _Body extends ConsumerWidget {
     return Column(
       children: [
         Expanded(
-          child: Center(
-            child: SafeArea(
-              bottom: false,
-              child: BoardTable(
-                onMove: (move, {isDrop, isPremove}) {
-                  ref
-                      .read(ctrlProvider.notifier)
-                      .onUserMove(Move.fromUci(move.uci)!);
-                },
-                boardData: cg.BoardData(
-                  orientation: puzzleState.pov.cg,
-                  interactableSide: puzzleState.mode == PuzzleMode.load ||
-                          puzzleState.position.isGameOver
-                      ? cg.InteractableSide.none
-                      : puzzleState.mode == PuzzleMode.view
-                          ? cg.InteractableSide.both
-                          : puzzleState.pov == Side.white
-                              ? cg.InteractableSide.white
-                              : cg.InteractableSide.black,
-                  fen: puzzleState.fen,
-                  isCheck: puzzleState.position.isCheck,
-                  lastMove: puzzleState.lastMove?.cg,
-                  sideToMove: puzzleState.position.turn.cg,
-                  validMoves: puzzleState.validMoves,
-                  shapes: puzzleState.isEngineEnabled && evalBestMove != null
-                      ? ISet([
-                          cg.Arrow(
-                            color: const Color(0x40003088),
-                            orig: evalBestMove.from,
-                            dest: evalBestMove.to,
-                          ),
-                        ])
-                      : null,
-                ),
-                engineGauge: puzzleState.isEngineEnabled
-                    ? EngineGaugeParams(
-                        orientation: puzzleState.pov,
-                        isLocalEngineAvailable: true,
-                        position: puzzleState.position,
-                        savedEval: puzzleState.node.eval,
-                      )
+          child: SafeArea(
+            bottom: false,
+            child: BoardTable(
+              onMove: (move, {isDrop, isPremove}) {
+                ref
+                    .read(ctrlProvider.notifier)
+                    .onUserMove(Move.fromUci(move.uci)!);
+              },
+              boardData: cg.BoardData(
+                orientation: puzzleState.pov.cg,
+                interactableSide: puzzleState.mode == PuzzleMode.load ||
+                        puzzleState.position.isGameOver
+                    ? cg.InteractableSide.none
+                    : puzzleState.mode == PuzzleMode.view
+                        ? cg.InteractableSide.both
+                        : puzzleState.pov == Side.white
+                            ? cg.InteractableSide.white
+                            : cg.InteractableSide.black,
+                fen: puzzleState.fen,
+                isCheck: boardPreferences.boardHighlights &&
+                    puzzleState.position.isCheck,
+                lastMove: puzzleState.lastMove?.cg,
+                sideToMove: puzzleState.position.turn.cg,
+                validMoves: puzzleState.validMoves,
+                shapes: puzzleState.isEngineEnabled && evalBestMove != null
+                    ? ISet([
+                        cg.Arrow(
+                          color: const Color(0x40003088),
+                          orig: evalBestMove.from,
+                          dest: evalBestMove.to,
+                        ),
+                      ])
                     : null,
-                showEngineGaugePlaceholder: true,
-                topTable: Center(
-                  child: PuzzleFeedbackWidget(
-                    puzzle: puzzleState.puzzle,
-                    state: puzzleState,
-                    onStreak: false,
-                  ),
+              ),
+              engineGauge: puzzleState.isEngineEnabled
+                  ? EngineGaugeParams(
+                      orientation: puzzleState.pov,
+                      isLocalEngineAvailable: true,
+                      position: puzzleState.position,
+                      savedEval: puzzleState.node.eval,
+                    )
+                  : null,
+              showEngineGaugePlaceholder: true,
+              topTable: Center(
+                child: PuzzleFeedbackWidget(
+                  puzzle: puzzleState.puzzle,
+                  state: puzzleState,
+                  onStreak: false,
                 ),
-                bottomTable: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    if (puzzleState.glicko != null)
-                      RatingPrefAware(
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                            top: 10.0,
-                          ),
-                          child: Row(
-                            children: [
-                              Text(context.l10n.rating),
-                              const SizedBox(width: 5.0),
-                              TweenAnimationBuilder<double>(
-                                tween: Tween<double>(
-                                  begin: puzzleState.glicko!.rating,
-                                  end:
-                                      puzzleState.nextContext?.glicko?.rating ??
-                                          puzzleState.glicko!.rating,
-                                ),
-                                duration: const Duration(milliseconds: 500),
-                                builder: (context, double rating, _) {
-                                  return Text(
-                                    rating.truncate().toString(),
-                                    style: const TextStyle(
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  );
-                                },
+              ),
+              bottomTable: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  if (puzzleState.glicko != null)
+                    RatingPrefAware(
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          top: 10.0,
+                        ),
+                        child: Row(
+                          children: [
+                            Text(context.l10n.rating),
+                            const SizedBox(width: 5.0),
+                            TweenAnimationBuilder<double>(
+                              tween: Tween<double>(
+                                begin: puzzleState.glicko!.rating,
+                                end: puzzleState.nextContext?.glicko?.rating ??
+                                    puzzleState.glicko!.rating,
                               ),
-                            ],
-                          ),
+                              duration: const Duration(milliseconds: 500),
+                              builder: (context, double rating, _) {
+                                return Text(
+                                  rating.truncate().toString(),
+                                  style: const TextStyle(
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
                         ),
                       ),
-                    PuzzleSessionWidget(
-                      initialPuzzleContext: initialPuzzleContext,
-                      ctrlProvider: ctrlProvider,
                     ),
-                  ],
-                ),
+                  PuzzleSessionWidget(
+                    initialPuzzleContext: initialPuzzleContext,
+                    ctrlProvider: ctrlProvider,
+                  ),
+                ],
               ),
             ),
           ),
@@ -441,7 +427,7 @@ class _BottomBar extends ConsumerWidget {
 
     return Container(
       color: Theme.of(context).platform == TargetPlatform.iOS
-          ? CupertinoTheme.of(context).barBackgroundColor
+          ? null
           : Theme.of(context).bottomAppBarTheme.color,
       child: SafeArea(
         top: false,
@@ -550,7 +536,8 @@ class _BottomBar extends ConsumerWidget {
           onPressed: (context) {
             launchShareDialog(
               context,
-              text: '$kLichessHost/training/${puzzleState.puzzle.puzzle.id}',
+              text: lichessUri('/training/${puzzleState.puzzle.puzzle.id}')
+                  .toString(),
             );
           },
         ),
@@ -561,10 +548,10 @@ class _BottomBar extends ConsumerWidget {
               context,
               builder: (context) => AnalysisScreen(
                 title: context.l10n.analysis,
+                pgnOrId: ref.read(ctrlProvider.notifier).makePgn(),
                 options: AnalysisOptions(
                   isLocalEvaluationAllowed: true,
                   variant: Variant.standard,
-                  pgn: ref.read(ctrlProvider.notifier).makePgn(),
                   orientation: puzzleState.pov,
                   id: standaloneAnalysisId,
                   initialMoveCursor: 0,
@@ -579,9 +566,8 @@ class _BottomBar extends ConsumerWidget {
           ),
           onPressed: (_) {
             ref
-                .withClient(
-              (client) =>
-                  GameRepository(client).getGame(puzzleState.puzzle.game.id),
+                .read(
+              archivedGameProvider(id: puzzleState.puzzle.game.id).future,
             )
                 .then((game) {
               pushPlatformRoute(
@@ -589,6 +575,7 @@ class _BottomBar extends ConsumerWidget {
                 builder: (context) => ArchivedGameScreen(
                   gameData: game.data,
                   orientation: puzzleState.pov,
+                  initialCursor: puzzleState.puzzle.puzzle.initialPly + 1,
                 ),
               );
             });
@@ -675,19 +662,20 @@ class _DifficultySelector extends ConsumerWidget {
 }
 
 class _PuzzleSettingsButton extends StatelessWidget {
-  const _PuzzleSettingsButton({required this.userId});
-
-  final UserId? userId;
+  const _PuzzleSettingsButton();
 
   @override
   Widget build(BuildContext context) {
-    return SettingsButton(
-      onPressed: () => pushPlatformRoute(
-        context,
-        title: context.l10n.settingsSettings,
-        fullscreenDialog: true,
-        builder: (_) => PuzzleSettingsScreen(userId: userId),
+    return AppBarIconButton(
+      onPressed: () => showAdaptiveBottomSheet<void>(
+        context: context,
+        isDismissible: true,
+        isScrollControlled: true,
+        showDragHandle: true,
+        builder: (_) => const PuzzleSettingsScreen(),
       ),
+      semanticsLabel: context.l10n.settingsSettings,
+      icon: const Icon(Icons.settings),
     );
   }
 }

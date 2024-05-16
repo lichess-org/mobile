@@ -6,7 +6,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:http/http.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
-import 'package:lichess_mobile/src/utils/package_info.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:stream_transform/stream_transform.dart';
 
@@ -21,28 +20,18 @@ class ConnectivityStatus with _$ConnectivityStatus {
   }) = _ConnectivityStatus;
 }
 
-@riverpod
-Future<ConnectivityStatus> connectivity(ConnectivityRef ref) async {
-  final client = httpClient(ref.read(packageInfoProvider));
-  ref.onDispose(client.close);
-  final connectivityResult = await Connectivity().checkConnectivity();
-  try {
-    return ConnectivityStatus(
-      connectivityResult: connectivityResult.lock,
-      isOnline: await onlineCheck(client),
-    );
-  } finally {
-    client.close();
-  }
-}
-
+/// This provider is used to listen to connectivity changes and check if the
+/// device is online.
+///
+/// It uses the [Connectivity] plugin to listen to changes and make HEAD requests
+/// to some known URIs.
 @riverpod
 Stream<ConnectivityStatus> connectivityChanges(ConnectivityChangesRef ref) {
   // some android devices needs to check connectivity on start
   final firstCheck =
       Stream.fromFuture(Connectivity().checkConnectivity()).asyncMap(
     (result) async {
-      final client = httpClient(ref.read(packageInfoProvider));
+      final client = httpClientFactory();
       try {
         return ConnectivityStatus(
           connectivityResult: result.lock,
@@ -56,7 +45,7 @@ Stream<ConnectivityStatus> connectivityChanges(ConnectivityChangesRef ref) {
 
   return Connectivity().onConnectivityChanged.asyncMap(
     (result) async {
-      final client = httpClient(ref.read(packageInfoProvider));
+      final client = httpClientFactory();
       try {
         return ConnectivityStatus(
           connectivityResult: result.lock,
@@ -67,6 +56,16 @@ Stream<ConnectivityStatus> connectivityChanges(ConnectivityChangesRef ref) {
       }
     },
   ).startWithStream(firstCheck);
+}
+
+/// This provider is used to check if the device is online.
+///
+/// It will react to connectivity status changes.
+@riverpod
+Future<bool> isOnline(IsOnlineRef ref) async {
+  return ref.watch(
+    connectivityChangesProvider.selectAsync((status) => status.isOnline),
+  );
 }
 
 final _internetCheckUris = [

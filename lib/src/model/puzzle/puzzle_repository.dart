@@ -7,7 +7,6 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -35,8 +34,12 @@ class PuzzleRepository {
     PuzzleDifficulty difficulty = PuzzleDifficulty.normal,
   }) {
     return client.readJson(
-      Uri.parse(
-        '$kLichessHost/api/puzzle/batch/${angle.key}?nb=$nb&difficulty=${difficulty.name}',
+      Uri(
+        path: '/api/puzzle/batch/${angle.key}',
+        queryParameters: {
+          'nb': nb.toString(),
+          'difficulty': difficulty.name,
+        },
       ),
       mapper: _decodeBatchResponse,
     );
@@ -49,8 +52,12 @@ class PuzzleRepository {
     PuzzleDifficulty difficulty = PuzzleDifficulty.normal,
   }) {
     return client.postReadJson(
-      Uri.parse(
-        '$kLichessHost/api/puzzle/batch/${angle.key}?nb=$nb&difficulty=${difficulty.name}',
+      Uri(
+        path: '/api/puzzle/batch/${angle.key}',
+        queryParameters: {
+          'nb': nb.toString(),
+          'difficulty': difficulty.name,
+        },
       ),
       headers: {'Content-type': 'application/json'},
       body: jsonEncode({
@@ -70,14 +77,14 @@ class PuzzleRepository {
 
   Future<Puzzle> fetch(PuzzleId id) {
     return client.readJson(
-      Uri.parse('$kLichessHost/api/puzzle/$id'),
+      Uri(path: '/api/puzzle/$id'),
       mapper: _puzzleFromJson,
     );
   }
 
   Future<PuzzleStreakResponse> streak() {
     return client.readJson(
-      Uri.parse('$kLichessHost/api/streak'),
+      Uri(path: '/api/streak'),
       mapper: (Map<String, dynamic> json) {
         return PuzzleStreakResponse(
           puzzle: _puzzleFromPick(pick(json).required()),
@@ -86,13 +93,14 @@ class PuzzleRepository {
                   (e) => PuzzleId(e),
                 ),
           ),
+          timestamp: DateTime.now(),
         );
       },
     );
   }
 
   Future<void> postStreakRun(int run) async {
-    final uri = Uri.parse('$kLichessHost/api/streak/$run');
+    final uri = Uri(path: '/api/streak/$run');
     final response = await client.post(uri);
     if (response.statusCode >= 400) {
       throw http.ClientException(
@@ -104,7 +112,7 @@ class PuzzleRepository {
 
   Future<PuzzleStormResponse> storm() {
     return client.readJson(
-      Uri.parse('$kLichessHost/api/storm'),
+      Uri(path: '/api/storm'),
       mapper: (Map<String, dynamic> json) {
         return PuzzleStormResponse(
           puzzles: IList(
@@ -112,6 +120,7 @@ class PuzzleRepository {
           ),
           highscore: pick(json['high']).letOrNull(_stormHighScoreFromPick),
           key: pick(json['key']).asStringOrNull(),
+          timestamp: DateTime.now(),
         );
       },
     );
@@ -131,7 +140,7 @@ class PuzzleRepository {
     };
 
     return client.postReadJson(
-      Uri.parse('$kLichessHost/storm'),
+      Uri(path: '/storm'),
       body: body,
       mapper: (Map<String, dynamic> json) {
         return pick(json['newHigh']).letOrNull(
@@ -147,7 +156,7 @@ class PuzzleRepository {
   Future<Puzzle> daily() {
     return client
         .readJson(
-          Uri.parse('$kLichessHost/api/puzzle/daily'),
+          Uri(path: '/api/puzzle/daily'),
           mapper: _puzzleFromJson,
         )
         .then(
@@ -159,7 +168,7 @@ class PuzzleRepository {
 
   Future<PuzzleDashboard> puzzleDashboard(int days) {
     return client.readJson(
-      Uri.parse('$kLichessHost/api/puzzle/dashboard/$days'),
+      Uri(path: '/api/puzzle/dashboard/$days'),
       mapper: _puzzleDashboardFromJson,
     );
   }
@@ -168,24 +177,29 @@ class PuzzleRepository {
     int max, {
     DateTime? before,
   }) {
-    final beforeQuery =
-        before != null ? '&before=${before.millisecondsSinceEpoch}' : '';
     return client.readNdJsonList(
-      Uri.parse('$kLichessHost/api/puzzle/activity?max=$max$beforeQuery'),
+      Uri(
+        path: '/api/puzzle/activity',
+        queryParameters: {
+          'max': max.toString(),
+          if (before != null)
+            'before': before.millisecondsSinceEpoch.toString(),
+        },
+      ),
       mapper: _puzzleActivityFromJson,
     );
   }
 
   Future<StormDashboard> stormDashboard(UserId userId) {
     return client.readJson(
-      Uri.parse('$kLichessHost/api/storm/dashboard/$userId'),
+      Uri(path: '/api/storm/dashboard/$userId'),
       mapper: _stormDashboardFromJson,
     );
   }
 
   Future<IMap<PuzzleThemeKey, PuzzleThemeData>> puzzleThemes() {
     return client.readJson(
-      Uri.parse('$kLichessHost/training/themes'),
+      Uri(path: '/training/themes'),
       headers: {'Accept': 'application/json'},
       mapper: _puzzleThemeFromJson,
     );
@@ -193,7 +207,7 @@ class PuzzleRepository {
 
   Future<IList<PuzzleOpeningFamily>> puzzleOpenings() {
     return client.readJson(
-      Uri.parse('$kLichessHost/training/openings'),
+      Uri(path: '/training/openings'),
       headers: {'Accept': 'application/json'},
       mapper: _puzzleOpeningFromJson,
     );
@@ -239,6 +253,13 @@ class PuzzleStreakResponse with _$PuzzleStreakResponse {
   const factory PuzzleStreakResponse({
     required Puzzle puzzle,
     required Streak streak,
+
+    /// Timestamp of the response, used as streak unique identifier.
+    ///
+    /// This field is not returned by the API but it is used to force the
+    /// [puzzleControllerProvider] to recompute when the streak provider is invalidated
+    /// and the server sends again the exact same streak data.
+    required DateTime timestamp,
   }) = _PuzzleStreakResponse;
 }
 
@@ -248,6 +269,13 @@ class PuzzleStormResponse with _$PuzzleStormResponse {
     required IList<LitePuzzle> puzzles,
     required String? key,
     required PuzzleStormHighScore? highscore,
+
+    /// Timestamp of the response, used as storm unique identifier.
+    ///
+    /// This field is not returned by the API but it is used to force the
+    /// stormControllerProvider to recompute when the storm provider is invalidated
+    /// and the server sends again the exact same storm data.
+    required DateTime timestamp,
   }) = _PuzzleStormResponse;
 }
 

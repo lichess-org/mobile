@@ -25,6 +25,7 @@ import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
+import 'package:lichess_mobile/src/model/game/game_storage.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -206,7 +207,12 @@ class GameController extends _$GameController {
 
   void cursorAt(int cursor) {
     if (state.hasValue) {
-      state = AsyncValue.data(state.requireValue.copyWith(stepCursor: cursor));
+      state = AsyncValue.data(
+        state.requireValue.copyWith(
+          stepCursor: cursor,
+          premove: null,
+        ),
+      );
       final san = state.requireValue.game.stepAt(cursor).sanMove?.san;
       if (san != null) {
         _playReplayMoveSound(san);
@@ -220,7 +226,7 @@ class GameController extends _$GameController {
       final curState = state.requireValue;
       if (curState.stepCursor < curState.game.steps.length - 1) {
         state = AsyncValue.data(
-          curState.copyWith(stepCursor: curState.stepCursor + 1),
+          curState.copyWith(stepCursor: curState.stepCursor + 1, premove: null),
         );
         final san = curState.game.stepAt(curState.stepCursor + 1).sanMove?.san;
         if (san != null) {
@@ -235,7 +241,7 @@ class GameController extends _$GameController {
       final curState = state.requireValue;
       if (curState.stepCursor > 0) {
         state = AsyncValue.data(
-          curState.copyWith(stepCursor: curState.stepCursor - 1),
+          curState.copyWith(stepCursor: curState.stepCursor - 1, premove: null),
         );
         final san = curState.game.stepAt(curState.stepCursor - 1).sanMove?.san;
         if (san != null) {
@@ -627,16 +633,22 @@ class GameController extends _$GameController {
 
         state = AsyncValue.data(newState);
 
-        _getPostGameData().then((result) {
-          result.fold((data) {
-            final game = _mergePostGameData(state.requireValue.game, data);
-            state = AsyncValue.data(
-              state.requireValue.copyWith(game: game),
-            );
-          }, (e, s) {
-            _logger.warning('Could not get post game data', e, s);
+        if (!newState.game.aborted) {
+          _getPostGameData().then((result) {
+            result.fold((data) {
+              final game = _mergePostGameData(state.requireValue.game, data);
+              state = AsyncValue.data(
+                state.requireValue.copyWith(game: game),
+              );
+
+              ref
+                  .read(gameStorageProvider)
+                  .save(game.toArchivedGame(finishedAt: DateTime.now()));
+            }, (e, s) {
+              _logger.warning('Could not get post game data', e, s);
+            });
           });
-        });
+        }
 
       case 'clockInc':
         final data = event.data as Map<String, dynamic>;
@@ -922,7 +934,9 @@ class GameState with _$GameState {
   bool get isZenModeEnabled =>
       zenModeGameSetting ??
       game.prefs?.zenMode == Zen.yes || game.prefs?.zenMode == Zen.gameAuto;
-  bool get canPremove => game.prefs?.enablePremove ?? true;
+  bool get canPremove =>
+      game.meta.speed != Speed.correspondence &&
+      (game.prefs?.enablePremove ?? true);
   bool get canAutoQueen => game.prefs?.autoQueen == AutoQueen.always;
   bool get canAutoQueenOnPremove => game.prefs?.autoQueen == AutoQueen.premove;
   bool get shouldConfirmResignAndDrawOffer => game.prefs?.confirmResign ?? true;
@@ -936,6 +950,7 @@ class GameState with _$GameState {
 
   bool get canGetNewOpponent =>
       !game.playable &&
+      game.meta.speed != Speed.correspondence &&
       (game.source == GameSource.lobby || game.source == GameSource.pool);
 
   bool get canOfferDraw =>
@@ -988,10 +1003,11 @@ class GameState with _$GameState {
     return null;
   }
 
+  String get analysisPgn => game.makePgn();
+
   AnalysisOptions get analysisOptions => AnalysisOptions(
         isLocalEvaluationAllowed: true,
         variant: game.meta.variant,
-        pgn: game.makePgn(),
         initialMoveCursor: stepCursor,
         orientation: game.youAre ?? Side.white,
         id: gameFullId,

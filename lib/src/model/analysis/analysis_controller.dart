@@ -4,6 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
 import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
@@ -25,21 +26,17 @@ part 'analysis_controller.freezed.dart';
 part 'analysis_controller.g.dart';
 
 const standaloneAnalysisId = StringId('standalone_analysis');
+final _dateFormat = DateFormat('yyyy.MM.dd');
 
 @freezed
 class AnalysisOptions with _$AnalysisOptions {
   const AnalysisOptions._();
   const factory AnalysisOptions({
+    /// The ID of the analysis. Can be a game ID or a standalone analysis ID.
     required StringId id,
     required bool isLocalEvaluationAllowed,
     required Side orientation,
     required Variant variant,
-
-    /// The PGN of the game to analyze.
-    /// The move list can be empty.
-    /// It can contain a FEN header for initial position.
-    /// If it contains a Variant header, it will be ignored.
-    required String pgn,
     int? initialMoveCursor,
     LightOpening? opening,
     Division? division,
@@ -65,7 +62,7 @@ class AnalysisController extends _$AnalysisController {
   Timer? _startEngineEvalTimer;
 
   @override
-  AnalysisState build(AnalysisOptions options) {
+  AnalysisState build(String pgn, AnalysisOptions options) {
     final evaluationService = ref.watch(evaluationServiceProvider);
     final serverAnalysisService = ref.watch(serverAnalysisServiceProvider);
 
@@ -84,13 +81,13 @@ class AnalysisController extends _$AnalysisController {
     Move? lastMove;
 
     final game = PgnGame.parsePgn(
-      options.pgn,
+      pgn,
       initHeaders: () => options.isLichessGameAnalysis
           ? {}
           : {
               'Event': '?',
               'Site': '?',
-              'Date': '????.??.??',
+              'Date': _dateFormat.format(DateTime.now()),
               'Round': '?',
               'White': '?',
               'Black': '?',
@@ -112,7 +109,8 @@ class AnalysisController extends _$AnalysisController {
       onVisitNode: (root, branch, isMainline) {
         if (isMainline &&
             options.initialMoveCursor != null &&
-            branch.position.ply <= options.initialMoveCursor!) {
+            branch.position.ply <=
+                root.position.ply + options.initialMoveCursor!) {
           path = path + branch.id;
           lastMove = branch.sanMove.move;
         }

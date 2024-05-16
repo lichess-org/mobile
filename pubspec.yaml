@@ -3,7 +3,7 @@ description: Lichess mobile app V2
 
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
-version: 0.7.6+000706 # see README.md for details about versioning
+version: 0.8.9+000809 # see README.md for details about versioning
 
 environment:
   sdk: ">=3.3.0 <4.0.0"
@@ -11,13 +11,14 @@ environment:
 dependencies:
   async: ^2.10.0
   cached_network_image: ^3.2.2
-  chessground: ^2.5.0
+  chessground: ^2.6.1
   collection: ^1.17.0
   connectivity_plus: ^6.0.2
+  cronet_http: ^1.2.0
   crypto: ^3.0.3
   cupertino_http: ^1.1.0
   cupertino_icons: ^1.0.2
-  dartchess: ^0.6.1
+  dartchess: ^0.7.0
   deep_pick: ^1.0.0
   device_info_plus: ^10.1.0
   dynamic_color: ^1.6.9
@@ -36,7 +37,7 @@ dependencies:
     sdk: flutter
   flutter_native_splash: ^2.3.5
   flutter_riverpod: ^2.3.4
-  flutter_secure_storage: ^9.0.0
+  flutter_secure_storage: 9.0.0
   flutter_slidable: ^3.0.0
   flutter_spinkit: ^5.2.0
   freezed_annotation: ^2.2.0
@@ -47,24 +48,24 @@ dependencies:
   logging: ^1.1.0
   material_color_utilities: ^0.8.0
   meta: ^1.8.0
-  package_info_plus: ^7.0.0
+  package_info_plus: ^8.0.0
   path: ^1.8.2
   popover: ^0.3.0
   pub_semver: ^2.1.4
   result_extensions: ^0.1.0
   riverpod_annotation: ^2.3.0
-  share_plus: ^8.0.3
+  share_plus: ^9.0.0
   shared_preferences: ^2.1.0
   signal_strength_indicator: ^0.4.1
   soundpool:
     git:
      url: https://github.com/lichess-org/flutter-soundpool.git
-     ref: 3900871fd9b6eec4a2437dbdc2946c96ca1f58fd
+     ref: 575ba7e5c55986caeef66101f49fa695d65e5a5a
   sqflite: ^2.2.5
   stockfish:
    git:
      url: https://github.com/lichess-org/dart-stockfish.git
-     ref: dc160c6ae339e4aa0b64ce50980a1b5ca5597d42
+     ref: 982a98258676165bdb268024bbcdc272290c9b3a
   stream_transform: ^2.1.0
   system_info_plus: ^0.0.5
   timeago: ^3.6.0

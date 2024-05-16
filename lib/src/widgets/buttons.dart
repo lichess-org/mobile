@@ -4,13 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
 
 /// Platform agnostic button which is used for important actions.
 ///
-/// Will use an [ElevatedButton] on Android and a [CupertinoButton.filled] on iOS.
+/// Will use an [FilledButton] on Android and a [CupertinoButton.filled] on iOS.
 class FatButton extends StatelessWidget {
   const FatButton({
     required this.semanticsLabel,
@@ -196,25 +193,6 @@ class AppBarIconButton extends StatelessWidget {
   }
 }
 
-/// A cogs icon button in the app bar
-class SettingsButton extends StatelessWidget {
-  const SettingsButton({
-    required this.onPressed,
-    super.key,
-  });
-
-  final VoidCallback? onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return AppBarIconButton(
-      onPressed: onPressed,
-      semanticsLabel: context.l10n.settingsSettings,
-      icon: const Icon(Icons.settings),
-    );
-  }
-}
-
 class AdaptiveTextButton extends StatelessWidget {
   const AdaptiveTextButton({
     required this.child,
@@ -307,102 +285,6 @@ class CupertinoIconButton extends StatelessWidget {
   }
 }
 
-/// A button that looks like a ListTile on a Card.
-class CardButton extends StatefulWidget {
-  const CardButton({
-    super.key,
-    this.icon,
-    required this.title,
-    this.subtitle,
-    required this.onTap,
-  });
-
-  final Widget? icon;
-  final Widget title;
-  final Widget? subtitle;
-  final VoidCallback? onTap;
-
-  @override
-  State<CardButton> createState() => _CardButtonState();
-}
-
-class _CardButtonState extends State<CardButton> {
-  double scale = 1.0;
-
-  void _onTapDown() {
-    if (widget.onTap == null) return;
-    setState(() => scale = 0.98);
-  }
-
-  void _onTapCancel() {
-    if (widget.onTap == null) return;
-    setState(() => scale = 1.00);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    switch (Theme.of(context).platform) {
-      case TargetPlatform.android:
-        return Opacity(
-          opacity: widget.onTap == null ? 0.4 : 1.0,
-          child: PlatformCard(
-            child: InkWell(
-              borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-              onTap: widget.onTap,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 6.0),
-                child: ListTile(
-                  leading: widget.icon,
-                  title: widget.title,
-                  subtitle: widget.subtitle,
-                ),
-              ),
-            ),
-          ),
-        );
-      case TargetPlatform.iOS:
-        final textColor = DefaultTextStyle.of(context).style.color;
-        return GestureDetector(
-          onTap: widget.onTap,
-          onTapDown: (_) => _onTapDown(),
-          onTapCancel: _onTapCancel,
-          onTapUp: (_) => _onTapCancel(),
-          child: AnimatedScale(
-            scale: scale,
-            duration: const Duration(milliseconds: 100),
-            child: Opacity(
-              opacity: widget.onTap == null ? 0.4 : 1.0,
-              child: PlatformCard(
-                elevation: 0.2,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 6.0),
-                  child: ListTileTheme(
-                    data: ListTileThemeData(
-                      iconColor:
-                          CupertinoColors.systemGrey.resolveFrom(context),
-                      titleTextStyle: TextStyle(color: textColor),
-                      subtitleTextStyle: TextStyle(
-                        color: textColor?.withOpacity(Styles.subtitleOpacity),
-                      ),
-                    ),
-                    child: ListTile(
-                      leading: widget.icon,
-                      title: widget.title,
-                      subtitle: widget.subtitle,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        );
-      default:
-        assert(false, 'Unexpected platform ${Theme.of(context).platform}');
-        return const SizedBox.shrink();
-    }
-  }
-}
-
 /// InkWell that adapts to the iOS platform.
 ///
 /// Used to create a button that shows a ripple on Android and a highlight on iOS.
@@ -437,6 +319,7 @@ class _AdaptiveInkWellState extends State<AdaptiveInkWell> {
           onTap: widget.onTap,
           onLongPress: widget.onLongPress,
           borderRadius: widget.borderRadius,
+          splashColor: widget.splashColor,
           child: widget.child,
         );
       case TargetPlatform.iOS:

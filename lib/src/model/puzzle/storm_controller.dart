@@ -28,39 +28,41 @@ const startTime = Duration(minutes: 3);
 
 @riverpod
 class StormController extends _$StormController {
-  int _nextPuzzleIndex = 0;
-  int _moves = 0;
-  int _errors = 0;
-  final _history = <PuzzleHistoryEntry>[];
   Timer? _firstMoveTimer;
 
   @override
-  StormState build(IList<LitePuzzle> puzzles) {
+  StormState build(IList<LitePuzzle> puzzles, DateTime timestamp) {
+    final pov = Chess.fromSetup(Setup.parseFen(puzzles.first.fen));
+    final clock = StormClock();
+
     ref.onDispose(() {
       _firstMoveTimer?.cancel();
-      state.clock.dispose();
+      clock.dispose();
     });
 
-    final pov = Chess.fromSetup(Setup.parseFen(puzzles.first.fen));
     final newState = StormState(
       firstMovePlayed: false,
       runOver: false,
       runStarted: false,
-      puzzle: puzzles[_nextPuzzleIndex],
+      puzzleIndex: 0,
+      puzzle: puzzles.first,
+      moves: 0,
+      errors: 0,
+      history: const IList.empty(),
       position: pov,
       pov: pov.turn.opposite,
       moveIndex: -1,
       numSolved: 0,
-      clock: StormClock(),
+      clock: clock,
       combo: const StormCombo(current: 0, best: 0),
       stats: null,
       lastSolvedTime: null,
     );
-    _nextPuzzleIndex += 1;
+
     _firstMoveTimer = Timer(
       const Duration(seconds: 1),
       () => _addMove(
-        state.expectedMove!,
+        newState.expectedMove!,
         ComboState.noChange,
         runStarted: false,
         userMove: false,
@@ -68,7 +70,7 @@ class StormController extends _$StormController {
       ),
     );
     newState.clock.timeStream.listen((e) {
-      if (e.$1 == Duration.zero && state.clock.endAt == null) {
+      if (e.$1 == Duration.zero && clock.endAt == null) {
         end();
       }
     });
@@ -80,7 +82,7 @@ class StormController extends _$StormController {
     state.clock.start();
     final expected = state.expectedMove;
     _addMove(move, ComboState.noChange, runStarted: true, userMove: true);
-    _moves += 1;
+    state = state.copyWith(moves: state.moves + 1);
     if (state.position.isGameOver || move == expected) {
       final bonus = state.combo.bonus(getNext: true);
       if (bonus != null) {
@@ -105,7 +107,7 @@ class StormController extends _$StormController {
         userMove: false,
       );
     } else {
-      _errors += 1;
+      state = state.copyWith(errors: state.errors + 1);
       ref.read(soundServiceProvider).play(Sound.error);
       HapticFeedback.heavyImpact();
       state.clock.subtractTime(malus);
@@ -178,9 +180,12 @@ class StormController extends _$StormController {
         newComboCurrent = state.combo.current;
     }
 
+    final int newPuzzleIndex = state.puzzleIndex + 1;
+
     state = state.copyWith(
-      puzzle: puzzles[_nextPuzzleIndex],
-      position: Chess.fromSetup(Setup.parseFen(puzzles[_nextPuzzleIndex].fen)),
+      puzzleIndex: newPuzzleIndex,
+      puzzle: puzzles[newPuzzleIndex],
+      position: Chess.fromSetup(Setup.parseFen(puzzles[newPuzzleIndex].fen)),
       moveIndex: -1,
       numSolved: result ? state.numSolved + 1 : state.numSolved,
       lastSolvedTime: DateTime.now(),
@@ -189,7 +194,6 @@ class StormController extends _$StormController {
         best: math.max(state.combo.best, state.combo.current + 1),
       ),
     );
-    _nextPuzzleIndex += 1;
     await Future<void>.delayed(moveDelay);
     _addMove(
       state.expectedMove!,
@@ -241,13 +245,13 @@ class StormController extends _$StormController {
   }
 
   StormRunStats _getStats() {
-    final wins = _history.where((e) => e.win == true).toList();
-    final mean =
-        _history.sumBy((e) => e.solvingTime!.inSeconds) / _history.length;
+    final wins = state.history.where((e) => e.win == true).toList();
+    final mean = state.history.sumBy((e) => e.solvingTime!.inSeconds) /
+        state.history.length;
     final threshold = mean * 1.5;
     return StormRunStats(
-      moves: _moves,
-      errors: _errors,
+      moves: state.moves,
+      errors: state.errors,
       score: wins.length,
       comboBest: state.combo.best,
       time: state.clock.endAt!,
@@ -257,8 +261,8 @@ class StormController extends _$StormController {
                 (maxRating, rating) => rating > maxRating ? rating : maxRating,
               )
           : 0,
-      history: _history.toIList(),
-      slowPuzzleIds: _history
+      history: state.history,
+      slowPuzzleIds: state.history
           .where((e) => e.solvingTime!.inSeconds > threshold)
           .map((e) => e.id)
           .toIList(),
@@ -269,13 +273,15 @@ class StormController extends _$StormController {
     final timeTaken = state.lastSolvedTime != null
         ? DateTime.now().difference(state.lastSolvedTime!)
         : DateTime.now().difference(state.clock.startAt!);
-    _history.add(
-      PuzzleHistoryEntry.fromLitePuzzle(state.puzzle, success, timeTaken),
+    state = state.copyWith(
+      history: state.history.add(
+        PuzzleHistoryEntry.fromLitePuzzle(state.puzzle, success, timeTaken),
+      ),
     );
   }
 
   bool _isNextPuzzleAvailable() {
-    return _nextPuzzleIndex < puzzles.length;
+    return state.puzzleIndex + 1 < puzzles.length;
   }
 }
 
@@ -283,6 +289,9 @@ class StormController extends _$StormController {
 class StormState with _$StormState {
   const StormState._();
   const factory StormState({
+    /// Index of the current puzzle being played
+    required int puzzleIndex,
+
     /// Current puzzle being played
     required LitePuzzle puzzle,
 
@@ -303,6 +312,15 @@ class StormState with _$StormState {
 
     /// A combo object which has the current and best combo
     required StormCombo combo,
+
+    /// Number of moves made in the run
+    required int moves,
+
+    /// Number of errors made in the run
+    required int errors,
+
+    /// The history of puzzles played in the run
+    required IList<PuzzleHistoryEntry> history,
 
     /// Stats of the storm run. Only initialisd after the run ends
     required StormRunStats? stats,

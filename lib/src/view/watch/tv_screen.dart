@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/model/tv/tv_controller.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -107,6 +108,7 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final boardPreferences = ref.watch(boardPreferencesProvider);
     final asyncGame = ref.watch(tvControllerProvider(channel, initialGame));
 
     return Column(
@@ -126,7 +128,7 @@ class _Body extends ConsumerWidget {
                   fen: position.fen,
                   sideToMove: sideToMove.cg,
                   lastMove: game.moveAt(gameState.stepCursor)?.cg,
-                  isCheck: position.isCheck,
+                  isCheck: boardPreferences.boardHighlights && position.isCheck,
                 );
                 final blackPlayerWidget = GamePlayer(
                   player: game.black.setOnGame(true),
@@ -218,7 +220,7 @@ class _BottomBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       color: Theme.of(context).platform == TargetPlatform.iOS
-          ? CupertinoTheme.of(context).barBackgroundColor
+          ? null
           : Theme.of(context).bottomAppBarTheme.color,
       child: SafeArea(
         top: false,

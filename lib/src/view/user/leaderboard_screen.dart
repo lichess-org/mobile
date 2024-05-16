@@ -6,7 +6,6 @@ import 'package:flutter_layout_grid/flutter_layout_grid.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/user/leaderboard.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -14,6 +13,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 /// Create a Screen with Top 10 players for each Lichess Variant
 class LeaderboardScreen extends StatelessWidget {
@@ -140,36 +140,12 @@ class LeaderboardListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return PlatformListTile(
       onTap: () => _handleTap(context),
-      leading: _OnlineOrPatron(patron: user.patron, online: user.online),
+      leading: perfIcon != null ? Icon(perfIcon) : null,
       title: Padding(
         padding: const EdgeInsets.only(right: 5.0),
-        child: Row(
-          children: [
-            if (user.title != null) ...[
-              Text(
-                user.title!,
-                style: TextStyle(
-                  color: context.lichessColors.brag,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(width: 5),
-            ],
-            Flexible(
-              child: Text(user.username, overflow: TextOverflow.ellipsis),
-            ),
-          ],
-        ),
+        child: UserFullNameWidget(user: user.lightUser),
       ),
-      subtitle: perfIcon != null
-          ? Row(
-              children: [
-                Icon(perfIcon, size: 16),
-                const SizedBox(width: 5),
-                Text(user.rating.toString()),
-              ],
-            )
-          : null,
+      subtitle: perfIcon != null ? Text(user.rating.toString()) : null,
       trailing: perfIcon != null
           ? _Progress(user.progress)
           : Text(user.rating.toString()),
@@ -202,14 +178,18 @@ class _Progress extends StatelessWidget {
               ? LichessIcons.arrow_full_upperright
               : LichessIcons.arrow_full_lowerright,
           size: 16,
-          color: progress > 0 ? LichessColors.good : LichessColors.red,
+          color: progress > 0
+              ? context.lichessColors.good
+              : context.lichessColors.error,
         ),
         Text(
           '${progress.abs()}',
           maxLines: 1,
           style: TextStyle(
             fontSize: 12,
-            color: progress > 0 ? LichessColors.good : LichessColors.red,
+            color: progress > 0
+                ? context.lichessColors.good
+                : context.lichessColors.error,
           ),
         ),
       ],
@@ -234,7 +214,7 @@ class _Leaderboard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 6),
       child: ListSection(
-        hasLeading: true,
+        hasLeading: false,
         showDivider: showDivider,
         header: Row(
           children: [
@@ -247,27 +227,5 @@ class _Leaderboard extends StatelessWidget {
             userList.map((user) => LeaderboardListTile(user: user)).toList(),
       ),
     );
-  }
-}
-
-class _OnlineOrPatron extends StatelessWidget {
-  const _OnlineOrPatron({this.patron, this.online});
-  final bool? patron;
-  final bool? online;
-
-  @override
-  Widget build(BuildContext context) {
-    if (patron != null) {
-      return Icon(
-        LichessIcons.patron,
-        color: online != null ? LichessColors.good : LichessColors.grey,
-      );
-    } else {
-      return Icon(
-        CupertinoIcons.circle_fill,
-        size: 20,
-        color: online != null ? LichessColors.good : LichessColors.grey,
-      );
-    }
   }
 }

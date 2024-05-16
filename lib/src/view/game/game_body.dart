@@ -103,11 +103,8 @@ class GameBody extends ConsumerWidget {
       ),
     );
 
-    final shouldShowMaterialDiff = ref.watch(
-      boardPreferencesProvider.select(
-        (prefs) => prefs.showMaterialDifference,
-      ),
-    );
+    final boardPreferences = ref.watch(boardPreferencesProvider);
+
     final blindfoldMode = ref.watch(
       gamePreferencesProvider.select(
         (prefs) => prefs.blindfoldMode,
@@ -119,7 +116,6 @@ class GameBody extends ConsumerWidget {
     return gameStateAsync.when(
       data: (gameState) {
         final position = gameState.game.positionAt(gameState.stepCursor);
-        final sideToMove = position.turn;
         final youAre = gameState.game.youAre ?? Side.white;
         final archivedBlackClock =
             gameState.game.archivedBlackClockAt(gameState.stepCursor);
@@ -128,10 +124,12 @@ class GameBody extends ConsumerWidget {
 
         final black = GamePlayer(
           player: gameState.game.black,
-          materialDiff: shouldShowMaterialDiff
+          materialDiff: boardPreferences.showMaterialDifference
               ? gameState.game.materialDiffAt(gameState.stepCursor, Side.black)
               : null,
-          timeToMove: sideToMove == Side.black ? gameState.timeToMove : null,
+          timeToMove: gameState.game.sideToMove == Side.black
+              ? gameState.timeToMove
+              : null,
           shouldLinkToUserProfile: youAre != Side.black,
           mePlaying: youAre == Side.black,
           zenMode: gameState.isZenModeEnabled,
@@ -166,10 +164,12 @@ class GameBody extends ConsumerWidget {
         );
         final white = GamePlayer(
           player: gameState.game.white,
-          materialDiff: shouldShowMaterialDiff
+          materialDiff: boardPreferences.showMaterialDifference
               ? gameState.game.materialDiffAt(gameState.stepCursor, Side.white)
               : null,
-          timeToMove: sideToMove == Side.white ? gameState.timeToMove : null,
+          timeToMove: gameState.game.sideToMove == Side.white
+              ? gameState.timeToMove
+              : null,
           shouldLinkToUserProfile: youAre != Side.white,
           mePlaying: youAre == Side.white,
           zenMode: gameState.isZenModeEnabled,
@@ -203,9 +203,12 @@ class GameBody extends ConsumerWidget {
                   : null,
         );
 
-        final topPlayer = youAre == Side.white ? black : white;
-        final bottomPlayer = youAre == Side.white ? white : black;
         final isBoardTurned = ref.watch(isBoardTurnedProvider);
+
+        final topPlayerIsBlack = youAre == Side.white && !isBoardTurned ||
+            youAre == Side.black && isBoardTurned;
+        final topPlayer = topPlayerIsBlack ? black : white;
+        final bottomPlayer = topPlayerIsBlack ? white : black;
 
         final content = WakelockWidget(
           shouldEnableOnFocusGained: () => gameState.game.playable,
@@ -249,8 +252,9 @@ class GameBody extends ConsumerWidget {
                         fen: position.fen,
                         lastMove:
                             gameState.game.moveAt(gameState.stepCursor)?.cg,
-                        isCheck: position.isCheck,
-                        sideToMove: sideToMove.cg,
+                        isCheck: boardPreferences.boardHighlights &&
+                            position.isCheck,
+                        sideToMove: position.turn.cg,
                         validMoves: algebraicLegalMoves(position),
                         premove: gameState.premove,
                       ),
@@ -511,6 +515,7 @@ class _GameBottomBar extends ConsumerWidget {
                   pushPlatformRoute(
                     context,
                     builder: (_) => AnalysisScreen(
+                      pgnOrId: gameState.analysisPgn,
                       options: gameState.analysisOptions,
                       title: context.l10n.gameAnalysis,
                     ),
@@ -599,7 +604,7 @@ class _GameBottomBar extends ConsumerWidget {
 
     return Container(
       color: Theme.of(context).platform == TargetPlatform.iOS
-          ? CupertinoTheme.of(context).barBackgroundColor
+          ? null
           : Theme.of(context).bottomAppBarTheme.color,
       child: SafeArea(
         top: false,
@@ -640,6 +645,7 @@ class _GameBottomBar extends ConsumerWidget {
               pushPlatformRoute(
                 context,
                 builder: (_) => AnalysisScreen(
+                  pgnOrId: gameState.analysisPgn,
                   options: gameState.analysisOptions.copyWith(
                     isLocalEvaluationAllowed: false,
                   ),

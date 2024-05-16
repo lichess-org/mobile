@@ -36,6 +36,17 @@ Instructions to install both are found in [the lila wiki](https://github.com/lic
 
 The mobile application is configured by default to target `http://127.0.0.1:9663` and `ws://127.0.0.1:9664`, so keep these when installing lila.
 
+### Using Lichess dev server
+
+To use the [Lichess dev](https://lichess.dev/) to run this app, run the following command to set up the Lichess host URLs in the app.
+
+```
+flutter run --dart-define=LICHESS_HOST=lichess.dev --dart-define=LICHESS_WS_HOST=socket.lichess.dev
+```
+
+**Note : Do not use any scheme (https:// or ws://) in url in host, since it's already handled by URI helper methods**
+
+
 ## Run
 
 We don't commit generated code to the repository. So you need to run the code
@@ -47,8 +58,9 @@ dart run build_runner watch
 ```
 
 Check you have some connected device with: `flutter devices`.
+If you target an android emulator you need to run these commands so the device can reach the local lila instance.
 
-If you target an android emulator you need to run these commands so the device can reach the local lila instance:
+**Note: Only run the command if you are using a local Lila server; otherwise, there's no need to set up port forwarding.**
 
 ```sh
 adb reverse tcp:9663 tcp:9663

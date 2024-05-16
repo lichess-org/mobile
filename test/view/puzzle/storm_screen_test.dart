@@ -2,7 +2,6 @@ import 'package:chessground/chessground.dart' as cg;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -14,17 +13,12 @@ import 'package:lichess_mobile/src/view/puzzle/storm_screen.dart';
 import '../../test_app.dart';
 import '../../test_utils.dart';
 
-class FakeClientFactory implements LichessClientFactory {
-  @override
-  http.Client call() {
-    return MockClient((request) {
-      if (request.url.path == '/storm') {
-        return mockResponse('', 200);
-      }
-      return mockResponse('', 404);
-    });
+final lichessClient = MockClient((request) {
+  if (request.url.path == '/storm') {
+    return mockResponse('', 200);
   }
-}
+  return mockResponse('', 404);
+});
 
 void main() {
   group('StormScreen', () {
@@ -38,7 +32,7 @@ void main() {
           home: const StormScreen(),
           overrides: [
             stormProvider.overrideWith((ref) => mockStromRun),
-            lichessClientFactoryProvider.overrideWithValue(FakeClientFactory()),
+            lichessClientProvider.overrideWithValue(lichessClient),
           ],
         );
 
@@ -58,7 +52,7 @@ void main() {
           home: const StormScreen(),
           overrides: [
             stormProvider.overrideWith((ref) => mockStromRun),
-            lichessClientFactoryProvider.overrideWithValue(FakeClientFactory()),
+            lichessClientProvider.overrideWithValue(lichessClient),
           ],
         );
 
@@ -81,7 +75,7 @@ void main() {
           home: const StormScreen(),
           overrides: [
             stormProvider.overrideWith((ref) => mockStromRun),
-            lichessClientFactoryProvider.overrideWithValue(FakeClientFactory()),
+            lichessClientProvider.overrideWithValue(lichessClient),
           ],
         );
 
@@ -135,7 +129,7 @@ void main() {
         home: const StormScreen(),
         overrides: [
           stormProvider.overrideWith((ref) => mockStromRun),
-          lichessClientFactoryProvider.overrideWithValue(FakeClientFactory()),
+          lichessClientProvider.overrideWithValue(lichessClient),
         ],
       );
 
@@ -179,7 +173,7 @@ void main() {
         home: const StormScreen(),
         overrides: [
           stormProvider.overrideWith((ref) => mockStromRun),
-          lichessClientFactoryProvider.overrideWithValue(FakeClientFactory()),
+          lichessClientProvider.overrideWithValue(lichessClient),
         ],
       );
 
@@ -219,4 +213,5 @@ final mockStromRun = PuzzleStormResponse(
   ]),
   key: null,
   highscore: null,
+  timestamp: DateTime.now(),
 );

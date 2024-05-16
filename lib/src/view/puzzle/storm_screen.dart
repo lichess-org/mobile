@@ -68,6 +68,8 @@ class _StormScreenState extends State<StormScreen> {
   Widget _iosBuilder(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
+        backgroundColor: Styles.cupertinoScaffoldColor.resolveFrom(context),
+        border: null,
         padding: Styles.cupertinoAppBarTrailingWidgetPadding,
         middle: const Text('Puzzle Storm'),
         trailing: Row(
@@ -124,7 +126,8 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = stormControllerProvider(data.puzzles);
+    final ctrlProvider = stormControllerProvider(data.puzzles, data.timestamp);
+    final boardPreferences = ref.watch(boardPreferencesProvider);
     final puzzleState = ref.watch(ctrlProvider);
     ref.listen(ctrlProvider.select((state) => state.runOver), (_, s) {
       if (s) {
@@ -157,7 +160,8 @@ class _Body extends ConsumerWidget {
                           ? cg.InteractableSide.white
                           : cg.InteractableSide.black,
                   fen: puzzleState.position.fen,
-                  isCheck: puzzleState.position.isCheck,
+                  isCheck: boardPreferences.boardHighlights &&
+                      puzzleState.position.isCheck,
                   lastMove: puzzleState.lastMove?.cg,
                   sideToMove: puzzleState.position.turn.cg,
                   validMoves: puzzleState.validMoves,
@@ -601,7 +605,7 @@ class _BottomBar extends ConsumerWidget {
     final puzzleState = ref.watch(ctrl);
     return Container(
       color: Theme.of(context).platform == TargetPlatform.iOS
-          ? CupertinoTheme.of(context).barBackgroundColor
+          ? null
           : Theme.of(context).bottomAppBarTheme.color,
       child: SafeArea(
         top: false,

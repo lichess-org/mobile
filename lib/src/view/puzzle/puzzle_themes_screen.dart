@@ -28,7 +28,7 @@ Future<
     )> _themes(
   _ThemesRef ref,
 ) async {
-  final connectivity = await ref.watch(connectivityProvider.future);
+  final isOnline = await ref.watch(isOnlineProvider.future);
   final savedThemes = await ref.watch(savedThemeBatchesProvider.future);
   IMap<PuzzleThemeKey, PuzzleThemeData>? onlineThemes;
   try {
@@ -37,12 +37,7 @@ Future<
     onlineThemes = null;
   }
   final savedOpenings = await ref.watch(savedOpeningBatchesProvider.future);
-  return (
-    connectivity.isOnline,
-    savedThemes,
-    onlineThemes,
-    savedOpenings.isNotEmpty
-  );
+  return (isOnline, savedThemes, onlineThemes, savedOpenings.isNotEmpty);
 }
 
 class PuzzleThemesScreen extends StatelessWidget {
@@ -151,13 +146,6 @@ class _Category extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final collapsedIconColor = Theme.of(context).platform == TargetPlatform.iOS
-        ? CupertinoColors.secondaryLabel.resolveFrom(context)
-        : null;
-    final tileColor = Theme.of(context).platform == TargetPlatform.iOS
-        ? CupertinoColors.systemBlue.resolveFrom(context)
-        : null;
-
     final themeCountStyle = TextStyle(
       fontSize: 12,
       color: textShade(
@@ -171,11 +159,10 @@ class _Category extends ConsumerWidget {
     return Theme(
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
       child: ExpansionTile(
-        iconColor: tileColor,
-        collapsedIconColor: collapsedIconColor,
         title: Text(categoryName),
         children: [
           ListSection(
+            hasLeading: true,
             children: themes.map(
               (theme) {
                 final isThemeAvailable =

@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -28,11 +29,13 @@ class ArchivedGameScreen extends ConsumerWidget {
   const ArchivedGameScreen({
     required this.gameData,
     required this.orientation,
+    this.initialCursor,
     super.key,
   });
 
   final LightArchivedGame gameData;
   final Side orientation;
+  final int? initialCursor;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -54,6 +57,7 @@ class ArchivedGameScreen extends ConsumerWidget {
       body: _BoardBody(
         gameData: gameData,
         orientation: orientation,
+        initialCursor: initialCursor,
       ),
       bottomNavigationBar:
           _BottomBar(gameData: gameData, orientation: orientation),
@@ -63,6 +67,8 @@ class ArchivedGameScreen extends ConsumerWidget {
   Widget _iosBuilder(BuildContext context, WidgetRef ref) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
+        backgroundColor: Styles.cupertinoScaffoldColor.resolveFrom(context),
+        border: null,
         middle: _GameTitle(gameData: gameData),
         padding: const EdgeInsetsDirectional.only(end: 16.0),
         trailing: ToggleSoundButton(),
@@ -75,6 +81,7 @@ class ArchivedGameScreen extends ConsumerWidget {
               child: _BoardBody(
                 gameData: gameData,
                 orientation: orientation,
+                initialCursor: initialCursor,
               ),
             ),
             _BottomBar(gameData: gameData, orientation: orientation),
@@ -114,13 +121,25 @@ class _BoardBody extends ConsumerWidget {
   const _BoardBody({
     required this.gameData,
     required this.orientation,
+    this.initialCursor,
   });
 
   final LightArchivedGame gameData;
   final Side orientation;
+  final int? initialCursor;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    if (initialCursor != null) {
+      ref.listen(gameCursorProvider(gameData.id), (prev, cursor) {
+        if (prev?.isLoading == true && cursor.hasValue) {
+          ref
+              .read(gameCursorProvider(gameData.id).notifier)
+              .cursorAt(initialCursor!);
+        }
+      });
+    }
+
     final isBoardTurned = ref.watch(isBoardTurnedProvider);
     final gameCursor = ref.watch(gameCursorProvider(gameData.id));
     final black = GamePlayer(
@@ -225,7 +244,7 @@ class _BottomBar extends ConsumerWidget {
 
     return Container(
       color: Theme.of(context).platform == TargetPlatform.iOS
-          ? CupertinoTheme.of(context).barBackgroundColor
+          ? null
           : Theme.of(context).bottomAppBarTheme.color,
       child: SafeArea(
         top: false,
@@ -277,10 +296,10 @@ class _BottomBar extends ConsumerWidget {
                             context,
                             builder: (context) => AnalysisScreen(
                               title: context.l10n.gameAnalysis,
+                              pgnOrId: game.makePgn(),
                               options: AnalysisOptions(
                                 isLocalEvaluationAllowed: true,
                                 variant: gameData.variant,
-                                pgn: game.makePgn(),
                                 initialMoveCursor: cursor,
                                 orientation: orientation,
                                 id: gameData.id,

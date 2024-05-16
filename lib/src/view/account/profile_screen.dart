@@ -136,7 +136,7 @@ class _PerfCards extends ConsumerWidget {
     return account.when(
       data: (user) {
         if (user != null) {
-          return PerfCards(user: user);
+          return PerfCards(user: user, isMe: true);
         } else {
           return const SizedBox.shrink();
         }

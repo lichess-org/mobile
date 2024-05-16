@@ -14,9 +14,9 @@ enum Perf {
   classical('Classical', 'Classical', LichessIcons.classical),
   correspondence('Correspondence', 'Corresp.', LichessIcons.correspondence),
   fromPosition('From Position', 'From Pos.', LichessIcons.feather),
-  chess960('Chess 960', '960', LichessIcons.die_six),
+  chess960('Chess960', '960', LichessIcons.die_six),
   antichess('Antichess', 'Antichess', LichessIcons.antichess),
-  kingOfTheHill('King Of The Hill', 'KotH', LichessIcons.flag),
+  kingOfTheHill('King of the Hill', 'KotH', LichessIcons.flag),
   threeCheck('Three-check', '3check', LichessIcons.three_check),
   atomic('Atomic', 'Atomic', LichessIcons.atom),
   horde('Horde', 'Horde', LichessIcons.horde),
@@ -70,8 +70,14 @@ enum Perf {
     }
   }
 
-  static IMap<String, Perf> nameMap = IMap(Perf.values.asNameMap());
+  static final IMap<String, Perf> nameMap = IMap(Perf.values.asNameMap());
 }
+
+String _titleKey(String title) =>
+    title.toLowerCase().replaceAll(RegExp('[ -_]'), '');
+
+final IMap<String, Perf> _lowerCaseTitleMap =
+    Perf.nameMap.map((key, value) => MapEntry(_titleKey(value.title), value));
 
 extension PerfExtension on Pick {
   Perf asPerfOrThrow() {
@@ -82,6 +88,15 @@ extension PerfExtension on Pick {
     if (value is String) {
       if (Perf.nameMap.containsKey(value)) {
         return Perf.nameMap[value]!;
+      }
+      // handle lichess api inconsistencies
+      final valueKey = _titleKey(value);
+      if (_lowerCaseTitleMap.containsKey(valueKey)) {
+        return _lowerCaseTitleMap[valueKey]!;
+      }
+      switch (valueKey) {
+        case 'puzzles':
+          return Perf.puzzle;
       }
     } else if (value is Map<String, dynamic>) {
       final perf = Perf.nameMap[value['key'] as String];

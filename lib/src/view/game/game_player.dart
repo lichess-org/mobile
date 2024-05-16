@@ -69,6 +69,7 @@ class GamePlayer extends StatelessWidget {
               Icon(
                 LichessIcons.patron,
                 size: playerFontSize,
+                semanticLabel: context.l10n.patronLichessPatron,
               ),
               const SizedBox(width: 5),
             ],
@@ -115,8 +116,8 @@ class GamePlayer extends StatelessWidget {
                               ' ${player.ratingDiff! > 0 ? '+' : ''}${player.ratingDiff}',
                           style: TextStyle(
                             color: player.ratingDiff! > 0
-                                ? LichessColors.green
-                                : LichessColors.red,
+                                ? context.lichessColors.good
+                                : context.lichessColors.error,
                           ),
                         ),
                     ],
@@ -219,7 +220,7 @@ class ConfirmMove extends StatelessWidget {
       children: [
         PlatformIconButton(
           icon: CupertinoIcons.xmark_rectangle_fill,
-          color: LichessColors.red,
+          color: context.lichessColors.error,
           iconSize: 35,
           semanticsLabel: context.l10n.cancel,
           padding: const EdgeInsets.all(10),
@@ -230,11 +231,12 @@ class ConfirmMove extends StatelessWidget {
             context.l10n.confirmMove,
             overflow: TextOverflow.ellipsis,
             maxLines: 2,
+            textAlign: TextAlign.center,
           ),
         ),
         PlatformIconButton(
           icon: CupertinoIcons.checkmark_rectangle_fill,
-          color: LichessColors.green,
+          color: context.lichessColors.good,
           iconSize: 35,
           semanticsLabel: context.l10n.accept,
           padding: const EdgeInsets.all(10),
@@ -304,7 +306,9 @@ class _MoveExpirationState extends State<MoveExpiration> {
         ? Text(
             context.l10n.nbSecondsToPlayTheFirstMove(secs),
             style: TextStyle(
-              color: widget.mePlaying && emerg ? LichessColors.red : null,
+              color: widget.mePlaying && emerg
+                  ? context.lichessColors.error
+                  : null,
             ),
           )
         : const Text('');

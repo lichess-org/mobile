@@ -4,7 +4,6 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/db/secure_storage.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
@@ -48,12 +47,6 @@ Future<AppDependencies> appDependencies(
 
   final appVersion = Version.parse(pInfo.version);
   final installedVersion = prefs.getString('installed_version');
-  // 0.7.0: id migration, just delete everything
-  // TODO: remove this after the next release
-  if (installedVersion == null) {
-    await prefs.clear();
-    await deleteDatabase(dbPath);
-  }
 
   if (installedVersion == null ||
       Version.parse(installedVersion) != appVersion) {
@@ -95,10 +88,10 @@ Future<AppDependencies> appDependencies(
 
   final storedSession = await sessionStorage.read();
   if (storedSession != null) {
-    final client = httpClient(pInfo);
+    final client = httpClientFactory();
     try {
       final response = await client.get(
-        Uri.parse('$kLichessHost/api/account'),
+        lichessUri('/api/account'),
         headers: {
           'Authorization': 'Bearer ${signBearerToken(storedSession.token)}',
           'User-Agent':

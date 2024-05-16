@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
@@ -15,6 +16,7 @@ import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/notification_service.dart';
+import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:logging/logging.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -35,13 +37,6 @@ class MockDatabase extends Mock implements Database {}
 class MockHttpClient extends Mock implements http.Client {}
 
 const shouldLog = false;
-
-class FakeClientFactory implements LichessClientFactory {
-  @override
-  http.Client call() {
-    return MockHttpClient();
-  }
-}
 
 Future<ProviderContainer> makeContainer({
   List<Override>? overrides,
@@ -73,7 +68,16 @@ Future<ProviderContainer> makeContainer({
         ref.onDispose(pool.dispose);
         return pool;
       }),
-      lichessClientFactoryProvider.overrideWithValue(FakeClientFactory()),
+      lichessClientProvider.overrideWithValue(MockHttpClient()),
+      connectivityChangesProvider.overrideWith((ref) {
+        return Stream.value(
+          const ConnectivityStatus(
+            connectivityResult: IListConst([ConnectivityResult.wifi]),
+            isOnline: true,
+          ),
+        );
+      }),
+      defaultClientProvider.overrideWithValue(MockHttpClient()),
       crashlyticsProvider.overrideWithValue(FakeCrashlytics()),
       notificationServiceProvider.overrideWithValue(FakeNotificationService()),
       soundServiceProvider.overrideWithValue(FakeSoundService()),

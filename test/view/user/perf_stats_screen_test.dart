@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
@@ -11,21 +10,15 @@ import '../../model/auth/fake_auth_repository.dart';
 import '../../test_app.dart';
 import '../../test_utils.dart';
 
-class FakeClientFactory implements LichessClientFactory {
-  @override
-  http.Client call() {
-    return MockClient((request) {
-      if (request.url.path ==
-          '/api/user/${fakeUser.id}/perf/${testPerf.name}') {
-        return mockResponse(userPerfStatsResponse, 200);
-      }
-      if (request.url.path == '/api/user/${fakeUser.id}/rating-history') {
-        return mockResponse(userRatingHistoryResponse, 200);
-      }
-      return mockResponse('', 404);
-    });
+final lichessClient = MockClient((request) {
+  if (request.url.path == '/api/user/${fakeUser.id}/perf/${testPerf.name}') {
+    return mockResponse(userPerfStatsResponse, 200);
   }
-}
+  if (request.url.path == '/api/user/${fakeUser.id}/rating-history') {
+    return mockResponse(userRatingHistoryResponse, 200);
+  }
+  return mockResponse('', 404);
+});
 
 void main() {
   group('PerfStatsScreen', () {
@@ -41,7 +34,7 @@ void main() {
             perf: testPerf,
           ),
           overrides: [
-            lichessClientFactoryProvider.overrideWithValue(FakeClientFactory()),
+            lichessClientProvider.overrideWithValue(lichessClient),
           ],
         );
 
@@ -71,7 +64,7 @@ void main() {
             perf: testPerf,
           ),
           overrides: [
-            lichessClientFactoryProvider.overrideWithValue(FakeClientFactory()),
+            lichessClientProvider.overrideWithValue(lichessClient),
           ],
         );
 

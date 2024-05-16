@@ -15,6 +15,7 @@ class PuzzleStreak with _$PuzzleStreak {
     required int index,
     required bool hasSkipped,
     required bool finished,
+    required DateTime timestamp,
   }) = _PuzzleStreak;
 
   PuzzleId? get nextId => streak.getOrNull(index + 1);

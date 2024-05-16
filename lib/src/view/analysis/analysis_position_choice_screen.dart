@@ -35,6 +35,8 @@ class AnalysisPositionChoiceScreen extends StatelessWidget {
   Widget _iosBuilder(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
+        backgroundColor: Styles.cupertinoScaffoldColor.resolveFrom(context),
+        border: null,
         middle: Text(context.l10n.analysis),
       ),
       child: const _Body(),
@@ -99,7 +101,8 @@ class _BodyState extends State<_Body> {
                         context,
                         rootNavigator: true,
                         builder: (context) => AnalysisScreen(
-                          options: parsedInput!,
+                          pgnOrId: parsedInput!.$1,
+                          options: parsedInput!.$2,
                         ),
                       )
                   : null,
@@ -118,26 +121,30 @@ class _BodyState extends State<_Body> {
     }
   }
 
-  AnalysisOptions? get parsedInput {
+  (String, AnalysisOptions)? get parsedInput {
     if (textInput == null || textInput!.trim().isEmpty) {
-      return const AnalysisOptions(
-        isLocalEvaluationAllowed: true,
-        variant: Variant.standard,
-        orientation: Side.white,
-        pgn: '',
-        id: standaloneAnalysisId,
+      return const (
+        '',
+        AnalysisOptions(
+          isLocalEvaluationAllowed: true,
+          variant: Variant.standard,
+          orientation: Side.white,
+          id: standaloneAnalysisId,
+        )
       );
     }
 
     // try to parse as FEN first
     try {
       final pos = Chess.fromSetup(Setup.parseFen(textInput!.trim()));
-      return AnalysisOptions(
-        isLocalEvaluationAllowed: true,
-        variant: Variant.standard,
-        orientation: Side.white,
-        pgn: '[FEN "${pos.fen}"]',
-        id: standaloneAnalysisId,
+      return (
+        '[FEN "${pos.fen}"]',
+        const AnalysisOptions(
+          isLocalEvaluationAllowed: true,
+          variant: Variant.standard,
+          orientation: Side.white,
+          id: standaloneAnalysisId,
+        )
       );
     } catch (_, __) {}
 
@@ -155,13 +162,15 @@ class _BodyState extends State<_Body> {
         return null;
       }
 
-      return AnalysisOptions(
-        isLocalEvaluationAllowed: true,
-        variant: rule != null ? Variant.fromRule(rule) : Variant.standard,
-        pgn: textInput!,
-        initialMoveCursor: mainlineMoves.isEmpty ? 0 : 1,
-        orientation: Side.white,
-        id: standaloneAnalysisId,
+      return (
+        textInput!,
+        AnalysisOptions(
+          isLocalEvaluationAllowed: true,
+          variant: rule != null ? Variant.fromRule(rule) : Variant.standard,
+          initialMoveCursor: mainlineMoves.isEmpty ? 0 : 1,
+          orientation: Side.white,
+          id: standaloneAnalysisId,
+        )
       );
     } catch (_, __) {}
 

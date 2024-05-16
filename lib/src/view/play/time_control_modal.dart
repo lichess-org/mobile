@@ -188,9 +188,7 @@ class _ChoiceChip extends StatelessWidget {
         border: selected
             ? Border.fromBorderSide(
                 BorderSide(
-                  color: Theme.of(context).platform == TargetPlatform.iOS
-                      ? CupertinoColors.activeBlue.resolveFrom(context)
-                      : Theme.of(context).colorScheme.primary,
+                  color: Theme.of(context).colorScheme.primary,
                   width: 2.0,
                 ),
               )

@@ -17,6 +17,7 @@ import 'game_status.dart';
 import 'player.dart';
 
 part 'archived_game.freezed.dart';
+part 'archived_game.g.dart';
 
 typedef ClockData = ({
   Duration initial,
@@ -25,9 +26,12 @@ typedef ClockData = ({
 
 /// A lichess game exported from the API.
 ///
-/// This represents a game that is finished and not owned by the current user.
-/// See [PlayableGame] for a game that is in progress or owned by the current user.
-@freezed
+/// This represents a game that is finished and can be viewed by anyone, or accessed
+/// offline.
+///
+/// See also [PlayableGame] for a game owned by the current user and that can be
+/// played unless finished.
+@Freezed(fromJson: true, toJson: true)
 class ArchivedGame
     with _$ArchivedGame, BaseGame, IndexableSteps
     implements BaseGame {
@@ -39,10 +43,14 @@ class ArchivedGame
     required GameMeta meta,
     // TODO refactor to not include this field
     required LightArchivedGame data,
+    @JsonKey(fromJson: stepsFromJson, toJson: stepsToJson)
     required IList<GameStep> steps,
     String? initialFen,
     required GameStatus status,
     Side? winner,
+
+    /// The point of view of the current player or null if spectating.
+    Side? youAre,
     bool? isThreefoldRepetition,
     required Player white,
     required Player black,
@@ -57,6 +65,24 @@ class ArchivedGame
   factory ArchivedGame.fromServerJson(Map<String, dynamic> json) {
     return _archivedGameFromPick(pick(json).required());
   }
+
+  /// Create an archived game from a local storage JSON.
+  factory ArchivedGame.fromJson(Map<String, dynamic> json) =>
+      _$ArchivedGameFromJson(json);
+
+  /// Player point of view. Null if spectating.
+  Player? get me => youAre == null
+      ? null
+      : youAre == Side.white
+          ? white
+          : black;
+
+  /// Opponent point of view. Null if spectating.
+  Player? get opponent => youAre == null
+      ? null
+      : youAre == Side.white
+          ? black
+          : white;
 }
 
 /// A lichess game exported from the API, with less data than [ArchivedGame].
@@ -65,7 +91,7 @@ class ArchivedGame
 /// Lichess endpoints that return this data:
 /// - GET /api/games/user/<userId>
 /// - GET /api/games/export/_ids
-@freezed
+@Freezed(fromJson: true, toJson: true)
 class LightArchivedGame with _$LightArchivedGame {
   const LightArchivedGame._();
 
@@ -86,7 +112,7 @@ class LightArchivedGame with _$LightArchivedGame {
     required Variant variant,
     LightOpening? opening,
     String? lastFen,
-    Move? lastMove,
+    @MoveConverter() Move? lastMove,
     Side? winner,
     ClockData? clock,
   }) = _ArchivedGameData;
@@ -94,6 +120,9 @@ class LightArchivedGame with _$LightArchivedGame {
   factory LightArchivedGame.fromServerJson(Map<String, dynamic> json) {
     return _lightArchivedGameFromPick(pick(json).required());
   }
+
+  factory LightArchivedGame.fromJson(Map<String, dynamic> json) =>
+      _$LightArchivedGameFromJson(json);
 
   String get clockDisplay {
     return TimeIncrement(

@@ -26,10 +26,12 @@ const kInlineMoveSpacing = 3.0;
 
 class AnalysisTreeView extends ConsumerStatefulWidget {
   const AnalysisTreeView(
+    this.pgn,
     this.options,
     this.displayMode,
   );
 
+  final String pgn;
   final AnalysisOptions options;
   final Orientation displayMode;
 
@@ -46,7 +48,7 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
   void initState() {
     super.initState();
     currentPath = ref.read(
-      analysisControllerProvider(widget.options).select(
+      analysisControllerProvider(widget.pgn, widget.options).select(
         (value) => value.currentPath,
       ),
     );
@@ -77,7 +79,7 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
   @override
   Widget build(BuildContext context) {
     ref.listen(
-      analysisControllerProvider(widget.options),
+      analysisControllerProvider(widget.pgn, widget.options),
       (prev, state) {
         if (prev?.currentPath != state.currentPath) {
           // debouncing the current path change to avoid rebuilding when using
@@ -102,7 +104,7 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
       },
     );
 
-    final ctrlProvider = analysisControllerProvider(widget.options);
+    final ctrlProvider = analysisControllerProvider(widget.pgn, widget.options);
     final root = ref.watch(ctrlProvider.select((value) => value.root));
     final rootComments = ref.watch(
       ctrlProvider.select((value) => value.pgnRootComments),
@@ -113,6 +115,7 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
     );
 
     final List<Widget> moveWidgets = _buildTreeWidget(
+      widget.pgn,
       widget.options,
       parent: root,
       nodes: root.children,
@@ -166,6 +169,7 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
   }
 
   List<Widget> _buildTreeWidget(
+    String pgn,
     AnalysisOptions options, {
     required ViewNode parent,
     required IList<ViewBranch> nodes,
@@ -185,6 +189,7 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
     // add the first child
     widgets.add(
       InlineMove(
+        pgn,
         options,
         path: newPath,
         parent: parent,
@@ -211,6 +216,7 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
             child: Wrap(
               spacing: kInlineMoveSpacing,
               children: _buildTreeWidget(
+                pgn,
                 options,
                 parent: parent,
                 nodes: [nodes[i]].lockUnsafe,
@@ -226,6 +232,7 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
       } else {
         widgets.addAll(
           _buildTreeWidget(
+            pgn,
             options,
             parent: parent,
             nodes: [nodes[i]].lockUnsafe,
@@ -242,6 +249,7 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
     // add the children of the first child
     widgets.addAll(
       _buildTreeWidget(
+        pgn,
         options,
         parent: firstChild,
         nodes: firstChild.children,
@@ -276,6 +284,7 @@ Color? _textColor(
 
 class InlineMove extends ConsumerWidget {
   const InlineMove(
+    this.pgn,
     this.options, {
     required this.path,
     required this.parent,
@@ -289,6 +298,7 @@ class InlineMove extends ConsumerWidget {
     this.endSideline = false,
   });
 
+  final String pgn;
   final AnalysisOptions options;
   final UciPath path;
   final ViewNode parent;
@@ -309,7 +319,7 @@ class InlineMove extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = analysisControllerProvider(options);
+    final ctrlProvider = analysisControllerProvider(pgn, options);
     final move = branch.sanMove;
     final ply = branch.position.ply;
     final textStyle = isSideline
@@ -369,6 +379,7 @@ class InlineMove extends ConsumerWidget {
               isScrollControlled: true,
               showDragHandle: true,
               builder: (context) => _MoveContextMenu(
+                pgn,
                 options,
                 title: ply.isOdd
                     ? '${(ply / 2).ceil()}. $moveWithNag'
@@ -429,6 +440,7 @@ class InlineMove extends ConsumerWidget {
 
 class _MoveContextMenu extends ConsumerWidget {
   const _MoveContextMenu(
+    this.pgn,
     this.options, {
     required this.title,
     required this.path,
@@ -438,6 +450,7 @@ class _MoveContextMenu extends ConsumerWidget {
   });
 
   final String title;
+  final String pgn;
   final AnalysisOptions options;
   final UciPath path;
   final ViewNode parent;
@@ -446,7 +459,7 @@ class _MoveContextMenu extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = analysisControllerProvider(options);
+    final ctrlProvider = analysisControllerProvider(pgn, options);
 
     return DraggableScrollableSheet(
       initialChildSize: .3,
