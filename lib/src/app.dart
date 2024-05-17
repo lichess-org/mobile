@@ -72,7 +72,7 @@ class _AppState extends ConsumerState<Application> {
     // Sync correspondence games on app start, just once.
     ref.read(correspondenceServiceProvider).syncGames();
 
-    ref.listenManual(connectivityChangesProvider, (prev, current) async {
+    ref.listenManual(connectivityProvider, (prev, current) async {
       // Play registered moves whenever the app comes back online.
       if (prev?.hasValue == true &&
           !prev!.value!.isOnline &&
@@ -87,7 +87,9 @@ class _AppState extends ConsumerState<Application> {
       }
 
       final socketClient = ref.read(socketPoolProvider).currentClient;
-      if (current.value?.isOnline == true && !socketClient.isActive) {
+      if (current.value?.isOnline == true &&
+          current.value?.appState == AppLifecycleState.resumed &&
+          !socketClient.isActive) {
         socketClient.connect();
       } else if (current.value?.isOnline == false) {
         socketClient.close();

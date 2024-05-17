@@ -97,7 +97,7 @@ Future<Widget> buildTestApp(
         return pool;
       }),
       // ignore: scoped_providers_should_specify_dependencies
-      connectivityChangesProvider.overrideWith((ref) {
+      connectivityProvider.overrideWith((ref) {
         return Stream.value(
           const ConnectivityStatus(
             connectivityResult: IListConst([ConnectivityResult.wifi]),

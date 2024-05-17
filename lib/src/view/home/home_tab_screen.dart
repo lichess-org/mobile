@@ -52,7 +52,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen(connectivityChangesProvider, (_, connectivity) {
+    ref.listen(connectivityProvider, (_, connectivity) {
       // Refresh the data only once if it was offline and is now online
       if (!connectivity.isRefreshing && connectivity.hasValue) {
         final isNowOnline = connectivity.value!.isOnline;
@@ -215,9 +215,9 @@ class _HomeBody extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isOnlineAsync = ref.watch(isOnlineProvider);
+    final isOnlineAsync = ref.watch(connectivityProvider);
     return isOnlineAsync.when(
-      data: (isOnline) {
+      data: (status) {
         final session = ref.watch(authSessionProvider);
         final isTablet = isTabletOrLarger(context);
         final emptyRecent = ref.watch(accountRecentGamesProvider).maybeWhen(
@@ -322,8 +322,9 @@ class _HomeBody extends ConsumerWidget {
                       child: Column(
                         children: [
                           const SizedBox(height: 8.0),
-                          if (isOnline) const _TabletCreateAGameSection(),
-                          if (isOnline)
+                          if (status.isOnline)
+                            const _TabletCreateAGameSection(),
+                          if (status.isOnline)
                             const _OngoingGamesPreview(maxGamesToShow: 5)
                           else
                             const _OfflineCorrespondencePreview(
@@ -347,7 +348,7 @@ class _HomeBody extends ConsumerWidget {
               ]
             : [
                 const _HelloWidget(),
-                if (isOnline)
+                if (status.isOnline)
                   const _OngoingGamesCarousel(maxGamesToShow: 20)
                 else
                   const _OfflineCorrespondenceCarousel(maxGamesToShow: 20),
@@ -794,7 +795,7 @@ class _PlayerScreenButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final connectivity = ref.watch(connectivityChangesProvider);
+    final connectivity = ref.watch(connectivityProvider);
 
     return connectivity.maybeWhen(
       data: (connectivity) => AppBarIconButton(
