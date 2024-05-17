@@ -33,6 +33,9 @@ import 'puzzle_themes_screen.dart';
 import 'storm_screen.dart';
 import 'streak_screen.dart';
 
+const _kNumberOfHistoryItemsOnHandset = 8;
+const _kNumberOfHistoryItemsOnTablet = 16;
+
 class PuzzleTabScreen extends ConsumerStatefulWidget {
   const PuzzleTabScreen({super.key});
 
@@ -306,6 +309,7 @@ class PuzzleHistoryWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncData = ref.watch(puzzleRecentActivityProvider);
+    final isTablet = isTabletOrLarger(context);
     return asyncData.when(
       data: (recentActivity) {
         if (recentActivity == null) {
@@ -321,6 +325,10 @@ class PuzzleHistoryWidget extends ConsumerWidget {
             ],
           );
         }
+
+        final maxItems = isTablet
+            ? _kNumberOfHistoryItemsOnTablet
+            : _kNumberOfHistoryItemsOnHandset;
 
         return ListSection(
           cupertinoBackgroundColor:
@@ -341,7 +349,8 @@ class PuzzleHistoryWidget extends ConsumerWidget {
               padding: Theme.of(context).platform == TargetPlatform.iOS
                   ? EdgeInsets.zero
                   : Styles.horizontalBodyPadding,
-              child: PuzzleHistoryPreview(recentActivity.take(8).toIList()),
+              child:
+                  PuzzleHistoryPreview(recentActivity.take(maxItems).toIList()),
             ),
           ],
         );

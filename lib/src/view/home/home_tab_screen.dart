@@ -144,7 +144,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
                 onRefresh: () => _refreshData(),
               ),
               const SliverToBoxAdapter(child: ConnectivityBanner()),
-              const _HomeBody(),
+              const SliverSafeArea(top: false, sliver: _HomeBody()),
             ],
           ),
           if (getScreenType(context) == ScreenType.handset)
@@ -228,6 +228,8 @@ class _HomeBody extends ConsumerWidget {
               orElse: () => false,
             );
 
+        // Show the welcome screen if there are no recent games and no stored games
+        // (i.e. first installation, or the user has never played a game)
         if (emptyRecent && emptyStored) {
           final welcomeWidgets = [
             Padding(
@@ -315,7 +317,7 @@ class _HomeBody extends ConsumerWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
+                    Flexible(
                       child: Column(
                         children: [
                           const SizedBox(height: 8.0),
@@ -329,7 +331,7 @@ class _HomeBody extends ConsumerWidget {
                         ],
                       ),
                     ),
-                    const Expanded(
+                    const Flexible(
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -361,7 +363,7 @@ class _HomeBody extends ConsumerWidget {
                 children: widgets,
               )
             : SliverList(
-                delegate: SliverChildListDelegate(widgets),
+                delegate: SliverChildListDelegate.fixed(widgets),
               );
       },
       loading: () {
