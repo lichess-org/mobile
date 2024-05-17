@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
-import 'package:lichess_mobile/src/utils/layout.dart';
+import 'package:lichess_mobile/src/utils/screen.dart';
 
 /// A simple countdown clock.
 ///

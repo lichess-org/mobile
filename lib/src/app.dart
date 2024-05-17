@@ -22,8 +22,8 @@ import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/notification_service.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
-import 'package:lichess_mobile/src/utils/layout.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/game/standalone_game_screen.dart';
 
 class LoadingAppScreen extends ConsumerWidget {
@@ -63,16 +63,15 @@ class Application extends ConsumerStatefulWidget {
 }
 
 class _AppState extends ConsumerState<Application> {
+  bool _correspondenceSynced = false;
+
   @override
   void initState() {
     if (Theme.of(context).platform == TargetPlatform.android) {
       setOptimalDisplayMode();
     }
 
-    // Sync correspondence games on app start, just once.
-    ref.read(correspondenceServiceProvider).syncGames();
-
-    ref.listenManual(connectivityChangesProvider, (prev, current) async {
+    ref.listenManual(connectivityProvider, (prev, current) async {
       // Play registered moves whenever the app comes back online.
       if (prev?.hasValue == true &&
           !prev!.value!.isOnline &&
@@ -86,8 +85,15 @@ class _AppState extends ConsumerState<Application> {
         }
       }
 
+      if (current.value?.isOnline == true && !_correspondenceSynced) {
+        _correspondenceSynced = true;
+        ref.read(correspondenceServiceProvider).syncGames();
+      }
+
       final socketClient = ref.read(socketPoolProvider).currentClient;
-      if (current.value?.isOnline == true && !socketClient.isActive) {
+      if (current.value?.isOnline == true &&
+          current.value?.appState == AppLifecycleState.resumed &&
+          !socketClient.isActive) {
         socketClient.connect();
       } else if (current.value?.isOnline == false) {
         socketClient.close();

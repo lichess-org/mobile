@@ -16,8 +16,9 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/layout.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/utils/screen.dart';
+import 'package:lichess_mobile/src/view/correspondence/offline_correspondence_game_screen.dart';
 import 'package:lichess_mobile/src/view/game/lobby_screen.dart';
 import 'package:lichess_mobile/src/view/game/standalone_game_screen.dart';
 import 'package:lichess_mobile/src/view/home/create_a_game_screen.dart';
@@ -51,7 +52,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen(connectivityChangesProvider, (_, connectivity) {
+    ref.listen(connectivityProvider, (_, connectivity) {
       // Refresh the data only once if it was offline and is now online
       if (!connectivity.isRefreshing && connectivity.hasValue) {
         final isNowOnline = connectivity.value!.isOnline;
@@ -72,7 +73,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
   }
 
   Widget _androidBuilder(BuildContext context) {
-    final isTablet = getScreenType(context) == ScreenType.tablet;
+    final isTablet = isTabletOrLarger(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('lichess.org'),
@@ -144,7 +145,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
                 onRefresh: () => _refreshData(),
               ),
               const SliverToBoxAdapter(child: ConnectivityBanner()),
-              const _HomeBody(),
+              const SliverSafeArea(top: false, sliver: _HomeBody()),
             ],
           ),
           if (getScreenType(context) == ScreenType.handset)
@@ -214,11 +215,11 @@ class _HomeBody extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isOnlineAsync = ref.watch(isOnlineProvider);
+    final isOnlineAsync = ref.watch(connectivityProvider);
     return isOnlineAsync.when(
-      data: (isOnline) {
+      data: (status) {
         final session = ref.watch(authSessionProvider);
-        final isTablet = getScreenType(context) == ScreenType.tablet;
+        final isTablet = isTabletOrLarger(context);
         final emptyRecent = ref.watch(accountRecentGamesProvider).maybeWhen(
               data: (data) => data.isEmpty,
               orElse: () => false,
@@ -228,6 +229,8 @@ class _HomeBody extends ConsumerWidget {
               orElse: () => false,
             );
 
+        // Show the welcome screen if there are no recent games and no stored games
+        // (i.e. first installation, or the user has never played a game)
         if (emptyRecent && emptyStored) {
           final welcomeWidgets = [
             Padding(
@@ -315,12 +318,13 @@ class _HomeBody extends ConsumerWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
+                    Flexible(
                       child: Column(
                         children: [
                           const SizedBox(height: 8.0),
-                          if (isOnline) const _TabletCreateAGameSection(),
-                          if (isOnline)
+                          if (status.isOnline)
+                            const _TabletCreateAGameSection(),
+                          if (status.isOnline)
                             const _OngoingGamesPreview(maxGamesToShow: 5)
                           else
                             const _OfflineCorrespondencePreview(
@@ -329,7 +333,7 @@ class _HomeBody extends ConsumerWidget {
                         ],
                       ),
                     ),
-                    const Expanded(
+                    const Flexible(
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -344,11 +348,11 @@ class _HomeBody extends ConsumerWidget {
               ]
             : [
                 const _HelloWidget(),
-                if (isOnline)
+                if (status.isOnline)
                   const _OngoingGamesCarousel(maxGamesToShow: 20)
                 else
                   const _OfflineCorrespondenceCarousel(maxGamesToShow: 20),
-                const SafeArea(top: false, child: RecentGames()),
+                const RecentGames(),
                 if (Theme.of(context).platform == TargetPlatform.iOS)
                   const SizedBox(height: 70.0)
                 else
@@ -459,7 +463,23 @@ class _OngoingGamesCarousel extends ConsumerWidget {
         }
         return _GamesCarousel<OngoingGame>(
           list: data,
-          builder: (game) => _GamePreviewCarouselItem(game: game),
+          builder: (game) => _GamePreviewCarouselItem(
+            game: game,
+            onTap: () {
+              pushPlatformRoute(
+                context,
+                rootNavigator: true,
+                builder: (context) => StandaloneGameScreen(
+                  params: InitialStandaloneGameParams(
+                    id: game.fullId,
+                    fen: game.fen,
+                    orientation: game.orientation,
+                    lastMove: game.lastMove,
+                  ),
+                ),
+              );
+            },
+          ),
           moreScreenBuilder: (_) => const OngoingGamesScreen(),
           maxGamesToShow: maxGamesToShow,
         );
@@ -501,6 +521,15 @@ class _OfflineCorrespondenceCarousel extends ConsumerWidget {
               lastMove: el.$2.lastMove,
               secondsLeft: el.$2.myTimeLeft(el.$1)?.inSeconds,
             ),
+            onTap: () {
+              pushPlatformRoute(
+                context,
+                rootNavigator: true,
+                builder: (_) => OfflineCorrespondenceGameScreen(
+                  initialGame: (el.$1, el.$2),
+                ),
+              );
+            },
           ),
           moreScreenBuilder: (_) => const OfflineCorrespondenceGamesScreen(),
           maxGamesToShow: maxGamesToShow,
@@ -555,7 +584,7 @@ class _GamesCarouselState<T> extends State<_GamesCarousel<T>> {
                     pushPlatformRoute(
                       context,
                       title: context.l10n.nbGamesInPlay(widget.list.length),
-                      builder: (_) => const OngoingGamesScreen(),
+                      builder: widget.moreScreenBuilder,
                     );
                   },
                   child: Text(context.l10n.more),
@@ -583,9 +612,10 @@ class _GamesCarouselState<T> extends State<_GamesCarousel<T>> {
 }
 
 class _GamePreviewCarouselItem extends StatelessWidget {
-  const _GamePreviewCarouselItem({required this.game});
+  const _GamePreviewCarouselItem({required this.game, this.onTap});
 
   final OngoingGame game;
+  final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -649,20 +679,7 @@ class _GamePreviewCarouselItem extends StatelessWidget {
           ),
         ),
       ),
-      onTap: () {
-        pushPlatformRoute(
-          context,
-          rootNavigator: true,
-          builder: (context) => StandaloneGameScreen(
-            params: InitialStandaloneGameParams(
-              id: game.fullId,
-              fen: game.fen,
-              orientation: game.orientation,
-              lastMove: game.lastMove,
-            ),
-          ),
-        );
-      },
+      onTap: onTap,
     );
   }
 }
@@ -778,7 +795,7 @@ class _PlayerScreenButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final connectivity = ref.watch(connectivityChangesProvider);
+    final connectivity = ref.watch(connectivityProvider);
 
     return connectivity.maybeWhen(
       data: (connectivity) => AppBarIconButton(
