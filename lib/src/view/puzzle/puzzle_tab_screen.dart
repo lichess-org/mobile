@@ -320,7 +320,13 @@ class PuzzleHistoryWidget extends ConsumerWidget {
             header: Text(context.l10n.puzzleHistory),
             children: [
               Center(
-                child: Text(context.l10n.puzzleNoPuzzlesToShow),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 16.0,
+                    horizontal: 8.0,
+                  ),
+                  child: Text(context.l10n.puzzleNoPuzzlesToShow),
+                ),
               ),
             ],
           );
