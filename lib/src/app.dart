@@ -63,14 +63,13 @@ class Application extends ConsumerStatefulWidget {
 }
 
 class _AppState extends ConsumerState<Application> {
+  bool _correspondenceSynced = false;
+
   @override
   void initState() {
     if (Theme.of(context).platform == TargetPlatform.android) {
       setOptimalDisplayMode();
     }
-
-    // Sync correspondence games on app start, just once.
-    ref.read(correspondenceServiceProvider).syncGames();
 
     ref.listenManual(connectivityProvider, (prev, current) async {
       // Play registered moves whenever the app comes back online.
@@ -84,6 +83,11 @@ class _AppState extends ConsumerState<Application> {
         if (nbMovesPlayed > 0) {
           ref.invalidate(ongoingGamesProvider);
         }
+      }
+
+      if (current.value?.isOnline == true && !_correspondenceSynced) {
+        _correspondenceSynced = true;
+        ref.read(correspondenceServiceProvider).syncGames();
       }
 
       final socketClient = ref.read(socketPoolProvider).currentClient;
