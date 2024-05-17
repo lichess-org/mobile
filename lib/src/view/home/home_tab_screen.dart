@@ -16,8 +16,8 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/layout.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/game/lobby_screen.dart';
 import 'package:lichess_mobile/src/view/game/standalone_game_screen.dart';
 import 'package:lichess_mobile/src/view/home/create_a_game_screen.dart';
@@ -72,7 +72,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
   }
 
   Widget _androidBuilder(BuildContext context) {
-    final isTablet = getScreenType(context) == ScreenType.tablet;
+    final isTablet = isTabletOrLarger(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('lichess.org'),
@@ -218,7 +218,7 @@ class _HomeBody extends ConsumerWidget {
     return isOnlineAsync.when(
       data: (isOnline) {
         final session = ref.watch(authSessionProvider);
-        final isTablet = getScreenType(context) == ScreenType.tablet;
+        final isTablet = isTabletOrLarger(context);
         final emptyRecent = ref.watch(accountRecentGamesProvider).maybeWhen(
               data: (data) => data.isEmpty,
               orElse: () => false,
