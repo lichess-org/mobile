@@ -352,7 +352,7 @@ class _HomeBody extends ConsumerWidget {
                   const _OngoingGamesCarousel(maxGamesToShow: 20)
                 else
                   const _OfflineCorrespondenceCarousel(maxGamesToShow: 20),
-                const SafeArea(top: false, child: RecentGames()),
+                const RecentGames(),
                 if (Theme.of(context).platform == TargetPlatform.iOS)
                   const SizedBox(height: 70.0)
                 else
@@ -365,7 +365,7 @@ class _HomeBody extends ConsumerWidget {
                 children: widgets,
               )
             : SliverList(
-                delegate: SliverChildListDelegate.fixed(widgets),
+                delegate: SliverChildListDelegate(widgets),
               );
       },
       loading: () {
