@@ -50,13 +50,14 @@ class RecentGames extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isOnline = ref.watch(isOnlineProvider);
+    final connectivity = ref.watch(connectivityProvider);
     final session = ref.watch(authSessionProvider);
     final userId = user?.id ?? session?.user.id;
 
     final recentGames = user != null
         ? ref.watch(_userRecentGamesProvider(userId: user!.id))
-        : session != null && (isOnline.valueOrNull ?? false) == true
+        : session != null &&
+                (connectivity.valueOrNull?.isOnline ?? false) == true
             ? ref.watch(accountRecentGamesProvider)
             : ref.watch(recentStoredGamesProvider).whenData((data) {
                 return data.map((e) => e.game.data).toIList();

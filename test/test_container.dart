@@ -69,7 +69,7 @@ Future<ProviderContainer> makeContainer({
         return pool;
       }),
       lichessClientProvider.overrideWithValue(MockHttpClient()),
-      connectivityChangesProvider.overrideWith((ref) {
+      connectivityProvider.overrideWith((ref) {
         return Stream.value(
           const ConnectivityStatus(
             connectivityResult: IListConst([ConnectivityResult.wifi]),

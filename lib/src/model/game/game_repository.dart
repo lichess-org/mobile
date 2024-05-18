@@ -39,7 +39,7 @@ class GameRepository {
       Uri(
         path: '/api/games/user/$userId',
         queryParameters: {
-          'max': '10',
+          'max': '20',
           'moves': 'false',
           'lastFen': 'true',
           'accuracy': 'true',

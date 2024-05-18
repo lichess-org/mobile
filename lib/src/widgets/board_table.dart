@@ -6,8 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/layout.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
+import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 
 import 'platform.dart';
@@ -98,7 +98,7 @@ class BoardTable extends ConsumerWidget {
       builder: (context, constraints) {
         final aspectRatio = constraints.biggest.aspectRatio;
         final defaultBoardSize = constraints.biggest.shortestSide;
-        final isTablet = getScreenType(context) == ScreenType.tablet;
+        final isTablet = isTabletOrLarger(context);
         final boardSize = isTablet
             ? defaultBoardSize - kTabletBoardTableSidePadding * 2
             : defaultBoardSize;

@@ -63,7 +63,7 @@ Future<IList<OngoingGame>> ongoingGames(OngoingGamesRef ref) async {
   if (session == null) return IList();
 
   return ref.withClientCacheFor(
-    (client) => AccountRepository(client).getOngoingGames(),
+    (client) => AccountRepository(client).getOngoingGames(nb: 20),
     const Duration(hours: 1),
   );
 }
@@ -101,9 +101,11 @@ class AccountRepository {
     return client.readJson(
       Uri(
         path: '/api/account/playing',
-        queryParameters: {
-          if (nb != null) 'nb': nb.toString(),
-        },
+        queryParameters: nb != null
+            ? {
+                'nb': nb.toString(),
+              }
+            : null,
       ),
       mapper: (Map<String, dynamic> json) {
         final list = json['nowPlaying'];

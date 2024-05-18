@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/constants.dart';
 
-/// Returns the estimated height of screen left the board
+/// Returns the estimated height of screen after removing the height of the board
 double estimateRemainingHeightLeftBoard(BuildContext context) {
   final size = MediaQuery.sizeOf(context);
   final padding = MediaQuery.paddingOf(context);
@@ -19,8 +19,6 @@ abstract class FormFactor {
   static const double handset = 300;
 }
 
-enum ScreenType { watch, handset, tablet, desktop }
-
 /// Detect device type regardless of orientation
 ScreenType getScreenType(BuildContext context) {
   final double deviceWidth = MediaQuery.sizeOf(context).shortestSide;
@@ -28,4 +26,29 @@ ScreenType getScreenType(BuildContext context) {
   if (deviceWidth > FormFactor.tablet) return ScreenType.tablet;
   if (deviceWidth > FormFactor.handset) return ScreenType.handset;
   return ScreenType.watch;
+}
+
+/// Returns true if the device form factor is at least as large as a tablet
+bool isTabletOrLarger(BuildContext context) {
+  return getScreenType(context) >= ScreenType.tablet;
+}
+
+enum ScreenType { watch, handset, tablet, desktop }
+
+extension ScreenTypeComparisonOperators on ScreenType {
+  bool operator <(ScreenType other) {
+    return index < other.index;
+  }
+
+  bool operator <=(ScreenType other) {
+    return index <= other.index;
+  }
+
+  bool operator >(ScreenType other) {
+    return index > other.index;
+  }
+
+  bool operator >=(ScreenType other) {
+    return index >= other.index;
+  }
 }
