@@ -257,7 +257,9 @@ class _AcplChart extends StatelessWidget {
               LineChartBarData(
                 spots: spots,
                 isCurved: true,
-                color: Colors.transparent,
+                color: Theme.of(context).platform == TargetPlatform.iOS
+                    ? Colors.orange
+                    : Theme.of(context).colorScheme.secondary,
                 barWidth: 1,
                 aboveBarData: BarAreaData(
                   show: true,
