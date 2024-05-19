@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
@@ -348,7 +349,11 @@ class _AccountPreferencesScreenState
         );
       },
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (err, stack) => Center(child: Text(err.toString())),
+      error: (err, _) {
+        return FullScreenRetryRequest(
+          onRetry: () => ref.invalidate(accountPreferencesProvider),
+        );
+      },
     );
 
     return Theme.of(context).platform == TargetPlatform.android
