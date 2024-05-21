@@ -86,12 +86,6 @@ class ImmersiveMode {
   /// device to sleep.
   Future<void> disable() async {
     WakelockPlus.disable();
-    SystemChrome.setEnabledSystemUIMode(
-      SystemUiMode.manual,
-      overlays: [
-        SystemUiOverlay.top,
-        SystemUiOverlay.bottom,
-      ],
-    );
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   }
 }

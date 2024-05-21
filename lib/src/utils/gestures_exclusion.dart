@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
@@ -91,13 +92,7 @@ Future<void> clearAndroidBoardGesturesExclusion() async {
   if (defaultTargetPlatform == TargetPlatform.android) {
     final androidInfo = await _deviceInfoPlugin.androidInfo;
     if (androidInfo.version.sdkInt >= 29) {
-      SystemChrome.setEnabledSystemUIMode(
-        SystemUiMode.manual,
-        overlays: [
-          SystemUiOverlay.top,
-          SystemUiOverlay.bottom,
-        ],
-      );
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
       GesturesExclusion.instance.clearRects();
     }
   }

@@ -71,8 +71,8 @@ Future<void> _startFlutterApp() async {
   // See src/app.dart for splash screen removal
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
-  // lock orientation to portrait on android phones
   if (defaultTargetPlatform == TargetPlatform.android) {
+    // lock orientation to portrait on android phones
     final view = widgetsBinding.platformDispatcher.views.first;
     final data = MediaQueryData.fromView(view);
     if (data.size.shortestSide < FormFactor.tablet) {
@@ -80,6 +80,16 @@ Future<void> _startFlutterApp() async {
         [DeviceOrientation.portraitUp],
       );
     }
+
+    // Sets edge-to-edge system UI mode on Android 12+
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        systemNavigationBarColor: Colors.transparent,
+        systemNavigationBarDividerColor: Colors.transparent,
+        systemNavigationBarContrastEnforced: true,
+      ),
+    );
   }
 
   runApp(
