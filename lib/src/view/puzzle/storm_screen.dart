@@ -32,14 +32,14 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 
-class StormScreen extends StatefulWidget {
+class StormScreen extends ConsumerStatefulWidget {
   const StormScreen({super.key});
 
   @override
-  State<StormScreen> createState() => _StormScreenState();
+  ConsumerState<StormScreen> createState() => _StormScreenState();
 }
 
-class _StormScreenState extends State<StormScreen> {
+class _StormScreenState extends ConsumerState<StormScreen> {
   final _boardKey = GlobalKey(debugLabel: 'boardOnStormScreen');
 
   @override
@@ -53,15 +53,12 @@ class _StormScreenState extends State<StormScreen> {
   }
 
   Widget _androidBuilder(BuildContext context) {
-    return AndroidGesturesExclusionWidget(
-      boardKey: _boardKey,
-      child: Scaffold(
-        appBar: AppBar(
-          actions: [_StormDashboardButton(), ToggleSoundButton()],
-          title: const Text('Puzzle Storm'),
-        ),
-        body: _Load(_boardKey),
+    return Scaffold(
+      appBar: AppBar(
+        actions: [_StormDashboardButton(), ToggleSoundButton()],
+        title: const Text('Puzzle Storm'),
       ),
+      body: _Load(_boardKey),
     );
   }
 
@@ -86,7 +83,7 @@ class _StormScreenState extends State<StormScreen> {
 class _Load extends ConsumerWidget {
   const _Load(this.boardKey);
 
-  final GlobalKey? boardKey;
+  final GlobalKey boardKey;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -118,69 +115,34 @@ class _Load extends ConsumerWidget {
 }
 
 class _Body extends ConsumerWidget {
-  const _Body({required this.data, this.boardKey});
+  const _Body({required this.data, required this.boardKey});
 
   final PuzzleStormResponse data;
 
-  final GlobalKey? boardKey;
+  final GlobalKey boardKey;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = stormControllerProvider(data.puzzles, data.timestamp);
     final boardPreferences = ref.watch(boardPreferencesProvider);
-    final puzzleState = ref.watch(ctrlProvider);
-    ref.listen(ctrlProvider.select((state) => state.runOver), (_, s) {
-      if (s) {
+    final stormState = ref.watch(ctrlProvider);
+
+    ref.listen(ctrlProvider, (prev, state) {
+      if (prev?.mode != StormMode.ended && state.mode == StormMode.ended) {
         Future.delayed(const Duration(milliseconds: 200), () {
           _showStats(context, ref.read(ctrlProvider).stats!);
         });
       }
+
+      if (prev?.mode != StormMode.running && state.mode == StormMode.running) {
+        setAndroidBoardGesturesExclusion(boardKey);
+      } else if (state.mode != StormMode.running) {
+        clearAndroidBoardGesturesExclusion();
+      }
     });
 
-    final content = Column(
-      children: [
-        Expanded(
-          child: Center(
-            child: SafeArea(
-              bottom: false,
-              child: BoardTable(
-                boardKey: boardKey,
-                onMove: (move, {isDrop, isPremove}) => ref
-                    .read(ctrlProvider.notifier)
-                    .onUserMove(Move.fromUci(move.uci)!),
-                onPremove: (move) =>
-                    ref.read(ctrlProvider.notifier).setPremove(move),
-                boardData: cg.BoardData(
-                  orientation: puzzleState.pov.cg,
-                  interactableSide: !puzzleState.firstMovePlayed ||
-                          puzzleState.runOver ||
-                          puzzleState.position.isGameOver
-                      ? cg.InteractableSide.none
-                      : puzzleState.pov == Side.white
-                          ? cg.InteractableSide.white
-                          : cg.InteractableSide.black,
-                  fen: puzzleState.position.fen,
-                  isCheck: boardPreferences.boardHighlights &&
-                      puzzleState.position.isCheck,
-                  lastMove: puzzleState.lastMove?.cg,
-                  sideToMove: puzzleState.position.turn.cg,
-                  validMoves: puzzleState.validMoves,
-                  premove: puzzleState.premove,
-                ),
-                topTable: _TopTable(
-                  ctrl: ctrlProvider,
-                ),
-                bottomTable: _Combo(puzzleState.combo),
-              ),
-            ),
-          ),
-        ),
-        _BottomBar(ctrlProvider),
-      ],
-    );
-
-    return PopScope(
-      canPop: !puzzleState.clock.isActive,
+    final content = PopScope(
+      canPop: stormState.mode != StormMode.running,
       onPopInvoked: (bool didPop) async {
         if (didPop) {
           return;
@@ -203,8 +165,55 @@ class _Body extends ConsumerWidget {
           navigator.pop();
         }
       },
-      child: content,
+      child: Column(
+        children: [
+          Expanded(
+            child: Center(
+              child: SafeArea(
+                bottom: false,
+                child: BoardTable(
+                  boardKey: boardKey,
+                  onMove: (move, {isDrop, isPremove}) => ref
+                      .read(ctrlProvider.notifier)
+                      .onUserMove(Move.fromUci(move.uci)!),
+                  onPremove: (move) =>
+                      ref.read(ctrlProvider.notifier).setPremove(move),
+                  boardData: cg.BoardData(
+                    orientation: stormState.pov.cg,
+                    interactableSide: !stormState.firstMovePlayed ||
+                            stormState.mode == StormMode.ended ||
+                            stormState.position.isGameOver
+                        ? cg.InteractableSide.none
+                        : stormState.pov == Side.white
+                            ? cg.InteractableSide.white
+                            : cg.InteractableSide.black,
+                    fen: stormState.position.fen,
+                    isCheck: boardPreferences.boardHighlights &&
+                        stormState.position.isCheck,
+                    lastMove: stormState.lastMove?.cg,
+                    sideToMove: stormState.position.turn.cg,
+                    validMoves: stormState.validMoves,
+                    premove: stormState.premove,
+                  ),
+                  topTable: _TopTable(data),
+                  bottomTable: _Combo(stormState.combo),
+                ),
+              ),
+            ),
+          ),
+          _BottomBar(ctrlProvider),
+        ],
+      ),
     );
+
+    return Theme.of(context).platform == TargetPlatform.android
+        ? AndroidGesturesExclusionWidget(
+            boardKey: boardKey,
+            shouldExcludeGesturesOnFocusGained: () =>
+                stormState.mode == StormMode.running,
+            child: content,
+          )
+        : content;
   }
 }
 
@@ -311,22 +320,21 @@ void _showStats(BuildContext context, StormRunStats stats) {
 }
 
 class _TopTable extends ConsumerWidget {
-  const _TopTable({
-    required this.ctrl,
-  });
+  const _TopTable(this.data);
 
-  final StormControllerProvider ctrl;
+  final PuzzleStormResponse data;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final puzzleState = ref.watch(ctrl);
+    final stormState =
+        ref.watch(stormControllerProvider(data.puzzles, data.timestamp));
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          if (!puzzleState.runStarted)
+          if (stormState.mode == StormMode.initial)
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(right: 16.0),
@@ -344,7 +352,7 @@ class _TopTable extends ConsumerWidget {
                       ),
                     ),
                     Text(
-                      puzzleState.pov == Side.white
+                      stormState.pov == Side.white
                           ? context.l10n.stormYouPlayTheWhitePiecesInAllPuzzles
                           : context.l10n.stormYouPlayTheBlackPiecesInAllPuzzles,
                       maxLines: 2,
@@ -365,7 +373,7 @@ class _TopTable extends ConsumerWidget {
             ),
             const SizedBox(width: 8),
             Text(
-              puzzleState.numSolved.toString(),
+              stormState.numSolved.toString(),
               style: TextStyle(
                 fontSize: 30.0,
                 fontWeight: FontWeight.bold,
@@ -374,7 +382,7 @@ class _TopTable extends ConsumerWidget {
             ),
             const Spacer(),
           ],
-          StormClockWidget(clock: puzzleState.clock),
+          StormClockWidget(clock: stormState.clock),
         ],
       ),
     );
@@ -602,7 +610,7 @@ class _BottomBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final puzzleState = ref.watch(ctrl);
+    final stormState = ref.watch(ctrl);
     return Container(
       color: Theme.of(context).platform == TargetPlatform.iOS
           ? null
@@ -614,7 +622,7 @@ class _BottomBar extends ConsumerWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              if (!puzzleState.clock.isActive && !puzzleState.runOver)
+              if (stormState.mode == StormMode.initial)
                 BottomBarButton(
                   icon: Icons.info_outline,
                   label: context.l10n.aboutX('Storm'),
@@ -626,27 +634,30 @@ class _BottomBar extends ConsumerWidget {
                 label: context.l10n.stormNewRun.split(' ').take(2).join(' '),
                 showLabel: true,
                 onTap: () {
-                  puzzleState.clock.reset();
+                  stormState.clock.reset();
                   ref.invalidate(stormProvider);
                 },
               ),
-              if (puzzleState.clock.isActive)
+              if (stormState.mode == StormMode.running)
                 BottomBarButton(
                   icon: LichessIcons.flag,
                   label: context.l10n.stormEndRun.split(' ').take(2).join(' '),
                   showLabel: true,
-                  onTap: () {
-                    if (puzzleState.clock.startAt != null) {
-                      puzzleState.clock.sendEnd();
-                    }
-                  },
+                  onTap: stormState.puzzleIndex > 2
+                      ? () {
+                          if (stormState.clock.startAt != null) {
+                            stormState.clock.sendEnd();
+                          }
+                        }
+                      : null,
                 ),
-              if (puzzleState.runOver && puzzleState.stats != null)
+              if (stormState.mode == StormMode.ended &&
+                  stormState.stats != null)
                 BottomBarButton(
                   icon: Icons.open_in_new,
                   label: 'Result',
                   showLabel: true,
-                  onTap: () => _showStats(context, puzzleState.stats!),
+                  onTap: () => _showStats(context, stormState.stats!),
                 ),
             ],
           ),
