@@ -3,7 +3,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/broadcast/broadcast_repository_providers.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/tv/featured_player.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/broadcast/not_implemented_screen.dart';
 import 'package:lichess_mobile/src/view/watch/broadcast_tile.dart';
 import 'package:lichess_mobile/src/view/watch/live_tv_channels_screen.dart';
 import 'package:lichess_mobile/src/view/watch/streamer_screen.dart';
@@ -206,7 +207,12 @@ class _BroadcastWidget extends ConsumerWidget {
           header: const Text('Tournament broadcasts'),
           hasLeading: true,
           headerTrailing: NoPaddingTextButton(
-            onPressed: () {},
+            onPressed: () {
+              pushPlatformRoute(
+                context,
+                builder: (context) => const Notimplemented(),
+              );
+            },
             child: Text(
               context.l10n.more,
             ),
