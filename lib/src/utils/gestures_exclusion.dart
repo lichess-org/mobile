@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
+import 'package:lichess_mobile/src/utils/screen.dart';
 
 final _deviceInfoPlugin = DeviceInfoPlugin();
 
@@ -61,26 +62,46 @@ Future<void> setAndroidBoardGesturesExclusion(GlobalKey boardKey) async {
   if (defaultTargetPlatform != TargetPlatform.android) {
     return;
   }
+  if (isTabletOrLarger(context)) {
+    return;
+  }
   final androidInfo = await _deviceInfoPlugin.androidInfo;
   if (androidInfo.version.sdkInt >= 29) {
     if (context.mounted) {
-      SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
       final box = context.findRenderObject();
       if (box != null && box is RenderBox) {
         final position = box.localToGlobal(Offset.zero);
         final ratio = MediaQuery.devicePixelRatioOf(context);
-        final verticalThreshold = 10 * ratio;
+
+        final squareSize = (box.size.width * ratio) / 8;
+        final halfSquareSize = squareSize / 2;
         final left = position.dx * ratio;
         final top = position.dy * ratio;
         final right = left + box.size.width * ratio;
-        final bottom = top + box.size.height * ratio;
-        final rect = Rect.fromLTRB(
-          left,
-          top - verticalThreshold,
-          right,
-          bottom + verticalThreshold,
-        );
-        GesturesExclusion.instance.setRects([rect]);
+
+        // excludes a series of squares of size 1/2 board square at the center
+        // of each squares at the horizontal edges of the board
+        final rects = <Rect>[];
+        for (var i = 0; i < 8; i++) {
+          rects.add(
+            Rect.fromLTWH(
+              left,
+              top + (i * squareSize) + halfSquareSize,
+              halfSquareSize,
+              halfSquareSize,
+            ),
+          );
+          rects.add(
+            Rect.fromLTWH(
+              right - halfSquareSize,
+              top + (i * squareSize) + halfSquareSize,
+              halfSquareSize,
+              halfSquareSize,
+            ),
+          );
+        }
+
+        GesturesExclusion.instance.setRects(rects);
       }
     }
   }
@@ -92,7 +113,6 @@ Future<void> clearAndroidBoardGesturesExclusion() async {
   if (defaultTargetPlatform == TargetPlatform.android) {
     final androidInfo = await _deviceInfoPlugin.androidInfo;
     if (androidInfo.version.sdkInt >= 29) {
-      SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
       GesturesExclusion.instance.clearRects();
     }
   }
