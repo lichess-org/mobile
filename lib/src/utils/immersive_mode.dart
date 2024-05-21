@@ -1,3 +1,4 @@
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
@@ -76,8 +77,10 @@ class ImmersiveMode {
   /// This hides the system UI (status bar and navigation bar) and forces the
   /// device to stay awake.
   Future<void> enable() async {
-    WakelockPlus.enable();
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+    return Future.wait([
+      WakelockPlus.enable(),
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky),
+    ]).then((_) {});
   }
 
   /// Disable immersive mode.
@@ -85,7 +88,16 @@ class ImmersiveMode {
   /// This shows the system UI (status bar and navigation bar) and allows the
   /// device to sleep.
   Future<void> disable() async {
-    WakelockPlus.disable();
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    final wakeFuture = WakelockPlus.disable();
+
+    final androidInfo = await DeviceInfoPlugin().androidInfo;
+    final setUiModeFuture = androidInfo.version.sdkInt >= 29
+        ? SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge)
+        : SystemChrome.setEnabledSystemUIMode(
+            SystemUiMode.manual,
+            overlays: SystemUiOverlay.values,
+          );
+
+    return Future.wait([wakeFuture, setUiModeFuture]).then((_) {});
   }
 }
