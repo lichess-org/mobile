@@ -65,15 +65,19 @@ class PuzzleHistoryPreview extends ConsumerWidget {
         final boardWidth =
             (constraints.maxWidth - (columnGap * crossAxisCount - columnGap)) /
                 crossAxisCount;
+
+        final cappedHistory =
+            maxRows != null ? history.take(crossAxisCount * maxRows!) : history;
+
         return LayoutGrid(
           columnSizes: List.generate(crossAxisCount, (_) => 1.fr),
           rowSizes: List.generate(
-            (history.length / crossAxisCount).floor(),
+            (history.length / crossAxisCount).ceil(),
             (_) => auto,
           ),
           rowGap: 16.0,
           columnGap: columnGap,
-          children: history.take(crossAxisCount % 4 == 0 ? 16 : 12).map((e) {
+          children: cappedHistory.map((e) {
             final (fen, side, lastMove) = e.preview;
             return BoardThumbnail(
               size: boardWidth,

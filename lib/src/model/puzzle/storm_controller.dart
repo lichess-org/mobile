@@ -42,8 +42,7 @@ class StormController extends _$StormController {
 
     final newState = StormState(
       firstMovePlayed: false,
-      runOver: false,
-      runStarted: false,
+      mode: StormMode.initial,
       puzzleIndex: 0,
       puzzle: puzzles.first,
       moves: 0,
@@ -146,7 +145,7 @@ class StormController extends _$StormController {
 
       final newState = state.copyWith(
         stats: stats,
-        runOver: true,
+        mode: StormMode.ended,
       );
 
       res.match(
@@ -164,7 +163,7 @@ class StormController extends _$StormController {
     } else {
       state = state.copyWith(
         stats: stats,
-        runOver: true,
+        mode: StormMode.ended,
       );
     }
   }
@@ -222,7 +221,7 @@ class StormController extends _$StormController {
     final pos = state.position;
     state = state.copyWith(
       firstMovePlayed: isFirstMove || state.firstMovePlayed,
-      runStarted: runStarted,
+      mode: runStarted ? StormMode.running : state.mode,
       position: state.position.play(move),
       moveIndex: state.moveIndex + 1,
       combo: StormCombo(
@@ -288,6 +287,7 @@ class StormController extends _$StormController {
 @freezed
 class StormState with _$StormState {
   const StormState._();
+
   const factory StormState({
     /// Index of the current puzzle being played
     required int puzzleIndex,
@@ -328,11 +328,8 @@ class StormState with _$StormState {
     /// Last solved time for the puzzle
     required DateTime? lastSolvedTime,
 
-    /// bool to indicate that the run has concluded. Useful for UI updates
-    required bool runOver,
-
-    /// bool to indicate run has started
-    required bool runStarted,
+    /// State mode of the storm run
+    required StormMode mode,
 
     /// bool to indicate that the first move has been played
     required bool firstMovePlayed,
@@ -351,11 +348,9 @@ class StormState with _$StormState {
   IMap<String, ISet<String>> get validMoves => algebraicLegalMoves(position);
 }
 
-enum ComboState {
-  increase,
-  reset,
-  noChange,
-}
+enum StormMode { initial, running, ended }
+
+enum ComboState { increase, reset, noChange }
 
 /// A `StormCombo` object represents the current and best combo of a storm run
 @freezed

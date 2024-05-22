@@ -25,7 +25,7 @@ import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'account_preferences_screen.dart';
-import 'board_settings_screen.dart';
+import 'board_behavior_settings_screen.dart';
 import 'board_theme_screen.dart';
 import 'piece_set_screen.dart';
 import 'sound_settings_screen.dart';
@@ -290,7 +290,7 @@ class _Body extends ConsumerWidget {
               pushPlatformRoute(
                 context,
                 title: context.l10n.preferencesGameBehavior,
-                builder: (context) => const BoardSettingsScreen(),
+                builder: (context) => const BoardBehaviorSettingsScreen(),
               );
             },
           ),

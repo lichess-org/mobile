@@ -355,8 +355,10 @@ class PuzzleHistoryWidget extends ConsumerWidget {
               padding: Theme.of(context).platform == TargetPlatform.iOS
                   ? EdgeInsets.zero
                   : Styles.horizontalBodyPadding,
-              child:
-                  PuzzleHistoryPreview(recentActivity.take(maxItems).toIList()),
+              child: PuzzleHistoryPreview(
+                recentActivity.take(maxItems).toIList(),
+                maxRows: 5,
+              ),
             ),
           ],
         );
