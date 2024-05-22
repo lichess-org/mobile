@@ -644,7 +644,7 @@ class _BottomBar extends ConsumerWidget {
                   icon: LichessIcons.flag,
                   label: context.l10n.stormEndRun.split(' ').take(2).join(' '),
                   showLabel: true,
-                  onTap: stormState.puzzleIndex > 2
+                  onTap: stormState.puzzleIndex >= 1
                       ? () {
                           if (stormState.clock.startAt != null) {
                             stormState.clock.sendEnd();
