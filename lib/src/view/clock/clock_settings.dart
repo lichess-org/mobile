@@ -20,57 +20,61 @@ class ClockSettings extends ConsumerWidget {
           .select((value) => value.paused || value.currentPlayer == null),
     );
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        const _PlayResumeButton(),
-        PlatformIconButton(
-          semanticsLabel: context.l10n.reset,
-          iconSize: _iconSize,
-          onTap: buttonsEnabled ? () => controller.reset() : null,
-          icon: Icons.cached,
-        ),
-        PlatformIconButton(
-          semanticsLabel: context.l10n.settingsSettings,
-          iconSize: _iconSize,
-          onTap: buttonsEnabled
-              ? () {
-                  final double screenHeight = MediaQuery.sizeOf(context).height;
-                  showAdaptiveBottomSheet<void>(
-                    context: context,
-                    isScrollControlled: true,
-                    showDragHandle: true,
-                    constraints: BoxConstraints(
-                      maxHeight: screenHeight - (screenHeight / 10),
-                    ),
-                    builder: (BuildContext context) {
-                      final options = ref.watch(
-                        clockControllerProvider
-                            .select((value) => value.options),
-                      );
-                      return TimeControlModal(
-                        excludeUltraBullet: true,
-                        value: TimeIncrement(
-                          options.time.inSeconds,
-                          options.increment.inSeconds,
-                        ),
-                        onSelected: (choice) {
-                          controller.updateOptions(choice);
-                        },
-                      );
-                    },
-                  );
-                }
-              : null,
-          icon: Icons.settings,
-        ),
-        PlatformIconButton(
-          semanticsLabel: context.l10n.close,
-          iconSize: _iconSize,
-          onTap: buttonsEnabled ? () => Navigator.of(context).pop() : null,
-          icon: Icons.home,
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          const _PlayResumeButton(),
+          PlatformIconButton(
+            semanticsLabel: context.l10n.reset,
+            iconSize: _iconSize,
+            onTap: buttonsEnabled ? () => controller.reset() : null,
+            icon: Icons.cached,
+          ),
+          PlatformIconButton(
+            semanticsLabel: context.l10n.settingsSettings,
+            iconSize: _iconSize,
+            onTap: buttonsEnabled
+                ? () {
+                    final double screenHeight =
+                        MediaQuery.sizeOf(context).height;
+                    showAdaptiveBottomSheet<void>(
+                      context: context,
+                      isScrollControlled: true,
+                      showDragHandle: true,
+                      constraints: BoxConstraints(
+                        maxHeight: screenHeight - (screenHeight / 10),
+                      ),
+                      builder: (BuildContext context) {
+                        final options = ref.watch(
+                          clockControllerProvider
+                              .select((value) => value.options),
+                        );
+                        return TimeControlModal(
+                          excludeUltraBullet: true,
+                          value: TimeIncrement(
+                            options.time.inSeconds,
+                            options.increment.inSeconds,
+                          ),
+                          onSelected: (choice) {
+                            controller.updateOptions(choice);
+                          },
+                        );
+                      },
+                    );
+                  }
+                : null,
+            icon: Icons.settings,
+          ),
+          PlatformIconButton(
+            semanticsLabel: context.l10n.close,
+            iconSize: _iconSize,
+            onTap: buttonsEnabled ? () => Navigator.of(context).pop() : null,
+            icon: Icons.home,
+          ),
+        ],
+      ),
     );
   }
 }
