@@ -55,12 +55,36 @@ class RecentGames extends ConsumerWidget {
     final userId = user?.id ?? session?.user.id;
 
     final recentGames = user != null
-        ? ref.watch(_userRecentGamesProvider(userId: user!.id))
+        ? ref
+            .watch(_userRecentGamesProvider(userId: user!.id))
+            .whenData((data) {
+            return data
+                .map(
+                  (e) =>
+                      // user is not null for at least one of the players
+                      (e, e.white.user?.id == userId ? Side.white : Side.black),
+                )
+                .toIList();
+          })
         : session != null &&
                 (connectivity.valueOrNull?.isOnline ?? false) == true
-            ? ref.watch(accountRecentGamesProvider)
+            ? ref.watch(accountRecentGamesProvider).whenData((data) {
+                return data
+                    .map(
+                      (e) => (
+                        e,
+                        // user is not null for at least one of the players
+                        e.white.user?.id == userId ? Side.white : Side.black
+                      ),
+                    )
+                    .toIList();
+              })
             : ref.watch(recentStoredGamesProvider).whenData((data) {
-                return data.map((e) => e.game.data).toIList();
+                return data
+                    // we can assume that `youAre` is not null either for logged
+                    // in users or for anonymous users
+                    .map((e) => (e.game.data, e.game.youAre ?? Side.white))
+                    .toIList();
               });
 
     Widget getResultIcon(LightArchivedGame game, Side mySide) {
@@ -96,16 +120,14 @@ class RecentGames extends ConsumerWidget {
         return ListSection(
           header: Text(context.l10n.recentGames),
           hasLeading: true,
-          children: data.map((game) {
-            final mySide =
-                game.white.user?.id == userId ? Side.white : Side.black;
-            final me = game.white.user?.id == userId ? game.white : game.black;
-            final opponent =
-                game.white.user?.id == userId ? game.black : game.white;
+          children: data.map((item) {
+            final (game, youAre) = item;
+            final me = youAre == Side.white ? game.white : game.black;
+            final opponent = youAre == Side.white ? game.black : game.white;
 
             return GameListTile(
               game: game,
-              mySide: userId == game.white.user?.id ? Side.white : Side.black,
+              mySide: youAre,
               onTap: game.variant.isSupported
                   ? () {
                       pushPlatformRoute(
@@ -119,15 +141,13 @@ class RecentGames extends ConsumerWidget {
                               )
                             : ArchivedGameScreen(
                                 gameData: game,
-                                orientation: userId == game.white.user?.id
-                                    ? Side.white
-                                    : Side.black,
+                                orientation: youAre,
                               ),
                       );
                     }
                   : null,
               icon: game.perf.icon,
-              playerTitle: UserFullNameWidget.player(
+              oppponentTitle: UserFullNameWidget.player(
                 user: opponent.user,
                 aiLevel: opponent.aiLevel,
                 rating: opponent.rating,
@@ -157,7 +177,7 @@ class RecentGames extends ConsumerWidget {
                     ),
                     const SizedBox(width: 5),
                   ],
-                  getResultIcon(game, mySide),
+                  getResultIcon(game, youAre),
                 ],
               ),
             );
