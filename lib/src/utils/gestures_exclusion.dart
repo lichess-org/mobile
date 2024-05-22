@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
+import 'package:lichess_mobile/src/utils/screen.dart';
 
 final _deviceInfoPlugin = DeviceInfoPlugin();
 
@@ -19,6 +20,7 @@ class AndroidGesturesExclusionWidget extends StatelessWidget {
     required this.child,
     required this.boardKey,
     this.shouldExcludeGesturesOnFocusGained,
+    this.shouldSetImmersiveMode = false,
     super.key,
   });
 
@@ -35,12 +37,20 @@ class AndroidGesturesExclusionWidget extends StatelessWidget {
   /// If not provided, the widget will enable immersive mode by default.
   final bool Function()? shouldExcludeGesturesOnFocusGained;
 
+  /// Whether to set immersive mode with the gestures exclusion.
+  ///
+  /// False by default.
+  final bool shouldSetImmersiveMode;
+
   @override
   Widget build(BuildContext context) {
     return FocusDetector(
       onFocusGained: () {
         if (shouldExcludeGesturesOnFocusGained?.call() ?? true) {
-          setAndroidBoardGesturesExclusion(boardKey);
+          setAndroidBoardGesturesExclusion(
+            boardKey,
+            withImmersiveMode: shouldSetImmersiveMode,
+          );
         }
       },
       onFocusLost: () {
@@ -53,7 +63,10 @@ class AndroidGesturesExclusionWidget extends StatelessWidget {
 
 /// Set immersive mode to hide the system UI and set gestures exclusion over the
 /// board widget. Only works on Android 10+.
-Future<void> setAndroidBoardGesturesExclusion(GlobalKey boardKey) async {
+Future<void> setAndroidBoardGesturesExclusion(
+  GlobalKey boardKey, {
+  bool withImmersiveMode = false,
+}) async {
   final context = boardKey.currentContext;
   if (context == null) {
     return;
@@ -61,27 +74,41 @@ Future<void> setAndroidBoardGesturesExclusion(GlobalKey boardKey) async {
   if (defaultTargetPlatform != TargetPlatform.android) {
     return;
   }
+  if (isTabletOrLarger(context)) {
+    return;
+  }
   final androidInfo = await _deviceInfoPlugin.androidInfo;
-  if (androidInfo.version.sdkInt >= 29) {
-    if (context.mounted) {
+  if (androidInfo.version.sdkInt < 29) {
+    return;
+  }
+
+  if (context.mounted) {
+    if (withImmersiveMode) {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-      final box = context.findRenderObject();
-      if (box != null && box is RenderBox) {
-        final position = box.localToGlobal(Offset.zero);
-        final ratio = MediaQuery.devicePixelRatioOf(context);
-        final verticalThreshold = 10 * ratio;
-        final left = position.dx * ratio;
-        final top = position.dy * ratio;
-        final right = left + box.size.width * ratio;
-        final bottom = top + box.size.height * ratio;
-        final rect = Rect.fromLTRB(
-          left,
-          top - verticalThreshold,
-          right,
-          bottom + verticalThreshold,
-        );
-        GesturesExclusion.instance.setRects([rect]);
-      }
+    }
+    final box = context.findRenderObject();
+    if (box != null && box is RenderBox) {
+      final position = box.localToGlobal(Offset.zero);
+      final ratio = MediaQuery.devicePixelRatioOf(context);
+      final verticalThreshold = 10 * ratio;
+      final left = position.dx * ratio;
+      final top = position.dy * ratio;
+      final right = left + box.size.width * ratio;
+      final height = box.size.height * ratio;
+      final squareSize = height / 8;
+      final leftRect = Rect.fromLTWH(
+        left,
+        top - verticalThreshold,
+        squareSize,
+        height + verticalThreshold,
+      );
+      final rightRect = Rect.fromLTWH(
+        right - squareSize,
+        top - verticalThreshold,
+        squareSize,
+        height + verticalThreshold,
+      );
+      GesturesExclusion.instance.setRects([leftRect, rightRect]);
     }
   }
 }

@@ -134,9 +134,7 @@ class _Body extends ConsumerWidget {
         });
       }
 
-      if (prev?.mode != StormMode.running && state.mode == StormMode.running) {
-        setAndroidBoardGesturesExclusion(boardKey);
-      } else if (state.mode != StormMode.running) {
+      if (state.mode == StormMode.ended) {
         clearAndroidBoardGesturesExclusion();
       }
     });
@@ -210,7 +208,10 @@ class _Body extends ConsumerWidget {
         ? AndroidGesturesExclusionWidget(
             boardKey: boardKey,
             shouldExcludeGesturesOnFocusGained: () =>
+                stormState.mode == StormMode.initial ||
                 stormState.mode == StormMode.running,
+            shouldSetImmersiveMode:
+                boardPreferences.immersiveModeWhilePlaying ?? false,
             child: content,
           )
         : content;

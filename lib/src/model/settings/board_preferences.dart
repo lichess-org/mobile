@@ -37,6 +37,14 @@ class BoardPreferences extends _$BoardPreferences {
     return _save(state.copyWith(hapticFeedback: !state.hapticFeedback));
   }
 
+  Future<void> toggleImmersiveModeWhilePlaying() {
+    return _save(
+      state.copyWith(
+        immersiveModeWhilePlaying: !(state.immersiveModeWhilePlaying ?? false),
+      ),
+    );
+  }
+
   Future<void> toggleShowLegalMoves() {
     return _save(state.copyWith(showLegalMoves: !state.showLegalMoves));
   }
@@ -76,6 +84,7 @@ class BoardPrefs with _$BoardPrefs {
   const factory BoardPrefs({
     required PieceSet pieceSet,
     required BoardTheme boardTheme,
+    bool? immersiveModeWhilePlaying,
     required bool hapticFeedback,
     required bool showLegalMoves,
     required bool boardHighlights,
@@ -87,6 +96,7 @@ class BoardPrefs with _$BoardPrefs {
   static const defaults = BoardPrefs(
     pieceSet: PieceSet.staunty,
     boardTheme: BoardTheme.brown,
+    immersiveModeWhilePlaying: false,
     hapticFeedback: true,
     showLegalMoves: true,
     boardHighlights: true,
