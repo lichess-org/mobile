@@ -236,9 +236,13 @@ class _AcplChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final mainLineColor = Theme.of(context).colorScheme.secondary;
+    final brightness = Theme.of(context).brightness;
+    final white = Theme.of(context).colorScheme.surfaceContainerHighest;
+    final black = Theme.of(context).colorScheme.outline;
     // yes it looks like below/above are inverted in fl_chart
-    final belowLineColor = Colors.white.withOpacity(0.4);
-    final aboveLineColor = Colors.grey.shade800.withOpacity(0.6);
+    final belowLineColor = brightness == Brightness.light ? white : black;
+    final aboveLineColor = brightness == Brightness.light ? black : white;
     final spots = evals
         .mapIndexed(
           (i, e) => FlSpot(i.toDouble(), e.winningChances(Side.white)),
@@ -257,7 +261,7 @@ class _AcplChart extends StatelessWidget {
               LineChartBarData(
                 spots: spots,
                 isCurved: true,
-                color: Colors.transparent,
+                color: mainLineColor.withOpacity(0.3),
                 barWidth: 1,
                 aboveBarData: BarAreaData(
                   show: true,

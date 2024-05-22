@@ -1215,12 +1215,14 @@ class AcplChart extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final mainLineColor = Theme.of(context).platform == TargetPlatform.iOS
-        ? Colors.orange
-        : Theme.of(context).colorScheme.secondary;
+    final mainLineColor = Theme.of(context).colorScheme.secondary;
     // yes it looks like below/above are inverted in fl_chart
-    final belowLineColor = Colors.white.withOpacity(0.7);
-    final aboveLineColor = Colors.grey.shade800.withOpacity(0.8);
+    final brightness = Theme.of(context).brightness;
+    final white = Theme.of(context).colorScheme.surfaceContainerHighest;
+    final black = Theme.of(context).colorScheme.outline;
+    // yes it looks like below/above are inverted in fl_chart
+    final belowLineColor = brightness == Brightness.light ? white : black;
+    final aboveLineColor = brightness == Brightness.light ? black : white;
 
     VerticalLine phaseVerticalBar(double x, String label) => VerticalLine(
           x: x,
@@ -1347,7 +1349,7 @@ class AcplChart extends ConsumerWidget {
                   spots: spots,
                   isCurved: false,
                   barWidth: 1,
-                  color: mainLineColor,
+                  color: mainLineColor.withOpacity(0.7),
                   aboveBarData: BarAreaData(
                     show: true,
                     color: aboveLineColor,
