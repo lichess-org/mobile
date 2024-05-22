@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/sound_theme.dart';
+import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/android.dart';
@@ -31,27 +32,36 @@ import 'piece_set_screen.dart';
 import 'sound_settings_screen.dart';
 import 'theme_mode_screen.dart';
 
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return PlatformWidget(
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ConsumerPlatformWidget(
+      ref: ref,
       androidBuilder: _androidBuilder,
       iosBuilder: _iosBuilder,
     );
   }
 
-  Widget _androidBuilder(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(context.l10n.settingsSettings),
+  Widget _androidBuilder(BuildContext context, WidgetRef ref) {
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (bool didPop) {
+        if (!didPop) {
+          ref.read(currentBottomTabProvider.notifier).state = BottomTab.home;
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(context.l10n.settingsSettings),
+        ),
+        body: SafeArea(child: _Body()),
       ),
-      body: SafeArea(child: _Body()),
     );
   }
 
-  Widget _iosBuilder(BuildContext context) {
+  Widget _iosBuilder(BuildContext context, WidgetRef ref) {
     return CupertinoPageScaffold(
       child: CustomScrollView(
         slivers: [

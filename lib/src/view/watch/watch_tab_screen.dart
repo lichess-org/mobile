@@ -84,31 +84,39 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
   }
 
   Widget _buildAndroid(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(context.l10n.watch),
-      ),
-      body: RefreshIndicator(
-        key: _androidRefreshKey,
-        onRefresh: refreshData,
-        child: SafeArea(
-          child: OrientationBuilder(
-            builder: (context, orientation) {
-              return orientation == Orientation.portrait
-                  ? ListView(
-                      controller: watchScrollController,
-                      children: const [_WatchTvWidget(), _StreamerWidget()],
-                    )
-                  : GridView(
-                      controller: watchScrollController,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        childAspectRatio: 0.92,
-                      ),
-                      children: const [_WatchTvWidget(), _StreamerWidget()],
-                    );
-            },
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (bool didPop) {
+        if (!didPop) {
+          ref.read(currentBottomTabProvider.notifier).state = BottomTab.home;
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(context.l10n.watch),
+        ),
+        body: RefreshIndicator(
+          key: _androidRefreshKey,
+          onRefresh: refreshData,
+          child: SafeArea(
+            child: OrientationBuilder(
+              builder: (context, orientation) {
+                return orientation == Orientation.portrait
+                    ? ListView(
+                        controller: watchScrollController,
+                        children: const [_WatchTvWidget(), _StreamerWidget()],
+                      )
+                    : GridView(
+                        controller: watchScrollController,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 0.92,
+                        ),
+                        children: const [_WatchTvWidget(), _StreamerWidget()],
+                      );
+              },
+            ),
           ),
         ),
       ),
