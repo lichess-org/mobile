@@ -63,7 +63,7 @@ class _Body extends ConsumerWidget {
               if (Theme.of(context).platform == TargetPlatform.android &&
                   !isTabletOrLarger(context))
                 androidVersionAsync.maybeWhen(
-                  data: (version) => version != null && version.sdkInt >= 31
+                  data: (version) => version != null && version.sdkInt >= 29
                       ? SwitchSettingTile(
                           title: const Text('Immersive mode'),
                           subtitle: const Text(
