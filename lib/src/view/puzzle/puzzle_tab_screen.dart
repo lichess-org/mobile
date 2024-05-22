@@ -64,20 +64,29 @@ class _PuzzleTabScreenState extends ConsumerState<PuzzleTabScreen> {
         ),
       ],
     );
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(context.l10n.puzzles),
-        actions: const [
-          _DashboardButton(),
-        ],
+
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (bool didPop) {
+        if (!didPop) {
+          ref.read(currentBottomTabProvider.notifier).state = BottomTab.home;
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(context.l10n.puzzles),
+          actions: const [
+            _DashboardButton(),
+          ],
+        ),
+        body: userSession != null
+            ? RefreshIndicator(
+                key: _androidRefreshKey,
+                onRefresh: _refreshData,
+                child: body,
+              )
+            : body,
       ),
-      body: userSession != null
-          ? RefreshIndicator(
-              key: _androidRefreshKey,
-              onRefresh: _refreshData,
-              child: body,
-            )
-          : body,
     );
   }
 
