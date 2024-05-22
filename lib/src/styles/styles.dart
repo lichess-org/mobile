@@ -242,6 +242,7 @@ Color lighten(Color c, [double amount = .1]) {
 @immutable
 class CustomColors extends ThemeExtension<CustomColors> {
   const CustomColors({
+    required this.cyan,
     required this.brag,
     required this.good,
     required this.error,
@@ -250,6 +251,7 @@ class CustomColors extends ThemeExtension<CustomColors> {
     required this.primary,
   });
 
+  final Color cyan;
   final Color brag;
   final Color good;
   final Color error;
@@ -259,6 +261,7 @@ class CustomColors extends ThemeExtension<CustomColors> {
 
   @override
   CustomColors copyWith({
+    Color? cyan,
     Color? brag,
     Color? good,
     Color? error,
@@ -267,6 +270,7 @@ class CustomColors extends ThemeExtension<CustomColors> {
     Color? primary,
   }) {
     return CustomColors(
+      cyan: cyan ?? this.cyan,
       brag: brag ?? this.brag,
       good: good ?? this.good,
       error: error ?? this.error,
@@ -282,6 +286,7 @@ class CustomColors extends ThemeExtension<CustomColors> {
       return this;
     }
     return CustomColors(
+      cyan: Color.lerp(cyan, other.cyan, t) ?? cyan,
       brag: Color.lerp(brag, other.brag, t) ?? brag,
       good: Color.lerp(good, other.good, t) ?? good,
       error: Color.lerp(error, other.error, t) ?? error,
@@ -293,6 +298,7 @@ class CustomColors extends ThemeExtension<CustomColors> {
 
   CustomColors harmonized(ColorScheme colorScheme) {
     return copyWith(
+      cyan: cyan.harmonizeWith(colorScheme.primary),
       brag: brag.harmonizeWith(colorScheme.primary),
       good: good.harmonizeWith(colorScheme.primary),
       error: error.harmonizeWith(colorScheme.primary),
@@ -304,6 +310,7 @@ class CustomColors extends ThemeExtension<CustomColors> {
 }
 
 const lichessCustomColors = CustomColors(
+  cyan: LichessColors.cyan,
   brag: LichessColors.brag,
   good: LichessColors.good,
   error: LichessColors.error,
