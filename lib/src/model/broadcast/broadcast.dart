@@ -54,7 +54,7 @@ class BroadcastPlayer with _$BroadcastPlayer {
 
   const factory BroadcastPlayer({
     required String name,
-    required String title,
+    required String? title,
     required int rating,
   }) = _BroadcastPlayer;
 

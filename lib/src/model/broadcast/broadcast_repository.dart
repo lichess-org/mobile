@@ -19,11 +19,13 @@ class BroadcastRepository {
   }
 
   Future<IList<BroadcastGameSnapshot>> getRound(String broadcastRoundId) {
-    return client.readJson(
-      Uri(path: 'api/broadcast/-/-/$broadcastRoundId'),
-      headers: {'Accept': 'application/x-ndjson'},
-      mapper: _makeGamesFromJson,
-    );
+    return Future.delayed(const Duration(seconds: 5), () {
+      return client.readJson(
+        Uri(path: 'api/broadcast/-/-/$broadcastRoundId'),
+        headers: {'Accept': 'application/x-ndjson'},
+        mapper: _makeGamesFromJson,
+      );
+    });
   }
 }
 
@@ -59,9 +61,8 @@ Round _roundFromPick(RequiredPick pick) {
 IList<BroadcastGameSnapshot> _makeGamesFromJson(Map<String, dynamic> json) =>
     _gamesFromPick(pick(json).required());
 
-IList<BroadcastGameSnapshot> _gamesFromPick(RequiredPick pick) {
-  return pick('games').asListOrEmpty(_gameFromPick).toIList();
-}
+IList<BroadcastGameSnapshot> _gamesFromPick(RequiredPick pick) =>
+    pick('games').asListOrEmpty(_gameFromPick).toIList();
 
 BroadcastGameSnapshot _gameFromPick(RequiredPick pick) {
   return BroadcastGameSnapshot(
@@ -74,7 +75,7 @@ BroadcastGameSnapshot _gameFromPick(RequiredPick pick) {
 BroadcastPlayer _playerFromPick(RequiredPick pick) {
   return BroadcastPlayer(
     name: pick('name').asStringOrThrow(),
-    title: pick('title').asStringOrThrow(),
+    title: pick('title').asStringOrNull(),
     rating: pick('rating').asIntOrThrow(),
   );
 }

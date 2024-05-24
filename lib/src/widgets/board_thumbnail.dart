@@ -6,6 +6,9 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 
 /// A board thumbnail widget
 class BoardThumbnail extends ConsumerStatefulWidget {
+  static const startingPositionFen =
+      'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+
   const BoardThumbnail({
     required this.size,
     required this.orientation,
@@ -15,6 +18,15 @@ class BoardThumbnail extends ConsumerStatefulWidget {
     this.lastMove,
     this.onTap,
   });
+
+  const BoardThumbnail.loading({
+    required this.size,
+    this.header,
+    this.footer,
+  })  : orientation = Side.white,
+        fen = startingPositionFen,
+        lastMove = null,
+        onTap = null;
 
   /// Size of the board.
   final double size;
