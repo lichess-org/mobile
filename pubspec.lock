@@ -285,10 +285,10 @@ packages:
     dependency: "direct main"
     description:
       name: cupertino_http
-      sha256: "20c167fd843c9ff6fc25cc4a0e8efa4180dfe119fb6d18c3c55104113e9cfc6f"
+      sha256: d04385be00db206c75be8ec1229729398bb7e48723ce33fde3a81ff219e2d7ca
       url: "https://pub.dev"
     source: hosted
-    version: "1.4.0"
+    version: "1.5.0"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -725,6 +725,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.2"
+  http_profile:
+    dependency: transitive
+    description:
+      name: http_profile
+      sha256: "7e679e355b09aaee2ab5010915c932cce3f2d1c11c3b2dc177891687014ffa78"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.0"
   image:
     dependency: transitive
     description:
