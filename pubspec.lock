@@ -253,10 +253,10 @@ packages:
     dependency: "direct main"
     description:
       name: cronet_http
-      sha256: "013c515e2caf1381fcdc577b0c1a3625021b0df32880c20c06757fc616d375bb"
+      sha256: f6b4f39b93affe542cc1a0dd3fc42844a93937eb1b250bad864f0936c7d5cf29
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.1"
+    version: "1.3.0"
   cross_file:
     dependency: transitive
     description:
@@ -725,6 +725,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.2"
+  http_profile:
+    dependency: transitive
+    description:
+      name: http_profile
+      sha256: "7e679e355b09aaee2ab5010915c932cce3f2d1c11c3b2dc177891687014ffa78"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.0"
   image:
     dependency: transitive
     description:
