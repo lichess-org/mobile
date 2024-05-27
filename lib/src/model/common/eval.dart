@@ -72,7 +72,10 @@ class ClientEval with _$ClientEval implements Eval {
   }
 
   IList<Move?> get bestMoves {
-    return pvs.map((e) => Move.fromUci(e.moves.first)).toIList();
+    return pvs
+        .where((e) => e.moves.isNotEmpty)
+        .map((e) => Move.fromUci(e.moves.first))
+        .toIList();
   }
 
   @override

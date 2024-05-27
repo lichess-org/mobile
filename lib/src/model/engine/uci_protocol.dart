@@ -99,9 +99,9 @@ class UCIProtocol {
         _stopRequested != true &&
         parts.first == 'info') {
       int depth = 0;
-      int? nodes;
+      int nodes = 0;
       int multiPv = 1;
-      int? elapsedMs;
+      int elapsedMs = 0;
       String? evalType;
       bool isMate = false;
       int? povEv;
@@ -130,16 +130,10 @@ class UCIProtocol {
         }
       }
 
-      // Sometimes we get #0. Let's just skip it.
-      if (isMate && povEv == 0) return;
-
       // Track max pv index to determine when pv prints are done.
       if (_expectedPvs < multiPv) _expectedPvs = multiPv;
 
-      if (depth < minDepth ||
-          nodes == null ||
-          elapsedMs == null ||
-          povEv == null) return;
+      if ((depth < minDepth && moves.isNotEmpty) || povEv == null) return;
 
       final pivot = _work!.threatMode == true ? 0 : 1;
       final ev = _work!.ply % 2 == pivot ? -povEv : povEv;
