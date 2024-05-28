@@ -82,6 +82,10 @@ class CenterLoadingIndicator extends StatelessWidget {
   }
 }
 
+/// A screen with an error message and a retry button.
+///
+/// This widget is intended to be used when a request fails and the user can
+/// retry it.
 class FullScreenRetryRequest extends StatelessWidget {
   const FullScreenRetryRequest({
     super.key,
