@@ -1094,13 +1094,13 @@ class ServerAnalysisSummary extends ConsumerWidget {
                                                     .read(ctrlProvider.notifier)
                                                     .requestServerAnalysis()
                                                     .catchError((Object e) {
-                                                      if (context.mounted) {
-                                                        showPlatformSnackbar(
-                                                          context,
-                                                          e.toString(),
-                                                          type: SnackBarType.error,
-                                                        );
-                                                      }
+                                                  if (context.mounted) {
+                                                    showPlatformSnackbar(
+                                                      context,
+                                                      e.toString(),
+                                                      type: SnackBarType.error,
+                                                    );
+                                                  }
                                                 });
                                               });
                                             },
