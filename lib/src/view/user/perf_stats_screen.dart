@@ -656,28 +656,27 @@ class _GameListWidget extends ConsumerWidget {
       children: [
         for (final game in games)
           _GameListTile(
-            onTap: () {
+            onTap: () async {
               final gameIds = ISet(games.map((g) => g.gameId));
-              ref
-                  .withClient(
+              final list = await ref.withClient(
                 (client) => GameRepository(client).getGamesByIds(gameIds),
-              )
-                  .then((list) {
-                final gameData =
-                    list.firstWhereOrNull((g) => g.id == game.gameId);
-                if (gameData != null && gameData.variant.isSupported) {
-                  pushPlatformRoute(
-                    context,
-                    rootNavigator: true,
-                    builder: (context) => ArchivedGameScreen(
-                      gameData: gameData,
-                      orientation: user.id == gameData.white.user?.id
-                          ? Side.white
-                          : Side.black,
-                    ),
-                  );
-                }
-              });
+              );
+              final gameData =
+                  list.firstWhereOrNull((g) => g.id == game.gameId);
+              if (context.mounted &&
+                  gameData != null &&
+                  gameData.variant.isSupported) {
+                pushPlatformRoute(
+                  context,
+                  rootNavigator: true,
+                  builder: (context) => ArchivedGameScreen(
+                    gameData: gameData,
+                    orientation: user.id == gameData.white.user?.id
+                        ? Side.white
+                        : Side.black,
+                  ),
+                );
+              }
             },
             playerTitle: UserFullNameWidget(
               user: game.opponent,

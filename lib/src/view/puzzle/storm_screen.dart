@@ -130,7 +130,9 @@ class _Body extends ConsumerWidget {
     ref.listen(ctrlProvider, (prev, state) {
       if (prev?.mode != StormMode.ended && state.mode == StormMode.ended) {
         Future.delayed(const Duration(milliseconds: 200), () {
-          _showStats(context, ref.read(ctrlProvider).stats!);
+          if (context.mounted) {
+            _showStats(context, ref.read(ctrlProvider).stats!);
+          }
         });
       }
 

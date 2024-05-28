@@ -564,12 +564,11 @@ class _BottomBar extends ConsumerWidget {
           makeLabel: (context) => Text(
             context.l10n.puzzleFromGameLink(puzzleState.puzzle.game.id.value),
           ),
-          onPressed: (_) {
-            ref
-                .read(
+          onPressed: (_) async {
+            final game = await ref.read(
               archivedGameProvider(id: puzzleState.puzzle.game.id).future,
-            )
-                .then((game) {
+            );
+            if (context.mounted) {
               pushPlatformRoute(
                 context,
                 builder: (context) => ArchivedGameScreen(
@@ -578,7 +577,7 @@ class _BottomBar extends ConsumerWidget {
                   initialCursor: puzzleState.puzzle.puzzle.initialPly + 1,
                 ),
               );
-            });
+            }
           },
         ),
       ],

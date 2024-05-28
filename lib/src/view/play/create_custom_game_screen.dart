@@ -191,17 +191,19 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
         case 'redirect':
           final data = event.data as Map<String, dynamic>;
           final gameFullId = pick(data['id']).asGameFullIdOrThrow();
-          pushPlatformRoute(
-            context,
-            rootNavigator: true,
-            builder: (BuildContext context) {
-              return StandaloneGameScreen(
-                params: InitialStandaloneGameParams(
-                  id: gameFullId,
-                ),
-              );
-            },
-          );
+          if (mounted) {
+            pushPlatformRoute(
+              context,
+              rootNavigator: true,
+              builder: (BuildContext context) {
+                return StandaloneGameScreen(
+                  params: InitialStandaloneGameParams(
+                    id: gameFullId,
+                  ),
+                );
+              },
+            );
+          }
           widget.setViewMode(_ViewMode.create);
 
         case 'reload_seeks':
