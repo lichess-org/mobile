@@ -16,9 +16,6 @@ import 'package:lichess_mobile/src/view/user/full_games_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-part 'recent_games.g.dart';
 
 class RecentGames extends ConsumerWidget {
   const RecentGames({this.user, super.key});
