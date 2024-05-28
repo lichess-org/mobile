@@ -30,7 +30,7 @@ class GameListTile extends StatelessWidget {
   const GameListTile({
     required this.game,
     required this.mySide,
-    required this.oppponentTitle,
+    required this.opponentTitle,
     this.icon,
     this.subtitle,
     this.trailing,
@@ -41,7 +41,7 @@ class GameListTile extends StatelessWidget {
   final Side mySide;
 
   final IconData? icon;
-  final Widget oppponentTitle;
+  final Widget opponentTitle;
   final Widget? subtitle;
   final Widget? trailing;
   final GestureTapCallback? onTap;
@@ -60,7 +60,7 @@ class GameListTile extends StatelessWidget {
           builder: (context) => _ContextMenu(
             game: game,
             mySide: mySide,
-            oppponentTitle: oppponentTitle,
+            oppponentTitle: opponentTitle,
             icon: icon,
             subtitle: subtitle,
             trailing: trailing,
@@ -68,7 +68,7 @@ class GameListTile extends StatelessWidget {
         );
       },
       leading: icon != null ? Icon(icon) : null,
-      title: oppponentTitle,
+      title: opponentTitle,
       subtitle: subtitle != null
           ? DefaultTextStyle.merge(
               child: subtitle!,
@@ -410,17 +410,18 @@ class _ContextMenu extends ConsumerWidget {
   }
 }
 
+/// A list tile that shows extended game info including an accuracy meter and a result icon.
 class ExtendedGameListTile extends StatelessWidget {
-  const ExtendedGameListTile({required this.game, this.userId});
+  const ExtendedGameListTile({required this.item, this.userId});
 
-  final LightArchivedGame game;
+  final (LightArchivedGame, Side) item;
   final UserId? userId;
 
   @override
   Widget build(BuildContext context) {
-    final mySide = game.white.user?.id == userId ? Side.white : Side.black;
-    final me = game.white.user?.id == userId ? game.white : game.black;
-    final opponent = game.white.user?.id == userId ? game.black : game.white;
+    final (game, youAre) = item;
+    final me = youAre == Side.white ? game.white : game.black;
+    final opponent = youAre == Side.white ? game.black : game.white;
 
     Widget getResultIcon(LightArchivedGame game, Side mySide) {
       if (game.status == GameStatus.aborted ||
@@ -449,7 +450,7 @@ class ExtendedGameListTile extends StatelessWidget {
 
     return GameListTile(
       game: game,
-      mySide: userId == game.white.user?.id ? Side.white : Side.black,
+      mySide: youAre,
       onTap: game.variant.isSupported
           ? () {
               pushPlatformRoute(
@@ -463,15 +464,13 @@ class ExtendedGameListTile extends StatelessWidget {
                       )
                     : ArchivedGameScreen(
                         gameData: game,
-                        orientation: userId == game.white.user?.id
-                            ? Side.white
-                            : Side.black,
+                        orientation: youAre,
                       ),
               );
             }
           : null,
       icon: game.perf.icon,
-      playerTitle: UserFullNameWidget.player(
+      opponentTitle: UserFullNameWidget.player(
         user: opponent.user,
         aiLevel: opponent.aiLevel,
         rating: opponent.rating,
@@ -501,7 +500,7 @@ class ExtendedGameListTile extends StatelessWidget {
             ),
             const SizedBox(width: 5),
           ],
-          getResultIcon(game, mySide),
+          getResultIcon(game, youAre),
         ],
       ),
     );

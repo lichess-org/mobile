@@ -111,7 +111,7 @@ class _BodyState extends ConsumerState<_Body> {
                 ],
               ),
               child: ExtendedGameListTile(
-                game: list[index],
+                item: list[index],
                 userId: widget.userId,
               ),
             );

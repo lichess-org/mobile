@@ -1,9 +1,13 @@
+import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/game/archived_game.dart';
+import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -15,6 +19,25 @@ import 'package:lichess_mobile/src/view/user/full_games_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'recent_games.g.dart';
+
+@riverpod
+Future<IList<LightArchivedGame>> _userRecentGames(
+  _UserRecentGamesRef ref, {
+  required UserId userId,
+}) {
+  return ref.withClientCacheFor(
+    (client) => GameRepository(client).getRecentGames(userId),
+    // cache is important because the associated widget is in a [ListView] and
+    // the provider may be instanciated multiple times in a short period of time
+    // (e.g. when scrolling)
+    // TODO: consider debouncing the request instead of caching it, or make the
+    // request in the parent widget and pass the result to the child
+    const Duration(minutes: 1),
+  );
+}
 
 class RecentGames extends ConsumerWidget {
   const RecentGames({this.user, super.key});
@@ -82,8 +105,8 @@ class RecentGames extends ConsumerWidget {
                   ),
                 )
               : null,
-          children: data.map((game) {
-            return ExtendedGameListTile(game: game, userId: userId);
+          children: data.map((item) {
+            return ExtendedGameListTile(item: item, userId: userId);
           }).toList(),
         );
       },

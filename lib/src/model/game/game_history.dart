@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:async/async.dart';
+import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
@@ -19,7 +20,7 @@ const _nbPerPage = 20;
 
 @riverpod
 class UserGameHistory extends _$UserGameHistory {
-  final _list = <LightArchivedGame>[];
+  final _list = <(LightArchivedGame, Side)>[];
 
   @override
   Future<UserGameHistoryState> build(UserId id) async {
@@ -29,7 +30,8 @@ class UserGameHistory extends _$UserGameHistory {
     });
     final recentGames =
         await ref.watch(userRecentGamesProvider(userId: id).future);
-    _list.addAll(recentGames);
+    _list.addAll(recentGames
+        .map((e) => (e, e.white.user?.id == id ? Side.white : Side.black)),);
     return UserGameHistoryState(
       gameList: _list.toIList(),
       isLoading: false,
@@ -46,7 +48,7 @@ class UserGameHistory extends _$UserGameHistory {
     Result.capture(
       ref.withClient(
         (client) => GameRepository(client)
-            .getFullGames(id, _nbPerPage, until: _list.last.createdAt),
+            .getFullGames(id, _nbPerPage, until: _list.last.$1.createdAt),
       ),
     ).fold(
       (value) {
@@ -56,7 +58,7 @@ class UserGameHistory extends _$UserGameHistory {
           );
           return;
         }
-        _list.addAll(value);
+        _list.addAll(value.map((e) => (e, e.white.user?.id == id ? Side.white : Side.black)));
         state = AsyncData(
           UserGameHistoryState(
             gameList: _list.toIList(),
@@ -77,7 +79,7 @@ class UserGameHistory extends _$UserGameHistory {
 @freezed
 class UserGameHistoryState with _$UserGameHistoryState {
   const factory UserGameHistoryState({
-    required IList<LightArchivedGame> gameList,
+    required IList<(LightArchivedGame, Side)> gameList,
     required bool isLoading,
     required bool hasMore,
     required bool hasError,
