@@ -40,7 +40,7 @@ class GameStorage {
   Future<IList<StoredGame>> page({
     UserId? userId,
     DateTime? until,
-    int max = 10,
+    int max = 20,
   }) async {
     final list = await _db.query(
       kGameStorageTable,

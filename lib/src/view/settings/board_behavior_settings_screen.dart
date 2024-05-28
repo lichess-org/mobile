@@ -2,13 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/utils/android.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
-class BoardSettingsScreen extends StatelessWidget {
-  const BoardSettingsScreen({super.key});
+class BoardBehaviorSettingsScreen extends StatelessWidget {
+  const BoardBehaviorSettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +42,8 @@ class _Body extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
 
+    final androidVersionAsync = ref.watch(androidVersionProvider);
+
     return SafeArea(
       child: ListView(
         children: [
@@ -56,6 +60,27 @@ class _Body extends ConsumerWidget {
                       .toggleHapticFeedback();
                 },
               ),
+              if (Theme.of(context).platform == TargetPlatform.android &&
+                  !isTabletOrLarger(context))
+                androidVersionAsync.maybeWhen(
+                  data: (version) => version != null && version.sdkInt >= 29
+                      ? SwitchSettingTile(
+                          title: const Text('Immersive mode'),
+                          subtitle: const Text(
+                            '''Hide system UI while playing. Use this if you are bothered by the system's navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.''',
+                            textAlign: TextAlign.justify,
+                            maxLines: 5,
+                          ),
+                          value: boardPrefs.immersiveModeWhilePlaying ?? false,
+                          onChanged: (value) {
+                            ref
+                                .read(boardPreferencesProvider.notifier)
+                                .toggleImmersiveModeWhilePlaying();
+                          },
+                        )
+                      : const SizedBox.shrink(),
+                  orElse: () => const SizedBox.shrink(),
+                ),
               SwitchSettingTile(
                 title: Text(
                   context.l10n.preferencesPieceDestinations,

@@ -16,8 +16,8 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/layout.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/puzzle/dashboard_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_history_screen.dart';
@@ -32,6 +32,9 @@ import 'puzzle_screen.dart';
 import 'puzzle_themes_screen.dart';
 import 'storm_screen.dart';
 import 'streak_screen.dart';
+
+const _kNumberOfHistoryItemsOnHandset = 8;
+const _kNumberOfHistoryItemsOnTablet = 16;
 
 class PuzzleTabScreen extends ConsumerStatefulWidget {
   const PuzzleTabScreen({super.key});
@@ -61,20 +64,29 @@ class _PuzzleTabScreenState extends ConsumerState<PuzzleTabScreen> {
         ),
       ],
     );
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(context.l10n.puzzles),
-        actions: const [
-          _DashboardButton(),
-        ],
+
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (bool didPop) {
+        if (!didPop) {
+          ref.read(currentBottomTabProvider.notifier).state = BottomTab.home;
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(context.l10n.puzzles),
+          actions: const [
+            _DashboardButton(),
+          ],
+        ),
+        body: userSession != null
+            ? RefreshIndicator(
+                key: _androidRefreshKey,
+                onRefresh: _refreshData,
+                child: body,
+              )
+            : body,
       ),
-      body: userSession != null
-          ? RefreshIndicator(
-              key: _androidRefreshKey,
-              onRefresh: _refreshData,
-              child: body,
-            )
-          : body,
     );
   }
 
@@ -124,9 +136,9 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final connectivity = ref.watch(connectivityChangesProvider);
+    final connectivity = ref.watch(connectivityProvider);
 
-    final isTablet = getScreenType(context) == ScreenType.tablet;
+    final isTablet = isTabletOrLarger(context);
 
     final handsetChildren = [
       connectivity.when(
@@ -306,6 +318,7 @@ class PuzzleHistoryWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncData = ref.watch(puzzleRecentActivityProvider);
+    final isTablet = isTabletOrLarger(context);
     return asyncData.when(
       data: (recentActivity) {
         if (recentActivity == null) {
@@ -316,11 +329,21 @@ class PuzzleHistoryWidget extends ConsumerWidget {
             header: Text(context.l10n.puzzleHistory),
             children: [
               Center(
-                child: Text(context.l10n.puzzleNoPuzzlesToShow),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 16.0,
+                    horizontal: 8.0,
+                  ),
+                  child: Text(context.l10n.puzzleNoPuzzlesToShow),
+                ),
               ),
             ],
           );
         }
+
+        final maxItems = isTablet
+            ? _kNumberOfHistoryItemsOnTablet
+            : _kNumberOfHistoryItemsOnHandset;
 
         return ListSection(
           cupertinoBackgroundColor:
@@ -341,7 +364,10 @@ class PuzzleHistoryWidget extends ConsumerWidget {
               padding: Theme.of(context).platform == TargetPlatform.iOS
                   ? EdgeInsets.zero
                   : Styles.horizontalBodyPadding,
-              child: PuzzleHistoryPreview(recentActivity.take(8).toIList()),
+              child: PuzzleHistoryPreview(
+                recentActivity.take(maxItems).toIList(),
+                maxRows: 5,
+              ),
             ),
           ],
         );

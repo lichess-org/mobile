@@ -1,15 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/puzzle/storm_controller.dart';
-import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 
 const _kClockFontSize = 26.0;
 
-class StormClockWidget extends ConsumerStatefulWidget {
+class StormClockWidget extends StatefulWidget {
   const StormClockWidget({required this.clock});
 
   final StormClock clock;
@@ -18,7 +16,7 @@ class StormClockWidget extends ConsumerStatefulWidget {
   _ClockState createState() => _ClockState();
 }
 
-class _ClockState extends ConsumerState<StormClockWidget>
+class _ClockState extends State<StormClockWidget>
     with SingleTickerProviderStateMixin {
   // ignore: avoid-late-keyword
   late AnimationController _controller;
@@ -99,7 +97,7 @@ class _ClockState extends ConsumerState<StormClockWidget>
 
   @override
   Widget build(BuildContext build) {
-    final brightness = ref.watch(currentBrightnessProvider);
+    final brightness = Theme.of(context).brightness;
     final clockStyle = brightness == Brightness.dark
         ? _ClockStyle.darkThemeStyle
         : _ClockStyle.lightThemeStyle;

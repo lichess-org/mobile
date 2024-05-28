@@ -13,8 +13,8 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart' as cg;
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/layout.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -56,11 +56,19 @@ class PuzzleHistoryPreview extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final crossAxisCount = constraints.maxWidth > FormFactor.tablet ? 4 : 2;
+        final crossAxisCount = constraints.maxWidth > 600
+            ? 4
+            : constraints.maxWidth > 450
+                ? 3
+                : 2;
         const columnGap = 12.0;
         final boardWidth =
             (constraints.maxWidth - (columnGap * crossAxisCount - columnGap)) /
                 crossAxisCount;
+
+        final cappedHistory =
+            maxRows != null ? history.take(crossAxisCount * maxRows!) : history;
+
         return LayoutGrid(
           columnSizes: List.generate(crossAxisCount, (_) => 1.fr),
           rowSizes: List.generate(
@@ -69,7 +77,7 @@ class PuzzleHistoryPreview extends ConsumerWidget {
           ),
           rowGap: 16.0,
           columnGap: columnGap,
-          children: history.map((e) {
+          children: cappedHistory.map((e) {
             final (fen, side, lastMove) = e.preview;
             return BoardThumbnail(
               size: boardWidth,

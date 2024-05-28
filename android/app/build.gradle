@@ -50,7 +50,7 @@ android {
 
     defaultConfig {
         applicationId "org.lichess.mobileV2"
-        minSdkVersion 21
+        minSdkVersion 26
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -73,6 +73,11 @@ android {
 
     buildTypes {
         release {
+            minifyEnabled true
+            proguardFiles(
+              getDefaultProguardFile('proguard-android-optimize.txt'),
+              'proguard-rules.pro'
+            )
             signingConfig signingConfigs.release
         }
     }

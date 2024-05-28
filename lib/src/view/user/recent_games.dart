@@ -23,16 +23,41 @@ class RecentGames extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isOnline = ref.watch(isOnlineProvider);
+    final connectivity = ref.watch(connectivityProvider);
     final session = ref.watch(authSessionProvider);
     final userId = user?.id ?? session?.user.id;
 
     final recentGames = user != null
-        ? ref.watch(userRecentGamesProvider(userId: user!.id))
-        : session != null && (isOnline.valueOrNull ?? false) == true
-            ? ref.watch(accountRecentGamesProvider)
+        ? ref
+            .watch(_userRecentGamesProvider(userId: user!.id))
+            .whenData((data) {
+            return data
+                .map(
+                  (e) =>
+                      // user is not null for at least one of the players
+                      (e, e.white.user?.id == userId ? Side.white : Side.black),
+                )
+                .toIList();
+          })
+        : session != null &&
+                (connectivity.valueOrNull?.isOnline ?? false) == true
+            ? ref.watch(accountRecentGamesProvider).whenData((data) {
+                return data
+                    .map(
+                      (e) => (
+                        e,
+                        // user is not null for at least one of the players
+                        e.white.user?.id == userId ? Side.white : Side.black
+                      ),
+                    )
+                    .toIList();
+              })
             : ref.watch(recentStoredGamesProvider).whenData((data) {
-                return data.map((e) => e.game.data).toIList();
+                return data
+                    // we can assume that `youAre` is not null either for logged
+                    // in users or for anonymous users
+                    .map((e) => (e.game.data, e.game.youAre ?? Side.white))
+                    .toIList();
               });
 
     return recentGames.when(

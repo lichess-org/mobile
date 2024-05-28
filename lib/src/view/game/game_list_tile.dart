@@ -30,7 +30,7 @@ class GameListTile extends StatelessWidget {
   const GameListTile({
     required this.game,
     required this.mySide,
-    required this.playerTitle,
+    required this.oppponentTitle,
     this.icon,
     this.subtitle,
     this.trailing,
@@ -41,7 +41,7 @@ class GameListTile extends StatelessWidget {
   final Side mySide;
 
   final IconData? icon;
-  final Widget playerTitle;
+  final Widget oppponentTitle;
   final Widget? subtitle;
   final Widget? trailing;
   final GestureTapCallback? onTap;
@@ -60,7 +60,7 @@ class GameListTile extends StatelessWidget {
           builder: (context) => _ContextMenu(
             game: game,
             mySide: mySide,
-            playerTitle: playerTitle,
+            oppponentTitle: oppponentTitle,
             icon: icon,
             subtitle: subtitle,
             trailing: trailing,
@@ -68,7 +68,7 @@ class GameListTile extends StatelessWidget {
         );
       },
       leading: icon != null ? Icon(icon) : null,
-      title: playerTitle,
+      title: oppponentTitle,
       subtitle: subtitle != null
           ? DefaultTextStyle.merge(
               child: subtitle!,
@@ -86,7 +86,7 @@ class _ContextMenu extends ConsumerWidget {
   const _ContextMenu({
     required this.game,
     required this.mySide,
-    required this.playerTitle,
+    required this.oppponentTitle,
     this.icon,
     this.subtitle,
     this.trailing,
@@ -96,7 +96,7 @@ class _ContextMenu extends ConsumerWidget {
   final Side mySide;
 
   final IconData? icon;
-  final Widget playerTitle;
+  final Widget oppponentTitle;
   final Widget? subtitle;
   final Widget? trailing;
 

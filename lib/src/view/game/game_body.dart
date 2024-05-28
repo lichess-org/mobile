@@ -292,6 +292,8 @@ class GameBody extends ConsumerWidget {
                 shouldExcludeGesturesOnFocusGained: () =>
                     gameState.game.meta.speed != Speed.correspondence &&
                     gameState.game.playable,
+                shouldSetImmersiveMode:
+                    boardPreferences.immersiveModeWhilePlaying ?? false,
                 child: content,
               )
             : content;
@@ -363,7 +365,12 @@ class GameBody extends ConsumerWidget {
       else if (prev?.hasValue != true) {
         final game = state.requireValue.game;
         if (game.meta.speed != Speed.correspondence && game.playable) {
-          setAndroidBoardGesturesExclusion(boardKey);
+          setAndroidBoardGesturesExclusion(
+            boardKey,
+            withImmersiveMode:
+                ref.read(boardPreferencesProvider).immersiveModeWhilePlaying ??
+                    false,
+          );
         }
       }
     }

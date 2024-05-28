@@ -25,8 +25,8 @@ import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/layout.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
@@ -248,7 +248,7 @@ class _Body extends ConsumerWidget {
               builder: (context, constraints) {
                 final aspectRatio = constraints.biggest.aspectRatio;
                 final defaultBoardSize = constraints.biggest.shortestSide;
-                final isTablet = getScreenType(context) == ScreenType.tablet;
+                final isTablet = isTabletOrLarger(context);
                 final remainingHeight =
                     constraints.maxHeight - defaultBoardSize;
                 final isSmallScreen =
@@ -1215,12 +1215,14 @@ class AcplChart extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final mainLineColor = Theme.of(context).platform == TargetPlatform.iOS
-        ? Colors.orange
-        : Theme.of(context).colorScheme.secondary;
+    final mainLineColor = Theme.of(context).colorScheme.secondary;
     // yes it looks like below/above are inverted in fl_chart
-    final belowLineColor = Colors.white.withOpacity(0.7);
-    final aboveLineColor = Colors.grey.shade800.withOpacity(0.8);
+    final brightness = Theme.of(context).brightness;
+    final white = Theme.of(context).colorScheme.surfaceContainerHighest;
+    final black = Theme.of(context).colorScheme.outline;
+    // yes it looks like below/above are inverted in fl_chart
+    final belowLineColor = brightness == Brightness.light ? white : black;
+    final aboveLineColor = brightness == Brightness.light ? black : white;
 
     VerticalLine phaseVerticalBar(double x, String label) => VerticalLine(
           x: x,
@@ -1347,7 +1349,7 @@ class AcplChart extends ConsumerWidget {
                   spots: spots,
                   isCurved: false,
                   barWidth: 1,
-                  color: mainLineColor,
+                  color: mainLineColor.withOpacity(0.7),
                   aboveBarData: BarAreaData(
                     show: true,
                     color: aboveLineColor,
