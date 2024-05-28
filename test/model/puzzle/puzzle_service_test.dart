@@ -33,7 +33,7 @@ void main() {
           return db;
         }),
         lichessClientProvider.overrideWith((ref) {
-          return mockClient;
+          return LichessClient(mockClient, ref);
         }),
       ],
     );

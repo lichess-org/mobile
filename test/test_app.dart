@@ -83,9 +83,13 @@ Future<Widget> buildTestApp(
   return ProviderScope(
     overrides: [
       // ignore: scoped_providers_should_specify_dependencies
-      lichessClientProvider.overrideWithValue(mockClient),
+      lichessClientProvider.overrideWith((ref) {
+        return LichessClient(mockClient, ref);
+      }),
       // ignore: scoped_providers_should_specify_dependencies
-      defaultClientProvider.overrideWithValue(mockClient),
+      defaultClientProvider.overrideWith((_) {
+        return mockClient;
+      }),
       // ignore: scoped_providers_should_specify_dependencies
       webSocketChannelFactoryProvider.overrideWith((ref) {
         return FakeWebSocketChannelFactory(() => FakeWebSocketChannel());

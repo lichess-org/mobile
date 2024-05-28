@@ -10,7 +10,7 @@ import 'package:lichess_mobile/src/widgets/user_list_tile.dart';
 import '../../test_app.dart';
 import '../../test_utils.dart';
 
-final lichessClient = MockClient((request) {
+final client = MockClient((request) {
   if (request.url.path == '/api/player/autocomplete') {
     if (request.url.queryParameters['term'] == 'joh') {
       return mockResponse(johResponse, 200);
@@ -29,7 +29,8 @@ void main() {
           tester,
           home: const SearchScreen(),
           overrides: [
-            lichessClientProvider.overrideWithValue(lichessClient),
+            lichessClientProvider
+                .overrideWith((ref) => LichessClient(client, ref)),
           ],
         );
 
@@ -69,7 +70,8 @@ void main() {
           tester,
           home: const SearchScreen(),
           overrides: [
-            lichessClientProvider.overrideWithValue(lichessClient),
+            lichessClientProvider
+                .overrideWith((ref) => LichessClient(client, ref)),
           ],
         );
 

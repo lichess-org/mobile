@@ -1,11 +1,12 @@
 import 'package:http/http.dart' as http;
+import 'package:lichess_mobile/src/model/common/http.dart';
 
 import './challenge_request.dart';
 
 class ChallengeRepository {
   const ChallengeRepository(this.client);
 
-  final http.Client client;
+  final LichessClient client;
 
   Future<void> challenge(String username, ChallengeRequest req) async {
     final uri = Uri(path: '/api/challenge/$username');

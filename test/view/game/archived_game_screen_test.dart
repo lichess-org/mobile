@@ -20,7 +20,7 @@ import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import '../../test_app.dart';
 import '../../test_utils.dart';
 
-final lichessClient = MockClient((request) {
+final client = MockClient((request) {
   if (request.url.path == '/game/export/qVChCOTc') {
     return mockResponse(gameResponse, 200);
   }
@@ -39,7 +39,8 @@ void main() {
             orientation: Side.white,
           ),
           overrides: [
-            lichessClientProvider.overrideWithValue(lichessClient),
+            lichessClientProvider
+                .overrideWith((ref) => LichessClient(client, ref)),
           ],
         );
 
@@ -111,7 +112,9 @@ void main() {
           orientation: Side.white,
         ),
         overrides: [
-          lichessClientProvider.overrideWithValue(lichessClient),
+          lichessClientProvider.overrideWith((ref) {
+            return LichessClient(client, ref);
+          }),
         ],
       );
 

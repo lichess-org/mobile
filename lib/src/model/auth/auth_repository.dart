@@ -21,12 +21,12 @@ FlutterAppAuth appAuth(AppAuthRef ref) {
 
 class AuthRepository {
   AuthRepository(
-    http.Client client,
+    LichessClient client,
     FlutterAppAuth appAuth,
   )   : _client = client,
         _appAuth = appAuth;
 
-  final http.Client _client;
+  final LichessClient _client;
   final Logger _log = Logger('AuthRepository');
   final FlutterAppAuth _appAuth;
 

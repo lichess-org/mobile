@@ -2,10 +2,12 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 
+import '../../test_container.dart';
 import '../../test_utils.dart';
 
 void main() {
@@ -24,7 +26,10 @@ void main() {
         return mockResponse('', 404);
       });
 
-      final repo = GameRepository(mockClient);
+      final container = await lichessClientContainer(mockClient);
+      final client = container.read(lichessClientProvider);
+
+      final repo = GameRepository(client);
 
       final result = await repo.getRecentGames(const UserId('testUser'));
       expect(result, isA<IList<LightArchivedGame>>());
@@ -54,7 +59,9 @@ void main() {
         return mockResponse('', 404);
       });
 
-      final repo = GameRepository(mockClient);
+      final container = await lichessClientContainer(mockClient);
+      final client = container.read(lichessClientProvider);
+      final repo = GameRepository(client);
       final result = await repo.getGamesByIds(ids);
 
       expect(result, isA<IList<LightArchivedGame>>());
@@ -76,7 +83,9 @@ void main() {
         return mockResponse('', 404);
       });
 
-      final repo = GameRepository(mockClient);
+      final container = await lichessClientContainer(mockClient);
+      final client = container.read(lichessClientProvider);
+      final repo = GameRepository(client);
       final game = await repo.getGame(const GameId('qVChCOTc'));
 
       expect(game, isA<ArchivedGame>());
@@ -97,7 +106,9 @@ void main() {
         return mockResponse('', 404);
       });
 
-      final repo = GameRepository(mockClient);
+      final container = await lichessClientContainer(mockClient);
+      final client = container.read(lichessClientProvider);
+      final repo = GameRepository(client);
       final result = await repo.getGame(const GameId('1vdsvmxp'));
 
       expect(result, isA<ArchivedGame>());

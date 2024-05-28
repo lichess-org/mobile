@@ -13,7 +13,7 @@ import 'package:lichess_mobile/src/view/puzzle/storm_screen.dart';
 import '../../test_app.dart';
 import '../../test_utils.dart';
 
-final lichessClient = MockClient((request) {
+final client = MockClient((request) {
   if (request.url.path == '/storm') {
     return mockResponse('', 200);
   }
@@ -32,7 +32,8 @@ void main() {
           home: const StormScreen(),
           overrides: [
             stormProvider.overrideWith((ref) => mockStromRun),
-            lichessClientProvider.overrideWithValue(lichessClient),
+            lichessClientProvider
+                .overrideWith((ref) => LichessClient(client, ref)),
           ],
         );
 
@@ -52,7 +53,8 @@ void main() {
           home: const StormScreen(),
           overrides: [
             stormProvider.overrideWith((ref) => mockStromRun),
-            lichessClientProvider.overrideWithValue(lichessClient),
+            lichessClientProvider
+                .overrideWith((ref) => LichessClient(client, ref)),
           ],
         );
 
@@ -75,7 +77,8 @@ void main() {
           home: const StormScreen(),
           overrides: [
             stormProvider.overrideWith((ref) => mockStromRun),
-            lichessClientProvider.overrideWithValue(lichessClient),
+            lichessClientProvider
+                .overrideWith((ref) => LichessClient(client, ref)),
           ],
         );
 
@@ -129,7 +132,8 @@ void main() {
         home: const StormScreen(),
         overrides: [
           stormProvider.overrideWith((ref) => mockStromRun),
-          lichessClientProvider.overrideWithValue(lichessClient),
+          lichessClientProvider
+              .overrideWith((ref) => LichessClient(client, ref)),
         ],
       );
 
@@ -173,7 +177,8 @@ void main() {
         home: const StormScreen(),
         overrides: [
           stormProvider.overrideWith((ref) => mockStromRun),
-          lichessClientProvider.overrideWithValue(lichessClient),
+          lichessClientProvider
+              .overrideWith((ref) => LichessClient(client, ref)),
         ],
       );
 

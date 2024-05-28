@@ -10,7 +10,7 @@ import '../../model/auth/fake_auth_repository.dart';
 import '../../test_app.dart';
 import '../../test_utils.dart';
 
-final lichessClient = MockClient((request) {
+final client = MockClient((request) {
   if (request.url.path == '/api/user/${fakeUser.id}/perf/${testPerf.name}') {
     return mockResponse(userPerfStatsResponse, 200);
   }
@@ -34,7 +34,9 @@ void main() {
             perf: testPerf,
           ),
           overrides: [
-            lichessClientProvider.overrideWithValue(lichessClient),
+            lichessClientProvider.overrideWith((ref) {
+              return LichessClient(client, ref);
+            }),
           ],
         );
 
@@ -64,7 +66,9 @@ void main() {
             perf: testPerf,
           ),
           overrides: [
-            lichessClientProvider.overrideWithValue(lichessClient),
+            lichessClientProvider.overrideWith((ref) {
+              return LichessClient(client, ref);
+            }),
           ],
         );
 

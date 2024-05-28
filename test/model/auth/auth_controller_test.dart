@@ -22,7 +22,7 @@ class Listener<T> extends Mock {
   void call(T? previous, T value);
 }
 
-final lichessClient = MockClient((request) {
+final client = MockClient((request) {
   if (request.url.path == '/api/account') {
     return mockResponse(testAccountResponse, 200);
   } else if (request.method == 'DELETE' && request.url.path == '/api/token') {
@@ -79,7 +79,8 @@ void main() {
         overrides: [
           appAuthProvider.overrideWithValue(mockFlutterAppAuth),
           sessionStorageProvider.overrideWithValue(mockSessionStorage),
-          lichessClientProvider.overrideWithValue(lichessClient),
+          lichessClientProvider
+              .overrideWith((ref) => LichessClient(client, ref)),
         ],
       );
 
@@ -121,7 +122,8 @@ void main() {
         overrides: [
           appAuthProvider.overrideWithValue(mockFlutterAppAuth),
           sessionStorageProvider.overrideWithValue(mockSessionStorage),
-          lichessClientProvider.overrideWithValue(lichessClient),
+          lichessClientProvider
+              .overrideWith((ref) => LichessClient(client, ref)),
         ],
       );
 

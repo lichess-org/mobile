@@ -8,7 +8,7 @@ import 'package:lichess_mobile/src/view/user/leaderboard_widget.dart';
 import '../../test_app.dart';
 import '../../test_utils.dart';
 
-final lichessClient = MockClient((request) {
+final client = MockClient((request) {
   if (request.url.path == '/api/player/top/1/standard') {
     return mockResponse(top1Response, 200);
   }
@@ -25,7 +25,8 @@ void main() {
           tester,
           home: Column(children: [LeaderboardWidget()]),
           overrides: [
-            lichessClientProvider.overrideWithValue(lichessClient),
+            lichessClientProvider
+                .overrideWith((ref) => LichessClient(client, ref)),
           ],
         );
 

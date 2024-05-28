@@ -11,7 +11,7 @@ import '../../model/auth/fake_session_storage.dart';
 import '../../test_app.dart';
 import '../../test_utils.dart';
 
-final lichessClient = MockClient((request) {
+final client = MockClient((request) {
   if (request.method == 'DELETE' && request.url.path == '/api/token') {
     return mockResponse('ok', 200);
   }
@@ -65,7 +65,8 @@ void main() {
           home: const SettingsScreen(),
           userSession: fakeSession,
           overrides: [
-            lichessClientProvider.overrideWithValue(lichessClient),
+            lichessClientProvider
+                .overrideWith((ref) => LichessClient(client, ref)),
           ],
         );
 

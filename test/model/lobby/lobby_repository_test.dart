@@ -1,10 +1,12 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/lobby/correspondence_challenge.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_repository.dart';
 
+import '../../test_container.dart';
 import '../../test_utils.dart';
 
 void main() {
@@ -15,10 +17,12 @@ void main() {
     return mockResponse('', 404);
   });
 
-  final repo = LobbyRepository(mockClient);
-
   group('LobbyRepository.getCorrespondenceChallenges', () {
     test('read json', () async {
+      final container = await lichessClientContainer(mockClient);
+      final client = container.read(lichessClientProvider);
+      final repo = LobbyRepository(client);
+
       final data = await repo.getCorrespondenceChallenges();
 
       expect(data, isA<IList<CorrespondenceChallenge>>());

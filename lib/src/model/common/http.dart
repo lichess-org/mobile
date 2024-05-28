@@ -81,7 +81,7 @@ Client defaultClient(DefaultClientRef ref) {
 ///
 /// Only one instance of this client is created and kept alive for the whole app.
 @Riverpod(keepAlive: true)
-Client lichessClient(LichessClientRef ref) {
+LichessClient lichessClient(LichessClientRef ref) {
   final client = LichessClient(
     // Retry just once, after 500ms, on 429 Too Many Requests.
     RetryClient(
@@ -478,7 +478,7 @@ extension ClientExtension on Client {
 
 extension ClientWidgetRefExtension on WidgetRef {
   /// Runs [fn] with a [LichessClient].
-  Future<T> withClient<T>(Future<T> Function(Client) fn) async {
+  Future<T> withClient<T>(Future<T> Function(LichessClient) fn) async {
     final client = read(lichessClientProvider);
     return await fn(client);
   }
@@ -486,7 +486,7 @@ extension ClientWidgetRefExtension on WidgetRef {
 
 extension ClientRefExtension on Ref {
   /// Runs [fn] with a [LichessClient].
-  Future<T> withClient<T>(Future<T> Function(Client) fn) async {
+  Future<T> withClient<T>(Future<T> Function(LichessClient) fn) async {
     final client = read(lichessClientProvider);
     return await fn(client);
   }
@@ -500,7 +500,7 @@ extension ClientAutoDisposeRefExtension<T> on AutoDisposeRef<T> {
   /// If [fn] throws with a [SocketException], the provider is not kept alive, this
   /// allows to retry the request later.
   Future<U> withClientCacheFor<U>(
-    Future<U> Function(Client) fn,
+    Future<U> Function(LichessClient) fn,
     Duration duration,
   ) async {
     final link = keepAlive();

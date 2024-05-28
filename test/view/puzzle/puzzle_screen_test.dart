@@ -156,7 +156,7 @@ void main() {
           ),
           overrides: [
             lichessClientProvider.overrideWith((ref) {
-              return mockClient;
+              return LichessClient(mockClient, ref);
             }),
             puzzleBatchStorageProvider.overrideWith((ref) {
               return mockBatchStorage;
@@ -270,7 +270,7 @@ void main() {
           ),
           overrides: [
             lichessClientProvider.overrideWith((ref) {
-              return mockClient;
+              return LichessClient(mockClient, ref);
             }),
             puzzleBatchStorageProvider.overrideWith((ref) {
               return mockBatchStorage;
@@ -370,7 +370,7 @@ void main() {
           ),
           overrides: [
             lichessClientProvider.overrideWith((ref) {
-              return mockClient;
+              return LichessClient(mockClient, ref);
             }),
             puzzleBatchStorageProvider.overrideWith((ref) {
               return mockBatchStorage;

@@ -71,7 +71,7 @@ Future<IList<OngoingGame>> ongoingGames(OngoingGamesRef ref) async {
 class AccountRepository {
   AccountRepository(this.client);
 
-  final http.Client client;
+  final LichessClient client;
   final Logger _log = Logger('AccountRepository');
 
   Future<User> getProfile() {

@@ -1,9 +1,11 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/relation/relation_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 
+import '../../test_container.dart';
 import '../../test_utils.dart';
 
 void main() {
@@ -23,7 +25,9 @@ void main() {
         return mockResponse('', 404);
       });
 
-      final repo = RelationRepository(mockClient);
+      final container = await lichessClientContainer(mockClient);
+      final client = container.read(lichessClientProvider);
+      final repo = RelationRepository(client);
       final result = await repo.getFollowing();
 
       expect(result, isA<IList<User>>());
@@ -43,7 +47,9 @@ void main() {
         return mockResponse('', 404);
       });
 
-      final repo = RelationRepository(mockClient);
+      final container = await lichessClientContainer(mockClient);
+      final client = container.read(lichessClientProvider);
+      final repo = RelationRepository(client);
       final result = await repo.getFollowing();
 
       expect(result, isA<IList<User>>());

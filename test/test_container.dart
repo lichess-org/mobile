@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/testing.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/app_dependencies.dart';
 import 'package:lichess_mobile/src/crashlytics.dart';
@@ -38,6 +39,19 @@ class MockHttpClient extends Mock implements http.Client {}
 
 const shouldLog = false;
 
+/// Returns a [ProviderContainer] with a mocked [LichessClient] configured with
+/// the given [mockClient].
+Future<ProviderContainer> lichessClientContainer(MockClient mockClient) async {
+  return makeContainer(
+    overrides: [
+      lichessClientProvider.overrideWith((ref) {
+        return LichessClient(mockClient, ref);
+      }),
+    ],
+  );
+}
+
+/// Returns a [ProviderContainer] with default mocks, ready for testing.
 Future<ProviderContainer> makeContainer({
   List<Override>? overrides,
   AuthSessionState? userSession,
@@ -68,7 +82,9 @@ Future<ProviderContainer> makeContainer({
         ref.onDispose(pool.dispose);
         return pool;
       }),
-      lichessClientProvider.overrideWithValue(MockHttpClient()),
+      lichessClientProvider.overrideWith((ref) {
+        return LichessClient(MockHttpClient(), ref);
+      }),
       connectivityProvider.overrideWith((ref) {
         return Stream.value(
           const ConnectivityStatus(

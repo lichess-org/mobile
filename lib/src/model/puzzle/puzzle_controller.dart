@@ -5,7 +5,6 @@ import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
@@ -63,7 +62,8 @@ class PuzzleController extends _$PuzzleController {
     return _loadNewContext(initialContext, initialStreak);
   }
 
-  PuzzleRepository _repository(http.Client client) => PuzzleRepository(client);
+  PuzzleRepository _repository(LichessClient client) =>
+      PuzzleRepository(client);
 
   PuzzleState _loadNewContext(
     PuzzleContext context,

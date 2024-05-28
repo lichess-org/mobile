@@ -6,7 +6,7 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 class RelationRepository {
   const RelationRepository(this.client);
 
-  final http.Client client;
+  final LichessClient client;
 
   Future<IList<User>> getFollowing() async {
     return client.readNdJsonList(

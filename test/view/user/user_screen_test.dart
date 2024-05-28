@@ -9,7 +9,7 @@ import '../../model/user/user_repository_test.dart';
 import '../../test_app.dart';
 import '../../test_utils.dart';
 
-final lichessClient = MockClient((request) {
+final client = MockClient((request) {
   if (request.url.path == '/api/games/user/$testUserId') {
     return mockResponse(userGameResponse, 200);
   } else if (request.url.path == '/api/user/$testUserId') {
@@ -42,7 +42,8 @@ void main() {
           tester,
           home: const UserScreen(user: testUser),
           overrides: [
-            lichessClientProvider.overrideWithValue(lichessClient),
+            lichessClientProvider
+                .overrideWith((ref) => LichessClient(client, ref)),
           ],
         );
 

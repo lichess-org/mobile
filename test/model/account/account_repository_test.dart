@@ -2,7 +2,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 
+import '../../test_container.dart';
 import '../../test_utils.dart';
 
 void main() {
@@ -59,7 +61,9 @@ void main() {
         return mockResponse('', 404);
       });
 
-      final repo = AccountRepository(mockClient);
+      final container = await lichessClientContainer(mockClient);
+      final client = container.read(lichessClientProvider);
+      final repo = AccountRepository(client);
       final result = await repo.getPreferences();
 
       expect(result, isA<AccountPrefState>());

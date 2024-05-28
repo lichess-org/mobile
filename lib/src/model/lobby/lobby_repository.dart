@@ -24,7 +24,7 @@ Future<IList<CorrespondenceChallenge>> correspondenceChallenges(
 class LobbyRepository {
   LobbyRepository(this.client);
 
-  final http.Client client;
+  final LichessClient client;
 
   Future<void> createSeek(GameSeek seek, {required String sri}) async {
     final uri = Uri(path: '/api/board/seek', queryParameters: {'sri': sri});

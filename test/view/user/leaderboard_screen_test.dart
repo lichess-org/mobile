@@ -7,7 +7,7 @@ import 'package:lichess_mobile/src/view/user/leaderboard_screen.dart';
 import '../../test_app.dart';
 import '../../test_utils.dart';
 
-final lichessClient = MockClient((request) {
+final client = MockClient((request) {
   if (request.url.path == '/api/player') {
     return mockResponse(leaderboardResponse, 200);
   }
@@ -24,7 +24,8 @@ void main() {
         final app = await buildTestApp(
           tester,
           overrides: [
-            lichessClientProvider.overrideWithValue(lichessClient),
+            lichessClientProvider
+                .overrideWith((ref) => LichessClient(client, ref)),
           ],
           home: const LeaderboardScreen(),
         );

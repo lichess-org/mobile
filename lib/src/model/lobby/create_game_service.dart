@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:deep_pick/deep_pick.dart';
-import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -24,7 +23,7 @@ class CreateGameService {
   final CreateGameServiceRef ref;
   final Logger _log;
 
-  http.Client get lichessClient => ref.read(lichessClientProvider);
+  LichessClient get lichessClient => ref.read(lichessClientProvider);
 
   StreamSubscription<SocketEvent>? _pendingGameConnection;
 
