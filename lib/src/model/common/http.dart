@@ -284,16 +284,16 @@ class LichessClient implements Client {
 
     return Response.fromStream(await send(request));
   }
+}
 
-  /// Throws an error if [response] is not successful.
-  void _checkResponseSuccess(Uri url, Response response) {
-    if (response.statusCode < 400) return;
-    var message = 'Request to $url failed with status ${response.statusCode}';
-    if (response.reasonPhrase != null) {
-      message = '$message: ${response.reasonPhrase}';
-    }
-    throw ClientException('$message.', url);
+/// Throws an error if [response] is not successful.
+void _checkResponseSuccess(Uri url, Response response) {
+  if (response.statusCode < 400) return;
+  var message = 'Request to $url failed with status ${response.statusCode}';
+  if (response.reasonPhrase != null) {
+    message = '$message: ${response.reasonPhrase}';
   }
+  throw ClientException('$message.', url);
 }
 
 extension ClientExtension on Client {
@@ -463,16 +463,6 @@ extension ClientExtension on Client {
         url,
       );
     }
-  }
-
-  /// Throws an error if [response] is not successful.
-  void _checkResponseSuccess(Uri url, Response response) {
-    if (response.statusCode < 400) return;
-    var message = 'Request to $url failed with status ${response.statusCode}';
-    if (response.reasonPhrase != null) {
-      message = '$message: ${response.reasonPhrase}';
-    }
-    throw ClientException('$message.', url);
   }
 }
 
