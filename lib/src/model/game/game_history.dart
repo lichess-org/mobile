@@ -30,8 +30,10 @@ class UserGameHistory extends _$UserGameHistory {
     });
     final recentGames =
         await ref.watch(userRecentGamesProvider(userId: id).future);
-    _list.addAll(recentGames
-        .map((e) => (e, e.white.user?.id == id ? Side.white : Side.black)),);
+    _list.addAll(
+      recentGames
+          .map((e) => (e, e.white.user?.id == id ? Side.white : Side.black)),
+    );
     return UserGameHistoryState(
       gameList: _list.toIList(),
       isLoading: false,
@@ -48,7 +50,7 @@ class UserGameHistory extends _$UserGameHistory {
     Result.capture(
       ref.withClient(
         (client) => GameRepository(client)
-            .getFullGames(id, _nbPerPage, until: _list.last.$1.createdAt),
+            .getUserGames(id, max: _nbPerPage, until: _list.last.$1.createdAt),
       ),
     ).fold(
       (value) {
@@ -58,7 +60,10 @@ class UserGameHistory extends _$UserGameHistory {
           );
           return;
         }
-        _list.addAll(value.map((e) => (e, e.white.user?.id == id ? Side.white : Side.black)));
+        _list.addAll(
+          value.map(
+              (e) => (e, e.white.user?.id == id ? Side.white : Side.black)),
+        );
         state = AsyncData(
           UserGameHistoryState(
             gameList: _list.toIList(),

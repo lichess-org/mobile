@@ -34,26 +34,9 @@ class GameRepository {
     }
   }
 
-  Future<IList<LightArchivedGame>> getRecentGames(UserId userId) {
-    return client.readNdJsonList(
-      Uri(
-        path: '/api/games/user/$userId',
-        queryParameters: {
-          'max': '20',
-          'moves': 'false',
-          'lastFen': 'true',
-          'accuracy': 'true',
-          'opening': 'true',
-        },
-      ),
-      headers: {'Accept': 'application/x-ndjson'},
-      mapper: LightArchivedGame.fromServerJson,
-    );
-  }
-
-  Future<IList<LightArchivedGame>> getFullGames(
-    UserId userId,
-    int max, {
+  Future<IList<LightArchivedGame>> getUserGames(
+    UserId userId, {
+    int? max = 20,
     DateTime? until,
   }) {
     return client.readNdJsonList(
