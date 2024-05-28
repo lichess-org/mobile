@@ -26,6 +26,7 @@ Broadcast _broadcastFromPick(RequiredPick pick) {
     tour: Tour(
       name: pick('tour', 'name').asStringOrThrow(),
       description: pick('tour', 'description').asStringOrThrow(),
+      imageUrl: pick('tour', 'image').asStringOrNull(),
     ),
   );
 }

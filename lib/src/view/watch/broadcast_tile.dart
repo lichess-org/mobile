@@ -12,6 +12,7 @@ class BroadcastTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return PlatformListTile(
       onTap: () => {},
+      leading: broadcast.tour.image(60.0),
       title: Padding(
         padding: const EdgeInsets.only(right: 5.0),
         child: Row(
