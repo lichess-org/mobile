@@ -178,8 +178,6 @@ class LichessClient implements Client {
       final request = response.request!;
       final method = request.method;
       final url = request.url;
-      // TODD for now logging isn't much useful
-      // We could use improve it later to create an http logger in the app.
       _logger.warning(
         '$method $url responded with status ${response.statusCode} ${response.reasonPhrase}',
       );
