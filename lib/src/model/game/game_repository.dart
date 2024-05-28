@@ -34,12 +34,17 @@ class GameRepository {
     }
   }
 
-  Future<IList<LightArchivedGame>> getRecentGames(UserId userId) {
+  Future<IList<LightArchivedGame>> getUserGames(
+    UserId userId, {
+    int? max = 20,
+    DateTime? until,
+  }) {
     return client.readNdJsonList(
       Uri(
         path: '/api/games/user/$userId',
         queryParameters: {
-          'max': '20',
+          'max': max.toString(),
+          if (until != null) 'until': until.millisecondsSinceEpoch.toString(),
           'moves': 'false',
           'lastFen': 'true',
           'accuracy': 'true',

@@ -52,7 +52,7 @@ Future<IList<LightArchivedGame>> accountRecentGames(
   final session = ref.watch(authSessionProvider);
   if (session == null) return IList();
   return ref.withClientCacheFor(
-    (client) => GameRepository(client).getRecentGames(session.user.id),
+    (client) => GameRepository(client).getUserGames(session.user.id),
     const Duration(hours: 1),
   );
 }
