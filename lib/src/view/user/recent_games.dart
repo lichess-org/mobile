@@ -4,10 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
-import 'package:lichess_mobile/src/model/game/game_repository.dart';
+import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/game/game_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -23,22 +22,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'recent_games.g.dart';
 
-@riverpod
-Future<IList<LightArchivedGame>> _userRecentGames(
-  _UserRecentGamesRef ref, {
-  required UserId userId,
-}) {
-  return ref.withClientCacheFor(
-    (client) => GameRepository(client).getUserGames(userId),
-    // cache is important because the associated widget is in a [ListView] and
-    // the provider may be instanciated multiple times in a short period of time
-    // (e.g. when scrolling)
-    // TODO: consider debouncing the request instead of caching it, or make the
-    // request in the parent widget and pass the result to the child
-    const Duration(minutes: 1),
-  );
-}
-
 class RecentGames extends ConsumerWidget {
   const RecentGames({this.user, super.key});
 
@@ -51,9 +34,7 @@ class RecentGames extends ConsumerWidget {
     final userId = user?.id ?? session?.user.id;
 
     final recentGames = user != null
-        ? ref
-            .watch(_userRecentGamesProvider(userId: user!.id))
-            .whenData((data) {
+        ? ref.watch(userRecentGamesProvider(userId: user!.id)).whenData((data) {
             return data
                 .map(
                   (e) =>
