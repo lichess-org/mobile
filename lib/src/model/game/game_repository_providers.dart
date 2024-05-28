@@ -25,7 +25,7 @@ Future<ArchivedGame> archivedGame(
 }
 
 @riverpod
-Future<IList<LightArchivedGame>> userRecentGames(
+Future<IList<LightArchivedGameWithPov>> userRecentGames(
   UserRecentGamesRef ref, {
   required UserId userId,
 }) {

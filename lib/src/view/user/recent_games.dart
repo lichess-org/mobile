@@ -1,14 +1,10 @@
-import 'package:dartchess/dartchess.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
-import 'package:lichess_mobile/src/model/game/game_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
@@ -24,40 +20,12 @@ class RecentGames extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final connectivity = ref.watch(connectivityProvider);
     final session = ref.watch(authSessionProvider);
     final userId = user?.id ?? session?.user.id;
 
     final recentGames = user != null
-        ? ref.watch(userRecentGamesProvider(userId: user!.id)).whenData((data) {
-            return data
-                .map(
-                  (e) =>
-                      // user is not null for at least one of the players
-                      (e, e.white.user?.id == userId ? Side.white : Side.black),
-                )
-                .toIList();
-          })
-        : session != null &&
-                (connectivity.valueOrNull?.isOnline ?? false) == true
-            ? ref.watch(accountRecentGamesProvider).whenData((data) {
-                return data
-                    .map(
-                      (e) => (
-                        e,
-                        // user is not null for at least one of the players
-                        e.white.user?.id == userId ? Side.white : Side.black
-                      ),
-                    )
-                    .toIList();
-              })
-            : ref.watch(recentStoredGamesProvider).whenData((data) {
-                return data
-                    // we can assume that `youAre` is not null either for logged
-                    // in users or for anonymous users
-                    .map((e) => (e.game.data, e.game.youAre ?? Side.white))
-                    .toIList();
-              });
+        ? ref.watch(userRecentGamesProvider(userId: user!.id))
+        : ref.watch(myRecentGamesProvider);
 
     return recentGames.when(
       data: (data) {

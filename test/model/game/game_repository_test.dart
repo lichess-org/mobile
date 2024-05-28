@@ -32,9 +32,9 @@ void main() {
       final repo = GameRepository(client);
 
       final result = await repo.getUserGames(const UserId('testUser'));
-      expect(result, isA<IList<LightArchivedGame>>());
+      expect(result, isA<IList<LightArchivedGameWithPov>>());
       expect(result.length, 3);
-      expect(result[0].id, const GameId('Huk88k3D'));
+      expect(result[0].game.id, const GameId('Huk88k3D'));
     });
   });
 

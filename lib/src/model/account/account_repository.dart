@@ -7,8 +7,6 @@ import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
-import 'package:lichess_mobile/src/model/game/archived_game.dart';
-import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository.dart';
 import 'package:logging/logging.dart';
@@ -41,18 +39,6 @@ Future<IList<UserActivity>> accountActivity(AccountActivityRef ref) async {
   if (session == null) return IList();
   return ref.withClientCacheFor(
     (client) => UserRepository(client).getActivity(session.user.id),
-    const Duration(hours: 1),
-  );
-}
-
-@riverpod
-Future<IList<LightArchivedGame>> accountRecentGames(
-  AccountRecentGamesRef ref,
-) async {
-  final session = ref.watch(authSessionProvider);
-  if (session == null) return IList();
-  return ref.withClientCacheFor(
-    (client) => GameRepository(client).getUserGames(session.user.id),
     const Duration(hours: 1),
   );
 }

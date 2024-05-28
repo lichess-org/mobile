@@ -1,3 +1,4 @@
+import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/model/common/http.dart';
@@ -34,26 +35,39 @@ class GameRepository {
     }
   }
 
-  Future<IList<LightArchivedGame>> getUserGames(
+  Future<IList<LightArchivedGameWithPov>> getUserGames(
     UserId userId, {
     int? max = 20,
     DateTime? until,
   }) {
-    return client.readNdJsonList(
-      Uri(
-        path: '/api/games/user/$userId',
-        queryParameters: {
-          'max': max.toString(),
-          if (until != null) 'until': until.millisecondsSinceEpoch.toString(),
-          'moves': 'false',
-          'lastFen': 'true',
-          'accuracy': 'true',
-          'opening': 'true',
-        },
-      ),
-      headers: {'Accept': 'application/x-ndjson'},
-      mapper: LightArchivedGame.fromServerJson,
-    );
+    return client
+        .readNdJsonList(
+          Uri(
+            path: '/api/games/user/$userId',
+            queryParameters: {
+              'max': max.toString(),
+              if (until != null)
+                'until': until.millisecondsSinceEpoch.toString(),
+              'moves': 'false',
+              'lastFen': 'true',
+              'accuracy': 'true',
+              'opening': 'true',
+            },
+          ),
+          headers: {'Accept': 'application/x-ndjson'},
+          mapper: LightArchivedGame.fromServerJson,
+        )
+        .then(
+          (value) => value
+              .map(
+                (e) => (
+                  game: e,
+                  // we know here user is not null for at least one of the players
+                  pov: e.white.user?.id == userId ? Side.white : Side.black,
+                ),
+              )
+              .toIList(),
+        );
   }
 
   /// Returns the games of the current user, given a list of ids.

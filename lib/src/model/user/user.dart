@@ -116,6 +116,11 @@ class User with _$User {
       }),
     );
   }
+
+  int get totalGames => perfs.values.fold<int>(
+        0,
+        (previousValue, element) => previousValue + (element.games ?? 0),
+      );
 }
 
 @freezed
@@ -138,11 +143,14 @@ class PlayTime with _$PlayTime {
 
 @freezed
 class UserPerf with _$UserPerf {
+  const UserPerf._();
+
   const factory UserPerf({
     required int rating,
     required int ratingDeviation,
     required int progression,
-    required int numberOfGames,
+    int? games,
+    int? runs,
     bool? provisional,
   }) = _UserPerf;
 
@@ -153,7 +161,8 @@ class UserPerf with _$UserPerf {
         rating: pick('rating').asIntOrThrow(),
         ratingDeviation: pick('rd').asIntOrThrow(),
         progression: pick('prog').asIntOrThrow(),
-        numberOfGames: pick('games').asIntOrThrow(),
+        games: pick('games').asIntOrNull(),
+        runs: pick('runs').asIntOrNull(),
         provisional: pick('prov').asBoolOrNull(),
       );
 
@@ -161,9 +170,11 @@ class UserPerf with _$UserPerf {
         rating: UserActivityStreak.fromJson(json).score,
         ratingDeviation: 0,
         progression: 0,
-        numberOfGames: UserActivityStreak.fromJson(json).runs,
+        runs: UserActivityStreak.fromJson(json).runs,
         provisional: null,
       );
+
+  int get numberOfGamesOrRuns => games ?? runs ?? 0;
 }
 
 @freezed

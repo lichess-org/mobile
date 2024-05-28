@@ -9,16 +9,20 @@ import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
-class FullGameScreen extends StatelessWidget {
+class FullGameScreen extends ConsumerWidget {
   const FullGameScreen({required this.user, super.key});
   final LightUser user;
 
   @override
-  Widget build(BuildContext context) {
-    return PlatformWidget(androidBuilder: _buildAndroid, iosBuilder: _buildIos);
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ConsumerPlatformWidget(
+      ref: ref,
+      androidBuilder: _buildAndroid,
+      iosBuilder: _buildIos,
+    );
   }
 
-  Widget _buildIos(BuildContext context) {
+  Widget _buildIos(BuildContext context, WidgetRef ref) {
     return CupertinoPageScaffold(
       navigationBar: const CupertinoNavigationBar(
         middle: Text('Full Game History'),
@@ -27,7 +31,7 @@ class FullGameScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildAndroid(BuildContext context) {
+  Widget _buildAndroid(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Full Game History'),

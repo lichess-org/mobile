@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/db/database.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -16,13 +15,6 @@ GameStorage gameStorage(
 ) {
   final db = ref.watch(databaseProvider);
   return GameStorage(db);
-}
-
-@riverpod
-Future<IList<StoredGame>> recentStoredGames(RecentStoredGamesRef ref) async {
-  final session = ref.watch(authSessionProvider);
-  final storage = ref.watch(gameStorageProvider);
-  return storage.page(userId: session?.user.id);
 }
 
 const kGameStorageTable = 'game';

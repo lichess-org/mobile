@@ -414,12 +414,12 @@ class _ContextMenu extends ConsumerWidget {
 class ExtendedGameListTile extends StatelessWidget {
   const ExtendedGameListTile({required this.item, this.userId});
 
-  final (LightArchivedGame, Side) item;
+  final LightArchivedGameWithPov item;
   final UserId? userId;
 
   @override
   Widget build(BuildContext context) {
-    final (game, youAre) = item;
+    final (game: game, pov: youAre) = item;
     final me = youAre == Side.white ? game.white : game.black;
     final opponent = youAre == Side.white ? game.black : game.white;
 
