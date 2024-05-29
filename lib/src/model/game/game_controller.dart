@@ -935,10 +935,8 @@ class GameState with _$GameState {
 
   /// Whether zen mode is enabled by account preference or local game setting
   bool get isZenModeEnabled =>
-      game.playable &&
-      (zenModeGameSetting ??
-          game.prefs?.zenMode == Zen.yes ||
-              game.prefs?.zenMode == Zen.gameAuto);
+      zenModeGameSetting ??
+      game.prefs?.zenMode == Zen.yes || game.prefs?.zenMode == Zen.gameAuto;
 
   bool get canPremove =>
       game.meta.speed != Speed.correspondence &&
