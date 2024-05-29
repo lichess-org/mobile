@@ -1,35 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/account/account_repository.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
-import 'package:lichess_mobile/src/model/game/game_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-part 'game_history_screen.g.dart';
-
-@riverpod
-Future<int> _userNumberOfGames(
-  _UserNumberOfGamesRef ref,
-  LightUser? user, {
-  required bool isOnline,
-}) async {
-  final session = ref.watch(authSessionProvider);
-  return user != null
-      ? ref.watch(
-          userProvider(id: user.id).selectAsync((u) => u.count?.all ?? 0),
-        )
-      : session != null && isOnline
-          ? ref.watch(accountProvider.selectAsync((u) => u?.count?.all ?? 0))
-          : ref.watch(gameStorageProvider).count(userId: user?.id);
-}
 
 class GameHistoryScreen extends ConsumerWidget {
   const GameHistoryScreen({
@@ -51,7 +28,7 @@ class GameHistoryScreen extends ConsumerWidget {
 
   Widget _buildIos(BuildContext context, WidgetRef ref) {
     final nbGamesAsync = ref.watch(
-      _userNumberOfGamesProvider(user, isOnline: isOnline),
+      userNumberOfGamesProvider(user, isOnline: isOnline),
     );
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
@@ -67,7 +44,7 @@ class GameHistoryScreen extends ConsumerWidget {
 
   Widget _buildAndroid(BuildContext context, WidgetRef ref) {
     final nbGamesAsync = ref.watch(
-      _userNumberOfGamesProvider(user, isOnline: isOnline),
+      userNumberOfGamesProvider(user, isOnline: isOnline),
     );
     return Scaffold(
       appBar: AppBar(
@@ -182,7 +159,7 @@ class _BodyState extends ConsumerState<_Body> {
       },
       error: (e, s) {
         debugPrint(
-          'SEVERE: [FullGameHistoryScreen] could not load game list',
+          'SEVERE: [GameHistoryScreen] could not load game list',
         );
         return const Center(child: Text('Could not load Game History'));
       },

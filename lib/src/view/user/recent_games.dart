@@ -32,22 +32,29 @@ class RecentGamesWidget extends ConsumerWidget {
         ? ref.watch(userRecentGamesProvider(userId: user!.id))
         : ref.watch(myRecentGamesProvider);
 
+    final nbOfGames = ref
+            .watch(
+              userNumberOfGamesProvider(user,
+                  isOnline: connectivity.valueOrNull?.isOnline == true),
+            )
+            .valueOrNull ??
+        0;
+
     return recentGames.when(
       data: (data) {
         if (data.isEmpty) {
           return const SizedBox.shrink();
         }
-        final u = user ?? ref.watch(authSessionProvider)?.user;
         return ListSection(
           header: Text(context.l10n.recentGames),
           hasLeading: true,
-          headerTrailing: u != null
+          headerTrailing: nbOfGames > data.length
               ? NoPaddingTextButton(
                   onPressed: () {
                     pushPlatformRoute(
                       context,
                       builder: (context) => GameHistoryScreen(
-                        user: u,
+                        user: user,
                         isOnline: connectivity.valueOrNull?.isOnline == true,
                       ),
                     );

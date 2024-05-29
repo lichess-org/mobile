@@ -4,12 +4,15 @@ import 'package:async/async.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_storage.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/riverpod.dart';
 import 'package:result_extensions/result_extensions.dart';
@@ -17,6 +20,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'game_history.freezed.dart';
 part 'game_history.g.dart';
+
+const kNumberOfRecentGames = 20;
 
 const _nbPerPage = 20;
 
@@ -32,13 +37,16 @@ Future<IList<LightArchivedGameWithPov>> myRecentGames(MyRecentGamesRef ref) {
   final online = connectivity.valueOrNull?.isOnline ?? false;
   if (session != null && online) {
     return ref.withClientCacheFor(
-      (client) => GameRepository(client).getUserGames(session.user.id),
+      (client) => GameRepository(client)
+          .getUserGames(session.user.id, max: kNumberOfRecentGames),
       const Duration(hours: 1),
     );
   } else {
     final storage = ref.watch(gameStorageProvider);
     ref.cacheFor(const Duration(hours: 1));
-    return storage.page(userId: session?.user.id).then(
+    return storage
+        .page(userId: session?.user.id, max: kNumberOfRecentGames)
+        .then(
           (value) => value
               // we can assume that `youAre` is not null either for logged
               // in users or for anonymous users
@@ -63,6 +71,27 @@ Future<IList<LightArchivedGameWithPov>> userRecentGames(
     // request in the parent widget and pass the result to the child
     const Duration(minutes: 1),
   );
+}
+
+/// A provider that fetches the total number of games played by given user, or the current app user if no user is provided.
+///
+/// If the user is logged in, the number of games is fetched from the server.
+/// If the user is not logged in, or there is no connectivity, the number of games
+/// stored locally are fetched instead.
+@riverpod
+Future<int> userNumberOfGames(
+  UserNumberOfGamesRef ref,
+  LightUser? user, {
+  required bool isOnline,
+}) async {
+  final session = ref.watch(authSessionProvider);
+  return user != null
+      ? ref.watch(
+          userProvider(id: user.id).selectAsync((u) => u.count?.all ?? 0),
+        )
+      : session != null && isOnline
+          ? ref.watch(accountProvider.selectAsync((u) => u?.count?.all ?? 0))
+          : ref.watch(gameStorageProvider).count(userId: user?.id);
 }
 
 /// A provider that fetches the game history for a given user, or the current app user if no user is provided.
