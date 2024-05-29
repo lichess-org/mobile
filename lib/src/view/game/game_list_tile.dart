@@ -218,21 +218,23 @@ class _ContextMenu extends ConsumerWidget {
               ),
               BottomSheetContextMenuAction(
                 icon: Icons.biotech,
-                onPressed: () {
-                  pushPlatformRoute(
-                    context,
-                    builder: (context) => AnalysisScreen(
-                      title: context.l10n.gameAnalysis,
-                      pgnOrId: game.id.value,
-                      options: AnalysisOptions(
-                        isLocalEvaluationAllowed: true,
-                        variant: game.variant,
-                        orientation: orientation,
-                        id: game.id,
-                      ),
-                    ),
-                  );
-                },
+                onPressed: game.variant.isSupported
+                    ? () {
+                        pushPlatformRoute(
+                          context,
+                          builder: (context) => AnalysisScreen(
+                            title: context.l10n.gameAnalysis,
+                            pgnOrId: game.id.value,
+                            options: AnalysisOptions(
+                              isLocalEvaluationAllowed: true,
+                              variant: game.variant,
+                              orientation: orientation,
+                              id: game.id,
+                            ),
+                          ),
+                        );
+                      }
+                    : null,
                 child: Text(context.l10n.gameAnalysis),
               ),
               BottomSheetContextMenuAction(
