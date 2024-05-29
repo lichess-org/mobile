@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
@@ -14,7 +13,7 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'full_games_screen.g.dart';
+part 'game_history_screen.g.dart';
 
 @riverpod
 Future<int> _userNumberOfGames(
@@ -30,8 +29,12 @@ Future<int> _userNumberOfGames(
           : ref.watch(gameStorageProvider).count(userId: user?.id);
 }
 
-class FullGameScreen extends ConsumerWidget {
-  const FullGameScreen({required this.user, required this.isOnline, super.key});
+class GameHistoryScreen extends ConsumerWidget {
+  const GameHistoryScreen({
+    required this.user,
+    required this.isOnline,
+    super.key,
+  });
   final LightUser? user;
   final bool isOnline;
 
@@ -89,8 +92,6 @@ class _Body extends ConsumerStatefulWidget {
 
 class _BodyState extends ConsumerState<_Body> {
   final ScrollController _scrollController = ScrollController();
-  bool _hasMore = true;
-  bool _isLoading = false;
 
   @override
   void initState() {
@@ -108,7 +109,21 @@ class _BodyState extends ConsumerState<_Body> {
   void _scrollListener() {
     if (_scrollController.position.pixels ==
         _scrollController.position.maxScrollExtent) {
-      if (_hasMore && !_isLoading) {
+      final state = ref.read(
+        userGameHistoryProvider(
+          widget.user?.id,
+          isOnline: widget.isOnline,
+        ),
+      );
+
+      if (!state.hasValue) {
+        return;
+      }
+
+      final hasMore = state.requireValue.hasMore;
+      final isLoading = state.requireValue.isLoading;
+
+      if (hasMore && !isLoading) {
         ref
             .read(
               userGameHistoryProvider(
@@ -129,9 +144,6 @@ class _BodyState extends ConsumerState<_Body> {
 
     return gameListState.when(
       data: (state) {
-        _hasMore = state.hasMore;
-        _isLoading = state.isLoading;
-
         final list = state.gameList;
 
         return SafeArea(
@@ -158,21 +170,9 @@ class _BodyState extends ConsumerState<_Body> {
                 );
               }
 
-              return Slidable(
-                endActionPane: const ActionPane(
-                  motion: ScrollMotion(),
-                  children: [
-                    SlidableAction(
-                      onPressed: null,
-                      icon: Icons.bookmark_add_outlined,
-                      label: 'Bookmark',
-                    ),
-                  ],
-                ),
-                child: ExtendedGameListTile(
-                  item: list[index],
-                  userId: widget.user?.id,
-                ),
+              return ExtendedGameListTile(
+                item: list[index],
+                userId: widget.user?.id,
               );
             },
           ),

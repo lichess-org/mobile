@@ -9,7 +9,6 @@ import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
-import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/game/game_storage.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/riverpod.dart';
@@ -21,6 +20,11 @@ part 'game_history.g.dart';
 
 const _nbPerPage = 20;
 
+/// A provider that fetches the current app user's recent games.
+///
+/// If the user is logged in, the recent games are fetched from the server.
+/// If the user is not logged in, or there is no connectivity, the recent games
+/// stored locally are fetched instead.
 @riverpod
 Future<IList<LightArchivedGameWithPov>> myRecentGames(MyRecentGamesRef ref) {
   final connectivity = ref.watch(connectivityProvider);
@@ -44,6 +48,24 @@ Future<IList<LightArchivedGameWithPov>> myRecentGames(MyRecentGamesRef ref) {
   }
 }
 
+/// A provider that fetches the recent games from the server for a given user.
+@riverpod
+Future<IList<LightArchivedGameWithPov>> userRecentGames(
+  UserRecentGamesRef ref, {
+  required UserId userId,
+}) {
+  return ref.withClientCacheFor(
+    (client) => GameRepository(client).getUserGames(userId),
+    // cache is important because the associated widget is in a [ListView] and
+    // the provider may be instanciated multiple times in a short period of time
+    // (e.g. when scrolling)
+    // TODO: consider debouncing the request instead of caching it, or make the
+    // request in the parent widget and pass the result to the child
+    const Duration(minutes: 1),
+  );
+}
+
+/// A provider that fetches the game history for a given user, or the current app user if no user is provided.
 @riverpod
 class UserGameHistory extends _$UserGameHistory {
   final _list = <LightArchivedGameWithPov>[];
@@ -53,7 +75,7 @@ class UserGameHistory extends _$UserGameHistory {
     UserId? userId, {
     required bool isOnline,
   }) async {
-    ref.cacheFor(const Duration(minutes: 30));
+    ref.cacheFor(const Duration(minutes: 5));
     ref.onDispose(() {
       _list.clear();
     });

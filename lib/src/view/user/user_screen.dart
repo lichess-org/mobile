@@ -119,7 +119,7 @@ class _UserProfileListView extends StatelessWidget {
         UserProfile(user: user),
         PerfCards(user: user, isMe: false),
         UserActivityWidget(user: user),
-        RecentGames(user: user.lightUser),
+        RecentGamesWidget(user: user.lightUser),
       ],
     );
   }

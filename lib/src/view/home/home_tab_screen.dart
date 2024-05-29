@@ -334,7 +334,7 @@ class _HomeBody extends ConsumerWidget {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           SizedBox(height: 8.0),
-                          RecentGames(),
+                          RecentGamesWidget(),
                         ],
                       ),
                     ),
@@ -347,7 +347,7 @@ class _HomeBody extends ConsumerWidget {
                   const _OngoingGamesCarousel(maxGamesToShow: 20)
                 else
                   const _OfflineCorrespondenceCarousel(maxGamesToShow: 20),
-                const RecentGames(),
+                const RecentGamesWidget(),
                 if (Theme.of(context).platform == TargetPlatform.iOS)
                   const SizedBox(height: 70.0)
                 else

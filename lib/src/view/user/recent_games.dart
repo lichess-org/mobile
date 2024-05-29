@@ -9,13 +9,17 @@ import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
-import 'package:lichess_mobile/src/view/user/full_games_screen.dart';
+import 'package:lichess_mobile/src/view/user/game_history_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
-class RecentGames extends ConsumerWidget {
-  const RecentGames({this.user, super.key});
+/// A widget that show a list of recent games for a given player or the current user.
+///
+/// If [user] is not provided, the current logged in user's recent games are displayed.
+/// If the current user is not logged in, or there is no connectivity, the stored recent games are displayed instead.
+class RecentGamesWidget extends ConsumerWidget {
+  const RecentGamesWidget({this.user, super.key});
 
   final LightUser? user;
 
@@ -43,7 +47,7 @@ class RecentGames extends ConsumerWidget {
                   onPressed: () {
                     pushPlatformRoute(
                       context,
-                      builder: (context) => FullGameScreen(
+                      builder: (context) => GameHistoryScreen(
                         user: u,
                         isOnline: connectivity.valueOrNull?.isOnline == true,
                       ),
