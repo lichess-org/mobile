@@ -132,7 +132,7 @@ class GameBody extends ConsumerWidget {
               : null,
           shouldLinkToUserProfile: youAre != Side.black,
           mePlaying: youAre == Side.black,
-          zenMode: gameState.isZenModeEnabled,
+          zenMode: gameState.isZenModeActive,
           confirmMoveCallbacks:
               youAre == Side.black && gameState.moveToConfirm != null
                   ? (
@@ -172,7 +172,7 @@ class GameBody extends ConsumerWidget {
               : null,
           shouldLinkToUserProfile: youAre != Side.white,
           mePlaying: youAre == Side.white,
-          zenMode: gameState.isZenModeEnabled,
+          zenMode: gameState.isZenModeActive,
           confirmMoveCallbacks:
               youAre == Side.white && gameState.moveToConfirm != null
                   ? (
@@ -420,7 +420,7 @@ class _GameBottomBar extends ConsumerWidget {
     final List<Widget> children = gameStateAsync.when(
       data: (gameState) {
         final isChatEnabled =
-            chatStateAsync != null && !gameState.isZenModeEnabled;
+            chatStateAsync != null && !gameState.isZenModeActive;
 
         final chatUnreadChip = isChatEnabled
             ? chatStateAsync.maybeWhen(

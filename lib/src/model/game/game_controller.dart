@@ -930,11 +930,16 @@ class GameState with _$GameState {
     GameFullId? redirectGameId,
   }) = _GameState;
 
+  /// Whether the zen mode is active
+  bool get isZenModeActive => game.playable && isZenModeEnabled;
+
+  /// Whether zen mode is enabled by account preference or local game setting
   bool get isZenModeEnabled =>
       game.playable &&
       (zenModeGameSetting ??
           game.prefs?.zenMode == Zen.yes ||
               game.prefs?.zenMode == Zen.gameAuto);
+
   bool get canPremove =>
       game.meta.speed != Speed.correspondence &&
       (game.prefs?.enablePremove ?? true);
