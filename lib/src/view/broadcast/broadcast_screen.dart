@@ -94,7 +94,7 @@ class BroadcastPreview extends StatelessWidget {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(10.0),
-        child: LayoutBoard(
+        child: GridBoard(
           rowGap: 5,
           builder: (crossAxisCount, boardWidth) => (games == null)
               ? List.generate(

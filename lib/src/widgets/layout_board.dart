@@ -2,11 +2,11 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_layout_grid/flutter_layout_grid.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 
-class LayoutBoard extends StatelessWidget {
+class GridBoard extends StatelessWidget {
   final List<BoardThumbnail> Function(int, double) builder;
   final double rowGap;
 
-  const LayoutBoard({
+  const GridBoard({
     super.key,
     required this.builder,
     required this.rowGap,

@@ -54,7 +54,7 @@ class PuzzleHistoryPreview extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return LayoutBoard(
+    return GridBoard(
       rowGap: 16,
       builder: (crossAxisCount, boardWidth) {
         final cappedHistory =
