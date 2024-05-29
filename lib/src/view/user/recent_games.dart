@@ -34,8 +34,10 @@ class RecentGamesWidget extends ConsumerWidget {
 
     final nbOfGames = ref
             .watch(
-              userNumberOfGamesProvider(user,
-                  isOnline: connectivity.valueOrNull?.isOnline == true),
+              userNumberOfGamesProvider(
+                user,
+                isOnline: connectivity.valueOrNull?.isOnline == true,
+              ),
             )
             .valueOrNull ??
         0;
