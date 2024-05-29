@@ -79,32 +79,52 @@ class BroadcastPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const numberLoadingBoardThumbnails = 16;
+    final fakeHeaderAndFooter = Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5),
+      child: Container(
+        width: double.infinity,
+        height: 24,
+        decoration: BoxDecoration(
+          color: Colors.black,
+          borderRadius: BorderRadius.circular(5),
+        ),
+      ),
+    );
 
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(10.0),
         child: LayoutBoard(
+          rowGap: 5,
           builder: (crossAxisCount, boardWidth) => (games == null)
               ? List.generate(
                   numberLoadingBoardThumbnails,
-                  (index) => BoardThumbnail.loading(size: boardWidth),
+                  (index) => BoardThumbnail.loading(
+                    size: boardWidth,
+                    header: fakeHeaderAndFooter,
+                    footer: fakeHeaderAndFooter,
+                  ),
                 )
               : games!
                   .map(
                     (game) => BoardThumbnail(
                       orientation: Side.white,
                       fen: game.fen,
-                      lastMove: game.lastMove.cg,
+                      lastMove: game.lastMove?.cg,
                       size: boardWidth,
-                      header: UserFullNameWidget.player(
-                        user: game.players[0].user,
-                        rating: game.players[0].rating,
-                        aiLevel: null,
+                      header: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5),
+                        child: UserFullNameWidget(
+                          user: game.players[0].user,
+                          rating: game.players[0].rating,
+                        ),
                       ),
-                      footer: UserFullNameWidget.player(
-                        user: game.players[1].user,
-                        rating: game.players[1].rating,
-                        aiLevel: null,
+                      footer: Padding(
+                        padding: const EdgeInsets.only(top: 5),
+                        child: UserFullNameWidget(
+                          user: game.players[1].user,
+                          rating: game.players[1].rating,
+                        ),
                       ),
                     ),
                   )

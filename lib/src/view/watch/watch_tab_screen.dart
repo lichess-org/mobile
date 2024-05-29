@@ -14,8 +14,8 @@ import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/view/broadcast/not_implemented_screen.dart';
-import 'package:lichess_mobile/src/view/watch/broadcast_tile.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_tile.dart';
+import 'package:lichess_mobile/src/view/broadcast/home_screen.dart';
 import 'package:lichess_mobile/src/view/watch/live_tv_channels_screen.dart';
 import 'package:lichess_mobile/src/view/watch/streamer_screen.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
@@ -195,7 +195,7 @@ Future<void> _refreshData(WidgetRef ref) {
 class _BroadcastWidget extends ConsumerWidget {
   const _BroadcastWidget();
 
-  static const int numberOfItems = 10;
+  static const int numberOfItems = 5;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -210,7 +210,7 @@ class _BroadcastWidget extends ConsumerWidget {
             onPressed: () {
               pushPlatformRoute(
                 context,
-                builder: (context) => const Notimplemented(),
+                builder: (context) => const HomeScreen(),
               );
             },
             child: Text(

@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
+import 'package:lichess_mobile/src/utils/json.dart';
 
 class BroadcastRepository {
   BroadcastRepository(this.client);
@@ -19,13 +20,11 @@ class BroadcastRepository {
   }
 
   Future<IList<BroadcastGameSnapshot>> getRound(String broadcastRoundId) {
-    return Future.delayed(const Duration(seconds: 5), () {
-      return client.readJson(
-        Uri(path: 'api/broadcast/-/-/$broadcastRoundId'),
-        headers: {'Accept': 'application/x-ndjson'},
-        mapper: _makeGamesFromJson,
-      );
-    });
+    return client.readJson(
+      Uri(path: 'api/broadcast/-/-/$broadcastRoundId'),
+      headers: {'Accept': 'application/x-ndjson'},
+      mapper: _makeGamesFromJson,
+    );
   }
 }
 
@@ -39,7 +38,9 @@ Broadcast _broadcastFromPick(RequiredPick pick) {
       description: pick('tour', 'description').asStringOrThrow(),
       imageUrl: pick('tour', 'image').asStringOrNull(),
     ),
-    rounds: pick('rounds').asListOrEmpty(_roundFromPick).toIList(),
+    rounds: (pick('rounds').asListOrEmpty(_roundFromPick)
+          ..sort((a, b) => a.startsAt.compareTo(b.startsAt)))
+        .toIList(),
   );
 }
 
@@ -55,6 +56,7 @@ Round _roundFromPick(RequiredPick pick) {
   return Round(
     id: pick('id').asStringOrThrow(),
     status: status,
+    startsAt: pick('startsAt').asDateTimeFromMillisecondsOrThrow().toLocal(),
   );
 }
 
@@ -67,8 +69,8 @@ IList<BroadcastGameSnapshot> _gamesFromPick(RequiredPick pick) =>
 BroadcastGameSnapshot _gameFromPick(RequiredPick pick) {
   return BroadcastGameSnapshot(
     players: pick('players').asListOrThrow(_playerFromPick).toIList(),
-    fen: pick('fen').asStringOrThrow(),
-    lastMove: pick('lastMove').asUciMoveOrThrow(),
+    fen: pick('fen').asStringOrNull() ?? Variant.standard.initialPosition.fen,
+    lastMove: pick('lastMove').asUciMoveOrNull(),
   );
 }
 
@@ -76,6 +78,6 @@ BroadcastPlayer _playerFromPick(RequiredPick pick) {
   return BroadcastPlayer(
     name: pick('name').asStringOrThrow(),
     title: pick('title').asStringOrNull(),
-    rating: pick('rating').asIntOrThrow(),
+    rating: pick('rating').asIntOrNull(),
   );
 }

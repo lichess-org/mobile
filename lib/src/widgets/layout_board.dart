@@ -4,10 +4,12 @@ import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 
 class LayoutBoard extends StatelessWidget {
   final List<BoardThumbnail> Function(int, double) builder;
+  final double rowGap;
 
   const LayoutBoard({
     super.key,
     required this.builder,
+    required this.rowGap,
   });
 
   @override
@@ -28,10 +30,10 @@ class LayoutBoard extends StatelessWidget {
         return LayoutGrid(
           columnSizes: List.generate(crossAxisCount, (_) => 1.fr),
           rowSizes: List.generate(
-            (boards.length / crossAxisCount).floor(),
+            (boards.length / crossAxisCount).ceil(),
             (_) => auto,
           ),
-          rowGap: 16.0,
+          rowGap: rowGap,
           columnGap: columnGap,
           children: boards,
         );
