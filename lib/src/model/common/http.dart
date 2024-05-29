@@ -294,6 +294,12 @@ void _checkResponseSuccess(Uri url, Response response) {
   throw ClientException('$message.', url);
 }
 
+/// A JSON decoder that decodes UTF-8 bytes.
+///
+/// This is a fusion of [Utf8Decoder] and [JsonDecoder] which is more efficient
+/// than decoding the bytes to a string and then parsing the JSON.
+final jsonUtf8Decoder = const Utf8Decoder().fuse(const JsonDecoder());
+
 extension ClientExtension on Client {
   /// Sends an HTTP GET request with the given headers to the given URL and
   /// returns a Future that completes to the body of the response as a JSON object
@@ -308,7 +314,7 @@ extension ClientExtension on Client {
   }) async {
     final response = await get(url, headers: headers);
     _checkResponseSuccess(url, response);
-    final json = jsonDecode(utf8.decode(response.bodyBytes));
+    final json = jsonUtf8Decoder.convert(response.bodyBytes);
     if (json is! Map<String, dynamic>) {
       _logger.severe('Could not read json object as $T: expected an object.');
       throw ClientException(
@@ -340,7 +346,7 @@ extension ClientExtension on Client {
   }) async {
     final response = await get(url, headers: headers);
     _checkResponseSuccess(url, response);
-    final json = jsonDecode(utf8.decode(response.bodyBytes));
+    final json = jsonUtf8Decoder.convert(response.bodyBytes);
     if (json is! List<dynamic>) {
       _logger.severe('Could not read json object as List: expected a list.');
       throw ClientException(
@@ -414,7 +420,7 @@ extension ClientExtension on Client {
     final response =
         await post(url, headers: headers, body: body, encoding: encoding);
     _checkResponseSuccess(url, response);
-    final json = jsonDecode(utf8.decode(response.bodyBytes));
+    final json = jsonUtf8Decoder.convert(response.bodyBytes);
     if (json is! Map<String, dynamic>) {
       _logger.severe('Could not read json object as $T: expected an object.');
       throw ClientException(
