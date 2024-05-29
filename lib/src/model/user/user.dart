@@ -117,10 +117,10 @@ class User with _$User {
     );
   }
 
-  int get totalGames => perfs.values.fold<int>(
-        0,
-        (previousValue, element) => previousValue + (element.games ?? 0),
-      );
+  int get totalGames => perfs.entries.fold<int>(0, (previousValue, element) {
+        return previousValue +
+            (element.key != Perf.puzzle ? element.value.games ?? 0 : 0);
+      });
 }
 
 @freezed

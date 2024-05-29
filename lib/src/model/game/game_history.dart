@@ -49,14 +49,15 @@ class UserGameHistory extends _$UserGameHistory {
   final _list = <LightArchivedGameWithPov>[];
 
   @override
-  Future<UserGameHistoryState> build(UserId? userId) async {
+  Future<UserGameHistoryState> build(
+    UserId? userId, {
+    required bool isOnline,
+  }) async {
     ref.cacheFor(const Duration(minutes: 30));
     ref.onDispose(() {
       _list.clear();
     });
 
-    final connectivity = ref.watch(connectivityProvider);
-    final online = connectivity.valueOrNull?.isOnline ?? false;
     final session = ref.watch(authSessionProvider);
 
     final recentGames = userId != null
@@ -70,7 +71,7 @@ class UserGameHistory extends _$UserGameHistory {
       isLoading: false,
       hasMore: true,
       hasError: false,
-      online: online,
+      online: isOnline,
       session: session,
     );
   }
@@ -104,10 +105,12 @@ class UserGameHistory extends _$UserGameHistory {
                     (value) => value
                         // we can assume that `youAre` is not null either for logged
                         // in users or for anonymous users
-                        .map((e) => (
-                              game: e.game.data,
-                              pov: e.game.youAre ?? Side.white
-                            ))
+                        .map(
+                          (e) => (
+                            game: e.game.data,
+                            pov: e.game.youAre ?? Side.white
+                          ),
+                        )
                         .toIList(),
                   ),
     ).fold(

@@ -2,16 +2,38 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
+import 'package:lichess_mobile/src/model/game/game_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'full_games_screen.g.dart';
+
+@riverpod
+Future<int> _userNumberOfGames(
+  _UserNumberOfGamesRef ref,
+  LightUser? user, {
+  required bool isOnline,
+}) async {
+  final session = ref.watch(authSessionProvider);
+  return user != null
+      ? ref.watch(userProvider(id: user.id).selectAsync((u) => u.totalGames))
+      : session != null && isOnline
+          ? ref.watch(accountProvider.selectAsync((u) => u?.totalGames ?? 0))
+          : ref.watch(gameStorageProvider).count(userId: user?.id);
+}
 
 class FullGameScreen extends ConsumerWidget {
-  const FullGameScreen({required this.user, super.key});
-  final LightUser user;
+  const FullGameScreen({required this.user, required this.isOnline, super.key});
+  final LightUser? user;
+  final bool isOnline;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -23,27 +45,44 @@ class FullGameScreen extends ConsumerWidget {
   }
 
   Widget _buildIos(BuildContext context, WidgetRef ref) {
+    final nbGamesAsync = ref.watch(
+      _userNumberOfGamesProvider(user, isOnline: isOnline),
+    );
     return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(
-        middle: Text('Full Game History'),
+      navigationBar: CupertinoNavigationBar(
+        middle: nbGamesAsync.when(
+          data: (nbGames) => Text(context.l10n.nbGames(nbGames)),
+          loading: () => const CupertinoActivityIndicator(),
+          error: (e, s) => const Text('All Games'),
+        ),
       ),
-      child: _Body(userId: user.id),
+      child: _Body(user: user, isOnline: isOnline),
     );
   }
 
   Widget _buildAndroid(BuildContext context, WidgetRef ref) {
+    final nbGamesAsync = ref.watch(
+      _userNumberOfGamesProvider(user, isOnline: isOnline),
+    );
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Full Game History'),
+        title: nbGamesAsync.when(
+          data: (nbGames) => Text(context.l10n.nbGames(nbGames)),
+          loading: () => const ButtonLoadingIndicator(),
+          error: (e, s) => const Text('All Games'),
+        ),
       ),
-      body: _Body(userId: user.id),
+      body: _Body(user: user, isOnline: isOnline),
     );
   }
 }
 
 class _Body extends ConsumerStatefulWidget {
-  const _Body({required this.userId});
-  final UserId userId;
+  const _Body({required this.user, required this.isOnline});
+
+  final LightUser? user;
+  final bool isOnline;
+
   @override
   ConsumerState<_Body> createState() => _BodyState();
 }
@@ -70,56 +109,73 @@ class _BodyState extends ConsumerState<_Body> {
     if (_scrollController.position.pixels ==
         _scrollController.position.maxScrollExtent) {
       if (_hasMore && !_isLoading) {
-        ref.read(userGameHistoryProvider(widget.userId).notifier).getNext();
+        ref
+            .read(
+              userGameHistoryProvider(
+                widget.user?.id,
+                isOnline: widget.isOnline,
+              ).notifier,
+            )
+            .getNext();
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final gameListState = ref.watch(userGameHistoryProvider(widget.userId));
+    final gameListState = ref.watch(
+      userGameHistoryProvider(widget.user?.id, isOnline: widget.isOnline),
+    );
 
     return gameListState.when(
       data: (state) {
         _hasMore = state.hasMore;
         _isLoading = state.isLoading;
-        if (state.hasError) {
-          showPlatformSnackbar(
-            context,
-            'Error loading Game History',
-            type: SnackBarType.error,
-          );
-        }
 
         final list = state.gameList;
-        return ListView.builder(
-          controller: _scrollController,
-          itemCount: list.length + (state.isLoading ? 1 : 0),
-          itemBuilder: (context, index) {
-            if (state.isLoading && index == list.length) {
-              return const Padding(
-                padding: EdgeInsets.symmetric(vertical: 32.0),
-                child: CenterLoadingIndicator(),
-              );
-            }
 
-            return Slidable(
-              endActionPane: const ActionPane(
-                motion: ScrollMotion(),
-                children: [
-                  SlidableAction(
-                    onPressed: null,
-                    icon: Icons.bookmark_add_outlined,
-                    label: 'Bookmark',
+        return SafeArea(
+          child: ListView.builder(
+            controller: _scrollController,
+            itemCount: list.length + (state.isLoading ? 1 : 0),
+            itemBuilder: (context, index) {
+              if (state.isLoading && index == list.length) {
+                return const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 32.0),
+                  child: CenterLoadingIndicator(),
+                );
+              } else if (state.hasError &&
+                  state.hasMore &&
+                  index == list.length) {
+                // TODO: add a retry button
+                return const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 32.0),
+                  child: Center(
+                    child: Text(
+                      'Could not load more games',
+                    ),
                   ),
-                ],
-              ),
-              child: ExtendedGameListTile(
-                item: list[index],
-                userId: widget.userId,
-              ),
-            );
-          },
+                );
+              }
+
+              return Slidable(
+                endActionPane: const ActionPane(
+                  motion: ScrollMotion(),
+                  children: [
+                    SlidableAction(
+                      onPressed: null,
+                      icon: Icons.bookmark_add_outlined,
+                      label: 'Bookmark',
+                    ),
+                  ],
+                ),
+                child: ExtendedGameListTile(
+                  item: list[index],
+                  userId: widget.user?.id,
+                ),
+              );
+            },
+          ),
         );
       },
       error: (e, s) {

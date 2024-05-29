@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
@@ -20,6 +21,7 @@ class RecentGames extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final connectivity = ref.watch(connectivityProvider);
     final session = ref.watch(authSessionProvider);
     final userId = user?.id ?? session?.user.id;
 
@@ -41,7 +43,10 @@ class RecentGames extends ConsumerWidget {
                   onPressed: () {
                     pushPlatformRoute(
                       context,
-                      builder: (context) => FullGameScreen(user: u),
+                      builder: (context) => FullGameScreen(
+                        user: u,
+                        isOnline: connectivity.valueOrNull?.isOnline == true,
+                      ),
                     );
                   },
                   child: Text(

@@ -29,6 +29,17 @@ class GameStorage {
   const GameStorage(this._db);
   final Database _db;
 
+  Future<int> count({
+    UserId? userId,
+  }) async {
+    final list = await _db.query(
+      kGameStorageTable,
+      where: 'userId = ?',
+      whereArgs: [userId ?? kStorageAnonId],
+    );
+    return list.length;
+  }
+
   Future<IList<StoredGame>> page({
     UserId? userId,
     DateTime? until,
