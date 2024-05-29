@@ -50,8 +50,7 @@ class BroadcastTile extends StatelessWidget {
           ],
         ),
       ),
-      trailing: (broadcast.rounds
-              .any((r) => r.status == BroadcastStatus.ongoing))
+      trailing: (broadcast.rounds.any((r) => r.status == RoundStatus.live))
           ? const Column(
               children: [
                 Icon(Icons.circle, color: Colors.red, size: 20),

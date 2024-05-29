@@ -16,8 +16,27 @@ class Broadcast with _$Broadcast {
   }) = _Broadcast;
 
   Round? get curentRound =>
-      rounds.where((r) => r.status == BroadcastStatus.ongoing).firstOrNull ??
-      rounds.where((r) => r.status == BroadcastStatus.finished).lastOrNull;
+      rounds.where((r) => r.status == RoundStatus.live).firstOrNull ??
+      rounds.where((r) => r.status == RoundStatus.finished).lastOrNull;
+
+  BroadcastStatus get status {
+    if (curentRound == null) return BroadcastStatus.upcoming;
+    if (curentRound!.status == RoundStatus.live) return BroadcastStatus.live;
+    return (curentRound! != rounds.last)
+        ? BroadcastStatus.ongoing
+        : BroadcastStatus.finished;
+  }
+
+  int get priority {
+    final statusPriority = switch (status) {
+      BroadcastStatus.live => 2,
+      BroadcastStatus.ongoing => 0,
+      BroadcastStatus.finished => -1,
+      BroadcastStatus.upcoming => -1,
+    };
+
+    return tour.tier + statusPriority;
+  }
 }
 
 @freezed
@@ -26,6 +45,7 @@ class Tour with _$Tour {
     required String name,
     required String description,
     required String? imageUrl,
+    required int tier,
   }) = _Tour;
 }
 
@@ -33,7 +53,7 @@ class Tour with _$Tour {
 class Round with _$Round {
   const factory Round({
     required String id,
-    required BroadcastStatus status,
+    required RoundStatus status,
     required DateTime startsAt,
   }) = _Round;
 }
@@ -66,6 +86,13 @@ class BroadcastPlayer with _$BroadcastPlayer {
 
 enum BroadcastStatus {
   ongoing,
+  live,
+  finished,
+  upcoming,
+}
+
+enum RoundStatus {
+  live,
   finished,
   upcoming,
 }

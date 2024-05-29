@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
@@ -15,6 +16,7 @@ class BroadcastRepository {
       Uri(path: '/api/broadcast'),
       headers: {'Accept': 'application/x-ndjson'},
       mapper: _makeBroadcastFromJson,
+      compare: (Broadcast a, Broadcast b) => b.priority.compareTo(a.priority),
     );
   }
 
@@ -36,21 +38,23 @@ Broadcast _broadcastFromPick(RequiredPick pick) {
       name: pick('tour', 'name').asStringOrThrow(),
       description: pick('tour', 'description').asStringOrThrow(),
       imageUrl: pick('tour', 'image').asStringOrNull(),
+      tier: pick('tour', 'tier').asIntOrThrow(),
     ),
-    rounds: (pick('rounds').asListOrEmpty(_roundFromPick)
-          ..sort((a, b) => a.startsAt.compareTo(b.startsAt)))
+    rounds: pick('rounds')
+        .asListOrEmpty(_roundFromPick)
+        .sorted((Round a, Round b) => a.startsAt.compareTo(b.startsAt))
         .toIList(),
   );
 }
 
 Round _roundFromPick(RequiredPick pick) {
-  final ongoing = pick('ongoing').asBoolOrFalse();
+  final live = pick('ongoing').asBoolOrFalse();
   final finished = pick('finished').asBoolOrFalse();
-  final status = ongoing
-      ? BroadcastStatus.ongoing
+  final status = live
+      ? RoundStatus.live
       : finished
-          ? BroadcastStatus.finished
-          : BroadcastStatus.upcoming;
+          ? RoundStatus.finished
+          : RoundStatus.upcoming;
 
   return Round(
     id: pick('id').asStringOrThrow(),
