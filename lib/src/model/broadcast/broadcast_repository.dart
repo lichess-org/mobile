@@ -1,6 +1,5 @@
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
@@ -9,7 +8,7 @@ import 'package:lichess_mobile/src/utils/json.dart';
 class BroadcastRepository {
   BroadcastRepository(this.client);
 
-  final http.Client client;
+  final LichessClient client;
 
   Future<IList<Broadcast>> getBroadcasts() {
     return client.readNdJsonList(
