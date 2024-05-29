@@ -83,41 +83,42 @@ class BroadcastPicture extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      clipBehavior: Clip.hardEdge,
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: LichessColors.grey.withOpacity(0.5),
-            blurRadius: 5,
-            spreadRadius: 1,
-          ),
-        ],
-        border: Border.all(color: LichessColors.grey),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Column(
-        children: [
-          GestureDetector(
-            child: (broadcast.tour.imageUrl != null)
-                ? Image.network(broadcast.tour.imageUrl!)
-                : const DefaultBroadcastImage(),
-            onTap: () {
-              pushPlatformRoute(
-                context,
-                builder: (context) => (broadcast.curentRound != null)
-                    ? BroadcastScreen(
-                        roundId: broadcast.curentRound!.id,
-                      )
-                    : DescriptionScreen(broadcast: broadcast),
-              );
-            },
-          ),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Text(broadcast.tour.name),
-          ),
-        ],
+    return GestureDetector(
+      onTap: () {
+        pushPlatformRoute(
+          context,
+          builder: (context) => (broadcast.curentRound != null)
+              ? BroadcastScreen(
+                  roundId: broadcast.curentRound!.id,
+                )
+              : DescriptionScreen(broadcast: broadcast),
+        );
+      },
+      child: Container(
+        clipBehavior: Clip.hardEdge,
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: LichessColors.grey.withOpacity(0.5),
+              blurRadius: 5,
+              spreadRadius: 1,
+            ),
+          ],
+          border: Border.all(color: LichessColors.grey),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Column(
+          children: [
+            if (broadcast.tour.imageUrl != null)
+              Image.network(broadcast.tour.imageUrl!)
+            else
+              const DefaultBroadcastImage(),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Text(broadcast.tour.name),
+            ),
+          ],
+        ),
       ),
     );
   }
