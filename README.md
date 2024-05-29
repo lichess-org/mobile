@@ -97,7 +97,7 @@ Then run the app with the `flutter run` command above, and a link to the logging
 ## Internationalisation
 
 Do not edit the `app_en.arb` file by hand, this file is generated.
-More information [in the wiki](https://github.com/lichess-org/mobile/wiki/About-internationalisation).
+For more information, see [Internationalisation](./docs/internationalisation.md).
 
 ## Releasing
 
