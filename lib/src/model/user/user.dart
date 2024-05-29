@@ -78,6 +78,7 @@ class User with _$User {
     required IMap<Perf, UserPerf> perfs,
     PlayTime? playTime,
     Profile? profile,
+    UserGameCount? count,
   }) = _User;
 
   LightUser get lightUser => LightUser(
@@ -106,6 +107,7 @@ class User with _$User {
       seenAt: pick('seenAt').asDateTimeFromMillisecondsOrNull(),
       playTime: pick('playTime').letOrNull(PlayTime.fromPick),
       profile: pick('profile').letOrNull(Profile.fromPick),
+      count: pick('count').letOrNull(UserGameCount.fromPick),
       perfs: IMap({
         for (final entry in receivedPerfsMap.entries)
           if (Perf.nameMap.containsKey(entry.key))
@@ -116,11 +118,44 @@ class User with _$User {
       }),
     );
   }
+}
 
-  int get totalGames => perfs.entries.fold<int>(0, (previousValue, element) {
-        return previousValue +
-            (element.key != Perf.puzzle ? element.value.games ?? 0 : 0);
-      });
+@freezed
+class UserGameCount with _$UserGameCount {
+  const factory UserGameCount({
+    required int all,
+    required int rated,
+    required int ai,
+    required int draw,
+    required int drawH,
+    required int win,
+    required int winH,
+    required int loss,
+    required int lossH,
+    required int bookmark,
+    required int playing,
+    required int import,
+    required int me,
+  }) = _UserGameCount;
+
+  factory UserGameCount.fromJson(Map<String, dynamic> json) =>
+      UserGameCount.fromPick(pick(json).required());
+
+  factory UserGameCount.fromPick(RequiredPick pick) => UserGameCount(
+        all: pick('all').asIntOrThrow(),
+        rated: pick('rated').asIntOrThrow(),
+        ai: pick('ai').asIntOrThrow(),
+        draw: pick('draw').asIntOrThrow(),
+        drawH: pick('drawH').asIntOrThrow(),
+        win: pick('win').asIntOrThrow(),
+        winH: pick('winH').asIntOrThrow(),
+        loss: pick('loss').asIntOrThrow(),
+        lossH: pick('lossH').asIntOrThrow(),
+        bookmark: pick('bookmark').asIntOrThrow(),
+        playing: pick('playing').asIntOrThrow(),
+        import: pick('import').asIntOrThrow(),
+        me: pick('me').asIntOrThrow(),
+      );
 }
 
 @freezed

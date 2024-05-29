@@ -23,9 +23,11 @@ Future<int> _userNumberOfGames(
 }) async {
   final session = ref.watch(authSessionProvider);
   return user != null
-      ? ref.watch(userProvider(id: user.id).selectAsync((u) => u.totalGames))
+      ? ref.watch(
+          userProvider(id: user.id).selectAsync((u) => u.count?.all ?? 0),
+        )
       : session != null && isOnline
-          ? ref.watch(accountProvider.selectAsync((u) => u?.totalGames ?? 0))
+          ? ref.watch(accountProvider.selectAsync((u) => u?.count?.all ?? 0))
           : ref.watch(gameStorageProvider).count(userId: user?.id);
 }
 
