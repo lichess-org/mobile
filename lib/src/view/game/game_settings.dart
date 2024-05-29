@@ -35,39 +35,6 @@ class GameSettings extends ConsumerWidget {
         subtitle: const SizedBox.shrink(),
       ),
       const SizedBox(height: 8.0),
-      SwitchSettingTile(
-        title: Text(context.l10n.sound),
-        value: isSoundEnabled,
-        onChanged: (value) {
-          ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled();
-        },
-      ),
-      SwitchSettingTile(
-        title: const Text('Haptic feedback'),
-        value: boardPrefs.hapticFeedback,
-        onChanged: (value) {
-          ref.read(boardPreferencesProvider.notifier).toggleHapticFeedback();
-        },
-      ),
-      SwitchSettingTile(
-        title: Text(
-          context.l10n.preferencesPieceAnimation,
-        ),
-        value: boardPrefs.pieceAnimation,
-        onChanged: (value) {
-          ref.read(boardPreferencesProvider.notifier).togglePieceAnimation();
-        },
-      ),
-      SwitchSettingTile(
-        title: Text(
-          context.l10n.toggleTheChat,
-        ),
-        value: gamePrefs.enableChat ?? false,
-        onChanged: (value) {
-          ref.read(gamePreferencesProvider.notifier).toggleChat();
-          ref.read(gameControllerProvider(id).notifier).onToggleChat(value);
-        },
-      ),
       ...userPrefsAsync.maybeWhen(
         data: (data) {
           return [
@@ -95,6 +62,50 @@ class GameSettings extends ConsumerWidget {
           ];
         },
         orElse: () => [],
+      ),
+      SwitchSettingTile(
+        title: Text(context.l10n.sound),
+        value: isSoundEnabled,
+        onChanged: (value) {
+          ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled();
+        },
+      ),
+      SwitchSettingTile(
+        title: const Text('Haptic feedback'),
+        value: boardPrefs.hapticFeedback,
+        onChanged: (value) {
+          ref.read(boardPreferencesProvider.notifier).toggleHapticFeedback();
+        },
+      ),
+      SwitchSettingTile(
+        title: Text(
+          context.l10n.preferencesPieceAnimation,
+        ),
+        value: boardPrefs.pieceAnimation,
+        onChanged: (value) {
+          ref.read(boardPreferencesProvider.notifier).togglePieceAnimation();
+        },
+      ),
+      SwitchSettingTile(
+        title: Text(
+          context.l10n.preferencesMaterialDifference,
+        ),
+        value: boardPrefs.showMaterialDifference,
+        onChanged: (value) {
+          ref
+              .read(boardPreferencesProvider.notifier)
+              .toggleShowMaterialDifference();
+        },
+      ),
+      SwitchSettingTile(
+        title: Text(
+          context.l10n.toggleTheChat,
+        ),
+        value: gamePrefs.enableChat ?? false,
+        onChanged: (value) {
+          ref.read(gamePreferencesProvider.notifier).toggleChat();
+          ref.read(gameControllerProvider(id).notifier).onToggleChat(value);
+        },
       ),
       SwitchSettingTile(
         title: const Text('Blindfold'),

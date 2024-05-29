@@ -930,10 +930,11 @@ class GameState with _$GameState {
     GameFullId? redirectGameId,
   }) = _GameState;
 
-  // preferences
   bool get isZenModeEnabled =>
-      zenModeGameSetting ??
-      game.prefs?.zenMode == Zen.yes || game.prefs?.zenMode == Zen.gameAuto;
+      game.playable &&
+      (zenModeGameSetting ??
+          game.prefs?.zenMode == Zen.yes ||
+              game.prefs?.zenMode == Zen.gameAuto);
   bool get canPremove =>
       game.meta.speed != Speed.correspondence &&
       (game.prefs?.enablePremove ?? true);
@@ -943,7 +944,6 @@ class GameState with _$GameState {
   bool get shouldConfirmMove =>
       moveConfirmSettingOverride ?? game.prefs?.submitMove ?? false;
 
-  // game state
   bool get isReplaying => stepCursor < game.steps.length - 1;
   bool get canGoForward => stepCursor < game.steps.length - 1;
   bool get canGoBackward => stepCursor > 0;
