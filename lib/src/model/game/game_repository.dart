@@ -37,7 +37,7 @@ class GameRepository {
 
   Future<IList<LightArchivedGameWithPov>> getUserGames(
     UserId userId, {
-    int? max = 20,
+    int max = 20,
     DateTime? until,
   }) {
     return client
