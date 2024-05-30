@@ -1246,5 +1246,7 @@
   "stormXRuns": "{count, plural, =0{1 runde} =1{1 runde} other{{count} rundar}}",
   "stormPlayedNbRunsOfPuzzleStorm": "{count, plural, =0{Har spela ein runde med {param2}} =1{Har spela ein runde med {param2}} other{Har spela {count} rundar med {param2}}}",
   "studyShareAndExport": "Del & eksporter",
-  "studyStart": "Start"
+  "studyStart": "Start",
+  "broadcastBroadcasts": "Overføringar",
+  "broadcastStartDate": "Startdato i di eiga tidssone"
 }

@@ -1238,5 +1238,7 @@
   "stormXRuns": "{count, plural, =0{1 tur} =1{1 tur} other{{count} tur}}",
   "stormPlayedNbRunsOfPuzzleStorm": "{count, plural, =0{Bir kez {param2} oynadı} =1{Bir kez {param2} oynadı} other{{count} kez {param2} oynadı}}",
   "studyShareAndExport": "Paylaş ve dışa aktar",
-  "studyStart": "Başlat"
+  "studyStart": "Başlat",
+  "broadcastBroadcasts": "Canlı Turnuvalar",
+  "broadcastStartDate": "Kendi saat diliminizdeki başlangıç zamanı"
 }

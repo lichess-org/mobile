@@ -1246,5 +1246,7 @@
   "stormXRuns": "{count, plural, =0{1 essai} =1{1 essai} other{{count} essais}}",
   "stormPlayedNbRunsOfPuzzleStorm": "{count, plural, =0{A fait un essai de {param2}} =1{A fait un essai de {param2}} other{A fait {count} essais de {param2}}}",
   "studyShareAndExport": "Partager & exporter",
-  "studyStart": "Commencer"
+  "studyStart": "Commencer",
+  "broadcastBroadcasts": "Diffusions",
+  "broadcastStartDate": "Date de début dans votre fuseau horaire"
 }

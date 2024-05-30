@@ -1227,5 +1227,7 @@
   "stormXRuns": "{count, plural, other{{count}번 도전}}",
   "stormPlayedNbRunsOfPuzzleStorm": "{count, plural, other{{param2} 중{count}개 플레이함}}",
   "studyShareAndExport": "공유 및 내보내기",
-  "studyStart": "시작"
+  "studyStart": "시작",
+  "broadcastBroadcasts": "방송",
+  "broadcastStartDate": "본인 시간대 기준 시작일"
 }

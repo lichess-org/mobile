@@ -2283,7 +2283,7 @@ class AppLocalizationsLb extends AppLocalizations {
   String get hue => 'Hue';
 
   @override
-  String get boardReset => 'Reset colors to default';
+  String get boardReset => 'Reset colours to default';
 
   @override
   String get pieceSet => 'Figurestil';
@@ -4569,4 +4569,10 @@ class AppLocalizationsLb extends AppLocalizations {
 
   @override
   String get studyStart => 'Lass';
+
+  @override
+  String get broadcastBroadcasts => 'Iwwerdroungen';
+
+  @override
+  String get broadcastStartDate => 'Startdatum an denger eegener Zäitzon';
 }

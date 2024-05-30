@@ -1246,5 +1246,7 @@
   "stormXRuns": "{count, plural, =0{1 серія} =1{1 серія} few{{count} серії} many{{count} серій} other{{count} серій}}",
   "stormPlayedNbRunsOfPuzzleStorm": "{count, plural, =0{Зіграна одна серія в {param2}} =1{Зіграна одна серія в {param2}} few{Зіграно {count} серії в {param2}} many{Зіграно {count} серій в {param2}} other{Зіграно {count} серій в {param2}}}",
   "studyShareAndExport": "Надсилання та експорт",
-  "studyStart": "Почати"
+  "studyStart": "Почати",
+  "broadcastBroadcasts": "Трансляції",
+  "broadcastStartDate": "Дата початку у вашому часовому поясі"
 }

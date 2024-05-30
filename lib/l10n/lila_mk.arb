@@ -994,5 +994,7 @@
   "settingsCantOpenSimilarAccount": "Нема да ви биде дозволено да отворите нова сметка со истото име, дури и со различна големина на буквите.",
   "settingsChangedMindDoNotCloseAccount": "Се предомислив, не го затварај мојот профил",
   "settingsCloseAccountExplanation": "Сигурни сте дека сакате да ја затворите вашата сметка? Тоа е трајна одлука. НИКОГАШ ПОВЕЌЕ нема да можете да се најавите.",
-  "settingsThisAccountIsClosed": "Овој профил е затворен."
+  "settingsThisAccountIsClosed": "Овој профил е затворен.",
+  "broadcastBroadcasts": "Емитувања",
+  "broadcastStartDate": "Почетен датум во вашата временска зона"
 }

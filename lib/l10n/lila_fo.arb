@@ -987,5 +987,7 @@
   "stormXRuns": "{count, plural, =0{1 umfar} =1{1 umfar} other{{count} umfør}}",
   "stormPlayedNbRunsOfPuzzleStorm": "{count, plural, =0{Telvaði eitt umfar av {param2}} =1{Telvaði eitt umfar av {param2}} other{Telvaði {count} umfør av {param2}}}",
   "studyShareAndExport": "Deil & flyt út",
-  "studyStart": "Byrja"
+  "studyStart": "Byrja",
+  "broadcastBroadcasts": "Sendingar",
+  "broadcastStartDate": "Byrjanardagfesting í tínum egna tíðarøki"
 }

@@ -1215,5 +1215,7 @@
   "stormXRuns": "{count, plural, =0{1 eilė} =1{1 eilė} few{{count} eilės} many{{count} eilės} other{{count} eilių}}",
   "stormPlayedNbRunsOfPuzzleStorm": "{count, plural, =0{Žaista viena {param2} eilė} =1{Žaista viena {param2} eilė} few{Žaistos {count} {param2} eilės} many{Žaista {count} {param2} eilės} other{Žaista {count} {param2} eilių}}",
   "studyShareAndExport": "Dalintis ir eksportuoti",
-  "studyStart": "Pradėti"
+  "studyStart": "Pradėti",
+  "broadcastBroadcasts": "Transliacijos",
+  "broadcastStartDate": "Pradžios laikas jūsų laiko juostoje"
 }

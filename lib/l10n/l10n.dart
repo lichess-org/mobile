@@ -4183,7 +4183,7 @@ abstract class AppLocalizations {
   /// No description provided for @boardReset.
   ///
   /// In en, this message translates to:
-  /// **'Reset colors to default'**
+  /// **'Reset colours to default'**
   String get boardReset;
 
   /// No description provided for @pieceSet.
@@ -5005,7 +5005,7 @@ abstract class AppLocalizations {
   /// No description provided for @simulHostcolor.
   ///
   /// In en, this message translates to:
-  /// **'Host color for each game'**
+  /// **'Host colour for each game'**
   String get simulHostcolor;
 
   /// No description provided for @estimatedStart.
@@ -7689,6 +7689,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Start'**
   String get studyStart;
+
+  /// No description provided for @broadcastBroadcasts.
+  ///
+  /// In en, this message translates to:
+  /// **'Broadcasts'**
+  String get broadcastBroadcasts;
+
+  /// No description provided for @broadcastStartDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Start date in your own timezone'**
+  String get broadcastStartDate;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

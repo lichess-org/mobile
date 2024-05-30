@@ -21,7 +21,7 @@ const lilaTranslationsPath = `${tmpDir}/[lichess-org.lila] master/translation/de
 const unzipMaxBufferSize = 1024 * 1024 * 10 // Set maxbuffer to 10MB to avoid errors when default 1MB used
 
 // selection of lila translation modules to include
-const modules = ['activity', 'contact', 'site', 'patron', 'preferences', 'puzzle', 'puzzleTheme', 'perfStat', 'search', 'settings', 'streamer', 'storm', 'study']
+const modules = ['activity', 'contact', 'site', 'patron', 'preferences', 'puzzle', 'puzzleTheme', 'perfStat', 'search', 'settings', 'streamer', 'storm', 'study', 'broadcast']
 
 // list of keys (per module) to include in the ARB file
 // If a module is not listed here, all keys will be included
@@ -31,6 +31,7 @@ const whiteLists = {
   'search': ['search'],
   'streamer': ['lichessStreamers'],
   'study': ['start', 'shareAndExport'],
+  'broadcast': ['broadcasts', 'startDate'],
 }
 
 

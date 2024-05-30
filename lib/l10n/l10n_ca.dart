@@ -4569,4 +4569,10 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get studyStart => 'Inici';
+
+  @override
+  String get broadcastBroadcasts => 'Retransmissions';
+
+  @override
+  String get broadcastStartDate => 'Data d\'inici en la teva zona horària';
 }

@@ -1226,5 +1226,7 @@
   "stormXRuns": "{count, plural, =0{1 lopie} =1{1 lopie} other{{count} lopies}}",
   "stormPlayedNbRunsOfPuzzleStorm": "{count, plural, =0{Speel een lopie van {param2}} =1{Speel een lopie van {param2}} other{Speel {count} lopies van {param2}}}",
   "studyShareAndExport": "Deel & voer uit",
-  "studyStart": "Begin"
+  "studyStart": "Begin",
+  "broadcastBroadcasts": "Uitsendings",
+  "broadcastStartDate": "Begin datum in jou eie tydsone"
 }

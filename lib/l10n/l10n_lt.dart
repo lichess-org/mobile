@@ -2317,7 +2317,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get hue => 'Hue';
 
   @override
-  String get boardReset => 'Reset colors to default';
+  String get boardReset => 'Reset colours to default';
 
   @override
   String get pieceSet => 'Figūrų rinkinys';
@@ -4701,4 +4701,10 @@ class AppLocalizationsLt extends AppLocalizations {
 
   @override
   String get studyStart => 'Pradėti';
+
+  @override
+  String get broadcastBroadcasts => 'Transliacijos';
+
+  @override
+  String get broadcastStartDate => 'Pradžios laikas jūsų laiko juostoje';
 }

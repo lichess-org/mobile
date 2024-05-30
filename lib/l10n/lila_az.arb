@@ -1091,5 +1091,7 @@
   "stormXRuns": "{count, plural, =0{1 cəhd} =1{1 cəhd} other{{count} cəhd}}",
   "stormPlayedNbRunsOfPuzzleStorm": "{count, plural, =0{Bir dəfə {param2} oynadı} =1{Bir dəfə {param2} oynadı} other{{count} dəfə {param2} oynadı}}",
   "studyShareAndExport": "Paylaş və yüklə",
-  "studyStart": "Başlat"
+  "studyStart": "Başlat",
+  "broadcastBroadcasts": "Yayım",
+  "broadcastStartDate": "Öz saat qurşağınızdakı başlama tarixi"
 }

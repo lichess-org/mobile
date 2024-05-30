@@ -2283,7 +2283,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get hue => 'Hue';
 
   @override
-  String get boardReset => 'Reset colors to default';
+  String get boardReset => 'Reset colours to default';
 
   @override
   String get pieceSet => 'Fiqur seti';
@@ -2738,7 +2738,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get cancelSimul => 'Simulu ləğv et';
 
   @override
-  String get simulHostcolor => 'Host color for each game';
+  String get simulHostcolor => 'Host colour for each game';
 
   @override
   String get estimatedStart => 'Estimated start time';
@@ -4565,4 +4565,10 @@ class AppLocalizationsAz extends AppLocalizations {
 
   @override
   String get studyStart => 'Başlat';
+
+  @override
+  String get broadcastBroadcasts => 'Yayım';
+
+  @override
+  String get broadcastStartDate => 'Öz saat qurşağınızdakı başlama tarixi';
 }

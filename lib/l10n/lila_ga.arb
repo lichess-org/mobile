@@ -1187,5 +1187,7 @@
   "stormXRuns": "{count, plural, =0{1 stríocáin} =1{1 stríocáin} =2{{count} stríocáin} few{{count} stríocáin} many{{count} stríocáin} other{{count} stríocáin}}",
   "stormPlayedNbRunsOfPuzzleStorm": "{count, plural, =0{D'imir stríocáin amháin de {param2}} =1{D'imir stríocáin amháin de {param2}} =2{D'imir {count} stríocáin de {param2}} few{D'imir {count} stríocáin de {param2}} many{D'imir {count} stríocáin de {param2}} other{D'imir {count} stríocáin de {param2}}}",
   "studyShareAndExport": "Comhroinn & easpórtáil",
-  "studyStart": "Tosú"
+  "studyStart": "Tosú",
+  "broadcastBroadcasts": "Craoltaí",
+  "broadcastStartDate": "Dáta tosaigh i do chrios ama féin"
 }

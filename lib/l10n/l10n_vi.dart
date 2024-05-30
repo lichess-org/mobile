@@ -2249,7 +2249,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get hue => 'Hue';
 
   @override
-  String get boardReset => 'Reset colors to default';
+  String get boardReset => 'Reset colours to default';
 
   @override
   String get pieceSet => 'Bộ cờ';
@@ -4437,4 +4437,10 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get studyStart => 'Bắt đầu';
+
+  @override
+  String get broadcastBroadcasts => 'Các phát sóng';
+
+  @override
+  String get broadcastStartDate => 'Ngày bắt đầu theo múi giờ của bạn';
 }

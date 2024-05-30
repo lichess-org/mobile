@@ -2300,7 +2300,7 @@ class AppLocalizationsHr extends AppLocalizations {
   String get hue => 'Hue';
 
   @override
-  String get boardReset => 'Reset colors to default';
+  String get boardReset => 'Reset colours to default';
 
   @override
   String get pieceSet => 'Set figura';
@@ -4633,4 +4633,10 @@ class AppLocalizationsHr extends AppLocalizations {
 
   @override
   String get studyStart => 'Start';
+
+  @override
+  String get broadcastBroadcasts => 'Prijenosi';
+
+  @override
+  String get broadcastStartDate => 'Datum početka u vlastitoj vremenskoj zoni';
 }

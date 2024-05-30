@@ -1239,5 +1239,7 @@
   "stormXRuns": "{count, plural, other{{count} 回}}",
   "stormPlayedNbRunsOfPuzzleStorm": "{count, plural, other{{param2} を {count} 回プレイ}}",
   "studyShareAndExport": "共有とエクスポート",
-  "studyStart": "開始"
+  "studyStart": "開始",
+  "broadcastBroadcasts": "イベント中継",
+  "broadcastStartDate": "開始日付（あなたの現地時間）"
 }

@@ -1224,5 +1224,7 @@
   "stormXRuns": "{count, plural, =0{1 Duerchlaf} =1{1 Duerchlaf} other{{count} Duerchleef}}",
   "stormPlayedNbRunsOfPuzzleStorm": "{count, plural, =0{Huet een Duerchlaf vun {param2} gespillt} =1{Huet een Duerchlaf vun {param2} gespillt} other{Huet {count} Duerchleef vun {param2} gespillt}}",
   "studyShareAndExport": "Deelen & exportéieren",
-  "studyStart": "Lass"
+  "studyStart": "Lass",
+  "broadcastBroadcasts": "Iwwerdroungen",
+  "broadcastStartDate": "Startdatum an denger eegener Zäitzon"
 }

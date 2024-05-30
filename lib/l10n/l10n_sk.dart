@@ -2317,7 +2317,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get hue => 'Hue';
 
   @override
-  String get boardReset => 'Reset colors to default';
+  String get boardReset => 'Reset colours to default';
 
   @override
   String get pieceSet => 'Vzhľad figúr';
@@ -4701,4 +4701,10 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get studyStart => 'Štart';
+
+  @override
+  String get broadcastBroadcasts => 'Vysielanie';
+
+  @override
+  String get broadcastStartDate => 'Dátum a čas začiatku, vo vašej časovej zóne';
 }

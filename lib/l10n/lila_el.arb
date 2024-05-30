@@ -1232,5 +1232,7 @@
   "stormXRuns": "{count, plural, =0{1 γύρος} =1{1 γύρος} other{{count} γύροι}}",
   "stormPlayedNbRunsOfPuzzleStorm": "{count, plural, =0{Έπαιξε έναν γύρο {param2}} =1{Έπαιξε έναν γύρο {param2}} other{Έπαιξε {count} γύρους {param2}}}",
   "studyShareAndExport": "Διαμοιρασμός & εξαγωγή",
-  "studyStart": "Δημιουργία"
+  "studyStart": "Δημιουργία",
+  "broadcastBroadcasts": "Αναμεταδόσεις",
+  "broadcastStartDate": "Ημερομηνία έναρξης στη δική σας ζώνη ώρας"
 }

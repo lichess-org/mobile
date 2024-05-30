@@ -1217,5 +1217,7 @@
   "stormXRuns": "{count, plural, =0{1 raund} =1{1 raund} other{{count} raunde}}",
   "stormPlayedNbRunsOfPuzzleStorm": "{count, plural, =0{Luajti një raund nga {param2}} =1{Luajti një raund nga {param2}} other{Luajti {count} raunde nga {param2}}}",
   "studyShareAndExport": "Ndajeni me të tjerë & eksportoni",
-  "studyStart": "Fillo"
+  "studyStart": "Fillo",
+  "broadcastBroadcasts": "Transmetime",
+  "broadcastStartDate": "Datë fillimi në zonën tuaj kohore"
 }

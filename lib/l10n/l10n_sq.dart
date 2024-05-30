@@ -2283,7 +2283,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get hue => 'Hue';
 
   @override
-  String get boardReset => 'Reset colors to default';
+  String get boardReset => 'Reset colours to default';
 
   @override
   String get pieceSet => 'Figura';
@@ -4569,4 +4569,10 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get studyStart => 'Fillo';
+
+  @override
+  String get broadcastBroadcasts => 'Transmetime';
+
+  @override
+  String get broadcastStartDate => 'Datë fillimi në zonën tuaj kohore';
 }

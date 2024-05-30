@@ -1193,5 +1193,7 @@
   "stormXRuns": "{count, plural, =0{1 փորձ} =1{1 փորձ} other{{count} փորձ}}",
   "stormPlayedNbRunsOfPuzzleStorm": "{count, plural, =0{Խաղացվել է մեկ շարք {param2}-ում} =1{Խաղացվել է մեկ շարք {param2}-ում} other{Խաղացվել է {count} շարք {param2}-ում}}",
   "studyShareAndExport": "Տարածել & և արտահանել",
-  "studyStart": "Սկսել"
+  "studyStart": "Սկսել",
+  "broadcastBroadcasts": "Հեռարձակումներ",
+  "broadcastStartDate": "Սկսվելու ամսաթիվը Ձեր ժամագոտում"
 }

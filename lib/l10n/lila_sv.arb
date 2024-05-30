@@ -1235,5 +1235,7 @@
   "stormXRuns": "{count, plural, =0{1 försök} =1{1 försök} other{{count} försök}}",
   "stormPlayedNbRunsOfPuzzleStorm": "{count, plural, =0{Spelade en omgång {param2}} =1{Spelade en omgång {param2}} other{Spelade {count} omgångar {param2}}}",
   "studyShareAndExport": "Dela & exportera",
-  "studyStart": "Starta"
+  "studyStart": "Starta",
+  "broadcastBroadcasts": "Sändningar",
+  "broadcastStartDate": "Startdatum i din egen tidszon"
 }

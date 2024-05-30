@@ -4701,4 +4701,10 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get studyStart => 'Начать';
+
+  @override
+  String get broadcastBroadcasts => 'Трансляции';
+
+  @override
+  String get broadcastStartDate => 'Дата начала в вашем часовом поясе';
 }

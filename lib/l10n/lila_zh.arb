@@ -1240,5 +1240,7 @@
   "stormXRuns": "{count, plural, other{{count}组}}",
   "stormPlayedNbRunsOfPuzzleStorm": "{count, plural, other{玩了{count}组的{param2}}}",
   "studyShareAndExport": "分享并导出",
-  "studyStart": "开始"
+  "studyStart": "开始",
+  "broadcastBroadcasts": "转播",
+  "broadcastStartDate": "开始日期，在你的本地时区"
 }

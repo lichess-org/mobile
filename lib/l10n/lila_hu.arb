@@ -1210,5 +1210,7 @@
   "stormXRuns": "{count, plural, =0{1 futam} =1{1 futam} other{{count} futam}}",
   "stormPlayedNbRunsOfPuzzleStorm": "{count, plural, =0{Egy {param2} futamot játszott} =1{Egy {param2} futamot játszott} other{{count} {param2} futamot játszott}}",
   "studyShareAndExport": "Megosztás és exportálás",
-  "studyStart": "Mehet"
+  "studyStart": "Mehet",
+  "broadcastBroadcasts": "Versenyközvetítések",
+  "broadcastStartDate": "Kezdés időpontja a saját időzónádban"
 }

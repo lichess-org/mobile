@@ -2249,7 +2249,7 @@ class AppLocalizationsTt extends AppLocalizations {
   String get hue => 'Hue';
 
   @override
-  String get boardReset => 'Reset colors to default';
+  String get boardReset => 'Reset colours to default';
 
   @override
   String get pieceSet => 'Эйберлэр';
@@ -2704,7 +2704,7 @@ class AppLocalizationsTt extends AppLocalizations {
   String get cancelSimul => 'Cancel the simul';
 
   @override
-  String get simulHostcolor => 'Host color for each game';
+  String get simulHostcolor => 'Host colour for each game';
 
   @override
   String get estimatedStart => 'Estimated start time';
@@ -4441,4 +4441,10 @@ class AppLocalizationsTt extends AppLocalizations {
 
   @override
   String get studyStart => 'Башла';
+
+  @override
+  String get broadcastBroadcasts => 'Ишеттәрешләр';
+
+  @override
+  String get broadcastStartDate => 'Башлагыз сәнә сезнең үзегезнең вакыт җирендән';
 }

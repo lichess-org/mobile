@@ -2283,7 +2283,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hue => 'Hue';
 
   @override
-  String get boardReset => 'Reset colors to default';
+  String get boardReset => 'Reset colours to default';
 
   @override
   String get pieceSet => 'Piece set';
@@ -2738,7 +2738,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cancelSimul => 'Cancel the simul';
 
   @override
-  String get simulHostcolor => 'Host color for each game';
+  String get simulHostcolor => 'Host colour for each game';
 
   @override
   String get estimatedStart => 'Estimated start time';
@@ -4565,6 +4565,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get studyStart => 'Start';
+
+  @override
+  String get broadcastBroadcasts => 'Broadcasts';
+
+  @override
+  String get broadcastStartDate => 'Start date in your own timezone';
 }
 
 /// The translations for English, as used in the United States (`en_US`).
@@ -9134,4 +9140,10 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get studyStart => 'Start';
+
+  @override
+  String get broadcastBroadcasts => 'Broadcasts';
+
+  @override
+  String get broadcastStartDate => 'Start date in your own timezone';
 }

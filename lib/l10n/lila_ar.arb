@@ -1238,5 +1238,7 @@
   "stormXRuns": "{count, plural, =0{لا جولات} =1{جولة واحدة} =2{جولتان} few{{count} جولات} many{{count} جولة} other{{count} جولة}}",
   "stormPlayedNbRunsOfPuzzleStorm": "{count, plural, =0{لم تلعب أي جولة {param2}} =1{لعبت جولة واحدة من {param2}} =2{لعبت جولتين من {param2}} few{لعبت {count} جولات من {param2}} many{لعبت {count} جولة من {param2}} other{لعبت {count} جولة من {param2}}}",
   "studyShareAndExport": "مشاركة و تصدير",
-  "studyStart": "ابدأ"
+  "studyStart": "ابدأ",
+  "broadcastBroadcasts": "البثوث",
+  "broadcastStartDate": "تاريخ البدء في المنطقة الزمنية الخاصة بك"
 }

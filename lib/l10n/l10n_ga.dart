@@ -2334,7 +2334,7 @@ class AppLocalizationsGa extends AppLocalizations {
   String get hue => 'Hue';
 
   @override
-  String get boardReset => 'Reset colors to default';
+  String get boardReset => 'Reset colours to default';
 
   @override
   String get pieceSet => 'Foireann píosaí';
@@ -4761,4 +4761,10 @@ class AppLocalizationsGa extends AppLocalizations {
 
   @override
   String get studyStart => 'Tosú';
+
+  @override
+  String get broadcastBroadcasts => 'Craoltaí';
+
+  @override
+  String get broadcastStartDate => 'Dáta tosaigh i do chrios ama féin';
 }

@@ -1225,5 +1225,7 @@
   "stormXRuns": "{count, plural, =0{1 pokus} =1{1 pokus} few{{count} pokusy} many{{count} pokusov} other{{count} pokusov}}",
   "stormPlayedNbRunsOfPuzzleStorm": "{count, plural, =0{Odohraný jeden pokus {param2}} =1{Odohraný jeden pokus {param2}} few{Obohrané {count} pokusy {param2}} many{Odohraných {count} pokusov {param2}} other{Odohraných {count} pokusov {param2}}}",
   "studyShareAndExport": "Zdielať & export",
-  "studyStart": "Štart"
+  "studyStart": "Štart",
+  "broadcastBroadcasts": "Vysielanie",
+  "broadcastStartDate": "Dátum a čas začiatku, vo vašej časovej zóne"
 }

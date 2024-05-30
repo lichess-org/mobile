@@ -1245,5 +1245,7 @@
   "stormXRuns": "{count, plural, =0{1 sarja} =1{1 sarja} other{{count} sarjaa}}",
   "stormPlayedNbRunsOfPuzzleStorm": "{count, plural, =0{Pelasi yhden sarjan {param2}ia} =1{Pelasi yhden sarjan {param2}ia} other{Pelasi {count} sarjaa {param2}ia}}",
   "studyShareAndExport": "Jaa & vie",
-  "studyStart": "Aloita"
+  "studyStart": "Aloita",
+  "broadcastBroadcasts": "Lähetykset",
+  "broadcastStartDate": "Alkamispäivämäärä omalla aikavyöhykkeelläsi"
 }
