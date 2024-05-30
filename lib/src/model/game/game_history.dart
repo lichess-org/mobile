@@ -94,7 +94,10 @@ Future<int> userNumberOfGames(
           : ref.watch(gameStorageProvider).count(userId: user?.id);
 }
 
-/// A provider that fetches the game history for a given user, or the current app user if no user is provided.
+/// A provider that paginates the game history for a given user, or the current app user if no user is provided.
+///
+/// The game history is fetched from the server if the user is logged in and app is online.
+/// Otherwise, the game history is fetched from the local storage.
 @riverpod
 class UserGameHistory extends _$UserGameHistory {
   final _list = <LightArchivedGameWithPov>[];
@@ -102,6 +105,12 @@ class UserGameHistory extends _$UserGameHistory {
   @override
   Future<UserGameHistoryState> build(
     UserId? userId, {
+    /// Whether the history is requested in an online context. Applicable only
+    /// when [userId] is null.
+    ///
+    /// If this is true, the provider will attempt to fetch the games from the
+    /// server. If this is false, the provider will fetch the games from the
+    /// local storage.
     required bool isOnline,
   }) async {
     ref.cacheFor(const Duration(minutes: 5));
@@ -127,6 +136,7 @@ class UserGameHistory extends _$UserGameHistory {
     );
   }
 
+  /// Fetches the next page of games.
   void getNext() {
     if (!state.hasValue) return;
 
