@@ -96,8 +96,9 @@ class BroadcastPicture extends StatelessWidget {
         );
       },
       child: Container(
-        clipBehavior: Clip.hardEdge,
+        clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
               color: LichessColors.grey.withOpacity(0.5),
@@ -105,55 +106,54 @@ class BroadcastPicture extends StatelessWidget {
               spreadRadius: 1,
             ),
           ],
+        ),
+        foregroundDecoration: BoxDecoration(
           border: (broadcast.status == BroadcastStatus.live)
               ? Border.all(color: LichessColors.red, width: 2)
               : Border.all(color: LichessColors.grey),
           borderRadius: BorderRadius.circular(20),
         ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(20),
-          child: Column(
-            children: [
-              if (broadcast.tour.imageUrl != null)
-                Image.network(broadcast.tour.imageUrl!)
-              else
-                const DefaultBroadcastImage(),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Flexible(
-                        child: Text(
-                          broadcast.tour.name,
-                          textAlign: TextAlign.center,
-                        ),
+        child: Column(
+          children: [
+            if (broadcast.tour.imageUrl != null)
+              Image.network(broadcast.tour.imageUrl!)
+            else
+              const DefaultBroadcastImage(),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Flexible(
+                      child: Text(
+                        broadcast.tour.name,
+                        textAlign: TextAlign.center,
                       ),
-                      if (broadcast.status == BroadcastStatus.live) ...[
-                        const SizedBox(width: 5),
-                        const Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.circle, color: Colors.red, size: 15),
-                            SizedBox(height: 5),
-                            Text(
-                              'LIVE',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.red,
-                              ),
+                    ),
+                    if (broadcast.status == BroadcastStatus.live) ...[
+                      const SizedBox(width: 5),
+                      const Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.circle, color: Colors.red, size: 15),
+                          SizedBox(height: 5),
+                          Text(
+                            'LIVE',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red,
                             ),
-                          ],
-                        ),
-                      ],
+                          ),
+                        ],
+                      ),
                     ],
-                  ),
+                  ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
