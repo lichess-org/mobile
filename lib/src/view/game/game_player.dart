@@ -56,81 +56,82 @@ class GamePlayer extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Icon(
-              player.onGame == true ? Icons.cloud : Icons.cloud_off,
-              color: player.onGame == true ? LichessColors.green : null,
-              size: 14,
-            ),
-            const SizedBox(width: 5),
-            if (player.user?.isPatron == true) ...[
+        if (!zenMode)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
               Icon(
-                LichessIcons.patron,
-                size: playerFontSize,
-                semanticLabel: context.l10n.patronLichessPatron,
+                player.onGame == true ? Icons.cloud : Icons.cloud_off,
+                color: player.onGame == true ? LichessColors.green : null,
+                size: 14,
               ),
               const SizedBox(width: 5),
-            ],
-            if (player.user?.title != null) ...[
-              Text(
-                player.user!.title!,
-                style: TextStyle(
-                  fontSize: playerFontSize,
-                  fontWeight: FontWeight.bold,
-                  color: context.lichessColors.brag,
+              if (player.user?.isPatron == true) ...[
+                Icon(
+                  LichessIcons.patron,
+                  size: playerFontSize,
+                  semanticLabel: context.l10n.patronLichessPatron,
                 ),
-              ),
-              const SizedBox(width: 5),
-            ],
-            Flexible(
-              child: Text(
-                player.displayName(context),
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: playerFontSize,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-            if (player.user?.flair != null) ...[
-              const SizedBox(width: 5),
-              CachedNetworkImage(
-                imageUrl: lichessFlairSrc(player.user!.flair!),
-                errorWidget: (_, __, ___) => kEmptyWidget,
-                width: 16,
-                height: 16,
-              ),
-            ],
-            if (player.rating != null)
-              RatingPrefAware(
-                child: Text.rich(
-                  TextSpan(
-                    text:
-                        ' ${player.rating}${player.provisional == true ? '?' : ''}',
-                    children: [
-                      if (player.ratingDiff != null)
-                        TextSpan(
-                          text:
-                              ' ${player.ratingDiff! > 0 ? '+' : ''}${player.ratingDiff}',
-                          style: TextStyle(
-                            color: player.ratingDiff! > 0
-                                ? context.lichessColors.good
-                                : context.lichessColors.error,
-                          ),
-                        ),
-                    ],
+                const SizedBox(width: 5),
+              ],
+              if (player.user?.title != null) ...[
+                Text(
+                  player.user!.title!,
+                  style: TextStyle(
+                    fontSize: playerFontSize,
+                    fontWeight: FontWeight.bold,
+                    color: context.lichessColors.brag,
                   ),
+                ),
+                const SizedBox(width: 5),
+              ],
+              Flexible(
+                child: Text(
+                  player.displayName(context),
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontSize: 14,
-                    color: textShade(context, 0.7),
+                    fontSize: playerFontSize,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
-          ],
-        ),
+              if (player.user?.flair != null) ...[
+                const SizedBox(width: 5),
+                CachedNetworkImage(
+                  imageUrl: lichessFlairSrc(player.user!.flair!),
+                  errorWidget: (_, __, ___) => kEmptyWidget,
+                  width: 16,
+                  height: 16,
+                ),
+              ],
+              if (player.rating != null)
+                RatingPrefAware(
+                  child: Text.rich(
+                    TextSpan(
+                      text:
+                          ' ${player.rating}${player.provisional == true ? '?' : ''}',
+                      children: [
+                        if (player.ratingDiff != null)
+                          TextSpan(
+                            text:
+                                ' ${player.ratingDiff! > 0 ? '+' : ''}${player.ratingDiff}',
+                            style: TextStyle(
+                              color: player.ratingDiff! > 0
+                                  ? context.lichessColors.good
+                                  : context.lichessColors.error,
+                            ),
+                          ),
+                      ],
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: textShade(context, 0.7),
+                    ),
+                  ),
+                ),
+            ],
+          ),
         if (timeToMove != null)
           MoveExpiration(timeToMove: timeToMove!, mePlaying: mePlaying)
         else if (materialDiff != null)
@@ -156,6 +157,7 @@ class GamePlayer extends StatelessWidget {
             ],
           )
         else
+          // to avoid shifts use an empty text widget
           const Text('', style: TextStyle(fontSize: 13)),
       ],
     );
@@ -175,7 +177,7 @@ class GamePlayer extends StatelessWidget {
               ),
             ),
           )
-        else if (!zenMode || timeToMove != null)
+        else
           Expanded(
             flex: 7,
             child: Padding(

@@ -96,9 +96,12 @@ class PlayableGame
   bool get imported => source == GameSource.import;
 
   bool get isPlayerTurn => lastPosition.turn == youAre;
+
+  /// Whether the game is properly finished (not aborted).
   bool get finished => status.value >= GameStatus.mate.value;
   bool get aborted => status == GameStatus.aborted;
 
+  /// Whether the game is still playable (not finished or aborted and not imported).
   bool get playable => status.value < GameStatus.aborted.value && !imported;
   bool get abortable =>
       playable &&
