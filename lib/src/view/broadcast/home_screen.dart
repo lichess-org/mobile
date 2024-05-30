@@ -118,36 +118,38 @@ class BroadcastPicture extends StatelessWidget {
                 Image.network(broadcast.tour.imageUrl!)
               else
                 const DefaultBroadcastImage(),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Flexible(
-                      child: Text(
-                        broadcast.tour.name,
-                        textAlign: TextAlign.center,
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Flexible(
+                        child: Text(
+                          broadcast.tour.name,
+                          textAlign: TextAlign.center,
+                        ),
                       ),
-                    ),
-                    if (broadcast.status == BroadcastStatus.live) ...[
-                      const SizedBox(width: 5),
-                      const Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.circle, color: Colors.red, size: 15),
-                          SizedBox(height: 5),
-                          Text(
-                            'LIVE',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.red,
+                      if (broadcast.status == BroadcastStatus.live) ...[
+                        const SizedBox(width: 5),
+                        const Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.circle, color: Colors.red, size: 15),
+                            SizedBox(height: 5),
+                            Text(
+                              'LIVE',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.red,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
+                          ],
+                        ),
+                      ],
                     ],
-                  ],
+                  ),
                 ),
               ),
             ],
