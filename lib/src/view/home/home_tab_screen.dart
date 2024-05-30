@@ -8,7 +8,7 @@ import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
-import 'package:lichess_mobile/src/model/game/game_storage.dart';
+import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
 import 'package:lichess_mobile/src/navigation.dart';
@@ -186,8 +186,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
 
   Future<void> _refreshData() {
     return Future.wait([
-      ref.refresh(accountRecentGamesProvider.future),
-      ref.refresh(recentStoredGamesProvider.future),
+      ref.refresh(myRecentGamesProvider.future),
       ref.refresh(ongoingGamesProvider.future),
     ]);
   }
@@ -220,18 +219,14 @@ class _HomeBody extends ConsumerWidget {
       data: (status) {
         final session = ref.watch(authSessionProvider);
         final isTablet = isTabletOrLarger(context);
-        final emptyRecent = ref.watch(accountRecentGamesProvider).maybeWhen(
-              data: (data) => data.isEmpty,
-              orElse: () => false,
-            );
-        final emptyStored = ref.watch(recentStoredGamesProvider).maybeWhen(
+        final emptyRecent = ref.watch(myRecentGamesProvider).maybeWhen(
               data: (data) => data.isEmpty,
               orElse: () => false,
             );
 
         // Show the welcome screen if there are no recent games and no stored games
         // (i.e. first installation, or the user has never played a game)
-        if (emptyRecent && emptyStored) {
+        if (emptyRecent) {
           final welcomeWidgets = [
             Padding(
               padding: Styles.horizontalBodyPadding,
@@ -339,7 +334,7 @@ class _HomeBody extends ConsumerWidget {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           SizedBox(height: 8.0),
-                          RecentGames(),
+                          RecentGamesWidget(),
                         ],
                       ),
                     ),
@@ -352,7 +347,7 @@ class _HomeBody extends ConsumerWidget {
                   const _OngoingGamesCarousel(maxGamesToShow: 20)
                 else
                   const _OfflineCorrespondenceCarousel(maxGamesToShow: 20),
-                const RecentGames(),
+                const RecentGamesWidget(),
                 if (Theme.of(context).platform == TargetPlatform.iOS)
                   const SizedBox(height: 70.0)
                 else

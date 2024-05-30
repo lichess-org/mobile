@@ -27,4 +27,9 @@ class MockGameStorage implements GameStorage {
   Future<void> save(ArchivedGame game) {
     return Future.value();
   }
+
+  @override
+  Future<int> count({UserId? userId}) {
+    return Future.value(0);
+  }
 }

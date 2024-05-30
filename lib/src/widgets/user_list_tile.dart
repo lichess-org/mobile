@@ -124,14 +124,16 @@ class _UserRating extends StatelessWidget {
     List<Perf> userPerfs = Perf.values.where((element) {
       final p = perfs[element];
       return p != null &&
-          p.numberOfGames > 0 &&
+          p.numberOfGamesOrRuns > 0 &&
           p.ratingDeviation < kClueLessDeviation;
     }).toList(growable: false);
 
     if (userPerfs.isEmpty) return const SizedBox.shrink();
 
     userPerfs.sort(
-      (p1, p2) => perfs[p1]!.numberOfGames.compareTo(perfs[p2]!.numberOfGames),
+      (p1, p2) => perfs[p1]!
+          .numberOfGamesOrRuns
+          .compareTo(perfs[p2]!.numberOfGamesOrRuns),
     );
     userPerfs = userPerfs.reversed.toList();
 

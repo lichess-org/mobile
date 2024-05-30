@@ -93,7 +93,8 @@ class _Title extends StatelessWidget {
       }
       final p = user.perfs[element];
       return p != null &&
-          p.numberOfGames > 0 &&
+          p.games != null &&
+          p.games! > 0 &&
           p.ratingDeviation < kClueLessDeviation;
     }).toList(growable: false);
     return AppBarTextButton(

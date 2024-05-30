@@ -25,13 +25,13 @@ class PerfCards extends StatelessWidget {
     List<Perf> userPerfs = Perf.values.where((element) {
       final p = user.perfs[element];
       return p != null &&
-          p.numberOfGames > 0 &&
+          p.numberOfGamesOrRuns > 0 &&
           p.ratingDeviation < kClueLessDeviation;
     }).toList(growable: false);
 
     userPerfs.sort(
-      (p1, p2) => user.perfs[p1]!.numberOfGames
-          .compareTo(user.perfs[p2]!.numberOfGames),
+      (p1, p2) => user.perfs[p1]!.numberOfGamesOrRuns
+          .compareTo(user.perfs[p2]!.numberOfGamesOrRuns),
     );
     userPerfs = userPerfs.reversed.toList();
 

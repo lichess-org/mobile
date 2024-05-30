@@ -62,7 +62,7 @@ class ProfileScreen extends ConsumerWidget {
               UserProfile(user: user),
               const _PerfCards(),
               const UserActivityWidget(),
-              const RecentGames(),
+              const RecentGamesWidget(),
             ],
           );
         },
@@ -110,7 +110,7 @@ class ProfileScreen extends ConsumerWidget {
                 UserProfile(user: user),
                 const _PerfCards(),
                 const UserActivityWidget(),
-                const RecentGames(),
+                const RecentGamesWidget(),
               ],
             ),
           );

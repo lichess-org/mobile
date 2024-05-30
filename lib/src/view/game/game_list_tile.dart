@@ -4,26 +4,33 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
+import 'package:lichess_mobile/src/model/game/game_status.dart';
+import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
+import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
+import 'package:lichess_mobile/src/view/game/standalone_game_screen.dart';
 import 'package:lichess_mobile/src/view/game/status_l10n.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/user_full_name.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 /// A list tile that shows game info.
 class GameListTile extends StatelessWidget {
   const GameListTile({
     required this.game,
     required this.mySide,
-    required this.oppponentTitle,
+    required this.opponentTitle,
     this.icon,
     this.subtitle,
     this.trailing,
@@ -34,7 +41,7 @@ class GameListTile extends StatelessWidget {
   final Side mySide;
 
   final IconData? icon;
-  final Widget oppponentTitle;
+  final Widget opponentTitle;
   final Widget? subtitle;
   final Widget? trailing;
   final GestureTapCallback? onTap;
@@ -53,7 +60,7 @@ class GameListTile extends StatelessWidget {
           builder: (context) => _ContextMenu(
             game: game,
             mySide: mySide,
-            oppponentTitle: oppponentTitle,
+            oppponentTitle: opponentTitle,
             icon: icon,
             subtitle: subtitle,
             trailing: trailing,
@@ -61,7 +68,7 @@ class GameListTile extends StatelessWidget {
         );
       },
       leading: icon != null ? Icon(icon) : null,
-      title: oppponentTitle,
+      title: opponentTitle,
       subtitle: subtitle != null
           ? DefaultTextStyle.merge(
               child: subtitle!,
@@ -211,21 +218,23 @@ class _ContextMenu extends ConsumerWidget {
               ),
               BottomSheetContextMenuAction(
                 icon: Icons.biotech,
-                onPressed: () {
-                  pushPlatformRoute(
-                    context,
-                    builder: (context) => AnalysisScreen(
-                      title: context.l10n.gameAnalysis,
-                      pgnOrId: game.id.value,
-                      options: AnalysisOptions(
-                        isLocalEvaluationAllowed: true,
-                        variant: game.variant,
-                        orientation: orientation,
-                        id: game.id,
-                      ),
-                    ),
-                  );
-                },
+                onPressed: game.variant.isSupported
+                    ? () {
+                        pushPlatformRoute(
+                          context,
+                          builder: (context) => AnalysisScreen(
+                            title: context.l10n.gameAnalysis,
+                            pgnOrId: game.id.value,
+                            options: AnalysisOptions(
+                              isLocalEvaluationAllowed: true,
+                              variant: game.variant,
+                              orientation: orientation,
+                              id: game.id,
+                            ),
+                          ),
+                        );
+                      }
+                    : null,
                 child: Text(context.l10n.gameAnalysis),
               ),
               BottomSheetContextMenuAction(
@@ -398,6 +407,103 @@ class _ContextMenu extends ConsumerWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// A list tile that shows extended game info including an accuracy meter and a result icon.
+class ExtendedGameListTile extends StatelessWidget {
+  const ExtendedGameListTile({required this.item, this.userId});
+
+  final LightArchivedGameWithPov item;
+  final UserId? userId;
+
+  @override
+  Widget build(BuildContext context) {
+    final (game: game, pov: youAre) = item;
+    final me = youAre == Side.white ? game.white : game.black;
+    final opponent = youAre == Side.white ? game.black : game.white;
+
+    Widget getResultIcon(LightArchivedGame game, Side mySide) {
+      if (game.status == GameStatus.aborted ||
+          game.status == GameStatus.noStart) {
+        return const Icon(
+          CupertinoIcons.xmark_square_fill,
+          color: LichessColors.grey,
+        );
+      } else {
+        return game.winner == null
+            ? Icon(
+                CupertinoIcons.equal_square_fill,
+                color: context.lichessColors.brag,
+              )
+            : game.winner == mySide
+                ? Icon(
+                    CupertinoIcons.plus_square_fill,
+                    color: context.lichessColors.good,
+                  )
+                : Icon(
+                    CupertinoIcons.minus_square_fill,
+                    color: context.lichessColors.error,
+                  );
+      }
+    }
+
+    return GameListTile(
+      game: game,
+      mySide: youAre,
+      onTap: game.variant.isSupported
+          ? () {
+              pushPlatformRoute(
+                context,
+                rootNavigator: true,
+                builder: (context) => game.fullId != null
+                    ? StandaloneGameScreen(
+                        params: InitialStandaloneGameParams(
+                          id: game.fullId!,
+                        ),
+                      )
+                    : ArchivedGameScreen(
+                        gameData: game,
+                        orientation: youAre,
+                      ),
+              );
+            }
+          : null,
+      icon: game.perf.icon,
+      opponentTitle: UserFullNameWidget.player(
+        user: opponent.user,
+        aiLevel: opponent.aiLevel,
+        rating: opponent.rating,
+      ),
+      subtitle: Text(
+        timeago.format(game.lastMoveAt),
+      ),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (me.analysis != null) ...[
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  CupertinoIcons.chart_bar_alt_fill,
+                  color: textShade(context, 0.5),
+                ),
+                Text(
+                  me.analysis!.accuracy.toString(),
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: textShade(context, Styles.subtitleOpacity),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(width: 5),
+          ],
+          getResultIcon(game, youAre),
+        ],
       ),
     );
   }

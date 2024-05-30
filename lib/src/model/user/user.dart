@@ -78,6 +78,7 @@ class User with _$User {
     required IMap<Perf, UserPerf> perfs,
     PlayTime? playTime,
     Profile? profile,
+    UserGameCount? count,
   }) = _User;
 
   LightUser get lightUser => LightUser(
@@ -106,6 +107,7 @@ class User with _$User {
       seenAt: pick('seenAt').asDateTimeFromMillisecondsOrNull(),
       playTime: pick('playTime').letOrNull(PlayTime.fromPick),
       profile: pick('profile').letOrNull(Profile.fromPick),
+      count: pick('count').letOrNull(UserGameCount.fromPick),
       perfs: IMap({
         for (final entry in receivedPerfsMap.entries)
           if (Perf.nameMap.containsKey(entry.key))
@@ -116,6 +118,46 @@ class User with _$User {
       }),
     );
   }
+}
+
+@freezed
+class UserGameCount with _$UserGameCount {
+  const factory UserGameCount({
+    required int all,
+    // TODO(#454): enable rest of fields when needed for filtering
+    // required int rated,
+    // required int ai,
+    // required int draw,
+    // required int drawH,
+    // required int win,
+    // required int winH,
+    // required int loss,
+    // required int lossH,
+    // required int bookmark,
+    // required int playing,
+    // required int imported,
+    // required int me,
+  }) = _UserGameCount;
+
+  factory UserGameCount.fromJson(Map<String, dynamic> json) =>
+      UserGameCount.fromPick(pick(json).required());
+
+  factory UserGameCount.fromPick(RequiredPick pick) => UserGameCount(
+        all: pick('all').asIntOrThrow(),
+        // TODO(#454): enable rest of fields when needed for filtering
+        // rated: pick('rated').asIntOrThrow(),
+        // ai: pick('ai').asIntOrThrow(),
+        // draw: pick('draw').asIntOrThrow(),
+        // drawH: pick('drawH').asIntOrThrow(),
+        // win: pick('win').asIntOrThrow(),
+        // winH: pick('winH').asIntOrThrow(),
+        // loss: pick('loss').asIntOrThrow(),
+        // lossH: pick('lossH').asIntOrThrow(),
+        // bookmark: pick('bookmark').asIntOrThrow(),
+        // playing: pick('playing').asIntOrThrow(),
+        // imported: pick('import').asIntOrThrow(),
+        // me: pick('me').asIntOrThrow(),
+      );
 }
 
 @freezed
@@ -138,11 +180,14 @@ class PlayTime with _$PlayTime {
 
 @freezed
 class UserPerf with _$UserPerf {
+  const UserPerf._();
+
   const factory UserPerf({
     required int rating,
     required int ratingDeviation,
     required int progression,
-    required int numberOfGames,
+    int? games,
+    int? runs,
     bool? provisional,
   }) = _UserPerf;
 
@@ -153,7 +198,8 @@ class UserPerf with _$UserPerf {
         rating: pick('rating').asIntOrThrow(),
         ratingDeviation: pick('rd').asIntOrThrow(),
         progression: pick('prog').asIntOrThrow(),
-        numberOfGames: pick('games').asIntOrThrow(),
+        games: pick('games').asIntOrNull(),
+        runs: pick('runs').asIntOrNull(),
         provisional: pick('prov').asBoolOrNull(),
       );
 
@@ -161,9 +207,11 @@ class UserPerf with _$UserPerf {
         rating: UserActivityStreak.fromJson(json).score,
         ratingDeviation: 0,
         progression: 0,
-        numberOfGames: UserActivityStreak.fromJson(json).runs,
+        runs: UserActivityStreak.fromJson(json).runs,
         provisional: null,
       );
+
+  int get numberOfGamesOrRuns => games ?? runs ?? 0;
 }
 
 @freezed

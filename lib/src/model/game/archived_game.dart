@@ -85,6 +85,9 @@ class ArchivedGame
           : white;
 }
 
+/// A [LightArchivedGame] associated with a point of view of a player.
+typedef LightArchivedGameWithPov = ({LightArchivedGame game, Side pov});
+
 /// A lichess game exported from the API, with less data than [ArchivedGame].
 ///
 /// This is commonly used to display a list of games.
