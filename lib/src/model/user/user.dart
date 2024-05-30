@@ -124,18 +124,19 @@ class User with _$User {
 class UserGameCount with _$UserGameCount {
   const factory UserGameCount({
     required int all,
-    required int rated,
-    required int ai,
-    required int draw,
-    required int drawH,
-    required int win,
-    required int winH,
-    required int loss,
-    required int lossH,
-    required int bookmark,
-    required int playing,
-    required int import,
-    required int me,
+    // TODO(#454): enable rest of fields when needed for filtering
+    // required int rated,
+    // required int ai,
+    // required int draw,
+    // required int drawH,
+    // required int win,
+    // required int winH,
+    // required int loss,
+    // required int lossH,
+    // required int bookmark,
+    // required int playing,
+    // required int imported,
+    // required int me,
   }) = _UserGameCount;
 
   factory UserGameCount.fromJson(Map<String, dynamic> json) =>
@@ -143,18 +144,19 @@ class UserGameCount with _$UserGameCount {
 
   factory UserGameCount.fromPick(RequiredPick pick) => UserGameCount(
         all: pick('all').asIntOrThrow(),
-        rated: pick('rated').asIntOrThrow(),
-        ai: pick('ai').asIntOrThrow(),
-        draw: pick('draw').asIntOrThrow(),
-        drawH: pick('drawH').asIntOrThrow(),
-        win: pick('win').asIntOrThrow(),
-        winH: pick('winH').asIntOrThrow(),
-        loss: pick('loss').asIntOrThrow(),
-        lossH: pick('lossH').asIntOrThrow(),
-        bookmark: pick('bookmark').asIntOrThrow(),
-        playing: pick('playing').asIntOrThrow(),
-        import: pick('import').asIntOrThrow(),
-        me: pick('me').asIntOrThrow(),
+        // TODO(#454): enable rest of fields when needed for filtering
+        // rated: pick('rated').asIntOrThrow(),
+        // ai: pick('ai').asIntOrThrow(),
+        // draw: pick('draw').asIntOrThrow(),
+        // drawH: pick('drawH').asIntOrThrow(),
+        // win: pick('win').asIntOrThrow(),
+        // winH: pick('winH').asIntOrThrow(),
+        // loss: pick('loss').asIntOrThrow(),
+        // lossH: pick('lossH').asIntOrThrow(),
+        // bookmark: pick('bookmark').asIntOrThrow(),
+        // playing: pick('playing').asIntOrThrow(),
+        // imported: pick('import').asIntOrThrow(),
+        // me: pick('me').asIntOrThrow(),
       );
 }
 
