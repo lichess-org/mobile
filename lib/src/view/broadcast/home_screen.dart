@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/description_screen.dart';
@@ -26,7 +27,7 @@ class HomeScreen extends ConsumerWidget {
   ) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Broadcast'),
+        title: Text(context.l10n.broadcastBroadcasts),
       ),
       body: const _Body(),
     );
@@ -35,11 +36,11 @@ class HomeScreen extends ConsumerWidget {
   Widget _iosBuilder(
     BuildContext context,
   ) {
-    return const CupertinoPageScaffold(
+    return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text('Broadcast'),
+        middle: Text(context.l10n.broadcastBroadcasts),
       ),
-      child: _Body(),
+      child: const _Body(),
     );
   }
 }

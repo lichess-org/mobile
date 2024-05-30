@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
 class DescriptionScreen extends StatelessWidget {
@@ -22,7 +23,7 @@ class DescriptionScreen extends StatelessWidget {
   ) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Broadcast'),
+        title: Text(context.l10n.broadcastBroadcasts),
       ),
       body: _Body(broadcast: broadcast),
     );
@@ -32,8 +33,8 @@ class DescriptionScreen extends StatelessWidget {
     BuildContext context,
   ) {
     return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(
-        middle: Text('Broadcast'),
+      navigationBar: CupertinoNavigationBar(
+        middle: Text(context.l10n.broadcastBroadcasts),
       ),
       child: _Body(
         broadcast: broadcast,
@@ -63,7 +64,7 @@ class _Body extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           Text(
-            'Starts at: ${broadcast.rounds.first.startsAt}',
+            '${context.l10n.broadcastStartDate}: ${broadcast.rounds.first.startsAt}',
             style: Styles.subtitle,
           ),
         ],

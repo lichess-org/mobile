@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/grid_board.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -30,7 +31,7 @@ class BroadcastScreen extends ConsumerWidget {
   ) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Broadcast'),
+        title: Text(context.l10n.broadcastBroadcasts),
       ),
       body: _Body(roundId),
     );
@@ -40,8 +41,8 @@ class BroadcastScreen extends ConsumerWidget {
     BuildContext context,
   ) {
     return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(
-        middle: Text('Broadcast'),
+      navigationBar: CupertinoNavigationBar(
+        middle: Text(context.l10n.broadcastBroadcasts),
       ),
       child: _Body(roundId),
     );
