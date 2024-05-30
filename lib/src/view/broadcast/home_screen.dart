@@ -11,11 +11,11 @@ import 'package:lichess_mobile/src/view/broadcast/broadcast_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/description_screen.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
-class HomeScreen extends ConsumerWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return PlatformWidget(
       androidBuilder: _androidBuilder,
       iosBuilder: _iosBuilder,
@@ -54,12 +54,12 @@ class _Body extends ConsumerWidget {
 
     return broadcasts.when(
       data: (broadcasts) {
-        return Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: SingleChildScrollView(
+        return SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
             child: LayoutGrid(
-              rowGap: 10,
-              columnGap: 10,
+              rowGap: 8,
+              columnGap: 8,
               columnSizes: [1.fr, 1.fr],
               rowSizes: List.generate(broadcasts.length ~/ 2, (index) => auto),
               children: broadcasts
