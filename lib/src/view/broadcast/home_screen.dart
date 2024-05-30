@@ -104,20 +104,52 @@ class BroadcastPicture extends StatelessWidget {
               spreadRadius: 1,
             ),
           ],
-          border: Border.all(color: LichessColors.grey),
+          border: (broadcast.status == BroadcastStatus.live)
+              ? Border.all(color: LichessColors.red, width: 2)
+              : Border.all(color: LichessColors.grey),
           borderRadius: BorderRadius.circular(20),
         ),
-        child: Column(
-          children: [
-            if (broadcast.tour.imageUrl != null)
-              Image.network(broadcast.tour.imageUrl!)
-            else
-              const DefaultBroadcastImage(),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Text(broadcast.tour.name),
-            ),
-          ],
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: Column(
+            children: [
+              if (broadcast.tour.imageUrl != null)
+                Image.network(broadcast.tour.imageUrl!)
+              else
+                const DefaultBroadcastImage(),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Flexible(
+                      child: Text(
+                        broadcast.tour.name,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    if (broadcast.status == BroadcastStatus.live) ...[
+                      const SizedBox(width: 5),
+                      const Column(
+                        children: [
+                          Icon(Icons.circle, color: Colors.red, size: 15),
+                          SizedBox(height: 5),
+                          Text(
+                            'LIVE',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
