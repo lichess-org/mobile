@@ -132,6 +132,7 @@ class BroadcastPicture extends StatelessWidget {
                     if (broadcast.status == BroadcastStatus.live) ...[
                       const SizedBox(width: 5),
                       const Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(Icons.circle, color: Colors.red, size: 15),
                           SizedBox(height: 5),

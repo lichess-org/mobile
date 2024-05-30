@@ -52,6 +52,7 @@ class BroadcastTile extends StatelessWidget {
       ),
       trailing: (broadcast.rounds.any((r) => r.status == RoundStatus.live))
           ? const Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(Icons.circle, color: Colors.red, size: 20),
                 SizedBox(height: 5),
