@@ -18,6 +18,7 @@ import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
+import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/correspondence/offline_correspondence_game_screen.dart';
 import 'package:lichess_mobile/src/view/game/lobby_screen.dart';
 import 'package:lichess_mobile/src/view/game/standalone_game_screen.dart';
@@ -405,21 +406,29 @@ class _HelloWidget extends ConsumerWidget {
           Styles.horizontalBodyPadding.add(Styles.sectionBottomPadding).add(
                 const EdgeInsets.only(top: 8.0),
               ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            Icons.wb_sunny,
-            size: iconSize,
-            color: context.lichessColors.brag,
-          ),
-          const SizedBox(width: 5.0),
-          Text(
-            'Hello${user != null ? ', ' : ''}',
-            style: style,
-          ),
-          if (user != null) UserFullNameWidget(user: user, style: style),
-        ],
+      child: GestureDetector(
+        onTap: () {
+          pushPlatformRoute(
+            context,
+            builder: (context) => const ProfileScreen(),
+          );
+        },
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.wb_sunny,
+              size: iconSize,
+              color: context.lichessColors.brag,
+            ),
+            const SizedBox(width: 5.0),
+            Text(
+              'Hello${user != null ? ', ' : ''}',
+              style: style,
+            ),
+            if (user != null) UserFullNameWidget(user: user, style: style),
+          ],
+        ),
       ),
     );
   }
