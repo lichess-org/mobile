@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -49,8 +50,11 @@ class _Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currentLocale = Intl.getCurrentLocale();
+    final dateFormatter = DateFormat.yMMMd(currentLocale).add_jm();
+
     return Padding(
-      padding: const EdgeInsets.all(10.0),
+      padding: Styles.bodySectionPadding,
       child: Column(
         children: [
           Text(
@@ -64,7 +68,7 @@ class _Body extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           Text(
-            '${context.l10n.broadcastStartDate}: ${broadcast.rounds.first.startsAt}',
+            '${context.l10n.broadcastStartDate}: ${dateFormatter.format(broadcast.rounds.first.startsAt)}',
             style: Styles.subtitle,
           ),
         ],
