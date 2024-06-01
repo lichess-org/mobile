@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
+import 'package:lichess_mobile/src/styles/transparent_image.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_screen.dart';
@@ -116,7 +117,13 @@ class BroadcastPicture extends StatelessWidget {
         child: Column(
           children: [
             if (broadcast.tour.imageUrl != null)
-              Image.network(broadcast.tour.imageUrl!)
+              AspectRatio(
+                aspectRatio: 2,
+                child: FadeInImage.memoryNetwork(
+                  placeholder: transparentImage,
+                  image: broadcast.tour.imageUrl!,
+                ),
+              )
             else
               const DefaultBroadcastImage(),
             Expanded(
@@ -161,34 +168,37 @@ class BroadcastPicture extends StatelessWidget {
 }
 
 class DefaultBroadcastImage extends StatelessWidget {
-  final double? height;
+  final double? width;
 
   const DefaultBroadcastImage({
     super.key,
-    this.height,
+    this.width,
   });
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: 2,
-      child: Container(
-        height: height,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              LichessColors.primary.withOpacity(0.7),
-              LichessColors.brag.withOpacity(0.7),
-            ],
+    return SizedBox(
+      width: width,
+      child: AspectRatio(
+        aspectRatio: 2,
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                LichessColors.primary.withOpacity(0.7),
+                LichessColors.brag.withOpacity(0.7),
+              ],
+            ),
           ),
-        ),
-        child: LayoutBuilder(
-          builder: (context, constraints) => Icon(
-            Icons.image_not_supported, // should be replaced with a Lichess icon
-            color: Colors.white.withOpacity(0.7),
-            size: constraints.maxWidth / 4,
+          child: LayoutBuilder(
+            builder: (context, constraints) => Icon(
+              Icons
+                  .image_not_supported, // should be replaced with a Lichess icon
+              color: Colors.white.withOpacity(0.7),
+              size: constraints.maxWidth / 4,
+            ),
           ),
         ),
       ),

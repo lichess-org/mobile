@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
+import 'package:lichess_mobile/src/styles/transparent_image.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/description_screen.dart';
@@ -17,13 +18,13 @@ class BroadcastTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return PlatformListTile(
       leading: (broadcast.tour.imageUrl != null)
-          ? Image.network(
-              broadcast.tour.imageUrl!,
+          ? FadeInImage.memoryNetwork(
+              placeholder: transparentImage,
+              image: broadcast.tour.imageUrl!,
               width: 60,
-            )
-          : const DefaultBroadcastImage(
               height: 30,
-            ),
+            )
+          : const DefaultBroadcastImage(width: 60),
       onTap: () {
         pushPlatformRoute(
           context,

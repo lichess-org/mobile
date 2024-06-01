@@ -81,7 +81,7 @@ class BroadcastPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const numberLoadingBoardThumbnails = 16;
+    const numberLoadingBoardThumbnails = 6;
     final fakeHeaderAndFooter = Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: Container(
