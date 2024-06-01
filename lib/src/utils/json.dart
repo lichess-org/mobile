@@ -51,6 +51,29 @@ extension TimeExtension on Pick {
     }
   }
 
+  /// Matches a Duration from centiseconds
+  Duration asDurationFromCentiSecondsOrThrow() {
+    final value = required().value;
+    if (value is Duration) {
+      return value;
+    }
+    if (value is int) {
+      return Duration(milliseconds: value * 10);
+    }
+    throw PickException(
+      "value $value at $debugParsingExit can't be casted to Duration",
+    );
+  }
+
+  Duration? asDurationFromCentiSecondsOrNull() {
+    if (value == null) return null;
+    try {
+      return asDurationFromCentiSecondsOrThrow();
+    } catch (_) {
+      return null;
+    }
+  }
+
   /// Matches a Duration from milliseconds
   Duration asDurationFromMilliSecondsOrThrow() {
     final value = required().value;

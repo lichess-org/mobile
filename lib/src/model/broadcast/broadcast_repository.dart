@@ -74,6 +74,7 @@ BroadcastGameSnapshot _gameFromPick(RequiredPick pick) {
     players: pick('players').asListOrThrow(_playerFromPick).toIList(),
     fen: pick('fen').asStringOrNull() ?? Variant.standard.initialPosition.fen,
     lastMove: pick('lastMove').asUciMoveOrNull(),
+    status: pick('status').asStringOrThrow(),
   );
 }
 
@@ -82,5 +83,6 @@ BroadcastPlayer _playerFromPick(RequiredPick pick) {
     name: pick('name').asStringOrThrow(),
     title: pick('title').asStringOrNull(),
     rating: pick('rating').asIntOrNull(),
+    clock: pick('clock').asDurationFromCentiSecondsOrNull(),
   );
 }

@@ -1,8 +1,6 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/user/user.dart';
 
 part 'broadcast.freezed.dart';
 
@@ -64,24 +62,18 @@ class BroadcastGameSnapshot with _$BroadcastGameSnapshot {
     required IList<BroadcastPlayer> players,
     required String fen,
     required Move? lastMove,
+    required String status,
   }) = _BroadcastGameSnapshot;
 }
 
 @freezed
 class BroadcastPlayer with _$BroadcastPlayer {
-  const BroadcastPlayer._();
-
   const factory BroadcastPlayer({
     required String name,
     required String? title,
     required int? rating,
+    required Duration? clock,
   }) = _BroadcastPlayer;
-
-  LightUser get user => LightUser(
-        id: UserId.fromUserName(name),
-        name: name,
-        title: title,
-      );
 }
 
 enum BroadcastStatus {

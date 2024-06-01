@@ -1,17 +1,19 @@
 import 'package:chessground/chessground.dart';
+import 'package:dartchess/dartchess.dart' as dartchess;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
+import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/grid_board.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
-import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 class BroadcastScreen extends ConsumerWidget {
   final String roundId;
@@ -93,44 +95,113 @@ class BroadcastPreview extends StatelessWidget {
     );
 
     return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: GridBoard(
-          rowGap: 5,
-          builder: (crossAxisCount, boardWidth) => (games == null)
-              ? List.generate(
-                  numberLoadingBoardThumbnails,
-                  (index) => BoardThumbnail.loading(
+      padding: const EdgeInsets.all(10.0),
+      child: GridBoard(
+        rowGap: 5,
+        builder: (crossAxisCount, boardWidth) => (games == null)
+            ? List.generate(
+                numberLoadingBoardThumbnails,
+                (index) => BoardThumbnail.loading(
+                  size: boardWidth,
+                  header: fakeHeaderAndFooter,
+                  footer: fakeHeaderAndFooter,
+                ),
+              )
+            : games!.map(
+                (game) {
+                  final playingSide =
+                      dartchess.Setup.parseFen(game.fen).turn.cg;
+
+                  return BoardThumbnail(
+                    orientation: Side.white,
+                    fen: game.fen,
+                    lastMove: game.lastMove?.cg,
                     size: boardWidth,
-                    header: fakeHeaderAndFooter,
-                    footer: fakeHeaderAndFooter,
-                  ),
-                )
-              : games!
-                  .map(
-                    (game) => BoardThumbnail(
-                      orientation: Side.white,
-                      fen: game.fen,
-                      lastMove: game.lastMove?.cg,
-                      size: boardWidth,
-                      header: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 5),
-                        child: UserFullNameWidget(
-                          user: game.players[0].user,
-                          rating: game.players[0].rating,
-                        ),
-                      ),
-                      footer: Padding(
-                        padding: const EdgeInsets.only(top: 5),
-                        child: UserFullNameWidget(
-                          user: game.players[1].user,
-                          rating: game.players[1].rating,
-                        ),
-                      ),
+                    header: PlayerWidget(
+                      player: game.players[1],
+                      gameStatus: game.status,
+                      side: Side.black,
+                      playingSide: playingSide,
                     ),
-                  )
-                  .toList(),
-        ),
+                    footer: PlayerWidget(
+                      player: game.players[0],
+                      gameStatus: game.status,
+                      side: Side.white,
+                      playingSide: playingSide,
+                    ),
+                  );
+                },
+              ).toList(),
+      ),
+    );
+  }
+}
+
+class PlayerWidget extends StatelessWidget {
+  final BroadcastPlayer player;
+  final String gameStatus;
+  final Side side;
+  final Side playingSide;
+
+  const PlayerWidget({
+    super.key,
+    required this.player,
+    required this.gameStatus,
+    required this.side,
+    required this.playingSide,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Flexible(
+            child: Row(
+              children: [
+                if (player.title != null) ...[
+                  Text(
+                    player.title!,
+                    style: const TextStyle().copyWith(
+                      color: context.lichessColors.brag,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(width: 5),
+                ],
+                Flexible(
+                  child: Text(
+                    player.name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          if (gameStatus != '*')
+            Text(
+              (gameStatus == '½-½')
+                  ? '½'
+                  : (gameStatus == '1-0')
+                      ? side == Side.white
+                          ? '1'
+                          : '0'
+                      : side == Side.black
+                          ? '1'
+                          : '0',
+              style: const TextStyle().copyWith(fontWeight: FontWeight.bold),
+            )
+          else if (player.clock != null)
+            Text(
+              player.clock!.toHoursMinutesSeconds(),
+              style: side == playingSide
+                  ? const TextStyle().copyWith(color: Colors.orange[900])
+                  : null,
+            ),
+        ],
       ),
     );
   }
