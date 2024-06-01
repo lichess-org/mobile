@@ -15,7 +15,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_tile.dart';
-import 'package:lichess_mobile/src/view/broadcast/home_screen.dart';
+import 'package:lichess_mobile/src/view/broadcast/tournament_screen.dart';
 import 'package:lichess_mobile/src/view/watch/live_tv_channels_screen.dart';
 import 'package:lichess_mobile/src/view/watch/streamer_screen.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
@@ -211,7 +211,7 @@ class _BroadcastWidget extends ConsumerWidget {
             onPressed: () {
               pushPlatformRoute(
                 context,
-                builder: (context) => const HomeScreen(),
+                builder: (context) => const TournamentScreen(),
               );
             },
             child: Text(
@@ -219,7 +219,9 @@ class _BroadcastWidget extends ConsumerWidget {
             ),
           ),
           children: [
-            ...data.take(numberOfItems).map((e) => BroadcastTile(broadcast: e)),
+            ...data
+                .take(numberOfItems)
+                .map((broadcast) => BroadcastTile(broadcast: broadcast)),
           ],
         );
       },

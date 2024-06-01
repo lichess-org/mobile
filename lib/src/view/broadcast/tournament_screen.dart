@@ -8,12 +8,12 @@ import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/transparent_image.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/view/broadcast/broadcast_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/description_screen.dart';
+import 'package:lichess_mobile/src/view/broadcast/game_screen.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class TournamentScreen extends StatelessWidget {
+  const TournamentScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +90,7 @@ class BroadcastPicture extends StatelessWidget {
         pushPlatformRoute(
           context,
           builder: (context) => (broadcast.curentRound != null)
-              ? BroadcastScreen(
+              ? GameScreen(
                   roundId: broadcast.curentRound!.id,
                 )
               : DescriptionScreen(broadcast: broadcast),

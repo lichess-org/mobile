@@ -15,10 +15,10 @@ import 'package:lichess_mobile/src/widgets/grid_board.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
-class BroadcastScreen extends ConsumerWidget {
+class GameScreen extends ConsumerWidget {
   final String roundId;
 
-  const BroadcastScreen({super.key, required this.roundId});
+  const GameScreen({super.key, required this.roundId});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
