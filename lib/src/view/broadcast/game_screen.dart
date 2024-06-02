@@ -163,10 +163,12 @@ class PlayerWidget extends StatelessWidget {
           Flexible(
             child: Row(
               children: [
-                SvgPicture.network(
-                  lichessFideFedSrc(player.fed),
-                  height: 12,
-                ),
+                if (player.fed != null) ...[
+                  SvgPicture.network(
+                    lichessFideFedSrc(player.fed!),
+                    height: 12,
+                  ),
+                ],
                 const SizedBox(width: 5),
                 if (player.title != null) ...[
                   Text(

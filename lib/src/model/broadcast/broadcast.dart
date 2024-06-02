@@ -73,7 +73,7 @@ class BroadcastPlayer with _$BroadcastPlayer {
     required String? title,
     required int? rating,
     required Duration? clock,
-    required String fed,
+    required String? fed,
   }) = _BroadcastPlayer;
 }
 
