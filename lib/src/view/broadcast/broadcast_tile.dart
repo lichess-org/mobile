@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/styles/transparent_image.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/broadcast/default_broadcast_image.dart';
 import 'package:lichess_mobile/src/view/broadcast/description_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/game_screen.dart';
-import 'package:lichess_mobile/src/view/broadcast/tournament_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 
 class BroadcastTile extends StatelessWidget {

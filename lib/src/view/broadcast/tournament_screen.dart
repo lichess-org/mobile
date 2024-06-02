@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/transparent_image.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/broadcast/default_broadcast_image.dart';
 import 'package:lichess_mobile/src/view/broadcast/description_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/game_screen.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -161,45 +162,6 @@ class BroadcastPicture extends StatelessWidget {
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class DefaultBroadcastImage extends StatelessWidget {
-  final double? width;
-
-  const DefaultBroadcastImage({
-    super.key,
-    this.width,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: width,
-      child: AspectRatio(
-        aspectRatio: 2,
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                LichessColors.primary.withOpacity(0.7),
-                LichessColors.brag.withOpacity(0.7),
-              ],
-            ),
-          ),
-          child: LayoutBuilder(
-            builder: (context, constraints) => Icon(
-              Icons
-                  .image_not_supported, // should be replaced with a Lichess icon
-              color: Colors.white.withOpacity(0.7),
-              size: constraints.maxWidth / 4,
-            ),
-          ),
         ),
       ),
     );
