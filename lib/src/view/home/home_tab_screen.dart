@@ -52,7 +52,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen(connectivityProvider, (_, connectivity) {
+    ref.listen(connectivityChangesProvider, (_, connectivity) {
       // Refresh the data only once if it was offline and is now online
       if (!connectivity.isRefreshing && connectivity.hasValue) {
         final isNowOnline = connectivity.value!.isOnline;
@@ -214,7 +214,7 @@ class _HomeBody extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isOnlineAsync = ref.watch(connectivityProvider);
+    final isOnlineAsync = ref.watch(connectivityChangesProvider);
     return isOnlineAsync.when(
       data: (status) {
         final session = ref.watch(authSessionProvider);
@@ -790,7 +790,7 @@ class _PlayerScreenButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final connectivity = ref.watch(connectivityProvider);
+    final connectivity = ref.watch(connectivityChangesProvider);
 
     return connectivity.maybeWhen(
       data: (connectivity) => AppBarIconButton(

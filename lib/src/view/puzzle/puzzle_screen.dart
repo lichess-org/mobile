@@ -609,7 +609,7 @@ class _DifficultySelector extends ConsumerWidget {
           .select((state) => state.difficulty),
     );
     final state = ref.watch(ctrlProvider);
-    final connectivity = ref.watch(connectivityProvider);
+    final connectivity = ref.watch(connectivityChangesProvider);
     return connectivity.when(
       data: (data) => StatefulBuilder(
         builder: (BuildContext context, StateSetter setState) {

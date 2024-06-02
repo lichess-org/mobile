@@ -1,4 +1,3 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
@@ -30,6 +29,7 @@ import './model/auth/fake_session_storage.dart';
 import './model/common/service/fake_sound_service.dart';
 import 'fake_notification_service.dart';
 import 'model/common/fake_websocket_channel.dart';
+import 'utils/fake_connectivity_changes.dart';
 
 class MockSoundPool extends Mock implements Soundpool {}
 
@@ -85,13 +85,8 @@ Future<ProviderContainer> makeContainer({
       lichessClientProvider.overrideWith((ref) {
         return LichessClient(MockHttpClient(), ref);
       }),
-      connectivityProvider.overrideWith((ref) {
-        return Stream.value(
-          const ConnectivityStatus(
-            connectivityResult: IListConst([ConnectivityResult.wifi]),
-            isOnline: true,
-          ),
-        );
+      connectivityChangesProvider.overrideWith(() {
+        return FakeConnectivityChanges();
       }),
       defaultClientProvider.overrideWithValue(MockHttpClient()),
       crashlyticsProvider.overrideWithValue(FakeCrashlytics()),

@@ -139,8 +139,11 @@ class BottomNavScaffold extends ConsumerWidget {
           ),
           bottomNavigationBar: Consumer(
             builder: (context, ref, _) {
-              final isOnline =
-                  ref.watch(connectivityProvider).valueOrNull?.isOnline ?? true;
+              final isOnline = ref
+                      .watch(connectivityChangesProvider)
+                      .valueOrNull
+                      ?.isOnline ??
+                  true;
               return NavigationBar(
                 selectedIndex: currentTab.index,
                 destinations: [
@@ -158,7 +161,8 @@ class BottomNavScaffold extends ConsumerWidget {
         );
       case TargetPlatform.iOS:
         final isOnline =
-            ref.watch(connectivityProvider).valueOrNull?.isOnline ?? true;
+            ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ??
+                true;
         return CupertinoTabScaffold(
           tabBuilder: _iOSTabBuilder,
           controller: _cupertinoTabController,

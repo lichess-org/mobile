@@ -136,7 +136,7 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final connectivity = ref.watch(connectivityProvider);
+    final connectivity = ref.watch(connectivityChangesProvider);
 
     final isTablet = isTabletOrLarger(context);
 

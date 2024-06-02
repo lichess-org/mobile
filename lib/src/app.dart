@@ -71,7 +71,7 @@ class _AppState extends ConsumerState<Application> {
       setOptimalDisplayMode();
     }
 
-    ref.listenManual(connectivityProvider, (prev, current) async {
+    ref.listenManual(connectivityChangesProvider, (prev, current) async {
       // Play registered moves whenever the app comes back online.
       if (prev?.hasValue == true &&
           !prev!.value!.isOnline &&

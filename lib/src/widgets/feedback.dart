@@ -11,7 +11,7 @@ class ConnectivityBanner extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final connectivity = ref.watch(connectivityProvider);
+    final connectivity = ref.watch(connectivityChangesProvider);
     final cupertinoTheme = CupertinoTheme.of(context);
     final theme = Theme.of(context);
     return connectivity.when(

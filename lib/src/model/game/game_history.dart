@@ -31,10 +31,12 @@ const _nbPerPage = 20;
 /// If the user is not logged in, or there is no connectivity, the recent games
 /// stored locally are fetched instead.
 @riverpod
-Future<IList<LightArchivedGameWithPov>> myRecentGames(MyRecentGamesRef ref) {
-  final connectivity = ref.watch(connectivityProvider);
+Future<IList<LightArchivedGameWithPov>> myRecentGames(
+  MyRecentGamesRef ref,
+) async {
+  final online = await ref
+      .watch(connectivityChangesProvider.selectAsync((c) => c.isOnline));
   final session = ref.watch(authSessionProvider);
-  final online = connectivity.valueOrNull?.isOnline ?? false;
   if (session != null && online) {
     return ref.withClientCacheFor(
       (client) => GameRepository(client)

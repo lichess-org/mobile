@@ -21,7 +21,7 @@ part 'opening_screen.g.dart';
 Future<(bool, IMap<String, int>, IList<PuzzleOpeningFamily>?)> _openings(
   _OpeningsRef ref,
 ) async {
-  final connectivity = await ref.watch(connectivityProvider.future);
+  final connectivity = await ref.watch(connectivityChangesProvider.future);
   final savedOpenings = await ref.watch(savedOpeningBatchesProvider.future);
   IList<PuzzleOpeningFamily>? onlineOpenings;
   try {

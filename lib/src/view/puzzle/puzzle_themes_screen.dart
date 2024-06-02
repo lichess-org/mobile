@@ -28,7 +28,7 @@ Future<
     )> _themes(
   _ThemesRef ref,
 ) async {
-  final connectivity = await ref.watch(connectivityProvider.future);
+  final connectivity = await ref.watch(connectivityChangesProvider.future);
   final savedThemes = await ref.watch(savedThemeBatchesProvider.future);
   IMap<PuzzleThemeKey, PuzzleThemeData>? onlineThemes;
   try {
