@@ -4,12 +4,14 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/grid_board.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -161,6 +163,11 @@ class PlayerWidget extends StatelessWidget {
           Flexible(
             child: Row(
               children: [
+                SvgPicture.network(
+                  lichessFideFedSrc(player.fed),
+                  height: 12,
+                ),
+                const SizedBox(width: 5),
                 if (player.title != null) ...[
                   Text(
                     player.title!,
@@ -181,6 +188,7 @@ class PlayerWidget extends StatelessWidget {
               ],
             ),
           ),
+          const SizedBox(width: 5),
           if (gameStatus != '*')
             Text(
               (gameStatus == '½-½')

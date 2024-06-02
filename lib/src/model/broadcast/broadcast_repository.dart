@@ -84,5 +84,6 @@ BroadcastPlayer _playerFromPick(RequiredPick pick) {
     title: pick('title').asStringOrNull(),
     rating: pick('rating').asIntOrNull(),
     clock: pick('clock').asDurationFromCentiSecondsOrNull(),
+    fed: pick('fed').asStringOrThrow(),
   );
 }
