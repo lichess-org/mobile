@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 
 class DefaultBroadcastImage extends StatelessWidget {
   final double? width;
@@ -28,15 +28,10 @@ class DefaultBroadcastImage extends StatelessWidget {
             ),
           ),
           child: LayoutBuilder(
-            builder: (context, constraints) => UnconstrainedBox(
-              child: SvgPicture.asset(
-                'assets/images/radio-tower.svg',
-                colorFilter: ColorFilter.mode(
-                  Theme.of(context).colorScheme.onSurfaceVariant,
-                  BlendMode.srcATop,
-                ),
-                width: constraints.maxWidth / 4,
-              ),
+            builder: (context, constraints) => Icon(
+              LichessIcons.radio_tower_lichess,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+              size: constraints.maxWidth / 4,
             ),
           ),
         ),
