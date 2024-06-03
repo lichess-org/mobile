@@ -291,17 +291,12 @@ class SocketClient {
 
   /// Closes the WebSocket connection and disposes the client.
   ///
-  /// This should be called only when the client is no longer needed.
-  /// This method is private because it should not be called directly by the
-  /// class user, rather by the [SocketPool] managing the clients.
   /// The [SocketPool] will call this method when the client is no longer needed.
-  /// Widgets and riverpod controllers should only subscribe and unsubscribe to
-  /// the client [stream].
   void _dispose() {
-    _disconnect();
     _streamController.close();
     _averageLag.dispose();
     isDisposed = true;
+    _disconnect();
   }
 
   /// Closes the WebSocket connection when temporarily not needed (by default

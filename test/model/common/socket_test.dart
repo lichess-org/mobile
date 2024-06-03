@@ -39,58 +39,6 @@ SocketClient _makeSocketClient(FakeWebSocketChannelFactory fakeChannelFactory) {
 
 void main() {
   group('SocketClient', () {
-    test('computes average lag', () async {
-      final fakeChannel = FakeWebSocketChannel();
-
-      final socketClient =
-          _makeSocketClient(FakeWebSocketChannelFactory(() => fakeChannel));
-      socketClient.connect();
-
-      // before the connection is ready the average lag is zero
-      expect(socketClient.averageLag.value, Duration.zero);
-
-      await socketClient.firstConnection;
-
-      // after the connection is ready the average lag is still zero since
-      // there was no ping/pong exchange yet
-      expect(socketClient.averageLag.value, Duration.zero);
-
-      // at this time the first ping is sent, wait for the pong
-      await expectLater(fakeChannel.stream, emits('0'));
-
-      // after the ping/pong exchange the average lag is computed
-      expect(
-        socketClient.averageLag.value.inMilliseconds,
-        greaterThanOrEqualTo(10),
-      );
-
-      // wait for more ping/pong exchanges
-      await expectLater(fakeChannel.stream, emitsInOrder(['0', '0', '0', '0']));
-
-      // average lag is still the same
-      expect(
-        socketClient.averageLag.value.inMilliseconds,
-        greaterThanOrEqualTo(10),
-      );
-
-      // increase the lag of the connection
-      fakeChannel.connectionLag = const Duration(milliseconds: 100);
-
-      // wait for more ping/pong exchanges
-      await expectLater(fakeChannel.stream, emitsInOrder(['0', '0', '0', '0']));
-
-      // average lag should be higher
-      expect(
-        socketClient.averageLag.value.inMilliseconds,
-        greaterThanOrEqualTo(40),
-      );
-
-      await socketClient.close();
-
-      // after disconnecting the average lag is zero again
-      expect(socketClient.averageLag.value, Duration.zero);
-    });
-
     test('handles ping/pong', () async {
       final fakeChannel = FakeWebSocketChannel();
 
@@ -180,6 +128,58 @@ void main() {
       expect(channels[2]!.closeCode, isNull);
 
       socketClient.close();
+    });
+
+    test('computes average lag', () async {
+      final fakeChannel = FakeWebSocketChannel();
+
+      final socketClient =
+          _makeSocketClient(FakeWebSocketChannelFactory(() => fakeChannel));
+      socketClient.connect();
+
+      // before the connection is ready the average lag is zero
+      expect(socketClient.averageLag.value, Duration.zero);
+
+      await socketClient.firstConnection;
+
+      // after the connection is ready the average lag is still zero since
+      // there was no ping/pong exchange yet
+      expect(socketClient.averageLag.value, Duration.zero);
+
+      // at this time the first ping is sent, wait for the pong
+      await expectLater(fakeChannel.stream, emits('0'));
+
+      // after the ping/pong exchange the average lag is computed
+      expect(
+        socketClient.averageLag.value.inMilliseconds,
+        greaterThanOrEqualTo(10),
+      );
+
+      // wait for more ping/pong exchanges
+      await expectLater(fakeChannel.stream, emitsInOrder(['0', '0', '0', '0']));
+
+      // average lag is still the same
+      expect(
+        socketClient.averageLag.value.inMilliseconds,
+        greaterThanOrEqualTo(10),
+      );
+
+      // increase the lag of the connection
+      fakeChannel.connectionLag = const Duration(milliseconds: 100);
+
+      // wait for more ping/pong exchanges
+      await expectLater(fakeChannel.stream, emitsInOrder(['0', '0', '0', '0']));
+
+      // average lag should be higher
+      expect(
+        socketClient.averageLag.value.inMilliseconds,
+        greaterThanOrEqualTo(40),
+      );
+
+      await socketClient.close();
+
+      // after disconnecting the average lag is zero again
+      expect(socketClient.averageLag.value, Duration.zero);
     });
 
     test('handles ackable messages', () async {
