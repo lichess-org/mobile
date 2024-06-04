@@ -7,7 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:intl/intl.dart';
-import 'package:lichess_mobile/src/app_dependencies.dart';
+import 'package:lichess_mobile/src/app_initialization.dart';
 import 'package:lichess_mobile/src/crashlytics.dart';
 import 'package:lichess_mobile/src/db/shared_preferences.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
@@ -94,8 +94,8 @@ Future<ProviderContainer> makeContainer({
       soundServiceProvider.overrideWithValue(FakeSoundService()),
       sharedPreferencesProvider.overrideWithValue(sharedPreferences),
       sessionStorageProvider.overrideWithValue(FakeSessionStorage()),
-      appDependenciesProvider.overrideWith((ref) {
-        return AppDependencies(
+      appInitializationProvider.overrideWith((ref) {
+        return AppInitializationData(
           packageInfo: PackageInfo(
             appName: 'lichess_mobile_test',
             version: 'test',

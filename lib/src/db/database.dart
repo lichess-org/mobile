@@ -1,4 +1,4 @@
-import 'package:lichess_mobile/src/app_dependencies.dart';
+import 'package:lichess_mobile/src/app_initialization.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -15,9 +15,9 @@ const kStorageAnonId = '**anonymous**';
 
 @Riverpod(keepAlive: true)
 Database database(DatabaseRef ref) {
-  // requireValue is possible because appDependenciesProvider is loaded before
+  // requireValue is possible because appInitializationProvider is loaded before
   // anything. See: lib/src/app.dart
-  final db = ref.read(appDependenciesProvider).requireValue.database;
+  final db = ref.read(appInitializationProvider).requireValue.database;
   ref.onDispose(db.close);
   return db;
 }

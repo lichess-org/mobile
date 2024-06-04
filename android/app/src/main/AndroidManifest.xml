@@ -14,7 +14,8 @@
         android:label="Lichess"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
-        android:roundIcon="@mipmap/ic_launcher_round">
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:fullBackupContent="@xml/backup_rules">
 
     <meta-data
       android:name="com.google.firebase.messaging.default_notification_icon"

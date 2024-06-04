@@ -9,7 +9,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/main.dart';
-import 'package:lichess_mobile/src/app_dependencies.dart';
+import 'package:lichess_mobile/src/app_initialization.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -31,8 +31,8 @@ class LoadingAppScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen<AsyncValue<AppDependencies>>(
-      appDependenciesProvider,
+    ref.listen<AsyncValue<AppInitializationData>>(
+      appInitializationProvider,
       (_, state) {
         if (state.hasValue) {
           FlutterNativeSplash.remove();
@@ -40,18 +40,17 @@ class LoadingAppScreen extends ConsumerWidget {
       },
     );
 
-    final appDependencies = ref.watch(appDependenciesProvider);
-    return appDependencies.when(
-      data: (_) => const Application(),
-      // loading screen is handled by the native splash screen
-      loading: () => const SizedBox.shrink(),
-      error: (err, st) {
-        debugPrint(
-          'SEVERE: [App] could not load app dependencies; $err\n$st',
+    return ref.watch(appInitializationProvider).when(
+          data: (_) => const Application(),
+          // loading screen is handled by the native splash screen
+          loading: () => const SizedBox.shrink(),
+          error: (err, st) {
+            debugPrint(
+              'SEVERE: [App] could not initialize app; $err\n$st',
+            );
+            return const SizedBox.shrink();
+          },
         );
-        return const SizedBox.shrink();
-      },
-    );
   }
 }
 

@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
-import 'package:lichess_mobile/src/app_dependencies.dart';
+import 'package:lichess_mobile/src/app_initialization.dart';
 import 'package:lichess_mobile/src/crashlytics.dart';
 import 'package:lichess_mobile/src/db/shared_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
@@ -121,8 +121,8 @@ Future<Widget> buildTestApp(
       // ignore: scoped_providers_should_specify_dependencies
       gameStorageProvider.overrideWithValue(MockGameStorage()),
       // ignore: scoped_providers_should_specify_dependencies
-      appDependenciesProvider.overrideWith((ref) {
-        return AppDependencies(
+      appInitializationProvider.overrideWith((ref) {
+        return AppInitializationData(
           packageInfo: PackageInfo(
             appName: 'lichess_mobile_test',
             version: 'test',

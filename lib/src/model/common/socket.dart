@@ -7,7 +7,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/app_dependencies.dart';
+import 'package:lichess_mobile/src/app_initialization.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
@@ -594,9 +594,9 @@ SocketPool socketPool(SocketPoolRef ref) {
 /// Socket Random Identifier.
 @Riverpod(keepAlive: true)
 String sri(SriRef ref) {
-  // requireValue is possible because appDependenciesProvider is loaded before
+  // requireValue is possible because appInitializationProvider is loaded before
   // anything. See: lib/src/app.dart
-  return ref.read(appDependenciesProvider).requireValue.sri;
+  return ref.read(appInitializationProvider).requireValue.sri;
 }
 
 /// Average lag computed from WebSocket ping/pong protocol.
