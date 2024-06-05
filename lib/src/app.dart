@@ -21,6 +21,7 @@ import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/notification_service.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/android.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
@@ -34,7 +35,7 @@ class LoadingAppScreen extends ConsumerWidget {
     ref.listen<AsyncValue<AppInitializationData>>(
       appInitializationProvider,
       (_, state) {
-        if (state.hasValue) {
+        if (state.hasValue || state.hasError) {
           FlutterNativeSplash.remove();
         }
       },
@@ -48,7 +49,37 @@ class LoadingAppScreen extends ConsumerWidget {
             debugPrint(
               'SEVERE: [App] could not initialize app; $err\n$st',
             );
-            return const SizedBox.shrink();
+            // We should really do everything we can to avoid this screen
+            // but in last resort, let's show an error message and invite the
+            // user to clear app data.
+            // TODO implement it on iOS
+            return Theme.of(context).platform == TargetPlatform.android
+                ? MaterialApp(
+                    home: Scaffold(
+                      body: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.all(16.0),
+                            child: Text(
+                              "Something went wrong :'(\n\nIf the problem persists, you can try to clear the storage and restart the application.\n\nSorry for the inconvenience.",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 18.0),
+                            ),
+                          ),
+                          const SizedBox(height: 16.0),
+                          ElevatedButton(
+                            onPressed: () {
+                              AndroidStorage.instance.clearUserData();
+                            },
+                            child: const Text('Clear storage'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                : const SizedBox.shrink();
           },
         );
   }
