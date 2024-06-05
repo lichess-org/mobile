@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/db/secure_storage.dart';
@@ -26,14 +27,14 @@ import 'package:soundpool/soundpool.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:system_info_plus/system_info_plus.dart';
 
-part 'app_dependencies.freezed.dart';
-part 'app_dependencies.g.dart';
+part 'app_initialization.freezed.dart';
+part 'app_initialization.g.dart';
 
-final _logger = Logger('AppDependencies');
+final _logger = Logger('AppInitialization');
 
 @Riverpod(keepAlive: true)
-Future<AppDependencies> appDependencies(
-  AppDependenciesRef ref,
+Future<AppInitializationData> appInitialization(
+  AppInitializationRef ref,
 ) async {
   final secureStorage = ref.watch(secureStorageProvider);
   final sessionStorage = ref.watch(sessionStorageProvider);
@@ -75,11 +76,19 @@ Future<AppDependencies> appDependencies(
   }
 
   // Generate a socket random identifier and store it for the app lifetime
-  final storedSri = await secureStorage.read(key: kSRIStorageKey);
-  if (storedSri == null) {
-    final sri = genRandomString(12);
-    _logger.info('Generated new SRI: $sri');
-    await secureStorage.write(key: kSRIStorageKey, value: sri);
+  String? storedSri;
+  try {
+    storedSri = await secureStorage.read(key: kSRIStorageKey);
+    if (storedSri == null) {
+      final sri = genRandomString(12);
+      _logger.info('Generated new SRI: $sri');
+      await secureStorage.write(key: kSRIStorageKey, value: sri);
+    }
+  } on PlatformException catch (e) {
+    _logger.warning('[AppInitialization] Error while reading SRI: $e');
+    // Clear all secure storage if an error occurs because it probably means the key has
+    // been lost
+    await secureStorage.deleteAll();
   }
 
   final sri = storedSri ??
@@ -102,7 +111,9 @@ Future<AppDependencies> appDependencies(
         await sessionStorage.delete();
       }
     } catch (e) {
-      debugPrint('WARNING: [AppDependencies] Error while checking session: $e');
+      debugPrint(
+        'WARNING: [AppInitialization] Error while checking session: $e',
+      );
     } finally {
       client.close();
     }
@@ -111,7 +122,7 @@ Future<AppDependencies> appDependencies(
   final physicalMemory = await SystemInfoPlus.physicalMemory ?? 256.0;
   final engineMaxMemory = (physicalMemory / 10).ceil();
 
-  return AppDependencies(
+  return AppInitializationData(
     packageInfo: pInfo,
     deviceInfo: deviceInfo,
     sharedPreferences: prefs,
@@ -124,8 +135,8 @@ Future<AppDependencies> appDependencies(
 }
 
 @freezed
-class AppDependencies with _$AppDependencies {
-  const factory AppDependencies({
+class AppInitializationData with _$AppInitializationData {
+  const factory AppInitializationData({
     required PackageInfo packageInfo,
     required BaseDeviceInfo deviceInfo,
     required SharedPreferences sharedPreferences,
@@ -134,5 +145,5 @@ class AppDependencies with _$AppDependencies {
     required Database database,
     required String sri,
     required int engineMaxMemoryInMb,
-  }) = _AppDependencies;
+  }) = _AppInitializationData;
 }

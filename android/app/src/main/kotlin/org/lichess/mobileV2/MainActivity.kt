@@ -1,5 +1,7 @@
 package org.lichess.mobileV2
 
+import android.app.ActivityManager
+import android.content.Context
 import android.graphics.Rect
 import androidx.core.view.ViewCompat
 import androidx.annotation.NonNull
@@ -8,17 +10,28 @@ import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 
 class MainActivity: FlutterActivity() {
-  private val CHANNEL = "mobile.lichess.org/gestures_exclusion"
+  private val exclusionChannel = "mobile.lichess.org/gestures_exclusion"
+  private val storageChannel = "mobile.lichess.org/storage"
 
   override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
     super.configureFlutterEngine(flutterEngine)
-    MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL).setMethodCallHandler {
+    MethodChannel(flutterEngine.dartExecutor.binaryMessenger, exclusionChannel).setMethodCallHandler {
       call, result ->
       if (call.method == "setSystemGestureExclusionRects") {
         val arguments = call.arguments as List<Map<String, Int>>
         val decodedRects = decodeExclusionRects(arguments)
         ViewCompat.setSystemGestureExclusionRects(activity.window.decorView, decodedRects)
         result.success(null)
+      } else {
+        result.notImplemented()
+      }
+    }
+
+    MethodChannel(flutterEngine.dartExecutor.binaryMessenger, storageChannel).setMethodCallHandler {
+      call, result ->
+      if (call.method == "clearApplicationUserData") {
+        val activityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        result.success(activityManager.clearApplicationUserData())
       } else {
         result.notImplemented()
       }

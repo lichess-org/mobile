@@ -1,7 +1,7 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:lichess_mobile/src/app_dependencies.dart';
+import 'package:lichess_mobile/src/app_initialization.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/sound_theme.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -25,9 +25,9 @@ typedef SoundMap = IMap<Sound, int>;
 
 @Riverpod(keepAlive: true)
 SoundService soundService(SoundServiceRef ref) {
-  // requireValue is possible because appDependenciesProvider is loaded before
+  // requireValue is possible because appInitializationProvider is loaded before
   // anything. See: lib/src/app.dart
-  final deps = ref.read(appDependenciesProvider).requireValue;
+  final deps = ref.read(appInitializationProvider).requireValue;
   final (pool, sounds) = deps.soundPool;
   return SoundService(pool, sounds, ref);
 }
