@@ -59,7 +59,10 @@ class ClockController extends _$ClockController {
   void updateOptions(TimeIncrement timeIncrement) =>
       state = ClockState.fromTimeIncrement(timeIncrement);
 
-  void updateOptionsCustom(TimeIncrement playerTop, TimeIncrement playerBottom) =>
+  void updateOptionsCustom(
+    TimeIncrement playerTop,
+    TimeIncrement playerBottom,
+  ) =>
       state = ClockState.fromSeparateTimeIncrements(playerTop, playerBottom);
 
   void setLoser(ClockPlayerType playerType) =>
@@ -120,7 +123,9 @@ class ClockState with _$ClockState {
   }
 
   factory ClockState.fromSeparateTimeIncrements(
-      TimeIncrement playerTop, TimeIncrement playerBottom,) {
+    TimeIncrement playerTop,
+    TimeIncrement playerBottom,
+  ) {
     final options = ClockOptions(
       timePlayerTop: Duration(seconds: playerTop.time),
       timePlayerBottom: Duration(seconds: playerBottom.time),

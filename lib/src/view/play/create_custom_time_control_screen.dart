@@ -10,7 +10,8 @@ import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
 class CreateCustomTimeControlScreen extends StatelessWidget {
-  final void Function(TimeIncrement playerTop, TimeIncrement playerBottom) onSubmit;
+  final void Function(TimeIncrement playerTop, TimeIncrement playerBottom)
+      onSubmit;
   final TimeIncrement topPlayer;
   final TimeIncrement bottomPlayer;
 
@@ -31,20 +32,31 @@ class CreateCustomTimeControlScreen extends StatelessWidget {
   Widget _androidBuilder(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(context.l10n.custom)),
-      body: _Body(onSubmit: onSubmit, topPlayer: topPlayer, bottomPlayer: bottomPlayer),
+      body: _Body(
+        onSubmit: onSubmit,
+        topPlayer: topPlayer,
+        bottomPlayer: bottomPlayer,
+      ),
     );
   }
 
   Widget _iosBuilder(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: const CupertinoNavigationBar(),
-      child: _Body(onSubmit: onSubmit, topPlayer: topPlayer, bottomPlayer: bottomPlayer),
+      child: _Body(
+        onSubmit: onSubmit,
+        topPlayer: topPlayer,
+        bottomPlayer: bottomPlayer,
+      ),
     );
   }
 }
 
 class _Body extends StatefulWidget {
-  final void Function(TimeIncrement timeTopPlayer, TimeIncrement timeBottomPlayer) onSubmit;
+  final void Function(
+    TimeIncrement timeTopPlayer,
+    TimeIncrement timeBottomPlayer,
+  ) onSubmit;
   final TimeIncrement topPlayer;
   final TimeIncrement bottomPlayer;
 
@@ -90,14 +102,16 @@ class _BodyState extends State<_Body> {
             timeSec: timeTopPlayer,
             incrementSec: incrementTopPlayer,
             updateTime: (int time) => setState(() => timeTopPlayer = time),
-            updateIncrement: (int increment) => setState(() => incrementTopPlayer = increment),
+            updateIncrement: (int increment) =>
+                setState(() => incrementTopPlayer = increment),
           ),
           _PlayerTimeSlider(
             playerNr: 2,
             timeSec: timeBottomPlayer,
             incrementSec: incrementBottomPlayer,
             updateTime: (int time) => setState(() => timeBottomPlayer = time),
-            updateIncrement: (int increment) => setState(() => incrementBottomPlayer = increment),
+            updateIncrement: (int increment) =>
+                setState(() => incrementBottomPlayer = increment),
           ),
           FatButton(
             semanticsLabel: context.l10n.apply,

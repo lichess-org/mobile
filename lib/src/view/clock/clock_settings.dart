@@ -65,7 +65,10 @@ class ClockSettings extends ConsumerWidget {
                             controller.updateOptions(choice);
                           },
                           onSelectedCustom: (playerTop, playerBottom) {
-                            controller.updateOptionsCustom(playerTop, playerBottom);
+                            controller.updateOptionsCustom(
+                              playerTop,
+                              playerBottom,
+                            );
                           },
                         );
                       },
