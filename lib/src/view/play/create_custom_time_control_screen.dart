@@ -11,11 +11,13 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 
 class CreateCustomTimeControlScreen extends StatelessWidget {
   final void Function(TimeIncrement playerTop, TimeIncrement playerBottom) onSubmit;
-  final TimeIncrement defaultTime;
+  final TimeIncrement topPlayer;
+  final TimeIncrement bottomPlayer;
 
   const CreateCustomTimeControlScreen({
     required this.onSubmit,
-    required this.defaultTime,
+    required this.topPlayer,
+    required this.bottomPlayer,
   });
 
   @override
@@ -29,25 +31,27 @@ class CreateCustomTimeControlScreen extends StatelessWidget {
   Widget _androidBuilder(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(context.l10n.custom)),
-      body: _Body(onSubmit: onSubmit, defaultTime: defaultTime),
+      body: _Body(onSubmit: onSubmit, topPlayer: topPlayer, bottomPlayer: bottomPlayer),
     );
   }
 
   Widget _iosBuilder(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: const CupertinoNavigationBar(),
-      child: _Body(onSubmit: onSubmit, defaultTime: defaultTime),
+      child: _Body(onSubmit: onSubmit, topPlayer: topPlayer, bottomPlayer: bottomPlayer),
     );
   }
 }
 
 class _Body extends StatefulWidget {
   final void Function(TimeIncrement timeTopPlayer, TimeIncrement timeBottomPlayer) onSubmit;
-  final TimeIncrement defaultTime;
+  final TimeIncrement topPlayer;
+  final TimeIncrement bottomPlayer;
 
   const _Body({
     required this.onSubmit,
-    required this.defaultTime,
+    required this.topPlayer,
+    required this.bottomPlayer,
   });
 
   @override
@@ -62,8 +66,10 @@ class _BodyState extends State<_Body> {
 
   @override
   void initState() {
-    timeTopPlayer = timeBottomPlayer = widget.defaultTime.time;
-    incrementTopPlayer = incrementBottomPlayer = widget.defaultTime.increment;
+    timeTopPlayer = widget.topPlayer.time;
+    timeBottomPlayer = widget.bottomPlayer.time;
+    incrementTopPlayer = widget.topPlayer.increment;
+    incrementBottomPlayer = widget.bottomPlayer.increment;
     super.initState();
   }
 
@@ -81,15 +87,15 @@ class _BodyState extends State<_Body> {
         children: [
           _PlayerTimeSlider(
             playerNr: 1,
-            time: timeTopPlayer,
-            increment: incrementTopPlayer,
+            timeSec: timeTopPlayer,
+            incrementSec: incrementTopPlayer,
             updateTime: (int time) => setState(() => timeTopPlayer = time),
             updateIncrement: (int increment) => setState(() => incrementTopPlayer = increment),
           ),
           _PlayerTimeSlider(
             playerNr: 2,
-            time: timeBottomPlayer,
-            increment: incrementBottomPlayer,
+            timeSec: timeBottomPlayer,
+            incrementSec: incrementBottomPlayer,
             updateTime: (int time) => setState(() => timeBottomPlayer = time),
             updateIncrement: (int increment) => setState(() => incrementBottomPlayer = increment),
           ),
@@ -110,15 +116,15 @@ class _BodyState extends State<_Body> {
 class _PlayerTimeSlider extends StatelessWidget {
   const _PlayerTimeSlider({
     required this.playerNr,
-    required this.time,
-    required this.increment,
+    required this.timeSec,
+    required this.incrementSec,
     required this.updateTime,
     required this.updateIncrement,
   });
 
   final int playerNr;
-  final int time;
-  final int increment;
+  final int timeSec;
+  final int incrementSec;
   final void Function(int time) updateTime;
   final void Function(int time) updateIncrement;
 
@@ -134,10 +140,10 @@ class _PlayerTimeSlider extends StatelessWidget {
         PlatformListTile(
           padding: EdgeInsets.zero,
           title: Text(
-            '${context.l10n.time}: ${context.l10n.nbMinutes(secToMin(time))}',
+            '${context.l10n.time}: ${timeSec < 60 ? context.l10n.nbSeconds(timeSec) : context.l10n.nbMinutes(_secToMin(timeSec))}',
           ),
           subtitle: NonLinearSlider(
-            value: time,
+            value: timeSec,
             values: kAvailableTimesInSeconds,
             labelBuilder: _clockTimeLabel,
             onChange: Theme.of(context).platform == TargetPlatform.iOS
@@ -153,10 +159,10 @@ class _PlayerTimeSlider extends StatelessWidget {
         PlatformListTile(
           padding: EdgeInsets.zero,
           title: Text(
-            '${context.l10n.increment}: ${context.l10n.nbSeconds(increment)}',
+            '${context.l10n.increment}: ${context.l10n.nbSeconds(incrementSec)}',
           ),
           subtitle: NonLinearSlider(
-            value: increment,
+            value: incrementSec,
             values: kAvailableIncrementsInSeconds,
             labelBuilder: (num sec) => sec.toString(),
             onChange: Theme.of(context).platform == TargetPlatform.iOS
@@ -174,7 +180,7 @@ class _PlayerTimeSlider extends StatelessWidget {
   }
 }
 
-int secToMin(num sec) => sec ~/ 60;
+int _secToMin(num sec) => sec ~/ 60;
 
 String _clockTimeLabel(num seconds) {
   switch (seconds) {
@@ -187,6 +193,6 @@ String _clockTimeLabel(num seconds) {
     case 15:
       return '¼';
     default:
-      return secToMin(seconds).toString();
+      return _secToMin(seconds).toString();
   }
 }
