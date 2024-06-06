@@ -6,15 +6,19 @@ import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/play/create_custom_time_control_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 
 class TimeControlModal extends ConsumerWidget {
   final ValueSetter<TimeIncrement> onSelected;
+  final void Function(TimeIncrement playerTop, TimeIncrement playerBottom)? onSelectedCustom;
   final TimeIncrement value;
   final bool excludeUltraBullet;
 
   const TimeControlModal({
     required this.onSelected,
+    this.onSelectedCustom,
     required this.value,
     this.excludeUltraBullet = false,
     super.key,
@@ -38,6 +42,22 @@ class TimeControlModal extends ConsumerWidget {
               style: Styles.title,
             ),
             const SizedBox(height: 26.0),
+            if (onSelectedCustom != null)
+              FatButton(
+                semanticsLabel: context.l10n.custom,
+                onPressed: () => {
+                  pushPlatformRoute(
+                    context,
+                    title: context.l10n.custom,
+                    builder: (_) => CreateCustomTimeControlScreen(
+                      onSubmit: onSelectedCustom!,
+                      defaultTime: value,
+                    ),
+                  ),
+                },
+                child: Text(context.l10n.custom),
+              ),
+              const SizedBox(height: 20.0),
             _SectionChoices(
               value,
               choices: [
