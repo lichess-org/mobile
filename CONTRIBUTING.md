@@ -22,7 +22,8 @@ experience it as well, if the issue is not self-descriptive.
 2. Search to make sure it isn't a duplicate. [The advanced search syntax](https://help.github.com/articles/searching-issues/) may come in handy.
 3. It is not a trivial problem or demands unrealistic dev time to fix. Such
 issues may be closed.
-4. You provide device hardware and operating system information to help with the
+4. You're not posting a one liner such as "X feature is missing". It is useless, we already know exactly what features are missing. Feature request are allowed if you're suggesting a new idea, while explaining it in the most detailed and clear possible way.
+5. You provide device hardware and operating system information to help with the
 debug.
 
 ## I want to suggest a feature for Lichess
