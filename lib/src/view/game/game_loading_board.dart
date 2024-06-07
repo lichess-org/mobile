@@ -271,7 +271,7 @@ class _AnimatedLobbyNumberState extends State<_AnimatedLobbyNumber> {
         end: value,
       ),
       curve: Curves.linear,
-      duration: const Duration(seconds: 3),
+      duration: const Duration(seconds: 6),
       builder: (context, int value, _) {
         return Text(widget.labelBuilder(value), style: _lobbyNumbersStyle);
       },
