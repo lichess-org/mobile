@@ -228,7 +228,7 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
     return challengesAsync.when(
       data: (challenges) {
         final supportedChallenges = challenges
-            .where((challenge) => challenge.variant.isSupported)
+            .where((challenge) => challenge.variant.isPlaySupported)
             .toList();
         return ListView.separated(
           itemCount: supportedChallenges.length,

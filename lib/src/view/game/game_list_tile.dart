@@ -218,7 +218,7 @@ class _ContextMenu extends ConsumerWidget {
               ),
               BottomSheetContextMenuAction(
                 icon: Icons.biotech,
-                onPressed: game.variant.isSupported
+                onPressed: game.variant.isReadSupported
                     ? () {
                         pushPlatformRoute(
                           context,
@@ -453,7 +453,7 @@ class ExtendedGameListTile extends StatelessWidget {
     return GameListTile(
       game: game,
       mySide: youAre,
-      onTap: game.variant.isSupported
+      onTap: game.variant.isReadSupported
           ? () {
               pushPlatformRoute(
                 context,

@@ -73,6 +73,9 @@ class User with _$User {
     bool? isPatron,
     bool? disabled,
     bool? tosViolation,
+
+    /// If true it means a BOT account is verified and can be featured
+    bool? verified,
     DateTime? createdAt,
     DateTime? seenAt,
     required IMap<Perf, UserPerf> perfs,
@@ -103,6 +106,7 @@ class User with _$User {
       isPatron: pick('patron').asBoolOrNull(),
       disabled: pick('disabled').asBoolOrNull(),
       tosViolation: pick('tosViolation').asBoolOrNull(),
+      verified: pick('verified').asBoolOrNull(),
       createdAt: pick('createdAt').asDateTimeFromMillisecondsOrNull(),
       seenAt: pick('seenAt').asDateTimeFromMillisecondsOrNull(),
       playTime: pick('playTime').letOrNull(PlayTime.fromPick),

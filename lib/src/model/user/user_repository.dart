@@ -23,6 +23,13 @@ class UserRepository {
     );
   }
 
+  Future<IList<User>> getOnlineBots() {
+    return client.readNdJsonList(
+      Uri(path: '/api/bot/online'),
+      mapper: User.fromServerJson,
+    );
+  }
+
   Future<UserPerfStats> getPerfStats(UserId id, Perf perf) {
     return client.readJson(
       Uri(path: '/api/user/$id/perf/${perf.name}'),

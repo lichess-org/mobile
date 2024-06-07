@@ -405,7 +405,7 @@ extension ClientExtension on Client {
     } catch (e) {
       _logger.severe('Could not read nd-json objects as List<$T>.');
       throw ClientException(
-        'Could not read nd-json objects as List<$T>.',
+        'Could not read nd-json objects as List<$T>: $e',
         url,
       );
     }
