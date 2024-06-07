@@ -15,7 +15,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_tile.dart';
-import 'package:lichess_mobile/src/view/broadcast/tournament_screen.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_tournament_screen.dart';
 import 'package:lichess_mobile/src/view/watch/live_tv_channels_screen.dart';
 import 'package:lichess_mobile/src/view/watch/streamer_screen.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
@@ -211,7 +211,7 @@ class _BroadcastWidget extends ConsumerWidget {
             onPressed: () {
               pushPlatformRoute(
                 context,
-                builder: (context) => const TournamentScreen(),
+                builder: (context) => const BroadcastTournamentScreen(),
               );
             },
             child: Text(

@@ -6,10 +6,10 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
-class DescriptionScreen extends StatelessWidget {
+class BroadcastDescriptionScreen extends StatelessWidget {
   final Broadcast broadcast;
 
-  const DescriptionScreen({super.key, required this.broadcast});
+  const BroadcastDescriptionScreen({super.key, required this.broadcast});
 
   @override
   Widget build(BuildContext context) {

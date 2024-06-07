@@ -9,11 +9,11 @@ class Broadcast with _$Broadcast {
   const Broadcast._();
 
   const factory Broadcast({
-    required Tour tour,
-    required IList<Round> rounds,
+    required BroadcastTournament tour,
+    required IList<BroadcastRound> rounds,
   }) = _Broadcast;
 
-  Round? get curentRound =>
+  BroadcastRound? get curentRound =>
       rounds.where((r) => r.status == RoundStatus.live).firstOrNull ??
       rounds.where((r) => r.status == RoundStatus.finished).lastOrNull;
 
@@ -38,22 +38,22 @@ class Broadcast with _$Broadcast {
 }
 
 @freezed
-class Tour with _$Tour {
-  const factory Tour({
+class BroadcastTournament with _$BroadcastTournament {
+  const factory BroadcastTournament({
     required String name,
     required String description,
     required String? imageUrl,
     required int tier,
-  }) = _Tour;
+  }) = _BroadcastTournament;
 }
 
 @freezed
-class Round with _$Round {
-  const factory Round({
+class BroadcastRound with _$BroadcastRound {
+  const factory BroadcastRound({
     required String id,
     required RoundStatus status,
     required DateTime startsAt,
-  }) = _Round;
+  }) = _BroadcastRound;
 }
 
 @freezed
@@ -73,7 +73,7 @@ class BroadcastPlayer with _$BroadcastPlayer {
     required String? title,
     required int? rating,
     required Duration? clock,
-    required String? fed,
+    required String? federation,
   }) = _BroadcastPlayer;
 }
 

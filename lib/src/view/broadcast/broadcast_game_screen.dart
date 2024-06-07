@@ -17,10 +17,10 @@ import 'package:lichess_mobile/src/widgets/grid_board.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
-class GameScreen extends ConsumerWidget {
+class BroadcastGameScreen extends ConsumerWidget {
   final String roundId;
 
-  const GameScreen({super.key, required this.roundId});
+  const BroadcastGameScreen({super.key, required this.roundId});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -163,9 +163,9 @@ class PlayerWidget extends StatelessWidget {
           Flexible(
             child: Row(
               children: [
-                if (player.fed != null) ...[
+                if (player.federation != null) ...[
                   SvgPicture.network(
-                    lichessFideFedSrc(player.fed!),
+                    lichessFideFedSrc(player.federation!),
                     height: 12,
                   ),
                 ],

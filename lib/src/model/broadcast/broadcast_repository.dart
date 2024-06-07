@@ -34,7 +34,7 @@ Broadcast _makeBroadcastFromJson(Map<String, dynamic> json) =>
 
 Broadcast _broadcastFromPick(RequiredPick pick) {
   return Broadcast(
-    tour: Tour(
+    tour: BroadcastTournament(
       name: pick('tour', 'name').asStringOrThrow(),
       description: pick('tour', 'description').asStringOrThrow(),
       imageUrl: pick('tour', 'image').asStringOrNull(),
@@ -42,12 +42,15 @@ Broadcast _broadcastFromPick(RequiredPick pick) {
     ),
     rounds: pick('rounds')
         .asListOrEmpty(_roundFromPick)
-        .sorted((Round a, Round b) => a.startsAt.compareTo(b.startsAt))
+        .sorted(
+          (BroadcastRound a, BroadcastRound b) =>
+              a.startsAt.compareTo(b.startsAt),
+        )
         .toIList(),
   );
 }
 
-Round _roundFromPick(RequiredPick pick) {
+BroadcastRound _roundFromPick(RequiredPick pick) {
   final live = pick('ongoing').asBoolOrFalse();
   final finished = pick('finished').asBoolOrFalse();
   final status = live
@@ -56,7 +59,7 @@ Round _roundFromPick(RequiredPick pick) {
           ? RoundStatus.finished
           : RoundStatus.upcoming;
 
-  return Round(
+  return BroadcastRound(
     id: pick('id').asStringOrThrow(),
     status: status,
     startsAt: pick('startsAt').asDateTimeFromMillisecondsOrThrow().toLocal(),
@@ -84,6 +87,6 @@ BroadcastPlayer _playerFromPick(RequiredPick pick) {
     title: pick('title').asStringOrNull(),
     rating: pick('rating').asIntOrNull(),
     clock: pick('clock').asDurationFromCentiSecondsOrNull(),
-    fed: pick('fed').asStringOrNull(),
+    federation: pick('fed').asStringOrNull(),
   );
 }
