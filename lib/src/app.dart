@@ -175,7 +175,6 @@ class _AppState extends ConsumerState<Application> {
           seedColor: boardTheme.colors.darkSquare,
           brightness: brightness,
           dynamicSchemeVariant: DynamicSchemeVariant.fidelity,
-
         );
 
         final cupertinoThemeData = CupertinoThemeData(
@@ -219,11 +218,13 @@ class _AppState extends ConsumerState<Application> {
                   ? 60
                   : null,
             ),
-            extensions: [lichessCustomColors.harmonized(
-              Theme.of(context).platform == TargetPlatform.iOS
-                  ? cupertinoColorScheme
-                  : colorScheme,
-            ),],
+            extensions: [
+              lichessCustomColors.harmonized(
+                Theme.of(context).platform == TargetPlatform.iOS
+                    ? cupertinoColorScheme
+                    : colorScheme,
+              ),
+            ],
           ),
           themeMode: themeMode,
           builder: Theme.of(context).platform == TargetPlatform.iOS
