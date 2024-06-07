@@ -231,7 +231,7 @@ class _Body extends ConsumerWidget {
 
     return PopScope(
       canPop: puzzleState.streak!.index == 0 || puzzleState.streak!.finished,
-      onPopInvoked: (bool didPop) async {
+      onPopInvokedWithResult: (bool didPop, _) async {
         if (didPop) {
           return;
         }

@@ -226,7 +226,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AppAuth: 182c5b88630569df5acb672720534756c29b3358
   connectivity_plus: ddd7f30999e1faaef5967c23d5b6d503d10434db
-  cupertino_http: 5f8b1161107fe6c8d94a0c618735a033d93fa7db
+  cupertino_http: 1a3a0f163c1b26e7f1a293b33d476e0fde7a64ec
   device_info_plus: 97af1d7e84681a90d0693e63169a5d50e0839a0d
   Firebase: 26b040b20866a55f55eb3611b9fcf3ae64816b86
   firebase_core: 5926464bbb028fef87d2443369b73ada2a8a3608

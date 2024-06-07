@@ -143,7 +143,7 @@ class _Body extends ConsumerWidget {
 
     final content = PopScope(
       canPop: stormState.mode != StormMode.running,
-      onPopInvoked: (bool didPop) async {
+      onPopInvokedWithResult: (bool didPop, _) async {
         if (didPop) {
           return;
         }
