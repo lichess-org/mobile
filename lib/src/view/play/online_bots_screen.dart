@@ -126,7 +126,7 @@ class _Body extends ConsumerWidget {
                               ),
                             )
                           else
-                            const Text('-'),
+                            const Text('  -  '),
                         ],
                       ),
                     );
