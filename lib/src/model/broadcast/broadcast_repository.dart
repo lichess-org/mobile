@@ -23,6 +23,8 @@ class BroadcastRepository {
   Future<IList<BroadcastGameSnapshot>> getRound(String broadcastRoundId) {
     return client.readJson(
       Uri(path: 'api/broadcast/-/-/$broadcastRoundId'),
+      // The path parameters with - are the broadcast tournament and round slug
+      // They are only used for SEO, so we can safely use - for these parameters
       headers: {'Accept': 'application/x-ndjson'},
       mapper: _makeGamesFromJson,
     );
