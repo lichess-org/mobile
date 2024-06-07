@@ -84,9 +84,9 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
   }
 
   Widget _buildAndroid(BuildContext context, WidgetRef ref) {
-    return PopScope(
+    return PopScope<Object?>(
       canPop: false,
-      onPopInvoked: (bool didPop) {
+      onPopInvokedWithResult: (bool didPop, Object? result) {
         if (!didPop) {
           ref.read(currentBottomTabProvider.notifier).state = BottomTab.home;
         }

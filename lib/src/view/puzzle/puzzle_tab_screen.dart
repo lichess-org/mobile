@@ -65,9 +65,9 @@ class _PuzzleTabScreenState extends ConsumerState<PuzzleTabScreen> {
       ],
     );
 
-    return PopScope(
+    return PopScope<Object?>(
       canPop: false,
-      onPopInvoked: (bool didPop) {
+      onPopInvokedWithResult: (bool didPop, Object? result) {
         if (!didPop) {
           ref.read(currentBottomTabProvider.notifier).state = BottomTab.home;
         }
