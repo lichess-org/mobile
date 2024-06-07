@@ -70,12 +70,17 @@ class _PlayRatingRangeState extends State<PlayRatingRange> {
                         : null,
                     onChangeEnd: isRatingRangeAvailable
                         ? (num value) {
-                            widget.onRatingDeltaChange(value.toInt(), _add);
+                            widget.onRatingDeltaChange(
+                              value.toInt(),
+                              value == 0 && _add == 0
+                                  ? kAddingRatingRange[1]
+                                  : _add,
+                            );
                           }
                         : null,
                   ),
                   Center(
-                    child: Text('$_subtract'),
+                    child: Text('${_subtract == 0 ? '-' : ''}$_subtract'),
                   ),
                 ],
               ),
@@ -103,7 +108,10 @@ class _PlayRatingRangeState extends State<PlayRatingRange> {
                     onChangeEnd: isRatingRangeAvailable
                         ? (num value) {
                             widget.onRatingDeltaChange(
-                              _subtract,
+                              value == 0 && _subtract == 0
+                                  ? kSubtractingRatingRange[
+                                      kSubtractingRatingRange.length - 2]
+                                  : _subtract,
                               value.toInt(),
                             );
                           }
