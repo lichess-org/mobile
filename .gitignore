@@ -13,8 +13,6 @@ build/
 *.g.dart
 *.mocks.dart
 
-split-debug-info/
-
 custom_lint.log
 
 # Directory created by dartdoc
