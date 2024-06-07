@@ -84,6 +84,11 @@ android {
             applicationIdSuffix ".debug"
         }
     }
+
+    dependenciesInfo {        # The Dependency Info Block is an encrypted proprietary blob from Google
+        includeInApk false    # Remove this blob from APK files that are shared on GitHub
+        includeInBundle true  # Ok to include it in AAB files as they are only used by Google Play
+    }
 }
 
 flutter {
