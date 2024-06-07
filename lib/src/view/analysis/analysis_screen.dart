@@ -38,6 +38,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:popover/popover.dart';
 
+import '../../utils/share.dart';
 import 'analysis_settings.dart';
 import 'analysis_share_screen.dart';
 import 'annotations.dart';
@@ -777,12 +778,26 @@ class _BottomBar extends ConsumerWidget {
           },
         ),
         BottomSheetAction(
-          makeLabel: (context) => Text(context.l10n.studyShareAndExport),
+          makeLabel: (context) =>
+              Text('${context.l10n.studyShareAndExport} PGN'),
           onPressed: (_) {
             pushPlatformRoute(
               context,
               title: context.l10n.studyShareAndExport,
               builder: (_) => AnalysisShareScreen(pgn: pgn, options: options),
+            );
+          },
+        ),
+        BottomSheetAction(
+          makeLabel: (context) =>
+              Text('${context.l10n.studyShareAndExport} FEN'),
+          onPressed: (_) {
+            launchShareDialog(
+              context,
+              text: ref
+                  .read(analysisControllerProvider(pgn, options))
+                  .position
+                  .fen,
             );
           },
         ),
