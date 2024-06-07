@@ -219,7 +219,9 @@ class _PuzzleMenuListTile extends StatelessWidget {
       leading: Icon(
         icon,
         size: Styles.mainListTileIconSize,
-        color: Theme.of(context).colorScheme.primary,
+        color: Theme.of(context).platform == TargetPlatform.iOS
+            ? CupertinoTheme.of(context).primaryColor
+            : Theme.of(context).colorScheme.primary,
       ),
       title: Text(title, style: Styles.mainListTileTitle),
       subtitle: Text(subtitle, maxLines: 3),

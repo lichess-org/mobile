@@ -73,7 +73,9 @@ class _Body extends StatelessWidget {
             leading: Icon(
               Icons.biotech,
               size: Styles.mainListTileIconSize,
-              color: Theme.of(context).colorScheme.primary,
+              color: Theme.of(context).platform == TargetPlatform.iOS
+                  ? CupertinoTheme.of(context).primaryColor
+                  : Theme.of(context).colorScheme.primary,
             ),
             title: Padding(
               padding: tilePadding,
@@ -93,7 +95,9 @@ class _Body extends StatelessWidget {
             leading: Icon(
               Icons.alarm,
               size: Styles.mainListTileIconSize,
-              color: Theme.of(context).colorScheme.primary,
+              color: Theme.of(context).platform == TargetPlatform.iOS
+                  ? CupertinoTheme.of(context).primaryColor
+                  : Theme.of(context).colorScheme.primary,
             ),
             title: Padding(
               padding: tilePadding,

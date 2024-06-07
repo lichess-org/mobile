@@ -171,12 +171,19 @@ class _AppState extends ConsumerState<Application> {
                 brightness: brightness,
               );
 
+        final cupertinoColorScheme = ColorScheme.fromSeed(
+          seedColor: boardTheme.colors.darkSquare,
+          brightness: brightness,
+          dynamicSchemeVariant: DynamicSchemeVariant.fidelity,
+
+        );
+
         final cupertinoThemeData = CupertinoThemeData(
-          primaryColor: colorScheme.primary,
-          primaryContrastingColor: colorScheme.onPrimary,
+          primaryColor: cupertinoColorScheme.primary,
+          primaryContrastingColor: cupertinoColorScheme.onPrimary,
           brightness: brightness,
           textTheme: CupertinoTheme.of(context).textTheme.copyWith(
-                primaryColor: colorScheme.primary,
+                primaryColor: cupertinoColorScheme.primary,
                 textStyle: CupertinoTheme.of(context)
                     .textTheme
                     .textStyle
@@ -212,18 +219,18 @@ class _AppState extends ConsumerState<Application> {
                   ? 60
                   : null,
             ),
-            extensions: [lichessCustomColors.harmonized(colorScheme)],
+            extensions: [lichessCustomColors.harmonized(
+              Theme.of(context).platform == TargetPlatform.iOS
+                  ? cupertinoColorScheme
+                  : colorScheme,
+            ),],
           ),
           themeMode: themeMode,
           builder: Theme.of(context).platform == TargetPlatform.iOS
               ? (context, child) {
                   return CupertinoTheme(
                     data: cupertinoThemeData,
-                    child: IconTheme(
-                      // This is needed to avoid the icon color being overridden by the cupertino theme
-                      data: IconTheme.of(context),
-                      child: Material(child: child),
-                    ),
+                    child: Material(child: child),
                   );
                 }
               : null,
