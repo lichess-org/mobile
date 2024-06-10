@@ -20,6 +20,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
+import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
@@ -87,6 +88,10 @@ class _Body extends ConsumerWidget {
 
     final soundTheme = ref.watch(
       generalPreferencesProvider.select((state) => state.soundTheme),
+    );
+
+    final volume = ref.watch(
+      generalPreferencesProvider.select((state) => state.volume),
     );
 
     final hasSystemColors = ref.watch(
@@ -223,6 +228,38 @@ class _Body extends ConsumerWidget {
                   builder: (context) => const SoundSettingsScreen(),
                 );
               }
+            },
+          ),
+          SettingsListTile(
+            icon: const Icon(Icons.volume_up),
+            settingsLabel: const Text('Volume'),
+            settingsValue: volume.toString(),
+            onTap: () {
+              showDialog<void>(
+                context: context,
+                builder: (context) {
+                  return _SettingsSliderDialog(
+                    title: 'Volume',
+                    value: volume,
+                    values: const [
+                      0.0,
+                      0.1,
+                      0.2,
+                      0.3,
+                      0.4,
+                      0.5,
+                      0.6,
+                      0.7,
+                      0.8,
+                      0.9,
+                      1.0,
+                    ],
+                    onChanged: (num value) => ref
+                        .read(generalPreferencesProvider.notifier)
+                        .setVolume(value.toDouble()),
+                  );
+                },
+              );
             },
           ),
           if (Theme.of(context).platform == TargetPlatform.android)
@@ -454,5 +491,57 @@ class _Body extends ConsumerWidget {
         },
       );
     }
+  }
+}
+
+class _SettingsSliderDialog extends StatefulWidget {
+  const _SettingsSliderDialog({
+    required this.title,
+    required this.value,
+    required this.values,
+    required this.onChanged,
+  });
+
+  final String title;
+  final num value;
+  final List<num> values;
+  final void Function(num value) onChanged;
+
+  @override
+  _SettingsSliderDialogState createState() => _SettingsSliderDialogState();
+}
+
+class _SettingsSliderDialogState extends State<_SettingsSliderDialog> {
+  late num value = widget.value;
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(widget.title),
+      content: StatefulBuilder(
+        builder: (context, setState) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              NonLinearSlider(
+                value: value,
+                values: widget.values,
+                onChangeEnd: (v) {
+                  setState(() => value = v);
+                  widget.onChanged(v);
+                },
+              ),
+              Text('$value', textAlign: TextAlign.center),
+            ],
+          );
+        },
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('OK'),
+        ),
+      ],
+    );
   }
 }
