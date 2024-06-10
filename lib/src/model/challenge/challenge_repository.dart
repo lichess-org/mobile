@@ -35,7 +35,15 @@ class ChallengeRepository {
     );
   }
 
-  Future<void> challenge(String username, ChallengeRequest req) async {
+  Future<Challenge> show(ChallengeId id) async {
+    final uri = Uri(path: '/api/challenge/$id/show');
+    return client.readJson(
+      uri,
+      mapper: (json) => _challengeFromPick(pick(json).required()),
+    );
+  }
+
+  Future<void> create(String username, ChallengeRequest req) async {
     final uri = Uri(path: '/api/challenge/$username');
     final response = await client.post(uri, body: req.toRequestBody);
 
@@ -47,13 +55,37 @@ class ChallengeRepository {
     }
   }
 
-  Future<void> challengeAI(AiChallengeRequest req) async {
-    final uri = Uri(path: '/api/challenge/ai');
-    final response = await client.post(uri, body: req.toRequestBody);
+  Future<void> accept(ChallengeId id) async {
+    final uri = Uri(path: '/api/challenge/$id/accept');
+    final response = await client.post(uri);
 
     if (response.statusCode >= 400) {
       throw http.ClientException(
-        'Failed to challenge AI: ${response.statusCode}',
+        'Failed to accept challenge: ${response.statusCode}',
+        uri,
+      );
+    }
+  }
+
+  Future<void> decline(ChallengeId id) async {
+    final uri = Uri(path: '/api/challenge/$id/decline');
+    final response = await client.post(uri);
+
+    if (response.statusCode >= 400) {
+      throw http.ClientException(
+        'Failed to decline challenge: ${response.statusCode}',
+        uri,
+      );
+    }
+  }
+
+  Future<void> cancel(ChallengeId id) async {
+    final uri = Uri(path: '/api/challenge/$id/cancel');
+    final response = await client.post(uri);
+
+    if (response.statusCode >= 400) {
+      throw http.ClientException(
+        'Failed to cancel challenge: ${response.statusCode}',
         uri,
       );
     }
