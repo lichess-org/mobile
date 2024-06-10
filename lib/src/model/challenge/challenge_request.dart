@@ -16,10 +16,6 @@ class ChallengeRequest with _$ChallengeRequest {
     'clock != null || days != null',
     'Either clock or days must be set but not both.',
   )
-  @Assert(
-    'variant == null || variant.isPlaySupported',
-    'Variant is not supported for playing.',
-  )
   const factory ChallengeRequest({
     /// Time control for the game.
     (Duration time, Duration increment)? clock,

@@ -1,12 +1,14 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/user/leaderboard.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository.dart';
 
+import '../../test_container.dart';
 import '../../test_utils.dart';
 
 const testUserId = UserId('test');
@@ -32,8 +34,10 @@ void main() {
         }
         return mockResponse('', 404);
       });
+      final container = await lichessClientContainer(mockClient);
+      final client = container.read(lichessClientProvider);
 
-      final repo = UserRepository(mockClient);
+      final repo = UserRepository(client);
 
       final result = await repo.getUser(testUserId);
 
@@ -89,8 +93,10 @@ void main() {
         }
         return mockResponse('', 404);
       });
+      final container = await lichessClientContainer(mockClient);
+      final client = container.read(lichessClientProvider);
+      final repo = UserRepository(client);
 
-      final repo = UserRepository(mockClient);
       final result = await repo.getUser(testUserId);
 
       expect(result, isA<User>());
@@ -144,7 +150,9 @@ void main() {
         return mockResponse('', 404);
       });
 
-      final repo = UserRepository(mockClient);
+      final container = await lichessClientContainer(mockClient);
+      final client = container.read(lichessClientProvider);
+      final repo = UserRepository(client);
 
       final result = await repo.getPerfStats(testUserId, testPerf);
 
@@ -399,7 +407,9 @@ void main() {
         return mockResponse('', 404);
       });
 
-      final repo = UserRepository(mockClient);
+      final container = await lichessClientContainer(mockClient);
+      final client = container.read(lichessClientProvider);
+      final repo = UserRepository(client);
 
       final result = await repo.getPerfStats(testUserId, testPerf);
 
@@ -427,7 +437,9 @@ void main() {
         return mockResponse('', 404);
       });
 
-      final repo = UserRepository(mockClient);
+      final container = await lichessClientContainer(mockClient);
+      final client = container.read(lichessClientProvider);
+      final repo = UserRepository(client);
       final result = await repo.getUsersStatuses(ids);
 
       expect(result, isA<IList<UserStatus>>());
@@ -467,7 +479,9 @@ void main() {
         return mockResponse('', 404);
       });
 
-      final repo = UserRepository(mockClient);
+      final container = await lichessClientContainer(mockClient);
+      final client = container.read(lichessClientProvider);
+      final repo = UserRepository(client);
       final result = await repo.getUsersStatuses(ids);
 
       expect(result, isA<IList<UserStatus>>());
@@ -488,7 +502,10 @@ void main() {
         return mockResponse('', 404);
       });
 
-      final repo = UserRepository(mockClient);
+      final container = await lichessClientContainer(mockClient);
+      final client = container.read(lichessClientProvider);
+      final repo = UserRepository(client);
+
       final result = await repo.getTop1();
 
       expect(result, isA<IMap<Perf, LeaderboardUser>>());
@@ -520,7 +537,10 @@ void main() {
         return mockResponse('', 404);
       });
 
-      final repo = UserRepository(mockClient);
+      final container = await lichessClientContainer(mockClient);
+      final client = container.read(lichessClientProvider);
+      final repo = UserRepository(client);
+
       final result = await repo.getLeaderboard();
 
       expect(result, isA<Leaderboard>());
@@ -536,7 +556,9 @@ void main() {
       return mockResponse('', 404);
     });
 
-    final repo = UserRepository(mockClient);
+    final container = await lichessClientContainer(mockClient);
+    final client = container.read(lichessClientProvider);
+    final repo = UserRepository(client);
     final result = await repo.getActivity(const UserId('testUser'));
 
     expect(result, isA<IList<UserActivity>>());

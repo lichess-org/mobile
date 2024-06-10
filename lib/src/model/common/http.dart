@@ -328,7 +328,7 @@ extension ClientExtension on Client {
     } catch (e, st) {
       _logger.severe('Could not read json object as $T: $e', e, st);
       throw ClientException(
-        'Could not read json object as $T: $e',
+        'Could not read json object as $T: $e\n$st',
         url,
       );
     }
