@@ -59,7 +59,7 @@ class ProfileScreen extends ConsumerWidget {
           }
           return ListView(
             children: [
-              UserProfile(user: user),
+              UserProfileWidget(user: user),
               const _PerfCards(),
               const UserActivityWidget(),
               const RecentGamesWidget(),
@@ -107,7 +107,7 @@ class ProfileScreen extends ConsumerWidget {
           return SafeArea(
             child: ListView(
               children: [
-                UserProfile(user: user),
+                UserProfileWidget(user: user),
                 const _PerfCards(),
                 const UserActivityWidget(),
                 const RecentGamesWidget(),

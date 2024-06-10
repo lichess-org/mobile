@@ -116,7 +116,7 @@ class _UserProfileListView extends StatelessWidget {
     }
     return ListView(
       children: [
-        UserProfile(user: user),
+        UserProfileWidget(user: user),
         PerfCards(user: user, isMe: false),
         UserActivityWidget(user: user),
         RecentGamesWidget(user: user.lightUser),

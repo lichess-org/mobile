@@ -1,8 +1,10 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository.dart';
@@ -15,7 +17,9 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
+import 'package:linkify/linkify.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 part 'online_bots_screen.g.dart';
 
@@ -190,9 +194,37 @@ class _ContextMenu extends ConsumerWidget {
                   style: Styles.title,
                 ),
                 const SizedBox(height: 8.0),
-                Text(
-                  bot.profile?.bio ?? '',
-                ),
+                if (bot.profile?.bio != null)
+                  Linkify(
+                    onOpen: (link) async {
+                      if (link.originText.startsWith('@')) {
+                        final username = link.originText.substring(1);
+                        pushPlatformRoute(
+                          context,
+                          builder: (ctx) => UserScreen(
+                            user: LightUser(
+                              id: UserId.fromUserName(username),
+                              name: username,
+                            ),
+                          ),
+                        );
+                      } else {
+                        launchUrl(Uri.parse(link.url));
+                      }
+                    },
+                    linkifiers: const [
+                      UrlLinkifier(),
+                      EmailLinkifier(),
+                      UserTagLinkifier(),
+                    ],
+                    text: bot.profile!.bio!,
+                    maxLines: 20,
+                    overflow: TextOverflow.ellipsis,
+                    linkStyle: const TextStyle(
+                      color: Colors.blueAccent,
+                      decoration: TextDecoration.none,
+                    ),
+                  ),
               ],
             ),
           ),
