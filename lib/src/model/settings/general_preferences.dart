@@ -43,6 +43,10 @@ class GeneralPreferences extends _$GeneralPreferences {
     return _save(state.copyWith(soundTheme: soundTheme));
   }
 
+  Future<void> setVolume(double volume) {
+    return _save(state.copyWith(volume: volume));
+  }
+
   Future<void> toggleSystemColors() async {
     if (defaultTargetPlatform != TargetPlatform.android) {
       return;
@@ -78,6 +82,7 @@ class GeneralPrefsState with _$GeneralPrefsState {
     required ThemeMode themeMode,
     required bool isSoundEnabled,
     required SoundTheme soundTheme,
+    required double volume,
 
     /// Should enable system color palette (android 12+ only)
     required bool systemColors,
@@ -87,6 +92,7 @@ class GeneralPrefsState with _$GeneralPrefsState {
     themeMode: ThemeMode.system,
     isSoundEnabled: true,
     soundTheme: SoundTheme.standard,
+    volume: 0.5,
     systemColors: true,
   );
 

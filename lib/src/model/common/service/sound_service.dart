@@ -84,6 +84,7 @@ class SoundService {
 
   Future<int?> play(Sound sound) async {
     final isEnabled = _ref.read(generalPreferencesProvider).isSoundEnabled;
+    final volume = _ref.read(generalPreferencesProvider).volume;
     final soundId = _sounds[sound];
     if (soundId != null && isEnabled) {
       // Stop current sound only if it is a move or capture sound
@@ -93,6 +94,7 @@ class SoundService {
               _currentStream!.$2 == Sound.capture)) {
         await _pool.stop(_currentStream!.$1);
       }
+      await _pool.setVolume(soundId: soundId, volume: volume);
       _currentStream = (await _pool.play(soundId), sound);
       return _currentStream!.$1;
     }
