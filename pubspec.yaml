@@ -48,6 +48,7 @@ dependencies:
   logging: ^1.1.0
   material_color_utilities: ^0.11.1
   meta: ^1.8.0
+  network_image_mock: ^2.1.1
   package_info_plus: ^8.0.0
   path: ^1.8.2
   popover: ^0.3.0
