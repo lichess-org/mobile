@@ -181,14 +181,7 @@ class PuzzleController extends _$PuzzleController {
       mode: PuzzleMode.view,
     );
 
-    _viewSolutionTimer =
-        Timer.periodic(const Duration(milliseconds: 800), (timer) {
-      if (state.canGoNext) {
-        _goToNextNode();
-      } else {
-        timer.cancel();
-      }
-    });
+    _goToNextNode();
   }
 
   void skipMove() {
