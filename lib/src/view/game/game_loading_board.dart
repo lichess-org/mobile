@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_numbers.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
@@ -11,6 +12,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 class LobbyScreenLoadingContent extends StatelessWidget {
   const LobbyScreenLoadingContent(this.seek, this.cancelGameCreation);
@@ -80,6 +82,85 @@ class LobbyScreenLoadingContent extends StatelessWidget {
             BottomBarButton(
               onTap: () async {
                 await cancelGameCreation();
+                if (context.mounted) {
+                  Navigator.of(context, rootNavigator: true).pop();
+                }
+              },
+              label: context.l10n.cancel,
+              showLabel: true,
+              icon: CupertinoIcons.xmark,
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class ChallengeLoadingContent extends StatelessWidget {
+  const ChallengeLoadingContent(this.challenge, this.cancelChallenge);
+
+  final ChallengeRequest challenge;
+  final Future<void> Function() cancelChallenge;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Expanded(
+          child: SafeArea(
+            bottom: false,
+            child: BoardTable(
+              boardData: const cg.BoardData(
+                interactableSide: cg.InteractableSide.none,
+                orientation: cg.Side.white,
+                fen: kEmptyFen,
+              ),
+              topTable: const SizedBox.shrink(),
+              bottomTable: const SizedBox.shrink(),
+              showMoveListPlaceholder: true,
+              boardOverlay: PlatformCard(
+                elevation: 2.0,
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(context.l10n.waitingForOpponent),
+                      const SizedBox(height: 16.0),
+                      UserFullNameWidget(
+                        user: challenge.user,
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      const SizedBox(height: 16.0),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            challenge.perf.icon,
+                            color: DefaultTextStyle.of(context).style.color,
+                          ),
+                          const SizedBox(width: 8.0),
+                          Text(
+                            challenge.timeIncrement?.display ??
+                                '${context.l10n.daysPerTurn}: ${challenge.days}',
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+        _BottomBar(
+          children: [
+            BottomBarButton(
+              onTap: () async {
+                await cancelChallenge();
                 if (context.mounted) {
                   Navigator.of(context, rootNavigator: true).pop();
                 }

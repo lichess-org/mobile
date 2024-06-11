@@ -16,7 +16,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
-import 'package:lichess_mobile/src/view/game/standalone_game_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/status_l10n.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
@@ -459,11 +459,7 @@ class ExtendedGameListTile extends StatelessWidget {
                 context,
                 rootNavigator: true,
                 builder: (context) => game.fullId != null
-                    ? StandaloneGameScreen(
-                        params: InitialStandaloneGameParams(
-                          id: game.fullId!,
-                        ),
-                      )
+                    ? GameScreen(initialGameId: game.fullId)
                     : ArchivedGameScreen(
                         gameData: game,
                         orientation: youAre,

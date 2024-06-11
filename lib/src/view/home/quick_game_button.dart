@@ -8,7 +8,7 @@ import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/view/game/lobby_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/play/time_control_modal.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -79,7 +79,7 @@ class QuickGameButton extends ConsumerWidget {
                     pushPlatformRoute(
                       context,
                       rootNavigator: true,
-                      builder: (_) => LobbyScreen(
+                      builder: (_) => GameScreen(
                         seek: GameSeek.fastPairing(playPrefs, session),
                       ),
                     );
@@ -91,7 +91,7 @@ class QuickGameButton extends ConsumerWidget {
                     pushPlatformRoute(
                       context,
                       rootNavigator: true,
-                      builder: (_) => LobbyScreen(
+                      builder: (_) => GameScreen(
                         seek: GameSeek.fastPairing(playPrefs, session),
                       ),
                     );

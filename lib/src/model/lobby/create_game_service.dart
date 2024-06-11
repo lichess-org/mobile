@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:deep_pick/deep_pick.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
+import 'package:lichess_mobile/src/model/challenge/challenge.dart';
+import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
@@ -12,9 +14,13 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'create_game_service.g.dart';
 
-@Riverpod(keepAlive: true)
+@riverpod
 CreateGameService createGameService(CreateGameServiceRef ref) {
-  return CreateGameService(Logger('CreateGameService'), ref: ref);
+  final service = CreateGameService(Logger('CreateGameService'), ref: ref);
+  ref.onDispose(() {
+    service.dispose();
+  });
+  return service;
 }
 
 class CreateGameService {
@@ -25,10 +31,15 @@ class CreateGameService {
 
   LichessClient get lichessClient => ref.read(lichessClientProvider);
 
-  StreamSubscription<SocketEvent>? _pendingGameConnection;
+  /// The current lobby connection if we are creating a game from the lobby.
+  StreamSubscription<SocketEvent>? _lobbyConnection;
 
+  /// The current challenge connection if we are creating a game from a challenge.
+  (ChallengeId, StreamSubscription<SocketEvent>)? _challengeConnection;
+
+  /// Create a new game from the lobby.
   Future<GameFullId> newLobbyGame(GameSeek seek) async {
-    if (_pendingGameConnection != null) {
+    if (_lobbyConnection != null) {
       throw StateError('Already creating a game.');
     }
 
@@ -38,7 +49,7 @@ class CreateGameService {
     // ensure the pending game connection is closed in any case
     final completer = Completer<GameFullId>()..future.whenComplete(dispose);
 
-    _pendingGameConnection = socketClient.stream.listen((event) {
+    _lobbyConnection = socketClient.stream.listen((event) {
       if (event.topic == 'redirect') {
         final data = event.data as Map<String, dynamic>;
         completer.complete(pick(data['id']).asGameFullIdOrThrow());
@@ -75,6 +86,7 @@ class CreateGameService {
     return completer.future;
   }
 
+  /// Create a new correspondence game.
   Future<void> newCorrespondenceGame(GameSeek seek) async {
     _log.info('Creating new correspondence game');
 
@@ -86,8 +98,60 @@ class CreateGameService {
     );
   }
 
+  /// Create a new challenge game.
+  ///
+  /// Returns the game id or the decline reason if the challenge was declined.
+  Future<(GameFullId?, DeclineReason?)> newChallenge(
+    ChallengeRequest challengeReq,
+  ) async {
+    if (_challengeConnection != null) {
+      throw StateError('Already creating a game.');
+    }
+
+    // ensure the pending connection is closed in any case
+    final completer = Completer<(GameFullId?, DeclineReason?)>()
+      ..future.whenComplete(dispose);
+
+    try {
+      _log.info('Creating new challenge game');
+
+      final repo = ChallengeRepository(lichessClient);
+      final challenge = await repo.create(challengeReq);
+
+      final socketPool = ref.read(socketPoolProvider);
+      final socketClient =
+          socketPool.open(Uri(path: '/challenge/${challenge.id}/socket/v5'));
+
+      _challengeConnection = (
+        challenge.id,
+        socketClient.stream.listen((event) async {
+          if (event.topic == 'reload') {
+            try {
+              final updatedChallenge = await repo.show(challenge.id);
+              if (updatedChallenge.gameFullId != null) {
+                completer.complete((updatedChallenge.gameFullId, null));
+              } else if (updatedChallenge.declineReason != null) {
+                completer.complete((null, updatedChallenge.declineReason));
+              }
+            } catch (e) {
+              _log.warning('Failed to reload challenge', e);
+            }
+          }
+        })
+      );
+    } catch (e) {
+      _log.warning('Failed to create challenge', e);
+      // if the completer is not yet completed, complete it with an error
+      if (!completer.isCompleted) {
+        completer.completeError(e);
+      }
+    }
+
+    return completer.future;
+  }
+
   /// Cancel the current game creation.
-  Future<void> cancel() async {
+  Future<void> cancelSeek() async {
     _log.info('Cancelling game creation');
     final sri = ref.read(sriProvider);
     try {
@@ -97,9 +161,23 @@ class CreateGameService {
     }
   }
 
+  Future<void> cancelChallenge() async {
+    final id = _challengeConnection?.$1;
+    if (id != null) {
+      try {
+        _log.info('Cancelling challenge');
+        await ChallengeRepository(lichessClient).cancel(id);
+      } catch (e) {
+        _log.warning('Failed to cancel challenge: $e', e);
+      }
+    }
+  }
+
   /// Dispose the service.
   void dispose() {
-    _pendingGameConnection?.cancel();
-    _pendingGameConnection = null;
+    _lobbyConnection?.cancel();
+    _lobbyConnection = null;
+    _challengeConnection?.$2.cancel();
+    _challengeConnection = null;
   }
 }

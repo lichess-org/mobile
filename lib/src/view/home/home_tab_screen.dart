@@ -20,9 +20,8 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/correspondence/offline_correspondence_game_screen.dart';
-import 'package:lichess_mobile/src/view/game/lobby_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/offline_correspondence_games_screen.dart';
-import 'package:lichess_mobile/src/view/game/standalone_game_screen.dart';
 import 'package:lichess_mobile/src/view/home/create_a_game_screen.dart';
 import 'package:lichess_mobile/src/view/home/create_game_options.dart';
 import 'package:lichess_mobile/src/view/home/quick_game_button.dart';
@@ -102,7 +101,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
                 pushPlatformRoute(
                   context,
                   rootNavigator: true,
-                  builder: (_) => LobbyScreen(
+                  builder: (_) => GameScreen(
                     seek: GameSeek.fastPairing(playPrefs, session),
                   ),
                 );
@@ -160,7 +159,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
                   pushPlatformRoute(
                     context,
                     rootNavigator: true,
-                    builder: (_) => LobbyScreen(
+                    builder: (_) => GameScreen(
                       seek: GameSeek.fastPairing(playPrefs, session),
                     ),
                   );
@@ -473,13 +472,11 @@ class _OngoingGamesCarousel extends ConsumerWidget {
               pushPlatformRoute(
                 context,
                 rootNavigator: true,
-                builder: (context) => StandaloneGameScreen(
-                  params: InitialStandaloneGameParams(
-                    id: game.fullId,
-                    fen: game.fen,
-                    orientation: game.orientation,
-                    lastMove: game.lastMove,
-                  ),
+                builder: (context) => GameScreen(
+                  initialGameId: game.fullId,
+                  loadingFen: game.fen,
+                  loadingOrientation: game.orientation,
+                  loadingLastMove: game.lastMove,
                 ),
               );
             },

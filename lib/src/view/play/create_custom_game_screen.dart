@@ -22,8 +22,7 @@ import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/view/game/lobby_screen.dart';
-import 'package:lichess_mobile/src/view/game/standalone_game_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -196,11 +195,7 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
               context,
               rootNavigator: true,
               builder: (BuildContext context) {
-                return StandaloneGameScreen(
-                  params: InitialStandaloneGameParams(
-                    id: gameFullId,
-                  ),
-                );
+                return GameScreen(initialGameId: gameFullId);
               },
             );
           }
@@ -629,7 +624,7 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                                     context,
                                     rootNavigator: true,
                                     builder: (BuildContext context) {
-                                      return LobbyScreen(
+                                      return GameScreen(
                                         seek: GameSeek.custom(
                                           preferences,
                                           account,

@@ -38,7 +38,7 @@ import 'game_player.dart';
 import 'game_result_dialog.dart';
 import 'game_screen_providers.dart';
 
-/// Common body for the [LobbyGameScreen] and [StandaloneGameScreen].
+/// Game body for the [GameScreen].
 ///
 /// This widget is responsible for displaying the board, the clocks, the players,
 /// and the bottom bar.

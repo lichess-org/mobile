@@ -1,31 +1,100 @@
-import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
+import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 
 part 'challenge.freezed.dart';
 
+abstract mixin class BaseChallenge {
+  ChallengeStatus get status;
+  Variant get variant;
+  Speed get speed;
+  ChallengeTimeControlType get timeControl;
+  (Duration time, Duration increment)? get clock;
+  int? get days;
+  bool get rated;
+  SideChoice get sideChoice;
+  String? get initialFen;
+  ChallengeDirection? get direction;
+
+  TimeIncrement? get timeIncrement => clock != null
+      ? TimeIncrement(clock!.$1.inSeconds, clock!.$2.inSeconds)
+      : null;
+
+  Perf get perf => Perf.fromVariantAndSpeed(
+        variant,
+        timeIncrement != null
+            ? Speed.fromTimeIncrement(timeIncrement!)
+            : Speed.correspondence,
+      );
+}
+
+/// Represents a challenge already created server-side.
 @freezed
-class Challenge with _$Challenge {
+class Challenge with _$Challenge, BaseChallenge implements BaseChallenge {
   const Challenge._();
 
+  @Assert(
+    'clock != null || days != null',
+    'Either clock or days must be set but not both.',
+  )
   const factory Challenge({
     required ChallengeId id,
+    GameFullId? gameFullId,
     required ChallengeStatus status,
     required Variant variant,
     required Speed speed,
-    required ChallengeTimeControl timeControl,
+    required ChallengeTimeControlType timeControl,
     required bool rated,
+    (Duration time, Duration increment)? clock,
+    int? days,
     required SideChoice sideChoice,
-    required Side finalSide,
-    required ChallengeUser challenger,
-    required ChallengeUser destUser,
+    ChallengeUser? challenger,
+    ChallengeUser? destUser,
+    DeclineReason? declineReason,
     String? initialFen,
     ChallengeDirection? direction,
   }) = _Challenge;
+}
+
+/// Represents a challenge request to play a game.
+@freezed
+class ChallengeRequest
+    with _$ChallengeRequest, BaseChallenge
+    implements BaseChallenge {
+  const ChallengeRequest._();
+
+  @Assert(
+    'clock != null || days != null',
+    'Either clock or days must be set but not both.',
+  )
+  const factory ChallengeRequest({
+    /// The user to challenge.
+    required LightUser user,
+    @Default(ChallengeStatus.pending) ChallengeStatus status,
+    required Variant variant,
+    required Speed speed,
+    required ChallengeTimeControlType timeControl,
+    (Duration time, Duration increment)? clock,
+    int? days,
+    required bool rated,
+    required SideChoice sideChoice,
+    String? initialFen,
+    @Default(ChallengeDirection.outward) ChallengeDirection? direction,
+  }) = _ChallengeRequest;
+
+  Map<String, dynamic> get toRequestBody => {
+        if (clock != null) 'clock.limit': (clock!.$1.inSeconds / 60).toString(),
+        if (clock != null) 'clock.increment': clock!.$2.inSeconds.toString(),
+        if (days != null) 'days': days.toString(),
+        'rated': rated.toString(),
+        'variant': variant.name,
+        if (sideChoice != SideChoice.random) 'color': sideChoice.name,
+      };
 }
 
 enum ChallengeDirection {
@@ -34,6 +103,11 @@ enum ChallengeDirection {
 }
 
 enum ChallengeStatus {
+  /// The challenge is pending. This is specific to the client, when the challenge
+  /// is not yet sent to the server.
+  pending,
+
+  // rest of the statuses are from the API
   created,
   offline,
   canceled,
@@ -47,18 +121,24 @@ enum ChallengeTimeControlType {
   correspondence,
 }
 
+enum DeclineReason {
+  generic,
+  later,
+  tooFast,
+  tooSlow,
+  timeControl,
+  rated,
+  casual,
+  standard,
+  variant,
+  noBot,
+  onlyBot,
+}
+
 typedef ChallengeUser = ({
   LightUser user,
-  bool provisionalRating,
-  int lagRating,
-});
-
-typedef ChallengeTimeControl = ({
-  ChallengeTimeControlType type,
-  Duration? time,
-  Duration? increment,
-  int? days,
-  bool? show,
+  bool? provisionalRating,
+  int? lagRating,
 });
 
 enum SideChoice {
@@ -197,6 +277,55 @@ extension ChallengeExtension on Pick {
     if (value == null) return null;
     try {
       return asSideChoiceOrThrow();
+    } catch (_) {
+      return null;
+    }
+  }
+
+  DeclineReason asDeclineReasonOrThrow() {
+    final value = this.required().value;
+    if (value is DeclineReason) {
+      return value;
+    }
+    if (value is String) {
+      switch (value) {
+        case 'generic':
+          return DeclineReason.generic;
+        case 'later':
+          return DeclineReason.later;
+        case 'tooFast':
+          return DeclineReason.tooFast;
+        case 'tooSlow':
+          return DeclineReason.tooSlow;
+        case 'timeControl':
+          return DeclineReason.timeControl;
+        case 'rated':
+          return DeclineReason.rated;
+        case 'casual':
+          return DeclineReason.casual;
+        case 'standard':
+          return DeclineReason.standard;
+        case 'variant':
+          return DeclineReason.variant;
+        case 'noBot':
+          return DeclineReason.noBot;
+        case 'onlyBot':
+          return DeclineReason.onlyBot;
+        default:
+          throw PickException(
+            "value $value at $debugParsingExit can't be casted to DeclineReason: invalid string.",
+          );
+      }
+    }
+    throw PickException(
+      "value $value at $debugParsingExit can't be casted to DeclineReason",
+    );
+  }
+
+  DeclineReason? asDeclineReasonOrNull() {
+    if (value == null) return null;
+    try {
+      return asDeclineReasonOrThrow();
     } catch (_) {
       return null;
     }

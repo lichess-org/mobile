@@ -9,8 +9,6 @@ import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 
-import './challenge_request.dart';
-
 typedef ChallengesList = ({
   IList<Challenge> inward,
   IList<Challenge> outward,
@@ -43,16 +41,13 @@ class ChallengeRepository {
     );
   }
 
-  Future<void> create(String username, ChallengeRequest req) async {
-    final uri = Uri(path: '/api/challenge/$username');
-    final response = await client.post(uri, body: req.toRequestBody);
-
-    if (response.statusCode >= 400) {
-      throw http.ClientException(
-        'Failed to challenge user: ${response.statusCode}',
-        uri,
-      );
-    }
+  Future<Challenge> create(ChallengeRequest challenge) async {
+    final uri = Uri(path: '/api/challenge/${challenge.user.id}');
+    return client.postReadJson(
+      uri,
+      body: challenge.toRequestBody,
+      mapper: (json) => _challengeFromPick(pick(json).required()),
+    );
   }
 
   Future<void> accept(ChallengeId id) async {
@@ -93,41 +88,45 @@ class ChallengeRepository {
 }
 
 Challenge _challengeFromPick(RequiredPick pick) {
-  final challengerUser = pick('challenger').asLightUserOrThrow();
-  final destUser = pick('destUser').asLightUserOrThrow();
-
   return Challenge(
     id: pick('id').asChallengeIdOrThrow(),
     status: pick('status').asChallengeStatusOrThrow(),
     variant: pick('variant').asVariantOrThrow(),
     speed: pick('speed').asSpeedOrThrow(),
-    timeControl: pick('timeControl').letOrThrow(
-      (tcPick) => (
-        type: tcPick('type').asChallengeTimeControlTypeOrThrow(),
-        time: tcPick('limit').asDurationFromSecondsOrNull(),
-        increment: tcPick('increment').asDurationFromSecondsOrNull(),
-        days: tcPick('daysPerTurn').asIntOrNull(),
-        show: tcPick('show').asBoolOrNull(),
-      ),
+    timeControl:
+        pick('timeControl', 'type').asChallengeTimeControlTypeOrThrow(),
+    clock: pick('timeControl').letOrThrow(
+      (clockPick) {
+        final time = clockPick('limit').asDurationFromSecondsOrNull();
+        final increment = clockPick('increment').asDurationFromSecondsOrNull();
+        return time != null && increment != null ? (time, increment) : null;
+      },
     ),
+    days: pick('timeControl', 'daysPerTurn').asIntOrNull(),
     rated: pick('rated').asBoolOrThrow(),
     sideChoice: pick('color').asSideChoiceOrThrow(),
-    finalSide: pick('finalColor').asSideOrThrow(),
-    challenger: pick('challenger').letOrThrow(
-      (challengerPick) => (
-        user: challengerUser,
-        provisionalRating: challengerPick('provisional').asBoolOrThrow(),
-        lagRating: challengerPick('lag').asIntOrThrow(),
-      ),
+    challenger: pick('challenger').letOrNull(
+      (challengerPick) {
+        final challengerUser = pick('challenger').asLightUserOrThrow();
+        return (
+          user: challengerUser,
+          provisionalRating: challengerPick('provisional').asBoolOrNull(),
+          lagRating: challengerPick('lag').asIntOrNull(),
+        );
+      },
     ),
-    destUser: pick('destUser').letOrThrow(
-      (destPick) => (
-        user: destUser,
-        provisionalRating: destPick('provisional').asBoolOrThrow(),
-        lagRating: destPick('lag').asIntOrThrow(),
-      ),
+    destUser: pick('destUser').letOrNull(
+      (destPick) {
+        final destUser = pick('destUser').asLightUserOrThrow();
+        return (
+          user: destUser,
+          provisionalRating: destPick('provisional').asBoolOrNull(),
+          lagRating: destPick('lag').asIntOrNull(),
+        );
+      },
     ),
     initialFen: pick('initialFen').asStringOrNull(),
     direction: pick('direction').asChallengeDirectionOrNull(),
+    declineReason: pick('declineReasonKey').asDeclineReasonOrNull(),
   );
 }
