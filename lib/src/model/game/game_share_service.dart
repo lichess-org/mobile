@@ -61,7 +61,7 @@ class GameShareService {
     GameId id,
     Side orientation,
     String fen,
-    Move lastMove,
+    Move? lastMove,
   ) async {
     final boardTheme = _ref.read(boardPreferencesProvider).boardTheme;
     final pieceTheme = _ref.read(boardPreferencesProvider).pieceSet;
@@ -69,7 +69,7 @@ class GameShareService {
         .read(defaultClientProvider)
         .get(
           Uri.parse(
-            '$kLichessCDNHost/export/fen.gif?fen=${Uri.encodeComponent(fen)}&color=${orientation.name}&lastMove=${lastMove.uci}&theme=${boardTheme.name}&piece=${pieceTheme.name}',
+            '$kLichessCDNHost/export/fen.gif?fen=${Uri.encodeComponent(fen)}&color=${orientation.name}${lastMove != null ? '&lastMove=${lastMove.uci}' : ''}&theme=${boardTheme.name}&piece=${pieceTheme.name}',
           ),
         )
         .timeout(const Duration(seconds: 1));
