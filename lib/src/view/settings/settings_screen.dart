@@ -125,6 +125,7 @@ class _Body extends ConsumerWidget {
               )
             : null;
 
+    String volumeLabel(double volume) => '${(volume * 100).toInt()}%';
     final List<Widget> content = [
       ListSection(
         header: userSession != null
@@ -232,7 +233,7 @@ class _Body extends ConsumerWidget {
           SettingsListTile(
             icon: const Icon(Icons.volume_up),
             settingsLabel: const Text('Volume'),
-            settingsValue: volume.toString(),
+            settingsValue: volumeLabel(volume),
             onTap: () {
               showDialog<void>(
                 context: context,
@@ -259,6 +260,7 @@ class _Body extends ConsumerWidget {
                           .setVolume(value);
                       await ref.read(soundServiceProvider).setVolume();
                     },
+                    labelBuilder: volumeLabel,
                   );
                 },
               );
@@ -502,12 +504,14 @@ class _SettingsSliderDialog extends StatefulWidget {
     required this.value,
     required this.values,
     required this.onChangeEnd,
+    this.labelBuilder,
   });
 
   final String title;
   final double value;
   final List<double> values;
   final void Function(double value) onChangeEnd;
+  final String Function(double)? labelBuilder;
 
   @override
   _SettingsSliderDialogState createState() => _SettingsSliderDialogState();
@@ -530,7 +534,8 @@ class _SettingsSliderDialogState extends State<_SettingsSliderDialog> {
                 min: 0,
                 max: widget.values.length - 1,
                 divisions: widget.values.length - 1,
-                label: widget.values[_index].toString(),
+                label: widget.labelBuilder?.call(widget.values[_index]) ??
+                    widget.values[_index].toString(),
                 onChanged: (double value) {
                   setState(() {
                     _index = value.toInt();
@@ -540,7 +545,11 @@ class _SettingsSliderDialogState extends State<_SettingsSliderDialog> {
                   widget.onChangeEnd.call(widget.values[_index]);
                 },
               ),
-              Text('${widget.values[_index]}', textAlign: TextAlign.center),
+              Text(
+                widget.labelBuilder?.call(widget.values[_index]) ??
+                    widget.values[_index].toString(),
+                textAlign: TextAlign.center,
+              ),
             ],
           );
         },
