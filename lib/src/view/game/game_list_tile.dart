@@ -289,7 +289,7 @@ class _ContextMenu extends ConsumerWidget {
                   );
                 },
               ),
-              if (game.lastFen != null && game.lastMove != null)
+              if (game.lastFen != null)
                 // Builder is used to retrieve the context immediately surrounding the
                 // BottomSheetContextMenuAction
                 // This is necessary to get the correct context for the iPad share dialog
@@ -309,7 +309,7 @@ class _ContextMenu extends ConsumerWidget {
                                 game.id,
                                 orientation,
                                 game.lastFen!,
-                                game.lastMove!,
+                                game.lastMove,
                               );
                           if (context.mounted) {
                             launchShareDialog(
