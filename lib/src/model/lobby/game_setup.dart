@@ -168,9 +168,11 @@ const kSubtractingRatingRange = [
   -150,
   -100,
   -50,
+  0,
 ];
 
 const kAddingRatingRange = [
+  0,
   50,
   100,
   150,
