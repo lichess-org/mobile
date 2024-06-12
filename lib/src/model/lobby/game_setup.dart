@@ -25,13 +25,7 @@ class GameSetup with _$GameSetup {
   const GameSetup._();
 
   const factory GameSetup({
-    // fast game
-    required TimeIncrement timeIncrement,
-
-    // custom time control choice
     required TimeControl customTimeControl,
-
-    // custom game
     required int customTimeSeconds,
     required int customIncrementSeconds,
     required int customDaysPerTurn,
@@ -39,13 +33,9 @@ class GameSetup with _$GameSetup {
     required bool customRated,
     required PlayableSide customSide,
     required (int, int) customRatingDelta,
-
-    // prefered seek mode, set after a seek is made
-    required SeekMode seekMode,
   }) = _GameSetup;
 
   static const defaults = GameSetup(
-    timeIncrement: TimeIncrement(600, 0),
     customTimeControl: TimeControl.realTime,
     customTimeSeconds: 180,
     customIncrementSeconds: 0,
@@ -54,7 +44,6 @@ class GameSetup with _$GameSetup {
     customSide: PlayableSide.random,
     customRatingDelta: (-500, 500),
     customDaysPerTurn: 3,
-    seekMode: SeekMode.fast,
   );
 
   Speed get speedFromCustom => Speed.fromTimeIncrement(
@@ -106,10 +95,6 @@ class GameSetupPreferences extends _$GameSetupPreferences {
         : GameSetup.defaults;
   }
 
-  Future<void> setTimeIncrement(TimeIncrement timeInc) {
-    return _save(state.copyWith(timeIncrement: timeInc));
-  }
-
   Future<void> setCustomTimeControl(TimeControl control) {
     return _save(state.copyWith(customTimeControl: control));
   }
@@ -132,10 +117,6 @@ class GameSetupPreferences extends _$GameSetupPreferences {
 
   Future<void> setCustomSide(PlayableSide side) {
     return _save(state.copyWith(customSide: side));
-  }
-
-  Future<void> setSeekMode(SeekMode mode) {
-    return _save(state.copyWith(seekMode: mode));
   }
 
   Future<void> setCustomRatingRange(int min, int max) {

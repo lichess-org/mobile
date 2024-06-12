@@ -611,15 +611,10 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: FatButton(
-                      semanticsLabel: context.l10n.create,
+                      semanticsLabel: context.l10n.createAGame,
                       onPressed: timeControl == TimeControl.realTime
                           ? isValidTimeControl
                               ? () {
-                                  ref
-                                      .read(
-                                        gameSetupPreferencesProvider.notifier,
-                                      )
-                                      .setSeekMode(SeekMode.custom);
                                   pushPlatformRoute(
                                     context,
                                     rootNavigator: true,
@@ -649,7 +644,7 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                                   await _pendingCreateGame;
                                   widget.setViewMode(_ViewMode.challenges);
                                 },
-                      child: Text(context.l10n.create, style: Styles.bold),
+                      child: Text(context.l10n.createAGame, style: Styles.bold),
                     ),
                   );
                 },

@@ -292,6 +292,9 @@ class AdaptiveInkWell extends StatefulWidget {
   const AdaptiveInkWell({
     required this.child,
     this.onTap,
+    this.onTapDown,
+    this.onTapUp,
+    this.onTapCancel,
     this.onLongPress,
     this.borderRadius,
     this.splashColor,
@@ -300,6 +303,9 @@ class AdaptiveInkWell extends StatefulWidget {
 
   final Widget child;
   final VoidCallback? onTap;
+  final GestureTapDownCallback? onTapDown;
+  final GestureTapUpCallback? onTapUp;
+  final GestureTapCancelCallback? onTapCancel;
   final VoidCallback? onLongPress;
   final BorderRadius? borderRadius;
   final Color? splashColor;
@@ -317,6 +323,9 @@ class _AdaptiveInkWellState extends State<AdaptiveInkWell> {
       case TargetPlatform.android:
         return InkWell(
           onTap: widget.onTap,
+          onTapDown: widget.onTapDown,
+          onTapUp: widget.onTapUp,
+          onTapCancel: widget.onTapCancel,
           onLongPress: widget.onLongPress,
           borderRadius: widget.borderRadius,
           splashColor: widget.splashColor,
@@ -326,12 +335,17 @@ class _AdaptiveInkWellState extends State<AdaptiveInkWell> {
         return GestureDetector(
           onLongPress: widget.onLongPress,
           onTap: widget.onTap,
-          onTapDown: (_) {
+          onTapDown: (details) {
+            widget.onTapDown?.call(details);
             if (widget.onTap == null) return;
             setState(() => _isPressed = true);
           },
-          onTapCancel: () => setState(() => _isPressed = false),
-          onTapUp: (_) {
+          onTapCancel: () {
+            widget.onTapCancel?.call();
+            setState(() => _isPressed = false);
+          },
+          onTapUp: (details) {
+            widget.onTapUp?.call(details);
             Future<void>.delayed(const Duration(milliseconds: 100)).then((_) {
               if (mounted) {
                 setState(() => _isPressed = false);

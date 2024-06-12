@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/home/create_game_options.dart';
-import 'package:lichess_mobile/src/view/home/quick_game_button.dart';
+import 'package:lichess_mobile/src/view/home/quick_game_matrix.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
-class CreateAGameScreen extends StatelessWidget {
-  const CreateAGameScreen();
+class PlayScreen extends StatelessWidget {
+  const PlayScreen();
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class CreateAGameScreen extends StatelessWidget {
   Widget _buildAndroid(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.l10n.createAGame),
+        title: Text(context.l10n.play),
       ),
       body: const _Body(),
     );
@@ -36,13 +36,12 @@ class _Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+    return SafeArea(
+      child: ListView(
         children: <Widget>[
           Padding(
             padding: Styles.bodySectionPadding,
-            child: const QuickGameButton(),
+            child: const QuickGameMatrix(showMatrixTitle: true),
           ),
           const CreateGameOptions(),
         ],
