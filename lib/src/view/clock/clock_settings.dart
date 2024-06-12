@@ -53,12 +53,22 @@ class ClockSettings extends ConsumerWidget {
                         );
                         return TimeControlModal(
                           excludeUltraBullet: true,
-                          value: TimeIncrement(
-                            options.time.inSeconds,
-                            options.increment.inSeconds,
+                          topPlayer: TimeIncrement(
+                            options.timePlayerTop.inSeconds,
+                            options.incrementPlayerTop.inSeconds,
+                          ),
+                          bottomPlayer: TimeIncrement(
+                            options.timePlayerBottom.inSeconds,
+                            options.incrementPlayerBottom.inSeconds,
                           ),
                           onSelected: (choice) {
                             controller.updateOptions(choice);
+                          },
+                          onSelectedCustom: (playerTop, playerBottom) {
+                            controller.updateOptionsCustom(
+                              playerTop,
+                              playerBottom,
+                            );
                           },
                         );
                       },

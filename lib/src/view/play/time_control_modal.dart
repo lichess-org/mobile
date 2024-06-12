@@ -6,16 +6,23 @@ import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/play/create_custom_time_control_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 
 class TimeControlModal extends ConsumerWidget {
   final ValueSetter<TimeIncrement> onSelected;
-  final TimeIncrement value;
+  final void Function(TimeIncrement playerTop, TimeIncrement playerBottom)?
+      onSelectedCustom;
+  final TimeIncrement topPlayer;
+  final TimeIncrement bottomPlayer;
   final bool excludeUltraBullet;
 
   const TimeControlModal({
     required this.onSelected,
-    required this.value,
+    this.onSelectedCustom,
+    required this.topPlayer,
+    required this.bottomPlayer,
     this.excludeUltraBullet = false,
     super.key,
   });
@@ -38,8 +45,30 @@ class TimeControlModal extends ConsumerWidget {
               style: Styles.title,
             ),
             const SizedBox(height: 26.0),
+            if (onSelectedCustom != null)
+              ListView(
+                shrinkWrap: true,
+                children: [
+                  FatButton(
+                    semanticsLabel: context.l10n.custom,
+                    onPressed: () => {
+                      pushPlatformRoute(
+                        context,
+                        title: context.l10n.custom,
+                        builder: (_) => CreateCustomTimeControlScreen(
+                          onSubmit: onSelectedCustom!,
+                          topPlayer: topPlayer,
+                          bottomPlayer: bottomPlayer,
+                        ),
+                      ),
+                    },
+                    child: Text(context.l10n.custom),
+                  ),
+                  const SizedBox(height: 20.0),
+                ],
+              ),
             _SectionChoices(
-              value,
+              topPlayer,
               choices: [
                 if (!excludeUltraBullet) const TimeIncrement(0, 1),
                 const TimeIncrement(60, 0),
@@ -54,7 +83,7 @@ class TimeControlModal extends ConsumerWidget {
             ),
             const SizedBox(height: 20.0),
             _SectionChoices(
-              value,
+              topPlayer,
               choices: const [
                 TimeIncrement(180, 0),
                 TimeIncrement(180, 2),
@@ -69,7 +98,7 @@ class TimeControlModal extends ConsumerWidget {
             ),
             const SizedBox(height: 20.0),
             _SectionChoices(
-              value,
+              topPlayer,
               choices: const [
                 TimeIncrement(600, 0),
                 TimeIncrement(600, 5),
@@ -84,7 +113,7 @@ class TimeControlModal extends ConsumerWidget {
             ),
             const SizedBox(height: 20.0),
             _SectionChoices(
-              value,
+              topPlayer,
               choices: const [
                 TimeIncrement(1500, 0),
                 TimeIncrement(1800, 0),

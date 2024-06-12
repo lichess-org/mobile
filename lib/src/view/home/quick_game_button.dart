@@ -53,7 +53,8 @@ class QuickGameButton extends ConsumerWidget {
                 ),
                 builder: (BuildContext context) {
                   return TimeControlModal(
-                    value: playPrefs.timeIncrement,
+                    topPlayer: playPrefs.timeIncrement,
+                    bottomPlayer: playPrefs.timeIncrement,
                     onSelected: (choice) {
                       ref
                           .read(gameSetupPreferencesProvider.notifier)
