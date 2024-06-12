@@ -20,7 +20,6 @@ import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
-import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
@@ -254,10 +253,10 @@ class _Body extends ConsumerWidget {
                       0.9,
                       1.0,
                     ],
-                    onChanged: (num value) async {
+                    onChangeEnd: (double value) async {
                       await ref
                           .read(generalPreferencesProvider.notifier)
-                          .setVolume(value.toDouble());
+                          .setVolume(value);
                       await ref.read(soundServiceProvider).setVolume();
                     },
                   );
@@ -502,20 +501,20 @@ class _SettingsSliderDialog extends StatefulWidget {
     required this.title,
     required this.value,
     required this.values,
-    required this.onChanged,
+    required this.onChangeEnd,
   });
 
   final String title;
-  final num value;
-  final List<num> values;
-  final void Function(num value) onChanged;
+  final double value;
+  final List<double> values;
+  final void Function(double value) onChangeEnd;
 
   @override
   _SettingsSliderDialogState createState() => _SettingsSliderDialogState();
 }
 
 class _SettingsSliderDialogState extends State<_SettingsSliderDialog> {
-  late num value = widget.value;
+  late int _index = widget.values.indexOf(widget.value);
 
   @override
   Widget build(BuildContext context) {
@@ -526,15 +525,22 @@ class _SettingsSliderDialogState extends State<_SettingsSliderDialog> {
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              NonLinearSlider(
-                value: value,
-                values: widget.values,
-                onChangeEnd: (v) {
-                  setState(() => value = v);
-                  widget.onChanged(v);
+              Slider.adaptive(
+                value: _index.toDouble(),
+                min: 0,
+                max: widget.values.length - 1,
+                divisions: widget.values.length - 1,
+                label: widget.values[_index].toString(),
+                onChanged: (double value) {
+                  setState(() {
+                    _index = value.toInt();
+                  });
+                },
+                onChangeEnd: (double value) {
+                  widget.onChangeEnd.call(widget.values[_index]);
                 },
               ),
-              Text('$value', textAlign: TextAlign.center),
+              Text('${widget.values[_index]}', textAlign: TextAlign.center),
             ],
           );
         },
