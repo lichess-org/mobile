@@ -254,9 +254,12 @@ class _Body extends ConsumerWidget {
                       0.9,
                       1.0,
                     ],
-                    onChanged: (num value) => ref
-                        .read(generalPreferencesProvider.notifier)
-                        .setVolume(value.toDouble()),
+                    onChanged: (num value) async {
+                      await ref
+                          .read(generalPreferencesProvider.notifier)
+                          .setVolume(value.toDouble());
+                      await ref.read(soundServiceProvider).setVolume();
+                    },
                   );
                 },
               );

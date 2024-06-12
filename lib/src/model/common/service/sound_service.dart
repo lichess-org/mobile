@@ -29,7 +29,9 @@ SoundService soundService(SoundServiceRef ref) {
   // anything. See: lib/src/app.dart
   final deps = ref.read(appInitializationProvider).requireValue;
   final (pool, sounds) = deps.soundPool;
-  return SoundService(pool, sounds, ref);
+  final masterVolume =
+      ref.watch(generalPreferencesProvider.select((value) => value.volume));
+  return SoundService(pool, sounds, masterVolume, ref);
 }
 
 @Riverpod(keepAlive: true)
@@ -74,17 +76,17 @@ Future<SoundMap> loadSounds(Soundpool pool, SoundTheme soundTheme) async {
 }
 
 class SoundService {
-  SoundService(this._pool, this._sounds, this._ref);
+  SoundService(this._pool, this._sounds, this.masterVolume, this._ref);
 
   final Soundpool _pool;
   SoundMap _sounds;
+  final double masterVolume;
   final SoundServiceRef _ref;
 
   (int, Sound)? _currentStream;
 
   Future<int?> play(Sound sound) async {
     final isEnabled = _ref.read(generalPreferencesProvider).isSoundEnabled;
-    final volume = _ref.read(generalPreferencesProvider).volume;
     final soundId = _sounds[sound];
     if (soundId != null && isEnabled) {
       // Stop current sound only if it is a move or capture sound
@@ -94,11 +96,19 @@ class SoundService {
               _currentStream!.$2 == Sound.capture)) {
         await _pool.stop(_currentStream!.$1);
       }
-      await _pool.setVolume(soundId: soundId, volume: volume);
       _currentStream = (await _pool.play(soundId), sound);
       return _currentStream!.$1;
     }
     return null;
+  }
+
+  Future<void> setVolume() async {
+    for (final sound in Sound.values) {
+      final soundId = _sounds[sound];
+      if (soundId != null) {
+        await _pool.setVolume(soundId: soundId, volume: masterVolume);
+      }
+    }
   }
 
   Future<void> stopCurrent() async {
