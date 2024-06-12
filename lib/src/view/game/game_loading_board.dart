@@ -210,71 +210,13 @@ class _LobbyNumbers extends ConsumerWidget {
     } else {
       final (:nbPlayers, :nbGames) = lobbyNumbers;
       return Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          _AnimatedLobbyNumber(
-            labelBuilder: (nb) => context.l10n.nbPlayers(nb),
-            value: nbPlayers,
-          ),
+          Text(context.l10n.nbPlayers(nbPlayers)),
           const SizedBox(height: 8.0),
-          _AnimatedLobbyNumber(
-            labelBuilder: (nb) => context.l10n.nbGamesInPlay(nb),
-            value: nbGames,
-          ),
+          Text(context.l10n.nbGamesInPlay(nbGames)),
         ],
       );
     }
-  }
-}
-
-const _lobbyNumbersStyle = TextStyle(
-  fontFeatures: [
-    FontFeature.tabularFigures(),
-  ],
-);
-
-class _AnimatedLobbyNumber extends StatefulWidget {
-  const _AnimatedLobbyNumber({
-    required this.labelBuilder,
-    required this.value,
-  });
-
-  final String Function(int) labelBuilder;
-  final int value;
-
-  @override
-  State<_AnimatedLobbyNumber> createState() => _AnimatedLobbyNumberState();
-}
-
-class _AnimatedLobbyNumberState extends State<_AnimatedLobbyNumber> {
-  int previousValue = 0;
-  int value = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    previousValue = widget.value;
-    value = widget.value;
-  }
-
-  @override
-  void didUpdateWidget(covariant _AnimatedLobbyNumber oldWidget) {
-    previousValue = oldWidget.value;
-    value = widget.value;
-    super.didUpdateWidget(oldWidget);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return TweenAnimationBuilder<int>(
-      tween: IntTween(
-        begin: previousValue,
-        end: value,
-      ),
-      curve: Curves.linear,
-      duration: const Duration(seconds: 3),
-      builder: (context, int value, _) {
-        return Text(widget.labelBuilder(value), style: _lobbyNumbersStyle);
-      },
-    );
   }
 }
