@@ -15,10 +15,12 @@ import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
+import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
@@ -778,8 +780,7 @@ class _BottomBar extends ConsumerWidget {
           },
         ),
         BottomSheetAction(
-          makeLabel: (context) =>
-              Text('${context.l10n.studyShareAndExport} PGN'),
+          makeLabel: (context) => const Text('Share PGN'),
           onPressed: (_) {
             pushPlatformRoute(
               context,
@@ -789,8 +790,7 @@ class _BottomBar extends ConsumerWidget {
           },
         ),
         BottomSheetAction(
-          makeLabel: (context) =>
-              Text('${context.l10n.studyShareAndExport} FEN'),
+          makeLabel: (context) => const Text('Share position as FEN'),
           onPressed: (_) {
             launchShareDialog(
               context,
@@ -801,6 +801,41 @@ class _BottomBar extends ConsumerWidget {
             );
           },
         ),
+        if (options.gameAnyId != null)
+          BottomSheetAction(
+            makeLabel: (context) =>
+                Text(context.l10n.screenshotCurrentPosition),
+            onPressed: (_) async {
+              final gameId = options.gameAnyId!.gameId;
+              final state = ref.read(analysisControllerProvider(pgn, options));
+              try {
+                final image =
+                    await ref.read(gameShareServiceProvider).screenshotPosition(
+                          gameId,
+                          options.orientation,
+                          state.position.fen,
+                          state.lastMove,
+                        );
+                if (context.mounted) {
+                  launchShareDialog(
+                    context,
+                    files: [image],
+                    subject: context.l10n.puzzleFromGameLink(
+                      lichessUri('/$gameId').toString(),
+                    ),
+                  );
+                }
+              } catch (e) {
+                if (context.mounted) {
+                  showPlatformSnackbar(
+                    context,
+                    'Failed to get GIF',
+                    type: SnackBarType.error,
+                  );
+                }
+              }
+            },
+          ),
       ],
     );
   }
