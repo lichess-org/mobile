@@ -16,10 +16,9 @@ part 'game_setup.g.dart';
 
 enum PlayableSide { random, white, black }
 
-enum SeekMode { fast, custom }
-
 enum TimeControl { realTime, correspondence }
 
+/// Saved custom game setup preferences.
 @Freezed(fromJson: true, toJson: true)
 class GameSetup with _$GameSetup {
   const GameSetup._();

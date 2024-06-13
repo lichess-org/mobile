@@ -42,10 +42,10 @@ class ChallengeRepository {
   }
 
   Future<Challenge> create(ChallengeRequest challenge) async {
-    final uri = Uri(path: '/api/challenge/${challenge.user.id}');
+    final uri = Uri(path: '/api/challenge/${challenge.destUser.id}');
     return client.postReadJson(
       uri,
-      body: challenge.toRequestBody,
+      body: challenge.setup.toRequestBody,
       mapper: (json) => _challengeFromPick(pick(json).required()),
     );
   }
@@ -99,7 +99,9 @@ Challenge _challengeFromPick(RequiredPick pick) {
       (clockPick) {
         final time = clockPick('limit').asDurationFromSecondsOrNull();
         final increment = clockPick('increment').asDurationFromSecondsOrNull();
-        return time != null && increment != null ? (time, increment) : null;
+        return time != null && increment != null
+            ? (time: time, increment: increment)
+            : null;
       },
     ),
     days: pick('timeControl', 'daysPerTurn').asIntOrNull(),

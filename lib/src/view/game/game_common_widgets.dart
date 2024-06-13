@@ -300,22 +300,22 @@ class _ChallengeGameTitle extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final mode = challenge.rated
+    final mode = challenge.setup.rated
         ? ' • ${context.l10n.rated}'
         : ' • ${context.l10n.casual}';
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Icon(
-          challenge.perf.icon,
+          challenge.setup.perf.icon,
           color: DefaultTextStyle.of(context).style.color,
         ),
         const SizedBox(width: 4.0),
-        if (challenge.timeIncrement != null)
-          Text('${challenge.timeIncrement?.display}$mode')
-        else if (challenge.days != null)
+        if (challenge.setup.timeIncrement != null)
+          Text('${challenge.setup.timeIncrement?.display}$mode')
+        else if (challenge.setup.days != null)
           Text(
-            '${context.l10n.nbDays(challenge.days!)}$mode',
+            '${context.l10n.nbDays(challenge.setup.days!)}$mode',
           ),
       ],
     );

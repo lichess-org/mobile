@@ -129,7 +129,7 @@ class ChallengeLoadingContent extends StatelessWidget {
                       Text(context.l10n.waitingForOpponent),
                       const SizedBox(height: 16.0),
                       UserFullNameWidget(
-                        user: challenge.user,
+                        user: challenge.destUser,
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
                       const SizedBox(height: 16.0),
@@ -138,13 +138,13 @@ class ChallengeLoadingContent extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(
-                            challenge.perf.icon,
+                            challenge.setup.perf.icon,
                             color: DefaultTextStyle.of(context).style.color,
                           ),
                           const SizedBox(width: 8.0),
                           Text(
-                            challenge.timeIncrement?.display ??
-                                '${context.l10n.daysPerTurn}: ${challenge.days}',
+                            challenge.setup.timeIncrement?.display ??
+                                '${context.l10n.daysPerTurn}: ${challenge.setup.days}',
                             style: Theme.of(context).textTheme.titleLarge,
                           ),
                         ],

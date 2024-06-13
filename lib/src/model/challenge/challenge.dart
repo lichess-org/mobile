@@ -8,21 +8,20 @@ import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 
 part 'challenge.freezed.dart';
+part 'challenge.g.dart';
 
 abstract mixin class BaseChallenge {
-  ChallengeStatus get status;
   Variant get variant;
   Speed get speed;
   ChallengeTimeControlType get timeControl;
-  (Duration time, Duration increment)? get clock;
+  ({Duration time, Duration increment})? get clock;
   int? get days;
   bool get rated;
   SideChoice get sideChoice;
   String? get initialFen;
-  ChallengeDirection? get direction;
 
   TimeIncrement? get timeIncrement => clock != null
-      ? TimeIncrement(clock!.$1.inSeconds, clock!.$2.inSeconds)
+      ? TimeIncrement(clock!.time.inSeconds, clock!.increment.inSeconds)
       : null;
 
   Perf get perf => Perf.fromVariantAndSpeed(
@@ -33,7 +32,7 @@ abstract mixin class BaseChallenge {
       );
 }
 
-/// Represents a challenge already created server-side.
+/// A challenge already created server-side.
 @freezed
 class Challenge with _$Challenge, BaseChallenge implements BaseChallenge {
   const Challenge._();
@@ -50,7 +49,7 @@ class Challenge with _$Challenge, BaseChallenge implements BaseChallenge {
     required Speed speed,
     required ChallengeTimeControlType timeControl,
     required bool rated,
-    (Duration time, Duration increment)? clock,
+    ({Duration time, Duration increment})? clock,
     int? days,
     required SideChoice sideChoice,
     ChallengeUser? challenger,
@@ -61,40 +60,67 @@ class Challenge with _$Challenge, BaseChallenge implements BaseChallenge {
   }) = _Challenge;
 }
 
-/// Represents a challenge request to play a game.
-@freezed
-class ChallengeRequest
-    with _$ChallengeRequest, BaseChallenge
+/// A challenge request to play a game with another user.
+typedef ChallengeRequest = ({
+  ChallengeSetup setup,
+  LightUser destUser,
+});
+
+/// A challenge setup.
+@Freezed(fromJson: true, toJson: true)
+class ChallengeSetup
+    with _$ChallengeSetup, BaseChallenge
     implements BaseChallenge {
-  const ChallengeRequest._();
+  const ChallengeSetup._();
 
   @Assert(
     'clock != null || days != null',
     'Either clock or days must be set but not both.',
   )
-  const factory ChallengeRequest({
-    /// The user to challenge.
-    required LightUser user,
-    @Default(ChallengeStatus.pending) ChallengeStatus status,
+  const factory ChallengeSetup({
     required Variant variant,
-    required Speed speed,
     required ChallengeTimeControlType timeControl,
-    (Duration time, Duration increment)? clock,
+    ({Duration time, Duration increment})? clock,
     int? days,
     required bool rated,
     required SideChoice sideChoice,
     String? initialFen,
-    @Default(ChallengeDirection.outward) ChallengeDirection? direction,
-  }) = _ChallengeRequest;
+  }) = _ChallengeSetup;
+
+  static const defaults = ChallengeSetup(
+    variant: Variant.standard,
+    timeControl: ChallengeTimeControlType.clock,
+    clock: (time: Duration(minutes: 10), increment: Duration.zero),
+    rated: false,
+    sideChoice: SideChoice.random,
+  );
+
+  @override
+  Speed get speed => Speed.fromTimeIncrement(
+        TimeIncrement(
+          clock != null ? clock!.time.inSeconds : 0,
+          clock != null ? clock!.increment.inSeconds : 0,
+        ),
+      );
 
   Map<String, dynamic> get toRequestBody => {
-        if (clock != null) 'clock.limit': (clock!.$1.inSeconds / 60).toString(),
-        if (clock != null) 'clock.increment': clock!.$2.inSeconds.toString(),
+        if (clock != null)
+          'clock.limit': (clock!.time.inSeconds / 60).toString(),
+        if (clock != null)
+          'clock.increment': clock!.increment.inSeconds.toString(),
         if (days != null) 'days': days.toString(),
         'rated': rated.toString(),
         'variant': variant.name,
         if (sideChoice != SideChoice.random) 'color': sideChoice.name,
       };
+
+  factory ChallengeSetup.fromJson(Map<String, dynamic> json) {
+    try {
+      return _$ChallengeSetupFromJson(json);
+    } catch (_) {
+      return ChallengeSetup.defaults;
+    }
+  }
 }
 
 enum ChallengeDirection {
@@ -103,11 +129,6 @@ enum ChallengeDirection {
 }
 
 enum ChallengeStatus {
-  /// The challenge is pending. This is specific to the client, when the challenge
-  /// is not yet sent to the server.
-  pending,
-
-  // rest of the statuses are from the API
   created,
   offline,
   canceled,
