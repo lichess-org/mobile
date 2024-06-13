@@ -1,32 +1,28 @@
 import 'dart:async';
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'relation_ctrl.freezed.dart';
-part 'relation_ctrl.g.dart';
+part 'online_friends.g.dart';
 
 @riverpod
-class RelationCtrl extends _$RelationCtrl {
+class OnlineFriends extends _$OnlineFriends {
   StreamSubscription<SocketEvent>? _socketSubscription;
   StreamSubscription<void>? _socketOpenSubscription;
 
   late SocketClient _socketClient;
 
   @override
-  Future<RelationCtrlState> build() async {
+  Future<IList<LightUser>> build() async {
     _socketClient = _socketPool.open(Uri(path: kDefaultSocketRoute));
 
     final state = _socketClient.stream
         .firstWhere((e) => e.topic == 'following_onlines')
         .then(
-          (event) => RelationCtrlState(
-            followingOnlines: _parseFriendsList(event.data as List<dynamic>),
-          ),
+          (event) => _parseFriendsList(event.data as List<dynamic>),
         );
 
     await _socketClient.firstConnection;
@@ -74,26 +70,17 @@ class RelationCtrl extends _$RelationCtrl {
     switch (event.topic) {
       case 'following_onlines':
         state = AsyncValue.data(
-          RelationCtrlState(
-            followingOnlines: _parseFriendsList(event.data as List<dynamic>),
-          ),
+          _parseFriendsList(event.data as List<dynamic>),
         );
 
       case 'following_enters':
         final data = _parseFriend(event.data.toString());
-        state = AsyncValue.data(
-          state.requireValue.copyWith(
-            followingOnlines: state.requireValue.followingOnlines.add(data),
-          ),
-        );
+        state = AsyncValue.data(state.requireValue.add(data));
 
       case 'following_leaves':
         final data = _parseFriend(event.data.toString());
         state = AsyncValue.data(
-          state.requireValue.copyWith(
-            followingOnlines: state.requireValue.followingOnlines
-                .removeWhere((v) => v.id == data.id),
-          ),
+          state.requireValue.removeWhere((v) => v.id == data.id),
         );
     }
   }
@@ -114,13 +101,4 @@ class RelationCtrl extends _$RelationCtrl {
   IList<LightUser> _parseFriendsList(List<dynamic> friends) {
     return friends.map((v) => _parseFriend(v.toString())).toIList();
   }
-}
-
-@freezed
-class RelationCtrlState with _$RelationCtrlState {
-  const RelationCtrlState._();
-
-  const factory RelationCtrlState({
-    required IList<LightUser> followingOnlines,
-  }) = _RelationCtrlState;
 }

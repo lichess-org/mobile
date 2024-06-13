@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/relation/relation_ctrl.dart';
+import 'package:lichess_mobile/src/model/relation/online_friends.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
@@ -27,11 +27,11 @@ class PlayerScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return FocusDetector(
       onFocusRegained: () {
-        ref.read(relationCtrlProvider.notifier).startWatchingFriends();
+        ref.read(onlineFriendsProvider.notifier).startWatchingFriends();
       },
       onFocusLost: () {
         if (context.mounted) {
-          ref.read(relationCtrlProvider.notifier).stopWatchingFriends();
+          ref.read(onlineFriendsProvider.notifier).stopWatchingFriends();
         }
       },
       child: PlatformWidget(
@@ -115,31 +115,30 @@ class _SearchButton extends StatelessWidget {
 class _OnlineFriendsWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final relationState = ref.watch(relationCtrlProvider);
+    final relationState = ref.watch(onlineFriendsProvider);
 
     return relationState.when(
       data: (data) {
         return ListSection(
-          header:
-              Text(context.l10n.nbFriendsOnline(data.followingOnlines.length)),
-          headerTrailing: data.followingOnlines.isEmpty
+          header: Text(context.l10n.nbFriendsOnline(data.length)),
+          headerTrailing: data.isEmpty
               ? null
               : NoPaddingTextButton(
-                  onPressed: () => _handleTap(context, data.followingOnlines),
+                  onPressed: () => _handleTap(context, data),
                   child: Text(
                     context.l10n.more,
                   ),
                 ),
           children: [
-            if (data.followingOnlines.isEmpty)
+            if (data.isEmpty)
               PlatformListTile(
                 title: Text(context.l10n.friends),
                 trailing: const Icon(
                   Icons.chevron_right,
                 ),
-                onTap: () => _handleTap(context, data.followingOnlines),
+                onTap: () => _handleTap(context, data),
               ),
-            for (final user in data.followingOnlines)
+            for (final user in data)
               PlatformListTile(
                 title: Padding(
                   padding: const EdgeInsets.only(right: 5.0),

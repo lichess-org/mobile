@@ -82,6 +82,10 @@ class User with _$User {
     PlayTime? playTime,
     Profile? profile,
     UserGameCount? count,
+    bool? followable,
+    bool? following,
+    bool? blocking,
+    bool? followsYou,
   }) = _User;
 
   LightUser get lightUser => LightUser(
@@ -120,6 +124,10 @@ class User with _$User {
                     ? UserPerf.fromJsonStreak(entry.value)
                     : UserPerf.fromJson(entry.value),
       }),
+      followable: pick('followable').asBoolOrNull(),
+      following: pick('following').asBoolOrNull(),
+      blocking: pick('blocking').asBoolOrNull(),
+      followsYou: pick('followsYou').asBoolOrNull(),
     );
   }
 }

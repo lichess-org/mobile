@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
-import 'package:lichess_mobile/src/model/relation/relation_ctrl.dart';
+import 'package:lichess_mobile/src/model/relation/online_friends.dart';
 import 'package:lichess_mobile/src/model/relation/relation_repository.dart';
 import 'package:lichess_mobile/src/model/relation/relation_repository_providers.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
@@ -25,8 +25,8 @@ Future<(IList<User>, IList<LightUser>)> _getFollowingAndOnlines(
   _GetFollowingAndOnlinesRef ref,
 ) async {
   final following = await ref.watch(followingProvider.future);
-  final onlines = await ref.watch(relationCtrlProvider.future);
-  return (following, onlines.followingOnlines);
+  final onlines = await ref.watch(onlineFriendsProvider.future);
+  return (following, onlines);
 }
 
 class FollowingScreen extends StatelessWidget {
@@ -101,7 +101,7 @@ class _Body extends ConsumerWidget {
                               try {
                                 await ref.withClient(
                                   (client) => RelationRepository(client)
-                                      .unfollow(user.username),
+                                      .unfollow(user.id),
                                 );
                               } catch (_) {
                                 setState(() {
@@ -112,6 +112,7 @@ class _Body extends ConsumerWidget {
                             backgroundColor: context.lichessColors.error,
                             foregroundColor: Colors.white,
                             icon: Icons.person_remove,
+                            // TODO translate
                             label: 'Unfollow',
                           ),
                         ],
