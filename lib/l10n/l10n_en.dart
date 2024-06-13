@@ -231,6 +231,87 @@ class AppLocalizationsEn extends AppLocalizations {
   String get contactContactLichess => 'Contact Lichess';
 
   @override
+  String challengeChallengesX(String param1) {
+    return 'Challenges: $param1';
+  }
+
+  @override
+  String get challengeChallengeToPlay => 'Challenge to a game';
+
+  @override
+  String get challengeChallengeDeclined => 'Challenge declined.';
+
+  @override
+  String get challengeChallengeAccepted => 'Challenge accepted!';
+
+  @override
+  String get challengeChallengeCanceled => 'Challenge cancelled.';
+
+  @override
+  String get challengeRegisterToSendChallenges => 'Please register to send challenges to this user.';
+
+  @override
+  String challengeYouCannotChallengeX(String param) {
+    return 'You cannot challenge $param.';
+  }
+
+  @override
+  String challengeXDoesNotAcceptChallenges(String param) {
+    return '$param does not accept challenges.';
+  }
+
+  @override
+  String challengeYourXRatingIsTooFarFromY(String param1, String param2) {
+    return 'Your $param1 rating is too far from $param2.';
+  }
+
+  @override
+  String challengeCannotChallengeDueToProvisionalXRating(String param) {
+    return 'Cannot challenge due to provisional $param rating.';
+  }
+
+  @override
+  String challengeXOnlyAcceptsChallengesFromFriends(String param) {
+    return '$param only accepts challenges from friends.';
+  }
+
+  @override
+  String get challengeDeclineGeneric => 'I\'m not accepting challenges at the moment.';
+
+  @override
+  String get challengeDeclineLater => 'This is not the right time for me, please ask again later.';
+
+  @override
+  String get challengeDeclineTooFast => 'This time control is too fast for me, please challenge again with a slower game.';
+
+  @override
+  String get challengeDeclineTooSlow => 'This time control is too slow for me, please challenge again with a faster game.';
+
+  @override
+  String get challengeDeclineTimeControl => 'I\'m not accepting challenges with this time control.';
+
+  @override
+  String get challengeDeclineRated => 'Please send me a rated challenge instead.';
+
+  @override
+  String get challengeDeclineCasual => 'Please send me a casual challenge instead.';
+
+  @override
+  String get challengeDeclineStandard => 'I\'m not accepting variant challenges right now.';
+
+  @override
+  String get challengeDeclineVariant => 'I\'m not willing to play this variant right now.';
+
+  @override
+  String get challengeDeclineNoBot => 'I\'m not accepting challenges from bots.';
+
+  @override
+  String get challengeDeclineOnlyBot => 'I\'m only accepting challenges from bots.';
+
+  @override
+  String get challengeInviteLichessUser => 'Or invite a Lichess user:';
+
+  @override
   String get playWithAFriend => 'Play with a friend';
 
   @override
@@ -4800,6 +4881,87 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get contactContactLichess => 'Contact Lichess';
+
+  @override
+  String challengeChallengesX(String param1) {
+    return 'Challenges: $param1';
+  }
+
+  @override
+  String get challengeChallengeToPlay => 'Challenge to a game';
+
+  @override
+  String get challengeChallengeDeclined => 'Challenge declined';
+
+  @override
+  String get challengeChallengeAccepted => 'Challenge accepted!';
+
+  @override
+  String get challengeChallengeCanceled => 'Challenge canceled.';
+
+  @override
+  String get challengeRegisterToSendChallenges => 'Please register to send challenges.';
+
+  @override
+  String challengeYouCannotChallengeX(String param) {
+    return 'You cannot challenge $param.';
+  }
+
+  @override
+  String challengeXDoesNotAcceptChallenges(String param) {
+    return '$param does not accept challenges.';
+  }
+
+  @override
+  String challengeYourXRatingIsTooFarFromY(String param1, String param2) {
+    return 'Your $param1 rating is too far from $param2.';
+  }
+
+  @override
+  String challengeCannotChallengeDueToProvisionalXRating(String param) {
+    return 'Cannot challenge due to provisional $param rating.';
+  }
+
+  @override
+  String challengeXOnlyAcceptsChallengesFromFriends(String param) {
+    return '$param only accepts challenges from friends.';
+  }
+
+  @override
+  String get challengeDeclineGeneric => 'I\'m not accepting challenges at the moment.';
+
+  @override
+  String get challengeDeclineLater => 'This is not the right time for me, please ask again later.';
+
+  @override
+  String get challengeDeclineTooFast => 'This time control is too fast for me, please challenge again with a slower game.';
+
+  @override
+  String get challengeDeclineTooSlow => 'This time control is too slow for me, please challenge again with a faster game.';
+
+  @override
+  String get challengeDeclineTimeControl => 'I\'m not accepting challenges with this time control.';
+
+  @override
+  String get challengeDeclineRated => 'Please send me a rated challenge instead.';
+
+  @override
+  String get challengeDeclineCasual => 'Please send me a casual challenge instead.';
+
+  @override
+  String get challengeDeclineStandard => 'I\'m not accepting variant challenges right now.';
+
+  @override
+  String get challengeDeclineVariant => 'I\'m not willing to play this variant right now.';
+
+  @override
+  String get challengeDeclineNoBot => 'I\'m not accepting challenges from bots.';
+
+  @override
+  String get challengeDeclineOnlyBot => 'I\'m only accepting challenges from bots.';
+
+  @override
+  String get challengeInviteLichessUser => 'Or invite a Lichess user:';
 
   @override
   String get playWithAFriend => 'Play with a friend';

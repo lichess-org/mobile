@@ -9,6 +9,8 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/play/challenge_screen.dart';
 import 'package:lichess_mobile/src/view/user/recent_games.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -174,6 +176,16 @@ class _UserProfileListView extends ConsumerWidget {
           ListSection(
             hasLeading: true,
             children: [
+              PlatformListTile(
+                title: Text(context.l10n.challengeChallengeToPlay),
+                leading: const Icon(Icons.play_arrow),
+                onTap: () {
+                  pushPlatformRoute(
+                    context,
+                    builder: (context) => ChallengeScreen(user.lightUser),
+                  );
+                },
+              ),
               if (user.followable == true && user.following != true)
                 PlatformListTile(
                   leading: const Icon(Icons.person_add),

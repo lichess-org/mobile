@@ -231,6 +231,87 @@ class AppLocalizationsSq extends AppLocalizations {
   String get contactContactLichess => 'Kontaktoni me Lichess-in';
 
   @override
+  String challengeChallengesX(String param1) {
+    return 'Challenges: $param1';
+  }
+
+  @override
+  String get challengeChallengeToPlay => 'Sfidoni në një lojë';
+
+  @override
+  String get challengeChallengeDeclined => 'Sfida u refuzua';
+
+  @override
+  String get challengeChallengeAccepted => 'Sfida u pranua!';
+
+  @override
+  String get challengeChallengeCanceled => 'Sfida u anulua.';
+
+  @override
+  String get challengeRegisterToSendChallenges => 'Që të dërgoni sfidë, ju lutemi, regjistrohuni.';
+
+  @override
+  String challengeYouCannotChallengeX(String param) {
+    return 'S’mund të sfidoni $param.';
+  }
+
+  @override
+  String challengeXDoesNotAcceptChallenges(String param) {
+    return '$param nuk pranon sfida.';
+  }
+
+  @override
+  String challengeYourXRatingIsTooFarFromY(String param1, String param2) {
+    return 'Vlerësimi juaj prej $param1 është shumë larg nga $param2.';
+  }
+
+  @override
+  String challengeCannotChallengeDueToProvisionalXRating(String param) {
+    return 'S’mund të jepni sfida, për shkak vlerësimi të përkohshëm $param.';
+  }
+
+  @override
+  String challengeXOnlyAcceptsChallengesFromFriends(String param) {
+    return '$param pranon sfida vetëm nga shokë.';
+  }
+
+  @override
+  String get challengeDeclineGeneric => 'Hëpërhë s’pranoj sfida.';
+
+  @override
+  String get challengeDeclineLater => 'S’është koha e duhur për mua, ju lutemi, pyetni më vonë.';
+
+  @override
+  String get challengeDeclineTooFast => 'Ky kontroll kohe është shumë i shpejtë për mua, ju lutemi, ribëni sfidë me një lojë më të ngadaltë.';
+
+  @override
+  String get challengeDeclineTooSlow => 'Ky kontroll kohe është shumë i ngadaltë për mua, ju lutemi, ribëni sfidë me një lojë më të ngadaltë.';
+
+  @override
+  String get challengeDeclineTimeControl => 'Nuk pranoj sfida me këtë kontroll kohe.';
+
+  @override
+  String get challengeDeclineRated => 'Të lutem më dërgo një sfide të vlerësuar.';
+
+  @override
+  String get challengeDeclineCasual => 'Të lutem më dërgo një sfide të pa vlerësuar.';
+
+  @override
+  String get challengeDeclineStandard => 'Tani për tani s’pranoj sfida variantesh.';
+
+  @override
+  String get challengeDeclineVariant => 'Tani për tani s’kam dëshirë të luaj këtë variant.';
+
+  @override
+  String get challengeDeclineNoBot => 'S’pranoj sfida prej robotësh.';
+
+  @override
+  String get challengeDeclineOnlyBot => 'Pranoj vetëm sfida prej robotësh.';
+
+  @override
+  String get challengeInviteLichessUser => 'Ose ftoni një Përdorues Lichess-i:';
+
+  @override
   String get playWithAFriend => 'Luani me një shok';
 
   @override

@@ -231,6 +231,87 @@ class AppLocalizationsHu extends AppLocalizations {
   String get contactContactLichess => 'Lépj velünk kapcsolatba';
 
   @override
+  String challengeChallengesX(String param1) {
+    return 'Kihívások: $param1';
+  }
+
+  @override
+  String get challengeChallengeToPlay => 'Kihívás játszmára';
+
+  @override
+  String get challengeChallengeDeclined => 'Kihívás elutasítva';
+
+  @override
+  String get challengeChallengeAccepted => 'Kihívás elfogadva!';
+
+  @override
+  String get challengeChallengeCanceled => 'Kihívás visszavonva.';
+
+  @override
+  String get challengeRegisterToSendChallenges => 'A kihíváshoz regisztráció szükséges.';
+
+  @override
+  String challengeYouCannotChallengeX(String param) {
+    return '$param nem kihívható.';
+  }
+
+  @override
+  String challengeXDoesNotAcceptChallenges(String param) {
+    return '$param nem fogad kihívásokat.';
+  }
+
+  @override
+  String challengeYourXRatingIsTooFarFromY(String param1, String param2) {
+    return 'Túl nagy az eltérés $param2 és a te $param1 pontszámod között.';
+  }
+
+  @override
+  String challengeCannotChallengeDueToProvisionalXRating(String param) {
+    return 'Nem kihívható az ideiglenes $param pontszám miatt.';
+  }
+
+  @override
+  String challengeXOnlyAcceptsChallengesFromFriends(String param) {
+    return '$param csak barátoktól fogad kihívást.';
+  }
+
+  @override
+  String get challengeDeclineGeneric => 'Jelenleg nem fogadok kihívásokat.';
+
+  @override
+  String get challengeDeclineLater => 'Számomra ez nem a legmegfelelőbb időpont, talán majd máskor.';
+
+  @override
+  String get challengeDeclineTooFast => 'Ez az időkorlát nekem túl gyors, kérlek küldj egy új kihívást lassabb játszmára.';
+
+  @override
+  String get challengeDeclineTooSlow => 'Ez az időkorlát nekem túl lassú, kérlek küldj egy új kihívást gyorsabb játszmára.';
+
+  @override
+  String get challengeDeclineTimeControl => 'Nem fogadok el kihívásokat ezzel az időkorláttal.';
+
+  @override
+  String get challengeDeclineRated => 'Kérlek inkább értékelt játszmára küldj kihívást.';
+
+  @override
+  String get challengeDeclineCasual => 'Kérlek inkább nem értékelt játszmára küldj kihívást.';
+
+  @override
+  String get challengeDeclineStandard => 'Jelenleg nem fogadok kihívásokat variáns játszmákra.';
+
+  @override
+  String get challengeDeclineVariant => 'Most nincs kedvem ezt a variánst játszani.';
+
+  @override
+  String get challengeDeclineNoBot => 'Nem fogadok el kihívást botoktól.';
+
+  @override
+  String get challengeDeclineOnlyBot => 'Csak botoktól fogadok el kihívást.';
+
+  @override
+  String get challengeInviteLichessUser => 'Vagy hívj meg egy Lichess Felhasználót:';
+
+  @override
   String get playWithAFriend => 'Játék egy ismerőssel';
 
   @override

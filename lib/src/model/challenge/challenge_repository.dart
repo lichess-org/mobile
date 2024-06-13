@@ -46,7 +46,7 @@ class ChallengeRepository {
     return client.postReadJson(
       uri,
       body: challenge.toRequestBody,
-      mapper: (json) => _challengeFromPick(pick(json).required()),
+      mapper: (json) => _challengeFromPick(pick(json)('challenge').required()),
     );
   }
 

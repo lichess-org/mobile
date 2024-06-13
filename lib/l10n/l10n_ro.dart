@@ -248,6 +248,87 @@ class AppLocalizationsRo extends AppLocalizations {
   String get contactContactLichess => 'Contactează Lichess';
 
   @override
+  String challengeChallengesX(String param1) {
+    return 'Provocări: $param1';
+  }
+
+  @override
+  String get challengeChallengeToPlay => 'Provoacă la o partidă';
+
+  @override
+  String get challengeChallengeDeclined => 'Provocare refuzată';
+
+  @override
+  String get challengeChallengeAccepted => 'Provocare acceptată!';
+
+  @override
+  String get challengeChallengeCanceled => 'Provocare anulată.';
+
+  @override
+  String get challengeRegisterToSendChallenges => 'Te rugăm să te înregistrezi pentru a putea trimite provocări.';
+
+  @override
+  String challengeYouCannotChallengeX(String param) {
+    return 'Nu poți să îl provoci pe $param.';
+  }
+
+  @override
+  String challengeXDoesNotAcceptChallenges(String param) {
+    return '$param nu acceptă provocări.';
+  }
+
+  @override
+  String challengeYourXRatingIsTooFarFromY(String param1, String param2) {
+    return 'Scorul tău pe $param1 este prea mare față de $param2.';
+  }
+
+  @override
+  String challengeCannotChallengeDueToProvisionalXRating(String param) {
+    return 'Nu se poate provoca datorită scorului provizoriu la $param.';
+  }
+
+  @override
+  String challengeXOnlyAcceptsChallengesFromFriends(String param) {
+    return '$param acceptă provocări doar de la prieteni.';
+  }
+
+  @override
+  String get challengeDeclineGeneric => 'Nu accept provocări la momentul actual.';
+
+  @override
+  String get challengeDeclineLater => 'Nu este timpul potrivit, te rog întreabă mai târziu.';
+
+  @override
+  String get challengeDeclineTooFast => 'Acest timp este prea rapid pentru mine, te rog să mă provoci cu un timp mai lent.';
+
+  @override
+  String get challengeDeclineTooSlow => 'Acest timp este prea lent pentru mine, te rog să mă provoci cu un timp mai rapid.';
+
+  @override
+  String get challengeDeclineTimeControl => 'Nu accept provocări cu acest timp.';
+
+  @override
+  String get challengeDeclineRated => 'Te rog să îmi trimiți în loc o provocare oficială.';
+
+  @override
+  String get challengeDeclineCasual => 'Te rog să îmi trimiți în loc o provocare neoficială.';
+
+  @override
+  String get challengeDeclineStandard => 'Nu accept provocări de variantă acum.';
+
+  @override
+  String get challengeDeclineVariant => 'Nu sunt dispus să joc această variantă acum.';
+
+  @override
+  String get challengeDeclineNoBot => 'Nu accept provocările roboților.';
+
+  @override
+  String get challengeDeclineOnlyBot => 'Accept doar provocări de la roboți.';
+
+  @override
+  String get challengeInviteLichessUser => 'Sau invitați un utilizator Lichess:';
+
+  @override
   String get playWithAFriend => 'Jucaţi cu un prieten';
 
   @override

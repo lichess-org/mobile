@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'challenge_preferences.freezed.dart';
@@ -94,6 +95,19 @@ class ChallengePreferencesState with _$ChallengePreferencesState {
           ),
         )
       : Speed.correspondence;
+
+  ChallengeRequest makeRequest(LightUser destUser, [String? initialFen]) {
+    return ChallengeRequest(
+      destUser: destUser,
+      variant: variant,
+      timeControl: timeControl,
+      clock: clock,
+      days: days,
+      rated: rated,
+      sideChoice: sideChoice,
+      initialFen: initialFen,
+    );
+  }
 
   factory ChallengePreferencesState.fromJson(Map<String, dynamic> json) {
     try {

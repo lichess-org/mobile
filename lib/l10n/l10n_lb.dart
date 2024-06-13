@@ -231,6 +231,87 @@ class AppLocalizationsLb extends AppLocalizations {
   String get contactContactLichess => 'Lichess kontaktéieren';
 
   @override
+  String challengeChallengesX(String param1) {
+    return 'Erausfuerderungen: $param1';
+  }
+
+  @override
+  String get challengeChallengeToPlay => 'Erausfuerderung zu enger Partie';
+
+  @override
+  String get challengeChallengeDeclined => 'Erausfuerderung ofgeleent';
+
+  @override
+  String get challengeChallengeAccepted => 'Erausfuerderung ugeholl!';
+
+  @override
+  String get challengeChallengeCanceled => 'Erausfuerderung annuléiert.';
+
+  @override
+  String get challengeRegisterToSendChallenges => 'Registréier dech wannechgelift fir Erausfuerderungen ze schécken.';
+
+  @override
+  String challengeYouCannotChallengeX(String param) {
+    return 'Du kanns $param net erausfuerderen.';
+  }
+
+  @override
+  String challengeXDoesNotAcceptChallenges(String param) {
+    return '$param akzeptéiert keng Erausfuerderungen.';
+  }
+
+  @override
+  String challengeYourXRatingIsTooFarFromY(String param1, String param2) {
+    return 'Deng $param1 Wäertung ass ze wäit vum $param2.';
+  }
+
+  @override
+  String challengeCannotChallengeDueToProvisionalXRating(String param) {
+    return 'Kann net erausfuerderen wéinst provisorescher $param Wäertung.';
+  }
+
+  @override
+  String challengeXOnlyAcceptsChallengesFromFriends(String param) {
+    return '$param akzeptéiert just Erausfuerderungen vun Frënn.';
+  }
+
+  @override
+  String get challengeDeclineGeneric => 'Ech akzeptéieren am Moment keng Erausfuerderungen.';
+
+  @override
+  String get challengeDeclineLater => 'Ech hun gerad keng Zäit, wannechgelift probéier méi spéit.';
+
+  @override
+  String get challengeDeclineTooFast => 'Dës Zäitkontroll ass mer ze schnell, fuerder mech wannechgelift zu enger méi lueser Partie eraus.';
+
+  @override
+  String get challengeDeclineTooSlow => 'Dës Zäitkontroll ass mer ze lues, fuerder mech wannechgelift zu enger méi schneller Partie eraus.';
+
+  @override
+  String get challengeDeclineTimeControl => 'Ech akzeptéieren keng Erausfuerderungen an dëser Zäitkontroll.';
+
+  @override
+  String get challengeDeclineRated => 'Schéck mer wannechgelift eng gewäert Erausfuerderung.';
+
+  @override
+  String get challengeDeclineCasual => 'Schéck mer wannechgelift eng ongewäert Erausfuerderung.';
+
+  @override
+  String get challengeDeclineStandard => 'Ech akzeptéieren am Moment keng Erausfuerderungen zu Varianten.';
+
+  @override
+  String get challengeDeclineVariant => 'Ech wëll déi Variant gerad net spillen.';
+
+  @override
+  String get challengeDeclineNoBot => 'Ech akzeptéieren keng Erausfuerderungen vun Bots.';
+
+  @override
+  String get challengeDeclineOnlyBot => 'Ech akzeptéieren just Erausfuerderungen vun Bots.';
+
+  @override
+  String get challengeInviteLichessUser => 'Oder invitéier en Lichess Benotzer:';
+
+  @override
   String get playWithAFriend => 'Spill géint e Kolleeg';
 
   @override

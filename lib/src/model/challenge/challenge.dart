@@ -90,8 +90,7 @@ class ChallengeRequest
       );
 
   Map<String, dynamic> get toRequestBody => {
-        if (clock != null)
-          'clock.limit': (clock!.time.inSeconds / 60).toString(),
+        if (clock != null) 'clock.limit': clock!.time.inSeconds.toString(),
         if (clock != null)
           'clock.increment': clock!.increment.inSeconds.toString(),
         if (days != null) 'days': days.toString(),

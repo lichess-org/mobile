@@ -231,6 +231,87 @@ class AppLocalizationsAz extends AppLocalizations {
   String get contactContactLichess => 'Lichess ilə əlaqə';
 
   @override
+  String challengeChallengesX(String param1) {
+    return 'Challenges: $param1';
+  }
+
+  @override
+  String get challengeChallengeToPlay => 'Oyuna çağırış';
+
+  @override
+  String get challengeChallengeDeclined => 'Çağırış rədd edildi.';
+
+  @override
+  String get challengeChallengeAccepted => 'Çağırış qəbul edildi!';
+
+  @override
+  String get challengeChallengeCanceled => 'Çağırışdan imtina edildi.';
+
+  @override
+  String get challengeRegisterToSendChallenges => 'Çağırış göndərmək üçün lütfən qeydiyyatdan keçin.';
+
+  @override
+  String challengeYouCannotChallengeX(String param) {
+    return '$param istifadəçisinə çağırış edə bilməzsiz.';
+  }
+
+  @override
+  String challengeXDoesNotAcceptChallenges(String param) {
+    return '$param çağırışları qəbul etmir.';
+  }
+
+  @override
+  String challengeYourXRatingIsTooFarFromY(String param1, String param2) {
+    return 'Sizin $param1 reytinqiniz $param2-in reytinqindən çox uzaqdır.';
+  }
+
+  @override
+  String challengeCannotChallengeDueToProvisionalXRating(String param) {
+    return 'Müvəqqəti $param reytinqi səbəbilə çağırış edə bilməzsiz.';
+  }
+
+  @override
+  String challengeXOnlyAcceptsChallengesFromFriends(String param) {
+    return '$param yalnız dostlarından çağırış qəbul edir.';
+  }
+
+  @override
+  String get challengeDeclineGeneric => 'Hal-hazırda çağırışları qəbul etmirəm.';
+
+  @override
+  String get challengeDeclineLater => 'Bu mənim üçün uyğun vaxt deyil, lütfən sonra yenidən soruşun.';
+
+  @override
+  String get challengeDeclineTooFast => 'Bu vaxt nəzarəti mənim üçün çox sürətlidir, lütfən daha yavaş bir oyunla yenidən çağırış edin.';
+
+  @override
+  String get challengeDeclineTooSlow => 'Bu vaxt nəzarəti mənim üçün çox yavaşdır lütfən daha sürətli bir oyunla yenidən çağırış edin.';
+
+  @override
+  String get challengeDeclineTimeControl => 'Bu vaxt nəzarətilə olan çağırışları qəbul etmirəm.';
+
+  @override
+  String get challengeDeclineRated => 'Zəhmət olmasa mənə reytinqli bir çağırış göndərin.';
+
+  @override
+  String get challengeDeclineCasual => 'Zəhmət olmasa mənə reytinqsiz bir çağırış göndərin.';
+
+  @override
+  String get challengeDeclineStandard => 'Hal-hazırda qeyri-ənənəvi şahmat variantları çağırışlarını qəbul etmirəm.';
+
+  @override
+  String get challengeDeclineVariant => 'Hazırda bu variantı oynamaq istəmirəm.';
+
+  @override
+  String get challengeDeclineNoBot => 'Botlardan gələn çağırışları qəbul etmirəm.';
+
+  @override
+  String get challengeDeclineOnlyBot => 'Yalnız botlardan gələn çağırışları qəbul edirəm.';
+
+  @override
+  String get challengeInviteLichessUser => 'Or invite a Lichess user:';
+
+  @override
   String get playWithAFriend => 'Bir dostunla oyna';
 
   @override

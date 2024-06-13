@@ -197,6 +197,87 @@ class AppLocalizationsKo extends AppLocalizations {
   String get contactContactLichess => 'Lichess에 문의하기';
 
   @override
+  String challengeChallengesX(String param1) {
+    return '도전: $param1';
+  }
+
+  @override
+  String get challengeChallengeToPlay => '도전 신청';
+
+  @override
+  String get challengeChallengeDeclined => '도전 거절됨';
+
+  @override
+  String get challengeChallengeAccepted => '도전 수락!';
+
+  @override
+  String get challengeChallengeCanceled => '도전 취소됨.';
+
+  @override
+  String get challengeRegisterToSendChallenges => '도전을 하려면 가입하십시오.';
+
+  @override
+  String challengeYouCannotChallengeX(String param) {
+    return '$param에게는 도전할 수 없습니다.';
+  }
+
+  @override
+  String challengeXDoesNotAcceptChallenges(String param) {
+    return '$param가 도전을 받아들이지 않았습니다.';
+  }
+
+  @override
+  String challengeYourXRatingIsTooFarFromY(String param1, String param2) {
+    return '당신의 레이팅 등급인 $param1과 상대의 레이팅 등급인 $param2과의 격차가 너무 큽니다.';
+  }
+
+  @override
+  String challengeCannotChallengeDueToProvisionalXRating(String param) {
+    return '$param 가 아직 레이팅이 확정되지 않아서 도전하실 수 없습니다.';
+  }
+
+  @override
+  String challengeXOnlyAcceptsChallengesFromFriends(String param) {
+    return '$param님은 친구인 상대만 도전을 받아들입니다.';
+  }
+
+  @override
+  String get challengeDeclineGeneric => '지금 도전을 받지 않습니다.';
+
+  @override
+  String get challengeDeclineLater => '시간이 맞지 않습니다. 나중에 다시 요청해주세요.';
+
+  @override
+  String get challengeDeclineTooFast => '시간이 너무 짧습니다. 더 긴 게임으로 신청해주세요.';
+
+  @override
+  String get challengeDeclineTooSlow => '시간이 너무 깁니다. 더 빠른 게임으로 신청해주세요.';
+
+  @override
+  String get challengeDeclineTimeControl => '이 시간으로는 도전을 받지 않습니다.';
+
+  @override
+  String get challengeDeclineRated => '대신 레이팅 대전을 신청해주세요.';
+
+  @override
+  String get challengeDeclineCasual => '대신 캐주얼 대전을 신청해주세요.';
+
+  @override
+  String get challengeDeclineStandard => '지금은 변형 체스 도전을 받지 않고 있습니다.';
+
+  @override
+  String get challengeDeclineVariant => '지금은 이 변형 체스를 하고 싶지 않습니다.';
+
+  @override
+  String get challengeDeclineNoBot => '봇의 도전은 받지 않습니다.';
+
+  @override
+  String get challengeDeclineOnlyBot => '봇의 도전만 받고 있습니다.';
+
+  @override
+  String get challengeInviteLichessUser => '또는 Lichess 사용자를 초대합니다:';
+
+  @override
   String get playWithAFriend => '친구와 게임하기';
 
   @override

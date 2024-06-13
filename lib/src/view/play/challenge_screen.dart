@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_preferences.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -20,7 +21,9 @@ import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
 class ChallengeScreen extends StatelessWidget {
-  const ChallengeScreen();
+  const ChallengeScreen(this.user);
+
+  final LightUser user;
 
   @override
   Widget build(BuildContext context) {
@@ -28,19 +31,24 @@ class ChallengeScreen extends StatelessWidget {
   }
 
   Widget _buildIos(BuildContext context) {
-    return const CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(),
-      child: _ChallengeBody(),
+    return CupertinoPageScaffold(
+      navigationBar: const CupertinoNavigationBar(),
+      child: _ChallengeBody(user),
     );
   }
 
   Widget _buildAndroid(BuildContext context) {
-    return const _ChallengeBody();
+    return Scaffold(
+      appBar: AppBar(title: Text(context.l10n.playWithAFriend)),
+      body: _ChallengeBody(user),
+    );
   }
 }
 
 class _ChallengeBody extends ConsumerStatefulWidget {
-  const _ChallengeBody();
+  const _ChallengeBody(this.user);
+
+  final LightUser user;
 
   @override
   ConsumerState<_ChallengeBody> createState() => _ChallengeBodyState();
@@ -58,55 +66,6 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
             preferences.clock.time > Duration.zero ||
             preferences.clock.increment >= Duration.zero;
 
-    final correspondenceSelector = [
-      Builder(
-        builder: (context) {
-          int daysPerTurn = preferences.days;
-          return StatefulBuilder(
-            builder: (context, setState) {
-              return PlatformListTile(
-                harmonizeCupertinoTitleStyle: true,
-                title: Text.rich(
-                  TextSpan(
-                    text: '${context.l10n.daysPerTurn}: ',
-                    children: [
-                      TextSpan(
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                        text: _daysLabel(daysPerTurn),
-                      ),
-                    ],
-                  ),
-                ),
-                subtitle: NonLinearSlider(
-                  value: daysPerTurn,
-                  values: kAvailableDaysPerTurn,
-                  labelBuilder: _daysLabel,
-                  onChange: Theme.of(context).platform == TargetPlatform.iOS
-                      ? (num value) {
-                          setState(() {
-                            daysPerTurn = value.toInt();
-                          });
-                        }
-                      : null,
-                  onChangeEnd: (num value) {
-                    setState(() {
-                      daysPerTurn = value.toInt();
-                    });
-                    ref
-                        .read(challengePreferencesProvider.notifier)
-                        .setDays(value.toInt());
-                  },
-                ),
-              );
-            },
-          );
-        },
-      ),
-    ];
-
     return accountAsync.when(
       data: (account) {
         final timeControl = preferences.timeControl;
@@ -118,44 +77,42 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                 ? Styles.sectionBottomPadding
                 : Styles.verticalBodyPadding,
             children: [
-              if (account != null)
-                PlatformListTile(
-                  harmonizeCupertinoTitleStyle: true,
-                  title: Text(context.l10n.timeControl),
-                  trailing: AdaptiveTextButton(
-                    onPressed: () {
-                      showChoicePicker(
-                        context,
-                        choices: [
-                          ChallengeTimeControlType.clock,
-                          ChallengeTimeControlType.correspondence,
-                          ChallengeTimeControlType.unlimited,
-                        ],
-                        selectedItem: preferences.timeControl,
-                        labelBuilder: (ChallengeTimeControlType timeControl) =>
-                            Text(
-                          timeControl == ChallengeTimeControlType.clock
-                              ? context.l10n.realTime
-                              : timeControl ==
-                                      ChallengeTimeControlType.correspondence
-                                  ? context.l10n.correspondence
-                                  : context.l10n.unlimited,
-                        ),
-                        onSelectedItemChanged:
-                            (ChallengeTimeControlType value) {
-                          ref
-                              .read(challengePreferencesProvider.notifier)
-                              .setTimeControl(value);
-                        },
-                      );
-                    },
-                    child: Text(
-                      preferences.timeControl == ChallengeTimeControlType.clock
-                          ? context.l10n.realTime
-                          : context.l10n.correspondence,
-                    ),
+              PlatformListTile(
+                harmonizeCupertinoTitleStyle: true,
+                title: Text(context.l10n.timeControl),
+                trailing: AdaptiveTextButton(
+                  onPressed: () {
+                    showChoicePicker(
+                      context,
+                      choices: [
+                        ChallengeTimeControlType.clock,
+                        ChallengeTimeControlType.correspondence,
+                        ChallengeTimeControlType.unlimited,
+                      ],
+                      selectedItem: preferences.timeControl,
+                      labelBuilder: (ChallengeTimeControlType timeControl) =>
+                          Text(
+                        timeControl == ChallengeTimeControlType.clock
+                            ? context.l10n.realTime
+                            : timeControl ==
+                                    ChallengeTimeControlType.correspondence
+                                ? context.l10n.correspondence
+                                : context.l10n.unlimited,
+                      ),
+                      onSelectedItemChanged: (ChallengeTimeControlType value) {
+                        ref
+                            .read(challengePreferencesProvider.notifier)
+                            .setTimeControl(value);
+                      },
+                    );
+                  },
+                  child: Text(
+                    preferences.timeControl == ChallengeTimeControlType.clock
+                        ? context.l10n.realTime
+                        : context.l10n.correspondence,
                   ),
                 ),
+              ),
               if (timeControl == ChallengeTimeControlType.clock) ...[
                 Builder(
                   builder: (context) {
@@ -257,8 +214,55 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                     );
                   },
                 ),
-              ] else
-                ...correspondenceSelector,
+              ] else ...[
+                Builder(
+                  builder: (context) {
+                    int daysPerTurn = preferences.days;
+                    return StatefulBuilder(
+                      builder: (context, setState) {
+                        return PlatformListTile(
+                          harmonizeCupertinoTitleStyle: true,
+                          title: Text.rich(
+                            TextSpan(
+                              text: '${context.l10n.daysPerTurn}: ',
+                              children: [
+                                TextSpan(
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                  ),
+                                  text: _daysLabel(daysPerTurn),
+                                ),
+                              ],
+                            ),
+                          ),
+                          subtitle: NonLinearSlider(
+                            value: daysPerTurn,
+                            values: kAvailableDaysPerTurn,
+                            labelBuilder: _daysLabel,
+                            onChange:
+                                Theme.of(context).platform == TargetPlatform.iOS
+                                    ? (num value) {
+                                        setState(() {
+                                          daysPerTurn = value.toInt();
+                                        });
+                                      }
+                                    : null,
+                            onChangeEnd: (num value) {
+                              setState(() {
+                                daysPerTurn = value.toInt();
+                              });
+                              ref
+                                  .read(challengePreferencesProvider.notifier)
+                                  .setDays(value.toInt());
+                            },
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
+              ],
               PlatformListTile(
                 harmonizeCupertinoTitleStyle: true,
                 title: Text(context.l10n.variant),
@@ -326,7 +330,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: FatButton(
-                      semanticsLabel: context.l10n.createAGame,
+                      semanticsLabel: context.l10n.challengeChallengeToPlay,
                       onPressed: timeControl == ChallengeTimeControlType.clock
                           ? isValidTimeControl
                               ? () {
@@ -335,19 +339,21 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                                     rootNavigator: true,
                                     builder: (BuildContext context) {
                                       return GameScreen(
-                                          // challenge: Challenge(
-                                          //   preferences,
-                                          //   account,
-                                          // ),
-                                          );
+                                        challenge: preferences
+                                            .makeRequest(widget.user),
+                                      );
                                     },
                                   );
                                 }
                               : null
                           : snapshot.connectionState == ConnectionState.waiting
                               ? null
+                              // TODO handle correspondence time control
                               : () async {},
-                      child: Text(context.l10n.createAGame, style: Styles.bold),
+                      child: Text(
+                        context.l10n.challengeChallengeToPlay,
+                        style: Styles.bold,
+                      ),
                     ),
                   );
                 },

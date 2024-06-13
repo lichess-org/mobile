@@ -197,6 +197,87 @@ class AppLocalizationsTt extends AppLocalizations {
   String get contactContactLichess => 'Элемтә Lichess';
 
   @override
+  String challengeChallengesX(String param1) {
+    return 'Challenges: $param1';
+  }
+
+  @override
+  String get challengeChallengeToPlay => 'Сынаулар уенда';
+
+  @override
+  String get challengeChallengeDeclined => 'Сынаулар кире кагылды';
+
+  @override
+  String get challengeChallengeAccepted => 'Сынаулар алынды!';
+
+  @override
+  String get challengeChallengeCanceled => 'Сынауны кире кактылар.';
+
+  @override
+  String get challengeRegisterToSendChallenges => 'Зинһар теркәл сынаулар җибәрер өчен.';
+
+  @override
+  String challengeYouCannotChallengeX(String param) {
+    return 'Сез сыный алмыйсыз $param.';
+  }
+
+  @override
+  String challengeXDoesNotAcceptChallenges(String param) {
+    return '$param сезнең сынауны кире какты.';
+  }
+
+  @override
+  String challengeYourXRatingIsTooFarFromY(String param1, String param2) {
+    return 'Сезнең $param1 рейтингыгыз $param2 дан оглы ара.';
+  }
+
+  @override
+  String challengeCannotChallengeDueToProvisionalXRating(String param) {
+    return 'Сынау вакытлы $param рейтингыгыз аркасында кыенлыклар тудыра алмый.';
+  }
+
+  @override
+  String challengeXOnlyAcceptsChallengesFromFriends(String param) {
+    return '$param ала сынаулар дустлардан гына.';
+  }
+
+  @override
+  String get challengeDeclineGeneric => 'Мин алмыйм сынауларны бу вакытта.';
+
+  @override
+  String get challengeDeclineLater => 'Бу минем өчен дөрес вакыт түгел, зинһар, соңрак кабат сорагыз.';
+
+  @override
+  String get challengeDeclineTooFast => 'Бу вакыт тикшерүе бик тиз минем өчен, зинһар сынагыз яңадан озаграк уен белән.';
+
+  @override
+  String get challengeDeclineTooSlow => 'Бу вакыт тикшерүе бик озак минем өчен, зинһар сынагыз яңадан тиз уен белән.';
+
+  @override
+  String get challengeDeclineTimeControl => 'Мин алмыйм сынауларны вакыт тикшерүе белән.';
+
+  @override
+  String get challengeDeclineRated => 'Зинһар җибәрегез миңа рейтинглы сынау урнына.';
+
+  @override
+  String get challengeDeclineCasual => 'Зинһар җибәрегез миңа бәяләүсез сынау урнына.';
+
+  @override
+  String get challengeDeclineStandard => 'Мин алмыйм вариантлы сынаулар хәзер.';
+
+  @override
+  String get challengeDeclineVariant => 'Мин тәләп куймыйм уйнарга бу вариантка хәзер.';
+
+  @override
+  String get challengeDeclineNoBot => 'Мин алмыйм сынаулар боттан.';
+
+  @override
+  String get challengeDeclineOnlyBot => 'Мин алам сынаулар боттан гына.';
+
+  @override
+  String get challengeInviteLichessUser => 'Or invite a Lichess user:';
+
+  @override
   String get playWithAFriend => 'Дустың белән уйнарга';
 
   @override

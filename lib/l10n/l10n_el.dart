@@ -231,6 +231,87 @@ class AppLocalizationsEl extends AppLocalizations {
   String get contactContactLichess => 'Επικοινωνήστε με Lichess';
 
   @override
+  String challengeChallengesX(String param1) {
+    return 'Προκλήσεις: $param1';
+  }
+
+  @override
+  String get challengeChallengeToPlay => 'Προκαλέστε σε παιχνίδι';
+
+  @override
+  String get challengeChallengeDeclined => 'Η πρόκληση απορρίφθηκε';
+
+  @override
+  String get challengeChallengeAccepted => 'Η πρόκληση έγινε δεκτή!';
+
+  @override
+  String get challengeChallengeCanceled => 'Η πρόκληση ακυρώθηκε.';
+
+  @override
+  String get challengeRegisterToSendChallenges => 'Εγγραφείτε για να στείλετε προκλήσεις.';
+
+  @override
+  String challengeYouCannotChallengeX(String param) {
+    return 'Δεν μπορείτε να προκαλέσετε τον $param.';
+  }
+
+  @override
+  String challengeXDoesNotAcceptChallenges(String param) {
+    return '$param δε δέχεται προκλήσεις.';
+  }
+
+  @override
+  String challengeYourXRatingIsTooFarFromY(String param1, String param2) {
+    return 'Η βαθμολογία σας στο $param1 διαφέρει σημαντικά από αυτήν του χρήστη $param2.';
+  }
+
+  @override
+  String challengeCannotChallengeDueToProvisionalXRating(String param) {
+    return 'Δεν είναι δυνατή η πρόκληση λόγω της προσωρινής βαθμολογίας στο $param.';
+  }
+
+  @override
+  String challengeXOnlyAcceptsChallengesFromFriends(String param) {
+    return '$param δέχεται προκλήσεις μόνο από φίλους.';
+  }
+
+  @override
+  String get challengeDeclineGeneric => 'Δε δέχομαι προκλήσεις αυτή τη στιγμή.';
+
+  @override
+  String get challengeDeclineLater => 'Δεν είμαι διαθέσιμος αυτήν τη στιγμή, ρωτήστε με ξανά αργότερα.';
+
+  @override
+  String get challengeDeclineTooFast => 'Αυτός ο χρόνος είναι πολύ γρήγορος για μένα, προκαλέστε με ξανά με έναν πιο αργό.';
+
+  @override
+  String get challengeDeclineTooSlow => 'Αυτός ο χρόνος είναι πολύ αργός για μένα, προκαλέστε με ξανά με έναν πιο γρήγορο.';
+
+  @override
+  String get challengeDeclineTimeControl => 'Δεν δέχομαι προκλήσεις με τέτοιους χρόνους.';
+
+  @override
+  String get challengeDeclineRated => 'Στείλτε μου μία βαθμολογημένη και όχι φιλική πρόκληση.';
+
+  @override
+  String get challengeDeclineCasual => 'Στείλτε μου μία φιλική και όχι βαθμολογημένη πρόκληση.';
+
+  @override
+  String get challengeDeclineStandard => 'Δεν δέχομαι προκλήσεις με παραλλαγές αυτή τη στιγμή.';
+
+  @override
+  String get challengeDeclineVariant => 'Δεν είμαι πρόθυμος να παίξω αυτήν την παραλλαγή αυτή τη στιγμή.';
+
+  @override
+  String get challengeDeclineNoBot => 'Δεν δέχομαι προκλήσεις από bots.';
+
+  @override
+  String get challengeDeclineOnlyBot => 'Δέχομαι προκλήσεις μόνο από bots.';
+
+  @override
+  String get challengeInviteLichessUser => 'Ή προσκαλέστε έναν χρήστη του Lichess:';
+
+  @override
   String get playWithAFriend => 'Παίξτε με έναν φίλο';
 
   @override

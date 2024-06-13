@@ -265,6 +265,87 @@ class AppLocalizationsBe extends AppLocalizations {
   String get contactContactLichess => 'Звязацца з Lichess';
 
   @override
+  String challengeChallengesX(String param1) {
+    return 'Выклікаў: $param1';
+  }
+
+  @override
+  String get challengeChallengeToPlay => 'Выклікаць на гульню';
+
+  @override
+  String get challengeChallengeDeclined => 'Выклік адхілены';
+
+  @override
+  String get challengeChallengeAccepted => 'Выклік прыняты!';
+
+  @override
+  String get challengeChallengeCanceled => 'Выклік скасаваны.';
+
+  @override
+  String get challengeRegisterToSendChallenges => 'Зарэгіструйцеся, каб выклікаць супернікаў на гульню.';
+
+  @override
+  String challengeYouCannotChallengeX(String param) {
+    return 'Вы не можаце выклікаць на гульню $param.';
+  }
+
+  @override
+  String challengeXDoesNotAcceptChallenges(String param) {
+    return '$param не прымае выклікі.';
+  }
+
+  @override
+  String challengeYourXRatingIsTooFarFromY(String param1, String param2) {
+    return 'Ваш рэйтынг у рэжыме «$param1» значна адрозніваецца ад $param2.';
+  }
+
+  @override
+  String challengeCannotChallengeDueToProvisionalXRating(String param) {
+    return 'Не магчыма выклікаць на гульню з умоўным $param рэйтынгам.';
+  }
+
+  @override
+  String challengeXOnlyAcceptsChallengesFromFriends(String param) {
+    return '$param прымае выклікі толькі ад сяброў.';
+  }
+
+  @override
+  String get challengeDeclineGeneric => 'Не прымаю выклікі на дадзены момант.';
+
+  @override
+  String get challengeDeclineLater => 'Гэта ня зрычны час для мяне, калі ласка, спытайцеся пазней.';
+
+  @override
+  String get challengeDeclineTooFast => 'Гэты кантроль часу занадта хуткі для мяне, калі ласка, выклічце зноў на больш павольную гульню.';
+
+  @override
+  String get challengeDeclineTooSlow => 'Гэты кантроль часу занадта павольны для мяне, калі ласка, выклічце зноў на больш хуткую гульню.';
+
+  @override
+  String get challengeDeclineTimeControl => 'Не прымаю выклікі з гэтым кантролем часу.';
+
+  @override
+  String get challengeDeclineRated => 'Калі ласка, прышлі рэйтынгавы выклік замест гэтага.';
+
+  @override
+  String get challengeDeclineCasual => 'Калі ласка, замест дашліце таварыскі выклік.';
+
+  @override
+  String get challengeDeclineStandard => 'Не прымаю выклікі ў некласічныя шахматы на дадзены момант.';
+
+  @override
+  String get challengeDeclineVariant => 'Я ня хочу граць гэты варыянт зараз.';
+
+  @override
+  String get challengeDeclineNoBot => 'Я не прымаю выклікі ад ботаў.';
+
+  @override
+  String get challengeDeclineOnlyBot => 'Я прымаю выклікі толькі ад ботаў.';
+
+  @override
+  String get challengeInviteLichessUser => 'Ці запрасіце карыстальніка Lichess:';
+
+  @override
   String get playWithAFriend => 'Гуляць з сябрам';
 
   @override

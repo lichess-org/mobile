@@ -197,6 +197,87 @@ class AppLocalizationsVi extends AppLocalizations {
   String get contactContactLichess => 'Liên hệ Lichess';
 
   @override
+  String challengeChallengesX(String param1) {
+    return 'Số thách đấu: $param1';
+  }
+
+  @override
+  String get challengeChallengeToPlay => 'Thách đấu một ván cờ';
+
+  @override
+  String get challengeChallengeDeclined => 'Lời thách đấu bị từ chối.';
+
+  @override
+  String get challengeChallengeAccepted => 'Lời thách đấu được chấp nhận!';
+
+  @override
+  String get challengeChallengeCanceled => 'Lời thách đấu bị hủy bỏ.';
+
+  @override
+  String get challengeRegisterToSendChallenges => 'Xin hãy đăng ký để gửi lời thách đấu tới người dùng này.';
+
+  @override
+  String challengeYouCannotChallengeX(String param) {
+    return 'Bạn không thể thách đấu $param.';
+  }
+
+  @override
+  String challengeXDoesNotAcceptChallenges(String param) {
+    return '$param không chấp nhận các lời thách đấu.';
+  }
+
+  @override
+  String challengeYourXRatingIsTooFarFromY(String param1, String param2) {
+    return 'Hệ số $param1 của bạn quá cách biệt so với $param2.';
+  }
+
+  @override
+  String challengeCannotChallengeDueToProvisionalXRating(String param) {
+    return 'Không thể thách đấu do hệ số $param tạm thời.';
+  }
+
+  @override
+  String challengeXOnlyAcceptsChallengesFromFriends(String param) {
+    return '$param chỉ chấp nhận những thách đấu từ bạn bè.';
+  }
+
+  @override
+  String get challengeDeclineGeneric => 'Hiện tại tôi đang không chấp nhận thách đấu.';
+
+  @override
+  String get challengeDeclineLater => 'Đây không phải là thời gian thích hợp với tôi, hãy hỏi lại sau.';
+
+  @override
+  String get challengeDeclineTooFast => 'Tùy chọn thời gian quá nhanh đối với tôi, hãy thách đấu lại với một thời gian chậm hơn.';
+
+  @override
+  String get challengeDeclineTooSlow => 'Tùy chọn thời gian quá chậm đối với tôi, hãy thách đấu lại với một thời gian nhanh hơn.';
+
+  @override
+  String get challengeDeclineTimeControl => 'Tôi không chấp nhận các thách đấu với tùy chọn thời gian này.';
+
+  @override
+  String get challengeDeclineRated => 'Hãy gửi yêu cầu thách đấu có xếp hạng cho tôi.';
+
+  @override
+  String get challengeDeclineCasual => 'Hãy gửi tôi yêu cầu thách đấu không xếp hạng.';
+
+  @override
+  String get challengeDeclineStandard => 'Hiện tại tôi không chấp nhận các thách đấu biến thể.';
+
+  @override
+  String get challengeDeclineVariant => 'Tôi chưa sẵn sàng chơi biến thể này ngay bây giờ.';
+
+  @override
+  String get challengeDeclineNoBot => 'Tôi không chấp nhận các thách đấu từ các BOT.';
+
+  @override
+  String get challengeDeclineOnlyBot => 'Tôi chỉ chấp nhận các thách đấu từ BOT.';
+
+  @override
+  String get challengeInviteLichessUser => 'Hoặc mời một người dùng Lichess:';
+
+  @override
   String get playWithAFriend => 'Chơi với bạn bè';
 
   @override

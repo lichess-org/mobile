@@ -265,6 +265,87 @@ class AppLocalizationsCs extends AppLocalizations {
   String get contactContactLichess => 'Kontaktujte Lichess';
 
   @override
+  String challengeChallengesX(String param1) {
+    return 'Výzvy: $param1';
+  }
+
+  @override
+  String get challengeChallengeToPlay => 'Vyzvat k partii';
+
+  @override
+  String get challengeChallengeDeclined => 'Výzva odmítnuta';
+
+  @override
+  String get challengeChallengeAccepted => 'Výzva přijata!';
+
+  @override
+  String get challengeChallengeCanceled => 'Výzva byla zrušena.';
+
+  @override
+  String get challengeRegisterToSendChallenges => 'Pro poslání výzvy se musíte zaregistrovat.';
+
+  @override
+  String challengeYouCannotChallengeX(String param) {
+    return 'Nemůžete vyzvat $param.';
+  }
+
+  @override
+  String challengeXDoesNotAcceptChallenges(String param) {
+    return '$param nepřijímá výzvy.';
+  }
+
+  @override
+  String challengeYourXRatingIsTooFarFromY(String param1, String param2) {
+    return 'Vaše $param1 hodnocení je příliš daleko od $param2.';
+  }
+
+  @override
+  String challengeCannotChallengeDueToProvisionalXRating(String param) {
+    return 'Nelze vyzvat kvůli prozatimnímu $param elu.';
+  }
+
+  @override
+  String challengeXOnlyAcceptsChallengesFromFriends(String param) {
+    return '$param přijímá výzvy pouze od přátel.';
+  }
+
+  @override
+  String get challengeDeclineGeneric => 'V tuto chvíli nepřijímám výzvy.';
+
+  @override
+  String get challengeDeclineLater => 'Teď nemohu, požádejte prosím později.';
+
+  @override
+  String get challengeDeclineTooFast => 'Tato časová kontrola je na mně příliš rychlá, vyzvi mně prosím s pomalejší.';
+
+  @override
+  String get challengeDeclineTooSlow => 'Vyzvi mne prosím k delší partii, tato časová kontrola je na mne moc rychlá.';
+
+  @override
+  String get challengeDeclineTimeControl => 'V tuto chvíli nepřijímám výzvy s touto časovou kontrolou.';
+
+  @override
+  String get challengeDeclineRated => 'Vyzvěte mě raději k hodnocené partii.';
+
+  @override
+  String get challengeDeclineCasual => 'Vyzvěte mě raději k nehodnocené partii.';
+
+  @override
+  String get challengeDeclineStandard => 'Nyní nepřijímám výzvy variant.';
+
+  @override
+  String get challengeDeclineVariant => 'Tuto variantu momentálně nechci hrát.';
+
+  @override
+  String get challengeDeclineNoBot => 'Nepřijímám výzvy od botů.';
+
+  @override
+  String get challengeDeclineOnlyBot => 'Přijímám výzvy pouze od botů.';
+
+  @override
+  String get challengeInviteLichessUser => 'Nebo pozvěte uživatele Lichess:';
+
+  @override
   String get playWithAFriend => 'Vyzvi kamaráda';
 
   @override

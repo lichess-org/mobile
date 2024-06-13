@@ -42,7 +42,7 @@ class RelationRepository {
   }
 
   Future<void> block(UserId userId) async {
-    final uri = Uri(path: '/rel/block/$userId');
+    final uri = Uri(path: '/api/rel/block/$userId');
     final response = await client.post(uri);
 
     if (response.statusCode >= 400) {
@@ -54,7 +54,7 @@ class RelationRepository {
   }
 
   Future<void> unblock(UserId userId) async {
-    final uri = Uri(path: '/rel/unblock/$userId');
+    final uri = Uri(path: '/api/rel/unblock/$userId');
     final response = await client.post(uri);
 
     if (response.statusCode >= 400) {

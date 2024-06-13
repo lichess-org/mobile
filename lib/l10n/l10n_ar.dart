@@ -282,6 +282,87 @@ class AppLocalizationsAr extends AppLocalizations {
   String get contactContactLichess => 'تواصل مع Lichess';
 
   @override
+  String challengeChallengesX(String param1) {
+    return 'التحديات: $param1';
+  }
+
+  @override
+  String get challengeChallengeToPlay => 'تحدى في مباراة';
+
+  @override
+  String get challengeChallengeDeclined => 'تم رفض التحدي';
+
+  @override
+  String get challengeChallengeAccepted => 'تم قبول التحدي!';
+
+  @override
+  String get challengeChallengeCanceled => 'تم إلغاء التحدي.';
+
+  @override
+  String get challengeRegisterToSendChallenges => 'الرجاء التسجيل لإرسال تحديات.';
+
+  @override
+  String challengeYouCannotChallengeX(String param) {
+    return 'لا يمكنك تحدي $param.';
+  }
+
+  @override
+  String challengeXDoesNotAcceptChallenges(String param) {
+    return '$param لا يقبل التحديات.';
+  }
+
+  @override
+  String challengeYourXRatingIsTooFarFromY(String param1, String param2) {
+    return 'تقييمك $param1 أعلى من $param2.';
+  }
+
+  @override
+  String challengeCannotChallengeDueToProvisionalXRating(String param) {
+    return 'لا يمكن ارسال التحدي بسبب تقييم $param المبدئي.';
+  }
+
+  @override
+  String challengeXOnlyAcceptsChallengesFromFriends(String param) {
+    return '$param يقبل التحديات من الأصدقاء فقط.';
+  }
+
+  @override
+  String get challengeDeclineGeneric => 'أنا لا أقبل التحديات في الوقت الراهن.';
+
+  @override
+  String get challengeDeclineLater => 'هذا ليس الوقت المناسب بالنسبة لي، أرجو أن تسأل مرة أخرى لاحقاً.';
+
+  @override
+  String get challengeDeclineTooFast => 'هذه المباراة سريعة جدا بالنسبة لي، يرجى تحدي مرة أخرى مع مباراة أبطأ.';
+
+  @override
+  String get challengeDeclineTooSlow => 'هذه المباراة بطيئة جدا بالنسبة لي، يرجى تحدي مرة أخرى مع مباراة أسرع.';
+
+  @override
+  String get challengeDeclineTimeControl => 'وقت المبارات لا يناسبني.';
+
+  @override
+  String get challengeDeclineRated => 'من فضلك أرسل لي تحدياً مقيماً بدلاً من ذلك.';
+
+  @override
+  String get challengeDeclineCasual => 'من فضلك أرسل لي تحدياً بدون تقييم بدلاً من ذلك.';
+
+  @override
+  String get challengeDeclineStandard => 'أنا لا أقبل أنواع اللعب غير العادية الآن.';
+
+  @override
+  String get challengeDeclineVariant => 'أنا لا أرغب في لعب نوع الشطرنج هذا الآن.';
+
+  @override
+  String get challengeDeclineNoBot => 'أنا لا أقبل التحديات من البوت.';
+
+  @override
+  String get challengeDeclineOnlyBot => 'أنا أقبل التحديات فقط من البوت.';
+
+  @override
+  String get challengeInviteLichessUser => 'أو قم بدعوة أحد المستخدمين:';
+
+  @override
   String get playWithAFriend => 'اللعب مع صديق';
 
   @override

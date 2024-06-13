@@ -231,6 +231,87 @@ class AppLocalizationsFi extends AppLocalizations {
   String get contactContactLichess => 'Ota yhteyttä Lichessiin';
 
   @override
+  String challengeChallengesX(String param1) {
+    return 'Haasteet: $param1';
+  }
+
+  @override
+  String get challengeChallengeToPlay => 'Haasta peliin';
+
+  @override
+  String get challengeChallengeDeclined => 'Haasteesta kieltäydyttiin';
+
+  @override
+  String get challengeChallengeAccepted => 'Haaste hyväksytty!';
+
+  @override
+  String get challengeChallengeCanceled => 'Haaste peruutettu.';
+
+  @override
+  String get challengeRegisterToSendChallenges => 'Rekisteröidy niin voit lähettää haasteita.';
+
+  @override
+  String challengeYouCannotChallengeX(String param) {
+    return 'Et voi haastaa pelaajaa $param.';
+  }
+
+  @override
+  String challengeXDoesNotAcceptChallenges(String param) {
+    return '$param ei ota haasteita vastaan.';
+  }
+
+  @override
+  String challengeYourXRatingIsTooFarFromY(String param1, String param2) {
+    return '$param1-vahvuuslukusi on liian kaukana pelaajan $param2 vahvuusluvusta.';
+  }
+
+  @override
+  String challengeCannotChallengeDueToProvisionalXRating(String param) {
+    return 'Et voi haastaa, koska $param-vahvuuslukusi on tilapäinen.';
+  }
+
+  @override
+  String challengeXOnlyAcceptsChallengesFromFriends(String param) {
+    return '$param ottaa vastaan haasteita vain kavereiltaan.';
+  }
+
+  @override
+  String get challengeDeclineGeneric => 'En ota tällä hetkellä haasteita vastaan.';
+
+  @override
+  String get challengeDeclineLater => 'Ajankohta ei sovi minulle juuri nyt, pyydä myöhemmin uudelleen.';
+
+  @override
+  String get challengeDeclineTooFast => 'Tämä aikaraja on minulle liian nopea, haasta minut uudelleen hitaampaan peliin.';
+
+  @override
+  String get challengeDeclineTooSlow => 'Tämä aikaraja on minulle liian hidas, haasta minut uudelleen nopeampaan peliin.';
+
+  @override
+  String get challengeDeclineTimeControl => 'En ota vastaan haasteita tällä aikarajalla.';
+
+  @override
+  String get challengeDeclineRated => 'Lähetä minulle sen sijaan haaste pisteytettyyn peliin.';
+
+  @override
+  String get challengeDeclineCasual => 'Lähetä minulle sen sijaan haaste rentoon peliin.';
+
+  @override
+  String get challengeDeclineStandard => 'En juuri nyt ota vastaan haasteita variantteihin.';
+
+  @override
+  String get challengeDeclineVariant => 'En juuri nyt halua pelata tätä varianttia.';
+
+  @override
+  String get challengeDeclineNoBot => 'En ota vastaan haasteita boteilta.';
+
+  @override
+  String get challengeDeclineOnlyBot => 'Otan vastaan haasteita vain boteilta.';
+
+  @override
+  String get challengeInviteLichessUser => 'Tai kutsu Lichess-käyttäjä:';
+
+  @override
   String get playWithAFriend => 'Pelaa kaveria vastaan';
 
   @override

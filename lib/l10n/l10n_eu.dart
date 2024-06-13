@@ -231,6 +231,87 @@ class AppLocalizationsEu extends AppLocalizations {
   String get contactContactLichess => 'Jarri kontaktuan Lichessekin';
 
   @override
+  String challengeChallengesX(String param1) {
+    return 'Erronkak: $param1';
+  }
+
+  @override
+  String get challengeChallengeToPlay => 'Partida baterako erronka egin';
+
+  @override
+  String get challengeChallengeDeclined => 'Erronka baztertuta';
+
+  @override
+  String get challengeChallengeAccepted => 'Erronka onartuta!';
+
+  @override
+  String get challengeChallengeCanceled => 'Erronka bertan behera utzita.';
+
+  @override
+  String get challengeRegisterToSendChallenges => 'Eman izena erronkak bidaltzeko.';
+
+  @override
+  String challengeYouCannotChallengeX(String param) {
+    return 'Ezin diozu $param erabiltzaileri erronka egin.';
+  }
+
+  @override
+  String challengeXDoesNotAcceptChallenges(String param) {
+    return '$param erabiltzaileak ez du erronkarik onartzen.';
+  }
+
+  @override
+  String challengeYourXRatingIsTooFarFromY(String param1, String param2) {
+    return 'Zure $param1 puntuazioa urrunegi dago $param2-tik.';
+  }
+
+  @override
+  String challengeCannotChallengeDueToProvisionalXRating(String param) {
+    return 'Ezin duzu erronkarik egin behin-behineko $param puntuazioa duzulako.';
+  }
+
+  @override
+  String challengeXOnlyAcceptsChallengesFromFriends(String param) {
+    return '$param erabiltzaileak bere lagunen erronkak onartzen ditu bakarrik.';
+  }
+
+  @override
+  String get challengeDeclineGeneric => 'Orain ez dut erronkarik onartzen.';
+
+  @override
+  String get challengeDeclineLater => 'Hori ez da momenturik onena, eskatu beranduago.';
+
+  @override
+  String get challengeDeclineTooFast => 'Erritmo hori azkarregia da, proposatu partida geldoago bat.';
+
+  @override
+  String get challengeDeclineTooSlow => 'Erritmo hori geldoegia da, proposatu partida azkarrago bat.';
+
+  @override
+  String get challengeDeclineTimeControl => 'Ez dut erritmo horretako erronkarik onartzen.';
+
+  @override
+  String get challengeDeclineRated => 'Mesedez bidali puntuaziorako balio duen erronka bat.';
+
+  @override
+  String get challengeDeclineCasual => 'Mesedez bidali lagunarteko erronka bat, puntuaziorako balio ez duena.';
+
+  @override
+  String get challengeDeclineStandard => 'Ez dut aldaeren erronkarik onartzen.';
+
+  @override
+  String get challengeDeclineVariant => 'Ez dut aldaera horretan jokatu nahi.';
+
+  @override
+  String get challengeDeclineNoBot => 'Ez dut erroboten erronkarik onartzen.';
+
+  @override
+  String get challengeDeclineOnlyBot => 'Erroboten erronkak bakarrik onartzen ditut.';
+
+  @override
+  String get challengeInviteLichessUser => 'Edo gonbidatu Lichesseko erabiltzaile bat:';
+
+  @override
   String get playWithAFriend => 'Lagun baten aurka jokatu';
 
   @override

@@ -231,6 +231,87 @@ class AppLocalizationsFa extends AppLocalizations {
   String get contactContactLichess => 'ارتباط با Lichess';
 
   @override
+  String challengeChallengesX(String param1) {
+    return 'پیشنهاد بازی: $param1';
+  }
+
+  @override
+  String get challengeChallengeToPlay => 'پیشنهاد بازی دادن';
+
+  @override
+  String get challengeChallengeDeclined => 'پیشنهاد بازی رد شد.';
+
+  @override
+  String get challengeChallengeAccepted => 'پیشنهاد بازی پذیرفته شد!';
+
+  @override
+  String get challengeChallengeCanceled => 'پیشنهاد بازی لغو شد.';
+
+  @override
+  String get challengeRegisterToSendChallenges => 'برای پیشنهاد بازی دادن به این کاربر، لطفا نام‌نویسی کنید.';
+
+  @override
+  String challengeYouCannotChallengeX(String param) {
+    return 'شما نمی‌توانید به $param پیشنهاد بازی دهید.';
+  }
+
+  @override
+  String challengeXDoesNotAcceptChallenges(String param) {
+    return '$param پیشنهاد بازی را نپذیرفت.';
+  }
+
+  @override
+  String challengeYourXRatingIsTooFarFromY(String param1, String param2) {
+    return 'درجه‌بندی $param1 شما با $param2 اختلاف زیادی دارد.';
+  }
+
+  @override
+  String challengeCannotChallengeDueToProvisionalXRating(String param) {
+    return 'به‌خاطر داشتن درجه‌بندی $param موقت، نمی‌توانید پیشنهاد بازی دهید.';
+  }
+
+  @override
+  String challengeXOnlyAcceptsChallengesFromFriends(String param) {
+    return '$param فقط پیشنهاد بازی از دوستانش را می‌پذیرد.';
+  }
+
+  @override
+  String get challengeDeclineGeneric => 'من فعلا پیشنهاد بازی نمی‌پذیرم.';
+
+  @override
+  String get challengeDeclineLater => 'الان زمان مناسبی برای من نیست، لطفا بعدا دوباره درخواست دهید.';
+
+  @override
+  String get challengeDeclineTooFast => 'این زمان‌بندی برایم خیلی کم است، لطفا دوباره با زمان‌بندی بیشتر پیشنهاد بازی دهید.';
+
+  @override
+  String get challengeDeclineTooSlow => 'این زمان‌بندی برایم خیلی زیاد است، لطفا دوباره با زمان‌بندی کمتر پیشنهاد بازی دهید.';
+
+  @override
+  String get challengeDeclineTimeControl => 'من با این زمان‌بندی، پیشنهاد بازی را نمی‌پذیرم.';
+
+  @override
+  String get challengeDeclineRated => 'لطفا به جایش، پیشنهاد بازی رسمی بده.';
+
+  @override
+  String get challengeDeclineCasual => 'لطفا به جایش، پیشنهاد بازی غیررسمی بده.';
+
+  @override
+  String get challengeDeclineStandard => 'الان پیشنهاد بازی‌های شطرنج‌گونه را نمی‌پذیرم.';
+
+  @override
+  String get challengeDeclineVariant => 'الان مایل نیستم این شطرنج‌گونه را بازی کنم.';
+
+  @override
+  String get challengeDeclineNoBot => 'من پیشنهاد بازی از ربات‌ها را نمی‌پذیرم.';
+
+  @override
+  String get challengeDeclineOnlyBot => 'من فقط پیشنهاد بازی از ربات‌ها را می‌پذیرم.';
+
+  @override
+  String get challengeInviteLichessUser => 'یا یک کاربر Lichess را دعوت کنید:';
+
+  @override
   String get playWithAFriend => 'بازی با دوستان';
 
   @override
