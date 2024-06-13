@@ -138,13 +138,13 @@ class ChallengeLoadingContent extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(
-                            challenge.setup.perf.icon,
+                            challenge.perf.icon,
                             color: DefaultTextStyle.of(context).style.color,
                           ),
                           const SizedBox(width: 8.0),
                           Text(
-                            challenge.setup.timeIncrement?.display ??
-                                '${context.l10n.daysPerTurn}: ${challenge.setup.days}',
+                            challenge.timeIncrement?.display ??
+                                '${context.l10n.daysPerTurn}: ${challenge.days}',
                             style: Theme.of(context).textTheme.titleLarge,
                           ),
                         ],

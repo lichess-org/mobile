@@ -8,7 +8,6 @@ import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 
 part 'challenge.freezed.dart';
-part 'challenge.g.dart';
 
 abstract mixin class BaseChallenge {
   Variant get variant;
@@ -61,23 +60,18 @@ class Challenge with _$Challenge, BaseChallenge implements BaseChallenge {
 }
 
 /// A challenge request to play a game with another user.
-typedef ChallengeRequest = ({
-  ChallengeSetup setup,
-  LightUser destUser,
-});
-
-/// A challenge setup.
-@Freezed(fromJson: true, toJson: true)
-class ChallengeSetup
-    with _$ChallengeSetup, BaseChallenge
+@freezed
+class ChallengeRequest
+    with _$ChallengeRequest, BaseChallenge
     implements BaseChallenge {
-  const ChallengeSetup._();
+  const ChallengeRequest._();
 
   @Assert(
     'clock != null || days != null',
     'Either clock or days must be set but not both.',
   )
-  const factory ChallengeSetup({
+  const factory ChallengeRequest({
+    required LightUser destUser,
     required Variant variant,
     required ChallengeTimeControlType timeControl,
     ({Duration time, Duration increment})? clock,
@@ -86,14 +80,6 @@ class ChallengeSetup
     required SideChoice sideChoice,
     String? initialFen,
   }) = _ChallengeSetup;
-
-  static const defaults = ChallengeSetup(
-    variant: Variant.standard,
-    timeControl: ChallengeTimeControlType.clock,
-    clock: (time: Duration(minutes: 10), increment: Duration.zero),
-    rated: false,
-    sideChoice: SideChoice.random,
-  );
 
   @override
   Speed get speed => Speed.fromTimeIncrement(
@@ -113,14 +99,6 @@ class ChallengeSetup
         'variant': variant.name,
         if (sideChoice != SideChoice.random) 'color': sideChoice.name,
       };
-
-  factory ChallengeSetup.fromJson(Map<String, dynamic> json) {
-    try {
-      return _$ChallengeSetupFromJson(json);
-    } catch (_) {
-      return ChallengeSetup.defaults;
-    }
-  }
 }
 
 enum ChallengeDirection {

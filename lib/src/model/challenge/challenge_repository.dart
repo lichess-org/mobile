@@ -45,7 +45,7 @@ class ChallengeRepository {
     final uri = Uri(path: '/api/challenge/${challenge.destUser.id}');
     return client.postReadJson(
       uri,
-      body: challenge.setup.toRequestBody,
+      body: challenge.toRequestBody,
       mapper: (json) => _challengeFromPick(pick(json).required()),
     );
   }
