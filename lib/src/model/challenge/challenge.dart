@@ -56,6 +56,7 @@ class Challenge with _$Challenge, BaseChallenge implements BaseChallenge {
     DeclineReason? declineReason,
     String? initialFen,
     ChallengeDirection? direction,
+    int? socketVersion,
   }) = _Challenge;
 }
 

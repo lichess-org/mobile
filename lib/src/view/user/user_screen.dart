@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/relation/relation_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -178,7 +179,7 @@ class _UserProfileListView extends ConsumerWidget {
             children: [
               PlatformListTile(
                 title: Text(context.l10n.challengeChallengeToPlay),
-                leading: const Icon(Icons.play_arrow),
+                leading: const Icon(LichessIcons.crossed_swords),
                 onTap: () {
                   pushPlatformRoute(
                     context,

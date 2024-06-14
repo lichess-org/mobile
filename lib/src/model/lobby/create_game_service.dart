@@ -119,8 +119,12 @@ class CreateGameService {
       final challenge = await repo.create(challengeReq);
 
       final socketPool = ref.read(socketPoolProvider);
-      final socketClient =
-          socketPool.open(Uri(path: '/challenge/${challenge.id}/socket/v5'));
+      final socketClient = socketPool.open(
+        Uri(
+          path: '/challenge/${challenge.id}/socket/v5',
+          queryParameters: {'v': (challenge.socketVersion ?? 0).toString()},
+        ),
+      );
 
       _challengeConnection = (
         challenge.id,
