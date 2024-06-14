@@ -115,9 +115,9 @@ class _SearchButton extends StatelessWidget {
 class _OnlineFriendsWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final relationState = ref.watch(onlineFriendsProvider);
+    final asyncFriends = ref.watch(onlineFriendsProvider);
 
-    return relationState.when(
+    return asyncFriends.when(
       data: (data) {
         return ListSection(
           header: Text(context.l10n.nbFriendsOnline(data.length)),

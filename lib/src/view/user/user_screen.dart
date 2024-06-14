@@ -235,7 +235,10 @@ class _UserProfileListView extends ConsumerWidget {
                 title: Text(context.l10n.reportXToModerators(user.username)),
                 onTap: () {
                   launchUrl(
-                    lichessUri('/report', {'username': user.id}),
+                    lichessUri('/report', {
+                      'username': user.id,
+                      'login': session.user.id,
+                    }),
                   );
                 },
               ),
