@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/package_info.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
+import 'package:lichess_mobile/src/view/settings/volume_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -217,6 +218,7 @@ class _Body extends ConsumerWidget {
                         .setSoundTheme(value ?? SoundTheme.standard);
                     ref.read(soundServiceProvider).changeTheme(
                           value ?? SoundTheme.standard,
+                          volume,
                           playSound: true,
                         );
                   },
@@ -232,38 +234,36 @@ class _Body extends ConsumerWidget {
           ),
           SettingsListTile(
             icon: const Icon(Icons.volume_up),
+            // TODO: translate
             settingsLabel: const Text('Volume'),
             settingsValue: volumeLabel(volume),
             onTap: () {
-              showDialog<void>(
-                context: context,
-                builder: (context) {
-                  return _SettingsSliderDialog(
-                    title: 'Volume',
-                    value: volume,
-                    values: const [
-                      0.0,
-                      0.1,
-                      0.2,
-                      0.3,
-                      0.4,
-                      0.5,
-                      0.6,
-                      0.7,
-                      0.8,
-                      0.9,
-                      1.0,
-                    ],
-                    onChangeEnd: (double value) async {
-                      await ref
-                          .read(generalPreferencesProvider.notifier)
-                          .setVolume(value);
-                      await ref.read(soundServiceProvider).setVolume();
-                    },
-                    labelBuilder: volumeLabel,
-                  );
-                },
-              );
+              if (Theme.of(context).platform == TargetPlatform.iOS) {
+                pushPlatformRoute(
+                  context,
+                  title: 'Volume',
+                  builder: (context) => const VolumeScreen(),
+                );
+              } else {
+                showDialog<void>(
+                  context: context,
+                  builder: (context) {
+                    return _SettingsSliderDialog(
+                      title: 'Volume',
+                      value: volume,
+                      values: kMasterVolumeValues,
+                      onChangeEnd: (double value) {
+                        ref
+                            .read(generalPreferencesProvider.notifier)
+                            .setVolume(value);
+
+                        ref.read(soundServiceProvider).setVolume(value);
+                      },
+                      labelBuilder: volumeLabel,
+                    );
+                  },
+                );
+              }
             },
           ),
           if (Theme.of(context).platform == TargetPlatform.android)

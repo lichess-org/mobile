@@ -42,7 +42,9 @@ Future<AppInitializationData> appInitialization(
   final deviceInfo = await DeviceInfoPlugin().deviceInfo;
   final prefs = await SharedPreferences.getInstance();
   final soundTheme = GeneralPreferences.fetchFromStorage(prefs).soundTheme;
-  final soundPool = await ref.watch(soundPoolProvider(soundTheme).future);
+  final masterVolume = GeneralPreferences.fetchFromStorage(prefs).volume;
+  final soundPool =
+      await ref.watch(soundPoolProvider(soundTheme, masterVolume).future);
 
   final dbPath = p.join(await getDatabasesPath(), kLichessDatabaseName);
 
