@@ -35,7 +35,13 @@ class CreateGameService {
   StreamSubscription<SocketEvent>? _lobbyConnection;
 
   /// The current challenge connection if we are creating a game from a challenge.
-  (ChallengeId, StreamSubscription<SocketEvent>)? _challengeConnection;
+  (
+    ChallengeId,
+    StreamSubscription<void>, // socket connects events
+    StreamSubscription<SocketEvent>, // socket events
+  )? _challengeConnection;
+
+  Timer? _challengePingTimer;
 
   /// Create a new game from the lobby.
   Future<GameFullId> newLobbyGame(GameSeek seek) async {
@@ -128,20 +134,31 @@ class CreateGameService {
 
       _challengeConnection = (
         challenge.id,
+        socketClient.connectedStream.listen((_) {
+          socketClient.send('ping', null);
+          _challengePingTimer?.cancel();
+          _challengePingTimer = Timer.periodic(
+            const Duration(seconds: 9),
+            (_) => socketClient.send('ping', null),
+          );
+        }),
         socketClient.stream.listen((event) async {
+          print('event: $event');
           if (event.topic == 'reload') {
             try {
               final updatedChallenge = await repo.show(challenge.id);
+              print('updatedChallenge: $updatedChallenge');
               if (updatedChallenge.gameFullId != null) {
                 completer.complete((updatedChallenge.gameFullId, null));
               } else if (updatedChallenge.declineReason != null) {
                 completer.complete((null, updatedChallenge.declineReason));
               }
             } catch (e) {
+              print(e);
               _log.warning('Failed to reload challenge', e);
             }
           }
-        })
+        }),
       );
     } catch (e) {
       _log.warning('Failed to create challenge', e);
@@ -182,6 +199,8 @@ class CreateGameService {
     _lobbyConnection?.cancel();
     _lobbyConnection = null;
     _challengeConnection?.$2.cancel();
+    _challengeConnection?.$3.cancel();
+    _challengePingTimer?.cancel();
     _challengeConnection = null;
   }
 }

@@ -37,7 +37,10 @@ class ChallengeRepository {
     final uri = Uri(path: '/api/challenge/$id/show');
     return client.readJson(
       uri,
-      mapper: (json) => _challengeFromPick(pick(json).required()),
+      mapper: (json) {
+        print('challenge show json: $json');
+        return _challengeFromPick(pick(json).required());
+      },
     );
   }
 
