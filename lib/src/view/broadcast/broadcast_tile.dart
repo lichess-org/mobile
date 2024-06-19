@@ -30,6 +30,7 @@ class BroadcastTile extends StatelessWidget {
           context,
           builder: (context) => (broadcast.curentRound != null)
               ? BroadcastGameScreen(
+                  broadCastTitle: broadcast.tour.name,
                   roundId: broadcast.curentRound!.id,
                 )
               : BroadcastDescriptionScreen(

@@ -10,20 +10,24 @@ import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
-import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/grid_board.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
-class BroadcastGameScreen extends ConsumerWidget {
+class BroadcastGameScreen extends StatelessWidget {
+  final String broadCastTitle;
   final String roundId;
 
-  const BroadcastGameScreen({super.key, required this.roundId});
+  const BroadcastGameScreen({
+    super.key,
+    required this.broadCastTitle,
+    required this.roundId,
+  });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return PlatformWidget(
       androidBuilder: _androidBuilder,
       iosBuilder: _iosBuilder,
@@ -35,7 +39,7 @@ class BroadcastGameScreen extends ConsumerWidget {
   ) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.l10n.broadcastBroadcasts),
+        title: Text(broadCastTitle),
       ),
       body: _Body(roundId),
     );
@@ -46,7 +50,7 @@ class BroadcastGameScreen extends ConsumerWidget {
   ) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text(context.l10n.broadcastBroadcasts),
+        middle: Text(broadCastTitle),
       ),
       child: _Body(roundId),
     );

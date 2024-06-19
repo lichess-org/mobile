@@ -24,7 +24,7 @@ class BroadcastDescriptionScreen extends StatelessWidget {
   ) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.l10n.broadcastBroadcasts),
+        title: Text(broadcast.tour.name),
       ),
       body: _Body(broadcast: broadcast),
     );
@@ -35,7 +35,7 @@ class BroadcastDescriptionScreen extends StatelessWidget {
   ) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text(context.l10n.broadcastBroadcasts),
+        middle: Text(broadcast.tour.name),
       ),
       child: _Body(
         broadcast: broadcast,
