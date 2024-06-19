@@ -96,44 +96,46 @@ class BroadcastPreview extends StatelessWidget {
       ),
     );
 
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(10.0),
-      child: GridBoard(
-        rowGap: 5,
-        builder: (crossAxisCount, boardWidth) => (games == null)
-            ? List.generate(
-                numberLoadingBoardThumbnails,
-                (index) => BoardThumbnail.loading(
-                  size: boardWidth,
-                  header: fakeHeaderAndFooter,
-                  footer: fakeHeaderAndFooter,
-                ),
-              )
-            : games!.map(
-                (game) {
-                  final playingSide =
-                      dartchess.Setup.parseFen(game.fen).turn.cg;
-
-                  return BoardThumbnail(
-                    orientation: Side.white,
-                    fen: game.fen,
-                    lastMove: game.lastMove?.cg,
+    return SafeArea(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(10.0),
+        child: GridBoard(
+          rowGap: 5,
+          builder: (crossAxisCount, boardWidth) => (games == null)
+              ? List.generate(
+                  numberLoadingBoardThumbnails,
+                  (index) => BoardThumbnail.loading(
                     size: boardWidth,
-                    header: PlayerWidget(
-                      player: game.players[1],
-                      gameStatus: game.status,
-                      side: Side.black,
-                      playingSide: playingSide,
-                    ),
-                    footer: PlayerWidget(
-                      player: game.players[0],
-                      gameStatus: game.status,
-                      side: Side.white,
-                      playingSide: playingSide,
-                    ),
-                  );
-                },
-              ).toList(),
+                    header: fakeHeaderAndFooter,
+                    footer: fakeHeaderAndFooter,
+                  ),
+                )
+              : games!.map(
+                  (game) {
+                    final playingSide =
+                        dartchess.Setup.parseFen(game.fen).turn.cg;
+
+                    return BoardThumbnail(
+                      orientation: Side.white,
+                      fen: game.fen,
+                      lastMove: game.lastMove?.cg,
+                      size: boardWidth,
+                      header: PlayerWidget(
+                        player: game.players[1],
+                        gameStatus: game.status,
+                        side: Side.black,
+                        playingSide: playingSide,
+                      ),
+                      footer: PlayerWidget(
+                        player: game.players[0],
+                        gameStatus: game.status,
+                        side: Side.white,
+                        playingSide: playingSide,
+                      ),
+                    );
+                  },
+                ).toList(),
+        ),
       ),
     );
   }

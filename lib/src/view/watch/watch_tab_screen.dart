@@ -156,6 +156,7 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
                     ? SliverList(
                         delegate: SliverChildListDelegate(
                           const [
+                            _BroadcastWidget(),
                             _WatchTvWidget(),
                             _StreamerWidget(),
                           ],
@@ -169,6 +170,7 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
                         ),
                         delegate: SliverChildListDelegate(
                           const [
+                            _BroadcastWidget(),
                             _WatchTvWidget(),
                             _StreamerWidget(),
                           ],

@@ -56,17 +56,20 @@ class _Body extends ConsumerWidget {
 
     return broadcasts.when(
       data: (broadcasts) {
-        return SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: LayoutGrid(
-              rowGap: 8,
-              columnGap: 8,
-              columnSizes: [1.fr, 1.fr],
-              rowSizes: List.generate(broadcasts.length ~/ 2, (index) => auto),
-              children: broadcasts
-                  .map((broadcast) => BroadcastPicture(broadcast: broadcast))
-                  .toList(),
+        return SafeArea(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: LayoutGrid(
+                rowGap: 8,
+                columnGap: 8,
+                columnSizes: [1.fr, 1.fr],
+                rowSizes:
+                    List.generate(broadcasts.length ~/ 2, (index) => auto),
+                children: broadcasts
+                    .map((broadcast) => BroadcastPicture(broadcast: broadcast))
+                    .toList(),
+              ),
             ),
           ),
         );
