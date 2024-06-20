@@ -128,7 +128,7 @@ class CreateGameService {
       final socketClient = socketPool.open(
         Uri(
           path: '/challenge/${challenge.id}/socket/v5',
-          queryParameters: {'v': (challenge.socketVersion ?? 0).toString()},
+          queryParameters: {'v': challenge.socketVersion.toString()},
         ),
       );
 
@@ -143,7 +143,6 @@ class CreateGameService {
           );
         }),
         socketClient.stream.listen((event) async {
-          print('event: $event');
           if (event.topic == 'reload') {
             try {
               final updatedChallenge = await repo.show(challenge.id);
@@ -154,7 +153,6 @@ class CreateGameService {
                 completer.complete((null, updatedChallenge.declineReason));
               }
             } catch (e) {
-              print(e);
               _log.warning('Failed to reload challenge', e);
             }
           }

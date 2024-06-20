@@ -41,6 +41,7 @@ class Challenge with _$Challenge, BaseChallenge implements BaseChallenge {
     'Either clock or days must be set but not both.',
   )
   const factory Challenge({
+    required int socketVersion,
     required ChallengeId id,
     GameFullId? gameFullId,
     required ChallengeStatus status,
@@ -56,7 +57,6 @@ class Challenge with _$Challenge, BaseChallenge implements BaseChallenge {
     DeclineReason? declineReason,
     String? initialFen,
     ChallengeDirection? direction,
-    int? socketVersion,
   }) = _Challenge;
 }
 

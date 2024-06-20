@@ -92,7 +92,7 @@ class ChallengeRepository {
 
 Challenge _challengeFromPick(RequiredPick pick) {
   return Challenge(
-    socketVersion: pick('socketVersion').asIntOrNull(),
+    socketVersion: pick('socketVersion').asIntOrThrow(),
     id: pick('id').asChallengeIdOrThrow(),
     status: pick('status').asChallengeStatusOrThrow(),
     variant: pick('variant').asVariantOrThrow(),
