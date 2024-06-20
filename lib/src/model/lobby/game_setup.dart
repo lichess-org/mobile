@@ -24,6 +24,7 @@ class GameSetup with _$GameSetup {
   const GameSetup._();
 
   const factory GameSetup({
+    required TimeIncrement quickPairingTimeIncrement,
     required TimeControl customTimeControl,
     required int customTimeSeconds,
     required int customIncrementSeconds,
@@ -35,6 +36,7 @@ class GameSetup with _$GameSetup {
   }) = _GameSetup;
 
   static const defaults = GameSetup(
+    quickPairingTimeIncrement: TimeIncrement(600, 0),
     customTimeControl: TimeControl.realTime,
     customTimeSeconds: 180,
     customIncrementSeconds: 0,
@@ -92,6 +94,10 @@ class GameSetupPreferences extends _$GameSetupPreferences {
             jsonDecode(stored) as Map<String, dynamic>,
           )
         : GameSetup.defaults;
+  }
+
+  Future<void> setQuickPairingTimeIncrement(TimeIncrement timeInc) {
+    return _save(state.copyWith(quickPairingTimeIncrement: timeInc));
   }
 
   Future<void> setCustomTimeControl(TimeControl control) {

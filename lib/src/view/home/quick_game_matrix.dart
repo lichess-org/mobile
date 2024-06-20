@@ -1,5 +1,4 @@
 import 'package:collection/collection.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
@@ -13,7 +12,6 @@ import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/play/create_custom_game_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
 
 const _kMatrixSpacing = 4.0;
 
@@ -33,58 +31,50 @@ class QuickGameMatrix extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (showMatrixTitle) ...[
-          Text(context.l10n.quickPairing),
+          Text(context.l10n.quickPairing, style: Styles.sectionTitle),
           const SizedBox(height: 6.0),
         ],
-        PlatformCard(
-          margin: EdgeInsets.zero,
-          borderRadius: const BorderRadius.all(Radius.circular(6.0)),
-          child: Padding(
-            padding: const EdgeInsets.all(6.0),
-            child: Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  colorFilter: ColorFilter.mode(logoColor, BlendMode.modulate),
-                  image: const AssetImage('assets/images/logo-transp.png'),
-                  fit: BoxFit.contain,
-                ),
-              ),
-              child: const Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _SectionChoices(
-                    choices: [
-                      TimeIncrement(60, 0),
-                      TimeIncrement(120, 1),
-                      TimeIncrement(180, 0),
-                    ],
-                  ),
-                  SizedBox(height: _kMatrixSpacing),
-                  _SectionChoices(
-                    choices: [
-                      TimeIncrement(180, 2),
-                      TimeIncrement(300, 0),
-                      TimeIncrement(300, 3),
-                    ],
-                  ),
-                  SizedBox(height: _kMatrixSpacing),
-                  _SectionChoices(
-                    choices: [
-                      TimeIncrement(600, 0),
-                      TimeIncrement(600, 5),
-                      TimeIncrement(900, 10),
-                    ],
-                  ),
-                  SizedBox(height: _kMatrixSpacing),
-                  _SectionChoices(
-                    choices: [
-                      TimeIncrement(1800, 0),
-                      TimeIncrement(1800, 20),
-                    ],
-                  ),
+        Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              colorFilter: ColorFilter.mode(logoColor, BlendMode.modulate),
+              image: const AssetImage('assets/images/logo-transp.png'),
+              fit: BoxFit.contain,
+            ),
+          ),
+          child: const Column(
+            children: [
+              _SectionChoices(
+                choices: [
+                  TimeIncrement(60, 0),
+                  TimeIncrement(120, 1),
+                  TimeIncrement(180, 0),
                 ],
               ),
-            ),
+              SizedBox(height: _kMatrixSpacing),
+              _SectionChoices(
+                choices: [
+                  TimeIncrement(180, 2),
+                  TimeIncrement(300, 0),
+                  TimeIncrement(300, 3),
+                ],
+              ),
+              SizedBox(height: _kMatrixSpacing),
+              _SectionChoices(
+                choices: [
+                  TimeIncrement(600, 0),
+                  TimeIncrement(600, 5),
+                  TimeIncrement(900, 10),
+                ],
+              ),
+              SizedBox(height: _kMatrixSpacing),
+              _SectionChoices(
+                choices: [
+                  TimeIncrement(1800, 0),
+                  TimeIncrement(1800, 20),
+                ],
+              ),
+            ],
           ),
         ),
       ],
@@ -174,34 +164,21 @@ class _ChoiceChip extends StatefulWidget {
 }
 
 class _ChoiceChipState extends State<_ChoiceChip> {
-  bool _tapped = false;
-
   @override
   Widget build(BuildContext context) {
+    final cardColor = Theme.of(context).platform == TargetPlatform.iOS
+        ? Styles.cupertinoCardColor.resolveFrom(context).withOpacity(0.7)
+        : Theme.of(context).colorScheme.surfaceContainer.withOpacity(0.7);
+
     return Container(
       decoration: BoxDecoration(
-        color: Colors.transparent,
+        color: cardColor,
         borderRadius: const BorderRadius.all(Radius.circular(6.0)),
-        border: _tapped
-            ? Border.fromBorderSide(
-                BorderSide(
-                  color: Theme.of(context).colorScheme.primary,
-                  width: 1.0,
-                ),
-              )
-            : Border.fromBorderSide(
-                BorderSide(
-                  color: CupertinoColors.separator.resolveFrom(context),
-                  width: 1.0,
-                ),
-              ),
       ),
       child: AdaptiveInkWell(
         borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-        onTapDown: (_) => setState(() => _tapped = true),
-        onTapUp: (_) => setState(() => _tapped = false),
-        onTapCancel: () => setState(() => _tapped = false),
         onTap: () => widget.onSelected(true),
+        splashColor: Theme.of(context).primaryColor.withOpacity(0.2),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: Column(

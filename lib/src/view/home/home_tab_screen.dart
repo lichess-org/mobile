@@ -252,8 +252,14 @@ class _HomeBody extends ConsumerWidget {
                   ),
                 ],
               )
-            else
+            else ...[
+              if (status.isOnline)
+                Padding(
+                  padding: Styles.bodySectionPadding,
+                  child: const QuickGameMatrix(showMatrixTitle: false),
+                ),
               ...welcomeWidgets,
+            ],
           ];
 
           return Theme.of(context).platform == TargetPlatform.android
@@ -315,6 +321,11 @@ class _HomeBody extends ConsumerWidget {
               ]
             : [
                 const _HelloWidget(),
+                if (status.isOnline)
+                  Padding(
+                    padding: Styles.bodySectionPadding,
+                    child: const QuickGameMatrix(showMatrixTitle: false),
+                  ),
                 if (status.isOnline)
                   const _OngoingGamesCarousel(maxGamesToShow: 20)
                 else

@@ -4,6 +4,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/home/create_game_options.dart';
 import 'package:lichess_mobile/src/view/home/quick_game_matrix.dart';
+import 'package:lichess_mobile/src/view/play/quick_game_button.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
 class PlayScreen extends StatelessWidget {
@@ -37,11 +38,12 @@ class _Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: ListView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Padding(
             padding: Styles.bodySectionPadding,
-            child: const QuickGameMatrix(showMatrixTitle: true),
+            child: const QuickGameButton(),
           ),
           const CreateGameOptions(),
         ],
