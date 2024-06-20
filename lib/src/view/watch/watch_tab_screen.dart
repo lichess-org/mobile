@@ -207,7 +207,7 @@ class _BroadcastWidget extends ConsumerWidget {
     return broadcastList.when(
       data: (data) {
         return ListSection(
-          header: const Text('Tournament broadcasts'),
+          header: Text(context.l10n.broadcastBroadcasts),
           hasLeading: true,
           headerTrailing: NoPaddingTextButton(
             onPressed: () {
