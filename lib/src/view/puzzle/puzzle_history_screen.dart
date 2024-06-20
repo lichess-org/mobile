@@ -2,7 +2,6 @@ import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_layout_grid/flutter_layout_grid.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
@@ -18,6 +17,7 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/grid_board.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -54,57 +54,39 @@ class PuzzleHistoryPreview extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final crossAxisCount = constraints.maxWidth > 600
-            ? 4
-            : constraints.maxWidth > 450
-                ? 3
-                : 2;
-        const columnGap = 12.0;
-        final boardWidth =
-            (constraints.maxWidth - (columnGap * crossAxisCount - columnGap)) /
-                crossAxisCount;
-
+    return GridBoard(
+      rowGap: 16,
+      builder: (crossAxisCount, boardWidth) {
         final cappedHistory =
             maxRows != null ? history.take(crossAxisCount * maxRows!) : history;
 
-        return LayoutGrid(
-          columnSizes: List.generate(crossAxisCount, (_) => 1.fr),
-          rowSizes: List.generate(
-            (history.length / crossAxisCount).ceil(),
-            (_) => auto,
-          ),
-          rowGap: 16.0,
-          columnGap: columnGap,
-          children: cappedHistory.map((e) {
-            final (fen, side, lastMove) = e.preview;
-            return BoardThumbnail(
-              size: boardWidth,
-              onTap: () {
-                pushPlatformRoute(
-                  context,
-                  rootNavigator: true,
-                  builder: (_) => PuzzleScreen(
-                    angle: const PuzzleTheme(PuzzleThemeKey.mix),
-                    puzzleId: e.id,
-                  ),
-                );
-              },
-              orientation: side.cg,
-              fen: fen,
-              lastMove: lastMove.cg,
-              footer: Padding(
-                padding: const EdgeInsets.only(top: 2.0),
-                child: Row(
-                  children: [
-                    _PuzzleResult(e),
-                  ],
+        return cappedHistory.map((e) {
+          final (fen, side, lastMove) = e.preview;
+          return BoardThumbnail(
+            size: boardWidth,
+            onTap: () {
+              pushPlatformRoute(
+                context,
+                rootNavigator: true,
+                builder: (_) => PuzzleScreen(
+                  angle: const PuzzleTheme(PuzzleThemeKey.mix),
+                  puzzleId: e.id,
                 ),
+              );
+            },
+            orientation: side.cg,
+            fen: fen,
+            lastMove: lastMove.cg,
+            footer: Padding(
+              padding: const EdgeInsets.only(top: 2.0),
+              child: Row(
+                children: [
+                  _PuzzleResult(e),
+                ],
               ),
-            );
-          }).toList(),
-        );
+            ),
+          );
+        }).toList();
       },
     );
   }

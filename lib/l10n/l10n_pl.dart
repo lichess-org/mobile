@@ -4701,4 +4701,10 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get studyStart => 'Rozpocznij';
+
+  @override
+  String get broadcastBroadcasts => 'Transmisje';
+
+  @override
+  String get broadcastStartDate => 'Data rozpoczęcia wydarzenia w Twojej strefie czasowej';
 }

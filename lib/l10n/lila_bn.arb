@@ -1077,5 +1077,7 @@
   "stormRuns": "চালান",
   "stormSkip": "এড়িয়ে যান",
   "stormXRuns": "{count, plural, =0{১ দউর} =1{১ দউর} other{{count} দউর}}",
-  "studyStart": "শুরু করুন"
+  "studyStart": "শুরু করুন",
+  "broadcastBroadcasts": "সম্প্রচার",
+  "broadcastStartDate": "আপনার নিজস্ব সময় অঞ্চল শুরু করার তারিখ"
 }

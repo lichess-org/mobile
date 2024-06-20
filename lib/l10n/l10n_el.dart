@@ -2283,7 +2283,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get hue => 'Hue';
 
   @override
-  String get boardReset => 'Reset colors to default';
+  String get boardReset => 'Reset colours to default';
 
   @override
   String get pieceSet => 'Επιλογή κομματιών';
@@ -4569,4 +4569,10 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get studyStart => 'Δημιουργία';
+
+  @override
+  String get broadcastBroadcasts => 'Αναμεταδόσεις';
+
+  @override
+  String get broadcastStartDate => 'Ημερομηνία έναρξης στη δική σας ζώνη ώρας';
 }

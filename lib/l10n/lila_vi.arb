@@ -1240,5 +1240,7 @@
   "stormXRuns": "{count, plural, other{{count} lần chơi}}",
   "stormPlayedNbRunsOfPuzzleStorm": "{count, plural, other{Đã chơi {count} lượt {param2}}}",
   "studyShareAndExport": "Chia sẻ & xuất",
-  "studyStart": "Bắt đầu"
+  "studyStart": "Bắt đầu",
+  "broadcastBroadcasts": "Các phát sóng",
+  "broadcastStartDate": "Ngày bắt đầu theo múi giờ của bạn"
 }

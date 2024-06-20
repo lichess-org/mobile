@@ -1231,5 +1231,7 @@
   "stormXRuns": "{count, plural, =0{1 poskus} =1{1 poskus} =2{{count} poskusa} few{{count} poskusi} other{{count} poskusov}}",
   "stormPlayedNbRunsOfPuzzleStorm": "{count, plural, =0{Opravljen en poskus {param2}} =1{Opravljen en poskus {param2}} =2{Opravljena {count} poskusa {param2}} few{Opravljeni {count} poskusi {param2}} other{Opravljenih {count} poskusov {param2}}}",
   "studyShareAndExport": "Deli in Izvozi podatke",
-  "studyStart": "Začni"
+  "studyStart": "Začni",
+  "broadcastBroadcasts": "Prenosi",
+  "broadcastStartDate": "Datum začetka v vaše časovnem pasu"
 }

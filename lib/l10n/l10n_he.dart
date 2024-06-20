@@ -4701,4 +4701,10 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get studyStart => 'שמירה';
+
+  @override
+  String get broadcastBroadcasts => 'הקרנות';
+
+  @override
+  String get broadcastStartDate => 'תאריך ההתחלה באזור הזמן שלך';
 }

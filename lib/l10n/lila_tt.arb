@@ -876,5 +876,7 @@
   "stormXRuns": "{count, plural, other{{count} йөгерә}}",
   "stormPlayedNbRunsOfPuzzleStorm": "{count, plural, other{{count} уйнаган {param2} йөгерә}}",
   "studyShareAndExport": "Юшәрик & яшдүр",
-  "studyStart": "Башла"
+  "studyStart": "Башла",
+  "broadcastBroadcasts": "Ишеттәрешләр",
+  "broadcastStartDate": "Башлагыз сәнә сезнең үзегезнең вакыт җирендән"
 }

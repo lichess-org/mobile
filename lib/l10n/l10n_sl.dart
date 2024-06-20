@@ -4701,4 +4701,10 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get studyStart => 'Začni';
+
+  @override
+  String get broadcastBroadcasts => 'Prenosi';
+
+  @override
+  String get broadcastStartDate => 'Datum začetka v vaše časovnem pasu';
 }

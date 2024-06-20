@@ -1246,5 +1246,7 @@
   "stormXRuns": "{count, plural, =0{ניסיון אחד} =1{ניסיון אחד} =2{{count} ניסיונות} many{{count} ניסיונות} other{{count} נסיונות}}",
   "stormPlayedNbRunsOfPuzzleStorm": "{count, plural, =0{שוחקה ריצה אחת של {param2}} =1{שוחקה ריצה אחת של {param2}} =2{שוחקו {count} ריצות של {param2}} many{שוחקו {count} ריצות של {param2}} other{שוחקו {count} ריצות של {param2}}}",
   "studyShareAndExport": "שיתוף & ייצוא",
-  "studyStart": "שמירה"
+  "studyStart": "שמירה",
+  "broadcastBroadcasts": "הקרנות",
+  "broadcastStartDate": "תאריך ההתחלה באזור הזמן שלך"
 }

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math' as math;
 
+import 'package:collection/collection.dart';
 import 'package:cronet_http/cronet_http.dart';
 import 'package:cupertino_http/cupertino_http.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -387,6 +388,7 @@ extension ClientExtension on Client {
     Uri url, {
     Map<String, String>? headers,
     required T Function(Map<String, dynamic>) mapper,
+    int Function(T, T)? compare,
   }) async {
     final response = await get(url, headers: headers);
     _checkResponseSuccess(url, response);
@@ -394,7 +396,12 @@ extension ClientExtension on Client {
       final json = LineSplitter.split(utf8.decode(response.bodyBytes))
           .where((e) => e.isNotEmpty && e != '\n')
           .map((e) => jsonDecode(e) as Map<String, dynamic>);
-      return IList(json.map(mapper));
+      final result = json.map(mapper);
+      if (compare == null) {
+        return IList(result);
+      } else {
+        return IList(result.sorted(compare));
+      }
     } catch (e) {
       _logger.severe('Could not read nd-json objects as List<$T>.');
       throw ClientException(

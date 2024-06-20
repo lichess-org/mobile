@@ -1240,5 +1240,7 @@
   "stormXRuns": "{count, plural, =0{یک دور} =1{یک دور} other{{count} دور}}",
   "stormPlayedNbRunsOfPuzzleStorm": "{count, plural, =0{یک دور از {param2} بازی شد} =1{یک دور از {param2} بازی شد} other{{count} دور از {param2} بازی شد}}",
   "studyShareAndExport": "اشتراک & صدور",
-  "studyStart": "شروع"
+  "studyStart": "شروع",
+  "broadcastBroadcasts": "پخش همگانی",
+  "broadcastStartDate": "تاریخ شروع، در منطقه زمانی خودتان"
 }

@@ -1236,5 +1236,7 @@
   "stormXRuns": "{count, plural, =0{1 kuro} =1{1 kuro} other{{count} kuroj}}",
   "stormPlayedNbRunsOfPuzzleStorm": "{count, plural, =0{Ludis unu kuron de {param2}} =1{Ludis unu kuron de {param2}} other{Ludis {count} kurojn de {param2}}}",
   "studyShareAndExport": "Konigi & eksporti",
-  "studyStart": "Komenci"
+  "studyStart": "Komenci",
+  "broadcastBroadcasts": "Elsendoj",
+  "broadcastStartDate": "Komenca dato en via propra horzono"
 }

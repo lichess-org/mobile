@@ -1246,5 +1246,7 @@
   "stormXRuns": "{count, plural, =0{Un intent} =1{Un intent} other{{count} intents}}",
   "stormPlayedNbRunsOfPuzzleStorm": "{count, plural, =0{Ha jugat una ronda de {param2}} =1{Ha jugat una ronda de {param2}} other{Ha jugat {count} rondes de {param2}}}",
   "studyShareAndExport": "Comparteix i exporta",
-  "studyStart": "Inici"
+  "studyStart": "Inici",
+  "broadcastBroadcasts": "Retransmissions",
+  "broadcastStartDate": "Data d'inici en la teva zona horària"
 }

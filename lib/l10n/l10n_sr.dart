@@ -2299,7 +2299,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get hue => 'Hue';
 
   @override
-  String get boardReset => 'Reset colors to default';
+  String get boardReset => 'Reset colours to default';
 
   @override
   String get pieceSet => 'Скуп фигура';
@@ -4621,4 +4621,10 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get studyStart => 'Започни';
+
+  @override
+  String get broadcastBroadcasts => 'Емитовања';
+
+  @override
+  String get broadcastStartDate => 'Датум почетка у твојој временској зони';
 }

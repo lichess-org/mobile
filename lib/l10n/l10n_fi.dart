@@ -4569,4 +4569,10 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get studyStart => 'Aloita';
+
+  @override
+  String get broadcastBroadcasts => 'Lähetykset';
+
+  @override
+  String get broadcastStartDate => 'Alkamispäivämäärä omalla aikavyöhykkeelläsi';
 }

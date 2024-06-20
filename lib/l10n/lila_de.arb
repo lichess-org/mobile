@@ -1246,5 +1246,7 @@
   "stormXRuns": "{count, plural, =0{1 Durchlauf} =1{1 Durchlauf} other{{count} Durchläufe}}",
   "stormPlayedNbRunsOfPuzzleStorm": "{count, plural, =0{Hat einen Durchlauf von {param2} gespielt} =1{Hat einen Durchlauf von {param2} gespielt} other{Hat {count} Durchläufe von {param2} gespielt}}",
   "studyShareAndExport": "Teilen und exportieren",
-  "studyStart": "Start"
+  "studyStart": "Start",
+  "broadcastBroadcasts": "Übertragungen",
+  "broadcastStartDate": "Startdatum in deiner eigenen Zeitzone"
 }

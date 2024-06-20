@@ -1358,7 +1358,7 @@
   "opacity": "Opacity",
   "brightness": "Brightness",
   "hue": "Hue",
-  "boardReset": "Reset colors to default",
+  "boardReset": "Reset colours to default",
   "pieceSet": "Piece set",
   "embedInYourWebsite": "Embed in your website",
   "usernameAlreadyUsed": "This username is already in use, please try another one.",
@@ -1661,7 +1661,7 @@
     }
   },
   "cancelSimul": "Cancel the simul",
-  "simulHostcolor": "Host color for each game",
+  "simulHostcolor": "Host colour for each game",
   "estimatedStart": "Estimated start time",
   "simulFeatured": "Feature on {param}",
   "@simulFeatured": {
@@ -2646,5 +2646,7 @@
     }
   },
   "studyShareAndExport": "Share & export",
-  "studyStart": "Start"
+  "studyStart": "Start",
+  "broadcastBroadcasts": "Broadcasts",
+  "broadcastStartDate": "Start date in your own timezone"
 }

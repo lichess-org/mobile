@@ -1207,5 +1207,7 @@
   "stormXRuns": "{count, plural, other{{count} berjalan}}",
   "stormPlayedNbRunsOfPuzzleStorm": "{count, plural, other{Memainkan {count} kali {param2}}}",
   "studyShareAndExport": "Bagikan & ekspor",
-  "studyStart": "Mulai"
+  "studyStart": "Mulai",
+  "broadcastBroadcasts": "Siaran",
+  "broadcastStartDate": "Tanggal mulai di zona waktu Anda sendiri"
 }

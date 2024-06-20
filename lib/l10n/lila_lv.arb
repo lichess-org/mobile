@@ -1206,5 +1206,7 @@
   "stormXRuns": "{count, plural, =0{{count} izspēlēšanas} =1{{count} izspēlēšana} other{{count} izspēlēšanas}}",
   "stormPlayedNbRunsOfPuzzleStorm": "{count, plural, =0{Izspēlēja {param2} {count} reizes} =1{Izspēlēja {param2} {count} reizi} other{Izspēlēja {param2} {count} reizes}}",
   "studyShareAndExport": "Koplietot & eksportēt",
-  "studyStart": "Sākt"
+  "studyStart": "Sākt",
+  "broadcastBroadcasts": "Raidījumi",
+  "broadcastStartDate": "Sākuma datums jūsu laika joslā"
 }

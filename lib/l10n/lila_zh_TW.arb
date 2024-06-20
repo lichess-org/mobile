@@ -1174,5 +1174,7 @@
   "stormXRuns": "{count, plural, other{{count}輪}}",
   "stormPlayedNbRunsOfPuzzleStorm": "{count, plural, other{玩了{count}輪的{param2}}}",
   "studyShareAndExport": "分享 & 導出",
-  "studyStart": "開始"
+  "studyStart": "開始",
+  "broadcastBroadcasts": "比賽直播",
+  "broadcastStartDate": "開始日期 (當地時間)"
 }

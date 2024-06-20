@@ -2334,7 +2334,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get hue => 'Hue';
 
   @override
-  String get boardReset => 'Reset colors to default';
+  String get boardReset => 'Reset colours to default';
 
   @override
   String get pieceSet => 'مجموعة القطع';
@@ -4767,4 +4767,10 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get studyStart => 'ابدأ';
+
+  @override
+  String get broadcastBroadcasts => 'البثوث';
+
+  @override
+  String get broadcastStartDate => 'تاريخ البدء في المنطقة الزمنية الخاصة بك';
 }

@@ -2283,7 +2283,7 @@ class AppLocalizationsFo extends AppLocalizations {
   String get hue => 'Hue';
 
   @override
-  String get boardReset => 'Reset colors to default';
+  String get boardReset => 'Reset colours to default';
 
   @override
   String get pieceSet => 'Snið á talvfólki';
@@ -2738,7 +2738,7 @@ class AppLocalizationsFo extends AppLocalizations {
   String get cancelSimul => 'Cancel the simul';
 
   @override
-  String get simulHostcolor => 'Host color for each game';
+  String get simulHostcolor => 'Host colour for each game';
 
   @override
   String get estimatedStart => 'Estimated start time';
@@ -4565,4 +4565,10 @@ class AppLocalizationsFo extends AppLocalizations {
 
   @override
   String get studyStart => 'Byrja';
+
+  @override
+  String get broadcastBroadcasts => 'Sendingar';
+
+  @override
+  String get broadcastStartDate => 'Byrjanardagfesting í tínum egna tíðarøki';
 }

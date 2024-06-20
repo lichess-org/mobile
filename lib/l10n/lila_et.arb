@@ -1151,5 +1151,7 @@
   "stormXRuns": "{count, plural, =0{1 mäng} =1{1 mäng} other{{count} mängu}}",
   "stormPlayedNbRunsOfPuzzleStorm": "{count, plural, =0{Mängis ühe mängu {param2}i} =1{Mängis ühe mängu {param2}i} other{Mängis {count} mängu {param2}i}}",
   "studyShareAndExport": "Jaga & ekspordi",
-  "studyStart": "Alusta"
+  "studyStart": "Alusta",
+  "broadcastBroadcasts": "Otseülekanded",
+  "broadcastStartDate": "Alguskuupäev sinu ajavööndis"
 }

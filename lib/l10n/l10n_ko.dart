@@ -2249,7 +2249,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get hue => 'Hue';
 
   @override
-  String get boardReset => 'Reset colors to default';
+  String get boardReset => 'Reset colours to default';
 
   @override
   String get pieceSet => '기물 세트';
@@ -4437,4 +4437,10 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get studyStart => '시작';
+
+  @override
+  String get broadcastBroadcasts => '방송';
+
+  @override
+  String get broadcastStartDate => '본인 시간대 기준 시작일';
 }

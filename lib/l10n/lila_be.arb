@@ -1197,5 +1197,7 @@
   "stormXRuns": "{count, plural, =0{1 спроба} =1{1 спроба} few{{count} спробы} many{{count} спробаў} other{{count} спробаў}}",
   "stormPlayedNbRunsOfPuzzleStorm": "{count, plural, =0{Выкарастана адна з {param2} спроб} =1{Выкарастана адна з {param2} спроб} few{Выкарастана {count} з {param2} спроб} many{Выкарастана {count} з {param2} спробаў} other{Выкарастана {count} з {param2} спробаў}}",
   "studyShareAndExport": "Падзяліцца & экспартаваць",
-  "studyStart": "Пачаць"
+  "studyStart": "Пачаць",
+  "broadcastBroadcasts": "Трансляцыі",
+  "broadcastStartDate": "Дата пачатаку ў вашым часавым поясе"
 }

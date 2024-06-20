@@ -2283,7 +2283,7 @@ class AppLocalizationsMk extends AppLocalizations {
   String get hue => 'Hue';
 
   @override
-  String get boardReset => 'Reset colors to default';
+  String get boardReset => 'Reset colours to default';
 
   @override
   String get pieceSet => 'Дизајн на фигурите';
@@ -4569,4 +4569,10 @@ class AppLocalizationsMk extends AppLocalizations {
 
   @override
   String get studyStart => 'Start';
+
+  @override
+  String get broadcastBroadcasts => 'Емитувања';
+
+  @override
+  String get broadcastStartDate => 'Почетен датум во вашата временска зона';
 }

@@ -16,9 +16,18 @@ Matcher sameHeaders(Map<String, String> headers) => _SameHeaders(headers);
 Future<T> delayedAnswer<T>(T value) =>
     Future<void>.delayed(const Duration(milliseconds: 5)).then((_) => value);
 
-Future<http.Response> mockResponse(String body, int code) =>
-    Future<void>.delayed(const Duration(milliseconds: 20))
-        .then((_) => http.Response(body, code));
+Future<http.Response> mockResponse(
+  String body,
+  int code, {
+  Map<String, String> headers = const {},
+}) =>
+    Future<void>.delayed(const Duration(milliseconds: 20)).then(
+      (_) => http.Response(
+        body,
+        code,
+        headers: headers,
+      ),
+    );
 
 Future<http.StreamedResponse> mockStreamedResponse(String body, int code) =>
     Future<void>.delayed(const Duration(milliseconds: 20)).then(

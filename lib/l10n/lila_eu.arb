@@ -1237,5 +1237,7 @@
   "stormXRuns": "{count, plural, =0{Saiakera 1} =1{Saiakera 1} other{{count} saiakera}}",
   "stormPlayedNbRunsOfPuzzleStorm": "{count, plural, =0{{param2} ariketaren saiakera bat egin duzu} =1{{param2} ariketaren saiakera bat egin duzu} other{{param2} ariketaren {count} saiakera egin dituzu}}",
   "studyShareAndExport": "Partekatu & esportatu",
-  "studyStart": "Hasi"
+  "studyStart": "Hasi",
+  "broadcastBroadcasts": "Emanaldiak",
+  "broadcastStartDate": "Zure ordu-zonako hasiera data"
 }

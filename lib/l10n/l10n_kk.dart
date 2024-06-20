@@ -2283,7 +2283,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get hue => 'Hue';
 
   @override
-  String get boardReset => 'Reset colors to default';
+  String get boardReset => 'Reset colours to default';
 
   @override
   String get pieceSet => 'Тастар келбеті';
@@ -4569,4 +4569,10 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get studyStart => 'Бастау';
+
+  @override
+  String get broadcastBroadcasts => 'Көрсетілімдер';
+
+  @override
+  String get broadcastStartDate => 'Басталу күні (өз уақыт белдеуіңізде)';
 }

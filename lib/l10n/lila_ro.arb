@@ -1233,5 +1233,7 @@
   "stormXRuns": "{count, plural, =0{O încercare} =1{O încercare} few{{count} încercări} other{{count} încercări}}",
   "stormPlayedNbRunsOfPuzzleStorm": "{count, plural, =0{A jucat o încercare de {param2}} =1{A jucat o încercare de {param2}} few{A jucat {count} încercări de {param2}} other{A jucat {count} încercări de {param2}}}",
   "studyShareAndExport": "Împărtășește & exportă",
-  "studyStart": "Începe"
+  "studyStart": "Începe",
+  "broadcastBroadcasts": "Transmisiuni",
+  "broadcastStartDate": "Data de începere conform fusului tău orar"
 }

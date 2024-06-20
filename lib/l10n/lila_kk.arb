@@ -1213,5 +1213,7 @@
   "stormXRuns": "{count, plural, =0{1 кезең} =1{1 кезең} other{{count} кезең}}",
   "stormPlayedNbRunsOfPuzzleStorm": "{count, plural, =0{{param2} кезеңнің бірі ойналды} =1{{param2} кезеңнің бірі ойналды} other{{param2} кезеңнің {count} ойналды}}",
   "studyShareAndExport": "Бөлісу мен Жүктеп алу",
-  "studyStart": "Бастау"
+  "studyStart": "Бастау",
+  "broadcastBroadcasts": "Көрсетілімдер",
+  "broadcastStartDate": "Басталу күні (өз уақыт белдеуіңізде)"
 }

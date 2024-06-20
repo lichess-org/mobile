@@ -4569,4 +4569,10 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get studyStart => 'Commencer';
+
+  @override
+  String get broadcastBroadcasts => 'Diffusions';
+
+  @override
+  String get broadcastStartDate => 'Date de début dans votre fuseau horaire';
 }

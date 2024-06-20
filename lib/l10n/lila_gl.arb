@@ -1246,5 +1246,7 @@
   "stormXRuns": "{count, plural, =0{1 quenda} =1{1 quenda} other{{count} quendas}}",
   "stormPlayedNbRunsOfPuzzleStorm": "{count, plural, =0{Xogou unha quenda de {param2}} =1{Xogou unha quenda de {param2}} other{Xogou {count} quendas de {param2}}}",
   "studyShareAndExport": "Compartir e exportar",
-  "studyStart": "Comezar"
+  "studyStart": "Comezar",
+  "broadcastBroadcasts": "Emisións en directo",
+  "broadcastStartDate": "Data de inicio na túa zona horaria"
 }

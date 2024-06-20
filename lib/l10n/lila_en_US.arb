@@ -1246,5 +1246,7 @@
   "stormXRuns": "{count, plural, =0{1 run} =1{1 run} other{{count} runs}}",
   "stormPlayedNbRunsOfPuzzleStorm": "{count, plural, =0{Played one run of {param2}} =1{Played one run of {param2}} other{Played {count} runs of {param2}}}",
   "studyShareAndExport": "Share & export",
-  "studyStart": "Start"
+  "studyStart": "Start",
+  "broadcastBroadcasts": "Broadcasts",
+  "broadcastStartDate": "Start date in your own timezone"
 }

@@ -4569,4 +4569,10 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get studyStart => 'Start';
+
+  @override
+  String get broadcastBroadcasts => 'Uitzendingen';
+
+  @override
+  String get broadcastStartDate => 'Aanvangsdatum in je eigen tijdzone';
 }

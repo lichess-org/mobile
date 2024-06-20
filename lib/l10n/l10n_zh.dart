@@ -2249,7 +2249,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get hue => 'Hue';
 
   @override
-  String get boardReset => 'Reset colors to default';
+  String get boardReset => 'Reset colours to default';
 
   @override
   String get pieceSet => '棋子设定';
@@ -4437,6 +4437,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get studyStart => '开始';
+
+  @override
+  String get broadcastBroadcasts => '转播';
+
+  @override
+  String get broadcastStartDate => '开始日期，在你的本地时区';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -8656,4 +8662,10 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get studyStart => '開始';
+
+  @override
+  String get broadcastBroadcasts => '比賽直播';
+
+  @override
+  String get broadcastStartDate => '開始日期 (當地時間)';
 }

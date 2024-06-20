@@ -4569,6 +4569,12 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get studyStart => 'Iniciar';
+
+  @override
+  String get broadcastBroadcasts => 'Transmissões';
+
+  @override
+  String get broadcastStartDate => 'Data de início no teu fuso horário';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
@@ -9138,4 +9144,10 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get studyStart => 'Iniciar';
+
+  @override
+  String get broadcastBroadcasts => 'Transmissões';
+
+  @override
+  String get broadcastStartDate => 'Data de início em seu próprio fuso horário';
 }

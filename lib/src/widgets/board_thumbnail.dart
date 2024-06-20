@@ -16,6 +16,15 @@ class BoardThumbnail extends ConsumerStatefulWidget {
     this.onTap,
   });
 
+  const BoardThumbnail.loading({
+    required this.size,
+    this.header,
+    this.footer,
+  })  : orientation = Side.white,
+        fen = kInitialFen,
+        lastMove = null,
+        onTap = null;
+
   /// Size of the board.
   final double size;
 

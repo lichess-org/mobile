@@ -997,5 +997,7 @@
   "stormAllTime": "A-viskoazh",
   "stormXRuns": "{count, plural, =0{1 frapad} =1{1 frapad} =2{{count} frapad} few{{count} frapad} many{{count} frapad} other{{count} frapad}}",
   "studyShareAndExport": "Skignañ & ezporzhiañ",
-  "studyStart": "Kregiñ"
+  "studyStart": "Kregiñ",
+  "broadcastBroadcasts": "War-eeun",
+  "broadcastStartDate": "Eur kregiñ en ho kwerzhid-eur"
 }

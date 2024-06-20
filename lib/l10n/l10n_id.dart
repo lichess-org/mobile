@@ -2249,7 +2249,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get hue => 'Hue';
 
   @override
-  String get boardReset => 'Reset colors to default';
+  String get boardReset => 'Reset colours to default';
 
   @override
   String get pieceSet => 'Susunan buah catur';
@@ -4437,4 +4437,10 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get studyStart => 'Mulai';
+
+  @override
+  String get broadcastBroadcasts => 'Siaran';
+
+  @override
+  String get broadcastStartDate => 'Tanggal mulai di zona waktu Anda sendiri';
 }

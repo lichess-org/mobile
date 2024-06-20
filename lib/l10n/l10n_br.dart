@@ -2334,7 +2334,7 @@ class AppLocalizationsBr extends AppLocalizations {
   String get hue => 'Hue';
 
   @override
-  String get boardReset => 'Reset colors to default';
+  String get boardReset => 'Reset colours to default';
 
   @override
   String get pieceSet => 'Ar pezhioù';
@@ -4745,4 +4745,10 @@ class AppLocalizationsBr extends AppLocalizations {
 
   @override
   String get studyStart => 'Kregiñ';
+
+  @override
+  String get broadcastBroadcasts => 'War-eeun';
+
+  @override
+  String get broadcastStartDate => 'Eur kregiñ en ho kwerzhid-eur';
 }

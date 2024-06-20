@@ -1245,5 +1245,7 @@
   "stormXRuns": "{count, plural, =0{1 sessie} =1{1 sessie} other{{count} sessies}}",
   "stormPlayedNbRunsOfPuzzleStorm": "{count, plural, =0{Eén sessie {param2} gespeeld} =1{Eén sessie {param2} gespeeld} other{{count} sessies {param2} gespeeld}}",
   "studyShareAndExport": "Deel & exporteer",
-  "studyStart": "Start"
+  "studyStart": "Start",
+  "broadcastBroadcasts": "Uitzendingen",
+  "broadcastStartDate": "Aanvangsdatum in je eigen tijdzone"
 }

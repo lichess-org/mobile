@@ -39,6 +39,7 @@ dependencies:
   flutter_secure_storage: ^9.2.0
   flutter_slidable: ^3.0.0
   flutter_spinkit: ^5.2.0
+  flutter_svg: ^2.0.10+1
   freezed_annotation: ^2.2.0
   http: ^1.1.0
   intl: ^0.19.0
@@ -47,6 +48,7 @@ dependencies:
   logging: ^1.1.0
   material_color_utilities: ^0.11.1
   meta: ^1.8.0
+  network_image_mock: ^2.1.1
   package_info_plus: ^8.0.0
   path: ^1.8.2
   popover: ^0.3.0

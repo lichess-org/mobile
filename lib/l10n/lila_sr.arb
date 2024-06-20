@@ -1109,5 +1109,7 @@
   "stormXRuns": "{count, plural, =0{1 рунда} =1{1 рунда} few{{count} рунде} other{{count} рунди}}",
   "stormPlayedNbRunsOfPuzzleStorm": "{count, plural, =0{Одиграли једну рунду {param2}-а} =1{Одиграли једну рунду {param2}-а} few{Одиграли {count} рунде {param2}-а} other{Одиграли {count} рунди {param2}-а}}",
   "studyShareAndExport": "Подели и извези",
-  "studyStart": "Започни"
+  "studyStart": "Започни",
+  "broadcastBroadcasts": "Емитовања",
+  "broadcastStartDate": "Датум почетка у твојој временској зони"
 }

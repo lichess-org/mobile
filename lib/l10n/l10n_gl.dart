@@ -4569,4 +4569,10 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get studyStart => 'Comezar';
+
+  @override
+  String get broadcastBroadcasts => 'Emisións en directo';
+
+  @override
+  String get broadcastStartDate => 'Data de inicio na túa zona horaria';
 }

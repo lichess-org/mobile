@@ -2283,7 +2283,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get hue => 'Hue';
 
   @override
-  String get boardReset => 'Reset colors to default';
+  String get boardReset => 'Reset colours to default';
 
   @override
   String get pieceSet => 'Խաղաքարերի ձևավորումը';
@@ -4569,4 +4569,10 @@ class AppLocalizationsHy extends AppLocalizations {
 
   @override
   String get studyStart => 'Սկսել';
+
+  @override
+  String get broadcastBroadcasts => 'Հեռարձակումներ';
+
+  @override
+  String get broadcastStartDate => 'Սկսվելու ամսաթիվը Ձեր ժամագոտում';
 }

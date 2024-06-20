@@ -2283,7 +2283,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get hue => 'Hue';
 
   @override
-  String get boardReset => 'Reset colors to default';
+  String get boardReset => 'Reset colours to default';
 
   @override
   String get pieceSet => 'Pieza formatua';
@@ -4569,4 +4569,10 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get studyStart => 'Hasi';
+
+  @override
+  String get broadcastBroadcasts => 'Emanaldiak';
+
+  @override
+  String get broadcastStartDate => 'Zure ordu-zonako hasiera data';
 }

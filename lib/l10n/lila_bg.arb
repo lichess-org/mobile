@@ -1223,5 +1223,7 @@
   "stormXRuns": "{count, plural, =0{1 опит} =1{1 опит} other{{count} опита}}",
   "stormPlayedNbRunsOfPuzzleStorm": "{count, plural, =0{Изигран един опит от {param2}} =1{Изигран един опит от {param2}} other{Изиграни {count} опита от {param2}}}",
   "studyShareAndExport": "Сподели",
-  "studyStart": "Начало"
+  "studyStart": "Начало",
+  "broadcastBroadcasts": "Излъчване",
+  "broadcastStartDate": "Дата на започване във вашата часова зона"
 }
