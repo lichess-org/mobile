@@ -202,6 +202,10 @@ class _BroadcastWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // TODO: show widget when broadcasts feature is ready
+    return const SizedBox.shrink();
+
+    // ignore: dead_code
     final broadcastList = ref.watch(broadcastsProvider);
 
     return broadcastList.when(
