@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_numbers.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
@@ -226,6 +227,80 @@ class LoadGameError extends StatelessWidget {
               bottomTable: const SizedBox.shrink(),
               showMoveListPlaceholder: true,
               errorMessage: errorMessage,
+            ),
+          ),
+        ),
+        _BottomBar(
+          children: [
+            BottomBarButton(
+              onTap: () => Navigator.of(context).pop(),
+              label: context.l10n.cancel,
+              icon: CupertinoIcons.xmark,
+              showLabel: true,
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class ChallengeDeclinedBoard extends StatelessWidget {
+  const ChallengeDeclinedBoard({
+    required this.declineReason,
+    this.destUser,
+  });
+
+  final String declineReason;
+
+  final LightUser? destUser;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Expanded(
+          child: SafeArea(
+            bottom: false,
+            child: BoardTable(
+              boardData: const cg.BoardData(
+                interactableSide: cg.InteractableSide.none,
+                orientation: cg.Side.white,
+                fen: kEmptyFen,
+              ),
+              topTable: const SizedBox.shrink(),
+              bottomTable: const SizedBox.shrink(),
+              showMoveListPlaceholder: true,
+              boardOverlay: PlatformCard(
+                elevation: 2.0,
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          context.l10n.challengeChallengeDeclined,
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        const SizedBox(height: 16.0),
+                        Text(
+                          declineReason,
+                          style: const TextStyle(fontStyle: FontStyle.italic),
+                        ),
+                        if (destUser != null) ...[
+                          const SizedBox(height: 8.0),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: UserFullNameWidget(user: destUser),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                ),
+              ),
             ),
           ),
         ),

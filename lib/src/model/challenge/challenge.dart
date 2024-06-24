@@ -1,4 +1,5 @@
 import 'package:deep_pick/deep_pick.dart';
+import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -6,6 +7,7 @@ import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
 part 'challenge.freezed.dart';
 
@@ -132,6 +134,33 @@ enum DeclineReason {
   variant,
   noBot,
   onlyBot,
+}
+
+String declineReasonMessage(BuildContext context, DeclineReason key) {
+  switch (key) {
+    case DeclineReason.generic:
+      return context.l10n.challengeDeclineGeneric;
+    case DeclineReason.later:
+      return context.l10n.challengeDeclineLater;
+    case DeclineReason.tooFast:
+      return context.l10n.challengeDeclineTooFast;
+    case DeclineReason.tooSlow:
+      return context.l10n.challengeDeclineTooSlow;
+    case DeclineReason.timeControl:
+      return context.l10n.challengeDeclineTimeControl;
+    case DeclineReason.rated:
+      return context.l10n.challengeDeclineRated;
+    case DeclineReason.casual:
+      return context.l10n.challengeDeclineCasual;
+    case DeclineReason.standard:
+      return context.l10n.challengeDeclineStandard;
+    case DeclineReason.variant:
+      return context.l10n.challengeDeclineVariant;
+    case DeclineReason.noBot:
+      return context.l10n.challengeDeclineNoBot;
+    case DeclineReason.onlyBot:
+      return context.l10n.challengeDeclineOnlyBot;
+  }
 }
 
 typedef ChallengeUser = ({

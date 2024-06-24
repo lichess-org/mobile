@@ -146,10 +146,9 @@ class CreateGameService {
           if (event.topic == 'reload') {
             try {
               final updatedChallenge = await repo.show(challenge.id);
-              print('updatedChallenge: $updatedChallenge');
               if (updatedChallenge.gameFullId != null) {
                 completer.complete((updatedChallenge.gameFullId, null));
-              } else if (updatedChallenge.declineReason != null) {
+              } else if (updatedChallenge.status == ChallengeStatus.declined) {
                 completer.complete((null, updatedChallenge.declineReason));
               }
             } catch (e) {

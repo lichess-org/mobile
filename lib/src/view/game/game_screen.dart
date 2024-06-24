@@ -2,6 +2,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
@@ -122,11 +123,13 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
 
   @override
   void didPop() {
-    super.didPop();
-    if (mounted && widget.source == _GameSource.lobby ||
-        widget.source == _GameSource.challenge) {
+    if (mounted &&
+        (widget.source == _GameSource.lobby ||
+            widget.source == _GameSource.challenge)) {
       ref.invalidate(myRecentGamesProvider);
+      ref.invalidate(accountProvider);
     }
+    super.didPop();
   }
 
   @override
@@ -162,12 +165,12 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
                   }
                 },
               )
-            : declineReason != null
-                // TODO l10n
-                ? LoadGameError(declineReason.toString())
-                : const LoadGameError(
-                    'Sorry, we could not create the game. Please try again later.',
-                  );
+            : ChallengeDeclinedBoard(
+                declineReason: declineReason != null
+                    ? declineReasonMessage(context, declineReason)
+                    : declineReasonMessage(context, DeclineReason.generic),
+                destUser: widget.challenge?.destUser,
+              );
         return PlatformWidget(
           androidBuilder: (context) => Scaffold(
             resizeToAvoidBottomInset: false,
