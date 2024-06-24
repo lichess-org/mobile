@@ -31,7 +31,7 @@ class QuickGameMatrix extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (showMatrixTitle) ...[
-          Text(context.l10n.quickPairing, style: Styles.sectionTitle),
+          Text(context.l10n.quickPairing),
           const SizedBox(height: 6.0),
         ],
         Container(
@@ -181,23 +181,7 @@ class _ChoiceChipState extends State<_ChoiceChip> {
         splashColor: Theme.of(context).primaryColor.withOpacity(0.2),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              widget.label,
-              if (widget.speed != null) ...[
-                const SizedBox(height: 2.0),
-                Text(
-                  widget.speed!.name.capitalize(),
-                  style: TextStyle(
-                    color: textShade(context, 0.7),
-                    fontSize: 12.0,
-                  ),
-                ),
-              ],
-            ],
-          ),
+          child: Center(child: widget.label),
         ),
       ),
     );

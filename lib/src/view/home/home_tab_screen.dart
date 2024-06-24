@@ -21,9 +21,9 @@ import 'package:lichess_mobile/src/view/correspondence/offline_correspondence_ga
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/offline_correspondence_games_screen.dart';
 import 'package:lichess_mobile/src/view/home/create_game_options.dart';
-import 'package:lichess_mobile/src/view/home/quick_game_matrix.dart';
 import 'package:lichess_mobile/src/view/play/ongoing_games_screen.dart';
 import 'package:lichess_mobile/src/view/play/play_screen.dart';
+import 'package:lichess_mobile/src/view/play/quick_game_matrix.dart';
 import 'package:lichess_mobile/src/view/user/player_screen.dart';
 import 'package:lichess_mobile/src/view/user/recent_games.dart';
 import 'package:lichess_mobile/src/widgets/board_carousel_item.dart';
@@ -321,10 +321,12 @@ class _HomeBody extends ConsumerWidget {
               ]
             : [
                 const _HelloWidget(),
+                if (session != null)
+                  AccountPerfCards(padding: Styles.bodySectionBottomPadding),
                 if (status.isOnline)
                   Padding(
                     padding: Styles.bodySectionPadding,
-                    child: const QuickGameMatrix(showMatrixTitle: false),
+                    child: const QuickGameMatrix(showMatrixTitle: true),
                   ),
                 if (status.isOnline)
                   const _OngoingGamesCarousel(maxGamesToShow: 20)
