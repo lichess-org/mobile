@@ -49,7 +49,9 @@ class ChallengeRepository {
     return client.postReadJson(
       uri,
       body: challenge.toRequestBody,
-      mapper: (json) => _challengeFromPick(pick(json)('challenge').required()),
+      mapper: (json) {
+        return _challengeFromPick(pick(json).required());
+      },
     );
   }
 
@@ -94,6 +96,7 @@ Challenge _challengeFromPick(RequiredPick pick) {
   return Challenge(
     socketVersion: pick('socketVersion').asIntOrThrow(),
     id: pick('id').asChallengeIdOrThrow(),
+    gameFullId: pick('fullId').asGameFullIdOrNull(),
     status: pick('status').asChallengeStatusOrThrow(),
     variant: pick('variant').asVariantOrThrow(),
     speed: pick('speed').asSpeedOrThrow(),
