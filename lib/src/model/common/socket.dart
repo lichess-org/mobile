@@ -286,7 +286,6 @@ class SocketClient {
       };
     }
 
-    print('socket send: $message');
     _sink?.add(jsonEncode(message));
   }
 
