@@ -344,7 +344,7 @@ class _EditableWidget extends ConsumerWidget {
             mainAxisSize: MainAxisSize.max,
             children: [
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.only(left: 8.0),
                 child: Checkbox.adaptive(
                   value: isEnabled,
                   onChanged: (_) {

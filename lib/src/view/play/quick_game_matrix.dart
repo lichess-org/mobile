@@ -179,7 +179,7 @@ class _ChoiceChipState extends State<_ChoiceChip> {
         onTap: () => widget.onSelected(true),
         splashColor: Theme.of(context).primaryColor.withOpacity(0.2),
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10.0),
+          padding: const EdgeInsets.symmetric(vertical: 16.0),
           child: Center(child: widget.label),
         ),
       ),
