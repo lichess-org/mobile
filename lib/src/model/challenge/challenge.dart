@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
 part 'challenge.freezed.dart';
@@ -60,6 +61,12 @@ class Challenge with _$Challenge, BaseChallenge implements BaseChallenge {
     String? initialFen,
     ChallengeDirection? direction,
   }) = _Challenge;
+
+  factory Challenge.fromServerJson(Map<String, dynamic> json) {
+    return _challengeFromPick(pick(json).required());
+  }
+
+  factory Challenge.fromPick(RequiredPick pick) => _challengeFromPick(pick);
 }
 
 /// A challenge request to play a game with another user.
@@ -358,4 +365,52 @@ extension ChallengeExtension on Pick {
       return null;
     }
   }
+}
+
+Challenge _challengeFromPick(RequiredPick pick) {
+  return Challenge(
+    socketVersion: pick('socketVersion').asIntOrThrow(),
+    id: pick('id').asChallengeIdOrThrow(),
+    gameFullId: pick('fullId').asGameFullIdOrNull(),
+    status: pick('status').asChallengeStatusOrThrow(),
+    variant: pick('variant').asVariantOrThrow(),
+    speed: pick('speed').asSpeedOrThrow(),
+    timeControl:
+        pick('timeControl', 'type').asChallengeTimeControlTypeOrThrow(),
+    clock: pick('timeControl').letOrThrow(
+      (clockPick) {
+        final time = clockPick('limit').asDurationFromSecondsOrNull();
+        final increment = clockPick('increment').asDurationFromSecondsOrNull();
+        return time != null && increment != null
+            ? (time: time, increment: increment)
+            : null;
+      },
+    ),
+    days: pick('timeControl', 'daysPerTurn').asIntOrNull(),
+    rated: pick('rated').asBoolOrThrow(),
+    sideChoice: pick('color').asSideChoiceOrThrow(),
+    challenger: pick('challenger').letOrNull(
+      (challengerPick) {
+        final challengerUser = pick('challenger').asLightUserOrThrow();
+        return (
+          user: challengerUser,
+          provisionalRating: challengerPick('provisional').asBoolOrNull(),
+          lagRating: challengerPick('lag').asIntOrNull(),
+        );
+      },
+    ),
+    destUser: pick('destUser').letOrNull(
+      (destPick) {
+        final destUser = pick('destUser').asLightUserOrThrow();
+        return (
+          user: destUser,
+          provisionalRating: destPick('provisional').asBoolOrNull(),
+          lagRating: destPick('lag').asIntOrNull(),
+        );
+      },
+    ),
+    initialFen: pick('initialFen').asStringOrNull(),
+    direction: pick('direction').asChallengeDirectionOrNull(),
+    declineReason: pick('declineReasonKey').asDeclineReasonOrNull(),
+  );
 }

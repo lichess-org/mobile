@@ -2,12 +2,8 @@ import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
-import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/common/speed.dart';
-import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/utils/json.dart';
 
 typedef ChallengesList = ({
   IList<Challenge> inward,
@@ -25,8 +21,8 @@ class ChallengeRepository {
       uri,
       mapper: (json) {
         final listPick = pick(json).required();
-        final inward = listPick('in').asListOrEmpty(_challengeFromPick);
-        final outward = listPick('out').asListOrEmpty(_challengeFromPick);
+        final inward = listPick('in').asListOrEmpty(Challenge.fromPick);
+        final outward = listPick('out').asListOrEmpty(Challenge.fromPick);
 
         return (inward: inward.lock, outward: outward.lock);
       },
@@ -37,7 +33,7 @@ class ChallengeRepository {
     final uri = Uri(path: '/api/challenge/$id/show');
     return client.readJson(
       uri,
-      mapper: (json) => _challengeFromPick(pick(json).required()),
+      mapper: Challenge.fromServerJson,
     );
   }
 
@@ -46,7 +42,7 @@ class ChallengeRepository {
     return client.postReadJson(
       uri,
       body: challenge.toRequestBody,
-      mapper: (json) => _challengeFromPick(pick(json).required()),
+      mapper: Challenge.fromServerJson,
     );
   }
 
@@ -85,52 +81,4 @@ class ChallengeRepository {
       );
     }
   }
-}
-
-Challenge _challengeFromPick(RequiredPick pick) {
-  return Challenge(
-    socketVersion: pick('socketVersion').asIntOrThrow(),
-    id: pick('id').asChallengeIdOrThrow(),
-    gameFullId: pick('fullId').asGameFullIdOrNull(),
-    status: pick('status').asChallengeStatusOrThrow(),
-    variant: pick('variant').asVariantOrThrow(),
-    speed: pick('speed').asSpeedOrThrow(),
-    timeControl:
-        pick('timeControl', 'type').asChallengeTimeControlTypeOrThrow(),
-    clock: pick('timeControl').letOrThrow(
-      (clockPick) {
-        final time = clockPick('limit').asDurationFromSecondsOrNull();
-        final increment = clockPick('increment').asDurationFromSecondsOrNull();
-        return time != null && increment != null
-            ? (time: time, increment: increment)
-            : null;
-      },
-    ),
-    days: pick('timeControl', 'daysPerTurn').asIntOrNull(),
-    rated: pick('rated').asBoolOrThrow(),
-    sideChoice: pick('color').asSideChoiceOrThrow(),
-    challenger: pick('challenger').letOrNull(
-      (challengerPick) {
-        final challengerUser = pick('challenger').asLightUserOrThrow();
-        return (
-          user: challengerUser,
-          provisionalRating: challengerPick('provisional').asBoolOrNull(),
-          lagRating: challengerPick('lag').asIntOrNull(),
-        );
-      },
-    ),
-    destUser: pick('destUser').letOrNull(
-      (destPick) {
-        final destUser = pick('destUser').asLightUserOrThrow();
-        return (
-          user: destUser,
-          provisionalRating: destPick('provisional').asBoolOrNull(),
-          lagRating: destPick('lag').asIntOrNull(),
-        );
-      },
-    ),
-    initialFen: pick('initialFen').asStringOrNull(),
-    direction: pick('direction').asChallengeDirectionOrNull(),
-    declineReason: pick('declineReasonKey').asDeclineReasonOrNull(),
-  );
 }
