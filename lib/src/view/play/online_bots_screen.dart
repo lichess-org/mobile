@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
@@ -11,6 +12,7 @@ import 'package:lichess_mobile/src/model/user/user_repository.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/play/challenge_screen.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -143,7 +145,22 @@ class _Body extends ConsumerWidget {
                 ),
               ],
             ),
-            onTap: () {},
+            onTap: () {
+              final session = ref.read(authSessionProvider);
+              if (session == null) {
+                showPlatformSnackbar(
+                  context,
+                  context.l10n.challengeRegisterToSendChallenges,
+                  type: SnackBarType.error,
+                );
+                return;
+              }
+              pushPlatformRoute(
+                context,
+                title: context.l10n.challengeChallengesX(bot.lightUser.name),
+                builder: (context) => ChallengeScreen(bot.lightUser),
+              );
+            },
             onLongPress: () {
               showAdaptiveBottomSheet<void>(
                 context: context,

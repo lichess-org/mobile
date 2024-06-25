@@ -39,7 +39,7 @@ class ChallengeScreen extends StatelessWidget {
 
   Widget _buildAndroid(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.playWithAFriend)),
+      appBar: AppBar(title: Text(context.l10n.challengeChallengesX(user.name))),
       body: _ChallengeBody(user),
     );
   }
