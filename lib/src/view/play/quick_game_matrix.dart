@@ -30,7 +30,7 @@ class QuickGameMatrix extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (showMatrixTitle) ...[
-          Text(context.l10n.quickPairing),
+          Text(context.l10n.quickPairing, style: Styles.sectionTitle),
           const SizedBox(height: 6.0),
         ],
         Container(
