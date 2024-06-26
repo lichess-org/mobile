@@ -24,6 +24,7 @@ import 'package:lichess_mobile/src/view/game/offline_correspondence_games_screen
 import 'package:lichess_mobile/src/view/home/create_game_options.dart';
 import 'package:lichess_mobile/src/view/play/ongoing_games_screen.dart';
 import 'package:lichess_mobile/src/view/play/play_screen.dart';
+import 'package:lichess_mobile/src/view/play/quick_game_button.dart';
 import 'package:lichess_mobile/src/view/play/quick_game_matrix.dart';
 import 'package:lichess_mobile/src/view/user/player_screen.dart';
 import 'package:lichess_mobile/src/view/user/recent_games.dart';
@@ -232,7 +233,18 @@ class _HomeBody extends ConsumerWidget {
 
         final widgets = isTablet
             ? [
-                const _HelloWidget(),
+                _EditableWidget(
+                  widget: EnabledWidget.hello,
+                  isEditing: isEditing,
+                  shouldShow: true,
+                  child: const _HelloWidget(),
+                ),
+                _EditableWidget(
+                  widget: EnabledWidget.perfCards,
+                  isEditing: isEditing,
+                  shouldShow: session != null,
+                  child: AccountPerfCards(padding: Styles.bodySectionPadding),
+                ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -241,7 +253,7 @@ class _HomeBody extends ConsumerWidget {
                         children: [
                           const SizedBox(height: 8.0),
                           if (status.isOnline)
-                            const _TabletCreateAGameSection(),
+                            _TabletCreateAGameSection(isEditing: isEditing),
                           if (status.isOnline)
                             const _OngoingGamesPreview(maxGamesToShow: 5)
                           else
@@ -283,7 +295,7 @@ class _HomeBody extends ConsumerWidget {
                   shouldShow: status.isOnline,
                   child: Padding(
                     padding: Styles.bodySectionPadding,
-                    child: const QuickGameMatrix(showMatrixTitle: true),
+                    child: const QuickGameMatrix(),
                   ),
                 ),
                 if (status.isOnline)
@@ -426,9 +438,10 @@ class _WelcomeScreen extends StatelessWidget {
       if (isTablet)
         Row(
           children: [
-            const Flexible(
-              child: _TabletCreateAGameSection(),
-            ),
+            if (status.isOnline)
+              Flexible(
+                child: _TabletCreateAGameSection(isEditing: isEditing),
+              ),
             Flexible(
               child: Column(
                 children: welcomeWidgets,
@@ -444,7 +457,7 @@ class _WelcomeScreen extends StatelessWidget {
             shouldShow: true,
             child: Padding(
               padding: Styles.bodySectionPadding,
-              child: const QuickGameMatrix(showMatrixTitle: false),
+              child: const QuickGameMatrix(),
             ),
           ),
         ...welcomeWidgets,
@@ -527,16 +540,27 @@ class _HelloWidget extends ConsumerWidget {
 }
 
 class _TabletCreateAGameSection extends StatelessWidget {
-  const _TabletCreateAGameSection();
+  const _TabletCreateAGameSection({required this.isEditing});
+
+  final bool isEditing;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
+        _EditableWidget(
+          widget: EnabledWidget.quickPairing,
+          isEditing: isEditing,
+          shouldShow: true,
+          child: Padding(
+            padding: Styles.bodySectionPadding,
+            child: const QuickGameMatrix(),
+          ),
+        ),
         Padding(
           padding: Styles.bodySectionPadding,
-          child: const QuickGameMatrix(showMatrixTitle: false),
+          child: const QuickGameButton(),
         ),
         const CreateGameOptions(),
       ],

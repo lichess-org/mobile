@@ -15,9 +15,7 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 const _kMatrixSpacing = 4.0;
 
 class QuickGameMatrix extends StatelessWidget {
-  const QuickGameMatrix({required this.showMatrixTitle});
-
-  final bool showMatrixTitle;
+  const QuickGameMatrix();
 
   @override
   Widget build(BuildContext context) {
@@ -29,10 +27,8 @@ class QuickGameMatrix extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (showMatrixTitle) ...[
-          Text(context.l10n.quickPairing, style: Styles.sectionTitle),
-          const SizedBox(height: 6.0),
-        ],
+        Text(context.l10n.quickPairing, style: Styles.sectionTitle),
+        const SizedBox(height: 6.0),
         Container(
           decoration: BoxDecoration(
             image: DecorationImage(
