@@ -110,7 +110,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
                   builder: (_) => const PlayScreen(),
                 );
               },
-              icon: const Icon(LichessIcons.chess_pawn),
+              icon: const Icon(Icons.add),
               label: Text(context.l10n.play),
             ),
     );
@@ -168,7 +168,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
                     builder: (_) => const PlayScreen(),
                   );
                 },
-                icon: const Icon(LichessIcons.chess_pawn),
+                icon: const Icon(Icons.add),
                 label: Text(context.l10n.play),
               ),
             ),
