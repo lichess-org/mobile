@@ -285,6 +285,19 @@ class LichessClient implements Client {
   }
 }
 
+/// An exception thrown when the server responds with a status code >= 400.
+class ServerException extends ClientException {
+  final int statusCode;
+  final Map<String, dynamic>? jsonError;
+
+  ServerException(
+    this.statusCode,
+    super.message,
+    Uri super.url,
+    this.jsonError,
+  );
+}
+
 /// Throws an error if [response] is not successful.
 void _checkResponseSuccess(Uri url, Response response) {
   if (response.statusCode < 400) return;
@@ -292,7 +305,21 @@ void _checkResponseSuccess(Uri url, Response response) {
   if (response.reasonPhrase != null) {
     message = '$message: ${response.reasonPhrase}';
   }
-  throw ClientException('$message.', url);
+  Map<String, dynamic>? jsonError;
+  if (response.body.isNotEmpty) {
+    try {
+      final json = jsonDecode(response.body);
+      if (json is Map<String, dynamic>) {
+        jsonError = json;
+        if (json.containsKey('error')) {
+          message = '$message: ${json['error']}';
+        }
+      }
+    } catch (e) {
+      _logger.warning('Could not decode error response from $url: $e');
+    }
+  }
+  throw ServerException(response.statusCode, '$message.', url, jsonError);
 }
 
 /// A JSON decoder that decodes UTF-8 bytes.

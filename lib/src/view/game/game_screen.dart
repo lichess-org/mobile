@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/lobby/create_game_service.dart';
@@ -165,12 +166,14 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
                   }
                 },
               )
-            : ChallengeDeclinedBoard(
-                declineReason: declineReason != null
-                    ? declineReasonMessage(context, declineReason)
-                    : declineReasonMessage(context, DeclineReason.generic),
-                destUser: widget.challenge?.destUser,
-              );
+            : widget.challenge != null
+                ? ChallengeDeclinedBoard(
+                    declineReason: declineReason != null
+                        ? declineReasonMessage(context, declineReason)
+                        : declineReasonMessage(context, DeclineReason.generic),
+                    destUser: widget.challenge?.destUser,
+                  )
+                : const LoadGameError('Could not create the game.');
         return PlatformWidget(
           androidBuilder: (context) => Scaffold(
             resizeToAvoidBottomInset: false,
@@ -220,11 +223,18 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
         debugPrint(
           'SEVERE: [GameScreen] could not create game; $e\n$s',
         );
-        const body = PopScope(
-          child: LoadGameError(
-            'Sorry, we could not create the game. Please try again later.',
-          ),
-        );
+
+        // lichess sends a 400 response if user has disallowed challenges
+        final message = e is ServerException && e.statusCode == 400
+            ? LoadGameError(
+                'Could not create the game: ${e.jsonError?['error'] as String?}',
+              )
+            : const LoadGameError(
+                'Sorry, we could not create the game. Please try again later.',
+              );
+
+        final body = PopScope(child: message);
+
         return PlatformWidget(
           androidBuilder: (context) => Scaffold(
             resizeToAvoidBottomInset: false,
