@@ -47,6 +47,8 @@ extension type const UserId(String value) implements StringId {
   UserId.fromJson(dynamic json) : this(json as String);
 }
 
+extension type const ChallengeId(String value) implements StringId {}
+
 extension IDPick on Pick {
   UserId asUserIdOrThrow() {
     final value = required().value;
@@ -119,6 +121,25 @@ extension IDPick on Pick {
     if (value == null) return null;
     try {
       return asPuzzleIdOrThrow();
+    } catch (_) {
+      return null;
+    }
+  }
+
+  ChallengeId asChallengeIdOrThrow() {
+    final value = required().value;
+    if (value is String) {
+      return ChallengeId(value);
+    }
+    throw PickException(
+      "value $value at $debugParsingExit can't be casted to ChallengeId",
+    );
+  }
+
+  ChallengeId? asChallengeIdOrNull() {
+    if (value == null) return null;
+    try {
+      return asChallengeIdOrThrow();
     } catch (_) {
       return null;
     }

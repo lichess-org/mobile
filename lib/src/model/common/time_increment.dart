@@ -3,8 +3,6 @@ import 'package:flutter/widgets.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 
 /// A pair of time and increment in seconds used as game clock
-///
-/// If both time and increment are 0, the clock is infinite.
 @immutable
 class TimeIncrement {
   const TimeIncrement(this.time, this.increment)

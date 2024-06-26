@@ -197,6 +197,87 @@ class AppLocalizationsJa extends AppLocalizations {
   String get contactContactLichess => 'Lichess に連絡する';
 
   @override
+  String challengeChallengesX(String param1) {
+    return 'チャレンジ：$param1';
+  }
+
+  @override
+  String get challengeChallengeToPlay => '対局を申し込む';
+
+  @override
+  String get challengeChallengeDeclined => '挑戦が拒否されました。';
+
+  @override
+  String get challengeChallengeAccepted => '挑戦が承認されました！';
+
+  @override
+  String get challengeChallengeCanceled => '挑戦がキャンセルされました。';
+
+  @override
+  String get challengeRegisterToSendChallenges => '挑戦を送るには登録が必要です。';
+
+  @override
+  String challengeYouCannotChallengeX(String param) {
+    return '$param には挑戦できません。';
+  }
+
+  @override
+  String challengeXDoesNotAcceptChallenges(String param) {
+    return '$param は挑戦を受け付けていません。';
+  }
+
+  @override
+  String challengeYourXRatingIsTooFarFromY(String param1, String param2) {
+    return 'あなたの $param1 レーティングは $param2 と離れすぎています。';
+  }
+
+  @override
+  String challengeCannotChallengeDueToProvisionalXRating(String param) {
+    return '$param レーティングが暫定のため挑戦できません。';
+  }
+
+  @override
+  String challengeXOnlyAcceptsChallengesFromFriends(String param) {
+    return '$param は友達からの挑戦しか受け付けません。';
+  }
+
+  @override
+  String get challengeDeclineGeneric => '現在、挑戦を受け付けていません。';
+
+  @override
+  String get challengeDeclineLater => '今は都合が悪いので、後でもう一度尋ねてください。';
+
+  @override
+  String get challengeDeclineTooFast => 'この持時間は私には短すぎます。もっと長い持時間で挑戦してください。';
+
+  @override
+  String get challengeDeclineTooSlow => 'この持時間は私には長すぎます。もっと短い持時間で挑戦してください。';
+
+  @override
+  String get challengeDeclineTimeControl => '現在、この持時間での挑戦は受け付けていません。';
+
+  @override
+  String get challengeDeclineRated => '代わりにレート戦での挑戦を送ってください。';
+
+  @override
+  String get challengeDeclineCasual => '代わりに非レート戦での挑戦を送ってください。';
+
+  @override
+  String get challengeDeclineStandard => '現在、バリアントでの挑戦は受け付けていません。';
+
+  @override
+  String get challengeDeclineVariant => '今はこのバリアントで対戦するつもりはありません。';
+
+  @override
+  String get challengeDeclineNoBot => 'ボットからの挑戦は受け付けていません。';
+
+  @override
+  String get challengeDeclineOnlyBot => '私はボットからの挑戦しか受け付けません。';
+
+  @override
+  String get challengeInviteLichessUser => 'Lichess ユーザーを招待する：';
+
+  @override
   String get playWithAFriend => '友達と対局する';
 
   @override

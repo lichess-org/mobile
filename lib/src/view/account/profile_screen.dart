@@ -59,8 +59,8 @@ class ProfileScreen extends ConsumerWidget {
           }
           return ListView(
             children: [
-              UserProfile(user: user),
-              const _PerfCards(),
+              UserProfileWidget(user: user),
+              const AccountPerfCards(),
               const UserActivityWidget(),
               const RecentGamesWidget(),
             ],
@@ -107,8 +107,8 @@ class ProfileScreen extends ConsumerWidget {
           return SafeArea(
             child: ListView(
               children: [
-                UserProfile(user: user),
-                const _PerfCards(),
+                UserProfileWidget(user: user),
+                const AccountPerfCards(),
                 const UserActivityWidget(),
                 const RecentGamesWidget(),
               ],
@@ -127,8 +127,10 @@ class ProfileScreen extends ConsumerWidget {
   }
 }
 
-class _PerfCards extends ConsumerWidget {
-  const _PerfCards();
+class AccountPerfCards extends ConsumerWidget {
+  const AccountPerfCards({this.padding});
+
+  final EdgeInsetsGeometry? padding;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -136,14 +138,14 @@ class _PerfCards extends ConsumerWidget {
     return account.when(
       data: (user) {
         if (user != null) {
-          return PerfCards(user: user, isMe: true);
+          return PerfCards(user: user, isMe: true, padding: padding);
         } else {
           return const SizedBox.shrink();
         }
       },
       loading: () => Shimmer(
         child: Padding(
-          padding: Styles.bodySectionPadding,
+          padding: padding ?? Styles.bodySectionPadding,
           child: SizedBox(
             height: 106,
             child: ListView.separated(

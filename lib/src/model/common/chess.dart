@@ -46,7 +46,8 @@ const altCastles = {
   'e8h8': 'e8g8',
 };
 
-const ISet<Variant> supportedVariants = ISetConst({
+/// Set of supported variants for reading a game (not playing).
+const ISet<Variant> readSupportedVariants = ISetConst({
   Variant.standard,
   Variant.chess960,
   Variant.fromPosition,
@@ -55,6 +56,13 @@ const ISet<Variant> supportedVariants = ISetConst({
   Variant.threeCheck,
   Variant.racingKings,
   Variant.horde,
+});
+
+/// Set of supported variants for playing a game.
+const ISet<Variant> playSupportedVariants = ISetConst({
+  Variant.standard,
+  Variant.chess960,
+  Variant.fromPosition,
 });
 
 enum Variant {
@@ -74,7 +82,9 @@ enum Variant {
   final String label;
   final IconData icon;
 
-  bool get isSupported => supportedVariants.contains(this);
+  bool get isReadSupported => readSupportedVariants.contains(this);
+
+  bool get isPlaySupported => playSupportedVariants.contains(this);
 
   static final IMap<String, Variant> nameMap = IMap(values.asNameMap());
 

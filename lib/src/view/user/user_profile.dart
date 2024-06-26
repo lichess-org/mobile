@@ -23,8 +23,8 @@ import 'countries.dart';
 
 const _userNameStyle = TextStyle(fontSize: 20, fontWeight: FontWeight.w500);
 
-class UserProfile extends ConsumerWidget {
-  const UserProfile({
+class UserProfileWidget extends ConsumerWidget {
+  const UserProfileWidget({
     required this.user,
     this.bioMaxLines = 10,
   });
@@ -101,11 +101,10 @@ class UserProfile extends ConsumerWidget {
               maxLines: bioMaxLines,
               style: bioStyle,
               overflow: TextOverflow.ellipsis,
-              linkStyle: Theme.of(context)
-                  .textTheme
-                  .bodyMedium
-                  ?.copyWith(color: Colors.blueAccent)
-                  .merge(bioStyle),
+              linkStyle: const TextStyle(
+                color: Colors.blueAccent,
+                decoration: TextDecoration.none,
+              ),
             ),
           const SizedBox(height: 10),
           if (user.profile?.fideRating != null)

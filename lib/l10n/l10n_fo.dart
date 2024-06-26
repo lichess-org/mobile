@@ -231,6 +231,87 @@ class AppLocalizationsFo extends AppLocalizations {
   String get contactContactLichess => 'Set teg í samband við Lichess';
 
   @override
+  String challengeChallengesX(String param1) {
+    return 'Challenges: $param1';
+  }
+
+  @override
+  String get challengeChallengeToPlay => 'Bjóða av at telva';
+
+  @override
+  String get challengeChallengeDeclined => 'Avbjóðing avvíst';
+
+  @override
+  String get challengeChallengeAccepted => 'Avbjóðing góðtikin!';
+
+  @override
+  String get challengeChallengeCanceled => 'Avbjóðing avlýst.';
+
+  @override
+  String get challengeRegisterToSendChallenges => 'Skráset teg vinaliga at senda avbjóðingar.';
+
+  @override
+  String challengeYouCannotChallengeX(String param) {
+    return 'Tú kanst ikki bjóða $param av.';
+  }
+
+  @override
+  String challengeXDoesNotAcceptChallenges(String param) {
+    return '$param tekur ikki ímóti avbjóðingum.';
+  }
+
+  @override
+  String challengeYourXRatingIsTooFarFromY(String param1, String param2) {
+    return 'Títt $param1 styrkital er ov langt frá $param2.';
+  }
+
+  @override
+  String challengeCannotChallengeDueToProvisionalXRating(String param) {
+    return 'Fær ikki bjóðað av vegna fyribils $param styrkital.';
+  }
+
+  @override
+  String challengeXOnlyAcceptsChallengesFromFriends(String param) {
+    return '$param tekur bert við avbjóðingum frá vinum.';
+  }
+
+  @override
+  String get challengeDeclineGeneric => 'Eg taki ikki móti avbjóðingum í løtuni.';
+
+  @override
+  String get challengeDeclineLater => 'Eg taki ikki ímóti avbjóðingum í løtuni. Spyr vinaliga aftur seinni.';
+
+  @override
+  String get challengeDeclineTooFast => 'Henda tíðarásetingin er ov skjót fyri meg. Bjóða mær vinaliga av aftur við einum seinførari talvi.';
+
+  @override
+  String get challengeDeclineTooSlow => 'Henda tíðarásetingin er ov sein fyri meg. Bjóða mær vinaliga av aftur við einum skjótari talvi.';
+
+  @override
+  String get challengeDeclineTimeControl => 'Eg taki ikki móti avbjóðingum við hesari tíðarásetingini.';
+
+  @override
+  String get challengeDeclineRated => 'Send mær vinaliga eina styrkismetta avbjóðing ístaðin.';
+
+  @override
+  String get challengeDeclineCasual => 'Send mær vinaliga eina óformella avbjóðing ístaðin.';
+
+  @override
+  String get challengeDeclineStandard => 'Eg taki ikki ímóti avbrigdisavbjóðingum í løtuni.';
+
+  @override
+  String get challengeDeclineVariant => 'Eg eri ikki sinnað/ur at telva hetta avbrigdið beint nú.';
+
+  @override
+  String get challengeDeclineNoBot => 'Eg taki ikki móti avbjóðingum frá teldum.';
+
+  @override
+  String get challengeDeclineOnlyBot => 'Eg taki bert móti avbjóðingum frá teldum.';
+
+  @override
+  String get challengeInviteLichessUser => 'Or invite a Lichess user:';
+
+  @override
   String get playWithAFriend => 'Telva móti einum vini';
 
   @override

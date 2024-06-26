@@ -231,6 +231,87 @@ class AppLocalizationsDe extends AppLocalizations {
   String get contactContactLichess => 'Lichess kontaktieren';
 
   @override
+  String challengeChallengesX(String param1) {
+    return 'Herausforderungen: $param1';
+  }
+
+  @override
+  String get challengeChallengeToPlay => 'Zu einer Partie herausfordern';
+
+  @override
+  String get challengeChallengeDeclined => 'Herausforderung abgelehnt';
+
+  @override
+  String get challengeChallengeAccepted => 'Herausforderung angenommen!';
+
+  @override
+  String get challengeChallengeCanceled => 'Herausforderung abgebrochen.';
+
+  @override
+  String get challengeRegisterToSendChallenges => 'Bitte registriere dich, um Herausforderungen an diesen Benutzer zu senden.';
+
+  @override
+  String challengeYouCannotChallengeX(String param) {
+    return 'Du kannst $param nicht herausfordern.';
+  }
+
+  @override
+  String challengeXDoesNotAcceptChallenges(String param) {
+    return '$param nimmt keine Herausforderungen an.';
+  }
+
+  @override
+  String challengeYourXRatingIsTooFarFromY(String param1, String param2) {
+    return 'Deine $param1 Wertung ist zu weit von $param2 entfernt.';
+  }
+
+  @override
+  String challengeCannotChallengeDueToProvisionalXRating(String param) {
+    return 'Herausforderung wegen provisorischer $param Wertung nicht möglich.';
+  }
+
+  @override
+  String challengeXOnlyAcceptsChallengesFromFriends(String param) {
+    return '$param nimmt Herausforderungen nur von Freunden an.';
+  }
+
+  @override
+  String get challengeDeclineGeneric => 'Ich nehme derzeit keine Herausforderungen an.';
+
+  @override
+  String get challengeDeclineLater => 'Ich nehme momentan keine Herausforderungen an, bitte frage später noch einmal.';
+
+  @override
+  String get challengeDeclineTooFast => 'Diese Bedenkzeit ist zu gering für mich, bitte fordere mich erneut mit einer höheren Bedenkzeit heraus.';
+
+  @override
+  String get challengeDeclineTooSlow => 'Diese Bedenkzeit ist zu lang für mich, bitte fordere mich mit weniger Bedenkzeit heraus.';
+
+  @override
+  String get challengeDeclineTimeControl => 'Ich nehme keine Herausforderungen mit dieser Bedenkzeit an.';
+
+  @override
+  String get challengeDeclineRated => 'Bitte fordere mich stattdessen zu einer gewerteten Partie heraus.';
+
+  @override
+  String get challengeDeclineCasual => 'Bitte fordere mich stattdessen zu einer ungewerteten Partie heraus.';
+
+  @override
+  String get challengeDeclineStandard => 'Ich nehme derzeit keine Herausforderungen für andere Spielvarianten an.';
+
+  @override
+  String get challengeDeclineVariant => 'Ich bin derzeit nicht bereit, diese Variante zu spielen.';
+
+  @override
+  String get challengeDeclineNoBot => 'Ich nehme keine Herausforderungen von Bots an.';
+
+  @override
+  String get challengeDeclineOnlyBot => 'Ich nehme nur Herausforderungen von Bots an.';
+
+  @override
+  String get challengeInviteLichessUser => 'Oder lade einen Lichess-Benutzer ein:';
+
+  @override
   String get playWithAFriend => 'Spiele mit einem Freund';
 
   @override

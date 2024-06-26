@@ -197,6 +197,87 @@ class AppLocalizationsZh extends AppLocalizations {
   String get contactContactLichess => '联系 Lichess';
 
   @override
+  String challengeChallengesX(String param1) {
+    return '挑战: $param1';
+  }
+
+  @override
+  String get challengeChallengeToPlay => '发起挑战';
+
+  @override
+  String get challengeChallengeDeclined => '拒绝挑战';
+
+  @override
+  String get challengeChallengeAccepted => '接受挑战';
+
+  @override
+  String get challengeChallengeCanceled => '挑战已取消';
+
+  @override
+  String get challengeRegisterToSendChallenges => '发起挑战前请先注册';
+
+  @override
+  String challengeYouCannotChallengeX(String param) {
+    return '你不能挑战 $param';
+  }
+
+  @override
+  String challengeXDoesNotAcceptChallenges(String param) {
+    return '$param 不接受挑战';
+  }
+
+  @override
+  String challengeYourXRatingIsTooFarFromY(String param1, String param2) {
+    return '你的 $param1 等级分与 $param2 相差太远';
+  }
+
+  @override
+  String challengeCannotChallengeDueToProvisionalXRating(String param) {
+    return '你的 $param 等级分不够稳定，不能进行挑战。';
+  }
+
+  @override
+  String challengeXOnlyAcceptsChallengesFromFriends(String param) {
+    return '$param只接受好友的挑战。';
+  }
+
+  @override
+  String get challengeDeclineGeneric => '我目前不接受挑战。';
+
+  @override
+  String get challengeDeclineLater => '这不是我合适的时机，请稍后再试。';
+
+  @override
+  String get challengeDeclineTooFast => '这次时限对我来说太快了，请再次用较慢的对局来挑战。';
+
+  @override
+  String get challengeDeclineTooSlow => '这次时限对我来说太慢了，请再次用较快的对局来挑战。';
+
+  @override
+  String get challengeDeclineTimeControl => '我不接受此次时限的挑战。';
+
+  @override
+  String get challengeDeclineRated => '请向我发送排位挑战。';
+
+  @override
+  String get challengeDeclineCasual => '请向我发送休闲挑战';
+
+  @override
+  String get challengeDeclineStandard => '我现在不接变体的挑战。';
+
+  @override
+  String get challengeDeclineVariant => '我现在不想玩这个变体。';
+
+  @override
+  String get challengeDeclineNoBot => '我不接受机器人的挑战。';
+
+  @override
+  String get challengeDeclineOnlyBot => '我只接受机器人的挑战。';
+
+  @override
+  String get challengeInviteLichessUser => '或邀请一位 Lichess 用户：';
+
+  @override
   String get playWithAFriend => '与好友下棋';
 
   @override
@@ -4638,6 +4719,87 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get contactContactLichess => '聯繫 Lichess';
+
+  @override
+  String challengeChallengesX(String param1) {
+    return '挑戰: $param1';
+  }
+
+  @override
+  String get challengeChallengeToPlay => '邀請對弈';
+
+  @override
+  String get challengeChallengeDeclined => '對弈邀請已拒絕';
+
+  @override
+  String get challengeChallengeAccepted => '對弈邀請已接受';
+
+  @override
+  String get challengeChallengeCanceled => '對弈邀請已撤銷';
+
+  @override
+  String get challengeRegisterToSendChallenges => '請登入以向其他人發出對弈邀請';
+
+  @override
+  String challengeYouCannotChallengeX(String param) {
+    return '你無法向$param發出對弈邀請';
+  }
+
+  @override
+  String challengeXDoesNotAcceptChallenges(String param) {
+    return '$param沒有接受對弈邀請';
+  }
+
+  @override
+  String challengeYourXRatingIsTooFarFromY(String param1, String param2) {
+    return '您的$param1積分與$param2相差太多';
+  }
+
+  @override
+  String challengeCannotChallengeDueToProvisionalXRating(String param) {
+    return '由於您的$param積分不夠穩定，無法發出挑戰。';
+  }
+
+  @override
+  String challengeXOnlyAcceptsChallengesFromFriends(String param) {
+    return '$param只接受好友的對弈邀請';
+  }
+
+  @override
+  String get challengeDeclineGeneric => '我目前不接受對弈';
+
+  @override
+  String get challengeDeclineLater => '我現在不接受對弈，請晚點再詢問';
+
+  @override
+  String get challengeDeclineTooFast => '這個時間控制對我來說太快了，請用慢一點的遊戲再次挑戰。';
+
+  @override
+  String get challengeDeclineTooSlow => '這個時間控制對我來說太慢了，請用快一點的遊戲再次挑戰。';
+
+  @override
+  String get challengeDeclineTimeControl => '我不接受這個挑戰的時間控制。';
+
+  @override
+  String get challengeDeclineRated => '請向我發送積分對弈。';
+
+  @override
+  String get challengeDeclineCasual => '請向我發送休閒對弈。';
+
+  @override
+  String get challengeDeclineStandard => '我不接受變體對弈。';
+
+  @override
+  String get challengeDeclineVariant => '我現在不想玩這個變體。';
+
+  @override
+  String get challengeDeclineNoBot => '我不接受機器人的對弈。';
+
+  @override
+  String get challengeDeclineOnlyBot => '我目前只接受機器人的對弈。';
+
+  @override
+  String get challengeInviteLichessUser => '或邀請一位 Lichess 用户：';
 
   @override
   String get playWithAFriend => '和好友下棋';

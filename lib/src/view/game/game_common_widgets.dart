@@ -2,6 +2,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
@@ -21,13 +22,10 @@ import 'game_settings.dart';
 import 'ping_rating.dart';
 
 class GameAppBar extends ConsumerWidget implements PreferredSizeWidget {
-  const GameAppBar({this.id, this.seek, super.key})
-      : assert(
-          (seek != null || id != null) && !(seek != null && id != null),
-          'Either seek or id must be provided, but not both.',
-        );
+  const GameAppBar({this.id, this.seek, this.challenge, super.key});
 
   final GameSeek? seek;
+  final ChallengeRequest? challenge;
   final GameFullId? id;
 
   static const pingRating = Padding(
@@ -46,9 +44,13 @@ class GameAppBar extends ConsumerWidget implements PreferredSizeWidget {
         data: (prevent) => prevent ? pingRating : null,
         orElse: () => pingRating,
       ),
-      title: seek != null
-          ? _LobbyGameTitle(seek: seek!)
-          : StandaloneGameTitle(id: id!),
+      title: id != null
+          ? StandaloneGameTitle(id: id!)
+          : seek != null
+              ? _LobbyGameTitle(seek: seek!)
+              : challenge != null
+                  ? _ChallengeGameTitle(challenge: challenge!)
+                  : const SizedBox.shrink(),
       actions: [
         if (id != null)
           AppBarIconButton(
@@ -72,13 +74,10 @@ class GameAppBar extends ConsumerWidget implements PreferredSizeWidget {
 
 class GameCupertinoNavBar extends ConsumerWidget
     implements ObstructingPreferredSizeWidget {
-  const GameCupertinoNavBar({this.id, this.seek, super.key})
-      : assert(
-          (seek != null || id != null) && !(seek != null && id != null),
-          'Either seek or id must be provided, but not both.',
-        );
+  const GameCupertinoNavBar({this.id, this.seek, this.challenge, super.key});
 
   final GameSeek? seek;
+  final ChallengeRequest? challenge;
   final GameFullId? id;
 
   static const pingRating = Padding(
@@ -100,9 +99,13 @@ class GameCupertinoNavBar extends ConsumerWidget
         data: (prevent) => prevent ? pingRating : null,
         orElse: () => pingRating,
       ),
-      middle: seek != null
-          ? _LobbyGameTitle(seek: seek!)
-          : StandaloneGameTitle(id: id!),
+      middle: id != null
+          ? StandaloneGameTitle(id: id!)
+          : seek != null
+              ? _LobbyGameTitle(seek: seek!)
+              : challenge != null
+                  ? _ChallengeGameTitle(challenge: challenge!)
+                  : const SizedBox.shrink(),
       trailing: id != null
           ? AppBarIconButton(
               onPressed: () => showAdaptiveBottomSheet<void>(
@@ -283,6 +286,37 @@ class _LobbyGameTitle extends ConsumerWidget {
         ),
         const SizedBox(width: 4.0),
         Text('${seek.timeIncrement?.display}$mode'),
+      ],
+    );
+  }
+}
+
+class _ChallengeGameTitle extends ConsumerWidget {
+  const _ChallengeGameTitle({
+    required this.challenge,
+  });
+
+  final ChallengeRequest challenge;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final mode = challenge.rated
+        ? ' • ${context.l10n.rated}'
+        : ' • ${context.l10n.casual}';
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(
+          challenge.perf.icon,
+          color: DefaultTextStyle.of(context).style.color,
+        ),
+        const SizedBox(width: 4.0),
+        if (challenge.timeIncrement != null)
+          Text('${challenge.timeIncrement?.display}$mode')
+        else if (challenge.days != null)
+          Text(
+            '${context.l10n.nbDays(challenge.days!)}$mode',
+          ),
       ],
     );
   }

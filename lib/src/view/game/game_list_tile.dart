@@ -16,7 +16,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
-import 'package:lichess_mobile/src/view/game/standalone_game_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/status_l10n.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
@@ -218,7 +218,7 @@ class _ContextMenu extends ConsumerWidget {
               ),
               BottomSheetContextMenuAction(
                 icon: Icons.biotech,
-                onPressed: game.variant.isSupported
+                onPressed: game.variant.isReadSupported
                     ? () {
                         pushPlatformRoute(
                           context,
@@ -453,17 +453,13 @@ class ExtendedGameListTile extends StatelessWidget {
     return GameListTile(
       game: game,
       mySide: youAre,
-      onTap: game.variant.isSupported
+      onTap: game.variant.isReadSupported
           ? () {
               pushPlatformRoute(
                 context,
                 rootNavigator: true,
                 builder: (context) => game.fullId != null
-                    ? StandaloneGameScreen(
-                        params: InitialStandaloneGameParams(
-                          id: game.fullId!,
-                        ),
-                      )
+                    ? GameScreen(initialGameId: game.fullId)
                     : ArchivedGameScreen(
                         gameData: game,
                         orientation: youAre,

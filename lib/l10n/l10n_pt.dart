@@ -231,6 +231,87 @@ class AppLocalizationsPt extends AppLocalizations {
   String get contactContactLichess => 'Contactar o Lichess';
 
   @override
+  String challengeChallengesX(String param1) {
+    return 'Desafios: $param1';
+  }
+
+  @override
+  String get challengeChallengeToPlay => 'Desafiar para jogar';
+
+  @override
+  String get challengeChallengeDeclined => 'Desafio recusado';
+
+  @override
+  String get challengeChallengeAccepted => 'Desafio aceite!';
+
+  @override
+  String get challengeChallengeCanceled => 'Desafio cancelado.';
+
+  @override
+  String get challengeRegisterToSendChallenges => 'Por favor regista-te para enviar desafios.';
+
+  @override
+  String challengeYouCannotChallengeX(String param) {
+    return 'Não podes desafiar $param.';
+  }
+
+  @override
+  String challengeXDoesNotAcceptChallenges(String param) {
+    return '$param não aceita desafios.';
+  }
+
+  @override
+  String challengeYourXRatingIsTooFarFromY(String param1, String param2) {
+    return 'O teu ranking $param1 esta muito distante de $param2.';
+  }
+
+  @override
+  String challengeCannotChallengeDueToProvisionalXRating(String param) {
+    return 'Não podes desafiar devido a ranking provisório $param.';
+  }
+
+  @override
+  String challengeXOnlyAcceptsChallengesFromFriends(String param) {
+    return '$param só aceita desafios de amigos.';
+  }
+
+  @override
+  String get challengeDeclineGeneric => 'Não estou a aceitar desafios no momento.';
+
+  @override
+  String get challengeDeclineLater => 'Este não é o momento certo para mim, por favor pergunte novamente mais tarde.';
+
+  @override
+  String get challengeDeclineTooFast => 'Este controlo de tempo é muito rápido para mim, por favor, desafie-me novamente com um jogo mais lento.';
+
+  @override
+  String get challengeDeclineTooSlow => 'Este controlo de tempo é muito lento para mim, por favor, desafie-me novamente com um jogo mais rápido.';
+
+  @override
+  String get challengeDeclineTimeControl => 'Não estou a aceitar desafios com este controlo de tempo.';
+
+  @override
+  String get challengeDeclineRated => 'Por favor, envie-me um desafio a valer para a classificação.';
+
+  @override
+  String get challengeDeclineCasual => 'Por favor, envie-me um desafio amigável.';
+
+  @override
+  String get challengeDeclineStandard => 'Não estou a aceitar desafios de variante, de momento.';
+
+  @override
+  String get challengeDeclineVariant => 'Não estou disposto a jogar essa variante, de momento.';
+
+  @override
+  String get challengeDeclineNoBot => 'Não estou a aceitar desafios de bots.';
+
+  @override
+  String get challengeDeclineOnlyBot => 'Apenas aceito desafios de bots.';
+
+  @override
+  String get challengeInviteLichessUser => 'Ou convide um utilizador Lichess:';
+
+  @override
   String get playWithAFriend => 'Jogar com um amigo';
 
   @override
@@ -4804,6 +4885,87 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get contactContactLichess => 'Entrar em contato com Lichess';
+
+  @override
+  String challengeChallengesX(String param1) {
+    return 'Desafios: $param1';
+  }
+
+  @override
+  String get challengeChallengeToPlay => 'Desafiar para jogar';
+
+  @override
+  String get challengeChallengeDeclined => 'Desafio recusado';
+
+  @override
+  String get challengeChallengeAccepted => 'Desafio aceito!';
+
+  @override
+  String get challengeChallengeCanceled => 'Desafio cancelado.';
+
+  @override
+  String get challengeRegisterToSendChallenges => 'Por favor, registre-se para enviar desafios.';
+
+  @override
+  String challengeYouCannotChallengeX(String param) {
+    return 'Você não pode desafiar $param.';
+  }
+
+  @override
+  String challengeXDoesNotAcceptChallenges(String param) {
+    return '$param não aceita desafios.';
+  }
+
+  @override
+  String challengeYourXRatingIsTooFarFromY(String param1, String param2) {
+    return 'O seu rating $param1 é muito diferente de $param2.';
+  }
+
+  @override
+  String challengeCannotChallengeDueToProvisionalXRating(String param) {
+    return 'Não pode desafiar devido ao rating provisório de $param.';
+  }
+
+  @override
+  String challengeXOnlyAcceptsChallengesFromFriends(String param) {
+    return '$param só aceita desafios de amigos.';
+  }
+
+  @override
+  String get challengeDeclineGeneric => 'Não estou aceitando desafios no momento.';
+
+  @override
+  String get challengeDeclineLater => 'Este não é o momento certo para mim, por favor pergunte novamente mais tarde.';
+
+  @override
+  String get challengeDeclineTooFast => 'Este controle de tempo é muito rápido para mim, por favor, desafie novamente com um jogo mais lento.';
+
+  @override
+  String get challengeDeclineTooSlow => 'Este controle de tempo é muito lento para mim, por favor, desafie novamente com um jogo mais rápido.';
+
+  @override
+  String get challengeDeclineTimeControl => 'Não estou aceitando desafios com estes controles de tempo.';
+
+  @override
+  String get challengeDeclineRated => 'Por favor, envie-me um desafio ranqueado.';
+
+  @override
+  String get challengeDeclineCasual => 'Por favor, envie-me um desafio amigável.';
+
+  @override
+  String get challengeDeclineStandard => 'Não estou aceitando desafios de variantes no momento.';
+
+  @override
+  String get challengeDeclineVariant => 'Não estou a fim de jogar esta variante no momento.';
+
+  @override
+  String get challengeDeclineNoBot => 'Não estou aceitando desafios de robôs.';
+
+  @override
+  String get challengeDeclineOnlyBot => 'Estou aceitando apenas desafios de robôs.';
+
+  @override
+  String get challengeInviteLichessUser => 'Ou convide um usuário Lichess:';
 
   @override
   String get playWithAFriend => 'Jogar contra um amigo';

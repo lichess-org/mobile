@@ -197,6 +197,87 @@ class AppLocalizationsId extends AppLocalizations {
   String get contactContactLichess => 'Kontak Lichess';
 
   @override
+  String challengeChallengesX(String param1) {
+    return 'Challenges: $param1';
+  }
+
+  @override
+  String get challengeChallengeToPlay => 'Menantang ke permainan';
+
+  @override
+  String get challengeChallengeDeclined => 'Tantangan ditolak';
+
+  @override
+  String get challengeChallengeAccepted => 'Tantangan diterima!';
+
+  @override
+  String get challengeChallengeCanceled => 'Tantangan dibatalkan.';
+
+  @override
+  String get challengeRegisterToSendChallenges => 'Harap mendaftar untuk mengirim tantangan.';
+
+  @override
+  String challengeYouCannotChallengeX(String param) {
+    return 'Anda tidak dapat menantang $param.';
+  }
+
+  @override
+  String challengeXDoesNotAcceptChallenges(String param) {
+    return '$param tidak menerima tantangan.';
+  }
+
+  @override
+  String challengeYourXRatingIsTooFarFromY(String param1, String param2) {
+    return 'Rating $param1 Anda terlalu jauh dari $param2.';
+  }
+
+  @override
+  String challengeCannotChallengeDueToProvisionalXRating(String param) {
+    return 'Dilarang menantang orang lain dikarenakan rating $param masih sementara.';
+  }
+
+  @override
+  String challengeXOnlyAcceptsChallengesFromFriends(String param) {
+    return '$param hanya menerima tantangan dari teman.';
+  }
+
+  @override
+  String get challengeDeclineGeneric => 'Saya tidak menerima tantangan saat ini.';
+
+  @override
+  String get challengeDeclineLater => 'Bukan waktu yang bagus untukku, mungkin lain kali.';
+
+  @override
+  String get challengeDeclineTooFast => 'Kecepatan waktu terlalu cepat untukku, harap tantang lagi dengan waktu permainan yang lebih lambat.';
+
+  @override
+  String get challengeDeclineTooSlow => 'Kecepatan waktu terlalu lama untukku, harap tantang lagi dengan waktu permainan yang lebih cepat.';
+
+  @override
+  String get challengeDeclineTimeControl => 'Saya tidak menerima tantangan dengan waktu permainan seperti ini.';
+
+  @override
+  String get challengeDeclineRated => 'Tolong tantang aku dengan permainan di rating.';
+
+  @override
+  String get challengeDeclineCasual => 'Tolong tantang aku dengan permainan yang santai.';
+
+  @override
+  String get challengeDeclineStandard => 'Saya tidak menerima tantangan variasi sekarang.';
+
+  @override
+  String get challengeDeclineVariant => 'Saya tidak ingin bermain variasi ini sekarang.';
+
+  @override
+  String get challengeDeclineNoBot => 'Saya tidak menerima tantangan dari bot.';
+
+  @override
+  String get challengeDeclineOnlyBot => 'Saya hanya menerima tantangan dari bot.';
+
+  @override
+  String get challengeInviteLichessUser => 'Atau undang pengguna Lichess lain:';
+
+  @override
   String get playWithAFriend => 'Bermain dengan teman';
 
   @override

@@ -282,6 +282,87 @@ class AppLocalizationsGa extends AppLocalizations {
   String get contactContactLichess => 'Déan teagmháil le Lichess';
 
   @override
+  String challengeChallengesX(String param1) {
+    return 'Challenges: $param1';
+  }
+
+  @override
+  String get challengeChallengeToPlay => 'Dúshlán cluiche';
+
+  @override
+  String get challengeChallengeDeclined => 'Dúshlán diúltaithe';
+
+  @override
+  String get challengeChallengeAccepted => 'Dúshlán glactha!';
+
+  @override
+  String get challengeChallengeCanceled => 'Dúshlán ar ceal.';
+
+  @override
+  String get challengeRegisterToSendChallenges => 'Cláraigh le do thoil chun dúshláin a sheoladh.';
+
+  @override
+  String challengeYouCannotChallengeX(String param) {
+    return 'Níl cead dúshlán a cuir chuig $param.';
+  }
+
+  @override
+  String challengeXDoesNotAcceptChallenges(String param) {
+    return 'Ní ghlacann $param le dúshláin.';
+  }
+
+  @override
+  String challengeYourXRatingIsTooFarFromY(String param1, String param2) {
+    return 'Tá do rátáil $param1 rófhada ó $param2.';
+  }
+
+  @override
+  String challengeCannotChallengeDueToProvisionalXRating(String param) {
+    return 'Ní féidir dúshlán a thabhairt mar gheall ar rátáil sealadach $param.';
+  }
+
+  @override
+  String challengeXOnlyAcceptsChallengesFromFriends(String param) {
+    return 'Ní ghlacann $param ach le dúshláin ó chairde.';
+  }
+
+  @override
+  String get challengeDeclineGeneric => 'Nílim ag glacadh le dúshláin i láthair na huaire.';
+
+  @override
+  String get challengeDeclineLater => 'Ní am ceart dom anois, iarr arís níos déanaí.';
+
+  @override
+  String get challengeDeclineTooFast => 'Tá an maor ama seo ró-thapa dom, tabhair dúshlán arís le cluiche níos moille.';
+
+  @override
+  String get challengeDeclineTooSlow => 'Tá an maor ama seo ró-mhall dom, tabhair dúshlán arís le cluiche níos tapa.';
+
+  @override
+  String get challengeDeclineTimeControl => 'Nílim ag glacadh le dúshláin leis an maor ama seo.';
+
+  @override
+  String get challengeDeclineRated => 'Seol dúshlán rátáilte chugam ina ionad.';
+
+  @override
+  String get challengeDeclineCasual => 'Seol dúshlán fhánach chugam ina ionad.';
+
+  @override
+  String get challengeDeclineStandard => 'Nílim ag glacadh le dúshláin éagsúla anois.';
+
+  @override
+  String get challengeDeclineVariant => 'Nílim sásta an leagan seo a imirt faoi láthair.';
+
+  @override
+  String get challengeDeclineNoBot => 'Nílim ag glacadh dúshláin ó botaí.';
+
+  @override
+  String get challengeDeclineOnlyBot => 'Nílim ag glacadh ach le dúshláin ó botaí.';
+
+  @override
+  String get challengeInviteLichessUser => 'Nó tabhair cuireadh d’Úsáideoir Lichess:';
+
+  @override
   String get playWithAFriend => 'Imir le cara';
 
   @override

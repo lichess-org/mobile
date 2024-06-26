@@ -231,6 +231,87 @@ class AppLocalizationsNb extends AppLocalizations {
   String get contactContactLichess => 'Ta kontakt med Lichess';
 
   @override
+  String challengeChallengesX(String param1) {
+    return 'Utfordringer: $param1';
+  }
+
+  @override
+  String get challengeChallengeToPlay => 'Utfordre til et parti';
+
+  @override
+  String get challengeChallengeDeclined => 'Utfordring avslått';
+
+  @override
+  String get challengeChallengeAccepted => 'Utfordring godtatt!';
+
+  @override
+  String get challengeChallengeCanceled => 'Utfordring avbrutt.';
+
+  @override
+  String get challengeRegisterToSendChallenges => 'Du må registrere deg for å kunne utfordre denne brukeren.';
+
+  @override
+  String challengeYouCannotChallengeX(String param) {
+    return 'Du kan ikke utfordre $param.';
+  }
+
+  @override
+  String challengeXDoesNotAcceptChallenges(String param) {
+    return '$param godtar ikke utfordringer.';
+  }
+
+  @override
+  String challengeYourXRatingIsTooFarFromY(String param1, String param2) {
+    return 'Ratingen din i $param1 er for langt unna $param2.';
+  }
+
+  @override
+  String challengeCannotChallengeDueToProvisionalXRating(String param) {
+    return 'Kan ikke utfordre på grunn av provisorisk rating i $param.';
+  }
+
+  @override
+  String challengeXOnlyAcceptsChallengesFromFriends(String param) {
+    return '$param godtar bare utfordringer fra venner.';
+  }
+
+  @override
+  String get challengeDeclineGeneric => 'Jeg godtar ikke utfordringer for øyeblikket.';
+
+  @override
+  String get challengeDeclineLater => 'Det passer ikke akkurat nå, spør senere.';
+
+  @override
+  String get challengeDeclineTooFast => 'Denne tidskontrollen er for rask for meg, send en ny utfordring til et tregere parti.';
+
+  @override
+  String get challengeDeclineTooSlow => 'Denne tidskontrollen er for treg for meg, send en ny utfordring til et raskere parti.';
+
+  @override
+  String get challengeDeclineTimeControl => 'Jeg godtar ikke utfordringer med denne tidskontrollen.';
+
+  @override
+  String get challengeDeclineRated => 'Send meg en utfordring til et ratet parti i stedet.';
+
+  @override
+  String get challengeDeclineCasual => 'Send meg en utfordring til et uformelt parti i stedet.';
+
+  @override
+  String get challengeDeclineStandard => 'Jeg godtar ikke utfordringer til varianter for øyeblikket.';
+
+  @override
+  String get challengeDeclineVariant => 'Jeg ønsker ikke å spille denne varianten for øyeblikket.';
+
+  @override
+  String get challengeDeclineNoBot => 'Jeg godtar ikke utfordringer fra boter.';
+
+  @override
+  String get challengeDeclineOnlyBot => 'Jeg godtar bare utfordringer fra boter.';
+
+  @override
+  String get challengeInviteLichessUser => 'Eller inviter en Lichess-bruker:';
+
+  @override
   String get playWithAFriend => 'Spill mot en venn';
 
   @override

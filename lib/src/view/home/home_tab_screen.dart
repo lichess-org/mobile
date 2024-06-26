@@ -1,7 +1,6 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
@@ -9,8 +8,7 @@ import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
-import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
-import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
+import 'package:lichess_mobile/src/model/settings/home_preferences.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
@@ -20,13 +18,13 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/correspondence/offline_correspondence_game_screen.dart';
-import 'package:lichess_mobile/src/view/game/lobby_screen.dart';
-import 'package:lichess_mobile/src/view/game/standalone_game_screen.dart';
-import 'package:lichess_mobile/src/view/home/create_a_game_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_screen.dart';
+import 'package:lichess_mobile/src/view/game/offline_correspondence_games_screen.dart';
 import 'package:lichess_mobile/src/view/home/create_game_options.dart';
-import 'package:lichess_mobile/src/view/home/quick_game_button.dart';
-import 'package:lichess_mobile/src/view/play/offline_correspondence_games_screen.dart';
 import 'package:lichess_mobile/src/view/play/ongoing_games_screen.dart';
+import 'package:lichess_mobile/src/view/play/play_screen.dart';
+import 'package:lichess_mobile/src/view/play/quick_game_button.dart';
+import 'package:lichess_mobile/src/view/play/quick_game_matrix.dart';
 import 'package:lichess_mobile/src/view/user/player_screen.dart';
 import 'package:lichess_mobile/src/view/user/recent_games.dart';
 import 'package:lichess_mobile/src/widgets/board_carousel_item.dart';
@@ -37,6 +35,8 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:url_launcher/url_launcher.dart';
+
+final editModeProvider = StateProvider<bool>((ref) => false);
 
 class HomeTabScreen extends ConsumerStatefulWidget {
   const HomeTabScreen({super.key});
@@ -75,11 +75,19 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
 
   Widget _androidBuilder(BuildContext context) {
     final isTablet = isTabletOrLarger(context);
+    final isEditing = ref.watch(editModeProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text('lichess.org'),
-        actions: const [
-          _PlayerScreenButton(),
+        actions: [
+          IconButton(
+            onPressed: () {
+              ref.read(editModeProvider.notifier).state = !isEditing;
+            },
+            icon: Icon(isEditing ? Icons.save : Icons.app_registration),
+            tooltip: isEditing ? 'Save' : 'Edit',
+          ),
+          const _PlayerScreenButton(),
         ],
       ),
       body: RefreshIndicator(
@@ -94,34 +102,21 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
       ),
       floatingActionButton: isTablet
           ? null
-          : GestureDetector(
-              onLongPress: () {
-                final playPrefs = ref.read(gameSetupPreferencesProvider);
-                final session = ref.read(authSessionProvider);
-                HapticFeedback.vibrate();
+          : FloatingActionButton.extended(
+              onPressed: () {
                 pushPlatformRoute(
                   context,
-                  rootNavigator: true,
-                  builder: (_) => LobbyScreen(
-                    seek: GameSeek.fastPairing(playPrefs, session),
-                  ),
+                  builder: (_) => const PlayScreen(),
                 );
               },
-              child: FloatingActionButton.extended(
-                onPressed: () {
-                  pushPlatformRoute(
-                    context,
-                    builder: (_) => const CreateAGameScreen(),
-                  );
-                },
-                icon: const Icon(Icons.add),
-                label: Text(context.l10n.createAGame),
-              ),
+              icon: const Icon(Icons.add),
+              label: Text(context.l10n.play),
             ),
     );
   }
 
   Widget _iosBuilder(BuildContext context) {
+    final isEditing = ref.watch(editModeProvider);
     return CupertinoPageScaffold(
       child: Stack(
         alignment: Alignment.bottomCenter,
@@ -129,13 +124,21 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
           CustomScrollView(
             controller: homeScrollController,
             slivers: [
-              const CupertinoSliverNavigationBar(
-                padding: EdgeInsetsDirectional.only(
+              CupertinoSliverNavigationBar(
+                padding: const EdgeInsetsDirectional.only(
                   start: 16.0,
                   end: 8.0,
                 ),
-                largeTitle: Text('Home'),
-                trailing: Row(
+                largeTitle: const Text('Home'),
+                leading: CupertinoButton(
+                  alignment: Alignment.centerLeft,
+                  padding: EdgeInsets.zero,
+                  onPressed: () {
+                    ref.read(editModeProvider.notifier).state = !isEditing;
+                  },
+                  child: Text(isEditing ? 'Done' : 'Edit'),
+                ),
+                trailing: const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     _PlayerScreenButton(),
@@ -153,31 +156,19 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
             Positioned(
               bottom: MediaQuery.paddingOf(context).bottom + 16.0,
               right: 8.0,
-              child: GestureDetector(
-                onLongPress: () {
-                  final playPrefs = ref.read(gameSetupPreferencesProvider);
-                  final session = ref.read(authSessionProvider);
+              child: FloatingActionButton.extended(
+                backgroundColor: CupertinoTheme.of(context).primaryColor,
+                foregroundColor:
+                    CupertinoTheme.of(context).primaryContrastingColor,
+                onPressed: () {
                   pushPlatformRoute(
                     context,
-                    rootNavigator: true,
-                    builder: (_) => LobbyScreen(
-                      seek: GameSeek.fastPairing(playPrefs, session),
-                    ),
+                    title: context.l10n.play,
+                    builder: (_) => const PlayScreen(),
                   );
                 },
-                child: FloatingActionButton.extended(
-                  backgroundColor: CupertinoTheme.of(context).primaryColor,
-                  foregroundColor:
-                      CupertinoTheme.of(context).primaryContrastingColor,
-                  onPressed: () {
-                    pushPlatformRoute(
-                      context,
-                      builder: (_) => const CreateAGameScreen(),
-                    );
-                  },
-                  icon: const Icon(Icons.add),
-                  label: Text(context.l10n.createAGame),
-                ),
+                icon: const Icon(Icons.add),
+                label: Text(context.l10n.play),
               ),
             ),
         ],
@@ -187,6 +178,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
 
   Future<void> _refreshData() {
     return Future.wait([
+      ref.refresh(accountProvider.future),
       ref.refresh(myRecentGamesProvider.future),
       ref.refresh(ongoingGamesProvider.future),
     ]);
@@ -216,6 +208,8 @@ class _HomeBody extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isOnlineAsync = ref.watch(connectivityChangesProvider);
+    final isEditing = ref.watch(editModeProvider);
+
     return isOnlineAsync.when(
       data: (status) {
         final session = ref.watch(authSessionProvider);
@@ -228,89 +222,28 @@ class _HomeBody extends ConsumerWidget {
         // Show the welcome screen if there are no recent games and no stored games
         // (i.e. first installation, or the user has never played a game)
         if (emptyRecent) {
-          final welcomeWidgets = [
-            Padding(
-              padding: Styles.horizontalBodyPadding,
-              child: LichessMessage(
-                style: Theme.of(context).platform == TargetPlatform.iOS
-                    ? const TextStyle(fontSize: 18)
-                    : Theme.of(context).textTheme.bodyLarge,
-                textAlign: TextAlign.center,
-              ),
-            ),
-            const SizedBox(height: 24.0),
-            if (session == null) ...[
-              const Center(child: _SignInWidget()),
-              const SizedBox(height: 16.0),
-            ],
-            if (Theme.of(context).platform != TargetPlatform.iOS &&
-                (session == null || session.user.isPatron != true)) ...[
-              Center(
-                child: SecondaryButton(
-                  semanticsLabel: context.l10n.patronDonate,
-                  onPressed: () {
-                    launchUrl(Uri.parse('https://lichess.org/patron'));
-                  },
-                  child: Text(context.l10n.patronDonate),
-                ),
-              ),
-              const SizedBox(height: 16.0),
-            ],
-            Center(
-              child: SecondaryButton(
-                semanticsLabel: context.l10n.aboutX('Lichess...'),
-                onPressed: () {
-                  launchUrl(Uri.parse('https://lichess.org/about'));
-                },
-                child: Text(context.l10n.aboutX('Lichess...')),
-              ),
-            ),
-          ];
-
-          final emptyScreenWidgets = [
-            if (isTablet)
-              Row(
-                children: [
-                  const Flexible(
-                    child: _TabletCreateAGameSection(),
-                  ),
-                  Flexible(
-                    child: Column(
-                      children: welcomeWidgets,
-                    ),
-                  ),
-                ],
-              )
-            else
-              ...welcomeWidgets,
-          ];
-
-          return Theme.of(context).platform == TargetPlatform.android
-              ? Center(
-                  child: ListView(
-                    shrinkWrap: true,
-                    children: emptyScreenWidgets,
-                  ),
-                )
-              : SliverFillRemaining(
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      bottom: MediaQuery.viewPaddingOf(context).vertical + 50.0,
-                    ),
-                    child: Center(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: emptyScreenWidgets,
-                      ),
-                    ),
-                  ),
-                );
+          return _WelcomeScreen(
+            session: session,
+            status: status,
+            isTablet: isTablet,
+            isEditing: isEditing,
+          );
         }
 
         final widgets = isTablet
             ? [
-                const _HelloWidget(),
+                _EditableWidget(
+                  widget: EnabledWidget.hello,
+                  isEditing: isEditing,
+                  shouldShow: true,
+                  child: const _HelloWidget(),
+                ),
+                _EditableWidget(
+                  widget: EnabledWidget.perfCards,
+                  isEditing: isEditing,
+                  shouldShow: session != null,
+                  child: AccountPerfCards(padding: Styles.bodySectionPadding),
+                ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -319,7 +252,7 @@ class _HomeBody extends ConsumerWidget {
                         children: [
                           const SizedBox(height: 8.0),
                           if (status.isOnline)
-                            const _TabletCreateAGameSection(),
+                            _TabletCreateAGameSection(isEditing: isEditing),
                           if (status.isOnline)
                             const _OngoingGamesPreview(maxGamesToShow: 5)
                           else
@@ -343,7 +276,27 @@ class _HomeBody extends ConsumerWidget {
                 ),
               ]
             : [
-                const _HelloWidget(),
+                _EditableWidget(
+                  widget: EnabledWidget.hello,
+                  isEditing: isEditing,
+                  shouldShow: true,
+                  child: const _HelloWidget(),
+                ),
+                _EditableWidget(
+                  widget: EnabledWidget.perfCards,
+                  isEditing: isEditing,
+                  shouldShow: session != null,
+                  child: AccountPerfCards(padding: Styles.bodySectionPadding),
+                ),
+                _EditableWidget(
+                  widget: EnabledWidget.quickPairing,
+                  isEditing: isEditing,
+                  shouldShow: status.isOnline,
+                  child: Padding(
+                    padding: Styles.bodySectionPadding,
+                    child: const QuickGameMatrix(),
+                  ),
+                ),
                 if (status.isOnline)
                   const _OngoingGamesCarousel(maxGamesToShow: 20)
                 else
@@ -377,6 +330,157 @@ class _HomeBody extends ConsumerWidget {
             : const SliverFillRemaining(child: child);
       },
     );
+  }
+}
+
+class _EditableWidget extends ConsumerWidget {
+  const _EditableWidget({
+    required this.child,
+    required this.widget,
+    required this.isEditing,
+    required this.shouldShow,
+  });
+
+  final Widget child;
+  final EnabledWidget widget;
+  final bool isEditing;
+  final bool shouldShow;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final enabledWidgets = ref.watch(homePreferencesProvider).enabledWidgets;
+    final isEnabled = enabledWidgets.contains(widget);
+
+    if (!shouldShow) {
+      return const SizedBox.shrink();
+    }
+
+    return isEditing
+        ? Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Checkbox.adaptive(
+                  value: isEnabled,
+                  onChanged: (_) {
+                    ref
+                        .read(homePreferencesProvider.notifier)
+                        .toggleWidget(widget);
+                  },
+                ),
+              ),
+              Expanded(child: child),
+            ],
+          )
+        : isEnabled
+            ? child
+            : const SizedBox.shrink();
+  }
+}
+
+class _WelcomeScreen extends StatelessWidget {
+  const _WelcomeScreen({
+    required this.session,
+    required this.status,
+    required this.isTablet,
+    required this.isEditing,
+  });
+
+  final AuthSessionState? session;
+  final ConnectivityStatus status;
+  final bool isTablet;
+  final bool isEditing;
+
+  @override
+  Widget build(BuildContext context) {
+    final welcomeWidgets = [
+      Padding(
+        padding: Styles.horizontalBodyPadding,
+        child: LichessMessage(
+          style: Theme.of(context).platform == TargetPlatform.iOS
+              ? const TextStyle(fontSize: 18)
+              : Theme.of(context).textTheme.bodyLarge,
+          textAlign: TextAlign.center,
+        ),
+      ),
+      const SizedBox(height: 24.0),
+      if (session == null) ...[
+        const Center(child: _SignInWidget()),
+        const SizedBox(height: 16.0),
+      ],
+      if (Theme.of(context).platform != TargetPlatform.iOS &&
+          (session == null || session!.user.isPatron != true)) ...[
+        Center(
+          child: SecondaryButton(
+            semanticsLabel: context.l10n.patronDonate,
+            onPressed: () {
+              launchUrl(Uri.parse('https://lichess.org/patron'));
+            },
+            child: Text(context.l10n.patronDonate),
+          ),
+        ),
+        const SizedBox(height: 16.0),
+      ],
+      Center(
+        child: SecondaryButton(
+          semanticsLabel: context.l10n.aboutX('Lichess...'),
+          onPressed: () {
+            launchUrl(Uri.parse('https://lichess.org/about'));
+          },
+          child: Text(context.l10n.aboutX('Lichess...')),
+        ),
+      ),
+    ];
+
+    final emptyScreenWidgets = [
+      if (isTablet)
+        Row(
+          children: [
+            if (status.isOnline)
+              Flexible(
+                child: _TabletCreateAGameSection(isEditing: isEditing),
+              ),
+            Flexible(
+              child: Column(
+                children: welcomeWidgets,
+              ),
+            ),
+          ],
+        )
+      else ...[
+        if (status.isOnline)
+          _EditableWidget(
+            widget: EnabledWidget.quickPairing,
+            isEditing: isEditing,
+            shouldShow: true,
+            child: Padding(
+              padding: Styles.bodySectionPadding,
+              child: const QuickGameMatrix(),
+            ),
+          ),
+        ...welcomeWidgets,
+      ],
+    ];
+
+    return Theme.of(context).platform == TargetPlatform.android
+        ? Center(
+            child: ListView(shrinkWrap: true, children: emptyScreenWidgets),
+          )
+        : SliverFillRemaining(
+            child: Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.viewPaddingOf(context).vertical + 50.0,
+              ),
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: emptyScreenWidgets,
+                ),
+              ),
+            ),
+          );
   }
 }
 
@@ -435,13 +539,24 @@ class _HelloWidget extends ConsumerWidget {
 }
 
 class _TabletCreateAGameSection extends StatelessWidget {
-  const _TabletCreateAGameSection();
+  const _TabletCreateAGameSection({required this.isEditing});
+
+  final bool isEditing;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
+        _EditableWidget(
+          widget: EnabledWidget.quickPairing,
+          isEditing: isEditing,
+          shouldShow: true,
+          child: Padding(
+            padding: Styles.bodySectionPadding,
+            child: const QuickGameMatrix(),
+          ),
+        ),
         Padding(
           padding: Styles.bodySectionPadding,
           child: const QuickGameButton(),
@@ -473,13 +588,11 @@ class _OngoingGamesCarousel extends ConsumerWidget {
               pushPlatformRoute(
                 context,
                 rootNavigator: true,
-                builder: (context) => StandaloneGameScreen(
-                  params: InitialStandaloneGameParams(
-                    id: game.fullId,
-                    fen: game.fen,
-                    orientation: game.orientation,
-                    lastMove: game.lastMove,
-                  ),
+                builder: (context) => GameScreen(
+                  initialGameId: game.fullId,
+                  loadingFen: game.fen,
+                  loadingOrientation: game.orientation,
+                  loadingLastMove: game.lastMove,
                 ),
               );
             },

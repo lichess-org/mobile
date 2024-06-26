@@ -265,6 +265,87 @@ class AppLocalizationsHe extends AppLocalizations {
   String get contactContactLichess => 'צרו קשר עם ליצ\'ס';
 
   @override
+  String challengeChallengesX(String param1) {
+    return 'הזמנות למשחק: $param1';
+  }
+
+  @override
+  String get challengeChallengeToPlay => 'הזמינו למשחק';
+
+  @override
+  String get challengeChallengeDeclined => 'ההזמנה למשחק נדחתה';
+
+  @override
+  String get challengeChallengeAccepted => 'ההזמנה למשחק התקבלה!';
+
+  @override
+  String get challengeChallengeCanceled => 'ההזמנה למשחק התבטלה.';
+
+  @override
+  String get challengeRegisterToSendChallenges => 'אנא הירשמו כדי לשלוח הזמנות למשחקים.';
+
+  @override
+  String challengeYouCannotChallengeX(String param) {
+    return 'לא ניתן להזמין את $param למשחק.';
+  }
+
+  @override
+  String challengeXDoesNotAcceptChallenges(String param) {
+    return '$param לא מקבל/ת הזמנות למשחקים.';
+  }
+
+  @override
+  String challengeYourXRatingIsTooFarFromY(String param1, String param2) {
+    return 'הדירוג שלך ב$param1 רחוק מדי מהדירוג של $param2.';
+  }
+
+  @override
+  String challengeCannotChallengeDueToProvisionalXRating(String param) {
+    return 'אין אפשרות להזמין למשחק בגלל שדירוגך ב-$param זמני.';
+  }
+
+  @override
+  String challengeXOnlyAcceptsChallengesFromFriends(String param) {
+    return '$param מאשר/ת רק אתגרים מחברים.';
+  }
+
+  @override
+  String get challengeDeclineGeneric => 'אני לא מקבל/ת הזמנות עכשיו.';
+
+  @override
+  String get challengeDeclineLater => 'זה לא הזמן המתאים עבורי, אנא שאל שוב מאוחר יותר.';
+
+  @override
+  String get challengeDeclineTooFast => 'קטגוריית הזמן הזו מהירה מדי בשבילי, בבקשה הזמן אותי שוב למשחק יותר איטי.';
+
+  @override
+  String get challengeDeclineTooSlow => 'קטגוריית הזמן הזו איטית מדי בשבילי, בבקשה הזמן אותי שוב למשחק יותר מהיר.';
+
+  @override
+  String get challengeDeclineTimeControl => 'אני לא מאשר/ת אתגרים בקטגוריית הזמן הזו.';
+
+  @override
+  String get challengeDeclineRated => 'בבקשה שלח/י לי הזמנה למשחק מדורג במקום.';
+
+  @override
+  String get challengeDeclineCasual => 'בבקשה שלח לי הזמנה למשחק לא מדורג במקום.';
+
+  @override
+  String get challengeDeclineStandard => 'אני לא מקבל/ת עכשיו הזמנות למשחקי שחמט לא סטנדרטי.';
+
+  @override
+  String get challengeDeclineVariant => 'אני לא מעוניין לשחק את סוג השחמט הזה עכשיו.';
+
+  @override
+  String get challengeDeclineNoBot => 'אני לא מאשר/ת הזמנות מבוטים.';
+
+  @override
+  String get challengeDeclineOnlyBot => 'מאשר/ת הזמנות למשחק רק מבוטים.';
+
+  @override
+  String get challengeInviteLichessUser => 'ניתן גם לשלוח הזמנה למשתמש/ת Lichess:';
+
+  @override
   String get playWithAFriend => 'שחק/י עם חבר/ה';
 
   @override

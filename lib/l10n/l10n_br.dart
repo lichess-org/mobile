@@ -282,6 +282,87 @@ class AppLocalizationsBr extends AppLocalizations {
   String get contactContactLichess => 'Mont e darempred gant Lichess';
 
   @override
+  String challengeChallengesX(String param1) {
+    return 'Daeoù: $param1';
+  }
+
+  @override
+  String get challengeChallengeToPlay => 'Daeañ ar c\'hoarier-mañ';
+
+  @override
+  String get challengeChallengeDeclined => 'Dae nac’het';
+
+  @override
+  String get challengeChallengeAccepted => 'Dae asantet!';
+
+  @override
+  String get challengeChallengeCanceled => 'Dae nullet.';
+
+  @override
+  String get challengeRegisterToSendChallenges => 'Kevreit evit daeañ an implijer-mañ mar plij.';
+
+  @override
+  String challengeYouCannotChallengeX(String param) {
+    return 'Ne c\'hallit ket daeañ $param.';
+  }
+
+  @override
+  String challengeXDoesNotAcceptChallenges(String param) {
+    return '$param n\'he/en deus ket c\'hant da vezañ daeet.';
+  }
+
+  @override
+  String challengeYourXRatingIsTooFarFromY(String param1, String param2) {
+    return 'Re vras an diforc\'h etre ho renkadur $param1 hag hini $param2.';
+  }
+
+  @override
+  String challengeCannotChallengeDueToProvisionalXRating(String param) {
+    return 'Ne c\'hallit ket daeañ abalamour d\'ar renkadur $param da c\'hortoz.';
+  }
+
+  @override
+  String challengeXOnlyAcceptsChallengesFromFriends(String param) {
+    return 'Ne vez ket degemeret daeoù nemet digant mignoned gant $param.';
+  }
+
+  @override
+  String get challengeDeclineGeneric => 'Ne zegemeran ket daeoù er mare-mañ.';
+
+  @override
+  String get challengeDeclineLater => 'N\'on ket dijabl evit poent, kasit ur goulenn din en-dro diwezhatoc\'h mar plij ganeoc\'h.';
+
+  @override
+  String get challengeDeclineTooFast => 'This time control is too fast for me, please challenge again with a slower game.';
+
+  @override
+  String get challengeDeclineTooSlow => 'This time control is too slow for me, please challenge again with a faster game.';
+
+  @override
+  String get challengeDeclineTimeControl => 'I\'m not accepting challenges with this time control.';
+
+  @override
+  String get challengeDeclineRated => 'Kasit din un dae renket kentoc\'h, mar plij ganeoc\'h.';
+
+  @override
+  String get challengeDeclineCasual => 'Kasit un dae ordin din kentoc\'h mar plij ganeoc\'h.';
+
+  @override
+  String get challengeDeclineStandard => 'I\'m not accepting variant challenges right now.';
+
+  @override
+  String get challengeDeclineVariant => 'Ne fell ket din c\'hoari an doare echedoù-mañ evit poent.';
+
+  @override
+  String get challengeDeclineNoBot => 'Ne zegemeran ket daeoù kaset gant robotoù.';
+
+  @override
+  String get challengeDeclineOnlyBot => 'Daeoù kaset gant robotoù a zegemeran nemetken.';
+
+  @override
+  String get challengeInviteLichessUser => 'Pediñ ur c\'hoarier war Lichess mod-all:';
+
+  @override
   String get playWithAFriend => 'C\'hoari a-enep ur mignon';
 
   @override

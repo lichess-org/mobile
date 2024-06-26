@@ -172,6 +172,74 @@
   },
   "contactContact": "Contact",
   "contactContactLichess": "Contact Lichess",
+  "challengeChallengesX": "Challenges: {param1}",
+  "@challengeChallengesX": {
+    "placeholders": {
+      "param1": {
+        "type": "String"
+      }
+    }
+  },
+  "challengeChallengeToPlay": "Challenge to a game",
+  "challengeChallengeDeclined": "Challenge declined.",
+  "challengeChallengeAccepted": "Challenge accepted!",
+  "challengeChallengeCanceled": "Challenge cancelled.",
+  "challengeRegisterToSendChallenges": "Please register to send challenges to this user.",
+  "challengeYouCannotChallengeX": "You cannot challenge {param}.",
+  "@challengeYouCannotChallengeX": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "challengeXDoesNotAcceptChallenges": "{param} does not accept challenges.",
+  "@challengeXDoesNotAcceptChallenges": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "challengeYourXRatingIsTooFarFromY": "Your {param1} rating is too far from {param2}.",
+  "@challengeYourXRatingIsTooFarFromY": {
+    "placeholders": {
+      "param1": {
+        "type": "String"
+      },
+      "param2": {
+        "type": "String"
+      }
+    }
+  },
+  "challengeCannotChallengeDueToProvisionalXRating": "Cannot challenge due to provisional {param} rating.",
+  "@challengeCannotChallengeDueToProvisionalXRating": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "challengeXOnlyAcceptsChallengesFromFriends": "{param} only accepts challenges from friends.",
+  "@challengeXOnlyAcceptsChallengesFromFriends": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "challengeDeclineGeneric": "I'm not accepting challenges at the moment.",
+  "challengeDeclineLater": "This is not the right time for me, please ask again later.",
+  "challengeDeclineTooFast": "This time control is too fast for me, please challenge again with a slower game.",
+  "challengeDeclineTooSlow": "This time control is too slow for me, please challenge again with a faster game.",
+  "challengeDeclineTimeControl": "I'm not accepting challenges with this time control.",
+  "challengeDeclineRated": "Please send me a rated challenge instead.",
+  "challengeDeclineCasual": "Please send me a casual challenge instead.",
+  "challengeDeclineStandard": "I'm not accepting variant challenges right now.",
+  "challengeDeclineVariant": "I'm not willing to play this variant right now.",
+  "challengeDeclineNoBot": "I'm not accepting challenges from bots.",
+  "challengeDeclineOnlyBot": "I'm only accepting challenges from bots.",
+  "challengeInviteLichessUser": "Or invite a Lichess user:",
   "playWithAFriend": "Play with a friend",
   "playWithTheMachine": "Play with the computer",
   "toInviteSomeoneToPlayGiveThisUrl": "To invite someone to play, give this URL",

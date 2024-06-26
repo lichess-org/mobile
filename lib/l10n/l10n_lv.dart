@@ -231,6 +231,87 @@ class AppLocalizationsLv extends AppLocalizations {
   String get contactContactLichess => 'Sazināties ar Lichess';
 
   @override
+  String challengeChallengesX(String param1) {
+    return 'Izaicinājumi: $param1';
+  }
+
+  @override
+  String get challengeChallengeToPlay => 'Izaicināt uz spēli';
+
+  @override
+  String get challengeChallengeDeclined => 'Izaicinājums noraidīts';
+
+  @override
+  String get challengeChallengeAccepted => 'Izaicinājums pieņemts!';
+
+  @override
+  String get challengeChallengeCanceled => 'Izaicinājums atcelts.';
+
+  @override
+  String get challengeRegisterToSendChallenges => 'Lūdzu reģistrējieties, lai sūtītu izaicinājumus.';
+
+  @override
+  String challengeYouCannotChallengeX(String param) {
+    return 'Nevarat izaicināt $param.';
+  }
+
+  @override
+  String challengeXDoesNotAcceptChallenges(String param) {
+    return '$param nepieņem izaicinājumus.';
+  }
+
+  @override
+  String challengeYourXRatingIsTooFarFromY(String param1, String param2) {
+    return 'Jūsu $param1 reitings ir par tālu no $param2.';
+  }
+
+  @override
+  String challengeCannotChallengeDueToProvisionalXRating(String param) {
+    return 'Nevar izaicināt pagaidu $param reitinga dēļ.';
+  }
+
+  @override
+  String challengeXOnlyAcceptsChallengesFromFriends(String param) {
+    return '$param pieņem izaicinājumus tikai no draugiem.';
+  }
+
+  @override
+  String get challengeDeclineGeneric => 'Pašlaik nepieņemu izaicinājumus.';
+
+  @override
+  String get challengeDeclineLater => 'Šis laiks man neder, lūdzu piedāvājiet vēlāk.';
+
+  @override
+  String get challengeDeclineTooFast => 'Šī laika kontrole man ir par ātru, lūdzu izaiciniet mani ar lēnāku spēli.';
+
+  @override
+  String get challengeDeclineTooSlow => 'Šī laika kontrole man ir par lēnu, lūdzu izaiciniet mani ar ātrāku spēli.';
+
+  @override
+  String get challengeDeclineTimeControl => 'Pašlaik nepieņemu izaicinājumus ar šo laika kontroli.';
+
+  @override
+  String get challengeDeclineRated => 'Labāk lūdzu atsūtiet vērtētu izaicinājumu.';
+
+  @override
+  String get challengeDeclineCasual => 'Labāk lūdzu atsūtiet nevērtētu izaicinājumu.';
+
+  @override
+  String get challengeDeclineStandard => 'Šobrīd nepieņemu variantu izaicinājumus.';
+
+  @override
+  String get challengeDeclineVariant => 'Šobrīd nevēlos spēlēt šo variantu.';
+
+  @override
+  String get challengeDeclineNoBot => 'Pašlaik nepieņemu izaicinājumus no botiem.';
+
+  @override
+  String get challengeDeclineOnlyBot => 'Pieņemu izaicinājumus tikai no botiem.';
+
+  @override
+  String get challengeInviteLichessUser => 'Vai uzaicināt Lichess lietotāju:';
+
+  @override
   String get playWithAFriend => 'Spēlēt ar draugu';
 
   @override

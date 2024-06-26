@@ -340,6 +340,144 @@ abstract class AppLocalizations {
   /// **'Contact Lichess'**
   String get contactContactLichess;
 
+  /// No description provided for @challengeChallengesX.
+  ///
+  /// In en, this message translates to:
+  /// **'Challenges: {param1}'**
+  String challengeChallengesX(String param1);
+
+  /// No description provided for @challengeChallengeToPlay.
+  ///
+  /// In en, this message translates to:
+  /// **'Challenge to a game'**
+  String get challengeChallengeToPlay;
+
+  /// No description provided for @challengeChallengeDeclined.
+  ///
+  /// In en, this message translates to:
+  /// **'Challenge declined.'**
+  String get challengeChallengeDeclined;
+
+  /// No description provided for @challengeChallengeAccepted.
+  ///
+  /// In en, this message translates to:
+  /// **'Challenge accepted!'**
+  String get challengeChallengeAccepted;
+
+  /// No description provided for @challengeChallengeCanceled.
+  ///
+  /// In en, this message translates to:
+  /// **'Challenge cancelled.'**
+  String get challengeChallengeCanceled;
+
+  /// No description provided for @challengeRegisterToSendChallenges.
+  ///
+  /// In en, this message translates to:
+  /// **'Please register to send challenges to this user.'**
+  String get challengeRegisterToSendChallenges;
+
+  /// No description provided for @challengeYouCannotChallengeX.
+  ///
+  /// In en, this message translates to:
+  /// **'You cannot challenge {param}.'**
+  String challengeYouCannotChallengeX(String param);
+
+  /// No description provided for @challengeXDoesNotAcceptChallenges.
+  ///
+  /// In en, this message translates to:
+  /// **'{param} does not accept challenges.'**
+  String challengeXDoesNotAcceptChallenges(String param);
+
+  /// No description provided for @challengeYourXRatingIsTooFarFromY.
+  ///
+  /// In en, this message translates to:
+  /// **'Your {param1} rating is too far from {param2}.'**
+  String challengeYourXRatingIsTooFarFromY(String param1, String param2);
+
+  /// No description provided for @challengeCannotChallengeDueToProvisionalXRating.
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot challenge due to provisional {param} rating.'**
+  String challengeCannotChallengeDueToProvisionalXRating(String param);
+
+  /// No description provided for @challengeXOnlyAcceptsChallengesFromFriends.
+  ///
+  /// In en, this message translates to:
+  /// **'{param} only accepts challenges from friends.'**
+  String challengeXOnlyAcceptsChallengesFromFriends(String param);
+
+  /// No description provided for @challengeDeclineGeneric.
+  ///
+  /// In en, this message translates to:
+  /// **'I\'m not accepting challenges at the moment.'**
+  String get challengeDeclineGeneric;
+
+  /// No description provided for @challengeDeclineLater.
+  ///
+  /// In en, this message translates to:
+  /// **'This is not the right time for me, please ask again later.'**
+  String get challengeDeclineLater;
+
+  /// No description provided for @challengeDeclineTooFast.
+  ///
+  /// In en, this message translates to:
+  /// **'This time control is too fast for me, please challenge again with a slower game.'**
+  String get challengeDeclineTooFast;
+
+  /// No description provided for @challengeDeclineTooSlow.
+  ///
+  /// In en, this message translates to:
+  /// **'This time control is too slow for me, please challenge again with a faster game.'**
+  String get challengeDeclineTooSlow;
+
+  /// No description provided for @challengeDeclineTimeControl.
+  ///
+  /// In en, this message translates to:
+  /// **'I\'m not accepting challenges with this time control.'**
+  String get challengeDeclineTimeControl;
+
+  /// No description provided for @challengeDeclineRated.
+  ///
+  /// In en, this message translates to:
+  /// **'Please send me a rated challenge instead.'**
+  String get challengeDeclineRated;
+
+  /// No description provided for @challengeDeclineCasual.
+  ///
+  /// In en, this message translates to:
+  /// **'Please send me a casual challenge instead.'**
+  String get challengeDeclineCasual;
+
+  /// No description provided for @challengeDeclineStandard.
+  ///
+  /// In en, this message translates to:
+  /// **'I\'m not accepting variant challenges right now.'**
+  String get challengeDeclineStandard;
+
+  /// No description provided for @challengeDeclineVariant.
+  ///
+  /// In en, this message translates to:
+  /// **'I\'m not willing to play this variant right now.'**
+  String get challengeDeclineVariant;
+
+  /// No description provided for @challengeDeclineNoBot.
+  ///
+  /// In en, this message translates to:
+  /// **'I\'m not accepting challenges from bots.'**
+  String get challengeDeclineNoBot;
+
+  /// No description provided for @challengeDeclineOnlyBot.
+  ///
+  /// In en, this message translates to:
+  /// **'I\'m only accepting challenges from bots.'**
+  String get challengeDeclineOnlyBot;
+
+  /// No description provided for @challengeInviteLichessUser.
+  ///
+  /// In en, this message translates to:
+  /// **'Or invite a Lichess user:'**
+  String get challengeInviteLichessUser;
+
   /// No description provided for @playWithAFriend.
   ///
   /// In en, this message translates to:

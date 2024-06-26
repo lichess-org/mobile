@@ -666,7 +666,7 @@ class _GameListWidget extends ConsumerWidget {
                   list.firstWhereOrNull((g) => g.id == game.gameId);
               if (context.mounted &&
                   gameData != null &&
-                  gameData.variant.isSupported) {
+                  gameData.variant.isReadSupported) {
                 pushPlatformRoute(
                   context,
                   rootNavigator: true,

@@ -231,6 +231,87 @@ class AppLocalizationsEo extends AppLocalizations {
   String get contactContactLichess => 'Kontakti Lichess';
 
   @override
+  String challengeChallengesX(String param1) {
+    return 'Defioj: $param1';
+  }
+
+  @override
+  String get challengeChallengeToPlay => 'Defii al nova ludo';
+
+  @override
+  String get challengeChallengeDeclined => 'Defio malakceptita';
+
+  @override
+  String get challengeChallengeAccepted => 'Defio akceptita!';
+
+  @override
+  String get challengeChallengeCanceled => 'Defio nuligita.';
+
+  @override
+  String get challengeRegisterToSendChallenges => 'Bonvolu registri por sendi defiojn.';
+
+  @override
+  String challengeYouCannotChallengeX(String param) {
+    return 'Vi ne povas defii $param.';
+  }
+
+  @override
+  String challengeXDoesNotAcceptChallenges(String param) {
+    return '$param ne akceptas defiojn.';
+  }
+
+  @override
+  String challengeYourXRatingIsTooFarFromY(String param1, String param2) {
+    return 'Via rango por $param1 estas tro for de la rango de $param2.';
+  }
+
+  @override
+  String challengeCannotChallengeDueToProvisionalXRating(String param) {
+    return 'Ne povi defii, pro provizora $param rango.';
+  }
+
+  @override
+  String challengeXOnlyAcceptsChallengesFromFriends(String param) {
+    return '$param nur akceptas defiojn de amikoj.';
+  }
+
+  @override
+  String get challengeDeclineGeneric => 'Mi ne akceptas defiojn en tiu ĉi momento.';
+
+  @override
+  String get challengeDeclineLater => 'Mi ne akceptas defiojn nun, bonvolu demandi denove poste.';
+
+  @override
+  String get challengeDeclineTooFast => 'Ĉi tempokontrolo estas tro rapida por mi, bonvolu defii denove per pli malrapida ludo.';
+
+  @override
+  String get challengeDeclineTooSlow => 'Ĉi tempokontrolo estas tro malrapida por mi, bonvolu defii denove per pli rapida ludo.';
+
+  @override
+  String get challengeDeclineTimeControl => 'Mi ne akceptas defiojn kun ĉi tiu tempokontrolo.';
+
+  @override
+  String get challengeDeclineRated => 'Bonvolu sendi al mi rangan defion anstataŭe.';
+
+  @override
+  String get challengeDeclineCasual => 'Bonvolu sendi al mi amikan defion anstataŭe.';
+
+  @override
+  String get challengeDeclineStandard => 'Mi ne akceptas variaĵajn defiojn nun.';
+
+  @override
+  String get challengeDeclineVariant => 'Mi ne volas ludi ĉi tiun variaĵon nun.';
+
+  @override
+  String get challengeDeclineNoBot => 'Mi ne akceptas defiojn de robotoj.';
+
+  @override
+  String get challengeDeclineOnlyBot => 'Mi nur akceptas defiojn de robotoj.';
+
+  @override
+  String get challengeInviteLichessUser => 'Aŭ invitu Lichess uzanton:';
+
+  @override
   String get playWithAFriend => 'Ludi kun amiko';
 
   @override

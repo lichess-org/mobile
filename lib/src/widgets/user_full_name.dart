@@ -92,7 +92,7 @@ class UserFullNameWidget extends ConsumerWidget {
               color: user?.title == 'BOT'
                   ? context.lichessColors.fancy
                   : context.lichessColors.brag,
-              fontWeight: FontWeight.bold,
+              fontWeight: user?.title == 'BOT' ? null : FontWeight.bold,
             ),
           ),
           const SizedBox(width: 5),

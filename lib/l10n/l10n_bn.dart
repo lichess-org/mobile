@@ -231,6 +231,87 @@ class AppLocalizationsBn extends AppLocalizations {
   String get contactContactLichess => 'পৃষ্ঠার শিরোনাম lichess. org/contact';
 
   @override
+  String challengeChallengesX(String param1) {
+    return 'প্রতিদ্বন্দ্বীরা:$param1';
+  }
+
+  @override
+  String get challengeChallengeToPlay => 'খেলার জন্য চ্যালেঞ্জ করুন';
+
+  @override
+  String get challengeChallengeDeclined => 'চ্যালেঞ্জ প্রত্যাখ্যান করা হয়েছে';
+
+  @override
+  String get challengeChallengeAccepted => 'চ্যালেঞ্জ গৃহীত হয়েছে!';
+
+  @override
+  String get challengeChallengeCanceled => 'চ্যালেঞ্জ বাতিল হয়েছে.';
+
+  @override
+  String get challengeRegisterToSendChallenges => 'চ্যালেঞ্জ করার জন্য একাউন্ট প্রয়োজন। দয়া করে নিবন্ধন করুন।.';
+
+  @override
+  String challengeYouCannotChallengeX(String param) {
+    return 'আপনি $param কে চ্যালেঞ্জ করতে পারবেন না.';
+  }
+
+  @override
+  String challengeXDoesNotAcceptChallenges(String param) {
+    return '$param চ্যালেঞ্জ গ্রহন করেননি.';
+  }
+
+  @override
+  String challengeYourXRatingIsTooFarFromY(String param1, String param2) {
+    return 'আপনার $param1 রেটিংস এবং $param2 এর ব্যবধান অনেক.';
+  }
+
+  @override
+  String challengeCannotChallengeDueToProvisionalXRating(String param) {
+    return 'আপনার (provisional) রেটিংস $param এর জন্য চ্যালেঞ্জ গ্রহণ হবে না.';
+  }
+
+  @override
+  String challengeXOnlyAcceptsChallengesFromFriends(String param) {
+    return '$param শুধু বন্ধুদের থেকে চ্যালেঞ্জ গ্রহন করেন.';
+  }
+
+  @override
+  String get challengeDeclineGeneric => 'দুঃখিত আমি এই মুহুর্তে কোনো চ্যালেঞ্জ গ্রহন করছি না.';
+
+  @override
+  String get challengeDeclineLater => 'আমার জন্য এখন উপযুক্ত সময় নয়, পরে জিজ্ঞাস করুন.';
+
+  @override
+  String get challengeDeclineTooFast => 'এই টাইম কন্ট্রোলের গেম আমার জন্য খুবই দ্রুত হয়ে যায়, অনুগ্রহ করে আরেকটু ধীর গতির গেম দিয়ে চ্যালেঞ্জ দিন.';
+
+  @override
+  String get challengeDeclineTooSlow => 'এই টাইম কন্ট্রলের গেম আমার জন্য খুবই ধীর গতির হয়ে যায়, অনুগ্রহ করে আরেকটু দ্রুত গতির গেম দিয়ে চেলেঞ্জ দিন.';
+
+  @override
+  String get challengeDeclineTimeControl => 'এই টাইম কন্ট্রল গেমে আমি চেলেঞ্জ গ্রহন করি না.';
+
+  @override
+  String get challengeDeclineRated => 'অনুগ্রহ পুর্বক আমাকে রেটেড গেমের চেলেঞ্জ দিন.';
+
+  @override
+  String get challengeDeclineCasual => 'অনুগ্রহ করে এর বদলে কেজুয়াল সিলেক্ট করে চেলেঞ্জ দিন.';
+
+  @override
+  String get challengeDeclineStandard => 'আমি এখন ভ্যারিয়েন্ট চ্যালেঞ্জ গ্রহন থেকে বিরত রয়েছি.';
+
+  @override
+  String get challengeDeclineVariant => 'ভেরিয়েন্ট গেম খেলতে ইচ্ছে করছে না এখন.';
+
+  @override
+  String get challengeDeclineNoBot => 'আমি এখন বোট থেকে চ্যালেঞ্জ গ্রহন থেকে বিরত রয়েছি.';
+
+  @override
+  String get challengeDeclineOnlyBot => 'আমি বর্তমানে শুধু বোট থেকে চ্যালেঞ্জ গ্রহন করছি.';
+
+  @override
+  String get challengeInviteLichessUser => 'অথবা একজন লিচেস ব্যবহারকারীকে আমন্ত্রণ জানান |:';
+
+  @override
   String get playWithAFriend => 'বন্ধুর সাথে খেলো';
 
   @override

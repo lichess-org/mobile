@@ -265,6 +265,87 @@ class AppLocalizationsSl extends AppLocalizations {
   String get contactContactLichess => 'Kontaktiraj lichess';
 
   @override
+  String challengeChallengesX(String param1) {
+    return 'Izzivi:$param1';
+  }
+
+  @override
+  String get challengeChallengeToPlay => 'Izzovi na partijo';
+
+  @override
+  String get challengeChallengeDeclined => 'Izziv zavrnjen';
+
+  @override
+  String get challengeChallengeAccepted => 'Izziv je sprejet!';
+
+  @override
+  String get challengeChallengeCanceled => 'Izziv je preklican.';
+
+  @override
+  String get challengeRegisterToSendChallenges => 'Če želite poslati izziv, se, prosim, registrirajte.';
+
+  @override
+  String challengeYouCannotChallengeX(String param) {
+    return 'Ne morete izzvati $param.';
+  }
+
+  @override
+  String challengeXDoesNotAcceptChallenges(String param) {
+    return '$param ne sprejema izzivov.';
+  }
+
+  @override
+  String challengeYourXRatingIsTooFarFromY(String param1, String param2) {
+    return 'Vaš $param1 rating je predaleč od ratinga igralca $param2.';
+  }
+
+  @override
+  String challengeCannotChallengeDueToProvisionalXRating(String param) {
+    return 'Izzivanje ni mogoče, zaradi začasnega $param ratinga.';
+  }
+
+  @override
+  String challengeXOnlyAcceptsChallengesFromFriends(String param) {
+    return '$param sprejema izzive samo od prijateljev.';
+  }
+
+  @override
+  String get challengeDeclineGeneric => 'Sedaj ne sprejemam izzivov.';
+
+  @override
+  String get challengeDeclineLater => 'Zdaj ni pravi čas, posimo vprašajte kasneje.';
+
+  @override
+  String get challengeDeclineTooFast => 'Tokratna kontrola je zame prehitra, prosim, ponovno izzivajte s počasnejšo igro.';
+
+  @override
+  String get challengeDeclineTooSlow => 'Tokratna kontrola je zame prepočasna, prosim, znova izzivajte s hitrejšo igro.';
+
+  @override
+  String get challengeDeclineTimeControl => 'S tem časovnim nadzorom ne sprejemam izzivov.';
+
+  @override
+  String get challengeDeclineRated => 'Prosim, pošljite mi rangirani izziv.';
+
+  @override
+  String get challengeDeclineCasual => 'Prosim, pošljite mi nerangirani izziv.';
+
+  @override
+  String get challengeDeclineStandard => 'Trenutno ne sprejemam variantnih izzivov.';
+
+  @override
+  String get challengeDeclineVariant => 'Trenutno nisem pripravljen igrati te različice.';
+
+  @override
+  String get challengeDeclineNoBot => 'Izzivov od robotov ne sprejemam.';
+
+  @override
+  String get challengeDeclineOnlyBot => 'Sprejemam le izzive od robotov.';
+
+  @override
+  String get challengeInviteLichessUser => 'Ali pa povabite Lichess uporabnika:';
+
+  @override
   String get playWithAFriend => 'Igraj s prijateljem';
 
   @override

@@ -3,10 +3,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
+import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 
 class TimeControlModal extends ConsumerWidget {
   final ValueSetter<TimeIncrement> onSelected;
@@ -96,6 +98,104 @@ class TimeControlModal extends ConsumerWidget {
                 icon: LichessIcons.classical,
               ),
               onSelected: onSelected,
+            ),
+            const SizedBox(height: 20.0),
+            Theme(
+              data:
+                  Theme.of(context).copyWith(dividerColor: Colors.transparent),
+              child: ExpansionTile(
+                title: _SectionTitle(
+                  title: context.l10n.custom,
+                  icon: Icons.tune,
+                ),
+                tilePadding: EdgeInsets.zero,
+                minTileHeight: 0,
+                children: [
+                  Builder(
+                    builder: (context) {
+                      TimeIncrement custom = value;
+                      return StatefulBuilder(
+                        builder: (context, setState) {
+                          return Column(
+                            children: [
+                              Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Expanded(
+                                    child: NonLinearSlider(
+                                      value: custom.time,
+                                      values: kAvailableTimesInSeconds,
+                                      onChange: Theme.of(context).platform ==
+                                              TargetPlatform.iOS
+                                          ? (num value) {
+                                              setState(() {
+                                                custom = TimeIncrement(
+                                                  value.toInt(),
+                                                  custom.increment,
+                                                );
+                                              });
+                                            }
+                                          : null,
+                                      onChangeEnd: (num value) {
+                                        setState(() {
+                                          custom = TimeIncrement(
+                                            value.toInt(),
+                                            custom.increment,
+                                          );
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 80,
+                                    child: Center(
+                                      child: Text(
+                                        custom.display,
+                                        style: Styles.timeControl
+                                            .merge(Styles.bold),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: NonLinearSlider(
+                                      value: custom.increment,
+                                      values: kAvailableIncrementsInSeconds,
+                                      onChange: Theme.of(context).platform ==
+                                              TargetPlatform.iOS
+                                          ? (num value) {
+                                              setState(() {
+                                                custom = TimeIncrement(
+                                                  custom.time,
+                                                  value.toInt(),
+                                                );
+                                              });
+                                            }
+                                          : null,
+                                      onChangeEnd: (num value) {
+                                        setState(() {
+                                          custom = TimeIncrement(
+                                            custom.time,
+                                            value.toInt(),
+                                          );
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SecondaryButton(
+                                onPressed: () => onSelected(custom),
+                                semanticsLabel: 'OK',
+                                child: const Text('OK', style: Styles.bold),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: 40.0),
           ],

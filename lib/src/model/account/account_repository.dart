@@ -103,7 +103,7 @@ class AccountRepository {
         }
         return list
             .map((e) => _ongoingGameFromJson(e as Map<String, dynamic>))
-            .where((e) => e.variant.isSupported)
+            .where((e) => e.variant.isReadSupported)
             .toIList();
       },
     );

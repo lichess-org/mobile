@@ -73,12 +73,19 @@ class User with _$User {
     bool? isPatron,
     bool? disabled,
     bool? tosViolation,
+
+    /// If true it means a BOT account is verified and can be featured
+    bool? verified,
     DateTime? createdAt,
     DateTime? seenAt,
     required IMap<Perf, UserPerf> perfs,
     PlayTime? playTime,
     Profile? profile,
     UserGameCount? count,
+    bool? followable,
+    bool? following,
+    bool? blocking,
+    bool? followsYou,
   }) = _User;
 
   LightUser get lightUser => LightUser(
@@ -103,6 +110,7 @@ class User with _$User {
       isPatron: pick('patron').asBoolOrNull(),
       disabled: pick('disabled').asBoolOrNull(),
       tosViolation: pick('tosViolation').asBoolOrNull(),
+      verified: pick('verified').asBoolOrNull(),
       createdAt: pick('createdAt').asDateTimeFromMillisecondsOrNull(),
       seenAt: pick('seenAt').asDateTimeFromMillisecondsOrNull(),
       playTime: pick('playTime').letOrNull(PlayTime.fromPick),
@@ -116,6 +124,10 @@ class User with _$User {
                     ? UserPerf.fromJsonStreak(entry.value)
                     : UserPerf.fromJson(entry.value),
       }),
+      followable: pick('followable').asBoolOrNull(),
+      following: pick('following').asBoolOrNull(),
+      blocking: pick('blocking').asBoolOrNull(),
+      followsYou: pick('followsYou').asBoolOrNull(),
     );
   }
 }

@@ -22,8 +22,7 @@ import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/view/game/lobby_screen.dart';
-import 'package:lichess_mobile/src/view/game/standalone_game_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -196,11 +195,7 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
               context,
               rootNavigator: true,
               builder: (BuildContext context) {
-                return StandaloneGameScreen(
-                  params: InitialStandaloneGameParams(
-                    id: gameFullId,
-                  ),
-                );
+                return GameScreen(initialGameId: gameFullId);
               },
             );
           }
@@ -228,7 +223,7 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
     return challengesAsync.when(
       data: (challenges) {
         final supportedChallenges = challenges
-            .where((challenge) => challenge.variant.isSupported)
+            .where((challenge) => challenge.variant.isPlaySupported)
             .toList();
         return ListView.separated(
           itemCount: supportedChallenges.length,
@@ -616,20 +611,15 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: FatButton(
-                      semanticsLabel: context.l10n.create,
+                      semanticsLabel: context.l10n.createAGame,
                       onPressed: timeControl == TimeControl.realTime
                           ? isValidTimeControl
                               ? () {
-                                  ref
-                                      .read(
-                                        gameSetupPreferencesProvider.notifier,
-                                      )
-                                      .setSeekMode(SeekMode.custom);
                                   pushPlatformRoute(
                                     context,
                                     rootNavigator: true,
                                     builder: (BuildContext context) {
-                                      return LobbyScreen(
+                                      return GameScreen(
                                         seek: GameSeek.custom(
                                           preferences,
                                           account,
@@ -654,7 +644,7 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                                   await _pendingCreateGame;
                                   widget.setViewMode(_ViewMode.challenges);
                                 },
-                      child: Text(context.l10n.create, style: Styles.bold),
+                      child: Text(context.l10n.createAGame, style: Styles.bold),
                     ),
                   );
                 },

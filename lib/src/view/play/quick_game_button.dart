@@ -8,7 +8,7 @@ import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/view/game/lobby_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/play/time_control_modal.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -33,9 +33,9 @@ class QuickGameButton extends ConsumerWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(playPrefs.timeIncrement.speed.icon),
+                      Icon(playPrefs.quickPairingTimeIncrement.speed.icon),
                       const SizedBox(width: 2.0),
-                      Text(playPrefs.timeIncrement.display),
+                      Text(playPrefs.quickPairingTimeIncrement.display),
                     ],
                   ),
                   const Icon(Icons.keyboard_arrow_down),
@@ -53,11 +53,11 @@ class QuickGameButton extends ConsumerWidget {
                 ),
                 builder: (BuildContext context) {
                   return TimeControlModal(
-                    value: playPrefs.timeIncrement,
+                    value: playPrefs.quickPairingTimeIncrement,
                     onSelected: (choice) {
                       ref
                           .read(gameSetupPreferencesProvider.notifier)
-                          .setTimeIncrement(choice);
+                          .setQuickPairingTimeIncrement(choice);
                     },
                   );
                 },
@@ -79,8 +79,11 @@ class QuickGameButton extends ConsumerWidget {
                     pushPlatformRoute(
                       context,
                       rootNavigator: true,
-                      builder: (_) => LobbyScreen(
-                        seek: GameSeek.fastPairing(playPrefs, session),
+                      builder: (_) => GameScreen(
+                        seek: GameSeek.fastPairing(
+                          playPrefs.quickPairingTimeIncrement,
+                          session,
+                        ),
                       ),
                     );
                   },
@@ -91,8 +94,11 @@ class QuickGameButton extends ConsumerWidget {
                     pushPlatformRoute(
                       context,
                       rootNavigator: true,
-                      builder: (_) => LobbyScreen(
-                        seek: GameSeek.fastPairing(playPrefs, session),
+                      builder: (_) => GameScreen(
+                        seek: GameSeek.fastPairing(
+                          playPrefs.quickPairingTimeIncrement,
+                          session,
+                        ),
                       ),
                     );
                   },

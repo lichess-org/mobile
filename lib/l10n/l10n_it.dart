@@ -231,6 +231,87 @@ class AppLocalizationsIt extends AppLocalizations {
   String get contactContactLichess => 'Contatta Lichess';
 
   @override
+  String challengeChallengesX(String param1) {
+    return 'Sfide: $param1';
+  }
+
+  @override
+  String get challengeChallengeToPlay => 'Sfida a una partita';
+
+  @override
+  String get challengeChallengeDeclined => 'Sfida rifiutata';
+
+  @override
+  String get challengeChallengeAccepted => 'Sfida accettata!';
+
+  @override
+  String get challengeChallengeCanceled => 'Sfida annullata.';
+
+  @override
+  String get challengeRegisterToSendChallenges => 'Registrati per sfidare altri giocatori.';
+
+  @override
+  String challengeYouCannotChallengeX(String param) {
+    return 'Non puoi sfidare $param.';
+  }
+
+  @override
+  String challengeXDoesNotAcceptChallenges(String param) {
+    return '$param non accetta sfide.';
+  }
+
+  @override
+  String challengeYourXRatingIsTooFarFromY(String param1, String param2) {
+    return 'Il tuo punteggio $param1 è troppo diverso da quello di $param2.';
+  }
+
+  @override
+  String challengeCannotChallengeDueToProvisionalXRating(String param) {
+    return 'Non puoi inviare la sfida poiché hai ancora un punteggio $param provvisorio.';
+  }
+
+  @override
+  String challengeXOnlyAcceptsChallengesFromFriends(String param) {
+    return '$param accetta sfide solo da amici.';
+  }
+
+  @override
+  String get challengeDeclineGeneric => 'Al momento non accetto sfide.';
+
+  @override
+  String get challengeDeclineLater => 'Non adesso, chiedimelo più tardi per favore.';
+
+  @override
+  String get challengeDeclineTooFast => 'Questa cadenza è troppo veloce per me, sfidami ad una partita più lenta per favore.';
+
+  @override
+  String get challengeDeclineTooSlow => 'Questa cadenza è troppo lenta per me, sfidami ad una partita più veloce per favore.';
+
+  @override
+  String get challengeDeclineTimeControl => 'Non accetto sfide con questa cadenza di tempo.';
+
+  @override
+  String get challengeDeclineRated => 'Mandami una sfida classificata per favore.';
+
+  @override
+  String get challengeDeclineCasual => 'Mandami una sfida amichevole per favore.';
+
+  @override
+  String get challengeDeclineStandard => 'Al momento non accetto sfide a varianti.';
+
+  @override
+  String get challengeDeclineVariant => 'Non voglio giocare a questa variante in questo momento.';
+
+  @override
+  String get challengeDeclineNoBot => 'Non accetto sfide da bot.';
+
+  @override
+  String get challengeDeclineOnlyBot => 'Accetto solo sfide da bot.';
+
+  @override
+  String get challengeInviteLichessUser => 'Oppure invita un utente di Lichess:';
+
+  @override
   String get playWithAFriend => 'Gioca con un amico';
 
   @override
