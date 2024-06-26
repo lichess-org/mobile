@@ -265,7 +265,12 @@ class _HomeBody extends ConsumerWidget {
                 ),
               ]
             : [
-                const _HelloWidget(),
+                _EditableWidget(
+                  widget: EnabledWidget.hello,
+                  isEditing: isEditing,
+                  shouldShow: true,
+                  child: const _HelloWidget(),
+                ),
                 _EditableWidget(
                   widget: EnabledWidget.perfCards,
                   isEditing: isEditing,

@@ -48,6 +48,7 @@ class HomePreferences extends _$HomePreferences {
 }
 
 enum EnabledWidget {
+  hello,
   perfCards,
   quickPairing,
 }
@@ -60,6 +61,7 @@ class HomePrefState with _$HomePrefState {
 
   static const defaults = HomePrefState(
     enabledWidgets: {
+      EnabledWidget.hello,
       EnabledWidget.perfCards,
       EnabledWidget.quickPairing,
     },
