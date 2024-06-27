@@ -448,6 +448,47 @@ class _GameBottomBar extends ConsumerWidget {
               icon: Icons.menu,
             ),
           ),
+          if (gameState.game.playable)
+            Expanded(
+              child: BottomBarButton(
+                label: context.l10n.resign,
+                onTap: gameState.game.resignable
+                    ? gameState.shouldConfirmResignAndDrawOffer
+                        ? () => _showConfirmDialog(
+                              context,
+                              description: Text(context.l10n.resignTheGame),
+                              onConfirm: () {
+                                ref
+                                    .read(gameControllerProvider(id).notifier)
+                                    .resignGame();
+                              },
+                            )
+                        : () {
+                            ref
+                                .read(gameControllerProvider(id).notifier)
+                                .resignGame();
+                          }
+                    : null,
+                icon: Icons.flag,
+              ),
+            )
+          else
+            Expanded(
+              child: BottomBarButton(
+                label: 'Show result',
+                onTap: () {
+                  showAdaptiveDialog<void>(
+                    context: context,
+                    builder: (context) => GameResultDialog(
+                      id: id,
+                      onNewOpponentCallback: onNewOpponentCallback,
+                    ),
+                    barrierDismissible: true,
+                  );
+                },
+                icon: Icons.info_outline,
+              ),
+            ),
           if (gameState.game.playable &&
               gameState.game.opponent?.offeringDraw == true)
             Expanded(
@@ -789,20 +830,6 @@ class _GameBottomBar extends ConsumerWidget {
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.newOpponent),
             onPressed: (_) => onNewOpponentCallback(gameState.game),
-          ),
-        if (gameState.game.finished)
-          BottomSheetAction(
-            makeLabel: (context) => const Text('Show result'),
-            onPressed: (_) {
-              showAdaptiveDialog<void>(
-                context: context,
-                builder: (context) => GameResultDialog(
-                  id: id,
-                  onNewOpponentCallback: onNewOpponentCallback,
-                ),
-                barrierDismissible: true,
-              );
-            },
           ),
         if (gameState.game.finished)
           ...makeFinishedGameShareActions(
