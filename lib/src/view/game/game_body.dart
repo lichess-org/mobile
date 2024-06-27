@@ -210,6 +210,12 @@ class GameBody extends ConsumerWidget {
         final topPlayer = topPlayerIsBlack ? black : white;
         final bottomPlayer = topPlayerIsBlack ? white : black;
 
+        final animationDuration =
+            gameState.game.meta.speed == Speed.ultraBullet ||
+                    gameState.game.meta.speed == Speed.bullet
+                ? Duration.zero
+                : boardPreferences.pieceAnimationDuration;
+
         final content = WakelockWidget(
           shouldEnableOnFocusGained: () => gameState.game.playable,
           child: PopScope(
@@ -223,6 +229,7 @@ class GameBody extends ConsumerWidget {
                     child: BoardTable(
                       key: boardKey,
                       boardSettingsOverrides: BoardSettingsOverrides(
+                        animationDuration: animationDuration,
                         autoQueenPromotion: gameState.canAutoQueen,
                         autoQueenPromotionOnPremove:
                             gameState.canAutoQueenOnPremove,
