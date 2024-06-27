@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
@@ -104,6 +105,10 @@ class GameBody extends ConsumerWidget {
     );
 
     final boardPreferences = ref.watch(boardPreferencesProvider);
+    final emergencySoundEnabled = ref.watch(clockSoundProvider).maybeWhen(
+          data: (clockSound) => clockSound,
+          orElse: () => true,
+        );
 
     final blindfoldMode = ref.watch(
       gamePreferencesProvider.select(
@@ -152,6 +157,7 @@ class GameBody extends ConsumerWidget {
                   emergencyThreshold: youAre == Side.black
                       ? gameState.game.meta.clock?.emergency
                       : null,
+                  emergencySoundEnabled: emergencySoundEnabled,
                   onFlag: () => ref.read(ctrlProvider.notifier).onFlag(),
                 )
               : gameState.game.correspondenceClock != null
@@ -192,6 +198,7 @@ class GameBody extends ConsumerWidget {
                   emergencyThreshold: youAre == Side.white
                       ? gameState.game.meta.clock?.emergency
                       : null,
+                  emergencySoundEnabled: emergencySoundEnabled,
                   onFlag: () => ref.read(ctrlProvider.notifier).onFlag(),
                 )
               : gameState.game.correspondenceClock != null
