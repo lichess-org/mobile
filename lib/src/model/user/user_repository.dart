@@ -15,9 +15,12 @@ class UserRepository {
 
   final LichessClient client;
 
-  Future<User> getUser(UserId id) {
+  Future<User> getUser(UserId id, {bool withCanChallenge = false}) {
     return client.readJson(
-      Uri(path: '/api/user/$id'),
+      Uri(
+        path: '/api/user/$id',
+        queryParameters: withCanChallenge ? {'challenge': 'true'} : null,
+      ),
       mapper: User.fromServerJson,
     );
   }

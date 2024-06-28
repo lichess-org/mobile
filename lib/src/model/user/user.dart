@@ -86,6 +86,7 @@ class User with _$User {
     bool? following,
     bool? blocking,
     bool? followsYou,
+    bool? canChallenge,
   }) = _User;
 
   LightUser get lightUser => LightUser(
@@ -128,6 +129,7 @@ class User with _$User {
       following: pick('following').asBoolOrNull(),
       blocking: pick('blocking').asBoolOrNull(),
       followsYou: pick('followsYou').asBoolOrNull(),
+      canChallenge: pick('canChallenge').asBoolOrNull(),
     );
   }
 }
