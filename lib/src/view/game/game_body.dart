@@ -448,31 +448,7 @@ class _GameBottomBar extends ConsumerWidget {
               icon: Icons.menu,
             ),
           ),
-          if (gameState.game.playable)
-            Expanded(
-              child: BottomBarButton(
-                label: context.l10n.resign,
-                onTap: gameState.game.resignable
-                    ? gameState.shouldConfirmResignAndDrawOffer
-                        ? () => _showConfirmDialog(
-                              context,
-                              description: Text(context.l10n.resignTheGame),
-                              onConfirm: () {
-                                ref
-                                    .read(gameControllerProvider(id).notifier)
-                                    .resignGame();
-                              },
-                            )
-                        : () {
-                            ref
-                                .read(gameControllerProvider(id).notifier)
-                                .resignGame();
-                          }
-                    : null,
-                icon: Icons.flag,
-              ),
-            )
-          else
+          if (!gameState.game.playable)
             Expanded(
               child: BottomBarButton(
                 label: 'Show result',
@@ -579,8 +555,28 @@ class _GameBottomBar extends ConsumerWidget {
               ),
             )
           else
-            const SizedBox(
-              width: 44.0,
+            Expanded(
+              child: BottomBarButton(
+                label: context.l10n.resign,
+                onTap: gameState.game.resignable
+                    ? gameState.shouldConfirmResignAndDrawOffer
+                        ? () => _showConfirmDialog(
+                              context,
+                              description: Text(context.l10n.resignTheGame),
+                              onConfirm: () {
+                                ref
+                                    .read(gameControllerProvider(id).notifier)
+                                    .resignGame();
+                              },
+                            )
+                        : () {
+                            ref
+                                .read(gameControllerProvider(id).notifier)
+                                .resignGame();
+                          }
+                    : null,
+                icon: Icons.flag,
+              ),
             ),
           if (gameState.game.meta.speed == Speed.correspondence &&
               !gameState.game.finished)
