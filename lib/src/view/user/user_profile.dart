@@ -36,9 +36,9 @@ class UserProfileWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userFullName = user.profile?.fullName != null
+    final userFullName = user.profile?.realName != null
         ? Text(
-            user.profile!.fullName!,
+            user.profile!.realName!,
             style: _userNameStyle,
           )
         : null;

@@ -13,8 +13,7 @@ class Profile with _$Profile {
     String? country,
     String? location,
     String? bio,
-    String? firstName,
-    String? lastName,
+    String? realName,
     int? fideRating,
     int? uscfRating,
     int? ecfRating,
@@ -22,10 +21,6 @@ class Profile with _$Profile {
   }) = _Profile;
 
   const Profile._();
-
-  String? get fullName => firstName != null && lastName != null
-      ? '$firstName $lastName'
-      : firstName ?? lastName;
 
   factory Profile.fromJson(Map<String, dynamic> json) {
     return Profile.fromPick(pick(json).required());
@@ -41,8 +36,7 @@ class Profile with _$Profile {
           pick('flag').asStringOrNull() ?? pick('country').asStringOrNull(),
       location: pick('location').asStringOrNull(),
       bio: pick('bio').asStringOrNull(),
-      firstName: pick('firstName').asStringOrNull(),
-      lastName: pick('lastName').asStringOrNull(),
+      realName: pick('realName').asStringOrNull(),
       fideRating: pick('fideRating').asIntOrNull(),
       uscfRating: pick('uscfRating').asIntOrNull(),
       ecfRating: pick('ecfRating').asIntOrNull(),

@@ -182,20 +182,11 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
             maxLength: 80,
           ),
           _textField(
-            label: context.l10n.firstName,
-            initialValue: widget.user.profile?.firstName,
-            formKey: 'firstName',
+            label: context.l10n.name,
+            initialValue: widget.user.profile?.realName,
+            formKey: 'realName',
             controller: TextEditingController(
-              text: widget.user.profile?.firstName,
-            ),
-            maxLength: 20,
-          ),
-          _textField(
-            label: context.l10n.lastName,
-            initialValue: widget.user.profile?.lastName,
-            formKey: 'lastName',
-            controller: TextEditingController(
-              text: widget.user.profile?.lastName,
+              text: widget.user.profile?.realName,
             ),
             maxLength: 20,
           ),
