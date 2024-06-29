@@ -97,6 +97,59 @@ class SwitchSettingTile extends StatelessWidget {
   }
 }
 
+class SliderSettingsTile extends StatefulWidget {
+  const SliderSettingsTile({
+    this.title,
+    required this.value,
+    required this.values,
+    required this.onChangeEnd,
+    this.labelBuilder,
+  });
+
+  final Text? title;
+  final double value;
+  final List<double> values;
+  final void Function(double value) onChangeEnd;
+  final String Function(double)? labelBuilder;
+
+  @override
+  State<SliderSettingsTile> createState() => _SliderSettingsTileState();
+}
+
+class _SliderSettingsTileState extends State<SliderSettingsTile> {
+  late int _index = widget.values.indexOf(widget.value);
+
+  @override
+  Widget build(BuildContext context) {
+    final slider = Slider.adaptive(
+      value: _index.toDouble(),
+      min: 0,
+      max: widget.values.length.toDouble() - 1,
+      divisions: widget.values.length - 1,
+      label: widget.labelBuilder?.call(widget.values[_index]) ??
+          widget.values[_index].toString(),
+      onChanged: (value) {
+        final newIndex = value.toInt();
+        setState(() {
+          _index = newIndex;
+        });
+      },
+      onChangeEnd: (value) {
+        widget.onChangeEnd(widget.values[_index]);
+      },
+    );
+
+    return PlatformListTile(
+      title:
+          widget.title != null ? _SettingsTitle(title: widget.title!) : slider,
+      subtitle: widget.title != null ? slider : null,
+      trailing: widget.labelBuilder != null
+          ? Text(widget.labelBuilder!.call(widget.values[_index]))
+          : null,
+    );
+  }
+}
+
 class SettingsSectionTitle extends StatelessWidget {
   const SettingsSectionTitle(this.title, {super.key});
 

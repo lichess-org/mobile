@@ -36,6 +36,7 @@ SoundService soundService(SoundServiceRef ref) {
 Future<(Soundpool, SoundMap)> soundPool(
   SoundPoolRef ref,
   SoundTheme theme,
+  double masterVolume,
 ) async {
   final pool = Soundpool.fromOptions(
     options: const SoundpoolOptions(
@@ -47,16 +48,20 @@ Future<(Soundpool, SoundMap)> soundPool(
   );
 
   ref.onDispose(pool.release);
-  final sounds = await loadSounds(pool, theme);
+  final sounds = await loadSounds(pool, theme, masterVolume);
 
   return (pool, sounds);
 }
 
 final extension = defaultTargetPlatform == TargetPlatform.iOS ? 'aifc' : 'mp3';
 
-Future<SoundMap> loadSounds(Soundpool pool, SoundTheme soundTheme) async {
+Future<SoundMap> loadSounds(
+  Soundpool pool,
+  SoundTheme soundTheme,
+  double masterVolume,
+) async {
   await pool.release();
-  return IMap({
+  final sounds = IMap({
     for (final sound in Sound.values)
       sound: await rootBundle
           .load('assets/sounds/${soundTheme.name}/${sound.name}.$extension')
@@ -71,6 +76,15 @@ Future<SoundMap> loadSounds(Soundpool pool, SoundTheme soundTheme) async {
           )
           .then((soundData) => pool.load(soundData)),
   });
+
+  for (final sound in Sound.values) {
+    final soundId = sounds[sound];
+    if (soundId != null) {
+      await pool.setVolume(soundId: soundId, volume: masterVolume);
+    }
+  }
+
+  return sounds;
 }
 
 class SoundService {
@@ -103,10 +117,23 @@ class SoundService {
     if (_currentStream != null) return _pool.stop(_currentStream!.$1);
   }
 
-  Future<void> changeTheme(SoundTheme theme, {bool playSound = false}) async {
-    _sounds = await loadSounds(_pool, theme);
+  Future<void> changeTheme(
+    SoundTheme theme,
+    double masterVolume, {
+    bool playSound = false,
+  }) async {
+    _sounds = await loadSounds(_pool, theme, masterVolume);
     if (playSound) {
       play(Sound.move);
+    }
+  }
+
+  Future<void> setVolume(double masterVolume) async {
+    for (final sound in Sound.values) {
+      final soundId = _sounds[sound];
+      if (soundId != null) {
+        await _pool.setVolume(soundId: soundId, volume: masterVolume);
+      }
     }
   }
 }

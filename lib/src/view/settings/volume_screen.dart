@@ -3,13 +3,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
-import 'package:lichess_mobile/src/model/settings/sound_theme.dart';
-import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
-class SoundSettingsScreen extends StatelessWidget {
-  const SoundSettingsScreen({super.key});
+const kMasterVolumeValues = [
+  0.0,
+  0.1,
+  0.2,
+  0.3,
+  0.4,
+  0.5,
+  0.6,
+  0.7,
+  0.8,
+  0.9,
+  1.0,
+];
+
+class VolumeScreen extends StatelessWidget {
+  const VolumeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +34,7 @@ class SoundSettingsScreen extends StatelessWidget {
 
   Widget _androidBuilder(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.sound)),
+      appBar: AppBar(title: const Text('Volume')),
       body: _Body(),
     );
   }
@@ -34,42 +47,31 @@ class SoundSettingsScreen extends StatelessWidget {
   }
 }
 
-String soundThemeL10n(BuildContext context, SoundTheme theme) =>
-    theme == SoundTheme.standard ? context.l10n.standard : theme.label;
-
 class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final soundTheme = ref.watch(
-      generalPreferencesProvider.select(
-        (state) => state.soundTheme,
-      ),
-    );
-
     final volume = ref.watch(
       generalPreferencesProvider.select((state) => state.volume),
     );
 
-    void onChanged(SoundTheme? value) {
-      ref
-          .read(generalPreferencesProvider.notifier)
-          .setSoundTheme(value ?? SoundTheme.standard);
-      ref.read(soundServiceProvider).changeTheme(
-            value ?? SoundTheme.standard,
-            volume,
-            playSound: true,
-          );
-    }
-
     return SafeArea(
       child: ListView(
         children: [
-          ChoicePicker(
-            notchedTile: true,
-            choices: SoundTheme.values,
-            selectedItem: soundTheme,
-            titleBuilder: (t) => Text(soundThemeL10n(context, t)),
-            onSelectedItemChanged: onChanged,
+          ListSection(
+            children: [
+              SliderSettingsTile(
+                value: volume,
+                values: kMasterVolumeValues,
+                onChangeEnd: (value) {
+                  ref
+                      .read(generalPreferencesProvider.notifier)
+                      .setVolume(value);
+
+                  ref.read(soundServiceProvider).setVolume(value);
+                },
+                labelBuilder: (value) => '${(value * 100).round()}%',
+              ),
+            ],
           ),
         ],
       ),

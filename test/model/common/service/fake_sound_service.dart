@@ -8,8 +8,15 @@ class FakeSoundService implements SoundService {
   }
 
   @override
+  Future<void> setVolume(double volume) async {}
+
+  @override
   Future<void> stopCurrent() async {}
 
   @override
-  Future<void> changeTheme(SoundTheme theme, {bool playSound = false}) async {}
+  Future<void> changeTheme(
+    SoundTheme theme,
+    double volume, {
+    bool playSound = false,
+  }) async {}
 }
