@@ -1,3 +1,4 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_layout_grid/flutter_layout_grid.dart';
@@ -5,13 +6,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/styles/transparent_image.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/view/broadcast/broadcast_description_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/default_broadcast_image.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 class BroadcastTournamentScreen extends StatelessWidget {
   const BroadcastTournamentScreen({super.key});
@@ -57,19 +60,41 @@ class _Body extends ConsumerWidget {
     return broadcasts.when(
       data: (broadcasts) {
         return SafeArea(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: LayoutGrid(
-                rowGap: 8,
-                columnGap: 8,
-                columnSizes: [1.fr, 1.fr],
-                rowSizes:
-                    List.generate(broadcasts.length ~/ 2, (index) => auto),
-                children: broadcasts
-                    .map((broadcast) => BroadcastPicture(broadcast: broadcast))
-                    .toList(),
-              ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            child: ListView(
+              children: [
+                if (broadcasts.active.isNotEmpty) ...[
+                  ListTile(
+                    dense: true,
+                    title: DefaultTextStyle.merge(
+                      style: Styles.sectionTitle,
+                      child: const Text('Live tournament broadcasts'),
+                    ),
+                  ),
+                  createLayoutGrid(broadcasts.active),
+                ],
+                if (broadcasts.upcoming.isNotEmpty) ...[
+                  const Padding(
+                    padding: EdgeInsets.all(10.0),
+                    child: Text(
+                      'Upcoming broadcasts',
+                      style: Styles.title,
+                    ),
+                  ),
+                  createLayoutGrid(broadcasts.upcoming),
+                ],
+                if (broadcasts.past.isNotEmpty) ...[
+                  const Padding(
+                    padding: EdgeInsets.all(10.0),
+                    child: Text(
+                      'Past broadcasts',
+                      style: Styles.title,
+                    ),
+                  ),
+                  createLayoutGrid(broadcasts.past),
+                ],
+              ],
             ),
           ),
         );
@@ -77,9 +102,28 @@ class _Body extends ConsumerWidget {
       error: (error, stackTrace) => Center(
         child: Text(error.toString()),
       ),
-      loading: () => const CircularProgressIndicator(),
+      loading: () => Shimmer(
+        child: ShimmerLoading(
+          isLoading: true,
+          child: ListSection.loading(
+            itemsNumber: 20,
+            header: true,
+          ),
+        ),
+      ),
     );
   }
+
+  Widget createLayoutGrid(IList<Broadcast> broadcasts) => LayoutGrid(
+        rowGap: 10,
+        columnGap: 10,
+        columnSizes: [1.fr, 1.fr],
+        rowSizes:
+            List.generate((broadcasts.length / 2).ceil(), (index) => auto),
+        children: broadcasts
+            .map((broadcast) => BroadcastPicture(broadcast: broadcast))
+            .toList(),
+      );
 }
 
 class BroadcastPicture extends StatelessWidget {
@@ -93,12 +137,10 @@ class BroadcastPicture extends StatelessWidget {
       onTap: () {
         pushPlatformRoute(
           context,
-          builder: (context) => (broadcast.curentRound != null)
-              ? BroadcastGameScreen(
-                  broadCastTitle: broadcast.tour.name,
-                  roundId: broadcast.curentRound!.id,
-                )
-              : BroadcastDescriptionScreen(broadcast: broadcast),
+          builder: (context) => BroadcastGameScreen(
+            broadCastTitle: broadcast.tour.name,
+            roundId: broadcast.lastRound.id,
+          ),
         );
       },
       child: Container(
@@ -114,7 +156,7 @@ class BroadcastPicture extends StatelessWidget {
           ],
         ),
         foregroundDecoration: BoxDecoration(
-          border: (broadcast.status == BroadcastStatus.live)
+          border: (broadcast.isLive)
               ? Border.all(color: LichessColors.red, width: 2)
               : Border.all(color: LichessColors.grey),
           borderRadius: BorderRadius.circular(20),
@@ -139,11 +181,11 @@ class BroadcastPicture extends StatelessWidget {
                   children: [
                     Flexible(
                       child: Text(
-                        broadcast.tour.name,
+                        broadcast.title,
                         textAlign: TextAlign.center,
                       ),
                     ),
-                    if (broadcast.status == BroadcastStatus.live) ...[
+                    if (broadcast.isLive) ...[
                       const SizedBox(width: 5),
                       const Column(
                         mainAxisAlignment: MainAxisAlignment.center,

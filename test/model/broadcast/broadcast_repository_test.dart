@@ -53,7 +53,7 @@ void main() {
       final response = await repo.getBroadcasts();
 
       expect(response, isA<IList<Broadcast>>());
-      expect(response.length, 20);
+      expect(response, 20);
     });
 
     test('getRound', () async {
