@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
@@ -226,7 +227,7 @@ class _BroadcastWidget extends ConsumerWidget {
             ),
           ),
           children: [
-            ...data
+            ...CombinedIterableView([data.active, data.upcoming, data.past])
                 .take(numberOfItems)
                 .map((broadcast) => BroadcastTile(broadcast: broadcast)),
           ],

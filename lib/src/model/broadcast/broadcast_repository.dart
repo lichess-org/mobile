@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
@@ -11,12 +10,11 @@ class BroadcastRepository {
 
   final LichessClient client;
 
-  Future<IList<Broadcast>> getBroadcasts() {
-    return client.readNdJsonList(
-      Uri(path: '/api/broadcast'),
-      headers: {'Accept': 'application/x-ndjson'},
-      mapper: _makeBroadcastFromJson,
-      compare: (Broadcast a, Broadcast b) => b.priority.compareTo(a.priority),
+  Future<BroadcastResponse> getBroadcasts() {
+    return client.readJson(
+      Uri(path: '/api/broadcast/top'),
+      headers: {'Accept': 'application/json'},
+      mapper: _makeBroadcastResponseFromJson,
     );
   }
 
@@ -31,40 +29,39 @@ class BroadcastRepository {
   }
 }
 
-Broadcast _makeBroadcastFromJson(Map<String, dynamic> json) =>
-    _broadcastFromPick(pick(json).required());
-
-Broadcast _broadcastFromPick(RequiredPick pick) {
-  return Broadcast(
-    tour: BroadcastTournament(
-      name: pick('tour', 'name').asStringOrThrow(),
-      description: pick('tour', 'description').asStringOrThrow(),
-      imageUrl: pick('tour', 'image').asStringOrNull(),
-      tier: pick('tour', 'tier').asIntOrThrow(),
-    ),
-    rounds: pick('rounds')
-        .asListOrEmpty(_roundFromPick)
-        .sorted(
-          (BroadcastRound a, BroadcastRound b) =>
-              a.startsAt.compareTo(b.startsAt),
-        )
+BroadcastResponse _makeBroadcastResponseFromJson(Map<String, dynamic> json) {
+  return BroadcastResponse(
+    active: pick(json, 'active').asListOrThrow(_broadcastFromPick).toIList(),
+    upcoming:
+        pick(json, 'upcoming').asListOrThrow(_broadcastFromPick).toIList(),
+    past: pick(json, 'past', 'currentPageResults')
+        .asListOrThrow(_broadcastFromPick)
         .toIList(),
   );
 }
 
-BroadcastRound _roundFromPick(RequiredPick pick) {
-  final live = pick('ongoing').asBoolOrFalse();
-  final finished = pick('finished').asBoolOrFalse();
+Broadcast _broadcastFromPick(RequiredPick pick) {
+  final live = pick('lastRound', 'ongoing').asBoolOrFalse();
+  final finished = pick('lastRound', 'finished').asBoolOrFalse();
   final status = live
       ? RoundStatus.live
       : finished
           ? RoundStatus.finished
           : RoundStatus.upcoming;
 
-  return BroadcastRound(
-    id: pick('id').asStringOrThrow(),
-    status: status,
-    startsAt: pick('startsAt').asDateTimeFromMillisecondsOrThrow().toLocal(),
+  return Broadcast(
+    tour: BroadcastTournament(
+      name: pick('tour', 'name').asStringOrThrow(),
+      imageUrl: pick('tour', 'image').asStringOrNull(),
+    ),
+    lastRound: BroadcastRound(
+      id: pick('lastRound', 'id').asStringOrThrow(),
+      status: status,
+      startsAt: pick('lastRound', 'startsAt')
+          .asDateTimeFromMillisecondsOrThrow()
+          .toLocal(),
+    ),
+    group: pick('group').asStringOrNull(),
   );
 }
 

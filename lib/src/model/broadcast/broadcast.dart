@@ -5,45 +5,34 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'broadcast.freezed.dart';
 
 @freezed
+class BroadcastResponse with _$BroadcastResponse {
+  const factory BroadcastResponse({
+    required IList<Broadcast> active,
+    required IList<Broadcast> upcoming,
+    required IList<Broadcast> past,
+  }) = _BroadcastResponse;
+}
+
+@freezed
 class Broadcast with _$Broadcast {
   const Broadcast._();
 
   const factory Broadcast({
     required BroadcastTournament tour,
-    required IList<BroadcastRound> rounds,
+    required BroadcastRound lastRound,
+    required String? group,
   }) = _Broadcast;
 
-  BroadcastRound? get curentRound =>
-      rounds.where((r) => r.status == RoundStatus.live).firstOrNull ??
-      rounds.where((r) => r.status == RoundStatus.finished).lastOrNull;
+  bool get isLive => lastRound.status == RoundStatus.live;
 
-  BroadcastStatus get status {
-    if (curentRound == null) return BroadcastStatus.upcoming;
-    if (curentRound!.status == RoundStatus.live) return BroadcastStatus.live;
-    return (curentRound! != rounds.last)
-        ? BroadcastStatus.ongoing
-        : BroadcastStatus.finished;
-  }
-
-  int get priority {
-    final statusPriority = switch (status) {
-      BroadcastStatus.live => 2,
-      BroadcastStatus.ongoing => 0,
-      BroadcastStatus.finished => -1,
-      BroadcastStatus.upcoming => -1,
-    };
-
-    return tour.tier + statusPriority;
-  }
+  String get title => group ?? tour.name;
 }
 
 @freezed
 class BroadcastTournament with _$BroadcastTournament {
   const factory BroadcastTournament({
     required String name,
-    required String description,
     required String? imageUrl,
-    required int tier,
   }) = _BroadcastTournament;
 }
 
@@ -75,13 +64,6 @@ class BroadcastPlayer with _$BroadcastPlayer {
     required Duration? clock,
     required String? federation,
   }) = _BroadcastPlayer;
-}
-
-enum BroadcastStatus {
-  ongoing,
-  live,
-  finished,
-  upcoming,
 }
 
 enum RoundStatus {

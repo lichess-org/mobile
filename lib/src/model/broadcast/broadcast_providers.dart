@@ -7,7 +7,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'broadcast_providers.g.dart';
 
 @riverpod
-Future<IList<Broadcast>> broadcasts(BroadcastsRef ref) async {
+Future<BroadcastResponse> broadcasts(BroadcastsRef ref) async {
   return ref
       .withClient((client) => BroadcastRepository(client).getBroadcasts());
 }
