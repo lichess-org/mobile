@@ -225,10 +225,10 @@ class AppLocalizationsEu extends AppLocalizations {
   }
 
   @override
-  String get contactContact => 'Harremana';
+  String get broadcastBroadcasts => 'Emanaldiak';
 
   @override
-  String get contactContactLichess => 'Jarri kontaktuan Lichessekin';
+  String get broadcastStartDate => 'Zure ordu-zonako hasiera data';
 
   @override
   String challengeChallengesX(String param1) {
@@ -310,6 +310,1012 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get challengeInviteLichessUser => 'Edo gonbidatu Lichesseko erabiltzaile bat:';
+
+  @override
+  String get contactContact => 'Harremana';
+
+  @override
+  String get contactContactLichess => 'Jarri kontaktuan Lichessekin';
+
+  @override
+  String get patronDonate => 'Dirua eman';
+
+  @override
+  String get patronLichessPatron => 'Lichess babeslea';
+
+  @override
+  String perfStatPerfStats(String param) {
+    return '$param estatistikak';
+  }
+
+  @override
+  String get perfStatViewTheGames => 'Partidak ikusi';
+
+  @override
+  String get perfStatProvisional => 'behin-behinekoa';
+
+  @override
+  String get perfStatNotEnoughRatedGames => 'Ez duzu puntuaziorako balio duten behar adina partida jokatu.';
+
+  @override
+  String perfStatProgressOverLastXGames(String param) {
+    return 'Azken $param partidetako aurrerapena:';
+  }
+
+  @override
+  String perfStatRatingDeviation(String param) {
+    return 'Puntuazioaren desbideraketa: $param.';
+  }
+
+  @override
+  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
+    return 'Balio baxuagoak puntuazioa egonkorragoa dela esan nahi du. ${param1}tik gorako balioak puntuazioa behin-behinekoa dela esan nahi du. Sailkapenetan agertzeko, balio hori $param2 baino baxuagoa (xake estandarrean) eta $param3 baino baxuagoa (aldaeretan) izan behar da.';
+  }
+
+  @override
+  String get perfStatTotalGames => 'Partida kopurua';
+
+  @override
+  String get perfStatRatedGames => 'Puntuaziorako balio duten partidak';
+
+  @override
+  String get perfStatTournamentGames => 'Txapelketetako partidak';
+
+  @override
+  String get perfStatBerserkedGames => 'Berserk erabilitako partidak';
+
+  @override
+  String get perfStatTimeSpentPlaying => 'Jokatzen emandako denbora';
+
+  @override
+  String get perfStatAverageOpponent => 'Aurkarien batazbestekoa';
+
+  @override
+  String get perfStatVictories => 'Garaipenak';
+
+  @override
+  String get perfStatDefeats => 'Porrotak';
+
+  @override
+  String get perfStatDisconnections => 'Deskonektatutakoak';
+
+  @override
+  String get perfStatNotEnoughGames => 'Ez duzu partida nahiko jokatu';
+
+  @override
+  String perfStatHighestRating(String param) {
+    return 'Puntuazio altuena: $param';
+  }
+
+  @override
+  String perfStatLowestRating(String param) {
+    return 'Puntuazio baxuena: $param';
+  }
+
+  @override
+  String perfStatFromXToY(String param1, String param2) {
+    return '$param1 - $param2';
+  }
+
+  @override
+  String get perfStatWinningStreak => 'Garaipenen segida';
+
+  @override
+  String get perfStatLosingStreak => 'Porroten segida';
+
+  @override
+  String perfStatLongestStreak(String param) {
+    return 'Segida luzeena: $param';
+  }
+
+  @override
+  String perfStatCurrentStreak(String param) {
+    return 'Uneko segida: $param';
+  }
+
+  @override
+  String get perfStatBestRated => 'Garaipen onenak';
+
+  @override
+  String get perfStatGamesInARow => 'Jarraian jokatutako partida kopurua';
+
+  @override
+  String get perfStatLessThanOneHour => 'Partiden artean ordubete baino gutxiago';
+
+  @override
+  String get perfStatMaxTimePlaying => 'Jokatzen emandako denbora gehiena';
+
+  @override
+  String get perfStatNow => 'orain';
+
+  @override
+  String get preferencesPreferences => 'Lehentasunak';
+
+  @override
+  String get preferencesDisplay => 'Erakutsi';
+
+  @override
+  String get preferencesPrivacy => 'Pribatutasuna';
+
+  @override
+  String get preferencesNotifications => 'Jakinarazpenak';
+
+  @override
+  String get preferencesPieceAnimation => 'Piezen animazioa';
+
+  @override
+  String get preferencesMaterialDifference => 'Material desoreka';
+
+  @override
+  String get preferencesBoardHighlights => 'Taulan markak erakutsi (azken jokaldia eta xakea)';
+
+  @override
+  String get preferencesPieceDestinations => 'Piezen norakoak (jokaldi zuzenak eta aurre-jokaldiak)';
+
+  @override
+  String get preferencesBoardCoordinates => 'Taularen koordinatutak (A-H, 1-8)';
+
+  @override
+  String get preferencesMoveListWhilePlaying => 'Jokaldi-zerrenda partidan zehar';
+
+  @override
+  String get preferencesPgnPieceNotation => 'Jokaldien idazketa';
+
+  @override
+  String get preferencesChessPieceSymbol => 'Xake piezen ikurra';
+
+  @override
+  String get preferencesPgnLetter => 'Hizkiak (K, Q, R, B, N)';
+
+  @override
+  String get preferencesZenMode => 'Zen modua';
+
+  @override
+  String get preferencesShowPlayerRatings => 'Erakutsi jokalarien puntuazioak';
+
+  @override
+  String get preferencesShowFlairs => 'Ikusi jokalarien iruditxoak';
+
+  @override
+  String get preferencesExplainShowPlayerRatings => 'Horri esker, gunearen puntuazio guztiak ezkutatu daitezke, xakean arreta jartzen laguntzeko. Partidak puntuka izan daitezke oraindik, hau da zuk ikus dezakezuna.';
+
+  @override
+  String get preferencesDisplayBoardResizeHandle => 'Xake-taularen tamaina aldatzeko aukera erakutsi';
+
+  @override
+  String get preferencesOnlyOnInitialPosition => 'Hasierako posizioan bakarrik';
+
+  @override
+  String get preferencesInGameOnly => 'Partidan zehar bakarrik';
+
+  @override
+  String get preferencesChessClock => 'Xake-erlojua';
+
+  @override
+  String get preferencesTenthsOfSeconds => 'Segundo-hamarrenak erakutsi';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'Denbora 10 segundotik behera dagoenean';
+
+  @override
+  String get preferencesHorizontalGreenProgressBars => 'Aurrerabide-barra berdea horizontalki';
+
+  @override
+  String get preferencesSoundWhenTimeGetsCritical => 'Soinua jo denbora bukatzear dagoenean';
+
+  @override
+  String get preferencesGiveMoreTime => 'Denbora gehiago eman';
+
+  @override
+  String get preferencesGameBehavior => 'Partidaren portaera';
+
+  @override
+  String get preferencesHowDoYouMovePieces => 'Nola mugitzen dituzu piezak?';
+
+  @override
+  String get preferencesClickTwoSquares => 'Bi laukitan klik eginda';
+
+  @override
+  String get preferencesDragPiece => 'Pieza arrastatuta';
+
+  @override
+  String get preferencesBothClicksAndDrag => 'Edozein';
+
+  @override
+  String get preferencesPremovesPlayingDuringOpponentTurn => 'Aldez aurretik mugitzea (aurkariaren txanda den bitartean mugitu)';
+
+  @override
+  String get preferencesTakebacksWithOpponentApproval => 'Jokaldia atzera botatzea  (aurkariaren onespenarekin)';
+
+  @override
+  String get preferencesInCasualGamesOnly => 'Puntu-aldaketarik gabeko partidetan bakarrik';
+
+  @override
+  String get preferencesPromoteToQueenAutomatically => 'Dama automatikoki sustatzea';
+
+  @override
+  String get preferencesExplainPromoteToQueenAutomatically => 'Eutsi <ctrl> tekla sakatuta sustapenean sustapen automatikoa aldi baterako desaktibatzeko';
+
+  @override
+  String get preferencesWhenPremoving => 'Aldez aurreko jokaldia egiten denean';
+
+  @override
+  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Posizioa hirutan errepikatzen denean berdinketa automatikoki eskatu';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanThirtySeconds => '30 segundo baino gutxiago geratzen denean';
+
+  @override
+  String get preferencesMoveConfirmation => 'Jokaldia baieztatzea';
+
+  @override
+  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Partida baten zehar taularen menua erabiliz desaktibatu daiteke';
+
+  @override
+  String get preferencesInCorrespondenceGames => 'Posta bidezko partidak';
+
+  @override
+  String get preferencesCorrespondenceAndUnlimited => 'Posta-xakea,  denbora-eperik gabe';
+
+  @override
+  String get preferencesConfirmResignationAndDrawOffers => 'Etsitze eta berdinketa eskaeren baieztapena eskatu';
+
+  @override
+  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Endrokatzeko modua';
+
+  @override
+  String get preferencesCastleByMovingTwoSquares => 'Erregea bi lauki mugitu';
+
+  @override
+  String get preferencesCastleByMovingOntoTheRook => 'Erregea gazteluaren gainera mugitu';
+
+  @override
+  String get preferencesInputMovesWithTheKeyboard => 'Jokaldiak teklatuarekin sartu';
+
+  @override
+  String get preferencesInputMovesWithVoice => 'Egin jokaldiak zure ahotsarekin';
+
+  @override
+  String get preferencesSnapArrowsToValidMoves => 'Marraztutako geziak legezko jokaldietara mugatu';
+
+  @override
+  String get preferencesSayGgWpAfterLosingOrDrawing => 'Txateam \"Good game, well played\" esan partida galdu edo berdintzean';
+
+  @override
+  String get preferencesYourPreferencesHaveBeenSaved => 'Zure ezarpenak ondo gorde dira.';
+
+  @override
+  String get preferencesScrollOnTheBoardToReplayMoves => 'Mugitu taula gainean jokaldiak ikusteko';
+
+  @override
+  String get preferencesCorrespondenceEmailNotification => 'Jaso posta elektronikoz zure posta-bidezko partiden jakinarazpenen zerrenda egunero';
+
+  @override
+  String get preferencesNotifyStreamStart => 'Streamerra zuzenean dago';
+
+  @override
+  String get preferencesNotifyInboxMsg => 'Mezu berria postontzian';
+
+  @override
+  String get preferencesNotifyForumMention => 'Foroko erantzunean aipatu zaituzte';
+
+  @override
+  String get preferencesNotifyInvitedStudy => 'Azterlanreko gonbidapena';
+
+  @override
+  String get preferencesNotifyGameEvent => 'Posta bidezko partidetan eguneraketa';
+
+  @override
+  String get preferencesNotifyChallenge => 'Erronkak';
+
+  @override
+  String get preferencesNotifyTournamentSoon => 'Txapelketa laster hasiko da';
+
+  @override
+  String get preferencesNotifyTimeAlarm => 'Posta bidezko partidaren denbora amaitzen ari da';
+
+  @override
+  String get preferencesNotifyBell => 'Kanpai bidezko jakinarazpena Lichess barruan';
+
+  @override
+  String get preferencesNotifyPush => 'Gailuko jakinarazpena Lichessen ez zaudenean';
+
+  @override
+  String get preferencesNotifyWeb => 'Nabigatzailea';
+
+  @override
+  String get preferencesNotifyDevice => 'Gailua';
+
+  @override
+  String get preferencesBellNotificationSound => 'Kanpaiaren jakinarazpen soinua';
+
+  @override
+  String get puzzlePuzzles => 'Ariketak';
+
+  @override
+  String get puzzlePuzzleThemes => 'Ariketen gaiak';
+
+  @override
+  String get puzzleRecommended => 'Gomendatutakoak';
+
+  @override
+  String get puzzlePhases => 'Faseak';
+
+  @override
+  String get puzzleMotifs => 'Gaiak';
+
+  @override
+  String get puzzleAdvanced => 'Aurreratua';
+
+  @override
+  String get puzzleLengths => 'Luzera';
+
+  @override
+  String get puzzleMates => 'Mateak';
+
+  @override
+  String get puzzleGoals => 'Helburuak';
+
+  @override
+  String get puzzleOrigin => 'Jatorria';
+
+  @override
+  String get puzzleSpecialMoves => 'Jokaldi bereziak';
+
+  @override
+  String get puzzleDidYouLikeThisPuzzle => 'Ariketa gustukoa izan da?';
+
+  @override
+  String get puzzleVoteToLoadNextOne => 'Eman bozka hurrengoa kargatzeko!';
+
+  @override
+  String get puzzleUpVote => 'Ariketari +1 botoa';
+
+  @override
+  String get puzzleDownVote => 'Ariketari -1 botoa';
+
+  @override
+  String get puzzleYourPuzzleRatingWillNotChange => 'Ariketen zure puntuazioa ez da aldatuko. Kontuan izan ariketak ez direla txapelketa bat. Puntuaziok zure gaitasunen araberako ariketak aukeratzen laguntzen du.';
+
+  @override
+  String get puzzleFindTheBestMoveForWhite => 'Zurien jokaldi onena bilatu.';
+
+  @override
+  String get puzzleFindTheBestMoveForBlack => 'Beltzen jokaldi onena bilatu.';
+
+  @override
+  String get puzzleToGetPersonalizedPuzzles => 'Ariketa pertsonalizatuak lortzeko:';
+
+  @override
+  String puzzlePuzzleId(String param) {
+    return '$param ariketa';
+  }
+
+  @override
+  String get puzzlePuzzleOfTheDay => 'Eguneko ariketa';
+
+  @override
+  String get puzzleDailyPuzzle => 'Eguneroko ariketa';
+
+  @override
+  String get puzzleClickToSolve => 'Ebazteko klik egin';
+
+  @override
+  String get puzzleGoodMove => 'Jokaldi ona';
+
+  @override
+  String get puzzleBestMove => 'Jokaldi onena!';
+
+  @override
+  String get puzzleKeepGoing => 'Jarraitu…';
+
+  @override
+  String get puzzlePuzzleSuccess => 'Zorionak!';
+
+  @override
+  String get puzzlePuzzleComplete => 'Ariketa osatuta!';
+
+  @override
+  String get puzzleByOpenings => 'Hasieraka';
+
+  @override
+  String get puzzlePuzzlesByOpenings => 'Hasierakako ariketak';
+
+  @override
+  String get puzzleOpeningsYouPlayedTheMost => 'Gehien jokatu dituzun hasierak';
+
+  @override
+  String get puzzleUseFindInPage => 'Erabili zure nabigatzaileko \"Bilatu orrian\" funtzioa zure hasiera gogokoena bilatzeko!';
+
+  @override
+  String get puzzleUseCtrlF => 'Erabili Ctrl+f zure hasiera gogokoena bilatzeko!';
+
+  @override
+  String get puzzleNotTheMove => 'Hori ez zen jokaldia!';
+
+  @override
+  String get puzzleTrySomethingElse => 'Saiatu beste batekin.';
+
+  @override
+  String puzzleRatingX(String param) {
+    return 'Sailkapena: $param';
+  }
+
+  @override
+  String get puzzleHidden => 'ezkutuan';
+
+  @override
+  String puzzleFromGameLink(String param) {
+    return '$param partidatik hartua';
+  }
+
+  @override
+  String get puzzleContinueTraining => 'Entrenatzen jarraitu';
+
+  @override
+  String get puzzleDifficultyLevel => 'Zailtasun-maila';
+
+  @override
+  String get puzzleNormal => 'Arrunta';
+
+  @override
+  String get puzzleEasier => 'Erraza';
+
+  @override
+  String get puzzleEasiest => 'Errazena';
+
+  @override
+  String get puzzleHarder => 'Zaila';
+
+  @override
+  String get puzzleHardest => 'Zailena';
+
+  @override
+  String get puzzleExample => 'Adibidea';
+
+  @override
+  String get puzzleAddAnotherTheme => 'Beste gai bat gehitu';
+
+  @override
+  String get puzzleNextPuzzle => 'Hurrengo ariketa';
+
+  @override
+  String get puzzleJumpToNextPuzzleImmediately => 'Salto egin hurrengo ariketara berehala';
+
+  @override
+  String get puzzlePuzzleDashboard => 'Ariketen kontrol-panela';
+
+  @override
+  String get puzzleImprovementAreas => 'Hobetzekoak';
+
+  @override
+  String get puzzleStrengths => 'Indarguneak';
+
+  @override
+  String get puzzleHistory => 'Ariketen historikoa';
+
+  @override
+  String get puzzleSolved => 'ebatzita';
+
+  @override
+  String get puzzleFailed => 'huts eginda';
+
+  @override
+  String get puzzleStreakDescription => 'Ebatzi gero eta zailagoak diren ariketak eta garaipen-bolada lortu. Ez dago erlojurik, beraz hartu behar duzun denbora. Jokaldi oker bat eta akabo! Baina aldi bakoitzean behin salto egin dezakezu.';
+
+  @override
+  String puzzleYourStreakX(String param) {
+    return 'Zure garaipen-bolada: $param';
+  }
+
+  @override
+  String get puzzleStreakSkipExplanation => 'Jokaldi hau saltatu zure bolada mantentzeko! Lasterketa bakoitzean behin bakarrik erabili dezakezu.';
+
+  @override
+  String get puzzleContinueTheStreak => 'Jarraitu garaipen-bolada';
+
+  @override
+  String get puzzleNewStreak => 'Garaipen-bolada berria';
+
+  @override
+  String get puzzleFromMyGames => 'Nire partidetatik';
+
+  @override
+  String get puzzleLookupOfPlayer => 'Bilatu jokalari baten partidetatik ateratako ariketak';
+
+  @override
+  String puzzleFromXGames(String param) {
+    return '$param jokalariaren partidetako ariketak';
+  }
+
+  @override
+  String get puzzleSearchPuzzles => 'Ariketak bilatu';
+
+  @override
+  String get puzzleFromMyGamesNone => 'Ez duzu ariketarik datu-basean, hala ere Lichessek asko maite zaitu.\nJokatu partida azkar eta arruntak zure partidetatik eratorritako ariketak izateko!';
+
+  @override
+  String puzzleFromXGamesFound(String param1, String param2) {
+    return '$param1 ariketa aurkitu dira $param2 partidatan';
+  }
+
+  @override
+  String get puzzlePuzzleDashboardDescription => 'Entrenatu, aztertu, hobetu';
+
+  @override
+  String puzzlePercentSolved(String param) {
+    return '$param ebatzita';
+  }
+
+  @override
+  String get puzzleNoPuzzlesToShow => 'Ez dago ezer erakusteko, ebatzi ariketa batzuk!';
+
+  @override
+  String get puzzleImprovementAreasDescription => 'Entrenatu zure eboluzioa hobetzeko!';
+
+  @override
+  String get puzzleStrengthDescription => 'Gai hauetan zabiltza ondoen';
+
+  @override
+  String puzzlePlayedXTimes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count aldiz jokatuta',
+      one: 'Behin jokatuta',
+      zero: 'Behin jokatuta',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsBelowYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Ariketen zure puntuazioa baino $count puntu beherago',
+      one: 'Ariketen zure puntuazioa baino puntu bat beherago',
+      zero: 'Ariketen zure puntuazioa baino puntu bat beherago',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsAboveYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Ariketen zure puntuazioa baino $count puntu gorago',
+      one: 'Ariketen zure puntuazioa baino puntu bat gorago',
+      zero: 'Ariketen zure puntuazioa baino puntu bat gorago',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPlayed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count jokatuta',
+      one: '$count jokatuta',
+      zero: '$count jokatuta',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbToReplay(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count berriz egiteko',
+      one: '$count berriz egiteko',
+      zero: '$count berriz egiteko',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get puzzleThemeAdvancedPawn => 'Peoi aurreratua';
+
+  @override
+  String get puzzleThemeAdvancedPawnDescription => 'Sustatuko den edo sustatze-bidean dagoen peoia da ariketa honen muina.';
+
+  @override
+  String get puzzleThemeAdvantage => 'Abantaila';
+
+  @override
+  String get puzzleThemeAdvantageDescription => 'Abantaila osoa lortzen saiatu (200cp ≤ ebaluazioa ≤ 600cp)';
+
+  @override
+  String get puzzleThemeAnastasiaMate => 'Anastasiaren matea';
+
+  @override
+  String get puzzleThemeAnastasiaMateDescription => 'Zaldun bat eta gaztelua eta damak aurkariaren erregea taularen bazter baten eta bere pieza baten artean harrapatzen dute.';
+
+  @override
+  String get puzzleThemeArabianMate => 'Mate arabiarra';
+
+  @override
+  String get puzzleThemeArabianMateDescription => 'Zaldun eta gaztelu banak elkarrekin lan egiten dute aurkariaren erregea xake-taularen bazter baten harrapatzeko.';
+
+  @override
+  String get puzzleThemeAttackingF2F7 => 'f2 edo f7 erasotu';
+
+  @override
+  String get puzzleThemeAttackingF2F7Description => 'f2 edo f7ko peoia helburu duen erasoa.';
+
+  @override
+  String get puzzleThemeAttraction => 'Erakarmena';
+
+  @override
+  String get puzzleThemeAttractionDescription => 'Aurkariaren pieza bat ondorengo erasoa erraztuko duen lauki batera mugitzeko pieza-aldaketa edo sakrifizioa.';
+
+  @override
+  String get puzzleThemeBackRankMate => 'Azken lerroko matea';
+
+  @override
+  String get puzzleThemeBackRankMateDescription => 'Bere piezekin trabatuta dagoenean erregeari bere errenkadan matea ematea.';
+
+  @override
+  String get puzzleThemeBishopEndgame => 'Alfilen bukaera';
+
+  @override
+  String get puzzleThemeBishopEndgameDescription => 'Alfilak eta peoiak bakarrik dituen partida-bukaera.';
+
+  @override
+  String get puzzleThemeBodenMate => 'Bodenen matea';
+
+  @override
+  String get puzzleThemeBodenMateDescription => 'Bi alfilek beren piezen artean trabatuta dagoen erregeari ematen dioten matea.';
+
+  @override
+  String get puzzleThemeCastling => 'Endrokea';
+
+  @override
+  String get puzzleThemeCastlingDescription => 'Babestu erregea eta ekarri gaztelua erasora.';
+
+  @override
+  String get puzzleThemeCapturingDefender => 'Defendatzailea harrapatu';
+
+  @override
+  String get puzzleThemeCapturingDefenderDescription => 'Beste pieza bat defendatzeko funtsezkoa den pieza kentzea, hurrengo jokaldietan lehenengo pieza hori harrapatzeko.';
+
+  @override
+  String get puzzleThemeCrushing => 'Zapalketa';
+
+  @override
+  String get puzzleThemeCrushingDescription => 'Akatsa aurkitu eta guztizko abantaila lortu. (ebaluazioa ≥ 600cp)';
+
+  @override
+  String get puzzleThemeDoubleBishopMate => 'Bi alfilen matea';
+
+  @override
+  String get puzzleThemeDoubleBishopMateDescription => 'Bi alfilek beren piezen artean trabatuta dagoen erregeari ematen dioten matea.';
+
+  @override
+  String get puzzleThemeDovetailMate => 'Mirubuztanaren matea';
+
+  @override
+  String get puzzleThemeDovetailMateDescription => 'Damak ematen duen matea erregearen ihes-laukiak bere piezekin trabatuta daudenean.';
+
+  @override
+  String get puzzleThemeEquality => 'Berdintasuna';
+
+  @override
+  String get puzzleThemeEqualityDescription => 'Partida galduta izatetik, berdinketa edo posizio berdintsua lortzera itzuli. (ebaluazioa ≤ 200cp)';
+
+  @override
+  String get puzzleThemeKingsideAttack => 'Erregearen aldeko erasoa';
+
+  @override
+  String get puzzleThemeKingsideAttackDescription => 'Aurkariaren erregearen aurkako erasoa, hau motzean endrokatu ostean.';
+
+  @override
+  String get puzzleThemeClearance => 'Garbiketa';
+
+  @override
+  String get puzzleThemeClearanceDescription => 'Lauki, errenkada edo diagonala garbitzen duen jokaldia, ondoren beste ideia taktiko bat erabiltzeko.';
+
+  @override
+  String get puzzleThemeDefensiveMove => 'Defentsa-jokaldia';
+
+  @override
+  String get puzzleThemeDefensiveMoveDescription => 'Materiala edo beste edozein abantaila galtzea ekiditeko jokaldi edo jokaldi-multzoa.';
+
+  @override
+  String get puzzleThemeDeflection => 'Desbideraketa';
+
+  @override
+  String get puzzleThemeDeflectionDescription => 'Aurkariaren pieza berezkoa duen betebehar batetik desbideratzea, adibidez lauki bat babestetik. Batzuetan \"gainkarga\" ere deitzen zaio.';
+
+  @override
+  String get puzzleThemeDiscoveredAttack => 'Ageriko erasoa';
+
+  @override
+  String get puzzleThemeDiscoveredAttackDescription => 'Beste pieza baten erasoa blokeatzen duen pieza bat mugitzea.';
+
+  @override
+  String get puzzleThemeDoubleCheck => 'Xake bikoitza';
+
+  @override
+  String get puzzleThemeDoubleCheckDescription => 'Bi piezarekin batera xake egitea, ageriko eraso baten ondorioz, mugitutako eta ezkutuan zegoen piezak aurkariaren erregea erasotuz.';
+
+  @override
+  String get puzzleThemeEndgame => 'Partida-bukaera';
+
+  @override
+  String get puzzleThemeEndgameDescription => 'Partidaren azken faseko taktika.';
+
+  @override
+  String get puzzleThemeEnPassantDescription => 'Igarotzean harrapatzeko arauarekin zerikusia duen taktika.';
+
+  @override
+  String get puzzleThemeExposedKing => 'Babesik gabeko erregea';
+
+  @override
+  String get puzzleThemeExposedKingDescription => 'Pieza gutxik defenditzen duten erregearen inguruko erasoa, sarri matean amaitzen dena.';
+
+  @override
+  String get puzzleThemeFork => 'Eraso bikoitza';
+
+  @override
+  String get puzzleThemeForkDescription => 'Mugitzen den piezak aurkariaren bi pieza batera erasotzen dituenean.';
+
+  @override
+  String get puzzleThemeHangingPiece => 'Defentsarik gabeko pieza';
+
+  @override
+  String get puzzleThemeHangingPieceDescription => 'Defentsarik ez duen edo defendatzaile gutxi dituen aurkariaren pieza baten ingurukoak.';
+
+  @override
+  String get puzzleThemeHookMate => 'Hooken matea';
+
+  @override
+  String get puzzleThemeHookMateDescription => 'Gaztelua, zalduna eta peoi batekin ematen den matea aurkariaren peoi batek bere erregearen bidea oztopatzen duelarik.';
+
+  @override
+  String get puzzleThemeInterference => 'Tartean sartzea';
+
+  @override
+  String get puzzleThemeInterferenceDescription => 'Aurkariaren bi piezaren artean pieza bat jartzea, horrela aurkariaren piezetako bat edo biak defentsarik gabe utziz.';
+
+  @override
+  String get puzzleThemeIntermezzo => 'Tarteko-jokaldia';
+
+  @override
+  String get puzzleThemeIntermezzoDescription => 'Esperotako jokaldia egin beharrean, aurkariari mehatxu bat eginez beste jokaldi bat egin aurkaria jokaldi horri erantzutera derrigortuz.';
+
+  @override
+  String get puzzleThemeKnightEndgame => 'Zaldunen finala';
+
+  @override
+  String get puzzleThemeKnightEndgameDescription => 'Zaldunak eta peoiak bakarrik dituen partida bukaera.';
+
+  @override
+  String get puzzleThemeLong => 'Ariketa luzea';
+
+  @override
+  String get puzzleThemeLongDescription => 'Irabazteko hiru jokaldi.';
+
+  @override
+  String get puzzleThemeMaster => 'Maisuen partidak';
+
+  @override
+  String get puzzleThemeMasterDescription => 'Tituludun jokalariek jokatutako partidetan oinarritutako ariketak.';
+
+  @override
+  String get puzzleThemeMasterVsMaster => 'Maisuen arteko partidak';
+
+  @override
+  String get puzzleThemeMasterVsMasterDescription => 'Tituludun jokalari biren artean jokatutako partidetan oinarritutako ariketak.';
+
+  @override
+  String get puzzleThemeMate => 'Mate';
+
+  @override
+  String get puzzleThemeMateDescription => 'Irabazi partida estiloarekin.';
+
+  @override
+  String get puzzleThemeMateIn1 => 'Mate baten';
+
+  @override
+  String get puzzleThemeMateIn1Description => 'Eman mate jokaldi bakarrean.';
+
+  @override
+  String get puzzleThemeMateIn2 => 'Mate bitan';
+
+  @override
+  String get puzzleThemeMateIn2Description => 'Eman mate bi jokalditan.';
+
+  @override
+  String get puzzleThemeMateIn3 => 'Mate hirutan';
+
+  @override
+  String get puzzleThemeMateIn3Description => 'Eman mate hiru jokalditan.';
+
+  @override
+  String get puzzleThemeMateIn4 => 'Mate lautan';
+
+  @override
+  String get puzzleThemeMateIn4Description => 'Eman mate lau jokalditan.';
+
+  @override
+  String get puzzleThemeMateIn5 => 'Mate 5 edo jokaldi gehiagotan';
+
+  @override
+  String get puzzleThemeMateIn5Description => 'Mate emateko sekuentzia luzea asmatu.';
+
+  @override
+  String get puzzleThemeMiddlegame => 'Erdi-jokoa';
+
+  @override
+  String get puzzleThemeMiddlegameDescription => 'Partidaren bigarren faseko taktika.';
+
+  @override
+  String get puzzleThemeOneMove => 'Jokaldi bakarreko ariketa';
+
+  @override
+  String get puzzleThemeOneMoveDescription => 'Jokaldi bakarrean ebazten den ariketa.';
+
+  @override
+  String get puzzleThemeOpening => 'Hasiera';
+
+  @override
+  String get puzzleThemeOpeningDescription => 'Partidaren lehenengo faseko taktika.';
+
+  @override
+  String get puzzleThemePawnEndgame => 'Peoien finala';
+
+  @override
+  String get puzzleThemePawnEndgameDescription => 'Peoiak bakarrik dituen finala.';
+
+  @override
+  String get puzzleThemePin => 'Iltzaketa';
+
+  @override
+  String get puzzleThemePinDescription => 'Iltzaketak ardatz dituen taktika, pieza bat mugitu ezin denean gehiago balio duen pieza bat airean utziko duelako.';
+
+  @override
+  String get puzzleThemePromotion => 'Sustapena';
+
+  @override
+  String get puzzleThemePromotionDescription => 'Sustatuko den edo sustatze-bidean dagoen peoia da ariketa honen muina.';
+
+  @override
+  String get puzzleThemeQueenEndgame => 'Damen finala';
+
+  @override
+  String get puzzleThemeQueenEndgameDescription => 'Damak eta peoiak bakarrik dituen finala.';
+
+  @override
+  String get puzzleThemeQueenRookEndgame => 'Dama eta Gaztelua';
+
+  @override
+  String get puzzleThemeQueenRookEndgameDescription => 'Damak, gazteluak eta peoiak bakarrik dituen finala.';
+
+  @override
+  String get puzzleThemeQueensideAttack => 'Damaren aldeko erasoa';
+
+  @override
+  String get puzzleThemeQueensideAttackDescription => 'Aurkariaren erregearen aurkako erasoa, hau luzean endrokatu ostean.';
+
+  @override
+  String get puzzleThemeQuietMove => 'Jokaldi lasaia';
+
+  @override
+  String get puzzleThemeQuietMoveDescription => 'Xakerik edo piezarik harrapatzen ez duen jokaldia, baina geldiezina den eraso bat prestatzen duena.';
+
+  @override
+  String get puzzleThemeRookEndgame => 'Gazteluen finala';
+
+  @override
+  String get puzzleThemeRookEndgameDescription => 'Gazteluak eta peoiak bakarrik dituen finala.';
+
+  @override
+  String get puzzleThemeSacrifice => 'Sakrifizioa';
+
+  @override
+  String get puzzleThemeSacrificeDescription => 'Geroago abantaila lortzeko epe motzean materiala entregatzea helburu duen taktika.';
+
+  @override
+  String get puzzleThemeShort => 'Ariketa laburra';
+
+  @override
+  String get puzzleThemeShortDescription => 'Bi jokaldi irabazteko.';
+
+  @override
+  String get puzzleThemeSkewer => 'Paretik kentzea';
+
+  @override
+  String get puzzleThemeSkewerDescription => 'Erasotua den balio handiko pieza bat mugitzea, erasotik kenduz eta bere atzean dagoen baina gutxiago balio duen pieza bat harrapatzen uztea, iltzaketaren aurkakoa.';
+
+  @override
+  String get puzzleThemeSmotheredMate => 'Ostikoaren matea';
+
+  @override
+  String get puzzleThemeSmotheredMateDescription => 'Zaldiak ematen duen matea, aurkariaren erregea bere piezak oztopatzen dutenez ezin delako mugitu.';
+
+  @override
+  String get puzzleThemeSuperGM => 'Super GMen partidak';
+
+  @override
+  String get puzzleThemeSuperGMDescription => 'Munduko jokalari onenek jokatutako partidetatik ateratako ariketak.';
+
+  @override
+  String get puzzleThemeTrappedPiece => 'Harrapatutako pieza';
+
+  @override
+  String get puzzleThemeTrappedPieceDescription => 'Bere jokaldiak mugatuta dituelako ihes egin ezin duen pieza.';
+
+  @override
+  String get puzzleThemeUnderPromotion => 'Sustapen txikia';
+
+  @override
+  String get puzzleThemeUnderPromotionDescription => 'Zalduna, alfila edo gaztelua sustatzea.';
+
+  @override
+  String get puzzleThemeVeryLong => 'Ariketa oso luzea';
+
+  @override
+  String get puzzleThemeVeryLongDescription => 'Irabazteko lau jokaldi edo gehiago.';
+
+  @override
+  String get puzzleThemeXRayAttack => 'X-izpien erasoa';
+
+  @override
+  String get puzzleThemeXRayAttackDescription => 'Aurkariaren pieza baten artetik, pieza batek lauki bat erasotu edo defendatzen duenean.';
+
+  @override
+  String get puzzleThemeZugzwang => 'Zugzwang';
+
+  @override
+  String get puzzleThemeZugzwangDescription => 'Aurkariak jokaldi mugatuak ditu eta jokaldi guztien bere posizioa okertu egiten dute.';
+
+  @override
+  String get puzzleThemeHealthyMix => 'Denetik pixkat';
+
+  @override
+  String get puzzleThemeHealthyMixDescription => 'Denetatik. Ez dakizu zer espero, beraz prestatu zure burua edozertarako! Benetako partidetan bezala.';
+
+  @override
+  String get puzzleThemePlayerGames => 'Jokalarien partidak';
+
+  @override
+  String get puzzleThemePlayerGamesDescription => 'Ikusi zure edo beste jokalarien partidetatik sortutako ariketak.';
+
+  @override
+  String puzzleThemePuzzleDownloadInformation(String param) {
+    return 'Ariketa hauek publikoak dira, $param helbidetik deskargatu daitezke.';
+  }
+
+  @override
+  String get searchSearch => 'Bilatu';
+
+  @override
+  String get settingsSettings => 'Ezarpenak';
+
+  @override
+  String get settingsCloseAccount => 'Kontua itxi';
+
+  @override
+  String get settingsManagedAccountCannotBeClosed => 'Zure kontua beste norbaitek kudeatzen du eta ezin da itxi.';
+
+  @override
+  String get settingsClosingIsDefinitive => 'Ixteak ez du atzera egiterik. Ziur zaude?';
+
+  @override
+  String get settingsCantOpenSimilarAccount => 'Ezingo duzu beste kontu bat ireki izen berdinarekin, naiz eta hizki larriak eta xeheak aldatu.';
+
+  @override
+  String get settingsChangedMindDoNotCloseAccount => 'Ez dut nire kontua itxi nahi';
+
+  @override
+  String get settingsCloseAccountExplanation => 'Benetan zure kontua itxi egin nahi duzu? Erabaki hau betiko hartuko duzu eta ezingo zara berriz inoiz webgunera sartu.';
+
+  @override
+  String get settingsThisAccountIsClosed => 'Kontu hau itxita dago.';
 
   @override
   String get playWithAFriend => 'Lagun baten aurka jokatu';
@@ -512,6 +1518,12 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get deleteFromHere => 'Ezabatu hemendik aurrera';
+
+  @override
+  String get collapseVariations => 'Collapse variations';
+
+  @override
+  String get expandVariations => 'Expand variations';
 
   @override
   String get forceVariation => 'Aldaera derrigortu';
@@ -1371,15 +2383,6 @@ class AppLocalizationsEu extends AppLocalizations {
   String get emptyTournamentName => 'Ez baduzu betetzen, txapelketak Maisu Handi baten izena hartuko du, ausaz.';
 
   @override
-  String get recommendNotTouching => 'Hobe ez ukitu hau.';
-
-  @override
-  String get fewerPlayers => 'Parte hartzeko baldintzak jartzen badituzu, jokalari gutxiago sartuko dira txapelketan.';
-
-  @override
-  String get showAdvancedSettings => 'Ezarpen aurreratuak';
-
-  @override
   String get makePrivateTournament => 'Txapelketa pribatu egin eta sarrera pasahitzarekin babestu';
 
   @override
@@ -1509,10 +2512,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get editProfile => 'Nire profila editatu';
 
   @override
-  String get firstName => 'Izena';
-
-  @override
-  String get lastName => 'Abizena';
+  String get realName => 'Real name';
 
   @override
   String get setFlair => 'Ezarri zure iruditxoa';
@@ -1641,13 +2641,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get cheat => 'Tranpak';
 
   @override
-  String get insult => 'Irainak';
-
-  @override
   String get troll => 'Trolla';
-
-  @override
-  String get ratingManipulation => 'Puntuazioa manipulatu';
 
   @override
   String get other => 'Bestelakoak';
@@ -1754,6 +2748,9 @@ class AppLocalizationsEu extends AppLocalizations {
 
   @override
   String get outsideTheBoard => 'Taulatik kanpo';
+
+  @override
+  String get allSquaresOfTheBoard => 'All squares of the board';
 
   @override
   String get onSlowGames => 'Partida moteletan';
@@ -3460,1009 +4457,6 @@ class AppLocalizationsEu extends AppLocalizations {
   }
 
   @override
-  String get patronDonate => 'Dirua eman';
-
-  @override
-  String get patronLichessPatron => 'Lichess babeslea';
-
-  @override
-  String get preferencesPreferences => 'Lehentasunak';
-
-  @override
-  String get preferencesDisplay => 'Erakutsi';
-
-  @override
-  String get preferencesPrivacy => 'Pribatutasuna';
-
-  @override
-  String get preferencesNotifications => 'Jakinarazpenak';
-
-  @override
-  String get preferencesPieceAnimation => 'Piezen animazioa';
-
-  @override
-  String get preferencesMaterialDifference => 'Material desoreka';
-
-  @override
-  String get preferencesBoardHighlights => 'Taulan markak erakutsi (azken jokaldia eta xakea)';
-
-  @override
-  String get preferencesPieceDestinations => 'Piezen norakoak (jokaldi zuzenak eta aurre-jokaldiak)';
-
-  @override
-  String get preferencesBoardCoordinates => 'Taularen koordinatutak (A-H, 1-8)';
-
-  @override
-  String get preferencesMoveListWhilePlaying => 'Jokaldi-zerrenda partidan zehar';
-
-  @override
-  String get preferencesPgnPieceNotation => 'Jokaldien idazketa';
-
-  @override
-  String get preferencesChessPieceSymbol => 'Xake piezen ikurra';
-
-  @override
-  String get preferencesPgnLetter => 'Hizkiak (K, Q, R, B, N)';
-
-  @override
-  String get preferencesZenMode => 'Zen modua';
-
-  @override
-  String get preferencesShowPlayerRatings => 'Erakutsi jokalarien puntuazioak';
-
-  @override
-  String get preferencesShowFlairs => 'Ikusi jokalarien iruditxoak';
-
-  @override
-  String get preferencesExplainShowPlayerRatings => 'Horri esker, gunearen puntuazio guztiak ezkutatu daitezke, xakean arreta jartzen laguntzeko. Partidak puntuka izan daitezke oraindik, hau da zuk ikus dezakezuna.';
-
-  @override
-  String get preferencesDisplayBoardResizeHandle => 'Xake-taularen tamaina aldatzeko aukera erakutsi';
-
-  @override
-  String get preferencesOnlyOnInitialPosition => 'Hasierako posizioan bakarrik';
-
-  @override
-  String get preferencesInGameOnly => 'Partidan zehar bakarrik';
-
-  @override
-  String get preferencesChessClock => 'Xake-erlojua';
-
-  @override
-  String get preferencesTenthsOfSeconds => 'Segundo-hamarrenak erakutsi';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'Denbora 10 segundotik behera dagoenean';
-
-  @override
-  String get preferencesHorizontalGreenProgressBars => 'Aurrerabide-barra berdea horizontalki';
-
-  @override
-  String get preferencesSoundWhenTimeGetsCritical => 'Soinua jo denbora bukatzear dagoenean';
-
-  @override
-  String get preferencesGiveMoreTime => 'Denbora gehiago eman';
-
-  @override
-  String get preferencesGameBehavior => 'Partidaren portaera';
-
-  @override
-  String get preferencesHowDoYouMovePieces => 'Nola mugitzen dituzu piezak?';
-
-  @override
-  String get preferencesClickTwoSquares => 'Bi laukitan klik eginda';
-
-  @override
-  String get preferencesDragPiece => 'Pieza arrastatuta';
-
-  @override
-  String get preferencesBothClicksAndDrag => 'Edozein';
-
-  @override
-  String get preferencesPremovesPlayingDuringOpponentTurn => 'Aldez aurretik mugitzea (aurkariaren txanda den bitartean mugitu)';
-
-  @override
-  String get preferencesTakebacksWithOpponentApproval => 'Jokaldia atzera botatzea  (aurkariaren onespenarekin)';
-
-  @override
-  String get preferencesInCasualGamesOnly => 'Puntu-aldaketarik gabeko partidetan bakarrik';
-
-  @override
-  String get preferencesPromoteToQueenAutomatically => 'Dama automatikoki sustatzea';
-
-  @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Eutsi <ctrl> tekla sakatuta sustapenean sustapen automatikoa aldi baterako desaktibatzeko';
-
-  @override
-  String get preferencesWhenPremoving => 'Aldez aurreko jokaldia egiten denean';
-
-  @override
-  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Posizioa hirutan errepikatzen denean berdinketa automatikoki eskatu';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanThirtySeconds => '30 segundo baino gutxiago geratzen denean';
-
-  @override
-  String get preferencesMoveConfirmation => 'Jokaldia baieztatzea';
-
-  @override
-  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Partida baten zehar taularen menua erabiliz desaktibatu daiteke';
-
-  @override
-  String get preferencesInCorrespondenceGames => 'Posta bidezko partidak';
-
-  @override
-  String get preferencesCorrespondenceAndUnlimited => 'Posta-xakea,  denbora-eperik gabe';
-
-  @override
-  String get preferencesConfirmResignationAndDrawOffers => 'Etsitze eta berdinketa eskaeren baieztapena eskatu';
-
-  @override
-  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Endrokatzeko modua';
-
-  @override
-  String get preferencesCastleByMovingTwoSquares => 'Erregea bi lauki mugitu';
-
-  @override
-  String get preferencesCastleByMovingOntoTheRook => 'Erregea gazteluaren gainera mugitu';
-
-  @override
-  String get preferencesInputMovesWithTheKeyboard => 'Jokaldiak teklatuarekin sartu';
-
-  @override
-  String get preferencesInputMovesWithVoice => 'Egin jokaldiak zure ahotsarekin';
-
-  @override
-  String get preferencesSnapArrowsToValidMoves => 'Marraztutako geziak legezko jokaldietara mugatu';
-
-  @override
-  String get preferencesSayGgWpAfterLosingOrDrawing => 'Txateam \"Good game, well played\" esan partida galdu edo berdintzean';
-
-  @override
-  String get preferencesYourPreferencesHaveBeenSaved => 'Zure ezarpenak ondo gorde dira.';
-
-  @override
-  String get preferencesScrollOnTheBoardToReplayMoves => 'Mugitu taula gainean jokaldiak ikusteko';
-
-  @override
-  String get preferencesCorrespondenceEmailNotification => 'Jaso posta elektronikoz zure posta-bidezko partiden jakinarazpenen zerrenda egunero';
-
-  @override
-  String get preferencesNotifyStreamStart => 'Streamerra zuzenean dago';
-
-  @override
-  String get preferencesNotifyInboxMsg => 'Mezu berria postontzian';
-
-  @override
-  String get preferencesNotifyForumMention => 'Foroko erantzunean aipatu zaituzte';
-
-  @override
-  String get preferencesNotifyInvitedStudy => 'Azterlanreko gonbidapena';
-
-  @override
-  String get preferencesNotifyGameEvent => 'Posta bidezko partidetan eguneraketa';
-
-  @override
-  String get preferencesNotifyChallenge => 'Erronkak';
-
-  @override
-  String get preferencesNotifyTournamentSoon => 'Txapelketa laster hasiko da';
-
-  @override
-  String get preferencesNotifyTimeAlarm => 'Posta bidezko partidaren denbora amaitzen ari da';
-
-  @override
-  String get preferencesNotifyBell => 'Kanpai bidezko jakinarazpena Lichess barruan';
-
-  @override
-  String get preferencesNotifyPush => 'Gailuko jakinarazpena Lichessen ez zaudenean';
-
-  @override
-  String get preferencesNotifyWeb => 'Nabigatzailea';
-
-  @override
-  String get preferencesNotifyDevice => 'Gailua';
-
-  @override
-  String get preferencesBellNotificationSound => 'Kanpaiaren jakinarazpen soinua';
-
-  @override
-  String get puzzlePuzzles => 'Ariketak';
-
-  @override
-  String get puzzlePuzzleThemes => 'Ariketen gaiak';
-
-  @override
-  String get puzzleRecommended => 'Gomendatutakoak';
-
-  @override
-  String get puzzlePhases => 'Faseak';
-
-  @override
-  String get puzzleMotifs => 'Gaiak';
-
-  @override
-  String get puzzleAdvanced => 'Aurreratua';
-
-  @override
-  String get puzzleLengths => 'Luzera';
-
-  @override
-  String get puzzleMates => 'Mateak';
-
-  @override
-  String get puzzleGoals => 'Helburuak';
-
-  @override
-  String get puzzleOrigin => 'Jatorria';
-
-  @override
-  String get puzzleSpecialMoves => 'Jokaldi bereziak';
-
-  @override
-  String get puzzleDidYouLikeThisPuzzle => 'Ariketa gustukoa izan da?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Eman bozka hurrengoa kargatzeko!';
-
-  @override
-  String get puzzleUpVote => 'Ariketari +1 botoa';
-
-  @override
-  String get puzzleDownVote => 'Ariketari -1 botoa';
-
-  @override
-  String get puzzleYourPuzzleRatingWillNotChange => 'Ariketen zure puntuazioa ez da aldatuko. Kontuan izan ariketak ez direla txapelketa bat. Puntuaziok zure gaitasunen araberako ariketak aukeratzen laguntzen du.';
-
-  @override
-  String get puzzleFindTheBestMoveForWhite => 'Zurien jokaldi onena bilatu.';
-
-  @override
-  String get puzzleFindTheBestMoveForBlack => 'Beltzen jokaldi onena bilatu.';
-
-  @override
-  String get puzzleToGetPersonalizedPuzzles => 'Ariketa pertsonalizatuak lortzeko:';
-
-  @override
-  String puzzlePuzzleId(String param) {
-    return '$param ariketa';
-  }
-
-  @override
-  String get puzzlePuzzleOfTheDay => 'Eguneko ariketa';
-
-  @override
-  String get puzzleDailyPuzzle => 'Eguneroko ariketa';
-
-  @override
-  String get puzzleClickToSolve => 'Ebazteko klik egin';
-
-  @override
-  String get puzzleGoodMove => 'Jokaldi ona';
-
-  @override
-  String get puzzleBestMove => 'Jokaldi onena!';
-
-  @override
-  String get puzzleKeepGoing => 'Jarraitu…';
-
-  @override
-  String get puzzlePuzzleSuccess => 'Zorionak!';
-
-  @override
-  String get puzzlePuzzleComplete => 'Ariketa osatuta!';
-
-  @override
-  String get puzzleByOpenings => 'Hasieraka';
-
-  @override
-  String get puzzlePuzzlesByOpenings => 'Hasierakako ariketak';
-
-  @override
-  String get puzzleOpeningsYouPlayedTheMost => 'Gehien jokatu dituzun hasierak';
-
-  @override
-  String get puzzleUseFindInPage => 'Erabili zure nabigatzaileko \"Bilatu orrian\" funtzioa zure hasiera gogokoena bilatzeko!';
-
-  @override
-  String get puzzleUseCtrlF => 'Erabili Ctrl+f zure hasiera gogokoena bilatzeko!';
-
-  @override
-  String get puzzleNotTheMove => 'Hori ez zen jokaldia!';
-
-  @override
-  String get puzzleTrySomethingElse => 'Saiatu beste batekin.';
-
-  @override
-  String puzzleRatingX(String param) {
-    return 'Sailkapena: $param';
-  }
-
-  @override
-  String get puzzleHidden => 'ezkutuan';
-
-  @override
-  String puzzleFromGameLink(String param) {
-    return '$param partidatik hartua';
-  }
-
-  @override
-  String get puzzleContinueTraining => 'Entrenatzen jarraitu';
-
-  @override
-  String get puzzleDifficultyLevel => 'Zailtasun-maila';
-
-  @override
-  String get puzzleNormal => 'Arrunta';
-
-  @override
-  String get puzzleEasier => 'Erraza';
-
-  @override
-  String get puzzleEasiest => 'Errazena';
-
-  @override
-  String get puzzleHarder => 'Zaila';
-
-  @override
-  String get puzzleHardest => 'Zailena';
-
-  @override
-  String get puzzleExample => 'Adibidea';
-
-  @override
-  String get puzzleAddAnotherTheme => 'Beste gai bat gehitu';
-
-  @override
-  String get puzzleNextPuzzle => 'Hurrengo ariketa';
-
-  @override
-  String get puzzleJumpToNextPuzzleImmediately => 'Salto egin hurrengo ariketara berehala';
-
-  @override
-  String get puzzlePuzzleDashboard => 'Ariketen kontrol-panela';
-
-  @override
-  String get puzzleImprovementAreas => 'Hobetzekoak';
-
-  @override
-  String get puzzleStrengths => 'Indarguneak';
-
-  @override
-  String get puzzleHistory => 'Ariketen historikoa';
-
-  @override
-  String get puzzleSolved => 'ebatzita';
-
-  @override
-  String get puzzleFailed => 'huts eginda';
-
-  @override
-  String get puzzleStreakDescription => 'Ebatzi gero eta zailagoak diren ariketak eta garaipen-bolada lortu. Ez dago erlojurik, beraz hartu behar duzun denbora. Jokaldi oker bat eta akabo! Baina aldi bakoitzean behin salto egin dezakezu.';
-
-  @override
-  String puzzleYourStreakX(String param) {
-    return 'Zure garaipen-bolada: $param';
-  }
-
-  @override
-  String get puzzleStreakSkipExplanation => 'Jokaldi hau saltatu zure bolada mantentzeko! Lasterketa bakoitzean behin bakarrik erabili dezakezu.';
-
-  @override
-  String get puzzleContinueTheStreak => 'Jarraitu garaipen-bolada';
-
-  @override
-  String get puzzleNewStreak => 'Garaipen-bolada berria';
-
-  @override
-  String get puzzleFromMyGames => 'Nire partidetatik';
-
-  @override
-  String get puzzleLookupOfPlayer => 'Bilatu jokalari baten partidetatik ateratako ariketak';
-
-  @override
-  String puzzleFromXGames(String param) {
-    return '$param jokalariaren partidetako ariketak';
-  }
-
-  @override
-  String get puzzleSearchPuzzles => 'Ariketak bilatu';
-
-  @override
-  String get puzzleFromMyGamesNone => 'Ez duzu ariketarik datu-basean, hala ere Lichessek asko maite zaitu.\nJokatu partida azkar eta arruntak zure partidetatik eratorritako ariketak izateko!';
-
-  @override
-  String puzzleFromXGamesFound(String param1, String param2) {
-    return '$param1 ariketa aurkitu dira $param2 partidatan';
-  }
-
-  @override
-  String get puzzlePuzzleDashboardDescription => 'Entrenatu, aztertu, hobetu';
-
-  @override
-  String puzzlePercentSolved(String param) {
-    return '$param ebatzita';
-  }
-
-  @override
-  String get puzzleNoPuzzlesToShow => 'Ez dago ezer erakusteko, ebatzi ariketa batzuk!';
-
-  @override
-  String get puzzleImprovementAreasDescription => 'Entrenatu zure eboluzioa hobetzeko!';
-
-  @override
-  String get puzzleStrengthDescription => 'Gai hauetan zabiltza ondoen';
-
-  @override
-  String puzzlePlayedXTimes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count aldiz jokatuta',
-      one: 'Behin jokatuta',
-      zero: 'Behin jokatuta',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsBelowYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Ariketen zure puntuazioa baino $count puntu beherago',
-      one: 'Ariketen zure puntuazioa baino puntu bat beherago',
-      zero: 'Ariketen zure puntuazioa baino puntu bat beherago',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsAboveYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Ariketen zure puntuazioa baino $count puntu gorago',
-      one: 'Ariketen zure puntuazioa baino puntu bat gorago',
-      zero: 'Ariketen zure puntuazioa baino puntu bat gorago',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPlayed(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count jokatuta',
-      one: '$count jokatuta',
-      zero: '$count jokatuta',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbToReplay(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count berriz egiteko',
-      one: '$count berriz egiteko',
-      zero: '$count berriz egiteko',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get puzzleThemeAdvancedPawn => 'Peoi aurreratua';
-
-  @override
-  String get puzzleThemeAdvancedPawnDescription => 'Sustatuko den edo sustatze-bidean dagoen peoia da ariketa honen muina.';
-
-  @override
-  String get puzzleThemeAdvantage => 'Abantaila';
-
-  @override
-  String get puzzleThemeAdvantageDescription => 'Abantaila osoa lortzen saiatu (200cp ≤ ebaluazioa ≤ 600cp)';
-
-  @override
-  String get puzzleThemeAnastasiaMate => 'Anastasiaren matea';
-
-  @override
-  String get puzzleThemeAnastasiaMateDescription => 'Zaldun bat eta gaztelua eta damak aurkariaren erregea taularen bazter baten eta bere pieza baten artean harrapatzen dute.';
-
-  @override
-  String get puzzleThemeArabianMate => 'Mate arabiarra';
-
-  @override
-  String get puzzleThemeArabianMateDescription => 'Zaldun eta gaztelu banak elkarrekin lan egiten dute aurkariaren erregea xake-taularen bazter baten harrapatzeko.';
-
-  @override
-  String get puzzleThemeAttackingF2F7 => 'f2 edo f7 erasotu';
-
-  @override
-  String get puzzleThemeAttackingF2F7Description => 'f2 edo f7ko peoia helburu duen erasoa.';
-
-  @override
-  String get puzzleThemeAttraction => 'Erakarmena';
-
-  @override
-  String get puzzleThemeAttractionDescription => 'Aurkariaren pieza bat ondorengo erasoa erraztuko duen lauki batera mugitzeko pieza-aldaketa edo sakrifizioa.';
-
-  @override
-  String get puzzleThemeBackRankMate => 'Azken lerroko matea';
-
-  @override
-  String get puzzleThemeBackRankMateDescription => 'Bere piezekin trabatuta dagoenean erregeari bere errenkadan matea ematea.';
-
-  @override
-  String get puzzleThemeBishopEndgame => 'Alfilen bukaera';
-
-  @override
-  String get puzzleThemeBishopEndgameDescription => 'Alfilak eta peoiak bakarrik dituen partida-bukaera.';
-
-  @override
-  String get puzzleThemeBodenMate => 'Bodenen matea';
-
-  @override
-  String get puzzleThemeBodenMateDescription => 'Bi alfilek beren piezen artean trabatuta dagoen erregeari ematen dioten matea.';
-
-  @override
-  String get puzzleThemeCastling => 'Endrokea';
-
-  @override
-  String get puzzleThemeCastlingDescription => 'Babestu erregea eta ekarri gaztelua erasora.';
-
-  @override
-  String get puzzleThemeCapturingDefender => 'Defendatzailea harrapatu';
-
-  @override
-  String get puzzleThemeCapturingDefenderDescription => 'Beste pieza bat defendatzeko funtsezkoa den pieza kentzea, hurrengo jokaldietan lehenengo pieza hori harrapatzeko.';
-
-  @override
-  String get puzzleThemeCrushing => 'Zapalketa';
-
-  @override
-  String get puzzleThemeCrushingDescription => 'Akatsa aurkitu eta guztizko abantaila lortu. (ebaluazioa ≥ 600cp)';
-
-  @override
-  String get puzzleThemeDoubleBishopMate => 'Bi alfilen matea';
-
-  @override
-  String get puzzleThemeDoubleBishopMateDescription => 'Bi alfilek beren piezen artean trabatuta dagoen erregeari ematen dioten matea.';
-
-  @override
-  String get puzzleThemeDovetailMate => 'Mirubuztanaren matea';
-
-  @override
-  String get puzzleThemeDovetailMateDescription => 'Damak ematen duen matea erregearen ihes-laukiak bere piezekin trabatuta daudenean.';
-
-  @override
-  String get puzzleThemeEquality => 'Berdintasuna';
-
-  @override
-  String get puzzleThemeEqualityDescription => 'Partida galduta izatetik, berdinketa edo posizio berdintsua lortzera itzuli. (ebaluazioa ≤ 200cp)';
-
-  @override
-  String get puzzleThemeKingsideAttack => 'Erregearen aldeko erasoa';
-
-  @override
-  String get puzzleThemeKingsideAttackDescription => 'Aurkariaren erregearen aurkako erasoa, hau motzean endrokatu ostean.';
-
-  @override
-  String get puzzleThemeClearance => 'Garbiketa';
-
-  @override
-  String get puzzleThemeClearanceDescription => 'Lauki, errenkada edo diagonala garbitzen duen jokaldia, ondoren beste ideia taktiko bat erabiltzeko.';
-
-  @override
-  String get puzzleThemeDefensiveMove => 'Defentsa-jokaldia';
-
-  @override
-  String get puzzleThemeDefensiveMoveDescription => 'Materiala edo beste edozein abantaila galtzea ekiditeko jokaldi edo jokaldi-multzoa.';
-
-  @override
-  String get puzzleThemeDeflection => 'Desbideraketa';
-
-  @override
-  String get puzzleThemeDeflectionDescription => 'Aurkariaren pieza berezkoa duen betebehar batetik desbideratzea, adibidez lauki bat babestetik. Batzuetan \"gainkarga\" ere deitzen zaio.';
-
-  @override
-  String get puzzleThemeDiscoveredAttack => 'Ageriko erasoa';
-
-  @override
-  String get puzzleThemeDiscoveredAttackDescription => 'Beste pieza baten erasoa blokeatzen duen pieza bat mugitzea.';
-
-  @override
-  String get puzzleThemeDoubleCheck => 'Xake bikoitza';
-
-  @override
-  String get puzzleThemeDoubleCheckDescription => 'Bi piezarekin batera xake egitea, ageriko eraso baten ondorioz, mugitutako eta ezkutuan zegoen piezak aurkariaren erregea erasotuz.';
-
-  @override
-  String get puzzleThemeEndgame => 'Partida-bukaera';
-
-  @override
-  String get puzzleThemeEndgameDescription => 'Partidaren azken faseko taktika.';
-
-  @override
-  String get puzzleThemeEnPassantDescription => 'Igarotzean harrapatzeko arauarekin zerikusia duen taktika.';
-
-  @override
-  String get puzzleThemeExposedKing => 'Babesik gabeko erregea';
-
-  @override
-  String get puzzleThemeExposedKingDescription => 'Pieza gutxik defenditzen duten erregearen inguruko erasoa, sarri matean amaitzen dena.';
-
-  @override
-  String get puzzleThemeFork => 'Eraso bikoitza';
-
-  @override
-  String get puzzleThemeForkDescription => 'Mugitzen den piezak aurkariaren bi pieza batera erasotzen dituenean.';
-
-  @override
-  String get puzzleThemeHangingPiece => 'Defentsarik gabeko pieza';
-
-  @override
-  String get puzzleThemeHangingPieceDescription => 'Defentsarik ez duen edo defendatzaile gutxi dituen aurkariaren pieza baten ingurukoak.';
-
-  @override
-  String get puzzleThemeHookMate => 'Hooken matea';
-
-  @override
-  String get puzzleThemeHookMateDescription => 'Gaztelua, zalduna eta peoi batekin ematen den matea aurkariaren peoi batek bere erregearen bidea oztopatzen duelarik.';
-
-  @override
-  String get puzzleThemeInterference => 'Tartean sartzea';
-
-  @override
-  String get puzzleThemeInterferenceDescription => 'Aurkariaren bi piezaren artean pieza bat jartzea, horrela aurkariaren piezetako bat edo biak defentsarik gabe utziz.';
-
-  @override
-  String get puzzleThemeIntermezzo => 'Tarteko-jokaldia';
-
-  @override
-  String get puzzleThemeIntermezzoDescription => 'Esperotako jokaldia egin beharrean, aurkariari mehatxu bat eginez beste jokaldi bat egin aurkaria jokaldi horri erantzutera derrigortuz.';
-
-  @override
-  String get puzzleThemeKnightEndgame => 'Zaldunen finala';
-
-  @override
-  String get puzzleThemeKnightEndgameDescription => 'Zaldunak eta peoiak bakarrik dituen partida bukaera.';
-
-  @override
-  String get puzzleThemeLong => 'Ariketa luzea';
-
-  @override
-  String get puzzleThemeLongDescription => 'Irabazteko hiru jokaldi.';
-
-  @override
-  String get puzzleThemeMaster => 'Maisuen partidak';
-
-  @override
-  String get puzzleThemeMasterDescription => 'Tituludun jokalariek jokatutako partidetan oinarritutako ariketak.';
-
-  @override
-  String get puzzleThemeMasterVsMaster => 'Maisuen arteko partidak';
-
-  @override
-  String get puzzleThemeMasterVsMasterDescription => 'Tituludun jokalari biren artean jokatutako partidetan oinarritutako ariketak.';
-
-  @override
-  String get puzzleThemeMate => 'Mate';
-
-  @override
-  String get puzzleThemeMateDescription => 'Irabazi partida estiloarekin.';
-
-  @override
-  String get puzzleThemeMateIn1 => 'Mate baten';
-
-  @override
-  String get puzzleThemeMateIn1Description => 'Eman mate jokaldi bakarrean.';
-
-  @override
-  String get puzzleThemeMateIn2 => 'Mate bitan';
-
-  @override
-  String get puzzleThemeMateIn2Description => 'Eman mate bi jokalditan.';
-
-  @override
-  String get puzzleThemeMateIn3 => 'Mate hirutan';
-
-  @override
-  String get puzzleThemeMateIn3Description => 'Eman mate hiru jokalditan.';
-
-  @override
-  String get puzzleThemeMateIn4 => 'Mate lautan';
-
-  @override
-  String get puzzleThemeMateIn4Description => 'Eman mate lau jokalditan.';
-
-  @override
-  String get puzzleThemeMateIn5 => 'Mate 5 edo jokaldi gehiagotan';
-
-  @override
-  String get puzzleThemeMateIn5Description => 'Mate emateko sekuentzia luzea asmatu.';
-
-  @override
-  String get puzzleThemeMiddlegame => 'Erdi-jokoa';
-
-  @override
-  String get puzzleThemeMiddlegameDescription => 'Partidaren bigarren faseko taktika.';
-
-  @override
-  String get puzzleThemeOneMove => 'Jokaldi bakarreko ariketa';
-
-  @override
-  String get puzzleThemeOneMoveDescription => 'Jokaldi bakarrean ebazten den ariketa.';
-
-  @override
-  String get puzzleThemeOpening => 'Hasiera';
-
-  @override
-  String get puzzleThemeOpeningDescription => 'Partidaren lehenengo faseko taktika.';
-
-  @override
-  String get puzzleThemePawnEndgame => 'Peoien finala';
-
-  @override
-  String get puzzleThemePawnEndgameDescription => 'Peoiak bakarrik dituen finala.';
-
-  @override
-  String get puzzleThemePin => 'Iltzaketa';
-
-  @override
-  String get puzzleThemePinDescription => 'Iltzaketak ardatz dituen taktika, pieza bat mugitu ezin denean gehiago balio duen pieza bat airean utziko duelako.';
-
-  @override
-  String get puzzleThemePromotion => 'Sustapena';
-
-  @override
-  String get puzzleThemePromotionDescription => 'Sustatuko den edo sustatze-bidean dagoen peoia da ariketa honen muina.';
-
-  @override
-  String get puzzleThemeQueenEndgame => 'Damen finala';
-
-  @override
-  String get puzzleThemeQueenEndgameDescription => 'Damak eta peoiak bakarrik dituen finala.';
-
-  @override
-  String get puzzleThemeQueenRookEndgame => 'Dama eta Gaztelua';
-
-  @override
-  String get puzzleThemeQueenRookEndgameDescription => 'Damak, gazteluak eta peoiak bakarrik dituen finala.';
-
-  @override
-  String get puzzleThemeQueensideAttack => 'Damaren aldeko erasoa';
-
-  @override
-  String get puzzleThemeQueensideAttackDescription => 'Aurkariaren erregearen aurkako erasoa, hau luzean endrokatu ostean.';
-
-  @override
-  String get puzzleThemeQuietMove => 'Jokaldi lasaia';
-
-  @override
-  String get puzzleThemeQuietMoveDescription => 'Xakerik edo piezarik harrapatzen ez duen jokaldia, baina geldiezina den eraso bat prestatzen duena.';
-
-  @override
-  String get puzzleThemeRookEndgame => 'Gazteluen finala';
-
-  @override
-  String get puzzleThemeRookEndgameDescription => 'Gazteluak eta peoiak bakarrik dituen finala.';
-
-  @override
-  String get puzzleThemeSacrifice => 'Sakrifizioa';
-
-  @override
-  String get puzzleThemeSacrificeDescription => 'Geroago abantaila lortzeko epe motzean materiala entregatzea helburu duen taktika.';
-
-  @override
-  String get puzzleThemeShort => 'Ariketa laburra';
-
-  @override
-  String get puzzleThemeShortDescription => 'Bi jokaldi irabazteko.';
-
-  @override
-  String get puzzleThemeSkewer => 'Paretik kentzea';
-
-  @override
-  String get puzzleThemeSkewerDescription => 'Erasotua den balio handiko pieza bat mugitzea, erasotik kenduz eta bere atzean dagoen baina gutxiago balio duen pieza bat harrapatzen uztea, iltzaketaren aurkakoa.';
-
-  @override
-  String get puzzleThemeSmotheredMate => 'Ostikoaren matea';
-
-  @override
-  String get puzzleThemeSmotheredMateDescription => 'Zaldiak ematen duen matea, aurkariaren erregea bere piezak oztopatzen dutenez ezin delako mugitu.';
-
-  @override
-  String get puzzleThemeSuperGM => 'Super GMen partidak';
-
-  @override
-  String get puzzleThemeSuperGMDescription => 'Munduko jokalari onenek jokatutako partidetatik ateratako ariketak.';
-
-  @override
-  String get puzzleThemeTrappedPiece => 'Harrapatutako pieza';
-
-  @override
-  String get puzzleThemeTrappedPieceDescription => 'Bere jokaldiak mugatuta dituelako ihes egin ezin duen pieza.';
-
-  @override
-  String get puzzleThemeUnderPromotion => 'Sustapen txikia';
-
-  @override
-  String get puzzleThemeUnderPromotionDescription => 'Zalduna, alfila edo gaztelua sustatzea.';
-
-  @override
-  String get puzzleThemeVeryLong => 'Ariketa oso luzea';
-
-  @override
-  String get puzzleThemeVeryLongDescription => 'Irabazteko lau jokaldi edo gehiago.';
-
-  @override
-  String get puzzleThemeXRayAttack => 'X-izpien erasoa';
-
-  @override
-  String get puzzleThemeXRayAttackDescription => 'Aurkariaren pieza baten artetik, pieza batek lauki bat erasotu edo defendatzen duenean.';
-
-  @override
-  String get puzzleThemeZugzwang => 'Zugzwang';
-
-  @override
-  String get puzzleThemeZugzwangDescription => 'Aurkariak jokaldi mugatuak ditu eta jokaldi guztien bere posizioa okertu egiten dute.';
-
-  @override
-  String get puzzleThemeHealthyMix => 'Denetik pixkat';
-
-  @override
-  String get puzzleThemeHealthyMixDescription => 'Denetatik. Ez dakizu zer espero, beraz prestatu zure burua edozertarako! Benetako partidetan bezala.';
-
-  @override
-  String get puzzleThemePlayerGames => 'Jokalarien partidak';
-
-  @override
-  String get puzzleThemePlayerGamesDescription => 'Ikusi zure edo beste jokalarien partidetatik sortutako ariketak.';
-
-  @override
-  String puzzleThemePuzzleDownloadInformation(String param) {
-    return 'Ariketa hauek publikoak dira, $param helbidetik deskargatu daitezke.';
-  }
-
-  @override
-  String perfStatPerfStats(String param) {
-    return '$param estatistikak';
-  }
-
-  @override
-  String get perfStatViewTheGames => 'Partidak ikusi';
-
-  @override
-  String get perfStatProvisional => 'behin-behinekoa';
-
-  @override
-  String get perfStatNotEnoughRatedGames => 'Ez duzu puntuaziorako balio duten behar adina partida jokatu.';
-
-  @override
-  String perfStatProgressOverLastXGames(String param) {
-    return 'Azken $param partidetako aurrerapena:';
-  }
-
-  @override
-  String perfStatRatingDeviation(String param) {
-    return 'Puntuazioaren desbideraketa: $param.';
-  }
-
-  @override
-  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
-    return 'Balio baxuagoak puntuazioa egonkorragoa dela esan nahi du. ${param1}tik gorako balioak puntuazioa behin-behinekoa dela esan nahi du. Sailkapenetan agertzeko, balio hori $param2 baino baxuagoa (xake estandarrean) eta $param3 baino baxuagoa (aldaeretan) izan behar da.';
-  }
-
-  @override
-  String get perfStatTotalGames => 'Partida kopurua';
-
-  @override
-  String get perfStatRatedGames => 'Puntuaziorako balio duten partidak';
-
-  @override
-  String get perfStatTournamentGames => 'Txapelketetako partidak';
-
-  @override
-  String get perfStatBerserkedGames => 'Berserk erabilitako partidak';
-
-  @override
-  String get perfStatTimeSpentPlaying => 'Jokatzen emandako denbora';
-
-  @override
-  String get perfStatAverageOpponent => 'Aurkarien batazbestekoa';
-
-  @override
-  String get perfStatVictories => 'Garaipenak';
-
-  @override
-  String get perfStatDefeats => 'Porrotak';
-
-  @override
-  String get perfStatDisconnections => 'Deskonektatutakoak';
-
-  @override
-  String get perfStatNotEnoughGames => 'Ez duzu partida nahiko jokatu';
-
-  @override
-  String perfStatHighestRating(String param) {
-    return 'Puntuazio altuena: $param';
-  }
-
-  @override
-  String perfStatLowestRating(String param) {
-    return 'Puntuazio baxuena: $param';
-  }
-
-  @override
-  String perfStatFromXToY(String param1, String param2) {
-    return '$param1 - $param2';
-  }
-
-  @override
-  String get perfStatWinningStreak => 'Garaipenen segida';
-
-  @override
-  String get perfStatLosingStreak => 'Porroten segida';
-
-  @override
-  String perfStatLongestStreak(String param) {
-    return 'Segida luzeena: $param';
-  }
-
-  @override
-  String perfStatCurrentStreak(String param) {
-    return 'Uneko segida: $param';
-  }
-
-  @override
-  String get perfStatBestRated => 'Garaipen onenak';
-
-  @override
-  String get perfStatGamesInARow => 'Jarraian jokatutako partida kopurua';
-
-  @override
-  String get perfStatLessThanOneHour => 'Partiden artean ordubete baino gutxiago';
-
-  @override
-  String get perfStatMaxTimePlaying => 'Jokatzen emandako denbora gehiena';
-
-  @override
-  String get perfStatNow => 'orain';
-
-  @override
-  String get searchSearch => 'Bilatu';
-
-  @override
-  String get settingsSettings => 'Ezarpenak';
-
-  @override
-  String get settingsCloseAccount => 'Kontua itxi';
-
-  @override
-  String get settingsManagedAccountCannotBeClosed => 'Zure kontua beste norbaitek kudeatzen du eta ezin da itxi.';
-
-  @override
-  String get settingsClosingIsDefinitive => 'Ixteak ez du atzera egiterik. Ziur zaude?';
-
-  @override
-  String get settingsCantOpenSimilarAccount => 'Ezingo duzu beste kontu bat ireki izen berdinarekin, naiz eta hizki larriak eta xeheak aldatu.';
-
-  @override
-  String get settingsChangedMindDoNotCloseAccount => 'Ez dut nire kontua itxi nahi';
-
-  @override
-  String get settingsCloseAccountExplanation => 'Benetan zure kontua itxi egin nahi duzu? Erabaki hau betiko hartuko duzu eta ezingo zara berriz inoiz webgunera sartu.';
-
-  @override
-  String get settingsThisAccountIsClosed => 'Kontu hau itxita dago.';
-
-  @override
-  String get streamerLichessStreamers => 'Lichess streamerrak';
-
-  @override
   String get stormMoveToStart => 'Mugitu hasteko';
 
   @override
@@ -4646,14 +4640,11 @@ class AppLocalizationsEu extends AppLocalizations {
   }
 
   @override
+  String get streamerLichessStreamers => 'Lichess streamerrak';
+
+  @override
   String get studyShareAndExport => 'Partekatu & esportatu';
 
   @override
   String get studyStart => 'Hasi';
-
-  @override
-  String get broadcastBroadcasts => 'Emanaldiak';
-
-  @override
-  String get broadcastStartDate => 'Zure ordu-zonako hasiera data';
 }

@@ -225,10 +225,10 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
-  String get contactContact => 'লাইকেস. আর. সি. / এর যোগাযোগের সংক্ষিপ্ত লিঙ্ক, হোমপেজে দৃশ্যমান';
+  String get broadcastBroadcasts => 'সম্প্রচার';
 
   @override
-  String get contactContactLichess => 'পৃষ্ঠার শিরোনাম lichess. org/contact';
+  String get broadcastStartDate => 'আপনার নিজস্ব সময় অঞ্চল শুরু করার তারিখ';
 
   @override
   String challengeChallengesX(String param1) {
@@ -312,3158 +312,121 @@ class AppLocalizationsBn extends AppLocalizations {
   String get challengeInviteLichessUser => 'অথবা একজন লিচেস ব্যবহারকারীকে আমন্ত্রণ জানান |:';
 
   @override
-  String get playWithAFriend => 'বন্ধুর সাথে খেলো';
+  String get contactContact => 'লাইকেস. আর. সি. / এর যোগাযোগের সংক্ষিপ্ত লিঙ্ক, হোমপেজে দৃশ্যমান';
 
   @override
-  String get playWithTheMachine => 'কম্পিউটারের সাথে খেলতে চান';
+  String get contactContactLichess => 'পৃষ্ঠার শিরোনাম lichess. org/contact';
 
   @override
-  String get toInviteSomeoneToPlayGiveThisUrl => 'কাউকে খেলার জন্য আমন্ত্রণ জানাতে চাইলে এই URL টি দিন';
+  String get patronDonate => 'দান করুন';
 
   @override
-  String get gameOver => 'খেলা সমাপ্ত';
+  String get patronLichessPatron => 'Lichess অভিভাবক';
 
   @override
-  String get waitingForOpponent => 'প্রতিপক্ষের জন্য অপেক্ষারত';
-
-  @override
-  String get orLetYourOpponentScanQrCode => 'Or let your opponent scan this QR code';
-
-  @override
-  String get waiting => 'অপেক্ষা করুন';
-
-  @override
-  String get yourTurn => 'আপনার চাল';
-
-  @override
-  String aiNameLevelAiLevel(String param1, String param2) {
-    return '$param1 এর লেভেল $param2';
-  }
-
-  @override
-  String get level => 'লেভেল';
-
-  @override
-  String get strength => 'শক্তি';
-
-  @override
-  String get toggleTheChat => 'আড্ডা চালু/বন্ধ';
-
-  @override
-  String get chat => 'আড্ডা';
-
-  @override
-  String get resign => 'হার স্বীকার করুন';
-
-  @override
-  String get checkmate => 'কিস্তিমাত';
-
-  @override
-  String get stalemate => 'চালমাত - সমান';
-
-  @override
-  String get white => 'সাদা';
-
-  @override
-  String get black => 'কালো';
-
-  @override
-  String get asWhite => 'সাদা হয়ে';
-
-  @override
-  String get asBlack => 'কালো হয়ে';
-
-  @override
-  String get randomColor => 'যে কোন রঙ';
-
-  @override
-  String get createAGame => 'খেলা তৈরি করুন';
-
-  @override
-  String get whiteIsVictorious => 'সাদা বিজয়ী';
-
-  @override
-  String get blackIsVictorious => 'কালো বিজয়ী';
-
-  @override
-  String get youPlayTheWhitePieces => 'আপনি সাদা গুটি নিয়ে খেলছেন';
-
-  @override
-  String get youPlayTheBlackPieces => 'আপনি কালো গুটি নিয়ে খেলছেন';
-
-  @override
-  String get itsYourTurn => 'এবার আপনার পালা!';
-
-  @override
-  String get cheatDetected => 'প্রতারণা শনাক্ত করা হয়েছে';
-
-  @override
-  String get kingInTheCenter => 'রাজাকে কেন্দ্রে আনুন';
-
-  @override
-  String get threeChecks => 'তিনটি কিস্তি';
-
-  @override
-  String get raceFinished => 'প্রতিযোগিতা শেষ';
-
-  @override
-  String get variantEnding => 'ভিন্ন রকমের সমাপ্তি';
-
-  @override
-  String get newOpponent => 'নতুন প্রতিপক্ষ';
-
-  @override
-  String get yourOpponentWantsToPlayANewGameWithYou => 'আপনার প্রতিপক্ষ পুনরায়  আপনার সাথে খেলতে চায়';
-
-  @override
-  String get joinTheGame => 'খেলাটিতে যোগ দিন';
-
-  @override
-  String get whitePlays => 'সাদার চাল';
-
-  @override
-  String get blackPlays => 'কালোর চাল';
-
-  @override
-  String get opponentLeftChoices => 'অপর খেলোয়াড় খেলাটি ছেড়ে চলে গেছেন, আপনি সেই খেলাটিকে জিততে পারেন নাহলে ড্র করতে পারেন কিংবা অপেক্ষা করুন প্রতিপক্ষের পুনরায় খেলায় ফিরে আসার';
-
-  @override
-  String get forceResignation => 'বিজয় দাবী করুন';
-
-  @override
-  String get forceDraw => 'সমান ঘোষণা করুন';
-
-  @override
-  String get talkInChat => 'আড্ডায় কথা বলুন';
-
-  @override
-  String get theFirstPersonToComeOnThisUrlWillPlayWithYou => 'এই URL দিয়ে আসা প্রথম ব্যক্তি আপনার সাথে খেলবেন';
-
-  @override
-  String get whiteResigned => 'সাদা হার মেনে নিলেন';
-
-  @override
-  String get blackResigned => 'কালো হার মেনে নিলেন';
-
-  @override
-  String get whiteLeftTheGame => 'সাদা খেলাটি ছেড়ে চলে গেছেন';
-
-  @override
-  String get blackLeftTheGame => 'কালো খেলাটি ছেড়ে চলে গেছেন';
-
-  @override
-  String get whiteDidntMove => 'সাদা চাল দিল না';
-
-  @override
-  String get blackDidntMove => 'কালো চাল দিল না';
-
-  @override
-  String get requestAComputerAnalysis => 'কম্পিউটার বিশ্লেষণের জন্য অবেদন করুন';
-
-  @override
-  String get computerAnalysis => 'কম্পিউটারের বিশ্লেষণ';
-
-  @override
-  String get computerAnalysisAvailable => 'কম্পিউটার বিশ্লেষণ পাওয়া যায়';
-
-  @override
-  String get computerAnalysisDisabled => 'কম্পিউটার বিশ্লেষণ অচল করা আছে';
-
-  @override
-  String get analysis => 'বিশ্লেষণ বোর্ড';
-
-  @override
-  String depthX(String param) {
-    return 'গভীরতা $param';
-  }
-
-  @override
-  String get usingServerAnalysis => 'সার্ভারের বিশ্লেষণ ব্যবহার করা হচ্ছে';
-
-  @override
-  String get loadingEngine => 'ইঞ্জিন লোড করা হচ্ছে...';
-
-  @override
-  String get calculatingMoves => 'চালগুলি গননা করা হচ্ছে...';
-
-  @override
-  String get engineFailed => 'ইঞ্জিন লোড করতে ব্যর্থ';
-
-  @override
-  String get cloudAnalysis => 'মেঘবিশ্লেষণ';
-
-  @override
-  String get goDeeper => 'গভীরে যাও';
-
-  @override
-  String get showThreat => 'ন্হমকি দেখান';
-
-  @override
-  String get inLocalBrowser => 'সাধারন ব্রাউজারের মধ্যে';
-
-  @override
-  String get toggleLocalEvaluation => 'স্থানীয় টগ্ল মূল্যায়ন';
-
-  @override
-  String get promoteVariation => 'বিজ্ঞাপন';
-
-  @override
-  String get makeMainLine => 'প্রাধান সীমা করা';
-
-  @override
-  String get deleteFromHere => 'এখান থেকে মুছুন';
-
-  @override
-  String get forceVariation => 'জোর করে পরিবর্তন';
-
-  @override
-  String get copyVariationPgn => 'Copy variation PGN';
-
-  @override
-  String get move => 'চাল';
-
-  @override
-  String get variantLoss => 'ভিন্ন ক্ষতি';
-
-  @override
-  String get variantWin => 'ভিন্ন জয়';
-
-  @override
-  String get insufficientMaterial => 'অপর্যাপ্ত উপাদান';
-
-  @override
-  String get pawnMove => 'ঘুঁটি সরান';
-
-  @override
-  String get capture => 'অধিগ্রহন করুন';
-
-  @override
-  String get close => 'বন্ধ';
-
-  @override
-  String get winning => 'জয়লাভ';
-
-  @override
-  String get losing => 'হেরে যাওয়া';
-
-  @override
-  String get drawn => 'সমান';
-
-  @override
-  String get unknown => 'অজানা';
-
-  @override
-  String get database => 'ডেটাবেজ';
-
-  @override
-  String get whiteDrawBlack => 'সাদা / সমান / কালো';
-
-  @override
-  String averageRatingX(String param) {
-    return 'গড় নির্ধারণ:$param';
-  }
-
-  @override
-  String get recentGames => 'সম্প্রতি খেলা';
-
-  @override
-  String get topGames => 'সেরা খেলা';
-
-  @override
-  String masterDbExplanation(String param1, String param2, String param3) {
-    return '২ লক্ষ ওটিবি খেলার $param1+খেলয়াড়ের বিশ্বাসের অনুপাত $param2 থেকে $param3';
-  }
-
-  @override
-  String get dtzWithRounding => 'DTZ50\'\' with rounding, based on number of half-moves until next capture or pawn move';
-
-  @override
-  String get noGameFound => 'কোন খেলা নেই';
-
-  @override
-  String get maxDepthReached => 'Max depth reached!';
-
-  @override
-  String get maybeIncludeMoreGamesFromThePreferencesMenu => 'হয়তো আরো খেলা যোগ করা হবে পচ্ছন্দের তালিকায়?';
-
-  @override
-  String get openings => 'শুরুর ভাগ';
-
-  @override
-  String get openingExplorer => 'অনুসন্ধানকারী খুলতেছে';
-
-  @override
-  String get openingEndgameExplorer => 'প্রারম্ভিক/শেষ খেলা কৌশল বিশ্লেষণ';
-
-  @override
-  String xOpeningExplorer(String param) {
-    return '$param অনুসন্ধানকারী খুলতেছে';
-  }
-
-  @override
-  String get playFirstOpeningEndgameExplorerMove => 'Play first opening/endgame-explorer move';
-
-  @override
-  String get winPreventedBy50MoveRule => '50-চাল নিয়মে জয় প্রতিরোধ';
-
-  @override
-  String get lossSavedBy50MoveRule => '50- চাল নিয়মে হার জমা';
-
-  @override
-  String get winOr50MovesByPriorMistake => 'Win or 50 moves by prior mistake';
-
-  @override
-  String get lossOr50MovesByPriorMistake => 'Loss or 50 moves by prior mistake';
-
-  @override
-  String get unknownDueToRounding => 'Win/loss only guaranteed if recommended tablebase line has been followed since the last capture or pawn move, due to possible rounding of DTZ values in Syzygy tablebases.';
-
-  @override
-  String get allSet => 'সব প্রস্তুত!';
-
-  @override
-  String get importPgn => 'PGN প্রবেশ করান';
-
-  @override
-  String get delete => 'মুছে ফেলা';
-
-  @override
-  String get deleteThisImportedGame => 'প্রেবেশ করানো খেলাটি মুছেফেলবেন?';
-
-  @override
-  String get replayMode => 'উত্তর ধরন';
-
-  @override
-  String get realtimeReplay => 'সঠিকসময়';
-
-  @override
-  String get byCPL => 'CPL দ্বারা';
-
-  @override
-  String get openStudy => 'মুক্ত অধ্যয়ন';
-
-  @override
-  String get enable => 'সচল';
-
-  @override
-  String get bestMoveArrow => 'সরানোর উত্তম চিহ্ন';
-
-  @override
-  String get showVariationArrows => 'বৈচিত্র্য তীর দেখান';
-
-  @override
-  String get evaluationGauge => 'পরিমাপ মূল্যায়ন';
-
-  @override
-  String get multipleLines => 'বহু রেখা';
-
-  @override
-  String get cpus => 'সিপিইউএস';
-
-  @override
-  String get memory => 'মেমরি';
-
-  @override
-  String get infiniteAnalysis => 'অনন্ত বিশ্লেষণ';
-
-  @override
-  String get removesTheDepthLimit => 'গভীরতার সীমা অপসারণ করুন এবং আপনার কম্পিউটারকে গরম রাখুন';
-
-  @override
-  String get engineManager => 'Engine manager';
-
-  @override
-  String get blunder => 'গুরুতর ভুল';
-
-  @override
-  String get mistake => 'ভুল';
-
-  @override
-  String get inaccuracy => 'অশুদ্ধি';
-
-  @override
-  String get moveTimes => 'চালের সময়';
-
-  @override
-  String get flipBoard => 'বোর্ডকে ঘোরান';
-
-  @override
-  String get threefoldRepetition => 'তিনবার একই চাল';
-
-  @override
-  String get claimADraw => 'সমান দাবী করুন';
-
-  @override
-  String get offerDraw => 'সমানের জন্য আহ্‌বান জানান';
-
-  @override
-  String get draw => 'সমান';
-
-  @override
-  String get drawByMutualAgreement => 'মতৈক্যের ভিত্তিতে ড্র';
-
-  @override
-  String get fiftyMovesWithoutProgress => 'কোনো অগ্রগতি ছাড়া ৫০ চাল';
-
-  @override
-  String get currentGames => 'বর্তমান খেলা';
-
-  @override
-  String get viewInFullSize => 'পূর্ণ আকারে দেখুন';
-
-  @override
-  String get logOut => 'প্রস্থান';
-
-  @override
-  String get signIn => 'সাইন ইন';
-
-  @override
-  String get rememberMe => 'আমাকে লগিন/সংযুক্ত রাখুন';
-
-  @override
-  String get youNeedAnAccountToDoThat => 'এটি করার জন্য আপনার একাউন্ট প্রয়োজন';
-
-  @override
-  String get signUp => 'নিবন্ধ';
-
-  @override
-  String get computersAreNotAllowedToPlay => 'কম্পিউটার অথবা কম্পিউটার ব্যবহার করে খেলা যাবে না | সবাইকে অনুরোধ করা হচ্ছে যেন কেউ খেলার সময় কোনো রকম কম্পিউটার এর সাহায্য না নেন | পুনশ্চ, অযথা অনেক গুলি একাউন্ট খুলবেন না তাহলে আপনাকে বহিষ্কার করা হতে পারে.';
-
-  @override
-  String get games => 'সমস্ত খেলা';
-
-  @override
-  String get forum => 'ফোরাম';
-
-  @override
-  String xPostedInForumY(String param1, String param2) {
-    return '$param1 পোস্ট করেছেন এ বিষয়ে $param2';
-  }
-
-  @override
-  String get latestForumPosts => 'সর্বশেষ ফোরাম বার্তা';
-
-  @override
-  String get players => 'খেলোয়াড়';
-
-  @override
-  String get friends => 'বন্ধুরা';
-
-  @override
-  String get discussions => 'বার্তাগুলি';
-
-  @override
-  String get today => 'আজ';
-
-  @override
-  String get yesterday => 'গতকাল';
-
-  @override
-  String get minutesPerSide => 'প্রতিটি পাশের জন্য বরাদ্দ মিনিট';
-
-  @override
-  String get variant => 'বিকল্প';
-
-  @override
-  String get variants => 'বিভিন্ন';
-
-  @override
-  String get timeControl => 'সময় নিয়ন্ত্রণ';
-
-  @override
-  String get realTime => 'সঠিক সময়';
-
-  @override
-  String get correspondence => 'দীর্ঘ খেলা';
-
-  @override
-  String get daysPerTurn => 'প্রতিটি চালের জন্য বরাদ্দ দিন';
-
-  @override
-  String get oneDay => 'একদিন';
-
-  @override
-  String get time => 'সময়';
-
-  @override
-  String get rating => 'অনুপাত';
-
-  @override
-  String get ratingStats => 'অনুপাত পরিসংখ্যান';
-
-  @override
-  String get username => 'ব্যবহারকারীর নাম';
-
-  @override
-  String get usernameOrEmail => 'ব্যবহারকারী নাম অথবা ই-মেইল';
-
-  @override
-  String get changeUsername => 'ইউজারনেম পরিবর্তন করুন';
-
-  @override
-  String get changeUsernameNotSame => 'শুধুমাত্র লেটারগুলোর কেইস পরিবর্তন করা সম্ভব। উদাহরণস্বরূপ \"johndoe\" থেকে \"JohnDoe\"।';
-
-  @override
-  String get changeUsernameDescription => 'আপনার ইউসারনেম পরিবর্তন করুন। এটি মাত্র একবারই পরিবর্তন করা যাবে এবং আপনি শুধুমাত্র বড়ো-ছোট হাতের অক্ষরে রূপান্তরকরণ করতে পারবেন।';
-
-  @override
-  String get signupUsernameHint => 'পছন্দ অনুযায়ী নিজের ইউজারনেম তৈরি করুন কারন পরে এটি পরিবর্তন করতে পারবেন না এবং অনুপযুক্ত ইউজারনেমের যেকোনো অ্যাকাউন্ট পরবর্বতিতে বন্ধ করা হতে পারে!';
-
-  @override
-  String get signupEmailHint => 'We will only use it for password reset.';
-
-  @override
-  String get password => 'পাসওয়ার্ড';
-
-  @override
-  String get changePassword => 'পাসওয়ার্ড পরিবর্তন';
-
-  @override
-  String get changeEmail => 'ই-মেইল পরিবর্তন করুন';
-
-  @override
-  String get email => 'ইমেল';
-
-  @override
-  String get passwordReset => 'পাসওয়ার্ড পরিবর্তন';
-
-  @override
-  String get forgotPassword => 'পাসওয়ার্ড ভুলে গেছেন?';
-
-  @override
-  String get error_weakPassword => 'This password is extremely common, and too easy to guess.';
-
-  @override
-  String get error_namePassword => 'Please don\'t use your username as your password.';
-
-  @override
-  String get blankedPassword => 'You have used the same password on another site, and that site has been compromised. To ensure the safety of your Lichess account, we need you to set a new password. Thank you for your understanding.';
-
-  @override
-  String get youAreLeavingLichess => 'আপনি লিচেস ছেড়ে যাচ্ছেন';
-
-  @override
-  String get neverTypeYourPassword => 'লিচেসে ব্যবহৃত পাসওয়ার্ড অন্য কোনো ওয়েবসাইটে টাইপ/ব্যবহার করবেন না!';
-
-  @override
-  String proceedToX(String param) {
-    return 'Proceed to $param';
-  }
-
-  @override
-  String get passwordSuggestion => 'অন্য কারো প্রস্তাবিত পাসওয়ার্ড ব্যবহার করবেন না, কারন আপনার অ্যাকাউন্ট অন্য কারো দ্বারা চুরি/ব্যাবহার হওয়ার সম্ভাবনা রয়েছে';
-
-  @override
-  String get emailSuggestion => 'অন্য কারো প্রস্তাবিত ই-মেইল ব্যবহার করবেন না, কারন আপনার অ্যাকাউন্ট অন্য কারো দ্বারা চুরি/ব্যাবহার হওয়ার সম্ভাবনা রয়েছে';
-
-  @override
-  String get emailConfirmHelp => 'ইমেল নিশ্চিতকরণের মাধ্যমে সাহায্য';
-
-  @override
-  String get emailConfirmNotReceived => 'সাইন আপ করার পর ইমেইলে কনফার্মেশন পান নি?';
-
-  @override
-  String get whatSignupUsername => 'একাউন্ট খোলার/সাইন আপ করার সময় ইউজারনেম কি ব্যাবহার করেছিলেন?';
-
-  @override
-  String usernameNotFound(String param) {
-    return 'আমরা এই নামের কোনো ব্যবহারকারী খুঁজে পাইনি: $param.';
-  }
-
-  @override
-  String get usernameCanBeUsedForNewAccount => 'নতুন একাউন্ট খুলতে এই ইউজারনেমটি ব্যাবহার করতে পারেন';
-
-  @override
-  String emailSent(String param) {
-    return '$param ঠিকানায় আমরা ইমেইল পাঠিয়েছি';
-  }
-
-  @override
-  String get emailCanTakeSomeTime => 'পৌঁছাতে কিছু সময় লাগতে পারে।.';
-
-  @override
-  String get refreshInboxAfterFiveMinutes => '৫ মিনিট অপেক্ষা করে ইমেইলবক্স রিফ্রেশ করুন.';
-
-  @override
-  String get checkSpamFolder => 'Also check your spam folder, it might end up there. If so, mark it as not spam.';
-
-  @override
-  String get emailForSignupHelp => 'If everything else fails, then send us this email:';
-
-  @override
-  String copyTextToEmail(String param) {
-    return 'Copy and paste the above text and send it to $param';
-  }
-
-  @override
-  String get waitForSignupHelp => 'We will come back to you shortly to help you complete your signup.';
-
-  @override
-  String accountConfirmed(String param) {
-    return 'The user $param is successfully confirmed.';
-  }
-
-  @override
-  String accountCanLogin(String param) {
-    return 'You can login right now as $param.';
-  }
-
-  @override
-  String get accountConfirmationEmailNotNeeded => 'You do not need a confirmation email.';
-
-  @override
-  String accountClosed(String param) {
-    return 'The account $param is closed.';
-  }
-
-  @override
-  String accountRegisteredWithoutEmail(String param) {
-    return 'The account $param was registered without an email.';
-  }
-
-  @override
-  String get rank => 'মর্যাদাক্রম';
-
-  @override
-  String rankX(String param) {
-    return 'অনুপাত: $param';
-  }
-
-  @override
-  String get gamesPlayed => 'খেলা খেলেছেন';
-
-  @override
-  String get cancel => 'বাতিল করুন';
-
-  @override
-  String get whiteTimeOut => 'সাদার সময় শেষ';
-
-  @override
-  String get blackTimeOut => 'কালোর সময় আপ';
-
-  @override
-  String get drawOfferSent => 'সমান অফার পাঠানো হয়েছে';
-
-  @override
-  String get drawOfferAccepted => 'সমান অফার গ্রহণ করা হয়েছে';
-
-  @override
-  String get drawOfferCanceled => 'সমান অফার বাতিল করা হয়েছে';
-
-  @override
-  String get whiteOffersDraw => 'সাদা অফার সমান';
-
-  @override
-  String get blackOffersDraw => 'কালো অফার সমান';
-
-  @override
-  String get whiteDeclinesDraw => 'সাদা সমান প্রত্যাখান করেছে';
-
-  @override
-  String get blackDeclinesDraw => 'কালো সমান প্রত্যাখান করেছে';
-
-  @override
-  String get yourOpponentOffersADraw => 'আপনার প্রতিপক্ষ সমান অফার করেছেন';
-
-  @override
-  String get accept => 'গ্রহণ করুন';
-
-  @override
-  String get decline => 'প্রত্যাখ্যান করুন';
-
-  @override
-  String get playingRightNow => 'এই মুহূর্তে খেলছেন';
-
-  @override
-  String get eventInProgress => 'এই মুহূর্তে খেলতেছে';
-
-  @override
-  String get finished => 'সমাপ্ত';
-
-  @override
-  String get abortGame => 'খেলা বন্ধ করুন';
-
-  @override
-  String get gameAborted => 'খেলা বন্ধ করা হয়েছে';
-
-  @override
-  String get standard => 'আদর্শ';
-
-  @override
-  String get customPosition => 'Custom position';
-
-  @override
-  String get unlimited => 'সীমাহীন সময়';
-
-  @override
-  String get mode => 'ধরন';
-
-  @override
-  String get casual => 'সাধারণ';
-
-  @override
-  String get rated => 'রেট করা';
-
-  @override
-  String get casualTournament => 'সাধারন';
-
-  @override
-  String get ratedTournament => 'অনুপাত';
-
-  @override
-  String get thisGameIsRated => 'এই খেলাটি রেট করা';
-
-  @override
-  String get rematch => 'আবার খেলুন';
-
-  @override
-  String get rematchOfferSent => 'পুনঃম্যাচের অফার পাঠানো হয়েছে';
-
-  @override
-  String get rematchOfferAccepted => 'পুনঃম্যাচের অফার গ্রহণ করা হয়েছে';
-
-  @override
-  String get rematchOfferCanceled => 'পুনঃম্যাচের অফার বাতিল করা হয়েছে';
-
-  @override
-  String get rematchOfferDeclined => 'পুনঃম্যাচের অফার প্রত্যাখ্যাত হয়েছে';
-
-  @override
-  String get cancelRematchOffer => 'পুনঃম্যাচের অফার বাতিল করুন';
-
-  @override
-  String get viewRematch => 'পুনঃম্যাচ দেখান';
-
-  @override
-  String get confirmMove => 'পদক্ষেপ নিশ্চিত করছি';
-
-  @override
-  String get play => 'খেলুন';
-
-  @override
-  String get inbox => 'ডাকবাক্স';
-
-  @override
-  String get chatRoom => 'আড্ডাঘর';
-
-  @override
-  String get loginToChat => 'আলাপআলচনা করতে লগিন করুন';
-
-  @override
-  String get youHaveBeenTimedOut => 'আপনার সময় শেষ.';
-
-  @override
-  String get spectatorRoom => 'দর্শক কক্ষ';
-
-  @override
-  String get composeMessage => 'মেসেজ তৈরি করুন';
-
-  @override
-  String get subject => 'শিরোনাম';
-
-  @override
-  String get send => 'পাঠান';
-
-  @override
-  String get incrementInSeconds => 'প্রতি সেকেন্ডে পর্যায়ক্রমিক বৃদ্ধি';
-
-  @override
-  String get freeOnlineChess => 'ফ্রি অনলাইন দাবা';
-
-  @override
-  String get exportGames => 'খেলা রপ্তানী';
-
-  @override
-  String get ratingRange => 'রেটিং সীমা';
-
-  @override
-  String get thisAccountViolatedTos => 'এই অ্যাকাউন্টটি লিচেস্‌-এর পরিষেবার শর্তসমূহ লঙ্ঘন করেছে';
-
-  @override
-  String get openingExplorerAndTablebase => 'বিস্লেষন খুলতেছে & টেবিলবেস';
-
-  @override
-  String get takeback => 'চাল ফিরিয়ে নিন';
-
-  @override
-  String get proposeATakeback => 'চাল ফিরিয়ে নেবার সুযোগ দিন';
-
-  @override
-  String get takebackPropositionSent => 'চাল ফিরিয়ে সুযোগ পাঠানো হয়েছে';
-
-  @override
-  String get takebackPropositionDeclined => 'চাল ফিরিয়ে নেবার সুযোগ প্রত্যাখ্যাত হয়েছে';
-
-  @override
-  String get takebackPropositionAccepted => 'চাল ফিরিয়ে নেবার সুযোগ গৃহীত হয়েছে';
-
-  @override
-  String get takebackPropositionCanceled => 'চাল ফিরিয়ে নেবার সুযোগ বাতিল করা হয়েছে';
-
-  @override
-  String get yourOpponentProposesATakeback => 'আপনার প্রতিপক্ষ চাল ফিরিয়ে নেবার সুযোগ দিতে চান';
-
-  @override
-  String get bookmarkThisGame => 'এই খেলাটি বুকমার্ক করুন';
-
-  @override
-  String get tournament => 'টুর্নামেন্ট';
-
-  @override
-  String get tournaments => 'টুর্নামেন্টগুলো';
-
-  @override
-  String get tournamentPoints => 'টুর্নামেন্ট পয়েন্ট';
-
-  @override
-  String get viewTournament => 'টুর্নামেন্ট দেখুন';
-
-  @override
-  String get backToTournament => 'টুর্নামেন্ট এ ফিরে যান';
-
-  @override
-  String get noDrawBeforeSwissLimit => 'You cannot draw before 30 moves are played in a Swiss tournament.';
-
-  @override
-  String get thematic => 'ধাতুসংক্রান্ত';
-
-  @override
-  String yourPerfRatingIsProvisional(String param) {
-    return 'আপনার $param অনুপাত হয় সাময়িক';
-  }
-
-  @override
-  String yourPerfRatingIsTooHigh(String param1, String param2) {
-    return 'আপনার $param1 অনুপাত ($param2) হয় অনেক বেশি';
-  }
-
-  @override
-  String yourTopWeeklyPerfRatingIsTooHigh(String param1, String param2) {
-    return 'আপনার সাপ্তাহিক সর্বোচ্চ $param1 অনুপাত ($param2) হয় অনেক বেশি';
-  }
-
-  @override
-  String yourPerfRatingIsTooLow(String param1, String param2) {
-    return 'আপনার $param1 অনুপাত ($param2) হয় অনেক কম';
-  }
-
-  @override
-  String ratedMoreThanInPerf(String param1, String param2) {
-    return 'অনুপাতদিত ≥ $param1 এ $param2';
-  }
-
-  @override
-  String ratedLessThanInPerf(String param1, String param2) {
-    return 'অনুপাদিত ≤ $param1 এ $param2';
-  }
-
-  @override
-  String mustBeInTeam(String param) {
-    return 'অবশ্যই $param টিমে থাকতে হবে।';
-  }
-
-  @override
-  String youAreNotInTeam(String param) {
-    return 'আপনি $param দলে নেই।';
-  }
-
-  @override
-  String get backToGame => 'খেলায় এ ফিরে যান';
-
-  @override
-  String get siteDescription => 'ফ্রি অনলাইন দাবা খেলা। এখন থেকে পরিচ্ছন্ন ইন্টারফেসে দাবা খেলুন। কোন রেজিস্ট্রেশনের দরকার নেই, নেই কোন বিজ্ঞাপন, এমনকি কোনও প্লাগইন-এরও প্রয়োজন নেই। দাবা খেলুন কম্পিউটারের সাথে, অথবা বন্ধুর সাথে অথবা অজানা যে কোন প্রতিপক্ষের সাথে।';
-
-  @override
-  String xJoinedTeamY(String param1, String param2) {
-    return '$param1 যোগ দিলেন $param2 দলে';
-  }
-
-  @override
-  String xCreatedTeamY(String param1, String param2) {
-    return '$param1 বানালেন $param2 দল';
-  }
-
-  @override
-  String get startedStreaming => 'স্ট্রিমিং চালু করেছেন';
-
-  @override
-  String xStartedStreaming(String param) {
-    return '$param স্ট্রিমিং শুরু করেছেন';
-  }
-
-  @override
-  String get averageElo => 'গড় ইলো';
-
-  @override
-  String get location => 'বসবাসস্থল';
-
-  @override
-  String get filterGames => 'খেলা ছাঁকন';
-
-  @override
-  String get reset => 'পুনরায় চালু করা';
-
-  @override
-  String get apply => 'প্রয়োগ';
-
-  @override
-  String get save => 'সংরক্ষন করুন';
-
-  @override
-  String get leaderboard => 'লিডারবোর্ড';
-
-  @override
-  String get screenshotCurrentPosition => 'বর্তমান অবস্থানে স্ক্রিনশট নিন';
-
-  @override
-  String get gameAsGIF => 'GIF হিসেবে';
-
-  @override
-  String get pasteTheFenStringHere => 'এখানে FEN স্ট্রিংটি জোড়া লাগান';
-
-  @override
-  String get pasteThePgnStringHere => 'এখানে PGN স্ট্রিংটি জোড়া লাগান';
-
-  @override
-  String get orUploadPgnFile => 'অথবা PGN আপলোড করুন';
-
-  @override
-  String get fromPosition => 'অবস্থা থেকে';
-
-  @override
-  String get continueFromHere => 'এখান থেকে আবার শুরু করুন';
-
-  @override
-  String get toStudy => 'অধ্যায়ন';
-
-  @override
-  String get importGame => 'খেলা আমদানী';
-
-  @override
-  String get importGameExplanation => 'যখন একটি খেলার PGN যোগ করবেন আপনি পাবেন একটি ব্রাউজাবেল উত্তর,\nএকটি কম্পিউটার বিশ্লেষণ, একটি খেলা আলাপ এবং একটি ভাগাভাগি করার URL.';
-
-  @override
-  String get importGameCaveat => 'Variations will be erased. To keep them, import the PGN via a study.';
-
-  @override
-  String get importGameDataPrivacyWarning => 'This PGN can be accessed by the public. To import a game privately, use a study.';
-
-  @override
-  String get thisIsAChessCaptcha => 'এটি হল দাবা CAPTCHA';
-
-  @override
-  String get clickOnTheBoardToMakeYourMove => 'বোর্ডে ক্লিক করে চাল দিয়ে প্রমাণ করুন যে আপনি সত্যিই মানুষ, রোবট নন।';
-
-  @override
-  String get captcha_fail => 'দয়া করে দাবার ক্যাপচা সমাধান করুন.';
-
-  @override
-  String get notACheckmate => 'এটি কিস্তিমাত নয়';
-
-  @override
-  String get whiteCheckmatesInOneMove => 'সাদা দলের একটি মুভে চেকমেট';
-
-  @override
-  String get blackCheckmatesInOneMove => 'কালো দলের একটি মুভে চেকমেট';
-
-  @override
-  String get retry => 'আবার চেষ্টা করুন';
-
-  @override
-  String get reconnecting => 'পুনঃসংযোগের চেষ্টা চলছে';
-
-  @override
-  String get noNetwork => 'Offline';
-
-  @override
-  String get favoriteOpponents => 'প্রিয় প্রতিদ্বন্দ্বী';
-
-  @override
-  String get follow => 'অনুসরণ';
-
-  @override
-  String get following => 'অনুসরণ করছেন';
-
-  @override
-  String get unfollow => 'আর অনুসরণ নয়';
-
-  @override
-  String followX(String param) {
-    return '$paramকে অননুসরণ করুন';
-  }
-
-  @override
-  String unfollowX(String param) {
-    return '$paramকে অননুসরণ করুন';
-  }
-
-  @override
-  String get block => 'বাধা দিন';
-
-  @override
-  String get blocked => 'বাধাগ্রস্ত';
-
-  @override
-  String get unblock => 'বাধা উঠিয়ে নিন';
-
-  @override
-  String get followsYou => 'আপনাকে অনুসরণ করছে';
-
-  @override
-  String xStartedFollowingY(String param1, String param2) {
-    return '$param1 অনুসরণ করা শুরু করেছেন $param2';
-  }
-
-  @override
-  String get more => 'আরও';
-
-  @override
-  String get memberSince => 'সদস্য রয়েছেন';
-
-  @override
-  String lastSeenActive(String param) {
-    return 'শেষ আগমন $param';
-  }
-
-  @override
-  String get player => 'খেলোয়াড়';
-
-  @override
-  String get list => 'তালিকা';
-
-  @override
-  String get graph => 'গ্রাফ';
-
-  @override
-  String get required => 'প্রয়োজনীয়';
-
-  @override
-  String get openTournaments => 'উন্মুক্ত টুর্নামেন্টগুলো';
-
-  @override
-  String get duration => 'সময়কাল';
-
-  @override
-  String get winner => 'বিজয়ী';
-
-  @override
-  String get standing => 'অপেক্ষারত';
-
-  @override
-  String get createANewTournament => 'নতুন টুর্নামেন্ট সৃষ্টি করুন';
-
-  @override
-  String get tournamentCalendar => 'টুর্নামেন্ট ক্যালেন্ডার';
-
-  @override
-  String get conditionOfEntry => 'এন্ট্রির শর্তাবলি:';
-
-  @override
-  String get advancedSettings => 'এডভান্সড সেটিংস';
-
-  @override
-  String get safeTournamentName => 'টুর্নামেন্টের জন্য একটি নিরাপদ নাম পছন্দ করুন।';
-
-  @override
-  String get inappropriateNameWarning => 'এমনকি সামান্য অনুপযুক্ত কিছুও আপনার অ্যাকাউন্ট বন্ধ করতে পারে।';
-
-  @override
-  String get emptyTournamentName => 'কোন গ্র্যান্ডমাস্টারের নামে টুর্নামেন্টের নাম দিতে চাইলে খালি রাখুন।';
-
-  @override
-  String get recommendNotTouching => 'এটা টাচ না করার জন্য পরামর্শ দেয়া হচ্ছে।';
-
-  @override
-  String get fewerPlayers => 'যদি আপনি এন্ট্রি করার শর্ত ঠিক করে দেন, তাহলে টুর্নামেন্টে তুলনামূলকভাবে কম খেলোয়ার পাওয়া যাবে।';
-
-  @override
-  String get showAdvancedSettings => 'এডভান্সড সেটিংসে যান';
-
-  @override
-  String get makePrivateTournament => 'পাসওয়ার্ড দিয়ে টুর্নামেন্টটি গোপনীয় এবং সিমাবদ্ধ করেদিন';
-
-  @override
-  String get join => 'যোগ দিন';
-
-  @override
-  String get withdraw => 'উঠিয়ে নিন';
-
-  @override
-  String get points => 'পয়েন্ট';
-
-  @override
-  String get wins => 'জয়';
-
-  @override
-  String get losses => 'পরাজয়';
-
-  @override
-  String get createdBy => 'তৈরি করেছেন';
-
-  @override
-  String get tournamentIsStarting => 'টুর্নামেন্ট শুরু হচ্ছে';
-
-  @override
-  String get tournamentPairingsAreNowClosed => 'ক্রীড়া-প্রতিযোগিতা যোগদান এখন বন্ধ হয়ে গেছে.';
-
-  @override
-  String standByX(String param) {
-    return 'অপেক্ষিত $param, যোগদান খেলোয়ার, তৈরি হও!';
-  }
-
-  @override
-  String get pause => 'বিরতি/Pause';
-
-  @override
-  String get resume => 'পুনরায় শুরু';
-
-  @override
-  String get youArePlaying => 'আপনি খেলতেছেন!';
-
-  @override
-  String get winRate => 'জয়ের অনুপাত';
-
-  @override
-  String get berserkRate => 'ক্ষিপ্ত অনুপাত';
-
-  @override
-  String get performance => 'সম্পাদন';
-
-  @override
-  String get tournamentComplete => 'ক্রীড়া-প্রতিযোগিতা সম্পন্ন হয়েছে';
-
-  @override
-  String get movesPlayed => 'খেলা সরানো হয়েছে';
-
-  @override
-  String get whiteWins => 'সাদা বিজয়ী';
-
-  @override
-  String get blackWins => 'কালো বিজয়ী';
-
-  @override
-  String get drawRate => 'Draw rate';
-
-  @override
-  String get draws => 'সমান';
-
-  @override
-  String nextXTournament(String param) {
-    return 'পরবর্তী $param ক্রীড়া-প্রতিযোগিতা:';
-  }
-
-  @override
-  String get averageOpponent => 'গড় প্রতিদ্বন্দ্বী';
-
-  @override
-  String get boardEditor => 'বোর্ড সম্পাদক';
-
-  @override
-  String get setTheBoard => 'বোর্ড সেট করুন';
-
-  @override
-  String get popularOpenings => 'জনপ্রিয় চমক';
-
-  @override
-  String get endgamePositions => 'সমাপনী খেলার অবস্থান';
-
-  @override
-  String chess960StartPosition(String param) {
-    return 'Chess960 এর শুরুর অবস্থান: $param';
-  }
-
-  @override
-  String get startPosition => 'শুরুর অবস্থান';
-
-  @override
-  String get clearBoard => 'বোর্ড খালি করুন';
-
-  @override
-  String get loadPosition => 'অবস্থান পুনঃস্থাপন';
-
-  @override
-  String get isPrivate => 'ব্যক্তিগত';
-
-  @override
-  String reportXToModerators(String param) {
-    return 'মডারেটরদের কাছে $param এর নামে রিপোর্ট করুন';
-  }
-
-  @override
-  String profileCompletion(String param) {
-    return 'প্রোফাইল সম্পন্ন: $param';
-  }
-
-  @override
-  String xRating(String param) {
-    return '$param অনুপাত';
-  }
-
-  @override
-  String get ifNoneLeaveEmpty => 'যদি কিছুই না হয়, খালি রাখুন';
-
-  @override
-  String get profile => 'পরিচিতি';
-
-  @override
-  String get editProfile => 'পরিচিতি সম্পাদনা';
-
-  @override
-  String get firstName => 'প্রথম নাম';
-
-  @override
-  String get lastName => 'শেষ নাম';
-
-  @override
-  String get setFlair => 'Set your flair';
-
-  @override
-  String get flair => 'Flair';
-
-  @override
-  String get youCanHideFlair => 'There is a setting to hide all user flairs across the entire site.';
-
-  @override
-  String get biography => 'জীবনবৃত্তান্ত';
-
-  @override
-  String get countryRegion => 'Country or region';
-
-  @override
-  String get thankYou => 'ধন্যবাদ';
-
-  @override
-  String get socialMediaLinks => 'সোশ্যাল মিডিয়ার লিঙ্ক';
-
-  @override
-  String get oneUrlPerLine => 'প্রতি লাইনে একটি লিংক।';
-
-  @override
-  String get inlineNotation => 'রেখা চিহ্ন';
-
-  @override
-  String get makeAStudy => 'অধ্যায়ন নিরাপদ রাখার জন্য অন্য ইউজারদের সঙ্গে শেয়ারকরুন ও অধ্যায়ন তৈরি করুন.';
-
-  @override
-  String get clearSavedMoves => 'চাল গুলো মুছুন';
-
-  @override
-  String get previouslyOnLichessTV => 'এর আগে Lichess TV- তে যা হয়েছে';
-
-  @override
-  String get onlinePlayers => 'যে সমস্ত  খেলোয়ার অনলাইন আছে';
-
-  @override
-  String get activePlayers => 'সক্রিয় খেলোয়াড়গণ';
-
-  @override
-  String get bewareTheGameIsRatedButHasNoClock => 'সাবধান, এই খেলাটি মূল্যায়িত তবে কোনো সময়সীমা নেই!';
-
-  @override
-  String get success => 'সফল্য হয়েছে';
-
-  @override
-  String get automaticallyProceedToNextGameAfterMoving => 'স্বয়ংক্রিয় ভাবে পরবর্তী খেলায় যান';
-
-  @override
-  String get autoSwitch => 'স্বয়ংক্রিয় পরিবর্তন';
-
-  @override
-  String get puzzles => 'ধাঁধা';
-
-  @override
-  String get onlineBots => 'Online bots';
-
-  @override
-  String get name => 'নাম';
-
-  @override
-  String get description => 'বিবরণ';
-
-  @override
-  String get descPrivate => 'ব্যাক্তিগত বর্ননা';
-
-  @override
-  String get descPrivateHelp => 'যে লেখা শুধু দলের সদস্য দেখতে পাবে.';
-
-  @override
-  String get no => 'না';
-
-  @override
-  String get yes => 'হ্যা';
-
-  @override
-  String get help => 'সাহায্য';
-
-  @override
-  String get createANewTopic => 'নতুন বিষয়  তৈরি করুন';
-
-  @override
-  String get topics => 'বিষয়';
-
-  @override
-  String get posts => 'লেখা';
-
-  @override
-  String get lastPost => 'শেষলেখা';
-
-  @override
-  String get views => 'দৃষ্টিপাত';
-
-  @override
-  String get replies => 'উত্তর';
-
-  @override
-  String get replyToThisTopic => 'এই বিষয়ে উত্তর দিন';
-
-  @override
-  String get reply => 'উত্তর';
-
-  @override
-  String get message => 'বার্তা';
-
-  @override
-  String get createTheTopic => 'বিষয় তৈরী করুন';
-
-  @override
-  String get reportAUser => 'কোনো user এর বিরুদ্ধে report করুন';
-
-  @override
-  String get user => 'user এর নাম';
-
-  @override
-  String get reason => 'কারণ';
-
-  @override
-  String get whatIsIheMatter => 'সম্পূর্ণ ঘটনার বিবরণ দেন';
-
-  @override
-  String get cheat => 'চিটিং করছে';
-
-  @override
-  String get insult => 'অপমান করেছে';
-
-  @override
-  String get troll => 'ব্যঙ্গ করছে';
-
-  @override
-  String get ratingManipulation => 'রেটিং ইচ্ছাকৃতভাবে পরিবর্তন';
-
-  @override
-  String get other => 'অন্য কোনো কারণ';
-
-  @override
-  String get reportDescriptionHelp => 'এখানে সেই খেলাটির link দেন এবং বলুন ওই ব্যক্তি ব্যবহারে কি অসুবিধা ছিল ?';
-
-  @override
-  String get error_provideOneCheatedGameLink => 'অনুগ্রহ করে একটা চিটেড গেমের লিংক দিন।';
-
-  @override
-  String by(String param) {
-    return '$param এর দ্বারা';
-  }
-
-  @override
-  String importedByX(String param) {
-    return 'খেলাটি এনেছেন $param';
-  }
-
-  @override
-  String get thisTopicIsNowClosed => 'এই বিষয়টি এখন শেষ হয়ে গেছে';
-
-  @override
-  String get blog => 'ব্লগ';
-
-  @override
-  String get notes => 'গুরুত্বপূর্ণ তথ্য';
-
-  @override
-  String get typePrivateNotesHere => 'এখানে নিজের ব্যক্তিগত  গুরুত্বপূর্ণ তথ্য লিখতে পারেন';
-
-  @override
-  String get writeAPrivateNoteAboutThisUser => 'এই ব্যবহারকারী সম্পর্কে ব্যক্তিগত নোট লিখুন';
-
-  @override
-  String get noNoteYet => 'এখন পর্যন্ত কোনো নোট নেই';
-
-  @override
-  String get invalidUsernameOrPassword => 'ব্যবহারকারী নাম অথবা পাসওয়ার্ড টি ঠিক নয়';
-
-  @override
-  String get incorrectPassword => 'ভুল সঙ্কেত শব্দ';
-
-  @override
-  String get invalidAuthenticationCode => 'ইনভ্যালিড অথেন্টিকেশন কোড';
-
-  @override
-  String get emailMeALink => 'আমাকে লিংক ইমেইল কর';
-
-  @override
-  String get currentPassword => 'বর্তমান পাসওয়ার্ড';
-
-  @override
-  String get newPassword => 'নতুন পাসওয়ার্ড';
-
-  @override
-  String get newPasswordAgain => 'নতুন পাসওয়ার্ড (পুনরায়)';
-
-  @override
-  String get newPasswordsDontMatch => 'নতুন পাসওয়ার্ড আগের সঙ্গে মিলে নি';
-
-  @override
-  String get newPasswordStrength => 'পাসওয়ার্ডের শক্তি';
-
-  @override
-  String get clockInitialTime => 'ঘড়ি অনুযায়ী প্রাথমিক সময়';
-
-  @override
-  String get clockIncrement => 'ঘড়ির সময়বৃদ্ধির হার';
-
-  @override
-  String get privacy => 'গোপনীয়তা';
-
-  @override
-  String get privacyPolicy => 'গোপনীয়তা নীতি';
-
-  @override
-  String get letOtherPlayersFollowYou => 'অন্যান্য খেলোয়ারদের আপানকে অনুসরন করতে দিন';
-
-  @override
-  String get letOtherPlayersChallengeYou => 'অন্যান্য খেলোয়ারদের আপানকে চ্যালেঞ্জ করতে দিন';
-
-  @override
-  String get letOtherPlayersInviteYouToStudy => 'অন্যান্য খেলোয়ারদের আপানকে আমন্ত্রন করতে দিন';
-
-  @override
-  String get sound => 'শব্দ';
-
-  @override
-  String get none => 'কিছুই না';
-
-  @override
-  String get fast => 'দ্রুত';
-
-  @override
-  String get normal => 'সাধারন';
-
-  @override
-  String get slow => 'ধীর';
-
-  @override
-  String get insideTheBoard => 'বোর্ডের মাধ্যে';
-
-  @override
-  String get outsideTheBoard => 'বোর্ডের বাহিরে';
-
-  @override
-  String get onSlowGames => 'খেলায় ধীর গতি';
-
-  @override
-  String get always => 'সব সময়';
-
-  @override
-  String get never => 'কখনই না';
-
-  @override
-  String xCompetesInY(String param1, String param2) {
-    return '$param1 করা আছে মধ্যে $param2';
-  }
-
-  @override
-  String get victory => 'বিজয়';
-
-  @override
-  String get defeat => 'হার';
-
-  @override
-  String victoryVsYInZ(String param1, String param2, String param3) {
-    return '$param1 বানাম $param2 মধ্যে $param3';
-  }
-
-  @override
-  String defeatVsYInZ(String param1, String param2, String param3) {
-    return '$param1 বানাম $param2 মধ্যে $param3';
-  }
-
-  @override
-  String drawVsYInZ(String param1, String param2, String param3) {
-    return '$param1 বানাম $param2 মধ্যে $param3';
-  }
-
-  @override
-  String get timeline => 'সময়রেখা';
-
-  @override
-  String get starting => 'শুরু হইতেছে:';
-
-  @override
-  String get allInformationIsPublicAndOptional => 'সব তথ্য হয় সরকারী এবং ঐচ্ছিক.';
-
-  @override
-  String get biographyDescription => 'আপনার সম্পর্কে বলুন, দাবায় আপনি কি পচ্ছন্দ করেন, আপনার প্রিয় সাইটগুলো, খেলা, খেলোয়াড়দের সম্পর্কে বলুন…';
-
-  @override
-  String get listBlockedPlayers => 'আপনি যাদের অবরুদ্ধ করেছেন তাদের তালিকা';
-
-  @override
-  String get human => 'মানুষ';
-
-  @override
-  String get computer => 'কম্পিউটার';
-
-  @override
-  String get side => 'পাশে';
-
-  @override
-  String get clock => 'ঘড়ি';
-
-  @override
-  String get opponent => 'প্রতিদ্বন্দ্বী';
-
-  @override
-  String get learnMenu => 'শেখা';
-
-  @override
-  String get studyMenu => 'অধ্যায়ন';
-
-  @override
-  String get practice => 'অনুশীলন';
-
-  @override
-  String get community => 'সম্প্রদায়';
-
-  @override
-  String get tools => 'সরঞ্জামসমূহ';
-
-  @override
-  String get increment => 'মুনাফা';
-
-  @override
-  String get error_unknown => 'অচল মান';
-
-  @override
-  String get error_required => 'এই ঘরটি পূরন করা আবশ্যক';
-
-  @override
-  String get error_email => 'ইমেইল ঠিকানাটি বৈধ নয়';
-
-  @override
-  String get error_email_acceptable => 'ইমেইল ঠিকানাটি গ্রহণযোগ্য নয়। দয়া করে পুনরায় চেক করুন, অত‍ঃপর চেষ্টা করুন।';
-
-  @override
-  String get error_email_unique => 'ইমেইল টি অকার্যকর বা ইতোমধ্যে ব্যবহৃত';
-
-  @override
-  String get error_email_different => 'এটি আপনার বর্তমানে ব্যবহৃত ইমেইল ঠিকানা';
-
-  @override
-  String error_minLength(String param) {
-    return 'পাসওয়ার্ড অন্তত $param বর্ণ/চিহ্ন দীর্ঘ হতে হবে';
-  }
-
-  @override
-  String error_maxLength(String param) {
-    return 'পাসওয়ার্ড সর্বোচ্চ $param বর্ণ/চিহ্ন দীর্ঘ হতে পারবে';
-  }
-
-  @override
-  String error_min(String param) {
-    return 'অবশ্যই $param দীর্ঘ হতে হবে।';
-  }
-
-  @override
-  String error_max(String param) {
-    return 'অবশ্যই $param দীর্ঘ হতে হবে।';
-  }
-
-  @override
-  String ifRatingIsPlusMinusX(String param) {
-    return 'যদি অনুপাত হয় ± $param';
-  }
-
-  @override
-  String get ifRegistered => 'নিবন্ধিত';
-
-  @override
-  String get onlyExistingConversations => 'বিদ্যমান কথোপকথন';
-
-  @override
-  String get onlyFriends => 'শুধু বন্ধুরা';
-
-  @override
-  String get menu => 'মেনু';
-
-  @override
-  String get castling => 'কাস্টেলিং';
-
-  @override
-  String get whiteCastlingKingside => 'সাদা O-O';
-
-  @override
-  String get blackCastlingKingside => 'কালো O-O';
-
-  @override
-  String tpTimeSpentPlaying(String param) {
-    return 'খেলার সময় অতিবাহিত: $param';
-  }
-
-  @override
-  String get watchGames => 'খেলাগুলো দেখুন';
-
-  @override
-  String tpTimeSpentOnTV(String param) {
-    return 'টিভির সময়: $param';
-  }
-
-  @override
-  String get watch => 'দেখুন';
-
-  @override
-  String get videoLibrary => 'ভিডিও লাইব্রেরি';
-
-  @override
-  String get streamersMenu => 'স্ট্রিমারকারীরা';
-
-  @override
-  String get mobileApp => 'মোবাইল অ্যাপ';
-
-  @override
-  String get webmasters => 'ওয়েবমাস্টারগুলো';
-
-  @override
-  String get about => 'সম্পর্কে';
-
-  @override
-  String aboutX(String param) {
-    return '$param সম্পর্কে';
-  }
-
-  @override
-  String xIsAFreeYLibreOpenSourceChessServer(String param1, String param2) {
-    return '$param1 বিনামুল্যে ($param2), লাইব্রেরী, এড-মুক্ত, ওপেনসোর্স দাবার সার্ভার.';
-  }
-
-  @override
-  String get really => 'সত্যিকার অর্থেই';
-
-  @override
-  String get contribute => 'অবদান';
-
-  @override
-  String get termsOfService => 'পরিষেবার শর্তাদি';
-
-  @override
-  String get sourceCode => 'উৎস সংকেতলিপি';
-
-  @override
-  String get simultaneousExhibitions => 'সমকালবর্তী প্রদর্শন';
-
-  @override
-  String get host => 'স্বাগতিক';
-
-  @override
-  String hostColorX(String param) {
-    return 'হোস্ট রং: $param';
-  }
-
-  @override
-  String get yourPendingSimuls => 'Your pending simuls';
-
-  @override
-  String get createdSimuls => 'নতুন সিমুলস তৈরি হয়েছে';
-
-  @override
-  String get hostANewSimul => 'একটি নতুন সিমুল স্বাগতিক';
-
-  @override
-  String get signUpToHostOrJoinASimul => 'Sign up to host or join a simul';
-
-  @override
-  String get noSimulFound => 'একসঙ্গে খুঁজে পাওয়া যায়নি';
-
-  @override
-  String get noSimulExplanation => 'এই যুগপত প্রদর্শনী বিদ্যমান নেই.';
-
-  @override
-  String get returnToSimulHomepage => 'সিমুল প্রথমপাতায় ফিরে যান';
-
-  @override
-  String get aboutSimul => 'সিমুলস একজন খেলোয়াড় মুখোমুখি হয় একসজ্ঞে কয়েকজন খেলোয়াড়ের সাথে.';
-
-  @override
-  String get aboutSimulImage => '50 প্রতিদ্বন্দ্বীর মধ্যে, ফিশার জিতেছে 47 খেলা, সমান 2 এবং হার 1.';
-
-  @override
-  String get aboutSimulRealLife => 'এই ধারনাটি নেওয়া হয় পৃথিবীর বাস্তব ঘটনা গুলো থেকে, বাস্তব জীবনে, স্বাগতিক সিমুল জরিত টেবিল সরানো থেকে টেবিল একক ভাবে চালার জন্য.';
-
-  @override
-  String get aboutSimulRules => 'যখন সিমুল শুরু হয়, প্রত্যেক খেলোয়াড় শুরু করে স্বাগতিকের সাথে একটি খেলা, যে পায় খেলার জন্য সাদা টুকরোগুলো, যখন সব খেলা সম্পন্ন হয় তখন সিমুল শেষ হয়ে যায়.';
-
-  @override
-  String get aboutSimulSettings => 'সিমুলগুলো হয় সবসময় আকস্মিক. পূনারয়খেলা, পেছনেনেওয়া এবং \"অনেকসময়\" বিকল হয়.';
-
-  @override
-  String get create => 'তৈরি করুন';
-
-  @override
-  String get whenCreateSimul => 'যখন আপনি একটি সিমুল তৈরি করেন, আপনি খেলার জন্য একাধিক খেলোয়ার পাবেন.';
-
-  @override
-  String get simulVariantsHint => 'যদি আপনি বিভিন্ন অপশন নির্বাচন করেন, প্রতিটি খেলোয়াড়কে বেছে নিতে হবে যেটা সে খেলতে চায়.';
-
-  @override
-  String get simulClockHint => 'ফিশার ঘড়ি বিন্যাস. একবারে অনেক খেলোয়াড় নিলে, হয়তো আপনার অনেক সময় প্রয়োজন হবে.';
-
-  @override
-  String get simulAddExtraTime => 'আপনি হয়তো অতিরিক্ত সময় যোগ করে আপনার ঘড়ি সিমুলের সাথে মোকাবেলা করতে পারবেন.';
-
-  @override
-  String get simulHostExtraTime => 'অতিরিক্ত ঘড়ির সময়ের স্বাগতিক';
-
-  @override
-  String get simulAddExtraTimePerPlayer => 'Add initial time to your clock for each player joining the simul.';
-
-  @override
-  String get simulHostExtraTimePerPlayer => 'Host extra clock time per player';
-
-  @override
-  String get lichessTournaments => 'দাবা ক্রীড়া-প্রতিযোগিতা';
-
-  @override
-  String get tournamentFAQ => 'কর্মক্ষেত্র প্রতিযোগিতার প্রশ্নবলী';
-
-  @override
-  String get timeBeforeTournamentStarts => 'সময়ের পূর্বে প্রতিযোগিতা শুরু';
-
-  @override
-  String get averageCentipawnLoss => 'গড় ছিন্টেপাওন ক্ষতি';
-
-  @override
-  String get accuracy => 'নির্ভুলতা';
-
-  @override
-  String get keyboardShortcuts => 'কী-বোর্ড শর্টকাট';
-
-  @override
-  String get keyMoveBackwardOrForward => 'পেছনে সরান/সামনে যান';
-
-  @override
-  String get keyGoToStartOrEnd => 'শুরু করতে যান/শেষ';
-
-  @override
-  String get keyCycleSelectedVariation => 'Cycle selected variation';
-
-  @override
-  String get keyShowOrHideComments => 'দেখুন/মন্তব্য লুকান';
-
-  @override
-  String get keyEnterOrExitVariation => 'প্রবেশ করান/বেরিয়ে যান';
-
-  @override
-  String get keyRequestComputerAnalysis => 'Request computer analysis, Learn from your mistakes';
-
-  @override
-  String get keyNextLearnFromYourMistakes => 'পরবর্তী (আপনার ভুল থেকে শিখুন)';
-
-  @override
-  String get keyNextBlunder => 'পরবর্তী সাঙ্ঘাতিক ভুল';
-
-  @override
-  String get keyNextMistake => 'পরবর্তী ভুল';
-
-  @override
-  String get keyNextInaccuracy => 'পরবর্তী নির্ভুলতা';
-
-  @override
-  String get keyPreviousBranch => 'আগের শাখা';
-
-  @override
-  String get keyNextBranch => 'পরবর্তী শাখা';
-
-  @override
-  String get toggleVariationArrows => 'Toggle variation arrows';
-
-  @override
-  String get cyclePreviousOrNextVariation => 'Cycle previous/next variation';
-
-  @override
-  String get toggleGlyphAnnotations => 'Toggle move annotations';
-
-  @override
-  String get togglePositionAnnotations => 'Toggle position annotations';
-
-  @override
-  String get variationArrowsInfo => 'Variation arrows let you navigate without using the move list.';
-
-  @override
-  String get playSelectedMove => 'play selected move';
-
-  @override
-  String get newTournament => 'নতুন ক্রীড়া-প্রতিযোগিতা';
-
-  @override
-  String get tournamentHomeTitle => 'দাবা ক্রীড়া-প্রতিযোগিতা বিভিন্ন সময় নিয়ন্ত্রণ এবং বৈকল্পিক দেখানো হয়েছে';
-
-  @override
-  String get tournamentHomeDescription => 'দ্রুত-গুরূত্বপূর্ণ দাবা প্রতিযোগিতা খেলুন! একটি অফিসিয়াল সময়সূচী প্রতিযোগিতায় যোগ দিন অথবা নিজের তৈরি করুন. বুল্লেট, বিলটজ, ক্লাসিক্যাল, দাবা960, পাহাড়ের রাজা, তিনরেখা, এবং আরো অপশন রয়েছে দাবা মজার জন্য.';
-
-  @override
-  String get tournamentNotFound => 'ক্রীড়া-প্রতিযোগিতা খুজে পাওয়া যাইনি';
-
-  @override
-  String get tournamentDoesNotExist => 'এই ক্রীড়া-প্রতিযোগিতার অস্তিত্ব নেই.';
-
-  @override
-  String get tournamentMayHaveBeenCanceled => 'ক্রীড়া-প্রতিযোগিতা শুরু হওয়ার পূর্বে যদি সব খেলোয়াড় বেড়িয়ে যায়, হয়তো এটা বাতিল করা হতে পারে.';
-
-  @override
-  String get returnToTournamentsHomepage => 'ফিরেযান ক্রীড়া-প্রতিযোগিতার প্রথম পাতায়';
-
-  @override
-  String weeklyPerfTypeRatingDistribution(String param) {
-    return 'সাপ্তাহিক $param অনুপাত বন্টন';
-  }
-
-  @override
-  String yourPerfTypeRatingIsRating(String param1, String param2) {
-    return 'আপনার $param1 অনুপাত হয় $param2.';
-  }
-
-  @override
-  String youAreBetterThanPercentOfPerfTypePlayers(String param1, String param2) {
-    return 'আপনি তুলনায় ভাল $param1 এর $param2 খেলোয়াড়দের.';
-  }
-
-  @override
-  String userIsBetterThanPercentOfPerfTypePlayers(String param1, String param2, String param3) {
-    return '$param1 $param2 উত্তম $param3 খেলোয়াড়ের থেকে.';
-  }
-
-  @override
-  String betterThanPercentPlayers(String param1, String param2) {
-    return 'Better than $param1 of $param2 players';
-  }
-
-  @override
-  String youDoNotHaveAnEstablishedPerfTypeRating(String param) {
-    return 'আপনার প্রতিষ্ঠিত কোন $param অনুপাত নেই.';
-  }
-
-  @override
-  String get yourRating => 'আপনার রেটিংস';
-
-  @override
-  String get cumulative => 'বর্ধিত';
-
-  @override
-  String get glicko2Rating => 'গ্লাইকো-২ রেটিং';
-
-  @override
-  String get checkYourEmail => 'আপনার ই-মেইল চেক করুন';
-
-  @override
-  String get weHaveSentYouAnEmailClickTheLink => 'আমরা আপনাকে একটি ই-মেইল পাঠিয়েছি. একাউন্টি সক্তিয় করার জন্য ই-মেইল দেওয়া লিংকটি ক্লিক করুন.';
-
-  @override
-  String get ifYouDoNotSeeTheEmailCheckOtherPlaces => 'যদি আপনি ই-মেইলটি না দেখতে পান, অন্যজাগায় থাকতে পারে, যেমন আপনার জুনক, স্প্যাম, সোসিয়াল, অথবা অন্য ফোল্ডার.';
-
-  @override
-  String weHaveSentYouAnEmailTo(String param) {
-    return 'আমরা একটি ই-মেইল পাঠিয়েছি $param. ই-মেইলে দেওয়া লিংকে ক্লিক করুন পাসওয়ার্ড পরিবর্তন করতে.';
-  }
-
-  @override
-  String byRegisteringYouAgreeToBeBoundByOur(String param) {
-    return 'নিবন্ধন করে, আপনি সম্মত হন আমাদের দ্বারা আবদ্ধ হতে $param.';
-  }
-
-  @override
-  String readAboutOur(String param) {
-    return 'আমাদের $param সম্পর্কে পড়ুন.';
-  }
-
-  @override
-  String get networkLagBetweenYouAndLichess => 'আপনার এবং লিচেস এর মধ্যে নেটওয়ার্ক ব্যবধান';
-
-  @override
-  String get timeToProcessAMoveOnLichessServer => 'লিচেস সার্ভারে স্থানান্তর প্রক্রিয়া করার সময়';
-
-  @override
-  String get downloadAnnotated => 'টীকাযুক্ত ডাউনলোড করুন';
-
-  @override
-  String get downloadRaw => 'কাঁচা ডাউনলোড করুন';
-
-  @override
-  String get downloadImported => 'আগমিত ডাউনলোড করুন';
-
-  @override
-  String get crosstable => 'ক্রোস্ট্যাবলে';
-
-  @override
-  String get youCanAlsoScrollOverTheBoardToMoveInTheGame => 'খেলা সরাতে আপনি বোর্ডের উপর স্ক্রল ও করতে পারবেন.';
-
-  @override
-  String get scrollOverComputerVariationsToPreviewThem => 'প্রিভিউ দেখার জন্য কম্পিউটার ভ্যারিয়েশনের উপর স্ক্রল করুন।';
-
-  @override
-  String get analysisShapesHowTo => 'সিফ্ট+ক্লিক চাপুন অথবা ডান-ক্লিক করুন বোর্ডের উপর বৃত্ত এবং তীর আঁকার জন্য.';
-
-  @override
-  String get letOtherPlayersMessageYou => 'অন্যান্য খেলোয়ারদের আপনাকে বার্তা করতে দিন';
-
-  @override
-  String get receiveForumNotifications => 'নোটিফিকেশন পাবেন যখন ফোরামে আপনাকে কেউ উল্লেখ করে';
-
-  @override
-  String get shareYourInsightsData => 'আপনার দাবার অর্ন্তদৃষ্টি তথ্য শেয়ার করুন';
-
-  @override
-  String get withNobody => 'কারো সাথে না';
-
-  @override
-  String get withFriends => 'বন্ধুদের সাথে';
-
-  @override
-  String get withEverybody => 'সবার সাথে';
-
-  @override
-  String get kidMode => 'বাচ্চা ধরন';
-
-  @override
-  String get kidModeIsEnabled => 'Kid mode is enabled.';
-
-  @override
-  String get kidModeExplanation => 'এটা হয় নিরাপত্তা সম্পর্কে. বাচ্চা ধরনের মধ্যে সব সাইটের যোগাযোগ নিষ্ক্রিয় করা হয়েছে. আপনার বাচ্চা এবং বিদ্যালয়ের ছাত্রদের, অন্য ইন্টারনেট ব্যবহারকারীদের থেকে রক্ষা করতে এটা সক্রিয় করুন.';
-
-  @override
-  String inKidModeTheLichessLogoGetsIconX(String param) {
-    return 'বাচ্চা ধরনের মধ্যে, লিচেস লোগো পায় একটি $param প্রতীক,\nতাই আপনি জানতে পারবেন আপনার বাচ্চা নিরাপদ.';
-  }
-
-  @override
-  String get askYourChessTeacherAboutLiftingKidMode => 'Your account is managed. Ask your chess teacher about lifting kid mode.';
-
-  @override
-  String get enableKidMode => 'বাচ্চা ধরন সক্রিয় করুন';
-
-  @override
-  String get disableKidMode => 'বাচ্চা ধরন নিষ্ক্রিয় করুন';
-
-  @override
-  String get security => 'নিরাপত্তা';
-
-  @override
-  String get sessions => 'সেশনসমূহ';
-
-  @override
-  String get revokeAllSessions => 'সকল সেশন বাতিল করুন';
-
-  @override
-  String get playChessEverywhere => 'দাবা খেলুন সব জায়গায়';
-
-  @override
-  String get asFreeAsLichess => 'যেমন লিচাস মুক্ত হিসাবে';
-
-  @override
-  String get builtForTheLoveOfChessNotMoney => 'দাবার ভালবাসার জন্য তৈরি, টাকা না';
-
-  @override
-  String get everybodyGetsAllFeaturesForFree => 'সকলেই পাবে বিনামূল্যে সব বৈশিষ্ট্য';
-
-  @override
-  String get zeroAdvertisement => 'শূন্য বিজ্ঞাপন';
-
-  @override
-  String get fullFeatured => 'সম্পূর্ণ বৈশিষ্ট্যযুক্ত';
-
-  @override
-  String get phoneAndTablet => 'ফোন এবং ট্যাবলেট';
-
-  @override
-  String get bulletBlitzClassical => 'গুলি, খুব দ্রুত আক্রমণ, ক্লাসিকাল';
-
-  @override
-  String get correspondenceChess => 'সাদৃশ্য দাবা';
-
-  @override
-  String get onlineAndOfflinePlay => 'অনলাইন এবং অফলাইন খেলা';
-
-  @override
-  String get viewTheSolution => 'সমাধান দেখুন';
-
-  @override
-  String get followAndChallengeFriends => 'অনুসরন করুন এবং বন্ধুদের চ্যালেঞ্জ করুন';
-
-  @override
-  String get gameAnalysis => 'খেলা বিশ্লেষন';
-
-  @override
-  String xHostsY(String param1, String param2) {
-    return '$param1 নির্মানকর্তা $param2';
-  }
-
-  @override
-  String xJoinsY(String param1, String param2) {
-    return '$param1 যোগদেয় $param2';
-  }
-
-  @override
-  String xLikesY(String param1, String param2) {
-    return '$param1 পচ্ছন্দ $param2';
-  }
-
-  @override
-  String get quickPairing => 'দ্রুত জোর-বাঁধানো';
-
-  @override
-  String get lobby => 'উপশালা';
-
-  @override
-  String get anonymous => 'অজ্ঞাত';
-
-  @override
-  String yourScore(String param) {
-    return 'আপনার স্কোর: $param';
-  }
-
-  @override
-  String get language => 'ভাষা';
-
-  @override
-  String get background => 'পটভূমি';
-
-  @override
-  String get light => 'আলো';
-
-  @override
-  String get dark => 'অন্ধকার';
-
-  @override
-  String get transparent => 'স্বচ্ছ';
-
-  @override
-  String get deviceTheme => 'Device theme';
-
-  @override
-  String get backgroundImageUrl => 'পটভূমি ছবির URL:';
-
-  @override
-  String get board => 'Board';
-
-  @override
-  String get size => 'Size';
-
-  @override
-  String get opacity => 'Opacity';
-
-  @override
-  String get brightness => 'Brightness';
-
-  @override
-  String get hue => 'Hue';
-
-  @override
-  String get boardReset => 'Reset colours to default';
-
-  @override
-  String get pieceSet => 'টুকরা সেট';
-
-  @override
-  String get embedInYourWebsite => 'আপনার ওয়েবসাইটে বসান';
-
-  @override
-  String get usernameAlreadyUsed => 'এই ব্যবহারকারীর নাম ইতিমধ্যে ব্যবহার করা হয়েছে, দয়া করে অন্য একটি চেষ্টা করুন.';
-
-  @override
-  String get usernamePrefixInvalid => 'ইউজারনেম অবশ্যই কোন অক্ষর দ্বারা শুরু হতে হবে।';
-
-  @override
-  String get usernameSuffixInvalid => 'ইউজারনেম অবশ্যই কোন অক্ষর বা সংখ্যা দ্বারা শেষ হতে হবে।';
-
-  @override
-  String get usernameCharsInvalid => 'ইউজারনেমে শুধুমাত্র অক্ষর, নাম্বার, আন্ডারস্কোর এবং হাইফেন থাকতে পারবে।';
-
-  @override
-  String get usernameUnacceptable => 'এই ব্যবহারকারী নামটি গ্রহণযোগ্য নয়.';
-
-  @override
-  String get playChessInStyle => 'দাবা খেলুন শৈলিতে';
-
-  @override
-  String get chessBasics => 'দাবা মূলসূত্র';
-
-  @override
-  String get coaches => 'প্রশিক্ষক';
-
-  @override
-  String get invalidPgn => 'অকার্যকর PGN';
-
-  @override
-  String get invalidFen => 'অকার্যকর FEN';
-
-  @override
-  String get custom => 'স্বনির্ধারিত';
-
-  @override
-  String get notifications => 'বিজ্ঞাপন';
-
-  @override
-  String notificationsX(String param1) {
-    return 'Notifications: $param1';
-  }
-
-  @override
-  String perfRatingX(String param) {
-    return 'অনুপাত: $param';
-  }
-
-  @override
-  String get practiceWithComputer => 'কম্পিউটারের সাথে অনুশীলন';
-
-  @override
-  String anotherWasX(String param) {
-    return 'আরেকটি ছিল $param';
-  }
-
-  @override
-  String bestWasX(String param) {
-    return 'সেরা ছিল $param';
-  }
-
-  @override
-  String get youBrowsedAway => 'আপনি যতদূর ব্রাউজ করেছেন';
-
-  @override
-  String get resumePractice => 'পুনারয় অনুশীলন';
-
-  @override
-  String get drawByFiftyMoves => 'The game has been drawn by the fifty move rule.';
-
-  @override
-  String get theGameIsADraw => 'খেলাটি হয় সমান.';
-
-  @override
-  String get computerThinking => 'কম্পিউটারের চিন্তা ...';
-
-  @override
-  String get seeBestMove => 'দেখুন সেরা চাল';
-
-  @override
-  String get hideBestMove => 'লুকান সেরা চাল';
-
-  @override
-  String get getAHint => 'একটি সূত্র পান';
-
-  @override
-  String get evaluatingYourMove => 'আপনার চাল মূল্যায়ন করবে...';
-
-  @override
-  String get whiteWinsGame => 'সাদা জিতেছে';
-
-  @override
-  String get blackWinsGame => 'কালো জিতেছে';
-
-  @override
-  String get learnFromYourMistakes => 'আপনার ভুলগুলো থেকে শিখুন';
-
-  @override
-  String get learnFromThisMistake => 'এই ভুল থেকে শিখুন';
-
-  @override
-  String get skipThisMove => 'এই ধাপটি এড়িয়ে যান';
-
-  @override
-  String get next => 'পরবর্তী';
-
-  @override
-  String xWasPlayed(String param) {
-    return '$param খেলা হয়েছিল';
-  }
-
-  @override
-  String get findBetterMoveForWhite => 'সাদার জন্য একটি ভালো চাল খুঁজুন';
-
-  @override
-  String get findBetterMoveForBlack => 'কালোর জন্য একটি ভালো চাল খুঁজুন';
-
-  @override
-  String get resumeLearning => 'পুনারয় শিখুন';
-
-  @override
-  String get youCanDoBetter => 'আপনি ভালো করতে পারেন';
-
-  @override
-  String get tryAnotherMoveForWhite => 'সাদার জন্য আরেকটি চাল চেষ্টা করুন';
-
-  @override
-  String get tryAnotherMoveForBlack => 'কালোর জন্য আরেকটি চাল চেষ্টা করুন';
-
-  @override
-  String get solution => 'সমাধান';
-
-  @override
-  String get waitingForAnalysis => 'অপেক্ষা করা হচ্ছে বিশ্লেষণের জন্য';
-
-  @override
-  String get noMistakesFoundForWhite => 'সাদার জন্য কোন ভুল পাওয়া যায়নি';
-
-  @override
-  String get noMistakesFoundForBlack => 'কালোর জন্য কোন ভুল পাওয়া যায়নি';
-
-  @override
-  String get doneReviewingWhiteMistakes => 'সাদার ভুল পর্যালোচনা করা হয়েছে';
-
-  @override
-  String get doneReviewingBlackMistakes => 'কালোর ভুল পর্যালোচনা করা হয়েছে';
-
-  @override
-  String get doItAgain => 'এটা পুনারয় করুন';
-
-  @override
-  String get reviewWhiteMistakes => 'সাদার ভুল পর্যালোচনা';
-
-  @override
-  String get reviewBlackMistakes => 'কালোর ভুল পর্যালোচনা';
-
-  @override
-  String get advantage => 'সুবিধা';
-
-  @override
-  String get opening => 'উদ্বোধন';
-
-  @override
-  String get middlegame => 'মাধ্যমখেলা';
-
-  @override
-  String get endgame => 'খেলাশেষ';
-
-  @override
-  String get conditionalPremoves => 'শর্তাধীন পুনারয়চাল';
-
-  @override
-  String get addCurrentVariation => 'বর্তমান ভিন্ন করুন';
-
-  @override
-  String get playVariationToCreateConditionalPremoves => 'শর্তাধীন পুনারয় চাল তৈরির জন্য একটি ভিন্ন খেলুন';
-
-  @override
-  String get noConditionalPremoves => 'পুনারয়চাল শর্তাধীন নেই';
-
-  @override
-  String playX(String param) {
-    return 'খেলা $param';
-  }
-
-  @override
-  String get showUnreadLichessMessage => 'You have received a private message from Lichess.';
-
-  @override
-  String get clickHereToReadIt => 'Click here to read it';
-
-  @override
-  String get sorry => 'দুঃখিত :(';
-
-  @override
-  String get weHadToTimeYouOutForAWhile => 'আমাদের কিছুক্ষণের জন্য আপনাকে বিরতি হল।';
-
-  @override
-  String get why => 'কেন';
-
-  @override
-  String get pleasantChessExperience => 'আমাদের লক্ষ্য প্রত্যেকের জন্য একটি আনন্দদায়ক দাবা খেলার অভিজ্ঞতা দেয়া।';
-
-  @override
-  String get goodPractice => 'সেই লক্ষ্যে আমাদের অবশ্যই নিশ্চিত করতে হবে যে সমস্ত খেলোয়াড় ভাল অভ্যাস চর্চা করে।';
-
-  @override
-  String get potentialProblem => 'যখন এধরনের সমস্যা ধরা পড়ে তখনই আমরা এই মেসেজ দিই.';
-
-  @override
-  String get howToAvoidThis => 'কিভাবে এসব এড়িয়ে চলবো?';
-
-  @override
-  String get playEveryGame => 'যে গেম খেলা শুরু করবেন তা অবশ্যই শেষ করবেন.';
-
-  @override
-  String get tryToWin => 'জেতার চেষ্টা করুন (অথবা ড্র) যেসব গেম খেলছেন.';
-
-  @override
-  String get resignLostGames => 'হেরে জাওা খেলা তি রেসিগ্ন করুন।( সময় সেশ হওার অপ্পেখা করবেন না)।.';
-
-  @override
-  String get temporaryInconvenience => 'অস্থায়ীভাবে এই অসুবিধার জন্য আমরা ক্ষমা প্রার্থনা করছি,';
-
-  @override
-  String get wishYouGreatGames => 'এবং lichess.org এ আপনার দুর্দান্ত গেমের শুভেচ্ছা.';
-
-  @override
-  String get thankYouForReading => 'পড়ার জন্য ধন্যবাদ!';
-
-  @override
-  String get lifetimeScore => 'সারাজীবনের স্কোর';
-
-  @override
-  String get currentMatchScore => 'বর্তমান ম্যাচের স্কোর';
-
-  @override
-  String get agreementAssistance => 'আমি সম্মতি এবং প্রতিশ্রুতি দিচ্ছি যে দাবা খেলার সময় কম্পিউটারের সহায়তা নিয়ে, কোনো প্রোগ্রাম বই, ডেটাবেজ বা অন্যকোনো ব্যাক্তির সহায়তা নিয়ে চিটিং করে খেলবো না).';
-
-  @override
-  String get agreementNice => 'আমি সম্মতি জানাচ্ছি সকল দাবাড়ু খেলোয়াড়দের সঙ্গে শ্রদ্ধাশীল আচরন করবো.';
-
-  @override
-  String agreementMultipleAccounts(String param) {
-    return 'আমি একমত পোষণ করছি যে আমি একাধিক একাউন্ট তৈরি করব না ($param এ উল্লেখিত কারণ ব্যতীত)।';
-  }
-
-  @override
-  String get agreementPolicy => 'আমি সম্মতি জানাচ্ছি যে আমি লাইচেজের সকল নিয়মকানুন মেনে চলবো.';
-
-  @override
-  String get searchOrStartNewDiscussion => 'খুজুন অথবা নতুন মেসেজ কনভার্সনে যান';
-
-  @override
-  String get edit => 'এডিট বা সম্পাদন করুন';
-
-  @override
-  String get bullet => 'Bullet';
-
-  @override
-  String get blitz => 'Blitz';
-
-  @override
-  String get rapid => 'র‍্যাপিড';
-
-  @override
-  String get classical => 'ক্লাসিক্যাল';
-
-  @override
-  String get ultraBulletDesc => 'অত্যন্ত দ্রুত গেমস: 30 সেকেন্ডেরও কম';
-
-  @override
-  String get bulletDesc => 'খুবই দ্রুত গেমস: 3 মিনিটেরও কম';
-
-  @override
-  String get blitzDesc => 'দ্রুত গেমস: 3 থেকে 8 মিনিট';
-
-  @override
-  String get rapidDesc => 'র‍্যাপিড গেমস: 3 থেকে 8 মিনিট';
-
-  @override
-  String get classicalDesc => 'ক্লাসিক্যাল গেমস: ২৫ মিনিট বা তার বেশি';
-
-  @override
-  String get correspondenceDesc => 'কোরেস্পডেন্স গেমস: এক বা একাধিক দিনের চাল';
-
-  @override
-  String get puzzleDesc => 'দাবা কৌশলের প্রশিক্ষক';
-
-  @override
-  String get important => 'গুরুত্বপূর্ণ';
-
-  @override
-  String yourQuestionMayHaveBeenAnswered(String param1) {
-    return 'হয়তো আপনার প্রশ্নের উত্তর রয়েছেই $param1';
-  }
-
-  @override
-  String get inTheFAQ => 'F.A.Q এর মধ্যে.';
-
-  @override
-  String toReportSomeoneForCheatingOrBadBehavior(String param1) {
-    return 'প্রতারনারমুলক কাজ বা খারাপ আচরনের জন্য রিপোর্ট, $param1';
-  }
-
-  @override
-  String get useTheReportForm => 'এই রিপোর্ট ফোরাম ব্যাবহার করুন';
-
-  @override
-  String toRequestSupport(String param1) {
-    return 'সমর্থনের জন্য অনুরোধ করতে, $param1';
-  }
-
-  @override
-  String get tryTheContactPage => 'যোগাযোগ পেজে যেয়ে দেখতে পারেন';
-
-  @override
-  String makeSureToRead(String param1) {
-    return 'Make sure to read $param1';
-  }
-
-  @override
-  String get theForumEtiquette => 'the forum etiquette';
-
-  @override
-  String get thisTopicIsArchived => 'এই টপিক বা বিষয়টি সংরক্ষণাগারভুক্ত করা হয়েছে সুতরাং এর জবাব আর দেওয়া যাবে না.';
-
-  @override
-  String joinTheTeamXToPost(String param1) {
-    return 'যুক্ত হোন $param1, এই ফোরামে পোষ্ট করার জন্য';
-  }
-
-  @override
-  String teamNamedX(String param1) {
-    return '$param1 দল';
-  }
-
-  @override
-  String get youCannotPostYetPlaySomeGames => 'আপনি এখন ফোরামে পোষ্ট করতে পারবেন না. আগে কিছু গেম খেলুন!';
-
-  @override
-  String get subscribe => 'সাবস্ক্রাইব';
-
-  @override
-  String get unsubscribe => 'আনসাবস্ক্রাইব';
-
-  @override
-  String mentionedYouInX(String param1) {
-    return '\"$param1\" এ আপনাকে উল্লেখ করেছেন।';
-  }
-
-  @override
-  String xMentionedYouInY(String param1, String param2) {
-    return '$param1 , \"$param2\" এ আপনার নাম উল্লেখ করেছেন।';
-  }
-
-  @override
-  String invitedYouToX(String param1) {
-    return '\"$param1\" এ আপনাকে আমন্ত্রণ জানিয়েছেন।';
-  }
-
-  @override
-  String xInvitedYouToY(String param1, String param2) {
-    return '$param1, আপনাকে \"$param2\" এ আমন্ত্রণ জানিয়েছেন।';
-  }
-
-  @override
-  String get youAreNowPartOfTeam => 'আপনি এখন দলের একটি অংশ।';
-
-  @override
-  String youHaveJoinedTeamX(String param1) {
-    return 'আপনি \"$param1\" এ যোগদান করেছেন।';
-  }
-
-  @override
-  String get someoneYouReportedWasBanned => 'আপনি অভিযুক্ত একজনকে ব্যান করা হয়েছে';
-
-  @override
-  String get congratsYouWon => 'অভিনন্দন, আপনি জিতেছেন!';
-
-  @override
-  String gameVsX(String param1) {
-    return 'খেলা বনাম $param1';
-  }
-
-  @override
-  String resVsX(String param1, String param2) {
-    return '$param1 বনাম $param2';
-  }
-
-  @override
-  String get lostAgainstTOSViolator => 'আপনি এমন কারোর সাথে হেরেছেন যে Liches TOS ভঙ্গ করেছে';
-
-  @override
-  String refundXpointsTimeControlY(String param1, String param2) {
-    return 'ফেরত: $param1 $param2 রেটিং পয়েন্ট।';
-  }
-
-  @override
-  String get timeAlmostUp => 'সময় প্রায় শেষ!';
-
-  @override
-  String get clickToRevealEmailAddress => '[ইমেইল অ্যাড্রেস দেখতে ক্লিক করুন]';
-
-  @override
-  String get download => 'ডাউনলোড করুন';
-
-  @override
-  String get coachManager => 'প্রশিক্ষক ব্যবস্থাপনা';
-
-  @override
-  String get streamerManager => 'সম্প্রচার নিয়ন্ত্রণ';
-
-  @override
-  String get cancelTournament => 'টুর্নামেন্ট বাতিল করুন';
-
-  @override
-  String get tournDescription => 'টুর্নামেন্টের বর্ণনা';
-
-  @override
-  String get tournDescriptionHelp => 'অংশগ্রহণকারীদের কিছু বলতে চান? সংক্ষেপে লেখার চেষ্টা করুন।\nMarkdown links ব্যবহারযোগ্য: [name](https://url)';
-
-  @override
-  String get ratedFormHelp => 'খেলাগুলো রেটেড/পয়েন্ট ভিত্তিক এবং খেলোয়াড়দের রেটিং এ প্রভাব ফেলবে';
-
-  @override
-  String get onlyMembersOfTeam => 'শুধুমাত্র দলের সদস্যরা';
-
-  @override
-  String get noRestriction => 'কোনো বিধিনিষেধ নেই';
-
-  @override
-  String get minimumRatedGames => 'সর্বনিম্ন রেটেড খেলার সংখ্যা';
-
-  @override
-  String get minimumRating => 'সর্বনিম্ন রেটিং';
-
-  @override
-  String get maximumWeeklyRating => 'সর্বোচ্চ সাপ্তাহিক রেটিং';
-
-  @override
-  String positionInputHelp(String param) {
-    return 'Paste a valid FEN to start every game from a given position.\nIt only works for standard games, not with variants.\nYou can use the $param to generate a FEN position, then paste it here.\nLeave empty to start games from the normal initial position.';
-  }
-
-  @override
-  String get cancelSimul => 'একত্রে খেলা বাতিল করুন';
-
-  @override
-  String get simulHostcolor => 'স্বাগতিক খেলোয়াড়ের ঘুটি/ piece এর রঙ';
-
-  @override
-  String get estimatedStart => 'আনুমানিক খেলা শুরুর সময়';
-
-  @override
-  String simulFeatured(String param) {
-    return 'দেখানো হবে $param';
-  }
-
-  @override
-  String simulFeaturedHelp(String param) {
-    return 'Show your simul to everyone on $param. Disable for private simuls.';
-  }
-
-  @override
-  String get simulDescription => 'Simul description';
-
-  @override
-  String get simulDescriptionHelp => 'আপনি অংশগ্রহণকারীদের কিছু বলতে চান?';
-
-  @override
-  String markdownAvailable(String param) {
-    return '$param is available for more advanced syntax.';
-  }
-
-  @override
-  String get embedsAvailable => 'Paste a game URL or a study chapter URL to embed it.';
-
-  @override
-  String get inYourLocalTimezone => 'আপনার স্থানীয় সময়';
-
-  @override
-  String get tournChat => 'টুর্নামেন্ট চ্যাট';
-
-  @override
-  String get noChat => 'কোনো চ্যাট নয়';
-
-  @override
-  String get onlyTeamLeaders => 'শুধুমাত্র দলীয় প্রধানগণ';
-
-  @override
-  String get onlyTeamMembers => 'শুধুমাত্র দলের সদস্যরা';
-
-  @override
-  String get navigateMoveTree => 'Move/চালের তালিকা নির্দেশক';
-
-  @override
-  String get mouseTricks => 'মাউসের নিয়ন্ত্রন';
-
-  @override
-  String get toggleLocalAnalysis => 'ব্যক্তিগত কম্পিউটার বিশ্লেষণ অন/অফ';
-
-  @override
-  String get toggleAllAnalysis => 'সব কম্পিউটার বিশ্লেষণ অন/অফ';
-
-  @override
-  String get playComputerMove => 'কম্পিউটারের সেরা চাল';
-
-  @override
-  String get analysisOptions => 'Analysis options';
-
-  @override
-  String get focusChat => 'Focus chat';
-
-  @override
-  String get showHelpDialog => 'Show this help dialog';
-
-  @override
-  String get reopenYourAccount => 'আপনার একাউন্ট পুনরায় খুলুন';
-
-  @override
-  String get closedAccountChangedMind => 'আপনি যদি আপনার একাউন্ট বন্ধ করে থাকেন, কিন্তু পরবর্তীতে মন পরিবর্তন করেন, সেক্ষেত্রে একাউন্ট ফেরত পাওয়ার জন্য আপনাকে একবার সুযোগ দেয়া হবে।';
-
-  @override
-  String get onlyWorksOnce => 'এটি শুধুমাত্র একবার কাজ করবে।';
-
-  @override
-  String get cantDoThisTwice => 'আপনি যদি দ্বিতীয়বারের মত একাউন্ট বন্ধ করেন, তাহলে তা আর পুনরুদ্ধার করা যাবে না।';
-
-  @override
-  String get emailAssociatedToaccount => 'এই একাউন্টের সঙ্গে সংশ্লিষ্ট ই-মেইল অ্যাড্রেস হচ্ছে';
-
-  @override
-  String get sentEmailWithLink => 'আমরা আপনাকে একটি লিঙ্ক সহ ই-মেইল পাঠিয়েছি।';
-
-  @override
-  String get tournamentEntryCode => 'টুর্নামেন্টে প্রবেশের কোড';
-
-  @override
-  String get hangOn => 'সাবধান!';
-
-  @override
-  String gameInProgress(String param) {
-    return '$param এর সাথে এখনো আপনার খেলা চলছে।';
-  }
-
-  @override
-  String get abortTheGame => 'খেলা ত্যাগ(abort) করুন';
-
-  @override
-  String get resignTheGame => 'খেলা সমর্পণ(resign) করুন';
-
-  @override
-  String get youCantStartNewGame => 'আপনি এই খেলা শেষ না করে নতুন খেলা শুরু করতে পারবেন না।';
-
-  @override
-  String get since => 'Since/শুরু';
-
-  @override
-  String get until => 'Until/পর্যন্ত';
-
-  @override
-  String get lichessDbExplanation => 'লিচেস এর সকল খেলোয়াড়দের রেটেড খেলা থেকে সংগ্রহকৃত';
-
-  @override
-  String get switchSides => 'পক্ষ পরিবর্তন করুন';
-
-  @override
-  String get closingAccountWithdrawAppeal => 'একাউন্ট বন্ধ করলে আপনার আপিল প্রত্যাহার হয়ে যাবে';
-
-  @override
-  String get ourEventTips => 'Our tips for organising events';
-
-  @override
-  String get instructions => 'Instructions';
-
-  @override
-  String get showMeEverything => 'Show me everything';
-
-  @override
-  String get lichessPatronInfo => 'লিচেস একটি অলাভজনক এবং সম্পূর্ণ বিনামূল্য/লিব্রা ওপেন সোর্স সফটওয়্যার।\nসকল পরিচালনা খরচ, উন্নয়ন, এবং বিষয়বস্তু ব্যবহারকারীদের দানের মাধ্যমে সংগৃহীত হয়।';
-
-  @override
-  String get nothingToSeeHere => 'Nothing to see here at the moment.';
-
-  @override
-  String opponentLeftCounter(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'আপনার প্রতিপক্ষ খেলা ছেড়ে দিয়েছেন। আপনি $count সেকেন্ডের মধ্যে জয় দাবি করতে পারেন.',
-      one: 'আপনার প্রতিপক্ষ খেলা ছেড়ে চলে গেছেন. আপনি চাইলে বিজয় দাবি করতে পারেন $count সেকেন্ডের মধ্যে.',
-      zero: 'আপনার প্রতিপক্ষ খেলা ছেড়ে চলে গেছেন. আপনি চাইলে বিজয় দাবি করতে পারেন $count সেকেন্ডের মধ্যে.',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String mateInXHalfMoves(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'সজ্ঞী $count অর্ধ-ধাপ',
-      one: 'সজ্ঞী $count অর্ধ-ধাপ',
-      zero: 'সজ্ঞী $count অর্ধ-ধাপ',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String nbBlunders(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count টি ব্লান্ডার',
-      one: '$count টি ব্লান্ডার',
-      zero: '$count টি ব্লান্ডার',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String nbMistakes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$countটি ভূল',
-      one: '$countটি ভূল',
-      zero: '$countটি ভূল',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String nbInaccuracies(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$countটি অনিপুণতা',
-      one: '$countটি অনিপুণতা',
-      zero: '$countটি অনিপুণতা',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String nbPlayers(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count জন খেলোয়াড়',
-      one: '$count জন খেলোয়াড়',
-      zero: '$count জন খেলোয়াড়',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String nbGames(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count টি খেলা',
-      one: '$count টি খেলা',
-      zero: '$count টি খেলা',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String ratingXOverYGames(int count, String param2) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count rating over $param2 games',
-      one: '$count rating over $param2 game',
-      zero: '$count rating over $param2 game',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String nbBookmarks(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count টি বুকমার্ক',
-      one: '$count টি বুকমার্ক',
-      zero: '$count টি বুকমার্ক',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String nbDays(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count দিনগুলো',
-      one: '$count দিন',
-      zero: '$count দিন',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String nbHours(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count ঘন্টা',
-      one: '$count ঘন্টা',
-      zero: '$count ঘন্টা',
-    );
-    return '$_temp0';
+  String perfStatPerfStats(String param) {
+    return '$param stats';
   }
 
   @override
-  String nbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count মিনিট',
-      one: '$count মিনিট',
-      zero: '$count মিনিট',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String rankIsUpdatedEveryNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'আপনার অনুক্রম প্রতি $count মিনিট পরপর আপডেট করা হয়।',
-      one: 'আপনার অনুক্রম প্রতি মিনিট পরপর আপডেট করা হয়।',
-      zero: 'আপনার অনুক্রম প্রতি মিনিট পরপর আপডেট করা হয়।',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String nbPuzzles(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count ধাঁধা',
-      one: '$count ধাঁধা',
-      zero: '$count ধাঁধা',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String nbGamesWithYou(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count টি খেলা আপনার সঙ্গে',
-      one: '$count টি খেলা আপনার সঙ্গে',
-      zero: '$count টি খেলা আপনার সঙ্গে',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String nbRated(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count অনুপাত',
-      one: '$count অনুপাত',
-      zero: '$count অনুপাত',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String nbWins(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count টি জয়',
-      one: '$count টি জয়',
-      zero: '$count টি জয়',
-    );
-    return '$_temp0';
-  }
+  String get perfStatViewTheGames => 'View the games';
 
   @override
-  String nbLosses(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count টি পরাজয়',
-      one: '$count টি পরাজয়',
-      zero: '$count টি পরাজয়',
-    );
-    return '$_temp0';
-  }
+  String get perfStatProvisional => 'provisional';
 
   @override
-  String nbDraws(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count টি ড্র',
-      one: '$count টি ড্র',
-      zero: '$count টি ড্র',
-    );
-    return '$_temp0';
-  }
+  String get perfStatNotEnoughRatedGames => 'Not enough rated games have been played to establish a reliable rating.';
 
   @override
-  String nbPlaying(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count খেলছে',
-      one: '$count খেলছে',
-      zero: '$count খেলছে',
-    );
-    return '$_temp0';
+  String perfStatProgressOverLastXGames(String param) {
+    return 'Progression over the last $param games:';
   }
 
   @override
-  String giveNbSeconds(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count সেকেন্ড দিন',
-      one: '$count সেকেন্ড দিন',
-      zero: '$count সেকেন্ড দিন',
-    );
-    return '$_temp0';
+  String perfStatRatingDeviation(String param) {
+    return 'Rating deviation: $param.';
   }
 
   @override
-  String nbTournamentPoints(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count ক্রীড়া-প্রতিযোগিতা অনুপাতগুলো',
-      one: '$count ক্রীড়া-প্রতিযোগিতা অনুপাত',
-      zero: '$count ক্রীড়া-প্রতিযোগিতা অনুপাত',
-    );
-    return '$_temp0';
+  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
+    return 'Lower value means the rating is more stable. Above $param1, the rating is considered provisional. To be included in the rankings, this value should be below $param2 (standard chess) or $param3 (variants).';
   }
 
   @override
-  String nbStudies(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count অধ্যায়নগুলি',
-      one: '$count অধ্যায়ন',
-      zero: '$count অধ্যায়ন',
-    );
-    return '$_temp0';
-  }
+  String get perfStatTotalGames => 'মোট গেম';
 
   @override
-  String nbSimuls(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count শিমুলগুলো',
-      one: '$count শিমুল',
-      zero: '$count শিমুল',
-    );
-    return '$_temp0';
-  }
+  String get perfStatRatedGames => 'Rated games';
 
   @override
-  String moreThanNbRatedGames(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '≥ $count খেলার অনুপাতগুলো',
-      one: '≥ $count খেলার অনুপাত',
-      zero: '≥ $count খেলার অনুপাত',
-    );
-    return '$_temp0';
-  }
+  String get perfStatTournamentGames => 'Tournament games';
 
   @override
-  String moreThanNbPerfRatedGames(int count, String param2) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '≥ $count $param2 খেলার অনুপাতগুলো',
-      one: '≥ $count $param2 খেলার অনুপাত',
-      zero: '≥ $count $param2 খেলার অনুপাত',
-    );
-    return '$_temp0';
-  }
+  String get perfStatBerserkedGames => 'Berserked games';
 
   @override
-  String needNbMorePerfGames(int count, String param2) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'আপনার খেলার প্রয়োজন $count আরো $param2 খেলার অনুপাত',
-      one: 'আপনার খেলার প্রয়োজন $count আরো $param2 খেলার অনুপাত',
-      zero: 'আপনার খেলার প্রয়োজন $count আরো $param2 খেলার অনুপাত',
-    );
-    return '$_temp0';
-  }
+  String get perfStatTimeSpentPlaying => 'Time spent playing';
 
   @override
-  String needNbMoreGames(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'আপনার খেলার প্রয়োজন $count আরো অনুপাদিত খেলা',
-      one: 'আপনার খেলার প্রয়োজন $count আরো অনুপাদিত খেলা',
-      zero: 'আপনার খেলার প্রয়োজন $count আরো অনুপাদিত খেলা',
-    );
-    return '$_temp0';
-  }
+  String get perfStatAverageOpponent => 'Average opponent';
 
   @override
-  String nbImportedGames(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count টি আমদানীকৃত খেলা',
-      one: '$count টি আমদানীকৃত খেলা',
-      zero: '$count টি আমদানীকৃত খেলা',
-    );
-    return '$_temp0';
-  }
+  String get perfStatVictories => 'Victories';
 
   @override
-  String nbFriendsOnline(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count বন্ধুরা অনলাইনে রয়েছেন',
-      one: '$count বন্ধু অনলাইনে রয়েছেন',
-      zero: '$count বন্ধু অনলাইনে রয়েছেন',
-    );
-    return '$_temp0';
-  }
+  String get perfStatDefeats => 'Defeats';
 
   @override
-  String nbFollowers(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count অনুসরণকারী',
-      one: '$count অনুসরণকারী',
-      zero: '$count অনুসরণকারী',
-    );
-    return '$_temp0';
-  }
+  String get perfStatDisconnections => 'Disconnections';
 
   @override
-  String nbFollowing(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count অনুসরণ করছেন',
-      one: '$count অনুসরণ করছেন',
-      zero: '$count অনুসরণ করছেন',
-    );
-    return '$_temp0';
-  }
+  String get perfStatNotEnoughGames => 'Not enough games played';
 
   @override
-  String lessThanNbMinutes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count মিনিটের কম সময়ে',
-      one: '$count মিনিটের কম সময়ে',
-      zero: '$count মিনিটের কম সময়ে',
-    );
-    return '$_temp0';
+  String perfStatHighestRating(String param) {
+    return 'Highest rating: $param';
   }
 
   @override
-  String nbGamesInPlay(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count খেলা চলছে',
-      one: '$count খেলা চলছে',
-      zero: '$count খেলা চলছে',
-    );
-    return '$_temp0';
+  String perfStatLowestRating(String param) {
+    return 'Lowest rating: $param';
   }
 
   @override
-  String maximumNbCharacters(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'সর্বোচ্চ: $count টি অক্ষর',
-      one: 'সর্বোচ্চ: $count টি অক্ষর',
-      zero: 'সর্বোচ্চ: $count টি অক্ষর',
-    );
-    return '$_temp0';
+  String perfStatFromXToY(String param1, String param2) {
+    return 'from $param1 to $param2';
   }
 
   @override
-  String blocks(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count বাধা',
-      one: '$count বাধা',
-      zero: '$count বাধা',
-    );
-    return '$_temp0';
-  }
+  String get perfStatWinningStreak => 'Winning streak';
 
   @override
-  String nbForumPosts(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count ফোরাম পোষ্ট',
-      one: '$count ফোরাম পোষ্ট',
-      zero: '$count ফোরাম পোষ্ট',
-    );
-    return '$_temp0';
-  }
+  String get perfStatLosingStreak => 'Losing streak';
 
   @override
-  String nbPerfTypePlayersThisWeek(int count, String param2) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count $param2 খেলোয়াড়গুলো এই সপ্তাহের.',
-      one: '$count $param2 খেলোয়াড় এই সপ্তাহের.',
-      zero: '$count $param2 খেলোয়াড় এই সপ্তাহের.',
-    );
-    return '$_temp0';
+  String perfStatLongestStreak(String param) {
+    return 'Longest streak: $param';
   }
 
   @override
-  String availableInNbLanguages(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'প্রাপ্য $count ভাষা সমূহ!',
-      one: 'প্রাপ্য $count ভাষা!',
-      zero: 'প্রাপ্য $count ভাষা!',
-    );
-    return '$_temp0';
+  String perfStatCurrentStreak(String param) {
+    return 'Current streak: $param';
   }
 
   @override
-  String nbSecondsToPlayTheFirstMove(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count সেকেন্ডে খেলার প্রথম চাল',
-      one: '$count সেকেন্ডে খেলার প্রথম চাল',
-      zero: '$count সেকেন্ডে খেলার প্রথম চাল',
-    );
-    return '$_temp0';
-  }
+  String get perfStatBestRated => 'Best rated victories';
 
   @override
-  String nbSeconds(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count সেকেন্ড',
-      one: '$count সেকেন্ড',
-      zero: '$count সেকেন্ড',
-    );
-    return '$_temp0';
-  }
+  String get perfStatGamesInARow => 'Games played in a row';
 
   @override
-  String andSaveNbPremoveLines(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'এবং সংরক্ষন $count পুনারয়চাল রেখা',
-      one: 'এবং সংরক্ষন $count পুনারয়চাল রেখা',
-      zero: 'এবং সংরক্ষন $count পুনারয়চাল রেখা',
-    );
-    return '$_temp0';
-  }
+  String get perfStatLessThanOneHour => 'Less than one hour between games';
 
   @override
-  String get patronDonate => 'Donate';
+  String get perfStatMaxTimePlaying => 'Max time spent playing';
 
   @override
-  String get patronLichessPatron => 'Lichess Patron';
+  String get perfStatNow => 'now';
 
   @override
   String get preferencesPreferences => 'পছন্দসমূহ';
@@ -3475,7 +438,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get preferencesPrivacy => 'গোপনীয়তা';
 
   @override
-  String get preferencesNotifications => 'Notifications';
+  String get preferencesNotifications => 'নোটিফিকেশন';
 
   @override
   String get preferencesPieceAnimation => 'গুটির অ্যানিমেশন';
@@ -3667,10 +630,10 @@ class AppLocalizationsBn extends AppLocalizations {
   String get preferencesBellNotificationSound => 'Bell notification sound';
 
   @override
-  String get puzzlePuzzles => 'ধাঁধা';
+  String get puzzlePuzzles => 'পাজল';
 
   @override
-  String get puzzlePuzzleThemes => 'ধাঁধার বিশয়বস্তু';
+  String get puzzlePuzzleThemes => 'পাজল থিম';
 
   @override
   String get puzzleRecommended => 'প্রস্তাবিত';
@@ -3729,7 +692,7 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
-  String get puzzlePuzzleOfTheDay => 'আজকের দিনের সেরা ধাঁধা';
+  String get puzzlePuzzleOfTheDay => 'আজকের পাজল';
 
   @override
   String get puzzleDailyPuzzle => 'দৈনিক ধাঁধা';
@@ -4328,111 +1291,6 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
-  String perfStatPerfStats(String param) {
-    return '$param stats';
-  }
-
-  @override
-  String get perfStatViewTheGames => 'View the games';
-
-  @override
-  String get perfStatProvisional => 'provisional';
-
-  @override
-  String get perfStatNotEnoughRatedGames => 'Not enough rated games have been played to establish a reliable rating.';
-
-  @override
-  String perfStatProgressOverLastXGames(String param) {
-    return 'Progression over the last $param games:';
-  }
-
-  @override
-  String perfStatRatingDeviation(String param) {
-    return 'Rating deviation: $param.';
-  }
-
-  @override
-  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
-    return 'Lower value means the rating is more stable. Above $param1, the rating is considered provisional. To be included in the rankings, this value should be below $param2 (standard chess) or $param3 (variants).';
-  }
-
-  @override
-  String get perfStatTotalGames => 'মোট গেম';
-
-  @override
-  String get perfStatRatedGames => 'Rated games';
-
-  @override
-  String get perfStatTournamentGames => 'Tournament games';
-
-  @override
-  String get perfStatBerserkedGames => 'Berserked games';
-
-  @override
-  String get perfStatTimeSpentPlaying => 'Time spent playing';
-
-  @override
-  String get perfStatAverageOpponent => 'Average opponent';
-
-  @override
-  String get perfStatVictories => 'Victories';
-
-  @override
-  String get perfStatDefeats => 'Defeats';
-
-  @override
-  String get perfStatDisconnections => 'Disconnections';
-
-  @override
-  String get perfStatNotEnoughGames => 'Not enough games played';
-
-  @override
-  String perfStatHighestRating(String param) {
-    return 'Highest rating: $param';
-  }
-
-  @override
-  String perfStatLowestRating(String param) {
-    return 'Lowest rating: $param';
-  }
-
-  @override
-  String perfStatFromXToY(String param1, String param2) {
-    return 'from $param1 to $param2';
-  }
-
-  @override
-  String get perfStatWinningStreak => 'Winning streak';
-
-  @override
-  String get perfStatLosingStreak => 'Losing streak';
-
-  @override
-  String perfStatLongestStreak(String param) {
-    return 'Longest streak: $param';
-  }
-
-  @override
-  String perfStatCurrentStreak(String param) {
-    return 'Current streak: $param';
-  }
-
-  @override
-  String get perfStatBestRated => 'Best rated victories';
-
-  @override
-  String get perfStatGamesInARow => 'Games played in a row';
-
-  @override
-  String get perfStatLessThanOneHour => 'Less than one hour between games';
-
-  @override
-  String get perfStatMaxTimePlaying => 'Max time spent playing';
-
-  @override
-  String get perfStatNow => 'now';
-
-  @override
   String get searchSearch => 'অনুসন্ধান';
 
   @override
@@ -4442,7 +1300,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get settingsCloseAccount => 'একাউন্ট বন্ধ করুন';
 
   @override
-  String get settingsManagedAccountCannotBeClosed => 'Your account is managed, and cannot be closed.';
+  String get settingsManagedAccountCannotBeClosed => 'আপনার অ্যাকাউন্ট পরিচালিত এবং বন্ধ করা যাবে না.';
 
   @override
   String get settingsClosingIsDefinitive => 'একাউন্ট বন্ধ সুনিশ্চিত। আর ফেরত যাওয়ার উপায় নেই। আপনি কি নিশ্চিত?';
@@ -4460,7 +1318,3143 @@ class AppLocalizationsBn extends AppLocalizations {
   String get settingsThisAccountIsClosed => 'এই একাউন্টটি বন্ধ করা হয়েছে';
 
   @override
-  String get streamerLichessStreamers => 'লিছেসস স্ত্রেয়ামের';
+  String get playWithAFriend => 'বন্ধুর সাথে খেলো';
+
+  @override
+  String get playWithTheMachine => 'কম্পিউটারের সাথে খেলতে চান';
+
+  @override
+  String get toInviteSomeoneToPlayGiveThisUrl => 'কাউকে খেলার জন্য আমন্ত্রণ জানাতে চাইলে এই URL টি দিন';
+
+  @override
+  String get gameOver => 'খেলা সমাপ্ত';
+
+  @override
+  String get waitingForOpponent => 'প্রতিপক্ষের জন্য অপেক্ষারত';
+
+  @override
+  String get orLetYourOpponentScanQrCode => 'Or let your opponent scan this QR code';
+
+  @override
+  String get waiting => 'অপেক্ষা করুন';
+
+  @override
+  String get yourTurn => 'আপনার চাল';
+
+  @override
+  String aiNameLevelAiLevel(String param1, String param2) {
+    return '$param1 এর লেভেল $param2';
+  }
+
+  @override
+  String get level => 'লেভেল';
+
+  @override
+  String get strength => 'শক্তি';
+
+  @override
+  String get toggleTheChat => 'আড্ডা চালু/বন্ধ';
+
+  @override
+  String get chat => 'আড্ডা';
+
+  @override
+  String get resign => 'হার স্বীকার করুন';
+
+  @override
+  String get checkmate => 'কিস্তিমাত';
+
+  @override
+  String get stalemate => 'চালমাত - সমান';
+
+  @override
+  String get white => 'সাদা';
+
+  @override
+  String get black => 'কালো';
+
+  @override
+  String get asWhite => 'সাদা হয়ে';
+
+  @override
+  String get asBlack => 'কালো হয়ে';
+
+  @override
+  String get randomColor => 'যে কোন রঙ';
+
+  @override
+  String get createAGame => 'খেলা তৈরি করুন';
+
+  @override
+  String get whiteIsVictorious => 'সাদা বিজয়ী';
+
+  @override
+  String get blackIsVictorious => 'কালো বিজয়ী';
+
+  @override
+  String get youPlayTheWhitePieces => 'আপনি সাদা গুটি নিয়ে খেলছেন';
+
+  @override
+  String get youPlayTheBlackPieces => 'আপনি কালো গুটি নিয়ে খেলছেন';
+
+  @override
+  String get itsYourTurn => 'এবার আপনার পালা!';
+
+  @override
+  String get cheatDetected => 'প্রতারণা শনাক্ত করা হয়েছে';
+
+  @override
+  String get kingInTheCenter => 'রাজাকে কেন্দ্রে আনুন';
+
+  @override
+  String get threeChecks => 'তিনটি কিস্তি';
+
+  @override
+  String get raceFinished => 'প্রতিযোগিতা শেষ';
+
+  @override
+  String get variantEnding => 'ভিন্ন রকমের সমাপ্তি';
+
+  @override
+  String get newOpponent => 'নতুন প্রতিপক্ষ';
+
+  @override
+  String get yourOpponentWantsToPlayANewGameWithYou => 'আপনার প্রতিপক্ষ পুনরায়  আপনার সাথে খেলতে চায়';
+
+  @override
+  String get joinTheGame => 'খেলাটিতে যোগ দিন';
+
+  @override
+  String get whitePlays => 'সাদার চাল';
+
+  @override
+  String get blackPlays => 'কালোর চাল';
+
+  @override
+  String get opponentLeftChoices => 'অপর খেলোয়াড় খেলাটি ছেড়ে চলে গেছেন, আপনি সেই খেলাটিকে জিততে পারেন নাহলে ড্র করতে পারেন কিংবা অপেক্ষা করুন প্রতিপক্ষের পুনরায় খেলায় ফিরে আসার';
+
+  @override
+  String get forceResignation => 'বিজয় দাবী করুন';
+
+  @override
+  String get forceDraw => 'সমান ঘোষণা করুন';
+
+  @override
+  String get talkInChat => 'আড্ডায় কথা বলুন';
+
+  @override
+  String get theFirstPersonToComeOnThisUrlWillPlayWithYou => 'এই URL দিয়ে আসা প্রথম ব্যক্তি আপনার সাথে খেলবেন';
+
+  @override
+  String get whiteResigned => 'সাদা হার মেনে নিলেন';
+
+  @override
+  String get blackResigned => 'কালো হার মেনে নিলেন';
+
+  @override
+  String get whiteLeftTheGame => 'সাদা খেলাটি ছেড়ে চলে গেছেন';
+
+  @override
+  String get blackLeftTheGame => 'কালো খেলাটি ছেড়ে চলে গেছেন';
+
+  @override
+  String get whiteDidntMove => 'সাদা চাল দিল না';
+
+  @override
+  String get blackDidntMove => 'কালো চাল দিল না';
+
+  @override
+  String get requestAComputerAnalysis => 'কম্পিউটার বিশ্লেষণের জন্য অবেদন করুন';
+
+  @override
+  String get computerAnalysis => 'কম্পিউটারের বিশ্লেষণ';
+
+  @override
+  String get computerAnalysisAvailable => 'কম্পিউটার বিশ্লেষণ পাওয়া যায়';
+
+  @override
+  String get computerAnalysisDisabled => 'কম্পিউটার বিশ্লেষণ অচল করা আছে';
+
+  @override
+  String get analysis => 'বিশ্লেষণ বোর্ড';
+
+  @override
+  String depthX(String param) {
+    return 'গভীরতা $param';
+  }
+
+  @override
+  String get usingServerAnalysis => 'সার্ভারের বিশ্লেষণ ব্যবহার করা হচ্ছে';
+
+  @override
+  String get loadingEngine => 'ইঞ্জিন লোড করা হচ্ছে...';
+
+  @override
+  String get calculatingMoves => 'চালগুলি গননা করা হচ্ছে...';
+
+  @override
+  String get engineFailed => 'ইঞ্জিন লোড করতে ব্যর্থ';
+
+  @override
+  String get cloudAnalysis => 'মেঘবিশ্লেষণ';
+
+  @override
+  String get goDeeper => 'গভীরে যাও';
+
+  @override
+  String get showThreat => 'ন্হমকি দেখান';
+
+  @override
+  String get inLocalBrowser => 'সাধারন ব্রাউজারের মধ্যে';
+
+  @override
+  String get toggleLocalEvaluation => 'স্থানীয় টগ্ল মূল্যায়ন';
+
+  @override
+  String get promoteVariation => 'বিজ্ঞাপন';
+
+  @override
+  String get makeMainLine => 'প্রাধান সীমা করা';
+
+  @override
+  String get deleteFromHere => 'এখান থেকে মুছুন';
+
+  @override
+  String get collapseVariations => 'Collapse variations';
+
+  @override
+  String get expandVariations => 'Expand variations';
+
+  @override
+  String get forceVariation => 'জোর করে পরিবর্তন';
+
+  @override
+  String get copyVariationPgn => 'Copy variation PGN';
+
+  @override
+  String get move => 'চাল';
+
+  @override
+  String get variantLoss => 'ভিন্ন ক্ষতি';
+
+  @override
+  String get variantWin => 'ভিন্ন জয়';
+
+  @override
+  String get insufficientMaterial => 'অপর্যাপ্ত উপাদান';
+
+  @override
+  String get pawnMove => 'ঘুঁটি সরান';
+
+  @override
+  String get capture => 'অধিগ্রহন করুন';
+
+  @override
+  String get close => 'বন্ধ';
+
+  @override
+  String get winning => 'জয়লাভ';
+
+  @override
+  String get losing => 'হেরে যাওয়া';
+
+  @override
+  String get drawn => 'সমান';
+
+  @override
+  String get unknown => 'অজানা';
+
+  @override
+  String get database => 'ডেটাবেজ';
+
+  @override
+  String get whiteDrawBlack => 'সাদা / সমান / কালো';
+
+  @override
+  String averageRatingX(String param) {
+    return 'গড় নির্ধারণ:$param';
+  }
+
+  @override
+  String get recentGames => 'সম্প্রতি খেলা';
+
+  @override
+  String get topGames => 'সেরা খেলা';
+
+  @override
+  String masterDbExplanation(String param1, String param2, String param3) {
+    return '২ লক্ষ ওটিবি খেলার $param1+খেলয়াড়ের বিশ্বাসের অনুপাত $param2 থেকে $param3';
+  }
+
+  @override
+  String get dtzWithRounding => 'DTZ50\'\' রাউন্ডিং সহ, পরবর্তী ক্যাপচার বা পন মুভ পর্যন্ত অর্ধ-চালের সংখ্যার উপর ভিত্তি করে';
+
+  @override
+  String get noGameFound => 'কোন খেলা নেই';
+
+  @override
+  String get maxDepthReached => 'সর্বোচ্চ গভীরতা পৌঁছে গেছে!';
+
+  @override
+  String get maybeIncludeMoreGamesFromThePreferencesMenu => 'হয়তো আরো খেলা যোগ করা হবে পচ্ছন্দের তালিকায়?';
+
+  @override
+  String get openings => 'শুরুর ভাগ';
+
+  @override
+  String get openingExplorer => 'অনুসন্ধানকারী খুলতেছে';
+
+  @override
+  String get openingEndgameExplorer => 'প্রারম্ভিক/শেষ খেলা কৌশল বিশ্লেষণ';
+
+  @override
+  String xOpeningExplorer(String param) {
+    return '$param অনুসন্ধানকারী খুলতেছে';
+  }
+
+  @override
+  String get playFirstOpeningEndgameExplorerMove => 'প্রথম ওপেনিং/এন্ডগেম-এক্সপ্লোরার মুভ খেলুন';
+
+  @override
+  String get winPreventedBy50MoveRule => '50-চাল নিয়মে জয় প্রতিরোধ';
+
+  @override
+  String get lossSavedBy50MoveRule => '50- চাল নিয়মে হার জমা';
+
+  @override
+  String get winOr50MovesByPriorMistake => 'Win or 50 moves by prior mistake';
+
+  @override
+  String get lossOr50MovesByPriorMistake => 'Loss or 50 moves by prior mistake';
+
+  @override
+  String get unknownDueToRounding => 'Syzygy টেবিলবেসগুলিতে DTZ মানগুলির সম্ভাব্য রাউন্ডিংয়ের কারণে, শেষ ক্যাপচার বা পন মুভের পর থেকে প্রস্তাবিত টেবিলবেস লাইন অনুসরণ করা হলেই জয়/পরাজয়ের নিশ্চয়তা থাকে.';
+
+  @override
+  String get allSet => 'সব প্রস্তুত!';
+
+  @override
+  String get importPgn => 'PGN প্রবেশ করান';
+
+  @override
+  String get delete => 'মুছে ফেলা';
+
+  @override
+  String get deleteThisImportedGame => 'প্রেবেশ করানো খেলাটি মুছেফেলবেন?';
+
+  @override
+  String get replayMode => 'উত্তর ধরন';
+
+  @override
+  String get realtimeReplay => 'সঠিকসময়';
+
+  @override
+  String get byCPL => 'CPL দ্বারা';
+
+  @override
+  String get openStudy => 'মুক্ত অধ্যয়ন';
+
+  @override
+  String get enable => 'সচল';
+
+  @override
+  String get bestMoveArrow => 'সরানোর উত্তম চিহ্ন';
+
+  @override
+  String get showVariationArrows => 'বৈচিত্র্য তীর দেখান';
+
+  @override
+  String get evaluationGauge => 'পরিমাপ মূল্যায়ন';
+
+  @override
+  String get multipleLines => 'বহু রেখা';
+
+  @override
+  String get cpus => 'সিপিইউএস';
+
+  @override
+  String get memory => 'মেমরি';
+
+  @override
+  String get infiniteAnalysis => 'অনন্ত বিশ্লেষণ';
+
+  @override
+  String get removesTheDepthLimit => 'গভীরতার সীমা অপসারণ করুন এবং আপনার কম্পিউটারকে গরম রাখুন';
+
+  @override
+  String get engineManager => 'ইঞ্জিন ম্যানেজার';
+
+  @override
+  String get blunder => 'গুরুতর ভুল';
+
+  @override
+  String get mistake => 'ভুল';
+
+  @override
+  String get inaccuracy => 'অশুদ্ধি';
+
+  @override
+  String get moveTimes => 'চালের সময়';
+
+  @override
+  String get flipBoard => 'বোর্ডকে ঘোরান';
+
+  @override
+  String get threefoldRepetition => 'তিনবার একই চাল';
+
+  @override
+  String get claimADraw => 'সমান দাবী করুন';
+
+  @override
+  String get offerDraw => 'সমানের জন্য আহ্‌বান জানান';
+
+  @override
+  String get draw => 'সমান';
+
+  @override
+  String get drawByMutualAgreement => 'মতৈক্যের ভিত্তিতে ড্র';
+
+  @override
+  String get fiftyMovesWithoutProgress => 'কোনো অগ্রগতি ছাড়া ৫০ চাল';
+
+  @override
+  String get currentGames => 'বর্তমান খেলা';
+
+  @override
+  String get viewInFullSize => 'পূর্ণ আকারে দেখুন';
+
+  @override
+  String get logOut => 'প্রস্থান';
+
+  @override
+  String get signIn => 'সাইন ইন';
+
+  @override
+  String get rememberMe => 'আমাকে লগিন/সংযুক্ত রাখুন';
+
+  @override
+  String get youNeedAnAccountToDoThat => 'এটি করার জন্য আপনার একাউন্ট প্রয়োজন';
+
+  @override
+  String get signUp => 'নিবন্ধ';
+
+  @override
+  String get computersAreNotAllowedToPlay => 'কম্পিউটার অথবা কম্পিউটার ব্যবহার করে খেলা যাবে না | সবাইকে অনুরোধ করা হচ্ছে যেন কেউ খেলার সময় কোনো রকম কম্পিউটার এর সাহায্য না নেন | পুনশ্চ, অযথা অনেক গুলি একাউন্ট খুলবেন না তাহলে আপনাকে বহিষ্কার করা হতে পারে.';
+
+  @override
+  String get games => 'সমস্ত খেলা';
+
+  @override
+  String get forum => 'ফোরাম';
+
+  @override
+  String xPostedInForumY(String param1, String param2) {
+    return '$param1 পোস্ট করেছেন এ বিষয়ে $param2';
+  }
+
+  @override
+  String get latestForumPosts => 'সর্বশেষ ফোরাম বার্তা';
+
+  @override
+  String get players => 'খেলোয়াড়';
+
+  @override
+  String get friends => 'বন্ধুরা';
+
+  @override
+  String get discussions => 'বার্তাগুলি';
+
+  @override
+  String get today => 'আজ';
+
+  @override
+  String get yesterday => 'গতকাল';
+
+  @override
+  String get minutesPerSide => 'প্রতিটি পাশের জন্য বরাদ্দ মিনিট';
+
+  @override
+  String get variant => 'বিকল্প';
+
+  @override
+  String get variants => 'বিভিন্ন';
+
+  @override
+  String get timeControl => 'সময় নিয়ন্ত্রণ';
+
+  @override
+  String get realTime => 'সঠিক সময়';
+
+  @override
+  String get correspondence => 'দীর্ঘ খেলা';
+
+  @override
+  String get daysPerTurn => 'প্রতিটি চালের জন্য বরাদ্দ দিন';
+
+  @override
+  String get oneDay => 'একদিন';
+
+  @override
+  String get time => 'সময়';
+
+  @override
+  String get rating => 'অনুপাত';
+
+  @override
+  String get ratingStats => 'অনুপাত পরিসংখ্যান';
+
+  @override
+  String get username => 'ব্যবহারকারীর নাম';
+
+  @override
+  String get usernameOrEmail => 'ব্যবহারকারী নাম অথবা ই-মেইল';
+
+  @override
+  String get changeUsername => 'ইউজারনেম পরিবর্তন করুন';
+
+  @override
+  String get changeUsernameNotSame => 'শুধুমাত্র লেটারগুলোর কেইস পরিবর্তন করা সম্ভব। উদাহরণস্বরূপ \"johndoe\" থেকে \"JohnDoe\"।';
+
+  @override
+  String get changeUsernameDescription => 'আপনার ইউসারনেম পরিবর্তন করুন। এটি মাত্র একবারই পরিবর্তন করা যাবে এবং আপনি শুধুমাত্র বড়ো-ছোট হাতের অক্ষরে রূপান্তরকরণ করতে পারবেন।';
+
+  @override
+  String get signupUsernameHint => 'পছন্দ অনুযায়ী নিজের ইউজারনেম তৈরি করুন কারন পরে এটি পরিবর্তন করতে পারবেন না এবং অনুপযুক্ত ইউজারনেমের যেকোনো অ্যাকাউন্ট পরবর্বতিতে বন্ধ করা হতে পারে!';
+
+  @override
+  String get signupEmailHint => 'আমরা এটি শুধুমাত্র পাসওয়ার্ড রিসেটের জন্য ব্যবহার করব.';
+
+  @override
+  String get password => 'পাসওয়ার্ড';
+
+  @override
+  String get changePassword => 'পাসওয়ার্ড পরিবর্তন';
+
+  @override
+  String get changeEmail => 'ই-মেইল পরিবর্তন করুন';
+
+  @override
+  String get email => 'ইমেল';
+
+  @override
+  String get passwordReset => 'পাসওয়ার্ড পরিবর্তন';
+
+  @override
+  String get forgotPassword => 'পাসওয়ার্ড ভুলে গেছেন?';
+
+  @override
+  String get error_weakPassword => 'এই পাসওয়ার্ড অত্যন্ত প্রচলিত, এবং অনুমান করা খুব সহজ.';
+
+  @override
+  String get error_namePassword => 'দয়া করে আপনার পাসওয়ার্ড হিসাবে আপনার ব্যবহারকারী নাম ব্যবহার করবেন না.';
+
+  @override
+  String get blankedPassword => 'আপনি অন্য সাইটে একই পাসওয়ার্ড ব্যবহার করেছেন এবং সেই সাইট ডাটা হ্যাক করা হয়েছে. আপনার Lichess অ্যাকাউন্টের নিরাপত্তা নিশ্চিত করতে, আপনাকে একটি নতুন পাসওয়ার্ড সেট করতে হবে. বোঝার জন্য আপনাকে ধন্যবাদ.';
+
+  @override
+  String get youAreLeavingLichess => 'আপনি লিচেস ছেড়ে যাচ্ছেন';
+
+  @override
+  String get neverTypeYourPassword => 'লিচেসে ব্যবহৃত পাসওয়ার্ড অন্য কোনো ওয়েবসাইটে টাইপ/ব্যবহার করবেন না!';
+
+  @override
+  String proceedToX(String param) {
+    return '$param এ এগিয়ে যান';
+  }
+
+  @override
+  String get passwordSuggestion => 'অন্য কারো প্রস্তাবিত পাসওয়ার্ড ব্যবহার করবেন না, কারন আপনার অ্যাকাউন্ট অন্য কারো দ্বারা চুরি/ব্যাবহার হওয়ার সম্ভাবনা রয়েছে';
+
+  @override
+  String get emailSuggestion => 'অন্য কারো প্রস্তাবিত ই-মেইল ব্যবহার করবেন না, কারন আপনার অ্যাকাউন্ট অন্য কারো দ্বারা চুরি/ব্যাবহার হওয়ার সম্ভাবনা রয়েছে';
+
+  @override
+  String get emailConfirmHelp => 'ইমেল নিশ্চিতকরণের মাধ্যমে সাহায্য';
+
+  @override
+  String get emailConfirmNotReceived => 'সাইন আপ করার পর ইমেইলে কনফার্মেশন পান নি?';
+
+  @override
+  String get whatSignupUsername => 'একাউন্ট খোলার/সাইন আপ করার সময় ইউজারনেম কি ব্যাবহার করেছিলেন?';
+
+  @override
+  String usernameNotFound(String param) {
+    return 'আমরা এই নামের কোনো ব্যবহারকারী খুঁজে পাইনি: $param.';
+  }
+
+  @override
+  String get usernameCanBeUsedForNewAccount => 'নতুন একাউন্ট খুলতে এই ইউজারনেমটি ব্যাবহার করতে পারেন';
+
+  @override
+  String emailSent(String param) {
+    return '$param ঠিকানায় আমরা ইমেইল পাঠিয়েছি';
+  }
+
+  @override
+  String get emailCanTakeSomeTime => 'পৌঁছাতে কিছু সময় লাগতে পারে।.';
+
+  @override
+  String get refreshInboxAfterFiveMinutes => '৫ মিনিট অপেক্ষা করে ইমেইলবক্স রিফ্রেশ করুন.';
+
+  @override
+  String get checkSpamFolder => 'এছাড়াও আপনার স্প্যাম ফোল্ডার চেক করুন, এটি সেখানে থাকতে পারে। যদি তাই হয়, এটি স্প্যাম নয় হিসাবে চিহ্নিত করুন.';
+
+  @override
+  String get emailForSignupHelp => 'অন্য সব কিছু ব্যর্থ হলে, আমাদের এই ইমেল পাঠান:';
+
+  @override
+  String copyTextToEmail(String param) {
+    return 'উপরের লেখাটি কপি করে পেস্ট করুন এবং $param এ পাঠান';
+  }
+
+  @override
+  String get waitForSignupHelp => 'আপনাকে আপনার সাইনআপ সম্পূর্ণ করতে সাহায্য করার জন্য আমরা শীঘ্রই আপনার কাছে ফিরে আসব.';
+
+  @override
+  String accountConfirmed(String param) {
+    return 'ব্যবহারকারী $param সফলভাবে নিশ্চিত করা হয়েছে.';
+  }
+
+  @override
+  String accountCanLogin(String param) {
+    return 'আপনি এখন $param হিসাবে লগইন করতে পারেন.';
+  }
+
+  @override
+  String get accountConfirmationEmailNotNeeded => 'আপনার নিশ্চিতকরণ ইমেল এর প্রয়োজন নেই.';
+
+  @override
+  String accountClosed(String param) {
+    return '$param একাউন্টটি বন্ধ করা হয়েছে.';
+  }
+
+  @override
+  String accountRegisteredWithoutEmail(String param) {
+    return '$param একাউন্টটি একটি ইমেল ছাড়াই রেজিস্টার করা হয়েছিল.';
+  }
+
+  @override
+  String get rank => 'মর্যাদাক্রম';
+
+  @override
+  String rankX(String param) {
+    return 'অনুপাত: $param';
+  }
+
+  @override
+  String get gamesPlayed => 'খেলা খেলেছেন';
+
+  @override
+  String get cancel => 'বাতিল করুন';
+
+  @override
+  String get whiteTimeOut => 'সাদার সময় শেষ';
+
+  @override
+  String get blackTimeOut => 'কালোর সময় আপ';
+
+  @override
+  String get drawOfferSent => 'সমান অফার পাঠানো হয়েছে';
+
+  @override
+  String get drawOfferAccepted => 'সমান অফার গ্রহণ করা হয়েছে';
+
+  @override
+  String get drawOfferCanceled => 'সমান অফার বাতিল করা হয়েছে';
+
+  @override
+  String get whiteOffersDraw => 'সাদা অফার সমান';
+
+  @override
+  String get blackOffersDraw => 'কালো অফার সমান';
+
+  @override
+  String get whiteDeclinesDraw => 'সাদা সমান প্রত্যাখান করেছে';
+
+  @override
+  String get blackDeclinesDraw => 'কালো সমান প্রত্যাখান করেছে';
+
+  @override
+  String get yourOpponentOffersADraw => 'আপনার প্রতিপক্ষ সমান অফার করেছেন';
+
+  @override
+  String get accept => 'গ্রহণ করুন';
+
+  @override
+  String get decline => 'প্রত্যাখ্যান করুন';
+
+  @override
+  String get playingRightNow => 'এই মুহূর্তে খেলছেন';
+
+  @override
+  String get eventInProgress => 'এই মুহূর্তে খেলতেছে';
+
+  @override
+  String get finished => 'সমাপ্ত';
+
+  @override
+  String get abortGame => 'খেলা বন্ধ করুন';
+
+  @override
+  String get gameAborted => 'খেলা বন্ধ করা হয়েছে';
+
+  @override
+  String get standard => 'আদর্শ';
+
+  @override
+  String get customPosition => 'পছন্দসই পজিশন';
+
+  @override
+  String get unlimited => 'সীমাহীন সময়';
+
+  @override
+  String get mode => 'ধরন';
+
+  @override
+  String get casual => 'সাধারণ';
+
+  @override
+  String get rated => 'রেট করা';
+
+  @override
+  String get casualTournament => 'সাধারন';
+
+  @override
+  String get ratedTournament => 'অনুপাত';
+
+  @override
+  String get thisGameIsRated => 'এই খেলাটি রেট করা';
+
+  @override
+  String get rematch => 'আবার খেলুন';
+
+  @override
+  String get rematchOfferSent => 'পুনঃম্যাচের অফার পাঠানো হয়েছে';
+
+  @override
+  String get rematchOfferAccepted => 'পুনঃম্যাচের অফার গ্রহণ করা হয়েছে';
+
+  @override
+  String get rematchOfferCanceled => 'পুনঃম্যাচের অফার বাতিল করা হয়েছে';
+
+  @override
+  String get rematchOfferDeclined => 'পুনঃম্যাচের অফার প্রত্যাখ্যাত হয়েছে';
+
+  @override
+  String get cancelRematchOffer => 'পুনঃম্যাচের অফার বাতিল করুন';
+
+  @override
+  String get viewRematch => 'পুনঃম্যাচ দেখান';
+
+  @override
+  String get confirmMove => 'পদক্ষেপ নিশ্চিত করছি';
+
+  @override
+  String get play => 'খেলুন';
+
+  @override
+  String get inbox => 'ডাকবাক্স';
+
+  @override
+  String get chatRoom => 'আড্ডাঘর';
+
+  @override
+  String get loginToChat => 'আলাপআলচনা করতে লগিন করুন';
+
+  @override
+  String get youHaveBeenTimedOut => 'আপনার সময় শেষ.';
+
+  @override
+  String get spectatorRoom => 'দর্শক কক্ষ';
+
+  @override
+  String get composeMessage => 'মেসেজ তৈরি করুন';
+
+  @override
+  String get subject => 'শিরোনাম';
+
+  @override
+  String get send => 'পাঠান';
+
+  @override
+  String get incrementInSeconds => 'প্রতি সেকেন্ডে পর্যায়ক্রমিক বৃদ্ধি';
+
+  @override
+  String get freeOnlineChess => 'ফ্রি অনলাইন দাবা';
+
+  @override
+  String get exportGames => 'খেলা রপ্তানী';
+
+  @override
+  String get ratingRange => 'রেটিং সীমা';
+
+  @override
+  String get thisAccountViolatedTos => 'এই অ্যাকাউন্টটি লিচেস্‌-এর পরিষেবার শর্তসমূহ লঙ্ঘন করেছে';
+
+  @override
+  String get openingExplorerAndTablebase => 'বিস্লেষন খুলতেছে & টেবিলবেস';
+
+  @override
+  String get takeback => 'চাল ফিরিয়ে নিন';
+
+  @override
+  String get proposeATakeback => 'চাল ফিরিয়ে নেবার সুযোগ দিন';
+
+  @override
+  String get takebackPropositionSent => 'চাল ফিরিয়ে সুযোগ পাঠানো হয়েছে';
+
+  @override
+  String get takebackPropositionDeclined => 'চাল ফিরিয়ে নেবার সুযোগ প্রত্যাখ্যাত হয়েছে';
+
+  @override
+  String get takebackPropositionAccepted => 'চাল ফিরিয়ে নেবার সুযোগ গৃহীত হয়েছে';
+
+  @override
+  String get takebackPropositionCanceled => 'চাল ফিরিয়ে নেবার সুযোগ বাতিল করা হয়েছে';
+
+  @override
+  String get yourOpponentProposesATakeback => 'আপনার প্রতিপক্ষ চাল ফিরিয়ে নেবার সুযোগ দিতে চান';
+
+  @override
+  String get bookmarkThisGame => 'এই খেলাটি বুকমার্ক করুন';
+
+  @override
+  String get tournament => 'টুর্নামেন্ট';
+
+  @override
+  String get tournaments => 'টুর্নামেন্টগুলো';
+
+  @override
+  String get tournamentPoints => 'টুর্নামেন্ট পয়েন্ট';
+
+  @override
+  String get viewTournament => 'টুর্নামেন্ট দেখুন';
+
+  @override
+  String get backToTournament => 'টুর্নামেন্ট এ ফিরে যান';
+
+  @override
+  String get noDrawBeforeSwissLimit => 'একটি সুইস টুর্নামেন্টে 30টি চাল খেলার আগে আপনি ড্র করতে পারবেন না.';
+
+  @override
+  String get thematic => 'ধাতুসংক্রান্ত';
+
+  @override
+  String yourPerfRatingIsProvisional(String param) {
+    return 'আপনার $param অনুপাত হয় সাময়িক';
+  }
+
+  @override
+  String yourPerfRatingIsTooHigh(String param1, String param2) {
+    return 'আপনার $param1 অনুপাত ($param2) হয় অনেক বেশি';
+  }
+
+  @override
+  String yourTopWeeklyPerfRatingIsTooHigh(String param1, String param2) {
+    return 'আপনার সাপ্তাহিক সর্বোচ্চ $param1 অনুপাত ($param2) হয় অনেক বেশি';
+  }
+
+  @override
+  String yourPerfRatingIsTooLow(String param1, String param2) {
+    return 'আপনার $param1 অনুপাত ($param2) হয় অনেক কম';
+  }
+
+  @override
+  String ratedMoreThanInPerf(String param1, String param2) {
+    return 'অনুপাতদিত ≥ $param1 এ $param2';
+  }
+
+  @override
+  String ratedLessThanInPerf(String param1, String param2) {
+    return 'অনুপাদিত ≤ $param1 এ $param2';
+  }
+
+  @override
+  String mustBeInTeam(String param) {
+    return 'অবশ্যই $param টিমে থাকতে হবে।';
+  }
+
+  @override
+  String youAreNotInTeam(String param) {
+    return 'আপনি $param দলে নেই।';
+  }
+
+  @override
+  String get backToGame => 'খেলায় এ ফিরে যান';
+
+  @override
+  String get siteDescription => 'ফ্রি অনলাইন দাবা খেলা। এখন থেকে পরিচ্ছন্ন ইন্টারফেসে দাবা খেলুন। কোন রেজিস্ট্রেশনের দরকার নেই, নেই কোন বিজ্ঞাপন, এমনকি কোনও প্লাগইন-এরও প্রয়োজন নেই। দাবা খেলুন কম্পিউটারের সাথে, অথবা বন্ধুর সাথে অথবা অজানা যে কোন প্রতিপক্ষের সাথে।';
+
+  @override
+  String xJoinedTeamY(String param1, String param2) {
+    return '$param1 যোগ দিলেন $param2 দলে';
+  }
+
+  @override
+  String xCreatedTeamY(String param1, String param2) {
+    return '$param1 বানালেন $param2 দল';
+  }
+
+  @override
+  String get startedStreaming => 'স্ট্রিমিং চালু করেছেন';
+
+  @override
+  String xStartedStreaming(String param) {
+    return '$param স্ট্রিমিং শুরু করেছেন';
+  }
+
+  @override
+  String get averageElo => 'গড় ইলো';
+
+  @override
+  String get location => 'বসবাসস্থল';
+
+  @override
+  String get filterGames => 'খেলা ছাঁকন';
+
+  @override
+  String get reset => 'পুনরায় চালু করা';
+
+  @override
+  String get apply => 'প্রয়োগ';
+
+  @override
+  String get save => 'সংরক্ষন করুন';
+
+  @override
+  String get leaderboard => 'লিডারবোর্ড';
+
+  @override
+  String get screenshotCurrentPosition => 'বর্তমান অবস্থানে স্ক্রিনশট নিন';
+
+  @override
+  String get gameAsGIF => 'GIF হিসেবে';
+
+  @override
+  String get pasteTheFenStringHere => 'এখানে FEN স্ট্রিংটি জোড়া লাগান';
+
+  @override
+  String get pasteThePgnStringHere => 'এখানে PGN স্ট্রিংটি জোড়া লাগান';
+
+  @override
+  String get orUploadPgnFile => 'অথবা PGN আপলোড করুন';
+
+  @override
+  String get fromPosition => 'অবস্থা থেকে';
+
+  @override
+  String get continueFromHere => 'এখান থেকে আবার শুরু করুন';
+
+  @override
+  String get toStudy => 'স্টাডি';
+
+  @override
+  String get importGame => 'খেলা আমদানী';
+
+  @override
+  String get importGameExplanation => 'যখন একটি খেলার PGN যোগ করবেন আপনি পাবেন একটি ব্রাউজাবেল উত্তর,\nএকটি কম্পিউটার বিশ্লেষণ, একটি খেলা আলাপ এবং একটি ভাগাভাগি করার URL.';
+
+  @override
+  String get importGameCaveat => 'Variations will be erased. To keep them, import the PGN via a study.';
+
+  @override
+  String get importGameDataPrivacyWarning => 'এই PGN জনসাধারণের দ্বারা অধিগত করা যেতে পারে। ব্যক্তিগতভাবে একটি গেম ইমপোর্ট করতে, একটি স্টাডি ব্যবহার করুন.';
+
+  @override
+  String get thisIsAChessCaptcha => 'এটি হল দাবা CAPTCHA';
+
+  @override
+  String get clickOnTheBoardToMakeYourMove => 'বোর্ডে ক্লিক করে চাল দিয়ে প্রমাণ করুন যে আপনি সত্যিই মানুষ, রোবট নন।';
+
+  @override
+  String get captcha_fail => 'দয়া করে দাবার ক্যাপচা সমাধান করুন.';
+
+  @override
+  String get notACheckmate => 'এটি কিস্তিমাত নয়';
+
+  @override
+  String get whiteCheckmatesInOneMove => 'সাদা দলের একটি মুভে চেকমেট';
+
+  @override
+  String get blackCheckmatesInOneMove => 'কালো দলের একটি মুভে চেকমেট';
+
+  @override
+  String get retry => 'আবার চেষ্টা করুন';
+
+  @override
+  String get reconnecting => 'পুনঃসংযোগের চেষ্টা চলছে';
+
+  @override
+  String get noNetwork => 'অফলাইন';
+
+  @override
+  String get favoriteOpponents => 'প্রিয় প্রতিদ্বন্দ্বী';
+
+  @override
+  String get follow => 'অনুসরণ';
+
+  @override
+  String get following => 'অনুসরণ করছেন';
+
+  @override
+  String get unfollow => 'আর অনুসরণ নয়';
+
+  @override
+  String followX(String param) {
+    return '$param-কে ফলো করুন';
+  }
+
+  @override
+  String unfollowX(String param) {
+    return '$paramকে অননুসরণ করুন';
+  }
+
+  @override
+  String get block => 'বাধা দিন';
+
+  @override
+  String get blocked => 'বাধাগ্রস্ত';
+
+  @override
+  String get unblock => 'বাধা উঠিয়ে নিন';
+
+  @override
+  String get followsYou => 'আপনাকে অনুসরণ করছে';
+
+  @override
+  String xStartedFollowingY(String param1, String param2) {
+    return '$param1 অনুসরণ করা শুরু করেছেন $param2';
+  }
+
+  @override
+  String get more => 'আরও';
+
+  @override
+  String get memberSince => 'সদস্য রয়েছেন';
+
+  @override
+  String lastSeenActive(String param) {
+    return 'শেষ আগমন $param';
+  }
+
+  @override
+  String get player => 'খেলোয়াড়';
+
+  @override
+  String get list => 'তালিকা';
+
+  @override
+  String get graph => 'গ্রাফ';
+
+  @override
+  String get required => 'প্রয়োজনীয়';
+
+  @override
+  String get openTournaments => 'উন্মুক্ত টুর্নামেন্টগুলো';
+
+  @override
+  String get duration => 'সময়কাল';
+
+  @override
+  String get winner => 'বিজয়ী';
+
+  @override
+  String get standing => 'অপেক্ষারত';
+
+  @override
+  String get createANewTournament => 'নতুন টুর্নামেন্ট সৃষ্টি করুন';
+
+  @override
+  String get tournamentCalendar => 'টুর্নামেন্ট ক্যালেন্ডার';
+
+  @override
+  String get conditionOfEntry => 'এন্ট্রির শর্তাবলি:';
+
+  @override
+  String get advancedSettings => 'এডভান্সড সেটিংস';
+
+  @override
+  String get safeTournamentName => 'টুর্নামেন্টের জন্য একটি নিরাপদ নাম পছন্দ করুন।';
+
+  @override
+  String get inappropriateNameWarning => 'এমনকি সামান্য অনুপযুক্ত কিছুও আপনার অ্যাকাউন্ট বন্ধ করতে পারে।';
+
+  @override
+  String get emptyTournamentName => 'কোন গ্র্যান্ডমাস্টারের নামে টুর্নামেন্টের নাম দিতে চাইলে খালি রাখুন।';
+
+  @override
+  String get makePrivateTournament => 'পাসওয়ার্ড দিয়ে টুর্নামেন্টটি গোপনীয় এবং সিমাবদ্ধ করেদিন';
+
+  @override
+  String get join => 'যোগ দিন';
+
+  @override
+  String get withdraw => 'উঠিয়ে নিন';
+
+  @override
+  String get points => 'পয়েন্ট';
+
+  @override
+  String get wins => 'জয়';
+
+  @override
+  String get losses => 'পরাজয়';
+
+  @override
+  String get createdBy => 'তৈরি করেছেন';
+
+  @override
+  String get tournamentIsStarting => 'টুর্নামেন্ট শুরু হচ্ছে';
+
+  @override
+  String get tournamentPairingsAreNowClosed => 'ক্রীড়া-প্রতিযোগিতা যোগদান এখন বন্ধ হয়ে গেছে.';
+
+  @override
+  String standByX(String param) {
+    return 'অপেক্ষিত $param, যোগদান খেলোয়ার, তৈরি হও!';
+  }
+
+  @override
+  String get pause => 'বিরতি/Pause';
+
+  @override
+  String get resume => 'পুনরায় শুরু';
+
+  @override
+  String get youArePlaying => 'আপনি খেলতেছেন!';
+
+  @override
+  String get winRate => 'জয়ের অনুপাত';
+
+  @override
+  String get berserkRate => 'ক্ষিপ্ত অনুপাত';
+
+  @override
+  String get performance => 'সম্পাদন';
+
+  @override
+  String get tournamentComplete => 'ক্রীড়া-প্রতিযোগিতা সম্পন্ন হয়েছে';
+
+  @override
+  String get movesPlayed => 'খেলা সরানো হয়েছে';
+
+  @override
+  String get whiteWins => 'সাদা বিজয়ী';
+
+  @override
+  String get blackWins => 'কালো বিজয়ী';
+
+  @override
+  String get drawRate => 'ড্র হার';
+
+  @override
+  String get draws => 'সমান';
+
+  @override
+  String nextXTournament(String param) {
+    return 'পরবর্তী $param ক্রীড়া-প্রতিযোগিতা:';
+  }
+
+  @override
+  String get averageOpponent => 'গড় প্রতিদ্বন্দ্বী';
+
+  @override
+  String get boardEditor => 'বোর্ড সম্পাদক';
+
+  @override
+  String get setTheBoard => 'বোর্ড সেট করুন';
+
+  @override
+  String get popularOpenings => 'জনপ্রিয় চমক';
+
+  @override
+  String get endgamePositions => 'সমাপনী খেলার অবস্থান';
+
+  @override
+  String chess960StartPosition(String param) {
+    return 'Chess960 এর শুরুর অবস্থান: $param';
+  }
+
+  @override
+  String get startPosition => 'শুরুর অবস্থান';
+
+  @override
+  String get clearBoard => 'বোর্ড খালি করুন';
+
+  @override
+  String get loadPosition => 'অবস্থান পুনঃস্থাপন';
+
+  @override
+  String get isPrivate => 'ব্যক্তিগত';
+
+  @override
+  String reportXToModerators(String param) {
+    return 'মডারেটরদের কাছে $param এর নামে রিপোর্ট করুন';
+  }
+
+  @override
+  String profileCompletion(String param) {
+    return 'প্রোফাইল সম্পন্ন: $param';
+  }
+
+  @override
+  String xRating(String param) {
+    return '$param অনুপাত';
+  }
+
+  @override
+  String get ifNoneLeaveEmpty => 'যদি কিছুই না হয়, খালি রাখুন';
+
+  @override
+  String get profile => 'পরিচিতি';
+
+  @override
+  String get editProfile => 'পরিচিতি সম্পাদনা';
+
+  @override
+  String get realName => 'Real name';
+
+  @override
+  String get setFlair => 'আপনার ফ্লেয়ার সেট করুন';
+
+  @override
+  String get flair => 'ফ্লেয়ার';
+
+  @override
+  String get youCanHideFlair => 'পুরো সাইট জুড়ে সমস্ত ব্যবহারকারীর ফ্লেয়ার লুকানোর জন্য একটি সেটিং রয়েছে.';
+
+  @override
+  String get biography => 'জীবনবৃত্তান্ত';
+
+  @override
+  String get countryRegion => 'দেশ বা অঞ্চল';
+
+  @override
+  String get thankYou => 'ধন্যবাদ';
+
+  @override
+  String get socialMediaLinks => 'সোশ্যাল মিডিয়ার লিঙ্ক';
+
+  @override
+  String get oneUrlPerLine => 'প্রতি লাইনে একটি লিংক।';
+
+  @override
+  String get inlineNotation => 'রেখা চিহ্ন';
+
+  @override
+  String get makeAStudy => 'অধ্যায়ন নিরাপদ রাখার জন্য অন্য ইউজারদের সঙ্গে শেয়ারকরুন ও অধ্যায়ন তৈরি করুন.';
+
+  @override
+  String get clearSavedMoves => 'চাল গুলো মুছুন';
+
+  @override
+  String get previouslyOnLichessTV => 'এর আগে Lichess TV- তে যা হয়েছে';
+
+  @override
+  String get onlinePlayers => 'যে সমস্ত  খেলোয়ার অনলাইন আছে';
+
+  @override
+  String get activePlayers => 'সক্রিয় খেলোয়াড়গণ';
+
+  @override
+  String get bewareTheGameIsRatedButHasNoClock => 'সাবধান, এই খেলাটি মূল্যায়িত তবে কোনো সময়সীমা নেই!';
+
+  @override
+  String get success => 'সফল্য হয়েছে';
+
+  @override
+  String get automaticallyProceedToNextGameAfterMoving => 'স্বয়ংক্রিয় ভাবে পরবর্তী খেলায় যান';
+
+  @override
+  String get autoSwitch => 'স্বয়ংক্রিয় পরিবর্তন';
+
+  @override
+  String get puzzles => 'ধাঁধা';
+
+  @override
+  String get onlineBots => 'অনলাইন বটস';
+
+  @override
+  String get name => 'নাম';
+
+  @override
+  String get description => 'বিবরণ';
+
+  @override
+  String get descPrivate => 'ব্যাক্তিগত বর্ননা';
+
+  @override
+  String get descPrivateHelp => 'যে লেখা শুধু দলের সদস্য দেখতে পাবে.';
+
+  @override
+  String get no => 'না';
+
+  @override
+  String get yes => 'হ্যা';
+
+  @override
+  String get help => 'সাহায্য';
+
+  @override
+  String get createANewTopic => 'নতুন বিষয়  তৈরি করুন';
+
+  @override
+  String get topics => 'বিষয়';
+
+  @override
+  String get posts => 'লেখা';
+
+  @override
+  String get lastPost => 'শেষলেখা';
+
+  @override
+  String get views => 'দৃষ্টিপাত';
+
+  @override
+  String get replies => 'উত্তর';
+
+  @override
+  String get replyToThisTopic => 'এই বিষয়ে উত্তর দিন';
+
+  @override
+  String get reply => 'উত্তর';
+
+  @override
+  String get message => 'বার্তা';
+
+  @override
+  String get createTheTopic => 'বিষয় তৈরী করুন';
+
+  @override
+  String get reportAUser => 'কোনো user এর বিরুদ্ধে report করুন';
+
+  @override
+  String get user => 'user এর নাম';
+
+  @override
+  String get reason => 'কারণ';
+
+  @override
+  String get whatIsIheMatter => 'সম্পূর্ণ ঘটনার বিবরণ দেন';
+
+  @override
+  String get cheat => 'চিটিং করছে';
+
+  @override
+  String get troll => 'ব্যঙ্গ করছে';
+
+  @override
+  String get other => 'অন্য কোনো কারণ';
+
+  @override
+  String get reportDescriptionHelp => 'এখানে সেই খেলাটির link দেন এবং বলুন ওই ব্যক্তি ব্যবহারে কি অসুবিধা ছিল ?';
+
+  @override
+  String get error_provideOneCheatedGameLink => 'অনুগ্রহ করে একটা চিটেড গেমের লিংক দিন।';
+
+  @override
+  String by(String param) {
+    return '$param এর দ্বারা';
+  }
+
+  @override
+  String importedByX(String param) {
+    return 'খেলাটি এনেছেন $param';
+  }
+
+  @override
+  String get thisTopicIsNowClosed => 'এই বিষয়টি এখন শেষ হয়ে গেছে';
+
+  @override
+  String get blog => 'ব্লগ';
+
+  @override
+  String get notes => 'গুরুত্বপূর্ণ তথ্য';
+
+  @override
+  String get typePrivateNotesHere => 'এখানে নিজের ব্যক্তিগত  গুরুত্বপূর্ণ তথ্য লিখতে পারেন';
+
+  @override
+  String get writeAPrivateNoteAboutThisUser => 'এই ব্যবহারকারী সম্পর্কে ব্যক্তিগত নোট লিখুন';
+
+  @override
+  String get noNoteYet => 'এখন পর্যন্ত কোনো নোট নেই';
+
+  @override
+  String get invalidUsernameOrPassword => 'ব্যবহারকারী নাম অথবা পাসওয়ার্ড টি ঠিক নয়';
+
+  @override
+  String get incorrectPassword => 'ভুল সঙ্কেত শব্দ';
+
+  @override
+  String get invalidAuthenticationCode => 'ইনভ্যালিড অথেন্টিকেশন কোড';
+
+  @override
+  String get emailMeALink => 'আমাকে লিংক ইমেইল কর';
+
+  @override
+  String get currentPassword => 'বর্তমান পাসওয়ার্ড';
+
+  @override
+  String get newPassword => 'নতুন পাসওয়ার্ড';
+
+  @override
+  String get newPasswordAgain => 'নতুন পাসওয়ার্ড (পুনরায়)';
+
+  @override
+  String get newPasswordsDontMatch => 'নতুন পাসওয়ার্ড আগের সঙ্গে মিলে নি';
+
+  @override
+  String get newPasswordStrength => 'পাসওয়ার্ডের শক্তি';
+
+  @override
+  String get clockInitialTime => 'ঘড়ি অনুযায়ী প্রাথমিক সময়';
+
+  @override
+  String get clockIncrement => 'ঘড়ির সময়বৃদ্ধির হার';
+
+  @override
+  String get privacy => 'গোপনীয়তা';
+
+  @override
+  String get privacyPolicy => 'গোপনীয়তা নীতি';
+
+  @override
+  String get letOtherPlayersFollowYou => 'অন্যান্য খেলোয়ারদের আপানকে অনুসরন করতে দিন';
+
+  @override
+  String get letOtherPlayersChallengeYou => 'অন্যান্য খেলোয়ারদের আপানকে চ্যালেঞ্জ করতে দিন';
+
+  @override
+  String get letOtherPlayersInviteYouToStudy => 'অন্যান্য খেলোয়ারদের আপানকে আমন্ত্রন করতে দিন';
+
+  @override
+  String get sound => 'শব্দ';
+
+  @override
+  String get none => 'কিছুই না';
+
+  @override
+  String get fast => 'দ্রুত';
+
+  @override
+  String get normal => 'সাধারন';
+
+  @override
+  String get slow => 'ধীর';
+
+  @override
+  String get insideTheBoard => 'বোর্ডের মাধ্যে';
+
+  @override
+  String get outsideTheBoard => 'বোর্ডের বাহিরে';
+
+  @override
+  String get allSquaresOfTheBoard => 'All squares of the board';
+
+  @override
+  String get onSlowGames => 'খেলায় ধীর গতি';
+
+  @override
+  String get always => 'সব সময়';
+
+  @override
+  String get never => 'কখনই না';
+
+  @override
+  String xCompetesInY(String param1, String param2) {
+    return '$param1 করা আছে মধ্যে $param2';
+  }
+
+  @override
+  String get victory => 'বিজয়';
+
+  @override
+  String get defeat => 'হার';
+
+  @override
+  String victoryVsYInZ(String param1, String param2, String param3) {
+    return '$param1 বানাম $param2 মধ্যে $param3';
+  }
+
+  @override
+  String defeatVsYInZ(String param1, String param2, String param3) {
+    return '$param1 বানাম $param2 মধ্যে $param3';
+  }
+
+  @override
+  String drawVsYInZ(String param1, String param2, String param3) {
+    return '$param1 বানাম $param2 মধ্যে $param3';
+  }
+
+  @override
+  String get timeline => 'সময়রেখা';
+
+  @override
+  String get starting => 'শুরু হইতেছে:';
+
+  @override
+  String get allInformationIsPublicAndOptional => 'সব তথ্য হয় সরকারী এবং ঐচ্ছিক.';
+
+  @override
+  String get biographyDescription => 'আপনার সম্পর্কে বলুন, দাবায় আপনি কি পচ্ছন্দ করেন, আপনার প্রিয় সাইটগুলো, খেলা, খেলোয়াড়দের সম্পর্কে বলুন…';
+
+  @override
+  String get listBlockedPlayers => 'আপনি যাদের অবরুদ্ধ করেছেন তাদের তালিকা';
+
+  @override
+  String get human => 'মানুষ';
+
+  @override
+  String get computer => 'কম্পিউটার';
+
+  @override
+  String get side => 'পাশে';
+
+  @override
+  String get clock => 'ঘড়ি';
+
+  @override
+  String get opponent => 'প্রতিদ্বন্দ্বী';
+
+  @override
+  String get learnMenu => 'শেখা';
+
+  @override
+  String get studyMenu => 'অধ্যায়ন';
+
+  @override
+  String get practice => 'অনুশীলন';
+
+  @override
+  String get community => 'সম্প্রদায়';
+
+  @override
+  String get tools => 'সরঞ্জামসমূহ';
+
+  @override
+  String get increment => 'মুনাফা';
+
+  @override
+  String get error_unknown => 'অচল মান';
+
+  @override
+  String get error_required => 'এই ঘরটি পূরন করা আবশ্যক';
+
+  @override
+  String get error_email => 'ইমেইল ঠিকানাটি বৈধ নয়';
+
+  @override
+  String get error_email_acceptable => 'ইমেইল ঠিকানাটি গ্রহণযোগ্য নয়। দয়া করে পুনরায় চেক করুন, অত‍ঃপর চেষ্টা করুন।';
+
+  @override
+  String get error_email_unique => 'ইমেইল টি অকার্যকর বা ইতোমধ্যে ব্যবহৃত';
+
+  @override
+  String get error_email_different => 'এটি আপনার বর্তমানে ব্যবহৃত ইমেইল ঠিকানা';
+
+  @override
+  String error_minLength(String param) {
+    return 'পাসওয়ার্ড অন্তত $param বর্ণ/চিহ্ন দীর্ঘ হতে হবে';
+  }
+
+  @override
+  String error_maxLength(String param) {
+    return 'পাসওয়ার্ড সর্বোচ্চ $param বর্ণ/চিহ্ন দীর্ঘ হতে পারবে';
+  }
+
+  @override
+  String error_min(String param) {
+    return 'অবশ্যই $param দীর্ঘ হতে হবে।';
+  }
+
+  @override
+  String error_max(String param) {
+    return 'অবশ্যই $param এর মধ্যে হতে হবে।';
+  }
+
+  @override
+  String ifRatingIsPlusMinusX(String param) {
+    return 'যদি অনুপাত হয় ± $param';
+  }
+
+  @override
+  String get ifRegistered => 'নিবন্ধিত';
+
+  @override
+  String get onlyExistingConversations => 'বিদ্যমান কথোপকথন';
+
+  @override
+  String get onlyFriends => 'শুধু বন্ধুরা';
+
+  @override
+  String get menu => 'মেনু';
+
+  @override
+  String get castling => 'কাস্টেলিং';
+
+  @override
+  String get whiteCastlingKingside => 'সাদা O-O';
+
+  @override
+  String get blackCastlingKingside => 'কালো O-O';
+
+  @override
+  String tpTimeSpentPlaying(String param) {
+    return 'খেলার সময় অতিবাহিত: $param';
+  }
+
+  @override
+  String get watchGames => 'খেলাগুলো দেখুন';
+
+  @override
+  String tpTimeSpentOnTV(String param) {
+    return 'টিভির সময়: $param';
+  }
+
+  @override
+  String get watch => 'দেখুন';
+
+  @override
+  String get videoLibrary => 'ভিডিও লাইব্রেরি';
+
+  @override
+  String get streamersMenu => 'স্ট্রিমারকারীরা';
+
+  @override
+  String get mobileApp => 'মোবাইল অ্যাপ';
+
+  @override
+  String get webmasters => 'ওয়েবমাস্টারগুলো';
+
+  @override
+  String get about => 'সম্পর্কে';
+
+  @override
+  String aboutX(String param) {
+    return '$param সম্পর্কে';
+  }
+
+  @override
+  String xIsAFreeYLibreOpenSourceChessServer(String param1, String param2) {
+    return '$param1 বিনামুল্যে ($param2), লাইব্রেরী, এড-মুক্ত, ওপেনসোর্স দাবার সার্ভার.';
+  }
+
+  @override
+  String get really => 'সত্যিকার অর্থেই';
+
+  @override
+  String get contribute => 'অবদান';
+
+  @override
+  String get termsOfService => 'পরিষেবার শর্তাদি';
+
+  @override
+  String get sourceCode => 'উৎস সংকেতলিপি';
+
+  @override
+  String get simultaneousExhibitions => 'সমকালবর্তী প্রদর্শন';
+
+  @override
+  String get host => 'স্বাগতিক';
+
+  @override
+  String hostColorX(String param) {
+    return 'হোস্ট রং: $param';
+  }
+
+  @override
+  String get yourPendingSimuls => 'আপনার অমীমাংসিত সিমুলস';
+
+  @override
+  String get createdSimuls => 'নতুন সিমুলস তৈরি হয়েছে';
+
+  @override
+  String get hostANewSimul => 'একটি নতুন সিমুল স্বাগতিক';
+
+  @override
+  String get signUpToHostOrJoinASimul => 'সিমুল হোস্ট করতে বা সিমুলে যোগ দিতে সাইন আপ করুন';
+
+  @override
+  String get noSimulFound => 'একসঙ্গে খুঁজে পাওয়া যায়নি';
+
+  @override
+  String get noSimulExplanation => 'এই যুগপত প্রদর্শনী বিদ্যমান নেই.';
+
+  @override
+  String get returnToSimulHomepage => 'সিমুল প্রথমপাতায় ফিরে যান';
+
+  @override
+  String get aboutSimul => 'সিমুলস একজন খেলোয়াড় মুখোমুখি হয় একসজ্ঞে কয়েকজন খেলোয়াড়ের সাথে.';
+
+  @override
+  String get aboutSimulImage => '50 প্রতিদ্বন্দ্বীর মধ্যে, ফিশার জিতেছে 47 খেলা, সমান 2 এবং হার 1.';
+
+  @override
+  String get aboutSimulRealLife => 'এই ধারনাটি নেওয়া হয় পৃথিবীর বাস্তব ঘটনা গুলো থেকে, বাস্তব জীবনে, স্বাগতিক সিমুল জরিত টেবিল সরানো থেকে টেবিল একক ভাবে চালার জন্য.';
+
+  @override
+  String get aboutSimulRules => 'যখন সিমুল শুরু হয়, প্রত্যেক খেলোয়াড় শুরু করে স্বাগতিকের সাথে একটি খেলা, যে পায় খেলার জন্য সাদা টুকরোগুলো, যখন সব খেলা সম্পন্ন হয় তখন সিমুল শেষ হয়ে যায়.';
+
+  @override
+  String get aboutSimulSettings => 'সিমুলগুলো হয় সবসময় আকস্মিক. পূনারয়খেলা, পেছনেনেওয়া এবং \"অনেকসময়\" বিকল হয়.';
+
+  @override
+  String get create => 'তৈরি করুন';
+
+  @override
+  String get whenCreateSimul => 'যখন আপনি একটি সিমুল তৈরি করেন, আপনি খেলার জন্য একাধিক খেলোয়ার পাবেন.';
+
+  @override
+  String get simulVariantsHint => 'যদি আপনি বিভিন্ন অপশন নির্বাচন করেন, প্রতিটি খেলোয়াড়কে বেছে নিতে হবে যেটা সে খেলতে চায়.';
+
+  @override
+  String get simulClockHint => 'ফিশার ঘড়ি বিন্যাস. একবারে অনেক খেলোয়াড় নিলে, হয়তো আপনার অনেক সময় প্রয়োজন হবে.';
+
+  @override
+  String get simulAddExtraTime => 'আপনি হয়তো অতিরিক্ত সময় যোগ করে আপনার ঘড়ি সিমুলের সাথে মোকাবেলা করতে পারবেন.';
+
+  @override
+  String get simulHostExtraTime => 'অতিরিক্ত ঘড়ির সময়ের স্বাগতিক';
+
+  @override
+  String get simulAddExtraTimePerPlayer => 'সিমুলে যোগদানকারী প্রতিটি খেলোয়াড়ের জন্য আপনার ঘড়িতে ইনিশিয়াল সময় যোগ করুন.';
+
+  @override
+  String get simulHostExtraTimePerPlayer => 'হোষ্ট একস্ত্রা ক্লক টাইম প্রতি খেলোয়াড়ের জন্য';
+
+  @override
+  String get lichessTournaments => 'দাবা ক্রীড়া-প্রতিযোগিতা';
+
+  @override
+  String get tournamentFAQ => 'কর্মক্ষেত্র প্রতিযোগিতার প্রশ্নবলী';
+
+  @override
+  String get timeBeforeTournamentStarts => 'সময়ের পূর্বে প্রতিযোগিতা শুরু';
+
+  @override
+  String get averageCentipawnLoss => 'গড় ছিন্টেপাওন ক্ষতি';
+
+  @override
+  String get accuracy => 'নির্ভুলতা';
+
+  @override
+  String get keyboardShortcuts => 'কী-বোর্ড শর্টকাট';
+
+  @override
+  String get keyMoveBackwardOrForward => 'পেছনে সরান/সামনে যান';
+
+  @override
+  String get keyGoToStartOrEnd => 'শুরু করতে যান/শেষ';
+
+  @override
+  String get keyCycleSelectedVariation => 'Cycle selected variation';
+
+  @override
+  String get keyShowOrHideComments => 'দেখুন/মন্তব্য লুকান';
+
+  @override
+  String get keyEnterOrExitVariation => 'প্রবেশ করান/বেরিয়ে যান';
+
+  @override
+  String get keyRequestComputerAnalysis => 'কম্পিউটার বিশ্লেষণের জন্য অনুরোধ করুন, আপনার ভুলগুলো থেকে শিখুন';
+
+  @override
+  String get keyNextLearnFromYourMistakes => 'পরবর্তী (আপনার ভুল থেকে শিখুন)';
+
+  @override
+  String get keyNextBlunder => 'পরবর্তী সাঙ্ঘাতিক ভুল';
+
+  @override
+  String get keyNextMistake => 'পরবর্তী ভুল';
+
+  @override
+  String get keyNextInaccuracy => 'পরবর্তী নির্ভুলতা';
+
+  @override
+  String get keyPreviousBranch => 'আগের শাখা';
+
+  @override
+  String get keyNextBranch => 'পরবর্তী শাখা';
+
+  @override
+  String get toggleVariationArrows => 'Toggle variation arrows';
+
+  @override
+  String get cyclePreviousOrNextVariation => 'Cycle previous/next variation';
+
+  @override
+  String get toggleGlyphAnnotations => 'Toggle move annotations';
+
+  @override
+  String get togglePositionAnnotations => 'Toggle position annotations';
+
+  @override
+  String get variationArrowsInfo => 'ভ্যারিয়েসন অ্যারোঁগুলি আপনাকে চাল তালিকা ব্যবহার না করেই নেভিগেট করতে দেয়.';
+
+  @override
+  String get playSelectedMove => 'নির্বাচিত চাল খেলুন';
+
+  @override
+  String get newTournament => 'নতুন ক্রীড়া-প্রতিযোগিতা';
+
+  @override
+  String get tournamentHomeTitle => 'দাবা ক্রীড়া-প্রতিযোগিতা বিভিন্ন সময় নিয়ন্ত্রণ এবং বৈকল্পিক দেখানো হয়েছে';
+
+  @override
+  String get tournamentHomeDescription => 'দ্রুত-গুরূত্বপূর্ণ দাবা প্রতিযোগিতা খেলুন! একটি অফিসিয়াল সময়সূচী প্রতিযোগিতায় যোগ দিন অথবা নিজের তৈরি করুন. বুল্লেট, বিলটজ, ক্লাসিক্যাল, দাবা960, পাহাড়ের রাজা, তিনরেখা, এবং আরো অপশন রয়েছে দাবা মজার জন্য.';
+
+  @override
+  String get tournamentNotFound => 'ক্রীড়া-প্রতিযোগিতা খুজে পাওয়া যাইনি';
+
+  @override
+  String get tournamentDoesNotExist => 'এই ক্রীড়া-প্রতিযোগিতার অস্তিত্ব নেই.';
+
+  @override
+  String get tournamentMayHaveBeenCanceled => 'ক্রীড়া-প্রতিযোগিতা শুরু হওয়ার পূর্বে যদি সব খেলোয়াড় বেড়িয়ে যায়, হয়তো এটা বাতিল করা হতে পারে.';
+
+  @override
+  String get returnToTournamentsHomepage => 'ফিরেযান ক্রীড়া-প্রতিযোগিতার প্রথম পাতায়';
+
+  @override
+  String weeklyPerfTypeRatingDistribution(String param) {
+    return 'সাপ্তাহিক $param অনুপাত বন্টন';
+  }
+
+  @override
+  String yourPerfTypeRatingIsRating(String param1, String param2) {
+    return 'আপনার $param1 অনুপাত হয় $param2.';
+  }
+
+  @override
+  String youAreBetterThanPercentOfPerfTypePlayers(String param1, String param2) {
+    return 'আপনি তুলনায় ভাল $param1 এর $param2 খেলোয়াড়দের.';
+  }
+
+  @override
+  String userIsBetterThanPercentOfPerfTypePlayers(String param1, String param2, String param3) {
+    return '$param1 $param2 উত্তম $param3 খেলোয়াড়ের থেকে.';
+  }
+
+  @override
+  String betterThanPercentPlayers(String param1, String param2) {
+    return '$param2 খেলোয়াড়দের মধ্যে $param1 এর চেয়ে ভালো';
+  }
+
+  @override
+  String youDoNotHaveAnEstablishedPerfTypeRating(String param) {
+    return 'আপনার প্রতিষ্ঠিত কোন $param অনুপাত নেই.';
+  }
+
+  @override
+  String get yourRating => 'আপনার রেটিংস';
+
+  @override
+  String get cumulative => 'বর্ধিত';
+
+  @override
+  String get glicko2Rating => 'গ্লাইকো-২ রেটিং';
+
+  @override
+  String get checkYourEmail => 'আপনার ই-মেইল চেক করুন';
+
+  @override
+  String get weHaveSentYouAnEmailClickTheLink => 'আমরা আপনাকে একটি ই-মেইল পাঠিয়েছি. একাউন্টি সক্তিয় করার জন্য ই-মেইল দেওয়া লিংকটি ক্লিক করুন.';
+
+  @override
+  String get ifYouDoNotSeeTheEmailCheckOtherPlaces => 'যদি আপনি ই-মেইলটি না দেখতে পান, অন্যজাগায় থাকতে পারে, যেমন আপনার জুনক, স্প্যাম, সোসিয়াল, অথবা অন্য ফোল্ডার.';
+
+  @override
+  String weHaveSentYouAnEmailTo(String param) {
+    return 'আমরা একটি ই-মেইল পাঠিয়েছি $param. ই-মেইলে দেওয়া লিংকে ক্লিক করুন পাসওয়ার্ড পরিবর্তন করতে.';
+  }
+
+  @override
+  String byRegisteringYouAgreeToBeBoundByOur(String param) {
+    return 'নিবন্ধন করে, আপনি সম্মত হন আমাদের দ্বারা আবদ্ধ হতে $param.';
+  }
+
+  @override
+  String readAboutOur(String param) {
+    return 'আমাদের $param সম্পর্কে পড়ুন.';
+  }
+
+  @override
+  String get networkLagBetweenYouAndLichess => 'আপনার এবং লিচেস এর মধ্যে নেটওয়ার্ক ব্যবধান';
+
+  @override
+  String get timeToProcessAMoveOnLichessServer => 'লিচেস সার্ভারে স্থানান্তর প্রক্রিয়া করার সময়';
+
+  @override
+  String get downloadAnnotated => 'টীকাযুক্ত ডাউনলোড করুন';
+
+  @override
+  String get downloadRaw => 'কাঁচা ডাউনলোড করুন';
+
+  @override
+  String get downloadImported => 'আগমিত ডাউনলোড করুন';
+
+  @override
+  String get crosstable => 'ক্রোস্ট্যাবলে';
+
+  @override
+  String get youCanAlsoScrollOverTheBoardToMoveInTheGame => 'খেলা সরাতে আপনি বোর্ডের উপর স্ক্রল ও করতে পারবেন.';
+
+  @override
+  String get scrollOverComputerVariationsToPreviewThem => 'প্রিভিউ দেখার জন্য কম্পিউটার ভ্যারিয়েশনের উপর স্ক্রল করুন।';
+
+  @override
+  String get analysisShapesHowTo => 'সিফ্ট+ক্লিক চাপুন অথবা ডান-ক্লিক করুন বোর্ডের উপর বৃত্ত এবং তীর আঁকার জন্য.';
+
+  @override
+  String get letOtherPlayersMessageYou => 'অন্যান্য খেলোয়ারদের আপনাকে বার্তা করতে দিন';
+
+  @override
+  String get receiveForumNotifications => 'নোটিফিকেশন পাবেন যখন ফোরামে আপনাকে কেউ উল্লেখ করে';
+
+  @override
+  String get shareYourInsightsData => 'আপনার দাবার অর্ন্তদৃষ্টি তথ্য শেয়ার করুন';
+
+  @override
+  String get withNobody => 'কারো সাথে না';
+
+  @override
+  String get withFriends => 'বন্ধুদের সাথে';
+
+  @override
+  String get withEverybody => 'সবার সাথে';
+
+  @override
+  String get kidMode => 'বাচ্চা ধরন';
+
+  @override
+  String get kidModeIsEnabled => 'কিড মোড সক্রিয় করা আছে.';
+
+  @override
+  String get kidModeExplanation => 'এটা হয় নিরাপত্তা সম্পর্কে. বাচ্চা ধরনের মধ্যে সব সাইটের যোগাযোগ নিষ্ক্রিয় করা হয়েছে. আপনার বাচ্চা এবং বিদ্যালয়ের ছাত্রদের, অন্য ইন্টারনেট ব্যবহারকারীদের থেকে রক্ষা করতে এটা সক্রিয় করুন.';
+
+  @override
+  String inKidModeTheLichessLogoGetsIconX(String param) {
+    return 'বাচ্চা ধরনের মধ্যে, লিচেস লোগো পায় একটি $param প্রতীক,\nতাই আপনি জানতে পারবেন আপনার বাচ্চা নিরাপদ.';
+  }
+
+  @override
+  String get askYourChessTeacherAboutLiftingKidMode => 'আপনার অ্যাকাউন্ট পরিচালিত করা হয়. কিড মোড উত্তোলন সম্পর্কে আপনার দাবা শিক্ষককে জিজ্ঞাসা করুন.';
+
+  @override
+  String get enableKidMode => 'বাচ্চা ধরন সক্রিয় করুন';
+
+  @override
+  String get disableKidMode => 'বাচ্চা ধরন নিষ্ক্রিয় করুন';
+
+  @override
+  String get security => 'নিরাপত্তা';
+
+  @override
+  String get sessions => 'সেশনসমূহ';
+
+  @override
+  String get revokeAllSessions => 'সকল সেশন বাতিল করুন';
+
+  @override
+  String get playChessEverywhere => 'দাবা খেলুন সব জায়গায়';
+
+  @override
+  String get asFreeAsLichess => 'যেমন লিচাস মুক্ত হিসাবে';
+
+  @override
+  String get builtForTheLoveOfChessNotMoney => 'দাবার ভালবাসার জন্য তৈরি, টাকা না';
+
+  @override
+  String get everybodyGetsAllFeaturesForFree => 'সকলেই পাবে বিনামূল্যে সব বৈশিষ্ট্য';
+
+  @override
+  String get zeroAdvertisement => 'শূন্য বিজ্ঞাপন';
+
+  @override
+  String get fullFeatured => 'সম্পূর্ণ বৈশিষ্ট্যযুক্ত';
+
+  @override
+  String get phoneAndTablet => 'ফোন এবং ট্যাবলেট';
+
+  @override
+  String get bulletBlitzClassical => 'গুলি, খুব দ্রুত আক্রমণ, ক্লাসিকাল';
+
+  @override
+  String get correspondenceChess => 'সাদৃশ্য দাবা';
+
+  @override
+  String get onlineAndOfflinePlay => 'অনলাইন এবং অফলাইন খেলা';
+
+  @override
+  String get viewTheSolution => 'সমাধান দেখুন';
+
+  @override
+  String get followAndChallengeFriends => 'অনুসরন করুন এবং বন্ধুদের চ্যালেঞ্জ করুন';
+
+  @override
+  String get gameAnalysis => 'খেলা বিশ্লেষন';
+
+  @override
+  String xHostsY(String param1, String param2) {
+    return '$param1 নির্মানকর্তা $param2';
+  }
+
+  @override
+  String xJoinsY(String param1, String param2) {
+    return '$param1 যোগদেয় $param2';
+  }
+
+  @override
+  String xLikesY(String param1, String param2) {
+    return '$param1 পচ্ছন্দ $param2';
+  }
+
+  @override
+  String get quickPairing => 'দ্রুত জোর-বাঁধানো';
+
+  @override
+  String get lobby => 'উপশালা';
+
+  @override
+  String get anonymous => 'অজ্ঞাত';
+
+  @override
+  String yourScore(String param) {
+    return 'আপনার স্কোর: $param';
+  }
+
+  @override
+  String get language => 'ভাষা';
+
+  @override
+  String get background => 'পটভূমি';
+
+  @override
+  String get light => 'আলো';
+
+  @override
+  String get dark => 'অন্ধকার';
+
+  @override
+  String get transparent => 'স্বচ্ছ';
+
+  @override
+  String get deviceTheme => 'ডিভাইস থিম';
+
+  @override
+  String get backgroundImageUrl => 'পটভূমি ছবির URL:';
+
+  @override
+  String get board => 'বোর্ড';
+
+  @override
+  String get size => 'সাইজ';
+
+  @override
+  String get opacity => 'অসস্বচছলতা';
+
+  @override
+  String get brightness => 'ব্রাইটনেস';
+
+  @override
+  String get hue => 'হিউ';
+
+  @override
+  String get boardReset => 'ডিফল্টে রং রিসেট করুন';
+
+  @override
+  String get pieceSet => 'টুকরা সেট';
+
+  @override
+  String get embedInYourWebsite => 'আপনার ওয়েবসাইটে বসান';
+
+  @override
+  String get usernameAlreadyUsed => 'এই ব্যবহারকারীর নাম ইতিমধ্যে ব্যবহার করা হয়েছে, দয়া করে অন্য একটি চেষ্টা করুন.';
+
+  @override
+  String get usernamePrefixInvalid => 'ইউজারনেম অবশ্যই কোন অক্ষর দ্বারা শুরু হতে হবে।';
+
+  @override
+  String get usernameSuffixInvalid => 'ইউজারনেম অবশ্যই কোন অক্ষর বা সংখ্যা দ্বারা শেষ হতে হবে।';
+
+  @override
+  String get usernameCharsInvalid => 'ইউজারনেমে শুধুমাত্র অক্ষর, নাম্বার, আন্ডারস্কোর এবং হাইফেন থাকতে পারবে।';
+
+  @override
+  String get usernameUnacceptable => 'এই ব্যবহারকারী নামটি গ্রহণযোগ্য নয়.';
+
+  @override
+  String get playChessInStyle => 'দাবা খেলুন শৈলিতে';
+
+  @override
+  String get chessBasics => 'দাবা মূলসূত্র';
+
+  @override
+  String get coaches => 'প্রশিক্ষক';
+
+  @override
+  String get invalidPgn => 'অকার্যকর PGN';
+
+  @override
+  String get invalidFen => 'অকার্যকর FEN';
+
+  @override
+  String get custom => 'স্বনির্ধারিত';
+
+  @override
+  String get notifications => 'বিজ্ঞাপন';
+
+  @override
+  String notificationsX(String param1) {
+    return 'নোটিফিকেশন: $param1';
+  }
+
+  @override
+  String perfRatingX(String param) {
+    return 'অনুপাত: $param';
+  }
+
+  @override
+  String get practiceWithComputer => 'কম্পিউটারের সাথে অনুশীলন';
+
+  @override
+  String anotherWasX(String param) {
+    return 'আরেকটি ছিল $param';
+  }
+
+  @override
+  String bestWasX(String param) {
+    return 'সেরা ছিল $param';
+  }
+
+  @override
+  String get youBrowsedAway => 'আপনি যতদূর ব্রাউজ করেছেন';
+
+  @override
+  String get resumePractice => 'পুনারয় অনুশীলন';
+
+  @override
+  String get drawByFiftyMoves => 'খেলাটি পঞ্চাশ চালের নিয়মে ড্র হয়েছে.';
+
+  @override
+  String get theGameIsADraw => 'খেলাটি হয় সমান.';
+
+  @override
+  String get computerThinking => 'কম্পিউটারের চিন্তা ...';
+
+  @override
+  String get seeBestMove => 'দেখুন সেরা চাল';
+
+  @override
+  String get hideBestMove => 'লুকান সেরা চাল';
+
+  @override
+  String get getAHint => 'একটি সূত্র পান';
+
+  @override
+  String get evaluatingYourMove => 'আপনার চাল মূল্যায়ন করবে...';
+
+  @override
+  String get whiteWinsGame => 'সাদা জিতেছে';
+
+  @override
+  String get blackWinsGame => 'কালো জিতেছে';
+
+  @override
+  String get learnFromYourMistakes => 'আপনার ভুলগুলো থেকে শিখুন';
+
+  @override
+  String get learnFromThisMistake => 'এই ভুল থেকে শিখুন';
+
+  @override
+  String get skipThisMove => 'এই ধাপটি এড়িয়ে যান';
+
+  @override
+  String get next => 'পরবর্তী';
+
+  @override
+  String xWasPlayed(String param) {
+    return '$param খেলা হয়েছিল';
+  }
+
+  @override
+  String get findBetterMoveForWhite => 'সাদার জন্য একটি ভালো চাল খুঁজুন';
+
+  @override
+  String get findBetterMoveForBlack => 'কালোর জন্য একটি ভালো চাল খুঁজুন';
+
+  @override
+  String get resumeLearning => 'পুনারয় শিখুন';
+
+  @override
+  String get youCanDoBetter => 'আপনি ভালো করতে পারেন';
+
+  @override
+  String get tryAnotherMoveForWhite => 'সাদার জন্য আরেকটি চাল চেষ্টা করুন';
+
+  @override
+  String get tryAnotherMoveForBlack => 'কালোর জন্য আরেকটি চাল চেষ্টা করুন';
+
+  @override
+  String get solution => 'সমাধান';
+
+  @override
+  String get waitingForAnalysis => 'অপেক্ষা করা হচ্ছে বিশ্লেষণের জন্য';
+
+  @override
+  String get noMistakesFoundForWhite => 'সাদার জন্য কোন ভুল পাওয়া যায়নি';
+
+  @override
+  String get noMistakesFoundForBlack => 'কালোর জন্য কোন ভুল পাওয়া যায়নি';
+
+  @override
+  String get doneReviewingWhiteMistakes => 'সাদার ভুল পর্যালোচনা করা হয়েছে';
+
+  @override
+  String get doneReviewingBlackMistakes => 'কালোর ভুল পর্যালোচনা করা হয়েছে';
+
+  @override
+  String get doItAgain => 'এটা পুনারয় করুন';
+
+  @override
+  String get reviewWhiteMistakes => 'সাদার ভুল পর্যালোচনা';
+
+  @override
+  String get reviewBlackMistakes => 'কালোর ভুল পর্যালোচনা';
+
+  @override
+  String get advantage => 'সুবিধা';
+
+  @override
+  String get opening => 'উদ্বোধন';
+
+  @override
+  String get middlegame => 'মাধ্যমখেলা';
+
+  @override
+  String get endgame => 'খেলাশেষ';
+
+  @override
+  String get conditionalPremoves => 'শর্তাধীন পুনারয়চাল';
+
+  @override
+  String get addCurrentVariation => 'বর্তমান ভিন্ন করুন';
+
+  @override
+  String get playVariationToCreateConditionalPremoves => 'শর্তাধীন পুনারয় চাল তৈরির জন্য একটি ভিন্ন খেলুন';
+
+  @override
+  String get noConditionalPremoves => 'পুনারয়চাল শর্তাধীন নেই';
+
+  @override
+  String playX(String param) {
+    return 'খেলা $param';
+  }
+
+  @override
+  String get showUnreadLichessMessage => 'আপনি Lichess থেকে একটি ব্যক্তিগত বার্তা পেয়েছেন.';
+
+  @override
+  String get clickHereToReadIt => 'পড়তে এখানে ক্লিক করুন';
+
+  @override
+  String get sorry => 'দুঃখিত :(';
+
+  @override
+  String get weHadToTimeYouOutForAWhile => 'আমাদের কিছুক্ষণের জন্য আপনাকে বিরতি হল।';
+
+  @override
+  String get why => 'কেন';
+
+  @override
+  String get pleasantChessExperience => 'আমাদের লক্ষ্য প্রত্যেকের জন্য একটি আনন্দদায়ক দাবা খেলার অভিজ্ঞতা দেয়া।';
+
+  @override
+  String get goodPractice => 'সেই লক্ষ্যে আমাদের অবশ্যই নিশ্চিত করতে হবে যে সমস্ত খেলোয়াড় ভাল অভ্যাস চর্চা করে।';
+
+  @override
+  String get potentialProblem => 'যখন এধরনের সমস্যা ধরা পড়ে তখনই আমরা এই মেসেজ দিই.';
+
+  @override
+  String get howToAvoidThis => 'কিভাবে এসব এড়িয়ে চলবো?';
+
+  @override
+  String get playEveryGame => 'যে গেম খেলা শুরু করবেন তা অবশ্যই শেষ করবেন.';
+
+  @override
+  String get tryToWin => 'জেতার চেষ্টা করুন (অথবা ড্র) যেসব গেম খেলছেন.';
+
+  @override
+  String get resignLostGames => 'হেরে জাওা খেলা তি রেসিগ্ন করুন।( সময় সেশ হওার অপ্পেখা করবেন না)।.';
+
+  @override
+  String get temporaryInconvenience => 'অস্থায়ীভাবে এই অসুবিধার জন্য আমরা ক্ষমা প্রার্থনা করছি,';
+
+  @override
+  String get wishYouGreatGames => 'এবং lichess.org এ আপনার দুর্দান্ত গেমের শুভেচ্ছা.';
+
+  @override
+  String get thankYouForReading => 'পড়ার জন্য ধন্যবাদ!';
+
+  @override
+  String get lifetimeScore => 'সারাজীবনের স্কোর';
+
+  @override
+  String get currentMatchScore => 'বর্তমান ম্যাচের স্কোর';
+
+  @override
+  String get agreementAssistance => 'আমি সম্মতি এবং প্রতিশ্রুতি দিচ্ছি যে দাবা খেলার সময় কম্পিউটারের সহায়তা নিয়ে, কোনো প্রোগ্রাম বই, ডেটাবেজ বা অন্যকোনো ব্যাক্তির সহায়তা নিয়ে চিটিং করে খেলবো না).';
+
+  @override
+  String get agreementNice => 'আমি সম্মতি জানাচ্ছি সকল দাবাড়ু খেলোয়াড়দের সঙ্গে শ্রদ্ধাশীল আচরন করবো.';
+
+  @override
+  String agreementMultipleAccounts(String param) {
+    return 'আমি একমত পোষণ করছি যে আমি একাধিক একাউন্ট তৈরি করব না ($param এ উল্লেখিত কারণ ব্যতীত)।';
+  }
+
+  @override
+  String get agreementPolicy => 'আমি সম্মতি জানাচ্ছি যে আমি লাইচেজের সকল নিয়মকানুন মেনে চলবো.';
+
+  @override
+  String get searchOrStartNewDiscussion => 'খুজুন অথবা নতুন মেসেজ কনভার্সনে যান';
+
+  @override
+  String get edit => 'এডিট বা সম্পাদন করুন';
+
+  @override
+  String get bullet => 'বুলেট';
+
+  @override
+  String get blitz => 'ব্লিজ';
+
+  @override
+  String get rapid => 'র‍্যাপিড';
+
+  @override
+  String get classical => 'ক্লাসিক্যাল';
+
+  @override
+  String get ultraBulletDesc => 'অত্যন্ত দ্রুত গেমস: 30 সেকেন্ডেরও কম';
+
+  @override
+  String get bulletDesc => 'খুবই দ্রুত গেমস: 3 মিনিটেরও কম';
+
+  @override
+  String get blitzDesc => 'দ্রুত গেমস: 3 থেকে 8 মিনিট';
+
+  @override
+  String get rapidDesc => 'র‍্যাপিড গেমস: 3 থেকে 8 মিনিট';
+
+  @override
+  String get classicalDesc => 'ক্লাসিক্যাল গেমস: ২৫ মিনিট বা তার বেশি';
+
+  @override
+  String get correspondenceDesc => 'কোরেস্পডেন্স গেমস: এক বা একাধিক দিনের চাল';
+
+  @override
+  String get puzzleDesc => 'দাবা কৌশলের প্রশিক্ষক';
+
+  @override
+  String get important => 'গুরুত্বপূর্ণ';
+
+  @override
+  String yourQuestionMayHaveBeenAnswered(String param1) {
+    return 'হয়তো আপনার প্রশ্নের উত্তর রয়েছেই $param1';
+  }
+
+  @override
+  String get inTheFAQ => 'F.A.Q এর মধ্যে.';
+
+  @override
+  String toReportSomeoneForCheatingOrBadBehavior(String param1) {
+    return 'প্রতারনারমুলক কাজ বা খারাপ আচরনের জন্য রিপোর্ট, $param1';
+  }
+
+  @override
+  String get useTheReportForm => 'এই রিপোর্ট ফোরাম ব্যাবহার করুন';
+
+  @override
+  String toRequestSupport(String param1) {
+    return 'সমর্থনের জন্য অনুরোধ করতে, $param1';
+  }
+
+  @override
+  String get tryTheContactPage => 'যোগাযোগ পেজে যেয়ে দেখতে পারেন';
+
+  @override
+  String makeSureToRead(String param1) {
+    return 'অনুগ্রহ করে $param1 পড়ুন';
+  }
+
+  @override
+  String get theForumEtiquette => 'ফোরাম শিষ্টাচার';
+
+  @override
+  String get thisTopicIsArchived => 'এই টপিক বা বিষয়টি সংরক্ষণাগারভুক্ত করা হয়েছে সুতরাং এর জবাব আর দেওয়া যাবে না.';
+
+  @override
+  String joinTheTeamXToPost(String param1) {
+    return 'যুক্ত হোন $param1, এই ফোরামে পোষ্ট করার জন্য';
+  }
+
+  @override
+  String teamNamedX(String param1) {
+    return '$param1 দল';
+  }
+
+  @override
+  String get youCannotPostYetPlaySomeGames => 'আপনি এখন ফোরামে পোষ্ট করতে পারবেন না. আগে কিছু গেম খেলুন!';
+
+  @override
+  String get subscribe => 'সাবস্ক্রাইব';
+
+  @override
+  String get unsubscribe => 'আনসাবস্ক্রাইব';
+
+  @override
+  String mentionedYouInX(String param1) {
+    return '\"$param1\" এ আপনাকে উল্লেখ করেছেন।';
+  }
+
+  @override
+  String xMentionedYouInY(String param1, String param2) {
+    return '$param1 , \"$param2\" এ আপনার নাম উল্লেখ করেছেন।';
+  }
+
+  @override
+  String invitedYouToX(String param1) {
+    return '\"$param1\" এ আপনাকে আমন্ত্রণ জানিয়েছেন।';
+  }
+
+  @override
+  String xInvitedYouToY(String param1, String param2) {
+    return '$param1, আপনাকে \"$param2\" এ আমন্ত্রণ জানিয়েছেন।';
+  }
+
+  @override
+  String get youAreNowPartOfTeam => 'আপনি এখন দলের একটি অংশ।';
+
+  @override
+  String youHaveJoinedTeamX(String param1) {
+    return 'আপনি \"$param1\" এ যোগদান করেছেন।';
+  }
+
+  @override
+  String get someoneYouReportedWasBanned => 'আপনি অভিযুক্ত একজনকে ব্যান করা হয়েছে';
+
+  @override
+  String get congratsYouWon => 'অভিনন্দন, আপনি জিতেছেন!';
+
+  @override
+  String gameVsX(String param1) {
+    return 'খেলা বনাম $param1';
+  }
+
+  @override
+  String resVsX(String param1, String param2) {
+    return '$param1 বনাম $param2';
+  }
+
+  @override
+  String get lostAgainstTOSViolator => 'আপনি এমন কারোর সাথে হেরেছেন যে Liches TOS ভঙ্গ করেছে';
+
+  @override
+  String refundXpointsTimeControlY(String param1, String param2) {
+    return 'ফেরত: $param1 $param2 রেটিং পয়েন্ট।';
+  }
+
+  @override
+  String get timeAlmostUp => 'সময় প্রায় শেষ!';
+
+  @override
+  String get clickToRevealEmailAddress => '[ইমেইল অ্যাড্রেস দেখতে ক্লিক করুন]';
+
+  @override
+  String get download => 'ডাউনলোড করুন';
+
+  @override
+  String get coachManager => 'প্রশিক্ষক ব্যবস্থাপনা';
+
+  @override
+  String get streamerManager => 'সম্প্রচার নিয়ন্ত্রণ';
+
+  @override
+  String get cancelTournament => 'টুর্নামেন্ট বাতিল করুন';
+
+  @override
+  String get tournDescription => 'টুর্নামেন্টের বর্ণনা';
+
+  @override
+  String get tournDescriptionHelp => 'অংশগ্রহণকারীদের কিছু বলতে চান? সংক্ষেপে লেখার চেষ্টা করুন।\nMarkdown links ব্যবহারযোগ্য: [name](https://url)';
+
+  @override
+  String get ratedFormHelp => 'খেলাগুলো রেটেড/পয়েন্ট ভিত্তিক এবং খেলোয়াড়দের রেটিং এ প্রভাব ফেলবে';
+
+  @override
+  String get onlyMembersOfTeam => 'শুধুমাত্র দলের সদস্যরা';
+
+  @override
+  String get noRestriction => 'কোনো বিধিনিষেধ নেই';
+
+  @override
+  String get minimumRatedGames => 'সর্বনিম্ন রেটেড খেলার সংখ্যা';
+
+  @override
+  String get minimumRating => 'সর্বনিম্ন রেটিং';
+
+  @override
+  String get maximumWeeklyRating => 'সর্বোচ্চ সাপ্তাহিক রেটিং';
+
+  @override
+  String positionInputHelp(String param) {
+    return 'একটি প্রদত্ত অবস্থান থেকে প্রতিটি খেলা শুরু করতে একটি বৈধ FEN পেস্ট করুন. এটি শুধুমাত্র স্ট্যান্ডার্ড গেমের জন্য কাজ করে, ভেরিয়েন্টের সাথে নয়. আপনি একটি FEN তৈরি করতে $param ব্যবহার করতে পারেন, তারপর এটি এখানে পেস্ট করুন. স্বাভাবিক প্রাথমিক অবস্থান থেকে গেম শুরু করতে খালি ছেড়ে দিন.';
+  }
+
+  @override
+  String get cancelSimul => 'একত্রে খেলা বাতিল করুন';
+
+  @override
+  String get simulHostcolor => 'স্বাগতিক খেলোয়াড়ের ঘুটি/ piece এর রঙ';
+
+  @override
+  String get estimatedStart => 'আনুমানিক খেলা শুরুর সময়';
+
+  @override
+  String simulFeatured(String param) {
+    return 'দেখানো হবে $param';
+  }
+
+  @override
+  String simulFeaturedHelp(String param) {
+    return '$param-এ সবার কাছে আপনার সিমুল দেখান। ব্যক্তিগত সিমুল জন্য নিষ্ক্রিয় করুন.';
+  }
+
+  @override
+  String get simulDescription => 'সিমুল বর্ণনা';
+
+  @override
+  String get simulDescriptionHelp => 'আপনি অংশগ্রহণকারীদের কিছু বলতে চান?';
+
+  @override
+  String markdownAvailable(String param) {
+    return '$param আরও উচ্চতর সিনট্যাক্সের জন্য উপলব্ধ.';
+  }
+
+  @override
+  String get embedsAvailable => 'এম্বেড করতে একটি গেম URL বা একটি স্টাডি চ্যাপটার URL পেস্ট করুন.';
+
+  @override
+  String get inYourLocalTimezone => 'আপনার স্থানীয় সময়';
+
+  @override
+  String get tournChat => 'টুর্নামেন্ট চ্যাট';
+
+  @override
+  String get noChat => 'কোনো চ্যাট নয়';
+
+  @override
+  String get onlyTeamLeaders => 'শুধুমাত্র দলীয় প্রধানগণ';
+
+  @override
+  String get onlyTeamMembers => 'শুধুমাত্র দলের সদস্যরা';
+
+  @override
+  String get navigateMoveTree => 'Move/চালের তালিকা নির্দেশক';
+
+  @override
+  String get mouseTricks => 'মাউসের নিয়ন্ত্রন';
+
+  @override
+  String get toggleLocalAnalysis => 'ব্যক্তিগত কম্পিউটার বিশ্লেষণ অন/অফ';
+
+  @override
+  String get toggleAllAnalysis => 'সব কম্পিউটার বিশ্লেষণ অন/অফ';
+
+  @override
+  String get playComputerMove => 'কম্পিউটারের সেরা চাল';
+
+  @override
+  String get analysisOptions => 'আনাল্যসিস অপশনস';
+
+  @override
+  String get focusChat => 'ফোকাস চ্যাট';
+
+  @override
+  String get showHelpDialog => 'এই হেল্প ডায়ালগ দেখান';
+
+  @override
+  String get reopenYourAccount => 'আপনার একাউন্ট পুনরায় খুলুন';
+
+  @override
+  String get closedAccountChangedMind => 'আপনি যদি আপনার একাউন্ট বন্ধ করে থাকেন, কিন্তু পরবর্তীতে মন পরিবর্তন করেন, সেক্ষেত্রে একাউন্ট ফেরত পাওয়ার জন্য আপনাকে একবার সুযোগ দেয়া হবে।';
+
+  @override
+  String get onlyWorksOnce => 'এটি শুধুমাত্র একবার কাজ করবে।';
+
+  @override
+  String get cantDoThisTwice => 'আপনি যদি দ্বিতীয়বারের মত একাউন্ট বন্ধ করেন, তাহলে তা আর পুনরুদ্ধার করা যাবে না।';
+
+  @override
+  String get emailAssociatedToaccount => 'এই একাউন্টের সঙ্গে সংশ্লিষ্ট ই-মেইল অ্যাড্রেস হচ্ছে';
+
+  @override
+  String get sentEmailWithLink => 'আমরা আপনাকে একটি লিঙ্ক সহ ই-মেইল পাঠিয়েছি।';
+
+  @override
+  String get tournamentEntryCode => 'টুর্নামেন্টে প্রবেশের কোড';
+
+  @override
+  String get hangOn => 'সাবধান!';
+
+  @override
+  String gameInProgress(String param) {
+    return '$param এর সাথে এখনো আপনার খেলা চলছে।';
+  }
+
+  @override
+  String get abortTheGame => 'খেলা ত্যাগ(abort) করুন';
+
+  @override
+  String get resignTheGame => 'খেলা সমর্পণ(resign) করুন';
+
+  @override
+  String get youCantStartNewGame => 'আপনি এই খেলা শেষ না করে নতুন খেলা শুরু করতে পারবেন না।';
+
+  @override
+  String get since => 'Since/শুরু';
+
+  @override
+  String get until => 'Until/পর্যন্ত';
+
+  @override
+  String get lichessDbExplanation => 'লিচেস এর সকল খেলোয়াড়দের রেটেড খেলা থেকে সংগ্রহকৃত';
+
+  @override
+  String get switchSides => 'পক্ষ পরিবর্তন করুন';
+
+  @override
+  String get closingAccountWithdrawAppeal => 'একাউন্ট বন্ধ করলে আপনার আপিল প্রত্যাহার হয়ে যাবে';
+
+  @override
+  String get ourEventTips => 'ইভেন্ট আয়োজনের জন্য আমাদের টিপস';
+
+  @override
+  String get instructions => 'নির্দেশাবলী';
+
+  @override
+  String get showMeEverything => 'সবকিছু দেখানো হোক';
+
+  @override
+  String get lichessPatronInfo => 'লিচেস একটি অলাভজনক এবং সম্পূর্ণ বিনামূল্য/লিব্রা ওপেন সোর্স সফটওয়্যার।\nসকল পরিচালনা খরচ, উন্নয়ন, এবং বিষয়বস্তু ব্যবহারকারীদের দানের মাধ্যমে সংগৃহীত হয়।';
+
+  @override
+  String get nothingToSeeHere => 'এই মুহূর্তে এখানে দেখার কিছু নেই.';
+
+  @override
+  String opponentLeftCounter(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'আপনার প্রতিপক্ষ খেলা ছেড়ে দিয়েছেন। আপনি $count সেকেন্ডের মধ্যে জয় দাবি করতে পারেন.',
+      one: 'আপনার প্রতিপক্ষ খেলা ছেড়ে চলে গেছেন. আপনি চাইলে বিজয় দাবি করতে পারেন $count সেকেন্ডের মধ্যে.',
+      zero: 'আপনার প্রতিপক্ষ খেলা ছেড়ে চলে গেছেন. আপনি চাইলে বিজয় দাবি করতে পারেন $count সেকেন্ডের মধ্যে.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String mateInXHalfMoves(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'সজ্ঞী $count অর্ধ-ধাপ',
+      one: 'সজ্ঞী $count অর্ধ-ধাপ',
+      zero: 'সজ্ঞী $count অর্ধ-ধাপ',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nbBlunders(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count টি ব্লান্ডার',
+      one: '$count টি ব্লান্ডার',
+      zero: '$count টি ব্লান্ডার',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nbMistakes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countটি ভূল',
+      one: '$countটি ভূল',
+      zero: '$countটি ভূল',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nbInaccuracies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$countটি অনিপুণতা',
+      one: '$countটি অনিপুণতা',
+      zero: '$countটি অনিপুণতা',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nbPlayers(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count জন খেলোয়াড়',
+      one: '$count জন খেলোয়াড়',
+      zero: '$count জন খেলোয়াড়',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nbGames(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count টি খেলা',
+      one: '$count টি খেলা',
+      zero: '$count টি খেলা',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String ratingXOverYGames(int count, String param2) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count রেটিং $param2 গেমের উপরে',
+      one: '$count রেটিং $param2 গেমের উপরে',
+      zero: '$count রেটিং $param2 গেমের উপরে',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nbBookmarks(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count টি বুকমার্ক',
+      one: '$count টি বুকমার্ক',
+      zero: '$count টি বুকমার্ক',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nbDays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count দিনগুলো',
+      one: '$count দিন',
+      zero: '$count দিন',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nbHours(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ঘন্টা',
+      one: '$count ঘন্টা',
+      zero: '$count ঘন্টা',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nbMinutes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count মিনিট',
+      one: '$count মিনিট',
+      zero: '$count মিনিট',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String rankIsUpdatedEveryNbMinutes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'আপনার অনুক্রম প্রতি $count মিনিট পরপর আপডেট করা হয়।',
+      one: 'আপনার অনুক্রম প্রতি মিনিট পরপর আপডেট করা হয়।',
+      zero: 'আপনার অনুক্রম প্রতি মিনিট পরপর আপডেট করা হয়।',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nbPuzzles(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ধাঁধা',
+      one: '$count ধাঁধা',
+      zero: '$count ধাঁধা',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nbGamesWithYou(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count টি খেলা আপনার সঙ্গে',
+      one: '$count টি খেলা আপনার সঙ্গে',
+      zero: '$count টি খেলা আপনার সঙ্গে',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nbRated(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count অনুপাত',
+      one: '$count অনুপাত',
+      zero: '$count অনুপাত',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nbWins(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count টি জয়',
+      one: '$count টি জয়',
+      zero: '$count টি জয়',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nbLosses(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count টি পরাজয়',
+      one: '$count টি পরাজয়',
+      zero: '$count টি পরাজয়',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nbDraws(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count টি ড্র',
+      one: '$count টি ড্র',
+      zero: '$count টি ড্র',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nbPlaying(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count খেলছে',
+      one: '$count খেলছে',
+      zero: '$count খেলছে',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String giveNbSeconds(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count সেকেন্ড দিন',
+      one: '$count সেকেন্ড দিন',
+      zero: '$count সেকেন্ড দিন',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nbTournamentPoints(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ক্রীড়া-প্রতিযোগিতা অনুপাতগুলো',
+      one: '$count ক্রীড়া-প্রতিযোগিতা অনুপাত',
+      zero: '$count ক্রীড়া-প্রতিযোগিতা অনুপাত',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nbStudies(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count অধ্যায়নগুলি',
+      one: '$count অধ্যায়ন',
+      zero: '$count অধ্যায়ন',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nbSimuls(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count শিমুলগুলো',
+      one: '$count শিমুল',
+      zero: '$count শিমুল',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String moreThanNbRatedGames(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '≥ $count খেলার অনুপাতগুলো',
+      one: '≥ $count খেলার অনুপাত',
+      zero: '≥ $count খেলার অনুপাত',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String moreThanNbPerfRatedGames(int count, String param2) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '≥ $count $param2 খেলার অনুপাতগুলো',
+      one: '≥ $count $param2 খেলার অনুপাত',
+      zero: '≥ $count $param2 খেলার অনুপাত',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String needNbMorePerfGames(int count, String param2) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'আপনার খেলার প্রয়োজন $count আরো $param2 খেলার অনুপাত',
+      one: 'আপনার খেলার প্রয়োজন $count আরো $param2 খেলার অনুপাত',
+      zero: 'আপনার খেলার প্রয়োজন $count আরো $param2 খেলার অনুপাত',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String needNbMoreGames(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'আপনার খেলার প্রয়োজন $count আরো অনুপাদিত খেলা',
+      one: 'আপনার খেলার প্রয়োজন $count আরো অনুপাদিত খেলা',
+      zero: 'আপনার খেলার প্রয়োজন $count আরো অনুপাদিত খেলা',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nbImportedGames(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count টি আমদানীকৃত খেলা',
+      one: '$count টি আমদানীকৃত খেলা',
+      zero: '$count টি আমদানীকৃত খেলা',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nbFriendsOnline(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count বন্ধুরা অনলাইনে রয়েছেন',
+      one: '$count বন্ধু অনলাইনে রয়েছেন',
+      zero: '$count বন্ধু অনলাইনে রয়েছেন',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nbFollowers(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count অনুসরণকারী',
+      one: '$count অনুসরণকারী',
+      zero: '$count অনুসরণকারী',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nbFollowing(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count অনুসরণ করছেন',
+      one: '$count অনুসরণ করছেন',
+      zero: '$count অনুসরণ করছেন',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String lessThanNbMinutes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count মিনিটের কম সময়ে',
+      one: '$count মিনিটের কম সময়ে',
+      zero: '$count মিনিটের কম সময়ে',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nbGamesInPlay(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count খেলা চলছে',
+      one: '$count খেলা চলছে',
+      zero: '$count খেলা চলছে',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String maximumNbCharacters(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'সর্বোচ্চ: $count টি অক্ষর',
+      one: 'সর্বোচ্চ: $count টি অক্ষর',
+      zero: 'সর্বোচ্চ: $count টি অক্ষর',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String blocks(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count বাধা',
+      one: '$count বাধা',
+      zero: '$count বাধা',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nbForumPosts(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ফোরাম পোষ্ট',
+      one: '$count ফোরাম পোষ্ট',
+      zero: '$count ফোরাম পোষ্ট',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nbPerfTypePlayersThisWeek(int count, String param2) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count $param2 খেলোয়াড়গুলো এই সপ্তাহের.',
+      one: '$count $param2 খেলোয়াড় এই সপ্তাহের.',
+      zero: '$count $param2 খেলোয়াড় এই সপ্তাহের.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String availableInNbLanguages(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'প্রাপ্য $count ভাষা সমূহ!',
+      one: 'প্রাপ্য $count ভাষা!',
+      zero: 'প্রাপ্য $count ভাষা!',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nbSecondsToPlayTheFirstMove(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count সেকেন্ডে খেলার প্রথম চাল',
+      one: '$count সেকেন্ডে খেলার প্রথম চাল',
+      zero: '$count সেকেন্ডে খেলার প্রথম চাল',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String nbSeconds(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count সেকেন্ড',
+      one: '$count সেকেন্ড',
+      zero: '$count সেকেন্ড',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String andSaveNbPremoveLines(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'এবং সংরক্ষন $count পুনারয়চাল রেখা',
+      one: 'এবং সংরক্ষন $count পুনারয়চাল রেখা',
+      zero: 'এবং সংরক্ষন $count পুনারয়চাল রেখা',
+    );
+    return '$_temp0';
+  }
 
   @override
   String get stormMoveToStart => 'সুরু করতে চাল দিন';
@@ -4607,13 +4601,13 @@ class AppLocalizationsBn extends AppLocalizations {
   String get stormThisWeek => 'This week';
 
   @override
-  String get stormThisMonth => 'This month';
+  String get stormThisMonth => 'এই মাসে';
 
   @override
   String get stormAllTime => 'All-time';
 
   @override
-  String get stormClickToReload => 'Click to reload';
+  String get stormClickToReload => 'পুনঃলোড করতে ক্লিক করুন';
 
   @override
   String get stormThisRunHasExpired => 'This run has expired!';
@@ -4646,14 +4640,11 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
+  String get streamerLichessStreamers => 'লিছেসস স্ত্রেয়ামের';
+
+  @override
   String get studyShareAndExport => 'Share & export';
 
   @override
   String get studyStart => 'শুরু করুন';
-
-  @override
-  String get broadcastBroadcasts => 'সম্প্রচার';
-
-  @override
-  String get broadcastStartDate => 'আপনার নিজস্ব সময় অঞ্চল শুরু করার তারিখ';
 }

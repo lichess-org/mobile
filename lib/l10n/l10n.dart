@@ -328,17 +328,17 @@ abstract class AppLocalizations {
   /// **'{count, plural, =0{Joined {count} team} =1{Joined {count} team} other{Joined {count} teams}}'**
   String activityJoinedNbTeams(int count);
 
-  /// No description provided for @contactContact.
+  /// No description provided for @broadcastBroadcasts.
   ///
   /// In en, this message translates to:
-  /// **'Contact'**
-  String get contactContact;
+  /// **'Broadcasts'**
+  String get broadcastBroadcasts;
 
-  /// No description provided for @contactContactLichess.
+  /// No description provided for @broadcastStartDate.
   ///
   /// In en, this message translates to:
-  /// **'Contact Lichess'**
-  String get contactContactLichess;
+  /// **'Start date in your own timezone'**
+  String get broadcastStartDate;
 
   /// No description provided for @challengeChallengesX.
   ///
@@ -477,6 +477,1860 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Or invite a Lichess user:'**
   String get challengeInviteLichessUser;
+
+  /// No description provided for @contactContact.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact'**
+  String get contactContact;
+
+  /// No description provided for @contactContactLichess.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact Lichess'**
+  String get contactContactLichess;
+
+  /// No description provided for @patronDonate.
+  ///
+  /// In en, this message translates to:
+  /// **'Donate'**
+  String get patronDonate;
+
+  /// No description provided for @patronLichessPatron.
+  ///
+  /// In en, this message translates to:
+  /// **'Lichess Patron'**
+  String get patronLichessPatron;
+
+  /// No description provided for @perfStatPerfStats.
+  ///
+  /// In en, this message translates to:
+  /// **'{param} stats'**
+  String perfStatPerfStats(String param);
+
+  /// No description provided for @perfStatViewTheGames.
+  ///
+  /// In en, this message translates to:
+  /// **'View the games'**
+  String get perfStatViewTheGames;
+
+  /// No description provided for @perfStatProvisional.
+  ///
+  /// In en, this message translates to:
+  /// **'provisional'**
+  String get perfStatProvisional;
+
+  /// No description provided for @perfStatNotEnoughRatedGames.
+  ///
+  /// In en, this message translates to:
+  /// **'Not enough rated games have been played to establish a reliable rating.'**
+  String get perfStatNotEnoughRatedGames;
+
+  /// No description provided for @perfStatProgressOverLastXGames.
+  ///
+  /// In en, this message translates to:
+  /// **'Progression over the last {param} games:'**
+  String perfStatProgressOverLastXGames(String param);
+
+  /// No description provided for @perfStatRatingDeviation.
+  ///
+  /// In en, this message translates to:
+  /// **'Rating deviation: {param}.'**
+  String perfStatRatingDeviation(String param);
+
+  /// No description provided for @perfStatRatingDeviationTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Lower value means the rating is more stable. Above {param1}, the rating is considered provisional. To be included in the rankings, this value should be below {param2} (standard chess) or {param3} (variants).'**
+  String perfStatRatingDeviationTooltip(String param1, String param2, String param3);
+
+  /// No description provided for @perfStatTotalGames.
+  ///
+  /// In en, this message translates to:
+  /// **'Total games'**
+  String get perfStatTotalGames;
+
+  /// No description provided for @perfStatRatedGames.
+  ///
+  /// In en, this message translates to:
+  /// **'Rated games'**
+  String get perfStatRatedGames;
+
+  /// No description provided for @perfStatTournamentGames.
+  ///
+  /// In en, this message translates to:
+  /// **'Tournament games'**
+  String get perfStatTournamentGames;
+
+  /// No description provided for @perfStatBerserkedGames.
+  ///
+  /// In en, this message translates to:
+  /// **'Berserked games'**
+  String get perfStatBerserkedGames;
+
+  /// No description provided for @perfStatTimeSpentPlaying.
+  ///
+  /// In en, this message translates to:
+  /// **'Time spent playing'**
+  String get perfStatTimeSpentPlaying;
+
+  /// No description provided for @perfStatAverageOpponent.
+  ///
+  /// In en, this message translates to:
+  /// **'Average opponent'**
+  String get perfStatAverageOpponent;
+
+  /// No description provided for @perfStatVictories.
+  ///
+  /// In en, this message translates to:
+  /// **'Victories'**
+  String get perfStatVictories;
+
+  /// No description provided for @perfStatDefeats.
+  ///
+  /// In en, this message translates to:
+  /// **'Defeats'**
+  String get perfStatDefeats;
+
+  /// No description provided for @perfStatDisconnections.
+  ///
+  /// In en, this message translates to:
+  /// **'Disconnections'**
+  String get perfStatDisconnections;
+
+  /// No description provided for @perfStatNotEnoughGames.
+  ///
+  /// In en, this message translates to:
+  /// **'Not enough games played'**
+  String get perfStatNotEnoughGames;
+
+  /// No description provided for @perfStatHighestRating.
+  ///
+  /// In en, this message translates to:
+  /// **'Highest rating: {param}'**
+  String perfStatHighestRating(String param);
+
+  /// No description provided for @perfStatLowestRating.
+  ///
+  /// In en, this message translates to:
+  /// **'Lowest rating: {param}'**
+  String perfStatLowestRating(String param);
+
+  /// No description provided for @perfStatFromXToY.
+  ///
+  /// In en, this message translates to:
+  /// **'from {param1} to {param2}'**
+  String perfStatFromXToY(String param1, String param2);
+
+  /// No description provided for @perfStatWinningStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'Winning streak'**
+  String get perfStatWinningStreak;
+
+  /// No description provided for @perfStatLosingStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'Losing streak'**
+  String get perfStatLosingStreak;
+
+  /// No description provided for @perfStatLongestStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'Longest streak: {param}'**
+  String perfStatLongestStreak(String param);
+
+  /// No description provided for @perfStatCurrentStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'Current streak: {param}'**
+  String perfStatCurrentStreak(String param);
+
+  /// No description provided for @perfStatBestRated.
+  ///
+  /// In en, this message translates to:
+  /// **'Best rated victories'**
+  String get perfStatBestRated;
+
+  /// No description provided for @perfStatGamesInARow.
+  ///
+  /// In en, this message translates to:
+  /// **'Games played in a row'**
+  String get perfStatGamesInARow;
+
+  /// No description provided for @perfStatLessThanOneHour.
+  ///
+  /// In en, this message translates to:
+  /// **'Less than one hour between games'**
+  String get perfStatLessThanOneHour;
+
+  /// No description provided for @perfStatMaxTimePlaying.
+  ///
+  /// In en, this message translates to:
+  /// **'Max time spent playing'**
+  String get perfStatMaxTimePlaying;
+
+  /// No description provided for @perfStatNow.
+  ///
+  /// In en, this message translates to:
+  /// **'now'**
+  String get perfStatNow;
+
+  /// No description provided for @preferencesPreferences.
+  ///
+  /// In en, this message translates to:
+  /// **'Preferences'**
+  String get preferencesPreferences;
+
+  /// No description provided for @preferencesDisplay.
+  ///
+  /// In en, this message translates to:
+  /// **'Display'**
+  String get preferencesDisplay;
+
+  /// No description provided for @preferencesPrivacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy'**
+  String get preferencesPrivacy;
+
+  /// No description provided for @preferencesNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get preferencesNotifications;
+
+  /// No description provided for @preferencesPieceAnimation.
+  ///
+  /// In en, this message translates to:
+  /// **'Piece animation'**
+  String get preferencesPieceAnimation;
+
+  /// No description provided for @preferencesMaterialDifference.
+  ///
+  /// In en, this message translates to:
+  /// **'Material difference'**
+  String get preferencesMaterialDifference;
+
+  /// No description provided for @preferencesBoardHighlights.
+  ///
+  /// In en, this message translates to:
+  /// **'Board highlights (last move and check)'**
+  String get preferencesBoardHighlights;
+
+  /// No description provided for @preferencesPieceDestinations.
+  ///
+  /// In en, this message translates to:
+  /// **'Piece destinations (valid moves and premoves)'**
+  String get preferencesPieceDestinations;
+
+  /// No description provided for @preferencesBoardCoordinates.
+  ///
+  /// In en, this message translates to:
+  /// **'Board coordinates (A-H, 1-8)'**
+  String get preferencesBoardCoordinates;
+
+  /// No description provided for @preferencesMoveListWhilePlaying.
+  ///
+  /// In en, this message translates to:
+  /// **'Move list while playing'**
+  String get preferencesMoveListWhilePlaying;
+
+  /// No description provided for @preferencesPgnPieceNotation.
+  ///
+  /// In en, this message translates to:
+  /// **'Move notation'**
+  String get preferencesPgnPieceNotation;
+
+  /// No description provided for @preferencesChessPieceSymbol.
+  ///
+  /// In en, this message translates to:
+  /// **'Chess piece symbol'**
+  String get preferencesChessPieceSymbol;
+
+  /// No description provided for @preferencesPgnLetter.
+  ///
+  /// In en, this message translates to:
+  /// **'Letter (K, Q, R, B, N)'**
+  String get preferencesPgnLetter;
+
+  /// No description provided for @preferencesZenMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Zen mode'**
+  String get preferencesZenMode;
+
+  /// No description provided for @preferencesShowPlayerRatings.
+  ///
+  /// In en, this message translates to:
+  /// **'Show player ratings'**
+  String get preferencesShowPlayerRatings;
+
+  /// No description provided for @preferencesShowFlairs.
+  ///
+  /// In en, this message translates to:
+  /// **'Show player flairs'**
+  String get preferencesShowFlairs;
+
+  /// No description provided for @preferencesExplainShowPlayerRatings.
+  ///
+  /// In en, this message translates to:
+  /// **'This hides all ratings from Lichess, to help focus on the chess. Rated games still impact your rating, this is only about what you get to see.'**
+  String get preferencesExplainShowPlayerRatings;
+
+  /// No description provided for @preferencesDisplayBoardResizeHandle.
+  ///
+  /// In en, this message translates to:
+  /// **'Show board resize handle'**
+  String get preferencesDisplayBoardResizeHandle;
+
+  /// No description provided for @preferencesOnlyOnInitialPosition.
+  ///
+  /// In en, this message translates to:
+  /// **'Only on initial position'**
+  String get preferencesOnlyOnInitialPosition;
+
+  /// No description provided for @preferencesInGameOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'In-game only'**
+  String get preferencesInGameOnly;
+
+  /// No description provided for @preferencesChessClock.
+  ///
+  /// In en, this message translates to:
+  /// **'Chess clock'**
+  String get preferencesChessClock;
+
+  /// No description provided for @preferencesTenthsOfSeconds.
+  ///
+  /// In en, this message translates to:
+  /// **'Tenths of seconds'**
+  String get preferencesTenthsOfSeconds;
+
+  /// No description provided for @preferencesWhenTimeRemainingLessThanTenSeconds.
+  ///
+  /// In en, this message translates to:
+  /// **'When time remaining < 10 seconds'**
+  String get preferencesWhenTimeRemainingLessThanTenSeconds;
+
+  /// No description provided for @preferencesHorizontalGreenProgressBars.
+  ///
+  /// In en, this message translates to:
+  /// **'Horizontal green progress bars'**
+  String get preferencesHorizontalGreenProgressBars;
+
+  /// No description provided for @preferencesSoundWhenTimeGetsCritical.
+  ///
+  /// In en, this message translates to:
+  /// **'Sound when time gets critical'**
+  String get preferencesSoundWhenTimeGetsCritical;
+
+  /// No description provided for @preferencesGiveMoreTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Give more time'**
+  String get preferencesGiveMoreTime;
+
+  /// No description provided for @preferencesGameBehavior.
+  ///
+  /// In en, this message translates to:
+  /// **'Game behaviour'**
+  String get preferencesGameBehavior;
+
+  /// No description provided for @preferencesHowDoYouMovePieces.
+  ///
+  /// In en, this message translates to:
+  /// **'How do you move pieces?'**
+  String get preferencesHowDoYouMovePieces;
+
+  /// No description provided for @preferencesClickTwoSquares.
+  ///
+  /// In en, this message translates to:
+  /// **'Click two squares'**
+  String get preferencesClickTwoSquares;
+
+  /// No description provided for @preferencesDragPiece.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag a piece'**
+  String get preferencesDragPiece;
+
+  /// No description provided for @preferencesBothClicksAndDrag.
+  ///
+  /// In en, this message translates to:
+  /// **'Either'**
+  String get preferencesBothClicksAndDrag;
+
+  /// No description provided for @preferencesPremovesPlayingDuringOpponentTurn.
+  ///
+  /// In en, this message translates to:
+  /// **'Premoves (playing during opponent turn)'**
+  String get preferencesPremovesPlayingDuringOpponentTurn;
+
+  /// No description provided for @preferencesTakebacksWithOpponentApproval.
+  ///
+  /// In en, this message translates to:
+  /// **'Takebacks (with opponent approval)'**
+  String get preferencesTakebacksWithOpponentApproval;
+
+  /// No description provided for @preferencesInCasualGamesOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'In casual games only'**
+  String get preferencesInCasualGamesOnly;
+
+  /// No description provided for @preferencesPromoteToQueenAutomatically.
+  ///
+  /// In en, this message translates to:
+  /// **'Promote to Queen automatically'**
+  String get preferencesPromoteToQueenAutomatically;
+
+  /// No description provided for @preferencesExplainPromoteToQueenAutomatically.
+  ///
+  /// In en, this message translates to:
+  /// **'Hold the <ctrl> key while promoting to temporarily disable auto-promotion'**
+  String get preferencesExplainPromoteToQueenAutomatically;
+
+  /// No description provided for @preferencesWhenPremoving.
+  ///
+  /// In en, this message translates to:
+  /// **'When premoving'**
+  String get preferencesWhenPremoving;
+
+  /// No description provided for @preferencesClaimDrawOnThreefoldRepetitionAutomatically.
+  ///
+  /// In en, this message translates to:
+  /// **'Claim draw on threefold repetition automatically'**
+  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically;
+
+  /// No description provided for @preferencesWhenTimeRemainingLessThanThirtySeconds.
+  ///
+  /// In en, this message translates to:
+  /// **'When time remaining < 30 seconds'**
+  String get preferencesWhenTimeRemainingLessThanThirtySeconds;
+
+  /// No description provided for @preferencesMoveConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Move confirmation'**
+  String get preferencesMoveConfirmation;
+
+  /// No description provided for @preferencesExplainCanThenBeTemporarilyDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Can be disabled during a game with the board menu'**
+  String get preferencesExplainCanThenBeTemporarilyDisabled;
+
+  /// No description provided for @preferencesInCorrespondenceGames.
+  ///
+  /// In en, this message translates to:
+  /// **'Correspondence games'**
+  String get preferencesInCorrespondenceGames;
+
+  /// No description provided for @preferencesCorrespondenceAndUnlimited.
+  ///
+  /// In en, this message translates to:
+  /// **'Correspondence and unlimited'**
+  String get preferencesCorrespondenceAndUnlimited;
+
+  /// No description provided for @preferencesConfirmResignationAndDrawOffers.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm resignation and draw offers'**
+  String get preferencesConfirmResignationAndDrawOffers;
+
+  /// No description provided for @preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook.
+  ///
+  /// In en, this message translates to:
+  /// **'Castling method'**
+  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook;
+
+  /// No description provided for @preferencesCastleByMovingTwoSquares.
+  ///
+  /// In en, this message translates to:
+  /// **'Move king two squares'**
+  String get preferencesCastleByMovingTwoSquares;
+
+  /// No description provided for @preferencesCastleByMovingOntoTheRook.
+  ///
+  /// In en, this message translates to:
+  /// **'Move king onto rook'**
+  String get preferencesCastleByMovingOntoTheRook;
+
+  /// No description provided for @preferencesInputMovesWithTheKeyboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Input moves with the keyboard'**
+  String get preferencesInputMovesWithTheKeyboard;
+
+  /// No description provided for @preferencesInputMovesWithVoice.
+  ///
+  /// In en, this message translates to:
+  /// **'Input moves with your voice'**
+  String get preferencesInputMovesWithVoice;
+
+  /// No description provided for @preferencesSnapArrowsToValidMoves.
+  ///
+  /// In en, this message translates to:
+  /// **'Snap arrows to valid moves'**
+  String get preferencesSnapArrowsToValidMoves;
+
+  /// No description provided for @preferencesSayGgWpAfterLosingOrDrawing.
+  ///
+  /// In en, this message translates to:
+  /// **'Say \"Good game, well played\" upon defeat or draw'**
+  String get preferencesSayGgWpAfterLosingOrDrawing;
+
+  /// No description provided for @preferencesYourPreferencesHaveBeenSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Your preferences have been saved.'**
+  String get preferencesYourPreferencesHaveBeenSaved;
+
+  /// No description provided for @preferencesScrollOnTheBoardToReplayMoves.
+  ///
+  /// In en, this message translates to:
+  /// **'Scroll on the board to replay moves'**
+  String get preferencesScrollOnTheBoardToReplayMoves;
+
+  /// No description provided for @preferencesCorrespondenceEmailNotification.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily email listing your correspondence games'**
+  String get preferencesCorrespondenceEmailNotification;
+
+  /// No description provided for @preferencesNotifyStreamStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Streamer goes live'**
+  String get preferencesNotifyStreamStart;
+
+  /// No description provided for @preferencesNotifyInboxMsg.
+  ///
+  /// In en, this message translates to:
+  /// **'New inbox message'**
+  String get preferencesNotifyInboxMsg;
+
+  /// No description provided for @preferencesNotifyForumMention.
+  ///
+  /// In en, this message translates to:
+  /// **'Forum comment mentions you'**
+  String get preferencesNotifyForumMention;
+
+  /// No description provided for @preferencesNotifyInvitedStudy.
+  ///
+  /// In en, this message translates to:
+  /// **'Study invite'**
+  String get preferencesNotifyInvitedStudy;
+
+  /// No description provided for @preferencesNotifyGameEvent.
+  ///
+  /// In en, this message translates to:
+  /// **'Correspondence game updates'**
+  String get preferencesNotifyGameEvent;
+
+  /// No description provided for @preferencesNotifyChallenge.
+  ///
+  /// In en, this message translates to:
+  /// **'Challenges'**
+  String get preferencesNotifyChallenge;
+
+  /// No description provided for @preferencesNotifyTournamentSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Tournament starting soon'**
+  String get preferencesNotifyTournamentSoon;
+
+  /// No description provided for @preferencesNotifyTimeAlarm.
+  ///
+  /// In en, this message translates to:
+  /// **'Correspondence clock running out'**
+  String get preferencesNotifyTimeAlarm;
+
+  /// No description provided for @preferencesNotifyBell.
+  ///
+  /// In en, this message translates to:
+  /// **'Bell notification within Lichess'**
+  String get preferencesNotifyBell;
+
+  /// No description provided for @preferencesNotifyPush.
+  ///
+  /// In en, this message translates to:
+  /// **'Device notification when you\'re not on Lichess'**
+  String get preferencesNotifyPush;
+
+  /// No description provided for @preferencesNotifyWeb.
+  ///
+  /// In en, this message translates to:
+  /// **'Browser'**
+  String get preferencesNotifyWeb;
+
+  /// No description provided for @preferencesNotifyDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'Device'**
+  String get preferencesNotifyDevice;
+
+  /// No description provided for @preferencesBellNotificationSound.
+  ///
+  /// In en, this message translates to:
+  /// **'Bell notification sound'**
+  String get preferencesBellNotificationSound;
+
+  /// No description provided for @puzzlePuzzles.
+  ///
+  /// In en, this message translates to:
+  /// **'Puzzles'**
+  String get puzzlePuzzles;
+
+  /// No description provided for @puzzlePuzzleThemes.
+  ///
+  /// In en, this message translates to:
+  /// **'Puzzle themes'**
+  String get puzzlePuzzleThemes;
+
+  /// No description provided for @puzzleRecommended.
+  ///
+  /// In en, this message translates to:
+  /// **'Recommended'**
+  String get puzzleRecommended;
+
+  /// No description provided for @puzzlePhases.
+  ///
+  /// In en, this message translates to:
+  /// **'Phases'**
+  String get puzzlePhases;
+
+  /// No description provided for @puzzleMotifs.
+  ///
+  /// In en, this message translates to:
+  /// **'Motifs'**
+  String get puzzleMotifs;
+
+  /// No description provided for @puzzleAdvanced.
+  ///
+  /// In en, this message translates to:
+  /// **'Advanced'**
+  String get puzzleAdvanced;
+
+  /// No description provided for @puzzleLengths.
+  ///
+  /// In en, this message translates to:
+  /// **'Lengths'**
+  String get puzzleLengths;
+
+  /// No description provided for @puzzleMates.
+  ///
+  /// In en, this message translates to:
+  /// **'Mates'**
+  String get puzzleMates;
+
+  /// No description provided for @puzzleGoals.
+  ///
+  /// In en, this message translates to:
+  /// **'Goals'**
+  String get puzzleGoals;
+
+  /// No description provided for @puzzleOrigin.
+  ///
+  /// In en, this message translates to:
+  /// **'Origin'**
+  String get puzzleOrigin;
+
+  /// No description provided for @puzzleSpecialMoves.
+  ///
+  /// In en, this message translates to:
+  /// **'Special moves'**
+  String get puzzleSpecialMoves;
+
+  /// No description provided for @puzzleDidYouLikeThisPuzzle.
+  ///
+  /// In en, this message translates to:
+  /// **'Did you like this puzzle?'**
+  String get puzzleDidYouLikeThisPuzzle;
+
+  /// No description provided for @puzzleVoteToLoadNextOne.
+  ///
+  /// In en, this message translates to:
+  /// **'Vote to load the next one!'**
+  String get puzzleVoteToLoadNextOne;
+
+  /// No description provided for @puzzleUpVote.
+  ///
+  /// In en, this message translates to:
+  /// **'Up vote puzzle'**
+  String get puzzleUpVote;
+
+  /// No description provided for @puzzleDownVote.
+  ///
+  /// In en, this message translates to:
+  /// **'Down vote puzzle'**
+  String get puzzleDownVote;
+
+  /// No description provided for @puzzleYourPuzzleRatingWillNotChange.
+  ///
+  /// In en, this message translates to:
+  /// **'Your puzzle rating will not change. Note that puzzles are not a competition. Your rating helps selecting the best puzzles for your current skill.'**
+  String get puzzleYourPuzzleRatingWillNotChange;
+
+  /// No description provided for @puzzleFindTheBestMoveForWhite.
+  ///
+  /// In en, this message translates to:
+  /// **'Find the best move for white.'**
+  String get puzzleFindTheBestMoveForWhite;
+
+  /// No description provided for @puzzleFindTheBestMoveForBlack.
+  ///
+  /// In en, this message translates to:
+  /// **'Find the best move for black.'**
+  String get puzzleFindTheBestMoveForBlack;
+
+  /// No description provided for @puzzleToGetPersonalizedPuzzles.
+  ///
+  /// In en, this message translates to:
+  /// **'To get personalized puzzles:'**
+  String get puzzleToGetPersonalizedPuzzles;
+
+  /// No description provided for @puzzlePuzzleId.
+  ///
+  /// In en, this message translates to:
+  /// **'Puzzle {param}'**
+  String puzzlePuzzleId(String param);
+
+  /// No description provided for @puzzlePuzzleOfTheDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Puzzle of the day'**
+  String get puzzlePuzzleOfTheDay;
+
+  /// No description provided for @puzzleDailyPuzzle.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Puzzle'**
+  String get puzzleDailyPuzzle;
+
+  /// No description provided for @puzzleClickToSolve.
+  ///
+  /// In en, this message translates to:
+  /// **'Click to solve'**
+  String get puzzleClickToSolve;
+
+  /// No description provided for @puzzleGoodMove.
+  ///
+  /// In en, this message translates to:
+  /// **'Good move'**
+  String get puzzleGoodMove;
+
+  /// No description provided for @puzzleBestMove.
+  ///
+  /// In en, this message translates to:
+  /// **'Best move!'**
+  String get puzzleBestMove;
+
+  /// No description provided for @puzzleKeepGoing.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep going…'**
+  String get puzzleKeepGoing;
+
+  /// No description provided for @puzzlePuzzleSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Success!'**
+  String get puzzlePuzzleSuccess;
+
+  /// No description provided for @puzzlePuzzleComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Puzzle complete!'**
+  String get puzzlePuzzleComplete;
+
+  /// No description provided for @puzzleByOpenings.
+  ///
+  /// In en, this message translates to:
+  /// **'By openings'**
+  String get puzzleByOpenings;
+
+  /// No description provided for @puzzlePuzzlesByOpenings.
+  ///
+  /// In en, this message translates to:
+  /// **'Puzzles by openings'**
+  String get puzzlePuzzlesByOpenings;
+
+  /// No description provided for @puzzleOpeningsYouPlayedTheMost.
+  ///
+  /// In en, this message translates to:
+  /// **'Openings you played the most in rated games'**
+  String get puzzleOpeningsYouPlayedTheMost;
+
+  /// No description provided for @puzzleUseFindInPage.
+  ///
+  /// In en, this message translates to:
+  /// **'Use \"Find in page\" in the browser menu to find your favourite opening!'**
+  String get puzzleUseFindInPage;
+
+  /// No description provided for @puzzleUseCtrlF.
+  ///
+  /// In en, this message translates to:
+  /// **'Use Ctrl+f to find your favourite opening!'**
+  String get puzzleUseCtrlF;
+
+  /// No description provided for @puzzleNotTheMove.
+  ///
+  /// In en, this message translates to:
+  /// **'That\'s not the move!'**
+  String get puzzleNotTheMove;
+
+  /// No description provided for @puzzleTrySomethingElse.
+  ///
+  /// In en, this message translates to:
+  /// **'Try something else.'**
+  String get puzzleTrySomethingElse;
+
+  /// No description provided for @puzzleRatingX.
+  ///
+  /// In en, this message translates to:
+  /// **'Rating: {param}'**
+  String puzzleRatingX(String param);
+
+  /// No description provided for @puzzleHidden.
+  ///
+  /// In en, this message translates to:
+  /// **'hidden'**
+  String get puzzleHidden;
+
+  /// No description provided for @puzzleFromGameLink.
+  ///
+  /// In en, this message translates to:
+  /// **'From game {param}'**
+  String puzzleFromGameLink(String param);
+
+  /// No description provided for @puzzleContinueTraining.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue training'**
+  String get puzzleContinueTraining;
+
+  /// No description provided for @puzzleDifficultyLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Difficulty level'**
+  String get puzzleDifficultyLevel;
+
+  /// No description provided for @puzzleNormal.
+  ///
+  /// In en, this message translates to:
+  /// **'Normal'**
+  String get puzzleNormal;
+
+  /// No description provided for @puzzleEasier.
+  ///
+  /// In en, this message translates to:
+  /// **'Easier'**
+  String get puzzleEasier;
+
+  /// No description provided for @puzzleEasiest.
+  ///
+  /// In en, this message translates to:
+  /// **'Easiest'**
+  String get puzzleEasiest;
+
+  /// No description provided for @puzzleHarder.
+  ///
+  /// In en, this message translates to:
+  /// **'Harder'**
+  String get puzzleHarder;
+
+  /// No description provided for @puzzleHardest.
+  ///
+  /// In en, this message translates to:
+  /// **'Hardest'**
+  String get puzzleHardest;
+
+  /// No description provided for @puzzleExample.
+  ///
+  /// In en, this message translates to:
+  /// **'Example'**
+  String get puzzleExample;
+
+  /// No description provided for @puzzleAddAnotherTheme.
+  ///
+  /// In en, this message translates to:
+  /// **'Add another theme'**
+  String get puzzleAddAnotherTheme;
+
+  /// No description provided for @puzzleNextPuzzle.
+  ///
+  /// In en, this message translates to:
+  /// **'Next puzzle'**
+  String get puzzleNextPuzzle;
+
+  /// No description provided for @puzzleJumpToNextPuzzleImmediately.
+  ///
+  /// In en, this message translates to:
+  /// **'Jump to next puzzle immediately'**
+  String get puzzleJumpToNextPuzzleImmediately;
+
+  /// No description provided for @puzzlePuzzleDashboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Puzzle Dashboard'**
+  String get puzzlePuzzleDashboard;
+
+  /// No description provided for @puzzleImprovementAreas.
+  ///
+  /// In en, this message translates to:
+  /// **'Improvement areas'**
+  String get puzzleImprovementAreas;
+
+  /// No description provided for @puzzleStrengths.
+  ///
+  /// In en, this message translates to:
+  /// **'Strengths'**
+  String get puzzleStrengths;
+
+  /// No description provided for @puzzleHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Puzzle history'**
+  String get puzzleHistory;
+
+  /// No description provided for @puzzleSolved.
+  ///
+  /// In en, this message translates to:
+  /// **'solved'**
+  String get puzzleSolved;
+
+  /// No description provided for @puzzleFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'incorrect'**
+  String get puzzleFailed;
+
+  /// No description provided for @puzzleStreakDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Solve progressively harder puzzles and build a win streak. There is no clock, so take your time. One wrong move, and it\'s game over! But you can skip one move per session.'**
+  String get puzzleStreakDescription;
+
+  /// No description provided for @puzzleYourStreakX.
+  ///
+  /// In en, this message translates to:
+  /// **'Your streak: {param}'**
+  String puzzleYourStreakX(String param);
+
+  /// No description provided for @puzzleStreakSkipExplanation.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip this move to preserve your streak! Only works once per run.'**
+  String get puzzleStreakSkipExplanation;
+
+  /// No description provided for @puzzleContinueTheStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue the streak'**
+  String get puzzleContinueTheStreak;
+
+  /// No description provided for @puzzleNewStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'New streak'**
+  String get puzzleNewStreak;
+
+  /// No description provided for @puzzleFromMyGames.
+  ///
+  /// In en, this message translates to:
+  /// **'From my games'**
+  String get puzzleFromMyGames;
+
+  /// No description provided for @puzzleLookupOfPlayer.
+  ///
+  /// In en, this message translates to:
+  /// **'Lookup puzzles from a player\'s games'**
+  String get puzzleLookupOfPlayer;
+
+  /// No description provided for @puzzleFromXGames.
+  ///
+  /// In en, this message translates to:
+  /// **'Puzzles from {param}\' games'**
+  String puzzleFromXGames(String param);
+
+  /// No description provided for @puzzleSearchPuzzles.
+  ///
+  /// In en, this message translates to:
+  /// **'Search puzzles'**
+  String get puzzleSearchPuzzles;
+
+  /// No description provided for @puzzleFromMyGamesNone.
+  ///
+  /// In en, this message translates to:
+  /// **'You have no puzzles in the database, but Lichess still loves you very much.\n\nPlay rapid and classical games to increase your chances of having a puzzle of yours added!'**
+  String get puzzleFromMyGamesNone;
+
+  /// No description provided for @puzzleFromXGamesFound.
+  ///
+  /// In en, this message translates to:
+  /// **'{param1} puzzles found in {param2} games'**
+  String puzzleFromXGamesFound(String param1, String param2);
+
+  /// No description provided for @puzzlePuzzleDashboardDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Train, analyse, improve'**
+  String get puzzlePuzzleDashboardDescription;
+
+  /// No description provided for @puzzlePercentSolved.
+  ///
+  /// In en, this message translates to:
+  /// **'{param} solved'**
+  String puzzlePercentSolved(String param);
+
+  /// No description provided for @puzzleNoPuzzlesToShow.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing to show, go play some puzzles first!'**
+  String get puzzleNoPuzzlesToShow;
+
+  /// No description provided for @puzzleImprovementAreasDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Train these to optimize your progress!'**
+  String get puzzleImprovementAreasDescription;
+
+  /// No description provided for @puzzleStrengthDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'You perform the best in these themes'**
+  String get puzzleStrengthDescription;
+
+  /// No description provided for @puzzlePlayedXTimes.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{Played {count} time} =1{Played {count} time} other{Played {count} times}}'**
+  String puzzlePlayedXTimes(int count);
+
+  /// No description provided for @puzzleNbPointsBelowYourPuzzleRating.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{One point below your puzzle rating} =1{One point below your puzzle rating} other{{count} points below your puzzle rating}}'**
+  String puzzleNbPointsBelowYourPuzzleRating(int count);
+
+  /// No description provided for @puzzleNbPointsAboveYourPuzzleRating.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{One point above your puzzle rating} =1{One point above your puzzle rating} other{{count} points above your puzzle rating}}'**
+  String puzzleNbPointsAboveYourPuzzleRating(int count);
+
+  /// No description provided for @puzzleNbPlayed.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, other{{count} played}}'**
+  String puzzleNbPlayed(int count);
+
+  /// No description provided for @puzzleNbToReplay.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, other{{count} to replay}}'**
+  String puzzleNbToReplay(int count);
+
+  /// No description provided for @puzzleThemeAdvancedPawn.
+  ///
+  /// In en, this message translates to:
+  /// **'Advanced pawn'**
+  String get puzzleThemeAdvancedPawn;
+
+  /// No description provided for @puzzleThemeAdvancedPawnDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'One of your pawns is deep into the opponent position, maybe threatening to promote.'**
+  String get puzzleThemeAdvancedPawnDescription;
+
+  /// No description provided for @puzzleThemeAdvantage.
+  ///
+  /// In en, this message translates to:
+  /// **'Advantage'**
+  String get puzzleThemeAdvantage;
+
+  /// No description provided for @puzzleThemeAdvantageDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Seize your chance to get a decisive advantage. (200cp ≤ eval ≤ 600cp)'**
+  String get puzzleThemeAdvantageDescription;
+
+  /// No description provided for @puzzleThemeAnastasiaMate.
+  ///
+  /// In en, this message translates to:
+  /// **'Anastasia\'s mate'**
+  String get puzzleThemeAnastasiaMate;
+
+  /// No description provided for @puzzleThemeAnastasiaMateDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'A knight and rook or queen team up to trap the opposing king between the side of the board and a friendly piece.'**
+  String get puzzleThemeAnastasiaMateDescription;
+
+  /// No description provided for @puzzleThemeArabianMate.
+  ///
+  /// In en, this message translates to:
+  /// **'Arabian mate'**
+  String get puzzleThemeArabianMate;
+
+  /// No description provided for @puzzleThemeArabianMateDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'A knight and a rook team up to trap the opposing king on a corner of the board.'**
+  String get puzzleThemeArabianMateDescription;
+
+  /// No description provided for @puzzleThemeAttackingF2F7.
+  ///
+  /// In en, this message translates to:
+  /// **'Attacking f2 or f7'**
+  String get puzzleThemeAttackingF2F7;
+
+  /// No description provided for @puzzleThemeAttackingF2F7Description.
+  ///
+  /// In en, this message translates to:
+  /// **'An attack focusing on the f2 or f7 pawn, such as in the fried liver opening.'**
+  String get puzzleThemeAttackingF2F7Description;
+
+  /// No description provided for @puzzleThemeAttraction.
+  ///
+  /// In en, this message translates to:
+  /// **'Attraction'**
+  String get puzzleThemeAttraction;
+
+  /// No description provided for @puzzleThemeAttractionDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'An exchange or sacrifice encouraging or forcing an opponent piece to a square that allows a follow-up tactic.'**
+  String get puzzleThemeAttractionDescription;
+
+  /// No description provided for @puzzleThemeBackRankMate.
+  ///
+  /// In en, this message translates to:
+  /// **'Back rank mate'**
+  String get puzzleThemeBackRankMate;
+
+  /// No description provided for @puzzleThemeBackRankMateDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Checkmate the king on the home rank, when it is trapped there by its own pieces.'**
+  String get puzzleThemeBackRankMateDescription;
+
+  /// No description provided for @puzzleThemeBishopEndgame.
+  ///
+  /// In en, this message translates to:
+  /// **'Bishop endgame'**
+  String get puzzleThemeBishopEndgame;
+
+  /// No description provided for @puzzleThemeBishopEndgameDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'An endgame with only bishops and pawns.'**
+  String get puzzleThemeBishopEndgameDescription;
+
+  /// No description provided for @puzzleThemeBodenMate.
+  ///
+  /// In en, this message translates to:
+  /// **'Boden\'s mate'**
+  String get puzzleThemeBodenMate;
+
+  /// No description provided for @puzzleThemeBodenMateDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Two attacking bishops on criss-crossing diagonals deliver mate to a king obstructed by friendly pieces.'**
+  String get puzzleThemeBodenMateDescription;
+
+  /// No description provided for @puzzleThemeCastling.
+  ///
+  /// In en, this message translates to:
+  /// **'Castling'**
+  String get puzzleThemeCastling;
+
+  /// No description provided for @puzzleThemeCastlingDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Bring the king to safety, and deploy the rook for attack.'**
+  String get puzzleThemeCastlingDescription;
+
+  /// No description provided for @puzzleThemeCapturingDefender.
+  ///
+  /// In en, this message translates to:
+  /// **'Capture the defender'**
+  String get puzzleThemeCapturingDefender;
+
+  /// No description provided for @puzzleThemeCapturingDefenderDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Removing a piece that is critical to defence of another piece, allowing the now undefended piece to be captured on a following move.'**
+  String get puzzleThemeCapturingDefenderDescription;
+
+  /// No description provided for @puzzleThemeCrushing.
+  ///
+  /// In en, this message translates to:
+  /// **'Crushing'**
+  String get puzzleThemeCrushing;
+
+  /// No description provided for @puzzleThemeCrushingDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Spot the opponent blunder to obtain a crushing advantage. (eval ≥ 600cp)'**
+  String get puzzleThemeCrushingDescription;
+
+  /// No description provided for @puzzleThemeDoubleBishopMate.
+  ///
+  /// In en, this message translates to:
+  /// **'Double bishop mate'**
+  String get puzzleThemeDoubleBishopMate;
+
+  /// No description provided for @puzzleThemeDoubleBishopMateDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Two attacking bishops on adjacent diagonals deliver mate to a king obstructed by friendly pieces.'**
+  String get puzzleThemeDoubleBishopMateDescription;
+
+  /// No description provided for @puzzleThemeDovetailMate.
+  ///
+  /// In en, this message translates to:
+  /// **'Dovetail mate'**
+  String get puzzleThemeDovetailMate;
+
+  /// No description provided for @puzzleThemeDovetailMateDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'A queen delivers mate to an adjacent king, whose only two escape squares are obstructed by friendly pieces.'**
+  String get puzzleThemeDovetailMateDescription;
+
+  /// No description provided for @puzzleThemeEquality.
+  ///
+  /// In en, this message translates to:
+  /// **'Equality'**
+  String get puzzleThemeEquality;
+
+  /// No description provided for @puzzleThemeEqualityDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Come back from a losing position, and secure a draw or a balanced position. (eval ≤ 200cp)'**
+  String get puzzleThemeEqualityDescription;
+
+  /// No description provided for @puzzleThemeKingsideAttack.
+  ///
+  /// In en, this message translates to:
+  /// **'Kingside attack'**
+  String get puzzleThemeKingsideAttack;
+
+  /// No description provided for @puzzleThemeKingsideAttackDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'An attack of the opponent\'s king, after they castled on the king side.'**
+  String get puzzleThemeKingsideAttackDescription;
+
+  /// No description provided for @puzzleThemeClearance.
+  ///
+  /// In en, this message translates to:
+  /// **'Clearance'**
+  String get puzzleThemeClearance;
+
+  /// No description provided for @puzzleThemeClearanceDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'A move, often with tempo, that clears a square, file or diagonal for a follow-up tactical idea.'**
+  String get puzzleThemeClearanceDescription;
+
+  /// No description provided for @puzzleThemeDefensiveMove.
+  ///
+  /// In en, this message translates to:
+  /// **'Defensive move'**
+  String get puzzleThemeDefensiveMove;
+
+  /// No description provided for @puzzleThemeDefensiveMoveDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'A precise move or sequence of moves that is needed to avoid losing material or another advantage.'**
+  String get puzzleThemeDefensiveMoveDescription;
+
+  /// No description provided for @puzzleThemeDeflection.
+  ///
+  /// In en, this message translates to:
+  /// **'Deflection'**
+  String get puzzleThemeDeflection;
+
+  /// No description provided for @puzzleThemeDeflectionDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'A move that distracts an opponent piece from another duty that it performs, such as guarding a key square. Sometimes also called \"overloading\".'**
+  String get puzzleThemeDeflectionDescription;
+
+  /// No description provided for @puzzleThemeDiscoveredAttack.
+  ///
+  /// In en, this message translates to:
+  /// **'Discovered attack'**
+  String get puzzleThemeDiscoveredAttack;
+
+  /// No description provided for @puzzleThemeDiscoveredAttackDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Moving a piece (such as a knight), that previously blocked an attack by a long range piece (such as a rook), out of the way of that piece.'**
+  String get puzzleThemeDiscoveredAttackDescription;
+
+  /// No description provided for @puzzleThemeDoubleCheck.
+  ///
+  /// In en, this message translates to:
+  /// **'Double check'**
+  String get puzzleThemeDoubleCheck;
+
+  /// No description provided for @puzzleThemeDoubleCheckDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Checking with two pieces at once, as a result of a discovered attack where both the moving piece and the unveiled piece attack the opponent\'s king.'**
+  String get puzzleThemeDoubleCheckDescription;
+
+  /// No description provided for @puzzleThemeEndgame.
+  ///
+  /// In en, this message translates to:
+  /// **'Endgame'**
+  String get puzzleThemeEndgame;
+
+  /// No description provided for @puzzleThemeEndgameDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'A tactic during the last phase of the game.'**
+  String get puzzleThemeEndgameDescription;
+
+  /// No description provided for @puzzleThemeEnPassantDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'A tactic involving the en passant rule, where a pawn can capture an opponent pawn that has bypassed it using its initial two-square move.'**
+  String get puzzleThemeEnPassantDescription;
+
+  /// No description provided for @puzzleThemeExposedKing.
+  ///
+  /// In en, this message translates to:
+  /// **'Exposed king'**
+  String get puzzleThemeExposedKing;
+
+  /// No description provided for @puzzleThemeExposedKingDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'A tactic involving a king with few defenders around it, often leading to checkmate.'**
+  String get puzzleThemeExposedKingDescription;
+
+  /// No description provided for @puzzleThemeFork.
+  ///
+  /// In en, this message translates to:
+  /// **'Fork'**
+  String get puzzleThemeFork;
+
+  /// No description provided for @puzzleThemeForkDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'A move where the moved piece attacks two opponent pieces at once.'**
+  String get puzzleThemeForkDescription;
+
+  /// No description provided for @puzzleThemeHangingPiece.
+  ///
+  /// In en, this message translates to:
+  /// **'Hanging piece'**
+  String get puzzleThemeHangingPiece;
+
+  /// No description provided for @puzzleThemeHangingPieceDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'A tactic involving an opponent piece being undefended or insufficiently defended and free to capture.'**
+  String get puzzleThemeHangingPieceDescription;
+
+  /// No description provided for @puzzleThemeHookMate.
+  ///
+  /// In en, this message translates to:
+  /// **'Hook mate'**
+  String get puzzleThemeHookMate;
+
+  /// No description provided for @puzzleThemeHookMateDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Checkmate with a rook, knight, and pawn along with one enemy pawn to limit the enemy king\'s escape.'**
+  String get puzzleThemeHookMateDescription;
+
+  /// No description provided for @puzzleThemeInterference.
+  ///
+  /// In en, this message translates to:
+  /// **'Interference'**
+  String get puzzleThemeInterference;
+
+  /// No description provided for @puzzleThemeInterferenceDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Moving a piece between two opponent pieces to leave one or both opponent pieces undefended, such as a knight on a defended square between two rooks.'**
+  String get puzzleThemeInterferenceDescription;
+
+  /// No description provided for @puzzleThemeIntermezzo.
+  ///
+  /// In en, this message translates to:
+  /// **'Intermezzo'**
+  String get puzzleThemeIntermezzo;
+
+  /// No description provided for @puzzleThemeIntermezzoDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Instead of playing the expected move, first interpose another move posing an immediate threat that the opponent must answer. Also known as \"Zwischenzug\" or \"In between\".'**
+  String get puzzleThemeIntermezzoDescription;
+
+  /// No description provided for @puzzleThemeKnightEndgame.
+  ///
+  /// In en, this message translates to:
+  /// **'Knight endgame'**
+  String get puzzleThemeKnightEndgame;
+
+  /// No description provided for @puzzleThemeKnightEndgameDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'An endgame with only knights and pawns.'**
+  String get puzzleThemeKnightEndgameDescription;
+
+  /// No description provided for @puzzleThemeLong.
+  ///
+  /// In en, this message translates to:
+  /// **'Long puzzle'**
+  String get puzzleThemeLong;
+
+  /// No description provided for @puzzleThemeLongDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Three moves to win.'**
+  String get puzzleThemeLongDescription;
+
+  /// No description provided for @puzzleThemeMaster.
+  ///
+  /// In en, this message translates to:
+  /// **'Master games'**
+  String get puzzleThemeMaster;
+
+  /// No description provided for @puzzleThemeMasterDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Puzzles from games played by titled players.'**
+  String get puzzleThemeMasterDescription;
+
+  /// No description provided for @puzzleThemeMasterVsMaster.
+  ///
+  /// In en, this message translates to:
+  /// **'Master vs Master games'**
+  String get puzzleThemeMasterVsMaster;
+
+  /// No description provided for @puzzleThemeMasterVsMasterDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Puzzles from games between two titled players.'**
+  String get puzzleThemeMasterVsMasterDescription;
+
+  /// No description provided for @puzzleThemeMate.
+  ///
+  /// In en, this message translates to:
+  /// **'Checkmate'**
+  String get puzzleThemeMate;
+
+  /// No description provided for @puzzleThemeMateDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Win the game with style.'**
+  String get puzzleThemeMateDescription;
+
+  /// No description provided for @puzzleThemeMateIn1.
+  ///
+  /// In en, this message translates to:
+  /// **'Mate in 1'**
+  String get puzzleThemeMateIn1;
+
+  /// No description provided for @puzzleThemeMateIn1Description.
+  ///
+  /// In en, this message translates to:
+  /// **'Deliver checkmate in one move.'**
+  String get puzzleThemeMateIn1Description;
+
+  /// No description provided for @puzzleThemeMateIn2.
+  ///
+  /// In en, this message translates to:
+  /// **'Mate in 2'**
+  String get puzzleThemeMateIn2;
+
+  /// No description provided for @puzzleThemeMateIn2Description.
+  ///
+  /// In en, this message translates to:
+  /// **'Deliver checkmate in two moves.'**
+  String get puzzleThemeMateIn2Description;
+
+  /// No description provided for @puzzleThemeMateIn3.
+  ///
+  /// In en, this message translates to:
+  /// **'Mate in 3'**
+  String get puzzleThemeMateIn3;
+
+  /// No description provided for @puzzleThemeMateIn3Description.
+  ///
+  /// In en, this message translates to:
+  /// **'Deliver checkmate in three moves.'**
+  String get puzzleThemeMateIn3Description;
+
+  /// No description provided for @puzzleThemeMateIn4.
+  ///
+  /// In en, this message translates to:
+  /// **'Mate in 4'**
+  String get puzzleThemeMateIn4;
+
+  /// No description provided for @puzzleThemeMateIn4Description.
+  ///
+  /// In en, this message translates to:
+  /// **'Deliver checkmate in four moves.'**
+  String get puzzleThemeMateIn4Description;
+
+  /// No description provided for @puzzleThemeMateIn5.
+  ///
+  /// In en, this message translates to:
+  /// **'Mate in 5 or more'**
+  String get puzzleThemeMateIn5;
+
+  /// No description provided for @puzzleThemeMateIn5Description.
+  ///
+  /// In en, this message translates to:
+  /// **'Figure out a long mating sequence.'**
+  String get puzzleThemeMateIn5Description;
+
+  /// No description provided for @puzzleThemeMiddlegame.
+  ///
+  /// In en, this message translates to:
+  /// **'Middlegame'**
+  String get puzzleThemeMiddlegame;
+
+  /// No description provided for @puzzleThemeMiddlegameDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'A tactic during the second phase of the game.'**
+  String get puzzleThemeMiddlegameDescription;
+
+  /// No description provided for @puzzleThemeOneMove.
+  ///
+  /// In en, this message translates to:
+  /// **'One-move puzzle'**
+  String get puzzleThemeOneMove;
+
+  /// No description provided for @puzzleThemeOneMoveDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'A puzzle that is only one move long.'**
+  String get puzzleThemeOneMoveDescription;
+
+  /// No description provided for @puzzleThemeOpening.
+  ///
+  /// In en, this message translates to:
+  /// **'Opening'**
+  String get puzzleThemeOpening;
+
+  /// No description provided for @puzzleThemeOpeningDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'A tactic during the first phase of the game.'**
+  String get puzzleThemeOpeningDescription;
+
+  /// No description provided for @puzzleThemePawnEndgame.
+  ///
+  /// In en, this message translates to:
+  /// **'Pawn endgame'**
+  String get puzzleThemePawnEndgame;
+
+  /// No description provided for @puzzleThemePawnEndgameDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'An endgame with only pawns.'**
+  String get puzzleThemePawnEndgameDescription;
+
+  /// No description provided for @puzzleThemePin.
+  ///
+  /// In en, this message translates to:
+  /// **'Pin'**
+  String get puzzleThemePin;
+
+  /// No description provided for @puzzleThemePinDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'A tactic involving pins, where a piece is unable to move without revealing an attack on a higher value piece.'**
+  String get puzzleThemePinDescription;
+
+  /// No description provided for @puzzleThemePromotion.
+  ///
+  /// In en, this message translates to:
+  /// **'Promotion'**
+  String get puzzleThemePromotion;
+
+  /// No description provided for @puzzleThemePromotionDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Promote one of your pawn to a queen or minor piece.'**
+  String get puzzleThemePromotionDescription;
+
+  /// No description provided for @puzzleThemeQueenEndgame.
+  ///
+  /// In en, this message translates to:
+  /// **'Queen endgame'**
+  String get puzzleThemeQueenEndgame;
+
+  /// No description provided for @puzzleThemeQueenEndgameDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'An endgame with only queens and pawns.'**
+  String get puzzleThemeQueenEndgameDescription;
+
+  /// No description provided for @puzzleThemeQueenRookEndgame.
+  ///
+  /// In en, this message translates to:
+  /// **'Queen and Rook'**
+  String get puzzleThemeQueenRookEndgame;
+
+  /// No description provided for @puzzleThemeQueenRookEndgameDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'An endgame with only queens, rooks and pawns.'**
+  String get puzzleThemeQueenRookEndgameDescription;
+
+  /// No description provided for @puzzleThemeQueensideAttack.
+  ///
+  /// In en, this message translates to:
+  /// **'Queenside attack'**
+  String get puzzleThemeQueensideAttack;
+
+  /// No description provided for @puzzleThemeQueensideAttackDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'An attack of the opponent\'s king, after they castled on the queen side.'**
+  String get puzzleThemeQueensideAttackDescription;
+
+  /// No description provided for @puzzleThemeQuietMove.
+  ///
+  /// In en, this message translates to:
+  /// **'Quiet move'**
+  String get puzzleThemeQuietMove;
+
+  /// No description provided for @puzzleThemeQuietMoveDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'A move that does neither make a check or capture, nor an immediate threat to capture, but does prepare a more hidden unavoidable threat for a later move.'**
+  String get puzzleThemeQuietMoveDescription;
+
+  /// No description provided for @puzzleThemeRookEndgame.
+  ///
+  /// In en, this message translates to:
+  /// **'Rook endgame'**
+  String get puzzleThemeRookEndgame;
+
+  /// No description provided for @puzzleThemeRookEndgameDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'An endgame with only rooks and pawns.'**
+  String get puzzleThemeRookEndgameDescription;
+
+  /// No description provided for @puzzleThemeSacrifice.
+  ///
+  /// In en, this message translates to:
+  /// **'Sacrifice'**
+  String get puzzleThemeSacrifice;
+
+  /// No description provided for @puzzleThemeSacrificeDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'A tactic involving giving up material in the short-term, to gain an advantage again after a forced sequence of moves.'**
+  String get puzzleThemeSacrificeDescription;
+
+  /// No description provided for @puzzleThemeShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Short puzzle'**
+  String get puzzleThemeShort;
+
+  /// No description provided for @puzzleThemeShortDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Two moves to win.'**
+  String get puzzleThemeShortDescription;
+
+  /// No description provided for @puzzleThemeSkewer.
+  ///
+  /// In en, this message translates to:
+  /// **'Skewer'**
+  String get puzzleThemeSkewer;
+
+  /// No description provided for @puzzleThemeSkewerDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'A motif involving a high value piece being attacked, moving out the way, and allowing a lower value piece behind it to be captured or attacked, the inverse of a pin.'**
+  String get puzzleThemeSkewerDescription;
+
+  /// No description provided for @puzzleThemeSmotheredMate.
+  ///
+  /// In en, this message translates to:
+  /// **'Smothered mate'**
+  String get puzzleThemeSmotheredMate;
+
+  /// No description provided for @puzzleThemeSmotheredMateDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'A checkmate delivered by a knight in which the mated king is unable to move because it is surrounded (or smothered) by its own pieces.'**
+  String get puzzleThemeSmotheredMateDescription;
+
+  /// No description provided for @puzzleThemeSuperGM.
+  ///
+  /// In en, this message translates to:
+  /// **'Super GM games'**
+  String get puzzleThemeSuperGM;
+
+  /// No description provided for @puzzleThemeSuperGMDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Puzzles from games played by the best players in the world.'**
+  String get puzzleThemeSuperGMDescription;
+
+  /// No description provided for @puzzleThemeTrappedPiece.
+  ///
+  /// In en, this message translates to:
+  /// **'Trapped piece'**
+  String get puzzleThemeTrappedPiece;
+
+  /// No description provided for @puzzleThemeTrappedPieceDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'A piece is unable to escape capture as it has limited moves.'**
+  String get puzzleThemeTrappedPieceDescription;
+
+  /// No description provided for @puzzleThemeUnderPromotion.
+  ///
+  /// In en, this message translates to:
+  /// **'Underpromotion'**
+  String get puzzleThemeUnderPromotion;
+
+  /// No description provided for @puzzleThemeUnderPromotionDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Promotion to a knight, bishop, or rook.'**
+  String get puzzleThemeUnderPromotionDescription;
+
+  /// No description provided for @puzzleThemeVeryLong.
+  ///
+  /// In en, this message translates to:
+  /// **'Very long puzzle'**
+  String get puzzleThemeVeryLong;
+
+  /// No description provided for @puzzleThemeVeryLongDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Four moves or more to win.'**
+  String get puzzleThemeVeryLongDescription;
+
+  /// No description provided for @puzzleThemeXRayAttack.
+  ///
+  /// In en, this message translates to:
+  /// **'X-Ray attack'**
+  String get puzzleThemeXRayAttack;
+
+  /// No description provided for @puzzleThemeXRayAttackDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'A piece attacks or defends a square, through an enemy piece.'**
+  String get puzzleThemeXRayAttackDescription;
+
+  /// No description provided for @puzzleThemeZugzwang.
+  ///
+  /// In en, this message translates to:
+  /// **'Zugzwang'**
+  String get puzzleThemeZugzwang;
+
+  /// No description provided for @puzzleThemeZugzwangDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'The opponent is limited in the moves they can make, and all moves worsen their position.'**
+  String get puzzleThemeZugzwangDescription;
+
+  /// No description provided for @puzzleThemeHealthyMix.
+  ///
+  /// In en, this message translates to:
+  /// **'Healthy mix'**
+  String get puzzleThemeHealthyMix;
+
+  /// No description provided for @puzzleThemeHealthyMixDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'A bit of everything. You don\'t know what to expect, so you remain ready for anything! Just like in real games.'**
+  String get puzzleThemeHealthyMixDescription;
+
+  /// No description provided for @puzzleThemePlayerGames.
+  ///
+  /// In en, this message translates to:
+  /// **'Player games'**
+  String get puzzleThemePlayerGames;
+
+  /// No description provided for @puzzleThemePlayerGamesDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Lookup puzzles generated from your games, or from another player\'s games.'**
+  String get puzzleThemePlayerGamesDescription;
+
+  /// No description provided for @puzzleThemePuzzleDownloadInformation.
+  ///
+  /// In en, this message translates to:
+  /// **'These puzzles are in the public domain, and can be downloaded from {param}.'**
+  String puzzleThemePuzzleDownloadInformation(String param);
+
+  /// No description provided for @searchSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get searchSearch;
+
+  /// No description provided for @settingsSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settingsSettings;
+
+  /// No description provided for @settingsCloseAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Close account'**
+  String get settingsCloseAccount;
+
+  /// No description provided for @settingsManagedAccountCannotBeClosed.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account is managed, and cannot be closed.'**
+  String get settingsManagedAccountCannotBeClosed;
+
+  /// No description provided for @settingsClosingIsDefinitive.
+  ///
+  /// In en, this message translates to:
+  /// **'Closing is definitive. There is no going back. Are you sure?'**
+  String get settingsClosingIsDefinitive;
+
+  /// No description provided for @settingsCantOpenSimilarAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'You will not be allowed to open a new account with the same name, even if the case is different.'**
+  String get settingsCantOpenSimilarAccount;
+
+  /// No description provided for @settingsChangedMindDoNotCloseAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'I changed my mind, don\'t close my account'**
+  String get settingsChangedMindDoNotCloseAccount;
+
+  /// No description provided for @settingsCloseAccountExplanation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to close your account? Closing your account is a permanent decision. You will NEVER be able to log in EVER AGAIN.'**
+  String get settingsCloseAccountExplanation;
+
+  /// No description provided for @settingsThisAccountIsClosed.
+  ///
+  /// In en, this message translates to:
+  /// **'This account is closed.'**
+  String get settingsThisAccountIsClosed;
 
   /// No description provided for @playWithAFriend.
   ///
@@ -873,6 +2727,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Delete from here'**
   String get deleteFromHere;
+
+  /// No description provided for @collapseVariations.
+  ///
+  /// In en, this message translates to:
+  /// **'Collapse variations'**
+  String get collapseVariations;
+
+  /// No description provided for @expandVariations.
+  ///
+  /// In en, this message translates to:
+  /// **'Expand variations'**
+  String get expandVariations;
 
   /// No description provided for @forceVariation.
   ///
@@ -2476,24 +4342,6 @@ abstract class AppLocalizations {
   /// **'Leave empty to name the tournament after a notable chess player.'**
   String get emptyTournamentName;
 
-  /// No description provided for @recommendNotTouching.
-  ///
-  /// In en, this message translates to:
-  /// **'We recommend not touching these.'**
-  String get recommendNotTouching;
-
-  /// No description provided for @fewerPlayers.
-  ///
-  /// In en, this message translates to:
-  /// **'If you set entry requirements, your tournament will have fewer players.'**
-  String get fewerPlayers;
-
-  /// No description provided for @showAdvancedSettings.
-  ///
-  /// In en, this message translates to:
-  /// **'Show advanced settings'**
-  String get showAdvancedSettings;
-
   /// No description provided for @makePrivateTournament.
   ///
   /// In en, this message translates to:
@@ -2728,17 +4576,11 @@ abstract class AppLocalizations {
   /// **'Edit profile'**
   String get editProfile;
 
-  /// No description provided for @firstName.
+  /// No description provided for @realName.
   ///
   /// In en, this message translates to:
-  /// **'First name'**
-  String get firstName;
-
-  /// No description provided for @lastName.
-  ///
-  /// In en, this message translates to:
-  /// **'Surname'**
-  String get lastName;
+  /// **'Real name'**
+  String get realName;
 
   /// No description provided for @setFlair.
   ///
@@ -2992,23 +4834,11 @@ abstract class AppLocalizations {
   /// **'Cheat'**
   String get cheat;
 
-  /// No description provided for @insult.
-  ///
-  /// In en, this message translates to:
-  /// **'Insult'**
-  String get insult;
-
   /// No description provided for @troll.
   ///
   /// In en, this message translates to:
   /// **'Troll'**
   String get troll;
-
-  /// No description provided for @ratingManipulation.
-  ///
-  /// In en, this message translates to:
-  /// **'Rating manipulation'**
-  String get ratingManipulation;
 
   /// No description provided for @other.
   ///
@@ -3213,6 +5043,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Outside the board'**
   String get outsideTheBoard;
+
+  /// No description provided for @allSquaresOfTheBoard.
+  ///
+  /// In en, this message translates to:
+  /// **'All squares of the board'**
+  String get allSquaresOfTheBoard;
 
   /// No description provided for @onSlowGames.
   ///
@@ -5095,7 +6931,7 @@ abstract class AppLocalizations {
   /// No description provided for @ratedFormHelp.
   ///
   /// In en, this message translates to:
-  /// **'Games are rated\nand impact players ratings'**
+  /// **'Games are rated and impact players ratings'**
   String get ratedFormHelp;
 
   /// No description provided for @onlyMembersOfTeam.
@@ -5650,1854 +7486,6 @@ abstract class AppLocalizations {
   /// **'{count, plural, =0{and save {count} premove line} =1{and save {count} premove line} other{and save {count} premove lines}}'**
   String andSaveNbPremoveLines(int count);
 
-  /// No description provided for @patronDonate.
-  ///
-  /// In en, this message translates to:
-  /// **'Donate'**
-  String get patronDonate;
-
-  /// No description provided for @patronLichessPatron.
-  ///
-  /// In en, this message translates to:
-  /// **'Lichess Patron'**
-  String get patronLichessPatron;
-
-  /// No description provided for @preferencesPreferences.
-  ///
-  /// In en, this message translates to:
-  /// **'Preferences'**
-  String get preferencesPreferences;
-
-  /// No description provided for @preferencesDisplay.
-  ///
-  /// In en, this message translates to:
-  /// **'Display'**
-  String get preferencesDisplay;
-
-  /// No description provided for @preferencesPrivacy.
-  ///
-  /// In en, this message translates to:
-  /// **'Privacy'**
-  String get preferencesPrivacy;
-
-  /// No description provided for @preferencesNotifications.
-  ///
-  /// In en, this message translates to:
-  /// **'Notifications'**
-  String get preferencesNotifications;
-
-  /// No description provided for @preferencesPieceAnimation.
-  ///
-  /// In en, this message translates to:
-  /// **'Piece animation'**
-  String get preferencesPieceAnimation;
-
-  /// No description provided for @preferencesMaterialDifference.
-  ///
-  /// In en, this message translates to:
-  /// **'Material difference'**
-  String get preferencesMaterialDifference;
-
-  /// No description provided for @preferencesBoardHighlights.
-  ///
-  /// In en, this message translates to:
-  /// **'Board highlights (last move and check)'**
-  String get preferencesBoardHighlights;
-
-  /// No description provided for @preferencesPieceDestinations.
-  ///
-  /// In en, this message translates to:
-  /// **'Piece destinations (valid moves and premoves)'**
-  String get preferencesPieceDestinations;
-
-  /// No description provided for @preferencesBoardCoordinates.
-  ///
-  /// In en, this message translates to:
-  /// **'Board coordinates (A-H, 1-8)'**
-  String get preferencesBoardCoordinates;
-
-  /// No description provided for @preferencesMoveListWhilePlaying.
-  ///
-  /// In en, this message translates to:
-  /// **'Move list while playing'**
-  String get preferencesMoveListWhilePlaying;
-
-  /// No description provided for @preferencesPgnPieceNotation.
-  ///
-  /// In en, this message translates to:
-  /// **'Move notation'**
-  String get preferencesPgnPieceNotation;
-
-  /// No description provided for @preferencesChessPieceSymbol.
-  ///
-  /// In en, this message translates to:
-  /// **'Chess piece symbol'**
-  String get preferencesChessPieceSymbol;
-
-  /// No description provided for @preferencesPgnLetter.
-  ///
-  /// In en, this message translates to:
-  /// **'Letter (K, Q, R, B, N)'**
-  String get preferencesPgnLetter;
-
-  /// No description provided for @preferencesZenMode.
-  ///
-  /// In en, this message translates to:
-  /// **'Zen mode'**
-  String get preferencesZenMode;
-
-  /// No description provided for @preferencesShowPlayerRatings.
-  ///
-  /// In en, this message translates to:
-  /// **'Show player ratings'**
-  String get preferencesShowPlayerRatings;
-
-  /// No description provided for @preferencesShowFlairs.
-  ///
-  /// In en, this message translates to:
-  /// **'Show player flairs'**
-  String get preferencesShowFlairs;
-
-  /// No description provided for @preferencesExplainShowPlayerRatings.
-  ///
-  /// In en, this message translates to:
-  /// **'This hides all ratings from Lichess, to help focus on the chess. Rated games still impact your rating, this is only about what you get to see.'**
-  String get preferencesExplainShowPlayerRatings;
-
-  /// No description provided for @preferencesDisplayBoardResizeHandle.
-  ///
-  /// In en, this message translates to:
-  /// **'Show board resize handle'**
-  String get preferencesDisplayBoardResizeHandle;
-
-  /// No description provided for @preferencesOnlyOnInitialPosition.
-  ///
-  /// In en, this message translates to:
-  /// **'Only on initial position'**
-  String get preferencesOnlyOnInitialPosition;
-
-  /// No description provided for @preferencesInGameOnly.
-  ///
-  /// In en, this message translates to:
-  /// **'In-game only'**
-  String get preferencesInGameOnly;
-
-  /// No description provided for @preferencesChessClock.
-  ///
-  /// In en, this message translates to:
-  /// **'Chess clock'**
-  String get preferencesChessClock;
-
-  /// No description provided for @preferencesTenthsOfSeconds.
-  ///
-  /// In en, this message translates to:
-  /// **'Tenths of seconds'**
-  String get preferencesTenthsOfSeconds;
-
-  /// No description provided for @preferencesWhenTimeRemainingLessThanTenSeconds.
-  ///
-  /// In en, this message translates to:
-  /// **'When time remaining < 10 seconds'**
-  String get preferencesWhenTimeRemainingLessThanTenSeconds;
-
-  /// No description provided for @preferencesHorizontalGreenProgressBars.
-  ///
-  /// In en, this message translates to:
-  /// **'Horizontal green progress bars'**
-  String get preferencesHorizontalGreenProgressBars;
-
-  /// No description provided for @preferencesSoundWhenTimeGetsCritical.
-  ///
-  /// In en, this message translates to:
-  /// **'Sound when time gets critical'**
-  String get preferencesSoundWhenTimeGetsCritical;
-
-  /// No description provided for @preferencesGiveMoreTime.
-  ///
-  /// In en, this message translates to:
-  /// **'Give more time'**
-  String get preferencesGiveMoreTime;
-
-  /// No description provided for @preferencesGameBehavior.
-  ///
-  /// In en, this message translates to:
-  /// **'Game behaviour'**
-  String get preferencesGameBehavior;
-
-  /// No description provided for @preferencesHowDoYouMovePieces.
-  ///
-  /// In en, this message translates to:
-  /// **'How do you move pieces?'**
-  String get preferencesHowDoYouMovePieces;
-
-  /// No description provided for @preferencesClickTwoSquares.
-  ///
-  /// In en, this message translates to:
-  /// **'Click two squares'**
-  String get preferencesClickTwoSquares;
-
-  /// No description provided for @preferencesDragPiece.
-  ///
-  /// In en, this message translates to:
-  /// **'Drag a piece'**
-  String get preferencesDragPiece;
-
-  /// No description provided for @preferencesBothClicksAndDrag.
-  ///
-  /// In en, this message translates to:
-  /// **'Either'**
-  String get preferencesBothClicksAndDrag;
-
-  /// No description provided for @preferencesPremovesPlayingDuringOpponentTurn.
-  ///
-  /// In en, this message translates to:
-  /// **'Premoves (playing during opponent turn)'**
-  String get preferencesPremovesPlayingDuringOpponentTurn;
-
-  /// No description provided for @preferencesTakebacksWithOpponentApproval.
-  ///
-  /// In en, this message translates to:
-  /// **'Takebacks (with opponent approval)'**
-  String get preferencesTakebacksWithOpponentApproval;
-
-  /// No description provided for @preferencesInCasualGamesOnly.
-  ///
-  /// In en, this message translates to:
-  /// **'In casual games only'**
-  String get preferencesInCasualGamesOnly;
-
-  /// No description provided for @preferencesPromoteToQueenAutomatically.
-  ///
-  /// In en, this message translates to:
-  /// **'Promote to Queen automatically'**
-  String get preferencesPromoteToQueenAutomatically;
-
-  /// No description provided for @preferencesExplainPromoteToQueenAutomatically.
-  ///
-  /// In en, this message translates to:
-  /// **'Hold the <ctrl> key while promoting to temporarily disable auto-promotion'**
-  String get preferencesExplainPromoteToQueenAutomatically;
-
-  /// No description provided for @preferencesWhenPremoving.
-  ///
-  /// In en, this message translates to:
-  /// **'When premoving'**
-  String get preferencesWhenPremoving;
-
-  /// No description provided for @preferencesClaimDrawOnThreefoldRepetitionAutomatically.
-  ///
-  /// In en, this message translates to:
-  /// **'Claim draw on threefold repetition automatically'**
-  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically;
-
-  /// No description provided for @preferencesWhenTimeRemainingLessThanThirtySeconds.
-  ///
-  /// In en, this message translates to:
-  /// **'When time remaining < 30 seconds'**
-  String get preferencesWhenTimeRemainingLessThanThirtySeconds;
-
-  /// No description provided for @preferencesMoveConfirmation.
-  ///
-  /// In en, this message translates to:
-  /// **'Move confirmation'**
-  String get preferencesMoveConfirmation;
-
-  /// No description provided for @preferencesExplainCanThenBeTemporarilyDisabled.
-  ///
-  /// In en, this message translates to:
-  /// **'Can be disabled during a game with the board menu'**
-  String get preferencesExplainCanThenBeTemporarilyDisabled;
-
-  /// No description provided for @preferencesInCorrespondenceGames.
-  ///
-  /// In en, this message translates to:
-  /// **'Correspondence games'**
-  String get preferencesInCorrespondenceGames;
-
-  /// No description provided for @preferencesCorrespondenceAndUnlimited.
-  ///
-  /// In en, this message translates to:
-  /// **'Correspondence and unlimited'**
-  String get preferencesCorrespondenceAndUnlimited;
-
-  /// No description provided for @preferencesConfirmResignationAndDrawOffers.
-  ///
-  /// In en, this message translates to:
-  /// **'Confirm resignation and draw offers'**
-  String get preferencesConfirmResignationAndDrawOffers;
-
-  /// No description provided for @preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook.
-  ///
-  /// In en, this message translates to:
-  /// **'Castling method'**
-  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook;
-
-  /// No description provided for @preferencesCastleByMovingTwoSquares.
-  ///
-  /// In en, this message translates to:
-  /// **'Move king two squares'**
-  String get preferencesCastleByMovingTwoSquares;
-
-  /// No description provided for @preferencesCastleByMovingOntoTheRook.
-  ///
-  /// In en, this message translates to:
-  /// **'Move king onto rook'**
-  String get preferencesCastleByMovingOntoTheRook;
-
-  /// No description provided for @preferencesInputMovesWithTheKeyboard.
-  ///
-  /// In en, this message translates to:
-  /// **'Input moves with the keyboard'**
-  String get preferencesInputMovesWithTheKeyboard;
-
-  /// No description provided for @preferencesInputMovesWithVoice.
-  ///
-  /// In en, this message translates to:
-  /// **'Input moves with your voice'**
-  String get preferencesInputMovesWithVoice;
-
-  /// No description provided for @preferencesSnapArrowsToValidMoves.
-  ///
-  /// In en, this message translates to:
-  /// **'Snap arrows to valid moves'**
-  String get preferencesSnapArrowsToValidMoves;
-
-  /// No description provided for @preferencesSayGgWpAfterLosingOrDrawing.
-  ///
-  /// In en, this message translates to:
-  /// **'Say \"Good game, well played\" upon defeat or draw'**
-  String get preferencesSayGgWpAfterLosingOrDrawing;
-
-  /// No description provided for @preferencesYourPreferencesHaveBeenSaved.
-  ///
-  /// In en, this message translates to:
-  /// **'Your preferences have been saved.'**
-  String get preferencesYourPreferencesHaveBeenSaved;
-
-  /// No description provided for @preferencesScrollOnTheBoardToReplayMoves.
-  ///
-  /// In en, this message translates to:
-  /// **'Scroll on the board to replay moves'**
-  String get preferencesScrollOnTheBoardToReplayMoves;
-
-  /// No description provided for @preferencesCorrespondenceEmailNotification.
-  ///
-  /// In en, this message translates to:
-  /// **'Daily email listing your correspondence games'**
-  String get preferencesCorrespondenceEmailNotification;
-
-  /// No description provided for @preferencesNotifyStreamStart.
-  ///
-  /// In en, this message translates to:
-  /// **'Streamer goes live'**
-  String get preferencesNotifyStreamStart;
-
-  /// No description provided for @preferencesNotifyInboxMsg.
-  ///
-  /// In en, this message translates to:
-  /// **'New inbox message'**
-  String get preferencesNotifyInboxMsg;
-
-  /// No description provided for @preferencesNotifyForumMention.
-  ///
-  /// In en, this message translates to:
-  /// **'Forum comment mentions you'**
-  String get preferencesNotifyForumMention;
-
-  /// No description provided for @preferencesNotifyInvitedStudy.
-  ///
-  /// In en, this message translates to:
-  /// **'Study invite'**
-  String get preferencesNotifyInvitedStudy;
-
-  /// No description provided for @preferencesNotifyGameEvent.
-  ///
-  /// In en, this message translates to:
-  /// **'Correspondence game updates'**
-  String get preferencesNotifyGameEvent;
-
-  /// No description provided for @preferencesNotifyChallenge.
-  ///
-  /// In en, this message translates to:
-  /// **'Challenges'**
-  String get preferencesNotifyChallenge;
-
-  /// No description provided for @preferencesNotifyTournamentSoon.
-  ///
-  /// In en, this message translates to:
-  /// **'Tournament starting soon'**
-  String get preferencesNotifyTournamentSoon;
-
-  /// No description provided for @preferencesNotifyTimeAlarm.
-  ///
-  /// In en, this message translates to:
-  /// **'Correspondence clock running out'**
-  String get preferencesNotifyTimeAlarm;
-
-  /// No description provided for @preferencesNotifyBell.
-  ///
-  /// In en, this message translates to:
-  /// **'Bell notification within Lichess'**
-  String get preferencesNotifyBell;
-
-  /// No description provided for @preferencesNotifyPush.
-  ///
-  /// In en, this message translates to:
-  /// **'Device notification when you\'re not on Lichess'**
-  String get preferencesNotifyPush;
-
-  /// No description provided for @preferencesNotifyWeb.
-  ///
-  /// In en, this message translates to:
-  /// **'Browser'**
-  String get preferencesNotifyWeb;
-
-  /// No description provided for @preferencesNotifyDevice.
-  ///
-  /// In en, this message translates to:
-  /// **'Device'**
-  String get preferencesNotifyDevice;
-
-  /// No description provided for @preferencesBellNotificationSound.
-  ///
-  /// In en, this message translates to:
-  /// **'Bell notification sound'**
-  String get preferencesBellNotificationSound;
-
-  /// No description provided for @puzzlePuzzles.
-  ///
-  /// In en, this message translates to:
-  /// **'Puzzles'**
-  String get puzzlePuzzles;
-
-  /// No description provided for @puzzlePuzzleThemes.
-  ///
-  /// In en, this message translates to:
-  /// **'Puzzle themes'**
-  String get puzzlePuzzleThemes;
-
-  /// No description provided for @puzzleRecommended.
-  ///
-  /// In en, this message translates to:
-  /// **'Recommended'**
-  String get puzzleRecommended;
-
-  /// No description provided for @puzzlePhases.
-  ///
-  /// In en, this message translates to:
-  /// **'Phases'**
-  String get puzzlePhases;
-
-  /// No description provided for @puzzleMotifs.
-  ///
-  /// In en, this message translates to:
-  /// **'Motifs'**
-  String get puzzleMotifs;
-
-  /// No description provided for @puzzleAdvanced.
-  ///
-  /// In en, this message translates to:
-  /// **'Advanced'**
-  String get puzzleAdvanced;
-
-  /// No description provided for @puzzleLengths.
-  ///
-  /// In en, this message translates to:
-  /// **'Lengths'**
-  String get puzzleLengths;
-
-  /// No description provided for @puzzleMates.
-  ///
-  /// In en, this message translates to:
-  /// **'Mates'**
-  String get puzzleMates;
-
-  /// No description provided for @puzzleGoals.
-  ///
-  /// In en, this message translates to:
-  /// **'Goals'**
-  String get puzzleGoals;
-
-  /// No description provided for @puzzleOrigin.
-  ///
-  /// In en, this message translates to:
-  /// **'Origin'**
-  String get puzzleOrigin;
-
-  /// No description provided for @puzzleSpecialMoves.
-  ///
-  /// In en, this message translates to:
-  /// **'Special moves'**
-  String get puzzleSpecialMoves;
-
-  /// No description provided for @puzzleDidYouLikeThisPuzzle.
-  ///
-  /// In en, this message translates to:
-  /// **'Did you like this puzzle?'**
-  String get puzzleDidYouLikeThisPuzzle;
-
-  /// No description provided for @puzzleVoteToLoadNextOne.
-  ///
-  /// In en, this message translates to:
-  /// **'Vote to load the next one!'**
-  String get puzzleVoteToLoadNextOne;
-
-  /// No description provided for @puzzleUpVote.
-  ///
-  /// In en, this message translates to:
-  /// **'Up vote puzzle'**
-  String get puzzleUpVote;
-
-  /// No description provided for @puzzleDownVote.
-  ///
-  /// In en, this message translates to:
-  /// **'Down vote puzzle'**
-  String get puzzleDownVote;
-
-  /// No description provided for @puzzleYourPuzzleRatingWillNotChange.
-  ///
-  /// In en, this message translates to:
-  /// **'Your puzzle rating will not change. Note that puzzles are not a competition. Your rating helps selecting the best puzzles for your current skill.'**
-  String get puzzleYourPuzzleRatingWillNotChange;
-
-  /// No description provided for @puzzleFindTheBestMoveForWhite.
-  ///
-  /// In en, this message translates to:
-  /// **'Find the best move for white.'**
-  String get puzzleFindTheBestMoveForWhite;
-
-  /// No description provided for @puzzleFindTheBestMoveForBlack.
-  ///
-  /// In en, this message translates to:
-  /// **'Find the best move for black.'**
-  String get puzzleFindTheBestMoveForBlack;
-
-  /// No description provided for @puzzleToGetPersonalizedPuzzles.
-  ///
-  /// In en, this message translates to:
-  /// **'To get personalized puzzles:'**
-  String get puzzleToGetPersonalizedPuzzles;
-
-  /// No description provided for @puzzlePuzzleId.
-  ///
-  /// In en, this message translates to:
-  /// **'Puzzle {param}'**
-  String puzzlePuzzleId(String param);
-
-  /// No description provided for @puzzlePuzzleOfTheDay.
-  ///
-  /// In en, this message translates to:
-  /// **'Puzzle of the day'**
-  String get puzzlePuzzleOfTheDay;
-
-  /// No description provided for @puzzleDailyPuzzle.
-  ///
-  /// In en, this message translates to:
-  /// **'Daily Puzzle'**
-  String get puzzleDailyPuzzle;
-
-  /// No description provided for @puzzleClickToSolve.
-  ///
-  /// In en, this message translates to:
-  /// **'Click to solve'**
-  String get puzzleClickToSolve;
-
-  /// No description provided for @puzzleGoodMove.
-  ///
-  /// In en, this message translates to:
-  /// **'Good move'**
-  String get puzzleGoodMove;
-
-  /// No description provided for @puzzleBestMove.
-  ///
-  /// In en, this message translates to:
-  /// **'Best move!'**
-  String get puzzleBestMove;
-
-  /// No description provided for @puzzleKeepGoing.
-  ///
-  /// In en, this message translates to:
-  /// **'Keep going…'**
-  String get puzzleKeepGoing;
-
-  /// No description provided for @puzzlePuzzleSuccess.
-  ///
-  /// In en, this message translates to:
-  /// **'Success!'**
-  String get puzzlePuzzleSuccess;
-
-  /// No description provided for @puzzlePuzzleComplete.
-  ///
-  /// In en, this message translates to:
-  /// **'Puzzle complete!'**
-  String get puzzlePuzzleComplete;
-
-  /// No description provided for @puzzleByOpenings.
-  ///
-  /// In en, this message translates to:
-  /// **'By openings'**
-  String get puzzleByOpenings;
-
-  /// No description provided for @puzzlePuzzlesByOpenings.
-  ///
-  /// In en, this message translates to:
-  /// **'Puzzles by openings'**
-  String get puzzlePuzzlesByOpenings;
-
-  /// No description provided for @puzzleOpeningsYouPlayedTheMost.
-  ///
-  /// In en, this message translates to:
-  /// **'Openings you played the most in rated games'**
-  String get puzzleOpeningsYouPlayedTheMost;
-
-  /// No description provided for @puzzleUseFindInPage.
-  ///
-  /// In en, this message translates to:
-  /// **'Use \"Find in page\" in the browser menu to find your favourite opening!'**
-  String get puzzleUseFindInPage;
-
-  /// No description provided for @puzzleUseCtrlF.
-  ///
-  /// In en, this message translates to:
-  /// **'Use Ctrl+f to find your favourite opening!'**
-  String get puzzleUseCtrlF;
-
-  /// No description provided for @puzzleNotTheMove.
-  ///
-  /// In en, this message translates to:
-  /// **'That\'s not the move!'**
-  String get puzzleNotTheMove;
-
-  /// No description provided for @puzzleTrySomethingElse.
-  ///
-  /// In en, this message translates to:
-  /// **'Try something else.'**
-  String get puzzleTrySomethingElse;
-
-  /// No description provided for @puzzleRatingX.
-  ///
-  /// In en, this message translates to:
-  /// **'Rating: {param}'**
-  String puzzleRatingX(String param);
-
-  /// No description provided for @puzzleHidden.
-  ///
-  /// In en, this message translates to:
-  /// **'hidden'**
-  String get puzzleHidden;
-
-  /// No description provided for @puzzleFromGameLink.
-  ///
-  /// In en, this message translates to:
-  /// **'From game {param}'**
-  String puzzleFromGameLink(String param);
-
-  /// No description provided for @puzzleContinueTraining.
-  ///
-  /// In en, this message translates to:
-  /// **'Continue training'**
-  String get puzzleContinueTraining;
-
-  /// No description provided for @puzzleDifficultyLevel.
-  ///
-  /// In en, this message translates to:
-  /// **'Difficulty level'**
-  String get puzzleDifficultyLevel;
-
-  /// No description provided for @puzzleNormal.
-  ///
-  /// In en, this message translates to:
-  /// **'Normal'**
-  String get puzzleNormal;
-
-  /// No description provided for @puzzleEasier.
-  ///
-  /// In en, this message translates to:
-  /// **'Easier'**
-  String get puzzleEasier;
-
-  /// No description provided for @puzzleEasiest.
-  ///
-  /// In en, this message translates to:
-  /// **'Easiest'**
-  String get puzzleEasiest;
-
-  /// No description provided for @puzzleHarder.
-  ///
-  /// In en, this message translates to:
-  /// **'Harder'**
-  String get puzzleHarder;
-
-  /// No description provided for @puzzleHardest.
-  ///
-  /// In en, this message translates to:
-  /// **'Hardest'**
-  String get puzzleHardest;
-
-  /// No description provided for @puzzleExample.
-  ///
-  /// In en, this message translates to:
-  /// **'Example'**
-  String get puzzleExample;
-
-  /// No description provided for @puzzleAddAnotherTheme.
-  ///
-  /// In en, this message translates to:
-  /// **'Add another theme'**
-  String get puzzleAddAnotherTheme;
-
-  /// No description provided for @puzzleNextPuzzle.
-  ///
-  /// In en, this message translates to:
-  /// **'Next puzzle'**
-  String get puzzleNextPuzzle;
-
-  /// No description provided for @puzzleJumpToNextPuzzleImmediately.
-  ///
-  /// In en, this message translates to:
-  /// **'Jump to next puzzle immediately'**
-  String get puzzleJumpToNextPuzzleImmediately;
-
-  /// No description provided for @puzzlePuzzleDashboard.
-  ///
-  /// In en, this message translates to:
-  /// **'Puzzle Dashboard'**
-  String get puzzlePuzzleDashboard;
-
-  /// No description provided for @puzzleImprovementAreas.
-  ///
-  /// In en, this message translates to:
-  /// **'Improvement areas'**
-  String get puzzleImprovementAreas;
-
-  /// No description provided for @puzzleStrengths.
-  ///
-  /// In en, this message translates to:
-  /// **'Strengths'**
-  String get puzzleStrengths;
-
-  /// No description provided for @puzzleHistory.
-  ///
-  /// In en, this message translates to:
-  /// **'Puzzle history'**
-  String get puzzleHistory;
-
-  /// No description provided for @puzzleSolved.
-  ///
-  /// In en, this message translates to:
-  /// **'solved'**
-  String get puzzleSolved;
-
-  /// No description provided for @puzzleFailed.
-  ///
-  /// In en, this message translates to:
-  /// **'incorrect'**
-  String get puzzleFailed;
-
-  /// No description provided for @puzzleStreakDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Solve progressively harder puzzles and build a win streak. There is no clock, so take your time. One wrong move, and it\'s game over! But you can skip one move per session.'**
-  String get puzzleStreakDescription;
-
-  /// No description provided for @puzzleYourStreakX.
-  ///
-  /// In en, this message translates to:
-  /// **'Your streak: {param}'**
-  String puzzleYourStreakX(String param);
-
-  /// No description provided for @puzzleStreakSkipExplanation.
-  ///
-  /// In en, this message translates to:
-  /// **'Skip this move to preserve your streak! Only works once per run.'**
-  String get puzzleStreakSkipExplanation;
-
-  /// No description provided for @puzzleContinueTheStreak.
-  ///
-  /// In en, this message translates to:
-  /// **'Continue the streak'**
-  String get puzzleContinueTheStreak;
-
-  /// No description provided for @puzzleNewStreak.
-  ///
-  /// In en, this message translates to:
-  /// **'New streak'**
-  String get puzzleNewStreak;
-
-  /// No description provided for @puzzleFromMyGames.
-  ///
-  /// In en, this message translates to:
-  /// **'From my games'**
-  String get puzzleFromMyGames;
-
-  /// No description provided for @puzzleLookupOfPlayer.
-  ///
-  /// In en, this message translates to:
-  /// **'Lookup puzzles from a player\'s games'**
-  String get puzzleLookupOfPlayer;
-
-  /// No description provided for @puzzleFromXGames.
-  ///
-  /// In en, this message translates to:
-  /// **'Puzzles from {param}\' games'**
-  String puzzleFromXGames(String param);
-
-  /// No description provided for @puzzleSearchPuzzles.
-  ///
-  /// In en, this message translates to:
-  /// **'Search puzzles'**
-  String get puzzleSearchPuzzles;
-
-  /// No description provided for @puzzleFromMyGamesNone.
-  ///
-  /// In en, this message translates to:
-  /// **'You have no puzzles in the database, but Lichess still loves you very much.\n\nPlay rapid and classical games to increase your chances of having a puzzle of yours added!'**
-  String get puzzleFromMyGamesNone;
-
-  /// No description provided for @puzzleFromXGamesFound.
-  ///
-  /// In en, this message translates to:
-  /// **'{param1} puzzles found in {param2} games'**
-  String puzzleFromXGamesFound(String param1, String param2);
-
-  /// No description provided for @puzzlePuzzleDashboardDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Train, analyse, improve'**
-  String get puzzlePuzzleDashboardDescription;
-
-  /// No description provided for @puzzlePercentSolved.
-  ///
-  /// In en, this message translates to:
-  /// **'{param} solved'**
-  String puzzlePercentSolved(String param);
-
-  /// No description provided for @puzzleNoPuzzlesToShow.
-  ///
-  /// In en, this message translates to:
-  /// **'Nothing to show, go play some puzzles first!'**
-  String get puzzleNoPuzzlesToShow;
-
-  /// No description provided for @puzzleImprovementAreasDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Train these to optimize your progress!'**
-  String get puzzleImprovementAreasDescription;
-
-  /// No description provided for @puzzleStrengthDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'You perform the best in these themes'**
-  String get puzzleStrengthDescription;
-
-  /// No description provided for @puzzlePlayedXTimes.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =0{Played {count} time} =1{Played {count} time} other{Played {count} times}}'**
-  String puzzlePlayedXTimes(int count);
-
-  /// No description provided for @puzzleNbPointsBelowYourPuzzleRating.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =0{One point below your puzzle rating} =1{One point below your puzzle rating} other{{count} points below your puzzle rating}}'**
-  String puzzleNbPointsBelowYourPuzzleRating(int count);
-
-  /// No description provided for @puzzleNbPointsAboveYourPuzzleRating.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, =0{One point above your puzzle rating} =1{One point above your puzzle rating} other{{count} points above your puzzle rating}}'**
-  String puzzleNbPointsAboveYourPuzzleRating(int count);
-
-  /// No description provided for @puzzleNbPlayed.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, other{{count} played}}'**
-  String puzzleNbPlayed(int count);
-
-  /// No description provided for @puzzleNbToReplay.
-  ///
-  /// In en, this message translates to:
-  /// **'{count, plural, other{{count} to replay}}'**
-  String puzzleNbToReplay(int count);
-
-  /// No description provided for @puzzleThemeAdvancedPawn.
-  ///
-  /// In en, this message translates to:
-  /// **'Advanced pawn'**
-  String get puzzleThemeAdvancedPawn;
-
-  /// No description provided for @puzzleThemeAdvancedPawnDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'One of your pawns is deep into the opponent position, maybe threatening to promote.'**
-  String get puzzleThemeAdvancedPawnDescription;
-
-  /// No description provided for @puzzleThemeAdvantage.
-  ///
-  /// In en, this message translates to:
-  /// **'Advantage'**
-  String get puzzleThemeAdvantage;
-
-  /// No description provided for @puzzleThemeAdvantageDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Seize your chance to get a decisive advantage. (200cp ≤ eval ≤ 600cp)'**
-  String get puzzleThemeAdvantageDescription;
-
-  /// No description provided for @puzzleThemeAnastasiaMate.
-  ///
-  /// In en, this message translates to:
-  /// **'Anastasia\'s mate'**
-  String get puzzleThemeAnastasiaMate;
-
-  /// No description provided for @puzzleThemeAnastasiaMateDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'A knight and rook or queen team up to trap the opposing king between the side of the board and a friendly piece.'**
-  String get puzzleThemeAnastasiaMateDescription;
-
-  /// No description provided for @puzzleThemeArabianMate.
-  ///
-  /// In en, this message translates to:
-  /// **'Arabian mate'**
-  String get puzzleThemeArabianMate;
-
-  /// No description provided for @puzzleThemeArabianMateDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'A knight and a rook team up to trap the opposing king on a corner of the board.'**
-  String get puzzleThemeArabianMateDescription;
-
-  /// No description provided for @puzzleThemeAttackingF2F7.
-  ///
-  /// In en, this message translates to:
-  /// **'Attacking f2 or f7'**
-  String get puzzleThemeAttackingF2F7;
-
-  /// No description provided for @puzzleThemeAttackingF2F7Description.
-  ///
-  /// In en, this message translates to:
-  /// **'An attack focusing on the f2 or f7 pawn, such as in the fried liver opening.'**
-  String get puzzleThemeAttackingF2F7Description;
-
-  /// No description provided for @puzzleThemeAttraction.
-  ///
-  /// In en, this message translates to:
-  /// **'Attraction'**
-  String get puzzleThemeAttraction;
-
-  /// No description provided for @puzzleThemeAttractionDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'An exchange or sacrifice encouraging or forcing an opponent piece to a square that allows a follow-up tactic.'**
-  String get puzzleThemeAttractionDescription;
-
-  /// No description provided for @puzzleThemeBackRankMate.
-  ///
-  /// In en, this message translates to:
-  /// **'Back rank mate'**
-  String get puzzleThemeBackRankMate;
-
-  /// No description provided for @puzzleThemeBackRankMateDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Checkmate the king on the home rank, when it is trapped there by its own pieces.'**
-  String get puzzleThemeBackRankMateDescription;
-
-  /// No description provided for @puzzleThemeBishopEndgame.
-  ///
-  /// In en, this message translates to:
-  /// **'Bishop endgame'**
-  String get puzzleThemeBishopEndgame;
-
-  /// No description provided for @puzzleThemeBishopEndgameDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'An endgame with only bishops and pawns.'**
-  String get puzzleThemeBishopEndgameDescription;
-
-  /// No description provided for @puzzleThemeBodenMate.
-  ///
-  /// In en, this message translates to:
-  /// **'Boden\'s mate'**
-  String get puzzleThemeBodenMate;
-
-  /// No description provided for @puzzleThemeBodenMateDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Two attacking bishops on criss-crossing diagonals deliver mate to a king obstructed by friendly pieces.'**
-  String get puzzleThemeBodenMateDescription;
-
-  /// No description provided for @puzzleThemeCastling.
-  ///
-  /// In en, this message translates to:
-  /// **'Castling'**
-  String get puzzleThemeCastling;
-
-  /// No description provided for @puzzleThemeCastlingDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Bring the king to safety, and deploy the rook for attack.'**
-  String get puzzleThemeCastlingDescription;
-
-  /// No description provided for @puzzleThemeCapturingDefender.
-  ///
-  /// In en, this message translates to:
-  /// **'Capture the defender'**
-  String get puzzleThemeCapturingDefender;
-
-  /// No description provided for @puzzleThemeCapturingDefenderDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Removing a piece that is critical to defence of another piece, allowing the now undefended piece to be captured on a following move.'**
-  String get puzzleThemeCapturingDefenderDescription;
-
-  /// No description provided for @puzzleThemeCrushing.
-  ///
-  /// In en, this message translates to:
-  /// **'Crushing'**
-  String get puzzleThemeCrushing;
-
-  /// No description provided for @puzzleThemeCrushingDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Spot the opponent blunder to obtain a crushing advantage. (eval ≥ 600cp)'**
-  String get puzzleThemeCrushingDescription;
-
-  /// No description provided for @puzzleThemeDoubleBishopMate.
-  ///
-  /// In en, this message translates to:
-  /// **'Double bishop mate'**
-  String get puzzleThemeDoubleBishopMate;
-
-  /// No description provided for @puzzleThemeDoubleBishopMateDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Two attacking bishops on adjacent diagonals deliver mate to a king obstructed by friendly pieces.'**
-  String get puzzleThemeDoubleBishopMateDescription;
-
-  /// No description provided for @puzzleThemeDovetailMate.
-  ///
-  /// In en, this message translates to:
-  /// **'Dovetail mate'**
-  String get puzzleThemeDovetailMate;
-
-  /// No description provided for @puzzleThemeDovetailMateDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'A queen delivers mate to an adjacent king, whose only two escape squares are obstructed by friendly pieces.'**
-  String get puzzleThemeDovetailMateDescription;
-
-  /// No description provided for @puzzleThemeEquality.
-  ///
-  /// In en, this message translates to:
-  /// **'Equality'**
-  String get puzzleThemeEquality;
-
-  /// No description provided for @puzzleThemeEqualityDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Come back from a losing position, and secure a draw or a balanced position. (eval ≤ 200cp)'**
-  String get puzzleThemeEqualityDescription;
-
-  /// No description provided for @puzzleThemeKingsideAttack.
-  ///
-  /// In en, this message translates to:
-  /// **'Kingside attack'**
-  String get puzzleThemeKingsideAttack;
-
-  /// No description provided for @puzzleThemeKingsideAttackDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'An attack of the opponent\'s king, after they castled on the king side.'**
-  String get puzzleThemeKingsideAttackDescription;
-
-  /// No description provided for @puzzleThemeClearance.
-  ///
-  /// In en, this message translates to:
-  /// **'Clearance'**
-  String get puzzleThemeClearance;
-
-  /// No description provided for @puzzleThemeClearanceDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'A move, often with tempo, that clears a square, file or diagonal for a follow-up tactical idea.'**
-  String get puzzleThemeClearanceDescription;
-
-  /// No description provided for @puzzleThemeDefensiveMove.
-  ///
-  /// In en, this message translates to:
-  /// **'Defensive move'**
-  String get puzzleThemeDefensiveMove;
-
-  /// No description provided for @puzzleThemeDefensiveMoveDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'A precise move or sequence of moves that is needed to avoid losing material or another advantage.'**
-  String get puzzleThemeDefensiveMoveDescription;
-
-  /// No description provided for @puzzleThemeDeflection.
-  ///
-  /// In en, this message translates to:
-  /// **'Deflection'**
-  String get puzzleThemeDeflection;
-
-  /// No description provided for @puzzleThemeDeflectionDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'A move that distracts an opponent piece from another duty that it performs, such as guarding a key square. Sometimes also called \"overloading\".'**
-  String get puzzleThemeDeflectionDescription;
-
-  /// No description provided for @puzzleThemeDiscoveredAttack.
-  ///
-  /// In en, this message translates to:
-  /// **'Discovered attack'**
-  String get puzzleThemeDiscoveredAttack;
-
-  /// No description provided for @puzzleThemeDiscoveredAttackDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Moving a piece (such as a knight), that previously blocked an attack by a long range piece (such as a rook), out of the way of that piece.'**
-  String get puzzleThemeDiscoveredAttackDescription;
-
-  /// No description provided for @puzzleThemeDoubleCheck.
-  ///
-  /// In en, this message translates to:
-  /// **'Double check'**
-  String get puzzleThemeDoubleCheck;
-
-  /// No description provided for @puzzleThemeDoubleCheckDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Checking with two pieces at once, as a result of a discovered attack where both the moving piece and the unveiled piece attack the opponent\'s king.'**
-  String get puzzleThemeDoubleCheckDescription;
-
-  /// No description provided for @puzzleThemeEndgame.
-  ///
-  /// In en, this message translates to:
-  /// **'Endgame'**
-  String get puzzleThemeEndgame;
-
-  /// No description provided for @puzzleThemeEndgameDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'A tactic during the last phase of the game.'**
-  String get puzzleThemeEndgameDescription;
-
-  /// No description provided for @puzzleThemeEnPassantDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'A tactic involving the en passant rule, where a pawn can capture an opponent pawn that has bypassed it using its initial two-square move.'**
-  String get puzzleThemeEnPassantDescription;
-
-  /// No description provided for @puzzleThemeExposedKing.
-  ///
-  /// In en, this message translates to:
-  /// **'Exposed king'**
-  String get puzzleThemeExposedKing;
-
-  /// No description provided for @puzzleThemeExposedKingDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'A tactic involving a king with few defenders around it, often leading to checkmate.'**
-  String get puzzleThemeExposedKingDescription;
-
-  /// No description provided for @puzzleThemeFork.
-  ///
-  /// In en, this message translates to:
-  /// **'Fork'**
-  String get puzzleThemeFork;
-
-  /// No description provided for @puzzleThemeForkDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'A move where the moved piece attacks two opponent pieces at once.'**
-  String get puzzleThemeForkDescription;
-
-  /// No description provided for @puzzleThemeHangingPiece.
-  ///
-  /// In en, this message translates to:
-  /// **'Hanging piece'**
-  String get puzzleThemeHangingPiece;
-
-  /// No description provided for @puzzleThemeHangingPieceDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'A tactic involving an opponent piece being undefended or insufficiently defended and free to capture.'**
-  String get puzzleThemeHangingPieceDescription;
-
-  /// No description provided for @puzzleThemeHookMate.
-  ///
-  /// In en, this message translates to:
-  /// **'Hook mate'**
-  String get puzzleThemeHookMate;
-
-  /// No description provided for @puzzleThemeHookMateDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Checkmate with a rook, knight, and pawn along with one enemy pawn to limit the enemy king\'s escape.'**
-  String get puzzleThemeHookMateDescription;
-
-  /// No description provided for @puzzleThemeInterference.
-  ///
-  /// In en, this message translates to:
-  /// **'Interference'**
-  String get puzzleThemeInterference;
-
-  /// No description provided for @puzzleThemeInterferenceDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Moving a piece between two opponent pieces to leave one or both opponent pieces undefended, such as a knight on a defended square between two rooks.'**
-  String get puzzleThemeInterferenceDescription;
-
-  /// No description provided for @puzzleThemeIntermezzo.
-  ///
-  /// In en, this message translates to:
-  /// **'Intermezzo'**
-  String get puzzleThemeIntermezzo;
-
-  /// No description provided for @puzzleThemeIntermezzoDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Instead of playing the expected move, first interpose another move posing an immediate threat that the opponent must answer. Also known as \"Zwischenzug\" or \"In between\".'**
-  String get puzzleThemeIntermezzoDescription;
-
-  /// No description provided for @puzzleThemeKnightEndgame.
-  ///
-  /// In en, this message translates to:
-  /// **'Knight endgame'**
-  String get puzzleThemeKnightEndgame;
-
-  /// No description provided for @puzzleThemeKnightEndgameDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'An endgame with only knights and pawns.'**
-  String get puzzleThemeKnightEndgameDescription;
-
-  /// No description provided for @puzzleThemeLong.
-  ///
-  /// In en, this message translates to:
-  /// **'Long puzzle'**
-  String get puzzleThemeLong;
-
-  /// No description provided for @puzzleThemeLongDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Three moves to win.'**
-  String get puzzleThemeLongDescription;
-
-  /// No description provided for @puzzleThemeMaster.
-  ///
-  /// In en, this message translates to:
-  /// **'Master games'**
-  String get puzzleThemeMaster;
-
-  /// No description provided for @puzzleThemeMasterDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Puzzles from games played by titled players.'**
-  String get puzzleThemeMasterDescription;
-
-  /// No description provided for @puzzleThemeMasterVsMaster.
-  ///
-  /// In en, this message translates to:
-  /// **'Master vs Master games'**
-  String get puzzleThemeMasterVsMaster;
-
-  /// No description provided for @puzzleThemeMasterVsMasterDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Puzzles from games between two titled players.'**
-  String get puzzleThemeMasterVsMasterDescription;
-
-  /// No description provided for @puzzleThemeMate.
-  ///
-  /// In en, this message translates to:
-  /// **'Checkmate'**
-  String get puzzleThemeMate;
-
-  /// No description provided for @puzzleThemeMateDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Win the game with style.'**
-  String get puzzleThemeMateDescription;
-
-  /// No description provided for @puzzleThemeMateIn1.
-  ///
-  /// In en, this message translates to:
-  /// **'Mate in 1'**
-  String get puzzleThemeMateIn1;
-
-  /// No description provided for @puzzleThemeMateIn1Description.
-  ///
-  /// In en, this message translates to:
-  /// **'Deliver checkmate in one move.'**
-  String get puzzleThemeMateIn1Description;
-
-  /// No description provided for @puzzleThemeMateIn2.
-  ///
-  /// In en, this message translates to:
-  /// **'Mate in 2'**
-  String get puzzleThemeMateIn2;
-
-  /// No description provided for @puzzleThemeMateIn2Description.
-  ///
-  /// In en, this message translates to:
-  /// **'Deliver checkmate in two moves.'**
-  String get puzzleThemeMateIn2Description;
-
-  /// No description provided for @puzzleThemeMateIn3.
-  ///
-  /// In en, this message translates to:
-  /// **'Mate in 3'**
-  String get puzzleThemeMateIn3;
-
-  /// No description provided for @puzzleThemeMateIn3Description.
-  ///
-  /// In en, this message translates to:
-  /// **'Deliver checkmate in three moves.'**
-  String get puzzleThemeMateIn3Description;
-
-  /// No description provided for @puzzleThemeMateIn4.
-  ///
-  /// In en, this message translates to:
-  /// **'Mate in 4'**
-  String get puzzleThemeMateIn4;
-
-  /// No description provided for @puzzleThemeMateIn4Description.
-  ///
-  /// In en, this message translates to:
-  /// **'Deliver checkmate in four moves.'**
-  String get puzzleThemeMateIn4Description;
-
-  /// No description provided for @puzzleThemeMateIn5.
-  ///
-  /// In en, this message translates to:
-  /// **'Mate in 5 or more'**
-  String get puzzleThemeMateIn5;
-
-  /// No description provided for @puzzleThemeMateIn5Description.
-  ///
-  /// In en, this message translates to:
-  /// **'Figure out a long mating sequence.'**
-  String get puzzleThemeMateIn5Description;
-
-  /// No description provided for @puzzleThemeMiddlegame.
-  ///
-  /// In en, this message translates to:
-  /// **'Middlegame'**
-  String get puzzleThemeMiddlegame;
-
-  /// No description provided for @puzzleThemeMiddlegameDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'A tactic during the second phase of the game.'**
-  String get puzzleThemeMiddlegameDescription;
-
-  /// No description provided for @puzzleThemeOneMove.
-  ///
-  /// In en, this message translates to:
-  /// **'One-move puzzle'**
-  String get puzzleThemeOneMove;
-
-  /// No description provided for @puzzleThemeOneMoveDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'A puzzle that is only one move long.'**
-  String get puzzleThemeOneMoveDescription;
-
-  /// No description provided for @puzzleThemeOpening.
-  ///
-  /// In en, this message translates to:
-  /// **'Opening'**
-  String get puzzleThemeOpening;
-
-  /// No description provided for @puzzleThemeOpeningDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'A tactic during the first phase of the game.'**
-  String get puzzleThemeOpeningDescription;
-
-  /// No description provided for @puzzleThemePawnEndgame.
-  ///
-  /// In en, this message translates to:
-  /// **'Pawn endgame'**
-  String get puzzleThemePawnEndgame;
-
-  /// No description provided for @puzzleThemePawnEndgameDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'An endgame with only pawns.'**
-  String get puzzleThemePawnEndgameDescription;
-
-  /// No description provided for @puzzleThemePin.
-  ///
-  /// In en, this message translates to:
-  /// **'Pin'**
-  String get puzzleThemePin;
-
-  /// No description provided for @puzzleThemePinDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'A tactic involving pins, where a piece is unable to move without revealing an attack on a higher value piece.'**
-  String get puzzleThemePinDescription;
-
-  /// No description provided for @puzzleThemePromotion.
-  ///
-  /// In en, this message translates to:
-  /// **'Promotion'**
-  String get puzzleThemePromotion;
-
-  /// No description provided for @puzzleThemePromotionDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Promote one of your pawn to a queen or minor piece.'**
-  String get puzzleThemePromotionDescription;
-
-  /// No description provided for @puzzleThemeQueenEndgame.
-  ///
-  /// In en, this message translates to:
-  /// **'Queen endgame'**
-  String get puzzleThemeQueenEndgame;
-
-  /// No description provided for @puzzleThemeQueenEndgameDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'An endgame with only queens and pawns.'**
-  String get puzzleThemeQueenEndgameDescription;
-
-  /// No description provided for @puzzleThemeQueenRookEndgame.
-  ///
-  /// In en, this message translates to:
-  /// **'Queen and Rook'**
-  String get puzzleThemeQueenRookEndgame;
-
-  /// No description provided for @puzzleThemeQueenRookEndgameDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'An endgame with only queens, rooks and pawns.'**
-  String get puzzleThemeQueenRookEndgameDescription;
-
-  /// No description provided for @puzzleThemeQueensideAttack.
-  ///
-  /// In en, this message translates to:
-  /// **'Queenside attack'**
-  String get puzzleThemeQueensideAttack;
-
-  /// No description provided for @puzzleThemeQueensideAttackDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'An attack of the opponent\'s king, after they castled on the queen side.'**
-  String get puzzleThemeQueensideAttackDescription;
-
-  /// No description provided for @puzzleThemeQuietMove.
-  ///
-  /// In en, this message translates to:
-  /// **'Quiet move'**
-  String get puzzleThemeQuietMove;
-
-  /// No description provided for @puzzleThemeQuietMoveDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'A move that does neither make a check or capture, nor an immediate threat to capture, but does prepare a more hidden unavoidable threat for a later move.'**
-  String get puzzleThemeQuietMoveDescription;
-
-  /// No description provided for @puzzleThemeRookEndgame.
-  ///
-  /// In en, this message translates to:
-  /// **'Rook endgame'**
-  String get puzzleThemeRookEndgame;
-
-  /// No description provided for @puzzleThemeRookEndgameDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'An endgame with only rooks and pawns.'**
-  String get puzzleThemeRookEndgameDescription;
-
-  /// No description provided for @puzzleThemeSacrifice.
-  ///
-  /// In en, this message translates to:
-  /// **'Sacrifice'**
-  String get puzzleThemeSacrifice;
-
-  /// No description provided for @puzzleThemeSacrificeDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'A tactic involving giving up material in the short-term, to gain an advantage again after a forced sequence of moves.'**
-  String get puzzleThemeSacrificeDescription;
-
-  /// No description provided for @puzzleThemeShort.
-  ///
-  /// In en, this message translates to:
-  /// **'Short puzzle'**
-  String get puzzleThemeShort;
-
-  /// No description provided for @puzzleThemeShortDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Two moves to win.'**
-  String get puzzleThemeShortDescription;
-
-  /// No description provided for @puzzleThemeSkewer.
-  ///
-  /// In en, this message translates to:
-  /// **'Skewer'**
-  String get puzzleThemeSkewer;
-
-  /// No description provided for @puzzleThemeSkewerDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'A motif involving a high value piece being attacked, moving out the way, and allowing a lower value piece behind it to be captured or attacked, the inverse of a pin.'**
-  String get puzzleThemeSkewerDescription;
-
-  /// No description provided for @puzzleThemeSmotheredMate.
-  ///
-  /// In en, this message translates to:
-  /// **'Smothered mate'**
-  String get puzzleThemeSmotheredMate;
-
-  /// No description provided for @puzzleThemeSmotheredMateDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'A checkmate delivered by a knight in which the mated king is unable to move because it is surrounded (or smothered) by its own pieces.'**
-  String get puzzleThemeSmotheredMateDescription;
-
-  /// No description provided for @puzzleThemeSuperGM.
-  ///
-  /// In en, this message translates to:
-  /// **'Super GM games'**
-  String get puzzleThemeSuperGM;
-
-  /// No description provided for @puzzleThemeSuperGMDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Puzzles from games played by the best players in the world.'**
-  String get puzzleThemeSuperGMDescription;
-
-  /// No description provided for @puzzleThemeTrappedPiece.
-  ///
-  /// In en, this message translates to:
-  /// **'Trapped piece'**
-  String get puzzleThemeTrappedPiece;
-
-  /// No description provided for @puzzleThemeTrappedPieceDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'A piece is unable to escape capture as it has limited moves.'**
-  String get puzzleThemeTrappedPieceDescription;
-
-  /// No description provided for @puzzleThemeUnderPromotion.
-  ///
-  /// In en, this message translates to:
-  /// **'Underpromotion'**
-  String get puzzleThemeUnderPromotion;
-
-  /// No description provided for @puzzleThemeUnderPromotionDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Promotion to a knight, bishop, or rook.'**
-  String get puzzleThemeUnderPromotionDescription;
-
-  /// No description provided for @puzzleThemeVeryLong.
-  ///
-  /// In en, this message translates to:
-  /// **'Very long puzzle'**
-  String get puzzleThemeVeryLong;
-
-  /// No description provided for @puzzleThemeVeryLongDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Four moves or more to win.'**
-  String get puzzleThemeVeryLongDescription;
-
-  /// No description provided for @puzzleThemeXRayAttack.
-  ///
-  /// In en, this message translates to:
-  /// **'X-Ray attack'**
-  String get puzzleThemeXRayAttack;
-
-  /// No description provided for @puzzleThemeXRayAttackDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'A piece attacks or defends a square, through an enemy piece.'**
-  String get puzzleThemeXRayAttackDescription;
-
-  /// No description provided for @puzzleThemeZugzwang.
-  ///
-  /// In en, this message translates to:
-  /// **'Zugzwang'**
-  String get puzzleThemeZugzwang;
-
-  /// No description provided for @puzzleThemeZugzwangDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'The opponent is limited in the moves they can make, and all moves worsen their position.'**
-  String get puzzleThemeZugzwangDescription;
-
-  /// No description provided for @puzzleThemeHealthyMix.
-  ///
-  /// In en, this message translates to:
-  /// **'Healthy mix'**
-  String get puzzleThemeHealthyMix;
-
-  /// No description provided for @puzzleThemeHealthyMixDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'A bit of everything. You don\'t know what to expect, so you remain ready for anything! Just like in real games.'**
-  String get puzzleThemeHealthyMixDescription;
-
-  /// No description provided for @puzzleThemePlayerGames.
-  ///
-  /// In en, this message translates to:
-  /// **'Player games'**
-  String get puzzleThemePlayerGames;
-
-  /// No description provided for @puzzleThemePlayerGamesDescription.
-  ///
-  /// In en, this message translates to:
-  /// **'Lookup puzzles generated from your games, or from another player\'s games.'**
-  String get puzzleThemePlayerGamesDescription;
-
-  /// No description provided for @puzzleThemePuzzleDownloadInformation.
-  ///
-  /// In en, this message translates to:
-  /// **'These puzzles are in the public domain, and can be downloaded from {param}.'**
-  String puzzleThemePuzzleDownloadInformation(String param);
-
-  /// No description provided for @perfStatPerfStats.
-  ///
-  /// In en, this message translates to:
-  /// **'{param} stats'**
-  String perfStatPerfStats(String param);
-
-  /// No description provided for @perfStatViewTheGames.
-  ///
-  /// In en, this message translates to:
-  /// **'View the games'**
-  String get perfStatViewTheGames;
-
-  /// No description provided for @perfStatProvisional.
-  ///
-  /// In en, this message translates to:
-  /// **'provisional'**
-  String get perfStatProvisional;
-
-  /// No description provided for @perfStatNotEnoughRatedGames.
-  ///
-  /// In en, this message translates to:
-  /// **'Not enough rated games have been played to establish a reliable rating.'**
-  String get perfStatNotEnoughRatedGames;
-
-  /// No description provided for @perfStatProgressOverLastXGames.
-  ///
-  /// In en, this message translates to:
-  /// **'Progression over the last {param} games:'**
-  String perfStatProgressOverLastXGames(String param);
-
-  /// No description provided for @perfStatRatingDeviation.
-  ///
-  /// In en, this message translates to:
-  /// **'Rating deviation: {param}.'**
-  String perfStatRatingDeviation(String param);
-
-  /// No description provided for @perfStatRatingDeviationTooltip.
-  ///
-  /// In en, this message translates to:
-  /// **'Lower value means the rating is more stable. Above {param1}, the rating is considered provisional. To be included in the rankings, this value should be below {param2} (standard chess) or {param3} (variants).'**
-  String perfStatRatingDeviationTooltip(String param1, String param2, String param3);
-
-  /// No description provided for @perfStatTotalGames.
-  ///
-  /// In en, this message translates to:
-  /// **'Total games'**
-  String get perfStatTotalGames;
-
-  /// No description provided for @perfStatRatedGames.
-  ///
-  /// In en, this message translates to:
-  /// **'Rated games'**
-  String get perfStatRatedGames;
-
-  /// No description provided for @perfStatTournamentGames.
-  ///
-  /// In en, this message translates to:
-  /// **'Tournament games'**
-  String get perfStatTournamentGames;
-
-  /// No description provided for @perfStatBerserkedGames.
-  ///
-  /// In en, this message translates to:
-  /// **'Berserked games'**
-  String get perfStatBerserkedGames;
-
-  /// No description provided for @perfStatTimeSpentPlaying.
-  ///
-  /// In en, this message translates to:
-  /// **'Time spent playing'**
-  String get perfStatTimeSpentPlaying;
-
-  /// No description provided for @perfStatAverageOpponent.
-  ///
-  /// In en, this message translates to:
-  /// **'Average opponent'**
-  String get perfStatAverageOpponent;
-
-  /// No description provided for @perfStatVictories.
-  ///
-  /// In en, this message translates to:
-  /// **'Victories'**
-  String get perfStatVictories;
-
-  /// No description provided for @perfStatDefeats.
-  ///
-  /// In en, this message translates to:
-  /// **'Defeats'**
-  String get perfStatDefeats;
-
-  /// No description provided for @perfStatDisconnections.
-  ///
-  /// In en, this message translates to:
-  /// **'Disconnections'**
-  String get perfStatDisconnections;
-
-  /// No description provided for @perfStatNotEnoughGames.
-  ///
-  /// In en, this message translates to:
-  /// **'Not enough games played'**
-  String get perfStatNotEnoughGames;
-
-  /// No description provided for @perfStatHighestRating.
-  ///
-  /// In en, this message translates to:
-  /// **'Highest rating: {param}'**
-  String perfStatHighestRating(String param);
-
-  /// No description provided for @perfStatLowestRating.
-  ///
-  /// In en, this message translates to:
-  /// **'Lowest rating: {param}'**
-  String perfStatLowestRating(String param);
-
-  /// No description provided for @perfStatFromXToY.
-  ///
-  /// In en, this message translates to:
-  /// **'from {param1} to {param2}'**
-  String perfStatFromXToY(String param1, String param2);
-
-  /// No description provided for @perfStatWinningStreak.
-  ///
-  /// In en, this message translates to:
-  /// **'Winning streak'**
-  String get perfStatWinningStreak;
-
-  /// No description provided for @perfStatLosingStreak.
-  ///
-  /// In en, this message translates to:
-  /// **'Losing streak'**
-  String get perfStatLosingStreak;
-
-  /// No description provided for @perfStatLongestStreak.
-  ///
-  /// In en, this message translates to:
-  /// **'Longest streak: {param}'**
-  String perfStatLongestStreak(String param);
-
-  /// No description provided for @perfStatCurrentStreak.
-  ///
-  /// In en, this message translates to:
-  /// **'Current streak: {param}'**
-  String perfStatCurrentStreak(String param);
-
-  /// No description provided for @perfStatBestRated.
-  ///
-  /// In en, this message translates to:
-  /// **'Best rated victories'**
-  String get perfStatBestRated;
-
-  /// No description provided for @perfStatGamesInARow.
-  ///
-  /// In en, this message translates to:
-  /// **'Games played in a row'**
-  String get perfStatGamesInARow;
-
-  /// No description provided for @perfStatLessThanOneHour.
-  ///
-  /// In en, this message translates to:
-  /// **'Less than one hour between games'**
-  String get perfStatLessThanOneHour;
-
-  /// No description provided for @perfStatMaxTimePlaying.
-  ///
-  /// In en, this message translates to:
-  /// **'Max time spent playing'**
-  String get perfStatMaxTimePlaying;
-
-  /// No description provided for @perfStatNow.
-  ///
-  /// In en, this message translates to:
-  /// **'now'**
-  String get perfStatNow;
-
-  /// No description provided for @searchSearch.
-  ///
-  /// In en, this message translates to:
-  /// **'Search'**
-  String get searchSearch;
-
-  /// No description provided for @settingsSettings.
-  ///
-  /// In en, this message translates to:
-  /// **'Settings'**
-  String get settingsSettings;
-
-  /// No description provided for @settingsCloseAccount.
-  ///
-  /// In en, this message translates to:
-  /// **'Close account'**
-  String get settingsCloseAccount;
-
-  /// No description provided for @settingsManagedAccountCannotBeClosed.
-  ///
-  /// In en, this message translates to:
-  /// **'Your account is managed, and cannot be closed.'**
-  String get settingsManagedAccountCannotBeClosed;
-
-  /// No description provided for @settingsClosingIsDefinitive.
-  ///
-  /// In en, this message translates to:
-  /// **'Closing is definitive. There is no going back. Are you sure?'**
-  String get settingsClosingIsDefinitive;
-
-  /// No description provided for @settingsCantOpenSimilarAccount.
-  ///
-  /// In en, this message translates to:
-  /// **'You will not be allowed to open a new account with the same name, even if the case is different.'**
-  String get settingsCantOpenSimilarAccount;
-
-  /// No description provided for @settingsChangedMindDoNotCloseAccount.
-  ///
-  /// In en, this message translates to:
-  /// **'I changed my mind, don\'t close my account'**
-  String get settingsChangedMindDoNotCloseAccount;
-
-  /// No description provided for @settingsCloseAccountExplanation.
-  ///
-  /// In en, this message translates to:
-  /// **'Are you sure you want to close your account? Closing your account is a permanent decision. You will NEVER be able to log in EVER AGAIN.'**
-  String get settingsCloseAccountExplanation;
-
-  /// No description provided for @settingsThisAccountIsClosed.
-  ///
-  /// In en, this message translates to:
-  /// **'This account is closed.'**
-  String get settingsThisAccountIsClosed;
-
-  /// No description provided for @streamerLichessStreamers.
-  ///
-  /// In en, this message translates to:
-  /// **'Lichess streamers'**
-  String get streamerLichessStreamers;
-
   /// No description provided for @stormMoveToStart.
   ///
   /// In en, this message translates to:
@@ -7816,6 +7804,12 @@ abstract class AppLocalizations {
   /// **'{count, plural, =0{Played one run of {param2}} =1{Played one run of {param2}} other{Played {count} runs of {param2}}}'**
   String stormPlayedNbRunsOfPuzzleStorm(int count, String param2);
 
+  /// No description provided for @streamerLichessStreamers.
+  ///
+  /// In en, this message translates to:
+  /// **'Lichess streamers'**
+  String get streamerLichessStreamers;
+
   /// No description provided for @studyShareAndExport.
   ///
   /// In en, this message translates to:
@@ -7827,18 +7821,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Start'**
   String get studyStart;
-
-  /// No description provided for @broadcastBroadcasts.
-  ///
-  /// In en, this message translates to:
-  /// **'Broadcasts'**
-  String get broadcastBroadcasts;
-
-  /// No description provided for @broadcastStartDate.
-  ///
-  /// In en, this message translates to:
-  /// **'Start date in your own timezone'**
-  String get broadcastStartDate;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

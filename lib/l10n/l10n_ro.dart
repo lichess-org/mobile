@@ -242,10 +242,10 @@ class AppLocalizationsRo extends AppLocalizations {
   }
 
   @override
-  String get contactContact => 'Contact';
+  String get broadcastBroadcasts => 'Transmisiuni';
 
   @override
-  String get contactContactLichess => 'Contactează Lichess';
+  String get broadcastStartDate => 'Data de începere conform fusului tău orar';
 
   @override
   String challengeChallengesX(String param1) {
@@ -327,6 +327,1017 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get challengeInviteLichessUser => 'Sau invitați un utilizator Lichess:';
+
+  @override
+  String get contactContact => 'Contact';
+
+  @override
+  String get contactContactLichess => 'Contactează Lichess';
+
+  @override
+  String get patronDonate => 'Donează';
+
+  @override
+  String get patronLichessPatron => 'Patron Lichess';
+
+  @override
+  String perfStatPerfStats(String param) {
+    return 'Statistici $param';
+  }
+
+  @override
+  String get perfStatViewTheGames => 'Vezi jocurile';
+
+  @override
+  String get perfStatProvisional => 'provizoriu';
+
+  @override
+  String get perfStatNotEnoughRatedGames => 'Nu au fost jucate destule meciuri oficiale pentru a stabili un rating solid.';
+
+  @override
+  String perfStatProgressOverLastXGames(String param) {
+    return 'Progres în ultimele $param meciuri:';
+  }
+
+  @override
+  String perfStatRatingDeviation(String param) {
+    return 'Devierea ratingului: $param.';
+  }
+
+  @override
+  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
+    return 'O valoare mai mică înseamnă că ratingul este mai stabil. Peste $param1, ratingul este considerat provizoriu. Pentru a fi inclus în clasament, această valoare ar trebui să fie sub $param2 (șah standard) sau $param3 (variante).';
+  }
+
+  @override
+  String get perfStatTotalGames => 'Meciuri totale';
+
+  @override
+  String get perfStatRatedGames => 'Meciuri oficiale';
+
+  @override
+  String get perfStatTournamentGames => 'Meciuri de turnee';
+
+  @override
+  String get perfStatBerserkedGames => 'Meciuri berserked';
+
+  @override
+  String get perfStatTimeSpentPlaying => 'Timp petrecut jucând';
+
+  @override
+  String get perfStatAverageOpponent => 'Adversar în medie';
+
+  @override
+  String get perfStatVictories => 'Victorii';
+
+  @override
+  String get perfStatDefeats => 'Înfrângeri';
+
+  @override
+  String get perfStatDisconnections => 'Deconectări';
+
+  @override
+  String get perfStatNotEnoughGames => 'N-au fost jucate destule meciuri';
+
+  @override
+  String perfStatHighestRating(String param) {
+    return 'Cel mai mare rating: $param';
+  }
+
+  @override
+  String perfStatLowestRating(String param) {
+    return 'Cel mai mic rating: $param';
+  }
+
+  @override
+  String perfStatFromXToY(String param1, String param2) {
+    return 'de la $param1 la $param2';
+  }
+
+  @override
+  String get perfStatWinningStreak => 'Victorii consecutive';
+
+  @override
+  String get perfStatLosingStreak => 'Înfrângeri consecutive';
+
+  @override
+  String perfStatLongestStreak(String param) {
+    return 'Cea mai lungă secvență: $param';
+  }
+
+  @override
+  String perfStatCurrentStreak(String param) {
+    return 'Secvența curentă: $param';
+  }
+
+  @override
+  String get perfStatBestRated => 'Cele mai bune victorii oficiale';
+
+  @override
+  String get perfStatGamesInARow => 'Meciuri jucate consecutiv';
+
+  @override
+  String get perfStatLessThanOneHour => 'Mai puțin de o oră între meciuri';
+
+  @override
+  String get perfStatMaxTimePlaying => 'Cel mai mult timp petrecut jucând';
+
+  @override
+  String get perfStatNow => 'acum';
+
+  @override
+  String get preferencesPreferences => 'Preferințe';
+
+  @override
+  String get preferencesDisplay => 'Afișare';
+
+  @override
+  String get preferencesPrivacy => 'Confidențialitate';
+
+  @override
+  String get preferencesNotifications => 'Notificări';
+
+  @override
+  String get preferencesPieceAnimation => 'Animația piesei';
+
+  @override
+  String get preferencesMaterialDifference => 'Diferență de piese capturate';
+
+  @override
+  String get preferencesBoardHighlights => 'Evidențiază pe tablă (ultima mutare și șahul)';
+
+  @override
+  String get preferencesPieceDestinations => 'Destinația piesei (mutări valide și premutări)';
+
+  @override
+  String get preferencesBoardCoordinates => 'Coordonatele tablei (A-H, 1-8)';
+
+  @override
+  String get preferencesMoveListWhilePlaying => 'Lista de mutări în timpul jocului';
+
+  @override
+  String get preferencesPgnPieceNotation => 'Notația mutării';
+
+  @override
+  String get preferencesChessPieceSymbol => 'Simbolul piesei de șah';
+
+  @override
+  String get preferencesPgnLetter => 'Literă (K, Q, R, B, N)';
+
+  @override
+  String get preferencesZenMode => 'Modul Zen';
+
+  @override
+  String get preferencesShowPlayerRatings => 'Arată evaluările jucătorului';
+
+  @override
+  String get preferencesShowFlairs => 'Arată pictograma personalizată a jucătorului';
+
+  @override
+  String get preferencesExplainShowPlayerRatings => 'Acest lucru permite ascunderea tuturor ratingurilor de pe site, pentru a ajuta la concentrarea pe jocul de șah. Jocurile pot fi evaluate, această setare este doar despre ce se poate vedea.';
+
+  @override
+  String get preferencesDisplayBoardResizeHandle => 'Arată indicatorul de redimensionare a tablei';
+
+  @override
+  String get preferencesOnlyOnInitialPosition => 'Doar inainte de prima mutare';
+
+  @override
+  String get preferencesInGameOnly => 'Doar în joc';
+
+  @override
+  String get preferencesChessClock => 'Ceasul de șah';
+
+  @override
+  String get preferencesTenthsOfSeconds => 'Zecimi de secundă';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'Când rămân mai puțin de 10 secunde';
+
+  @override
+  String get preferencesHorizontalGreenProgressBars => 'Bare orizontale verzi cu progresul';
+
+  @override
+  String get preferencesSoundWhenTimeGetsCritical => 'Sunet când timpul e aproape de expirare';
+
+  @override
+  String get preferencesGiveMoreTime => 'Adaugă timp adversarului';
+
+  @override
+  String get preferencesGameBehavior => 'Comportamentul din joc';
+
+  @override
+  String get preferencesHowDoYouMovePieces => 'Cum mutați piesele?';
+
+  @override
+  String get preferencesClickTwoSquares => 'Apasă pe două pătrățele';
+
+  @override
+  String get preferencesDragPiece => 'Trage o piesă';
+
+  @override
+  String get preferencesBothClicksAndDrag => 'Ambele';
+
+  @override
+  String get preferencesPremovesPlayingDuringOpponentTurn => 'Mutare anticipată (mută pe timpul adversarului)';
+
+  @override
+  String get preferencesTakebacksWithOpponentApproval => 'Dă înapoi (cu aprobarea adversarului)';
+
+  @override
+  String get preferencesInCasualGamesOnly => 'În jocuri amicale';
+
+  @override
+  String get preferencesPromoteToQueenAutomatically => 'Promovează automat în damă';
+
+  @override
+  String get preferencesExplainPromoteToQueenAutomatically => 'Țineți apăsată tasta <ctrl> în timp ce promovați un pion pentru a dezactiva temporar promovarea automată';
+
+  @override
+  String get preferencesWhenPremoving => 'În cazul mutărilor anticipate';
+
+  @override
+  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Declară automat o remiză în cazul a trei repetări';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Când timpul rămas e mai scurt de 30 de secunde';
+
+  @override
+  String get preferencesMoveConfirmation => 'Confirmare mutare';
+
+  @override
+  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Poate fi dezactivat în timpul unui joc cu meniul de tablă';
+
+  @override
+  String get preferencesInCorrespondenceGames => 'În jocuri prin corespondență';
+
+  @override
+  String get preferencesCorrespondenceAndUnlimited => 'Corespondență sau timp nelimitat';
+
+  @override
+  String get preferencesConfirmResignationAndDrawOffers => 'Confirmă abandonarea și oferirea remizei';
+
+  @override
+  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Metoda prin care faci rocada';
+
+  @override
+  String get preferencesCastleByMovingTwoSquares => 'Mută regele două pătrățele';
+
+  @override
+  String get preferencesCastleByMovingOntoTheRook => 'Mută regele pe turn';
+
+  @override
+  String get preferencesInputMovesWithTheKeyboard => 'Introdu mutări folosind tastatura';
+
+  @override
+  String get preferencesInputMovesWithVoice => 'Execută mișcările cu vocea';
+
+  @override
+  String get preferencesSnapArrowsToValidMoves => 'Trage săgețile la mutările valide';
+
+  @override
+  String get preferencesSayGgWpAfterLosingOrDrawing => 'Spune \"Joc bun, bine jucat\" la înfrângere sau la remiză';
+
+  @override
+  String get preferencesYourPreferencesHaveBeenSaved => 'Preferințele tale au fost salvate';
+
+  @override
+  String get preferencesScrollOnTheBoardToReplayMoves => 'Derulează pe tablă pentru a rejuca mutările';
+
+  @override
+  String get preferencesCorrespondenceEmailNotification => 'Notificare zilnică prin email cu lista jocurilor prin corespondență';
+
+  @override
+  String get preferencesNotifyStreamStart => 'Un streamer e live';
+
+  @override
+  String get preferencesNotifyInboxMsg => 'Mesaj nou';
+
+  @override
+  String get preferencesNotifyForumMention => 'Un comentariu din forum vă menționează';
+
+  @override
+  String get preferencesNotifyInvitedStudy => 'Invitație la un studiu';
+
+  @override
+  String get preferencesNotifyGameEvent => 'Actualizări la jocurile prin corespondență';
+
+  @override
+  String get preferencesNotifyChallenge => 'Provocări';
+
+  @override
+  String get preferencesNotifyTournamentSoon => 'Turneul începe în curând';
+
+  @override
+  String get preferencesNotifyTimeAlarm => 'Timpul rămas la jocurile prin corespondenţă e scurt';
+
+  @override
+  String get preferencesNotifyBell => 'Notificare în Lichess';
+
+  @override
+  String get preferencesNotifyPush => 'Notificare dispozitiv când nu ești în Lichess';
+
+  @override
+  String get preferencesNotifyWeb => 'Navigator';
+
+  @override
+  String get preferencesNotifyDevice => 'Dispozitiv';
+
+  @override
+  String get preferencesBellNotificationSound => 'Sunet de notificare';
+
+  @override
+  String get puzzlePuzzles => 'Probleme de șah';
+
+  @override
+  String get puzzlePuzzleThemes => 'Teme pentru problemele de șah';
+
+  @override
+  String get puzzleRecommended => 'Recomandare';
+
+  @override
+  String get puzzlePhases => 'Faze';
+
+  @override
+  String get puzzleMotifs => 'Motive';
+
+  @override
+  String get puzzleAdvanced => 'Avansat';
+
+  @override
+  String get puzzleLengths => 'Lungimi';
+
+  @override
+  String get puzzleMates => 'Mate';
+
+  @override
+  String get puzzleGoals => 'Obiective';
+
+  @override
+  String get puzzleOrigin => 'Origine';
+
+  @override
+  String get puzzleSpecialMoves => 'Mutări speciale';
+
+  @override
+  String get puzzleDidYouLikeThisPuzzle => 'Ți-a plăcut această problemă?';
+
+  @override
+  String get puzzleVoteToLoadNextOne => 'Votează pentru a-l încărca pe următorul!';
+
+  @override
+  String get puzzleUpVote => 'Îmi place';
+
+  @override
+  String get puzzleDownVote => 'Vot negativ';
+
+  @override
+  String get puzzleYourPuzzleRatingWillNotChange => 'Evaluarea ta la puzzle-uri nu se va schimba. Iți amintim că puzzle-urile nu sunt o competiție. Evaluarea ajută la selectarea celor mai bune puzzle-uri care corespund nivelului tău.';
+
+  @override
+  String get puzzleFindTheBestMoveForWhite => 'Găsiți cea mai bună mutare pentru alb.';
+
+  @override
+  String get puzzleFindTheBestMoveForBlack => 'Găsiți cea mai bună mutare pentru negru.';
+
+  @override
+  String get puzzleToGetPersonalizedPuzzles => 'Pentru a primi probleme de șah personalizate:';
+
+  @override
+  String puzzlePuzzleId(String param) {
+    return 'Problema de șah $param';
+  }
+
+  @override
+  String get puzzlePuzzleOfTheDay => 'Problema zilei';
+
+  @override
+  String get puzzleDailyPuzzle => 'Puzzle Zilnic';
+
+  @override
+  String get puzzleClickToSolve => 'Dă click pentru a rezolva';
+
+  @override
+  String get puzzleGoodMove => 'Mutare bună';
+
+  @override
+  String get puzzleBestMove => 'Cea mai bună mutare!';
+
+  @override
+  String get puzzleKeepGoing => 'Continuați cu următoarea mutare…';
+
+  @override
+  String get puzzlePuzzleSuccess => 'Succes!';
+
+  @override
+  String get puzzlePuzzleComplete => 'Puzzle complet!';
+
+  @override
+  String get puzzleByOpenings => 'După deschideri';
+
+  @override
+  String get puzzlePuzzlesByOpenings => 'Puzzle-uri după deschidere';
+
+  @override
+  String get puzzleOpeningsYouPlayedTheMost => 'Deschideri pe care le-ai jucat cel mai mult în meciurile evaluate';
+
+  @override
+  String get puzzleUseFindInPage => 'Folosește \"Găsește în pagină\" în meniul browser-ului pentru a găsi deschiderea ta preferată!';
+
+  @override
+  String get puzzleUseCtrlF => 'Folosește Ctrl+f pentru a găsi deschiderea favorită!';
+
+  @override
+  String get puzzleNotTheMove => 'Nu este asta mișcarea!';
+
+  @override
+  String get puzzleTrySomethingElse => 'Încercă altceva.';
+
+  @override
+  String puzzleRatingX(String param) {
+    return 'Scor: $param';
+  }
+
+  @override
+  String get puzzleHidden => 'ascuns';
+
+  @override
+  String puzzleFromGameLink(String param) {
+    return 'Din partida $param';
+  }
+
+  @override
+  String get puzzleContinueTraining => 'Continuați antrenamentul';
+
+  @override
+  String get puzzleDifficultyLevel => 'Nivel de dificultate';
+
+  @override
+  String get puzzleNormal => 'Normal';
+
+  @override
+  String get puzzleEasier => 'Mai ușor';
+
+  @override
+  String get puzzleEasiest => 'Cel mai ușor';
+
+  @override
+  String get puzzleHarder => 'Mai Greu';
+
+  @override
+  String get puzzleHardest => 'Cel mai greu';
+
+  @override
+  String get puzzleExample => 'Exemplu';
+
+  @override
+  String get puzzleAddAnotherTheme => 'Adăugați o altă temă';
+
+  @override
+  String get puzzleNextPuzzle => 'Puzzle-ul următor';
+
+  @override
+  String get puzzleJumpToNextPuzzleImmediately => 'Sari imediat la problema următoare';
+
+  @override
+  String get puzzlePuzzleDashboard => 'Panoul de control pentru probleme de șah';
+
+  @override
+  String get puzzleImprovementAreas => 'Zone de îmbunătățit';
+
+  @override
+  String get puzzleStrengths => 'Puncte tari';
+
+  @override
+  String get puzzleHistory => 'Istoric probleme de șah';
+
+  @override
+  String get puzzleSolved => 'rezolvat';
+
+  @override
+  String get puzzleFailed => 'eșuat';
+
+  @override
+  String get puzzleStreakDescription => 'Rezolvă probleme din ce în ce mai grele și construiește un șir de victorii consecutive. Nu există limită de timp, deci nu te grăbi. O mișcare greșită și jocul s-a terminat! Dar poți sări peste o mutare în fiecare sesiune.';
+
+  @override
+  String puzzleYourStreakX(String param) {
+    return 'Probleme consecutive: $param';
+  }
+
+  @override
+  String get puzzleStreakSkipExplanation => 'Sări peste această mutare pentru a-ți păstra șirul de probleme consecutive reușite! Funcționează o singură dată pe sesiune.';
+
+  @override
+  String get puzzleContinueTheStreak => 'Continuă secvența';
+
+  @override
+  String get puzzleNewStreak => 'Începe o nouă secvență';
+
+  @override
+  String get puzzleFromMyGames => 'Din jocurile mele';
+
+  @override
+  String get puzzleLookupOfPlayer => 'Caută puzzle-uri din jocurile unui jucător';
+
+  @override
+  String puzzleFromXGames(String param) {
+    return 'Puzzle-uri din jocurile $param';
+  }
+
+  @override
+  String get puzzleSearchPuzzles => 'Caută puzzle-uri';
+
+  @override
+  String get puzzleFromMyGamesNone => 'Nu ai nici o problemă în baza de date, dar Lichess tot te apreciază foarte mult.\nJoacă jocuri rapide și clasice pentru a crește șansele de a vedea adăugată o problemă extrasă din partidele tale!';
+
+  @override
+  String puzzleFromXGamesFound(String param1, String param2) {
+    return '$param1 probleme găsite în $param2 jocuri';
+  }
+
+  @override
+  String get puzzlePuzzleDashboardDescription => 'Antreneaza-te, analizează, fii mai bun';
+
+  @override
+  String puzzlePercentSolved(String param) {
+    return '$param rezolvate';
+  }
+
+  @override
+  String get puzzleNoPuzzlesToShow => 'Nimic de arătat, joacă mai întâi câteva puzzle-uri!';
+
+  @override
+  String get puzzleImprovementAreasDescription => 'Antreneaza-te pentru a-ti optimiza progresul!';
+
+  @override
+  String get puzzleStrengthDescription => 'Obțineți cele mai bune rezultate la aceste teme';
+
+  @override
+  String puzzlePlayedXTimes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Jucat de $count ori',
+      few: 'Jucat de $count ori',
+      one: 'Jucat $count dată',
+      zero: 'Jucat $count dată',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsBelowYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count de puncte sub ratingul tău de puzzle-uri',
+      few: '$count puncte sub ratingul tău de puzzle-uri',
+      one: 'Un punct sub ratingul tău de puzzle-uri',
+      zero: 'Un punct sub ratingul tău de puzzle-uri',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsAboveYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count de puncte deasupra ratingului tău de puzzle-uri',
+      few: '$count puncte deasupra ratingului tău de puzzle-uri',
+      one: 'Un punct deasupra ratingului tău de puzzle-uri',
+      zero: 'Un punct deasupra ratingului tău de puzzle-uri',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPlayed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count jucate',
+      few: '$count jucate',
+      one: '$count jucat',
+      zero: '$count jucat',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbToReplay(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count de rejucat',
+      few: '$count de rejucat',
+      one: '$count de rejucat',
+      zero: '$count de rejucat',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get puzzleThemeAdvancedPawn => 'Pion avansat';
+
+  @override
+  String get puzzleThemeAdvancedPawnDescription => 'Unul dintre pionii care este avansat in teritoriul inamic, poate amenință să promoveze.';
+
+  @override
+  String get puzzleThemeAdvantage => 'Avantaj';
+
+  @override
+  String get puzzleThemeAdvantageDescription => 'Profită de șansa ta pentru a obține un avantaj decisiv. (200cp ≤ eval ≤ 600cp)';
+
+  @override
+  String get puzzleThemeAnastasiaMate => 'Mat-ul Anastasiei';
+
+  @override
+  String get puzzleThemeAnastasiaMateDescription => 'Un cal şi o tură sau o regină fac echipă pentru a prinde regele opus între marginea tablei şi o piesă aliată.';
+
+  @override
+  String get puzzleThemeArabianMate => 'Mat-ul arab';
+
+  @override
+  String get puzzleThemeArabianMateDescription => 'Un cal și o tură au făcut echipă să prinda regele într-un colț de tablă.';
+
+  @override
+  String get puzzleThemeAttackingF2F7 => 'Atac pe f2 sau f7';
+
+  @override
+  String get puzzleThemeAttackingF2F7Description => 'Un atac concentrat pe pionul f2 sau f7, cum ar fi în deschiderea ficat prăjit (atacul Fegatello).';
+
+  @override
+  String get puzzleThemeAttraction => 'Atragere';
+
+  @override
+  String get puzzleThemeAttractionDescription => 'Un schimb sau sacrificiu care încurajează sau forțează o piesă adversară pe un pătrat care permite o tactică ulterioară.';
+
+  @override
+  String get puzzleThemeBackRankMate => 'Mat pe rândul din spate';
+
+  @override
+  String get puzzleThemeBackRankMateDescription => 'Dă șah mat regelui pe rândul inițial, când e blocat acolo de propriele lui piese.';
+
+  @override
+  String get puzzleThemeBishopEndgame => 'Final cu nebuni';
+
+  @override
+  String get puzzleThemeBishopEndgameDescription => 'Un final de partidă doar cu nebuni și pioni.';
+
+  @override
+  String get puzzleThemeBodenMate => 'Mat-ul lui Boden';
+
+  @override
+  String get puzzleThemeBodenMateDescription => 'Doi nebuni care atacă pe diagonale încrucișate livrează mat-ul unui rege blocat de piese aliate.';
+
+  @override
+  String get puzzleThemeCastling => 'Rocada';
+
+  @override
+  String get puzzleThemeCastlingDescription => 'Adu regele în siguranță și mută tura pentru atac.';
+
+  @override
+  String get puzzleThemeCapturingDefender => 'Capturează apărătorul';
+
+  @override
+  String get puzzleThemeCapturingDefenderDescription => 'Capturarea unei piese esențiale apărării alteia, permițând captura piesei acum neapărată la o mutare ulterioară.';
+
+  @override
+  String get puzzleThemeCrushing => 'Zdrobitor';
+
+  @override
+  String get puzzleThemeCrushingDescription => 'Observă gafa adversarului pentru a obține un avantaj zdrobitor. (eval ≥ 600cp)';
+
+  @override
+  String get puzzleThemeDoubleBishopMate => 'Mat-ul cu doi nebuni';
+
+  @override
+  String get puzzleThemeDoubleBishopMateDescription => 'Doi nebuni care atacă pe diagonale adiacente livrează mat-ul unui rege blocat de piese aliate.';
+
+  @override
+  String get puzzleThemeDovetailMate => 'Mat-ul dovertail';
+
+  @override
+  String get puzzleThemeDovetailMateDescription => 'O regină livrează mat-ul unui rege adiacent, care are doar două patrate de scapare dar sunt blocate de piese aliate.';
+
+  @override
+  String get puzzleThemeEquality => 'Egalitate';
+
+  @override
+  String get puzzleThemeEqualityDescription => 'Întoarce-te dintr-o poziție de pierdere și asigură o remiză sau o poziție echilibrată. (eval ≤ 200cp)';
+
+  @override
+  String get puzzleThemeKingsideAttack => 'Atac pe partea regelui';
+
+  @override
+  String get puzzleThemeKingsideAttackDescription => 'Un atac al regelui adversarului, după ce a făcut rocada pe partea regelui.';
+
+  @override
+  String get puzzleThemeClearance => 'Îndepărtare';
+
+  @override
+  String get puzzleThemeClearanceDescription => 'O mutare, adeseori cu tempo, care eliberează un pătrat, o coloană sau o diagonală pentru o idee tactică ulterioară.';
+
+  @override
+  String get puzzleThemeDefensiveMove => 'Mutare defensivă';
+
+  @override
+  String get puzzleThemeDefensiveMoveDescription => 'O mutare precisă sau o secvență de mutări care e necesară pentru a evita pierderea pieselor sau a unui alt avantaj.';
+
+  @override
+  String get puzzleThemeDeflection => 'Deviere';
+
+  @override
+  String get puzzleThemeDeflectionDescription => 'O mutare care distrage o piesă adversară de la o altă funcție pe care o îndeplinește, cum ar fi apărarea unui pătrat esențial.';
+
+  @override
+  String get puzzleThemeDiscoveredAttack => 'Atac prin descoperire';
+
+  @override
+  String get puzzleThemeDiscoveredAttackDescription => 'Mutarea unei piese care bloca anterior un atac de la o altă piesă cu rază lungă de acțiune, cum ar fi un cal din calea unui turn.';
+
+  @override
+  String get puzzleThemeDoubleCheck => 'Șah dublu';
+
+  @override
+  String get puzzleThemeDoubleCheckDescription => 'Șahul cu două piese deodată, ca rezultat al unui atac descoperit unde și piesa mutată, și cea descoperită atacă regele adversarului.';
+
+  @override
+  String get puzzleThemeEndgame => 'Final de partidă';
+
+  @override
+  String get puzzleThemeEndgameDescription => 'O tactică în ultima etapă a jocului.';
+
+  @override
+  String get puzzleThemeEnPassantDescription => 'O tactică cu regula en passant, unde un pion poate captura un pion adversar care l-a întrecut folosind mutarea sa inițială de două pătrate.';
+
+  @override
+  String get puzzleThemeExposedKing => 'Rege expus';
+
+  @override
+  String get puzzleThemeExposedKingDescription => 'O tactică ce implică un rege cu puțini apărători în jurul său, adeseori rezultând în șah mat.';
+
+  @override
+  String get puzzleThemeFork => 'Bifurcare';
+
+  @override
+  String get puzzleThemeForkDescription => 'O mutare unde piesa mutată atacă două piese adversare deodată.';
+
+  @override
+  String get puzzleThemeHangingPiece => 'Piesă neprotejată';
+
+  @override
+  String get puzzleThemeHangingPieceDescription => 'O tactică ce implică o piesă adversară care e neprotejată sau apărată insuficient și e liberă pentru capturare.';
+
+  @override
+  String get puzzleThemeHookMate => 'Mat-ul hook';
+
+  @override
+  String get puzzleThemeHookMateDescription => 'Șah mat cu o tură, un cal și un pion alături de un pion inamic pentru a limita metodele de scăpare ale regelui.';
+
+  @override
+  String get puzzleThemeInterference => 'Obstacol';
+
+  @override
+  String get puzzleThemeInterferenceDescription => 'Mutarea unei piese între două piese adversare pentru a lăsa una sau ambele piese adversare neprotejate, cum ar fi un cal pe un pătrat protejat dintre două ture.';
+
+  @override
+  String get puzzleThemeIntermezzo => 'Intermezzo';
+
+  @override
+  String get puzzleThemeIntermezzoDescription => 'În loc să faci mutarea așteptată, mai întâi intervii cu o altă mutare care e o amenințare imediată, căreia adversarul trebuie să-i răspundă. Cunoscut și ca \"Zwischenzug\" sau \"In between\".';
+
+  @override
+  String get puzzleThemeKnightEndgame => 'Final cu cai';
+
+  @override
+  String get puzzleThemeKnightEndgameDescription => 'Un final de partidă doar cu pioni și cai.';
+
+  @override
+  String get puzzleThemeLong => 'Puzzle lung';
+
+  @override
+  String get puzzleThemeLongDescription => 'Trei mutări pentru a câștiga.';
+
+  @override
+  String get puzzleThemeMaster => 'Partidele maeștrilor';
+
+  @override
+  String get puzzleThemeMasterDescription => 'Puzzle-uri din partidele jucate de jucători care au primit titluri FIDE.';
+
+  @override
+  String get puzzleThemeMasterVsMaster => 'Partide maestru vs maestru';
+
+  @override
+  String get puzzleThemeMasterVsMasterDescription => 'Puzzle-uri din partidele jucate între doi jucători care au primit titluri FIDE.';
+
+  @override
+  String get puzzleThemeMate => 'Mat';
+
+  @override
+  String get puzzleThemeMateDescription => 'Câștigă jocul cu stil.';
+
+  @override
+  String get puzzleThemeMateIn1 => 'Mat din 1';
+
+  @override
+  String get puzzleThemeMateIn1Description => 'Dă mat dintr-o mutare.';
+
+  @override
+  String get puzzleThemeMateIn2 => 'Mat din 2';
+
+  @override
+  String get puzzleThemeMateIn2Description => 'Dă mat din două mutări.';
+
+  @override
+  String get puzzleThemeMateIn3 => 'Mat din 3';
+
+  @override
+  String get puzzleThemeMateIn3Description => 'Dă mat din trei mutări.';
+
+  @override
+  String get puzzleThemeMateIn4 => 'Mat din 4';
+
+  @override
+  String get puzzleThemeMateIn4Description => 'Dă mat din patru mutări.';
+
+  @override
+  String get puzzleThemeMateIn5 => 'Mat din 5 sau mai multe';
+
+  @override
+  String get puzzleThemeMateIn5Description => 'Găsește o secvență lungă de mat.';
+
+  @override
+  String get puzzleThemeMiddlegame => 'Mijlocul jocului';
+
+  @override
+  String get puzzleThemeMiddlegameDescription => 'O tactică în a doua etapă a jocului.';
+
+  @override
+  String get puzzleThemeOneMove => 'Puzzle de o mutare';
+
+  @override
+  String get puzzleThemeOneMoveDescription => 'Un puzzle care are doar o mutare.';
+
+  @override
+  String get puzzleThemeOpening => 'Deschidere';
+
+  @override
+  String get puzzleThemeOpeningDescription => 'O tactică în prima etapă a jocului.';
+
+  @override
+  String get puzzleThemePawnEndgame => 'Final cu pioni';
+
+  @override
+  String get puzzleThemePawnEndgameDescription => 'Un final de partidă doar cu pioni.';
+
+  @override
+  String get puzzleThemePin => 'Blocare';
+
+  @override
+  String get puzzleThemePinDescription => 'O tactică cu blocări, unde o piesă nu se poate mișca fără a descoperi un atac asupra unei piese mai valoroase.';
+
+  @override
+  String get puzzleThemePromotion => 'Promovare';
+
+  @override
+  String get puzzleThemePromotionDescription => 'Un pion care promovează sau amenință să promoveze e cheia acestei tactici.';
+
+  @override
+  String get puzzleThemeQueenEndgame => 'Final cu regine';
+
+  @override
+  String get puzzleThemeQueenEndgameDescription => 'Un final de partidă doar cu regine și pioni.';
+
+  @override
+  String get puzzleThemeQueenRookEndgame => 'Final cu regine și turnuri';
+
+  @override
+  String get puzzleThemeQueenRookEndgameDescription => 'Un final de partidă doar cu regine, turnuri și pioni.';
+
+  @override
+  String get puzzleThemeQueensideAttack => 'Atac pe partea reginei';
+
+  @override
+  String get puzzleThemeQueensideAttackDescription => 'Un atac asupra regelui adversarului, după ce a făcut rocada pe partea reginei.';
+
+  @override
+  String get puzzleThemeQuietMove => 'Mutare silențioasă';
+
+  @override
+  String get puzzleThemeQuietMoveDescription => 'O mutare care nu capturează sau dă șah, dar care pregătește o amenințare inevitabilă pentru o mutare ulterioară.';
+
+  @override
+  String get puzzleThemeRookEndgame => 'Final cu turnuri';
+
+  @override
+  String get puzzleThemeRookEndgameDescription => 'Un final de partidă doar cu turnuri și pioni.';
+
+  @override
+  String get puzzleThemeSacrifice => 'Sacrificiu';
+
+  @override
+  String get puzzleThemeSacrificeDescription => 'O tactică care implică renunțarea la material pe termen scurt pentru a câștiga un avantaj din nou după o secvență forțată de mutări.';
+
+  @override
+  String get puzzleThemeShort => 'Puzzle scurt';
+
+  @override
+  String get puzzleThemeShortDescription => 'Două mutări pentru a câștiga.';
+
+  @override
+  String get puzzleThemeSkewer => 'Skewer';
+
+  @override
+  String get puzzleThemeSkewerDescription => 'Un motiv care implică atacarea unei piese de mare valoare, mutarea înafara traseului, și permițând capturarea sau atacarea unei piese cu valoare inferioară în spatele ei, inversul unui pin.';
+
+  @override
+  String get puzzleThemeSmotheredMate => 'Mat sufocat';
+
+  @override
+  String get puzzleThemeSmotheredMateDescription => 'Un șah mat livrat de un cal în care regele împerechiat este incapabil să se miște deoarece este înconjurat (sau sufocat) de piesele lui aliate.';
+
+  @override
+  String get puzzleThemeSuperGM => 'Partidele Super GM';
+
+  @override
+  String get puzzleThemeSuperGMDescription => 'Puzzle-uri din partidele jucate de cei mai buni jucători din lume.';
+
+  @override
+  String get puzzleThemeTrappedPiece => 'Piesa blocată';
+
+  @override
+  String get puzzleThemeTrappedPieceDescription => 'O piesa este incapabilă de a scăpa din capturarea deoarece are mutări limitate.';
+
+  @override
+  String get puzzleThemeUnderPromotion => 'Subpromovare';
+
+  @override
+  String get puzzleThemeUnderPromotionDescription => 'Promovează într-un cal, un nebun sau o tură.';
+
+  @override
+  String get puzzleThemeVeryLong => 'Problemă foarte lungă';
+
+  @override
+  String get puzzleThemeVeryLongDescription => 'Patru mutări sau mai multe pentru a câștiga.';
+
+  @override
+  String get puzzleThemeXRayAttack => 'Atac raze x';
+
+  @override
+  String get puzzleThemeXRayAttackDescription => 'O piesă atacă sau apară un patrat, printr-o piesă inamică.';
+
+  @override
+  String get puzzleThemeZugzwang => 'Zugzwang';
+
+  @override
+  String get puzzleThemeZugzwangDescription => 'Adversarul este limitat în mișcările pe care le poate face, iar toate mișcările îi înrăutățesc poziția.';
+
+  @override
+  String get puzzleThemeHealthyMix => 'Amestec sănătos';
+
+  @override
+  String get puzzleThemeHealthyMixDescription => 'Un pic din toate. Nu știi la ce să te aștepți, așa că rămâi gata pentru orice! La fel ca în jocurile reale.';
+
+  @override
+  String get puzzleThemePlayerGames => 'Partide jucători';
+
+  @override
+  String get puzzleThemePlayerGamesDescription => 'Caută puzzle-uri generate din partidele tale sau din partidele unui alt jucător.';
+
+  @override
+  String puzzleThemePuzzleDownloadInformation(String param) {
+    return 'Aceste puzzle-uri sunt în domeniul public și pot fi descărcate de la $param.';
+  }
+
+  @override
+  String get searchSearch => 'Căutare';
+
+  @override
+  String get settingsSettings => 'Setări';
+
+  @override
+  String get settingsCloseAccount => 'Închide contul';
+
+  @override
+  String get settingsManagedAccountCannotBeClosed => 'Contul tău este gestionat și nu poate fi închis.';
+
+  @override
+  String get settingsClosingIsDefinitive => 'Închiderea este definitivă. Nu există cale de întoarcere. Ești sigur?';
+
+  @override
+  String get settingsCantOpenSimilarAccount => 'Nu îți va fi permis să creezi un cont nou cu același nume, indiferent dacă literele sunt minuscule sau majuscule.';
+
+  @override
+  String get settingsChangedMindDoNotCloseAccount => 'M-am răzgandit, nu îmi închide contul.';
+
+  @override
+  String get settingsCloseAccountExplanation => 'Ești sigur că vrei să-ți închizi contul? Închiderea contului este o decizie permanentă. NU te vei mai putea conecta NICIODATĂ.';
+
+  @override
+  String get settingsThisAccountIsClosed => 'Contul este închis.';
 
   @override
   String get playWithAFriend => 'Jucaţi cu un prieten';
@@ -529,6 +1540,12 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get deleteFromHere => 'Șterge de aici';
+
+  @override
+  String get collapseVariations => 'Collapse variations';
+
+  @override
+  String get expandVariations => 'Expand variations';
 
   @override
   String get forceVariation => 'Forțează variația';
@@ -1007,7 +2024,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get standard => 'Standard';
 
   @override
-  String get customPosition => 'Custom position';
+  String get customPosition => 'Poziție personalizată';
 
   @override
   String get unlimited => 'Nelimitat';
@@ -1388,15 +2405,6 @@ class AppLocalizationsRo extends AppLocalizations {
   String get emptyTournamentName => 'Lăsați necompletat pentru a numi turneul după un jucător bun de șah.';
 
   @override
-  String get recommendNotTouching => 'Iți recomandăm să nu modifici aceste setări.';
-
-  @override
-  String get fewerPlayers => 'Dacă stabilești condiții de intrare, turneul tău va avea mai puțini jucători.';
-
-  @override
-  String get showAdvancedSettings => 'Afișează setările avansate';
-
-  @override
   String get makePrivateTournament => 'Faceți competiția privată și restricționați accesul cu o parolă';
 
   @override
@@ -1526,10 +2534,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get editProfile => 'Editează profilul';
 
   @override
-  String get firstName => 'Prenume';
-
-  @override
-  String get lastName => 'Nume';
+  String get realName => 'Nume real';
 
   @override
   String get setFlair => 'Set your flair';
@@ -1658,13 +2663,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get cheat => 'Trișează';
 
   @override
-  String get insult => 'Insultă';
-
-  @override
   String get troll => 'Troll';
-
-  @override
-  String get ratingManipulation => 'Manipularea evaluării';
 
   @override
   String get other => 'Altceva';
@@ -1771,6 +2770,9 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get outsideTheBoard => 'În afara tablei';
+
+  @override
+  String get allSquaresOfTheBoard => 'All squares of the board';
 
   @override
   String get onSlowGames => 'În jocurile lente';
@@ -2366,22 +3368,22 @@ class AppLocalizationsRo extends AppLocalizations {
   String get backgroundImageUrl => 'URL-ul imaginii de fundal:';
 
   @override
-  String get board => 'Board';
+  String get board => 'Tablă';
 
   @override
-  String get size => 'Size';
+  String get size => 'Dimensiune';
 
   @override
-  String get opacity => 'Opacity';
+  String get opacity => 'Opacitate';
 
   @override
-  String get brightness => 'Brightness';
+  String get brightness => 'Luminozitate';
 
   @override
-  String get hue => 'Hue';
+  String get hue => 'Nuanță';
 
   @override
-  String get boardReset => 'Reset colours to default';
+  String get boardReset => 'Resetează culorile la valorile implicite';
 
   @override
   String get pieceSet => 'Set de piese';
@@ -3519,1014 +4521,6 @@ class AppLocalizationsRo extends AppLocalizations {
   }
 
   @override
-  String get patronDonate => 'Donează';
-
-  @override
-  String get patronLichessPatron => 'Patron Lichess';
-
-  @override
-  String get preferencesPreferences => 'Preferințe';
-
-  @override
-  String get preferencesDisplay => 'Afișare';
-
-  @override
-  String get preferencesPrivacy => 'Confidențialitate';
-
-  @override
-  String get preferencesNotifications => 'Notificări';
-
-  @override
-  String get preferencesPieceAnimation => 'Animația piesei';
-
-  @override
-  String get preferencesMaterialDifference => 'Diferență de piese capturate';
-
-  @override
-  String get preferencesBoardHighlights => 'Evidențiază pe tablă (ultima mutare și șahul)';
-
-  @override
-  String get preferencesPieceDestinations => 'Destinația piesei (mutări valide și premutări)';
-
-  @override
-  String get preferencesBoardCoordinates => 'Coordonatele tablei (A-H, 1-8)';
-
-  @override
-  String get preferencesMoveListWhilePlaying => 'Lista de mutări în timpul jocului';
-
-  @override
-  String get preferencesPgnPieceNotation => 'Notația mutării';
-
-  @override
-  String get preferencesChessPieceSymbol => 'Simbolul piesei de șah';
-
-  @override
-  String get preferencesPgnLetter => 'Literă (K, Q, R, B, N)';
-
-  @override
-  String get preferencesZenMode => 'Modul Zen';
-
-  @override
-  String get preferencesShowPlayerRatings => 'Arată evaluările jucătorului';
-
-  @override
-  String get preferencesShowFlairs => 'Arată pictograma personalizată a jucătorului';
-
-  @override
-  String get preferencesExplainShowPlayerRatings => 'Acest lucru permite ascunderea tuturor ratingurilor de pe site, pentru a ajuta la concentrarea pe jocul de șah. Jocurile pot fi evaluate, această setare este doar despre ce se poate vedea.';
-
-  @override
-  String get preferencesDisplayBoardResizeHandle => 'Arată indicatorul de redimensionare a tablei';
-
-  @override
-  String get preferencesOnlyOnInitialPosition => 'Doar inainte de prima mutare';
-
-  @override
-  String get preferencesInGameOnly => 'Doar în joc';
-
-  @override
-  String get preferencesChessClock => 'Ceasul de șah';
-
-  @override
-  String get preferencesTenthsOfSeconds => 'Zecimi de secundă';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'Când rămân mai puțin de 10 secunde';
-
-  @override
-  String get preferencesHorizontalGreenProgressBars => 'Bare orizontale verzi cu progresul';
-
-  @override
-  String get preferencesSoundWhenTimeGetsCritical => 'Sunet când timpul e aproape de expirare';
-
-  @override
-  String get preferencesGiveMoreTime => 'Adaugă timp adversarului';
-
-  @override
-  String get preferencesGameBehavior => 'Comportamentul din joc';
-
-  @override
-  String get preferencesHowDoYouMovePieces => 'Cum mutați piesele?';
-
-  @override
-  String get preferencesClickTwoSquares => 'Apasă pe două pătrățele';
-
-  @override
-  String get preferencesDragPiece => 'Trage o piesă';
-
-  @override
-  String get preferencesBothClicksAndDrag => 'Ambele';
-
-  @override
-  String get preferencesPremovesPlayingDuringOpponentTurn => 'Mutare anticipată (mută pe timpul adversarului)';
-
-  @override
-  String get preferencesTakebacksWithOpponentApproval => 'Dă înapoi (cu aprobarea adversarului)';
-
-  @override
-  String get preferencesInCasualGamesOnly => 'În jocuri amicale';
-
-  @override
-  String get preferencesPromoteToQueenAutomatically => 'Promovează automat în damă';
-
-  @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Țineți apăsată tasta <ctrl> în timp ce promovați un pion pentru a dezactiva temporar promovarea automată';
-
-  @override
-  String get preferencesWhenPremoving => 'În cazul mutărilor anticipate';
-
-  @override
-  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Declară automat o remiză în cazul a trei repetări';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Când timpul rămas e mai scurt de 30 de secunde';
-
-  @override
-  String get preferencesMoveConfirmation => 'Confirmare mutare';
-
-  @override
-  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Poate fi dezactivat în timpul unui joc cu meniul de tablă';
-
-  @override
-  String get preferencesInCorrespondenceGames => 'În jocuri prin corespondență';
-
-  @override
-  String get preferencesCorrespondenceAndUnlimited => 'Corespondență sau timp nelimitat';
-
-  @override
-  String get preferencesConfirmResignationAndDrawOffers => 'Confirmă abandonarea și oferirea remizei';
-
-  @override
-  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Metoda prin care faci rocada';
-
-  @override
-  String get preferencesCastleByMovingTwoSquares => 'Mută regele două pătrățele';
-
-  @override
-  String get preferencesCastleByMovingOntoTheRook => 'Mută regele pe turn';
-
-  @override
-  String get preferencesInputMovesWithTheKeyboard => 'Introdu mutări folosind tastatura';
-
-  @override
-  String get preferencesInputMovesWithVoice => 'Execută mișcările cu vocea';
-
-  @override
-  String get preferencesSnapArrowsToValidMoves => 'Trage săgețile la mutările valide';
-
-  @override
-  String get preferencesSayGgWpAfterLosingOrDrawing => 'Spune \"Joc bun, bine jucat\" la înfrângere sau la remiză';
-
-  @override
-  String get preferencesYourPreferencesHaveBeenSaved => 'Preferințele tale au fost salvate';
-
-  @override
-  String get preferencesScrollOnTheBoardToReplayMoves => 'Derulează pe tablă pentru a rejuca mutările';
-
-  @override
-  String get preferencesCorrespondenceEmailNotification => 'Notificare zilnică prin email cu lista jocurilor prin corespondență';
-
-  @override
-  String get preferencesNotifyStreamStart => 'Un streamer e live';
-
-  @override
-  String get preferencesNotifyInboxMsg => 'Mesaj nou';
-
-  @override
-  String get preferencesNotifyForumMention => 'Un comentariu din forum vă menționează';
-
-  @override
-  String get preferencesNotifyInvitedStudy => 'Invitație la un studiu';
-
-  @override
-  String get preferencesNotifyGameEvent => 'Actualizări la jocurile prin corespondență';
-
-  @override
-  String get preferencesNotifyChallenge => 'Provocări';
-
-  @override
-  String get preferencesNotifyTournamentSoon => 'Turneul începe în curând';
-
-  @override
-  String get preferencesNotifyTimeAlarm => 'Timpul rămas la jocurile prin corespondenţă e scurt';
-
-  @override
-  String get preferencesNotifyBell => 'Notificare în Lichess';
-
-  @override
-  String get preferencesNotifyPush => 'Notificare dispozitiv când nu ești în Lichess';
-
-  @override
-  String get preferencesNotifyWeb => 'Navigator';
-
-  @override
-  String get preferencesNotifyDevice => 'Dispozitiv';
-
-  @override
-  String get preferencesBellNotificationSound => 'Sunet de notificare';
-
-  @override
-  String get puzzlePuzzles => 'Probleme de șah';
-
-  @override
-  String get puzzlePuzzleThemes => 'Teme pentru problemele de șah';
-
-  @override
-  String get puzzleRecommended => 'Recomandare';
-
-  @override
-  String get puzzlePhases => 'Faze';
-
-  @override
-  String get puzzleMotifs => 'Motive';
-
-  @override
-  String get puzzleAdvanced => 'Avansat';
-
-  @override
-  String get puzzleLengths => 'Lungimi';
-
-  @override
-  String get puzzleMates => 'Mate';
-
-  @override
-  String get puzzleGoals => 'Obiective';
-
-  @override
-  String get puzzleOrigin => 'Origine';
-
-  @override
-  String get puzzleSpecialMoves => 'Mutări speciale';
-
-  @override
-  String get puzzleDidYouLikeThisPuzzle => 'Ți-a plăcut această problemă?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Votează pentru a-l încărca pe următorul!';
-
-  @override
-  String get puzzleUpVote => 'Îmi place';
-
-  @override
-  String get puzzleDownVote => 'Vot negativ';
-
-  @override
-  String get puzzleYourPuzzleRatingWillNotChange => 'Evaluarea ta la puzzle-uri nu se va schimba. Iți amintim că puzzle-urile nu sunt o competiție. Evaluarea ajută la selectarea celor mai bune puzzle-uri care corespund nivelului tău.';
-
-  @override
-  String get puzzleFindTheBestMoveForWhite => 'Găsiți cea mai bună mutare pentru alb.';
-
-  @override
-  String get puzzleFindTheBestMoveForBlack => 'Găsiți cea mai bună mutare pentru negru.';
-
-  @override
-  String get puzzleToGetPersonalizedPuzzles => 'Pentru a primi probleme de șah personalizate:';
-
-  @override
-  String puzzlePuzzleId(String param) {
-    return 'Problema de șah $param';
-  }
-
-  @override
-  String get puzzlePuzzleOfTheDay => 'Problema zilei';
-
-  @override
-  String get puzzleDailyPuzzle => 'Puzzle Zilnic';
-
-  @override
-  String get puzzleClickToSolve => 'Dă click pentru a rezolva';
-
-  @override
-  String get puzzleGoodMove => 'Mutare bună';
-
-  @override
-  String get puzzleBestMove => 'Cea mai bună mutare!';
-
-  @override
-  String get puzzleKeepGoing => 'Continuați cu următoarea mutare…';
-
-  @override
-  String get puzzlePuzzleSuccess => 'Succes!';
-
-  @override
-  String get puzzlePuzzleComplete => 'Puzzle complet!';
-
-  @override
-  String get puzzleByOpenings => 'După deschideri';
-
-  @override
-  String get puzzlePuzzlesByOpenings => 'Puzzle-uri după deschidere';
-
-  @override
-  String get puzzleOpeningsYouPlayedTheMost => 'Deschideri pe care le-ai jucat cel mai mult în meciurile evaluate';
-
-  @override
-  String get puzzleUseFindInPage => 'Folosește \"Găsește în pagină\" în meniul browser-ului pentru a găsi deschiderea ta preferată!';
-
-  @override
-  String get puzzleUseCtrlF => 'Folosește Ctrl+f pentru a găsi deschiderea favorită!';
-
-  @override
-  String get puzzleNotTheMove => 'Nu este asta mișcarea!';
-
-  @override
-  String get puzzleTrySomethingElse => 'Încercă altceva.';
-
-  @override
-  String puzzleRatingX(String param) {
-    return 'Scor: $param';
-  }
-
-  @override
-  String get puzzleHidden => 'ascuns';
-
-  @override
-  String puzzleFromGameLink(String param) {
-    return 'Din partida $param';
-  }
-
-  @override
-  String get puzzleContinueTraining => 'Continuați antrenamentul';
-
-  @override
-  String get puzzleDifficultyLevel => 'Nivel de dificultate';
-
-  @override
-  String get puzzleNormal => 'Normal';
-
-  @override
-  String get puzzleEasier => 'Mai ușor';
-
-  @override
-  String get puzzleEasiest => 'Cel mai ușor';
-
-  @override
-  String get puzzleHarder => 'Mai Greu';
-
-  @override
-  String get puzzleHardest => 'Cel mai greu';
-
-  @override
-  String get puzzleExample => 'Exemplu';
-
-  @override
-  String get puzzleAddAnotherTheme => 'Adăugați o altă temă';
-
-  @override
-  String get puzzleNextPuzzle => 'Puzzle-ul următor';
-
-  @override
-  String get puzzleJumpToNextPuzzleImmediately => 'Sari imediat la problema următoare';
-
-  @override
-  String get puzzlePuzzleDashboard => 'Panoul de control pentru probleme de șah';
-
-  @override
-  String get puzzleImprovementAreas => 'Zone de îmbunătățit';
-
-  @override
-  String get puzzleStrengths => 'Puncte tari';
-
-  @override
-  String get puzzleHistory => 'Istoric probleme de șah';
-
-  @override
-  String get puzzleSolved => 'rezolvat';
-
-  @override
-  String get puzzleFailed => 'eșuat';
-
-  @override
-  String get puzzleStreakDescription => 'Rezolvă probleme din ce în ce mai grele și construiește un șir de victorii consecutive. Nu există limită de timp, deci nu te grăbi. O mișcare greșită și jocul s-a terminat! Dar poți sări peste o mutare în fiecare sesiune.';
-
-  @override
-  String puzzleYourStreakX(String param) {
-    return 'Probleme consecutive: $param';
-  }
-
-  @override
-  String get puzzleStreakSkipExplanation => 'Sări peste această mutare pentru a-ți păstra șirul de probleme consecutive reușite! Funcționează o singură dată pe sesiune.';
-
-  @override
-  String get puzzleContinueTheStreak => 'Continuă secvența';
-
-  @override
-  String get puzzleNewStreak => 'Începe o nouă secvență';
-
-  @override
-  String get puzzleFromMyGames => 'Din jocurile mele';
-
-  @override
-  String get puzzleLookupOfPlayer => 'Caută puzzle-uri din jocurile unui jucător';
-
-  @override
-  String puzzleFromXGames(String param) {
-    return 'Puzzle-uri din jocurile $param';
-  }
-
-  @override
-  String get puzzleSearchPuzzles => 'Caută puzzle-uri';
-
-  @override
-  String get puzzleFromMyGamesNone => 'Nu ai nici o problemă în baza de date, dar Lichess tot te apreciază foarte mult.\nJoacă jocuri rapide și clasice pentru a crește șansele de a vedea adăugată o problemă extrasă din partidele tale!';
-
-  @override
-  String puzzleFromXGamesFound(String param1, String param2) {
-    return '$param1 probleme găsite în $param2 jocuri';
-  }
-
-  @override
-  String get puzzlePuzzleDashboardDescription => 'Antreneaza-te, analizează, fii mai bun';
-
-  @override
-  String puzzlePercentSolved(String param) {
-    return '$param rezolvate';
-  }
-
-  @override
-  String get puzzleNoPuzzlesToShow => 'Nimic de arătat, joacă mai întâi câteva puzzle-uri!';
-
-  @override
-  String get puzzleImprovementAreasDescription => 'Antreneaza-te pentru a-ti optimiza progresul!';
-
-  @override
-  String get puzzleStrengthDescription => 'Obțineți cele mai bune rezultate la aceste teme';
-
-  @override
-  String puzzlePlayedXTimes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Jucat de $count ori',
-      few: 'Jucat de $count ori',
-      one: 'Jucat $count dată',
-      zero: 'Jucat $count dată',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsBelowYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count de puncte sub ratingul tău de puzzle-uri',
-      few: '$count puncte sub ratingul tău de puzzle-uri',
-      one: 'Un punct sub ratingul tău de puzzle-uri',
-      zero: 'Un punct sub ratingul tău de puzzle-uri',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsAboveYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count de puncte deasupra ratingului tău de puzzle-uri',
-      few: '$count puncte deasupra ratingului tău de puzzle-uri',
-      one: 'Un punct deasupra ratingului tău de puzzle-uri',
-      zero: 'Un punct deasupra ratingului tău de puzzle-uri',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPlayed(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count jucate',
-      few: '$count jucate',
-      one: '$count jucat',
-      zero: '$count jucat',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbToReplay(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count de rejucat',
-      few: '$count de rejucat',
-      one: '$count de rejucat',
-      zero: '$count de rejucat',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get puzzleThemeAdvancedPawn => 'Pion avansat';
-
-  @override
-  String get puzzleThemeAdvancedPawnDescription => 'Unul dintre pionii care este avansat in teritoriul inamic, poate amenință să promoveze.';
-
-  @override
-  String get puzzleThemeAdvantage => 'Avantaj';
-
-  @override
-  String get puzzleThemeAdvantageDescription => 'Profită de șansa ta pentru a obține un avantaj decisiv. (200cp ≤ eval ≤ 600cp)';
-
-  @override
-  String get puzzleThemeAnastasiaMate => 'Mat-ul Anastasiei';
-
-  @override
-  String get puzzleThemeAnastasiaMateDescription => 'Un cal şi o tură sau o regină fac echipă pentru a prinde regele opus între marginea tablei şi o piesă aliată.';
-
-  @override
-  String get puzzleThemeArabianMate => 'Mat-ul arab';
-
-  @override
-  String get puzzleThemeArabianMateDescription => 'Un cal și o tură au făcut echipă să prinda regele într-un colț de tablă.';
-
-  @override
-  String get puzzleThemeAttackingF2F7 => 'Atac pe f2 sau f7';
-
-  @override
-  String get puzzleThemeAttackingF2F7Description => 'Un atac concentrat pe pionul f2 sau f7, cum ar fi în deschiderea ficat prăjit (atacul Fegatello).';
-
-  @override
-  String get puzzleThemeAttraction => 'Atragere';
-
-  @override
-  String get puzzleThemeAttractionDescription => 'Un schimb sau sacrificiu care încurajează sau forțează o piesă adversară pe un pătrat care permite o tactică ulterioară.';
-
-  @override
-  String get puzzleThemeBackRankMate => 'Mat pe rândul din spate';
-
-  @override
-  String get puzzleThemeBackRankMateDescription => 'Dă șah mat regelui pe rândul inițial, când e blocat acolo de propriele lui piese.';
-
-  @override
-  String get puzzleThemeBishopEndgame => 'Final cu nebuni';
-
-  @override
-  String get puzzleThemeBishopEndgameDescription => 'Un final de partidă doar cu nebuni și pioni.';
-
-  @override
-  String get puzzleThemeBodenMate => 'Mat-ul lui Boden';
-
-  @override
-  String get puzzleThemeBodenMateDescription => 'Doi nebuni care atacă pe diagonale încrucișate livrează mat-ul unui rege blocat de piese aliate.';
-
-  @override
-  String get puzzleThemeCastling => 'Rocada';
-
-  @override
-  String get puzzleThemeCastlingDescription => 'Adu regele în siguranță și mută tura pentru atac.';
-
-  @override
-  String get puzzleThemeCapturingDefender => 'Capturează apărătorul';
-
-  @override
-  String get puzzleThemeCapturingDefenderDescription => 'Capturarea unei piese esențiale apărării alteia, permițând captura piesei acum neapărată la o mutare ulterioară.';
-
-  @override
-  String get puzzleThemeCrushing => 'Zdrobitor';
-
-  @override
-  String get puzzleThemeCrushingDescription => 'Observă gafa adversarului pentru a obține un avantaj zdrobitor. (eval ≥ 600cp)';
-
-  @override
-  String get puzzleThemeDoubleBishopMate => 'Mat-ul cu doi nebuni';
-
-  @override
-  String get puzzleThemeDoubleBishopMateDescription => 'Doi nebuni care atacă pe diagonale adiacente livrează mat-ul unui rege blocat de piese aliate.';
-
-  @override
-  String get puzzleThemeDovetailMate => 'Mat-ul dovertail';
-
-  @override
-  String get puzzleThemeDovetailMateDescription => 'O regină livrează mat-ul unui rege adiacent, care are doar două patrate de scapare dar sunt blocate de piese aliate.';
-
-  @override
-  String get puzzleThemeEquality => 'Egalitate';
-
-  @override
-  String get puzzleThemeEqualityDescription => 'Întoarce-te dintr-o poziție de pierdere și asigură o remiză sau o poziție echilibrată. (eval ≤ 200cp)';
-
-  @override
-  String get puzzleThemeKingsideAttack => 'Atac pe partea regelui';
-
-  @override
-  String get puzzleThemeKingsideAttackDescription => 'Un atac al regelui adversarului, după ce a făcut rocada pe partea regelui.';
-
-  @override
-  String get puzzleThemeClearance => 'Îndepărtare';
-
-  @override
-  String get puzzleThemeClearanceDescription => 'O mutare, adeseori cu tempo, care eliberează un pătrat, o coloană sau o diagonală pentru o idee tactică ulterioară.';
-
-  @override
-  String get puzzleThemeDefensiveMove => 'Mutare defensivă';
-
-  @override
-  String get puzzleThemeDefensiveMoveDescription => 'O mutare precisă sau o secvență de mutări care e necesară pentru a evita pierderea pieselor sau a unui alt avantaj.';
-
-  @override
-  String get puzzleThemeDeflection => 'Deviere';
-
-  @override
-  String get puzzleThemeDeflectionDescription => 'O mutare care distrage o piesă adversară de la o altă funcție pe care o îndeplinește, cum ar fi apărarea unui pătrat esențial.';
-
-  @override
-  String get puzzleThemeDiscoveredAttack => 'Atac prin descoperire';
-
-  @override
-  String get puzzleThemeDiscoveredAttackDescription => 'Mutarea unei piese care bloca anterior un atac de la o altă piesă cu rază lungă de acțiune, cum ar fi un cal din calea unui turn.';
-
-  @override
-  String get puzzleThemeDoubleCheck => 'Șah dublu';
-
-  @override
-  String get puzzleThemeDoubleCheckDescription => 'Șahul cu două piese deodată, ca rezultat al unui atac descoperit unde și piesa mutată, și cea descoperită atacă regele adversarului.';
-
-  @override
-  String get puzzleThemeEndgame => 'Final de partidă';
-
-  @override
-  String get puzzleThemeEndgameDescription => 'O tactică în ultima etapă a jocului.';
-
-  @override
-  String get puzzleThemeEnPassantDescription => 'O tactică cu regula en passant, unde un pion poate captura un pion adversar care l-a întrecut folosind mutarea sa inițială de două pătrate.';
-
-  @override
-  String get puzzleThemeExposedKing => 'Rege expus';
-
-  @override
-  String get puzzleThemeExposedKingDescription => 'O tactică ce implică un rege cu puțini apărători în jurul său, adeseori rezultând în șah mat.';
-
-  @override
-  String get puzzleThemeFork => 'Bifurcare';
-
-  @override
-  String get puzzleThemeForkDescription => 'O mutare unde piesa mutată atacă două piese adversare deodată.';
-
-  @override
-  String get puzzleThemeHangingPiece => 'Piesă neprotejată';
-
-  @override
-  String get puzzleThemeHangingPieceDescription => 'O tactică ce implică o piesă adversară care e neprotejată sau apărată insuficient și e liberă pentru capturare.';
-
-  @override
-  String get puzzleThemeHookMate => 'Mat-ul hook';
-
-  @override
-  String get puzzleThemeHookMateDescription => 'Șah mat cu o tură, un cal și un pion alături de un pion inamic pentru a limita metodele de scăpare ale regelui.';
-
-  @override
-  String get puzzleThemeInterference => 'Obstacol';
-
-  @override
-  String get puzzleThemeInterferenceDescription => 'Mutarea unei piese între două piese adversare pentru a lăsa una sau ambele piese adversare neprotejate, cum ar fi un cal pe un pătrat protejat dintre două ture.';
-
-  @override
-  String get puzzleThemeIntermezzo => 'Intermezzo';
-
-  @override
-  String get puzzleThemeIntermezzoDescription => 'În loc să faci mutarea așteptată, mai întâi intervii cu o altă mutare care e o amenințare imediată, căreia adversarul trebuie să-i răspundă. Cunoscut și ca \"Zwischenzug\" sau \"In between\".';
-
-  @override
-  String get puzzleThemeKnightEndgame => 'Final cu cai';
-
-  @override
-  String get puzzleThemeKnightEndgameDescription => 'Un final de partidă doar cu pioni și cai.';
-
-  @override
-  String get puzzleThemeLong => 'Puzzle lung';
-
-  @override
-  String get puzzleThemeLongDescription => 'Trei mutări pentru a câștiga.';
-
-  @override
-  String get puzzleThemeMaster => 'Partidele maeștrilor';
-
-  @override
-  String get puzzleThemeMasterDescription => 'Puzzle-uri din partidele jucate de jucători care au primit titluri FIDE.';
-
-  @override
-  String get puzzleThemeMasterVsMaster => 'Partide maestru vs maestru';
-
-  @override
-  String get puzzleThemeMasterVsMasterDescription => 'Puzzle-uri din partidele jucate între doi jucători care au primit titluri FIDE.';
-
-  @override
-  String get puzzleThemeMate => 'Mat';
-
-  @override
-  String get puzzleThemeMateDescription => 'Câștigă jocul cu stil.';
-
-  @override
-  String get puzzleThemeMateIn1 => 'Mat din 1';
-
-  @override
-  String get puzzleThemeMateIn1Description => 'Dă mat dintr-o mutare.';
-
-  @override
-  String get puzzleThemeMateIn2 => 'Mat din 2';
-
-  @override
-  String get puzzleThemeMateIn2Description => 'Dă mat din două mutări.';
-
-  @override
-  String get puzzleThemeMateIn3 => 'Mat din 3';
-
-  @override
-  String get puzzleThemeMateIn3Description => 'Dă mat din trei mutări.';
-
-  @override
-  String get puzzleThemeMateIn4 => 'Mat din 4';
-
-  @override
-  String get puzzleThemeMateIn4Description => 'Dă mat din patru mutări.';
-
-  @override
-  String get puzzleThemeMateIn5 => 'Mat din 5 sau mai multe';
-
-  @override
-  String get puzzleThemeMateIn5Description => 'Găsește o secvență lungă de mat.';
-
-  @override
-  String get puzzleThemeMiddlegame => 'Mijlocul jocului';
-
-  @override
-  String get puzzleThemeMiddlegameDescription => 'O tactică în a doua etapă a jocului.';
-
-  @override
-  String get puzzleThemeOneMove => 'Puzzle de o mutare';
-
-  @override
-  String get puzzleThemeOneMoveDescription => 'Un puzzle care are doar o mutare.';
-
-  @override
-  String get puzzleThemeOpening => 'Deschidere';
-
-  @override
-  String get puzzleThemeOpeningDescription => 'O tactică în prima etapă a jocului.';
-
-  @override
-  String get puzzleThemePawnEndgame => 'Final cu pioni';
-
-  @override
-  String get puzzleThemePawnEndgameDescription => 'Un final de partidă doar cu pioni.';
-
-  @override
-  String get puzzleThemePin => 'Blocare';
-
-  @override
-  String get puzzleThemePinDescription => 'O tactică cu blocări, unde o piesă nu se poate mișca fără a descoperi un atac asupra unei piese mai valoroase.';
-
-  @override
-  String get puzzleThemePromotion => 'Promovare';
-
-  @override
-  String get puzzleThemePromotionDescription => 'Un pion care promovează sau amenință să promoveze e cheia acestei tactici.';
-
-  @override
-  String get puzzleThemeQueenEndgame => 'Final cu regine';
-
-  @override
-  String get puzzleThemeQueenEndgameDescription => 'Un final de partidă doar cu regine și pioni.';
-
-  @override
-  String get puzzleThemeQueenRookEndgame => 'Final cu regine și turnuri';
-
-  @override
-  String get puzzleThemeQueenRookEndgameDescription => 'Un final de partidă doar cu regine, turnuri și pioni.';
-
-  @override
-  String get puzzleThemeQueensideAttack => 'Atac pe partea reginei';
-
-  @override
-  String get puzzleThemeQueensideAttackDescription => 'Un atac asupra regelui adversarului, după ce a făcut rocada pe partea reginei.';
-
-  @override
-  String get puzzleThemeQuietMove => 'Mutare silențioasă';
-
-  @override
-  String get puzzleThemeQuietMoveDescription => 'O mutare care nu capturează sau dă șah, dar care pregătește o amenințare inevitabilă pentru o mutare ulterioară.';
-
-  @override
-  String get puzzleThemeRookEndgame => 'Final cu turnuri';
-
-  @override
-  String get puzzleThemeRookEndgameDescription => 'Un final de partidă doar cu turnuri și pioni.';
-
-  @override
-  String get puzzleThemeSacrifice => 'Sacrificiu';
-
-  @override
-  String get puzzleThemeSacrificeDescription => 'O tactică care implică renunțarea la material pe termen scurt pentru a câștiga un avantaj din nou după o secvență forțată de mutări.';
-
-  @override
-  String get puzzleThemeShort => 'Puzzle scurt';
-
-  @override
-  String get puzzleThemeShortDescription => 'Două mutări pentru a câștiga.';
-
-  @override
-  String get puzzleThemeSkewer => 'Skewer';
-
-  @override
-  String get puzzleThemeSkewerDescription => 'Un motiv care implică atacarea unei piese de mare valoare, mutarea înafara traseului, și permițând capturarea sau atacarea unei piese cu valoare inferioară în spatele ei, inversul unui pin.';
-
-  @override
-  String get puzzleThemeSmotheredMate => 'Mat sufocat';
-
-  @override
-  String get puzzleThemeSmotheredMateDescription => 'Un șah mat livrat de un cal în care regele împerechiat este incapabil să se miște deoarece este înconjurat (sau sufocat) de piesele lui aliate.';
-
-  @override
-  String get puzzleThemeSuperGM => 'Partidele Super GM';
-
-  @override
-  String get puzzleThemeSuperGMDescription => 'Puzzle-uri din partidele jucate de cei mai buni jucători din lume.';
-
-  @override
-  String get puzzleThemeTrappedPiece => 'Piesa blocată';
-
-  @override
-  String get puzzleThemeTrappedPieceDescription => 'O piesa este incapabilă de a scăpa din capturarea deoarece are mutări limitate.';
-
-  @override
-  String get puzzleThemeUnderPromotion => 'Subpromovare';
-
-  @override
-  String get puzzleThemeUnderPromotionDescription => 'Promovează într-un cal, un nebun sau o tură.';
-
-  @override
-  String get puzzleThemeVeryLong => 'Problemă foarte lungă';
-
-  @override
-  String get puzzleThemeVeryLongDescription => 'Patru mutări sau mai multe pentru a câștiga.';
-
-  @override
-  String get puzzleThemeXRayAttack => 'Atac raze x';
-
-  @override
-  String get puzzleThemeXRayAttackDescription => 'O piesă atacă sau apară un patrat, printr-o piesă inamică.';
-
-  @override
-  String get puzzleThemeZugzwang => 'Zugzwang';
-
-  @override
-  String get puzzleThemeZugzwangDescription => 'Adversarul este limitat în mișcările pe care le poate face, iar toate mișcările îi înrăutățesc poziția.';
-
-  @override
-  String get puzzleThemeHealthyMix => 'Amestec sănătos';
-
-  @override
-  String get puzzleThemeHealthyMixDescription => 'Un pic din toate. Nu știi la ce să te aștepți, așa că rămâi gata pentru orice! La fel ca în jocurile reale.';
-
-  @override
-  String get puzzleThemePlayerGames => 'Partide jucători';
-
-  @override
-  String get puzzleThemePlayerGamesDescription => 'Caută puzzle-uri generate din partidele tale sau din partidele unui alt jucător.';
-
-  @override
-  String puzzleThemePuzzleDownloadInformation(String param) {
-    return 'Aceste puzzle-uri sunt în domeniul public și pot fi descărcate de la $param.';
-  }
-
-  @override
-  String perfStatPerfStats(String param) {
-    return 'Statistici $param';
-  }
-
-  @override
-  String get perfStatViewTheGames => 'Vezi jocurile';
-
-  @override
-  String get perfStatProvisional => 'provizoriu';
-
-  @override
-  String get perfStatNotEnoughRatedGames => 'Nu au fost jucate destule meciuri oficiale pentru a stabili un rating solid.';
-
-  @override
-  String perfStatProgressOverLastXGames(String param) {
-    return 'Progres în ultimele $param meciuri:';
-  }
-
-  @override
-  String perfStatRatingDeviation(String param) {
-    return 'Devierea ratingului: $param.';
-  }
-
-  @override
-  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
-    return 'O valoare mai mică înseamnă că ratingul este mai stabil. Peste $param1, ratingul este considerat provizoriu. Pentru a fi inclus în clasament, această valoare ar trebui să fie sub $param2 (șah standard) sau $param3 (variante).';
-  }
-
-  @override
-  String get perfStatTotalGames => 'Meciuri totale';
-
-  @override
-  String get perfStatRatedGames => 'Meciuri oficiale';
-
-  @override
-  String get perfStatTournamentGames => 'Meciuri de turnee';
-
-  @override
-  String get perfStatBerserkedGames => 'Meciuri berserked';
-
-  @override
-  String get perfStatTimeSpentPlaying => 'Timp petrecut jucând';
-
-  @override
-  String get perfStatAverageOpponent => 'Adversar în medie';
-
-  @override
-  String get perfStatVictories => 'Victorii';
-
-  @override
-  String get perfStatDefeats => 'Înfrângeri';
-
-  @override
-  String get perfStatDisconnections => 'Deconectări';
-
-  @override
-  String get perfStatNotEnoughGames => 'N-au fost jucate destule meciuri';
-
-  @override
-  String perfStatHighestRating(String param) {
-    return 'Cel mai mare rating: $param';
-  }
-
-  @override
-  String perfStatLowestRating(String param) {
-    return 'Cel mai mic rating: $param';
-  }
-
-  @override
-  String perfStatFromXToY(String param1, String param2) {
-    return 'de la $param1 la $param2';
-  }
-
-  @override
-  String get perfStatWinningStreak => 'Victorii consecutive';
-
-  @override
-  String get perfStatLosingStreak => 'Înfrângeri consecutive';
-
-  @override
-  String perfStatLongestStreak(String param) {
-    return 'Cea mai lungă secvență: $param';
-  }
-
-  @override
-  String perfStatCurrentStreak(String param) {
-    return 'Secvența curentă: $param';
-  }
-
-  @override
-  String get perfStatBestRated => 'Cele mai bune victorii oficiale';
-
-  @override
-  String get perfStatGamesInARow => 'Meciuri jucate consecutiv';
-
-  @override
-  String get perfStatLessThanOneHour => 'Mai puțin de o oră între meciuri';
-
-  @override
-  String get perfStatMaxTimePlaying => 'Cel mai mult timp petrecut jucând';
-
-  @override
-  String get perfStatNow => 'acum';
-
-  @override
-  String get searchSearch => 'Căutare';
-
-  @override
-  String get settingsSettings => 'Setări';
-
-  @override
-  String get settingsCloseAccount => 'Închide contul';
-
-  @override
-  String get settingsManagedAccountCannotBeClosed => 'Contul tău este gestionat și nu poate fi închis.';
-
-  @override
-  String get settingsClosingIsDefinitive => 'Închiderea este definitivă. Nu există cale de întoarcere. Ești sigur?';
-
-  @override
-  String get settingsCantOpenSimilarAccount => 'Nu îți va fi permis să creezi un cont nou cu același nume, indiferent dacă literele sunt minuscule sau majuscule.';
-
-  @override
-  String get settingsChangedMindDoNotCloseAccount => 'M-am răzgandit, nu îmi închide contul.';
-
-  @override
-  String get settingsCloseAccountExplanation => 'Ești sigur că vrei să-ți închizi contul? Închiderea contului este o decizie permanentă. NU te vei mai putea conecta NICIODATĂ.';
-
-  @override
-  String get settingsThisAccountIsClosed => 'Contul este închis.';
-
-  @override
-  String get streamerLichessStreamers => 'Lichess streameri';
-
-  @override
   String get stormMoveToStart => 'Miscă-te ca să începi';
 
   @override
@@ -4712,14 +4706,11 @@ class AppLocalizationsRo extends AppLocalizations {
   }
 
   @override
+  String get streamerLichessStreamers => 'Lichess streameri';
+
+  @override
   String get studyShareAndExport => 'Împărtășește & exportă';
 
   @override
   String get studyStart => 'Începe';
-
-  @override
-  String get broadcastBroadcasts => 'Transmisiuni';
-
-  @override
-  String get broadcastStartDate => 'Data de începere conform fusului tău orar';
 }

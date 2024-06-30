@@ -259,10 +259,10 @@ class AppLocalizationsBe extends AppLocalizations {
   }
 
   @override
-  String get contactContact => 'Звязацца';
+  String get broadcastBroadcasts => 'Трансляцыі';
 
   @override
-  String get contactContactLichess => 'Звязацца з Lichess';
+  String get broadcastStartDate => 'Дата пачатаку ў вашым часавым поясе';
 
   @override
   String challengeChallengesX(String param1) {
@@ -344,6 +344,1022 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get challengeInviteLichessUser => 'Ці запрасіце карыстальніка Lichess:';
+
+  @override
+  String get contactContact => 'Звязацца';
+
+  @override
+  String get contactContactLichess => 'Звязацца з Lichess';
+
+  @override
+  String get patronDonate => 'Ахвяраваць';
+
+  @override
+  String get patronLichessPatron => 'Спонсар Lichess';
+
+  @override
+  String perfStatPerfStats(String param) {
+    return 'Статыстыка $param';
+  }
+
+  @override
+  String get perfStatViewTheGames => 'Праглядзець гульні';
+
+  @override
+  String get perfStatProvisional => 'умоўны';
+
+  @override
+  String get perfStatNotEnoughRatedGames => 'Не было згуляна дастаткова рэйтынгавых гульняў, каб усталяваць дакладны рэйтынг.';
+
+  @override
+  String perfStatProgressOverLastXGames(String param) {
+    return 'Прагрэс за апошнія $param гульняў:';
+  }
+
+  @override
+  String perfStatRatingDeviation(String param) {
+    return 'Адхіленне рэйтынгу: $param.';
+  }
+
+  @override
+  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
+    return 'Чым ніжэй значэнне, тым больш усталяваным з\'яўляецца рэйтынг. Рэйтынг вышэйшы за $param1, лічыцца ўмоўным. Каб быць уключаным у спісы рэйтынгу, гэта значэнне павінна быць ніжэй за $param2 (звычайныя шахматы) або $param3 (варыянты).';
+  }
+
+  @override
+  String get perfStatTotalGames => 'Агулам гульняў';
+
+  @override
+  String get perfStatRatedGames => 'Рэйтынгавыя гульні';
+
+  @override
+  String get perfStatTournamentGames => 'Гульні ў турнірах';
+
+  @override
+  String get perfStatBerserkedGames => 'Гульні з бярсеркам';
+
+  @override
+  String get perfStatTimeSpentPlaying => 'Агульны час за гульнёй';
+
+  @override
+  String get perfStatAverageOpponent => 'Сярэдні рэйтынг суперніка';
+
+  @override
+  String get perfStatVictories => 'Перамогі';
+
+  @override
+  String get perfStatDefeats => 'Паразы';
+
+  @override
+  String get perfStatDisconnections => 'Адключэнні';
+
+  @override
+  String get perfStatNotEnoughGames => 'Згуляна недастаткова партый';
+
+  @override
+  String perfStatHighestRating(String param) {
+    return 'Найвышэйшы рэйтынг: $param';
+  }
+
+  @override
+  String perfStatLowestRating(String param) {
+    return 'Найніжэйшы рэйтынг: $param';
+  }
+
+  @override
+  String perfStatFromXToY(String param1, String param2) {
+    return 'ад $param1 да $param2';
+  }
+
+  @override
+  String get perfStatWinningStreak => 'Перамог запар';
+
+  @override
+  String get perfStatLosingStreak => 'Паразаў запар';
+
+  @override
+  String perfStatLongestStreak(String param) {
+    return 'Найдаўжэйшая серыя: $param';
+  }
+
+  @override
+  String perfStatCurrentStreak(String param) {
+    return 'Бягучая серыя: $param';
+  }
+
+  @override
+  String get perfStatBestRated => 'Найлепшыя рэйтынгавыя перамогі';
+
+  @override
+  String get perfStatGamesInARow => 'Гульняў сыграна запар';
+
+  @override
+  String get perfStatLessThanOneHour => 'Менш за гадзіну паміж гульнямі';
+
+  @override
+  String get perfStatMaxTimePlaying => 'Максімальны час за гульнёй';
+
+  @override
+  String get perfStatNow => 'зараз';
+
+  @override
+  String get preferencesPreferences => 'Налады';
+
+  @override
+  String get preferencesDisplay => 'Адлюстраванне';
+
+  @override
+  String get preferencesPrivacy => 'Прыватнасць';
+
+  @override
+  String get preferencesNotifications => 'Апавяшчэнні';
+
+  @override
+  String get preferencesPieceAnimation => 'Анімацыя фігур';
+
+  @override
+  String get preferencesMaterialDifference => 'Паказваць розніцу ў фігурах';
+
+  @override
+  String get preferencesBoardHighlights => 'Падсвечваць апошні ход і шах';
+
+  @override
+  String get preferencesPieceDestinations => 'Паказваць дапушчальныя хады';
+
+  @override
+  String get preferencesBoardCoordinates => 'Каардынаты дошкі';
+
+  @override
+  String get preferencesMoveListWhilePlaying => 'Паказваць спіс рухаў пад час гульні';
+
+  @override
+  String get preferencesPgnPieceNotation => 'Натацыя рухаў';
+
+  @override
+  String get preferencesChessPieceSymbol => 'Сымбаль шахматнай фігуры';
+
+  @override
+  String get preferencesPgnLetter => 'Літара (K, Q, R, B, N)';
+
+  @override
+  String get preferencesZenMode => 'Рэжым Дзэн';
+
+  @override
+  String get preferencesShowPlayerRatings => 'Паказваць рэйтынг гульцоў';
+
+  @override
+  String get preferencesShowFlairs => 'Паказваць эмодзі гульцоў';
+
+  @override
+  String get preferencesExplainShowPlayerRatings => 'Гэта дазваляе схаваць усе рэйтынгі на сайце, каб дапамагчы сканцэнтравацца на шахматах. Гульні ўсё яшчэ могуць быць рэйтынгавымі, змены адбудуцца толькі візуальныя.';
+
+  @override
+  String get preferencesDisplayBoardResizeHandle => 'Паказваць ручку змены памеру дошкі';
+
+  @override
+  String get preferencesOnlyOnInitialPosition => 'Толькі ў пачатковым становішчы';
+
+  @override
+  String get preferencesInGameOnly => 'Выключна ў партыі';
+
+  @override
+  String get preferencesChessClock => 'Шахматны гадзіннік';
+
+  @override
+  String get preferencesTenthsOfSeconds => 'Дзясятыя долі секунды';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'Калі засталося менш за 10 с';
+
+  @override
+  String get preferencesHorizontalGreenProgressBars => 'Індыкатар часу';
+
+  @override
+  String get preferencesSoundWhenTimeGetsCritical => 'Гукавое апавяшчэнне калі час хутка скончыцца';
+
+  @override
+  String get preferencesGiveMoreTime => 'Дадаць часу';
+
+  @override
+  String get preferencesGameBehavior => 'Гульнявыя паводзіны';
+
+  @override
+  String get preferencesHowDoYouMovePieces => 'Як вы перасоўваеце фігуры?';
+
+  @override
+  String get preferencesClickTwoSquares => 'Націскам на дзве клеткі';
+
+  @override
+  String get preferencesDragPiece => 'Перацягваннем фігуры';
+
+  @override
+  String get preferencesBothClicksAndDrag => 'Абодвума спосабамі';
+
+  @override
+  String get preferencesPremovesPlayingDuringOpponentTurn => 'Ход на апярэджанне (падчас ходу суперніка)';
+
+  @override
+  String get preferencesTakebacksWithOpponentApproval => 'Скасаванні ходу (са згоды суперніка)';
+
+  @override
+  String get preferencesInCasualGamesOnly => 'Толькі ў таварыскіх гульнях';
+
+  @override
+  String get preferencesPromoteToQueenAutomatically => 'Аўтаматычна пераўтвараць пешку ў ферзя';
+
+  @override
+  String get preferencesExplainPromoteToQueenAutomatically => 'Зацісніце клавішу <ctrl> пад час пераўтварэння, каб часова адключыць аўта-пераўтварэнне';
+
+  @override
+  String get preferencesWhenPremoving => 'Пры ходзе на апярэджанне';
+
+  @override
+  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Аўтаматычна запытваць нічыю пры трохразовым паўторы ходу';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Калі застаецца < 30 секунд';
+
+  @override
+  String get preferencesMoveConfirmation => 'Пацверджанне руху';
+
+  @override
+  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Можа быць адключана падчас гульні з дапамогай меню дошкі';
+
+  @override
+  String get preferencesInCorrespondenceGames => 'У гульні па ліставанні';
+
+  @override
+  String get preferencesCorrespondenceAndUnlimited => 'Па ліставанні і без абмежавання часу';
+
+  @override
+  String get preferencesConfirmResignationAndDrawOffers => 'Пацвярджаць здаччу і прапановы нічый';
+
+  @override
+  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Спосаб ракіроўкі';
+
+  @override
+  String get preferencesCastleByMovingTwoSquares => 'Караля на дзьве клеткі';
+
+  @override
+  String get preferencesCastleByMovingOntoTheRook => 'Караля перасунуць на ладдзю';
+
+  @override
+  String get preferencesInputMovesWithTheKeyboard => 'Уводзіць хады з дапамогай клавіятуры';
+
+  @override
+  String get preferencesInputMovesWithVoice => 'Уводзьце хады вашым голасам';
+
+  @override
+  String get preferencesSnapArrowsToValidMoves => 'Маляваць стрэлки толькі да магчымых хадоў';
+
+  @override
+  String get preferencesSayGgWpAfterLosingOrDrawing => 'Казаць \"Good game, well played\" пасля паразы або нічыі';
+
+  @override
+  String get preferencesYourPreferencesHaveBeenSaved => 'Вашы налады былі захаваныя.';
+
+  @override
+  String get preferencesScrollOnTheBoardToReplayMoves => 'Гартайце колцам мышцы на дошцы, каб прагледзець хады';
+
+  @override
+  String get preferencesCorrespondenceEmailNotification => 'Штодзённае апавяшчэнне па пошце з пералікам вашых гульняў па ліставанні';
+
+  @override
+  String get preferencesNotifyStreamStart => 'Стрымер вядзе трансляцыю';
+
+  @override
+  String get preferencesNotifyInboxMsg => 'Новае паведамленне';
+
+  @override
+  String get preferencesNotifyForumMention => 'Каментарый на форуме закранае Вас';
+
+  @override
+  String get preferencesNotifyInvitedStudy => 'Запрашэнне на ўрок';
+
+  @override
+  String get preferencesNotifyGameEvent => 'Абнаўленне ў гульні па перапісцы';
+
+  @override
+  String get preferencesNotifyChallenge => 'Выклікі';
+
+  @override
+  String get preferencesNotifyTournamentSoon => 'У хуткім часе пачынаецца турнір';
+
+  @override
+  String get preferencesNotifyTimeAlarm => 'Час зыходзіць у гульні па перепісцы';
+
+  @override
+  String get preferencesNotifyBell => 'Гукавое паведамленне ад Lichess';
+
+  @override
+  String get preferencesNotifyPush => 'Паведамленне на прыладу, калі Вы не на Lichess';
+
+  @override
+  String get preferencesNotifyWeb => 'Браўзер';
+
+  @override
+  String get preferencesNotifyDevice => 'Прылада';
+
+  @override
+  String get preferencesBellNotificationSound => 'Гукавое паведамленне';
+
+  @override
+  String get puzzlePuzzles => 'Задачы';
+
+  @override
+  String get puzzlePuzzleThemes => 'Тэмы задач';
+
+  @override
+  String get puzzleRecommended => 'Рэкамендаваныя';
+
+  @override
+  String get puzzlePhases => 'Стадыі гульні';
+
+  @override
+  String get puzzleMotifs => 'Матывы';
+
+  @override
+  String get puzzleAdvanced => 'Прасунутыя';
+
+  @override
+  String get puzzleLengths => 'Колькасць хадоў';
+
+  @override
+  String get puzzleMates => 'Маты';
+
+  @override
+  String get puzzleGoals => 'Мэты';
+
+  @override
+  String get puzzleOrigin => 'Паходжанне';
+
+  @override
+  String get puzzleSpecialMoves => 'Адмысловыя хады';
+
+  @override
+  String get puzzleDidYouLikeThisPuzzle => 'Ці спадабалася задача?';
+
+  @override
+  String get puzzleVoteToLoadNextOne => 'Прагаласуйце, каб перайсці да наступнай!';
+
+  @override
+  String get puzzleUpVote => 'Задача спадабалася';
+
+  @override
+  String get puzzleDownVote => 'Задача не спадабалася';
+
+  @override
+  String get puzzleYourPuzzleRatingWillNotChange => 'Ваш рэйтынг задач не зменіцца. Заўважце, што задачы гэта не спаборніцтва. Рэйтынг дапамагае абіраць найлепшыя задачы для вашага бягучага ўзроўню.';
+
+  @override
+  String get puzzleFindTheBestMoveForWhite => 'Знайдзіце найлепшы ход белых.';
+
+  @override
+  String get puzzleFindTheBestMoveForBlack => 'Знайдзіце найлепшы ход чорных.';
+
+  @override
+  String get puzzleToGetPersonalizedPuzzles => 'Каб атрымаць персаналізаваныя задачы:';
+
+  @override
+  String puzzlePuzzleId(String param) {
+    return 'Задача $param';
+  }
+
+  @override
+  String get puzzlePuzzleOfTheDay => 'Задача дня';
+
+  @override
+  String get puzzleDailyPuzzle => 'Daily Puzzle';
+
+  @override
+  String get puzzleClickToSolve => 'Націсніце, каб рашыць';
+
+  @override
+  String get puzzleGoodMove => 'Добры ход';
+
+  @override
+  String get puzzleBestMove => 'Найлепшы ход!';
+
+  @override
+  String get puzzleKeepGoing => 'Працягвайце…';
+
+  @override
+  String get puzzlePuzzleSuccess => 'Поспех!';
+
+  @override
+  String get puzzlePuzzleComplete => 'Задача вырашана!';
+
+  @override
+  String get puzzleByOpenings => 'By openings';
+
+  @override
+  String get puzzlePuzzlesByOpenings => 'Puzzles by openings';
+
+  @override
+  String get puzzleOpeningsYouPlayedTheMost => 'Openings you played the most in rated games';
+
+  @override
+  String get puzzleUseFindInPage => 'Use \"Find in page\" in the browser menu to find your favourite opening!';
+
+  @override
+  String get puzzleUseCtrlF => 'Use Ctrl+f to find your favourite opening!';
+
+  @override
+  String get puzzleNotTheMove => 'Гэта не той ход!';
+
+  @override
+  String get puzzleTrySomethingElse => 'Паспрабуйце нешта іншае.';
+
+  @override
+  String puzzleRatingX(String param) {
+    return 'Рэйтынг: $param';
+  }
+
+  @override
+  String get puzzleHidden => 'схаваны';
+
+  @override
+  String puzzleFromGameLink(String param) {
+    return 'З гульні $param';
+  }
+
+  @override
+  String get puzzleContinueTraining => 'Працягнуць трэніроўку';
+
+  @override
+  String get puzzleDifficultyLevel => 'Узровень складанасці';
+
+  @override
+  String get puzzleNormal => 'Нармальны';
+
+  @override
+  String get puzzleEasier => 'Лёгкі';
+
+  @override
+  String get puzzleEasiest => 'Найлягчэйшы';
+
+  @override
+  String get puzzleHarder => 'Цяжкі';
+
+  @override
+  String get puzzleHardest => 'Найцяжэйшы';
+
+  @override
+  String get puzzleExample => 'Прыклад';
+
+  @override
+  String get puzzleAddAnotherTheme => 'Дадаць іншую тэму';
+
+  @override
+  String get puzzleNextPuzzle => 'Наступная задача';
+
+  @override
+  String get puzzleJumpToNextPuzzleImmediately => 'Адразу перайсці да наступнай задачы';
+
+  @override
+  String get puzzlePuzzleDashboard => 'Панэль задач';
+
+  @override
+  String get puzzleImprovementAreas => 'Напрамкі паляпшэння';
+
+  @override
+  String get puzzleStrengths => 'Моцныя бакі';
+
+  @override
+  String get puzzleHistory => 'Гісторыя задач';
+
+  @override
+  String get puzzleSolved => 'вырашана правільна';
+
+  @override
+  String get puzzleFailed => 'памылка';
+
+  @override
+  String get puzzleStreakDescription => 'Вырашайце патупова ўскладняючыеся задачы і стварыце пераможную серыю. Тут няма гадзінніку, таму не спяшайцеся. Адзін няправільны ход і гульня скончана! Але можна прапусціць адзін ход за спробу.';
+
+  @override
+  String puzzleYourStreakX(String param) {
+    return 'Ваша серыя: $param';
+  }
+
+  @override
+  String get puzzleStreakSkipExplanation => 'Прапусціце гэты ход, каб захаваць серыю! Можна скарыстаць толькі адзін раз.';
+
+  @override
+  String get puzzleContinueTheStreak => 'Працягнуць серыю';
+
+  @override
+  String get puzzleNewStreak => 'Новая серыя';
+
+  @override
+  String get puzzleFromMyGames => 'З маіх гульняў';
+
+  @override
+  String get puzzleLookupOfPlayer => 'Шукаць задачы з партый гульца';
+
+  @override
+  String puzzleFromXGames(String param) {
+    return 'Задачы з гульняў $param';
+  }
+
+  @override
+  String get puzzleSearchPuzzles => 'Шукаць задачы';
+
+  @override
+  String get puzzleFromMyGamesNone => 'Базе дадзеных няма задач з вашых гульня, але Liches усе роўна любіць вас!\nПагуляйце ў хуткія або класічныя шахматы каб павялічыць шанец выкарыстання вашых гульняў у задачах.';
+
+  @override
+  String puzzleFromXGamesFound(String param1, String param2) {
+    return 'Знойдзена $param1 задач ў $param2 гульнях';
+  }
+
+  @override
+  String get puzzlePuzzleDashboardDescription => 'Трэніруйцеся, аналізуйце, паляпшайцеся';
+
+  @override
+  String puzzlePercentSolved(String param) {
+    return '$param вырашана правільна';
+  }
+
+  @override
+  String get puzzleNoPuzzlesToShow => 'Нічога няма, вырашыце некалькі задач спачатку!';
+
+  @override
+  String get puzzleImprovementAreasDescription => 'Трэніруйце гэта, каб палепшыць прагрэс!';
+
+  @override
+  String get puzzleStrengthDescription => 'Найбольш атрымоўваюцца гэтыя тэмы';
+
+  @override
+  String puzzlePlayedXTimes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Згуляна $count разоў',
+      many: 'Згуляна $count разоў',
+      few: 'Згуляна $count разы',
+      one: 'Згуляна $count раз',
+      zero: 'Згуляна $count раз',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsBelowYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count балаў менш за ваш рэйтынг задач',
+      many: '$count балаў менш за ваш рэйтынг задач',
+      few: '$count бала менш за ваш рэйтынг задач',
+      one: 'Адзін бал менш за ваш рэйтынг задач',
+      zero: 'Адзін бал менш за ваш рэйтынг задач',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsAboveYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count балаў вышэй за ваш рэйтынг задач',
+      many: '$count балаў вышэй за ваш рэйтынг задач',
+      few: '$count бала вышэй за ваш рэйтынг задач',
+      one: 'Адзін бал вышэй за ваш рэйтынг задач',
+      zero: 'Адзін бал вышэй за ваш рэйтынг задач',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPlayed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count вырашана',
+      many: '$count вырашана',
+      few: '$count вырашаны',
+      one: '$count вырашана',
+      zero: '$count вырашана',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbToReplay(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count перарашаць',
+      many: '$count перарашаць',
+      few: '$count перарашаць',
+      one: '$count перарашаць',
+      zero: '$count перарашаць',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get puzzleThemeAdvancedPawn => 'Далёка прасунутая пешка';
+
+  @override
+  String get puzzleThemeAdvancedPawnDescription => 'Адна з вашых пешак глыбока ў пазіцыі суперніка, магчыма пагражае ператварэннем.';
+
+  @override
+  String get puzzleThemeAdvantage => 'Перавага';
+
+  @override
+  String get puzzleThemeAdvantageDescription => 'Не ўпусціце шанец, каб атрымаць вырашальную перавагу. (200сп ≤ ацэнка ≤ 600сп)';
+
+  @override
+  String get puzzleThemeAnastasiaMate => 'Мат Анастасіі';
+
+  @override
+  String get puzzleThemeAnastasiaMateDescription => 'Конь і ладдзя (ці ферзь) працуюць разам, каб заматаваць караля суперніка паміж сваёй фігурай і краем дошкі.';
+
+  @override
+  String get puzzleThemeArabianMate => 'Арабскі мат';
+
+  @override
+  String get puzzleThemeArabianMateDescription => 'Конь і ладдзя працуюць разам, каб заматаваць караля суперніка ў кутку дошкі.';
+
+  @override
+  String get puzzleThemeAttackingF2F7 => 'Напад на f2 або f7';
+
+  @override
+  String get puzzleThemeAttackingF2F7Description => 'Нападзенне, накіраванае на пешку на f2 або f7, як у дэбюце Атакі Фегатэлла.';
+
+  @override
+  String get puzzleThemeAttraction => 'Прыцягненне';
+
+  @override
+  String get puzzleThemeAttractionDescription => 'Абмен або ахвяра, якая заахвочвае або прымушае фігуру суперніка выйсці на поле, што дазваляе здейсніць тактыку.';
+
+  @override
+  String get puzzleThemeBackRankMate => 'Мат на апошняй гарызанталі';
+
+  @override
+  String get puzzleThemeBackRankMateDescription => 'Пастаўце мат каралю на хатняй гарызанталі, калі ён заблакаваны сваімі фігурамі.';
+
+  @override
+  String get puzzleThemeBishopEndgame => 'Слановы эндшпіль';
+
+  @override
+  String get puzzleThemeBishopEndgameDescription => 'Эндшпіль выключна са сланамі і пешкамі.';
+
+  @override
+  String get puzzleThemeBodenMate => 'Мат Бодэна';
+
+  @override
+  String get puzzleThemeBodenMateDescription => 'Два нападаючых слана па перакрыжаваных дыяганалях матуюць караля, які акружаны сваімі фігурамі.';
+
+  @override
+  String get puzzleThemeCastling => 'Ракіроўка';
+
+  @override
+  String get puzzleThemeCastlingDescription => 'Адпраўце караля ў бяспеку і выведзіце ладдзю ў атаку.';
+
+  @override
+  String get puzzleThemeCapturingDefender => 'Узяцце абаронцы';
+
+  @override
+  String get puzzleThemeCapturingDefenderDescription => 'Адцягненне або ўзяцце фігуры, якая з\'яўляца крытычнай для абароны іншай фігуры, што дазваляе ўзяце неабароненую фігуру наступным ходам.';
+
+  @override
+  String get puzzleThemeCrushing => 'Зруйнаванне';
+
+  @override
+  String get puzzleThemeCrushingDescription => 'Знайдзіце позех суперніка і атрымайце разгромную перавагу. (ацэнка ≥ 600сп)';
+
+  @override
+  String get puzzleThemeDoubleBishopMate => 'Мат двума сланамі';
+
+  @override
+  String get puzzleThemeDoubleBishopMateDescription => 'Два нападаючых слана на суседніх дыяганалях матуюць караля, які акружаны сваімі фігурамі.';
+
+  @override
+  String get puzzleThemeDovetailMate => 'Мат \"галубіны хвост\"';
+
+  @override
+  String get puzzleThemeDovetailMateDescription => 'Ферзь ставіць мат сумежнаму каралю, адзіныя два палі адыхода якога заняты яго ж фігурамі.';
+
+  @override
+  String get puzzleThemeEquality => 'Выраўненне';
+
+  @override
+  String get puzzleThemeEqualityDescription => 'Адыграйцеся з прайгранай пазіцыі і забяспечце нічыйную або збалансаваную пазіцыю. (ацэнка пазіціі ≤ 200сп)';
+
+  @override
+  String get puzzleThemeKingsideAttack => 'Атака на каралеўскім флангу';
+
+  @override
+  String get puzzleThemeKingsideAttackDescription => 'Атака на караля суперніка, пасля ягонай кароткай ракіроўкі.';
+
+  @override
+  String get puzzleThemeClearance => 'Расчыстка поля';
+
+  @override
+  String get puzzleThemeClearanceDescription => 'Ход, часта з тэмпам, які расчышчае поле, лінію або дыяганал для паследуючай тактыкі.';
+
+  @override
+  String get puzzleThemeDefensiveMove => 'Абарончы ход';
+
+  @override
+  String get puzzleThemeDefensiveMoveDescription => 'Дакладны ход або паслядоўнасць хадоў, неабходная каб пазбегнуць страты матэрыялу або іншай перавагі.';
+
+  @override
+  String get puzzleThemeDeflection => 'Адцягненне';
+
+  @override
+  String get puzzleThemeDeflectionDescription => 'Ход, які адцягвае фігуру суперніка ад выканання іншага абавязку, напрыклад, аховы ключавога поля. Часам таксама называецца \"перагрузка\".';
+
+  @override
+  String get puzzleThemeDiscoveredAttack => 'Ўскрыты напад';
+
+  @override
+  String get puzzleThemeDiscoveredAttackDescription => 'Ход фігурай (напрыклад канём), якая раней блакавала фігуру далёкага дзеяння (напрыклад ладдзю), з лініі нападу гэтай фігуры.';
+
+  @override
+  String get puzzleThemeDoubleCheck => 'Падвойны шах';
+
+  @override
+  String get puzzleThemeDoubleCheckDescription => 'Шах дзвюма фігурамі адначасова, у выніку ўскрытыга нападу, калі і фігура, якая ходзіць, і раскрытая фігура атакуюць караля суперніка.';
+
+  @override
+  String get puzzleThemeEndgame => 'Эндшпіль';
+
+  @override
+  String get puzzleThemeEndgameDescription => 'Тактыка на апошнім этапе гульні.';
+
+  @override
+  String get puzzleThemeEnPassantDescription => 'Задача звязаная з \"узяццем на праходзе\", дзе пешка можа ўзяць пешку суперніка, якая прайшла побач, выкарыстоўвыючы першы ход на два палі.';
+
+  @override
+  String get puzzleThemeExposedKing => 'Адкрыты кароль';
+
+  @override
+  String get puzzleThemeExposedKingDescription => 'Тактыка, уключаючая недастаткова абароненага караля, якая часта скончваецца матам.';
+
+  @override
+  String get puzzleThemeFork => 'Відэлец';
+
+  @override
+  String get puzzleThemeForkDescription => 'Ход, калі фігура, якой пахадзілі, нападае адразу на дзве фігуры суперніка.';
+
+  @override
+  String get puzzleThemeHangingPiece => 'Вісячая фігура';
+
+  @override
+  String get puzzleThemeHangingPieceDescription => 'Тактыка, уключаючая неабароненую фігуру суперніка ці недастатковую колькасць яе абаронцоў, якую можна з\'есці.';
+
+  @override
+  String get puzzleThemeHookMate => 'Хук-мат';
+
+  @override
+  String get puzzleThemeHookMateDescription => 'Мат ладдзёй, канём і пешкай разам з дапамогай адной пешкай суперніка, абмяжоўваючай адыход варожага караля.';
+
+  @override
+  String get puzzleThemeInterference => 'Перакрыццё';
+
+  @override
+  String get puzzleThemeInterferenceDescription => 'Перамяшчэнне фігуры паміж дзвюма фігурамі суперніка, каб адна або абедзве фігуры суперніка засталіся без абароны, напрыклад, конь на абароненым полі паміж дзвюма ладдзямі.';
+
+  @override
+  String get puzzleThemeIntermezzo => 'Прамежкавы ход';
+
+  @override
+  String get puzzleThemeIntermezzoDescription => 'Замест чаканага хода, спачатку зрабіце іншы ход, ствараючы непасрэдную пагрозу, на якую супернік павінен адказаць. Таксама вядомы як \"Zwischenzug\" або \"Intermezzo\".';
+
+  @override
+  String get puzzleThemeKnightEndgame => 'Канёвы эндшпіль';
+
+  @override
+  String get puzzleThemeKnightEndgameDescription => 'Эндшпіль выключна з канямі і пешкамі.';
+
+  @override
+  String get puzzleThemeLong => 'Доўгая задача';
+
+  @override
+  String get puzzleThemeLongDescription => 'Да перамогі 3 хады.';
+
+  @override
+  String get puzzleThemeMaster => 'Гульні майстроў';
+
+  @override
+  String get puzzleThemeMasterDescription => 'Задачы з гульняў тытулаваных гульцоў.';
+
+  @override
+  String get puzzleThemeMasterVsMaster => 'З гульняў майстроў';
+
+  @override
+  String get puzzleThemeMasterVsMasterDescription => 'Задачы з гульняў паміж тытулаванымі гульцамі.';
+
+  @override
+  String get puzzleThemeMate => 'Мат';
+
+  @override
+  String get puzzleThemeMateDescription => 'Выйграйце стылёва.';
+
+  @override
+  String get puzzleThemeMateIn1 => 'Мат у 1 ход';
+
+  @override
+  String get puzzleThemeMateIn1Description => 'Пастаўце мат у адзін ход.';
+
+  @override
+  String get puzzleThemeMateIn2 => 'Мат у 2 хады';
+
+  @override
+  String get puzzleThemeMateIn2Description => 'Пастаўце мат у два хады.';
+
+  @override
+  String get puzzleThemeMateIn3 => 'Мат у 3 хады';
+
+  @override
+  String get puzzleThemeMateIn3Description => 'Пастаўце мат у тры хады.';
+
+  @override
+  String get puzzleThemeMateIn4 => 'Мат у 4 хады';
+
+  @override
+  String get puzzleThemeMateIn4Description => 'Пастаўце мат у чатыры хады.';
+
+  @override
+  String get puzzleThemeMateIn5 => 'Мат у 5 хадоў';
+
+  @override
+  String get puzzleThemeMateIn5Description => 'Знайдзіце доўгую матавую паслядоўнасць.';
+
+  @override
+  String get puzzleThemeMiddlegame => 'Мітальшпіль';
+
+  @override
+  String get puzzleThemeMiddlegameDescription => 'Тактыка на другім этапе гульні.';
+
+  @override
+  String get puzzleThemeOneMove => 'Аднахадовая задача';
+
+  @override
+  String get puzzleThemeOneMoveDescription => 'Задача ў адзін ход.';
+
+  @override
+  String get puzzleThemeOpening => 'Дэбют';
+
+  @override
+  String get puzzleThemeOpeningDescription => 'Тактыка на першым этапе гульні.';
+
+  @override
+  String get puzzleThemePawnEndgame => 'Пешачны эндшпіль';
+
+  @override
+  String get puzzleThemePawnEndgameDescription => 'Эндшпіль выключна з пешкамі.';
+
+  @override
+  String get puzzleThemePin => 'Звязка';
+
+  @override
+  String get puzzleThemePinDescription => 'Тактыка, уключаючая звязкі, дзе фігура не можа рухацца, не дазволіўшы нападзенне на больш каштоўную фігуру.';
+
+  @override
+  String get puzzleThemePromotion => 'Ператварэнне пешкі';
+
+  @override
+  String get puzzleThemePromotionDescription => 'Ператварыцце адну з пешак ў ферзя або легкую фігуру.';
+
+  @override
+  String get puzzleThemeQueenEndgame => 'Ферзевы эндшпіль';
+
+  @override
+  String get puzzleThemeQueenEndgameDescription => 'Эндшпіль выключна з ферзмі і пешкамі.';
+
+  @override
+  String get puzzleThemeQueenRookEndgame => 'Ферзева-ладдзейны эндшпіль';
+
+  @override
+  String get puzzleThemeQueenRookEndgameDescription => 'Эндшпіль выключна з ферзямі, ладдзямі і пешкамі.';
+
+  @override
+  String get puzzleThemeQueensideAttack => 'Атака на ферзевам флангу';
+
+  @override
+  String get puzzleThemeQueensideAttackDescription => 'Атака на караля суперніка, пасля ягонай доўгай ракіроўкі.';
+
+  @override
+  String get puzzleThemeQuietMove => 'Павольны ход';
+
+  @override
+  String get puzzleThemeQuietMoveDescription => 'Ход, які не робіць не шах, не збівае штосьці, не стварае непасрэднай пагрозы, але рыхтуе схваную немянуючую пагрозу для наступных хадоў.';
+
+  @override
+  String get puzzleThemeRookEndgame => 'Ладзейны эндшпіль';
+
+  @override
+  String get puzzleThemeRookEndgameDescription => 'Эндшпіль выключна з ладдзямі і пешкамі.';
+
+  @override
+  String get puzzleThemeSacrifice => 'Ахвяра';
+
+  @override
+  String get puzzleThemeSacrificeDescription => 'Тактыка, уключаючая кароткатэрміновае ахвяраванне матэрыялу, дзеля атрымання перавагі пасля вымушанай паслядоўнасці хадоў.';
+
+  @override
+  String get puzzleThemeShort => 'Кароткая задача';
+
+  @override
+  String get puzzleThemeShortDescription => 'Да перамогі 2 хады.';
+
+  @override
+  String get puzzleThemeSkewer => 'Скразны ўдар';
+
+  @override
+  String get puzzleThemeSkewerDescription => 'Матыў, уключаючы напад на каштоўную фігуру, якая сыходзячы з лініі нападу, дазваляе збіць або атакаваць стаячую ззаду менш каштоўную фігуры ззаду, адваротная звязка.';
+
+  @override
+  String get puzzleThemeSmotheredMate => 'Спёрты мат';
+
+  @override
+  String get puzzleThemeSmotheredMateDescription => 'Мат пастаўленны канём, калі заматаваны кароль не можа рухацца, бо акружаны (ці запёрты) сваімі фігурамі.';
+
+  @override
+  String get puzzleThemeSuperGM => 'Партыі супергросмайстраў';
+
+  @override
+  String get puzzleThemeSuperGMDescription => 'Задачы з партый найлепшых гульцоў у свеце.';
+
+  @override
+  String get puzzleThemeTrappedPiece => 'Фігура ў пастцы';
+
+  @override
+  String get puzzleThemeTrappedPieceDescription => 'Фігура не можа пазбегнуць збіцця, бо абмежавана ў хадах.';
+
+  @override
+  String get puzzleThemeUnderPromotion => 'Слабае пераўтварэнне';
+
+  @override
+  String get puzzleThemeUnderPromotionDescription => 'Пераўтварэнне пешкі ў каня, слана або ладдзю.';
+
+  @override
+  String get puzzleThemeVeryLong => 'Вельмі доўгая задача';
+
+  @override
+  String get puzzleThemeVeryLongDescription => 'Чатыры або больш хадоў да перамогі.';
+
+  @override
+  String get puzzleThemeXRayAttack => 'Рэнтген';
+
+  @override
+  String get puzzleThemeXRayAttackDescription => 'Фігара нападае або бараніць поле праз варожую фігуру.';
+
+  @override
+  String get puzzleThemeZugzwang => 'Цугцванг';
+
+  @override
+  String get puzzleThemeZugzwangDescription => 'Супернік абмежаваны ў хадах і ўсе магчымыя хады пагаршаюць яго пазіцыю.';
+
+  @override
+  String get puzzleThemeHealthyMix => 'Здаровая сумесь';
+
+  @override
+  String get puzzleThemeHealthyMixDescription => 'Патрошкі ўсяго. Вы ня ведаеце чаго чакаць, таму гатовы да ўсяго! Як у сапраўдных гульнях.';
+
+  @override
+  String get puzzleThemePlayerGames => 'З партый гульца';
+
+  @override
+  String get puzzleThemePlayerGamesDescription => 'Праглядзіце задачы ўзятыя з вашых гульняў, ці з партый іншага гульца.';
+
+  @override
+  String puzzleThemePuzzleDownloadInformation(String param) {
+    return 'Гэта публічныя задачы, іх магчыма спампаваць з $param.';
+  }
+
+  @override
+  String get searchSearch => 'Пошук';
+
+  @override
+  String get settingsSettings => 'Налады';
+
+  @override
+  String get settingsCloseAccount => 'Выдаліць уліковы запіс';
+
+  @override
+  String get settingsManagedAccountCannotBeClosed => 'Your account is managed, and cannot be closed.';
+
+  @override
+  String get settingsClosingIsDefinitive => 'Зачыненне немагчыма будзе адмяніць. Не будзе шляху назад. Вы ўпэўнены?';
+
+  @override
+  String get settingsCantOpenSimilarAccount => 'Вам не будзе дазволена стварыць новы ўліковы запіс з тым жа імем, нават калі рэгістр сімвалаў адрозніваецца.';
+
+  @override
+  String get settingsChangedMindDoNotCloseAccount => 'Я перадумаў, не выдаляйце мой уліковы запіс';
+
+  @override
+  String get settingsCloseAccountExplanation => 'Вы сапраўды хочаце выдаліць свой уліковы запіс? Гэта неадваротнае дзеянне: увайсці ў яго будзе немагчыма.';
+
+  @override
+  String get settingsThisAccountIsClosed => 'Гэты ўліковы запіс зачынены.';
 
   @override
   String get playWithAFriend => 'Гуляць з сябрам';
@@ -546,6 +1562,12 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get deleteFromHere => 'Выдаліць з гэтага месца';
+
+  @override
+  String get collapseVariations => 'Collapse variations';
+
+  @override
+  String get expandVariations => 'Expand variations';
 
   @override
   String get forceVariation => 'Прасунуць варыянт';
@@ -1405,15 +2427,6 @@ class AppLocalizationsBe extends AppLocalizations {
   String get emptyTournamentName => 'Пакіньце пустым, каб назваць турнір у гонар выпадковага гросмайстра.';
 
   @override
-  String get recommendNotTouching => 'Лепей тут нічога не чапаць.';
-
-  @override
-  String get fewerPlayers => 'Калі вы задасце ўмовы ўваходу, то не ўсе гульцы змогуць далучыцца да вашага турніру.';
-
-  @override
-  String get showAdvancedSettings => 'Паказаць дадатковыя налады';
-
-  @override
   String get makePrivateTournament => 'Зрабіць турнір прыватным і абмяжаваць доступ паролем';
 
   @override
@@ -1543,10 +2556,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get editProfile => 'Рэдагаваць профіль';
 
   @override
-  String get firstName => 'Імя';
-
-  @override
-  String get lastName => 'Прозвішча';
+  String get realName => 'Real name';
 
   @override
   String get setFlair => 'Set your flair';
@@ -1675,13 +2685,7 @@ class AppLocalizationsBe extends AppLocalizations {
   String get cheat => 'Несумленная гульня';
 
   @override
-  String get insult => 'Абраза';
-
-  @override
   String get troll => 'Троль';
-
-  @override
-  String get ratingManipulation => 'Махінацыі з рэйтынгам';
 
   @override
   String get other => 'Іншае';
@@ -1788,6 +2792,9 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get outsideTheBoard => 'Па-за дошкай';
+
+  @override
+  String get allSquaresOfTheBoard => 'All squares of the board';
 
   @override
   String get onSlowGames => 'У павольных гульнях';
@@ -3574,1019 +4581,6 @@ class AppLocalizationsBe extends AppLocalizations {
   }
 
   @override
-  String get patronDonate => 'Ахвяраваць';
-
-  @override
-  String get patronLichessPatron => 'Спонсар Lichess';
-
-  @override
-  String get preferencesPreferences => 'Налады';
-
-  @override
-  String get preferencesDisplay => 'Адлюстраванне';
-
-  @override
-  String get preferencesPrivacy => 'Прыватнасць';
-
-  @override
-  String get preferencesNotifications => 'Апавяшчэнні';
-
-  @override
-  String get preferencesPieceAnimation => 'Анімацыя фігур';
-
-  @override
-  String get preferencesMaterialDifference => 'Паказваць розніцу ў фігурах';
-
-  @override
-  String get preferencesBoardHighlights => 'Падсвечваць апошні ход і шах';
-
-  @override
-  String get preferencesPieceDestinations => 'Паказваць дапушчальныя хады';
-
-  @override
-  String get preferencesBoardCoordinates => 'Каардынаты дошкі';
-
-  @override
-  String get preferencesMoveListWhilePlaying => 'Паказваць спіс рухаў пад час гульні';
-
-  @override
-  String get preferencesPgnPieceNotation => 'Натацыя рухаў';
-
-  @override
-  String get preferencesChessPieceSymbol => 'Сымбаль шахматнай фігуры';
-
-  @override
-  String get preferencesPgnLetter => 'Літара (K, Q, R, B, N)';
-
-  @override
-  String get preferencesZenMode => 'Рэжым Дзэн';
-
-  @override
-  String get preferencesShowPlayerRatings => 'Паказваць рэйтынг гульцоў';
-
-  @override
-  String get preferencesShowFlairs => 'Паказваць эмодзі гульцоў';
-
-  @override
-  String get preferencesExplainShowPlayerRatings => 'Гэта дазваляе схаваць усе рэйтынгі на сайце, каб дапамагчы сканцэнтравацца на шахматах. Гульні ўсё яшчэ могуць быць рэйтынгавымі, змены адбудуцца толькі візуальныя.';
-
-  @override
-  String get preferencesDisplayBoardResizeHandle => 'Паказваць ручку змены памеру дошкі';
-
-  @override
-  String get preferencesOnlyOnInitialPosition => 'Толькі ў пачатковым становішчы';
-
-  @override
-  String get preferencesInGameOnly => 'Выключна ў партыі';
-
-  @override
-  String get preferencesChessClock => 'Шахматны гадзіннік';
-
-  @override
-  String get preferencesTenthsOfSeconds => 'Дзясятыя долі секунды';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'Калі засталося менш за 10 с';
-
-  @override
-  String get preferencesHorizontalGreenProgressBars => 'Індыкатар часу';
-
-  @override
-  String get preferencesSoundWhenTimeGetsCritical => 'Гукавое апавяшчэнне калі час хутка скончыцца';
-
-  @override
-  String get preferencesGiveMoreTime => 'Дадаць часу';
-
-  @override
-  String get preferencesGameBehavior => 'Гульнявыя паводзіны';
-
-  @override
-  String get preferencesHowDoYouMovePieces => 'Як вы перасоўваеце фігуры?';
-
-  @override
-  String get preferencesClickTwoSquares => 'Націскам на дзве клеткі';
-
-  @override
-  String get preferencesDragPiece => 'Перацягваннем фігуры';
-
-  @override
-  String get preferencesBothClicksAndDrag => 'Абодвума спосабамі';
-
-  @override
-  String get preferencesPremovesPlayingDuringOpponentTurn => 'Ход на апярэджанне (падчас ходу суперніка)';
-
-  @override
-  String get preferencesTakebacksWithOpponentApproval => 'Скасаванні ходу (са згоды суперніка)';
-
-  @override
-  String get preferencesInCasualGamesOnly => 'Толькі ў таварыскіх гульнях';
-
-  @override
-  String get preferencesPromoteToQueenAutomatically => 'Аўтаматычна пераўтвараць пешку ў ферзя';
-
-  @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Зацісніце клавішу <ctrl> пад час пераўтварэння, каб часова адключыць аўта-пераўтварэнне';
-
-  @override
-  String get preferencesWhenPremoving => 'Пры ходзе на апярэджанне';
-
-  @override
-  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Аўтаматычна запытваць нічыю пры трохразовым паўторы ходу';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Калі застаецца < 30 секунд';
-
-  @override
-  String get preferencesMoveConfirmation => 'Пацверджанне руху';
-
-  @override
-  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Можа быць адключана падчас гульні з дапамогай меню дошкі';
-
-  @override
-  String get preferencesInCorrespondenceGames => 'У гульні па ліставанні';
-
-  @override
-  String get preferencesCorrespondenceAndUnlimited => 'Па ліставанні і без абмежавання часу';
-
-  @override
-  String get preferencesConfirmResignationAndDrawOffers => 'Пацвярджаць здаччу і прапановы нічый';
-
-  @override
-  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Спосаб ракіроўкі';
-
-  @override
-  String get preferencesCastleByMovingTwoSquares => 'Караля на дзьве клеткі';
-
-  @override
-  String get preferencesCastleByMovingOntoTheRook => 'Караля перасунуць на ладдзю';
-
-  @override
-  String get preferencesInputMovesWithTheKeyboard => 'Уводзіць хады з дапамогай клавіятуры';
-
-  @override
-  String get preferencesInputMovesWithVoice => 'Уводзьце хады вашым голасам';
-
-  @override
-  String get preferencesSnapArrowsToValidMoves => 'Маляваць стрэлки толькі да магчымых хадоў';
-
-  @override
-  String get preferencesSayGgWpAfterLosingOrDrawing => 'Казаць \"Good game, well played\" пасля паразы або нічыі';
-
-  @override
-  String get preferencesYourPreferencesHaveBeenSaved => 'Вашы налады былі захаваныя.';
-
-  @override
-  String get preferencesScrollOnTheBoardToReplayMoves => 'Гартайце колцам мышцы на дошцы, каб прагледзець хады';
-
-  @override
-  String get preferencesCorrespondenceEmailNotification => 'Штодзённае апавяшчэнне па пошце з пералікам вашых гульняў па ліставанні';
-
-  @override
-  String get preferencesNotifyStreamStart => 'Стрымер вядзе трансляцыю';
-
-  @override
-  String get preferencesNotifyInboxMsg => 'Новае паведамленне';
-
-  @override
-  String get preferencesNotifyForumMention => 'Каментарый на форуме закранае Вас';
-
-  @override
-  String get preferencesNotifyInvitedStudy => 'Запрашэнне на ўрок';
-
-  @override
-  String get preferencesNotifyGameEvent => 'Абнаўленне ў гульні па перапісцы';
-
-  @override
-  String get preferencesNotifyChallenge => 'Выклікі';
-
-  @override
-  String get preferencesNotifyTournamentSoon => 'У хуткім часе пачынаецца турнір';
-
-  @override
-  String get preferencesNotifyTimeAlarm => 'Час зыходзіць у гульні па перепісцы';
-
-  @override
-  String get preferencesNotifyBell => 'Гукавое паведамленне ад Lichess';
-
-  @override
-  String get preferencesNotifyPush => 'Паведамленне на прыладу, калі Вы не на Lichess';
-
-  @override
-  String get preferencesNotifyWeb => 'Браўзер';
-
-  @override
-  String get preferencesNotifyDevice => 'Прылада';
-
-  @override
-  String get preferencesBellNotificationSound => 'Гукавое паведамленне';
-
-  @override
-  String get puzzlePuzzles => 'Задачы';
-
-  @override
-  String get puzzlePuzzleThemes => 'Тэмы задач';
-
-  @override
-  String get puzzleRecommended => 'Рэкамендаваныя';
-
-  @override
-  String get puzzlePhases => 'Стадыі гульні';
-
-  @override
-  String get puzzleMotifs => 'Матывы';
-
-  @override
-  String get puzzleAdvanced => 'Прасунутыя';
-
-  @override
-  String get puzzleLengths => 'Колькасць хадоў';
-
-  @override
-  String get puzzleMates => 'Маты';
-
-  @override
-  String get puzzleGoals => 'Мэты';
-
-  @override
-  String get puzzleOrigin => 'Паходжанне';
-
-  @override
-  String get puzzleSpecialMoves => 'Адмысловыя хады';
-
-  @override
-  String get puzzleDidYouLikeThisPuzzle => 'Ці спадабалася задача?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Прагаласуйце, каб перайсці да наступнай!';
-
-  @override
-  String get puzzleUpVote => 'Задача спадабалася';
-
-  @override
-  String get puzzleDownVote => 'Задача не спадабалася';
-
-  @override
-  String get puzzleYourPuzzleRatingWillNotChange => 'Ваш рэйтынг задач не зменіцца. Заўважце, што задачы гэта не спаборніцтва. Рэйтынг дапамагае абіраць найлепшыя задачы для вашага бягучага ўзроўню.';
-
-  @override
-  String get puzzleFindTheBestMoveForWhite => 'Знайдзіце найлепшы ход белых.';
-
-  @override
-  String get puzzleFindTheBestMoveForBlack => 'Знайдзіце найлепшы ход чорных.';
-
-  @override
-  String get puzzleToGetPersonalizedPuzzles => 'Каб атрымаць персаналізаваныя задачы:';
-
-  @override
-  String puzzlePuzzleId(String param) {
-    return 'Задача $param';
-  }
-
-  @override
-  String get puzzlePuzzleOfTheDay => 'Задача дня';
-
-  @override
-  String get puzzleDailyPuzzle => 'Daily Puzzle';
-
-  @override
-  String get puzzleClickToSolve => 'Націсніце, каб рашыць';
-
-  @override
-  String get puzzleGoodMove => 'Добры ход';
-
-  @override
-  String get puzzleBestMove => 'Найлепшы ход!';
-
-  @override
-  String get puzzleKeepGoing => 'Працягвайце…';
-
-  @override
-  String get puzzlePuzzleSuccess => 'Поспех!';
-
-  @override
-  String get puzzlePuzzleComplete => 'Задача вырашана!';
-
-  @override
-  String get puzzleByOpenings => 'By openings';
-
-  @override
-  String get puzzlePuzzlesByOpenings => 'Puzzles by openings';
-
-  @override
-  String get puzzleOpeningsYouPlayedTheMost => 'Openings you played the most in rated games';
-
-  @override
-  String get puzzleUseFindInPage => 'Use \"Find in page\" in the browser menu to find your favourite opening!';
-
-  @override
-  String get puzzleUseCtrlF => 'Use Ctrl+f to find your favourite opening!';
-
-  @override
-  String get puzzleNotTheMove => 'Гэта не той ход!';
-
-  @override
-  String get puzzleTrySomethingElse => 'Паспрабуйце нешта іншае.';
-
-  @override
-  String puzzleRatingX(String param) {
-    return 'Рэйтынг: $param';
-  }
-
-  @override
-  String get puzzleHidden => 'схаваны';
-
-  @override
-  String puzzleFromGameLink(String param) {
-    return 'З гульні $param';
-  }
-
-  @override
-  String get puzzleContinueTraining => 'Працягнуць трэніроўку';
-
-  @override
-  String get puzzleDifficultyLevel => 'Узровень складанасці';
-
-  @override
-  String get puzzleNormal => 'Нармальны';
-
-  @override
-  String get puzzleEasier => 'Лёгкі';
-
-  @override
-  String get puzzleEasiest => 'Найлягчэйшы';
-
-  @override
-  String get puzzleHarder => 'Цяжкі';
-
-  @override
-  String get puzzleHardest => 'Найцяжэйшы';
-
-  @override
-  String get puzzleExample => 'Прыклад';
-
-  @override
-  String get puzzleAddAnotherTheme => 'Дадаць іншую тэму';
-
-  @override
-  String get puzzleNextPuzzle => 'Наступная задача';
-
-  @override
-  String get puzzleJumpToNextPuzzleImmediately => 'Адразу перайсці да наступнай задачы';
-
-  @override
-  String get puzzlePuzzleDashboard => 'Панэль задач';
-
-  @override
-  String get puzzleImprovementAreas => 'Напрамкі паляпшэння';
-
-  @override
-  String get puzzleStrengths => 'Моцныя бакі';
-
-  @override
-  String get puzzleHistory => 'Гісторыя задач';
-
-  @override
-  String get puzzleSolved => 'вырашана правільна';
-
-  @override
-  String get puzzleFailed => 'памылка';
-
-  @override
-  String get puzzleStreakDescription => 'Вырашайце патупова ўскладняючыеся задачы і стварыце пераможную серыю. Тут няма гадзінніку, таму не спяшайцеся. Адзін няправільны ход і гульня скончана! Але можна прапусціць адзін ход за спробу.';
-
-  @override
-  String puzzleYourStreakX(String param) {
-    return 'Ваша серыя: $param';
-  }
-
-  @override
-  String get puzzleStreakSkipExplanation => 'Прапусціце гэты ход, каб захаваць серыю! Можна скарыстаць толькі адзін раз.';
-
-  @override
-  String get puzzleContinueTheStreak => 'Працягнуць серыю';
-
-  @override
-  String get puzzleNewStreak => 'Новая серыя';
-
-  @override
-  String get puzzleFromMyGames => 'З маіх гульняў';
-
-  @override
-  String get puzzleLookupOfPlayer => 'Шукаць задачы з партый гульца';
-
-  @override
-  String puzzleFromXGames(String param) {
-    return 'Задачы з гульняў $param';
-  }
-
-  @override
-  String get puzzleSearchPuzzles => 'Шукаць задачы';
-
-  @override
-  String get puzzleFromMyGamesNone => 'Базе дадзеных няма задач з вашых гульня, але Liches усе роўна любіць вас!\nПагуляйце ў хуткія або класічныя шахматы каб павялічыць шанец выкарыстання вашых гульняў у задачах.';
-
-  @override
-  String puzzleFromXGamesFound(String param1, String param2) {
-    return 'Знойдзена $param1 задач ў $param2 гульнях';
-  }
-
-  @override
-  String get puzzlePuzzleDashboardDescription => 'Трэніруйцеся, аналізуйце, паляпшайцеся';
-
-  @override
-  String puzzlePercentSolved(String param) {
-    return '$param вырашана правільна';
-  }
-
-  @override
-  String get puzzleNoPuzzlesToShow => 'Нічога няма, вырашыце некалькі задач спачатку!';
-
-  @override
-  String get puzzleImprovementAreasDescription => 'Трэніруйце гэта, каб палепшыць прагрэс!';
-
-  @override
-  String get puzzleStrengthDescription => 'Найбольш атрымоўваюцца гэтыя тэмы';
-
-  @override
-  String puzzlePlayedXTimes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Згуляна $count разоў',
-      many: 'Згуляна $count разоў',
-      few: 'Згуляна $count разы',
-      one: 'Згуляна $count раз',
-      zero: 'Згуляна $count раз',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsBelowYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count балаў менш за ваш рэйтынг задач',
-      many: '$count балаў менш за ваш рэйтынг задач',
-      few: '$count бала менш за ваш рэйтынг задач',
-      one: 'Адзін бал менш за ваш рэйтынг задач',
-      zero: 'Адзін бал менш за ваш рэйтынг задач',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsAboveYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count балаў вышэй за ваш рэйтынг задач',
-      many: '$count балаў вышэй за ваш рэйтынг задач',
-      few: '$count бала вышэй за ваш рэйтынг задач',
-      one: 'Адзін бал вышэй за ваш рэйтынг задач',
-      zero: 'Адзін бал вышэй за ваш рэйтынг задач',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPlayed(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count вырашана',
-      many: '$count вырашана',
-      few: '$count вырашаны',
-      one: '$count вырашана',
-      zero: '$count вырашана',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbToReplay(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count перарашаць',
-      many: '$count перарашаць',
-      few: '$count перарашаць',
-      one: '$count перарашаць',
-      zero: '$count перарашаць',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get puzzleThemeAdvancedPawn => 'Далёка прасунутая пешка';
-
-  @override
-  String get puzzleThemeAdvancedPawnDescription => 'Адна з вашых пешак глыбока ў пазіцыі суперніка, магчыма пагражае ператварэннем.';
-
-  @override
-  String get puzzleThemeAdvantage => 'Перавага';
-
-  @override
-  String get puzzleThemeAdvantageDescription => 'Не ўпусціце шанец, каб атрымаць вырашальную перавагу. (200сп ≤ ацэнка ≤ 600сп)';
-
-  @override
-  String get puzzleThemeAnastasiaMate => 'Мат Анастасіі';
-
-  @override
-  String get puzzleThemeAnastasiaMateDescription => 'Конь і ладдзя (ці ферзь) працуюць разам, каб заматаваць караля суперніка паміж сваёй фігурай і краем дошкі.';
-
-  @override
-  String get puzzleThemeArabianMate => 'Арабскі мат';
-
-  @override
-  String get puzzleThemeArabianMateDescription => 'Конь і ладдзя працуюць разам, каб заматаваць караля суперніка ў кутку дошкі.';
-
-  @override
-  String get puzzleThemeAttackingF2F7 => 'Напад на f2 або f7';
-
-  @override
-  String get puzzleThemeAttackingF2F7Description => 'Нападзенне, накіраванае на пешку на f2 або f7, як у дэбюце Атакі Фегатэлла.';
-
-  @override
-  String get puzzleThemeAttraction => 'Прыцягненне';
-
-  @override
-  String get puzzleThemeAttractionDescription => 'Абмен або ахвяра, якая заахвочвае або прымушае фігуру суперніка выйсці на поле, што дазваляе здейсніць тактыку.';
-
-  @override
-  String get puzzleThemeBackRankMate => 'Мат на апошняй гарызанталі';
-
-  @override
-  String get puzzleThemeBackRankMateDescription => 'Пастаўце мат каралю на хатняй гарызанталі, калі ён заблакаваны сваімі фігурамі.';
-
-  @override
-  String get puzzleThemeBishopEndgame => 'Слановы эндшпіль';
-
-  @override
-  String get puzzleThemeBishopEndgameDescription => 'Эндшпіль выключна са сланамі і пешкамі.';
-
-  @override
-  String get puzzleThemeBodenMate => 'Мат Бодэна';
-
-  @override
-  String get puzzleThemeBodenMateDescription => 'Два нападаючых слана па перакрыжаваных дыяганалях матуюць караля, які акружаны сваімі фігурамі.';
-
-  @override
-  String get puzzleThemeCastling => 'Ракіроўка';
-
-  @override
-  String get puzzleThemeCastlingDescription => 'Адпраўце караля ў бяспеку і выведзіце ладдзю ў атаку.';
-
-  @override
-  String get puzzleThemeCapturingDefender => 'Узяцце абаронцы';
-
-  @override
-  String get puzzleThemeCapturingDefenderDescription => 'Адцягненне або ўзяцце фігуры, якая з\'яўляца крытычнай для абароны іншай фігуры, што дазваляе ўзяце неабароненую фігуру наступным ходам.';
-
-  @override
-  String get puzzleThemeCrushing => 'Зруйнаванне';
-
-  @override
-  String get puzzleThemeCrushingDescription => 'Знайдзіце позех суперніка і атрымайце разгромную перавагу. (ацэнка ≥ 600сп)';
-
-  @override
-  String get puzzleThemeDoubleBishopMate => 'Мат двума сланамі';
-
-  @override
-  String get puzzleThemeDoubleBishopMateDescription => 'Два нападаючых слана на суседніх дыяганалях матуюць караля, які акружаны сваімі фігурамі.';
-
-  @override
-  String get puzzleThemeDovetailMate => 'Мат \"галубіны хвост\"';
-
-  @override
-  String get puzzleThemeDovetailMateDescription => 'Ферзь ставіць мат сумежнаму каралю, адзіныя два палі адыхода якога заняты яго ж фігурамі.';
-
-  @override
-  String get puzzleThemeEquality => 'Выраўненне';
-
-  @override
-  String get puzzleThemeEqualityDescription => 'Адыграйцеся з прайгранай пазіцыі і забяспечце нічыйную або збалансаваную пазіцыю. (ацэнка пазіціі ≤ 200сп)';
-
-  @override
-  String get puzzleThemeKingsideAttack => 'Атака на каралеўскім флангу';
-
-  @override
-  String get puzzleThemeKingsideAttackDescription => 'Атака на караля суперніка, пасля ягонай кароткай ракіроўкі.';
-
-  @override
-  String get puzzleThemeClearance => 'Расчыстка поля';
-
-  @override
-  String get puzzleThemeClearanceDescription => 'Ход, часта з тэмпам, які расчышчае поле, лінію або дыяганал для паследуючай тактыкі.';
-
-  @override
-  String get puzzleThemeDefensiveMove => 'Абарончы ход';
-
-  @override
-  String get puzzleThemeDefensiveMoveDescription => 'Дакладны ход або паслядоўнасць хадоў, неабходная каб пазбегнуць страты матэрыялу або іншай перавагі.';
-
-  @override
-  String get puzzleThemeDeflection => 'Адцягненне';
-
-  @override
-  String get puzzleThemeDeflectionDescription => 'Ход, які адцягвае фігуру суперніка ад выканання іншага абавязку, напрыклад, аховы ключавога поля. Часам таксама называецца \"перагрузка\".';
-
-  @override
-  String get puzzleThemeDiscoveredAttack => 'Ўскрыты напад';
-
-  @override
-  String get puzzleThemeDiscoveredAttackDescription => 'Ход фігурай (напрыклад канём), якая раней блакавала фігуру далёкага дзеяння (напрыклад ладдзю), з лініі нападу гэтай фігуры.';
-
-  @override
-  String get puzzleThemeDoubleCheck => 'Падвойны шах';
-
-  @override
-  String get puzzleThemeDoubleCheckDescription => 'Шах дзвюма фігурамі адначасова, у выніку ўскрытыга нападу, калі і фігура, якая ходзіць, і раскрытая фігура атакуюць караля суперніка.';
-
-  @override
-  String get puzzleThemeEndgame => 'Эндшпіль';
-
-  @override
-  String get puzzleThemeEndgameDescription => 'Тактыка на апошнім этапе гульні.';
-
-  @override
-  String get puzzleThemeEnPassantDescription => 'Задача звязаная з \"узяццем на праходзе\", дзе пешка можа ўзяць пешку суперніка, якая прайшла побач, выкарыстоўвыючы першы ход на два палі.';
-
-  @override
-  String get puzzleThemeExposedKing => 'Адкрыты кароль';
-
-  @override
-  String get puzzleThemeExposedKingDescription => 'Тактыка, уключаючая недастаткова абароненага караля, якая часта скончваецца матам.';
-
-  @override
-  String get puzzleThemeFork => 'Відэлец';
-
-  @override
-  String get puzzleThemeForkDescription => 'Ход, калі фігура, якой пахадзілі, нападае адразу на дзве фігуры суперніка.';
-
-  @override
-  String get puzzleThemeHangingPiece => 'Вісячая фігура';
-
-  @override
-  String get puzzleThemeHangingPieceDescription => 'Тактыка, уключаючая неабароненую фігуру суперніка ці недастатковую колькасць яе абаронцоў, якую можна з\'есці.';
-
-  @override
-  String get puzzleThemeHookMate => 'Хук-мат';
-
-  @override
-  String get puzzleThemeHookMateDescription => 'Мат ладдзёй, канём і пешкай разам з дапамогай адной пешкай суперніка, абмяжоўваючай адыход варожага караля.';
-
-  @override
-  String get puzzleThemeInterference => 'Перакрыццё';
-
-  @override
-  String get puzzleThemeInterferenceDescription => 'Перамяшчэнне фігуры паміж дзвюма фігурамі суперніка, каб адна або абедзве фігуры суперніка засталіся без абароны, напрыклад, конь на абароненым полі паміж дзвюма ладдзямі.';
-
-  @override
-  String get puzzleThemeIntermezzo => 'Прамежкавы ход';
-
-  @override
-  String get puzzleThemeIntermezzoDescription => 'Замест чаканага хода, спачатку зрабіце іншы ход, ствараючы непасрэдную пагрозу, на якую супернік павінен адказаць. Таксама вядомы як \"Zwischenzug\" або \"Intermezzo\".';
-
-  @override
-  String get puzzleThemeKnightEndgame => 'Канёвы эндшпіль';
-
-  @override
-  String get puzzleThemeKnightEndgameDescription => 'Эндшпіль выключна з канямі і пешкамі.';
-
-  @override
-  String get puzzleThemeLong => 'Доўгая задача';
-
-  @override
-  String get puzzleThemeLongDescription => 'Да перамогі 3 хады.';
-
-  @override
-  String get puzzleThemeMaster => 'Гульні майстроў';
-
-  @override
-  String get puzzleThemeMasterDescription => 'Задачы з гульняў тытулаваных гульцоў.';
-
-  @override
-  String get puzzleThemeMasterVsMaster => 'З гульняў майстроў';
-
-  @override
-  String get puzzleThemeMasterVsMasterDescription => 'Задачы з гульняў паміж тытулаванымі гульцамі.';
-
-  @override
-  String get puzzleThemeMate => 'Мат';
-
-  @override
-  String get puzzleThemeMateDescription => 'Выйграйце стылёва.';
-
-  @override
-  String get puzzleThemeMateIn1 => 'Мат у 1 ход';
-
-  @override
-  String get puzzleThemeMateIn1Description => 'Пастаўце мат у адзін ход.';
-
-  @override
-  String get puzzleThemeMateIn2 => 'Мат у 2 хады';
-
-  @override
-  String get puzzleThemeMateIn2Description => 'Пастаўце мат у два хады.';
-
-  @override
-  String get puzzleThemeMateIn3 => 'Мат у 3 хады';
-
-  @override
-  String get puzzleThemeMateIn3Description => 'Пастаўце мат у тры хады.';
-
-  @override
-  String get puzzleThemeMateIn4 => 'Мат у 4 хады';
-
-  @override
-  String get puzzleThemeMateIn4Description => 'Пастаўце мат у чатыры хады.';
-
-  @override
-  String get puzzleThemeMateIn5 => 'Мат у 5 хадоў';
-
-  @override
-  String get puzzleThemeMateIn5Description => 'Знайдзіце доўгую матавую паслядоўнасць.';
-
-  @override
-  String get puzzleThemeMiddlegame => 'Мітальшпіль';
-
-  @override
-  String get puzzleThemeMiddlegameDescription => 'Тактыка на другім этапе гульні.';
-
-  @override
-  String get puzzleThemeOneMove => 'Аднахадовая задача';
-
-  @override
-  String get puzzleThemeOneMoveDescription => 'Задача ў адзін ход.';
-
-  @override
-  String get puzzleThemeOpening => 'Дэбют';
-
-  @override
-  String get puzzleThemeOpeningDescription => 'Тактыка на першым этапе гульні.';
-
-  @override
-  String get puzzleThemePawnEndgame => 'Пешачны эндшпіль';
-
-  @override
-  String get puzzleThemePawnEndgameDescription => 'Эндшпіль выключна з пешкамі.';
-
-  @override
-  String get puzzleThemePin => 'Звязка';
-
-  @override
-  String get puzzleThemePinDescription => 'Тактыка, уключаючая звязкі, дзе фігура не можа рухацца, не дазволіўшы нападзенне на больш каштоўную фігуру.';
-
-  @override
-  String get puzzleThemePromotion => 'Ператварэнне пешкі';
-
-  @override
-  String get puzzleThemePromotionDescription => 'Ператварыцце адну з пешак ў ферзя або легкую фігуру.';
-
-  @override
-  String get puzzleThemeQueenEndgame => 'Ферзевы эндшпіль';
-
-  @override
-  String get puzzleThemeQueenEndgameDescription => 'Эндшпіль выключна з ферзмі і пешкамі.';
-
-  @override
-  String get puzzleThemeQueenRookEndgame => 'Ферзева-ладдзейны эндшпіль';
-
-  @override
-  String get puzzleThemeQueenRookEndgameDescription => 'Эндшпіль выключна з ферзямі, ладдзямі і пешкамі.';
-
-  @override
-  String get puzzleThemeQueensideAttack => 'Атака на ферзевам флангу';
-
-  @override
-  String get puzzleThemeQueensideAttackDescription => 'Атака на караля суперніка, пасля ягонай доўгай ракіроўкі.';
-
-  @override
-  String get puzzleThemeQuietMove => 'Павольны ход';
-
-  @override
-  String get puzzleThemeQuietMoveDescription => 'Ход, які не робіць не шах, не збівае штосьці, не стварае непасрэднай пагрозы, але рыхтуе схваную немянуючую пагрозу для наступных хадоў.';
-
-  @override
-  String get puzzleThemeRookEndgame => 'Ладзейны эндшпіль';
-
-  @override
-  String get puzzleThemeRookEndgameDescription => 'Эндшпіль выключна з ладдзямі і пешкамі.';
-
-  @override
-  String get puzzleThemeSacrifice => 'Ахвяра';
-
-  @override
-  String get puzzleThemeSacrificeDescription => 'Тактыка, уключаючая кароткатэрміновае ахвяраванне матэрыялу, дзеля атрымання перавагі пасля вымушанай паслядоўнасці хадоў.';
-
-  @override
-  String get puzzleThemeShort => 'Кароткая задача';
-
-  @override
-  String get puzzleThemeShortDescription => 'Да перамогі 2 хады.';
-
-  @override
-  String get puzzleThemeSkewer => 'Скразны ўдар';
-
-  @override
-  String get puzzleThemeSkewerDescription => 'Матыў, уключаючы напад на каштоўную фігуру, якая сыходзячы з лініі нападу, дазваляе збіць або атакаваць стаячую ззаду менш каштоўную фігуры ззаду, адваротная звязка.';
-
-  @override
-  String get puzzleThemeSmotheredMate => 'Спёрты мат';
-
-  @override
-  String get puzzleThemeSmotheredMateDescription => 'Мат пастаўленны канём, калі заматаваны кароль не можа рухацца, бо акружаны (ці запёрты) сваімі фігурамі.';
-
-  @override
-  String get puzzleThemeSuperGM => 'Партыі супергросмайстраў';
-
-  @override
-  String get puzzleThemeSuperGMDescription => 'Задачы з партый найлепшых гульцоў у свеце.';
-
-  @override
-  String get puzzleThemeTrappedPiece => 'Фігура ў пастцы';
-
-  @override
-  String get puzzleThemeTrappedPieceDescription => 'Фігура не можа пазбегнуць збіцця, бо абмежавана ў хадах.';
-
-  @override
-  String get puzzleThemeUnderPromotion => 'Слабае пераўтварэнне';
-
-  @override
-  String get puzzleThemeUnderPromotionDescription => 'Пераўтварэнне пешкі ў каня, слана або ладдзю.';
-
-  @override
-  String get puzzleThemeVeryLong => 'Вельмі доўгая задача';
-
-  @override
-  String get puzzleThemeVeryLongDescription => 'Чатыры або больш хадоў да перамогі.';
-
-  @override
-  String get puzzleThemeXRayAttack => 'Рэнтген';
-
-  @override
-  String get puzzleThemeXRayAttackDescription => 'Фігара нападае або бараніць поле праз варожую фігуру.';
-
-  @override
-  String get puzzleThemeZugzwang => 'Цугцванг';
-
-  @override
-  String get puzzleThemeZugzwangDescription => 'Супернік абмежаваны ў хадах і ўсе магчымыя хады пагаршаюць яго пазіцыю.';
-
-  @override
-  String get puzzleThemeHealthyMix => 'Здаровая сумесь';
-
-  @override
-  String get puzzleThemeHealthyMixDescription => 'Патрошкі ўсяго. Вы ня ведаеце чаго чакаць, таму гатовы да ўсяго! Як у сапраўдных гульнях.';
-
-  @override
-  String get puzzleThemePlayerGames => 'З партый гульца';
-
-  @override
-  String get puzzleThemePlayerGamesDescription => 'Праглядзіце задачы ўзятыя з вашых гульняў, ці з партый іншага гульца.';
-
-  @override
-  String puzzleThemePuzzleDownloadInformation(String param) {
-    return 'Гэта публічныя задачы, іх магчыма спампаваць з $param.';
-  }
-
-  @override
-  String perfStatPerfStats(String param) {
-    return 'Статыстыка $param';
-  }
-
-  @override
-  String get perfStatViewTheGames => 'Праглядзець гульні';
-
-  @override
-  String get perfStatProvisional => 'умоўны';
-
-  @override
-  String get perfStatNotEnoughRatedGames => 'Не было згуляна дастаткова рэйтынгавых гульняў, каб усталяваць дакладны рэйтынг.';
-
-  @override
-  String perfStatProgressOverLastXGames(String param) {
-    return 'Прагрэс за апошнія $param гульняў:';
-  }
-
-  @override
-  String perfStatRatingDeviation(String param) {
-    return 'Адхіленне рэйтынгу: $param.';
-  }
-
-  @override
-  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
-    return 'Чым ніжэй значэнне, тым больш усталяваным з\'яўляецца рэйтынг. Рэйтынг вышэйшы за $param1, лічыцца ўмоўным. Каб быць уключаным у спісы рэйтынгу, гэта значэнне павінна быць ніжэй за $param2 (звычайныя шахматы) або $param3 (варыянты).';
-  }
-
-  @override
-  String get perfStatTotalGames => 'Агулам гульняў';
-
-  @override
-  String get perfStatRatedGames => 'Рэйтынгавыя гульні';
-
-  @override
-  String get perfStatTournamentGames => 'Гульні ў турнірах';
-
-  @override
-  String get perfStatBerserkedGames => 'Гульні з бярсеркам';
-
-  @override
-  String get perfStatTimeSpentPlaying => 'Агульны час за гульнёй';
-
-  @override
-  String get perfStatAverageOpponent => 'Сярэдні рэйтынг суперніка';
-
-  @override
-  String get perfStatVictories => 'Перамогі';
-
-  @override
-  String get perfStatDefeats => 'Паразы';
-
-  @override
-  String get perfStatDisconnections => 'Адключэнні';
-
-  @override
-  String get perfStatNotEnoughGames => 'Згуляна недастаткова партый';
-
-  @override
-  String perfStatHighestRating(String param) {
-    return 'Найвышэйшы рэйтынг: $param';
-  }
-
-  @override
-  String perfStatLowestRating(String param) {
-    return 'Найніжэйшы рэйтынг: $param';
-  }
-
-  @override
-  String perfStatFromXToY(String param1, String param2) {
-    return 'ад $param1 да $param2';
-  }
-
-  @override
-  String get perfStatWinningStreak => 'Перамог запар';
-
-  @override
-  String get perfStatLosingStreak => 'Паразаў запар';
-
-  @override
-  String perfStatLongestStreak(String param) {
-    return 'Найдаўжэйшая серыя: $param';
-  }
-
-  @override
-  String perfStatCurrentStreak(String param) {
-    return 'Бягучая серыя: $param';
-  }
-
-  @override
-  String get perfStatBestRated => 'Найлепшыя рэйтынгавыя перамогі';
-
-  @override
-  String get perfStatGamesInARow => 'Гульняў сыграна запар';
-
-  @override
-  String get perfStatLessThanOneHour => 'Менш за гадзіну паміж гульнямі';
-
-  @override
-  String get perfStatMaxTimePlaying => 'Максімальны час за гульнёй';
-
-  @override
-  String get perfStatNow => 'зараз';
-
-  @override
-  String get searchSearch => 'Пошук';
-
-  @override
-  String get settingsSettings => 'Налады';
-
-  @override
-  String get settingsCloseAccount => 'Выдаліць уліковы запіс';
-
-  @override
-  String get settingsManagedAccountCannotBeClosed => 'Your account is managed, and cannot be closed.';
-
-  @override
-  String get settingsClosingIsDefinitive => 'Зачыненне немагчыма будзе адмяніць. Не будзе шляху назад. Вы ўпэўнены?';
-
-  @override
-  String get settingsCantOpenSimilarAccount => 'Вам не будзе дазволена стварыць новы ўліковы запіс з тым жа імем, нават калі рэгістр сімвалаў адрозніваецца.';
-
-  @override
-  String get settingsChangedMindDoNotCloseAccount => 'Я перадумаў, не выдаляйце мой уліковы запіс';
-
-  @override
-  String get settingsCloseAccountExplanation => 'Вы сапраўды хочаце выдаліць свой уліковы запіс? Гэта неадваротнае дзеянне: увайсці ў яго будзе немагчыма.';
-
-  @override
-  String get settingsThisAccountIsClosed => 'Гэты ўліковы запіс зачынены.';
-
-  @override
-  String get streamerLichessStreamers => 'Стрымеры на Lichess';
-
-  @override
   String get stormMoveToStart => 'Зрабіце ход, каб пачаць';
 
   @override
@@ -4774,14 +4768,11 @@ class AppLocalizationsBe extends AppLocalizations {
   }
 
   @override
+  String get streamerLichessStreamers => 'Стрымеры на Lichess';
+
+  @override
   String get studyShareAndExport => 'Падзяліцца & экспартаваць';
 
   @override
   String get studyStart => 'Пачаць';
-
-  @override
-  String get broadcastBroadcasts => 'Трансляцыі';
-
-  @override
-  String get broadcastStartDate => 'Дата пачатаку ў вашым часавым поясе';
 }

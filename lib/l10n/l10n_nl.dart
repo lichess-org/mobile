@@ -225,10 +225,10 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get contactContact => 'Contact';
+  String get broadcastBroadcasts => 'Uitzendingen';
 
   @override
-  String get contactContactLichess => 'Contact met Lichess';
+  String get broadcastStartDate => 'Aanvangsdatum in je eigen tijdzone';
 
   @override
   String challengeChallengesX(String param1) {
@@ -310,6 +310,1012 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get challengeInviteLichessUser => 'Of nodig een Lichess-gebruiker uit:';
+
+  @override
+  String get contactContact => 'Contact';
+
+  @override
+  String get contactContactLichess => 'Contact met Lichess';
+
+  @override
+  String get patronDonate => 'Doneer';
+
+  @override
+  String get patronLichessPatron => 'Lichess Patroon';
+
+  @override
+  String perfStatPerfStats(String param) {
+    return '$param-statistieken';
+  }
+
+  @override
+  String get perfStatViewTheGames => 'Bekijk de partijen';
+
+  @override
+  String get perfStatProvisional => 'voorlopig';
+
+  @override
+  String get perfStatNotEnoughRatedGames => 'Er zijn niet genoeg partijen met rating gespeeld om een betrouwbare rating vast te stellen.';
+
+  @override
+  String perfStatProgressOverLastXGames(String param) {
+    return 'Voortgang in de laatste $param partijen:';
+  }
+
+  @override
+  String perfStatRatingDeviation(String param) {
+    return 'Rating deviatie: $param.';
+  }
+
+  @override
+  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
+    return 'Een lagere waarde betekent dat de rating stabieler is. Boven $param1 wordt de rating als voorlopig beschouwd. Om in de ranglijsten te worden opgenomen, moet deze waarde lager zijn dan $param2 (standaard schaken) of $param3 (varianten).';
+  }
+
+  @override
+  String get perfStatTotalGames => 'Totaal aantal partijen';
+
+  @override
+  String get perfStatRatedGames => 'Partijen met rating';
+
+  @override
+  String get perfStatTournamentGames => 'Toernooipartijen';
+
+  @override
+  String get perfStatBerserkedGames => 'Berserk partijen';
+
+  @override
+  String get perfStatTimeSpentPlaying => 'Tijd schakend besteed';
+
+  @override
+  String get perfStatAverageOpponent => 'Gemiddelde tegenstander';
+
+  @override
+  String get perfStatVictories => 'Overwinningen';
+
+  @override
+  String get perfStatDefeats => 'Nederlagen';
+
+  @override
+  String get perfStatDisconnections => 'Verbroken verbindingen';
+
+  @override
+  String get perfStatNotEnoughGames => 'Niet genoeg partijen gespeeld';
+
+  @override
+  String perfStatHighestRating(String param) {
+    return 'Hoogste rating: $param';
+  }
+
+  @override
+  String perfStatLowestRating(String param) {
+    return 'Laagste rating: $param';
+  }
+
+  @override
+  String perfStatFromXToY(String param1, String param2) {
+    return 'van $param1 tot $param2';
+  }
+
+  @override
+  String get perfStatWinningStreak => 'Overwinningsreeks';
+
+  @override
+  String get perfStatLosingStreak => 'Verliesreeks';
+
+  @override
+  String perfStatLongestStreak(String param) {
+    return 'Langste reeks: $param';
+  }
+
+  @override
+  String perfStatCurrentStreak(String param) {
+    return 'Huidige reeks: $param';
+  }
+
+  @override
+  String get perfStatBestRated => 'Grootste overwinningen';
+
+  @override
+  String get perfStatGamesInARow => 'Aaneengesloten partijen';
+
+  @override
+  String get perfStatLessThanOneHour => 'Minder dan een uur tussen de partijen';
+
+  @override
+  String get perfStatMaxTimePlaying => 'Langste schaakpartij';
+
+  @override
+  String get perfStatNow => 'nu';
+
+  @override
+  String get preferencesPreferences => 'Voorkeuren';
+
+  @override
+  String get preferencesDisplay => 'Weergave';
+
+  @override
+  String get preferencesPrivacy => 'Privacy';
+
+  @override
+  String get preferencesNotifications => 'Meldingen';
+
+  @override
+  String get preferencesPieceAnimation => 'Stukanimatie';
+
+  @override
+  String get preferencesMaterialDifference => 'Materiaalverschil';
+
+  @override
+  String get preferencesBoardHighlights => 'Bord laten oplichten (laatste zet en schaak)';
+
+  @override
+  String get preferencesPieceDestinations => 'Bestemming van het stuk (geldige zetten en premoves)';
+
+  @override
+  String get preferencesBoardCoordinates => 'Bordcoördinaten (A-H, 1-8)';
+
+  @override
+  String get preferencesMoveListWhilePlaying => 'Zetnotatie zichtbaar tijdens partij';
+
+  @override
+  String get preferencesPgnPieceNotation => 'Stuknotatie in PGN';
+
+  @override
+  String get preferencesChessPieceSymbol => 'Schaakstuksymbool';
+
+  @override
+  String get preferencesPgnLetter => 'PGN-letter (K, D, T, L, P)';
+
+  @override
+  String get preferencesZenMode => 'Zenmodus';
+
+  @override
+  String get preferencesShowPlayerRatings => 'Toon de rating van de spelers';
+
+  @override
+  String get preferencesShowFlairs => 'Geef de flairs van de spelers weer';
+
+  @override
+  String get preferencesExplainShowPlayerRatings => 'Deze instelling zorgt ervoor dat alle ratings op de website verborgen blijven zodat je je kunt concentreren op het schaken. Partijen kunnen nog steeds met rating zijn; dit gaat alleen om wat je te zien krijgt.';
+
+  @override
+  String get preferencesDisplayBoardResizeHandle => 'Toon de knop om het bordformaat te wijzigen';
+
+  @override
+  String get preferencesOnlyOnInitialPosition => 'Enkel tijdens de beginstelling';
+
+  @override
+  String get preferencesInGameOnly => 'Alleen tijdens partij';
+
+  @override
+  String get preferencesChessClock => 'Schaakklok';
+
+  @override
+  String get preferencesTenthsOfSeconds => 'Tienden van seconden';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'Wanneer resterende tijd < 10 seconden';
+
+  @override
+  String get preferencesHorizontalGreenProgressBars => 'Horizontale groene voortgangsbalk';
+
+  @override
+  String get preferencesSoundWhenTimeGetsCritical => 'Geluidssignaal als tijd opraakt';
+
+  @override
+  String get preferencesGiveMoreTime => 'Meer tijd geven';
+
+  @override
+  String get preferencesGameBehavior => 'Spelgedrag';
+
+  @override
+  String get preferencesHowDoYouMovePieces => 'Hoe zet je stukken?';
+
+  @override
+  String get preferencesClickTwoSquares => 'Klik twee vakjes';
+
+  @override
+  String get preferencesDragPiece => 'Sleep een stuk';
+
+  @override
+  String get preferencesBothClicksAndDrag => 'Beide';
+
+  @override
+  String get preferencesPremovesPlayingDuringOpponentTurn => 'Vooraf-zetten (spelen tijdens beurt tegenstander)';
+
+  @override
+  String get preferencesTakebacksWithOpponentApproval => 'Terugnames (met goedkeuring van tegenstander)';
+
+  @override
+  String get preferencesInCasualGamesOnly => 'Alleen bij partijen zonder rating';
+
+  @override
+  String get preferencesPromoteToQueenAutomatically => 'Automatisch promoveren tot dame';
+
+  @override
+  String get preferencesExplainPromoteToQueenAutomatically => 'Houd de <Ctrl> toets ingedrukt om auto-promotie tijdelijk uit te zetten';
+
+  @override
+  String get preferencesWhenPremoving => 'Bij vooraf-zetten';
+
+  @override
+  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Eis automatisch remise op bij driemaal dezelfde stelling';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Wanneer resterende tijd < 30 seconden';
+
+  @override
+  String get preferencesMoveConfirmation => 'Zetbevestiging';
+
+  @override
+  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Kan tijdens een partij uitgeschakeld worden met het bordmenu';
+
+  @override
+  String get preferencesInCorrespondenceGames => 'Bij correspondentiepartijen';
+
+  @override
+  String get preferencesCorrespondenceAndUnlimited => 'Correspondentiepartij en zonder klok';
+
+  @override
+  String get preferencesConfirmResignationAndDrawOffers => 'Opgave en remise-aanbod bevestigen';
+
+  @override
+  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Rokeren';
+
+  @override
+  String get preferencesCastleByMovingTwoSquares => 'Verplaats de koning twee velden';
+
+  @override
+  String get preferencesCastleByMovingOntoTheRook => 'Verplaats de koning naar de toren';
+
+  @override
+  String get preferencesInputMovesWithTheKeyboard => 'Zetten invoeren met het toetsenbord';
+
+  @override
+  String get preferencesInputMovesWithVoice => 'Voer zetten in met je stem';
+
+  @override
+  String get preferencesSnapArrowsToValidMoves => 'Geldige zetten markeren met pijlen';
+
+  @override
+  String get preferencesSayGgWpAfterLosingOrDrawing => 'Zeg \"Goede partij, goed gespeeld\" bij verlies of remise';
+
+  @override
+  String get preferencesYourPreferencesHaveBeenSaved => 'Uw voorkeuren werden opgeslagen.';
+
+  @override
+  String get preferencesScrollOnTheBoardToReplayMoves => 'Scroll op het bord om zetten opnieuw af te spelen';
+
+  @override
+  String get preferencesCorrespondenceEmailNotification => 'Dagelijkse e-mailmeldingen met de lijst van jouw correspondentiepartijen';
+
+  @override
+  String get preferencesNotifyStreamStart => 'Streamer gaat live';
+
+  @override
+  String get preferencesNotifyInboxMsg => 'Nieuw bericht inbox';
+
+  @override
+  String get preferencesNotifyForumMention => 'Opmerking op het forum noemt u';
+
+  @override
+  String get preferencesNotifyInvitedStudy => 'Studie uitnodiging';
+
+  @override
+  String get preferencesNotifyGameEvent => 'Spelupdates voor correspondentiepartijen';
+
+  @override
+  String get preferencesNotifyChallenge => 'Uitdagingen';
+
+  @override
+  String get preferencesNotifyTournamentSoon => 'Toernooi begint binnenkort';
+
+  @override
+  String get preferencesNotifyTimeAlarm => 'Klok met correspondentie bijna leeg';
+
+  @override
+  String get preferencesNotifyBell => 'Bel melding binnen Lichess';
+
+  @override
+  String get preferencesNotifyPush => 'Apparaatmelding wanneer je niet op Lichess bent';
+
+  @override
+  String get preferencesNotifyWeb => 'Browser';
+
+  @override
+  String get preferencesNotifyDevice => 'Apparaat';
+
+  @override
+  String get preferencesBellNotificationSound => 'Meldingsgeluid';
+
+  @override
+  String get puzzlePuzzles => 'Puzzels';
+
+  @override
+  String get puzzlePuzzleThemes => 'Puzzelthema\'s';
+
+  @override
+  String get puzzleRecommended => 'Aanbevolen';
+
+  @override
+  String get puzzlePhases => 'Fasen';
+
+  @override
+  String get puzzleMotifs => 'Motieven';
+
+  @override
+  String get puzzleAdvanced => 'Geavanceerd';
+
+  @override
+  String get puzzleLengths => 'Duur';
+
+  @override
+  String get puzzleMates => 'Schaakmat';
+
+  @override
+  String get puzzleGoals => 'Doelen';
+
+  @override
+  String get puzzleOrigin => 'Herkomst';
+
+  @override
+  String get puzzleSpecialMoves => 'Speciale zetten';
+
+  @override
+  String get puzzleDidYouLikeThisPuzzle => 'Vond je deze puzzel leuk?';
+
+  @override
+  String get puzzleVoteToLoadNextOne => 'Stem om de volgende te laden!';
+
+  @override
+  String get puzzleUpVote => 'Puzzel leuk vinden';
+
+  @override
+  String get puzzleDownVote => 'Puzzel niet leuk vinden';
+
+  @override
+  String get puzzleYourPuzzleRatingWillNotChange => 'Je puzzelrating zal niet veranderen: puzzels zijn geen competitie. De rating helpt bij het selecteren van de beste puzzels voor je huidige vaardigheid.';
+
+  @override
+  String get puzzleFindTheBestMoveForWhite => 'Vind de beste zet voor wit.';
+
+  @override
+  String get puzzleFindTheBestMoveForBlack => 'Vind de beste zet voor zwart.';
+
+  @override
+  String get puzzleToGetPersonalizedPuzzles => 'Om gepersonaliseerde puzzels te krijgen:';
+
+  @override
+  String puzzlePuzzleId(String param) {
+    return 'Puzzel $param';
+  }
+
+  @override
+  String get puzzlePuzzleOfTheDay => 'Puzzel van de dag';
+
+  @override
+  String get puzzleDailyPuzzle => 'Dagelijkse Puzzel';
+
+  @override
+  String get puzzleClickToSolve => 'Klik om op te lossen';
+
+  @override
+  String get puzzleGoodMove => 'Goede zet';
+
+  @override
+  String get puzzleBestMove => 'Beste zet!';
+
+  @override
+  String get puzzleKeepGoing => 'Ga zo door…';
+
+  @override
+  String get puzzlePuzzleSuccess => 'Perfect!';
+
+  @override
+  String get puzzlePuzzleComplete => 'Puzzel voltooid!';
+
+  @override
+  String get puzzleByOpenings => 'Per opening';
+
+  @override
+  String get puzzlePuzzlesByOpenings => 'Puzzels per opening';
+
+  @override
+  String get puzzleOpeningsYouPlayedTheMost => 'Openingen die je het meest hebt gespeeld in partijen met rating';
+
+  @override
+  String get puzzleUseFindInPage => 'Gebruik \"In pagina zoeken\" in het browsermenu om je favoriete opening te vinden!';
+
+  @override
+  String get puzzleUseCtrlF => 'Gebruik Ctrl+F om je favoriete opening te vinden!';
+
+  @override
+  String get puzzleNotTheMove => 'Dat is niet de juiste zet!';
+
+  @override
+  String get puzzleTrySomethingElse => 'Probeer iets anders.';
+
+  @override
+  String puzzleRatingX(String param) {
+    return 'Rating: $param';
+  }
+
+  @override
+  String get puzzleHidden => 'verborgen';
+
+  @override
+  String puzzleFromGameLink(String param) {
+    return 'Van partij $param';
+  }
+
+  @override
+  String get puzzleContinueTraining => 'Ga verder met de training';
+
+  @override
+  String get puzzleDifficultyLevel => 'Moeilijkheidsgraad';
+
+  @override
+  String get puzzleNormal => 'Standaard';
+
+  @override
+  String get puzzleEasier => 'Makkelijk';
+
+  @override
+  String get puzzleEasiest => 'Makkelijker';
+
+  @override
+  String get puzzleHarder => 'Moeilijk';
+
+  @override
+  String get puzzleHardest => 'Moeilijker';
+
+  @override
+  String get puzzleExample => 'Voorbeeld';
+
+  @override
+  String get puzzleAddAnotherTheme => 'Voeg nog een thema toe';
+
+  @override
+  String get puzzleNextPuzzle => 'Volgende puzzel';
+
+  @override
+  String get puzzleJumpToNextPuzzleImmediately => 'Ga direct door naar volgende puzzel';
+
+  @override
+  String get puzzlePuzzleDashboard => 'Puzzeldashboard';
+
+  @override
+  String get puzzleImprovementAreas => 'Verbeterpunten';
+
+  @override
+  String get puzzleStrengths => 'Sterke punten';
+
+  @override
+  String get puzzleHistory => 'Puzzelscore';
+
+  @override
+  String get puzzleSolved => 'opgelost';
+
+  @override
+  String get puzzleFailed => 'niet opgelost';
+
+  @override
+  String get puzzleStreakDescription => 'Los steeds moeilijker wordende puzzels op en bouw aan een succesreeks. Er is geen klok, dus neem de tijd. Eén foute zet en het spel is uit! Per sessie kun je één zet overslaan.';
+
+  @override
+  String puzzleYourStreakX(String param) {
+    return 'Uw reeks: $param';
+  }
+
+  @override
+  String get puzzleStreakSkipExplanation => 'Sla deze zet over om je reeks te behouden! Werkt maar eenmaal per sessie.';
+
+  @override
+  String get puzzleContinueTheStreak => 'Doorgaan met de reeks';
+
+  @override
+  String get puzzleNewStreak => 'Nieuwe reeks';
+
+  @override
+  String get puzzleFromMyGames => 'Van mijn partijen';
+
+  @override
+  String get puzzleLookupOfPlayer => 'Zoek puzzels uit partijen van een specifieke speler';
+
+  @override
+  String puzzleFromXGames(String param) {
+    return 'Puzzels uit de partijen van $param';
+  }
+
+  @override
+  String get puzzleSearchPuzzles => 'Puzzels zoeken';
+
+  @override
+  String get puzzleFromMyGamesNone => 'Je hebt geen puzzels in de database staan, maar Lichess waardeert je nog steeds heel erg.\nSpeel rapid en klassieke partijen om de kans te vergroten dat een puzzel uit jouw partijen wordt toegevoegd!';
+
+  @override
+  String puzzleFromXGamesFound(String param1, String param2) {
+    return '$param1 puzzels gevonden in $param2 partijen';
+  }
+
+  @override
+  String get puzzlePuzzleDashboardDescription => 'Train, analyseer, verbeter';
+
+  @override
+  String puzzlePercentSolved(String param) {
+    return '$param opgelost';
+  }
+
+  @override
+  String get puzzleNoPuzzlesToShow => 'Niets te tonen, speel eerst wat puzzels!';
+
+  @override
+  String get puzzleImprovementAreasDescription => 'Train deze om je voortgang te optimaliseren!';
+
+  @override
+  String get puzzleStrengthDescription => 'Je presteert het beste in deze thema\'s';
+
+  @override
+  String puzzlePlayedXTimes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count keer gespeeld',
+      one: '$count keer gespeeld',
+      zero: '$count keer gespeeld',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsBelowYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count punten onder je puzzelrating',
+      one: 'Eén punt onder je puzzelrating',
+      zero: 'Eén punt onder je puzzelrating',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsAboveYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count punten boven je puzzelrating',
+      one: 'Eén punt boven je puzzelrating',
+      zero: 'Eén punt boven je puzzelrating',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPlayed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count gespeeld',
+      one: '$count gespeeld',
+      zero: '$count gespeeld',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbToReplay(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count om te herhalen',
+      one: '$count om te herhalen',
+      zero: '$count om te herhalen',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get puzzleThemeAdvancedPawn => 'Opgerukte pion';
+
+  @override
+  String get puzzleThemeAdvancedPawnDescription => 'Een pion die promoveert of dreigt te promoveren is hier cruciaal.';
+
+  @override
+  String get puzzleThemeAdvantage => 'Voordeel';
+
+  @override
+  String get puzzleThemeAdvantageDescription => 'Grijp je kans om een doorslaggevend voordeel te verkrijgen. (200cp ≤ eval ≤ 600 cp)';
+
+  @override
+  String get puzzleThemeAnastasiaMate => 'Mat van Anastasia';
+
+  @override
+  String get puzzleThemeAnastasiaMateDescription => 'Een paard werkt samen met een toren of dame om de koning van de tegenstander tussen de zijkant van het bord en een eigen stuk te vangen.';
+
+  @override
+  String get puzzleThemeArabianMate => 'Arabisch mat';
+
+  @override
+  String get puzzleThemeArabianMateDescription => 'Een paard en een toren werken samen om de koning van de tegenstander in een hoek van het bord in te sluiten.';
+
+  @override
+  String get puzzleThemeAttackingF2F7 => 'f2 of f7 aanvallen';
+
+  @override
+  String get puzzleThemeAttackingF2F7Description => 'Een aanval gericht op de f2 of de f7-pion, zoals in de Fegatello-opening.';
+
+  @override
+  String get puzzleThemeAttraction => 'Lokken';
+
+  @override
+  String get puzzleThemeAttractionDescription => 'Een afruil of offer om een vijandelijk stuk naar een veld te lokken of te dwingen waardoor een tactisch vervolg mogelijk wordt gemaakt.';
+
+  @override
+  String get puzzleThemeBackRankMate => 'Mat op de achterste rij';
+
+  @override
+  String get puzzleThemeBackRankMateDescription => 'Zet de koning mat op de achterste rij, ingesloten door zijn eigen stukken.';
+
+  @override
+  String get puzzleThemeBishopEndgame => 'Lopereindspel';
+
+  @override
+  String get puzzleThemeBishopEndgameDescription => 'Een eindspel met alleen lopers en pionnen.';
+
+  @override
+  String get puzzleThemeBodenMate => 'Mat van Boden';
+
+  @override
+  String get puzzleThemeBodenMateDescription => 'Twee lopers op kruisende diagonalen zetten een koning mat die wordt belemmerd door de eigen stukken.';
+
+  @override
+  String get puzzleThemeCastling => 'Rokeren';
+
+  @override
+  String get puzzleThemeCastlingDescription => 'Breng de koning in veiligheid en zet de toren in voor een aanval.';
+
+  @override
+  String get puzzleThemeCapturingDefender => 'De verdediger slaan';
+
+  @override
+  String get puzzleThemeCapturingDefenderDescription => 'Een stuk slaan dat essentieel is voor de verdediging van een ander stuk, waardoor vervolgens het nu onverdedigde stuk een volgende zet kan worden geslagen.';
+
+  @override
+  String get puzzleThemeCrushing => 'Verpletteren';
+
+  @override
+  String get puzzleThemeCrushingDescription => 'Zie de blunder van de tegenstander om een verpletterend voordeel te verkrijgen. (eval ≥ 600cp)';
+
+  @override
+  String get puzzleThemeDoubleBishopMate => 'Mat met twee lopers';
+
+  @override
+  String get puzzleThemeDoubleBishopMateDescription => 'Twee lopers op belendende diagonalen zetten een koning mat die wordt belemmerd door de eigen stukken.';
+
+  @override
+  String get puzzleThemeDovetailMate => 'Zwaluwstaartmat';
+
+  @override
+  String get puzzleThemeDovetailMateDescription => 'Een dame zet mat naast de koning, wiens vluchtvelden geblokkeerd zijn door eigen stukken.';
+
+  @override
+  String get puzzleThemeEquality => 'Evenwicht';
+
+  @override
+  String get puzzleThemeEqualityDescription => 'Terugkomen uit een verloren stelling en een remise veiligstellen of een gelijkwaardige stelling bereiken. (eval ≤ 200cp)';
+
+  @override
+  String get puzzleThemeKingsideAttack => 'Koningsaanval';
+
+  @override
+  String get puzzleThemeKingsideAttackDescription => 'Een aanval op de vijandelijke koning na een korte rokade.';
+
+  @override
+  String get puzzleThemeClearance => 'Breekzet';
+
+  @override
+  String get puzzleThemeClearanceDescription => 'Een zet, vaak met tempo, die een veld, lijn of diagonaal vrijmaakt voor een tactisch vervolg.';
+
+  @override
+  String get puzzleThemeDefensiveMove => 'Verdedigende zet';
+
+  @override
+  String get puzzleThemeDefensiveMoveDescription => 'Een nauwkeurige zet of reeks zetten die nodig zijn om verlies van materiaal of een ander voordeel te voorkomen.';
+
+  @override
+  String get puzzleThemeDeflection => 'Weglokken';
+
+  @override
+  String get puzzleThemeDeflectionDescription => 'Een zet die een vijandelijk stuk afleidt van een andere taak die het uitoefent, zoals het bewaken van een belangrijk veld.';
+
+  @override
+  String get puzzleThemeDiscoveredAttack => 'Aftrekaanval';
+
+  @override
+  String get puzzleThemeDiscoveredAttackDescription => 'Een stuk verplaatsen dat daarvoor een aanval van een ander lange afstandsstuk blokkeerde, bijvoorbeeld een paard dat opzij gaat voor een toren.';
+
+  @override
+  String get puzzleThemeDoubleCheck => 'Dubbelschaak';
+
+  @override
+  String get puzzleThemeDoubleCheckDescription => 'Schaak geven met twee stukken tegelijk als gevolg van een aftrekaanval waarbij zowel het verplaatste als het geactiveerde stuk de koning van de tegenstander aanvalt.';
+
+  @override
+  String get puzzleThemeEndgame => 'Eindspel';
+
+  @override
+  String get puzzleThemeEndgameDescription => 'Tactiek in de slotfase van de partij.';
+
+  @override
+  String get puzzleThemeEnPassantDescription => 'Tactiek met betrekking tot de en passant-regel, waarbij een pion een vijandelijke pion die vanuit zijn beginpositie twee velden tegelijk wordt opgespeeld, kan slaan.';
+
+  @override
+  String get puzzleThemeExposedKing => 'Onveilige koning';
+
+  @override
+  String get puzzleThemeExposedKingDescription => 'Een stelling met een koning met weinig verdedigers, vaak leidend tot schaakmat.';
+
+  @override
+  String get puzzleThemeFork => 'Vork';
+
+  @override
+  String get puzzleThemeForkDescription => 'Een zet waarbij het gespeelde stuk twee vijandelijke stukken tegelijk aanvalt.';
+
+  @override
+  String get puzzleThemeHangingPiece => 'Ongedekt stuk';
+
+  @override
+  String get puzzleThemeHangingPieceDescription => 'Een situatie waarin een vijandelijk stuk niet of onvoldoende verdedigd wordt en daarom ongestraft geslagen kan worden.';
+
+  @override
+  String get puzzleThemeHookMate => 'Haakmat';
+
+  @override
+  String get puzzleThemeHookMateDescription => 'Mat met een toren, paard en pion tezamen met een vijandelijke pion om de vluchtvelden van de koning in te perken.';
+
+  @override
+  String get puzzleThemeInterference => 'Tussenplaatsing';
+
+  @override
+  String get puzzleThemeInterferenceDescription => 'Een stuk plaatsen tussen twee vijandelijke stukken om één of beide stukken onverdedigd te laten, zoals een paard op een verdedigd veld tussen twee torens.';
+
+  @override
+  String get puzzleThemeIntermezzo => 'Tussenzet';
+
+  @override
+  String get puzzleThemeIntermezzoDescription => 'In plaats van de verwachte zet, eerst een andere zet doen met een directe dreiging die de tegenstander eerst moet beantwoorden. Ook wel bekend als \"Zwischenzug\" of \"In between\".';
+
+  @override
+  String get puzzleThemeKnightEndgame => 'Paardeneindspel';
+
+  @override
+  String get puzzleThemeKnightEndgameDescription => 'Een eindspel met alleen paarden en pionnen.';
+
+  @override
+  String get puzzleThemeLong => 'Lange puzzel';
+
+  @override
+  String get puzzleThemeLongDescription => 'Winnen in drie zetten.';
+
+  @override
+  String get puzzleThemeMaster => 'Partijen van meesters';
+
+  @override
+  String get puzzleThemeMasterDescription => 'Puzzels van partijen met één titelhouder.';
+
+  @override
+  String get puzzleThemeMasterVsMaster => 'Partijen van meesters onderling';
+
+  @override
+  String get puzzleThemeMasterVsMasterDescription => 'Puzzels van partijen met twee titelhouders.';
+
+  @override
+  String get puzzleThemeMate => 'Mat';
+
+  @override
+  String get puzzleThemeMateDescription => 'De partij in stijl winnen.';
+
+  @override
+  String get puzzleThemeMateIn1 => 'Mat in 1';
+
+  @override
+  String get puzzleThemeMateIn1Description => 'Zet schaakmat in één zet.';
+
+  @override
+  String get puzzleThemeMateIn2 => 'Mat in 2';
+
+  @override
+  String get puzzleThemeMateIn2Description => 'Zet schaakmat in twee zetten.';
+
+  @override
+  String get puzzleThemeMateIn3 => 'Mat in 3';
+
+  @override
+  String get puzzleThemeMateIn3Description => 'Zet schaakmat in drie zetten.';
+
+  @override
+  String get puzzleThemeMateIn4 => 'Mat in 4';
+
+  @override
+  String get puzzleThemeMateIn4Description => 'Zet schaakmat in vier zetten.';
+
+  @override
+  String get puzzleThemeMateIn5 => 'Mat in 5 of meer';
+
+  @override
+  String get puzzleThemeMateIn5Description => 'Bedenk een langere reeks zetten.';
+
+  @override
+  String get puzzleThemeMiddlegame => 'Middenspel';
+
+  @override
+  String get puzzleThemeMiddlegameDescription => 'Tactiek in de tweede fase van de partij.';
+
+  @override
+  String get puzzleThemeOneMove => 'Eén-zet puzzel';
+
+  @override
+  String get puzzleThemeOneMoveDescription => 'Een puzzel die maar één zet vereist.';
+
+  @override
+  String get puzzleThemeOpening => 'Opening';
+
+  @override
+  String get puzzleThemeOpeningDescription => 'Tactiek in de eerste fase van de partij.';
+
+  @override
+  String get puzzleThemePawnEndgame => 'Pionneneindspel';
+
+  @override
+  String get puzzleThemePawnEndgameDescription => 'Een eindspel met alleen pionnen.';
+
+  @override
+  String get puzzleThemePin => 'Penning';
+
+  @override
+  String get puzzleThemePinDescription => 'Tactiek waarbij een stuk niet verzet kan worden op straffe van een aanval op een stuk van hogere waarde.';
+
+  @override
+  String get puzzleThemePromotion => 'Promotie';
+
+  @override
+  String get puzzleThemePromotionDescription => 'Een pion die promoveert of dreigt te promoveren is hier cruciaal.';
+
+  @override
+  String get puzzleThemeQueenEndgame => 'Dame-eindspel';
+
+  @override
+  String get puzzleThemeQueenEndgameDescription => 'Een eindspel met alleen dame en pionnen.';
+
+  @override
+  String get puzzleThemeQueenRookEndgame => 'Dame-toreneindspel';
+
+  @override
+  String get puzzleThemeQueenRookEndgameDescription => 'Een eindspel met alleen dame, torens en pionnen.';
+
+  @override
+  String get puzzleThemeQueensideAttack => 'Dameaanval';
+
+  @override
+  String get puzzleThemeQueensideAttackDescription => 'Een aanval op de vijandelijke koning na een lange rokade.';
+
+  @override
+  String get puzzleThemeQuietMove => 'Stille zet';
+
+  @override
+  String get puzzleThemeQuietMoveDescription => 'Een zet die niet schaak geeft of een stuk slaat, maar een onvermijdelijke dreiging door een latere zet voorbereidt.';
+
+  @override
+  String get puzzleThemeRookEndgame => 'Toreneindspel';
+
+  @override
+  String get puzzleThemeRookEndgameDescription => 'Een eindspel met alleen torens en pionnen.';
+
+  @override
+  String get puzzleThemeSacrifice => 'Offer';
+
+  @override
+  String get puzzleThemeSacrificeDescription => 'Tactiek waarbij op korte termijn materiaal wordt opgegeven om voordeel te verkrijgen na een aantal gedwongen zetten.';
+
+  @override
+  String get puzzleThemeShort => 'Korte puzzel';
+
+  @override
+  String get puzzleThemeShortDescription => 'Winnen in twee zetten.';
+
+  @override
+  String get puzzleThemeSkewer => 'Röntgenaanval';
+
+  @override
+  String get puzzleThemeSkewerDescription => 'Een motief waarbij een waardevol stuk wordt aangevallen en vervolgens wordt verplaatst, waardoor een lichter stuk erachter kan worden geslagen of aangevallen. Het omgekeerde van een penning.';
+
+  @override
+  String get puzzleThemeSmotheredMate => 'Stikmat';
+
+  @override
+  String get puzzleThemeSmotheredMateDescription => 'Schaakmat met een paard waarbij de aangevallen koning geen zet kan doen omdat hij ingesloten is (of verstikt) door zijn eigen stukken.';
+
+  @override
+  String get puzzleThemeSuperGM => 'Partijen van topschakers';
+
+  @override
+  String get puzzleThemeSuperGMDescription => 'Puzzels van partijen gespeeld door de beste schakers ter wereld.';
+
+  @override
+  String get puzzleThemeTrappedPiece => 'Ingesloten stuk';
+
+  @override
+  String get puzzleThemeTrappedPieceDescription => 'Een stuk kan niet meer ontsnappen omdat het geen velden meer heeft.';
+
+  @override
+  String get puzzleThemeUnderPromotion => 'Minorpromotie';
+
+  @override
+  String get puzzleThemeUnderPromotionDescription => 'Promotie tot paard, loper of toren.';
+
+  @override
+  String get puzzleThemeVeryLong => 'Zeer lange puzzel';
+
+  @override
+  String get puzzleThemeVeryLongDescription => 'Winnen in vier of meer zetten.';
+
+  @override
+  String get puzzleThemeXRayAttack => 'Röntgenaanval';
+
+  @override
+  String get puzzleThemeXRayAttackDescription => 'Een stuk valt een veld aan of verdedigt een veld, door een vijandelijk stuk heen.';
+
+  @override
+  String get puzzleThemeZugzwang => 'Zetdwang';
+
+  @override
+  String get puzzleThemeZugzwangDescription => 'De tegenstander is beperkt in de zetten die hij kan doen, en elke zet verslechtert zijn stelling.';
+
+  @override
+  String get puzzleThemeHealthyMix => 'Gezonde mix';
+
+  @override
+  String get puzzleThemeHealthyMixDescription => 'Van alles wat. Je weet niet wat je te wachten staat, je moet dus op alles voorbereid zijn! Net als in echte partijen.';
+
+  @override
+  String get puzzleThemePlayerGames => 'Eigen partijen';
+
+  @override
+  String get puzzleThemePlayerGamesDescription => 'Zoek puzzels gegenereerd uit jouw partijen, of uit partijen van een andere speler.';
+
+  @override
+  String puzzleThemePuzzleDownloadInformation(String param) {
+    return 'Deze puzzels zijn beschikbaar in het publieke domein en kunnen worden gedownload op $param.';
+  }
+
+  @override
+  String get searchSearch => 'Zoek';
+
+  @override
+  String get settingsSettings => 'Instellingen';
+
+  @override
+  String get settingsCloseAccount => 'Verwijder account';
+
+  @override
+  String get settingsManagedAccountCannotBeClosed => 'Je account wordt beheerd, en kan niet verwijderd worden.';
+
+  @override
+  String get settingsClosingIsDefinitive => 'Verwijderen is definitief. Er is geen weg terug. Weet je het zeker?';
+
+  @override
+  String get settingsCantOpenSimilarAccount => 'Het is niet toegestaan om een nieuw account met dezelfde naam aan te maken, ook al is het hoofdlettergebruik anders.';
+
+  @override
+  String get settingsChangedMindDoNotCloseAccount => 'Ik ben van gedachten veranderd; sluit mijn account niet';
+
+  @override
+  String get settingsCloseAccountExplanation => 'Weet je zeker dat je het account wilt verwijderen? Het verwijderen van je account is een permanente beslissing. Je kunt NOOIT meer op dit account inloggen.';
+
+  @override
+  String get settingsThisAccountIsClosed => 'Dit account is gesloten.';
 
   @override
   String get playWithAFriend => 'Speel tegen een vriend';
@@ -512,6 +1518,12 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get deleteFromHere => 'Verwijder vanaf hier';
+
+  @override
+  String get collapseVariations => 'Varianten verbergen';
+
+  @override
+  String get expandVariations => 'Varianten weergeven';
 
   @override
   String get forceVariation => 'Forceer variatie';
@@ -1077,7 +2089,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get ratingRange => 'Ratingbereik';
 
   @override
-  String get thisAccountViolatedTos => 'Deze account heeft de Lichess Servicevoorwaarden geschonden';
+  String get thisAccountViolatedTos => 'Dit account heeft de Lichess Servicevoorwaarden geschonden';
 
   @override
   String get openingExplorerAndTablebase => 'Openingsverkenner & tablebase';
@@ -1371,15 +2383,6 @@ class AppLocalizationsNl extends AppLocalizations {
   String get emptyTournamentName => 'Laat het veld leeg om het toernooi naar een willekeurige grootmeester te vernoemen.';
 
   @override
-  String get recommendNotTouching => 'Wij raden aan om deze niet aan te raken.';
-
-  @override
-  String get fewerPlayers => 'Als u voorwaarden voor deelname instelt, zullen er minder spelers meedoen.';
-
-  @override
-  String get showAdvancedSettings => 'Toon uitgebreide instellingen >>';
-
-  @override
   String get makePrivateTournament => 'Maak het toernooi privé en beperk de toegang met een wachtwoord';
 
   @override
@@ -1509,10 +2512,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get editProfile => 'Pas profiel aan';
 
   @override
-  String get firstName => 'Voornaam';
-
-  @override
-  String get lastName => 'Achternaam';
+  String get realName => 'Echte naam';
 
   @override
   String get setFlair => 'Stel je flair in';
@@ -1641,13 +2641,7 @@ class AppLocalizationsNl extends AppLocalizations {
   String get cheat => 'Valsspelen';
 
   @override
-  String get insult => 'Beledigen';
-
-  @override
   String get troll => 'Provoceren';
-
-  @override
-  String get ratingManipulation => 'Rating manipulatie';
 
   @override
   String get other => 'Anders';
@@ -1754,6 +2748,9 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get outsideTheBoard => 'Buiten het bord';
+
+  @override
+  String get allSquaresOfTheBoard => 'Alle velden van het bord';
 
   @override
   String get onSlowGames => 'Alleen bij langzame partijen';
@@ -3460,1009 +4457,6 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
-  String get patronDonate => 'Doneer';
-
-  @override
-  String get patronLichessPatron => 'Lichess Patroon';
-
-  @override
-  String get preferencesPreferences => 'Voorkeuren';
-
-  @override
-  String get preferencesDisplay => 'Weergave';
-
-  @override
-  String get preferencesPrivacy => 'Privacy';
-
-  @override
-  String get preferencesNotifications => 'Meldingen';
-
-  @override
-  String get preferencesPieceAnimation => 'Stukanimatie';
-
-  @override
-  String get preferencesMaterialDifference => 'Materiaalverschil';
-
-  @override
-  String get preferencesBoardHighlights => 'Bord laten oplichten (laatste zet en schaak)';
-
-  @override
-  String get preferencesPieceDestinations => 'Bestemming van het stuk (geldige zetten en premoves)';
-
-  @override
-  String get preferencesBoardCoordinates => 'Bordcoördinaten (A-H, 1-8)';
-
-  @override
-  String get preferencesMoveListWhilePlaying => 'Zetnotatie zichtbaar tijdens partij';
-
-  @override
-  String get preferencesPgnPieceNotation => 'Stuknotatie in PGN';
-
-  @override
-  String get preferencesChessPieceSymbol => 'Schaakstuksymbool';
-
-  @override
-  String get preferencesPgnLetter => 'PGN-letter (K, D, T, L, P)';
-
-  @override
-  String get preferencesZenMode => 'Zenmodus';
-
-  @override
-  String get preferencesShowPlayerRatings => 'Toon de rating van de spelers';
-
-  @override
-  String get preferencesShowFlairs => 'Geef de flairs van de spelers weer';
-
-  @override
-  String get preferencesExplainShowPlayerRatings => 'Deze instelling zorgt ervoor dat alle ratings op de website verborgen blijven zodat je je kunt concentreren op het schaken. Partijen kunnen nog steeds met rating zijn; dit gaat alleen om wat je te zien krijgt.';
-
-  @override
-  String get preferencesDisplayBoardResizeHandle => 'Toon de knop om het bordformaat te wijzigen';
-
-  @override
-  String get preferencesOnlyOnInitialPosition => 'Enkel tijdens de beginstelling';
-
-  @override
-  String get preferencesInGameOnly => 'Alleen tijdens partij';
-
-  @override
-  String get preferencesChessClock => 'Schaakklok';
-
-  @override
-  String get preferencesTenthsOfSeconds => 'Tienden van seconden';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'Wanneer resterende tijd < 10 seconden';
-
-  @override
-  String get preferencesHorizontalGreenProgressBars => 'Horizontale groene voortgangsbalk';
-
-  @override
-  String get preferencesSoundWhenTimeGetsCritical => 'Geluidssignaal als tijd opraakt';
-
-  @override
-  String get preferencesGiveMoreTime => 'Meer tijd geven';
-
-  @override
-  String get preferencesGameBehavior => 'Spelgedrag';
-
-  @override
-  String get preferencesHowDoYouMovePieces => 'Hoe zet je stukken?';
-
-  @override
-  String get preferencesClickTwoSquares => 'Klik twee vakjes';
-
-  @override
-  String get preferencesDragPiece => 'Sleep een stuk';
-
-  @override
-  String get preferencesBothClicksAndDrag => 'Beide';
-
-  @override
-  String get preferencesPremovesPlayingDuringOpponentTurn => 'Vooraf-zetten (spelen tijdens beurt tegenstander)';
-
-  @override
-  String get preferencesTakebacksWithOpponentApproval => 'Terugnames (met goedkeuring van tegenstander)';
-
-  @override
-  String get preferencesInCasualGamesOnly => 'Alleen bij partijen zonder rating';
-
-  @override
-  String get preferencesPromoteToQueenAutomatically => 'Automatisch promoveren tot dame';
-
-  @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Houd de <Ctrl> toets ingedrukt om auto-promotie tijdelijk uit te zetten';
-
-  @override
-  String get preferencesWhenPremoving => 'Bij vooraf-zetten';
-
-  @override
-  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Eis automatisch remise op bij driemaal dezelfde stelling';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Wanneer resterende tijd < 30 seconden';
-
-  @override
-  String get preferencesMoveConfirmation => 'Zetbevestiging';
-
-  @override
-  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Kan tijdens een partij uitgeschakeld worden met het bordmenu';
-
-  @override
-  String get preferencesInCorrespondenceGames => 'Bij correspondentiepartijen';
-
-  @override
-  String get preferencesCorrespondenceAndUnlimited => 'Correspondentiepartij en zonder klok';
-
-  @override
-  String get preferencesConfirmResignationAndDrawOffers => 'Opgave en remise-aanbod bevestigen';
-
-  @override
-  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Rokeren';
-
-  @override
-  String get preferencesCastleByMovingTwoSquares => 'Verplaats de koning twee velden';
-
-  @override
-  String get preferencesCastleByMovingOntoTheRook => 'Verplaats de koning naar de toren';
-
-  @override
-  String get preferencesInputMovesWithTheKeyboard => 'Zetten invoeren met het toetsenbord';
-
-  @override
-  String get preferencesInputMovesWithVoice => 'Voer zetten in met je stem';
-
-  @override
-  String get preferencesSnapArrowsToValidMoves => 'Geldige zetten markeren met pijlen';
-
-  @override
-  String get preferencesSayGgWpAfterLosingOrDrawing => 'Zeg \"Goede partij, goed gespeeld\" bij verlies of remise';
-
-  @override
-  String get preferencesYourPreferencesHaveBeenSaved => 'Uw voorkeuren werden opgeslagen.';
-
-  @override
-  String get preferencesScrollOnTheBoardToReplayMoves => 'Scroll op het bord om zetten opnieuw af te spelen';
-
-  @override
-  String get preferencesCorrespondenceEmailNotification => 'Dagelijkse e-mailmeldingen met de lijst van jouw correspondentiepartijen';
-
-  @override
-  String get preferencesNotifyStreamStart => 'Streamer gaat live';
-
-  @override
-  String get preferencesNotifyInboxMsg => 'Nieuw bericht inbox';
-
-  @override
-  String get preferencesNotifyForumMention => 'Opmerking op het forum noemt u';
-
-  @override
-  String get preferencesNotifyInvitedStudy => 'Studie uitnodiging';
-
-  @override
-  String get preferencesNotifyGameEvent => 'Spelupdates voor correspondentiepartijen';
-
-  @override
-  String get preferencesNotifyChallenge => 'Uitdagingen';
-
-  @override
-  String get preferencesNotifyTournamentSoon => 'Toernooi begint binnenkort';
-
-  @override
-  String get preferencesNotifyTimeAlarm => 'Klok met correspondentie bijna leeg';
-
-  @override
-  String get preferencesNotifyBell => 'Bel melding binnen Lichess';
-
-  @override
-  String get preferencesNotifyPush => 'Apparaatmelding wanneer je niet op Lichess bent';
-
-  @override
-  String get preferencesNotifyWeb => 'Browser';
-
-  @override
-  String get preferencesNotifyDevice => 'Apparaat';
-
-  @override
-  String get preferencesBellNotificationSound => 'Meldingsgeluid';
-
-  @override
-  String get puzzlePuzzles => 'Puzzels';
-
-  @override
-  String get puzzlePuzzleThemes => 'Puzzelthema\'s';
-
-  @override
-  String get puzzleRecommended => 'Aanbevolen';
-
-  @override
-  String get puzzlePhases => 'Fasen';
-
-  @override
-  String get puzzleMotifs => 'Motieven';
-
-  @override
-  String get puzzleAdvanced => 'Geavanceerd';
-
-  @override
-  String get puzzleLengths => 'Duur';
-
-  @override
-  String get puzzleMates => 'Schaakmat';
-
-  @override
-  String get puzzleGoals => 'Doelen';
-
-  @override
-  String get puzzleOrigin => 'Herkomst';
-
-  @override
-  String get puzzleSpecialMoves => 'Speciale zetten';
-
-  @override
-  String get puzzleDidYouLikeThisPuzzle => 'Vond je deze puzzel leuk?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Stem om de volgende te laden!';
-
-  @override
-  String get puzzleUpVote => 'Puzzel leuk vinden';
-
-  @override
-  String get puzzleDownVote => 'Puzzel niet leuk vinden';
-
-  @override
-  String get puzzleYourPuzzleRatingWillNotChange => 'Je puzzelrating zal niet veranderen: puzzels zijn geen competitie. De rating helpt bij het selecteren van de beste puzzels voor je huidige vaardigheid.';
-
-  @override
-  String get puzzleFindTheBestMoveForWhite => 'Vind de beste zet voor wit.';
-
-  @override
-  String get puzzleFindTheBestMoveForBlack => 'Vind de beste zet voor zwart.';
-
-  @override
-  String get puzzleToGetPersonalizedPuzzles => 'Om gepersonaliseerde puzzels te krijgen:';
-
-  @override
-  String puzzlePuzzleId(String param) {
-    return 'Puzzel $param';
-  }
-
-  @override
-  String get puzzlePuzzleOfTheDay => 'Puzzel van de dag';
-
-  @override
-  String get puzzleDailyPuzzle => 'Dagelijkse Puzzel';
-
-  @override
-  String get puzzleClickToSolve => 'Klik om op te lossen';
-
-  @override
-  String get puzzleGoodMove => 'Goede zet';
-
-  @override
-  String get puzzleBestMove => 'Beste zet!';
-
-  @override
-  String get puzzleKeepGoing => 'Ga zo door…';
-
-  @override
-  String get puzzlePuzzleSuccess => 'Perfect!';
-
-  @override
-  String get puzzlePuzzleComplete => 'Puzzel voltooid!';
-
-  @override
-  String get puzzleByOpenings => 'Per opening';
-
-  @override
-  String get puzzlePuzzlesByOpenings => 'Puzzels per opening';
-
-  @override
-  String get puzzleOpeningsYouPlayedTheMost => 'Openingen die je het meest hebt gespeeld in partijen met rating';
-
-  @override
-  String get puzzleUseFindInPage => 'Gebruik \"In pagina zoeken\" in het browsermenu om je favoriete opening te vinden!';
-
-  @override
-  String get puzzleUseCtrlF => 'Gebruik Ctrl+F om je favoriete opening te vinden!';
-
-  @override
-  String get puzzleNotTheMove => 'Dat is niet de juiste zet!';
-
-  @override
-  String get puzzleTrySomethingElse => 'Probeer iets anders.';
-
-  @override
-  String puzzleRatingX(String param) {
-    return 'Rating: $param';
-  }
-
-  @override
-  String get puzzleHidden => 'verborgen';
-
-  @override
-  String puzzleFromGameLink(String param) {
-    return 'Van partij $param';
-  }
-
-  @override
-  String get puzzleContinueTraining => 'Ga verder met de training';
-
-  @override
-  String get puzzleDifficultyLevel => 'Moeilijkheidsgraad';
-
-  @override
-  String get puzzleNormal => 'Standaard';
-
-  @override
-  String get puzzleEasier => 'Makkelijk';
-
-  @override
-  String get puzzleEasiest => 'Makkelijker';
-
-  @override
-  String get puzzleHarder => 'Moeilijk';
-
-  @override
-  String get puzzleHardest => 'Moeilijker';
-
-  @override
-  String get puzzleExample => 'Voorbeeld';
-
-  @override
-  String get puzzleAddAnotherTheme => 'Voeg nog een thema toe';
-
-  @override
-  String get puzzleNextPuzzle => 'Volgende puzzel';
-
-  @override
-  String get puzzleJumpToNextPuzzleImmediately => 'Ga direct door naar volgende puzzel';
-
-  @override
-  String get puzzlePuzzleDashboard => 'Puzzeldashboard';
-
-  @override
-  String get puzzleImprovementAreas => 'Verbeterpunten';
-
-  @override
-  String get puzzleStrengths => 'Sterke punten';
-
-  @override
-  String get puzzleHistory => 'Puzzelscore';
-
-  @override
-  String get puzzleSolved => 'opgelost';
-
-  @override
-  String get puzzleFailed => 'niet opgelost';
-
-  @override
-  String get puzzleStreakDescription => 'Los steeds moeilijker wordende puzzels op en bouw aan een succesreeks. Er is geen klok, dus neem de tijd. Eén foute zet en het spel is uit! Per sessie kun je één zet overslaan.';
-
-  @override
-  String puzzleYourStreakX(String param) {
-    return 'Uw reeks: $param';
-  }
-
-  @override
-  String get puzzleStreakSkipExplanation => 'Sla deze zet over om je reeks te behouden! Werkt maar eenmaal per sessie.';
-
-  @override
-  String get puzzleContinueTheStreak => 'Doorgaan met de reeks';
-
-  @override
-  String get puzzleNewStreak => 'Nieuwe reeks';
-
-  @override
-  String get puzzleFromMyGames => 'Van mijn partijen';
-
-  @override
-  String get puzzleLookupOfPlayer => 'Zoek puzzels uit partijen van een specifieke speler';
-
-  @override
-  String puzzleFromXGames(String param) {
-    return 'Puzzels uit de partijen van $param';
-  }
-
-  @override
-  String get puzzleSearchPuzzles => 'Puzzels zoeken';
-
-  @override
-  String get puzzleFromMyGamesNone => 'Je hebt geen puzzels in de database staan, maar Lichess waardeert je nog steeds heel erg.\nSpeel rapid en klassieke partijen om de kans te vergroten dat een puzzel uit jouw partijen wordt toegevoegd!';
-
-  @override
-  String puzzleFromXGamesFound(String param1, String param2) {
-    return '$param1 puzzels gevonden in $param2 partijen';
-  }
-
-  @override
-  String get puzzlePuzzleDashboardDescription => 'Train, analyseer, verbeter';
-
-  @override
-  String puzzlePercentSolved(String param) {
-    return '$param opgelost';
-  }
-
-  @override
-  String get puzzleNoPuzzlesToShow => 'Niets te tonen, speel eerst wat puzzels!';
-
-  @override
-  String get puzzleImprovementAreasDescription => 'Train deze om je voortgang te optimaliseren!';
-
-  @override
-  String get puzzleStrengthDescription => 'Je presteert het beste in deze thema\'s';
-
-  @override
-  String puzzlePlayedXTimes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count keer gespeeld',
-      one: '$count keer gespeeld',
-      zero: '$count keer gespeeld',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsBelowYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count punten onder je puzzelrating',
-      one: 'Eén punt onder je puzzelrating',
-      zero: 'Eén punt onder je puzzelrating',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsAboveYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count punten boven je puzzelrating',
-      one: 'Eén punt boven je puzzelrating',
-      zero: 'Eén punt boven je puzzelrating',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPlayed(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count gespeeld',
-      one: '$count gespeeld',
-      zero: '$count gespeeld',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbToReplay(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count om te herhalen',
-      one: '$count om te herhalen',
-      zero: '$count om te herhalen',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get puzzleThemeAdvancedPawn => 'Opgerukte pion';
-
-  @override
-  String get puzzleThemeAdvancedPawnDescription => 'Een pion die promoveert of dreigt te promoveren is hier cruciaal.';
-
-  @override
-  String get puzzleThemeAdvantage => 'Voordeel';
-
-  @override
-  String get puzzleThemeAdvantageDescription => 'Grijp je kans om een doorslaggevend voordeel te verkrijgen. (200cp ≤ eval ≤ 600 cp)';
-
-  @override
-  String get puzzleThemeAnastasiaMate => 'Mat van Anastasia';
-
-  @override
-  String get puzzleThemeAnastasiaMateDescription => 'Een paard werkt samen met een toren of dame om de koning van de tegenstander tussen de zijkant van het bord en een eigen stuk te vangen.';
-
-  @override
-  String get puzzleThemeArabianMate => 'Arabisch mat';
-
-  @override
-  String get puzzleThemeArabianMateDescription => 'Een paard en een toren werken samen om de koning van de tegenstander in een hoek van het bord in te sluiten.';
-
-  @override
-  String get puzzleThemeAttackingF2F7 => 'f2 of f7 aanvallen';
-
-  @override
-  String get puzzleThemeAttackingF2F7Description => 'Een aanval gericht op de f2 of de f7-pion, zoals in de Fegatello-opening.';
-
-  @override
-  String get puzzleThemeAttraction => 'Lokken';
-
-  @override
-  String get puzzleThemeAttractionDescription => 'Een afruil of offer om een vijandelijk stuk naar een veld te lokken of te dwingen waardoor een tactisch vervolg mogelijk wordt gemaakt.';
-
-  @override
-  String get puzzleThemeBackRankMate => 'Mat op de achterste rij';
-
-  @override
-  String get puzzleThemeBackRankMateDescription => 'Zet de koning mat op de achterste rij, ingesloten door zijn eigen stukken.';
-
-  @override
-  String get puzzleThemeBishopEndgame => 'Lopereindspel';
-
-  @override
-  String get puzzleThemeBishopEndgameDescription => 'Een eindspel met alleen lopers en pionnen.';
-
-  @override
-  String get puzzleThemeBodenMate => 'Mat van Boden';
-
-  @override
-  String get puzzleThemeBodenMateDescription => 'Twee lopers op kruisende diagonalen zetten een koning mat die wordt belemmerd door de eigen stukken.';
-
-  @override
-  String get puzzleThemeCastling => 'Rokeren';
-
-  @override
-  String get puzzleThemeCastlingDescription => 'Breng de koning in veiligheid en zet de toren in voor een aanval.';
-
-  @override
-  String get puzzleThemeCapturingDefender => 'De verdediger slaan';
-
-  @override
-  String get puzzleThemeCapturingDefenderDescription => 'Een stuk slaan dat essentieel is voor de verdediging van een ander stuk, waardoor vervolgens het nu onverdedigde stuk een volgende zet kan worden geslagen.';
-
-  @override
-  String get puzzleThemeCrushing => 'Verpletteren';
-
-  @override
-  String get puzzleThemeCrushingDescription => 'Zie de blunder van de tegenstander om een verpletterend voordeel te verkrijgen. (eval ≥ 600cp)';
-
-  @override
-  String get puzzleThemeDoubleBishopMate => 'Mat met twee lopers';
-
-  @override
-  String get puzzleThemeDoubleBishopMateDescription => 'Twee lopers op belendende diagonalen zetten een koning mat die wordt belemmerd door de eigen stukken.';
-
-  @override
-  String get puzzleThemeDovetailMate => 'Zwaluwstaartmat';
-
-  @override
-  String get puzzleThemeDovetailMateDescription => 'Een dame zet mat naast de koning, wiens vluchtvelden geblokkeerd zijn door eigen stukken.';
-
-  @override
-  String get puzzleThemeEquality => 'Evenwicht';
-
-  @override
-  String get puzzleThemeEqualityDescription => 'Terugkomen uit een verloren stelling en een remise veiligstellen of een gelijkwaardige stelling bereiken. (eval ≤ 200cp)';
-
-  @override
-  String get puzzleThemeKingsideAttack => 'Koningsaanval';
-
-  @override
-  String get puzzleThemeKingsideAttackDescription => 'Een aanval op de vijandelijke koning na een korte rokade.';
-
-  @override
-  String get puzzleThemeClearance => 'Breekzet';
-
-  @override
-  String get puzzleThemeClearanceDescription => 'Een zet, vaak met tempo, die een veld, lijn of diagonaal vrijmaakt voor een tactisch vervolg.';
-
-  @override
-  String get puzzleThemeDefensiveMove => 'Verdedigende zet';
-
-  @override
-  String get puzzleThemeDefensiveMoveDescription => 'Een nauwkeurige zet of reeks zetten die nodig zijn om verlies van materiaal of een ander voordeel te voorkomen.';
-
-  @override
-  String get puzzleThemeDeflection => 'Weglokken';
-
-  @override
-  String get puzzleThemeDeflectionDescription => 'Een zet die een vijandelijk stuk afleidt van een andere taak die het uitoefent, zoals het bewaken van een belangrijk veld.';
-
-  @override
-  String get puzzleThemeDiscoveredAttack => 'Aftrekaanval';
-
-  @override
-  String get puzzleThemeDiscoveredAttackDescription => 'Een stuk verplaatsen dat daarvoor een aanval van een ander lange afstandsstuk blokkeerde, bijvoorbeeld een paard dat opzij gaat voor een toren.';
-
-  @override
-  String get puzzleThemeDoubleCheck => 'Dubbelschaak';
-
-  @override
-  String get puzzleThemeDoubleCheckDescription => 'Schaak geven met twee stukken tegelijk als gevolg van een aftrekaanval waarbij zowel het verplaatste als het geactiveerde stuk de koning van de tegenstander aanvalt.';
-
-  @override
-  String get puzzleThemeEndgame => 'Eindspel';
-
-  @override
-  String get puzzleThemeEndgameDescription => 'Tactiek in de slotfase van de partij.';
-
-  @override
-  String get puzzleThemeEnPassantDescription => 'Tactiek met betrekking tot de en passant-regel, waarbij een pion een vijandelijke pion die vanuit zijn beginpositie twee velden tegelijk wordt opgespeeld, kan slaan.';
-
-  @override
-  String get puzzleThemeExposedKing => 'Onveilige koning';
-
-  @override
-  String get puzzleThemeExposedKingDescription => 'Een stelling met een koning met weinig verdedigers, vaak leidend tot schaakmat.';
-
-  @override
-  String get puzzleThemeFork => 'Vork';
-
-  @override
-  String get puzzleThemeForkDescription => 'Een zet waarbij het gespeelde stuk twee vijandelijke stukken tegelijk aanvalt.';
-
-  @override
-  String get puzzleThemeHangingPiece => 'Ongedekt stuk';
-
-  @override
-  String get puzzleThemeHangingPieceDescription => 'Een situatie waarin een vijandelijk stuk niet of onvoldoende verdedigd wordt en daarom ongestraft geslagen kan worden.';
-
-  @override
-  String get puzzleThemeHookMate => 'Haakmat';
-
-  @override
-  String get puzzleThemeHookMateDescription => 'Mat met een toren, paard en pion tezamen met een vijandelijke pion om de vluchtvelden van de koning in te perken.';
-
-  @override
-  String get puzzleThemeInterference => 'Tussenplaatsing';
-
-  @override
-  String get puzzleThemeInterferenceDescription => 'Een stuk plaatsen tussen twee vijandelijke stukken om één of beide stukken onverdedigd te laten, zoals een paard op een verdedigd veld tussen twee torens.';
-
-  @override
-  String get puzzleThemeIntermezzo => 'Tussenzet';
-
-  @override
-  String get puzzleThemeIntermezzoDescription => 'In plaats van de verwachte zet, eerst een andere zet doen met een directe dreiging die de tegenstander eerst moet beantwoorden. Ook wel bekend als \"Zwischenzug\" of \"In between\".';
-
-  @override
-  String get puzzleThemeKnightEndgame => 'Paardeneindspel';
-
-  @override
-  String get puzzleThemeKnightEndgameDescription => 'Een eindspel met alleen paarden en pionnen.';
-
-  @override
-  String get puzzleThemeLong => 'Lange puzzel';
-
-  @override
-  String get puzzleThemeLongDescription => 'Winnen in drie zetten.';
-
-  @override
-  String get puzzleThemeMaster => 'Partijen van meesters';
-
-  @override
-  String get puzzleThemeMasterDescription => 'Puzzels van partijen met één titelhouder.';
-
-  @override
-  String get puzzleThemeMasterVsMaster => 'Partijen van meesters onderling';
-
-  @override
-  String get puzzleThemeMasterVsMasterDescription => 'Puzzels van partijen met twee titelhouders.';
-
-  @override
-  String get puzzleThemeMate => 'Mat';
-
-  @override
-  String get puzzleThemeMateDescription => 'De partij in stijl winnen.';
-
-  @override
-  String get puzzleThemeMateIn1 => 'Mat in 1';
-
-  @override
-  String get puzzleThemeMateIn1Description => 'Zet schaakmat in één zet.';
-
-  @override
-  String get puzzleThemeMateIn2 => 'Mat in 2';
-
-  @override
-  String get puzzleThemeMateIn2Description => 'Zet schaakmat in twee zetten.';
-
-  @override
-  String get puzzleThemeMateIn3 => 'Mat in 3';
-
-  @override
-  String get puzzleThemeMateIn3Description => 'Zet schaakmat in drie zetten.';
-
-  @override
-  String get puzzleThemeMateIn4 => 'Mat in 4';
-
-  @override
-  String get puzzleThemeMateIn4Description => 'Zet schaakmat in vier zetten.';
-
-  @override
-  String get puzzleThemeMateIn5 => 'Mat in 5 of meer';
-
-  @override
-  String get puzzleThemeMateIn5Description => 'Bedenk een langere reeks zetten.';
-
-  @override
-  String get puzzleThemeMiddlegame => 'Middenspel';
-
-  @override
-  String get puzzleThemeMiddlegameDescription => 'Tactiek in de tweede fase van de partij.';
-
-  @override
-  String get puzzleThemeOneMove => 'Eén-zet puzzel';
-
-  @override
-  String get puzzleThemeOneMoveDescription => 'Een puzzel die maar één zet vereist.';
-
-  @override
-  String get puzzleThemeOpening => 'Opening';
-
-  @override
-  String get puzzleThemeOpeningDescription => 'Tactiek in de eerste fase van de partij.';
-
-  @override
-  String get puzzleThemePawnEndgame => 'Pionneneindspel';
-
-  @override
-  String get puzzleThemePawnEndgameDescription => 'Een eindspel met alleen pionnen.';
-
-  @override
-  String get puzzleThemePin => 'Penning';
-
-  @override
-  String get puzzleThemePinDescription => 'Tactiek waarbij een stuk niet verzet kan worden op straffe van een aanval op een stuk van hogere waarde.';
-
-  @override
-  String get puzzleThemePromotion => 'Promotie';
-
-  @override
-  String get puzzleThemePromotionDescription => 'Een pion die promoveert of dreigt te promoveren is hier cruciaal.';
-
-  @override
-  String get puzzleThemeQueenEndgame => 'Dame-eindspel';
-
-  @override
-  String get puzzleThemeQueenEndgameDescription => 'Een eindspel met alleen dame en pionnen.';
-
-  @override
-  String get puzzleThemeQueenRookEndgame => 'Dame-toreneindspel';
-
-  @override
-  String get puzzleThemeQueenRookEndgameDescription => 'Een eindspel met alleen dame, torens en pionnen.';
-
-  @override
-  String get puzzleThemeQueensideAttack => 'Dameaanval';
-
-  @override
-  String get puzzleThemeQueensideAttackDescription => 'Een aanval op de vijandelijke koning na een lange rokade.';
-
-  @override
-  String get puzzleThemeQuietMove => 'Stille zet';
-
-  @override
-  String get puzzleThemeQuietMoveDescription => 'Een zet die niet schaak geeft of een stuk slaat, maar een onvermijdelijke dreiging door een latere zet voorbereidt.';
-
-  @override
-  String get puzzleThemeRookEndgame => 'Toreneindspel';
-
-  @override
-  String get puzzleThemeRookEndgameDescription => 'Een eindspel met alleen torens en pionnen.';
-
-  @override
-  String get puzzleThemeSacrifice => 'Offer';
-
-  @override
-  String get puzzleThemeSacrificeDescription => 'Tactiek waarbij op korte termijn materiaal wordt opgegeven om voordeel te verkrijgen na een aantal gedwongen zetten.';
-
-  @override
-  String get puzzleThemeShort => 'Korte puzzel';
-
-  @override
-  String get puzzleThemeShortDescription => 'Winnen in twee zetten.';
-
-  @override
-  String get puzzleThemeSkewer => 'Röntgenaanval';
-
-  @override
-  String get puzzleThemeSkewerDescription => 'Een motief waarbij een waardevol stuk wordt aangevallen en vervolgens wordt verplaatst, waardoor een lichter stuk erachter kan worden geslagen of aangevallen. Het omgekeerde van een penning.';
-
-  @override
-  String get puzzleThemeSmotheredMate => 'Stikmat';
-
-  @override
-  String get puzzleThemeSmotheredMateDescription => 'Schaakmat met een paard waarbij de aangevallen koning geen zet kan doen omdat hij ingesloten is (of verstikt) door zijn eigen stukken.';
-
-  @override
-  String get puzzleThemeSuperGM => 'Partijen van topschakers';
-
-  @override
-  String get puzzleThemeSuperGMDescription => 'Puzzels van partijen gespeeld door de beste schakers ter wereld.';
-
-  @override
-  String get puzzleThemeTrappedPiece => 'Ingesloten stuk';
-
-  @override
-  String get puzzleThemeTrappedPieceDescription => 'Een stuk kan niet meer ontsnappen omdat het geen velden meer heeft.';
-
-  @override
-  String get puzzleThemeUnderPromotion => 'Minorpromotie';
-
-  @override
-  String get puzzleThemeUnderPromotionDescription => 'Promotie tot paard, loper of toren.';
-
-  @override
-  String get puzzleThemeVeryLong => 'Zeer lange puzzel';
-
-  @override
-  String get puzzleThemeVeryLongDescription => 'Winnen in vier of meer zetten.';
-
-  @override
-  String get puzzleThemeXRayAttack => 'Röntgenaanval';
-
-  @override
-  String get puzzleThemeXRayAttackDescription => 'Een stuk valt een veld aan of verdedigt een veld, door een vijandelijk stuk heen.';
-
-  @override
-  String get puzzleThemeZugzwang => 'Zetdwang';
-
-  @override
-  String get puzzleThemeZugzwangDescription => 'De tegenstander is beperkt in de zetten die hij kan doen, en elke zet verslechtert zijn stelling.';
-
-  @override
-  String get puzzleThemeHealthyMix => 'Gezonde mix';
-
-  @override
-  String get puzzleThemeHealthyMixDescription => 'Van alles wat. Je weet niet wat je te wachten staat, je moet dus op alles voorbereid zijn! Net als in echte partijen.';
-
-  @override
-  String get puzzleThemePlayerGames => 'Eigen partijen';
-
-  @override
-  String get puzzleThemePlayerGamesDescription => 'Zoek puzzels gegenereerd uit jouw partijen, of uit partijen van een andere speler.';
-
-  @override
-  String puzzleThemePuzzleDownloadInformation(String param) {
-    return 'Deze puzzels zijn beschikbaar in het publieke domein en kunnen worden gedownload op $param.';
-  }
-
-  @override
-  String perfStatPerfStats(String param) {
-    return '$param-statistieken';
-  }
-
-  @override
-  String get perfStatViewTheGames => 'Bekijk de partijen';
-
-  @override
-  String get perfStatProvisional => 'voorlopig';
-
-  @override
-  String get perfStatNotEnoughRatedGames => 'Er zijn niet genoeg partijen met rating gespeeld om een betrouwbare rating vast te stellen.';
-
-  @override
-  String perfStatProgressOverLastXGames(String param) {
-    return 'Voortgang in de laatste $param partijen:';
-  }
-
-  @override
-  String perfStatRatingDeviation(String param) {
-    return 'Rating deviatie: $param.';
-  }
-
-  @override
-  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
-    return 'Een lagere waarde betekent dat de rating stabieler is. Boven $param1 wordt de rating als voorlopig beschouwd. Om in de ranglijsten te worden opgenomen, moet deze waarde lager zijn dan $param2 (standaard schaken) of $param3 (varianten).';
-  }
-
-  @override
-  String get perfStatTotalGames => 'Totaal aantal partijen';
-
-  @override
-  String get perfStatRatedGames => 'Partijen met rating';
-
-  @override
-  String get perfStatTournamentGames => 'Toernooipartijen';
-
-  @override
-  String get perfStatBerserkedGames => 'Berserk partijen';
-
-  @override
-  String get perfStatTimeSpentPlaying => 'Tijd schakend besteed';
-
-  @override
-  String get perfStatAverageOpponent => 'Gemiddelde tegenstander';
-
-  @override
-  String get perfStatVictories => 'Overwinningen';
-
-  @override
-  String get perfStatDefeats => 'Nederlagen';
-
-  @override
-  String get perfStatDisconnections => 'Verbroken verbindingen';
-
-  @override
-  String get perfStatNotEnoughGames => 'Niet genoeg partijen gespeeld';
-
-  @override
-  String perfStatHighestRating(String param) {
-    return 'Hoogste rating: $param';
-  }
-
-  @override
-  String perfStatLowestRating(String param) {
-    return 'Laagste rating: $param';
-  }
-
-  @override
-  String perfStatFromXToY(String param1, String param2) {
-    return 'van $param1 tot $param2';
-  }
-
-  @override
-  String get perfStatWinningStreak => 'Overwinningsreeks';
-
-  @override
-  String get perfStatLosingStreak => 'Verliesreeks';
-
-  @override
-  String perfStatLongestStreak(String param) {
-    return 'Langste reeks: $param';
-  }
-
-  @override
-  String perfStatCurrentStreak(String param) {
-    return 'Huidige reeks: $param';
-  }
-
-  @override
-  String get perfStatBestRated => 'Grootste overwinningen';
-
-  @override
-  String get perfStatGamesInARow => 'Aaneengesloten partijen';
-
-  @override
-  String get perfStatLessThanOneHour => 'Minder dan een uur tussen de partijen';
-
-  @override
-  String get perfStatMaxTimePlaying => 'Langste schaakpartij';
-
-  @override
-  String get perfStatNow => 'nu';
-
-  @override
-  String get searchSearch => 'Zoek';
-
-  @override
-  String get settingsSettings => 'Instellingen';
-
-  @override
-  String get settingsCloseAccount => 'Verwijder account';
-
-  @override
-  String get settingsManagedAccountCannotBeClosed => 'Je account wordt beheerd, en kan niet verwijderd worden.';
-
-  @override
-  String get settingsClosingIsDefinitive => 'Verwijderen is definitief. Er is geen weg terug. Weet je het zeker?';
-
-  @override
-  String get settingsCantOpenSimilarAccount => 'Het is niet toegestaan om een nieuw account met dezelfde naam aan te maken, ook al is het hoofdlettergebruik anders.';
-
-  @override
-  String get settingsChangedMindDoNotCloseAccount => 'Ik ben van gedachten veranderd; sluit mijn account niet';
-
-  @override
-  String get settingsCloseAccountExplanation => 'Weet je zeker dat je het account wilt verwijderen? Het verwijderen van je account is een permanente beslissing. Je kunt NOOIT meer op dit account inloggen.';
-
-  @override
-  String get settingsThisAccountIsClosed => 'Dit account is gesloten.';
-
-  @override
-  String get streamerLichessStreamers => 'Lichess streamers';
-
-  @override
   String get stormMoveToStart => 'Doe een zet om te beginnen';
 
   @override
@@ -4646,14 +4640,11 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
+  String get streamerLichessStreamers => 'Lichess streamers';
+
+  @override
   String get studyShareAndExport => 'Deel & exporteer';
 
   @override
   String get studyStart => 'Start';
-
-  @override
-  String get broadcastBroadcasts => 'Uitzendingen';
-
-  @override
-  String get broadcastStartDate => 'Aanvangsdatum in je eigen tijdzone';
 }

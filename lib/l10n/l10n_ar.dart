@@ -276,10 +276,10 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get contactContact => 'اتصل بنا';
+  String get broadcastBroadcasts => 'البثوث';
 
   @override
-  String get contactContactLichess => 'تواصل مع Lichess';
+  String get broadcastStartDate => 'تاريخ البدء في المنطقة الزمنية الخاصة بك';
 
   @override
   String challengeChallengesX(String param1) {
@@ -361,6 +361,1027 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get challengeInviteLichessUser => 'أو قم بدعوة أحد المستخدمين:';
+
+  @override
+  String get contactContact => 'اتصل بنا';
+
+  @override
+  String get contactContactLichess => 'تواصل مع Lichess';
+
+  @override
+  String get patronDonate => 'تبرع';
+
+  @override
+  String get patronLichessPatron => 'راعي Lichess';
+
+  @override
+  String perfStatPerfStats(String param) {
+    return 'احصائيات $param';
+  }
+
+  @override
+  String get perfStatViewTheGames => 'عرض المباريات';
+
+  @override
+  String get perfStatProvisional => 'مؤقت';
+
+  @override
+  String get perfStatNotEnoughRatedGames => 'لم تلعب مباريات مقيّمة بما يكفي للحصول ع تقييم موثق.';
+
+  @override
+  String perfStatProgressOverLastXGames(String param) {
+    return 'التقدم خلال آخر المباريات ال$param الاخيرة:';
+  }
+
+  @override
+  String perfStatRatingDeviation(String param) {
+    return 'انحراف التقييم: $param.';
+  }
+
+  @override
+  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
+    return 'القيمة المنخفضة تعني أن التصنيف أكثر استقرارا. أعلى من $param1، يعتبر التقييم مؤقتا. لكي يتم تضمينه في الترتيبات، يجب أن تكون هذه القيمة أقل من $param2 (الشطرنج القياسي) أو $param3 (المتغيرات).';
+  }
+
+  @override
+  String get perfStatTotalGames => 'إجمالي المباريات';
+
+  @override
+  String get perfStatRatedGames => 'مباريات مقيّمة';
+
+  @override
+  String get perfStatTournamentGames => 'مباريات بطولة';
+
+  @override
+  String get perfStatBerserkedGames => 'مباريات مخاطرة';
+
+  @override
+  String get perfStatTimeSpentPlaying => 'الوقت المقضي في اللعب';
+
+  @override
+  String get perfStatAverageOpponent => 'متوسط تقييم الخصم';
+
+  @override
+  String get perfStatVictories => 'الانتصارات';
+
+  @override
+  String get perfStatDefeats => 'الهزائم';
+
+  @override
+  String get perfStatDisconnections => 'الانقطاعات';
+
+  @override
+  String get perfStatNotEnoughGames => 'لم تلعب مباريات كفاية';
+
+  @override
+  String perfStatHighestRating(String param) {
+    return 'أعلى تقييم: $param';
+  }
+
+  @override
+  String perfStatLowestRating(String param) {
+    return 'أقل تقييم: $param';
+  }
+
+  @override
+  String perfStatFromXToY(String param1, String param2) {
+    return 'من $param1 الى $param2';
+  }
+
+  @override
+  String get perfStatWinningStreak => 'سلسلة الانتصارات';
+
+  @override
+  String get perfStatLosingStreak => 'سلسلة الهزائم';
+
+  @override
+  String perfStatLongestStreak(String param) {
+    return 'اطول سلسلة: $param';
+  }
+
+  @override
+  String perfStatCurrentStreak(String param) {
+    return 'السلسلة الحالية: $param';
+  }
+
+  @override
+  String get perfStatBestRated => 'افضل الانتصارات المقيّمة';
+
+  @override
+  String get perfStatGamesInARow => 'مباريات لُعبت على التوالي';
+
+  @override
+  String get perfStatLessThanOneHour => 'اقل من ساعة واحدة بين المباريات';
+
+  @override
+  String get perfStatMaxTimePlaying => 'اقصى وقت مقضي في اللعب';
+
+  @override
+  String get perfStatNow => 'الآن';
+
+  @override
+  String get preferencesPreferences => 'تفضيلات';
+
+  @override
+  String get preferencesDisplay => 'عرض';
+
+  @override
+  String get preferencesPrivacy => 'الخصوصية';
+
+  @override
+  String get preferencesNotifications => 'إشعارات';
+
+  @override
+  String get preferencesPieceAnimation => 'المؤثرات الحركية للقطعة';
+
+  @override
+  String get preferencesMaterialDifference => 'الفرق المادي';
+
+  @override
+  String get preferencesBoardHighlights => 'تميز معالم الرقعة (آخر نقلة والكش)';
+
+  @override
+  String get preferencesPieceDestinations => 'إظهار النقلات القانونية (النقلات المتاحة والنقلات الاستباقية)';
+
+  @override
+  String get preferencesBoardCoordinates => 'إحداثيات الرقعة (A-H, 1-8)';
+
+  @override
+  String get preferencesMoveListWhilePlaying => 'قائمة النقلات خلال المباراة';
+
+  @override
+  String get preferencesPgnPieceNotation => 'تدوين النقلة';
+
+  @override
+  String get preferencesChessPieceSymbol => 'رمز قطعة الشطرنج';
+
+  @override
+  String get preferencesPgnLetter => 'حروف (K, Q, R, B, N)';
+
+  @override
+  String get preferencesZenMode => 'وضع التأمل';
+
+  @override
+  String get preferencesShowPlayerRatings => 'إظهار تقييمات اللاعب';
+
+  @override
+  String get preferencesShowFlairs => 'إظهار ميول اللاعب';
+
+  @override
+  String get preferencesExplainShowPlayerRatings => 'هذا يخفي جميع التقييمات من الموقع، للمساعدة في التركيز على مباراة الشطرنج. لا يزال من الممكن لعب مباريات مقيمة، هذا فقط يحدد ما تراه.';
+
+  @override
+  String get preferencesDisplayBoardResizeHandle => 'أظهر زر تعديل حجم الرقعة';
+
+  @override
+  String get preferencesOnlyOnInitialPosition => 'خلال الوضع المبدئي فقط';
+
+  @override
+  String get preferencesInGameOnly => 'في اللعبة فقط';
+
+  @override
+  String get preferencesChessClock => 'مؤقت الشطرنج';
+
+  @override
+  String get preferencesTenthsOfSeconds => 'أجزاء الثانية';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'عندما يقل الوقت عن 10 ثوانٍ';
+
+  @override
+  String get preferencesHorizontalGreenProgressBars => 'الشريط الأخضر للساعة';
+
+  @override
+  String get preferencesSoundWhenTimeGetsCritical => 'إصدار صوت عندما يقارب الوقت الانتهاء';
+
+  @override
+  String get preferencesGiveMoreTime => 'منح الوقت';
+
+  @override
+  String get preferencesGameBehavior => 'إعدادات اللعبة';
+
+  @override
+  String get preferencesHowDoYouMovePieces => 'كيف يمكنك تحريك القطع؟';
+
+  @override
+  String get preferencesClickTwoSquares => 'النقر فوق مربعين';
+
+  @override
+  String get preferencesDragPiece => 'سحب القطعة';
+
+  @override
+  String get preferencesBothClicksAndDrag => 'كلاهما';
+
+  @override
+  String get preferencesPremovesPlayingDuringOpponentTurn => 'النقلات الاستباقية (اللعب خلال دور الخصم)';
+
+  @override
+  String get preferencesTakebacksWithOpponentApproval => 'التراجع عن النقلات (بموافقة الخصم)';
+
+  @override
+  String get preferencesInCasualGamesOnly => 'في المباريات غير المقيمة فقط';
+
+  @override
+  String get preferencesPromoteToQueenAutomatically => 'الترقية إلى وزير آلياً';
+
+  @override
+  String get preferencesExplainPromoteToQueenAutomatically => 'اضغط مفتاح<ctrl> عند الترقية لتعطيل الترقية التلقائية مؤقتاً';
+
+  @override
+  String get preferencesWhenPremoving => 'عند النقلة الاستباقية';
+
+  @override
+  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'مطالبة بالتعادل لتكرار نفس النقلات ثلاث مرات بشكل تلقائي';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'عندما يقل الوقت عن 30 ثانية';
+
+  @override
+  String get preferencesMoveConfirmation => 'تأكيد النقلة';
+
+  @override
+  String get preferencesExplainCanThenBeTemporarilyDisabled => 'يمكن تعطيله أثناء اللعبة مع قائمة اللوحة';
+
+  @override
+  String get preferencesInCorrespondenceGames => 'فى العاب المراسلة';
+
+  @override
+  String get preferencesCorrespondenceAndUnlimited => 'مراسلة وبدون توقيت';
+
+  @override
+  String get preferencesConfirmResignationAndDrawOffers => 'تأكيد الاستسلام وعرض التعادل';
+
+  @override
+  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'طريقة التحصين/التبييت';
+
+  @override
+  String get preferencesCastleByMovingTwoSquares => 'حرك الملك مربعين';
+
+  @override
+  String get preferencesCastleByMovingOntoTheRook => 'حرك الملك بإتجاه الرخ';
+
+  @override
+  String get preferencesInputMovesWithTheKeyboard => 'إدخال النقلات بلوحة المفاتيح';
+
+  @override
+  String get preferencesInputMovesWithVoice => 'الإدخال يتحرك بصوتك';
+
+  @override
+  String get preferencesSnapArrowsToValidMoves => 'سحب الأسهم في اتجاهات صالحة';
+
+  @override
+  String get preferencesSayGgWpAfterLosingOrDrawing => 'قُل \"مباراة جيدة، لعبت بشكل جيد\" عند الهزيمة أو التعادل';
+
+  @override
+  String get preferencesYourPreferencesHaveBeenSaved => 'تم حفظ تفضيلاتك.';
+
+  @override
+  String get preferencesScrollOnTheBoardToReplayMoves => 'مرر على الرقعة لإعادة عرض التحركات';
+
+  @override
+  String get preferencesCorrespondenceEmailNotification => 'البريد الإلكتروني اليومي يدرج ألعاب المراسلة الخاصة بك';
+
+  @override
+  String get preferencesNotifyStreamStart => 'البث مباشر الآن';
+
+  @override
+  String get preferencesNotifyInboxMsg => 'رسالة جديدة في البريد الوارد';
+
+  @override
+  String get preferencesNotifyForumMention => 'تعليق في المنتدى يشير إليك';
+
+  @override
+  String get preferencesNotifyInvitedStudy => 'دعوة إلى الدراسة';
+
+  @override
+  String get preferencesNotifyGameEvent => 'تحديثات مباراة المراسلة';
+
+  @override
+  String get preferencesNotifyChallenge => 'تحديات';
+
+  @override
+  String get preferencesNotifyTournamentSoon => 'البطولة ستبدأ قريباً';
+
+  @override
+  String get preferencesNotifyTimeAlarm => 'ساعة المراسلة تنفد';
+
+  @override
+  String get preferencesNotifyBell => 'إشعار الجرس داخل Lichess';
+
+  @override
+  String get preferencesNotifyPush => 'إشعار الجهاز عندما لا تكون على Lichess';
+
+  @override
+  String get preferencesNotifyWeb => 'المتصفح';
+
+  @override
+  String get preferencesNotifyDevice => 'الجهاز';
+
+  @override
+  String get preferencesBellNotificationSound => 'صوت التنبيه';
+
+  @override
+  String get puzzlePuzzles => 'الألغاز';
+
+  @override
+  String get puzzlePuzzleThemes => 'خصائص الألغاز';
+
+  @override
+  String get puzzleRecommended => 'مقترح';
+
+  @override
+  String get puzzlePhases => 'مراحل';
+
+  @override
+  String get puzzleMotifs => 'الأفكار الرئيسية';
+
+  @override
+  String get puzzleAdvanced => 'خيارات أعمق';
+
+  @override
+  String get puzzleLengths => 'الأطوال';
+
+  @override
+  String get puzzleMates => 'الحلفاء';
+
+  @override
+  String get puzzleGoals => 'الغايات';
+
+  @override
+  String get puzzleOrigin => 'الأصل';
+
+  @override
+  String get puzzleSpecialMoves => 'نقلات مميزة';
+
+  @override
+  String get puzzleDidYouLikeThisPuzzle => 'هل أعجبك هذا اللغز؟';
+
+  @override
+  String get puzzleVoteToLoadNextOne => 'صوت لتبدأ الغز التالي!';
+
+  @override
+  String get puzzleUpVote => 'أعجبني اللغز';
+
+  @override
+  String get puzzleDownVote => 'لم يعجبني اللغز';
+
+  @override
+  String get puzzleYourPuzzleRatingWillNotChange => 'تقييم الألغاز الخاص بك لن يتغير. لاحظ أن الألغاز ليست مسابقة. التقييم يساعد على اختيار أفضل الألغاز لمهاراتك الحالية.';
+
+  @override
+  String get puzzleFindTheBestMoveForWhite => 'جد أفضل نقلة للأبيض.';
+
+  @override
+  String get puzzleFindTheBestMoveForBlack => 'جد أفضل نقلة للأسود.';
+
+  @override
+  String get puzzleToGetPersonalizedPuzzles => 'للحصول على ألغاز خاصة بك:';
+
+  @override
+  String puzzlePuzzleId(String param) {
+    return 'لغز $param';
+  }
+
+  @override
+  String get puzzlePuzzleOfTheDay => 'لغز اليوم';
+
+  @override
+  String get puzzleDailyPuzzle => 'اللغز اليومي';
+
+  @override
+  String get puzzleClickToSolve => 'انقر للحل';
+
+  @override
+  String get puzzleGoodMove => 'نقلة جيدة';
+
+  @override
+  String get puzzleBestMove => 'أفضل نقلة!';
+
+  @override
+  String get puzzleKeepGoing => 'استمر…';
+
+  @override
+  String get puzzlePuzzleSuccess => 'تم بنجاح!';
+
+  @override
+  String get puzzlePuzzleComplete => 'تم حل اللغز!';
+
+  @override
+  String get puzzleByOpenings => 'من الافتتاحات';
+
+  @override
+  String get puzzlePuzzlesByOpenings => 'ألغاز من الافتتاحات';
+
+  @override
+  String get puzzleOpeningsYouPlayedTheMost => 'الافتتاحات التي استخدمتها في معظم المبارايات المقيمة';
+
+  @override
+  String get puzzleUseFindInPage => 'استخدم خاصية \"البحث في الصفحة\" في المتصفح للعثور على افتتاحك المفضل!';
+
+  @override
+  String get puzzleUseCtrlF => 'أضغط Ctrl و f لتبحث عن افتتاحك المفضل!';
+
+  @override
+  String get puzzleNotTheMove => 'هذه ليست الحركة الصحيحة!';
+
+  @override
+  String get puzzleTrySomethingElse => 'جرب شيئا آخر.';
+
+  @override
+  String puzzleRatingX(String param) {
+    return 'التقييم: $param';
+  }
+
+  @override
+  String get puzzleHidden => 'مخفي';
+
+  @override
+  String puzzleFromGameLink(String param) {
+    return 'من مباراة $param';
+  }
+
+  @override
+  String get puzzleContinueTraining => 'استمر في التدريب';
+
+  @override
+  String get puzzleDifficultyLevel => 'مستوى الصعوبة';
+
+  @override
+  String get puzzleNormal => 'عادي';
+
+  @override
+  String get puzzleEasier => 'سهل';
+
+  @override
+  String get puzzleEasiest => 'سهل جدًا';
+
+  @override
+  String get puzzleHarder => 'أصعب';
+
+  @override
+  String get puzzleHardest => 'صعب جدًا';
+
+  @override
+  String get puzzleExample => 'مثال';
+
+  @override
+  String get puzzleAddAnotherTheme => 'إضافة نوع آخر';
+
+  @override
+  String get puzzleNextPuzzle => 'اللغز الموالي';
+
+  @override
+  String get puzzleJumpToNextPuzzleImmediately => 'انتقل للغز التالي مباشرة';
+
+  @override
+  String get puzzlePuzzleDashboard => 'لوحة التحكم بالألغاز';
+
+  @override
+  String get puzzleImprovementAreas => 'مناطق بحاجة لتحسين';
+
+  @override
+  String get puzzleStrengths => 'نقاط القوة';
+
+  @override
+  String get puzzleHistory => 'سجل الألغاز';
+
+  @override
+  String get puzzleSolved => 'حلت';
+
+  @override
+  String get puzzleFailed => 'فشلت';
+
+  @override
+  String get puzzleStreakDescription => 'حل الألغاز بشكل مطرد وبناء سلسلة الفوز. لا توجد ساعة، لذا خذ وقتك. نقلة خاطئة واحدة، وقد انتهت اللعبة! ولكن يمكنك تخطي حركة واحدة في كل دورة.';
+
+  @override
+  String puzzleYourStreakX(String param) {
+    return 'حل متتالي: $param';
+  }
+
+  @override
+  String get puzzleStreakSkipExplanation => 'تخطى هذه الحركة للحفاظ على سلسلة الانتصارات.';
+
+  @override
+  String get puzzleContinueTheStreak => 'استمر في الحل المتتالي';
+
+  @override
+  String get puzzleNewStreak => 'حل متتالي جديد';
+
+  @override
+  String get puzzleFromMyGames => 'من مبارياتي';
+
+  @override
+  String get puzzleLookupOfPlayer => 'ابحث عن ألغاز في مباريات لاعبين آخريين';
+
+  @override
+  String puzzleFromXGames(String param) {
+    return 'ألغاز من مباريات $param';
+  }
+
+  @override
+  String get puzzleSearchPuzzles => 'ابحث عن ألغاز';
+
+  @override
+  String get puzzleFromMyGamesNone => 'ليس لديك أي ألغز في قاعدة البيانات، لكن Lichess تحبك جداً.\nإلعب مبارايات سريعة أو مبارايات كلاسيكية لزيادة فرصك في الحصول على ألغازك الخاصة!';
+
+  @override
+  String puzzleFromXGamesFound(String param1, String param2) {
+    return '$param1 ألغاز وجدت في $param2 مباراة';
+  }
+
+  @override
+  String get puzzlePuzzleDashboardDescription => 'تدرب،حلل،تطور';
+
+  @override
+  String puzzlePercentSolved(String param) {
+    return 'تم حل $param';
+  }
+
+  @override
+  String get puzzleNoPuzzlesToShow => 'لا شيء لإظهاره، اذهب والعب بعض الألغاز!';
+
+  @override
+  String get puzzleImprovementAreasDescription => 'تدرب بهذه لتحسين تقدمك!';
+
+  @override
+  String get puzzleStrengthDescription => 'أنت تقوم بهذه المهارة بأفضل شكل';
+
+  @override
+  String puzzlePlayedXTimes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'لعبت $count مرة',
+      many: 'لعبت $count مرة',
+      few: 'لعبت $count مرة',
+      two: 'لعبت $count مرة',
+      one: 'لعبت $count مرة',
+      zero: 'لعبت $count مرة',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsBelowYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count نقطة أقل من تقييمك في الألغاز',
+      many: '$count نقطة أقل من تقييمك في الألغاز',
+      few: '$count نقطة أقل من تقييمك في الألغاز',
+      two: '$count نقطة أقل من تقييمك في الألغاز',
+      one: 'نقطة واحدة أقل من تقييمك في الألغاز',
+      zero: 'نقطة واحدة أقل من تقييمك في الألغاز',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsAboveYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count نقطة أعلى من تقييمك في الألغاز',
+      many: '$count نقطة أعلى من تقييمك في الألغاز',
+      few: '$count نقطة أعلى من تقييمك في الألغاز',
+      two: '$count نقطة أعلى من تقييمك في الألغاز',
+      one: 'نقطة واحدة أعلى من تقييمك في الألغاز',
+      zero: 'نقطة واحدة أعلى من تقييمك في الألغاز',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPlayed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count لعبت',
+      many: '$count لعبت',
+      few: '$count لعبت',
+      two: '$count لعبت',
+      one: '$count لعبت',
+      zero: '$count لعبت',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbToReplay(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count لإعادة العرض',
+      many: '$count لإعادة العرض',
+      few: '$count لإعادة العرض',
+      two: '$count لإعادة العرض',
+      one: '$count لإعادة العرض',
+      zero: '$count لإعادة العرض',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get puzzleThemeAdvancedPawn => 'الأخذ بالتجاوز';
+
+  @override
+  String get puzzleThemeAdvancedPawnDescription => 'و يُعتبر ترقية البيدق أو التهديد بترقيته هو مفتاح التكتيك.';
+
+  @override
+  String get puzzleThemeAdvantage => 'أفضلية';
+
+  @override
+  String get puzzleThemeAdvantageDescription => 'اغتنم فرصتك للحصول على ميزة حاسمة. (200cp ≤ التقييم ≤ 600cp)';
+
+  @override
+  String get puzzleThemeAnastasiaMate => 'أنماط كش مات';
+
+  @override
+  String get puzzleThemeAnastasiaMateDescription => 'يتعاون الحصان والقلعة أو الوزير ليحاصروا الملك المنافس بين جانب الرقعة وقطعة صديقة.';
+
+  @override
+  String get puzzleThemeArabianMate => 'كش مات عربي';
+
+  @override
+  String get puzzleThemeArabianMateDescription => 'يتعاون الحصان والرخ ليحاصروا ملك الخصم في زاوية الرقعة.';
+
+  @override
+  String get puzzleThemeAttackingF2F7 => 'الهجوم على f2 أو f7';
+
+  @override
+  String get puzzleThemeAttackingF2F7Description => 'هجوم يستهدف بيادق f2 أو f7، على سبيل المثال، كما في افتتاحية \"fried liver\".';
+
+  @override
+  String get puzzleThemeAttraction => 'الجذب(التضحية)';
+
+  @override
+  String get puzzleThemeAttractionDescription => 'تضحية خادعة تغري الخصم لأخذها لتنفيذ فكرة تكتيكية، أو تبادل قطع بهدف إرغام الخضم على نقل قطعة إلى مربع حيث يمكن استغلال موقعها الجديد من خلال تكتيك معين.';
+
+  @override
+  String get puzzleThemeBackRankMate => 'كش مات في الصف الأخير';
+
+  @override
+  String get puzzleThemeBackRankMateDescription => 'كش مات في الصف الأخير حيث يكون الملك محاصر بقطعه.';
+
+  @override
+  String get puzzleThemeBishopEndgame => 'مرحلة نهاية اللعبة بالفيلة';
+
+  @override
+  String get puzzleThemeBishopEndgameDescription => 'مرحلة نهاية اللعبة تتضمن فيل وجنود فقط.';
+
+  @override
+  String get puzzleThemeBodenMate => 'كش مات \"بودين\"';
+
+  @override
+  String get puzzleThemeBodenMateDescription => 'فيلين يهاجمان الملك على أوتار متجاورة ويكون الملكك محاصر بقطع صديقة ليشكل كش مات.';
+
+  @override
+  String get puzzleThemeCastling => 'تبييت';
+
+  @override
+  String get puzzleThemeCastlingDescription => 'ضع الملك في أمان، وانشر القلعة للهجوم.';
+
+  @override
+  String get puzzleThemeCapturingDefender => 'خذ المدافع';
+
+  @override
+  String get puzzleThemeCapturingDefenderDescription => 'إزالة قطعة ذات أهمية حاسمة للدفاع عن قطعة أخرى، مما يسمح للقطعة التي لا يمكن الدفاع عنها الآن أن يتم الاستيلاء عليها في الحركة التالية.';
+
+  @override
+  String get puzzleThemeCrushing => 'سحق';
+
+  @override
+  String get puzzleThemeCrushingDescription => 'اكتشف خطأ الخصم الفادح للحصول على تفوق ساحق (يساوي 600 جزء بالمئة من البيدق أو أكثر)';
+
+  @override
+  String get puzzleThemeDoubleBishopMate => 'كش مات بفيلين';
+
+  @override
+  String get puzzleThemeDoubleBishopMateDescription => 'فيلين يهاجمان الملك على أوتار متجاورة ويكون الملكك محاصر بقطع صديقة ليشكل كش مات.';
+
+  @override
+  String get puzzleThemeDovetailMate => 'كش مات \"Dovetail\"';
+
+  @override
+  String get puzzleThemeDovetailMateDescription => 'الوزير يكش مات للملك العدو المجاور، و يكون المربعات الي يمكن الهرب إليها مشغولة بقطع صديقة.';
+
+  @override
+  String get puzzleThemeEquality => 'المساواة';
+
+  @override
+  String get puzzleThemeEqualityDescription => 'تحويل الوضعية الخاسرة إلى وصعية تعادل أو موقف متعادل';
+
+  @override
+  String get puzzleThemeKingsideAttack => 'هجوم من طرف الملك';
+
+  @override
+  String get puzzleThemeKingsideAttackDescription => 'الهجوم على ملك الخصم بعد أن يجري التبييت على جناح الملك.';
+
+  @override
+  String get puzzleThemeClearance => 'تصفية';
+
+  @override
+  String get puzzleThemeClearanceDescription => 'حركة، غالباً ما تكون تراجعية، مما يفرغ عمود أو قطر أو مربع، ليتبعه خطة تكتيكية.';
+
+  @override
+  String get puzzleThemeDefensiveMove => 'نقلة دفاعية';
+
+  @override
+  String get puzzleThemeDefensiveMoveDescription => 'نقلات أو سلسلة من النقلات الدقيقة الضرورية لعدم خسارة قطع أو خسارة الأفضلية.';
+
+  @override
+  String get puzzleThemeDeflection => 'ابعاد';
+
+  @override
+  String get puzzleThemeDeflectionDescription => 'نقلة تصرف انتباه قطعة الخصم عن مهمة مهمة أخرى تؤديها، على سبيل المثال، عن الدفاع عن مربع رئيسي. أحيانًا يُطلق عليه أيضًا \"التحميل الزائد\".';
+
+  @override
+  String get puzzleThemeDiscoveredAttack => 'هجوم مكشوف';
+
+  @override
+  String get puzzleThemeDiscoveredAttackDescription => 'تحريك قطعة (مثل الحصان)، التي حالت في السابق دون هجوم على قطعة بعيدة المدى (مثل القلعة)، بعيدا عن طريق تلك القطعة.';
+
+  @override
+  String get puzzleThemeDoubleCheck => 'كشة مزدوجة';
+
+  @override
+  String get puzzleThemeDoubleCheckDescription => 'الكش من قطعتين في وقت واحد، نتيجةً للهجوم المكتشف حيث تهاجم كل من القطعة المتحركة والقطعة غير المختبئة ملك الخصم. وبالتالي لا يمكن للملك سوى الهروب من الكش.';
+
+  @override
+  String get puzzleThemeEndgame => 'مرحلة نهاية المباراة';
+
+  @override
+  String get puzzleThemeEndgameDescription => 'تكتيك خلال مرحلة نهاية المباراة.';
+
+  @override
+  String get puzzleThemeEnPassantDescription => 'تكتيك يستخدم قاعدة \"الأخذ بالتجاوز\"، حيث يمكن للبيدق أن يأسر بيدق الخصم الذي قام بالحركة الأولية عن طريق نقله مربعين، حيث يتعرض المربع المتقاطع للهجوم من قبل بيدق يمكنه الاستيلاء على بيدق الخصم.';
+
+  @override
+  String get puzzleThemeExposedKing => 'ملك مكشوف';
+
+  @override
+  String get puzzleThemeExposedKingDescription => 'تكتيك حيث يكون هناك القليل من المدافعين حول الملك مما يقود غالباً إلى كش مات.';
+
+  @override
+  String get puzzleThemeFork => 'شوكة';
+
+  @override
+  String get puzzleThemeForkDescription => 'نقلة تهاجم قطعتين للخصم في آن واحد.';
+
+  @override
+  String get puzzleThemeHangingPiece => 'قطعة معلقة بدون حماية';
+
+  @override
+  String get puzzleThemeHangingPieceDescription => 'تكتيك حيث تكون قطعة للخصم غير مدافع عنها أو دفاع غير كافي بالتالي يمكن التقاطها بدون خسارة أي قطع من طرفك.';
+
+  @override
+  String get puzzleThemeHookMate => 'كش مات بالخطاف';
+
+  @override
+  String get puzzleThemeHookMateDescription => 'نمط الكش مات باستخدام قلعة و حصان و جندي بالإضافة إلى جندي الخصم ليحد من حركات الملك للهروب.';
+
+  @override
+  String get puzzleThemeInterference => 'التشوش';
+
+  @override
+  String get puzzleThemeInterferenceDescription => 'نقلة تحجب خط التفاعل بين قطع الخصم بعيدة المدى، ونتيجة لذلك تصبح إحدى القطعتين أو كلاهما بلا حماية. على سبيل المثال، يقف الحصان في مربع بين قلعتين.';
+
+  @override
+  String get puzzleThemeIntermezzo => 'النقلة البينيّة';
+
+  @override
+  String get puzzleThemeIntermezzoDescription => 'بدلاً من لعب النقلة المتوقعة، يتم أولاً القيام بنقلة أخرى تشكل تهديدًا فوريًا مباشرًا يجب على الخصم الرد عليه. يُعرف أيضًا باسم \"زفيشنزوك\" أو \"أنترميزو \".';
+
+  @override
+  String get puzzleThemeKnightEndgame => 'نهاية المباراة تتضمن حصان';
+
+  @override
+  String get puzzleThemeKnightEndgameDescription => 'نهاية مباراة تتضمن أحصنة و بيادق فقط.';
+
+  @override
+  String get puzzleThemeLong => 'لغز طويل';
+
+  @override
+  String get puzzleThemeLongDescription => 'ثلاث حركات للفوز.';
+
+  @override
+  String get puzzleThemeMaster => 'مباريات استاذ';
+
+  @override
+  String get puzzleThemeMasterDescription => 'ألغاز من مباريات لاعبين من حملة الألقاب.';
+
+  @override
+  String get puzzleThemeMasterVsMaster => 'مباراة أستاذ ضد أستاذ';
+
+  @override
+  String get puzzleThemeMasterVsMasterDescription => 'ألغاز من مباريات بين لاعبين من حملة الألقاب.';
+
+  @override
+  String get puzzleThemeMate => 'كش مات';
+
+  @override
+  String get puzzleThemeMateDescription => 'اربح المباراة بأناقة.';
+
+  @override
+  String get puzzleThemeMateIn1 => 'كش مات في حركة واحدة';
+
+  @override
+  String get puzzleThemeMateIn1Description => 'تحقيق الكش مات في حركة وحدة.';
+
+  @override
+  String get puzzleThemeMateIn2 => 'كش مات في حركتين';
+
+  @override
+  String get puzzleThemeMateIn2Description => 'تحقيق الكش مات في حركتين.';
+
+  @override
+  String get puzzleThemeMateIn3 => 'كش مات في 3 حركات';
+
+  @override
+  String get puzzleThemeMateIn3Description => 'تحقيق الكش مات في 3 نقلات.';
+
+  @override
+  String get puzzleThemeMateIn4 => 'كش مات في 4 حركات';
+
+  @override
+  String get puzzleThemeMateIn4Description => 'تحقيق الكش مات قي 4 نقلات.';
+
+  @override
+  String get puzzleThemeMateIn5 => 'كش مات في 5 حركات أو اكثر';
+
+  @override
+  String get puzzleThemeMateIn5Description => 'اكتشف سلسلة من الحركات الممتابعة التي تقود إلى كش مات.';
+
+  @override
+  String get puzzleThemeMiddlegame => 'مرحلة وسط اللعبة';
+
+  @override
+  String get puzzleThemeMiddlegameDescription => 'تكتيك خلال وسط المباراة.';
+
+  @override
+  String get puzzleThemeOneMove => 'لفز ذو حركة واحدة';
+
+  @override
+  String get puzzleThemeOneMoveDescription => 'لغز بحركة واحدة فقط.';
+
+  @override
+  String get puzzleThemeOpening => 'افتتاح';
+
+  @override
+  String get puzzleThemeOpeningDescription => 'تكتيك في مرحلة الافتتاح.';
+
+  @override
+  String get puzzleThemePawnEndgame => 'نهاية اللعبة بالجنود';
+
+  @override
+  String get puzzleThemePawnEndgameDescription => 'نهاية لعبة بجنود فقط.';
+
+  @override
+  String get puzzleThemePin => 'تثبيت';
+
+  @override
+  String get puzzleThemePinDescription => 'تكتيك يستخدم التثبيت حيث تكون القطعة غير قادرة على الحركة لأنها ستعرض قطعة ذات قيمة أكبر للهجوم.';
+
+  @override
+  String get puzzleThemePromotion => 'ترقية';
+
+  @override
+  String get puzzleThemePromotionDescription => 'ترقية جنديك إلى وزير أو أي قطعة أخرى.';
+
+  @override
+  String get puzzleThemeQueenEndgame => 'نهاية مباراة الوزير';
+
+  @override
+  String get puzzleThemeQueenEndgameDescription => 'نهاية المباراة بالوزير و الجنود.';
+
+  @override
+  String get puzzleThemeQueenRookEndgame => 'وزير و قلعة';
+
+  @override
+  String get puzzleThemeQueenRookEndgameDescription => 'نهاية المباراة تضمن وزير و قلاع و جنود.';
+
+  @override
+  String get puzzleThemeQueensideAttack => 'هجوم على طرف الوزير';
+
+  @override
+  String get puzzleThemeQueensideAttackDescription => 'الهجوم على ملك الخصم بعد التبييت على جناح الوزير.';
+
+  @override
+  String get puzzleThemeQuietMove => 'نقلة هادئة';
+
+  @override
+  String get puzzleThemeQuietMoveDescription => 'حركة لا تكش أو تأخذ أي قطعة و لا تشكل أي تهديد مباشر بالأخذ، لكنها تحضر لحركة خفية لتهديد لا يمكن تجنبه.';
+
+  @override
+  String get puzzleThemeRookEndgame => 'نهاية المباراة بالقلعة';
+
+  @override
+  String get puzzleThemeRookEndgameDescription => 'نهاية المباراة بالقلعة و الجنود فقط.';
+
+  @override
+  String get puzzleThemeSacrifice => 'تضحية';
+
+  @override
+  String get puzzleThemeSacrificeDescription => 'تكتيك يشمل التضحية ببعض القطع مقابل كسب الأفضلية مرة أخرى بعد عدة حركات إجبارية.';
+
+  @override
+  String get puzzleThemeShort => 'لغز قصير';
+
+  @override
+  String get puzzleThemeShortDescription => 'حركتين للانتصار.';
+
+  @override
+  String get puzzleThemeSkewer => 'سيخ';
+
+  @override
+  String get puzzleThemeSkewerDescription => 'نموذج يتضمن قطعة عالية القيمة تتعرض للهجوم، وتتحرك بعيدًا عن الخط، وتسمح بأسر قطعة ذات قيمة أقل خلفها أو مهاجمتها، عكس التثبيت.';
+
+  @override
+  String get puzzleThemeSmotheredMate => 'كش بالخنق';
+
+  @override
+  String get puzzleThemeSmotheredMateDescription => 'هو نمط من الكش مات بالحصان حيث أن الملك غير قادر على التحرك لأنه محاط (مخنوق) بقطعه.';
+
+  @override
+  String get puzzleThemeSuperGM => 'مباراة أستاذ دولي كبير';
+
+  @override
+  String get puzzleThemeSuperGMDescription => 'ألغاز من مبارايات تم لعبها من أفضل اللاعبين في العالم.';
+
+  @override
+  String get puzzleThemeTrappedPiece => 'قطعة محاصرة';
+
+  @override
+  String get puzzleThemeTrappedPieceDescription => 'قطعة لا تستطيع الهرب بسبب عدم وجود مربعات آمنة للهروب إليها.';
+
+  @override
+  String get puzzleThemeUnderPromotion => 'ترقية لغير الوزير';
+
+  @override
+  String get puzzleThemeUnderPromotionDescription => 'ترقية الجندي لقلعة أو فيل أو حصان.';
+
+  @override
+  String get puzzleThemeVeryLong => 'لغز طويل جداً';
+
+  @override
+  String get puzzleThemeVeryLongDescription => 'أربع نقلات أو أكثر للفوز.';
+
+  @override
+  String get puzzleThemeXRayAttack => 'هجوم X-Ray';
+
+  @override
+  String get puzzleThemeXRayAttackDescription => 'القطعة تهاجم أو تدافع عن مربع, من خلال قطعة عدو.';
+
+  @override
+  String get puzzleThemeZugzwang => 'Zugzwang';
+
+  @override
+  String get puzzleThemeZugzwangDescription => 'حركات الخصم محدودة و كل الحركات تؤدي إلى تفاقم الوضع نحو الأسوء.';
+
+  @override
+  String get puzzleThemeHealthyMix => 'خليط';
+
+  @override
+  String get puzzleThemeHealthyMixDescription => 'القليل من كل نوع، لذا لا يمكنك التنبؤ باللغز القادم فابقى مستعداً لأي شيء، تماماً كالمباريات الحقيقية.';
+
+  @override
+  String get puzzleThemePlayerGames => 'مبارايات اللاعب';
+
+  @override
+  String get puzzleThemePlayerGamesDescription => 'ابحث عن ألغاز من مبارياتك أو من مباريات لاعبين آخرين.';
+
+  @override
+  String puzzleThemePuzzleDownloadInformation(String param) {
+    return 'هذه الألغاز موجودة للعامة بإمكانك تحميلها من هنا$param.';
+  }
+
+  @override
+  String get searchSearch => 'بحث';
+
+  @override
+  String get settingsSettings => 'الإعدادات';
+
+  @override
+  String get settingsCloseAccount => 'إغلاق الحساب';
+
+  @override
+  String get settingsManagedAccountCannotBeClosed => 'حسابك يتم إدارته، ولا يمكن إغلاقه.';
+
+  @override
+  String get settingsClosingIsDefinitive => 'الإغلاق الحساب نهائي، لا يمكنك التراجع عن هذا القرار، أ أنت متحقق؟';
+
+  @override
+  String get settingsCantOpenSimilarAccount => 'لن يسمح لك بفتح حساب جديد بنفس الإسم، حتى لو كان حجم الأحرف مختلف.';
+
+  @override
+  String get settingsChangedMindDoNotCloseAccount => 'غيرت رأيي، لا تغلق حسابي';
+
+  @override
+  String get settingsCloseAccountExplanation => 'هل أنت متأكد من أنك تريد اغلاق حسابك؟\nاغلاق حسابك هو قرار دائم ونهائي.\nولا يمكنك التراجع عن هذا القرار على الإطلاق.';
+
+  @override
+  String get settingsThisAccountIsClosed => 'هذا الحساب مغلق.';
 
   @override
   String get playWithAFriend => 'اللعب مع صديق';
@@ -563,6 +1584,12 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get deleteFromHere => 'احذف من هنا';
+
+  @override
+  String get collapseVariations => 'أعلى';
+
+  @override
+  String get expandVariations => 'وسع التفريع';
 
   @override
   String get forceVariation => 'فرض التسلسل';
@@ -1422,15 +2449,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get emptyTournamentName => 'أترك الحقل فارغاً وسيتم تسمية البطولة باسم غراند ماستر عشوائي.';
 
   @override
-  String get recommendNotTouching => 'نوصي بعدم تغيير هذه الخيارات.';
-
-  @override
-  String get fewerPlayers => 'إذا حددت شروطَ دخولٍ للبطولة فقد يكون لديك لاعبون أقل.';
-
-  @override
-  String get showAdvancedSettings => 'إظهار الإعدادات المتقدمة';
-
-  @override
   String get makePrivateTournament => 'جعل البطولة خاصة، وتقييد الوصول بكلمة مرور';
 
   @override
@@ -1560,10 +2578,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get editProfile => 'حرر الملف الشخصي';
 
   @override
-  String get firstName => 'الاسم الأول';
-
-  @override
-  String get lastName => 'اسم العائلة';
+  String get realName => 'Real name';
 
   @override
   String get setFlair => 'اختيار الشارة';
@@ -1623,7 +2638,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get puzzles => 'الألغاز';
 
   @override
-  String get onlineBots => 'Online bots';
+  String get onlineBots => 'الروبوتات المتصلة';
 
   @override
   String get name => 'الاسم';
@@ -1692,13 +2707,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get cheat => 'غش';
 
   @override
-  String get insult => 'إهانة';
-
-  @override
   String get troll => 'إزعاج';
-
-  @override
-  String get ratingManipulation => 'تلاعب بالتقييم';
 
   @override
   String get other => 'أخرى';
@@ -1805,6 +2814,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get outsideTheBoard => 'خارج الرقعة';
+
+  @override
+  String get allSquaresOfTheBoard => 'All squares of the board';
 
   @override
   String get onSlowGames => 'في المباريات البطيئة';
@@ -2141,7 +3153,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get toggleGlyphAnnotations => 'تبديل الرموز التوضيحية';
 
   @override
-  String get togglePositionAnnotations => 'Toggle position annotations';
+  String get togglePositionAnnotations => 'تبديل تحليل الموقف';
 
   @override
   String get variationArrowsInfo => 'أسمهم النقلات تسمح لك بلعبها دون استخدام قائمة النقلات المرشحة.';
@@ -2400,22 +3412,22 @@ class AppLocalizationsAr extends AppLocalizations {
   String get backgroundImageUrl => 'رابط صورة الخلفية:';
 
   @override
-  String get board => 'Board';
+  String get board => 'اللوحة';
 
   @override
-  String get size => 'Size';
+  String get size => 'الحجم';
 
   @override
-  String get opacity => 'Opacity';
+  String get opacity => 'الشفافيّة';
 
   @override
-  String get brightness => 'Brightness';
+  String get brightness => 'السطوع';
 
   @override
-  String get hue => 'Hue';
+  String get hue => 'التدرج اللوني';
 
   @override
-  String get boardReset => 'Reset colours to default';
+  String get boardReset => 'إعادة تعيين الألوان إلى الافتراضي';
 
   @override
   String get pieceSet => 'مجموعة القطع';
@@ -3637,1024 +4649,6 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get patronDonate => 'تبرع';
-
-  @override
-  String get patronLichessPatron => 'راعي Lichess';
-
-  @override
-  String get preferencesPreferences => 'تفضيلات';
-
-  @override
-  String get preferencesDisplay => 'عرض';
-
-  @override
-  String get preferencesPrivacy => 'الخصوصية';
-
-  @override
-  String get preferencesNotifications => 'إشعارات';
-
-  @override
-  String get preferencesPieceAnimation => 'المؤثرات الحركية للقطعة';
-
-  @override
-  String get preferencesMaterialDifference => 'الفرق المادي';
-
-  @override
-  String get preferencesBoardHighlights => 'تميز معالم الرقعة (آخر نقلة والكش)';
-
-  @override
-  String get preferencesPieceDestinations => 'إظهار النقلات القانونية (النقلات المتاحة والنقلات الاستباقية)';
-
-  @override
-  String get preferencesBoardCoordinates => 'إحداثيات الرقعة (A-H, 1-8)';
-
-  @override
-  String get preferencesMoveListWhilePlaying => 'قائمة النقلات خلال المباراة';
-
-  @override
-  String get preferencesPgnPieceNotation => 'تدوين النقلة';
-
-  @override
-  String get preferencesChessPieceSymbol => 'رمز قطعة الشطرنج';
-
-  @override
-  String get preferencesPgnLetter => 'حروف (K, Q, R, B, N)';
-
-  @override
-  String get preferencesZenMode => 'وضع التأمل';
-
-  @override
-  String get preferencesShowPlayerRatings => 'إظهار تقييمات اللاعب';
-
-  @override
-  String get preferencesShowFlairs => 'إظهار ميول اللاعب';
-
-  @override
-  String get preferencesExplainShowPlayerRatings => 'هذا يخفي جميع التقييمات من الموقع، للمساعدة في التركيز على مباراة الشطرنج. لا يزال من الممكن لعب مباريات مقيمة، هذا فقط يحدد ما تراه.';
-
-  @override
-  String get preferencesDisplayBoardResizeHandle => 'أظهر زر تعديل حجم الرقعة';
-
-  @override
-  String get preferencesOnlyOnInitialPosition => 'خلال الوضع المبدئي فقط';
-
-  @override
-  String get preferencesInGameOnly => 'في اللعبة فقط';
-
-  @override
-  String get preferencesChessClock => 'مؤقت الشطرنج';
-
-  @override
-  String get preferencesTenthsOfSeconds => 'أجزاء الثانية';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'عندما يقل الوقت عن 10 ثوانٍ';
-
-  @override
-  String get preferencesHorizontalGreenProgressBars => 'الشريط الأخضر للساعة';
-
-  @override
-  String get preferencesSoundWhenTimeGetsCritical => 'إصدار صوت عندما يقارب الوقت الانتهاء';
-
-  @override
-  String get preferencesGiveMoreTime => 'منح الوقت';
-
-  @override
-  String get preferencesGameBehavior => 'إعدادات اللعبة';
-
-  @override
-  String get preferencesHowDoYouMovePieces => 'كيف يمكنك تحريك القطع؟';
-
-  @override
-  String get preferencesClickTwoSquares => 'النقر فوق مربعين';
-
-  @override
-  String get preferencesDragPiece => 'سحب القطعة';
-
-  @override
-  String get preferencesBothClicksAndDrag => 'كلاهما';
-
-  @override
-  String get preferencesPremovesPlayingDuringOpponentTurn => 'النقلات الاستباقية (اللعب خلال دور الخصم)';
-
-  @override
-  String get preferencesTakebacksWithOpponentApproval => 'التراجع عن النقلات (بموافقة الخصم)';
-
-  @override
-  String get preferencesInCasualGamesOnly => 'في المباريات غير المقيمة فقط';
-
-  @override
-  String get preferencesPromoteToQueenAutomatically => 'الترقية إلى وزير آلياً';
-
-  @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'اضغط مفتاح<ctrl> عند الترقية لتعطيل الترقية التلقائية مؤقتاً';
-
-  @override
-  String get preferencesWhenPremoving => 'عند النقلة الاستباقية';
-
-  @override
-  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'مطالبة بالتعادل لتكرار نفس النقلات ثلاث مرات بشكل تلقائي';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'عندما يقل الوقت عن 30 ثانية';
-
-  @override
-  String get preferencesMoveConfirmation => 'تأكيد النقلة';
-
-  @override
-  String get preferencesExplainCanThenBeTemporarilyDisabled => 'يمكن تعطيله أثناء اللعبة مع قائمة اللوحة';
-
-  @override
-  String get preferencesInCorrespondenceGames => 'فى العاب المراسلة';
-
-  @override
-  String get preferencesCorrespondenceAndUnlimited => 'مراسلة وبدون توقيت';
-
-  @override
-  String get preferencesConfirmResignationAndDrawOffers => 'تأكيد الاستسلام وعرض التعادل';
-
-  @override
-  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'طريقة التحصين/التبييت';
-
-  @override
-  String get preferencesCastleByMovingTwoSquares => 'حرك الملك مربعين';
-
-  @override
-  String get preferencesCastleByMovingOntoTheRook => 'حرك الملك بإتجاه الرخ';
-
-  @override
-  String get preferencesInputMovesWithTheKeyboard => 'إدخال النقلات بلوحة المفاتيح';
-
-  @override
-  String get preferencesInputMovesWithVoice => 'الإدخال يتحرك بصوتك';
-
-  @override
-  String get preferencesSnapArrowsToValidMoves => 'سحب الأسهم في اتجاهات صالحة';
-
-  @override
-  String get preferencesSayGgWpAfterLosingOrDrawing => 'قُل \"مباراة جيدة، لعبت بشكل جيد\" عند الهزيمة أو التعادل';
-
-  @override
-  String get preferencesYourPreferencesHaveBeenSaved => 'تم حفظ تفضيلاتك.';
-
-  @override
-  String get preferencesScrollOnTheBoardToReplayMoves => 'مرر على الرقعة لإعادة عرض التحركات';
-
-  @override
-  String get preferencesCorrespondenceEmailNotification => 'البريد الإلكتروني اليومي يدرج ألعاب المراسلة الخاصة بك';
-
-  @override
-  String get preferencesNotifyStreamStart => 'البث مباشر الآن';
-
-  @override
-  String get preferencesNotifyInboxMsg => 'رسالة جديدة في البريد الوارد';
-
-  @override
-  String get preferencesNotifyForumMention => 'تعليق في المنتدى يشير إليك';
-
-  @override
-  String get preferencesNotifyInvitedStudy => 'دعوة إلى الدراسة';
-
-  @override
-  String get preferencesNotifyGameEvent => 'تحديثات مباراة المراسلة';
-
-  @override
-  String get preferencesNotifyChallenge => 'تحديات';
-
-  @override
-  String get preferencesNotifyTournamentSoon => 'البطولة ستبدأ قريباً';
-
-  @override
-  String get preferencesNotifyTimeAlarm => 'ساعة المراسلة تنفد';
-
-  @override
-  String get preferencesNotifyBell => 'إشعار الجرس داخل Lichess';
-
-  @override
-  String get preferencesNotifyPush => 'إشعار الجهاز عندما لا تكون على Lichess';
-
-  @override
-  String get preferencesNotifyWeb => 'المتصفح';
-
-  @override
-  String get preferencesNotifyDevice => 'الجهاز';
-
-  @override
-  String get preferencesBellNotificationSound => 'صوت التنبيه';
-
-  @override
-  String get puzzlePuzzles => 'الألغاز';
-
-  @override
-  String get puzzlePuzzleThemes => 'خصائص الألغاز';
-
-  @override
-  String get puzzleRecommended => 'مقترح';
-
-  @override
-  String get puzzlePhases => 'مراحل';
-
-  @override
-  String get puzzleMotifs => 'الأفكار الرئيسية';
-
-  @override
-  String get puzzleAdvanced => 'خيارات أعمق';
-
-  @override
-  String get puzzleLengths => 'الأطوال';
-
-  @override
-  String get puzzleMates => 'الحلفاء';
-
-  @override
-  String get puzzleGoals => 'الغايات';
-
-  @override
-  String get puzzleOrigin => 'الأصل';
-
-  @override
-  String get puzzleSpecialMoves => 'نقلات مميزة';
-
-  @override
-  String get puzzleDidYouLikeThisPuzzle => 'هل أعجبك هذا اللغز؟';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'صوت لتبدأ الغز التالي!';
-
-  @override
-  String get puzzleUpVote => 'أعجبني اللغز';
-
-  @override
-  String get puzzleDownVote => 'لم يعجبني اللغز';
-
-  @override
-  String get puzzleYourPuzzleRatingWillNotChange => 'تقييم الألغاز الخاص بك لن يتغير. لاحظ أن الألغاز ليست مسابقة. التقييم يساعد على اختيار أفضل الألغاز لمهاراتك الحالية.';
-
-  @override
-  String get puzzleFindTheBestMoveForWhite => 'جد أفضل نقلة للأبيض.';
-
-  @override
-  String get puzzleFindTheBestMoveForBlack => 'جد أفضل نقلة للأسود.';
-
-  @override
-  String get puzzleToGetPersonalizedPuzzles => 'للحصول على ألغاز خاصة بك:';
-
-  @override
-  String puzzlePuzzleId(String param) {
-    return 'لغز $param';
-  }
-
-  @override
-  String get puzzlePuzzleOfTheDay => 'لغز اليوم';
-
-  @override
-  String get puzzleDailyPuzzle => 'اللغز اليومي';
-
-  @override
-  String get puzzleClickToSolve => 'انقر للحل';
-
-  @override
-  String get puzzleGoodMove => 'نقلة جيدة';
-
-  @override
-  String get puzzleBestMove => 'أفضل نقلة!';
-
-  @override
-  String get puzzleKeepGoing => 'استمر…';
-
-  @override
-  String get puzzlePuzzleSuccess => 'تم بنجاح!';
-
-  @override
-  String get puzzlePuzzleComplete => 'تم حل اللغز!';
-
-  @override
-  String get puzzleByOpenings => 'من الافتتاحات';
-
-  @override
-  String get puzzlePuzzlesByOpenings => 'ألغاز من الافتتاحات';
-
-  @override
-  String get puzzleOpeningsYouPlayedTheMost => 'الافتتاحات التي استخدمتها في معظم المبارايات المقيمة';
-
-  @override
-  String get puzzleUseFindInPage => 'استخدم خاصية \"البحث في الصفحة\" في المتصفح للعثور على افتتاحك المفضل!';
-
-  @override
-  String get puzzleUseCtrlF => 'أضغط Ctrl و f لتبحث عن افتتاحك المفضل!';
-
-  @override
-  String get puzzleNotTheMove => 'هذه ليست الحركة الصحيحة!';
-
-  @override
-  String get puzzleTrySomethingElse => 'جرب شيئا آخر.';
-
-  @override
-  String puzzleRatingX(String param) {
-    return 'التقييم: $param';
-  }
-
-  @override
-  String get puzzleHidden => 'مخفي';
-
-  @override
-  String puzzleFromGameLink(String param) {
-    return 'من مباراة $param';
-  }
-
-  @override
-  String get puzzleContinueTraining => 'استمر في التدريب';
-
-  @override
-  String get puzzleDifficultyLevel => 'مستوى الصعوبة';
-
-  @override
-  String get puzzleNormal => 'عادي';
-
-  @override
-  String get puzzleEasier => 'سهل';
-
-  @override
-  String get puzzleEasiest => 'سهل جدًا';
-
-  @override
-  String get puzzleHarder => 'أصعب';
-
-  @override
-  String get puzzleHardest => 'صعب جدًا';
-
-  @override
-  String get puzzleExample => 'مثال';
-
-  @override
-  String get puzzleAddAnotherTheme => 'إضافة نوع آخر';
-
-  @override
-  String get puzzleNextPuzzle => 'اللغز الموالي';
-
-  @override
-  String get puzzleJumpToNextPuzzleImmediately => 'انتقل للغز التالي مباشرة';
-
-  @override
-  String get puzzlePuzzleDashboard => 'لوحة التحكم بالألغاز';
-
-  @override
-  String get puzzleImprovementAreas => 'مناطق بحاجة لتحسين';
-
-  @override
-  String get puzzleStrengths => 'نقاط القوة';
-
-  @override
-  String get puzzleHistory => 'سجل الألغاز';
-
-  @override
-  String get puzzleSolved => 'حلت';
-
-  @override
-  String get puzzleFailed => 'فشلت';
-
-  @override
-  String get puzzleStreakDescription => 'حل الألغاز بشكل مطرد وبناء سلسلة الفوز. لا توجد ساعة، لذا خذ وقتك. نقلة خاطئة واحدة، وقد انتهت اللعبة! ولكن يمكنك تخطي حركة واحدة في كل دورة.';
-
-  @override
-  String puzzleYourStreakX(String param) {
-    return 'حل متتالي: $param';
-  }
-
-  @override
-  String get puzzleStreakSkipExplanation => 'تخطى هذه الحركة للحفاظ على سلسلة الانتصارات.';
-
-  @override
-  String get puzzleContinueTheStreak => 'استمر في الحل المتتالي';
-
-  @override
-  String get puzzleNewStreak => 'حل متتالي جديد';
-
-  @override
-  String get puzzleFromMyGames => 'من مبارياتي';
-
-  @override
-  String get puzzleLookupOfPlayer => 'ابحث عن ألغاز في مباريات لاعبين آخريين';
-
-  @override
-  String puzzleFromXGames(String param) {
-    return 'ألغاز من مباريات $param';
-  }
-
-  @override
-  String get puzzleSearchPuzzles => 'ابحث عن ألغاز';
-
-  @override
-  String get puzzleFromMyGamesNone => 'ليس لديك أي ألغز في قاعدة البيانات، لكن Lichess تحبك جداً.\nإلعب مبارايات سريعة أو مبارايات كلاسيكية لزيادة فرصك في الحصول على ألغازك الخاصة!';
-
-  @override
-  String puzzleFromXGamesFound(String param1, String param2) {
-    return '$param1 ألغاز وجدت في $param2 مباراة';
-  }
-
-  @override
-  String get puzzlePuzzleDashboardDescription => 'تدرب،حلل،تطور';
-
-  @override
-  String puzzlePercentSolved(String param) {
-    return 'تم حل $param';
-  }
-
-  @override
-  String get puzzleNoPuzzlesToShow => 'لا شيء لإظهاره، اذهب والعب بعض الألغاز!';
-
-  @override
-  String get puzzleImprovementAreasDescription => 'تدرب بهذه لتحسين تقدمك!';
-
-  @override
-  String get puzzleStrengthDescription => 'أنت تقوم بهذه المهارة بأفضل شكل';
-
-  @override
-  String puzzlePlayedXTimes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'لعبت $count مرة',
-      many: 'لعبت $count مرة',
-      few: 'لعبت $count مرة',
-      two: 'لعبت $count مرة',
-      one: 'لعبت $count مرة',
-      zero: 'لعبت $count مرة',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsBelowYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count نقطة أقل من تقييمك في الألغاز',
-      many: '$count نقطة أقل من تقييمك في الألغاز',
-      few: '$count نقطة أقل من تقييمك في الألغاز',
-      two: '$count نقطة أقل من تقييمك في الألغاز',
-      one: 'نقطة واحدة أقل من تقييمك في الألغاز',
-      zero: 'نقطة واحدة أقل من تقييمك في الألغاز',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsAboveYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count نقطة أعلى من تقييمك في الألغاز',
-      many: '$count نقطة أعلى من تقييمك في الألغاز',
-      few: '$count نقطة أعلى من تقييمك في الألغاز',
-      two: '$count نقطة أعلى من تقييمك في الألغاز',
-      one: 'نقطة واحدة أعلى من تقييمك في الألغاز',
-      zero: 'نقطة واحدة أعلى من تقييمك في الألغاز',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPlayed(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count لعبت',
-      many: '$count لعبت',
-      few: '$count لعبت',
-      two: '$count لعبت',
-      one: '$count لعبت',
-      zero: '$count لعبت',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbToReplay(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count لإعادة العرض',
-      many: '$count لإعادة العرض',
-      few: '$count لإعادة العرض',
-      two: '$count لإعادة العرض',
-      one: '$count لإعادة العرض',
-      zero: '$count لإعادة العرض',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get puzzleThemeAdvancedPawn => 'الأخذ بالتجاوز';
-
-  @override
-  String get puzzleThemeAdvancedPawnDescription => 'و يُعتبر ترقية البيدق أو التهديد بترقيته هو مفتاح التكتيك.';
-
-  @override
-  String get puzzleThemeAdvantage => 'أفضلية';
-
-  @override
-  String get puzzleThemeAdvantageDescription => 'اغتنم فرصتك للحصول على ميزة حاسمة. (200cp ≤ التقييم ≤ 600cp)';
-
-  @override
-  String get puzzleThemeAnastasiaMate => 'أنماط كش مات';
-
-  @override
-  String get puzzleThemeAnastasiaMateDescription => 'يتعاون الحصان والقلعة أو الوزير ليحاصروا الملك المنافس بين جانب الرقعة وقطعة صديقة.';
-
-  @override
-  String get puzzleThemeArabianMate => 'كش مات عربي';
-
-  @override
-  String get puzzleThemeArabianMateDescription => 'يتعاون الحصان والرخ ليحاصروا ملك الخصم في زاوية الرقعة.';
-
-  @override
-  String get puzzleThemeAttackingF2F7 => 'الهجوم على f2 أو f7';
-
-  @override
-  String get puzzleThemeAttackingF2F7Description => 'هجوم يستهدف بيادق f2 أو f7، على سبيل المثال، كما في افتتاحية \"fried liver\".';
-
-  @override
-  String get puzzleThemeAttraction => 'الجذب(التضحية)';
-
-  @override
-  String get puzzleThemeAttractionDescription => 'تضحية خادعة تغري الخصم لأخذها لتنفيذ فكرة تكتيكية، أو تبادل قطع بهدف إرغام الخضم على نقل قطعة إلى مربع حيث يمكن استغلال موقعها الجديد من خلال تكتيك معين.';
-
-  @override
-  String get puzzleThemeBackRankMate => 'كش مات في الصف الأخير';
-
-  @override
-  String get puzzleThemeBackRankMateDescription => 'كش مات في الصف الأخير حيث يكون الملك محاصر بقطعه.';
-
-  @override
-  String get puzzleThemeBishopEndgame => 'مرحلة نهاية اللعبة بالفيلة';
-
-  @override
-  String get puzzleThemeBishopEndgameDescription => 'مرحلة نهاية اللعبة تتضمن فيل وجنود فقط.';
-
-  @override
-  String get puzzleThemeBodenMate => 'كش مات \"بودين\"';
-
-  @override
-  String get puzzleThemeBodenMateDescription => 'فيلين يهاجمان الملك على أوتار متجاورة ويكون الملكك محاصر بقطع صديقة ليشكل كش مات.';
-
-  @override
-  String get puzzleThemeCastling => 'تبييت';
-
-  @override
-  String get puzzleThemeCastlingDescription => 'ضع الملك في أمان، وانشر القلعة للهجوم.';
-
-  @override
-  String get puzzleThemeCapturingDefender => 'خذ المدافع';
-
-  @override
-  String get puzzleThemeCapturingDefenderDescription => 'إزالة قطعة ذات أهمية حاسمة للدفاع عن قطعة أخرى، مما يسمح للقطعة التي لا يمكن الدفاع عنها الآن أن يتم الاستيلاء عليها في الحركة التالية.';
-
-  @override
-  String get puzzleThemeCrushing => 'سحق';
-
-  @override
-  String get puzzleThemeCrushingDescription => 'اكتشف خطأ الخصم الفادح للحصول على تفوق ساحق (يساوي 600 جزء بالمئة من البيدق أو أكثر)';
-
-  @override
-  String get puzzleThemeDoubleBishopMate => 'كش مات بفيلين';
-
-  @override
-  String get puzzleThemeDoubleBishopMateDescription => 'فيلين يهاجمان الملك على أوتار متجاورة ويكون الملكك محاصر بقطع صديقة ليشكل كش مات.';
-
-  @override
-  String get puzzleThemeDovetailMate => 'كش مات \"Dovetail\"';
-
-  @override
-  String get puzzleThemeDovetailMateDescription => 'الوزير يكش مات للملك العدو المجاور، و يكون المربعات الي يمكن الهرب إليها مشغولة بقطع صديقة.';
-
-  @override
-  String get puzzleThemeEquality => 'المساواة';
-
-  @override
-  String get puzzleThemeEqualityDescription => 'تحويل الوضعية الخاسرة إلى وصعية تعادل أو موقف متعادل';
-
-  @override
-  String get puzzleThemeKingsideAttack => 'هجوم من طرف الملك';
-
-  @override
-  String get puzzleThemeKingsideAttackDescription => 'الهجوم على ملك الخصم بعد أن يجري التبييت على جناح الملك.';
-
-  @override
-  String get puzzleThemeClearance => 'تصفية';
-
-  @override
-  String get puzzleThemeClearanceDescription => 'حركة، غالباً ما تكون تراجعية، مما يفرغ عمود أو قطر أو مربع، ليتبعه خطة تكتيكية.';
-
-  @override
-  String get puzzleThemeDefensiveMove => 'نقلة دفاعية';
-
-  @override
-  String get puzzleThemeDefensiveMoveDescription => 'نقلات أو سلسلة من النقلات الدقيقة الضرورية لعدم خسارة قطع أو خسارة الأفضلية.';
-
-  @override
-  String get puzzleThemeDeflection => 'ابعاد';
-
-  @override
-  String get puzzleThemeDeflectionDescription => 'نقلة تصرف انتباه قطعة الخصم عن مهمة مهمة أخرى تؤديها، على سبيل المثال، عن الدفاع عن مربع رئيسي. أحيانًا يُطلق عليه أيضًا \"التحميل الزائد\".';
-
-  @override
-  String get puzzleThemeDiscoveredAttack => 'هجوم مكشوف';
-
-  @override
-  String get puzzleThemeDiscoveredAttackDescription => 'تحريك قطعة (مثل الحصان)، التي حالت في السابق دون هجوم على قطعة بعيدة المدى (مثل القلعة)، بعيدا عن طريق تلك القطعة.';
-
-  @override
-  String get puzzleThemeDoubleCheck => 'كشة مزدوجة';
-
-  @override
-  String get puzzleThemeDoubleCheckDescription => 'الكش من قطعتين في وقت واحد، نتيجةً للهجوم المكتشف حيث تهاجم كل من القطعة المتحركة والقطعة غير المختبئة ملك الخصم. وبالتالي لا يمكن للملك سوى الهروب من الكش.';
-
-  @override
-  String get puzzleThemeEndgame => 'مرحلة نهاية المباراة';
-
-  @override
-  String get puzzleThemeEndgameDescription => 'تكتيك خلال مرحلة نهاية المباراة.';
-
-  @override
-  String get puzzleThemeEnPassantDescription => 'تكتيك يستخدم قاعدة \"الأخذ بالتجاوز\"، حيث يمكن للبيدق أن يأسر بيدق الخصم الذي قام بالحركة الأولية عن طريق نقله مربعين، حيث يتعرض المربع المتقاطع للهجوم من قبل بيدق يمكنه الاستيلاء على بيدق الخصم.';
-
-  @override
-  String get puzzleThemeExposedKing => 'ملك مكشوف';
-
-  @override
-  String get puzzleThemeExposedKingDescription => 'تكتيك حيث يكون هناك القليل من المدافعين حول الملك مما يقود غالباً إلى كش مات.';
-
-  @override
-  String get puzzleThemeFork => 'شوكة';
-
-  @override
-  String get puzzleThemeForkDescription => 'نقلة تهاجم قطعتين للخصم في آن واحد.';
-
-  @override
-  String get puzzleThemeHangingPiece => 'قطعة معلقة بدون حماية';
-
-  @override
-  String get puzzleThemeHangingPieceDescription => 'تكتيك حيث تكون قطعة للخصم غير مدافع عنها أو دفاع غير كافي بالتالي يمكن التقاطها بدون خسارة أي قطع من طرفك.';
-
-  @override
-  String get puzzleThemeHookMate => 'كش مات بالخطاف';
-
-  @override
-  String get puzzleThemeHookMateDescription => 'نمط الكش مات باستخدام قلعة و حصان و جندي بالإضافة إلى جندي الخصم ليحد من حركات الملك للهروب.';
-
-  @override
-  String get puzzleThemeInterference => 'التشوش';
-
-  @override
-  String get puzzleThemeInterferenceDescription => 'نقلة تحجب خط التفاعل بين قطع الخصم بعيدة المدى، ونتيجة لذلك تصبح إحدى القطعتين أو كلاهما بلا حماية. على سبيل المثال، يقف الحصان في مربع بين قلعتين.';
-
-  @override
-  String get puzzleThemeIntermezzo => 'النقلة البينيّة';
-
-  @override
-  String get puzzleThemeIntermezzoDescription => 'بدلاً من لعب النقلة المتوقعة، يتم أولاً القيام بنقلة أخرى تشكل تهديدًا فوريًا مباشرًا يجب على الخصم الرد عليه. يُعرف أيضًا باسم \"زفيشنزوك\" أو \"أنترميزو \".';
-
-  @override
-  String get puzzleThemeKnightEndgame => 'نهاية المباراة تتضمن حصان';
-
-  @override
-  String get puzzleThemeKnightEndgameDescription => 'نهاية مباراة تتضمن أحصنة و بيادق فقط.';
-
-  @override
-  String get puzzleThemeLong => 'لغز طويل';
-
-  @override
-  String get puzzleThemeLongDescription => 'ثلاث حركات للفوز.';
-
-  @override
-  String get puzzleThemeMaster => 'مباريات استاذ';
-
-  @override
-  String get puzzleThemeMasterDescription => 'ألغاز من مباريات لاعبين من حملة الألقاب.';
-
-  @override
-  String get puzzleThemeMasterVsMaster => 'مباراة أستاذ ضد أستاذ';
-
-  @override
-  String get puzzleThemeMasterVsMasterDescription => 'ألغاز من مباريات بين لاعبين من حملة الألقاب.';
-
-  @override
-  String get puzzleThemeMate => 'كش مات';
-
-  @override
-  String get puzzleThemeMateDescription => 'اربح المباراة بأناقة.';
-
-  @override
-  String get puzzleThemeMateIn1 => 'كش مات في حركة واحدة';
-
-  @override
-  String get puzzleThemeMateIn1Description => 'تحقيق الكش مات في حركة وحدة.';
-
-  @override
-  String get puzzleThemeMateIn2 => 'كش مات في حركتين';
-
-  @override
-  String get puzzleThemeMateIn2Description => 'تحقيق الكش مات في حركتين.';
-
-  @override
-  String get puzzleThemeMateIn3 => 'كش مات في 3 حركات';
-
-  @override
-  String get puzzleThemeMateIn3Description => 'تحقيق الكش مات في 3 نقلات.';
-
-  @override
-  String get puzzleThemeMateIn4 => 'كش مات في 4 حركات';
-
-  @override
-  String get puzzleThemeMateIn4Description => 'تحقيق الكش مات قي 4 نقلات.';
-
-  @override
-  String get puzzleThemeMateIn5 => 'كش مات في 5 حركات أو اكثر';
-
-  @override
-  String get puzzleThemeMateIn5Description => 'اكتشف سلسلة من الحركات الممتابعة التي تقود إلى كش مات.';
-
-  @override
-  String get puzzleThemeMiddlegame => 'مرحلة وسط اللعبة';
-
-  @override
-  String get puzzleThemeMiddlegameDescription => 'تكتيك خلال وسط المباراة.';
-
-  @override
-  String get puzzleThemeOneMove => 'لفز ذو حركة واحدة';
-
-  @override
-  String get puzzleThemeOneMoveDescription => 'لغز بحركة واحدة فقط.';
-
-  @override
-  String get puzzleThemeOpening => 'افتتاح';
-
-  @override
-  String get puzzleThemeOpeningDescription => 'تكتيك في مرحلة الافتتاح.';
-
-  @override
-  String get puzzleThemePawnEndgame => 'نهاية اللعبة بالجنود';
-
-  @override
-  String get puzzleThemePawnEndgameDescription => 'نهاية لعبة بجنود فقط.';
-
-  @override
-  String get puzzleThemePin => 'تثبيت';
-
-  @override
-  String get puzzleThemePinDescription => 'تكتيك يستخدم التثبيت حيث تكون القطعة غير قادرة على الحركة لأنها ستعرض قطعة ذات قيمة أكبر للهجوم.';
-
-  @override
-  String get puzzleThemePromotion => 'ترقية';
-
-  @override
-  String get puzzleThemePromotionDescription => 'ترقية جنديك إلى وزير أو أي قطعة أخرى.';
-
-  @override
-  String get puzzleThemeQueenEndgame => 'نهاية مباراة الوزير';
-
-  @override
-  String get puzzleThemeQueenEndgameDescription => 'نهاية المباراة بالوزير و الجنود.';
-
-  @override
-  String get puzzleThemeQueenRookEndgame => 'وزير و قلعة';
-
-  @override
-  String get puzzleThemeQueenRookEndgameDescription => 'نهاية المباراة تضمن وزير و قلاع و جنود.';
-
-  @override
-  String get puzzleThemeQueensideAttack => 'هجوم على طرف الوزير';
-
-  @override
-  String get puzzleThemeQueensideAttackDescription => 'الهجوم على ملك الخصم بعد التبييت على جناح الوزير.';
-
-  @override
-  String get puzzleThemeQuietMove => 'نقلة هادئة';
-
-  @override
-  String get puzzleThemeQuietMoveDescription => 'حركة لا تكش أو تأخذ أي قطعة و لا تشكل أي تهديد مباشر بالأخذ، لكنها تحضر لحركة خفية لتهديد لا يمكن تجنبه.';
-
-  @override
-  String get puzzleThemeRookEndgame => 'نهاية المباراة بالقلعة';
-
-  @override
-  String get puzzleThemeRookEndgameDescription => 'نهاية المباراة بالقلعة و الجنود فقط.';
-
-  @override
-  String get puzzleThemeSacrifice => 'تضحية';
-
-  @override
-  String get puzzleThemeSacrificeDescription => 'تكتيك يشمل التضحية ببعض القطع مقابل كسب الأفضلية مرة أخرى بعد عدة حركات إجبارية.';
-
-  @override
-  String get puzzleThemeShort => 'لغز قصير';
-
-  @override
-  String get puzzleThemeShortDescription => 'حركتين للانتصار.';
-
-  @override
-  String get puzzleThemeSkewer => 'سيخ';
-
-  @override
-  String get puzzleThemeSkewerDescription => 'نموذج يتضمن قطعة عالية القيمة تتعرض للهجوم، وتتحرك بعيدًا عن الخط، وتسمح بأسر قطعة ذات قيمة أقل خلفها أو مهاجمتها، عكس التثبيت.';
-
-  @override
-  String get puzzleThemeSmotheredMate => 'كش بالخنق';
-
-  @override
-  String get puzzleThemeSmotheredMateDescription => 'هو نمط من الكش مات بالحصان حيث أن الملك غير قادر على التحرك لأنه محاط (مخنوق) بقطعه.';
-
-  @override
-  String get puzzleThemeSuperGM => 'مباراة أستاذ دولي كبير';
-
-  @override
-  String get puzzleThemeSuperGMDescription => 'ألغاز من مبارايات تم لعبها من أفضل اللاعبين في العالم.';
-
-  @override
-  String get puzzleThemeTrappedPiece => 'قطعة محاصرة';
-
-  @override
-  String get puzzleThemeTrappedPieceDescription => 'قطعة لا تستطيع الهرب بسبب عدم وجود مربعات آمنة للهروب إليها.';
-
-  @override
-  String get puzzleThemeUnderPromotion => 'ترقية لغير الوزير';
-
-  @override
-  String get puzzleThemeUnderPromotionDescription => 'ترقية الجندي لقلعة أو فيل أو حصان.';
-
-  @override
-  String get puzzleThemeVeryLong => 'لغز طويل جداً';
-
-  @override
-  String get puzzleThemeVeryLongDescription => 'أربع نقلات أو أكثر للفوز.';
-
-  @override
-  String get puzzleThemeXRayAttack => 'هجوم X-Ray';
-
-  @override
-  String get puzzleThemeXRayAttackDescription => 'القطعة تهاجم أو تدافع عن مربع, من خلال قطعة عدو.';
-
-  @override
-  String get puzzleThemeZugzwang => 'Zugzwang';
-
-  @override
-  String get puzzleThemeZugzwangDescription => 'حركات الخصم محدودة و كل الحركات تؤدي إلى تفاقم الوضع نحو الأسوء.';
-
-  @override
-  String get puzzleThemeHealthyMix => 'خليط';
-
-  @override
-  String get puzzleThemeHealthyMixDescription => 'القليل من كل نوع، لذا لا يمكنك التنبؤ باللغز القادم فابقى مستعداً لأي شيء، تماماً كالمباريات الحقيقية.';
-
-  @override
-  String get puzzleThemePlayerGames => 'مبارايات اللاعب';
-
-  @override
-  String get puzzleThemePlayerGamesDescription => 'ابحث عن ألغاز من مبارياتك أو من مباريات لاعبين آخرين.';
-
-  @override
-  String puzzleThemePuzzleDownloadInformation(String param) {
-    return 'هذه الألغاز موجودة للعامة بإمكانك تحميلها من هنا$param.';
-  }
-
-  @override
-  String perfStatPerfStats(String param) {
-    return 'احصائيات $param';
-  }
-
-  @override
-  String get perfStatViewTheGames => 'عرض المباريات';
-
-  @override
-  String get perfStatProvisional => 'مؤقت';
-
-  @override
-  String get perfStatNotEnoughRatedGames => 'لم تلعب مباريات مقيّمة بما يكفي للحصول ع تقييم موثق.';
-
-  @override
-  String perfStatProgressOverLastXGames(String param) {
-    return 'التقدم خلال آخر المباريات ال$param الاخيرة:';
-  }
-
-  @override
-  String perfStatRatingDeviation(String param) {
-    return 'انحراف التقييم: $param.';
-  }
-
-  @override
-  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
-    return 'القيمة المنخفضة تعني أن التصنيف أكثر استقرارا. أعلى من $param1، يعتبر التقييم مؤقتا. لكي يتم تضمينه في الترتيبات، يجب أن تكون هذه القيمة أقل من $param2 (الشطرنج القياسي) أو $param3 (المتغيرات).';
-  }
-
-  @override
-  String get perfStatTotalGames => 'إجمالي المباريات';
-
-  @override
-  String get perfStatRatedGames => 'مباريات مقيّمة';
-
-  @override
-  String get perfStatTournamentGames => 'مباريات بطولة';
-
-  @override
-  String get perfStatBerserkedGames => 'مباريات مخاطرة';
-
-  @override
-  String get perfStatTimeSpentPlaying => 'الوقت المقضي في اللعب';
-
-  @override
-  String get perfStatAverageOpponent => 'متوسط تقييم الخصم';
-
-  @override
-  String get perfStatVictories => 'الانتصارات';
-
-  @override
-  String get perfStatDefeats => 'الهزائم';
-
-  @override
-  String get perfStatDisconnections => 'الانقطاعات';
-
-  @override
-  String get perfStatNotEnoughGames => 'لم تلعب مباريات كفاية';
-
-  @override
-  String perfStatHighestRating(String param) {
-    return 'أعلى تقييم: $param';
-  }
-
-  @override
-  String perfStatLowestRating(String param) {
-    return 'أقل تقييم: $param';
-  }
-
-  @override
-  String perfStatFromXToY(String param1, String param2) {
-    return 'من $param1 الى $param2';
-  }
-
-  @override
-  String get perfStatWinningStreak => 'سلسلة الانتصارات';
-
-  @override
-  String get perfStatLosingStreak => 'سلسلة الهزائم';
-
-  @override
-  String perfStatLongestStreak(String param) {
-    return 'اطول سلسلة: $param';
-  }
-
-  @override
-  String perfStatCurrentStreak(String param) {
-    return 'السلسلة الحالية: $param';
-  }
-
-  @override
-  String get perfStatBestRated => 'افضل الانتصارات المقيّمة';
-
-  @override
-  String get perfStatGamesInARow => 'مباريات لُعبت على التوالي';
-
-  @override
-  String get perfStatLessThanOneHour => 'اقل من ساعة واحدة بين المباريات';
-
-  @override
-  String get perfStatMaxTimePlaying => 'اقصى وقت مقضي في اللعب';
-
-  @override
-  String get perfStatNow => 'الآن';
-
-  @override
-  String get searchSearch => 'بحث';
-
-  @override
-  String get settingsSettings => 'الإعدادات';
-
-  @override
-  String get settingsCloseAccount => 'إغلاق الحساب';
-
-  @override
-  String get settingsManagedAccountCannotBeClosed => 'حسابك يتم إدارته، ولا يمكن إغلاقه.';
-
-  @override
-  String get settingsClosingIsDefinitive => 'الإغلاق الحساب نهائي، لا يمكنك التراجع عن هذا القرار، أ أنت متحقق؟';
-
-  @override
-  String get settingsCantOpenSimilarAccount => 'لن يسمح لك بفتح حساب جديد بنفس الإسم، حتى لو كان حجم الأحرف مختلف.';
-
-  @override
-  String get settingsChangedMindDoNotCloseAccount => 'غيرت رأيي، لا تغلق حسابي';
-
-  @override
-  String get settingsCloseAccountExplanation => 'هل أنت متأكد من أنك تريد اغلاق حسابك؟\nاغلاق حسابك هو قرار دائم ونهائي.\nولا يمكنك التراجع عن هذا القرار على الإطلاق.';
-
-  @override
-  String get settingsThisAccountIsClosed => 'هذا الحساب مغلق.';
-
-  @override
-  String get streamerLichessStreamers => 'بثوث ليشس';
-
-  @override
   String get stormMoveToStart => 'حَرِك لتبدأ';
 
   @override
@@ -4844,14 +4838,11 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
+  String get streamerLichessStreamers => 'بثوث ليشس';
+
+  @override
   String get studyShareAndExport => 'مشاركة و تصدير';
 
   @override
   String get studyStart => 'ابدأ';
-
-  @override
-  String get broadcastBroadcasts => 'البثوث';
-
-  @override
-  String get broadcastStartDate => 'تاريخ البدء في المنطقة الزمنية الخاصة بك';
 }

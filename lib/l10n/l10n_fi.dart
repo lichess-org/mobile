@@ -225,10 +225,10 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
-  String get contactContact => 'Ota yhteyttä';
+  String get broadcastBroadcasts => 'Lähetykset';
 
   @override
-  String get contactContactLichess => 'Ota yhteyttä Lichessiin';
+  String get broadcastStartDate => 'Alkamispäivämäärä omalla aikavyöhykkeelläsi';
 
   @override
   String challengeChallengesX(String param1) {
@@ -310,6 +310,1012 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get challengeInviteLichessUser => 'Tai kutsu Lichess-käyttäjä:';
+
+  @override
+  String get contactContact => 'Ota yhteyttä';
+
+  @override
+  String get contactContactLichess => 'Ota yhteyttä Lichessiin';
+
+  @override
+  String get patronDonate => 'Lahjoita';
+
+  @override
+  String get patronLichessPatron => 'Lichessin tukija';
+
+  @override
+  String perfStatPerfStats(String param) {
+    return '$param-tilastot';
+  }
+
+  @override
+  String get perfStatViewTheGames => 'Katso pelit';
+
+  @override
+  String get perfStatProvisional => 'tilapäinen';
+
+  @override
+  String get perfStatNotEnoughRatedGames => 'Ei ole pelattu riittävän montaa pisteytettyä peliä, jotta voitaisiin muodostaa luotettava vahvuusluku.';
+
+  @override
+  String perfStatProgressOverLastXGames(String param) {
+    return 'Kehitys viimeisten $param pelin aikana:';
+  }
+
+  @override
+  String perfStatRatingDeviation(String param) {
+    return 'Vahvuuslukupoikkeama: $param.';
+  }
+
+  @override
+  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
+    return 'Alempi arvo tarkoittaa, että vahvuusluku on vakiintuneempi. Kun arvo on yli $param1, vahvuusluku on tilapäinen. Vahvuuslukulistalle pääsee, kun tämä arvo on alle $param2 (tavallisessa shakissa) tai $param3 (varianteissa).';
+  }
+
+  @override
+  String get perfStatTotalGames => 'Pelejä yhteensä';
+
+  @override
+  String get perfStatRatedGames => 'Pisteytettyjä pelejä';
+
+  @override
+  String get perfStatTournamentGames => 'Turnauspelejä';
+
+  @override
+  String get perfStatBerserkedGames => 'Berserkkipelejä';
+
+  @override
+  String get perfStatTimeSpentPlaying => 'Pelaamiseen käytetty aika';
+
+  @override
+  String get perfStatAverageOpponent => 'Keskimääräinen vastustaja';
+
+  @override
+  String get perfStatVictories => 'Voittoja';
+
+  @override
+  String get perfStatDefeats => 'Tappioita';
+
+  @override
+  String get perfStatDisconnections => 'Yhteys katkennut';
+
+  @override
+  String get perfStatNotEnoughGames => 'Ei tarpeeksi pelattuja pelejä';
+
+  @override
+  String perfStatHighestRating(String param) {
+    return 'Korkein vahvuusluku: $param';
+  }
+
+  @override
+  String perfStatLowestRating(String param) {
+    return 'Alin vahvuusluku: $param';
+  }
+
+  @override
+  String perfStatFromXToY(String param1, String param2) {
+    return 'aikavälillä $param1–$param2';
+  }
+
+  @override
+  String get perfStatWinningStreak => 'Voittoputki';
+
+  @override
+  String get perfStatLosingStreak => 'Tappioputki';
+
+  @override
+  String perfStatLongestStreak(String param) {
+    return 'Pisin putki: $param';
+  }
+
+  @override
+  String perfStatCurrentStreak(String param) {
+    return 'Nykyinen putki: $param';
+  }
+
+  @override
+  String get perfStatBestRated => 'Korkeimman vahvuusluvun voitot';
+
+  @override
+  String get perfStatGamesInARow => 'Peräjälkeen pelattuja pelejä';
+
+  @override
+  String get perfStatLessThanOneHour => 'Alle tunti pelien välissä';
+
+  @override
+  String get perfStatMaxTimePlaying => 'Pisin yhtäjaksoinen peliaika';
+
+  @override
+  String get perfStatNow => 'nyt';
+
+  @override
+  String get preferencesPreferences => 'Asetukset';
+
+  @override
+  String get preferencesDisplay => 'Näyttöasetukset';
+
+  @override
+  String get preferencesPrivacy => 'Yksityisyysasetukset';
+
+  @override
+  String get preferencesNotifications => 'Ilmoitukset';
+
+  @override
+  String get preferencesPieceAnimation => 'Nappuloiden animaatio';
+
+  @override
+  String get preferencesMaterialDifference => 'Materiaaliero';
+
+  @override
+  String get preferencesBoardHighlights => 'Laudan korostukset (viimeisin siirto ja shakki)';
+
+  @override
+  String get preferencesPieceDestinations => 'Lailliset siirrot ja esisiirrot';
+
+  @override
+  String get preferencesBoardCoordinates => 'Laudan koordinaatit (A-H, 1-8)';
+
+  @override
+  String get preferencesMoveListWhilePlaying => 'Siirtolista pelin aikana';
+
+  @override
+  String get preferencesPgnPieceNotation => 'Siirtojen merkintätapa';
+
+  @override
+  String get preferencesChessPieceSymbol => 'Shakkinappulasymbolit';
+
+  @override
+  String get preferencesPgnLetter => 'Kirjaimet (K, Q, R, B, N)';
+
+  @override
+  String get preferencesZenMode => 'Zen-moodi';
+
+  @override
+  String get preferencesShowPlayerRatings => 'Näytä pelaajien vahvuusluvut';
+
+  @override
+  String get preferencesShowFlairs => 'Näytä pelaajien tyylit';
+
+  @override
+  String get preferencesExplainShowPlayerRatings => 'Tämän avulla voit piilottaa sivustolta kaikki vahvuusluvut, jotta voit keskittyä paremmin shakinpeluuseen. Pelit kyllä pisteytetään normaalisti, tällä asetuksella on vaikutus vain sinun näkymääsi.';
+
+  @override
+  String get preferencesDisplayBoardResizeHandle => 'Näytä laudan koon muokkauskahva';
+
+  @override
+  String get preferencesOnlyOnInitialPosition => 'Vain alkuasemassa';
+
+  @override
+  String get preferencesInGameOnly => 'Vain pelin aikana';
+
+  @override
+  String get preferencesChessClock => 'Shakkikello';
+
+  @override
+  String get preferencesTenthsOfSeconds => 'Sekunnin kymmenesosat';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'Kun aikaa jäljellä < 10 sekuntia';
+
+  @override
+  String get preferencesHorizontalGreenProgressBars => 'Vaakasuora vihreä ajanetenemispalkki';
+
+  @override
+  String get preferencesSoundWhenTimeGetsCritical => 'Äänimerkki kun aika on vähissä';
+
+  @override
+  String get preferencesGiveMoreTime => 'Anna lisää aikaa';
+
+  @override
+  String get preferencesGameBehavior => 'Pelillisiä lisäasetuksia';
+
+  @override
+  String get preferencesHowDoYouMovePieces => 'Kuinka siirrät nappuloita?';
+
+  @override
+  String get preferencesClickTwoSquares => 'Klikkaa kahta ruutua';
+
+  @override
+  String get preferencesDragPiece => 'Raahaa nappulaa';
+
+  @override
+  String get preferencesBothClicksAndDrag => 'Molemmat';
+
+  @override
+  String get preferencesPremovesPlayingDuringOpponentTurn => 'Esisiirrot (pelaaminen vastustajan vuorolla)';
+
+  @override
+  String get preferencesTakebacksWithOpponentApproval => 'Siirtojen peruminen (vastustajan hyväksynnällä)';
+
+  @override
+  String get preferencesInCasualGamesOnly => 'Vain rennoissa peleissä';
+
+  @override
+  String get preferencesPromoteToQueenAutomatically => 'Korota automaattisesti kuningattareksi';
+
+  @override
+  String get preferencesExplainPromoteToQueenAutomatically => 'Pidä <ctrl>-näppäintä painettuna korottaessasi sotilaan, jos haluat ottaa automaattisen korotuksen väliaikaisesti pois käytöstä';
+
+  @override
+  String get preferencesWhenPremoving => 'Esisiirtäessä';
+
+  @override
+  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Vaadi tasapeli automaattisesti kolminkertaisen toiston sattuessa';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Kun aikaa on jäljellä < 30 sekuntia';
+
+  @override
+  String get preferencesMoveConfirmation => 'Siirron vahvistus';
+
+  @override
+  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Voidaan poistaa käytöstä pelin aikana lautavalikon kautta';
+
+  @override
+  String get preferencesInCorrespondenceGames => 'Kirjeshakissa';
+
+  @override
+  String get preferencesCorrespondenceAndUnlimited => 'Kirjeshakki ja aikarajaton';
+
+  @override
+  String get preferencesConfirmResignationAndDrawOffers => 'Vahvista luovutukset ja tasapelitarjoukset';
+
+  @override
+  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Kuinka linnoittaudut';
+
+  @override
+  String get preferencesCastleByMovingTwoSquares => 'Siirrä kuningasta kaksi ruutua';
+
+  @override
+  String get preferencesCastleByMovingOntoTheRook => 'Siirrä kuningas tornin päälle';
+
+  @override
+  String get preferencesInputMovesWithTheKeyboard => 'Syötä siirtoja näppäimistöllä';
+
+  @override
+  String get preferencesInputMovesWithVoice => 'Syötä siirtosi puheella';
+
+  @override
+  String get preferencesSnapArrowsToValidMoves => 'Merkitse mahdolliset siirrot nuolilla';
+
+  @override
+  String get preferencesSayGgWpAfterLosingOrDrawing => 'Sano \"Good game, well played\" (suom. \"Hyvä peli, hyvin pelattu\") tasapelin tai tappion jälkeen';
+
+  @override
+  String get preferencesYourPreferencesHaveBeenSaved => 'Asetuksesi on tallennettu.';
+
+  @override
+  String get preferencesScrollOnTheBoardToReplayMoves => 'Vierittämällä laudan yllä voit katsoa siirtoja uudelleen';
+
+  @override
+  String get preferencesCorrespondenceEmailNotification => 'Päivittäinen sähköposti-ilmoitus, jossa listataan kirjeshakkipelisi';
+
+  @override
+  String get preferencesNotifyStreamStart => 'Striimaaja aloittaa striimin';
+
+  @override
+  String get preferencesNotifyInboxMsg => 'Uusi saapunut viesti';
+
+  @override
+  String get preferencesNotifyForumMention => 'Sinut mainitaan foorumin kommentissa';
+
+  @override
+  String get preferencesNotifyInvitedStudy => 'Kutsu tutkielmaan';
+
+  @override
+  String get preferencesNotifyGameEvent => 'Kirjeshakkipelien uudet tapahtumat';
+
+  @override
+  String get preferencesNotifyChallenge => 'Haasteet';
+
+  @override
+  String get preferencesNotifyTournamentSoon => 'Turnaus alkamassa pian';
+
+  @override
+  String get preferencesNotifyTimeAlarm => 'Kirjeshakkipelin aika loppumassa';
+
+  @override
+  String get preferencesNotifyBell => 'Kilahtava ilmoitus Lichessissä';
+
+  @override
+  String get preferencesNotifyPush => 'Laitteen ilmoitus, kun et ole Lichessissä';
+
+  @override
+  String get preferencesNotifyWeb => 'Selain';
+
+  @override
+  String get preferencesNotifyDevice => 'Laite';
+
+  @override
+  String get preferencesBellNotificationSound => 'Ilmoitusten kilahdusääni';
+
+  @override
+  String get puzzlePuzzles => 'Tehtävät';
+
+  @override
+  String get puzzlePuzzleThemes => 'Tehtävien aiheet';
+
+  @override
+  String get puzzleRecommended => 'Suosittelemme';
+
+  @override
+  String get puzzlePhases => 'Pelin vaiheet';
+
+  @override
+  String get puzzleMotifs => 'Motiivit';
+
+  @override
+  String get puzzleAdvanced => 'Edistyneille';
+
+  @override
+  String get puzzleLengths => 'Pituudet';
+
+  @override
+  String get puzzleMates => 'Matit';
+
+  @override
+  String get puzzleGoals => 'Tavoitteet';
+
+  @override
+  String get puzzleOrigin => 'Alkuperä';
+
+  @override
+  String get puzzleSpecialMoves => 'Erityissiirrot';
+
+  @override
+  String get puzzleDidYouLikeThisPuzzle => 'Piditkö tästä tehtävästä?';
+
+  @override
+  String get puzzleVoteToLoadNextOne => 'Anna arviosi, niin seuraava latautuu!';
+
+  @override
+  String get puzzleUpVote => 'Arvioi tehtävä hyväksi';
+
+  @override
+  String get puzzleDownVote => 'Arvioi tehtävä huonoksi';
+
+  @override
+  String get puzzleYourPuzzleRatingWillNotChange => 'Tehtävävahvuuslukusi ei muutu. Huomaa, että tehtävien ratkaisu ei ole kilpailu. Vahvuusluvun perusteella saat ratkaistavaksesi tämänhetkistä taitotasoasi parhaiten vastaavia tehtäviä.';
+
+  @override
+  String get puzzleFindTheBestMoveForWhite => 'Löydä valkean paras siirto.';
+
+  @override
+  String get puzzleFindTheBestMoveForBlack => 'Löydä mustan paras siirto.';
+
+  @override
+  String get puzzleToGetPersonalizedPuzzles => 'Halutessasi henkilökohtaisia tehtäviä:';
+
+  @override
+  String puzzlePuzzleId(String param) {
+    return 'Tehtävä $param';
+  }
+
+  @override
+  String get puzzlePuzzleOfTheDay => 'Päivän tehtävä';
+
+  @override
+  String get puzzleDailyPuzzle => 'Päivän tehtävä';
+
+  @override
+  String get puzzleClickToSolve => 'Ratkaise klikkaamalla';
+
+  @override
+  String get puzzleGoodMove => 'Hyvä siirto';
+
+  @override
+  String get puzzleBestMove => 'Paras siirto!';
+
+  @override
+  String get puzzleKeepGoing => 'Jatka…';
+
+  @override
+  String get puzzlePuzzleSuccess => 'Onnistui!';
+
+  @override
+  String get puzzlePuzzleComplete => 'Tehtävä ratkaistu!';
+
+  @override
+  String get puzzleByOpenings => 'Avausryhmitys';
+
+  @override
+  String get puzzlePuzzlesByOpenings => 'Tehtäviä avausten mukaan ryhmitettyinä';
+
+  @override
+  String get puzzleOpeningsYouPlayedTheMost => 'Pisteytetyissä peleissä eniten pelaamasi avaukset';
+
+  @override
+  String get puzzleUseFindInPage => 'Löydä lempiavauksesi valitsemalla selaimen valikosta \"Etsi sivulta\"!';
+
+  @override
+  String get puzzleUseCtrlF => 'Löydä lempiavauksesi painamalla Ctrl+F!';
+
+  @override
+  String get puzzleNotTheMove => 'Tuo siirto se ei ole!';
+
+  @override
+  String get puzzleTrySomethingElse => 'Kokeile jotain muuta.';
+
+  @override
+  String puzzleRatingX(String param) {
+    return 'Vahvuusluku: $param';
+  }
+
+  @override
+  String get puzzleHidden => 'piilotettu';
+
+  @override
+  String puzzleFromGameLink(String param) {
+    return 'Pelistä $param';
+  }
+
+  @override
+  String get puzzleContinueTraining => 'Jatka harjoittelua';
+
+  @override
+  String get puzzleDifficultyLevel => 'Vaikeustaso';
+
+  @override
+  String get puzzleNormal => 'Keskitaso';
+
+  @override
+  String get puzzleEasier => 'Helpompi';
+
+  @override
+  String get puzzleEasiest => 'Helpoin';
+
+  @override
+  String get puzzleHarder => 'Vaikeampi';
+
+  @override
+  String get puzzleHardest => 'Vaikein';
+
+  @override
+  String get puzzleExample => 'Esimerkki';
+
+  @override
+  String get puzzleAddAnotherTheme => 'Lisää toinen teema';
+
+  @override
+  String get puzzleNextPuzzle => 'Seuraava tehtävä';
+
+  @override
+  String get puzzleJumpToNextPuzzleImmediately => 'Jatka heti seuraavaan tehtävään';
+
+  @override
+  String get puzzlePuzzleDashboard => 'Tehtävien hallinta';
+
+  @override
+  String get puzzleImprovementAreas => 'Paranna näitä';
+
+  @override
+  String get puzzleStrengths => 'Vahvuutesi';
+
+  @override
+  String get puzzleHistory => 'Tehtävähistoria';
+
+  @override
+  String get puzzleSolved => 'ratkaistu';
+
+  @override
+  String get puzzleFailed => 'epäonnistui';
+
+  @override
+  String get puzzleStreakDescription => 'Ratkaise asteittain vaikeutuvia tehtäviä ja luo voittoputki. Kello ei ole käytössä, joten voit miettiä rauhassa. Yksikin väärä siirto, niin peli on ohi! Kunkin sarjan aikana voit kuitenkin ohittaa yhden siirron.';
+
+  @override
+  String puzzleYourStreakX(String param) {
+    return 'Putkesi: $param';
+  }
+
+  @override
+  String get puzzleStreakSkipExplanation => 'Ohita tämä siirto jatkaaksesi putkea! Toimii kunkin sarjan aikana vain kerran.';
+
+  @override
+  String get puzzleContinueTheStreak => 'Jatka putkea';
+
+  @override
+  String get puzzleNewStreak => 'Uusi putki';
+
+  @override
+  String get puzzleFromMyGames => 'Omista peleistäni';
+
+  @override
+  String get puzzleLookupOfPlayer => 'Hae tehtäviä tietyn pelaajan peleistä';
+
+  @override
+  String puzzleFromXGames(String param) {
+    return 'Tehtäviä pelaajan $param peleistä';
+  }
+
+  @override
+  String get puzzleSearchPuzzles => 'Hae tehtäviä';
+
+  @override
+  String get puzzleFromMyGamesNone => 'Tietokannassa ei ole tehtäviä sinulta, mutta olet silti Lichessille erittäin tärkeä.\nKun pelaat lisää nopeita ja klassisia pelejä, on suurempi mahdollisuus, että sinunkin peleistäsi luodaan tehtävä!';
+
+  @override
+  String puzzleFromXGamesFound(String param1, String param2) {
+    return 'Löytyi $param1 tehtävää $param2 pelistä';
+  }
+
+  @override
+  String get puzzlePuzzleDashboardDescription => 'Harjoittele, analysoi, kehity';
+
+  @override
+  String puzzlePercentSolved(String param) {
+    return '$param ratkaistu';
+  }
+
+  @override
+  String get puzzleNoPuzzlesToShow => 'Täällä ei ole vielä mitään nähtävää – tee ensin joitakin tehtäviä!';
+
+  @override
+  String get puzzleImprovementAreasDescription => 'Harjoittele näitä tehostaaksesi edistymistäsi!';
+
+  @override
+  String get puzzleStrengthDescription => 'Suoriudut parhaiten näissä aiheissa';
+
+  @override
+  String puzzlePlayedXTimes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Pelattu $count kertaa',
+      one: 'Pelattu $count kerran',
+      zero: 'Pelattu $count kerran',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsBelowYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count pistettä matalampi tehtävävahvuusluku kuin sinulla',
+      one: 'Yhden pisteen matalampi tehtävävahvuusluku kuin sinulla',
+      zero: 'Yhden pisteen matalampi tehtävävahvuusluku kuin sinulla',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsAboveYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count pistettä korkeampi tehtävävahvuusluku kuin sinulla',
+      one: 'Yhden pisteen korkeampi tehtävävahvuusluku kuin sinulla',
+      zero: 'Yhden pisteen korkeampi tehtävävahvuusluku kuin sinulla',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPlayed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count pelattu',
+      one: '$count pelattu',
+      zero: '$count pelattu',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbToReplay(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count kerrattavaa',
+      one: '$count kerrattava',
+      zero: '$count kerrattava',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get puzzleThemeAdvancedPawn => 'Pitkälle edennyt sotilas';
+
+  @override
+  String get puzzleThemeAdvancedPawnDescription => 'Taktiikassa keskeistä on sotilas, joka korottuu tai uhkaa korottua.';
+
+  @override
+  String get puzzleThemeAdvantage => 'Etu';
+
+  @override
+  String get puzzleThemeAdvantageDescription => 'Tartu tilaisuuteen hankkia ratkaiseva etu. (200cp ≤ eval ≤ 600cp)';
+
+  @override
+  String get puzzleThemeAnastasiaMate => 'Anastasian matti';
+
+  @override
+  String get puzzleThemeAnastasiaMateDescription => 'Ratsun sekä tornin tai daamin yhteistyöllä vastustajan kuningas jää kiinni laudan reunan ja oman nappulan välissä.';
+
+  @override
+  String get puzzleThemeArabianMate => 'Arabialainen matti';
+
+  @override
+  String get puzzleThemeArabianMateDescription => 'Ratsun ja tornin yhteistyöllä vastustajan kuningas jää kiinni laudan nurkassa.';
+
+  @override
+  String get puzzleThemeAttackingF2F7 => 'Hyökkäys f2:een tai f7:ään';
+
+  @override
+  String get puzzleThemeAttackingF2F7Description => 'F2- tai f7-sotilaaseen kohdistuva hyökkäys, kuten esimerkiksi Preussilaisen pelin Fried Liver eli Fegatello-muunnelma.';
+
+  @override
+  String get puzzleThemeAttraction => 'Houkutus';
+
+  @override
+  String get puzzleThemeAttractionDescription => 'Vaihto tai uhraus, joka houkuttelee tai pakottaa vastustajan nappulan tiettyyn ruutuun ja mahdollistaa siten taktisen jatkon.';
+
+  @override
+  String get puzzleThemeBackRankMate => 'Takarivin matti';
+
+  @override
+  String get puzzleThemeBackRankMateDescription => 'Matita kuningas takarivillä, kun sen omat nappulat estävät sitä siirtymästä pois.';
+
+  @override
+  String get puzzleThemeBishopEndgame => 'Lähettiloppupeli';
+
+  @override
+  String get puzzleThemeBishopEndgameDescription => 'Loppupeli, jossa on vain lähettejä ja sotilaita.';
+
+  @override
+  String get puzzleThemeBodenMate => 'Bodenin matti';
+
+  @override
+  String get puzzleThemeBodenMateDescription => 'Kaksi ristiäviltä diagonaaleilta hyökkäävää lähettiä matittaa omien nappuloidensa estämän kuninkaan.';
+
+  @override
+  String get puzzleThemeCastling => 'Linnoitus';
+
+  @override
+  String get puzzleThemeCastlingDescription => 'Vie kuninkaasi turvaan ja tuo tornisi mukaan hyökkäykseen.';
+
+  @override
+  String get puzzleThemeCapturingDefender => 'Lyö puolustava nappula';
+
+  @override
+  String get puzzleThemeCapturingDefenderDescription => 'Lyö toisen nappulan suojelemiseen käytetty nappula, jotta voit seuraavilla siirroilla lyödä toisen nappulan, joka ei ole enää suojeltu.';
+
+  @override
+  String get puzzleThemeCrushing => 'Murskaava etu';
+
+  @override
+  String get puzzleThemeCrushingDescription => 'Löydä vastustajan vakava virhe ja hanki murskaava etu. (eval ≥ 600cp)';
+
+  @override
+  String get puzzleThemeDoubleBishopMate => 'Kahden lähetin matti';
+
+  @override
+  String get puzzleThemeDoubleBishopMateDescription => 'Kaksi vierekkäisiltä diagonaaleilta hyökkäävää lähettiä matittaa omien nappuloidensa estämän kuninkaan.';
+
+  @override
+  String get puzzleThemeDovetailMate => 'Cozion matti';
+
+  @override
+  String get puzzleThemeDovetailMateDescription => 'Daami matittaa vieressään olevan kuninkaan, jonka omat nappulat vievät siltä sen ainoat kaksi pakoruutua.';
+
+  @override
+  String get puzzleThemeEquality => 'Tasoitus';
+
+  @override
+  String get puzzleThemeEqualityDescription => 'Nouse häviöasemasta takaisin peliin ja saavuta tasapeli tai tasapainoinen asema. (eval ≤ 200cp)';
+
+  @override
+  String get puzzleThemeKingsideAttack => 'Hyökkäys kuningassivustalla';
+
+  @override
+  String get puzzleThemeKingsideAttackDescription => 'Hyökkää vastustajan kuninkaan kimppuun tämän linnoituttua kuningassivustalle.';
+
+  @override
+  String get puzzleThemeClearance => 'Vapautus';
+
+  @override
+  String get puzzleThemeClearanceDescription => 'Usein tempolla tehtävä siirto, joka vapauttaa ruudun, linjan tai diagonaalin seuraavaa taktista ideaa varten.';
+
+  @override
+  String get puzzleThemeDefensiveMove => 'Puolustussiirto';
+
+  @override
+  String get puzzleThemeDefensiveMoveDescription => 'Tarkka siirto tai siirtosarja, joka tarvitaan materiaali- tai muun edun menetyksen välttämiseksi.';
+
+  @override
+  String get puzzleThemeDeflection => 'Harhautus';
+
+  @override
+  String get puzzleThemeDeflectionDescription => 'Siirto, jolla harhautetaan vastustajan nappula pois suorittamasta jotain toista tehtävää, kuten vartioimasta tärkeää ruutua.';
+
+  @override
+  String get puzzleThemeDiscoveredAttack => 'Paljastushyökkäys';
+
+  @override
+  String get puzzleThemeDiscoveredAttackDescription => 'Siirrä nappulaa, joka on tähän asti peittänyt jonkin ulottuvaisen nappulan hyökkäyksen, esimerkiksi ratsu pois tornin edestä.';
+
+  @override
+  String get puzzleThemeDoubleCheck => 'Kaksoisshakki';
+
+  @override
+  String get puzzleThemeDoubleCheckDescription => 'Shakkaa samanaikaisesti kahdella nappulalla niin, että paljastushyökkäyksessäsi sekä liikkuva nappula että sen paljastama nappula uhkaavat vastustajan kuningasta.';
+
+  @override
+  String get puzzleThemeEndgame => 'Loppupeli';
+
+  @override
+  String get puzzleThemeEndgameDescription => 'Taktiikka pelin viimeisessä vaiheessa.';
+
+  @override
+  String get puzzleThemeEnPassantDescription => 'Taktiikka, jossa sovelletaan ohestalyöntisääntöä, eli jossa sotilas voi lyödä sellaisen vastustajan sotilaan, joka on juuri ensimmäisellä kahden ruudun siirrollaan ohittanut sen.';
+
+  @override
+  String get puzzleThemeExposedKing => 'Suojaton kuningas';
+
+  @override
+  String get puzzleThemeExposedKingDescription => 'Taktiikka, jossa kuninkaan ympärillä on vain vähän puolustajia, ja joka usein johtaa mattiin.';
+
+  @override
+  String get puzzleThemeFork => 'Haarukka';
+
+  @override
+  String get puzzleThemeForkDescription => 'Siirto, jolla siirrettävä nappula uhkaa samanaikaisesti kahta vastustajan nappulaa.';
+
+  @override
+  String get puzzleThemeHangingPiece => 'Ilmainen nappula';
+
+  @override
+  String get puzzleThemeHangingPieceDescription => 'Taktiikka, jossa vastustajan nappulaa ei ole suojattu lainkaan tai ei riittävästi, ja jossa se on vapaasti lyötävissä.';
+
+  @override
+  String get puzzleThemeHookMate => 'Koukkumatti';
+
+  @override
+  String get puzzleThemeHookMateDescription => 'Tornin, ratsun ja sotilaan yhteispelillä syntyvä matti, jossa vastustajan sotilas vie kuninkaaltaan yhden pakoruudun.';
+
+  @override
+  String get puzzleThemeInterference => 'Katko';
+
+  @override
+  String get puzzleThemeInterferenceDescription => 'Siirrä nappulasi kahden vastustajan nappulan väliin niin, että yksi tai molemmat vastustajan nappuloista jäävät ilman suojaa, esimerkiksi ratsusi suojattuun ruutuun kahden tornin väliin.';
+
+  @override
+  String get puzzleThemeIntermezzo => 'Välisiirto';
+
+  @override
+  String get puzzleThemeIntermezzoDescription => 'Tee odotetun siirron sijaan ensin toinen siirto, jonka synnyttämään välittömään uhkaan vastustajasi täytyy vastata. Tunnetaan myös nimellä \"Zwischenzug\".';
+
+  @override
+  String get puzzleThemeKnightEndgame => 'Ratsuloppupeli';
+
+  @override
+  String get puzzleThemeKnightEndgameDescription => 'Loppupeli, jossa on vain ratsuja ja sotilaita.';
+
+  @override
+  String get puzzleThemeLong => 'Pitkä tehtävä';
+
+  @override
+  String get puzzleThemeLongDescription => 'Voittoon tarvitaan kolme siirtoa.';
+
+  @override
+  String get puzzleThemeMaster => 'Mestaritason pelit';
+
+  @override
+  String get puzzleThemeMasterDescription => 'Tehtäviä arvonimen saaneiden pelaajien peleistä.';
+
+  @override
+  String get puzzleThemeMasterVsMaster => 'Kahden mestarin väliset pelit';
+
+  @override
+  String get puzzleThemeMasterVsMasterDescription => 'Tehtäviä kahden arvonimen saaneen pelaajan välisistä peleistä.';
+
+  @override
+  String get puzzleThemeMate => 'Matti';
+
+  @override
+  String get puzzleThemeMateDescription => 'Voita peli tyylillä.';
+
+  @override
+  String get puzzleThemeMateIn1 => '1 siirron matti';
+
+  @override
+  String get puzzleThemeMateIn1Description => 'Tee matti yhdessä siirrossa.';
+
+  @override
+  String get puzzleThemeMateIn2 => '2 siirron matti';
+
+  @override
+  String get puzzleThemeMateIn2Description => 'Tee matti kahdessa siirrossa.';
+
+  @override
+  String get puzzleThemeMateIn3 => '3 siirron matti';
+
+  @override
+  String get puzzleThemeMateIn3Description => 'Tee matti kolmessa siirrossa.';
+
+  @override
+  String get puzzleThemeMateIn4 => '4 siirron matti';
+
+  @override
+  String get puzzleThemeMateIn4Description => 'Tee matti neljässä siirrossa.';
+
+  @override
+  String get puzzleThemeMateIn5 => '5 tai useamman siirron matti';
+
+  @override
+  String get puzzleThemeMateIn5Description => 'Löydä pitkä mattisommitelma.';
+
+  @override
+  String get puzzleThemeMiddlegame => 'Keskipeli';
+
+  @override
+  String get puzzleThemeMiddlegameDescription => 'Taktiikka pelin toisessa vaiheessa.';
+
+  @override
+  String get puzzleThemeOneMove => 'Yhden siirron tehtävä';
+
+  @override
+  String get puzzleThemeOneMoveDescription => 'Tehtävä, jossa vaaditaan vain yksi siirto.';
+
+  @override
+  String get puzzleThemeOpening => 'Avaus';
+
+  @override
+  String get puzzleThemeOpeningDescription => 'Taktiikka pelin ensimmäisessä vaiheessa.';
+
+  @override
+  String get puzzleThemePawnEndgame => 'Sotilasloppupeli';
+
+  @override
+  String get puzzleThemePawnEndgameDescription => 'Loppupeli, jossa on vain sotilaita.';
+
+  @override
+  String get puzzleThemePin => 'Kiinnitys';
+
+  @override
+  String get puzzleThemePinDescription => 'Taktiikka, jossa kiinnitetty nappula ei pysty liikkumaan paljastamatta arvokkaampaan nappulaan kohdistuvaa hyökkäystä.';
+
+  @override
+  String get puzzleThemePromotion => 'Korotus';
+
+  @override
+  String get puzzleThemePromotionDescription => 'Taktiikassa keskeistä on sotilas, joka korottuu tai uhkaa korottua.';
+
+  @override
+  String get puzzleThemeQueenEndgame => 'Daamiloppupeli';
+
+  @override
+  String get puzzleThemeQueenEndgameDescription => 'Loppupeli, jossa on vain daamit ja sotilaita.';
+
+  @override
+  String get puzzleThemeQueenRookEndgame => 'Daami- ja torniloppupeli';
+
+  @override
+  String get puzzleThemeQueenRookEndgameDescription => 'Loppupeli, jossa on vain daameja, torneja ja sotilaita.';
+
+  @override
+  String get puzzleThemeQueensideAttack => 'Hyökkäys daamisivustalla';
+
+  @override
+  String get puzzleThemeQueensideAttackDescription => 'Hyökkää vastustajan kuninkaan kimppuun tämän linnoituttua daamisivustalle.';
+
+  @override
+  String get puzzleThemeQuietMove => 'Hiljainen siirto';
+
+  @override
+  String get puzzleThemeQuietMoveDescription => 'Siirto, joka ei shakkaa eikä lyö, mutta pohjustaa tulevalle siirrolle väistämättömän uhan.';
+
+  @override
+  String get puzzleThemeRookEndgame => 'Torniloppupeli';
+
+  @override
+  String get puzzleThemeRookEndgameDescription => 'Loppupeli, jossa on vain torneja ja sotilaita.';
+
+  @override
+  String get puzzleThemeSacrifice => 'Uhraus';
+
+  @override
+  String get puzzleThemeSacrificeDescription => 'Taktiikka, jossa luovutaan väliaikaisesti materiaalista, jotta pakottavan sommitelman päätteeksi saavutetaan jälleen etu.';
+
+  @override
+  String get puzzleThemeShort => 'Lyhyt tehtävä';
+
+  @override
+  String get puzzleThemeShortDescription => 'Voittoon tarvitaan kaksi siirtoa.';
+
+  @override
+  String get puzzleThemeSkewer => 'Varrastus';
+
+  @override
+  String get puzzleThemeSkewerDescription => 'Siirto, jolla uhataan arvokkaampaa nappulaa, jonka siirtyessä sen takana oleva nappula jää uhatuksi ja on lyötävissä, eli toisin päin kuin kiinnityksessä.';
+
+  @override
+  String get puzzleThemeSmotheredMate => 'Pussimatti';
+
+  @override
+  String get puzzleThemeSmotheredMateDescription => 'Ratsun tekemä matti, jossa matitettava kuningas ei pysty liikkumaan, koska sen omat nappulat ympäröivät sitä (eli pussittavat sen).';
+
+  @override
+  String get puzzleThemeSuperGM => 'Supersuurmestarien pelit';
+
+  @override
+  String get puzzleThemeSuperGMDescription => 'Tehtäviä maailman parhaiden pelaajien pelaamista peleistä.';
+
+  @override
+  String get puzzleThemeTrappedPiece => 'Ansaan jäävä nappula';
+
+  @override
+  String get puzzleThemeTrappedPieceDescription => 'Nappula ei pääse pakenemaan lyömiseltä sopivien pakosiirtojen puuttuessa.';
+
+  @override
+  String get puzzleThemeUnderPromotion => 'Alikorotus';
+
+  @override
+  String get puzzleThemeUnderPromotionDescription => 'Korotus ratsuksi, lähetiksi tai torniksi.';
+
+  @override
+  String get puzzleThemeVeryLong => 'Erittäin pitkä tehtävä';
+
+  @override
+  String get puzzleThemeVeryLongDescription => 'Voittoon tarvitaan neljä siirtoa tai enemmän.';
+
+  @override
+  String get puzzleThemeXRayAttack => 'Röntgenhyökkäys';
+
+  @override
+  String get puzzleThemeXRayAttackDescription => 'Nappula uhkaa tai puolustaa ruutua vastustajan nappulan läpi.';
+
+  @override
+  String get puzzleThemeZugzwang => 'Siirtopakko';
+
+  @override
+  String get puzzleThemeZugzwangDescription => 'Vastustajalla on rajoitettu määrä mahdollisia siirtoja, ja niistä kaikki heikentävät hänen asemaansa.';
+
+  @override
+  String get puzzleThemeHealthyMix => 'Terve sekoitus';
+
+  @override
+  String get puzzleThemeHealthyMixDescription => 'Vähän kaikkea. Et tiedä mitä tuleman pitää, joten olet valmiina mihin tahansa! Aivan kuten oikeissa peleissäkin.';
+
+  @override
+  String get puzzleThemePlayerGames => 'Pelaajan peleistä';
+
+  @override
+  String get puzzleThemePlayerGamesDescription => 'Tehtäviä sinun tai jonkun toisen yksittäisen pelaajan peleistä.';
+
+  @override
+  String puzzleThemePuzzleDownloadInformation(String param) {
+    return 'Nämä tehtävät ovat vapaasti käytettävissä ja ladattavissa osoitteesta $param.';
+  }
+
+  @override
+  String get searchSearch => 'Etsi';
+
+  @override
+  String get settingsSettings => 'Asetukset';
+
+  @override
+  String get settingsCloseAccount => 'Sulje tili';
+
+  @override
+  String get settingsManagedAccountCannotBeClosed => 'Käyttäjätunnuksesi on hallinnassa, eikä sitä voi sulkea.';
+
+  @override
+  String get settingsClosingIsDefinitive => 'Tunnuksen sulku on lopullinen. Et voi myöhemmin peruuttaa sitä. Oletko varma?';
+
+  @override
+  String get settingsCantOpenSimilarAccount => 'Et voi luoda uutta käyttäjätunnusta samalla nimellä, et vaikka muuttaisit isoja kirjaimia pieniksi tai päinvastoin.';
+
+  @override
+  String get settingsChangedMindDoNotCloseAccount => 'Muutin mieleni, älä sulje tunnustani';
+
+  @override
+  String get settingsCloseAccountExplanation => 'Haluatko varmasti sulkea tilisi? Sulkeminen on pysyvä päätös. Et voi ENÄÄ KOSKAAN kirjautua sisään.';
+
+  @override
+  String get settingsThisAccountIsClosed => 'Tämä tunnus on suljettu.';
 
   @override
   String get playWithAFriend => 'Pelaa kaveria vastaan';
@@ -512,6 +1518,12 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get deleteFromHere => 'Poista tästä alkaen';
+
+  @override
+  String get collapseVariations => 'Taita kokoon muunnelmat';
+
+  @override
+  String get expandVariations => 'Laajenna muunnelmat';
 
   @override
   String get forceVariation => 'Pakota muunnelmaksi';
@@ -1371,15 +2383,6 @@ class AppLocalizationsFi extends AppLocalizations {
   String get emptyTournamentName => 'Jos jätät tyhjäksi, turnaus nimetään jonkun suurmestarin mukaan.';
 
   @override
-  String get recommendNotTouching => 'Emme suosittele näihin koskemista.';
-
-  @override
-  String get fewerPlayers => 'Jos asetat liittymisehtoja, turnauksessasi tulee olemaan vähemmän pelaajia.';
-
-  @override
-  String get showAdvancedSettings => 'Näytä lisäasetukset';
-
-  @override
   String get makePrivateTournament => 'Tee turnauksesta yksityinen ja aseta salasana, jolla siihen pääsee';
 
   @override
@@ -1509,10 +2512,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get editProfile => 'Muokkaa profiilia';
 
   @override
-  String get firstName => 'Etunimi';
-
-  @override
-  String get lastName => 'Sukunimi';
+  String get realName => 'Oikea nimi';
 
   @override
   String get setFlair => 'Valitse tyylisi';
@@ -1641,13 +2641,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get cheat => 'Huijaus';
 
   @override
-  String get insult => 'Loukkaus';
-
-  @override
   String get troll => 'Trolli';
-
-  @override
-  String get ratingManipulation => 'Vahvuusluvun manipulointi';
 
   @override
   String get other => 'Muu';
@@ -1754,6 +2748,9 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get outsideTheBoard => 'Laudan ulkopuolella';
+
+  @override
+  String get allSquaresOfTheBoard => 'Kaikki laudan ruudut';
 
   @override
   String get onSlowGames => 'Hitaissa peleissä';
@@ -1976,7 +2973,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get hostANewSimul => 'Pidä uusi simultaani';
 
   @override
-  String get signUpToHostOrJoinASimul => 'Sign up to host or join a simul';
+  String get signUpToHostOrJoinASimul => 'Kirjaudu niin voit antaa simultaanin tai liittyä sellaiseen';
 
   @override
   String get noSimulFound => 'Simultaania ei löydy';
@@ -3460,1009 +4457,6 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
-  String get patronDonate => 'Lahjoita';
-
-  @override
-  String get patronLichessPatron => 'Lichessin tukija';
-
-  @override
-  String get preferencesPreferences => 'Asetukset';
-
-  @override
-  String get preferencesDisplay => 'Näyttöasetukset';
-
-  @override
-  String get preferencesPrivacy => 'Yksityisyysasetukset';
-
-  @override
-  String get preferencesNotifications => 'Ilmoitukset';
-
-  @override
-  String get preferencesPieceAnimation => 'Nappuloiden animaatio';
-
-  @override
-  String get preferencesMaterialDifference => 'Materiaaliero';
-
-  @override
-  String get preferencesBoardHighlights => 'Laudan korostukset (viimeisin siirto ja shakki)';
-
-  @override
-  String get preferencesPieceDestinations => 'Lailliset siirrot ja esisiirrot';
-
-  @override
-  String get preferencesBoardCoordinates => 'Laudan koordinaatit (A-H, 1-8)';
-
-  @override
-  String get preferencesMoveListWhilePlaying => 'Siirtolista pelin aikana';
-
-  @override
-  String get preferencesPgnPieceNotation => 'Siirtojen merkintätapa';
-
-  @override
-  String get preferencesChessPieceSymbol => 'Shakkinappulasymbolit';
-
-  @override
-  String get preferencesPgnLetter => 'Kirjaimet (K, Q, R, B, N)';
-
-  @override
-  String get preferencesZenMode => 'Zen-moodi';
-
-  @override
-  String get preferencesShowPlayerRatings => 'Näytä pelaajien vahvuusluvut';
-
-  @override
-  String get preferencesShowFlairs => 'Näytä pelaajien tyylit';
-
-  @override
-  String get preferencesExplainShowPlayerRatings => 'Tämän avulla voit piilottaa sivustolta kaikki vahvuusluvut, jotta voit keskittyä paremmin shakinpeluuseen. Pelit kyllä pisteytetään normaalisti, tällä asetuksella on vaikutus vain sinun näkymääsi.';
-
-  @override
-  String get preferencesDisplayBoardResizeHandle => 'Näytä laudan koon muokkauskahva';
-
-  @override
-  String get preferencesOnlyOnInitialPosition => 'Vain alkuasemassa';
-
-  @override
-  String get preferencesInGameOnly => 'Vain pelin aikana';
-
-  @override
-  String get preferencesChessClock => 'Shakkikello';
-
-  @override
-  String get preferencesTenthsOfSeconds => 'Sekunnin kymmenesosat';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'Kun aikaa jäljellä < 10 sekuntia';
-
-  @override
-  String get preferencesHorizontalGreenProgressBars => 'Vaakasuora vihreä ajanetenemispalkki';
-
-  @override
-  String get preferencesSoundWhenTimeGetsCritical => 'Äänimerkki kun aika on vähissä';
-
-  @override
-  String get preferencesGiveMoreTime => 'Anna lisää aikaa';
-
-  @override
-  String get preferencesGameBehavior => 'Pelillisiä lisäasetuksia';
-
-  @override
-  String get preferencesHowDoYouMovePieces => 'Kuinka siirrät nappuloita?';
-
-  @override
-  String get preferencesClickTwoSquares => 'Klikkaa kahta ruutua';
-
-  @override
-  String get preferencesDragPiece => 'Raahaa nappulaa';
-
-  @override
-  String get preferencesBothClicksAndDrag => 'Molemmat';
-
-  @override
-  String get preferencesPremovesPlayingDuringOpponentTurn => 'Esisiirrot (pelaaminen vastustajan vuorolla)';
-
-  @override
-  String get preferencesTakebacksWithOpponentApproval => 'Siirtojen peruminen (vastustajan hyväksynnällä)';
-
-  @override
-  String get preferencesInCasualGamesOnly => 'Vain rennoissa peleissä';
-
-  @override
-  String get preferencesPromoteToQueenAutomatically => 'Korota automaattisesti kuningattareksi';
-
-  @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Pidä <ctrl>-näppäintä painettuna korottaessasi sotilaan, jos haluat ottaa automaattisen korotuksen väliaikaisesti pois käytöstä';
-
-  @override
-  String get preferencesWhenPremoving => 'Esisiirtäessä';
-
-  @override
-  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Vaadi tasapeli automaattisesti kolminkertaisen toiston sattuessa';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Kun aikaa on jäljellä < 30 sekuntia';
-
-  @override
-  String get preferencesMoveConfirmation => 'Siirron vahvistus';
-
-  @override
-  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Voidaan poistaa käytöstä pelin aikana lautavalikon kautta';
-
-  @override
-  String get preferencesInCorrespondenceGames => 'Kirjeshakissa';
-
-  @override
-  String get preferencesCorrespondenceAndUnlimited => 'Kirjeshakki ja aikarajaton';
-
-  @override
-  String get preferencesConfirmResignationAndDrawOffers => 'Vahvista luovutukset ja tasapelitarjoukset';
-
-  @override
-  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Kuinka linnoittaudut';
-
-  @override
-  String get preferencesCastleByMovingTwoSquares => 'Siirrä kuningasta kaksi ruutua';
-
-  @override
-  String get preferencesCastleByMovingOntoTheRook => 'Siirrä kuningas tornin päälle';
-
-  @override
-  String get preferencesInputMovesWithTheKeyboard => 'Syötä siirtoja näppäimistöllä';
-
-  @override
-  String get preferencesInputMovesWithVoice => 'Syötä siirtosi puheella';
-
-  @override
-  String get preferencesSnapArrowsToValidMoves => 'Merkitse mahdolliset siirrot nuolilla';
-
-  @override
-  String get preferencesSayGgWpAfterLosingOrDrawing => 'Sano \"Good game, well played\" (suom. \"Hyvä peli, hyvin pelattu\") tasapelin tai tappion jälkeen';
-
-  @override
-  String get preferencesYourPreferencesHaveBeenSaved => 'Asetuksesi on tallennettu.';
-
-  @override
-  String get preferencesScrollOnTheBoardToReplayMoves => 'Vierittämällä laudan yllä voit katsoa siirtoja uudelleen';
-
-  @override
-  String get preferencesCorrespondenceEmailNotification => 'Päivittäinen sähköposti-ilmoitus, jossa listataan kirjeshakkipelisi';
-
-  @override
-  String get preferencesNotifyStreamStart => 'Striimaaja aloittaa striimin';
-
-  @override
-  String get preferencesNotifyInboxMsg => 'Uusi saapunut viesti';
-
-  @override
-  String get preferencesNotifyForumMention => 'Sinut mainitaan foorumin kommentissa';
-
-  @override
-  String get preferencesNotifyInvitedStudy => 'Kutsu tutkielmaan';
-
-  @override
-  String get preferencesNotifyGameEvent => 'Kirjeshakkipelien uudet tapahtumat';
-
-  @override
-  String get preferencesNotifyChallenge => 'Haasteet';
-
-  @override
-  String get preferencesNotifyTournamentSoon => 'Turnaus alkamassa pian';
-
-  @override
-  String get preferencesNotifyTimeAlarm => 'Kirjeshakkipelin aika loppumassa';
-
-  @override
-  String get preferencesNotifyBell => 'Kilahtava ilmoitus Lichessissä';
-
-  @override
-  String get preferencesNotifyPush => 'Laitteen ilmoitus, kun et ole Lichessissä';
-
-  @override
-  String get preferencesNotifyWeb => 'Selain';
-
-  @override
-  String get preferencesNotifyDevice => 'Laite';
-
-  @override
-  String get preferencesBellNotificationSound => 'Ilmoitusten kilahdusääni';
-
-  @override
-  String get puzzlePuzzles => 'Tehtävät';
-
-  @override
-  String get puzzlePuzzleThemes => 'Tehtävien aiheet';
-
-  @override
-  String get puzzleRecommended => 'Suosittelemme';
-
-  @override
-  String get puzzlePhases => 'Pelin vaiheet';
-
-  @override
-  String get puzzleMotifs => 'Motiivit';
-
-  @override
-  String get puzzleAdvanced => 'Edistyneille';
-
-  @override
-  String get puzzleLengths => 'Pituudet';
-
-  @override
-  String get puzzleMates => 'Matit';
-
-  @override
-  String get puzzleGoals => 'Tavoitteet';
-
-  @override
-  String get puzzleOrigin => 'Alkuperä';
-
-  @override
-  String get puzzleSpecialMoves => 'Erityissiirrot';
-
-  @override
-  String get puzzleDidYouLikeThisPuzzle => 'Piditkö tästä tehtävästä?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Anna arviosi, niin seuraava latautuu!';
-
-  @override
-  String get puzzleUpVote => 'Arvioi tehtävä hyväksi';
-
-  @override
-  String get puzzleDownVote => 'Arvioi tehtävä huonoksi';
-
-  @override
-  String get puzzleYourPuzzleRatingWillNotChange => 'Tehtävävahvuuslukusi ei muutu. Huomaa, että tehtävien ratkaisu ei ole kilpailu. Vahvuusluvun perusteella saat ratkaistavaksesi tämänhetkistä taitotasoasi parhaiten vastaavia tehtäviä.';
-
-  @override
-  String get puzzleFindTheBestMoveForWhite => 'Löydä valkean paras siirto.';
-
-  @override
-  String get puzzleFindTheBestMoveForBlack => 'Löydä mustan paras siirto.';
-
-  @override
-  String get puzzleToGetPersonalizedPuzzles => 'Halutessasi henkilökohtaisia tehtäviä:';
-
-  @override
-  String puzzlePuzzleId(String param) {
-    return 'Tehtävä $param';
-  }
-
-  @override
-  String get puzzlePuzzleOfTheDay => 'Päivän tehtävä';
-
-  @override
-  String get puzzleDailyPuzzle => 'Päivän tehtävä';
-
-  @override
-  String get puzzleClickToSolve => 'Ratkaise klikkaamalla';
-
-  @override
-  String get puzzleGoodMove => 'Hyvä siirto';
-
-  @override
-  String get puzzleBestMove => 'Paras siirto!';
-
-  @override
-  String get puzzleKeepGoing => 'Jatka…';
-
-  @override
-  String get puzzlePuzzleSuccess => 'Onnistui!';
-
-  @override
-  String get puzzlePuzzleComplete => 'Tehtävä ratkaistu!';
-
-  @override
-  String get puzzleByOpenings => 'Avausryhmitys';
-
-  @override
-  String get puzzlePuzzlesByOpenings => 'Tehtäviä avausten mukaan ryhmitettyinä';
-
-  @override
-  String get puzzleOpeningsYouPlayedTheMost => 'Pisteytetyissä peleissä eniten pelaamasi avaukset';
-
-  @override
-  String get puzzleUseFindInPage => 'Löydä lempiavauksesi valitsemalla selaimen valikosta \"Etsi sivulta\"!';
-
-  @override
-  String get puzzleUseCtrlF => 'Löydä lempiavauksesi painamalla Ctrl+F!';
-
-  @override
-  String get puzzleNotTheMove => 'Tuo siirto se ei ole!';
-
-  @override
-  String get puzzleTrySomethingElse => 'Kokeile jotain muuta.';
-
-  @override
-  String puzzleRatingX(String param) {
-    return 'Vahvuusluku: $param';
-  }
-
-  @override
-  String get puzzleHidden => 'piilotettu';
-
-  @override
-  String puzzleFromGameLink(String param) {
-    return 'Pelistä $param';
-  }
-
-  @override
-  String get puzzleContinueTraining => 'Jatka harjoittelua';
-
-  @override
-  String get puzzleDifficultyLevel => 'Vaikeustaso';
-
-  @override
-  String get puzzleNormal => 'Keskitaso';
-
-  @override
-  String get puzzleEasier => 'Helpompi';
-
-  @override
-  String get puzzleEasiest => 'Helpoin';
-
-  @override
-  String get puzzleHarder => 'Vaikeampi';
-
-  @override
-  String get puzzleHardest => 'Vaikein';
-
-  @override
-  String get puzzleExample => 'Esimerkki';
-
-  @override
-  String get puzzleAddAnotherTheme => 'Lisää toinen teema';
-
-  @override
-  String get puzzleNextPuzzle => 'Seuraava tehtävä';
-
-  @override
-  String get puzzleJumpToNextPuzzleImmediately => 'Jatka heti seuraavaan tehtävään';
-
-  @override
-  String get puzzlePuzzleDashboard => 'Tehtävien hallinta';
-
-  @override
-  String get puzzleImprovementAreas => 'Paranna näitä';
-
-  @override
-  String get puzzleStrengths => 'Vahvuutesi';
-
-  @override
-  String get puzzleHistory => 'Tehtävähistoria';
-
-  @override
-  String get puzzleSolved => 'ratkaistu';
-
-  @override
-  String get puzzleFailed => 'epäonnistui';
-
-  @override
-  String get puzzleStreakDescription => 'Ratkaise asteittain vaikeutuvia tehtäviä ja luo voittoputki. Kello ei ole käytössä, joten voit miettiä rauhassa. Yksikin väärä siirto, niin peli on ohi! Kunkin sarjan aikana voit kuitenkin ohittaa yhden siirron.';
-
-  @override
-  String puzzleYourStreakX(String param) {
-    return 'Putkesi: $param';
-  }
-
-  @override
-  String get puzzleStreakSkipExplanation => 'Ohita tämä siirto jatkaaksesi putkea! Toimii kunkin sarjan aikana vain kerran.';
-
-  @override
-  String get puzzleContinueTheStreak => 'Jatka putkea';
-
-  @override
-  String get puzzleNewStreak => 'Uusi putki';
-
-  @override
-  String get puzzleFromMyGames => 'Omista peleistäni';
-
-  @override
-  String get puzzleLookupOfPlayer => 'Hae tehtäviä tietyn pelaajan peleistä';
-
-  @override
-  String puzzleFromXGames(String param) {
-    return 'Tehtäviä pelaajan $param peleistä';
-  }
-
-  @override
-  String get puzzleSearchPuzzles => 'Hae tehtäviä';
-
-  @override
-  String get puzzleFromMyGamesNone => 'Tietokannassa ei ole tehtäviä sinulta, mutta olet silti Lichessille erittäin tärkeä.\nKun pelaat lisää nopeita ja klassisia pelejä, on suurempi mahdollisuus, että sinunkin peleistäsi luodaan tehtävä!';
-
-  @override
-  String puzzleFromXGamesFound(String param1, String param2) {
-    return 'Löytyi $param1 tehtävää $param2 pelistä';
-  }
-
-  @override
-  String get puzzlePuzzleDashboardDescription => 'Harjoittele, analysoi, kehity';
-
-  @override
-  String puzzlePercentSolved(String param) {
-    return '$param ratkaistu';
-  }
-
-  @override
-  String get puzzleNoPuzzlesToShow => 'Täällä ei ole vielä mitään nähtävää – tee ensin joitakin tehtäviä!';
-
-  @override
-  String get puzzleImprovementAreasDescription => 'Harjoittele näitä tehostaaksesi edistymistäsi!';
-
-  @override
-  String get puzzleStrengthDescription => 'Suoriudut parhaiten näissä aiheissa';
-
-  @override
-  String puzzlePlayedXTimes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Pelattu $count kertaa',
-      one: 'Pelattu $count kerran',
-      zero: 'Pelattu $count kerran',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsBelowYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count pistettä matalampi tehtävävahvuusluku kuin sinulla',
-      one: 'Yhden pisteen matalampi tehtävävahvuusluku kuin sinulla',
-      zero: 'Yhden pisteen matalampi tehtävävahvuusluku kuin sinulla',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsAboveYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count pistettä korkeampi tehtävävahvuusluku kuin sinulla',
-      one: 'Yhden pisteen korkeampi tehtävävahvuusluku kuin sinulla',
-      zero: 'Yhden pisteen korkeampi tehtävävahvuusluku kuin sinulla',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPlayed(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count pelattu',
-      one: '$count pelattu',
-      zero: '$count pelattu',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbToReplay(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count kerrattavaa',
-      one: '$count kerrattava',
-      zero: '$count kerrattava',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get puzzleThemeAdvancedPawn => 'Pitkälle edennyt sotilas';
-
-  @override
-  String get puzzleThemeAdvancedPawnDescription => 'Taktiikassa keskeistä on sotilas, joka korottuu tai uhkaa korottua.';
-
-  @override
-  String get puzzleThemeAdvantage => 'Etu';
-
-  @override
-  String get puzzleThemeAdvantageDescription => 'Tartu tilaisuuteen hankkia ratkaiseva etu. (200cp ≤ eval ≤ 600cp)';
-
-  @override
-  String get puzzleThemeAnastasiaMate => 'Anastasian matti';
-
-  @override
-  String get puzzleThemeAnastasiaMateDescription => 'Ratsun sekä tornin tai daamin yhteistyöllä vastustajan kuningas jää kiinni laudan reunan ja oman nappulan välissä.';
-
-  @override
-  String get puzzleThemeArabianMate => 'Arabialainen matti';
-
-  @override
-  String get puzzleThemeArabianMateDescription => 'Ratsun ja tornin yhteistyöllä vastustajan kuningas jää kiinni laudan nurkassa.';
-
-  @override
-  String get puzzleThemeAttackingF2F7 => 'Hyökkäys f2:een tai f7:ään';
-
-  @override
-  String get puzzleThemeAttackingF2F7Description => 'F2- tai f7-sotilaaseen kohdistuva hyökkäys, kuten esimerkiksi Preussilaisen pelin Fried Liver eli Fegatello-muunnelma.';
-
-  @override
-  String get puzzleThemeAttraction => 'Houkutus';
-
-  @override
-  String get puzzleThemeAttractionDescription => 'Vaihto tai uhraus, joka houkuttelee tai pakottaa vastustajan nappulan tiettyyn ruutuun ja mahdollistaa siten taktisen jatkon.';
-
-  @override
-  String get puzzleThemeBackRankMate => 'Takarivin matti';
-
-  @override
-  String get puzzleThemeBackRankMateDescription => 'Matita kuningas takarivillä, kun sen omat nappulat estävät sitä siirtymästä pois.';
-
-  @override
-  String get puzzleThemeBishopEndgame => 'Lähettiloppupeli';
-
-  @override
-  String get puzzleThemeBishopEndgameDescription => 'Loppupeli, jossa on vain lähettejä ja sotilaita.';
-
-  @override
-  String get puzzleThemeBodenMate => 'Bodenin matti';
-
-  @override
-  String get puzzleThemeBodenMateDescription => 'Kaksi ristiäviltä diagonaaleilta hyökkäävää lähettiä matittaa omien nappuloidensa estämän kuninkaan.';
-
-  @override
-  String get puzzleThemeCastling => 'Linnoitus';
-
-  @override
-  String get puzzleThemeCastlingDescription => 'Vie kuninkaasi turvaan ja tuo tornisi mukaan hyökkäykseen.';
-
-  @override
-  String get puzzleThemeCapturingDefender => 'Lyö puolustava nappula';
-
-  @override
-  String get puzzleThemeCapturingDefenderDescription => 'Lyö toisen nappulan suojelemiseen käytetty nappula, jotta voit seuraavilla siirroilla lyödä toisen nappulan, joka ei ole enää suojeltu.';
-
-  @override
-  String get puzzleThemeCrushing => 'Murskaava etu';
-
-  @override
-  String get puzzleThemeCrushingDescription => 'Löydä vastustajan vakava virhe ja hanki murskaava etu. (eval ≥ 600cp)';
-
-  @override
-  String get puzzleThemeDoubleBishopMate => 'Kahden lähetin matti';
-
-  @override
-  String get puzzleThemeDoubleBishopMateDescription => 'Kaksi vierekkäisiltä diagonaaleilta hyökkäävää lähettiä matittaa omien nappuloidensa estämän kuninkaan.';
-
-  @override
-  String get puzzleThemeDovetailMate => 'Cozion matti';
-
-  @override
-  String get puzzleThemeDovetailMateDescription => 'Daami matittaa vieressään olevan kuninkaan, jonka omat nappulat vievät siltä sen ainoat kaksi pakoruutua.';
-
-  @override
-  String get puzzleThemeEquality => 'Tasoitus';
-
-  @override
-  String get puzzleThemeEqualityDescription => 'Nouse häviöasemasta takaisin peliin ja saavuta tasapeli tai tasapainoinen asema. (eval ≤ 200cp)';
-
-  @override
-  String get puzzleThemeKingsideAttack => 'Hyökkäys kuningassivustalla';
-
-  @override
-  String get puzzleThemeKingsideAttackDescription => 'Hyökkää vastustajan kuninkaan kimppuun tämän linnoituttua kuningassivustalle.';
-
-  @override
-  String get puzzleThemeClearance => 'Vapautus';
-
-  @override
-  String get puzzleThemeClearanceDescription => 'Usein tempolla tehtävä siirto, joka vapauttaa ruudun, linjan tai diagonaalin seuraavaa taktista ideaa varten.';
-
-  @override
-  String get puzzleThemeDefensiveMove => 'Puolustussiirto';
-
-  @override
-  String get puzzleThemeDefensiveMoveDescription => 'Tarkka siirto tai siirtosarja, joka tarvitaan materiaali- tai muun edun menetyksen välttämiseksi.';
-
-  @override
-  String get puzzleThemeDeflection => 'Harhautus';
-
-  @override
-  String get puzzleThemeDeflectionDescription => 'Siirto, jolla harhautetaan vastustajan nappula pois suorittamasta jotain toista tehtävää, kuten vartioimasta tärkeää ruutua.';
-
-  @override
-  String get puzzleThemeDiscoveredAttack => 'Paljastushyökkäys';
-
-  @override
-  String get puzzleThemeDiscoveredAttackDescription => 'Siirrä nappulaa, joka on tähän asti peittänyt jonkin ulottuvaisen nappulan hyökkäyksen, esimerkiksi ratsu pois tornin edestä.';
-
-  @override
-  String get puzzleThemeDoubleCheck => 'Kaksoisshakki';
-
-  @override
-  String get puzzleThemeDoubleCheckDescription => 'Shakkaa samanaikaisesti kahdella nappulalla niin, että paljastushyökkäyksessäsi sekä liikkuva nappula että sen paljastama nappula uhkaavat vastustajan kuningasta.';
-
-  @override
-  String get puzzleThemeEndgame => 'Loppupeli';
-
-  @override
-  String get puzzleThemeEndgameDescription => 'Taktiikka pelin viimeisessä vaiheessa.';
-
-  @override
-  String get puzzleThemeEnPassantDescription => 'Taktiikka, jossa sovelletaan ohestalyöntisääntöä, eli jossa sotilas voi lyödä sellaisen vastustajan sotilaan, joka on juuri ensimmäisellä kahden ruudun siirrollaan ohittanut sen.';
-
-  @override
-  String get puzzleThemeExposedKing => 'Suojaton kuningas';
-
-  @override
-  String get puzzleThemeExposedKingDescription => 'Taktiikka, jossa kuninkaan ympärillä on vain vähän puolustajia, ja joka usein johtaa mattiin.';
-
-  @override
-  String get puzzleThemeFork => 'Haarukka';
-
-  @override
-  String get puzzleThemeForkDescription => 'Siirto, jolla siirrettävä nappula uhkaa samanaikaisesti kahta vastustajan nappulaa.';
-
-  @override
-  String get puzzleThemeHangingPiece => 'Ilmainen nappula';
-
-  @override
-  String get puzzleThemeHangingPieceDescription => 'Taktiikka, jossa vastustajan nappulaa ei ole suojattu lainkaan tai ei riittävästi, ja jossa se on vapaasti lyötävissä.';
-
-  @override
-  String get puzzleThemeHookMate => 'Koukkumatti';
-
-  @override
-  String get puzzleThemeHookMateDescription => 'Tornin, ratsun ja sotilaan yhteispelillä syntyvä matti, jossa vastustajan sotilas vie kuninkaaltaan yhden pakoruudun.';
-
-  @override
-  String get puzzleThemeInterference => 'Katko';
-
-  @override
-  String get puzzleThemeInterferenceDescription => 'Siirrä nappulasi kahden vastustajan nappulan väliin niin, että yksi tai molemmat vastustajan nappuloista jäävät ilman suojaa, esimerkiksi ratsusi suojattuun ruutuun kahden tornin väliin.';
-
-  @override
-  String get puzzleThemeIntermezzo => 'Välisiirto';
-
-  @override
-  String get puzzleThemeIntermezzoDescription => 'Tee odotetun siirron sijaan ensin toinen siirto, jonka synnyttämään välittömään uhkaan vastustajasi täytyy vastata. Tunnetaan myös nimellä \"Zwischenzug\".';
-
-  @override
-  String get puzzleThemeKnightEndgame => 'Ratsuloppupeli';
-
-  @override
-  String get puzzleThemeKnightEndgameDescription => 'Loppupeli, jossa on vain ratsuja ja sotilaita.';
-
-  @override
-  String get puzzleThemeLong => 'Pitkä tehtävä';
-
-  @override
-  String get puzzleThemeLongDescription => 'Voittoon tarvitaan kolme siirtoa.';
-
-  @override
-  String get puzzleThemeMaster => 'Mestaritason pelit';
-
-  @override
-  String get puzzleThemeMasterDescription => 'Tehtäviä arvonimen saaneiden pelaajien peleistä.';
-
-  @override
-  String get puzzleThemeMasterVsMaster => 'Kahden mestarin väliset pelit';
-
-  @override
-  String get puzzleThemeMasterVsMasterDescription => 'Tehtäviä kahden arvonimen saaneen pelaajan välisistä peleistä.';
-
-  @override
-  String get puzzleThemeMate => 'Matti';
-
-  @override
-  String get puzzleThemeMateDescription => 'Voita peli tyylillä.';
-
-  @override
-  String get puzzleThemeMateIn1 => '1 siirron matti';
-
-  @override
-  String get puzzleThemeMateIn1Description => 'Tee matti yhdessä siirrossa.';
-
-  @override
-  String get puzzleThemeMateIn2 => '2 siirron matti';
-
-  @override
-  String get puzzleThemeMateIn2Description => 'Tee matti kahdessa siirrossa.';
-
-  @override
-  String get puzzleThemeMateIn3 => '3 siirron matti';
-
-  @override
-  String get puzzleThemeMateIn3Description => 'Tee matti kolmessa siirrossa.';
-
-  @override
-  String get puzzleThemeMateIn4 => '4 siirron matti';
-
-  @override
-  String get puzzleThemeMateIn4Description => 'Tee matti neljässä siirrossa.';
-
-  @override
-  String get puzzleThemeMateIn5 => '5 tai useamman siirron matti';
-
-  @override
-  String get puzzleThemeMateIn5Description => 'Löydä pitkä mattisommitelma.';
-
-  @override
-  String get puzzleThemeMiddlegame => 'Keskipeli';
-
-  @override
-  String get puzzleThemeMiddlegameDescription => 'Taktiikka pelin toisessa vaiheessa.';
-
-  @override
-  String get puzzleThemeOneMove => 'Yhden siirron tehtävä';
-
-  @override
-  String get puzzleThemeOneMoveDescription => 'Tehtävä, jossa vaaditaan vain yksi siirto.';
-
-  @override
-  String get puzzleThemeOpening => 'Avaus';
-
-  @override
-  String get puzzleThemeOpeningDescription => 'Taktiikka pelin ensimmäisessä vaiheessa.';
-
-  @override
-  String get puzzleThemePawnEndgame => 'Sotilasloppupeli';
-
-  @override
-  String get puzzleThemePawnEndgameDescription => 'Loppupeli, jossa on vain sotilaita.';
-
-  @override
-  String get puzzleThemePin => 'Kiinnitys';
-
-  @override
-  String get puzzleThemePinDescription => 'Taktiikka, jossa kiinnitetty nappula ei pysty liikkumaan paljastamatta arvokkaampaan nappulaan kohdistuvaa hyökkäystä.';
-
-  @override
-  String get puzzleThemePromotion => 'Korotus';
-
-  @override
-  String get puzzleThemePromotionDescription => 'Taktiikassa keskeistä on sotilas, joka korottuu tai uhkaa korottua.';
-
-  @override
-  String get puzzleThemeQueenEndgame => 'Daamiloppupeli';
-
-  @override
-  String get puzzleThemeQueenEndgameDescription => 'Loppupeli, jossa on vain daamit ja sotilaita.';
-
-  @override
-  String get puzzleThemeQueenRookEndgame => 'Daami- ja torniloppupeli';
-
-  @override
-  String get puzzleThemeQueenRookEndgameDescription => 'Loppupeli, jossa on vain daameja, torneja ja sotilaita.';
-
-  @override
-  String get puzzleThemeQueensideAttack => 'Hyökkäys daamisivustalla';
-
-  @override
-  String get puzzleThemeQueensideAttackDescription => 'Hyökkää vastustajan kuninkaan kimppuun tämän linnoituttua daamisivustalle.';
-
-  @override
-  String get puzzleThemeQuietMove => 'Hiljainen siirto';
-
-  @override
-  String get puzzleThemeQuietMoveDescription => 'Siirto, joka ei shakkaa eikä lyö, mutta pohjustaa tulevalle siirrolle väistämättömän uhan.';
-
-  @override
-  String get puzzleThemeRookEndgame => 'Torniloppupeli';
-
-  @override
-  String get puzzleThemeRookEndgameDescription => 'Loppupeli, jossa on vain torneja ja sotilaita.';
-
-  @override
-  String get puzzleThemeSacrifice => 'Uhraus';
-
-  @override
-  String get puzzleThemeSacrificeDescription => 'Taktiikka, jossa luovutaan väliaikaisesti materiaalista, jotta pakottavan sommitelman päätteeksi saavutetaan jälleen etu.';
-
-  @override
-  String get puzzleThemeShort => 'Lyhyt tehtävä';
-
-  @override
-  String get puzzleThemeShortDescription => 'Voittoon tarvitaan kaksi siirtoa.';
-
-  @override
-  String get puzzleThemeSkewer => 'Varrastus';
-
-  @override
-  String get puzzleThemeSkewerDescription => 'Siirto, jolla uhataan arvokkaampaa nappulaa, jonka siirtyessä sen takana oleva nappula jää uhatuksi ja on lyötävissä, eli toisin päin kuin kiinnityksessä.';
-
-  @override
-  String get puzzleThemeSmotheredMate => 'Pussimatti';
-
-  @override
-  String get puzzleThemeSmotheredMateDescription => 'Ratsun tekemä matti, jossa matitettava kuningas ei pysty liikkumaan, koska sen omat nappulat ympäröivät sitä (eli pussittavat sen).';
-
-  @override
-  String get puzzleThemeSuperGM => 'Supersuurmestarien pelit';
-
-  @override
-  String get puzzleThemeSuperGMDescription => 'Tehtäviä maailman parhaiden pelaajien pelaamista peleistä.';
-
-  @override
-  String get puzzleThemeTrappedPiece => 'Ansaan jäävä nappula';
-
-  @override
-  String get puzzleThemeTrappedPieceDescription => 'Nappula ei pääse pakenemaan lyömiseltä sopivien pakosiirtojen puuttuessa.';
-
-  @override
-  String get puzzleThemeUnderPromotion => 'Alikorotus';
-
-  @override
-  String get puzzleThemeUnderPromotionDescription => 'Korotus ratsuksi, lähetiksi tai torniksi.';
-
-  @override
-  String get puzzleThemeVeryLong => 'Erittäin pitkä tehtävä';
-
-  @override
-  String get puzzleThemeVeryLongDescription => 'Voittoon tarvitaan neljä siirtoa tai enemmän.';
-
-  @override
-  String get puzzleThemeXRayAttack => 'Röntgenhyökkäys';
-
-  @override
-  String get puzzleThemeXRayAttackDescription => 'Nappula uhkaa tai puolustaa ruutua vastustajan nappulan läpi.';
-
-  @override
-  String get puzzleThemeZugzwang => 'Siirtopakko';
-
-  @override
-  String get puzzleThemeZugzwangDescription => 'Vastustajalla on rajoitettu määrä mahdollisia siirtoja, ja niistä kaikki heikentävät hänen asemaansa.';
-
-  @override
-  String get puzzleThemeHealthyMix => 'Terve sekoitus';
-
-  @override
-  String get puzzleThemeHealthyMixDescription => 'Vähän kaikkea. Et tiedä mitä tuleman pitää, joten olet valmiina mihin tahansa! Aivan kuten oikeissa peleissäkin.';
-
-  @override
-  String get puzzleThemePlayerGames => 'Pelaajan peleistä';
-
-  @override
-  String get puzzleThemePlayerGamesDescription => 'Tehtäviä sinun tai jonkun toisen yksittäisen pelaajan peleistä.';
-
-  @override
-  String puzzleThemePuzzleDownloadInformation(String param) {
-    return 'Nämä tehtävät ovat vapaasti käytettävissä ja ladattavissa osoitteesta $param.';
-  }
-
-  @override
-  String perfStatPerfStats(String param) {
-    return '$param-tilastot';
-  }
-
-  @override
-  String get perfStatViewTheGames => 'Katso pelit';
-
-  @override
-  String get perfStatProvisional => 'tilapäinen';
-
-  @override
-  String get perfStatNotEnoughRatedGames => 'Ei ole pelattu riittävän montaa pisteytettyä peliä, jotta voitaisiin muodostaa luotettava vahvuusluku.';
-
-  @override
-  String perfStatProgressOverLastXGames(String param) {
-    return 'Kehitys viimeisten $param pelin aikana:';
-  }
-
-  @override
-  String perfStatRatingDeviation(String param) {
-    return 'Vahvuuslukupoikkeama: $param.';
-  }
-
-  @override
-  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
-    return 'Alempi arvo tarkoittaa, että vahvuusluku on vakiintuneempi. Kun arvo on yli $param1, vahvuusluku on tilapäinen. Vahvuuslukulistalle pääsee, kun tämä arvo on alle $param2 (tavallisessa shakissa) tai $param3 (varianteissa).';
-  }
-
-  @override
-  String get perfStatTotalGames => 'Pelejä yhteensä';
-
-  @override
-  String get perfStatRatedGames => 'Pisteytettyjä pelejä';
-
-  @override
-  String get perfStatTournamentGames => 'Turnauspelejä';
-
-  @override
-  String get perfStatBerserkedGames => 'Berserkkipelejä';
-
-  @override
-  String get perfStatTimeSpentPlaying => 'Pelaamiseen käytetty aika';
-
-  @override
-  String get perfStatAverageOpponent => 'Keskimääräinen vastustaja';
-
-  @override
-  String get perfStatVictories => 'Voittoja';
-
-  @override
-  String get perfStatDefeats => 'Tappioita';
-
-  @override
-  String get perfStatDisconnections => 'Yhteys katkennut';
-
-  @override
-  String get perfStatNotEnoughGames => 'Ei tarpeeksi pelattuja pelejä';
-
-  @override
-  String perfStatHighestRating(String param) {
-    return 'Korkein vahvuusluku: $param';
-  }
-
-  @override
-  String perfStatLowestRating(String param) {
-    return 'Alin vahvuusluku: $param';
-  }
-
-  @override
-  String perfStatFromXToY(String param1, String param2) {
-    return 'aikavälillä $param1–$param2';
-  }
-
-  @override
-  String get perfStatWinningStreak => 'Voittoputki';
-
-  @override
-  String get perfStatLosingStreak => 'Tappioputki';
-
-  @override
-  String perfStatLongestStreak(String param) {
-    return 'Pisin putki: $param';
-  }
-
-  @override
-  String perfStatCurrentStreak(String param) {
-    return 'Nykyinen putki: $param';
-  }
-
-  @override
-  String get perfStatBestRated => 'Korkeimman vahvuusluvun voitot';
-
-  @override
-  String get perfStatGamesInARow => 'Peräjälkeen pelattuja pelejä';
-
-  @override
-  String get perfStatLessThanOneHour => 'Alle tunti pelien välissä';
-
-  @override
-  String get perfStatMaxTimePlaying => 'Pisin yhtäjaksoinen peliaika';
-
-  @override
-  String get perfStatNow => 'nyt';
-
-  @override
-  String get searchSearch => 'Etsi';
-
-  @override
-  String get settingsSettings => 'Asetukset';
-
-  @override
-  String get settingsCloseAccount => 'Sulje tili';
-
-  @override
-  String get settingsManagedAccountCannotBeClosed => 'Käyttäjätunnuksesi on hallinnassa, eikä sitä voi sulkea.';
-
-  @override
-  String get settingsClosingIsDefinitive => 'Tunnuksen sulku on lopullinen. Et voi myöhemmin peruuttaa sitä. Oletko varma?';
-
-  @override
-  String get settingsCantOpenSimilarAccount => 'Et voi luoda uutta käyttäjätunnusta samalla nimellä, et vaikka muuttaisit isoja kirjaimia pieniksi tai päinvastoin.';
-
-  @override
-  String get settingsChangedMindDoNotCloseAccount => 'Muutin mieleni, älä sulje tunnustani';
-
-  @override
-  String get settingsCloseAccountExplanation => 'Haluatko varmasti sulkea tilisi? Sulkeminen on pysyvä päätös. Et voi ENÄÄ KOSKAAN kirjautua sisään.';
-
-  @override
-  String get settingsThisAccountIsClosed => 'Tämä tunnus on suljettu.';
-
-  @override
-  String get streamerLichessStreamers => 'Lichess-striimaajat';
-
-  @override
   String get stormMoveToStart => 'Aloita tekemällä siirto';
 
   @override
@@ -4646,14 +4640,11 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
+  String get streamerLichessStreamers => 'Lichess-striimaajat';
+
+  @override
   String get studyShareAndExport => 'Jaa & vie';
 
   @override
   String get studyStart => 'Aloita';
-
-  @override
-  String get broadcastBroadcasts => 'Lähetykset';
-
-  @override
-  String get broadcastStartDate => 'Alkamispäivämäärä omalla aikavyöhykkeelläsi';
 }

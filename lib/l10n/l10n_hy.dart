@@ -225,10 +225,10 @@ class AppLocalizationsHy extends AppLocalizations {
   }
 
   @override
-  String get contactContact => 'Կոնտակտներ';
+  String get broadcastBroadcasts => 'Հեռարձակումներ';
 
   @override
-  String get contactContactLichess => 'Lichess-ի կոնտակտներ';
+  String get broadcastStartDate => 'Սկսվելու ամսաթիվը Ձեր ժամագոտում';
 
   @override
   String challengeChallengesX(String param1) {
@@ -310,6 +310,1012 @@ class AppLocalizationsHy extends AppLocalizations {
 
   @override
   String get challengeInviteLichessUser => 'Կամ հրավիրեք Lichess-ի օգտատիրոջ.';
+
+  @override
+  String get contactContact => 'Կոնտակտներ';
+
+  @override
+  String get contactContactLichess => 'Lichess-ի կոնտակտներ';
+
+  @override
+  String get patronDonate => 'Նվիրաբերել';
+
+  @override
+  String get patronLichessPatron => 'Lichess-ի հովանավոր';
+
+  @override
+  String perfStatPerfStats(String param) {
+    return '$param վիճակագրություն';
+  }
+
+  @override
+  String get perfStatViewTheGames => 'Դիտել պարտիաները';
+
+  @override
+  String get perfStatProvisional => 'նախնական';
+
+  @override
+  String get perfStatNotEnoughRatedGames => 'Ճշգրիտ վարկանիշն իմանալու համար վարկանիշային պարտիաների քանակը բավարար չէ։';
+
+  @override
+  String perfStatProgressOverLastXGames(String param) {
+    return 'Աճը վերջին $param խաղերի ընթացքում.';
+  }
+
+  @override
+  String perfStatRatingDeviation(String param) {
+    return 'Վարկանիշի շեղումը` $param։';
+  }
+
+  @override
+  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
+    return 'Ցածրագույն արժեքը նշանակում է, որ վարկանիշն ավելի կայուն է։ Եթե այդ ցուցանիշը գերազանցում է $param1-ը, ապա վարկանիշը համարվում է մոտավոր։ Վարկանիշի ցանկերում ընդգրկվելու համար այդ ցուցանիշը պետք է փոքր լինի $param2-ից (դասական շախմատ) կամ $param3-ից (տարբերակներ)։';
+  }
+
+  @override
+  String get perfStatTotalGames => 'Ընդամենը պարտիաներ';
+
+  @override
+  String get perfStatRatedGames => 'Վարկանիշային պարտիաներ';
+
+  @override
+  String get perfStatTournamentGames => 'Մրցաշարային պարտիաներ';
+
+  @override
+  String get perfStatBerserkedGames => 'Բերսերկով պարտիաներ';
+
+  @override
+  String get perfStatTimeSpentPlaying => 'Ընդհանուր խաղաժամանակ';
+
+  @override
+  String get perfStatAverageOpponent => 'Մրցակիցների միջին վարկանիշը';
+
+  @override
+  String get perfStatVictories => 'Հաղթանակներ';
+
+  @override
+  String get perfStatDefeats => 'Պարտություններ';
+
+  @override
+  String get perfStatDisconnections => 'Անջատումներ';
+
+  @override
+  String get perfStatNotEnoughGames => 'Խաղացված պարտիաների քանակն անբավարար է';
+
+  @override
+  String perfStatHighestRating(String param) {
+    return 'Բարձրագույն վարկանիշ` $param';
+  }
+
+  @override
+  String perfStatLowestRating(String param) {
+    return 'Ցածրագույն վարկանիշ` $param';
+  }
+
+  @override
+  String perfStatFromXToY(String param1, String param2) {
+    return '$param1-ից $param2';
+  }
+
+  @override
+  String get perfStatWinningStreak => 'Անընդմեջ հաղթանակներ';
+
+  @override
+  String get perfStatLosingStreak => 'Անընդմեջ պարտություններ';
+
+  @override
+  String perfStatLongestStreak(String param) {
+    return 'Ամենաերկար շարքը` $param';
+  }
+
+  @override
+  String perfStatCurrentStreak(String param) {
+    return 'Ընթացիկ շարքը` $param';
+  }
+
+  @override
+  String get perfStatBestRated => 'Հաղթանակներ ամենաբարձր վարկանիշ ունեցողների նկատմամբ';
+
+  @override
+  String get perfStatGamesInARow => 'Անընդմեջ խաղացված պարտիաներ';
+
+  @override
+  String get perfStatLessThanOneHour => 'Պարտիաների միջև դադարը` մեկ ժամից պակաս';
+
+  @override
+  String get perfStatMaxTimePlaying => 'Առավելագույն խաղաժամանակ';
+
+  @override
+  String get perfStatNow => 'հիմա';
+
+  @override
+  String get preferencesPreferences => 'Կարգավորումներ';
+
+  @override
+  String get preferencesDisplay => 'Ցուցադրել';
+
+  @override
+  String get preferencesPrivacy => 'Գաղտնիություն';
+
+  @override
+  String get preferencesNotifications => 'Ծանուցումներ';
+
+  @override
+  String get preferencesPieceAnimation => 'Խաղաքարերի ձևավորում';
+
+  @override
+  String get preferencesMaterialDifference => 'Ցուցադրել նյութական տարբերությունը';
+
+  @override
+  String get preferencesBoardHighlights => 'Խաղատախտակի բնութագիր (վերջին քայլը և շախը)';
+
+  @override
+  String get preferencesPieceDestinations => 'Ցույց տալ թույլատրելի քայլերը';
+
+  @override
+  String get preferencesBoardCoordinates => 'Խաղատախտակի համակարգում (A-H, 1-8)';
+
+  @override
+  String get preferencesMoveListWhilePlaying => 'քայլերի ցուցակը խաղի ժամանակ';
+
+  @override
+  String get preferencesPgnPieceNotation => 'Շախմատային նոտագրություն';
+
+  @override
+  String get preferencesChessPieceSymbol => 'Շախմատային խաղաքարի պատկերանշան';
+
+  @override
+  String get preferencesPgnLetter => 'Խաղաքարի տառը (K, Q, R, B, N)';
+
+  @override
+  String get preferencesZenMode => 'Ձեն ռեժիմ';
+
+  @override
+  String get preferencesShowPlayerRatings => 'Ցուցադրել խաղացողի վարկանիշը';
+
+  @override
+  String get preferencesShowFlairs => 'Show player flairs';
+
+  @override
+  String get preferencesExplainShowPlayerRatings => 'Հնարավորություն է տալիս թաքցնելու կայքի բոլոր վարկանիշները՝ խաղի վրա կենտրոնանալու համար։ Պարտիաները մնում են վարկանիշային, պարզապես Դուք դա չեք տեսնի։';
+
+  @override
+  String get preferencesDisplayBoardResizeHandle => 'Ցույց տալ խաղատախտակի չափսի փոփոխության պատկերագիրը';
+
+  @override
+  String get preferencesOnlyOnInitialPosition => 'Միայն սկզբնական դիրքում';
+
+  @override
+  String get preferencesInGameOnly => 'Միայն խաղի մեջ';
+
+  @override
+  String get preferencesChessClock => 'շախմատի ժամացույց';
+
+  @override
+  String get preferencesTenthsOfSeconds => 'ցուցադրել վայրկյանները';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'Երբ ժամանակը մնացել է <10 վայրկյան';
+
+  @override
+  String get preferencesHorizontalGreenProgressBars => 'Հորիզոնական կանաչ գծով';
+
+  @override
+  String get preferencesSoundWhenTimeGetsCritical => 'ձայնով, երբ ժամանակը վերջանում է';
+
+  @override
+  String get preferencesGiveMoreTime => 'Ավելացնել ժամանակ';
+
+  @override
+  String get preferencesGameBehavior => 'Խաղի կարգավորումներ';
+
+  @override
+  String get preferencesHowDoYouMovePieces => 'Ինչպե՞ս տեղաշարժել խաղաքարերը։';
+
+  @override
+  String get preferencesClickTwoSquares => 'Երկու վանդակները սեղմելով';
+
+  @override
+  String get preferencesDragPiece => 'Խաղաքարը տեղափոխելով';
+
+  @override
+  String get preferencesBothClicksAndDrag => 'Երկուսն էլ';
+
+  @override
+  String get preferencesPremovesPlayingDuringOpponentTurn => 'Նախնական քայլ (քանի դեռ մրցակիցը մտածում է)';
+
+  @override
+  String get preferencesTakebacksWithOpponentApproval => 'քայլը հետ վերցնելու առաջարկ (հակառակորդի թույլտվությամբ)';
+
+  @override
+  String get preferencesInCasualGamesOnly => 'Միայն ընկերական խաղերում';
+
+  @override
+  String get preferencesPromoteToQueenAutomatically => 'Ավտոմատ փոխակերպվել թագուհու';
+
+  @override
+  String get preferencesExplainPromoteToQueenAutomatically => 'Hold the <ctrl> key while promoting to temporarily disable auto-promotion';
+
+  @override
+  String get preferencesWhenPremoving => 'Նախաքայլ անելիս';
+
+  @override
+  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Քայլերի եռակի կրկնության դեպքում ինքնաբերաբար պահանջել ոչ-ոքի';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Երբ մնում է < 30 վայրկյանից քիչ';
+
+  @override
+  String get preferencesMoveConfirmation => 'Քայլի հաստատում';
+
+  @override
+  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Can be disabled during a game with the board menu';
+
+  @override
+  String get preferencesInCorrespondenceGames => 'Նամակագրական խաղեր';
+
+  @override
+  String get preferencesCorrespondenceAndUnlimited => 'Նամակագրական և առանց ժամանակի սահմանափակման';
+
+  @override
+  String get preferencesConfirmResignationAndDrawOffers => 'Հաստատել պարտությունը և ոչ-ոքիի առաջարկը';
+
+  @override
+  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Փոխատեղման եղանակը';
+
+  @override
+  String get preferencesCastleByMovingTwoSquares => 'Արքան տեղափոխել երկու վանդակ';
+
+  @override
+  String get preferencesCastleByMovingOntoTheRook => 'Արքան տեղափոխել նավակի վրա';
+
+  @override
+  String get preferencesInputMovesWithTheKeyboard => 'Քայլերը մուտքագրել ստեղնաշարով';
+
+  @override
+  String get preferencesInputMovesWithVoice => 'Քայլերի ներմուծումը ձայնի միջոցով';
+
+  @override
+  String get preferencesSnapArrowsToValidMoves => 'Սլաքներով ցույց տալ միայն թույլատրելի քայլերը';
+
+  @override
+  String get preferencesSayGgWpAfterLosingOrDrawing => 'Պարտությունից կամ ոչ-ոքիից հետո զրուցարանում գրել. «Good game, well played»';
+
+  @override
+  String get preferencesYourPreferencesHaveBeenSaved => 'Ձեր նախընտրությունները պահպանված են';
+
+  @override
+  String get preferencesScrollOnTheBoardToReplayMoves => 'Քայլերը դիտելու համար մկնիկի անիվը պտտեք խաղատախտակի վրա';
+
+  @override
+  String get preferencesCorrespondenceEmailNotification => 'Daily email listing your correspondence games';
+
+  @override
+  String get preferencesNotifyStreamStart => 'Streamer goes live';
+
+  @override
+  String get preferencesNotifyInboxMsg => 'New inbox message';
+
+  @override
+  String get preferencesNotifyForumMention => 'Forum comment mentions you';
+
+  @override
+  String get preferencesNotifyInvitedStudy => 'Ստուդիայի հրավեր';
+
+  @override
+  String get preferencesNotifyGameEvent => 'Նամակագրական խաղին առնչվող թարմացումներ';
+
+  @override
+  String get preferencesNotifyChallenge => 'Challenges';
+
+  @override
+  String get preferencesNotifyTournamentSoon => 'Մրցաշարը շուտով կսկսվի';
+
+  @override
+  String get preferencesNotifyTimeAlarm => 'Նամակագրական խաղում ժամանակը շուտով կսպառվի';
+
+  @override
+  String get preferencesNotifyBell => 'Lichess-ի ձայնային տեղեկացում';
+
+  @override
+  String get preferencesNotifyPush => 'Device notification when you\'re not on Lichess';
+
+  @override
+  String get preferencesNotifyWeb => 'Դիտարկիչ';
+
+  @override
+  String get preferencesNotifyDevice => 'Սարք';
+
+  @override
+  String get preferencesBellNotificationSound => 'Ծանուցումների զանգակի ձայնը';
+
+  @override
+  String get puzzlePuzzles => 'Խնդիրներ';
+
+  @override
+  String get puzzlePuzzleThemes => 'Խնդիրների թեմաներ';
+
+  @override
+  String get puzzleRecommended => 'Խորհուրդ է տրվում';
+
+  @override
+  String get puzzlePhases => 'Խաղի փուլեր';
+
+  @override
+  String get puzzleMotifs => 'Մոտիվներ';
+
+  @override
+  String get puzzleAdvanced => 'Առաջադեմ';
+
+  @override
+  String get puzzleLengths => 'Քայլերի քանակը';
+
+  @override
+  String get puzzleMates => 'Մատեր';
+
+  @override
+  String get puzzleGoals => 'Նպատակներ';
+
+  @override
+  String get puzzleOrigin => 'Պարտիաներից';
+
+  @override
+  String get puzzleSpecialMoves => 'Հատուկ քայլեր';
+
+  @override
+  String get puzzleDidYouLikeThisPuzzle => 'Հավանեցի՞ք խնդիրը։';
+
+  @override
+  String get puzzleVoteToLoadNextOne => 'Քվեարկե՛ք և անցե՛ք հաջորդին։';
+
+  @override
+  String get puzzleUpVote => 'Խնդիրը հավանեցի';
+
+  @override
+  String get puzzleDownVote => 'Խնդիրը չհավանեցի';
+
+  @override
+  String get puzzleYourPuzzleRatingWillNotChange => 'Խնդիրներ լուծելու Ձեր վարկանիշը չի փոփոխվի։ Խնդիրների լուծումը մրցություն չէ։ Վարկանիշը հնարավորություն է տալիս ավելի լավ ընտրել խնդիրները ըստ Ձեր մակարդակի։';
+
+  @override
+  String get puzzleFindTheBestMoveForWhite => 'Գտե՛ք սպիտակների լավագույն քայլը։';
+
+  @override
+  String get puzzleFindTheBestMoveForBlack => 'Գտե՛ք սևերի լավագույն քայլը։';
+
+  @override
+  String get puzzleToGetPersonalizedPuzzles => 'Անհատական խնդիրներ ստանալու համար.';
+
+  @override
+  String puzzlePuzzleId(String param) {
+    return 'Խնդիր № $param';
+  }
+
+  @override
+  String get puzzlePuzzleOfTheDay => 'Օրվա խնդիրը';
+
+  @override
+  String get puzzleDailyPuzzle => 'Ամենօրյա Խնդիր';
+
+  @override
+  String get puzzleClickToSolve => 'Սեղմեք լուծելու համար';
+
+  @override
+  String get puzzleGoodMove => 'Լավ քայլ է';
+
+  @override
+  String get puzzleBestMove => 'Լավագո՛ւյն քայլը';
+
+  @override
+  String get puzzleKeepGoing => 'Շարունակեք…';
+
+  @override
+  String get puzzlePuzzleSuccess => 'Խնդիրը լուծված է';
+
+  @override
+  String get puzzlePuzzleComplete => 'Խնդիրը լուծված է';
+
+  @override
+  String get puzzleByOpenings => 'Ըստ դեբյուտների';
+
+  @override
+  String get puzzlePuzzlesByOpenings => 'Դեբյուտային խնդիրներ';
+
+  @override
+  String get puzzleOpeningsYouPlayedTheMost => 'Դեբյուտներ, որոնք դուք խաղացել եք վարկանիշային կուսակցությունների մեծ մասում';
+
+  @override
+  String get puzzleUseFindInPage => 'Օգտագործեք \"Գտել էջում \" զննարկչի ընտրացանկում՝ ձեր նախընտրած դեբյուտը գտնելու՛ համար:';
+
+  @override
+  String get puzzleUseCtrlF => 'Օգտագործեք Ctrl + f ՝ Ձեր նախընտրած դեբյուտը գտնելու՛ համար։';
+
+  @override
+  String get puzzleNotTheMove => 'Վատ քայլ է';
+
+  @override
+  String get puzzleTrySomethingElse => 'Փորձեք այլ կերպ։';
+
+  @override
+  String puzzleRatingX(String param) {
+    return 'Վարկանիշ՝ $param';
+  }
+
+  @override
+  String get puzzleHidden => 'թաքցրած է';
+
+  @override
+  String puzzleFromGameLink(String param) {
+    return '$param պարտիայից';
+  }
+
+  @override
+  String get puzzleContinueTraining => 'Շարունակել մարզումը';
+
+  @override
+  String get puzzleDifficultyLevel => 'Բարդության մակարդակը';
+
+  @override
+  String get puzzleNormal => 'Միջին';
+
+  @override
+  String get puzzleEasier => 'Հեշտ';
+
+  @override
+  String get puzzleEasiest => 'Շատ հեշտ';
+
+  @override
+  String get puzzleHarder => 'Բարդ';
+
+  @override
+  String get puzzleHardest => 'Շատ բարդ';
+
+  @override
+  String get puzzleExample => 'Օրինակ';
+
+  @override
+  String get puzzleAddAnotherTheme => 'Ավելացնել այլ մոտիվ';
+
+  @override
+  String get puzzleNextPuzzle => 'Հաջորդ խնդիրը';
+
+  @override
+  String get puzzleJumpToNextPuzzleImmediately => 'Անմիջապես անցնել հաջորդ խնդրին';
+
+  @override
+  String get puzzlePuzzleDashboard => 'Խնդիրների վահանակ';
+
+  @override
+  String get puzzleImprovementAreas => 'Թույլ կողմեր';
+
+  @override
+  String get puzzleStrengths => 'Ուժեղ կողմեր';
+
+  @override
+  String get puzzleHistory => 'Խնդիրների պատմություն';
+
+  @override
+  String get puzzleSolved => 'լուծված';
+
+  @override
+  String get puzzleFailed => 'անհաջող';
+
+  @override
+  String get puzzleStreakDescription => 'Լուծե՛ք աստիճանաբար բարդացող խնդիրները և ստեղծե՛ք հաղթական շարք։ Այստեղ չկա ժամացույց, այնպես որ՝ մի՛ շտապեք։ Մեկ անհաջող քայլ, և խաղն ավարտված է։ Բայց մեկ խաղաշարի ընթացքում կարելի է բաց թողնել մեկ քայլ։';
+
+  @override
+  String puzzleYourStreakX(String param) {
+    return 'Ձեր շարքը՝ $param';
+  }
+
+  @override
+  String get puzzleStreakSkipExplanation => 'Բաց թողնել այս քայլը՝ շարքը պահպանելու համար։ Կարելի է օգտագործել միայն մեկ անգամ։';
+
+  @override
+  String get puzzleContinueTheStreak => 'Շարունակել շարքը';
+
+  @override
+  String get puzzleNewStreak => 'Նոր շարք';
+
+  @override
+  String get puzzleFromMyGames => 'Իմ պարտիաներից';
+
+  @override
+  String get puzzleLookupOfPlayer => 'Փնտրել խնդիրներ խաղացողի պարտիաներից';
+
+  @override
+  String puzzleFromXGames(String param) {
+    return 'Խնդիրներ $param-ի պարտիաներից';
+  }
+
+  @override
+  String get puzzleSearchPuzzles => 'Փնտրել խնդիրներ';
+
+  @override
+  String get puzzleFromMyGamesNone => 'Տվյալների բազայում Ձեր պարտիաներից խնդիրներ չկան, բայց Lichess-ը Ձեզ հետ հույսեր է կապում։ Խաղացե՛ք ավելի շատ արագ կամ դասական ժամակարգով պարտիաներ, և խնդիրներ ունեցող խաղացողների ցանկում հայտնվելու Ձեր հնարավորությունները կմեծանան։';
+
+  @override
+  String puzzleFromXGamesFound(String param1, String param2) {
+    return 'Գտնվել է $param1 խնդիր $param2 պարտիաներում';
+  }
+
+  @override
+  String get puzzlePuzzleDashboardDescription => 'Մարզվե՛ք, վերլուծե՛ք, բարելավե՛ք';
+
+  @override
+  String puzzlePercentSolved(String param) {
+    return '$param ճիշտ է';
+  }
+
+  @override
+  String get puzzleNoPuzzlesToShow => 'Ոչինչ չկա, սկսելու համար լուծե՛ք մի քանի խնդիր։';
+
+  @override
+  String get puzzleImprovementAreasDescription => 'Մարզե՛ք այս թեմաները՝ Ձեր առաջընթացը բարելավելու համար։';
+
+  @override
+  String get puzzleStrengthDescription => 'Դուք ցուցադրում եք լավագույն արդյունքները այս թեմաներում';
+
+  @override
+  String puzzlePlayedXTimes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Փորձել են լուծել $count անգամ',
+      one: 'Փորձել են լուծել $count անգամ',
+      zero: 'Փորձել են լուծել $count անգամ',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsBelowYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count միավոր ցածր՝ խնդիրների լուծման Ձեր վարկանիշից',
+      one: 'Մեկ միավոր ցածր՝ խնդիրների լուծման Ձեր վարկանիշից',
+      zero: 'Մեկ միավոր ցածր՝ խնդիրների լուծման Ձեր վարկանիշից',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsAboveYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count միավոր բարձր խնդիրների լուծման Ձեր վարկանիշից',
+      one: 'Մեկ միավոր բարձր խնդիրների լուծման Ձեր վարկանիշից',
+      zero: 'Մեկ միավոր բարձր խնդիրների լուծման Ձեր վարկանիշից',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPlayed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count լուծված է',
+      one: '$count լուծված Է',
+      zero: '$count լուծված Է',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbToReplay(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count կրկնել',
+      one: '$count կրկնել',
+      zero: '$count կրկնել',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get puzzleThemeAdvancedPawn => 'Առաջ գնացած զինվոր';
+
+  @override
+  String get puzzleThemeAdvancedPawnDescription => 'Զինվորը վերածվելու կամ զինվորը վերածվելու սպառնալիքի հետ կապված մարտավարություն։';
+
+  @override
+  String get puzzleThemeAdvantage => 'Առավելություն';
+
+  @override
+  String get puzzleThemeAdvantageDescription => 'Օգտագործեք որոշիչ առավելություն ստանալու Ձեր հնարավորությունը (200-ից 600 սանտիզինվոր)';
+
+  @override
+  String get puzzleThemeAnastasiaMate => 'Անաստասիայի մատ';
+
+  @override
+  String get puzzleThemeAnastasiaMateDescription => 'Ձին և նավակը (կամ թագուհին) մրցակցի արքային մատ են անում խաղատախտակի եզրի և մրցակցի այլ խաղաքարի միջև։';
+
+  @override
+  String get puzzleThemeArabianMate => 'Արաբական մատ';
+
+  @override
+  String get puzzleThemeArabianMateDescription => 'Ձին և նավակը մրցակցի արքային մատ են անում խաղատախտակի անկյունում։';
+
+  @override
+  String get puzzleThemeAttackingF2F7 => 'Գրոհ f2-ի կամ f7-ի վրա';
+
+  @override
+  String get puzzleThemeAttackingF2F7Description => 'f2 կամ f7 զինվորների վրա ուղղված գրոհ, օրինակ, Ֆեգատելլոյի գրոհում (տապակած լյարդի սկզբնախաղում)։';
+
+  @override
+  String get puzzleThemeAttraction => 'Հրապուրում';
+
+  @override
+  String get puzzleThemeAttractionDescription => 'Փոխանակում կամ զոհաբերություն, որը ստիպում կամ մղում է մրցակցի խաղաքարին զբաղեցնել դաշտը, որից հետո հնարավոր է դառնում հետագա մարտավարական հնարքը։';
+
+  @override
+  String get puzzleThemeBackRankMate => 'Մատ վերջին հորիզոնականում';
+
+  @override
+  String get puzzleThemeBackRankMateDescription => 'Մատ արքային նրա իսկ հորիզոնականում, երբ նա շրջափակված է իր իսկ խաղաքարերով։';
+
+  @override
+  String get puzzleThemeBishopEndgame => 'Փղային վերջնախաղ';
+
+  @override
+  String get puzzleThemeBishopEndgameDescription => 'Միայն փղերով և զինվորներով վերջնախաղ։';
+
+  @override
+  String get puzzleThemeBodenMate => 'Բոդենի մատ';
+
+  @override
+  String get puzzleThemeBodenMateDescription => 'Խաչվող անկյունագծերում գտնվող երկու փղերը մատ են հայտարարում մրցակցի արքային, որը շրջափակված է սեփական խաղաքարերով։';
+
+  @override
+  String get puzzleThemeCastling => 'Փոխատեղում';
+
+  @override
+  String get puzzleThemeCastlingDescription => 'Արքայի տեղափոխումն ապահով տեղ և նավակի դուրսբերումը մարտի։';
+
+  @override
+  String get puzzleThemeCapturingDefender => 'Պաշտպանի վերացում';
+
+  @override
+  String get puzzleThemeCapturingDefenderDescription => 'Այլ խաղաքարը պաշտպանող խաղաքարի շահում կամ փոխանակում՝ հետագայում անպաշտպան մնացած խաղաքարի շահումով։';
+
+  @override
+  String get puzzleThemeCrushing => 'Ջախջախում';
+
+  @override
+  String get puzzleThemeCrushingDescription => 'Օգտագործեք մրցակցի վրիպումը՝ ջախջախիչ առավելություն (600 և ավելի սանտիզինվոր) ստանալու համար';
+
+  @override
+  String get puzzleThemeDoubleBishopMate => 'Մատ երկու փղով';
+
+  @override
+  String get puzzleThemeDoubleBishopMateDescription => 'Հարակից անկյունագծերում գտնվող երկու փղերը մատ են հայտարարում մրցակցի արքային, որը շրջափակված է սեփական խաղաքարերով։';
+
+  @override
+  String get puzzleThemeDovetailMate => '«Ծիծեռնակի պոչ» մատ';
+
+  @override
+  String get puzzleThemeDovetailMateDescription => 'Մատ թագուհով կողքին կանգնած արքային, որի նահանջի միակ երկու դաշտերը զբաղեցնում են սեփական խաղաքարերը։';
+
+  @override
+  String get puzzleThemeEquality => 'Հավասարեցում';
+
+  @override
+  String get puzzleThemeEqualityDescription => 'Պարտված դիրքից հավասարեցրեք խաղը. պարտիան ավարտեք ոչ-ոքի կամ ստացեք նյութական հավասարություն (200 սանտիզինվորից պակաս)';
+
+  @override
+  String get puzzleThemeKingsideAttack => 'Գրոհ արքայական թևում';
+
+  @override
+  String get puzzleThemeKingsideAttackDescription => 'Գրոհ մրցակցի՝ կարճ կողմում փոխատեղում կատարած արքայի վրա։';
+
+  @override
+  String get puzzleThemeClearance => 'Գծի կամ դաշտի ազատում';
+
+  @override
+  String get puzzleThemeClearanceDescription => 'Որպես կանոն, տեմպով կատարվող քայլ, որն ազատում է դաշտը, գիծը կամ անկյունագիծը՝ մարտավարական մտահղացումն իրագործելու նպատակով։';
+
+  @override
+  String get puzzleThemeDefensiveMove => 'Պաշտպանական քայլ';
+
+  @override
+  String get puzzleThemeDefensiveMoveDescription => 'Ճշգրիտ քայլ կամ քայլերի հաջորդականություն, որոնք անհրաժեշտ են նյութական կամ առավելության կորստից խուսափելու համար։';
+
+  @override
+  String get puzzleThemeDeflection => 'Շեղում';
+
+  @override
+  String get puzzleThemeDeflectionDescription => 'Քայլ, որը մրցակցի խաղաքարը շեղում է կարևոր խնդրից, օրինակ, հանգուցային դաշտի պաշտպանությունից։';
+
+  @override
+  String get puzzleThemeDiscoveredAttack => 'Բացված հարձակում';
+
+  @override
+  String get puzzleThemeDiscoveredAttackDescription => 'Քայլ խաղաքարով, որ ծածկում է հեռահար խաղաքարի գրոհի գիծը։ Օրինակ, քայլ ձիով, որով բացվում է գիծը նրա հետևում կանգնած նավակի համար։';
+
+  @override
+  String get puzzleThemeDoubleCheck => 'Կրկնակի շախ';
+
+  @override
+  String get puzzleThemeDoubleCheckDescription => 'Շախ միաժամանակ երկու խաղաքարով՝ բաց հարձակման միջոցով։ Հնարավոր չէ վերցնել երկու գրոհող խաղաքարերը և հնարավոր չէ ծածկվել դրանցից, հետևաբար արքան կարող է միայն հեռանալ շախից։';
+
+  @override
+  String get puzzleThemeEndgame => 'Վերջնախաղ';
+
+  @override
+  String get puzzleThemeEndgameDescription => 'Մարտավարություն խաղի վերջնամասում։';
+
+  @override
+  String get puzzleThemeEnPassantDescription => 'Մարտավարություն «կողանցիկ հարված» կանոնի կիրառմամբ, որտեղ զինվորը կարող է հարվածել մրցակցի զինվորը, որը առաջին քայլն է կատարել՝ տեղաշարժվելով երկու դաշտ, ընդ որում՝ հատվող դաշտը գտնվում է մրցակցի զինվորի հարվածի տակ, որը կարող է վերցնել այդ զինվորը։';
+
+  @override
+  String get puzzleThemeExposedKing => 'Մերկ արքա';
+
+  @override
+  String get puzzleThemeExposedKingDescription => 'Անպաշտպան կամ թույլ պաշտպանված արքան հաճախ դառնում է մատային գրոհի զոհը։';
+
+  @override
+  String get puzzleThemeFork => 'Պատառաքաղ';
+
+  @override
+  String get puzzleThemeForkDescription => 'Քայլ, որի դեպքում հարվածի տակ է հայտնվում մրցակցի երկու խաղաքար։';
+
+  @override
+  String get puzzleThemeHangingPiece => 'Անպաշտպան խաղաքար';
+
+  @override
+  String get puzzleThemeHangingPieceDescription => 'Մարտավարություն, որի ժամանակ մրցակցի խաղաքարը պաշտպանված չէ կամ լավ պաշտպանված չէ և կարող է վերցվել։';
+
+  @override
+  String get puzzleThemeHookMate => 'Հուք մատ';
+
+  @override
+  String get puzzleThemeHookMateDescription => 'Մատ զինվորով պաշտպանված ձիով և նավակով, ընդ որում` մրցակցի զինվորներից մեկը զբաղեցնում է նրա արքայի նահանջի միակ դաշտը։';
+
+  @override
+  String get puzzleThemeInterference => 'Ծածկում';
+
+  @override
+  String get puzzleThemeInterferenceDescription => 'Քայլ, որով ծածկվում է մրցակցի հեռահար խաղաքարերի համագործակցության գիծը, որի արդյունքում այդ խաղաքարերը կամ նրանցից մեկը դառնում են անպաշտպան։ Օրինակ, ձին կանգնում է նավակների միջև գտնվող պաշտպանված վանդակին։';
+
+  @override
+  String get puzzleThemeIntermezzo => 'Միջանկյալ քայլ';
+
+  @override
+  String get puzzleThemeIntermezzoDescription => 'Սպասելի քայլ կատարելու փոխարեն, սկզբում կատարվում է այլ, անմիջական սպառնալիք ստեղծող քայլ, որին մրցակիցը պետք է պատասխանի։ Հայտնի է նաև  «Zwischenzug» կամ «Intermezzo» անուններով։';
+
+  @override
+  String get puzzleThemeKnightEndgame => 'Ձիու վերջնախաղ';
+
+  @override
+  String get puzzleThemeKnightEndgameDescription => 'Միայն ձիերով և զինվորներով վերջնախաղ։';
+
+  @override
+  String get puzzleThemeLong => 'Եռաքայլ խնդիր';
+
+  @override
+  String get puzzleThemeLongDescription => 'Երեք քայլ մինչև հաղթանակ։';
+
+  @override
+  String get puzzleThemeMaster => 'Վարպետների պարտիաներ';
+
+  @override
+  String get puzzleThemeMasterDescription => 'Խնդիրներ տիտղոսակիր խաղացողների մասնակցությամբ պարտիաներից։';
+
+  @override
+  String get puzzleThemeMasterVsMaster => 'Երկու վարպետների պարտիաներ';
+
+  @override
+  String get puzzleThemeMasterVsMasterDescription => 'Խնդիրներ երկու տիտղոսակիր խաղացողների մասնակցությամբ պարտիաներից։';
+
+  @override
+  String get puzzleThemeMate => 'Մատ';
+
+  @override
+  String get puzzleThemeMateDescription => 'Ավարտեք խաղը գեղեցիկ';
+
+  @override
+  String get puzzleThemeMateIn1 => 'Մատ 1 քայլից';
+
+  @override
+  String get puzzleThemeMateIn1Description => 'Արեք մատ մեկ քայլից։';
+
+  @override
+  String get puzzleThemeMateIn2 => 'Մատ 2 քայլից';
+
+  @override
+  String get puzzleThemeMateIn2Description => 'Արեք մատ երկու քայլից։';
+
+  @override
+  String get puzzleThemeMateIn3 => 'Մատ 3 քայլից';
+
+  @override
+  String get puzzleThemeMateIn3Description => 'Արեք մատ երեք քայլից։';
+
+  @override
+  String get puzzleThemeMateIn4 => 'Մատ 4 քայլից';
+
+  @override
+  String get puzzleThemeMateIn4Description => 'Արեք մատ չորս քայլից։';
+
+  @override
+  String get puzzleThemeMateIn5 => 'Մատ 5 և ավելի քայլից';
+
+  @override
+  String get puzzleThemeMateIn5Description => 'Գտեք դեպի մատը տանող քայլերի հաջորդականությունը։';
+
+  @override
+  String get puzzleThemeMiddlegame => 'Միջնախաղ';
+
+  @override
+  String get puzzleThemeMiddlegameDescription => 'Մարտավարություն խաղի երկրորդ փուլում։';
+
+  @override
+  String get puzzleThemeOneMove => 'Մեկքայլանի խնդիր';
+
+  @override
+  String get puzzleThemeOneMoveDescription => 'Խնդիր, որտեղ պետք է անել միայն մեկ հաղթող քայլ։';
+
+  @override
+  String get puzzleThemeOpening => 'Սկզբնախաղ';
+
+  @override
+  String get puzzleThemeOpeningDescription => 'Մարտավարություն խաղի առաջին փուլում։';
+
+  @override
+  String get puzzleThemePawnEndgame => 'Զինվորային վերջնախաղ';
+
+  @override
+  String get puzzleThemePawnEndgameDescription => 'Վերջնախաղ զինվորներով։';
+
+  @override
+  String get puzzleThemePin => 'Կապ';
+
+  @override
+  String get puzzleThemePinDescription => 'Կապի օգտագործումով մարտավարություն, երբ խաղաքարը չի կարող քայլել, այլապես գրոհի տակ կհայտնվի նրա հետևում գտնվող ավելի արժեքավոր խաղաքարը։';
+
+  @override
+  String get puzzleThemePromotion => 'Վերածում';
+
+  @override
+  String get puzzleThemePromotionDescription => 'Քայլ, որի ժամանակ զինվորը հասնում է վերջին հորիզոնականին և վերածվում նույն գույնի ցանկացած խաղաքարի, բացի արքայից։';
+
+  @override
+  String get puzzleThemeQueenEndgame => 'Թագուհու վերջնախաղ';
+
+  @override
+  String get puzzleThemeQueenEndgameDescription => 'Միայն թագուհիներով և զինվորներով վերջնախաղ։';
+
+  @override
+  String get puzzleThemeQueenRookEndgame => 'Թագուհով և նավակով վերջնախաղ';
+
+  @override
+  String get puzzleThemeQueenRookEndgameDescription => 'Միայն թագուհիներով, նավակներով և զինվորներով վերջնախաղ։';
+
+  @override
+  String get puzzleThemeQueensideAttack => 'Գրոհ թագուհու թևում';
+
+  @override
+  String get puzzleThemeQueensideAttackDescription => 'Գրոհ մրցակցի՝ երկար կողմում փոխատեղում կատարած արքայի վրա։';
+
+  @override
+  String get puzzleThemeQuietMove => 'Հանգիստ քայլ';
+
+  @override
+  String get puzzleThemeQuietMoveDescription => 'Քայլ առանց շախի կամ խաղաքար վերցնելու, որն այնուամենայնիվ նախապատրաստում է անխուսափելի սպառնալիք։';
+
+  @override
+  String get puzzleThemeRookEndgame => 'Նավակային վերջնախաղ';
+
+  @override
+  String get puzzleThemeRookEndgameDescription => 'Միայն նավակներով և զինվորներով վերջնախաղ։';
+
+  @override
+  String get puzzleThemeSacrifice => 'Զոհաբերություն';
+
+  @override
+  String get puzzleThemeSacrificeDescription => 'Մարտավարություն, որի ժամանակ տրվում է որևէ խաղաքար` առավելություն ստանալու, մատ հայտարարելու կամ պարտիան ոչ-ոքի ավարտելու նպատակով։';
+
+  @override
+  String get puzzleThemeShort => 'Երկքայլանի խնդիր';
+
+  @override
+  String get puzzleThemeShortDescription => 'Երկու քայլ մինչև հաղթանակ։';
+
+  @override
+  String get puzzleThemeSkewer => 'Գծային հարձակում';
+
+  @override
+  String get puzzleThemeSkewerDescription => 'Կապի տեսակ է, բայց այս դեպքում հակառակն է՝ ավելի թանկ խաղաքարը հայտնվում է պակաս արժեքավոր կամ համարժեք խաղաքարի գրոհի գծում։';
+
+  @override
+  String get puzzleThemeSmotheredMate => 'Խեղդուկ մատ';
+
+  @override
+  String get puzzleThemeSmotheredMateDescription => 'Մատ ձիով արքային, որը չի կարող փախչել, որովհետև շրջափակված է (խեղդված է) սեփական խաղաքարերով։';
+
+  @override
+  String get puzzleThemeSuperGM => 'Սուպերգրոսմայստերների պարտիաներ';
+
+  @override
+  String get puzzleThemeSuperGMDescription => 'Խնդիրներ աշխարհի լավագույն շախմատիստների պարտիաներից։';
+
+  @override
+  String get puzzleThemeTrappedPiece => 'Խաղաքարի որսում';
+
+  @override
+  String get puzzleThemeTrappedPieceDescription => 'Խաղաքարը չի կարող հեռանալ հարձակումից, քանի որ չունի նահանջի ազատ դաշտեր, կամ այդ դաշտերը ևս հարվածի տակ են։';
+
+  @override
+  String get puzzleThemeUnderPromotion => 'Թույլ վերածում';
+
+  @override
+  String get puzzleThemeUnderPromotionDescription => 'Զինվորի վերածում ոչ թե թագուհու, այլ ձիու, փղի կամ նավակի։';
+
+  @override
+  String get puzzleThemeVeryLong => 'Բազմաքայլ խնդիր';
+
+  @override
+  String get puzzleThemeVeryLongDescription => 'Չորս կամ ավելի քայլ հաղթելու համար։';
+
+  @override
+  String get puzzleThemeXRayAttack => 'Ռենտգեն';
+
+  @override
+  String get puzzleThemeXRayAttackDescription => 'Իրավիճակ, երբ հեռահար խաղաքարի հարձակման կամ պաշտպանության գծին կանգնած է մրցակցի խաղաքարը։';
+
+  @override
+  String get puzzleThemeZugzwang => 'Ցուգցվանգ';
+
+  @override
+  String get puzzleThemeZugzwangDescription => 'Մրցակիցը ստիպված է անել հնարավոր փոքրաթիվ քայլերից մեկը,  բայց քայլերից ցանկացածը տանում է դիրքի վատացման։';
+
+  @override
+  String get puzzleThemeHealthyMix => 'Խառը խնդիրներ';
+
+  @override
+  String get puzzleThemeHealthyMixDescription => 'Ամեն ինչից` քիչ-քիչ։ Դուք չգիտեք` ինչ է սպասվում, այնպես որ, պատրաստ եղեք ամեն ինչի։ Ինչպես իսկական պարտիայում։';
+
+  @override
+  String get puzzleThemePlayerGames => 'Խաղացողի պարտիաները';
+
+  @override
+  String get puzzleThemePlayerGamesDescription => 'Գտնել խնդիրներ, որոնք ստեղծվել են Ձեր պարտիաներից, կամ այլ խաղացողների պարտիաներից։';
+
+  @override
+  String puzzleThemePuzzleDownloadInformation(String param) {
+    return 'Այս խնդիրները հանրության սեփականությունն են, և Դուք կարող եք ներբեռնել դրանք՝ $param։';
+  }
+
+  @override
+  String get searchSearch => 'Փնտրել';
+
+  @override
+  String get settingsSettings => 'Կարգավորումներ';
+
+  @override
+  String get settingsCloseAccount => 'Փակել հաշիվը';
+
+  @override
+  String get settingsManagedAccountCannotBeClosed => 'Ձեր հաշիվը կառավարվում է և չի կարող փակվել։';
+
+  @override
+  String get settingsClosingIsDefinitive => 'Փակումը հնարավոր չի լինի չեղարկել։ Համոզվա՞ծ եք։';
+
+  @override
+  String get settingsCantOpenSimilarAccount => 'Դուք չեք կարողանա ստեղծել նույն անունով մասնակցային հաշիվ, նույնիսկ եթե տառաշարերը (մեծատառ-փոքրատառ) տարբերվեն։';
+
+  @override
+  String get settingsChangedMindDoNotCloseAccount => 'Ես մտափոխվել եմ, մի փակեք իմ հաշիվը';
+
+  @override
+  String get settingsCloseAccountExplanation => 'Դուք համոզվա՞ծ եք, որ ցանկանում եք փակել Ձեր մասնակցային հաշիվը։ Փակումն անդառնալի է։ Դուք այլևս երբեք չեք կարողանա մուտք գործել Ձեր հաշիվ։';
+
+  @override
+  String get settingsThisAccountIsClosed => 'Այս հաշիվը փակված է:';
 
   @override
   String get playWithAFriend => 'Խաղալ ընկերոջ հետ';
@@ -512,6 +1518,12 @@ class AppLocalizationsHy extends AppLocalizations {
 
   @override
   String get deleteFromHere => 'Ջնջել այստեղից';
+
+  @override
+  String get collapseVariations => 'Collapse variations';
+
+  @override
+  String get expandVariations => 'Expand variations';
 
   @override
   String get forceVariation => 'Պարտադրել վարիացիան';
@@ -1371,15 +2383,6 @@ class AppLocalizationsHy extends AppLocalizations {
   String get emptyTournamentName => 'Թողեք դատարկ` մրցաշարը պատահական գրոսմայստերի պատվին կոչելու համար։';
 
   @override
-  String get recommendNotTouching => 'Խորհուրդ չենք տալիս սահմանել այդ պայմանները։';
-
-  @override
-  String get fewerPlayers => 'Եթե Դուք սահմանեք մասնակցության պայմանները, Ձեր մրցաշարին կարող են մասնակցել ավելի քիչ թվով խաղացողներ։';
-
-  @override
-  String get showAdvancedSettings => 'Ցույց տալ ընդլայնված կարգավորումները';
-
-  @override
   String get makePrivateTournament => 'Մրցաշարը դարձնել փակ և մուտքը սահմանափակել գաղտնաբառով';
 
   @override
@@ -1509,10 +2512,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get editProfile => 'Խմբագրել անձնագիրը';
 
   @override
-  String get firstName => 'Անուն';
-
-  @override
-  String get lastName => 'Ազգանուն';
+  String get realName => 'Real name';
 
   @override
   String get setFlair => 'Set your flair';
@@ -1641,13 +2641,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get cheat => 'խաբեբա';
 
   @override
-  String get insult => 'վիրավորանք';
-
-  @override
   String get troll => 'Թրոլինգ';
-
-  @override
-  String get ratingManipulation => 'Կեղծարարություններ վարկանիշի հետ';
 
   @override
   String get other => 'այլ';
@@ -1754,6 +2748,9 @@ class AppLocalizationsHy extends AppLocalizations {
 
   @override
   String get outsideTheBoard => 'Խաղատախտակից դուրս';
+
+  @override
+  String get allSquaresOfTheBoard => 'All squares of the board';
 
   @override
   String get onSlowGames => 'Դանդաղ խաղերում';
@@ -3460,1009 +4457,6 @@ class AppLocalizationsHy extends AppLocalizations {
   }
 
   @override
-  String get patronDonate => 'Նվիրաբերել';
-
-  @override
-  String get patronLichessPatron => 'Lichess-ի հովանավոր';
-
-  @override
-  String get preferencesPreferences => 'Կարգավորումներ';
-
-  @override
-  String get preferencesDisplay => 'Ցուցադրել';
-
-  @override
-  String get preferencesPrivacy => 'Գաղտնիություն';
-
-  @override
-  String get preferencesNotifications => 'Ծանուցումներ';
-
-  @override
-  String get preferencesPieceAnimation => 'Խաղաքարերի ձևավորում';
-
-  @override
-  String get preferencesMaterialDifference => 'Ցուցադրել նյութական տարբերությունը';
-
-  @override
-  String get preferencesBoardHighlights => 'Խաղատախտակի բնութագիր (վերջին քայլը և շախը)';
-
-  @override
-  String get preferencesPieceDestinations => 'Ցույց տալ թույլատրելի քայլերը';
-
-  @override
-  String get preferencesBoardCoordinates => 'Խաղատախտակի համակարգում (A-H, 1-8)';
-
-  @override
-  String get preferencesMoveListWhilePlaying => 'քայլերի ցուցակը խաղի ժամանակ';
-
-  @override
-  String get preferencesPgnPieceNotation => 'Շախմատային նոտագրություն';
-
-  @override
-  String get preferencesChessPieceSymbol => 'Շախմատային խաղաքարի պատկերանշան';
-
-  @override
-  String get preferencesPgnLetter => 'Խաղաքարի տառը (K, Q, R, B, N)';
-
-  @override
-  String get preferencesZenMode => 'Ձեն ռեժիմ';
-
-  @override
-  String get preferencesShowPlayerRatings => 'Ցուցադրել խաղացողի վարկանիշը';
-
-  @override
-  String get preferencesShowFlairs => 'Show player flairs';
-
-  @override
-  String get preferencesExplainShowPlayerRatings => 'Հնարավորություն է տալիս թաքցնելու կայքի բոլոր վարկանիշները՝ խաղի վրա կենտրոնանալու համար։ Պարտիաները մնում են վարկանիշային, պարզապես Դուք դա չեք տեսնի։';
-
-  @override
-  String get preferencesDisplayBoardResizeHandle => 'Ցույց տալ խաղատախտակի չափսի փոփոխության պատկերագիրը';
-
-  @override
-  String get preferencesOnlyOnInitialPosition => 'Միայն սկզբնական դիրքում';
-
-  @override
-  String get preferencesInGameOnly => 'Միայն խաղի մեջ';
-
-  @override
-  String get preferencesChessClock => 'շախմատի ժամացույց';
-
-  @override
-  String get preferencesTenthsOfSeconds => 'ցուցադրել վայրկյանները';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'Երբ ժամանակը մնացել է <10 վայրկյան';
-
-  @override
-  String get preferencesHorizontalGreenProgressBars => 'Հորիզոնական կանաչ գծով';
-
-  @override
-  String get preferencesSoundWhenTimeGetsCritical => 'ձայնով, երբ ժամանակը վերջանում է';
-
-  @override
-  String get preferencesGiveMoreTime => 'Ավելացնել ժամանակ';
-
-  @override
-  String get preferencesGameBehavior => 'Խաղի կարգավորումներ';
-
-  @override
-  String get preferencesHowDoYouMovePieces => 'Ինչպե՞ս տեղաշարժել խաղաքարերը։';
-
-  @override
-  String get preferencesClickTwoSquares => 'Երկու վանդակները սեղմելով';
-
-  @override
-  String get preferencesDragPiece => 'Խաղաքարը տեղափոխելով';
-
-  @override
-  String get preferencesBothClicksAndDrag => 'Երկուսն էլ';
-
-  @override
-  String get preferencesPremovesPlayingDuringOpponentTurn => 'Նախնական քայլ (քանի դեռ մրցակիցը մտածում է)';
-
-  @override
-  String get preferencesTakebacksWithOpponentApproval => 'քայլը հետ վերցնելու առաջարկ (հակառակորդի թույլտվությամբ)';
-
-  @override
-  String get preferencesInCasualGamesOnly => 'Միայն ընկերական խաղերում';
-
-  @override
-  String get preferencesPromoteToQueenAutomatically => 'Ավտոմատ փոխակերպվել թագուհու';
-
-  @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Hold the <ctrl> key while promoting to temporarily disable auto-promotion';
-
-  @override
-  String get preferencesWhenPremoving => 'Նախաքայլ անելիս';
-
-  @override
-  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Քայլերի եռակի կրկնության դեպքում ինքնաբերաբար պահանջել ոչ-ոքի';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Երբ մնում է < 30 վայրկյանից քիչ';
-
-  @override
-  String get preferencesMoveConfirmation => 'Քայլի հաստատում';
-
-  @override
-  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Can be disabled during a game with the board menu';
-
-  @override
-  String get preferencesInCorrespondenceGames => 'Նամակագրական խաղեր';
-
-  @override
-  String get preferencesCorrespondenceAndUnlimited => 'Նամակագրական և առանց ժամանակի սահմանափակման';
-
-  @override
-  String get preferencesConfirmResignationAndDrawOffers => 'Հաստատել պարտությունը և ոչ-ոքիի առաջարկը';
-
-  @override
-  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Փոխատեղման եղանակը';
-
-  @override
-  String get preferencesCastleByMovingTwoSquares => 'Արքան տեղափոխել երկու վանդակ';
-
-  @override
-  String get preferencesCastleByMovingOntoTheRook => 'Արքան տեղափոխել նավակի վրա';
-
-  @override
-  String get preferencesInputMovesWithTheKeyboard => 'Քայլերը մուտքագրել ստեղնաշարով';
-
-  @override
-  String get preferencesInputMovesWithVoice => 'Քայլերի ներմուծումը ձայնի միջոցով';
-
-  @override
-  String get preferencesSnapArrowsToValidMoves => 'Սլաքներով ցույց տալ միայն թույլատրելի քայլերը';
-
-  @override
-  String get preferencesSayGgWpAfterLosingOrDrawing => 'Պարտությունից կամ ոչ-ոքիից հետո զրուցարանում գրել. «Good game, well played»';
-
-  @override
-  String get preferencesYourPreferencesHaveBeenSaved => 'Ձեր նախընտրությունները պահպանված են';
-
-  @override
-  String get preferencesScrollOnTheBoardToReplayMoves => 'Քայլերը դիտելու համար մկնիկի անիվը պտտեք խաղատախտակի վրա';
-
-  @override
-  String get preferencesCorrespondenceEmailNotification => 'Daily email listing your correspondence games';
-
-  @override
-  String get preferencesNotifyStreamStart => 'Streamer goes live';
-
-  @override
-  String get preferencesNotifyInboxMsg => 'New inbox message';
-
-  @override
-  String get preferencesNotifyForumMention => 'Forum comment mentions you';
-
-  @override
-  String get preferencesNotifyInvitedStudy => 'Ստուդիայի հրավեր';
-
-  @override
-  String get preferencesNotifyGameEvent => 'Նամակագրական խաղին առնչվող թարմացումներ';
-
-  @override
-  String get preferencesNotifyChallenge => 'Challenges';
-
-  @override
-  String get preferencesNotifyTournamentSoon => 'Մրցաշարը շուտով կսկսվի';
-
-  @override
-  String get preferencesNotifyTimeAlarm => 'Նամակագրական խաղում ժամանակը շուտով կսպառվի';
-
-  @override
-  String get preferencesNotifyBell => 'Lichess-ի ձայնային տեղեկացում';
-
-  @override
-  String get preferencesNotifyPush => 'Device notification when you\'re not on Lichess';
-
-  @override
-  String get preferencesNotifyWeb => 'Դիտարկիչ';
-
-  @override
-  String get preferencesNotifyDevice => 'Սարք';
-
-  @override
-  String get preferencesBellNotificationSound => 'Ծանուցումների զանգակի ձայնը';
-
-  @override
-  String get puzzlePuzzles => 'Խնդիրներ';
-
-  @override
-  String get puzzlePuzzleThemes => 'Խնդիրների թեմաներ';
-
-  @override
-  String get puzzleRecommended => 'Խորհուրդ է տրվում';
-
-  @override
-  String get puzzlePhases => 'Խաղի փուլեր';
-
-  @override
-  String get puzzleMotifs => 'Մոտիվներ';
-
-  @override
-  String get puzzleAdvanced => 'Առաջադեմ';
-
-  @override
-  String get puzzleLengths => 'Քայլերի քանակը';
-
-  @override
-  String get puzzleMates => 'Մատեր';
-
-  @override
-  String get puzzleGoals => 'Նպատակներ';
-
-  @override
-  String get puzzleOrigin => 'Պարտիաներից';
-
-  @override
-  String get puzzleSpecialMoves => 'Հատուկ քայլեր';
-
-  @override
-  String get puzzleDidYouLikeThisPuzzle => 'Հավանեցի՞ք խնդիրը։';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Քվեարկե՛ք և անցե՛ք հաջորդին։';
-
-  @override
-  String get puzzleUpVote => 'Խնդիրը հավանեցի';
-
-  @override
-  String get puzzleDownVote => 'Խնդիրը չհավանեցի';
-
-  @override
-  String get puzzleYourPuzzleRatingWillNotChange => 'Խնդիրներ լուծելու Ձեր վարկանիշը չի փոփոխվի։ Խնդիրների լուծումը մրցություն չէ։ Վարկանիշը հնարավորություն է տալիս ավելի լավ ընտրել խնդիրները ըստ Ձեր մակարդակի։';
-
-  @override
-  String get puzzleFindTheBestMoveForWhite => 'Գտե՛ք սպիտակների լավագույն քայլը։';
-
-  @override
-  String get puzzleFindTheBestMoveForBlack => 'Գտե՛ք սևերի լավագույն քայլը։';
-
-  @override
-  String get puzzleToGetPersonalizedPuzzles => 'Անհատական խնդիրներ ստանալու համար.';
-
-  @override
-  String puzzlePuzzleId(String param) {
-    return 'Խնդիր № $param';
-  }
-
-  @override
-  String get puzzlePuzzleOfTheDay => 'Օրվա խնդիրը';
-
-  @override
-  String get puzzleDailyPuzzle => 'Ամենօրյա Խնդիր';
-
-  @override
-  String get puzzleClickToSolve => 'Սեղմեք լուծելու համար';
-
-  @override
-  String get puzzleGoodMove => 'Լավ քայլ է';
-
-  @override
-  String get puzzleBestMove => 'Լավագո՛ւյն քայլը';
-
-  @override
-  String get puzzleKeepGoing => 'Շարունակեք…';
-
-  @override
-  String get puzzlePuzzleSuccess => 'Խնդիրը լուծված է';
-
-  @override
-  String get puzzlePuzzleComplete => 'Խնդիրը լուծված է';
-
-  @override
-  String get puzzleByOpenings => 'Ըստ դեբյուտների';
-
-  @override
-  String get puzzlePuzzlesByOpenings => 'Դեբյուտային խնդիրներ';
-
-  @override
-  String get puzzleOpeningsYouPlayedTheMost => 'Դեբյուտներ, որոնք դուք խաղացել եք վարկանիշային կուսակցությունների մեծ մասում';
-
-  @override
-  String get puzzleUseFindInPage => 'Օգտագործեք \"Գտել էջում \" զննարկչի ընտրացանկում՝ ձեր նախընտրած դեբյուտը գտնելու՛ համար:';
-
-  @override
-  String get puzzleUseCtrlF => 'Օգտագործեք Ctrl + f ՝ Ձեր նախընտրած դեբյուտը գտնելու՛ համար։';
-
-  @override
-  String get puzzleNotTheMove => 'Վատ քայլ է';
-
-  @override
-  String get puzzleTrySomethingElse => 'Փորձեք այլ կերպ։';
-
-  @override
-  String puzzleRatingX(String param) {
-    return 'Վարկանիշ՝ $param';
-  }
-
-  @override
-  String get puzzleHidden => 'թաքցրած է';
-
-  @override
-  String puzzleFromGameLink(String param) {
-    return '$param պարտիայից';
-  }
-
-  @override
-  String get puzzleContinueTraining => 'Շարունակել մարզումը';
-
-  @override
-  String get puzzleDifficultyLevel => 'Բարդության մակարդակը';
-
-  @override
-  String get puzzleNormal => 'Միջին';
-
-  @override
-  String get puzzleEasier => 'Հեշտ';
-
-  @override
-  String get puzzleEasiest => 'Շատ հեշտ';
-
-  @override
-  String get puzzleHarder => 'Բարդ';
-
-  @override
-  String get puzzleHardest => 'Շատ բարդ';
-
-  @override
-  String get puzzleExample => 'Օրինակ';
-
-  @override
-  String get puzzleAddAnotherTheme => 'Ավելացնել այլ մոտիվ';
-
-  @override
-  String get puzzleNextPuzzle => 'Հաջորդ խնդիրը';
-
-  @override
-  String get puzzleJumpToNextPuzzleImmediately => 'Անմիջապես անցնել հաջորդ խնդրին';
-
-  @override
-  String get puzzlePuzzleDashboard => 'Խնդիրների վահանակ';
-
-  @override
-  String get puzzleImprovementAreas => 'Թույլ կողմեր';
-
-  @override
-  String get puzzleStrengths => 'Ուժեղ կողմեր';
-
-  @override
-  String get puzzleHistory => 'Խնդիրների պատմություն';
-
-  @override
-  String get puzzleSolved => 'լուծված';
-
-  @override
-  String get puzzleFailed => 'անհաջող';
-
-  @override
-  String get puzzleStreakDescription => 'Լուծե՛ք աստիճանաբար բարդացող խնդիրները և ստեղծե՛ք հաղթական շարք։ Այստեղ չկա ժամացույց, այնպես որ՝ մի՛ շտապեք։ Մեկ անհաջող քայլ, և խաղն ավարտված է։ Բայց մեկ խաղաշարի ընթացքում կարելի է բաց թողնել մեկ քայլ։';
-
-  @override
-  String puzzleYourStreakX(String param) {
-    return 'Ձեր շարքը՝ $param';
-  }
-
-  @override
-  String get puzzleStreakSkipExplanation => 'Բաց թողնել այս քայլը՝ շարքը պահպանելու համար։ Կարելի է օգտագործել միայն մեկ անգամ։';
-
-  @override
-  String get puzzleContinueTheStreak => 'Շարունակել շարքը';
-
-  @override
-  String get puzzleNewStreak => 'Նոր շարք';
-
-  @override
-  String get puzzleFromMyGames => 'Իմ պարտիաներից';
-
-  @override
-  String get puzzleLookupOfPlayer => 'Փնտրել խնդիրներ խաղացողի պարտիաներից';
-
-  @override
-  String puzzleFromXGames(String param) {
-    return 'Խնդիրներ $param-ի պարտիաներից';
-  }
-
-  @override
-  String get puzzleSearchPuzzles => 'Փնտրել խնդիրներ';
-
-  @override
-  String get puzzleFromMyGamesNone => 'Տվյալների բազայում Ձեր պարտիաներից խնդիրներ չկան, բայց Lichess-ը Ձեզ հետ հույսեր է կապում։ Խաղացե՛ք ավելի շատ արագ կամ դասական ժամակարգով պարտիաներ, և խնդիրներ ունեցող խաղացողների ցանկում հայտնվելու Ձեր հնարավորությունները կմեծանան։';
-
-  @override
-  String puzzleFromXGamesFound(String param1, String param2) {
-    return 'Գտնվել է $param1 խնդիր $param2 պարտիաներում';
-  }
-
-  @override
-  String get puzzlePuzzleDashboardDescription => 'Մարզվե՛ք, վերլուծե՛ք, բարելավե՛ք';
-
-  @override
-  String puzzlePercentSolved(String param) {
-    return '$param ճիշտ է';
-  }
-
-  @override
-  String get puzzleNoPuzzlesToShow => 'Ոչինչ չկա, սկսելու համար լուծե՛ք մի քանի խնդիր։';
-
-  @override
-  String get puzzleImprovementAreasDescription => 'Մարզե՛ք այս թեմաները՝ Ձեր առաջընթացը բարելավելու համար։';
-
-  @override
-  String get puzzleStrengthDescription => 'Դուք ցուցադրում եք լավագույն արդյունքները այս թեմաներում';
-
-  @override
-  String puzzlePlayedXTimes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Փորձել են լուծել $count անգամ',
-      one: 'Փորձել են լուծել $count անգամ',
-      zero: 'Փորձել են լուծել $count անգամ',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsBelowYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count միավոր ցածր՝ խնդիրների լուծման Ձեր վարկանիշից',
-      one: 'Մեկ միավոր ցածր՝ խնդիրների լուծման Ձեր վարկանիշից',
-      zero: 'Մեկ միավոր ցածր՝ խնդիրների լուծման Ձեր վարկանիշից',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsAboveYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count միավոր բարձր խնդիրների լուծման Ձեր վարկանիշից',
-      one: 'Մեկ միավոր բարձր խնդիրների լուծման Ձեր վարկանիշից',
-      zero: 'Մեկ միավոր բարձր խնդիրների լուծման Ձեր վարկանիշից',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPlayed(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count լուծված է',
-      one: '$count լուծված Է',
-      zero: '$count լուծված Է',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbToReplay(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count կրկնել',
-      one: '$count կրկնել',
-      zero: '$count կրկնել',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get puzzleThemeAdvancedPawn => 'Առաջ գնացած զինվոր';
-
-  @override
-  String get puzzleThemeAdvancedPawnDescription => 'Զինվորը վերածվելու կամ զինվորը վերածվելու սպառնալիքի հետ կապված մարտավարություն։';
-
-  @override
-  String get puzzleThemeAdvantage => 'Առավելություն';
-
-  @override
-  String get puzzleThemeAdvantageDescription => 'Օգտագործեք որոշիչ առավելություն ստանալու Ձեր հնարավորությունը (200-ից 600 սանտիզինվոր)';
-
-  @override
-  String get puzzleThemeAnastasiaMate => 'Անաստասիայի մատ';
-
-  @override
-  String get puzzleThemeAnastasiaMateDescription => 'Ձին և նավակը (կամ թագուհին) մրցակցի արքային մատ են անում խաղատախտակի եզրի և մրցակցի այլ խաղաքարի միջև։';
-
-  @override
-  String get puzzleThemeArabianMate => 'Արաբական մատ';
-
-  @override
-  String get puzzleThemeArabianMateDescription => 'Ձին և նավակը մրցակցի արքային մատ են անում խաղատախտակի անկյունում։';
-
-  @override
-  String get puzzleThemeAttackingF2F7 => 'Գրոհ f2-ի կամ f7-ի վրա';
-
-  @override
-  String get puzzleThemeAttackingF2F7Description => 'f2 կամ f7 զինվորների վրա ուղղված գրոհ, օրինակ, Ֆեգատելլոյի գրոհում (տապակած լյարդի սկզբնախաղում)։';
-
-  @override
-  String get puzzleThemeAttraction => 'Հրապուրում';
-
-  @override
-  String get puzzleThemeAttractionDescription => 'Փոխանակում կամ զոհաբերություն, որը ստիպում կամ մղում է մրցակցի խաղաքարին զբաղեցնել դաշտը, որից հետո հնարավոր է դառնում հետագա մարտավարական հնարքը։';
-
-  @override
-  String get puzzleThemeBackRankMate => 'Մատ վերջին հորիզոնականում';
-
-  @override
-  String get puzzleThemeBackRankMateDescription => 'Մատ արքային նրա իսկ հորիզոնականում, երբ նա շրջափակված է իր իսկ խաղաքարերով։';
-
-  @override
-  String get puzzleThemeBishopEndgame => 'Փղային վերջնախաղ';
-
-  @override
-  String get puzzleThemeBishopEndgameDescription => 'Միայն փղերով և զինվորներով վերջնախաղ։';
-
-  @override
-  String get puzzleThemeBodenMate => 'Բոդենի մատ';
-
-  @override
-  String get puzzleThemeBodenMateDescription => 'Խաչվող անկյունագծերում գտնվող երկու փղերը մատ են հայտարարում մրցակցի արքային, որը շրջափակված է սեփական խաղաքարերով։';
-
-  @override
-  String get puzzleThemeCastling => 'Փոխատեղում';
-
-  @override
-  String get puzzleThemeCastlingDescription => 'Արքայի տեղափոխումն ապահով տեղ և նավակի դուրսբերումը մարտի։';
-
-  @override
-  String get puzzleThemeCapturingDefender => 'Պաշտպանի վերացում';
-
-  @override
-  String get puzzleThemeCapturingDefenderDescription => 'Այլ խաղաքարը պաշտպանող խաղաքարի շահում կամ փոխանակում՝ հետագայում անպաշտպան մնացած խաղաքարի շահումով։';
-
-  @override
-  String get puzzleThemeCrushing => 'Ջախջախում';
-
-  @override
-  String get puzzleThemeCrushingDescription => 'Օգտագործեք մրցակցի վրիպումը՝ ջախջախիչ առավելություն (600 և ավելի սանտիզինվոր) ստանալու համար';
-
-  @override
-  String get puzzleThemeDoubleBishopMate => 'Մատ երկու փղով';
-
-  @override
-  String get puzzleThemeDoubleBishopMateDescription => 'Հարակից անկյունագծերում գտնվող երկու փղերը մատ են հայտարարում մրցակցի արքային, որը շրջափակված է սեփական խաղաքարերով։';
-
-  @override
-  String get puzzleThemeDovetailMate => '«Ծիծեռնակի պոչ» մատ';
-
-  @override
-  String get puzzleThemeDovetailMateDescription => 'Մատ թագուհով կողքին կանգնած արքային, որի նահանջի միակ երկու դաշտերը զբաղեցնում են սեփական խաղաքարերը։';
-
-  @override
-  String get puzzleThemeEquality => 'Հավասարեցում';
-
-  @override
-  String get puzzleThemeEqualityDescription => 'Պարտված դիրքից հավասարեցրեք խաղը. պարտիան ավարտեք ոչ-ոքի կամ ստացեք նյութական հավասարություն (200 սանտիզինվորից պակաս)';
-
-  @override
-  String get puzzleThemeKingsideAttack => 'Գրոհ արքայական թևում';
-
-  @override
-  String get puzzleThemeKingsideAttackDescription => 'Գրոհ մրցակցի՝ կարճ կողմում փոխատեղում կատարած արքայի վրա։';
-
-  @override
-  String get puzzleThemeClearance => 'Գծի կամ դաշտի ազատում';
-
-  @override
-  String get puzzleThemeClearanceDescription => 'Որպես կանոն, տեմպով կատարվող քայլ, որն ազատում է դաշտը, գիծը կամ անկյունագիծը՝ մարտավարական մտահղացումն իրագործելու նպատակով։';
-
-  @override
-  String get puzzleThemeDefensiveMove => 'Պաշտպանական քայլ';
-
-  @override
-  String get puzzleThemeDefensiveMoveDescription => 'Ճշգրիտ քայլ կամ քայլերի հաջորդականություն, որոնք անհրաժեշտ են նյութական կամ առավելության կորստից խուսափելու համար։';
-
-  @override
-  String get puzzleThemeDeflection => 'Շեղում';
-
-  @override
-  String get puzzleThemeDeflectionDescription => 'Քայլ, որը մրցակցի խաղաքարը շեղում է կարևոր խնդրից, օրինակ, հանգուցային դաշտի պաշտպանությունից։';
-
-  @override
-  String get puzzleThemeDiscoveredAttack => 'Բացված հարձակում';
-
-  @override
-  String get puzzleThemeDiscoveredAttackDescription => 'Քայլ խաղաքարով, որ ծածկում է հեռահար խաղաքարի գրոհի գիծը։ Օրինակ, քայլ ձիով, որով բացվում է գիծը նրա հետևում կանգնած նավակի համար։';
-
-  @override
-  String get puzzleThemeDoubleCheck => 'Կրկնակի շախ';
-
-  @override
-  String get puzzleThemeDoubleCheckDescription => 'Շախ միաժամանակ երկու խաղաքարով՝ բաց հարձակման միջոցով։ Հնարավոր չէ վերցնել երկու գրոհող խաղաքարերը և հնարավոր չէ ծածկվել դրանցից, հետևաբար արքան կարող է միայն հեռանալ շախից։';
-
-  @override
-  String get puzzleThemeEndgame => 'Վերջնախաղ';
-
-  @override
-  String get puzzleThemeEndgameDescription => 'Մարտավարություն խաղի վերջնամասում։';
-
-  @override
-  String get puzzleThemeEnPassantDescription => 'Մարտավարություն «կողանցիկ հարված» կանոնի կիրառմամբ, որտեղ զինվորը կարող է հարվածել մրցակցի զինվորը, որը առաջին քայլն է կատարել՝ տեղաշարժվելով երկու դաշտ, ընդ որում՝ հատվող դաշտը գտնվում է մրցակցի զինվորի հարվածի տակ, որը կարող է վերցնել այդ զինվորը։';
-
-  @override
-  String get puzzleThemeExposedKing => 'Մերկ արքա';
-
-  @override
-  String get puzzleThemeExposedKingDescription => 'Անպաշտպան կամ թույլ պաշտպանված արքան հաճախ դառնում է մատային գրոհի զոհը։';
-
-  @override
-  String get puzzleThemeFork => 'Պատառաքաղ';
-
-  @override
-  String get puzzleThemeForkDescription => 'Քայլ, որի դեպքում հարվածի տակ է հայտնվում մրցակցի երկու խաղաքար։';
-
-  @override
-  String get puzzleThemeHangingPiece => 'Անպաշտպան խաղաքար';
-
-  @override
-  String get puzzleThemeHangingPieceDescription => 'Մարտավարություն, որի ժամանակ մրցակցի խաղաքարը պաշտպանված չէ կամ լավ պաշտպանված չէ և կարող է վերցվել։';
-
-  @override
-  String get puzzleThemeHookMate => 'Հուք մատ';
-
-  @override
-  String get puzzleThemeHookMateDescription => 'Մատ զինվորով պաշտպանված ձիով և նավակով, ընդ որում` մրցակցի զինվորներից մեկը զբաղեցնում է նրա արքայի նահանջի միակ դաշտը։';
-
-  @override
-  String get puzzleThemeInterference => 'Ծածկում';
-
-  @override
-  String get puzzleThemeInterferenceDescription => 'Քայլ, որով ծածկվում է մրցակցի հեռահար խաղաքարերի համագործակցության գիծը, որի արդյունքում այդ խաղաքարերը կամ նրանցից մեկը դառնում են անպաշտպան։ Օրինակ, ձին կանգնում է նավակների միջև գտնվող պաշտպանված վանդակին։';
-
-  @override
-  String get puzzleThemeIntermezzo => 'Միջանկյալ քայլ';
-
-  @override
-  String get puzzleThemeIntermezzoDescription => 'Սպասելի քայլ կատարելու փոխարեն, սկզբում կատարվում է այլ, անմիջական սպառնալիք ստեղծող քայլ, որին մրցակիցը պետք է պատասխանի։ Հայտնի է նաև  «Zwischenzug» կամ «Intermezzo» անուններով։';
-
-  @override
-  String get puzzleThemeKnightEndgame => 'Ձիու վերջնախաղ';
-
-  @override
-  String get puzzleThemeKnightEndgameDescription => 'Միայն ձիերով և զինվորներով վերջնախաղ։';
-
-  @override
-  String get puzzleThemeLong => 'Եռաքայլ խնդիր';
-
-  @override
-  String get puzzleThemeLongDescription => 'Երեք քայլ մինչև հաղթանակ։';
-
-  @override
-  String get puzzleThemeMaster => 'Վարպետների պարտիաներ';
-
-  @override
-  String get puzzleThemeMasterDescription => 'Խնդիրներ տիտղոսակիր խաղացողների մասնակցությամբ պարտիաներից։';
-
-  @override
-  String get puzzleThemeMasterVsMaster => 'Երկու վարպետների պարտիաներ';
-
-  @override
-  String get puzzleThemeMasterVsMasterDescription => 'Խնդիրներ երկու տիտղոսակիր խաղացողների մասնակցությամբ պարտիաներից։';
-
-  @override
-  String get puzzleThemeMate => 'Մատ';
-
-  @override
-  String get puzzleThemeMateDescription => 'Ավարտեք խաղը գեղեցիկ';
-
-  @override
-  String get puzzleThemeMateIn1 => 'Մատ 1 քայլից';
-
-  @override
-  String get puzzleThemeMateIn1Description => 'Արեք մատ մեկ քայլից։';
-
-  @override
-  String get puzzleThemeMateIn2 => 'Մատ 2 քայլից';
-
-  @override
-  String get puzzleThemeMateIn2Description => 'Արեք մատ երկու քայլից։';
-
-  @override
-  String get puzzleThemeMateIn3 => 'Մատ 3 քայլից';
-
-  @override
-  String get puzzleThemeMateIn3Description => 'Արեք մատ երեք քայլից։';
-
-  @override
-  String get puzzleThemeMateIn4 => 'Մատ 4 քայլից';
-
-  @override
-  String get puzzleThemeMateIn4Description => 'Արեք մատ չորս քայլից։';
-
-  @override
-  String get puzzleThemeMateIn5 => 'Մատ 5 և ավելի քայլից';
-
-  @override
-  String get puzzleThemeMateIn5Description => 'Գտեք դեպի մատը տանող քայլերի հաջորդականությունը։';
-
-  @override
-  String get puzzleThemeMiddlegame => 'Միջնախաղ';
-
-  @override
-  String get puzzleThemeMiddlegameDescription => 'Մարտավարություն խաղի երկրորդ փուլում։';
-
-  @override
-  String get puzzleThemeOneMove => 'Մեկքայլանի խնդիր';
-
-  @override
-  String get puzzleThemeOneMoveDescription => 'Խնդիր, որտեղ պետք է անել միայն մեկ հաղթող քայլ։';
-
-  @override
-  String get puzzleThemeOpening => 'Սկզբնախաղ';
-
-  @override
-  String get puzzleThemeOpeningDescription => 'Մարտավարություն խաղի առաջին փուլում։';
-
-  @override
-  String get puzzleThemePawnEndgame => 'Զինվորային վերջնախաղ';
-
-  @override
-  String get puzzleThemePawnEndgameDescription => 'Վերջնախաղ զինվորներով։';
-
-  @override
-  String get puzzleThemePin => 'Կապ';
-
-  @override
-  String get puzzleThemePinDescription => 'Կապի օգտագործումով մարտավարություն, երբ խաղաքարը չի կարող քայլել, այլապես գրոհի տակ կհայտնվի նրա հետևում գտնվող ավելի արժեքավոր խաղաքարը։';
-
-  @override
-  String get puzzleThemePromotion => 'Վերածում';
-
-  @override
-  String get puzzleThemePromotionDescription => 'Քայլ, որի ժամանակ զինվորը հասնում է վերջին հորիզոնականին և վերածվում նույն գույնի ցանկացած խաղաքարի, բացի արքայից։';
-
-  @override
-  String get puzzleThemeQueenEndgame => 'Թագուհու վերջնախաղ';
-
-  @override
-  String get puzzleThemeQueenEndgameDescription => 'Միայն թագուհիներով և զինվորներով վերջնախաղ։';
-
-  @override
-  String get puzzleThemeQueenRookEndgame => 'Թագուհով և նավակով վերջնախաղ';
-
-  @override
-  String get puzzleThemeQueenRookEndgameDescription => 'Միայն թագուհիներով, նավակներով և զինվորներով վերջնախաղ։';
-
-  @override
-  String get puzzleThemeQueensideAttack => 'Գրոհ թագուհու թևում';
-
-  @override
-  String get puzzleThemeQueensideAttackDescription => 'Գրոհ մրցակցի՝ երկար կողմում փոխատեղում կատարած արքայի վրա։';
-
-  @override
-  String get puzzleThemeQuietMove => 'Հանգիստ քայլ';
-
-  @override
-  String get puzzleThemeQuietMoveDescription => 'Քայլ առանց շախի կամ խաղաքար վերցնելու, որն այնուամենայնիվ նախապատրաստում է անխուսափելի սպառնալիք։';
-
-  @override
-  String get puzzleThemeRookEndgame => 'Նավակային վերջնախաղ';
-
-  @override
-  String get puzzleThemeRookEndgameDescription => 'Միայն նավակներով և զինվորներով վերջնախաղ։';
-
-  @override
-  String get puzzleThemeSacrifice => 'Զոհաբերություն';
-
-  @override
-  String get puzzleThemeSacrificeDescription => 'Մարտավարություն, որի ժամանակ տրվում է որևէ խաղաքար` առավելություն ստանալու, մատ հայտարարելու կամ պարտիան ոչ-ոքի ավարտելու նպատակով։';
-
-  @override
-  String get puzzleThemeShort => 'Երկքայլանի խնդիր';
-
-  @override
-  String get puzzleThemeShortDescription => 'Երկու քայլ մինչև հաղթանակ։';
-
-  @override
-  String get puzzleThemeSkewer => 'Գծային հարձակում';
-
-  @override
-  String get puzzleThemeSkewerDescription => 'Կապի տեսակ է, բայց այս դեպքում հակառակն է՝ ավելի թանկ խաղաքարը հայտնվում է պակաս արժեքավոր կամ համարժեք խաղաքարի գրոհի գծում։';
-
-  @override
-  String get puzzleThemeSmotheredMate => 'Խեղդուկ մատ';
-
-  @override
-  String get puzzleThemeSmotheredMateDescription => 'Մատ ձիով արքային, որը չի կարող փախչել, որովհետև շրջափակված է (խեղդված է) սեփական խաղաքարերով։';
-
-  @override
-  String get puzzleThemeSuperGM => 'Սուպերգրոսմայստերների պարտիաներ';
-
-  @override
-  String get puzzleThemeSuperGMDescription => 'Խնդիրներ աշխարհի լավագույն շախմատիստների պարտիաներից։';
-
-  @override
-  String get puzzleThemeTrappedPiece => 'Խաղաքարի որսում';
-
-  @override
-  String get puzzleThemeTrappedPieceDescription => 'Խաղաքարը չի կարող հեռանալ հարձակումից, քանի որ չունի նահանջի ազատ դաշտեր, կամ այդ դաշտերը ևս հարվածի տակ են։';
-
-  @override
-  String get puzzleThemeUnderPromotion => 'Թույլ վերածում';
-
-  @override
-  String get puzzleThemeUnderPromotionDescription => 'Զինվորի վերածում ոչ թե թագուհու, այլ ձիու, փղի կամ նավակի։';
-
-  @override
-  String get puzzleThemeVeryLong => 'Բազմաքայլ խնդիր';
-
-  @override
-  String get puzzleThemeVeryLongDescription => 'Չորս կամ ավելի քայլ հաղթելու համար։';
-
-  @override
-  String get puzzleThemeXRayAttack => 'Ռենտգեն';
-
-  @override
-  String get puzzleThemeXRayAttackDescription => 'Իրավիճակ, երբ հեռահար խաղաքարի հարձակման կամ պաշտպանության գծին կանգնած է մրցակցի խաղաքարը։';
-
-  @override
-  String get puzzleThemeZugzwang => 'Ցուգցվանգ';
-
-  @override
-  String get puzzleThemeZugzwangDescription => 'Մրցակիցը ստիպված է անել հնարավոր փոքրաթիվ քայլերից մեկը,  բայց քայլերից ցանկացածը տանում է դիրքի վատացման։';
-
-  @override
-  String get puzzleThemeHealthyMix => 'Խառը խնդիրներ';
-
-  @override
-  String get puzzleThemeHealthyMixDescription => 'Ամեն ինչից` քիչ-քիչ։ Դուք չգիտեք` ինչ է սպասվում, այնպես որ, պատրաստ եղեք ամեն ինչի։ Ինչպես իսկական պարտիայում։';
-
-  @override
-  String get puzzleThemePlayerGames => 'Խաղացողի պարտիաները';
-
-  @override
-  String get puzzleThemePlayerGamesDescription => 'Գտնել խնդիրներ, որոնք ստեղծվել են Ձեր պարտիաներից, կամ այլ խաղացողների պարտիաներից։';
-
-  @override
-  String puzzleThemePuzzleDownloadInformation(String param) {
-    return 'Այս խնդիրները հանրության սեփականությունն են, և Դուք կարող եք ներբեռնել դրանք՝ $param։';
-  }
-
-  @override
-  String perfStatPerfStats(String param) {
-    return '$param վիճակագրություն';
-  }
-
-  @override
-  String get perfStatViewTheGames => 'Դիտել պարտիաները';
-
-  @override
-  String get perfStatProvisional => 'նախնական';
-
-  @override
-  String get perfStatNotEnoughRatedGames => 'Ճշգրիտ վարկանիշն իմանալու համար վարկանիշային պարտիաների քանակը բավարար չէ։';
-
-  @override
-  String perfStatProgressOverLastXGames(String param) {
-    return 'Աճը վերջին $param խաղերի ընթացքում.';
-  }
-
-  @override
-  String perfStatRatingDeviation(String param) {
-    return 'Վարկանիշի շեղումը` $param։';
-  }
-
-  @override
-  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
-    return 'Ցածրագույն արժեքը նշանակում է, որ վարկանիշն ավելի կայուն է։ Եթե այդ ցուցանիշը գերազանցում է $param1-ը, ապա վարկանիշը համարվում է մոտավոր։ Վարկանիշի ցանկերում ընդգրկվելու համար այդ ցուցանիշը պետք է փոքր լինի $param2-ից (դասական շախմատ) կամ $param3-ից (տարբերակներ)։';
-  }
-
-  @override
-  String get perfStatTotalGames => 'Ընդամենը պարտիաներ';
-
-  @override
-  String get perfStatRatedGames => 'Վարկանիշային պարտիաներ';
-
-  @override
-  String get perfStatTournamentGames => 'Մրցաշարային պարտիաներ';
-
-  @override
-  String get perfStatBerserkedGames => 'Բերսերկով պարտիաներ';
-
-  @override
-  String get perfStatTimeSpentPlaying => 'Ընդհանուր խաղաժամանակ';
-
-  @override
-  String get perfStatAverageOpponent => 'Մրցակիցների միջին վարկանիշը';
-
-  @override
-  String get perfStatVictories => 'Հաղթանակներ';
-
-  @override
-  String get perfStatDefeats => 'Պարտություններ';
-
-  @override
-  String get perfStatDisconnections => 'Անջատումներ';
-
-  @override
-  String get perfStatNotEnoughGames => 'Խաղացված պարտիաների քանակն անբավարար է';
-
-  @override
-  String perfStatHighestRating(String param) {
-    return 'Բարձրագույն վարկանիշ` $param';
-  }
-
-  @override
-  String perfStatLowestRating(String param) {
-    return 'Ցածրագույն վարկանիշ` $param';
-  }
-
-  @override
-  String perfStatFromXToY(String param1, String param2) {
-    return '$param1-ից $param2';
-  }
-
-  @override
-  String get perfStatWinningStreak => 'Անընդմեջ հաղթանակներ';
-
-  @override
-  String get perfStatLosingStreak => 'Անընդմեջ պարտություններ';
-
-  @override
-  String perfStatLongestStreak(String param) {
-    return 'Ամենաերկար շարքը` $param';
-  }
-
-  @override
-  String perfStatCurrentStreak(String param) {
-    return 'Ընթացիկ շարքը` $param';
-  }
-
-  @override
-  String get perfStatBestRated => 'Հաղթանակներ ամենաբարձր վարկանիշ ունեցողների նկատմամբ';
-
-  @override
-  String get perfStatGamesInARow => 'Անընդմեջ խաղացված պարտիաներ';
-
-  @override
-  String get perfStatLessThanOneHour => 'Պարտիաների միջև դադարը` մեկ ժամից պակաս';
-
-  @override
-  String get perfStatMaxTimePlaying => 'Առավելագույն խաղաժամանակ';
-
-  @override
-  String get perfStatNow => 'հիմա';
-
-  @override
-  String get searchSearch => 'Փնտրել';
-
-  @override
-  String get settingsSettings => 'Կարգավորումներ';
-
-  @override
-  String get settingsCloseAccount => 'Փակել հաշիվը';
-
-  @override
-  String get settingsManagedAccountCannotBeClosed => 'Ձեր հաշիվը կառավարվում է և չի կարող փակվել։';
-
-  @override
-  String get settingsClosingIsDefinitive => 'Փակումը հնարավոր չի լինի չեղարկել։ Համոզվա՞ծ եք։';
-
-  @override
-  String get settingsCantOpenSimilarAccount => 'Դուք չեք կարողանա ստեղծել նույն անունով մասնակցային հաշիվ, նույնիսկ եթե տառաշարերը (մեծատառ-փոքրատառ) տարբերվեն։';
-
-  @override
-  String get settingsChangedMindDoNotCloseAccount => 'Ես մտափոխվել եմ, մի փակեք իմ հաշիվը';
-
-  @override
-  String get settingsCloseAccountExplanation => 'Դուք համոզվա՞ծ եք, որ ցանկանում եք փակել Ձեր մասնակցային հաշիվը։ Փակումն անդառնալի է։ Դուք այլևս երբեք չեք կարողանա մուտք գործել Ձեր հաշիվ։';
-
-  @override
-  String get settingsThisAccountIsClosed => 'Այս հաշիվը փակված է:';
-
-  @override
-  String get streamerLichessStreamers => 'Lichess-ի հեռարձակողներ';
-
-  @override
   String get stormMoveToStart => 'Սկսելու համար քայլ կատարեք';
 
   @override
@@ -4646,14 +4640,11 @@ class AppLocalizationsHy extends AppLocalizations {
   }
 
   @override
+  String get streamerLichessStreamers => 'Lichess-ի հեռարձակողներ';
+
+  @override
   String get studyShareAndExport => 'Տարածել & և արտահանել';
 
   @override
   String get studyStart => 'Սկսել';
-
-  @override
-  String get broadcastBroadcasts => 'Հեռարձակումներ';
-
-  @override
-  String get broadcastStartDate => 'Սկսվելու ամսաթիվը Ձեր ժամագոտում';
 }
