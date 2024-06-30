@@ -27,7 +27,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: 'সাপোর্ট করেছেন lichess.org সাইটকে $count মাসের জন্য $param2 হিসেবে',
       one: 'সাপোর্ট করেছেন lichess.org সাইটকে $count মাসের জন্য $param2 হিসেবে',
-      zero: 'সাপোর্ট করেছেন lichess.org সাইটকে $count মাসের জন্য $param2 হিসেবে',
     );
     return '$_temp0';
   }
@@ -39,7 +38,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: 'অভ্যস্ত $count অবস্থান গুলো করত $param2',
       one: 'অভ্যস্ত $count অবস্থান করত $param2',
-      zero: 'অভ্যস্ত $count অবস্থান করত $param2',
     );
     return '$_temp0';
   }
@@ -51,7 +49,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: 'সমাধান $count কৌশলগত ধাঁধাগুলো',
       one: 'সমাধান $count কৌশলগত ধাঁধা',
-      zero: 'সমাধান $count কৌশলগত ধাঁধা',
     );
     return '$_temp0';
   }
@@ -63,7 +60,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: 'খেলেছে $count $param2 খেলাগুলো',
       one: 'খেলেছে $count $param2 খেলা',
-      zero: 'খেলেছে $count $param2 খেলা',
     );
     return '$_temp0';
   }
@@ -75,7 +71,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: 'পোস্ট করা হয়েছে $count বার্তাগুলো $param2',
       one: 'পোস্ট করা হয়েছে $count বার্তায় $param2',
-      zero: 'পোস্ট করা হয়েছে $count বার্তায় $param2',
     );
     return '$_temp0';
   }
@@ -87,7 +82,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: '$count মুভে খেলেছেন',
       one: '$count মুভে খেলেছেন',
-      zero: '$count মুভে খেলেছেন',
     );
     return '$_temp0';
   }
@@ -99,7 +93,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: '$count টি কোরেস্পন্ডিং গেমের মধ্যে',
       one: '$count টি কোরেস্পন্ডিং গেমের মধ্যে',
-      zero: '$count টি কোরেস্পন্ডিং গেমের মধ্যে',
     );
     return '$_temp0';
   }
@@ -111,7 +104,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: 'সম্পন্ন হয়েছে $count সাদৃশ্য খেলাগুলো',
       one: 'সম্পন্ন হয়েছে $count সাদৃশ্য খেলা',
-      zero: 'সম্পন্ন হয়েছে $count সাদৃশ্য খেলা',
     );
     return '$_temp0';
   }
@@ -123,7 +115,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: 'অনুসরণ শুরু করেছে $count খেলোয়াড়',
       one: 'অনুসরণ শুরু করেছে $count খেলোয়াড়',
-      zero: 'অনুসরণ শুরু করেছে $count খেলোয়াড়',
     );
     return '$_temp0';
   }
@@ -135,7 +126,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: 'অর্জন করেছেন $count নতুন অনুসরন',
       one: 'অর্জন করেছেন $count নতুন অনুসরন',
-      zero: 'অর্জন করেছেন $count নতুন অনুসরন',
     );
     return '$_temp0';
   }
@@ -147,7 +137,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: 'হোস্টেড $count সমকালীন প্রদর্শনী',
       one: 'হোস্টেড $count সমকালীন প্রদর্শনী',
-      zero: 'হোস্টেড $count সমকালীন প্রদর্শনী',
     );
     return '$_temp0';
   }
@@ -159,7 +148,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: 'অংশগ্রহণ করী $count সমকালীন প্রদর্শনী',
       one: 'অংশগ্রহণ করী $count সমকালীন প্রদর্শনী',
-      zero: 'অংশগ্রহণ করী $count সমকালীন প্রদর্শনী',
     );
     return '$_temp0';
   }
@@ -171,7 +159,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: 'তৈরি হয়েছে $count নতুন গবেষণা',
       one: 'তৈরি হয়েছে $count নতুন গবেষণা',
-      zero: 'তৈরি হয়েছে $count নতুন গবেষণা',
     );
     return '$_temp0';
   }
@@ -183,7 +170,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: 'প্রতিযোগিতায় $count সর্ম্পূন হয়েছে',
       one: 'প্রতিযোগিতায় $count সর্ম্পূন হয়েছে',
-      zero: 'প্রতিযোগিতায় $count সর্ম্পূন হয়েছে',
     );
     return '$_temp0';
   }
@@ -195,7 +181,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: 'অনুপাত #$count (সর্বোচ্চ $param2%) সাথে $param3 খেলায় $param4',
       one: 'অনুপাত #$count (সর্বোচ্চ $param2%) সাথে $param3 খেলায় $param4',
-      zero: 'অনুপাত #$count (সর্বোচ্চ $param2%) সাথে $param3 খেলায় $param4',
     );
     return '$_temp0';
   }
@@ -207,7 +192,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: 'সুইস টুর্নামেন্ট শেষ করেছেন $count এর ভেতর',
       one: 'সুইস টুর্নামেন্ট শেষ করেছেন $count এর ভেতর',
-      zero: 'সুইস টুর্নামেন্ট শেষ করেছেন $count এর ভেতর',
     );
     return '$_temp0';
   }
@@ -219,7 +203,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: 'যুক্ত হয়েছে $count দল',
       one: 'যুক্ত হয়েছে $count দল',
-      zero: 'যুক্ত হয়েছে $count দল',
     );
     return '$_temp0';
   }
@@ -863,7 +846,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: '$count বার খেলা হয়েছে',
       one: '$count বার খেলা হয়েছে',
-      zero: '$count বার খেলা হয়েছে',
     );
     return '$_temp0';
   }
@@ -875,7 +857,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: 'আপনার ধাঁধার রেটিং হতে $count পয়েন্ট কম।',
       one: 'আপনার ধাঁধার রেটিং হতে এক পয়েন্ট কম।',
-      zero: 'আপনার ধাঁধার রেটিং হতে এক পয়েন্ট কম।',
     );
     return '$_temp0';
   }
@@ -887,7 +868,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: 'আপনার ধাঁধার রেটিং হতে $count পয়েন্ট বেশি।',
       one: 'আপনার ধাঁধার রেটিং হতে এক পয়েন্ট বেশি।',
-      zero: 'আপনার ধাঁধার রেটিং হতে এক পয়েন্ট বেশি।',
     );
     return '$_temp0';
   }
@@ -899,7 +879,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: '$count টি খেলেছেন',
       one: '$count টি খেলেছেন',
-      zero: '$count টি খেলেছেন',
     );
     return '$_temp0';
   }
@@ -911,7 +890,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: '$count টি পুনরায় খেলুন',
       one: '$count টি পুনরায় খেলুন',
-      zero: '$count টি পুনরায় খেলুন',
     );
     return '$_temp0';
   }
@@ -3959,7 +3937,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: 'আপনার প্রতিপক্ষ খেলা ছেড়ে দিয়েছেন। আপনি $count সেকেন্ডের মধ্যে জয় দাবি করতে পারেন.',
       one: 'আপনার প্রতিপক্ষ খেলা ছেড়ে চলে গেছেন. আপনি চাইলে বিজয় দাবি করতে পারেন $count সেকেন্ডের মধ্যে.',
-      zero: 'আপনার প্রতিপক্ষ খেলা ছেড়ে চলে গেছেন. আপনি চাইলে বিজয় দাবি করতে পারেন $count সেকেন্ডের মধ্যে.',
     );
     return '$_temp0';
   }
@@ -3971,7 +3948,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: 'সজ্ঞী $count অর্ধ-ধাপ',
       one: 'সজ্ঞী $count অর্ধ-ধাপ',
-      zero: 'সজ্ঞী $count অর্ধ-ধাপ',
     );
     return '$_temp0';
   }
@@ -3983,7 +3959,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: '$count টি ব্লান্ডার',
       one: '$count টি ব্লান্ডার',
-      zero: '$count টি ব্লান্ডার',
     );
     return '$_temp0';
   }
@@ -3995,7 +3970,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: '$countটি ভূল',
       one: '$countটি ভূল',
-      zero: '$countটি ভূল',
     );
     return '$_temp0';
   }
@@ -4007,7 +3981,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: '$countটি অনিপুণতা',
       one: '$countটি অনিপুণতা',
-      zero: '$countটি অনিপুণতা',
     );
     return '$_temp0';
   }
@@ -4019,7 +3992,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: '$count জন খেলোয়াড়',
       one: '$count জন খেলোয়াড়',
-      zero: '$count জন খেলোয়াড়',
     );
     return '$_temp0';
   }
@@ -4031,7 +4003,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: '$count টি খেলা',
       one: '$count টি খেলা',
-      zero: '$count টি খেলা',
     );
     return '$_temp0';
   }
@@ -4043,7 +4014,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: '$count রেটিং $param2 গেমের উপরে',
       one: '$count রেটিং $param2 গেমের উপরে',
-      zero: '$count রেটিং $param2 গেমের উপরে',
     );
     return '$_temp0';
   }
@@ -4055,7 +4025,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: '$count টি বুকমার্ক',
       one: '$count টি বুকমার্ক',
-      zero: '$count টি বুকমার্ক',
     );
     return '$_temp0';
   }
@@ -4067,7 +4036,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: '$count দিনগুলো',
       one: '$count দিন',
-      zero: '$count দিন',
     );
     return '$_temp0';
   }
@@ -4079,7 +4047,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: '$count ঘন্টা',
       one: '$count ঘন্টা',
-      zero: '$count ঘন্টা',
     );
     return '$_temp0';
   }
@@ -4091,7 +4058,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: '$count মিনিট',
       one: '$count মিনিট',
-      zero: '$count মিনিট',
     );
     return '$_temp0';
   }
@@ -4103,7 +4069,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: 'আপনার অনুক্রম প্রতি $count মিনিট পরপর আপডেট করা হয়।',
       one: 'আপনার অনুক্রম প্রতি মিনিট পরপর আপডেট করা হয়।',
-      zero: 'আপনার অনুক্রম প্রতি মিনিট পরপর আপডেট করা হয়।',
     );
     return '$_temp0';
   }
@@ -4115,7 +4080,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: '$count ধাঁধা',
       one: '$count ধাঁধা',
-      zero: '$count ধাঁধা',
     );
     return '$_temp0';
   }
@@ -4127,7 +4091,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: '$count টি খেলা আপনার সঙ্গে',
       one: '$count টি খেলা আপনার সঙ্গে',
-      zero: '$count টি খেলা আপনার সঙ্গে',
     );
     return '$_temp0';
   }
@@ -4139,7 +4102,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: '$count অনুপাত',
       one: '$count অনুপাত',
-      zero: '$count অনুপাত',
     );
     return '$_temp0';
   }
@@ -4151,7 +4113,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: '$count টি জয়',
       one: '$count টি জয়',
-      zero: '$count টি জয়',
     );
     return '$_temp0';
   }
@@ -4163,7 +4124,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: '$count টি পরাজয়',
       one: '$count টি পরাজয়',
-      zero: '$count টি পরাজয়',
     );
     return '$_temp0';
   }
@@ -4175,7 +4135,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: '$count টি ড্র',
       one: '$count টি ড্র',
-      zero: '$count টি ড্র',
     );
     return '$_temp0';
   }
@@ -4187,7 +4146,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: '$count খেলছে',
       one: '$count খেলছে',
-      zero: '$count খেলছে',
     );
     return '$_temp0';
   }
@@ -4199,7 +4157,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: '$count সেকেন্ড দিন',
       one: '$count সেকেন্ড দিন',
-      zero: '$count সেকেন্ড দিন',
     );
     return '$_temp0';
   }
@@ -4211,7 +4168,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: '$count ক্রীড়া-প্রতিযোগিতা অনুপাতগুলো',
       one: '$count ক্রীড়া-প্রতিযোগিতা অনুপাত',
-      zero: '$count ক্রীড়া-প্রতিযোগিতা অনুপাত',
     );
     return '$_temp0';
   }
@@ -4223,7 +4179,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: '$count অধ্যায়নগুলি',
       one: '$count অধ্যায়ন',
-      zero: '$count অধ্যায়ন',
     );
     return '$_temp0';
   }
@@ -4235,7 +4190,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: '$count শিমুলগুলো',
       one: '$count শিমুল',
-      zero: '$count শিমুল',
     );
     return '$_temp0';
   }
@@ -4247,7 +4201,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: '≥ $count খেলার অনুপাতগুলো',
       one: '≥ $count খেলার অনুপাত',
-      zero: '≥ $count খেলার অনুপাত',
     );
     return '$_temp0';
   }
@@ -4259,7 +4212,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: '≥ $count $param2 খেলার অনুপাতগুলো',
       one: '≥ $count $param2 খেলার অনুপাত',
-      zero: '≥ $count $param2 খেলার অনুপাত',
     );
     return '$_temp0';
   }
@@ -4271,7 +4223,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: 'আপনার খেলার প্রয়োজন $count আরো $param2 খেলার অনুপাত',
       one: 'আপনার খেলার প্রয়োজন $count আরো $param2 খেলার অনুপাত',
-      zero: 'আপনার খেলার প্রয়োজন $count আরো $param2 খেলার অনুপাত',
     );
     return '$_temp0';
   }
@@ -4283,7 +4234,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: 'আপনার খেলার প্রয়োজন $count আরো অনুপাদিত খেলা',
       one: 'আপনার খেলার প্রয়োজন $count আরো অনুপাদিত খেলা',
-      zero: 'আপনার খেলার প্রয়োজন $count আরো অনুপাদিত খেলা',
     );
     return '$_temp0';
   }
@@ -4295,7 +4245,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: '$count টি আমদানীকৃত খেলা',
       one: '$count টি আমদানীকৃত খেলা',
-      zero: '$count টি আমদানীকৃত খেলা',
     );
     return '$_temp0';
   }
@@ -4307,7 +4256,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: '$count বন্ধুরা অনলাইনে রয়েছেন',
       one: '$count বন্ধু অনলাইনে রয়েছেন',
-      zero: '$count বন্ধু অনলাইনে রয়েছেন',
     );
     return '$_temp0';
   }
@@ -4319,7 +4267,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: '$count অনুসরণকারী',
       one: '$count অনুসরণকারী',
-      zero: '$count অনুসরণকারী',
     );
     return '$_temp0';
   }
@@ -4331,7 +4278,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: '$count অনুসরণ করছেন',
       one: '$count অনুসরণ করছেন',
-      zero: '$count অনুসরণ করছেন',
     );
     return '$_temp0';
   }
@@ -4343,7 +4289,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: '$count মিনিটের কম সময়ে',
       one: '$count মিনিটের কম সময়ে',
-      zero: '$count মিনিটের কম সময়ে',
     );
     return '$_temp0';
   }
@@ -4355,7 +4300,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: '$count খেলা চলছে',
       one: '$count খেলা চলছে',
-      zero: '$count খেলা চলছে',
     );
     return '$_temp0';
   }
@@ -4367,7 +4311,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: 'সর্বোচ্চ: $count টি অক্ষর',
       one: 'সর্বোচ্চ: $count টি অক্ষর',
-      zero: 'সর্বোচ্চ: $count টি অক্ষর',
     );
     return '$_temp0';
   }
@@ -4379,7 +4322,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: '$count বাধা',
       one: '$count বাধা',
-      zero: '$count বাধা',
     );
     return '$_temp0';
   }
@@ -4391,7 +4333,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: '$count ফোরাম পোষ্ট',
       one: '$count ফোরাম পোষ্ট',
-      zero: '$count ফোরাম পোষ্ট',
     );
     return '$_temp0';
   }
@@ -4403,7 +4344,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: '$count $param2 খেলোয়াড়গুলো এই সপ্তাহের.',
       one: '$count $param2 খেলোয়াড় এই সপ্তাহের.',
-      zero: '$count $param2 খেলোয়াড় এই সপ্তাহের.',
     );
     return '$_temp0';
   }
@@ -4415,7 +4355,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: 'প্রাপ্য $count ভাষা সমূহ!',
       one: 'প্রাপ্য $count ভাষা!',
-      zero: 'প্রাপ্য $count ভাষা!',
     );
     return '$_temp0';
   }
@@ -4427,7 +4366,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: '$count সেকেন্ডে খেলার প্রথম চাল',
       one: '$count সেকেন্ডে খেলার প্রথম চাল',
-      zero: '$count সেকেন্ডে খেলার প্রথম চাল',
     );
     return '$_temp0';
   }
@@ -4439,7 +4377,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: '$count সেকেন্ড',
       one: '$count সেকেন্ড',
-      zero: '$count সেকেন্ড',
     );
     return '$_temp0';
   }
@@ -4451,7 +4388,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: 'এবং সংরক্ষন $count পুনারয়চাল রেখা',
       one: 'এবং সংরক্ষন $count পুনারয়চাল রেখা',
-      zero: 'এবং সংরক্ষন $count পুনারয়চাল রেখা',
     );
     return '$_temp0';
   }
@@ -4622,7 +4558,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: '$count দউর',
       one: '১ দউর',
-      zero: '১ দউর',
     );
     return '$_temp0';
   }
@@ -4634,7 +4569,6 @@ class AppLocalizationsBn extends AppLocalizations {
       locale: localeName,
       other: 'Played $count runs of $param2',
       one: 'Played one run of $param2',
-      zero: 'Played one run of $param2',
     );
     return '$_temp0';
   }

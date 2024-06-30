@@ -30,7 +30,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: 'Skoazellet he/en deus lichess.org e-pad $count miz evel $param2',
       two: 'Skoazellet he/en deus lichess.org e-pad $count viz evel $param2',
       one: 'Skoazellet he/en deus lichess.org e-pad $count miz evel $param2',
-      zero: 'Skoazellet he/en deus lichess.org e-pad $count miz evel $param2',
     );
     return '$_temp0';
   }
@@ -45,7 +44,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: 'Pleustret he/en deus war $count lec\'hiadur e $param2',
       two: 'Pleustret he/en deus war $count lec\'hiadur e $param2',
       one: 'Pleustret he/en deus war $count lec\'hiadur e $param2',
-      zero: 'Pleustret he/en deus war $count lec\'hiadur e $param2',
     );
     return '$_temp0';
   }
@@ -60,7 +58,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: 'Dirouestlet he/en deus $count poelladenn strategiezh',
       two: 'Dirouestlet he/en deus $count boelladenn strategiezh',
       one: 'Dirouestlet he/en deus $count boelladenn strategiezh',
-      zero: 'Dirouestlet he/en deus $count boelladenn strategiezh',
     );
     return '$_temp0';
   }
@@ -75,7 +72,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: '$count krogad $param2 c\'hoariet',
       two: '$count grogad $param2 c\'hoariet',
       one: '$count c\'hrogad $param2 c\'hoariet',
-      zero: '$count c\'hrogad $param2 c\'hoariet',
     );
     return '$_temp0';
   }
@@ -90,7 +86,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: '$count kemennadenn e $param2 zo bet skrivet ganti/gantañ',
       two: '$count gemennadenn e $param2 zo bet skrivet ganti/gantañ',
       one: '$count gemennadenn e $param2 zo bet skrivet ganti/gantañ',
-      zero: '$count gemennadenn e $param2 zo bet skrivet ganti/gantañ',
     );
     return '$_temp0';
   }
@@ -105,7 +100,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: 'C\'hoariet he/en deus $count fiñvadenn',
       two: 'C\'hoariet he/en deus $count fiñvadenn',
       one: 'C\'hoariet he/en deus $count fiñvadenn',
-      zero: 'C\'hoariet he/en deus $count fiñvadenn',
     );
     return '$_temp0';
   }
@@ -120,7 +114,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: 'e $count krogad a-bell',
       two: 'e $count grogad a-bell',
       one: 'en $count c\'hrogad a-bell',
-      zero: 'en $count c\'hrogad a-bell',
     );
     return '$_temp0';
   }
@@ -135,7 +128,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: '$count krogad a-bell echuet',
       two: '$count grogad a-bell echuet',
       one: '$count c\'hrogad a-bell echuet',
-      zero: '$count c\'hrogad a-bell echuet',
     );
     return '$_temp0';
   }
@@ -150,7 +142,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: 'Krog eo da heuliañ $count c\'hoarier',
       two: 'Krog eo da heuliañ $count c\'hoarier',
       one: 'Krog eo da heuliañ $count c\'hoarier',
-      zero: 'Krog eo da heuliañ $count c\'hoarier',
     );
     return '$_temp0';
   }
@@ -165,7 +156,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: '$count heulier nevez',
       two: '$count heulier nevez',
       one: '$count heulier nevez',
-      zero: '$count heulier nevez',
     );
     return '$_temp0';
   }
@@ -180,7 +170,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: 'Roet bod da $count abadenn gempred',
       two: 'Roet bod da $count abadenn gempred',
       one: 'Roet bod d\' $count abadenn gempred',
-      zero: 'Roet bod d\' $count abadenn gempred',
     );
     return '$_temp0';
   }
@@ -195,7 +184,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: 'Kemeret perzh e $count abadenn gempred',
       two: 'Kemeret perzh e $count abadenn gempred',
       one: 'Kemeret perzh en $count abadenn gempred',
-      zero: 'Kemeret perzh en $count abadenn gempred',
     );
     return '$_temp0';
   }
@@ -210,7 +198,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: 'Krouet $count studiadenn gantañ',
       two: 'Krouet $count studiadenn gantañ',
       one: 'Krouet $count studiadenn gantañ',
-      zero: 'Krouet $count studiadenn gantañ',
     );
     return '$_temp0';
   }
@@ -225,7 +212,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: 'Kemeret he/en deus perzh e $count tournamant',
       two: 'Kemeret he/en deus perzh e $count dournamant',
       one: 'Kemeret he/en deus perzh en $count tournamant',
-      zero: 'Kemeret he/en deus perzh en $count tournamant',
     );
     return '$_temp0';
   }
@@ -240,7 +226,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: 'Renket #$count (to$param2%) gant $param3 krogad e $param4',
       two: 'Renket #$count (to$param2%) gant $param3 grogad e $param4',
       one: 'Renket #$count (to$param2%) gant $param3 c\'hrogad e $param4',
-      zero: 'Renket #$count (to$param2%) gant $param3 c\'hrogad e $param4',
     );
     return '$_temp0';
   }
@@ -255,7 +240,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: 'Kemeret he/en deus perzh e $count tournamant suis',
       two: 'Kemeret he/en deus perzh e $count tournamant suis',
       one: 'Kemeret he/en deus perzh e $count tournamant suis',
-      zero: 'Kemeret he/en deus perzh e $count tournamant suis',
     );
     return '$_temp0';
   }
@@ -270,7 +254,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: 'Ezel eus $count skipailh',
       two: 'Ezel eus $count skipailh',
       one: 'Ezel eus $count skipailh',
-      zero: 'Ezel eus $count skipailh',
     );
     return '$_temp0';
   }
@@ -917,7 +900,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: 'C\'hoariet $count gwech',
       two: 'C\'hoariet $count wech',
       one: 'C\'hoariet $count wech',
-      zero: 'C\'hoariet $count wech',
     );
     return '$_temp0';
   }
@@ -929,7 +911,6 @@ class AppLocalizationsBr extends AppLocalizations {
       locale: localeName,
       other: '$count points below your puzzle rating',
       one: 'One point below your puzzle rating',
-      zero: 'One point below your puzzle rating',
     );
     return '$_temp0';
   }
@@ -941,7 +922,6 @@ class AppLocalizationsBr extends AppLocalizations {
       locale: localeName,
       other: '$count points above your puzzle rating',
       one: 'One point above your puzzle rating',
-      zero: 'One point above your puzzle rating',
     );
     return '$_temp0';
   }
@@ -4012,7 +3992,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: 'Hoc\'h enebourien o deus kuitaet ar c\'hrogad. Gallout a reoc\'h goulenn bezañ trec\'h a-benn $count eilenn.',
       two: 'Hoc\'h enebour en deus kuitaet ar c\'hrogad. Gallout a reoc\'h goulenn bezañ trec\'h a-benn $count eilenn.',
       one: 'Hoc\'h enebour en deus kuitaet ar c\'hrogad. Gallout a reoc\'h goulenn bezañ trec\'h a-benn $count eilenn.',
-      zero: 'Hoc\'h enebour en deus kuitaet ar c\'hrogad. Gallout a reoc\'h goulenn bezañ trec\'h a-benn $count eilenn.',
     );
     return '$_temp0';
   }
@@ -4027,7 +4006,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: 'Lamm d\'ar roue goude $count hanter-fiñvadenn',
       two: 'Lamm d\'ar roue goude $count hanter-fiñvadenn',
       one: 'Lamm d\'ar roue goude $count hanter-fiñvadenn',
-      zero: 'Lamm d\'ar roue goude $count hanter-fiñvadenn',
     );
     return '$_temp0';
   }
@@ -4042,7 +4020,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: '$count bourd',
       two: '$count vourd',
       one: '$count bourd',
-      zero: '$count bourd',
     );
     return '$_temp0';
   }
@@ -4057,7 +4034,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: '$count fazi',
       two: '$count fazi',
       one: '$count fazi',
-      zero: '$count fazi',
     );
     return '$_temp0';
   }
@@ -4072,7 +4048,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: '$count diresisted',
       two: '$count ziresisted',
       one: '$count diresisted',
-      zero: '$count diresisted',
     );
     return '$_temp0';
   }
@@ -4087,7 +4062,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: '$count c\'hoarier',
       two: '$count c\'hoarier',
       one: '$count c\'hoarier',
-      zero: '$count c\'hoarier',
     );
     return '$_temp0';
   }
@@ -4102,7 +4076,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: '$count krogad',
       two: '$count grogad',
       one: '$count c\'hrogad',
-      zero: '$count c\'hrogad',
     );
     return '$_temp0';
   }
@@ -4117,7 +4090,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: 'Renkadur $count diwar $param2 c\'h/krogad',
       two: 'Renkadur $count diwar $param2 grogad',
       one: 'Renkadur $count diwar $param2 c\'hrogad',
-      zero: 'Renkadur $count diwar $param2 c\'hrogad',
     );
     return '$_temp0';
   }
@@ -4132,7 +4104,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: '$count er roll-istor',
       two: '$count er roll-istor',
       one: '$count er roll-istor',
-      zero: '$count er roll-istor',
     );
     return '$_temp0';
   }
@@ -4147,7 +4118,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: '$count deiz',
       two: '$count zeiz',
       one: '$count deiz',
-      zero: '$count deiz',
     );
     return '$_temp0';
   }
@@ -4162,7 +4132,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: '$count eur',
       two: '$count eur',
       one: '$count eur',
-      zero: '$count eur',
     );
     return '$_temp0';
   }
@@ -4177,7 +4146,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: '$count munutenn',
       two: '$count vunutenn',
       one: '$count vunutenn',
-      zero: '$count vunutenn',
     );
     return '$_temp0';
   }
@@ -4192,7 +4160,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: 'Bep $count munutenn e vez hizivaet ar renkadur',
       two: 'Bep $count vunutenn e vez hizivaet ar renkadur',
       one: 'Bep munutenn e vez hizivaet ar renkadur',
-      zero: 'Bep munutenn e vez hizivaet ar renkadur',
     );
     return '$_temp0';
   }
@@ -4207,7 +4174,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: '$count poelladennoù',
       two: '$count boelladenn',
       one: '$count poelladenn taktik',
-      zero: '$count poelladenn taktik',
     );
     return '$_temp0';
   }
@@ -4222,7 +4188,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: '$count krogad a-enep deoc\'h',
       two: '$count grogad a-enep deoc\'h',
       one: '$count c\'hrogad a-enep deoc\'h',
-      zero: '$count c\'hrogad a-enep deoc\'h',
     );
     return '$_temp0';
   }
@@ -4237,7 +4202,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: '$count c\'hoari renket',
       two: '$count c\'hoari renket',
       one: '$count c\'hoari renket',
-      zero: '$count c\'hoari renket',
     );
     return '$_temp0';
   }
@@ -4252,7 +4216,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: '$count trec\'h',
       two: '$count drec\'h',
       one: '$count trec\'h',
-      zero: '$count trec\'h',
     );
     return '$_temp0';
   }
@@ -4267,7 +4230,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: '$count koll',
       two: '$count goll',
       one: '$count c\'holl',
-      zero: '$count c\'holl',
     );
     return '$_temp0';
   }
@@ -4282,7 +4244,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: '$count rampo',
       two: '$count rampo',
       one: '$count rampo',
-      zero: '$count rampo',
     );
     return '$_temp0';
   }
@@ -4297,7 +4258,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: '$count o c\'hoari',
       two: '$count o c\'hoari',
       one: '$count o c\'hoari',
-      zero: '$count o c\'hoari',
     );
     return '$_temp0';
   }
@@ -4312,7 +4272,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: 'Reiñ $count eilenn',
       two: 'Reiñ $count eilenn',
       one: 'Reiñ $count eilenn',
-      zero: 'Reiñ $count eilenn',
     );
     return '$_temp0';
   }
@@ -4327,7 +4286,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: '$count poent tournamant',
       two: '$count boent tournamant',
       one: '$count poent tournamant',
-      zero: '$count poent tournamant',
     );
     return '$_temp0';
   }
@@ -4342,7 +4300,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: '$count studiadenn',
       two: '$count studiadenn',
       one: '$count studiadenn',
-      zero: '$count studiadenn',
     );
     return '$_temp0';
   }
@@ -4354,7 +4311,6 @@ class AppLocalizationsBr extends AppLocalizations {
       locale: localeName,
       other: '$count simuls',
       one: '$count simul',
-      zero: '$count simul',
     );
     return '$_temp0';
   }
@@ -4369,7 +4325,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: '≥ $count krogad renket',
       two: '≥ $count grogad renket',
       one: '≥ $count c\'hrogad renket',
-      zero: '≥ $count c\'hrogad renket',
     );
     return '$_temp0';
   }
@@ -4384,7 +4339,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: '≥ $count krogad $param2 renket',
       two: '≥ $count grogad $param2 renket',
       one: '≥ $count c\'hrogad $param2 renket',
-      zero: '≥ $count c\'hrogad $param2 renket',
     );
     return '$_temp0';
   }
@@ -4399,7 +4353,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: 'Ret eo deoc\'h kemer perzh e $count krogad $param2 renket ouzhpenn',
       two: 'Ret eo deoc\'h kemer perzh e $count grogad $param2 renket ouzhpenn',
       one: 'Ret eo deoc\'h kemer perzh en $count c\'hrogad $param2 renket ouzhpenn',
-      zero: 'Ret eo deoc\'h kemer perzh en $count c\'hrogad $param2 renket ouzhpenn',
     );
     return '$_temp0';
   }
@@ -4414,7 +4367,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: 'Ret eo deoc\'h kemer perzh e $count krogad renket ouzhpenn',
       two: 'Ret eo deoc\'h kemer perzh e $count grogad renket ouzhpenn',
       one: 'Ret eo deoc\'h kemer perzh en $count c\'hrogad renket ouzhpenn',
-      zero: 'Ret eo deoc\'h kemer perzh en $count c\'hrogad renket ouzhpenn',
     );
     return '$_temp0';
   }
@@ -4429,7 +4381,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: '$count krogad enporzhiet',
       two: '$count grogad enporzhiet',
       one: '$count c\'hrogad enporzhiet',
-      zero: '$count c\'hrogad enporzhiet',
     );
     return '$_temp0';
   }
@@ -4444,7 +4395,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: '$count mignon enlinenn',
       two: '$count vignon enlinenn',
       one: '$count mignon enlinenn',
-      zero: '$count mignon enlinenn',
     );
     return '$_temp0';
   }
@@ -4459,7 +4409,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: '$count den o heuliañ',
       two: '$count zen o heuliañ',
       one: '$count den o heuliañ',
-      zero: '$count den o heuliañ',
     );
     return '$_temp0';
   }
@@ -4474,7 +4423,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: 'O heuliañ $count c\'hoarier',
       two: 'O heuliañ $count c\'hoarier',
       one: 'O heuliañ $count c\'hoarier',
-      zero: 'O heuliañ $count c\'hoarier',
     );
     return '$_temp0';
   }
@@ -4489,7 +4437,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: 'Nebeutoc\'h evit $count munutenn',
       two: 'Nebeutoc\'h evit $count vunutenn',
       one: 'Nebeutoc\'h evit $count vunutenn',
-      zero: 'Nebeutoc\'h evit $count vunutenn',
     );
     return '$_temp0';
   }
@@ -4504,7 +4451,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: '$count krogad o ren bremañ',
       two: '$count grogad o ren bremañ',
       one: '$count c\'hrogad o ren bremañ',
-      zero: '$count c\'hrogad o ren bremañ',
     );
     return '$_temp0';
   }
@@ -4519,7 +4465,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: 'Hirder brasañ: $count arouezenn.',
       two: 'Hirder brasañ: $count arouezenn.',
       one: 'Hirder brasañ : $count arouezenn.',
-      zero: 'Hirder brasañ : $count arouezenn.',
     );
     return '$_temp0';
   }
@@ -4534,7 +4479,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: '$count stanket',
       two: '$count stanket',
       one: '$count stanket',
-      zero: '$count stanket',
     );
     return '$_temp0';
   }
@@ -4549,7 +4493,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: '$count kemennadenn er forom',
       two: '$count gemennadenn er forom',
       one: '$count gemennadenn er forom',
-      zero: '$count gemennadenn er forom',
     );
     return '$_temp0';
   }
@@ -4564,7 +4507,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: '$count c\'hoarier $param2 ar sizhun-mañ.',
       two: '$count c\'hoarier $param2 ar sizhun-mañ.',
       one: '$count c\'hoarier $param2 ar sizhun-mañ.',
-      zero: '$count c\'hoarier $param2 ar sizhun-mañ.',
     );
     return '$_temp0';
   }
@@ -4579,7 +4521,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: 'Gallout a reer dibab etre $count yezh!',
       two: 'Gallout a reer dibab etre $count yezh!',
       one: 'Gallout a reer dibab etre $count yezh!',
-      zero: 'Gallout a reer dibab etre $count yezh!',
     );
     return '$_temp0';
   }
@@ -4594,7 +4535,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: '$count eilenn evit fiñval ho pezh kentañ c\'hoazh',
       two: '$count eilenn evit fiñval ho pezh kentañ c\'hoazh',
       one: '$count eilenn evit fiñval ho pezh kentañ c\'hoazh',
-      zero: '$count eilenn evit fiñval ho pezh kentañ c\'hoazh',
     );
     return '$_temp0';
   }
@@ -4609,7 +4549,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: '$count eilenn',
       two: '$count eilenn',
       one: '$count eilenn',
-      zero: '$count eilenn',
     );
     return '$_temp0';
   }
@@ -4624,7 +4563,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: 'hag enrollit $count linennoù raktaolioù',
       two: 'hag enrollit $count linenn raktaolioù',
       one: 'hag enrollit $count linenn raktaolioù',
-      zero: 'hag enrollit $count linenn raktaolioù',
     );
     return '$_temp0';
   }
@@ -4798,7 +4736,6 @@ class AppLocalizationsBr extends AppLocalizations {
       few: '$count frapad',
       two: '$count frapad',
       one: '1 frapad',
-      zero: '1 frapad',
     );
     return '$_temp0';
   }
@@ -4810,7 +4747,6 @@ class AppLocalizationsBr extends AppLocalizations {
       locale: localeName,
       other: 'Played $count runs of $param2',
       one: 'Played one run of $param2',
-      zero: 'Played one run of $param2',
     );
     return '$_temp0';
   }

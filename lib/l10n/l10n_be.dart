@@ -29,7 +29,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: 'Падтрымаў lichess.org на $count месяцаў як $param2',
       few: 'Падтрымаў lichess.org на $count месяцы як $param2',
       one: 'Падтрымаў lichess.org на $count месяц як $param2',
-      zero: 'Падтрымаў lichess.org на $count месяц як $param2',
     );
     return '$_temp0';
   }
@@ -43,7 +42,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: 'Практыкаваны пазіцыі $count у $param2',
       few: 'Практыкаваны пазіцыі $count у $param2',
       one: 'Практыкавана пазіцыя $count у $param2',
-      zero: 'Практыкавана пазіцыя $count у $param2',
     );
     return '$_temp0';
   }
@@ -57,7 +55,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: 'Вырашана $count задач',
       few: 'Вырашана $count задач',
       one: 'Вырашана $count задача',
-      zero: 'Вырашана $count задача',
     );
     return '$_temp0';
   }
@@ -71,7 +68,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: 'Згуляна $count гульняў у $param2',
       few: 'Згуляна $count гульняў у $param2',
       one: 'Згуляна $count гульня ў $param2',
-      zero: 'Згуляна $count гульня ў $param2',
     );
     return '$_temp0';
   }
@@ -85,7 +81,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: 'Апублікавана $count паведамленняў у $param2',
       few: 'Апублікавана $count паведамленняў у $param2',
       one: 'Апублікавана $count паведамленне ў $param2',
-      zero: 'Апублікавана $count паведамленне ў $param2',
     );
     return '$_temp0';
   }
@@ -99,7 +94,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: 'Згуляна $count хадоў',
       few: 'Згуляна $count хады',
       one: 'Згуляны $count ход',
-      zero: 'Згуляны $count ход',
     );
     return '$_temp0';
   }
@@ -113,7 +107,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: 'у $count гульнях па ліставанні',
       few: 'у $count гульнях па ліставанні',
       one: 'у $count гульні па ліставанні',
-      zero: 'у $count гульні па ліставанні',
     );
     return '$_temp0';
   }
@@ -127,7 +120,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: 'Згуляна $count гульняў па ліставанні',
       few: 'Згуляна $count гульні па ліставанні',
       one: 'Згуляна $count гульня па ліставанні',
-      zero: 'Згуляна $count гульня па ліставанні',
     );
     return '$_temp0';
   }
@@ -141,7 +133,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: 'Падпісаўся на $count гульцоў',
       few: 'Падпісаўся на $count гульцоў',
       one: 'Падпісаўся на $count гульца',
-      zero: 'Падпісаўся на $count гульца',
     );
     return '$_temp0';
   }
@@ -155,7 +146,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: '$count новых падпісчыкаў',
       few: '$count новых падпісчыкі',
       one: '$count новы падпісчык',
-      zero: '$count новы падпісчык',
     );
     return '$_temp0';
   }
@@ -169,7 +159,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: 'Правёў $count сеансаў адначасовай гульні',
       few: 'Правёў $count сеансы адначасовай гульні',
       one: 'Правёў $count сеанс адначасовай гульні',
-      zero: 'Правёў $count сеанс адначасовай гульні',
     );
     return '$_temp0';
   }
@@ -183,7 +172,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: 'Браў удзел у $count сеансах адначасовай гульні',
       few: 'Браў удзел у $count сеансах адначасовай гульні',
       one: 'Браў удзел у $count сеансе адначасовай гульні',
-      zero: 'Браў удзел у $count сеансе адначасовай гульні',
     );
     return '$_temp0';
   }
@@ -197,7 +185,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: 'Стварыў $count новых даследаванняў',
       few: 'Стварыў $count новыя даследаванні',
       one: 'Стварыў $count новае даследаванне',
-      zero: 'Стварыў $count новае даследаванне',
     );
     return '$_temp0';
   }
@@ -211,7 +198,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: 'Паўдзельнічаў у $count турнірах',
       few: 'Паўдзельнічаў у $count турнірах',
       one: 'Паўдзельнічаў у $count турніры',
-      zero: 'Паўдзельнічаў у $count турніры',
     );
     return '$_temp0';
   }
@@ -225,7 +211,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: 'Заняў $count месца (лепшыя $param2%) турніру $param4, узяўшы ўдзел у $param3 гульнях',
       few: 'Заняў $count месца (лепшыя $param2%) турніру $param4, узяўшы ўдзел у $param3 гульнях',
       one: 'Заняў $count месца (лепшыя $param2%) турніру $param4, узяўшы ўдзел у $param3 гульні',
-      zero: 'Заняў $count месца (лепшыя $param2%) турніру $param4, узяўшы ўдзел у $param3 гульні',
     );
     return '$_temp0';
   }
@@ -239,7 +224,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: 'Паўдзельнічаў(-ла) у $count турнірах па швейцырскай сістэме',
       few: 'Паўдзельнічаў(-ла) у $count турнірах па швейцырскай сістэме',
       one: 'Паўдзельнічаў(-ла) у $count турніры па швейцарскай сістэме',
-      zero: 'Паўдзельнічаў(-ла) у $count турніры па швейцарскай сістэме',
     );
     return '$_temp0';
   }
@@ -253,7 +237,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: 'Далучыўся да $count каманд',
       few: 'Далучыўся да $count каманд',
       one: 'Далучыўся да $count каманды',
-      zero: 'Далучыўся да $count каманды',
     );
     return '$_temp0';
   }
@@ -899,7 +882,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: 'Згуляна $count разоў',
       few: 'Згуляна $count разы',
       one: 'Згуляна $count раз',
-      zero: 'Згуляна $count раз',
     );
     return '$_temp0';
   }
@@ -913,7 +895,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: '$count балаў менш за ваш рэйтынг задач',
       few: '$count бала менш за ваш рэйтынг задач',
       one: 'Адзін бал менш за ваш рэйтынг задач',
-      zero: 'Адзін бал менш за ваш рэйтынг задач',
     );
     return '$_temp0';
   }
@@ -927,7 +908,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: '$count балаў вышэй за ваш рэйтынг задач',
       few: '$count бала вышэй за ваш рэйтынг задач',
       one: 'Адзін бал вышэй за ваш рэйтынг задач',
-      zero: 'Адзін бал вышэй за ваш рэйтынг задач',
     );
     return '$_temp0';
   }
@@ -941,7 +921,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: '$count вырашана',
       few: '$count вырашаны',
       one: '$count вырашана',
-      zero: '$count вырашана',
     );
     return '$_temp0';
   }
@@ -955,7 +934,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: '$count перарашаць',
       few: '$count перарашаць',
       one: '$count перарашаць',
-      zero: '$count перарашаць',
     );
     return '$_temp0';
   }
@@ -4005,7 +3983,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: 'Ваш супернік пакінуў гульню. Вы можаце абвясціць перамогу праз $count секунд.',
       few: 'Ваш сапернік пакінуў гульню. Вы можаце абвясціць перамогу праз $count секунд(у,ы).',
       one: 'Ваш сапернік пакінуў гульню. Вы можаце абвясціць перамогу праз $count секунды.',
-      zero: 'Ваш сапернік пакінуў гульню. Вы можаце абвясціць перамогу праз $count секунды.',
     );
     return '$_temp0';
   }
@@ -4019,7 +3996,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: 'Мат за $count паўхадоў',
       few: 'Мат за $count паўхады',
       one: 'Мат за $count паўхадоў',
-      zero: 'Мат за $count паўхадоў',
     );
     return '$_temp0';
   }
@@ -4033,7 +4009,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: '$count позехаў',
       few: '$count позеха',
       one: '$count позех',
-      zero: '$count позех',
     );
     return '$_temp0';
   }
@@ -4047,7 +4022,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: '$count памылак',
       few: '$count памылкі',
       one: '$count памылка',
-      zero: '$count памылка',
     );
     return '$_temp0';
   }
@@ -4061,7 +4035,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: '$count недакладнасцяў',
       few: '$count недакладнасці',
       one: '$count недакладнасць',
-      zero: '$count недакладнасць',
     );
     return '$_temp0';
   }
@@ -4075,7 +4048,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: '$count гульцоў',
       few: '$count гульцы',
       one: '$count гулец',
-      zero: '$count гулец',
     );
     return '$_temp0';
   }
@@ -4089,7 +4061,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: '$count гульняў',
       few: '$count гульні',
       one: '$count гульня',
-      zero: '$count гульня',
     );
     return '$_temp0';
   }
@@ -4101,7 +4072,6 @@ class AppLocalizationsBe extends AppLocalizations {
       locale: localeName,
       other: '$count rating over $param2 games',
       one: '$count rating over $param2 game',
-      zero: '$count rating over $param2 game',
     );
     return '$_temp0';
   }
@@ -4115,7 +4085,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: '$count закладак',
       few: '$count закладкі',
       one: '$count закладка',
-      zero: '$count закладка',
     );
     return '$_temp0';
   }
@@ -4129,7 +4098,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: '$count дзён',
       few: '$count дні',
       one: '$count дзень',
-      zero: '$count дзень',
     );
     return '$_temp0';
   }
@@ -4143,7 +4111,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: '$count гадзін',
       few: '$count гадзіны',
       one: '$count гадзіна',
-      zero: '$count гадзіна',
     );
     return '$_temp0';
   }
@@ -4157,7 +4124,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: '$count хвілін',
       few: '$count хвіліны',
       one: '$count хвіліна',
-      zero: '$count хвіліна',
     );
     return '$_temp0';
   }
@@ -4171,7 +4137,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: 'Рэйтынг абнаўляецца кожныя $count хвілін',
       few: 'Рэйтынг абнаўляецца кожныя $count хвіліны',
       one: 'Рэйтынг абнаўляецца кожную хвіліну',
-      zero: 'Рэйтынг абнаўляецца кожную хвіліну',
     );
     return '$_temp0';
   }
@@ -4185,7 +4150,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: '$count задач',
       few: '$count задачы',
       one: '$count задача',
-      zero: '$count задача',
     );
     return '$_temp0';
   }
@@ -4199,7 +4163,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: '$count партый з вамі',
       few: '$count партыі з вамі',
       one: '$count партыя з вамі',
-      zero: '$count партыя з вамі',
     );
     return '$_temp0';
   }
@@ -4213,7 +4176,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: '$count рэйтынгавых',
       few: '$count рэйтынгавыя',
       one: '$count рэйтынгавая',
-      zero: '$count рэйтынгавая',
     );
     return '$_temp0';
   }
@@ -4227,7 +4189,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: '$count перамог',
       few: '$count перамогі',
       one: '$count перамога',
-      zero: '$count перамога',
     );
     return '$_temp0';
   }
@@ -4241,7 +4202,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: '$count паразаў',
       few: '$count паразы',
       one: '$count параза',
-      zero: '$count параза',
     );
     return '$_temp0';
   }
@@ -4255,7 +4215,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: '$count унічыю',
       few: '$count унічыю',
       one: '$count унічыю',
-      zero: '$count унічыю',
     );
     return '$_temp0';
   }
@@ -4269,7 +4228,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: '$count у працэсе',
       few: '$count у працэсе',
       one: '$count у працэсе',
-      zero: '$count у працэсе',
     );
     return '$_temp0';
   }
@@ -4283,7 +4241,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: 'Даць $count секунд',
       few: 'Даць $count секунды',
       one: 'Даць $count секунду',
-      zero: 'Даць $count секунду',
     );
     return '$_temp0';
   }
@@ -4297,7 +4254,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: '$count турнірных балаў',
       few: '$count турнірныя балы',
       one: '$count турнірны бал',
-      zero: '$count турнірны бал',
     );
     return '$_temp0';
   }
@@ -4311,7 +4267,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: '$count навучанняў',
       few: '$count навучанні',
       one: '$count навучанне',
-      zero: '$count навучанне',
     );
     return '$_temp0';
   }
@@ -4323,7 +4278,6 @@ class AppLocalizationsBe extends AppLocalizations {
       locale: localeName,
       other: '$count simuls',
       one: '$count simul',
-      zero: '$count simul',
     );
     return '$_temp0';
   }
@@ -4337,7 +4291,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: '$count рэйтынгавых гульняў',
       few: '≥$count рэйтынгавыя гульні',
       one: '≥$count рэйтынгавая гульня',
-      zero: '≥$count рэйтынгавая гульня',
     );
     return '$_temp0';
   }
@@ -4351,7 +4304,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: '≥ $count рэйтынгавых гульняў ў рэжыме «$param2»',
       few: '≥ $count рэйтынгавыя гульні ў рэжыме «$param2»',
       one: '≥ $count рэйтынгавая гульня ў рэжыме «$param2»',
-      zero: '≥ $count рэйтынгавая гульня ў рэжыме «$param2»',
     );
     return '$_temp0';
   }
@@ -4365,7 +4317,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: 'Вы павінны згуляць яшчэ $count рэйтынгавых гульняў у рэжыме «$param2»',
       few: 'Вы павінны згуляць яшчэ $count рэйтынгавыя гульні ў рэжыме «$param2»',
       one: 'Вы павінны згуляць яшчэ $count рэйтынгавую гульню ў рэжыме «$param2»',
-      zero: 'Вы павінны згуляць яшчэ $count рэйтынгавую гульню ў рэжыме «$param2»',
     );
     return '$_temp0';
   }
@@ -4379,7 +4330,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: 'Вы павінны згуляць яшчэ $count рэйтынгавых гульняў',
       few: 'Вы павінны згуляць яшчэ $count рэйтынгавыя гульні',
       one: 'Вы павінны згуляць яшчэ $count рэйтынгавую гульню',
-      zero: 'Вы павінны згуляць яшчэ $count рэйтынгавую гульню',
     );
     return '$_temp0';
   }
@@ -4393,7 +4343,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: '$count імпартаваных гульняў',
       few: '$count імпартаваныя гульні',
       one: '$count імпартаваная гульня',
-      zero: '$count імпартаваная гульня',
     );
     return '$_temp0';
   }
@@ -4407,7 +4356,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: '$count сяброў у сетцы',
       few: '$count сябра ў сетцы',
       one: '$count сябар у сетцы',
-      zero: '$count сябар у сетцы',
     );
     return '$_temp0';
   }
@@ -4421,7 +4369,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: '$count падпісчыкаў',
       few: '$count падпісчыкі',
       one: '$count падпісчык',
-      zero: '$count падпісчык',
     );
     return '$_temp0';
   }
@@ -4435,7 +4382,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: 'падпісаны на $count гульцоў',
       few: 'падпісаны на $count гульцоў',
       one: 'падпісаны на $count гульца',
-      zero: 'падпісаны на $count гульца',
     );
     return '$_temp0';
   }
@@ -4449,7 +4395,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: 'Менш за $count хвілін',
       few: 'Менш за $count хвіліны',
       one: 'Менш за $count хвіліну',
-      zero: 'Менш за $count хвіліну',
     );
     return '$_temp0';
   }
@@ -4463,7 +4408,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: '$count бягучых гульняў',
       few: '$count бягучыя гульні',
       one: '$count бягучая гульня',
-      zero: '$count бягучая гульня',
     );
     return '$_temp0';
   }
@@ -4477,7 +4421,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: 'Максімум: $count сімвалаў.',
       few: 'Максімум: $count сімвалы.',
       one: 'Максімум: $count сімвал.',
-      zero: 'Максімум: $count сімвал.',
     );
     return '$_temp0';
   }
@@ -4491,7 +4434,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: '$count заблакіраваных гульцоў',
       few: '$count заблакіраваных гульцы',
       one: '$count заблакіраваны гулец',
-      zero: '$count заблакіраваны гулец',
     );
     return '$_temp0';
   }
@@ -4505,7 +4447,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: '$count допісаў на форуме',
       few: '$count допісы на форуме',
       one: '$count допіс на форуме',
-      zero: '$count допіс на форуме',
     );
     return '$_temp0';
   }
@@ -4519,7 +4460,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: '$count гульцоў у $param2 на гэтым тыдні.',
       few: '$count гульцы у $param2 на гэтым тыдні.',
       one: '$count гулец у $param2 на гэтым тыдні.',
-      zero: '$count гулец у $param2 на гэтым тыдні.',
     );
     return '$_temp0';
   }
@@ -4533,7 +4473,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: 'Даступна на $count мовах!',
       few: 'Даступна на $count мовах!',
       one: 'Даступна на $count мове!',
-      zero: 'Даступна на $count мове!',
     );
     return '$_temp0';
   }
@@ -4547,7 +4486,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: '$count секунд на першы ход',
       few: '$count секунды на першы ход',
       one: '$count секунда на першы ход',
-      zero: '$count секунда на першы ход',
     );
     return '$_temp0';
   }
@@ -4561,7 +4499,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: '$count секунд',
       few: '$count секунды',
       one: '$count секунда',
-      zero: '$count секунда',
     );
     return '$_temp0';
   }
@@ -4575,7 +4512,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: 'і захаваць $count паслядоўнасцяў',
       few: 'і захаваць $count паслядоўнасці',
       one: 'і захаваць $count паслядоўнасць',
-      zero: 'і захаваць $count паслядоўнасць',
     );
     return '$_temp0';
   }
@@ -4748,7 +4684,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: '$count спробаў',
       few: '$count спробы',
       one: '1 спроба',
-      zero: '1 спроба',
     );
     return '$_temp0';
   }
@@ -4762,7 +4697,6 @@ class AppLocalizationsBe extends AppLocalizations {
       many: 'Выкарастана $count з $param2 спробаў',
       few: 'Выкарастана $count з $param2 спроб',
       one: 'Выкарастана адна з $param2 спроб',
-      zero: 'Выкарастана адна з $param2 спроб',
     );
     return '$_temp0';
   }

@@ -29,7 +29,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: 'Підтримує lichess.org протягом $count місяців як $param2',
       few: 'Підтримує lichess.org протягом $count місяців як $param2',
       one: 'Підтримує lichess.org протягом $count місяця як $param2',
-      zero: 'Підтримує lichess.org протягом $count місяця як $param2',
     );
     return '$_temp0';
   }
@@ -43,7 +42,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: 'Виконано $count вправ в $param2',
       few: 'Виконано $count вправи в $param2',
       one: 'Виконано $count вправу в $param2',
-      zero: 'Виконано $count вправу в $param2',
     );
     return '$_temp0';
   }
@@ -57,7 +55,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: 'Вирішено $count тактичних задач',
       few: 'Вирішено $count тактичні задачі',
       one: 'Вирішено $count тактичну задачу',
-      zero: 'Вирішено $count тактичну задачу',
     );
     return '$_temp0';
   }
@@ -71,7 +68,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: 'Зіграно $count ігор в $param2',
       few: 'Зіграно $count гри в $param2',
       one: 'Зіграно $count гру в $param2',
-      zero: 'Зіграно $count гру в $param2',
     );
     return '$_temp0';
   }
@@ -85,7 +81,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: 'Опубліковано $count повідомлень в $param2',
       few: 'Опубліковано $count повідомлення в $param2',
       one: 'Опубліковано $count повідомлення в $param2',
-      zero: 'Опубліковано $count повідомлення в $param2',
     );
     return '$_temp0';
   }
@@ -99,7 +94,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: 'Зроблено $count ходів',
       few: 'Зроблено $count ходи',
       one: 'Зроблено $count хід',
-      zero: 'Зроблено $count хід',
     );
     return '$_temp0';
   }
@@ -113,7 +107,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: 'у $count заочних іграх',
       few: 'у $count заочних іграх',
       one: 'у $count заочній грі',
-      zero: 'у $count заочній грі',
     );
     return '$_temp0';
   }
@@ -127,7 +120,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: 'Зіграно $count заочних ігор',
       few: 'Зіграно $count заочні гри',
       one: 'Зіграно $count заочну гру',
-      zero: 'Зіграно $count заочну гру',
     );
     return '$_temp0';
   }
@@ -141,7 +133,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: 'Почав спостерігати за $count гравцями',
       few: 'Почав спостерігати за $count гравцями',
       one: 'Підписався на $count гравця',
-      zero: 'Підписався на $count гравця',
     );
     return '$_temp0';
   }
@@ -155,7 +146,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: 'Отримав $count нових підписників',
       few: 'Отримав $count нових підписників',
       one: 'Отримав $count нового підписника',
-      zero: 'Отримав $count нового підписника',
     );
     return '$_temp0';
   }
@@ -169,7 +159,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: 'Провів $count сеансів одночасної гри',
       few: 'Провів $count сеанси одночасної гри',
       one: 'Провів $count сеанс одночасної гри',
-      zero: 'Провів $count сеанс одночасної гри',
     );
     return '$_temp0';
   }
@@ -183,7 +172,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: 'Брав участь в $count сеансах одночасної гри',
       few: 'Брав участь в $count сеансах одночасної гри',
       one: 'Брав участь у $count сеансі одночасної гри',
-      zero: 'Брав участь у $count сеансі одночасної гри',
     );
     return '$_temp0';
   }
@@ -197,7 +185,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: 'Створено $count нових досліджень',
       few: 'Створено $count нові дослідження',
       one: 'Створено $count нове дослідження',
-      zero: 'Створено $count нове дослідження',
     );
     return '$_temp0';
   }
@@ -211,7 +198,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: 'Змагався в $count турнірах',
       few: 'Змагався в $count турнірах',
       one: 'Змагався в $count турнірі',
-      zero: 'Змагався в $count турнірі',
     );
     return '$_temp0';
   }
@@ -225,7 +211,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: 'Досяг #$count місця (кращі $param2%), зіграно $param3 ігор, турнір: $param4',
       few: 'Досяг #$count місця (кращі $param2%), зіграно $param3 гри, турнір: $param4',
       one: 'Досяг #$count місця (кращі $param2%), зіграна $param3 гра, в турнірі: $param4',
-      zero: 'Досяг #$count місця (кращі $param2%), зіграна $param3 гра, в турнірі: $param4',
     );
     return '$_temp0';
   }
@@ -239,7 +224,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: 'Завершив $count турнірів за швейцарською системою',
       few: 'Завершив $count турніри за швейцарською системою',
       one: 'Завершив $count турнір за швейцарською системою',
-      zero: 'Завершив $count турнір за швейцарською системою',
     );
     return '$_temp0';
   }
@@ -253,7 +237,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: 'Приєднався до $count команд',
       few: 'Приєднався до $count команд',
       one: 'Приєднався до $count команди',
-      zero: 'Приєднався до $count команди',
     );
     return '$_temp0';
   }
@@ -899,7 +882,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: 'Зіграно $count раз',
       few: 'Зіграно $count рази',
       one: 'Зіграно $count раз',
-      zero: 'Зіграно $count раз',
     );
     return '$_temp0';
   }
@@ -913,7 +895,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: '$count балів нижче вашого рейтингу в задачах',
       few: '$count бали нижче вашого рейтингу в задачах',
       one: 'На один бал нижче вашого рейтингу в задачах',
-      zero: 'На один бал нижче вашого рейтингу в задачах',
     );
     return '$_temp0';
   }
@@ -927,7 +908,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: '$count балів вище вашого рейтингу в задачах',
       few: '$count бали вище вашого рейтингу в задачах',
       one: 'Один бал вище вашого рейтингу в задачах',
-      zero: 'Один бал вище вашого рейтингу в задачах',
     );
     return '$_temp0';
   }
@@ -941,7 +921,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: '$count зіграно',
       few: '$count зіграно',
       one: '$count зіграно',
-      zero: '$count зіграно',
     );
     return '$_temp0';
   }
@@ -955,7 +934,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: '$count повторити',
       few: '$count повторити',
       one: '$count повторити',
-      zero: '$count повторити',
     );
     return '$_temp0';
   }
@@ -4005,7 +3983,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: 'Ваш суперник покинув гру. Ви можете оголосити перемогу за $count секунд.',
       few: 'Ваш суперник покинув гру. Ви можете оголосити перемогу за $count секунди.',
       one: 'Ваш суперник покинув гру. Ви можете оголосити перемогу за $count секунд.',
-      zero: 'Ваш суперник покинув гру. Ви можете оголосити перемогу за $count секунд.',
     );
     return '$_temp0';
   }
@@ -4019,7 +3996,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: 'Мат в $count напівходів',
       few: 'Мат в $count напівходи',
       one: 'Мат в $count напівхід',
-      zero: 'Мат в $count напівхід',
     );
     return '$_temp0';
   }
@@ -4033,7 +4009,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: '$count грубих помилок',
       few: '$count грубі помилки',
       one: '$count груба помилка',
-      zero: '$count груба помилка',
     );
     return '$_temp0';
   }
@@ -4047,7 +4022,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: '$count помилок',
       few: '$count помилки',
       one: '$count помилка',
-      zero: '$count помилка',
     );
     return '$_temp0';
   }
@@ -4061,7 +4035,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: '$count неточностей',
       few: '$count неточності',
       one: '$count неточність',
-      zero: '$count неточність',
     );
     return '$_temp0';
   }
@@ -4075,7 +4048,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: '$count гравців',
       few: '$count гравці',
       one: '$count гравець',
-      zero: '$count гравець',
     );
     return '$_temp0';
   }
@@ -4089,7 +4061,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: '$count ігор',
       few: '$count гри',
       one: '$count гра',
-      zero: '$count гра',
     );
     return '$_temp0';
   }
@@ -4103,7 +4074,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: 'Рейтинг $count за $param2 партій',
       few: 'Рейтинг $count за $param2 партії',
       one: 'Рейтинг $count за $param2 партію',
-      zero: 'Рейтинг $count за $param2 партію',
     );
     return '$_temp0';
   }
@@ -4117,7 +4087,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: '$count закладок',
       few: '$count закладки',
       one: '$count закладка',
-      zero: '$count закладка',
     );
     return '$_temp0';
   }
@@ -4131,7 +4100,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: '$count днів',
       few: '$count дні',
       one: '$count день',
-      zero: '$count день',
     );
     return '$_temp0';
   }
@@ -4145,7 +4113,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: '$count годин',
       few: '$count години',
       one: '$count година',
-      zero: '$count година',
     );
     return '$_temp0';
   }
@@ -4159,7 +4126,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: '$count хвилин',
       few: '$count хвилини',
       one: '$count хвилина',
-      zero: '$count хвилина',
     );
     return '$_temp0';
   }
@@ -4173,7 +4139,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: 'Місце в рейтингу оновлюється кожні $count хвилин',
       few: 'Місце в рейтингу оновлюється кожні $count хвилини',
       one: 'Місце в рейтингу оновлюється щохвилини',
-      zero: 'Місце в рейтингу оновлюється щохвилини',
     );
     return '$_temp0';
   }
@@ -4187,7 +4152,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: '$count задач',
       few: '$count задачі',
       one: '$count задача',
-      zero: '$count задача',
     );
     return '$_temp0';
   }
@@ -4201,7 +4165,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: '$count партій з вами',
       few: '$count партії з вами',
       one: '$count партія з вами',
-      zero: '$count партія з вами',
     );
     return '$_temp0';
   }
@@ -4215,7 +4178,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: '$count рейтингових',
       few: '$count рейтингові',
       one: '$count рейтингова',
-      zero: '$count рейтингова',
     );
     return '$_temp0';
   }
@@ -4229,7 +4191,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: '$count перемог',
       few: '$count перемоги',
       one: '$count перемога',
-      zero: '$count перемога',
     );
     return '$_temp0';
   }
@@ -4243,7 +4204,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: '$count поразок',
       few: '$count поразки',
       one: '$count поразка',
-      zero: '$count поразка',
     );
     return '$_temp0';
   }
@@ -4257,7 +4217,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: '$count нічиїх',
       few: '$count нічиї',
       one: '$count нічия',
-      zero: '$count нічия',
     );
     return '$_temp0';
   }
@@ -4271,7 +4230,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: '$count грають',
       few: '$count грають',
       one: '$count грає',
-      zero: '$count грає',
     );
     return '$_temp0';
   }
@@ -4285,7 +4243,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: 'Додати $count секунд',
       few: 'Додати $count секунди',
       one: 'Додати $count секунду',
-      zero: 'Додати $count секунду',
     );
     return '$_temp0';
   }
@@ -4299,7 +4256,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: '$count турнірних очок',
       few: '$count турнірних очки',
       one: '$count турнірне очко',
-      zero: '$count турнірне очко',
     );
     return '$_temp0';
   }
@@ -4313,7 +4269,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: '$count досліджень',
       few: '$count дослідження',
       one: '$count дослідження',
-      zero: '$count дослідження',
     );
     return '$_temp0';
   }
@@ -4327,7 +4282,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: '$count сеансів',
       few: '$count сеанса',
       one: '$count сеанс',
-      zero: '$count сеанс',
     );
     return '$_temp0';
   }
@@ -4341,7 +4295,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: '≥ $count рейтингових ігор',
       few: '≥ $count рейтингові гри',
       one: '≥ $count рейтингова гра',
-      zero: '≥ $count рейтингова гра',
     );
     return '$_temp0';
   }
@@ -4355,7 +4308,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: '≥ $count $param2 рейтингових ігор',
       few: '≥ $count $param2 рейтингові ігри',
       one: '≥ $count $param2 рейтингова гра',
-      zero: '≥ $count $param2 рейтингова гра',
     );
     return '$_temp0';
   }
@@ -4369,7 +4321,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: 'Ви маєте зіграти ще $count рейтингових ігор в $param2',
       few: 'Вам потрібно зіграти ще $count рейтингових ігор $param2',
       one: 'Ви маєте зіграти ще $count рейтингову гру в $param2',
-      zero: 'Ви маєте зіграти ще $count рейтингову гру в $param2',
     );
     return '$_temp0';
   }
@@ -4383,7 +4334,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: 'Ви повинні зіграти ще $count рейтингових ігор',
       few: 'Вам потрібно зіграти ще $count рейтингові гри',
       one: 'Ви повинні зіграти ще $count рейтингову гру',
-      zero: 'Ви повинні зіграти ще $count рейтингову гру',
     );
     return '$_temp0';
   }
@@ -4397,7 +4347,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: '$count імпортованих ігор',
       few: '$count імпортовані гри',
       one: '$count імпортована гра',
-      zero: '$count імпортована гра',
     );
     return '$_temp0';
   }
@@ -4411,7 +4360,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: '$count друзів у мережі',
       few: '$count друга у мережі',
       one: '$count друг у мережі',
-      zero: '$count друг у мережі',
     );
     return '$_temp0';
   }
@@ -4425,7 +4373,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: '$count спостерігачів',
       few: '$count спостерігачі',
       one: '$count спостерігач',
-      zero: '$count спостерігач',
     );
     return '$_temp0';
   }
@@ -4439,7 +4386,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: '$count спостерігають',
       few: '$count спостерігають',
       one: '$count спостерігає',
-      zero: '$count спостерігає',
     );
     return '$_temp0';
   }
@@ -4453,7 +4399,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: 'Менше $count хвилин',
       few: 'Менше $count хвилин',
       one: 'Менше $count хвилини',
-      zero: 'Менше $count хвилини',
     );
     return '$_temp0';
   }
@@ -4467,7 +4412,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: '$count ігор триває',
       few: '$count гри триває',
       one: '$count гра триває',
-      zero: '$count гра триває',
     );
     return '$_temp0';
   }
@@ -4481,7 +4425,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: 'Максимум: $count символів.',
       few: 'Максимум: $count символа.',
       one: 'Максимум: $count символів.',
-      zero: 'Максимум: $count символів.',
     );
     return '$_temp0';
   }
@@ -4495,7 +4438,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: '$count заблоковано',
       few: '$count заблоковано',
       one: '$count заблоковано',
-      zero: '$count заблоковано',
     );
     return '$_temp0';
   }
@@ -4509,7 +4451,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: '$count дописів на форумі',
       few: '$count дописи на форумі',
       one: '$count допис на форумі',
-      zero: '$count допис на форумі',
     );
     return '$_temp0';
   }
@@ -4523,7 +4464,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: '$count гравців грали у $param2 цього тижня.',
       few: '$count гравців грали у $param2 цього тижня.',
       one: '$count гравець грав у $param2 цього тижня.',
-      zero: '$count гравець грав у $param2 цього тижня.',
     );
     return '$_temp0';
   }
@@ -4537,7 +4477,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: 'Доступно $count мовами!',
       few: 'Доступно $count мовами!',
       one: 'Доступно $count мовою!',
-      zero: 'Доступно $count мовою!',
     );
     return '$_temp0';
   }
@@ -4551,7 +4490,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: '$count секунд на перший хід',
       few: '$count секунди на перший хід',
       one: '$count секунда на перший хід',
-      zero: '$count секунда на перший хід',
     );
     return '$_temp0';
   }
@@ -4565,7 +4503,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: '$count секунд',
       few: '$count секунди',
       one: '$count секунда',
-      zero: '$count секунда',
     );
     return '$_temp0';
   }
@@ -4579,7 +4516,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: 'і зберегти $count послідовностей',
       few: 'і зберегти $count послідовності',
       one: 'і зберегти $count послідовність',
-      zero: 'і зберегти $count послідовність',
     );
     return '$_temp0';
   }
@@ -4752,7 +4688,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: '$count серій',
       few: '$count серії',
       one: '1 серія',
-      zero: '1 серія',
     );
     return '$_temp0';
   }
@@ -4766,7 +4701,6 @@ class AppLocalizationsUk extends AppLocalizations {
       many: 'Зіграно $count серій в $param2',
       few: 'Зіграно $count серії в $param2',
       one: 'Зіграна одна серія в $param2',
-      zero: 'Зіграна одна серія в $param2',
     );
     return '$_temp0';
   }

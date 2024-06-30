@@ -29,7 +29,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: 'Remia lichess.org $count mėn. kaip „$param2“',
       few: 'Remia lichess.org $count mėn. kaip „$param2“',
       one: 'Remia lichess.org $count mėn. kaip „$param2“',
-      zero: 'Remia lichess.org $count mėn. kaip „$param2“',
     );
     return '$_temp0';
   }
@@ -43,7 +42,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: 'Praktikavosi $count pozicijų per „$param2“',
       few: 'Praktikavosi $count pozicijas per „$param2“',
       one: 'Praktikavosi $count poziciją per „$param2“',
-      zero: 'Praktikavosi $count poziciją per „$param2“',
     );
     return '$_temp0';
   }
@@ -57,7 +55,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: 'Išsprendė $count taktinių užduočių',
       few: 'Išsprendė $count taktines užduotis',
       one: 'Išsprendė $count taktinę užduotį',
-      zero: 'Išsprendė $count taktinę užduotį',
     );
     return '$_temp0';
   }
@@ -71,7 +68,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: 'Sužaidė $count „$param2“ partijų',
       few: 'Sužaidė $count „$param2“ partijas',
       one: 'Sužaidė $count „$param2“ partiją',
-      zero: 'Sužaidė $count „$param2“ partiją',
     );
     return '$_temp0';
   }
@@ -85,7 +81,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: 'Parašė $count žinučių temoje „$param2“',
       few: 'Parašė $count žinutes temoje „$param2“',
       one: 'Parašė $count žinutę temoje „$param2“',
-      zero: 'Parašė $count žinutę temoje „$param2“',
     );
     return '$_temp0';
   }
@@ -99,7 +94,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: 'Sužaidė $count ėjimų',
       few: 'Sužaidė $count ėjimus',
       one: 'Sužaidė $count ėjimą',
-      zero: 'Sužaidė $count ėjimą',
     );
     return '$_temp0';
   }
@@ -113,7 +107,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: 'per $count korespondencinių partijų',
       few: 'per $count korespondencines partijas',
       one: 'per $count korespondencinę partiją',
-      zero: 'per $count korespondencinę partiją',
     );
     return '$_temp0';
   }
@@ -127,7 +120,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: 'Užbaigė $count korespondencinių partijų',
       few: 'Užbaigė $count korespondencines partijas',
       one: 'Užbaigė $count korespondencinę partiją',
-      zero: 'Užbaigė $count korespondencinę partiją',
     );
     return '$_temp0';
   }
@@ -141,7 +133,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: 'Pradėjo sekti $count žaidėjų',
       few: 'Pradėjo sekti $count žaidėjus',
       one: 'Pradėjo sekti $count žaidėją',
-      zero: 'Pradėjo sekti $count žaidėją',
     );
     return '$_temp0';
   }
@@ -155,7 +146,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: 'Sulaukė $count sekėjų',
       few: 'Sulaukė $count sekėjų',
       one: 'Sulaukė $count sekėjo',
-      zero: 'Sulaukė $count sekėjo',
     );
     return '$_temp0';
   }
@@ -169,7 +159,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: 'Organizavo $count simulų',
       few: 'Organizavo $count simulus',
       one: 'Organizavo $count simulą',
-      zero: 'Organizavo $count simulą',
     );
     return '$_temp0';
   }
@@ -183,7 +172,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: 'Dalyvavo $count-yje simulų',
       few: 'Dalyvavo $count-se simuluose',
       one: 'Dalyvavo $count-me simule',
-      zero: 'Dalyvavo $count-me simule',
     );
     return '$_temp0';
   }
@@ -197,7 +185,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: 'Sukūrė $count naujų studijų',
       few: 'Sukūrė $count naujas studijas',
       one: 'Sukūrė $count naują studiją',
-      zero: 'Sukūrė $count naują studiją',
     );
     return '$_temp0';
   }
@@ -211,7 +198,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: 'Varžėsi $count-yje turnyrų',
       few: 'Varžėsi $count-uose turnyruose',
       one: 'Varžėsi $count-ame turnyre',
-      zero: 'Varžėsi $count-ame turnyre',
     );
     return '$_temp0';
   }
@@ -225,7 +211,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: 'Užėmė #$count (tarp $param2% geriausiųjų) su $param3 partijų, žaidžiant „$param4“',
       few: 'Užėmė #$count (tarp $param2% geriausiųjų) su $param3 partijomis, žaidžiant „$param4“',
       one: 'Užėmė #$count (tarp $param2% geriausiųjų) su $param3 partija, žaidžiant „$param4“',
-      zero: 'Užėmė #$count (tarp $param2% geriausiųjų) su $param3 partija, žaidžiant „$param4“',
     );
     return '$_temp0';
   }
@@ -239,7 +224,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: 'Dalyvavo $count šveicariško turnyro',
       few: 'Dalyvavo $count šveicariškuose turnyruose',
       one: 'Dalyvavo $count šveicariškame turnyre',
-      zero: 'Dalyvavo $count šveicariškame turnyre',
     );
     return '$_temp0';
   }
@@ -253,7 +237,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: 'Prisijungė prie $count komandų',
       few: 'Prisijungė prie $count komandų',
       one: 'Prisijungė prie $count komandos',
-      zero: 'Prisijungė prie $count komandos',
     );
     return '$_temp0';
   }
@@ -899,7 +882,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: 'Žaista $count kartą',
       few: 'Žaista $count kartus',
       one: 'Žaista $count kartą',
-      zero: 'Žaista $count kartą',
     );
     return '$_temp0';
   }
@@ -913,7 +895,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: '$count taško aukščiau jūsų užduočių reitingo',
       few: '$count taškais aukščiau jūsų užduočių reitingo',
       one: 'Vienu tašku aukščiau jūsų užduočių reitingo',
-      zero: 'Vienu tašku aukščiau jūsų užduočių reitingo',
     );
     return '$_temp0';
   }
@@ -927,7 +908,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: '$count taško aukščiau jūsų užduočių reitingo',
       few: '$count taškais aukščiau jūsų užduočių reitingo',
       one: 'Vienu tašku aukščiau jūsų užduočių reitingo',
-      zero: 'Vienu tašku aukščiau jūsų užduočių reitingo',
     );
     return '$_temp0';
   }
@@ -941,7 +921,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: '$count sužaista',
       few: '$count sužaisti',
       one: '$count sužaistas',
-      zero: '$count sužaistas',
     );
     return '$_temp0';
   }
@@ -955,7 +934,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: '$count sužaisti',
       few: '$count sužaisti',
       one: '$count sužaisti',
-      zero: '$count sužaisti',
     );
     return '$_temp0';
   }
@@ -4005,7 +3983,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: 'Jūsų varžovas paliko partiją. Galėsite prisiimti pergalę už $count sekundžių.',
       few: 'Jūsų varžovas paliko partiją. Galėsite prisiimti pergalę už $count sekundžių.',
       one: 'Jūsų varžovas paliko partiją. Galėsite prisiimti pergalę už $count sekundės.',
-      zero: 'Jūsų varžovas paliko partiją. Galėsite prisiimti pergalę už $count sekundės.',
     );
     return '$_temp0';
   }
@@ -4019,7 +3996,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: 'Matas už $count pus-ėjimų',
       few: 'Matas už $count pus-ėjimų',
       one: 'Matas už $count pus-ėjimo',
-      zero: 'Matas už $count pus-ėjimo',
     );
     return '$_temp0';
   }
@@ -4033,7 +4009,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: '$count šiurkščios klaidos',
       few: '$count šiurkščios klaidos',
       one: '$count šiurkšti klaida',
-      zero: '$count šiurkšti klaida',
     );
     return '$_temp0';
   }
@@ -4047,7 +4022,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: '$count klaidos',
       few: '$count klaidos',
       one: '$count klaida',
-      zero: '$count klaida',
     );
     return '$_temp0';
   }
@@ -4061,7 +4035,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: '$count netikslumo',
       few: '$count netikslumai',
       one: '$count netikslumas',
-      zero: '$count netikslumas',
     );
     return '$_temp0';
   }
@@ -4075,7 +4048,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: '$count žaidėjų',
       few: '$count žaidėjai',
       one: '$count žaidėjas',
-      zero: '$count žaidėjas',
     );
     return '$_temp0';
   }
@@ -4089,7 +4061,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: '$count partijų',
       few: '$count partijos',
       one: '$count partija',
-      zero: '$count partija',
     );
     return '$_temp0';
   }
@@ -4103,7 +4074,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: '$count reitingas per $param2 partijos',
       few: '$count reitingas per $param2 partijas',
       one: '$count reitingas per $param2 partiją',
-      zero: '$count reitingas per $param2 partiją',
     );
     return '$_temp0';
   }
@@ -4117,7 +4087,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: '$count įrašų',
       few: '$count įrašai',
       one: '$count įrašas',
-      zero: '$count įrašas',
     );
     return '$_temp0';
   }
@@ -4131,7 +4100,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: '$count dienų',
       few: '$count dienos',
       one: '$count diena',
-      zero: '$count diena',
     );
     return '$_temp0';
   }
@@ -4145,7 +4113,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: '$count valandų',
       few: '$count valandos',
       one: '$count valanda',
-      zero: '$count valanda',
     );
     return '$_temp0';
   }
@@ -4159,7 +4126,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: '$count minutės',
       few: '$count minutės',
       one: '$count minutė',
-      zero: '$count minutė',
     );
     return '$_temp0';
   }
@@ -4173,7 +4139,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: 'Reitingas atnaujinamas kas $count minučių',
       few: 'Reitingas atnaujinamas kas $count minutes',
       one: 'Reitingas atnaujinamas kas minutę',
-      zero: 'Reitingas atnaujinamas kas minutę',
     );
     return '$_temp0';
   }
@@ -4187,7 +4152,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: '$count užduočių',
       few: '$count užduotys',
       one: '$count užduotis',
-      zero: '$count užduotis',
     );
     return '$_temp0';
   }
@@ -4201,7 +4165,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: '$count partijų su jumis',
       few: '$count partijos su jumis',
       one: '$count partija su jumis',
-      zero: '$count partija su jumis',
     );
     return '$_temp0';
   }
@@ -4215,7 +4178,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: '$count vertinamų',
       few: '$count vertinamos',
       one: '$count vertinama',
-      zero: '$count vertinama',
     );
     return '$_temp0';
   }
@@ -4229,7 +4191,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: '$count pergalių',
       few: '$count pergalės',
       one: '$count pergalė',
-      zero: '$count pergalė',
     );
     return '$_temp0';
   }
@@ -4243,7 +4204,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: '$count pralaimėjimų',
       few: '$count pralaimėjimai',
       one: '$count pralaimėjimas',
-      zero: '$count pralaimėjimas',
     );
     return '$_temp0';
   }
@@ -4257,7 +4217,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: '$count lygiųjų',
       few: '$count lygiosios',
       one: '$count lygiosios',
-      zero: '$count lygiosios',
     );
     return '$_temp0';
   }
@@ -4271,7 +4230,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: '$count žaidžiamų',
       few: '$count žaidžiami',
       one: '$count žaidžiamas',
-      zero: '$count žaidžiamas',
     );
     return '$_temp0';
   }
@@ -4285,7 +4243,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: 'Duoti $count sekundžių',
       few: 'Duoti $count sekundes',
       one: 'Duoti $count sekundę',
-      zero: 'Duoti $count sekundę',
     );
     return '$_temp0';
   }
@@ -4299,7 +4256,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: '$count turnyro taškų',
       few: '$count turnyro taškai',
       one: '$count turnyro taškas',
-      zero: '$count turnyro taškas',
     );
     return '$_temp0';
   }
@@ -4313,7 +4269,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: '$count studijų',
       few: '$count studijos',
       one: '$count studija',
-      zero: '$count studija',
     );
     return '$_temp0';
   }
@@ -4327,7 +4282,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: '$count simultano',
       few: '$count simultanai',
       one: '$count simultanas',
-      zero: '$count simultanas',
     );
     return '$_temp0';
   }
@@ -4341,7 +4295,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: '≥ $count vertinamų partijų',
       few: '≥ $count vertinamos partijos',
       one: '≥ $count vertinama partija',
-      zero: '≥ $count vertinama partija',
     );
     return '$_temp0';
   }
@@ -4355,7 +4308,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: '≥ $count vertinamų „$param2“ partijų',
       few: '≥ $count vertinamos „$param2“ partijos',
       one: '≥ $count vertinama „$param2“ partija',
-      zero: '≥ $count vertinama „$param2“ partija',
     );
     return '$_temp0';
   }
@@ -4369,7 +4321,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: 'Jums reikia sužaisti dar $count vertinamų „$param2“ partijų',
       few: 'Jums reikia sužaisti dar $count vertinamas „$param2“ partijas',
       one: 'Jums reikia sužaisti dar $count vertinamą „$param2“ partiją',
-      zero: 'Jums reikia sužaisti dar $count vertinamą „$param2“ partiją',
     );
     return '$_temp0';
   }
@@ -4383,7 +4334,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: 'Jums reikia sužaisti dar $count vertinamų partijų',
       few: 'Jums reikia sužaisti dar $count vertinamas partijas',
       one: 'Jums reikia sužaisti dar $count vertinamą partiją',
-      zero: 'Jums reikia sužaisti dar $count vertinamą partiją',
     );
     return '$_temp0';
   }
@@ -4397,7 +4347,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: '$count importuotų žaidimų',
       few: '$count importuoti žaidimai',
       one: '$count importuotas žaidimas',
-      zero: '$count importuotas žaidimas',
     );
     return '$_temp0';
   }
@@ -4411,7 +4360,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: '$count prisijungusių draugų',
       few: '$count prisijungę draugai',
       one: '$count prisijungęs draugas',
-      zero: '$count prisijungęs draugas',
     );
     return '$_temp0';
   }
@@ -4425,7 +4373,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: '$count sekėjų',
       few: '$count sekėjai',
       one: '$count sekėjas',
-      zero: '$count sekėjas',
     );
     return '$_temp0';
   }
@@ -4439,7 +4386,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: '$count sekamų',
       few: '$count sekami',
       one: '$count sekamas',
-      zero: '$count sekamas',
     );
     return '$_temp0';
   }
@@ -4453,7 +4399,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: 'Mažiau nei $count minučių',
       few: 'Mažiau nei $count minutės',
       one: 'Mažiau nei $count minutė',
-      zero: 'Mažiau nei $count minutė',
     );
     return '$_temp0';
   }
@@ -4467,7 +4412,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: '$count vykstančių partijų',
       few: '$count vykstančios partijos',
       one: '$count vykstanti partija',
-      zero: '$count vykstanti partija',
     );
     return '$_temp0';
   }
@@ -4481,7 +4425,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: 'Daugiausiai: $count simbolių.',
       few: 'Daugiausiai: $count simboliai.',
       one: 'Daugiausiai: $count simbolis.',
-      zero: 'Daugiausiai: $count simbolis.',
     );
     return '$_temp0';
   }
@@ -4495,7 +4438,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: '$count užblokuotų',
       few: '$count užblokuoti',
       one: '$count užblokuotas',
-      zero: '$count užblokuotas',
     );
     return '$_temp0';
   }
@@ -4509,7 +4451,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: '$count forumo pranešimų',
       few: '$count forumo pranešimai',
       one: '$count forumo pranešimas',
-      zero: '$count forumo pranešimas',
     );
     return '$_temp0';
   }
@@ -4523,7 +4464,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: '$count $param2 žaidėjų šią savaitę.',
       few: '$count $param2 žaidėjai šią savaitę.',
       one: '$count $param2 žaidėjas šią savaitę.',
-      zero: '$count $param2 žaidėjas šią savaitę.',
     );
     return '$_temp0';
   }
@@ -4537,7 +4477,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: 'Galima rinktis iš $count kalbų!',
       few: 'Galima rinktis iš $count kalbų!',
       one: 'Galima rinktis iš $count kalbos!',
-      zero: 'Galima rinktis iš $count kalbos!',
     );
     return '$_temp0';
   }
@@ -4551,7 +4490,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: '$count sekundžių atlikti pirmąjį ėjimą',
       few: '$count sekundės atlikti pirmąjį ėjimą',
       one: '$count sekundė atlikti pirmąjį ėjimą',
-      zero: '$count sekundė atlikti pirmąjį ėjimą',
     );
     return '$_temp0';
   }
@@ -4565,7 +4503,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: '$count sekundžių',
       few: '$count sekundės',
       one: '$count sekundė',
-      zero: '$count sekundė',
     );
     return '$_temp0';
   }
@@ -4579,7 +4516,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: 'ir sutaupykite $count išankstinio ėjimo linijų',
       few: 'ir sutaupykite $count išankstinio ėjimo linijas',
       one: 'ir sutaupykite $count išankstinio ėjimo liniją',
-      zero: 'ir sutaupykite $count išankstinio ėjimo liniją',
     );
     return '$_temp0';
   }
@@ -4752,7 +4688,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: '$count eilės',
       few: '$count eilės',
       one: '1 eilė',
-      zero: '1 eilė',
     );
     return '$_temp0';
   }
@@ -4766,7 +4701,6 @@ class AppLocalizationsLt extends AppLocalizations {
       many: 'Žaista $count $param2 eilės',
       few: 'Žaistos $count $param2 eilės',
       one: 'Žaista viena $param2 eilė',
-      zero: 'Žaista viena $param2 eilė',
     );
     return '$_temp0';
   }

@@ -29,7 +29,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: '$count mesece podpira lichess.org kot $param2',
       two: '$count meseca podpira lichess.org kot $param2',
       one: '$count mesec podpira lichess.org kot $param2',
-      zero: '$count mesec podpira lichess.org kot $param2',
     );
     return '$_temp0';
   }
@@ -43,7 +42,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: 'Treniral $count pozicije na $param2',
       two: 'Treniral $count pozicij na $param2',
       one: 'Treniral $count pozicijo na $param2',
-      zero: 'Treniral $count pozicijo na $param2',
     );
     return '$_temp0';
   }
@@ -57,7 +55,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: 'Rešil $count taktične probleme',
       two: 'Rešil $count taktična problema',
       one: 'Rešil $count taktični problem',
-      zero: 'Rešil $count taktični problem',
     );
     return '$_temp0';
   }
@@ -71,7 +68,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: 'Odigral $count $param2 partije',
       two: 'Odigral $count $param2 partiji',
       one: 'Odigral $count $param2 partijo',
-      zero: 'Odigral $count $param2 partijo',
     );
     return '$_temp0';
   }
@@ -85,7 +81,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: 'Objavil $count sporočila v $param2',
       two: 'Objavil $count sporočili v $param2',
       one: 'Objavil $count sporočilo v $param2',
-      zero: 'Objavil $count sporočilo v $param2',
     );
     return '$_temp0';
   }
@@ -99,7 +94,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: 'Potegnil $count poteze',
       two: 'Potegnil $count potezi',
       one: 'Potegnil $count potezo',
-      zero: 'Potegnil $count potezo',
     );
     return '$_temp0';
   }
@@ -113,7 +107,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: 'v $count dopisnih partijah',
       two: 'v $count dopisnih partijah',
       one: 'v $count dopisni partiji',
-      zero: 'v $count dopisni partiji',
     );
     return '$_temp0';
   }
@@ -127,7 +120,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: 'Končal $count dopisne partije',
       two: 'Končal $count dopisni partiji',
       one: 'Končal $count dopisno partijo',
-      zero: 'Končal $count dopisno partijo',
     );
     return '$_temp0';
   }
@@ -141,7 +133,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: 'Sledi $count igralcem',
       two: 'Sledi $count igralcem',
       one: 'Sledi $count igralcu',
-      zero: 'Sledi $count igralcu',
     );
     return '$_temp0';
   }
@@ -155,7 +146,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: 'Ima $count nove sledilce',
       two: 'Ima $count nova sledilca',
       one: 'Ima $count novega sledilca',
-      zero: 'Ima $count novega sledilca',
     );
     return '$_temp0';
   }
@@ -169,7 +159,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: 'Gostil $count simultanke',
       two: 'Gostil $count simultanki',
       one: 'Gostil $count simultanko',
-      zero: 'Gostil $count simultanko',
     );
     return '$_temp0';
   }
@@ -183,7 +172,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: 'Sodeloval pri $count simultankah',
       two: 'Sodeloval pri $count simultankah',
       one: 'Sodeloval pri $count simultanki',
-      zero: 'Sodeloval pri $count simultanki',
     );
     return '$_temp0';
   }
@@ -197,7 +185,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: 'Ustvaril $count nove študije',
       two: 'Ustvaril $count novi študiji',
       one: 'Ustvaril $count nov študij',
-      zero: 'Ustvaril $count nov študij',
     );
     return '$_temp0';
   }
@@ -211,7 +198,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: 'Končal $count turnirje',
       two: 'Končal $count turnirja',
       one: 'Končal $count turnir',
-      zero: 'Končal $count turnir',
     );
     return '$_temp0';
   }
@@ -225,7 +211,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: '#$count na lestvici (najboljših $param2%) v $param3 partijah tekmovanja $param4',
       two: '#$count na lestvici (najboljših $param2%) v $param3 partijah tekmovanja $param4',
       one: '#$count na lestvici (najboljših $param2%) v $param3 partiji tekmovanja $param4',
-      zero: '#$count na lestvici (najboljših $param2%) v $param3 partiji tekmovanja $param4',
     );
     return '$_temp0';
   }
@@ -239,7 +224,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: 'Tekmoval na $count švicarskih turnirjih',
       two: 'Tekmoval na $count švicarskih turnirjih',
       one: 'Tekmoval na $count švicarskem turnirju',
-      zero: 'Tekmoval na $count švicarskem turnirju',
     );
     return '$_temp0';
   }
@@ -253,7 +237,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: 'Pridružen $count ekipam',
       two: 'Pridružen $count ekipam',
       one: 'Pridružen $count ekipi',
-      zero: 'Pridružen $count ekipi',
     );
     return '$_temp0';
   }
@@ -899,7 +882,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: 'Odigrano $count krat',
       two: 'Odigrano $count krat',
       one: 'Odigrano $count krat',
-      zero: 'Odigrano $count krat',
     );
     return '$_temp0';
   }
@@ -913,7 +895,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: '$count točke pod ratingom uganke',
       two: '$count točki pod ratingom uganke',
       one: 'Ena točka pod ratingom uganke',
-      zero: 'Ena točka pod ratingom uganke',
     );
     return '$_temp0';
   }
@@ -927,7 +908,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: '$count točke nad ratingom uganke',
       two: '$count točki nad ratingom uganke',
       one: 'Ena točka nad ratingom uganke',
-      zero: 'Ena točka nad ratingom uganke',
     );
     return '$_temp0';
   }
@@ -941,7 +921,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: '$count igrani',
       two: '$count igrani',
       one: '$count igrana',
-      zero: '$count igrana',
     );
     return '$_temp0';
   }
@@ -955,7 +934,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: '$count za predvajanje',
       two: '$count za predvajanje',
       one: '$count za predvajanje',
-      zero: '$count za predvajanje',
     );
     return '$_temp0';
   }
@@ -4005,7 +3983,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: 'Vaš nasprotnik je zapustil igro. Čez $count sekunde lahko proglasite zmago.',
       two: 'Vaš nasprotnik je zapustil igro. Čez $count sekundi lahko proglasite zmago.',
       one: 'Vaš nasprotnik je zapustil igro. Čez $count sekundo lahko proglasite zmago.',
-      zero: 'Vaš nasprotnik je zapustil igro. Čez $count sekundo lahko proglasite zmago.',
     );
     return '$_temp0';
   }
@@ -4019,7 +3996,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: 'Mat v $count pol-potezah',
       two: 'Mat v $count pol-potezah',
       one: 'Mat v $count pol-potezi',
-      zero: 'Mat v $count pol-potezi',
     );
     return '$_temp0';
   }
@@ -4033,7 +4009,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: '$count napake',
       two: '$count napaki',
       one: '$count napaka',
-      zero: '$count napaka',
     );
     return '$_temp0';
   }
@@ -4047,7 +4022,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: '$count napakice',
       two: '$count napakici',
       one: '$count napakica',
-      zero: '$count napakica',
     );
     return '$_temp0';
   }
@@ -4061,7 +4035,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: '$count nenatančnosti',
       two: '$count nenatančnosti',
       one: '$count nenatančnost',
-      zero: '$count nenatančnost',
     );
     return '$_temp0';
   }
@@ -4075,7 +4048,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: '$count igralci',
       two: '$count igralca',
       one: '$count igralec',
-      zero: '$count igralec',
     );
     return '$_temp0';
   }
@@ -4089,7 +4061,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: '$count partij',
       two: '$count partiji',
       one: '$count partija',
-      zero: '$count partija',
     );
     return '$_temp0';
   }
@@ -4103,7 +4074,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: '$count rating v $param2 igrah',
       two: '$count rating v $param2 igrah',
       one: '$count rating v $param2 igri',
-      zero: '$count rating v $param2 igri',
     );
     return '$_temp0';
   }
@@ -4117,7 +4087,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: '$count zaznamki',
       two: '$count zaznamka',
       one: '$count zaznamek',
-      zero: '$count zaznamek',
     );
     return '$_temp0';
   }
@@ -4131,7 +4100,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: '$count dni',
       two: '$count dneva',
       one: '$count dan',
-      zero: '$count dan',
     );
     return '$_temp0';
   }
@@ -4145,7 +4113,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: '$count ure',
       two: '$count uri',
       one: '$count ura',
-      zero: '$count ura',
     );
     return '$_temp0';
   }
@@ -4159,7 +4126,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: '$count minute',
       two: '$count minuti',
       one: '$count minuta',
-      zero: '$count minuta',
     );
     return '$_temp0';
   }
@@ -4173,7 +4139,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: 'Uvrstitev se posodablja vsake $count minute',
       two: 'Uvrstitev se posodablja vsaki $count minuti',
       one: 'Uvrstitev se posodablja vsako minuto',
-      zero: 'Uvrstitev se posodablja vsako minuto',
     );
     return '$_temp0';
   }
@@ -4187,7 +4152,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: '$count probleme',
       two: '$count problema',
       one: '$count problem',
-      zero: '$count problem',
     );
     return '$_temp0';
   }
@@ -4201,7 +4165,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: '$count partije s teboj',
       two: '$count partiji s teboj',
       one: '$count partija s teboj',
-      zero: '$count partija s teboj',
     );
     return '$_temp0';
   }
@@ -4215,7 +4178,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: '$count rangirani',
       two: '$count rangirana',
       one: '$count rangiran',
-      zero: '$count rangiran',
     );
     return '$_temp0';
   }
@@ -4229,7 +4191,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: '$count zmage',
       two: '$count zmagi',
       one: '$count zmaga',
-      zero: '$count zmaga',
     );
     return '$_temp0';
   }
@@ -4243,7 +4204,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: '$count poraze',
       two: '$count poraza',
       one: '$count poraz',
-      zero: '$count poraz',
     );
     return '$_temp0';
   }
@@ -4257,7 +4217,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: '$count remije',
       two: '$count remija',
       one: '$count remi',
-      zero: '$count remi',
     );
     return '$_temp0';
   }
@@ -4271,7 +4230,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: '$count v teku',
       two: '$count v teku',
       one: '$count v teku',
-      zero: '$count v teku',
     );
     return '$_temp0';
   }
@@ -4285,7 +4243,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: 'Dodaj $count sekunde',
       two: 'Dodaj $count sekundi',
       one: 'Dodaj $count sekundo',
-      zero: 'Dodaj $count sekundo',
     );
     return '$_temp0';
   }
@@ -4299,7 +4256,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: '$count turnirske točke',
       two: '$count turnirski točki',
       one: '$count turnirska točko',
-      zero: '$count turnirska točko',
     );
     return '$_temp0';
   }
@@ -4313,7 +4269,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: '$count študije',
       two: '$count študiji',
       one: '$count študija',
-      zero: '$count študija',
     );
     return '$_temp0';
   }
@@ -4327,7 +4282,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: '$count simultanke',
       two: '$count simultanki',
       one: '$count simultanka',
-      zero: '$count simultanka',
     );
     return '$_temp0';
   }
@@ -4341,7 +4295,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: '≥ $count rangirane partije',
       two: '≥ $count rangirani partiji',
       one: '≥ $count rangirana partija',
-      zero: '≥ $count rangirana partija',
     );
     return '$_temp0';
   }
@@ -4355,7 +4308,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: '≥ $count $param2 rangirane partije',
       two: '≥ $count $param2 rangirani partiji',
       one: '≥ $count $param2 rangirana partija',
-      zero: '≥ $count $param2 rangirana partija',
     );
     return '$_temp0';
   }
@@ -4369,7 +4321,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: 'Odigrati morate še $count rangiranih partij $param2',
       two: 'Morate odigrati še $count rangirani partiji $param2',
       one: 'Odigrati morate še $count rangiranih partij $param2',
-      zero: 'Odigrati morate še $count rangiranih partij $param2',
     );
     return '$_temp0';
   }
@@ -4383,7 +4334,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: 'Morate odigrati še $count rangirane partije',
       two: 'Morate odigrati še $count rangirani partiji',
       one: 'Morate odigrati še $count rangirano partijo',
-      zero: 'Morate odigrati še $count rangirano partijo',
     );
     return '$_temp0';
   }
@@ -4397,7 +4347,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: '$count uvožene igre',
       two: '$count uvoženi igri',
       one: '$count uvožena igra',
-      zero: '$count uvožena igra',
     );
     return '$_temp0';
   }
@@ -4411,7 +4360,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: 'št. prijateljev: $count',
       two: 'Ni prijavljenih prijateljev',
       one: '$count prijatelj je prijavljen',
-      zero: '$count prijatelj je prijavljen',
     );
     return '$_temp0';
   }
@@ -4425,7 +4373,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: '$count sledilci',
       two: '$count sledilca',
       one: 'Št. sledilcev: $count',
-      zero: 'Št. sledilcev: $count',
     );
     return '$_temp0';
   }
@@ -4439,7 +4386,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: '$count sledijo',
       two: '$count sledita',
       one: '$count sledi',
-      zero: '$count sledi',
     );
     return '$_temp0';
   }
@@ -4453,7 +4399,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: 'Manj kot $count minute',
       two: 'Manj kot $count minuti',
       one: 'Manj kot $count minuta',
-      zero: 'Manj kot $count minuta',
     );
     return '$_temp0';
   }
@@ -4467,7 +4412,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: '$count igrane partije',
       two: '$count igrani partiji',
       one: '$count igrana partija',
-      zero: '$count igrana partija',
     );
     return '$_temp0';
   }
@@ -4481,7 +4425,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: 'Največ: $count znake.',
       two: 'Največ: $count znaka.',
       one: 'Največ: $count znak.',
-      zero: 'Največ: $count znak.',
     );
     return '$_temp0';
   }
@@ -4495,7 +4438,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: '$count blokirajo',
       two: '$count blokirata',
       one: '$count blokira',
-      zero: '$count blokira',
     );
     return '$_temp0';
   }
@@ -4509,7 +4451,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: '$count zapisi na forumu',
       two: '$count zapisa na forumu',
       one: '$count zapis na forumu',
-      zero: '$count zapis na forumu',
     );
     return '$_temp0';
   }
@@ -4523,7 +4464,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: '$count $param2 igralci v tem tednu.',
       two: '$count $param2 igralca v tem tednu.',
       one: '$count $param2 igralec v tem tednu.',
-      zero: '$count $param2 igralec v tem tednu.',
     );
     return '$_temp0';
   }
@@ -4537,7 +4477,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: 'Na voljo v $count jezikih!',
       two: 'Na voljo v $count jezikih!',
       one: 'Na voljo v $count jeziku!',
-      zero: 'Na voljo v $count jeziku!',
     );
     return '$_temp0';
   }
@@ -4551,7 +4490,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: '$count sekunde za prvo potezo',
       two: '$count sekundi za prvo potezo',
       one: '$count sekund za prvo potezo',
-      zero: '$count sekund za prvo potezo',
     );
     return '$_temp0';
   }
@@ -4565,7 +4503,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: '$count sekund',
       two: '$count sekundi',
       one: '$count sekunda',
-      zero: '$count sekunda',
     );
     return '$_temp0';
   }
@@ -4579,7 +4516,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: 'in shranite $count predpotezne variante',
       two: 'in shranite $count predpotezni varianti',
       one: 'in shranite $count predpotezno varianto',
-      zero: 'in shranite $count predpotezno varianto',
     );
     return '$_temp0';
   }
@@ -4752,7 +4688,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: '$count poskusi',
       two: '$count poskusa',
       one: '1 poskus',
-      zero: '1 poskus',
     );
     return '$_temp0';
   }
@@ -4766,7 +4701,6 @@ class AppLocalizationsSl extends AppLocalizations {
       few: 'Opravljeni $count poskusi $param2',
       two: 'Opravljena $count poskusa $param2',
       one: 'Opravljen en poskus $param2',
-      zero: 'Opravljen en poskus $param2',
     );
     return '$_temp0';
   }

@@ -27,7 +27,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Stuðlaði lichess.org í $count mánaðir sum ein $param2',
       one: 'Stuðlaði lichess.org í $count mánaða sum ein $param2',
-      zero: 'Stuðlaði lichess.org í $count mánaða sum ein $param2',
     );
     return '$_temp0';
   }
@@ -39,7 +38,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Vandi $count støður í $param2',
       one: 'Vandi $count støðu í $param2',
-      zero: 'Vandi $count støðu í $param2',
     );
     return '$_temp0';
   }
@@ -51,7 +49,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Loysti $count taktiskar uppgávur',
       one: 'Loysti $count taktiska uppgávu',
-      zero: 'Loysti $count taktiska uppgávu',
     );
     return '$_temp0';
   }
@@ -63,7 +60,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Telvaði $count $param2 talv',
       one: 'Telvaði $count $param2 talv',
-      zero: 'Telvaði $count $param2 talv',
     );
     return '$_temp0';
   }
@@ -75,7 +71,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Skrivaði $count boð í $param2',
       one: 'Skrivaði $count boð í $param2',
-      zero: 'Skrivaði $count boð í $param2',
     );
     return '$_temp0';
   }
@@ -87,7 +82,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Telvaði $count leikir',
       one: 'Telvaði $count leik',
-      zero: 'Telvaði $count leik',
     );
     return '$_temp0';
   }
@@ -99,7 +93,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'í $count brævtalvum',
       one: 'í $count brævtalvi',
-      zero: 'í $count brævtalvi',
     );
     return '$_temp0';
   }
@@ -111,7 +104,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Fullførdi $count brævtalv',
       one: 'Fullførdi $count brævtalv',
-      zero: 'Fullførdi $count brævtalv',
     );
     return '$_temp0';
   }
@@ -123,7 +115,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Fór undir at fylgja $count telvarum',
       one: 'Fór undir at fylgja $count telvara',
-      zero: 'Fór undir at fylgja $count telvara',
     );
     return '$_temp0';
   }
@@ -135,7 +126,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Fekk $count nýggjar fylgjarar',
       one: 'Fekk $count nýggjan fylgjara',
-      zero: 'Fekk $count nýggjan fylgjara',
     );
     return '$_temp0';
   }
@@ -147,7 +137,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Var vertur fyri $count fjøltalvum',
       one: 'Var vertur fyri $count fjøltalvi',
-      zero: 'Var vertur fyri $count fjøltalvi',
     );
     return '$_temp0';
   }
@@ -159,7 +148,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Var við í $count fjøltalvum',
       one: 'Var við í $count fjøltalvi',
-      zero: 'Var við í $count fjøltalvi',
     );
     return '$_temp0';
   }
@@ -171,7 +159,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Stovnaði $count nýggjar rannsóknir',
       one: 'Stovnaði $count nýggja rannsókn',
-      zero: 'Stovnaði $count nýggja rannsókn',
     );
     return '$_temp0';
   }
@@ -183,7 +170,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Kappaðist í $count kappingum',
       one: 'Kappaðist í $count kapping',
-      zero: 'Kappaðist í $count kapping',
     );
     return '$_temp0';
   }
@@ -195,7 +181,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Styrkismettur #$count (top $param2%) við $param3 talvum í $param4',
       one: 'Styrkismettur #$count (top $param2%) við $param3 talvi í $param4',
-      zero: 'Styrkismettur #$count (top $param2%) við $param3 talvi í $param4',
     );
     return '$_temp0';
   }
@@ -207,7 +192,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Kappaðist í $count swisskappingum',
       one: 'Kappaðist í $count swisskapping',
-      zero: 'Kappaðist í $count swisskapping',
     );
     return '$_temp0';
   }
@@ -219,7 +203,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Fór upp í $count lið',
       one: 'Fór upp í $count lið',
-      zero: 'Fór upp í $count lið',
     );
     return '$_temp0';
   }
@@ -863,7 +846,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Telvað $count ferðir',
       one: 'Telvað $count ferð',
-      zero: 'Telvað $count ferð',
     );
     return '$_temp0';
   }
@@ -875,7 +857,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count points below your puzzle rating',
       one: 'One point below your puzzle rating',
-      zero: 'One point below your puzzle rating',
     );
     return '$_temp0';
   }
@@ -887,7 +868,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count points above your puzzle rating',
       one: 'One point above your puzzle rating',
-      zero: 'One point above your puzzle rating',
     );
     return '$_temp0';
   }
@@ -3955,7 +3935,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Títt mótstøðufólk fór frá talvinum. Tú kanst siga teg hava vunnið um $count sekund.',
       one: 'Mótleikarin fór frá talvinum. Tú kanst siga teg hava vunnið um $count sekund.',
-      zero: 'Mótleikarin fór frá talvinum. Tú kanst siga teg hava vunnið um $count sekund.',
     );
     return '$_temp0';
   }
@@ -3967,7 +3946,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Skák og mát í $count hálvum leikum',
       one: 'Skák og mát í $count hálvum leiki',
-      zero: 'Skák og mát í $count hálvum leiki',
     );
     return '$_temp0';
   }
@@ -3979,7 +3957,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count bukkar',
       one: '$count bukkur',
-      zero: '$count bukkur',
     );
     return '$_temp0';
   }
@@ -3991,7 +3968,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count mistøk',
       one: '$count mistak',
-      zero: '$count mistak',
     );
     return '$_temp0';
   }
@@ -4003,7 +3979,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count óneyvleikar',
       one: '$count óneyvleiki',
-      zero: '$count óneyvleiki',
     );
     return '$_temp0';
   }
@@ -4015,7 +3990,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count telvarar',
       one: '$count telvari',
-      zero: '$count telvari',
     );
     return '$_temp0';
   }
@@ -4027,7 +4001,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count talv',
       one: '$count talv',
-      zero: '$count talv',
     );
     return '$_temp0';
   }
@@ -4039,7 +4012,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count rating over $param2 games',
       one: '$count rating over $param2 game',
-      zero: '$count rating over $param2 game',
     );
     return '$_temp0';
   }
@@ -4051,7 +4023,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count bókamerki',
       one: '$count bókamerki',
-      zero: '$count bókamerki',
     );
     return '$_temp0';
   }
@@ -4063,7 +4034,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count dagar',
       one: '$count dag',
-      zero: '$count dag',
     );
     return '$_temp0';
   }
@@ -4075,7 +4045,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count tímar',
       one: '$count tími',
-      zero: '$count tími',
     );
     return '$_temp0';
   }
@@ -4087,7 +4056,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count minuttir',
       one: '$count minuttur',
-      zero: '$count minuttur',
     );
     return '$_temp0';
   }
@@ -4099,7 +4067,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Støða/tign verður dagførd $count minuttir ímillum',
       one: 'Støða/tign verður dagførd hvønn minutt',
-      zero: 'Støða/tign verður dagførd hvønn minutt',
     );
     return '$_temp0';
   }
@@ -4111,7 +4078,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count uppgávur',
       one: '$count uppgáva',
-      zero: '$count uppgáva',
     );
     return '$_temp0';
   }
@@ -4123,7 +4089,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count talv móti tær',
       one: '$count talv móti tær',
-      zero: '$count talv móti tær',
     );
     return '$_temp0';
   }
@@ -4135,7 +4100,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count styrkismett',
       one: '$count styrkismettur',
-      zero: '$count styrkismettur',
     );
     return '$_temp0';
   }
@@ -4147,7 +4111,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count sigrar',
       one: '$count sigur',
-      zero: '$count sigur',
     );
     return '$_temp0';
   }
@@ -4159,7 +4122,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count ósigrar',
       one: '$count ósigur',
-      zero: '$count ósigur',
     );
     return '$_temp0';
   }
@@ -4171,7 +4133,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count jøvn',
       one: '$count javnt',
-      zero: '$count javnt',
     );
     return '$_temp0';
   }
@@ -4183,7 +4144,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count í gongd',
       one: '$count í gongd',
-      zero: '$count í gongd',
     );
     return '$_temp0';
   }
@@ -4195,7 +4155,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Gev $count sekund',
       one: 'Gev $count sekund',
-      zero: 'Gev $count sekund',
     );
     return '$_temp0';
   }
@@ -4207,7 +4166,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count kappingastig',
       one: '$count kappingarstig',
-      zero: '$count kappingarstig',
     );
     return '$_temp0';
   }
@@ -4219,7 +4177,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count rannsóknir',
       one: '$count rannsókn',
-      zero: '$count rannsókn',
     );
     return '$_temp0';
   }
@@ -4231,7 +4188,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count simuls',
       one: '$count simul',
-      zero: '$count simul',
     );
     return '$_temp0';
   }
@@ -4243,7 +4199,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '≥ $count styrkismett talv',
       one: '≥ $count styrkismett talv',
-      zero: '≥ $count styrkismett talv',
     );
     return '$_temp0';
   }
@@ -4255,7 +4210,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '≥ $count $param2 styrkismett talv',
       one: '≥ $count $param2 styrkismett talv',
-      zero: '≥ $count $param2 styrkismett talv',
     );
     return '$_temp0';
   }
@@ -4267,7 +4221,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Tær nýtist at telva $count fleiri $param2 styrkismett talv',
       one: 'Tær nýtist at telva $count $param2 styrkismett talv aftrat',
-      zero: 'Tær nýtist at telva $count $param2 styrkismett talv aftrat',
     );
     return '$_temp0';
   }
@@ -4279,7 +4232,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Tær nýtist at telva $count styrkismett talv aftrat',
       one: 'Tær nýtist at telva $count styrkismett talv aftrat',
-      zero: 'Tær nýtist at telva $count styrkismett talv aftrat',
     );
     return '$_temp0';
   }
@@ -4291,7 +4243,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count innflutt talv',
       one: '$count innflutt talv',
-      zero: '$count innflutt talv',
     );
     return '$_temp0';
   }
@@ -4303,7 +4254,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count vinir á alnetinum',
       one: '$count vinur á alnetinum',
-      zero: '$count vinur á alnetinum',
     );
     return '$_temp0';
   }
@@ -4315,7 +4265,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count fylgjarar',
       one: '$count fylgjari',
-      zero: '$count fylgjari',
     );
     return '$_temp0';
   }
@@ -4327,7 +4276,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count fylgja',
       one: '$count fylgir',
-      zero: '$count fylgir',
     );
     return '$_temp0';
   }
@@ -4339,7 +4287,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Minni enn $count minuttir',
       one: 'Minni enn $count minuttur',
-      zero: 'Minni enn $count minuttur',
     );
     return '$_temp0';
   }
@@ -4351,7 +4298,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count talv verða telvað',
       one: '$count talv verður telvað',
-      zero: '$count talv verður telvað',
     );
     return '$_temp0';
   }
@@ -4363,7 +4309,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Í mesta lagi: $count bókstavir.',
       one: 'Í mesta lagi: $count bókstavur.',
-      zero: 'Í mesta lagi: $count bókstavur.',
     );
     return '$_temp0';
   }
@@ -4375,7 +4320,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count forðaðir',
       one: '$count forðaður',
-      zero: '$count forðaður',
     );
     return '$_temp0';
   }
@@ -4387,7 +4331,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count uppsløg á torgi',
       one: '$count uppslag á torgi',
-      zero: '$count uppslag á torgi',
     );
     return '$_temp0';
   }
@@ -4399,7 +4342,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count $param2 telvarar hesa vikuna.',
       one: '$count $param2 telvari hesa vikuna.',
-      zero: '$count $param2 telvari hesa vikuna.',
     );
     return '$_temp0';
   }
@@ -4411,7 +4353,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Tøkt á $count málum!',
       one: 'Tøkt á $count máli!',
-      zero: 'Tøkt á $count máli!',
     );
     return '$_temp0';
   }
@@ -4423,7 +4364,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count sekundir at flyta fyrsta leik',
       one: '$count sekund at flyta fyrsta leik',
-      zero: '$count sekund at flyta fyrsta leik',
     );
     return '$_temp0';
   }
@@ -4435,7 +4375,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count sekundir',
       one: '$count sekund',
-      zero: '$count sekund',
     );
     return '$_temp0';
   }
@@ -4447,7 +4386,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'og goym $count undanleikir',
       one: 'og goym $count undanleik',
-      zero: 'og goym $count undanleik',
     );
     return '$_temp0';
   }
@@ -4618,7 +4556,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count umfør',
       one: '1 umfar',
-      zero: '1 umfar',
     );
     return '$_temp0';
   }
@@ -4630,7 +4567,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Telvaði $count umfør av $param2',
       one: 'Telvaði eitt umfar av $param2',
-      zero: 'Telvaði eitt umfar av $param2',
     );
     return '$_temp0';
   }

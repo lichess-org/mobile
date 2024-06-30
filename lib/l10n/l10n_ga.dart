@@ -30,7 +30,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: 'Thacaigh lichess.org ar feadh $count mí mar $param2',
       two: 'Thacaíodh le lichess.org ar feadh $count mhí mar $param2',
       one: 'Thacaíodh le lichess.org ar feadh mí amháin mar $param2',
-      zero: 'Thacaíodh le lichess.org ar feadh mí amháin mar $param2',
     );
     return '$_temp0';
   }
@@ -45,7 +44,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: 'Rinneadh cleachtadh ar$count suíomh de chuid $param2',
       two: 'Rinneadh cleachtadh ar $count shuíomh de chuid $param2',
       one: 'Rinneadh cleachtadh ar suíomh amháin de chuid $param2',
-      zero: 'Rinneadh cleachtadh ar suíomh amháin de chuid $param2',
     );
     return '$_temp0';
   }
@@ -60,7 +58,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: '$count bhfadhb beartach réitithe',
       two: '$count fhadhb beartach réitithe',
       one: 'Fadhb beartach amháin réitithe',
-      zero: 'Fadhb beartach amháin réitithe',
     );
     return '$_temp0';
   }
@@ -75,7 +72,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: 'Imríodh $count gcluiche $param2',
       two: 'Imríodh $count chluiche $param2',
       one: 'Imríodh cluiche amháin $param2',
-      zero: 'Imríodh cluiche amháin $param2',
     );
     return '$_temp0';
   }
@@ -90,7 +86,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: 'Phostaíodh $count teachtaireachtí i $param2',
       two: 'Phostaíodh $count teachtaireachtí i $param2',
       one: 'Phostaíodh teachtaireacht amháin i $param2',
-      zero: 'Phostaíodh teachtaireacht amháin i $param2',
     );
     return '$_temp0';
   }
@@ -105,7 +100,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: '$count beart imeartha',
       two: '$count bheart imeartha',
       one: 'Beart amháin imeartha',
-      zero: 'Beart amháin imeartha',
     );
     return '$_temp0';
   }
@@ -120,7 +114,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: 'i $count cluiche comhfhreagrais',
       two: 'i $count chluiche comhfhreagrais',
       one: 'i gcluiche amháin comhfhreagrais',
-      zero: 'i gcluiche amháin comhfhreagrais',
     );
     return '$_temp0';
   }
@@ -135,7 +128,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: '$count gcluiche comhfhreagrais críochnaithe',
       two: '$count chluiche comhfhreagrais críochnaithe',
       one: '$count cluiche comhfhreagrais críochnaithe',
-      zero: '$count cluiche comhfhreagrais críochnaithe',
     );
     return '$_temp0';
   }
@@ -150,7 +142,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: 'Thosaíodh $count bhficheallaí a leanacht',
       two: 'Thosaíodh $count fhicheallaí a leanacht',
       one: 'Thosaíodh ficheallaí amháin a leanacht',
-      zero: 'Thosaíodh ficheallaí amháin a leanacht',
     );
     return '$_temp0';
   }
@@ -165,7 +156,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: 'Fuarthas $count leantóir nua',
       two: 'Fuarthas $count leantóir nua',
       one: 'Fuarthas leantóir amháin nua',
-      zero: 'Fuarthas leantóir amháin nua',
     );
     return '$_temp0';
   }
@@ -180,7 +170,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: 'Bhí $count taispeántas comhuaineacha faoi cúram',
       two: 'Bhí $count taispeántas comhuaineacha faoi cúram',
       one: 'Bhí taispeántas comhuaineach amháin faoi cúram',
-      zero: 'Bhí taispeántas comhuaineach amháin faoi cúram',
     );
     return '$_temp0';
   }
@@ -195,7 +184,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: 'Glacadh páirt i $count dtaispeántais comhuaineacha',
       two: 'Glacadh páirt i $count thaispeántais comhuaineacha',
       one: 'Glacadh páirt i dtaispeántas comhuaineach amháin',
-      zero: 'Glacadh páirt i dtaispeántas comhuaineach amháin',
     );
     return '$_temp0';
   }
@@ -210,7 +198,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: 'Chruthaigh $count staidéar nua',
       two: 'Chruthaigh $count staidéar nua',
       one: 'Chruthaigh staidéar nua amháin',
-      zero: 'Chruthaigh staidéar nua amháin',
     );
     return '$_temp0';
   }
@@ -225,7 +212,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: 'San iomaíocht i $count gcomórtas Airéine',
       two: 'San iomaíocht i $count chomórtas Airéine',
       one: 'San iomaíocht i gcomórtas Airéine amháin',
-      zero: 'San iomaíocht i gcomórtas Airéine amháin',
     );
     return '$_temp0';
   }
@@ -240,7 +226,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: 'Céimíocht #$count (an $param2% is fearr) le $param3 gcluiche i $param4',
       two: 'Céimíocht #$count (an $param2% is fearr) le $param3 chluiche i $param4',
       one: 'Céimíocht #$count (an $param2% is fearr) le $param3 cluiche i $param4',
-      zero: 'Céimíocht #$count (an $param2% is fearr) le $param3 cluiche i $param4',
     );
     return '$_temp0';
   }
@@ -255,7 +240,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: 'San iomaíocht i $count gcomórtas swiss',
       two: 'San iomaíocht i $count chomórtas swiss',
       one: 'San iomaíocht i gcomórtais swiss amháín',
-      zero: 'San iomaíocht i gcomórtais swiss amháín',
     );
     return '$_temp0';
   }
@@ -270,7 +254,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: 'Isteach i $count bhfoireann',
       two: 'Isteach i $count fhoireann',
       one: 'Isteach i bhfoireann amháin',
-      zero: 'Isteach i bhfoireann amháin',
     );
     return '$_temp0';
   }
@@ -917,7 +900,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: 'Imeartha $count uair',
       two: 'Imeartha $count uair',
       one: 'Imeartha $count uair',
-      zero: 'Imeartha $count uair',
     );
     return '$_temp0';
   }
@@ -932,7 +914,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: '$count bpointe faoi bhun do rátáil faidhbe',
       two: '$count phointe faoi bhun do rátáil faidhbe',
       one: 'Pointe amháin faoi bhun do rátáil faidhbe',
-      zero: 'Pointe amháin faoi bhun do rátáil faidhbe',
     );
     return '$_temp0';
   }
@@ -947,7 +928,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: '$count bpointe os comhair do rátáil faidhbe',
       two: '$count phointe os comhair do rátáil faidhbe',
       one: 'Pointe amháin os comhair do rátáil faidhbe',
-      zero: 'Pointe amháin os comhair do rátáil faidhbe',
     );
     return '$_temp0';
   }
@@ -962,7 +942,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: 'D\'imir $count',
       two: 'D\'imir $count',
       one: 'D\'imir $count',
-      zero: 'D\'imir $count',
     );
     return '$_temp0';
   }
@@ -977,7 +956,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: '$count athimirt',
       two: '$count athimirt',
       one: '$count athimirt',
-      zero: '$count athimirt',
     );
     return '$_temp0';
   }
@@ -4028,7 +4006,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: 'D’fhág do chéile comhraic an cluiche. Féadfaidh tú an bua a fháil i $count shoicind.',
       two: 'D’fhág do chéile comhraic an cluiche. Féadfaidh tú an bua a fháil i $count shoicind.',
       one: 'D’fhág do chéile comhraic an cluiche. Féadfaidh tú an bua a fháil éileamh i $count soicind.',
-      zero: 'D’fhág do chéile comhraic an cluiche. Féadfaidh tú an bua a fháil éileamh i $count soicind.',
     );
     return '$_temp0';
   }
@@ -4043,7 +4020,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: 'Marbhsháinn i $count leath-bheart',
       two: 'Marbhsháinn i $count leath-bheart',
       one: 'Marbhsháinn i $count leath-bheart',
-      zero: 'Marbhsháinn i $count leath-bheart',
     );
     return '$_temp0';
   }
@@ -4058,7 +4034,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: '$count mbotún',
       two: '$count bhotún',
       one: '$count botún',
-      zero: '$count botún',
     );
     return '$_temp0';
   }
@@ -4073,7 +4048,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: '$count mbotún',
       two: '$count bhotún',
       one: '$count botún',
-      zero: '$count botún',
     );
     return '$_temp0';
   }
@@ -4088,7 +4062,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: '$count míchruinneas',
       two: '$count mhíchruinneas',
       one: '$count míchruinneas',
-      zero: '$count míchruinneas',
     );
     return '$_temp0';
   }
@@ -4103,7 +4076,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: '$count imreoir',
       two: '$count imreoir',
       one: '$count imreoir',
-      zero: '$count imreoir',
     );
     return '$_temp0';
   }
@@ -4118,7 +4090,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: '$count cluiche',
       two: '$count chluiche',
       one: '$count cluiche',
-      zero: '$count cluiche',
     );
     return '$_temp0';
   }
@@ -4130,7 +4101,6 @@ class AppLocalizationsGa extends AppLocalizations {
       locale: localeName,
       other: '$count rating over $param2 games',
       one: '$count rating over $param2 game',
-      zero: '$count rating over $param2 game',
     );
     return '$_temp0';
   }
@@ -4145,7 +4115,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: '$count leabharmharc',
       two: '$count leabharmharc',
       one: '$count leabharmharc',
-      zero: '$count leabharmharc',
     );
     return '$_temp0';
   }
@@ -4160,7 +4129,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: '$count lá',
       two: '$count lá',
       one: 'Lá amháin',
-      zero: 'Lá amháin',
     );
     return '$_temp0';
   }
@@ -4175,7 +4143,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: '$count uair',
       two: '$count uair',
       one: '$count uair',
-      zero: '$count uair',
     );
     return '$_temp0';
   }
@@ -4190,7 +4157,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: '$count nóiméad',
       two: '$count nóiméad',
       one: '$count nóiméad',
-      zero: '$count nóiméad',
     );
     return '$_temp0';
   }
@@ -4205,7 +4171,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: 'Uasdátaítear rangú gach $count nóimead',
       two: 'Uasdátaítear rangú gach $count nóimead',
       one: 'Uasdátaítear rangú gach $count nóimead',
-      zero: 'Uasdátaítear rangú gach $count nóimead',
     );
     return '$_temp0';
   }
@@ -4220,7 +4185,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: '$count fhadhb',
       two: '$count fhadhb',
       one: '$count fadhb',
-      zero: '$count fadhb',
     );
     return '$_temp0';
   }
@@ -4235,7 +4199,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: '$count gcluiche leat',
       two: '$count chluiche leat',
       one: '$count cluiche leat',
-      zero: '$count cluiche leat',
     );
     return '$_temp0';
   }
@@ -4250,7 +4213,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: '$count chluichí rátáilte',
       two: '$count chluiche rátáilte',
       one: '$count cluiche rátáilte',
-      zero: '$count cluiche rátáilte',
     );
     return '$_temp0';
   }
@@ -4265,7 +4227,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: '$count mbua',
       two: '$count bhua',
       one: '$count bua',
-      zero: '$count bua',
     );
     return '$_temp0';
   }
@@ -4280,7 +4241,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: '$count chaill',
       two: '$count chaill',
       one: '$count caill',
-      zero: '$count caill',
     );
     return '$_temp0';
   }
@@ -4295,7 +4255,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: '$count gcomhscór',
       two: '$count chomhscór',
       one: '$count comhscór',
-      zero: '$count comhscór',
     );
     return '$_temp0';
   }
@@ -4310,7 +4269,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: '$count á imirt',
       two: '$count á imirt',
       one: '$count á imirt',
-      zero: '$count á imirt',
     );
     return '$_temp0';
   }
@@ -4325,7 +4283,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: 'Tabhair $count shoicind',
       two: 'Tabhair $count shoicind',
       one: 'Tabhair $count soicind',
-      zero: 'Tabhair $count soicind',
     );
     return '$_temp0';
   }
@@ -4340,7 +4297,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: '$count bpointe comórtais',
       two: '$count phointe comórtais',
       one: '$count pointe comórtais',
-      zero: '$count pointe comórtais',
     );
     return '$_temp0';
   }
@@ -4355,7 +4311,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: '$count staidéir',
       two: '$count staidéir',
       one: '$count staidéar',
-      zero: '$count staidéar',
     );
     return '$_temp0';
   }
@@ -4367,7 +4322,6 @@ class AppLocalizationsGa extends AppLocalizations {
       locale: localeName,
       other: '$count simuls',
       one: '$count simul',
-      zero: '$count simul',
     );
     return '$_temp0';
   }
@@ -4382,7 +4336,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: '≥ $count cluichí rátáilte',
       two: '≥ $count cluichí rátáilte',
       one: '≥ $count cluiche rátáilte',
-      zero: '≥ $count cluiche rátáilte',
     );
     return '$_temp0';
   }
@@ -4397,7 +4350,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: '≥ $count cluichí rátáilte $param2',
       two: '≥ $count cluichí rátáilte $param2',
       one: '≥ $count cluiche rátáilte $param2',
-      zero: '≥ $count cluiche rátáilte $param2',
     );
     return '$_temp0';
   }
@@ -4412,7 +4364,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: 'Caithfidh tú $count gcluiche rátáilte \"$param2\" eile a imirt',
       two: 'Caithfidh tú $count chluiche rátáilte \"$param2\" eile a imirt',
       one: 'Caithfidh tú $count cluiche rátáilte \"$param2\" eile a imirt',
-      zero: 'Caithfidh tú $count cluiche rátáilte \"$param2\" eile a imirt',
     );
     return '$_temp0';
   }
@@ -4427,7 +4378,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: 'Caithfidh tú $count gcluiche rátáilte eile a imirt',
       two: 'Caithfidh tú $count chluiche rátáilte eile a imirt',
       one: 'Caithfidh tú $count cluiche rátáilte eile a imirt',
-      zero: 'Caithfidh tú $count cluiche rátáilte eile a imirt',
     );
     return '$_temp0';
   }
@@ -4442,7 +4392,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: '$count gcluiche iompórtáilte',
       two: '$count chluiche iompórtáilte',
       one: '$count cluiche iompórtáilte',
-      zero: '$count cluiche iompórtáilte',
     );
     return '$_temp0';
   }
@@ -4457,7 +4406,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: '$count cairde ar líne',
       two: '$count chara ar líne',
       one: 'cara amháin ar líne',
-      zero: 'cara amháin ar líne',
     );
     return '$_temp0';
   }
@@ -4472,7 +4420,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: '$count leantóir',
       two: 'beirt leantóir',
       one: 'leantóir amháin',
-      zero: 'leantóir amháin',
     );
     return '$_temp0';
   }
@@ -4487,7 +4434,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: '$count ag leanúint',
       two: 'beirt ag leanúint',
       one: 'duine amháin ag leanúint',
-      zero: 'duine amháin ag leanúint',
     );
     return '$_temp0';
   }
@@ -4502,7 +4448,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: 'Níos lú ná $count nóiméad',
       two: 'Níos lú ná $count nóiméad',
       one: 'Níos lú ná nóiméad amháin',
-      zero: 'Níos lú ná nóiméad amháin',
     );
     return '$_temp0';
   }
@@ -4517,7 +4462,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: '$count gcluiche san imirt',
       two: '$count chluiche san imirt',
       one: '$count cluiche san imirt',
-      zero: '$count cluiche san imirt',
     );
     return '$_temp0';
   }
@@ -4532,7 +4476,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: 'Uasmhéid $count gcarachtar.',
       two: 'Uasmhéid $count charachtar.',
       one: 'Uasmhéid $count carachtar.',
-      zero: 'Uasmhéid $count carachtar.',
     );
     return '$_temp0';
   }
@@ -4547,7 +4490,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: '$count bloic',
       two: '$count bhloc',
       one: 'bloc amháin',
-      zero: 'bloc amháin',
     );
     return '$_temp0';
   }
@@ -4562,7 +4504,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: 'poist fóraim $count',
       two: 'post fóraim $count',
       one: 'post fóraim amháin',
-      zero: 'post fóraim amháin',
     );
     return '$_temp0';
   }
@@ -4577,7 +4518,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: '$count $param2 imreoir an tseachtain seo.',
       two: '$count $param2 imreoir an tseachtain seo.',
       one: '$count $param2 imreoir an tseachtain seo.',
-      zero: '$count $param2 imreoir an tseachtain seo.',
     );
     return '$_temp0';
   }
@@ -4592,7 +4532,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: 'Ar fáil i $count dteanga!',
       two: 'Ar fáil i $count theanga!',
       one: 'Ar fáil i $count teanga!',
-      zero: 'Ar fáil i $count teanga!',
     );
     return '$_temp0';
   }
@@ -4607,7 +4546,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: '$count soicind chun an chéad bheart a imirt',
       two: '$count soicind chun an chéad bheart a imirt',
       one: '$count soicind chun an chéad bheart a imirt',
-      zero: '$count soicind chun an chéad bheart a imirt',
     );
     return '$_temp0';
   }
@@ -4622,7 +4560,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: '$count soicind',
       two: '$count shoicind',
       one: '$count soicind',
-      zero: '$count soicind',
     );
     return '$_temp0';
   }
@@ -4637,7 +4574,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: 'agus sábháil $count líne réamhbhirt',
       two: 'agus sábháil $count líne réamhbhirt',
       one: 'agus sábháil $count líne réamhbhirt',
-      zero: 'agus sábháil $count líne réamhbhirt',
     );
     return '$_temp0';
   }
@@ -4811,7 +4747,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: '$count stríocáin',
       two: '$count stríocáin',
       one: '1 stríocáin',
-      zero: '1 stríocáin',
     );
     return '$_temp0';
   }
@@ -4826,7 +4761,6 @@ class AppLocalizationsGa extends AppLocalizations {
       few: 'D\'imir $count stríocáin de $param2',
       two: 'D\'imir $count stríocáin de $param2',
       one: 'D\'imir stríocáin amháin de $param2',
-      zero: 'D\'imir stríocáin amháin de $param2',
     );
     return '$_temp0';
   }

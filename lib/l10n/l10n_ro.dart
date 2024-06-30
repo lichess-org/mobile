@@ -28,7 +28,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: 'A sprijinit lichess.org pentru $count luni ca și $param2',
       few: 'A sprijinit lichess.org pentru $count luni ca și $param2',
       one: 'A sprijinit lichess.org pentru $count lună ca și $param2',
-      zero: 'A sprijinit lichess.org pentru $count lună ca și $param2',
     );
     return '$_temp0';
   }
@@ -41,7 +40,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: 'A practicat $count poziții pe $param2',
       few: 'A practicat $count poziții pe $param2',
       one: 'A practicat $count poziție pe $param2',
-      zero: 'A practicat $count poziție pe $param2',
     );
     return '$_temp0';
   }
@@ -54,7 +52,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: 'A rezolvat $count puzzle-uri tactice',
       few: 'A rezolvat $count puzzle-uri tactice',
       one: 'A rezolvat $count puzzle tactic',
-      zero: 'A rezolvat $count puzzle tactic',
     );
     return '$_temp0';
   }
@@ -67,7 +64,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: 'A jucat $count meciuri $param2',
       few: 'A jucat $count meciuri $param2',
       one: 'A jucat $count meci $param2',
-      zero: 'A jucat $count meci $param2',
     );
     return '$_temp0';
   }
@@ -80,7 +76,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: 'A postat $count mesaje în $param2',
       few: 'A postat $count mesaje în $param2',
       one: 'A postat $count mesaj în $param2',
-      zero: 'A postat $count mesaj în $param2',
     );
     return '$_temp0';
   }
@@ -93,7 +88,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: 'A jucat $count mutări',
       few: 'A jucat $count mutări',
       one: 'A jucat $count mutare',
-      zero: 'A jucat $count mutare',
     );
     return '$_temp0';
   }
@@ -106,7 +100,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: 'în $count jocuri de corespondență',
       few: 'în $count jocuri de corespondență',
       one: 'în $count joc de corespondență',
-      zero: 'în $count joc de corespondență',
     );
     return '$_temp0';
   }
@@ -119,7 +112,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: 'A completat $count meciuri de corespondență',
       few: 'A completat $count meciuri de corespondență',
       one: 'A completat $count meci de corespondență',
-      zero: 'A completat $count meci de corespondență',
     );
     return '$_temp0';
   }
@@ -132,7 +124,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: 'A început să urmărească $count jucători',
       few: 'A început să urmărească $count jucători',
       one: 'A început să urmărească $count jucător',
-      zero: 'A început să urmărească $count jucător',
     );
     return '$_temp0';
   }
@@ -145,7 +136,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: 'A obținut $count urmăritori noi',
       few: 'A obținut $count urmăritori noi',
       one: 'A obținut $count urmăritor nou',
-      zero: 'A obținut $count urmăritor nou',
     );
     return '$_temp0';
   }
@@ -158,7 +148,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: 'A găzduit $count simultane de șah',
       few: 'A găzduit $count simultane de șah',
       one: 'A găzduit $count simultană de șah',
-      zero: 'A găzduit $count simultană de șah',
     );
     return '$_temp0';
   }
@@ -171,7 +160,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: 'A participat în $count simultane de șah',
       few: 'A participat în $count simultane de șah',
       one: 'A participat în $count simultan de șah',
-      zero: 'A participat în $count simultan de șah',
     );
     return '$_temp0';
   }
@@ -184,7 +172,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: 'A creat $count studii noi',
       few: 'A creat $count studii noi',
       one: 'A creat $count studiu nou',
-      zero: 'A creat $count studiu nou',
     );
     return '$_temp0';
   }
@@ -197,7 +184,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: 'A concurat în $count competiții',
       few: 'A concurat în $count competiții',
       one: 'A concurat în $count competiție',
-      zero: 'A concurat în $count competiție',
     );
     return '$_temp0';
   }
@@ -210,7 +196,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: 'Clasat #$count (top $param2%) cu $param3 meciuri în $param4',
       few: 'Clasat #$count (top $param2%) cu $param3 meciuri în $param4',
       one: 'Clasat #$count (top $param2%) cu $param3 meci în $param4',
-      zero: 'Clasat #$count (top $param2%) cu $param3 meci în $param4',
     );
     return '$_temp0';
   }
@@ -223,7 +208,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: 'A concurat în $count turnee elvețiene',
       few: 'A concurat în $count turnee elvețiene',
       one: 'A concurat în $count turneu elvețian',
-      zero: 'A concurat în $count turneu elvețian',
     );
     return '$_temp0';
   }
@@ -236,7 +220,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: 'S-a alăturat la $count echipe',
       few: 'S-a alăturat la $count echipe',
       one: 'S-a alăturat la $count echipă',
-      zero: 'S-a alăturat la $count echipă',
     );
     return '$_temp0';
   }
@@ -881,7 +864,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: 'Jucat de $count ori',
       few: 'Jucat de $count ori',
       one: 'Jucat $count dată',
-      zero: 'Jucat $count dată',
     );
     return '$_temp0';
   }
@@ -894,7 +876,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: '$count de puncte sub ratingul tău de puzzle-uri',
       few: '$count puncte sub ratingul tău de puzzle-uri',
       one: 'Un punct sub ratingul tău de puzzle-uri',
-      zero: 'Un punct sub ratingul tău de puzzle-uri',
     );
     return '$_temp0';
   }
@@ -907,7 +888,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: '$count de puncte deasupra ratingului tău de puzzle-uri',
       few: '$count puncte deasupra ratingului tău de puzzle-uri',
       one: 'Un punct deasupra ratingului tău de puzzle-uri',
-      zero: 'Un punct deasupra ratingului tău de puzzle-uri',
     );
     return '$_temp0';
   }
@@ -920,7 +900,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: '$count jucate',
       few: '$count jucate',
       one: '$count jucat',
-      zero: '$count jucat',
     );
     return '$_temp0';
   }
@@ -933,7 +912,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: '$count de rejucat',
       few: '$count de rejucat',
       one: '$count de rejucat',
-      zero: '$count de rejucat',
     );
     return '$_temp0';
   }
@@ -3982,7 +3960,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: 'Adversarul tău a părăsit jocul. Poți revendica victoria peste $count secunde.',
       few: 'Adversarul tău a părăsit jocul. Poți revendica victoria peste $count secunde.',
       one: 'Adversarul tău a părăsit jocul. Poți revendica victoria peste $count secundă.',
-      zero: 'Adversarul tău a părăsit jocul. Poți revendica victoria peste $count secundă.',
     );
     return '$_temp0';
   }
@@ -3995,7 +3972,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: 'Mat în $count mutări',
       few: 'Mat în $count mutări',
       one: 'Mat la prima mutare',
-      zero: 'Mat la prima mutare',
     );
     return '$_temp0';
   }
@@ -4008,7 +3984,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: '$count de gafe',
       few: '$count gafe',
       one: '$count gafă',
-      zero: '$count gafă',
     );
     return '$_temp0';
   }
@@ -4021,7 +3996,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: '$count de greșeli',
       few: '$count greșeli',
       one: '$count greșeală',
-      zero: '$count greșeală',
     );
     return '$_temp0';
   }
@@ -4034,7 +4008,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: '$count de inexactități',
       few: '$count inexactități',
       one: '$count inexactitate',
-      zero: '$count inexactitate',
     );
     return '$_temp0';
   }
@@ -4047,7 +4020,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: '$count de jucători',
       few: '$count jucători',
       one: '$count jucător',
-      zero: '$count jucător',
     );
     return '$_temp0';
   }
@@ -4060,7 +4032,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: '$count de partide',
       few: '$count partide',
       one: '$count partidă',
-      zero: '$count partidă',
     );
     return '$_temp0';
   }
@@ -4073,7 +4044,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: 'Rating $count din $param2 de meciuri',
       few: 'Rating $count din $param2 meciuri',
       one: 'Rating $count din $param2 meci',
-      zero: 'Rating $count din $param2 meci',
     );
     return '$_temp0';
   }
@@ -4086,7 +4056,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: '$count marcate',
       few: '$count marcate',
       one: '$count marcat',
-      zero: '$count marcat',
     );
     return '$_temp0';
   }
@@ -4099,7 +4068,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: '$count de zile',
       few: '$count zile',
       one: '$count zi',
-      zero: '$count zi',
     );
     return '$_temp0';
   }
@@ -4112,7 +4080,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: '$count de ore',
       few: '$count ore',
       one: '$count oră',
-      zero: '$count oră',
     );
     return '$_temp0';
   }
@@ -4125,7 +4092,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: '$count de minute',
       few: '$count minute',
       one: '$count minut',
-      zero: '$count minut',
     );
     return '$_temp0';
   }
@@ -4138,7 +4104,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: 'Locul în clasament este actualizat la fiecare $count minute',
       few: 'Locul în clasament este actualizat la fiecare $count minute',
       one: 'Locul în clasament este actualizat în fiecare minut',
-      zero: 'Locul în clasament este actualizat în fiecare minut',
     );
     return '$_temp0';
   }
@@ -4151,7 +4116,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: '$count poziții',
       few: '$count poziții',
       one: 'O poziție',
-      zero: 'O poziție',
     );
     return '$_temp0';
   }
@@ -4164,7 +4128,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: '$count partide cu tine',
       few: '$count partide cu tine',
       one: '$count partidă cu tine',
-      zero: '$count partidă cu tine',
     );
     return '$_temp0';
   }
@@ -4177,7 +4140,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: '$count evaluate',
       few: '$count evaluate',
       one: '$count evaluat',
-      zero: '$count evaluat',
     );
     return '$_temp0';
   }
@@ -4190,7 +4152,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: '$count de victorii',
       few: '$count victorii',
       one: '$count victorie',
-      zero: '$count victorie',
     );
     return '$_temp0';
   }
@@ -4203,7 +4164,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: '$count de înfrângeri',
       few: '$count înfrângeri',
       one: '$count înfrângere',
-      zero: '$count înfrângere',
     );
     return '$_temp0';
   }
@@ -4216,7 +4176,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: '$count de remize',
       few: '$count remize',
       one: '$count remiză',
-      zero: '$count remiză',
     );
     return '$_temp0';
   }
@@ -4229,7 +4188,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: '$count le joacă',
       few: '$count le joacă',
       one: '$count îl joacă',
-      zero: '$count îl joacă',
     );
     return '$_temp0';
   }
@@ -4242,7 +4200,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: 'Acordă $count secunde',
       few: 'Acordă $count secunde',
       one: 'Acordă $count secundă',
-      zero: 'Acordă $count secundă',
     );
     return '$_temp0';
   }
@@ -4255,7 +4212,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: '$count puncte de turneu',
       few: '$count puncte de turneu',
       one: '$count punct de turneu',
-      zero: '$count punct de turneu',
     );
     return '$_temp0';
   }
@@ -4268,7 +4224,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: '$count de studii',
       few: '$count studii',
       one: '$count studiu',
-      zero: '$count studiu',
     );
     return '$_temp0';
   }
@@ -4281,7 +4236,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: '$count simul',
       few: '$count simul',
       one: '$count simul',
-      zero: '$count simul',
     );
     return '$_temp0';
   }
@@ -4294,7 +4248,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: '$count partide evaluate',
       few: '$count meciuri evaluate',
       one: '$count meci evaluat',
-      zero: '$count meci evaluat',
     );
     return '$_temp0';
   }
@@ -4307,7 +4260,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: '$count $param2 partide jucate',
       few: '$count $param2 meciuri jucate',
       one: '$count $param2 meci jucat',
-      zero: '$count $param2 meci jucat',
     );
     return '$_temp0';
   }
@@ -4320,7 +4272,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: 'Trebuie să joci încă $count partide $param2 evaluate',
       few: 'Trebuie să joci încă $count meciuri in variantă $param2',
       one: 'Trebuie să joci încă $count meci in variantă $param2',
-      zero: 'Trebuie să joci încă $count meci in variantă $param2',
     );
     return '$_temp0';
   }
@@ -4333,7 +4284,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: 'Trebuie să joci încă $count meciuri evaluate',
       few: 'Trebuie să joci încă $count meciuri evaluate',
       one: 'Trebuie să joci încă $count meci evaluat',
-      zero: 'Trebuie să joci încă $count meci evaluat',
     );
     return '$_temp0';
   }
@@ -4346,7 +4296,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: '$count partide importate',
       few: '$count partide importate',
       one: '$count partidă importată',
-      zero: '$count partidă importată',
     );
     return '$_temp0';
   }
@@ -4359,7 +4308,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: '$count prieteni online',
       few: '$count prieteni online',
       one: '$count prieten online',
-      zero: '$count prieten online',
     );
     return '$_temp0';
   }
@@ -4372,7 +4320,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: '$count urmăritori',
       few: '$count urmăritori',
       one: '$count urmăritor',
-      zero: '$count urmăritor',
     );
     return '$_temp0';
   }
@@ -4385,7 +4332,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: '$count urmăriți',
       few: '$count urmăriți',
       one: '$count urmărit',
-      zero: '$count urmărit',
     );
     return '$_temp0';
   }
@@ -4398,7 +4344,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: 'Mai puțin de $count minute',
       few: 'Mai puțin de $count minute',
       one: 'Mai puțin de $count minut',
-      zero: 'Mai puțin de $count minut',
     );
     return '$_temp0';
   }
@@ -4411,7 +4356,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: '$count de partide în desfășurare',
       few: '$count partide în desfășurare',
       one: '$count partidă în desfășurare',
-      zero: '$count partidă în desfășurare',
     );
     return '$_temp0';
   }
@@ -4424,7 +4368,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: 'Maxim: $count caractere.',
       few: 'Maxim: $count caractere.',
       one: 'Maxim: $count caracter.',
-      zero: 'Maxim: $count caracter.',
     );
     return '$_temp0';
   }
@@ -4437,7 +4380,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: '$count jucători blocați',
       few: '$count jucători blocați',
       one: '$count jucător blocat',
-      zero: '$count jucător blocat',
     );
     return '$_temp0';
   }
@@ -4450,7 +4392,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: '$count de postări pe forum',
       few: '$count postări pe forum',
       one: '$count postare pe forum',
-      zero: '$count postare pe forum',
     );
     return '$_temp0';
   }
@@ -4463,7 +4404,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: '$count jucători $param2 în această săptămână.',
       few: '$count jucători $param2 în această săptămână.',
       one: '$count jucător $param2 în această săptămână.',
-      zero: '$count jucător $param2 în această săptămână.',
     );
     return '$_temp0';
   }
@@ -4476,7 +4416,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: 'Disponibil în $count limbi!',
       few: 'Disponibil în $count limbi!',
       one: 'Disponibil într-o limbă!',
-      zero: 'Disponibil într-o limbă!',
     );
     return '$_temp0';
   }
@@ -4489,7 +4428,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: '$count secunde rămase pentru a începe jocul',
       few: '$count secunde rămase pentru a începe jocul',
       one: '$count secundă rămasă pentru a începe jocul',
-      zero: '$count secundă rămasă pentru a începe jocul',
     );
     return '$_temp0';
   }
@@ -4502,7 +4440,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: '$count secunde',
       few: '$count secunde',
       one: '$count secundă',
-      zero: '$count secundă',
     );
     return '$_temp0';
   }
@@ -4515,7 +4452,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: 'și salvează $count variațiile cu mutare anticipată',
       few: 'și salvează $count variațiile cu mutare anticipată',
       one: 'și salvează $count variație cu mutare anticipată',
-      zero: 'și salvează $count variație cu mutare anticipată',
     );
     return '$_temp0';
   }
@@ -4687,7 +4623,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: '$count încercări',
       few: '$count încercări',
       one: 'O încercare',
-      zero: 'O încercare',
     );
     return '$_temp0';
   }
@@ -4700,7 +4635,6 @@ class AppLocalizationsRo extends AppLocalizations {
       other: 'A jucat $count încercări de $param2',
       few: 'A jucat $count încercări de $param2',
       one: 'A jucat o încercare de $param2',
-      zero: 'A jucat o încercare de $param2',
     );
     return '$_temp0';
   }

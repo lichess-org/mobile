@@ -27,7 +27,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: 'A lichess.org támogatója $count hónapja $param2-ként',
       one: 'A lichess.org támogatója $count hónapja $param2-ként',
-      zero: 'A lichess.org támogatója $count hónapja $param2-ként',
     );
     return '$_temp0';
   }
@@ -39,7 +38,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count $param2 állást gyakorolt',
       one: '$count $param2 állást gyakorolt',
-      zero: '$count $param2 állást gyakorolt',
     );
     return '$_temp0';
   }
@@ -51,7 +49,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: 'Befejezett $count taktikai feladványt',
       one: 'Megoldott $count taktikai feladványt',
-      zero: 'Megoldott $count taktikai feladványt',
     );
     return '$_temp0';
   }
@@ -63,7 +60,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count $param2 partit játszott',
       one: '$count $param2 partit játszott',
-      zero: '$count $param2 partit játszott',
     );
     return '$_temp0';
   }
@@ -75,7 +71,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count üzenetet írt a $param2 témába',
       one: '$count üzenetet írt a $param2 témába',
-      zero: '$count üzenetet írt a $param2 témába',
     );
     return '$_temp0';
   }
@@ -87,7 +82,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count lépést tett',
       one: '$count lépést tett',
-      zero: '$count lépést tett',
     );
     return '$_temp0';
   }
@@ -99,7 +93,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count levelező játszmában',
       one: '$count levelező játszmában',
-      zero: '$count levelező játszmában',
     );
     return '$_temp0';
   }
@@ -111,7 +104,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: 'Befejezett $count levelező sakk játszmát',
       one: 'Befejezett $count levelező sakk játszmát',
-      zero: 'Befejezett $count levelező sakk játszmát',
     );
     return '$_temp0';
   }
@@ -123,7 +115,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count játékost kezdett követni',
       one: '$count játékost kezdett követni',
-      zero: '$count játékost kezdett követni',
     );
     return '$_temp0';
   }
@@ -135,7 +126,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count új követőt szerzett',
       one: '$count új követőt szerzett',
-      zero: '$count új követőt szerzett',
     );
     return '$_temp0';
   }
@@ -147,7 +137,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count szimultán bemutatót rendezett',
       one: '$count szimultán bemutatót rendezett',
-      zero: '$count szimultán bemutatót rendezett',
     );
     return '$_temp0';
   }
@@ -159,7 +148,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count szimultán bemutatón vett részt',
       one: '$count szimultán bemutatón vett részt',
-      zero: '$count szimultán bemutatón vett részt',
     );
     return '$_temp0';
   }
@@ -171,7 +159,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count új tanulmány',
       one: '$count új tanulmányt készített',
-      zero: '$count új tanulmányt készített',
     );
     return '$_temp0';
   }
@@ -183,7 +170,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count versenyen vett részt',
       one: '$count versenyen vett részt',
-      zero: '$count versenyen vett részt',
     );
     return '$_temp0';
   }
@@ -195,7 +181,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$param4 #$count. helyezés (felső $param2%) $param3 játszmából',
       one: '$param4 #$count. helyezés (felső $param2%) $param3 játszmából',
-      zero: '$param4 #$count. helyezés (felső $param2%) $param3 játszmából',
     );
     return '$_temp0';
   }
@@ -207,7 +192,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count svájci rendszerű versenyen vett részt',
       one: '$count svájci rendszerű versenyen vett részt',
-      zero: '$count svájci rendszerű versenyen vett részt',
     );
     return '$_temp0';
   }
@@ -219,7 +203,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count csapathoz csatlakozott',
       one: '$count csapathoz csatlakozott',
-      zero: '$count csapathoz csatlakozott',
     );
     return '$_temp0';
   }
@@ -863,7 +846,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count beküldött megfejtés',
       one: '$count beküldött megfejtés',
-      zero: '$count beküldött megfejtés',
     );
     return '$_temp0';
   }
@@ -875,7 +857,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count ponttal az értékszámod alatt',
       one: 'Egy ponttal az értékszámod alatt',
-      zero: 'Egy ponttal az értékszámod alatt',
     );
     return '$_temp0';
   }
@@ -887,7 +868,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count ponttal az értékszámod felett',
       one: 'Egy ponttal az értékszámod felett',
-      zero: 'Egy ponttal az értékszámod felett',
     );
     return '$_temp0';
   }
@@ -899,7 +879,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count játszott',
       one: '$count játszott',
-      zero: '$count játszott',
     );
     return '$_temp0';
   }
@@ -911,7 +890,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count újra',
       one: '$count újra',
-      zero: '$count újra',
     );
     return '$_temp0';
   }
@@ -3959,7 +3937,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: 'Az ellenfeled elhagyta a játékot, $count másodperc múlva győzelmet igényelhetsz.',
       one: 'Az ellenfeled elhagyta a játékot, $count másodperc múlva győzelmet igényelhetsz.',
-      zero: 'Az ellenfeled elhagyta a játékot, $count másodperc múlva győzelmet igényelhetsz.',
     );
     return '$_temp0';
   }
@@ -3971,7 +3948,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: 'Matt $count féllépésben',
       one: 'Matt $count féllépésben',
-      zero: 'Matt $count féllépésben',
     );
     return '$_temp0';
   }
@@ -3983,7 +3959,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count súlyos hiba',
       one: '$count súlyos hiba',
-      zero: '$count súlyos hiba',
     );
     return '$_temp0';
   }
@@ -3995,7 +3970,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count hiba',
       one: '$count hiba',
-      zero: '$count hiba',
     );
     return '$_temp0';
   }
@@ -4007,7 +3981,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count pontatlanság',
       one: '$count pontatlanság',
-      zero: '$count pontatlanság',
     );
     return '$_temp0';
   }
@@ -4019,7 +3992,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count játékos',
       one: '$count játékos',
-      zero: '$count játékos',
     );
     return '$_temp0';
   }
@@ -4031,7 +4003,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count játszma',
       one: '$count játszma',
-      zero: '$count játszma',
     );
     return '$_temp0';
   }
@@ -4043,7 +4014,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count pontszám $param2 játszma alapján',
       one: '$count pontszám $param2 játszma alapján',
-      zero: '$count pontszám $param2 játszma alapján',
     );
     return '$_temp0';
   }
@@ -4055,7 +4025,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count kedvenc',
       one: '$count kedvenc',
-      zero: '$count kedvenc',
     );
     return '$_temp0';
   }
@@ -4067,7 +4036,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count nap',
       one: '$count nap',
-      zero: '$count nap',
     );
     return '$_temp0';
   }
@@ -4079,7 +4047,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count óra',
       one: '$count óra',
-      zero: '$count óra',
     );
     return '$_temp0';
   }
@@ -4091,7 +4058,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count perc',
       one: '$count perc',
-      zero: '$count perc',
     );
     return '$_temp0';
   }
@@ -4103,7 +4069,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: 'A helyezés minden $count percben frissül',
       one: 'A helyezés minden percben frissül',
-      zero: 'A helyezés minden percben frissül',
     );
     return '$_temp0';
   }
@@ -4115,7 +4080,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count feladvány',
       one: '$count feladvány',
-      zero: '$count feladvány',
     );
     return '$_temp0';
   }
@@ -4127,7 +4091,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count játék veled',
       one: '$count játszma veled',
-      zero: '$count játszma veled',
     );
     return '$_temp0';
   }
@@ -4139,7 +4102,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count rangsorolt',
       one: '$count rangsorolt',
-      zero: '$count rangsorolt',
     );
     return '$_temp0';
   }
@@ -4151,7 +4113,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count győzelem',
       one: '$count győzelem',
-      zero: '$count győzelem',
     );
     return '$_temp0';
   }
@@ -4163,7 +4124,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count vereség',
       one: '$count vereség',
-      zero: '$count vereség',
     );
     return '$_temp0';
   }
@@ -4175,7 +4135,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count döntetlen',
       one: '$count döntetlen',
-      zero: '$count döntetlen',
     );
     return '$_temp0';
   }
@@ -4187,7 +4146,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count folyamatban',
       one: '$count folyamatban',
-      zero: '$count folyamatban',
     );
     return '$_temp0';
   }
@@ -4199,7 +4157,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: 'Adj $count másodpercet',
       one: 'Adj $count másodpercet',
-      zero: 'Adj $count másodpercet',
     );
     return '$_temp0';
   }
@@ -4211,7 +4168,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count versenypont',
       one: '$count versenypont',
-      zero: '$count versenypont',
     );
     return '$_temp0';
   }
@@ -4223,7 +4179,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count tanulmány',
       one: '$count tanulmány',
-      zero: '$count tanulmány',
     );
     return '$_temp0';
   }
@@ -4235,7 +4190,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count szimultán',
       one: '$count szimultán',
-      zero: '$count szimultán',
     );
     return '$_temp0';
   }
@@ -4247,7 +4201,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '≥ $count értékelt játszma',
       one: '≥ $count értékelt játszma',
-      zero: '≥ $count értékelt játszma',
     );
     return '$_temp0';
   }
@@ -4259,7 +4212,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '≥ $count értékelt $param2 játszma',
       one: '≥ $count értékelt $param2 játszma',
-      zero: '≥ $count értékelt $param2 játszma',
     );
     return '$_temp0';
   }
@@ -4271,7 +4223,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: 'Még $count további $param2 rangsorolt játszma szükséges',
       one: 'Még $count további $param2 rangsorolt játszma szükséges',
-      zero: 'Még $count további $param2 rangsorolt játszma szükséges',
     );
     return '$_temp0';
   }
@@ -4283,7 +4234,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: 'Még $count további rangsorolt játszma szükséges',
       one: 'Még $count további rangsorolt játszma szükséges',
-      zero: 'Még $count további rangsorolt játszma szükséges',
     );
     return '$_temp0';
   }
@@ -4295,7 +4245,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count Importált játszma',
       one: '$count importált játszma',
-      zero: '$count importált játszma',
     );
     return '$_temp0';
   }
@@ -4307,7 +4256,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count barát online',
       one: '$count barát online',
-      zero: '$count barát online',
     );
     return '$_temp0';
   }
@@ -4319,7 +4267,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count követő',
       one: '$count követő',
-      zero: '$count követő',
     );
     return '$_temp0';
   }
@@ -4331,7 +4278,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count követve',
       one: '$count követve',
-      zero: '$count követve',
     );
     return '$_temp0';
   }
@@ -4343,7 +4289,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: 'Kevesebb mint $count perc',
       one: 'Kevesebb mint $count perc',
-      zero: 'Kevesebb mint $count perc',
     );
     return '$_temp0';
   }
@@ -4355,7 +4300,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count játszma fut',
       one: '$count játszma fut',
-      zero: '$count játszma fut',
     );
     return '$_temp0';
   }
@@ -4367,7 +4311,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: 'Legfeljebb $count karakter.',
       one: 'Legfeljebb $count karakter.',
-      zero: 'Legfeljebb $count karakter.',
     );
     return '$_temp0';
   }
@@ -4379,7 +4322,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count letiltott játékos',
       one: '$count letiltott játékos',
-      zero: '$count letiltott játékos',
     );
     return '$_temp0';
   }
@@ -4391,7 +4333,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count fórumbejegyzés',
       one: '$count fórumbejegyzés',
-      zero: '$count fórumbejegyzés',
     );
     return '$_temp0';
   }
@@ -4403,7 +4344,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count $param2 játékos ezen a héten.',
       one: '$count $param2 játékos ezen a héten.',
-      zero: '$count $param2 játékos ezen a héten.',
     );
     return '$_temp0';
   }
@@ -4415,7 +4355,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: 'Elérhető $count nyelven',
       one: 'Elérhető $count nyelven',
-      zero: 'Elérhető $count nyelven',
     );
     return '$_temp0';
   }
@@ -4427,7 +4366,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count másodperc a kezdőlépés megtételére',
       one: '$count másodperc a kezdőlépés megtételére',
-      zero: '$count másodperc a kezdőlépés megtételére',
     );
     return '$_temp0';
   }
@@ -4439,7 +4377,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count másodperc',
       one: '$count másodperc',
-      zero: '$count másodperc',
     );
     return '$_temp0';
   }
@@ -4451,7 +4388,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: 'és $count változat mentése',
       one: 'és $count változat mentése',
-      zero: 'és $count változat mentése',
     );
     return '$_temp0';
   }
@@ -4622,7 +4558,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count futam',
       one: '1 futam',
-      zero: '1 futam',
     );
     return '$_temp0';
   }
@@ -4634,7 +4569,6 @@ class AppLocalizationsHu extends AppLocalizations {
       locale: localeName,
       other: '$count $param2 futamot játszott',
       one: 'Egy $param2 futamot játszott',
-      zero: 'Egy $param2 futamot játszott',
     );
     return '$_temp0';
   }
