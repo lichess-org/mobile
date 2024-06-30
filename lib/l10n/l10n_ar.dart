@@ -395,7 +395,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get broadcastBroadcasts => 'البثوث';
 
   @override
-  String get broadcastStartDate => 'تاريخ البدء في المنطقة الزمنية الخاصة بك';
+  String get broadcastLiveBroadcasts => 'بث البطولة المباشرة';
 
   @override
   String challengeChallengesX(String param1) {

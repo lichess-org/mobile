@@ -310,7 +310,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get broadcastBroadcasts => 'Các phát sóng';
 
   @override
-  String get broadcastStartDate => 'Ngày bắt đầu theo múi giờ của bạn';
+  String get broadcastLiveBroadcasts => 'Các giải đấu phát sóng trực tiếp';
 
   @override
   String challengeChallengesX(String param1) {

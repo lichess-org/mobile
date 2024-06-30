@@ -327,7 +327,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get broadcastBroadcasts => 'Retransmissions';
 
   @override
-  String get broadcastStartDate => 'Data d\'inici en la teva zona horària';
+  String get broadcastLiveBroadcasts => 'Retransmissions de tornejos en directe';
 
   @override
   String challengeChallengesX(String param1) {

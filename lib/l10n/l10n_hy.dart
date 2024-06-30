@@ -327,7 +327,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get broadcastBroadcasts => 'Հեռարձակումներ';
 
   @override
-  String get broadcastStartDate => 'Սկսվելու ամսաթիվը Ձեր ժամագոտում';
+  String get broadcastLiveBroadcasts => 'Մրցաշարի ուղիղ հեռարձակումներ';
 
   @override
   String challengeChallengesX(String param1) {

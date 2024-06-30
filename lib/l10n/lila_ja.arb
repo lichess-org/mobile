@@ -21,7 +21,7 @@
   "activityCompetedInNbSwissTournaments": "{count, plural, other{{count} 回のスイス式トーナメントに参加}}",
   "activityJoinedNbTeams": "{count, plural, other{{count} チームに参加}}",
   "broadcastBroadcasts": "イベント中継",
-  "broadcastStartDate": "開始日付（あなたの現地時間）",
+  "broadcastLiveBroadcasts": "実戦トーナメントのライブ中継",
   "challengeChallengesX": "チャレンジ：{param1}",
   "challengeChallengeToPlay": "対局を申し込む",
   "challengeChallengeDeclined": "挑戦が拒否されました。",

@@ -361,7 +361,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get broadcastBroadcasts => 'הקרנות';
 
   @override
-  String get broadcastStartDate => 'תאריך ההתחלה באזור הזמן שלך';
+  String get broadcastLiveBroadcasts => 'צפייה ישירה בטורנירים';
 
   @override
   String challengeChallengesX(String param1) {

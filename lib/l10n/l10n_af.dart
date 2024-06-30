@@ -327,7 +327,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get broadcastBroadcasts => 'Uitsendings';
 
   @override
-  String get broadcastStartDate => 'Begin datum in jou eie tydsone';
+  String get broadcastLiveBroadcasts => 'Regstreekse toernooi uitsendings';
 
   @override
   String challengeChallengesX(String param1) {

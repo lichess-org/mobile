@@ -361,7 +361,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get broadcastBroadcasts => 'Transliacijos';
 
   @override
-  String get broadcastStartDate => 'Pradžios laikas jūsų laiko juostoje';
+  String get broadcastLiveBroadcasts => 'Vykstančios turnyrų transliacijos';
 
   @override
   String challengeChallengesX(String param1) {

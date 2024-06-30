@@ -327,7 +327,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get broadcastBroadcasts => 'प्रसारण';
 
   @override
-  String get broadcastStartDate => 'अपने स्वयं के समयक्षेत्र में प्रारंभ दिनांक';
+  String get broadcastLiveBroadcasts => 'लाइव टूर्नामेंट प्रसारण';
 
   @override
   String challengeChallengesX(String param1) {

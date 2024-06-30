@@ -327,7 +327,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get broadcastBroadcasts => 'Übertragungen';
 
   @override
-  String get broadcastStartDate => 'Startdatum in deiner eigenen Zeitzone';
+  String get broadcastLiveBroadcasts => 'Live-Turnierübertragungen';
 
   @override
   String challengeChallengesX(String param1) {

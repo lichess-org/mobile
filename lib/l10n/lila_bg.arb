@@ -26,7 +26,7 @@
   "activityCompetedInNbSwissTournaments": "{count, plural, =1{Участва в {count} турнир по швейцарската система} other{Участва в {count} турнира по швейцарската система}}",
   "activityJoinedNbTeams": "{count, plural, =1{Присъедини се в {count} отбор} other{Присъедини се в {count} отбори}}",
   "broadcastBroadcasts": "Излъчване",
-  "broadcastStartDate": "Дата на започване във вашата часова зона",
+  "broadcastLiveBroadcasts": "Излъчвания на турнир на живо",
   "challengeChallengesX": "Предизвикателства: {param1}",
   "challengeChallengeToPlay": "Предизвикайте на партия",
   "challengeChallengeDeclined": "Предизвикателството е отказано",

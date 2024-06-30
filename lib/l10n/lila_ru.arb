@@ -21,7 +21,7 @@
   "activityCompetedInNbSwissTournaments": "{count, plural, =1{Завершён {count} турнир по швейцарской системе} few{Завершено {count} турнира по швейцарской системе} many{Завершено {count} турниров по швейцарской системе} other{Завершено {count} турниров по швейцарской системе}}",
   "activityJoinedNbTeams": "{count, plural, =1{Принят в {count} клуб} few{Принят в {count} клуба} many{Принят в {count} клубов} other{Принят в {count} клубов}}",
   "broadcastBroadcasts": "Трансляции",
-  "broadcastStartDate": "Дата начала в вашем часовом поясе",
+  "broadcastLiveBroadcasts": "Прямые трансляции турнира",
   "challengeChallengesX": "Вызовов: {param1}",
   "challengeChallengeToPlay": "Вызвать на игру",
   "challengeChallengeDeclined": "Вызов отклонён",
