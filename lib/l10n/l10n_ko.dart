@@ -191,10 +191,10 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get contactContact => '문의';
+  String get broadcastBroadcasts => '방송';
 
   @override
-  String get contactContactLichess => 'Lichess에 문의하기';
+  String get broadcastLiveBroadcasts => '실시간 대회 방송';
 
   @override
   String challengeChallengesX(String param1) {
@@ -276,6 +276,1002 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get challengeInviteLichessUser => '또는 Lichess 사용자를 초대합니다:';
+
+  @override
+  String get contactContact => '문의';
+
+  @override
+  String get contactContactLichess => 'Lichess에 문의하기';
+
+  @override
+  String get patronDonate => '기부';
+
+  @override
+  String get patronLichessPatron => 'Lichess 후원자';
+
+  @override
+  String perfStatPerfStats(String param) {
+    return '$param 통계';
+  }
+
+  @override
+  String get perfStatViewTheGames => '게임 보기';
+
+  @override
+  String get perfStatProvisional => '임시';
+
+  @override
+  String get perfStatNotEnoughRatedGames => '신뢰할만한 레이팅을 설정하기에 충분한 만큼의 레이팅 게임을 플레이하지 않았습니다.';
+
+  @override
+  String perfStatProgressOverLastXGames(String param) {
+    return '최근 $param 게임 동안:';
+  }
+
+  @override
+  String perfStatRatingDeviation(String param) {
+    return '레이팅 편차: $param.';
+  }
+
+  @override
+  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
+    return '낮은 값일 수록 레이팅이 안정적입니다. $param1 이상이라면 임시 레이팅으로 간주합니다. 랭킹에 들기 위해서는 이 값이 $param2 (스탠다드 체스) 또는 $param3 (변형 체스) 보다 낮아야 합니다.';
+  }
+
+  @override
+  String get perfStatTotalGames => '총 게임';
+
+  @override
+  String get perfStatRatedGames => '레이팅 게임';
+
+  @override
+  String get perfStatTournamentGames => '토너먼트 게임';
+
+  @override
+  String get perfStatBerserkedGames => '버서크 게임';
+
+  @override
+  String get perfStatTimeSpentPlaying => '플레이한 시간';
+
+  @override
+  String get perfStatAverageOpponent => '상대의 평균 레이팅';
+
+  @override
+  String get perfStatVictories => '승리';
+
+  @override
+  String get perfStatDefeats => '패배';
+
+  @override
+  String get perfStatDisconnections => '연결 끊김';
+
+  @override
+  String get perfStatNotEnoughGames => '충분한 게임을 하지 않으셨습니다';
+
+  @override
+  String perfStatHighestRating(String param) {
+    return '최고 레이팅: $param';
+  }
+
+  @override
+  String perfStatLowestRating(String param) {
+    return '최저 레이팅: $param';
+  }
+
+  @override
+  String perfStatFromXToY(String param1, String param2) {
+    return '$param1에서 $param2';
+  }
+
+  @override
+  String get perfStatWinningStreak => '연승';
+
+  @override
+  String get perfStatLosingStreak => '연패';
+
+  @override
+  String perfStatLongestStreak(String param) {
+    return '최고 기록: $param';
+  }
+
+  @override
+  String perfStatCurrentStreak(String param) {
+    return '현재 기록: $param';
+  }
+
+  @override
+  String get perfStatBestRated => '승리한 최고 레이팅';
+
+  @override
+  String get perfStatGamesInARow => '연속 게임 플레이';
+
+  @override
+  String get perfStatLessThanOneHour => '게임 사이가 1시간 미만인 경우';
+
+  @override
+  String get perfStatMaxTimePlaying => '게임을 한 최대 시간';
+
+  @override
+  String get perfStatNow => '지금';
+
+  @override
+  String get preferencesPreferences => '설정';
+
+  @override
+  String get preferencesDisplay => '화면';
+
+  @override
+  String get preferencesPrivacy => '프라이버시';
+
+  @override
+  String get preferencesNotifications => '공지 사항';
+
+  @override
+  String get preferencesPieceAnimation => '기물 움직임 애니메이션';
+
+  @override
+  String get preferencesMaterialDifference => '기물 차이';
+
+  @override
+  String get preferencesBoardHighlights => '보드 하이라이트 (마지막 수 및 체크)';
+
+  @override
+  String get preferencesPieceDestinations => '기물 착지점 (유효한 움직임 및 미리두기)';
+
+  @override
+  String get preferencesBoardCoordinates => '보드 좌표 (A-H, 1-8)';
+
+  @override
+  String get preferencesMoveListWhilePlaying => '피스 움직임 기록';
+
+  @override
+  String get preferencesPgnPieceNotation => 'PGN 기물표기방식';
+
+  @override
+  String get preferencesChessPieceSymbol => '체스 말 기호';
+
+  @override
+  String get preferencesPgnLetter => '알파벳 (K, Q, R, B, N)';
+
+  @override
+  String get preferencesZenMode => '젠 모드';
+
+  @override
+  String get preferencesShowPlayerRatings => '플레이어 레이팅 보기';
+
+  @override
+  String get preferencesShowFlairs => '플레이어 레이팅 보기';
+
+  @override
+  String get preferencesExplainShowPlayerRatings => '체스에 집중할 수 있도록 웹사이트에서 레이팅을 모두 숨깁니다. 경기는 여전히 레이팅에 반영될 것이며, 눈으로 보이는 정보에만 영향을 줍니다.';
+
+  @override
+  String get preferencesDisplayBoardResizeHandle => '보드 크기 재조정 핸들 보이기';
+
+  @override
+  String get preferencesOnlyOnInitialPosition => '초기 상태에서만';
+
+  @override
+  String get preferencesInGameOnly => '게임 도중에만 적용';
+
+  @override
+  String get preferencesChessClock => '체스 시계';
+
+  @override
+  String get preferencesTenthsOfSeconds => '1/10초 단위';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanTenSeconds => '남은 시간이 10초 미만일 때';
+
+  @override
+  String get preferencesHorizontalGreenProgressBars => '녹색 수평 진행 바';
+
+  @override
+  String get preferencesSoundWhenTimeGetsCritical => '시간이 얼마 안 남았을 때 소리 재생';
+
+  @override
+  String get preferencesGiveMoreTime => '시간 더 주기';
+
+  @override
+  String get preferencesGameBehavior => '게임 동작';
+
+  @override
+  String get preferencesHowDoYouMovePieces => '기물을 어떻게 움직이나요?';
+
+  @override
+  String get preferencesClickTwoSquares => '현재 위치와 원하는 위치에 클릭하기';
+
+  @override
+  String get preferencesDragPiece => '드래그';
+
+  @override
+  String get preferencesBothClicksAndDrag => '아무 방법으로';
+
+  @override
+  String get preferencesPremovesPlayingDuringOpponentTurn => '미리두기 (상대 턴일 때 수를 두기)';
+
+  @override
+  String get preferencesTakebacksWithOpponentApproval => '무르기 (상대 승인과 함께)';
+
+  @override
+  String get preferencesInCasualGamesOnly => '캐주얼 모드에서만';
+
+  @override
+  String get preferencesPromoteToQueenAutomatically => '퀸으로 자동 승진';
+
+  @override
+  String get preferencesExplainPromoteToQueenAutomatically => '일시적으로 자동 승진을 끄기 위해 승진하는 동안 <ctrl>를 누르세요';
+
+  @override
+  String get preferencesWhenPremoving => '미리둘 때만';
+
+  @override
+  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => '3회 동형반복시 자동으로 무승부 요청';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanThirtySeconds => '남은 시간이 30초 미만일 때만';
+
+  @override
+  String get preferencesMoveConfirmation => '피스를 움직이기 전에 물음';
+
+  @override
+  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Can be disabled during a game with the board menu';
+
+  @override
+  String get preferencesInCorrespondenceGames => '긴 대국에서만';
+
+  @override
+  String get preferencesCorrespondenceAndUnlimited => '긴 대국과 무제한';
+
+  @override
+  String get preferencesConfirmResignationAndDrawOffers => '기권 또는 무승부 제안시 물음';
+
+  @override
+  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => '캐슬링 방법';
+
+  @override
+  String get preferencesCastleByMovingTwoSquares => '왕을 2칸 옮기기';
+
+  @override
+  String get preferencesCastleByMovingOntoTheRook => '킹을 룩한테 이동';
+
+  @override
+  String get preferencesInputMovesWithTheKeyboard => '키보드 입력';
+
+  @override
+  String get preferencesInputMovesWithVoice => '음성으로 기물 이동';
+
+  @override
+  String get preferencesSnapArrowsToValidMoves => '적법한 움직임에만 화살표를 그림';
+
+  @override
+  String get preferencesSayGgWpAfterLosingOrDrawing => '패배하거나 무승부 시 \"Good game, well played\"라고 말합니다.';
+
+  @override
+  String get preferencesYourPreferencesHaveBeenSaved => '설정이 저장되었습니다.';
+
+  @override
+  String get preferencesScrollOnTheBoardToReplayMoves => '보드에서 스크롤을 해서 수를 앞 뒤로 이동';
+
+  @override
+  String get preferencesCorrespondenceEmailNotification => '매일 일간 게임의 목록을 보여주는 알림 메일을 받기';
+
+  @override
+  String get preferencesNotifyStreamStart => '스트리머가 생방송 시작';
+
+  @override
+  String get preferencesNotifyInboxMsg => '새로운 받은 편지함 메시지';
+
+  @override
+  String get preferencesNotifyForumMention => '포럼 댓글에서 당신이 언급됨';
+
+  @override
+  String get preferencesNotifyInvitedStudy => '스터디 초대';
+
+  @override
+  String get preferencesNotifyGameEvent => '긴 대국 업데이트';
+
+  @override
+  String get preferencesNotifyChallenge => '도전 과제';
+
+  @override
+  String get preferencesNotifyTournamentSoon => '곧 토너먼트 시작할 때';
+
+  @override
+  String get preferencesNotifyTimeAlarm => '긴 대국 시간 초과';
+
+  @override
+  String get preferencesNotifyBell => '리체스 내에서 벨 알림';
+
+  @override
+  String get preferencesNotifyPush => '리체스를 사용하지 않을 때 기기 알림';
+
+  @override
+  String get preferencesNotifyWeb => '브라우저';
+
+  @override
+  String get preferencesNotifyDevice => '기기 정보';
+
+  @override
+  String get preferencesBellNotificationSound => '벨 알림 음';
+
+  @override
+  String get puzzlePuzzles => '퍼즐';
+
+  @override
+  String get puzzlePuzzleThemes => '퍼즐 테마';
+
+  @override
+  String get puzzleRecommended => '추천';
+
+  @override
+  String get puzzlePhases => '단계';
+
+  @override
+  String get puzzleMotifs => '모티브';
+
+  @override
+  String get puzzleAdvanced => '고급';
+
+  @override
+  String get puzzleLengths => '길이';
+
+  @override
+  String get puzzleMates => '체크메이트';
+
+  @override
+  String get puzzleGoals => '목표';
+
+  @override
+  String get puzzleOrigin => '출처';
+
+  @override
+  String get puzzleSpecialMoves => '특수 행마';
+
+  @override
+  String get puzzleDidYouLikeThisPuzzle => '이 퍼즐이 괜찮았나요?';
+
+  @override
+  String get puzzleVoteToLoadNextOne => '다음 퍼즐을 위해 투표해주세요!';
+
+  @override
+  String get puzzleUpVote => '퍼즐 추천';
+
+  @override
+  String get puzzleDownVote => '퍼즐 비추천';
+
+  @override
+  String get puzzleYourPuzzleRatingWillNotChange => '당신의 퍼즐 레이팅은 바뀌지 않을 것입니다. 퍼즐은 경쟁이 아니라는 걸 기억하세요. 레이팅은 당신의 현재 스킬에 맞는 퍼즐을 선택하도록 돕습니다.';
+
+  @override
+  String get puzzleFindTheBestMoveForWhite => '백의 최고의 수를 찾아보세요.';
+
+  @override
+  String get puzzleFindTheBestMoveForBlack => '흑의 최고의 수를 찾아보세요.';
+
+  @override
+  String get puzzleToGetPersonalizedPuzzles => '개인화된 퍼즐을 위해선:';
+
+  @override
+  String puzzlePuzzleId(String param) {
+    return '퍼즐 $param';
+  }
+
+  @override
+  String get puzzlePuzzleOfTheDay => '오늘의 퍼즐';
+
+  @override
+  String get puzzleDailyPuzzle => '일일 퍼즐';
+
+  @override
+  String get puzzleClickToSolve => '퍼즐 풀기';
+
+  @override
+  String get puzzleGoodMove => '좋은 수 입니다.';
+
+  @override
+  String get puzzleBestMove => '가장 좋은 수입니다!';
+
+  @override
+  String get puzzleKeepGoing => '계속하세요...';
+
+  @override
+  String get puzzlePuzzleSuccess => '성공!';
+
+  @override
+  String get puzzlePuzzleComplete => '퍼즐 완료!';
+
+  @override
+  String get puzzleByOpenings => '오프닝별';
+
+  @override
+  String get puzzlePuzzlesByOpenings => '오프닝별 퍼즐';
+
+  @override
+  String get puzzleOpeningsYouPlayedTheMost => '레이팅 게임에서 가장 많이 플레이한 오프닝';
+
+  @override
+  String get puzzleUseFindInPage => '브라우저의 \"페이지에서 찾기\" 메뉴를 이용해 가장 좋아하는 오프닝을 찾으세요!';
+
+  @override
+  String get puzzleUseCtrlF => 'Ctrl+f를 사용해서 가장 좋아하는 오프닝을 찾으세요!';
+
+  @override
+  String get puzzleNotTheMove => '답이 아닙니다!';
+
+  @override
+  String get puzzleTrySomethingElse => '다른 것 시도하기';
+
+  @override
+  String puzzleRatingX(String param) {
+    return '레이팅: $param';
+  }
+
+  @override
+  String get puzzleHidden => '숨겨짐';
+
+  @override
+  String puzzleFromGameLink(String param) {
+    return '게임 $param에서';
+  }
+
+  @override
+  String get puzzleContinueTraining => '연습 계속하기';
+
+  @override
+  String get puzzleDifficultyLevel => '난이도';
+
+  @override
+  String get puzzleNormal => '보통';
+
+  @override
+  String get puzzleEasier => '쉬움';
+
+  @override
+  String get puzzleEasiest => '매우 쉬움';
+
+  @override
+  String get puzzleHarder => '어려움';
+
+  @override
+  String get puzzleHardest => '매우 어려움';
+
+  @override
+  String get puzzleExample => '예시';
+
+  @override
+  String get puzzleAddAnotherTheme => '새 테마 추가';
+
+  @override
+  String get puzzleNextPuzzle => '다음 퍼즐';
+
+  @override
+  String get puzzleJumpToNextPuzzleImmediately => '다음 퍼즐로 즉시 이동';
+
+  @override
+  String get puzzlePuzzleDashboard => '퍼즐 대시보드';
+
+  @override
+  String get puzzleImprovementAreas => '개선이 필요한 부분';
+
+  @override
+  String get puzzleStrengths => '강점';
+
+  @override
+  String get puzzleHistory => '퍼즐 히스토리';
+
+  @override
+  String get puzzleSolved => '해결함';
+
+  @override
+  String get puzzleFailed => '실패함';
+
+  @override
+  String get puzzleStreakDescription => '점점 더 어려워지는 퍼즐을 풀고 연승을 쌓으세요. 시간 제한은 없습니다. 한번의 잘못된 수 만으로 게임이 끝납니다! 그러나 세션당 한 수를 건너 뛸 수 있습니다.';
+
+  @override
+  String puzzleYourStreakX(String param) {
+    return '연승 기록: $param';
+  }
+
+  @override
+  String get puzzleStreakSkipExplanation => '이 수를 건너뛰고 연승 기록을 보존하세요! 한 도전에 한 번만 가능합니다.';
+
+  @override
+  String get puzzleContinueTheStreak => '계속하기';
+
+  @override
+  String get puzzleNewStreak => '새 연승 도전';
+
+  @override
+  String get puzzleFromMyGames => '내 게임에서';
+
+  @override
+  String get puzzleLookupOfPlayer => '플레이어의 게임들에서 퍼즐을 찾습니다';
+
+  @override
+  String puzzleFromXGames(String param) {
+    return '$param의 게임에서의 퍼즐';
+  }
+
+  @override
+  String get puzzleSearchPuzzles => '퍼즐 찾기';
+
+  @override
+  String get puzzleFromMyGamesNone => '데이터베이스에 퍼즐이 없습니다만, Lichess는 여전히 당신을 사랑합니다.\n래피드나 클래시컬 게임을 플레이해서 당신의 퍼즐이 추가될 확률을 높이세요!';
+
+  @override
+  String puzzleFromXGamesFound(String param1, String param2) {
+    return '$param2의 게임에서 찾은 $param1개의 퍼즐';
+  }
+
+  @override
+  String get puzzlePuzzleDashboardDescription => '훈련, 분석, 개선';
+
+  @override
+  String puzzlePercentSolved(String param) {
+    return '$param 해결함';
+  }
+
+  @override
+  String get puzzleNoPuzzlesToShow => '표시할 것이 없습니다. 먼저 퍼즐을 플레이하세요!';
+
+  @override
+  String get puzzleImprovementAreasDescription => '실력을 높이기 위해 훈련하세요!';
+
+  @override
+  String get puzzleStrengthDescription => '이 테마에서 최고의 성적을 냈습니다';
+
+  @override
+  String puzzlePlayedXTimes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count회 플레이',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsBelowYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '당신의 퍼즐 레이팅보다 $count 포인트 낮음',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsAboveYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '당신의 퍼즐 레이팅보다 $count 포인트 높음',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPlayed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 플레이함',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbToReplay(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 다시 풀기',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get puzzleThemeAdvancedPawn => '전진한 폰';
+
+  @override
+  String get puzzleThemeAdvancedPawnDescription => '상대방 진영에 깊숙히 전진한 폰이 승급을 노립니다.';
+
+  @override
+  String get puzzleThemeAdvantage => '이점';
+
+  @override
+  String get puzzleThemeAdvantageDescription => '결정적인 이점을 쟁취하세요. (200cp ≤ eval ≤ 600cp)';
+
+  @override
+  String get puzzleThemeAnastasiaMate => '아나스타시아 메이트';
+
+  @override
+  String get puzzleThemeAnastasiaMateDescription => '나이트와 룩 또는 퀸이 힘을 합쳐 상대 킹을 보드 가장자리와 자신의 기물 사이의 함정에 빠트립니다.';
+
+  @override
+  String get puzzleThemeArabianMate => '아라비안 메이트';
+
+  @override
+  String get puzzleThemeArabianMateDescription => '나이트와 룩이 힘을 합쳐 상대 킹을 보드 구석에서 함정에 빠트립니다.';
+
+  @override
+  String get puzzleThemeAttackingF2F7 => 'f2나 f7 공격하기';
+
+  @override
+  String get puzzleThemeAttackingF2F7Description => 'f2나 f7 칸의 폰을 노리고 공격합니다. 예시: 프라이드 리버 오프닝.';
+
+  @override
+  String get puzzleThemeAttraction => '유인';
+
+  @override
+  String get puzzleThemeAttractionDescription => '희생이나 교환을 통해 상대 기물을 후속 전술이 있는 칸으로 끌어냅니다.';
+
+  @override
+  String get puzzleThemeBackRankMate => '백 랭크 메이트';
+
+  @override
+  String get puzzleThemeBackRankMateDescription => '킹이 자신의 기물들에게 막혀 마지막 랭크에서 체크메이트 당합니다.';
+
+  @override
+  String get puzzleThemeBishopEndgame => '비숍 엔드게임';
+
+  @override
+  String get puzzleThemeBishopEndgameDescription => '비숍과 폰만 있는 엔드게임';
+
+  @override
+  String get puzzleThemeBodenMate => '보든 메이트';
+
+  @override
+  String get puzzleThemeBodenMateDescription => '자신의 기물에 막힌 킹에게 두 비숍이 X자로 대각선을 막아 메이트를 합니다.';
+
+  @override
+  String get puzzleThemeCastling => '캐슬링';
+
+  @override
+  String get puzzleThemeCastlingDescription => '왕을 안전하게 피신시키고, 룩을 이용해 공격 태세를 갖춥니다.';
+
+  @override
+  String get puzzleThemeCapturingDefender => '보호하는 기물을 제거하세요.';
+
+  @override
+  String get puzzleThemeCapturingDefenderDescription => '다른 기물을 방어중인 기물을 잡아서 다음 수에 더 이상 방어되지 않는 기물을 잡을 수 있게 됩니다.';
+
+  @override
+  String get puzzleThemeCrushing => '박살내기';
+
+  @override
+  String get puzzleThemeCrushingDescription => '상대의 블런더를 포착하고 박살내어 이득을 얻으세요. (eval ≥ 600cp)';
+
+  @override
+  String get puzzleThemeDoubleBishopMate => '2비숍 메이트';
+
+  @override
+  String get puzzleThemeDoubleBishopMateDescription => '자신의 기물에 막힌 킹에게 두 비숍이 인접한 대각선을 막아 메이트를 합니다.';
+
+  @override
+  String get puzzleThemeDovetailMate => '도브테일 메이트';
+
+  @override
+  String get puzzleThemeDovetailMateDescription => '퀸이 킹 바로 옆에서 메이트를 합니다. 유일하게 빠져나갈 수 있는 두 칸은 자신의 기물에게 막혀 있습니다.';
+
+  @override
+  String get puzzleThemeEquality => '동등함';
+
+  @override
+  String get puzzleThemeEqualityDescription => '불리한 상황에서 벗어나 무승부 또는 균형잡힌 포지션으로 만드세요. (eval ≤ 200cp)';
+
+  @override
+  String get puzzleThemeKingsideAttack => '킹사이드 공격';
+
+  @override
+  String get puzzleThemeKingsideAttackDescription => '상대 킹이 킹사이드 캐슬링을 한 뒤의 공격.';
+
+  @override
+  String get puzzleThemeClearance => '정리';
+
+  @override
+  String get puzzleThemeClearanceDescription => '이어지는 전술적 아이디어를 위해 칸, 파일 또는 대각선을 비우는 수입니다.';
+
+  @override
+  String get puzzleThemeDefensiveMove => '방어적인 수';
+
+  @override
+  String get puzzleThemeDefensiveMoveDescription => '기물을 잃거나 다른 손실을 피하기 위해 필요한 정확한 수입니다.';
+
+  @override
+  String get puzzleThemeDeflection => '유인';
+
+  @override
+  String get puzzleThemeDeflectionDescription => '중요한 칸을 수비하는 등 다른 역할을 수행하는 상대 기물의 주의를 분산시키는 수입니다. \"과부하\"라고도 불립니다.';
+
+  @override
+  String get puzzleThemeDiscoveredAttack => '디스커버드 어택';
+
+  @override
+  String get puzzleThemeDiscoveredAttackDescription => '장거리 기물(예: 룩)의 길을 막고 있는 기물(예: 나이트)을 이동시켜 공격합니다.';
+
+  @override
+  String get puzzleThemeDoubleCheck => '더블 체크';
+
+  @override
+  String get puzzleThemeDoubleCheckDescription => '움직인 기물과 그 뒤에 있던 기물이 모두 상대 킹을 공격한 디스커버 어택의 결과로, 두 기물이 동시에 체크를 합니다.';
+
+  @override
+  String get puzzleThemeEndgame => '엔드게임';
+
+  @override
+  String get puzzleThemeEndgameDescription => '게임 종반부에서의 전략';
+
+  @override
+  String get puzzleThemeEnPassantDescription => '앙파상 규칙을 포함한 전술입니다. 상대 폰이 처음에 두 칸 이동해서 내 폰을 지나쳤을 경우, 그 폰을 잡을 수 있습니다.';
+
+  @override
+  String get puzzleThemeExposedKing => '노출된 킹';
+
+  @override
+  String get puzzleThemeExposedKingDescription => '주변에 방어자가 얼마 없는 킹에 대한 전술입니다. 종종 체크메이트가 되기도 합니다.';
+
+  @override
+  String get puzzleThemeFork => '포크';
+
+  @override
+  String get puzzleThemeForkDescription => '이동한 기물이 두 개의 상대 기물을 동시에 공격하는 수입니다.';
+
+  @override
+  String get puzzleThemeHangingPiece => '보호받지 않는 기물';
+
+  @override
+  String get puzzleThemeHangingPieceDescription => '상대 기물이 지켜지지 않거나 불충분하게 지켜져 공짜로 잡을 수 있는 전술입니다.';
+
+  @override
+  String get puzzleThemeHookMate => '훅 메이트';
+
+  @override
+  String get puzzleThemeHookMateDescription => '상대의 폰에 의해 탈출로가 막힌 킹을 룩, 나이트, 폰으로 체크메이트 합니다.';
+
+  @override
+  String get puzzleThemeInterference => '간섭';
+
+  @override
+  String get puzzleThemeInterferenceDescription => '상대의 두 기물 사이에 기물을 집어넣어 그 기물들을 지켜지지 않게 만듭니다. 두 룩 사이의 나이트처럼요.';
+
+  @override
+  String get puzzleThemeIntermezzo => '사잇수';
+
+  @override
+  String get puzzleThemeIntermezzoDescription => '예상되는 플레이를 하는 대신, 먼저 상대가 즉시 해결해야 하는 또 다른 위협을 끼워 넣습니다. \"Zwischenzug\"나 \"In between\"이라고도 합니다.';
+
+  @override
+  String get puzzleThemeKnightEndgame => '나이트 엔딩';
+
+  @override
+  String get puzzleThemeKnightEndgameDescription => '나이트와 폰만 있는 엔드게임';
+
+  @override
+  String get puzzleThemeLong => '긴 퍼즐';
+
+  @override
+  String get puzzleThemeLongDescription => '승리까지 세 수 걸립니다.';
+
+  @override
+  String get puzzleThemeMaster => '마스터 게임';
+
+  @override
+  String get puzzleThemeMasterDescription => '타이틀 보유 플레이어의 게임에서 나온 퍼즐입니다.';
+
+  @override
+  String get puzzleThemeMasterVsMaster => '마스터 vs 마스터 게임';
+
+  @override
+  String get puzzleThemeMasterVsMasterDescription => '타이틀 보유 플레이어 간의 게임에서 나온 퍼즐입니다.';
+
+  @override
+  String get puzzleThemeMate => '체크메이트';
+
+  @override
+  String get puzzleThemeMateDescription => '게임을 승리하세요.';
+
+  @override
+  String get puzzleThemeMateIn1 => '1수 메이트';
+
+  @override
+  String get puzzleThemeMateIn1Description => '한 수만에 체크메이트하세요.';
+
+  @override
+  String get puzzleThemeMateIn2 => '2수 메이트';
+
+  @override
+  String get puzzleThemeMateIn2Description => '두 수만에 체크메이트하세요.';
+
+  @override
+  String get puzzleThemeMateIn3 => '3수 메이트';
+
+  @override
+  String get puzzleThemeMateIn3Description => '세 수만에 체크메이트하세요.';
+
+  @override
+  String get puzzleThemeMateIn4 => '4수 메이트';
+
+  @override
+  String get puzzleThemeMateIn4Description => '네 수만에 체크메이트하세요.';
+
+  @override
+  String get puzzleThemeMateIn5 => '5수+ 메이트';
+
+  @override
+  String get puzzleThemeMateIn5Description => '긴 체크메이트를 찾아내세요.';
+
+  @override
+  String get puzzleThemeMiddlegame => '미들게임';
+
+  @override
+  String get puzzleThemeMiddlegameDescription => '게임 중반부에서의 전략';
+
+  @override
+  String get puzzleThemeOneMove => '1수 퍼즐';
+
+  @override
+  String get puzzleThemeOneMoveDescription => '한 수짜리 퍼즐입니다.';
+
+  @override
+  String get puzzleThemeOpening => '오프닝';
+
+  @override
+  String get puzzleThemeOpeningDescription => '게임 초반부에서의 전략';
+
+  @override
+  String get puzzleThemePawnEndgame => '폰 엔드게임';
+
+  @override
+  String get puzzleThemePawnEndgameDescription => '폰만 있는 엔드게임.';
+
+  @override
+  String get puzzleThemePin => '핀';
+
+  @override
+  String get puzzleThemePinDescription => '더 높은 가치의 기물이 공격받게 되기 때문에 기물을 움직이지 못하게 하는 전술입니다.';
+
+  @override
+  String get puzzleThemePromotion => '프로모션';
+
+  @override
+  String get puzzleThemePromotionDescription => '폰을 퀸이나 다른 기물로 승진';
+
+  @override
+  String get puzzleThemeQueenEndgame => '퀸 엔딩';
+
+  @override
+  String get puzzleThemeQueenEndgameDescription => '퀸과 폰만 있는 엔드게임';
+
+  @override
+  String get puzzleThemeQueenRookEndgame => '퀸과 룩';
+
+  @override
+  String get puzzleThemeQueenRookEndgameDescription => '퀸과 룩, 폰만 있는 엔드게임';
+
+  @override
+  String get puzzleThemeQueensideAttack => '퀸사이드 공격';
+
+  @override
+  String get puzzleThemeQueensideAttackDescription => '상대 킹이 퀸사이드 캐슬링을 한 뒤의 공격.';
+
+  @override
+  String get puzzleThemeQuietMove => '조용한 수';
+
+  @override
+  String get puzzleThemeQuietMoveDescription => '체크 또는 기물을 잡는 수가 아니지만 나중에 피할 수 없는 위협을 준비하는 수입니다.';
+
+  @override
+  String get puzzleThemeRookEndgame => '룩 엔딩';
+
+  @override
+  String get puzzleThemeRookEndgameDescription => '룩과 폰만 있는 엔드게임';
+
+  @override
+  String get puzzleThemeSacrifice => '희생';
+
+  @override
+  String get puzzleThemeSacrificeDescription => '일련의 강제수로 이득을 얻기 위해 단기적으로 기물을 포기하는 전술입니다.';
+
+  @override
+  String get puzzleThemeShort => '짧은 퍼즐';
+
+  @override
+  String get puzzleThemeShortDescription => '승리까지 두 수 걸립니다.';
+
+  @override
+  String get puzzleThemeSkewer => '스큐어';
+
+  @override
+  String get puzzleThemeSkewerDescription => '높은 가치의 기물을 공격해 길을 비키게 만들고, 그 뒤에 있는 낮은 가치의 기물을 잡는 전술입니다. 핀의 반대죠.';
+
+  @override
+  String get puzzleThemeSmotheredMate => '질식 체크메이트';
+
+  @override
+  String get puzzleThemeSmotheredMateDescription => '자신의 기물에 둘러쌓여(또는 \"질식되어\") 움직일 수 없는 킹을 나이트로 체크메이트 시키는 것 입니다.';
+
+  @override
+  String get puzzleThemeSuperGM => '슈퍼GM 게임';
+
+  @override
+  String get puzzleThemeSuperGMDescription => '세계 최고 플레이어들의 게임에서 나온 퍼즐입니다.';
+
+  @override
+  String get puzzleThemeTrappedPiece => '갇힌 기물';
+
+  @override
+  String get puzzleThemeTrappedPieceDescription => '기물의 움직임이 제한되어 있어 잡히는걸 막을 수 없습니다.';
+
+  @override
+  String get puzzleThemeUnderPromotion => '하향 승진';
+
+  @override
+  String get puzzleThemeUnderPromotionDescription => '나이트, 비숍, 룩으로 승진';
+
+  @override
+  String get puzzleThemeVeryLong => '아주 긴 퍼즐';
+
+  @override
+  String get puzzleThemeVeryLongDescription => '승리까지 네 수 이상이 걸립니다.';
+
+  @override
+  String get puzzleThemeXRayAttack => 'X-Ray 공격';
+
+  @override
+  String get puzzleThemeXRayAttackDescription => '기물이 상대 기물 너머의 칸을 공격 또는 방어합니다.';
+
+  @override
+  String get puzzleThemeZugzwang => '추크추방';
+
+  @override
+  String get puzzleThemeZugzwangDescription => '상대가 둘 수 있는 수는 제한되어 있으며, 모든 수가 포지션을 악화시킵니다.';
+
+  @override
+  String get puzzleThemeHealthyMix => '골고루 섞기';
+
+  @override
+  String get puzzleThemeHealthyMixDescription => '전부 다. 무엇이 나올지 모르기 때문에 모든 것에 준비되어 있어야 합니다. 마치 진짜 게임처럼요.';
+
+  @override
+  String get puzzleThemePlayerGames => '플레이어 게임';
+
+  @override
+  String get puzzleThemePlayerGamesDescription => '당신의 게임이나 다른 플레이어의 게임에서 나온 퍼즐을 찾아보세요.';
+
+  @override
+  String puzzleThemePuzzleDownloadInformation(String param) {
+    return '이 퍼즐들은 퍼블릭 도메인이며, $param에서 다운로드할 수 있습니다.';
+  }
+
+  @override
+  String get searchSearch => '검색';
+
+  @override
+  String get settingsSettings => '설정';
+
+  @override
+  String get settingsCloseAccount => '계정 폐쇄';
+
+  @override
+  String get settingsManagedAccountCannotBeClosed => '당신의 계정은 관리되고 있으며, 폐쇄될 수 없습니다.';
+
+  @override
+  String get settingsClosingIsDefinitive => '폐쇄 결정은 바꾸거나, 되돌릴 수 없습니다. 정말로 하실 건가요?';
+
+  @override
+  String get settingsCantOpenSimilarAccount => '대소문자가 다르더라도, 똑같은 이름으로 계정을 다시 열 수 없습니다.';
+
+  @override
+  String get settingsChangedMindDoNotCloseAccount => '마음이 바뀌었습니다, 계정을 폐쇄하지 않겠습니다';
+
+  @override
+  String get settingsCloseAccountExplanation => '정말로 계정을 닫고 싶으신가요? 계정 폐쇄는 되돌릴 수 없습니다. 절대로 다시 로그인 할 수 없습니다.';
+
+  @override
+  String get settingsThisAccountIsClosed => '계정이 폐쇄되었습니다.';
 
   @override
   String get playWithAFriend => '친구와 게임하기';
@@ -478,6 +1474,12 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get deleteFromHere => '여기서부터 삭제';
+
+  @override
+  String get collapseVariations => 'Collapse variations';
+
+  @override
+  String get expandVariations => 'Expand variations';
 
   @override
   String get forceVariation => '변화 강제하기';
@@ -1337,15 +2339,6 @@ class AppLocalizationsKo extends AppLocalizations {
   String get emptyTournamentName => '토너먼트 이름을 공란으로 두면, 임의의 그랜드마스터 선수 이름으로 선택됩니다.';
 
   @override
-  String get recommendNotTouching => '이 설정은 되도록이면 그대로 두는 것을 추천합니다.';
-
-  @override
-  String get fewerPlayers => '참가조건을 설정하면, 참가자 수가 적어집니다.';
-
-  @override
-  String get showAdvancedSettings => '고급 설정 보기';
-
-  @override
   String get makePrivateTournament => '토너먼트를 비공개로 바꾸고, 비밀번호가 있어야만 들어갈 수 있습니다.';
 
   @override
@@ -1475,10 +2468,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get editProfile => '프로필 수정';
 
   @override
-  String get firstName => '이름';
-
-  @override
-  String get lastName => '성';
+  String get realName => 'Real name';
 
   @override
   String get setFlair => 'Set your flair';
@@ -1607,13 +2597,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get cheat => '부정행위';
 
   @override
-  String get insult => '모욕';
-
-  @override
   String get troll => '분란 조장';
-
-  @override
-  String get ratingManipulation => '레이팅 조작';
 
   @override
   String get other => '기타';
@@ -1720,6 +2704,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get outsideTheBoard => '보드 바깥쪽에';
+
+  @override
+  String get allSquaresOfTheBoard => 'All squares of the board';
 
   @override
   String get onSlowGames => '느린 게임에서만';
@@ -3342,999 +4329,6 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get patronDonate => '기부';
-
-  @override
-  String get patronLichessPatron => 'Lichess 후원자';
-
-  @override
-  String get preferencesPreferences => '설정';
-
-  @override
-  String get preferencesDisplay => '화면';
-
-  @override
-  String get preferencesPrivacy => '프라이버시';
-
-  @override
-  String get preferencesNotifications => '공지 사항';
-
-  @override
-  String get preferencesPieceAnimation => '기물 움직임 애니메이션';
-
-  @override
-  String get preferencesMaterialDifference => '기물 차이';
-
-  @override
-  String get preferencesBoardHighlights => '보드 하이라이트 (마지막 수 및 체크)';
-
-  @override
-  String get preferencesPieceDestinations => '기물 착지점 (유효한 움직임 및 미리두기)';
-
-  @override
-  String get preferencesBoardCoordinates => '보드 좌표 (A-H, 1-8)';
-
-  @override
-  String get preferencesMoveListWhilePlaying => '피스 움직임 기록';
-
-  @override
-  String get preferencesPgnPieceNotation => 'PGN 기물표기방식';
-
-  @override
-  String get preferencesChessPieceSymbol => '체스 말 기호';
-
-  @override
-  String get preferencesPgnLetter => '알파벳 (K, Q, R, B, N)';
-
-  @override
-  String get preferencesZenMode => '젠 모드';
-
-  @override
-  String get preferencesShowPlayerRatings => '플레이어 레이팅 보기';
-
-  @override
-  String get preferencesShowFlairs => '플레이어 레이팅 보기';
-
-  @override
-  String get preferencesExplainShowPlayerRatings => '체스에 집중할 수 있도록 웹사이트에서 레이팅을 모두 숨깁니다. 경기는 여전히 레이팅에 반영될 것이며, 눈으로 보이는 정보에만 영향을 줍니다.';
-
-  @override
-  String get preferencesDisplayBoardResizeHandle => '보드 크기 재조정 핸들 보이기';
-
-  @override
-  String get preferencesOnlyOnInitialPosition => '초기 상태에서만';
-
-  @override
-  String get preferencesInGameOnly => '게임 도중에만 적용';
-
-  @override
-  String get preferencesChessClock => '체스 시계';
-
-  @override
-  String get preferencesTenthsOfSeconds => '1/10초 단위';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanTenSeconds => '남은 시간이 10초 미만일 때';
-
-  @override
-  String get preferencesHorizontalGreenProgressBars => '녹색 수평 진행 바';
-
-  @override
-  String get preferencesSoundWhenTimeGetsCritical => '시간이 얼마 안 남았을 때 소리 재생';
-
-  @override
-  String get preferencesGiveMoreTime => '시간 더 주기';
-
-  @override
-  String get preferencesGameBehavior => '게임 동작';
-
-  @override
-  String get preferencesHowDoYouMovePieces => '기물을 어떻게 움직이나요?';
-
-  @override
-  String get preferencesClickTwoSquares => '현재 위치와 원하는 위치에 클릭하기';
-
-  @override
-  String get preferencesDragPiece => '드래그';
-
-  @override
-  String get preferencesBothClicksAndDrag => '아무 방법으로';
-
-  @override
-  String get preferencesPremovesPlayingDuringOpponentTurn => '미리두기 (상대 턴일 때 수를 두기)';
-
-  @override
-  String get preferencesTakebacksWithOpponentApproval => '무르기 (상대 승인과 함께)';
-
-  @override
-  String get preferencesInCasualGamesOnly => '캐주얼 모드에서만';
-
-  @override
-  String get preferencesPromoteToQueenAutomatically => '퀸으로 자동 승진';
-
-  @override
-  String get preferencesExplainPromoteToQueenAutomatically => '일시적으로 자동 승진을 끄기 위해 승진하는 동안 <ctrl>를 누르세요';
-
-  @override
-  String get preferencesWhenPremoving => '미리둘 때만';
-
-  @override
-  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => '3회 동형반복시 자동으로 무승부 요청';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanThirtySeconds => '남은 시간이 30초 미만일 때만';
-
-  @override
-  String get preferencesMoveConfirmation => '피스를 움직이기 전에 물음';
-
-  @override
-  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Can be disabled during a game with the board menu';
-
-  @override
-  String get preferencesInCorrespondenceGames => '긴 대국에서만';
-
-  @override
-  String get preferencesCorrespondenceAndUnlimited => '긴 대국과 무제한';
-
-  @override
-  String get preferencesConfirmResignationAndDrawOffers => '기권 또는 무승부 제안시 물음';
-
-  @override
-  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => '캐슬링 방법';
-
-  @override
-  String get preferencesCastleByMovingTwoSquares => '왕을 2칸 옮기기';
-
-  @override
-  String get preferencesCastleByMovingOntoTheRook => '킹을 룩한테 이동';
-
-  @override
-  String get preferencesInputMovesWithTheKeyboard => '키보드 입력';
-
-  @override
-  String get preferencesInputMovesWithVoice => '음성으로 기물 이동';
-
-  @override
-  String get preferencesSnapArrowsToValidMoves => '적법한 움직임에만 화살표를 그림';
-
-  @override
-  String get preferencesSayGgWpAfterLosingOrDrawing => '패배하거나 무승부 시 \"Good game, well played\"라고 말합니다.';
-
-  @override
-  String get preferencesYourPreferencesHaveBeenSaved => '설정이 저장되었습니다.';
-
-  @override
-  String get preferencesScrollOnTheBoardToReplayMoves => '보드에서 스크롤을 해서 수를 앞 뒤로 이동';
-
-  @override
-  String get preferencesCorrespondenceEmailNotification => '매일 일간 게임의 목록을 보여주는 알림 메일을 받기';
-
-  @override
-  String get preferencesNotifyStreamStart => '스트리머가 생방송 시작';
-
-  @override
-  String get preferencesNotifyInboxMsg => '새로운 받은 편지함 메시지';
-
-  @override
-  String get preferencesNotifyForumMention => '포럼 댓글에서 당신이 언급됨';
-
-  @override
-  String get preferencesNotifyInvitedStudy => '스터디 초대';
-
-  @override
-  String get preferencesNotifyGameEvent => '긴 대국 업데이트';
-
-  @override
-  String get preferencesNotifyChallenge => '도전 과제';
-
-  @override
-  String get preferencesNotifyTournamentSoon => '곧 토너먼트 시작할 때';
-
-  @override
-  String get preferencesNotifyTimeAlarm => '긴 대국 시간 초과';
-
-  @override
-  String get preferencesNotifyBell => '리체스 내에서 벨 알림';
-
-  @override
-  String get preferencesNotifyPush => '리체스를 사용하지 않을 때 기기 알림';
-
-  @override
-  String get preferencesNotifyWeb => '브라우저';
-
-  @override
-  String get preferencesNotifyDevice => '기기 정보';
-
-  @override
-  String get preferencesBellNotificationSound => '벨 알림 음';
-
-  @override
-  String get puzzlePuzzles => '퍼즐';
-
-  @override
-  String get puzzlePuzzleThemes => '퍼즐 테마';
-
-  @override
-  String get puzzleRecommended => '추천';
-
-  @override
-  String get puzzlePhases => '단계';
-
-  @override
-  String get puzzleMotifs => '모티브';
-
-  @override
-  String get puzzleAdvanced => '고급';
-
-  @override
-  String get puzzleLengths => '길이';
-
-  @override
-  String get puzzleMates => '체크메이트';
-
-  @override
-  String get puzzleGoals => '목표';
-
-  @override
-  String get puzzleOrigin => '출처';
-
-  @override
-  String get puzzleSpecialMoves => '특수 행마';
-
-  @override
-  String get puzzleDidYouLikeThisPuzzle => '이 퍼즐이 괜찮았나요?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => '다음 퍼즐을 위해 투표해주세요!';
-
-  @override
-  String get puzzleUpVote => '퍼즐 추천';
-
-  @override
-  String get puzzleDownVote => '퍼즐 비추천';
-
-  @override
-  String get puzzleYourPuzzleRatingWillNotChange => '당신의 퍼즐 레이팅은 바뀌지 않을 것입니다. 퍼즐은 경쟁이 아니라는 걸 기억하세요. 레이팅은 당신의 현재 스킬에 맞는 퍼즐을 선택하도록 돕습니다.';
-
-  @override
-  String get puzzleFindTheBestMoveForWhite => '백의 최고의 수를 찾아보세요.';
-
-  @override
-  String get puzzleFindTheBestMoveForBlack => '흑의 최고의 수를 찾아보세요.';
-
-  @override
-  String get puzzleToGetPersonalizedPuzzles => '개인화된 퍼즐을 위해선:';
-
-  @override
-  String puzzlePuzzleId(String param) {
-    return '퍼즐 $param';
-  }
-
-  @override
-  String get puzzlePuzzleOfTheDay => '오늘의 퍼즐';
-
-  @override
-  String get puzzleDailyPuzzle => '일일 퍼즐';
-
-  @override
-  String get puzzleClickToSolve => '퍼즐 풀기';
-
-  @override
-  String get puzzleGoodMove => '좋은 수 입니다.';
-
-  @override
-  String get puzzleBestMove => '가장 좋은 수입니다!';
-
-  @override
-  String get puzzleKeepGoing => '계속하세요...';
-
-  @override
-  String get puzzlePuzzleSuccess => '성공!';
-
-  @override
-  String get puzzlePuzzleComplete => '퍼즐 완료!';
-
-  @override
-  String get puzzleByOpenings => '오프닝별';
-
-  @override
-  String get puzzlePuzzlesByOpenings => '오프닝별 퍼즐';
-
-  @override
-  String get puzzleOpeningsYouPlayedTheMost => '레이팅 게임에서 가장 많이 플레이한 오프닝';
-
-  @override
-  String get puzzleUseFindInPage => '브라우저의 \"페이지에서 찾기\" 메뉴를 이용해 가장 좋아하는 오프닝을 찾으세요!';
-
-  @override
-  String get puzzleUseCtrlF => 'Ctrl+f를 사용해서 가장 좋아하는 오프닝을 찾으세요!';
-
-  @override
-  String get puzzleNotTheMove => '답이 아닙니다!';
-
-  @override
-  String get puzzleTrySomethingElse => '다른 것 시도하기';
-
-  @override
-  String puzzleRatingX(String param) {
-    return '레이팅: $param';
-  }
-
-  @override
-  String get puzzleHidden => '숨겨짐';
-
-  @override
-  String puzzleFromGameLink(String param) {
-    return '게임 $param에서';
-  }
-
-  @override
-  String get puzzleContinueTraining => '연습 계속하기';
-
-  @override
-  String get puzzleDifficultyLevel => '난이도';
-
-  @override
-  String get puzzleNormal => '보통';
-
-  @override
-  String get puzzleEasier => '쉬움';
-
-  @override
-  String get puzzleEasiest => '매우 쉬움';
-
-  @override
-  String get puzzleHarder => '어려움';
-
-  @override
-  String get puzzleHardest => '매우 어려움';
-
-  @override
-  String get puzzleExample => '예시';
-
-  @override
-  String get puzzleAddAnotherTheme => '새 테마 추가';
-
-  @override
-  String get puzzleNextPuzzle => '다음 퍼즐';
-
-  @override
-  String get puzzleJumpToNextPuzzleImmediately => '다음 퍼즐로 즉시 이동';
-
-  @override
-  String get puzzlePuzzleDashboard => '퍼즐 대시보드';
-
-  @override
-  String get puzzleImprovementAreas => '개선이 필요한 부분';
-
-  @override
-  String get puzzleStrengths => '강점';
-
-  @override
-  String get puzzleHistory => '퍼즐 히스토리';
-
-  @override
-  String get puzzleSolved => '해결함';
-
-  @override
-  String get puzzleFailed => '실패함';
-
-  @override
-  String get puzzleStreakDescription => '점점 더 어려워지는 퍼즐을 풀고 연승을 쌓으세요. 시간 제한은 없습니다. 한번의 잘못된 수 만으로 게임이 끝납니다! 그러나 세션당 한 수를 건너 뛸 수 있습니다.';
-
-  @override
-  String puzzleYourStreakX(String param) {
-    return '연승 기록: $param';
-  }
-
-  @override
-  String get puzzleStreakSkipExplanation => '이 수를 건너뛰고 연승 기록을 보존하세요! 한 도전에 한 번만 가능합니다.';
-
-  @override
-  String get puzzleContinueTheStreak => '계속하기';
-
-  @override
-  String get puzzleNewStreak => '새 연승 도전';
-
-  @override
-  String get puzzleFromMyGames => '내 게임에서';
-
-  @override
-  String get puzzleLookupOfPlayer => '플레이어의 게임들에서 퍼즐을 찾습니다';
-
-  @override
-  String puzzleFromXGames(String param) {
-    return '$param의 게임에서의 퍼즐';
-  }
-
-  @override
-  String get puzzleSearchPuzzles => '퍼즐 찾기';
-
-  @override
-  String get puzzleFromMyGamesNone => '데이터베이스에 퍼즐이 없습니다만, Lichess는 여전히 당신을 사랑합니다.\n래피드나 클래시컬 게임을 플레이해서 당신의 퍼즐이 추가될 확률을 높이세요!';
-
-  @override
-  String puzzleFromXGamesFound(String param1, String param2) {
-    return '$param2의 게임에서 찾은 $param1개의 퍼즐';
-  }
-
-  @override
-  String get puzzlePuzzleDashboardDescription => '훈련, 분석, 개선';
-
-  @override
-  String puzzlePercentSolved(String param) {
-    return '$param 해결함';
-  }
-
-  @override
-  String get puzzleNoPuzzlesToShow => '표시할 것이 없습니다. 먼저 퍼즐을 플레이하세요!';
-
-  @override
-  String get puzzleImprovementAreasDescription => '실력을 높이기 위해 훈련하세요!';
-
-  @override
-  String get puzzleStrengthDescription => '이 테마에서 최고의 성적을 냈습니다';
-
-  @override
-  String puzzlePlayedXTimes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count회 플레이',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsBelowYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '당신의 퍼즐 레이팅보다 $count 포인트 낮음',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsAboveYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '당신의 퍼즐 레이팅보다 $count 포인트 높음',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPlayed(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count 플레이함',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbToReplay(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count 다시 풀기',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get puzzleThemeAdvancedPawn => '전진한 폰';
-
-  @override
-  String get puzzleThemeAdvancedPawnDescription => '상대방 진영에 깊숙히 전진한 폰이 승급을 노립니다.';
-
-  @override
-  String get puzzleThemeAdvantage => '이점';
-
-  @override
-  String get puzzleThemeAdvantageDescription => '결정적인 이점을 쟁취하세요. (200cp ≤ eval ≤ 600cp)';
-
-  @override
-  String get puzzleThemeAnastasiaMate => '아나스타시아 메이트';
-
-  @override
-  String get puzzleThemeAnastasiaMateDescription => '나이트와 룩 또는 퀸이 힘을 합쳐 상대 킹을 보드 가장자리와 자신의 기물 사이의 함정에 빠트립니다.';
-
-  @override
-  String get puzzleThemeArabianMate => '아라비안 메이트';
-
-  @override
-  String get puzzleThemeArabianMateDescription => '나이트와 룩이 힘을 합쳐 상대 킹을 보드 구석에서 함정에 빠트립니다.';
-
-  @override
-  String get puzzleThemeAttackingF2F7 => 'f2나 f7 공격하기';
-
-  @override
-  String get puzzleThemeAttackingF2F7Description => 'f2나 f7 칸의 폰을 노리고 공격합니다. 예시: 프라이드 리버 오프닝.';
-
-  @override
-  String get puzzleThemeAttraction => '유인';
-
-  @override
-  String get puzzleThemeAttractionDescription => '희생이나 교환을 통해 상대 기물을 후속 전술이 있는 칸으로 끌어냅니다.';
-
-  @override
-  String get puzzleThemeBackRankMate => '백 랭크 메이트';
-
-  @override
-  String get puzzleThemeBackRankMateDescription => '킹이 자신의 기물들에게 막혀 마지막 랭크에서 체크메이트 당합니다.';
-
-  @override
-  String get puzzleThemeBishopEndgame => '비숍 엔드게임';
-
-  @override
-  String get puzzleThemeBishopEndgameDescription => '비숍과 폰만 있는 엔드게임';
-
-  @override
-  String get puzzleThemeBodenMate => '보든 메이트';
-
-  @override
-  String get puzzleThemeBodenMateDescription => '자신의 기물에 막힌 킹에게 두 비숍이 X자로 대각선을 막아 메이트를 합니다.';
-
-  @override
-  String get puzzleThemeCastling => '캐슬링';
-
-  @override
-  String get puzzleThemeCastlingDescription => '왕을 안전하게 피신시키고, 룩을 이용해 공격 태세를 갖춥니다.';
-
-  @override
-  String get puzzleThemeCapturingDefender => '보호하는 기물을 제거하세요.';
-
-  @override
-  String get puzzleThemeCapturingDefenderDescription => '다른 기물을 방어중인 기물을 잡아서 다음 수에 더 이상 방어되지 않는 기물을 잡을 수 있게 됩니다.';
-
-  @override
-  String get puzzleThemeCrushing => '박살내기';
-
-  @override
-  String get puzzleThemeCrushingDescription => '상대의 블런더를 포착하고 박살내어 이득을 얻으세요. (eval ≥ 600cp)';
-
-  @override
-  String get puzzleThemeDoubleBishopMate => '2비숍 메이트';
-
-  @override
-  String get puzzleThemeDoubleBishopMateDescription => '자신의 기물에 막힌 킹에게 두 비숍이 인접한 대각선을 막아 메이트를 합니다.';
-
-  @override
-  String get puzzleThemeDovetailMate => '도브테일 메이트';
-
-  @override
-  String get puzzleThemeDovetailMateDescription => '퀸이 킹 바로 옆에서 메이트를 합니다. 유일하게 빠져나갈 수 있는 두 칸은 자신의 기물에게 막혀 있습니다.';
-
-  @override
-  String get puzzleThemeEquality => '동등함';
-
-  @override
-  String get puzzleThemeEqualityDescription => '불리한 상황에서 벗어나 무승부 또는 균형잡힌 포지션으로 만드세요. (eval ≤ 200cp)';
-
-  @override
-  String get puzzleThemeKingsideAttack => '킹사이드 공격';
-
-  @override
-  String get puzzleThemeKingsideAttackDescription => '상대 킹이 킹사이드 캐슬링을 한 뒤의 공격.';
-
-  @override
-  String get puzzleThemeClearance => '정리';
-
-  @override
-  String get puzzleThemeClearanceDescription => '이어지는 전술적 아이디어를 위해 칸, 파일 또는 대각선을 비우는 수입니다.';
-
-  @override
-  String get puzzleThemeDefensiveMove => '방어적인 수';
-
-  @override
-  String get puzzleThemeDefensiveMoveDescription => '기물을 잃거나 다른 손실을 피하기 위해 필요한 정확한 수입니다.';
-
-  @override
-  String get puzzleThemeDeflection => '유인';
-
-  @override
-  String get puzzleThemeDeflectionDescription => '중요한 칸을 수비하는 등 다른 역할을 수행하는 상대 기물의 주의를 분산시키는 수입니다. \"과부하\"라고도 불립니다.';
-
-  @override
-  String get puzzleThemeDiscoveredAttack => '디스커버드 어택';
-
-  @override
-  String get puzzleThemeDiscoveredAttackDescription => '장거리 기물(예: 룩)의 길을 막고 있는 기물(예: 나이트)을 이동시켜 공격합니다.';
-
-  @override
-  String get puzzleThemeDoubleCheck => '더블 체크';
-
-  @override
-  String get puzzleThemeDoubleCheckDescription => '움직인 기물과 그 뒤에 있던 기물이 모두 상대 킹을 공격한 디스커버 어택의 결과로, 두 기물이 동시에 체크를 합니다.';
-
-  @override
-  String get puzzleThemeEndgame => '엔드게임';
-
-  @override
-  String get puzzleThemeEndgameDescription => '게임 종반부에서의 전략';
-
-  @override
-  String get puzzleThemeEnPassantDescription => '앙파상 규칙을 포함한 전술입니다. 상대 폰이 처음에 두 칸 이동해서 내 폰을 지나쳤을 경우, 그 폰을 잡을 수 있습니다.';
-
-  @override
-  String get puzzleThemeExposedKing => '노출된 킹';
-
-  @override
-  String get puzzleThemeExposedKingDescription => '주변에 방어자가 얼마 없는 킹에 대한 전술입니다. 종종 체크메이트가 되기도 합니다.';
-
-  @override
-  String get puzzleThemeFork => '포크';
-
-  @override
-  String get puzzleThemeForkDescription => '이동한 기물이 두 개의 상대 기물을 동시에 공격하는 수입니다.';
-
-  @override
-  String get puzzleThemeHangingPiece => '보호받지 않는 기물';
-
-  @override
-  String get puzzleThemeHangingPieceDescription => '상대 기물이 지켜지지 않거나 불충분하게 지켜져 공짜로 잡을 수 있는 전술입니다.';
-
-  @override
-  String get puzzleThemeHookMate => '훅 메이트';
-
-  @override
-  String get puzzleThemeHookMateDescription => '상대의 폰에 의해 탈출로가 막힌 킹을 룩, 나이트, 폰으로 체크메이트 합니다.';
-
-  @override
-  String get puzzleThemeInterference => '간섭';
-
-  @override
-  String get puzzleThemeInterferenceDescription => '상대의 두 기물 사이에 기물을 집어넣어 그 기물들을 지켜지지 않게 만듭니다. 두 룩 사이의 나이트처럼요.';
-
-  @override
-  String get puzzleThemeIntermezzo => '사잇수';
-
-  @override
-  String get puzzleThemeIntermezzoDescription => '예상되는 플레이를 하는 대신, 먼저 상대가 즉시 해결해야 하는 또 다른 위협을 끼워 넣습니다. \"Zwischenzug\"나 \"In between\"이라고도 합니다.';
-
-  @override
-  String get puzzleThemeKnightEndgame => '나이트 엔딩';
-
-  @override
-  String get puzzleThemeKnightEndgameDescription => '나이트와 폰만 있는 엔드게임';
-
-  @override
-  String get puzzleThemeLong => '긴 퍼즐';
-
-  @override
-  String get puzzleThemeLongDescription => '승리까지 세 수 걸립니다.';
-
-  @override
-  String get puzzleThemeMaster => '마스터 게임';
-
-  @override
-  String get puzzleThemeMasterDescription => '타이틀 보유 플레이어의 게임에서 나온 퍼즐입니다.';
-
-  @override
-  String get puzzleThemeMasterVsMaster => '마스터 vs 마스터 게임';
-
-  @override
-  String get puzzleThemeMasterVsMasterDescription => '타이틀 보유 플레이어 간의 게임에서 나온 퍼즐입니다.';
-
-  @override
-  String get puzzleThemeMate => '체크메이트';
-
-  @override
-  String get puzzleThemeMateDescription => '게임을 승리하세요.';
-
-  @override
-  String get puzzleThemeMateIn1 => '1수 메이트';
-
-  @override
-  String get puzzleThemeMateIn1Description => '한 수만에 체크메이트하세요.';
-
-  @override
-  String get puzzleThemeMateIn2 => '2수 메이트';
-
-  @override
-  String get puzzleThemeMateIn2Description => '두 수만에 체크메이트하세요.';
-
-  @override
-  String get puzzleThemeMateIn3 => '3수 메이트';
-
-  @override
-  String get puzzleThemeMateIn3Description => '세 수만에 체크메이트하세요.';
-
-  @override
-  String get puzzleThemeMateIn4 => '4수 메이트';
-
-  @override
-  String get puzzleThemeMateIn4Description => '네 수만에 체크메이트하세요.';
-
-  @override
-  String get puzzleThemeMateIn5 => '5수+ 메이트';
-
-  @override
-  String get puzzleThemeMateIn5Description => '긴 체크메이트를 찾아내세요.';
-
-  @override
-  String get puzzleThemeMiddlegame => '미들게임';
-
-  @override
-  String get puzzleThemeMiddlegameDescription => '게임 중반부에서의 전략';
-
-  @override
-  String get puzzleThemeOneMove => '1수 퍼즐';
-
-  @override
-  String get puzzleThemeOneMoveDescription => '한 수짜리 퍼즐입니다.';
-
-  @override
-  String get puzzleThemeOpening => '오프닝';
-
-  @override
-  String get puzzleThemeOpeningDescription => '게임 초반부에서의 전략';
-
-  @override
-  String get puzzleThemePawnEndgame => '폰 엔드게임';
-
-  @override
-  String get puzzleThemePawnEndgameDescription => '폰만 있는 엔드게임.';
-
-  @override
-  String get puzzleThemePin => '핀';
-
-  @override
-  String get puzzleThemePinDescription => '더 높은 가치의 기물이 공격받게 되기 때문에 기물을 움직이지 못하게 하는 전술입니다.';
-
-  @override
-  String get puzzleThemePromotion => '프로모션';
-
-  @override
-  String get puzzleThemePromotionDescription => '폰을 퀸이나 다른 기물로 승진';
-
-  @override
-  String get puzzleThemeQueenEndgame => '퀸 엔딩';
-
-  @override
-  String get puzzleThemeQueenEndgameDescription => '퀸과 폰만 있는 엔드게임';
-
-  @override
-  String get puzzleThemeQueenRookEndgame => '퀸과 룩';
-
-  @override
-  String get puzzleThemeQueenRookEndgameDescription => '퀸과 룩, 폰만 있는 엔드게임';
-
-  @override
-  String get puzzleThemeQueensideAttack => '퀸사이드 공격';
-
-  @override
-  String get puzzleThemeQueensideAttackDescription => '상대 킹이 퀸사이드 캐슬링을 한 뒤의 공격.';
-
-  @override
-  String get puzzleThemeQuietMove => '조용한 수';
-
-  @override
-  String get puzzleThemeQuietMoveDescription => '체크 또는 기물을 잡는 수가 아니지만 나중에 피할 수 없는 위협을 준비하는 수입니다.';
-
-  @override
-  String get puzzleThemeRookEndgame => '룩 엔딩';
-
-  @override
-  String get puzzleThemeRookEndgameDescription => '룩과 폰만 있는 엔드게임';
-
-  @override
-  String get puzzleThemeSacrifice => '희생';
-
-  @override
-  String get puzzleThemeSacrificeDescription => '일련의 강제수로 이득을 얻기 위해 단기적으로 기물을 포기하는 전술입니다.';
-
-  @override
-  String get puzzleThemeShort => '짧은 퍼즐';
-
-  @override
-  String get puzzleThemeShortDescription => '승리까지 두 수 걸립니다.';
-
-  @override
-  String get puzzleThemeSkewer => '스큐어';
-
-  @override
-  String get puzzleThemeSkewerDescription => '높은 가치의 기물을 공격해 길을 비키게 만들고, 그 뒤에 있는 낮은 가치의 기물을 잡는 전술입니다. 핀의 반대죠.';
-
-  @override
-  String get puzzleThemeSmotheredMate => '질식 체크메이트';
-
-  @override
-  String get puzzleThemeSmotheredMateDescription => '자신의 기물에 둘러쌓여(또는 \"질식되어\") 움직일 수 없는 킹을 나이트로 체크메이트 시키는 것 입니다.';
-
-  @override
-  String get puzzleThemeSuperGM => '슈퍼GM 게임';
-
-  @override
-  String get puzzleThemeSuperGMDescription => '세계 최고 플레이어들의 게임에서 나온 퍼즐입니다.';
-
-  @override
-  String get puzzleThemeTrappedPiece => '갇힌 기물';
-
-  @override
-  String get puzzleThemeTrappedPieceDescription => '기물의 움직임이 제한되어 있어 잡히는걸 막을 수 없습니다.';
-
-  @override
-  String get puzzleThemeUnderPromotion => '하향 승진';
-
-  @override
-  String get puzzleThemeUnderPromotionDescription => '나이트, 비숍, 룩으로 승진';
-
-  @override
-  String get puzzleThemeVeryLong => '아주 긴 퍼즐';
-
-  @override
-  String get puzzleThemeVeryLongDescription => '승리까지 네 수 이상이 걸립니다.';
-
-  @override
-  String get puzzleThemeXRayAttack => 'X-Ray 공격';
-
-  @override
-  String get puzzleThemeXRayAttackDescription => '기물이 상대 기물 너머의 칸을 공격 또는 방어합니다.';
-
-  @override
-  String get puzzleThemeZugzwang => '추크추방';
-
-  @override
-  String get puzzleThemeZugzwangDescription => '상대가 둘 수 있는 수는 제한되어 있으며, 모든 수가 포지션을 악화시킵니다.';
-
-  @override
-  String get puzzleThemeHealthyMix => '골고루 섞기';
-
-  @override
-  String get puzzleThemeHealthyMixDescription => '전부 다. 무엇이 나올지 모르기 때문에 모든 것에 준비되어 있어야 합니다. 마치 진짜 게임처럼요.';
-
-  @override
-  String get puzzleThemePlayerGames => '플레이어 게임';
-
-  @override
-  String get puzzleThemePlayerGamesDescription => '당신의 게임이나 다른 플레이어의 게임에서 나온 퍼즐을 찾아보세요.';
-
-  @override
-  String puzzleThemePuzzleDownloadInformation(String param) {
-    return '이 퍼즐들은 퍼블릭 도메인이며, $param에서 다운로드할 수 있습니다.';
-  }
-
-  @override
-  String perfStatPerfStats(String param) {
-    return '$param 통계';
-  }
-
-  @override
-  String get perfStatViewTheGames => '게임 보기';
-
-  @override
-  String get perfStatProvisional => '임시';
-
-  @override
-  String get perfStatNotEnoughRatedGames => '신뢰할만한 레이팅을 설정하기에 충분한 만큼의 레이팅 게임을 플레이하지 않았습니다.';
-
-  @override
-  String perfStatProgressOverLastXGames(String param) {
-    return '최근 $param 게임 동안:';
-  }
-
-  @override
-  String perfStatRatingDeviation(String param) {
-    return '레이팅 편차: $param.';
-  }
-
-  @override
-  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
-    return '낮은 값일 수록 레이팅이 안정적입니다. $param1 이상이라면 임시 레이팅으로 간주합니다. 랭킹에 들기 위해서는 이 값이 $param2 (스탠다드 체스) 또는 $param3 (변형 체스) 보다 낮아야 합니다.';
-  }
-
-  @override
-  String get perfStatTotalGames => '총 게임';
-
-  @override
-  String get perfStatRatedGames => '레이팅 게임';
-
-  @override
-  String get perfStatTournamentGames => '토너먼트 게임';
-
-  @override
-  String get perfStatBerserkedGames => '버서크 게임';
-
-  @override
-  String get perfStatTimeSpentPlaying => '플레이한 시간';
-
-  @override
-  String get perfStatAverageOpponent => '상대의 평균 레이팅';
-
-  @override
-  String get perfStatVictories => '승리';
-
-  @override
-  String get perfStatDefeats => '패배';
-
-  @override
-  String get perfStatDisconnections => '연결 끊김';
-
-  @override
-  String get perfStatNotEnoughGames => '충분한 게임을 하지 않으셨습니다';
-
-  @override
-  String perfStatHighestRating(String param) {
-    return '최고 레이팅: $param';
-  }
-
-  @override
-  String perfStatLowestRating(String param) {
-    return '최저 레이팅: $param';
-  }
-
-  @override
-  String perfStatFromXToY(String param1, String param2) {
-    return '$param1에서 $param2';
-  }
-
-  @override
-  String get perfStatWinningStreak => '연승';
-
-  @override
-  String get perfStatLosingStreak => '연패';
-
-  @override
-  String perfStatLongestStreak(String param) {
-    return '최고 기록: $param';
-  }
-
-  @override
-  String perfStatCurrentStreak(String param) {
-    return '현재 기록: $param';
-  }
-
-  @override
-  String get perfStatBestRated => '승리한 최고 레이팅';
-
-  @override
-  String get perfStatGamesInARow => '연속 게임 플레이';
-
-  @override
-  String get perfStatLessThanOneHour => '게임 사이가 1시간 미만인 경우';
-
-  @override
-  String get perfStatMaxTimePlaying => '게임을 한 최대 시간';
-
-  @override
-  String get perfStatNow => '지금';
-
-  @override
-  String get searchSearch => '검색';
-
-  @override
-  String get settingsSettings => '설정';
-
-  @override
-  String get settingsCloseAccount => '계정 폐쇄';
-
-  @override
-  String get settingsManagedAccountCannotBeClosed => '당신의 계정은 관리되고 있으며, 폐쇄될 수 없습니다.';
-
-  @override
-  String get settingsClosingIsDefinitive => '폐쇄 결정은 바꾸거나, 되돌릴 수 없습니다. 정말로 하실 건가요?';
-
-  @override
-  String get settingsCantOpenSimilarAccount => '대소문자가 다르더라도, 똑같은 이름으로 계정을 다시 열 수 없습니다.';
-
-  @override
-  String get settingsChangedMindDoNotCloseAccount => '마음이 바뀌었습니다, 계정을 폐쇄하지 않겠습니다';
-
-  @override
-  String get settingsCloseAccountExplanation => '정말로 계정을 닫고 싶으신가요? 계정 폐쇄는 되돌릴 수 없습니다. 절대로 다시 로그인 할 수 없습니다.';
-
-  @override
-  String get settingsThisAccountIsClosed => '계정이 폐쇄되었습니다.';
-
-  @override
-  String get streamerLichessStreamers => 'Lichess 스트리머';
-
-  @override
   String get stormMoveToStart => '기물을 움직이면 시작';
 
   @override
@@ -4514,14 +4508,11 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
+  String get streamerLichessStreamers => 'Lichess 스트리머';
+
+  @override
   String get studyShareAndExport => '공유 및 내보내기';
 
   @override
   String get studyStart => '시작';
-
-  @override
-  String get broadcastBroadcasts => '방송';
-
-  @override
-  String get broadcastStartDate => '본인 시간대 기준 시작일';
 }

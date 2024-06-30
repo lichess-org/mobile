@@ -47,7 +47,7 @@ const whiteLists = {
   'search': ['search'],
   'streamer': ['lichessStreamers'],
   'study': ['start', 'shareAndExport'],
-  'broadcast': ['broadcasts', 'startDate'],
+  'broadcast': ['broadcasts', 'liveBroadcasts'],
 }
 
 

@@ -225,10 +225,10 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
-  String get contactContact => 'লাইকেস. আর. সি. / এর যোগাযোগের সংক্ষিপ্ত লিঙ্ক, হোমপেজে দৃশ্যমান';
+  String get broadcastBroadcasts => 'সম্প্রচার';
 
   @override
-  String get contactContactLichess => 'পৃষ্ঠার শিরোনাম lichess. org/contact';
+  String get broadcastLiveBroadcasts => 'সরাসরি টুর্নামেন্ট সম্প্রচার';
 
   @override
   String challengeChallengesX(String param1) {
@@ -310,6 +310,1012 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get challengeInviteLichessUser => 'অথবা একজন লিচেস ব্যবহারকারীকে আমন্ত্রণ জানান |:';
+
+  @override
+  String get contactContact => 'লাইকেস. আর. সি. / এর যোগাযোগের সংক্ষিপ্ত লিঙ্ক, হোমপেজে দৃশ্যমান';
+
+  @override
+  String get contactContactLichess => 'পৃষ্ঠার শিরোনাম lichess. org/contact';
+
+  @override
+  String get patronDonate => 'Donate';
+
+  @override
+  String get patronLichessPatron => 'Lichess Patron';
+
+  @override
+  String perfStatPerfStats(String param) {
+    return '$param stats';
+  }
+
+  @override
+  String get perfStatViewTheGames => 'View the games';
+
+  @override
+  String get perfStatProvisional => 'provisional';
+
+  @override
+  String get perfStatNotEnoughRatedGames => 'Not enough rated games have been played to establish a reliable rating.';
+
+  @override
+  String perfStatProgressOverLastXGames(String param) {
+    return 'Progression over the last $param games:';
+  }
+
+  @override
+  String perfStatRatingDeviation(String param) {
+    return 'Rating deviation: $param.';
+  }
+
+  @override
+  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
+    return 'Lower value means the rating is more stable. Above $param1, the rating is considered provisional. To be included in the rankings, this value should be below $param2 (standard chess) or $param3 (variants).';
+  }
+
+  @override
+  String get perfStatTotalGames => 'মোট গেম';
+
+  @override
+  String get perfStatRatedGames => 'Rated games';
+
+  @override
+  String get perfStatTournamentGames => 'Tournament games';
+
+  @override
+  String get perfStatBerserkedGames => 'Berserked games';
+
+  @override
+  String get perfStatTimeSpentPlaying => 'Time spent playing';
+
+  @override
+  String get perfStatAverageOpponent => 'Average opponent';
+
+  @override
+  String get perfStatVictories => 'Victories';
+
+  @override
+  String get perfStatDefeats => 'Defeats';
+
+  @override
+  String get perfStatDisconnections => 'Disconnections';
+
+  @override
+  String get perfStatNotEnoughGames => 'Not enough games played';
+
+  @override
+  String perfStatHighestRating(String param) {
+    return 'Highest rating: $param';
+  }
+
+  @override
+  String perfStatLowestRating(String param) {
+    return 'Lowest rating: $param';
+  }
+
+  @override
+  String perfStatFromXToY(String param1, String param2) {
+    return 'from $param1 to $param2';
+  }
+
+  @override
+  String get perfStatWinningStreak => 'Winning streak';
+
+  @override
+  String get perfStatLosingStreak => 'Losing streak';
+
+  @override
+  String perfStatLongestStreak(String param) {
+    return 'Longest streak: $param';
+  }
+
+  @override
+  String perfStatCurrentStreak(String param) {
+    return 'Current streak: $param';
+  }
+
+  @override
+  String get perfStatBestRated => 'Best rated victories';
+
+  @override
+  String get perfStatGamesInARow => 'Games played in a row';
+
+  @override
+  String get perfStatLessThanOneHour => 'Less than one hour between games';
+
+  @override
+  String get perfStatMaxTimePlaying => 'Max time spent playing';
+
+  @override
+  String get perfStatNow => 'now';
+
+  @override
+  String get preferencesPreferences => 'পছন্দসমূহ';
+
+  @override
+  String get preferencesDisplay => 'ডিসপ্লে';
+
+  @override
+  String get preferencesPrivacy => 'গোপনীয়তা';
+
+  @override
+  String get preferencesNotifications => 'Notifications';
+
+  @override
+  String get preferencesPieceAnimation => 'গুটির অ্যানিমেশন';
+
+  @override
+  String get preferencesMaterialDifference => 'গুটির মধ্যে ব্যবধান';
+
+  @override
+  String get preferencesBoardHighlights => 'বোর্ডের বৈশিষ্ট সমূহ (শেষ চাল এবং পরীক্ষা)';
+
+  @override
+  String get preferencesPieceDestinations => 'টুকরো গন্তব্যস্থল (বৈধ চাল ও আবার চাল)';
+
+  @override
+  String get preferencesBoardCoordinates => 'বোর্ডের স্থানাংকর (A-H, 1-8)';
+
+  @override
+  String get preferencesMoveListWhilePlaying => 'খেলার সময় তালিকা সরান';
+
+  @override
+  String get preferencesPgnPieceNotation => 'প্রতীক চিহ্ন সরান';
+
+  @override
+  String get preferencesChessPieceSymbol => 'দাবার টুকরোর ধরন';
+
+  @override
+  String get preferencesPgnLetter => 'বর্ণ (কে, কিউ, আর, বি, এন)';
+
+  @override
+  String get preferencesZenMode => 'জেন মোড';
+
+  @override
+  String get preferencesShowPlayerRatings => 'Show player ratings';
+
+  @override
+  String get preferencesShowFlairs => 'Show player flairs';
+
+  @override
+  String get preferencesExplainShowPlayerRatings => 'This hides all ratings from Lichess, to help focus on the chess. Rated games still impact your rating, this is only about what you get to see.';
+
+  @override
+  String get preferencesDisplayBoardResizeHandle => 'Show board resize handle';
+
+  @override
+  String get preferencesOnlyOnInitialPosition => 'Only on initial position';
+
+  @override
+  String get preferencesInGameOnly => 'In-game only';
+
+  @override
+  String get preferencesChessClock => 'দাবার ঘড়ি';
+
+  @override
+  String get preferencesTenthsOfSeconds => 'সেকেন্ডের কাটা';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'যখন সময় বাকি < 10 সেকেন্ড';
+
+  @override
+  String get preferencesHorizontalGreenProgressBars => 'সমতল সবুজ অগ্রগতি বার';
+
+  @override
+  String get preferencesSoundWhenTimeGetsCritical => 'যখন সময় জটিল হয়ে যায় শব্দ';
+
+  @override
+  String get preferencesGiveMoreTime => 'আরো কিছু সময় দিন';
+
+  @override
+  String get preferencesGameBehavior => 'Game behaviour';
+
+  @override
+  String get preferencesHowDoYouMovePieces => 'কিভাবে আপনি টুকরোগুলো সরাবেন?';
+
+  @override
+  String get preferencesClickTwoSquares => 'দুই স্থান নির্বাচন করুন';
+
+  @override
+  String get preferencesDragPiece => 'এক টুকরো স্থান্তর করুন';
+
+  @override
+  String get preferencesBothClicksAndDrag => 'উভয়ের';
+
+  @override
+  String get preferencesPremovesPlayingDuringOpponentTurn => 'পূনারয়চালন (প্রতিপক্ষের মোর নেওয়ার সময়)';
+
+  @override
+  String get preferencesTakebacksWithOpponentApproval => 'পিছনে নেও (প্রতিদ্বন্দ্বীর অনুমদনের সাথে)';
+
+  @override
+  String get preferencesInCasualGamesOnly => 'শুধু অনিয়মিত খেলার মধ্যে';
+
+  @override
+  String get preferencesPromoteToQueenAutomatically => 'সংক্রিয়ভাবে রানীর জন্য প্রচার';
+
+  @override
+  String get preferencesExplainPromoteToQueenAutomatically => 'Hold the <ctrl> key while promoting to temporarily disable auto-promotion';
+
+  @override
+  String get preferencesWhenPremoving => 'যখন পূনার‍য়সারান';
+
+  @override
+  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'সংক্রিয়ভাবে দাবি আঁকা বিষয়ে তিনগুন অনুবর্তন';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'যখন সময় বাকি < 30 সেকেন্ড';
+
+  @override
+  String get preferencesMoveConfirmation => 'অনুমোদন সরান';
+
+  @override
+  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Can be disabled during a game with the board menu';
+
+  @override
+  String get preferencesInCorrespondenceGames => 'সাদৃশ্য খেলাগুলো';
+
+  @override
+  String get preferencesCorrespondenceAndUnlimited => 'সাদৃশ্য এবং সীমাহীন';
+
+  @override
+  String get preferencesConfirmResignationAndDrawOffers => 'পদত্যাগ নিশ্চিত করুন এবং অফার লুটে নিন';
+
+  @override
+  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'কাস্টলিং পদ্বতি';
+
+  @override
+  String get preferencesCastleByMovingTwoSquares => 'দুই বর্গে রাজা সরান';
+
+  @override
+  String get preferencesCastleByMovingOntoTheRook => 'দাবার নৌকার উপর দিয়ে রাজাকে সরান';
+
+  @override
+  String get preferencesInputMovesWithTheKeyboard => 'কী-বোর্ডের সাথে নিবেশ সরান';
+
+  @override
+  String get preferencesInputMovesWithVoice => 'Input moves with your voice';
+
+  @override
+  String get preferencesSnapArrowsToValidMoves => 'Snap arrows to valid moves';
+
+  @override
+  String get preferencesSayGgWpAfterLosingOrDrawing => 'Say \"Good game, well played\" upon defeat or draw';
+
+  @override
+  String get preferencesYourPreferencesHaveBeenSaved => 'আপনার পচ্ছন্দগুলি সংরক্ষিত করা হয়েছে.';
+
+  @override
+  String get preferencesScrollOnTheBoardToReplayMoves => 'Scroll on the board to replay moves';
+
+  @override
+  String get preferencesCorrespondenceEmailNotification => 'Daily email listing your correspondence games';
+
+  @override
+  String get preferencesNotifyStreamStart => 'Streamer goes live';
+
+  @override
+  String get preferencesNotifyInboxMsg => 'New inbox message';
+
+  @override
+  String get preferencesNotifyForumMention => 'Forum comment mentions you';
+
+  @override
+  String get preferencesNotifyInvitedStudy => 'Study invite';
+
+  @override
+  String get preferencesNotifyGameEvent => 'Correspondence game updates';
+
+  @override
+  String get preferencesNotifyChallenge => 'Challenges';
+
+  @override
+  String get preferencesNotifyTournamentSoon => 'Tournament starting soon';
+
+  @override
+  String get preferencesNotifyTimeAlarm => 'Correspondence clock running out';
+
+  @override
+  String get preferencesNotifyBell => 'Bell notification within Lichess';
+
+  @override
+  String get preferencesNotifyPush => 'Device notification when you\'re not on Lichess';
+
+  @override
+  String get preferencesNotifyWeb => 'Browser';
+
+  @override
+  String get preferencesNotifyDevice => 'Device';
+
+  @override
+  String get preferencesBellNotificationSound => 'Bell notification sound';
+
+  @override
+  String get puzzlePuzzles => 'ধাঁধা';
+
+  @override
+  String get puzzlePuzzleThemes => 'ধাঁধার বিশয়বস্তু';
+
+  @override
+  String get puzzleRecommended => 'প্রস্তাবিত';
+
+  @override
+  String get puzzlePhases => 'পর্যায়';
+
+  @override
+  String get puzzleMotifs => 'বিষয়বস্তু';
+
+  @override
+  String get puzzleAdvanced => 'বিস্তারিত';
+
+  @override
+  String get puzzleLengths => 'দৈর্ঘ্য';
+
+  @override
+  String get puzzleMates => 'চেকমেট নিদর্শন';
+
+  @override
+  String get puzzleGoals => 'উদ্দেশ';
+
+  @override
+  String get puzzleOrigin => 'উত্স';
+
+  @override
+  String get puzzleSpecialMoves => 'বিশেশ চাল';
+
+  @override
+  String get puzzleDidYouLikeThisPuzzle => 'আপনি এই ধাঁধা তি কি পছন্দ করেছেন?';
+
+  @override
+  String get puzzleVoteToLoadNextOne => 'পরের ধাঁধা তি তে জেতে ভতে দিন!';
+
+  @override
+  String get puzzleUpVote => 'ধাঁধা কে আপ-ভোট করুন';
+
+  @override
+  String get puzzleDownVote => 'ধাঁধা কে ডাউন-ভোট করুন';
+
+  @override
+  String get puzzleYourPuzzleRatingWillNotChange => 'আপনার ধাঁধার রেটিং পরিবর্তীত হবে না। উল্লেখ্য, ধাঁধা প্রতিযোগীতামূলক নয়। আপনার রেটিং আপনার দক্ষতা অনুযায়ী ধাঁধা বাছাই করতে সাহায্য করে।';
+
+  @override
+  String get puzzleFindTheBestMoveForWhite => 'সাদার জন্নে সব থেকে উপযোগী চাল তি খুজে বার করুন।.';
+
+  @override
+  String get puzzleFindTheBestMoveForBlack => 'কালোর জন্নে সব থেকে উপযোগী চাল তি খুজে বার করুন।.';
+
+  @override
+  String get puzzleToGetPersonalizedPuzzles => 'আপনার ব্যাক্তিগত পাজল পেতে:';
+
+  @override
+  String puzzlePuzzleId(String param) {
+    return 'ধাঁধা $param';
+  }
+
+  @override
+  String get puzzlePuzzleOfTheDay => 'আজকের দিনের সেরা ধাঁধা';
+
+  @override
+  String get puzzleDailyPuzzle => 'দৈনিক ধাঁধা';
+
+  @override
+  String get puzzleClickToSolve => 'সমাধানের জন্য ক্লিক করুন';
+
+  @override
+  String get puzzleGoodMove => 'ভালো মানের মুভ';
+
+  @override
+  String get puzzleBestMove => 'সেরা মানের মুভ!';
+
+  @override
+  String get puzzleKeepGoing => 'চালিয়ে যান…';
+
+  @override
+  String get puzzlePuzzleSuccess => 'সফল হয়েছে!';
+
+  @override
+  String get puzzlePuzzleComplete => 'পাজল সম্পন্ন!';
+
+  @override
+  String get puzzleByOpenings => 'ওপেনিং অনুযায়ী';
+
+  @override
+  String get puzzlePuzzlesByOpenings => 'ওপেনিং অনুযায়ী ধাঁধা';
+
+  @override
+  String get puzzleOpeningsYouPlayedTheMost => 'রেটেড খেলায় আপনি যে ওপেনিংগুলো সবথেকে বেশি খেলেছেন';
+
+  @override
+  String get puzzleUseFindInPage => 'আপনার প্রিয় ওপেনিংগুলি খুঁজতে ব্রাউসার মেনুতে \"ফাইন্ড ইন পেজ\" ব্যবহার করুন!';
+
+  @override
+  String get puzzleUseCtrlF => 'আপনার প্রিয় ওপেনিং খুঁজতে Ctrl + F ব্যবহার করুন!';
+
+  @override
+  String get puzzleNotTheMove => 'এটা সঠিক চাল না!';
+
+  @override
+  String get puzzleTrySomethingElse => 'অন্য কিছু চেষ্টা করুন.';
+
+  @override
+  String puzzleRatingX(String param) {
+    return 'রেটিংস: $param';
+  }
+
+  @override
+  String get puzzleHidden => 'লুকায়িত';
+
+  @override
+  String puzzleFromGameLink(String param) {
+    return '$param খেলা থেকে';
+  }
+
+  @override
+  String get puzzleContinueTraining => 'প্রশিক্ষন চালিয়ে যান';
+
+  @override
+  String get puzzleDifficultyLevel => 'কঠিনের মাত্রা';
+
+  @override
+  String get puzzleNormal => 'সাধারন';
+
+  @override
+  String get puzzleEasier => 'সহজ';
+
+  @override
+  String get puzzleEasiest => 'খুবই সহজ';
+
+  @override
+  String get puzzleHarder => 'কঠিন';
+
+  @override
+  String get puzzleHardest => 'খুবই কঠিন';
+
+  @override
+  String get puzzleExample => 'উদাহরণ';
+
+  @override
+  String get puzzleAddAnotherTheme => 'অন্য থিম যুক্ত করুন';
+
+  @override
+  String get puzzleNextPuzzle => 'পরবর্তী ধাঁধা';
+
+  @override
+  String get puzzleJumpToNextPuzzleImmediately => 'তাৎক্ষনিক নতুন পাজলে চলে যাই';
+
+  @override
+  String get puzzlePuzzleDashboard => 'পাজল ড্যাশবোর্ড';
+
+  @override
+  String get puzzleImprovementAreas => 'উন্নতি করার জায়গা';
+
+  @override
+  String get puzzleStrengths => 'শক্তিমত্তা';
+
+  @override
+  String get puzzleHistory => 'পূর্বে চেষ্টা করা ধাঁধা';
+
+  @override
+  String get puzzleSolved => 'মীমাংসিত';
+
+  @override
+  String get puzzleFailed => 'ভুল করা ধাঁদা';
+
+  @override
+  String get puzzleStreakDescription => 'ধারাবাহিক জয় বজায় রাখতে ক্রমাগত কঠিন হতে থাকা ধাঁধার সমাধান করুন। কোনো সময়সীমা নেই। তবে একটি ভুল চালে খেলা শেষ। প্রতি সেশনে একটি করে চাল বাদ(skip) দেয়া যাবে।';
+
+  @override
+  String puzzleYourStreakX(String param) {
+    return 'আপনার স্কোর: $param';
+  }
+
+  @override
+  String get puzzleStreakSkipExplanation => 'আপনার ধারাবাহিক জয় বজায় রাখতে এই চাল বাদ(skip) করুন। প্রতিবার প্রচেষ্টায় একবার করে এমনটা করতে পারবেন।';
+
+  @override
+  String get puzzleContinueTheStreak => 'পরবর্তী ধাঁধায় যান';
+
+  @override
+  String get puzzleNewStreak => 'নতুন ধাঁধার ধারা';
+
+  @override
+  String get puzzleFromMyGames => 'আমার খেলা গুলো থেকে';
+
+  @override
+  String get puzzleLookupOfPlayer => 'একজন খেলোয়াড়ের খেলা থেকে ধাঁধা দেখুন';
+
+  @override
+  String puzzleFromXGames(String param) {
+    return '$param এর খেলা থেকে নেয়া ধাঁধা';
+  }
+
+  @override
+  String get puzzleSearchPuzzles => 'ধাঁধা খুজুন';
+
+  @override
+  String get puzzleFromMyGamesNone => 'ডাটাবেজে আপনার কোনো ধাঁধা নেই।\nআপনার খেলা থেকে ধাঁধা নেয়ার সম্ভাবনা বাড়াতে র‍্যাপিড এবং ক্লাসিক খেলুন।';
+
+  @override
+  String puzzleFromXGamesFound(String param1, String param2) {
+    return '$param2 টি খেলা হতে $param1 টি ধাঁধা পাওয়া গেছে।';
+  }
+
+  @override
+  String get puzzlePuzzleDashboardDescription => 'প্রশিক্ষণ, বিশ্লেষণ, উন্নতি';
+
+  @override
+  String puzzlePercentSolved(String param) {
+    return '$param সমাধান করেছেন।';
+  }
+
+  @override
+  String get puzzleNoPuzzlesToShow => 'প্রদর্শনের কিছু নেই। প্রথমে কিছু ধাঁধা খেলুন।';
+
+  @override
+  String get puzzleImprovementAreasDescription => 'আপনার প্রগতির জন্য এইগুলোতে প্রশিক্ষণ করুন!';
+
+  @override
+  String get puzzleStrengthDescription => 'আপনি এই ধাঁচের গুলোয় ভালো খেলেন।';
+
+  @override
+  String puzzlePlayedXTimes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count বার খেলা হয়েছে',
+      one: '$count বার খেলা হয়েছে',
+      zero: '$count বার খেলা হয়েছে',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsBelowYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'আপনার ধাঁধার রেটিং হতে $count পয়েন্ট কম।',
+      one: 'আপনার ধাঁধার রেটিং হতে এক পয়েন্ট কম।',
+      zero: 'আপনার ধাঁধার রেটিং হতে এক পয়েন্ট কম।',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsAboveYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'আপনার ধাঁধার রেটিং হতে $count পয়েন্ট বেশি।',
+      one: 'আপনার ধাঁধার রেটিং হতে এক পয়েন্ট বেশি।',
+      zero: 'আপনার ধাঁধার রেটিং হতে এক পয়েন্ট বেশি।',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPlayed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count টি খেলেছেন',
+      one: '$count টি খেলেছেন',
+      zero: '$count টি খেলেছেন',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbToReplay(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count টি পুনরায় খেলুন',
+      one: '$count টি পুনরায় খেলুন',
+      zero: '$count টি পুনরায় খেলুন',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get puzzleThemeAdvancedPawn => 'অগ্রসর সৈন্য';
+
+  @override
+  String get puzzleThemeAdvancedPawnDescription => 'আপনার একটি সৈন্য প্রতিপক্ষের অবস্থানের গভীরে গিয়েছে, সম্ভবত তা প্রমোশনের জন্য হুশিয়ারি দিচ্ছে।';
+
+  @override
+  String get puzzleThemeAdvantage => 'লাভ';
+
+  @override
+  String get puzzleThemeAdvantageDescription => 'মারাত্বক লাভের জন্য আপনার সুযোগকে কাজে লাগান (200cp ≤ eval ≤ 600cp)';
+
+  @override
+  String get puzzleThemeAnastasiaMate => 'অ্যানেস্তেসিয়ার মাত';
+
+  @override
+  String get puzzleThemeAnastasiaMateDescription => 'একটা ঘোড়া এবং একটা নৌকা অথবা মন্ত্রীকে নিয়ে দল বাঁধান প্রতিপক্ষের রাজাকে বোর্ডের সাইড এবং তারই গুটির মাঝে ফাঁদে ফেলার জন্য।';
+
+  @override
+  String get puzzleThemeArabianMate => 'আরবীয় মাত';
+
+  @override
+  String get puzzleThemeArabianMateDescription => 'প্রতিপক্ষের রাজাকে বোর্ডের এক কোণায় ফাঁদে ফেলার জন্য একটা ঘোড়া এবং একটা নৌকার দলগঠন।';
+
+  @override
+  String get puzzleThemeAttackingF2F7 => 'f2 অথবা f7 কে আক্রমণ করা';
+
+  @override
+  String get puzzleThemeAttackingF2F7Description => 'f2 অথবা f7 সৈন্যকে লক্ষ্য করে আক্রমণ, ফ্রায়েড লিভার ওপেনিং এ যেমন।';
+
+  @override
+  String get puzzleThemeAttraction => 'আকর্ষণ';
+
+  @override
+  String get puzzleThemeAttractionDescription => 'শত্রুর গুটিকে জোর করে একটা ঘরে আনার জন্য একটা বিনিময় অথবা ত্যাগ যার মাধ্যমে পরে ট্যাকটিক করা যায়।';
+
+  @override
+  String get puzzleThemeBackRankMate => 'পিছনের র‍্যাংক মাত';
+
+  @override
+  String get puzzleThemeBackRankMateDescription => 'রাজাকে নিজের বাড়ির র‍্যাংকে বাজিমাত করা, যখন তা নিজের গুটি দ্বারাই ফাঁদে আটকে থাকে।';
+
+  @override
+  String get puzzleThemeBishopEndgame => 'হাতি এন্ডগেম';
+
+  @override
+  String get puzzleThemeBishopEndgameDescription => 'শুধু হাতি এবং সৈন্যদের নিয়ে একটা এন্ডগেম।';
+
+  @override
+  String get puzzleThemeBodenMate => 'বডেনের মাত';
+
+  @override
+  String get puzzleThemeBodenMateDescription => 'দুইটা ক্রস করা আড়া-আড়ি রেখার উপর দুইটা হাতি যা নিজের গুটিতে আটে থাকা রাজাকে বাজিমাত করে।';
+
+  @override
+  String get puzzleThemeCastling => 'ক্যাসলিং';
+
+  @override
+  String get puzzleThemeCastlingDescription => 'রাজাকে নিরাপদে নিয়ে আসুন, এবং আপনার নৌকাকে স্থাপন করুন হামলার জন্য.';
+
+  @override
+  String get puzzleThemeCapturingDefender => 'রক্ষককে খান';
+
+  @override
+  String get puzzleThemeCapturingDefenderDescription => 'একটা গুটিকে খাওয়া যা আরেকটার প্রতিরক্ষা করে, যা পরের একটি চালে যেই গুটিকে রক্ষা করা হচ্ছিল তাকে খাওয়ার সুযোগ করে দেয়।';
+
+  @override
+  String get puzzleThemeCrushing => 'গুড়িয়ে দেয়া';
+
+  @override
+  String get puzzleThemeCrushingDescription => 'অপনেন্টের ব্লানডারকে ধরে ফেলুন এবং প্রতিপক্ষকে গুড়িয়ে দিয়ে লাভ অর্জন করুন। (eval ≥ 600cp)';
+
+  @override
+  String get puzzleThemeDoubleBishopMate => 'দুটি হাতির মাত';
+
+  @override
+  String get puzzleThemeDoubleBishopMateDescription => 'পাশাপাশি দুটি আড়া-আড়ি রেখায় থাকা দুটি বিশপ/হাতি নিজের গুটি দ্বারা আটকা পড়া প্রতিপক্ষের রাজাকে কিস্তিমাত করবে।';
+
+  @override
+  String get puzzleThemeDovetailMate => 'ডাভটেইল মাত';
+
+  @override
+  String get puzzleThemeDovetailMateDescription => 'একটা মন্ত্রী রাজাকে বাজিমাত দেয়, যার কেবল দুটি মুক্তির ঘর নিজের গুটি দ্বারা দখলকৃত থাকে।';
+
+  @override
+  String get puzzleThemeEquality => 'সমতা';
+
+  @override
+  String get puzzleThemeEqualityDescription => 'একটা হেরে যাওয়া অবস্থান থেকে ফিরে আসা, এবং ড্র অথবা একটা ভারসাম্যযুক্ত অবস্থানে নিয়ে আসা। (eval ≤ 200cp)';
+
+  @override
+  String get puzzleThemeKingsideAttack => 'রাজার দিকে আক্রমণ';
+
+  @override
+  String get puzzleThemeKingsideAttackDescription => 'প্রতিপক্ষের রাজার নিজের পাশে ক্যাসলিং করার পর, তাকে আক্রমণ করা।';
+
+  @override
+  String get puzzleThemeClearance => 'পরিষ্কারকরণ';
+
+  @override
+  String get puzzleThemeClearanceDescription => 'প্রায়শই একটি টেম্পোসহ, একটা চাল যা একটা ঘর, ফাইল অথবা আড়া-আড়ি লাইন পরিষ্কার করে পরে যার দ্বারা ট্যাকটিক প্রয়োগ করা যায়।';
+
+  @override
+  String get puzzleThemeDefensiveMove => 'রক্ষণাত্বক চাল';
+
+  @override
+  String get puzzleThemeDefensiveMoveDescription => 'একটা নিখুঁত চাল অথবা চালের ধারা যার দ্বারা ম্যাটেরিয়াল হারানো অথবা অন্য ধরণের ক্ষতির হাত থেকে বাঁচা যায়।';
+
+  @override
+  String get puzzleThemeDeflection => 'বিচ্যুতি';
+
+  @override
+  String get puzzleThemeDeflectionDescription => 'একটা চাল যা প্রতিপক্ষের গুটিকে নিজের কাজ (যেমন একটা গুরুত্বপূর্ণ ঘর পাহারা দেয়া) থেকে বিরত রাখে। কখনো কখনো এটাকে ওভারলোডিং ও বলা হয়।';
+
+  @override
+  String get puzzleThemeDiscoveredAttack => 'আবিষ্কৃত আক্রমণ';
+
+  @override
+  String get puzzleThemeDiscoveredAttackDescription => 'একটা গুটি (যেমন ঘোড়া), যা পূর্বে কোন গুটির আক্রমণকে প্রতিরোধ করছিল, তাকে সেই গুটির রাস্তা থেকে সরিয়ে আক্রমণ করা। এতে যেগুটি সরানো হলো এবং যেগুটির পথ থেকে সরানো হলো উভয়ই আক্রমণ করবে।';
+
+  @override
+  String get puzzleThemeDoubleCheck => 'দ্বৈত চেক';
+
+  @override
+  String get puzzleThemeDoubleCheckDescription => 'দুটি গুটি দিয়ে একসাথে চেক করা, আবিষ্কৃত আক্রমণের ফলস্বরূপ যেখানে যে গুটি সরে এবং যে গুটির রাস্তা পরিষ্কার হয় উভয়ই প্রতিপক্ষের রাজাকে আক্রমণ করে।';
+
+  @override
+  String get puzzleThemeEndgame => 'সমাপনী খেলা';
+
+  @override
+  String get puzzleThemeEndgameDescription => 'গেমের শেষ পর্যায়ের একটি ট্যাকটিক।';
+
+  @override
+  String get puzzleThemeEnPassantDescription => 'এন প্যাসান্ট রুলকে কেন্দ্র করে একটি ট্যাকটিক, যেখানে একটা সৈন্য একটা প্রতিপক্ষের সৈন্যকে খেতে পারে যা তাকে পাশ কাটিয়েছে নিজের দুই ঘর অতিক্রমের ক্ষমতা ব্যবহার করে।';
+
+  @override
+  String get puzzleThemeExposedKing => 'বহি:প্রকাশিত রাজা';
+
+  @override
+  String get puzzleThemeExposedKingDescription => 'রাজার আশেপাশে অল্পসংখ্যক রক্ষককে কেন্দ্র করে একটি কৌশল, যা প্রায়ই কিস্তিমাতে পরিণত হয়।';
+
+  @override
+  String get puzzleThemeFork => 'কাঁটাচামচ';
+
+  @override
+  String get puzzleThemeForkDescription => 'একটা চাল যেখানে একটা গুটি প্রতিপক্ষের দুটি গুটিকে আক্রমণ করে একইসাথে (যেভাবে একজন দুইহাতে দুটো কাঁটাচামচ দিয়ে দুটো জিনিসে আক্রমণ করে).';
+
+  @override
+  String get puzzleThemeHangingPiece => 'ঝুলন্ত গুটি';
+
+  @override
+  String get puzzleThemeHangingPieceDescription => 'প্রতিপক্ষের গুটি অরক্ষিত বা অপর্যাপ্তভাবে রক্ষিত এবং ক্যাপচার/খাওয়ার জন্য উন্মুক্ত।';
+
+  @override
+  String get puzzleThemeHookMate => 'হুক মেট';
+
+  @override
+  String get puzzleThemeHookMateDescription => 'একটি নৌকা, ঘোড়া এবং সৈন্য দ্বারা প্রতিপক্ষের রাজাকে কিস্তিমাত করা যা নিজের সৈন্য দ্বারা আটকা পরেছে।';
+
+  @override
+  String get puzzleThemeInterference => 'প্রতিবন্ধকতা তৈরি';
+
+  @override
+  String get puzzleThemeInterferenceDescription => 'একটি গুটিকে প্রতিপক্ষের দুটি গুটির মধ্যবর্তী ঘরে চাল দেয়া, যাতে একটি বা উভয় গুটি অরক্ষিত হয়ে পড়ে। যেমনঃ দুটি নৌকার মধ্যে প্রতিপক্ষের একটি রক্ষিত ঘরে প্রতিপক্ষের ঘোড়ার চাল দেয়া।';
+
+  @override
+  String get puzzleThemeIntermezzo => 'Intermezzo/মধ্যবর্তী চাল';
+
+  @override
+  String get puzzleThemeIntermezzoDescription => 'প্রত্যাশিত চাল না খেলে ভিন্ন চাল দেয়া, যা তৎক্ষণাৎ হুমকি(threat) তৈরি করবে এবং প্রতিপক্ষকে অবশ্যই তা প্রতিহত করতে হবে।';
+
+  @override
+  String get puzzleThemeKnightEndgame => 'Knight/ঘোড়ার সমাপনী খেলা';
+
+  @override
+  String get puzzleThemeKnightEndgameDescription => 'শুধু হাতি এবং সৈন্যদের নিয়ে সমাপনী খেলা।';
+
+  @override
+  String get puzzleThemeLong => 'দীর্ঘ ধাঁধা';
+
+  @override
+  String get puzzleThemeLongDescription => 'তিন চালে জিতুন।';
+
+  @override
+  String get puzzleThemeMaster => 'খেতাবধারীদের খেলা';
+
+  @override
+  String get puzzleThemeMasterDescription => 'খেতাবধারীদের খেলা থেকে নেয়া ধাঁধা।';
+
+  @override
+  String get puzzleThemeMasterVsMaster => 'খেতাব বনাম খেতাব';
+
+  @override
+  String get puzzleThemeMasterVsMasterDescription => 'দুইজন খেতাবধারীদের খেলা থেকে নেয়া ধাঁধা।';
+
+  @override
+  String get puzzleThemeMate => 'কিস্তিমাত';
+
+  @override
+  String get puzzleThemeMateDescription => 'ভঙ্গিমায় খেলা জিতুন।';
+
+  @override
+  String get puzzleThemeMateIn1 => '১ চালে মাত';
+
+  @override
+  String get puzzleThemeMateIn1Description => '১ চালে কিস্তিমাত দিন।';
+
+  @override
+  String get puzzleThemeMateIn2 => '২ চালে মাত';
+
+  @override
+  String get puzzleThemeMateIn2Description => '২ চালে কিস্তিমাত দিন।';
+
+  @override
+  String get puzzleThemeMateIn3 => '৩ চালে মাত';
+
+  @override
+  String get puzzleThemeMateIn3Description => '৩ চালে কিস্তিমাত দিন।';
+
+  @override
+  String get puzzleThemeMateIn4 => '৪ চালে মাত';
+
+  @override
+  String get puzzleThemeMateIn4Description => '৪ চালে কিস্তিমাত দিন।';
+
+  @override
+  String get puzzleThemeMateIn5 => '৫ বা ততোধিক চালে মাত';
+
+  @override
+  String get puzzleThemeMateIn5Description => 'কিস্তিমাত করার দীর্ঘ চালের ক্রম বের করতে হবে।';
+
+  @override
+  String get puzzleThemeMiddlegame => 'মধ্য-খেলা';
+
+  @override
+  String get puzzleThemeMiddlegameDescription => 'খেলার দ্বিতীয় পর্যায়ের কৌশল।';
+
+  @override
+  String get puzzleThemeOneMove => '১ চালের ধাঁধা';
+
+  @override
+  String get puzzleThemeOneMoveDescription => 'মাত্র ১ চাল দীর্ঘ ধাঁধা।';
+
+  @override
+  String get puzzleThemeOpening => 'প্রারম্ভিক খেলা';
+
+  @override
+  String get puzzleThemeOpeningDescription => 'খেলার শুরুর পর্যায়ের কৌশল।';
+
+  @override
+  String get puzzleThemePawnEndgame => 'সৈন্যের সমাপনী খেলা';
+
+  @override
+  String get puzzleThemePawnEndgameDescription => 'শুধুমাত্র সৈন্য দ্বারা সমাপনী খেলা।';
+
+  @override
+  String get puzzleThemePin => 'Pin/আটকে ফেলা';
+
+  @override
+  String get puzzleThemePinDescription => 'এক ধরণের কৌশল যেখানে একটি গুটির চাল দিলে নিজের বড় গুটির উপর আক্রমন হবে।';
+
+  @override
+  String get puzzleThemePromotion => 'Promotion/পদোন্নতি';
+
+  @override
+  String get puzzleThemePromotionDescription => 'আপনার সৈন্যকে মন্ত্রী বা অন্য লঘু গুটিতে উন্নীত করুন।';
+
+  @override
+  String get puzzleThemeQueenEndgame => 'মন্ত্রীর সমাপনী খেলা';
+
+  @override
+  String get puzzleThemeQueenEndgameDescription => 'শুধু মন্ত্রী এবং সৈন্যদের নিয়ে একটা সমাপনী খেলা।';
+
+  @override
+  String get puzzleThemeQueenRookEndgame => 'মন্ত্রী এবং নৌকা';
+
+  @override
+  String get puzzleThemeQueenRookEndgameDescription => 'শুধু মন্ত্রী, নৌকা এবং সৈন্যদের নিয়ে সমাপনী খেলা।';
+
+  @override
+  String get puzzleThemeQueensideAttack => 'মন্ত্রী-দিকের আক্রমণ';
+
+  @override
+  String get puzzleThemeQueensideAttackDescription => 'প্রতিপক্ষের রাজার মন্ত্রীর দিকে ক্যাসলিং করার পর আক্রমণ।';
+
+  @override
+  String get puzzleThemeQuietMove => 'Quite/নীরব চাল';
+
+  @override
+  String get puzzleThemeQuietMoveDescription => 'যে চাল তাৎক্ষণিক কোনো প্রতিক্রিয়া করে না, কিন্তু পরবর্তী চাল গুলোকে অনেক গুপ্ত, অনিবার্য আক্রমনের জন্য তৈরি করে।';
+
+  @override
+  String get puzzleThemeRookEndgame => 'নৌকার সমাপনী খেলা';
+
+  @override
+  String get puzzleThemeRookEndgameDescription => 'শুধু নৌকা এবং সৈন্যদের নিয়ে সমাপনী খেলা।';
+
+  @override
+  String get puzzleThemeSacrifice => 'Sacrifice/বিসর্জন';
+
+  @override
+  String get puzzleThemeSacrificeDescription => 'কৌশলগত সুবিধা অর্জনের জন্য গুটি বিসর্জন দেয়া।';
+
+  @override
+  String get puzzleThemeShort => 'সংক্ষিপ্ত ধাঁধা';
+
+  @override
+  String get puzzleThemeShortDescription => 'দুই চালে জিতুন।';
+
+  @override
+  String get puzzleThemeSkewer => 'Skewer/শূল';
+
+  @override
+  String get puzzleThemeSkewerDescription => 'কোনো বড় গুটি আক্রমনের শিকার হলে, সেটি সরে গিয়ে পিছনের কোনো ছোট গুটিকে বিসর্জন/আক্রান্ত করা।';
+
+  @override
+  String get puzzleThemeSmotheredMate => 'স্মদারড মেট';
+
+  @override
+  String get puzzleThemeSmotheredMateDescription => 'ঘোড়া যখন নিজের গুটি দ্বারা আটকে পড়া রাজাকে কিস্তিমাত করে।';
+
+  @override
+  String get puzzleThemeSuperGM => 'সুপার গ্রান্ডমাস্টারদের খেলা।';
+
+  @override
+  String get puzzleThemeSuperGMDescription => 'বিশ্বসেরা দাবাড়ুদের খেলা থেকে নেয়া ধাঁধা।';
+
+  @override
+  String get puzzleThemeTrappedPiece => 'আটকে পড়া গুটি';
+
+  @override
+  String get puzzleThemeTrappedPieceDescription => 'সীমিত চাল থাকার জন্য গুটি যখন নিজেকে খাওয়া(capture) থেকে বাঁচাতে পারে না।';
+
+  @override
+  String get puzzleThemeUnderPromotion => 'অর্ধ-পদোন্নতি(Underpromotion)';
+
+  @override
+  String get puzzleThemeUnderPromotionDescription => 'ঘোড়া, হাতি অথবা নৌকায় উন্নীত করা।';
+
+  @override
+  String get puzzleThemeVeryLong => 'অতিদীর্ঘ ধাঁধা';
+
+  @override
+  String get puzzleThemeVeryLongDescription => 'চার বা ততোধিক চালে জিতুন';
+
+  @override
+  String get puzzleThemeXRayAttack => 'এক্স-রে আক্রমণ';
+
+  @override
+  String get puzzleThemeXRayAttackDescription => 'একটি গুটি যখন প্রতিপক্ষের গুটির ভিতর দিয়ে কোনো ঘরকে রক্ষা বা আক্রমন করে।';
+
+  @override
+  String get puzzleThemeZugzwang => 'জুগজওয়াং(Zugzwang)';
+
+  @override
+  String get puzzleThemeZugzwangDescription => 'প্রতিপক্ষের সীমিত চাল আছে, এবং সব চাল তাদের অবস্থান আরো খারাপ করবে।';
+
+  @override
+  String get puzzleThemeHealthyMix => 'পরিমিত মিশ্রণ';
+
+  @override
+  String get puzzleThemeHealthyMixDescription => 'সবকিছু একটু করে। আপনি জানবেন না কি আসতে চলেছে। অনেকটা বাস্তব খেলার মতো।';
+
+  @override
+  String get puzzleThemePlayerGames => 'খেলোয়ারদের খেলা হতে';
+
+  @override
+  String get puzzleThemePlayerGamesDescription => 'খেলোয়ারদের খেলা থেকে বাছাই করে তৈরি করা ধাঁধা।';
+
+  @override
+  String puzzleThemePuzzleDownloadInformation(String param) {
+    return 'এই ধাঁধা গুলো সবার জন্য উন্মুক্ত এবং $param থেকে নামিয়ে নেয়া যাবে।';
+  }
+
+  @override
+  String get searchSearch => 'অনুসন্ধান';
+
+  @override
+  String get settingsSettings => 'সেটিংস';
+
+  @override
+  String get settingsCloseAccount => 'একাউন্ট বন্ধ করুন';
+
+  @override
+  String get settingsManagedAccountCannotBeClosed => 'Your account is managed, and cannot be closed.';
+
+  @override
+  String get settingsClosingIsDefinitive => 'একাউন্ট বন্ধ সুনিশ্চিত। আর ফেরত যাওয়ার উপায় নেই। আপনি কি নিশ্চিত?';
+
+  @override
+  String get settingsCantOpenSimilarAccount => 'আপনি একই নামে আর নতুন একাউন্ট খুলতে পারবেন না, যদিও নামের বর্ণগুলো ছোট/বড় হাতের হয়।';
+
+  @override
+  String get settingsChangedMindDoNotCloseAccount => 'আমি নিজের মত পরিবর্তন করেছি এবং আমার একাউন্ট বন্ধ করতে চাই না';
+
+  @override
+  String get settingsCloseAccountExplanation => 'আপনি কি নিশ্চিত যে আপনি নিজের একাউন্টটি বন্ধ করতে চান? আপনার একাউন্ট বন্ধ করবার সিদ্ধান্তটি স্থায়ী হবে। আপনি আর কখনও লগ ইন করতে সক্ষম হবেন না।';
+
+  @override
+  String get settingsThisAccountIsClosed => 'এই একাউন্টটি বন্ধ করা হয়েছে';
 
   @override
   String get playWithAFriend => 'বন্ধুর সাথে খেলো';
@@ -512,6 +1518,12 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get deleteFromHere => 'এখান থেকে মুছুন';
+
+  @override
+  String get collapseVariations => 'Collapse variations';
+
+  @override
+  String get expandVariations => 'Expand variations';
 
   @override
   String get forceVariation => 'জোর করে পরিবর্তন';
@@ -1371,15 +2383,6 @@ class AppLocalizationsBn extends AppLocalizations {
   String get emptyTournamentName => 'কোন গ্র্যান্ডমাস্টারের নামে টুর্নামেন্টের নাম দিতে চাইলে খালি রাখুন।';
 
   @override
-  String get recommendNotTouching => 'এটা টাচ না করার জন্য পরামর্শ দেয়া হচ্ছে।';
-
-  @override
-  String get fewerPlayers => 'যদি আপনি এন্ট্রি করার শর্ত ঠিক করে দেন, তাহলে টুর্নামেন্টে তুলনামূলকভাবে কম খেলোয়ার পাওয়া যাবে।';
-
-  @override
-  String get showAdvancedSettings => 'এডভান্সড সেটিংসে যান';
-
-  @override
   String get makePrivateTournament => 'পাসওয়ার্ড দিয়ে টুর্নামেন্টটি গোপনীয় এবং সিমাবদ্ধ করেদিন';
 
   @override
@@ -1509,10 +2512,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get editProfile => 'পরিচিতি সম্পাদনা';
 
   @override
-  String get firstName => 'প্রথম নাম';
-
-  @override
-  String get lastName => 'শেষ নাম';
+  String get realName => 'Real name';
 
   @override
   String get setFlair => 'Set your flair';
@@ -1641,13 +2641,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get cheat => 'চিটিং করছে';
 
   @override
-  String get insult => 'অপমান করেছে';
-
-  @override
   String get troll => 'ব্যঙ্গ করছে';
-
-  @override
-  String get ratingManipulation => 'রেটিং ইচ্ছাকৃতভাবে পরিবর্তন';
 
   @override
   String get other => 'অন্য কোনো কারণ';
@@ -1754,6 +2748,9 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get outsideTheBoard => 'বোর্ডের বাহিরে';
+
+  @override
+  String get allSquaresOfTheBoard => 'All squares of the board';
 
   @override
   String get onSlowGames => 'খেলায় ধীর গতি';
@@ -3460,1009 +4457,6 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
-  String get patronDonate => 'Donate';
-
-  @override
-  String get patronLichessPatron => 'Lichess Patron';
-
-  @override
-  String get preferencesPreferences => 'পছন্দসমূহ';
-
-  @override
-  String get preferencesDisplay => 'ডিসপ্লে';
-
-  @override
-  String get preferencesPrivacy => 'গোপনীয়তা';
-
-  @override
-  String get preferencesNotifications => 'Notifications';
-
-  @override
-  String get preferencesPieceAnimation => 'গুটির অ্যানিমেশন';
-
-  @override
-  String get preferencesMaterialDifference => 'গুটির মধ্যে ব্যবধান';
-
-  @override
-  String get preferencesBoardHighlights => 'বোর্ডের বৈশিষ্ট সমূহ (শেষ চাল এবং পরীক্ষা)';
-
-  @override
-  String get preferencesPieceDestinations => 'টুকরো গন্তব্যস্থল (বৈধ চাল ও আবার চাল)';
-
-  @override
-  String get preferencesBoardCoordinates => 'বোর্ডের স্থানাংকর (A-H, 1-8)';
-
-  @override
-  String get preferencesMoveListWhilePlaying => 'খেলার সময় তালিকা সরান';
-
-  @override
-  String get preferencesPgnPieceNotation => 'প্রতীক চিহ্ন সরান';
-
-  @override
-  String get preferencesChessPieceSymbol => 'দাবার টুকরোর ধরন';
-
-  @override
-  String get preferencesPgnLetter => 'বর্ণ (কে, কিউ, আর, বি, এন)';
-
-  @override
-  String get preferencesZenMode => 'জেন মোড';
-
-  @override
-  String get preferencesShowPlayerRatings => 'Show player ratings';
-
-  @override
-  String get preferencesShowFlairs => 'Show player flairs';
-
-  @override
-  String get preferencesExplainShowPlayerRatings => 'This hides all ratings from Lichess, to help focus on the chess. Rated games still impact your rating, this is only about what you get to see.';
-
-  @override
-  String get preferencesDisplayBoardResizeHandle => 'Show board resize handle';
-
-  @override
-  String get preferencesOnlyOnInitialPosition => 'Only on initial position';
-
-  @override
-  String get preferencesInGameOnly => 'In-game only';
-
-  @override
-  String get preferencesChessClock => 'দাবার ঘড়ি';
-
-  @override
-  String get preferencesTenthsOfSeconds => 'সেকেন্ডের কাটা';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'যখন সময় বাকি < 10 সেকেন্ড';
-
-  @override
-  String get preferencesHorizontalGreenProgressBars => 'সমতল সবুজ অগ্রগতি বার';
-
-  @override
-  String get preferencesSoundWhenTimeGetsCritical => 'যখন সময় জটিল হয়ে যায় শব্দ';
-
-  @override
-  String get preferencesGiveMoreTime => 'আরো কিছু সময় দিন';
-
-  @override
-  String get preferencesGameBehavior => 'Game behaviour';
-
-  @override
-  String get preferencesHowDoYouMovePieces => 'কিভাবে আপনি টুকরোগুলো সরাবেন?';
-
-  @override
-  String get preferencesClickTwoSquares => 'দুই স্থান নির্বাচন করুন';
-
-  @override
-  String get preferencesDragPiece => 'এক টুকরো স্থান্তর করুন';
-
-  @override
-  String get preferencesBothClicksAndDrag => 'উভয়ের';
-
-  @override
-  String get preferencesPremovesPlayingDuringOpponentTurn => 'পূনারয়চালন (প্রতিপক্ষের মোর নেওয়ার সময়)';
-
-  @override
-  String get preferencesTakebacksWithOpponentApproval => 'পিছনে নেও (প্রতিদ্বন্দ্বীর অনুমদনের সাথে)';
-
-  @override
-  String get preferencesInCasualGamesOnly => 'শুধু অনিয়মিত খেলার মধ্যে';
-
-  @override
-  String get preferencesPromoteToQueenAutomatically => 'সংক্রিয়ভাবে রানীর জন্য প্রচার';
-
-  @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Hold the <ctrl> key while promoting to temporarily disable auto-promotion';
-
-  @override
-  String get preferencesWhenPremoving => 'যখন পূনার‍য়সারান';
-
-  @override
-  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'সংক্রিয়ভাবে দাবি আঁকা বিষয়ে তিনগুন অনুবর্তন';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'যখন সময় বাকি < 30 সেকেন্ড';
-
-  @override
-  String get preferencesMoveConfirmation => 'অনুমোদন সরান';
-
-  @override
-  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Can be disabled during a game with the board menu';
-
-  @override
-  String get preferencesInCorrespondenceGames => 'সাদৃশ্য খেলাগুলো';
-
-  @override
-  String get preferencesCorrespondenceAndUnlimited => 'সাদৃশ্য এবং সীমাহীন';
-
-  @override
-  String get preferencesConfirmResignationAndDrawOffers => 'পদত্যাগ নিশ্চিত করুন এবং অফার লুটে নিন';
-
-  @override
-  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'কাস্টলিং পদ্বতি';
-
-  @override
-  String get preferencesCastleByMovingTwoSquares => 'দুই বর্গে রাজা সরান';
-
-  @override
-  String get preferencesCastleByMovingOntoTheRook => 'দাবার নৌকার উপর দিয়ে রাজাকে সরান';
-
-  @override
-  String get preferencesInputMovesWithTheKeyboard => 'কী-বোর্ডের সাথে নিবেশ সরান';
-
-  @override
-  String get preferencesInputMovesWithVoice => 'Input moves with your voice';
-
-  @override
-  String get preferencesSnapArrowsToValidMoves => 'Snap arrows to valid moves';
-
-  @override
-  String get preferencesSayGgWpAfterLosingOrDrawing => 'Say \"Good game, well played\" upon defeat or draw';
-
-  @override
-  String get preferencesYourPreferencesHaveBeenSaved => 'আপনার পচ্ছন্দগুলি সংরক্ষিত করা হয়েছে.';
-
-  @override
-  String get preferencesScrollOnTheBoardToReplayMoves => 'Scroll on the board to replay moves';
-
-  @override
-  String get preferencesCorrespondenceEmailNotification => 'Daily email listing your correspondence games';
-
-  @override
-  String get preferencesNotifyStreamStart => 'Streamer goes live';
-
-  @override
-  String get preferencesNotifyInboxMsg => 'New inbox message';
-
-  @override
-  String get preferencesNotifyForumMention => 'Forum comment mentions you';
-
-  @override
-  String get preferencesNotifyInvitedStudy => 'Study invite';
-
-  @override
-  String get preferencesNotifyGameEvent => 'Correspondence game updates';
-
-  @override
-  String get preferencesNotifyChallenge => 'Challenges';
-
-  @override
-  String get preferencesNotifyTournamentSoon => 'Tournament starting soon';
-
-  @override
-  String get preferencesNotifyTimeAlarm => 'Correspondence clock running out';
-
-  @override
-  String get preferencesNotifyBell => 'Bell notification within Lichess';
-
-  @override
-  String get preferencesNotifyPush => 'Device notification when you\'re not on Lichess';
-
-  @override
-  String get preferencesNotifyWeb => 'Browser';
-
-  @override
-  String get preferencesNotifyDevice => 'Device';
-
-  @override
-  String get preferencesBellNotificationSound => 'Bell notification sound';
-
-  @override
-  String get puzzlePuzzles => 'ধাঁধা';
-
-  @override
-  String get puzzlePuzzleThemes => 'ধাঁধার বিশয়বস্তু';
-
-  @override
-  String get puzzleRecommended => 'প্রস্তাবিত';
-
-  @override
-  String get puzzlePhases => 'পর্যায়';
-
-  @override
-  String get puzzleMotifs => 'বিষয়বস্তু';
-
-  @override
-  String get puzzleAdvanced => 'বিস্তারিত';
-
-  @override
-  String get puzzleLengths => 'দৈর্ঘ্য';
-
-  @override
-  String get puzzleMates => 'চেকমেট নিদর্শন';
-
-  @override
-  String get puzzleGoals => 'উদ্দেশ';
-
-  @override
-  String get puzzleOrigin => 'উত্স';
-
-  @override
-  String get puzzleSpecialMoves => 'বিশেশ চাল';
-
-  @override
-  String get puzzleDidYouLikeThisPuzzle => 'আপনি এই ধাঁধা তি কি পছন্দ করেছেন?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'পরের ধাঁধা তি তে জেতে ভতে দিন!';
-
-  @override
-  String get puzzleUpVote => 'ধাঁধা কে আপ-ভোট করুন';
-
-  @override
-  String get puzzleDownVote => 'ধাঁধা কে ডাউন-ভোট করুন';
-
-  @override
-  String get puzzleYourPuzzleRatingWillNotChange => 'আপনার ধাঁধার রেটিং পরিবর্তীত হবে না। উল্লেখ্য, ধাঁধা প্রতিযোগীতামূলক নয়। আপনার রেটিং আপনার দক্ষতা অনুযায়ী ধাঁধা বাছাই করতে সাহায্য করে।';
-
-  @override
-  String get puzzleFindTheBestMoveForWhite => 'সাদার জন্নে সব থেকে উপযোগী চাল তি খুজে বার করুন।.';
-
-  @override
-  String get puzzleFindTheBestMoveForBlack => 'কালোর জন্নে সব থেকে উপযোগী চাল তি খুজে বার করুন।.';
-
-  @override
-  String get puzzleToGetPersonalizedPuzzles => 'আপনার ব্যাক্তিগত পাজল পেতে:';
-
-  @override
-  String puzzlePuzzleId(String param) {
-    return 'ধাঁধা $param';
-  }
-
-  @override
-  String get puzzlePuzzleOfTheDay => 'আজকের দিনের সেরা ধাঁধা';
-
-  @override
-  String get puzzleDailyPuzzle => 'দৈনিক ধাঁধা';
-
-  @override
-  String get puzzleClickToSolve => 'সমাধানের জন্য ক্লিক করুন';
-
-  @override
-  String get puzzleGoodMove => 'ভালো মানের মুভ';
-
-  @override
-  String get puzzleBestMove => 'সেরা মানের মুভ!';
-
-  @override
-  String get puzzleKeepGoing => 'চালিয়ে যান…';
-
-  @override
-  String get puzzlePuzzleSuccess => 'সফল হয়েছে!';
-
-  @override
-  String get puzzlePuzzleComplete => 'পাজল সম্পন্ন!';
-
-  @override
-  String get puzzleByOpenings => 'ওপেনিং অনুযায়ী';
-
-  @override
-  String get puzzlePuzzlesByOpenings => 'ওপেনিং অনুযায়ী ধাঁধা';
-
-  @override
-  String get puzzleOpeningsYouPlayedTheMost => 'রেটেড খেলায় আপনি যে ওপেনিংগুলো সবথেকে বেশি খেলেছেন';
-
-  @override
-  String get puzzleUseFindInPage => 'আপনার প্রিয় ওপেনিংগুলি খুঁজতে ব্রাউসার মেনুতে \"ফাইন্ড ইন পেজ\" ব্যবহার করুন!';
-
-  @override
-  String get puzzleUseCtrlF => 'আপনার প্রিয় ওপেনিং খুঁজতে Ctrl + F ব্যবহার করুন!';
-
-  @override
-  String get puzzleNotTheMove => 'এটা সঠিক চাল না!';
-
-  @override
-  String get puzzleTrySomethingElse => 'অন্য কিছু চেষ্টা করুন.';
-
-  @override
-  String puzzleRatingX(String param) {
-    return 'রেটিংস: $param';
-  }
-
-  @override
-  String get puzzleHidden => 'লুকায়িত';
-
-  @override
-  String puzzleFromGameLink(String param) {
-    return '$param খেলা থেকে';
-  }
-
-  @override
-  String get puzzleContinueTraining => 'প্রশিক্ষন চালিয়ে যান';
-
-  @override
-  String get puzzleDifficultyLevel => 'কঠিনের মাত্রা';
-
-  @override
-  String get puzzleNormal => 'সাধারন';
-
-  @override
-  String get puzzleEasier => 'সহজ';
-
-  @override
-  String get puzzleEasiest => 'খুবই সহজ';
-
-  @override
-  String get puzzleHarder => 'কঠিন';
-
-  @override
-  String get puzzleHardest => 'খুবই কঠিন';
-
-  @override
-  String get puzzleExample => 'উদাহরণ';
-
-  @override
-  String get puzzleAddAnotherTheme => 'অন্য থিম যুক্ত করুন';
-
-  @override
-  String get puzzleNextPuzzle => 'পরবর্তী ধাঁধা';
-
-  @override
-  String get puzzleJumpToNextPuzzleImmediately => 'তাৎক্ষনিক নতুন পাজলে চলে যাই';
-
-  @override
-  String get puzzlePuzzleDashboard => 'পাজল ড্যাশবোর্ড';
-
-  @override
-  String get puzzleImprovementAreas => 'উন্নতি করার জায়গা';
-
-  @override
-  String get puzzleStrengths => 'শক্তিমত্তা';
-
-  @override
-  String get puzzleHistory => 'পূর্বে চেষ্টা করা ধাঁধা';
-
-  @override
-  String get puzzleSolved => 'মীমাংসিত';
-
-  @override
-  String get puzzleFailed => 'ভুল করা ধাঁদা';
-
-  @override
-  String get puzzleStreakDescription => 'ধারাবাহিক জয় বজায় রাখতে ক্রমাগত কঠিন হতে থাকা ধাঁধার সমাধান করুন। কোনো সময়সীমা নেই। তবে একটি ভুল চালে খেলা শেষ। প্রতি সেশনে একটি করে চাল বাদ(skip) দেয়া যাবে।';
-
-  @override
-  String puzzleYourStreakX(String param) {
-    return 'আপনার স্কোর: $param';
-  }
-
-  @override
-  String get puzzleStreakSkipExplanation => 'আপনার ধারাবাহিক জয় বজায় রাখতে এই চাল বাদ(skip) করুন। প্রতিবার প্রচেষ্টায় একবার করে এমনটা করতে পারবেন।';
-
-  @override
-  String get puzzleContinueTheStreak => 'পরবর্তী ধাঁধায় যান';
-
-  @override
-  String get puzzleNewStreak => 'নতুন ধাঁধার ধারা';
-
-  @override
-  String get puzzleFromMyGames => 'আমার খেলা গুলো থেকে';
-
-  @override
-  String get puzzleLookupOfPlayer => 'একজন খেলোয়াড়ের খেলা থেকে ধাঁধা দেখুন';
-
-  @override
-  String puzzleFromXGames(String param) {
-    return '$param এর খেলা থেকে নেয়া ধাঁধা';
-  }
-
-  @override
-  String get puzzleSearchPuzzles => 'ধাঁধা খুজুন';
-
-  @override
-  String get puzzleFromMyGamesNone => 'ডাটাবেজে আপনার কোনো ধাঁধা নেই।\nআপনার খেলা থেকে ধাঁধা নেয়ার সম্ভাবনা বাড়াতে র‍্যাপিড এবং ক্লাসিক খেলুন।';
-
-  @override
-  String puzzleFromXGamesFound(String param1, String param2) {
-    return '$param2 টি খেলা হতে $param1 টি ধাঁধা পাওয়া গেছে।';
-  }
-
-  @override
-  String get puzzlePuzzleDashboardDescription => 'প্রশিক্ষণ, বিশ্লেষণ, উন্নতি';
-
-  @override
-  String puzzlePercentSolved(String param) {
-    return '$param সমাধান করেছেন।';
-  }
-
-  @override
-  String get puzzleNoPuzzlesToShow => 'প্রদর্শনের কিছু নেই। প্রথমে কিছু ধাঁধা খেলুন।';
-
-  @override
-  String get puzzleImprovementAreasDescription => 'আপনার প্রগতির জন্য এইগুলোতে প্রশিক্ষণ করুন!';
-
-  @override
-  String get puzzleStrengthDescription => 'আপনি এই ধাঁচের গুলোয় ভালো খেলেন।';
-
-  @override
-  String puzzlePlayedXTimes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count বার খেলা হয়েছে',
-      one: '$count বার খেলা হয়েছে',
-      zero: '$count বার খেলা হয়েছে',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsBelowYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'আপনার ধাঁধার রেটিং হতে $count পয়েন্ট কম।',
-      one: 'আপনার ধাঁধার রেটিং হতে এক পয়েন্ট কম।',
-      zero: 'আপনার ধাঁধার রেটিং হতে এক পয়েন্ট কম।',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsAboveYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'আপনার ধাঁধার রেটিং হতে $count পয়েন্ট বেশি।',
-      one: 'আপনার ধাঁধার রেটিং হতে এক পয়েন্ট বেশি।',
-      zero: 'আপনার ধাঁধার রেটিং হতে এক পয়েন্ট বেশি।',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPlayed(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count টি খেলেছেন',
-      one: '$count টি খেলেছেন',
-      zero: '$count টি খেলেছেন',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbToReplay(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count টি পুনরায় খেলুন',
-      one: '$count টি পুনরায় খেলুন',
-      zero: '$count টি পুনরায় খেলুন',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get puzzleThemeAdvancedPawn => 'অগ্রসর সৈন্য';
-
-  @override
-  String get puzzleThemeAdvancedPawnDescription => 'আপনার একটি সৈন্য প্রতিপক্ষের অবস্থানের গভীরে গিয়েছে, সম্ভবত তা প্রমোশনের জন্য হুশিয়ারি দিচ্ছে।';
-
-  @override
-  String get puzzleThemeAdvantage => 'লাভ';
-
-  @override
-  String get puzzleThemeAdvantageDescription => 'মারাত্বক লাভের জন্য আপনার সুযোগকে কাজে লাগান (200cp ≤ eval ≤ 600cp)';
-
-  @override
-  String get puzzleThemeAnastasiaMate => 'অ্যানেস্তেসিয়ার মাত';
-
-  @override
-  String get puzzleThemeAnastasiaMateDescription => 'একটা ঘোড়া এবং একটা নৌকা অথবা মন্ত্রীকে নিয়ে দল বাঁধান প্রতিপক্ষের রাজাকে বোর্ডের সাইড এবং তারই গুটির মাঝে ফাঁদে ফেলার জন্য।';
-
-  @override
-  String get puzzleThemeArabianMate => 'আরবীয় মাত';
-
-  @override
-  String get puzzleThemeArabianMateDescription => 'প্রতিপক্ষের রাজাকে বোর্ডের এক কোণায় ফাঁদে ফেলার জন্য একটা ঘোড়া এবং একটা নৌকার দলগঠন।';
-
-  @override
-  String get puzzleThemeAttackingF2F7 => 'f2 অথবা f7 কে আক্রমণ করা';
-
-  @override
-  String get puzzleThemeAttackingF2F7Description => 'f2 অথবা f7 সৈন্যকে লক্ষ্য করে আক্রমণ, ফ্রায়েড লিভার ওপেনিং এ যেমন।';
-
-  @override
-  String get puzzleThemeAttraction => 'আকর্ষণ';
-
-  @override
-  String get puzzleThemeAttractionDescription => 'শত্রুর গুটিকে জোর করে একটা ঘরে আনার জন্য একটা বিনিময় অথবা ত্যাগ যার মাধ্যমে পরে ট্যাকটিক করা যায়।';
-
-  @override
-  String get puzzleThemeBackRankMate => 'পিছনের র‍্যাংক মাত';
-
-  @override
-  String get puzzleThemeBackRankMateDescription => 'রাজাকে নিজের বাড়ির র‍্যাংকে বাজিমাত করা, যখন তা নিজের গুটি দ্বারাই ফাঁদে আটকে থাকে।';
-
-  @override
-  String get puzzleThemeBishopEndgame => 'হাতি এন্ডগেম';
-
-  @override
-  String get puzzleThemeBishopEndgameDescription => 'শুধু হাতি এবং সৈন্যদের নিয়ে একটা এন্ডগেম।';
-
-  @override
-  String get puzzleThemeBodenMate => 'বডেনের মাত';
-
-  @override
-  String get puzzleThemeBodenMateDescription => 'দুইটা ক্রস করা আড়া-আড়ি রেখার উপর দুইটা হাতি যা নিজের গুটিতে আটে থাকা রাজাকে বাজিমাত করে।';
-
-  @override
-  String get puzzleThemeCastling => 'ক্যাসলিং';
-
-  @override
-  String get puzzleThemeCastlingDescription => 'রাজাকে নিরাপদে নিয়ে আসুন, এবং আপনার নৌকাকে স্থাপন করুন হামলার জন্য.';
-
-  @override
-  String get puzzleThemeCapturingDefender => 'রক্ষককে খান';
-
-  @override
-  String get puzzleThemeCapturingDefenderDescription => 'একটা গুটিকে খাওয়া যা আরেকটার প্রতিরক্ষা করে, যা পরের একটি চালে যেই গুটিকে রক্ষা করা হচ্ছিল তাকে খাওয়ার সুযোগ করে দেয়।';
-
-  @override
-  String get puzzleThemeCrushing => 'গুড়িয়ে দেয়া';
-
-  @override
-  String get puzzleThemeCrushingDescription => 'অপনেন্টের ব্লানডারকে ধরে ফেলুন এবং প্রতিপক্ষকে গুড়িয়ে দিয়ে লাভ অর্জন করুন। (eval ≥ 600cp)';
-
-  @override
-  String get puzzleThemeDoubleBishopMate => 'দুটি হাতির মাত';
-
-  @override
-  String get puzzleThemeDoubleBishopMateDescription => 'পাশাপাশি দুটি আড়া-আড়ি রেখায় থাকা দুটি বিশপ/হাতি নিজের গুটি দ্বারা আটকা পড়া প্রতিপক্ষের রাজাকে কিস্তিমাত করবে।';
-
-  @override
-  String get puzzleThemeDovetailMate => 'ডাভটেইল মাত';
-
-  @override
-  String get puzzleThemeDovetailMateDescription => 'একটা মন্ত্রী রাজাকে বাজিমাত দেয়, যার কেবল দুটি মুক্তির ঘর নিজের গুটি দ্বারা দখলকৃত থাকে।';
-
-  @override
-  String get puzzleThemeEquality => 'সমতা';
-
-  @override
-  String get puzzleThemeEqualityDescription => 'একটা হেরে যাওয়া অবস্থান থেকে ফিরে আসা, এবং ড্র অথবা একটা ভারসাম্যযুক্ত অবস্থানে নিয়ে আসা। (eval ≤ 200cp)';
-
-  @override
-  String get puzzleThemeKingsideAttack => 'রাজার দিকে আক্রমণ';
-
-  @override
-  String get puzzleThemeKingsideAttackDescription => 'প্রতিপক্ষের রাজার নিজের পাশে ক্যাসলিং করার পর, তাকে আক্রমণ করা।';
-
-  @override
-  String get puzzleThemeClearance => 'পরিষ্কারকরণ';
-
-  @override
-  String get puzzleThemeClearanceDescription => 'প্রায়শই একটি টেম্পোসহ, একটা চাল যা একটা ঘর, ফাইল অথবা আড়া-আড়ি লাইন পরিষ্কার করে পরে যার দ্বারা ট্যাকটিক প্রয়োগ করা যায়।';
-
-  @override
-  String get puzzleThemeDefensiveMove => 'রক্ষণাত্বক চাল';
-
-  @override
-  String get puzzleThemeDefensiveMoveDescription => 'একটা নিখুঁত চাল অথবা চালের ধারা যার দ্বারা ম্যাটেরিয়াল হারানো অথবা অন্য ধরণের ক্ষতির হাত থেকে বাঁচা যায়।';
-
-  @override
-  String get puzzleThemeDeflection => 'বিচ্যুতি';
-
-  @override
-  String get puzzleThemeDeflectionDescription => 'একটা চাল যা প্রতিপক্ষের গুটিকে নিজের কাজ (যেমন একটা গুরুত্বপূর্ণ ঘর পাহারা দেয়া) থেকে বিরত রাখে। কখনো কখনো এটাকে ওভারলোডিং ও বলা হয়।';
-
-  @override
-  String get puzzleThemeDiscoveredAttack => 'আবিষ্কৃত আক্রমণ';
-
-  @override
-  String get puzzleThemeDiscoveredAttackDescription => 'একটা গুটি (যেমন ঘোড়া), যা পূর্বে কোন গুটির আক্রমণকে প্রতিরোধ করছিল, তাকে সেই গুটির রাস্তা থেকে সরিয়ে আক্রমণ করা। এতে যেগুটি সরানো হলো এবং যেগুটির পথ থেকে সরানো হলো উভয়ই আক্রমণ করবে।';
-
-  @override
-  String get puzzleThemeDoubleCheck => 'দ্বৈত চেক';
-
-  @override
-  String get puzzleThemeDoubleCheckDescription => 'দুটি গুটি দিয়ে একসাথে চেক করা, আবিষ্কৃত আক্রমণের ফলস্বরূপ যেখানে যে গুটি সরে এবং যে গুটির রাস্তা পরিষ্কার হয় উভয়ই প্রতিপক্ষের রাজাকে আক্রমণ করে।';
-
-  @override
-  String get puzzleThemeEndgame => 'সমাপনী খেলা';
-
-  @override
-  String get puzzleThemeEndgameDescription => 'গেমের শেষ পর্যায়ের একটি ট্যাকটিক।';
-
-  @override
-  String get puzzleThemeEnPassantDescription => 'এন প্যাসান্ট রুলকে কেন্দ্র করে একটি ট্যাকটিক, যেখানে একটা সৈন্য একটা প্রতিপক্ষের সৈন্যকে খেতে পারে যা তাকে পাশ কাটিয়েছে নিজের দুই ঘর অতিক্রমের ক্ষমতা ব্যবহার করে।';
-
-  @override
-  String get puzzleThemeExposedKing => 'বহি:প্রকাশিত রাজা';
-
-  @override
-  String get puzzleThemeExposedKingDescription => 'রাজার আশেপাশে অল্পসংখ্যক রক্ষককে কেন্দ্র করে একটি কৌশল, যা প্রায়ই কিস্তিমাতে পরিণত হয়।';
-
-  @override
-  String get puzzleThemeFork => 'কাঁটাচামচ';
-
-  @override
-  String get puzzleThemeForkDescription => 'একটা চাল যেখানে একটা গুটি প্রতিপক্ষের দুটি গুটিকে আক্রমণ করে একইসাথে (যেভাবে একজন দুইহাতে দুটো কাঁটাচামচ দিয়ে দুটো জিনিসে আক্রমণ করে).';
-
-  @override
-  String get puzzleThemeHangingPiece => 'ঝুলন্ত গুটি';
-
-  @override
-  String get puzzleThemeHangingPieceDescription => 'প্রতিপক্ষের গুটি অরক্ষিত বা অপর্যাপ্তভাবে রক্ষিত এবং ক্যাপচার/খাওয়ার জন্য উন্মুক্ত।';
-
-  @override
-  String get puzzleThemeHookMate => 'হুক মেট';
-
-  @override
-  String get puzzleThemeHookMateDescription => 'একটি নৌকা, ঘোড়া এবং সৈন্য দ্বারা প্রতিপক্ষের রাজাকে কিস্তিমাত করা যা নিজের সৈন্য দ্বারা আটকা পরেছে।';
-
-  @override
-  String get puzzleThemeInterference => 'প্রতিবন্ধকতা তৈরি';
-
-  @override
-  String get puzzleThemeInterferenceDescription => 'একটি গুটিকে প্রতিপক্ষের দুটি গুটির মধ্যবর্তী ঘরে চাল দেয়া, যাতে একটি বা উভয় গুটি অরক্ষিত হয়ে পড়ে। যেমনঃ দুটি নৌকার মধ্যে প্রতিপক্ষের একটি রক্ষিত ঘরে প্রতিপক্ষের ঘোড়ার চাল দেয়া।';
-
-  @override
-  String get puzzleThemeIntermezzo => 'Intermezzo/মধ্যবর্তী চাল';
-
-  @override
-  String get puzzleThemeIntermezzoDescription => 'প্রত্যাশিত চাল না খেলে ভিন্ন চাল দেয়া, যা তৎক্ষণাৎ হুমকি(threat) তৈরি করবে এবং প্রতিপক্ষকে অবশ্যই তা প্রতিহত করতে হবে।';
-
-  @override
-  String get puzzleThemeKnightEndgame => 'Knight/ঘোড়ার সমাপনী খেলা';
-
-  @override
-  String get puzzleThemeKnightEndgameDescription => 'শুধু হাতি এবং সৈন্যদের নিয়ে সমাপনী খেলা।';
-
-  @override
-  String get puzzleThemeLong => 'দীর্ঘ ধাঁধা';
-
-  @override
-  String get puzzleThemeLongDescription => 'তিন চালে জিতুন।';
-
-  @override
-  String get puzzleThemeMaster => 'খেতাবধারীদের খেলা';
-
-  @override
-  String get puzzleThemeMasterDescription => 'খেতাবধারীদের খেলা থেকে নেয়া ধাঁধা।';
-
-  @override
-  String get puzzleThemeMasterVsMaster => 'খেতাব বনাম খেতাব';
-
-  @override
-  String get puzzleThemeMasterVsMasterDescription => 'দুইজন খেতাবধারীদের খেলা থেকে নেয়া ধাঁধা।';
-
-  @override
-  String get puzzleThemeMate => 'কিস্তিমাত';
-
-  @override
-  String get puzzleThemeMateDescription => 'ভঙ্গিমায় খেলা জিতুন।';
-
-  @override
-  String get puzzleThemeMateIn1 => '১ চালে মাত';
-
-  @override
-  String get puzzleThemeMateIn1Description => '১ চালে কিস্তিমাত দিন।';
-
-  @override
-  String get puzzleThemeMateIn2 => '২ চালে মাত';
-
-  @override
-  String get puzzleThemeMateIn2Description => '২ চালে কিস্তিমাত দিন।';
-
-  @override
-  String get puzzleThemeMateIn3 => '৩ চালে মাত';
-
-  @override
-  String get puzzleThemeMateIn3Description => '৩ চালে কিস্তিমাত দিন।';
-
-  @override
-  String get puzzleThemeMateIn4 => '৪ চালে মাত';
-
-  @override
-  String get puzzleThemeMateIn4Description => '৪ চালে কিস্তিমাত দিন।';
-
-  @override
-  String get puzzleThemeMateIn5 => '৫ বা ততোধিক চালে মাত';
-
-  @override
-  String get puzzleThemeMateIn5Description => 'কিস্তিমাত করার দীর্ঘ চালের ক্রম বের করতে হবে।';
-
-  @override
-  String get puzzleThemeMiddlegame => 'মধ্য-খেলা';
-
-  @override
-  String get puzzleThemeMiddlegameDescription => 'খেলার দ্বিতীয় পর্যায়ের কৌশল।';
-
-  @override
-  String get puzzleThemeOneMove => '১ চালের ধাঁধা';
-
-  @override
-  String get puzzleThemeOneMoveDescription => 'মাত্র ১ চাল দীর্ঘ ধাঁধা।';
-
-  @override
-  String get puzzleThemeOpening => 'প্রারম্ভিক খেলা';
-
-  @override
-  String get puzzleThemeOpeningDescription => 'খেলার শুরুর পর্যায়ের কৌশল।';
-
-  @override
-  String get puzzleThemePawnEndgame => 'সৈন্যের সমাপনী খেলা';
-
-  @override
-  String get puzzleThemePawnEndgameDescription => 'শুধুমাত্র সৈন্য দ্বারা সমাপনী খেলা।';
-
-  @override
-  String get puzzleThemePin => 'Pin/আটকে ফেলা';
-
-  @override
-  String get puzzleThemePinDescription => 'এক ধরণের কৌশল যেখানে একটি গুটির চাল দিলে নিজের বড় গুটির উপর আক্রমন হবে।';
-
-  @override
-  String get puzzleThemePromotion => 'Promotion/পদোন্নতি';
-
-  @override
-  String get puzzleThemePromotionDescription => 'আপনার সৈন্যকে মন্ত্রী বা অন্য লঘু গুটিতে উন্নীত করুন।';
-
-  @override
-  String get puzzleThemeQueenEndgame => 'মন্ত্রীর সমাপনী খেলা';
-
-  @override
-  String get puzzleThemeQueenEndgameDescription => 'শুধু মন্ত্রী এবং সৈন্যদের নিয়ে একটা সমাপনী খেলা।';
-
-  @override
-  String get puzzleThemeQueenRookEndgame => 'মন্ত্রী এবং নৌকা';
-
-  @override
-  String get puzzleThemeQueenRookEndgameDescription => 'শুধু মন্ত্রী, নৌকা এবং সৈন্যদের নিয়ে সমাপনী খেলা।';
-
-  @override
-  String get puzzleThemeQueensideAttack => 'মন্ত্রী-দিকের আক্রমণ';
-
-  @override
-  String get puzzleThemeQueensideAttackDescription => 'প্রতিপক্ষের রাজার মন্ত্রীর দিকে ক্যাসলিং করার পর আক্রমণ।';
-
-  @override
-  String get puzzleThemeQuietMove => 'Quite/নীরব চাল';
-
-  @override
-  String get puzzleThemeQuietMoveDescription => 'যে চাল তাৎক্ষণিক কোনো প্রতিক্রিয়া করে না, কিন্তু পরবর্তী চাল গুলোকে অনেক গুপ্ত, অনিবার্য আক্রমনের জন্য তৈরি করে।';
-
-  @override
-  String get puzzleThemeRookEndgame => 'নৌকার সমাপনী খেলা';
-
-  @override
-  String get puzzleThemeRookEndgameDescription => 'শুধু নৌকা এবং সৈন্যদের নিয়ে সমাপনী খেলা।';
-
-  @override
-  String get puzzleThemeSacrifice => 'Sacrifice/বিসর্জন';
-
-  @override
-  String get puzzleThemeSacrificeDescription => 'কৌশলগত সুবিধা অর্জনের জন্য গুটি বিসর্জন দেয়া।';
-
-  @override
-  String get puzzleThemeShort => 'সংক্ষিপ্ত ধাঁধা';
-
-  @override
-  String get puzzleThemeShortDescription => 'দুই চালে জিতুন।';
-
-  @override
-  String get puzzleThemeSkewer => 'Skewer/শূল';
-
-  @override
-  String get puzzleThemeSkewerDescription => 'কোনো বড় গুটি আক্রমনের শিকার হলে, সেটি সরে গিয়ে পিছনের কোনো ছোট গুটিকে বিসর্জন/আক্রান্ত করা।';
-
-  @override
-  String get puzzleThemeSmotheredMate => 'স্মদারড মেট';
-
-  @override
-  String get puzzleThemeSmotheredMateDescription => 'ঘোড়া যখন নিজের গুটি দ্বারা আটকে পড়া রাজাকে কিস্তিমাত করে।';
-
-  @override
-  String get puzzleThemeSuperGM => 'সুপার গ্রান্ডমাস্টারদের খেলা।';
-
-  @override
-  String get puzzleThemeSuperGMDescription => 'বিশ্বসেরা দাবাড়ুদের খেলা থেকে নেয়া ধাঁধা।';
-
-  @override
-  String get puzzleThemeTrappedPiece => 'আটকে পড়া গুটি';
-
-  @override
-  String get puzzleThemeTrappedPieceDescription => 'সীমিত চাল থাকার জন্য গুটি যখন নিজেকে খাওয়া(capture) থেকে বাঁচাতে পারে না।';
-
-  @override
-  String get puzzleThemeUnderPromotion => 'অর্ধ-পদোন্নতি(Underpromotion)';
-
-  @override
-  String get puzzleThemeUnderPromotionDescription => 'ঘোড়া, হাতি অথবা নৌকায় উন্নীত করা।';
-
-  @override
-  String get puzzleThemeVeryLong => 'অতিদীর্ঘ ধাঁধা';
-
-  @override
-  String get puzzleThemeVeryLongDescription => 'চার বা ততোধিক চালে জিতুন';
-
-  @override
-  String get puzzleThemeXRayAttack => 'এক্স-রে আক্রমণ';
-
-  @override
-  String get puzzleThemeXRayAttackDescription => 'একটি গুটি যখন প্রতিপক্ষের গুটির ভিতর দিয়ে কোনো ঘরকে রক্ষা বা আক্রমন করে।';
-
-  @override
-  String get puzzleThemeZugzwang => 'জুগজওয়াং(Zugzwang)';
-
-  @override
-  String get puzzleThemeZugzwangDescription => 'প্রতিপক্ষের সীমিত চাল আছে, এবং সব চাল তাদের অবস্থান আরো খারাপ করবে।';
-
-  @override
-  String get puzzleThemeHealthyMix => 'পরিমিত মিশ্রণ';
-
-  @override
-  String get puzzleThemeHealthyMixDescription => 'সবকিছু একটু করে। আপনি জানবেন না কি আসতে চলেছে। অনেকটা বাস্তব খেলার মতো।';
-
-  @override
-  String get puzzleThemePlayerGames => 'খেলোয়ারদের খেলা হতে';
-
-  @override
-  String get puzzleThemePlayerGamesDescription => 'খেলোয়ারদের খেলা থেকে বাছাই করে তৈরি করা ধাঁধা।';
-
-  @override
-  String puzzleThemePuzzleDownloadInformation(String param) {
-    return 'এই ধাঁধা গুলো সবার জন্য উন্মুক্ত এবং $param থেকে নামিয়ে নেয়া যাবে।';
-  }
-
-  @override
-  String perfStatPerfStats(String param) {
-    return '$param stats';
-  }
-
-  @override
-  String get perfStatViewTheGames => 'View the games';
-
-  @override
-  String get perfStatProvisional => 'provisional';
-
-  @override
-  String get perfStatNotEnoughRatedGames => 'Not enough rated games have been played to establish a reliable rating.';
-
-  @override
-  String perfStatProgressOverLastXGames(String param) {
-    return 'Progression over the last $param games:';
-  }
-
-  @override
-  String perfStatRatingDeviation(String param) {
-    return 'Rating deviation: $param.';
-  }
-
-  @override
-  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
-    return 'Lower value means the rating is more stable. Above $param1, the rating is considered provisional. To be included in the rankings, this value should be below $param2 (standard chess) or $param3 (variants).';
-  }
-
-  @override
-  String get perfStatTotalGames => 'মোট গেম';
-
-  @override
-  String get perfStatRatedGames => 'Rated games';
-
-  @override
-  String get perfStatTournamentGames => 'Tournament games';
-
-  @override
-  String get perfStatBerserkedGames => 'Berserked games';
-
-  @override
-  String get perfStatTimeSpentPlaying => 'Time spent playing';
-
-  @override
-  String get perfStatAverageOpponent => 'Average opponent';
-
-  @override
-  String get perfStatVictories => 'Victories';
-
-  @override
-  String get perfStatDefeats => 'Defeats';
-
-  @override
-  String get perfStatDisconnections => 'Disconnections';
-
-  @override
-  String get perfStatNotEnoughGames => 'Not enough games played';
-
-  @override
-  String perfStatHighestRating(String param) {
-    return 'Highest rating: $param';
-  }
-
-  @override
-  String perfStatLowestRating(String param) {
-    return 'Lowest rating: $param';
-  }
-
-  @override
-  String perfStatFromXToY(String param1, String param2) {
-    return 'from $param1 to $param2';
-  }
-
-  @override
-  String get perfStatWinningStreak => 'Winning streak';
-
-  @override
-  String get perfStatLosingStreak => 'Losing streak';
-
-  @override
-  String perfStatLongestStreak(String param) {
-    return 'Longest streak: $param';
-  }
-
-  @override
-  String perfStatCurrentStreak(String param) {
-    return 'Current streak: $param';
-  }
-
-  @override
-  String get perfStatBestRated => 'Best rated victories';
-
-  @override
-  String get perfStatGamesInARow => 'Games played in a row';
-
-  @override
-  String get perfStatLessThanOneHour => 'Less than one hour between games';
-
-  @override
-  String get perfStatMaxTimePlaying => 'Max time spent playing';
-
-  @override
-  String get perfStatNow => 'now';
-
-  @override
-  String get searchSearch => 'অনুসন্ধান';
-
-  @override
-  String get settingsSettings => 'সেটিংস';
-
-  @override
-  String get settingsCloseAccount => 'একাউন্ট বন্ধ করুন';
-
-  @override
-  String get settingsManagedAccountCannotBeClosed => 'Your account is managed, and cannot be closed.';
-
-  @override
-  String get settingsClosingIsDefinitive => 'একাউন্ট বন্ধ সুনিশ্চিত। আর ফেরত যাওয়ার উপায় নেই। আপনি কি নিশ্চিত?';
-
-  @override
-  String get settingsCantOpenSimilarAccount => 'আপনি একই নামে আর নতুন একাউন্ট খুলতে পারবেন না, যদিও নামের বর্ণগুলো ছোট/বড় হাতের হয়।';
-
-  @override
-  String get settingsChangedMindDoNotCloseAccount => 'আমি নিজের মত পরিবর্তন করেছি এবং আমার একাউন্ট বন্ধ করতে চাই না';
-
-  @override
-  String get settingsCloseAccountExplanation => 'আপনি কি নিশ্চিত যে আপনি নিজের একাউন্টটি বন্ধ করতে চান? আপনার একাউন্ট বন্ধ করবার সিদ্ধান্তটি স্থায়ী হবে। আপনি আর কখনও লগ ইন করতে সক্ষম হবেন না।';
-
-  @override
-  String get settingsThisAccountIsClosed => 'এই একাউন্টটি বন্ধ করা হয়েছে';
-
-  @override
-  String get streamerLichessStreamers => 'লিছেসস স্ত্রেয়ামের';
-
-  @override
   String get stormMoveToStart => 'সুরু করতে চাল দিন';
 
   @override
@@ -4646,14 +4640,11 @@ class AppLocalizationsBn extends AppLocalizations {
   }
 
   @override
+  String get streamerLichessStreamers => 'লিছেসস স্ত্রেয়ামের';
+
+  @override
   String get studyShareAndExport => 'Share & export';
 
   @override
   String get studyStart => 'শুরু করুন';
-
-  @override
-  String get broadcastBroadcasts => 'সম্প্রচার';
-
-  @override
-  String get broadcastStartDate => 'আপনার নিজস্ব সময় অঞ্চল শুরু করার তারিখ';
 }

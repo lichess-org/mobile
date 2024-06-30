@@ -191,10 +191,10 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get contactContact => 'Liên hệ';
+  String get broadcastBroadcasts => 'Các phát sóng';
 
   @override
-  String get contactContactLichess => 'Liên hệ Lichess';
+  String get broadcastLiveBroadcasts => 'Các giải đấu phát sóng trực tiếp';
 
   @override
   String challengeChallengesX(String param1) {
@@ -276,6 +276,1002 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get challengeInviteLichessUser => 'Hoặc mời một người dùng Lichess:';
+
+  @override
+  String get contactContact => 'Liên hệ';
+
+  @override
+  String get contactContactLichess => 'Liên hệ Lichess';
+
+  @override
+  String get patronDonate => 'Ủng hộ';
+
+  @override
+  String get patronLichessPatron => 'Người bảo trợ Lichess';
+
+  @override
+  String perfStatPerfStats(String param) {
+    return 'Thống kê $param';
+  }
+
+  @override
+  String get perfStatViewTheGames => 'Xem các ván cờ';
+
+  @override
+  String get perfStatProvisional => 'tạm thời';
+
+  @override
+  String get perfStatNotEnoughRatedGames => 'Không có đủ ván có xếp hạng đã được chơi để thiết lập một hệ số đáng tin cậy.';
+
+  @override
+  String perfStatProgressOverLastXGames(String param) {
+    return 'Sự tiến bộ qua $param ván cờ gần đây:';
+  }
+
+  @override
+  String perfStatRatingDeviation(String param) {
+    return 'Độ chênh lệch hệ số: $param.';
+  }
+
+  @override
+  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
+    return 'Giá trị thấp hơn nghĩa là hệ số ổn định hơn. Ở ngưỡng trên $param1, hệ số được coi là tạm thời. Để được xếp trong bảng xếp hạng, giá trị này phải ở dưới ngưỡng $param2 (cờ tiêu chuẩn) hoặc $param3 (các biến thể).';
+  }
+
+  @override
+  String get perfStatTotalGames => 'Tổng số ván cờ';
+
+  @override
+  String get perfStatRatedGames => 'Các ván cờ có xếp hạng';
+
+  @override
+  String get perfStatTournamentGames => 'Số ván chơi trong giải đấu';
+
+  @override
+  String get perfStatBerserkedGames => 'Số ván chơi Berserk';
+
+  @override
+  String get perfStatTimeSpentPlaying => 'Thời gian đã chơi';
+
+  @override
+  String get perfStatAverageOpponent => 'Đối thủ trung bình';
+
+  @override
+  String get perfStatVictories => 'Thắng';
+
+  @override
+  String get perfStatDefeats => 'Thua';
+
+  @override
+  String get perfStatDisconnections => 'Ngắt kết nối';
+
+  @override
+  String get perfStatNotEnoughGames => 'Chơi chưa đủ ván';
+
+  @override
+  String perfStatHighestRating(String param) {
+    return 'Hệ số cao nhất: $param';
+  }
+
+  @override
+  String perfStatLowestRating(String param) {
+    return 'Hệ số thấp nhất: $param';
+  }
+
+  @override
+  String perfStatFromXToY(String param1, String param2) {
+    return 'từ $param1 đến $param2';
+  }
+
+  @override
+  String get perfStatWinningStreak => 'Chuỗi thắng';
+
+  @override
+  String get perfStatLosingStreak => 'Chuỗi thua';
+
+  @override
+  String perfStatLongestStreak(String param) {
+    return 'Chuỗi dài nhất: $param';
+  }
+
+  @override
+  String perfStatCurrentStreak(String param) {
+    return 'Chuỗi hiện tại: $param';
+  }
+
+  @override
+  String get perfStatBestRated => 'Ván thắng được cộng Elo nhiều nhất';
+
+  @override
+  String get perfStatGamesInARow => 'Số ván cờ được chơi liên tục';
+
+  @override
+  String get perfStatLessThanOneHour => 'Ít hơn một giờ giữa các ván cờ';
+
+  @override
+  String get perfStatMaxTimePlaying => 'Thời gian dài nhất đã chơi';
+
+  @override
+  String get perfStatNow => 'bây giờ';
+
+  @override
+  String get preferencesPreferences => 'Sửa giao diện';
+
+  @override
+  String get preferencesDisplay => 'Hiển thị';
+
+  @override
+  String get preferencesPrivacy => 'Quyền riêng tư';
+
+  @override
+  String get preferencesNotifications => 'Thông báo';
+
+  @override
+  String get preferencesPieceAnimation => 'Hình ảnh động của quân cờ';
+
+  @override
+  String get preferencesMaterialDifference => 'Chênh lệch giá trị quân cờ';
+
+  @override
+  String get preferencesBoardHighlights => 'Đánh dấu trên bàn cờ (nước đi mới nhất và nước chiếu)';
+
+  @override
+  String get preferencesPieceDestinations => 'Các điểm đến của quân cờ (các nước đi hợp lý và nước đi dự đoán)';
+
+  @override
+  String get preferencesBoardCoordinates => 'Tọa độ bàn cờ (A-H, 1-8)';
+
+  @override
+  String get preferencesMoveListWhilePlaying => 'Biên bản ván đấu';
+
+  @override
+  String get preferencesPgnPieceNotation => 'Ký hiệu nước cờ';
+
+  @override
+  String get preferencesChessPieceSymbol => 'Biểu tượng quân cờ';
+
+  @override
+  String get preferencesPgnLetter => 'Ký tự (K, Q, R, B, N)';
+
+  @override
+  String get preferencesZenMode => 'Chế độ tập trung';
+
+  @override
+  String get preferencesShowPlayerRatings => 'Hiển thị hệ số của người chơi';
+
+  @override
+  String get preferencesShowFlairs => 'Hiển thị biểu tượng của người chơi';
+
+  @override
+  String get preferencesExplainShowPlayerRatings => 'Điều này sẽ ẩn toàn bộ hệ số khỏi Lichess để giúp tập trung vào ván cờ. Ván đấu có xếp hạng vẫn ảnh hưởng đến hệ số của bạn, đây chỉ là những gì bạn có thể nhìn thấy.';
+
+  @override
+  String get preferencesDisplayBoardResizeHandle => 'Hiện nút thay đổi kích cỡ bàn cờ';
+
+  @override
+  String get preferencesOnlyOnInitialPosition => 'Chỉ ở thế cờ ban đầu';
+
+  @override
+  String get preferencesInGameOnly => 'Chỉ trong ván cờ';
+
+  @override
+  String get preferencesChessClock => 'Đồng hồ cờ vua';
+
+  @override
+  String get preferencesTenthsOfSeconds => 'Một phần mười giây';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'Khi thời gian còn lại < 10 giây';
+
+  @override
+  String get preferencesHorizontalGreenProgressBars => 'Thanh tiến trình ngang màu xanh';
+
+  @override
+  String get preferencesSoundWhenTimeGetsCritical => 'Âm thanh khi thời gian sắp hết';
+
+  @override
+  String get preferencesGiveMoreTime => 'Cho thêm thời gian';
+
+  @override
+  String get preferencesGameBehavior => 'Thao tác chơi';
+
+  @override
+  String get preferencesHowDoYouMovePieces => 'Bạn di chuyển quân như thế nào?';
+
+  @override
+  String get preferencesClickTwoSquares => 'Nhấn hai ô';
+
+  @override
+  String get preferencesDragPiece => 'Thả quân cờ';
+
+  @override
+  String get preferencesBothClicksAndDrag => 'Cả hai';
+
+  @override
+  String get preferencesPremovesPlayingDuringOpponentTurn => 'Nước cờ dự đoán (được thực hiện khi đang đến lượt đi của đối phương)';
+
+  @override
+  String get preferencesTakebacksWithOpponentApproval => 'Hoãn nước đi (với sự chấp thuận của đối thủ)';
+
+  @override
+  String get preferencesInCasualGamesOnly => 'Chỉ trong các ván đấu không tính Elo';
+
+  @override
+  String get preferencesPromoteToQueenAutomatically => 'Tự động phong cấp thành quân Hậu';
+
+  @override
+  String get preferencesExplainPromoteToQueenAutomatically => 'Giữ nút <ctrl> trong khi phong cấp để tạm thời hủy bỏ việc phong cấp tự động';
+
+  @override
+  String get preferencesWhenPremoving => 'Khi đi trước';
+
+  @override
+  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Tự động hoà khi lặp cờ ba lần';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Khi thời gian còn lại < 30 giây';
+
+  @override
+  String get preferencesMoveConfirmation => 'Xác nhận nước đi';
+
+  @override
+  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Có thể bị vô hiệu hóa trong ván cờ với mục lục bàn cờ';
+
+  @override
+  String get preferencesInCorrespondenceGames => 'Cờ qua thư';
+
+  @override
+  String get preferencesCorrespondenceAndUnlimited => 'Cờ qua thư và cờ vô hạn';
+
+  @override
+  String get preferencesConfirmResignationAndDrawOffers => 'Xác nhận chịu thua và đề nghị hòa';
+
+  @override
+  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Cách nhập thành';
+
+  @override
+  String get preferencesCastleByMovingTwoSquares => 'Di chuyển vua 2 nước';
+
+  @override
+  String get preferencesCastleByMovingOntoTheRook => 'Di chuyển vua vào xe';
+
+  @override
+  String get preferencesInputMovesWithTheKeyboard => 'Nhập các nước đi với bàn phím';
+
+  @override
+  String get preferencesInputMovesWithVoice => 'Đầu vào nước đi với giọng nói của bạn';
+
+  @override
+  String get preferencesSnapArrowsToValidMoves => 'Tự kéo mũi tên vào ô của nước đi hợp lệ';
+
+  @override
+  String get preferencesSayGgWpAfterLosingOrDrawing => 'Tự động nhắn \"Good game, well played\" (Ván cờ hay, chơi hay lắm) sau khi hòa hoặc thua';
+
+  @override
+  String get preferencesYourPreferencesHaveBeenSaved => 'Tùy chọn của bạn đã được lưu';
+
+  @override
+  String get preferencesScrollOnTheBoardToReplayMoves => 'Cuộn con chuột trên bàn cờ để xem lại nước đi';
+
+  @override
+  String get preferencesCorrespondenceEmailNotification => 'Email thông báo hàng ngày sẽ bao gồm cả các ván cờ qua thư';
+
+  @override
+  String get preferencesNotifyStreamStart => 'Streamer đang phát trực tiếp';
+
+  @override
+  String get preferencesNotifyInboxMsg => 'Tin nhắn mới';
+
+  @override
+  String get preferencesNotifyForumMention => 'Có bình luận diễn đàn đề cập đến bạn';
+
+  @override
+  String get preferencesNotifyInvitedStudy => 'Lời mời nghiên cứu';
+
+  @override
+  String get preferencesNotifyGameEvent => 'Những cập nhật liên quan đến ván cờ qua thư';
+
+  @override
+  String get preferencesNotifyChallenge => 'Các lời thách đấu';
+
+  @override
+  String get preferencesNotifyTournamentSoon => 'Giải đấu sắp bắt đầu';
+
+  @override
+  String get preferencesNotifyTimeAlarm => 'Thời gian đánh cờ qua thư sắp hết';
+
+  @override
+  String get preferencesNotifyBell => 'Chuông thông báo khi đang truy cập Lichess';
+
+  @override
+  String get preferencesNotifyPush => 'Thông báo tới thiết bị của bạn khi bạn không truy cập Lichess';
+
+  @override
+  String get preferencesNotifyWeb => 'Trình duyệt';
+
+  @override
+  String get preferencesNotifyDevice => 'Thiết bị';
+
+  @override
+  String get preferencesBellNotificationSound => 'Âm thanh chuông báo';
+
+  @override
+  String get puzzlePuzzles => 'Câu đố';
+
+  @override
+  String get puzzlePuzzleThemes => 'Chủ đề câu đố';
+
+  @override
+  String get puzzleRecommended => 'Được đề xuất';
+
+  @override
+  String get puzzlePhases => 'Giai đoạn';
+
+  @override
+  String get puzzleMotifs => 'Các mô-típ';
+
+  @override
+  String get puzzleAdvanced => 'Nâng cao';
+
+  @override
+  String get puzzleLengths => 'Thời lượng';
+
+  @override
+  String get puzzleMates => 'Chiếu hết';
+
+  @override
+  String get puzzleGoals => 'Mục tiêu';
+
+  @override
+  String get puzzleOrigin => 'Nguồn từ';
+
+  @override
+  String get puzzleSpecialMoves => 'Các nước cờ đặc biệt';
+
+  @override
+  String get puzzleDidYouLikeThisPuzzle => 'Bạn thích câu đố này chứ?';
+
+  @override
+  String get puzzleVoteToLoadNextOne => 'Bình chọn để đến câu đố tiếp theo!';
+
+  @override
+  String get puzzleUpVote => 'Thích câu đố';
+
+  @override
+  String get puzzleDownVote => 'Không thích câu đố';
+
+  @override
+  String get puzzleYourPuzzleRatingWillNotChange => 'Hệ số giải câu đố của bạn sẽ không thay đổi. Lưu ý rằng giải câu đố không phải một cuộc thi. Hệ số của bạn nhằm giúp chọn những câu đố phù hợp nhất với trình độ của bạn.';
+
+  @override
+  String get puzzleFindTheBestMoveForWhite => 'Tìm nước tối ưu cho Trắng.';
+
+  @override
+  String get puzzleFindTheBestMoveForBlack => 'Tìm nước tối ưu cho Đen.';
+
+  @override
+  String get puzzleToGetPersonalizedPuzzles => 'Để có được các thế cờ dành riêng cho bạn:';
+
+  @override
+  String puzzlePuzzleId(String param) {
+    return 'Câu đố $param';
+  }
+
+  @override
+  String get puzzlePuzzleOfTheDay => 'Câu đố của ngày';
+
+  @override
+  String get puzzleDailyPuzzle => 'Câu đố Hàng ngày';
+
+  @override
+  String get puzzleClickToSolve => 'Nhấn để giải';
+
+  @override
+  String get puzzleGoodMove => 'Nước đi tốt';
+
+  @override
+  String get puzzleBestMove => 'Nước đi tối ưu!';
+
+  @override
+  String get puzzleKeepGoing => 'Hãy tiếp tục…';
+
+  @override
+  String get puzzlePuzzleSuccess => 'Thành công!';
+
+  @override
+  String get puzzlePuzzleComplete => 'Hoàn thành câu đố!';
+
+  @override
+  String get puzzleByOpenings => 'Theo khai cuộc';
+
+  @override
+  String get puzzlePuzzlesByOpenings => 'Câu đố theo khai cuộc';
+
+  @override
+  String get puzzleOpeningsYouPlayedTheMost => 'Những khai cuộc bạn thường chơi trong các ván đấu có xếp hạng';
+
+  @override
+  String get puzzleUseFindInPage => 'Dùng \"Tìm kiếm trong trang\" trong mục lục trình duyệt để tìm khai cuộc yêu thích của bạn!';
+
+  @override
+  String get puzzleUseCtrlF => 'Dùng Ctrl+f để tìm khai cuộc yêu thích của bạn!';
+
+  @override
+  String get puzzleNotTheMove => 'Đó chưa phải là nước đi tối ưu!';
+
+  @override
+  String get puzzleTrySomethingElse => 'Hãy thử nước đi khác.';
+
+  @override
+  String puzzleRatingX(String param) {
+    return 'Hệ số: $param';
+  }
+
+  @override
+  String get puzzleHidden => 'ẩn';
+
+  @override
+  String puzzleFromGameLink(String param) {
+    return 'Từ ván cờ $param';
+  }
+
+  @override
+  String get puzzleContinueTraining => 'Tiếp tục tập luyện';
+
+  @override
+  String get puzzleDifficultyLevel => 'Độ khó';
+
+  @override
+  String get puzzleNormal => 'Bình thường';
+
+  @override
+  String get puzzleEasier => 'Dễ hơn';
+
+  @override
+  String get puzzleEasiest => 'Dễ nhất';
+
+  @override
+  String get puzzleHarder => 'Khó hơn';
+
+  @override
+  String get puzzleHardest => 'Khó nhất';
+
+  @override
+  String get puzzleExample => 'Ví dụ';
+
+  @override
+  String get puzzleAddAnotherTheme => 'Thêm chủ đề khác';
+
+  @override
+  String get puzzleNextPuzzle => 'Câu đố tiếp theo';
+
+  @override
+  String get puzzleJumpToNextPuzzleImmediately => 'Chuyển tới câu đố tiếp theo ngay lập tức';
+
+  @override
+  String get puzzlePuzzleDashboard => 'Bảng thống kê giải câu đố';
+
+  @override
+  String get puzzleImprovementAreas => 'Các điểm cần cải thiện';
+
+  @override
+  String get puzzleStrengths => 'Điểm mạnh';
+
+  @override
+  String get puzzleHistory => 'Lịch sử giải câu đố';
+
+  @override
+  String get puzzleSolved => 'giải đúng';
+
+  @override
+  String get puzzleFailed => 'giải sai';
+
+  @override
+  String get puzzleStreakDescription => 'Giải những câu đố có độ khó tăng dần và tích lũy chuỗi thắng. Sẽ không có đồng hồ, nên hãy giải chúng một cách bình tĩnh. Một nước đi sai, và trò chơi sẽ kết thúc! Tuy nhiên, bạn được quyền bỏ qua một nước đi trong mỗi lần chơi.';
+
+  @override
+  String puzzleYourStreakX(String param) {
+    return 'Chuỗi của bạn: $param';
+  }
+
+  @override
+  String get puzzleStreakSkipExplanation => 'Bỏ qua nước đi này để bảo toàn chuỗi của bạn! Chỉ dùng được một lần cho mỗi lần chơi.';
+
+  @override
+  String get puzzleContinueTheStreak => 'Tiếp tục chuỗi';
+
+  @override
+  String get puzzleNewStreak => 'Chuỗi mới';
+
+  @override
+  String get puzzleFromMyGames => 'Từ ván đấu của tôi';
+
+  @override
+  String get puzzleLookupOfPlayer => 'Tìm câu đố từ các ván đấu của người khác';
+
+  @override
+  String puzzleFromXGames(String param) {
+    return 'Câu đố từ ván cờ của $param';
+  }
+
+  @override
+  String get puzzleSearchPuzzles => 'Tìm câu đố';
+
+  @override
+  String get puzzleFromMyGamesNone => 'Bạn không có câu đố nào trong dữ liệu, nhưng Lichess vẫn rất yêu mến bạn.\n\nHãy chơi thêm nhiều ván cờ nhanh và cờ chậm để có cơ hội có một câu đố từ ván cờ của riêng bạn!';
+
+  @override
+  String puzzleFromXGamesFound(String param1, String param2) {
+    return 'Đã tìm được $param1 câu đố trong các ván đấu của $param2';
+  }
+
+  @override
+  String get puzzlePuzzleDashboardDescription => 'Rèn luyện, phân tích, cải thiện';
+
+  @override
+  String puzzlePercentSolved(String param) {
+    return 'Giải đúng $param';
+  }
+
+  @override
+  String get puzzleNoPuzzlesToShow => 'Chưa có gì cả, hãy giải một vài câu đố trước đã!';
+
+  @override
+  String get puzzleImprovementAreasDescription => 'Luyện tập chúng để tối ưu hóa tiến trình của bạn!';
+
+  @override
+  String get puzzleStrengthDescription => 'Bạn thể hiện tốt nhất ở những lĩnh vực này';
+
+  @override
+  String puzzlePlayedXTimes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Đã được giải $count lần',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsBelowYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Dưới $count điểm hệ số câu đố của bạn',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsAboveYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Trên $count điểm hệ số câu đố của bạn',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPlayed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Đã giải $count',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbToReplay(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Cần giải lại $count',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get puzzleThemeAdvancedPawn => 'Tốt thông xa';
+
+  @override
+  String get puzzleThemeAdvancedPawnDescription => 'Một quân tốt của bạn có thể đe dọa phong cấp đang nằm sâu bên trong thế trận của đối thủ.';
+
+  @override
+  String get puzzleThemeAdvantage => 'Lợi thế';
+
+  @override
+  String get puzzleThemeAdvantageDescription => 'Tận dụng cơ hội của bạn để chiếm lấy lợi thế quyết định. (200cp ≤ đánh giá ≤ 600cp)';
+
+  @override
+  String get puzzleThemeAnastasiaMate => 'Chiếu hết kiểu Anastasia';
+
+  @override
+  String get puzzleThemeAnastasiaMateDescription => 'Một quân mã phối hợp cùng quân xe hoặc quân hậu để bẫy quân vua đối phương vào thế kẹp giữa cạnh bàn cờ và một quân khác.';
+
+  @override
+  String get puzzleThemeArabianMate => 'Chiếu hết kiểu Ả Rập';
+
+  @override
+  String get puzzleThemeArabianMateDescription => 'Một Mã và một Xe hợp sức để bẫy vua đối phương trên một góc của bàn cờ.';
+
+  @override
+  String get puzzleThemeAttackingF2F7 => 'Tấn công ô f2 hoặc f7';
+
+  @override
+  String get puzzleThemeAttackingF2F7Description => 'Một đòn tấn công nhằm vào quân tốt f2 hay f7, ví dụ như trong khai cuộc Fried Liver Attack.';
+
+  @override
+  String get puzzleThemeAttraction => 'Thu hút';
+
+  @override
+  String get puzzleThemeAttractionDescription => 'Việc đổi quân hoặc thí quân thu hút hoặc ép buộc một quân đối phương đến một ô nhằm tạo một đòn chiến thuật.';
+
+  @override
+  String get puzzleThemeBackRankMate => 'Chiếu hết hàng cuối';
+
+  @override
+  String get puzzleThemeBackRankMateDescription => 'Chiếu hết trên hàng cuối, khi vua bị mắc kẹt bởi chính quân của nó.';
+
+  @override
+  String get puzzleThemeBishopEndgame => 'Cờ tàn tượng';
+
+  @override
+  String get puzzleThemeBishopEndgameDescription => 'Một thế cờ tàn chỉ có tượng và tốt.';
+
+  @override
+  String get puzzleThemeBodenMate => 'Chiếu hết kiểu Boden';
+
+  @override
+  String get puzzleThemeBodenMateDescription => 'Hai quân Tượng tấn công trên các đường chéo chéo nhau chiếu hết một quân vua bị kẹt bởi đồng đội của nó.';
+
+  @override
+  String get puzzleThemeCastling => 'Nhập thành';
+
+  @override
+  String get puzzleThemeCastlingDescription => 'Chuyển quân vua đến vị trí an toàn và triển khai quân xe để tấn công.';
+
+  @override
+  String get puzzleThemeCapturingDefender => 'Ăn quân phòng thủ';
+
+  @override
+  String get puzzleThemeCapturingDefenderDescription => 'Loại bỏ một quân cực kỳ quan trọng đối với việc bảo vệ một quân cờ khác, khiến cho quân cờ hiện không được bảo vệ có thể bị ăn vào một nước sau đó.';
+
+  @override
+  String get puzzleThemeCrushing => 'Áp đảo';
+
+  @override
+  String get puzzleThemeCrushingDescription => 'Phát hiện sai lầm nghiêm trọng của đối phương để giành được lợi thế áp đảo. (đánh giá ≥ 600cp)';
+
+  @override
+  String get puzzleThemeDoubleBishopMate => 'Chiếu hết bằng cặp Tượng';
+
+  @override
+  String get puzzleThemeDoubleBishopMateDescription => 'Hai quân Tượng tấn công trên các đường chéo liền kề chiếu hết một quân vua bị cản trở bởi quân cờ.';
+
+  @override
+  String get puzzleThemeDovetailMate => 'Chiếu hết kiểu Đuôi én';
+
+  @override
+  String get puzzleThemeDovetailMateDescription => 'Một Hậu chiếu hết vua ở ô liền kề, hai ô duy nhất quân vua có thể chạy được lúc này đều bị chặn.';
+
+  @override
+  String get puzzleThemeEquality => 'Cân bằng';
+
+  @override
+  String get puzzleThemeEqualityDescription => 'Lật kèo từ một thế cờ thua và giành được một thế trận hòa hoặc cân bằng. (đánh giá ≤ 200cp)';
+
+  @override
+  String get puzzleThemeKingsideAttack => 'Tấn công cánh vua';
+
+  @override
+  String get puzzleThemeKingsideAttackDescription => 'Tấn công vua đối phương sau khi họ nhập thành cánh vua.';
+
+  @override
+  String get puzzleThemeClearance => 'Dọn đường';
+
+  @override
+  String get puzzleThemeClearanceDescription => 'Một nước đi, thường đi kèm nhịp độ dùng để dọn đường một ô, cột hay đường chéo cho một đòn chiến thuật sắp tới.';
+
+  @override
+  String get puzzleThemeDefensiveMove => 'Nước cờ phòng thủ';
+
+  @override
+  String get puzzleThemeDefensiveMoveDescription => 'Một nước đi hoặc chuỗi nước đi chính xác cần để tránh mất quân hoặc một lợi thế khác.';
+
+  @override
+  String get puzzleThemeDeflection => 'Đánh lạc hướng';
+
+  @override
+  String get puzzleThemeDeflectionDescription => 'Một nước đi đánh lạc hướng một quân đối phương khỏi một nhiệm vụ nó đang làm, chẳng hạn như bảo vệ một ô trọng điểm. Còn được gọi là \"quá tải\".';
+
+  @override
+  String get puzzleThemeDiscoveredAttack => 'Tấn công mở';
+
+  @override
+  String get puzzleThemeDiscoveredAttackDescription => 'Đi một quân cờ đang chặn giữa đường tấn công của một quân đánh xa khác (ví dụ như đi một quân mã khỏi đường tấn công của quân xe).';
+
+  @override
+  String get puzzleThemeDoubleCheck => 'Chiếu đôi';
+
+  @override
+  String get puzzleThemeDoubleCheckDescription => 'Chiếu bằng hai quân một lúc, là kết quả của một đòn tấn công mở khi mà cả quân đứng sau và quân chặn đường đều tấn công vua đối phương.';
+
+  @override
+  String get puzzleThemeEndgame => 'Tàn cuộc';
+
+  @override
+  String get puzzleThemeEndgameDescription => 'Chiến thuật trong phần kết thúc của ván cờ.';
+
+  @override
+  String get puzzleThemeEnPassantDescription => 'Một đòn chiến thuật bao gồm luật bắt tốt qua đường, khi một quân tốt có thể ăn một quân tốt đối phương đi qua mặt nó khi đi 2 ô từ vị trí ban đầu của nó.';
+
+  @override
+  String get puzzleThemeExposedKing => 'Vua bị hở';
+
+  @override
+  String get puzzleThemeExposedKingDescription => 'Một đòn chiến thuật bao gồm một quân vua với ít quân bảo vệ quanh quân vua đó, thường dẫn tới chiếu hết.';
+
+  @override
+  String get puzzleThemeFork => 'Tấn công đôi';
+
+  @override
+  String get puzzleThemeForkDescription => 'Một nước đi mà một quân cờ tấn công hai quân cờ của đối phương cùng lúc.';
+
+  @override
+  String get puzzleThemeHangingPiece => 'Quân treo';
+
+  @override
+  String get puzzleThemeHangingPieceDescription => 'Một chiến thuật liên quan đến quân cờ của đối phương không được phòng thủ hoặc phòng thủ không đủ dẫn tới việc có thể ăn quân cờ đấy.';
+
+  @override
+  String get puzzleThemeHookMate => 'Chiếu kiểu móc';
+
+  @override
+  String get puzzleThemeHookMateDescription => 'Chiếu hết bằng quân xe, mã và tốt cùng với một quân tốt đối phương làm chặn đường vua chạy.';
+
+  @override
+  String get puzzleThemeInterference => 'Can thiệp';
+
+  @override
+  String get puzzleThemeInterferenceDescription => 'Di chuyển một quân cờ giữa hai quân cờ đối thủ để một hoặc cả hai quân cờ đối thủ không bị cản trở, chẳng hạn như một quân Mã trên ô vuông được bảo vệ giữa hai quân Xe.';
+
+  @override
+  String get puzzleThemeIntermezzo => 'Xen giữa';
+
+  @override
+  String get puzzleThemeIntermezzoDescription => 'Thay vì chơi nước đi dự kiến, trước tiên hãy xen vào một nước đi khác gây ra mối đe dọa ngay lập tức mà đối thủ phải đáp trả. Còn được gọi là \"Zwischenzug\" hoặc \"Ở giữa\".';
+
+  @override
+  String get puzzleThemeKnightEndgame => 'Tàn cuộc Mã';
+
+  @override
+  String get puzzleThemeKnightEndgameDescription => 'Một thế cờ tàn chỉ có mã và tốt.';
+
+  @override
+  String get puzzleThemeLong => 'Câu đố dài';
+
+  @override
+  String get puzzleThemeLongDescription => 'Thắng trong ba nước cờ.';
+
+  @override
+  String get puzzleThemeMaster => 'Ván đấu cao cấp';
+
+  @override
+  String get puzzleThemeMasterDescription => 'Câu đố từ các ván đấu của người có danh hiệu.';
+
+  @override
+  String get puzzleThemeMasterVsMaster => 'Ván đấu giữa 2 kiện tướng';
+
+  @override
+  String get puzzleThemeMasterVsMasterDescription => 'Câu đố từ các ván đấu giữa hai người chơi có danh hiệu.';
+
+  @override
+  String get puzzleThemeMate => 'Chiếu hết';
+
+  @override
+  String get puzzleThemeMateDescription => 'Chiến thắng ván cờ với phong cách.';
+
+  @override
+  String get puzzleThemeMateIn1 => 'Chiếu hết trong 1 nước';
+
+  @override
+  String get puzzleThemeMateIn1Description => 'Chiếu hết trong một nước cờ.';
+
+  @override
+  String get puzzleThemeMateIn2 => 'Chiếu hết trong 2 nước';
+
+  @override
+  String get puzzleThemeMateIn2Description => 'Chiếu hết trong hai nước cờ.';
+
+  @override
+  String get puzzleThemeMateIn3 => 'Chiếu hết trong 3 nước';
+
+  @override
+  String get puzzleThemeMateIn3Description => 'Chiếu hết trong ba nước cờ.';
+
+  @override
+  String get puzzleThemeMateIn4 => 'Chiếu hết trong 4 nước';
+
+  @override
+  String get puzzleThemeMateIn4Description => 'Chiếu hết trong bốn nước cờ.';
+
+  @override
+  String get puzzleThemeMateIn5 => 'Chiếu hết trong 5 nước hoặc hơn';
+
+  @override
+  String get puzzleThemeMateIn5Description => 'Tìm ra một chuỗi dài các nước cờ dẫn đến chiếu hết.';
+
+  @override
+  String get puzzleThemeMiddlegame => 'Trung cuộc';
+
+  @override
+  String get puzzleThemeMiddlegameDescription => 'Chiến thuật trong giai đoạn thứ hai của ván cờ.';
+
+  @override
+  String get puzzleThemeOneMove => 'Câu đố một nước';
+
+  @override
+  String get puzzleThemeOneMoveDescription => 'Câu đố mà chỉ có một nước đi.';
+
+  @override
+  String get puzzleThemeOpening => 'Khai cuộc';
+
+  @override
+  String get puzzleThemeOpeningDescription => 'Chiến thuật trong phần mở đầu của ván cờ.';
+
+  @override
+  String get puzzleThemePawnEndgame => 'Tàn cuộc Tốt';
+
+  @override
+  String get puzzleThemePawnEndgameDescription => 'Một thế tàn cuộc chỉ với tốt.';
+
+  @override
+  String get puzzleThemePin => 'Ghim';
+
+  @override
+  String get puzzleThemePinDescription => 'Một chiến thuật khiến một quân cờ không thể di chuyển mà không để lộ mục tiêu là quân cờ đằng sau nó với giá trị lớn hơn.';
+
+  @override
+  String get puzzleThemePromotion => 'Phong cấp';
+
+  @override
+  String get puzzleThemePromotionDescription => 'Phong cấp tốt của bạn thành quân hậu hoặc những quân phụ khác.';
+
+  @override
+  String get puzzleThemeQueenEndgame => 'Tàn cuộc Hậu';
+
+  @override
+  String get puzzleThemeQueenEndgameDescription => 'Một thế cờ tàn chỉ có hậu và tốt.';
+
+  @override
+  String get puzzleThemeQueenRookEndgame => 'Hậu và Xe';
+
+  @override
+  String get puzzleThemeQueenRookEndgameDescription => 'Một thế cờ tàn chỉ có hậu, xe và tốt.';
+
+  @override
+  String get puzzleThemeQueensideAttack => 'Tấn công cánh hậu';
+
+  @override
+  String get puzzleThemeQueensideAttackDescription => 'Tấn công vua đối phương sau khi họ nhập thành cánh hậu.';
+
+  @override
+  String get puzzleThemeQuietMove => 'Nước đi tĩnh lặng';
+
+  @override
+  String get puzzleThemeQuietMoveDescription => 'Một nước cờ không chiếu hay ăn quân của đối phương, nhưng lại tạo ra một sự đe dọa không thể tránh khỏi cho một nước đi sau.';
+
+  @override
+  String get puzzleThemeRookEndgame => 'Tàn cuộc Xe';
+
+  @override
+  String get puzzleThemeRookEndgameDescription => 'Một thế cờ tàn chỉ có xe và tốt.';
+
+  @override
+  String get puzzleThemeSacrifice => 'Thí quân';
+
+  @override
+  String get puzzleThemeSacrificeDescription => 'Một chiến thuật liên quan đến việc từ bỏ quân trong thời gian ngắn, để giành lại lợi thế sau một chuỗi nước đi bắt buộc.';
+
+  @override
+  String get puzzleThemeShort => 'Câu đố ngắn';
+
+  @override
+  String get puzzleThemeShortDescription => 'Thắng trong hai nước cờ.';
+
+  @override
+  String get puzzleThemeSkewer => 'Đòn xiên';
+
+  @override
+  String get puzzleThemeSkewerDescription => 'Một mô típ liên quan tới việc một quân cờ có giá trị cao bị tấn công buộc phải di chuyển khỏi vị trí, dẫn tới một quân cờ giá trị thấp hơn ở phía sau bị tấn công hoặc ăn, ngược lại so với ghim.';
+
+  @override
+  String get puzzleThemeSmotheredMate => 'Chiếu kiểu kẹt';
+
+  @override
+  String get puzzleThemeSmotheredMateDescription => 'Một nước chiếu hết với quân mã mà trong đó vua đối phương không thể di chuyển vì bị bao vây bởi chính các quân cờ khác của họ.';
+
+  @override
+  String get puzzleThemeSuperGM => 'Các ván đấu từ Siêu Đại Kiện Tướng';
+
+  @override
+  String get puzzleThemeSuperGMDescription => 'Câu đố từ những ván đấu đã được chơi bởi những kỳ thủ giỏi nhất trên thế giới.';
+
+  @override
+  String get puzzleThemeTrappedPiece => 'Quân bị bẫy';
+
+  @override
+  String get puzzleThemeTrappedPieceDescription => 'Một quân cờ không thể thoát khỏi việc bị ăn vì nó bị giới hạn các nước đi.';
+
+  @override
+  String get puzzleThemeUnderPromotion => 'Phong cấp thấp';
+
+  @override
+  String get puzzleThemeUnderPromotionDescription => 'Phong cấp thành mã, tượng hoặc xe.';
+
+  @override
+  String get puzzleThemeVeryLong => 'Câu đố rất dài';
+
+  @override
+  String get puzzleThemeVeryLongDescription => 'Bốn nước cờ hoặc hơn để chiến thắng.';
+
+  @override
+  String get puzzleThemeXRayAttack => 'Đòn Tia X';
+
+  @override
+  String get puzzleThemeXRayAttackDescription => 'Một quân cờ tấn công hoặc phòng thủ một ô sau một quân cờ khác của đối phương.';
+
+  @override
+  String get puzzleThemeZugzwang => 'Cưỡng ép';
+
+  @override
+  String get puzzleThemeZugzwangDescription => 'Đối phương bị giới hạn các nước mà họ có thể đi và tất cả các nước đi ấy đều hại họ.';
+
+  @override
+  String get puzzleThemeHealthyMix => 'Phối hợp nhịp nhàng';
+
+  @override
+  String get puzzleThemeHealthyMixDescription => 'Mỗi thứ một chút. Bạn không biết được thứ gì đang chờ mình, vậy nên bạn cần phải sẵn sàng cho mọi thứ! Như một ván cờ thật vậy!';
+
+  @override
+  String get puzzleThemePlayerGames => 'Các ván đấu của người chơi';
+
+  @override
+  String get puzzleThemePlayerGamesDescription => 'Những câu đố từ những ván cờ của bạn hoặc từ các ván cờ của những người chơi khác.';
+
+  @override
+  String puzzleThemePuzzleDownloadInformation(String param) {
+    return 'Những câu đố này thuộc phạm vi công khai và có thể tải về từ $param.';
+  }
+
+  @override
+  String get searchSearch => 'Tìm kiếm';
+
+  @override
+  String get settingsSettings => 'Cài đặt';
+
+  @override
+  String get settingsCloseAccount => 'Đóng tài khoản';
+
+  @override
+  String get settingsManagedAccountCannotBeClosed => 'Tài khoản của bạn đang bị quản lý, hiện không thể đóng.';
+
+  @override
+  String get settingsClosingIsDefinitive => 'Việc đóng tài khoản là vĩnh viễn. Không có cách nào để có thể lấy lại. Bạn vẫn chắc chắn muốn đóng chứ?';
+
+  @override
+  String get settingsCantOpenSimilarAccount => 'Bạn không được phép tạo tài khoản trùng tên, kể cả khác chữ hoa, thường.';
+
+  @override
+  String get settingsChangedMindDoNotCloseAccount => 'Tôi đã đổi ý, đừng đóng tài khoản của tôi';
+
+  @override
+  String get settingsCloseAccountExplanation => 'Bạn có chắc muốn đóng tài khoản? Việc đóng tài khoản là quyết định vĩnh viễn. Bạn sẽ KHÔNG BAO GIỜ có thể ĐĂNG NHẬP LẠI.';
+
+  @override
+  String get settingsThisAccountIsClosed => 'Tài khoản này đã bị đóng';
 
   @override
   String get playWithAFriend => 'Chơi với bạn bè';
@@ -478,6 +1474,12 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get deleteFromHere => 'Xoá từ đây';
+
+  @override
+  String get collapseVariations => 'Collapse variations';
+
+  @override
+  String get expandVariations => 'Expand variations';
 
   @override
   String get forceVariation => 'Đổi biến';
@@ -1337,15 +2339,6 @@ class AppLocalizationsVi extends AppLocalizations {
   String get emptyTournamentName => 'Hãy để trống để lấy tên theo tên một kỳ thủ cờ vua nổi tiếng.';
 
   @override
-  String get recommendNotTouching => 'Chúng tôi khuyên bạn không nên thay đổi.';
-
-  @override
-  String get fewerPlayers => 'Nếu bạn thiết lập điều kiện tham gia, giải của bạn sẽ có ít người chơi hơn.';
-
-  @override
-  String get showAdvancedSettings => 'Hiện các thiết lập nâng cao';
-
-  @override
   String get makePrivateTournament => 'Đặt giải đấu ở chế độ riêng tư và giới hạn tham gia bởi mật khẩu';
 
   @override
@@ -1475,10 +2468,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get editProfile => 'Chỉnh sửa thông tin cá nhân';
 
   @override
-  String get firstName => 'Tên';
-
-  @override
-  String get lastName => 'Họ';
+  String get realName => 'Real name';
 
   @override
   String get setFlair => 'Đặt biểu tượng của bạn';
@@ -1607,13 +2597,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get cheat => 'Gian lận';
 
   @override
-  String get insult => 'Xúc phạm';
-
-  @override
   String get troll => 'Chọc tức, chơi khăm';
-
-  @override
-  String get ratingManipulation => 'Thao túng xếp hạng';
 
   @override
   String get other => 'Khác';
@@ -1720,6 +2704,9 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get outsideTheBoard => 'Bên ngoài bàn cờ';
+
+  @override
+  String get allSquaresOfTheBoard => 'All squares of the board';
 
   @override
   String get onSlowGames => 'Chỉ khi chơi cờ chậm';
@@ -3342,999 +4329,6 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get patronDonate => 'Ủng hộ';
-
-  @override
-  String get patronLichessPatron => 'Người bảo trợ Lichess';
-
-  @override
-  String get preferencesPreferences => 'Sửa giao diện';
-
-  @override
-  String get preferencesDisplay => 'Hiển thị';
-
-  @override
-  String get preferencesPrivacy => 'Quyền riêng tư';
-
-  @override
-  String get preferencesNotifications => 'Thông báo';
-
-  @override
-  String get preferencesPieceAnimation => 'Hình ảnh động của quân cờ';
-
-  @override
-  String get preferencesMaterialDifference => 'Chênh lệch giá trị quân cờ';
-
-  @override
-  String get preferencesBoardHighlights => 'Đánh dấu trên bàn cờ (nước đi mới nhất và nước chiếu)';
-
-  @override
-  String get preferencesPieceDestinations => 'Các điểm đến của quân cờ (các nước đi hợp lý và nước đi dự đoán)';
-
-  @override
-  String get preferencesBoardCoordinates => 'Tọa độ bàn cờ (A-H, 1-8)';
-
-  @override
-  String get preferencesMoveListWhilePlaying => 'Biên bản ván đấu';
-
-  @override
-  String get preferencesPgnPieceNotation => 'Ký hiệu nước cờ';
-
-  @override
-  String get preferencesChessPieceSymbol => 'Biểu tượng quân cờ';
-
-  @override
-  String get preferencesPgnLetter => 'Ký tự (K, Q, R, B, N)';
-
-  @override
-  String get preferencesZenMode => 'Chế độ tập trung';
-
-  @override
-  String get preferencesShowPlayerRatings => 'Hiển thị hệ số của người chơi';
-
-  @override
-  String get preferencesShowFlairs => 'Hiển thị biểu tượng của người chơi';
-
-  @override
-  String get preferencesExplainShowPlayerRatings => 'Điều này sẽ ẩn toàn bộ hệ số khỏi Lichess để giúp tập trung vào ván cờ. Ván đấu có xếp hạng vẫn ảnh hưởng đến hệ số của bạn, đây chỉ là những gì bạn có thể nhìn thấy.';
-
-  @override
-  String get preferencesDisplayBoardResizeHandle => 'Hiện nút thay đổi kích cỡ bàn cờ';
-
-  @override
-  String get preferencesOnlyOnInitialPosition => 'Chỉ ở thế cờ ban đầu';
-
-  @override
-  String get preferencesInGameOnly => 'Chỉ trong ván cờ';
-
-  @override
-  String get preferencesChessClock => 'Đồng hồ cờ vua';
-
-  @override
-  String get preferencesTenthsOfSeconds => 'Một phần mười giây';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'Khi thời gian còn lại < 10 giây';
-
-  @override
-  String get preferencesHorizontalGreenProgressBars => 'Thanh tiến trình ngang màu xanh';
-
-  @override
-  String get preferencesSoundWhenTimeGetsCritical => 'Âm thanh khi thời gian sắp hết';
-
-  @override
-  String get preferencesGiveMoreTime => 'Cho thêm thời gian';
-
-  @override
-  String get preferencesGameBehavior => 'Thao tác chơi';
-
-  @override
-  String get preferencesHowDoYouMovePieces => 'Bạn di chuyển quân như thế nào?';
-
-  @override
-  String get preferencesClickTwoSquares => 'Nhấn hai ô';
-
-  @override
-  String get preferencesDragPiece => 'Thả quân cờ';
-
-  @override
-  String get preferencesBothClicksAndDrag => 'Cả hai';
-
-  @override
-  String get preferencesPremovesPlayingDuringOpponentTurn => 'Nước cờ dự đoán (được thực hiện khi đang đến lượt đi của đối phương)';
-
-  @override
-  String get preferencesTakebacksWithOpponentApproval => 'Hoãn nước đi (với sự chấp thuận của đối thủ)';
-
-  @override
-  String get preferencesInCasualGamesOnly => 'Chỉ trong các ván đấu không tính Elo';
-
-  @override
-  String get preferencesPromoteToQueenAutomatically => 'Tự động phong cấp thành quân Hậu';
-
-  @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Giữ nút <ctrl> trong khi phong cấp để tạm thời hủy bỏ việc phong cấp tự động';
-
-  @override
-  String get preferencesWhenPremoving => 'Khi đi trước';
-
-  @override
-  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Tự động hoà khi lặp cờ ba lần';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Khi thời gian còn lại < 30 giây';
-
-  @override
-  String get preferencesMoveConfirmation => 'Xác nhận nước đi';
-
-  @override
-  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Có thể bị vô hiệu hóa trong ván cờ với mục lục bàn cờ';
-
-  @override
-  String get preferencesInCorrespondenceGames => 'Cờ qua thư';
-
-  @override
-  String get preferencesCorrespondenceAndUnlimited => 'Cờ qua thư và cờ vô hạn';
-
-  @override
-  String get preferencesConfirmResignationAndDrawOffers => 'Xác nhận chịu thua và đề nghị hòa';
-
-  @override
-  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Cách nhập thành';
-
-  @override
-  String get preferencesCastleByMovingTwoSquares => 'Di chuyển vua 2 nước';
-
-  @override
-  String get preferencesCastleByMovingOntoTheRook => 'Di chuyển vua vào xe';
-
-  @override
-  String get preferencesInputMovesWithTheKeyboard => 'Nhập các nước đi với bàn phím';
-
-  @override
-  String get preferencesInputMovesWithVoice => 'Đầu vào nước đi với giọng nói của bạn';
-
-  @override
-  String get preferencesSnapArrowsToValidMoves => 'Tự kéo mũi tên vào ô của nước đi hợp lệ';
-
-  @override
-  String get preferencesSayGgWpAfterLosingOrDrawing => 'Tự động nhắn \"Good game, well played\" (Ván cờ hay, chơi hay lắm) sau khi hòa hoặc thua';
-
-  @override
-  String get preferencesYourPreferencesHaveBeenSaved => 'Tùy chọn của bạn đã được lưu';
-
-  @override
-  String get preferencesScrollOnTheBoardToReplayMoves => 'Cuộn con chuột trên bàn cờ để xem lại nước đi';
-
-  @override
-  String get preferencesCorrespondenceEmailNotification => 'Email thông báo hàng ngày sẽ bao gồm cả các ván cờ qua thư';
-
-  @override
-  String get preferencesNotifyStreamStart => 'Streamer đang phát trực tiếp';
-
-  @override
-  String get preferencesNotifyInboxMsg => 'Tin nhắn mới';
-
-  @override
-  String get preferencesNotifyForumMention => 'Có bình luận diễn đàn đề cập đến bạn';
-
-  @override
-  String get preferencesNotifyInvitedStudy => 'Lời mời nghiên cứu';
-
-  @override
-  String get preferencesNotifyGameEvent => 'Những cập nhật liên quan đến ván cờ qua thư';
-
-  @override
-  String get preferencesNotifyChallenge => 'Các lời thách đấu';
-
-  @override
-  String get preferencesNotifyTournamentSoon => 'Giải đấu sắp bắt đầu';
-
-  @override
-  String get preferencesNotifyTimeAlarm => 'Thời gian đánh cờ qua thư sắp hết';
-
-  @override
-  String get preferencesNotifyBell => 'Chuông thông báo khi đang truy cập Lichess';
-
-  @override
-  String get preferencesNotifyPush => 'Thông báo tới thiết bị của bạn khi bạn không truy cập Lichess';
-
-  @override
-  String get preferencesNotifyWeb => 'Trình duyệt';
-
-  @override
-  String get preferencesNotifyDevice => 'Thiết bị';
-
-  @override
-  String get preferencesBellNotificationSound => 'Âm thanh chuông báo';
-
-  @override
-  String get puzzlePuzzles => 'Câu đố';
-
-  @override
-  String get puzzlePuzzleThemes => 'Chủ đề câu đố';
-
-  @override
-  String get puzzleRecommended => 'Được đề xuất';
-
-  @override
-  String get puzzlePhases => 'Giai đoạn';
-
-  @override
-  String get puzzleMotifs => 'Các mô-típ';
-
-  @override
-  String get puzzleAdvanced => 'Nâng cao';
-
-  @override
-  String get puzzleLengths => 'Thời lượng';
-
-  @override
-  String get puzzleMates => 'Chiếu hết';
-
-  @override
-  String get puzzleGoals => 'Mục tiêu';
-
-  @override
-  String get puzzleOrigin => 'Nguồn từ';
-
-  @override
-  String get puzzleSpecialMoves => 'Các nước cờ đặc biệt';
-
-  @override
-  String get puzzleDidYouLikeThisPuzzle => 'Bạn thích câu đố này chứ?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Bình chọn để đến câu đố tiếp theo!';
-
-  @override
-  String get puzzleUpVote => 'Thích câu đố';
-
-  @override
-  String get puzzleDownVote => 'Không thích câu đố';
-
-  @override
-  String get puzzleYourPuzzleRatingWillNotChange => 'Hệ số giải câu đố của bạn sẽ không thay đổi. Lưu ý rằng giải câu đố không phải một cuộc thi. Hệ số của bạn nhằm giúp chọn những câu đố phù hợp nhất với trình độ của bạn.';
-
-  @override
-  String get puzzleFindTheBestMoveForWhite => 'Tìm nước tối ưu cho Trắng.';
-
-  @override
-  String get puzzleFindTheBestMoveForBlack => 'Tìm nước tối ưu cho Đen.';
-
-  @override
-  String get puzzleToGetPersonalizedPuzzles => 'Để có được các thế cờ dành riêng cho bạn:';
-
-  @override
-  String puzzlePuzzleId(String param) {
-    return 'Câu đố $param';
-  }
-
-  @override
-  String get puzzlePuzzleOfTheDay => 'Câu đố của ngày';
-
-  @override
-  String get puzzleDailyPuzzle => 'Câu đố Hàng ngày';
-
-  @override
-  String get puzzleClickToSolve => 'Nhấn để giải';
-
-  @override
-  String get puzzleGoodMove => 'Nước đi tốt';
-
-  @override
-  String get puzzleBestMove => 'Nước đi tối ưu!';
-
-  @override
-  String get puzzleKeepGoing => 'Hãy tiếp tục…';
-
-  @override
-  String get puzzlePuzzleSuccess => 'Thành công!';
-
-  @override
-  String get puzzlePuzzleComplete => 'Hoàn thành câu đố!';
-
-  @override
-  String get puzzleByOpenings => 'Theo khai cuộc';
-
-  @override
-  String get puzzlePuzzlesByOpenings => 'Câu đố theo khai cuộc';
-
-  @override
-  String get puzzleOpeningsYouPlayedTheMost => 'Những khai cuộc bạn thường chơi trong các ván đấu có xếp hạng';
-
-  @override
-  String get puzzleUseFindInPage => 'Dùng \"Tìm kiếm trong trang\" trong mục lục trình duyệt để tìm khai cuộc yêu thích của bạn!';
-
-  @override
-  String get puzzleUseCtrlF => 'Dùng Ctrl+f để tìm khai cuộc yêu thích của bạn!';
-
-  @override
-  String get puzzleNotTheMove => 'Đó chưa phải là nước đi tối ưu!';
-
-  @override
-  String get puzzleTrySomethingElse => 'Hãy thử nước đi khác.';
-
-  @override
-  String puzzleRatingX(String param) {
-    return 'Hệ số: $param';
-  }
-
-  @override
-  String get puzzleHidden => 'ẩn';
-
-  @override
-  String puzzleFromGameLink(String param) {
-    return 'Từ ván cờ $param';
-  }
-
-  @override
-  String get puzzleContinueTraining => 'Tiếp tục tập luyện';
-
-  @override
-  String get puzzleDifficultyLevel => 'Độ khó';
-
-  @override
-  String get puzzleNormal => 'Bình thường';
-
-  @override
-  String get puzzleEasier => 'Dễ hơn';
-
-  @override
-  String get puzzleEasiest => 'Dễ nhất';
-
-  @override
-  String get puzzleHarder => 'Khó hơn';
-
-  @override
-  String get puzzleHardest => 'Khó nhất';
-
-  @override
-  String get puzzleExample => 'Ví dụ';
-
-  @override
-  String get puzzleAddAnotherTheme => 'Thêm chủ đề khác';
-
-  @override
-  String get puzzleNextPuzzle => 'Câu đố tiếp theo';
-
-  @override
-  String get puzzleJumpToNextPuzzleImmediately => 'Chuyển tới câu đố tiếp theo ngay lập tức';
-
-  @override
-  String get puzzlePuzzleDashboard => 'Bảng thống kê giải câu đố';
-
-  @override
-  String get puzzleImprovementAreas => 'Các điểm cần cải thiện';
-
-  @override
-  String get puzzleStrengths => 'Điểm mạnh';
-
-  @override
-  String get puzzleHistory => 'Lịch sử giải câu đố';
-
-  @override
-  String get puzzleSolved => 'giải đúng';
-
-  @override
-  String get puzzleFailed => 'giải sai';
-
-  @override
-  String get puzzleStreakDescription => 'Giải những câu đố có độ khó tăng dần và tích lũy chuỗi thắng. Sẽ không có đồng hồ, nên hãy giải chúng một cách bình tĩnh. Một nước đi sai, và trò chơi sẽ kết thúc! Tuy nhiên, bạn được quyền bỏ qua một nước đi trong mỗi lần chơi.';
-
-  @override
-  String puzzleYourStreakX(String param) {
-    return 'Chuỗi của bạn: $param';
-  }
-
-  @override
-  String get puzzleStreakSkipExplanation => 'Bỏ qua nước đi này để bảo toàn chuỗi của bạn! Chỉ dùng được một lần cho mỗi lần chơi.';
-
-  @override
-  String get puzzleContinueTheStreak => 'Tiếp tục chuỗi';
-
-  @override
-  String get puzzleNewStreak => 'Chuỗi mới';
-
-  @override
-  String get puzzleFromMyGames => 'Từ ván đấu của tôi';
-
-  @override
-  String get puzzleLookupOfPlayer => 'Tìm câu đố từ các ván đấu của người khác';
-
-  @override
-  String puzzleFromXGames(String param) {
-    return 'Câu đố từ ván cờ của $param';
-  }
-
-  @override
-  String get puzzleSearchPuzzles => 'Tìm câu đố';
-
-  @override
-  String get puzzleFromMyGamesNone => 'Bạn không có câu đố nào trong dữ liệu, nhưng Lichess vẫn rất yêu mến bạn.\n\nHãy chơi thêm nhiều ván cờ nhanh và cờ chậm để có cơ hội có một câu đố từ ván cờ của riêng bạn!';
-
-  @override
-  String puzzleFromXGamesFound(String param1, String param2) {
-    return 'Đã tìm được $param1 câu đố trong các ván đấu của $param2';
-  }
-
-  @override
-  String get puzzlePuzzleDashboardDescription => 'Rèn luyện, phân tích, cải thiện';
-
-  @override
-  String puzzlePercentSolved(String param) {
-    return 'Giải đúng $param';
-  }
-
-  @override
-  String get puzzleNoPuzzlesToShow => 'Chưa có gì cả, hãy giải một vài câu đố trước đã!';
-
-  @override
-  String get puzzleImprovementAreasDescription => 'Luyện tập chúng để tối ưu hóa tiến trình của bạn!';
-
-  @override
-  String get puzzleStrengthDescription => 'Bạn thể hiện tốt nhất ở những lĩnh vực này';
-
-  @override
-  String puzzlePlayedXTimes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Đã được giải $count lần',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsBelowYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Dưới $count điểm hệ số câu đố của bạn',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsAboveYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Trên $count điểm hệ số câu đố của bạn',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPlayed(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Đã giải $count',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbToReplay(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Cần giải lại $count',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get puzzleThemeAdvancedPawn => 'Tốt thông xa';
-
-  @override
-  String get puzzleThemeAdvancedPawnDescription => 'Một quân tốt của bạn có thể đe dọa phong cấp đang nằm sâu bên trong thế trận của đối thủ.';
-
-  @override
-  String get puzzleThemeAdvantage => 'Lợi thế';
-
-  @override
-  String get puzzleThemeAdvantageDescription => 'Tận dụng cơ hội của bạn để chiếm lấy lợi thế quyết định. (200cp ≤ đánh giá ≤ 600cp)';
-
-  @override
-  String get puzzleThemeAnastasiaMate => 'Chiếu hết kiểu Anastasia';
-
-  @override
-  String get puzzleThemeAnastasiaMateDescription => 'Một quân mã phối hợp cùng quân xe hoặc quân hậu để bẫy quân vua đối phương vào thế kẹp giữa cạnh bàn cờ và một quân khác.';
-
-  @override
-  String get puzzleThemeArabianMate => 'Chiếu hết kiểu Ả Rập';
-
-  @override
-  String get puzzleThemeArabianMateDescription => 'Một Mã và một Xe hợp sức để bẫy vua đối phương trên một góc của bàn cờ.';
-
-  @override
-  String get puzzleThemeAttackingF2F7 => 'Tấn công ô f2 hoặc f7';
-
-  @override
-  String get puzzleThemeAttackingF2F7Description => 'Một đòn tấn công nhằm vào quân tốt f2 hay f7, ví dụ như trong khai cuộc Fried Liver Attack.';
-
-  @override
-  String get puzzleThemeAttraction => 'Thu hút';
-
-  @override
-  String get puzzleThemeAttractionDescription => 'Việc đổi quân hoặc thí quân thu hút hoặc ép buộc một quân đối phương đến một ô nhằm tạo một đòn chiến thuật.';
-
-  @override
-  String get puzzleThemeBackRankMate => 'Chiếu hết hàng cuối';
-
-  @override
-  String get puzzleThemeBackRankMateDescription => 'Chiếu hết trên hàng cuối, khi vua bị mắc kẹt bởi chính quân của nó.';
-
-  @override
-  String get puzzleThemeBishopEndgame => 'Cờ tàn tượng';
-
-  @override
-  String get puzzleThemeBishopEndgameDescription => 'Một thế cờ tàn chỉ có tượng và tốt.';
-
-  @override
-  String get puzzleThemeBodenMate => 'Chiếu hết kiểu Boden';
-
-  @override
-  String get puzzleThemeBodenMateDescription => 'Hai quân Tượng tấn công trên các đường chéo chéo nhau chiếu hết một quân vua bị kẹt bởi đồng đội của nó.';
-
-  @override
-  String get puzzleThemeCastling => 'Nhập thành';
-
-  @override
-  String get puzzleThemeCastlingDescription => 'Chuyển quân vua đến vị trí an toàn và triển khai quân xe để tấn công.';
-
-  @override
-  String get puzzleThemeCapturingDefender => 'Ăn quân phòng thủ';
-
-  @override
-  String get puzzleThemeCapturingDefenderDescription => 'Loại bỏ một quân cực kỳ quan trọng đối với việc bảo vệ một quân cờ khác, khiến cho quân cờ hiện không được bảo vệ có thể bị ăn vào một nước sau đó.';
-
-  @override
-  String get puzzleThemeCrushing => 'Áp đảo';
-
-  @override
-  String get puzzleThemeCrushingDescription => 'Phát hiện sai lầm nghiêm trọng của đối phương để giành được lợi thế áp đảo. (đánh giá ≥ 600cp)';
-
-  @override
-  String get puzzleThemeDoubleBishopMate => 'Chiếu hết bằng cặp Tượng';
-
-  @override
-  String get puzzleThemeDoubleBishopMateDescription => 'Hai quân Tượng tấn công trên các đường chéo liền kề chiếu hết một quân vua bị cản trở bởi quân cờ.';
-
-  @override
-  String get puzzleThemeDovetailMate => 'Chiếu hết kiểu Đuôi én';
-
-  @override
-  String get puzzleThemeDovetailMateDescription => 'Một Hậu chiếu hết vua ở ô liền kề, hai ô duy nhất quân vua có thể chạy được lúc này đều bị chặn.';
-
-  @override
-  String get puzzleThemeEquality => 'Cân bằng';
-
-  @override
-  String get puzzleThemeEqualityDescription => 'Lật kèo từ một thế cờ thua và giành được một thế trận hòa hoặc cân bằng. (đánh giá ≤ 200cp)';
-
-  @override
-  String get puzzleThemeKingsideAttack => 'Tấn công cánh vua';
-
-  @override
-  String get puzzleThemeKingsideAttackDescription => 'Tấn công vua đối phương sau khi họ nhập thành cánh vua.';
-
-  @override
-  String get puzzleThemeClearance => 'Dọn đường';
-
-  @override
-  String get puzzleThemeClearanceDescription => 'Một nước đi, thường đi kèm nhịp độ dùng để dọn đường một ô, cột hay đường chéo cho một đòn chiến thuật sắp tới.';
-
-  @override
-  String get puzzleThemeDefensiveMove => 'Nước cờ phòng thủ';
-
-  @override
-  String get puzzleThemeDefensiveMoveDescription => 'Một nước đi hoặc chuỗi nước đi chính xác cần để tránh mất quân hoặc một lợi thế khác.';
-
-  @override
-  String get puzzleThemeDeflection => 'Đánh lạc hướng';
-
-  @override
-  String get puzzleThemeDeflectionDescription => 'Một nước đi đánh lạc hướng một quân đối phương khỏi một nhiệm vụ nó đang làm, chẳng hạn như bảo vệ một ô trọng điểm. Còn được gọi là \"quá tải\".';
-
-  @override
-  String get puzzleThemeDiscoveredAttack => 'Tấn công mở';
-
-  @override
-  String get puzzleThemeDiscoveredAttackDescription => 'Đi một quân cờ đang chặn giữa đường tấn công của một quân đánh xa khác (ví dụ như đi một quân mã khỏi đường tấn công của quân xe).';
-
-  @override
-  String get puzzleThemeDoubleCheck => 'Chiếu đôi';
-
-  @override
-  String get puzzleThemeDoubleCheckDescription => 'Chiếu bằng hai quân một lúc, là kết quả của một đòn tấn công mở khi mà cả quân đứng sau và quân chặn đường đều tấn công vua đối phương.';
-
-  @override
-  String get puzzleThemeEndgame => 'Tàn cuộc';
-
-  @override
-  String get puzzleThemeEndgameDescription => 'Chiến thuật trong phần kết thúc của ván cờ.';
-
-  @override
-  String get puzzleThemeEnPassantDescription => 'Một đòn chiến thuật bao gồm luật bắt tốt qua đường, khi một quân tốt có thể ăn một quân tốt đối phương đi qua mặt nó khi đi 2 ô từ vị trí ban đầu của nó.';
-
-  @override
-  String get puzzleThemeExposedKing => 'Vua bị hở';
-
-  @override
-  String get puzzleThemeExposedKingDescription => 'Một đòn chiến thuật bao gồm một quân vua với ít quân bảo vệ quanh quân vua đó, thường dẫn tới chiếu hết.';
-
-  @override
-  String get puzzleThemeFork => 'Tấn công đôi';
-
-  @override
-  String get puzzleThemeForkDescription => 'Một nước đi mà một quân cờ tấn công hai quân cờ của đối phương cùng lúc.';
-
-  @override
-  String get puzzleThemeHangingPiece => 'Quân treo';
-
-  @override
-  String get puzzleThemeHangingPieceDescription => 'Một chiến thuật liên quan đến quân cờ của đối phương không được phòng thủ hoặc phòng thủ không đủ dẫn tới việc có thể ăn quân cờ đấy.';
-
-  @override
-  String get puzzleThemeHookMate => 'Chiếu kiểu móc';
-
-  @override
-  String get puzzleThemeHookMateDescription => 'Chiếu hết bằng quân xe, mã và tốt cùng với một quân tốt đối phương làm chặn đường vua chạy.';
-
-  @override
-  String get puzzleThemeInterference => 'Can thiệp';
-
-  @override
-  String get puzzleThemeInterferenceDescription => 'Di chuyển một quân cờ giữa hai quân cờ đối thủ để một hoặc cả hai quân cờ đối thủ không bị cản trở, chẳng hạn như một quân Mã trên ô vuông được bảo vệ giữa hai quân Xe.';
-
-  @override
-  String get puzzleThemeIntermezzo => 'Xen giữa';
-
-  @override
-  String get puzzleThemeIntermezzoDescription => 'Thay vì chơi nước đi dự kiến, trước tiên hãy xen vào một nước đi khác gây ra mối đe dọa ngay lập tức mà đối thủ phải đáp trả. Còn được gọi là \"Zwischenzug\" hoặc \"Ở giữa\".';
-
-  @override
-  String get puzzleThemeKnightEndgame => 'Tàn cuộc Mã';
-
-  @override
-  String get puzzleThemeKnightEndgameDescription => 'Một thế cờ tàn chỉ có mã và tốt.';
-
-  @override
-  String get puzzleThemeLong => 'Câu đố dài';
-
-  @override
-  String get puzzleThemeLongDescription => 'Thắng trong ba nước cờ.';
-
-  @override
-  String get puzzleThemeMaster => 'Ván đấu cao cấp';
-
-  @override
-  String get puzzleThemeMasterDescription => 'Câu đố từ các ván đấu của người có danh hiệu.';
-
-  @override
-  String get puzzleThemeMasterVsMaster => 'Ván đấu giữa 2 kiện tướng';
-
-  @override
-  String get puzzleThemeMasterVsMasterDescription => 'Câu đố từ các ván đấu giữa hai người chơi có danh hiệu.';
-
-  @override
-  String get puzzleThemeMate => 'Chiếu hết';
-
-  @override
-  String get puzzleThemeMateDescription => 'Chiến thắng ván cờ với phong cách.';
-
-  @override
-  String get puzzleThemeMateIn1 => 'Chiếu hết trong 1 nước';
-
-  @override
-  String get puzzleThemeMateIn1Description => 'Chiếu hết trong một nước cờ.';
-
-  @override
-  String get puzzleThemeMateIn2 => 'Chiếu hết trong 2 nước';
-
-  @override
-  String get puzzleThemeMateIn2Description => 'Chiếu hết trong hai nước cờ.';
-
-  @override
-  String get puzzleThemeMateIn3 => 'Chiếu hết trong 3 nước';
-
-  @override
-  String get puzzleThemeMateIn3Description => 'Chiếu hết trong ba nước cờ.';
-
-  @override
-  String get puzzleThemeMateIn4 => 'Chiếu hết trong 4 nước';
-
-  @override
-  String get puzzleThemeMateIn4Description => 'Chiếu hết trong bốn nước cờ.';
-
-  @override
-  String get puzzleThemeMateIn5 => 'Chiếu hết trong 5 nước hoặc hơn';
-
-  @override
-  String get puzzleThemeMateIn5Description => 'Tìm ra một chuỗi dài các nước cờ dẫn đến chiếu hết.';
-
-  @override
-  String get puzzleThemeMiddlegame => 'Trung cuộc';
-
-  @override
-  String get puzzleThemeMiddlegameDescription => 'Chiến thuật trong giai đoạn thứ hai của ván cờ.';
-
-  @override
-  String get puzzleThemeOneMove => 'Câu đố một nước';
-
-  @override
-  String get puzzleThemeOneMoveDescription => 'Câu đố mà chỉ có một nước đi.';
-
-  @override
-  String get puzzleThemeOpening => 'Khai cuộc';
-
-  @override
-  String get puzzleThemeOpeningDescription => 'Chiến thuật trong phần mở đầu của ván cờ.';
-
-  @override
-  String get puzzleThemePawnEndgame => 'Tàn cuộc Tốt';
-
-  @override
-  String get puzzleThemePawnEndgameDescription => 'Một thế tàn cuộc chỉ với tốt.';
-
-  @override
-  String get puzzleThemePin => 'Ghim';
-
-  @override
-  String get puzzleThemePinDescription => 'Một chiến thuật khiến một quân cờ không thể di chuyển mà không để lộ mục tiêu là quân cờ đằng sau nó với giá trị lớn hơn.';
-
-  @override
-  String get puzzleThemePromotion => 'Phong cấp';
-
-  @override
-  String get puzzleThemePromotionDescription => 'Phong cấp tốt của bạn thành quân hậu hoặc những quân phụ khác.';
-
-  @override
-  String get puzzleThemeQueenEndgame => 'Tàn cuộc Hậu';
-
-  @override
-  String get puzzleThemeQueenEndgameDescription => 'Một thế cờ tàn chỉ có hậu và tốt.';
-
-  @override
-  String get puzzleThemeQueenRookEndgame => 'Hậu và Xe';
-
-  @override
-  String get puzzleThemeQueenRookEndgameDescription => 'Một thế cờ tàn chỉ có hậu, xe và tốt.';
-
-  @override
-  String get puzzleThemeQueensideAttack => 'Tấn công cánh hậu';
-
-  @override
-  String get puzzleThemeQueensideAttackDescription => 'Tấn công vua đối phương sau khi họ nhập thành cánh hậu.';
-
-  @override
-  String get puzzleThemeQuietMove => 'Nước đi tĩnh lặng';
-
-  @override
-  String get puzzleThemeQuietMoveDescription => 'Một nước cờ không chiếu hay ăn quân của đối phương, nhưng lại tạo ra một sự đe dọa không thể tránh khỏi cho một nước đi sau.';
-
-  @override
-  String get puzzleThemeRookEndgame => 'Tàn cuộc Xe';
-
-  @override
-  String get puzzleThemeRookEndgameDescription => 'Một thế cờ tàn chỉ có xe và tốt.';
-
-  @override
-  String get puzzleThemeSacrifice => 'Thí quân';
-
-  @override
-  String get puzzleThemeSacrificeDescription => 'Một chiến thuật liên quan đến việc từ bỏ quân trong thời gian ngắn, để giành lại lợi thế sau một chuỗi nước đi bắt buộc.';
-
-  @override
-  String get puzzleThemeShort => 'Câu đố ngắn';
-
-  @override
-  String get puzzleThemeShortDescription => 'Thắng trong hai nước cờ.';
-
-  @override
-  String get puzzleThemeSkewer => 'Đòn xiên';
-
-  @override
-  String get puzzleThemeSkewerDescription => 'Một mô típ liên quan tới việc một quân cờ có giá trị cao bị tấn công buộc phải di chuyển khỏi vị trí, dẫn tới một quân cờ giá trị thấp hơn ở phía sau bị tấn công hoặc ăn, ngược lại so với ghim.';
-
-  @override
-  String get puzzleThemeSmotheredMate => 'Chiếu kiểu kẹt';
-
-  @override
-  String get puzzleThemeSmotheredMateDescription => 'Một nước chiếu hết với quân mã mà trong đó vua đối phương không thể di chuyển vì bị bao vây bởi chính các quân cờ khác của họ.';
-
-  @override
-  String get puzzleThemeSuperGM => 'Các ván đấu từ Siêu Đại Kiện Tướng';
-
-  @override
-  String get puzzleThemeSuperGMDescription => 'Câu đố từ những ván đấu đã được chơi bởi những kỳ thủ giỏi nhất trên thế giới.';
-
-  @override
-  String get puzzleThemeTrappedPiece => 'Quân bị bẫy';
-
-  @override
-  String get puzzleThemeTrappedPieceDescription => 'Một quân cờ không thể thoát khỏi việc bị ăn vì nó bị giới hạn các nước đi.';
-
-  @override
-  String get puzzleThemeUnderPromotion => 'Phong cấp thấp';
-
-  @override
-  String get puzzleThemeUnderPromotionDescription => 'Phong cấp thành mã, tượng hoặc xe.';
-
-  @override
-  String get puzzleThemeVeryLong => 'Câu đố rất dài';
-
-  @override
-  String get puzzleThemeVeryLongDescription => 'Bốn nước cờ hoặc hơn để chiến thắng.';
-
-  @override
-  String get puzzleThemeXRayAttack => 'Đòn Tia X';
-
-  @override
-  String get puzzleThemeXRayAttackDescription => 'Một quân cờ tấn công hoặc phòng thủ một ô sau một quân cờ khác của đối phương.';
-
-  @override
-  String get puzzleThemeZugzwang => 'Cưỡng ép';
-
-  @override
-  String get puzzleThemeZugzwangDescription => 'Đối phương bị giới hạn các nước mà họ có thể đi và tất cả các nước đi ấy đều hại họ.';
-
-  @override
-  String get puzzleThemeHealthyMix => 'Phối hợp nhịp nhàng';
-
-  @override
-  String get puzzleThemeHealthyMixDescription => 'Mỗi thứ một chút. Bạn không biết được thứ gì đang chờ mình, vậy nên bạn cần phải sẵn sàng cho mọi thứ! Như một ván cờ thật vậy!';
-
-  @override
-  String get puzzleThemePlayerGames => 'Các ván đấu của người chơi';
-
-  @override
-  String get puzzleThemePlayerGamesDescription => 'Những câu đố từ những ván cờ của bạn hoặc từ các ván cờ của những người chơi khác.';
-
-  @override
-  String puzzleThemePuzzleDownloadInformation(String param) {
-    return 'Những câu đố này thuộc phạm vi công khai và có thể tải về từ $param.';
-  }
-
-  @override
-  String perfStatPerfStats(String param) {
-    return 'Thống kê $param';
-  }
-
-  @override
-  String get perfStatViewTheGames => 'Xem các ván cờ';
-
-  @override
-  String get perfStatProvisional => 'tạm thời';
-
-  @override
-  String get perfStatNotEnoughRatedGames => 'Không có đủ ván có xếp hạng đã được chơi để thiết lập một hệ số đáng tin cậy.';
-
-  @override
-  String perfStatProgressOverLastXGames(String param) {
-    return 'Sự tiến bộ qua $param ván cờ gần đây:';
-  }
-
-  @override
-  String perfStatRatingDeviation(String param) {
-    return 'Độ chênh lệch hệ số: $param.';
-  }
-
-  @override
-  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
-    return 'Giá trị thấp hơn nghĩa là hệ số ổn định hơn. Ở ngưỡng trên $param1, hệ số được coi là tạm thời. Để được xếp trong bảng xếp hạng, giá trị này phải ở dưới ngưỡng $param2 (cờ tiêu chuẩn) hoặc $param3 (các biến thể).';
-  }
-
-  @override
-  String get perfStatTotalGames => 'Tổng số ván cờ';
-
-  @override
-  String get perfStatRatedGames => 'Các ván cờ có xếp hạng';
-
-  @override
-  String get perfStatTournamentGames => 'Số ván chơi trong giải đấu';
-
-  @override
-  String get perfStatBerserkedGames => 'Số ván chơi Berserk';
-
-  @override
-  String get perfStatTimeSpentPlaying => 'Thời gian đã chơi';
-
-  @override
-  String get perfStatAverageOpponent => 'Đối thủ trung bình';
-
-  @override
-  String get perfStatVictories => 'Thắng';
-
-  @override
-  String get perfStatDefeats => 'Thua';
-
-  @override
-  String get perfStatDisconnections => 'Ngắt kết nối';
-
-  @override
-  String get perfStatNotEnoughGames => 'Chơi chưa đủ ván';
-
-  @override
-  String perfStatHighestRating(String param) {
-    return 'Hệ số cao nhất: $param';
-  }
-
-  @override
-  String perfStatLowestRating(String param) {
-    return 'Hệ số thấp nhất: $param';
-  }
-
-  @override
-  String perfStatFromXToY(String param1, String param2) {
-    return 'từ $param1 đến $param2';
-  }
-
-  @override
-  String get perfStatWinningStreak => 'Chuỗi thắng';
-
-  @override
-  String get perfStatLosingStreak => 'Chuỗi thua';
-
-  @override
-  String perfStatLongestStreak(String param) {
-    return 'Chuỗi dài nhất: $param';
-  }
-
-  @override
-  String perfStatCurrentStreak(String param) {
-    return 'Chuỗi hiện tại: $param';
-  }
-
-  @override
-  String get perfStatBestRated => 'Ván thắng được cộng Elo nhiều nhất';
-
-  @override
-  String get perfStatGamesInARow => 'Số ván cờ được chơi liên tục';
-
-  @override
-  String get perfStatLessThanOneHour => 'Ít hơn một giờ giữa các ván cờ';
-
-  @override
-  String get perfStatMaxTimePlaying => 'Thời gian dài nhất đã chơi';
-
-  @override
-  String get perfStatNow => 'bây giờ';
-
-  @override
-  String get searchSearch => 'Tìm kiếm';
-
-  @override
-  String get settingsSettings => 'Cài đặt';
-
-  @override
-  String get settingsCloseAccount => 'Đóng tài khoản';
-
-  @override
-  String get settingsManagedAccountCannotBeClosed => 'Tài khoản của bạn đang bị quản lý, hiện không thể đóng.';
-
-  @override
-  String get settingsClosingIsDefinitive => 'Việc đóng tài khoản là vĩnh viễn. Không có cách nào để có thể lấy lại. Bạn vẫn chắc chắn muốn đóng chứ?';
-
-  @override
-  String get settingsCantOpenSimilarAccount => 'Bạn không được phép tạo tài khoản trùng tên, kể cả khác chữ hoa, thường.';
-
-  @override
-  String get settingsChangedMindDoNotCloseAccount => 'Tôi đã đổi ý, đừng đóng tài khoản của tôi';
-
-  @override
-  String get settingsCloseAccountExplanation => 'Bạn có chắc muốn đóng tài khoản? Việc đóng tài khoản là quyết định vĩnh viễn. Bạn sẽ KHÔNG BAO GIỜ có thể ĐĂNG NHẬP LẠI.';
-
-  @override
-  String get settingsThisAccountIsClosed => 'Tài khoản này đã bị đóng';
-
-  @override
-  String get streamerLichessStreamers => 'Các Streamer của Lichess';
-
-  @override
   String get stormMoveToStart => 'Đi quân để bắt đầu';
 
   @override
@@ -4514,14 +4508,11 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
+  String get streamerLichessStreamers => 'Các Streamer của Lichess';
+
+  @override
   String get studyShareAndExport => 'Chia sẻ & xuất';
 
   @override
   String get studyStart => 'Bắt đầu';
-
-  @override
-  String get broadcastBroadcasts => 'Các phát sóng';
-
-  @override
-  String get broadcastStartDate => 'Ngày bắt đầu theo múi giờ của bạn';
 }

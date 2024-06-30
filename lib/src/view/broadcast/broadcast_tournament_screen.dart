@@ -110,7 +110,7 @@ class _BodyState extends ConsumerState<_Body> {
               dense: true,
               title: DefaultTextStyle.merge(
                 style: Styles.sectionTitle,
-                child: const Text('Live tournament broadcasts'),
+                child: Text(context.l10n.broadcastLiveBroadcasts),
               ),
             ),
           ),
