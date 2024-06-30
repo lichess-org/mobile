@@ -7,6 +7,21 @@ class AppLocalizationsFi extends AppLocalizations {
   AppLocalizationsFi([String locale = 'fi']) : super(locale);
 
   @override
+  String get mobileHomeTab => 'Home';
+
+  @override
+  String get mobilePuzzlesTab => 'Puzzles';
+
+  @override
+  String get mobileToolsTab => 'Tools';
+
+  @override
+  String get mobileWatchTab => 'Watch';
+
+  @override
+  String get mobileSettingsTab => 'Settings';
+
+  @override
   String get activityActivity => 'Toiminta';
 
   @override
@@ -211,7 +226,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get broadcastBroadcasts => 'Lähetykset';
 
   @override
-  String get broadcastStartDate => 'Alkamispäivämäärä omalla aikavyöhykkeelläsi';
+  String get broadcastLiveBroadcasts => 'Suorat lähetykset turnauksista';
 
   @override
   String challengeChallengesX(String param1) {

@@ -7,6 +7,21 @@ class AppLocalizationsGa extends AppLocalizations {
   AppLocalizationsGa([String locale = 'ga']) : super(locale);
 
   @override
+  String get mobileHomeTab => 'Home';
+
+  @override
+  String get mobilePuzzlesTab => 'Puzzles';
+
+  @override
+  String get mobileToolsTab => 'Tools';
+
+  @override
+  String get mobileWatchTab => 'Watch';
+
+  @override
+  String get mobileSettingsTab => 'Settings';
+
+  @override
   String get activityActivity => 'Gníomhaíocht';
 
   @override
@@ -262,7 +277,7 @@ class AppLocalizationsGa extends AppLocalizations {
   String get broadcastBroadcasts => 'Craoltaí';
 
   @override
-  String get broadcastStartDate => 'Dáta tosaigh i do chrios ama féin';
+  String get broadcastLiveBroadcasts => 'Craoltaí beo comórtais';
 
   @override
   String challengeChallengesX(String param1) {

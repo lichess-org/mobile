@@ -21,7 +21,7 @@
   "activityCompetedInNbSwissTournaments": "{count, plural, =1{{count} svájci rendszerű versenyen vett részt} other{{count} svájci rendszerű versenyen vett részt}}",
   "activityJoinedNbTeams": "{count, plural, =1{{count} csapathoz csatlakozott} other{{count} csapathoz csatlakozott}}",
   "broadcastBroadcasts": "Versenyközvetítések",
-  "broadcastStartDate": "Kezdés időpontja a saját időzónádban",
+  "broadcastLiveBroadcasts": "Közvetítések élő versenyekről",
   "challengeChallengesX": "Kihívások: {param1}",
   "challengeChallengeToPlay": "Kihívás játszmára",
   "challengeChallengeDeclined": "Kihívás elutasítva",

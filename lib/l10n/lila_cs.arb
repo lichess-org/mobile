@@ -21,7 +21,7 @@
   "activityCompetedInNbSwissTournaments": "{count, plural, =1{Účast v {count} švýcarském turnaji} few{Účast ve {count} švýcarských turnajích} many{Účast v {count} švýcarských turnajích} other{Účast v {count} švýcarských turnajích}}",
   "activityJoinedNbTeams": "{count, plural, =1{Přidal se k {count} týmu} few{Přidal se k {count} týmům} many{Přidal se k {count} týmům} other{Přidal se k {count} týmům}}",
   "broadcastBroadcasts": "Přenosy",
-  "broadcastStartDate": "Datum a čas zahájení ve vašem časovém pásmu",
+  "broadcastLiveBroadcasts": "Živé přenosy turnajů",
   "challengeChallengesX": "Výzvy: {param1}",
   "challengeChallengeToPlay": "Vyzvat k partii",
   "challengeChallengeDeclined": "Výzva odmítnuta",

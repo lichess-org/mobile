@@ -7,6 +7,21 @@ class AppLocalizationsVi extends AppLocalizations {
   AppLocalizationsVi([String locale = 'vi']) : super(locale);
 
   @override
+  String get mobileHomeTab => 'Home';
+
+  @override
+  String get mobilePuzzlesTab => 'Puzzles';
+
+  @override
+  String get mobileToolsTab => 'Tools';
+
+  @override
+  String get mobileWatchTab => 'Watch';
+
+  @override
+  String get mobileSettingsTab => 'Settings';
+
+  @override
   String get activityActivity => 'Hoạt động';
 
   @override
@@ -194,7 +209,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get broadcastBroadcasts => 'Các phát sóng';
 
   @override
-  String get broadcastStartDate => 'Ngày bắt đầu theo múi giờ của bạn';
+  String get broadcastLiveBroadcasts => 'Các giải đấu phát sóng trực tiếp';
 
   @override
   String challengeChallengesX(String param1) {

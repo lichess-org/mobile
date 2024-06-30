@@ -7,6 +7,21 @@ class AppLocalizationsRu extends AppLocalizations {
   AppLocalizationsRu([String locale = 'ru']) : super(locale);
 
   @override
+  String get mobileHomeTab => 'Home';
+
+  @override
+  String get mobilePuzzlesTab => 'Puzzles';
+
+  @override
+  String get mobileToolsTab => 'Tools';
+
+  @override
+  String get mobileWatchTab => 'Watch';
+
+  @override
+  String get mobileSettingsTab => 'Settings';
+
+  @override
   String get activityActivity => 'Активность';
 
   @override
@@ -245,7 +260,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get broadcastBroadcasts => 'Трансляции';
 
   @override
-  String get broadcastStartDate => 'Дата начала в вашем часовом поясе';
+  String get broadcastLiveBroadcasts => 'Прямые трансляции турнира';
 
   @override
   String challengeChallengesX(String param1) {

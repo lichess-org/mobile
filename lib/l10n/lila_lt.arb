@@ -21,7 +21,7 @@
   "activityCompetedInNbSwissTournaments": "{count, plural, =1{Dalyvavo {count} šveicariškame turnyre} few{Dalyvavo {count} šveicariškuose turnyruose} many{Dalyvavo {count} šveicariško turnyro} other{Dalyvavo {count} šveicariškų turnyrų}}",
   "activityJoinedNbTeams": "{count, plural, =1{Prisijungė prie {count} komandos} few{Prisijungė prie {count} komandų} many{Prisijungė prie {count} komandų} other{Prisijungė prie {count} komandų}}",
   "broadcastBroadcasts": "Transliacijos",
-  "broadcastStartDate": "Pradžios laikas jūsų laiko juostoje",
+  "broadcastLiveBroadcasts": "Vykstančios turnyrų transliacijos",
   "challengeChallengesX": "Iššūkiai: {param1}",
   "challengeChallengeToPlay": "Iškelti iššūkį",
   "challengeChallengeDeclined": "Iššūkis atmestas",

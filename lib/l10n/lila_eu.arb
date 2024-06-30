@@ -21,7 +21,7 @@
   "activityCompetedInNbSwissTournaments": "{count, plural, =1{Txapelketa suitzar {count}en hartu du parte} other{{count} txapelketa suitzarretan hartu du parte}}",
   "activityJoinedNbTeams": "{count, plural, =1{Talde {count}era sartu da} other{{count} taldetara sartu da}}",
   "broadcastBroadcasts": "Emanaldiak",
-  "broadcastStartDate": "Zure ordu-zonako hasiera data",
+  "broadcastLiveBroadcasts": "Txapelketen zuzeneko emanaldiak",
   "challengeChallengesX": "Erronkak: {param1}",
   "challengeChallengeToPlay": "Partida baterako erronka egin",
   "challengeChallengeDeclined": "Erronka baztertuta",

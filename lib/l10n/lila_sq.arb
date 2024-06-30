@@ -21,7 +21,7 @@
   "activityCompetedInNbSwissTournaments": "{count, plural, =1{Konkuroi në turneun zviceran {count}} other{Ndeshur në {count} turne zviceranë}}",
   "activityJoinedNbTeams": "{count, plural, =1{U bashkua me ekipin {count}} other{U bë pjesë e {count} ekipive}}",
   "broadcastBroadcasts": "Transmetime",
-  "broadcastStartDate": "Datë fillimi në zonën tuaj kohore",
+  "broadcastLiveBroadcasts": "Transmetime të drejtpërdrejta turnesh",
   "challengeChallengeToPlay": "Sfidoni në një lojë",
   "challengeChallengeDeclined": "Sfida u refuzua",
   "challengeChallengeAccepted": "Sfida u pranua!",

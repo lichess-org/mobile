@@ -7,6 +7,21 @@ class AppLocalizationsGl extends AppLocalizations {
   AppLocalizationsGl([String locale = 'gl']) : super(locale);
 
   @override
+  String get mobileHomeTab => 'Inicio';
+
+  @override
+  String get mobilePuzzlesTab => 'Crebacabezas';
+
+  @override
+  String get mobileToolsTab => 'Ferramentas';
+
+  @override
+  String get mobileWatchTab => 'Ver';
+
+  @override
+  String get mobileSettingsTab => 'Axustes';
+
+  @override
   String get activityActivity => 'Actividade';
 
   @override
@@ -211,7 +226,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get broadcastBroadcasts => 'Emisións en directo';
 
   @override
-  String get broadcastStartDate => 'Data de inicio na túa zona horaria';
+  String get broadcastLiveBroadcasts => 'Emisións de torneos en directo';
 
   @override
   String challengeChallengesX(String param1) {

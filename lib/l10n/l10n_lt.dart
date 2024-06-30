@@ -7,6 +7,21 @@ class AppLocalizationsLt extends AppLocalizations {
   AppLocalizationsLt([String locale = 'lt']) : super(locale);
 
   @override
+  String get mobileHomeTab => 'Home';
+
+  @override
+  String get mobilePuzzlesTab => 'Puzzles';
+
+  @override
+  String get mobileToolsTab => 'Tools';
+
+  @override
+  String get mobileWatchTab => 'Watch';
+
+  @override
+  String get mobileSettingsTab => 'Settings';
+
+  @override
   String get activityActivity => 'Veikla';
 
   @override
@@ -245,7 +260,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get broadcastBroadcasts => 'Transliacijos';
 
   @override
-  String get broadcastStartDate => 'Pradžios laikas jūsų laiko juostoje';
+  String get broadcastLiveBroadcasts => 'Vykstančios turnyrų transliacijos';
 
   @override
   String challengeChallengesX(String param1) {

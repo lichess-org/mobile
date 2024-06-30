@@ -26,7 +26,7 @@
   "activityCompetedInNbSwissTournaments": "{count, plural, =1{Ha competido en {count} torneo suizo} other{Ha competido en {count} torneos suizos}}",
   "activityJoinedNbTeams": "{count, plural, =1{Miembro de {count} equipo} other{Miembro de {count} equipos}}",
   "broadcastBroadcasts": "Emisiones",
-  "broadcastStartDate": "Fecha de inicio en tu zona horaria",
+  "broadcastLiveBroadcasts": "Emisiones de torneos en directo",
   "challengeChallengesX": "Desafíos: {param1}",
   "challengeChallengeToPlay": "Desafiar a una partida",
   "challengeChallengeDeclined": "Desafío rechazado",

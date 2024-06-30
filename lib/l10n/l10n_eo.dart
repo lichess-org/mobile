@@ -7,6 +7,21 @@ class AppLocalizationsEo extends AppLocalizations {
   AppLocalizationsEo([String locale = 'eo']) : super(locale);
 
   @override
+  String get mobileHomeTab => 'Home';
+
+  @override
+  String get mobilePuzzlesTab => 'Puzzles';
+
+  @override
+  String get mobileToolsTab => 'Tools';
+
+  @override
+  String get mobileWatchTab => 'Watch';
+
+  @override
+  String get mobileSettingsTab => 'Settings';
+
+  @override
   String get activityActivity => 'Aktiveco';
 
   @override
@@ -211,7 +226,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get broadcastBroadcasts => 'Elsendoj';
 
   @override
-  String get broadcastStartDate => 'Komenca dato en via propra horzono';
+  String get broadcastLiveBroadcasts => 'Vivaj turniraj elsendoj';
 
   @override
   String challengeChallengesX(String param1) {

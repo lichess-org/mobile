@@ -21,7 +21,7 @@
   "activityCompetedInNbSwissTournaments": "{count, plural, =1{Kemeret he/en deus perzh e {count} tournamant suis} =2{Kemeret he/en deus perzh e {count} tournamant suis} few{Kemeret he/en deus perzh e {count} tournamant suis} many{Kemeret he/en deus perzh e {count} tournamant suis} other{Kemeret he/en deus perzh e {count} tournamant suis}}",
   "activityJoinedNbTeams": "{count, plural, =1{Ezel eus {count} skipailh} =2{Ezel eus {count} skipailh} few{Ezel eus {count} skipailh} many{Ezel eus {count} skipailh} other{Ezel eus {count} skipailh}}",
   "broadcastBroadcasts": "War-eeun",
-  "broadcastStartDate": "Eur kregiñ en ho kwerzhid-eur",
+  "broadcastLiveBroadcasts": "Tournamantoù skignet war-eeun",
   "challengeChallengesX": "Daeoù: {param1}",
   "challengeChallengeToPlay": "Daeañ ar c'hoarier-mañ",
   "challengeChallengeDeclined": "Dae nac’het",

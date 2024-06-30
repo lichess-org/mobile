@@ -7,6 +7,21 @@ class AppLocalizationsHu extends AppLocalizations {
   AppLocalizationsHu([String locale = 'hu']) : super(locale);
 
   @override
+  String get mobileHomeTab => 'Home';
+
+  @override
+  String get mobilePuzzlesTab => 'Puzzles';
+
+  @override
+  String get mobileToolsTab => 'Tools';
+
+  @override
+  String get mobileWatchTab => 'Watch';
+
+  @override
+  String get mobileSettingsTab => 'Settings';
+
+  @override
   String get activityActivity => 'Aktivitás';
 
   @override
@@ -211,7 +226,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get broadcastBroadcasts => 'Versenyközvetítések';
 
   @override
-  String get broadcastStartDate => 'Kezdés időpontja a saját időzónádban';
+  String get broadcastLiveBroadcasts => 'Közvetítések élő versenyekről';
 
   @override
   String challengeChallengesX(String param1) {

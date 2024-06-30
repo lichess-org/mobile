@@ -7,6 +7,21 @@ class AppLocalizationsFa extends AppLocalizations {
   AppLocalizationsFa([String locale = 'fa']) : super(locale);
 
   @override
+  String get mobileHomeTab => 'خانه';
+
+  @override
+  String get mobilePuzzlesTab => 'معماها';
+
+  @override
+  String get mobileToolsTab => 'ابزارها';
+
+  @override
+  String get mobileWatchTab => 'تماشا';
+
+  @override
+  String get mobileSettingsTab => 'تنظیمات';
+
+  @override
   String get activityActivity => 'فعالیت';
 
   @override
@@ -211,7 +226,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get broadcastBroadcasts => 'پخش همگانی';
 
   @override
-  String get broadcastStartDate => 'تاریخ شروع، در منطقه زمانی خودتان';
+  String get broadcastLiveBroadcasts => 'پخش زنده مسابقات';
 
   @override
   String challengeChallengesX(String param1) {
@@ -2900,7 +2915,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get streamersMenu => 'بَرخَط-محتواسازها';
 
   @override
-  String get mobileApp => 'برنامه ی موبایل';
+  String get mobileApp => 'گوشی‌افزار';
 
   @override
   String get webmasters => 'وبداران';
@@ -3238,7 +3253,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get playChessEverywhere => 'همه جا شطرنج بازی کنید';
 
   @override
-  String get asFreeAsLichess => 'رایگان به مانند لیچس';
+  String get asFreeAsLichess => 'کاملا رایگان';
 
   @override
   String get builtForTheLoveOfChessNotMoney => 'ساخته شده با عشق به شطرنج نه پول';
@@ -3262,7 +3277,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get correspondenceChess => 'شطرنج مکاتبه ای';
 
   @override
-  String get onlineAndOfflinePlay => 'بازی کردن بَرخط و بُرون‌خط';
+  String get onlineAndOfflinePlay => 'بازی بَرخط و بُرون‌خط';
 
   @override
   String get viewTheSolution => 'دیدن راهِ حل';
@@ -4353,8 +4368,8 @@ class AppLocalizationsFa extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'در $count  زبان‌ها موجود است',
-      one: 'در $count  زبان‌ها موجود است',
+      other: 'در $count زبان موجود است!',
+      one: 'در $count زبان موجود است!',
     );
     return '$_temp0';
   }

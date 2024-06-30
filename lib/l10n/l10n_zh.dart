@@ -7,6 +7,21 @@ class AppLocalizationsZh extends AppLocalizations {
   AppLocalizationsZh([String locale = 'zh']) : super(locale);
 
   @override
+  String get mobileHomeTab => 'Home';
+
+  @override
+  String get mobilePuzzlesTab => 'Puzzles';
+
+  @override
+  String get mobileToolsTab => 'Tools';
+
+  @override
+  String get mobileWatchTab => 'Watch';
+
+  @override
+  String get mobileSettingsTab => 'Settings';
+
+  @override
   String get activityActivity => '动态';
 
   @override
@@ -194,7 +209,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get broadcastBroadcasts => '转播';
 
   @override
-  String get broadcastStartDate => '开始日期，在你的本地时区';
+  String get broadcastLiveBroadcasts => '赛事转播';
 
   @override
   String challengeChallengesX(String param1) {
@@ -4709,7 +4724,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get broadcastBroadcasts => '比賽直播';
 
   @override
-  String get broadcastStartDate => '開始日期 (當地時間)';
+  String get broadcastLiveBroadcasts => '錦標賽直播';
 
   @override
   String challengeChallengesX(String param1) {

@@ -7,6 +7,21 @@ class AppLocalizationsSk extends AppLocalizations {
   AppLocalizationsSk([String locale = 'sk']) : super(locale);
 
   @override
+  String get mobileHomeTab => 'Home';
+
+  @override
+  String get mobilePuzzlesTab => 'Puzzles';
+
+  @override
+  String get mobileToolsTab => 'Tools';
+
+  @override
+  String get mobileWatchTab => 'Watch';
+
+  @override
+  String get mobileSettingsTab => 'Settings';
+
+  @override
   String get activityActivity => 'Aktivita';
 
   @override
@@ -245,7 +260,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get broadcastBroadcasts => 'Vysielanie';
 
   @override
-  String get broadcastStartDate => 'Dátum a čas začiatku, vo vašej časovej zóne';
+  String get broadcastLiveBroadcasts => 'Živé vysielanie turnaja';
 
   @override
   String challengeChallengesX(String param1) {
