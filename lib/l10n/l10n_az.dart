@@ -327,7 +327,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get broadcastBroadcasts => 'Yayım';
 
   @override
-  String get broadcastStartDate => 'Öz saat qurşağınızdakı başlama tarixi';
+  String get broadcastLiveBroadcasts => 'Canlı turnir yayımları';
 
   @override
   String challengeChallengesX(String param1) {

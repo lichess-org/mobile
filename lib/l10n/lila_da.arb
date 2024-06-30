@@ -26,7 +26,7 @@
   "activityCompetedInNbSwissTournaments": "{count, plural, =1{Deltog i {count} schweizerturnering} other{Deltog i {count} schweizerturneringer}}",
   "activityJoinedNbTeams": "{count, plural, =1{Blev medlem af {count} hold} other{Blev medlem af {count} hold}}",
   "broadcastBroadcasts": "Udsendelser",
-  "broadcastStartDate": "Startdato i din egen tidszone",
+  "broadcastLiveBroadcasts": "Live turnerings-udsendelser",
   "challengeChallengesX": "Udfordringer: {param1}",
   "challengeChallengeToPlay": "Udfordr til et spil",
   "challengeChallengeDeclined": "Udfordring afvist",

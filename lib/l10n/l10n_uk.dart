@@ -361,7 +361,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get broadcastBroadcasts => 'Трансляції';
 
   @override
-  String get broadcastStartDate => 'Дата початку у вашому часовому поясі';
+  String get broadcastLiveBroadcasts => 'Онлайн трансляції турнірів';
 
   @override
   String challengeChallengesX(String param1) {

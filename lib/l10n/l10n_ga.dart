@@ -378,7 +378,7 @@ class AppLocalizationsGa extends AppLocalizations {
   String get broadcastBroadcasts => 'Craoltaí';
 
   @override
-  String get broadcastStartDate => 'Dáta tosaigh i do chrios ama féin';
+  String get broadcastLiveBroadcasts => 'Craoltaí beo comórtais';
 
   @override
   String challengeChallengesX(String param1) {

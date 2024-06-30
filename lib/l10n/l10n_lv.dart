@@ -344,7 +344,7 @@ class AppLocalizationsLv extends AppLocalizations {
   String get broadcastBroadcasts => 'Raidījumi';
 
   @override
-  String get broadcastStartDate => 'Sākuma datums jūsu laika joslā';
+  String get broadcastLiveBroadcasts => 'Reāllaika turnīru raidījumi';
 
   @override
   String challengeChallengesX(String param1) {

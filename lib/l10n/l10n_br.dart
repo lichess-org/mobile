@@ -378,7 +378,7 @@ class AppLocalizationsBr extends AppLocalizations {
   String get broadcastBroadcasts => 'War-eeun';
 
   @override
-  String get broadcastStartDate => 'Eur kregiñ en ho kwerzhid-eur';
+  String get broadcastLiveBroadcasts => 'Tournamantoù skignet war-eeun';
 
   @override
   String challengeChallengesX(String param1) {

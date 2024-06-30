@@ -327,7 +327,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get broadcastBroadcasts => 'پخش همگانی';
 
   @override
-  String get broadcastStartDate => 'تاریخ شروع، در منطقه زمانی خودتان';
+  String get broadcastLiveBroadcasts => 'پخش زنده مسابقات';
 
   @override
   String challengeChallengesX(String param1) {

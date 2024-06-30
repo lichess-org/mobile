@@ -21,7 +21,7 @@
   "activityCompetedInNbSwissTournaments": "{count, plural, =1{Се натпреварувал во {count} швајцарски турнир} other{Се натпреварувал во {count} швајцарски турнири}}",
   "activityJoinedNbTeams": "{count, plural, =1{Се придружи на {count} тим} other{Се придружи на {count} тимови}}",
   "broadcastBroadcasts": "Емитувања",
-  "broadcastStartDate": "Почетен датум во вашата временска зона",
+  "broadcastLiveBroadcasts": "Пренос на турнири во живо",
   "challengeChallengeToPlay": "Предизвикај на Игра",
   "challengeChallengeDeclined": "Предизвикот е одбиен",
   "challengeChallengeAccepted": "Предизвикот е прифатен!",

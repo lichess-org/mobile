@@ -327,7 +327,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get broadcastBroadcasts => 'Transmetime';
 
   @override
-  String get broadcastStartDate => 'Datë fillimi në zonën tuaj kohore';
+  String get broadcastLiveBroadcasts => 'Transmetime të drejtpërdrejta turnesh';
 
   @override
   String challengeChallengesX(String param1) {

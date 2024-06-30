@@ -310,7 +310,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get broadcastBroadcasts => '转播';
 
   @override
-  String get broadcastStartDate => '开始日期，在你的本地时区';
+  String get broadcastLiveBroadcasts => '赛事转播';
 
   @override
   String challengeChallengesX(String param1) {
@@ -4825,7 +4825,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get broadcastBroadcasts => '比賽直播';
 
   @override
-  String get broadcastStartDate => '開始日期 (當地時間)';
+  String get broadcastLiveBroadcasts => '錦標賽直播';
 
   @override
   String challengeChallengesX(String param1) {

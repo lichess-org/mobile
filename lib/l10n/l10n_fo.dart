@@ -327,7 +327,7 @@ class AppLocalizationsFo extends AppLocalizations {
   String get broadcastBroadcasts => 'Sendingar';
 
   @override
-  String get broadcastStartDate => 'Byrjanardagfesting í tínum egna tíðarøki';
+  String get broadcastLiveBroadcasts => 'Beinleiðis sendingar frá kappingum';
 
   @override
   String challengeChallengesX(String param1) {

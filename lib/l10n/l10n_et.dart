@@ -327,7 +327,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get broadcastBroadcasts => 'Otseülekanded';
 
   @override
-  String get broadcastStartDate => 'Alguskuupäev sinu ajavööndis';
+  String get broadcastLiveBroadcasts => 'Otseülekanded turniirilt';
 
   @override
   String challengeChallengesX(String param1) {
