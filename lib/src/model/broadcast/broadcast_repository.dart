@@ -10,9 +10,12 @@ class BroadcastRepository {
 
   final LichessClient client;
 
-  Future<BroadcastResponse> getBroadcasts() {
+  Future<BroadcastResponse> getBroadcasts({int page = 1}) {
     return client.readJson(
-      Uri(path: '/api/broadcast/top'),
+      Uri(
+        path: '/api/broadcast/top',
+        queryParameters: {'page': page.toString()},
+      ),
       headers: {'Accept': 'application/json'},
       mapper: _makeBroadcastResponseFromJson,
     );

@@ -1,7 +1,5 @@
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_layout_grid/flutter_layout_grid.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
@@ -12,7 +10,6 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/default_broadcast_image.dart';
-import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
@@ -50,86 +47,145 @@ class BroadcastTournamentScreen extends StatelessWidget {
   }
 }
 
-class _Body extends ConsumerWidget {
+class _Body extends ConsumerStatefulWidget {
   const _Body();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final broadcasts = ref.watch(broadcastsProvider);
+  ConsumerState<ConsumerStatefulWidget> createState() => _BodyState();
+}
 
-    return broadcasts.when(
-      data: (broadcasts) {
-        return SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-            child: ListView(
-              children: [
-                if (broadcasts.active.isNotEmpty) ...[
-                  ListTile(
-                    dense: true,
-                    title: DefaultTextStyle.merge(
-                      style: Styles.sectionTitle,
-                      child: const Text('Live tournament broadcasts'),
-                    ),
-                  ),
-                  createLayoutGrid(broadcasts.active),
-                ],
-                if (broadcasts.upcoming.isNotEmpty) ...[
-                  const Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: Text(
-                      'Upcoming broadcasts',
-                      style: Styles.title,
-                    ),
-                  ),
-                  createLayoutGrid(broadcasts.upcoming),
-                ],
-                if (broadcasts.past.isNotEmpty) ...[
-                  const Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: Text(
-                      'Past broadcasts',
-                      style: Styles.title,
-                    ),
-                  ),
-                  createLayoutGrid(broadcasts.past),
-                ],
-              ],
+class _BodyState extends ConsumerState<_Body> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_scrollListener);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_scrollListener);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollListener() {
+    if (_scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent) {
+      final broadcastList = ref.read(broadcastsProvider);
+
+      if (!broadcastList.isLoading) {
+        ref.read(broadcastPageProvider.notifier).next();
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final broadcasts = ref.watch(broadcastsProvider);
+    final itemsCount =
+        broadcasts.value?.past.length ?? (broadcasts.isLoading ? 10 : 0);
+
+    if (!broadcasts.hasValue && broadcasts.isLoading) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
+    if (!broadcasts.hasValue && broadcasts.isLoading) {
+      debugPrint(
+        'SEVERE: [BroadcastTournamentScreen] could not load broadcast tournaments',
+      );
+      return const Center(child: Text('Could not load broadcast tournaments'));
+    }
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      child: CustomScrollView(
+        controller: _scrollController,
+        slivers: [
+          SliverToBoxAdapter(
+            child: ListTile(
+              dense: true,
+              title: DefaultTextStyle.merge(
+                style: Styles.sectionTitle,
+                child: const Text('Live tournament broadcasts'),
+              ),
             ),
           ),
-        );
-      },
-      error: (error, stackTrace) => Center(
-        child: Text(error.toString()),
-      ),
-      loading: () => Shimmer(
-        child: ShimmerLoading(
-          isLoading: true,
-          child: ListSection.loading(
-            itemsNumber: 20,
-            header: true,
+          SliverGrid.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+            ),
+            itemBuilder: (context, index) =>
+                BroadcastPicture(broadcast: broadcasts.value!.active[index]),
+            itemCount: broadcasts.value!.active.length,
           ),
-        ),
+          SliverToBoxAdapter(
+            child: ListTile(
+              dense: true,
+              title: DefaultTextStyle.merge(
+                style: Styles.sectionTitle,
+                child: const Text('Upcoming broadcasts'),
+              ),
+            ),
+          ),
+          SliverGrid.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+            ),
+            itemBuilder: (context, index) =>
+                BroadcastPicture(broadcast: broadcasts.value!.upcoming[index]),
+            itemCount: broadcasts.value!.upcoming.length,
+          ),
+          SliverToBoxAdapter(
+            child: ListTile(
+              dense: true,
+              title: DefaultTextStyle.merge(
+                style: Styles.sectionTitle,
+                child: const Text('Past broadcasts'),
+              ),
+            ),
+          ),
+          SliverGrid.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+            ),
+            itemBuilder: (context, index) => (broadcasts.isLoading &&
+                    index > itemsCount - 10)
+                ? Shimmer(
+                    child: ShimmerLoading(
+                      isLoading: true,
+                      child: BroadcastPicture.loading(),
+                    ),
+                  )
+                : BroadcastPicture(broadcast: broadcasts.value!.past[index]),
+            itemCount: itemsCount,
+          ),
+          const SliverToBoxAdapter(
+            child: SizedBox(
+              height: 10,
+            ),
+          ),
+        ],
       ),
     );
   }
-
-  Widget createLayoutGrid(IList<Broadcast> broadcasts) => LayoutGrid(
-        rowGap: 10,
-        columnGap: 10,
-        columnSizes: [1.fr, 1.fr],
-        rowSizes:
-            List.generate((broadcasts.length / 2).ceil(), (index) => auto),
-        children: broadcasts
-            .map((broadcast) => BroadcastPicture(broadcast: broadcast))
-            .toList(),
-      );
 }
 
 class BroadcastPicture extends StatelessWidget {
   final Broadcast broadcast;
 
-  const BroadcastPicture({super.key, required this.broadcast});
+  const BroadcastPicture({required this.broadcast});
+
+  BroadcastPicture.loading() : broadcast = Broadcast.loading();
 
   @override
   Widget build(BuildContext context) {

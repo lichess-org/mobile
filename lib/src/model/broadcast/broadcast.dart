@@ -23,6 +23,16 @@ class Broadcast with _$Broadcast {
     required String? group,
   }) = _Broadcast;
 
+  factory Broadcast.loading() => Broadcast(
+        tour: const BroadcastTournament(name: '', imageUrl: null),
+        lastRound: BroadcastRound(
+          id: '',
+          status: RoundStatus.finished,
+          startsAt: DateTime.now(),
+        ),
+        group: null,
+      );
+
   bool get isLive => lastRound.status == RoundStatus.live;
 
   String get title => group ?? tour.name;
