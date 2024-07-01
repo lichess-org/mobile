@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/expanded_section.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -349,7 +350,12 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                           : snapshot.connectionState == ConnectionState.waiting
                               ? null
                               // TODO handle correspondence time control
-                              : () async {},
+                              : () async {
+                                  showPlatformSnackbar(
+                                    context,
+                                    'Correspondence time control is not supported yet',
+                                  );
+                                },
                       child: Text(
                         context.l10n.challengeChallengeToPlay,
                         style: Styles.bold,
