@@ -1,2 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+  <string name="homeTab">Startside</string>
+  <string name="puzzlesTab">Oppgåver</string>
+  <string name="toolsTab">Verktøy</string>
+  <string name="watchTab">Sjå</string>
+  <string name="settingsTab">Innstillingar</string>
+</resources>
