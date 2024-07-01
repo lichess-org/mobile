@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="homeTab">Home</string>
-  <string name="puzzlesTab">Puzzles</string>
-  <string name="toolsTab">Tools</string>
-  <string name="watchTab">Watch</string>
-  <string name="settingsTab">Settings</string>
+  <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short to avoid ugly text shifting issues." maxLength="10">Home</string>
+  <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short to avoid ugly text shifting issues." maxLength="10">Puzzles</string>
+  <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short to avoid ugly text shifting issues." maxLength="10">Tools</string>
+  <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short to avoid ugly text shifting issues." maxLength="10">Watch</string>
+  <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short to avoid ugly text shifting issues." maxLength="10">Settings</string>
 </resources>
