@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
+import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
@@ -65,8 +66,27 @@ class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final games = ref.watch(roundProvider(roundId));
+    final roundStream = ref.watch(roundStreamProvider(roundId));
+
+    return roundStream.when(
+      data: (root) {
+        print(root.makePgn());
+        return BoardThumbnail(
+          size: 400,
+          orientation: Side.white,
+          fen: Root.fromPgnGame(root).mainline.last.position.fen,
+        );
+      },
+      loading: () => const CircularProgressIndicator(),
+      error: (error, stackTrace) => Center(
+        child: Text(error.toString()),
+      ),
+    );
+
     return games.when(
-      data: (games) => BroadcastPreview(games: games),
+      data: (games) => (games.isEmpty)
+          ? const Text('No games to show for now')
+          : BroadcastPreview(games: games),
       loading: () => const Shimmer(
         child: ShimmerLoading(
           isLoading: true,

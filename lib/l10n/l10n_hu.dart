@@ -225,10 +225,10 @@ class AppLocalizationsHu extends AppLocalizations {
   }
 
   @override
-  String get contactContact => 'Kapcsolat';
+  String get broadcastBroadcasts => 'Versenyközvetítések';
 
   @override
-  String get contactContactLichess => 'Lépj velünk kapcsolatba';
+  String get broadcastLiveBroadcasts => 'Közvetítések élő versenyekről';
 
   @override
   String challengeChallengesX(String param1) {
@@ -310,6 +310,1012 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get challengeInviteLichessUser => 'Vagy hívj meg egy Lichess Felhasználót:';
+
+  @override
+  String get contactContact => 'Kapcsolat';
+
+  @override
+  String get contactContactLichess => 'Lépj velünk kapcsolatba';
+
+  @override
+  String get patronDonate => 'Adakozz';
+
+  @override
+  String get patronLichessPatron => 'Lichess Patron';
+
+  @override
+  String perfStatPerfStats(String param) {
+    return '$param statisztika';
+  }
+
+  @override
+  String get perfStatViewTheGames => 'Mutasd a játszmákat';
+
+  @override
+  String get perfStatProvisional => 'becsült';
+
+  @override
+  String get perfStatNotEnoughRatedGames => 'Nincs elegendő értékelt játszmád megbízható értékszám meghatározásához.';
+
+  @override
+  String perfStatProgressOverLastXGames(String param) {
+    return 'Az utolsó $param játszma szerinti alakulás:';
+  }
+
+  @override
+  String perfStatRatingDeviation(String param) {
+    return 'Pontszám eltérés: $param.';
+  }
+
+  @override
+  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
+    return 'Az alacsonyabb érték azt jelenti, hogy a minősítés stabilabb. $param1 feletti pontszám ideiglenesnek tekintendő. A ranglistán való szerepléshez ennek az értéknek $param2 (szokásos sakk) vagy $param3 (sakk változatok) alatt kell lennie.';
+  }
+
+  @override
+  String get perfStatTotalGames => 'Összes játszma';
+
+  @override
+  String get perfStatRatedGames => 'Rangsorolt játszma';
+
+  @override
+  String get perfStatTournamentGames => 'Verseny játszma';
+
+  @override
+  String get perfStatBerserkedGames => 'Berserk játszma';
+
+  @override
+  String get perfStatTimeSpentPlaying => 'Játékkal töltött idő';
+
+  @override
+  String get perfStatAverageOpponent => 'Ellenfelek átlaga';
+
+  @override
+  String get perfStatVictories => 'Győzelmek';
+
+  @override
+  String get perfStatDefeats => 'Vereségek';
+
+  @override
+  String get perfStatDisconnections => 'Szétkapcsolások';
+
+  @override
+  String get perfStatNotEnoughGames => 'Nincs elegendő játszma';
+
+  @override
+  String perfStatHighestRating(String param) {
+    return 'Legmagasabb pontszám: $param';
+  }
+
+  @override
+  String perfStatLowestRating(String param) {
+    return 'Legalacsonyabb pontszám: $param';
+  }
+
+  @override
+  String perfStatFromXToY(String param1, String param2) {
+    return '$param1-tól $param2-ig';
+  }
+
+  @override
+  String get perfStatWinningStreak => 'Győztes sorozat';
+
+  @override
+  String get perfStatLosingStreak => 'Vesztes sorozat';
+
+  @override
+  String perfStatLongestStreak(String param) {
+    return 'Leghosszabb sorozat: $param';
+  }
+
+  @override
+  String perfStatCurrentStreak(String param) {
+    return 'Jelenlegi sorozat: $param';
+  }
+
+  @override
+  String get perfStatBestRated => 'Legjobb győzelmek';
+
+  @override
+  String get perfStatGamesInARow => 'Egymás után játszott partik';
+
+  @override
+  String get perfStatLessThanOneHour => 'Kevesebb, mint egy óra játszmák között';
+
+  @override
+  String get perfStatMaxTimePlaying => 'Legtöbb játékkal töltött idő';
+
+  @override
+  String get perfStatNow => 'most';
+
+  @override
+  String get preferencesPreferences => 'Testreszabás';
+
+  @override
+  String get preferencesDisplay => 'Megjelenés';
+
+  @override
+  String get preferencesPrivacy => 'Adatvédelem';
+
+  @override
+  String get preferencesNotifications => 'Értesítések';
+
+  @override
+  String get preferencesPieceAnimation => 'Bábuk animációja';
+
+  @override
+  String get preferencesMaterialDifference => 'Bábuk közötti különbség';
+
+  @override
+  String get preferencesBoardHighlights => 'Kiemelés a táblán (utolsó lépés és sakk)';
+
+  @override
+  String get preferencesPieceDestinations => 'A figurák érkezési mezői (érvényes lépések és előre bevitt lépések)';
+
+  @override
+  String get preferencesBoardCoordinates => 'Tábla koordináták (A-H, 1-8)';
+
+  @override
+  String get preferencesMoveListWhilePlaying => 'Lépéslista játék közben';
+
+  @override
+  String get preferencesPgnPieceNotation => 'Lépés jelölése';
+
+  @override
+  String get preferencesChessPieceSymbol => 'Sakkbábu ikonja';
+
+  @override
+  String get preferencesPgnLetter => 'Betű (K, Q, R, B, N)';
+
+  @override
+  String get preferencesZenMode => 'Zen mód';
+
+  @override
+  String get preferencesShowPlayerRatings => 'Játékosok értékszámának megjelenítése';
+
+  @override
+  String get preferencesShowFlairs => 'Show player flairs';
+
+  @override
+  String get preferencesExplainShowPlayerRatings => 'Elrejthető a játékosok értékszáma, hogy könnyebb legyen a játékra koncentrálni. A játszmák ettől függetlenül lehetnek értékeltek, ez csak a megjelenítésre vonatkozik.';
+
+  @override
+  String get preferencesDisplayBoardResizeHandle => 'Átméretező sarok mutatása';
+
+  @override
+  String get preferencesOnlyOnInitialPosition => 'Csak kezdőállásnál';
+
+  @override
+  String get preferencesInGameOnly => 'Csak játék közben';
+
+  @override
+  String get preferencesChessClock => 'Sakkóra';
+
+  @override
+  String get preferencesTenthsOfSeconds => 'Tizedmásodpercek';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'Amikor a hátralévő idő < 10 másodperc';
+
+  @override
+  String get preferencesHorizontalGreenProgressBars => 'Vízszintes zöld folyamatjelző';
+
+  @override
+  String get preferencesSoundWhenTimeGetsCritical => 'Figyelmeztető hang, ha nagyon kevés idő maradt';
+
+  @override
+  String get preferencesGiveMoreTime => 'Több idő adása';
+
+  @override
+  String get preferencesGameBehavior => 'Játék működése';
+
+  @override
+  String get preferencesHowDoYouMovePieces => 'Hogyan mozgatod a bábukat?';
+
+  @override
+  String get preferencesClickTwoSquares => 'Kattintással';
+
+  @override
+  String get preferencesDragPiece => 'Egérhúzással';
+
+  @override
+  String get preferencesBothClicksAndDrag => 'Mindkettő';
+
+  @override
+  String get preferencesPremovesPlayingDuringOpponentTurn => 'Előre megadott lépések (amíg az ellenfél van soron)';
+
+  @override
+  String get preferencesTakebacksWithOpponentApproval => 'Visszalépés (az ellenfél beleegyezésével)';
+
+  @override
+  String get preferencesInCasualGamesOnly => 'Csak rangosorolás nélküli játékok esetén';
+
+  @override
+  String get preferencesPromoteToQueenAutomatically => 'Gyalog automatikus előléptetése vezérré';
+
+  @override
+  String get preferencesExplainPromoteToQueenAutomatically => 'Gyalogátváltozáskor tartsd lenyomva a <ctrl> billentyűt, hogy a gyalog ne változzon át automatikusan';
+
+  @override
+  String get preferencesWhenPremoving => 'Előre meghatározott lépés esetén';
+
+  @override
+  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Háromszori ismétlés esetén automatikus döntetlen igénylése';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Ha a hátralévő idő < 30 másodperc';
+
+  @override
+  String get preferencesMoveConfirmation => 'Lépés jóváhagyatása';
+
+  @override
+  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Játék közben a tábla melletti menüvel kikapcsolható';
+
+  @override
+  String get preferencesInCorrespondenceGames => 'Levelező mérkőzés';
+
+  @override
+  String get preferencesCorrespondenceAndUnlimited => 'Távjáték és korlátlan';
+
+  @override
+  String get preferencesConfirmResignationAndDrawOffers => 'Feladás és döntetlen kérelem megerősítése';
+
+  @override
+  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Sáncolás módja';
+
+  @override
+  String get preferencesCastleByMovingTwoSquares => 'Király mozog két mezőt';
+
+  @override
+  String get preferencesCastleByMovingOntoTheRook => 'Király mozog a bástyára';
+
+  @override
+  String get preferencesInputMovesWithTheKeyboard => 'Lépések bevitele a billentyűzettel';
+
+  @override
+  String get preferencesInputMovesWithVoice => 'Lépj a hangod segítségével';
+
+  @override
+  String get preferencesSnapArrowsToValidMoves => 'Nyilak illesztése a szabályos lépésekhez';
+
+  @override
+  String get preferencesSayGgWpAfterLosingOrDrawing => '\"Good game, well played\" üzenet küldése döntetlen vagy vereség esetén';
+
+  @override
+  String get preferencesYourPreferencesHaveBeenSaved => 'Beállítások elmentve.';
+
+  @override
+  String get preferencesScrollOnTheBoardToReplayMoves => 'Lépések visszajátszása görgetéssel';
+
+  @override
+  String get preferencesCorrespondenceEmailNotification => 'Napi email a folyamatban lévő levelezős játszmákról';
+
+  @override
+  String get preferencesNotifyStreamStart => 'Egy streamer műsort ad';
+
+  @override
+  String get preferencesNotifyInboxMsg => 'Új üzenet';
+
+  @override
+  String get preferencesNotifyForumMention => 'Megemlítenek a fórumon';
+
+  @override
+  String get preferencesNotifyInvitedStudy => 'Meghívó tanulmányba';
+
+  @override
+  String get preferencesNotifyGameEvent => 'Levelező mérkőzés';
+
+  @override
+  String get preferencesNotifyChallenge => 'Kihívás';
+
+  @override
+  String get preferencesNotifyTournamentSoon => 'Hamarosan kezdődő verseny';
+
+  @override
+  String get preferencesNotifyTimeAlarm => 'Hamarosan lejár az idő levelezős játszmában';
+
+  @override
+  String get preferencesNotifyBell => 'Hangjelzés a Lichessen belül';
+
+  @override
+  String get preferencesNotifyPush => 'Értesítés mobileszközön, amikor nem vagy fenn Lichessen';
+
+  @override
+  String get preferencesNotifyWeb => 'Böngésző';
+
+  @override
+  String get preferencesNotifyDevice => 'Eszköz';
+
+  @override
+  String get preferencesBellNotificationSound => 'Hangjelzés';
+
+  @override
+  String get puzzlePuzzles => 'Feladványok';
+
+  @override
+  String get puzzlePuzzleThemes => 'Feladvány témák';
+
+  @override
+  String get puzzleRecommended => 'Ajánlott';
+
+  @override
+  String get puzzlePhases => 'Szakaszok';
+
+  @override
+  String get puzzleMotifs => 'Motívumok';
+
+  @override
+  String get puzzleAdvanced => 'Haladó';
+
+  @override
+  String get puzzleLengths => 'Hossz';
+
+  @override
+  String get puzzleMates => 'Matt';
+
+  @override
+  String get puzzleGoals => 'Célok';
+
+  @override
+  String get puzzleOrigin => 'Forrás';
+
+  @override
+  String get puzzleSpecialMoves => 'Különleges lépések';
+
+  @override
+  String get puzzleDidYouLikeThisPuzzle => 'Tetszett ez a feladvány?';
+
+  @override
+  String get puzzleVoteToLoadNextOne => 'Szavazz egy újért cserébe!';
+
+  @override
+  String get puzzleUpVote => 'Tetszett';
+
+  @override
+  String get puzzleDownVote => 'Nem tetszett';
+
+  @override
+  String get puzzleYourPuzzleRatingWillNotChange => 'A feladvány értékelésed nem fog változni. Ne feledd, a feladványoknak nincs tétje. Az értékelésed csupán segít kiválasztani az aktuális szintednek legjobban megfelelőket.';
+
+  @override
+  String get puzzleFindTheBestMoveForWhite => 'Találd meg világos legjobb lépését.';
+
+  @override
+  String get puzzleFindTheBestMoveForBlack => 'Találd meg sötét legjobb lépését.';
+
+  @override
+  String get puzzleToGetPersonalizedPuzzles => 'Személyre szóló feladványok:';
+
+  @override
+  String puzzlePuzzleId(String param) {
+    return '$param. feladvány';
+  }
+
+  @override
+  String get puzzlePuzzleOfTheDay => 'Napi feladvány';
+
+  @override
+  String get puzzleDailyPuzzle => 'Napi feladvány';
+
+  @override
+  String get puzzleClickToSolve => 'Katt a megoldáshoz';
+
+  @override
+  String get puzzleGoodMove => 'Jó lépés';
+
+  @override
+  String get puzzleBestMove => 'A legjobb lépés!';
+
+  @override
+  String get puzzleKeepGoing => 'Folytasd…';
+
+  @override
+  String get puzzlePuzzleSuccess => 'Siker!';
+
+  @override
+  String get puzzlePuzzleComplete => 'Kész a feladvány!';
+
+  @override
+  String get puzzleByOpenings => 'Megnyitások szerint';
+
+  @override
+  String get puzzlePuzzlesByOpenings => 'Feladványok megnyitások szerint';
+
+  @override
+  String get puzzleOpeningsYouPlayedTheMost => 'A leggyakoribb megnyitások az értékelt játszmáidból';
+
+  @override
+  String get puzzleUseFindInPage => 'Használd a böngésző \"Keresés az oldalon\" funkcióját, hogy megtaláld a kedvenc megnyitásod!';
+
+  @override
+  String get puzzleUseCtrlF => 'Ctrl+f a kedvenc megnyitásod megtalálásához!';
+
+  @override
+  String get puzzleNotTheMove => 'Nem a legjobb lépés!';
+
+  @override
+  String get puzzleTrySomethingElse => 'Próbálkozz mással.';
+
+  @override
+  String puzzleRatingX(String param) {
+    return 'Pontszám: $param';
+  }
+
+  @override
+  String get puzzleHidden => 'rejtett';
+
+  @override
+  String puzzleFromGameLink(String param) {
+    return '$param játszmából';
+  }
+
+  @override
+  String get puzzleContinueTraining => 'Gyakorlás folytatása';
+
+  @override
+  String get puzzleDifficultyLevel => 'Nehézségi szint';
+
+  @override
+  String get puzzleNormal => 'Közepes';
+
+  @override
+  String get puzzleEasier => 'Könnyű';
+
+  @override
+  String get puzzleEasiest => 'Nagyon könnyű';
+
+  @override
+  String get puzzleHarder => 'Nehéz';
+
+  @override
+  String get puzzleHardest => 'Nagyon nehéz';
+
+  @override
+  String get puzzleExample => 'Példa';
+
+  @override
+  String get puzzleAddAnotherTheme => 'Másik téma hozzáadása';
+
+  @override
+  String get puzzleNextPuzzle => 'Következő feladvány';
+
+  @override
+  String get puzzleJumpToNextPuzzleImmediately => 'Rögtön a következő feladányhoz ugrás';
+
+  @override
+  String get puzzlePuzzleDashboard => 'Feladvány áttekintő';
+
+  @override
+  String get puzzleImprovementAreas => 'Fejleszthető témák';
+
+  @override
+  String get puzzleStrengths => 'Erősségek';
+
+  @override
+  String get puzzleHistory => 'Korábbi feladványok';
+
+  @override
+  String get puzzleSolved => 'megoldva';
+
+  @override
+  String get puzzleFailed => 'sikertelen';
+
+  @override
+  String get puzzleStreakDescription => 'Oldj meg egyre nehezedő feladványokat nyerő széria építéséhez. Nincs időkorlát, szánd rá az időt. Egyetlen hibás lépés és a játéknak vége. Viszont mindig egyet átugorhatsz.';
+
+  @override
+  String puzzleYourStreakX(String param) {
+    return 'Nyerő szériád: $param';
+  }
+
+  @override
+  String get puzzleStreakSkipExplanation => 'Ugord át ezt a lépést a szériád megőrzéséhez! Egy menetben csak egyszer működik.';
+
+  @override
+  String get puzzleContinueTheStreak => 'Széria folytatása';
+
+  @override
+  String get puzzleNewStreak => 'Új széria';
+
+  @override
+  String get puzzleFromMyGames => 'Saját játszmáimból';
+
+  @override
+  String get puzzleLookupOfPlayer => 'Feladványok keresése más játszmáiból';
+
+  @override
+  String puzzleFromXGames(String param) {
+    return 'Feladványok $param játszmáiból';
+  }
+
+  @override
+  String get puzzleSearchPuzzles => 'Feladványok keresése';
+
+  @override
+  String get puzzleFromMyGamesNone => 'Nincsenek feladványaid az adatbázisban, de ez semmi rosszat nem jelent.\nJátssz rapid vagy klasszikus partikat, így nagyobb eséllyel szerepelhetnek a te játszmáid feladványai is!';
+
+  @override
+  String puzzleFromXGamesFound(String param1, String param2) {
+    return '$param1 feladvány található $param2 játszmái között';
+  }
+
+  @override
+  String get puzzlePuzzleDashboardDescription => 'Gyakorolj, elemezz, fejlődj';
+
+  @override
+  String puzzlePercentSolved(String param) {
+    return '$param sikeres';
+  }
+
+  @override
+  String get puzzleNoPuzzlesToShow => 'Oldj meg néhány feladványt a statisztika megjelenítéséhez!';
+
+  @override
+  String get puzzleImprovementAreasDescription => 'Gyakorolj ezekben a témákban, hogy erősítsd a tudásod!';
+
+  @override
+  String get puzzleStrengthDescription => 'Ezekben a témákban teljesítesz a legjobban';
+
+  @override
+  String puzzlePlayedXTimes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count beküldött megfejtés',
+      one: '$count beküldött megfejtés',
+      zero: '$count beküldött megfejtés',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsBelowYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ponttal az értékszámod alatt',
+      one: 'Egy ponttal az értékszámod alatt',
+      zero: 'Egy ponttal az értékszámod alatt',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsAboveYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ponttal az értékszámod felett',
+      one: 'Egy ponttal az értékszámod felett',
+      zero: 'Egy ponttal az értékszámod felett',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPlayed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count játszott',
+      one: '$count játszott',
+      zero: '$count játszott',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbToReplay(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count újra',
+      one: '$count újra',
+      zero: '$count újra',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get puzzleThemeAdvancedPawn => 'Előretört gyalog';
+
+  @override
+  String get puzzleThemeAdvancedPawnDescription => 'Egy gyalogod előretört az ellenfél térfelére és át is változhat.';
+
+  @override
+  String get puzzleThemeAdvantage => 'Előny';
+
+  @override
+  String get puzzleThemeAdvantageDescription => 'Ragadd meg a lehetőséget a döntő előny megszerzéséhez. (200cp ≤ eval ≤ 600cp)';
+
+  @override
+  String get puzzleThemeAnastasiaMate => 'Anasztázia mattja';
+
+  @override
+  String get puzzleThemeAnastasiaMateDescription => 'Egy huszár és egy bástya vagy a vezér közösen csapdába ejtik az ellenfél királyát a tábla széle és egy figurája között.';
+
+  @override
+  String get puzzleThemeArabianMate => 'Arab matt';
+
+  @override
+  String get puzzleThemeArabianMateDescription => 'Egy huszár és egy bástya közösen sarokba szorítják az ellenfél királyát.';
+
+  @override
+  String get puzzleThemeAttackingF2F7 => 'Az f2 vagy f7 támadása';
+
+  @override
+  String get puzzleThemeAttackingF2F7Description => 'Az f2 vagy f7 gyalog ellen irányuló támadás, mint például a \"sültmáj\" megnyitás.';
+
+  @override
+  String get puzzleThemeAttraction => 'Ráterelés';
+
+  @override
+  String get puzzleThemeAttractionDescription => 'Csere vagy áldozat ami elmozdítja az ellenfél figuráját egy olyan mezőre ahol újabb taktika alkalmazható.';
+
+  @override
+  String get puzzleThemeBackRankMate => 'Matt a hátsó soron';
+
+  @override
+  String get puzzleThemeBackRankMateDescription => 'Adj mattot az alapsoron ragadt királynak, mikor a saját figurái ejtik csapdába.';
+
+  @override
+  String get puzzleThemeBishopEndgame => 'Futó végjáték';
+
+  @override
+  String get puzzleThemeBishopEndgameDescription => 'Végjáték csak futókkal és gyalogokkal.';
+
+  @override
+  String get puzzleThemeBodenMate => 'Boden mattja';
+
+  @override
+  String get puzzleThemeBodenMateDescription => 'Két támadó futó az átlókat keresztezve adnak mattot a saját figurái által akadályozott királynak.';
+
+  @override
+  String get puzzleThemeCastling => 'Sáncolás';
+
+  @override
+  String get puzzleThemeCastlingDescription => 'Helyezd a királyt biztonságba és mozgósítsd a bástyát.';
+
+  @override
+  String get puzzleThemeCapturingDefender => 'A védő leütése';
+
+  @override
+  String get puzzleThemeCapturingDefenderDescription => 'Egy másik védelméhez elengedhetetlen figura leütése, így a védtelen figura a következő lépésben szabadon levehető.';
+
+  @override
+  String get puzzleThemeCrushing => 'Megsemmisítés';
+
+  @override
+  String get puzzleThemeCrushingDescription => 'Az ellenfél sakkvakságának kihasználása elsöprő előnnyé fordítható. (> 600cp)';
+
+  @override
+  String get puzzleThemeDoubleBishopMate => 'Futópár matt';
+
+  @override
+  String get puzzleThemeDoubleBishopMateDescription => 'A két futó szomszédos átlókon ad mattot a saját figurája által akadályozott királynak.';
+
+  @override
+  String get puzzleThemeDovetailMate => 'Fecskefark matt';
+
+  @override
+  String get puzzleThemeDovetailMateDescription => 'A vezér mattot ad a szomszédos mezőn álló királynak, aminek mindkét menekülési útját saját figurái foglalják el.';
+
+  @override
+  String get puzzleThemeEquality => 'Egyenlőség';
+
+  @override
+  String get puzzleThemeEqualityDescription => 'Visszatérés egy rosszabb állásból és a döntetlen vagy kiegyensúlyozott állás bebiztosítása.';
+
+  @override
+  String get puzzleThemeKingsideAttack => 'Királyszárnytámadás';
+
+  @override
+  String get puzzleThemeKingsideAttackDescription => 'Királyszárnyra sáncolt király ellen indított támadás.';
+
+  @override
+  String get puzzleThemeClearance => 'Felszabadítás';
+
+  @override
+  String get puzzleThemeClearanceDescription => 'Egy lépés, általában tempóval, amely felszabadít egy mezőt, vonalat vagy átlót egy taktika kedvéért.';
+
+  @override
+  String get puzzleThemeDefensiveMove => 'Védekező lépés';
+
+  @override
+  String get puzzleThemeDefensiveMoveDescription => 'Olyan precíz lépés vagy lépéssorozat amivel elkerülhető anyagveszteség vagy más hátrányos helyzet.';
+
+  @override
+  String get puzzleThemeDeflection => 'Elterelés';
+
+  @override
+  String get puzzleThemeDeflectionDescription => 'Egy lépés amivel az ellenfél figurája kimozdítható aktuális feladatából, például egy kulcsmező felügyelete.';
+
+  @override
+  String get puzzleThemeDiscoveredAttack => 'Felfedés';
+
+  @override
+  String get puzzleThemeDiscoveredAttackDescription => 'Egy figura mozgatása ami előzőleg egy másik figura tűzvonalában állt, például huszár elléptetése a bástya útjából.';
+
+  @override
+  String get puzzleThemeDoubleCheck => 'Kettős sakk';
+
+  @override
+  String get puzzleThemeDoubleCheckDescription => 'Két figurával történő egyidejű sakkadás amikor felfedés után az elmozdított és a korábban akadályozott figura is támadja az ellenfél királyát.';
+
+  @override
+  String get puzzleThemeEndgame => 'Végjáték';
+
+  @override
+  String get puzzleThemeEndgameDescription => 'Taktikák a játszma utolsó fázisában.';
+
+  @override
+  String get puzzleThemeEnPassantDescription => 'Az en passant szabályt kihasználó taktika, mikor egy gyalog leütheti a mellette elhaladó, alapállásból kettőt lépő ellenfél gyalogját.';
+
+  @override
+  String get puzzleThemeExposedKing => 'Kiszolgáltatott király';
+
+  @override
+  String get puzzleThemeExposedKingDescription => 'Olyan taktika, ami kihasználja a király körüli kevés védőt, gyakran matthoz vezet.';
+
+  @override
+  String get puzzleThemeFork => 'Villa';
+
+  @override
+  String get puzzleThemeForkDescription => 'Olyan lépés amivel a mozgatott figura egyszerre két ellenséges figurát támad.';
+
+  @override
+  String get puzzleThemeHangingPiece => 'Lógó figura';
+
+  @override
+  String get puzzleThemeHangingPieceDescription => 'Azok a taktikák amik védtelen vagy elégtelenül bevédett, ezért szabadon levehető figurákon alapulnak.';
+
+  @override
+  String get puzzleThemeHookMate => 'Horog matt';
+
+  @override
+  String get puzzleThemeHookMateDescription => 'Egy bástya, huszár és gyalog az ellenfél, gyalogja által akadályozott királyát körbevéve adnak mattot.';
+
+  @override
+  String get puzzleThemeInterference => 'Akadályozás';
+
+  @override
+  String get puzzleThemeInterferenceDescription => 'Egy figura mozgatása két ellenséges figura közé az egyiket vagy mindkettőt védtelenné téve, például egy huszárral belépni egy védett mezőre két bástya közé.';
+
+  @override
+  String get puzzleThemeIntermezzo => 'Köztes lépés';
+
+  @override
+  String get puzzleThemeIntermezzoDescription => 'A várt lépés megtétele helyett egy olyan lépés beszúrása, amely fenyegetésére az ellenfélnek rögtön válaszolnia kell. Ismert még \"Zwischenzug\"-nak vagy \"Intermezzo\"-nak.';
+
+  @override
+  String get puzzleThemeKnightEndgame => 'Huszár végjáték';
+
+  @override
+  String get puzzleThemeKnightEndgameDescription => 'Végjáték csak huszárokkal és gyalogokkal.';
+
+  @override
+  String get puzzleThemeLong => 'Hosszú feladvány';
+
+  @override
+  String get puzzleThemeLongDescription => 'Három lépés a megoldás.';
+
+  @override
+  String get puzzleThemeMaster => 'Mesterjátszmák';
+
+  @override
+  String get puzzleThemeMasterDescription => 'Feladványok mesterek játszmáiból.';
+
+  @override
+  String get puzzleThemeMasterVsMaster => 'Mesterek egymás ellen';
+
+  @override
+  String get puzzleThemeMasterVsMasterDescription => 'Feladványok két mester egymás elleni játszmáiból.';
+
+  @override
+  String get puzzleThemeMate => 'Matt';
+
+  @override
+  String get puzzleThemeMateDescription => 'Vidd a játszmát stílusosan.';
+
+  @override
+  String get puzzleThemeMateIn1 => 'Matt 1 lépésben';
+
+  @override
+  String get puzzleThemeMateIn1Description => 'Adj mattot egy lépésben.';
+
+  @override
+  String get puzzleThemeMateIn2 => 'Matt 2 lépésben';
+
+  @override
+  String get puzzleThemeMateIn2Description => 'Adj mattot két lépésben.';
+
+  @override
+  String get puzzleThemeMateIn3 => 'Matt 3 lépésben';
+
+  @override
+  String get puzzleThemeMateIn3Description => 'Adj mattot három lépésben.';
+
+  @override
+  String get puzzleThemeMateIn4 => 'Matt 4 lépésben';
+
+  @override
+  String get puzzleThemeMateIn4Description => 'Adj mattot négy lépésben.';
+
+  @override
+  String get puzzleThemeMateIn5 => 'Matt 5 vagy több lépésben';
+
+  @override
+  String get puzzleThemeMateIn5Description => 'Találd meg a matthoz vezető hosszabb lépéssorozatot.';
+
+  @override
+  String get puzzleThemeMiddlegame => 'Középjáték';
+
+  @override
+  String get puzzleThemeMiddlegameDescription => 'Taktikák a játszma második fázisában.';
+
+  @override
+  String get puzzleThemeOneMove => 'Egy lépéses feladvány';
+
+  @override
+  String get puzzleThemeOneMoveDescription => 'Csupán egy lépésből álló feladvány.';
+
+  @override
+  String get puzzleThemeOpening => 'Megnyitás';
+
+  @override
+  String get puzzleThemeOpeningDescription => 'Taktikák a játszma kezdeti fázisában.';
+
+  @override
+  String get puzzleThemePawnEndgame => 'Gyalogvégjáték';
+
+  @override
+  String get puzzleThemePawnEndgameDescription => 'Végjáték csak gyalogokkal.';
+
+  @override
+  String get puzzleThemePin => 'Kötés';
+
+  @override
+  String get puzzleThemePinDescription => 'A kötés, mikor egy figura nem tud ellépni anélkül, hogy felfedné az ellenfél támadását egy értékesebb figura felé.';
+
+  @override
+  String get puzzleThemePromotion => 'Átváltozás';
+
+  @override
+  String get puzzleThemePromotionDescription => 'Átváltozó vagy átváltozással fenyegető gyalog kulcsfontosságú taktika.';
+
+  @override
+  String get puzzleThemeQueenEndgame => 'Vezér végjáték';
+
+  @override
+  String get puzzleThemeQueenEndgameDescription => 'Végjáték csak vezérekkel és gyalogokkal.';
+
+  @override
+  String get puzzleThemeQueenRookEndgame => 'Vezér és bástya';
+
+  @override
+  String get puzzleThemeQueenRookEndgameDescription => 'Végjáték vezérekkel, bástyákkal és gyalogokkal.';
+
+  @override
+  String get puzzleThemeQueensideAttack => 'Vezérszárnytámadás';
+
+  @override
+  String get puzzleThemeQueensideAttackDescription => 'Vezérszárnyra sáncolt király ellen indított támadás.';
+
+  @override
+  String get puzzleThemeQuietMove => 'Csendes lépés';
+
+  @override
+  String get puzzleThemeQuietMoveDescription => 'Olyan lépés ami nem ad sakkot és nem is ütés, de védhetetlen fenyegetést készít elő egy későbbi lépéshez.';
+
+  @override
+  String get puzzleThemeRookEndgame => 'Bástya végjáték';
+
+  @override
+  String get puzzleThemeRookEndgameDescription => 'Végjáték csak bástyákkal és gyalogokkal.';
+
+  @override
+  String get puzzleThemeSacrifice => 'Áldozat';
+
+  @override
+  String get puzzleThemeSacrificeDescription => 'Olyan taktika ami enged leütni egy figurát annak érdekében, hogy később előnyre tegyen szert kényszerítő lépések által.';
+
+  @override
+  String get puzzleThemeShort => 'Rövid feladvány';
+
+  @override
+  String get puzzleThemeShortDescription => 'Két lépés a megoldás.';
+
+  @override
+  String get puzzleThemeSkewer => 'Nyárs';
+
+  @override
+  String get puzzleThemeSkewerDescription => 'Az a motívum mikor egy magasabb értékű figurát támadva az kénytelen ellépni szabaddá téve így az utat a kisebb értékű figura leütéséhez. A kötés fordítottja.';
+
+  @override
+  String get puzzleThemeSmotheredMate => 'Fojtott matt';
+
+  @override
+  String get puzzleThemeSmotheredMateDescription => 'Olyan huszárral adott matt, ahol a sakkot kapó király nem tud lépni, mert saját figurái veszik körül (fojtják meg).';
+
+  @override
+  String get puzzleThemeSuperGM => 'Szupernagymesteri játszmák';
+
+  @override
+  String get puzzleThemeSuperGMDescription => 'Feladványok a világ legjobb játékosai közötti összecsapásokból.';
+
+  @override
+  String get puzzleThemeTrappedPiece => 'Csapda';
+
+  @override
+  String get puzzleThemeTrappedPieceDescription => 'Egy figura leütése nem elkerülhető, ha nincs menekülési útja.';
+
+  @override
+  String get puzzleThemeUnderPromotion => 'Minor-átváltozás';
+
+  @override
+  String get puzzleThemeUnderPromotionDescription => 'Gyalog átváltozása huszár, futó vagy bástyára.';
+
+  @override
+  String get puzzleThemeVeryLong => 'Nagyon hosszú feladvány';
+
+  @override
+  String get puzzleThemeVeryLongDescription => 'Négy vagy több lépés a megoldáshoz.';
+
+  @override
+  String get puzzleThemeXRayAttack => 'Röntgen támadás';
+
+  @override
+  String get puzzleThemeXRayAttackDescription => 'Figura ami egy ellenséges figurán áthatolva véd vagy támad egy mezőt.';
+
+  @override
+  String get puzzleThemeZugzwang => 'Lépéskényszer';
+
+  @override
+  String get puzzleThemeZugzwangDescription => 'Az ellenfélnek kevés lehetséges lépése van, és mind csak tovább rontja a pozícióját.';
+
+  @override
+  String get puzzleThemeHealthyMix => 'Vegyes mix';
+
+  @override
+  String get puzzleThemeHealthyMixDescription => 'Egy kicsit mindenből. Nem tudod mire számíthatsz, ezért állj készen bármire! Akár egy valódi játszmában.';
+
+  @override
+  String get puzzleThemePlayerGames => 'Felhasználók játszmái';
+
+  @override
+  String get puzzleThemePlayerGamesDescription => 'A saját vagy mások játszmáiból generált feladványok keresése.';
+
+  @override
+  String puzzleThemePuzzleDownloadInformation(String param) {
+    return 'Ezek a feladványok közkincsnek minősülnek és innen letölthetők: $param.';
+  }
+
+  @override
+  String get searchSearch => 'Keresés';
+
+  @override
+  String get settingsSettings => 'Beállítások';
+
+  @override
+  String get settingsCloseAccount => 'Fiók zárolása';
+
+  @override
+  String get settingsManagedAccountCannotBeClosed => 'A felhasználói fiókod felügyelet alatt áll, ezért nem zárolható.';
+
+  @override
+  String get settingsClosingIsDefinitive => 'A fiók törlése végleges. Nem lehet visszavonni. Biztos vagy benne?';
+
+  @override
+  String get settingsCantOpenSimilarAccount => 'Nem fogsz tudni új fiókot nyitni ugyanezzel a névvel, még eltérő kis- és nagybetűkkel sem.';
+
+  @override
+  String get settingsChangedMindDoNotCloseAccount => 'Meggondoltam magam, mégsem zárolom a fiókomat';
+
+  @override
+  String get settingsCloseAccountExplanation => 'Biztos, hogy zárolni akarod a fiókod? A döntés végleges és visszavonhatatlan. Nem fogsz tudni belépni SOHA TÖBBÉ.';
+
+  @override
+  String get settingsThisAccountIsClosed => 'Ez a fiók zárolva van.';
 
   @override
   String get playWithAFriend => 'Játék egy ismerőssel';
@@ -512,6 +1518,12 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get deleteFromHere => 'Törlés innentől';
+
+  @override
+  String get collapseVariations => 'Collapse variations';
+
+  @override
+  String get expandVariations => 'Expand variations';
 
   @override
   String get forceVariation => 'Mentés változatként';
@@ -1371,15 +2383,6 @@ class AppLocalizationsHu extends AppLocalizations {
   String get emptyTournamentName => 'Hagyd üresen, ha azt szeretnéd, hogy a versenyed egy nagymesterről kapjon nevet.';
 
   @override
-  String get recommendNotTouching => 'Azt javasoljuk, hogy ne változtass ezeken.';
-
-  @override
-  String get fewerPlayers => 'Követelmények beállítása esetén kevesebb játékos lesz a versenyen.';
-
-  @override
-  String get showAdvancedSettings => 'Haladó beállítások megjelenítése';
-
-  @override
   String get makePrivateTournament => 'A torna priváttá tétele a fenti jelszóval';
 
   @override
@@ -1509,10 +2512,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get editProfile => 'Profil szerkesztése';
 
   @override
-  String get firstName => 'Keresztnév';
-
-  @override
-  String get lastName => 'Vezetéknév';
+  String get realName => 'Real name';
 
   @override
   String get setFlair => 'Set your flair';
@@ -1641,13 +2641,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get cheat => 'Csalás';
 
   @override
-  String get insult => 'Sértegetés';
-
-  @override
   String get troll => 'Trollkodás';
-
-  @override
-  String get ratingManipulation => 'Pontszám manipuláció';
 
   @override
   String get other => 'Egyéb';
@@ -1754,6 +2748,9 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get outsideTheBoard => 'A táblán kívül';
+
+  @override
+  String get allSquaresOfTheBoard => 'All squares of the board';
 
   @override
   String get onSlowGames => 'Lassú játékok esetén';
@@ -3460,1009 +4457,6 @@ class AppLocalizationsHu extends AppLocalizations {
   }
 
   @override
-  String get patronDonate => 'Adakozz';
-
-  @override
-  String get patronLichessPatron => 'Lichess Patron';
-
-  @override
-  String get preferencesPreferences => 'Testreszabás';
-
-  @override
-  String get preferencesDisplay => 'Megjelenés';
-
-  @override
-  String get preferencesPrivacy => 'Adatvédelem';
-
-  @override
-  String get preferencesNotifications => 'Értesítések';
-
-  @override
-  String get preferencesPieceAnimation => 'Bábuk animációja';
-
-  @override
-  String get preferencesMaterialDifference => 'Bábuk közötti különbség';
-
-  @override
-  String get preferencesBoardHighlights => 'Kiemelés a táblán (utolsó lépés és sakk)';
-
-  @override
-  String get preferencesPieceDestinations => 'A figurák érkezési mezői (érvényes lépések és előre bevitt lépések)';
-
-  @override
-  String get preferencesBoardCoordinates => 'Tábla koordináták (A-H, 1-8)';
-
-  @override
-  String get preferencesMoveListWhilePlaying => 'Lépéslista játék közben';
-
-  @override
-  String get preferencesPgnPieceNotation => 'Lépés jelölése';
-
-  @override
-  String get preferencesChessPieceSymbol => 'Sakkbábu ikonja';
-
-  @override
-  String get preferencesPgnLetter => 'Betű (K, Q, R, B, N)';
-
-  @override
-  String get preferencesZenMode => 'Zen mód';
-
-  @override
-  String get preferencesShowPlayerRatings => 'Játékosok értékszámának megjelenítése';
-
-  @override
-  String get preferencesShowFlairs => 'Show player flairs';
-
-  @override
-  String get preferencesExplainShowPlayerRatings => 'Elrejthető a játékosok értékszáma, hogy könnyebb legyen a játékra koncentrálni. A játszmák ettől függetlenül lehetnek értékeltek, ez csak a megjelenítésre vonatkozik.';
-
-  @override
-  String get preferencesDisplayBoardResizeHandle => 'Átméretező sarok mutatása';
-
-  @override
-  String get preferencesOnlyOnInitialPosition => 'Csak kezdőállásnál';
-
-  @override
-  String get preferencesInGameOnly => 'Csak játék közben';
-
-  @override
-  String get preferencesChessClock => 'Sakkóra';
-
-  @override
-  String get preferencesTenthsOfSeconds => 'Tizedmásodpercek';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'Amikor a hátralévő idő < 10 másodperc';
-
-  @override
-  String get preferencesHorizontalGreenProgressBars => 'Vízszintes zöld folyamatjelző';
-
-  @override
-  String get preferencesSoundWhenTimeGetsCritical => 'Figyelmeztető hang, ha nagyon kevés idő maradt';
-
-  @override
-  String get preferencesGiveMoreTime => 'Több idő adása';
-
-  @override
-  String get preferencesGameBehavior => 'Játék működése';
-
-  @override
-  String get preferencesHowDoYouMovePieces => 'Hogyan mozgatod a bábukat?';
-
-  @override
-  String get preferencesClickTwoSquares => 'Kattintással';
-
-  @override
-  String get preferencesDragPiece => 'Egérhúzással';
-
-  @override
-  String get preferencesBothClicksAndDrag => 'Mindkettő';
-
-  @override
-  String get preferencesPremovesPlayingDuringOpponentTurn => 'Előre megadott lépések (amíg az ellenfél van soron)';
-
-  @override
-  String get preferencesTakebacksWithOpponentApproval => 'Visszalépés (az ellenfél beleegyezésével)';
-
-  @override
-  String get preferencesInCasualGamesOnly => 'Csak rangosorolás nélküli játékok esetén';
-
-  @override
-  String get preferencesPromoteToQueenAutomatically => 'Gyalog automatikus előléptetése vezérré';
-
-  @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Gyalogátváltozáskor tartsd lenyomva a <ctrl> billentyűt, hogy a gyalog ne változzon át automatikusan';
-
-  @override
-  String get preferencesWhenPremoving => 'Előre meghatározott lépés esetén';
-
-  @override
-  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Háromszori ismétlés esetén automatikus döntetlen igénylése';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Ha a hátralévő idő < 30 másodperc';
-
-  @override
-  String get preferencesMoveConfirmation => 'Lépés jóváhagyatása';
-
-  @override
-  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Játék közben a tábla melletti menüvel kikapcsolható';
-
-  @override
-  String get preferencesInCorrespondenceGames => 'Levelező mérkőzés';
-
-  @override
-  String get preferencesCorrespondenceAndUnlimited => 'Távjáték és korlátlan';
-
-  @override
-  String get preferencesConfirmResignationAndDrawOffers => 'Feladás és döntetlen kérelem megerősítése';
-
-  @override
-  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Sáncolás módja';
-
-  @override
-  String get preferencesCastleByMovingTwoSquares => 'Király mozog két mezőt';
-
-  @override
-  String get preferencesCastleByMovingOntoTheRook => 'Király mozog a bástyára';
-
-  @override
-  String get preferencesInputMovesWithTheKeyboard => 'Lépések bevitele a billentyűzettel';
-
-  @override
-  String get preferencesInputMovesWithVoice => 'Lépj a hangod segítségével';
-
-  @override
-  String get preferencesSnapArrowsToValidMoves => 'Nyilak illesztése a szabályos lépésekhez';
-
-  @override
-  String get preferencesSayGgWpAfterLosingOrDrawing => '\"Good game, well played\" üzenet küldése döntetlen vagy vereség esetén';
-
-  @override
-  String get preferencesYourPreferencesHaveBeenSaved => 'Beállítások elmentve.';
-
-  @override
-  String get preferencesScrollOnTheBoardToReplayMoves => 'Lépések visszajátszása görgetéssel';
-
-  @override
-  String get preferencesCorrespondenceEmailNotification => 'Napi email a folyamatban lévő levelezős játszmákról';
-
-  @override
-  String get preferencesNotifyStreamStart => 'Egy streamer műsort ad';
-
-  @override
-  String get preferencesNotifyInboxMsg => 'Új üzenet';
-
-  @override
-  String get preferencesNotifyForumMention => 'Megemlítenek a fórumon';
-
-  @override
-  String get preferencesNotifyInvitedStudy => 'Meghívó tanulmányba';
-
-  @override
-  String get preferencesNotifyGameEvent => 'Levelező mérkőzés';
-
-  @override
-  String get preferencesNotifyChallenge => 'Kihívás';
-
-  @override
-  String get preferencesNotifyTournamentSoon => 'Hamarosan kezdődő verseny';
-
-  @override
-  String get preferencesNotifyTimeAlarm => 'Hamarosan lejár az idő levelezős játszmában';
-
-  @override
-  String get preferencesNotifyBell => 'Hangjelzés a Lichessen belül';
-
-  @override
-  String get preferencesNotifyPush => 'Értesítés mobileszközön, amikor nem vagy fenn Lichessen';
-
-  @override
-  String get preferencesNotifyWeb => 'Böngésző';
-
-  @override
-  String get preferencesNotifyDevice => 'Eszköz';
-
-  @override
-  String get preferencesBellNotificationSound => 'Hangjelzés';
-
-  @override
-  String get puzzlePuzzles => 'Feladványok';
-
-  @override
-  String get puzzlePuzzleThemes => 'Feladvány témák';
-
-  @override
-  String get puzzleRecommended => 'Ajánlott';
-
-  @override
-  String get puzzlePhases => 'Szakaszok';
-
-  @override
-  String get puzzleMotifs => 'Motívumok';
-
-  @override
-  String get puzzleAdvanced => 'Haladó';
-
-  @override
-  String get puzzleLengths => 'Hossz';
-
-  @override
-  String get puzzleMates => 'Matt';
-
-  @override
-  String get puzzleGoals => 'Célok';
-
-  @override
-  String get puzzleOrigin => 'Forrás';
-
-  @override
-  String get puzzleSpecialMoves => 'Különleges lépések';
-
-  @override
-  String get puzzleDidYouLikeThisPuzzle => 'Tetszett ez a feladvány?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Szavazz egy újért cserébe!';
-
-  @override
-  String get puzzleUpVote => 'Tetszett';
-
-  @override
-  String get puzzleDownVote => 'Nem tetszett';
-
-  @override
-  String get puzzleYourPuzzleRatingWillNotChange => 'A feladvány értékelésed nem fog változni. Ne feledd, a feladványoknak nincs tétje. Az értékelésed csupán segít kiválasztani az aktuális szintednek legjobban megfelelőket.';
-
-  @override
-  String get puzzleFindTheBestMoveForWhite => 'Találd meg világos legjobb lépését.';
-
-  @override
-  String get puzzleFindTheBestMoveForBlack => 'Találd meg sötét legjobb lépését.';
-
-  @override
-  String get puzzleToGetPersonalizedPuzzles => 'Személyre szóló feladványok:';
-
-  @override
-  String puzzlePuzzleId(String param) {
-    return '$param. feladvány';
-  }
-
-  @override
-  String get puzzlePuzzleOfTheDay => 'Napi feladvány';
-
-  @override
-  String get puzzleDailyPuzzle => 'Napi feladvány';
-
-  @override
-  String get puzzleClickToSolve => 'Katt a megoldáshoz';
-
-  @override
-  String get puzzleGoodMove => 'Jó lépés';
-
-  @override
-  String get puzzleBestMove => 'A legjobb lépés!';
-
-  @override
-  String get puzzleKeepGoing => 'Folytasd…';
-
-  @override
-  String get puzzlePuzzleSuccess => 'Siker!';
-
-  @override
-  String get puzzlePuzzleComplete => 'Kész a feladvány!';
-
-  @override
-  String get puzzleByOpenings => 'Megnyitások szerint';
-
-  @override
-  String get puzzlePuzzlesByOpenings => 'Feladványok megnyitások szerint';
-
-  @override
-  String get puzzleOpeningsYouPlayedTheMost => 'A leggyakoribb megnyitások az értékelt játszmáidból';
-
-  @override
-  String get puzzleUseFindInPage => 'Használd a böngésző \"Keresés az oldalon\" funkcióját, hogy megtaláld a kedvenc megnyitásod!';
-
-  @override
-  String get puzzleUseCtrlF => 'Ctrl+f a kedvenc megnyitásod megtalálásához!';
-
-  @override
-  String get puzzleNotTheMove => 'Nem a legjobb lépés!';
-
-  @override
-  String get puzzleTrySomethingElse => 'Próbálkozz mással.';
-
-  @override
-  String puzzleRatingX(String param) {
-    return 'Pontszám: $param';
-  }
-
-  @override
-  String get puzzleHidden => 'rejtett';
-
-  @override
-  String puzzleFromGameLink(String param) {
-    return '$param játszmából';
-  }
-
-  @override
-  String get puzzleContinueTraining => 'Gyakorlás folytatása';
-
-  @override
-  String get puzzleDifficultyLevel => 'Nehézségi szint';
-
-  @override
-  String get puzzleNormal => 'Közepes';
-
-  @override
-  String get puzzleEasier => 'Könnyű';
-
-  @override
-  String get puzzleEasiest => 'Nagyon könnyű';
-
-  @override
-  String get puzzleHarder => 'Nehéz';
-
-  @override
-  String get puzzleHardest => 'Nagyon nehéz';
-
-  @override
-  String get puzzleExample => 'Példa';
-
-  @override
-  String get puzzleAddAnotherTheme => 'Másik téma hozzáadása';
-
-  @override
-  String get puzzleNextPuzzle => 'Következő feladvány';
-
-  @override
-  String get puzzleJumpToNextPuzzleImmediately => 'Rögtön a következő feladányhoz ugrás';
-
-  @override
-  String get puzzlePuzzleDashboard => 'Feladvány áttekintő';
-
-  @override
-  String get puzzleImprovementAreas => 'Fejleszthető témák';
-
-  @override
-  String get puzzleStrengths => 'Erősségek';
-
-  @override
-  String get puzzleHistory => 'Korábbi feladványok';
-
-  @override
-  String get puzzleSolved => 'megoldva';
-
-  @override
-  String get puzzleFailed => 'sikertelen';
-
-  @override
-  String get puzzleStreakDescription => 'Oldj meg egyre nehezedő feladványokat nyerő széria építéséhez. Nincs időkorlát, szánd rá az időt. Egyetlen hibás lépés és a játéknak vége. Viszont mindig egyet átugorhatsz.';
-
-  @override
-  String puzzleYourStreakX(String param) {
-    return 'Nyerő szériád: $param';
-  }
-
-  @override
-  String get puzzleStreakSkipExplanation => 'Ugord át ezt a lépést a szériád megőrzéséhez! Egy menetben csak egyszer működik.';
-
-  @override
-  String get puzzleContinueTheStreak => 'Széria folytatása';
-
-  @override
-  String get puzzleNewStreak => 'Új széria';
-
-  @override
-  String get puzzleFromMyGames => 'Saját játszmáimból';
-
-  @override
-  String get puzzleLookupOfPlayer => 'Feladványok keresése más játszmáiból';
-
-  @override
-  String puzzleFromXGames(String param) {
-    return 'Feladványok $param játszmáiból';
-  }
-
-  @override
-  String get puzzleSearchPuzzles => 'Feladványok keresése';
-
-  @override
-  String get puzzleFromMyGamesNone => 'Nincsenek feladványaid az adatbázisban, de ez semmi rosszat nem jelent.\nJátssz rapid vagy klasszikus partikat, így nagyobb eséllyel szerepelhetnek a te játszmáid feladványai is!';
-
-  @override
-  String puzzleFromXGamesFound(String param1, String param2) {
-    return '$param1 feladvány található $param2 játszmái között';
-  }
-
-  @override
-  String get puzzlePuzzleDashboardDescription => 'Gyakorolj, elemezz, fejlődj';
-
-  @override
-  String puzzlePercentSolved(String param) {
-    return '$param sikeres';
-  }
-
-  @override
-  String get puzzleNoPuzzlesToShow => 'Oldj meg néhány feladványt a statisztika megjelenítéséhez!';
-
-  @override
-  String get puzzleImprovementAreasDescription => 'Gyakorolj ezekben a témákban, hogy erősítsd a tudásod!';
-
-  @override
-  String get puzzleStrengthDescription => 'Ezekben a témákban teljesítesz a legjobban';
-
-  @override
-  String puzzlePlayedXTimes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count beküldött megfejtés',
-      one: '$count beküldött megfejtés',
-      zero: '$count beküldött megfejtés',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsBelowYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count ponttal az értékszámod alatt',
-      one: 'Egy ponttal az értékszámod alatt',
-      zero: 'Egy ponttal az értékszámod alatt',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsAboveYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count ponttal az értékszámod felett',
-      one: 'Egy ponttal az értékszámod felett',
-      zero: 'Egy ponttal az értékszámod felett',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPlayed(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count játszott',
-      one: '$count játszott',
-      zero: '$count játszott',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbToReplay(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count újra',
-      one: '$count újra',
-      zero: '$count újra',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get puzzleThemeAdvancedPawn => 'Előretört gyalog';
-
-  @override
-  String get puzzleThemeAdvancedPawnDescription => 'Egy gyalogod előretört az ellenfél térfelére és át is változhat.';
-
-  @override
-  String get puzzleThemeAdvantage => 'Előny';
-
-  @override
-  String get puzzleThemeAdvantageDescription => 'Ragadd meg a lehetőséget a döntő előny megszerzéséhez. (200cp ≤ eval ≤ 600cp)';
-
-  @override
-  String get puzzleThemeAnastasiaMate => 'Anasztázia mattja';
-
-  @override
-  String get puzzleThemeAnastasiaMateDescription => 'Egy huszár és egy bástya vagy a vezér közösen csapdába ejtik az ellenfél királyát a tábla széle és egy figurája között.';
-
-  @override
-  String get puzzleThemeArabianMate => 'Arab matt';
-
-  @override
-  String get puzzleThemeArabianMateDescription => 'Egy huszár és egy bástya közösen sarokba szorítják az ellenfél királyát.';
-
-  @override
-  String get puzzleThemeAttackingF2F7 => 'Az f2 vagy f7 támadása';
-
-  @override
-  String get puzzleThemeAttackingF2F7Description => 'Az f2 vagy f7 gyalog ellen irányuló támadás, mint például a \"sültmáj\" megnyitás.';
-
-  @override
-  String get puzzleThemeAttraction => 'Ráterelés';
-
-  @override
-  String get puzzleThemeAttractionDescription => 'Csere vagy áldozat ami elmozdítja az ellenfél figuráját egy olyan mezőre ahol újabb taktika alkalmazható.';
-
-  @override
-  String get puzzleThemeBackRankMate => 'Matt a hátsó soron';
-
-  @override
-  String get puzzleThemeBackRankMateDescription => 'Adj mattot az alapsoron ragadt királynak, mikor a saját figurái ejtik csapdába.';
-
-  @override
-  String get puzzleThemeBishopEndgame => 'Futó végjáték';
-
-  @override
-  String get puzzleThemeBishopEndgameDescription => 'Végjáték csak futókkal és gyalogokkal.';
-
-  @override
-  String get puzzleThemeBodenMate => 'Boden mattja';
-
-  @override
-  String get puzzleThemeBodenMateDescription => 'Két támadó futó az átlókat keresztezve adnak mattot a saját figurái által akadályozott királynak.';
-
-  @override
-  String get puzzleThemeCastling => 'Sáncolás';
-
-  @override
-  String get puzzleThemeCastlingDescription => 'Helyezd a királyt biztonságba és mozgósítsd a bástyát.';
-
-  @override
-  String get puzzleThemeCapturingDefender => 'A védő leütése';
-
-  @override
-  String get puzzleThemeCapturingDefenderDescription => 'Egy másik védelméhez elengedhetetlen figura leütése, így a védtelen figura a következő lépésben szabadon levehető.';
-
-  @override
-  String get puzzleThemeCrushing => 'Megsemmisítés';
-
-  @override
-  String get puzzleThemeCrushingDescription => 'Az ellenfél sakkvakságának kihasználása elsöprő előnnyé fordítható. (> 600cp)';
-
-  @override
-  String get puzzleThemeDoubleBishopMate => 'Futópár matt';
-
-  @override
-  String get puzzleThemeDoubleBishopMateDescription => 'A két futó szomszédos átlókon ad mattot a saját figurája által akadályozott királynak.';
-
-  @override
-  String get puzzleThemeDovetailMate => 'Fecskefark matt';
-
-  @override
-  String get puzzleThemeDovetailMateDescription => 'A vezér mattot ad a szomszédos mezőn álló királynak, aminek mindkét menekülési útját saját figurái foglalják el.';
-
-  @override
-  String get puzzleThemeEquality => 'Egyenlőség';
-
-  @override
-  String get puzzleThemeEqualityDescription => 'Visszatérés egy rosszabb állásból és a döntetlen vagy kiegyensúlyozott állás bebiztosítása.';
-
-  @override
-  String get puzzleThemeKingsideAttack => 'Királyszárnytámadás';
-
-  @override
-  String get puzzleThemeKingsideAttackDescription => 'Királyszárnyra sáncolt király ellen indított támadás.';
-
-  @override
-  String get puzzleThemeClearance => 'Felszabadítás';
-
-  @override
-  String get puzzleThemeClearanceDescription => 'Egy lépés, általában tempóval, amely felszabadít egy mezőt, vonalat vagy átlót egy taktika kedvéért.';
-
-  @override
-  String get puzzleThemeDefensiveMove => 'Védekező lépés';
-
-  @override
-  String get puzzleThemeDefensiveMoveDescription => 'Olyan precíz lépés vagy lépéssorozat amivel elkerülhető anyagveszteség vagy más hátrányos helyzet.';
-
-  @override
-  String get puzzleThemeDeflection => 'Elterelés';
-
-  @override
-  String get puzzleThemeDeflectionDescription => 'Egy lépés amivel az ellenfél figurája kimozdítható aktuális feladatából, például egy kulcsmező felügyelete.';
-
-  @override
-  String get puzzleThemeDiscoveredAttack => 'Felfedés';
-
-  @override
-  String get puzzleThemeDiscoveredAttackDescription => 'Egy figura mozgatása ami előzőleg egy másik figura tűzvonalában állt, például huszár elléptetése a bástya útjából.';
-
-  @override
-  String get puzzleThemeDoubleCheck => 'Kettős sakk';
-
-  @override
-  String get puzzleThemeDoubleCheckDescription => 'Két figurával történő egyidejű sakkadás amikor felfedés után az elmozdított és a korábban akadályozott figura is támadja az ellenfél királyát.';
-
-  @override
-  String get puzzleThemeEndgame => 'Végjáték';
-
-  @override
-  String get puzzleThemeEndgameDescription => 'Taktikák a játszma utolsó fázisában.';
-
-  @override
-  String get puzzleThemeEnPassantDescription => 'Az en passant szabályt kihasználó taktika, mikor egy gyalog leütheti a mellette elhaladó, alapállásból kettőt lépő ellenfél gyalogját.';
-
-  @override
-  String get puzzleThemeExposedKing => 'Kiszolgáltatott király';
-
-  @override
-  String get puzzleThemeExposedKingDescription => 'Olyan taktika, ami kihasználja a király körüli kevés védőt, gyakran matthoz vezet.';
-
-  @override
-  String get puzzleThemeFork => 'Villa';
-
-  @override
-  String get puzzleThemeForkDescription => 'Olyan lépés amivel a mozgatott figura egyszerre két ellenséges figurát támad.';
-
-  @override
-  String get puzzleThemeHangingPiece => 'Lógó figura';
-
-  @override
-  String get puzzleThemeHangingPieceDescription => 'Azok a taktikák amik védtelen vagy elégtelenül bevédett, ezért szabadon levehető figurákon alapulnak.';
-
-  @override
-  String get puzzleThemeHookMate => 'Horog matt';
-
-  @override
-  String get puzzleThemeHookMateDescription => 'Egy bástya, huszár és gyalog az ellenfél, gyalogja által akadályozott királyát körbevéve adnak mattot.';
-
-  @override
-  String get puzzleThemeInterference => 'Akadályozás';
-
-  @override
-  String get puzzleThemeInterferenceDescription => 'Egy figura mozgatása két ellenséges figura közé az egyiket vagy mindkettőt védtelenné téve, például egy huszárral belépni egy védett mezőre két bástya közé.';
-
-  @override
-  String get puzzleThemeIntermezzo => 'Köztes lépés';
-
-  @override
-  String get puzzleThemeIntermezzoDescription => 'A várt lépés megtétele helyett egy olyan lépés beszúrása, amely fenyegetésére az ellenfélnek rögtön válaszolnia kell. Ismert még \"Zwischenzug\"-nak vagy \"Intermezzo\"-nak.';
-
-  @override
-  String get puzzleThemeKnightEndgame => 'Huszár végjáték';
-
-  @override
-  String get puzzleThemeKnightEndgameDescription => 'Végjáték csak huszárokkal és gyalogokkal.';
-
-  @override
-  String get puzzleThemeLong => 'Hosszú feladvány';
-
-  @override
-  String get puzzleThemeLongDescription => 'Három lépés a megoldás.';
-
-  @override
-  String get puzzleThemeMaster => 'Mesterjátszmák';
-
-  @override
-  String get puzzleThemeMasterDescription => 'Feladványok mesterek játszmáiból.';
-
-  @override
-  String get puzzleThemeMasterVsMaster => 'Mesterek egymás ellen';
-
-  @override
-  String get puzzleThemeMasterVsMasterDescription => 'Feladványok két mester egymás elleni játszmáiból.';
-
-  @override
-  String get puzzleThemeMate => 'Matt';
-
-  @override
-  String get puzzleThemeMateDescription => 'Vidd a játszmát stílusosan.';
-
-  @override
-  String get puzzleThemeMateIn1 => 'Matt 1 lépésben';
-
-  @override
-  String get puzzleThemeMateIn1Description => 'Adj mattot egy lépésben.';
-
-  @override
-  String get puzzleThemeMateIn2 => 'Matt 2 lépésben';
-
-  @override
-  String get puzzleThemeMateIn2Description => 'Adj mattot két lépésben.';
-
-  @override
-  String get puzzleThemeMateIn3 => 'Matt 3 lépésben';
-
-  @override
-  String get puzzleThemeMateIn3Description => 'Adj mattot három lépésben.';
-
-  @override
-  String get puzzleThemeMateIn4 => 'Matt 4 lépésben';
-
-  @override
-  String get puzzleThemeMateIn4Description => 'Adj mattot négy lépésben.';
-
-  @override
-  String get puzzleThemeMateIn5 => 'Matt 5 vagy több lépésben';
-
-  @override
-  String get puzzleThemeMateIn5Description => 'Találd meg a matthoz vezető hosszabb lépéssorozatot.';
-
-  @override
-  String get puzzleThemeMiddlegame => 'Középjáték';
-
-  @override
-  String get puzzleThemeMiddlegameDescription => 'Taktikák a játszma második fázisában.';
-
-  @override
-  String get puzzleThemeOneMove => 'Egy lépéses feladvány';
-
-  @override
-  String get puzzleThemeOneMoveDescription => 'Csupán egy lépésből álló feladvány.';
-
-  @override
-  String get puzzleThemeOpening => 'Megnyitás';
-
-  @override
-  String get puzzleThemeOpeningDescription => 'Taktikák a játszma kezdeti fázisában.';
-
-  @override
-  String get puzzleThemePawnEndgame => 'Gyalogvégjáték';
-
-  @override
-  String get puzzleThemePawnEndgameDescription => 'Végjáték csak gyalogokkal.';
-
-  @override
-  String get puzzleThemePin => 'Kötés';
-
-  @override
-  String get puzzleThemePinDescription => 'A kötés, mikor egy figura nem tud ellépni anélkül, hogy felfedné az ellenfél támadását egy értékesebb figura felé.';
-
-  @override
-  String get puzzleThemePromotion => 'Átváltozás';
-
-  @override
-  String get puzzleThemePromotionDescription => 'Átváltozó vagy átváltozással fenyegető gyalog kulcsfontosságú taktika.';
-
-  @override
-  String get puzzleThemeQueenEndgame => 'Vezér végjáték';
-
-  @override
-  String get puzzleThemeQueenEndgameDescription => 'Végjáték csak vezérekkel és gyalogokkal.';
-
-  @override
-  String get puzzleThemeQueenRookEndgame => 'Vezér és bástya';
-
-  @override
-  String get puzzleThemeQueenRookEndgameDescription => 'Végjáték vezérekkel, bástyákkal és gyalogokkal.';
-
-  @override
-  String get puzzleThemeQueensideAttack => 'Vezérszárnytámadás';
-
-  @override
-  String get puzzleThemeQueensideAttackDescription => 'Vezérszárnyra sáncolt király ellen indított támadás.';
-
-  @override
-  String get puzzleThemeQuietMove => 'Csendes lépés';
-
-  @override
-  String get puzzleThemeQuietMoveDescription => 'Olyan lépés ami nem ad sakkot és nem is ütés, de védhetetlen fenyegetést készít elő egy későbbi lépéshez.';
-
-  @override
-  String get puzzleThemeRookEndgame => 'Bástya végjáték';
-
-  @override
-  String get puzzleThemeRookEndgameDescription => 'Végjáték csak bástyákkal és gyalogokkal.';
-
-  @override
-  String get puzzleThemeSacrifice => 'Áldozat';
-
-  @override
-  String get puzzleThemeSacrificeDescription => 'Olyan taktika ami enged leütni egy figurát annak érdekében, hogy később előnyre tegyen szert kényszerítő lépések által.';
-
-  @override
-  String get puzzleThemeShort => 'Rövid feladvány';
-
-  @override
-  String get puzzleThemeShortDescription => 'Két lépés a megoldás.';
-
-  @override
-  String get puzzleThemeSkewer => 'Nyárs';
-
-  @override
-  String get puzzleThemeSkewerDescription => 'Az a motívum mikor egy magasabb értékű figurát támadva az kénytelen ellépni szabaddá téve így az utat a kisebb értékű figura leütéséhez. A kötés fordítottja.';
-
-  @override
-  String get puzzleThemeSmotheredMate => 'Fojtott matt';
-
-  @override
-  String get puzzleThemeSmotheredMateDescription => 'Olyan huszárral adott matt, ahol a sakkot kapó király nem tud lépni, mert saját figurái veszik körül (fojtják meg).';
-
-  @override
-  String get puzzleThemeSuperGM => 'Szupernagymesteri játszmák';
-
-  @override
-  String get puzzleThemeSuperGMDescription => 'Feladványok a világ legjobb játékosai közötti összecsapásokból.';
-
-  @override
-  String get puzzleThemeTrappedPiece => 'Csapda';
-
-  @override
-  String get puzzleThemeTrappedPieceDescription => 'Egy figura leütése nem elkerülhető, ha nincs menekülési útja.';
-
-  @override
-  String get puzzleThemeUnderPromotion => 'Minor-átváltozás';
-
-  @override
-  String get puzzleThemeUnderPromotionDescription => 'Gyalog átváltozása huszár, futó vagy bástyára.';
-
-  @override
-  String get puzzleThemeVeryLong => 'Nagyon hosszú feladvány';
-
-  @override
-  String get puzzleThemeVeryLongDescription => 'Négy vagy több lépés a megoldáshoz.';
-
-  @override
-  String get puzzleThemeXRayAttack => 'Röntgen támadás';
-
-  @override
-  String get puzzleThemeXRayAttackDescription => 'Figura ami egy ellenséges figurán áthatolva véd vagy támad egy mezőt.';
-
-  @override
-  String get puzzleThemeZugzwang => 'Lépéskényszer';
-
-  @override
-  String get puzzleThemeZugzwangDescription => 'Az ellenfélnek kevés lehetséges lépése van, és mind csak tovább rontja a pozícióját.';
-
-  @override
-  String get puzzleThemeHealthyMix => 'Vegyes mix';
-
-  @override
-  String get puzzleThemeHealthyMixDescription => 'Egy kicsit mindenből. Nem tudod mire számíthatsz, ezért állj készen bármire! Akár egy valódi játszmában.';
-
-  @override
-  String get puzzleThemePlayerGames => 'Felhasználók játszmái';
-
-  @override
-  String get puzzleThemePlayerGamesDescription => 'A saját vagy mások játszmáiból generált feladványok keresése.';
-
-  @override
-  String puzzleThemePuzzleDownloadInformation(String param) {
-    return 'Ezek a feladványok közkincsnek minősülnek és innen letölthetők: $param.';
-  }
-
-  @override
-  String perfStatPerfStats(String param) {
-    return '$param statisztika';
-  }
-
-  @override
-  String get perfStatViewTheGames => 'Mutasd a játszmákat';
-
-  @override
-  String get perfStatProvisional => 'becsült';
-
-  @override
-  String get perfStatNotEnoughRatedGames => 'Nincs elegendő értékelt játszmád megbízható értékszám meghatározásához.';
-
-  @override
-  String perfStatProgressOverLastXGames(String param) {
-    return 'Az utolsó $param játszma szerinti alakulás:';
-  }
-
-  @override
-  String perfStatRatingDeviation(String param) {
-    return 'Pontszám eltérés: $param.';
-  }
-
-  @override
-  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
-    return 'Az alacsonyabb érték azt jelenti, hogy a minősítés stabilabb. $param1 feletti pontszám ideiglenesnek tekintendő. A ranglistán való szerepléshez ennek az értéknek $param2 (szokásos sakk) vagy $param3 (sakk változatok) alatt kell lennie.';
-  }
-
-  @override
-  String get perfStatTotalGames => 'Összes játszma';
-
-  @override
-  String get perfStatRatedGames => 'Rangsorolt játszma';
-
-  @override
-  String get perfStatTournamentGames => 'Verseny játszma';
-
-  @override
-  String get perfStatBerserkedGames => 'Berserk játszma';
-
-  @override
-  String get perfStatTimeSpentPlaying => 'Játékkal töltött idő';
-
-  @override
-  String get perfStatAverageOpponent => 'Ellenfelek átlaga';
-
-  @override
-  String get perfStatVictories => 'Győzelmek';
-
-  @override
-  String get perfStatDefeats => 'Vereségek';
-
-  @override
-  String get perfStatDisconnections => 'Szétkapcsolások';
-
-  @override
-  String get perfStatNotEnoughGames => 'Nincs elegendő játszma';
-
-  @override
-  String perfStatHighestRating(String param) {
-    return 'Legmagasabb pontszám: $param';
-  }
-
-  @override
-  String perfStatLowestRating(String param) {
-    return 'Legalacsonyabb pontszám: $param';
-  }
-
-  @override
-  String perfStatFromXToY(String param1, String param2) {
-    return '$param1-tól $param2-ig';
-  }
-
-  @override
-  String get perfStatWinningStreak => 'Győztes sorozat';
-
-  @override
-  String get perfStatLosingStreak => 'Vesztes sorozat';
-
-  @override
-  String perfStatLongestStreak(String param) {
-    return 'Leghosszabb sorozat: $param';
-  }
-
-  @override
-  String perfStatCurrentStreak(String param) {
-    return 'Jelenlegi sorozat: $param';
-  }
-
-  @override
-  String get perfStatBestRated => 'Legjobb győzelmek';
-
-  @override
-  String get perfStatGamesInARow => 'Egymás után játszott partik';
-
-  @override
-  String get perfStatLessThanOneHour => 'Kevesebb, mint egy óra játszmák között';
-
-  @override
-  String get perfStatMaxTimePlaying => 'Legtöbb játékkal töltött idő';
-
-  @override
-  String get perfStatNow => 'most';
-
-  @override
-  String get searchSearch => 'Keresés';
-
-  @override
-  String get settingsSettings => 'Beállítások';
-
-  @override
-  String get settingsCloseAccount => 'Fiók zárolása';
-
-  @override
-  String get settingsManagedAccountCannotBeClosed => 'A felhasználói fiókod felügyelet alatt áll, ezért nem zárolható.';
-
-  @override
-  String get settingsClosingIsDefinitive => 'A fiók törlése végleges. Nem lehet visszavonni. Biztos vagy benne?';
-
-  @override
-  String get settingsCantOpenSimilarAccount => 'Nem fogsz tudni új fiókot nyitni ugyanezzel a névvel, még eltérő kis- és nagybetűkkel sem.';
-
-  @override
-  String get settingsChangedMindDoNotCloseAccount => 'Meggondoltam magam, mégsem zárolom a fiókomat';
-
-  @override
-  String get settingsCloseAccountExplanation => 'Biztos, hogy zárolni akarod a fiókod? A döntés végleges és visszavonhatatlan. Nem fogsz tudni belépni SOHA TÖBBÉ.';
-
-  @override
-  String get settingsThisAccountIsClosed => 'Ez a fiók zárolva van.';
-
-  @override
-  String get streamerLichessStreamers => 'Lichess streamerek';
-
-  @override
   String get stormMoveToStart => 'Lépj a kezdéshez';
 
   @override
@@ -4646,14 +4640,11 @@ class AppLocalizationsHu extends AppLocalizations {
   }
 
   @override
+  String get streamerLichessStreamers => 'Lichess streamerek';
+
+  @override
   String get studyShareAndExport => 'Megosztás és exportálás';
 
   @override
   String get studyStart => 'Mehet';
-
-  @override
-  String get broadcastBroadcasts => 'Versenyközvetítések';
-
-  @override
-  String get broadcastStartDate => 'Kezdés időpontja a saját időzónádban';
 }
