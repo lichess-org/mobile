@@ -634,7 +634,7 @@ class _BottomBar extends ConsumerWidget {
                 ),
               BottomBarButton(
                 icon: Icons.delete,
-                label: context.l10n.stormNewRun.split(' ').take(2).join(' '),
+                label: context.l10n.stormNewRun.split('(').first.trimRight(),
                 showLabel: true,
                 onTap: () {
                   stormState.clock.reset();
@@ -644,7 +644,7 @@ class _BottomBar extends ConsumerWidget {
               if (stormState.mode == StormMode.running)
                 BottomBarButton(
                   icon: LichessIcons.flag,
-                  label: context.l10n.stormEndRun.split(' ').take(2).join(' '),
+                  label: context.l10n.stormEndRun.split('(').first.trimRight(),
                   showLabel: true,
                   onTap: stormState.puzzleIndex >= 1
                       ? () {
