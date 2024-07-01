@@ -1,2 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+  <string name="homeTab">Startscherm</string>
+  <string name="puzzlesTab">Puzzels</string>
+  <string name="toolsTab">Gereedschap</string>
+  <string name="watchTab">Kijken</string>
+  <string name="settingsTab">Instellingen</string>
+</resources>
