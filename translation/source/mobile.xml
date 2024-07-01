@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="homeTab">Home</string>
+  <string name="puzzlesTab">Puzzles</string>
+  <string name="toolsTab">Tools</string>
+  <string name="watchTab">Watch</string>
+  <string name="settingsTab">Settings</string>
+</resources>
