@@ -242,10 +242,10 @@ class AppLocalizationsHr extends AppLocalizations {
   }
 
   @override
-  String get contactContact => 'Kontaktirajte nas';
+  String get broadcastBroadcasts => 'Prijenosi';
 
   @override
-  String get contactContactLichess => 'Kontaktiraj Lichess';
+  String get broadcastStartDate => 'Datum početka u vlastitoj vremenskoj zoni';
 
   @override
   String challengeChallengesX(String param1) {
@@ -329,6 +329,1017 @@ class AppLocalizationsHr extends AppLocalizations {
   String get challengeInviteLichessUser => 'Ili pozovite Lichess korisnika:';
 
   @override
+  String get contactContact => 'Kontaktirajte nas';
+
+  @override
+  String get contactContactLichess => 'Kontaktiraj Lichess';
+
+  @override
+  String get patronDonate => 'Donirajte';
+
+  @override
+  String get patronLichessPatron => 'Lichess donacijska stranica';
+
+  @override
+  String perfStatPerfStats(String param) {
+    return '$param statistika';
+  }
+
+  @override
+  String get perfStatViewTheGames => 'Pogledaj partije';
+
+  @override
+  String get perfStatProvisional => 'privremeno';
+
+  @override
+  String get perfStatNotEnoughRatedGames => 'Odigrano je nedovoljno rangiranih partija da bi se uspostavio pouzdani rejting.';
+
+  @override
+  String perfStatProgressOverLastXGames(String param) {
+    return 'Napredak u zadnjih $param partija:';
+  }
+
+  @override
+  String perfStatRatingDeviation(String param) {
+    return 'Rejting devijacija: $param.';
+  }
+
+  @override
+  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
+    return 'Manja vrijednost znači da je ocjena stabilnija. Iznad $param1, ocjena se smatra privremenom. Da bi bila uključena u ljestvicu, ova vrijednost treba biti ispod $param2 (standardni šah) ili $param3 (varijante).';
+  }
+
+  @override
+  String get perfStatTotalGames => 'Ukupno partija';
+
+  @override
+  String get perfStatRatedGames => 'Rangirane partije';
+
+  @override
+  String get perfStatTournamentGames => 'Turnirske partije';
+
+  @override
+  String get perfStatBerserkedGames => 'Berserk partije';
+
+  @override
+  String get perfStatTimeSpentPlaying => 'Vrijeme provedeno igrajući';
+
+  @override
+  String get perfStatAverageOpponent => 'Prosječni protivnik';
+
+  @override
+  String get perfStatVictories => 'Pobjede';
+
+  @override
+  String get perfStatDefeats => 'Porazi';
+
+  @override
+  String get perfStatDisconnections => 'Prekidi veze';
+
+  @override
+  String get perfStatNotEnoughGames => 'Nedovoljno partija odigrano';
+
+  @override
+  String perfStatHighestRating(String param) {
+    return 'Najviši rejting: $param';
+  }
+
+  @override
+  String perfStatLowestRating(String param) {
+    return 'Najniži rejting: $param';
+  }
+
+  @override
+  String perfStatFromXToY(String param1, String param2) {
+    return 'od $param1 do $param2';
+  }
+
+  @override
+  String get perfStatWinningStreak => 'Pobjednički niz';
+
+  @override
+  String get perfStatLosingStreak => 'Gubitnički niz';
+
+  @override
+  String perfStatLongestStreak(String param) {
+    return 'Najduži niz: $param';
+  }
+
+  @override
+  String perfStatCurrentStreak(String param) {
+    return 'Trenutni niz: $param';
+  }
+
+  @override
+  String get perfStatBestRated => 'Najbolje rangirane pobjede';
+
+  @override
+  String get perfStatGamesInARow => 'Igre odigrane za redom';
+
+  @override
+  String get perfStatLessThanOneHour => 'Manje od jednog sata između igara';
+
+  @override
+  String get perfStatMaxTimePlaying => 'Vrijeme provedeno igrajući';
+
+  @override
+  String get perfStatNow => 'sada';
+
+  @override
+  String get preferencesPreferences => 'Postavke';
+
+  @override
+  String get preferencesDisplay => 'Zaslon';
+
+  @override
+  String get preferencesPrivacy => 'Privatnost';
+
+  @override
+  String get preferencesNotifications => 'Obavijesti';
+
+  @override
+  String get preferencesPieceAnimation => 'Animacija figura';
+
+  @override
+  String get preferencesMaterialDifference => 'Razlika u figurama';
+
+  @override
+  String get preferencesBoardHighlights => 'Osvijetli zadnji potez i šah';
+
+  @override
+  String get preferencesPieceDestinations => 'Legalni potezi (važeći potezi i pretpotezi)';
+
+  @override
+  String get preferencesBoardCoordinates => 'Oznake na ploči (A-H, 1-8)';
+
+  @override
+  String get preferencesMoveListWhilePlaying => 'Popis poteza tijekom partije';
+
+  @override
+  String get preferencesPgnPieceNotation => 'Oznaka poteza';
+
+  @override
+  String get preferencesChessPieceSymbol => 'Simbol šahovske figure';
+
+  @override
+  String get preferencesPgnLetter => 'Slovo (K, Q, R, B, N)';
+
+  @override
+  String get preferencesZenMode => 'Zen način';
+
+  @override
+  String get preferencesShowPlayerRatings => 'Prikaži igračev rejting';
+
+  @override
+  String get preferencesShowFlairs => 'Show player flairs';
+
+  @override
+  String get preferencesExplainShowPlayerRatings => 'Omogućuje sakrivanje svih rejtinga sa websajta da bi se fokusirali na šah. Partije i dalje mogu biti bodovane, postavka utječe samo na prikaz, ne računanje.';
+
+  @override
+  String get preferencesDisplayBoardResizeHandle => 'Prikaži ručicu za promjenu veličine ploče';
+
+  @override
+  String get preferencesOnlyOnInitialPosition => 'Samo na početku partije';
+
+  @override
+  String get preferencesInGameOnly => 'Samo unutar igre';
+
+  @override
+  String get preferencesChessClock => 'Sat';
+
+  @override
+  String get preferencesTenthsOfSeconds => 'Desetinke sekundi';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'Kad je ostalo manje od 10 sekundi';
+
+  @override
+  String get preferencesHorizontalGreenProgressBars => 'Vodoravna zelena linija napretka';
+
+  @override
+  String get preferencesSoundWhenTimeGetsCritical => 'Zvuk kada je vrijeme kritično';
+
+  @override
+  String get preferencesGiveMoreTime => 'Daj više vremena';
+
+  @override
+  String get preferencesGameBehavior => 'Način igre';
+
+  @override
+  String get preferencesHowDoYouMovePieces => 'Kako želiš pomicati figure?';
+
+  @override
+  String get preferencesClickTwoSquares => 'Klikom na dva polja';
+
+  @override
+  String get preferencesDragPiece => 'Povlačenjem figure';
+
+  @override
+  String get preferencesBothClicksAndDrag => 'Ili';
+
+  @override
+  String get preferencesPremovesPlayingDuringOpponentTurn => 'Pretpotezi (potezi dok je protivnikov red)';
+
+  @override
+  String get preferencesTakebacksWithOpponentApproval => 'Povlačenje poteza (ako se protivnik složi)';
+
+  @override
+  String get preferencesInCasualGamesOnly => 'Samo u prijateljskim partijama';
+
+  @override
+  String get preferencesPromoteToQueenAutomatically => 'Auto-promocija u damu';
+
+  @override
+  String get preferencesExplainPromoteToQueenAutomatically => 'Držite <ctrl> tipku prilikom promocije pješaka da bi privremeno onemogućili automatsku promociju u damu';
+
+  @override
+  String get preferencesWhenPremoving => 'Kada odigraš pretpotez';
+
+  @override
+  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Automatski proglasi remi po trostrukom ponavljanju pozicije';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Kada je vrijeme < 30 sekundi';
+
+  @override
+  String get preferencesMoveConfirmation => 'Potvrda poteza';
+
+  @override
+  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Can be disabled during a game with the board menu';
+
+  @override
+  String get preferencesInCorrespondenceGames => 'U dopisnim partijama';
+
+  @override
+  String get preferencesCorrespondenceAndUnlimited => 'Dopisni šah i neograničene partije';
+
+  @override
+  String get preferencesConfirmResignationAndDrawOffers => 'Potvrdi predaju i ponudu za remi';
+
+  @override
+  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Način rošade';
+
+  @override
+  String get preferencesCastleByMovingTwoSquares => 'Pomakni kralja dvije kocke';
+
+  @override
+  String get preferencesCastleByMovingOntoTheRook => 'Pomakni kralja na kulu';
+
+  @override
+  String get preferencesInputMovesWithTheKeyboard => 'Omogući unošenje poteza tipkovnicom';
+
+  @override
+  String get preferencesInputMovesWithVoice => 'Input moves with your voice';
+
+  @override
+  String get preferencesSnapArrowsToValidMoves => 'Crtaj strelice za planiranje budućih poteza';
+
+  @override
+  String get preferencesSayGgWpAfterLosingOrDrawing => 'Reci \"Dobra partija, odlićno odigrano\" kad izgubiš ili odigraš remi';
+
+  @override
+  String get preferencesYourPreferencesHaveBeenSaved => 'Tvoje promjene su spremljene.';
+
+  @override
+  String get preferencesScrollOnTheBoardToReplayMoves => 'Pomakni kotačić miša iznad ploče za pregled poteza';
+
+  @override
+  String get preferencesCorrespondenceEmailNotification => 'Dnevna obavijest putem pošte s popisom vaših dopisnih igara';
+
+  @override
+  String get preferencesNotifyStreamStart => 'Streamer ide uživo';
+
+  @override
+  String get preferencesNotifyInboxMsg => 'Nova poruka u ulaznoj pošti';
+
+  @override
+  String get preferencesNotifyForumMention => 'Forumski komentar vas spominje';
+
+  @override
+  String get preferencesNotifyInvitedStudy => 'Poziv za Study';
+
+  @override
+  String get preferencesNotifyGameEvent => 'Ažuriranja dopisnih igara';
+
+  @override
+  String get preferencesNotifyChallenge => 'Izazovi';
+
+  @override
+  String get preferencesNotifyTournamentSoon => 'Turnir započinje ubrzo';
+
+  @override
+  String get preferencesNotifyTimeAlarm => 'Sat za dopisivanje ističe';
+
+  @override
+  String get preferencesNotifyBell => 'Obavijest zvonom unutar Lichessa';
+
+  @override
+  String get preferencesNotifyPush => 'Obavijest uređaja kada niste na Lichessu';
+
+  @override
+  String get preferencesNotifyWeb => 'Preglednik';
+
+  @override
+  String get preferencesNotifyDevice => 'Uređaj';
+
+  @override
+  String get preferencesBellNotificationSound => 'Obavijest kao zvuk';
+
+  @override
+  String get puzzlePuzzles => 'Zadaci';
+
+  @override
+  String get puzzlePuzzleThemes => 'Kategorije zadataka';
+
+  @override
+  String get puzzleRecommended => 'Preporučeno';
+
+  @override
+  String get puzzlePhases => 'Faze';
+
+  @override
+  String get puzzleMotifs => 'Motivi';
+
+  @override
+  String get puzzleAdvanced => 'Napredno';
+
+  @override
+  String get puzzleLengths => 'Duljine';
+
+  @override
+  String get puzzleMates => 'Matevi';
+
+  @override
+  String get puzzleGoals => 'Ciljevi';
+
+  @override
+  String get puzzleOrigin => 'Podrijetlo';
+
+  @override
+  String get puzzleSpecialMoves => 'Specifični potezi';
+
+  @override
+  String get puzzleDidYouLikeThisPuzzle => 'Sviđa li ti se ovaj zadatak?';
+
+  @override
+  String get puzzleVoteToLoadNextOne => 'Ocijeni i prijeđi na sljedeći zadatak!';
+
+  @override
+  String get puzzleUpVote => 'Glasaj za zagonetku';
+
+  @override
+  String get puzzleDownVote => 'Glasaj protiv zagonetke';
+
+  @override
+  String get puzzleYourPuzzleRatingWillNotChange => 'Tvoj rejting zadataka se neće promjeniti. Imaj na umu da rješavanje zadaka nije natjecanje. Rejting prvenstveno pomaže u odabiru najboljih zadataka za tvoj trenutni nivo vještine.';
+
+  @override
+  String get puzzleFindTheBestMoveForWhite => 'Pronađi najbolji potez za bijelog.';
+
+  @override
+  String get puzzleFindTheBestMoveForBlack => 'Pronađi najbolji potez za crnog.';
+
+  @override
+  String get puzzleToGetPersonalizedPuzzles => 'Za personalizirane zadatke:';
+
+  @override
+  String puzzlePuzzleId(String param) {
+    return 'Zadatak $param';
+  }
+
+  @override
+  String get puzzlePuzzleOfTheDay => 'Zadatak dana';
+
+  @override
+  String get puzzleDailyPuzzle => 'Dnevna zagonetka';
+
+  @override
+  String get puzzleClickToSolve => 'Klikni za rješenje';
+
+  @override
+  String get puzzleGoodMove => 'Dobar potez';
+
+  @override
+  String get puzzleBestMove => 'Najbolji potez!';
+
+  @override
+  String get puzzleKeepGoing => 'Nastavi…';
+
+  @override
+  String get puzzlePuzzleSuccess => 'Uspješno obavljeno!';
+
+  @override
+  String get puzzlePuzzleComplete => 'Zadatak riješen!';
+
+  @override
+  String get puzzleByOpenings => 'Prema otvaranjima';
+
+  @override
+  String get puzzlePuzzlesByOpenings => 'Zagonetke prema otvaranjima';
+
+  @override
+  String get puzzleOpeningsYouPlayedTheMost => 'Otvaranje koje si najviše igrao u rangiranim igrama';
+
+  @override
+  String get puzzleUseFindInPage => 'Koristi \"Pronađi na stranici\" u izborniku preglednika da bi pronašao svoje omiljeno otvaranje!';
+
+  @override
+  String get puzzleUseCtrlF => 'Koristi Ctrl+f da bi pronašao svoje omiljeno otvaranje!';
+
+  @override
+  String get puzzleNotTheMove => 'Netočan odgovor!';
+
+  @override
+  String get puzzleTrySomethingElse => 'Pokušaj nešto drugo.';
+
+  @override
+  String puzzleRatingX(String param) {
+    return 'Rejting: $param';
+  }
+
+  @override
+  String get puzzleHidden => 'skriven';
+
+  @override
+  String puzzleFromGameLink(String param) {
+    return 'Iz partije $param';
+  }
+
+  @override
+  String get puzzleContinueTraining => 'Nastavi sa zadacima';
+
+  @override
+  String get puzzleDifficultyLevel => 'Težina zadataka';
+
+  @override
+  String get puzzleNormal => 'Srednje';
+
+  @override
+  String get puzzleEasier => 'Lakše';
+
+  @override
+  String get puzzleEasiest => 'Najlakše';
+
+  @override
+  String get puzzleHarder => 'Teže';
+
+  @override
+  String get puzzleHardest => 'Najteže';
+
+  @override
+  String get puzzleExample => 'Primjer';
+
+  @override
+  String get puzzleAddAnotherTheme => 'Dodaj novu kategoriju';
+
+  @override
+  String get puzzleNextPuzzle => 'Sljedeća puzla';
+
+  @override
+  String get puzzleJumpToNextPuzzleImmediately => 'Automatski učitaj nove zadatke';
+
+  @override
+  String get puzzlePuzzleDashboard => 'Sučelje zadataka';
+
+  @override
+  String get puzzleImprovementAreas => 'Nedostaci';
+
+  @override
+  String get puzzleStrengths => 'Prednosti';
+
+  @override
+  String get puzzleHistory => 'Povijest zadataka';
+
+  @override
+  String get puzzleSolved => 'riješeno';
+
+  @override
+  String get puzzleFailed => 'neuspješno';
+
+  @override
+  String get puzzleStreakDescription => 'Stvori pobjednički niz rješavajući sve teže zadatke bez vremenskog ograničenja. Jedan krivi potez i igraje gotova! Dozvoljeno je preskočiti jedan potez u sesiji.';
+
+  @override
+  String puzzleYourStreakX(String param) {
+    return 'Tvoj niz: $param';
+  }
+
+  @override
+  String get puzzleStreakSkipExplanation => 'Preskoči ovaj potez da zadržiš pobjednički niz! Dozvoljeno je jedno preskakanje po sesiji.';
+
+  @override
+  String get puzzleContinueTheStreak => 'Nastavite niz';
+
+  @override
+  String get puzzleNewStreak => 'Novi niz';
+
+  @override
+  String get puzzleFromMyGames => 'Iz mojih partija';
+
+  @override
+  String get puzzleLookupOfPlayer => 'Pronađi zadatke iz igračevih partija';
+
+  @override
+  String puzzleFromXGames(String param) {
+    return 'Zadatci iz partija igrača $param';
+  }
+
+  @override
+  String get puzzleSearchPuzzles => 'Pretraži zadatke';
+
+  @override
+  String get puzzleFromMyGamesNone => 'Nema tvojih zadataka u bazi, ali Lichess te i dalje puno voli.\n\nIgraj rapid i classic partije da povećaš vjerojatnost da zadatak iz tvoje partije bude dodan!';
+
+  @override
+  String puzzleFromXGamesFound(String param1, String param2) {
+    return '$param1 zadatka su nađena u $param2 partija';
+  }
+
+  @override
+  String get puzzlePuzzleDashboardDescription => 'Vježbaj, analiziraj, unaprijedi';
+
+  @override
+  String puzzlePercentSolved(String param) {
+    return '$param riješenih';
+  }
+
+  @override
+  String get puzzleNoPuzzlesToShow => 'Niste odigrali ni jedan zadatak.';
+
+  @override
+  String get puzzleImprovementAreasDescription => 'Vježbaj ove zadatke da bi optimalno napredovao!';
+
+  @override
+  String get puzzleStrengthDescription => 'Ove teme ti idu najbolje';
+
+  @override
+  String puzzlePlayedXTimes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Odigrano $count puta',
+      few: 'Odigrano $count puta',
+      one: 'Odigrano $count puta',
+      zero: 'Odigrano $count puta',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsBelowYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count bodova ispod tvog rejtinga iz zadataka',
+      few: '$count bodova ispod tvog rejtinga iz zadataka',
+      one: '$count bod ispod tvog rejtinga iz zadataka',
+      zero: '$count bod ispod tvog rejtinga iz zadataka',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsAboveYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count bodova iznad tvog rejtinga iz zadataka',
+      few: '$count bodova iznad tvog rejtinga iz zadataka',
+      one: '$count bod iznad tvog rejtinga iz zadataka',
+      zero: '$count bod iznad tvog rejtinga iz zadataka',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPlayed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count odigranih',
+      few: '$count odigrana',
+      one: '$count odigran',
+      zero: '$count odigran',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbToReplay(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count za pregledati',
+      few: '$count za pregledati',
+      one: '$count za pregledati',
+      zero: '$count za pregledati',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get puzzleThemeAdvancedPawn => 'Pješak napreduje';
+
+  @override
+  String get puzzleThemeAdvancedPawnDescription => 'Pješak u postupku ili prijetnji promaknućem je ključan za taktiku.';
+
+  @override
+  String get puzzleThemeAdvantage => 'Prednost';
+
+  @override
+  String get puzzleThemeAdvantageDescription => 'Iskoristi priliku i pridobij odlučujuču prednost. (200cp ≤ eval ≤ 600cp)';
+
+  @override
+  String get puzzleThemeAnastasiaMate => 'Anastazijin mat';
+
+  @override
+  String get puzzleThemeAnastasiaMateDescription => 'Skakač i top ili dama udružuju se kako bi uhvatili protivničkog kralja u zamku između ruba ploče s jedne i njegove figure s druge strane.';
+
+  @override
+  String get puzzleThemeArabianMate => 'Arapski mat';
+
+  @override
+  String get puzzleThemeArabianMateDescription => 'Skakač i top udružuju snage kako bi zarobili suparničkog kralja u uglu igraće ploče.';
+
+  @override
+  String get puzzleThemeAttackingF2F7 => 'Napad na f2 ili f7 polje';
+
+  @override
+  String get puzzleThemeAttackingF2F7Description => 'Napad na f2 ili f7 pješaka kao što je napad lovcem popularno nazvan \"fried liver opening\".';
+
+  @override
+  String get puzzleThemeAttraction => 'Privlačenje';
+
+  @override
+  String get puzzleThemeAttractionDescription => 'Razmjena ili žrtva koja potiče ili forsira protivničke figure u poziciju koja omogućuje taktičke poteze koji donose prednost.';
+
+  @override
+  String get puzzleThemeBackRankMate => 'Mat na zadnjem redu';
+
+  @override
+  String get puzzleThemeBackRankMateDescription => 'Top ili dama matiraju kralja koji se nalazi na njegovom prvom redu (odnosno osmom iz perspektive protivnika) te je zagrađen svojim figurama.';
+
+  @override
+  String get puzzleThemeBishopEndgame => 'Lovčeva završnica';
+
+  @override
+  String get puzzleThemeBishopEndgameDescription => 'Završnica u kojoj sudjeluju samo lovci i pješaci.';
+
+  @override
+  String get puzzleThemeBodenMate => 'Bodenov mat';
+
+  @override
+  String get puzzleThemeBodenMateDescription => 'Dva lovca napadaju po unakrsnim dijagonalama i matiraju kralja okruženog njegovim figurama.';
+
+  @override
+  String get puzzleThemeCastling => 'Rokada';
+
+  @override
+  String get puzzleThemeCastlingDescription => 'Dovedi svog kralja na sigurno i postavi svog topa za napad.';
+
+  @override
+  String get puzzleThemeCapturingDefender => 'Eliminiraj obranu';
+
+  @override
+  String get puzzleThemeCapturingDefenderDescription => 'Eliminacijom figure koja brani ili je neizravno uključena u obranu druge figure omogućujete uzimanje figure koja ostaje bez obrane.';
+
+  @override
+  String get puzzleThemeCrushing => 'Uništavanje';
+
+  @override
+  String get puzzleThemeCrushingDescription => 'Uoči protivničku grešku te pridobij golemu prednost. (eval ≥ 600cp)';
+
+  @override
+  String get puzzleThemeDoubleBishopMate => 'Mat lovačkim parom';
+
+  @override
+  String get puzzleThemeDoubleBishopMateDescription => 'Lovački par zadaje mat na susjednim dijagonalama kralju zarobljenom iza prijateljske figure.';
+
+  @override
+  String get puzzleThemeDovetailMate => 'Lastin mat';
+
+  @override
+  String get puzzleThemeDovetailMateDescription => 'Kraljica zadaje mat dodirujuči protivničkog kralja po dijagonali. Kraljeva jedina polja za bijeg zauzeta su njegovim figurama.';
+
+  @override
+  String get puzzleThemeEquality => 'Izjednačenje';
+
+  @override
+  String get puzzleThemeEqualityDescription => 'Pronađi potez koji te dovodi iz gubitničke u podjednaku poziciju. (eval ≤ 200cp)';
+
+  @override
+  String get puzzleThemeKingsideAttack => 'Napad na kraljevoj strani';
+
+  @override
+  String get puzzleThemeKingsideAttackDescription => 'Napad na protivničkog kralja nakon što je protivnik odigrao malu rokadu.';
+
+  @override
+  String get puzzleThemeClearance => 'Čiščenje';
+
+  @override
+  String get puzzleThemeClearanceDescription => 'Potez (najčešće s tempom) koji oslobađa polje, red ili dijagonalu za nadolazeću taktičku ideju.';
+
+  @override
+  String get puzzleThemeDefensiveMove => 'Obrambeni potez';
+
+  @override
+  String get puzzleThemeDefensiveMoveDescription => 'Određeni potez ili slijed poteza koje je potrebno odigrati za zadržavanje materijala ili pozicije.';
+
+  @override
+  String get puzzleThemeDeflection => 'Odvraćanje';
+
+  @override
+  String get puzzleThemeDeflectionDescription => 'Potez koji odvraća protivničku figuru od dužnosti koju obavlja (kao što je kontroliranje značajnog polja). Ova taktika se također zove i \"preopterećenje\".';
+
+  @override
+  String get puzzleThemeDiscoveredAttack => 'Otkriveni napad';
+
+  @override
+  String get puzzleThemeDiscoveredAttackDescription => 'Napad izvršen kad se figura koja blokira drugu figuru (kraljicu, lovca ili topa) skloni sa određene dijagonale, reda ili stupca.';
+
+  @override
+  String get puzzleThemeDoubleCheck => 'Dvostruki šah';
+
+  @override
+  String get puzzleThemeDoubleCheckDescription => 'Šah kojeg daju dvije figure istovremeno kao rezultat otkrivenog šaha.';
+
+  @override
+  String get puzzleThemeEndgame => 'Završnica';
+
+  @override
+  String get puzzleThemeEndgameDescription => 'Taktički potezi u završnici.';
+
+  @override
+  String get puzzleThemeEnPassantDescription => 'Taktika koja uključuje pravilo \"en passant\" po kojem pješak uzima protivničkog pješaka koji ga preskače koristeći inicijalno otvaranje pješaka za dva polja.';
+
+  @override
+  String get puzzleThemeExposedKing => 'Golišavi kralj';
+
+  @override
+  String get puzzleThemeExposedKingDescription => 'Taktika koja uključuje kralja okruženim nekolicinom obrambenih figura što često rezultira matom.';
+
+  @override
+  String get puzzleThemeFork => 'Rašlje';
+
+  @override
+  String get puzzleThemeForkDescription => 'Situacija u šahovskoj partiji kad jedna figura napadne dvije ili više protivničkih.';
+
+  @override
+  String get puzzleThemeHangingPiece => 'Viseća figura';
+
+  @override
+  String get puzzleThemeHangingPieceDescription => 'Taktika koja uključuje neobranjenu ili nedovoljno obranjenu protivničku figuru besplatnu za uzimanje.';
+
+  @override
+  String get puzzleThemeHookMate => 'Kuka-mat';
+
+  @override
+  String get puzzleThemeHookMateDescription => 'U kuka-matu sudjeluju top, skakač i pješak te jedan protivnički pješak koji onemogućuje bijeg svom kralju.';
+
+  @override
+  String get puzzleThemeInterference => 'Podmetanje';
+
+  @override
+  String get puzzleThemeInterferenceDescription => 'Pomicanje figure između dvije protivničke figure pritom ih napadajući. Kao rezultat protivnik nije u mogućnosti obraniti obe figure.';
+
+  @override
+  String get puzzleThemeIntermezzo => 'Međupotez';
+
+  @override
+  String get puzzleThemeIntermezzoDescription => 'Potez koji se igra prije očekivanog poteza koji predstavlja direktnu prijetnju na koju protivnik mora odgovoriti.';
+
+  @override
+  String get puzzleThemeKnightEndgame => 'Skakačeva završnica';
+
+  @override
+  String get puzzleThemeKnightEndgameDescription => 'Završnica u kojoj sudjeluju samo skakači i pješaci.';
+
+  @override
+  String get puzzleThemeLong => 'Dugi zadatak';
+
+  @override
+  String get puzzleThemeLongDescription => 'Tri poteza za pobjedu.';
+
+  @override
+  String get puzzleThemeMaster => 'Majstorske partije';
+
+  @override
+  String get puzzleThemeMasterDescription => 'Zadaci iz partija odigranih od strane igrača s titulom.';
+
+  @override
+  String get puzzleThemeMasterVsMaster => 'Majstor protiv majstora';
+
+  @override
+  String get puzzleThemeMasterVsMasterDescription => 'Zadaci iz partija odigranih između igrača s titulama.';
+
+  @override
+  String get puzzleThemeMate => 'Mat';
+
+  @override
+  String get puzzleThemeMateDescription => 'Pobijedi sa stilom.';
+
+  @override
+  String get puzzleThemeMateIn1 => 'Mat u 1';
+
+  @override
+  String get puzzleThemeMateIn1Description => 'Matiraj protivnika u jednom potezu.';
+
+  @override
+  String get puzzleThemeMateIn2 => 'Mat u 2';
+
+  @override
+  String get puzzleThemeMateIn2Description => 'Matiraj protivnika u dva poteza.';
+
+  @override
+  String get puzzleThemeMateIn3 => 'Mat u 3';
+
+  @override
+  String get puzzleThemeMateIn3Description => 'Matiraj protivnika u tri poteza.';
+
+  @override
+  String get puzzleThemeMateIn4 => 'Mat u 4';
+
+  @override
+  String get puzzleThemeMateIn4Description => 'Matiraj protivnika u četiri poteza.';
+
+  @override
+  String get puzzleThemeMateIn5 => 'Mat u 5 ili više';
+
+  @override
+  String get puzzleThemeMateIn5Description => 'Pronađi slijed koji uključuje više od četiri poteza i dovodi do mata.';
+
+  @override
+  String get puzzleThemeMiddlegame => 'Središnjica';
+
+  @override
+  String get puzzleThemeMiddlegameDescription => 'Taktički potezi u središnjici.';
+
+  @override
+  String get puzzleThemeOneMove => 'Jednopotezni zadatak';
+
+  @override
+  String get puzzleThemeOneMoveDescription => 'Zadatak koji se sastoji od samo jednog poteza.';
+
+  @override
+  String get puzzleThemeOpening => 'Otvaranje';
+
+  @override
+  String get puzzleThemeOpeningDescription => 'Taktički potezi u otvaranju.';
+
+  @override
+  String get puzzleThemePawnEndgame => 'Pješačka završnica';
+
+  @override
+  String get puzzleThemePawnEndgameDescription => 'Završnica koja uključuje samo pješake.';
+
+  @override
+  String get puzzleThemePin => 'Svezivanje';
+
+  @override
+  String get puzzleThemePinDescription => 'Taktika koja uključuje protivničku figuru koja je vezana za kralja ili drugu figuru veče vrijednosti.';
+
+  @override
+  String get puzzleThemePromotion => 'Unapređenje';
+
+  @override
+  String get puzzleThemePromotionDescription => 'Pješak u postupku ili prijetnji promaknućem je ključan za taktiku.';
+
+  @override
+  String get puzzleThemeQueenEndgame => 'Kraljičina završnica';
+
+  @override
+  String get puzzleThemeQueenEndgameDescription => 'Završnica u kojoj sudjeluju samo kraljica i pješaci.';
+
+  @override
+  String get puzzleThemeQueenRookEndgame => 'Kraljica i top';
+
+  @override
+  String get puzzleThemeQueenRookEndgameDescription => 'Završnica u kojoj sudjeluju isključivo kraljica, top i pješaci.';
+
+  @override
+  String get puzzleThemeQueensideAttack => 'Napad na kraljičinu stranu';
+
+  @override
+  String get puzzleThemeQueensideAttackDescription => 'Napad na protivničkog kralja nakon što je protivnik odigrao veliku rokadu.';
+
+  @override
+  String get puzzleThemeQuietMove => 'Tihi potez';
+
+  @override
+  String get puzzleThemeQuietMoveDescription => 'Potez koji ne uzima protivničku figuru ni ne stavlja protivničkog kralja u šah ali zato priprema neizbježnu prijetnju za nadolazeće poteze.';
+
+  @override
+  String get puzzleThemeRookEndgame => 'Topovska završnica';
+
+  @override
+  String get puzzleThemeRookEndgameDescription => 'Završnica u kojoj sudjeluju samo topovi i pješaci.';
+
+  @override
+  String get puzzleThemeSacrifice => 'Žrtva';
+
+  @override
+  String get puzzleThemeSacrificeDescription => 'Taktika koja uključuje žrtvu koja rezultira stjecanjem prednosti neposredno nakon forsiranog slijeda poteza.';
+
+  @override
+  String get puzzleThemeShort => 'Kratki zadatak';
+
+  @override
+  String get puzzleThemeShortDescription => 'Dva poteza za pobjedu.';
+
+  @override
+  String get puzzleThemeSkewer => 'Ražanj';
+
+  @override
+  String get puzzleThemeSkewerDescription => 'Napadom figura sa linijskim djelovanjem (dama, top ili lovac) na jednu figuru (npr. kralja), napadnuta se figura prisiljava na povlačenje što vodi gubitku figure, koja se nalazi na istoj liniji kao i napadnuta figura.';
+
+  @override
+  String get puzzleThemeSmotheredMate => 'Ugušeni mat';
+
+  @override
+  String get puzzleThemeSmotheredMateDescription => 'Mat kojeg skakač vrši nad kraljem kojemu njegove figure onemogućuju bijeg.';
+
+  @override
+  String get puzzleThemeSuperGM => 'Super-velemajstorske igre';
+
+  @override
+  String get puzzleThemeSuperGMDescription => 'Zadaci iz partija najboljih svjetskih velemajstora.';
+
+  @override
+  String get puzzleThemeTrappedPiece => 'Zarobljena figura';
+
+  @override
+  String get puzzleThemeTrappedPieceDescription => 'Figura koja ne može pobjeći uzimanju.';
+
+  @override
+  String get puzzleThemeUnderPromotion => 'Potpromaknuće';
+
+  @override
+  String get puzzleThemeUnderPromotionDescription => 'Promaknuće u skakača, lovca ili topa.';
+
+  @override
+  String get puzzleThemeVeryLong => 'Iznimno duga puzla';
+
+  @override
+  String get puzzleThemeVeryLongDescription => 'Slijed od četiri ili više poteza nužan za pobjedu.';
+
+  @override
+  String get puzzleThemeXRayAttack => 'Rendgenski napad';
+
+  @override
+  String get puzzleThemeXRayAttackDescription => 'Figura napada ili brani polje kroz protivničku figuru.';
+
+  @override
+  String get puzzleThemeZugzwang => 'Iznuđeni potez (Zugzwang)';
+
+  @override
+  String get puzzleThemeZugzwangDescription => 'Protivnik je prisiljen odigrati potez koji mu pogoršava poziciju.';
+
+  @override
+  String get puzzleThemeHealthyMix => 'Pomalo svega';
+
+  @override
+  String get puzzleThemeHealthyMixDescription => 'Kao i u pravim partijama - budi spreman i očekuj bilo što! Kombinacija svih navedenih vrsta zadataka.';
+
+  @override
+  String get puzzleThemePlayerGames => 'Igračeve partije';
+
+  @override
+  String get puzzleThemePlayerGamesDescription => 'Pogledaj zadatke generirate iz vlastitih partija ili iz partija određenog igrača.';
+
+  @override
+  String puzzleThemePuzzleDownloadInformation(String param) {
+    return 'Ovi zadaci su u javnom vlasništvu i mogu biti preuzeti sa $param.';
+  }
+
+  @override
+  String get searchSearch => 'Traži';
+
+  @override
+  String get settingsSettings => 'Postavke';
+
+  @override
+  String get settingsCloseAccount => 'Zatvori račun';
+
+  @override
+  String get settingsManagedAccountCannotBeClosed => 'Vašim računom se upravlja i ne može se zatvoriti.';
+
+  @override
+  String get settingsClosingIsDefinitive => 'Zatvaranje je konačno. Nema povratka. Jesi li siguran?';
+
+  @override
+  String get settingsCantOpenSimilarAccount => 'Neće ti biti dopušteno otvaranje novog računa s istim imenom, čak i ako kapitalizacija slova bude drugačija.';
+
+  @override
+  String get settingsChangedMindDoNotCloseAccount => 'Predomislio/la sam se, ne zatvaraj moj račun';
+
+  @override
+  String get settingsCloseAccountExplanation => 'Jeste li sigurni da želite zatvoriti račun? Zatvaranje računa je trajna odluka. Više se NIKADA nećete moći prijaviti.';
+
+  @override
+  String get settingsThisAccountIsClosed => 'Račun je zatvoren.';
+
+  @override
   String get playWithAFriend => 'Igraj protiv prijatelja';
 
   @override
@@ -344,7 +1355,7 @@ class AppLocalizationsHr extends AppLocalizations {
   String get waitingForOpponent => 'Čekam protivnika';
 
   @override
-  String get orLetYourOpponentScanQrCode => 'Or let your opponent scan this QR code';
+  String get orLetYourOpponentScanQrCode => 'Ili dopusti da tvoj protivnik skenira QR kod';
 
   @override
   String get waiting => 'Čekanje';
@@ -531,10 +1542,16 @@ class AppLocalizationsHr extends AppLocalizations {
   String get deleteFromHere => 'Obriši s popisa';
 
   @override
+  String get collapseVariations => 'Collapse variations';
+
+  @override
+  String get expandVariations => 'Expand variations';
+
+  @override
   String get forceVariation => 'Promakni varijaciju';
 
   @override
-  String get copyVariationPgn => 'Copy variation PGN';
+  String get copyVariationPgn => 'Kopiraj varijaciju PGN-a';
 
   @override
   String get move => 'Potez';
@@ -618,7 +1635,7 @@ class AppLocalizationsHr extends AppLocalizations {
   }
 
   @override
-  String get playFirstOpeningEndgameExplorerMove => 'Play first opening/endgame-explorer move';
+  String get playFirstOpeningEndgameExplorerMove => 'Odigraj prvo otvaranje/završnički-istraživački potez';
 
   @override
   String get winPreventedBy50MoveRule => 'Pobjeda spriječena na bazi pravila o 50 poteza';
@@ -666,7 +1683,7 @@ class AppLocalizationsHr extends AppLocalizations {
   String get bestMoveArrow => 'Strelica za najbolji potez';
 
   @override
-  String get showVariationArrows => 'Show variation arrows';
+  String get showVariationArrows => 'Pokaži strelice varijacija';
 
   @override
   String get evaluationGauge => 'Mjerilo evaluacije';
@@ -687,7 +1704,7 @@ class AppLocalizationsHr extends AppLocalizations {
   String get removesTheDepthLimit => 'Uklanja granicu do koje računalo može analizirati, i održava tvoje računalo toplim';
 
   @override
-  String get engineManager => 'Engine manager';
+  String get engineManager => 'Upravitelj enginea';
 
   @override
   String get blunder => 'Gruba greška';
@@ -1388,15 +2405,6 @@ class AppLocalizationsHr extends AppLocalizations {
   String get emptyTournamentName => 'Ako ostaviš prazno, turnir će se nazvati po nasumičnom velemajstoru.';
 
   @override
-  String get recommendNotTouching => 'Preporučamo da ne ovo ne dira.';
-
-  @override
-  String get fewerPlayers => 'Ako se postavi uvjet za sudjelovanje, turnir će imati manje igrača.';
-
-  @override
-  String get showAdvancedSettings => 'Prikaži napredne postavke';
-
-  @override
   String get makePrivateTournament => 'Učini turnir privatnim i ograniči pristup lozinkom';
 
   @override
@@ -1526,10 +2534,7 @@ class AppLocalizationsHr extends AppLocalizations {
   String get editProfile => 'Uredi profil';
 
   @override
-  String get firstName => 'Ime';
-
-  @override
-  String get lastName => 'Prezime';
+  String get realName => 'Real name';
 
   @override
   String get setFlair => 'Set your flair';
@@ -1658,13 +2663,7 @@ class AppLocalizationsHr extends AppLocalizations {
   String get cheat => 'Varanje';
 
   @override
-  String get insult => 'Vrijeđanje';
-
-  @override
   String get troll => 'Provokacija';
-
-  @override
-  String get ratingManipulation => 'Manipulacija rejtingom';
 
   @override
   String get other => 'Ostalo';
@@ -1771,6 +2770,9 @@ class AppLocalizationsHr extends AppLocalizations {
 
   @override
   String get outsideTheBoard => 'Izvan ploče';
+
+  @override
+  String get allSquaresOfTheBoard => 'All squares of the board';
 
   @override
   String get onSlowGames => 'U sporim partijama';
@@ -3517,1014 +4519,6 @@ class AppLocalizationsHr extends AppLocalizations {
   }
 
   @override
-  String get patronDonate => 'Donirajte';
-
-  @override
-  String get patronLichessPatron => 'Lichess donacijska stranica';
-
-  @override
-  String get preferencesPreferences => 'Postavke';
-
-  @override
-  String get preferencesDisplay => 'Zaslon';
-
-  @override
-  String get preferencesPrivacy => 'Privatnost';
-
-  @override
-  String get preferencesNotifications => 'Obavijesti';
-
-  @override
-  String get preferencesPieceAnimation => 'Animacija figura';
-
-  @override
-  String get preferencesMaterialDifference => 'Razlika u figurama';
-
-  @override
-  String get preferencesBoardHighlights => 'Osvijetli zadnji potez i šah';
-
-  @override
-  String get preferencesPieceDestinations => 'Legalni potezi (važeći potezi i pretpotezi)';
-
-  @override
-  String get preferencesBoardCoordinates => 'Oznake na ploči (A-H, 1-8)';
-
-  @override
-  String get preferencesMoveListWhilePlaying => 'Popis poteza tijekom partije';
-
-  @override
-  String get preferencesPgnPieceNotation => 'Oznaka poteza';
-
-  @override
-  String get preferencesChessPieceSymbol => 'Simbol šahovske figure';
-
-  @override
-  String get preferencesPgnLetter => 'Slovo (K, Q, R, B, N)';
-
-  @override
-  String get preferencesZenMode => 'Zen način';
-
-  @override
-  String get preferencesShowPlayerRatings => 'Prikaži igračev rejting';
-
-  @override
-  String get preferencesShowFlairs => 'Show player flairs';
-
-  @override
-  String get preferencesExplainShowPlayerRatings => 'Omogućuje sakrivanje svih rejtinga sa websajta da bi se fokusirali na šah. Partije i dalje mogu biti bodovane, postavka utječe samo na prikaz, ne računanje.';
-
-  @override
-  String get preferencesDisplayBoardResizeHandle => 'Prikaži ručicu za promjenu veličine ploče';
-
-  @override
-  String get preferencesOnlyOnInitialPosition => 'Samo na početku partije';
-
-  @override
-  String get preferencesInGameOnly => 'Samo unutar igre';
-
-  @override
-  String get preferencesChessClock => 'Sat';
-
-  @override
-  String get preferencesTenthsOfSeconds => 'Desetinke sekundi';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'Kad je ostalo manje od 10 sekundi';
-
-  @override
-  String get preferencesHorizontalGreenProgressBars => 'Vodoravna zelena linija napretka';
-
-  @override
-  String get preferencesSoundWhenTimeGetsCritical => 'Zvuk kada je vrijeme kritično';
-
-  @override
-  String get preferencesGiveMoreTime => 'Daj više vremena';
-
-  @override
-  String get preferencesGameBehavior => 'Način igre';
-
-  @override
-  String get preferencesHowDoYouMovePieces => 'Kako želiš pomicati figure?';
-
-  @override
-  String get preferencesClickTwoSquares => 'Klikom na dva polja';
-
-  @override
-  String get preferencesDragPiece => 'Povlačenjem figure';
-
-  @override
-  String get preferencesBothClicksAndDrag => 'Ili';
-
-  @override
-  String get preferencesPremovesPlayingDuringOpponentTurn => 'Pretpotezi (potezi dok je protivnikov red)';
-
-  @override
-  String get preferencesTakebacksWithOpponentApproval => 'Povlačenje poteza (ako se protivnik složi)';
-
-  @override
-  String get preferencesInCasualGamesOnly => 'Samo u prijateljskim partijama';
-
-  @override
-  String get preferencesPromoteToQueenAutomatically => 'Auto-promocija u damu';
-
-  @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Držite <ctrl> tipku prilikom promocije pješaka da bi privremeno onemogućili automatsku promociju u damu';
-
-  @override
-  String get preferencesWhenPremoving => 'Kada odigraš pretpotez';
-
-  @override
-  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Automatski proglasi remi po trostrukom ponavljanju pozicije';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Kada je vrijeme < 30 sekundi';
-
-  @override
-  String get preferencesMoveConfirmation => 'Potvrda poteza';
-
-  @override
-  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Can be disabled during a game with the board menu';
-
-  @override
-  String get preferencesInCorrespondenceGames => 'U dopisnim partijama';
-
-  @override
-  String get preferencesCorrespondenceAndUnlimited => 'Dopisni šah i neograničene partije';
-
-  @override
-  String get preferencesConfirmResignationAndDrawOffers => 'Potvrdi predaju i ponudu za remi';
-
-  @override
-  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Način rošade';
-
-  @override
-  String get preferencesCastleByMovingTwoSquares => 'Pomakni kralja dvije kocke';
-
-  @override
-  String get preferencesCastleByMovingOntoTheRook => 'Pomakni kralja na kulu';
-
-  @override
-  String get preferencesInputMovesWithTheKeyboard => 'Omogući unošenje poteza tipkovnicom';
-
-  @override
-  String get preferencesInputMovesWithVoice => 'Input moves with your voice';
-
-  @override
-  String get preferencesSnapArrowsToValidMoves => 'Crtaj strelice za planiranje budućih poteza';
-
-  @override
-  String get preferencesSayGgWpAfterLosingOrDrawing => 'Reci \"Dobra partija, odlićno odigrano\" kad izgubiš ili odigraš remi';
-
-  @override
-  String get preferencesYourPreferencesHaveBeenSaved => 'Tvoje promjene su spremljene.';
-
-  @override
-  String get preferencesScrollOnTheBoardToReplayMoves => 'Pomakni kotačić miša iznad ploče za pregled poteza';
-
-  @override
-  String get preferencesCorrespondenceEmailNotification => 'Dnevna obavijest putem pošte s popisom vaših dopisnih igara';
-
-  @override
-  String get preferencesNotifyStreamStart => 'Streamer ide uživo';
-
-  @override
-  String get preferencesNotifyInboxMsg => 'Nova poruka u ulaznoj pošti';
-
-  @override
-  String get preferencesNotifyForumMention => 'Forumski komentar vas spominje';
-
-  @override
-  String get preferencesNotifyInvitedStudy => 'Poziv za Study';
-
-  @override
-  String get preferencesNotifyGameEvent => 'Ažuriranja dopisnih igara';
-
-  @override
-  String get preferencesNotifyChallenge => 'Izazovi';
-
-  @override
-  String get preferencesNotifyTournamentSoon => 'Turnir započinje ubrzo';
-
-  @override
-  String get preferencesNotifyTimeAlarm => 'Sat za dopisivanje ističe';
-
-  @override
-  String get preferencesNotifyBell => 'Obavijest zvonom unutar Lichessa';
-
-  @override
-  String get preferencesNotifyPush => 'Obavijest uređaja kada niste na Lichessu';
-
-  @override
-  String get preferencesNotifyWeb => 'Preglednik';
-
-  @override
-  String get preferencesNotifyDevice => 'Uređaj';
-
-  @override
-  String get preferencesBellNotificationSound => 'Obavijest kao zvuk';
-
-  @override
-  String get puzzlePuzzles => 'Zadaci';
-
-  @override
-  String get puzzlePuzzleThemes => 'Kategorije zadataka';
-
-  @override
-  String get puzzleRecommended => 'Preporučeno';
-
-  @override
-  String get puzzlePhases => 'Faze';
-
-  @override
-  String get puzzleMotifs => 'Motivi';
-
-  @override
-  String get puzzleAdvanced => 'Napredno';
-
-  @override
-  String get puzzleLengths => 'Duljine';
-
-  @override
-  String get puzzleMates => 'Matevi';
-
-  @override
-  String get puzzleGoals => 'Ciljevi';
-
-  @override
-  String get puzzleOrigin => 'Podrijetlo';
-
-  @override
-  String get puzzleSpecialMoves => 'Specifični potezi';
-
-  @override
-  String get puzzleDidYouLikeThisPuzzle => 'Sviđa li ti se ovaj zadatak?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Ocijeni i prijeđi na sljedeći zadatak!';
-
-  @override
-  String get puzzleUpVote => 'Glasaj za zagonetku';
-
-  @override
-  String get puzzleDownVote => 'Glasaj protiv zagonetke';
-
-  @override
-  String get puzzleYourPuzzleRatingWillNotChange => 'Tvoj rejting zadataka se neće promjeniti. Imaj na umu da rješavanje zadaka nije natjecanje. Rejting prvenstveno pomaže u odabiru najboljih zadataka za tvoj trenutni nivo vještine.';
-
-  @override
-  String get puzzleFindTheBestMoveForWhite => 'Pronađi najbolji potez za bijelog.';
-
-  @override
-  String get puzzleFindTheBestMoveForBlack => 'Pronađi najbolji potez za crnog.';
-
-  @override
-  String get puzzleToGetPersonalizedPuzzles => 'Za personalizirane zadatke:';
-
-  @override
-  String puzzlePuzzleId(String param) {
-    return 'Zadatak $param';
-  }
-
-  @override
-  String get puzzlePuzzleOfTheDay => 'Zadatak dana';
-
-  @override
-  String get puzzleDailyPuzzle => 'Dnevna zagonetka';
-
-  @override
-  String get puzzleClickToSolve => 'Klikni za rješenje';
-
-  @override
-  String get puzzleGoodMove => 'Dobar potez';
-
-  @override
-  String get puzzleBestMove => 'Najbolji potez!';
-
-  @override
-  String get puzzleKeepGoing => 'Nastavi…';
-
-  @override
-  String get puzzlePuzzleSuccess => 'Uspješno obavljeno!';
-
-  @override
-  String get puzzlePuzzleComplete => 'Zadatak riješen!';
-
-  @override
-  String get puzzleByOpenings => 'Prema otvaranjima';
-
-  @override
-  String get puzzlePuzzlesByOpenings => 'Zagonetke prema otvaranjima';
-
-  @override
-  String get puzzleOpeningsYouPlayedTheMost => 'Otvaranje koje si najviše igrao u rangiranim igrama';
-
-  @override
-  String get puzzleUseFindInPage => 'Koristi \"Pronađi na stranici\" u izborniku preglednika da bi pronašao svoje omiljeno otvaranje!';
-
-  @override
-  String get puzzleUseCtrlF => 'Koristi Ctrl+f da bi pronašao svoje omiljeno otvaranje!';
-
-  @override
-  String get puzzleNotTheMove => 'Netočan odgovor!';
-
-  @override
-  String get puzzleTrySomethingElse => 'Pokušaj nešto drugo.';
-
-  @override
-  String puzzleRatingX(String param) {
-    return 'Rejting: $param';
-  }
-
-  @override
-  String get puzzleHidden => 'skriven';
-
-  @override
-  String puzzleFromGameLink(String param) {
-    return 'Iz partije $param';
-  }
-
-  @override
-  String get puzzleContinueTraining => 'Nastavi sa zadacima';
-
-  @override
-  String get puzzleDifficultyLevel => 'Težina zadataka';
-
-  @override
-  String get puzzleNormal => 'Srednje';
-
-  @override
-  String get puzzleEasier => 'Lakše';
-
-  @override
-  String get puzzleEasiest => 'Najlakše';
-
-  @override
-  String get puzzleHarder => 'Teže';
-
-  @override
-  String get puzzleHardest => 'Najteže';
-
-  @override
-  String get puzzleExample => 'Primjer';
-
-  @override
-  String get puzzleAddAnotherTheme => 'Dodaj novu kategoriju';
-
-  @override
-  String get puzzleNextPuzzle => 'Sljedeća puzla';
-
-  @override
-  String get puzzleJumpToNextPuzzleImmediately => 'Automatski učitaj nove zadatke';
-
-  @override
-  String get puzzlePuzzleDashboard => 'Sučelje zadataka';
-
-  @override
-  String get puzzleImprovementAreas => 'Nedostaci';
-
-  @override
-  String get puzzleStrengths => 'Prednosti';
-
-  @override
-  String get puzzleHistory => 'Povijest zadataka';
-
-  @override
-  String get puzzleSolved => 'riješeno';
-
-  @override
-  String get puzzleFailed => 'neuspješno';
-
-  @override
-  String get puzzleStreakDescription => 'Stvori pobjednički niz rješavajući sve teže zadatke bez vremenskog ograničenja. Jedan krivi potez i igraje gotova! Dozvoljeno je preskočiti jedan potez u sesiji.';
-
-  @override
-  String puzzleYourStreakX(String param) {
-    return 'Tvoj niz: $param';
-  }
-
-  @override
-  String get puzzleStreakSkipExplanation => 'Preskoči ovaj potez da zadržiš pobjednički niz! Dozvoljeno je jedno preskakanje po sesiji.';
-
-  @override
-  String get puzzleContinueTheStreak => 'Nastavite niz';
-
-  @override
-  String get puzzleNewStreak => 'Novi niz';
-
-  @override
-  String get puzzleFromMyGames => 'Iz mojih partija';
-
-  @override
-  String get puzzleLookupOfPlayer => 'Pronađi zadatke iz igračevih partija';
-
-  @override
-  String puzzleFromXGames(String param) {
-    return 'Zadatci iz partija igrača $param';
-  }
-
-  @override
-  String get puzzleSearchPuzzles => 'Pretraži zadatke';
-
-  @override
-  String get puzzleFromMyGamesNone => 'Nema tvojih zadataka u bazi, ali Lichess te i dalje puno voli.\n\nIgraj rapid i classic partije da povećaš vjerojatnost da zadatak iz tvoje partije bude dodan!';
-
-  @override
-  String puzzleFromXGamesFound(String param1, String param2) {
-    return '$param1 zadatka su nađena u $param2 partija';
-  }
-
-  @override
-  String get puzzlePuzzleDashboardDescription => 'Vježbaj, analiziraj, unaprijedi';
-
-  @override
-  String puzzlePercentSolved(String param) {
-    return '$param riješenih';
-  }
-
-  @override
-  String get puzzleNoPuzzlesToShow => 'Niste odigrali ni jedan zadatak.';
-
-  @override
-  String get puzzleImprovementAreasDescription => 'Vježbaj ove zadatke da bi optimalno napredovao!';
-
-  @override
-  String get puzzleStrengthDescription => 'Ove teme ti idu najbolje';
-
-  @override
-  String puzzlePlayedXTimes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Odigrano $count puta',
-      few: 'Odigrano $count puta',
-      one: 'Odigrano $count puta',
-      zero: 'Odigrano $count puta',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsBelowYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count bodova ispod tvog rejtinga iz zadataka',
-      few: '$count bodova ispod tvog rejtinga iz zadataka',
-      one: '$count bod ispod tvog rejtinga iz zadataka',
-      zero: '$count bod ispod tvog rejtinga iz zadataka',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsAboveYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count bodova iznad tvog rejtinga iz zadataka',
-      few: '$count bodova iznad tvog rejtinga iz zadataka',
-      one: '$count bod iznad tvog rejtinga iz zadataka',
-      zero: '$count bod iznad tvog rejtinga iz zadataka',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPlayed(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count odigranih',
-      few: '$count odigrana',
-      one: '$count odigran',
-      zero: '$count odigran',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbToReplay(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count za pregledati',
-      few: '$count za pregledati',
-      one: '$count za pregledati',
-      zero: '$count za pregledati',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get puzzleThemeAdvancedPawn => 'Pješak napreduje';
-
-  @override
-  String get puzzleThemeAdvancedPawnDescription => 'Pješak u postupku ili prijetnji promaknućem je ključan za taktiku.';
-
-  @override
-  String get puzzleThemeAdvantage => 'Prednost';
-
-  @override
-  String get puzzleThemeAdvantageDescription => 'Iskoristi priliku i pridobij odlučujuču prednost. (200cp ≤ eval ≤ 600cp)';
-
-  @override
-  String get puzzleThemeAnastasiaMate => 'Anastazijin mat';
-
-  @override
-  String get puzzleThemeAnastasiaMateDescription => 'Skakač i top ili dama udružuju se kako bi uhvatili protivničkog kralja u zamku između ruba ploče s jedne i njegove figure s druge strane.';
-
-  @override
-  String get puzzleThemeArabianMate => 'Arapski mat';
-
-  @override
-  String get puzzleThemeArabianMateDescription => 'Skakač i top udružuju snage kako bi zarobili suparničkog kralja u uglu igraće ploče.';
-
-  @override
-  String get puzzleThemeAttackingF2F7 => 'Napad na f2 ili f7 polje';
-
-  @override
-  String get puzzleThemeAttackingF2F7Description => 'Napad na f2 ili f7 pješaka kao što je napad lovcem popularno nazvan \"fried liver opening\".';
-
-  @override
-  String get puzzleThemeAttraction => 'Privlačenje';
-
-  @override
-  String get puzzleThemeAttractionDescription => 'Razmjena ili žrtva koja potiče ili forsira protivničke figure u poziciju koja omogućuje taktičke poteze koji donose prednost.';
-
-  @override
-  String get puzzleThemeBackRankMate => 'Mat na zadnjem redu';
-
-  @override
-  String get puzzleThemeBackRankMateDescription => 'Top ili dama matiraju kralja koji se nalazi na njegovom prvom redu (odnosno osmom iz perspektive protivnika) te je zagrađen svojim figurama.';
-
-  @override
-  String get puzzleThemeBishopEndgame => 'Lovčeva završnica';
-
-  @override
-  String get puzzleThemeBishopEndgameDescription => 'Završnica u kojoj sudjeluju samo lovci i pješaci.';
-
-  @override
-  String get puzzleThemeBodenMate => 'Bodenov mat';
-
-  @override
-  String get puzzleThemeBodenMateDescription => 'Dva lovca napadaju po unakrsnim dijagonalama i matiraju kralja okruženog njegovim figurama.';
-
-  @override
-  String get puzzleThemeCastling => 'Rokada';
-
-  @override
-  String get puzzleThemeCastlingDescription => 'Dovedi svog kralja na sigurno i postavi svog topa za napad.';
-
-  @override
-  String get puzzleThemeCapturingDefender => 'Eliminiraj obranu';
-
-  @override
-  String get puzzleThemeCapturingDefenderDescription => 'Eliminacijom figure koja brani ili je neizravno uključena u obranu druge figure omogućujete uzimanje figure koja ostaje bez obrane.';
-
-  @override
-  String get puzzleThemeCrushing => 'Uništavanje';
-
-  @override
-  String get puzzleThemeCrushingDescription => 'Uoči protivničku grešku te pridobij golemu prednost. (eval ≥ 600cp)';
-
-  @override
-  String get puzzleThemeDoubleBishopMate => 'Mat lovačkim parom';
-
-  @override
-  String get puzzleThemeDoubleBishopMateDescription => 'Lovački par zadaje mat na susjednim dijagonalama kralju zarobljenom iza prijateljske figure.';
-
-  @override
-  String get puzzleThemeDovetailMate => 'Lastin mat';
-
-  @override
-  String get puzzleThemeDovetailMateDescription => 'Kraljica zadaje mat dodirujuči protivničkog kralja po dijagonali. Kraljeva jedina polja za bijeg zauzeta su njegovim figurama.';
-
-  @override
-  String get puzzleThemeEquality => 'Izjednačenje';
-
-  @override
-  String get puzzleThemeEqualityDescription => 'Pronađi potez koji te dovodi iz gubitničke u podjednaku poziciju. (eval ≤ 200cp)';
-
-  @override
-  String get puzzleThemeKingsideAttack => 'Napad na kraljevoj strani';
-
-  @override
-  String get puzzleThemeKingsideAttackDescription => 'Napad na protivničkog kralja nakon što je protivnik odigrao malu rokadu.';
-
-  @override
-  String get puzzleThemeClearance => 'Čiščenje';
-
-  @override
-  String get puzzleThemeClearanceDescription => 'Potez (najčešće s tempom) koji oslobađa polje, red ili dijagonalu za nadolazeću taktičku ideju.';
-
-  @override
-  String get puzzleThemeDefensiveMove => 'Obrambeni potez';
-
-  @override
-  String get puzzleThemeDefensiveMoveDescription => 'Određeni potez ili slijed poteza koje je potrebno odigrati za zadržavanje materijala ili pozicije.';
-
-  @override
-  String get puzzleThemeDeflection => 'Odvraćanje';
-
-  @override
-  String get puzzleThemeDeflectionDescription => 'Potez koji odvraća protivničku figuru od dužnosti koju obavlja (kao što je kontroliranje značajnog polja). Ova taktika se također zove i \"preopterećenje\".';
-
-  @override
-  String get puzzleThemeDiscoveredAttack => 'Otkriveni napad';
-
-  @override
-  String get puzzleThemeDiscoveredAttackDescription => 'Napad izvršen kad se figura koja blokira drugu figuru (kraljicu, lovca ili topa) skloni sa određene dijagonale, reda ili stupca.';
-
-  @override
-  String get puzzleThemeDoubleCheck => 'Dvostruki šah';
-
-  @override
-  String get puzzleThemeDoubleCheckDescription => 'Šah kojeg daju dvije figure istovremeno kao rezultat otkrivenog šaha.';
-
-  @override
-  String get puzzleThemeEndgame => 'Završnica';
-
-  @override
-  String get puzzleThemeEndgameDescription => 'Taktički potezi u završnici.';
-
-  @override
-  String get puzzleThemeEnPassantDescription => 'Taktika koja uključuje pravilo \"en passant\" po kojem pješak uzima protivničkog pješaka koji ga preskače koristeći inicijalno otvaranje pješaka za dva polja.';
-
-  @override
-  String get puzzleThemeExposedKing => 'Golišavi kralj';
-
-  @override
-  String get puzzleThemeExposedKingDescription => 'Taktika koja uključuje kralja okruženim nekolicinom obrambenih figura što često rezultira matom.';
-
-  @override
-  String get puzzleThemeFork => 'Rašlje';
-
-  @override
-  String get puzzleThemeForkDescription => 'Situacija u šahovskoj partiji kad jedna figura napadne dvije ili više protivničkih.';
-
-  @override
-  String get puzzleThemeHangingPiece => 'Viseća figura';
-
-  @override
-  String get puzzleThemeHangingPieceDescription => 'Taktika koja uključuje neobranjenu ili nedovoljno obranjenu protivničku figuru besplatnu za uzimanje.';
-
-  @override
-  String get puzzleThemeHookMate => 'Kuka-mat';
-
-  @override
-  String get puzzleThemeHookMateDescription => 'U kuka-matu sudjeluju top, skakač i pješak te jedan protivnički pješak koji onemogućuje bijeg svom kralju.';
-
-  @override
-  String get puzzleThemeInterference => 'Podmetanje';
-
-  @override
-  String get puzzleThemeInterferenceDescription => 'Pomicanje figure između dvije protivničke figure pritom ih napadajući. Kao rezultat protivnik nije u mogućnosti obraniti obe figure.';
-
-  @override
-  String get puzzleThemeIntermezzo => 'Međupotez';
-
-  @override
-  String get puzzleThemeIntermezzoDescription => 'Potez koji se igra prije očekivanog poteza koji predstavlja direktnu prijetnju na koju protivnik mora odgovoriti.';
-
-  @override
-  String get puzzleThemeKnightEndgame => 'Skakačeva završnica';
-
-  @override
-  String get puzzleThemeKnightEndgameDescription => 'Završnica u kojoj sudjeluju samo skakači i pješaci.';
-
-  @override
-  String get puzzleThemeLong => 'Dugi zadatak';
-
-  @override
-  String get puzzleThemeLongDescription => 'Tri poteza za pobjedu.';
-
-  @override
-  String get puzzleThemeMaster => 'Majstorske partije';
-
-  @override
-  String get puzzleThemeMasterDescription => 'Zadaci iz partija odigranih od strane igrača s titulom.';
-
-  @override
-  String get puzzleThemeMasterVsMaster => 'Majstor protiv majstora';
-
-  @override
-  String get puzzleThemeMasterVsMasterDescription => 'Zadaci iz partija odigranih između igrača s titulama.';
-
-  @override
-  String get puzzleThemeMate => 'Mat';
-
-  @override
-  String get puzzleThemeMateDescription => 'Pobijedi sa stilom.';
-
-  @override
-  String get puzzleThemeMateIn1 => 'Mat u 1';
-
-  @override
-  String get puzzleThemeMateIn1Description => 'Matiraj protivnika u jednom potezu.';
-
-  @override
-  String get puzzleThemeMateIn2 => 'Mat u 2';
-
-  @override
-  String get puzzleThemeMateIn2Description => 'Matiraj protivnika u dva poteza.';
-
-  @override
-  String get puzzleThemeMateIn3 => 'Mat u 3';
-
-  @override
-  String get puzzleThemeMateIn3Description => 'Matiraj protivnika u tri poteza.';
-
-  @override
-  String get puzzleThemeMateIn4 => 'Mat u 4';
-
-  @override
-  String get puzzleThemeMateIn4Description => 'Matiraj protivnika u četiri poteza.';
-
-  @override
-  String get puzzleThemeMateIn5 => 'Mat u 5 ili više';
-
-  @override
-  String get puzzleThemeMateIn5Description => 'Pronađi slijed koji uključuje više od četiri poteza i dovodi do mata.';
-
-  @override
-  String get puzzleThemeMiddlegame => 'Središnjica';
-
-  @override
-  String get puzzleThemeMiddlegameDescription => 'Taktički potezi u središnjici.';
-
-  @override
-  String get puzzleThemeOneMove => 'Jednopotezni zadatak';
-
-  @override
-  String get puzzleThemeOneMoveDescription => 'Zadatak koji se sastoji od samo jednog poteza.';
-
-  @override
-  String get puzzleThemeOpening => 'Otvaranje';
-
-  @override
-  String get puzzleThemeOpeningDescription => 'Taktički potezi u otvaranju.';
-
-  @override
-  String get puzzleThemePawnEndgame => 'Pješačka završnica';
-
-  @override
-  String get puzzleThemePawnEndgameDescription => 'Završnica koja uključuje samo pješake.';
-
-  @override
-  String get puzzleThemePin => 'Svezivanje';
-
-  @override
-  String get puzzleThemePinDescription => 'Taktika koja uključuje protivničku figuru koja je vezana za kralja ili drugu figuru veče vrijednosti.';
-
-  @override
-  String get puzzleThemePromotion => 'Unapređenje';
-
-  @override
-  String get puzzleThemePromotionDescription => 'Pješak u postupku ili prijetnji promaknućem je ključan za taktiku.';
-
-  @override
-  String get puzzleThemeQueenEndgame => 'Kraljičina završnica';
-
-  @override
-  String get puzzleThemeQueenEndgameDescription => 'Završnica u kojoj sudjeluju samo kraljica i pješaci.';
-
-  @override
-  String get puzzleThemeQueenRookEndgame => 'Kraljica i top';
-
-  @override
-  String get puzzleThemeQueenRookEndgameDescription => 'Završnica u kojoj sudjeluju isključivo kraljica, top i pješaci.';
-
-  @override
-  String get puzzleThemeQueensideAttack => 'Napad na kraljičinu stranu';
-
-  @override
-  String get puzzleThemeQueensideAttackDescription => 'Napad na protivničkog kralja nakon što je protivnik odigrao veliku rokadu.';
-
-  @override
-  String get puzzleThemeQuietMove => 'Tihi potez';
-
-  @override
-  String get puzzleThemeQuietMoveDescription => 'Potez koji ne uzima protivničku figuru ni ne stavlja protivničkog kralja u šah ali zato priprema neizbježnu prijetnju za nadolazeće poteze.';
-
-  @override
-  String get puzzleThemeRookEndgame => 'Topovska završnica';
-
-  @override
-  String get puzzleThemeRookEndgameDescription => 'Završnica u kojoj sudjeluju samo topovi i pješaci.';
-
-  @override
-  String get puzzleThemeSacrifice => 'Žrtva';
-
-  @override
-  String get puzzleThemeSacrificeDescription => 'Taktika koja uključuje žrtvu koja rezultira stjecanjem prednosti neposredno nakon forsiranog slijeda poteza.';
-
-  @override
-  String get puzzleThemeShort => 'Kratki zadatak';
-
-  @override
-  String get puzzleThemeShortDescription => 'Dva poteza za pobjedu.';
-
-  @override
-  String get puzzleThemeSkewer => 'Ražanj';
-
-  @override
-  String get puzzleThemeSkewerDescription => 'Napadom figura sa linijskim djelovanjem (dama, top ili lovac) na jednu figuru (npr. kralja), napadnuta se figura prisiljava na povlačenje što vodi gubitku figure, koja se nalazi na istoj liniji kao i napadnuta figura.';
-
-  @override
-  String get puzzleThemeSmotheredMate => 'Ugušeni mat';
-
-  @override
-  String get puzzleThemeSmotheredMateDescription => 'Mat kojeg skakač vrši nad kraljem kojemu njegove figure onemogućuju bijeg.';
-
-  @override
-  String get puzzleThemeSuperGM => 'Super-velemajstorske igre';
-
-  @override
-  String get puzzleThemeSuperGMDescription => 'Zadaci iz partija najboljih svjetskih velemajstora.';
-
-  @override
-  String get puzzleThemeTrappedPiece => 'Zarobljena figura';
-
-  @override
-  String get puzzleThemeTrappedPieceDescription => 'Figura koja ne može pobjeći uzimanju.';
-
-  @override
-  String get puzzleThemeUnderPromotion => 'Potpromaknuće';
-
-  @override
-  String get puzzleThemeUnderPromotionDescription => 'Promaknuće u skakača, lovca ili topa.';
-
-  @override
-  String get puzzleThemeVeryLong => 'Iznimno duga puzla';
-
-  @override
-  String get puzzleThemeVeryLongDescription => 'Slijed od četiri ili više poteza nužan za pobjedu.';
-
-  @override
-  String get puzzleThemeXRayAttack => 'Rendgenski napad';
-
-  @override
-  String get puzzleThemeXRayAttackDescription => 'Figura napada ili brani polje kroz protivničku figuru.';
-
-  @override
-  String get puzzleThemeZugzwang => 'Iznuđeni potez (Zugzwang)';
-
-  @override
-  String get puzzleThemeZugzwangDescription => 'Protivnik je prisiljen odigrati potez koji mu pogoršava poziciju.';
-
-  @override
-  String get puzzleThemeHealthyMix => 'Pomalo svega';
-
-  @override
-  String get puzzleThemeHealthyMixDescription => 'Kao i u pravim partijama - budi spreman i očekuj bilo što! Kombinacija svih navedenih vrsta zadataka.';
-
-  @override
-  String get puzzleThemePlayerGames => 'Igračeve partije';
-
-  @override
-  String get puzzleThemePlayerGamesDescription => 'Pogledaj zadatke generirate iz vlastitih partija ili iz partija određenog igrača.';
-
-  @override
-  String puzzleThemePuzzleDownloadInformation(String param) {
-    return 'Ovi zadaci su u javnom vlasništvu i mogu biti preuzeti sa $param.';
-  }
-
-  @override
-  String perfStatPerfStats(String param) {
-    return '$param statistika';
-  }
-
-  @override
-  String get perfStatViewTheGames => 'Pogledaj partije';
-
-  @override
-  String get perfStatProvisional => 'privremeno';
-
-  @override
-  String get perfStatNotEnoughRatedGames => 'Odigrano je nedovoljno rangiranih partija da bi se uspostavio pouzdani rejting.';
-
-  @override
-  String perfStatProgressOverLastXGames(String param) {
-    return 'Napredak u zadnjih $param partija:';
-  }
-
-  @override
-  String perfStatRatingDeviation(String param) {
-    return 'Rejting devijacija: $param.';
-  }
-
-  @override
-  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
-    return 'Manja vrijednost znači da je ocjena stabilnija. Iznad $param1, ocjena se smatra privremenom. Da bi bila uključena u ljestvicu, ova vrijednost treba biti ispod $param2 (standardni šah) ili $param3 (varijante).';
-  }
-
-  @override
-  String get perfStatTotalGames => 'Ukupno partija';
-
-  @override
-  String get perfStatRatedGames => 'Rangirane partije';
-
-  @override
-  String get perfStatTournamentGames => 'Turnirske partije';
-
-  @override
-  String get perfStatBerserkedGames => 'Berserk partije';
-
-  @override
-  String get perfStatTimeSpentPlaying => 'Vrijeme provedeno igrajući';
-
-  @override
-  String get perfStatAverageOpponent => 'Prosječni protivnik';
-
-  @override
-  String get perfStatVictories => 'Pobjede';
-
-  @override
-  String get perfStatDefeats => 'Porazi';
-
-  @override
-  String get perfStatDisconnections => 'Prekidi veze';
-
-  @override
-  String get perfStatNotEnoughGames => 'Nedovoljno partija odigrano';
-
-  @override
-  String perfStatHighestRating(String param) {
-    return 'Najviši rejting: $param';
-  }
-
-  @override
-  String perfStatLowestRating(String param) {
-    return 'Najniži rejting: $param';
-  }
-
-  @override
-  String perfStatFromXToY(String param1, String param2) {
-    return 'od $param1 do $param2';
-  }
-
-  @override
-  String get perfStatWinningStreak => 'Pobjednički niz';
-
-  @override
-  String get perfStatLosingStreak => 'Gubitnički niz';
-
-  @override
-  String perfStatLongestStreak(String param) {
-    return 'Najduži niz: $param';
-  }
-
-  @override
-  String perfStatCurrentStreak(String param) {
-    return 'Trenutni niz: $param';
-  }
-
-  @override
-  String get perfStatBestRated => 'Najbolje rangirane pobjede';
-
-  @override
-  String get perfStatGamesInARow => 'Igre odigrane za redom';
-
-  @override
-  String get perfStatLessThanOneHour => 'Manje od jednog sata između igara';
-
-  @override
-  String get perfStatMaxTimePlaying => 'Vrijeme provedeno igrajući';
-
-  @override
-  String get perfStatNow => 'sada';
-
-  @override
-  String get searchSearch => 'Traži';
-
-  @override
-  String get settingsSettings => 'Postavke';
-
-  @override
-  String get settingsCloseAccount => 'Zatvori račun';
-
-  @override
-  String get settingsManagedAccountCannotBeClosed => 'Vašim računom se upravlja i ne može se zatvoriti.';
-
-  @override
-  String get settingsClosingIsDefinitive => 'Zatvaranje je konačno. Nema povratka. Jesi li siguran?';
-
-  @override
-  String get settingsCantOpenSimilarAccount => 'Neće ti biti dopušteno otvaranje novog računa s istim imenom, čak i ako kapitalizacija slova bude drugačija.';
-
-  @override
-  String get settingsChangedMindDoNotCloseAccount => 'Predomislio/la sam se, ne zatvaraj moj račun';
-
-  @override
-  String get settingsCloseAccountExplanation => 'Jeste li sigurni da želite zatvoriti račun? Zatvaranje računa je trajna odluka. Više se NIKADA nećete moći prijaviti.';
-
-  @override
-  String get settingsThisAccountIsClosed => 'Račun je zatvoren.';
-
-  @override
-  String get streamerLichessStreamers => 'Lichess emiteri';
-
-  @override
   String get stormMoveToStart => 'Povucite potez da biste počeli';
 
   @override
@@ -4710,14 +4704,11 @@ class AppLocalizationsHr extends AppLocalizations {
   }
 
   @override
+  String get streamerLichessStreamers => 'Lichess emiteri';
+
+  @override
   String get studyShareAndExport => 'Podijeli & izvozi';
 
   @override
   String get studyStart => 'Start';
-
-  @override
-  String get broadcastBroadcasts => 'Prijenosi';
-
-  @override
-  String get broadcastStartDate => 'Datum početka u vlastitoj vremenskoj zoni';
 }

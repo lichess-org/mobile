@@ -276,10 +276,10 @@ class AppLocalizationsBr extends AppLocalizations {
   }
 
   @override
-  String get contactContact => 'Darempred';
+  String get broadcastBroadcasts => 'War-eeun';
 
   @override
-  String get contactContactLichess => 'Mont e darempred gant Lichess';
+  String get broadcastStartDate => 'Eur kregiñ en ho kwerzhid-eur';
 
   @override
   String challengeChallengesX(String param1) {
@@ -361,6 +361,1011 @@ class AppLocalizationsBr extends AppLocalizations {
 
   @override
   String get challengeInviteLichessUser => 'Pediñ ur c\'hoarier war Lichess mod-all:';
+
+  @override
+  String get contactContact => 'Darempred';
+
+  @override
+  String get contactContactLichess => 'Mont e darempred gant Lichess';
+
+  @override
+  String get patronDonate => 'Ober un donezon';
+
+  @override
+  String get patronLichessPatron => 'Lichess Patron';
+
+  @override
+  String perfStatPerfStats(String param) {
+    return 'Stadegoù $param';
+  }
+
+  @override
+  String get perfStatViewTheGames => 'Gwelet ar c\'hrogadoù';
+
+  @override
+  String get perfStatProvisional => 'da c\'hortoz';
+
+  @override
+  String get perfStatNotEnoughRatedGames => 'N\'eo ket bet c\'hoariet trawalc\'h a grogadoù renket evit kaout ur renkadur a glot gant ho live.';
+
+  @override
+  String perfStatProgressOverLastXGames(String param) {
+    return 'Araokadennoù e-pad an/ar $param krogad diwezhañ:';
+  }
+
+  @override
+  String perfStatRatingDeviation(String param) {
+    return 'Forc\'had standard: $param.';
+  }
+
+  @override
+  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
+    return 'Lower value means the rating is more stable. Above $param1, the rating is considered provisional. To be included in the rankings, this value should be below $param2 (standard chess) or $param3 (variants).';
+  }
+
+  @override
+  String get perfStatTotalGames => 'Niver a grogadoù';
+
+  @override
+  String get perfStatRatedGames => 'Krogadoù renket';
+
+  @override
+  String get perfStatTournamentGames => 'Krogadoù tournamant';
+
+  @override
+  String get perfStatBerserkedGames => 'Krogadoù berserket';
+
+  @override
+  String get perfStatTimeSpentPlaying => 'Amzer o c\'hoari';
+
+  @override
+  String get perfStatAverageOpponent => 'Live keitat an enebour';
+
+  @override
+  String get perfStatVictories => 'Trec\'hioù';
+
+  @override
+  String get perfStatDefeats => 'Lammoù';
+
+  @override
+  String get perfStatDisconnections => 'Digevreadennoù';
+
+  @override
+  String get perfStatNotEnoughGames => 'N\'ho peus ket c\'hoariet a-walc\'h c\'hoazh';
+
+  @override
+  String perfStatHighestRating(String param) {
+    return 'Renkadur uhelañ: $param';
+  }
+
+  @override
+  String perfStatLowestRating(String param) {
+    return 'Renkadur izelañ: $param';
+  }
+
+  @override
+  String perfStatFromXToY(String param1, String param2) {
+    return 'etre $param1 ha $param2';
+  }
+
+  @override
+  String get perfStatWinningStreak => 'Krogadoù gounezet da-heul';
+
+  @override
+  String get perfStatLosingStreak => 'Krogadoù kollet da-heul';
+
+  @override
+  String perfStatLongestStreak(String param) {
+    return 'Brasañ niver da heul: $param';
+  }
+
+  @override
+  String perfStatCurrentStreak(String param) {
+    return 'Niver a grogadoù da heul evit poent: $param';
+  }
+
+  @override
+  String get perfStatBestRated => 'Gwellañ trec\'hioù renket';
+
+  @override
+  String get perfStatGamesInARow => 'Krogadoù c\'hoariet hep troc\'h';
+
+  @override
+  String get perfStatLessThanOneHour => 'Nebeutoc\'h evit un eur etre daou grogad';
+
+  @override
+  String get perfStatMaxTimePlaying => 'Ar muiañ a amzer o c\'hoari dizehan';
+
+  @override
+  String get perfStatNow => 'bremañ';
+
+  @override
+  String get preferencesPreferences => 'Dibaboù';
+
+  @override
+  String get preferencesDisplay => 'Display';
+
+  @override
+  String get preferencesPrivacy => 'Buhez prevez';
+
+  @override
+  String get preferencesNotifications => 'Kemennoù';
+
+  @override
+  String get preferencesPieceAnimation => 'Mod da fiñval ar pezhioù';
+
+  @override
+  String get preferencesMaterialDifference => 'Diforc\'hioù a-fet dafar';
+
+  @override
+  String get preferencesBoardHighlights => 'Gouleier evit sikour war an dablez (fiñvadenn ziwezhañ ha bec\'h d\'ar roue)';
+
+  @override
+  String get preferencesPieceDestinations => 'Karrezennoù degemer (fiñvadennoù ha rak-fiñvadennoù gwiriek)';
+
+  @override
+  String get preferencesBoardCoordinates => 'Daveennoù an dablez (A-H, 1-8)';
+
+  @override
+  String get preferencesMoveListWhilePlaying => 'Roll ar fiñvadennoù e-pad ar c\'hrogad';
+
+  @override
+  String get preferencesPgnPieceNotation => 'Notenniñ ar fiñvadennoù';
+
+  @override
+  String get preferencesChessPieceSymbol => 'Arouez ar pezh echedoù';
+
+  @override
+  String get preferencesPgnLetter => 'Lizherenn (K, Q, R, B, N)';
+
+  @override
+  String get preferencesZenMode => 'Mod zen';
+
+  @override
+  String get preferencesShowPlayerRatings => 'Diskouez renkadur ar c\'hoarier';
+
+  @override
+  String get preferencesShowFlairs => 'Show player flairs';
+
+  @override
+  String get preferencesExplainShowPlayerRatings => 'This hides all ratings from Lichess, to help focus on the chess. Rated games still impact your rating, this is only about what you get to see.';
+
+  @override
+  String get preferencesDisplayBoardResizeHandle => 'Diskouez an arouez evit cheñch ment an dablez';
+
+  @override
+  String get preferencesOnlyOnInitialPosition => 'Lec\'hiadur kentañ nemetken';
+
+  @override
+  String get preferencesInGameOnly => 'In-game only';
+
+  @override
+  String get preferencesChessClock => 'Horolaj echedoù';
+
+  @override
+  String get preferencesTenthsOfSeconds => 'Dekvedennoù an eilennoù';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'Pa chom nebeutoc\'h evit < 10 eilenn';
+
+  @override
+  String get preferencesHorizontalGreenProgressBars => 'Barrennoù dibunañ gwer a-blaen';
+
+  @override
+  String get preferencesSoundWhenTimeGetsCritical => 'Trouz pa ne chom ket kalz amzer';
+
+  @override
+  String get preferencesGiveMoreTime => 'Reiñ muioc\'h a amzer';
+
+  @override
+  String get preferencesGameBehavior => 'Mont en-dro ar c\'hrogad';
+
+  @override
+  String get preferencesHowDoYouMovePieces => 'Penaos e lakaer ar pezhioù da fiñval?';
+
+  @override
+  String get preferencesClickTwoSquares => 'Klikañ war div garrezenn';
+
+  @override
+  String get preferencesDragPiece => 'Lakaat ar pezh da riklañ';
+
+  @override
+  String get preferencesBothClicksAndDrag => 'An daou';
+
+  @override
+  String get preferencesPremovesPlayingDuringOpponentTurn => 'Rak-fiñvadennoù (c\'hoari e-pad tro hoc\'h enebour)';
+
+  @override
+  String get preferencesTakebacksWithOpponentApproval => 'Nullañ ar fiñvadenn ziwezhañ (gant asant an enebour)';
+
+  @override
+  String get preferencesInCasualGamesOnly => 'E krogadoù a vignoniezh hepken';
+
+  @override
+  String get preferencesPromoteToQueenAutomatically => 'Treiñ da rouanez en un doare emgefreek';
+
+  @override
+  String get preferencesExplainPromoteToQueenAutomatically => 'Hold the <ctrl> key while promoting to temporarily disable auto-promotion';
+
+  @override
+  String get preferencesWhenPremoving => 'E-pad ar rak-fiñvadenn';
+
+  @override
+  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Arc\'hañ bezañ rampo goude fiñvadennoù heñvel-poch en un doare emgefreek';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Pa chom nebeutoc\'h evit < 30 eilenn';
+
+  @override
+  String get preferencesMoveConfirmation => 'Kadarnaat ar fiñvadenn';
+
+  @override
+  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Can be disabled during a game with the board menu';
+
+  @override
+  String get preferencesInCorrespondenceGames => 'Krogadoù a-bell';
+
+  @override
+  String get preferencesCorrespondenceAndUnlimited => 'A-bell ha diharz';
+
+  @override
+  String get preferencesConfirmResignationAndDrawOffers => 'Kadarnaat ar c\'hodianañ hag ar goulenn bezañ rampo';
+
+  @override
+  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Doareoù da rokañ';
+
+  @override
+  String get preferencesCastleByMovingTwoSquares => 'O tiplasañ ar roue deus div garrezenn';
+
+  @override
+  String get preferencesCastleByMovingOntoTheRook => 'Diblasañ ar roue war an tour evit rokañ';
+
+  @override
+  String get preferencesInputMovesWithTheKeyboard => 'Aozañ an touchennaoueg evit c\'hoari gantañ';
+
+  @override
+  String get preferencesInputMovesWithVoice => 'Input moves with your voice';
+
+  @override
+  String get preferencesSnapArrowsToValidMoves => 'Snap arrows to valid moves';
+
+  @override
+  String get preferencesSayGgWpAfterLosingOrDrawing => 'Say \"Good game, well played\" upon defeat or draw';
+
+  @override
+  String get preferencesYourPreferencesHaveBeenSaved => 'Savetaet eo bet ho tibaboù.';
+
+  @override
+  String get preferencesScrollOnTheBoardToReplayMoves => 'Scroll on the board to replay moves';
+
+  @override
+  String get preferencesCorrespondenceEmailNotification => 'Daily email listing your correspondence games';
+
+  @override
+  String get preferencesNotifyStreamStart => 'Streamer goes live';
+
+  @override
+  String get preferencesNotifyInboxMsg => 'New inbox message';
+
+  @override
+  String get preferencesNotifyForumMention => 'Forum comment mentions you';
+
+  @override
+  String get preferencesNotifyInvitedStudy => 'Study invite';
+
+  @override
+  String get preferencesNotifyGameEvent => 'Correspondence game updates';
+
+  @override
+  String get preferencesNotifyChallenge => 'Challenges';
+
+  @override
+  String get preferencesNotifyTournamentSoon => 'Un tournamant a vo a-benn nebeut';
+
+  @override
+  String get preferencesNotifyTimeAlarm => 'Correspondence clock running out';
+
+  @override
+  String get preferencesNotifyBell => 'Bell notification within Lichess';
+
+  @override
+  String get preferencesNotifyPush => 'Device notification when you\'re not on Lichess';
+
+  @override
+  String get preferencesNotifyWeb => 'Merdeer';
+
+  @override
+  String get preferencesNotifyDevice => 'Device';
+
+  @override
+  String get preferencesBellNotificationSound => 'Klevet ar c\'hloc\'h';
+
+  @override
+  String get puzzlePuzzles => 'Poelladennoù';
+
+  @override
+  String get puzzlePuzzleThemes => 'Puzzle themes';
+
+  @override
+  String get puzzleRecommended => 'Recommended';
+
+  @override
+  String get puzzlePhases => 'Phases';
+
+  @override
+  String get puzzleMotifs => 'Motifs';
+
+  @override
+  String get puzzleAdvanced => 'Advanced';
+
+  @override
+  String get puzzleLengths => 'Lengths';
+
+  @override
+  String get puzzleMates => 'Mates';
+
+  @override
+  String get puzzleGoals => 'Palioù';
+
+  @override
+  String get puzzleOrigin => 'Mammenn';
+
+  @override
+  String get puzzleSpecialMoves => 'Special moves';
+
+  @override
+  String get puzzleDidYouLikeThisPuzzle => 'Ha plijet oc\'h bet gant ar boelladenn-mañ?';
+
+  @override
+  String get puzzleVoteToLoadNextOne => 'Votit evit kaout unan all!';
+
+  @override
+  String get puzzleUpVote => 'Up vote puzzle';
+
+  @override
+  String get puzzleDownVote => 'Down vote puzzle';
+
+  @override
+  String get puzzleYourPuzzleRatingWillNotChange => 'Your puzzle rating will not change. Note that puzzles are not a competition. Your rating helps selecting the best puzzles for your current skill.';
+
+  @override
+  String get puzzleFindTheBestMoveForWhite => 'Find the best move for white.';
+
+  @override
+  String get puzzleFindTheBestMoveForBlack => 'Find the best move for black.';
+
+  @override
+  String get puzzleToGetPersonalizedPuzzles => 'To get personalized puzzles:';
+
+  @override
+  String puzzlePuzzleId(String param) {
+    return 'Poelladenn $param';
+  }
+
+  @override
+  String get puzzlePuzzleOfTheDay => 'Poelladenn an deiz';
+
+  @override
+  String get puzzleDailyPuzzle => 'Poelladenn pemdeziek';
+
+  @override
+  String get puzzleClickToSolve => 'Klikit da ziskoulmañ';
+
+  @override
+  String get puzzleGoodMove => 'Good move';
+
+  @override
+  String get puzzleBestMove => 'Best move!';
+
+  @override
+  String get puzzleKeepGoing => 'Kendalc\'hit…';
+
+  @override
+  String get puzzlePuzzleSuccess => 'Deuet eo ganeoc\'h!';
+
+  @override
+  String get puzzlePuzzleComplete => 'Puzzle complete!';
+
+  @override
+  String get puzzleByOpenings => 'Dre zigoradurioù';
+
+  @override
+  String get puzzlePuzzlesByOpenings => 'Poelladennoù dre zigoradurioù';
+
+  @override
+  String get puzzleOpeningsYouPlayedTheMost => 'Digoradurioù ho peus c\'hoariet alies e krogadoù renket';
+
+  @override
+  String get puzzleUseFindInPage => 'Use \"Find in page\" in the browser menu to find your favourite opening!';
+
+  @override
+  String get puzzleUseCtrlF => 'Grit gant Ctrl+f evit kavout ho tigoradurioù muiañ-karet!';
+
+  @override
+  String get puzzleNotTheMove => 'That\'s not the move!';
+
+  @override
+  String get puzzleTrySomethingElse => 'Klaskit un doare all.';
+
+  @override
+  String puzzleRatingX(String param) {
+    return 'Renkadur: $param';
+  }
+
+  @override
+  String get puzzleHidden => 'kuzhet';
+
+  @override
+  String puzzleFromGameLink(String param) {
+    return 'C\'hoariet gant $param';
+  }
+
+  @override
+  String get puzzleContinueTraining => 'Kenderc\'hel gant ar pleustriñ';
+
+  @override
+  String get puzzleDifficultyLevel => 'Difficulty level';
+
+  @override
+  String get puzzleNormal => 'Normal';
+
+  @override
+  String get puzzleEasier => 'Aesoc\'h';
+
+  @override
+  String get puzzleEasiest => 'Aesañ';
+
+  @override
+  String get puzzleHarder => 'Startoc\'h';
+
+  @override
+  String get puzzleHardest => 'Startañ';
+
+  @override
+  String get puzzleExample => 'Skouer';
+
+  @override
+  String get puzzleAddAnotherTheme => 'Add another theme';
+
+  @override
+  String get puzzleNextPuzzle => 'Poelladenn nesañ';
+
+  @override
+  String get puzzleJumpToNextPuzzleImmediately => 'Cheñch poelladenn diouzhtu';
+
+  @override
+  String get puzzlePuzzleDashboard => 'Puzzle Dashboard';
+
+  @override
+  String get puzzleImprovementAreas => 'Ar pezh a zo da wellaat';
+
+  @override
+  String get puzzleStrengths => 'Strengths';
+
+  @override
+  String get puzzleHistory => 'Puzzle history';
+
+  @override
+  String get puzzleSolved => 'solved';
+
+  @override
+  String get puzzleFailed => 'n\'eo ket mat';
+
+  @override
+  String get puzzleStreakDescription => 'Solve progressively harder puzzles and build a win streak. There is no clock, so take your time. One wrong move, and it\'s game over! But you can skip one move per session.';
+
+  @override
+  String puzzleYourStreakX(String param) {
+    return 'Your streak: $param';
+  }
+
+  @override
+  String get puzzleStreakSkipExplanation => 'Skip this move to preserve your streak! Only works once per run.';
+
+  @override
+  String get puzzleContinueTheStreak => 'Continue the streak';
+
+  @override
+  String get puzzleNewStreak => 'New streak';
+
+  @override
+  String get puzzleFromMyGames => 'Diwar ma c\'hrogadoù';
+
+  @override
+  String get puzzleLookupOfPlayer => 'Lookup puzzles from a player\'s games';
+
+  @override
+  String puzzleFromXGames(String param) {
+    return 'Puzzles from $param\' games';
+  }
+
+  @override
+  String get puzzleSearchPuzzles => 'Search puzzles';
+
+  @override
+  String get puzzleFromMyGamesNone => 'N\'eus poelladenn ebet tennet diwar ho krogadoù met gant Lichess oc\'h karet memestra.\nKontant e vefec\'h e vefe savet ur boelladenn diwar unan eus ho partiennoù? C\'hoariit krogadoù prim pe glasel evit kaout muioc\'h a chañs!';
+
+  @override
+  String puzzleFromXGamesFound(String param1, String param2) {
+    return '$param1 puzzles found in $param2 games';
+  }
+
+  @override
+  String get puzzlePuzzleDashboardDescription => 'Pleustriñ, dielfennañ, mont war-raok';
+
+  @override
+  String puzzlePercentSolved(String param) {
+    return '$param solved';
+  }
+
+  @override
+  String get puzzleNoPuzzlesToShow => 'Nothing to show, go play some puzzles first!';
+
+  @override
+  String get puzzleImprovementAreasDescription => 'Pleustrit war ar re-mañ evit mont war-raok!';
+
+  @override
+  String get puzzleStrengthDescription => 'You perform the best in these themes';
+
+  @override
+  String puzzlePlayedXTimes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'C\'hoariet $count gwech',
+      many: 'C\'hoariet $count gwech',
+      few: 'C\'hoariet $count gwech',
+      two: 'C\'hoariet $count wech',
+      one: 'C\'hoariet $count wech',
+      zero: 'C\'hoariet $count wech',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsBelowYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count points below your puzzle rating',
+      one: 'One point below your puzzle rating',
+      zero: 'One point below your puzzle rating',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsAboveYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count points above your puzzle rating',
+      one: 'One point above your puzzle rating',
+      zero: 'One point above your puzzle rating',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPlayed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count played',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbToReplay(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count to replay',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get puzzleThemeAdvancedPawn => 'Advanced pawn';
+
+  @override
+  String get puzzleThemeAdvancedPawnDescription => 'One of your pawns is deep into the opponent position, maybe threatening to promote.';
+
+  @override
+  String get puzzleThemeAdvantage => 'Advantage';
+
+  @override
+  String get puzzleThemeAdvantageDescription => 'Seize your chance to get a decisive advantage. (200cp ≤ eval ≤ 600cp)';
+
+  @override
+  String get puzzleThemeAnastasiaMate => 'Lamm d\'ar roue mod Ananastasia';
+
+  @override
+  String get puzzleThemeAnastasiaMateDescription => 'A knight and rook or queen team up to trap the opposing king between the side of the board and a friendly piece.';
+
+  @override
+  String get puzzleThemeArabianMate => 'Lamm d\'ar roue mod Arabia';
+
+  @override
+  String get puzzleThemeArabianMateDescription => 'A knight and a rook team up to trap the opposing king on a corner of the board.';
+
+  @override
+  String get puzzleThemeAttackingF2F7 => 'Tagañ f2 pe f7';
+
+  @override
+  String get puzzleThemeAttackingF2F7Description => 'An attack focusing on the f2 or f7 pawn, such as in the fried liver opening.';
+
+  @override
+  String get puzzleThemeAttraction => 'Attraction';
+
+  @override
+  String get puzzleThemeAttractionDescription => 'An exchange or sacrifice encouraging or forcing an opponent piece to a square that allows a follow-up tactic.';
+
+  @override
+  String get puzzleThemeBackRankMate => 'Back rank mate';
+
+  @override
+  String get puzzleThemeBackRankMateDescription => 'Checkmate the king on the home rank, when it is trapped there by its own pieces.';
+
+  @override
+  String get puzzleThemeBishopEndgame => 'Bishop endgame';
+
+  @override
+  String get puzzleThemeBishopEndgameDescription => 'An endgame with only bishops and pawns.';
+
+  @override
+  String get puzzleThemeBodenMate => 'Lamm d\'ar roue mod Boden';
+
+  @override
+  String get puzzleThemeBodenMateDescription => 'Two attacking bishops on criss-crossing diagonals deliver mate to a king obstructed by friendly pieces.';
+
+  @override
+  String get puzzleThemeCastling => 'Rokañ';
+
+  @override
+  String get puzzleThemeCastlingDescription => 'Gwarezit ho roue ha kasit ho tour d\'an emgann.';
+
+  @override
+  String get puzzleThemeCapturingDefender => 'Capture the defender';
+
+  @override
+  String get puzzleThemeCapturingDefenderDescription => 'Removing a piece that is critical to defence of another piece, allowing the now undefended piece to be captured on a following move.';
+
+  @override
+  String get puzzleThemeCrushing => 'Crushing';
+
+  @override
+  String get puzzleThemeCrushingDescription => 'Spot the opponent blunder to obtain a crushing advantage. (eval ≥ 600cp)';
+
+  @override
+  String get puzzleThemeDoubleBishopMate => 'Double bishop mate';
+
+  @override
+  String get puzzleThemeDoubleBishopMateDescription => 'Two attacking bishops on adjacent diagonals deliver mate to a king obstructed by friendly pieces.';
+
+  @override
+  String get puzzleThemeDovetailMate => 'Lamm d\'ar roue mod Dovetail';
+
+  @override
+  String get puzzleThemeDovetailMateDescription => 'A queen delivers mate to an adjacent king, whose only two escape squares are obstructed by friendly pieces.';
+
+  @override
+  String get puzzleThemeEquality => 'Equality';
+
+  @override
+  String get puzzleThemeEqualityDescription => 'Come back from a losing position, and secure a draw or a balanced position. (eval ≤ 200cp)';
+
+  @override
+  String get puzzleThemeKingsideAttack => 'Tagañ tu ar roue';
+
+  @override
+  String get puzzleThemeKingsideAttackDescription => 'An attack of the opponent\'s king, after they castled on the king side.';
+
+  @override
+  String get puzzleThemeClearance => 'Clearance';
+
+  @override
+  String get puzzleThemeClearanceDescription => 'A move, often with tempo, that clears a square, file or diagonal for a follow-up tactical idea.';
+
+  @override
+  String get puzzleThemeDefensiveMove => 'Defensive move';
+
+  @override
+  String get puzzleThemeDefensiveMoveDescription => 'A precise move or sequence of moves that is needed to avoid losing material or another advantage.';
+
+  @override
+  String get puzzleThemeDeflection => 'Deflection';
+
+  @override
+  String get puzzleThemeDeflectionDescription => 'A move that distracts an opponent piece from another duty that it performs, such as guarding a key square. Sometimes also called \"overloading\".';
+
+  @override
+  String get puzzleThemeDiscoveredAttack => 'Discovered attack';
+
+  @override
+  String get puzzleThemeDiscoveredAttackDescription => 'Moving a piece (such as a knight), that previously blocked an attack by a long range piece (such as a rook), out of the way of that piece.';
+
+  @override
+  String get puzzleThemeDoubleCheck => 'Bec\'h d\'ar roue doubl';
+
+  @override
+  String get puzzleThemeDoubleCheckDescription => 'Checking with two pieces at once, as a result of a discovered attack where both the moving piece and the unveiled piece attack the opponent\'s king.';
+
+  @override
+  String get puzzleThemeEndgame => 'Fin ar c\'hrogad';
+
+  @override
+  String get puzzleThemeEndgameDescription => 'A tactic during the last phase of the game.';
+
+  @override
+  String get puzzleThemeEnPassantDescription => 'A tactic involving the en passant rule, where a pawn can capture an opponent pawn that has bypassed it using its initial two-square move.';
+
+  @override
+  String get puzzleThemeExposedKing => 'Exposed king';
+
+  @override
+  String get puzzleThemeExposedKingDescription => 'A tactic involving a king with few defenders around it, often leading to checkmate.';
+
+  @override
+  String get puzzleThemeFork => 'Forc\'h';
+
+  @override
+  String get puzzleThemeForkDescription => 'A move where the moved piece attacks two opponent pieces at once.';
+
+  @override
+  String get puzzleThemeHangingPiece => 'Hanging piece';
+
+  @override
+  String get puzzleThemeHangingPieceDescription => 'A tactic involving an opponent piece being undefended or insufficiently defended and free to capture.';
+
+  @override
+  String get puzzleThemeHookMate => 'Hook mate';
+
+  @override
+  String get puzzleThemeHookMateDescription => 'Checkmate with a rook, knight, and pawn along with one enemy pawn to limit the enemy king\'s escape.';
+
+  @override
+  String get puzzleThemeInterference => 'Interference';
+
+  @override
+  String get puzzleThemeInterferenceDescription => 'Moving a piece between two opponent pieces to leave one or both opponent pieces undefended, such as a knight on a defended square between two rooks.';
+
+  @override
+  String get puzzleThemeIntermezzo => 'Intermezzo';
+
+  @override
+  String get puzzleThemeIntermezzoDescription => 'Instead of playing the expected move, first interpose another move posing an immediate threat that the opponent must answer. Also known as \"Zwischenzug\" or \"In between\".';
+
+  @override
+  String get puzzleThemeKnightEndgame => 'Knight endgame';
+
+  @override
+  String get puzzleThemeKnightEndgameDescription => 'An endgame with only knights and pawns.';
+
+  @override
+  String get puzzleThemeLong => 'Poelladenn hir';
+
+  @override
+  String get puzzleThemeLongDescription => 'Three moves to win.';
+
+  @override
+  String get puzzleThemeMaster => 'Master games';
+
+  @override
+  String get puzzleThemeMasterDescription => 'Puzzles from games played by titled players.';
+
+  @override
+  String get puzzleThemeMasterVsMaster => 'Master vs Master games';
+
+  @override
+  String get puzzleThemeMasterVsMasterDescription => 'Puzzles from games between two titled players.';
+
+  @override
+  String get puzzleThemeMate => 'Lamm d\'ar roue';
+
+  @override
+  String get puzzleThemeMateDescription => 'Win the game with style.';
+
+  @override
+  String get puzzleThemeMateIn1 => 'Mate in 1';
+
+  @override
+  String get puzzleThemeMateIn1Description => 'Deliver checkmate in one move.';
+
+  @override
+  String get puzzleThemeMateIn2 => 'Mate in 2';
+
+  @override
+  String get puzzleThemeMateIn2Description => 'Deliver checkmate in two moves.';
+
+  @override
+  String get puzzleThemeMateIn3 => 'Mate in 3';
+
+  @override
+  String get puzzleThemeMateIn3Description => 'Deliver checkmate in three moves.';
+
+  @override
+  String get puzzleThemeMateIn4 => 'Mate in 4';
+
+  @override
+  String get puzzleThemeMateIn4Description => 'Deliver checkmate in four moves.';
+
+  @override
+  String get puzzleThemeMateIn5 => 'Mate in 5 or more';
+
+  @override
+  String get puzzleThemeMateIn5Description => 'Figure out a long mating sequence.';
+
+  @override
+  String get puzzleThemeMiddlegame => 'Kreiz ar c\'hrogad';
+
+  @override
+  String get puzzleThemeMiddlegameDescription => 'A tactic during the second phase of the game.';
+
+  @override
+  String get puzzleThemeOneMove => 'One-move puzzle';
+
+  @override
+  String get puzzleThemeOneMoveDescription => 'A puzzle that is only one move long.';
+
+  @override
+  String get puzzleThemeOpening => 'Digoradur';
+
+  @override
+  String get puzzleThemeOpeningDescription => 'A tactic during the first phase of the game.';
+
+  @override
+  String get puzzleThemePawnEndgame => 'Pawn endgame';
+
+  @override
+  String get puzzleThemePawnEndgameDescription => 'An endgame with only pawns.';
+
+  @override
+  String get puzzleThemePin => 'Tachañ';
+
+  @override
+  String get puzzleThemePinDescription => 'A tactic involving pins, where a piece is unable to move without revealing an attack on a higher value piece.';
+
+  @override
+  String get puzzleThemePromotion => 'Promotion';
+
+  @override
+  String get puzzleThemePromotionDescription => 'Promote one of your pawn to a queen or minor piece.';
+
+  @override
+  String get puzzleThemeQueenEndgame => 'Queen endgame';
+
+  @override
+  String get puzzleThemeQueenEndgameDescription => 'An endgame with only queens and pawns.';
+
+  @override
+  String get puzzleThemeQueenRookEndgame => 'Queen and Rook';
+
+  @override
+  String get puzzleThemeQueenRookEndgameDescription => 'An endgame with only queens, rooks and pawns.';
+
+  @override
+  String get puzzleThemeQueensideAttack => 'Queenside attack';
+
+  @override
+  String get puzzleThemeQueensideAttackDescription => 'An attack of the opponent\'s king, after they castled on the queen side.';
+
+  @override
+  String get puzzleThemeQuietMove => 'Quiet move';
+
+  @override
+  String get puzzleThemeQuietMoveDescription => 'A move that does neither make a check or capture, nor an immediate threat to capture, but does prepare a more hidden unavoidable threat for a later move.';
+
+  @override
+  String get puzzleThemeRookEndgame => 'Rook endgame';
+
+  @override
+  String get puzzleThemeRookEndgameDescription => 'An endgame with only rooks and pawns.';
+
+  @override
+  String get puzzleThemeSacrifice => 'Aberzh';
+
+  @override
+  String get puzzleThemeSacrificeDescription => 'A tactic involving giving up material in the short-term, to gain an advantage again after a forced sequence of moves.';
+
+  @override
+  String get puzzleThemeShort => 'Poelladenn verr';
+
+  @override
+  String get puzzleThemeShortDescription => 'Two moves to win.';
+
+  @override
+  String get puzzleThemeSkewer => 'Skewer';
+
+  @override
+  String get puzzleThemeSkewerDescription => 'A motif involving a high value piece being attacked, moving out the way, and allowing a lower value piece behind it to be captured or attacked, the inverse of a pin.';
+
+  @override
+  String get puzzleThemeSmotheredMate => 'Smothered mate';
+
+  @override
+  String get puzzleThemeSmotheredMateDescription => 'A checkmate delivered by a knight in which the mated king is unable to move because it is surrounded (or smothered) by its own pieces.';
+
+  @override
+  String get puzzleThemeSuperGM => 'Super GM games';
+
+  @override
+  String get puzzleThemeSuperGMDescription => 'Puzzles from games played by the best players in the world.';
+
+  @override
+  String get puzzleThemeTrappedPiece => 'Trapped piece';
+
+  @override
+  String get puzzleThemeTrappedPieceDescription => 'A piece is unable to escape capture as it has limited moves.';
+
+  @override
+  String get puzzleThemeUnderPromotion => 'Underpromotion';
+
+  @override
+  String get puzzleThemeUnderPromotionDescription => 'Promotion to a knight, bishop, or rook.';
+
+  @override
+  String get puzzleThemeVeryLong => 'Poelladenn hir-tre';
+
+  @override
+  String get puzzleThemeVeryLongDescription => 'Four moves or more to win.';
+
+  @override
+  String get puzzleThemeXRayAttack => 'X-Ray attack';
+
+  @override
+  String get puzzleThemeXRayAttackDescription => 'A piece attacks or defends a square, through an enemy piece.';
+
+  @override
+  String get puzzleThemeZugzwang => 'Zugzwang';
+
+  @override
+  String get puzzleThemeZugzwangDescription => 'The opponent is limited in the moves they can make, and all moves worsen their position.';
+
+  @override
+  String get puzzleThemeHealthyMix => 'A bep seurt';
+
+  @override
+  String get puzzleThemeHealthyMixDescription => 'A bep seurt. N\'ouzit ket petra gortoz hag e mod-se e voc\'h prest evit pep tra! Heñvel ouzh ar c\'hrogadoù gwir.';
+
+  @override
+  String get puzzleThemePlayerGames => 'Player games';
+
+  @override
+  String get puzzleThemePlayerGamesDescription => 'Lookup puzzles generated from your games, or from another player\'s games.';
+
+  @override
+  String puzzleThemePuzzleDownloadInformation(String param) {
+    return 'These puzzles are in the public domain, and can be downloaded from $param.';
+  }
+
+  @override
+  String get searchSearch => 'Klask';
+
+  @override
+  String get settingsSettings => 'Arventennoù';
+
+  @override
+  String get settingsCloseAccount => 'Serriñ ar gont';
+
+  @override
+  String get settingsManagedAccountCannotBeClosed => 'Meret eo ho kont ha ne c\'hall ket bezañ serret.';
+
+  @override
+  String get settingsClosingIsDefinitive => 'Serret e vo ho kont da viken. Ne c\'halloc\'h ket cheñch ho soñj. Sur oc\'h?';
+
+  @override
+  String get settingsCantOpenSimilarAccount => 'Ne voc\'h ket aotreet da grouiñ ur gont nevez gant ar memes anv, pa vije gant ur ment lizherennoù disheñvel.';
+
+  @override
+  String get settingsChangedMindDoNotCloseAccount => 'Cheñchet em eus ma soñj, na serrit ket ma c\'hont';
+
+  @override
+  String get settingsCloseAccountExplanation => 'Serret e vo ho kont, sur oc\'h? Un diviz-pad an hini eo. NE c\'halloc\'h KET adkavout anezhi ken, BIKEN.';
+
+  @override
+  String get settingsThisAccountIsClosed => 'Serr eo ar gont-mañ.';
 
   @override
   String get playWithAFriend => 'C\'hoari a-enep ur mignon';
@@ -563,6 +1568,12 @@ class AppLocalizationsBr extends AppLocalizations {
 
   @override
   String get deleteFromHere => 'Dilemel adalek amañ';
+
+  @override
+  String get collapseVariations => 'Collapse variations';
+
+  @override
+  String get expandVariations => 'Expand variations';
 
   @override
   String get forceVariation => 'Troiñ en ur variant';
@@ -1422,15 +2433,6 @@ class AppLocalizationsBr extends AppLocalizations {
   String get emptyTournamentName => 'Laoskit goullo evit envel an tournamant diouzh anv ur c\'hoarier echedoù brudet.';
 
   @override
-  String get recommendNotTouching => 'Gwelloc\'h eo deoc\'h chom hep kemm anezhe.';
-
-  @override
-  String get fewerPlayers => 'Ma c\'houlennit strishadurioù evit mont-tre e vo nebeutoc\'h a c\'hoarierien o kemer perzh en ho tournamant.';
-
-  @override
-  String get showAdvancedSettings => 'Diskouez an arventennoù kempleshoc\'h';
-
-  @override
   String get makePrivateTournament => 'Gallout a rit krouiñ un tournamant prevez oc\'h ouzhpennañ ur ger-tremen';
 
   @override
@@ -1560,10 +2562,7 @@ class AppLocalizationsBr extends AppLocalizations {
   String get editProfile => 'Aozañ ar profil';
 
   @override
-  String get firstName => 'Anv';
-
-  @override
-  String get lastName => 'Anv familh';
+  String get realName => 'Real name';
 
   @override
   String get setFlair => 'Set your flair';
@@ -1692,13 +2691,7 @@ class AppLocalizationsBr extends AppLocalizations {
   String get cheat => 'Trucherezh';
 
   @override
-  String get insult => 'Kunujenn';
-
-  @override
   String get troll => 'Troll';
-
-  @override
-  String get ratingManipulation => 'Itrikañ renkadur';
 
   @override
   String get other => 'All';
@@ -1805,6 +2798,9 @@ class AppLocalizationsBr extends AppLocalizations {
 
   @override
   String get outsideTheBoard => 'Er-maez eus an dablez';
+
+  @override
+  String get allSquaresOfTheBoard => 'All squares of the board';
 
   @override
   String get onSlowGames => 'E-pad ar c\'hrogadoù difonn';
@@ -3634,1008 +4630,6 @@ class AppLocalizationsBr extends AppLocalizations {
   }
 
   @override
-  String get patronDonate => 'Ober un donezon';
-
-  @override
-  String get patronLichessPatron => 'Lichess Patron';
-
-  @override
-  String get preferencesPreferences => 'Dibaboù';
-
-  @override
-  String get preferencesDisplay => 'Display';
-
-  @override
-  String get preferencesPrivacy => 'Buhez prevez';
-
-  @override
-  String get preferencesNotifications => 'Kemennoù';
-
-  @override
-  String get preferencesPieceAnimation => 'Mod da fiñval ar pezhioù';
-
-  @override
-  String get preferencesMaterialDifference => 'Diforc\'hioù a-fet dafar';
-
-  @override
-  String get preferencesBoardHighlights => 'Gouleier evit sikour war an dablez (fiñvadenn ziwezhañ ha bec\'h d\'ar roue)';
-
-  @override
-  String get preferencesPieceDestinations => 'Karrezennoù degemer (fiñvadennoù ha rak-fiñvadennoù gwiriek)';
-
-  @override
-  String get preferencesBoardCoordinates => 'Daveennoù an dablez (A-H, 1-8)';
-
-  @override
-  String get preferencesMoveListWhilePlaying => 'Roll ar fiñvadennoù e-pad ar c\'hrogad';
-
-  @override
-  String get preferencesPgnPieceNotation => 'Notenniñ ar fiñvadennoù';
-
-  @override
-  String get preferencesChessPieceSymbol => 'Arouez ar pezh echedoù';
-
-  @override
-  String get preferencesPgnLetter => 'Lizherenn (K, Q, R, B, N)';
-
-  @override
-  String get preferencesZenMode => 'Mod zen';
-
-  @override
-  String get preferencesShowPlayerRatings => 'Diskouez renkadur ar c\'hoarier';
-
-  @override
-  String get preferencesShowFlairs => 'Show player flairs';
-
-  @override
-  String get preferencesExplainShowPlayerRatings => 'This hides all ratings from Lichess, to help focus on the chess. Rated games still impact your rating, this is only about what you get to see.';
-
-  @override
-  String get preferencesDisplayBoardResizeHandle => 'Diskouez an arouez evit cheñch ment an dablez';
-
-  @override
-  String get preferencesOnlyOnInitialPosition => 'Lec\'hiadur kentañ nemetken';
-
-  @override
-  String get preferencesInGameOnly => 'In-game only';
-
-  @override
-  String get preferencesChessClock => 'Horolaj echedoù';
-
-  @override
-  String get preferencesTenthsOfSeconds => 'Dekvedennoù an eilennoù';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'Pa chom nebeutoc\'h evit < 10 eilenn';
-
-  @override
-  String get preferencesHorizontalGreenProgressBars => 'Barrennoù dibunañ gwer a-blaen';
-
-  @override
-  String get preferencesSoundWhenTimeGetsCritical => 'Trouz pa ne chom ket kalz amzer';
-
-  @override
-  String get preferencesGiveMoreTime => 'Reiñ muioc\'h a amzer';
-
-  @override
-  String get preferencesGameBehavior => 'Mont en-dro ar c\'hrogad';
-
-  @override
-  String get preferencesHowDoYouMovePieces => 'Penaos e lakaer ar pezhioù da fiñval?';
-
-  @override
-  String get preferencesClickTwoSquares => 'Klikañ war div garrezenn';
-
-  @override
-  String get preferencesDragPiece => 'Lakaat ar pezh da riklañ';
-
-  @override
-  String get preferencesBothClicksAndDrag => 'An daou';
-
-  @override
-  String get preferencesPremovesPlayingDuringOpponentTurn => 'Rak-fiñvadennoù (c\'hoari e-pad tro hoc\'h enebour)';
-
-  @override
-  String get preferencesTakebacksWithOpponentApproval => 'Nullañ ar fiñvadenn ziwezhañ (gant asant an enebour)';
-
-  @override
-  String get preferencesInCasualGamesOnly => 'E krogadoù a vignoniezh hepken';
-
-  @override
-  String get preferencesPromoteToQueenAutomatically => 'Treiñ da rouanez en un doare emgefreek';
-
-  @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Hold the <ctrl> key while promoting to temporarily disable auto-promotion';
-
-  @override
-  String get preferencesWhenPremoving => 'E-pad ar rak-fiñvadenn';
-
-  @override
-  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Arc\'hañ bezañ rampo goude fiñvadennoù heñvel-poch en un doare emgefreek';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Pa chom nebeutoc\'h evit < 30 eilenn';
-
-  @override
-  String get preferencesMoveConfirmation => 'Kadarnaat ar fiñvadenn';
-
-  @override
-  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Can be disabled during a game with the board menu';
-
-  @override
-  String get preferencesInCorrespondenceGames => 'Krogadoù a-bell';
-
-  @override
-  String get preferencesCorrespondenceAndUnlimited => 'A-bell ha diharz';
-
-  @override
-  String get preferencesConfirmResignationAndDrawOffers => 'Kadarnaat ar c\'hodianañ hag ar goulenn bezañ rampo';
-
-  @override
-  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Doareoù da rokañ';
-
-  @override
-  String get preferencesCastleByMovingTwoSquares => 'O tiplasañ ar roue deus div garrezenn';
-
-  @override
-  String get preferencesCastleByMovingOntoTheRook => 'Diblasañ ar roue war an tour evit rokañ';
-
-  @override
-  String get preferencesInputMovesWithTheKeyboard => 'Aozañ an touchennaoueg evit c\'hoari gantañ';
-
-  @override
-  String get preferencesInputMovesWithVoice => 'Input moves with your voice';
-
-  @override
-  String get preferencesSnapArrowsToValidMoves => 'Snap arrows to valid moves';
-
-  @override
-  String get preferencesSayGgWpAfterLosingOrDrawing => 'Say \"Good game, well played\" upon defeat or draw';
-
-  @override
-  String get preferencesYourPreferencesHaveBeenSaved => 'Savetaet eo bet ho tibaboù.';
-
-  @override
-  String get preferencesScrollOnTheBoardToReplayMoves => 'Scroll on the board to replay moves';
-
-  @override
-  String get preferencesCorrespondenceEmailNotification => 'Daily email listing your correspondence games';
-
-  @override
-  String get preferencesNotifyStreamStart => 'Streamer goes live';
-
-  @override
-  String get preferencesNotifyInboxMsg => 'New inbox message';
-
-  @override
-  String get preferencesNotifyForumMention => 'Forum comment mentions you';
-
-  @override
-  String get preferencesNotifyInvitedStudy => 'Study invite';
-
-  @override
-  String get preferencesNotifyGameEvent => 'Correspondence game updates';
-
-  @override
-  String get preferencesNotifyChallenge => 'Challenges';
-
-  @override
-  String get preferencesNotifyTournamentSoon => 'Un tournamant a vo a-benn nebeut';
-
-  @override
-  String get preferencesNotifyTimeAlarm => 'Correspondence clock running out';
-
-  @override
-  String get preferencesNotifyBell => 'Bell notification within Lichess';
-
-  @override
-  String get preferencesNotifyPush => 'Device notification when you\'re not on Lichess';
-
-  @override
-  String get preferencesNotifyWeb => 'Merdeer';
-
-  @override
-  String get preferencesNotifyDevice => 'Device';
-
-  @override
-  String get preferencesBellNotificationSound => 'Klevet ar c\'hloc\'h';
-
-  @override
-  String get puzzlePuzzles => 'Poelladennoù';
-
-  @override
-  String get puzzlePuzzleThemes => 'Puzzle themes';
-
-  @override
-  String get puzzleRecommended => 'Recommended';
-
-  @override
-  String get puzzlePhases => 'Phases';
-
-  @override
-  String get puzzleMotifs => 'Motifs';
-
-  @override
-  String get puzzleAdvanced => 'Advanced';
-
-  @override
-  String get puzzleLengths => 'Lengths';
-
-  @override
-  String get puzzleMates => 'Mates';
-
-  @override
-  String get puzzleGoals => 'Palioù';
-
-  @override
-  String get puzzleOrigin => 'Mammenn';
-
-  @override
-  String get puzzleSpecialMoves => 'Special moves';
-
-  @override
-  String get puzzleDidYouLikeThisPuzzle => 'Ha plijet oc\'h bet gant ar boelladenn-mañ?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Votit evit kaout unan all!';
-
-  @override
-  String get puzzleUpVote => 'Up vote puzzle';
-
-  @override
-  String get puzzleDownVote => 'Down vote puzzle';
-
-  @override
-  String get puzzleYourPuzzleRatingWillNotChange => 'Your puzzle rating will not change. Note that puzzles are not a competition. Your rating helps selecting the best puzzles for your current skill.';
-
-  @override
-  String get puzzleFindTheBestMoveForWhite => 'Find the best move for white.';
-
-  @override
-  String get puzzleFindTheBestMoveForBlack => 'Find the best move for black.';
-
-  @override
-  String get puzzleToGetPersonalizedPuzzles => 'To get personalized puzzles:';
-
-  @override
-  String puzzlePuzzleId(String param) {
-    return 'Poelladenn $param';
-  }
-
-  @override
-  String get puzzlePuzzleOfTheDay => 'Poelladenn an deiz';
-
-  @override
-  String get puzzleDailyPuzzle => 'Poelladenn pemdeziek';
-
-  @override
-  String get puzzleClickToSolve => 'Klikit da ziskoulmañ';
-
-  @override
-  String get puzzleGoodMove => 'Good move';
-
-  @override
-  String get puzzleBestMove => 'Best move!';
-
-  @override
-  String get puzzleKeepGoing => 'Kendalc\'hit…';
-
-  @override
-  String get puzzlePuzzleSuccess => 'Deuet eo ganeoc\'h!';
-
-  @override
-  String get puzzlePuzzleComplete => 'Puzzle complete!';
-
-  @override
-  String get puzzleByOpenings => 'Dre zigoradurioù';
-
-  @override
-  String get puzzlePuzzlesByOpenings => 'Poelladennoù dre zigoradurioù';
-
-  @override
-  String get puzzleOpeningsYouPlayedTheMost => 'Digoradurioù ho peus c\'hoariet alies e krogadoù renket';
-
-  @override
-  String get puzzleUseFindInPage => 'Use \"Find in page\" in the browser menu to find your favourite opening!';
-
-  @override
-  String get puzzleUseCtrlF => 'Grit gant Ctrl+f evit kavout ho tigoradurioù muiañ-karet!';
-
-  @override
-  String get puzzleNotTheMove => 'That\'s not the move!';
-
-  @override
-  String get puzzleTrySomethingElse => 'Klaskit un doare all.';
-
-  @override
-  String puzzleRatingX(String param) {
-    return 'Renkadur: $param';
-  }
-
-  @override
-  String get puzzleHidden => 'kuzhet';
-
-  @override
-  String puzzleFromGameLink(String param) {
-    return 'C\'hoariet gant $param';
-  }
-
-  @override
-  String get puzzleContinueTraining => 'Kenderc\'hel gant ar pleustriñ';
-
-  @override
-  String get puzzleDifficultyLevel => 'Difficulty level';
-
-  @override
-  String get puzzleNormal => 'Normal';
-
-  @override
-  String get puzzleEasier => 'Aesoc\'h';
-
-  @override
-  String get puzzleEasiest => 'Aesañ';
-
-  @override
-  String get puzzleHarder => 'Startoc\'h';
-
-  @override
-  String get puzzleHardest => 'Startañ';
-
-  @override
-  String get puzzleExample => 'Skouer';
-
-  @override
-  String get puzzleAddAnotherTheme => 'Add another theme';
-
-  @override
-  String get puzzleNextPuzzle => 'Poelladenn nesañ';
-
-  @override
-  String get puzzleJumpToNextPuzzleImmediately => 'Cheñch poelladenn diouzhtu';
-
-  @override
-  String get puzzlePuzzleDashboard => 'Puzzle Dashboard';
-
-  @override
-  String get puzzleImprovementAreas => 'Ar pezh a zo da wellaat';
-
-  @override
-  String get puzzleStrengths => 'Strengths';
-
-  @override
-  String get puzzleHistory => 'Puzzle history';
-
-  @override
-  String get puzzleSolved => 'solved';
-
-  @override
-  String get puzzleFailed => 'n\'eo ket mat';
-
-  @override
-  String get puzzleStreakDescription => 'Solve progressively harder puzzles and build a win streak. There is no clock, so take your time. One wrong move, and it\'s game over! But you can skip one move per session.';
-
-  @override
-  String puzzleYourStreakX(String param) {
-    return 'Your streak: $param';
-  }
-
-  @override
-  String get puzzleStreakSkipExplanation => 'Skip this move to preserve your streak! Only works once per run.';
-
-  @override
-  String get puzzleContinueTheStreak => 'Continue the streak';
-
-  @override
-  String get puzzleNewStreak => 'New streak';
-
-  @override
-  String get puzzleFromMyGames => 'Diwar ma c\'hrogadoù';
-
-  @override
-  String get puzzleLookupOfPlayer => 'Lookup puzzles from a player\'s games';
-
-  @override
-  String puzzleFromXGames(String param) {
-    return 'Puzzles from $param\' games';
-  }
-
-  @override
-  String get puzzleSearchPuzzles => 'Search puzzles';
-
-  @override
-  String get puzzleFromMyGamesNone => 'N\'eus poelladenn ebet tennet diwar ho krogadoù met gant Lichess oc\'h karet memestra.\nKontant e vefec\'h e vefe savet ur boelladenn diwar unan eus ho partiennoù? C\'hoariit krogadoù prim pe glasel evit kaout muioc\'h a chañs!';
-
-  @override
-  String puzzleFromXGamesFound(String param1, String param2) {
-    return '$param1 puzzles found in $param2 games';
-  }
-
-  @override
-  String get puzzlePuzzleDashboardDescription => 'Pleustriñ, dielfennañ, mont war-raok';
-
-  @override
-  String puzzlePercentSolved(String param) {
-    return '$param solved';
-  }
-
-  @override
-  String get puzzleNoPuzzlesToShow => 'Nothing to show, go play some puzzles first!';
-
-  @override
-  String get puzzleImprovementAreasDescription => 'Pleustrit war ar re-mañ evit mont war-raok!';
-
-  @override
-  String get puzzleStrengthDescription => 'You perform the best in these themes';
-
-  @override
-  String puzzlePlayedXTimes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'C\'hoariet $count gwech',
-      many: 'C\'hoariet $count gwech',
-      few: 'C\'hoariet $count gwech',
-      two: 'C\'hoariet $count wech',
-      one: 'C\'hoariet $count wech',
-      zero: 'C\'hoariet $count wech',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsBelowYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count points below your puzzle rating',
-      one: 'One point below your puzzle rating',
-      zero: 'One point below your puzzle rating',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsAboveYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count points above your puzzle rating',
-      one: 'One point above your puzzle rating',
-      zero: 'One point above your puzzle rating',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPlayed(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count played',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbToReplay(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count to replay',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get puzzleThemeAdvancedPawn => 'Advanced pawn';
-
-  @override
-  String get puzzleThemeAdvancedPawnDescription => 'One of your pawns is deep into the opponent position, maybe threatening to promote.';
-
-  @override
-  String get puzzleThemeAdvantage => 'Advantage';
-
-  @override
-  String get puzzleThemeAdvantageDescription => 'Seize your chance to get a decisive advantage. (200cp ≤ eval ≤ 600cp)';
-
-  @override
-  String get puzzleThemeAnastasiaMate => 'Lamm d\'ar roue mod Ananastasia';
-
-  @override
-  String get puzzleThemeAnastasiaMateDescription => 'A knight and rook or queen team up to trap the opposing king between the side of the board and a friendly piece.';
-
-  @override
-  String get puzzleThemeArabianMate => 'Lamm d\'ar roue mod Arabia';
-
-  @override
-  String get puzzleThemeArabianMateDescription => 'A knight and a rook team up to trap the opposing king on a corner of the board.';
-
-  @override
-  String get puzzleThemeAttackingF2F7 => 'Tagañ f2 pe f7';
-
-  @override
-  String get puzzleThemeAttackingF2F7Description => 'An attack focusing on the f2 or f7 pawn, such as in the fried liver opening.';
-
-  @override
-  String get puzzleThemeAttraction => 'Attraction';
-
-  @override
-  String get puzzleThemeAttractionDescription => 'An exchange or sacrifice encouraging or forcing an opponent piece to a square that allows a follow-up tactic.';
-
-  @override
-  String get puzzleThemeBackRankMate => 'Back rank mate';
-
-  @override
-  String get puzzleThemeBackRankMateDescription => 'Checkmate the king on the home rank, when it is trapped there by its own pieces.';
-
-  @override
-  String get puzzleThemeBishopEndgame => 'Bishop endgame';
-
-  @override
-  String get puzzleThemeBishopEndgameDescription => 'An endgame with only bishops and pawns.';
-
-  @override
-  String get puzzleThemeBodenMate => 'Lamm d\'ar roue mod Boden';
-
-  @override
-  String get puzzleThemeBodenMateDescription => 'Two attacking bishops on criss-crossing diagonals deliver mate to a king obstructed by friendly pieces.';
-
-  @override
-  String get puzzleThemeCastling => 'Rokañ';
-
-  @override
-  String get puzzleThemeCastlingDescription => 'Gwarezit ho roue ha kasit ho tour d\'an emgann.';
-
-  @override
-  String get puzzleThemeCapturingDefender => 'Capture the defender';
-
-  @override
-  String get puzzleThemeCapturingDefenderDescription => 'Removing a piece that is critical to defence of another piece, allowing the now undefended piece to be captured on a following move.';
-
-  @override
-  String get puzzleThemeCrushing => 'Crushing';
-
-  @override
-  String get puzzleThemeCrushingDescription => 'Spot the opponent blunder to obtain a crushing advantage. (eval ≥ 600cp)';
-
-  @override
-  String get puzzleThemeDoubleBishopMate => 'Double bishop mate';
-
-  @override
-  String get puzzleThemeDoubleBishopMateDescription => 'Two attacking bishops on adjacent diagonals deliver mate to a king obstructed by friendly pieces.';
-
-  @override
-  String get puzzleThemeDovetailMate => 'Lamm d\'ar roue mod Dovetail';
-
-  @override
-  String get puzzleThemeDovetailMateDescription => 'A queen delivers mate to an adjacent king, whose only two escape squares are obstructed by friendly pieces.';
-
-  @override
-  String get puzzleThemeEquality => 'Equality';
-
-  @override
-  String get puzzleThemeEqualityDescription => 'Come back from a losing position, and secure a draw or a balanced position. (eval ≤ 200cp)';
-
-  @override
-  String get puzzleThemeKingsideAttack => 'Tagañ tu ar roue';
-
-  @override
-  String get puzzleThemeKingsideAttackDescription => 'An attack of the opponent\'s king, after they castled on the king side.';
-
-  @override
-  String get puzzleThemeClearance => 'Clearance';
-
-  @override
-  String get puzzleThemeClearanceDescription => 'A move, often with tempo, that clears a square, file or diagonal for a follow-up tactical idea.';
-
-  @override
-  String get puzzleThemeDefensiveMove => 'Defensive move';
-
-  @override
-  String get puzzleThemeDefensiveMoveDescription => 'A precise move or sequence of moves that is needed to avoid losing material or another advantage.';
-
-  @override
-  String get puzzleThemeDeflection => 'Deflection';
-
-  @override
-  String get puzzleThemeDeflectionDescription => 'A move that distracts an opponent piece from another duty that it performs, such as guarding a key square. Sometimes also called \"overloading\".';
-
-  @override
-  String get puzzleThemeDiscoveredAttack => 'Discovered attack';
-
-  @override
-  String get puzzleThemeDiscoveredAttackDescription => 'Moving a piece (such as a knight), that previously blocked an attack by a long range piece (such as a rook), out of the way of that piece.';
-
-  @override
-  String get puzzleThemeDoubleCheck => 'Bec\'h d\'ar roue doubl';
-
-  @override
-  String get puzzleThemeDoubleCheckDescription => 'Checking with two pieces at once, as a result of a discovered attack where both the moving piece and the unveiled piece attack the opponent\'s king.';
-
-  @override
-  String get puzzleThemeEndgame => 'Fin ar c\'hrogad';
-
-  @override
-  String get puzzleThemeEndgameDescription => 'A tactic during the last phase of the game.';
-
-  @override
-  String get puzzleThemeEnPassantDescription => 'A tactic involving the en passant rule, where a pawn can capture an opponent pawn that has bypassed it using its initial two-square move.';
-
-  @override
-  String get puzzleThemeExposedKing => 'Exposed king';
-
-  @override
-  String get puzzleThemeExposedKingDescription => 'A tactic involving a king with few defenders around it, often leading to checkmate.';
-
-  @override
-  String get puzzleThemeFork => 'Forc\'h';
-
-  @override
-  String get puzzleThemeForkDescription => 'A move where the moved piece attacks two opponent pieces at once.';
-
-  @override
-  String get puzzleThemeHangingPiece => 'Hanging piece';
-
-  @override
-  String get puzzleThemeHangingPieceDescription => 'A tactic involving an opponent piece being undefended or insufficiently defended and free to capture.';
-
-  @override
-  String get puzzleThemeHookMate => 'Hook mate';
-
-  @override
-  String get puzzleThemeHookMateDescription => 'Checkmate with a rook, knight, and pawn along with one enemy pawn to limit the enemy king\'s escape.';
-
-  @override
-  String get puzzleThemeInterference => 'Interference';
-
-  @override
-  String get puzzleThemeInterferenceDescription => 'Moving a piece between two opponent pieces to leave one or both opponent pieces undefended, such as a knight on a defended square between two rooks.';
-
-  @override
-  String get puzzleThemeIntermezzo => 'Intermezzo';
-
-  @override
-  String get puzzleThemeIntermezzoDescription => 'Instead of playing the expected move, first interpose another move posing an immediate threat that the opponent must answer. Also known as \"Zwischenzug\" or \"In between\".';
-
-  @override
-  String get puzzleThemeKnightEndgame => 'Knight endgame';
-
-  @override
-  String get puzzleThemeKnightEndgameDescription => 'An endgame with only knights and pawns.';
-
-  @override
-  String get puzzleThemeLong => 'Poelladenn hir';
-
-  @override
-  String get puzzleThemeLongDescription => 'Three moves to win.';
-
-  @override
-  String get puzzleThemeMaster => 'Master games';
-
-  @override
-  String get puzzleThemeMasterDescription => 'Puzzles from games played by titled players.';
-
-  @override
-  String get puzzleThemeMasterVsMaster => 'Master vs Master games';
-
-  @override
-  String get puzzleThemeMasterVsMasterDescription => 'Puzzles from games between two titled players.';
-
-  @override
-  String get puzzleThemeMate => 'Lamm d\'ar roue';
-
-  @override
-  String get puzzleThemeMateDescription => 'Win the game with style.';
-
-  @override
-  String get puzzleThemeMateIn1 => 'Mate in 1';
-
-  @override
-  String get puzzleThemeMateIn1Description => 'Deliver checkmate in one move.';
-
-  @override
-  String get puzzleThemeMateIn2 => 'Mate in 2';
-
-  @override
-  String get puzzleThemeMateIn2Description => 'Deliver checkmate in two moves.';
-
-  @override
-  String get puzzleThemeMateIn3 => 'Mate in 3';
-
-  @override
-  String get puzzleThemeMateIn3Description => 'Deliver checkmate in three moves.';
-
-  @override
-  String get puzzleThemeMateIn4 => 'Mate in 4';
-
-  @override
-  String get puzzleThemeMateIn4Description => 'Deliver checkmate in four moves.';
-
-  @override
-  String get puzzleThemeMateIn5 => 'Mate in 5 or more';
-
-  @override
-  String get puzzleThemeMateIn5Description => 'Figure out a long mating sequence.';
-
-  @override
-  String get puzzleThemeMiddlegame => 'Kreiz ar c\'hrogad';
-
-  @override
-  String get puzzleThemeMiddlegameDescription => 'A tactic during the second phase of the game.';
-
-  @override
-  String get puzzleThemeOneMove => 'One-move puzzle';
-
-  @override
-  String get puzzleThemeOneMoveDescription => 'A puzzle that is only one move long.';
-
-  @override
-  String get puzzleThemeOpening => 'Digoradur';
-
-  @override
-  String get puzzleThemeOpeningDescription => 'A tactic during the first phase of the game.';
-
-  @override
-  String get puzzleThemePawnEndgame => 'Pawn endgame';
-
-  @override
-  String get puzzleThemePawnEndgameDescription => 'An endgame with only pawns.';
-
-  @override
-  String get puzzleThemePin => 'Tachañ';
-
-  @override
-  String get puzzleThemePinDescription => 'A tactic involving pins, where a piece is unable to move without revealing an attack on a higher value piece.';
-
-  @override
-  String get puzzleThemePromotion => 'Promotion';
-
-  @override
-  String get puzzleThemePromotionDescription => 'Promote one of your pawn to a queen or minor piece.';
-
-  @override
-  String get puzzleThemeQueenEndgame => 'Queen endgame';
-
-  @override
-  String get puzzleThemeQueenEndgameDescription => 'An endgame with only queens and pawns.';
-
-  @override
-  String get puzzleThemeQueenRookEndgame => 'Queen and Rook';
-
-  @override
-  String get puzzleThemeQueenRookEndgameDescription => 'An endgame with only queens, rooks and pawns.';
-
-  @override
-  String get puzzleThemeQueensideAttack => 'Queenside attack';
-
-  @override
-  String get puzzleThemeQueensideAttackDescription => 'An attack of the opponent\'s king, after they castled on the queen side.';
-
-  @override
-  String get puzzleThemeQuietMove => 'Quiet move';
-
-  @override
-  String get puzzleThemeQuietMoveDescription => 'A move that does neither make a check or capture, nor an immediate threat to capture, but does prepare a more hidden unavoidable threat for a later move.';
-
-  @override
-  String get puzzleThemeRookEndgame => 'Rook endgame';
-
-  @override
-  String get puzzleThemeRookEndgameDescription => 'An endgame with only rooks and pawns.';
-
-  @override
-  String get puzzleThemeSacrifice => 'Aberzh';
-
-  @override
-  String get puzzleThemeSacrificeDescription => 'A tactic involving giving up material in the short-term, to gain an advantage again after a forced sequence of moves.';
-
-  @override
-  String get puzzleThemeShort => 'Poelladenn verr';
-
-  @override
-  String get puzzleThemeShortDescription => 'Two moves to win.';
-
-  @override
-  String get puzzleThemeSkewer => 'Skewer';
-
-  @override
-  String get puzzleThemeSkewerDescription => 'A motif involving a high value piece being attacked, moving out the way, and allowing a lower value piece behind it to be captured or attacked, the inverse of a pin.';
-
-  @override
-  String get puzzleThemeSmotheredMate => 'Smothered mate';
-
-  @override
-  String get puzzleThemeSmotheredMateDescription => 'A checkmate delivered by a knight in which the mated king is unable to move because it is surrounded (or smothered) by its own pieces.';
-
-  @override
-  String get puzzleThemeSuperGM => 'Super GM games';
-
-  @override
-  String get puzzleThemeSuperGMDescription => 'Puzzles from games played by the best players in the world.';
-
-  @override
-  String get puzzleThemeTrappedPiece => 'Trapped piece';
-
-  @override
-  String get puzzleThemeTrappedPieceDescription => 'A piece is unable to escape capture as it has limited moves.';
-
-  @override
-  String get puzzleThemeUnderPromotion => 'Underpromotion';
-
-  @override
-  String get puzzleThemeUnderPromotionDescription => 'Promotion to a knight, bishop, or rook.';
-
-  @override
-  String get puzzleThemeVeryLong => 'Poelladenn hir-tre';
-
-  @override
-  String get puzzleThemeVeryLongDescription => 'Four moves or more to win.';
-
-  @override
-  String get puzzleThemeXRayAttack => 'X-Ray attack';
-
-  @override
-  String get puzzleThemeXRayAttackDescription => 'A piece attacks or defends a square, through an enemy piece.';
-
-  @override
-  String get puzzleThemeZugzwang => 'Zugzwang';
-
-  @override
-  String get puzzleThemeZugzwangDescription => 'The opponent is limited in the moves they can make, and all moves worsen their position.';
-
-  @override
-  String get puzzleThemeHealthyMix => 'A bep seurt';
-
-  @override
-  String get puzzleThemeHealthyMixDescription => 'A bep seurt. N\'ouzit ket petra gortoz hag e mod-se e voc\'h prest evit pep tra! Heñvel ouzh ar c\'hrogadoù gwir.';
-
-  @override
-  String get puzzleThemePlayerGames => 'Player games';
-
-  @override
-  String get puzzleThemePlayerGamesDescription => 'Lookup puzzles generated from your games, or from another player\'s games.';
-
-  @override
-  String puzzleThemePuzzleDownloadInformation(String param) {
-    return 'These puzzles are in the public domain, and can be downloaded from $param.';
-  }
-
-  @override
-  String perfStatPerfStats(String param) {
-    return 'Stadegoù $param';
-  }
-
-  @override
-  String get perfStatViewTheGames => 'Gwelet ar c\'hrogadoù';
-
-  @override
-  String get perfStatProvisional => 'da c\'hortoz';
-
-  @override
-  String get perfStatNotEnoughRatedGames => 'N\'eo ket bet c\'hoariet trawalc\'h a grogadoù renket evit kaout ur renkadur a glot gant ho live.';
-
-  @override
-  String perfStatProgressOverLastXGames(String param) {
-    return 'Araokadennoù e-pad an/ar $param krogad diwezhañ:';
-  }
-
-  @override
-  String perfStatRatingDeviation(String param) {
-    return 'Forc\'had standard: $param.';
-  }
-
-  @override
-  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
-    return 'Lower value means the rating is more stable. Above $param1, the rating is considered provisional. To be included in the rankings, this value should be below $param2 (standard chess) or $param3 (variants).';
-  }
-
-  @override
-  String get perfStatTotalGames => 'Niver a grogadoù';
-
-  @override
-  String get perfStatRatedGames => 'Krogadoù renket';
-
-  @override
-  String get perfStatTournamentGames => 'Krogadoù tournamant';
-
-  @override
-  String get perfStatBerserkedGames => 'Krogadoù berserket';
-
-  @override
-  String get perfStatTimeSpentPlaying => 'Amzer o c\'hoari';
-
-  @override
-  String get perfStatAverageOpponent => 'Live keitat an enebour';
-
-  @override
-  String get perfStatVictories => 'Trec\'hioù';
-
-  @override
-  String get perfStatDefeats => 'Lammoù';
-
-  @override
-  String get perfStatDisconnections => 'Digevreadennoù';
-
-  @override
-  String get perfStatNotEnoughGames => 'N\'ho peus ket c\'hoariet a-walc\'h c\'hoazh';
-
-  @override
-  String perfStatHighestRating(String param) {
-    return 'Renkadur uhelañ: $param';
-  }
-
-  @override
-  String perfStatLowestRating(String param) {
-    return 'Renkadur izelañ: $param';
-  }
-
-  @override
-  String perfStatFromXToY(String param1, String param2) {
-    return 'etre $param1 ha $param2';
-  }
-
-  @override
-  String get perfStatWinningStreak => 'Krogadoù gounezet da-heul';
-
-  @override
-  String get perfStatLosingStreak => 'Krogadoù kollet da-heul';
-
-  @override
-  String perfStatLongestStreak(String param) {
-    return 'Brasañ niver da heul: $param';
-  }
-
-  @override
-  String perfStatCurrentStreak(String param) {
-    return 'Niver a grogadoù da heul evit poent: $param';
-  }
-
-  @override
-  String get perfStatBestRated => 'Gwellañ trec\'hioù renket';
-
-  @override
-  String get perfStatGamesInARow => 'Krogadoù c\'hoariet hep troc\'h';
-
-  @override
-  String get perfStatLessThanOneHour => 'Nebeutoc\'h evit un eur etre daou grogad';
-
-  @override
-  String get perfStatMaxTimePlaying => 'Ar muiañ a amzer o c\'hoari dizehan';
-
-  @override
-  String get perfStatNow => 'bremañ';
-
-  @override
-  String get searchSearch => 'Klask';
-
-  @override
-  String get settingsSettings => 'Arventennoù';
-
-  @override
-  String get settingsCloseAccount => 'Serriñ ar gont';
-
-  @override
-  String get settingsManagedAccountCannotBeClosed => 'Meret eo ho kont ha ne c\'hall ket bezañ serret.';
-
-  @override
-  String get settingsClosingIsDefinitive => 'Serret e vo ho kont da viken. Ne c\'halloc\'h ket cheñch ho soñj. Sur oc\'h?';
-
-  @override
-  String get settingsCantOpenSimilarAccount => 'Ne voc\'h ket aotreet da grouiñ ur gont nevez gant ar memes anv, pa vije gant ur ment lizherennoù disheñvel.';
-
-  @override
-  String get settingsChangedMindDoNotCloseAccount => 'Cheñchet em eus ma soñj, na serrit ket ma c\'hont';
-
-  @override
-  String get settingsCloseAccountExplanation => 'Serret e vo ho kont, sur oc\'h? Un diviz-pad an hini eo. NE c\'halloc\'h KET adkavout anezhi ken, BIKEN.';
-
-  @override
-  String get settingsThisAccountIsClosed => 'Serr eo ar gont-mañ.';
-
-  @override
-  String get streamerLichessStreamers => 'Streamerien Lichess';
-
-  @override
   String get stormMoveToStart => 'Grit un taol evit kregiñ';
 
   @override
@@ -4822,14 +4816,11 @@ class AppLocalizationsBr extends AppLocalizations {
   }
 
   @override
+  String get streamerLichessStreamers => 'Streamerien Lichess';
+
+  @override
   String get studyShareAndExport => 'Skignañ & ezporzhiañ';
 
   @override
   String get studyStart => 'Kregiñ';
-
-  @override
-  String get broadcastBroadcasts => 'War-eeun';
-
-  @override
-  String get broadcastStartDate => 'Eur kregiñ en ho kwerzhid-eur';
 }

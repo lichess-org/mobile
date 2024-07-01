@@ -191,10 +191,10 @@ class AppLocalizationsId extends AppLocalizations {
   }
 
   @override
-  String get contactContact => 'Kontak';
+  String get broadcastBroadcasts => 'Siaran';
 
   @override
-  String get contactContactLichess => 'Kontak Lichess';
+  String get broadcastStartDate => 'Tanggal mulai di zona waktu Anda sendiri';
 
   @override
   String challengeChallengesX(String param1) {
@@ -276,6 +276,1002 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get challengeInviteLichessUser => 'Atau undang pengguna Lichess lain:';
+
+  @override
+  String get contactContact => 'Kontak';
+
+  @override
+  String get contactContactLichess => 'Kontak Lichess';
+
+  @override
+  String get patronDonate => 'Donasi';
+
+  @override
+  String get patronLichessPatron => 'Patron Lichess';
+
+  @override
+  String perfStatPerfStats(String param) {
+    return '$param statistik';
+  }
+
+  @override
+  String get perfStatViewTheGames => 'Lihat permainan';
+
+  @override
+  String get perfStatProvisional => 'penyisihan';
+
+  @override
+  String get perfStatNotEnoughRatedGames => 'Tidak mencukupi permainan dirating yang telah dimainkan untuk mendapatkan rating yang dapat diandalkan.';
+
+  @override
+  String perfStatProgressOverLastXGames(String param) {
+    return 'Kemajuan dalam permainan $param terakhir kali:';
+  }
+
+  @override
+  String perfStatRatingDeviation(String param) {
+    return 'Selisih rating: $param.';
+  }
+
+  @override
+  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
+    return 'Nilai rendah berarti ratingnya lebih stabil. Diatas $param1, ratingnya dipertimbangkan sebagai provisonal. Untuk dimasukkan dalam rangking, nilai ini harus berada dibawah $param2 (catur standar) atau $param3 (variasi).';
+  }
+
+  @override
+  String get perfStatTotalGames => 'Total permainan';
+
+  @override
+  String get perfStatRatedGames => 'Permainan di-rating';
+
+  @override
+  String get perfStatTournamentGames => 'Permainan turnamen';
+
+  @override
+  String get perfStatBerserkedGames => 'Permainan saat mengamuk';
+
+  @override
+  String get perfStatTimeSpentPlaying => 'Waktu bermain';
+
+  @override
+  String get perfStatAverageOpponent => 'Rata-rata lawan';
+
+  @override
+  String get perfStatVictories => 'Kemenangan';
+
+  @override
+  String get perfStatDefeats => 'Kalah';
+
+  @override
+  String get perfStatDisconnections => 'Koneksi terputus';
+
+  @override
+  String get perfStatNotEnoughGames => 'Permainan yang dimainkan tidak mencukupi';
+
+  @override
+  String perfStatHighestRating(String param) {
+    return 'Rating tertinggi: $param';
+  }
+
+  @override
+  String perfStatLowestRating(String param) {
+    return 'Rating terendah: $param';
+  }
+
+  @override
+  String perfStatFromXToY(String param1, String param2) {
+    return 'dari $param1 ke $param2';
+  }
+
+  @override
+  String get perfStatWinningStreak => 'Kemenangan beruntun';
+
+  @override
+  String get perfStatLosingStreak => 'Kekalahan beruntun';
+
+  @override
+  String perfStatLongestStreak(String param) {
+    return 'Beruntun terpanjang: $param';
+  }
+
+  @override
+  String perfStatCurrentStreak(String param) {
+    return 'Beruntun saat ini: $param';
+  }
+
+  @override
+  String get perfStatBestRated => 'Kemenangan dirating terbaik';
+
+  @override
+  String get perfStatGamesInARow => 'Permainan yang dimainkan berturut-turut';
+
+  @override
+  String get perfStatLessThanOneHour => 'Kurang dari satu jam antar permainan';
+
+  @override
+  String get perfStatMaxTimePlaying => 'Maksimal waktu bermain';
+
+  @override
+  String get perfStatNow => 'sekarang';
+
+  @override
+  String get preferencesPreferences => 'Pengaturan';
+
+  @override
+  String get preferencesDisplay => 'Tampilan';
+
+  @override
+  String get preferencesPrivacy => 'Privasi';
+
+  @override
+  String get preferencesNotifications => 'Notifikasi';
+
+  @override
+  String get preferencesPieceAnimation => 'Animasi Buah Catur';
+
+  @override
+  String get preferencesMaterialDifference => 'Perbedaan materi';
+
+  @override
+  String get preferencesBoardHighlights => 'Sorotan papan (langkah terakhir dan skak)';
+
+  @override
+  String get preferencesPieceDestinations => 'Jejak buah catur (langkah sah dan pra-langkah)';
+
+  @override
+  String get preferencesBoardCoordinates => 'Koordinat Papan (A-H, 1-8)';
+
+  @override
+  String get preferencesMoveListWhilePlaying => 'Daftar langkah ketika bermain';
+
+  @override
+  String get preferencesPgnPieceNotation => 'Catatan langkah';
+
+  @override
+  String get preferencesChessPieceSymbol => 'Simbol bidak catur';
+
+  @override
+  String get preferencesPgnLetter => 'Huruf (K, Q, R, B, N)';
+
+  @override
+  String get preferencesZenMode => 'Mode Zen';
+
+  @override
+  String get preferencesShowPlayerRatings => 'Munculkan rating pemain';
+
+  @override
+  String get preferencesShowFlairs => 'Show player flairs';
+
+  @override
+  String get preferencesExplainShowPlayerRatings => 'Ini dapat menyembunyikan rating dari website, agar membantu fokus ke catur. Permainan tetap dapat dinilai, ini hanya untuk apa yang Anda lihat.';
+
+  @override
+  String get preferencesDisplayBoardResizeHandle => 'Tampilkan pengubah ukuran papan catur';
+
+  @override
+  String get preferencesOnlyOnInitialPosition => 'Hanya di posisi awal';
+
+  @override
+  String get preferencesInGameOnly => 'In-game only';
+
+  @override
+  String get preferencesChessClock => 'Jam catur';
+
+  @override
+  String get preferencesTenthsOfSeconds => 'Sepersepuluh detik';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'Ketika waktu tersisa < 10 detik';
+
+  @override
+  String get preferencesHorizontalGreenProgressBars => 'Indikator horisontal perkembangan warna hijau';
+
+  @override
+  String get preferencesSoundWhenTimeGetsCritical => 'Bersuara ketika waktu hampir habis';
+
+  @override
+  String get preferencesGiveMoreTime => 'Berikan waktu lebih';
+
+  @override
+  String get preferencesGameBehavior => 'Lingkungan permainan';
+
+  @override
+  String get preferencesHowDoYouMovePieces => 'Bagaimana Anda melangkahkan bidak?';
+
+  @override
+  String get preferencesClickTwoSquares => 'Klik dua kotak';
+
+  @override
+  String get preferencesDragPiece => 'Seret sebuah bidak';
+
+  @override
+  String get preferencesBothClicksAndDrag => 'Keduanya';
+
+  @override
+  String get preferencesPremovesPlayingDuringOpponentTurn => 'Pra-langkah (siapkan langkah saat giliran lawan)';
+
+  @override
+  String get preferencesTakebacksWithOpponentApproval => 'Langkah batal (dengan persetujuan lawan)';
+
+  @override
+  String get preferencesInCasualGamesOnly => 'Hanya pada permainan santai (tanpa di-rating)';
+
+  @override
+  String get preferencesPromoteToQueenAutomatically => 'Otomatis promosikan Menteri';
+
+  @override
+  String get preferencesExplainPromoteToQueenAutomatically => 'Tahan tombol <ctrl> saat promosi untuk sementara membatalkan promosi otomatis';
+
+  @override
+  String get preferencesWhenPremoving => 'Ketika pra-langkah';
+
+  @override
+  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Langsung Remis pada pengulangan ketiga kali';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Ketika waktu tersisa < 30 detik';
+
+  @override
+  String get preferencesMoveConfirmation => 'Konfirmasi langkah';
+
+  @override
+  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Dapat dimatikan selama permainan pada menu papan';
+
+  @override
+  String get preferencesInCorrespondenceGames => 'Pada partai korespondensi';
+
+  @override
+  String get preferencesCorrespondenceAndUnlimited => 'Korespondensi dan permainan tanpa batas waktu';
+
+  @override
+  String get preferencesConfirmResignationAndDrawOffers => 'Mengonfirmasi tawaran menyerah dan remis';
+
+  @override
+  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Metode rokade';
+
+  @override
+  String get preferencesCastleByMovingTwoSquares => 'Memindahkan raja dua kotak';
+
+  @override
+  String get preferencesCastleByMovingOntoTheRook => 'Memindahkan raja ke benteng';
+
+  @override
+  String get preferencesInputMovesWithTheKeyboard => 'Melangkah dengan menggunakan keyboard';
+
+  @override
+  String get preferencesInputMovesWithVoice => 'Input moves with your voice';
+
+  @override
+  String get preferencesSnapArrowsToValidMoves => 'Arahkan panah ke arah yang benar';
+
+  @override
+  String get preferencesSayGgWpAfterLosingOrDrawing => 'Ucapkan \"Good game, well played\" apabila kalah atau seri';
+
+  @override
+  String get preferencesYourPreferencesHaveBeenSaved => 'Pengaturan telah disimpan.';
+
+  @override
+  String get preferencesScrollOnTheBoardToReplayMoves => 'Gulir pada papan untuk mengulang gerakan';
+
+  @override
+  String get preferencesCorrespondenceEmailNotification => 'Email harian yang berisi daftar permainan korespondensi anda';
+
+  @override
+  String get preferencesNotifyStreamStart => 'Streamer memulai siaran';
+
+  @override
+  String get preferencesNotifyInboxMsg => 'Pesan masuk';
+
+  @override
+  String get preferencesNotifyForumMention => 'Komentar forum menyebutkan Anda';
+
+  @override
+  String get preferencesNotifyInvitedStudy => 'Undangan studi';
+
+  @override
+  String get preferencesNotifyGameEvent => 'Update permainan korespondensi';
+
+  @override
+  String get preferencesNotifyChallenge => 'Tantangan';
+
+  @override
+  String get preferencesNotifyTournamentSoon => 'Turnamen akan segera dimulai';
+
+  @override
+  String get preferencesNotifyTimeAlarm => 'Waktu korespondensi akan habis';
+
+  @override
+  String get preferencesNotifyBell => 'Notifikasi bel didalam Lichess';
+
+  @override
+  String get preferencesNotifyPush => 'Notifikasi perangkat saat anda tidak di Lichess';
+
+  @override
+  String get preferencesNotifyWeb => 'Browser';
+
+  @override
+  String get preferencesNotifyDevice => 'Perangkat';
+
+  @override
+  String get preferencesBellNotificationSound => 'Suara pemberitahuan';
+
+  @override
+  String get puzzlePuzzles => 'Teka-teki';
+
+  @override
+  String get puzzlePuzzleThemes => 'Tema teka-teki';
+
+  @override
+  String get puzzleRecommended => 'Direkomendasikan';
+
+  @override
+  String get puzzlePhases => 'Tahapan';
+
+  @override
+  String get puzzleMotifs => 'Tema';
+
+  @override
+  String get puzzleAdvanced => 'Lanjut';
+
+  @override
+  String get puzzleLengths => 'Panjang';
+
+  @override
+  String get puzzleMates => 'Mat';
+
+  @override
+  String get puzzleGoals => 'Tujuan';
+
+  @override
+  String get puzzleOrigin => 'Asal';
+
+  @override
+  String get puzzleSpecialMoves => 'Langkah spesial';
+
+  @override
+  String get puzzleDidYouLikeThisPuzzle => 'Apakah anda menyukai teka-teki ini?';
+
+  @override
+  String get puzzleVoteToLoadNextOne => 'Isi untuk memanggil yang satunya lagi!';
+
+  @override
+  String get puzzleUpVote => 'Up vote puzzle';
+
+  @override
+  String get puzzleDownVote => 'Down vote puzzle';
+
+  @override
+  String get puzzleYourPuzzleRatingWillNotChange => 'Your puzzle rating will not change. Note that puzzles are not a competition. Your rating helps selecting the best puzzles for your current skill.';
+
+  @override
+  String get puzzleFindTheBestMoveForWhite => 'Temukan langkah terbaik putih.';
+
+  @override
+  String get puzzleFindTheBestMoveForBlack => 'Temukan langkah terbaik hitam.';
+
+  @override
+  String get puzzleToGetPersonalizedPuzzles => 'Untuk mendapatkan teka-teki yang diatur:';
+
+  @override
+  String puzzlePuzzleId(String param) {
+    return 'Teka-teki $param';
+  }
+
+  @override
+  String get puzzlePuzzleOfTheDay => 'Teka-teki hari ini';
+
+  @override
+  String get puzzleDailyPuzzle => 'Teka-teki harian';
+
+  @override
+  String get puzzleClickToSolve => 'Klik untuk jawabannya';
+
+  @override
+  String get puzzleGoodMove => 'Langkah bagus';
+
+  @override
+  String get puzzleBestMove => 'Langkah Baik!';
+
+  @override
+  String get puzzleKeepGoing => 'Lanjutkan…';
+
+  @override
+  String get puzzlePuzzleSuccess => 'Berhasil!';
+
+  @override
+  String get puzzlePuzzleComplete => 'Teka-teki terselesaikan!';
+
+  @override
+  String get puzzleByOpenings => 'By openings';
+
+  @override
+  String get puzzlePuzzlesByOpenings => 'Puzzles by openings';
+
+  @override
+  String get puzzleOpeningsYouPlayedTheMost => 'Openings you played the most in rated games';
+
+  @override
+  String get puzzleUseFindInPage => 'Use \"Find in page\" in the browser menu to find your favourite opening!';
+
+  @override
+  String get puzzleUseCtrlF => 'Use Ctrl+f to find your favourite opening!';
+
+  @override
+  String get puzzleNotTheMove => 'Itu bukan langkahnya!';
+
+  @override
+  String get puzzleTrySomethingElse => 'Coba lagi lainnya.';
+
+  @override
+  String puzzleRatingX(String param) {
+    return 'Rating: $param';
+  }
+
+  @override
+  String get puzzleHidden => 'tersembunyi';
+
+  @override
+  String puzzleFromGameLink(String param) {
+    return 'Dari game $param';
+  }
+
+  @override
+  String get puzzleContinueTraining => 'Lanjutkan latihan';
+
+  @override
+  String get puzzleDifficultyLevel => 'Level Sulit';
+
+  @override
+  String get puzzleNormal => 'Normal';
+
+  @override
+  String get puzzleEasier => 'Lebih mudah';
+
+  @override
+  String get puzzleEasiest => 'Paling mudah';
+
+  @override
+  String get puzzleHarder => 'Lebih sulit';
+
+  @override
+  String get puzzleHardest => 'Paling sulit';
+
+  @override
+  String get puzzleExample => 'Contoh';
+
+  @override
+  String get puzzleAddAnotherTheme => 'Tambah tema lainnya';
+
+  @override
+  String get puzzleNextPuzzle => 'Teka-teki selanjutnya';
+
+  @override
+  String get puzzleJumpToNextPuzzleImmediately => 'Lompat ke teka-teki berikutnya segera';
+
+  @override
+  String get puzzlePuzzleDashboard => 'Beranda Teka-teki';
+
+  @override
+  String get puzzleImprovementAreas => 'Area Penyempurnaan';
+
+  @override
+  String get puzzleStrengths => 'Kekuatan';
+
+  @override
+  String get puzzleHistory => 'Riwayat teka-teki';
+
+  @override
+  String get puzzleSolved => 'diselesaikan';
+
+  @override
+  String get puzzleFailed => 'gagal';
+
+  @override
+  String get puzzleStreakDescription => 'Pecahkan teka-teki yang semakin sulit dan bangun kemenangan beruntun. Tidak ada jam, jadi luangkan waktu Anda. Satu langkah salah, dan permainan berakir! Tapi Anda dapat melewati gerakan per sesi.';
+
+  @override
+  String puzzleYourStreakX(String param) {
+    return 'Garis Anda: $param';
+  }
+
+  @override
+  String get puzzleStreakSkipExplanation => 'Lewati gerakan ini untuk mempertahankan garis Anda! Hanya bekerja sekali per pertandingan.';
+
+  @override
+  String get puzzleContinueTheStreak => 'Lanjutkan garisnya';
+
+  @override
+  String get puzzleNewStreak => 'Garis baru';
+
+  @override
+  String get puzzleFromMyGames => 'Dari permainan saya';
+
+  @override
+  String get puzzleLookupOfPlayer => 'Cari teka-teki dari sebuah permainan pemain';
+
+  @override
+  String puzzleFromXGames(String param) {
+    return 'Teka-teki dari permainan $param';
+  }
+
+  @override
+  String get puzzleSearchPuzzles => 'Cari teka-teki';
+
+  @override
+  String get puzzleFromMyGamesNone => 'Anda tidak memiliki teka-teki dalam database, tetapi Lichess masih sangat mencintai Anda.\nMainkan permainan cepat dan klasik untuk meningkatkan kesempatan Anda agar sebuah teka-teki dari Anda dapat ditambahkan!';
+
+  @override
+  String puzzleFromXGamesFound(String param1, String param2) {
+    return 'Teka-teki $param1 ditemukan di permainan $param2';
+  }
+
+  @override
+  String get puzzlePuzzleDashboardDescription => 'Latih, analisis, meningkat';
+
+  @override
+  String puzzlePercentSolved(String param) {
+    return '$param selesai';
+  }
+
+  @override
+  String get puzzleNoPuzzlesToShow => 'Tidak ada apa apa, silahkan mainkan taktik terlebih dahulu!';
+
+  @override
+  String get puzzleImprovementAreasDescription => 'Latih ini untuk mengoptimisasi kemajuan anda!';
+
+  @override
+  String get puzzleStrengthDescription => 'Performa anda baik di tema-tema ini';
+
+  @override
+  String puzzlePlayedXTimes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Dimainkan $count kali',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsBelowYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count poin dibawah rating teka-teki Anda',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsAboveYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count poin diatas rating teka-teki Anda',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPlayed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count dimainkan',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbToReplay(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count dapat diulang',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get puzzleThemeAdvancedPawn => 'Pion terdepan';
+
+  @override
+  String get puzzleThemeAdvancedPawnDescription => 'Satu pion anda jauh dalam posisi lawan, mungkin mengancam untuk melakukan promosi.';
+
+  @override
+  String get puzzleThemeAdvantage => 'Keuntungan';
+
+  @override
+  String get puzzleThemeAdvantageDescription => 'Raih kesempatan Anda untuk mendapatkan keuntungan yang besar. (200cp ≤ eval ≤ 600cp)';
+
+  @override
+  String get puzzleThemeAnastasiaMate => 'Skakmat Anastasia';
+
+  @override
+  String get puzzleThemeAnastasiaMateDescription => 'Kuda dan benteng bekerja sama untuk menjebak raja lawan di antara sisi papan dan bidak kawan di sisi lain.';
+
+  @override
+  String get puzzleThemeArabianMate => 'Skakmat Arab';
+
+  @override
+  String get puzzleThemeArabianMateDescription => 'Bidak kuda dan benteng bekerja sama untuk menjebak raja lawan di sudut papan.';
+
+  @override
+  String get puzzleThemeAttackingF2F7 => 'Menyerang f2 atau f7';
+
+  @override
+  String get puzzleThemeAttackingF2F7Description => 'Sebuah serangan memfokuskan pada pion f2 atau f7, seperti pembukaan fried liver.';
+
+  @override
+  String get puzzleThemeAttraction => 'Pikatan';
+
+  @override
+  String get puzzleThemeAttractionDescription => 'Sebuah pertukaran atau pengorbanan yang mendorong atau memaksa bidak lawan ke kotak yang memungkinkan taktik tindak lanjut.';
+
+  @override
+  String get puzzleThemeBackRankMate => 'Mat Baris Terakhir';
+
+  @override
+  String get puzzleThemeBackRankMateDescription => 'Skakmat raja di kandang sendiri, ketika terjebak oleh bidaknya sendiri.';
+
+  @override
+  String get puzzleThemeBishopEndgame => 'Babak akhir gajah';
+
+  @override
+  String get puzzleThemeBishopEndgameDescription => 'Babak akhir dengan hanya gajah dan pion.';
+
+  @override
+  String get puzzleThemeBodenMate => 'Skakmat Boden';
+
+  @override
+  String get puzzleThemeBodenMateDescription => 'Dua bidak gajah yang menyerang dengan diagonal berselang-seling mengantarkan raja skakmat karena terhalang oleh bidaknya sendiri, biasanya benteng dan pion.';
+
+  @override
+  String get puzzleThemeCastling => 'Rokade';
+
+  @override
+  String get puzzleThemeCastlingDescription => 'Letakkan posisi raja aman, dan manfaatkan benteng untuk menyerang.';
+
+  @override
+  String get puzzleThemeCapturingDefender => 'Memakan pelindung';
+
+  @override
+  String get puzzleThemeCapturingDefenderDescription => 'Memakan bidak yang sangat penting untuk menjaga bidak lain, memungkinkan bagian yang sekarang tidak terlindungi untuk ditangkap pada langkah berikut.';
+
+  @override
+  String get puzzleThemeCrushing => 'Hancurkan';
+
+  @override
+  String get puzzleThemeCrushingDescription => 'Temukan kesalahan lawan untuk mendapat keuntungan yang besar. (eval ≥ 600cp)';
+
+  @override
+  String get puzzleThemeDoubleBishopMate => 'Skakmat gajah ganda';
+
+  @override
+  String get puzzleThemeDoubleBishopMateDescription => 'Dua bidak gajah yang menyerang pada diagonal yang bersebelahan mengantarkan sekakmat pada raja yang terhalang bidaknya sendiri.';
+
+  @override
+  String get puzzleThemeDovetailMate => 'Skatmat Dovetail';
+
+  @override
+  String get puzzleThemeDovetailMateDescription => 'Menteri skakmat disebelah raja, yang dua petak melarikan dirinya terhambat oleh bidak kawan.';
+
+  @override
+  String get puzzleThemeEquality => 'Kesetaraan';
+
+  @override
+  String get puzzleThemeEqualityDescription => 'Kembali dari posisi kalah dan amankan seri atau posisi seimbang. (eval ≤ 200cp)';
+
+  @override
+  String get puzzleThemeKingsideAttack => 'Serangan raja';
+
+  @override
+  String get puzzleThemeKingsideAttackDescription => 'Serangan raja lawan, setelah mereka berada di sisi raja.';
+
+  @override
+  String get puzzleThemeClearance => 'Pembersihan';
+
+  @override
+  String get puzzleThemeClearanceDescription => 'Sebuah gerakan, seringkali dengan tempo, file atau diagonal untuk ide taktis lanjutan.';
+
+  @override
+  String get puzzleThemeDefensiveMove => 'Gerakan bertahan';
+
+  @override
+  String get puzzleThemeDefensiveMoveDescription => 'Sebuah gerakan presisi atau urutan gerakan yang dibutuhkan untuk menghindari kerugian material atau keunggulan lain.';
+
+  @override
+  String get puzzleThemeDeflection => 'Defleksi';
+
+  @override
+  String get puzzleThemeDeflectionDescription => 'Gerakan yang mengalihkan perhatian bidak lawan dari tugas lain yang dilakukan, seperti menjaga kotak kunci. Kadang juga disebut \"overloading\".';
+
+  @override
+  String get puzzleThemeDiscoveredAttack => 'Menemukan serangan';
+
+  @override
+  String get puzzleThemeDiscoveredAttackDescription => 'Menggerakan bidak(seperti kuda), yang sebelumnya memblokir serangan oleh bidak jarak jauh(seperti benteng) keluar dari bidak itu.';
+
+  @override
+  String get puzzleThemeDoubleCheck => 'Skak ganda';
+
+  @override
+  String get puzzleThemeDoubleCheckDescription => 'Skak dengan dua bidak bersamaan, sebagai hasil dari serangan tarik dimana bidak yang bergerak dan bidak yang terungkap menyerang raja lawan bersamaan.';
+
+  @override
+  String get puzzleThemeEndgame => 'Akhir permainan';
+
+  @override
+  String get puzzleThemeEndgameDescription => 'Sebuah taktik selama fase akhir permainan.';
+
+  @override
+  String get puzzleThemeEnPassantDescription => 'Taktik melibatkan aturan \"en passant\", yang mana pion dapat makan pion lawan yang baru saja melangkah 2 petak awal.';
+
+  @override
+  String get puzzleThemeExposedKing => 'Raja tak terlindung';
+
+  @override
+  String get puzzleThemeExposedKingDescription => 'Sebuah taktik melibatkan raja dan beberapa bidak penjaga yang dimana sering berujung sekakmat.';
+
+  @override
+  String get puzzleThemeFork => 'Fork';
+
+  @override
+  String get puzzleThemeForkDescription => 'Sebuah gerakan dimana bidak yang digerakkan menyerang dua bidak lawan secara bersamaan.';
+
+  @override
+  String get puzzleThemeHangingPiece => 'Bidak tak terjaga';
+
+  @override
+  String get puzzleThemeHangingPieceDescription => 'Sebuah taktik dimana bidak lawan tidak dipertahankan atau kurang cukup pertahanan sehingga dapat dimakan dengan aman.';
+
+  @override
+  String get puzzleThemeHookMate => 'Sekakmat kait';
+
+  @override
+  String get puzzleThemeHookMateDescription => 'Skakmat dengan benteng, kuda, dan pion serta satu pion lawan untuk membatasi pergerakan raja lawan.';
+
+  @override
+  String get puzzleThemeInterference => 'Gangguan';
+
+  @override
+  String get puzzleThemeInterferenceDescription => 'Menggerakan sebuah bidak diantara dua bidak lawan agar menghilangkan pertahanan satu atau kedua bidak lasan, contohnya sebuah kuda pada kotak yang aman diantara dua benteng.';
+
+  @override
+  String get puzzleThemeIntermezzo => 'Selingan';
+
+  @override
+  String get puzzleThemeIntermezzoDescription => 'Daripada memainkan gerakan yang disangka, mainkan terlebih dulu gerakan lain yang mengancam sehingga mewajibkan lawan untuk membalas. Juga disebut \"Zwischenzug\" atau \"Di antara\".';
+
+  @override
+  String get puzzleThemeKnightEndgame => 'Babak akhir kuda';
+
+  @override
+  String get puzzleThemeKnightEndgameDescription => 'Babak akhir dengan hanya kuda dan pion.';
+
+  @override
+  String get puzzleThemeLong => 'Puzzle Panjang';
+
+  @override
+  String get puzzleThemeLongDescription => 'Tiga gerakan untuk menang.';
+
+  @override
+  String get puzzleThemeMaster => 'Permainan master';
+
+  @override
+  String get puzzleThemeMasterDescription => 'Puzzle dari seri pemain bergelar.';
+
+  @override
+  String get puzzleThemeMasterVsMaster => 'Game Master vs Master';
+
+  @override
+  String get puzzleThemeMasterVsMasterDescription => 'Puzzle dari permainan antara dua pemain bergelar.';
+
+  @override
+  String get puzzleThemeMate => 'Skakmat';
+
+  @override
+  String get puzzleThemeMateDescription => 'Menangkan game dengan bergaya.';
+
+  @override
+  String get puzzleThemeMateIn1 => 'Mati dalam 1 Langkah';
+
+  @override
+  String get puzzleThemeMateIn1Description => 'Berikan skakmat dalam satu gerakan.';
+
+  @override
+  String get puzzleThemeMateIn2 => 'Mati dalam 2 Langkah';
+
+  @override
+  String get puzzleThemeMateIn2Description => 'Berikan skakmat dalam dua gerakan.';
+
+  @override
+  String get puzzleThemeMateIn3 => 'Mati dalam 3 Langkah';
+
+  @override
+  String get puzzleThemeMateIn3Description => 'Berikan skatmat dalam tiga gerakan.';
+
+  @override
+  String get puzzleThemeMateIn4 => 'Mati dalam 4 Langkah';
+
+  @override
+  String get puzzleThemeMateIn4Description => 'Berikan skakmat dalam empat gerakan.';
+
+  @override
+  String get puzzleThemeMateIn5 => 'Mati dalam 5 langkah atau lebih';
+
+  @override
+  String get puzzleThemeMateIn5Description => 'Temukan urutan panjang skatmat.';
+
+  @override
+  String get puzzleThemeMiddlegame => 'Setengah permainan';
+
+  @override
+  String get puzzleThemeMiddlegameDescription => 'Taktik selama fase kedua permainan.';
+
+  @override
+  String get puzzleThemeOneMove => 'Teka-teki satu gerakan';
+
+  @override
+  String get puzzleThemeOneMoveDescription => 'Teka-teki yang hanya satu gerakan panjang.';
+
+  @override
+  String get puzzleThemeOpening => 'Pembuka';
+
+  @override
+  String get puzzleThemeOpeningDescription => 'Taktik selama fase pertama permainan.';
+
+  @override
+  String get puzzleThemePawnEndgame => 'Babak akhir pion';
+
+  @override
+  String get puzzleThemePawnEndgameDescription => 'Babak akhir hanya dengan pion.';
+
+  @override
+  String get puzzleThemePin => 'Pin';
+
+  @override
+  String get puzzleThemePinDescription => 'Taktik meliputi pin, dimana bidak tidak dapat bergerak tanpa membuka serangan pada bidak yang bernilai lebih tinggi.';
+
+  @override
+  String get puzzleThemePromotion => 'Promosi';
+
+  @override
+  String get puzzleThemePromotionDescription => 'Promosi salah satu pion menjadi menteri atau bidak minor lainnya.';
+
+  @override
+  String get puzzleThemeQueenEndgame => 'Babak akhir menteri';
+
+  @override
+  String get puzzleThemeQueenEndgameDescription => 'Babak akhir hanya dengan menteri dan pion.';
+
+  @override
+  String get puzzleThemeQueenRookEndgame => 'Menteri dan Benteng';
+
+  @override
+  String get puzzleThemeQueenRookEndgameDescription => 'Permainan Akhir hanya dengan menteri, benteng, dan pion.';
+
+  @override
+  String get puzzleThemeQueensideAttack => 'Serangan sisi menteri';
+
+  @override
+  String get puzzleThemeQueensideAttackDescription => 'Serangan raja lawan, setelah lawan rokade panjang.';
+
+  @override
+  String get puzzleThemeQuietMove => 'Gerakan tenang';
+
+  @override
+  String get puzzleThemeQuietMoveDescription => 'Sebuah gerakan yang tidak melakukan sekak maupun memakan, dan tidak memberi ancaman memakan langsung, namun mempersiapkan ancaman tersembunyi yang tidak dapat dihindari pada gerakan selanjutnya.';
+
+  @override
+  String get puzzleThemeRookEndgame => 'Permainan Akhir benteng';
+
+  @override
+  String get puzzleThemeRookEndgameDescription => 'Babak akhir dengan hanya benteng dan pion.';
+
+  @override
+  String get puzzleThemeSacrifice => 'Sacrifice';
+
+  @override
+  String get puzzleThemeSacrificeDescription => 'Sebuah taktik yang melibatkan menyerahkan material dalam jangka pendek, untuk meraih keuntungan kembali setelah urutan gerakan yang terpaksa.';
+
+  @override
+  String get puzzleThemeShort => 'Teka-teki pendek';
+
+  @override
+  String get puzzleThemeShortDescription => 'Dua gerakan untuk menang.';
+
+  @override
+  String get puzzleThemeSkewer => 'Tusukan';
+
+  @override
+  String get puzzleThemeSkewerDescription => 'Sebuah motif melibatkan sebuah bidak berharga yang diserang bergerak sehingga mengizinkan bidak bernilai lebih rendah dibelakangnya dimakan atau diserang, yang merupakan kebalikan dari sebuah pin.';
+
+  @override
+  String get puzzleThemeSmotheredMate => 'Sekakmat kepung';
+
+  @override
+  String get puzzleThemeSmotheredMateDescription => 'Sebuah sekakmat yang diraih oleh sebuah kuda yang dimana raja tidak dapat bergerak karena terkepung oleh bidaknya sendiri.';
+
+  @override
+  String get puzzleThemeSuperGM => 'Permainan super GM';
+
+  @override
+  String get puzzleThemeSuperGMDescription => 'Teka-teki dari permainan yang dimainkan oleh pemain terbaik di seluruh dunia.';
+
+  @override
+  String get puzzleThemeTrappedPiece => 'Bidak yang terperangkap';
+
+  @override
+  String get puzzleThemeTrappedPieceDescription => 'Bidak tidak bisa lolos dari penangkapan karena gerakannya dibatasi.';
+
+  @override
+  String get puzzleThemeUnderPromotion => 'Dalam Promosi';
+
+  @override
+  String get puzzleThemeUnderPromotionDescription => 'Promosi ke kuda, gajah, atau benteng.';
+
+  @override
+  String get puzzleThemeVeryLong => 'Teka-teki yang sangat panjang';
+
+  @override
+  String get puzzleThemeVeryLongDescription => 'Empat gerakan atau lebih untuk menang.';
+
+  @override
+  String get puzzleThemeXRayAttack => 'Serangan Sinar-X';
+
+  @override
+  String get puzzleThemeXRayAttackDescription => 'Bidak menyerang atau mempertahankan kotak, melalui bidak musuh.';
+
+  @override
+  String get puzzleThemeZugzwang => 'Zugzwang';
+
+  @override
+  String get puzzleThemeZugzwangDescription => 'Musuh dibatasi gerakan yang dapat mereka lakukan, dan semua gerakan memperburuk posisi mereka.';
+
+  @override
+  String get puzzleThemeHealthyMix => 'Campuran baik';
+
+  @override
+  String get puzzleThemeHealthyMixDescription => 'Sedikit dari segalanya. Anda tidak tahu apa yang akan terjadi, jadi Anda tetap siap untuk apapun! Sama seperti permainan sebenarnya.';
+
+  @override
+  String get puzzleThemePlayerGames => 'Permainan pemain';
+
+  @override
+  String get puzzleThemePlayerGamesDescription => 'Mengambil taktik yang dihasilkan dari permainan anda, atau pemain lain.';
+
+  @override
+  String puzzleThemePuzzleDownloadInformation(String param) {
+    return 'Taktik-taktik ini ada di domain publik, dan dapat di download dari $param.';
+  }
+
+  @override
+  String get searchSearch => 'Cari';
+
+  @override
+  String get settingsSettings => 'Pengaturan';
+
+  @override
+  String get settingsCloseAccount => 'Tutup akun';
+
+  @override
+  String get settingsManagedAccountCannotBeClosed => 'Akun Anda dikelola, dan tidak dapat ditutup.';
+
+  @override
+  String get settingsClosingIsDefinitive => 'Menghapus akun tidak dapat dibatalkan. Apakah Anda yakin?';
+
+  @override
+  String get settingsCantOpenSimilarAccount => 'Anda tidak akan diizinkan untuk membuka akun baru dengan nama yang sama, meskipun besar-kecil hurufnya berbeda.';
+
+  @override
+  String get settingsChangedMindDoNotCloseAccount => 'Saya berubah pikiran, jangan tutup akun saya';
+
+  @override
+  String get settingsCloseAccountExplanation => 'Apakah Anda yakin ingin menutup akun Anda? Menutup akun Anda adalah keputusan permanen. Anda tidak akan PERNAH bisa MASUK lagi.';
+
+  @override
+  String get settingsThisAccountIsClosed => 'Akun ini telah ditutup.';
 
   @override
   String get playWithAFriend => 'Bermain dengan teman';
@@ -478,6 +1474,12 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get deleteFromHere => 'Hapus dari sini';
+
+  @override
+  String get collapseVariations => 'Collapse variations';
+
+  @override
+  String get expandVariations => 'Expand variations';
 
   @override
   String get forceVariation => 'Paksakan variasi';
@@ -1337,15 +2339,6 @@ class AppLocalizationsId extends AppLocalizations {
   String get emptyTournamentName => 'Biarkan kosong untuk nama turnamen setelah pengacakan Grandmaster.';
 
   @override
-  String get recommendNotTouching => 'Kita rekomendasikan jangan sentuh ini.';
-
-  @override
-  String get fewerPlayers => 'Jika Anda atur persyaratan masuk, turnamen yang Anda buat akan memiliki lebih sedikit pemain.';
-
-  @override
-  String get showAdvancedSettings => 'Tampilkan pengaturan lanjutan';
-
-  @override
   String get makePrivateTournament => 'Jadikan turnamen pribadi, dan batasi akses dengan kata sandi';
 
   @override
@@ -1475,10 +2468,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get editProfile => 'Ubah profil';
 
   @override
-  String get firstName => 'Nama depan';
-
-  @override
-  String get lastName => 'Nama Belakang';
+  String get realName => 'Real name';
 
   @override
   String get setFlair => 'Sunting flair anda';
@@ -1607,13 +2597,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get cheat => 'Cheat';
 
   @override
-  String get insult => 'Penghinaan';
-
-  @override
   String get troll => 'Jebakan';
-
-  @override
-  String get ratingManipulation => 'Manipulasi rating';
 
   @override
   String get other => 'Lainnya';
@@ -1720,6 +2704,9 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get outsideTheBoard => 'Di luar papan';
+
+  @override
+  String get allSquaresOfTheBoard => 'All squares of the board';
 
   @override
   String get onSlowGames => 'Pada catur klasik';
@@ -3342,999 +4329,6 @@ class AppLocalizationsId extends AppLocalizations {
   }
 
   @override
-  String get patronDonate => 'Donasi';
-
-  @override
-  String get patronLichessPatron => 'Patron Lichess';
-
-  @override
-  String get preferencesPreferences => 'Pengaturan';
-
-  @override
-  String get preferencesDisplay => 'Tampilan';
-
-  @override
-  String get preferencesPrivacy => 'Privasi';
-
-  @override
-  String get preferencesNotifications => 'Notifikasi';
-
-  @override
-  String get preferencesPieceAnimation => 'Animasi Buah Catur';
-
-  @override
-  String get preferencesMaterialDifference => 'Perbedaan materi';
-
-  @override
-  String get preferencesBoardHighlights => 'Sorotan papan (langkah terakhir dan skak)';
-
-  @override
-  String get preferencesPieceDestinations => 'Jejak buah catur (langkah sah dan pra-langkah)';
-
-  @override
-  String get preferencesBoardCoordinates => 'Koordinat Papan (A-H, 1-8)';
-
-  @override
-  String get preferencesMoveListWhilePlaying => 'Daftar langkah ketika bermain';
-
-  @override
-  String get preferencesPgnPieceNotation => 'Catatan langkah';
-
-  @override
-  String get preferencesChessPieceSymbol => 'Simbol bidak catur';
-
-  @override
-  String get preferencesPgnLetter => 'Huruf (K, Q, R, B, N)';
-
-  @override
-  String get preferencesZenMode => 'Mode Zen';
-
-  @override
-  String get preferencesShowPlayerRatings => 'Munculkan rating pemain';
-
-  @override
-  String get preferencesShowFlairs => 'Show player flairs';
-
-  @override
-  String get preferencesExplainShowPlayerRatings => 'Ini dapat menyembunyikan rating dari website, agar membantu fokus ke catur. Permainan tetap dapat dinilai, ini hanya untuk apa yang Anda lihat.';
-
-  @override
-  String get preferencesDisplayBoardResizeHandle => 'Tampilkan pengubah ukuran papan catur';
-
-  @override
-  String get preferencesOnlyOnInitialPosition => 'Hanya di posisi awal';
-
-  @override
-  String get preferencesInGameOnly => 'In-game only';
-
-  @override
-  String get preferencesChessClock => 'Jam catur';
-
-  @override
-  String get preferencesTenthsOfSeconds => 'Sepersepuluh detik';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'Ketika waktu tersisa < 10 detik';
-
-  @override
-  String get preferencesHorizontalGreenProgressBars => 'Indikator horisontal perkembangan warna hijau';
-
-  @override
-  String get preferencesSoundWhenTimeGetsCritical => 'Bersuara ketika waktu hampir habis';
-
-  @override
-  String get preferencesGiveMoreTime => 'Berikan waktu lebih';
-
-  @override
-  String get preferencesGameBehavior => 'Lingkungan permainan';
-
-  @override
-  String get preferencesHowDoYouMovePieces => 'Bagaimana Anda melangkahkan bidak?';
-
-  @override
-  String get preferencesClickTwoSquares => 'Klik dua kotak';
-
-  @override
-  String get preferencesDragPiece => 'Seret sebuah bidak';
-
-  @override
-  String get preferencesBothClicksAndDrag => 'Keduanya';
-
-  @override
-  String get preferencesPremovesPlayingDuringOpponentTurn => 'Pra-langkah (siapkan langkah saat giliran lawan)';
-
-  @override
-  String get preferencesTakebacksWithOpponentApproval => 'Langkah batal (dengan persetujuan lawan)';
-
-  @override
-  String get preferencesInCasualGamesOnly => 'Hanya pada permainan santai (tanpa di-rating)';
-
-  @override
-  String get preferencesPromoteToQueenAutomatically => 'Otomatis promosikan Menteri';
-
-  @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Tahan tombol <ctrl> saat promosi untuk sementara membatalkan promosi otomatis';
-
-  @override
-  String get preferencesWhenPremoving => 'Ketika pra-langkah';
-
-  @override
-  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Langsung Remis pada pengulangan ketiga kali';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Ketika waktu tersisa < 30 detik';
-
-  @override
-  String get preferencesMoveConfirmation => 'Konfirmasi langkah';
-
-  @override
-  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Dapat dimatikan selama permainan pada menu papan';
-
-  @override
-  String get preferencesInCorrespondenceGames => 'Pada partai korespondensi';
-
-  @override
-  String get preferencesCorrespondenceAndUnlimited => 'Korespondensi dan permainan tanpa batas waktu';
-
-  @override
-  String get preferencesConfirmResignationAndDrawOffers => 'Mengonfirmasi tawaran menyerah dan remis';
-
-  @override
-  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Metode rokade';
-
-  @override
-  String get preferencesCastleByMovingTwoSquares => 'Memindahkan raja dua kotak';
-
-  @override
-  String get preferencesCastleByMovingOntoTheRook => 'Memindahkan raja ke benteng';
-
-  @override
-  String get preferencesInputMovesWithTheKeyboard => 'Melangkah dengan menggunakan keyboard';
-
-  @override
-  String get preferencesInputMovesWithVoice => 'Input moves with your voice';
-
-  @override
-  String get preferencesSnapArrowsToValidMoves => 'Arahkan panah ke arah yang benar';
-
-  @override
-  String get preferencesSayGgWpAfterLosingOrDrawing => 'Ucapkan \"Good game, well played\" apabila kalah atau seri';
-
-  @override
-  String get preferencesYourPreferencesHaveBeenSaved => 'Pengaturan telah disimpan.';
-
-  @override
-  String get preferencesScrollOnTheBoardToReplayMoves => 'Gulir pada papan untuk mengulang gerakan';
-
-  @override
-  String get preferencesCorrespondenceEmailNotification => 'Email harian yang berisi daftar permainan korespondensi anda';
-
-  @override
-  String get preferencesNotifyStreamStart => 'Streamer memulai siaran';
-
-  @override
-  String get preferencesNotifyInboxMsg => 'Pesan masuk';
-
-  @override
-  String get preferencesNotifyForumMention => 'Komentar forum menyebutkan Anda';
-
-  @override
-  String get preferencesNotifyInvitedStudy => 'Undangan studi';
-
-  @override
-  String get preferencesNotifyGameEvent => 'Update permainan korespondensi';
-
-  @override
-  String get preferencesNotifyChallenge => 'Tantangan';
-
-  @override
-  String get preferencesNotifyTournamentSoon => 'Turnamen akan segera dimulai';
-
-  @override
-  String get preferencesNotifyTimeAlarm => 'Waktu korespondensi akan habis';
-
-  @override
-  String get preferencesNotifyBell => 'Notifikasi bel didalam Lichess';
-
-  @override
-  String get preferencesNotifyPush => 'Notifikasi perangkat saat anda tidak di Lichess';
-
-  @override
-  String get preferencesNotifyWeb => 'Browser';
-
-  @override
-  String get preferencesNotifyDevice => 'Perangkat';
-
-  @override
-  String get preferencesBellNotificationSound => 'Suara pemberitahuan';
-
-  @override
-  String get puzzlePuzzles => 'Teka-teki';
-
-  @override
-  String get puzzlePuzzleThemes => 'Tema teka-teki';
-
-  @override
-  String get puzzleRecommended => 'Direkomendasikan';
-
-  @override
-  String get puzzlePhases => 'Tahapan';
-
-  @override
-  String get puzzleMotifs => 'Tema';
-
-  @override
-  String get puzzleAdvanced => 'Lanjut';
-
-  @override
-  String get puzzleLengths => 'Panjang';
-
-  @override
-  String get puzzleMates => 'Mat';
-
-  @override
-  String get puzzleGoals => 'Tujuan';
-
-  @override
-  String get puzzleOrigin => 'Asal';
-
-  @override
-  String get puzzleSpecialMoves => 'Langkah spesial';
-
-  @override
-  String get puzzleDidYouLikeThisPuzzle => 'Apakah anda menyukai teka-teki ini?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Isi untuk memanggil yang satunya lagi!';
-
-  @override
-  String get puzzleUpVote => 'Up vote puzzle';
-
-  @override
-  String get puzzleDownVote => 'Down vote puzzle';
-
-  @override
-  String get puzzleYourPuzzleRatingWillNotChange => 'Your puzzle rating will not change. Note that puzzles are not a competition. Your rating helps selecting the best puzzles for your current skill.';
-
-  @override
-  String get puzzleFindTheBestMoveForWhite => 'Temukan langkah terbaik putih.';
-
-  @override
-  String get puzzleFindTheBestMoveForBlack => 'Temukan langkah terbaik hitam.';
-
-  @override
-  String get puzzleToGetPersonalizedPuzzles => 'Untuk mendapatkan teka-teki yang diatur:';
-
-  @override
-  String puzzlePuzzleId(String param) {
-    return 'Teka-teki $param';
-  }
-
-  @override
-  String get puzzlePuzzleOfTheDay => 'Teka-teki hari ini';
-
-  @override
-  String get puzzleDailyPuzzle => 'Teka-teki harian';
-
-  @override
-  String get puzzleClickToSolve => 'Klik untuk jawabannya';
-
-  @override
-  String get puzzleGoodMove => 'Langkah bagus';
-
-  @override
-  String get puzzleBestMove => 'Langkah Baik!';
-
-  @override
-  String get puzzleKeepGoing => 'Lanjutkan…';
-
-  @override
-  String get puzzlePuzzleSuccess => 'Berhasil!';
-
-  @override
-  String get puzzlePuzzleComplete => 'Teka-teki terselesaikan!';
-
-  @override
-  String get puzzleByOpenings => 'By openings';
-
-  @override
-  String get puzzlePuzzlesByOpenings => 'Puzzles by openings';
-
-  @override
-  String get puzzleOpeningsYouPlayedTheMost => 'Openings you played the most in rated games';
-
-  @override
-  String get puzzleUseFindInPage => 'Use \"Find in page\" in the browser menu to find your favourite opening!';
-
-  @override
-  String get puzzleUseCtrlF => 'Use Ctrl+f to find your favourite opening!';
-
-  @override
-  String get puzzleNotTheMove => 'Itu bukan langkahnya!';
-
-  @override
-  String get puzzleTrySomethingElse => 'Coba lagi lainnya.';
-
-  @override
-  String puzzleRatingX(String param) {
-    return 'Rating: $param';
-  }
-
-  @override
-  String get puzzleHidden => 'tersembunyi';
-
-  @override
-  String puzzleFromGameLink(String param) {
-    return 'Dari game $param';
-  }
-
-  @override
-  String get puzzleContinueTraining => 'Lanjutkan latihan';
-
-  @override
-  String get puzzleDifficultyLevel => 'Level Sulit';
-
-  @override
-  String get puzzleNormal => 'Normal';
-
-  @override
-  String get puzzleEasier => 'Lebih mudah';
-
-  @override
-  String get puzzleEasiest => 'Paling mudah';
-
-  @override
-  String get puzzleHarder => 'Lebih sulit';
-
-  @override
-  String get puzzleHardest => 'Paling sulit';
-
-  @override
-  String get puzzleExample => 'Contoh';
-
-  @override
-  String get puzzleAddAnotherTheme => 'Tambah tema lainnya';
-
-  @override
-  String get puzzleNextPuzzle => 'Teka-teki selanjutnya';
-
-  @override
-  String get puzzleJumpToNextPuzzleImmediately => 'Lompat ke teka-teki berikutnya segera';
-
-  @override
-  String get puzzlePuzzleDashboard => 'Beranda Teka-teki';
-
-  @override
-  String get puzzleImprovementAreas => 'Area Penyempurnaan';
-
-  @override
-  String get puzzleStrengths => 'Kekuatan';
-
-  @override
-  String get puzzleHistory => 'Riwayat teka-teki';
-
-  @override
-  String get puzzleSolved => 'diselesaikan';
-
-  @override
-  String get puzzleFailed => 'gagal';
-
-  @override
-  String get puzzleStreakDescription => 'Pecahkan teka-teki yang semakin sulit dan bangun kemenangan beruntun. Tidak ada jam, jadi luangkan waktu Anda. Satu langkah salah, dan permainan berakir! Tapi Anda dapat melewati gerakan per sesi.';
-
-  @override
-  String puzzleYourStreakX(String param) {
-    return 'Garis Anda: $param';
-  }
-
-  @override
-  String get puzzleStreakSkipExplanation => 'Lewati gerakan ini untuk mempertahankan garis Anda! Hanya bekerja sekali per pertandingan.';
-
-  @override
-  String get puzzleContinueTheStreak => 'Lanjutkan garisnya';
-
-  @override
-  String get puzzleNewStreak => 'Garis baru';
-
-  @override
-  String get puzzleFromMyGames => 'Dari permainan saya';
-
-  @override
-  String get puzzleLookupOfPlayer => 'Cari teka-teki dari sebuah permainan pemain';
-
-  @override
-  String puzzleFromXGames(String param) {
-    return 'Teka-teki dari permainan $param';
-  }
-
-  @override
-  String get puzzleSearchPuzzles => 'Cari teka-teki';
-
-  @override
-  String get puzzleFromMyGamesNone => 'Anda tidak memiliki teka-teki dalam database, tetapi Lichess masih sangat mencintai Anda.\nMainkan permainan cepat dan klasik untuk meningkatkan kesempatan Anda agar sebuah teka-teki dari Anda dapat ditambahkan!';
-
-  @override
-  String puzzleFromXGamesFound(String param1, String param2) {
-    return 'Teka-teki $param1 ditemukan di permainan $param2';
-  }
-
-  @override
-  String get puzzlePuzzleDashboardDescription => 'Latih, analisis, meningkat';
-
-  @override
-  String puzzlePercentSolved(String param) {
-    return '$param selesai';
-  }
-
-  @override
-  String get puzzleNoPuzzlesToShow => 'Tidak ada apa apa, silahkan mainkan taktik terlebih dahulu!';
-
-  @override
-  String get puzzleImprovementAreasDescription => 'Latih ini untuk mengoptimisasi kemajuan anda!';
-
-  @override
-  String get puzzleStrengthDescription => 'Performa anda baik di tema-tema ini';
-
-  @override
-  String puzzlePlayedXTimes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Dimainkan $count kali',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsBelowYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count poin dibawah rating teka-teki Anda',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsAboveYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count poin diatas rating teka-teki Anda',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPlayed(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count dimainkan',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbToReplay(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count dapat diulang',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get puzzleThemeAdvancedPawn => 'Pion terdepan';
-
-  @override
-  String get puzzleThemeAdvancedPawnDescription => 'Satu pion anda jauh dalam posisi lawan, mungkin mengancam untuk melakukan promosi.';
-
-  @override
-  String get puzzleThemeAdvantage => 'Keuntungan';
-
-  @override
-  String get puzzleThemeAdvantageDescription => 'Raih kesempatan Anda untuk mendapatkan keuntungan yang besar. (200cp ≤ eval ≤ 600cp)';
-
-  @override
-  String get puzzleThemeAnastasiaMate => 'Skakmat Anastasia';
-
-  @override
-  String get puzzleThemeAnastasiaMateDescription => 'Kuda dan benteng bekerja sama untuk menjebak raja lawan di antara sisi papan dan bidak kawan di sisi lain.';
-
-  @override
-  String get puzzleThemeArabianMate => 'Skakmat Arab';
-
-  @override
-  String get puzzleThemeArabianMateDescription => 'Bidak kuda dan benteng bekerja sama untuk menjebak raja lawan di sudut papan.';
-
-  @override
-  String get puzzleThemeAttackingF2F7 => 'Menyerang f2 atau f7';
-
-  @override
-  String get puzzleThemeAttackingF2F7Description => 'Sebuah serangan memfokuskan pada pion f2 atau f7, seperti pembukaan fried liver.';
-
-  @override
-  String get puzzleThemeAttraction => 'Pikatan';
-
-  @override
-  String get puzzleThemeAttractionDescription => 'Sebuah pertukaran atau pengorbanan yang mendorong atau memaksa bidak lawan ke kotak yang memungkinkan taktik tindak lanjut.';
-
-  @override
-  String get puzzleThemeBackRankMate => 'Mat Baris Terakhir';
-
-  @override
-  String get puzzleThemeBackRankMateDescription => 'Skakmat raja di kandang sendiri, ketika terjebak oleh bidaknya sendiri.';
-
-  @override
-  String get puzzleThemeBishopEndgame => 'Babak akhir gajah';
-
-  @override
-  String get puzzleThemeBishopEndgameDescription => 'Babak akhir dengan hanya gajah dan pion.';
-
-  @override
-  String get puzzleThemeBodenMate => 'Skakmat Boden';
-
-  @override
-  String get puzzleThemeBodenMateDescription => 'Dua bidak gajah yang menyerang dengan diagonal berselang-seling mengantarkan raja skakmat karena terhalang oleh bidaknya sendiri, biasanya benteng dan pion.';
-
-  @override
-  String get puzzleThemeCastling => 'Rokade';
-
-  @override
-  String get puzzleThemeCastlingDescription => 'Letakkan posisi raja aman, dan manfaatkan benteng untuk menyerang.';
-
-  @override
-  String get puzzleThemeCapturingDefender => 'Memakan pelindung';
-
-  @override
-  String get puzzleThemeCapturingDefenderDescription => 'Memakan bidak yang sangat penting untuk menjaga bidak lain, memungkinkan bagian yang sekarang tidak terlindungi untuk ditangkap pada langkah berikut.';
-
-  @override
-  String get puzzleThemeCrushing => 'Hancurkan';
-
-  @override
-  String get puzzleThemeCrushingDescription => 'Temukan kesalahan lawan untuk mendapat keuntungan yang besar. (eval ≥ 600cp)';
-
-  @override
-  String get puzzleThemeDoubleBishopMate => 'Skakmat gajah ganda';
-
-  @override
-  String get puzzleThemeDoubleBishopMateDescription => 'Dua bidak gajah yang menyerang pada diagonal yang bersebelahan mengantarkan sekakmat pada raja yang terhalang bidaknya sendiri.';
-
-  @override
-  String get puzzleThemeDovetailMate => 'Skatmat Dovetail';
-
-  @override
-  String get puzzleThemeDovetailMateDescription => 'Menteri skakmat disebelah raja, yang dua petak melarikan dirinya terhambat oleh bidak kawan.';
-
-  @override
-  String get puzzleThemeEquality => 'Kesetaraan';
-
-  @override
-  String get puzzleThemeEqualityDescription => 'Kembali dari posisi kalah dan amankan seri atau posisi seimbang. (eval ≤ 200cp)';
-
-  @override
-  String get puzzleThemeKingsideAttack => 'Serangan raja';
-
-  @override
-  String get puzzleThemeKingsideAttackDescription => 'Serangan raja lawan, setelah mereka berada di sisi raja.';
-
-  @override
-  String get puzzleThemeClearance => 'Pembersihan';
-
-  @override
-  String get puzzleThemeClearanceDescription => 'Sebuah gerakan, seringkali dengan tempo, file atau diagonal untuk ide taktis lanjutan.';
-
-  @override
-  String get puzzleThemeDefensiveMove => 'Gerakan bertahan';
-
-  @override
-  String get puzzleThemeDefensiveMoveDescription => 'Sebuah gerakan presisi atau urutan gerakan yang dibutuhkan untuk menghindari kerugian material atau keunggulan lain.';
-
-  @override
-  String get puzzleThemeDeflection => 'Defleksi';
-
-  @override
-  String get puzzleThemeDeflectionDescription => 'Gerakan yang mengalihkan perhatian bidak lawan dari tugas lain yang dilakukan, seperti menjaga kotak kunci. Kadang juga disebut \"overloading\".';
-
-  @override
-  String get puzzleThemeDiscoveredAttack => 'Menemukan serangan';
-
-  @override
-  String get puzzleThemeDiscoveredAttackDescription => 'Menggerakan bidak(seperti kuda), yang sebelumnya memblokir serangan oleh bidak jarak jauh(seperti benteng) keluar dari bidak itu.';
-
-  @override
-  String get puzzleThemeDoubleCheck => 'Skak ganda';
-
-  @override
-  String get puzzleThemeDoubleCheckDescription => 'Skak dengan dua bidak bersamaan, sebagai hasil dari serangan tarik dimana bidak yang bergerak dan bidak yang terungkap menyerang raja lawan bersamaan.';
-
-  @override
-  String get puzzleThemeEndgame => 'Akhir permainan';
-
-  @override
-  String get puzzleThemeEndgameDescription => 'Sebuah taktik selama fase akhir permainan.';
-
-  @override
-  String get puzzleThemeEnPassantDescription => 'Taktik melibatkan aturan \"en passant\", yang mana pion dapat makan pion lawan yang baru saja melangkah 2 petak awal.';
-
-  @override
-  String get puzzleThemeExposedKing => 'Raja tak terlindung';
-
-  @override
-  String get puzzleThemeExposedKingDescription => 'Sebuah taktik melibatkan raja dan beberapa bidak penjaga yang dimana sering berujung sekakmat.';
-
-  @override
-  String get puzzleThemeFork => 'Fork';
-
-  @override
-  String get puzzleThemeForkDescription => 'Sebuah gerakan dimana bidak yang digerakkan menyerang dua bidak lawan secara bersamaan.';
-
-  @override
-  String get puzzleThemeHangingPiece => 'Bidak tak terjaga';
-
-  @override
-  String get puzzleThemeHangingPieceDescription => 'Sebuah taktik dimana bidak lawan tidak dipertahankan atau kurang cukup pertahanan sehingga dapat dimakan dengan aman.';
-
-  @override
-  String get puzzleThemeHookMate => 'Sekakmat kait';
-
-  @override
-  String get puzzleThemeHookMateDescription => 'Skakmat dengan benteng, kuda, dan pion serta satu pion lawan untuk membatasi pergerakan raja lawan.';
-
-  @override
-  String get puzzleThemeInterference => 'Gangguan';
-
-  @override
-  String get puzzleThemeInterferenceDescription => 'Menggerakan sebuah bidak diantara dua bidak lawan agar menghilangkan pertahanan satu atau kedua bidak lasan, contohnya sebuah kuda pada kotak yang aman diantara dua benteng.';
-
-  @override
-  String get puzzleThemeIntermezzo => 'Selingan';
-
-  @override
-  String get puzzleThemeIntermezzoDescription => 'Daripada memainkan gerakan yang disangka, mainkan terlebih dulu gerakan lain yang mengancam sehingga mewajibkan lawan untuk membalas. Juga disebut \"Zwischenzug\" atau \"Di antara\".';
-
-  @override
-  String get puzzleThemeKnightEndgame => 'Babak akhir kuda';
-
-  @override
-  String get puzzleThemeKnightEndgameDescription => 'Babak akhir dengan hanya kuda dan pion.';
-
-  @override
-  String get puzzleThemeLong => 'Puzzle Panjang';
-
-  @override
-  String get puzzleThemeLongDescription => 'Tiga gerakan untuk menang.';
-
-  @override
-  String get puzzleThemeMaster => 'Permainan master';
-
-  @override
-  String get puzzleThemeMasterDescription => 'Puzzle dari seri pemain bergelar.';
-
-  @override
-  String get puzzleThemeMasterVsMaster => 'Game Master vs Master';
-
-  @override
-  String get puzzleThemeMasterVsMasterDescription => 'Puzzle dari permainan antara dua pemain bergelar.';
-
-  @override
-  String get puzzleThemeMate => 'Skakmat';
-
-  @override
-  String get puzzleThemeMateDescription => 'Menangkan game dengan bergaya.';
-
-  @override
-  String get puzzleThemeMateIn1 => 'Mati dalam 1 Langkah';
-
-  @override
-  String get puzzleThemeMateIn1Description => 'Berikan skakmat dalam satu gerakan.';
-
-  @override
-  String get puzzleThemeMateIn2 => 'Mati dalam 2 Langkah';
-
-  @override
-  String get puzzleThemeMateIn2Description => 'Berikan skakmat dalam dua gerakan.';
-
-  @override
-  String get puzzleThemeMateIn3 => 'Mati dalam 3 Langkah';
-
-  @override
-  String get puzzleThemeMateIn3Description => 'Berikan skatmat dalam tiga gerakan.';
-
-  @override
-  String get puzzleThemeMateIn4 => 'Mati dalam 4 Langkah';
-
-  @override
-  String get puzzleThemeMateIn4Description => 'Berikan skakmat dalam empat gerakan.';
-
-  @override
-  String get puzzleThemeMateIn5 => 'Mati dalam 5 langkah atau lebih';
-
-  @override
-  String get puzzleThemeMateIn5Description => 'Temukan urutan panjang skatmat.';
-
-  @override
-  String get puzzleThemeMiddlegame => 'Setengah permainan';
-
-  @override
-  String get puzzleThemeMiddlegameDescription => 'Taktik selama fase kedua permainan.';
-
-  @override
-  String get puzzleThemeOneMove => 'Teka-teki satu gerakan';
-
-  @override
-  String get puzzleThemeOneMoveDescription => 'Teka-teki yang hanya satu gerakan panjang.';
-
-  @override
-  String get puzzleThemeOpening => 'Pembuka';
-
-  @override
-  String get puzzleThemeOpeningDescription => 'Taktik selama fase pertama permainan.';
-
-  @override
-  String get puzzleThemePawnEndgame => 'Babak akhir pion';
-
-  @override
-  String get puzzleThemePawnEndgameDescription => 'Babak akhir hanya dengan pion.';
-
-  @override
-  String get puzzleThemePin => 'Pin';
-
-  @override
-  String get puzzleThemePinDescription => 'Taktik meliputi pin, dimana bidak tidak dapat bergerak tanpa membuka serangan pada bidak yang bernilai lebih tinggi.';
-
-  @override
-  String get puzzleThemePromotion => 'Promosi';
-
-  @override
-  String get puzzleThemePromotionDescription => 'Promosi salah satu pion menjadi menteri atau bidak minor lainnya.';
-
-  @override
-  String get puzzleThemeQueenEndgame => 'Babak akhir menteri';
-
-  @override
-  String get puzzleThemeQueenEndgameDescription => 'Babak akhir hanya dengan menteri dan pion.';
-
-  @override
-  String get puzzleThemeQueenRookEndgame => 'Menteri dan Benteng';
-
-  @override
-  String get puzzleThemeQueenRookEndgameDescription => 'Permainan Akhir hanya dengan menteri, benteng, dan pion.';
-
-  @override
-  String get puzzleThemeQueensideAttack => 'Serangan sisi menteri';
-
-  @override
-  String get puzzleThemeQueensideAttackDescription => 'Serangan raja lawan, setelah lawan rokade panjang.';
-
-  @override
-  String get puzzleThemeQuietMove => 'Gerakan tenang';
-
-  @override
-  String get puzzleThemeQuietMoveDescription => 'Sebuah gerakan yang tidak melakukan sekak maupun memakan, dan tidak memberi ancaman memakan langsung, namun mempersiapkan ancaman tersembunyi yang tidak dapat dihindari pada gerakan selanjutnya.';
-
-  @override
-  String get puzzleThemeRookEndgame => 'Permainan Akhir benteng';
-
-  @override
-  String get puzzleThemeRookEndgameDescription => 'Babak akhir dengan hanya benteng dan pion.';
-
-  @override
-  String get puzzleThemeSacrifice => 'Sacrifice';
-
-  @override
-  String get puzzleThemeSacrificeDescription => 'Sebuah taktik yang melibatkan menyerahkan material dalam jangka pendek, untuk meraih keuntungan kembali setelah urutan gerakan yang terpaksa.';
-
-  @override
-  String get puzzleThemeShort => 'Teka-teki pendek';
-
-  @override
-  String get puzzleThemeShortDescription => 'Dua gerakan untuk menang.';
-
-  @override
-  String get puzzleThemeSkewer => 'Tusukan';
-
-  @override
-  String get puzzleThemeSkewerDescription => 'Sebuah motif melibatkan sebuah bidak berharga yang diserang bergerak sehingga mengizinkan bidak bernilai lebih rendah dibelakangnya dimakan atau diserang, yang merupakan kebalikan dari sebuah pin.';
-
-  @override
-  String get puzzleThemeSmotheredMate => 'Sekakmat kepung';
-
-  @override
-  String get puzzleThemeSmotheredMateDescription => 'Sebuah sekakmat yang diraih oleh sebuah kuda yang dimana raja tidak dapat bergerak karena terkepung oleh bidaknya sendiri.';
-
-  @override
-  String get puzzleThemeSuperGM => 'Permainan super GM';
-
-  @override
-  String get puzzleThemeSuperGMDescription => 'Teka-teki dari permainan yang dimainkan oleh pemain terbaik di seluruh dunia.';
-
-  @override
-  String get puzzleThemeTrappedPiece => 'Bidak yang terperangkap';
-
-  @override
-  String get puzzleThemeTrappedPieceDescription => 'Bidak tidak bisa lolos dari penangkapan karena gerakannya dibatasi.';
-
-  @override
-  String get puzzleThemeUnderPromotion => 'Dalam Promosi';
-
-  @override
-  String get puzzleThemeUnderPromotionDescription => 'Promosi ke kuda, gajah, atau benteng.';
-
-  @override
-  String get puzzleThemeVeryLong => 'Teka-teki yang sangat panjang';
-
-  @override
-  String get puzzleThemeVeryLongDescription => 'Empat gerakan atau lebih untuk menang.';
-
-  @override
-  String get puzzleThemeXRayAttack => 'Serangan Sinar-X';
-
-  @override
-  String get puzzleThemeXRayAttackDescription => 'Bidak menyerang atau mempertahankan kotak, melalui bidak musuh.';
-
-  @override
-  String get puzzleThemeZugzwang => 'Zugzwang';
-
-  @override
-  String get puzzleThemeZugzwangDescription => 'Musuh dibatasi gerakan yang dapat mereka lakukan, dan semua gerakan memperburuk posisi mereka.';
-
-  @override
-  String get puzzleThemeHealthyMix => 'Campuran baik';
-
-  @override
-  String get puzzleThemeHealthyMixDescription => 'Sedikit dari segalanya. Anda tidak tahu apa yang akan terjadi, jadi Anda tetap siap untuk apapun! Sama seperti permainan sebenarnya.';
-
-  @override
-  String get puzzleThemePlayerGames => 'Permainan pemain';
-
-  @override
-  String get puzzleThemePlayerGamesDescription => 'Mengambil taktik yang dihasilkan dari permainan anda, atau pemain lain.';
-
-  @override
-  String puzzleThemePuzzleDownloadInformation(String param) {
-    return 'Taktik-taktik ini ada di domain publik, dan dapat di download dari $param.';
-  }
-
-  @override
-  String perfStatPerfStats(String param) {
-    return '$param statistik';
-  }
-
-  @override
-  String get perfStatViewTheGames => 'Lihat permainan';
-
-  @override
-  String get perfStatProvisional => 'penyisihan';
-
-  @override
-  String get perfStatNotEnoughRatedGames => 'Tidak mencukupi permainan dirating yang telah dimainkan untuk mendapatkan rating yang dapat diandalkan.';
-
-  @override
-  String perfStatProgressOverLastXGames(String param) {
-    return 'Kemajuan dalam permainan $param terakhir kali:';
-  }
-
-  @override
-  String perfStatRatingDeviation(String param) {
-    return 'Selisih rating: $param.';
-  }
-
-  @override
-  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
-    return 'Nilai rendah berarti ratingnya lebih stabil. Diatas $param1, ratingnya dipertimbangkan sebagai provisonal. Untuk dimasukkan dalam rangking, nilai ini harus berada dibawah $param2 (catur standar) atau $param3 (variasi).';
-  }
-
-  @override
-  String get perfStatTotalGames => 'Total permainan';
-
-  @override
-  String get perfStatRatedGames => 'Permainan di-rating';
-
-  @override
-  String get perfStatTournamentGames => 'Permainan turnamen';
-
-  @override
-  String get perfStatBerserkedGames => 'Permainan saat mengamuk';
-
-  @override
-  String get perfStatTimeSpentPlaying => 'Waktu bermain';
-
-  @override
-  String get perfStatAverageOpponent => 'Rata-rata lawan';
-
-  @override
-  String get perfStatVictories => 'Kemenangan';
-
-  @override
-  String get perfStatDefeats => 'Kalah';
-
-  @override
-  String get perfStatDisconnections => 'Koneksi terputus';
-
-  @override
-  String get perfStatNotEnoughGames => 'Permainan yang dimainkan tidak mencukupi';
-
-  @override
-  String perfStatHighestRating(String param) {
-    return 'Rating tertinggi: $param';
-  }
-
-  @override
-  String perfStatLowestRating(String param) {
-    return 'Rating terendah: $param';
-  }
-
-  @override
-  String perfStatFromXToY(String param1, String param2) {
-    return 'dari $param1 ke $param2';
-  }
-
-  @override
-  String get perfStatWinningStreak => 'Kemenangan beruntun';
-
-  @override
-  String get perfStatLosingStreak => 'Kekalahan beruntun';
-
-  @override
-  String perfStatLongestStreak(String param) {
-    return 'Beruntun terpanjang: $param';
-  }
-
-  @override
-  String perfStatCurrentStreak(String param) {
-    return 'Beruntun saat ini: $param';
-  }
-
-  @override
-  String get perfStatBestRated => 'Kemenangan dirating terbaik';
-
-  @override
-  String get perfStatGamesInARow => 'Permainan yang dimainkan berturut-turut';
-
-  @override
-  String get perfStatLessThanOneHour => 'Kurang dari satu jam antar permainan';
-
-  @override
-  String get perfStatMaxTimePlaying => 'Maksimal waktu bermain';
-
-  @override
-  String get perfStatNow => 'sekarang';
-
-  @override
-  String get searchSearch => 'Cari';
-
-  @override
-  String get settingsSettings => 'Pengaturan';
-
-  @override
-  String get settingsCloseAccount => 'Tutup akun';
-
-  @override
-  String get settingsManagedAccountCannotBeClosed => 'Akun Anda dikelola, dan tidak dapat ditutup.';
-
-  @override
-  String get settingsClosingIsDefinitive => 'Menghapus akun tidak dapat dibatalkan. Apakah Anda yakin?';
-
-  @override
-  String get settingsCantOpenSimilarAccount => 'Anda tidak akan diizinkan untuk membuka akun baru dengan nama yang sama, meskipun besar-kecil hurufnya berbeda.';
-
-  @override
-  String get settingsChangedMindDoNotCloseAccount => 'Saya berubah pikiran, jangan tutup akun saya';
-
-  @override
-  String get settingsCloseAccountExplanation => 'Apakah Anda yakin ingin menutup akun Anda? Menutup akun Anda adalah keputusan permanen. Anda tidak akan PERNAH bisa MASUK lagi.';
-
-  @override
-  String get settingsThisAccountIsClosed => 'Akun ini telah ditutup.';
-
-  @override
-  String get streamerLichessStreamers => 'Streamer Lichess';
-
-  @override
   String get stormMoveToStart => 'Melangkah untuk memulai';
 
   @override
@@ -4514,14 +4508,11 @@ class AppLocalizationsId extends AppLocalizations {
   }
 
   @override
+  String get streamerLichessStreamers => 'Streamer Lichess';
+
+  @override
   String get studyShareAndExport => 'Bagikan & ekspor';
 
   @override
   String get studyStart => 'Mulai';
-
-  @override
-  String get broadcastBroadcasts => 'Siaran';
-
-  @override
-  String get broadcastStartDate => 'Tanggal mulai di zona waktu Anda sendiri';
 }

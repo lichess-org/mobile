@@ -191,10 +191,10 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get contactContact => '联系';
+  String get broadcastBroadcasts => '转播';
 
   @override
-  String get contactContactLichess => '联系 Lichess';
+  String get broadcastStartDate => '开始日期，在你的本地时区';
 
   @override
   String challengeChallengesX(String param1) {
@@ -276,6 +276,1002 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get challengeInviteLichessUser => '或邀请一位 Lichess 用户：';
+
+  @override
+  String get contactContact => '联系';
+
+  @override
+  String get contactContactLichess => '联系 Lichess';
+
+  @override
+  String get patronDonate => '捐赠';
+
+  @override
+  String get patronLichessPatron => '赞助 Lichess';
+
+  @override
+  String perfStatPerfStats(String param) {
+    return '$param 战绩';
+  }
+
+  @override
+  String get perfStatViewTheGames => '查看棋局';
+
+  @override
+  String get perfStatProvisional => '暂定';
+
+  @override
+  String get perfStatNotEnoughRatedGames => '因排位赛数量不足而无法测定可靠的等级分';
+
+  @override
+  String perfStatProgressOverLastXGames(String param) {
+    return '最近 $param 局后的变化:';
+  }
+
+  @override
+  String perfStatRatingDeviation(String param) {
+    return '等级分偏差: $param';
+  }
+
+  @override
+  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
+    return '偏差值越低，等级分越稳定。若偏差值大于 $param1，则等级分是暂时的。只有当偏差低于 $param2（标准局）/ $param3（变种）时，才能进入排名。';
+  }
+
+  @override
+  String get perfStatTotalGames => '棋局总数';
+
+  @override
+  String get perfStatRatedGames => '排位赛局数';
+
+  @override
+  String get perfStatTournamentGames => '锦标赛局数';
+
+  @override
+  String get perfStatBerserkedGames => '神速局数';
+
+  @override
+  String get perfStatTimeSpentPlaying => '弈棋总时间';
+
+  @override
+  String get perfStatAverageOpponent => '对手平均等级分';
+
+  @override
+  String get perfStatVictories => '胜';
+
+  @override
+  String get perfStatDefeats => '负';
+
+  @override
+  String get perfStatDisconnections => '断线';
+
+  @override
+  String get perfStatNotEnoughGames => '棋局不足';
+
+  @override
+  String perfStatHighestRating(String param) {
+    return '最高等级分: $param';
+  }
+
+  @override
+  String perfStatLowestRating(String param) {
+    return '最低等级分: $param';
+  }
+
+  @override
+  String perfStatFromXToY(String param1, String param2) {
+    return '自 $param1 至 $param2';
+  }
+
+  @override
+  String get perfStatWinningStreak => '连胜';
+
+  @override
+  String get perfStatLosingStreak => '连败';
+
+  @override
+  String perfStatLongestStreak(String param) {
+    return '最长纪录: $param';
+  }
+
+  @override
+  String perfStatCurrentStreak(String param) {
+    return '当前纪录: $param';
+  }
+
+  @override
+  String get perfStatBestRated => '最佳胜利';
+
+  @override
+  String get perfStatGamesInARow => '连续对局';
+
+  @override
+  String get perfStatLessThanOneHour => '棋局间隔一个小时以内';
+
+  @override
+  String get perfStatMaxTimePlaying => '最长连续对局时间';
+
+  @override
+  String get perfStatNow => '现在';
+
+  @override
+  String get preferencesPreferences => '偏好设置';
+
+  @override
+  String get preferencesDisplay => '显示';
+
+  @override
+  String get preferencesPrivacy => '隐私设置';
+
+  @override
+  String get preferencesNotifications => '通知';
+
+  @override
+  String get preferencesPieceAnimation => '棋子动画';
+
+  @override
+  String get preferencesMaterialDifference => '子力差距';
+
+  @override
+  String get preferencesBoardHighlights => '棋盘高亮（最后一步与将军）';
+
+  @override
+  String get preferencesPieceDestinations => '棋子走到位置（有效着与预先走棋）';
+
+  @override
+  String get preferencesBoardCoordinates => '棋盘坐标（A-H, 1-8）';
+
+  @override
+  String get preferencesMoveListWhilePlaying => '对局进行时显示可走着法';
+
+  @override
+  String get preferencesPgnPieceNotation => '使用PGN字母(K,Q,R,B,N)或棋子图标来显示PGN棋谱';
+
+  @override
+  String get preferencesChessPieceSymbol => '棋子图标';
+
+  @override
+  String get preferencesPgnLetter => '字母 （K,Q,R,B,N）';
+
+  @override
+  String get preferencesZenMode => '禅意模式';
+
+  @override
+  String get preferencesShowPlayerRatings => '显示等级分';
+
+  @override
+  String get preferencesShowFlairs => '显示玩家图标';
+
+  @override
+  String get preferencesExplainShowPlayerRatings => '该选项可在网站内隐藏等级分，使你可以专注于下棋本身。对局依旧会影响等级分，但不会向你显示。';
+
+  @override
+  String get preferencesDisplayBoardResizeHandle => '调整棋盘大小';
+
+  @override
+  String get preferencesOnlyOnInitialPosition => '仅初始局面';
+
+  @override
+  String get preferencesInGameOnly => '仅在对局中';
+
+  @override
+  String get preferencesChessClock => '棋钟';
+
+  @override
+  String get preferencesTenthsOfSeconds => '显示十分之一秒';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanTenSeconds => '当剩余时间小于10秒';
+
+  @override
+  String get preferencesHorizontalGreenProgressBars => '显示绿色横进度条';
+
+  @override
+  String get preferencesSoundWhenTimeGetsCritical => '时间不足时声音提醒';
+
+  @override
+  String get preferencesGiveMoreTime => '给对方更多时间';
+
+  @override
+  String get preferencesGameBehavior => '对局行为';
+
+  @override
+  String get preferencesHowDoYouMovePieces => '你想通过什么方式走棋？';
+
+  @override
+  String get preferencesClickTwoSquares => '点起始位置和终止位置';
+
+  @override
+  String get preferencesDragPiece => '拖动棋子';
+
+  @override
+  String get preferencesBothClicksAndDrag => '两者都行';
+
+  @override
+  String get preferencesPremovesPlayingDuringOpponentTurn => '预先走棋（在对手的回合走棋）';
+
+  @override
+  String get preferencesTakebacksWithOpponentApproval => '悔棋（需要对手同意）';
+
+  @override
+  String get preferencesInCasualGamesOnly => '仅限于休闲对局';
+
+  @override
+  String get preferencesPromoteToQueenAutomatically => '兵自动升为后';
+
+  @override
+  String get preferencesExplainPromoteToQueenAutomatically => '按住 <ctrl> 键以临时禁用自动升变';
+
+  @override
+  String get preferencesWhenPremoving => '预先走棋時';
+
+  @override
+  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => '在三次重复局面时自动要求和局';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanThirtySeconds => '当剩余时间小于30秒';
+
+  @override
+  String get preferencesMoveConfirmation => '确认走棋';
+
+  @override
+  String get preferencesExplainCanThenBeTemporarilyDisabled => '可以在游戏中使用棋盘菜单禁用此功能';
+
+  @override
+  String get preferencesInCorrespondenceGames => '通信棋局';
+
+  @override
+  String get preferencesCorrespondenceAndUnlimited => '通信和无限';
+
+  @override
+  String get preferencesConfirmResignationAndDrawOffers => '认输以及提出和棋需要确认';
+
+  @override
+  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => '王车易位方法';
+
+  @override
+  String get preferencesCastleByMovingTwoSquares => '将王移动两格';
+
+  @override
+  String get preferencesCastleByMovingOntoTheRook => '将王移到车上';
+
+  @override
+  String get preferencesInputMovesWithTheKeyboard => '用键盘输入棋步';
+
+  @override
+  String get preferencesInputMovesWithVoice => '用语音输入着法';
+
+  @override
+  String get preferencesSnapArrowsToValidMoves => '将箭头吸附到有效着法上';
+
+  @override
+  String get preferencesSayGgWpAfterLosingOrDrawing => '输棋、和棋后自动发送：“厉害，玩得不错！”';
+
+  @override
+  String get preferencesYourPreferencesHaveBeenSaved => '你的设置已保存。';
+
+  @override
+  String get preferencesScrollOnTheBoardToReplayMoves => '在棋盘上滚动鼠标滚轮以回退';
+
+  @override
+  String get preferencesCorrespondenceEmailNotification => '每日发送邮件通知你正在进行的通讯棋局';
+
+  @override
+  String get preferencesNotifyStreamStart => '主播开始直播';
+
+  @override
+  String get preferencesNotifyInboxMsg => '新消息';
+
+  @override
+  String get preferencesNotifyForumMention => '论坛评论提到了你';
+
+  @override
+  String get preferencesNotifyInvitedStudy => '研讨邀请';
+
+  @override
+  String get preferencesNotifyGameEvent => '通信棋局更新';
+
+  @override
+  String get preferencesNotifyChallenge => '挑战';
+
+  @override
+  String get preferencesNotifyTournamentSoon => '比赛即将开始';
+
+  @override
+  String get preferencesNotifyTimeAlarm => '通讯棋局时间快要耗尽';
+
+  @override
+  String get preferencesNotifyBell => 'Lichess 内的铃声通知';
+
+  @override
+  String get preferencesNotifyPush => 'Lichess 外的设备通知';
+
+  @override
+  String get preferencesNotifyWeb => '浏览器通知';
+
+  @override
+  String get preferencesNotifyDevice => '设备通知';
+
+  @override
+  String get preferencesBellNotificationSound => '通知铃声';
+
+  @override
+  String get puzzlePuzzles => '谜题';
+
+  @override
+  String get puzzlePuzzleThemes => '训练主题';
+
+  @override
+  String get puzzleRecommended => '我们推荐：';
+
+  @override
+  String get puzzlePhases => '分阶段';
+
+  @override
+  String get puzzleMotifs => '分主题';
+
+  @override
+  String get puzzleAdvanced => '进阶';
+
+  @override
+  String get puzzleLengths => '分长度';
+
+  @override
+  String get puzzleMates => '将死';
+
+  @override
+  String get puzzleGoals => '分目标';
+
+  @override
+  String get puzzleOrigin => '来源';
+
+  @override
+  String get puzzleSpecialMoves => '特殊着法';
+
+  @override
+  String get puzzleDidYouLikeThisPuzzle => '你喜欢这道训练题吗？';
+
+  @override
+  String get puzzleVoteToLoadNextOne => '投票以加载下一题';
+
+  @override
+  String get puzzleUpVote => '赞';
+
+  @override
+  String get puzzleDownVote => '踩';
+
+  @override
+  String get puzzleYourPuzzleRatingWillNotChange => '你的谜题等级分将不会改变。请注意，解谜题不是比赛。等级分有助于根据你当前水平选择最佳谜题。';
+
+  @override
+  String get puzzleFindTheBestMoveForWhite => '找出白方的最佳着法';
+
+  @override
+  String get puzzleFindTheBestMoveForBlack => '找出黑方的最佳着法';
+
+  @override
+  String get puzzleToGetPersonalizedPuzzles => '获取个性化谜题';
+
+  @override
+  String puzzlePuzzleId(String param) {
+    return '谜题编号：$param';
+  }
+
+  @override
+  String get puzzlePuzzleOfTheDay => '每日棋谜';
+
+  @override
+  String get puzzleDailyPuzzle => '每日棋谜';
+
+  @override
+  String get puzzleClickToSolve => '点击解题';
+
+  @override
+  String get puzzleGoodMove => '好棋';
+
+  @override
+  String get puzzleBestMove => '最佳走法！';
+
+  @override
+  String get puzzleKeepGoing => '请继续…';
+
+  @override
+  String get puzzlePuzzleSuccess => '解题成功!';
+
+  @override
+  String get puzzlePuzzleComplete => '解题完成!';
+
+  @override
+  String get puzzleByOpenings => '按开局分类';
+
+  @override
+  String get puzzlePuzzlesByOpenings => '按开局分类的谜题';
+
+  @override
+  String get puzzleOpeningsYouPlayedTheMost => '你在排位赛中使用最多的开局';
+
+  @override
+  String get puzzleUseFindInPage => '在浏览器菜单中使用 “在页面中查找” 来找到你最爱的开局！';
+
+  @override
+  String get puzzleUseCtrlF => '使用 Ctrl + F 查找你最爱的开局！';
+
+  @override
+  String get puzzleNotTheMove => '不是最佳着法';
+
+  @override
+  String get puzzleTrySomethingElse => '试试其他着法';
+
+  @override
+  String puzzleRatingX(String param) {
+    return '等级分：$param';
+  }
+
+  @override
+  String get puzzleHidden => '已隐藏';
+
+  @override
+  String puzzleFromGameLink(String param) {
+    return '来自对局：$param';
+  }
+
+  @override
+  String get puzzleContinueTraining => '继续训练';
+
+  @override
+  String get puzzleDifficultyLevel => '难易级别';
+
+  @override
+  String get puzzleNormal => '正常';
+
+  @override
+  String get puzzleEasier => '更简单';
+
+  @override
+  String get puzzleEasiest => '最简单';
+
+  @override
+  String get puzzleHarder => '更难';
+
+  @override
+  String get puzzleHardest => '最难';
+
+  @override
+  String get puzzleExample => '示例';
+
+  @override
+  String get puzzleAddAnotherTheme => '添加新的主题';
+
+  @override
+  String get puzzleNextPuzzle => '下一个谜题';
+
+  @override
+  String get puzzleJumpToNextPuzzleImmediately => '解题后立即跳至下一个';
+
+  @override
+  String get puzzlePuzzleDashboard => '数据统计';
+
+  @override
+  String get puzzleImprovementAreas => '有待提升';
+
+  @override
+  String get puzzleStrengths => '强项';
+
+  @override
+  String get puzzleHistory => '解题历史';
+
+  @override
+  String get puzzleSolved => '已解答';
+
+  @override
+  String get puzzleFailed => '失败';
+
+  @override
+  String get puzzleStreakDescription => '解破日益困难的谜题，从而建造一个胜利纪录。没有计时。一步错解，游戏就会结束！不过，每场游戏都可跳过一步棋。';
+
+  @override
+  String puzzleYourStreakX(String param) {
+    return '你的连胜纪录: $param';
+  }
+
+  @override
+  String get puzzleStreakSkipExplanation => '跳过这一步来保持你的连胜纪录！每场游戏只能使用一次。';
+
+  @override
+  String get puzzleContinueTheStreak => '继续连胜纪录';
+
+  @override
+  String get puzzleNewStreak => '新连胜纪录';
+
+  @override
+  String get puzzleFromMyGames => '来自我的对局';
+
+  @override
+  String get puzzleLookupOfPlayer => '从玩家的对局中查找谜题';
+
+  @override
+  String puzzleFromXGames(String param) {
+    return '来自 $param 的对局的谜题';
+  }
+
+  @override
+  String get puzzleSearchPuzzles => '搜索谜题';
+
+  @override
+  String get puzzleFromMyGamesNone => '你下过的棋局暂时没有被纳入到谜题数据库中，但 Lichess 将一如既往地记着你所走的每一步。\n多下快棋和慢棋可以提升你的棋局被纳入谜题数据库的概率哦！';
+
+  @override
+  String puzzleFromXGamesFound(String param1, String param2) {
+    return '在 $param2 场对局中发现了 $param1 个谜题';
+  }
+
+  @override
+  String get puzzlePuzzleDashboardDescription => '训练、分析、提升';
+
+  @override
+  String puzzlePercentSolved(String param) {
+    return '$param 已解决';
+  }
+
+  @override
+  String get puzzleNoPuzzlesToShow => '没有什么可以显示的，先去玩一些谜题吧！';
+
+  @override
+  String get puzzleImprovementAreasDescription => '训练这些主题来提升你的表现！';
+
+  @override
+  String get puzzleStrengthDescription => '你擅长这些主题';
+
+  @override
+  String puzzlePlayedXTimes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '共 $count 次尝试',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsBelowYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '比你的谜题等级分低$count',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsAboveYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '比你的谜题等级分高$count',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPlayed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '玩过 $count',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbToReplay(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 重玩',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get puzzleThemeAdvancedPawn => '高位兵';
+
+  @override
+  String get puzzleThemeAdvancedPawnDescription => '你的兵已经深入对手的领地，可能威胁升变。';
+
+  @override
+  String get puzzleThemeAdvantage => '优势';
+
+  @override
+  String get puzzleThemeAdvantageDescription => '抓住能让你获得决定性优势的机会。(200厘兵 ≤ 评估 ≤ 600厘兵)';
+
+  @override
+  String get puzzleThemeAnastasiaMate => '阿纳斯塔西亚杀法';
+
+  @override
+  String get puzzleThemeAnastasiaMateDescription => '马与车或者后配合将对方的王将死在被同一方棋子卡住的边角。';
+
+  @override
+  String get puzzleThemeArabianMate => '阿拉伯杀法';
+
+  @override
+  String get puzzleThemeArabianMateDescription => '马与车配合将杀对方在角落上的王。';
+
+  @override
+  String get puzzleThemeAttackingF2F7 => '进攻 f2 或 f7';
+
+  @override
+  String get puzzleThemeAttackingF2F7Description => '进攻的焦点集中在f2或f7兵，像在双马防御煎肝进攻中一样。';
+
+  @override
+  String get puzzleThemeAttraction => '引入';
+
+  @override
+  String get puzzleThemeAttractionDescription => '以兑子或弃子吸引或迫使对方的棋子走到后续可实施战术的格子。';
+
+  @override
+  String get puzzleThemeBackRankMate => '底线杀王';
+
+  @override
+  String get puzzleThemeBackRankMateDescription => '在底线将杀被同一方棋子困住的王。';
+
+  @override
+  String get puzzleThemeBishopEndgame => '象残局';
+
+  @override
+  String get puzzleThemeBishopEndgameDescription => '只有象和兵的残局。';
+
+  @override
+  String get puzzleThemeBodenMate => '波登杀法';
+
+  @override
+  String get puzzleThemeBodenMateDescription => '双象在交错的斜线上将杀被同一方棋子阻挡的王。';
+
+  @override
+  String get puzzleThemeCastling => '王车易位';
+
+  @override
+  String get puzzleThemeCastlingDescription => '将王转移到安全的地方，同时将车投入进攻。';
+
+  @override
+  String get puzzleThemeCapturingDefender => '消除保护';
+
+  @override
+  String get puzzleThemeCapturingDefenderDescription => '消除保护另一个棋子的重要棋子，以在后续着法中吃掉已消除保护的棋子。';
+
+  @override
+  String get puzzleThemeCrushing => '压倒性优势';
+
+  @override
+  String get puzzleThemeCrushingDescription => '抓住对手的失误以获得压倒性的优势 (评估 ≥ 600厘兵)。';
+
+  @override
+  String get puzzleThemeDoubleBishopMate => '双象杀王';
+
+  @override
+  String get puzzleThemeDoubleBishopMateDescription => '双象在相邻的斜线上将杀被同一方棋子阻挡的王。';
+
+  @override
+  String get puzzleThemeDovetailMate => '燕尾杀法';
+
+  @override
+  String get puzzleThemeDovetailMateDescription => '后贴面杀，王唯一能逃跑的两个格子被同一方的棋子阻挡。';
+
+  @override
+  String get puzzleThemeEquality => '均势';
+
+  @override
+  String get puzzleThemeEqualityDescription => '从大劣的局面回到和棋或者均势 (评估 ≤ 200厘兵)。';
+
+  @override
+  String get puzzleThemeKingsideAttack => '王翼进攻';
+
+  @override
+  String get puzzleThemeKingsideAttackDescription => '在对方短易位后进攻对方的王。';
+
+  @override
+  String get puzzleThemeClearance => '腾挪';
+
+  @override
+  String get puzzleThemeClearanceDescription => '一着通常伴随有为后续战术构想腾空棋格、直线或斜线的棋。';
+
+  @override
+  String get puzzleThemeDefensiveMove => '防守着法';
+
+  @override
+  String get puzzleThemeDefensiveMoveDescription => '避免丢子或失去其他优势所需的精确着法或着法序列。';
+
+  @override
+  String get puzzleThemeDeflection => '引离';
+
+  @override
+  String get puzzleThemeDeflectionDescription => '一步棋使对方的棋子分散了其另一项任务，例如防守一个关键格。有时候也叫“过载”。';
+
+  @override
+  String get puzzleThemeDiscoveredAttack => '闪击';
+
+  @override
+  String get puzzleThemeDiscoveredAttackDescription => '移动阻挡长距离棋子(例如车) 的己方棋子(例如马)，打通前者的路线。';
+
+  @override
+  String get puzzleThemeDoubleCheck => '双将';
+
+  @override
+  String get puzzleThemeDoubleCheckDescription => '两个棋子同时将军，作为一种闪击，走动的棋子与后面闪露出来的棋子同时攻击对方的王。';
+
+  @override
+  String get puzzleThemeEndgame => '残局';
+
+  @override
+  String get puzzleThemeEndgameDescription => '对局最后阶段的战术。';
+
+  @override
+  String get puzzleThemeEnPassantDescription => '涉及吃过路兵规则的战术，兵可以吃掉对方刚走两格、横向相邻的兵。';
+
+  @override
+  String get puzzleThemeExposedKing => '暴露的王';
+
+  @override
+  String get puzzleThemeExposedKingDescription => '对方王的周围只有很少的防守棋子时的战术，往往导致将杀。';
+
+  @override
+  String get puzzleThemeFork => '击双';
+
+  @override
+  String get puzzleThemeForkDescription => '走动的棋子同时攻击对方的两个棋子。';
+
+  @override
+  String get puzzleThemeHangingPiece => '悬子';
+
+  @override
+  String get puzzleThemeHangingPieceDescription => '涉及对方少保护或无保护的棋子，可以随意吃掉。';
+
+  @override
+  String get puzzleThemeHookMate => '勾杀';
+
+  @override
+  String get puzzleThemeHookMateDescription => '用车、马、兵杀棋，对方的兵限制王逃跑。';
+
+  @override
+  String get puzzleThemeInterference => '拦截';
+
+  @override
+  String get puzzleThemeInterferenceDescription => '走动棋子到对手的两个棋子之间，使其中的一个或两个棋子消除保护，例如将一个马走到两个车之间的防守格上。';
+
+  @override
+  String get puzzleThemeIntermezzo => '过渡着';
+
+  @override
+  String get puzzleThemeIntermezzoDescription => '不走预期的着法，而是走一着对手必须应对的直接威胁。';
+
+  @override
+  String get puzzleThemeKnightEndgame => '马残局';
+
+  @override
+  String get puzzleThemeKnightEndgameDescription => '只有马和兵的残局。';
+
+  @override
+  String get puzzleThemeLong => '长谜题';
+
+  @override
+  String get puzzleThemeLongDescription => '三步胜。';
+
+  @override
+  String get puzzleThemeMaster => '大师对局';
+
+  @override
+  String get puzzleThemeMasterDescription => '出自有名棋手对局的谜题。';
+
+  @override
+  String get puzzleThemeMasterVsMaster => '大师与大师对局';
+
+  @override
+  String get puzzleThemeMasterVsMasterDescription => '出自两位有名棋手对局的谜题。';
+
+  @override
+  String get puzzleThemeMate => '杀王';
+
+  @override
+  String get puzzleThemeMateDescription => '有型地赢棋。';
+
+  @override
+  String get puzzleThemeMateIn1 => '一步杀';
+
+  @override
+  String get puzzleThemeMateIn1Description => '一步之内实现将杀。';
+
+  @override
+  String get puzzleThemeMateIn2 => '两步杀';
+
+  @override
+  String get puzzleThemeMateIn2Description => '两步之内实现将杀。';
+
+  @override
+  String get puzzleThemeMateIn3 => '三步杀';
+
+  @override
+  String get puzzleThemeMateIn3Description => '三步之内实现将杀。';
+
+  @override
+  String get puzzleThemeMateIn4 => '四步杀';
+
+  @override
+  String get puzzleThemeMateIn4Description => '四步之内实现将杀。';
+
+  @override
+  String get puzzleThemeMateIn5 => '五步或更多步杀';
+
+  @override
+  String get puzzleThemeMateIn5Description => '找出一套很长的将杀着法。';
+
+  @override
+  String get puzzleThemeMiddlegame => '中局';
+
+  @override
+  String get puzzleThemeMiddlegameDescription => '对局第二阶段的战术。';
+
+  @override
+  String get puzzleThemeOneMove => '一步棋谜题';
+
+  @override
+  String get puzzleThemeOneMoveDescription => '只有一步棋的谜题。';
+
+  @override
+  String get puzzleThemeOpening => '开局';
+
+  @override
+  String get puzzleThemeOpeningDescription => '对局第一阶段的战术。';
+
+  @override
+  String get puzzleThemePawnEndgame => '兵残局';
+
+  @override
+  String get puzzleThemePawnEndgameDescription => '只有兵的残局。';
+
+  @override
+  String get puzzleThemePin => '牵制';
+
+  @override
+  String get puzzleThemePinDescription => '涉及牵制的策略，一个棋子不能移动否则背后更高价值的棋子将被攻击。';
+
+  @override
+  String get puzzleThemePromotion => '升变';
+
+  @override
+  String get puzzleThemePromotionDescription => '将兵升变为后或其他棋子。';
+
+  @override
+  String get puzzleThemeQueenEndgame => '后残局';
+
+  @override
+  String get puzzleThemeQueenEndgameDescription => '只有后和兵的残局。';
+
+  @override
+  String get puzzleThemeQueenRookEndgame => '后车残局';
+
+  @override
+  String get puzzleThemeQueenRookEndgameDescription => '只有后、车、兵的残局。';
+
+  @override
+  String get puzzleThemeQueensideAttack => '后翼进攻';
+
+  @override
+  String get puzzleThemeQueensideAttackDescription => '在对方长易位后进攻对方的王。';
+
+  @override
+  String get puzzleThemeQuietMove => '安静的一着';
+
+  @override
+  String get puzzleThemeQuietMoveDescription => '一步没有将军吃子的棋，但是为后续准备了一个不可避免的威胁。';
+
+  @override
+  String get puzzleThemeRookEndgame => '车残局';
+
+  @override
+  String get puzzleThemeRookEndgameDescription => '只有车和兵的残局。';
+
+  @override
+  String get puzzleThemeSacrifice => '弃子';
+
+  @override
+  String get puzzleThemeSacrificeDescription => '涉及在短期内弃子的策略，以便在强制执行一系列着法后再次获得优势。';
+
+  @override
+  String get puzzleThemeShort => '短谜题';
+
+  @override
+  String get puzzleThemeShortDescription => '两步胜。';
+
+  @override
+  String get puzzleThemeSkewer => '串击';
+
+  @override
+  String get puzzleThemeSkewerDescription => '攻击对方高价值的棋子，使其走开，以允许其后方较低价值的棋子被吃或攻击（反向的牵制）。';
+
+  @override
+  String get puzzleThemeSmotheredMate => '闷杀';
+
+  @override
+  String get puzzleThemeSmotheredMateDescription => '由马完成的将杀，对方王被自己的棋子包围（或困住），因此无法移动。';
+
+  @override
+  String get puzzleThemeSuperGM => '超级大师对局';
+
+  @override
+  String get puzzleThemeSuperGMDescription => '出自世界上最好的棋手对局的谜题。';
+
+  @override
+  String get puzzleThemeTrappedPiece => '被困的棋子';
+
+  @override
+  String get puzzleThemeTrappedPieceDescription => '一个棋子由于其走法有限无法逃脱被捉。';
+
+  @override
+  String get puzzleThemeUnderPromotion => '低升变';
+
+  @override
+  String get puzzleThemeUnderPromotionDescription => '升变为马、象或车。';
+
+  @override
+  String get puzzleThemeVeryLong => '超长谜题';
+
+  @override
+  String get puzzleThemeVeryLongDescription => '四步或更多步胜。';
+
+  @override
+  String get puzzleThemeXRayAttack => '穿透攻击';
+
+  @override
+  String get puzzleThemeXRayAttackDescription => '一个棋子穿过对方的棋子攻击或防守一个格子。';
+
+  @override
+  String get puzzleThemeZugzwang => '楚茨文克（无等着）';
+
+  @override
+  String get puzzleThemeZugzwangDescription => '对手可选的着法是有限的，并且所有着法都会使其局面更加恶化。';
+
+  @override
+  String get puzzleThemeHealthyMix => '健康搭配';
+
+  @override
+  String get puzzleThemeHealthyMixDescription => '每个主题中选取一些。你不知道会出现什么，因此得时刻打起精神！ 就像在真实对局中一样。';
+
+  @override
+  String get puzzleThemePlayerGames => '玩家对局';
+
+  @override
+  String get puzzleThemePlayerGamesDescription => '查找从你或其他玩家的对局中产生的谜题。';
+
+  @override
+  String puzzleThemePuzzleDownloadInformation(String param) {
+    return '这些谜题都是公开的，可以在 $param 下载。';
+  }
+
+  @override
+  String get searchSearch => '搜索';
+
+  @override
+  String get settingsSettings => '设置';
+
+  @override
+  String get settingsCloseAccount => '关闭账户';
+
+  @override
+  String get settingsManagedAccountCannotBeClosed => '你的账号已被管理，无法被关闭。';
+
+  @override
+  String get settingsClosingIsDefinitive => '关闭账户是不可回退的决定。你真的确定吗？';
+
+  @override
+  String get settingsCantOpenSimilarAccount => '新账号名称不能和旧账号相同，只有大小写差别也不被允许。';
+
+  @override
+  String get settingsChangedMindDoNotCloseAccount => '我改主意了，不要关闭帐号';
+
+  @override
+  String get settingsCloseAccountExplanation => '你确定要关闭你的账户？关闭账户是不可回退的决定。 你将再不能再使用此账户登录。';
+
+  @override
+  String get settingsThisAccountIsClosed => '此帐户已被关闭。';
 
   @override
   String get playWithAFriend => '与好友下棋';
@@ -478,6 +1474,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get deleteFromHere => '从此处开始删除';
+
+  @override
+  String get collapseVariations => '折叠变着';
+
+  @override
+  String get expandVariations => '展开变着';
 
   @override
   String get forceVariation => '强制作为变着';
@@ -1337,15 +2339,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get emptyTournamentName => '若留空，将会随机选择一位著名的大师的名字作为锦标赛名称。';
 
   @override
-  String get recommendNotTouching => '我们建议你不更改这些设置。';
-
-  @override
-  String get fewerPlayers => '如果你设置参赛条件，锦标赛的玩家将会更少。';
-
-  @override
-  String get showAdvancedSettings => '显示高级设置';
-
-  @override
   String get makePrivateTournament => '设置比赛私有，并用密码限制访问';
 
   @override
@@ -1475,10 +2468,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get editProfile => '编辑个人资料';
 
   @override
-  String get firstName => '名';
-
-  @override
-  String get lastName => '姓';
+  String get realName => '真名';
 
   @override
   String get setFlair => '设置你的图标';
@@ -1607,13 +2597,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get cheat => '作弊';
 
   @override
-  String get insult => '侮辱';
-
-  @override
   String get troll => '捣乱';
-
-  @override
-  String get ratingManipulation => '操纵等级分';
 
   @override
   String get other => '其他';
@@ -1720,6 +2704,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get outsideTheBoard => '棋盘外';
+
+  @override
+  String get allSquaresOfTheBoard => 'All squares of the board';
 
   @override
   String get onSlowGames => '在慢棋时';
@@ -2315,22 +3302,22 @@ class AppLocalizationsZh extends AppLocalizations {
   String get backgroundImageUrl => '背景图片网址：';
 
   @override
-  String get board => 'Board';
+  String get board => '棋盘';
 
   @override
-  String get size => 'Size';
+  String get size => '大小';
 
   @override
-  String get opacity => 'Opacity';
+  String get opacity => '不透明度';
 
   @override
-  String get brightness => 'Brightness';
+  String get brightness => '亮度';
 
   @override
-  String get hue => 'Hue';
+  String get hue => '色调';
 
   @override
-  String get boardReset => 'Reset colours to default';
+  String get boardReset => '重置颜色设置';
 
   @override
   String get pieceSet => '棋子设定';
@@ -3342,999 +4329,6 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get patronDonate => '捐赠';
-
-  @override
-  String get patronLichessPatron => '赞助 Lichess';
-
-  @override
-  String get preferencesPreferences => '偏好设置';
-
-  @override
-  String get preferencesDisplay => '显示';
-
-  @override
-  String get preferencesPrivacy => '隐私设置';
-
-  @override
-  String get preferencesNotifications => '通知';
-
-  @override
-  String get preferencesPieceAnimation => '棋子动画';
-
-  @override
-  String get preferencesMaterialDifference => '子力差距';
-
-  @override
-  String get preferencesBoardHighlights => '棋盘高亮（最后一步与将军）';
-
-  @override
-  String get preferencesPieceDestinations => '棋子走到位置（有效着与预先走棋）';
-
-  @override
-  String get preferencesBoardCoordinates => '棋盘坐标（A-H, 1-8）';
-
-  @override
-  String get preferencesMoveListWhilePlaying => '对局进行时显示可走着法';
-
-  @override
-  String get preferencesPgnPieceNotation => '使用PGN字母(K,Q,R,B,N)或棋子图标来显示PGN棋谱';
-
-  @override
-  String get preferencesChessPieceSymbol => '棋子图标';
-
-  @override
-  String get preferencesPgnLetter => '字母 （K,Q,R,B,N）';
-
-  @override
-  String get preferencesZenMode => '禅意模式';
-
-  @override
-  String get preferencesShowPlayerRatings => '显示等级分';
-
-  @override
-  String get preferencesShowFlairs => '显示玩家图标';
-
-  @override
-  String get preferencesExplainShowPlayerRatings => '该选项可在网站内隐藏等级分，使你可以专注于下棋本身。对局依旧会影响等级分，但不会向你显示。';
-
-  @override
-  String get preferencesDisplayBoardResizeHandle => '调整棋盘大小';
-
-  @override
-  String get preferencesOnlyOnInitialPosition => '仅初始局面';
-
-  @override
-  String get preferencesInGameOnly => '仅在对局中';
-
-  @override
-  String get preferencesChessClock => '棋钟';
-
-  @override
-  String get preferencesTenthsOfSeconds => '显示十分之一秒';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanTenSeconds => '当剩余时间小于10秒';
-
-  @override
-  String get preferencesHorizontalGreenProgressBars => '显示绿色横进度条';
-
-  @override
-  String get preferencesSoundWhenTimeGetsCritical => '时间不足时声音提醒';
-
-  @override
-  String get preferencesGiveMoreTime => '给对方更多时间';
-
-  @override
-  String get preferencesGameBehavior => '对局行为';
-
-  @override
-  String get preferencesHowDoYouMovePieces => '你想通过什么方式走棋？';
-
-  @override
-  String get preferencesClickTwoSquares => '点起始位置和终止位置';
-
-  @override
-  String get preferencesDragPiece => '拖动棋子';
-
-  @override
-  String get preferencesBothClicksAndDrag => '两者都行';
-
-  @override
-  String get preferencesPremovesPlayingDuringOpponentTurn => '预先走棋（在对手的回合走棋）';
-
-  @override
-  String get preferencesTakebacksWithOpponentApproval => '悔棋（需要对手同意）';
-
-  @override
-  String get preferencesInCasualGamesOnly => '仅限于休闲对局';
-
-  @override
-  String get preferencesPromoteToQueenAutomatically => '兵自动升为后';
-
-  @override
-  String get preferencesExplainPromoteToQueenAutomatically => '按住 <ctrl> 键以临时禁用自动升变';
-
-  @override
-  String get preferencesWhenPremoving => '预先走棋時';
-
-  @override
-  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => '在三次重复局面时自动要求和局';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanThirtySeconds => '当剩余时间小于30秒';
-
-  @override
-  String get preferencesMoveConfirmation => '确认走棋';
-
-  @override
-  String get preferencesExplainCanThenBeTemporarilyDisabled => '可以在游戏中使用棋盘菜单禁用此功能';
-
-  @override
-  String get preferencesInCorrespondenceGames => '通信棋局';
-
-  @override
-  String get preferencesCorrespondenceAndUnlimited => '通信和无限';
-
-  @override
-  String get preferencesConfirmResignationAndDrawOffers => '认输以及提出和棋需要确认';
-
-  @override
-  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => '王车易位方法';
-
-  @override
-  String get preferencesCastleByMovingTwoSquares => '将王移动两格';
-
-  @override
-  String get preferencesCastleByMovingOntoTheRook => '将王移到车上';
-
-  @override
-  String get preferencesInputMovesWithTheKeyboard => '用键盘输入棋步';
-
-  @override
-  String get preferencesInputMovesWithVoice => '用语音输入着法';
-
-  @override
-  String get preferencesSnapArrowsToValidMoves => '将箭头吸附到有效着法上';
-
-  @override
-  String get preferencesSayGgWpAfterLosingOrDrawing => '输棋、和棋后自动发送：“厉害，玩得不错！”';
-
-  @override
-  String get preferencesYourPreferencesHaveBeenSaved => '你的设置已保存。';
-
-  @override
-  String get preferencesScrollOnTheBoardToReplayMoves => '在棋盘上滚动鼠标滚轮以回退';
-
-  @override
-  String get preferencesCorrespondenceEmailNotification => '每日发送邮件通知你正在进行的通讯棋局';
-
-  @override
-  String get preferencesNotifyStreamStart => '主播开始直播';
-
-  @override
-  String get preferencesNotifyInboxMsg => '新消息';
-
-  @override
-  String get preferencesNotifyForumMention => '论坛评论提到了你';
-
-  @override
-  String get preferencesNotifyInvitedStudy => '研讨邀请';
-
-  @override
-  String get preferencesNotifyGameEvent => '通信棋局更新';
-
-  @override
-  String get preferencesNotifyChallenge => '挑战';
-
-  @override
-  String get preferencesNotifyTournamentSoon => '比赛即将开始';
-
-  @override
-  String get preferencesNotifyTimeAlarm => '通讯棋局时间快要耗尽';
-
-  @override
-  String get preferencesNotifyBell => 'Lichess 内的铃声通知';
-
-  @override
-  String get preferencesNotifyPush => 'Lichess 外的设备通知';
-
-  @override
-  String get preferencesNotifyWeb => '浏览器通知';
-
-  @override
-  String get preferencesNotifyDevice => '设备通知';
-
-  @override
-  String get preferencesBellNotificationSound => '通知铃声';
-
-  @override
-  String get puzzlePuzzles => '谜题';
-
-  @override
-  String get puzzlePuzzleThemes => '训练主题';
-
-  @override
-  String get puzzleRecommended => '我们推荐：';
-
-  @override
-  String get puzzlePhases => '分阶段';
-
-  @override
-  String get puzzleMotifs => '分主题';
-
-  @override
-  String get puzzleAdvanced => '进阶';
-
-  @override
-  String get puzzleLengths => '分长度';
-
-  @override
-  String get puzzleMates => '将死';
-
-  @override
-  String get puzzleGoals => '分目标';
-
-  @override
-  String get puzzleOrigin => '来源';
-
-  @override
-  String get puzzleSpecialMoves => '特殊着法';
-
-  @override
-  String get puzzleDidYouLikeThisPuzzle => '你喜欢这道训练题吗？';
-
-  @override
-  String get puzzleVoteToLoadNextOne => '投票以加载下一题';
-
-  @override
-  String get puzzleUpVote => '赞';
-
-  @override
-  String get puzzleDownVote => '踩';
-
-  @override
-  String get puzzleYourPuzzleRatingWillNotChange => '你的谜题等级分将不会改变。请注意，解谜题不是比赛。等级分有助于根据你当前水平选择最佳谜题。';
-
-  @override
-  String get puzzleFindTheBestMoveForWhite => '找出白方的最佳着法';
-
-  @override
-  String get puzzleFindTheBestMoveForBlack => '找出黑方的最佳着法';
-
-  @override
-  String get puzzleToGetPersonalizedPuzzles => '获取个性化谜题';
-
-  @override
-  String puzzlePuzzleId(String param) {
-    return '谜题编号：$param';
-  }
-
-  @override
-  String get puzzlePuzzleOfTheDay => '每日棋谜';
-
-  @override
-  String get puzzleDailyPuzzle => '每日棋谜';
-
-  @override
-  String get puzzleClickToSolve => '点击解题';
-
-  @override
-  String get puzzleGoodMove => '好棋';
-
-  @override
-  String get puzzleBestMove => '最佳走法！';
-
-  @override
-  String get puzzleKeepGoing => '请继续…';
-
-  @override
-  String get puzzlePuzzleSuccess => '解题成功!';
-
-  @override
-  String get puzzlePuzzleComplete => '解题完成!';
-
-  @override
-  String get puzzleByOpenings => '按开局分类';
-
-  @override
-  String get puzzlePuzzlesByOpenings => '按开局分类的谜题';
-
-  @override
-  String get puzzleOpeningsYouPlayedTheMost => '你在排位赛中使用最多的开局';
-
-  @override
-  String get puzzleUseFindInPage => '在浏览器菜单中使用 “在页面中查找” 来找到你最爱的开局！';
-
-  @override
-  String get puzzleUseCtrlF => '使用 Ctrl + F 查找你最爱的开局！';
-
-  @override
-  String get puzzleNotTheMove => '不是最佳着法';
-
-  @override
-  String get puzzleTrySomethingElse => '试试其他着法';
-
-  @override
-  String puzzleRatingX(String param) {
-    return '等级分：$param';
-  }
-
-  @override
-  String get puzzleHidden => '已隐藏';
-
-  @override
-  String puzzleFromGameLink(String param) {
-    return '来自对局：$param';
-  }
-
-  @override
-  String get puzzleContinueTraining => '继续训练';
-
-  @override
-  String get puzzleDifficultyLevel => '难易级别';
-
-  @override
-  String get puzzleNormal => '正常';
-
-  @override
-  String get puzzleEasier => '更简单';
-
-  @override
-  String get puzzleEasiest => '最简单';
-
-  @override
-  String get puzzleHarder => '更难';
-
-  @override
-  String get puzzleHardest => '最难';
-
-  @override
-  String get puzzleExample => '示例';
-
-  @override
-  String get puzzleAddAnotherTheme => '添加新的主题';
-
-  @override
-  String get puzzleNextPuzzle => '下一个谜题';
-
-  @override
-  String get puzzleJumpToNextPuzzleImmediately => '解题后立即跳至下一个';
-
-  @override
-  String get puzzlePuzzleDashboard => '数据统计';
-
-  @override
-  String get puzzleImprovementAreas => '有待提升';
-
-  @override
-  String get puzzleStrengths => '强项';
-
-  @override
-  String get puzzleHistory => '解题历史';
-
-  @override
-  String get puzzleSolved => '已解答';
-
-  @override
-  String get puzzleFailed => '失败';
-
-  @override
-  String get puzzleStreakDescription => '解破日益困难的谜题，从而建造一个胜利纪录。没有计时。一步错解，游戏就会结束！不过，每场游戏都可跳过一步棋。';
-
-  @override
-  String puzzleYourStreakX(String param) {
-    return '你的连胜纪录: $param';
-  }
-
-  @override
-  String get puzzleStreakSkipExplanation => '跳过这一步来保持你的连胜纪录！每场游戏只能使用一次。';
-
-  @override
-  String get puzzleContinueTheStreak => '继续连胜纪录';
-
-  @override
-  String get puzzleNewStreak => '新连胜纪录';
-
-  @override
-  String get puzzleFromMyGames => '来自我的对局';
-
-  @override
-  String get puzzleLookupOfPlayer => '从玩家的对局中查找谜题';
-
-  @override
-  String puzzleFromXGames(String param) {
-    return '来自 $param 的对局的谜题';
-  }
-
-  @override
-  String get puzzleSearchPuzzles => '搜索谜题';
-
-  @override
-  String get puzzleFromMyGamesNone => '你下过的棋局暂时没有被纳入到谜题数据库中，但 Lichess 将一如既往地记着你所走的每一步。\n多下快棋和慢棋可以提升你的棋局被纳入谜题数据库的概率哦！';
-
-  @override
-  String puzzleFromXGamesFound(String param1, String param2) {
-    return '在 $param2 场对局中发现了 $param1 个谜题';
-  }
-
-  @override
-  String get puzzlePuzzleDashboardDescription => '训练、分析、提升';
-
-  @override
-  String puzzlePercentSolved(String param) {
-    return '$param 已解决';
-  }
-
-  @override
-  String get puzzleNoPuzzlesToShow => '没有什么可以显示的，先去玩一些谜题吧！';
-
-  @override
-  String get puzzleImprovementAreasDescription => '训练这些主题来提升你的表现！';
-
-  @override
-  String get puzzleStrengthDescription => '你擅长这些主题';
-
-  @override
-  String puzzlePlayedXTimes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '共 $count 次尝试',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsBelowYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '比你的谜题等级分低$count',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsAboveYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '比你的谜题等级分高$count',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPlayed(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '玩过 $count',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbToReplay(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count 重玩',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get puzzleThemeAdvancedPawn => '高位兵';
-
-  @override
-  String get puzzleThemeAdvancedPawnDescription => '你的兵已经深入对手的领地，可能威胁升变。';
-
-  @override
-  String get puzzleThemeAdvantage => '优势';
-
-  @override
-  String get puzzleThemeAdvantageDescription => '抓住能让你获得决定性优势的机会。(200厘兵 ≤ 评估 ≤ 600厘兵)';
-
-  @override
-  String get puzzleThemeAnastasiaMate => '阿纳斯塔西亚杀法';
-
-  @override
-  String get puzzleThemeAnastasiaMateDescription => '马与车或者后配合将对方的王将死在被同一方棋子卡住的边角。';
-
-  @override
-  String get puzzleThemeArabianMate => '阿拉伯杀法';
-
-  @override
-  String get puzzleThemeArabianMateDescription => '马与车配合将杀对方在角落上的王。';
-
-  @override
-  String get puzzleThemeAttackingF2F7 => '进攻 f2 或 f7';
-
-  @override
-  String get puzzleThemeAttackingF2F7Description => '进攻的焦点集中在f2或f7兵，像在双马防御煎肝进攻中一样。';
-
-  @override
-  String get puzzleThemeAttraction => '引入';
-
-  @override
-  String get puzzleThemeAttractionDescription => '以兑子或弃子吸引或迫使对方的棋子走到后续可实施战术的格子。';
-
-  @override
-  String get puzzleThemeBackRankMate => '底线杀王';
-
-  @override
-  String get puzzleThemeBackRankMateDescription => '在底线将杀被同一方棋子困住的王。';
-
-  @override
-  String get puzzleThemeBishopEndgame => '象残局';
-
-  @override
-  String get puzzleThemeBishopEndgameDescription => '只有象和兵的残局。';
-
-  @override
-  String get puzzleThemeBodenMate => '波登杀法';
-
-  @override
-  String get puzzleThemeBodenMateDescription => '双象在交错的斜线上将杀被同一方棋子阻挡的王。';
-
-  @override
-  String get puzzleThemeCastling => '王车易位';
-
-  @override
-  String get puzzleThemeCastlingDescription => '将王转移到安全的地方，同时将车投入进攻。';
-
-  @override
-  String get puzzleThemeCapturingDefender => '消除保护';
-
-  @override
-  String get puzzleThemeCapturingDefenderDescription => '消除保护另一个棋子的重要棋子，以在后续着法中吃掉已消除保护的棋子。';
-
-  @override
-  String get puzzleThemeCrushing => '压倒性优势';
-
-  @override
-  String get puzzleThemeCrushingDescription => '抓住对手的失误以获得压倒性的优势 (评估 ≥ 600厘兵)。';
-
-  @override
-  String get puzzleThemeDoubleBishopMate => '双象杀王';
-
-  @override
-  String get puzzleThemeDoubleBishopMateDescription => '双象在相邻的斜线上将杀被同一方棋子阻挡的王。';
-
-  @override
-  String get puzzleThemeDovetailMate => '燕尾杀法';
-
-  @override
-  String get puzzleThemeDovetailMateDescription => '后贴面杀，王唯一能逃跑的两个格子被同一方的棋子阻挡。';
-
-  @override
-  String get puzzleThemeEquality => '均势';
-
-  @override
-  String get puzzleThemeEqualityDescription => '从大劣的局面回到和棋或者均势 (评估 ≤ 200厘兵)。';
-
-  @override
-  String get puzzleThemeKingsideAttack => '王翼进攻';
-
-  @override
-  String get puzzleThemeKingsideAttackDescription => '在对方短易位后进攻对方的王。';
-
-  @override
-  String get puzzleThemeClearance => '腾挪';
-
-  @override
-  String get puzzleThemeClearanceDescription => '一着通常伴随有为后续战术构想腾空棋格、直线或斜线的棋。';
-
-  @override
-  String get puzzleThemeDefensiveMove => '防守着法';
-
-  @override
-  String get puzzleThemeDefensiveMoveDescription => '避免丢子或失去其他优势所需的精确着法或着法序列。';
-
-  @override
-  String get puzzleThemeDeflection => '引离';
-
-  @override
-  String get puzzleThemeDeflectionDescription => '一步棋使对方的棋子分散了其另一项任务，例如防守一个关键格。有时候也叫“过载”。';
-
-  @override
-  String get puzzleThemeDiscoveredAttack => '闪击';
-
-  @override
-  String get puzzleThemeDiscoveredAttackDescription => '移动阻挡长距离棋子(例如车) 的己方棋子(例如马)，打通前者的路线。';
-
-  @override
-  String get puzzleThemeDoubleCheck => '双将';
-
-  @override
-  String get puzzleThemeDoubleCheckDescription => '两个棋子同时将军，作为一种闪击，走动的棋子与后面闪露出来的棋子同时攻击对方的王。';
-
-  @override
-  String get puzzleThemeEndgame => '残局';
-
-  @override
-  String get puzzleThemeEndgameDescription => '对局最后阶段的战术。';
-
-  @override
-  String get puzzleThemeEnPassantDescription => '涉及吃过路兵规则的战术，兵可以吃掉对方刚走两格、横向相邻的兵。';
-
-  @override
-  String get puzzleThemeExposedKing => '暴露的王';
-
-  @override
-  String get puzzleThemeExposedKingDescription => '对方王的周围只有很少的防守棋子时的战术，往往导致将杀。';
-
-  @override
-  String get puzzleThemeFork => '击双';
-
-  @override
-  String get puzzleThemeForkDescription => '走动的棋子同时攻击对方的两个棋子。';
-
-  @override
-  String get puzzleThemeHangingPiece => '悬子';
-
-  @override
-  String get puzzleThemeHangingPieceDescription => '涉及对方少保护或无保护的棋子，可以随意吃掉。';
-
-  @override
-  String get puzzleThemeHookMate => '勾杀';
-
-  @override
-  String get puzzleThemeHookMateDescription => '用车、马、兵杀棋，对方的兵限制王逃跑。';
-
-  @override
-  String get puzzleThemeInterference => '拦截';
-
-  @override
-  String get puzzleThemeInterferenceDescription => '走动棋子到对手的两个棋子之间，使其中的一个或两个棋子消除保护，例如将一个马走到两个车之间的防守格上。';
-
-  @override
-  String get puzzleThemeIntermezzo => '过渡着';
-
-  @override
-  String get puzzleThemeIntermezzoDescription => '不走预期的着法，而是走一着对手必须应对的直接威胁。';
-
-  @override
-  String get puzzleThemeKnightEndgame => '马残局';
-
-  @override
-  String get puzzleThemeKnightEndgameDescription => '只有马和兵的残局。';
-
-  @override
-  String get puzzleThemeLong => '长谜题';
-
-  @override
-  String get puzzleThemeLongDescription => '三步胜。';
-
-  @override
-  String get puzzleThemeMaster => '大师对局';
-
-  @override
-  String get puzzleThemeMasterDescription => '出自有名棋手对局的谜题。';
-
-  @override
-  String get puzzleThemeMasterVsMaster => '大师与大师对局';
-
-  @override
-  String get puzzleThemeMasterVsMasterDescription => '出自两位有名棋手对局的谜题。';
-
-  @override
-  String get puzzleThemeMate => '杀王';
-
-  @override
-  String get puzzleThemeMateDescription => '有型地赢棋。';
-
-  @override
-  String get puzzleThemeMateIn1 => '一步杀';
-
-  @override
-  String get puzzleThemeMateIn1Description => '一步之内实现将杀。';
-
-  @override
-  String get puzzleThemeMateIn2 => '两步杀';
-
-  @override
-  String get puzzleThemeMateIn2Description => '两步之内实现将杀。';
-
-  @override
-  String get puzzleThemeMateIn3 => '三步杀';
-
-  @override
-  String get puzzleThemeMateIn3Description => '三步之内实现将杀。';
-
-  @override
-  String get puzzleThemeMateIn4 => '四步杀';
-
-  @override
-  String get puzzleThemeMateIn4Description => '四步之内实现将杀。';
-
-  @override
-  String get puzzleThemeMateIn5 => '五步或更多步杀';
-
-  @override
-  String get puzzleThemeMateIn5Description => '找出一套很长的将杀着法。';
-
-  @override
-  String get puzzleThemeMiddlegame => '中局';
-
-  @override
-  String get puzzleThemeMiddlegameDescription => '对局第二阶段的战术。';
-
-  @override
-  String get puzzleThemeOneMove => '一步棋谜题';
-
-  @override
-  String get puzzleThemeOneMoveDescription => '只有一步棋的谜题。';
-
-  @override
-  String get puzzleThemeOpening => '开局';
-
-  @override
-  String get puzzleThemeOpeningDescription => '对局第一阶段的战术。';
-
-  @override
-  String get puzzleThemePawnEndgame => '兵残局';
-
-  @override
-  String get puzzleThemePawnEndgameDescription => '只有兵的残局。';
-
-  @override
-  String get puzzleThemePin => '牵制';
-
-  @override
-  String get puzzleThemePinDescription => '涉及牵制的策略，一个棋子不能移动否则背后更高价值的棋子将被攻击。';
-
-  @override
-  String get puzzleThemePromotion => '升变';
-
-  @override
-  String get puzzleThemePromotionDescription => '将兵升变为后或其他棋子。';
-
-  @override
-  String get puzzleThemeQueenEndgame => '后残局';
-
-  @override
-  String get puzzleThemeQueenEndgameDescription => '只有后和兵的残局。';
-
-  @override
-  String get puzzleThemeQueenRookEndgame => '后车残局';
-
-  @override
-  String get puzzleThemeQueenRookEndgameDescription => '只有后、车、兵的残局。';
-
-  @override
-  String get puzzleThemeQueensideAttack => '后翼进攻';
-
-  @override
-  String get puzzleThemeQueensideAttackDescription => '在对方长易位后进攻对方的王。';
-
-  @override
-  String get puzzleThemeQuietMove => '安静的一着';
-
-  @override
-  String get puzzleThemeQuietMoveDescription => '一步没有将军吃子的棋，但是为后续准备了一个不可避免的威胁。';
-
-  @override
-  String get puzzleThemeRookEndgame => '车残局';
-
-  @override
-  String get puzzleThemeRookEndgameDescription => '只有车和兵的残局。';
-
-  @override
-  String get puzzleThemeSacrifice => '弃子';
-
-  @override
-  String get puzzleThemeSacrificeDescription => '涉及在短期内弃子的策略，以便在强制执行一系列着法后再次获得优势。';
-
-  @override
-  String get puzzleThemeShort => '短谜题';
-
-  @override
-  String get puzzleThemeShortDescription => '两步胜。';
-
-  @override
-  String get puzzleThemeSkewer => '串击';
-
-  @override
-  String get puzzleThemeSkewerDescription => '攻击对方高价值的棋子，使其走开，以允许其后方较低价值的棋子被吃或攻击（反向的牵制）。';
-
-  @override
-  String get puzzleThemeSmotheredMate => '闷杀';
-
-  @override
-  String get puzzleThemeSmotheredMateDescription => '由马完成的将杀，对方王被自己的棋子包围（或困住），因此无法移动。';
-
-  @override
-  String get puzzleThemeSuperGM => '超级大师对局';
-
-  @override
-  String get puzzleThemeSuperGMDescription => '出自世界上最好的棋手对局的谜题。';
-
-  @override
-  String get puzzleThemeTrappedPiece => '被困的棋子';
-
-  @override
-  String get puzzleThemeTrappedPieceDescription => '一个棋子由于其走法有限无法逃脱被捉。';
-
-  @override
-  String get puzzleThemeUnderPromotion => '低升变';
-
-  @override
-  String get puzzleThemeUnderPromotionDescription => '升变为马、象或车。';
-
-  @override
-  String get puzzleThemeVeryLong => '超长谜题';
-
-  @override
-  String get puzzleThemeVeryLongDescription => '四步或更多步胜。';
-
-  @override
-  String get puzzleThemeXRayAttack => '穿透攻击';
-
-  @override
-  String get puzzleThemeXRayAttackDescription => '一个棋子穿过对方的棋子攻击或防守一个格子。';
-
-  @override
-  String get puzzleThemeZugzwang => '楚茨文克（无等着）';
-
-  @override
-  String get puzzleThemeZugzwangDescription => '对手可选的着法是有限的，并且所有着法都会使其局面更加恶化。';
-
-  @override
-  String get puzzleThemeHealthyMix => '健康搭配';
-
-  @override
-  String get puzzleThemeHealthyMixDescription => '每个主题中选取一些。你不知道会出现什么，因此得时刻打起精神！ 就像在真实对局中一样。';
-
-  @override
-  String get puzzleThemePlayerGames => '玩家对局';
-
-  @override
-  String get puzzleThemePlayerGamesDescription => '查找从你或其他玩家的对局中产生的谜题。';
-
-  @override
-  String puzzleThemePuzzleDownloadInformation(String param) {
-    return '这些谜题都是公开的，可以在 $param 下载。';
-  }
-
-  @override
-  String perfStatPerfStats(String param) {
-    return '$param 战绩';
-  }
-
-  @override
-  String get perfStatViewTheGames => '查看棋局';
-
-  @override
-  String get perfStatProvisional => '暂定';
-
-  @override
-  String get perfStatNotEnoughRatedGames => '因排位赛数量不足而无法测定可靠的等级分';
-
-  @override
-  String perfStatProgressOverLastXGames(String param) {
-    return '最近 $param 局后的变化:';
-  }
-
-  @override
-  String perfStatRatingDeviation(String param) {
-    return '等级分偏差: $param';
-  }
-
-  @override
-  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
-    return '偏差值越低，等级分越稳定。若偏差值大于 $param1，则等级分是暂时的。只有当偏差低于 $param2（标准局）/ $param3（变种）时，才能进入排名。';
-  }
-
-  @override
-  String get perfStatTotalGames => '棋局总数';
-
-  @override
-  String get perfStatRatedGames => '排位赛局数';
-
-  @override
-  String get perfStatTournamentGames => '锦标赛局数';
-
-  @override
-  String get perfStatBerserkedGames => '神速局数';
-
-  @override
-  String get perfStatTimeSpentPlaying => '弈棋总时间';
-
-  @override
-  String get perfStatAverageOpponent => '对手平均等级分';
-
-  @override
-  String get perfStatVictories => '胜';
-
-  @override
-  String get perfStatDefeats => '负';
-
-  @override
-  String get perfStatDisconnections => '断线';
-
-  @override
-  String get perfStatNotEnoughGames => '棋局不足';
-
-  @override
-  String perfStatHighestRating(String param) {
-    return '最高等级分: $param';
-  }
-
-  @override
-  String perfStatLowestRating(String param) {
-    return '最低等级分: $param';
-  }
-
-  @override
-  String perfStatFromXToY(String param1, String param2) {
-    return '自 $param1 至 $param2';
-  }
-
-  @override
-  String get perfStatWinningStreak => '连胜';
-
-  @override
-  String get perfStatLosingStreak => '连败';
-
-  @override
-  String perfStatLongestStreak(String param) {
-    return '最长纪录: $param';
-  }
-
-  @override
-  String perfStatCurrentStreak(String param) {
-    return '当前纪录: $param';
-  }
-
-  @override
-  String get perfStatBestRated => '最佳胜利';
-
-  @override
-  String get perfStatGamesInARow => '连续对局';
-
-  @override
-  String get perfStatLessThanOneHour => '棋局间隔一个小时以内';
-
-  @override
-  String get perfStatMaxTimePlaying => '最长连续对局时间';
-
-  @override
-  String get perfStatNow => '现在';
-
-  @override
-  String get searchSearch => '搜索';
-
-  @override
-  String get settingsSettings => '设置';
-
-  @override
-  String get settingsCloseAccount => '关闭账户';
-
-  @override
-  String get settingsManagedAccountCannotBeClosed => '你的账号已被管理，无法被关闭。';
-
-  @override
-  String get settingsClosingIsDefinitive => '关闭账户是不可回退的决定。你真的确定吗？';
-
-  @override
-  String get settingsCantOpenSimilarAccount => '新账号名称不能和旧账号相同，只有大小写差别也不被允许。';
-
-  @override
-  String get settingsChangedMindDoNotCloseAccount => '我改主意了，不要关闭帐号';
-
-  @override
-  String get settingsCloseAccountExplanation => '你确定要关闭你的账户？关闭账户是不可回退的决定。 你将再不能再使用此账户登录。';
-
-  @override
-  String get settingsThisAccountIsClosed => '此帐户已被关闭。';
-
-  @override
-  String get streamerLichessStreamers => 'Lichess 主播';
-
-  @override
   String get stormMoveToStart => '走一步棋以开始';
 
   @override
@@ -4514,16 +4508,13 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get streamerLichessStreamers => 'Lichess 主播';
+
+  @override
   String get studyShareAndExport => '分享并导出';
 
   @override
   String get studyStart => '开始';
-
-  @override
-  String get broadcastBroadcasts => '转播';
-
-  @override
-  String get broadcastStartDate => '开始日期，在你的本地时区';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -4715,10 +4706,10 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   }
 
   @override
-  String get contactContact => '聯繫我們';
+  String get broadcastBroadcasts => '比賽直播';
 
   @override
-  String get contactContactLichess => '聯繫 Lichess';
+  String get broadcastStartDate => '開始日期 (當地時間)';
 
   @override
   String challengeChallengesX(String param1) {
@@ -4800,6 +4791,829 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
 
   @override
   String get challengeInviteLichessUser => '或邀請一位 Lichess 用户：';
+
+  @override
+  String get contactContact => '聯繫我們';
+
+  @override
+  String get contactContactLichess => '聯繫 Lichess';
+
+  @override
+  String get patronDonate => '捐款';
+
+  @override
+  String get patronLichessPatron => 'Lichess 贊助者';
+
+  @override
+  String perfStatPerfStats(String param) {
+    return '$param戰績';
+  }
+
+  @override
+  String get perfStatViewTheGames => '查看遊戲紀錄';
+
+  @override
+  String get perfStatProvisional => '臨時';
+
+  @override
+  String get perfStatNotEnoughRatedGames => '積分賽場次太少，無法計算準確積分。';
+
+  @override
+  String perfStatProgressOverLastXGames(String param) {
+    return '最近$param場棋局之積分變化：';
+  }
+
+  @override
+  String perfStatRatingDeviation(String param) {
+    return '積分誤差: $param';
+  }
+
+  @override
+  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
+    return '越低的數值代表積分越穩定。 數值高於$param1時的積分會被判定為浮動積分。\n要被列入排名之中，該數值需低於$param2(標準西洋棋) 或是$param3(西洋棋變體)。';
+  }
+
+  @override
+  String get perfStatTotalGames => '總計棋局';
+
+  @override
+  String get perfStatRatedGames => '積分棋局';
+
+  @override
+  String get perfStatTournamentGames => '聯賽棋局';
+
+  @override
+  String get perfStatBerserkedGames => '狂暴模式棋局';
+
+  @override
+  String get perfStatTimeSpentPlaying => '奕棋時間';
+
+  @override
+  String get perfStatAverageOpponent => '對手平均積分';
+
+  @override
+  String get perfStatVictories => '勝場';
+
+  @override
+  String get perfStatDefeats => '敗場';
+
+  @override
+  String get perfStatDisconnections => '斷線場次';
+
+  @override
+  String get perfStatNotEnoughGames => '棋局數不夠多';
+
+  @override
+  String perfStatHighestRating(String param) {
+    return '最高積分：$param';
+  }
+
+  @override
+  String perfStatLowestRating(String param) {
+    return '最低積分：$param';
+  }
+
+  @override
+  String perfStatFromXToY(String param1, String param2) {
+    return '從$param1到$param2';
+  }
+
+  @override
+  String get perfStatWinningStreak => '連勝場數';
+
+  @override
+  String get perfStatLosingStreak => '連敗場數';
+
+  @override
+  String perfStatLongestStreak(String param) {
+    return '最長紀錄：$param';
+  }
+
+  @override
+  String perfStatCurrentStreak(String param) {
+    return '目前記錄：$param';
+  }
+
+  @override
+  String get perfStatBestRated => '積分賽勝場之最強對手';
+
+  @override
+  String get perfStatGamesInARow => '連續奕棋場數';
+
+  @override
+  String get perfStatLessThanOneHour => '兩場間距不到一小時';
+
+  @override
+  String get perfStatMaxTimePlaying => '最高奕棋時間';
+
+  @override
+  String get perfStatNow => '現在';
+
+  @override
+  String get preferencesPreferences => '偏好設置';
+
+  @override
+  String get preferencesDisplay => '顯示';
+
+  @override
+  String get preferencesPrivacy => '隱私';
+
+  @override
+  String get preferencesNotifications => '通知';
+
+  @override
+  String get preferencesPieceAnimation => '棋子動畫';
+
+  @override
+  String get preferencesMaterialDifference => '子力差距';
+
+  @override
+  String get preferencesBoardHighlights => '棋盤高亮 (最後一步與將軍)';
+
+  @override
+  String get preferencesPieceDestinations => '棋子目的地（有效走法與預先走棋）';
+
+  @override
+  String get preferencesBoardCoordinates => '棋盤座標（A-H, 1-8）';
+
+  @override
+  String get preferencesMoveListWhilePlaying => '遊戲進行時顯示棋譜';
+
+  @override
+  String get preferencesPgnPieceNotation => '棋譜記法';
+
+  @override
+  String get preferencesChessPieceSymbol => '棋子符號';
+
+  @override
+  String get preferencesPgnLetter => '字母 (K, Q, R, B, N)';
+
+  @override
+  String get preferencesZenMode => '專注模式';
+
+  @override
+  String get preferencesShowPlayerRatings => '顯示玩家等級分';
+
+  @override
+  String get preferencesExplainShowPlayerRatings => '這允許隱藏本網站上的所有等級分，以輔助專心下棋。每局遊戲仍可以計算及改變等級分，這個設定只會影響到你是否看得到此分數。';
+
+  @override
+  String get preferencesDisplayBoardResizeHandle => '顯示盤面大小調整區塊';
+
+  @override
+  String get preferencesOnlyOnInitialPosition => '只在起始局面';
+
+  @override
+  String get preferencesInGameOnly => '只在遊戲中';
+
+  @override
+  String get preferencesChessClock => '棋鐘';
+
+  @override
+  String get preferencesTenthsOfSeconds => '十分之一秒';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanTenSeconds => '當剩餘時間小於10秒';
+
+  @override
+  String get preferencesHorizontalGreenProgressBars => '綠色橫進度條';
+
+  @override
+  String get preferencesSoundWhenTimeGetsCritical => '時間不足時聲音提醒';
+
+  @override
+  String get preferencesGiveMoreTime => '給對方更多時間';
+
+  @override
+  String get preferencesGameBehavior => '對局行為';
+
+  @override
+  String get preferencesHowDoYouMovePieces => '移動棋子方式？';
+
+  @override
+  String get preferencesClickTwoSquares => '點擊棋子及目標位置';
+
+  @override
+  String get preferencesDragPiece => '拖曳棋子';
+
+  @override
+  String get preferencesBothClicksAndDrag => '兩者都行';
+
+  @override
+  String get preferencesPremovesPlayingDuringOpponentTurn => '預先走棋（在對手的回合走棋）';
+
+  @override
+  String get preferencesTakebacksWithOpponentApproval => '悔棋（經過對手同意）';
+
+  @override
+  String get preferencesInCasualGamesOnly => '僅限非正式遊戲';
+
+  @override
+  String get preferencesPromoteToQueenAutomatically => '兵自動升為后';
+
+  @override
+  String get preferencesExplainPromoteToQueenAutomatically => '升變的同時按住<ctrl>以暫時取消自動升變';
+
+  @override
+  String get preferencesWhenPremoving => '預先走棋時';
+
+  @override
+  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => '在三次重覆局面時自動要求和局';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanThirtySeconds => '當剩餘時間小於30秒';
+
+  @override
+  String get preferencesMoveConfirmation => '走棋確認';
+
+  @override
+  String get preferencesExplainCanThenBeTemporarilyDisabled => '可以在遊戲中用棋盤選單中關閉此功能';
+
+  @override
+  String get preferencesInCorrespondenceGames => '在長期對局中';
+
+  @override
+  String get preferencesCorrespondenceAndUnlimited => '通信和無限';
+
+  @override
+  String get preferencesConfirmResignationAndDrawOffers => '確認投降或和局請求';
+
+  @override
+  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => '入堡方法';
+
+  @override
+  String get preferencesCastleByMovingTwoSquares => '移動國王兩格';
+
+  @override
+  String get preferencesCastleByMovingOntoTheRook => '移動國王到城堡上';
+
+  @override
+  String get preferencesInputMovesWithTheKeyboard => '使用鍵盤輸入著法';
+
+  @override
+  String get preferencesInputMovesWithVoice => '用語音輸入著法';
+
+  @override
+  String get preferencesSnapArrowsToValidMoves => '將右鍵標示箭頭鎖定到合法棋步';
+
+  @override
+  String get preferencesSayGgWpAfterLosingOrDrawing => '輸棋或和棋後自動發送 \"Good game, well played\"。';
+
+  @override
+  String get preferencesYourPreferencesHaveBeenSaved => '已儲存您的設定。';
+
+  @override
+  String get preferencesScrollOnTheBoardToReplayMoves => '在騎盤上使用滑鼠滾輪以重新顯示過去棋步';
+
+  @override
+  String get preferencesCorrespondenceEmailNotification => '每日以電郵列出您當前的長期對局';
+
+  @override
+  String get preferencesNotifyStreamStart => '追蹤的直播主開始直播';
+
+  @override
+  String get preferencesNotifyInboxMsg => '收件夾有新訊息';
+
+  @override
+  String get preferencesNotifyForumMention => '論壇評論中提到您';
+
+  @override
+  String get preferencesNotifyInvitedStudy => '研究邀請';
+
+  @override
+  String get preferencesNotifyGameEvent => '長期對局更新訊息';
+
+  @override
+  String get preferencesNotifyChallenge => '挑戰';
+
+  @override
+  String get preferencesNotifyTournamentSoon => '比賽即將開始';
+
+  @override
+  String get preferencesNotifyTimeAlarm => '長期對局的時間即將耗盡';
+
+  @override
+  String get preferencesNotifyBell => 'Lichess 內的鈴聲通知';
+
+  @override
+  String get preferencesNotifyPush => 'Lichess 外的設備通知';
+
+  @override
+  String get preferencesNotifyWeb => '瀏覽器通知';
+
+  @override
+  String get preferencesNotifyDevice => '設備通知';
+
+  @override
+  String get preferencesBellNotificationSound => '通知鈴聲';
+
+  @override
+  String get puzzlePuzzles => '謎題';
+
+  @override
+  String get puzzlePuzzleThemes => '謎題主題';
+
+  @override
+  String get puzzleRecommended => '推薦';
+
+  @override
+  String get puzzlePhases => '分類';
+
+  @override
+  String get puzzleMotifs => '主題';
+
+  @override
+  String get puzzleAdvanced => '高級';
+
+  @override
+  String get puzzleLengths => '長度';
+
+  @override
+  String get puzzleMates => '將軍';
+
+  @override
+  String get puzzleGoals => '目標';
+
+  @override
+  String get puzzleOrigin => '來源';
+
+  @override
+  String get puzzleSpecialMoves => '特殊移動';
+
+  @override
+  String get puzzleDidYouLikeThisPuzzle => '您喜歡這道謎題嗎？';
+
+  @override
+  String get puzzleVoteToLoadNextOne => '告訴我們加載下一題!';
+
+  @override
+  String get puzzleYourPuzzleRatingWillNotChange => '您的謎題評級不會改變。請注意，謎題不是比賽。您的評分有助於選擇最適合您當前技能的謎題。';
+
+  @override
+  String get puzzleFindTheBestMoveForWhite => '為白方找出最佳移動';
+
+  @override
+  String get puzzleFindTheBestMoveForBlack => '為黑方找出最佳移動';
+
+  @override
+  String get puzzleToGetPersonalizedPuzzles => '得到個人推薦題目:';
+
+  @override
+  String puzzlePuzzleId(String param) {
+    return '謎題 $param';
+  }
+
+  @override
+  String get puzzlePuzzleOfTheDay => '每日一題';
+
+  @override
+  String get puzzleClickToSolve => '點擊解題';
+
+  @override
+  String get puzzleGoodMove => '好棋';
+
+  @override
+  String get puzzleBestMove => '最佳走法!';
+
+  @override
+  String get puzzleKeepGoing => '加油!';
+
+  @override
+  String get puzzlePuzzleSuccess => '成功！';
+
+  @override
+  String get puzzlePuzzleComplete => '解題完成!';
+
+  @override
+  String get puzzleNotTheMove => '不是這步!';
+
+  @override
+  String get puzzleTrySomethingElse => '試試其他的移動';
+
+  @override
+  String puzzleRatingX(String param) {
+    return '評級：$param';
+  }
+
+  @override
+  String get puzzleHidden => '隱藏';
+
+  @override
+  String puzzleFromGameLink(String param) {
+    return '來自對局 $param';
+  }
+
+  @override
+  String get puzzleContinueTraining => '繼續訓練';
+
+  @override
+  String get puzzleDifficultyLevel => '困難度';
+
+  @override
+  String get puzzleNormal => '一般';
+
+  @override
+  String get puzzleEasier => '簡單';
+
+  @override
+  String get puzzleEasiest => '超簡單';
+
+  @override
+  String get puzzleHarder => '困難';
+
+  @override
+  String get puzzleHardest => '超困難';
+
+  @override
+  String get puzzleExample => '範例';
+
+  @override
+  String get puzzleAddAnotherTheme => '加入其他主題';
+
+  @override
+  String get puzzleJumpToNextPuzzleImmediately => '立即跳到下一個謎題';
+
+  @override
+  String get puzzlePuzzleDashboard => '謎題能力分析';
+
+  @override
+  String get puzzleImprovementAreas => '弱點';
+
+  @override
+  String get puzzleStrengths => '強項';
+
+  @override
+  String get puzzleHistory => '解題紀錄';
+
+  @override
+  String get puzzleSolved => '解決';
+
+  @override
+  String get puzzleFailed => '失敗';
+
+  @override
+  String get puzzleStreakDescription => '累積你的連勝，解著漸漸變難的題目。 沒有時間限制，不要急。走錯一步，將會是遊戲結束！\n不過每一局中你都有跳過一步棋的機會。';
+
+  @override
+  String puzzleYourStreakX(String param) {
+    return '您的連勝場數：$param';
+  }
+
+  @override
+  String get puzzleStreakSkipExplanation => '跳過這一步來維持您的連勝紀錄！每次遊玩只能使用一次。';
+
+  @override
+  String get puzzleContinueTheStreak => '繼續遊玩';
+
+  @override
+  String get puzzleNewStreak => '新的連勝紀錄';
+
+  @override
+  String get puzzleFromMyGames => '來自我的棋局';
+
+  @override
+  String get puzzleLookupOfPlayer => '尋找其他棋手的棋局謎題';
+
+  @override
+  String puzzleFromXGames(String param) {
+    return '來自$param棋局的謎題';
+  }
+
+  @override
+  String get puzzleSearchPuzzles => '尋找謎題';
+
+  @override
+  String get puzzleFromMyGamesNone => '你在數據庫中沒有謎題，但 Lichess 仍然非常愛你。\n遊玩一些快速和經典遊戲，以增加添加拼圖的機會！';
+
+  @override
+  String puzzleFromXGamesFound(String param1, String param2) {
+    return '在$param2中找到$param1個謎題';
+  }
+
+  @override
+  String get puzzlePuzzleDashboardDescription => '訓練、分析、改進';
+
+  @override
+  String puzzlePercentSolved(String param) {
+    return '$param 已解決';
+  }
+
+  @override
+  String get puzzleNoPuzzlesToShow => '沒有什麼可展示的，先去玩一些謎題吧！';
+
+  @override
+  String get puzzleImprovementAreasDescription => '訓練這些類型的謎題來優化你的進步！';
+
+  @override
+  String get puzzleStrengthDescription => '你在這些主題中表現最好';
+
+  @override
+  String puzzlePlayedXTimes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '已被嘗試$count次',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsBelowYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '低於你的謎題積分$count點',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsAboveYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '高於你的謎題積分$count點',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPlayed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 已遊玩',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbToReplay(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 重玩',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get puzzleThemeAdvancedPawn => '升變兵';
+
+  @override
+  String get puzzleThemeAdvancedPawnDescription => '你的其中一個兵已經深入了對方的棋位，或許要威脅升變。';
+
+  @override
+  String get puzzleThemeAdvantage => '擁有優勢';
+
+  @override
+  String get puzzleThemeAnastasiaMate => '阿納斯塔西亞殺法';
+
+  @override
+  String get puzzleThemeArabianMate => '阿拉伯殺法';
+
+  @override
+  String get puzzleThemeArabianMateDescription => '馬和車聯手把對方的王困住在角落的位置';
+
+  @override
+  String get puzzleThemeAttackingF2F7 => '攻擊f2或f7';
+
+  @override
+  String get puzzleThemeAttraction => '吸引';
+
+  @override
+  String get puzzleThemeBackRankMate => '後排將死';
+
+  @override
+  String get puzzleThemeBackRankMateDescription => '在對方的王在底線被自身的棋子困住時，將殺對方的王';
+
+  @override
+  String get puzzleThemeBishopEndgame => '象殘局';
+
+  @override
+  String get puzzleThemeBishopEndgameDescription => '只剩象和兵的殘局';
+
+  @override
+  String get puzzleThemeBodenMate => '波登殺法';
+
+  @override
+  String get puzzleThemeCastling => '易位';
+
+  @override
+  String get puzzleThemeCapturingDefender => '吃子 - 防守者';
+
+  @override
+  String get puzzleThemeCrushing => '壓倒性優勢';
+
+  @override
+  String get puzzleThemeCrushingDescription => '察覺對方的漏著並藉此取得巨大優勢。(大於600百分兵)';
+
+  @override
+  String get puzzleThemeDoubleBishopMate => '雙主教將死';
+
+  @override
+  String get puzzleThemeEquality => '均勢';
+
+  @override
+  String get puzzleThemeKingsideAttack => '王翼攻擊';
+
+  @override
+  String get puzzleThemeClearance => '騰挪';
+
+  @override
+  String get puzzleThemeDefensiveMove => '加強防守';
+
+  @override
+  String get puzzleThemeDeflection => '引離';
+
+  @override
+  String get puzzleThemeDiscoveredAttack => '閃擊';
+
+  @override
+  String get puzzleThemeDoubleCheck => '雙將';
+
+  @override
+  String get puzzleThemeEndgame => '殘局';
+
+  @override
+  String get puzzleThemeEndgameDescription => '棋局中最後階段的戰術';
+
+  @override
+  String get puzzleThemeFork => '捉雙';
+
+  @override
+  String get puzzleThemeKnightEndgame => '馬殘局';
+
+  @override
+  String get puzzleThemeKnightEndgameDescription => '只剩馬和兵的殘局';
+
+  @override
+  String get puzzleThemeLong => '長謎題';
+
+  @override
+  String get puzzleThemeLongDescription => '三步獲勝';
+
+  @override
+  String get puzzleThemeMaster => '大師棋局';
+
+  @override
+  String get puzzleThemeMasterVsMaster => '大師對局';
+
+  @override
+  String get puzzleThemeMate => '將軍';
+
+  @override
+  String get puzzleThemeMateIn1 => '一步殺棋';
+
+  @override
+  String get puzzleThemeMateIn1Description => '一步將軍';
+
+  @override
+  String get puzzleThemeMateIn2 => '兩步殺棋';
+
+  @override
+  String get puzzleThemeMateIn2Description => '走兩步以達到將軍';
+
+  @override
+  String get puzzleThemeMateIn3 => '三步殺棋';
+
+  @override
+  String get puzzleThemeMateIn3Description => '走三步以達到將軍';
+
+  @override
+  String get puzzleThemeMateIn4 => '四步殺棋';
+
+  @override
+  String get puzzleThemeMateIn4Description => '走四步以達到將軍';
+
+  @override
+  String get puzzleThemeMateIn5 => '五步或更高 將軍';
+
+  @override
+  String get puzzleThemeMiddlegame => '中局';
+
+  @override
+  String get puzzleThemeMiddlegameDescription => '棋局中第二階段的戰術';
+
+  @override
+  String get puzzleThemeOneMove => '一步題';
+
+  @override
+  String get puzzleThemeOneMoveDescription => '只有一步長的題目';
+
+  @override
+  String get puzzleThemeOpening => '開局';
+
+  @override
+  String get puzzleThemeOpeningDescription => '棋局中起始階段的戰術';
+
+  @override
+  String get puzzleThemePawnEndgame => '兵殘局';
+
+  @override
+  String get puzzleThemePawnEndgameDescription => '只剩兵的殘局';
+
+  @override
+  String get puzzleThemePin => '牽制';
+
+  @override
+  String get puzzleThemePromotion => '升變';
+
+  @override
+  String get puzzleThemeQueenEndgame => '后殘局';
+
+  @override
+  String get puzzleThemeQueenEndgameDescription => '只剩后和兵的殘局';
+
+  @override
+  String get puzzleThemeQueenRookEndgame => '后與車';
+
+  @override
+  String get puzzleThemeQueenRookEndgameDescription => '只剩后、車和兵的殘局';
+
+  @override
+  String get puzzleThemeQueensideAttack => '后翼攻擊';
+
+  @override
+  String get puzzleThemeQuietMove => '安靜的一着';
+
+  @override
+  String get puzzleThemeRookEndgame => '車殘局';
+
+  @override
+  String get puzzleThemeRookEndgameDescription => '只剩車和兵的殘局';
+
+  @override
+  String get puzzleThemeSacrifice => '棄子';
+
+  @override
+  String get puzzleThemeShort => '短謎題';
+
+  @override
+  String get puzzleThemeShortDescription => '兩步獲勝';
+
+  @override
+  String get puzzleThemeSkewer => '串擊';
+
+  @override
+  String get puzzleThemeSmotheredMate => '悶殺';
+
+  @override
+  String get puzzleThemeSuperGM => '超級大師賽局';
+
+  @override
+  String get puzzleThemeSuperGMDescription => '來自世界各地優秀玩家對局的戰術題';
+
+  @override
+  String get puzzleThemeTrappedPiece => '被困的棋子';
+
+  @override
+  String get puzzleThemeUnderPromotion => '升變';
+
+  @override
+  String get puzzleThemeUnderPromotionDescription => '升變成騎士、象或車';
+
+  @override
+  String get puzzleThemeVeryLong => '非常長的謎題';
+
+  @override
+  String get puzzleThemeVeryLongDescription => '四步或以上獲勝';
+
+  @override
+  String get puzzleThemeXRayAttack => '穿透攻擊';
+
+  @override
+  String get puzzleThemeZugzwang => '等著';
+
+  @override
+  String get puzzleThemeHealthyMix => '綜合';
+
+  @override
+  String get puzzleThemeHealthyMixDescription => '所有類型都有！你不知道會遇到什麼題型，所以請做好準備，就像在實戰一樣。';
+
+  @override
+  String get searchSearch => '搜尋';
+
+  @override
+  String get settingsSettings => '設定';
+
+  @override
+  String get settingsCloseAccount => '關閉帳戶';
+
+  @override
+  String get settingsClosingIsDefinitive => '您確定要刪除帳號嗎？這是不能挽回的';
+
+  @override
+  String get settingsCantOpenSimilarAccount => '即使名稱大小寫不同，您也不能使用相同的名稱開設新帳戶';
+
+  @override
+  String get settingsChangedMindDoNotCloseAccount => '我改變主意了，不要關閉我的帳號';
+
+  @override
+  String get settingsCloseAccountExplanation => '您真的確定要刪除帳戶嗎？ 關閉帳戶是永久性的決定， 您將「永遠無法」再次登錄。';
+
+  @override
+  String get settingsThisAccountIsClosed => '此帳號已被關閉。';
 
   @override
   String get playWithAFriend => '和好友下棋';
@@ -5849,15 +6663,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get emptyTournamentName => '若不填入錦標賽的名稱，將會用一位著名的棋手名字來做為錦標賽名稱。';
 
   @override
-  String get recommendNotTouching => '我們建議您不要調整這些數據';
-
-  @override
-  String get fewerPlayers => '如果你設定入場限制，你的錦標賽選手會比較少。';
-
-  @override
-  String get showAdvancedSettings => '顯示進階設定';
-
-  @override
   String get makePrivateTournament => '把錦標賽設定為私人，並設定密碼來限制進入。';
 
   @override
@@ -5987,12 +6792,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get editProfile => '編輯資料';
 
   @override
-  String get firstName => '名';
-
-  @override
-  String get lastName => '姓';
-
-  @override
   String get setFlair => '設置你的圖標';
 
   @override
@@ -6116,13 +6915,7 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   String get cheat => '作弊';
 
   @override
-  String get insult => '侮辱';
-
-  @override
   String get troll => '钓鱼';
-
-  @override
-  String get ratingManipulation => '操縱積分';
 
   @override
   String get other => '其他';
@@ -7824,826 +8617,6 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   }
 
   @override
-  String get patronDonate => '捐款';
-
-  @override
-  String get patronLichessPatron => 'Lichess 贊助者';
-
-  @override
-  String get preferencesPreferences => '偏好設置';
-
-  @override
-  String get preferencesDisplay => '顯示';
-
-  @override
-  String get preferencesPrivacy => '隱私';
-
-  @override
-  String get preferencesNotifications => '通知';
-
-  @override
-  String get preferencesPieceAnimation => '棋子動畫';
-
-  @override
-  String get preferencesMaterialDifference => '子力差距';
-
-  @override
-  String get preferencesBoardHighlights => '棋盤高亮 (最後一步與將軍)';
-
-  @override
-  String get preferencesPieceDestinations => '棋子目的地（有效走法與預先走棋）';
-
-  @override
-  String get preferencesBoardCoordinates => '棋盤座標（A-H, 1-8）';
-
-  @override
-  String get preferencesMoveListWhilePlaying => '遊戲進行時顯示棋譜';
-
-  @override
-  String get preferencesPgnPieceNotation => '棋譜記法';
-
-  @override
-  String get preferencesChessPieceSymbol => '棋子符號';
-
-  @override
-  String get preferencesPgnLetter => '字母 (K, Q, R, B, N)';
-
-  @override
-  String get preferencesZenMode => '專注模式';
-
-  @override
-  String get preferencesShowPlayerRatings => '顯示玩家等級分';
-
-  @override
-  String get preferencesExplainShowPlayerRatings => '這允許隱藏本網站上的所有等級分，以輔助專心下棋。每局遊戲仍可以計算及改變等級分，這個設定只會影響到你是否看得到此分數。';
-
-  @override
-  String get preferencesDisplayBoardResizeHandle => '顯示盤面大小調整區塊';
-
-  @override
-  String get preferencesOnlyOnInitialPosition => '只在起始局面';
-
-  @override
-  String get preferencesInGameOnly => '只在遊戲中';
-
-  @override
-  String get preferencesChessClock => '棋鐘';
-
-  @override
-  String get preferencesTenthsOfSeconds => '十分之一秒';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanTenSeconds => '當剩餘時間小於10秒';
-
-  @override
-  String get preferencesHorizontalGreenProgressBars => '綠色橫進度條';
-
-  @override
-  String get preferencesSoundWhenTimeGetsCritical => '時間不足時聲音提醒';
-
-  @override
-  String get preferencesGiveMoreTime => '給對方更多時間';
-
-  @override
-  String get preferencesGameBehavior => '對局行為';
-
-  @override
-  String get preferencesHowDoYouMovePieces => '移動棋子方式？';
-
-  @override
-  String get preferencesClickTwoSquares => '點擊棋子及目標位置';
-
-  @override
-  String get preferencesDragPiece => '拖曳棋子';
-
-  @override
-  String get preferencesBothClicksAndDrag => '兩者都行';
-
-  @override
-  String get preferencesPremovesPlayingDuringOpponentTurn => '預先走棋（在對手的回合走棋）';
-
-  @override
-  String get preferencesTakebacksWithOpponentApproval => '悔棋（經過對手同意）';
-
-  @override
-  String get preferencesInCasualGamesOnly => '僅限非正式遊戲';
-
-  @override
-  String get preferencesPromoteToQueenAutomatically => '兵自動升為后';
-
-  @override
-  String get preferencesExplainPromoteToQueenAutomatically => '升變的同時按住<ctrl>以暫時取消自動升變';
-
-  @override
-  String get preferencesWhenPremoving => '預先走棋時';
-
-  @override
-  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => '在三次重覆局面時自動要求和局';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanThirtySeconds => '當剩餘時間小於30秒';
-
-  @override
-  String get preferencesMoveConfirmation => '走棋確認';
-
-  @override
-  String get preferencesExplainCanThenBeTemporarilyDisabled => '可以在遊戲中用棋盤選單中關閉此功能';
-
-  @override
-  String get preferencesInCorrespondenceGames => '在長期對局中';
-
-  @override
-  String get preferencesCorrespondenceAndUnlimited => '通信和無限';
-
-  @override
-  String get preferencesConfirmResignationAndDrawOffers => '確認投降或和局請求';
-
-  @override
-  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => '入堡方法';
-
-  @override
-  String get preferencesCastleByMovingTwoSquares => '移動國王兩格';
-
-  @override
-  String get preferencesCastleByMovingOntoTheRook => '移動國王到城堡上';
-
-  @override
-  String get preferencesInputMovesWithTheKeyboard => '使用鍵盤輸入著法';
-
-  @override
-  String get preferencesInputMovesWithVoice => '用語音輸入著法';
-
-  @override
-  String get preferencesSnapArrowsToValidMoves => '將右鍵標示箭頭鎖定到合法棋步';
-
-  @override
-  String get preferencesSayGgWpAfterLosingOrDrawing => '輸棋或和棋後自動發送 \"Good game, well played\"。';
-
-  @override
-  String get preferencesYourPreferencesHaveBeenSaved => '已儲存您的設定。';
-
-  @override
-  String get preferencesScrollOnTheBoardToReplayMoves => '在騎盤上使用滑鼠滾輪以重新顯示過去棋步';
-
-  @override
-  String get preferencesCorrespondenceEmailNotification => '每日以電郵列出您當前的長期對局';
-
-  @override
-  String get preferencesNotifyStreamStart => '追蹤的直播主開始直播';
-
-  @override
-  String get preferencesNotifyInboxMsg => '收件夾有新訊息';
-
-  @override
-  String get preferencesNotifyForumMention => '論壇評論中提到您';
-
-  @override
-  String get preferencesNotifyInvitedStudy => '研究邀請';
-
-  @override
-  String get preferencesNotifyGameEvent => '長期對局更新訊息';
-
-  @override
-  String get preferencesNotifyChallenge => '挑戰';
-
-  @override
-  String get preferencesNotifyTournamentSoon => '比賽即將開始';
-
-  @override
-  String get preferencesNotifyTimeAlarm => '長期對局的時間即將耗盡';
-
-  @override
-  String get preferencesNotifyBell => 'Lichess 內的鈴聲通知';
-
-  @override
-  String get preferencesNotifyPush => 'Lichess 外的設備通知';
-
-  @override
-  String get preferencesNotifyWeb => '瀏覽器通知';
-
-  @override
-  String get preferencesNotifyDevice => '設備通知';
-
-  @override
-  String get preferencesBellNotificationSound => '通知鈴聲';
-
-  @override
-  String get puzzlePuzzles => '謎題';
-
-  @override
-  String get puzzlePuzzleThemes => '謎題主題';
-
-  @override
-  String get puzzleRecommended => '推薦';
-
-  @override
-  String get puzzlePhases => '分類';
-
-  @override
-  String get puzzleMotifs => '主題';
-
-  @override
-  String get puzzleAdvanced => '高級';
-
-  @override
-  String get puzzleLengths => '長度';
-
-  @override
-  String get puzzleMates => '將軍';
-
-  @override
-  String get puzzleGoals => '目標';
-
-  @override
-  String get puzzleOrigin => '來源';
-
-  @override
-  String get puzzleSpecialMoves => '特殊移動';
-
-  @override
-  String get puzzleDidYouLikeThisPuzzle => '您喜歡這道謎題嗎？';
-
-  @override
-  String get puzzleVoteToLoadNextOne => '告訴我們加載下一題!';
-
-  @override
-  String get puzzleYourPuzzleRatingWillNotChange => '您的謎題評級不會改變。請注意，謎題不是比賽。您的評分有助於選擇最適合您當前技能的謎題。';
-
-  @override
-  String get puzzleFindTheBestMoveForWhite => '為白方找出最佳移動';
-
-  @override
-  String get puzzleFindTheBestMoveForBlack => '為黑方找出最佳移動';
-
-  @override
-  String get puzzleToGetPersonalizedPuzzles => '得到個人推薦題目:';
-
-  @override
-  String puzzlePuzzleId(String param) {
-    return '謎題 $param';
-  }
-
-  @override
-  String get puzzlePuzzleOfTheDay => '每日一題';
-
-  @override
-  String get puzzleClickToSolve => '點擊解題';
-
-  @override
-  String get puzzleGoodMove => '好棋';
-
-  @override
-  String get puzzleBestMove => '最佳走法!';
-
-  @override
-  String get puzzleKeepGoing => '加油!';
-
-  @override
-  String get puzzlePuzzleSuccess => '成功！';
-
-  @override
-  String get puzzlePuzzleComplete => '解題完成!';
-
-  @override
-  String get puzzleNotTheMove => '不是這步!';
-
-  @override
-  String get puzzleTrySomethingElse => '試試其他的移動';
-
-  @override
-  String puzzleRatingX(String param) {
-    return '評級：$param';
-  }
-
-  @override
-  String get puzzleHidden => '隱藏';
-
-  @override
-  String puzzleFromGameLink(String param) {
-    return '來自對局 $param';
-  }
-
-  @override
-  String get puzzleContinueTraining => '繼續訓練';
-
-  @override
-  String get puzzleDifficultyLevel => '困難度';
-
-  @override
-  String get puzzleNormal => '一般';
-
-  @override
-  String get puzzleEasier => '簡單';
-
-  @override
-  String get puzzleEasiest => '超簡單';
-
-  @override
-  String get puzzleHarder => '困難';
-
-  @override
-  String get puzzleHardest => '超困難';
-
-  @override
-  String get puzzleExample => '範例';
-
-  @override
-  String get puzzleAddAnotherTheme => '加入其他主題';
-
-  @override
-  String get puzzleJumpToNextPuzzleImmediately => '立即跳到下一個謎題';
-
-  @override
-  String get puzzlePuzzleDashboard => '謎題能力分析';
-
-  @override
-  String get puzzleImprovementAreas => '弱點';
-
-  @override
-  String get puzzleStrengths => '強項';
-
-  @override
-  String get puzzleHistory => '解題紀錄';
-
-  @override
-  String get puzzleSolved => '解決';
-
-  @override
-  String get puzzleFailed => '失敗';
-
-  @override
-  String get puzzleStreakDescription => '累積你的連勝，解著漸漸變難的題目。 沒有時間限制，不要急。走錯一步，將會是遊戲結束！\n不過每一局中你都有跳過一步棋的機會。';
-
-  @override
-  String puzzleYourStreakX(String param) {
-    return '您的連勝場數：$param';
-  }
-
-  @override
-  String get puzzleStreakSkipExplanation => '跳過這一步來維持您的連勝紀錄！每次遊玩只能使用一次。';
-
-  @override
-  String get puzzleContinueTheStreak => '繼續遊玩';
-
-  @override
-  String get puzzleNewStreak => '新的連勝紀錄';
-
-  @override
-  String get puzzleFromMyGames => '來自我的棋局';
-
-  @override
-  String get puzzleLookupOfPlayer => '尋找其他棋手的棋局謎題';
-
-  @override
-  String puzzleFromXGames(String param) {
-    return '來自$param棋局的謎題';
-  }
-
-  @override
-  String get puzzleSearchPuzzles => '尋找謎題';
-
-  @override
-  String get puzzleFromMyGamesNone => '你在數據庫中沒有謎題，但 Lichess 仍然非常愛你。\n遊玩一些快速和經典遊戲，以增加添加拼圖的機會！';
-
-  @override
-  String puzzleFromXGamesFound(String param1, String param2) {
-    return '在$param2中找到$param1個謎題';
-  }
-
-  @override
-  String get puzzlePuzzleDashboardDescription => '訓練、分析、改進';
-
-  @override
-  String puzzlePercentSolved(String param) {
-    return '$param 已解決';
-  }
-
-  @override
-  String get puzzleNoPuzzlesToShow => '沒有什麼可展示的，先去玩一些謎題吧！';
-
-  @override
-  String get puzzleImprovementAreasDescription => '訓練這些類型的謎題來優化你的進步！';
-
-  @override
-  String get puzzleStrengthDescription => '你在這些主題中表現最好';
-
-  @override
-  String puzzlePlayedXTimes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '已被嘗試$count次',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsBelowYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '低於你的謎題積分$count點',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsAboveYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '高於你的謎題積分$count點',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPlayed(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count 已遊玩',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbToReplay(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count 重玩',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get puzzleThemeAdvancedPawn => '升變兵';
-
-  @override
-  String get puzzleThemeAdvancedPawnDescription => '你的其中一個兵已經深入了對方的棋位，或許要威脅升變。';
-
-  @override
-  String get puzzleThemeAdvantage => '擁有優勢';
-
-  @override
-  String get puzzleThemeAnastasiaMate => '阿納斯塔西亞殺法';
-
-  @override
-  String get puzzleThemeArabianMate => '阿拉伯殺法';
-
-  @override
-  String get puzzleThemeArabianMateDescription => '馬和車聯手把對方的王困住在角落的位置';
-
-  @override
-  String get puzzleThemeAttackingF2F7 => '攻擊f2或f7';
-
-  @override
-  String get puzzleThemeAttraction => '吸引';
-
-  @override
-  String get puzzleThemeBackRankMate => '後排將死';
-
-  @override
-  String get puzzleThemeBackRankMateDescription => '在對方的王在底線被自身的棋子困住時，將殺對方的王';
-
-  @override
-  String get puzzleThemeBishopEndgame => '象殘局';
-
-  @override
-  String get puzzleThemeBishopEndgameDescription => '只剩象和兵的殘局';
-
-  @override
-  String get puzzleThemeBodenMate => '波登殺法';
-
-  @override
-  String get puzzleThemeCastling => '易位';
-
-  @override
-  String get puzzleThemeCapturingDefender => '吃子 - 防守者';
-
-  @override
-  String get puzzleThemeCrushing => '壓倒性優勢';
-
-  @override
-  String get puzzleThemeCrushingDescription => '察覺對方的漏著並藉此取得巨大優勢。(大於600百分兵)';
-
-  @override
-  String get puzzleThemeDoubleBishopMate => '雙主教將死';
-
-  @override
-  String get puzzleThemeEquality => '均勢';
-
-  @override
-  String get puzzleThemeKingsideAttack => '王翼攻擊';
-
-  @override
-  String get puzzleThemeClearance => '騰挪';
-
-  @override
-  String get puzzleThemeDefensiveMove => '加強防守';
-
-  @override
-  String get puzzleThemeDeflection => '引離';
-
-  @override
-  String get puzzleThemeDiscoveredAttack => '閃擊';
-
-  @override
-  String get puzzleThemeDoubleCheck => '雙將';
-
-  @override
-  String get puzzleThemeEndgame => '殘局';
-
-  @override
-  String get puzzleThemeEndgameDescription => '棋局中最後階段的戰術';
-
-  @override
-  String get puzzleThemeFork => '捉雙';
-
-  @override
-  String get puzzleThemeKnightEndgame => '馬殘局';
-
-  @override
-  String get puzzleThemeKnightEndgameDescription => '只剩馬和兵的殘局';
-
-  @override
-  String get puzzleThemeLong => '長謎題';
-
-  @override
-  String get puzzleThemeLongDescription => '三步獲勝';
-
-  @override
-  String get puzzleThemeMaster => '大師棋局';
-
-  @override
-  String get puzzleThemeMasterVsMaster => '大師對局';
-
-  @override
-  String get puzzleThemeMate => '將軍';
-
-  @override
-  String get puzzleThemeMateIn1 => '一步殺棋';
-
-  @override
-  String get puzzleThemeMateIn1Description => '一步將軍';
-
-  @override
-  String get puzzleThemeMateIn2 => '兩步殺棋';
-
-  @override
-  String get puzzleThemeMateIn2Description => '走兩步以達到將軍';
-
-  @override
-  String get puzzleThemeMateIn3 => '三步殺棋';
-
-  @override
-  String get puzzleThemeMateIn3Description => '走三步以達到將軍';
-
-  @override
-  String get puzzleThemeMateIn4 => '四步殺棋';
-
-  @override
-  String get puzzleThemeMateIn4Description => '走四步以達到將軍';
-
-  @override
-  String get puzzleThemeMateIn5 => '五步或更高 將軍';
-
-  @override
-  String get puzzleThemeMiddlegame => '中局';
-
-  @override
-  String get puzzleThemeMiddlegameDescription => '棋局中第二階段的戰術';
-
-  @override
-  String get puzzleThemeOneMove => '一步題';
-
-  @override
-  String get puzzleThemeOneMoveDescription => '只有一步長的題目';
-
-  @override
-  String get puzzleThemeOpening => '開局';
-
-  @override
-  String get puzzleThemeOpeningDescription => '棋局中起始階段的戰術';
-
-  @override
-  String get puzzleThemePawnEndgame => '兵殘局';
-
-  @override
-  String get puzzleThemePawnEndgameDescription => '只剩兵的殘局';
-
-  @override
-  String get puzzleThemePin => '牽制';
-
-  @override
-  String get puzzleThemePromotion => '升變';
-
-  @override
-  String get puzzleThemeQueenEndgame => '后殘局';
-
-  @override
-  String get puzzleThemeQueenEndgameDescription => '只剩后和兵的殘局';
-
-  @override
-  String get puzzleThemeQueenRookEndgame => '后與車';
-
-  @override
-  String get puzzleThemeQueenRookEndgameDescription => '只剩后、車和兵的殘局';
-
-  @override
-  String get puzzleThemeQueensideAttack => '后翼攻擊';
-
-  @override
-  String get puzzleThemeQuietMove => '安靜的一着';
-
-  @override
-  String get puzzleThemeRookEndgame => '車殘局';
-
-  @override
-  String get puzzleThemeRookEndgameDescription => '只剩車和兵的殘局';
-
-  @override
-  String get puzzleThemeSacrifice => '棄子';
-
-  @override
-  String get puzzleThemeShort => '短謎題';
-
-  @override
-  String get puzzleThemeShortDescription => '兩步獲勝';
-
-  @override
-  String get puzzleThemeSkewer => '串擊';
-
-  @override
-  String get puzzleThemeSmotheredMate => '悶殺';
-
-  @override
-  String get puzzleThemeSuperGM => '超級大師賽局';
-
-  @override
-  String get puzzleThemeSuperGMDescription => '來自世界各地優秀玩家對局的戰術題';
-
-  @override
-  String get puzzleThemeTrappedPiece => '被困的棋子';
-
-  @override
-  String get puzzleThemeUnderPromotion => '升變';
-
-  @override
-  String get puzzleThemeUnderPromotionDescription => '升變成騎士、象或車';
-
-  @override
-  String get puzzleThemeVeryLong => '非常長的謎題';
-
-  @override
-  String get puzzleThemeVeryLongDescription => '四步或以上獲勝';
-
-  @override
-  String get puzzleThemeXRayAttack => '穿透攻擊';
-
-  @override
-  String get puzzleThemeZugzwang => '等著';
-
-  @override
-  String get puzzleThemeHealthyMix => '綜合';
-
-  @override
-  String get puzzleThemeHealthyMixDescription => '所有類型都有！你不知道會遇到什麼題型，所以請做好準備，就像在實戰一樣。';
-
-  @override
-  String perfStatPerfStats(String param) {
-    return '$param戰績';
-  }
-
-  @override
-  String get perfStatViewTheGames => '查看遊戲紀錄';
-
-  @override
-  String get perfStatProvisional => '臨時';
-
-  @override
-  String get perfStatNotEnoughRatedGames => '積分賽場次太少，無法計算準確積分。';
-
-  @override
-  String perfStatProgressOverLastXGames(String param) {
-    return '最近$param場棋局之積分變化：';
-  }
-
-  @override
-  String perfStatRatingDeviation(String param) {
-    return '積分誤差: $param';
-  }
-
-  @override
-  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
-    return '越低的數值代表積分越穩定。 數值高於$param1時的積分會被判定為浮動積分。\n要被列入排名之中，該數值需低於$param2(標準西洋棋) 或是$param3(西洋棋變體)。';
-  }
-
-  @override
-  String get perfStatTotalGames => '總計棋局';
-
-  @override
-  String get perfStatRatedGames => '積分棋局';
-
-  @override
-  String get perfStatTournamentGames => '聯賽棋局';
-
-  @override
-  String get perfStatBerserkedGames => '狂暴模式棋局';
-
-  @override
-  String get perfStatTimeSpentPlaying => '奕棋時間';
-
-  @override
-  String get perfStatAverageOpponent => '對手平均積分';
-
-  @override
-  String get perfStatVictories => '勝場';
-
-  @override
-  String get perfStatDefeats => '敗場';
-
-  @override
-  String get perfStatDisconnections => '斷線場次';
-
-  @override
-  String get perfStatNotEnoughGames => '棋局數不夠多';
-
-  @override
-  String perfStatHighestRating(String param) {
-    return '最高積分：$param';
-  }
-
-  @override
-  String perfStatLowestRating(String param) {
-    return '最低積分：$param';
-  }
-
-  @override
-  String perfStatFromXToY(String param1, String param2) {
-    return '從$param1到$param2';
-  }
-
-  @override
-  String get perfStatWinningStreak => '連勝場數';
-
-  @override
-  String get perfStatLosingStreak => '連敗場數';
-
-  @override
-  String perfStatLongestStreak(String param) {
-    return '最長紀錄：$param';
-  }
-
-  @override
-  String perfStatCurrentStreak(String param) {
-    return '目前記錄：$param';
-  }
-
-  @override
-  String get perfStatBestRated => '積分賽勝場之最強對手';
-
-  @override
-  String get perfStatGamesInARow => '連續奕棋場數';
-
-  @override
-  String get perfStatLessThanOneHour => '兩場間距不到一小時';
-
-  @override
-  String get perfStatMaxTimePlaying => '最高奕棋時間';
-
-  @override
-  String get perfStatNow => '現在';
-
-  @override
-  String get searchSearch => '搜尋';
-
-  @override
-  String get settingsSettings => '設定';
-
-  @override
-  String get settingsCloseAccount => '關閉帳戶';
-
-  @override
-  String get settingsClosingIsDefinitive => '您確定要刪除帳號嗎？這是不能挽回的';
-
-  @override
-  String get settingsCantOpenSimilarAccount => '即使名稱大小寫不同，您也不能使用相同的名稱開設新帳戶';
-
-  @override
-  String get settingsChangedMindDoNotCloseAccount => '我改變主意了，不要關閉我的帳號';
-
-  @override
-  String get settingsCloseAccountExplanation => '您真的確定要刪除帳戶嗎？ 關閉帳戶是永久性的決定， 您將「永遠無法」再次登錄。';
-
-  @override
-  String get settingsThisAccountIsClosed => '此帳號已被關閉。';
-
-  @override
-  String get streamerLichessStreamers => 'Lichess實況主';
-
-  @override
   String get stormMoveToStart => '移動以開始';
 
   @override
@@ -8820,14 +8793,11 @@ class AppLocalizationsZhTw extends AppLocalizationsZh {
   }
 
   @override
+  String get streamerLichessStreamers => 'Lichess實況主';
+
+  @override
   String get studyShareAndExport => '分享 & 導出';
 
   @override
   String get studyStart => '開始';
-
-  @override
-  String get broadcastBroadcasts => '比賽直播';
-
-  @override
-  String get broadcastStartDate => '開始日期 (當地時間)';
 }

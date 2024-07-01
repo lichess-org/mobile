@@ -225,10 +225,10 @@ class AppLocalizationsMk extends AppLocalizations {
   }
 
   @override
-  String get contactContact => 'Контакт';
+  String get broadcastBroadcasts => 'Емитувања';
 
   @override
-  String get contactContactLichess => 'Контактирајте ја Lichess';
+  String get broadcastStartDate => 'Почетен датум во вашата временска зона';
 
   @override
   String challengeChallengesX(String param1) {
@@ -310,6 +310,1012 @@ class AppLocalizationsMk extends AppLocalizations {
 
   @override
   String get challengeInviteLichessUser => 'Or invite a Lichess user:';
+
+  @override
+  String get contactContact => 'Контакт';
+
+  @override
+  String get contactContactLichess => 'Контактирајте ја Lichess';
+
+  @override
+  String get patronDonate => 'Донирај';
+
+  @override
+  String get patronLichessPatron => 'Lichess подржувач';
+
+  @override
+  String perfStatPerfStats(String param) {
+    return '$param статистика';
+  }
+
+  @override
+  String get perfStatViewTheGames => 'Прегледај ги партиите';
+
+  @override
+  String get perfStatProvisional => 'привремен';
+
+  @override
+  String get perfStatNotEnoughRatedGames => 'Нема одиграно доволно рангирани игри за воспоставување на рејтинг.';
+
+  @override
+  String perfStatProgressOverLastXGames(String param) {
+    return 'Напредок во последните $param партии:';
+  }
+
+  @override
+  String perfStatRatingDeviation(String param) {
+    return 'Девијација на рејтингот: $param.';
+  }
+
+  @override
+  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
+    return 'Пониска вредност значи дека рејтингот е постабилен. Над $param1, рејтингот се смета за привремен. За да биде вклучена во рангирањата, оваа вредност треба да биде под $param2 (класичен шах) или $param3 (варијации).';
+  }
+
+  @override
+  String get perfStatTotalGames => 'Вкупно партии';
+
+  @override
+  String get perfStatRatedGames => 'Рангирани партии';
+
+  @override
+  String get perfStatTournamentGames => 'Турнирски партии';
+
+  @override
+  String get perfStatBerserkedGames => 'Берсерк парии';
+
+  @override
+  String get perfStatTimeSpentPlaying => 'Време поминато во играње';
+
+  @override
+  String get perfStatAverageOpponent => 'Просечен противник';
+
+  @override
+  String get perfStatVictories => 'Победи';
+
+  @override
+  String get perfStatDefeats => 'Порази';
+
+  @override
+  String get perfStatDisconnections => 'Прекинати партии';
+
+  @override
+  String get perfStatNotEnoughGames => 'Недоволно одиграни партии';
+
+  @override
+  String perfStatHighestRating(String param) {
+    return 'Највисок рејтинг: $param';
+  }
+
+  @override
+  String perfStatLowestRating(String param) {
+    return 'Најнизок рејтинг: $param';
+  }
+
+  @override
+  String perfStatFromXToY(String param1, String param2) {
+    return 'од $param1 до $param2';
+  }
+
+  @override
+  String get perfStatWinningStreak => 'Победничка низа';
+
+  @override
+  String get perfStatLosingStreak => 'Губитничка низа';
+
+  @override
+  String perfStatLongestStreak(String param) {
+    return 'Најдолга низа: $param';
+  }
+
+  @override
+  String perfStatCurrentStreak(String param) {
+    return 'Сегашна низа: $param';
+  }
+
+  @override
+  String get perfStatBestRated => 'Најдобро рангирани победи';
+
+  @override
+  String get perfStatGamesInARow => 'Број одиграни партии во низа';
+
+  @override
+  String get perfStatLessThanOneHour => 'Помалку од еден час меѓу партии';
+
+  @override
+  String get perfStatMaxTimePlaying => 'Макс. време поминато во играње';
+
+  @override
+  String get perfStatNow => 'сега';
+
+  @override
+  String get preferencesPreferences => 'Поставки';
+
+  @override
+  String get preferencesDisplay => 'Display';
+
+  @override
+  String get preferencesPrivacy => 'Privacy';
+
+  @override
+  String get preferencesNotifications => 'Notifications';
+
+  @override
+  String get preferencesPieceAnimation => 'Анимација на фигурите';
+
+  @override
+  String get preferencesMaterialDifference => 'Материјална разлика';
+
+  @override
+  String get preferencesBoardHighlights => 'Нагласени полиња (последен потег и шах)';
+
+  @override
+  String get preferencesPieceDestinations => 'Легални потези (важечки потези и претпотези)';
+
+  @override
+  String get preferencesBoardCoordinates => 'Координати на таблата (А-H, 1-8)';
+
+  @override
+  String get preferencesMoveListWhilePlaying => 'Листа на потези за време на партијата';
+
+  @override
+  String get preferencesPgnPieceNotation => 'Запишување на потезите';
+
+  @override
+  String get preferencesChessPieceSymbol => 'Симбол на фигурата';
+
+  @override
+  String get preferencesPgnLetter => 'Буква (K, Q, R, B, N)';
+
+  @override
+  String get preferencesZenMode => 'Зен режим';
+
+  @override
+  String get preferencesShowPlayerRatings => 'Покажи го рејтингот на играчите';
+
+  @override
+  String get preferencesShowFlairs => 'Show player flairs';
+
+  @override
+  String get preferencesExplainShowPlayerRatings => 'Ова овозможува да ги скриете сите рангови од веб страницата, со цел да се фокусирате на шахот. Игрите и понатаму ќе бидат рангирани, со ова само нема да можете да ги видите.';
+
+  @override
+  String get preferencesDisplayBoardResizeHandle => 'Прикажи ја рачката за промена на големината на таблата';
+
+  @override
+  String get preferencesOnlyOnInitialPosition => 'Само на почетокот на партијата';
+
+  @override
+  String get preferencesInGameOnly => 'In-game only';
+
+  @override
+  String get preferencesChessClock => 'Шаховски часовник';
+
+  @override
+  String get preferencesTenthsOfSeconds => 'Стотинки';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'Кога останатото време е < 10 секунди';
+
+  @override
+  String get preferencesHorizontalGreenProgressBars => 'Хоризонтална зелена линија за напредок';
+
+  @override
+  String get preferencesSoundWhenTimeGetsCritical => 'Звук кога има преостанато малку време';
+
+  @override
+  String get preferencesGiveMoreTime => 'Додај време';
+
+  @override
+  String get preferencesGameBehavior => 'Начин на играње';
+
+  @override
+  String get preferencesHowDoYouMovePieces => 'Како да ги движите фигурите?';
+
+  @override
+  String get preferencesClickTwoSquares => 'Кликни на двете полиња';
+
+  @override
+  String get preferencesDragPiece => 'Влечи ја фигурата';
+
+  @override
+  String get preferencesBothClicksAndDrag => 'И двете';
+
+  @override
+  String get preferencesPremovesPlayingDuringOpponentTurn => 'Претпотези (играње додека противникот е на ред)';
+
+  @override
+  String get preferencesTakebacksWithOpponentApproval => 'Враќање потези (со дозвола на противникот)';
+
+  @override
+  String get preferencesInCasualGamesOnly => 'Само во пријателски партии';
+
+  @override
+  String get preferencesPromoteToQueenAutomatically => 'Автоматски унапреди во кралица';
+
+  @override
+  String get preferencesExplainPromoteToQueenAutomatically => 'Hold the <ctrl> key while promoting to temporarily disable auto-promotion';
+
+  @override
+  String get preferencesWhenPremoving => 'Кога изигрувам претпотег';
+
+  @override
+  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Автоматско прогласување реми по третото повторување на потегот';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Кога останатото време е < 30 секунди';
+
+  @override
+  String get preferencesMoveConfirmation => 'Потврда за потегот';
+
+  @override
+  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Can be disabled during a game with the board menu';
+
+  @override
+  String get preferencesInCorrespondenceGames => 'Дописен шах';
+
+  @override
+  String get preferencesCorrespondenceAndUnlimited => 'Дописен шах и неограничени партии';
+
+  @override
+  String get preferencesConfirmResignationAndDrawOffers => 'Потврди предавање и понуда за реми';
+
+  @override
+  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Метод за рокада';
+
+  @override
+  String get preferencesCastleByMovingTwoSquares => 'Помести го кралот две полиња';
+
+  @override
+  String get preferencesCastleByMovingOntoTheRook => 'Помести го кралот врз топот';
+
+  @override
+  String get preferencesInputMovesWithTheKeyboard => 'Внеси потези со тастатура';
+
+  @override
+  String get preferencesInputMovesWithVoice => 'Input moves with your voice';
+
+  @override
+  String get preferencesSnapArrowsToValidMoves => 'Snap arrows to valid moves';
+
+  @override
+  String get preferencesSayGgWpAfterLosingOrDrawing => 'Say \"Good game, well played\" upon defeat or draw';
+
+  @override
+  String get preferencesYourPreferencesHaveBeenSaved => 'Вашите поставки се зачувани.';
+
+  @override
+  String get preferencesScrollOnTheBoardToReplayMoves => 'Scroll on the board to replay moves';
+
+  @override
+  String get preferencesCorrespondenceEmailNotification => 'Daily email listing your correspondence games';
+
+  @override
+  String get preferencesNotifyStreamStart => 'Streamer goes live';
+
+  @override
+  String get preferencesNotifyInboxMsg => 'New inbox message';
+
+  @override
+  String get preferencesNotifyForumMention => 'Forum comment mentions you';
+
+  @override
+  String get preferencesNotifyInvitedStudy => 'Study invite';
+
+  @override
+  String get preferencesNotifyGameEvent => 'Correspondence game updates';
+
+  @override
+  String get preferencesNotifyChallenge => 'Challenges';
+
+  @override
+  String get preferencesNotifyTournamentSoon => 'Tournament starting soon';
+
+  @override
+  String get preferencesNotifyTimeAlarm => 'Correspondence clock running out';
+
+  @override
+  String get preferencesNotifyBell => 'Bell notification within Lichess';
+
+  @override
+  String get preferencesNotifyPush => 'Device notification when you\'re not on Lichess';
+
+  @override
+  String get preferencesNotifyWeb => 'Browser';
+
+  @override
+  String get preferencesNotifyDevice => 'Device';
+
+  @override
+  String get preferencesBellNotificationSound => 'Bell notification sound';
+
+  @override
+  String get puzzlePuzzles => 'Загатки';
+
+  @override
+  String get puzzlePuzzleThemes => 'Категории на загатки';
+
+  @override
+  String get puzzleRecommended => 'Препорачани';
+
+  @override
+  String get puzzlePhases => 'Етапи';
+
+  @override
+  String get puzzleMotifs => 'Мотиви';
+
+  @override
+  String get puzzleAdvanced => 'Напредно';
+
+  @override
+  String get puzzleLengths => 'Должина';
+
+  @override
+  String get puzzleMates => 'Матови';
+
+  @override
+  String get puzzleGoals => 'Цели';
+
+  @override
+  String get puzzleOrigin => 'Потекло';
+
+  @override
+  String get puzzleSpecialMoves => 'Специјални потези';
+
+  @override
+  String get puzzleDidYouLikeThisPuzzle => 'Дали Ви се допадна оваа загатка?';
+
+  @override
+  String get puzzleVoteToLoadNextOne => 'Гласај и премини на наредната!';
+
+  @override
+  String get puzzleUpVote => 'Up vote puzzle';
+
+  @override
+  String get puzzleDownVote => 'Down vote puzzle';
+
+  @override
+  String get puzzleYourPuzzleRatingWillNotChange => 'Вашиот рејтинг нема да се промени. Имајте на ум дека загатките не се натпреварување. Вашиот рејтинг помага во изборот на најсоодветните загатки за вашата моментална вештина.';
+
+  @override
+  String get puzzleFindTheBestMoveForWhite => 'Најди го најдобриот потег на белиот.';
+
+  @override
+  String get puzzleFindTheBestMoveForBlack => 'Најди го најдобриот потег на црниот.';
+
+  @override
+  String get puzzleToGetPersonalizedPuzzles => 'Персонализирани загатки:';
+
+  @override
+  String puzzlePuzzleId(String param) {
+    return 'Загатка $param';
+  }
+
+  @override
+  String get puzzlePuzzleOfTheDay => 'Загатка на денот';
+
+  @override
+  String get puzzleDailyPuzzle => 'Daily Puzzle';
+
+  @override
+  String get puzzleClickToSolve => 'Кликни за решение';
+
+  @override
+  String get puzzleGoodMove => 'Добар потег';
+
+  @override
+  String get puzzleBestMove => 'Најдобар потег!';
+
+  @override
+  String get puzzleKeepGoing => 'Продолжи…';
+
+  @override
+  String get puzzlePuzzleSuccess => 'Успех!';
+
+  @override
+  String get puzzlePuzzleComplete => 'Загатката е решена!';
+
+  @override
+  String get puzzleByOpenings => 'By openings';
+
+  @override
+  String get puzzlePuzzlesByOpenings => 'Puzzles by openings';
+
+  @override
+  String get puzzleOpeningsYouPlayedTheMost => 'Openings you played the most in rated games';
+
+  @override
+  String get puzzleUseFindInPage => 'Use \"Find in page\" in the browser menu to find your favourite opening!';
+
+  @override
+  String get puzzleUseCtrlF => 'Use Ctrl+f to find your favourite opening!';
+
+  @override
+  String get puzzleNotTheMove => 'Неточен потег!';
+
+  @override
+  String get puzzleTrySomethingElse => 'Пробајте нешто друго.';
+
+  @override
+  String puzzleRatingX(String param) {
+    return 'Рејтинг: $param';
+  }
+
+  @override
+  String get puzzleHidden => 'скриен';
+
+  @override
+  String puzzleFromGameLink(String param) {
+    return 'Од играта $param';
+  }
+
+  @override
+  String get puzzleContinueTraining => 'Продолжи да вежбаш';
+
+  @override
+  String get puzzleDifficultyLevel => 'Ниво на тешкотија';
+
+  @override
+  String get puzzleNormal => 'Нормално';
+
+  @override
+  String get puzzleEasier => 'Полесно';
+
+  @override
+  String get puzzleEasiest => 'Најлесно';
+
+  @override
+  String get puzzleHarder => 'Потешко';
+
+  @override
+  String get puzzleHardest => 'Најтешко';
+
+  @override
+  String get puzzleExample => 'Пример';
+
+  @override
+  String get puzzleAddAnotherTheme => 'Додади нова тема';
+
+  @override
+  String get puzzleNextPuzzle => 'Next puzzle';
+
+  @override
+  String get puzzleJumpToNextPuzzleImmediately => 'Веднаш премини на следната загатка';
+
+  @override
+  String get puzzlePuzzleDashboard => 'Панел на загатки';
+
+  @override
+  String get puzzleImprovementAreas => 'Области за подобрување';
+
+  @override
+  String get puzzleStrengths => 'Предности';
+
+  @override
+  String get puzzleHistory => 'Историја на загатки';
+
+  @override
+  String get puzzleSolved => 'решено';
+
+  @override
+  String get puzzleFailed => 'неуспешно';
+
+  @override
+  String get puzzleStreakDescription => 'Решавајте прогресивно потешки загатки и изградете победничка серија. Нема часовник, па не брзајте. Еден погрешен потег и играта е завршена! Но, можете да прескокнете еден потег по сесија.';
+
+  @override
+  String puzzleYourStreakX(String param) {
+    return 'Вашата серија: $param';
+  }
+
+  @override
+  String get puzzleStreakSkipExplanation => 'Прескокнете го овој потег за да ја зачувате вашата победничка серија! Дозволено само еднаш во сесија.';
+
+  @override
+  String get puzzleContinueTheStreak => 'Продолжете ја серијата';
+
+  @override
+  String get puzzleNewStreak => 'Нова серија';
+
+  @override
+  String get puzzleFromMyGames => 'Од моите игри';
+
+  @override
+  String get puzzleLookupOfPlayer => 'Пребарувај загатки од игрите на други играчи';
+
+  @override
+  String puzzleFromXGames(String param) {
+    return 'Загатки од игрите на $param\'';
+  }
+
+  @override
+  String get puzzleSearchPuzzles => 'Пребарувај загатки';
+
+  @override
+  String get puzzleFromMyGamesNone => 'Немате загатки во базата на податоци, но Lichess сè уште многу ве сака.\n\nИграјте брзи и класични игри за да ги зголемите шансите ваша загатка да биде додадена!';
+
+  @override
+  String puzzleFromXGamesFound(String param1, String param2) {
+    return '$param1 загатки пронајдени во $param2 игри';
+  }
+
+  @override
+  String get puzzlePuzzleDashboardDescription => 'Вежбај, анализирај, подобри се';
+
+  @override
+  String puzzlePercentSolved(String param) {
+    return '$param решени';
+  }
+
+  @override
+  String get puzzleNoPuzzlesToShow => 'Нема што да се покаже овде, прво одиграјте неколку загатки!';
+
+  @override
+  String get puzzleImprovementAreasDescription => 'Вежбајте ги овие загатки за да го оптимизирате вашиот прогрес!';
+
+  @override
+  String get puzzleStrengthDescription => 'Најдобро играте во овие теми';
+
+  @override
+  String puzzlePlayedXTimes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Одиграно $count пати',
+      one: 'Одиграно $count',
+      zero: 'Одиграно $count',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsBelowYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count поени под вашиот рејтинг',
+      one: 'Еден поен под вашиот рејтинг',
+      zero: 'Еден поен под вашиот рејтинг',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsAboveYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count поени над вашиот рејтинг',
+      one: 'Еден поен над вашиот рејтинг',
+      zero: 'Еден поен над вашиот рејтинг',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPlayed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count одиграни',
+      one: '$count одиграна',
+      zero: '$count одиграна',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbToReplay(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count прегледај',
+      one: '$count прегледај',
+      zero: '$count прегледај',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get puzzleThemeAdvancedPawn => 'Advanced pawn';
+
+  @override
+  String get puzzleThemeAdvancedPawnDescription => 'One of your pawns is deep into the opponent position, maybe threatening to promote.';
+
+  @override
+  String get puzzleThemeAdvantage => 'Предност';
+
+  @override
+  String get puzzleThemeAdvantageDescription => 'Искористете ја шансата да добиете одлучувачка предност. (200cp ≤ eval ≤ 600cp)';
+
+  @override
+  String get puzzleThemeAnastasiaMate => 'Anastasia\'s mate';
+
+  @override
+  String get puzzleThemeAnastasiaMateDescription => 'A knight and rook or queen team up to trap the opposing king between the side of the board and a friendly piece.';
+
+  @override
+  String get puzzleThemeArabianMate => 'Arabian mate';
+
+  @override
+  String get puzzleThemeArabianMateDescription => 'A knight and a rook team up to trap the opposing king on a corner of the board.';
+
+  @override
+  String get puzzleThemeAttackingF2F7 => 'Attacking f2 or f7';
+
+  @override
+  String get puzzleThemeAttackingF2F7Description => 'An attack focusing on the f2 or f7 pawn, such as in the fried liver opening.';
+
+  @override
+  String get puzzleThemeAttraction => 'Attraction';
+
+  @override
+  String get puzzleThemeAttractionDescription => 'An exchange or sacrifice encouraging or forcing an opponent piece to a square that allows a follow-up tactic.';
+
+  @override
+  String get puzzleThemeBackRankMate => 'Back rank mate';
+
+  @override
+  String get puzzleThemeBackRankMateDescription => 'Checkmate the king on the home rank, when it is trapped there by its own pieces.';
+
+  @override
+  String get puzzleThemeBishopEndgame => 'Bishop endgame';
+
+  @override
+  String get puzzleThemeBishopEndgameDescription => 'An endgame with only bishops and pawns.';
+
+  @override
+  String get puzzleThemeBodenMate => 'Boden\'s mate';
+
+  @override
+  String get puzzleThemeBodenMateDescription => 'Two attacking bishops on criss-crossing diagonals deliver mate to a king obstructed by friendly pieces.';
+
+  @override
+  String get puzzleThemeCastling => 'Castling';
+
+  @override
+  String get puzzleThemeCastlingDescription => 'Bring the king to safety, and deploy the rook for attack.';
+
+  @override
+  String get puzzleThemeCapturingDefender => 'Capture the defender';
+
+  @override
+  String get puzzleThemeCapturingDefenderDescription => 'Removing a piece that is critical to defence of another piece, allowing the now undefended piece to be captured on a following move.';
+
+  @override
+  String get puzzleThemeCrushing => 'Crushing';
+
+  @override
+  String get puzzleThemeCrushingDescription => 'Spot the opponent blunder to obtain a crushing advantage. (eval ≥ 600cp)';
+
+  @override
+  String get puzzleThemeDoubleBishopMate => 'Double bishop mate';
+
+  @override
+  String get puzzleThemeDoubleBishopMateDescription => 'Two attacking bishops on adjacent diagonals deliver mate to a king obstructed by friendly pieces.';
+
+  @override
+  String get puzzleThemeDovetailMate => 'Dovetail mate';
+
+  @override
+  String get puzzleThemeDovetailMateDescription => 'A queen delivers mate to an adjacent king, whose only two escape squares are obstructed by friendly pieces.';
+
+  @override
+  String get puzzleThemeEquality => 'Equality';
+
+  @override
+  String get puzzleThemeEqualityDescription => 'Come back from a losing position, and secure a draw or a balanced position. (eval ≤ 200cp)';
+
+  @override
+  String get puzzleThemeKingsideAttack => 'Kingside attack';
+
+  @override
+  String get puzzleThemeKingsideAttackDescription => 'An attack of the opponent\'s king, after they castled on the king side.';
+
+  @override
+  String get puzzleThemeClearance => 'Clearance';
+
+  @override
+  String get puzzleThemeClearanceDescription => 'A move, often with tempo, that clears a square, file or diagonal for a follow-up tactical idea.';
+
+  @override
+  String get puzzleThemeDefensiveMove => 'Defensive move';
+
+  @override
+  String get puzzleThemeDefensiveMoveDescription => 'A precise move or sequence of moves that is needed to avoid losing material or another advantage.';
+
+  @override
+  String get puzzleThemeDeflection => 'Deflection';
+
+  @override
+  String get puzzleThemeDeflectionDescription => 'A move that distracts an opponent piece from another duty that it performs, such as guarding a key square. Sometimes also called \"overloading\".';
+
+  @override
+  String get puzzleThemeDiscoveredAttack => 'Discovered attack';
+
+  @override
+  String get puzzleThemeDiscoveredAttackDescription => 'Moving a piece (such as a knight), that previously blocked an attack by a long range piece (such as a rook), out of the way of that piece.';
+
+  @override
+  String get puzzleThemeDoubleCheck => 'Double check';
+
+  @override
+  String get puzzleThemeDoubleCheckDescription => 'Checking with two pieces at once, as a result of a discovered attack where both the moving piece and the unveiled piece attack the opponent\'s king.';
+
+  @override
+  String get puzzleThemeEndgame => 'Endgame';
+
+  @override
+  String get puzzleThemeEndgameDescription => 'A tactic during the last phase of the game.';
+
+  @override
+  String get puzzleThemeEnPassantDescription => 'A tactic involving the en passant rule, where a pawn can capture an opponent pawn that has bypassed it using its initial two-square move.';
+
+  @override
+  String get puzzleThemeExposedKing => 'Exposed king';
+
+  @override
+  String get puzzleThemeExposedKingDescription => 'A tactic involving a king with few defenders around it, often leading to checkmate.';
+
+  @override
+  String get puzzleThemeFork => 'Fork';
+
+  @override
+  String get puzzleThemeForkDescription => 'A move where the moved piece attacks two opponent pieces at once.';
+
+  @override
+  String get puzzleThemeHangingPiece => 'Hanging piece';
+
+  @override
+  String get puzzleThemeHangingPieceDescription => 'A tactic involving an opponent piece being undefended or insufficiently defended and free to capture.';
+
+  @override
+  String get puzzleThemeHookMate => 'Hook mate';
+
+  @override
+  String get puzzleThemeHookMateDescription => 'Checkmate with a rook, knight, and pawn along with one enemy pawn to limit the enemy king\'s escape.';
+
+  @override
+  String get puzzleThemeInterference => 'Interference';
+
+  @override
+  String get puzzleThemeInterferenceDescription => 'Moving a piece between two opponent pieces to leave one or both opponent pieces undefended, such as a knight on a defended square between two rooks.';
+
+  @override
+  String get puzzleThemeIntermezzo => 'Intermezzo';
+
+  @override
+  String get puzzleThemeIntermezzoDescription => 'Instead of playing the expected move, first interpose another move posing an immediate threat that the opponent must answer. Also known as \"Zwischenzug\" or \"In between\".';
+
+  @override
+  String get puzzleThemeKnightEndgame => 'Knight endgame';
+
+  @override
+  String get puzzleThemeKnightEndgameDescription => 'An endgame with only knights and pawns.';
+
+  @override
+  String get puzzleThemeLong => 'Long puzzle';
+
+  @override
+  String get puzzleThemeLongDescription => 'Three moves to win.';
+
+  @override
+  String get puzzleThemeMaster => 'Master games';
+
+  @override
+  String get puzzleThemeMasterDescription => 'Puzzles from games played by titled players.';
+
+  @override
+  String get puzzleThemeMasterVsMaster => 'Master vs Master games';
+
+  @override
+  String get puzzleThemeMasterVsMasterDescription => 'Puzzles from games between two titled players.';
+
+  @override
+  String get puzzleThemeMate => 'Checkmate';
+
+  @override
+  String get puzzleThemeMateDescription => 'Win the game with style.';
+
+  @override
+  String get puzzleThemeMateIn1 => 'Mate in 1';
+
+  @override
+  String get puzzleThemeMateIn1Description => 'Deliver checkmate in one move.';
+
+  @override
+  String get puzzleThemeMateIn2 => 'Mate in 2';
+
+  @override
+  String get puzzleThemeMateIn2Description => 'Deliver checkmate in two moves.';
+
+  @override
+  String get puzzleThemeMateIn3 => 'Mate in 3';
+
+  @override
+  String get puzzleThemeMateIn3Description => 'Deliver checkmate in three moves.';
+
+  @override
+  String get puzzleThemeMateIn4 => 'Mate in 4';
+
+  @override
+  String get puzzleThemeMateIn4Description => 'Deliver checkmate in four moves.';
+
+  @override
+  String get puzzleThemeMateIn5 => 'Mate in 5 or more';
+
+  @override
+  String get puzzleThemeMateIn5Description => 'Figure out a long mating sequence.';
+
+  @override
+  String get puzzleThemeMiddlegame => 'Middlegame';
+
+  @override
+  String get puzzleThemeMiddlegameDescription => 'A tactic during the second phase of the game.';
+
+  @override
+  String get puzzleThemeOneMove => 'One-move puzzle';
+
+  @override
+  String get puzzleThemeOneMoveDescription => 'A puzzle that is only one move long.';
+
+  @override
+  String get puzzleThemeOpening => 'Opening';
+
+  @override
+  String get puzzleThemeOpeningDescription => 'A tactic during the first phase of the game.';
+
+  @override
+  String get puzzleThemePawnEndgame => 'Pawn endgame';
+
+  @override
+  String get puzzleThemePawnEndgameDescription => 'An endgame with only pawns.';
+
+  @override
+  String get puzzleThemePin => 'Pin';
+
+  @override
+  String get puzzleThemePinDescription => 'A tactic involving pins, where a piece is unable to move without revealing an attack on a higher value piece.';
+
+  @override
+  String get puzzleThemePromotion => 'Promotion';
+
+  @override
+  String get puzzleThemePromotionDescription => 'Promote one of your pawn to a queen or minor piece.';
+
+  @override
+  String get puzzleThemeQueenEndgame => 'Queen endgame';
+
+  @override
+  String get puzzleThemeQueenEndgameDescription => 'An endgame with only queens and pawns.';
+
+  @override
+  String get puzzleThemeQueenRookEndgame => 'Queen and Rook';
+
+  @override
+  String get puzzleThemeQueenRookEndgameDescription => 'An endgame with only queens, rooks and pawns.';
+
+  @override
+  String get puzzleThemeQueensideAttack => 'Queenside attack';
+
+  @override
+  String get puzzleThemeQueensideAttackDescription => 'An attack of the opponent\'s king, after they castled on the queen side.';
+
+  @override
+  String get puzzleThemeQuietMove => 'Quiet move';
+
+  @override
+  String get puzzleThemeQuietMoveDescription => 'A move that does neither make a check or capture, nor an immediate threat to capture, but does prepare a more hidden unavoidable threat for a later move.';
+
+  @override
+  String get puzzleThemeRookEndgame => 'Rook endgame';
+
+  @override
+  String get puzzleThemeRookEndgameDescription => 'An endgame with only rooks and pawns.';
+
+  @override
+  String get puzzleThemeSacrifice => 'Sacrifice';
+
+  @override
+  String get puzzleThemeSacrificeDescription => 'A tactic involving giving up material in the short-term, to gain an advantage again after a forced sequence of moves.';
+
+  @override
+  String get puzzleThemeShort => 'Short puzzle';
+
+  @override
+  String get puzzleThemeShortDescription => 'Two moves to win.';
+
+  @override
+  String get puzzleThemeSkewer => 'Skewer';
+
+  @override
+  String get puzzleThemeSkewerDescription => 'A motif involving a high value piece being attacked, moving out the way, and allowing a lower value piece behind it to be captured or attacked, the inverse of a pin.';
+
+  @override
+  String get puzzleThemeSmotheredMate => 'Smothered mate';
+
+  @override
+  String get puzzleThemeSmotheredMateDescription => 'A checkmate delivered by a knight in which the mated king is unable to move because it is surrounded (or smothered) by its own pieces.';
+
+  @override
+  String get puzzleThemeSuperGM => 'Super GM games';
+
+  @override
+  String get puzzleThemeSuperGMDescription => 'Puzzles from games played by the best players in the world.';
+
+  @override
+  String get puzzleThemeTrappedPiece => 'Trapped piece';
+
+  @override
+  String get puzzleThemeTrappedPieceDescription => 'A piece is unable to escape capture as it has limited moves.';
+
+  @override
+  String get puzzleThemeUnderPromotion => 'Underpromotion';
+
+  @override
+  String get puzzleThemeUnderPromotionDescription => 'Promotion to a knight, bishop, or rook.';
+
+  @override
+  String get puzzleThemeVeryLong => 'Very long puzzle';
+
+  @override
+  String get puzzleThemeVeryLongDescription => 'Four moves or more to win.';
+
+  @override
+  String get puzzleThemeXRayAttack => 'X-Ray attack';
+
+  @override
+  String get puzzleThemeXRayAttackDescription => 'A piece attacks or defends a square, through an enemy piece.';
+
+  @override
+  String get puzzleThemeZugzwang => 'Zugzwang';
+
+  @override
+  String get puzzleThemeZugzwangDescription => 'The opponent is limited in the moves they can make, and all moves worsen their position.';
+
+  @override
+  String get puzzleThemeHealthyMix => 'Healthy mix';
+
+  @override
+  String get puzzleThemeHealthyMixDescription => 'A bit of everything. You don\'t know what to expect, so you remain ready for anything! Just like in real games.';
+
+  @override
+  String get puzzleThemePlayerGames => 'Player games';
+
+  @override
+  String get puzzleThemePlayerGamesDescription => 'Lookup puzzles generated from your games, or from another player\'s games.';
+
+  @override
+  String puzzleThemePuzzleDownloadInformation(String param) {
+    return 'These puzzles are in the public domain, and can be downloaded from $param.';
+  }
+
+  @override
+  String get searchSearch => 'Пребарај';
+
+  @override
+  String get settingsSettings => 'Поставки';
+
+  @override
+  String get settingsCloseAccount => 'Затвори го профилот';
+
+  @override
+  String get settingsManagedAccountCannotBeClosed => 'Your account is managed, and cannot be closed.';
+
+  @override
+  String get settingsClosingIsDefinitive => 'Затворањето на сметката е трајно. Неповратно. Сигурни сте?';
+
+  @override
+  String get settingsCantOpenSimilarAccount => 'Нема да ви биде дозволено да отворите нова сметка со истото име, дури и со различна големина на буквите.';
+
+  @override
+  String get settingsChangedMindDoNotCloseAccount => 'Се предомислив, не го затварај мојот профил';
+
+  @override
+  String get settingsCloseAccountExplanation => 'Сигурни сте дека сакате да ја затворите вашата сметка? Тоа е трајна одлука. НИКОГАШ ПОВЕЌЕ нема да можете да се најавите.';
+
+  @override
+  String get settingsThisAccountIsClosed => 'Овој профил е затворен.';
 
   @override
   String get playWithAFriend => 'Играј со пријател';
@@ -512,6 +1518,12 @@ class AppLocalizationsMk extends AppLocalizations {
 
   @override
   String get deleteFromHere => 'Избриши одовде';
+
+  @override
+  String get collapseVariations => 'Collapse variations';
+
+  @override
+  String get expandVariations => 'Expand variations';
 
   @override
   String get forceVariation => 'Прикажи како варијанта';
@@ -1371,15 +2383,6 @@ class AppLocalizationsMk extends AppLocalizations {
   String get emptyTournamentName => 'Остави празно за турнирот да биде крстен по шаховски првак.';
 
   @override
-  String get recommendNotTouching => 'Препорачуваме да не ги менувате овие поставки.';
-
-  @override
-  String get fewerPlayers => 'Ако поставите услови за влез, вашиот турнир ќе има помалку играчи.';
-
-  @override
-  String get showAdvancedSettings => 'Покажи ги напредните поставки';
-
-  @override
   String get makePrivateTournament => 'Направи го турнирот приватен и ограничи го пристапот со лозинка';
 
   @override
@@ -1509,10 +2512,7 @@ class AppLocalizationsMk extends AppLocalizations {
   String get editProfile => 'Уреди го профилот';
 
   @override
-  String get firstName => 'Име';
-
-  @override
-  String get lastName => 'Презиме';
+  String get realName => 'Real name';
 
   @override
   String get setFlair => 'Set your flair';
@@ -1641,13 +2641,7 @@ class AppLocalizationsMk extends AppLocalizations {
   String get cheat => 'Мамење';
 
   @override
-  String get insult => 'Навреда';
-
-  @override
   String get troll => 'Трол';
-
-  @override
-  String get ratingManipulation => 'Манипулација на рејтинг';
 
   @override
   String get other => 'Друго';
@@ -1754,6 +2748,9 @@ class AppLocalizationsMk extends AppLocalizations {
 
   @override
   String get outsideTheBoard => 'Надвор од таблата';
+
+  @override
+  String get allSquaresOfTheBoard => 'All squares of the board';
 
   @override
   String get onSlowGames => 'Во спори партии';
@@ -3460,1009 +4457,6 @@ class AppLocalizationsMk extends AppLocalizations {
   }
 
   @override
-  String get patronDonate => 'Донирај';
-
-  @override
-  String get patronLichessPatron => 'Lichess подржувач';
-
-  @override
-  String get preferencesPreferences => 'Поставки';
-
-  @override
-  String get preferencesDisplay => 'Display';
-
-  @override
-  String get preferencesPrivacy => 'Privacy';
-
-  @override
-  String get preferencesNotifications => 'Notifications';
-
-  @override
-  String get preferencesPieceAnimation => 'Анимација на фигурите';
-
-  @override
-  String get preferencesMaterialDifference => 'Материјална разлика';
-
-  @override
-  String get preferencesBoardHighlights => 'Нагласени полиња (последен потег и шах)';
-
-  @override
-  String get preferencesPieceDestinations => 'Легални потези (важечки потези и претпотези)';
-
-  @override
-  String get preferencesBoardCoordinates => 'Координати на таблата (А-H, 1-8)';
-
-  @override
-  String get preferencesMoveListWhilePlaying => 'Листа на потези за време на партијата';
-
-  @override
-  String get preferencesPgnPieceNotation => 'Запишување на потезите';
-
-  @override
-  String get preferencesChessPieceSymbol => 'Симбол на фигурата';
-
-  @override
-  String get preferencesPgnLetter => 'Буква (K, Q, R, B, N)';
-
-  @override
-  String get preferencesZenMode => 'Зен режим';
-
-  @override
-  String get preferencesShowPlayerRatings => 'Покажи го рејтингот на играчите';
-
-  @override
-  String get preferencesShowFlairs => 'Show player flairs';
-
-  @override
-  String get preferencesExplainShowPlayerRatings => 'Ова овозможува да ги скриете сите рангови од веб страницата, со цел да се фокусирате на шахот. Игрите и понатаму ќе бидат рангирани, со ова само нема да можете да ги видите.';
-
-  @override
-  String get preferencesDisplayBoardResizeHandle => 'Прикажи ја рачката за промена на големината на таблата';
-
-  @override
-  String get preferencesOnlyOnInitialPosition => 'Само на почетокот на партијата';
-
-  @override
-  String get preferencesInGameOnly => 'In-game only';
-
-  @override
-  String get preferencesChessClock => 'Шаховски часовник';
-
-  @override
-  String get preferencesTenthsOfSeconds => 'Стотинки';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'Кога останатото време е < 10 секунди';
-
-  @override
-  String get preferencesHorizontalGreenProgressBars => 'Хоризонтална зелена линија за напредок';
-
-  @override
-  String get preferencesSoundWhenTimeGetsCritical => 'Звук кога има преостанато малку време';
-
-  @override
-  String get preferencesGiveMoreTime => 'Додај време';
-
-  @override
-  String get preferencesGameBehavior => 'Начин на играње';
-
-  @override
-  String get preferencesHowDoYouMovePieces => 'Како да ги движите фигурите?';
-
-  @override
-  String get preferencesClickTwoSquares => 'Кликни на двете полиња';
-
-  @override
-  String get preferencesDragPiece => 'Влечи ја фигурата';
-
-  @override
-  String get preferencesBothClicksAndDrag => 'И двете';
-
-  @override
-  String get preferencesPremovesPlayingDuringOpponentTurn => 'Претпотези (играње додека противникот е на ред)';
-
-  @override
-  String get preferencesTakebacksWithOpponentApproval => 'Враќање потези (со дозвола на противникот)';
-
-  @override
-  String get preferencesInCasualGamesOnly => 'Само во пријателски партии';
-
-  @override
-  String get preferencesPromoteToQueenAutomatically => 'Автоматски унапреди во кралица';
-
-  @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Hold the <ctrl> key while promoting to temporarily disable auto-promotion';
-
-  @override
-  String get preferencesWhenPremoving => 'Кога изигрувам претпотег';
-
-  @override
-  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Автоматско прогласување реми по третото повторување на потегот';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Кога останатото време е < 30 секунди';
-
-  @override
-  String get preferencesMoveConfirmation => 'Потврда за потегот';
-
-  @override
-  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Can be disabled during a game with the board menu';
-
-  @override
-  String get preferencesInCorrespondenceGames => 'Дописен шах';
-
-  @override
-  String get preferencesCorrespondenceAndUnlimited => 'Дописен шах и неограничени партии';
-
-  @override
-  String get preferencesConfirmResignationAndDrawOffers => 'Потврди предавање и понуда за реми';
-
-  @override
-  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Метод за рокада';
-
-  @override
-  String get preferencesCastleByMovingTwoSquares => 'Помести го кралот две полиња';
-
-  @override
-  String get preferencesCastleByMovingOntoTheRook => 'Помести го кралот врз топот';
-
-  @override
-  String get preferencesInputMovesWithTheKeyboard => 'Внеси потези со тастатура';
-
-  @override
-  String get preferencesInputMovesWithVoice => 'Input moves with your voice';
-
-  @override
-  String get preferencesSnapArrowsToValidMoves => 'Snap arrows to valid moves';
-
-  @override
-  String get preferencesSayGgWpAfterLosingOrDrawing => 'Say \"Good game, well played\" upon defeat or draw';
-
-  @override
-  String get preferencesYourPreferencesHaveBeenSaved => 'Вашите поставки се зачувани.';
-
-  @override
-  String get preferencesScrollOnTheBoardToReplayMoves => 'Scroll on the board to replay moves';
-
-  @override
-  String get preferencesCorrespondenceEmailNotification => 'Daily email listing your correspondence games';
-
-  @override
-  String get preferencesNotifyStreamStart => 'Streamer goes live';
-
-  @override
-  String get preferencesNotifyInboxMsg => 'New inbox message';
-
-  @override
-  String get preferencesNotifyForumMention => 'Forum comment mentions you';
-
-  @override
-  String get preferencesNotifyInvitedStudy => 'Study invite';
-
-  @override
-  String get preferencesNotifyGameEvent => 'Correspondence game updates';
-
-  @override
-  String get preferencesNotifyChallenge => 'Challenges';
-
-  @override
-  String get preferencesNotifyTournamentSoon => 'Tournament starting soon';
-
-  @override
-  String get preferencesNotifyTimeAlarm => 'Correspondence clock running out';
-
-  @override
-  String get preferencesNotifyBell => 'Bell notification within Lichess';
-
-  @override
-  String get preferencesNotifyPush => 'Device notification when you\'re not on Lichess';
-
-  @override
-  String get preferencesNotifyWeb => 'Browser';
-
-  @override
-  String get preferencesNotifyDevice => 'Device';
-
-  @override
-  String get preferencesBellNotificationSound => 'Bell notification sound';
-
-  @override
-  String get puzzlePuzzles => 'Загатки';
-
-  @override
-  String get puzzlePuzzleThemes => 'Категории на загатки';
-
-  @override
-  String get puzzleRecommended => 'Препорачани';
-
-  @override
-  String get puzzlePhases => 'Етапи';
-
-  @override
-  String get puzzleMotifs => 'Мотиви';
-
-  @override
-  String get puzzleAdvanced => 'Напредно';
-
-  @override
-  String get puzzleLengths => 'Должина';
-
-  @override
-  String get puzzleMates => 'Матови';
-
-  @override
-  String get puzzleGoals => 'Цели';
-
-  @override
-  String get puzzleOrigin => 'Потекло';
-
-  @override
-  String get puzzleSpecialMoves => 'Специјални потези';
-
-  @override
-  String get puzzleDidYouLikeThisPuzzle => 'Дали Ви се допадна оваа загатка?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Гласај и премини на наредната!';
-
-  @override
-  String get puzzleUpVote => 'Up vote puzzle';
-
-  @override
-  String get puzzleDownVote => 'Down vote puzzle';
-
-  @override
-  String get puzzleYourPuzzleRatingWillNotChange => 'Вашиот рејтинг нема да се промени. Имајте на ум дека загатките не се натпреварување. Вашиот рејтинг помага во изборот на најсоодветните загатки за вашата моментална вештина.';
-
-  @override
-  String get puzzleFindTheBestMoveForWhite => 'Најди го најдобриот потег на белиот.';
-
-  @override
-  String get puzzleFindTheBestMoveForBlack => 'Најди го најдобриот потег на црниот.';
-
-  @override
-  String get puzzleToGetPersonalizedPuzzles => 'Персонализирани загатки:';
-
-  @override
-  String puzzlePuzzleId(String param) {
-    return 'Загатка $param';
-  }
-
-  @override
-  String get puzzlePuzzleOfTheDay => 'Загатка на денот';
-
-  @override
-  String get puzzleDailyPuzzle => 'Daily Puzzle';
-
-  @override
-  String get puzzleClickToSolve => 'Кликни за решение';
-
-  @override
-  String get puzzleGoodMove => 'Добар потег';
-
-  @override
-  String get puzzleBestMove => 'Најдобар потег!';
-
-  @override
-  String get puzzleKeepGoing => 'Продолжи…';
-
-  @override
-  String get puzzlePuzzleSuccess => 'Успех!';
-
-  @override
-  String get puzzlePuzzleComplete => 'Загатката е решена!';
-
-  @override
-  String get puzzleByOpenings => 'By openings';
-
-  @override
-  String get puzzlePuzzlesByOpenings => 'Puzzles by openings';
-
-  @override
-  String get puzzleOpeningsYouPlayedTheMost => 'Openings you played the most in rated games';
-
-  @override
-  String get puzzleUseFindInPage => 'Use \"Find in page\" in the browser menu to find your favourite opening!';
-
-  @override
-  String get puzzleUseCtrlF => 'Use Ctrl+f to find your favourite opening!';
-
-  @override
-  String get puzzleNotTheMove => 'Неточен потег!';
-
-  @override
-  String get puzzleTrySomethingElse => 'Пробајте нешто друго.';
-
-  @override
-  String puzzleRatingX(String param) {
-    return 'Рејтинг: $param';
-  }
-
-  @override
-  String get puzzleHidden => 'скриен';
-
-  @override
-  String puzzleFromGameLink(String param) {
-    return 'Од играта $param';
-  }
-
-  @override
-  String get puzzleContinueTraining => 'Продолжи да вежбаш';
-
-  @override
-  String get puzzleDifficultyLevel => 'Ниво на тешкотија';
-
-  @override
-  String get puzzleNormal => 'Нормално';
-
-  @override
-  String get puzzleEasier => 'Полесно';
-
-  @override
-  String get puzzleEasiest => 'Најлесно';
-
-  @override
-  String get puzzleHarder => 'Потешко';
-
-  @override
-  String get puzzleHardest => 'Најтешко';
-
-  @override
-  String get puzzleExample => 'Пример';
-
-  @override
-  String get puzzleAddAnotherTheme => 'Додади нова тема';
-
-  @override
-  String get puzzleNextPuzzle => 'Next puzzle';
-
-  @override
-  String get puzzleJumpToNextPuzzleImmediately => 'Веднаш премини на следната загатка';
-
-  @override
-  String get puzzlePuzzleDashboard => 'Панел на загатки';
-
-  @override
-  String get puzzleImprovementAreas => 'Области за подобрување';
-
-  @override
-  String get puzzleStrengths => 'Предности';
-
-  @override
-  String get puzzleHistory => 'Историја на загатки';
-
-  @override
-  String get puzzleSolved => 'решено';
-
-  @override
-  String get puzzleFailed => 'неуспешно';
-
-  @override
-  String get puzzleStreakDescription => 'Решавајте прогресивно потешки загатки и изградете победничка серија. Нема часовник, па не брзајте. Еден погрешен потег и играта е завршена! Но, можете да прескокнете еден потег по сесија.';
-
-  @override
-  String puzzleYourStreakX(String param) {
-    return 'Вашата серија: $param';
-  }
-
-  @override
-  String get puzzleStreakSkipExplanation => 'Прескокнете го овој потег за да ја зачувате вашата победничка серија! Дозволено само еднаш во сесија.';
-
-  @override
-  String get puzzleContinueTheStreak => 'Продолжете ја серијата';
-
-  @override
-  String get puzzleNewStreak => 'Нова серија';
-
-  @override
-  String get puzzleFromMyGames => 'Од моите игри';
-
-  @override
-  String get puzzleLookupOfPlayer => 'Пребарувај загатки од игрите на други играчи';
-
-  @override
-  String puzzleFromXGames(String param) {
-    return 'Загатки од игрите на $param\'';
-  }
-
-  @override
-  String get puzzleSearchPuzzles => 'Пребарувај загатки';
-
-  @override
-  String get puzzleFromMyGamesNone => 'Немате загатки во базата на податоци, но Lichess сè уште многу ве сака.\n\nИграјте брзи и класични игри за да ги зголемите шансите ваша загатка да биде додадена!';
-
-  @override
-  String puzzleFromXGamesFound(String param1, String param2) {
-    return '$param1 загатки пронајдени во $param2 игри';
-  }
-
-  @override
-  String get puzzlePuzzleDashboardDescription => 'Вежбај, анализирај, подобри се';
-
-  @override
-  String puzzlePercentSolved(String param) {
-    return '$param решени';
-  }
-
-  @override
-  String get puzzleNoPuzzlesToShow => 'Нема што да се покаже овде, прво одиграјте неколку загатки!';
-
-  @override
-  String get puzzleImprovementAreasDescription => 'Вежбајте ги овие загатки за да го оптимизирате вашиот прогрес!';
-
-  @override
-  String get puzzleStrengthDescription => 'Најдобро играте во овие теми';
-
-  @override
-  String puzzlePlayedXTimes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Одиграно $count пати',
-      one: 'Одиграно $count',
-      zero: 'Одиграно $count',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsBelowYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count поени под вашиот рејтинг',
-      one: 'Еден поен под вашиот рејтинг',
-      zero: 'Еден поен под вашиот рејтинг',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsAboveYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count поени над вашиот рејтинг',
-      one: 'Еден поен над вашиот рејтинг',
-      zero: 'Еден поен над вашиот рејтинг',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPlayed(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count одиграни',
-      one: '$count одиграна',
-      zero: '$count одиграна',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbToReplay(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count прегледај',
-      one: '$count прегледај',
-      zero: '$count прегледај',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get puzzleThemeAdvancedPawn => 'Advanced pawn';
-
-  @override
-  String get puzzleThemeAdvancedPawnDescription => 'One of your pawns is deep into the opponent position, maybe threatening to promote.';
-
-  @override
-  String get puzzleThemeAdvantage => 'Предност';
-
-  @override
-  String get puzzleThemeAdvantageDescription => 'Искористете ја шансата да добиете одлучувачка предност. (200cp ≤ eval ≤ 600cp)';
-
-  @override
-  String get puzzleThemeAnastasiaMate => 'Anastasia\'s mate';
-
-  @override
-  String get puzzleThemeAnastasiaMateDescription => 'A knight and rook or queen team up to trap the opposing king between the side of the board and a friendly piece.';
-
-  @override
-  String get puzzleThemeArabianMate => 'Arabian mate';
-
-  @override
-  String get puzzleThemeArabianMateDescription => 'A knight and a rook team up to trap the opposing king on a corner of the board.';
-
-  @override
-  String get puzzleThemeAttackingF2F7 => 'Attacking f2 or f7';
-
-  @override
-  String get puzzleThemeAttackingF2F7Description => 'An attack focusing on the f2 or f7 pawn, such as in the fried liver opening.';
-
-  @override
-  String get puzzleThemeAttraction => 'Attraction';
-
-  @override
-  String get puzzleThemeAttractionDescription => 'An exchange or sacrifice encouraging or forcing an opponent piece to a square that allows a follow-up tactic.';
-
-  @override
-  String get puzzleThemeBackRankMate => 'Back rank mate';
-
-  @override
-  String get puzzleThemeBackRankMateDescription => 'Checkmate the king on the home rank, when it is trapped there by its own pieces.';
-
-  @override
-  String get puzzleThemeBishopEndgame => 'Bishop endgame';
-
-  @override
-  String get puzzleThemeBishopEndgameDescription => 'An endgame with only bishops and pawns.';
-
-  @override
-  String get puzzleThemeBodenMate => 'Boden\'s mate';
-
-  @override
-  String get puzzleThemeBodenMateDescription => 'Two attacking bishops on criss-crossing diagonals deliver mate to a king obstructed by friendly pieces.';
-
-  @override
-  String get puzzleThemeCastling => 'Castling';
-
-  @override
-  String get puzzleThemeCastlingDescription => 'Bring the king to safety, and deploy the rook for attack.';
-
-  @override
-  String get puzzleThemeCapturingDefender => 'Capture the defender';
-
-  @override
-  String get puzzleThemeCapturingDefenderDescription => 'Removing a piece that is critical to defence of another piece, allowing the now undefended piece to be captured on a following move.';
-
-  @override
-  String get puzzleThemeCrushing => 'Crushing';
-
-  @override
-  String get puzzleThemeCrushingDescription => 'Spot the opponent blunder to obtain a crushing advantage. (eval ≥ 600cp)';
-
-  @override
-  String get puzzleThemeDoubleBishopMate => 'Double bishop mate';
-
-  @override
-  String get puzzleThemeDoubleBishopMateDescription => 'Two attacking bishops on adjacent diagonals deliver mate to a king obstructed by friendly pieces.';
-
-  @override
-  String get puzzleThemeDovetailMate => 'Dovetail mate';
-
-  @override
-  String get puzzleThemeDovetailMateDescription => 'A queen delivers mate to an adjacent king, whose only two escape squares are obstructed by friendly pieces.';
-
-  @override
-  String get puzzleThemeEquality => 'Equality';
-
-  @override
-  String get puzzleThemeEqualityDescription => 'Come back from a losing position, and secure a draw or a balanced position. (eval ≤ 200cp)';
-
-  @override
-  String get puzzleThemeKingsideAttack => 'Kingside attack';
-
-  @override
-  String get puzzleThemeKingsideAttackDescription => 'An attack of the opponent\'s king, after they castled on the king side.';
-
-  @override
-  String get puzzleThemeClearance => 'Clearance';
-
-  @override
-  String get puzzleThemeClearanceDescription => 'A move, often with tempo, that clears a square, file or diagonal for a follow-up tactical idea.';
-
-  @override
-  String get puzzleThemeDefensiveMove => 'Defensive move';
-
-  @override
-  String get puzzleThemeDefensiveMoveDescription => 'A precise move or sequence of moves that is needed to avoid losing material or another advantage.';
-
-  @override
-  String get puzzleThemeDeflection => 'Deflection';
-
-  @override
-  String get puzzleThemeDeflectionDescription => 'A move that distracts an opponent piece from another duty that it performs, such as guarding a key square. Sometimes also called \"overloading\".';
-
-  @override
-  String get puzzleThemeDiscoveredAttack => 'Discovered attack';
-
-  @override
-  String get puzzleThemeDiscoveredAttackDescription => 'Moving a piece (such as a knight), that previously blocked an attack by a long range piece (such as a rook), out of the way of that piece.';
-
-  @override
-  String get puzzleThemeDoubleCheck => 'Double check';
-
-  @override
-  String get puzzleThemeDoubleCheckDescription => 'Checking with two pieces at once, as a result of a discovered attack where both the moving piece and the unveiled piece attack the opponent\'s king.';
-
-  @override
-  String get puzzleThemeEndgame => 'Endgame';
-
-  @override
-  String get puzzleThemeEndgameDescription => 'A tactic during the last phase of the game.';
-
-  @override
-  String get puzzleThemeEnPassantDescription => 'A tactic involving the en passant rule, where a pawn can capture an opponent pawn that has bypassed it using its initial two-square move.';
-
-  @override
-  String get puzzleThemeExposedKing => 'Exposed king';
-
-  @override
-  String get puzzleThemeExposedKingDescription => 'A tactic involving a king with few defenders around it, often leading to checkmate.';
-
-  @override
-  String get puzzleThemeFork => 'Fork';
-
-  @override
-  String get puzzleThemeForkDescription => 'A move where the moved piece attacks two opponent pieces at once.';
-
-  @override
-  String get puzzleThemeHangingPiece => 'Hanging piece';
-
-  @override
-  String get puzzleThemeHangingPieceDescription => 'A tactic involving an opponent piece being undefended or insufficiently defended and free to capture.';
-
-  @override
-  String get puzzleThemeHookMate => 'Hook mate';
-
-  @override
-  String get puzzleThemeHookMateDescription => 'Checkmate with a rook, knight, and pawn along with one enemy pawn to limit the enemy king\'s escape.';
-
-  @override
-  String get puzzleThemeInterference => 'Interference';
-
-  @override
-  String get puzzleThemeInterferenceDescription => 'Moving a piece between two opponent pieces to leave one or both opponent pieces undefended, such as a knight on a defended square between two rooks.';
-
-  @override
-  String get puzzleThemeIntermezzo => 'Intermezzo';
-
-  @override
-  String get puzzleThemeIntermezzoDescription => 'Instead of playing the expected move, first interpose another move posing an immediate threat that the opponent must answer. Also known as \"Zwischenzug\" or \"In between\".';
-
-  @override
-  String get puzzleThemeKnightEndgame => 'Knight endgame';
-
-  @override
-  String get puzzleThemeKnightEndgameDescription => 'An endgame with only knights and pawns.';
-
-  @override
-  String get puzzleThemeLong => 'Long puzzle';
-
-  @override
-  String get puzzleThemeLongDescription => 'Three moves to win.';
-
-  @override
-  String get puzzleThemeMaster => 'Master games';
-
-  @override
-  String get puzzleThemeMasterDescription => 'Puzzles from games played by titled players.';
-
-  @override
-  String get puzzleThemeMasterVsMaster => 'Master vs Master games';
-
-  @override
-  String get puzzleThemeMasterVsMasterDescription => 'Puzzles from games between two titled players.';
-
-  @override
-  String get puzzleThemeMate => 'Checkmate';
-
-  @override
-  String get puzzleThemeMateDescription => 'Win the game with style.';
-
-  @override
-  String get puzzleThemeMateIn1 => 'Mate in 1';
-
-  @override
-  String get puzzleThemeMateIn1Description => 'Deliver checkmate in one move.';
-
-  @override
-  String get puzzleThemeMateIn2 => 'Mate in 2';
-
-  @override
-  String get puzzleThemeMateIn2Description => 'Deliver checkmate in two moves.';
-
-  @override
-  String get puzzleThemeMateIn3 => 'Mate in 3';
-
-  @override
-  String get puzzleThemeMateIn3Description => 'Deliver checkmate in three moves.';
-
-  @override
-  String get puzzleThemeMateIn4 => 'Mate in 4';
-
-  @override
-  String get puzzleThemeMateIn4Description => 'Deliver checkmate in four moves.';
-
-  @override
-  String get puzzleThemeMateIn5 => 'Mate in 5 or more';
-
-  @override
-  String get puzzleThemeMateIn5Description => 'Figure out a long mating sequence.';
-
-  @override
-  String get puzzleThemeMiddlegame => 'Middlegame';
-
-  @override
-  String get puzzleThemeMiddlegameDescription => 'A tactic during the second phase of the game.';
-
-  @override
-  String get puzzleThemeOneMove => 'One-move puzzle';
-
-  @override
-  String get puzzleThemeOneMoveDescription => 'A puzzle that is only one move long.';
-
-  @override
-  String get puzzleThemeOpening => 'Opening';
-
-  @override
-  String get puzzleThemeOpeningDescription => 'A tactic during the first phase of the game.';
-
-  @override
-  String get puzzleThemePawnEndgame => 'Pawn endgame';
-
-  @override
-  String get puzzleThemePawnEndgameDescription => 'An endgame with only pawns.';
-
-  @override
-  String get puzzleThemePin => 'Pin';
-
-  @override
-  String get puzzleThemePinDescription => 'A tactic involving pins, where a piece is unable to move without revealing an attack on a higher value piece.';
-
-  @override
-  String get puzzleThemePromotion => 'Promotion';
-
-  @override
-  String get puzzleThemePromotionDescription => 'Promote one of your pawn to a queen or minor piece.';
-
-  @override
-  String get puzzleThemeQueenEndgame => 'Queen endgame';
-
-  @override
-  String get puzzleThemeQueenEndgameDescription => 'An endgame with only queens and pawns.';
-
-  @override
-  String get puzzleThemeQueenRookEndgame => 'Queen and Rook';
-
-  @override
-  String get puzzleThemeQueenRookEndgameDescription => 'An endgame with only queens, rooks and pawns.';
-
-  @override
-  String get puzzleThemeQueensideAttack => 'Queenside attack';
-
-  @override
-  String get puzzleThemeQueensideAttackDescription => 'An attack of the opponent\'s king, after they castled on the queen side.';
-
-  @override
-  String get puzzleThemeQuietMove => 'Quiet move';
-
-  @override
-  String get puzzleThemeQuietMoveDescription => 'A move that does neither make a check or capture, nor an immediate threat to capture, but does prepare a more hidden unavoidable threat for a later move.';
-
-  @override
-  String get puzzleThemeRookEndgame => 'Rook endgame';
-
-  @override
-  String get puzzleThemeRookEndgameDescription => 'An endgame with only rooks and pawns.';
-
-  @override
-  String get puzzleThemeSacrifice => 'Sacrifice';
-
-  @override
-  String get puzzleThemeSacrificeDescription => 'A tactic involving giving up material in the short-term, to gain an advantage again after a forced sequence of moves.';
-
-  @override
-  String get puzzleThemeShort => 'Short puzzle';
-
-  @override
-  String get puzzleThemeShortDescription => 'Two moves to win.';
-
-  @override
-  String get puzzleThemeSkewer => 'Skewer';
-
-  @override
-  String get puzzleThemeSkewerDescription => 'A motif involving a high value piece being attacked, moving out the way, and allowing a lower value piece behind it to be captured or attacked, the inverse of a pin.';
-
-  @override
-  String get puzzleThemeSmotheredMate => 'Smothered mate';
-
-  @override
-  String get puzzleThemeSmotheredMateDescription => 'A checkmate delivered by a knight in which the mated king is unable to move because it is surrounded (or smothered) by its own pieces.';
-
-  @override
-  String get puzzleThemeSuperGM => 'Super GM games';
-
-  @override
-  String get puzzleThemeSuperGMDescription => 'Puzzles from games played by the best players in the world.';
-
-  @override
-  String get puzzleThemeTrappedPiece => 'Trapped piece';
-
-  @override
-  String get puzzleThemeTrappedPieceDescription => 'A piece is unable to escape capture as it has limited moves.';
-
-  @override
-  String get puzzleThemeUnderPromotion => 'Underpromotion';
-
-  @override
-  String get puzzleThemeUnderPromotionDescription => 'Promotion to a knight, bishop, or rook.';
-
-  @override
-  String get puzzleThemeVeryLong => 'Very long puzzle';
-
-  @override
-  String get puzzleThemeVeryLongDescription => 'Four moves or more to win.';
-
-  @override
-  String get puzzleThemeXRayAttack => 'X-Ray attack';
-
-  @override
-  String get puzzleThemeXRayAttackDescription => 'A piece attacks or defends a square, through an enemy piece.';
-
-  @override
-  String get puzzleThemeZugzwang => 'Zugzwang';
-
-  @override
-  String get puzzleThemeZugzwangDescription => 'The opponent is limited in the moves they can make, and all moves worsen their position.';
-
-  @override
-  String get puzzleThemeHealthyMix => 'Healthy mix';
-
-  @override
-  String get puzzleThemeHealthyMixDescription => 'A bit of everything. You don\'t know what to expect, so you remain ready for anything! Just like in real games.';
-
-  @override
-  String get puzzleThemePlayerGames => 'Player games';
-
-  @override
-  String get puzzleThemePlayerGamesDescription => 'Lookup puzzles generated from your games, or from another player\'s games.';
-
-  @override
-  String puzzleThemePuzzleDownloadInformation(String param) {
-    return 'These puzzles are in the public domain, and can be downloaded from $param.';
-  }
-
-  @override
-  String perfStatPerfStats(String param) {
-    return '$param статистика';
-  }
-
-  @override
-  String get perfStatViewTheGames => 'Прегледај ги партиите';
-
-  @override
-  String get perfStatProvisional => 'привремен';
-
-  @override
-  String get perfStatNotEnoughRatedGames => 'Нема одиграно доволно рангирани игри за воспоставување на рејтинг.';
-
-  @override
-  String perfStatProgressOverLastXGames(String param) {
-    return 'Напредок во последните $param партии:';
-  }
-
-  @override
-  String perfStatRatingDeviation(String param) {
-    return 'Девијација на рејтингот: $param.';
-  }
-
-  @override
-  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
-    return 'Пониска вредност значи дека рејтингот е постабилен. Над $param1, рејтингот се смета за привремен. За да биде вклучена во рангирањата, оваа вредност треба да биде под $param2 (класичен шах) или $param3 (варијации).';
-  }
-
-  @override
-  String get perfStatTotalGames => 'Вкупно партии';
-
-  @override
-  String get perfStatRatedGames => 'Рангирани партии';
-
-  @override
-  String get perfStatTournamentGames => 'Турнирски партии';
-
-  @override
-  String get perfStatBerserkedGames => 'Берсерк парии';
-
-  @override
-  String get perfStatTimeSpentPlaying => 'Време поминато во играње';
-
-  @override
-  String get perfStatAverageOpponent => 'Просечен противник';
-
-  @override
-  String get perfStatVictories => 'Победи';
-
-  @override
-  String get perfStatDefeats => 'Порази';
-
-  @override
-  String get perfStatDisconnections => 'Прекинати партии';
-
-  @override
-  String get perfStatNotEnoughGames => 'Недоволно одиграни партии';
-
-  @override
-  String perfStatHighestRating(String param) {
-    return 'Највисок рејтинг: $param';
-  }
-
-  @override
-  String perfStatLowestRating(String param) {
-    return 'Најнизок рејтинг: $param';
-  }
-
-  @override
-  String perfStatFromXToY(String param1, String param2) {
-    return 'од $param1 до $param2';
-  }
-
-  @override
-  String get perfStatWinningStreak => 'Победничка низа';
-
-  @override
-  String get perfStatLosingStreak => 'Губитничка низа';
-
-  @override
-  String perfStatLongestStreak(String param) {
-    return 'Најдолга низа: $param';
-  }
-
-  @override
-  String perfStatCurrentStreak(String param) {
-    return 'Сегашна низа: $param';
-  }
-
-  @override
-  String get perfStatBestRated => 'Најдобро рангирани победи';
-
-  @override
-  String get perfStatGamesInARow => 'Број одиграни партии во низа';
-
-  @override
-  String get perfStatLessThanOneHour => 'Помалку од еден час меѓу партии';
-
-  @override
-  String get perfStatMaxTimePlaying => 'Макс. време поминато во играње';
-
-  @override
-  String get perfStatNow => 'сега';
-
-  @override
-  String get searchSearch => 'Пребарај';
-
-  @override
-  String get settingsSettings => 'Поставки';
-
-  @override
-  String get settingsCloseAccount => 'Затвори го профилот';
-
-  @override
-  String get settingsManagedAccountCannotBeClosed => 'Your account is managed, and cannot be closed.';
-
-  @override
-  String get settingsClosingIsDefinitive => 'Затворањето на сметката е трајно. Неповратно. Сигурни сте?';
-
-  @override
-  String get settingsCantOpenSimilarAccount => 'Нема да ви биде дозволено да отворите нова сметка со истото име, дури и со различна големина на буквите.';
-
-  @override
-  String get settingsChangedMindDoNotCloseAccount => 'Се предомислив, не го затварај мојот профил';
-
-  @override
-  String get settingsCloseAccountExplanation => 'Сигурни сте дека сакате да ја затворите вашата сметка? Тоа е трајна одлука. НИКОГАШ ПОВЕЌЕ нема да можете да се најавите.';
-
-  @override
-  String get settingsThisAccountIsClosed => 'Овој профил е затворен.';
-
-  @override
-  String get streamerLichessStreamers => 'Lichess streamers';
-
-  @override
   String get stormMoveToStart => 'Move to start';
 
   @override
@@ -4646,14 +4640,11 @@ class AppLocalizationsMk extends AppLocalizations {
   }
 
   @override
+  String get streamerLichessStreamers => 'Lichess streamers';
+
+  @override
   String get studyShareAndExport => 'Share & export';
 
   @override
   String get studyStart => 'Start';
-
-  @override
-  String get broadcastBroadcasts => 'Емитувања';
-
-  @override
-  String get broadcastStartDate => 'Почетен датум во вашата временска зона';
 }

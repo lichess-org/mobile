@@ -259,10 +259,10 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
-  String get contactContact => 'Kontakt';
+  String get broadcastBroadcasts => 'Vysielanie';
 
   @override
-  String get contactContactLichess => 'Kontaktuj Lichess';
+  String get broadcastStartDate => 'Dátum a čas začiatku, vo vašej časovej zóne';
 
   @override
   String challengeChallengesX(String param1) {
@@ -344,6 +344,1022 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get challengeInviteLichessUser => 'Alebo pozvite používateľa Lichess:';
+
+  @override
+  String get contactContact => 'Kontakt';
+
+  @override
+  String get contactContactLichess => 'Kontaktuj Lichess';
+
+  @override
+  String get patronDonate => 'Prispieť';
+
+  @override
+  String get patronLichessPatron => 'Lichess Patrón';
+
+  @override
+  String perfStatPerfStats(String param) {
+    return '$param štatistiky';
+  }
+
+  @override
+  String get perfStatViewTheGames => 'Zobraziť partie';
+
+  @override
+  String get perfStatProvisional => 'provizórny';
+
+  @override
+  String get perfStatNotEnoughRatedGames => 'Na zaistenie spoľahlivého ratingu sa neodohralo dosť hodnotených hier.';
+
+  @override
+  String perfStatProgressOverLastXGames(String param) {
+    return 'Postup počas posledných $param hier:';
+  }
+
+  @override
+  String perfStatRatingDeviation(String param) {
+    return 'Odchýlka ratingu: $param.';
+  }
+
+  @override
+  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
+    return 'Nižšia hodnota znamená, že rating je stabilnejší. Hodnota vyššia ako $param1 znamená, že rating sa považuje za provizórny. Ak chcete byť zaradení do rebríčka, táto hodnota by mala byť nižšia ako $param2 (štandardný šach) alebo $param3 (varianty).';
+  }
+
+  @override
+  String get perfStatTotalGames => 'Celkový počet hier';
+
+  @override
+  String get perfStatRatedGames => 'Hodnotené partie';
+
+  @override
+  String get perfStatTournamentGames => 'Turnajové hry';
+
+  @override
+  String get perfStatBerserkedGames => 'Zúrivé hry';
+
+  @override
+  String get perfStatTimeSpentPlaying => 'Čas strávený hraním';
+
+  @override
+  String get perfStatAverageOpponent => 'Priemerný súper';
+
+  @override
+  String get perfStatVictories => 'Víťazstvá';
+
+  @override
+  String get perfStatDefeats => 'Porážky';
+
+  @override
+  String get perfStatDisconnections => 'Odpojenia';
+
+  @override
+  String get perfStatNotEnoughGames => 'Nedostatok odohraných hier';
+
+  @override
+  String perfStatHighestRating(String param) {
+    return 'Najvyšší rating: $param';
+  }
+
+  @override
+  String perfStatLowestRating(String param) {
+    return 'Najnižší rating: $param';
+  }
+
+  @override
+  String perfStatFromXToY(String param1, String param2) {
+    return 'od $param1 do $param2';
+  }
+
+  @override
+  String get perfStatWinningStreak => 'Séria výhier';
+
+  @override
+  String get perfStatLosingStreak => 'Séria prehier';
+
+  @override
+  String perfStatLongestStreak(String param) {
+    return 'Najdlhšia séria: $param';
+  }
+
+  @override
+  String perfStatCurrentStreak(String param) {
+    return 'Súčasná séria: $param';
+  }
+
+  @override
+  String get perfStatBestRated => 'Najlepšie hodnotené víťazstvá';
+
+  @override
+  String get perfStatGamesInARow => 'Séria partií po sebe';
+
+  @override
+  String get perfStatLessThanOneHour => 'Menej ako hodina medzi hrami';
+
+  @override
+  String get perfStatMaxTimePlaying => 'Max čas strávený hraním';
+
+  @override
+  String get perfStatNow => 'teraz';
+
+  @override
+  String get preferencesPreferences => 'Nastavenia';
+
+  @override
+  String get preferencesDisplay => 'Zobrazenie';
+
+  @override
+  String get preferencesPrivacy => 'Súkromie';
+
+  @override
+  String get preferencesNotifications => 'Upozornenia';
+
+  @override
+  String get preferencesPieceAnimation => 'Animácia figúrok';
+
+  @override
+  String get preferencesMaterialDifference => 'Materiálny rozdiel';
+
+  @override
+  String get preferencesBoardHighlights => 'Zvýraznenie šachovnice (posledný ťah a šach)';
+
+  @override
+  String get preferencesPieceDestinations => 'Zobrazovať dostupné polia (možné ťahy a predťahy)';
+
+  @override
+  String get preferencesBoardCoordinates => 'Šachovnicové súradnice (A-H, 1-8)';
+
+  @override
+  String get preferencesMoveListWhilePlaying => 'Zobraziť šachovú notáciu počas partie';
+
+  @override
+  String get preferencesPgnPieceNotation => 'Označenie figúr v notácii';
+
+  @override
+  String get preferencesChessPieceSymbol => 'Symboly šachových figúr';
+
+  @override
+  String get preferencesPgnLetter => 'Písmenová notácia (K, D, V, S, J)';
+
+  @override
+  String get preferencesZenMode => 'Zen mód';
+
+  @override
+  String get preferencesShowPlayerRatings => 'Ukázať hráčove ratingy';
+
+  @override
+  String get preferencesShowFlairs => 'Zobraziť u hráčov ikonky štýlu';
+
+  @override
+  String get preferencesExplainShowPlayerRatings => 'Týmto môžete na webovej stránke skryť všetky hodnotenia, aby ste sa mohli sústrediť na šach. Partie môžu byť stále hodnotené, ide len o to, čo sa Vám zobrazí.';
+
+  @override
+  String get preferencesDisplayBoardResizeHandle => 'Zobraziť tlačidlo na zmenu veľkosti šachovnice';
+
+  @override
+  String get preferencesOnlyOnInitialPosition => 'Iba v základnom postavení';
+
+  @override
+  String get preferencesInGameOnly => 'Iba pri partii';
+
+  @override
+  String get preferencesChessClock => 'Šachové hodiny';
+
+  @override
+  String get preferencesTenthsOfSeconds => 'Desatiny sekundy';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'Keď ostáva < 10 sekúnd';
+
+  @override
+  String get preferencesHorizontalGreenProgressBars => 'Vodorovné zelené ukazovatele priebehu';
+
+  @override
+  String get preferencesSoundWhenTimeGetsCritical => 'Zapnúť zvukové varovanie v prípade kritického množstva času';
+
+  @override
+  String get preferencesGiveMoreTime => 'Pridať čas';
+
+  @override
+  String get preferencesGameBehavior => 'Nastavenia partie';
+
+  @override
+  String get preferencesHowDoYouMovePieces => 'Akým spôsobom ťaháte figúrkami?';
+
+  @override
+  String get preferencesClickTwoSquares => 'Kliknutím na dve polia';
+
+  @override
+  String get preferencesDragPiece => 'Presun figúrky';
+
+  @override
+  String get preferencesBothClicksAndDrag => 'Oboje';
+
+  @override
+  String get preferencesPremovesPlayingDuringOpponentTurn => 'Predťahy (hranie počas súperovho ťahu)';
+
+  @override
+  String get preferencesTakebacksWithOpponentApproval => 'Vrátenie ťahu (so súhlasom súpera)';
+
+  @override
+  String get preferencesInCasualGamesOnly => 'Iba pri priateľských partiách';
+
+  @override
+  String get preferencesPromoteToQueenAutomatically => 'Automaticky premeniť pešiaka na dámu';
+
+  @override
+  String get preferencesExplainPromoteToQueenAutomatically => 'Pre dočasné vypnutie automatickej premeny podržte klávesu <ctrl> počas ťahu premeny';
+
+  @override
+  String get preferencesWhenPremoving => 'Pri predťahu';
+
+  @override
+  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Automaticky vyžiadať remízu pri treťom opakovaní pozície';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Keď ostáva < 30 sekúnd a menej';
+
+  @override
+  String get preferencesMoveConfirmation => 'Potvrdenie ťahu';
+
+  @override
+  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Dá sa zrušiť počas partie cez \"hamburgerové menu\" pri šachovnici';
+
+  @override
+  String get preferencesInCorrespondenceGames => 'Korešpondenčné partie';
+
+  @override
+  String get preferencesCorrespondenceAndUnlimited => 'Korešpondenčný a nekonečný';
+
+  @override
+  String get preferencesConfirmResignationAndDrawOffers => 'Potvrdiť vzdanie partie a ponuku remízy';
+
+  @override
+  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Spôsob vykonania rošády';
+
+  @override
+  String get preferencesCastleByMovingTwoSquares => 'Presunúť kráľa o dve polia';
+
+  @override
+  String get preferencesCastleByMovingOntoTheRook => 'Presunúť kráľa na pole s vežou';
+
+  @override
+  String get preferencesInputMovesWithTheKeyboard => 'Zadávanie ťahov pomocou klávesnice';
+
+  @override
+  String get preferencesInputMovesWithVoice => 'Zadávanie ťahov pomocou hlasu';
+
+  @override
+  String get preferencesSnapArrowsToValidMoves => 'Zobraziť šípky pri možných ťahoch';
+
+  @override
+  String get preferencesSayGgWpAfterLosingOrDrawing => 'Napíš \"Good game, well played\" (v preklade: Dobrá partia, pekne zahrané) po prehre alebo remíze';
+
+  @override
+  String get preferencesYourPreferencesHaveBeenSaved => 'Vaše nastavenia boli uložené.';
+
+  @override
+  String get preferencesScrollOnTheBoardToReplayMoves => 'Rolovaním po šachovnici prehrávať ťahy';
+
+  @override
+  String get preferencesCorrespondenceEmailNotification => 'Denný mailový výpis Vašich korešpondenčných partií';
+
+  @override
+  String get preferencesNotifyStreamStart => 'Streamer začal vysielať';
+
+  @override
+  String get preferencesNotifyInboxMsg => 'Nová správa';
+
+  @override
+  String get preferencesNotifyForumMention => 'V komentári na fóre sa o Vás píše';
+
+  @override
+  String get preferencesNotifyInvitedStudy => 'Pozvánka do štúdie';
+
+  @override
+  String get preferencesNotifyGameEvent => 'Aktualizácie korešpondenčných partií';
+
+  @override
+  String get preferencesNotifyChallenge => 'Výzvy';
+
+  @override
+  String get preferencesNotifyTournamentSoon => 'Onedlho začínajúci turnaj';
+
+  @override
+  String get preferencesNotifyTimeAlarm => 'Dochádza čas v korešpondenčnej partii';
+
+  @override
+  String get preferencesNotifyBell => 'Upozornenie zvončekom v rámci Lichess-u';
+
+  @override
+  String get preferencesNotifyPush => 'Upozornenie zariadenia v čase keď nie ste na Lichess-e';
+
+  @override
+  String get preferencesNotifyWeb => 'Prehliadač';
+
+  @override
+  String get preferencesNotifyDevice => 'Zariadenie';
+
+  @override
+  String get preferencesBellNotificationSound => 'Zvuk upozornenia';
+
+  @override
+  String get puzzlePuzzles => 'Šachové úlohy';
+
+  @override
+  String get puzzlePuzzleThemes => 'Kategórie úloh';
+
+  @override
+  String get puzzleRecommended => 'Odporúčané';
+
+  @override
+  String get puzzlePhases => 'Fázy';
+
+  @override
+  String get puzzleMotifs => 'Motívy';
+
+  @override
+  String get puzzleAdvanced => 'Pokročilé';
+
+  @override
+  String get puzzleLengths => 'Dĺžka';
+
+  @override
+  String get puzzleMates => 'Mat';
+
+  @override
+  String get puzzleGoals => 'Cieľ';
+
+  @override
+  String get puzzleOrigin => 'Pôvod';
+
+  @override
+  String get puzzleSpecialMoves => 'Špeciálne ťahy';
+
+  @override
+  String get puzzleDidYouLikeThisPuzzle => 'Páčila sa vám táto úloha?';
+
+  @override
+  String get puzzleVoteToLoadNextOne => 'Hlasujte a prejdite k ďalšej úlohe!';
+
+  @override
+  String get puzzleUpVote => 'Posunúť úlohu vyššie';
+
+  @override
+  String get puzzleDownVote => 'Posunúť úlohu nižšie';
+
+  @override
+  String get puzzleYourPuzzleRatingWillNotChange => 'Váš rating úloh sa nezmení. Upozorňujeme, že úlohy nie sú súťaž. Rating pomáha pri výbere najlepších úloh s prihliadnutím na vaše aktuálne zručnosti.';
+
+  @override
+  String get puzzleFindTheBestMoveForWhite => 'Nájdite najlepší ťah za bieleho.';
+
+  @override
+  String get puzzleFindTheBestMoveForBlack => 'Nájdite najlepší ťah za čierneho.';
+
+  @override
+  String get puzzleToGetPersonalizedPuzzles => 'Získajte úlohy šité na mieru:';
+
+  @override
+  String puzzlePuzzleId(String param) {
+    return 'Úloha $param';
+  }
+
+  @override
+  String get puzzlePuzzleOfTheDay => 'Úloha dňa';
+
+  @override
+  String get puzzleDailyPuzzle => 'Úloha na tento deň';
+
+  @override
+  String get puzzleClickToSolve => 'Kliknutím vyriešiť';
+
+  @override
+  String get puzzleGoodMove => 'Dobrý ťah';
+
+  @override
+  String get puzzleBestMove => 'Najlepší ťah!';
+
+  @override
+  String get puzzleKeepGoing => 'Pokračujte…';
+
+  @override
+  String get puzzlePuzzleSuccess => 'Vyriešené!';
+
+  @override
+  String get puzzlePuzzleComplete => 'Úloha splnená!';
+
+  @override
+  String get puzzleByOpenings => 'Podľa otvorení';
+
+  @override
+  String get puzzlePuzzlesByOpenings => 'Šachové úlohy podľa otvorení';
+
+  @override
+  String get puzzleOpeningsYouPlayedTheMost => 'Otvorenia, ktoré ste najviac hrali v hodnotených partiách';
+
+  @override
+  String get puzzleUseFindInPage => 'K nájdeniu Vášho obľúbeného otvorenia použite \"Nájsť na stránke\" v menu prehliadača!';
+
+  @override
+  String get puzzleUseCtrlF => 'K nájdeniu Vášho obľúbeného otvorenia použite Ctrl+f!';
+
+  @override
+  String get puzzleNotTheMove => 'To nie je ten správny ťah!';
+
+  @override
+  String get puzzleTrySomethingElse => 'Skúste niečo iné.';
+
+  @override
+  String puzzleRatingX(String param) {
+    return 'Rating: $param';
+  }
+
+  @override
+  String get puzzleHidden => 'skryté';
+
+  @override
+  String puzzleFromGameLink(String param) {
+    return 'Z hry $param';
+  }
+
+  @override
+  String get puzzleContinueTraining => 'Trénujte ďalej';
+
+  @override
+  String get puzzleDifficultyLevel => 'Obtiažnosť';
+
+  @override
+  String get puzzleNormal => 'Normálna';
+
+  @override
+  String get puzzleEasier => 'Ľahšia';
+
+  @override
+  String get puzzleEasiest => 'Najľahšia';
+
+  @override
+  String get puzzleHarder => 'Ťažšia';
+
+  @override
+  String get puzzleHardest => 'Najťažšia';
+
+  @override
+  String get puzzleExample => 'Príklad';
+
+  @override
+  String get puzzleAddAnotherTheme => 'Pridať ďalšiu kategóriu';
+
+  @override
+  String get puzzleNextPuzzle => 'Ďalšia úloha';
+
+  @override
+  String get puzzleJumpToNextPuzzleImmediately => 'Automaticky prejsť na ďalšiu úlohu';
+
+  @override
+  String get puzzlePuzzleDashboard => 'Nástenka šachových úloh';
+
+  @override
+  String get puzzleImprovementAreas => 'Oblasti zlepšenia';
+
+  @override
+  String get puzzleStrengths => 'Silné stránky';
+
+  @override
+  String get puzzleHistory => 'História úloh';
+
+  @override
+  String get puzzleSolved => 'vyriešené';
+
+  @override
+  String get puzzleFailed => 'zlyhané';
+
+  @override
+  String get puzzleStreakDescription => 'Riešte postupne ťažšie úlohy a dosiahnite nepretržitú sériu správnych riešení. Nie sú tu žiadne hodiny, takže sa neponáhľajte. Stačí jeden nesprávny ťah a séria sa končí! V každej sérii je však môžete jeden ťah vynechať.';
+
+  @override
+  String puzzleYourStreakX(String param) {
+    return 'Vaša séria výhier: $param';
+  }
+
+  @override
+  String get puzzleStreakSkipExplanation => 'Preskočte tento ťah, aby ste neprerušili sériu! Funguje len raz za sériu.';
+
+  @override
+  String get puzzleContinueTheStreak => 'Pokračovať v sérii výhier';
+
+  @override
+  String get puzzleNewStreak => 'Nová séria výhier';
+
+  @override
+  String get puzzleFromMyGames => 'Z mojich partií';
+
+  @override
+  String get puzzleLookupOfPlayer => 'Vyhľadávanie úloh z partií hráča';
+
+  @override
+  String puzzleFromXGames(String param) {
+    return 'Úlohy z partí hráča $param';
+  }
+
+  @override
+  String get puzzleSearchPuzzles => 'Hľadať úlohy';
+
+  @override
+  String get puzzleFromMyGamesNone => 'Nemáte v databáze žiadne úlohy z vlastných partií, ale Lichess Vás má aj tak veľmi rád.\n\nHrajte rapid a klasické partie, aby ste zvýšili svoje šance na pridanie úlohy z Vašej vlastnej partie!';
+
+  @override
+  String puzzleFromXGamesFound(String param1, String param2) {
+    return '$param1 úloh nájdených v $param2 partiách';
+  }
+
+  @override
+  String get puzzlePuzzleDashboardDescription => 'Trénujte, analyzujte, zlepšujte sa';
+
+  @override
+  String puzzlePercentSolved(String param) {
+    return '$param vyriešených';
+  }
+
+  @override
+  String get puzzleNoPuzzlesToShow => 'Niet tu čo ukázať, choďte najprv riešiť pár úloh!';
+
+  @override
+  String get puzzleImprovementAreasDescription => 'Precvičujte tieto úlohy aby ste napredovali čo najrýchlejšie!';
+
+  @override
+  String get puzzleStrengthDescription => 'Tieto témy Vám idú najlepšie';
+
+  @override
+  String puzzlePlayedXTimes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Hrané $count-krát',
+      many: 'Hrané $count-krát',
+      few: 'Hrané $count-krát',
+      one: 'Hrané $count-krát',
+      zero: 'Hrané $count-krát',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsBelowYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'O $count bodov nižšia ako Váš rating úloh',
+      many: 'O $count bodov nižšia ako Váš rating úloh',
+      few: 'O $count body nižšia ako Váš rating úloh',
+      one: 'O jeden bod nižšia ako Váš rating úloh',
+      zero: 'O jeden bod nižšia ako Váš rating úloh',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsAboveYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'O $count bodov vyššia ako Váš rating úloh',
+      many: 'O $count bodov vyššia ako Váš rating úloh',
+      few: 'O $count body vyššia ako Váš rating úloh',
+      one: 'O jeden bodov vyššia ako Váš rating úloh',
+      zero: 'O jeden bodov vyššia ako Váš rating úloh',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPlayed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count hraných',
+      many: '$count hraných',
+      few: '$count hrané',
+      one: '$count hraná',
+      zero: '$count hraná',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbToReplay(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count na zopakovanie',
+      many: '$count na zopakovanie',
+      few: '$count na zopakovanie',
+      one: '$count na zopakovanie',
+      zero: '$count na zopakovanie',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get puzzleThemeAdvancedPawn => 'Voľný pešiak';
+
+  @override
+  String get puzzleThemeAdvancedPawnDescription => 'Premena pešiaka alebo hrozba premeny je kľúčom k taktike.';
+
+  @override
+  String get puzzleThemeAdvantage => 'Výhoda';
+
+  @override
+  String get puzzleThemeAdvantageDescription => 'Využite svoju šancu získať rozhodujúcu prevahu (200cp ≤ eval ≤ 600cp)';
+
+  @override
+  String get puzzleThemeAnastasiaMate => 'Anastáziin mat';
+
+  @override
+  String get puzzleThemeAnastasiaMateDescription => 'Jazdec a veža alebo dáma sa spoja aby súperovho kráľa chytili do pasce medzi okrajom šachovnice a vlastnou figúrkou.';
+
+  @override
+  String get puzzleThemeArabianMate => 'Arabský mat';
+
+  @override
+  String get puzzleThemeArabianMateDescription => 'Jazdec a veža sa spoja aby súperovho kráľa chytili do pasce v rohu šachovnice.';
+
+  @override
+  String get puzzleThemeAttackingF2F7 => 'Útok na f2 alebo f7';
+
+  @override
+  String get puzzleThemeAttackingF2F7Description => 'Útok zameraný na f2 alebo f7 pešiaka, ako napríklad vo fried liver útoku.';
+
+  @override
+  String get puzzleThemeAttraction => 'Preťaženie';
+
+  @override
+  String get puzzleThemeAttractionDescription => 'Výmena alebo obeť podnecujúca alebo nútiaca pohyb súperovej figúry na pole, ktoré povoľuje nasledovnú taktiku.';
+
+  @override
+  String get puzzleThemeBackRankMate => 'Mat na poslednom rade';
+
+  @override
+  String get puzzleThemeBackRankMateDescription => 'Zmatujte kráľa na poslednej rade, keď je tam uväznený svojimi vlastnými figúrami.';
+
+  @override
+  String get puzzleThemeBishopEndgame => 'Strelcová koncovka';
+
+  @override
+  String get puzzleThemeBishopEndgameDescription => 'Koncovka iba so strelcami a pešiakmi.';
+
+  @override
+  String get puzzleThemeBodenMate => 'Bodenov mat';
+
+  @override
+  String get puzzleThemeBodenMateDescription => 'Dvaja útočiaci strelci na križujúcich sa diagonálach zmatujú kráľa zablokovaného vlastnými figúrkami.';
+
+  @override
+  String get puzzleThemeCastling => 'Rošáda';
+
+  @override
+  String get puzzleThemeCastlingDescription => 'Schovajte svojho kráľa do bezpečia a nasaďte vežu do útoku.';
+
+  @override
+  String get puzzleThemeCapturingDefender => 'Odstránenie obrany';
+
+  @override
+  String get puzzleThemeCapturingDefenderDescription => 'Odstránenie figúry, ktorá je dôležitá pri obrane inej figúry, dovoľujúc branie novo nebránenej figúry v následujúcom ťahu.';
+
+  @override
+  String get puzzleThemeCrushing => 'Rozdrvenie';
+
+  @override
+  String get puzzleThemeCrushingDescription => 'Odhaľte súperovu hrubú chybu a získajte drvivú výhodu. (eval ≥ 600cp)';
+
+  @override
+  String get puzzleThemeDoubleBishopMate => 'Mat dvojicou strelcov';
+
+  @override
+  String get puzzleThemeDoubleBishopMateDescription => 'Dvaja útočiaci strelci na susediacich diagonálach zmatujú kráľa zablokovaného vlastnými figúrkami.';
+
+  @override
+  String get puzzleThemeDovetailMate => 'Devetailov mat';
+
+  @override
+  String get puzzleThemeDovetailMateDescription => 'Dáma zmatuje kráľa v tesnej blízkosti, pričom jediné dve únikové políčka kráľovi blokujú vlastné figúrky.';
+
+  @override
+  String get puzzleThemeEquality => 'Rovnováha';
+
+  @override
+  String get puzzleThemeEqualityDescription => 'Dostaňte sa z prehratej pozície, a zaistite remízu alebo vyrovnanú pozíciu. (eval ≤ 200cp)';
+
+  @override
+  String get puzzleThemeKingsideAttack => 'Útok na kráľovskom krídle';
+
+  @override
+  String get puzzleThemeKingsideAttackDescription => 'Útok na súperovho kráľa po tom ako súper zahral malú rošádu.';
+
+  @override
+  String get puzzleThemeClearance => 'Uvoľnenie';
+
+  @override
+  String get puzzleThemeClearanceDescription => 'Ťah, častokrát s tempom, ktorý uvoľňuje pole, stĺpec alebo diagonálu na nasledujúcu taktickú ideu.';
+
+  @override
+  String get puzzleThemeDefensiveMove => 'Obranný ťah';
+
+  @override
+  String get puzzleThemeDefensiveMoveDescription => 'Presný ťah alebo sekvencia ťahov, ktorá je potrebná na odvrátenie straty materiálu alebo inej výhody.';
+
+  @override
+  String get puzzleThemeDeflection => 'Odlákanie';
+
+  @override
+  String get puzzleThemeDeflectionDescription => 'Ťah, ktorý odvádza súperovu figúry od jej iných povinností, ako napríklad bránenie kľúčového poľa. Občas nazývané aj \"preťaženie\".';
+
+  @override
+  String get puzzleThemeDiscoveredAttack => 'Odťažené napadnutie';
+
+  @override
+  String get puzzleThemeDiscoveredAttackDescription => 'Ťah figúrou, ktorá blokovala napadnutie inou figúrou, ako napr. ťah jazdcom, ktorý odkryje napadnutie vežou.';
+
+  @override
+  String get puzzleThemeDoubleCheck => 'Dvojitý šach';
+
+  @override
+  String get puzzleThemeDoubleCheckDescription => 'Šachovanie dvoma figúrami naraz, ako výsledok odkryvného šachu, kedy aj figúra ktorou sa potiahlo aj odkrytá figúra napádajú súperovho kráľa.';
+
+  @override
+  String get puzzleThemeEndgame => 'Koncovka';
+
+  @override
+  String get puzzleThemeEndgameDescription => 'Taktika počas posledného úseku hry.';
+
+  @override
+  String get puzzleThemeEnPassantDescription => 'Taktika spojená s pravidlom brania mimochodom, kedy pešiak môže vziať súperovho pešiaka, ktorý sa pohol zo základného postavenia o dve polia a tým sa dostal na jeho úroveň.';
+
+  @override
+  String get puzzleThemeExposedKing => 'Oslabený kráľ';
+
+  @override
+  String get puzzleThemeExposedKingDescription => 'Taktika spojená s kráľom, ktorý má okolo seba málo brániacich figúr, často vedúca k matu.';
+
+  @override
+  String get puzzleThemeFork => 'Vidlička';
+
+  @override
+  String get puzzleThemeForkDescription => 'Ťah, pri ktorom figúra útočí na dve nepriateľské figúry naraz.';
+
+  @override
+  String get puzzleThemeHangingPiece => 'Visiaca figúra';
+
+  @override
+  String get puzzleThemeHangingPieceDescription => 'Taktika spojená so súperovou figúrou, ktorá je nekrytá alebo nedostatočne krytá a je možné ju vziať zadarmo.';
+
+  @override
+  String get puzzleThemeHookMate => 'Hákový mat';
+
+  @override
+  String get puzzleThemeHookMateDescription => 'Mat vežou, jazdcom alebo pešiakom spolu s jedným súperovým pešiakom, ktorý obmedzuje pohyb kráľa.';
+
+  @override
+  String get puzzleThemeInterference => 'Prekrytie';
+
+  @override
+  String get puzzleThemeInterferenceDescription => 'Umiestnenie figúry medzi dve súperove figúry čím sa tieto dve stávajú nekrytými, napr. umiestnenie jazdca na kryté pole medzi dve veže.';
+
+  @override
+  String get puzzleThemeIntermezzo => 'Medziťah';
+
+  @override
+  String get puzzleThemeIntermezzoDescription => 'Namiesto očakávaného ťahu, zahranie ťahu znamenajúceho okamžitú hrozbu, na ktorú musí protihráč reagovať. Nazývaný tiež \"Zwischenzug\".';
+
+  @override
+  String get puzzleThemeKnightEndgame => 'Jazdcová koncovka';
+
+  @override
+  String get puzzleThemeKnightEndgameDescription => 'Koncovka iba s jazdcami a pešiakmi.';
+
+  @override
+  String get puzzleThemeLong => 'Troj-ťahové úlohy';
+
+  @override
+  String get puzzleThemeLongDescription => 'Tri ťahy do výhry.';
+
+  @override
+  String get puzzleThemeMaster => 'Partie majstrov';
+
+  @override
+  String get puzzleThemeMasterDescription => 'Úlohy z partií šachistov s titulom.';
+
+  @override
+  String get puzzleThemeMasterVsMaster => 'Partie majstrov proti majstrom';
+
+  @override
+  String get puzzleThemeMasterVsMasterDescription => 'Úlohy z partií medzi šachistami s titulom.';
+
+  @override
+  String get puzzleThemeMate => 'Mat';
+
+  @override
+  String get puzzleThemeMateDescription => 'Vyhrajte hru so štýlom.';
+
+  @override
+  String get puzzleThemeMateIn1 => 'Mat 1. ťahom';
+
+  @override
+  String get puzzleThemeMateIn1Description => 'Dajte mat jedným ťahom.';
+
+  @override
+  String get puzzleThemeMateIn2 => 'Mat 2. ťahom';
+
+  @override
+  String get puzzleThemeMateIn2Description => 'Dajte mat dvoma ťahmi.';
+
+  @override
+  String get puzzleThemeMateIn3 => 'Mat 3. ťahom';
+
+  @override
+  String get puzzleThemeMateIn3Description => 'Dajte mat tromi ťahmi.';
+
+  @override
+  String get puzzleThemeMateIn4 => 'Mat na 4 ťahy';
+
+  @override
+  String get puzzleThemeMateIn4Description => 'Dajte mat štyrmi ťahmi.';
+
+  @override
+  String get puzzleThemeMateIn5 => 'Mat 5. alebo väčším počtom ťahov';
+
+  @override
+  String get puzzleThemeMateIn5Description => 'Nájdite dlhú matovú kombináciu.';
+
+  @override
+  String get puzzleThemeMiddlegame => 'Stredná hra';
+
+  @override
+  String get puzzleThemeMiddlegameDescription => 'Taktika počas druhého úseku hry.';
+
+  @override
+  String get puzzleThemeOneMove => 'Jedno-ťahové úlohy';
+
+  @override
+  String get puzzleThemeOneMoveDescription => 'Úloha, ktorá je iba jednoťahová.';
+
+  @override
+  String get puzzleThemeOpening => 'Otvorenie';
+
+  @override
+  String get puzzleThemeOpeningDescription => 'Taktika počas prvého úseku hry.';
+
+  @override
+  String get puzzleThemePawnEndgame => 'Pešiaková koncovka';
+
+  @override
+  String get puzzleThemePawnEndgameDescription => 'Koncovka iba s pešiakmi.';
+
+  @override
+  String get puzzleThemePin => 'Väzba';
+
+  @override
+  String get puzzleThemePinDescription => 'Taktika spojená s väzbou, kedy sa figúrka nemôže pohnúť bez toho aby neodkryla napadnutie figúry vyššej hodnoty.';
+
+  @override
+  String get puzzleThemePromotion => 'Premena';
+
+  @override
+  String get puzzleThemePromotionDescription => 'Premena pešiaka alebo hrozba premeny pešiaka je kľúčom k tejto taktike.';
+
+  @override
+  String get puzzleThemeQueenEndgame => 'Dámska koncovka';
+
+  @override
+  String get puzzleThemeQueenEndgameDescription => 'Koncovka iba s kráľovnami a pešiakmi.';
+
+  @override
+  String get puzzleThemeQueenRookEndgame => 'Dáma a Veža';
+
+  @override
+  String get puzzleThemeQueenRookEndgameDescription => 'Koncovka iba s dámami, vežami a pešiakmi.';
+
+  @override
+  String get puzzleThemeQueensideAttack => 'Útok na dámskom krídle';
+
+  @override
+  String get puzzleThemeQueensideAttackDescription => 'Útok na súperovho kráľa po tom ako súper zahral veľkú rošádu.';
+
+  @override
+  String get puzzleThemeQuietMove => 'Tichý ťah';
+
+  @override
+  String get puzzleThemeQuietMoveDescription => 'Ťah, ktorým ani nešachujeme ani neberieme súperove figúry, ale pripravujeme neodvratnú hrozbu v neskoršom ťahu.';
+
+  @override
+  String get puzzleThemeRookEndgame => 'Vežová koncovka';
+
+  @override
+  String get puzzleThemeRookEndgameDescription => 'Koncovka iba s vežami a pešiakmi.';
+
+  @override
+  String get puzzleThemeSacrifice => 'Obeť';
+
+  @override
+  String get puzzleThemeSacrificeDescription => 'Taktika spojená s krátkodobým odovzdaním materiálu za účelom neskoršieho zisku výhody po zahratí vynútenej série ťahov.';
+
+  @override
+  String get puzzleThemeShort => 'Dvoj-ťahové úlohy';
+
+  @override
+  String get puzzleThemeShortDescription => 'Dva ťahy do výhry.';
+
+  @override
+  String get puzzleThemeSkewer => 'Napichnutie';
+
+  @override
+  String get puzzleThemeSkewerDescription => 'Motív spojený s napadnutím figúry vysokej hodnoty, po ktorej ustúpení je umožnené zobratie alebo napadnutie figúry nižšej hodnoty, opak väzby.';
+
+  @override
+  String get puzzleThemeSmotheredMate => 'Dusený mat';
+
+  @override
+  String get puzzleThemeSmotheredMateDescription => 'Mat daný jazdcom, pri ktorom sa matovaný kráľ nemá kam pohnúť pretože je obkolesený (alebo zadusený) vlastnými figúrami.';
+
+  @override
+  String get puzzleThemeSuperGM => 'Partie superveľmajstrov';
+
+  @override
+  String get puzzleThemeSuperGMDescription => 'Úlohy z partií najlepších hráčov sveta.';
+
+  @override
+  String get puzzleThemeTrappedPiece => 'Chytená figúra';
+
+  @override
+  String get puzzleThemeTrappedPieceDescription => 'Figúra neschopná ujsť vyhodeniu, pretože má limitované možnosti.';
+
+  @override
+  String get puzzleThemeUnderPromotion => 'Pod-premena';
+
+  @override
+  String get puzzleThemeUnderPromotionDescription => 'Premena na jazdca, strelca, alebo vežu.';
+
+  @override
+  String get puzzleThemeVeryLong => 'Viac-ťahové úlohy';
+
+  @override
+  String get puzzleThemeVeryLongDescription => 'Štyri alebo viac ťahov do výhry.';
+
+  @override
+  String get puzzleThemeXRayAttack => 'Röntgenový útok';
+
+  @override
+  String get puzzleThemeXRayAttackDescription => 'Figúra bráni alebo útočí na pole cez súperovu figúru.';
+
+  @override
+  String get puzzleThemeZugzwang => 'Nevýhoda ťahu';
+
+  @override
+  String get puzzleThemeZugzwangDescription => 'Súper je limitovaný vo svojich ťahoch a každý ťah zhorší jeho pozíciu.';
+
+  @override
+  String get puzzleThemeHealthyMix => 'Zdravý mix';
+
+  @override
+  String get puzzleThemeHealthyMixDescription => 'Zmes úloh. Neviete čo očakávať, a tak ste neustále pripravení na všetko! Presne ako v skutočných partiách.';
+
+  @override
+  String get puzzleThemePlayerGames => 'Vaše partie';
+
+  @override
+  String get puzzleThemePlayerGamesDescription => 'Vyhľadajte si úlohy vygenerované z Vašich partií alebo z partií iných hráčov.';
+
+  @override
+  String puzzleThemePuzzleDownloadInformation(String param) {
+    return 'Tieto úlohy sú voľne dostupné a môžete si ich stiahnuť z $param.';
+  }
+
+  @override
+  String get searchSearch => 'Hľadať';
+
+  @override
+  String get settingsSettings => 'Nastavenia';
+
+  @override
+  String get settingsCloseAccount => 'Zrušiť účet';
+
+  @override
+  String get settingsManagedAccountCannotBeClosed => 'Váš účet je spravovaný niekým iným a nemožno ho zrušiť.';
+
+  @override
+  String get settingsClosingIsDefinitive => 'Zrušenie je definitívne. Nedá sa vrátiť naspäť. Ste si istí?';
+
+  @override
+  String get settingsCantOpenSimilarAccount => 'Nebudete si môcť založiť nový účet s rovnakým menom, ani keď sa bude líšiť veľkosť písmen.';
+
+  @override
+  String get settingsChangedMindDoNotCloseAccount => 'Rozmyslel som si to, nerušte môj účet';
+
+  @override
+  String get settingsCloseAccountExplanation => 'Ste si istí, že chcete zrušiť váš účet? Zrušenie vášho účtu je trvalé rozhodnutie. Už sa NIKDY ZNOVU nebudete môcť prihlásiť.';
+
+  @override
+  String get settingsThisAccountIsClosed => 'Účet zrušený.';
 
   @override
   String get playWithAFriend => 'Hrať s priateľom';
@@ -546,6 +1562,12 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get deleteFromHere => 'Vymazať odtiaľto';
+
+  @override
+  String get collapseVariations => 'Skryť varianty';
+
+  @override
+  String get expandVariations => 'Ukázať varianty';
 
   @override
   String get forceVariation => 'Povýšiť variant';
@@ -1405,15 +2427,6 @@ class AppLocalizationsSk extends AppLocalizations {
   String get emptyTournamentName => 'Ak názov nevyplníte, turnaj bude pomenovaný po náhodnom veľmajstrovi.';
 
   @override
-  String get recommendNotTouching => 'Tieto nastavenia odporúčame ponechať nedotknuté.';
-
-  @override
-  String get fewerPlayers => 'Ak nastavíte podmienky účasti, Váš turnaj bude mať menej hráčov.';
-
-  @override
-  String get showAdvancedSettings => 'Zobraziť pokročilé nastavenia';
-
-  @override
   String get makePrivateTournament => 'Nastav turnaj ako súkromný a obmedz prístup k nemu pomocou hesla';
 
   @override
@@ -1543,10 +2556,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get editProfile => 'Upraviť profil';
 
   @override
-  String get firstName => 'Meno';
-
-  @override
-  String get lastName => 'Priezvisko';
+  String get realName => 'Skutočné meno';
 
   @override
   String get setFlair => 'Nastavte si svoju ikonku štýlu';
@@ -1675,13 +2685,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get cheat => 'Podvod';
 
   @override
-  String get insult => 'Urážka';
-
-  @override
   String get troll => 'Troll';
-
-  @override
-  String get ratingManipulation => 'Ovplyvňovanie ratingu';
 
   @override
   String get other => 'Iné';
@@ -1788,6 +2792,9 @@ class AppLocalizationsSk extends AppLocalizations {
 
   @override
   String get outsideTheBoard => 'Mimo šachovnice';
+
+  @override
+  String get allSquaresOfTheBoard => 'Všetky políčka šachovnice';
 
   @override
   String get onSlowGames => 'Pri pomalých hrách';
@@ -2383,22 +3390,22 @@ class AppLocalizationsSk extends AppLocalizations {
   String get backgroundImageUrl => 'URL obrázka na pozadí:';
 
   @override
-  String get board => 'Board';
+  String get board => 'Šachovnica';
 
   @override
-  String get size => 'Size';
+  String get size => 'Veľkosť';
 
   @override
-  String get opacity => 'Opacity';
+  String get opacity => 'Priehľadnosť';
 
   @override
-  String get brightness => 'Brightness';
+  String get brightness => 'Jas';
 
   @override
-  String get hue => 'Hue';
+  String get hue => 'Odtieň';
 
   @override
-  String get boardReset => 'Reset colours to default';
+  String get boardReset => 'Obnoviť farby na predvolené hodnoty';
 
   @override
   String get pieceSet => 'Vzhľad figúr';
@@ -3578,1019 +4585,6 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
-  String get patronDonate => 'Prispieť';
-
-  @override
-  String get patronLichessPatron => 'Lichess Patrón';
-
-  @override
-  String get preferencesPreferences => 'Nastavenia';
-
-  @override
-  String get preferencesDisplay => 'Zobrazenie';
-
-  @override
-  String get preferencesPrivacy => 'Súkromie';
-
-  @override
-  String get preferencesNotifications => 'Upozornenia';
-
-  @override
-  String get preferencesPieceAnimation => 'Animácia figúrok';
-
-  @override
-  String get preferencesMaterialDifference => 'Materiálny rozdiel';
-
-  @override
-  String get preferencesBoardHighlights => 'Zvýraznenie šachovnice (posledný ťah a šach)';
-
-  @override
-  String get preferencesPieceDestinations => 'Zobrazovať dostupné polia (možné ťahy a predťahy)';
-
-  @override
-  String get preferencesBoardCoordinates => 'Šachovnicové súradnice (A-H, 1-8)';
-
-  @override
-  String get preferencesMoveListWhilePlaying => 'Zobraziť šachovú notáciu počas partie';
-
-  @override
-  String get preferencesPgnPieceNotation => 'Označenie figúr v notácii';
-
-  @override
-  String get preferencesChessPieceSymbol => 'Symboly šachových figúr';
-
-  @override
-  String get preferencesPgnLetter => 'Písmenová notácia (K, D, V, S, J)';
-
-  @override
-  String get preferencesZenMode => 'Zen mód';
-
-  @override
-  String get preferencesShowPlayerRatings => 'Ukázať hráčove ratingy';
-
-  @override
-  String get preferencesShowFlairs => 'Zobraziť u hráčov ikonky štýlu';
-
-  @override
-  String get preferencesExplainShowPlayerRatings => 'Týmto môžete na webovej stránke skryť všetky hodnotenia, aby ste sa mohli sústrediť na šach. Partie môžu byť stále hodnotené, ide len o to, čo sa Vám zobrazí.';
-
-  @override
-  String get preferencesDisplayBoardResizeHandle => 'Zobraziť tlačidlo na zmenu veľkosti šachovnice';
-
-  @override
-  String get preferencesOnlyOnInitialPosition => 'Iba v základnom postavení';
-
-  @override
-  String get preferencesInGameOnly => 'Iba pri partii';
-
-  @override
-  String get preferencesChessClock => 'Šachové hodiny';
-
-  @override
-  String get preferencesTenthsOfSeconds => 'Desatiny sekundy';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'Keď ostáva < 10 sekúnd';
-
-  @override
-  String get preferencesHorizontalGreenProgressBars => 'Vodorovné zelené ukazovatele priebehu';
-
-  @override
-  String get preferencesSoundWhenTimeGetsCritical => 'Zapnúť zvukové varovanie v prípade kritického množstva času';
-
-  @override
-  String get preferencesGiveMoreTime => 'Pridať čas';
-
-  @override
-  String get preferencesGameBehavior => 'Nastavenia partie';
-
-  @override
-  String get preferencesHowDoYouMovePieces => 'Akým spôsobom ťaháte figúrkami?';
-
-  @override
-  String get preferencesClickTwoSquares => 'Kliknutím na dve polia';
-
-  @override
-  String get preferencesDragPiece => 'Presun figúrky';
-
-  @override
-  String get preferencesBothClicksAndDrag => 'Oboje';
-
-  @override
-  String get preferencesPremovesPlayingDuringOpponentTurn => 'Predťahy (hranie počas súperovho ťahu)';
-
-  @override
-  String get preferencesTakebacksWithOpponentApproval => 'Vrátenie ťahu (so súhlasom súpera)';
-
-  @override
-  String get preferencesInCasualGamesOnly => 'Iba pri priateľských partiách';
-
-  @override
-  String get preferencesPromoteToQueenAutomatically => 'Automaticky premeniť pešiaka na dámu';
-
-  @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Pre dočasné vypnutie automatickej premeny podržte klávesu <ctrl> počas ťahu premeny';
-
-  @override
-  String get preferencesWhenPremoving => 'Pri predťahu';
-
-  @override
-  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Automaticky vyžiadať remízu pri treťom opakovaní pozície';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Keď ostáva < 30 sekúnd a menej';
-
-  @override
-  String get preferencesMoveConfirmation => 'Potvrdenie ťahu';
-
-  @override
-  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Dá sa zrušiť počas partie cez \"hamburgerové menu\" pri šachovnici';
-
-  @override
-  String get preferencesInCorrespondenceGames => 'Korešpondenčné partie';
-
-  @override
-  String get preferencesCorrespondenceAndUnlimited => 'Korešpondenčný a nekonečný';
-
-  @override
-  String get preferencesConfirmResignationAndDrawOffers => 'Potvrdiť vzdanie partie a ponuku remízy';
-
-  @override
-  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Spôsob vykonania rošády';
-
-  @override
-  String get preferencesCastleByMovingTwoSquares => 'Presunúť kráľa o dve polia';
-
-  @override
-  String get preferencesCastleByMovingOntoTheRook => 'Presunúť kráľa na pole s vežou';
-
-  @override
-  String get preferencesInputMovesWithTheKeyboard => 'Zadávanie ťahov pomocou klávesnice';
-
-  @override
-  String get preferencesInputMovesWithVoice => 'Zadávanie ťahov pomocou hlasu';
-
-  @override
-  String get preferencesSnapArrowsToValidMoves => 'Zobraziť šípky pri možných ťahoch';
-
-  @override
-  String get preferencesSayGgWpAfterLosingOrDrawing => 'Napíš \"Good game, well played\" (v preklade: Dobrá partia, pekne zahrané) po prehre alebo remíze';
-
-  @override
-  String get preferencesYourPreferencesHaveBeenSaved => 'Vaše nastavenia boli uložené.';
-
-  @override
-  String get preferencesScrollOnTheBoardToReplayMoves => 'Rolovaním po šachovnici prehrávať ťahy';
-
-  @override
-  String get preferencesCorrespondenceEmailNotification => 'Denný mailový výpis Vašich korešpondenčných partií';
-
-  @override
-  String get preferencesNotifyStreamStart => 'Streamer začal vysielať';
-
-  @override
-  String get preferencesNotifyInboxMsg => 'Nová správa';
-
-  @override
-  String get preferencesNotifyForumMention => 'V komentári na fóre sa o Vás píše';
-
-  @override
-  String get preferencesNotifyInvitedStudy => 'Pozvánka do štúdie';
-
-  @override
-  String get preferencesNotifyGameEvent => 'Aktualizácie korešpondenčných partií';
-
-  @override
-  String get preferencesNotifyChallenge => 'Výzvy';
-
-  @override
-  String get preferencesNotifyTournamentSoon => 'Onedlho začínajúci turnaj';
-
-  @override
-  String get preferencesNotifyTimeAlarm => 'Dochádza čas v korešpondenčnej partii';
-
-  @override
-  String get preferencesNotifyBell => 'Upozornenie zvončekom v rámci Lichess-u';
-
-  @override
-  String get preferencesNotifyPush => 'Upozornenie zariadenia v čase keď nie ste na Lichess-e';
-
-  @override
-  String get preferencesNotifyWeb => 'Prehliadač';
-
-  @override
-  String get preferencesNotifyDevice => 'Zariadenie';
-
-  @override
-  String get preferencesBellNotificationSound => 'Zvuk upozornenia';
-
-  @override
-  String get puzzlePuzzles => 'Šachové úlohy';
-
-  @override
-  String get puzzlePuzzleThemes => 'Kategórie úloh';
-
-  @override
-  String get puzzleRecommended => 'Odporúčané';
-
-  @override
-  String get puzzlePhases => 'Fázy';
-
-  @override
-  String get puzzleMotifs => 'Motívy';
-
-  @override
-  String get puzzleAdvanced => 'Pokročilé';
-
-  @override
-  String get puzzleLengths => 'Dĺžka';
-
-  @override
-  String get puzzleMates => 'Mat';
-
-  @override
-  String get puzzleGoals => 'Cieľ';
-
-  @override
-  String get puzzleOrigin => 'Pôvod';
-
-  @override
-  String get puzzleSpecialMoves => 'Špeciálne ťahy';
-
-  @override
-  String get puzzleDidYouLikeThisPuzzle => 'Páčila sa vám táto úloha?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Hlasujte a prejdite k ďalšej úlohe!';
-
-  @override
-  String get puzzleUpVote => 'Posunúť úlohu vyššie';
-
-  @override
-  String get puzzleDownVote => 'Posunúť úlohu nižšie';
-
-  @override
-  String get puzzleYourPuzzleRatingWillNotChange => 'Váš rating úloh sa nezmení. Upozorňujeme, že úlohy nie sú súťaž. Rating pomáha pri výbere najlepších úloh s prihliadnutím na vaše aktuálne zručnosti.';
-
-  @override
-  String get puzzleFindTheBestMoveForWhite => 'Nájdite najlepší ťah za bieleho.';
-
-  @override
-  String get puzzleFindTheBestMoveForBlack => 'Nájdite najlepší ťah za čierneho.';
-
-  @override
-  String get puzzleToGetPersonalizedPuzzles => 'Získajte úlohy šité na mieru:';
-
-  @override
-  String puzzlePuzzleId(String param) {
-    return 'Úloha $param';
-  }
-
-  @override
-  String get puzzlePuzzleOfTheDay => 'Úloha dňa';
-
-  @override
-  String get puzzleDailyPuzzle => 'Úloha na tento deň';
-
-  @override
-  String get puzzleClickToSolve => 'Kliknutím vyriešiť';
-
-  @override
-  String get puzzleGoodMove => 'Dobrý ťah';
-
-  @override
-  String get puzzleBestMove => 'Najlepší ťah!';
-
-  @override
-  String get puzzleKeepGoing => 'Pokračujte…';
-
-  @override
-  String get puzzlePuzzleSuccess => 'Vyriešené!';
-
-  @override
-  String get puzzlePuzzleComplete => 'Úloha splnená!';
-
-  @override
-  String get puzzleByOpenings => 'Podľa otvorení';
-
-  @override
-  String get puzzlePuzzlesByOpenings => 'Šachové úlohy podľa otvorení';
-
-  @override
-  String get puzzleOpeningsYouPlayedTheMost => 'Otvorenia, ktoré ste najviac hrali v hodnotených partiách';
-
-  @override
-  String get puzzleUseFindInPage => 'K nájdeniu Vášho obľúbeného otvorenia použite \"Nájsť na stránke\" v menu prehliadača!';
-
-  @override
-  String get puzzleUseCtrlF => 'K nájdeniu Vášho obľúbeného otvorenia použite Ctrl+f!';
-
-  @override
-  String get puzzleNotTheMove => 'To nie je ten správny ťah!';
-
-  @override
-  String get puzzleTrySomethingElse => 'Skúste niečo iné.';
-
-  @override
-  String puzzleRatingX(String param) {
-    return 'Rating: $param';
-  }
-
-  @override
-  String get puzzleHidden => 'skryté';
-
-  @override
-  String puzzleFromGameLink(String param) {
-    return 'Z hry $param';
-  }
-
-  @override
-  String get puzzleContinueTraining => 'Trénujte ďalej';
-
-  @override
-  String get puzzleDifficultyLevel => 'Obtiažnosť';
-
-  @override
-  String get puzzleNormal => 'Normálna';
-
-  @override
-  String get puzzleEasier => 'Ľahšia';
-
-  @override
-  String get puzzleEasiest => 'Najľahšia';
-
-  @override
-  String get puzzleHarder => 'Ťažšia';
-
-  @override
-  String get puzzleHardest => 'Najťažšia';
-
-  @override
-  String get puzzleExample => 'Príklad';
-
-  @override
-  String get puzzleAddAnotherTheme => 'Pridať ďalšiu kategóriu';
-
-  @override
-  String get puzzleNextPuzzle => 'Ďalšia úloha';
-
-  @override
-  String get puzzleJumpToNextPuzzleImmediately => 'Automaticky prejsť na ďalšiu úlohu';
-
-  @override
-  String get puzzlePuzzleDashboard => 'Nástenka šachových úloh';
-
-  @override
-  String get puzzleImprovementAreas => 'Oblasti zlepšenia';
-
-  @override
-  String get puzzleStrengths => 'Silné stránky';
-
-  @override
-  String get puzzleHistory => 'História úloh';
-
-  @override
-  String get puzzleSolved => 'vyriešené';
-
-  @override
-  String get puzzleFailed => 'zlyhané';
-
-  @override
-  String get puzzleStreakDescription => 'Riešte postupne ťažšie úlohy a dosiahnite nepretržitú sériu správnych riešení. Nie sú tu žiadne hodiny, takže sa neponáhľajte. Stačí jeden nesprávny ťah a séria sa končí! V každej sérii je však môžete jeden ťah vynechať.';
-
-  @override
-  String puzzleYourStreakX(String param) {
-    return 'Vaša séria výhier: $param';
-  }
-
-  @override
-  String get puzzleStreakSkipExplanation => 'Preskočte tento ťah, aby ste neprerušili sériu! Funguje len raz za sériu.';
-
-  @override
-  String get puzzleContinueTheStreak => 'Pokračovať v sérii výhier';
-
-  @override
-  String get puzzleNewStreak => 'Nová séria výhier';
-
-  @override
-  String get puzzleFromMyGames => 'Z mojich partií';
-
-  @override
-  String get puzzleLookupOfPlayer => 'Vyhľadávanie úloh z partií hráča';
-
-  @override
-  String puzzleFromXGames(String param) {
-    return 'Úlohy z partí hráča $param';
-  }
-
-  @override
-  String get puzzleSearchPuzzles => 'Hľadať úlohy';
-
-  @override
-  String get puzzleFromMyGamesNone => 'Nemáte v databáze žiadne úlohy z vlastných partií, ale Lichess Vás má aj tak veľmi rád.\n\nHrajte rapid a klasické partie, aby ste zvýšili svoje šance na pridanie úlohy z Vašej vlastnej partie!';
-
-  @override
-  String puzzleFromXGamesFound(String param1, String param2) {
-    return '$param1 úloh nájdených v $param2 partiách';
-  }
-
-  @override
-  String get puzzlePuzzleDashboardDescription => 'Trénujte, analyzujte, zlepšujte sa';
-
-  @override
-  String puzzlePercentSolved(String param) {
-    return '$param vyriešených';
-  }
-
-  @override
-  String get puzzleNoPuzzlesToShow => 'Niet tu čo ukázať, choďte najprv riešiť pár úloh!';
-
-  @override
-  String get puzzleImprovementAreasDescription => 'Precvičujte tieto úlohy aby ste napredovali čo najrýchlejšie!';
-
-  @override
-  String get puzzleStrengthDescription => 'Tieto témy Vám idú najlepšie';
-
-  @override
-  String puzzlePlayedXTimes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Hrané $count-krát',
-      many: 'Hrané $count-krát',
-      few: 'Hrané $count-krát',
-      one: 'Hrané $count-krát',
-      zero: 'Hrané $count-krát',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsBelowYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'O $count bodov nižšia ako Váš rating úloh',
-      many: 'O $count bodov nižšia ako Váš rating úloh',
-      few: 'O $count body nižšia ako Váš rating úloh',
-      one: 'O jeden bod nižšia ako Váš rating úloh',
-      zero: 'O jeden bod nižšia ako Váš rating úloh',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsAboveYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'O $count bodov vyššia ako Váš rating úloh',
-      many: 'O $count bodov vyššia ako Váš rating úloh',
-      few: 'O $count body vyššia ako Váš rating úloh',
-      one: 'O jeden bodov vyššia ako Váš rating úloh',
-      zero: 'O jeden bodov vyššia ako Váš rating úloh',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPlayed(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count hraných',
-      many: '$count hraných',
-      few: '$count hrané',
-      one: '$count hraná',
-      zero: '$count hraná',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbToReplay(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count na zopakovanie',
-      many: '$count na zopakovanie',
-      few: '$count na zopakovanie',
-      one: '$count na zopakovanie',
-      zero: '$count na zopakovanie',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get puzzleThemeAdvancedPawn => 'Voľný pešiak';
-
-  @override
-  String get puzzleThemeAdvancedPawnDescription => 'Premena pešiaka alebo hrozba premeny je kľúčom k taktike.';
-
-  @override
-  String get puzzleThemeAdvantage => 'Výhoda';
-
-  @override
-  String get puzzleThemeAdvantageDescription => 'Využite svoju šancu získať rozhodujúcu prevahu (200cp ≤ eval ≤ 600cp)';
-
-  @override
-  String get puzzleThemeAnastasiaMate => 'Anastáziin mat';
-
-  @override
-  String get puzzleThemeAnastasiaMateDescription => 'Jazdec a veža alebo dáma sa spoja aby súperovho kráľa chytili do pasce medzi okrajom šachovnice a vlastnou figúrkou.';
-
-  @override
-  String get puzzleThemeArabianMate => 'Arabský mat';
-
-  @override
-  String get puzzleThemeArabianMateDescription => 'Jazdec a veža sa spoja aby súperovho kráľa chytili do pasce v rohu šachovnice.';
-
-  @override
-  String get puzzleThemeAttackingF2F7 => 'Útok na f2 alebo f7';
-
-  @override
-  String get puzzleThemeAttackingF2F7Description => 'Útok zameraný na f2 alebo f7 pešiaka, ako napríklad vo fried liver útoku.';
-
-  @override
-  String get puzzleThemeAttraction => 'Preťaženie';
-
-  @override
-  String get puzzleThemeAttractionDescription => 'Výmena alebo obeť podnecujúca alebo nútiaca pohyb súperovej figúry na pole, ktoré povoľuje nasledovnú taktiku.';
-
-  @override
-  String get puzzleThemeBackRankMate => 'Mat na poslednom rade';
-
-  @override
-  String get puzzleThemeBackRankMateDescription => 'Zmatujte kráľa na poslednej rade, keď je tam uväznený svojimi vlastnými figúrami.';
-
-  @override
-  String get puzzleThemeBishopEndgame => 'Strelcová koncovka';
-
-  @override
-  String get puzzleThemeBishopEndgameDescription => 'Koncovka iba so strelcami a pešiakmi.';
-
-  @override
-  String get puzzleThemeBodenMate => 'Bodenov mat';
-
-  @override
-  String get puzzleThemeBodenMateDescription => 'Dvaja útočiaci strelci na križujúcich sa diagonálach zmatujú kráľa zablokovaného vlastnými figúrkami.';
-
-  @override
-  String get puzzleThemeCastling => 'Rošáda';
-
-  @override
-  String get puzzleThemeCastlingDescription => 'Schovajte svojho kráľa do bezpečia a nasaďte vežu do útoku.';
-
-  @override
-  String get puzzleThemeCapturingDefender => 'Odstránenie obrany';
-
-  @override
-  String get puzzleThemeCapturingDefenderDescription => 'Odstránenie figúry, ktorá je dôležitá pri obrane inej figúry, dovoľujúc branie novo nebránenej figúry v následujúcom ťahu.';
-
-  @override
-  String get puzzleThemeCrushing => 'Rozdrvenie';
-
-  @override
-  String get puzzleThemeCrushingDescription => 'Odhaľte súperovu hrubú chybu a získajte drvivú výhodu. (eval ≥ 600cp)';
-
-  @override
-  String get puzzleThemeDoubleBishopMate => 'Mat dvojicou strelcov';
-
-  @override
-  String get puzzleThemeDoubleBishopMateDescription => 'Dvaja útočiaci strelci na susediacich diagonálach zmatujú kráľa zablokovaného vlastnými figúrkami.';
-
-  @override
-  String get puzzleThemeDovetailMate => 'Devetailov mat';
-
-  @override
-  String get puzzleThemeDovetailMateDescription => 'Dáma zmatuje kráľa v tesnej blízkosti, pričom jediné dve únikové políčka kráľovi blokujú vlastné figúrky.';
-
-  @override
-  String get puzzleThemeEquality => 'Rovnováha';
-
-  @override
-  String get puzzleThemeEqualityDescription => 'Dostaňte sa z prehratej pozície, a zaistite remízu alebo vyrovnanú pozíciu. (eval ≤ 200cp)';
-
-  @override
-  String get puzzleThemeKingsideAttack => 'Útok na kráľovskom krídle';
-
-  @override
-  String get puzzleThemeKingsideAttackDescription => 'Útok na súperovho kráľa po tom ako súper zahral malú rošádu.';
-
-  @override
-  String get puzzleThemeClearance => 'Uvoľnenie';
-
-  @override
-  String get puzzleThemeClearanceDescription => 'Ťah, častokrát s tempom, ktorý uvoľňuje pole, stĺpec alebo diagonálu na nasledujúcu taktickú ideu.';
-
-  @override
-  String get puzzleThemeDefensiveMove => 'Obranný ťah';
-
-  @override
-  String get puzzleThemeDefensiveMoveDescription => 'Presný ťah alebo sekvencia ťahov, ktorá je potrebná na odvrátenie straty materiálu alebo inej výhody.';
-
-  @override
-  String get puzzleThemeDeflection => 'Odlákanie';
-
-  @override
-  String get puzzleThemeDeflectionDescription => 'Ťah, ktorý odvádza súperovu figúry od jej iných povinností, ako napríklad bránenie kľúčového poľa. Občas nazývané aj \"preťaženie\".';
-
-  @override
-  String get puzzleThemeDiscoveredAttack => 'Odťažené napadnutie';
-
-  @override
-  String get puzzleThemeDiscoveredAttackDescription => 'Ťah figúrou, ktorá blokovala napadnutie inou figúrou, ako napr. ťah jazdcom, ktorý odkryje napadnutie vežou.';
-
-  @override
-  String get puzzleThemeDoubleCheck => 'Dvojitý šach';
-
-  @override
-  String get puzzleThemeDoubleCheckDescription => 'Šachovanie dvoma figúrami naraz, ako výsledok odkryvného šachu, kedy aj figúra ktorou sa potiahlo aj odkrytá figúra napádajú súperovho kráľa.';
-
-  @override
-  String get puzzleThemeEndgame => 'Koncovka';
-
-  @override
-  String get puzzleThemeEndgameDescription => 'Taktika počas posledného úseku hry.';
-
-  @override
-  String get puzzleThemeEnPassantDescription => 'Taktika spojená s pravidlom brania mimochodom, kedy pešiak môže vziať súperovho pešiaka, ktorý sa pohol zo základného postavenia o dve polia a tým sa dostal na jeho úroveň.';
-
-  @override
-  String get puzzleThemeExposedKing => 'Oslabený kráľ';
-
-  @override
-  String get puzzleThemeExposedKingDescription => 'Taktika spojená s kráľom, ktorý má okolo seba málo brániacich figúr, často vedúca k matu.';
-
-  @override
-  String get puzzleThemeFork => 'Vidlička';
-
-  @override
-  String get puzzleThemeForkDescription => 'Ťah, pri ktorom figúra útočí na dve nepriateľské figúry naraz.';
-
-  @override
-  String get puzzleThemeHangingPiece => 'Visiaca figúra';
-
-  @override
-  String get puzzleThemeHangingPieceDescription => 'Taktika spojená so súperovou figúrou, ktorá je nekrytá alebo nedostatočne krytá a je možné ju vziať zadarmo.';
-
-  @override
-  String get puzzleThemeHookMate => 'Hákový mat';
-
-  @override
-  String get puzzleThemeHookMateDescription => 'Mat vežou, jazdcom alebo pešiakom spolu s jedným súperovým pešiakom, ktorý obmedzuje pohyb kráľa.';
-
-  @override
-  String get puzzleThemeInterference => 'Prekrytie';
-
-  @override
-  String get puzzleThemeInterferenceDescription => 'Umiestnenie figúry medzi dve súperove figúry čím sa tieto dve stávajú nekrytými, napr. umiestnenie jazdca na kryté pole medzi dve veže.';
-
-  @override
-  String get puzzleThemeIntermezzo => 'Medziťah';
-
-  @override
-  String get puzzleThemeIntermezzoDescription => 'Namiesto očakávaného ťahu, zahranie ťahu znamenajúceho okamžitú hrozbu, na ktorú musí protihráč reagovať. Nazývaný tiež \"Zwischenzug\".';
-
-  @override
-  String get puzzleThemeKnightEndgame => 'Jazdcová koncovka';
-
-  @override
-  String get puzzleThemeKnightEndgameDescription => 'Koncovka iba s jazdcami a pešiakmi.';
-
-  @override
-  String get puzzleThemeLong => 'Troj-ťahové úlohy';
-
-  @override
-  String get puzzleThemeLongDescription => 'Tri ťahy do výhry.';
-
-  @override
-  String get puzzleThemeMaster => 'Partie majstrov';
-
-  @override
-  String get puzzleThemeMasterDescription => 'Úlohy z partií šachistov s titulom.';
-
-  @override
-  String get puzzleThemeMasterVsMaster => 'Partie majstrov proti majstrom';
-
-  @override
-  String get puzzleThemeMasterVsMasterDescription => 'Úlohy z partií medzi šachistami s titulom.';
-
-  @override
-  String get puzzleThemeMate => 'Mat';
-
-  @override
-  String get puzzleThemeMateDescription => 'Vyhrajte hru so štýlom.';
-
-  @override
-  String get puzzleThemeMateIn1 => 'Mat 1. ťahom';
-
-  @override
-  String get puzzleThemeMateIn1Description => 'Dajte mat jedným ťahom.';
-
-  @override
-  String get puzzleThemeMateIn2 => 'Mat 2. ťahom';
-
-  @override
-  String get puzzleThemeMateIn2Description => 'Dajte mat dvoma ťahmi.';
-
-  @override
-  String get puzzleThemeMateIn3 => 'Mat 3. ťahom';
-
-  @override
-  String get puzzleThemeMateIn3Description => 'Dajte mat tromi ťahmi.';
-
-  @override
-  String get puzzleThemeMateIn4 => 'Mat na 4 ťahy';
-
-  @override
-  String get puzzleThemeMateIn4Description => 'Dajte mat štyrmi ťahmi.';
-
-  @override
-  String get puzzleThemeMateIn5 => 'Mat 5. alebo väčším počtom ťahov';
-
-  @override
-  String get puzzleThemeMateIn5Description => 'Nájdite dlhú matovú kombináciu.';
-
-  @override
-  String get puzzleThemeMiddlegame => 'Stredná hra';
-
-  @override
-  String get puzzleThemeMiddlegameDescription => 'Taktika počas druhého úseku hry.';
-
-  @override
-  String get puzzleThemeOneMove => 'Jedno-ťahové úlohy';
-
-  @override
-  String get puzzleThemeOneMoveDescription => 'Úloha, ktorá je iba jednoťahová.';
-
-  @override
-  String get puzzleThemeOpening => 'Otvorenie';
-
-  @override
-  String get puzzleThemeOpeningDescription => 'Taktika počas prvého úseku hry.';
-
-  @override
-  String get puzzleThemePawnEndgame => 'Pešiaková koncovka';
-
-  @override
-  String get puzzleThemePawnEndgameDescription => 'Koncovka iba s pešiakmi.';
-
-  @override
-  String get puzzleThemePin => 'Väzba';
-
-  @override
-  String get puzzleThemePinDescription => 'Taktika spojená s väzbou, kedy sa figúrka nemôže pohnúť bez toho aby neodkryla napadnutie figúry vyššej hodnoty.';
-
-  @override
-  String get puzzleThemePromotion => 'Premena';
-
-  @override
-  String get puzzleThemePromotionDescription => 'Premena pešiaka alebo hrozba premeny pešiaka je kľúčom k tejto taktike.';
-
-  @override
-  String get puzzleThemeQueenEndgame => 'Dámska koncovka';
-
-  @override
-  String get puzzleThemeQueenEndgameDescription => 'Koncovka iba s kráľovnami a pešiakmi.';
-
-  @override
-  String get puzzleThemeQueenRookEndgame => 'Dáma a Veža';
-
-  @override
-  String get puzzleThemeQueenRookEndgameDescription => 'Koncovka iba s dámami, vežami a pešiakmi.';
-
-  @override
-  String get puzzleThemeQueensideAttack => 'Útok na dámskom krídle';
-
-  @override
-  String get puzzleThemeQueensideAttackDescription => 'Útok na súperovho kráľa po tom ako súper zahral veľkú rošádu.';
-
-  @override
-  String get puzzleThemeQuietMove => 'Tichý ťah';
-
-  @override
-  String get puzzleThemeQuietMoveDescription => 'Ťah, ktorým ani nešachujeme ani neberieme súperove figúry, ale pripravujeme neodvratnú hrozbu v neskoršom ťahu.';
-
-  @override
-  String get puzzleThemeRookEndgame => 'Vežová koncovka';
-
-  @override
-  String get puzzleThemeRookEndgameDescription => 'Koncovka iba s vežami a pešiakmi.';
-
-  @override
-  String get puzzleThemeSacrifice => 'Obeť';
-
-  @override
-  String get puzzleThemeSacrificeDescription => 'Taktika spojená s krátkodobým odovzdaním materiálu za účelom neskoršieho zisku výhody po zahratí vynútenej série ťahov.';
-
-  @override
-  String get puzzleThemeShort => 'Dvoj-ťahové úlohy';
-
-  @override
-  String get puzzleThemeShortDescription => 'Dva ťahy do výhry.';
-
-  @override
-  String get puzzleThemeSkewer => 'Napichnutie';
-
-  @override
-  String get puzzleThemeSkewerDescription => 'Motív spojený s napadnutím figúry vysokej hodnoty, po ktorej ustúpení je umožnené zobratie alebo napadnutie figúry nižšej hodnoty, opak väzby.';
-
-  @override
-  String get puzzleThemeSmotheredMate => 'Dusený mat';
-
-  @override
-  String get puzzleThemeSmotheredMateDescription => 'Mat daný jazdcom, pri ktorom sa matovaný kráľ nemá kam pohnúť pretože je obkolesený (alebo zadusený) vlastnými figúrami.';
-
-  @override
-  String get puzzleThemeSuperGM => 'Partie superveľmajstrov';
-
-  @override
-  String get puzzleThemeSuperGMDescription => 'Úlohy z partií najlepších hráčov sveta.';
-
-  @override
-  String get puzzleThemeTrappedPiece => 'Chytená figúra';
-
-  @override
-  String get puzzleThemeTrappedPieceDescription => 'Figúra neschopná ujsť vyhodeniu, pretože má limitované možnosti.';
-
-  @override
-  String get puzzleThemeUnderPromotion => 'Pod-premena';
-
-  @override
-  String get puzzleThemeUnderPromotionDescription => 'Premena na jazdca, strelca, alebo vežu.';
-
-  @override
-  String get puzzleThemeVeryLong => 'Viac-ťahové úlohy';
-
-  @override
-  String get puzzleThemeVeryLongDescription => 'Štyri alebo viac ťahov do výhry.';
-
-  @override
-  String get puzzleThemeXRayAttack => 'Röntgenový útok';
-
-  @override
-  String get puzzleThemeXRayAttackDescription => 'Figúra bráni alebo útočí na pole cez súperovu figúru.';
-
-  @override
-  String get puzzleThemeZugzwang => 'Nevýhoda ťahu';
-
-  @override
-  String get puzzleThemeZugzwangDescription => 'Súper je limitovaný vo svojich ťahoch a každý ťah zhorší jeho pozíciu.';
-
-  @override
-  String get puzzleThemeHealthyMix => 'Zdravý mix';
-
-  @override
-  String get puzzleThemeHealthyMixDescription => 'Zmes úloh. Neviete čo očakávať, a tak ste neustále pripravení na všetko! Presne ako v skutočných partiách.';
-
-  @override
-  String get puzzleThemePlayerGames => 'Vaše partie';
-
-  @override
-  String get puzzleThemePlayerGamesDescription => 'Vyhľadajte si úlohy vygenerované z Vašich partií alebo z partií iných hráčov.';
-
-  @override
-  String puzzleThemePuzzleDownloadInformation(String param) {
-    return 'Tieto úlohy sú voľne dostupné a môžete si ich stiahnuť z $param.';
-  }
-
-  @override
-  String perfStatPerfStats(String param) {
-    return '$param štatistiky';
-  }
-
-  @override
-  String get perfStatViewTheGames => 'Zobraziť partie';
-
-  @override
-  String get perfStatProvisional => 'provizórny';
-
-  @override
-  String get perfStatNotEnoughRatedGames => 'Na zaistenie spoľahlivého ratingu sa neodohralo dosť hodnotených hier.';
-
-  @override
-  String perfStatProgressOverLastXGames(String param) {
-    return 'Postup počas posledných $param hier:';
-  }
-
-  @override
-  String perfStatRatingDeviation(String param) {
-    return 'Odchýlka ratingu: $param.';
-  }
-
-  @override
-  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
-    return 'Nižšia hodnota znamená, že rating je stabilnejší. Hodnota vyššia ako $param1 znamená, že rating sa považuje za provizórny. Ak chcete byť zaradení do rebríčka, táto hodnota by mala byť nižšia ako $param2 (štandardný šach) alebo $param3 (varianty).';
-  }
-
-  @override
-  String get perfStatTotalGames => 'Celkový počet hier';
-
-  @override
-  String get perfStatRatedGames => 'Hodnotené partie';
-
-  @override
-  String get perfStatTournamentGames => 'Turnajové hry';
-
-  @override
-  String get perfStatBerserkedGames => 'Zúrivé hry';
-
-  @override
-  String get perfStatTimeSpentPlaying => 'Čas strávený hraním';
-
-  @override
-  String get perfStatAverageOpponent => 'Priemerný súper';
-
-  @override
-  String get perfStatVictories => 'Víťazstvá';
-
-  @override
-  String get perfStatDefeats => 'Porážky';
-
-  @override
-  String get perfStatDisconnections => 'Odpojenia';
-
-  @override
-  String get perfStatNotEnoughGames => 'Nedostatok odohraných hier';
-
-  @override
-  String perfStatHighestRating(String param) {
-    return 'Najvyšší rating: $param';
-  }
-
-  @override
-  String perfStatLowestRating(String param) {
-    return 'Najnižší rating: $param';
-  }
-
-  @override
-  String perfStatFromXToY(String param1, String param2) {
-    return 'od $param1 do $param2';
-  }
-
-  @override
-  String get perfStatWinningStreak => 'Séria výhier';
-
-  @override
-  String get perfStatLosingStreak => 'Séria prehier';
-
-  @override
-  String perfStatLongestStreak(String param) {
-    return 'Najdlhšia séria: $param';
-  }
-
-  @override
-  String perfStatCurrentStreak(String param) {
-    return 'Súčasná séria: $param';
-  }
-
-  @override
-  String get perfStatBestRated => 'Najlepšie hodnotené víťazstvá';
-
-  @override
-  String get perfStatGamesInARow => 'Séria partií po sebe';
-
-  @override
-  String get perfStatLessThanOneHour => 'Menej ako hodina medzi hrami';
-
-  @override
-  String get perfStatMaxTimePlaying => 'Max čas strávený hraním';
-
-  @override
-  String get perfStatNow => 'teraz';
-
-  @override
-  String get searchSearch => 'Hľadať';
-
-  @override
-  String get settingsSettings => 'Nastavenia';
-
-  @override
-  String get settingsCloseAccount => 'Zrušiť účet';
-
-  @override
-  String get settingsManagedAccountCannotBeClosed => 'Váš účet je spravovaný niekým iným a nemožno ho zrušiť.';
-
-  @override
-  String get settingsClosingIsDefinitive => 'Zrušenie je definitívne. Nedá sa vrátiť naspäť. Ste si istí?';
-
-  @override
-  String get settingsCantOpenSimilarAccount => 'Nebudete si môcť založiť nový účet s rovnakým menom, ani keď sa bude líšiť veľkosť písmen.';
-
-  @override
-  String get settingsChangedMindDoNotCloseAccount => 'Rozmyslel som si to, nerušte môj účet';
-
-  @override
-  String get settingsCloseAccountExplanation => 'Ste si istí, že chcete zrušiť váš účet? Zrušenie vášho účtu je trvalé rozhodnutie. Už sa NIKDY ZNOVU nebudete môcť prihlásiť.';
-
-  @override
-  String get settingsThisAccountIsClosed => 'Účet zrušený.';
-
-  @override
-  String get streamerLichessStreamers => 'Lichess streameri';
-
-  @override
   String get stormMoveToStart => 'Odštartujte potiahnutím';
 
   @override
@@ -4778,14 +4772,11 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
+  String get streamerLichessStreamers => 'Lichess streameri';
+
+  @override
   String get studyShareAndExport => 'Zdielať & export';
 
   @override
   String get studyStart => 'Štart';
-
-  @override
-  String get broadcastBroadcasts => 'Vysielanie';
-
-  @override
-  String get broadcastStartDate => 'Dátum a čas začiatku, vo vašej časovej zóne';
 }

@@ -225,10 +225,10 @@ class AppLocalizationsNb extends AppLocalizations {
   }
 
   @override
-  String get contactContact => 'Kontakt';
+  String get broadcastBroadcasts => 'Overføringer';
 
   @override
-  String get contactContactLichess => 'Ta kontakt med Lichess';
+  String get broadcastStartDate => 'Startdato i din egen tidssone';
 
   @override
   String challengeChallengesX(String param1) {
@@ -310,6 +310,1012 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get challengeInviteLichessUser => 'Eller inviter en Lichess-bruker:';
+
+  @override
+  String get contactContact => 'Kontakt';
+
+  @override
+  String get contactContactLichess => 'Ta kontakt med Lichess';
+
+  @override
+  String get patronDonate => 'Bidra';
+
+  @override
+  String get patronLichessPatron => 'Lichess-patron';
+
+  @override
+  String perfStatPerfStats(String param) {
+    return '$param-statistikk';
+  }
+
+  @override
+  String get perfStatViewTheGames => 'Vis partiene';
+
+  @override
+  String get perfStatProvisional => 'provisorisk';
+
+  @override
+  String get perfStatNotEnoughRatedGames => 'For få ratede partier til å kunne beregne en stabil rating.';
+
+  @override
+  String perfStatProgressOverLastXGames(String param) {
+    return 'Forandring over de siste $param partiene:';
+  }
+
+  @override
+  String perfStatRatingDeviation(String param) {
+    return 'Ratingavvik: $param.';
+  }
+
+  @override
+  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
+    return 'Lavere verdi betyr at ratingen er mer stabil. Over $param1 er ratingen provisorisk. For å komme på rangeringslistene må verdien være under $param2 (standard sjakk) eller $param3 (varianter).';
+  }
+
+  @override
+  String get perfStatTotalGames => 'Totalt antall partier';
+
+  @override
+  String get perfStatRatedGames => 'Ratede partier';
+
+  @override
+  String get perfStatTournamentGames => 'Turneringspartier';
+
+  @override
+  String get perfStatBerserkedGames => 'Berserkpartier';
+
+  @override
+  String get perfStatTimeSpentPlaying => 'Tid brukt på å spille';
+
+  @override
+  String get perfStatAverageOpponent => 'Gjennomsnittlig motstanderrating';
+
+  @override
+  String get perfStatVictories => 'Seire';
+
+  @override
+  String get perfStatDefeats => 'Tap';
+
+  @override
+  String get perfStatDisconnections => 'Frakoblinger';
+
+  @override
+  String get perfStatNotEnoughGames => 'For få spilte partier';
+
+  @override
+  String perfStatHighestRating(String param) {
+    return 'Høyeste oppnådde rating: $param';
+  }
+
+  @override
+  String perfStatLowestRating(String param) {
+    return 'Laveste oppnådde rating: $param';
+  }
+
+  @override
+  String perfStatFromXToY(String param1, String param2) {
+    return 'fra $param1 til $param2';
+  }
+
+  @override
+  String get perfStatWinningStreak => 'Seiersrekke';
+
+  @override
+  String get perfStatLosingStreak => 'Tapsrekke';
+
+  @override
+  String perfStatLongestStreak(String param) {
+    return 'Lengste rekke: $param';
+  }
+
+  @override
+  String perfStatCurrentStreak(String param) {
+    return 'Nåværende rekke: $param';
+  }
+
+  @override
+  String get perfStatBestRated => 'Beste seire';
+
+  @override
+  String get perfStatGamesInARow => 'Partier spilt på rad';
+
+  @override
+  String get perfStatLessThanOneHour => 'Mindre enn én time mellom partiene';
+
+  @override
+  String get perfStatMaxTimePlaying => 'Maks tid brukt på å spille';
+
+  @override
+  String get perfStatNow => 'nå';
+
+  @override
+  String get preferencesPreferences => 'Innstillinger';
+
+  @override
+  String get preferencesDisplay => 'Visning';
+
+  @override
+  String get preferencesPrivacy => 'Personvern';
+
+  @override
+  String get preferencesNotifications => 'Varsler';
+
+  @override
+  String get preferencesPieceAnimation => 'Brikke animasjon';
+
+  @override
+  String get preferencesMaterialDifference => 'Materiell forskjell';
+
+  @override
+  String get preferencesBoardHighlights => 'Feltmarkering (siste trekk og sjakk)';
+
+  @override
+  String get preferencesPieceDestinations => 'Brikkedestinasjoner (gyldige trekk og forhåndstrekk)';
+
+  @override
+  String get preferencesBoardCoordinates => 'Brettkoordinater (A-H, 1-8)';
+
+  @override
+  String get preferencesMoveListWhilePlaying => 'Notasjonsliste mens du spiller';
+
+  @override
+  String get preferencesPgnPieceNotation => 'Notasjon';
+
+  @override
+  String get preferencesChessPieceSymbol => 'Brikkesymbol';
+
+  @override
+  String get preferencesPgnLetter => 'Bokstav (K, Q, R, B, N)';
+
+  @override
+  String get preferencesZenMode => 'Zen-modus';
+
+  @override
+  String get preferencesShowPlayerRatings => 'Vis spillerratinger';
+
+  @override
+  String get preferencesShowFlairs => 'Vis spillerflairer';
+
+  @override
+  String get preferencesExplainShowPlayerRatings => 'Denne innstillingen skjuler alle ratingene på nettstedet, slik at du kan fokusere på sjakken. Du kan fortsatt spille ratede partier.';
+
+  @override
+  String get preferencesDisplayBoardResizeHandle => 'Vis håndtak for brettstørrelse';
+
+  @override
+  String get preferencesOnlyOnInitialPosition => 'Kun for utgangsstillingen';
+
+  @override
+  String get preferencesInGameOnly => 'Bare under partier';
+
+  @override
+  String get preferencesChessClock => 'Sjakkur';
+
+  @override
+  String get preferencesTenthsOfSeconds => 'Tidels sekunder';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'Når gjenværende tid < 10 sekunder';
+
+  @override
+  String get preferencesHorizontalGreenProgressBars => 'Horisontal grønn progresjonslinje';
+
+  @override
+  String get preferencesSoundWhenTimeGetsCritical => 'Lyd når tiden blir kritisk';
+
+  @override
+  String get preferencesGiveMoreTime => 'Gi mer tid';
+
+  @override
+  String get preferencesGameBehavior => 'Spilloppførsel';
+
+  @override
+  String get preferencesHowDoYouMovePieces => 'Hvordan flytte brikker?';
+
+  @override
+  String get preferencesClickTwoSquares => 'Klikk to felt';
+
+  @override
+  String get preferencesDragPiece => 'Dra brikke';
+
+  @override
+  String get preferencesBothClicksAndDrag => 'Begge';
+
+  @override
+  String get preferencesPremovesPlayingDuringOpponentTurn => 'Forhåndstrekk (gjør trekk når det er motstanders trekk)';
+
+  @override
+  String get preferencesTakebacksWithOpponentApproval => 'Angre trekk (med motstanders godkjennelse)';
+
+  @override
+  String get preferencesInCasualGamesOnly => 'Bare for uformelle partier';
+
+  @override
+  String get preferencesPromoteToQueenAutomatically => 'Forvandle til dronning automatisk';
+
+  @override
+  String get preferencesExplainPromoteToQueenAutomatically => 'Hold <ctrl>-tasten nede under bondeforvandlingen for å unngå auto-dronning';
+
+  @override
+  String get preferencesWhenPremoving => 'Ved bruk av førtrekk';
+
+  @override
+  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Krev remis ved trekkgjentakelse automatisk';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Når gjenværende tid < 30 sekunder';
+
+  @override
+  String get preferencesMoveConfirmation => 'Trekkbekreftelse';
+
+  @override
+  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Kan skrus av under partiene med menyen på brettet';
+
+  @override
+  String get preferencesInCorrespondenceGames => 'I fjernsjakk';
+
+  @override
+  String get preferencesCorrespondenceAndUnlimited => 'Korrespondanse og ubegrenset';
+
+  @override
+  String get preferencesConfirmResignationAndDrawOffers => 'Bekreft når du gir opp eller tilbyr remis';
+
+  @override
+  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Metode for å rokere';
+
+  @override
+  String get preferencesCastleByMovingTwoSquares => 'Flytt kongen to felter';
+
+  @override
+  String get preferencesCastleByMovingOntoTheRook => 'Sett kongen på tårnet';
+
+  @override
+  String get preferencesInputMovesWithTheKeyboard => 'Skriv trekk med tastaturet';
+
+  @override
+  String get preferencesInputMovesWithVoice => 'Gi trekk med stemmen';
+
+  @override
+  String get preferencesSnapArrowsToValidMoves => 'Piler viser gyldige trekk';
+
+  @override
+  String get preferencesSayGgWpAfterLosingOrDrawing => 'Si «Good game, well played» («Godt parti, bra spilt») etter tap eller remis';
+
+  @override
+  String get preferencesYourPreferencesHaveBeenSaved => 'Innstillingene dine er lagret.';
+
+  @override
+  String get preferencesScrollOnTheBoardToReplayMoves => 'Bruk musehjulet for å spille av trekk';
+
+  @override
+  String get preferencesCorrespondenceEmailNotification => 'Daglig oversikt over fjernsjakkpartiene dine tilsendt på e-post';
+
+  @override
+  String get preferencesNotifyStreamStart => 'Strømmer begynner å strømme';
+
+  @override
+  String get preferencesNotifyInboxMsg => 'Ny melding i innboksen';
+
+  @override
+  String get preferencesNotifyForumMention => 'Forumkommentar nevner deg';
+
+  @override
+  String get preferencesNotifyInvitedStudy => 'Invitasjon til studie';
+
+  @override
+  String get preferencesNotifyGameEvent => 'Oppdateringer for fjernsjakkpartier';
+
+  @override
+  String get preferencesNotifyChallenge => 'Utfordringer';
+
+  @override
+  String get preferencesNotifyTournamentSoon => 'Turnering starter snart';
+
+  @override
+  String get preferencesNotifyTimeAlarm => 'Fjernsjakkur i ferd med å løpe ut';
+
+  @override
+  String get preferencesNotifyBell => 'Bjellevarsel innenfor Lichess';
+
+  @override
+  String get preferencesNotifyPush => 'Enhetsvarsel utenfor Lichess';
+
+  @override
+  String get preferencesNotifyWeb => 'Nettleser';
+
+  @override
+  String get preferencesNotifyDevice => 'Enhet';
+
+  @override
+  String get preferencesBellNotificationSound => 'Bjellevarsel med lyd';
+
+  @override
+  String get puzzlePuzzles => 'Sjakknøtter';
+
+  @override
+  String get puzzlePuzzleThemes => 'Temaer for sjakknøtter';
+
+  @override
+  String get puzzleRecommended => 'Anbefalt';
+
+  @override
+  String get puzzlePhases => 'Faser';
+
+  @override
+  String get puzzleMotifs => 'Motiver';
+
+  @override
+  String get puzzleAdvanced => 'For viderekomne';
+
+  @override
+  String get puzzleLengths => 'Varighet';
+
+  @override
+  String get puzzleMates => 'Mattstillinger';
+
+  @override
+  String get puzzleGoals => 'Mål';
+
+  @override
+  String get puzzleOrigin => 'Opphav';
+
+  @override
+  String get puzzleSpecialMoves => 'Spesialtrekk';
+
+  @override
+  String get puzzleDidYouLikeThisPuzzle => 'Likte du denne sjakknøtten?';
+
+  @override
+  String get puzzleVoteToLoadNextOne => 'Stem for å laste den neste!';
+
+  @override
+  String get puzzleUpVote => 'Bra sjakknøtt';
+
+  @override
+  String get puzzleDownVote => 'Mindre bra sjakknøtt';
+
+  @override
+  String get puzzleYourPuzzleRatingWillNotChange => 'Ratingen din for sjakknøtter vil ikke endre seg. Husk at sjakknøtter ikke er en konkurranse. Ratingen din hjelper til med å finne de sjakknøttene som passer ferdighetene dine.';
+
+  @override
+  String get puzzleFindTheBestMoveForWhite => 'Finn det beste trekket for hvit.';
+
+  @override
+  String get puzzleFindTheBestMoveForBlack => 'Finn det beste trekket for svart.';
+
+  @override
+  String get puzzleToGetPersonalizedPuzzles => 'For tilpassede sjakknøtter:';
+
+  @override
+  String puzzlePuzzleId(String param) {
+    return 'Sjakknøtt $param';
+  }
+
+  @override
+  String get puzzlePuzzleOfTheDay => 'Dagens nøtt';
+
+  @override
+  String get puzzleDailyPuzzle => 'Dagens nøtt';
+
+  @override
+  String get puzzleClickToSolve => 'Klikk for å løse';
+
+  @override
+  String get puzzleGoodMove => 'Bra trekk';
+
+  @override
+  String get puzzleBestMove => 'Beste trekk!';
+
+  @override
+  String get puzzleKeepGoing => 'Fortsett…';
+
+  @override
+  String get puzzlePuzzleSuccess => 'Korrekt!';
+
+  @override
+  String get puzzlePuzzleComplete => 'Ferdigknekt nøtt!';
+
+  @override
+  String get puzzleByOpenings => 'Etter åpninger';
+
+  @override
+  String get puzzlePuzzlesByOpenings => 'Sjakknøtter etter åpninger';
+
+  @override
+  String get puzzleOpeningsYouPlayedTheMost => 'Åpningene du spiller mest av i ratede partier';
+
+  @override
+  String get puzzleUseFindInPage => 'Bruk søkefunksjonen i nettleseren for å finne favorittåpningen din!';
+
+  @override
+  String get puzzleUseCtrlF => 'Bruk Ctrl+f for å finne favorittåpningen din!';
+
+  @override
+  String get puzzleNotTheMove => 'Det der er ikke trekket!';
+
+  @override
+  String get puzzleTrySomethingElse => 'Prøv noe annet.';
+
+  @override
+  String puzzleRatingX(String param) {
+    return 'Rating: $param';
+  }
+
+  @override
+  String get puzzleHidden => 'skjult';
+
+  @override
+  String puzzleFromGameLink(String param) {
+    return 'Fra parti $param';
+  }
+
+  @override
+  String get puzzleContinueTraining => 'Fortsett å øve';
+
+  @override
+  String get puzzleDifficultyLevel => 'Vanskelighetsgrad';
+
+  @override
+  String get puzzleNormal => 'Vanlig';
+
+  @override
+  String get puzzleEasier => 'Lettere';
+
+  @override
+  String get puzzleEasiest => 'Lettest';
+
+  @override
+  String get puzzleHarder => 'Vanskelig';
+
+  @override
+  String get puzzleHardest => 'Vanskeligst';
+
+  @override
+  String get puzzleExample => 'Eksempel';
+
+  @override
+  String get puzzleAddAnotherTheme => 'Legg til tema';
+
+  @override
+  String get puzzleNextPuzzle => 'Neste sjakknøtt';
+
+  @override
+  String get puzzleJumpToNextPuzzleImmediately => 'Gå til neste sjakknøtt med én gang';
+
+  @override
+  String get puzzlePuzzleDashboard => 'Panel for sjakknøtter';
+
+  @override
+  String get puzzleImprovementAreas => 'Forbedringsområder';
+
+  @override
+  String get puzzleStrengths => 'Styrker';
+
+  @override
+  String get puzzleHistory => 'Historikk for sjakknøtter';
+
+  @override
+  String get puzzleSolved => 'løst';
+
+  @override
+  String get puzzleFailed => 'feil';
+
+  @override
+  String get puzzleStreakDescription => 'Løs verre og verre sjakknøtter og bygg en seiersrekke. Det er ingen klokke, så ta den tiden du trenger. Ett galt trekk og det er slutt! Du kan imidlertid hoppe over ett trekk for hver runde.';
+
+  @override
+  String puzzleYourStreakX(String param) {
+    return 'Din rekke: $param';
+  }
+
+  @override
+  String get puzzleStreakSkipExplanation => 'Hopp over dette trekket for å bevare rekken din! Funker bare én gang for hver runde.';
+
+  @override
+  String get puzzleContinueTheStreak => 'Fortsett rekken';
+
+  @override
+  String get puzzleNewStreak => 'Ny rekke';
+
+  @override
+  String get puzzleFromMyGames => 'Fra mine partier';
+
+  @override
+  String get puzzleLookupOfPlayer => 'Søk etter sjakknøtter fra en spillers partier';
+
+  @override
+  String puzzleFromXGames(String param) {
+    return 'Sjakknøtter fra partier med $param';
+  }
+
+  @override
+  String get puzzleSearchPuzzles => 'Søk etter sjakknøtter';
+
+  @override
+  String get puzzleFromMyGamesNone => 'Du har ingen sjakknøtter i databasen, men Lichess setter like fullt umåtelig stor pris på deg.\nSpill partier i hurtigsjakk og klassisk sjakk for å øke sjansen for å få med en sjakknøtt!';
+
+  @override
+  String puzzleFromXGamesFound(String param1, String param2) {
+    return '$param1 sjakknøtter funnet i partier med $param2';
+  }
+
+  @override
+  String get puzzlePuzzleDashboardDescription => 'Øv, analyser, bli bedre';
+
+  @override
+  String puzzlePercentSolved(String param) {
+    return '$param løst';
+  }
+
+  @override
+  String get puzzleNoPuzzlesToShow => 'Ingenting å vise, løs noen sjakknøtter først!';
+
+  @override
+  String get puzzleImprovementAreasDescription => 'Øv på disse for å optimalisere framgangen din!';
+
+  @override
+  String get puzzleStrengthDescription => 'Du gjør det best i disse temaene';
+
+  @override
+  String puzzlePlayedXTimes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Spilt $count ganger',
+      one: 'Spilt $count gang',
+      zero: 'Spilt $count gang',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsBelowYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count poeng under sjakknøttratingen din',
+      one: 'Ett poeng under sjakknøttratingen din',
+      zero: 'Ett poeng under sjakknøttratingen din',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsAboveYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count poeng over sjakknøttratingen din',
+      one: 'Ett poeng over sjakknøttratingen din',
+      zero: 'Ett poeng over sjakknøttratingen din',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPlayed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count spilt',
+      one: '$count spilt',
+      zero: '$count spilt',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbToReplay(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count å gjenta',
+      one: '$count å gjenta',
+      zero: '$count å gjenta',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get puzzleThemeAdvancedPawn => 'Framskutt bonde';
+
+  @override
+  String get puzzleThemeAdvancedPawnDescription => 'En bonde står dypt inne i motstanderens stilling, muligens med trussel om bondeforvandling.';
+
+  @override
+  String get puzzleThemeAdvantage => 'Fordel';
+
+  @override
+  String get puzzleThemeAdvantageDescription => 'Grip sjansen til en avgjørende fordel. (200cp ≤ eval ≤ 600cp)';
+
+  @override
+  String get puzzleThemeAnastasiaMate => 'Anastasias matt';
+
+  @override
+  String get puzzleThemeAnastasiaMateDescription => 'Tårn eller dronning slår seg sammen med springer for å fange motstanderens konge mellom kanten av brettet og egen brikke.';
+
+  @override
+  String get puzzleThemeArabianMate => 'Arabisk matt';
+
+  @override
+  String get puzzleThemeArabianMateDescription => 'Springer og tårn slår seg sammen for å fange motstanderens konge i hjørnet av brettet.';
+
+  @override
+  String get puzzleThemeAttackingF2F7 => 'Angrep mot f2 eller f7';
+
+  @override
+  String get puzzleThemeAttackingF2F7Description => 'Et angrep med fokus på bonden på f2 eller f7, slik som i fegatello-angrepet.';
+
+  @override
+  String get puzzleThemeAttraction => 'Magnetoffer';
+
+  @override
+  String get puzzleThemeAttractionDescription => 'Et bytte eller offer som lokker eller tvinger motstanderens brikke til et felt som gjør en oppfølgingstaktikk mulig.';
+
+  @override
+  String get puzzleThemeBackRankMate => 'Sekkematt';
+
+  @override
+  String get puzzleThemeBackRankMateDescription => 'Sett kongen sjakk matt på sisteraden, når den er fanget der av egne brikker.';
+
+  @override
+  String get puzzleThemeBishopEndgame => 'Løpersluttspill';
+
+  @override
+  String get puzzleThemeBishopEndgameDescription => 'Et sluttspill med kun løpere og bønder.';
+
+  @override
+  String get puzzleThemeBodenMate => 'Bodens matt';
+
+  @override
+  String get puzzleThemeBodenMateDescription => 'To angripende løpere på kryssende diagonaler setter matt, da kongen er blokkert av egne brikker.';
+
+  @override
+  String get puzzleThemeCastling => 'Rokade';
+
+  @override
+  String get puzzleThemeCastlingDescription => 'Få kongen i sikkerhet og gjør tårnet klart for angrep.';
+
+  @override
+  String get puzzleThemeCapturingDefender => 'Slå forsvareren';
+
+  @override
+  String get puzzleThemeCapturingDefenderDescription => 'Ta en brikke som gir avgjørende dekning for en annen brikke, slik at den nå udekkede brikken kan slås senere.';
+
+  @override
+  String get puzzleThemeCrushing => 'Knusende';
+
+  @override
+  String get puzzleThemeCrushingDescription => 'Oppdag motstanderens bukk og oppnå en knusende fordel. (eval ≥ 600cp)';
+
+  @override
+  String get puzzleThemeDoubleBishopMate => 'Dobbeltløpermatt';
+
+  @override
+  String get puzzleThemeDoubleBishopMateDescription => 'To angripende løpere på tilstøtende diagonaler setter matt, da kongen er blokkert av egne brikker.';
+
+  @override
+  String get puzzleThemeDovetailMate => 'Halematt';
+
+  @override
+  String get puzzleThemeDovetailMateDescription => 'Dronning setter tilstøtende konge matt, da de to eneste fluktfeltene er blokkert av egne brikker.';
+
+  @override
+  String get puzzleThemeEquality => 'Utligning';
+
+  @override
+  String get puzzleThemeEqualityDescription => 'Vend en tapt stilling til remis eller lik stilling. (eval ≤ 200cp)';
+
+  @override
+  String get puzzleThemeKingsideAttack => 'Angrep på kongefløyen';
+
+  @override
+  String get puzzleThemeKingsideAttackDescription => 'Et angrep mot motstanderens konge etter kort rokade.';
+
+  @override
+  String get puzzleThemeClearance => 'Feltrømming';
+
+  @override
+  String get puzzleThemeClearanceDescription => 'Et trekk, gjerne med tempo, som åpner et felt, en linje eller en diagonal for en påfølgende taktisk idé.';
+
+  @override
+  String get puzzleThemeDefensiveMove => 'Forsvarstrekk';
+
+  @override
+  String get puzzleThemeDefensiveMoveDescription => 'Et trekk eller en trekkrekke som er nøyaktig det som trengs for å unngå å tape materiell eller en annen fordel.';
+
+  @override
+  String get puzzleThemeDeflection => 'Avledning';
+
+  @override
+  String get puzzleThemeDeflectionDescription => 'Et trekk som leder en motstanderbrikke vekk fra en rolle den har, for eksempel å dekke et nøkkelfelt. Noen ganger også kalt «overbelastning».';
+
+  @override
+  String get puzzleThemeDiscoveredAttack => 'Avdekker';
+
+  @override
+  String get puzzleThemeDiscoveredAttackDescription => 'Å flytte en brikke som blokkerer angrep fra en annen langtrekkende brikke, for eksempel å flytte en springer ut av veien for et tårn.';
+
+  @override
+  String get puzzleThemeDoubleCheck => 'Dobbeltsjakk';
+
+  @override
+  String get puzzleThemeDoubleCheckDescription => 'Å gi sjakk med to brikker samtidig, gjennom en avdekker der både brikken som flyttes, og brikken som avdekkes, angriper motstanderens konge.';
+
+  @override
+  String get puzzleThemeEndgame => 'Sluttspill';
+
+  @override
+  String get puzzleThemeEndgameDescription => 'En taktikk i den siste fasen av partiet.';
+
+  @override
+  String get puzzleThemeEnPassantDescription => 'En taktikk som utnytter en passant-regelen, der en bonde kan slå en motstanderbonde som har passert den ved å flytte to felt.';
+
+  @override
+  String get puzzleThemeExposedKing => 'Utsatt konge';
+
+  @override
+  String get puzzleThemeExposedKingDescription => 'En taktikk som utnytter en konge med få forsvarsbrikker rundt seg, noe som ofte leder til sjakk matt.';
+
+  @override
+  String get puzzleThemeFork => 'Gaffel';
+
+  @override
+  String get puzzleThemeForkDescription => 'Et trekk der brikken som ble flyttet, angriper to av motstanderens brikker samtidig.';
+
+  @override
+  String get puzzleThemeHangingPiece => 'Hengende brikke';
+
+  @override
+  String get puzzleThemeHangingPieceDescription => 'En taktikk som utnytter at en motstanderbrikke er udekket eller ikke tilstrekkelig dekket og kan slås.';
+
+  @override
+  String get puzzleThemeHookMate => 'Krokmatt';
+
+  @override
+  String get puzzleThemeHookMateDescription => 'Tårn, springer og bonde setter sjakk matt i en stilling der motstanderens bonde avskjærer kongens flukt.';
+
+  @override
+  String get puzzleThemeInterference => 'Interferens';
+
+  @override
+  String get puzzleThemeInterferenceDescription => 'Å flytte en brikke mellom to motstanderbrikker slik at en av eller begge motstanderbrikkene er udekket, for eksempel en springer på et dekket felt mellom to tårn.';
+
+  @override
+  String get puzzleThemeIntermezzo => 'Mellomtrekk';
+
+  @override
+  String get puzzleThemeIntermezzoDescription => 'I stedet for å foreta det forventede trekket utføres først et annet trekk som utgjør en umiddelbar trussel, som motstanderen må svare på.';
+
+  @override
+  String get puzzleThemeKnightEndgame => 'Springersluttspill';
+
+  @override
+  String get puzzleThemeKnightEndgameDescription => 'Et sluttspill med kun springere og bønder.';
+
+  @override
+  String get puzzleThemeLong => 'Lang sjakknøtt';
+
+  @override
+  String get puzzleThemeLongDescription => 'Tre trekk til vinst.';
+
+  @override
+  String get puzzleThemeMaster => 'Mesterpartier';
+
+  @override
+  String get puzzleThemeMasterDescription => 'Sjakknøtter fra partier med spillere som har sjakktittel.';
+
+  @override
+  String get puzzleThemeMasterVsMaster => 'Mestermøter';
+
+  @override
+  String get puzzleThemeMasterVsMasterDescription => 'Sjakknøtter fra partier mellom to spillere som har sjakktittel.';
+
+  @override
+  String get puzzleThemeMate => 'Matt';
+
+  @override
+  String get puzzleThemeMateDescription => 'Vinn partiet med stil.';
+
+  @override
+  String get puzzleThemeMateIn1 => 'Matt i 1';
+
+  @override
+  String get puzzleThemeMateIn1Description => 'Sett sjakk matt i ett trekk.';
+
+  @override
+  String get puzzleThemeMateIn2 => 'Matt i 2';
+
+  @override
+  String get puzzleThemeMateIn2Description => 'Sett sjakk matt i to trekk.';
+
+  @override
+  String get puzzleThemeMateIn3 => 'Matt i 3';
+
+  @override
+  String get puzzleThemeMateIn3Description => 'Sett sjakk matt i tre trekk.';
+
+  @override
+  String get puzzleThemeMateIn4 => 'Matt i 4';
+
+  @override
+  String get puzzleThemeMateIn4Description => 'Sett sjakk matt i fire trekk.';
+
+  @override
+  String get puzzleThemeMateIn5 => 'Matt i 5 eller flere';
+
+  @override
+  String get puzzleThemeMateIn5Description => 'Finn en lang trekkrekke som gir matt.';
+
+  @override
+  String get puzzleThemeMiddlegame => 'Midtspill';
+
+  @override
+  String get puzzleThemeMiddlegameDescription => 'En taktikk i den andre fasen av partiet.';
+
+  @override
+  String get puzzleThemeOneMove => 'Ett-trekks sjakknøtt';
+
+  @override
+  String get puzzleThemeOneMoveDescription => 'En sjakknøtt på bare ett trekk.';
+
+  @override
+  String get puzzleThemeOpening => 'Åpning';
+
+  @override
+  String get puzzleThemeOpeningDescription => 'En taktikk i den første fasen av partiet.';
+
+  @override
+  String get puzzleThemePawnEndgame => 'Bondesluttspill';
+
+  @override
+  String get puzzleThemePawnEndgameDescription => 'Et sluttspill med kun bønder.';
+
+  @override
+  String get puzzleThemePin => 'Binding';
+
+  @override
+  String get puzzleThemePinDescription => 'En taktikk som utnytter bindinger, der en brikke ikke kan flyttes uten at en brikke med høyere verdi trues.';
+
+  @override
+  String get puzzleThemePromotion => 'Bondeforvandling';
+
+  @override
+  String get puzzleThemePromotionDescription => 'Bytt ut bonde med dronning, tårn, løper eller springer.';
+
+  @override
+  String get puzzleThemeQueenEndgame => 'Dronningsluttspill';
+
+  @override
+  String get puzzleThemeQueenEndgameDescription => 'Et sluttspill med kun dronninger og bønder.';
+
+  @override
+  String get puzzleThemeQueenRookEndgame => 'Dronning- og tårnsluttspill';
+
+  @override
+  String get puzzleThemeQueenRookEndgameDescription => 'Et sluttspill med kun dronninger, tårn og bønder.';
+
+  @override
+  String get puzzleThemeQueensideAttack => 'Angrep på dronningfløyen';
+
+  @override
+  String get puzzleThemeQueensideAttackDescription => 'Et angrep mot motstanderens konge etter lang rokade.';
+
+  @override
+  String get puzzleThemeQuietMove => 'Rolig trekk';
+
+  @override
+  String get puzzleThemeQuietMoveDescription => 'Et trekk som ikke gir sjakk eller slår en brikke, men som forbereder en uunngåelig trussel i et senere trekk.';
+
+  @override
+  String get puzzleThemeRookEndgame => 'Tårnsluttspill';
+
+  @override
+  String get puzzleThemeRookEndgameDescription => 'Et sluttspill med kun tårn og bønder.';
+
+  @override
+  String get puzzleThemeSacrifice => 'Offer';
+
+  @override
+  String get puzzleThemeSacrificeDescription => 'En taktikk der man gir fra seg materiell på kort sikt, for å oppnå en fordel etter en tvungen trekkrekke.';
+
+  @override
+  String get puzzleThemeShort => 'Kort sjakknøtt';
+
+  @override
+  String get puzzleThemeShortDescription => 'To trekk til vinst.';
+
+  @override
+  String get puzzleThemeSkewer => 'Spidding';
+
+  @override
+  String get puzzleThemeSkewerDescription => 'Et motiv der en brikke med høy verdi er under angrep og må flyttes, noe som tillater at en brikke med lavere verdi som står bak den, blir slått eller angrepet, det motsatte av en binding.';
+
+  @override
+  String get puzzleThemeSmotheredMate => 'Kvelermatt';
+
+  @override
+  String get puzzleThemeSmotheredMateDescription => 'En stilling der en springer setter sjakk matt, og kongen ikke kan flyttes fordi den er omgitt (eller kvalt) av egne brikker.';
+
+  @override
+  String get puzzleThemeSuperGM => 'Super-GM-partier';
+
+  @override
+  String get puzzleThemeSuperGMDescription => 'Sjakknøtter fra partier med verdens beste spillere.';
+
+  @override
+  String get puzzleThemeTrappedPiece => 'Fanget brikke';
+
+  @override
+  String get puzzleThemeTrappedPieceDescription => 'En brikke kan ikke unnslippe, siden den har få mulige trekk.';
+
+  @override
+  String get puzzleThemeUnderPromotion => 'Underforvandling';
+
+  @override
+  String get puzzleThemeUnderPromotionDescription => 'Bondeforvandling til springer, løper eller tårn.';
+
+  @override
+  String get puzzleThemeVeryLong => 'Veldig lang sjakknøtt';
+
+  @override
+  String get puzzleThemeVeryLongDescription => 'Fire trekk eller flere til vinst.';
+
+  @override
+  String get puzzleThemeXRayAttack => 'Røntgenangrep';
+
+  @override
+  String get puzzleThemeXRayAttackDescription => 'En brikke angriper eller dekker et felt indirekte, gjennom en av motstanderens brikker.';
+
+  @override
+  String get puzzleThemeZugzwang => 'Trekktvang';
+
+  @override
+  String get puzzleThemeZugzwangDescription => 'Motstanderen kan bare utføre trekk som forverrer egen stilling.';
+
+  @override
+  String get puzzleThemeHealthyMix => 'Frisk blanding';
+
+  @override
+  String get puzzleThemeHealthyMixDescription => 'Litt av alt. Du vet ikke hva du får, så du er klar for alt! Akkurat som i virkelige partier.';
+
+  @override
+  String get puzzleThemePlayerGames => 'Spillerpartier';
+
+  @override
+  String get puzzleThemePlayerGamesDescription => 'Finn sjakknøtter generert fra dine eller andres partier.';
+
+  @override
+  String puzzleThemePuzzleDownloadInformation(String param) {
+    return 'Disse sjakknøttene er offentlig eiendom og kan lastes ned fra $param.';
+  }
+
+  @override
+  String get searchSearch => 'Søk';
+
+  @override
+  String get settingsSettings => 'Innstillinger';
+
+  @override
+  String get settingsCloseAccount => 'Avslutt konto';
+
+  @override
+  String get settingsManagedAccountCannotBeClosed => 'Kontoen din er forvaltet og kan ikke avsluttes.';
+
+  @override
+  String get settingsClosingIsDefinitive => 'Å lukke kontoen er en beslutning som ikke kan reverseres. Er du helt sikker?';
+
+  @override
+  String get settingsCantOpenSimilarAccount => 'Du har ikke mulighet til å opprette en ny konto med samme brukernavn, selv om du endrer små bokstaver til STORE, eller STORE bokstaver til små.';
+
+  @override
+  String get settingsChangedMindDoNotCloseAccount => 'Jeg angrer, ikke avslutt kontoen min';
+
+  @override
+  String get settingsCloseAccountExplanation => 'Er du helt sikker på at du vil lukke denne kontoen? Det er en permanent beslutning. Du vil ikke ha mulighet til å logge inn igjen noen gang.';
+
+  @override
+  String get settingsThisAccountIsClosed => 'Denne kontoen er avsluttet.';
 
   @override
   String get playWithAFriend => 'Spill mot en venn';
@@ -514,6 +1520,12 @@ class AppLocalizationsNb extends AppLocalizations {
   String get deleteFromHere => 'Slett herfra';
 
   @override
+  String get collapseVariations => 'Skjul varianter';
+
+  @override
+  String get expandVariations => 'Vis varianter';
+
+  @override
   String get forceVariation => 'Vis som variant';
 
   @override
@@ -655,7 +1667,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get evaluationGauge => 'Evalueringsmåler';
 
   @override
-  String get multipleLines => 'Flere linjer';
+  String get multipleLines => 'Flere varianter';
 
   @override
   String get cpus => 'Prosessorer';
@@ -1080,7 +2092,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get thisAccountViolatedTos => 'Denne kontoen brøt vilkårene for å bruke Lichess';
 
   @override
-  String get openingExplorerAndTablebase => 'Åpningsutforsker & tabellbase';
+  String get openingExplorerAndTablebase => 'Åpningsutforsker og tabellbase';
 
   @override
   String get takeback => 'Angre';
@@ -1371,15 +2383,6 @@ class AppLocalizationsNb extends AppLocalizations {
   String get emptyTournamentName => 'La stå tomt for at turneringa skal få navn etter en tilfeldig stormester.';
 
   @override
-  String get recommendNotTouching => 'Vi anbefaler å ikke endre disse.';
-
-  @override
-  String get fewerPlayers => 'Om du stiller betingelser for å delta vil turneringa få færre deltakere.';
-
-  @override
-  String get showAdvancedSettings => 'Vis avanserte innstillinger';
-
-  @override
   String get makePrivateTournament => 'Gjør turneringen privat og begrens tilgang med et passord';
 
   @override
@@ -1509,10 +2512,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get editProfile => 'Rediger profil';
 
   @override
-  String get firstName => 'Fornavn';
-
-  @override
-  String get lastName => 'Etternavn';
+  String get realName => 'Virkelig navn';
 
   @override
   String get setFlair => 'Velg flair';
@@ -1641,13 +2641,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get cheat => 'Juks';
 
   @override
-  String get insult => 'Fornærmelse';
-
-  @override
   String get troll => 'Troll';
-
-  @override
-  String get ratingManipulation => 'Ratingmanipulering';
 
   @override
   String get other => 'Annet';
@@ -1754,6 +2748,9 @@ class AppLocalizationsNb extends AppLocalizations {
 
   @override
   String get outsideTheBoard => 'Utenfor brettet';
+
+  @override
+  String get allSquaresOfTheBoard => 'All squares of the board';
 
   @override
   String get onSlowGames => 'På lange partier';
@@ -2349,22 +3346,22 @@ class AppLocalizationsNb extends AppLocalizations {
   String get backgroundImageUrl => 'URL for bakgrunnsbilde:';
 
   @override
-  String get board => 'Board';
+  String get board => 'Brett';
 
   @override
-  String get size => 'Size';
+  String get size => 'Størrelse';
 
   @override
-  String get opacity => 'Opacity';
+  String get opacity => 'Ugjennomsiktighet';
 
   @override
-  String get brightness => 'Brightness';
+  String get brightness => 'Lysstyrke';
 
   @override
-  String get hue => 'Hue';
+  String get hue => 'Fargetone';
 
   @override
-  String get boardReset => 'Reset colours to default';
+  String get boardReset => 'Tilbake til standardfarger';
 
   @override
   String get pieceSet => 'Brikkesett';
@@ -3452,1015 +4449,12 @@ class AppLocalizationsNb extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'og lagre $count linjer med forhåndstrekk',
-      one: 'og lagre $count linje med forhåndstrekk',
-      zero: 'og lagre $count linje med forhåndstrekk',
+      other: 'og lagre $count forhåndstrekkvarianter',
+      one: 'og lagre $count forhåndstrekkvariant',
+      zero: 'og lagre $count forhåndstrekkvariant',
     );
     return '$_temp0';
   }
-
-  @override
-  String get patronDonate => 'Bidra';
-
-  @override
-  String get patronLichessPatron => 'Lichess-patron';
-
-  @override
-  String get preferencesPreferences => 'Innstillinger';
-
-  @override
-  String get preferencesDisplay => 'Visning';
-
-  @override
-  String get preferencesPrivacy => 'Personvern';
-
-  @override
-  String get preferencesNotifications => 'Varsler';
-
-  @override
-  String get preferencesPieceAnimation => 'Brikke animasjon';
-
-  @override
-  String get preferencesMaterialDifference => 'Materiell forskjell';
-
-  @override
-  String get preferencesBoardHighlights => 'Feltmarkering (siste trekk og sjakk)';
-
-  @override
-  String get preferencesPieceDestinations => 'Brikkedestinasjoner (gyldige trekk og forhåndstrekk)';
-
-  @override
-  String get preferencesBoardCoordinates => 'Brettkoordinater (A-H, 1-8)';
-
-  @override
-  String get preferencesMoveListWhilePlaying => 'Notasjonsliste mens du spiller';
-
-  @override
-  String get preferencesPgnPieceNotation => 'Notasjon';
-
-  @override
-  String get preferencesChessPieceSymbol => 'Brikkesymbol';
-
-  @override
-  String get preferencesPgnLetter => 'Bokstav (K, Q, R, B, N)';
-
-  @override
-  String get preferencesZenMode => 'Zen-modus';
-
-  @override
-  String get preferencesShowPlayerRatings => 'Vis spillerratinger';
-
-  @override
-  String get preferencesShowFlairs => 'Vis spillerflairer';
-
-  @override
-  String get preferencesExplainShowPlayerRatings => 'Denne innstillingen skjuler alle ratingene på nettstedet, slik at du kan fokusere på sjakken. Du kan fortsatt spille ratede partier.';
-
-  @override
-  String get preferencesDisplayBoardResizeHandle => 'Vis håndtak for brettstørrelse';
-
-  @override
-  String get preferencesOnlyOnInitialPosition => 'Kun for utgangsstillingen';
-
-  @override
-  String get preferencesInGameOnly => 'Bare under partier';
-
-  @override
-  String get preferencesChessClock => 'Sjakkur';
-
-  @override
-  String get preferencesTenthsOfSeconds => 'Tidels sekunder';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'Når gjenværende tid < 10 sekunder';
-
-  @override
-  String get preferencesHorizontalGreenProgressBars => 'Horisontal grønn progresjonslinje';
-
-  @override
-  String get preferencesSoundWhenTimeGetsCritical => 'Lyd når tiden blir kritisk';
-
-  @override
-  String get preferencesGiveMoreTime => 'Gi mer tid';
-
-  @override
-  String get preferencesGameBehavior => 'Spilloppførsel';
-
-  @override
-  String get preferencesHowDoYouMovePieces => 'Hvordan flytte brikker?';
-
-  @override
-  String get preferencesClickTwoSquares => 'Klikk to felt';
-
-  @override
-  String get preferencesDragPiece => 'Dra brikke';
-
-  @override
-  String get preferencesBothClicksAndDrag => 'Begge';
-
-  @override
-  String get preferencesPremovesPlayingDuringOpponentTurn => 'Forhåndstrekk (gjør trekk når det er motstanders trekk)';
-
-  @override
-  String get preferencesTakebacksWithOpponentApproval => 'Angre trekk (med motstanders godkjennelse)';
-
-  @override
-  String get preferencesInCasualGamesOnly => 'Bare for uformelle partier';
-
-  @override
-  String get preferencesPromoteToQueenAutomatically => 'Forvandle til dronning automatisk';
-
-  @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Hold <ctrl>-tasten nede under bondeforvandlingen for å unngå auto-dronning';
-
-  @override
-  String get preferencesWhenPremoving => 'Ved bruk av førtrekk';
-
-  @override
-  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Krev remis ved trekkgjentakelse automatisk';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Når gjenværende tid < 30 sekunder';
-
-  @override
-  String get preferencesMoveConfirmation => 'Trekkbekreftelse';
-
-  @override
-  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Kan skrus av under partiene med menyen på brettet';
-
-  @override
-  String get preferencesInCorrespondenceGames => 'I fjernsjakk';
-
-  @override
-  String get preferencesCorrespondenceAndUnlimited => 'Korrespondanse og ubegrenset';
-
-  @override
-  String get preferencesConfirmResignationAndDrawOffers => 'Bekreft når du gir opp eller tilbyr remis';
-
-  @override
-  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Metode for å rokere';
-
-  @override
-  String get preferencesCastleByMovingTwoSquares => 'Flytt kongen to felter';
-
-  @override
-  String get preferencesCastleByMovingOntoTheRook => 'Sett kongen på tårnet';
-
-  @override
-  String get preferencesInputMovesWithTheKeyboard => 'Skriv trekk med tastaturet';
-
-  @override
-  String get preferencesInputMovesWithVoice => 'Gi trekk med stemmen';
-
-  @override
-  String get preferencesSnapArrowsToValidMoves => 'Piler viser gyldige trekk';
-
-  @override
-  String get preferencesSayGgWpAfterLosingOrDrawing => 'Si «Good game, well played» («Godt parti, bra spilt») etter tap eller remis';
-
-  @override
-  String get preferencesYourPreferencesHaveBeenSaved => 'Innstillingene dine er lagret.';
-
-  @override
-  String get preferencesScrollOnTheBoardToReplayMoves => 'Bruk musehjulet for å spille av trekk';
-
-  @override
-  String get preferencesCorrespondenceEmailNotification => 'Daglig oversikt over fjernsjakkpartiene dine tilsendt på e-post';
-
-  @override
-  String get preferencesNotifyStreamStart => 'Strømmer begynner å strømme';
-
-  @override
-  String get preferencesNotifyInboxMsg => 'Ny melding i innboksen';
-
-  @override
-  String get preferencesNotifyForumMention => 'Forumkommentar nevner deg';
-
-  @override
-  String get preferencesNotifyInvitedStudy => 'Invitasjon til studie';
-
-  @override
-  String get preferencesNotifyGameEvent => 'Oppdateringer for fjernsjakkpartier';
-
-  @override
-  String get preferencesNotifyChallenge => 'Utfordringer';
-
-  @override
-  String get preferencesNotifyTournamentSoon => 'Turnering starter snart';
-
-  @override
-  String get preferencesNotifyTimeAlarm => 'Fjernsjakkur i ferd med å løpe ut';
-
-  @override
-  String get preferencesNotifyBell => 'Bjellevarsel innenfor Lichess';
-
-  @override
-  String get preferencesNotifyPush => 'Enhetsvarsel utenfor Lichess';
-
-  @override
-  String get preferencesNotifyWeb => 'Nettleser';
-
-  @override
-  String get preferencesNotifyDevice => 'Enhet';
-
-  @override
-  String get preferencesBellNotificationSound => 'Bjellevarsel med lyd';
-
-  @override
-  String get puzzlePuzzles => 'Sjakknøtter';
-
-  @override
-  String get puzzlePuzzleThemes => 'Temaer for sjakknøtter';
-
-  @override
-  String get puzzleRecommended => 'Anbefalt';
-
-  @override
-  String get puzzlePhases => 'Faser';
-
-  @override
-  String get puzzleMotifs => 'Motiver';
-
-  @override
-  String get puzzleAdvanced => 'For viderekomne';
-
-  @override
-  String get puzzleLengths => 'Varighet';
-
-  @override
-  String get puzzleMates => 'Mattstillinger';
-
-  @override
-  String get puzzleGoals => 'Mål';
-
-  @override
-  String get puzzleOrigin => 'Opphav';
-
-  @override
-  String get puzzleSpecialMoves => 'Spesialtrekk';
-
-  @override
-  String get puzzleDidYouLikeThisPuzzle => 'Likte du denne sjakknøtten?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Stem for å laste den neste!';
-
-  @override
-  String get puzzleUpVote => 'Bra sjakknøtt';
-
-  @override
-  String get puzzleDownVote => 'Mindre bra sjakknøtt';
-
-  @override
-  String get puzzleYourPuzzleRatingWillNotChange => 'Ratingen din for sjakknøtter vil ikke endre seg. Husk at sjakknøtter ikke er en konkurranse. Ratingen din hjelper til med å finne de sjakknøttene som passer ferdighetene dine.';
-
-  @override
-  String get puzzleFindTheBestMoveForWhite => 'Finn det beste trekket for hvit.';
-
-  @override
-  String get puzzleFindTheBestMoveForBlack => 'Finn det beste trekket for svart.';
-
-  @override
-  String get puzzleToGetPersonalizedPuzzles => 'For tilpassede sjakknøtter:';
-
-  @override
-  String puzzlePuzzleId(String param) {
-    return 'Sjakknøtt $param';
-  }
-
-  @override
-  String get puzzlePuzzleOfTheDay => 'Dagens nøtt';
-
-  @override
-  String get puzzleDailyPuzzle => 'Dagens nøtt';
-
-  @override
-  String get puzzleClickToSolve => 'Klikk for å løse';
-
-  @override
-  String get puzzleGoodMove => 'Bra trekk';
-
-  @override
-  String get puzzleBestMove => 'Beste trekk!';
-
-  @override
-  String get puzzleKeepGoing => 'Fortsett…';
-
-  @override
-  String get puzzlePuzzleSuccess => 'Korrekt!';
-
-  @override
-  String get puzzlePuzzleComplete => 'Ferdigknekt nøtt!';
-
-  @override
-  String get puzzleByOpenings => 'Etter åpninger';
-
-  @override
-  String get puzzlePuzzlesByOpenings => 'Sjakknøtter etter åpninger';
-
-  @override
-  String get puzzleOpeningsYouPlayedTheMost => 'Åpningene du spiller mest av i ratede partier';
-
-  @override
-  String get puzzleUseFindInPage => 'Bruk søkefunksjonen i nettleseren for å finne favorittåpningen din!';
-
-  @override
-  String get puzzleUseCtrlF => 'Bruk Ctrl+f for å finne favorittåpningen din!';
-
-  @override
-  String get puzzleNotTheMove => 'Det der er ikke trekket!';
-
-  @override
-  String get puzzleTrySomethingElse => 'Prøv noe annet.';
-
-  @override
-  String puzzleRatingX(String param) {
-    return 'Rating: $param';
-  }
-
-  @override
-  String get puzzleHidden => 'skjult';
-
-  @override
-  String puzzleFromGameLink(String param) {
-    return 'Fra parti $param';
-  }
-
-  @override
-  String get puzzleContinueTraining => 'Fortsett å øve';
-
-  @override
-  String get puzzleDifficultyLevel => 'Vanskelighetsgrad';
-
-  @override
-  String get puzzleNormal => 'Vanlig';
-
-  @override
-  String get puzzleEasier => 'Lettere';
-
-  @override
-  String get puzzleEasiest => 'Lettest';
-
-  @override
-  String get puzzleHarder => 'Vanskelig';
-
-  @override
-  String get puzzleHardest => 'Vanskeligst';
-
-  @override
-  String get puzzleExample => 'Eksempel';
-
-  @override
-  String get puzzleAddAnotherTheme => 'Legg til tema';
-
-  @override
-  String get puzzleNextPuzzle => 'Neste sjakknøtt';
-
-  @override
-  String get puzzleJumpToNextPuzzleImmediately => 'Gå til neste sjakknøtt med én gang';
-
-  @override
-  String get puzzlePuzzleDashboard => 'Panel for sjakknøtter';
-
-  @override
-  String get puzzleImprovementAreas => 'Forbedringsområder';
-
-  @override
-  String get puzzleStrengths => 'Styrker';
-
-  @override
-  String get puzzleHistory => 'Historikk for sjakknøtter';
-
-  @override
-  String get puzzleSolved => 'løst';
-
-  @override
-  String get puzzleFailed => 'feil';
-
-  @override
-  String get puzzleStreakDescription => 'Løs verre og verre sjakknøtter og bygg en seiersrekke. Det er ingen klokke, så ta den tiden du trenger. Ett galt trekk og det er slutt! Du kan imidlertid hoppe over ett trekk for hver runde.';
-
-  @override
-  String puzzleYourStreakX(String param) {
-    return 'Din rekke: $param';
-  }
-
-  @override
-  String get puzzleStreakSkipExplanation => 'Hopp over dette trekket for å bevare rekken din! Funker bare én gang for hver runde.';
-
-  @override
-  String get puzzleContinueTheStreak => 'Fortsett rekken';
-
-  @override
-  String get puzzleNewStreak => 'Ny rekke';
-
-  @override
-  String get puzzleFromMyGames => 'Fra mine partier';
-
-  @override
-  String get puzzleLookupOfPlayer => 'Søk etter sjakknøtter fra en spillers partier';
-
-  @override
-  String puzzleFromXGames(String param) {
-    return 'Sjakknøtter fra partier med $param';
-  }
-
-  @override
-  String get puzzleSearchPuzzles => 'Søk etter sjakknøtter';
-
-  @override
-  String get puzzleFromMyGamesNone => 'Du har ingen sjakknøtter i databasen, men Lichess setter like fullt umåtelig stor pris på deg.\nSpill partier i hurtigsjakk og klassisk sjakk for å øke sjansen for å få med en sjakknøtt!';
-
-  @override
-  String puzzleFromXGamesFound(String param1, String param2) {
-    return '$param1 sjakknøtter funnet i partier med $param2';
-  }
-
-  @override
-  String get puzzlePuzzleDashboardDescription => 'Øv, analyser, bli bedre';
-
-  @override
-  String puzzlePercentSolved(String param) {
-    return '$param løst';
-  }
-
-  @override
-  String get puzzleNoPuzzlesToShow => 'Ingenting å vise, løs noen sjakknøtter først!';
-
-  @override
-  String get puzzleImprovementAreasDescription => 'Øv på disse for å optimalisere framgangen din!';
-
-  @override
-  String get puzzleStrengthDescription => 'Du gjør det best i disse temaene';
-
-  @override
-  String puzzlePlayedXTimes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Spilt $count ganger',
-      one: 'Spilt $count gang',
-      zero: 'Spilt $count gang',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsBelowYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count poeng under sjakknøttratingen din',
-      one: 'Ett poeng under sjakknøttratingen din',
-      zero: 'Ett poeng under sjakknøttratingen din',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsAboveYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count poeng over sjakknøttratingen din',
-      one: 'Ett poeng over sjakknøttratingen din',
-      zero: 'Ett poeng over sjakknøttratingen din',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPlayed(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count spilt',
-      one: '$count spilt',
-      zero: '$count spilt',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbToReplay(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count å gjenta',
-      one: '$count å gjenta',
-      zero: '$count å gjenta',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get puzzleThemeAdvancedPawn => 'Framskutt bonde';
-
-  @override
-  String get puzzleThemeAdvancedPawnDescription => 'En bonde står dypt inne i motstanderens stilling, muligens med trussel om bondeforvandling.';
-
-  @override
-  String get puzzleThemeAdvantage => 'Fordel';
-
-  @override
-  String get puzzleThemeAdvantageDescription => 'Grip sjansen til en avgjørende fordel. (200cp ≤ eval ≤ 600cp)';
-
-  @override
-  String get puzzleThemeAnastasiaMate => 'Anastasias matt';
-
-  @override
-  String get puzzleThemeAnastasiaMateDescription => 'Tårn eller dronning slår seg sammen med springer for å fange motstanderens konge mellom kanten av brettet og egen brikke.';
-
-  @override
-  String get puzzleThemeArabianMate => 'Arabisk matt';
-
-  @override
-  String get puzzleThemeArabianMateDescription => 'Springer og tårn slår seg sammen for å fange motstanderens konge i hjørnet av brettet.';
-
-  @override
-  String get puzzleThemeAttackingF2F7 => 'Angrep mot f2 eller f7';
-
-  @override
-  String get puzzleThemeAttackingF2F7Description => 'Et angrep med fokus på bonden på f2 eller f7, slik som i fegatello-angrepet.';
-
-  @override
-  String get puzzleThemeAttraction => 'Magnetoffer';
-
-  @override
-  String get puzzleThemeAttractionDescription => 'Et bytte eller offer som lokker eller tvinger motstanderens brikke til et felt som gjør en oppfølgingstaktikk mulig.';
-
-  @override
-  String get puzzleThemeBackRankMate => 'Sekkematt';
-
-  @override
-  String get puzzleThemeBackRankMateDescription => 'Sett kongen sjakk matt på sisteraden, når den er fanget der av egne brikker.';
-
-  @override
-  String get puzzleThemeBishopEndgame => 'Løpersluttspill';
-
-  @override
-  String get puzzleThemeBishopEndgameDescription => 'Et sluttspill med kun løpere og bønder.';
-
-  @override
-  String get puzzleThemeBodenMate => 'Bodens matt';
-
-  @override
-  String get puzzleThemeBodenMateDescription => 'To angripende løpere på kryssende diagonaler setter matt, da kongen er blokkert av egne brikker.';
-
-  @override
-  String get puzzleThemeCastling => 'Rokade';
-
-  @override
-  String get puzzleThemeCastlingDescription => 'Få kongen i sikkerhet og gjør tårnet klart for angrep.';
-
-  @override
-  String get puzzleThemeCapturingDefender => 'Slå forsvareren';
-
-  @override
-  String get puzzleThemeCapturingDefenderDescription => 'Ta en brikke som gir avgjørende dekning for en annen brikke, slik at den nå udekkede brikken kan slås senere.';
-
-  @override
-  String get puzzleThemeCrushing => 'Knusende';
-
-  @override
-  String get puzzleThemeCrushingDescription => 'Oppdag motstanderens bukk og oppnå en knusende fordel. (eval ≥ 600cp)';
-
-  @override
-  String get puzzleThemeDoubleBishopMate => 'Dobbeltløpermatt';
-
-  @override
-  String get puzzleThemeDoubleBishopMateDescription => 'To angripende løpere på tilstøtende diagonaler setter matt, da kongen er blokkert av egne brikker.';
-
-  @override
-  String get puzzleThemeDovetailMate => 'Halematt';
-
-  @override
-  String get puzzleThemeDovetailMateDescription => 'Dronning setter tilstøtende konge matt, da de to eneste fluktfeltene er blokkert av egne brikker.';
-
-  @override
-  String get puzzleThemeEquality => 'Utligning';
-
-  @override
-  String get puzzleThemeEqualityDescription => 'Vend en tapt stilling til remis eller lik stilling. (eval ≤ 200cp)';
-
-  @override
-  String get puzzleThemeKingsideAttack => 'Angrep på kongefløyen';
-
-  @override
-  String get puzzleThemeKingsideAttackDescription => 'Et angrep mot motstanderens konge etter kort rokade.';
-
-  @override
-  String get puzzleThemeClearance => 'Feltrømming';
-
-  @override
-  String get puzzleThemeClearanceDescription => 'Et trekk, gjerne med tempo, som åpner et felt, en linje eller en diagonal for en påfølgende taktisk idé.';
-
-  @override
-  String get puzzleThemeDefensiveMove => 'Forsvarstrekk';
-
-  @override
-  String get puzzleThemeDefensiveMoveDescription => 'Et trekk eller en trekkrekke som er nøyaktig det som trengs for å unngå å tape materiell eller en annen fordel.';
-
-  @override
-  String get puzzleThemeDeflection => 'Avledning';
-
-  @override
-  String get puzzleThemeDeflectionDescription => 'Et trekk som leder en motstanderbrikke vekk fra en rolle den har, for eksempel å dekke et nøkkelfelt. Noen ganger også kalt «overbelastning».';
-
-  @override
-  String get puzzleThemeDiscoveredAttack => 'Avdekker';
-
-  @override
-  String get puzzleThemeDiscoveredAttackDescription => 'Å flytte en brikke som blokkerer angrep fra en annen langtrekkende brikke, for eksempel å flytte en springer ut av veien for et tårn.';
-
-  @override
-  String get puzzleThemeDoubleCheck => 'Dobbeltsjakk';
-
-  @override
-  String get puzzleThemeDoubleCheckDescription => 'Å gi sjakk med to brikker samtidig, gjennom en avdekker der både brikken som flyttes, og brikken som avdekkes, angriper motstanderens konge.';
-
-  @override
-  String get puzzleThemeEndgame => 'Sluttspill';
-
-  @override
-  String get puzzleThemeEndgameDescription => 'En taktikk i den siste fasen av partiet.';
-
-  @override
-  String get puzzleThemeEnPassantDescription => 'En taktikk som utnytter en passant-regelen, der en bonde kan slå en motstanderbonde som har passert den ved å flytte to felt.';
-
-  @override
-  String get puzzleThemeExposedKing => 'Utsatt konge';
-
-  @override
-  String get puzzleThemeExposedKingDescription => 'En taktikk som utnytter en konge med få forsvarsbrikker rundt seg, noe som ofte leder til sjakk matt.';
-
-  @override
-  String get puzzleThemeFork => 'Gaffel';
-
-  @override
-  String get puzzleThemeForkDescription => 'Et trekk der brikken som ble flyttet, angriper to av motstanderens brikker samtidig.';
-
-  @override
-  String get puzzleThemeHangingPiece => 'Hengende brikke';
-
-  @override
-  String get puzzleThemeHangingPieceDescription => 'En taktikk som utnytter at en motstanderbrikke er udekket eller ikke tilstrekkelig dekket og kan slås.';
-
-  @override
-  String get puzzleThemeHookMate => 'Krokmatt';
-
-  @override
-  String get puzzleThemeHookMateDescription => 'Tårn, springer og bonde setter sjakk matt i en stilling der motstanderens bonde avskjærer kongens flukt.';
-
-  @override
-  String get puzzleThemeInterference => 'Interferens';
-
-  @override
-  String get puzzleThemeInterferenceDescription => 'Å flytte en brikke mellom to motstanderbrikker slik at en av eller begge motstanderbrikkene er udekket, for eksempel en springer på et dekket felt mellom to tårn.';
-
-  @override
-  String get puzzleThemeIntermezzo => 'Mellomtrekk';
-
-  @override
-  String get puzzleThemeIntermezzoDescription => 'I stedet for å foreta det forventede trekket utføres først et annet trekk som utgjør en umiddelbar trussel, som motstanderen må svare på.';
-
-  @override
-  String get puzzleThemeKnightEndgame => 'Springersluttspill';
-
-  @override
-  String get puzzleThemeKnightEndgameDescription => 'Et sluttspill med kun springere og bønder.';
-
-  @override
-  String get puzzleThemeLong => 'Lang sjakknøtt';
-
-  @override
-  String get puzzleThemeLongDescription => 'Tre trekk til vinst.';
-
-  @override
-  String get puzzleThemeMaster => 'Mesterpartier';
-
-  @override
-  String get puzzleThemeMasterDescription => 'Sjakknøtter fra partier med spillere som har sjakktittel.';
-
-  @override
-  String get puzzleThemeMasterVsMaster => 'Mestermøter';
-
-  @override
-  String get puzzleThemeMasterVsMasterDescription => 'Sjakknøtter fra partier mellom to spillere som har sjakktittel.';
-
-  @override
-  String get puzzleThemeMate => 'Matt';
-
-  @override
-  String get puzzleThemeMateDescription => 'Vinn partiet med stil.';
-
-  @override
-  String get puzzleThemeMateIn1 => 'Matt i 1';
-
-  @override
-  String get puzzleThemeMateIn1Description => 'Sett sjakk matt i ett trekk.';
-
-  @override
-  String get puzzleThemeMateIn2 => 'Matt i 2';
-
-  @override
-  String get puzzleThemeMateIn2Description => 'Sett sjakk matt i to trekk.';
-
-  @override
-  String get puzzleThemeMateIn3 => 'Matt i 3';
-
-  @override
-  String get puzzleThemeMateIn3Description => 'Sett sjakk matt i tre trekk.';
-
-  @override
-  String get puzzleThemeMateIn4 => 'Matt i 4';
-
-  @override
-  String get puzzleThemeMateIn4Description => 'Sett sjakk matt i fire trekk.';
-
-  @override
-  String get puzzleThemeMateIn5 => 'Matt i 5 eller flere';
-
-  @override
-  String get puzzleThemeMateIn5Description => 'Finn en lang trekkrekke som gir matt.';
-
-  @override
-  String get puzzleThemeMiddlegame => 'Midtspill';
-
-  @override
-  String get puzzleThemeMiddlegameDescription => 'En taktikk i den andre fasen av partiet.';
-
-  @override
-  String get puzzleThemeOneMove => 'Ett-trekks sjakknøtt';
-
-  @override
-  String get puzzleThemeOneMoveDescription => 'En sjakknøtt på bare ett trekk.';
-
-  @override
-  String get puzzleThemeOpening => 'Åpning';
-
-  @override
-  String get puzzleThemeOpeningDescription => 'En taktikk i den første fasen av partiet.';
-
-  @override
-  String get puzzleThemePawnEndgame => 'Bondesluttspill';
-
-  @override
-  String get puzzleThemePawnEndgameDescription => 'Et sluttspill med kun bønder.';
-
-  @override
-  String get puzzleThemePin => 'Binding';
-
-  @override
-  String get puzzleThemePinDescription => 'En taktikk som utnytter bindinger, der en brikke ikke kan flyttes uten at en brikke med høyere verdi trues.';
-
-  @override
-  String get puzzleThemePromotion => 'Bondeforvandling';
-
-  @override
-  String get puzzleThemePromotionDescription => 'Bytt ut bonde med dronning, tårn, løper eller springer.';
-
-  @override
-  String get puzzleThemeQueenEndgame => 'Dronningsluttspill';
-
-  @override
-  String get puzzleThemeQueenEndgameDescription => 'Et sluttspill med kun dronninger og bønder.';
-
-  @override
-  String get puzzleThemeQueenRookEndgame => 'Dronning- og tårnsluttspill';
-
-  @override
-  String get puzzleThemeQueenRookEndgameDescription => 'Et sluttspill med kun dronninger, tårn og bønder.';
-
-  @override
-  String get puzzleThemeQueensideAttack => 'Angrep på dronningfløyen';
-
-  @override
-  String get puzzleThemeQueensideAttackDescription => 'Et angrep mot motstanderens konge etter lang rokade.';
-
-  @override
-  String get puzzleThemeQuietMove => 'Rolig trekk';
-
-  @override
-  String get puzzleThemeQuietMoveDescription => 'Et trekk som ikke gir sjakk eller slår en brikke, men som forbereder en uunngåelig trussel i et senere trekk.';
-
-  @override
-  String get puzzleThemeRookEndgame => 'Tårnsluttspill';
-
-  @override
-  String get puzzleThemeRookEndgameDescription => 'Et sluttspill med kun tårn og bønder.';
-
-  @override
-  String get puzzleThemeSacrifice => 'Offer';
-
-  @override
-  String get puzzleThemeSacrificeDescription => 'En taktikk der man gir fra seg materiell på kort sikt, for å oppnå en fordel etter en tvungen trekkrekke.';
-
-  @override
-  String get puzzleThemeShort => 'Kort sjakknøtt';
-
-  @override
-  String get puzzleThemeShortDescription => 'To trekk til vinst.';
-
-  @override
-  String get puzzleThemeSkewer => 'Spidding';
-
-  @override
-  String get puzzleThemeSkewerDescription => 'Et motiv der en brikke med høy verdi er under angrep og må flyttes, noe som tillater at en brikke med lavere verdi som står bak den, blir slått eller angrepet, det motsatte av en binding.';
-
-  @override
-  String get puzzleThemeSmotheredMate => 'Kvelermatt';
-
-  @override
-  String get puzzleThemeSmotheredMateDescription => 'En stilling der en springer setter sjakk matt, og kongen ikke kan flyttes fordi den er omgitt (eller kvalt) av egne brikker.';
-
-  @override
-  String get puzzleThemeSuperGM => 'Super-GM-partier';
-
-  @override
-  String get puzzleThemeSuperGMDescription => 'Sjakknøtter fra partier med verdens beste spillere.';
-
-  @override
-  String get puzzleThemeTrappedPiece => 'Fanget brikke';
-
-  @override
-  String get puzzleThemeTrappedPieceDescription => 'En brikke kan ikke unnslippe, siden den har få mulige trekk.';
-
-  @override
-  String get puzzleThemeUnderPromotion => 'Underforvandling';
-
-  @override
-  String get puzzleThemeUnderPromotionDescription => 'Bondeforvandling til springer, løper eller tårn.';
-
-  @override
-  String get puzzleThemeVeryLong => 'Veldig lang sjakknøtt';
-
-  @override
-  String get puzzleThemeVeryLongDescription => 'Fire trekk eller flere til vinst.';
-
-  @override
-  String get puzzleThemeXRayAttack => 'Røntgenangrep';
-
-  @override
-  String get puzzleThemeXRayAttackDescription => 'En brikke angriper eller dekker et felt indirekte, gjennom en av motstanderens brikker.';
-
-  @override
-  String get puzzleThemeZugzwang => 'Trekktvang';
-
-  @override
-  String get puzzleThemeZugzwangDescription => 'Motstanderen kan bare utføre trekk som forverrer egen stilling.';
-
-  @override
-  String get puzzleThemeHealthyMix => 'Frisk blanding';
-
-  @override
-  String get puzzleThemeHealthyMixDescription => 'Litt av alt. Du vet ikke hva du får, så du er klar for alt! Akkurat som i virkelige partier.';
-
-  @override
-  String get puzzleThemePlayerGames => 'Spillerpartier';
-
-  @override
-  String get puzzleThemePlayerGamesDescription => 'Finn sjakknøtter generert fra dine eller andres partier.';
-
-  @override
-  String puzzleThemePuzzleDownloadInformation(String param) {
-    return 'Disse sjakknøttene er offentlig eiendom og kan lastes ned fra $param.';
-  }
-
-  @override
-  String perfStatPerfStats(String param) {
-    return '$param-statistikk';
-  }
-
-  @override
-  String get perfStatViewTheGames => 'Vis partiene';
-
-  @override
-  String get perfStatProvisional => 'provisorisk';
-
-  @override
-  String get perfStatNotEnoughRatedGames => 'For få ratede partier til å kunne beregne en stabil rating.';
-
-  @override
-  String perfStatProgressOverLastXGames(String param) {
-    return 'Forandring over de siste $param partiene:';
-  }
-
-  @override
-  String perfStatRatingDeviation(String param) {
-    return 'Ratingavvik: $param.';
-  }
-
-  @override
-  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
-    return 'Lavere verdi betyr at ratingen er mer stabil. Over $param1 er ratingen provisorisk. For å komme på rangeringslistene må verdien være under $param2 (standard sjakk) eller $param3 (varianter).';
-  }
-
-  @override
-  String get perfStatTotalGames => 'Totalt antall partier';
-
-  @override
-  String get perfStatRatedGames => 'Ratede partier';
-
-  @override
-  String get perfStatTournamentGames => 'Turneringspartier';
-
-  @override
-  String get perfStatBerserkedGames => 'Berserkpartier';
-
-  @override
-  String get perfStatTimeSpentPlaying => 'Tid brukt på å spille';
-
-  @override
-  String get perfStatAverageOpponent => 'Gjennomsnittlig motstanderrating';
-
-  @override
-  String get perfStatVictories => 'Seire';
-
-  @override
-  String get perfStatDefeats => 'Tap';
-
-  @override
-  String get perfStatDisconnections => 'Frakoblinger';
-
-  @override
-  String get perfStatNotEnoughGames => 'For få spilte partier';
-
-  @override
-  String perfStatHighestRating(String param) {
-    return 'Høyeste oppnådde rating: $param';
-  }
-
-  @override
-  String perfStatLowestRating(String param) {
-    return 'Laveste oppnådde rating: $param';
-  }
-
-  @override
-  String perfStatFromXToY(String param1, String param2) {
-    return 'fra $param1 til $param2';
-  }
-
-  @override
-  String get perfStatWinningStreak => 'Seiersrekke';
-
-  @override
-  String get perfStatLosingStreak => 'Tapsrekke';
-
-  @override
-  String perfStatLongestStreak(String param) {
-    return 'Lengste rekke: $param';
-  }
-
-  @override
-  String perfStatCurrentStreak(String param) {
-    return 'Nåværende rekke: $param';
-  }
-
-  @override
-  String get perfStatBestRated => 'Beste seire';
-
-  @override
-  String get perfStatGamesInARow => 'Partier spilt på rad';
-
-  @override
-  String get perfStatLessThanOneHour => 'Mindre enn én time mellom partiene';
-
-  @override
-  String get perfStatMaxTimePlaying => 'Maks tid brukt på å spille';
-
-  @override
-  String get perfStatNow => 'nå';
-
-  @override
-  String get searchSearch => 'Søk';
-
-  @override
-  String get settingsSettings => 'Innstillinger';
-
-  @override
-  String get settingsCloseAccount => 'Avslutt konto';
-
-  @override
-  String get settingsManagedAccountCannotBeClosed => 'Kontoen din er forvaltet og kan ikke avsluttes.';
-
-  @override
-  String get settingsClosingIsDefinitive => 'Å lukke kontoen er en beslutning som ikke kan reverseres. Er du helt sikker?';
-
-  @override
-  String get settingsCantOpenSimilarAccount => 'Du har ikke mulighet til å opprette en ny konto med samme brukernavn, selv om du endrer små bokstaver til STORE, eller STORE bokstaver til små.';
-
-  @override
-  String get settingsChangedMindDoNotCloseAccount => 'Jeg angrer, ikke avslutt kontoen min';
-
-  @override
-  String get settingsCloseAccountExplanation => 'Er du helt sikker på at du vil lukke denne kontoen? Det er en permanent beslutning. Du vil ikke ha mulighet til å logge inn igjen noen gang.';
-
-  @override
-  String get settingsThisAccountIsClosed => 'Denne kontoen er avsluttet.';
-
-  @override
-  String get streamerLichessStreamers => 'Lichess-strømmere';
 
   @override
   String get stormMoveToStart => 'Trekk for å begynne';
@@ -4646,14 +4640,11 @@ class AppLocalizationsNb extends AppLocalizations {
   }
 
   @override
+  String get streamerLichessStreamers => 'Lichess-strømmere';
+
+  @override
   String get studyShareAndExport => 'Del og eksporter';
 
   @override
   String get studyStart => 'Start';
-
-  @override
-  String get broadcastBroadcasts => 'Overføringer';
-
-  @override
-  String get broadcastStartDate => 'Startdato i din egen tidssone';
 }

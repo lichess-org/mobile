@@ -170,8 +170,8 @@
       }
     }
   },
-  "contactContact": "Contact",
-  "contactContactLichess": "Contact Lichess",
+  "broadcastBroadcasts": "Broadcasts",
+  "broadcastStartDate": "Start date in your own timezone",
   "challengeChallengesX": "Challenges: {param1}",
   "@challengeChallengesX": {
     "placeholders": {
@@ -240,6 +240,481 @@
   "challengeDeclineNoBot": "I'm not accepting challenges from bots.",
   "challengeDeclineOnlyBot": "I'm only accepting challenges from bots.",
   "challengeInviteLichessUser": "Or invite a Lichess user:",
+  "contactContact": "Contact",
+  "contactContactLichess": "Contact Lichess",
+  "patronDonate": "Donate",
+  "patronLichessPatron": "Lichess Patron",
+  "perfStatPerfStats": "{param} stats",
+  "@perfStatPerfStats": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "perfStatViewTheGames": "View the games",
+  "perfStatProvisional": "provisional",
+  "perfStatNotEnoughRatedGames": "Not enough rated games have been played to establish a reliable rating.",
+  "perfStatProgressOverLastXGames": "Progression over the last {param} games:",
+  "@perfStatProgressOverLastXGames": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "perfStatRatingDeviation": "Rating deviation: {param}.",
+  "@perfStatRatingDeviation": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "perfStatRatingDeviationTooltip": "Lower value means the rating is more stable. Above {param1}, the rating is considered provisional. To be included in the rankings, this value should be below {param2} (standard chess) or {param3} (variants).",
+  "@perfStatRatingDeviationTooltip": {
+    "placeholders": {
+      "param1": {
+        "type": "String"
+      },
+      "param2": {
+        "type": "String"
+      },
+      "param3": {
+        "type": "String"
+      }
+    }
+  },
+  "perfStatTotalGames": "Total games",
+  "perfStatRatedGames": "Rated games",
+  "perfStatTournamentGames": "Tournament games",
+  "perfStatBerserkedGames": "Berserked games",
+  "perfStatTimeSpentPlaying": "Time spent playing",
+  "perfStatAverageOpponent": "Average opponent",
+  "perfStatVictories": "Victories",
+  "perfStatDefeats": "Defeats",
+  "perfStatDisconnections": "Disconnections",
+  "perfStatNotEnoughGames": "Not enough games played",
+  "perfStatHighestRating": "Highest rating: {param}",
+  "@perfStatHighestRating": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "perfStatLowestRating": "Lowest rating: {param}",
+  "@perfStatLowestRating": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "perfStatFromXToY": "from {param1} to {param2}",
+  "@perfStatFromXToY": {
+    "placeholders": {
+      "param1": {
+        "type": "String"
+      },
+      "param2": {
+        "type": "String"
+      }
+    }
+  },
+  "perfStatWinningStreak": "Winning streak",
+  "perfStatLosingStreak": "Losing streak",
+  "perfStatLongestStreak": "Longest streak: {param}",
+  "@perfStatLongestStreak": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "perfStatCurrentStreak": "Current streak: {param}",
+  "@perfStatCurrentStreak": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "perfStatBestRated": "Best rated victories",
+  "perfStatGamesInARow": "Games played in a row",
+  "perfStatLessThanOneHour": "Less than one hour between games",
+  "perfStatMaxTimePlaying": "Max time spent playing",
+  "perfStatNow": "now",
+  "preferencesPreferences": "Preferences",
+  "preferencesDisplay": "Display",
+  "preferencesPrivacy": "Privacy",
+  "preferencesNotifications": "Notifications",
+  "preferencesPieceAnimation": "Piece animation",
+  "preferencesMaterialDifference": "Material difference",
+  "preferencesBoardHighlights": "Board highlights (last move and check)",
+  "preferencesPieceDestinations": "Piece destinations (valid moves and premoves)",
+  "preferencesBoardCoordinates": "Board coordinates (A-H, 1-8)",
+  "preferencesMoveListWhilePlaying": "Move list while playing",
+  "preferencesPgnPieceNotation": "Move notation",
+  "preferencesChessPieceSymbol": "Chess piece symbol",
+  "preferencesPgnLetter": "Letter (K, Q, R, B, N)",
+  "preferencesZenMode": "Zen mode",
+  "preferencesShowPlayerRatings": "Show player ratings",
+  "preferencesShowFlairs": "Show player flairs",
+  "preferencesExplainShowPlayerRatings": "This hides all ratings from Lichess, to help focus on the chess. Rated games still impact your rating, this is only about what you get to see.",
+  "preferencesDisplayBoardResizeHandle": "Show board resize handle",
+  "preferencesOnlyOnInitialPosition": "Only on initial position",
+  "preferencesInGameOnly": "In-game only",
+  "preferencesChessClock": "Chess clock",
+  "preferencesTenthsOfSeconds": "Tenths of seconds",
+  "preferencesWhenTimeRemainingLessThanTenSeconds": "When time remaining < 10 seconds",
+  "preferencesHorizontalGreenProgressBars": "Horizontal green progress bars",
+  "preferencesSoundWhenTimeGetsCritical": "Sound when time gets critical",
+  "preferencesGiveMoreTime": "Give more time",
+  "preferencesGameBehavior": "Game behaviour",
+  "preferencesHowDoYouMovePieces": "How do you move pieces?",
+  "preferencesClickTwoSquares": "Click two squares",
+  "preferencesDragPiece": "Drag a piece",
+  "preferencesBothClicksAndDrag": "Either",
+  "preferencesPremovesPlayingDuringOpponentTurn": "Premoves (playing during opponent turn)",
+  "preferencesTakebacksWithOpponentApproval": "Takebacks (with opponent approval)",
+  "preferencesInCasualGamesOnly": "In casual games only",
+  "preferencesPromoteToQueenAutomatically": "Promote to Queen automatically",
+  "preferencesExplainPromoteToQueenAutomatically": "Hold the <ctrl> key while promoting to temporarily disable auto-promotion",
+  "preferencesWhenPremoving": "When premoving",
+  "preferencesClaimDrawOnThreefoldRepetitionAutomatically": "Claim draw on threefold repetition automatically",
+  "preferencesWhenTimeRemainingLessThanThirtySeconds": "When time remaining < 30 seconds",
+  "preferencesMoveConfirmation": "Move confirmation",
+  "preferencesExplainCanThenBeTemporarilyDisabled": "Can be disabled during a game with the board menu",
+  "preferencesInCorrespondenceGames": "Correspondence games",
+  "preferencesCorrespondenceAndUnlimited": "Correspondence and unlimited",
+  "preferencesConfirmResignationAndDrawOffers": "Confirm resignation and draw offers",
+  "preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook": "Castling method",
+  "preferencesCastleByMovingTwoSquares": "Move king two squares",
+  "preferencesCastleByMovingOntoTheRook": "Move king onto rook",
+  "preferencesInputMovesWithTheKeyboard": "Input moves with the keyboard",
+  "preferencesInputMovesWithVoice": "Input moves with your voice",
+  "preferencesSnapArrowsToValidMoves": "Snap arrows to valid moves",
+  "preferencesSayGgWpAfterLosingOrDrawing": "Say \"Good game, well played\" upon defeat or draw",
+  "preferencesYourPreferencesHaveBeenSaved": "Your preferences have been saved.",
+  "preferencesScrollOnTheBoardToReplayMoves": "Scroll on the board to replay moves",
+  "preferencesCorrespondenceEmailNotification": "Daily email listing your correspondence games",
+  "preferencesNotifyStreamStart": "Streamer goes live",
+  "preferencesNotifyInboxMsg": "New inbox message",
+  "preferencesNotifyForumMention": "Forum comment mentions you",
+  "preferencesNotifyInvitedStudy": "Study invite",
+  "preferencesNotifyGameEvent": "Correspondence game updates",
+  "preferencesNotifyChallenge": "Challenges",
+  "preferencesNotifyTournamentSoon": "Tournament starting soon",
+  "preferencesNotifyTimeAlarm": "Correspondence clock running out",
+  "preferencesNotifyBell": "Bell notification within Lichess",
+  "preferencesNotifyPush": "Device notification when you're not on Lichess",
+  "preferencesNotifyWeb": "Browser",
+  "preferencesNotifyDevice": "Device",
+  "preferencesBellNotificationSound": "Bell notification sound",
+  "puzzlePuzzles": "Puzzles",
+  "puzzlePuzzleThemes": "Puzzle themes",
+  "puzzleRecommended": "Recommended",
+  "puzzlePhases": "Phases",
+  "puzzleMotifs": "Motifs",
+  "puzzleAdvanced": "Advanced",
+  "puzzleLengths": "Lengths",
+  "puzzleMates": "Mates",
+  "puzzleGoals": "Goals",
+  "puzzleOrigin": "Origin",
+  "puzzleSpecialMoves": "Special moves",
+  "puzzleDidYouLikeThisPuzzle": "Did you like this puzzle?",
+  "puzzleVoteToLoadNextOne": "Vote to load the next one!",
+  "puzzleUpVote": "Up vote puzzle",
+  "puzzleDownVote": "Down vote puzzle",
+  "puzzleYourPuzzleRatingWillNotChange": "Your puzzle rating will not change. Note that puzzles are not a competition. Your rating helps selecting the best puzzles for your current skill.",
+  "puzzleFindTheBestMoveForWhite": "Find the best move for white.",
+  "puzzleFindTheBestMoveForBlack": "Find the best move for black.",
+  "puzzleToGetPersonalizedPuzzles": "To get personalized puzzles:",
+  "puzzlePuzzleId": "Puzzle {param}",
+  "@puzzlePuzzleId": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "puzzlePuzzleOfTheDay": "Puzzle of the day",
+  "puzzleDailyPuzzle": "Daily Puzzle",
+  "puzzleClickToSolve": "Click to solve",
+  "puzzleGoodMove": "Good move",
+  "puzzleBestMove": "Best move!",
+  "puzzleKeepGoing": "Keep going…",
+  "puzzlePuzzleSuccess": "Success!",
+  "puzzlePuzzleComplete": "Puzzle complete!",
+  "puzzleByOpenings": "By openings",
+  "puzzlePuzzlesByOpenings": "Puzzles by openings",
+  "puzzleOpeningsYouPlayedTheMost": "Openings you played the most in rated games",
+  "puzzleUseFindInPage": "Use \"Find in page\" in the browser menu to find your favourite opening!",
+  "puzzleUseCtrlF": "Use Ctrl+f to find your favourite opening!",
+  "puzzleNotTheMove": "That's not the move!",
+  "puzzleTrySomethingElse": "Try something else.",
+  "puzzleRatingX": "Rating: {param}",
+  "@puzzleRatingX": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "puzzleHidden": "hidden",
+  "puzzleFromGameLink": "From game {param}",
+  "@puzzleFromGameLink": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "puzzleContinueTraining": "Continue training",
+  "puzzleDifficultyLevel": "Difficulty level",
+  "puzzleNormal": "Normal",
+  "puzzleEasier": "Easier",
+  "puzzleEasiest": "Easiest",
+  "puzzleHarder": "Harder",
+  "puzzleHardest": "Hardest",
+  "puzzleExample": "Example",
+  "puzzleAddAnotherTheme": "Add another theme",
+  "puzzleNextPuzzle": "Next puzzle",
+  "puzzleJumpToNextPuzzleImmediately": "Jump to next puzzle immediately",
+  "puzzlePuzzleDashboard": "Puzzle Dashboard",
+  "puzzleImprovementAreas": "Improvement areas",
+  "puzzleStrengths": "Strengths",
+  "puzzleHistory": "Puzzle history",
+  "puzzleSolved": "solved",
+  "puzzleFailed": "incorrect",
+  "puzzleStreakDescription": "Solve progressively harder puzzles and build a win streak. There is no clock, so take your time. One wrong move, and it's game over! But you can skip one move per session.",
+  "puzzleYourStreakX": "Your streak: {param}",
+  "@puzzleYourStreakX": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "puzzleStreakSkipExplanation": "Skip this move to preserve your streak! Only works once per run.",
+  "puzzleContinueTheStreak": "Continue the streak",
+  "puzzleNewStreak": "New streak",
+  "puzzleFromMyGames": "From my games",
+  "puzzleLookupOfPlayer": "Lookup puzzles from a player's games",
+  "puzzleFromXGames": "Puzzles from {param}' games",
+  "@puzzleFromXGames": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "puzzleSearchPuzzles": "Search puzzles",
+  "puzzleFromMyGamesNone": "You have no puzzles in the database, but Lichess still loves you very much.\n\nPlay rapid and classical games to increase your chances of having a puzzle of yours added!",
+  "puzzleFromXGamesFound": "{param1} puzzles found in {param2} games",
+  "@puzzleFromXGamesFound": {
+    "placeholders": {
+      "param1": {
+        "type": "String"
+      },
+      "param2": {
+        "type": "String"
+      }
+    }
+  },
+  "puzzlePuzzleDashboardDescription": "Train, analyse, improve",
+  "puzzlePercentSolved": "{param} solved",
+  "@puzzlePercentSolved": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "puzzleNoPuzzlesToShow": "Nothing to show, go play some puzzles first!",
+  "puzzleImprovementAreasDescription": "Train these to optimize your progress!",
+  "puzzleStrengthDescription": "You perform the best in these themes",
+  "puzzlePlayedXTimes": "{count, plural, =0{Played {count} time} =1{Played {count} time} other{Played {count} times}}",
+  "@puzzlePlayedXTimes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "puzzleNbPointsBelowYourPuzzleRating": "{count, plural, =0{One point below your puzzle rating} =1{One point below your puzzle rating} other{{count} points below your puzzle rating}}",
+  "@puzzleNbPointsBelowYourPuzzleRating": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "puzzleNbPointsAboveYourPuzzleRating": "{count, plural, =0{One point above your puzzle rating} =1{One point above your puzzle rating} other{{count} points above your puzzle rating}}",
+  "@puzzleNbPointsAboveYourPuzzleRating": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "puzzleNbPlayed": "{count, plural, other{{count} played}}",
+  "@puzzleNbPlayed": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "puzzleNbToReplay": "{count, plural, other{{count} to replay}}",
+  "@puzzleNbToReplay": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "puzzleThemeAdvancedPawn": "Advanced pawn",
+  "puzzleThemeAdvancedPawnDescription": "One of your pawns is deep into the opponent position, maybe threatening to promote.",
+  "puzzleThemeAdvantage": "Advantage",
+  "puzzleThemeAdvantageDescription": "Seize your chance to get a decisive advantage. (200cp ≤ eval ≤ 600cp)",
+  "puzzleThemeAnastasiaMate": "Anastasia's mate",
+  "puzzleThemeAnastasiaMateDescription": "A knight and rook or queen team up to trap the opposing king between the side of the board and a friendly piece.",
+  "puzzleThemeArabianMate": "Arabian mate",
+  "puzzleThemeArabianMateDescription": "A knight and a rook team up to trap the opposing king on a corner of the board.",
+  "puzzleThemeAttackingF2F7": "Attacking f2 or f7",
+  "puzzleThemeAttackingF2F7Description": "An attack focusing on the f2 or f7 pawn, such as in the fried liver opening.",
+  "puzzleThemeAttraction": "Attraction",
+  "puzzleThemeAttractionDescription": "An exchange or sacrifice encouraging or forcing an opponent piece to a square that allows a follow-up tactic.",
+  "puzzleThemeBackRankMate": "Back rank mate",
+  "puzzleThemeBackRankMateDescription": "Checkmate the king on the home rank, when it is trapped there by its own pieces.",
+  "puzzleThemeBishopEndgame": "Bishop endgame",
+  "puzzleThemeBishopEndgameDescription": "An endgame with only bishops and pawns.",
+  "puzzleThemeBodenMate": "Boden's mate",
+  "puzzleThemeBodenMateDescription": "Two attacking bishops on criss-crossing diagonals deliver mate to a king obstructed by friendly pieces.",
+  "puzzleThemeCastling": "Castling",
+  "puzzleThemeCastlingDescription": "Bring the king to safety, and deploy the rook for attack.",
+  "puzzleThemeCapturingDefender": "Capture the defender",
+  "puzzleThemeCapturingDefenderDescription": "Removing a piece that is critical to defence of another piece, allowing the now undefended piece to be captured on a following move.",
+  "puzzleThemeCrushing": "Crushing",
+  "puzzleThemeCrushingDescription": "Spot the opponent blunder to obtain a crushing advantage. (eval ≥ 600cp)",
+  "puzzleThemeDoubleBishopMate": "Double bishop mate",
+  "puzzleThemeDoubleBishopMateDescription": "Two attacking bishops on adjacent diagonals deliver mate to a king obstructed by friendly pieces.",
+  "puzzleThemeDovetailMate": "Dovetail mate",
+  "puzzleThemeDovetailMateDescription": "A queen delivers mate to an adjacent king, whose only two escape squares are obstructed by friendly pieces.",
+  "puzzleThemeEquality": "Equality",
+  "puzzleThemeEqualityDescription": "Come back from a losing position, and secure a draw or a balanced position. (eval ≤ 200cp)",
+  "puzzleThemeKingsideAttack": "Kingside attack",
+  "puzzleThemeKingsideAttackDescription": "An attack of the opponent's king, after they castled on the king side.",
+  "puzzleThemeClearance": "Clearance",
+  "puzzleThemeClearanceDescription": "A move, often with tempo, that clears a square, file or diagonal for a follow-up tactical idea.",
+  "puzzleThemeDefensiveMove": "Defensive move",
+  "puzzleThemeDefensiveMoveDescription": "A precise move or sequence of moves that is needed to avoid losing material or another advantage.",
+  "puzzleThemeDeflection": "Deflection",
+  "puzzleThemeDeflectionDescription": "A move that distracts an opponent piece from another duty that it performs, such as guarding a key square. Sometimes also called \"overloading\".",
+  "puzzleThemeDiscoveredAttack": "Discovered attack",
+  "puzzleThemeDiscoveredAttackDescription": "Moving a piece (such as a knight), that previously blocked an attack by a long range piece (such as a rook), out of the way of that piece.",
+  "puzzleThemeDoubleCheck": "Double check",
+  "puzzleThemeDoubleCheckDescription": "Checking with two pieces at once, as a result of a discovered attack where both the moving piece and the unveiled piece attack the opponent's king.",
+  "puzzleThemeEndgame": "Endgame",
+  "puzzleThemeEndgameDescription": "A tactic during the last phase of the game.",
+  "puzzleThemeEnPassantDescription": "A tactic involving the en passant rule, where a pawn can capture an opponent pawn that has bypassed it using its initial two-square move.",
+  "puzzleThemeExposedKing": "Exposed king",
+  "puzzleThemeExposedKingDescription": "A tactic involving a king with few defenders around it, often leading to checkmate.",
+  "puzzleThemeFork": "Fork",
+  "puzzleThemeForkDescription": "A move where the moved piece attacks two opponent pieces at once.",
+  "puzzleThemeHangingPiece": "Hanging piece",
+  "puzzleThemeHangingPieceDescription": "A tactic involving an opponent piece being undefended or insufficiently defended and free to capture.",
+  "puzzleThemeHookMate": "Hook mate",
+  "puzzleThemeHookMateDescription": "Checkmate with a rook, knight, and pawn along with one enemy pawn to limit the enemy king's escape.",
+  "puzzleThemeInterference": "Interference",
+  "puzzleThemeInterferenceDescription": "Moving a piece between two opponent pieces to leave one or both opponent pieces undefended, such as a knight on a defended square between two rooks.",
+  "puzzleThemeIntermezzo": "Intermezzo",
+  "puzzleThemeIntermezzoDescription": "Instead of playing the expected move, first interpose another move posing an immediate threat that the opponent must answer. Also known as \"Zwischenzug\" or \"In between\".",
+  "puzzleThemeKnightEndgame": "Knight endgame",
+  "puzzleThemeKnightEndgameDescription": "An endgame with only knights and pawns.",
+  "puzzleThemeLong": "Long puzzle",
+  "puzzleThemeLongDescription": "Three moves to win.",
+  "puzzleThemeMaster": "Master games",
+  "puzzleThemeMasterDescription": "Puzzles from games played by titled players.",
+  "puzzleThemeMasterVsMaster": "Master vs Master games",
+  "puzzleThemeMasterVsMasterDescription": "Puzzles from games between two titled players.",
+  "puzzleThemeMate": "Checkmate",
+  "puzzleThemeMateDescription": "Win the game with style.",
+  "puzzleThemeMateIn1": "Mate in 1",
+  "puzzleThemeMateIn1Description": "Deliver checkmate in one move.",
+  "puzzleThemeMateIn2": "Mate in 2",
+  "puzzleThemeMateIn2Description": "Deliver checkmate in two moves.",
+  "puzzleThemeMateIn3": "Mate in 3",
+  "puzzleThemeMateIn3Description": "Deliver checkmate in three moves.",
+  "puzzleThemeMateIn4": "Mate in 4",
+  "puzzleThemeMateIn4Description": "Deliver checkmate in four moves.",
+  "puzzleThemeMateIn5": "Mate in 5 or more",
+  "puzzleThemeMateIn5Description": "Figure out a long mating sequence.",
+  "puzzleThemeMiddlegame": "Middlegame",
+  "puzzleThemeMiddlegameDescription": "A tactic during the second phase of the game.",
+  "puzzleThemeOneMove": "One-move puzzle",
+  "puzzleThemeOneMoveDescription": "A puzzle that is only one move long.",
+  "puzzleThemeOpening": "Opening",
+  "puzzleThemeOpeningDescription": "A tactic during the first phase of the game.",
+  "puzzleThemePawnEndgame": "Pawn endgame",
+  "puzzleThemePawnEndgameDescription": "An endgame with only pawns.",
+  "puzzleThemePin": "Pin",
+  "puzzleThemePinDescription": "A tactic involving pins, where a piece is unable to move without revealing an attack on a higher value piece.",
+  "puzzleThemePromotion": "Promotion",
+  "puzzleThemePromotionDescription": "Promote one of your pawn to a queen or minor piece.",
+  "puzzleThemeQueenEndgame": "Queen endgame",
+  "puzzleThemeQueenEndgameDescription": "An endgame with only queens and pawns.",
+  "puzzleThemeQueenRookEndgame": "Queen and Rook",
+  "puzzleThemeQueenRookEndgameDescription": "An endgame with only queens, rooks and pawns.",
+  "puzzleThemeQueensideAttack": "Queenside attack",
+  "puzzleThemeQueensideAttackDescription": "An attack of the opponent's king, after they castled on the queen side.",
+  "puzzleThemeQuietMove": "Quiet move",
+  "puzzleThemeQuietMoveDescription": "A move that does neither make a check or capture, nor an immediate threat to capture, but does prepare a more hidden unavoidable threat for a later move.",
+  "puzzleThemeRookEndgame": "Rook endgame",
+  "puzzleThemeRookEndgameDescription": "An endgame with only rooks and pawns.",
+  "puzzleThemeSacrifice": "Sacrifice",
+  "puzzleThemeSacrificeDescription": "A tactic involving giving up material in the short-term, to gain an advantage again after a forced sequence of moves.",
+  "puzzleThemeShort": "Short puzzle",
+  "puzzleThemeShortDescription": "Two moves to win.",
+  "puzzleThemeSkewer": "Skewer",
+  "puzzleThemeSkewerDescription": "A motif involving a high value piece being attacked, moving out the way, and allowing a lower value piece behind it to be captured or attacked, the inverse of a pin.",
+  "puzzleThemeSmotheredMate": "Smothered mate",
+  "puzzleThemeSmotheredMateDescription": "A checkmate delivered by a knight in which the mated king is unable to move because it is surrounded (or smothered) by its own pieces.",
+  "puzzleThemeSuperGM": "Super GM games",
+  "puzzleThemeSuperGMDescription": "Puzzles from games played by the best players in the world.",
+  "puzzleThemeTrappedPiece": "Trapped piece",
+  "puzzleThemeTrappedPieceDescription": "A piece is unable to escape capture as it has limited moves.",
+  "puzzleThemeUnderPromotion": "Underpromotion",
+  "puzzleThemeUnderPromotionDescription": "Promotion to a knight, bishop, or rook.",
+  "puzzleThemeVeryLong": "Very long puzzle",
+  "puzzleThemeVeryLongDescription": "Four moves or more to win.",
+  "puzzleThemeXRayAttack": "X-Ray attack",
+  "puzzleThemeXRayAttackDescription": "A piece attacks or defends a square, through an enemy piece.",
+  "puzzleThemeZugzwang": "Zugzwang",
+  "puzzleThemeZugzwangDescription": "The opponent is limited in the moves they can make, and all moves worsen their position.",
+  "puzzleThemeHealthyMix": "Healthy mix",
+  "puzzleThemeHealthyMixDescription": "A bit of everything. You don't know what to expect, so you remain ready for anything! Just like in real games.",
+  "puzzleThemePlayerGames": "Player games",
+  "puzzleThemePlayerGamesDescription": "Lookup puzzles generated from your games, or from another player's games.",
+  "puzzleThemePuzzleDownloadInformation": "These puzzles are in the public domain, and can be downloaded from {param}.",
+  "@puzzleThemePuzzleDownloadInformation": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "searchSearch": "Search",
+  "settingsSettings": "Settings",
+  "settingsCloseAccount": "Close account",
+  "settingsManagedAccountCannotBeClosed": "Your account is managed, and cannot be closed.",
+  "settingsClosingIsDefinitive": "Closing is definitive. There is no going back. Are you sure?",
+  "settingsCantOpenSimilarAccount": "You will not be allowed to open a new account with the same name, even if the case is different.",
+  "settingsChangedMindDoNotCloseAccount": "I changed my mind, don't close my account",
+  "settingsCloseAccountExplanation": "Are you sure you want to close your account? Closing your account is a permanent decision. You will NEVER be able to log in EVER AGAIN.",
+  "settingsThisAccountIsClosed": "This account is closed.",
   "playWithAFriend": "Play with a friend",
   "playWithTheMachine": "Play with the computer",
   "toInviteSomeoneToPlayGiveThisUrl": "To invite someone to play, give this URL",
@@ -323,6 +798,8 @@
   "promoteVariation": "Promote variation",
   "makeMainLine": "Make mainline",
   "deleteFromHere": "Delete from here",
+  "collapseVariations": "Collapse variations",
+  "expandVariations": "Expand variations",
   "forceVariation": "Force variation",
   "copyVariationPgn": "Copy variation PGN",
   "move": "Move",
@@ -819,9 +1296,6 @@
   "safeTournamentName": "Pick a very safe name for the tournament.",
   "inappropriateNameWarning": "Anything even slightly inappropriate could get your account closed.",
   "emptyTournamentName": "Leave empty to name the tournament after a notable chess player.",
-  "recommendNotTouching": "We recommend not touching these.",
-  "fewerPlayers": "If you set entry requirements, your tournament will have fewer players.",
-  "showAdvancedSettings": "Show advanced settings",
   "makePrivateTournament": "Make the tournament private, and restrict access with a password",
   "join": "Join",
   "withdraw": "Withdraw",
@@ -903,8 +1377,7 @@
   "ifNoneLeaveEmpty": "If none, leave empty",
   "profile": "Profile",
   "editProfile": "Edit profile",
-  "firstName": "First name",
-  "lastName": "Surname",
+  "realName": "Real name",
   "setFlair": "Set your flair",
   "flair": "Flair",
   "youCanHideFlair": "There is a setting to hide all user flairs across the entire site.",
@@ -947,9 +1420,7 @@
   "reason": "Reason",
   "whatIsIheMatter": "What's the matter?",
   "cheat": "Cheat",
-  "insult": "Insult",
   "troll": "Troll",
-  "ratingManipulation": "Rating manipulation",
   "other": "Other",
   "reportDescriptionHelp": "Paste the link to the game(s) and explain what is wrong about this user's behaviour. Don't just say \"they cheat\", but tell us how you came to this conclusion. Your report will be processed faster if written in English.",
   "error_provideOneCheatedGameLink": "Please provide at least one link to a cheated game.",
@@ -998,6 +1469,7 @@
   "slow": "Slow",
   "insideTheBoard": "Inside the board",
   "outsideTheBoard": "Outside the board",
+  "allSquaresOfTheBoard": "All squares of the board",
   "onSlowGames": "On slow games",
   "always": "Always",
   "never": "Never",
@@ -1714,7 +2186,7 @@
   "cancelTournament": "Cancel the tournament",
   "tournDescription": "Tournament description",
   "tournDescriptionHelp": "Anything special you want to tell the participants? Try to keep it short. Markdown links are available: [name](https://url)",
-  "ratedFormHelp": "Games are rated\nand impact players ratings",
+  "ratedFormHelp": "Games are rated and impact players ratings",
   "onlyMembersOfTeam": "Only members of team",
   "noRestriction": "No restriction",
   "minimumRatedGames": "Minimum rated games",
@@ -2148,480 +2620,6 @@
       }
     }
   },
-  "patronDonate": "Donate",
-  "patronLichessPatron": "Lichess Patron",
-  "preferencesPreferences": "Preferences",
-  "preferencesDisplay": "Display",
-  "preferencesPrivacy": "Privacy",
-  "preferencesNotifications": "Notifications",
-  "preferencesPieceAnimation": "Piece animation",
-  "preferencesMaterialDifference": "Material difference",
-  "preferencesBoardHighlights": "Board highlights (last move and check)",
-  "preferencesPieceDestinations": "Piece destinations (valid moves and premoves)",
-  "preferencesBoardCoordinates": "Board coordinates (A-H, 1-8)",
-  "preferencesMoveListWhilePlaying": "Move list while playing",
-  "preferencesPgnPieceNotation": "Move notation",
-  "preferencesChessPieceSymbol": "Chess piece symbol",
-  "preferencesPgnLetter": "Letter (K, Q, R, B, N)",
-  "preferencesZenMode": "Zen mode",
-  "preferencesShowPlayerRatings": "Show player ratings",
-  "preferencesShowFlairs": "Show player flairs",
-  "preferencesExplainShowPlayerRatings": "This hides all ratings from Lichess, to help focus on the chess. Rated games still impact your rating, this is only about what you get to see.",
-  "preferencesDisplayBoardResizeHandle": "Show board resize handle",
-  "preferencesOnlyOnInitialPosition": "Only on initial position",
-  "preferencesInGameOnly": "In-game only",
-  "preferencesChessClock": "Chess clock",
-  "preferencesTenthsOfSeconds": "Tenths of seconds",
-  "preferencesWhenTimeRemainingLessThanTenSeconds": "When time remaining < 10 seconds",
-  "preferencesHorizontalGreenProgressBars": "Horizontal green progress bars",
-  "preferencesSoundWhenTimeGetsCritical": "Sound when time gets critical",
-  "preferencesGiveMoreTime": "Give more time",
-  "preferencesGameBehavior": "Game behaviour",
-  "preferencesHowDoYouMovePieces": "How do you move pieces?",
-  "preferencesClickTwoSquares": "Click two squares",
-  "preferencesDragPiece": "Drag a piece",
-  "preferencesBothClicksAndDrag": "Either",
-  "preferencesPremovesPlayingDuringOpponentTurn": "Premoves (playing during opponent turn)",
-  "preferencesTakebacksWithOpponentApproval": "Takebacks (with opponent approval)",
-  "preferencesInCasualGamesOnly": "In casual games only",
-  "preferencesPromoteToQueenAutomatically": "Promote to Queen automatically",
-  "preferencesExplainPromoteToQueenAutomatically": "Hold the <ctrl> key while promoting to temporarily disable auto-promotion",
-  "preferencesWhenPremoving": "When premoving",
-  "preferencesClaimDrawOnThreefoldRepetitionAutomatically": "Claim draw on threefold repetition automatically",
-  "preferencesWhenTimeRemainingLessThanThirtySeconds": "When time remaining < 30 seconds",
-  "preferencesMoveConfirmation": "Move confirmation",
-  "preferencesExplainCanThenBeTemporarilyDisabled": "Can be disabled during a game with the board menu",
-  "preferencesInCorrespondenceGames": "Correspondence games",
-  "preferencesCorrespondenceAndUnlimited": "Correspondence and unlimited",
-  "preferencesConfirmResignationAndDrawOffers": "Confirm resignation and draw offers",
-  "preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook": "Castling method",
-  "preferencesCastleByMovingTwoSquares": "Move king two squares",
-  "preferencesCastleByMovingOntoTheRook": "Move king onto rook",
-  "preferencesInputMovesWithTheKeyboard": "Input moves with the keyboard",
-  "preferencesInputMovesWithVoice": "Input moves with your voice",
-  "preferencesSnapArrowsToValidMoves": "Snap arrows to valid moves",
-  "preferencesSayGgWpAfterLosingOrDrawing": "Say \"Good game, well played\" upon defeat or draw",
-  "preferencesYourPreferencesHaveBeenSaved": "Your preferences have been saved.",
-  "preferencesScrollOnTheBoardToReplayMoves": "Scroll on the board to replay moves",
-  "preferencesCorrespondenceEmailNotification": "Daily email listing your correspondence games",
-  "preferencesNotifyStreamStart": "Streamer goes live",
-  "preferencesNotifyInboxMsg": "New inbox message",
-  "preferencesNotifyForumMention": "Forum comment mentions you",
-  "preferencesNotifyInvitedStudy": "Study invite",
-  "preferencesNotifyGameEvent": "Correspondence game updates",
-  "preferencesNotifyChallenge": "Challenges",
-  "preferencesNotifyTournamentSoon": "Tournament starting soon",
-  "preferencesNotifyTimeAlarm": "Correspondence clock running out",
-  "preferencesNotifyBell": "Bell notification within Lichess",
-  "preferencesNotifyPush": "Device notification when you're not on Lichess",
-  "preferencesNotifyWeb": "Browser",
-  "preferencesNotifyDevice": "Device",
-  "preferencesBellNotificationSound": "Bell notification sound",
-  "puzzlePuzzles": "Puzzles",
-  "puzzlePuzzleThemes": "Puzzle themes",
-  "puzzleRecommended": "Recommended",
-  "puzzlePhases": "Phases",
-  "puzzleMotifs": "Motifs",
-  "puzzleAdvanced": "Advanced",
-  "puzzleLengths": "Lengths",
-  "puzzleMates": "Mates",
-  "puzzleGoals": "Goals",
-  "puzzleOrigin": "Origin",
-  "puzzleSpecialMoves": "Special moves",
-  "puzzleDidYouLikeThisPuzzle": "Did you like this puzzle?",
-  "puzzleVoteToLoadNextOne": "Vote to load the next one!",
-  "puzzleUpVote": "Up vote puzzle",
-  "puzzleDownVote": "Down vote puzzle",
-  "puzzleYourPuzzleRatingWillNotChange": "Your puzzle rating will not change. Note that puzzles are not a competition. Your rating helps selecting the best puzzles for your current skill.",
-  "puzzleFindTheBestMoveForWhite": "Find the best move for white.",
-  "puzzleFindTheBestMoveForBlack": "Find the best move for black.",
-  "puzzleToGetPersonalizedPuzzles": "To get personalized puzzles:",
-  "puzzlePuzzleId": "Puzzle {param}",
-  "@puzzlePuzzleId": {
-    "placeholders": {
-      "param": {
-        "type": "String"
-      }
-    }
-  },
-  "puzzlePuzzleOfTheDay": "Puzzle of the day",
-  "puzzleDailyPuzzle": "Daily Puzzle",
-  "puzzleClickToSolve": "Click to solve",
-  "puzzleGoodMove": "Good move",
-  "puzzleBestMove": "Best move!",
-  "puzzleKeepGoing": "Keep going…",
-  "puzzlePuzzleSuccess": "Success!",
-  "puzzlePuzzleComplete": "Puzzle complete!",
-  "puzzleByOpenings": "By openings",
-  "puzzlePuzzlesByOpenings": "Puzzles by openings",
-  "puzzleOpeningsYouPlayedTheMost": "Openings you played the most in rated games",
-  "puzzleUseFindInPage": "Use \"Find in page\" in the browser menu to find your favourite opening!",
-  "puzzleUseCtrlF": "Use Ctrl+f to find your favourite opening!",
-  "puzzleNotTheMove": "That's not the move!",
-  "puzzleTrySomethingElse": "Try something else.",
-  "puzzleRatingX": "Rating: {param}",
-  "@puzzleRatingX": {
-    "placeholders": {
-      "param": {
-        "type": "String"
-      }
-    }
-  },
-  "puzzleHidden": "hidden",
-  "puzzleFromGameLink": "From game {param}",
-  "@puzzleFromGameLink": {
-    "placeholders": {
-      "param": {
-        "type": "String"
-      }
-    }
-  },
-  "puzzleContinueTraining": "Continue training",
-  "puzzleDifficultyLevel": "Difficulty level",
-  "puzzleNormal": "Normal",
-  "puzzleEasier": "Easier",
-  "puzzleEasiest": "Easiest",
-  "puzzleHarder": "Harder",
-  "puzzleHardest": "Hardest",
-  "puzzleExample": "Example",
-  "puzzleAddAnotherTheme": "Add another theme",
-  "puzzleNextPuzzle": "Next puzzle",
-  "puzzleJumpToNextPuzzleImmediately": "Jump to next puzzle immediately",
-  "puzzlePuzzleDashboard": "Puzzle Dashboard",
-  "puzzleImprovementAreas": "Improvement areas",
-  "puzzleStrengths": "Strengths",
-  "puzzleHistory": "Puzzle history",
-  "puzzleSolved": "solved",
-  "puzzleFailed": "incorrect",
-  "puzzleStreakDescription": "Solve progressively harder puzzles and build a win streak. There is no clock, so take your time. One wrong move, and it's game over! But you can skip one move per session.",
-  "puzzleYourStreakX": "Your streak: {param}",
-  "@puzzleYourStreakX": {
-    "placeholders": {
-      "param": {
-        "type": "String"
-      }
-    }
-  },
-  "puzzleStreakSkipExplanation": "Skip this move to preserve your streak! Only works once per run.",
-  "puzzleContinueTheStreak": "Continue the streak",
-  "puzzleNewStreak": "New streak",
-  "puzzleFromMyGames": "From my games",
-  "puzzleLookupOfPlayer": "Lookup puzzles from a player's games",
-  "puzzleFromXGames": "Puzzles from {param}' games",
-  "@puzzleFromXGames": {
-    "placeholders": {
-      "param": {
-        "type": "String"
-      }
-    }
-  },
-  "puzzleSearchPuzzles": "Search puzzles",
-  "puzzleFromMyGamesNone": "You have no puzzles in the database, but Lichess still loves you very much.\n\nPlay rapid and classical games to increase your chances of having a puzzle of yours added!",
-  "puzzleFromXGamesFound": "{param1} puzzles found in {param2} games",
-  "@puzzleFromXGamesFound": {
-    "placeholders": {
-      "param1": {
-        "type": "String"
-      },
-      "param2": {
-        "type": "String"
-      }
-    }
-  },
-  "puzzlePuzzleDashboardDescription": "Train, analyse, improve",
-  "puzzlePercentSolved": "{param} solved",
-  "@puzzlePercentSolved": {
-    "placeholders": {
-      "param": {
-        "type": "String"
-      }
-    }
-  },
-  "puzzleNoPuzzlesToShow": "Nothing to show, go play some puzzles first!",
-  "puzzleImprovementAreasDescription": "Train these to optimize your progress!",
-  "puzzleStrengthDescription": "You perform the best in these themes",
-  "puzzlePlayedXTimes": "{count, plural, =0{Played {count} time} =1{Played {count} time} other{Played {count} times}}",
-  "@puzzlePlayedXTimes": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "puzzleNbPointsBelowYourPuzzleRating": "{count, plural, =0{One point below your puzzle rating} =1{One point below your puzzle rating} other{{count} points below your puzzle rating}}",
-  "@puzzleNbPointsBelowYourPuzzleRating": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "puzzleNbPointsAboveYourPuzzleRating": "{count, plural, =0{One point above your puzzle rating} =1{One point above your puzzle rating} other{{count} points above your puzzle rating}}",
-  "@puzzleNbPointsAboveYourPuzzleRating": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "puzzleNbPlayed": "{count, plural, other{{count} played}}",
-  "@puzzleNbPlayed": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "puzzleNbToReplay": "{count, plural, other{{count} to replay}}",
-  "@puzzleNbToReplay": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "puzzleThemeAdvancedPawn": "Advanced pawn",
-  "puzzleThemeAdvancedPawnDescription": "One of your pawns is deep into the opponent position, maybe threatening to promote.",
-  "puzzleThemeAdvantage": "Advantage",
-  "puzzleThemeAdvantageDescription": "Seize your chance to get a decisive advantage. (200cp ≤ eval ≤ 600cp)",
-  "puzzleThemeAnastasiaMate": "Anastasia's mate",
-  "puzzleThemeAnastasiaMateDescription": "A knight and rook or queen team up to trap the opposing king between the side of the board and a friendly piece.",
-  "puzzleThemeArabianMate": "Arabian mate",
-  "puzzleThemeArabianMateDescription": "A knight and a rook team up to trap the opposing king on a corner of the board.",
-  "puzzleThemeAttackingF2F7": "Attacking f2 or f7",
-  "puzzleThemeAttackingF2F7Description": "An attack focusing on the f2 or f7 pawn, such as in the fried liver opening.",
-  "puzzleThemeAttraction": "Attraction",
-  "puzzleThemeAttractionDescription": "An exchange or sacrifice encouraging or forcing an opponent piece to a square that allows a follow-up tactic.",
-  "puzzleThemeBackRankMate": "Back rank mate",
-  "puzzleThemeBackRankMateDescription": "Checkmate the king on the home rank, when it is trapped there by its own pieces.",
-  "puzzleThemeBishopEndgame": "Bishop endgame",
-  "puzzleThemeBishopEndgameDescription": "An endgame with only bishops and pawns.",
-  "puzzleThemeBodenMate": "Boden's mate",
-  "puzzleThemeBodenMateDescription": "Two attacking bishops on criss-crossing diagonals deliver mate to a king obstructed by friendly pieces.",
-  "puzzleThemeCastling": "Castling",
-  "puzzleThemeCastlingDescription": "Bring the king to safety, and deploy the rook for attack.",
-  "puzzleThemeCapturingDefender": "Capture the defender",
-  "puzzleThemeCapturingDefenderDescription": "Removing a piece that is critical to defence of another piece, allowing the now undefended piece to be captured on a following move.",
-  "puzzleThemeCrushing": "Crushing",
-  "puzzleThemeCrushingDescription": "Spot the opponent blunder to obtain a crushing advantage. (eval ≥ 600cp)",
-  "puzzleThemeDoubleBishopMate": "Double bishop mate",
-  "puzzleThemeDoubleBishopMateDescription": "Two attacking bishops on adjacent diagonals deliver mate to a king obstructed by friendly pieces.",
-  "puzzleThemeDovetailMate": "Dovetail mate",
-  "puzzleThemeDovetailMateDescription": "A queen delivers mate to an adjacent king, whose only two escape squares are obstructed by friendly pieces.",
-  "puzzleThemeEquality": "Equality",
-  "puzzleThemeEqualityDescription": "Come back from a losing position, and secure a draw or a balanced position. (eval ≤ 200cp)",
-  "puzzleThemeKingsideAttack": "Kingside attack",
-  "puzzleThemeKingsideAttackDescription": "An attack of the opponent's king, after they castled on the king side.",
-  "puzzleThemeClearance": "Clearance",
-  "puzzleThemeClearanceDescription": "A move, often with tempo, that clears a square, file or diagonal for a follow-up tactical idea.",
-  "puzzleThemeDefensiveMove": "Defensive move",
-  "puzzleThemeDefensiveMoveDescription": "A precise move or sequence of moves that is needed to avoid losing material or another advantage.",
-  "puzzleThemeDeflection": "Deflection",
-  "puzzleThemeDeflectionDescription": "A move that distracts an opponent piece from another duty that it performs, such as guarding a key square. Sometimes also called \"overloading\".",
-  "puzzleThemeDiscoveredAttack": "Discovered attack",
-  "puzzleThemeDiscoveredAttackDescription": "Moving a piece (such as a knight), that previously blocked an attack by a long range piece (such as a rook), out of the way of that piece.",
-  "puzzleThemeDoubleCheck": "Double check",
-  "puzzleThemeDoubleCheckDescription": "Checking with two pieces at once, as a result of a discovered attack where both the moving piece and the unveiled piece attack the opponent's king.",
-  "puzzleThemeEndgame": "Endgame",
-  "puzzleThemeEndgameDescription": "A tactic during the last phase of the game.",
-  "puzzleThemeEnPassantDescription": "A tactic involving the en passant rule, where a pawn can capture an opponent pawn that has bypassed it using its initial two-square move.",
-  "puzzleThemeExposedKing": "Exposed king",
-  "puzzleThemeExposedKingDescription": "A tactic involving a king with few defenders around it, often leading to checkmate.",
-  "puzzleThemeFork": "Fork",
-  "puzzleThemeForkDescription": "A move where the moved piece attacks two opponent pieces at once.",
-  "puzzleThemeHangingPiece": "Hanging piece",
-  "puzzleThemeHangingPieceDescription": "A tactic involving an opponent piece being undefended or insufficiently defended and free to capture.",
-  "puzzleThemeHookMate": "Hook mate",
-  "puzzleThemeHookMateDescription": "Checkmate with a rook, knight, and pawn along with one enemy pawn to limit the enemy king's escape.",
-  "puzzleThemeInterference": "Interference",
-  "puzzleThemeInterferenceDescription": "Moving a piece between two opponent pieces to leave one or both opponent pieces undefended, such as a knight on a defended square between two rooks.",
-  "puzzleThemeIntermezzo": "Intermezzo",
-  "puzzleThemeIntermezzoDescription": "Instead of playing the expected move, first interpose another move posing an immediate threat that the opponent must answer. Also known as \"Zwischenzug\" or \"In between\".",
-  "puzzleThemeKnightEndgame": "Knight endgame",
-  "puzzleThemeKnightEndgameDescription": "An endgame with only knights and pawns.",
-  "puzzleThemeLong": "Long puzzle",
-  "puzzleThemeLongDescription": "Three moves to win.",
-  "puzzleThemeMaster": "Master games",
-  "puzzleThemeMasterDescription": "Puzzles from games played by titled players.",
-  "puzzleThemeMasterVsMaster": "Master vs Master games",
-  "puzzleThemeMasterVsMasterDescription": "Puzzles from games between two titled players.",
-  "puzzleThemeMate": "Checkmate",
-  "puzzleThemeMateDescription": "Win the game with style.",
-  "puzzleThemeMateIn1": "Mate in 1",
-  "puzzleThemeMateIn1Description": "Deliver checkmate in one move.",
-  "puzzleThemeMateIn2": "Mate in 2",
-  "puzzleThemeMateIn2Description": "Deliver checkmate in two moves.",
-  "puzzleThemeMateIn3": "Mate in 3",
-  "puzzleThemeMateIn3Description": "Deliver checkmate in three moves.",
-  "puzzleThemeMateIn4": "Mate in 4",
-  "puzzleThemeMateIn4Description": "Deliver checkmate in four moves.",
-  "puzzleThemeMateIn5": "Mate in 5 or more",
-  "puzzleThemeMateIn5Description": "Figure out a long mating sequence.",
-  "puzzleThemeMiddlegame": "Middlegame",
-  "puzzleThemeMiddlegameDescription": "A tactic during the second phase of the game.",
-  "puzzleThemeOneMove": "One-move puzzle",
-  "puzzleThemeOneMoveDescription": "A puzzle that is only one move long.",
-  "puzzleThemeOpening": "Opening",
-  "puzzleThemeOpeningDescription": "A tactic during the first phase of the game.",
-  "puzzleThemePawnEndgame": "Pawn endgame",
-  "puzzleThemePawnEndgameDescription": "An endgame with only pawns.",
-  "puzzleThemePin": "Pin",
-  "puzzleThemePinDescription": "A tactic involving pins, where a piece is unable to move without revealing an attack on a higher value piece.",
-  "puzzleThemePromotion": "Promotion",
-  "puzzleThemePromotionDescription": "Promote one of your pawn to a queen or minor piece.",
-  "puzzleThemeQueenEndgame": "Queen endgame",
-  "puzzleThemeQueenEndgameDescription": "An endgame with only queens and pawns.",
-  "puzzleThemeQueenRookEndgame": "Queen and Rook",
-  "puzzleThemeQueenRookEndgameDescription": "An endgame with only queens, rooks and pawns.",
-  "puzzleThemeQueensideAttack": "Queenside attack",
-  "puzzleThemeQueensideAttackDescription": "An attack of the opponent's king, after they castled on the queen side.",
-  "puzzleThemeQuietMove": "Quiet move",
-  "puzzleThemeQuietMoveDescription": "A move that does neither make a check or capture, nor an immediate threat to capture, but does prepare a more hidden unavoidable threat for a later move.",
-  "puzzleThemeRookEndgame": "Rook endgame",
-  "puzzleThemeRookEndgameDescription": "An endgame with only rooks and pawns.",
-  "puzzleThemeSacrifice": "Sacrifice",
-  "puzzleThemeSacrificeDescription": "A tactic involving giving up material in the short-term, to gain an advantage again after a forced sequence of moves.",
-  "puzzleThemeShort": "Short puzzle",
-  "puzzleThemeShortDescription": "Two moves to win.",
-  "puzzleThemeSkewer": "Skewer",
-  "puzzleThemeSkewerDescription": "A motif involving a high value piece being attacked, moving out the way, and allowing a lower value piece behind it to be captured or attacked, the inverse of a pin.",
-  "puzzleThemeSmotheredMate": "Smothered mate",
-  "puzzleThemeSmotheredMateDescription": "A checkmate delivered by a knight in which the mated king is unable to move because it is surrounded (or smothered) by its own pieces.",
-  "puzzleThemeSuperGM": "Super GM games",
-  "puzzleThemeSuperGMDescription": "Puzzles from games played by the best players in the world.",
-  "puzzleThemeTrappedPiece": "Trapped piece",
-  "puzzleThemeTrappedPieceDescription": "A piece is unable to escape capture as it has limited moves.",
-  "puzzleThemeUnderPromotion": "Underpromotion",
-  "puzzleThemeUnderPromotionDescription": "Promotion to a knight, bishop, or rook.",
-  "puzzleThemeVeryLong": "Very long puzzle",
-  "puzzleThemeVeryLongDescription": "Four moves or more to win.",
-  "puzzleThemeXRayAttack": "X-Ray attack",
-  "puzzleThemeXRayAttackDescription": "A piece attacks or defends a square, through an enemy piece.",
-  "puzzleThemeZugzwang": "Zugzwang",
-  "puzzleThemeZugzwangDescription": "The opponent is limited in the moves they can make, and all moves worsen their position.",
-  "puzzleThemeHealthyMix": "Healthy mix",
-  "puzzleThemeHealthyMixDescription": "A bit of everything. You don't know what to expect, so you remain ready for anything! Just like in real games.",
-  "puzzleThemePlayerGames": "Player games",
-  "puzzleThemePlayerGamesDescription": "Lookup puzzles generated from your games, or from another player's games.",
-  "puzzleThemePuzzleDownloadInformation": "These puzzles are in the public domain, and can be downloaded from {param}.",
-  "@puzzleThemePuzzleDownloadInformation": {
-    "placeholders": {
-      "param": {
-        "type": "String"
-      }
-    }
-  },
-  "perfStatPerfStats": "{param} stats",
-  "@perfStatPerfStats": {
-    "placeholders": {
-      "param": {
-        "type": "String"
-      }
-    }
-  },
-  "perfStatViewTheGames": "View the games",
-  "perfStatProvisional": "provisional",
-  "perfStatNotEnoughRatedGames": "Not enough rated games have been played to establish a reliable rating.",
-  "perfStatProgressOverLastXGames": "Progression over the last {param} games:",
-  "@perfStatProgressOverLastXGames": {
-    "placeholders": {
-      "param": {
-        "type": "String"
-      }
-    }
-  },
-  "perfStatRatingDeviation": "Rating deviation: {param}.",
-  "@perfStatRatingDeviation": {
-    "placeholders": {
-      "param": {
-        "type": "String"
-      }
-    }
-  },
-  "perfStatRatingDeviationTooltip": "Lower value means the rating is more stable. Above {param1}, the rating is considered provisional. To be included in the rankings, this value should be below {param2} (standard chess) or {param3} (variants).",
-  "@perfStatRatingDeviationTooltip": {
-    "placeholders": {
-      "param1": {
-        "type": "String"
-      },
-      "param2": {
-        "type": "String"
-      },
-      "param3": {
-        "type": "String"
-      }
-    }
-  },
-  "perfStatTotalGames": "Total games",
-  "perfStatRatedGames": "Rated games",
-  "perfStatTournamentGames": "Tournament games",
-  "perfStatBerserkedGames": "Berserked games",
-  "perfStatTimeSpentPlaying": "Time spent playing",
-  "perfStatAverageOpponent": "Average opponent",
-  "perfStatVictories": "Victories",
-  "perfStatDefeats": "Defeats",
-  "perfStatDisconnections": "Disconnections",
-  "perfStatNotEnoughGames": "Not enough games played",
-  "perfStatHighestRating": "Highest rating: {param}",
-  "@perfStatHighestRating": {
-    "placeholders": {
-      "param": {
-        "type": "String"
-      }
-    }
-  },
-  "perfStatLowestRating": "Lowest rating: {param}",
-  "@perfStatLowestRating": {
-    "placeholders": {
-      "param": {
-        "type": "String"
-      }
-    }
-  },
-  "perfStatFromXToY": "from {param1} to {param2}",
-  "@perfStatFromXToY": {
-    "placeholders": {
-      "param1": {
-        "type": "String"
-      },
-      "param2": {
-        "type": "String"
-      }
-    }
-  },
-  "perfStatWinningStreak": "Winning streak",
-  "perfStatLosingStreak": "Losing streak",
-  "perfStatLongestStreak": "Longest streak: {param}",
-  "@perfStatLongestStreak": {
-    "placeholders": {
-      "param": {
-        "type": "String"
-      }
-    }
-  },
-  "perfStatCurrentStreak": "Current streak: {param}",
-  "@perfStatCurrentStreak": {
-    "placeholders": {
-      "param": {
-        "type": "String"
-      }
-    }
-  },
-  "perfStatBestRated": "Best rated victories",
-  "perfStatGamesInARow": "Games played in a row",
-  "perfStatLessThanOneHour": "Less than one hour between games",
-  "perfStatMaxTimePlaying": "Max time spent playing",
-  "perfStatNow": "now",
-  "searchSearch": "Search",
-  "settingsSettings": "Settings",
-  "settingsCloseAccount": "Close account",
-  "settingsManagedAccountCannotBeClosed": "Your account is managed, and cannot be closed.",
-  "settingsClosingIsDefinitive": "Closing is definitive. There is no going back. Are you sure?",
-  "settingsCantOpenSimilarAccount": "You will not be allowed to open a new account with the same name, even if the case is different.",
-  "settingsChangedMindDoNotCloseAccount": "I changed my mind, don't close my account",
-  "settingsCloseAccountExplanation": "Are you sure you want to close your account? Closing your account is a permanent decision. You will NEVER be able to log in EVER AGAIN.",
-  "settingsThisAccountIsClosed": "This account is closed.",
-  "streamerLichessStreamers": "Lichess streamers",
   "stormMoveToStart": "Move to start",
   "stormYouPlayTheWhitePiecesInAllPuzzles": "You play the white pieces in all puzzles",
   "stormYouPlayTheBlackPiecesInAllPuzzles": "You play the black pieces in all puzzles",
@@ -2713,8 +2711,7 @@
       }
     }
   },
+  "streamerLichessStreamers": "Lichess streamers",
   "studyShareAndExport": "Share & export",
-  "studyStart": "Start",
-  "broadcastBroadcasts": "Broadcasts",
-  "broadcastStartDate": "Start date in your own timezone"
+  "studyStart": "Start"
 }

@@ -225,10 +225,10 @@ class AppLocalizationsKk extends AppLocalizations {
   }
 
   @override
-  String get contactContact => 'Байланыс';
+  String get broadcastBroadcasts => 'Көрсетілімдер';
 
   @override
-  String get contactContactLichess => 'Личеспен байланыс';
+  String get broadcastStartDate => 'Басталу күні (өз уақыт белдеуіңізде)';
 
   @override
   String challengeChallengesX(String param1) {
@@ -310,6 +310,1012 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get challengeInviteLichessUser => 'Не Личес ойыншысын шақыру:';
+
+  @override
+  String get contactContact => 'Байланыс';
+
+  @override
+  String get contactContactLichess => 'Личеспен байланыс';
+
+  @override
+  String get patronDonate => 'Демеу жасау';
+
+  @override
+  String get patronLichessPatron => 'Личес Қамқоршысы';
+
+  @override
+  String perfStatPerfStats(String param) {
+    return '$param статистикасы';
+  }
+
+  @override
+  String get perfStatViewTheGames => 'Ойындарын көру';
+
+  @override
+  String get perfStatProvisional => 'болжамалы';
+
+  @override
+  String get perfStatNotEnoughRatedGames => 'Тұрақты рейтингке ие болу үшін бағалы ойын саны жеткіліксіз.';
+
+  @override
+  String perfStatProgressOverLastXGames(String param) {
+    return 'Кейінгі $param ойынның қорытындысы:';
+  }
+
+  @override
+  String perfStatRatingDeviation(String param) {
+    return 'Рейтинг ауытқуы: $param.';
+  }
+
+  @override
+  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
+    return 'Мөлшері аз болса, рейтингтің тұрақты екенін білдіреді. $param1-дан артық болса – болжамалы. Орынға ие болу үшін бұл шама классикалық шахматта $param2-дан, ал басқа шахмат түрлерінде $param3-дан кем болуы керек.';
+  }
+
+  @override
+  String get perfStatTotalGames => 'Барлық ойындар';
+
+  @override
+  String get perfStatRatedGames => 'Бағалы ойындар';
+
+  @override
+  String get perfStatTournamentGames => 'Жарыс ойындары';
+
+  @override
+  String get perfStatBerserkedGames => 'Берсерк ойындары';
+
+  @override
+  String get perfStatTimeSpentPlaying => 'Ойынмен өткен уақыт';
+
+  @override
+  String get perfStatAverageOpponent => 'Орташа қарсылас';
+
+  @override
+  String get perfStatVictories => 'Жеңістер';
+
+  @override
+  String get perfStatDefeats => 'Жеңілістер';
+
+  @override
+  String get perfStatDisconnections => 'Байланыс үзілуі';
+
+  @override
+  String get perfStatNotEnoughGames => 'Ойындар саны жеткіліксіз';
+
+  @override
+  String perfStatHighestRating(String param) {
+    return 'Ең үлкен рейтинг: $param';
+  }
+
+  @override
+  String perfStatLowestRating(String param) {
+    return 'Ең төменгі рейтинг: $param';
+  }
+
+  @override
+  String perfStatFromXToY(String param1, String param2) {
+    return '$param1 - $param2 аралығында';
+  }
+
+  @override
+  String get perfStatWinningStreak => 'Жеңістер тізбегі';
+
+  @override
+  String get perfStatLosingStreak => 'Жеңілістер тізбегі';
+
+  @override
+  String perfStatLongestStreak(String param) {
+    return 'Ең ұзақ тізбек: $param';
+  }
+
+  @override
+  String perfStatCurrentStreak(String param) {
+    return 'Қазіргі тізбек: $param';
+  }
+
+  @override
+  String get perfStatBestRated => 'Ең бағалы жеңістер';
+
+  @override
+  String get perfStatGamesInARow => 'Қатарынан ойналған ойындар';
+
+  @override
+  String get perfStatLessThanOneHour => 'Ойындар арасы бір сағаттан кем';
+
+  @override
+  String get perfStatMaxTimePlaying => 'Ойынмен өткен ең ұзақ уақыт';
+
+  @override
+  String get perfStatNow => 'қазір';
+
+  @override
+  String get preferencesPreferences => 'Баптаулар';
+
+  @override
+  String get preferencesDisplay => 'Көрініс';
+
+  @override
+  String get preferencesPrivacy => 'Құпиялық';
+
+  @override
+  String get preferencesNotifications => 'Хабарламалар';
+
+  @override
+  String get preferencesPieceAnimation => 'Тастар анимациясы';
+
+  @override
+  String get preferencesMaterialDifference => 'Тас мөлшерінің айырмашылығы';
+
+  @override
+  String get preferencesBoardHighlights => 'Жүріс ізін көрсету (кейінгі жүріс пен шах)';
+
+  @override
+  String get preferencesPieceDestinations => 'Тастың бағытын көрсету (заңды, алдын-ала жүрістер)';
+
+  @override
+  String get preferencesBoardCoordinates => 'Тақта координаттары (A-H, 1-8)';
+
+  @override
+  String get preferencesMoveListWhilePlaying => 'Ойын кезіндегі жүрістер тізімі';
+
+  @override
+  String get preferencesPgnPieceNotation => 'Жүрісті жазу тәртібі';
+
+  @override
+  String get preferencesChessPieceSymbol => 'Тас таңбасы';
+
+  @override
+  String get preferencesPgnLetter => 'Әріптер (K, Q, R, B, N)';
+
+  @override
+  String get preferencesZenMode => 'Оқшау көрініс';
+
+  @override
+  String get preferencesShowPlayerRatings => 'Ойыншылардың рейтингін көрсету';
+
+  @override
+  String get preferencesShowFlairs => 'Show player flairs';
+
+  @override
+  String get preferencesExplainShowPlayerRatings => 'Шахматқа назарды күшейту үшін бұл бүкіл сайттағы рейтингтерді жасырады. Бағалау тәртібіне еш әсері жоқ, жай сыртқы көрінісі басқаша болады.';
+
+  @override
+  String get preferencesDisplayBoardResizeHandle => 'Тақтаны үлкейту тұтқасын көрсету';
+
+  @override
+  String get preferencesOnlyOnInitialPosition => 'Тек бастапқы күйде ғана';
+
+  @override
+  String get preferencesInGameOnly => 'Ойында ғана';
+
+  @override
+  String get preferencesChessClock => 'Шахмат сағаты';
+
+  @override
+  String get preferencesTenthsOfSeconds => 'Секундтың ондық бөлігін көрсету';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanTenSeconds => '10 секунд қалғанда';
+
+  @override
+  String get preferencesHorizontalGreenProgressBars => 'Уақыт жүрісін көрсететін көлденең жасыл жолақ';
+
+  @override
+  String get preferencesSoundWhenTimeGetsCritical => 'Уақыт аз қалғанда, дыбыс белгі беру';
+
+  @override
+  String get preferencesGiveMoreTime => 'Қарсыласқа уақыт беру мүмкіндігі';
+
+  @override
+  String get preferencesGameBehavior => 'Ойын тәртібі';
+
+  @override
+  String get preferencesHowDoYouMovePieces => 'Тасты қалай жүресіз?';
+
+  @override
+  String get preferencesClickTwoSquares => 'Екі шаршыны басып';
+
+  @override
+  String get preferencesDragPiece => 'Тасты тартып';
+
+  @override
+  String get preferencesBothClicksAndDrag => 'Екі әдіспен де';
+
+  @override
+  String get preferencesPremovesPlayingDuringOpponentTurn => 'Алдын-ала жүру (қарсыластың кезегінде жүру)';
+
+  @override
+  String get preferencesTakebacksWithOpponentApproval => 'Жүрісті қайтару (қарсыластың келісімі қажет)';
+
+  @override
+  String get preferencesInCasualGamesOnly => 'Жай ойындарда ғана';
+
+  @override
+  String get preferencesPromoteToQueenAutomatically => 'Уәзірге автоматты түрде айналдыру';
+
+  @override
+  String get preferencesExplainPromoteToQueenAutomatically => 'Ойын кезінде автоматты айналдыруды уақытша өшіру үшін <ctrl> басып тұрыңыз';
+
+  @override
+  String get preferencesWhenPremoving => 'Алдын-ала жүрісте';
+
+  @override
+  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Үш реттік қайталану болса, автоматты түрде тепе-теңдік жариялау';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanThirtySeconds => '30 секунд қалғанда';
+
+  @override
+  String get preferencesMoveConfirmation => 'Жүрісті растау';
+
+  @override
+  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Ойын кезінде тақта баптаулары арқылы өшіруге болады';
+
+  @override
+  String get preferencesInCorrespondenceGames => 'Хат-хабарлы ойындарда';
+
+  @override
+  String get preferencesCorrespondenceAndUnlimited => 'Хат-хабарлы мен уақыты шексіз';
+
+  @override
+  String get preferencesConfirmResignationAndDrawOffers => 'Берілу мен тепе-теңдік ұсынысын растау';
+
+  @override
+  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Бекіну әдісі';
+
+  @override
+  String get preferencesCastleByMovingTwoSquares => 'Патшаны екі шаршы жүру';
+
+  @override
+  String get preferencesCastleByMovingOntoTheRook => 'Патшаны тура тасына қою';
+
+  @override
+  String get preferencesInputMovesWithTheKeyboard => 'Пернетақта арқылы жүру';
+
+  @override
+  String get preferencesInputMovesWithVoice => 'Қадамды дауыспен жасау';
+
+  @override
+  String get preferencesSnapArrowsToValidMoves => 'Нұсқағыш тек заңды жүрістерге ғана жабысады';
+
+  @override
+  String get preferencesSayGgWpAfterLosingOrDrawing => 'Жеңіліс не тепе-теңдіктен кейін \"Жақсы ойын, қызық болды\" деп айту';
+
+  @override
+  String get preferencesYourPreferencesHaveBeenSaved => 'Баптауыңыз сақталды.';
+
+  @override
+  String get preferencesScrollOnTheBoardToReplayMoves => 'Тақта бетінде тіңтуір айналдырумен жүрістерді қайта көрсету';
+
+  @override
+  String get preferencesCorrespondenceEmailNotification => 'Хат-хабарлы ойындарыңыз туралы күнде поштаңызға ескертпе жіберу';
+
+  @override
+  String get preferencesNotifyStreamStart => 'Стрим басталды';
+
+  @override
+  String get preferencesNotifyInboxMsg => 'Жаңа хабар';
+
+  @override
+  String get preferencesNotifyForumMention => 'Форумда сіз туралы айтты';
+
+  @override
+  String get preferencesNotifyInvitedStudy => 'Зерттеуге шақырды';
+
+  @override
+  String get preferencesNotifyGameEvent => 'Хат-хабарлы ойын барысы';
+
+  @override
+  String get preferencesNotifyChallenge => 'Шақырулар';
+
+  @override
+  String get preferencesNotifyTournamentSoon => 'Жарыс жақында басталады';
+
+  @override
+  String get preferencesNotifyTimeAlarm => 'Хат-хабарлы ойын уақыты бітер алдында';
+
+  @override
+  String get preferencesNotifyBell => 'Личестегі қоңыраулы ескерту';
+
+  @override
+  String get preferencesNotifyPush => 'Құрылғының ескертуі, Личестен тыс кезіңізде';
+
+  @override
+  String get preferencesNotifyWeb => 'Браузер';
+
+  @override
+  String get preferencesNotifyDevice => 'Құрылғы';
+
+  @override
+  String get preferencesBellNotificationSound => 'Қоңыраулы ескерту';
+
+  @override
+  String get puzzlePuzzles => 'Жұмбақтар';
+
+  @override
+  String get puzzlePuzzleThemes => 'Жұмбақ тақырыптары';
+
+  @override
+  String get puzzleRecommended => 'Ұсыныстар';
+
+  @override
+  String get puzzlePhases => 'Кезеңдер';
+
+  @override
+  String get puzzleMotifs => 'Жағдайлар';
+
+  @override
+  String get puzzleAdvanced => 'Қосымша';
+
+  @override
+  String get puzzleLengths => 'Ұзындық';
+
+  @override
+  String get puzzleMates => 'Маттар';
+
+  @override
+  String get puzzleGoals => 'Мақсаттар';
+
+  @override
+  String get puzzleOrigin => 'Түпнұсқа';
+
+  @override
+  String get puzzleSpecialMoves => 'Ерекше жүрістер';
+
+  @override
+  String get puzzleDidYouLikeThisPuzzle => 'Бұл жұмбақ ұнай ма?';
+
+  @override
+  String get puzzleVoteToLoadNextOne => 'Келесін ашу үшін дауыс беріңіз!';
+
+  @override
+  String get puzzleUpVote => 'Дәрежесін көтеру';
+
+  @override
+  String get puzzleDownVote => 'Дәрежесін түсіру';
+
+  @override
+  String get puzzleYourPuzzleRatingWillNotChange => 'Сіздің жұмбақ шешу рейтингіңіз өзгермейді. Жұмбақтар жарыс емес екенін ескеріңіз. Мұндағы рейтингтің қызметі – сіздің деңгейіңізге сәйкес жұмбақты табуға көмекші болу.';
+
+  @override
+  String get puzzleFindTheBestMoveForWhite => 'Аққа ең табысты жүрісті табыңыз.';
+
+  @override
+  String get puzzleFindTheBestMoveForBlack => 'Қараға ең табысты жүрісті табыңыз.';
+
+  @override
+  String get puzzleToGetPersonalizedPuzzles => 'Жекелендірген жұмбақ алу үшін:';
+
+  @override
+  String puzzlePuzzleId(String param) {
+    return 'Жұмбақ $param';
+  }
+
+  @override
+  String get puzzlePuzzleOfTheDay => 'Бүгінгі жұмбақ';
+
+  @override
+  String get puzzleDailyPuzzle => 'күнделікті жұмбақтар';
+
+  @override
+  String get puzzleClickToSolve => 'Шешу үшін басыңыз';
+
+  @override
+  String get puzzleGoodMove => 'Жақсы жүріс';
+
+  @override
+  String get puzzleBestMove => 'Үздік жүріс!';
+
+  @override
+  String get puzzleKeepGoing => 'Ары қарай…';
+
+  @override
+  String get puzzlePuzzleSuccess => 'Бәрі дұрыс!';
+
+  @override
+  String get puzzlePuzzleComplete => 'Жұмбақ шешілді!';
+
+  @override
+  String get puzzleByOpenings => 'Бастамасына қарай';
+
+  @override
+  String get puzzlePuzzlesByOpenings => 'Жұмбақтың бастамасы';
+
+  @override
+  String get puzzleOpeningsYouPlayedTheMost => 'Сіздің бағалы ойындарыңызда ең жиі келетін бастама';
+
+  @override
+  String get puzzleUseFindInPage => 'Браузер мәзірінде \"Осы бетте іздеуді\" қолдана қалаулы бастаманы тауып алыңыз!';
+
+  @override
+  String get puzzleUseCtrlF => 'Қалаулы бастаманы табу үшін Ctrl+f басыңыз';
+
+  @override
+  String get puzzleNotTheMove => 'Ол жүріс емес!';
+
+  @override
+  String get puzzleTrySomethingElse => 'Басқаша жүріп көріңіз.';
+
+  @override
+  String puzzleRatingX(String param) {
+    return 'Рейтинг: $param';
+  }
+
+  @override
+  String get puzzleHidden => 'жасырын';
+
+  @override
+  String puzzleFromGameLink(String param) {
+    return '$param ойнынан';
+  }
+
+  @override
+  String get puzzleContinueTraining => 'Жаттығуды жалғастыру';
+
+  @override
+  String get puzzleDifficultyLevel => 'Күрделілік деңгейі';
+
+  @override
+  String get puzzleNormal => 'Қалыпты';
+
+  @override
+  String get puzzleEasier => 'Жеңілдеу';
+
+  @override
+  String get puzzleEasiest => 'Ең жеңілі';
+
+  @override
+  String get puzzleHarder => 'Қиындау';
+
+  @override
+  String get puzzleHardest => 'Ең қиыны';
+
+  @override
+  String get puzzleExample => 'Мысал';
+
+  @override
+  String get puzzleAddAnotherTheme => 'Басқа тақырып қосу';
+
+  @override
+  String get puzzleNextPuzzle => 'Келесі жұмбақ';
+
+  @override
+  String get puzzleJumpToNextPuzzleImmediately => 'Келесі жұмбаққа бірден өту';
+
+  @override
+  String get puzzlePuzzleDashboard => 'Жетістіктер';
+
+  @override
+  String get puzzleImprovementAreas => 'Жетілдіру бағыты';
+
+  @override
+  String get puzzleStrengths => 'Күштілігі';
+
+  @override
+  String get puzzleHistory => 'Жұмбақ журналы';
+
+  @override
+  String get puzzleSolved => 'шешілді';
+
+  @override
+  String get puzzleFailed => 'шешілмеді';
+
+  @override
+  String get puzzleStreakDescription => 'Қиындай беретін жұмбақтарды шешіп, жеңістер тізбегін құрыңыз. Уақытта шектеу жоқ. Бір бұрыс қадам болса, ойын бітті! Бірақ бір бәйгеде бір жүрісті өткізіп жібере аласыз.';
+
+  @override
+  String puzzleYourStreakX(String param) {
+    return 'Жеңістер тізбегі: $param';
+  }
+
+  @override
+  String get puzzleStreakSkipExplanation => 'Тізбегіңіз үзілмес үшін бұл жүрісті өткізіп жіберіңіз. Әр бәйгеде бір рет қана жасауға болады.';
+
+  @override
+  String get puzzleContinueTheStreak => 'Тізбекті жалғастыру';
+
+  @override
+  String get puzzleNewStreak => 'Жаңа тізбек';
+
+  @override
+  String get puzzleFromMyGames => 'Менің ойындарымнан';
+
+  @override
+  String get puzzleLookupOfPlayer => 'Бір ойыншының ойындарынан жұмбақ іздеу';
+
+  @override
+  String puzzleFromXGames(String param) {
+    return '$param ойындарынан жұмбақтар';
+  }
+
+  @override
+  String get puzzleSearchPuzzles => 'Жұмбақ іздеу';
+
+  @override
+  String get puzzleFromMyGamesNone => 'Дерекқорыңызда жұмбақ жоқ (бірақ сізге деген құрметіміз одан азайған емес).\nЖүйрік әрі классикалық ойын ойнап, жұмбақ құрылуына себепші болыңыз!';
+
+  @override
+  String puzzleFromXGamesFound(String param1, String param2) {
+    return '$param2 ойында $param1 жұмбақ табылды';
+  }
+
+  @override
+  String get puzzlePuzzleDashboardDescription => 'Жаттығып, талдап, ақыл шыңдаңыз!';
+
+  @override
+  String puzzlePercentSolved(String param) {
+    return '$param шешілді';
+  }
+
+  @override
+  String get puzzleNoPuzzlesToShow => 'Мәлімет жоқ. Алдымен жұмбақ шешіп көріңіз!';
+
+  @override
+  String get puzzleImprovementAreasDescription => 'Жетістігіңізді жақсарту үшін осы жаттығуды көріңіз!';
+
+  @override
+  String get puzzleStrengthDescription => 'Осы тақырыпта сізде үздік нәтиже';
+
+  @override
+  String puzzlePlayedXTimes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count рет ойналды',
+      one: '$count рет ойналды',
+      zero: '$count рет ойналды',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsBelowYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Жұмбақ рейтингіңізден төмен $count ұпай',
+      one: 'Жұмбақ рейтингіңізден төмен бір ұпай',
+      zero: 'Жұмбақ рейтингіңізден төмен бір ұпай',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsAboveYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Жұмбақ рейтингіңізден жоғары $count ұпай',
+      one: 'Жұмбақ рейтингіңізден жоғары бір ұпай',
+      zero: 'Жұмбақ рейтингіңізден жоғары бір ұпай',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPlayed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ойнадыңыз',
+      one: '$count ойнадыңыз',
+      zero: '$count ойнадыңыз',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbToReplay(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count-н қайта ойнау',
+      one: '$count-н қайта ойнау',
+      zero: '$count-н қайта ойнау',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get puzzleThemeAdvancedPawn => 'Әккі сарбаз';
+
+  @override
+  String get puzzleThemeAdvancedPawnDescription => 'Айналуға ұмтылған не айналу қаупін төндіретін сарбаз – тактиканың өзегі.';
+
+  @override
+  String get puzzleThemeAdvantage => 'Басымдылық';
+
+  @override
+  String get puzzleThemeAdvantageDescription => 'Шешуші артықшылық беретін сәтті жіберіп алмаңыз. (200-600 сп)';
+
+  @override
+  String get puzzleThemeAnastasiaMate => 'Анастасия маты';
+
+  @override
+  String get puzzleThemeAnastasiaMateDescription => 'Ат пен тура не уәзірдің бірлесіп, қарсылас патшасын тақта шеті мен өз тасының арасында ұстап алуы.';
+
+  @override
+  String get puzzleThemeArabianMate => 'Арабша мат';
+
+  @override
+  String get puzzleThemeArabianMateDescription => 'Ат пен тураның бірлесіп қарсылас патшаны тақта бұрышында ұстап алуы.';
+
+  @override
+  String get puzzleThemeAttackingF2F7 => 'f2 не f7-ге шабуылдау';
+
+  @override
+  String get puzzleThemeAttackingF2F7Description => '\"Қуырылған бүйрек\" бастауындағыдай f2 не f7 сарбазына бағытталған шабуыл.';
+
+  @override
+  String get puzzleThemeAttraction => 'Тартымдылық';
+
+  @override
+  String get puzzleThemeAttractionDescription => 'Қарсылас тасын белгілі бір шаршыға итермелейтін не күштеп ығыстыратын айырбастау не құрбан ету.';
+
+  @override
+  String get puzzleThemeBackRankMate => 'Соңғы сап маты';
+
+  @override
+  String get puzzleThemeBackRankMateDescription => 'Өз сабында өз тастарымен қамалған патшаға мат.';
+
+  @override
+  String get puzzleThemeBishopEndgame => 'Пiл ойынсоңы';
+
+  @override
+  String get puzzleThemeBishopEndgameDescription => 'Пілдер мен сарбаздары ғана бар ойынсоңы.';
+
+  @override
+  String get puzzleThemeBodenMate => 'Бодэн маты';
+
+  @override
+  String get puzzleThemeBodenMateDescription => 'Қарсылас патшасының бір жағын өз тастары бөгеп тұрғанда, екі піл қиылыса шабуылдайды.';
+
+  @override
+  String get puzzleThemeCastling => 'Бекіну';
+
+  @override
+  String get puzzleThemeCastlingDescription => 'Патшаны қорғаулы жерге кіргізіп, тураны шабуылға даярлаңыз.';
+
+  @override
+  String get puzzleThemeCapturingDefender => 'Қорғаушыны жою';
+
+  @override
+  String get puzzleThemeCapturingDefenderDescription => 'Бір тасты қорғап тұрған басқа тасты басып алсаңыз, әлгі тас қорғаусыз қалып, оны басып алуға жол ашылады.';
+
+  @override
+  String get puzzleThemeCrushing => 'Тас-талқан';
+
+  @override
+  String get puzzleThemeCrushingDescription => 'Жойқын артықшылыққа ие болу үшін қарсыластың қателігін анықтаңыз. (≥ 600 сп)';
+
+  @override
+  String get puzzleThemeDoubleBishopMate => 'Пілдер маты';
+
+  @override
+  String get puzzleThemeDoubleBishopMateDescription => 'Қарсылас патшасының бір жағын өз тастары бөгеп тұрғанда, екі піл қатарлас шабуылдайды.';
+
+  @override
+  String get puzzleThemeDovetailMate => 'Айырқұйрық мат';
+
+  @override
+  String get puzzleThemeDovetailMateDescription => 'Қарсылас патшасының екі жағын өз тастары бөгеп тұрғанда, уәзір жақыннан мат қояды.';
+
+  @override
+  String get puzzleThemeEquality => 'Теңдік';
+
+  @override
+  String get puzzleThemeEqualityDescription => 'Жаман күйден шығып, ойынды тепе-теңдікке не тең күйге жеткізіңіз. (≤ 200 сп)';
+
+  @override
+  String get puzzleThemeKingsideAttack => 'Патша жақты шабуыл';
+
+  @override
+  String get puzzleThemeKingsideAttackDescription => 'Қарсыластың патшасы өз жағына бекінгеннен кейін оған жасалатын шабуыл.';
+
+  @override
+  String get puzzleThemeClearance => 'Тазарту';
+
+  @override
+  String get puzzleThemeClearanceDescription => 'Тактиканы асыру мақсатында шаршыны, тік не диагоналды жолды босату үшін әдетте қарқынмен жасалынатын жүріс.';
+
+  @override
+  String get puzzleThemeDefensiveMove => 'Қорғану жүрісі';
+
+  @override
+  String get puzzleThemeDefensiveMoveDescription => 'Тастарды не артықшылықты жоғалтпау мақсатында жасалатын жүріс не жүрістер тізбегі.';
+
+  @override
+  String get puzzleThemeDeflection => 'Назарын бұру';
+
+  @override
+  String get puzzleThemeDeflectionDescription => 'Қарсылас тасын өз міндетінен (мысалы, бір маңызды шаршыны қорғаудан) үзу үшін жасалынатын алдамшы жүріс.';
+
+  @override
+  String get puzzleThemeDiscoveredAttack => 'Ашылған шабуыл';
+
+  @override
+  String get puzzleThemeDiscoveredAttackDescription => 'Ұзын жүрісті тастың шабуылын бөгеп тұрған таспен жүру. Мысалы, тура жолында тұрған атпен жүру.';
+
+  @override
+  String get puzzleThemeDoubleCheck => 'Қос шах';
+
+  @override
+  String get puzzleThemeDoubleCheckDescription => 'Ашылған шабуыл кезінде бірден екі тастың (яғни, шабулды ашқан тас пен шабуылдап жатқан тас) қарсылас патшасына қойған шахтары.';
+
+  @override
+  String get puzzleThemeEndgame => 'Ойынсоңы';
+
+  @override
+  String get puzzleThemeEndgameDescription => 'Ойынның соңғы кезеңіндегі тактика.';
+
+  @override
+  String get puzzleThemeEnPassantDescription => 'Бір сазбаз, қасынан қарсыластың сарбазы өткенде, оны басып алатын жағдайды, яғни жолай басып алуды қамтитын тактика.';
+
+  @override
+  String get puzzleThemeExposedKing => 'Жалаңаш патша';
+
+  @override
+  String get puzzleThemeExposedKingDescription => 'Қорғанысы нашар патша әдетте маттың иісін сезіп тұрады.';
+
+  @override
+  String get puzzleThemeFork => 'Шанышқы';
+
+  @override
+  String get puzzleThemeForkDescription => 'Қарсыластың бірден екі тасын ұратын тас жүрісі.';
+
+  @override
+  String get puzzleThemeHangingPiece => 'Олжа тас';
+
+  @override
+  String get puzzleThemeHangingPieceDescription => 'Қорғанысы нашар не қорғаусыз тұрған қарсылас тасын басып алуды меңзейтін тактика.';
+
+  @override
+  String get puzzleThemeHookMate => 'Қармақ мат';
+
+  @override
+  String get puzzleThemeHookMateDescription => 'Қарсылас патшасына өз сарбазы бөгет бола тұра, ат, тура мен сарбаз арқылы қойылған мат.';
+
+  @override
+  String get puzzleThemeInterference => 'Бөгет';
+
+  @override
+  String get puzzleThemeInterferenceDescription => 'Қарсыластың екі байланысқан тастарының арасына бөгет қойып, олардың біреуін не екеуін қорғаусыз ету. Мысалы, екі өзара қорғап тұрған туралардың арасына тұра қалған ат.';
+
+  @override
+  String get puzzleThemeIntermezzo => 'Аралық жүріс';
+
+  @override
+  String get puzzleThemeIntermezzoDescription => 'Болжамға сай жүрудің орнына алдымен басқаша, қарсыласқа қауіп келтіретін, жауап беруге мәжбүрлейтін жүріс жасау. Басқаша \"Intermezzo\" не \"Zwischenzug\" деп те аталады.';
+
+  @override
+  String get puzzleThemeKnightEndgame => 'Ат ойынсоңы';
+
+  @override
+  String get puzzleThemeKnightEndgameDescription => 'Аттар мен сарбаздары ғана бар ойынсоңы.';
+
+  @override
+  String get puzzleThemeLong => 'Ұзын жұмбақ';
+
+  @override
+  String get puzzleThemeLongDescription => 'Жеңіске үш қадам.';
+
+  @override
+  String get puzzleThemeMaster => 'Шебер ойындары';
+
+  @override
+  String get puzzleThemeMasterDescription => 'Атақты ойыншылардың ойындарынан алынған жұмбақтар.';
+
+  @override
+  String get puzzleThemeMasterVsMaster => 'Шеберлердің өзара ойындары';
+
+  @override
+  String get puzzleThemeMasterVsMasterDescription => 'Екі атақты ойыншылардың ойындарынан алынған жұмбақтар.';
+
+  @override
+  String get puzzleThemeMate => 'Мат';
+
+  @override
+  String get puzzleThemeMateDescription => 'Ойынды әдемі жеңіп алыңыз.';
+
+  @override
+  String get puzzleThemeMateIn1 => '1 жүрісті мат';
+
+  @override
+  String get puzzleThemeMateIn1Description => 'Бір жүріспен мат жасаңыз.';
+
+  @override
+  String get puzzleThemeMateIn2 => '2 жүрісті мат';
+
+  @override
+  String get puzzleThemeMateIn2Description => 'Екі жүріспен мат жасаңыз.';
+
+  @override
+  String get puzzleThemeMateIn3 => '3 жүрісті мат';
+
+  @override
+  String get puzzleThemeMateIn3Description => 'Үш жүріспен мат жасаңыз.';
+
+  @override
+  String get puzzleThemeMateIn4 => '4 жүрісті мат';
+
+  @override
+  String get puzzleThemeMateIn4Description => 'Төрт жүріспен мат жасаңыз.';
+
+  @override
+  String get puzzleThemeMateIn5 => '≥5 жүрісті мат';
+
+  @override
+  String get puzzleThemeMateIn5Description => 'Матқа жеткізетін жүрістер тізбегін табыңыз.';
+
+  @override
+  String get puzzleThemeMiddlegame => 'Ойын ортасы';
+
+  @override
+  String get puzzleThemeMiddlegameDescription => 'Ойынның екінші кезеңіндегі тактика.';
+
+  @override
+  String get puzzleThemeOneMove => 'Бір қадамды жұмбақ';
+
+  @override
+  String get puzzleThemeOneMoveDescription => 'Бір жүріспен ғана шешілетін жұмбақ.';
+
+  @override
+  String get puzzleThemeOpening => 'Бастау';
+
+  @override
+  String get puzzleThemeOpeningDescription => 'Ойынның алғашқы кезеңіндегі тактика.';
+
+  @override
+  String get puzzleThemePawnEndgame => 'Сарбаздар ойынсоңы';
+
+  @override
+  String get puzzleThemePawnEndgameDescription => 'Сарбаздары ғана бар ойынсоңы.';
+
+  @override
+  String get puzzleThemePin => 'Байлау';
+
+  @override
+  String get puzzleThemePinDescription => 'Артта тұрған құнды тасты жоғалту қаупі болғандықтан, алдыңғы тас орнынан кете алмайтындай жағдай.';
+
+  @override
+  String get puzzleThemePromotion => 'Айналу';
+
+  @override
+  String get puzzleThemePromotionDescription => 'Айналуға ұмтылған не айналу қаупін төндіретін сарбаз – тактиканың өзегі.';
+
+  @override
+  String get puzzleThemeQueenEndgame => 'Уәзір ойынсоңы';
+
+  @override
+  String get puzzleThemeQueenEndgameDescription => 'Уәзірлер мен сарбаздары ғана бар ойынсоңы.';
+
+  @override
+  String get puzzleThemeQueenRookEndgame => 'Уәзір мен Тура';
+
+  @override
+  String get puzzleThemeQueenRookEndgameDescription => 'Уәзірлер, туралар мен сарбаздары ғана бар ойынсоңы.';
+
+  @override
+  String get puzzleThemeQueensideAttack => 'Уәзір жақты шабуыл';
+
+  @override
+  String get puzzleThemeQueensideAttackDescription => 'Қарсылас патшасы уәзір жаққа бекінгеннен кейін оған жасалатын шабуыл.';
+
+  @override
+  String get puzzleThemeQuietMove => 'Үнсіз жүріс';
+
+  @override
+  String get puzzleThemeQuietMoveDescription => 'Шах етпейтін не басып алмайтын, бірақ болашақ соққыны дайындайтын жүріс.';
+
+  @override
+  String get puzzleThemeRookEndgame => 'Тура ойынсоңы';
+
+  @override
+  String get puzzleThemeRookEndgameDescription => 'Туралар мен сарбаздары ғана бар ойынсоңы.';
+
+  @override
+  String get puzzleThemeSacrifice => 'Құрбан ету';
+
+  @override
+  String get puzzleThemeSacrificeDescription => 'Кейін бір артықшылыққа жету мақсатыменен тастан әдейі айырылу.';
+
+  @override
+  String get puzzleThemeShort => 'Қысқа жұмбақ';
+
+  @override
+  String get puzzleThemeShortDescription => 'Жеңіске екі қадам.';
+
+  @override
+  String get puzzleThemeSkewer => 'Найза';
+
+  @override
+  String get puzzleThemeSkewerDescription => 'Байлауға қарама-қарсы: құнды тас соққы астында бола, артындағы арзан тасты беріп, қашуға мәжбүр болатындай жағдай.';
+
+  @override
+  String get puzzleThemeSmotheredMate => 'Қамаған мат';
+
+  @override
+  String get puzzleThemeSmotheredMateDescription => 'Өз тастарымен қамалған патша бірде-бір жүріс жасай алмайтын кезде оған қарсыластың аты жасаған мат.';
+
+  @override
+  String get puzzleThemeSuperGM => 'Супер гроссмейстер ойындары';
+
+  @override
+  String get puzzleThemeSuperGMDescription => 'Дүние жүзі мықтыларының ойындарынан алынған жұмбақтар.';
+
+  @override
+  String get puzzleThemeTrappedPiece => 'Тұзаққа түскен';
+
+  @override
+  String get puzzleThemeTrappedPieceDescription => 'Басып алынудан қаша алмайтын, жүрісі шектелген тас.';
+
+  @override
+  String get puzzleThemeUnderPromotion => 'Кіші айналу';
+
+  @override
+  String get puzzleThemeUnderPromotionDescription => 'Ат, піл не тураға айналу.';
+
+  @override
+  String get puzzleThemeVeryLong => 'Ұп-ұзын жұмбақ';
+
+  @override
+  String get puzzleThemeVeryLongDescription => 'Жеңіске төрт не одан да көп қадам.';
+
+  @override
+  String get puzzleThemeXRayAttack => 'Рентген';
+
+  @override
+  String get puzzleThemeXRayAttackDescription => 'Бір тастың қарсылас тасын аттай бір шаршыны қорғауы не шабуылдауы.';
+
+  @override
+  String get puzzleThemeZugzwang => 'Цугцванг';
+
+  @override
+  String get puzzleThemeZugzwangDescription => 'Жүрісі шектелген тастардың әр жүрісі жалпы жағдайдың нашарлауына әкеп соқтыратын кез.';
+
+  @override
+  String get puzzleThemeHealthyMix => 'Аралас дастархан';
+
+  @override
+  String get puzzleThemeHealthyMixDescription => 'Барлығынан аз-аздан. Күтпеген жағдайларға бейім болыңыз! Дәл нағыз шахматтағыдай!';
+
+  @override
+  String get puzzleThemePlayerGames => 'Ойыншылардан';
+
+  @override
+  String get puzzleThemePlayerGamesDescription => 'Сіздің не басқаның ойындарынан құрылған жұмбақтарды табу.';
+
+  @override
+  String puzzleThemePuzzleDownloadInformation(String param) {
+    return 'Осы жұмбақтар көпшілікке ашық доменде сақтаулы, оларды осы жерден жүктеп алуға болады: $param';
+  }
+
+  @override
+  String get searchSearch => 'Іздеу';
+
+  @override
+  String get settingsSettings => 'Баптаулар';
+
+  @override
+  String get settingsCloseAccount => 'Тіркелгіні жабу';
+
+  @override
+  String get settingsManagedAccountCannotBeClosed => 'Сіздің тіркелгіңіз біреудің басқаруында, сондықтан сіз оны жаба алмайсыз.';
+
+  @override
+  String get settingsClosingIsDefinitive => 'Жабу - түпкілікті! Кері жол жоқ. Сенімдісіз бе?';
+
+  @override
+  String get settingsCantOpenSimilarAccount => 'Кейін дәл сондай атпенен жаңа тіркелгі жасай алмайсыз (әріп үлкендігі басқаша болса да).';
+
+  @override
+  String get settingsChangedMindDoNotCloseAccount => 'Мен ойымды өзгерттім, тіркелгімді жаппаңызшы';
+
+  @override
+  String get settingsCloseAccountExplanation => 'Сіз өз тіркелгіңіздің жабуын растайсыз ба? Тіркелгі жабу - қайтарымсыз әрекет. Тіркелгіге қайтадан ЕШҚАШАН КІРЕ АЛМАЙСЫЗ.';
+
+  @override
+  String get settingsThisAccountIsClosed => 'Бұл тіркелгі жабылды.';
 
   @override
   String get playWithAFriend => 'Доспен ойнау';
@@ -512,6 +1518,12 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get deleteFromHere => 'Мына жерден жою';
+
+  @override
+  String get collapseVariations => 'Collapse variations';
+
+  @override
+  String get expandVariations => 'Expand variations';
 
   @override
   String get forceVariation => 'Тармақты дамыту';
@@ -1371,15 +2383,6 @@ class AppLocalizationsKk extends AppLocalizations {
   String get emptyTournamentName => 'Елеулі бір шахматшының атымен атау үшін бос қалдырыңыз.';
 
   @override
-  String get recommendNotTouching => 'Бұны тиіспеуге кеңес береміз.';
-
-  @override
-  String get fewerPlayers => 'Егер кіру талаптарын қойсаңыз, қатысатын ойыншылар саны аз болады.';
-
-  @override
-  String get showAdvancedSettings => 'Қосымша баптауларды көрсету';
-
-  @override
   String get makePrivateTournament => 'Кіруді құпиясөзбен шектеп, жарысты оңашалаңыз';
 
   @override
@@ -1509,10 +2512,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get editProfile => 'Куәлікті өзгерту';
 
   @override
-  String get firstName => 'Атыңыз';
-
-  @override
-  String get lastName => 'Тегіңіз';
+  String get realName => 'Real name';
 
   @override
   String get setFlair => 'Set your flair';
@@ -1641,13 +2641,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get cheat => 'Чит, алдап ойнау';
 
   @override
-  String get insult => 'Қорлау';
-
-  @override
   String get troll => 'Троль, кемсіту';
-
-  @override
-  String get ratingManipulation => 'Рейтингпен айла-шарғы';
 
   @override
   String get other => 'Басқа';
@@ -1754,6 +2748,9 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get outsideTheBoard => 'Тақта сыртында';
+
+  @override
+  String get allSquaresOfTheBoard => 'All squares of the board';
 
   @override
   String get onSlowGames => 'Ұзақ ойындар кезінде';
@@ -3460,1009 +4457,6 @@ class AppLocalizationsKk extends AppLocalizations {
   }
 
   @override
-  String get patronDonate => 'Демеу жасау';
-
-  @override
-  String get patronLichessPatron => 'Личес Қамқоршысы';
-
-  @override
-  String get preferencesPreferences => 'Баптаулар';
-
-  @override
-  String get preferencesDisplay => 'Көрініс';
-
-  @override
-  String get preferencesPrivacy => 'Құпиялық';
-
-  @override
-  String get preferencesNotifications => 'Хабарламалар';
-
-  @override
-  String get preferencesPieceAnimation => 'Тастар анимациясы';
-
-  @override
-  String get preferencesMaterialDifference => 'Тас мөлшерінің айырмашылығы';
-
-  @override
-  String get preferencesBoardHighlights => 'Жүріс ізін көрсету (кейінгі жүріс пен шах)';
-
-  @override
-  String get preferencesPieceDestinations => 'Тастың бағытын көрсету (заңды, алдын-ала жүрістер)';
-
-  @override
-  String get preferencesBoardCoordinates => 'Тақта координаттары (A-H, 1-8)';
-
-  @override
-  String get preferencesMoveListWhilePlaying => 'Ойын кезіндегі жүрістер тізімі';
-
-  @override
-  String get preferencesPgnPieceNotation => 'Жүрісті жазу тәртібі';
-
-  @override
-  String get preferencesChessPieceSymbol => 'Тас таңбасы';
-
-  @override
-  String get preferencesPgnLetter => 'Әріптер (K, Q, R, B, N)';
-
-  @override
-  String get preferencesZenMode => 'Оқшау көрініс';
-
-  @override
-  String get preferencesShowPlayerRatings => 'Ойыншылардың рейтингін көрсету';
-
-  @override
-  String get preferencesShowFlairs => 'Show player flairs';
-
-  @override
-  String get preferencesExplainShowPlayerRatings => 'Шахматқа назарды күшейту үшін бұл бүкіл сайттағы рейтингтерді жасырады. Бағалау тәртібіне еш әсері жоқ, жай сыртқы көрінісі басқаша болады.';
-
-  @override
-  String get preferencesDisplayBoardResizeHandle => 'Тақтаны үлкейту тұтқасын көрсету';
-
-  @override
-  String get preferencesOnlyOnInitialPosition => 'Тек бастапқы күйде ғана';
-
-  @override
-  String get preferencesInGameOnly => 'Ойында ғана';
-
-  @override
-  String get preferencesChessClock => 'Шахмат сағаты';
-
-  @override
-  String get preferencesTenthsOfSeconds => 'Секундтың ондық бөлігін көрсету';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanTenSeconds => '10 секунд қалғанда';
-
-  @override
-  String get preferencesHorizontalGreenProgressBars => 'Уақыт жүрісін көрсететін көлденең жасыл жолақ';
-
-  @override
-  String get preferencesSoundWhenTimeGetsCritical => 'Уақыт аз қалғанда, дыбыс белгі беру';
-
-  @override
-  String get preferencesGiveMoreTime => 'Қарсыласқа уақыт беру мүмкіндігі';
-
-  @override
-  String get preferencesGameBehavior => 'Ойын тәртібі';
-
-  @override
-  String get preferencesHowDoYouMovePieces => 'Тасты қалай жүресіз?';
-
-  @override
-  String get preferencesClickTwoSquares => 'Екі шаршыны басып';
-
-  @override
-  String get preferencesDragPiece => 'Тасты тартып';
-
-  @override
-  String get preferencesBothClicksAndDrag => 'Екі әдіспен де';
-
-  @override
-  String get preferencesPremovesPlayingDuringOpponentTurn => 'Алдын-ала жүру (қарсыластың кезегінде жүру)';
-
-  @override
-  String get preferencesTakebacksWithOpponentApproval => 'Жүрісті қайтару (қарсыластың келісімі қажет)';
-
-  @override
-  String get preferencesInCasualGamesOnly => 'Жай ойындарда ғана';
-
-  @override
-  String get preferencesPromoteToQueenAutomatically => 'Уәзірге автоматты түрде айналдыру';
-
-  @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Ойын кезінде автоматты айналдыруды уақытша өшіру үшін <ctrl> басып тұрыңыз';
-
-  @override
-  String get preferencesWhenPremoving => 'Алдын-ала жүрісте';
-
-  @override
-  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Үш реттік қайталану болса, автоматты түрде тепе-теңдік жариялау';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanThirtySeconds => '30 секунд қалғанда';
-
-  @override
-  String get preferencesMoveConfirmation => 'Жүрісті растау';
-
-  @override
-  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Ойын кезінде тақта баптаулары арқылы өшіруге болады';
-
-  @override
-  String get preferencesInCorrespondenceGames => 'Хат-хабарлы ойындарда';
-
-  @override
-  String get preferencesCorrespondenceAndUnlimited => 'Хат-хабарлы мен уақыты шексіз';
-
-  @override
-  String get preferencesConfirmResignationAndDrawOffers => 'Берілу мен тепе-теңдік ұсынысын растау';
-
-  @override
-  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Бекіну әдісі';
-
-  @override
-  String get preferencesCastleByMovingTwoSquares => 'Патшаны екі шаршы жүру';
-
-  @override
-  String get preferencesCastleByMovingOntoTheRook => 'Патшаны тура тасына қою';
-
-  @override
-  String get preferencesInputMovesWithTheKeyboard => 'Пернетақта арқылы жүру';
-
-  @override
-  String get preferencesInputMovesWithVoice => 'Қадамды дауыспен жасау';
-
-  @override
-  String get preferencesSnapArrowsToValidMoves => 'Нұсқағыш тек заңды жүрістерге ғана жабысады';
-
-  @override
-  String get preferencesSayGgWpAfterLosingOrDrawing => 'Жеңіліс не тепе-теңдіктен кейін \"Жақсы ойын, қызық болды\" деп айту';
-
-  @override
-  String get preferencesYourPreferencesHaveBeenSaved => 'Баптауыңыз сақталды.';
-
-  @override
-  String get preferencesScrollOnTheBoardToReplayMoves => 'Тақта бетінде тіңтуір айналдырумен жүрістерді қайта көрсету';
-
-  @override
-  String get preferencesCorrespondenceEmailNotification => 'Хат-хабарлы ойындарыңыз туралы күнде поштаңызға ескертпе жіберу';
-
-  @override
-  String get preferencesNotifyStreamStart => 'Стрим басталды';
-
-  @override
-  String get preferencesNotifyInboxMsg => 'Жаңа хабар';
-
-  @override
-  String get preferencesNotifyForumMention => 'Форумда сіз туралы айтты';
-
-  @override
-  String get preferencesNotifyInvitedStudy => 'Зерттеуге шақырды';
-
-  @override
-  String get preferencesNotifyGameEvent => 'Хат-хабарлы ойын барысы';
-
-  @override
-  String get preferencesNotifyChallenge => 'Шақырулар';
-
-  @override
-  String get preferencesNotifyTournamentSoon => 'Жарыс жақында басталады';
-
-  @override
-  String get preferencesNotifyTimeAlarm => 'Хат-хабарлы ойын уақыты бітер алдында';
-
-  @override
-  String get preferencesNotifyBell => 'Личестегі қоңыраулы ескерту';
-
-  @override
-  String get preferencesNotifyPush => 'Құрылғының ескертуі, Личестен тыс кезіңізде';
-
-  @override
-  String get preferencesNotifyWeb => 'Браузер';
-
-  @override
-  String get preferencesNotifyDevice => 'Құрылғы';
-
-  @override
-  String get preferencesBellNotificationSound => 'Қоңыраулы ескерту';
-
-  @override
-  String get puzzlePuzzles => 'Жұмбақтар';
-
-  @override
-  String get puzzlePuzzleThemes => 'Жұмбақ тақырыптары';
-
-  @override
-  String get puzzleRecommended => 'Ұсыныстар';
-
-  @override
-  String get puzzlePhases => 'Кезеңдер';
-
-  @override
-  String get puzzleMotifs => 'Жағдайлар';
-
-  @override
-  String get puzzleAdvanced => 'Қосымша';
-
-  @override
-  String get puzzleLengths => 'Ұзындық';
-
-  @override
-  String get puzzleMates => 'Маттар';
-
-  @override
-  String get puzzleGoals => 'Мақсаттар';
-
-  @override
-  String get puzzleOrigin => 'Түпнұсқа';
-
-  @override
-  String get puzzleSpecialMoves => 'Ерекше жүрістер';
-
-  @override
-  String get puzzleDidYouLikeThisPuzzle => 'Бұл жұмбақ ұнай ма?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Келесін ашу үшін дауыс беріңіз!';
-
-  @override
-  String get puzzleUpVote => 'Дәрежесін көтеру';
-
-  @override
-  String get puzzleDownVote => 'Дәрежесін түсіру';
-
-  @override
-  String get puzzleYourPuzzleRatingWillNotChange => 'Сіздің жұмбақ шешу рейтингіңіз өзгермейді. Жұмбақтар жарыс емес екенін ескеріңіз. Мұндағы рейтингтің қызметі – сіздің деңгейіңізге сәйкес жұмбақты табуға көмекші болу.';
-
-  @override
-  String get puzzleFindTheBestMoveForWhite => 'Аққа ең табысты жүрісті табыңыз.';
-
-  @override
-  String get puzzleFindTheBestMoveForBlack => 'Қараға ең табысты жүрісті табыңыз.';
-
-  @override
-  String get puzzleToGetPersonalizedPuzzles => 'Жекелендірген жұмбақ алу үшін:';
-
-  @override
-  String puzzlePuzzleId(String param) {
-    return 'Жұмбақ $param';
-  }
-
-  @override
-  String get puzzlePuzzleOfTheDay => 'Бүгінгі жұмбақ';
-
-  @override
-  String get puzzleDailyPuzzle => 'күнделікті жұмбақтар';
-
-  @override
-  String get puzzleClickToSolve => 'Шешу үшін басыңыз';
-
-  @override
-  String get puzzleGoodMove => 'Жақсы жүріс';
-
-  @override
-  String get puzzleBestMove => 'Үздік жүріс!';
-
-  @override
-  String get puzzleKeepGoing => 'Ары қарай…';
-
-  @override
-  String get puzzlePuzzleSuccess => 'Бәрі дұрыс!';
-
-  @override
-  String get puzzlePuzzleComplete => 'Жұмбақ шешілді!';
-
-  @override
-  String get puzzleByOpenings => 'Бастамасына қарай';
-
-  @override
-  String get puzzlePuzzlesByOpenings => 'Жұмбақтың бастамасы';
-
-  @override
-  String get puzzleOpeningsYouPlayedTheMost => 'Сіздің бағалы ойындарыңызда ең жиі келетін бастама';
-
-  @override
-  String get puzzleUseFindInPage => 'Браузер мәзірінде \"Осы бетте іздеуді\" қолдана қалаулы бастаманы тауып алыңыз!';
-
-  @override
-  String get puzzleUseCtrlF => 'Қалаулы бастаманы табу үшін Ctrl+f басыңыз';
-
-  @override
-  String get puzzleNotTheMove => 'Ол жүріс емес!';
-
-  @override
-  String get puzzleTrySomethingElse => 'Басқаша жүріп көріңіз.';
-
-  @override
-  String puzzleRatingX(String param) {
-    return 'Рейтинг: $param';
-  }
-
-  @override
-  String get puzzleHidden => 'жасырын';
-
-  @override
-  String puzzleFromGameLink(String param) {
-    return '$param ойнынан';
-  }
-
-  @override
-  String get puzzleContinueTraining => 'Жаттығуды жалғастыру';
-
-  @override
-  String get puzzleDifficultyLevel => 'Күрделілік деңгейі';
-
-  @override
-  String get puzzleNormal => 'Қалыпты';
-
-  @override
-  String get puzzleEasier => 'Жеңілдеу';
-
-  @override
-  String get puzzleEasiest => 'Ең жеңілі';
-
-  @override
-  String get puzzleHarder => 'Қиындау';
-
-  @override
-  String get puzzleHardest => 'Ең қиыны';
-
-  @override
-  String get puzzleExample => 'Мысал';
-
-  @override
-  String get puzzleAddAnotherTheme => 'Басқа тақырып қосу';
-
-  @override
-  String get puzzleNextPuzzle => 'Келесі жұмбақ';
-
-  @override
-  String get puzzleJumpToNextPuzzleImmediately => 'Келесі жұмбаққа бірден өту';
-
-  @override
-  String get puzzlePuzzleDashboard => 'Жетістіктер';
-
-  @override
-  String get puzzleImprovementAreas => 'Жетілдіру бағыты';
-
-  @override
-  String get puzzleStrengths => 'Күштілігі';
-
-  @override
-  String get puzzleHistory => 'Жұмбақ журналы';
-
-  @override
-  String get puzzleSolved => 'шешілді';
-
-  @override
-  String get puzzleFailed => 'шешілмеді';
-
-  @override
-  String get puzzleStreakDescription => 'Қиындай беретін жұмбақтарды шешіп, жеңістер тізбегін құрыңыз. Уақытта шектеу жоқ. Бір бұрыс қадам болса, ойын бітті! Бірақ бір бәйгеде бір жүрісті өткізіп жібере аласыз.';
-
-  @override
-  String puzzleYourStreakX(String param) {
-    return 'Жеңістер тізбегі: $param';
-  }
-
-  @override
-  String get puzzleStreakSkipExplanation => 'Тізбегіңіз үзілмес үшін бұл жүрісті өткізіп жіберіңіз. Әр бәйгеде бір рет қана жасауға болады.';
-
-  @override
-  String get puzzleContinueTheStreak => 'Тізбекті жалғастыру';
-
-  @override
-  String get puzzleNewStreak => 'Жаңа тізбек';
-
-  @override
-  String get puzzleFromMyGames => 'Менің ойындарымнан';
-
-  @override
-  String get puzzleLookupOfPlayer => 'Бір ойыншының ойындарынан жұмбақ іздеу';
-
-  @override
-  String puzzleFromXGames(String param) {
-    return '$param ойындарынан жұмбақтар';
-  }
-
-  @override
-  String get puzzleSearchPuzzles => 'Жұмбақ іздеу';
-
-  @override
-  String get puzzleFromMyGamesNone => 'Дерекқорыңызда жұмбақ жоқ (бірақ сізге деген құрметіміз одан азайған емес).\nЖүйрік әрі классикалық ойын ойнап, жұмбақ құрылуына себепші болыңыз!';
-
-  @override
-  String puzzleFromXGamesFound(String param1, String param2) {
-    return '$param2 ойында $param1 жұмбақ табылды';
-  }
-
-  @override
-  String get puzzlePuzzleDashboardDescription => 'Жаттығып, талдап, ақыл шыңдаңыз!';
-
-  @override
-  String puzzlePercentSolved(String param) {
-    return '$param шешілді';
-  }
-
-  @override
-  String get puzzleNoPuzzlesToShow => 'Мәлімет жоқ. Алдымен жұмбақ шешіп көріңіз!';
-
-  @override
-  String get puzzleImprovementAreasDescription => 'Жетістігіңізді жақсарту үшін осы жаттығуды көріңіз!';
-
-  @override
-  String get puzzleStrengthDescription => 'Осы тақырыпта сізде үздік нәтиже';
-
-  @override
-  String puzzlePlayedXTimes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count рет ойналды',
-      one: '$count рет ойналды',
-      zero: '$count рет ойналды',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsBelowYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Жұмбақ рейтингіңізден төмен $count ұпай',
-      one: 'Жұмбақ рейтингіңізден төмен бір ұпай',
-      zero: 'Жұмбақ рейтингіңізден төмен бір ұпай',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsAboveYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Жұмбақ рейтингіңізден жоғары $count ұпай',
-      one: 'Жұмбақ рейтингіңізден жоғары бір ұпай',
-      zero: 'Жұмбақ рейтингіңізден жоғары бір ұпай',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPlayed(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count ойнадыңыз',
-      one: '$count ойнадыңыз',
-      zero: '$count ойнадыңыз',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbToReplay(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count-н қайта ойнау',
-      one: '$count-н қайта ойнау',
-      zero: '$count-н қайта ойнау',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get puzzleThemeAdvancedPawn => 'Әккі сарбаз';
-
-  @override
-  String get puzzleThemeAdvancedPawnDescription => 'Айналуға ұмтылған не айналу қаупін төндіретін сарбаз – тактиканың өзегі.';
-
-  @override
-  String get puzzleThemeAdvantage => 'Басымдылық';
-
-  @override
-  String get puzzleThemeAdvantageDescription => 'Шешуші артықшылық беретін сәтті жіберіп алмаңыз. (200-600 сп)';
-
-  @override
-  String get puzzleThemeAnastasiaMate => 'Анастасия маты';
-
-  @override
-  String get puzzleThemeAnastasiaMateDescription => 'Ат пен тура не уәзірдің бірлесіп, қарсылас патшасын тақта шеті мен өз тасының арасында ұстап алуы.';
-
-  @override
-  String get puzzleThemeArabianMate => 'Арабша мат';
-
-  @override
-  String get puzzleThemeArabianMateDescription => 'Ат пен тураның бірлесіп қарсылас патшаны тақта бұрышында ұстап алуы.';
-
-  @override
-  String get puzzleThemeAttackingF2F7 => 'f2 не f7-ге шабуылдау';
-
-  @override
-  String get puzzleThemeAttackingF2F7Description => '\"Қуырылған бүйрек\" бастауындағыдай f2 не f7 сарбазына бағытталған шабуыл.';
-
-  @override
-  String get puzzleThemeAttraction => 'Тартымдылық';
-
-  @override
-  String get puzzleThemeAttractionDescription => 'Қарсылас тасын белгілі бір шаршыға итермелейтін не күштеп ығыстыратын айырбастау не құрбан ету.';
-
-  @override
-  String get puzzleThemeBackRankMate => 'Соңғы сап маты';
-
-  @override
-  String get puzzleThemeBackRankMateDescription => 'Өз сабында өз тастарымен қамалған патшаға мат.';
-
-  @override
-  String get puzzleThemeBishopEndgame => 'Пiл ойынсоңы';
-
-  @override
-  String get puzzleThemeBishopEndgameDescription => 'Пілдер мен сарбаздары ғана бар ойынсоңы.';
-
-  @override
-  String get puzzleThemeBodenMate => 'Бодэн маты';
-
-  @override
-  String get puzzleThemeBodenMateDescription => 'Қарсылас патшасының бір жағын өз тастары бөгеп тұрғанда, екі піл қиылыса шабуылдайды.';
-
-  @override
-  String get puzzleThemeCastling => 'Бекіну';
-
-  @override
-  String get puzzleThemeCastlingDescription => 'Патшаны қорғаулы жерге кіргізіп, тураны шабуылға даярлаңыз.';
-
-  @override
-  String get puzzleThemeCapturingDefender => 'Қорғаушыны жою';
-
-  @override
-  String get puzzleThemeCapturingDefenderDescription => 'Бір тасты қорғап тұрған басқа тасты басып алсаңыз, әлгі тас қорғаусыз қалып, оны басып алуға жол ашылады.';
-
-  @override
-  String get puzzleThemeCrushing => 'Тас-талқан';
-
-  @override
-  String get puzzleThemeCrushingDescription => 'Жойқын артықшылыққа ие болу үшін қарсыластың қателігін анықтаңыз. (≥ 600 сп)';
-
-  @override
-  String get puzzleThemeDoubleBishopMate => 'Пілдер маты';
-
-  @override
-  String get puzzleThemeDoubleBishopMateDescription => 'Қарсылас патшасының бір жағын өз тастары бөгеп тұрғанда, екі піл қатарлас шабуылдайды.';
-
-  @override
-  String get puzzleThemeDovetailMate => 'Айырқұйрық мат';
-
-  @override
-  String get puzzleThemeDovetailMateDescription => 'Қарсылас патшасының екі жағын өз тастары бөгеп тұрғанда, уәзір жақыннан мат қояды.';
-
-  @override
-  String get puzzleThemeEquality => 'Теңдік';
-
-  @override
-  String get puzzleThemeEqualityDescription => 'Жаман күйден шығып, ойынды тепе-теңдікке не тең күйге жеткізіңіз. (≤ 200 сп)';
-
-  @override
-  String get puzzleThemeKingsideAttack => 'Патша жақты шабуыл';
-
-  @override
-  String get puzzleThemeKingsideAttackDescription => 'Қарсыластың патшасы өз жағына бекінгеннен кейін оған жасалатын шабуыл.';
-
-  @override
-  String get puzzleThemeClearance => 'Тазарту';
-
-  @override
-  String get puzzleThemeClearanceDescription => 'Тактиканы асыру мақсатында шаршыны, тік не диагоналды жолды босату үшін әдетте қарқынмен жасалынатын жүріс.';
-
-  @override
-  String get puzzleThemeDefensiveMove => 'Қорғану жүрісі';
-
-  @override
-  String get puzzleThemeDefensiveMoveDescription => 'Тастарды не артықшылықты жоғалтпау мақсатында жасалатын жүріс не жүрістер тізбегі.';
-
-  @override
-  String get puzzleThemeDeflection => 'Назарын бұру';
-
-  @override
-  String get puzzleThemeDeflectionDescription => 'Қарсылас тасын өз міндетінен (мысалы, бір маңызды шаршыны қорғаудан) үзу үшін жасалынатын алдамшы жүріс.';
-
-  @override
-  String get puzzleThemeDiscoveredAttack => 'Ашылған шабуыл';
-
-  @override
-  String get puzzleThemeDiscoveredAttackDescription => 'Ұзын жүрісті тастың шабуылын бөгеп тұрған таспен жүру. Мысалы, тура жолында тұрған атпен жүру.';
-
-  @override
-  String get puzzleThemeDoubleCheck => 'Қос шах';
-
-  @override
-  String get puzzleThemeDoubleCheckDescription => 'Ашылған шабуыл кезінде бірден екі тастың (яғни, шабулды ашқан тас пен шабуылдап жатқан тас) қарсылас патшасына қойған шахтары.';
-
-  @override
-  String get puzzleThemeEndgame => 'Ойынсоңы';
-
-  @override
-  String get puzzleThemeEndgameDescription => 'Ойынның соңғы кезеңіндегі тактика.';
-
-  @override
-  String get puzzleThemeEnPassantDescription => 'Бір сазбаз, қасынан қарсыластың сарбазы өткенде, оны басып алатын жағдайды, яғни жолай басып алуды қамтитын тактика.';
-
-  @override
-  String get puzzleThemeExposedKing => 'Жалаңаш патша';
-
-  @override
-  String get puzzleThemeExposedKingDescription => 'Қорғанысы нашар патша әдетте маттың иісін сезіп тұрады.';
-
-  @override
-  String get puzzleThemeFork => 'Шанышқы';
-
-  @override
-  String get puzzleThemeForkDescription => 'Қарсыластың бірден екі тасын ұратын тас жүрісі.';
-
-  @override
-  String get puzzleThemeHangingPiece => 'Олжа тас';
-
-  @override
-  String get puzzleThemeHangingPieceDescription => 'Қорғанысы нашар не қорғаусыз тұрған қарсылас тасын басып алуды меңзейтін тактика.';
-
-  @override
-  String get puzzleThemeHookMate => 'Қармақ мат';
-
-  @override
-  String get puzzleThemeHookMateDescription => 'Қарсылас патшасына өз сарбазы бөгет бола тұра, ат, тура мен сарбаз арқылы қойылған мат.';
-
-  @override
-  String get puzzleThemeInterference => 'Бөгет';
-
-  @override
-  String get puzzleThemeInterferenceDescription => 'Қарсыластың екі байланысқан тастарының арасына бөгет қойып, олардың біреуін не екеуін қорғаусыз ету. Мысалы, екі өзара қорғап тұрған туралардың арасына тұра қалған ат.';
-
-  @override
-  String get puzzleThemeIntermezzo => 'Аралық жүріс';
-
-  @override
-  String get puzzleThemeIntermezzoDescription => 'Болжамға сай жүрудің орнына алдымен басқаша, қарсыласқа қауіп келтіретін, жауап беруге мәжбүрлейтін жүріс жасау. Басқаша \"Intermezzo\" не \"Zwischenzug\" деп те аталады.';
-
-  @override
-  String get puzzleThemeKnightEndgame => 'Ат ойынсоңы';
-
-  @override
-  String get puzzleThemeKnightEndgameDescription => 'Аттар мен сарбаздары ғана бар ойынсоңы.';
-
-  @override
-  String get puzzleThemeLong => 'Ұзын жұмбақ';
-
-  @override
-  String get puzzleThemeLongDescription => 'Жеңіске үш қадам.';
-
-  @override
-  String get puzzleThemeMaster => 'Шебер ойындары';
-
-  @override
-  String get puzzleThemeMasterDescription => 'Атақты ойыншылардың ойындарынан алынған жұмбақтар.';
-
-  @override
-  String get puzzleThemeMasterVsMaster => 'Шеберлердің өзара ойындары';
-
-  @override
-  String get puzzleThemeMasterVsMasterDescription => 'Екі атақты ойыншылардың ойындарынан алынған жұмбақтар.';
-
-  @override
-  String get puzzleThemeMate => 'Мат';
-
-  @override
-  String get puzzleThemeMateDescription => 'Ойынды әдемі жеңіп алыңыз.';
-
-  @override
-  String get puzzleThemeMateIn1 => '1 жүрісті мат';
-
-  @override
-  String get puzzleThemeMateIn1Description => 'Бір жүріспен мат жасаңыз.';
-
-  @override
-  String get puzzleThemeMateIn2 => '2 жүрісті мат';
-
-  @override
-  String get puzzleThemeMateIn2Description => 'Екі жүріспен мат жасаңыз.';
-
-  @override
-  String get puzzleThemeMateIn3 => '3 жүрісті мат';
-
-  @override
-  String get puzzleThemeMateIn3Description => 'Үш жүріспен мат жасаңыз.';
-
-  @override
-  String get puzzleThemeMateIn4 => '4 жүрісті мат';
-
-  @override
-  String get puzzleThemeMateIn4Description => 'Төрт жүріспен мат жасаңыз.';
-
-  @override
-  String get puzzleThemeMateIn5 => '≥5 жүрісті мат';
-
-  @override
-  String get puzzleThemeMateIn5Description => 'Матқа жеткізетін жүрістер тізбегін табыңыз.';
-
-  @override
-  String get puzzleThemeMiddlegame => 'Ойын ортасы';
-
-  @override
-  String get puzzleThemeMiddlegameDescription => 'Ойынның екінші кезеңіндегі тактика.';
-
-  @override
-  String get puzzleThemeOneMove => 'Бір қадамды жұмбақ';
-
-  @override
-  String get puzzleThemeOneMoveDescription => 'Бір жүріспен ғана шешілетін жұмбақ.';
-
-  @override
-  String get puzzleThemeOpening => 'Бастау';
-
-  @override
-  String get puzzleThemeOpeningDescription => 'Ойынның алғашқы кезеңіндегі тактика.';
-
-  @override
-  String get puzzleThemePawnEndgame => 'Сарбаздар ойынсоңы';
-
-  @override
-  String get puzzleThemePawnEndgameDescription => 'Сарбаздары ғана бар ойынсоңы.';
-
-  @override
-  String get puzzleThemePin => 'Байлау';
-
-  @override
-  String get puzzleThemePinDescription => 'Артта тұрған құнды тасты жоғалту қаупі болғандықтан, алдыңғы тас орнынан кете алмайтындай жағдай.';
-
-  @override
-  String get puzzleThemePromotion => 'Айналу';
-
-  @override
-  String get puzzleThemePromotionDescription => 'Айналуға ұмтылған не айналу қаупін төндіретін сарбаз – тактиканың өзегі.';
-
-  @override
-  String get puzzleThemeQueenEndgame => 'Уәзір ойынсоңы';
-
-  @override
-  String get puzzleThemeQueenEndgameDescription => 'Уәзірлер мен сарбаздары ғана бар ойынсоңы.';
-
-  @override
-  String get puzzleThemeQueenRookEndgame => 'Уәзір мен Тура';
-
-  @override
-  String get puzzleThemeQueenRookEndgameDescription => 'Уәзірлер, туралар мен сарбаздары ғана бар ойынсоңы.';
-
-  @override
-  String get puzzleThemeQueensideAttack => 'Уәзір жақты шабуыл';
-
-  @override
-  String get puzzleThemeQueensideAttackDescription => 'Қарсылас патшасы уәзір жаққа бекінгеннен кейін оған жасалатын шабуыл.';
-
-  @override
-  String get puzzleThemeQuietMove => 'Үнсіз жүріс';
-
-  @override
-  String get puzzleThemeQuietMoveDescription => 'Шах етпейтін не басып алмайтын, бірақ болашақ соққыны дайындайтын жүріс.';
-
-  @override
-  String get puzzleThemeRookEndgame => 'Тура ойынсоңы';
-
-  @override
-  String get puzzleThemeRookEndgameDescription => 'Туралар мен сарбаздары ғана бар ойынсоңы.';
-
-  @override
-  String get puzzleThemeSacrifice => 'Құрбан ету';
-
-  @override
-  String get puzzleThemeSacrificeDescription => 'Кейін бір артықшылыққа жету мақсатыменен тастан әдейі айырылу.';
-
-  @override
-  String get puzzleThemeShort => 'Қысқа жұмбақ';
-
-  @override
-  String get puzzleThemeShortDescription => 'Жеңіске екі қадам.';
-
-  @override
-  String get puzzleThemeSkewer => 'Найза';
-
-  @override
-  String get puzzleThemeSkewerDescription => 'Байлауға қарама-қарсы: құнды тас соққы астында бола, артындағы арзан тасты беріп, қашуға мәжбүр болатындай жағдай.';
-
-  @override
-  String get puzzleThemeSmotheredMate => 'Қамаған мат';
-
-  @override
-  String get puzzleThemeSmotheredMateDescription => 'Өз тастарымен қамалған патша бірде-бір жүріс жасай алмайтын кезде оған қарсыластың аты жасаған мат.';
-
-  @override
-  String get puzzleThemeSuperGM => 'Супер гроссмейстер ойындары';
-
-  @override
-  String get puzzleThemeSuperGMDescription => 'Дүние жүзі мықтыларының ойындарынан алынған жұмбақтар.';
-
-  @override
-  String get puzzleThemeTrappedPiece => 'Тұзаққа түскен';
-
-  @override
-  String get puzzleThemeTrappedPieceDescription => 'Басып алынудан қаша алмайтын, жүрісі шектелген тас.';
-
-  @override
-  String get puzzleThemeUnderPromotion => 'Кіші айналу';
-
-  @override
-  String get puzzleThemeUnderPromotionDescription => 'Ат, піл не тураға айналу.';
-
-  @override
-  String get puzzleThemeVeryLong => 'Ұп-ұзын жұмбақ';
-
-  @override
-  String get puzzleThemeVeryLongDescription => 'Жеңіске төрт не одан да көп қадам.';
-
-  @override
-  String get puzzleThemeXRayAttack => 'Рентген';
-
-  @override
-  String get puzzleThemeXRayAttackDescription => 'Бір тастың қарсылас тасын аттай бір шаршыны қорғауы не шабуылдауы.';
-
-  @override
-  String get puzzleThemeZugzwang => 'Цугцванг';
-
-  @override
-  String get puzzleThemeZugzwangDescription => 'Жүрісі шектелген тастардың әр жүрісі жалпы жағдайдың нашарлауына әкеп соқтыратын кез.';
-
-  @override
-  String get puzzleThemeHealthyMix => 'Аралас дастархан';
-
-  @override
-  String get puzzleThemeHealthyMixDescription => 'Барлығынан аз-аздан. Күтпеген жағдайларға бейім болыңыз! Дәл нағыз шахматтағыдай!';
-
-  @override
-  String get puzzleThemePlayerGames => 'Ойыншылардан';
-
-  @override
-  String get puzzleThemePlayerGamesDescription => 'Сіздің не басқаның ойындарынан құрылған жұмбақтарды табу.';
-
-  @override
-  String puzzleThemePuzzleDownloadInformation(String param) {
-    return 'Осы жұмбақтар көпшілікке ашық доменде сақтаулы, оларды осы жерден жүктеп алуға болады: $param';
-  }
-
-  @override
-  String perfStatPerfStats(String param) {
-    return '$param статистикасы';
-  }
-
-  @override
-  String get perfStatViewTheGames => 'Ойындарын көру';
-
-  @override
-  String get perfStatProvisional => 'болжамалы';
-
-  @override
-  String get perfStatNotEnoughRatedGames => 'Тұрақты рейтингке ие болу үшін бағалы ойын саны жеткіліксіз.';
-
-  @override
-  String perfStatProgressOverLastXGames(String param) {
-    return 'Кейінгі $param ойынның қорытындысы:';
-  }
-
-  @override
-  String perfStatRatingDeviation(String param) {
-    return 'Рейтинг ауытқуы: $param.';
-  }
-
-  @override
-  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
-    return 'Мөлшері аз болса, рейтингтің тұрақты екенін білдіреді. $param1-дан артық болса – болжамалы. Орынға ие болу үшін бұл шама классикалық шахматта $param2-дан, ал басқа шахмат түрлерінде $param3-дан кем болуы керек.';
-  }
-
-  @override
-  String get perfStatTotalGames => 'Барлық ойындар';
-
-  @override
-  String get perfStatRatedGames => 'Бағалы ойындар';
-
-  @override
-  String get perfStatTournamentGames => 'Жарыс ойындары';
-
-  @override
-  String get perfStatBerserkedGames => 'Берсерк ойындары';
-
-  @override
-  String get perfStatTimeSpentPlaying => 'Ойынмен өткен уақыт';
-
-  @override
-  String get perfStatAverageOpponent => 'Орташа қарсылас';
-
-  @override
-  String get perfStatVictories => 'Жеңістер';
-
-  @override
-  String get perfStatDefeats => 'Жеңілістер';
-
-  @override
-  String get perfStatDisconnections => 'Байланыс үзілуі';
-
-  @override
-  String get perfStatNotEnoughGames => 'Ойындар саны жеткіліксіз';
-
-  @override
-  String perfStatHighestRating(String param) {
-    return 'Ең үлкен рейтинг: $param';
-  }
-
-  @override
-  String perfStatLowestRating(String param) {
-    return 'Ең төменгі рейтинг: $param';
-  }
-
-  @override
-  String perfStatFromXToY(String param1, String param2) {
-    return '$param1 - $param2 аралығында';
-  }
-
-  @override
-  String get perfStatWinningStreak => 'Жеңістер тізбегі';
-
-  @override
-  String get perfStatLosingStreak => 'Жеңілістер тізбегі';
-
-  @override
-  String perfStatLongestStreak(String param) {
-    return 'Ең ұзақ тізбек: $param';
-  }
-
-  @override
-  String perfStatCurrentStreak(String param) {
-    return 'Қазіргі тізбек: $param';
-  }
-
-  @override
-  String get perfStatBestRated => 'Ең бағалы жеңістер';
-
-  @override
-  String get perfStatGamesInARow => 'Қатарынан ойналған ойындар';
-
-  @override
-  String get perfStatLessThanOneHour => 'Ойындар арасы бір сағаттан кем';
-
-  @override
-  String get perfStatMaxTimePlaying => 'Ойынмен өткен ең ұзақ уақыт';
-
-  @override
-  String get perfStatNow => 'қазір';
-
-  @override
-  String get searchSearch => 'Іздеу';
-
-  @override
-  String get settingsSettings => 'Баптаулар';
-
-  @override
-  String get settingsCloseAccount => 'Тіркелгіні жабу';
-
-  @override
-  String get settingsManagedAccountCannotBeClosed => 'Сіздің тіркелгіңіз біреудің басқаруында, сондықтан сіз оны жаба алмайсыз.';
-
-  @override
-  String get settingsClosingIsDefinitive => 'Жабу - түпкілікті! Кері жол жоқ. Сенімдісіз бе?';
-
-  @override
-  String get settingsCantOpenSimilarAccount => 'Кейін дәл сондай атпенен жаңа тіркелгі жасай алмайсыз (әріп үлкендігі басқаша болса да).';
-
-  @override
-  String get settingsChangedMindDoNotCloseAccount => 'Мен ойымды өзгерттім, тіркелгімді жаппаңызшы';
-
-  @override
-  String get settingsCloseAccountExplanation => 'Сіз өз тіркелгіңіздің жабуын растайсыз ба? Тіркелгі жабу - қайтарымсыз әрекет. Тіркелгіге қайтадан ЕШҚАШАН КІРЕ АЛМАЙСЫЗ.';
-
-  @override
-  String get settingsThisAccountIsClosed => 'Бұл тіркелгі жабылды.';
-
-  @override
-  String get streamerLichessStreamers => 'Личес стримерлері';
-
-  @override
   String get stormMoveToStart => 'Бастау үшін жүріңіз';
 
   @override
@@ -4646,14 +4640,11 @@ class AppLocalizationsKk extends AppLocalizations {
   }
 
   @override
+  String get streamerLichessStreamers => 'Личес стримерлері';
+
+  @override
   String get studyShareAndExport => 'Бөлісу мен Жүктеп алу';
 
   @override
   String get studyStart => 'Бастау';
-
-  @override
-  String get broadcastBroadcasts => 'Көрсетілімдер';
-
-  @override
-  String get broadcastStartDate => 'Басталу күні (өз уақыт белдеуіңізде)';
 }

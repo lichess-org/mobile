@@ -191,10 +191,10 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String get contactContact => '各種連絡先';
+  String get broadcastBroadcasts => 'イベント中継';
 
   @override
-  String get contactContactLichess => 'Lichess に連絡する';
+  String get broadcastStartDate => '開始日付（あなたの現地時間）';
 
   @override
   String challengeChallengesX(String param1) {
@@ -276,6 +276,1002 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get challengeInviteLichessUser => 'Lichess ユーザーを招待する：';
+
+  @override
+  String get contactContact => '各種連絡先';
+
+  @override
+  String get contactContactLichess => 'Lichess に連絡する';
+
+  @override
+  String get patronDonate => '寄付';
+
+  @override
+  String get patronLichessPatron => 'Lichess パトロン';
+
+  @override
+  String perfStatPerfStats(String param) {
+    return '$param の統計';
+  }
+
+  @override
+  String get perfStatViewTheGames => '対局を表示';
+
+  @override
+  String get perfStatProvisional => '仮定';
+
+  @override
+  String get perfStatNotEnoughRatedGames => 'レート戦が少なすぎて信頼できるレーティングが算出できません。';
+
+  @override
+  String perfStatProgressOverLastXGames(String param) {
+    return '過去 $param 戦での変動：';
+  }
+
+  @override
+  String perfStatRatingDeviation(String param) {
+    return 'レーティング偏差：$param';
+  }
+
+  @override
+  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
+    return '数字が小さいほどレーティングが安定していることになります。$param1 を超えていると暫定レーティングとなります。ランキング入りするにはこの数字が $param2 未満（通常ルール）か $param3 未満（バリアント）でなくてはなりません。';
+  }
+
+  @override
+  String get perfStatTotalGames => '総局数';
+
+  @override
+  String get perfStatRatedGames => 'レート戦局数';
+
+  @override
+  String get perfStatTournamentGames => 'トーナメント対局数';
+
+  @override
+  String get perfStatBerserkedGames => 'バーサーク局数';
+
+  @override
+  String get perfStatTimeSpentPlaying => '総プレイ時間';
+
+  @override
+  String get perfStatAverageOpponent => '対局相手の平均';
+
+  @override
+  String get perfStatVictories => '勝ち';
+
+  @override
+  String get perfStatDefeats => '負け';
+
+  @override
+  String get perfStatDisconnections => '接続切れ';
+
+  @override
+  String get perfStatNotEnoughGames => '対局数が不十分';
+
+  @override
+  String perfStatHighestRating(String param) {
+    return '最高レーティング：$param';
+  }
+
+  @override
+  String perfStatLowestRating(String param) {
+    return '最低レーティング：$param';
+  }
+
+  @override
+  String perfStatFromXToY(String param1, String param2) {
+    return '$param1 から $param2 まで';
+  }
+
+  @override
+  String get perfStatWinningStreak => '連勝';
+
+  @override
+  String get perfStatLosingStreak => '連敗';
+
+  @override
+  String perfStatLongestStreak(String param) {
+    return '最長：$param';
+  }
+
+  @override
+  String perfStatCurrentStreak(String param) {
+    return '現在：$param';
+  }
+
+  @override
+  String get perfStatBestRated => '勝った相手の最高';
+
+  @override
+  String get perfStatGamesInARow => '連続対局数';
+
+  @override
+  String get perfStatLessThanOneHour => 'ゲーム間隔 1 時間以内';
+
+  @override
+  String get perfStatMaxTimePlaying => '最長連続プレイ時間';
+
+  @override
+  String get perfStatNow => '現在';
+
+  @override
+  String get preferencesPreferences => '設定';
+
+  @override
+  String get preferencesDisplay => '表示';
+
+  @override
+  String get preferencesPrivacy => 'プライバシー';
+
+  @override
+  String get preferencesNotifications => '通知';
+
+  @override
+  String get preferencesPieceAnimation => '駒のアニメーション速度';
+
+  @override
+  String get preferencesMaterialDifference => '駒の損得';
+
+  @override
+  String get preferencesBoardHighlights => '盤上のハイライト表示（最後の手、チェック）';
+
+  @override
+  String get preferencesPieceDestinations => '駒の行き先（ルール上動けるマス、プリムーブ）';
+
+  @override
+  String get preferencesBoardCoordinates => 'マスの座標（A-H, 1-8）';
+
+  @override
+  String get preferencesMoveListWhilePlaying => 'プレイ中の棋譜記録';
+
+  @override
+  String get preferencesPgnPieceNotation => 'PGN 駒表示方法';
+
+  @override
+  String get preferencesChessPieceSymbol => 'チェス駒シンボル';
+
+  @override
+  String get preferencesPgnLetter => '文字（K, Q, R, B, N）';
+
+  @override
+  String get preferencesZenMode => '集中モード';
+
+  @override
+  String get preferencesShowPlayerRatings => 'レーティングを表示';
+
+  @override
+  String get preferencesShowFlairs => 'プレイヤーのフレアを表示';
+
+  @override
+  String get preferencesExplainShowPlayerRatings => 'Lichess 上のすべてのレーティングが非表示となり、集中しやすくなります。対局はレート戦のままで、変わるのは表示の有無だけです。';
+
+  @override
+  String get preferencesDisplayBoardResizeHandle => '盤サイズ変更マークを表示';
+
+  @override
+  String get preferencesOnlyOnInitialPosition => 'ゲーム開始時のみ';
+
+  @override
+  String get preferencesInGameOnly => '対局中のみ';
+
+  @override
+  String get preferencesChessClock => '時間表示';
+
+  @override
+  String get preferencesTenthsOfSeconds => '0.1秒単位で時間表示';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanTenSeconds => '持時間が残り10秒以下の場合';
+
+  @override
+  String get preferencesHorizontalGreenProgressBars => '緑の棒（プログレスバー）を表示';
+
+  @override
+  String get preferencesSoundWhenTimeGetsCritical => '時間が迫ってきたら音を鳴らす';
+
+  @override
+  String get preferencesGiveMoreTime => '相手に時間追加';
+
+  @override
+  String get preferencesGameBehavior => '対局中の動作';
+
+  @override
+  String get preferencesHowDoYouMovePieces => '駒の移動方法';
+
+  @override
+  String get preferencesClickTwoSquares => '2 つのマスをクリック';
+
+  @override
+  String get preferencesDragPiece => '駒をドラッグ';
+
+  @override
+  String get preferencesBothClicksAndDrag => 'どちらでも';
+
+  @override
+  String get preferencesPremovesPlayingDuringOpponentTurn => 'プリムーブ（相手の手番中に次の自分の手を入力する）';
+
+  @override
+  String get preferencesTakebacksWithOpponentApproval => '待ったあり（相手が同意すれば）';
+
+  @override
+  String get preferencesInCasualGamesOnly => '非レート戦のみ';
+
+  @override
+  String get preferencesPromoteToQueenAutomatically => '自動的にクイーンに昇格する';
+
+  @override
+  String get preferencesExplainPromoteToQueenAutomatically => '<ctrl> キーを押しながら昇格させると、Q への自動昇格を一時的に無効にできます';
+
+  @override
+  String get preferencesWhenPremoving => 'プリムーブをした場合';
+
+  @override
+  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => '同形三復を自動的にドローにする';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanThirtySeconds => '持時間が残り30秒以下の場合';
+
+  @override
+  String get preferencesMoveConfirmation => '着手をそのつど確認する';
+
+  @override
+  String get preferencesExplainCanThenBeTemporarilyDisabled => 'ボードのメニューからゲーム中に無効にできます';
+
+  @override
+  String get preferencesInCorrespondenceGames => '通信チェスのみ';
+
+  @override
+  String get preferencesCorrespondenceAndUnlimited => '通信戦と持時間無制限';
+
+  @override
+  String get preferencesConfirmResignationAndDrawOffers => '投了とドロー提案を確認する';
+
+  @override
+  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'キャスリングの入力';
+
+  @override
+  String get preferencesCastleByMovingTwoSquares => 'キングを 2 マス動かす';
+
+  @override
+  String get preferencesCastleByMovingOntoTheRook => 'キングをルークの上に動かす';
+
+  @override
+  String get preferencesInputMovesWithTheKeyboard => '手をキーボードで入力';
+
+  @override
+  String get preferencesInputMovesWithVoice => '手を声で入力';
+
+  @override
+  String get preferencesSnapArrowsToValidMoves => '可能な手を矢印で表示';
+
+  @override
+  String get preferencesSayGgWpAfterLosingOrDrawing => '負けかドローの際に「Good game, well played」と言う';
+
+  @override
+  String get preferencesYourPreferencesHaveBeenSaved => '設定が保存されました。';
+
+  @override
+  String get preferencesScrollOnTheBoardToReplayMoves => 'ボード上スクロールで手を再現';
+
+  @override
+  String get preferencesCorrespondenceEmailNotification => '通信戦の対局をリストにした毎日のメール通知';
+
+  @override
+  String get preferencesNotifyStreamStart => '配信を始めた時';
+
+  @override
+  String get preferencesNotifyInboxMsg => '新しい着信メッセージ';
+
+  @override
+  String get preferencesNotifyForumMention => 'フォーラムであなたの名前が出た時';
+
+  @override
+  String get preferencesNotifyInvitedStudy => '研究への招待';
+
+  @override
+  String get preferencesNotifyGameEvent => '通信戦の進行状況';
+
+  @override
+  String get preferencesNotifyChallenge => '挑戦が来た時';
+
+  @override
+  String get preferencesNotifyTournamentSoon => 'トーナメントが間もなく開始';
+
+  @override
+  String get preferencesNotifyTimeAlarm => '通信戦の時間切迫';
+
+  @override
+  String get preferencesNotifyBell => 'Lichess にいる時にベル音';
+
+  @override
+  String get preferencesNotifyPush => 'Lichess にいない時にデバイスでの通知';
+
+  @override
+  String get preferencesNotifyWeb => 'ブラウザ';
+
+  @override
+  String get preferencesNotifyDevice => 'デバイス';
+
+  @override
+  String get preferencesBellNotificationSound => 'ベル通知の音';
+
+  @override
+  String get puzzlePuzzles => 'タクティクス問題';
+
+  @override
+  String get puzzlePuzzleThemes => '問題のテーマ';
+
+  @override
+  String get puzzleRecommended => 'おすすめ';
+
+  @override
+  String get puzzlePhases => '序盤・中盤・終盤';
+
+  @override
+  String get puzzleMotifs => 'モチーフ';
+
+  @override
+  String get puzzleAdvanced => '上級';
+
+  @override
+  String get puzzleLengths => '手数';
+
+  @override
+  String get puzzleMates => 'メイト';
+
+  @override
+  String get puzzleGoals => '目標';
+
+  @override
+  String get puzzleOrigin => '出所';
+
+  @override
+  String get puzzleSpecialMoves => '特殊な手';
+
+  @override
+  String get puzzleDidYouLikeThisPuzzle => 'この問題は気に入りましたか？';
+
+  @override
+  String get puzzleVoteToLoadNextOne => '投票すると次を読み込みます！';
+
+  @override
+  String get puzzleUpVote => '上げ投票';
+
+  @override
+  String get puzzleDownVote => '下げ投票';
+
+  @override
+  String get puzzleYourPuzzleRatingWillNotChange => 'あなたのレーティングは動きません。タクティクス問題は競技ではありません。レーティングは今のあなたのスキルに見合った問題を選ぶのに役立ちます。';
+
+  @override
+  String get puzzleFindTheBestMoveForWhite => '白の最善手を見つけてください。';
+
+  @override
+  String get puzzleFindTheBestMoveForBlack => '黒の最善手を見つけてください。';
+
+  @override
+  String get puzzleToGetPersonalizedPuzzles => 'あなたに合わせた問題を解くには:';
+
+  @override
+  String puzzlePuzzleId(String param) {
+    return '問題番号 $param';
+  }
+
+  @override
+  String get puzzlePuzzleOfTheDay => '本日の問題';
+
+  @override
+  String get puzzleDailyPuzzle => '本日の問題';
+
+  @override
+  String get puzzleClickToSolve => '問題を解く';
+
+  @override
+  String get puzzleGoodMove => '好手';
+
+  @override
+  String get puzzleBestMove => '最善手！';
+
+  @override
+  String get puzzleKeepGoing => '続ける…';
+
+  @override
+  String get puzzlePuzzleSuccess => '成功！';
+
+  @override
+  String get puzzlePuzzleComplete => '問題終了！';
+
+  @override
+  String get puzzleByOpenings => 'オープニング別';
+
+  @override
+  String get puzzlePuzzlesByOpenings => 'オープニング別の問題';
+
+  @override
+  String get puzzleOpeningsYouPlayedTheMost => 'レート戦でもっともよく使ったオープニング';
+
+  @override
+  String get puzzleUseFindInPage => 'ブラウザのページ内検索（Ctrl+F）を使えばお好きなオープニングが探せます。';
+
+  @override
+  String get puzzleUseCtrlF => 'Ctrl+F を使えばお好きなオープニングが探せます。';
+
+  @override
+  String get puzzleNotTheMove => 'その手は違います！';
+
+  @override
+  String get puzzleTrySomethingElse => '別の手をどうぞ。';
+
+  @override
+  String puzzleRatingX(String param) {
+    return 'レーティング: $param';
+  }
+
+  @override
+  String get puzzleHidden => '非表示';
+
+  @override
+  String puzzleFromGameLink(String param) {
+    return 'ゲーム $param から';
+  }
+
+  @override
+  String get puzzleContinueTraining => 'トレーニングを続ける';
+
+  @override
+  String get puzzleDifficultyLevel => '難易度';
+
+  @override
+  String get puzzleNormal => '通常';
+
+  @override
+  String get puzzleEasier => '易しい';
+
+  @override
+  String get puzzleEasiest => '非常に易しい';
+
+  @override
+  String get puzzleHarder => '難しい';
+
+  @override
+  String get puzzleHardest => '非常に難しい';
+
+  @override
+  String get puzzleExample => '例';
+
+  @override
+  String get puzzleAddAnotherTheme => '別のテーマを追加';
+
+  @override
+  String get puzzleNextPuzzle => '次の問題';
+
+  @override
+  String get puzzleJumpToNextPuzzleImmediately => '解いたらすぐ次の問題を読み込む';
+
+  @override
+  String get puzzlePuzzleDashboard => '問題成績データ';
+
+  @override
+  String get puzzleImprovementAreas => '改善ポイント';
+
+  @override
+  String get puzzleStrengths => '得意テーマ';
+
+  @override
+  String get puzzleHistory => '解答履歴';
+
+  @override
+  String get puzzleSolved => '正解';
+
+  @override
+  String get puzzleFailed => '失敗';
+
+  @override
+  String get puzzleStreakDescription => 'だんだん難しくなる問題に連続正解してください。時間制限はないのでじっくりとどうぞ。1 手間違えると終了です！　ただし途中 1 手だけ飛ばすことができます。';
+
+  @override
+  String puzzleYourStreakX(String param) {
+    return '連続正解：$param';
+  }
+
+  @override
+  String get puzzleStreakSkipExplanation => '手を飛ばすことで連続正解が続きます！ 1 回だけ有効。';
+
+  @override
+  String get puzzleContinueTheStreak => '連続正解を続ける';
+
+  @override
+  String get puzzleNewStreak => '新たなストリーク';
+
+  @override
+  String get puzzleFromMyGames => '自分のゲームから';
+
+  @override
+  String get puzzleLookupOfPlayer => 'ある人の対局から取った問題を検索';
+
+  @override
+  String puzzleFromXGames(String param) {
+    return '$param の対局からの問題';
+  }
+
+  @override
+  String get puzzleSearchPuzzles => '問題を検索';
+
+  @override
+  String get puzzleFromMyGamesNone => 'あなたの対局からの問題はまだありませんが、Lichess はあなたの参加を歓迎します。自分の対局が使われる可能性を増やすには、ラピッドかクラシカルでプレイしてください！';
+
+  @override
+  String puzzleFromXGamesFound(String param1, String param2) {
+    return '$param1 問がヒット（全 $param2 局中）';
+  }
+
+  @override
+  String get puzzlePuzzleDashboardDescription => '練習、分析、上達';
+
+  @override
+  String puzzlePercentSolved(String param) {
+    return '$param に正解';
+  }
+
+  @override
+  String get puzzleNoPuzzlesToShow => 'データがありません、まず問題をプレイしてから！';
+
+  @override
+  String get puzzleImprovementAreasDescription => 'ここのテーマを練習して前進！';
+
+  @override
+  String get puzzleStrengthDescription => 'これらのテーマで好成績でした';
+
+  @override
+  String puzzlePlayedXTimes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 回プレイ',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsBelowYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'あなたのレーティングより $count 点下',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsAboveYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'あなたのレーティングより $count 点上',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPlayed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 問をプレイ',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbToReplay(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 再挑戦',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get puzzleThemeAdvancedPawn => '進んだポーン';
+
+  @override
+  String get puzzleThemeAdvancedPawnDescription => 'ポーンの昇格かその狙いがテーマの問題。';
+
+  @override
+  String get puzzleThemeAdvantage => '優位';
+
+  @override
+  String get puzzleThemeAdvantageDescription => '決定的な優位を得てください。（評価値は 200cp 以上 600cp 以下）';
+
+  @override
+  String get puzzleThemeAnastasiaMate => 'アナスタシアのメイト';
+
+  @override
+  String get puzzleThemeAnastasiaMateDescription => '盤端と味方の駒にはさまれたキングを、ナイトとルーク（またはクイーン）でメイトする形。';
+
+  @override
+  String get puzzleThemeArabianMate => 'アラビアのメイト';
+
+  @override
+  String get puzzleThemeArabianMateDescription => '盤の隅にいるキングを、ナイトとルークでメイトする形。';
+
+  @override
+  String get puzzleThemeAttackingF2F7 => 'f2/f7への攻撃';
+
+  @override
+  String get puzzleThemeAttackingF2F7Description => 'f2 か f7 のポーンを狙う攻撃（フライド・リバー・アタックなど）。';
+
+  @override
+  String get puzzleThemeAttraction => 'アトラクション（引き寄せ）';
+
+  @override
+  String get puzzleThemeAttractionDescription => '交換か捨て駒によって相手の駒を不利なマスに誘い込む。';
+
+  @override
+  String get puzzleThemeBackRankMate => 'バックランク・メイト';
+
+  @override
+  String get puzzleThemeBackRankMateDescription => '一番下のランクで、上を自分の駒に塞がれたキングをメイトする。';
+
+  @override
+  String get puzzleThemeBishopEndgame => 'ビショップ・エンドゲーム';
+
+  @override
+  String get puzzleThemeBishopEndgameDescription => 'ビショップとポーンだけの終盤。';
+
+  @override
+  String get puzzleThemeBodenMate => 'ボーデンのメイト';
+
+  @override
+  String get puzzleThemeBodenMateDescription => '味方の駒にじゃまされたキングを、2 個のビショップが交差した効き筋でメイトする形。';
+
+  @override
+  String get puzzleThemeCastling => 'キャスリング';
+
+  @override
+  String get puzzleThemeCastlingDescription => 'キングを安全にし、ルークを攻撃に活用する。';
+
+  @override
+  String get puzzleThemeCapturingDefender => '守り駒の除去';
+
+  @override
+  String get puzzleThemeCapturingDefenderDescription => '別の駒を守っている駒を消して、無防備になった駒を取る。';
+
+  @override
+  String get puzzleThemeCrushing => '圧倒';
+
+  @override
+  String get puzzleThemeCrushingDescription => '相手の悪手をとがめて圧倒的な優位を築きます。（評価値は 600cp 以上）';
+
+  @override
+  String get puzzleThemeDoubleBishopMate => 'ダブル・ビショップのメイト';
+
+  @override
+  String get puzzleThemeDoubleBishopMateDescription => '味方の駒にじゃまされたキングを、2 個のビショップが平行な効き筋でメイトする形。';
+
+  @override
+  String get puzzleThemeDovetailMate => '燕尾のメイト';
+
+  @override
+  String get puzzleThemeDovetailMateDescription => '斜め後ろを両方とも味方の駒に塞がれたキングを、クイーン1個でメイトする形。';
+
+  @override
+  String get puzzleThemeEquality => '互角';
+
+  @override
+  String get puzzleThemeEqualityDescription => '劣勢の局面から、ドローを確保するか互角の局面に戻します。（評価値は 200cp 以下）';
+
+  @override
+  String get puzzleThemeKingsideAttack => 'キングサイド攻撃';
+
+  @override
+  String get puzzleThemeKingsideAttackDescription => 'キングサイドにキャスリングした相手のキングを攻撃する。';
+
+  @override
+  String get puzzleThemeClearance => 'クリアランス（解放）';
+
+  @override
+  String get puzzleThemeClearanceDescription => '次のタクティクスのためにマス、ファイル、斜線を開く手（先手であることが多い）。';
+
+  @override
+  String get puzzleThemeDefensiveMove => '守り';
+
+  @override
+  String get puzzleThemeDefensiveMoveDescription => '駒損などの不利を避けるために必要な正確な手または手順。';
+
+  @override
+  String get puzzleThemeDeflection => 'ディフレクション（そらし）';
+
+  @override
+  String get puzzleThemeDeflectionDescription => '相手の駒を別の役割（重要なマスを守るなど）からそらす手。';
+
+  @override
+  String get puzzleThemeDiscoveredAttack => 'ディスカバード・アタック';
+
+  @override
+  String get puzzleThemeDiscoveredAttackDescription => '別のラインピースの効きを止めていた駒を動かす手。たとえばルークの効き筋からナイトを動かす。';
+
+  @override
+  String get puzzleThemeDoubleCheck => 'ダブル・チェック';
+
+  @override
+  String get puzzleThemeDoubleCheckDescription => 'ディスカバード・アタックによって、動いた駒とラインピースが相手のキングに同時にチェックをかける手。';
+
+  @override
+  String get puzzleThemeEndgame => 'エンドゲーム';
+
+  @override
+  String get puzzleThemeEndgameDescription => 'ゲームの終盤でのタクティクス。';
+
+  @override
+  String get puzzleThemeEnPassantDescription => 'アンパッサン、つまり相手の 2 マス前進したポーンを途中で取る手を含むタクティクス。';
+
+  @override
+  String get puzzleThemeExposedKing => '危険なキング';
+
+  @override
+  String get puzzleThemeExposedKingDescription => '守り駒の少ないキングを攻める問題、多くの場合メイトにつながる。';
+
+  @override
+  String get puzzleThemeFork => 'フォーク（両取り）';
+
+  @override
+  String get puzzleThemeForkDescription => '動いた駒が相手の 2 つの駒を同時に攻撃する手。';
+
+  @override
+  String get puzzleThemeHangingPiece => '浮き駒';
+
+  @override
+  String get puzzleThemeHangingPieceDescription => '守りのない駒、または守り駒の足りない駒をただで取る問題。';
+
+  @override
+  String get puzzleThemeHookMate => '釣り針のメイト';
+
+  @override
+  String get puzzleThemeHookMateDescription => 'ポーンの隣にいるキングを、ルーク、ナイト、ポーンでメイトする形。';
+
+  @override
+  String get puzzleThemeInterference => 'インターフェア（干渉）';
+
+  @override
+  String get puzzleThemeInterferenceDescription => '相手の 2 つの駒の間に駒を入れて浮き駒を作る問題。相手の 2 個のルークの間に守られたナイトを入れる、など。';
+
+  @override
+  String get puzzleThemeIntermezzo => 'ツヴィッシェンツーク（利かし）';
+
+  @override
+  String get puzzleThemeIntermezzoDescription => '当然に見える手を指す代わりに、いったん相手が受けざるを得ない別の手をはさむ問題。';
+
+  @override
+  String get puzzleThemeKnightEndgame => 'ナイト・エンドゲーム';
+
+  @override
+  String get puzzleThemeKnightEndgameDescription => 'ナイトとポーンだけの終盤。';
+
+  @override
+  String get puzzleThemeLong => '長手数問題';
+
+  @override
+  String get puzzleThemeLongDescription => '3 手で勝ちになります。';
+
+  @override
+  String get puzzleThemeMaster => 'マスターのゲーム';
+
+  @override
+  String get puzzleThemeMasterDescription => 'タイトル保持者の対局から採った問題。';
+
+  @override
+  String get puzzleThemeMasterVsMaster => 'マスター同士のゲーム';
+
+  @override
+  String get puzzleThemeMasterVsMasterDescription => '双方がタイトル保持者の対局から採った問題。';
+
+  @override
+  String get puzzleThemeMate => 'メイト';
+
+  @override
+  String get puzzleThemeMateDescription => 'きれいに勝ちを決める。';
+
+  @override
+  String get puzzleThemeMateIn1 => '1 手メイト';
+
+  @override
+  String get puzzleThemeMateIn1Description => '1 手でチェックメイトにします。';
+
+  @override
+  String get puzzleThemeMateIn2 => '2 手メイト';
+
+  @override
+  String get puzzleThemeMateIn2Description => '2 手でチェックメイトにします。';
+
+  @override
+  String get puzzleThemeMateIn3 => '3 手メイト';
+
+  @override
+  String get puzzleThemeMateIn3Description => '3 手でチェックメイトにします。';
+
+  @override
+  String get puzzleThemeMateIn4 => '4 手メイト';
+
+  @override
+  String get puzzleThemeMateIn4Description => '4 手でチェックメイトにします。';
+
+  @override
+  String get puzzleThemeMateIn5 => '5 手以上メイト';
+
+  @override
+  String get puzzleThemeMateIn5Description => '長いメイトの手順を考える。';
+
+  @override
+  String get puzzleThemeMiddlegame => 'ミドルゲーム';
+
+  @override
+  String get puzzleThemeMiddlegameDescription => 'ゲームの中盤でのタクティクス。';
+
+  @override
+  String get puzzleThemeOneMove => '1 手問題';
+
+  @override
+  String get puzzleThemeOneMoveDescription => '1 手だけ動かす問題。';
+
+  @override
+  String get puzzleThemeOpening => 'オープニング';
+
+  @override
+  String get puzzleThemeOpeningDescription => 'ゲームの序盤でのタクティクス。';
+
+  @override
+  String get puzzleThemePawnEndgame => 'ポーン・エンドゲーム';
+
+  @override
+  String get puzzleThemePawnEndgameDescription => 'ポーンだけの終盤。';
+
+  @override
+  String get puzzleThemePin => 'ピン';
+
+  @override
+  String get puzzleThemePinDescription => 'ピンを含む問題。ラインピースに狙われた駒が動くと、より価値の高い駒が取られてしまう状況。';
+
+  @override
+  String get puzzleThemePromotion => 'プロモーション';
+
+  @override
+  String get puzzleThemePromotionDescription => 'ポーンの昇格かその狙いがテーマの問題。';
+
+  @override
+  String get puzzleThemeQueenEndgame => 'クイーン・エンドゲーム';
+
+  @override
+  String get puzzleThemeQueenEndgameDescription => 'クイーンとポーンだけの終盤。';
+
+  @override
+  String get puzzleThemeQueenRookEndgame => 'クイーンとルーク';
+
+  @override
+  String get puzzleThemeQueenRookEndgameDescription => 'クイーン、ルーク、ポーンだけの終盤。';
+
+  @override
+  String get puzzleThemeQueensideAttack => 'クイーンサイド攻撃';
+
+  @override
+  String get puzzleThemeQueensideAttackDescription => 'クイーンサイドにキャスリングした相手のキングを攻撃する。';
+
+  @override
+  String get puzzleThemeQuietMove => '静かな手';
+
+  @override
+  String get puzzleThemeQuietMoveDescription => 'チェックでも駒取りでもないが、次に防げない狙いを用意する手。';
+
+  @override
+  String get puzzleThemeRookEndgame => 'ルーク・エンドゲーム';
+
+  @override
+  String get puzzleThemeRookEndgameDescription => 'ルークとポーンだけの終盤。';
+
+  @override
+  String get puzzleThemeSacrifice => 'サクリファイス（捨て駒）';
+
+  @override
+  String get puzzleThemeSacrificeDescription => '短期的な駒損を含み、強制的な手順の後に優位を築く問題。';
+
+  @override
+  String get puzzleThemeShort => '短手数問題';
+
+  @override
+  String get puzzleThemeShortDescription => '2 手で勝ちになります。';
+
+  @override
+  String get puzzleThemeSkewer => 'スキュアー（串刺し）';
+
+  @override
+  String get puzzleThemeSkewerDescription => 'ラインピースで価値の高い駒を攻撃し、それが逃げた後で背後にある価値の低い駒を取るタクティクス。ピンの裏返し。';
+
+  @override
+  String get puzzleThemeSmotheredMate => 'スマザード・メイト';
+
+  @override
+  String get puzzleThemeSmotheredMateDescription => 'キングが味方の駒に囲まれて動けない時（スマザー＝窒息している時）に、ナイト 1 個でかけるメイト。';
+
+  @override
+  String get puzzleThemeSuperGM => 'スーパー GM の対局';
+
+  @override
+  String get puzzleThemeSuperGMDescription => '世界の一流選手の対局から採った問題。';
+
+  @override
+  String get puzzleThemeTrappedPiece => '敵駒を殺す';
+
+  @override
+  String get puzzleThemeTrappedPieceDescription => '相手の駒の動きを制限して、逃げられない状態にする問題。';
+
+  @override
+  String get puzzleThemeUnderPromotion => 'アンダープロモーション';
+
+  @override
+  String get puzzleThemeUnderPromotionDescription => 'ナイト、ビショップ、ルークへの昇格。';
+
+  @override
+  String get puzzleThemeVeryLong => '超長手数問題';
+
+  @override
+  String get puzzleThemeVeryLongDescription => '4 手以上で勝ちになります。';
+
+  @override
+  String get puzzleThemeXRayAttack => 'Ｘ線攻撃';
+
+  @override
+  String get puzzleThemeXRayAttackDescription => '相手の駒の向こうにあるマスを間接的に攻撃（または防御）する。';
+
+  @override
+  String get puzzleThemeZugzwang => 'ツークツワンク';
+
+  @override
+  String get puzzleThemeZugzwangDescription => '相手の指せる手が、どれを選んでも局面を悪くしてしまう形。';
+
+  @override
+  String get puzzleThemeHealthyMix => '混合';
+
+  @override
+  String get puzzleThemeHealthyMixDescription => 'いろいろな問題を少しずつ。どんな問題が来るかわからないので油断しないで！　実戦と同じです。';
+
+  @override
+  String get puzzleThemePlayerGames => 'プレイヤーの対局';
+
+  @override
+  String get puzzleThemePlayerGamesDescription => '自分の対局、他のプレイヤーの対局から取られた問題を検索します。';
+
+  @override
+  String puzzleThemePuzzleDownloadInformation(String param) {
+    return 'これらの問題はパブリックドメインにあり、$param でダウンロードできます。';
+  }
+
+  @override
+  String get searchSearch => '検索';
+
+  @override
+  String get settingsSettings => '設定';
+
+  @override
+  String get settingsCloseAccount => 'アカウント停止';
+
+  @override
+  String get settingsManagedAccountCannotBeClosed => 'あなたのアカウントは別の人が管理しており、自分では停止できません。';
+
+  @override
+  String get settingsClosingIsDefinitive => 'アカウント停止は不可逆で、元には戻せません。ほんとうに停止しますか？';
+
+  @override
+  String get settingsCantOpenSimilarAccount => '同じ名前（大文字・小文字が違っていても）で別のアカウントを作ることもできません。';
+
+  @override
+  String get settingsChangedMindDoNotCloseAccount => '気が変わったのでアカウントを停止しない';
+
+  @override
+  String get settingsCloseAccountExplanation => 'ほんとうにアカウントを停止しますか？　これは永久的な決定です。このアカウントには二度とログインできなくなります。';
+
+  @override
+  String get settingsThisAccountIsClosed => 'このアカウントは停止されました';
 
   @override
   String get playWithAFriend => '友達と対局する';
@@ -478,6 +1474,12 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get deleteFromHere => 'これ以降を削除';
+
+  @override
+  String get collapseVariations => '変化手順をかくす';
+
+  @override
+  String get expandVariations => '変化手順を表示する';
 
   @override
   String get forceVariation => '変化として表示';
@@ -1337,15 +2339,6 @@ class AppLocalizationsJa extends AppLocalizations {
   String get emptyTournamentName => '空白のままにしておくと、自動でランダムな有名選手の名前がつきます。';
 
   @override
-  String get recommendNotTouching => 'ここは触らないことを推奨します。';
-
-  @override
-  String get fewerPlayers => '参加条件を決めると、当然参加者は少なくなります。';
-
-  @override
-  String get showAdvancedSettings => '「高度な設定」を表示';
-
-  @override
   String get makePrivateTournament => 'トーナメントを「非公開」にすると参加にパスワードが必要になります';
 
   @override
@@ -1475,10 +2468,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get editProfile => 'プロフィールの編集';
 
   @override
-  String get firstName => '名';
-
-  @override
-  String get lastName => '姓';
+  String get realName => '実名';
 
   @override
   String get setFlair => 'フレアを設定';
@@ -1607,13 +2597,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get cheat => 'ソフト使用';
 
   @override
-  String get insult => '侮辱';
-
-  @override
   String get troll => '荒らし';
-
-  @override
-  String get ratingManipulation => 'レーティング不正操作';
 
   @override
   String get other => 'その他';
@@ -1720,6 +2704,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get outsideTheBoard => '盤の外';
+
+  @override
+  String get allSquaresOfTheBoard => 'すべてのマスに';
 
   @override
   String get onSlowGames => '長時間の対局のみ';
@@ -2315,22 +3302,22 @@ class AppLocalizationsJa extends AppLocalizations {
   String get backgroundImageUrl => '背景画像URL:';
 
   @override
-  String get board => 'Board';
+  String get board => '盤のデザイン';
 
   @override
-  String get size => 'Size';
+  String get size => 'サイズ';
 
   @override
-  String get opacity => 'Opacity';
+  String get opacity => '透明度';
 
   @override
-  String get brightness => 'Brightness';
+  String get brightness => '明るさ';
 
   @override
-  String get hue => 'Hue';
+  String get hue => '色';
 
   @override
-  String get boardReset => 'Reset colours to default';
+  String get boardReset => '色をデフォルトに戻す';
 
   @override
   String get pieceSet => '駒のデザイン';
@@ -3342,999 +4329,6 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String get patronDonate => '寄付';
-
-  @override
-  String get patronLichessPatron => 'Lichess パトロン';
-
-  @override
-  String get preferencesPreferences => '設定';
-
-  @override
-  String get preferencesDisplay => '表示';
-
-  @override
-  String get preferencesPrivacy => 'プライバシー';
-
-  @override
-  String get preferencesNotifications => '通知';
-
-  @override
-  String get preferencesPieceAnimation => '駒のアニメーション速度';
-
-  @override
-  String get preferencesMaterialDifference => '駒の損得';
-
-  @override
-  String get preferencesBoardHighlights => '盤上のハイライト表示（最後の手、チェック）';
-
-  @override
-  String get preferencesPieceDestinations => '駒の行き先（ルール上動けるマス、プリムーブ）';
-
-  @override
-  String get preferencesBoardCoordinates => 'マスの座標（A-H, 1-8）';
-
-  @override
-  String get preferencesMoveListWhilePlaying => 'プレイ中の棋譜記録';
-
-  @override
-  String get preferencesPgnPieceNotation => 'PGN 駒表示方法';
-
-  @override
-  String get preferencesChessPieceSymbol => 'チェス駒シンボル';
-
-  @override
-  String get preferencesPgnLetter => '文字（K, Q, R, B, N）';
-
-  @override
-  String get preferencesZenMode => '集中モード';
-
-  @override
-  String get preferencesShowPlayerRatings => 'レーティングを表示';
-
-  @override
-  String get preferencesShowFlairs => 'プレイヤーのフレアを表示';
-
-  @override
-  String get preferencesExplainShowPlayerRatings => 'Lichess 上のすべてのレーティングが非表示となり、集中しやすくなります。対局はレート戦のままで、変わるのは表示の有無だけです。';
-
-  @override
-  String get preferencesDisplayBoardResizeHandle => '盤サイズ変更マークを表示';
-
-  @override
-  String get preferencesOnlyOnInitialPosition => 'ゲーム開始時のみ';
-
-  @override
-  String get preferencesInGameOnly => '対局中のみ';
-
-  @override
-  String get preferencesChessClock => '時間表示';
-
-  @override
-  String get preferencesTenthsOfSeconds => '0.1秒単位で時間表示';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanTenSeconds => '持時間が残り10秒以下の場合';
-
-  @override
-  String get preferencesHorizontalGreenProgressBars => '緑の棒（プログレスバー）を表示';
-
-  @override
-  String get preferencesSoundWhenTimeGetsCritical => '時間が迫ってきたら音を鳴らす';
-
-  @override
-  String get preferencesGiveMoreTime => '相手に時間追加';
-
-  @override
-  String get preferencesGameBehavior => '対局中の動作';
-
-  @override
-  String get preferencesHowDoYouMovePieces => '駒の移動方法';
-
-  @override
-  String get preferencesClickTwoSquares => '2 つのマスをクリック';
-
-  @override
-  String get preferencesDragPiece => '駒をドラッグ';
-
-  @override
-  String get preferencesBothClicksAndDrag => 'どちらでも';
-
-  @override
-  String get preferencesPremovesPlayingDuringOpponentTurn => 'プリムーブ（相手の手番中に次の自分の手を入力する）';
-
-  @override
-  String get preferencesTakebacksWithOpponentApproval => '待ったあり（相手が同意すれば）';
-
-  @override
-  String get preferencesInCasualGamesOnly => '非レート戦のみ';
-
-  @override
-  String get preferencesPromoteToQueenAutomatically => '自動的にクイーンに昇格する';
-
-  @override
-  String get preferencesExplainPromoteToQueenAutomatically => '<ctrl> キーを押しながら昇格させると、Q への自動昇格を一時的に無効にできます';
-
-  @override
-  String get preferencesWhenPremoving => 'プリムーブをした場合';
-
-  @override
-  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => '同形三復を自動的にドローにする';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanThirtySeconds => '持時間が残り30秒以下の場合';
-
-  @override
-  String get preferencesMoveConfirmation => '着手をそのつど確認する';
-
-  @override
-  String get preferencesExplainCanThenBeTemporarilyDisabled => 'ボードのメニューからゲーム中に無効にできます';
-
-  @override
-  String get preferencesInCorrespondenceGames => '通信チェスのみ';
-
-  @override
-  String get preferencesCorrespondenceAndUnlimited => '通信戦と持時間無制限';
-
-  @override
-  String get preferencesConfirmResignationAndDrawOffers => '投了とドロー提案を確認する';
-
-  @override
-  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'キャスリングの入力';
-
-  @override
-  String get preferencesCastleByMovingTwoSquares => 'キングを 2 マス動かす';
-
-  @override
-  String get preferencesCastleByMovingOntoTheRook => 'キングをルークの上に動かす';
-
-  @override
-  String get preferencesInputMovesWithTheKeyboard => '手をキーボードで入力';
-
-  @override
-  String get preferencesInputMovesWithVoice => '手を声で入力';
-
-  @override
-  String get preferencesSnapArrowsToValidMoves => '可能な手を矢印で表示';
-
-  @override
-  String get preferencesSayGgWpAfterLosingOrDrawing => '負けかドローの際に「Good game, well played」と言う';
-
-  @override
-  String get preferencesYourPreferencesHaveBeenSaved => '設定が保存されました。';
-
-  @override
-  String get preferencesScrollOnTheBoardToReplayMoves => 'ボード上スクロールで手を再現';
-
-  @override
-  String get preferencesCorrespondenceEmailNotification => '通信戦の対局をリストにした毎日のメール通知';
-
-  @override
-  String get preferencesNotifyStreamStart => '配信を始めた時';
-
-  @override
-  String get preferencesNotifyInboxMsg => '新しい着信メッセージ';
-
-  @override
-  String get preferencesNotifyForumMention => 'フォーラムであなたの名前が出た時';
-
-  @override
-  String get preferencesNotifyInvitedStudy => '研究への招待';
-
-  @override
-  String get preferencesNotifyGameEvent => '通信戦の進行状況';
-
-  @override
-  String get preferencesNotifyChallenge => '挑戦が来た時';
-
-  @override
-  String get preferencesNotifyTournamentSoon => 'トーナメントが間もなく開始';
-
-  @override
-  String get preferencesNotifyTimeAlarm => '通信戦の時間切迫';
-
-  @override
-  String get preferencesNotifyBell => 'Lichess にいる時にベル音';
-
-  @override
-  String get preferencesNotifyPush => 'Lichess にいない時にデバイスでの通知';
-
-  @override
-  String get preferencesNotifyWeb => 'ブラウザ';
-
-  @override
-  String get preferencesNotifyDevice => 'デバイス';
-
-  @override
-  String get preferencesBellNotificationSound => 'ベル通知の音';
-
-  @override
-  String get puzzlePuzzles => 'タクティクス問題';
-
-  @override
-  String get puzzlePuzzleThemes => '問題のテーマ';
-
-  @override
-  String get puzzleRecommended => 'おすすめ';
-
-  @override
-  String get puzzlePhases => '序盤・中盤・終盤';
-
-  @override
-  String get puzzleMotifs => 'モチーフ';
-
-  @override
-  String get puzzleAdvanced => '上級';
-
-  @override
-  String get puzzleLengths => '手数';
-
-  @override
-  String get puzzleMates => 'メイト';
-
-  @override
-  String get puzzleGoals => '目標';
-
-  @override
-  String get puzzleOrigin => '出所';
-
-  @override
-  String get puzzleSpecialMoves => '特殊な手';
-
-  @override
-  String get puzzleDidYouLikeThisPuzzle => 'この問題は気に入りましたか？';
-
-  @override
-  String get puzzleVoteToLoadNextOne => '投票すると次を読み込みます！';
-
-  @override
-  String get puzzleUpVote => '上げ投票';
-
-  @override
-  String get puzzleDownVote => '下げ投票';
-
-  @override
-  String get puzzleYourPuzzleRatingWillNotChange => 'あなたのレーティングは動きません。タクティクス問題は競技ではありません。レーティングは今のあなたのスキルに見合った問題を選ぶのに役立ちます。';
-
-  @override
-  String get puzzleFindTheBestMoveForWhite => '白の最善手を見つけてください。';
-
-  @override
-  String get puzzleFindTheBestMoveForBlack => '黒の最善手を見つけてください。';
-
-  @override
-  String get puzzleToGetPersonalizedPuzzles => 'あなたに合わせた問題を解くには:';
-
-  @override
-  String puzzlePuzzleId(String param) {
-    return '問題番号 $param';
-  }
-
-  @override
-  String get puzzlePuzzleOfTheDay => '本日の問題';
-
-  @override
-  String get puzzleDailyPuzzle => '本日の問題';
-
-  @override
-  String get puzzleClickToSolve => '問題を解く';
-
-  @override
-  String get puzzleGoodMove => '好手';
-
-  @override
-  String get puzzleBestMove => '最善手！';
-
-  @override
-  String get puzzleKeepGoing => '続ける…';
-
-  @override
-  String get puzzlePuzzleSuccess => '成功！';
-
-  @override
-  String get puzzlePuzzleComplete => '問題終了！';
-
-  @override
-  String get puzzleByOpenings => 'オープニング別';
-
-  @override
-  String get puzzlePuzzlesByOpenings => 'オープニング別の問題';
-
-  @override
-  String get puzzleOpeningsYouPlayedTheMost => 'レート戦でもっともよく使ったオープニング';
-
-  @override
-  String get puzzleUseFindInPage => 'ブラウザのページ内検索（Ctrl+F）を使えばお好きなオープニングが探せます。';
-
-  @override
-  String get puzzleUseCtrlF => 'Ctrl+F を使えばお好きなオープニングが探せます。';
-
-  @override
-  String get puzzleNotTheMove => 'その手は違います！';
-
-  @override
-  String get puzzleTrySomethingElse => '別の手をどうぞ。';
-
-  @override
-  String puzzleRatingX(String param) {
-    return 'レーティング: $param';
-  }
-
-  @override
-  String get puzzleHidden => '非表示';
-
-  @override
-  String puzzleFromGameLink(String param) {
-    return 'ゲーム $param から';
-  }
-
-  @override
-  String get puzzleContinueTraining => 'トレーニングを続ける';
-
-  @override
-  String get puzzleDifficultyLevel => '難易度';
-
-  @override
-  String get puzzleNormal => '通常';
-
-  @override
-  String get puzzleEasier => '易しい';
-
-  @override
-  String get puzzleEasiest => '非常に易しい';
-
-  @override
-  String get puzzleHarder => '難しい';
-
-  @override
-  String get puzzleHardest => '非常に難しい';
-
-  @override
-  String get puzzleExample => '例';
-
-  @override
-  String get puzzleAddAnotherTheme => '別のテーマを追加';
-
-  @override
-  String get puzzleNextPuzzle => '次の問題';
-
-  @override
-  String get puzzleJumpToNextPuzzleImmediately => '解いたらすぐ次の問題を読み込む';
-
-  @override
-  String get puzzlePuzzleDashboard => '問題成績データ';
-
-  @override
-  String get puzzleImprovementAreas => '改善ポイント';
-
-  @override
-  String get puzzleStrengths => '得意テーマ';
-
-  @override
-  String get puzzleHistory => '解答履歴';
-
-  @override
-  String get puzzleSolved => '正解';
-
-  @override
-  String get puzzleFailed => '失敗';
-
-  @override
-  String get puzzleStreakDescription => 'だんだん難しくなる問題に連続正解してください。時間制限はないのでじっくりとどうぞ。1 手間違えると終了です！　ただし途中 1 手だけ飛ばすことができます。';
-
-  @override
-  String puzzleYourStreakX(String param) {
-    return '連続正解：$param';
-  }
-
-  @override
-  String get puzzleStreakSkipExplanation => '手を飛ばすことで連続正解が続きます！ 1 回だけ有効。';
-
-  @override
-  String get puzzleContinueTheStreak => '連続正解を続ける';
-
-  @override
-  String get puzzleNewStreak => '新たなストリーク';
-
-  @override
-  String get puzzleFromMyGames => '自分のゲームから';
-
-  @override
-  String get puzzleLookupOfPlayer => 'ある人の対局から取った問題を検索';
-
-  @override
-  String puzzleFromXGames(String param) {
-    return '$param の対局からの問題';
-  }
-
-  @override
-  String get puzzleSearchPuzzles => '問題を検索';
-
-  @override
-  String get puzzleFromMyGamesNone => 'あなたの対局からの問題はまだありませんが、Lichess はあなたの参加を歓迎します。自分の対局が使われる可能性を増やすには、ラピッドかクラシカルでプレイしてください！';
-
-  @override
-  String puzzleFromXGamesFound(String param1, String param2) {
-    return '$param1 問がヒット（全 $param2 局中）';
-  }
-
-  @override
-  String get puzzlePuzzleDashboardDescription => '練習、分析、上達';
-
-  @override
-  String puzzlePercentSolved(String param) {
-    return '$param に正解';
-  }
-
-  @override
-  String get puzzleNoPuzzlesToShow => 'データがありません、まず問題をプレイしてから！';
-
-  @override
-  String get puzzleImprovementAreasDescription => 'ここのテーマを練習して前進！';
-
-  @override
-  String get puzzleStrengthDescription => 'これらのテーマで好成績でした';
-
-  @override
-  String puzzlePlayedXTimes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count 回プレイ',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsBelowYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'あなたのレーティングより $count 点下',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsAboveYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'あなたのレーティングより $count 点上',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPlayed(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count 問をプレイ',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbToReplay(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count 再挑戦',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get puzzleThemeAdvancedPawn => '進んだポーン';
-
-  @override
-  String get puzzleThemeAdvancedPawnDescription => 'ポーンの昇格かその狙いがテーマの問題。';
-
-  @override
-  String get puzzleThemeAdvantage => '優位';
-
-  @override
-  String get puzzleThemeAdvantageDescription => '決定的な優位を得てください。（評価値は 200cp 以上 600cp 以下）';
-
-  @override
-  String get puzzleThemeAnastasiaMate => 'アナスタシアのメイト';
-
-  @override
-  String get puzzleThemeAnastasiaMateDescription => '盤端と味方の駒にはさまれたキングを、ナイトとルーク（またはクイーン）でメイトする形。';
-
-  @override
-  String get puzzleThemeArabianMate => 'アラビアのメイト';
-
-  @override
-  String get puzzleThemeArabianMateDescription => '盤の隅にいるキングを、ナイトとルークでメイトする形。';
-
-  @override
-  String get puzzleThemeAttackingF2F7 => 'f2/f7への攻撃';
-
-  @override
-  String get puzzleThemeAttackingF2F7Description => 'f2 か f7 のポーンを狙う攻撃（フライド・リバー・アタックなど）。';
-
-  @override
-  String get puzzleThemeAttraction => 'アトラクション（引き寄せ）';
-
-  @override
-  String get puzzleThemeAttractionDescription => '交換か捨て駒によって相手の駒を不利なマスに誘い込む。';
-
-  @override
-  String get puzzleThemeBackRankMate => 'バックランク・メイト';
-
-  @override
-  String get puzzleThemeBackRankMateDescription => '一番下のランクで、上を自分の駒に塞がれたキングをメイトする。';
-
-  @override
-  String get puzzleThemeBishopEndgame => 'ビショップ・エンドゲーム';
-
-  @override
-  String get puzzleThemeBishopEndgameDescription => 'ビショップとポーンだけの終盤。';
-
-  @override
-  String get puzzleThemeBodenMate => 'ボーデンのメイト';
-
-  @override
-  String get puzzleThemeBodenMateDescription => '味方の駒にじゃまされたキングを、2 個のビショップが交差した効き筋でメイトする形。';
-
-  @override
-  String get puzzleThemeCastling => 'キャスリング';
-
-  @override
-  String get puzzleThemeCastlingDescription => 'キングを安全にし、ルークを攻撃に活用する。';
-
-  @override
-  String get puzzleThemeCapturingDefender => '守り駒の除去';
-
-  @override
-  String get puzzleThemeCapturingDefenderDescription => '別の駒を守っている駒を消して、無防備になった駒を取る。';
-
-  @override
-  String get puzzleThemeCrushing => '圧倒';
-
-  @override
-  String get puzzleThemeCrushingDescription => '相手の悪手をとがめて圧倒的な優位を築きます。（評価値は 600cp 以上）';
-
-  @override
-  String get puzzleThemeDoubleBishopMate => 'ダブル・ビショップのメイト';
-
-  @override
-  String get puzzleThemeDoubleBishopMateDescription => '味方の駒にじゃまされたキングを、2 個のビショップが平行な効き筋でメイトする形。';
-
-  @override
-  String get puzzleThemeDovetailMate => '燕尾のメイト';
-
-  @override
-  String get puzzleThemeDovetailMateDescription => '斜め後ろを両方とも味方の駒に塞がれたキングを、クイーン1個でメイトする形。';
-
-  @override
-  String get puzzleThemeEquality => '互角';
-
-  @override
-  String get puzzleThemeEqualityDescription => '劣勢の局面から、ドローを確保するか互角の局面に戻します。（評価値は 200cp 以下）';
-
-  @override
-  String get puzzleThemeKingsideAttack => 'キングサイド攻撃';
-
-  @override
-  String get puzzleThemeKingsideAttackDescription => 'キングサイドにキャスリングした相手のキングを攻撃する。';
-
-  @override
-  String get puzzleThemeClearance => 'クリアランス（解放）';
-
-  @override
-  String get puzzleThemeClearanceDescription => '次のタクティクスのためにマス、ファイル、斜線を開く手（先手であることが多い）。';
-
-  @override
-  String get puzzleThemeDefensiveMove => '守り';
-
-  @override
-  String get puzzleThemeDefensiveMoveDescription => '駒損などの不利を避けるために必要な正確な手または手順。';
-
-  @override
-  String get puzzleThemeDeflection => 'ディフレクション（そらし）';
-
-  @override
-  String get puzzleThemeDeflectionDescription => '相手の駒を別の役割（重要なマスを守るなど）からそらす手。';
-
-  @override
-  String get puzzleThemeDiscoveredAttack => 'ディスカバード・アタック';
-
-  @override
-  String get puzzleThemeDiscoveredAttackDescription => '別のラインピースの効きを止めていた駒を動かす手。たとえばルークの効き筋からナイトを動かす。';
-
-  @override
-  String get puzzleThemeDoubleCheck => 'ダブル・チェック';
-
-  @override
-  String get puzzleThemeDoubleCheckDescription => 'ディスカバード・アタックによって、動いた駒とラインピースが相手のキングに同時にチェックをかける手。';
-
-  @override
-  String get puzzleThemeEndgame => 'エンドゲーム';
-
-  @override
-  String get puzzleThemeEndgameDescription => 'ゲームの終盤でのタクティクス。';
-
-  @override
-  String get puzzleThemeEnPassantDescription => 'アンパッサン、つまり相手の 2 マス前進したポーンを途中で取る手を含むタクティクス。';
-
-  @override
-  String get puzzleThemeExposedKing => '危険なキング';
-
-  @override
-  String get puzzleThemeExposedKingDescription => '守り駒の少ないキングを攻める問題、多くの場合メイトにつながる。';
-
-  @override
-  String get puzzleThemeFork => 'フォーク（両取り）';
-
-  @override
-  String get puzzleThemeForkDescription => '動いた駒が相手の 2 つの駒を同時に攻撃する手。';
-
-  @override
-  String get puzzleThemeHangingPiece => '浮き駒';
-
-  @override
-  String get puzzleThemeHangingPieceDescription => '守りのない駒、または守り駒の足りない駒をただで取る問題。';
-
-  @override
-  String get puzzleThemeHookMate => '釣り針のメイト';
-
-  @override
-  String get puzzleThemeHookMateDescription => 'ポーンの隣にいるキングを、ルーク、ナイト、ポーンでメイトする形。';
-
-  @override
-  String get puzzleThemeInterference => 'インターフェア（干渉）';
-
-  @override
-  String get puzzleThemeInterferenceDescription => '相手の 2 つの駒の間に駒を入れて浮き駒を作る問題。相手の 2 個のルークの間に守られたナイトを入れる、など。';
-
-  @override
-  String get puzzleThemeIntermezzo => 'ツヴィッシェンツーク（利かし）';
-
-  @override
-  String get puzzleThemeIntermezzoDescription => '当然に見える手を指す代わりに、いったん相手が受けざるを得ない別の手をはさむ問題。';
-
-  @override
-  String get puzzleThemeKnightEndgame => 'ナイト・エンドゲーム';
-
-  @override
-  String get puzzleThemeKnightEndgameDescription => 'ナイトとポーンだけの終盤。';
-
-  @override
-  String get puzzleThemeLong => '長手数問題';
-
-  @override
-  String get puzzleThemeLongDescription => '3 手で勝ちになります。';
-
-  @override
-  String get puzzleThemeMaster => 'マスターのゲーム';
-
-  @override
-  String get puzzleThemeMasterDescription => 'タイトル保持者の対局から採った問題。';
-
-  @override
-  String get puzzleThemeMasterVsMaster => 'マスター同士のゲーム';
-
-  @override
-  String get puzzleThemeMasterVsMasterDescription => '双方がタイトル保持者の対局から採った問題。';
-
-  @override
-  String get puzzleThemeMate => 'メイト';
-
-  @override
-  String get puzzleThemeMateDescription => 'きれいに勝ちを決める。';
-
-  @override
-  String get puzzleThemeMateIn1 => '1 手メイト';
-
-  @override
-  String get puzzleThemeMateIn1Description => '1 手でチェックメイトにします。';
-
-  @override
-  String get puzzleThemeMateIn2 => '2 手メイト';
-
-  @override
-  String get puzzleThemeMateIn2Description => '2 手でチェックメイトにします。';
-
-  @override
-  String get puzzleThemeMateIn3 => '3 手メイト';
-
-  @override
-  String get puzzleThemeMateIn3Description => '3 手でチェックメイトにします。';
-
-  @override
-  String get puzzleThemeMateIn4 => '4 手メイト';
-
-  @override
-  String get puzzleThemeMateIn4Description => '4 手でチェックメイトにします。';
-
-  @override
-  String get puzzleThemeMateIn5 => '5 手以上メイト';
-
-  @override
-  String get puzzleThemeMateIn5Description => '長いメイトの手順を考える。';
-
-  @override
-  String get puzzleThemeMiddlegame => 'ミドルゲーム';
-
-  @override
-  String get puzzleThemeMiddlegameDescription => 'ゲームの中盤でのタクティクス。';
-
-  @override
-  String get puzzleThemeOneMove => '1 手問題';
-
-  @override
-  String get puzzleThemeOneMoveDescription => '1 手だけ動かす問題。';
-
-  @override
-  String get puzzleThemeOpening => 'オープニング';
-
-  @override
-  String get puzzleThemeOpeningDescription => 'ゲームの序盤でのタクティクス。';
-
-  @override
-  String get puzzleThemePawnEndgame => 'ポーン・エンドゲーム';
-
-  @override
-  String get puzzleThemePawnEndgameDescription => 'ポーンだけの終盤。';
-
-  @override
-  String get puzzleThemePin => 'ピン';
-
-  @override
-  String get puzzleThemePinDescription => 'ピンを含む問題。ラインピースに狙われた駒が動くと、より価値の高い駒が取られてしまう状況。';
-
-  @override
-  String get puzzleThemePromotion => 'プロモーション';
-
-  @override
-  String get puzzleThemePromotionDescription => 'ポーンの昇格かその狙いがテーマの問題。';
-
-  @override
-  String get puzzleThemeQueenEndgame => 'クイーン・エンドゲーム';
-
-  @override
-  String get puzzleThemeQueenEndgameDescription => 'クイーンとポーンだけの終盤。';
-
-  @override
-  String get puzzleThemeQueenRookEndgame => 'クイーンとルーク';
-
-  @override
-  String get puzzleThemeQueenRookEndgameDescription => 'クイーン、ルーク、ポーンだけの終盤。';
-
-  @override
-  String get puzzleThemeQueensideAttack => 'クイーンサイド攻撃';
-
-  @override
-  String get puzzleThemeQueensideAttackDescription => 'クイーンサイドにキャスリングした相手のキングを攻撃する。';
-
-  @override
-  String get puzzleThemeQuietMove => '静かな手';
-
-  @override
-  String get puzzleThemeQuietMoveDescription => 'チェックでも駒取りでもないが、次に防げない狙いを用意する手。';
-
-  @override
-  String get puzzleThemeRookEndgame => 'ルーク・エンドゲーム';
-
-  @override
-  String get puzzleThemeRookEndgameDescription => 'ルークとポーンだけの終盤。';
-
-  @override
-  String get puzzleThemeSacrifice => 'サクリファイス（捨て駒）';
-
-  @override
-  String get puzzleThemeSacrificeDescription => '短期的な駒損を含み、強制的な手順の後に優位を築く問題。';
-
-  @override
-  String get puzzleThemeShort => '短手数問題';
-
-  @override
-  String get puzzleThemeShortDescription => '2 手で勝ちになります。';
-
-  @override
-  String get puzzleThemeSkewer => 'スキュアー（串刺し）';
-
-  @override
-  String get puzzleThemeSkewerDescription => 'ラインピースで価値の高い駒を攻撃し、それが逃げた後で背後にある価値の低い駒を取るタクティクス。ピンの裏返し。';
-
-  @override
-  String get puzzleThemeSmotheredMate => 'スマザード・メイト';
-
-  @override
-  String get puzzleThemeSmotheredMateDescription => 'キングが味方の駒に囲まれて動けない時（スマザー＝窒息している時）に、ナイト 1 個でかけるメイト。';
-
-  @override
-  String get puzzleThemeSuperGM => 'スーパー GM の対局';
-
-  @override
-  String get puzzleThemeSuperGMDescription => '世界の一流選手の対局から採った問題。';
-
-  @override
-  String get puzzleThemeTrappedPiece => '敵駒を殺す';
-
-  @override
-  String get puzzleThemeTrappedPieceDescription => '相手の駒の動きを制限して、逃げられない状態にする問題。';
-
-  @override
-  String get puzzleThemeUnderPromotion => 'アンダープロモーション';
-
-  @override
-  String get puzzleThemeUnderPromotionDescription => 'ナイト、ビショップ、ルークへの昇格。';
-
-  @override
-  String get puzzleThemeVeryLong => '超長手数問題';
-
-  @override
-  String get puzzleThemeVeryLongDescription => '4 手以上で勝ちになります。';
-
-  @override
-  String get puzzleThemeXRayAttack => 'Ｘ線攻撃';
-
-  @override
-  String get puzzleThemeXRayAttackDescription => '相手の駒の向こうにあるマスを間接的に攻撃（または防御）する。';
-
-  @override
-  String get puzzleThemeZugzwang => 'ツークツワンク';
-
-  @override
-  String get puzzleThemeZugzwangDescription => '相手の指せる手が、どれを選んでも局面を悪くしてしまう形。';
-
-  @override
-  String get puzzleThemeHealthyMix => '混合';
-
-  @override
-  String get puzzleThemeHealthyMixDescription => 'いろいろな問題を少しずつ。どんな問題が来るかわからないので油断しないで！　実戦と同じです。';
-
-  @override
-  String get puzzleThemePlayerGames => 'プレイヤーの対局';
-
-  @override
-  String get puzzleThemePlayerGamesDescription => '自分の対局、他のプレイヤーの対局から取られた問題を検索します。';
-
-  @override
-  String puzzleThemePuzzleDownloadInformation(String param) {
-    return 'これらの問題はパブリックドメインにあり、$param でダウンロードできます。';
-  }
-
-  @override
-  String perfStatPerfStats(String param) {
-    return '$param の統計';
-  }
-
-  @override
-  String get perfStatViewTheGames => '対局を表示';
-
-  @override
-  String get perfStatProvisional => '仮定';
-
-  @override
-  String get perfStatNotEnoughRatedGames => 'レート戦が少なすぎて信頼できるレーティングが算出できません。';
-
-  @override
-  String perfStatProgressOverLastXGames(String param) {
-    return '過去 $param 戦での変動：';
-  }
-
-  @override
-  String perfStatRatingDeviation(String param) {
-    return 'レーティング偏差：$param';
-  }
-
-  @override
-  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
-    return '数字が小さいほどレーティングが安定していることになります。$param1 を超えていると暫定レーティングとなります。ランキング入りするにはこの数字が $param2 未満（通常ルール）か $param3 未満（バリアント）でなくてはなりません。';
-  }
-
-  @override
-  String get perfStatTotalGames => '総局数';
-
-  @override
-  String get perfStatRatedGames => 'レート戦局数';
-
-  @override
-  String get perfStatTournamentGames => 'トーナメント対局数';
-
-  @override
-  String get perfStatBerserkedGames => 'バーサーク局数';
-
-  @override
-  String get perfStatTimeSpentPlaying => '総プレイ時間';
-
-  @override
-  String get perfStatAverageOpponent => '対局相手の平均';
-
-  @override
-  String get perfStatVictories => '勝ち';
-
-  @override
-  String get perfStatDefeats => '負け';
-
-  @override
-  String get perfStatDisconnections => '接続切れ';
-
-  @override
-  String get perfStatNotEnoughGames => '対局数が不十分';
-
-  @override
-  String perfStatHighestRating(String param) {
-    return '最高レーティング：$param';
-  }
-
-  @override
-  String perfStatLowestRating(String param) {
-    return '最低レーティング：$param';
-  }
-
-  @override
-  String perfStatFromXToY(String param1, String param2) {
-    return '$param1 から $param2 まで';
-  }
-
-  @override
-  String get perfStatWinningStreak => '連勝';
-
-  @override
-  String get perfStatLosingStreak => '連敗';
-
-  @override
-  String perfStatLongestStreak(String param) {
-    return '最長：$param';
-  }
-
-  @override
-  String perfStatCurrentStreak(String param) {
-    return '現在：$param';
-  }
-
-  @override
-  String get perfStatBestRated => '勝った相手の最高';
-
-  @override
-  String get perfStatGamesInARow => '連続対局数';
-
-  @override
-  String get perfStatLessThanOneHour => 'ゲーム間隔 1 時間以内';
-
-  @override
-  String get perfStatMaxTimePlaying => '最長連続プレイ時間';
-
-  @override
-  String get perfStatNow => '現在';
-
-  @override
-  String get searchSearch => '検索';
-
-  @override
-  String get settingsSettings => '設定';
-
-  @override
-  String get settingsCloseAccount => 'アカウント停止';
-
-  @override
-  String get settingsManagedAccountCannotBeClosed => 'あなたのアカウントは別の人が管理しており、自分では停止できません。';
-
-  @override
-  String get settingsClosingIsDefinitive => 'アカウント停止は不可逆で、元には戻せません。ほんとうに停止しますか？';
-
-  @override
-  String get settingsCantOpenSimilarAccount => '同じ名前（大文字・小文字が違っていても）で別のアカウントを作ることもできません。';
-
-  @override
-  String get settingsChangedMindDoNotCloseAccount => '気が変わったのでアカウントを停止しない';
-
-  @override
-  String get settingsCloseAccountExplanation => 'ほんとうにアカウントを停止しますか？　これは永久的な決定です。このアカウントには二度とログインできなくなります。';
-
-  @override
-  String get settingsThisAccountIsClosed => 'このアカウントは停止されました';
-
-  @override
-  String get streamerLichessStreamers => 'Lichess 配信者';
-
-  @override
   String get stormMoveToStart => '一手指すとスタート';
 
   @override
@@ -4514,14 +4508,11 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String get streamerLichessStreamers => 'Lichess 配信者';
+
+  @override
   String get studyShareAndExport => '共有とエクスポート';
 
   @override
   String get studyStart => '開始';
-
-  @override
-  String get broadcastBroadcasts => 'イベント中継';
-
-  @override
-  String get broadcastStartDate => '開始日付（あなたの現地時間）';
 }

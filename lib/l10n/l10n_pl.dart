@@ -259,10 +259,10 @@ class AppLocalizationsPl extends AppLocalizations {
   }
 
   @override
-  String get contactContact => 'Kontakt';
+  String get broadcastBroadcasts => 'Transmisje';
 
   @override
-  String get contactContactLichess => 'Skontaktuj się z Lichess';
+  String get broadcastStartDate => 'Data rozpoczęcia wydarzenia w Twojej strefie czasowej';
 
   @override
   String challengeChallengesX(String param1) {
@@ -344,6 +344,1022 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get challengeInviteLichessUser => 'Lub zaproś użytkownika Lichess:';
+
+  @override
+  String get contactContact => 'Kontakt';
+
+  @override
+  String get contactContactLichess => 'Skontaktuj się z Lichess';
+
+  @override
+  String get patronDonate => 'Przekaż datek';
+
+  @override
+  String get patronLichessPatron => 'Patron Lichess';
+
+  @override
+  String perfStatPerfStats(String param) {
+    return 'Statystyki dla $param';
+  }
+
+  @override
+  String get perfStatViewTheGames => 'Zobacz partie';
+
+  @override
+  String get perfStatProvisional => 'prowizoryczny';
+
+  @override
+  String get perfStatNotEnoughRatedGames => 'Nie zagrano wystarczająco dużo rankingowych gier, aby ustalić wiarygodną ranking.';
+
+  @override
+  String perfStatProgressOverLastXGames(String param) {
+    return 'Postęp w ostatnich $param partiach:';
+  }
+
+  @override
+  String perfStatRatingDeviation(String param) {
+    return 'Odchylenie rankingu: $param.';
+  }
+
+  @override
+  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
+    return 'Niższa wartość oznacza, że ranking jest bardziej stabilny. Powyżej $param1, ranking jest uważany za tymczasowy. Aby znaleźć się na listach rankingowych, wartość ta powinna być niższa niż $param2 (standardowe szachy) lub $param3 (warianty).';
+  }
+
+  @override
+  String get perfStatTotalGames => 'Wszystkie partie';
+
+  @override
+  String get perfStatRatedGames => 'Partie rankingowe';
+
+  @override
+  String get perfStatTournamentGames => 'Partie turniejowe';
+
+  @override
+  String get perfStatBerserkedGames => 'Partie z berserkiem';
+
+  @override
+  String get perfStatTimeSpentPlaying => 'Czas spędzony na grze';
+
+  @override
+  String get perfStatAverageOpponent => 'Średni ranking przeciwnika';
+
+  @override
+  String get perfStatVictories => 'Zwycięstwa';
+
+  @override
+  String get perfStatDefeats => 'Porażki';
+
+  @override
+  String get perfStatDisconnections => 'Rozłączania';
+
+  @override
+  String get perfStatNotEnoughGames => 'Za mało rozegranych partii';
+
+  @override
+  String perfStatHighestRating(String param) {
+    return 'Najwyższy ranking: $param';
+  }
+
+  @override
+  String perfStatLowestRating(String param) {
+    return 'Najniższy ranking: $param';
+  }
+
+  @override
+  String perfStatFromXToY(String param1, String param2) {
+    return 'od $param1 do $param2';
+  }
+
+  @override
+  String get perfStatWinningStreak => 'Seria zwycięstw';
+
+  @override
+  String get perfStatLosingStreak => 'Seria porażek';
+
+  @override
+  String perfStatLongestStreak(String param) {
+    return 'Najdłuższa seria: $param';
+  }
+
+  @override
+  String perfStatCurrentStreak(String param) {
+    return 'Bieżąca seria: $param';
+  }
+
+  @override
+  String get perfStatBestRated => 'Najlepsze zwycięstwa';
+
+  @override
+  String get perfStatGamesInARow => 'Gry rozegrane z rzędu';
+
+  @override
+  String get perfStatLessThanOneHour => 'Mniej niż jedna godzina pomiędzy grami';
+
+  @override
+  String get perfStatMaxTimePlaying => 'Maksymalny czas spędzony na grze';
+
+  @override
+  String get perfStatNow => 'teraz';
+
+  @override
+  String get preferencesPreferences => 'Ustawienia';
+
+  @override
+  String get preferencesDisplay => 'Wyświetlanie';
+
+  @override
+  String get preferencesPrivacy => 'Prywatność';
+
+  @override
+  String get preferencesNotifications => 'Powiadomienia';
+
+  @override
+  String get preferencesPieceAnimation => 'Animacja ruchu bierek';
+
+  @override
+  String get preferencesMaterialDifference => 'Przewaga materialna';
+
+  @override
+  String get preferencesBoardHighlights => 'Wyróżnienie pól szachownicy (ostatni ruch i szach)';
+
+  @override
+  String get preferencesPieceDestinations => 'Pola docelowe (ruchy poprawne i planowane)';
+
+  @override
+  String get preferencesBoardCoordinates => 'Współrzędne pól (a-h, 1-8)';
+
+  @override
+  String get preferencesMoveListWhilePlaying => 'Lista ruchów podczas partii';
+
+  @override
+  String get preferencesPgnPieceNotation => 'Notacja ruchów';
+
+  @override
+  String get preferencesChessPieceSymbol => 'Za pomocą symboli figur';
+
+  @override
+  String get preferencesPgnLetter => 'Litery (K, Q, R, B, N)';
+
+  @override
+  String get preferencesZenMode => 'Tryb Zen';
+
+  @override
+  String get preferencesShowPlayerRatings => 'Pokaż rankingi gracza';
+
+  @override
+  String get preferencesShowFlairs => 'Pokaż emblematy graczy';
+
+  @override
+  String get preferencesExplainShowPlayerRatings => 'Ukrywa wszystkie rankingi na stronie internetowej, aby pomóc skupić się na grze. Partie nadal mogą być oceniane, opcja ukrywa tylko widok rankingu.';
+
+  @override
+  String get preferencesDisplayBoardResizeHandle => 'Pokaż uchwyt od zmiany rozmiaru szachownicy';
+
+  @override
+  String get preferencesOnlyOnInitialPosition => 'Tylko w pozycji początkowej';
+
+  @override
+  String get preferencesInGameOnly => 'Tylko w partii';
+
+  @override
+  String get preferencesChessClock => 'Zegar szachowy';
+
+  @override
+  String get preferencesTenthsOfSeconds => 'Dziesiąte części sekundy';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'Kiedy na zegarze jest mniej niż 10 sekund';
+
+  @override
+  String get preferencesHorizontalGreenProgressBars => 'Poziomy zielony pasek czasu';
+
+  @override
+  String get preferencesSoundWhenTimeGetsCritical => 'Powiadom dźwiękiem przy niedoczasie';
+
+  @override
+  String get preferencesGiveMoreTime => 'Dodaj więcej czasu';
+
+  @override
+  String get preferencesGameBehavior => 'Zachowanie gry';
+
+  @override
+  String get preferencesHowDoYouMovePieces => 'W jaki sposób wykonywać ruch?';
+
+  @override
+  String get preferencesClickTwoSquares => 'Klikając dwa pola';
+
+  @override
+  String get preferencesDragPiece => 'Przeciągając figurę';
+
+  @override
+  String get preferencesBothClicksAndDrag => 'Na oba sposoby';
+
+  @override
+  String get preferencesPremovesPlayingDuringOpponentTurn => 'Ruch planowany (podczas ruchu przeciwnika)';
+
+  @override
+  String get preferencesTakebacksWithOpponentApproval => 'Cofanie ruchów (za zgodą przeciwnika)';
+
+  @override
+  String get preferencesInCasualGamesOnly => 'Tylko w grach towarzyskich';
+
+  @override
+  String get preferencesPromoteToQueenAutomatically => 'Automatyczna promocja na hetmana';
+
+  @override
+  String get preferencesExplainPromoteToQueenAutomatically => 'Przytrzymaj klawisz <ctrl> podczas promocji pionka, aby tymczasowo wyłączyć automatyczną przemianę w hetmana';
+
+  @override
+  String get preferencesWhenPremoving => 'W czasie ruchu planowanego';
+
+  @override
+  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Automatyczny remis po trzykrotnym powtórzeniu pozycji';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Kiedy pozostało mniej niż 30 sekund';
+
+  @override
+  String get preferencesMoveConfirmation => 'Potwierdzenie ruchu';
+
+  @override
+  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Może być wyłączony podczas partii z menu';
+
+  @override
+  String get preferencesInCorrespondenceGames => 'W grze korespondencyjnej';
+
+  @override
+  String get preferencesCorrespondenceAndUnlimited => 'Korespondencyjne i bez limitu czasu';
+
+  @override
+  String get preferencesConfirmResignationAndDrawOffers => 'Potwierdzaj poddanie się i wysłanie propozycji remisu';
+
+  @override
+  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Sposób roszowania';
+
+  @override
+  String get preferencesCastleByMovingTwoSquares => 'Ruch królem o dwa pola';
+
+  @override
+  String get preferencesCastleByMovingOntoTheRook => 'Ruch królem na wieżę';
+
+  @override
+  String get preferencesInputMovesWithTheKeyboard => 'Wprowadzaj ruchy za pomocą klawiatury';
+
+  @override
+  String get preferencesInputMovesWithVoice => 'Wykonywanie posunięć za pomocą głosu';
+
+  @override
+  String get preferencesSnapArrowsToValidMoves => 'Wyrównuj strzałki do legalnych ruchów';
+
+  @override
+  String get preferencesSayGgWpAfterLosingOrDrawing => 'Napisz \"Good game, well played\" po przegranej lub remisie';
+
+  @override
+  String get preferencesYourPreferencesHaveBeenSaved => 'Twoje ustawienia zostały zapisane.';
+
+  @override
+  String get preferencesScrollOnTheBoardToReplayMoves => 'Przewiń myszką, aby powtórzyć ruchy';
+
+  @override
+  String get preferencesCorrespondenceEmailNotification => 'Codzienne powiadomienia mailowe z listą Twoich partii korespondencyjnych';
+
+  @override
+  String get preferencesNotifyStreamStart => 'Streamer jest na żywo';
+
+  @override
+  String get preferencesNotifyInboxMsg => 'Nowa wiadomość';
+
+  @override
+  String get preferencesNotifyForumMention => 'Wspomniano o Tobie w komentarzu na forum';
+
+  @override
+  String get preferencesNotifyInvitedStudy => 'Zaproszenie do wspólnego opracowania';
+
+  @override
+  String get preferencesNotifyGameEvent => 'Zdarzenie w partii korespondencyjnej';
+
+  @override
+  String get preferencesNotifyChallenge => 'Wyzwania';
+
+  @override
+  String get preferencesNotifyTournamentSoon => 'Turniej rozpocznie się wkrótce';
+
+  @override
+  String get preferencesNotifyTimeAlarm => 'Czas w partii korespondencyjnej dobiega końca';
+
+  @override
+  String get preferencesNotifyBell => 'Powiadomienie dźwiękowe gdy jesteś na Lichess';
+
+  @override
+  String get preferencesNotifyPush => 'Powiadomienie na urządzenie, gdy nie jesteś na Lichess';
+
+  @override
+  String get preferencesNotifyWeb => 'Przeglądarka';
+
+  @override
+  String get preferencesNotifyDevice => 'Urządzenie';
+
+  @override
+  String get preferencesBellNotificationSound => 'Dźwięk powiadomień';
+
+  @override
+  String get puzzlePuzzles => 'Zadania szachowe';
+
+  @override
+  String get puzzlePuzzleThemes => 'Motywy zadań';
+
+  @override
+  String get puzzleRecommended => 'Polecane';
+
+  @override
+  String get puzzlePhases => 'Faza gry';
+
+  @override
+  String get puzzleMotifs => 'Motyw';
+
+  @override
+  String get puzzleAdvanced => 'Zaawansowane';
+
+  @override
+  String get puzzleLengths => 'Długość zadania';
+
+  @override
+  String get puzzleMates => 'Maty';
+
+  @override
+  String get puzzleGoals => 'Cele';
+
+  @override
+  String get puzzleOrigin => 'Źródło';
+
+  @override
+  String get puzzleSpecialMoves => 'Szczególne posunięcia';
+
+  @override
+  String get puzzleDidYouLikeThisPuzzle => 'Czy podobało Ci się to zadanie?';
+
+  @override
+  String get puzzleVoteToLoadNextOne => 'Zagłosuj, by wczytać następny!';
+
+  @override
+  String get puzzleUpVote => 'Daj plusa zadaniu';
+
+  @override
+  String get puzzleDownVote => 'Daj minusa zadaniu';
+
+  @override
+  String get puzzleYourPuzzleRatingWillNotChange => 'Twój ranking w rozwiązywaniu zadań nie ulegnie zmianie. Pamiętaj, że zadania nie są rywalizacją. Twój ranking pomaga wybrać najlepsze zadania dla Twoich aktualnych umiejętności.';
+
+  @override
+  String get puzzleFindTheBestMoveForWhite => 'Znajdź najlepszy ruch dla białych.';
+
+  @override
+  String get puzzleFindTheBestMoveForBlack => 'Znajdź najlepszy ruch dla czarnych.';
+
+  @override
+  String get puzzleToGetPersonalizedPuzzles => 'Aby uzyskać spersonalizowane zadania:';
+
+  @override
+  String puzzlePuzzleId(String param) {
+    return 'Zadanie $param';
+  }
+
+  @override
+  String get puzzlePuzzleOfTheDay => 'Zadanie dnia';
+
+  @override
+  String get puzzleDailyPuzzle => 'Zadanie dnia';
+
+  @override
+  String get puzzleClickToSolve => 'Kliknij, aby zobaczyć rozwiązanie';
+
+  @override
+  String get puzzleGoodMove => 'Dobry ruch';
+
+  @override
+  String get puzzleBestMove => 'Najlepszy ruch!';
+
+  @override
+  String get puzzleKeepGoing => 'Kontynuuj…';
+
+  @override
+  String get puzzlePuzzleSuccess => 'Sukces!';
+
+  @override
+  String get puzzlePuzzleComplete => 'Zadanie zakończone!';
+
+  @override
+  String get puzzleByOpenings => 'Według otwarć';
+
+  @override
+  String get puzzlePuzzlesByOpenings => 'Zadania według otwarć';
+
+  @override
+  String get puzzleOpeningsYouPlayedTheMost => 'Najczęściej grane otwarcia w partiach rankingowych';
+
+  @override
+  String get puzzleUseFindInPage => 'Użyj \"Znajdź na stronie\" w menu przeglądarki, aby znaleźć swoje ulubione otwarcie!';
+
+  @override
+  String get puzzleUseCtrlF => 'Użyj Ctrl+f, aby znaleźć swoje ulubione otwarcie!';
+
+  @override
+  String get puzzleNotTheMove => 'To nie jest właściwy ruch!';
+
+  @override
+  String get puzzleTrySomethingElse => 'Spróbuj czegoś innego.';
+
+  @override
+  String puzzleRatingX(String param) {
+    return 'Ranking: $param';
+  }
+
+  @override
+  String get puzzleHidden => 'ukryty';
+
+  @override
+  String puzzleFromGameLink(String param) {
+    return 'Z partii $param';
+  }
+
+  @override
+  String get puzzleContinueTraining => 'Kontynuuj trening';
+
+  @override
+  String get puzzleDifficultyLevel => 'Poziom trudności';
+
+  @override
+  String get puzzleNormal => 'Normalny';
+
+  @override
+  String get puzzleEasier => 'Łatwy';
+
+  @override
+  String get puzzleEasiest => 'Bardzo łatwy';
+
+  @override
+  String get puzzleHarder => 'Trudny';
+
+  @override
+  String get puzzleHardest => 'Bardzo trudny';
+
+  @override
+  String get puzzleExample => 'Przykład';
+
+  @override
+  String get puzzleAddAnotherTheme => 'Dodaj inny motyw';
+
+  @override
+  String get puzzleNextPuzzle => 'Następne zadanie';
+
+  @override
+  String get puzzleJumpToNextPuzzleImmediately => 'Natychmiast przejdź do następnego zadania';
+
+  @override
+  String get puzzlePuzzleDashboard => 'Panel zadań';
+
+  @override
+  String get puzzleImprovementAreas => 'Obszary rozwoju';
+
+  @override
+  String get puzzleStrengths => 'Siła';
+
+  @override
+  String get puzzleHistory => 'Historia zadań';
+
+  @override
+  String get puzzleSolved => 'rozwiązane';
+
+  @override
+  String get puzzleFailed => 'nie udało się';
+
+  @override
+  String get puzzleStreakDescription => 'Stopniowo rozwiązuj coraz trudniejsze zadania i utwórz serię poprawnych rozwiązań. Czas nie jest odliczany, więc nie musisz się spieszyć. Jednak do przegranej wystarczy tylko jeden zły ruch! Możesz pominąć jeden ruch na sesję.';
+
+  @override
+  String puzzleYourStreakX(String param) {
+    return 'Twoja seria: $param';
+  }
+
+  @override
+  String get puzzleStreakSkipExplanation => 'Pomiń ruch, jeśli chcesz zachować swoją serię. Możesz użyć tylko raz w sesji.';
+
+  @override
+  String get puzzleContinueTheStreak => 'Kontynuuj serię';
+
+  @override
+  String get puzzleNewStreak => 'Nowa seria';
+
+  @override
+  String get puzzleFromMyGames => 'Z moich gier';
+
+  @override
+  String get puzzleLookupOfPlayer => 'Wyszukaj zadań z gier gracza';
+
+  @override
+  String puzzleFromXGames(String param) {
+    return 'Zadania z partii gracza $param';
+  }
+
+  @override
+  String get puzzleSearchPuzzles => 'Szukaj zadań';
+
+  @override
+  String get puzzleFromMyGamesNone => 'Nie masz zadań w bazie danych, ale Lichess nadal bardzo Cię kocha.\nGraj partie szybkie i klasyczne, aby zwiększyć swoje szanse na dodanie zadania!';
+
+  @override
+  String puzzleFromXGamesFound(String param1, String param2) {
+    return '$param1 zadań znalezionych w $param2 grach';
+  }
+
+  @override
+  String get puzzlePuzzleDashboardDescription => 'Trenuj, analizuj, doskonal się';
+
+  @override
+  String puzzlePercentSolved(String param) {
+    return '$param rozwiązanych';
+  }
+
+  @override
+  String get puzzleNoPuzzlesToShow => 'Nic do pokazania, najpierw rozwiąż kilka zadań!';
+
+  @override
+  String get puzzleImprovementAreasDescription => 'Trenuj, aby zoptymalizować swoje postępy!';
+
+  @override
+  String get puzzleStrengthDescription => 'Najlepiej sobie radzisz z tymi motywami';
+
+  @override
+  String puzzlePlayedXTimes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Rozwiązywane $count razy',
+      many: 'Rozwiązywane $count razy',
+      few: 'Rozwiązywane $count razy',
+      one: 'Rozwiązywane $count raz',
+      zero: 'Rozwiązywane $count raz',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsBelowYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count punktów poniżej Twojego rankingu w rozwiązywaniu zadań',
+      many: '$count punktów poniżej Twojego rankingu w rozwiązywaniu zadań',
+      few: '$count punkty poniżej Twojego rankingu w rozwiązywaniu zadań',
+      one: 'Jeden punkt poniżej Twojego rankingu w rozwiązywaniu zadań',
+      zero: 'Jeden punkt poniżej Twojego rankingu w rozwiązywaniu zadań',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsAboveYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count punktów powyżej Twojego rankingu w rozwiązywaniu zadań',
+      many: '$count punktów powyżej Twojego rankingu w rozwiązywaniu zadań',
+      few: '$count punkty powyżej Twojego rankingu w rozwiązywaniu zadań',
+      one: 'Jeden punkt powyżej Twojego rankingu w rozwiązywaniu zadań',
+      zero: 'Jeden punkt powyżej Twojego rankingu w rozwiązywaniu zadań',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPlayed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count rozwiązywanych',
+      many: '$count rozwiązywanych',
+      few: '$count rozwiązywanych',
+      one: '$count rozwiązywanych',
+      zero: '$count rozwiązywanych',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbToReplay(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count do powtórki',
+      many: '$count do powtórki',
+      few: '$count do powtórki',
+      one: '$count do powtórki',
+      zero: '$count do powtórki',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get puzzleThemeAdvancedPawn => 'Zaawansowany pion';
+
+  @override
+  String get puzzleThemeAdvancedPawnDescription => 'Zaawansowany pion lub pion grożący przemianą jest kluczowy w taktyce.';
+
+  @override
+  String get puzzleThemeAdvantage => 'Przewaga';
+
+  @override
+  String get puzzleThemeAdvantageDescription => 'Wykorzystaj szansę na uzyskanie decydującej przewagi. (200cp ≤ eval ≤ 600cp)';
+
+  @override
+  String get puzzleThemeAnastasiaMate => 'Mat Anastazji';
+
+  @override
+  String get puzzleThemeAnastasiaMateDescription => 'Skoczek, wieża lub hetman łączą siły, aby złapać przeciwnego króla w pułapkę pomiędzy bandą szachownicy, a jego inną figurą.';
+
+  @override
+  String get puzzleThemeArabianMate => 'Mat arabski';
+
+  @override
+  String get puzzleThemeArabianMateDescription => 'Skoczek i wieża współpracują razem, aby zaciągnąć króla w róg szachownicy.';
+
+  @override
+  String get puzzleThemeAttackingF2F7 => 'Atak na f2 lub f7';
+
+  @override
+  String get puzzleThemeAttackingF2F7Description => 'Atak koncentrujący się na pionach f2 lub f7, na przykład taki jak w szewskim macie.';
+
+  @override
+  String get puzzleThemeAttraction => 'Przyciąganie';
+
+  @override
+  String get puzzleThemeAttractionDescription => 'Wymiana bądź poświęcenie zachęcające lub zmuszające bierkę przeciwnika do zajęcia pola, na którym będzie ona celem kolejnych taktyk.';
+
+  @override
+  String get puzzleThemeBackRankMate => 'Mat na ostatniej linii';
+
+  @override
+  String get puzzleThemeBackRankMateDescription => 'Zamatuj króla uwięzionego w ostatnim rzędzie przez własne bierki.';
+
+  @override
+  String get puzzleThemeBishopEndgame => 'Końcówka gońcowa';
+
+  @override
+  String get puzzleThemeBishopEndgameDescription => 'Gra końcowa wyłącznie z gońcami i pionami.';
+
+  @override
+  String get puzzleThemeBodenMate => 'Mat Bodena';
+
+  @override
+  String get puzzleThemeBodenMateDescription => 'Dwa atakujące gońce na przeciwnych przekątnych matują króla ograniczonego przez własne bierki.';
+
+  @override
+  String get puzzleThemeCastling => 'Roszada';
+
+  @override
+  String get puzzleThemeCastlingDescription => 'Zabezpiecz swojego króla i wprowadź do gry wieżę.';
+
+  @override
+  String get puzzleThemeCapturingDefender => 'Zabicie obrońcy';
+
+  @override
+  String get puzzleThemeCapturingDefenderDescription => 'Usunięcie obrońcy który jest kluczowy do obrony innej figury, pozwalając na zbicie niebronionej figury w następnym ruchu.';
+
+  @override
+  String get puzzleThemeCrushing => 'Decydująca przewaga';
+
+  @override
+  String get puzzleThemeCrushingDescription => 'Znajdź błąd przeciwnika i zdobądź decydującą przewagę (ocena pozycji: powyżej 600cp)';
+
+  @override
+  String get puzzleThemeDoubleBishopMate => 'Mat dwoma gońcami';
+
+  @override
+  String get puzzleThemeDoubleBishopMateDescription => 'Dwa atakujące gońce na sąsiednich przekątnych matują króla ograniczonego przez własne bierki.';
+
+  @override
+  String get puzzleThemeDovetailMate => 'Jaskółczy ogon';
+
+  @override
+  String get puzzleThemeDovetailMateDescription => 'Hetman matuje sąsiedniego króla, którego jedyne dwa pola ucieczki są zablokowane przez własne bierki.';
+
+  @override
+  String get puzzleThemeEquality => 'Równowaga';
+
+  @override
+  String get puzzleThemeEqualityDescription => 'Odzyskaj remis bądź równowagę wychodząc z przegrywającej pozycji. (ocena pozycji: poniżej 200cp)';
+
+  @override
+  String get puzzleThemeKingsideAttack => 'Atak skrzydłem królewskim';
+
+  @override
+  String get puzzleThemeKingsideAttackDescription => 'Atak na króla przeciwnika po krótkiej roszadzie.';
+
+  @override
+  String get puzzleThemeClearance => 'Zwolnienie';
+
+  @override
+  String get puzzleThemeClearanceDescription => 'Posunięcie, często z tempem, które udostępnia pole, linię bądź przekątną do wykorzystania w następnej taktyce.';
+
+  @override
+  String get puzzleThemeDefensiveMove => 'Ruch obronny';
+
+  @override
+  String get puzzleThemeDefensiveMoveDescription => 'Precyzyjne posunięcie lub ich ciąg, niezbędne by uniknąć straty materiału lub innej przewagi.';
+
+  @override
+  String get puzzleThemeDeflection => 'Odciągnięcie';
+
+  @override
+  String get puzzleThemeDeflectionDescription => 'Posunięcie odciągające bierkę przeciwnika od innego wykonywanego przez nią zadania, np. ochrony kluczowego pola.';
+
+  @override
+  String get puzzleThemeDiscoveredAttack => 'Atak z odsłony';
+
+  @override
+  String get puzzleThemeDiscoveredAttackDescription => 'Ruch bierką, która blokuje atak innej figury dalekiego zasięgu, np. ruch skoczkiem uaktywniający wieżę.';
+
+  @override
+  String get puzzleThemeDoubleCheck => 'Podwójny szach';
+
+  @override
+  String get puzzleThemeDoubleCheckDescription => 'Szach dwoma bierkami jednocześnie będący wynikiem ataku z odkrycia, w którym zarówno bierka poruszana, jak i odkryta atakują króla.';
+
+  @override
+  String get puzzleThemeEndgame => 'Końcówka';
+
+  @override
+  String get puzzleThemeEndgameDescription => 'Taktyka w ostatniej fazie gry.';
+
+  @override
+  String get puzzleThemeEnPassantDescription => 'Taktyka wykorzystująca bicie w przelocie, gdzie pion może zbić piona przeciwnika, który minął go wykonawszy swoje początkowe posuniecie o dwa pola.';
+
+  @override
+  String get puzzleThemeExposedKing => 'Odsłonięty król';
+
+  @override
+  String get puzzleThemeExposedKingDescription => 'Taktyka z udziałem króla z kilkoma jego obrońcami, często prowadząca do mata.';
+
+  @override
+  String get puzzleThemeFork => 'Widełki';
+
+  @override
+  String get puzzleThemeForkDescription => 'Ruch w którym poruszona bierka atakuje jednocześnie dwie bierki przeciwnika.';
+
+  @override
+  String get puzzleThemeHangingPiece => 'Wisząca figura';
+
+  @override
+  String get puzzleThemeHangingPieceDescription => 'Taktyka wykorzystująca możliwość zbicia niebronionej lub niedostatecznie bronionej bierki przeciwnika.';
+
+  @override
+  String get puzzleThemeHookMate => 'Mat haka';
+
+  @override
+  String get puzzleThemeHookMateDescription => 'Mat wieżą, skoczkiem i pionkiem z wrogim pionem blokującym ucieczkę króla.';
+
+  @override
+  String get puzzleThemeInterference => 'Przesłona';
+
+  @override
+  String get puzzleThemeInterferenceDescription => 'Ruch figurą pomiędzy dwie figury przeciwnika, tak, że jedna lub obydwie są niebronione. Na przykład ruch skoczkiem na bronione pole pomiędzy dwie wieże.';
+
+  @override
+  String get puzzleThemeIntermezzo => 'Wtrącony ruch';
+
+  @override
+  String get puzzleThemeIntermezzoDescription => 'Zamiast zagrania spodziewanego posunięcia, wykonanie takiego, które stanowi bezpośrednią groźbę, na którą przeciwnik zmuszony jest odpowiedzieć. Znane również jako „zwischenzug”.';
+
+  @override
+  String get puzzleThemeKnightEndgame => 'Końcówka skoczkowa';
+
+  @override
+  String get puzzleThemeKnightEndgameDescription => 'Gra końcowa wyłącznie ze skoczkami i pionami.';
+
+  @override
+  String get puzzleThemeLong => 'Długie zadanie';
+
+  @override
+  String get puzzleThemeLongDescription => 'Trzy ruchy by wygrać.';
+
+  @override
+  String get puzzleThemeMaster => 'Partie mistrzów';
+
+  @override
+  String get puzzleThemeMasterDescription => 'Zadania z partii graczy utytułowanych.';
+
+  @override
+  String get puzzleThemeMasterVsMaster => 'Mistrz kontra Mistrz';
+
+  @override
+  String get puzzleThemeMasterVsMasterDescription => 'Zadania z partii pomiędzy dwoma utytułowanymi graczami.';
+
+  @override
+  String get puzzleThemeMate => 'Mat';
+
+  @override
+  String get puzzleThemeMateDescription => 'Wygraj partię w dobrym stylu.';
+
+  @override
+  String get puzzleThemeMateIn1 => 'Mat w 1 ruchu';
+
+  @override
+  String get puzzleThemeMateIn1Description => 'Daj mata w jednym posunięciu.';
+
+  @override
+  String get puzzleThemeMateIn2 => 'Mat w 2 ruchach';
+
+  @override
+  String get puzzleThemeMateIn2Description => 'Daj mata w dwóch posunięciach.';
+
+  @override
+  String get puzzleThemeMateIn3 => 'Mat w 3 ruchach';
+
+  @override
+  String get puzzleThemeMateIn3Description => 'Daj mata w trzech posunięciach.';
+
+  @override
+  String get puzzleThemeMateIn4 => 'Mat w 4 ruchach';
+
+  @override
+  String get puzzleThemeMateIn4Description => 'Daj mata w czterech posunięciach.';
+
+  @override
+  String get puzzleThemeMateIn5 => 'Mat w 5 lub więcej ruchach';
+
+  @override
+  String get puzzleThemeMateIn5Description => 'Naprawdę długa sekwencja matowa.';
+
+  @override
+  String get puzzleThemeMiddlegame => 'Gra środkowa';
+
+  @override
+  String get puzzleThemeMiddlegameDescription => 'Taktyka w drugiej fazie gry.';
+
+  @override
+  String get puzzleThemeOneMove => 'Jednochodówka';
+
+  @override
+  String get puzzleThemeOneMoveDescription => 'Zadanie, którego długość to tylko jedno posunięcie.';
+
+  @override
+  String get puzzleThemeOpening => 'Otwarcie';
+
+  @override
+  String get puzzleThemeOpeningDescription => 'Taktyka w pierwszej fazie gry.';
+
+  @override
+  String get puzzleThemePawnEndgame => 'Końcówka pionkowa';
+
+  @override
+  String get puzzleThemePawnEndgameDescription => 'Gra końcowa wyłącznie z pionami.';
+
+  @override
+  String get puzzleThemePin => 'Związanie';
+
+  @override
+  String get puzzleThemePinDescription => 'Taktyka wykorzystująca związania, czyli sytuacje, w których ruch bierki naraża na atak figurę o wyższej wartości.';
+
+  @override
+  String get puzzleThemePromotion => 'Promocja';
+
+  @override
+  String get puzzleThemePromotionDescription => 'Promocja piona lub zagrożenie promocją jest kluczem tej taktyki.';
+
+  @override
+  String get puzzleThemeQueenEndgame => 'Końcówka hetmańska';
+
+  @override
+  String get puzzleThemeQueenEndgameDescription => 'Gra końcowa wyłącznie z hetmanami i pionami.';
+
+  @override
+  String get puzzleThemeQueenRookEndgame => 'Końcówka wieżowo-hetmańska';
+
+  @override
+  String get puzzleThemeQueenRookEndgameDescription => 'Gra końcowa wyłącznie z wieżami, hetmanami i pionami.';
+
+  @override
+  String get puzzleThemeQueensideAttack => 'Atak skrzydłem hetmańskim';
+
+  @override
+  String get puzzleThemeQueensideAttackDescription => 'Atak na króla przeciwnika po długiej roszadzie.';
+
+  @override
+  String get puzzleThemeQuietMove => 'Cichy ruch';
+
+  @override
+  String get puzzleThemeQuietMoveDescription => 'Posunięcie niebędące ani szachem, ani biciem, które przygotowuje groźbę nie do uniknięcia w jednym z kolejnych posunięć.';
+
+  @override
+  String get puzzleThemeRookEndgame => 'Końcówka wieżowa';
+
+  @override
+  String get puzzleThemeRookEndgameDescription => 'Gra końcowa wyłącznie z wieżami i pionami.';
+
+  @override
+  String get puzzleThemeSacrifice => 'Poświęcenie';
+
+  @override
+  String get puzzleThemeSacrificeDescription => 'Taktyka wykorzystująca krótkoterminowe oddanie materiału do zdobycia przewagi po forsownej sekwencji posunięć.';
+
+  @override
+  String get puzzleThemeShort => 'Krótkie zadanie';
+
+  @override
+  String get puzzleThemeShortDescription => 'Dwa ruchy by wygrać.';
+
+  @override
+  String get puzzleThemeSkewer => 'Szpila';
+
+  @override
+  String get puzzleThemeSkewerDescription => 'Motyw, w którym bierka o wyższej wartości unikając ataku pozwala na zbicie bądź zaatakowanie bierki o niższej wartości. Odwrotność związania.';
+
+  @override
+  String get puzzleThemeSmotheredMate => 'Mat Beniowskiego';
+
+  @override
+  String get puzzleThemeSmotheredMateDescription => 'Mat dawany skoczkiem w którym matowany król nie może się poruszać ponieważ jest otoczony (zduszony) własnymi bierkami.';
+
+  @override
+  String get puzzleThemeSuperGM => 'Partie arcymistrzów';
+
+  @override
+  String get puzzleThemeSuperGMDescription => 'Zadania z partii granych przez najlepszych graczy na świecie.';
+
+  @override
+  String get puzzleThemeTrappedPiece => 'Uwięziona figura';
+
+  @override
+  String get puzzleThemeTrappedPieceDescription => 'Bierka nie może uniknąć zbicia z powodu ograniczenia mobilności.';
+
+  @override
+  String get puzzleThemeUnderPromotion => 'Słaba promocja';
+
+  @override
+  String get puzzleThemeUnderPromotionDescription => 'Promocja na skoczka, gońca lub wieżę.';
+
+  @override
+  String get puzzleThemeVeryLong => 'Bardzo długie zadanie';
+
+  @override
+  String get puzzleThemeVeryLongDescription => 'Cztery ruchy lub więcej, aby wygrać.';
+
+  @override
+  String get puzzleThemeXRayAttack => 'Rentgen';
+
+  @override
+  String get puzzleThemeXRayAttackDescription => 'Figura atakuje albo broni pole przez wrogą figurę.';
+
+  @override
+  String get puzzleThemeZugzwang => 'Zugzwang';
+
+  @override
+  String get puzzleThemeZugzwangDescription => 'Ograniczone ruchy przeciwnika powodują, że każde posunięcie pogarsza jego pozycję.';
+
+  @override
+  String get puzzleThemeHealthyMix => 'Miszmasz';
+
+  @override
+  String get puzzleThemeHealthyMixDescription => 'Bądź gotów na wszystko! Jak podczas prawdziwej partii.';
+
+  @override
+  String get puzzleThemePlayerGames => 'Partie gracza';
+
+  @override
+  String get puzzleThemePlayerGamesDescription => 'Wyszukaj zadania wygenerowane z Twoich partii lub z partii innego gracza.';
+
+  @override
+  String puzzleThemePuzzleDownloadInformation(String param) {
+    return 'Te zadania dostępne są w domenie publicznej i mogą być pobrane z $param.';
+  }
+
+  @override
+  String get searchSearch => 'Szukaj';
+
+  @override
+  String get settingsSettings => 'Ustawienia';
+
+  @override
+  String get settingsCloseAccount => 'Zamknij konto';
+
+  @override
+  String get settingsManagedAccountCannotBeClosed => 'Twoim kontem zarządza nauczyciel, nie możesz go zamknąć.';
+
+  @override
+  String get settingsClosingIsDefinitive => 'Zamknięcie konta jest nieodwracalne. Czy chcesz kontynuować?';
+
+  @override
+  String get settingsCantOpenSimilarAccount => 'Nie będzie można otworzyć nowego konta z tą samą nazwą, nawet jeśli wielkość liter będzie inna.';
+
+  @override
+  String get settingsChangedMindDoNotCloseAccount => 'Zmieniłem zdanie, nie chcę zamykać swojego konta';
+
+  @override
+  String get settingsCloseAccountExplanation => 'Jesteś pewien, że chcesz zamknąć swoje konto? Zamknięcie konta jest decyzją nieodwracalną. Już NIGDY nie będziesz mógł się na nie zalogować.';
+
+  @override
+  String get settingsThisAccountIsClosed => 'Konto zostało zamknięte.';
 
   @override
   String get playWithAFriend => 'Zagraj ze znajomym';
@@ -546,6 +1562,12 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get deleteFromHere => 'Usuń od tego miejsca';
+
+  @override
+  String get collapseVariations => 'Zwiń warianty';
+
+  @override
+  String get expandVariations => 'Rozwiń warianty';
 
   @override
   String get forceVariation => 'Przedstaw jako wariant';
@@ -1405,15 +2427,6 @@ class AppLocalizationsPl extends AppLocalizations {
   String get emptyTournamentName => 'Jeśli nie podasz nazwy turnieju, zostanie on nazwany od nazwiska losowo wybranego arcymistrza.';
 
   @override
-  String get recommendNotTouching => 'Zalecamy nie zmieniać tych ustawień.';
-
-  @override
-  String get fewerPlayers => 'Ustawienie warunków wstępu sprawi, że do turnieju przystąpi mniej osób.';
-
-  @override
-  String get showAdvancedSettings => 'Pokaż ustawienia zaawansowane';
-
-  @override
   String get makePrivateTournament => 'Ustaw turniej jako prywatny i ogranicz dostęp za pomocą hasła';
 
   @override
@@ -1543,10 +2556,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get editProfile => 'Edycja profilu';
 
   @override
-  String get firstName => 'Imię';
-
-  @override
-  String get lastName => 'Nazwisko';
+  String get realName => 'Prawdziwe nazwisko';
 
   @override
   String get setFlair => 'Ustaw swój emblemat';
@@ -1675,13 +2685,7 @@ class AppLocalizationsPl extends AppLocalizations {
   String get cheat => 'Oszust';
 
   @override
-  String get insult => 'Znieważenie';
-
-  @override
   String get troll => 'Natręt (troll)';
-
-  @override
-  String get ratingManipulation => 'Manipulacja rankingiem';
 
   @override
   String get other => 'Inne';
@@ -1788,6 +2792,9 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get outsideTheBoard => 'Poza szachownicą';
+
+  @override
+  String get allSquaresOfTheBoard => 'Wszystkie pola szachownicy';
 
   @override
   String get onSlowGames => 'W wolniejszych partiach';
@@ -3578,1019 +4585,6 @@ class AppLocalizationsPl extends AppLocalizations {
   }
 
   @override
-  String get patronDonate => 'Przekaż datek';
-
-  @override
-  String get patronLichessPatron => 'Patron Lichess';
-
-  @override
-  String get preferencesPreferences => 'Ustawienia';
-
-  @override
-  String get preferencesDisplay => 'Wyświetlanie';
-
-  @override
-  String get preferencesPrivacy => 'Prywatność';
-
-  @override
-  String get preferencesNotifications => 'Powiadomienia';
-
-  @override
-  String get preferencesPieceAnimation => 'Animacja ruchu bierek';
-
-  @override
-  String get preferencesMaterialDifference => 'Przewaga materialna';
-
-  @override
-  String get preferencesBoardHighlights => 'Wyróżnienie pól szachownicy (ostatni ruch i szach)';
-
-  @override
-  String get preferencesPieceDestinations => 'Pola docelowe (ruchy poprawne i planowane)';
-
-  @override
-  String get preferencesBoardCoordinates => 'Współrzędne pól (a-h, 1-8)';
-
-  @override
-  String get preferencesMoveListWhilePlaying => 'Lista ruchów podczas partii';
-
-  @override
-  String get preferencesPgnPieceNotation => 'Notacja ruchów';
-
-  @override
-  String get preferencesChessPieceSymbol => 'Za pomocą symboli figur';
-
-  @override
-  String get preferencesPgnLetter => 'Litery (K, Q, R, B, N)';
-
-  @override
-  String get preferencesZenMode => 'Tryb Zen';
-
-  @override
-  String get preferencesShowPlayerRatings => 'Pokaż rankingi gracza';
-
-  @override
-  String get preferencesShowFlairs => 'Pokaż emblematy graczy';
-
-  @override
-  String get preferencesExplainShowPlayerRatings => 'Ukrywa wszystkie rankingi na stronie internetowej, aby pomóc skupić się na grze. Partie nadal mogą być oceniane, opcja ukrywa tylko widok rankingu.';
-
-  @override
-  String get preferencesDisplayBoardResizeHandle => 'Pokaż uchwyt od zmiany rozmiaru szachownicy';
-
-  @override
-  String get preferencesOnlyOnInitialPosition => 'Tylko w pozycji początkowej';
-
-  @override
-  String get preferencesInGameOnly => 'Tylko w partii';
-
-  @override
-  String get preferencesChessClock => 'Zegar szachowy';
-
-  @override
-  String get preferencesTenthsOfSeconds => 'Dziesiąte części sekundy';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'Kiedy na zegarze jest mniej niż 10 sekund';
-
-  @override
-  String get preferencesHorizontalGreenProgressBars => 'Poziomy zielony pasek czasu';
-
-  @override
-  String get preferencesSoundWhenTimeGetsCritical => 'Powiadom dźwiękiem przy niedoczasie';
-
-  @override
-  String get preferencesGiveMoreTime => 'Dodaj więcej czasu';
-
-  @override
-  String get preferencesGameBehavior => 'Zachowanie gry';
-
-  @override
-  String get preferencesHowDoYouMovePieces => 'W jaki sposób wykonywać ruch?';
-
-  @override
-  String get preferencesClickTwoSquares => 'Klikając dwa pola';
-
-  @override
-  String get preferencesDragPiece => 'Przeciągając figurę';
-
-  @override
-  String get preferencesBothClicksAndDrag => 'Na oba sposoby';
-
-  @override
-  String get preferencesPremovesPlayingDuringOpponentTurn => 'Ruch planowany (podczas ruchu przeciwnika)';
-
-  @override
-  String get preferencesTakebacksWithOpponentApproval => 'Cofanie ruchów (za zgodą przeciwnika)';
-
-  @override
-  String get preferencesInCasualGamesOnly => 'Tylko w grach towarzyskich';
-
-  @override
-  String get preferencesPromoteToQueenAutomatically => 'Automatyczna promocja na hetmana';
-
-  @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Przytrzymaj klawisz <ctrl> podczas promocji pionka, aby tymczasowo wyłączyć automatyczną przemianę w hetmana';
-
-  @override
-  String get preferencesWhenPremoving => 'W czasie ruchu planowanego';
-
-  @override
-  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Automatyczny remis po trzykrotnym powtórzeniu pozycji';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Kiedy pozostało mniej niż 30 sekund';
-
-  @override
-  String get preferencesMoveConfirmation => 'Potwierdzenie ruchu';
-
-  @override
-  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Może być wyłączony podczas partii z menu';
-
-  @override
-  String get preferencesInCorrespondenceGames => 'W grze korespondencyjnej';
-
-  @override
-  String get preferencesCorrespondenceAndUnlimited => 'Korespondencyjne i bez limitu czasu';
-
-  @override
-  String get preferencesConfirmResignationAndDrawOffers => 'Potwierdzaj poddanie się i wysłanie propozycji remisu';
-
-  @override
-  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Sposób roszowania';
-
-  @override
-  String get preferencesCastleByMovingTwoSquares => 'Ruch królem o dwa pola';
-
-  @override
-  String get preferencesCastleByMovingOntoTheRook => 'Ruch królem na wieżę';
-
-  @override
-  String get preferencesInputMovesWithTheKeyboard => 'Wprowadzaj ruchy za pomocą klawiatury';
-
-  @override
-  String get preferencesInputMovesWithVoice => 'Wykonywanie posunięć za pomocą głosu';
-
-  @override
-  String get preferencesSnapArrowsToValidMoves => 'Wyrównuj strzałki do legalnych ruchów';
-
-  @override
-  String get preferencesSayGgWpAfterLosingOrDrawing => 'Napisz \"Good game, well played\" po przegranej lub remisie';
-
-  @override
-  String get preferencesYourPreferencesHaveBeenSaved => 'Twoje ustawienia zostały zapisane.';
-
-  @override
-  String get preferencesScrollOnTheBoardToReplayMoves => 'Przewiń myszką, aby powtórzyć ruchy';
-
-  @override
-  String get preferencesCorrespondenceEmailNotification => 'Codzienne powiadomienia mailowe z listą Twoich partii korespondencyjnych';
-
-  @override
-  String get preferencesNotifyStreamStart => 'Streamer jest na żywo';
-
-  @override
-  String get preferencesNotifyInboxMsg => 'Nowa wiadomość';
-
-  @override
-  String get preferencesNotifyForumMention => 'Wspomniano o Tobie w komentarzu na forum';
-
-  @override
-  String get preferencesNotifyInvitedStudy => 'Zaproszenie do wspólnego opracowania';
-
-  @override
-  String get preferencesNotifyGameEvent => 'Zdarzenie w partii korespondencyjnej';
-
-  @override
-  String get preferencesNotifyChallenge => 'Wyzwania';
-
-  @override
-  String get preferencesNotifyTournamentSoon => 'Turniej rozpocznie się wkrótce';
-
-  @override
-  String get preferencesNotifyTimeAlarm => 'Czas w partii korespondencyjnej dobiega końca';
-
-  @override
-  String get preferencesNotifyBell => 'Powiadomienie dźwiękowe gdy jesteś na Lichess';
-
-  @override
-  String get preferencesNotifyPush => 'Powiadomienie na urządzenie, gdy nie jesteś na Lichess';
-
-  @override
-  String get preferencesNotifyWeb => 'Przeglądarka';
-
-  @override
-  String get preferencesNotifyDevice => 'Urządzenie';
-
-  @override
-  String get preferencesBellNotificationSound => 'Dźwięk powiadomień';
-
-  @override
-  String get puzzlePuzzles => 'Zadania szachowe';
-
-  @override
-  String get puzzlePuzzleThemes => 'Motywy zadań';
-
-  @override
-  String get puzzleRecommended => 'Polecane';
-
-  @override
-  String get puzzlePhases => 'Faza gry';
-
-  @override
-  String get puzzleMotifs => 'Motyw';
-
-  @override
-  String get puzzleAdvanced => 'Zaawansowane';
-
-  @override
-  String get puzzleLengths => 'Długość zadania';
-
-  @override
-  String get puzzleMates => 'Maty';
-
-  @override
-  String get puzzleGoals => 'Cele';
-
-  @override
-  String get puzzleOrigin => 'Źródło';
-
-  @override
-  String get puzzleSpecialMoves => 'Szczególne posunięcia';
-
-  @override
-  String get puzzleDidYouLikeThisPuzzle => 'Czy podobało Ci się to zadanie?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Zagłosuj, by wczytać następny!';
-
-  @override
-  String get puzzleUpVote => 'Daj plusa zadaniu';
-
-  @override
-  String get puzzleDownVote => 'Daj minusa zadaniu';
-
-  @override
-  String get puzzleYourPuzzleRatingWillNotChange => 'Twój ranking w rozwiązywaniu zadań nie ulegnie zmianie. Pamiętaj, że zadania nie są rywalizacją. Twój ranking pomaga wybrać najlepsze zadania dla Twoich aktualnych umiejętności.';
-
-  @override
-  String get puzzleFindTheBestMoveForWhite => 'Znajdź najlepszy ruch dla białych.';
-
-  @override
-  String get puzzleFindTheBestMoveForBlack => 'Znajdź najlepszy ruch dla czarnych.';
-
-  @override
-  String get puzzleToGetPersonalizedPuzzles => 'Aby uzyskać spersonalizowane zadania:';
-
-  @override
-  String puzzlePuzzleId(String param) {
-    return 'Zadanie $param';
-  }
-
-  @override
-  String get puzzlePuzzleOfTheDay => 'Zadanie dnia';
-
-  @override
-  String get puzzleDailyPuzzle => 'Zadanie dnia';
-
-  @override
-  String get puzzleClickToSolve => 'Kliknij, aby zobaczyć rozwiązanie';
-
-  @override
-  String get puzzleGoodMove => 'Dobry ruch';
-
-  @override
-  String get puzzleBestMove => 'Najlepszy ruch!';
-
-  @override
-  String get puzzleKeepGoing => 'Kontynuuj…';
-
-  @override
-  String get puzzlePuzzleSuccess => 'Sukces!';
-
-  @override
-  String get puzzlePuzzleComplete => 'Zadanie zakończone!';
-
-  @override
-  String get puzzleByOpenings => 'Według otwarć';
-
-  @override
-  String get puzzlePuzzlesByOpenings => 'Zadania według otwarć';
-
-  @override
-  String get puzzleOpeningsYouPlayedTheMost => 'Najczęściej grane otwarcia w partiach rankingowych';
-
-  @override
-  String get puzzleUseFindInPage => 'Użyj \"Znajdź na stronie\" w menu przeglądarki, aby znaleźć swoje ulubione otwarcie!';
-
-  @override
-  String get puzzleUseCtrlF => 'Użyj Ctrl+f, aby znaleźć swoje ulubione otwarcie!';
-
-  @override
-  String get puzzleNotTheMove => 'To nie jest właściwy ruch!';
-
-  @override
-  String get puzzleTrySomethingElse => 'Spróbuj czegoś innego.';
-
-  @override
-  String puzzleRatingX(String param) {
-    return 'Ranking: $param';
-  }
-
-  @override
-  String get puzzleHidden => 'ukryty';
-
-  @override
-  String puzzleFromGameLink(String param) {
-    return 'Z partii $param';
-  }
-
-  @override
-  String get puzzleContinueTraining => 'Kontynuuj trening';
-
-  @override
-  String get puzzleDifficultyLevel => 'Poziom trudności';
-
-  @override
-  String get puzzleNormal => 'Normalny';
-
-  @override
-  String get puzzleEasier => 'Łatwy';
-
-  @override
-  String get puzzleEasiest => 'Bardzo łatwy';
-
-  @override
-  String get puzzleHarder => 'Trudny';
-
-  @override
-  String get puzzleHardest => 'Bardzo trudny';
-
-  @override
-  String get puzzleExample => 'Przykład';
-
-  @override
-  String get puzzleAddAnotherTheme => 'Dodaj inny motyw';
-
-  @override
-  String get puzzleNextPuzzle => 'Następne zadanie';
-
-  @override
-  String get puzzleJumpToNextPuzzleImmediately => 'Natychmiast przejdź do następnego zadania';
-
-  @override
-  String get puzzlePuzzleDashboard => 'Panel zadań';
-
-  @override
-  String get puzzleImprovementAreas => 'Obszary rozwoju';
-
-  @override
-  String get puzzleStrengths => 'Siła';
-
-  @override
-  String get puzzleHistory => 'Historia zadań';
-
-  @override
-  String get puzzleSolved => 'rozwiązane';
-
-  @override
-  String get puzzleFailed => 'nie udało się';
-
-  @override
-  String get puzzleStreakDescription => 'Stopniowo rozwiązuj coraz trudniejsze zadania i utwórz serię poprawnych rozwiązań. Czas nie jest odliczany, więc nie musisz się spieszyć. Jednak do przegranej wystarczy tylko jeden zły ruch! Możesz pominąć jeden ruch na sesję.';
-
-  @override
-  String puzzleYourStreakX(String param) {
-    return 'Twoja seria: $param';
-  }
-
-  @override
-  String get puzzleStreakSkipExplanation => 'Pomiń ruch, jeśli chcesz zachować swoją serię. Możesz użyć tylko raz w sesji.';
-
-  @override
-  String get puzzleContinueTheStreak => 'Kontynuuj serię';
-
-  @override
-  String get puzzleNewStreak => 'Nowa seria';
-
-  @override
-  String get puzzleFromMyGames => 'Z moich gier';
-
-  @override
-  String get puzzleLookupOfPlayer => 'Wyszukaj zadań z gier gracza';
-
-  @override
-  String puzzleFromXGames(String param) {
-    return 'Zadania z partii gracza $param';
-  }
-
-  @override
-  String get puzzleSearchPuzzles => 'Szukaj zadań';
-
-  @override
-  String get puzzleFromMyGamesNone => 'Nie masz zadań w bazie danych, ale Lichess nadal bardzo Cię kocha.\nGraj partie szybkie i klasyczne, aby zwiększyć swoje szanse na dodanie zadania!';
-
-  @override
-  String puzzleFromXGamesFound(String param1, String param2) {
-    return '$param1 zadań znalezionych w $param2 grach';
-  }
-
-  @override
-  String get puzzlePuzzleDashboardDescription => 'Trenuj, analizuj, doskonal się';
-
-  @override
-  String puzzlePercentSolved(String param) {
-    return '$param rozwiązanych';
-  }
-
-  @override
-  String get puzzleNoPuzzlesToShow => 'Nic do pokazania, najpierw rozwiąż kilka zadań!';
-
-  @override
-  String get puzzleImprovementAreasDescription => 'Trenuj, aby zoptymalizować swoje postępy!';
-
-  @override
-  String get puzzleStrengthDescription => 'Najlepiej sobie radzisz z tymi motywami';
-
-  @override
-  String puzzlePlayedXTimes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Rozwiązywane $count razy',
-      many: 'Rozwiązywane $count razy',
-      few: 'Rozwiązywane $count razy',
-      one: 'Rozwiązywane $count raz',
-      zero: 'Rozwiązywane $count raz',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsBelowYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count punktów poniżej Twojego rankingu w rozwiązywaniu zadań',
-      many: '$count punktów poniżej Twojego rankingu w rozwiązywaniu zadań',
-      few: '$count punkty poniżej Twojego rankingu w rozwiązywaniu zadań',
-      one: 'Jeden punkt poniżej Twojego rankingu w rozwiązywaniu zadań',
-      zero: 'Jeden punkt poniżej Twojego rankingu w rozwiązywaniu zadań',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsAboveYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count punktów powyżej Twojego rankingu w rozwiązywaniu zadań',
-      many: '$count punktów powyżej Twojego rankingu w rozwiązywaniu zadań',
-      few: '$count punkty powyżej Twojego rankingu w rozwiązywaniu zadań',
-      one: 'Jeden punkt powyżej Twojego rankingu w rozwiązywaniu zadań',
-      zero: 'Jeden punkt powyżej Twojego rankingu w rozwiązywaniu zadań',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPlayed(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count rozwiązywanych',
-      many: '$count rozwiązywanych',
-      few: '$count rozwiązywanych',
-      one: '$count rozwiązywanych',
-      zero: '$count rozwiązywanych',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbToReplay(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count do powtórki',
-      many: '$count do powtórki',
-      few: '$count do powtórki',
-      one: '$count do powtórki',
-      zero: '$count do powtórki',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get puzzleThemeAdvancedPawn => 'Zaawansowany pion';
-
-  @override
-  String get puzzleThemeAdvancedPawnDescription => 'Zaawansowany pion lub pion grożący przemianą jest kluczowy w taktyce.';
-
-  @override
-  String get puzzleThemeAdvantage => 'Przewaga';
-
-  @override
-  String get puzzleThemeAdvantageDescription => 'Wykorzystaj szansę na uzyskanie decydującej przewagi. (200cp ≤ eval ≤ 600cp)';
-
-  @override
-  String get puzzleThemeAnastasiaMate => 'Mat Anastazji';
-
-  @override
-  String get puzzleThemeAnastasiaMateDescription => 'Skoczek, wieża lub hetman łączą siły, aby złapać przeciwnego króla w pułapkę pomiędzy bandą szachownicy, a jego inną figurą.';
-
-  @override
-  String get puzzleThemeArabianMate => 'Mat arabski';
-
-  @override
-  String get puzzleThemeArabianMateDescription => 'Skoczek i wieża współpracują razem, aby zaciągnąć króla w róg szachownicy.';
-
-  @override
-  String get puzzleThemeAttackingF2F7 => 'Atak na f2 lub f7';
-
-  @override
-  String get puzzleThemeAttackingF2F7Description => 'Atak koncentrujący się na pionach f2 lub f7, na przykład taki jak w szewskim macie.';
-
-  @override
-  String get puzzleThemeAttraction => 'Przyciąganie';
-
-  @override
-  String get puzzleThemeAttractionDescription => 'Wymiana bądź poświęcenie zachęcające lub zmuszające bierkę przeciwnika do zajęcia pola, na którym będzie ona celem kolejnych taktyk.';
-
-  @override
-  String get puzzleThemeBackRankMate => 'Mat na ostatniej linii';
-
-  @override
-  String get puzzleThemeBackRankMateDescription => 'Zamatuj króla uwięzionego w ostatnim rzędzie przez własne bierki.';
-
-  @override
-  String get puzzleThemeBishopEndgame => 'Końcówka gońcowa';
-
-  @override
-  String get puzzleThemeBishopEndgameDescription => 'Gra końcowa wyłącznie z gońcami i pionami.';
-
-  @override
-  String get puzzleThemeBodenMate => 'Mat Bodena';
-
-  @override
-  String get puzzleThemeBodenMateDescription => 'Dwa atakujące gońce na przeciwnych przekątnych matują króla ograniczonego przez własne bierki.';
-
-  @override
-  String get puzzleThemeCastling => 'Roszada';
-
-  @override
-  String get puzzleThemeCastlingDescription => 'Zabezpiecz swojego króla i wprowadź do gry wieżę.';
-
-  @override
-  String get puzzleThemeCapturingDefender => 'Zabicie obrońcy';
-
-  @override
-  String get puzzleThemeCapturingDefenderDescription => 'Usunięcie obrońcy który jest kluczowy do obrony innej figury, pozwalając na zbicie niebronionej figury w następnym ruchu.';
-
-  @override
-  String get puzzleThemeCrushing => 'Decydująca przewaga';
-
-  @override
-  String get puzzleThemeCrushingDescription => 'Znajdź błąd przeciwnika i zdobądź decydującą przewagę (ocena pozycji: powyżej 600cp)';
-
-  @override
-  String get puzzleThemeDoubleBishopMate => 'Mat dwoma gońcami';
-
-  @override
-  String get puzzleThemeDoubleBishopMateDescription => 'Dwa atakujące gońce na sąsiednich przekątnych matują króla ograniczonego przez własne bierki.';
-
-  @override
-  String get puzzleThemeDovetailMate => 'Jaskółczy ogon';
-
-  @override
-  String get puzzleThemeDovetailMateDescription => 'Hetman matuje sąsiedniego króla, którego jedyne dwa pola ucieczki są zablokowane przez własne bierki.';
-
-  @override
-  String get puzzleThemeEquality => 'Równowaga';
-
-  @override
-  String get puzzleThemeEqualityDescription => 'Odzyskaj remis bądź równowagę wychodząc z przegrywającej pozycji. (ocena pozycji: poniżej 200cp)';
-
-  @override
-  String get puzzleThemeKingsideAttack => 'Atak skrzydłem królewskim';
-
-  @override
-  String get puzzleThemeKingsideAttackDescription => 'Atak na króla przeciwnika po krótkiej roszadzie.';
-
-  @override
-  String get puzzleThemeClearance => 'Zwolnienie';
-
-  @override
-  String get puzzleThemeClearanceDescription => 'Posunięcie, często z tempem, które udostępnia pole, linię bądź przekątną do wykorzystania w następnej taktyce.';
-
-  @override
-  String get puzzleThemeDefensiveMove => 'Ruch obronny';
-
-  @override
-  String get puzzleThemeDefensiveMoveDescription => 'Precyzyjne posunięcie lub ich ciąg, niezbędne by uniknąć straty materiału lub innej przewagi.';
-
-  @override
-  String get puzzleThemeDeflection => 'Odciągnięcie';
-
-  @override
-  String get puzzleThemeDeflectionDescription => 'Posunięcie odciągające bierkę przeciwnika od innego wykonywanego przez nią zadania, np. ochrony kluczowego pola.';
-
-  @override
-  String get puzzleThemeDiscoveredAttack => 'Atak z odsłony';
-
-  @override
-  String get puzzleThemeDiscoveredAttackDescription => 'Ruch bierką, która blokuje atak innej figury dalekiego zasięgu, np. ruch skoczkiem uaktywniający wieżę.';
-
-  @override
-  String get puzzleThemeDoubleCheck => 'Podwójny szach';
-
-  @override
-  String get puzzleThemeDoubleCheckDescription => 'Szach dwoma bierkami jednocześnie będący wynikiem ataku z odkrycia, w którym zarówno bierka poruszana, jak i odkryta atakują króla.';
-
-  @override
-  String get puzzleThemeEndgame => 'Końcówka';
-
-  @override
-  String get puzzleThemeEndgameDescription => 'Taktyka w ostatniej fazie gry.';
-
-  @override
-  String get puzzleThemeEnPassantDescription => 'Taktyka wykorzystująca bicie w przelocie, gdzie pion może zbić piona przeciwnika, który minął go wykonawszy swoje początkowe posuniecie o dwa pola.';
-
-  @override
-  String get puzzleThemeExposedKing => 'Odsłonięty król';
-
-  @override
-  String get puzzleThemeExposedKingDescription => 'Taktyka z udziałem króla z kilkoma jego obrońcami, często prowadząca do mata.';
-
-  @override
-  String get puzzleThemeFork => 'Widełki';
-
-  @override
-  String get puzzleThemeForkDescription => 'Ruch w którym poruszona bierka atakuje jednocześnie dwie bierki przeciwnika.';
-
-  @override
-  String get puzzleThemeHangingPiece => 'Wisząca figura';
-
-  @override
-  String get puzzleThemeHangingPieceDescription => 'Taktyka wykorzystująca możliwość zbicia niebronionej lub niedostatecznie bronionej bierki przeciwnika.';
-
-  @override
-  String get puzzleThemeHookMate => 'Mat haka';
-
-  @override
-  String get puzzleThemeHookMateDescription => 'Mat wieżą, skoczkiem i pionkiem z wrogim pionem blokującym ucieczkę króla.';
-
-  @override
-  String get puzzleThemeInterference => 'Przesłona';
-
-  @override
-  String get puzzleThemeInterferenceDescription => 'Ruch figurą pomiędzy dwie figury przeciwnika, tak, że jedna lub obydwie są niebronione. Na przykład ruch skoczkiem na bronione pole pomiędzy dwie wieże.';
-
-  @override
-  String get puzzleThemeIntermezzo => 'Wtrącony ruch';
-
-  @override
-  String get puzzleThemeIntermezzoDescription => 'Zamiast zagrania spodziewanego posunięcia, wykonanie takiego, które stanowi bezpośrednią groźbę, na którą przeciwnik zmuszony jest odpowiedzieć. Znane również jako „zwischenzug”.';
-
-  @override
-  String get puzzleThemeKnightEndgame => 'Końcówka skoczkowa';
-
-  @override
-  String get puzzleThemeKnightEndgameDescription => 'Gra końcowa wyłącznie ze skoczkami i pionami.';
-
-  @override
-  String get puzzleThemeLong => 'Długie zadanie';
-
-  @override
-  String get puzzleThemeLongDescription => 'Trzy ruchy by wygrać.';
-
-  @override
-  String get puzzleThemeMaster => 'Partie mistrzów';
-
-  @override
-  String get puzzleThemeMasterDescription => 'Zadania z partii graczy utytułowanych.';
-
-  @override
-  String get puzzleThemeMasterVsMaster => 'Mistrz kontra Mistrz';
-
-  @override
-  String get puzzleThemeMasterVsMasterDescription => 'Zadania z partii pomiędzy dwoma utytułowanymi graczami.';
-
-  @override
-  String get puzzleThemeMate => 'Mat';
-
-  @override
-  String get puzzleThemeMateDescription => 'Wygraj partię w dobrym stylu.';
-
-  @override
-  String get puzzleThemeMateIn1 => 'Mat w 1 ruchu';
-
-  @override
-  String get puzzleThemeMateIn1Description => 'Daj mata w jednym posunięciu.';
-
-  @override
-  String get puzzleThemeMateIn2 => 'Mat w 2 ruchach';
-
-  @override
-  String get puzzleThemeMateIn2Description => 'Daj mata w dwóch posunięciach.';
-
-  @override
-  String get puzzleThemeMateIn3 => 'Mat w 3 ruchach';
-
-  @override
-  String get puzzleThemeMateIn3Description => 'Daj mata w trzech posunięciach.';
-
-  @override
-  String get puzzleThemeMateIn4 => 'Mat w 4 ruchach';
-
-  @override
-  String get puzzleThemeMateIn4Description => 'Daj mata w czterech posunięciach.';
-
-  @override
-  String get puzzleThemeMateIn5 => 'Mat w 5 lub więcej ruchach';
-
-  @override
-  String get puzzleThemeMateIn5Description => 'Naprawdę długa sekwencja matowa.';
-
-  @override
-  String get puzzleThemeMiddlegame => 'Gra środkowa';
-
-  @override
-  String get puzzleThemeMiddlegameDescription => 'Taktyka w drugiej fazie gry.';
-
-  @override
-  String get puzzleThemeOneMove => 'Jednochodówka';
-
-  @override
-  String get puzzleThemeOneMoveDescription => 'Zadanie, którego długość to tylko jedno posunięcie.';
-
-  @override
-  String get puzzleThemeOpening => 'Otwarcie';
-
-  @override
-  String get puzzleThemeOpeningDescription => 'Taktyka w pierwszej fazie gry.';
-
-  @override
-  String get puzzleThemePawnEndgame => 'Końcówka pionkowa';
-
-  @override
-  String get puzzleThemePawnEndgameDescription => 'Gra końcowa wyłącznie z pionami.';
-
-  @override
-  String get puzzleThemePin => 'Związanie';
-
-  @override
-  String get puzzleThemePinDescription => 'Taktyka wykorzystująca związania, czyli sytuacje, w których ruch bierki naraża na atak figurę o wyższej wartości.';
-
-  @override
-  String get puzzleThemePromotion => 'Promocja';
-
-  @override
-  String get puzzleThemePromotionDescription => 'Promocja piona lub zagrożenie promocją jest kluczem tej taktyki.';
-
-  @override
-  String get puzzleThemeQueenEndgame => 'Końcówka hetmańska';
-
-  @override
-  String get puzzleThemeQueenEndgameDescription => 'Gra końcowa wyłącznie z hetmanami i pionami.';
-
-  @override
-  String get puzzleThemeQueenRookEndgame => 'Końcówka wieżowo-hetmańska';
-
-  @override
-  String get puzzleThemeQueenRookEndgameDescription => 'Gra końcowa wyłącznie z wieżami, hetmanami i pionami.';
-
-  @override
-  String get puzzleThemeQueensideAttack => 'Atak skrzydłem hetmańskim';
-
-  @override
-  String get puzzleThemeQueensideAttackDescription => 'Atak na króla przeciwnika po długiej roszadzie.';
-
-  @override
-  String get puzzleThemeQuietMove => 'Cichy ruch';
-
-  @override
-  String get puzzleThemeQuietMoveDescription => 'Posunięcie niebędące ani szachem, ani biciem, które przygotowuje groźbę nie do uniknięcia w jednym z kolejnych posunięć.';
-
-  @override
-  String get puzzleThemeRookEndgame => 'Końcówka wieżowa';
-
-  @override
-  String get puzzleThemeRookEndgameDescription => 'Gra końcowa wyłącznie z wieżami i pionami.';
-
-  @override
-  String get puzzleThemeSacrifice => 'Poświęcenie';
-
-  @override
-  String get puzzleThemeSacrificeDescription => 'Taktyka wykorzystująca krótkoterminowe oddanie materiału do zdobycia przewagi po forsownej sekwencji posunięć.';
-
-  @override
-  String get puzzleThemeShort => 'Krótkie zadanie';
-
-  @override
-  String get puzzleThemeShortDescription => 'Dwa ruchy by wygrać.';
-
-  @override
-  String get puzzleThemeSkewer => 'Szpila';
-
-  @override
-  String get puzzleThemeSkewerDescription => 'Motyw, w którym bierka o wyższej wartości unikając ataku pozwala na zbicie bądź zaatakowanie bierki o niższej wartości. Odwrotność związania.';
-
-  @override
-  String get puzzleThemeSmotheredMate => 'Mat Beniowskiego';
-
-  @override
-  String get puzzleThemeSmotheredMateDescription => 'Mat dawany skoczkiem w którym matowany król nie może się poruszać ponieważ jest otoczony (zduszony) własnymi bierkami.';
-
-  @override
-  String get puzzleThemeSuperGM => 'Partie arcymistrzów';
-
-  @override
-  String get puzzleThemeSuperGMDescription => 'Zadania z partii granych przez najlepszych graczy na świecie.';
-
-  @override
-  String get puzzleThemeTrappedPiece => 'Uwięziona figura';
-
-  @override
-  String get puzzleThemeTrappedPieceDescription => 'Bierka nie może uniknąć zbicia z powodu ograniczenia mobilności.';
-
-  @override
-  String get puzzleThemeUnderPromotion => 'Słaba promocja';
-
-  @override
-  String get puzzleThemeUnderPromotionDescription => 'Promocja na skoczka, gońca lub wieżę.';
-
-  @override
-  String get puzzleThemeVeryLong => 'Bardzo długie zadanie';
-
-  @override
-  String get puzzleThemeVeryLongDescription => 'Cztery ruchy lub więcej, aby wygrać.';
-
-  @override
-  String get puzzleThemeXRayAttack => 'Rentgen';
-
-  @override
-  String get puzzleThemeXRayAttackDescription => 'Figura atakuje albo broni pole przez wrogą figurę.';
-
-  @override
-  String get puzzleThemeZugzwang => 'Zugzwang';
-
-  @override
-  String get puzzleThemeZugzwangDescription => 'Ograniczone ruchy przeciwnika powodują, że każde posunięcie pogarsza jego pozycję.';
-
-  @override
-  String get puzzleThemeHealthyMix => 'Miszmasz';
-
-  @override
-  String get puzzleThemeHealthyMixDescription => 'Bądź gotów na wszystko! Jak podczas prawdziwej partii.';
-
-  @override
-  String get puzzleThemePlayerGames => 'Partie gracza';
-
-  @override
-  String get puzzleThemePlayerGamesDescription => 'Wyszukaj zadania wygenerowane z Twoich partii lub z partii innego gracza.';
-
-  @override
-  String puzzleThemePuzzleDownloadInformation(String param) {
-    return 'Te zadania dostępne są w domenie publicznej i mogą być pobrane z $param.';
-  }
-
-  @override
-  String perfStatPerfStats(String param) {
-    return 'Statystyki dla $param';
-  }
-
-  @override
-  String get perfStatViewTheGames => 'Zobacz partie';
-
-  @override
-  String get perfStatProvisional => 'prowizoryczny';
-
-  @override
-  String get perfStatNotEnoughRatedGames => 'Nie zagrano wystarczająco dużo rankingowych gier, aby ustalić wiarygodną ranking.';
-
-  @override
-  String perfStatProgressOverLastXGames(String param) {
-    return 'Postęp w ostatnich $param partiach:';
-  }
-
-  @override
-  String perfStatRatingDeviation(String param) {
-    return 'Odchylenie rankingu: $param.';
-  }
-
-  @override
-  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
-    return 'Niższa wartość oznacza, że ranking jest bardziej stabilny. Powyżej $param1, ranking jest uważany za tymczasowy. Aby znaleźć się na listach rankingowych, wartość ta powinna być niższa niż $param2 (standardowe szachy) lub $param3 (warianty).';
-  }
-
-  @override
-  String get perfStatTotalGames => 'Wszystkie partie';
-
-  @override
-  String get perfStatRatedGames => 'Partie rankingowe';
-
-  @override
-  String get perfStatTournamentGames => 'Partie turniejowe';
-
-  @override
-  String get perfStatBerserkedGames => 'Partie z berserkiem';
-
-  @override
-  String get perfStatTimeSpentPlaying => 'Czas spędzony na grze';
-
-  @override
-  String get perfStatAverageOpponent => 'Średni ranking przeciwnika';
-
-  @override
-  String get perfStatVictories => 'Zwycięstwa';
-
-  @override
-  String get perfStatDefeats => 'Porażki';
-
-  @override
-  String get perfStatDisconnections => 'Rozłączania';
-
-  @override
-  String get perfStatNotEnoughGames => 'Za mało rozegranych partii';
-
-  @override
-  String perfStatHighestRating(String param) {
-    return 'Najwyższy ranking: $param';
-  }
-
-  @override
-  String perfStatLowestRating(String param) {
-    return 'Najniższy ranking: $param';
-  }
-
-  @override
-  String perfStatFromXToY(String param1, String param2) {
-    return 'od $param1 do $param2';
-  }
-
-  @override
-  String get perfStatWinningStreak => 'Seria zwycięstw';
-
-  @override
-  String get perfStatLosingStreak => 'Seria porażek';
-
-  @override
-  String perfStatLongestStreak(String param) {
-    return 'Najdłuższa seria: $param';
-  }
-
-  @override
-  String perfStatCurrentStreak(String param) {
-    return 'Bieżąca seria: $param';
-  }
-
-  @override
-  String get perfStatBestRated => 'Najlepsze zwycięstwa';
-
-  @override
-  String get perfStatGamesInARow => 'Gry rozegrane z rzędu';
-
-  @override
-  String get perfStatLessThanOneHour => 'Mniej niż jedna godzina pomiędzy grami';
-
-  @override
-  String get perfStatMaxTimePlaying => 'Maksymalny czas spędzony na grze';
-
-  @override
-  String get perfStatNow => 'teraz';
-
-  @override
-  String get searchSearch => 'Szukaj';
-
-  @override
-  String get settingsSettings => 'Ustawienia';
-
-  @override
-  String get settingsCloseAccount => 'Zamknij konto';
-
-  @override
-  String get settingsManagedAccountCannotBeClosed => 'Twoim kontem zarządza nauczyciel, nie możesz go zamknąć.';
-
-  @override
-  String get settingsClosingIsDefinitive => 'Zamknięcie konta jest nieodwracalne. Czy chcesz kontynuować?';
-
-  @override
-  String get settingsCantOpenSimilarAccount => 'Nie będzie można otworzyć nowego konta z tą samą nazwą, nawet jeśli wielkość liter będzie inna.';
-
-  @override
-  String get settingsChangedMindDoNotCloseAccount => 'Zmieniłem zdanie, nie chcę zamykać swojego konta';
-
-  @override
-  String get settingsCloseAccountExplanation => 'Jesteś pewien, że chcesz zamknąć swoje konto? Zamknięcie konta jest decyzją nieodwracalną. Już NIGDY nie będziesz mógł się na nie zalogować.';
-
-  @override
-  String get settingsThisAccountIsClosed => 'Konto zostało zamknięte.';
-
-  @override
-  String get streamerLichessStreamers => 'Streamerzy Lichess';
-
-  @override
   String get stormMoveToStart => 'Wykonaj ruch, aby zacząć';
 
   @override
@@ -4778,14 +4772,11 @@ class AppLocalizationsPl extends AppLocalizations {
   }
 
   @override
+  String get streamerLichessStreamers => 'Streamerzy Lichess';
+
+  @override
   String get studyShareAndExport => 'Udostępnianie i eksport';
 
   @override
   String get studyStart => 'Rozpocznij';
-
-  @override
-  String get broadcastBroadcasts => 'Transmisje';
-
-  @override
-  String get broadcastStartDate => 'Data rozpoczęcia wydarzenia w Twojej strefie czasowej';
 }

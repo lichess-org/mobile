@@ -225,10 +225,10 @@ class AppLocalizationsLv extends AppLocalizations {
   }
 
   @override
-  String get contactContact => 'Kontakti';
+  String get broadcastBroadcasts => 'Raidījumi';
 
   @override
-  String get contactContactLichess => 'Sazināties ar Lichess';
+  String get broadcastStartDate => 'Sākuma datums jūsu laika joslā';
 
   @override
   String challengeChallengesX(String param1) {
@@ -310,6 +310,1012 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get challengeInviteLichessUser => 'Vai uzaicināt Lichess lietotāju:';
+
+  @override
+  String get contactContact => 'Kontakti';
+
+  @override
+  String get contactContactLichess => 'Sazināties ar Lichess';
+
+  @override
+  String get patronDonate => 'Ziedot';
+
+  @override
+  String get patronLichessPatron => 'Lichess Sponsors';
+
+  @override
+  String perfStatPerfStats(String param) {
+    return '$param statistika';
+  }
+
+  @override
+  String get perfStatViewTheGames => 'Skatīt spēles';
+
+  @override
+  String get perfStatProvisional => 'pagaidu';
+
+  @override
+  String get perfStatNotEnoughRatedGames => 'Nav spēlēts pietiekami vērtētu spēļu, lai izveidotu uzticamu reitingu.';
+
+  @override
+  String perfStatProgressOverLastXGames(String param) {
+    return 'Attīstība pēdējo $param spēļu laikā:';
+  }
+
+  @override
+  String perfStatRatingDeviation(String param) {
+    return 'Reitinga novirze: $param.';
+  }
+
+  @override
+  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
+    return 'Zemākas vērtības nozīmē, ka reitings ir stabilāks. Vērtības virs $param1 piemīt tikai pagaidu reitingiem. Tabulās iekļauj tikai spēlētājus, kam šī vērtība ir zem $param2 parastajā šahā vai $param3 variantos.';
+  }
+
+  @override
+  String get perfStatTotalGames => 'Spēles kopumā';
+
+  @override
+  String get perfStatRatedGames => 'Vērtētās spēles';
+
+  @override
+  String get perfStatTournamentGames => 'Turnīru spēles';
+
+  @override
+  String get perfStatBerserkedGames => 'Dullās spēles';
+
+  @override
+  String get perfStatTimeSpentPlaying => 'Spēlējot pavadītais laiks';
+
+  @override
+  String get perfStatAverageOpponent => 'Vidējais pretinieks';
+
+  @override
+  String get perfStatVictories => 'Uzvaras';
+
+  @override
+  String get perfStatDefeats => 'Zaudējumi';
+
+  @override
+  String get perfStatDisconnections => 'Atvienošanās';
+
+  @override
+  String get perfStatNotEnoughGames => 'Nav spēlēts pietiekami spēļu';
+
+  @override
+  String perfStatHighestRating(String param) {
+    return 'Augstākais reitings: $param';
+  }
+
+  @override
+  String perfStatLowestRating(String param) {
+    return 'Zemākais reitings: $param';
+  }
+
+  @override
+  String perfStatFromXToY(String param1, String param2) {
+    return 'no $param1 līdz $param2';
+  }
+
+  @override
+  String get perfStatWinningStreak => 'Uzvaras pēc kārtas';
+
+  @override
+  String get perfStatLosingStreak => 'Zaudējumi pēc kārtas';
+
+  @override
+  String perfStatLongestStreak(String param) {
+    return 'Garākā sērija: $param';
+  }
+
+  @override
+  String perfStatCurrentStreak(String param) {
+    return 'Pašreizējā sērija: $param';
+  }
+
+  @override
+  String get perfStatBestRated => 'Labākās vērtētās uzvaras';
+
+  @override
+  String get perfStatGamesInARow => 'Pēc kārtas spēlētās spēles';
+
+  @override
+  String get perfStatLessThanOneHour => 'Mazāk par stundu starp spēlēm';
+
+  @override
+  String get perfStatMaxTimePlaying => 'Ilgākais spēlējot pavadītais laiks';
+
+  @override
+  String get perfStatNow => 'tagad';
+
+  @override
+  String get preferencesPreferences => 'Uzstādījumi';
+
+  @override
+  String get preferencesDisplay => 'Izskats';
+
+  @override
+  String get preferencesPrivacy => 'Privātums';
+
+  @override
+  String get preferencesNotifications => 'Paziņojumi';
+
+  @override
+  String get preferencesPieceAnimation => 'Figūru animācija';
+
+  @override
+  String get preferencesMaterialDifference => 'Materiāla starpība';
+
+  @override
+  String get preferencesBoardHighlights => 'Lauciņu izcelšana (pēdējais gājiens vai piesakot šahu)';
+
+  @override
+  String get preferencesPieceDestinations => 'Figūru galamērķi (atļauti gājieni vai priekšgājieni)';
+
+  @override
+  String get preferencesBoardCoordinates => 'Galdiņa koordinātas (A-H, 1-8)';
+
+  @override
+  String get preferencesMoveListWhilePlaying => 'Gājienu saraksts spēles laikā';
+
+  @override
+  String get preferencesPgnPieceNotation => 'Gājienu notācija';
+
+  @override
+  String get preferencesChessPieceSymbol => 'Šaha figūras simbols';
+
+  @override
+  String get preferencesPgnLetter => 'Burts (K, Q, R, B, N)';
+
+  @override
+  String get preferencesZenMode => 'Zen režīms';
+
+  @override
+  String get preferencesShowPlayerRatings => 'Rādīt spēlētāju reitingus';
+
+  @override
+  String get preferencesShowFlairs => 'Show player flairs';
+
+  @override
+  String get preferencesExplainShowPlayerRatings => 'Šī iespēja ļauj slēpt visus reitingus mājaslapā, lai palīdzētu koncentrēties uz pašu šahu. Spēles joprojām var būt vērtētas – šis attiecas tikai uz to, ko jūs redzat.';
+
+  @override
+  String get preferencesDisplayBoardResizeHandle => 'Rādīt galdiņa izmēra maiņas rīku';
+
+  @override
+  String get preferencesOnlyOnInitialPosition => 'Tikai sākotnējajā pozīcijā';
+
+  @override
+  String get preferencesInGameOnly => 'In-game only';
+
+  @override
+  String get preferencesChessClock => 'Šaha pulkstenis';
+
+  @override
+  String get preferencesTenthsOfSeconds => 'Sekunžu desmitdaļas';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'Ja atlicis < 10 sekundēm';
+
+  @override
+  String get preferencesHorizontalGreenProgressBars => 'Zaļā horizontālā izpildes josla';
+
+  @override
+  String get preferencesSoundWhenTimeGetsCritical => 'Signalizēt, kad laika pavisam maz';
+
+  @override
+  String get preferencesGiveMoreTime => 'Dot vairāk laika';
+
+  @override
+  String get preferencesGameBehavior => 'Spēles uzvedība';
+
+  @override
+  String get preferencesHowDoYouMovePieces => 'Kā pārvietot figūras?';
+
+  @override
+  String get preferencesClickTwoSquares => 'Klikšķinot uz diviem lauciņiem';
+
+  @override
+  String get preferencesDragPiece => 'Velkot figūru';
+
+  @override
+  String get preferencesBothClicksAndDrag => 'Jebkurā veidā';
+
+  @override
+  String get preferencesPremovesPlayingDuringOpponentTurn => 'Priekšgājieni (izdarīti pretinieka gājienā)';
+
+  @override
+  String get preferencesTakebacksWithOpponentApproval => 'Gājienu atsaukšana (ar pretinieka piekrišanu)';
+
+  @override
+  String get preferencesInCasualGamesOnly => 'Tikai nevērtētajās spēlēs';
+
+  @override
+  String get preferencesPromoteToQueenAutomatically => 'Automātiski pārvērst par Dāmu';
+
+  @override
+  String get preferencesExplainPromoteToQueenAutomatically => 'Turiet nospiestu taustiņu <ctrl>, kad paaugstinat bandinieku, lai īslaicīgi atspējotu automātisko paaugstināšanu';
+
+  @override
+  String get preferencesWhenPremoving => 'Tikai priekšgājienos';
+
+  @override
+  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Automātiski pieprasīt trīskāršās atkārtošanās neizšķirtu';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Ja atlicis < 30 sekundēm';
+
+  @override
+  String get preferencesMoveConfirmation => 'Gājiena apstiprināšana';
+
+  @override
+  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Izslēdzams spēles laikā no galdiņa izvēlnes';
+
+  @override
+  String get preferencesInCorrespondenceGames => 'Korespondencšaha spēlēs';
+
+  @override
+  String get preferencesCorrespondenceAndUnlimited => 'Korespondencšaha un bezgalīgajās spēlēs';
+
+  @override
+  String get preferencesConfirmResignationAndDrawOffers => 'Apstiprināt padošanos un neizšķirta piedāvājumus';
+
+  @override
+  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Rokādes metode';
+
+  @override
+  String get preferencesCastleByMovingTwoSquares => 'Pārvietot karali par diviem lauciņiem';
+
+  @override
+  String get preferencesCastleByMovingOntoTheRook => 'Pārvietot karali virsū tornim';
+
+  @override
+  String get preferencesInputMovesWithTheKeyboard => 'Ievadīt gājienus ar tastatūru';
+
+  @override
+  String get preferencesInputMovesWithVoice => 'Input moves with your voice';
+
+  @override
+  String get preferencesSnapArrowsToValidMoves => 'Pievilkt bultas pie iespējamiem gājieniem';
+
+  @override
+  String get preferencesSayGgWpAfterLosingOrDrawing => 'Sūtīt \"Good game, well played\" (angļ. val. \"Laba partija, labi nospēlēta\") pēc uzvaras vai neizšķirta';
+
+  @override
+  String get preferencesYourPreferencesHaveBeenSaved => 'Jūsu uzstādījumi ir saglabāti.';
+
+  @override
+  String get preferencesScrollOnTheBoardToReplayMoves => 'Ritiniet peli virs galdiņa, lai skatītu spēles gaitu';
+
+  @override
+  String get preferencesCorrespondenceEmailNotification => 'E-pasta ziņojums reizi dienā par jūsu korespondencšaha spēlēm';
+
+  @override
+  String get preferencesNotifyStreamStart => 'Straumētājs sāk tiešraidi';
+
+  @override
+  String get preferencesNotifyInboxMsg => 'Jauna ziņa iesūtnē';
+
+  @override
+  String get preferencesNotifyForumMention => 'Foruma ziņa jūs piemin';
+
+  @override
+  String get preferencesNotifyInvitedStudy => 'Izpētes ielūgums';
+
+  @override
+  String get preferencesNotifyGameEvent => 'Notikumi Korespondencšahā';
+
+  @override
+  String get preferencesNotifyChallenge => 'Izaicinājumi';
+
+  @override
+  String get preferencesNotifyTournamentSoon => 'Turnīra sākums tuvojas';
+
+  @override
+  String get preferencesNotifyTimeAlarm => 'Korespondencšaha laiks izsīkst';
+
+  @override
+  String get preferencesNotifyBell => 'Zvana paziņojumi Lichess programmā';
+
+  @override
+  String get preferencesNotifyPush => 'Ierīces paziņojumi, kad neesat platformā Lichess';
+
+  @override
+  String get preferencesNotifyWeb => 'Pārlūkprogrammā';
+
+  @override
+  String get preferencesNotifyDevice => 'Ierīcē';
+
+  @override
+  String get preferencesBellNotificationSound => 'Paziņojumu skaņa';
+
+  @override
+  String get puzzlePuzzles => 'Uzdevumi';
+
+  @override
+  String get puzzlePuzzleThemes => 'Uzdevumu temati';
+
+  @override
+  String get puzzleRecommended => 'Ieteikumi';
+
+  @override
+  String get puzzlePhases => 'Posmi';
+
+  @override
+  String get puzzleMotifs => 'Motīvi';
+
+  @override
+  String get puzzleAdvanced => 'Lietpratējiem';
+
+  @override
+  String get puzzleLengths => 'Garumi';
+
+  @override
+  String get puzzleMates => 'Mati';
+
+  @override
+  String get puzzleGoals => 'Mērķi';
+
+  @override
+  String get puzzleOrigin => 'Izcelsme';
+
+  @override
+  String get puzzleSpecialMoves => 'Īpaši gājieni';
+
+  @override
+  String get puzzleDidYouLikeThisPuzzle => 'Vai patika šis uzdevums?';
+
+  @override
+  String get puzzleVoteToLoadNextOne => 'Balsojiet, lai ielādētu nākamo!';
+
+  @override
+  String get puzzleUpVote => 'Patīk puzle';
+
+  @override
+  String get puzzleDownVote => 'Nepatīk puzle';
+
+  @override
+  String get puzzleYourPuzzleRatingWillNotChange => 'Jūsu uzdevumu reitings nemainīsies. Ievērojiet, ka uzdevumu risināšana nav sacensības. Reitings mums palīdz atlasīt labākos uzdevumus jūsu prasmju līmenim.';
+
+  @override
+  String get puzzleFindTheBestMoveForWhite => 'Atrodiet labāko gājienu baltajiem.';
+
+  @override
+  String get puzzleFindTheBestMoveForBlack => 'Atrodiet labāko gājienu melnajiem.';
+
+  @override
+  String get puzzleToGetPersonalizedPuzzles => 'Lai iegūtu pielāgotus uzdevumus:';
+
+  @override
+  String puzzlePuzzleId(String param) {
+    return 'Uzdevums $param';
+  }
+
+  @override
+  String get puzzlePuzzleOfTheDay => 'Dienas uzdevums';
+
+  @override
+  String get puzzleDailyPuzzle => 'Šodienas uzdevums';
+
+  @override
+  String get puzzleClickToSolve => 'Klikšķiniet, lai atrisinātu';
+
+  @override
+  String get puzzleGoodMove => 'Labs gājiens';
+
+  @override
+  String get puzzleBestMove => 'Vislabākais gājiens!';
+
+  @override
+  String get puzzleKeepGoing => 'Turpiniet…';
+
+  @override
+  String get puzzlePuzzleSuccess => 'Izdevās!';
+
+  @override
+  String get puzzlePuzzleComplete => 'Uzdevums atrisināts!';
+
+  @override
+  String get puzzleByOpenings => 'Pa atklātnēm';
+
+  @override
+  String get puzzlePuzzlesByOpenings => 'Puzles pa atklātnēm';
+
+  @override
+  String get puzzleOpeningsYouPlayedTheMost => 'Visvairāk spēlētās atklātnes spēlēs ar reitingu';
+
+  @override
+  String get puzzleUseFindInPage => 'Lieto \"Find in page\" no pārlūka izvēlnes lai atrastu savu mīļāko atklātni!';
+
+  @override
+  String get puzzleUseCtrlF => 'Lieto Ctrl+f lai atrastu savu mīļāko atklātni!';
+
+  @override
+  String get puzzleNotTheMove => 'Tas nav īstais gājiens!';
+
+  @override
+  String get puzzleTrySomethingElse => 'Izmēģiniet ko citu.';
+
+  @override
+  String puzzleRatingX(String param) {
+    return 'Reitings: $param';
+  }
+
+  @override
+  String get puzzleHidden => 'slēpts';
+
+  @override
+  String puzzleFromGameLink(String param) {
+    return 'No spēles $param';
+  }
+
+  @override
+  String get puzzleContinueTraining => 'Turpināt treniņu';
+
+  @override
+  String get puzzleDifficultyLevel => 'Grūtības pakāpe';
+
+  @override
+  String get puzzleNormal => 'Parasta';
+
+  @override
+  String get puzzleEasier => 'Vieglāka';
+
+  @override
+  String get puzzleEasiest => 'Visvieglākā';
+
+  @override
+  String get puzzleHarder => 'Grūtāka';
+
+  @override
+  String get puzzleHardest => 'Visgrūtākā';
+
+  @override
+  String get puzzleExample => 'Piemērs';
+
+  @override
+  String get puzzleAddAnotherTheme => 'Pievienot jaunu tēmu';
+
+  @override
+  String get puzzleNextPuzzle => 'Nākamais uzdevums';
+
+  @override
+  String get puzzleJumpToNextPuzzleImmediately => 'Uzreiz pārslēgties uz nākamo uzdevumu';
+
+  @override
+  String get puzzlePuzzleDashboard => 'Uzdevumu panelis';
+
+  @override
+  String get puzzleImprovementAreas => 'Uzlabojamās jomas';
+
+  @override
+  String get puzzleStrengths => 'Uzdevumi, kas padodas';
+
+  @override
+  String get puzzleHistory => 'Uzdevumu vēsture';
+
+  @override
+  String get puzzleSolved => 'atrisināts';
+
+  @override
+  String get puzzleFailed => 'neizdevās';
+
+  @override
+  String get puzzleStreakDescription => 'Atrisiniet aizvien grūtākus uzdevumus un veidojiet uzvaru sēriju. Varat domāt, cik ilgi vēlaties, jo laiks nav ierobežots. Viens nepareizs gājiens, un spēle galā! Taču varat izlaist vienu gājienu katrā sesijā.';
+
+  @override
+  String puzzleYourStreakX(String param) {
+    return 'Jūsu uzvaru posms: $param';
+  }
+
+  @override
+  String get puzzleStreakSkipExplanation => 'Izlaist gājienu, lai paturētu uzvaru sēriju. Darbojas tikai vienreiz katrā spēlē.';
+
+  @override
+  String get puzzleContinueTheStreak => 'Turpināt uzvaru sēriju';
+
+  @override
+  String get puzzleNewStreak => 'Jauna uzvaru sērija';
+
+  @override
+  String get puzzleFromMyGames => 'No manām spēlēm';
+
+  @override
+  String get puzzleLookupOfPlayer => 'Meklēt uzdevumus no kāda spēlētāja spēlēm';
+
+  @override
+  String puzzleFromXGames(String param) {
+    return 'Uzdevumi no spēlētāja $param spēlēm';
+  }
+
+  @override
+  String get puzzleSearchPuzzles => 'Meklēt uzdevumus';
+
+  @override
+  String get puzzleFromMyGamesNone => 'Mums ļoti žēl, bet jums nav neviena uzdevuma datu bāzē.\n\nSpēlējiet ātrās vai klasiskajās spēlēs, lai paaugstinātu varbūtību, ka no tām tiks izveidots uzdevums!';
+
+  @override
+  String puzzleFromXGamesFound(String param1, String param2) {
+    return 'Atrasti $param1 uzdevumi no $param2 spēlēm';
+  }
+
+  @override
+  String get puzzlePuzzleDashboardDescription => 'Trenēties, izpētīt un uzlabot prasmes';
+
+  @override
+  String puzzlePercentSolved(String param) {
+    return '$param atrisinātas';
+  }
+
+  @override
+  String get puzzleNoPuzzlesToShow => 'Nav ko parādīt; vispirms izspēlējiet kādu uzdevumu!';
+
+  @override
+  String get puzzleImprovementAreasDescription => 'Apgūstiet šīs tēmas, lai ātrāk uzlabotu prasmes!';
+
+  @override
+  String get puzzleStrengthDescription => 'Vislabāk jums padodas šīs prasmes';
+
+  @override
+  String puzzlePlayedXTimes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Spēlēts $count reizes',
+      one: 'Spēlēts $count reizi',
+      zero: 'Spēlēts $count reizes',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsBelowYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count punkti zem jūsu uzdevumu reitinga',
+      one: '$count punkts zem jūsu pužļu reitinga',
+      zero: '$count punktu zem jūsu uzdevumu reitinga',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsAboveYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count punkti virs jūsu uzdevumu reitinga',
+      one: '$count punkts virs jūsu uzdevumu reitinga',
+      zero: '$count punktu virs jūsu uzdevumu reitinga',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPlayed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count izspēlētas',
+      one: '$count izspēlēta',
+      zero: '$count izspēlētas',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbToReplay(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count jāatkārto',
+      one: '$count jāatkārto',
+      zero: '$count jāatkārto',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get puzzleThemeAdvancedPawn => 'Brīvbandinieks';
+
+  @override
+  String get puzzleThemeAdvancedPawnDescription => 'Kāds no jūsu bandiniekiem nonācis dziļi pretinieka pozīcijā, iespējams draudot ar paaugstināšanu.';
+
+  @override
+  String get puzzleThemeAdvantage => 'Pārsvars';
+
+  @override
+  String get puzzleThemeAdvantageDescription => 'Izmantojiet iespēju iegūt noteicošu pārsvaru. (200cp ≤ vērtējums ≤ 600cp)';
+
+  @override
+  String get puzzleThemeAnastasiaMate => 'Anastāsijas mats';
+
+  @override
+  String get puzzleThemeAnastasiaMateDescription => 'Zirdziņš ar torni vai dāmu iesprosto pretinieka karali starp galdiņa malu un viņa paša figūru.';
+
+  @override
+  String get puzzleThemeArabianMate => 'Arābu mats';
+
+  @override
+  String get puzzleThemeArabianMateDescription => 'Zirdziņš ar torni kopīgi iesprosto pretinieka karali galdiņa stūrī.';
+
+  @override
+  String get puzzleThemeAttackingF2F7 => 'Uzbrukums f2 vai f7';
+
+  @override
+  String get puzzleThemeAttackingF2F7Description => 'Uzbrukums, kas koncentrējas uz f2 vai f7 bandinieku, līdzīgi \"fried liver\" (angļ. val. \"cepto aknu\") atklātnei.';
+
+  @override
+  String get puzzleThemeAttraction => 'Ievilkšana';
+
+  @override
+  String get puzzleThemeAttractionDescription => 'Apmaiņa vai upuris, kas mudina vai piespiež pretinieka figūru ieņemt kādu lauciņu, darot iespējamu taktikas turpinājumu.';
+
+  @override
+  String get puzzleThemeBackRankMate => 'Līnijmats';
+
+  @override
+  String get puzzleThemeBackRankMateDescription => 'Piesakiet matu karalim, kuru savā rindā iesprostojušas paša figūras.';
+
+  @override
+  String get puzzleThemeBishopEndgame => 'Laidņu galotne';
+
+  @override
+  String get puzzleThemeBishopEndgameDescription => 'Beigu spēle, kurā iesaistīti tikai laidņi un bandinieki.';
+
+  @override
+  String get puzzleThemeBodenMate => 'Bodena mats';
+
+  @override
+  String get puzzleThemeBodenMateDescription => 'Divi laidņi uz pretēju krāsu krusteniskām diagonālēm piesaka matu karalim, kura izbēgšanu traucē paša figūras.';
+
+  @override
+  String get puzzleThemeCastling => 'Rokāde';
+
+  @override
+  String get puzzleThemeCastlingDescription => 'Nogādājiet karali drošībā un novietojiet torni uzbrukuma pozīcijā.';
+
+  @override
+  String get puzzleThemeCapturingDefender => 'Sargājošas figūras nosišana';
+
+  @override
+  String get puzzleThemeCapturingDefenderDescription => 'Nosist figūru, kas nepieciešama citas figūras aizsardzībai, padarot iespējamu neaizsargātās figūras nosišanu nākamajā gājienā.';
+
+  @override
+  String get puzzleThemeCrushing => 'Graušana';
+
+  @override
+  String get puzzleThemeCrushingDescription => 'Ieraugiet pretinieka rupjo kļūdu, lai iegūtu graujošu pārsvaru. (vērtējums > 600cp)';
+
+  @override
+  String get puzzleThemeDoubleBishopMate => 'Dubultlaidņa mats';
+
+  @override
+  String get puzzleThemeDoubleBishopMateDescription => 'Divi laidņi uz blakus diagonālēm piesaka matu karalim, ko ierobežo paša figūras.';
+
+  @override
+  String get puzzleThemeDovetailMate => 'Kozio mats';
+
+  @override
+  String get puzzleThemeDovetailMateDescription => 'Dāma piesaka matu nostājoties pie pretinieka karaļa tā, ka tā abi neapdraudētie lauciņi ir aizņemti ar paša figūrām.';
+
+  @override
+  String get puzzleThemeEquality => 'Vienlīdzība';
+
+  @override
+  String get puzzleThemeEqualityDescription => 'Atgriezieties no zaudējošas pozīcijas, un iegūstiet neizšķirtu vai vienlīdzīgu pozīciju. (vērtējums ≤ 200cp)';
+
+  @override
+  String get puzzleThemeKingsideAttack => 'Karaļa puses uzbrukums';
+
+  @override
+  String get puzzleThemeKingsideAttackDescription => 'Uzbrukums pretinieka karalim pēc rokādes karaļa pusē.';
+
+  @override
+  String get puzzleThemeClearance => 'Atbrīvošana';
+
+  @override
+  String get puzzleThemeClearanceDescription => 'Gājiens, kas atbrīvo lauciņu, rindu vai diagonāli un bieži iegūst tempu, ļaujot turpināt taktisko ideju.';
+
+  @override
+  String get puzzleThemeDefensiveMove => 'Aizsargājošs gājiens';
+
+  @override
+  String get puzzleThemeDefensiveMoveDescription => 'Precīzs gājiens vai gājienu virkne, kas nepieciešama, lai nezaudētu materiālu vai citu priekšrocību.';
+
+  @override
+  String get puzzleThemeDeflection => 'Novirze';
+
+  @override
+  String get puzzleThemeDeflectionDescription => 'Gājiens, kas novērš pretinieka figūras uzmanību no kāda lauciņa sargāšanas vai cita uzdevuma.';
+
+  @override
+  String get puzzleThemeDiscoveredAttack => 'Atklāts uzbrukums';
+
+  @override
+  String get puzzleThemeDiscoveredAttackDescription => 'Figūras, kas iepriekš bloķēja slīdošas figūras uzbrukumu, izkustināšana — piemēram zirdziņa aizkustināšana no torņa ceļa.';
+
+  @override
+  String get puzzleThemeDoubleCheck => 'Dubultais šahs';
+
+  @override
+  String get puzzleThemeDoubleCheckDescription => 'Atklāta uzbrukuma rezultātā pieteikts šahs ar abām figūrām vienlaikus: gan ar atklāto figūru, gan ar izkustināto figūru.';
+
+  @override
+  String get puzzleThemeEndgame => 'Beigu spēle';
+
+  @override
+  String get puzzleThemeEndgameDescription => 'Sēles noslēdzošā posma taktika.';
+
+  @override
+  String get puzzleThemeEnPassantDescription => 'Stratēģija, kas iesaista garāmejošā sitiena noteikumu, kurš nosaka, ka bandinieks var nosist pretinieka bandinieku, ja tas tikko nostājies blakus ar sākotnējo divu lauciņu gājienu.';
+
+  @override
+  String get puzzleThemeExposedKing => 'Atklāts karalis';
+
+  @override
+  String get puzzleThemeExposedKingDescription => 'Uzbrukums karalim, kam ir maz aizsargājošu figūru; šis bieži noved pie mata.';
+
+  @override
+  String get puzzleThemeFork => 'Dakša';
+
+  @override
+  String get puzzleThemeForkDescription => 'Gājiens, pēc kura kustinātā figūra uzbrūk diviem pretiniekiem reizē.';
+
+  @override
+  String get puzzleThemeHangingPiece => 'Neapsargāta figūra';
+
+  @override
+  String get puzzleThemeHangingPieceDescription => 'Taktika, ar kuru var par brīvu nosist pretinieka figūru, kas ir neapsargāta vai nepietiekami apsargāta.';
+
+  @override
+  String get puzzleThemeHookMate => 'Āķa mats';
+
+  @override
+  String get puzzleThemeHookMateDescription => 'Mats ar torni, zirdziņu un bandinieku, kurā iesaistīts viens pretinieka bandinieks, kas ierobežo karaļa izbēgšanu.';
+
+  @override
+  String get puzzleThemeInterference => 'Iejaukšanās';
+
+  @override
+  String get puzzleThemeInterferenceDescription => 'Figūras novietošana starp divām pretinieka figūrām tā, lai vismaz viena no tām būtu neapsargāta — piemēram zirdziņa novietošana uz apsargāta lauciņa starp torņiem.';
+
+  @override
+  String get puzzleThemeIntermezzo => 'Intermezzo';
+
+  @override
+  String get puzzleThemeIntermezzoDescription => 'Tā vietā lai izspēlētu sagaidīto gājienu, vispirms iestarpiniet citu gājienu, kas radīs neatliekamus draudus, par kuriem pretiniekam būs jārūpējas. Pazīstams arī kā \"Zwischenzug\" vai kā gājiens \"pa vidu\".';
+
+  @override
+  String get puzzleThemeKnightEndgame => 'Zirdziņu beigu spēle';
+
+  @override
+  String get puzzleThemeKnightEndgameDescription => 'Beigu spēle, kurā iesaistīti tikai zirdziņi un bandinieki.';
+
+  @override
+  String get puzzleThemeLong => 'Garš uzdevums';
+
+  @override
+  String get puzzleThemeLongDescription => 'Trīs gājieni līdz uzvarai.';
+
+  @override
+  String get puzzleThemeMaster => 'Meistaru spēles';
+
+  @override
+  String get puzzleThemeMasterDescription => 'Puzles no spēlēm, ko spēlējuši spēlētāji ar tituliem.';
+
+  @override
+  String get puzzleThemeMasterVsMaster => 'Meistaru spēles pret meistariem';
+
+  @override
+  String get puzzleThemeMasterVsMasterDescription => 'Puzles no spēlēm, kurās abiem spēlētājiem ir tituli.';
+
+  @override
+  String get puzzleThemeMate => 'Mats';
+
+  @override
+  String get puzzleThemeMateDescription => 'Uzvariet spēli ar stilu.';
+
+  @override
+  String get puzzleThemeMateIn1 => 'Mats vienā gājienā';
+
+  @override
+  String get puzzleThemeMateIn1Description => 'Piesakiet matu vienā gājienā.';
+
+  @override
+  String get puzzleThemeMateIn2 => 'Mats 2 gājienos';
+
+  @override
+  String get puzzleThemeMateIn2Description => 'Piesakiet matu divos gājienos.';
+
+  @override
+  String get puzzleThemeMateIn3 => 'Mats 3 gājienos';
+
+  @override
+  String get puzzleThemeMateIn3Description => 'Piesakiet matu trīs gājienos.';
+
+  @override
+  String get puzzleThemeMateIn4 => 'Mats 4 gājienos';
+
+  @override
+  String get puzzleThemeMateIn4Description => 'Piesakiet matu četros gājienos.';
+
+  @override
+  String get puzzleThemeMateIn5 => 'Mats 5 vai vairāk gājienos';
+
+  @override
+  String get puzzleThemeMateIn5Description => 'Izdomājiet garu gājienu virkni, kas beidzas ar matu.';
+
+  @override
+  String get puzzleThemeMiddlegame => 'Vidusspēle';
+
+  @override
+  String get puzzleThemeMiddlegameDescription => 'Spēles otrā posma taktika.';
+
+  @override
+  String get puzzleThemeOneMove => 'Viena gājiena uzdevums';
+
+  @override
+  String get puzzleThemeOneMoveDescription => 'Uzdevums, kas ilgst tikai vienu gājienu.';
+
+  @override
+  String get puzzleThemeOpening => 'Atklātne';
+
+  @override
+  String get puzzleThemeOpeningDescription => 'Atklātnes posma taktika.';
+
+  @override
+  String get puzzleThemePawnEndgame => 'Bandinieku beigu spēle';
+
+  @override
+  String get puzzleThemePawnEndgameDescription => 'Beigu spēle, kurā iesaistīti tikai bandinieki.';
+
+  @override
+  String get puzzleThemePin => 'Piespraušana';
+
+  @override
+  String get puzzleThemePinDescription => 'Taktika, kas iesaista piespraušanu – pozīciju, kurā figūra nevar izkustēties bez uzbrukuma atklāšanas augstākas vērtības figūrai.';
+
+  @override
+  String get puzzleThemePromotion => 'Paaugstināšana';
+
+  @override
+  String get puzzleThemePromotionDescription => 'Paaugstiniet bandinieku par dāmu vai citu figūru.';
+
+  @override
+  String get puzzleThemeQueenEndgame => 'Dāmu beigu spēle';
+
+  @override
+  String get puzzleThemeQueenEndgameDescription => 'Beigu spēle, kurā iesaistīti tikai bandinieki un dāmas.';
+
+  @override
+  String get puzzleThemeQueenRookEndgame => 'Dāmu un torņu beigu spēle';
+
+  @override
+  String get puzzleThemeQueenRookEndgameDescription => 'Beigu spēle, kurā iesaistīti tikai bandinieki, torņi un dāmas.';
+
+  @override
+  String get puzzleThemeQueensideAttack => 'Dāmas puses uzbrukums';
+
+  @override
+  String get puzzleThemeQueensideAttackDescription => 'Uzbrukums pretinieka karalim pēc rokādes dāmas pusē.';
+
+  @override
+  String get puzzleThemeQuietMove => 'Klusais gājiens';
+
+  @override
+  String get puzzleThemeQuietMoveDescription => 'Gājiens, kas nepiesaka šahu un nenosit nevienu figūru, tomēr sagatavo nenovēršamus draudus kādā sekojošā gājienā.';
+
+  @override
+  String get puzzleThemeRookEndgame => 'Torņu beigu spēle';
+
+  @override
+  String get puzzleThemeRookEndgameDescription => 'Beigu spēle, kurā iesaistīti tikai torņi un bandinieki.';
+
+  @override
+  String get puzzleThemeSacrifice => 'Upuris';
+
+  @override
+  String get puzzleThemeSacrificeDescription => 'Stratēģija, kurā īstermiņā atdod materiālu, lai atkal iegūtu pārsvaru pēc piespiestu gājienu virknes.';
+
+  @override
+  String get puzzleThemeShort => 'Īss uzdevums';
+
+  @override
+  String get puzzleThemeShortDescription => 'Divi gājieni līdz uzvarai.';
+
+  @override
+  String get puzzleThemeSkewer => 'Iesms';
+
+  @override
+  String get puzzleThemeSkewerDescription => 'Šis motīvs iesaista augstas vērtības figūru, kurai jāizkustās, lai izvairītos no uzbrukuma, atļaujot vai nu uzbrukumu mazākas vērtības figūrai, kas atrodas aiz tās, vai arī šīs figūras nosišanu – pretējais piespraušanai.';
+
+  @override
+  String get puzzleThemeSmotheredMate => 'Smacējošais mats';
+
+  @override
+  String get puzzleThemeSmotheredMateDescription => 'Zirdziņa pieteikts mats karalim, kas nevar kustēties dēļ paša figūrām, kas to ielenkušas (nosmacējušas).';
+
+  @override
+  String get puzzleThemeSuperGM => 'Super-Lielmeistaru spēles';
+
+  @override
+  String get puzzleThemeSuperGMDescription => 'Uzdevumi no labāko pasaules spēlētāju spēlēm.';
+
+  @override
+  String get puzzleThemeTrappedPiece => 'Iesprostota figūra';
+
+  @override
+  String get puzzleThemeTrappedPieceDescription => 'Figūra nevar izbēgt nosišanu, jo ierobežoti tās gājieni.';
+
+  @override
+  String get puzzleThemeUnderPromotion => 'Pieticīga paaugstināšana';
+
+  @override
+  String get puzzleThemeUnderPromotionDescription => 'Paaugstināšana par zirdziņu, laidni vai torni.';
+
+  @override
+  String get puzzleThemeVeryLong => 'Ļoti garš uzdevums';
+
+  @override
+  String get puzzleThemeVeryLongDescription => 'Vismaz četri gājieni līdz uzvarai.';
+
+  @override
+  String get puzzleThemeXRayAttack => 'Rentgena uzbrukums';
+
+  @override
+  String get puzzleThemeXRayAttackDescription => 'Figūra uzbrūk vai apsargā lauciņu caur pretinieka figūru.';
+
+  @override
+  String get puzzleThemeZugzwang => 'Zugzwang';
+
+  @override
+  String get puzzleThemeZugzwangDescription => 'Pretiniekam ir ierobežoti iespējamie gājieni, un visi no tiem pasliktina pretinieka pozīciju.';
+
+  @override
+  String get puzzleThemeHealthyMix => 'Veselīgs sajaukums';
+
+  @override
+  String get puzzleThemeHealthyMixDescription => 'Mazliet no visa kā. Nezināsiet, ko sagaidīt, tāpēc paliksiet gatavs jebkam! Tieši kā īstās spēlēs.';
+
+  @override
+  String get puzzleThemePlayerGames => 'Spēlētāja spēles';
+
+  @override
+  String get puzzleThemePlayerGamesDescription => 'Meklējiet uzdevumus, kas radīti no jūsu vai cita spēlētāja spēlēm.';
+
+  @override
+  String puzzleThemePuzzleDownloadInformation(String param) {
+    return 'Šie uzdevumi ir neaizsargājami darbi, un tos var lejupielādēt lapā $param.';
+  }
+
+  @override
+  String get searchSearch => 'Meklēt';
+
+  @override
+  String get settingsSettings => 'Iestatījumi';
+
+  @override
+  String get settingsCloseAccount => 'Slēgt kontu';
+
+  @override
+  String get settingsManagedAccountCannotBeClosed => 'Jūsu konts tiek pārvaldīts, un to nevar slēgt.';
+
+  @override
+  String get settingsClosingIsDefinitive => 'Slēgšana ir galīga. Atpakaļceļa nav. Vai esat pārliecināts?';
+
+  @override
+  String get settingsCantOpenSimilarAccount => 'Nevarēsiet atvērt jaunu kontu ar to pašu vārdu, pat ja burtu lielumi atšķirsies.';
+
+  @override
+  String get settingsChangedMindDoNotCloseAccount => 'Es pārdomāju, neslēdziet manu kontu';
+
+  @override
+  String get settingsCloseAccountExplanation => 'Vai esat pārliecināts, ka vēlaties slēgt kontu? Konta slēgšanu nevar atsaukt. Jūs vairs nekad nevarēsiet ierakstīties.';
+
+  @override
+  String get settingsThisAccountIsClosed => 'Šis konts ir slēgts.';
 
   @override
   String get playWithAFriend => 'Spēlēt ar draugu';
@@ -512,6 +1518,12 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get deleteFromHere => 'Dzēst šo un turpmākos gājienus';
+
+  @override
+  String get collapseVariations => 'Collapse variations';
+
+  @override
+  String get expandVariations => 'Expand variations';
 
   @override
   String get forceVariation => 'Rādīt kā variantu';
@@ -1371,15 +2383,6 @@ class AppLocalizationsLv extends AppLocalizations {
   String get emptyTournamentName => 'Atstājiet neaizpildītu, lai nosauktu turnīru kāda ievērojama šahista vārdā.';
 
   @override
-  String get recommendNotTouching => 'Iesakām šeit neko nemainīt.';
-
-  @override
-  String get fewerPlayers => 'Ja uzstādīsiet dalības noteikumus, jūsu turnīrā piedalīsies mazāk spēlētāju.';
-
-  @override
-  String get showAdvancedSettings => 'Rādīt lietpratēju uzstādījumus';
-
-  @override
   String get makePrivateTournament => 'Padarīt turnīru privātu, un ierobežot piekļuvi ar paroli';
 
   @override
@@ -1509,10 +2512,7 @@ class AppLocalizationsLv extends AppLocalizations {
   String get editProfile => 'Labot profilu';
 
   @override
-  String get firstName => 'Vārds';
-
-  @override
-  String get lastName => 'Uzvārds';
+  String get realName => 'Real name';
 
   @override
   String get setFlair => 'Set your flair';
@@ -1641,13 +2641,7 @@ class AppLocalizationsLv extends AppLocalizations {
   String get cheat => 'Krāpšanās';
 
   @override
-  String get insult => 'Apvainošana';
-
-  @override
   String get troll => 'Troļļošana';
-
-  @override
-  String get ratingManipulation => 'Reitinga manipulācija';
 
   @override
   String get other => 'Cits';
@@ -1754,6 +2748,9 @@ class AppLocalizationsLv extends AppLocalizations {
 
   @override
   String get outsideTheBoard => 'Galdiņa ārpusē';
+
+  @override
+  String get allSquaresOfTheBoard => 'All squares of the board';
 
   @override
   String get onSlowGames => 'Lēnajās spēlēs';
@@ -3460,1009 +4457,6 @@ class AppLocalizationsLv extends AppLocalizations {
   }
 
   @override
-  String get patronDonate => 'Ziedot';
-
-  @override
-  String get patronLichessPatron => 'Lichess Sponsors';
-
-  @override
-  String get preferencesPreferences => 'Uzstādījumi';
-
-  @override
-  String get preferencesDisplay => 'Izskats';
-
-  @override
-  String get preferencesPrivacy => 'Privātums';
-
-  @override
-  String get preferencesNotifications => 'Paziņojumi';
-
-  @override
-  String get preferencesPieceAnimation => 'Figūru animācija';
-
-  @override
-  String get preferencesMaterialDifference => 'Materiāla starpība';
-
-  @override
-  String get preferencesBoardHighlights => 'Lauciņu izcelšana (pēdējais gājiens vai piesakot šahu)';
-
-  @override
-  String get preferencesPieceDestinations => 'Figūru galamērķi (atļauti gājieni vai priekšgājieni)';
-
-  @override
-  String get preferencesBoardCoordinates => 'Galdiņa koordinātas (A-H, 1-8)';
-
-  @override
-  String get preferencesMoveListWhilePlaying => 'Gājienu saraksts spēles laikā';
-
-  @override
-  String get preferencesPgnPieceNotation => 'Gājienu notācija';
-
-  @override
-  String get preferencesChessPieceSymbol => 'Šaha figūras simbols';
-
-  @override
-  String get preferencesPgnLetter => 'Burts (K, Q, R, B, N)';
-
-  @override
-  String get preferencesZenMode => 'Zen režīms';
-
-  @override
-  String get preferencesShowPlayerRatings => 'Rādīt spēlētāju reitingus';
-
-  @override
-  String get preferencesShowFlairs => 'Show player flairs';
-
-  @override
-  String get preferencesExplainShowPlayerRatings => 'Šī iespēja ļauj slēpt visus reitingus mājaslapā, lai palīdzētu koncentrēties uz pašu šahu. Spēles joprojām var būt vērtētas – šis attiecas tikai uz to, ko jūs redzat.';
-
-  @override
-  String get preferencesDisplayBoardResizeHandle => 'Rādīt galdiņa izmēra maiņas rīku';
-
-  @override
-  String get preferencesOnlyOnInitialPosition => 'Tikai sākotnējajā pozīcijā';
-
-  @override
-  String get preferencesInGameOnly => 'In-game only';
-
-  @override
-  String get preferencesChessClock => 'Šaha pulkstenis';
-
-  @override
-  String get preferencesTenthsOfSeconds => 'Sekunžu desmitdaļas';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'Ja atlicis < 10 sekundēm';
-
-  @override
-  String get preferencesHorizontalGreenProgressBars => 'Zaļā horizontālā izpildes josla';
-
-  @override
-  String get preferencesSoundWhenTimeGetsCritical => 'Signalizēt, kad laika pavisam maz';
-
-  @override
-  String get preferencesGiveMoreTime => 'Dot vairāk laika';
-
-  @override
-  String get preferencesGameBehavior => 'Spēles uzvedība';
-
-  @override
-  String get preferencesHowDoYouMovePieces => 'Kā pārvietot figūras?';
-
-  @override
-  String get preferencesClickTwoSquares => 'Klikšķinot uz diviem lauciņiem';
-
-  @override
-  String get preferencesDragPiece => 'Velkot figūru';
-
-  @override
-  String get preferencesBothClicksAndDrag => 'Jebkurā veidā';
-
-  @override
-  String get preferencesPremovesPlayingDuringOpponentTurn => 'Priekšgājieni (izdarīti pretinieka gājienā)';
-
-  @override
-  String get preferencesTakebacksWithOpponentApproval => 'Gājienu atsaukšana (ar pretinieka piekrišanu)';
-
-  @override
-  String get preferencesInCasualGamesOnly => 'Tikai nevērtētajās spēlēs';
-
-  @override
-  String get preferencesPromoteToQueenAutomatically => 'Automātiski pārvērst par Dāmu';
-
-  @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Turiet nospiestu taustiņu <ctrl>, kad paaugstinat bandinieku, lai īslaicīgi atspējotu automātisko paaugstināšanu';
-
-  @override
-  String get preferencesWhenPremoving => 'Tikai priekšgājienos';
-
-  @override
-  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Automātiski pieprasīt trīskāršās atkārtošanās neizšķirtu';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Ja atlicis < 30 sekundēm';
-
-  @override
-  String get preferencesMoveConfirmation => 'Gājiena apstiprināšana';
-
-  @override
-  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Izslēdzams spēles laikā no galdiņa izvēlnes';
-
-  @override
-  String get preferencesInCorrespondenceGames => 'Korespondencšaha spēlēs';
-
-  @override
-  String get preferencesCorrespondenceAndUnlimited => 'Korespondencšaha un bezgalīgajās spēlēs';
-
-  @override
-  String get preferencesConfirmResignationAndDrawOffers => 'Apstiprināt padošanos un neizšķirta piedāvājumus';
-
-  @override
-  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Rokādes metode';
-
-  @override
-  String get preferencesCastleByMovingTwoSquares => 'Pārvietot karali par diviem lauciņiem';
-
-  @override
-  String get preferencesCastleByMovingOntoTheRook => 'Pārvietot karali virsū tornim';
-
-  @override
-  String get preferencesInputMovesWithTheKeyboard => 'Ievadīt gājienus ar tastatūru';
-
-  @override
-  String get preferencesInputMovesWithVoice => 'Input moves with your voice';
-
-  @override
-  String get preferencesSnapArrowsToValidMoves => 'Pievilkt bultas pie iespējamiem gājieniem';
-
-  @override
-  String get preferencesSayGgWpAfterLosingOrDrawing => 'Sūtīt \"Good game, well played\" (angļ. val. \"Laba partija, labi nospēlēta\") pēc uzvaras vai neizšķirta';
-
-  @override
-  String get preferencesYourPreferencesHaveBeenSaved => 'Jūsu uzstādījumi ir saglabāti.';
-
-  @override
-  String get preferencesScrollOnTheBoardToReplayMoves => 'Ritiniet peli virs galdiņa, lai skatītu spēles gaitu';
-
-  @override
-  String get preferencesCorrespondenceEmailNotification => 'E-pasta ziņojums reizi dienā par jūsu korespondencšaha spēlēm';
-
-  @override
-  String get preferencesNotifyStreamStart => 'Straumētājs sāk tiešraidi';
-
-  @override
-  String get preferencesNotifyInboxMsg => 'Jauna ziņa iesūtnē';
-
-  @override
-  String get preferencesNotifyForumMention => 'Foruma ziņa jūs piemin';
-
-  @override
-  String get preferencesNotifyInvitedStudy => 'Izpētes ielūgums';
-
-  @override
-  String get preferencesNotifyGameEvent => 'Notikumi Korespondencšahā';
-
-  @override
-  String get preferencesNotifyChallenge => 'Izaicinājumi';
-
-  @override
-  String get preferencesNotifyTournamentSoon => 'Turnīra sākums tuvojas';
-
-  @override
-  String get preferencesNotifyTimeAlarm => 'Korespondencšaha laiks izsīkst';
-
-  @override
-  String get preferencesNotifyBell => 'Zvana paziņojumi Lichess programmā';
-
-  @override
-  String get preferencesNotifyPush => 'Ierīces paziņojumi, kad neesat platformā Lichess';
-
-  @override
-  String get preferencesNotifyWeb => 'Pārlūkprogrammā';
-
-  @override
-  String get preferencesNotifyDevice => 'Ierīcē';
-
-  @override
-  String get preferencesBellNotificationSound => 'Paziņojumu skaņa';
-
-  @override
-  String get puzzlePuzzles => 'Uzdevumi';
-
-  @override
-  String get puzzlePuzzleThemes => 'Uzdevumu temati';
-
-  @override
-  String get puzzleRecommended => 'Ieteikumi';
-
-  @override
-  String get puzzlePhases => 'Posmi';
-
-  @override
-  String get puzzleMotifs => 'Motīvi';
-
-  @override
-  String get puzzleAdvanced => 'Lietpratējiem';
-
-  @override
-  String get puzzleLengths => 'Garumi';
-
-  @override
-  String get puzzleMates => 'Mati';
-
-  @override
-  String get puzzleGoals => 'Mērķi';
-
-  @override
-  String get puzzleOrigin => 'Izcelsme';
-
-  @override
-  String get puzzleSpecialMoves => 'Īpaši gājieni';
-
-  @override
-  String get puzzleDidYouLikeThisPuzzle => 'Vai patika šis uzdevums?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Balsojiet, lai ielādētu nākamo!';
-
-  @override
-  String get puzzleUpVote => 'Patīk puzle';
-
-  @override
-  String get puzzleDownVote => 'Nepatīk puzle';
-
-  @override
-  String get puzzleYourPuzzleRatingWillNotChange => 'Jūsu uzdevumu reitings nemainīsies. Ievērojiet, ka uzdevumu risināšana nav sacensības. Reitings mums palīdz atlasīt labākos uzdevumus jūsu prasmju līmenim.';
-
-  @override
-  String get puzzleFindTheBestMoveForWhite => 'Atrodiet labāko gājienu baltajiem.';
-
-  @override
-  String get puzzleFindTheBestMoveForBlack => 'Atrodiet labāko gājienu melnajiem.';
-
-  @override
-  String get puzzleToGetPersonalizedPuzzles => 'Lai iegūtu pielāgotus uzdevumus:';
-
-  @override
-  String puzzlePuzzleId(String param) {
-    return 'Uzdevums $param';
-  }
-
-  @override
-  String get puzzlePuzzleOfTheDay => 'Dienas uzdevums';
-
-  @override
-  String get puzzleDailyPuzzle => 'Šodienas uzdevums';
-
-  @override
-  String get puzzleClickToSolve => 'Klikšķiniet, lai atrisinātu';
-
-  @override
-  String get puzzleGoodMove => 'Labs gājiens';
-
-  @override
-  String get puzzleBestMove => 'Vislabākais gājiens!';
-
-  @override
-  String get puzzleKeepGoing => 'Turpiniet…';
-
-  @override
-  String get puzzlePuzzleSuccess => 'Izdevās!';
-
-  @override
-  String get puzzlePuzzleComplete => 'Uzdevums atrisināts!';
-
-  @override
-  String get puzzleByOpenings => 'Pa atklātnēm';
-
-  @override
-  String get puzzlePuzzlesByOpenings => 'Puzles pa atklātnēm';
-
-  @override
-  String get puzzleOpeningsYouPlayedTheMost => 'Visvairāk spēlētās atklātnes spēlēs ar reitingu';
-
-  @override
-  String get puzzleUseFindInPage => 'Lieto \"Find in page\" no pārlūka izvēlnes lai atrastu savu mīļāko atklātni!';
-
-  @override
-  String get puzzleUseCtrlF => 'Lieto Ctrl+f lai atrastu savu mīļāko atklātni!';
-
-  @override
-  String get puzzleNotTheMove => 'Tas nav īstais gājiens!';
-
-  @override
-  String get puzzleTrySomethingElse => 'Izmēģiniet ko citu.';
-
-  @override
-  String puzzleRatingX(String param) {
-    return 'Reitings: $param';
-  }
-
-  @override
-  String get puzzleHidden => 'slēpts';
-
-  @override
-  String puzzleFromGameLink(String param) {
-    return 'No spēles $param';
-  }
-
-  @override
-  String get puzzleContinueTraining => 'Turpināt treniņu';
-
-  @override
-  String get puzzleDifficultyLevel => 'Grūtības pakāpe';
-
-  @override
-  String get puzzleNormal => 'Parasta';
-
-  @override
-  String get puzzleEasier => 'Vieglāka';
-
-  @override
-  String get puzzleEasiest => 'Visvieglākā';
-
-  @override
-  String get puzzleHarder => 'Grūtāka';
-
-  @override
-  String get puzzleHardest => 'Visgrūtākā';
-
-  @override
-  String get puzzleExample => 'Piemērs';
-
-  @override
-  String get puzzleAddAnotherTheme => 'Pievienot jaunu tēmu';
-
-  @override
-  String get puzzleNextPuzzle => 'Nākamais uzdevums';
-
-  @override
-  String get puzzleJumpToNextPuzzleImmediately => 'Uzreiz pārslēgties uz nākamo uzdevumu';
-
-  @override
-  String get puzzlePuzzleDashboard => 'Uzdevumu panelis';
-
-  @override
-  String get puzzleImprovementAreas => 'Uzlabojamās jomas';
-
-  @override
-  String get puzzleStrengths => 'Uzdevumi, kas padodas';
-
-  @override
-  String get puzzleHistory => 'Uzdevumu vēsture';
-
-  @override
-  String get puzzleSolved => 'atrisināts';
-
-  @override
-  String get puzzleFailed => 'neizdevās';
-
-  @override
-  String get puzzleStreakDescription => 'Atrisiniet aizvien grūtākus uzdevumus un veidojiet uzvaru sēriju. Varat domāt, cik ilgi vēlaties, jo laiks nav ierobežots. Viens nepareizs gājiens, un spēle galā! Taču varat izlaist vienu gājienu katrā sesijā.';
-
-  @override
-  String puzzleYourStreakX(String param) {
-    return 'Jūsu uzvaru posms: $param';
-  }
-
-  @override
-  String get puzzleStreakSkipExplanation => 'Izlaist gājienu, lai paturētu uzvaru sēriju. Darbojas tikai vienreiz katrā spēlē.';
-
-  @override
-  String get puzzleContinueTheStreak => 'Turpināt uzvaru sēriju';
-
-  @override
-  String get puzzleNewStreak => 'Jauna uzvaru sērija';
-
-  @override
-  String get puzzleFromMyGames => 'No manām spēlēm';
-
-  @override
-  String get puzzleLookupOfPlayer => 'Meklēt uzdevumus no kāda spēlētāja spēlēm';
-
-  @override
-  String puzzleFromXGames(String param) {
-    return 'Uzdevumi no spēlētāja $param spēlēm';
-  }
-
-  @override
-  String get puzzleSearchPuzzles => 'Meklēt uzdevumus';
-
-  @override
-  String get puzzleFromMyGamesNone => 'Mums ļoti žēl, bet jums nav neviena uzdevuma datu bāzē.\n\nSpēlējiet ātrās vai klasiskajās spēlēs, lai paaugstinātu varbūtību, ka no tām tiks izveidots uzdevums!';
-
-  @override
-  String puzzleFromXGamesFound(String param1, String param2) {
-    return 'Atrasti $param1 uzdevumi no $param2 spēlēm';
-  }
-
-  @override
-  String get puzzlePuzzleDashboardDescription => 'Trenēties, izpētīt un uzlabot prasmes';
-
-  @override
-  String puzzlePercentSolved(String param) {
-    return '$param atrisinātas';
-  }
-
-  @override
-  String get puzzleNoPuzzlesToShow => 'Nav ko parādīt; vispirms izspēlējiet kādu uzdevumu!';
-
-  @override
-  String get puzzleImprovementAreasDescription => 'Apgūstiet šīs tēmas, lai ātrāk uzlabotu prasmes!';
-
-  @override
-  String get puzzleStrengthDescription => 'Vislabāk jums padodas šīs prasmes';
-
-  @override
-  String puzzlePlayedXTimes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Spēlēts $count reizes',
-      one: 'Spēlēts $count reizi',
-      zero: 'Spēlēts $count reizes',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsBelowYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count punkti zem jūsu uzdevumu reitinga',
-      one: '$count punkts zem jūsu pužļu reitinga',
-      zero: '$count punktu zem jūsu uzdevumu reitinga',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsAboveYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count punkti virs jūsu uzdevumu reitinga',
-      one: '$count punkts virs jūsu uzdevumu reitinga',
-      zero: '$count punktu virs jūsu uzdevumu reitinga',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPlayed(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count izspēlētas',
-      one: '$count izspēlēta',
-      zero: '$count izspēlētas',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbToReplay(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count jāatkārto',
-      one: '$count jāatkārto',
-      zero: '$count jāatkārto',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get puzzleThemeAdvancedPawn => 'Brīvbandinieks';
-
-  @override
-  String get puzzleThemeAdvancedPawnDescription => 'Kāds no jūsu bandiniekiem nonācis dziļi pretinieka pozīcijā, iespējams draudot ar paaugstināšanu.';
-
-  @override
-  String get puzzleThemeAdvantage => 'Pārsvars';
-
-  @override
-  String get puzzleThemeAdvantageDescription => 'Izmantojiet iespēju iegūt noteicošu pārsvaru. (200cp ≤ vērtējums ≤ 600cp)';
-
-  @override
-  String get puzzleThemeAnastasiaMate => 'Anastāsijas mats';
-
-  @override
-  String get puzzleThemeAnastasiaMateDescription => 'Zirdziņš ar torni vai dāmu iesprosto pretinieka karali starp galdiņa malu un viņa paša figūru.';
-
-  @override
-  String get puzzleThemeArabianMate => 'Arābu mats';
-
-  @override
-  String get puzzleThemeArabianMateDescription => 'Zirdziņš ar torni kopīgi iesprosto pretinieka karali galdiņa stūrī.';
-
-  @override
-  String get puzzleThemeAttackingF2F7 => 'Uzbrukums f2 vai f7';
-
-  @override
-  String get puzzleThemeAttackingF2F7Description => 'Uzbrukums, kas koncentrējas uz f2 vai f7 bandinieku, līdzīgi \"fried liver\" (angļ. val. \"cepto aknu\") atklātnei.';
-
-  @override
-  String get puzzleThemeAttraction => 'Ievilkšana';
-
-  @override
-  String get puzzleThemeAttractionDescription => 'Apmaiņa vai upuris, kas mudina vai piespiež pretinieka figūru ieņemt kādu lauciņu, darot iespējamu taktikas turpinājumu.';
-
-  @override
-  String get puzzleThemeBackRankMate => 'Līnijmats';
-
-  @override
-  String get puzzleThemeBackRankMateDescription => 'Piesakiet matu karalim, kuru savā rindā iesprostojušas paša figūras.';
-
-  @override
-  String get puzzleThemeBishopEndgame => 'Laidņu galotne';
-
-  @override
-  String get puzzleThemeBishopEndgameDescription => 'Beigu spēle, kurā iesaistīti tikai laidņi un bandinieki.';
-
-  @override
-  String get puzzleThemeBodenMate => 'Bodena mats';
-
-  @override
-  String get puzzleThemeBodenMateDescription => 'Divi laidņi uz pretēju krāsu krusteniskām diagonālēm piesaka matu karalim, kura izbēgšanu traucē paša figūras.';
-
-  @override
-  String get puzzleThemeCastling => 'Rokāde';
-
-  @override
-  String get puzzleThemeCastlingDescription => 'Nogādājiet karali drošībā un novietojiet torni uzbrukuma pozīcijā.';
-
-  @override
-  String get puzzleThemeCapturingDefender => 'Sargājošas figūras nosišana';
-
-  @override
-  String get puzzleThemeCapturingDefenderDescription => 'Nosist figūru, kas nepieciešama citas figūras aizsardzībai, padarot iespējamu neaizsargātās figūras nosišanu nākamajā gājienā.';
-
-  @override
-  String get puzzleThemeCrushing => 'Graušana';
-
-  @override
-  String get puzzleThemeCrushingDescription => 'Ieraugiet pretinieka rupjo kļūdu, lai iegūtu graujošu pārsvaru. (vērtējums > 600cp)';
-
-  @override
-  String get puzzleThemeDoubleBishopMate => 'Dubultlaidņa mats';
-
-  @override
-  String get puzzleThemeDoubleBishopMateDescription => 'Divi laidņi uz blakus diagonālēm piesaka matu karalim, ko ierobežo paša figūras.';
-
-  @override
-  String get puzzleThemeDovetailMate => 'Kozio mats';
-
-  @override
-  String get puzzleThemeDovetailMateDescription => 'Dāma piesaka matu nostājoties pie pretinieka karaļa tā, ka tā abi neapdraudētie lauciņi ir aizņemti ar paša figūrām.';
-
-  @override
-  String get puzzleThemeEquality => 'Vienlīdzība';
-
-  @override
-  String get puzzleThemeEqualityDescription => 'Atgriezieties no zaudējošas pozīcijas, un iegūstiet neizšķirtu vai vienlīdzīgu pozīciju. (vērtējums ≤ 200cp)';
-
-  @override
-  String get puzzleThemeKingsideAttack => 'Karaļa puses uzbrukums';
-
-  @override
-  String get puzzleThemeKingsideAttackDescription => 'Uzbrukums pretinieka karalim pēc rokādes karaļa pusē.';
-
-  @override
-  String get puzzleThemeClearance => 'Atbrīvošana';
-
-  @override
-  String get puzzleThemeClearanceDescription => 'Gājiens, kas atbrīvo lauciņu, rindu vai diagonāli un bieži iegūst tempu, ļaujot turpināt taktisko ideju.';
-
-  @override
-  String get puzzleThemeDefensiveMove => 'Aizsargājošs gājiens';
-
-  @override
-  String get puzzleThemeDefensiveMoveDescription => 'Precīzs gājiens vai gājienu virkne, kas nepieciešama, lai nezaudētu materiālu vai citu priekšrocību.';
-
-  @override
-  String get puzzleThemeDeflection => 'Novirze';
-
-  @override
-  String get puzzleThemeDeflectionDescription => 'Gājiens, kas novērš pretinieka figūras uzmanību no kāda lauciņa sargāšanas vai cita uzdevuma.';
-
-  @override
-  String get puzzleThemeDiscoveredAttack => 'Atklāts uzbrukums';
-
-  @override
-  String get puzzleThemeDiscoveredAttackDescription => 'Figūras, kas iepriekš bloķēja slīdošas figūras uzbrukumu, izkustināšana — piemēram zirdziņa aizkustināšana no torņa ceļa.';
-
-  @override
-  String get puzzleThemeDoubleCheck => 'Dubultais šahs';
-
-  @override
-  String get puzzleThemeDoubleCheckDescription => 'Atklāta uzbrukuma rezultātā pieteikts šahs ar abām figūrām vienlaikus: gan ar atklāto figūru, gan ar izkustināto figūru.';
-
-  @override
-  String get puzzleThemeEndgame => 'Beigu spēle';
-
-  @override
-  String get puzzleThemeEndgameDescription => 'Sēles noslēdzošā posma taktika.';
-
-  @override
-  String get puzzleThemeEnPassantDescription => 'Stratēģija, kas iesaista garāmejošā sitiena noteikumu, kurš nosaka, ka bandinieks var nosist pretinieka bandinieku, ja tas tikko nostājies blakus ar sākotnējo divu lauciņu gājienu.';
-
-  @override
-  String get puzzleThemeExposedKing => 'Atklāts karalis';
-
-  @override
-  String get puzzleThemeExposedKingDescription => 'Uzbrukums karalim, kam ir maz aizsargājošu figūru; šis bieži noved pie mata.';
-
-  @override
-  String get puzzleThemeFork => 'Dakša';
-
-  @override
-  String get puzzleThemeForkDescription => 'Gājiens, pēc kura kustinātā figūra uzbrūk diviem pretiniekiem reizē.';
-
-  @override
-  String get puzzleThemeHangingPiece => 'Neapsargāta figūra';
-
-  @override
-  String get puzzleThemeHangingPieceDescription => 'Taktika, ar kuru var par brīvu nosist pretinieka figūru, kas ir neapsargāta vai nepietiekami apsargāta.';
-
-  @override
-  String get puzzleThemeHookMate => 'Āķa mats';
-
-  @override
-  String get puzzleThemeHookMateDescription => 'Mats ar torni, zirdziņu un bandinieku, kurā iesaistīts viens pretinieka bandinieks, kas ierobežo karaļa izbēgšanu.';
-
-  @override
-  String get puzzleThemeInterference => 'Iejaukšanās';
-
-  @override
-  String get puzzleThemeInterferenceDescription => 'Figūras novietošana starp divām pretinieka figūrām tā, lai vismaz viena no tām būtu neapsargāta — piemēram zirdziņa novietošana uz apsargāta lauciņa starp torņiem.';
-
-  @override
-  String get puzzleThemeIntermezzo => 'Intermezzo';
-
-  @override
-  String get puzzleThemeIntermezzoDescription => 'Tā vietā lai izspēlētu sagaidīto gājienu, vispirms iestarpiniet citu gājienu, kas radīs neatliekamus draudus, par kuriem pretiniekam būs jārūpējas. Pazīstams arī kā \"Zwischenzug\" vai kā gājiens \"pa vidu\".';
-
-  @override
-  String get puzzleThemeKnightEndgame => 'Zirdziņu beigu spēle';
-
-  @override
-  String get puzzleThemeKnightEndgameDescription => 'Beigu spēle, kurā iesaistīti tikai zirdziņi un bandinieki.';
-
-  @override
-  String get puzzleThemeLong => 'Garš uzdevums';
-
-  @override
-  String get puzzleThemeLongDescription => 'Trīs gājieni līdz uzvarai.';
-
-  @override
-  String get puzzleThemeMaster => 'Meistaru spēles';
-
-  @override
-  String get puzzleThemeMasterDescription => 'Puzles no spēlēm, ko spēlējuši spēlētāji ar tituliem.';
-
-  @override
-  String get puzzleThemeMasterVsMaster => 'Meistaru spēles pret meistariem';
-
-  @override
-  String get puzzleThemeMasterVsMasterDescription => 'Puzles no spēlēm, kurās abiem spēlētājiem ir tituli.';
-
-  @override
-  String get puzzleThemeMate => 'Mats';
-
-  @override
-  String get puzzleThemeMateDescription => 'Uzvariet spēli ar stilu.';
-
-  @override
-  String get puzzleThemeMateIn1 => 'Mats vienā gājienā';
-
-  @override
-  String get puzzleThemeMateIn1Description => 'Piesakiet matu vienā gājienā.';
-
-  @override
-  String get puzzleThemeMateIn2 => 'Mats 2 gājienos';
-
-  @override
-  String get puzzleThemeMateIn2Description => 'Piesakiet matu divos gājienos.';
-
-  @override
-  String get puzzleThemeMateIn3 => 'Mats 3 gājienos';
-
-  @override
-  String get puzzleThemeMateIn3Description => 'Piesakiet matu trīs gājienos.';
-
-  @override
-  String get puzzleThemeMateIn4 => 'Mats 4 gājienos';
-
-  @override
-  String get puzzleThemeMateIn4Description => 'Piesakiet matu četros gājienos.';
-
-  @override
-  String get puzzleThemeMateIn5 => 'Mats 5 vai vairāk gājienos';
-
-  @override
-  String get puzzleThemeMateIn5Description => 'Izdomājiet garu gājienu virkni, kas beidzas ar matu.';
-
-  @override
-  String get puzzleThemeMiddlegame => 'Vidusspēle';
-
-  @override
-  String get puzzleThemeMiddlegameDescription => 'Spēles otrā posma taktika.';
-
-  @override
-  String get puzzleThemeOneMove => 'Viena gājiena uzdevums';
-
-  @override
-  String get puzzleThemeOneMoveDescription => 'Uzdevums, kas ilgst tikai vienu gājienu.';
-
-  @override
-  String get puzzleThemeOpening => 'Atklātne';
-
-  @override
-  String get puzzleThemeOpeningDescription => 'Atklātnes posma taktika.';
-
-  @override
-  String get puzzleThemePawnEndgame => 'Bandinieku beigu spēle';
-
-  @override
-  String get puzzleThemePawnEndgameDescription => 'Beigu spēle, kurā iesaistīti tikai bandinieki.';
-
-  @override
-  String get puzzleThemePin => 'Piespraušana';
-
-  @override
-  String get puzzleThemePinDescription => 'Taktika, kas iesaista piespraušanu – pozīciju, kurā figūra nevar izkustēties bez uzbrukuma atklāšanas augstākas vērtības figūrai.';
-
-  @override
-  String get puzzleThemePromotion => 'Paaugstināšana';
-
-  @override
-  String get puzzleThemePromotionDescription => 'Paaugstiniet bandinieku par dāmu vai citu figūru.';
-
-  @override
-  String get puzzleThemeQueenEndgame => 'Dāmu beigu spēle';
-
-  @override
-  String get puzzleThemeQueenEndgameDescription => 'Beigu spēle, kurā iesaistīti tikai bandinieki un dāmas.';
-
-  @override
-  String get puzzleThemeQueenRookEndgame => 'Dāmu un torņu beigu spēle';
-
-  @override
-  String get puzzleThemeQueenRookEndgameDescription => 'Beigu spēle, kurā iesaistīti tikai bandinieki, torņi un dāmas.';
-
-  @override
-  String get puzzleThemeQueensideAttack => 'Dāmas puses uzbrukums';
-
-  @override
-  String get puzzleThemeQueensideAttackDescription => 'Uzbrukums pretinieka karalim pēc rokādes dāmas pusē.';
-
-  @override
-  String get puzzleThemeQuietMove => 'Klusais gājiens';
-
-  @override
-  String get puzzleThemeQuietMoveDescription => 'Gājiens, kas nepiesaka šahu un nenosit nevienu figūru, tomēr sagatavo nenovēršamus draudus kādā sekojošā gājienā.';
-
-  @override
-  String get puzzleThemeRookEndgame => 'Torņu beigu spēle';
-
-  @override
-  String get puzzleThemeRookEndgameDescription => 'Beigu spēle, kurā iesaistīti tikai torņi un bandinieki.';
-
-  @override
-  String get puzzleThemeSacrifice => 'Upuris';
-
-  @override
-  String get puzzleThemeSacrificeDescription => 'Stratēģija, kurā īstermiņā atdod materiālu, lai atkal iegūtu pārsvaru pēc piespiestu gājienu virknes.';
-
-  @override
-  String get puzzleThemeShort => 'Īss uzdevums';
-
-  @override
-  String get puzzleThemeShortDescription => 'Divi gājieni līdz uzvarai.';
-
-  @override
-  String get puzzleThemeSkewer => 'Iesms';
-
-  @override
-  String get puzzleThemeSkewerDescription => 'Šis motīvs iesaista augstas vērtības figūru, kurai jāizkustās, lai izvairītos no uzbrukuma, atļaujot vai nu uzbrukumu mazākas vērtības figūrai, kas atrodas aiz tās, vai arī šīs figūras nosišanu – pretējais piespraušanai.';
-
-  @override
-  String get puzzleThemeSmotheredMate => 'Smacējošais mats';
-
-  @override
-  String get puzzleThemeSmotheredMateDescription => 'Zirdziņa pieteikts mats karalim, kas nevar kustēties dēļ paša figūrām, kas to ielenkušas (nosmacējušas).';
-
-  @override
-  String get puzzleThemeSuperGM => 'Super-Lielmeistaru spēles';
-
-  @override
-  String get puzzleThemeSuperGMDescription => 'Uzdevumi no labāko pasaules spēlētāju spēlēm.';
-
-  @override
-  String get puzzleThemeTrappedPiece => 'Iesprostota figūra';
-
-  @override
-  String get puzzleThemeTrappedPieceDescription => 'Figūra nevar izbēgt nosišanu, jo ierobežoti tās gājieni.';
-
-  @override
-  String get puzzleThemeUnderPromotion => 'Pieticīga paaugstināšana';
-
-  @override
-  String get puzzleThemeUnderPromotionDescription => 'Paaugstināšana par zirdziņu, laidni vai torni.';
-
-  @override
-  String get puzzleThemeVeryLong => 'Ļoti garš uzdevums';
-
-  @override
-  String get puzzleThemeVeryLongDescription => 'Vismaz četri gājieni līdz uzvarai.';
-
-  @override
-  String get puzzleThemeXRayAttack => 'Rentgena uzbrukums';
-
-  @override
-  String get puzzleThemeXRayAttackDescription => 'Figūra uzbrūk vai apsargā lauciņu caur pretinieka figūru.';
-
-  @override
-  String get puzzleThemeZugzwang => 'Zugzwang';
-
-  @override
-  String get puzzleThemeZugzwangDescription => 'Pretiniekam ir ierobežoti iespējamie gājieni, un visi no tiem pasliktina pretinieka pozīciju.';
-
-  @override
-  String get puzzleThemeHealthyMix => 'Veselīgs sajaukums';
-
-  @override
-  String get puzzleThemeHealthyMixDescription => 'Mazliet no visa kā. Nezināsiet, ko sagaidīt, tāpēc paliksiet gatavs jebkam! Tieši kā īstās spēlēs.';
-
-  @override
-  String get puzzleThemePlayerGames => 'Spēlētāja spēles';
-
-  @override
-  String get puzzleThemePlayerGamesDescription => 'Meklējiet uzdevumus, kas radīti no jūsu vai cita spēlētāja spēlēm.';
-
-  @override
-  String puzzleThemePuzzleDownloadInformation(String param) {
-    return 'Šie uzdevumi ir neaizsargājami darbi, un tos var lejupielādēt lapā $param.';
-  }
-
-  @override
-  String perfStatPerfStats(String param) {
-    return '$param statistika';
-  }
-
-  @override
-  String get perfStatViewTheGames => 'Skatīt spēles';
-
-  @override
-  String get perfStatProvisional => 'pagaidu';
-
-  @override
-  String get perfStatNotEnoughRatedGames => 'Nav spēlēts pietiekami vērtētu spēļu, lai izveidotu uzticamu reitingu.';
-
-  @override
-  String perfStatProgressOverLastXGames(String param) {
-    return 'Attīstība pēdējo $param spēļu laikā:';
-  }
-
-  @override
-  String perfStatRatingDeviation(String param) {
-    return 'Reitinga novirze: $param.';
-  }
-
-  @override
-  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
-    return 'Zemākas vērtības nozīmē, ka reitings ir stabilāks. Vērtības virs $param1 piemīt tikai pagaidu reitingiem. Tabulās iekļauj tikai spēlētājus, kam šī vērtība ir zem $param2 parastajā šahā vai $param3 variantos.';
-  }
-
-  @override
-  String get perfStatTotalGames => 'Spēles kopumā';
-
-  @override
-  String get perfStatRatedGames => 'Vērtētās spēles';
-
-  @override
-  String get perfStatTournamentGames => 'Turnīru spēles';
-
-  @override
-  String get perfStatBerserkedGames => 'Dullās spēles';
-
-  @override
-  String get perfStatTimeSpentPlaying => 'Spēlējot pavadītais laiks';
-
-  @override
-  String get perfStatAverageOpponent => 'Vidējais pretinieks';
-
-  @override
-  String get perfStatVictories => 'Uzvaras';
-
-  @override
-  String get perfStatDefeats => 'Zaudējumi';
-
-  @override
-  String get perfStatDisconnections => 'Atvienošanās';
-
-  @override
-  String get perfStatNotEnoughGames => 'Nav spēlēts pietiekami spēļu';
-
-  @override
-  String perfStatHighestRating(String param) {
-    return 'Augstākais reitings: $param';
-  }
-
-  @override
-  String perfStatLowestRating(String param) {
-    return 'Zemākais reitings: $param';
-  }
-
-  @override
-  String perfStatFromXToY(String param1, String param2) {
-    return 'no $param1 līdz $param2';
-  }
-
-  @override
-  String get perfStatWinningStreak => 'Uzvaras pēc kārtas';
-
-  @override
-  String get perfStatLosingStreak => 'Zaudējumi pēc kārtas';
-
-  @override
-  String perfStatLongestStreak(String param) {
-    return 'Garākā sērija: $param';
-  }
-
-  @override
-  String perfStatCurrentStreak(String param) {
-    return 'Pašreizējā sērija: $param';
-  }
-
-  @override
-  String get perfStatBestRated => 'Labākās vērtētās uzvaras';
-
-  @override
-  String get perfStatGamesInARow => 'Pēc kārtas spēlētās spēles';
-
-  @override
-  String get perfStatLessThanOneHour => 'Mazāk par stundu starp spēlēm';
-
-  @override
-  String get perfStatMaxTimePlaying => 'Ilgākais spēlējot pavadītais laiks';
-
-  @override
-  String get perfStatNow => 'tagad';
-
-  @override
-  String get searchSearch => 'Meklēt';
-
-  @override
-  String get settingsSettings => 'Iestatījumi';
-
-  @override
-  String get settingsCloseAccount => 'Slēgt kontu';
-
-  @override
-  String get settingsManagedAccountCannotBeClosed => 'Jūsu konts tiek pārvaldīts, un to nevar slēgt.';
-
-  @override
-  String get settingsClosingIsDefinitive => 'Slēgšana ir galīga. Atpakaļceļa nav. Vai esat pārliecināts?';
-
-  @override
-  String get settingsCantOpenSimilarAccount => 'Nevarēsiet atvērt jaunu kontu ar to pašu vārdu, pat ja burtu lielumi atšķirsies.';
-
-  @override
-  String get settingsChangedMindDoNotCloseAccount => 'Es pārdomāju, neslēdziet manu kontu';
-
-  @override
-  String get settingsCloseAccountExplanation => 'Vai esat pārliecināts, ka vēlaties slēgt kontu? Konta slēgšanu nevar atsaukt. Jūs vairs nekad nevarēsiet ierakstīties.';
-
-  @override
-  String get settingsThisAccountIsClosed => 'Šis konts ir slēgts.';
-
-  @override
-  String get streamerLichessStreamers => 'Lichess straumētāji';
-
-  @override
   String get stormMoveToStart => 'Izdariet gājienu, lai sāktu';
 
   @override
@@ -4646,14 +4640,11 @@ class AppLocalizationsLv extends AppLocalizations {
   }
 
   @override
+  String get streamerLichessStreamers => 'Lichess straumētāji';
+
+  @override
   String get studyShareAndExport => 'Koplietot & eksportēt';
 
   @override
   String get studyStart => 'Sākt';
-
-  @override
-  String get broadcastBroadcasts => 'Raidījumi';
-
-  @override
-  String get broadcastStartDate => 'Sākuma datums jūsu laika joslā';
 }
