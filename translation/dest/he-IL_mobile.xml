@@ -1,2 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+  <string name="homeTab">בית</string>
+  <string name="puzzlesTab">חידות</string>
+  <string name="toolsTab">כלים</string>
+  <string name="watchTab">צפייה</string>
+  <string name="settingsTab">הגדרות</string>
+</resources>
