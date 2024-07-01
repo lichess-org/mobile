@@ -60,6 +60,7 @@ class BroadcastGameSnapshot with _$BroadcastGameSnapshot {
   const factory BroadcastGameSnapshot({
     required IList<BroadcastPlayer> players,
     required String fen,
+    required PgnGame? pgn,
     required Move? lastMove,
     required String status,
   }) = _BroadcastGameSnapshot;

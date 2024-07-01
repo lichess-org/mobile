@@ -203,6 +203,12 @@ class LichessClient implements Client {
   }) =>
       _sendUnstreamed('GET', url, headers);
 
+  Future<StreamedResponse> getStream(
+    Uri url, {
+    Map<String, String>? headers,
+  }) =>
+      _sendStreamed('GET', url, headers);
+
   @override
   Future<Response> post(
     Uri url, {
@@ -282,6 +288,36 @@ class LichessClient implements Client {
 
     return Response.fromStream(await send(request));
   }
+
+  /// Sends a non-streaming [Request] and returns a streaming [Response].
+  Future<StreamedResponse> _sendStreamed(
+    String method,
+    Uri url,
+    Map<String, String>? headers, [
+    Object? body,
+    Encoding? encoding,
+  ]) async {
+    final request = Request(
+      method,
+      lichessUri(url.path, url.hasQuery ? url.queryParameters : null),
+    );
+
+    if (headers != null) request.headers.addAll(headers);
+    if (encoding != null) request.encoding = encoding;
+    if (body != null) {
+      if (body is String) {
+        request.body = body;
+      } else if (body is List) {
+        request.bodyBytes = body.cast<int>();
+      } else if (body is Map) {
+        request.bodyFields = body.cast<String, String>();
+      } else {
+        throw ArgumentError('Invalid request body "$body".');
+      }
+    }
+
+    return await send(request);
+  }
 }
 
 /// An exception thrown when the server responds with a status code >= 400.
@@ -326,6 +362,19 @@ void _checkResponseSuccess(Uri url, Response response) {
 /// This is a fusion of [Utf8Decoder] and [JsonDecoder] which is more efficient
 /// than decoding the bytes to a string and then parsing the JSON.
 final jsonUtf8Decoder = const Utf8Decoder().fuse(const JsonDecoder());
+
+extension LichessClientExtension on LichessClient {
+  Stream<T> readStream<T>(
+    Uri url, {
+    Map<String, String>? headers,
+    required T Function(String) mapper,
+  }) async* {
+    final response = await getStream(url, headers: headers);
+    await for (final chunck in response.stream.transform(utf8.decoder)) {
+      yield mapper(chunck);
+    }
+  }
+}
 
 extension ClientExtension on Client {
   /// Sends an HTTP GET request with the given headers to the given URL and
@@ -503,6 +552,11 @@ extension ClientWidgetRefExtension on WidgetRef {
     final client = read(lichessClientProvider);
     return await fn(client);
   }
+
+  Stream<T> withClientStream<T>(Stream<T> Function(LichessClient) fn) {
+    final client = read(lichessClientProvider);
+    return fn(client);
+  }
 }
 
 extension ClientRefExtension on Ref {
@@ -510,6 +564,11 @@ extension ClientRefExtension on Ref {
   Future<T> withClient<T>(Future<T> Function(LichessClient) fn) async {
     final client = read(lichessClientProvider);
     return await fn(client);
+  }
+
+  Stream<T> withClientStream<T>(Stream<T> Function(LichessClient) fn) {
+    final client = read(lichessClientProvider);
+    return fn(client);
   }
 }
 

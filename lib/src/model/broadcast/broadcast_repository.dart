@@ -1,3 +1,4 @@
+import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
@@ -30,6 +31,17 @@ class BroadcastRepository {
       mapper: _makeGamesFromJson,
     );
   }
+
+  Stream<PgnGame> getRoundStream(
+    String broadcastRoundId,
+  ) {
+    return client.readStream(
+      Uri(path: 'api/stream/broadcast/round/$broadcastRoundId.pgn'),
+      mapper: (pgn) {
+        return PgnGame.parsePgn(pgn);
+      },
+    );
+  }
 }
 
 BroadcastResponse _makeBroadcastResponseFromJson(Map<String, dynamic> json) {
@@ -44,8 +56,8 @@ BroadcastResponse _makeBroadcastResponseFromJson(Map<String, dynamic> json) {
 }
 
 Broadcast _broadcastFromPick(RequiredPick pick) {
-  final live = pick('lastRound', 'ongoing').asBoolOrFalse();
-  final finished = pick('lastRound', 'finished').asBoolOrFalse();
+  final live = pick('round', 'ongoing').asBoolOrFalse();
+  final finished = pick('round', 'finished').asBoolOrFalse();
   final status = live
       ? RoundStatus.live
       : finished
@@ -58,9 +70,9 @@ Broadcast _broadcastFromPick(RequiredPick pick) {
       imageUrl: pick('tour', 'image').asStringOrNull(),
     ),
     lastRound: BroadcastRound(
-      id: pick('lastRound', 'id').asStringOrThrow(),
+      id: pick('round', 'id').asStringOrThrow(),
       status: status,
-      startsAt: pick('lastRound', 'startsAt')
+      startsAt: pick('round', 'startsAt')
           .asDateTimeFromMillisecondsOrThrow()
           .toLocal(),
     ),
@@ -78,6 +90,7 @@ BroadcastGameSnapshot _gameFromPick(RequiredPick pick) {
   return BroadcastGameSnapshot(
     players: pick('players').asListOrThrow(_playerFromPick).toIList(),
     fen: pick('fen').asStringOrNull() ?? Variant.standard.initialPosition.fen,
+    pgn: null,
     lastMove: pick('lastMove').asUciMoveOrNull(),
     status: pick('status').asStringOrThrow(),
   );

@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
+import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
@@ -64,7 +65,7 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final games = ref.watch(broadcastRoundProvider(roundId));
+    final games = ref.watch(broadcastRoundBoardsProvider(roundId));
 
     return games.when(
       data: (games) => (games.isEmpty)
@@ -124,7 +125,14 @@ class BroadcastPreview extends StatelessWidget {
 
                     return BoardThumbnail(
                       orientation: Side.white,
-                      fen: game.fen,
+                      fen: (game.pgn != null)
+                          ? Root.fromPgnGame(game.pgn!)
+                                  .mainline
+                                  .lastOrNull
+                                  ?.position
+                                  .fen ??
+                              dartchess.kInitialFEN
+                          : game.fen,
                       lastMove: game.lastMove?.cg,
                       size: boardWidth,
                       header: PlayerWidget(
