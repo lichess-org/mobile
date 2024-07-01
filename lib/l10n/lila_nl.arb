@@ -1,4 +1,9 @@
 {
+  "mobileHomeTab": "Startscherm",
+  "mobilePuzzlesTab": "Puzzels",
+  "mobileToolsTab": "Gereedschap",
+  "mobileWatchTab": "Kijken",
+  "mobileSettingsTab": "Instellingen",
   "activityActivity": "Activiteit",
   "activityHostedALiveStream": "Heeft een live stream gehost",
   "activityRankedInSwissTournament": "Eindigde #{param1} in {param2}",

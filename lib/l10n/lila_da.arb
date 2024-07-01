@@ -1,4 +1,9 @@
 {
+  "mobileHomeTab": "Hjem",
+  "mobilePuzzlesTab": "Opgaver",
+  "mobileToolsTab": "Værktøjer",
+  "mobileWatchTab": "Se",
+  "mobileSettingsTab": "Indstillinger",
   "activityActivity": "Aktivitet",
   "activityHostedALiveStream": "Hostede en livestream",
   "activityRankedInSwissTournament": "Rangeret #{param1} i {param2}",

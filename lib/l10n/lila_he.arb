@@ -1,4 +1,9 @@
 {
+  "mobileHomeTab": "בית",
+  "mobilePuzzlesTab": "חידות",
+  "mobileToolsTab": "כלים",
+  "mobileWatchTab": "צפייה",
+  "mobileSettingsTab": "הגדרות",
   "activityActivity": "פעילות",
   "activityHostedALiveStream": "עלה (או עלתה) לשידור חי",
   "activityRankedInSwissTournament": "סיים/ה במקום {param1} ב־{param2}",

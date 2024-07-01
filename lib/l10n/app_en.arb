@@ -1,4 +1,9 @@
 {
+  "mobileHomeTab": "Home",
+  "mobilePuzzlesTab": "Puzzles",
+  "mobileToolsTab": "Tools",
+  "mobileWatchTab": "Watch",
+  "mobileSettingsTab": "Settings",
   "activityActivity": "Activity",
   "activityHostedALiveStream": "Hosted a live stream",
   "activityRankedInSwissTournament": "Ranked #{param1} in {param2}",

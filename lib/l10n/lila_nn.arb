@@ -1,4 +1,9 @@
 {
+  "mobileHomeTab": "Startside",
+  "mobilePuzzlesTab": "Oppgåver",
+  "mobileToolsTab": "Verktøy",
+  "mobileWatchTab": "Sjå",
+  "mobileSettingsTab": "Innstillingar",
   "activityActivity": "Aktivitet",
   "activityHostedALiveStream": "Starta en direktestraum",
   "activityRankedInSwissTournament": "Vart nr. {param1} i {param2}",

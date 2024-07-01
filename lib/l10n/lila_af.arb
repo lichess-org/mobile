@@ -1,4 +1,9 @@
 {
+  "mobileHomeTab": "Tuis",
+  "mobilePuzzlesTab": "Kopkrappers",
+  "mobileToolsTab": "Hulpmiddels",
+  "mobileWatchTab": "Hou dop",
+  "mobileSettingsTab": "Instellings",
   "activityActivity": "Aktiwiteite",
   "activityHostedALiveStream": "Het 'n lewendige uitsending aangebied",
   "activityRankedInSwissTournament": "Rang van #{param1} uit {param2}",

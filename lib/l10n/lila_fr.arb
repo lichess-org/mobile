@@ -1,4 +1,9 @@
 {
+  "mobileHomeTab": "Accueil",
+  "mobilePuzzlesTab": "Problèmes",
+  "mobileToolsTab": "Outils",
+  "mobileWatchTab": "Regarder",
+  "mobileSettingsTab": "Paramètres",
   "activityActivity": "Activité",
   "activityHostedALiveStream": "A hébergé une diffusion en direct",
   "activityRankedInSwissTournament": "Classé {param1} dans le tournoi {param2}",

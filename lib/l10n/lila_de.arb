@@ -1,4 +1,9 @@
 {
+  "mobileHomeTab": "Startseite",
+  "mobilePuzzlesTab": "Aufgaben",
+  "mobileToolsTab": "Werkzeuge",
+  "mobileWatchTab": "Zuschauen",
+  "mobileSettingsTab": "Einstellungen",
   "activityActivity": "Verlauf",
   "activityHostedALiveStream": "Hat live gestreamt",
   "activityRankedInSwissTournament": "Hat Platz #{param1} im Turnier {param2} belegt",

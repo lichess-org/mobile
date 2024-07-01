@@ -1,4 +1,9 @@
 {
+  "mobileHomeTab": "Inici",
+  "mobilePuzzlesTab": "Problemes",
+  "mobileToolsTab": "Eines",
+  "mobileWatchTab": "Visualitza",
+  "mobileSettingsTab": "Configuració",
   "activityActivity": "Activitat",
   "activityHostedALiveStream": "Has fet una retransmissió en directe",
   "activityRankedInSwissTournament": "Classificat #{param1} en {param2}",

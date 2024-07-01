@@ -1,4 +1,9 @@
 {
+  "mobileHomeTab": "Inicio",
+  "mobilePuzzlesTab": "Crebacabezas",
+  "mobileToolsTab": "Ferramentas",
+  "mobileWatchTab": "Ver",
+  "mobileSettingsTab": "Axustes",
   "activityActivity": "Actividade",
   "activityHostedALiveStream": "Emitiu en directo",
   "activityRankedInSwissTournament": "{param1}º na clasificación de {param2}",

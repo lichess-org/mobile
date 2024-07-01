@@ -1,4 +1,9 @@
 {
+  "mobileHomeTab": "Начало",
+  "mobilePuzzlesTab": "Задачи",
+  "mobileToolsTab": "Инструменти",
+  "mobileWatchTab": "Гледай",
+  "mobileSettingsTab": "Настройки",
   "activityActivity": "Дейност",
   "activityHostedALiveStream": "Стартира предаване на живо",
   "activityRankedInSwissTournament": "Рейтинг #{param1} от {param2}",
