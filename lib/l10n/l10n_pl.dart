@@ -29,7 +29,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: 'Wspiera lichess.org przez $count miesięcy jako $param2',
       few: 'Wspiera lichess.org przez $count miesiące jako $param2',
       one: 'Wspomógł/-ogła lichess.org na miesiąc jako $param2',
-      zero: 'Wspomógł/-ogła lichess.org na miesiąc jako $param2',
     );
     return '$_temp0';
   }
@@ -43,7 +42,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: 'Przerobiono $count ćwiczeń w $param2',
       few: 'Przerobiono $count ćwiczenia w $param2',
       one: 'Przerobiono $count ćwiczenie w $param2',
-      zero: 'Przerobiono $count ćwiczenie w $param2',
     );
     return '$_temp0';
   }
@@ -57,7 +55,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: 'Rozwiązano $count zadań szachowych',
       few: 'Rozwiązano $count zadania szachowe',
       one: 'Rozwiązano $count zadanie szachowe',
-      zero: 'Rozwiązano $count zadanie szachowe',
     );
     return '$_temp0';
   }
@@ -71,7 +68,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: 'Rozegrane $count partii $param2',
       few: 'Rozegrane $count partie $param2',
       one: 'Rozegrana $count partia $param2',
-      zero: 'Rozegrana $count partia $param2',
     );
     return '$_temp0';
   }
@@ -85,7 +81,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: 'Opublikowanie $count wpisów w $param2',
       few: 'Opublikowanie $count wpisów w $param2',
       one: 'Opublikowanie wpisu w $param2',
-      zero: 'Opublikowanie wpisu w $param2',
     );
     return '$_temp0';
   }
@@ -99,7 +94,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: 'Wykonane $count ruchów',
       few: 'Wykonane $count ruchy',
       one: 'Wykonany $count ruch',
-      zero: 'Wykonany $count ruch',
     );
     return '$_temp0';
   }
@@ -113,7 +107,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: 'w $count partiach korespondencyjnych',
       few: 'w $count partiach korespondencyjnych',
       one: 'w $count partii korespondencyjnej',
-      zero: 'w $count partii korespondencyjnej',
     );
     return '$_temp0';
   }
@@ -127,7 +120,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: 'Zakończenie $count partii korespondencyjnych',
       few: 'Zakończenie $count partii korespondencyjnych',
       one: 'Zakończenie partii korespondencyjnej',
-      zero: 'Zakończenie partii korespondencyjnej',
     );
     return '$_temp0';
   }
@@ -141,7 +133,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: 'Rozpoczęcie obserwowania $count graczy',
       few: 'Rozpoczęcie obserwowania $count graczy',
       one: 'Rozpoczęcie obserwowania gracza',
-      zero: 'Rozpoczęcie obserwowania gracza',
     );
     return '$_temp0';
   }
@@ -155,7 +146,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: 'Zyskano $count nowych obserwujących',
       few: 'Zyskano $count nowych obserwujących',
       one: 'Zyskano $count nowego obserwującego/-ą',
-      zero: 'Zyskano $count nowego obserwującego/-ą',
     );
     return '$_temp0';
   }
@@ -169,7 +159,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: 'Rozegranie $count symultan',
       few: 'Rozegranie $count symultan',
       one: 'Rozegranie symultany',
-      zero: 'Rozegranie symultany',
     );
     return '$_temp0';
   }
@@ -183,7 +172,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: 'Udział w $count symultanach',
       few: 'Udział w $count symultanach',
       one: 'Udział w $count symultanie',
-      zero: 'Udział w $count symultanie',
     );
     return '$_temp0';
   }
@@ -197,7 +185,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: 'Utworzenie $count nowych opracowań',
       few: 'Utworzenie $count nowych opracowań',
       one: 'Utworzenie nowego opracowania',
-      zero: 'Utworzenie nowego opracowania',
     );
     return '$_temp0';
   }
@@ -211,7 +198,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: 'Uczestnictwo w $count turniejach',
       few: 'Uczestnictwo w $count turniejach',
       one: 'Uczestnictwo w turnieju',
-      zero: 'Uczestnictwo w turnieju',
     );
     return '$_temp0';
   }
@@ -225,7 +211,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: '$count miejsce w klasyfikacji (top $param2%) z $param3 partiami w $param4',
       few: '$count miejsce w klasyfikacji (top $param2%) z $param3 partiami w $param4',
       one: '$count miejsce w klasyfikacji (top $param2%) z $param3 partią w $param4',
-      zero: '$count miejsce w klasyfikacji (top $param2%) z $param3 partią w $param4',
     );
     return '$_temp0';
   }
@@ -239,7 +224,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: 'Uczestniczył(a) w $count turniejach szwajcarskich',
       few: 'Uczestniczył(a) w $count turniejach szwajcarskich',
       one: 'Uczestniczył(a) w $count turnieju szwajcarskim',
-      zero: 'Uczestniczył(a) w $count turnieju szwajcarskim',
     );
     return '$_temp0';
   }
@@ -253,7 +237,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: 'Dołączenie do $count klubów',
       few: 'Dołączenie do $count klubów',
       one: 'Dołączenie do klubu',
-      zero: 'Dołączenie do klubu',
     );
     return '$_temp0';
   }
@@ -899,7 +882,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: 'Rozwiązywane $count razy',
       few: 'Rozwiązywane $count razy',
       one: 'Rozwiązywane $count raz',
-      zero: 'Rozwiązywane $count raz',
     );
     return '$_temp0';
   }
@@ -913,7 +895,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: '$count punktów poniżej Twojego rankingu w rozwiązywaniu zadań',
       few: '$count punkty poniżej Twojego rankingu w rozwiązywaniu zadań',
       one: 'Jeden punkt poniżej Twojego rankingu w rozwiązywaniu zadań',
-      zero: 'Jeden punkt poniżej Twojego rankingu w rozwiązywaniu zadań',
     );
     return '$_temp0';
   }
@@ -927,7 +908,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: '$count punktów powyżej Twojego rankingu w rozwiązywaniu zadań',
       few: '$count punkty powyżej Twojego rankingu w rozwiązywaniu zadań',
       one: 'Jeden punkt powyżej Twojego rankingu w rozwiązywaniu zadań',
-      zero: 'Jeden punkt powyżej Twojego rankingu w rozwiązywaniu zadań',
     );
     return '$_temp0';
   }
@@ -941,7 +921,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: '$count rozwiązywanych',
       few: '$count rozwiązywanych',
       one: '$count rozwiązywanych',
-      zero: '$count rozwiązywanych',
     );
     return '$_temp0';
   }
@@ -955,7 +934,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: '$count do powtórki',
       few: '$count do powtórki',
       one: '$count do powtórki',
-      zero: '$count do powtórki',
     );
     return '$_temp0';
   }
@@ -4005,7 +3983,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: 'Przeciwnik opuścił grę. Możesz ogłosić wygraną za $count sekund.',
       few: 'Przeciwnik opuścił grę. Możesz ogłosić wygraną za $count sekundy.',
       one: 'Przeciwnik opuścił grę. Możesz ogłosić wygraną za $count sekundę.',
-      zero: 'Przeciwnik opuścił grę. Możesz ogłosić wygraną za $count sekundę.',
     );
     return '$_temp0';
   }
@@ -4019,7 +3996,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: 'Mat w $count posunięciach',
       few: 'Mat w $count posunięciach',
       one: 'Mat w $count posunięciu',
-      zero: 'Mat w $count posunięciu',
     );
     return '$_temp0';
   }
@@ -4033,7 +4009,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: '$count błędów',
       few: '$count błędy',
       one: '$count błąd',
-      zero: '$count błąd',
     );
     return '$_temp0';
   }
@@ -4047,7 +4022,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: '$count pomyłek',
       few: '$count pomyłki',
       one: '$count pomyłka',
-      zero: '$count pomyłka',
     );
     return '$_temp0';
   }
@@ -4061,7 +4035,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: '$count niedokładności',
       few: '$count niedokładności',
       one: '$count niedokładność',
-      zero: '$count niedokładność',
     );
     return '$_temp0';
   }
@@ -4075,7 +4048,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: '$count graczy',
       few: '$count graczy',
       one: '$count gracz',
-      zero: '$count gracz',
     );
     return '$_temp0';
   }
@@ -4089,7 +4061,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: '$count partii',
       few: '$count partie',
       one: '$count partia',
-      zero: '$count partia',
     );
     return '$_temp0';
   }
@@ -4103,7 +4074,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: '$count ranking na podstawie $param2 partii',
       few: '$count ranking na podstawie $param2 partii',
       one: '$count ranking na podstawie $param2 partii',
-      zero: '$count ranking na podstawie $param2 partii',
     );
     return '$_temp0';
   }
@@ -4117,7 +4087,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: '$count ulubiona partii',
       few: '$count ulubiona partie',
       one: '$count ulubiona partia',
-      zero: '$count ulubiona partia',
     );
     return '$_temp0';
   }
@@ -4131,7 +4100,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: '$count dni',
       few: '$count dni',
       one: '$count dzień',
-      zero: '$count dzień',
     );
     return '$_temp0';
   }
@@ -4145,7 +4113,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: '$count godzin',
       few: '$count godziny',
       one: '$count godzina',
-      zero: '$count godzina',
     );
     return '$_temp0';
   }
@@ -4159,7 +4126,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: '$count minut',
       few: '$count minuty',
       one: '$count minuta',
-      zero: '$count minuta',
     );
     return '$_temp0';
   }
@@ -4173,7 +4139,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: 'Ranking jest aktualizowany co $count minut',
       few: 'Ranking jest aktualizowany co $count minuty',
       one: 'Ranking jest aktualizowany co minutę',
-      zero: 'Ranking jest aktualizowany co minutę',
     );
     return '$_temp0';
   }
@@ -4187,7 +4152,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: '$count zadań',
       few: '$count zadania',
       one: '$count zadanie',
-      zero: '$count zadanie',
     );
     return '$_temp0';
   }
@@ -4201,7 +4165,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: '$count partii z Tobą',
       few: '$count partie z Tobą',
       one: '$count partia z Tobą',
-      zero: '$count partia z Tobą',
     );
     return '$_temp0';
   }
@@ -4215,7 +4178,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: '$count rankingowych',
       few: '$count rankingowe',
       one: '$count rankingowa',
-      zero: '$count rankingowa',
     );
     return '$_temp0';
   }
@@ -4229,7 +4191,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: '$count wygranych',
       few: '$count wygrane',
       one: '$count wygrana',
-      zero: '$count wygrana',
     );
     return '$_temp0';
   }
@@ -4243,7 +4204,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: '$count przegranych',
       few: '$count przegrane',
       one: '$count przegrana',
-      zero: '$count przegrana',
     );
     return '$_temp0';
   }
@@ -4257,7 +4217,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: '$count remisów',
       few: '$count remisy',
       one: '$count remis',
-      zero: '$count remis',
     );
     return '$_temp0';
   }
@@ -4271,7 +4230,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: '$count w toku',
       few: '$count w toku',
       one: '$count w toku',
-      zero: '$count w toku',
     );
     return '$_temp0';
   }
@@ -4285,7 +4243,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: 'Dodaj $count sekund',
       few: 'Dodaj $count sekundy',
       one: 'Dodaj $count sekundę',
-      zero: 'Dodaj $count sekundę',
     );
     return '$_temp0';
   }
@@ -4299,7 +4256,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: '$count punktów turniejowych',
       few: '$count punkty turniejowe',
       one: '$count punkt turniejowy',
-      zero: '$count punkt turniejowy',
     );
     return '$_temp0';
   }
@@ -4313,7 +4269,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: '$count opracowań',
       few: '$count opracowania',
       one: '$count opracowanie',
-      zero: '$count opracowanie',
     );
     return '$_temp0';
   }
@@ -4327,7 +4282,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: '$count symultan',
       few: '$count symultany',
       one: '$count symultana',
-      zero: '$count symultana',
     );
     return '$_temp0';
   }
@@ -4341,7 +4295,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: '≥ $count partii rankingowych',
       few: '≥ $count partie rankingowe',
       one: '≥ $count partia rankingowa',
-      zero: '≥ $count partia rankingowa',
     );
     return '$_temp0';
   }
@@ -4355,7 +4308,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: 'Przynajmniej $count partii rankingowych ($param2)',
       few: 'Przynajmniej $count partie rankingowe ($param2)',
       one: 'Przynajmniej $count partia rankingowa ($param2)',
-      zero: 'Przynajmniej $count partia rankingowa ($param2)',
     );
     return '$_temp0';
   }
@@ -4369,7 +4321,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: 'Musisz rozegrać jeszcze $count partie rankingowe ($param2)',
       few: 'Musisz rozegrać jeszcze $count partie rankingowe ($param2)',
       one: 'Musisz rozegrać jeszcze $count partię rankingową ($param2)',
-      zero: 'Musisz rozegrać jeszcze $count partię rankingową ($param2)',
     );
     return '$_temp0';
   }
@@ -4383,7 +4334,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: 'Musisz rozegrać jeszcze $count partii rankingowych',
       few: 'Musisz rozegrać jeszcze $count partie rankingowe',
       one: 'Musisz rozegrać jeszcze $count partię rankingową',
-      zero: 'Musisz rozegrać jeszcze $count partię rankingową',
     );
     return '$_temp0';
   }
@@ -4397,7 +4347,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: '$count zaimportowana partii',
       few: '$count zaimportowana partie',
       one: '$count zaimportowana partia',
-      zero: '$count zaimportowana partia',
     );
     return '$_temp0';
   }
@@ -4411,7 +4360,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: '$count znajomych online',
       few: '$count znajomych online',
       one: '$count znajomy online',
-      zero: '$count znajomy online',
     );
     return '$_temp0';
   }
@@ -4425,7 +4373,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: '$count obserwujących',
       few: '$count obserwujących',
       one: '$count obserwujący',
-      zero: '$count obserwujący',
     );
     return '$_temp0';
   }
@@ -4439,7 +4386,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: '$count obserwowanych',
       few: '$count obserwowanych',
       one: '$count obserwowany',
-      zero: '$count obserwowany',
     );
     return '$_temp0';
   }
@@ -4453,7 +4399,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: 'Poniżej $count minut',
       few: 'Poniżej $count minut',
       one: 'Poniżej $count minuty',
-      zero: 'Poniżej $count minuty',
     );
     return '$_temp0';
   }
@@ -4467,7 +4412,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: '$count partii w toku',
       few: '$count partie w toku',
       one: '$count partia w toku',
-      zero: '$count partia w toku',
     );
     return '$_temp0';
   }
@@ -4481,7 +4425,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: 'Maksymalnie: $count znaków.',
       few: 'Maksymalnie: $count znaki.',
       one: 'Maksymalnie: $count znak.',
-      zero: 'Maksymalnie: $count znak.',
     );
     return '$_temp0';
   }
@@ -4495,7 +4438,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: '$count zablokowanych',
       few: '$count zablokowanych',
       one: '$count zablokowany',
-      zero: '$count zablokowany',
     );
     return '$_temp0';
   }
@@ -4509,7 +4451,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: '$count wpisów na forum',
       few: '$count wpisy na forum',
       one: '$count wpis na forum',
-      zero: '$count wpis na forum',
     );
     return '$_temp0';
   }
@@ -4523,7 +4464,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: '$count graczy w tym tygodniu ($param2).',
       few: '$count graczy w tym tygodniu ($param2).',
       one: '$count gracz w tym tygodniu ($param2).',
-      zero: '$count gracz w tym tygodniu ($param2).',
     );
     return '$_temp0';
   }
@@ -4537,7 +4477,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: 'Dostępna w $count językach!',
       few: 'Dostępna w $count językach!',
       one: 'Dostępna w $count języku!',
-      zero: 'Dostępna w $count języku!',
     );
     return '$_temp0';
   }
@@ -4551,7 +4490,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: '$count sekund na wykonanie pierwszego ruchu',
       few: '$count sekundy na wykonanie pierwszego ruchu',
       one: '$count sekunda na wykonanie pierwszego ruchu',
-      zero: '$count sekunda na wykonanie pierwszego ruchu',
     );
     return '$_temp0';
   }
@@ -4565,7 +4503,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: '$count sekund',
       few: '$count sekundy',
       one: '$count sekunda',
-      zero: '$count sekunda',
     );
     return '$_temp0';
   }
@@ -4579,7 +4516,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: 'i zapisz $count wariantów warunkowych',
       few: 'i zapisz $count warianty warunkowe',
       one: 'i zapisz wariant warunkowy',
-      zero: 'i zapisz wariant warunkowy',
     );
     return '$_temp0';
   }
@@ -4752,7 +4688,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: '$count prób',
       few: '$count próby',
       one: '1 próba',
-      zero: '1 próba',
     );
     return '$_temp0';
   }
@@ -4766,7 +4701,6 @@ class AppLocalizationsPl extends AppLocalizations {
       many: 'Rozegrano $count sesji $param2',
       few: 'Rozegrano $count sesje $param2',
       one: 'Rozegrano jedną sesję $param2',
-      zero: 'Rozegrano jedną sesję $param2',
     );
     return '$_temp0';
   }

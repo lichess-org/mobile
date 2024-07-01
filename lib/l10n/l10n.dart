@@ -229,103 +229,103 @@ abstract class AppLocalizations {
   /// No description provided for @activitySupportedNbMonths.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{Supported lichess.org for {count} month as a {param2}} =1{Supported lichess.org for {count} month as a {param2}} other{Supported lichess.org for {count} months as a {param2}}}'**
+  /// **'{count, plural, =1{Supported lichess.org for {count} month as a {param2}} other{Supported lichess.org for {count} months as a {param2}}}'**
   String activitySupportedNbMonths(int count, String param2);
 
   /// No description provided for @activityPracticedNbPositions.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{Practised {count} position on {param2}} =1{Practised {count} position on {param2}} other{Practised {count} positions on {param2}}}'**
+  /// **'{count, plural, =1{Practised {count} position on {param2}} other{Practised {count} positions on {param2}}}'**
   String activityPracticedNbPositions(int count, String param2);
 
   /// No description provided for @activitySolvedNbPuzzles.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{Solved {count} training puzzle} =1{Solved {count} training puzzle} other{Solved {count} training puzzles}}'**
+  /// **'{count, plural, =1{Solved {count} training puzzle} other{Solved {count} training puzzles}}'**
   String activitySolvedNbPuzzles(int count);
 
   /// No description provided for @activityPlayedNbGames.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{Played {count} {param2} game} =1{Played {count} {param2} game} other{Played {count} {param2} games}}'**
+  /// **'{count, plural, =1{Played {count} {param2} game} other{Played {count} {param2} games}}'**
   String activityPlayedNbGames(int count, String param2);
 
   /// No description provided for @activityPostedNbMessages.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{Posted {count} message in {param2}} =1{Posted {count} message in {param2}} other{Posted {count} messages in {param2}}}'**
+  /// **'{count, plural, =1{Posted {count} message in {param2}} other{Posted {count} messages in {param2}}}'**
   String activityPostedNbMessages(int count, String param2);
 
   /// No description provided for @activityPlayedNbMoves.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{Played {count} move} =1{Played {count} move} other{Played {count} moves}}'**
+  /// **'{count, plural, =1{Played {count} move} other{Played {count} moves}}'**
   String activityPlayedNbMoves(int count);
 
   /// No description provided for @activityInNbCorrespondenceGames.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{in {count} correspondence game} =1{in {count} correspondence game} other{in {count} correspondence games}}'**
+  /// **'{count, plural, =1{in {count} correspondence game} other{in {count} correspondence games}}'**
   String activityInNbCorrespondenceGames(int count);
 
   /// No description provided for @activityCompletedNbGames.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{Completed {count} correspondence game} =1{Completed {count} correspondence game} other{Completed {count} correspondence games}}'**
+  /// **'{count, plural, =1{Completed {count} correspondence game} other{Completed {count} correspondence games}}'**
   String activityCompletedNbGames(int count);
 
   /// No description provided for @activityFollowedNbPlayers.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{Started following {count} player} =1{Started following {count} player} other{Started following {count} players}}'**
+  /// **'{count, plural, =1{Started following {count} player} other{Started following {count} players}}'**
   String activityFollowedNbPlayers(int count);
 
   /// No description provided for @activityGainedNbFollowers.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{Gained {count} new follower} =1{Gained {count} new follower} other{Gained {count} new followers}}'**
+  /// **'{count, plural, =1{Gained {count} new follower} other{Gained {count} new followers}}'**
   String activityGainedNbFollowers(int count);
 
   /// No description provided for @activityHostedNbSimuls.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{Hosted {count} simultaneous exhibition} =1{Hosted {count} simultaneous exhibition} other{Hosted {count} simultaneous exhibitions}}'**
+  /// **'{count, plural, =1{Hosted {count} simultaneous exhibition} other{Hosted {count} simultaneous exhibitions}}'**
   String activityHostedNbSimuls(int count);
 
   /// No description provided for @activityJoinedNbSimuls.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{Participated in {count} simultaneous exhibition} =1{Participated in {count} simultaneous exhibition} other{Participated in {count} simultaneous exhibitions}}'**
+  /// **'{count, plural, =1{Participated in {count} simultaneous exhibition} other{Participated in {count} simultaneous exhibitions}}'**
   String activityJoinedNbSimuls(int count);
 
   /// No description provided for @activityCreatedNbStudies.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{Created {count} new study} =1{Created {count} new study} other{Created {count} new studies}}'**
+  /// **'{count, plural, =1{Created {count} new study} other{Created {count} new studies}}'**
   String activityCreatedNbStudies(int count);
 
   /// No description provided for @activityCompetedInNbTournaments.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{Competed in {count} Arena tournament} =1{Competed in {count} Arena tournament} other{Competed in {count} Arena tournaments}}'**
+  /// **'{count, plural, =1{Competed in {count} Arena tournament} other{Competed in {count} Arena tournaments}}'**
   String activityCompetedInNbTournaments(int count);
 
   /// No description provided for @activityRankedInTournament.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{Ranked #{count} (top {param2}%) with {param3} game in {param4}} =1{Ranked #{count} (top {param2}%) with {param3} game in {param4}} other{Ranked #{count} (top {param2}%) with {param3} games in {param4}}}'**
+  /// **'{count, plural, =1{Ranked #{count} (top {param2}%) with {param3} game in {param4}} other{Ranked #{count} (top {param2}%) with {param3} games in {param4}}}'**
   String activityRankedInTournament(int count, String param2, String param3, String param4);
 
   /// No description provided for @activityCompetedInNbSwissTournaments.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{Competed in {count} Swiss tournament} =1{Competed in {count} Swiss tournament} other{Competed in {count} Swiss tournaments}}'**
+  /// **'{count, plural, =1{Competed in {count} Swiss tournament} other{Competed in {count} Swiss tournaments}}'**
   String activityCompetedInNbSwissTournaments(int count);
 
   /// No description provided for @activityJoinedNbTeams.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{Joined {count} team} =1{Joined {count} team} other{Joined {count} teams}}'**
+  /// **'{count, plural, =1{Joined {count} team} other{Joined {count} teams}}'**
   String activityJoinedNbTeams(int count);
 
   /// No description provided for @broadcastBroadcasts.
@@ -1507,19 +1507,19 @@ abstract class AppLocalizations {
   /// No description provided for @puzzlePlayedXTimes.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{Played {count} time} =1{Played {count} time} other{Played {count} times}}'**
+  /// **'{count, plural, =1{Played {count} time} other{Played {count} times}}'**
   String puzzlePlayedXTimes(int count);
 
   /// No description provided for @puzzleNbPointsBelowYourPuzzleRating.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{One point below your puzzle rating} =1{One point below your puzzle rating} other{{count} points below your puzzle rating}}'**
+  /// **'{count, plural, =1{One point below your puzzle rating} other{{count} points below your puzzle rating}}'**
   String puzzleNbPointsBelowYourPuzzleRating(int count);
 
   /// No description provided for @puzzleNbPointsAboveYourPuzzleRating.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{One point above your puzzle rating} =1{One point above your puzzle rating} other{{count} points above your puzzle rating}}'**
+  /// **'{count, plural, =1{One point above your puzzle rating} other{{count} points above your puzzle rating}}'**
   String puzzleNbPointsAboveYourPuzzleRating(int count);
 
   /// No description provided for @puzzleNbPlayed.
@@ -7237,253 +7237,253 @@ abstract class AppLocalizations {
   /// No description provided for @opponentLeftCounter.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{Your opponent left the game. You can claim victory in {count} second.} =1{Your opponent left the game. You can claim victory in {count} second.} other{Your opponent left the game. You can claim victory in {count} seconds.}}'**
+  /// **'{count, plural, =1{Your opponent left the game. You can claim victory in {count} second.} other{Your opponent left the game. You can claim victory in {count} seconds.}}'**
   String opponentLeftCounter(int count);
 
   /// No description provided for @mateInXHalfMoves.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{Mate in {count} half-move} =1{Mate in {count} half-move} other{Mate in {count} half-moves}}'**
+  /// **'{count, plural, =1{Mate in {count} half-move} other{Mate in {count} half-moves}}'**
   String mateInXHalfMoves(int count);
 
   /// No description provided for @nbBlunders.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{{count} blunder} =1{{count} blunder} other{{count} blunders}}'**
+  /// **'{count, plural, =1{{count} blunder} other{{count} blunders}}'**
   String nbBlunders(int count);
 
   /// No description provided for @nbMistakes.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{{count} mistake} =1{{count} mistake} other{{count} mistakes}}'**
+  /// **'{count, plural, =1{{count} mistake} other{{count} mistakes}}'**
   String nbMistakes(int count);
 
   /// No description provided for @nbInaccuracies.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{{count} inaccuracy} =1{{count} inaccuracy} other{{count} inaccuracies}}'**
+  /// **'{count, plural, =1{{count} inaccuracy} other{{count} inaccuracies}}'**
   String nbInaccuracies(int count);
 
   /// No description provided for @nbPlayers.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{{count} player} =1{{count} player} other{{count} players}}'**
+  /// **'{count, plural, =1{{count} player} other{{count} players}}'**
   String nbPlayers(int count);
 
   /// No description provided for @nbGames.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{{count} game} =1{{count} game} other{{count} games}}'**
+  /// **'{count, plural, =1{{count} game} other{{count} games}}'**
   String nbGames(int count);
 
   /// No description provided for @ratingXOverYGames.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{{count} rating over {param2} game} =1{{count} rating over {param2} game} other{{count} rating over {param2} games}}'**
+  /// **'{count, plural, =1{{count} rating over {param2} game} other{{count} rating over {param2} games}}'**
   String ratingXOverYGames(int count, String param2);
 
   /// No description provided for @nbBookmarks.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{{count} bookmark} =1{{count} bookmark} other{{count} bookmarks}}'**
+  /// **'{count, plural, =1{{count} bookmark} other{{count} bookmarks}}'**
   String nbBookmarks(int count);
 
   /// No description provided for @nbDays.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{{count} day} =1{{count} day} other{{count} days}}'**
+  /// **'{count, plural, =1{{count} day} other{{count} days}}'**
   String nbDays(int count);
 
   /// No description provided for @nbHours.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{{count} hour} =1{{count} hour} other{{count} hours}}'**
+  /// **'{count, plural, =1{{count} hour} other{{count} hours}}'**
   String nbHours(int count);
 
   /// No description provided for @nbMinutes.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{{count} minute} =1{{count} minute} other{{count} minutes}}'**
+  /// **'{count, plural, =1{{count} minute} other{{count} minutes}}'**
   String nbMinutes(int count);
 
   /// No description provided for @rankIsUpdatedEveryNbMinutes.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{Rank is updated every minute} =1{Rank is updated every minute} other{Rank is updated every {count} minutes}}'**
+  /// **'{count, plural, =1{Rank is updated every minute} other{Rank is updated every {count} minutes}}'**
   String rankIsUpdatedEveryNbMinutes(int count);
 
   /// No description provided for @nbPuzzles.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{{count} puzzle} =1{{count} puzzle} other{{count} puzzles}}'**
+  /// **'{count, plural, =1{{count} puzzle} other{{count} puzzles}}'**
   String nbPuzzles(int count);
 
   /// No description provided for @nbGamesWithYou.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{{count} game with you} =1{{count} game with you} other{{count} games with you}}'**
+  /// **'{count, plural, =1{{count} game with you} other{{count} games with you}}'**
   String nbGamesWithYou(int count);
 
   /// No description provided for @nbRated.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{{count} rated} =1{{count} rated} other{{count} rated}}'**
+  /// **'{count, plural, =1{{count} rated} other{{count} rated}}'**
   String nbRated(int count);
 
   /// No description provided for @nbWins.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{{count} win} =1{{count} win} other{{count} wins}}'**
+  /// **'{count, plural, =1{{count} win} other{{count} wins}}'**
   String nbWins(int count);
 
   /// No description provided for @nbLosses.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{{count} loss} =1{{count} loss} other{{count} losses}}'**
+  /// **'{count, plural, =1{{count} loss} other{{count} losses}}'**
   String nbLosses(int count);
 
   /// No description provided for @nbDraws.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{{count} draw} =1{{count} draw} other{{count} draws}}'**
+  /// **'{count, plural, =1{{count} draw} other{{count} draws}}'**
   String nbDraws(int count);
 
   /// No description provided for @nbPlaying.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{{count} playing} =1{{count} playing} other{{count} playing}}'**
+  /// **'{count, plural, =1{{count} playing} other{{count} playing}}'**
   String nbPlaying(int count);
 
   /// No description provided for @giveNbSeconds.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{Give {count} second} =1{Give {count} second} other{Give {count} seconds}}'**
+  /// **'{count, plural, =1{Give {count} second} other{Give {count} seconds}}'**
   String giveNbSeconds(int count);
 
   /// No description provided for @nbTournamentPoints.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{{count} tournament point} =1{{count} tournament point} other{{count} tournament points}}'**
+  /// **'{count, plural, =1{{count} tournament point} other{{count} tournament points}}'**
   String nbTournamentPoints(int count);
 
   /// No description provided for @nbStudies.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{{count} study} =1{{count} study} other{{count} studies}}'**
+  /// **'{count, plural, =1{{count} study} other{{count} studies}}'**
   String nbStudies(int count);
 
   /// No description provided for @nbSimuls.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{{count} simul} =1{{count} simul} other{{count} simuls}}'**
+  /// **'{count, plural, =1{{count} simul} other{{count} simuls}}'**
   String nbSimuls(int count);
 
   /// No description provided for @moreThanNbRatedGames.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{≥ {count} rated game} =1{≥ {count} rated game} other{≥ {count} rated games}}'**
+  /// **'{count, plural, =1{≥ {count} rated game} other{≥ {count} rated games}}'**
   String moreThanNbRatedGames(int count);
 
   /// No description provided for @moreThanNbPerfRatedGames.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{≥ {count} {param2} rated game} =1{≥ {count} {param2} rated game} other{≥ {count} {param2} rated games}}'**
+  /// **'{count, plural, =1{≥ {count} {param2} rated game} other{≥ {count} {param2} rated games}}'**
   String moreThanNbPerfRatedGames(int count, String param2);
 
   /// No description provided for @needNbMorePerfGames.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{You need to play {count} more {param2} rated game} =1{You need to play {count} more {param2} rated game} other{You need to play {count} more {param2} rated games}}'**
+  /// **'{count, plural, =1{You need to play {count} more {param2} rated game} other{You need to play {count} more {param2} rated games}}'**
   String needNbMorePerfGames(int count, String param2);
 
   /// No description provided for @needNbMoreGames.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{You need to play {count} more rated game} =1{You need to play {count} more rated game} other{You need to play {count} more rated games}}'**
+  /// **'{count, plural, =1{You need to play {count} more rated game} other{You need to play {count} more rated games}}'**
   String needNbMoreGames(int count);
 
   /// No description provided for @nbImportedGames.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{{count} imported game} =1{{count} imported game} other{{count} imported games}}'**
+  /// **'{count, plural, =1{{count} imported game} other{{count} imported games}}'**
   String nbImportedGames(int count);
 
   /// No description provided for @nbFriendsOnline.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{{count} friend online} =1{{count} friend online} other{{count} friends online}}'**
+  /// **'{count, plural, =1{{count} friend online} other{{count} friends online}}'**
   String nbFriendsOnline(int count);
 
   /// No description provided for @nbFollowers.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{{count} follower} =1{{count} follower} other{{count} followers}}'**
+  /// **'{count, plural, =1{{count} follower} other{{count} followers}}'**
   String nbFollowers(int count);
 
   /// No description provided for @nbFollowing.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{{count} following} =1{{count} following} other{{count} following}}'**
+  /// **'{count, plural, =1{{count} following} other{{count} following}}'**
   String nbFollowing(int count);
 
   /// No description provided for @lessThanNbMinutes.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{Less than {count} minute} =1{Less than {count} minute} other{Less than {count} minutes}}'**
+  /// **'{count, plural, =1{Less than {count} minute} other{Less than {count} minutes}}'**
   String lessThanNbMinutes(int count);
 
   /// No description provided for @nbGamesInPlay.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{{count} game in play} =1{{count} game in play} other{{count} games in play}}'**
+  /// **'{count, plural, =1{{count} game in play} other{{count} games in play}}'**
   String nbGamesInPlay(int count);
 
   /// No description provided for @maximumNbCharacters.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{Maximum: {count} character.} =1{Maximum: {count} character.} other{Maximum: {count} characters.}}'**
+  /// **'{count, plural, =1{Maximum: {count} character.} other{Maximum: {count} characters.}}'**
   String maximumNbCharacters(int count);
 
   /// No description provided for @blocks.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{{count} block} =1{{count} block} other{{count} blocks}}'**
+  /// **'{count, plural, =1{{count} block} other{{count} blocks}}'**
   String blocks(int count);
 
   /// No description provided for @nbForumPosts.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{{count} forum post} =1{{count} forum post} other{{count} forum posts}}'**
+  /// **'{count, plural, =1{{count} forum post} other{{count} forum posts}}'**
   String nbForumPosts(int count);
 
   /// No description provided for @nbPerfTypePlayersThisWeek.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{{count} {param2} player this week.} =1{{count} {param2} player this week.} other{{count} {param2} players this week.}}'**
+  /// **'{count, plural, =1{{count} {param2} player this week.} other{{count} {param2} players this week.}}'**
   String nbPerfTypePlayersThisWeek(int count, String param2);
 
   /// No description provided for @availableInNbLanguages.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{Available in {count} language!} =1{Available in {count} language!} other{Available in {count} languages!}}'**
+  /// **'{count, plural, =1{Available in {count} language!} other{Available in {count} languages!}}'**
   String availableInNbLanguages(int count);
 
   /// No description provided for @nbSecondsToPlayTheFirstMove.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{{count} second to play the first move} =1{{count} second to play the first move} other{{count} seconds to play the first move}}'**
+  /// **'{count, plural, =1{{count} second to play the first move} other{{count} seconds to play the first move}}'**
   String nbSecondsToPlayTheFirstMove(int count);
 
   /// No description provided for @nbSeconds.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{{count} second} =1{{count} second} other{{count} seconds}}'**
+  /// **'{count, plural, =1{{count} second} other{{count} seconds}}'**
   String nbSeconds(int count);
 
   /// No description provided for @andSaveNbPremoveLines.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{and save {count} premove line} =1{and save {count} premove line} other{and save {count} premove lines}}'**
+  /// **'{count, plural, =1{and save {count} premove line} other{and save {count} premove lines}}'**
   String andSaveNbPremoveLines(int count);
 
   /// No description provided for @stormMoveToStart.
@@ -7795,13 +7795,13 @@ abstract class AppLocalizations {
   /// No description provided for @stormXRuns.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{1 run} =1{1 run} other{{count} runs}}'**
+  /// **'{count, plural, =1{1 run} other{{count} runs}}'**
   String stormXRuns(int count);
 
   /// No description provided for @stormPlayedNbRunsOfPuzzleStorm.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =0{Played one run of {param2}} =1{Played one run of {param2}} other{Played {count} runs of {param2}}}'**
+  /// **'{count, plural, =1{Played one run of {param2}} other{Played {count} runs of {param2}}}'**
   String stormPlayedNbRunsOfPuzzleStorm(int count, String param2);
 
   /// No description provided for @streamerLichessStreamers.

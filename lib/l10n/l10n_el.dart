@@ -27,7 +27,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Υποστήριξε το lichess για $count μήνες ως $param2',
       one: 'Υποστήριξε το lichess για $count μήνα ως $param2',
-      zero: 'Υποστήριξε το lichess για $count μήνα ως $param2',
     );
     return '$_temp0';
   }
@@ -39,7 +38,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Εξασκήθηκε $count θέσεις σε $param2',
       one: 'Εξασκήθηκε $count θέση σε $param2',
-      zero: 'Εξασκήθηκε $count θέση σε $param2',
     );
     return '$_temp0';
   }
@@ -51,7 +49,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Έλυσε $count τακτικούς γρίφους',
       one: 'Έλυσε $count τακτικό γρίφο',
-      zero: 'Έλυσε $count τακτικό γρίφο',
     );
     return '$_temp0';
   }
@@ -63,7 +60,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Έπαιξε $count παρτίδες $param2',
       one: 'Έπαιξε $count παρτίδα $param2',
-      zero: 'Έπαιξε $count παρτίδα $param2',
     );
     return '$_temp0';
   }
@@ -75,7 +71,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Δημοσίευσε $count μηνύματα στο $param2',
       one: 'Δημοσίευσε $count μήνυμα στο $param2',
-      zero: 'Δημοσίευσε $count μήνυμα στο $param2',
     );
     return '$_temp0';
   }
@@ -87,7 +82,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Έπαιξε $count κινήσεις',
       one: 'Έπαιξε $count κίνηση',
-      zero: 'Έπαιξε $count κίνηση',
     );
     return '$_temp0';
   }
@@ -99,7 +93,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'σε $count παρτίδες αλληλογραφίας',
       one: 'σε $count παρτίδα αλληλογραφίας',
-      zero: 'σε $count παρτίδα αλληλογραφίας',
     );
     return '$_temp0';
   }
@@ -111,7 +104,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Ολοκλήρωσε $count παρτίδες αλληλογραφίας',
       one: 'Ολοκλήρωσε $count παρτίδα αλληλογραφίας',
-      zero: 'Ολοκλήρωσε $count παρτίδα αλληλογραφίας',
     );
     return '$_temp0';
   }
@@ -123,7 +115,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Άρχισε να ακολουθεί $count παίκτες',
       one: 'Άρχισε να ακολουθεί $count παίκτη',
-      zero: 'Άρχισε να ακολουθεί $count παίκτη',
     );
     return '$_temp0';
   }
@@ -135,7 +126,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Απέκτησε $count νέους ακόλουθους',
       one: 'Απέκτησε $count νέο ακόλουθο',
-      zero: 'Απέκτησε $count νέο ακόλουθο',
     );
     return '$_temp0';
   }
@@ -147,7 +137,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Φιλοξένησε $count σιμουλτανέ',
       one: 'Φιλοξένησε $count σιμουλτανέ',
-      zero: 'Φιλοξένησε $count σιμουλτανέ',
     );
     return '$_temp0';
   }
@@ -159,7 +148,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Συμμετείχε σε $count σιμουλτανέ',
       one: 'Συμμετείχε σε $count σιμουλτανέ',
-      zero: 'Συμμετείχε σε $count σιμουλτανέ',
     );
     return '$_temp0';
   }
@@ -171,7 +159,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Δημιούργησε $count νέες μελέτες',
       one: 'Δημιούργησε $count νέα μελέτη',
-      zero: 'Δημιούργησε $count νέα μελέτη',
     );
     return '$_temp0';
   }
@@ -183,7 +170,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Αγωνίστηκε σε $count τουρνουά',
       one: 'Αγωνίστηκε σε $count τουρνουά',
-      zero: 'Αγωνίστηκε σε $count τουρνουά',
     );
     return '$_temp0';
   }
@@ -195,7 +181,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Κατατάχθηκε #$count (κορυφαίος $param2%) με $param3 παιχνίδια σε $param4',
       one: 'Κατατάχθηκε #$count (κορυφαίος $param2%) με $param3 παιχνίδι σε $param4',
-      zero: 'Κατατάχθηκε #$count (κορυφαίος $param2%) με $param3 παιχνίδι σε $param4',
     );
     return '$_temp0';
   }
@@ -207,7 +192,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Αγωνίστηκε σε $count ελβετικά τουρνουά',
       one: 'Αγωνίστηκε σε $count ελβετικό τουρνουά',
-      zero: 'Αγωνίστηκε σε $count ελβετικό τουρνουά',
     );
     return '$_temp0';
   }
@@ -219,7 +203,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Έγινε μέλος $count ομαδών',
       one: 'Έγινε μέλος $count ομάδας',
-      zero: 'Έγινε μέλος $count ομάδας',
     );
     return '$_temp0';
   }
@@ -863,7 +846,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Λύθηκε $count φορές',
       one: 'Λύθηκε $count φορά',
-      zero: 'Λύθηκε $count φορά',
     );
     return '$_temp0';
   }
@@ -875,7 +857,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count πόντους κάτω από τη βαθμολογία γρίφων σας',
       one: 'Έναν πόντο κάτω από τη βαθμολογία γρίφων σας',
-      zero: 'Έναν πόντο κάτω από τη βαθμολογία γρίφων σας',
     );
     return '$_temp0';
   }
@@ -887,7 +868,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count πόντους πάνω από την βαθμολογία γρίφων σας',
       one: 'Έναν πόντο πάνω από την βαθμολογία γρίφων σας',
-      zero: 'Έναν πόντο πάνω από την βαθμολογία γρίφων σας',
     );
     return '$_temp0';
   }
@@ -899,7 +879,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count παίχτηκαν',
       one: '$count παίχτηκε',
-      zero: '$count παίχτηκε',
     );
     return '$_temp0';
   }
@@ -911,7 +890,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count για επανάληψη',
       one: '$count για επανάληψη',
-      zero: '$count για επανάληψη',
     );
     return '$_temp0';
   }
@@ -3959,7 +3937,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Ο αντίπαλος έφυγε από το παιχνίδι. Διεκδίκηση νίκης σε $count δευτερόλεπτα.',
       one: 'Ο αντίπαλός σας έφυγε από το παιχνίδι. Διεκδίκηση νίκης σε $count δευτερόλεπτο.',
-      zero: 'Ο αντίπαλός σας έφυγε από το παιχνίδι. Διεκδίκηση νίκης σε $count δευτερόλεπτο.',
     );
     return '$_temp0';
   }
@@ -3971,7 +3948,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Ματ σε $count μισές κινήσεις',
       one: 'Ματ σε $count μισή κίνηση',
-      zero: 'Ματ σε $count μισή κίνηση',
     );
     return '$_temp0';
   }
@@ -3983,7 +3959,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count σοβαρά σφάλματα',
       one: '$count σοβαρό σφάλμα',
-      zero: '$count σοβαρό σφάλμα',
     );
     return '$_temp0';
   }
@@ -3995,7 +3970,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count λάθη',
       one: '$count λάθος',
-      zero: '$count λάθος',
     );
     return '$_temp0';
   }
@@ -4007,7 +3981,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count ανακρίβειες',
       one: '$count ανακρίβεια',
-      zero: '$count ανακρίβεια',
     );
     return '$_temp0';
   }
@@ -4019,7 +3992,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count παίκτες',
       one: '$count παίκτης',
-      zero: '$count παίκτης',
     );
     return '$_temp0';
   }
@@ -4031,7 +4003,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count παιχνίδια',
       one: '$count παιχνίδι',
-      zero: '$count παιχνίδι',
     );
     return '$_temp0';
   }
@@ -4043,7 +4014,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Βαθμολογία $count για $param2 παιχνίδια',
       one: 'Βαθμολογία $count για $param2 παιχνίδι',
-      zero: 'Βαθμολογία $count για $param2 παιχνίδι',
     );
     return '$_temp0';
   }
@@ -4055,7 +4025,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count σελιδοδείκτες',
       one: '$count σελιδοδείκτης',
-      zero: '$count σελιδοδείκτης',
     );
     return '$_temp0';
   }
@@ -4067,7 +4036,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count ημέρες',
       one: '$count ημέρα',
-      zero: '$count ημέρα',
     );
     return '$_temp0';
   }
@@ -4079,7 +4047,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count ώρες',
       one: '$count ώρα',
-      zero: '$count ώρα',
     );
     return '$_temp0';
   }
@@ -4091,7 +4058,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count λεπτά',
       one: '$count λεπτό',
-      zero: '$count λεπτό',
     );
     return '$_temp0';
   }
@@ -4103,7 +4069,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Η κατάταξη ενημερώνεται κάθε $count λεπτά',
       one: 'Η κατάταξη ενημερώνεται κάθε λεπτό',
-      zero: 'Η κατάταξη ενημερώνεται κάθε λεπτό',
     );
     return '$_temp0';
   }
@@ -4115,7 +4080,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count γρίφοι',
       one: '$count γρίφος',
-      zero: '$count γρίφος',
     );
     return '$_temp0';
   }
@@ -4127,7 +4091,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count παιχνίδια με εσάς',
       one: '$count παιχνίδι με εσάς',
-      zero: '$count παιχνίδι με εσάς',
     );
     return '$_temp0';
   }
@@ -4139,7 +4102,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count βαθμολογημένα',
       one: '$count βαθμολογημένο',
-      zero: '$count βαθμολογημένο',
     );
     return '$_temp0';
   }
@@ -4151,7 +4113,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count νίκες',
       one: '$count νίκη',
-      zero: '$count νίκη',
     );
     return '$_temp0';
   }
@@ -4163,7 +4124,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count ήττες',
       one: '$count ήττα',
-      zero: '$count ήττα',
     );
     return '$_temp0';
   }
@@ -4175,7 +4135,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count ισοπαλίες',
       one: '$count ισοπαλία',
-      zero: '$count ισοπαλία',
     );
     return '$_temp0';
   }
@@ -4187,7 +4146,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count παίζονται',
       one: '$count παίζεται',
-      zero: '$count παίζεται',
     );
     return '$_temp0';
   }
@@ -4199,7 +4157,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Προσθέστε $count δευτερόλεπτα',
       one: 'Προσθέστε $count δευτερόλεπτα',
-      zero: 'Προσθέστε $count δευτερόλεπτα',
     );
     return '$_temp0';
   }
@@ -4211,7 +4168,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count πόντοι τουρνουά',
       one: '$count πόντος τουρνουά',
-      zero: '$count πόντος τουρνουά',
     );
     return '$_temp0';
   }
@@ -4223,7 +4179,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count μελέτες',
       one: '$count μελέτη',
-      zero: '$count μελέτη',
     );
     return '$_temp0';
   }
@@ -4235,7 +4190,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count σιμουλτανέ',
       one: '$count σιμουλτανέ',
-      zero: '$count σιμουλτανέ',
     );
     return '$_temp0';
   }
@@ -4247,7 +4201,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '≥ $count βαθμολογημένα παιχνίδια',
       one: '≥ $count βαθμολογημένο παιχνίδι',
-      zero: '≥ $count βαθμολογημένο παιχνίδι',
     );
     return '$_temp0';
   }
@@ -4259,7 +4212,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '≥ $count βαθμολογημένα παιχνίδια $param2',
       one: '≥ $count βαθμολογημένο παιχνίδι $param2',
-      zero: '≥ $count βαθμολογημένο παιχνίδι $param2',
     );
     return '$_temp0';
   }
@@ -4271,7 +4223,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Πρέπει να παίξετε $count επιπλέον $param2 βαθμολογημένα παιχνίδια',
       one: 'Πρέπει να παίξετε $count επιπλέον $param2 βαθμολογημένο παιχνίδι',
-      zero: 'Πρέπει να παίξετε $count επιπλέον $param2 βαθμολογημένο παιχνίδι',
     );
     return '$_temp0';
   }
@@ -4283,7 +4234,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Πρέπει να παίξετε $count βαθμολογημένα παιχνίδια',
       one: 'Πρέπει να παίξετε $count βαθμολογημένο παιχνίδι',
-      zero: 'Πρέπει να παίξετε $count βαθμολογημένο παιχνίδι',
     );
     return '$_temp0';
   }
@@ -4295,7 +4245,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count Εισαγόμενα παιχνίδια',
       one: '$count Εισαγόμενο παιχνίδι',
-      zero: '$count Εισαγόμενο παιχνίδι',
     );
     return '$_temp0';
   }
@@ -4307,7 +4256,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count φίλοι συνδεδεμένοι',
       one: '$count φίλος συνδεδεμένος',
-      zero: '$count φίλος συνδεδεμένος',
     );
     return '$_temp0';
   }
@@ -4319,7 +4267,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count ακόλουθοι',
       one: '$count ακόλουθος',
-      zero: '$count ακόλουθος',
     );
     return '$_temp0';
   }
@@ -4331,7 +4278,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count ακολουθούνται',
       one: '$count ακολουθείται',
-      zero: '$count ακολουθείται',
     );
     return '$_temp0';
   }
@@ -4343,7 +4289,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Λιγότερο από $count λεπτά',
       one: 'Λιγότερο από $count λεπτό',
-      zero: 'Λιγότερο από $count λεπτό',
     );
     return '$_temp0';
   }
@@ -4355,7 +4300,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count παιχνίδια παίζονται τώρα',
       one: '$count παιχνίδι παίζεται τώρα',
-      zero: '$count παιχνίδι παίζεται τώρα',
     );
     return '$_temp0';
   }
@@ -4367,7 +4311,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Όριο: $count χαρακτήρες.',
       one: 'Όριο: $count χαρακτήρες.',
-      zero: 'Όριο: $count χαρακτήρες.',
     );
     return '$_temp0';
   }
@@ -4379,7 +4322,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count αποκλεισμοί',
       one: '$count αποκλεισμός',
-      zero: '$count αποκλεισμός',
     );
     return '$_temp0';
   }
@@ -4391,7 +4333,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count δημοσιεύσεις φόρουμ',
       one: '$count δημοσίευση φόρουμ',
-      zero: '$count δημοσίευση φόρουμ',
     );
     return '$_temp0';
   }
@@ -4403,7 +4344,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count παίκτες $param2 αυτήν την εβδομάδα.',
       one: '$count παίκτης $param2 αυτήν την εβδομάδα.',
-      zero: '$count παίκτης $param2 αυτήν την εβδομάδα.',
     );
     return '$_temp0';
   }
@@ -4415,7 +4355,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Διαθέσιμο σε $count γλώσσες!',
       one: 'Διαθέσιμο σε $count γλώσσες!',
-      zero: 'Διαθέσιμο σε $count γλώσσες!',
     );
     return '$_temp0';
   }
@@ -4427,7 +4366,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count δευτερόλεπτα για την πρώτη κίνηση',
       one: '$count δευτερόλεπτο για την πρώτη κίνηση',
-      zero: '$count δευτερόλεπτο για την πρώτη κίνηση',
     );
     return '$_temp0';
   }
@@ -4439,7 +4377,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count δευτερόλεπτα',
       one: '$count δευτερόλεπτο',
-      zero: '$count δευτερόλεπτο',
     );
     return '$_temp0';
   }
@@ -4451,7 +4388,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'και αποθηκεύστε $count γραμμές προκίνησης',
       one: 'και αποθηκεύστε $count γραμμή προκίνησης',
-      zero: 'και αποθηκεύστε $count γραμμή προκίνησης',
     );
     return '$_temp0';
   }
@@ -4622,7 +4558,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count γύροι',
       one: '1 γύρος',
-      zero: '1 γύρος',
     );
     return '$_temp0';
   }
@@ -4634,7 +4569,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Έπαιξε $count γύρους $param2',
       one: 'Έπαιξε έναν γύρο $param2',
-      zero: 'Έπαιξε έναν γύρο $param2',
     );
     return '$_temp0';
   }

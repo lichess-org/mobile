@@ -27,7 +27,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Mbështeti lichess.org për $count muaj si $param2',
       one: 'Mbështeti lichess.org për $count muaj si $param2',
-      zero: 'Mbështeti lichess.org për $count muaj si $param2',
     );
     return '$_temp0';
   }
@@ -39,7 +38,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Ushtroi $count pozicione në $param2',
       one: 'U praktikua pozicioni $count në $param2',
-      zero: 'U praktikua pozicioni $count në $param2',
     );
     return '$_temp0';
   }
@@ -51,7 +49,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Zgjidhi $count ushtrime taktike',
       one: 'Zgjidhet enigma taktike $count',
-      zero: 'Zgjidhet enigma taktike $count',
     );
     return '$_temp0';
   }
@@ -63,7 +60,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Luajti $count lojëra $param2',
       one: 'Luajti lojë $count $param2',
-      zero: 'Luajti lojë $count $param2',
     );
     return '$_temp0';
   }
@@ -75,7 +71,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Postoi $count mesazhe në $param2',
       one: 'Postuar $count mesazh në $param2',
-      zero: 'Postuar $count mesazh në $param2',
     );
     return '$_temp0';
   }
@@ -87,7 +82,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Bëri $count lëvizje',
       one: 'Luajti lëvizje $count',
-      zero: 'Luajti lëvizje $count',
     );
     return '$_temp0';
   }
@@ -99,7 +93,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'në $count lojëra korrespondence',
       one: 'në lojën e korrespondencës $count',
-      zero: 'në lojën e korrespondencës $count',
     );
     return '$_temp0';
   }
@@ -111,7 +104,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Plotësoi $count lojëra me korrespondencë',
       one: 'Përfundoi lojën e korrespondencës $count',
-      zero: 'Përfundoi lojën e korrespondencës $count',
     );
     return '$_temp0';
   }
@@ -123,7 +115,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Filloi të ndjekë $count lojtarë',
       one: 'Filloi të ndjek lojtarin $count',
-      zero: 'Filloi të ndjek lojtarin $count',
     );
     return '$_temp0';
   }
@@ -135,7 +126,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Përfitoi $count ndjekës të ri',
       one: 'Fitoi %një ndjekës të ri',
-      zero: 'Fitoi %një ndjekës të ri',
     );
     return '$_temp0';
   }
@@ -147,7 +137,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Zhvilloi $count lojëra të njëkohësishme',
       one: 'Zhvilloi $count lojëra të njëkohësishme',
-      zero: 'Zhvilloi $count lojëra të njëkohësishme',
     );
     return '$_temp0';
   }
@@ -159,7 +148,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Mori pjesë në $count ndeshje të njëkohësishme',
       one: 'Mori pjesë në $count ndeshje të njëkohësishme',
-      zero: 'Mori pjesë në $count ndeshje të njëkohësishme',
     );
     return '$_temp0';
   }
@@ -171,7 +159,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Krijoi $count mësime të reja',
       one: 'Krijoi $count studim të ri',
-      zero: 'Krijoi $count studim të ri',
     );
     return '$_temp0';
   }
@@ -183,7 +170,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Ndeshur në $count turne Arenë',
       one: 'Konkuroi në turneun $count Arena',
-      zero: 'Konkuroi në turneun $count Arena',
     );
     return '$_temp0';
   }
@@ -195,7 +181,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'U rendit i $count ($param2% kryesuesit) me $param3 lojëra në $param4',
       one: 'U rendit i $count ($param2% kryesuesit) me $param3 lojë në $param4',
-      zero: 'U rendit i $count ($param2% kryesuesit) me $param3 lojë në $param4',
     );
     return '$_temp0';
   }
@@ -207,7 +192,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Ndeshur në $count turne zviceranë',
       one: 'Konkuroi në turneun zviceran $count',
-      zero: 'Konkuroi në turneun zviceran $count',
     );
     return '$_temp0';
   }
@@ -219,7 +203,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'U bë pjesë e $count ekipive',
       one: 'U bashkua me ekipin $count',
-      zero: 'U bashkua me ekipin $count',
     );
     return '$_temp0';
   }
@@ -863,7 +846,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Luajtur $count herë',
       one: 'Luajtur $count herë',
-      zero: 'Luajtur $count herë',
     );
     return '$_temp0';
   }
@@ -875,7 +857,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count pikë nën vlerësimin tuaj në ushtrime',
       one: 'Një pikë nën vlerësimin tuaj në ushtrime',
-      zero: 'Një pikë nën vlerësimin tuaj në ushtrime',
     );
     return '$_temp0';
   }
@@ -887,7 +868,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count pikë mbi vlerësimin tuaj në ushtrime',
       one: 'Një pikë mbi vlerësimin tuaj në ushtrime',
-      zero: 'Një pikë mbi vlerësimin tuaj në ushtrime',
     );
     return '$_temp0';
   }
@@ -899,7 +879,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count të luajtur',
       one: '$count i luajtur',
-      zero: '$count i luajtur',
     );
     return '$_temp0';
   }
@@ -911,7 +890,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count për t’u riluajtur',
       one: '$count për t’u riluajtur',
-      zero: '$count për t’u riluajtur',
     );
     return '$_temp0';
   }
@@ -3959,7 +3937,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Kundërshtari juaj la lojën. Mund të kërkoni fitoren pas $count sekondash.',
       one: 'Kundërshtari juaj la lojën. Mund të kërkoni fitoren pas $count sekondash.',
-      zero: 'Kundërshtari juaj la lojën. Mund të kërkoni fitoren pas $count sekondash.',
     );
     return '$_temp0';
   }
@@ -3971,7 +3948,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Mat në $count gjysmë lëvizje',
       one: 'Mat në $count gjysmë lëvizje',
-      zero: 'Mat në $count gjysmë lëvizje',
     );
     return '$_temp0';
   }
@@ -3983,7 +3959,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count gafa',
       one: '$count gafë',
-      zero: '$count gafë',
     );
     return '$_temp0';
   }
@@ -3995,7 +3970,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count gabime',
       one: '$count gabim',
-      zero: '$count gabim',
     );
     return '$_temp0';
   }
@@ -4007,7 +3981,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count pasaktësi',
       one: '$count pasaktësi',
-      zero: '$count pasaktësi',
     );
     return '$_temp0';
   }
@@ -4019,7 +3992,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count lojtarë',
       one: '$count lojtar',
-      zero: '$count lojtar',
     );
     return '$_temp0';
   }
@@ -4031,7 +4003,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count lojëra',
       one: '$count lojë',
-      zero: '$count lojë',
     );
     return '$_temp0';
   }
@@ -4043,7 +4014,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Vlerësuar me $count për $param2 lojëra',
       one: 'Vlerësuar me $count për $param2 lojë',
-      zero: 'Vlerësuar me $count për $param2 lojë',
     );
     return '$_temp0';
   }
@@ -4055,7 +4025,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count faqerojtës',
       one: '$count faqerojtës',
-      zero: '$count faqerojtës',
     );
     return '$_temp0';
   }
@@ -4067,7 +4036,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count ditë',
       one: '$count ditë',
-      zero: '$count ditë',
     );
     return '$_temp0';
   }
@@ -4079,7 +4047,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count orë',
       one: '$count orë',
-      zero: '$count orë',
     );
     return '$_temp0';
   }
@@ -4091,7 +4058,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count minuta',
       one: '$count minutë',
-      zero: '$count minutë',
     );
     return '$_temp0';
   }
@@ -4103,7 +4069,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Renditja përditësohet çdo $count minuta',
       one: 'Renditja përditësohet çdo minutë',
-      zero: 'Renditja përditësohet çdo minutë',
     );
     return '$_temp0';
   }
@@ -4115,7 +4080,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count ushtrime',
       one: '$count ushtrimi',
-      zero: '$count ushtrimi',
     );
     return '$_temp0';
   }
@@ -4127,7 +4091,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count lojëra me ju',
       one: '$count lojë me ju',
-      zero: '$count lojë me ju',
     );
     return '$_temp0';
   }
@@ -4139,7 +4102,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count të vlerësuara',
       one: '$count e vlerësuar',
-      zero: '$count e vlerësuar',
     );
     return '$_temp0';
   }
@@ -4151,7 +4113,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count fitore',
       one: '$count fitore',
-      zero: '$count fitore',
     );
     return '$_temp0';
   }
@@ -4163,7 +4124,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count humbje',
       one: '$count humbje',
-      zero: '$count humbje',
     );
     return '$_temp0';
   }
@@ -4175,7 +4135,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count barazime',
       one: '$count barazim',
-      zero: '$count barazim',
     );
     return '$_temp0';
   }
@@ -4187,7 +4146,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count duke luajtur',
       one: '$count po luan',
-      zero: '$count po luan',
     );
     return '$_temp0';
   }
@@ -4199,7 +4157,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Dhuro $count sekonda',
       one: 'Jep $count sekondë',
-      zero: 'Jep $count sekondë',
     );
     return '$_temp0';
   }
@@ -4211,7 +4168,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count pikë nga turnetë',
       one: '$count pikë nga turnetë',
-      zero: '$count pikë nga turnetë',
     );
     return '$_temp0';
   }
@@ -4223,7 +4179,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count studime',
       one: '$count studim',
-      zero: '$count studim',
     );
     return '$_temp0';
   }
@@ -4235,7 +4190,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count simultane',
       one: '$count simultane',
-      zero: '$count simultane',
     );
     return '$_temp0';
   }
@@ -4247,7 +4201,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Lojëra të vlerësuara me ≥ $count',
       one: 'Lojë e vlerësuar me ≥ $count',
-      zero: 'Lojë e vlerësuar me ≥ $count',
     );
     return '$_temp0';
   }
@@ -4259,7 +4212,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Lojëra të vlerësuara me ≥ $count $param2',
       one: 'Lojë e vlerësuar me ≥ $count $param2',
-      zero: 'Lojë e vlerësuar me ≥ $count $param2',
     );
     return '$_temp0';
   }
@@ -4271,7 +4223,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Lypset të luani edhe $count lojëra të vlerësuara me $param2',
       one: 'Lypset të luani edhe $count lojë të vlerësuar me $param2',
-      zero: 'Lypset të luani edhe $count lojë të vlerësuar me $param2',
     );
     return '$_temp0';
   }
@@ -4283,7 +4234,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Lypset të luani edhe $count lojëra të vlerësuara',
       one: 'Lypset të luani edhe $count lojë të vlerësuar',
-      zero: 'Lypset të luani edhe $count lojë të vlerësuar',
     );
     return '$_temp0';
   }
@@ -4295,7 +4245,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count lojëra të importuara',
       one: '$count lojë e importuar',
-      zero: '$count lojë e importuar',
     );
     return '$_temp0';
   }
@@ -4307,7 +4256,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count shokë në linjë',
       one: '$count shok në linjë',
-      zero: '$count shok në linjë',
     );
     return '$_temp0';
   }
@@ -4319,7 +4267,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count ndjekës',
       one: '$count ndjekës',
-      zero: '$count ndjekës',
     );
     return '$_temp0';
   }
@@ -4331,7 +4278,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count që ndiqen',
       one: '$count që ndiqet',
-      zero: '$count që ndiqet',
     );
     return '$_temp0';
   }
@@ -4343,7 +4289,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Më pak se $count minuta',
       one: 'Më pak se $count minutë',
-      zero: 'Më pak se $count minutë',
     );
     return '$_temp0';
   }
@@ -4355,7 +4300,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count lojëra duke u luajtur',
       one: '$count lojë duke u luajtur',
-      zero: '$count lojë duke u luajtur',
     );
     return '$_temp0';
   }
@@ -4367,7 +4311,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'E shumta:$count shenja.',
       one: 'E shumta:$count shenjë.',
-      zero: 'E shumta:$count shenjë.',
     );
     return '$_temp0';
   }
@@ -4379,7 +4322,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count bllokime',
       one: '$count bllokim',
-      zero: '$count bllokim',
     );
     return '$_temp0';
   }
@@ -4391,7 +4333,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count postime forumi',
       one: '$count postim forumi',
-      zero: '$count postim forumi',
     );
     return '$_temp0';
   }
@@ -4403,7 +4344,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count $param2 lojtarë këtë javë.',
       one: '$count $param2 lojtar këtë javë.',
-      zero: '$count $param2 lojtar këtë javë.',
     );
     return '$_temp0';
   }
@@ -4415,7 +4355,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'I përdorshëm në $count gjuhë!',
       one: 'I përdorshëm në $count gjuhë!',
-      zero: 'I përdorshëm në $count gjuhë!',
     );
     return '$_temp0';
   }
@@ -4427,7 +4366,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count sekonda për kryerjen e lëvizjes së parë',
       one: '$count sekondë për kryerjen e lëvizjes së parë',
-      zero: '$count sekondë për kryerjen e lëvizjes së parë',
     );
     return '$_temp0';
   }
@@ -4439,7 +4377,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count sekonda',
       one: '$count sekondë',
-      zero: '$count sekondë',
     );
     return '$_temp0';
   }
@@ -4451,7 +4388,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'edhe ruaj $count linja premove',
       one: 'edhe ruaj $count linja premove',
-      zero: 'edhe ruaj $count linja premove',
     );
     return '$_temp0';
   }
@@ -4622,7 +4558,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count raunde',
       one: '1 raund',
-      zero: '1 raund',
     );
     return '$_temp0';
   }
@@ -4634,7 +4569,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Luajti $count raunde nga $param2',
       one: 'Luajti një raund nga $param2',
-      zero: 'Luajti një raund nga $param2',
     );
     return '$_temp0';
   }

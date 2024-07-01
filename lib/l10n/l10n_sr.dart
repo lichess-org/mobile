@@ -28,7 +28,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: 'Подржали lichess.org на $count месеци као $param2',
       few: 'Подржали lichess.org на $count месеца као $param2',
       one: 'Подржали lichess.org на $count месец као $param2',
-      zero: 'Подржали lichess.org на $count месец као $param2',
     );
     return '$_temp0';
   }
@@ -41,7 +40,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: 'Вежбали $count позиција на $param2',
       few: 'Вежбали $count позиције на $param2',
       one: 'Вежбали $count позицију на $param2',
-      zero: 'Вежбали $count позицију на $param2',
     );
     return '$_temp0';
   }
@@ -54,7 +52,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: 'Решили $count тактичких проблема',
       few: 'Решили $count тактичка проблема',
       one: 'Решили $count тактички проблем',
-      zero: 'Решили $count тактички проблем',
     );
     return '$_temp0';
   }
@@ -67,7 +64,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: 'Одиграли $count $param2 партија',
       few: 'Одиграли $count $param2 партије',
       one: 'Одиграли $count $param2 партију',
-      zero: 'Одиграли $count $param2 партију',
     );
     return '$_temp0';
   }
@@ -80,7 +76,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: 'Поставили $count порука у $param2',
       few: 'Поставили $count поруке у $param2',
       one: 'Поставили $count поруку у $param2',
-      zero: 'Поставили $count поруку у $param2',
     );
     return '$_temp0';
   }
@@ -93,7 +88,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: 'Одиграли $count потеза',
       few: 'Одиграли $count потеза',
       one: 'Одиграли $count потез',
-      zero: 'Одиграли $count потез',
     );
     return '$_temp0';
   }
@@ -106,7 +100,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: 'у $count дописних партија',
       few: 'у $count дописне партије',
       one: 'у $count дописној партији',
-      zero: 'у $count дописној партији',
     );
     return '$_temp0';
   }
@@ -119,7 +112,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: 'Завршили $count дописних партија',
       few: 'Завршили $count дописне партије',
       one: 'Завршили $count дописну партију',
-      zero: 'Завршили $count дописну партију',
     );
     return '$_temp0';
   }
@@ -132,7 +124,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: 'Почели пратити $count играча',
       few: 'Почели пратити $count играча',
       one: 'Почели пратити $count играча',
-      zero: 'Почели пратити $count играча',
     );
     return '$_temp0';
   }
@@ -145,7 +136,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: 'Стекли $count нових пратилаца',
       few: 'Стекли $count нова пратилаца',
       one: 'Стекли $count новог пратиоца',
-      zero: 'Стекли $count новог пратиоца',
     );
     return '$_temp0';
   }
@@ -158,7 +148,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: 'Одржали $count симултанки',
       few: 'Одржали $count симултанке',
       one: 'Одржали $count симултанку',
-      zero: 'Одржали $count симултанку',
     );
     return '$_temp0';
   }
@@ -171,7 +160,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: 'Учествовали у $count симултанки',
       few: 'Учествовали у $count симултанке',
       one: 'Учествовали у $count симултанки',
-      zero: 'Учествовали у $count симултанки',
     );
     return '$_temp0';
   }
@@ -184,7 +172,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: 'Направили $count нових студија',
       few: 'Направили $count нове студије',
       one: 'Направили $count нову студију',
-      zero: 'Направили $count нову студију',
     );
     return '$_temp0';
   }
@@ -197,7 +184,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: 'Учествовали у $count турнира',
       few: 'Учествовали у $count турнира',
       one: 'Учествовали у $count турниру',
-      zero: 'Учествовали у $count турниру',
     );
     return '$_temp0';
   }
@@ -210,7 +196,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: 'Рангиран #$count (првих $param2%) са $param3 партија у $param4',
       few: 'Рангиран #$count (првих $param2%) са $param3 партије у $param4',
       one: 'Рангиран #$count (првих $param2%) са $param3 партијом у $param4',
-      zero: 'Рангиран #$count (првих $param2%) са $param3 партијом у $param4',
     );
     return '$_temp0';
   }
@@ -222,7 +207,6 @@ class AppLocalizationsSr extends AppLocalizations {
       locale: localeName,
       other: 'Competed in $count Swiss tournaments',
       one: 'Competed in $count Swiss tournament',
-      zero: 'Competed in $count Swiss tournament',
     );
     return '$_temp0';
   }
@@ -235,7 +219,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: 'Ушли у $count тимова',
       few: 'Ушли у $count тима',
       one: 'Ушли у $count тим',
-      zero: 'Ушли у $count тим',
     );
     return '$_temp0';
   }
@@ -880,7 +863,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: 'Играно $count пута',
       few: 'Играно $count пута',
       one: 'Играно $count пут',
-      zero: 'Играно $count пут',
     );
     return '$_temp0';
   }
@@ -892,7 +874,6 @@ class AppLocalizationsSr extends AppLocalizations {
       locale: localeName,
       other: '$count points below your puzzle rating',
       one: 'One point below your puzzle rating',
-      zero: 'One point below your puzzle rating',
     );
     return '$_temp0';
   }
@@ -904,7 +885,6 @@ class AppLocalizationsSr extends AppLocalizations {
       locale: localeName,
       other: '$count points above your puzzle rating',
       one: 'One point above your puzzle rating',
-      zero: 'One point above your puzzle rating',
     );
     return '$_temp0';
   }
@@ -3973,7 +3953,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: 'Ваш противник је напустио игру. Победа ће Вам бити приписана за $count секунди.',
       few: 'Ваш противник је напустио игру. Победа ће Вам бити приписана за $count секунди.',
       one: 'Ваш противник је напустио игру. Победа ће Вам бити приписана за $count секунди.',
-      zero: 'Ваш противник је напустио игру. Победа ће Вам бити приписана за $count секунди.',
     );
     return '$_temp0';
   }
@@ -3986,7 +3965,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: 'Мат у $count полу-потеза',
       few: 'Мат у $count полу-потеза',
       one: 'Мат у $count полу-потезу',
-      zero: 'Мат у $count полу-потезу',
     );
     return '$_temp0';
   }
@@ -3998,7 +3976,6 @@ class AppLocalizationsSr extends AppLocalizations {
       locale: localeName,
       other: '$count blunders',
       one: '$count blunder',
-      zero: '$count blunder',
     );
     return '$_temp0';
   }
@@ -4010,7 +3987,6 @@ class AppLocalizationsSr extends AppLocalizations {
       locale: localeName,
       other: '$count mistakes',
       one: '$count mistake',
-      zero: '$count mistake',
     );
     return '$_temp0';
   }
@@ -4022,7 +3998,6 @@ class AppLocalizationsSr extends AppLocalizations {
       locale: localeName,
       other: '$count inaccuracies',
       one: '$count inaccuracy',
-      zero: '$count inaccuracy',
     );
     return '$_temp0';
   }
@@ -4035,7 +4010,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: '$count играча на вези',
       few: '$count играча на вези',
       one: '$count играч на вези',
-      zero: '$count играч на вези',
     );
     return '$_temp0';
   }
@@ -4048,7 +4022,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: '$count партије',
       few: '$count партије',
       one: '$count партија',
-      zero: '$count партија',
     );
     return '$_temp0';
   }
@@ -4060,7 +4033,6 @@ class AppLocalizationsSr extends AppLocalizations {
       locale: localeName,
       other: '$count rating over $param2 games',
       one: '$count rating over $param2 game',
-      zero: '$count rating over $param2 game',
     );
     return '$_temp0';
   }
@@ -4073,7 +4045,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: '$count обележених игара',
       few: '$count обележених игара',
       one: '$count обележена игра',
-      zero: '$count обележена игра',
     );
     return '$_temp0';
   }
@@ -4086,7 +4057,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: '$count дана',
       few: '$count дана',
       one: '$count дан',
-      zero: '$count дан',
     );
     return '$_temp0';
   }
@@ -4099,7 +4069,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: '$count сати',
       few: '$count сати',
       one: '$count сат',
-      zero: '$count сат',
     );
     return '$_temp0';
   }
@@ -4112,7 +4081,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: '$count минута',
       few: '$count минута',
       one: '$count минут',
-      zero: '$count минут',
     );
     return '$_temp0';
   }
@@ -4125,7 +4093,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: 'Ранг се ажурира сваких $count минута',
       few: 'Ранг се ажурира сваке $count минуте',
       one: 'Ранг се ажурира сваки минут',
-      zero: 'Ранг се ажурира сваки минут',
     );
     return '$_temp0';
   }
@@ -4138,7 +4105,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: '$count тактика',
       few: '$count тактике',
       one: '$count тактика',
-      zero: '$count тактика',
     );
     return '$_temp0';
   }
@@ -4151,7 +4117,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: '$count игара са вама',
       few: '$count игара са вама',
       one: '$count игра са вама',
-      zero: '$count игра са вама',
     );
     return '$_temp0';
   }
@@ -4164,7 +4129,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: '$count рангираних',
       few: '$count рангиране',
       one: '$count рангирана',
-      zero: '$count рангирана',
     );
     return '$_temp0';
   }
@@ -4177,7 +4141,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: '$count победа',
       few: '$count победе',
       one: '$count победа',
-      zero: '$count победа',
     );
     return '$_temp0';
   }
@@ -4190,7 +4153,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: '$count пораза',
       few: '$count пораза',
       one: '$count пораз',
-      zero: '$count пораз',
     );
     return '$_temp0';
   }
@@ -4203,7 +4165,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: '$count ремија',
       few: '$count ремија',
       one: '$count реми',
-      zero: '$count реми',
     );
     return '$_temp0';
   }
@@ -4216,7 +4177,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: '$count играју',
       few: '$count играју',
       one: '$count игра',
-      zero: '$count игра',
     );
     return '$_temp0';
   }
@@ -4229,7 +4189,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: 'Додај $count секунди',
       few: 'Додај $count секунде',
       one: 'Додај $count секунд',
-      zero: 'Додај $count секунд',
     );
     return '$_temp0';
   }
@@ -4242,7 +4201,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: '$count поена на турнирима',
       few: '$count поена на турнирима',
       one: '$count поен на турнирима',
-      zero: '$count поен на турнирима',
     );
     return '$_temp0';
   }
@@ -4255,7 +4213,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: '$count студија',
       few: '$count студије',
       one: '$count студија',
-      zero: '$count студија',
     );
     return '$_temp0';
   }
@@ -4267,7 +4224,6 @@ class AppLocalizationsSr extends AppLocalizations {
       locale: localeName,
       other: '$count simuls',
       one: '$count simul',
-      zero: '$count simul',
     );
     return '$_temp0';
   }
@@ -4280,7 +4236,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: '≥ $count рангираних игара',
       few: '≥ $count рангиране игре',
       one: '≥ $count рангирана игра',
-      zero: '≥ $count рангирана игра',
     );
     return '$_temp0';
   }
@@ -4293,7 +4248,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: '≥ $count $param2 рангираних игара',
       few: '≥ $count $param2 рангиране игре',
       one: '≥ $count $param2 рангирана игра',
-      zero: '≥ $count $param2 рангирана игра',
     );
     return '$_temp0';
   }
@@ -4306,7 +4260,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: 'Морате одиграти још $count $param2 рангираних игара',
       few: 'Морате одиграти још $count $param2 рангиране игре',
       one: 'Морате одиграти још $count $param2 рангирану игру',
-      zero: 'Морате одиграти још $count $param2 рангирану игру',
     );
     return '$_temp0';
   }
@@ -4319,7 +4272,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: 'Морате одиграти још $count рангираних игара',
       few: 'Морате одиграти још $count рангиране игре',
       one: 'Морате одиграти још $count рангирану игру',
-      zero: 'Морате одиграти још $count рангирану игру',
     );
     return '$_temp0';
   }
@@ -4332,7 +4284,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: '$count увезених игара',
       few: '$count увезене игре',
       one: '$count увезена игра',
-      zero: '$count увезена игра',
     );
     return '$_temp0';
   }
@@ -4345,7 +4296,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: '$count пријатеља на мрежи',
       few: '$count пријатеља на мрежи',
       one: '$count пријатељ на мрежи',
-      zero: '$count пријатељ на мрежи',
     );
     return '$_temp0';
   }
@@ -4358,7 +4308,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: '$count пратиоца',
       few: '$count пратиоца',
       one: '$count пратиоц',
-      zero: '$count пратиоц',
     );
     return '$_temp0';
   }
@@ -4371,7 +4320,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: 'прати $count',
       few: 'прати $count',
       one: 'прати $count',
-      zero: 'прати $count',
     );
     return '$_temp0';
   }
@@ -4384,7 +4332,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: 'Мање од $count минута',
       few: 'Мање од $count минута',
       one: 'Мање од $count минут',
-      zero: 'Мање од $count минут',
     );
     return '$_temp0';
   }
@@ -4397,7 +4344,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: '$count партија се игра',
       few: '$count партије се играју',
       one: '$count партија се игра',
-      zero: '$count партија се игра',
     );
     return '$_temp0';
   }
@@ -4410,7 +4356,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: 'Највише: $count карактера',
       few: 'Највише: $count карактера',
       one: 'Највише: $count карактер',
-      zero: 'Највише: $count карактер',
     );
     return '$_temp0';
   }
@@ -4423,7 +4368,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: '$count блокираних',
       few: '$count блокиранa',
       one: '$count блокиран',
-      zero: '$count блокиран',
     );
     return '$_temp0';
   }
@@ -4436,7 +4380,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: '$count коментара на форуму',
       few: '$count коментара на форуму',
       one: '$count коментар на форуму',
-      zero: '$count коментар на форуму',
     );
     return '$_temp0';
   }
@@ -4449,7 +4392,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: '$count $param2 играча ове недеље.',
       few: '$count $param2 играча ове недеље.',
       one: '$count $param2 играч ове недеље.',
-      zero: '$count $param2 играч ове недеље.',
     );
     return '$_temp0';
   }
@@ -4462,7 +4404,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: 'Доступно у $count језика!',
       few: 'Доступно у $count језика!',
       one: 'Доступно у $count језику!',
-      zero: 'Доступно у $count језику!',
     );
     return '$_temp0';
   }
@@ -4475,7 +4416,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: '$count секунди да одиграте први потез',
       few: '$count секунде да одиграте први потез',
       one: '$count секунд да одиграте први потез',
-      zero: '$count секунд да одиграте први потез',
     );
     return '$_temp0';
   }
@@ -4488,7 +4428,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: '$count секунди',
       few: '$count секунде',
       one: '$count секунд',
-      zero: '$count секунд',
     );
     return '$_temp0';
   }
@@ -4501,7 +4440,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: 'и сачувај $count пре-потезних линија',
       few: 'и сачувај $count пре-потезне линије',
       one: 'и сачувај $count пре-потезну линију',
-      zero: 'и сачувај $count пре-потезну линију',
     );
     return '$_temp0';
   }
@@ -4673,7 +4611,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: '$count рунди',
       few: '$count рунде',
       one: '1 рунда',
-      zero: '1 рунда',
     );
     return '$_temp0';
   }
@@ -4686,7 +4623,6 @@ class AppLocalizationsSr extends AppLocalizations {
       other: 'Одиграли $count рунди $param2-а',
       few: 'Одиграли $count рунде $param2-а',
       one: 'Одиграли једну рунду $param2-а',
-      zero: 'Одиграли једну рунду $param2-а',
     );
     return '$_temp0';
   }

@@ -27,7 +27,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$param2 के रूप में $count महीने के लिए lichess.org का समर्थन किया।',
       one: '$param2 के रूप में $count महीने के लिए lichess.org का समर्थन किया।',
-      zero: '$param2 के रूप में $count महीने के लिए lichess.org का समर्थन किया।',
     );
     return '$_temp0';
   }
@@ -39,7 +38,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$param2 पर $count स्थितियों का अभ्यास किया',
       one: '$param2 पर $count स्थिति का अभ्यास किया',
-      zero: '$param2 पर $count स्थिति का अभ्यास किया',
     );
     return '$_temp0';
   }
@@ -51,7 +49,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$count प्रशिक्षण पहेलियों को हल किया',
       one: '$count प्रशिक्षण पहेली को हल किया',
-      zero: '$count प्रशिक्षण पहेली को हल किया',
     );
     return '$_temp0';
   }
@@ -63,7 +60,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$count $param2 के खेल खेले',
       one: '$count $param2 का खेल खेला',
-      zero: '$count $param2 का खेल खेला',
     );
     return '$_temp0';
   }
@@ -75,7 +71,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$param2 में $count संदेश भेजे',
       one: '$param2 में $count संदेश भेजा',
-      zero: '$param2 में $count संदेश भेजा',
     );
     return '$_temp0';
   }
@@ -87,7 +82,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$count चालें चली',
       one: '$count चाल चली',
-      zero: '$count चाल चली',
     );
     return '$_temp0';
   }
@@ -99,7 +93,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$count पत्राचार खेलों में',
       one: '$count पत्राचार खेल में',
-      zero: '$count पत्राचार खेल में',
     );
     return '$_temp0';
   }
@@ -111,7 +104,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$count पत्राचार खेल पूर्ण किए',
       one: '$count पत्राचार खेल पूर्ण किया',
-      zero: '$count पत्राचार खेल पूर्ण किया',
     );
     return '$_temp0';
   }
@@ -123,7 +115,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$count खिलाड़ियों का अनुसरण करना शुरू किया',
       one: '$count खिलाड़ी का अनुसरण करना शुरू किया',
-      zero: '$count खिलाड़ी का अनुसरण करना शुरू किया',
     );
     return '$_temp0';
   }
@@ -135,7 +126,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$count नए अनुयायी प्राप्त किए गए',
       one: '$count नया अनुयायी प्राप्त किया गया',
-      zero: '$count नया अनुयायी प्राप्त किया गया',
     );
     return '$_temp0';
   }
@@ -147,7 +137,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$count समकालिक प्रदर्शनियों का आयोजन किया',
       one: '$count समकालिक प्रदर्शनी का आयोजन किया',
-      zero: '$count समकालिक प्रदर्शनी का आयोजन किया',
     );
     return '$_temp0';
   }
@@ -159,7 +148,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$count समकालिक प्रदर्शनियों में भाग लिया',
       one: '$count समकालिक प्रदर्शनी में भाग लिया',
-      zero: '$count समकालिक प्रदर्शनी में भाग लिया',
     );
     return '$_temp0';
   }
@@ -171,7 +159,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$count नए अध्ययनों का निर्माण किया',
       one: '$count नया अध्ययन का निर्माण किया',
-      zero: '$count नया अध्ययन का निर्माण किया',
     );
     return '$_temp0';
   }
@@ -183,7 +170,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$count arena टूर्नामेटों में भाग लिया',
       one: '$count arena टूर्नामेंट में भाग लिया',
-      zero: '$count arena टूर्नामेंट में भाग लिया',
     );
     return '$_temp0';
   }
@@ -195,7 +181,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$param4 में $param3 खेल के साथ $count (टॉप $param2%) रैंक किया गया',
       one: '$param4 में $param3 खेल के साथ $count (टॉप $param2%) रैंक किया गया',
-      zero: '$param4 में $param3 खेल के साथ $count (टॉप $param2%) रैंक किया गया',
     );
     return '$_temp0';
   }
@@ -207,7 +192,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$count स्विस टुर्नामेंटों में भाग लिया',
       one: '$count स्विस टूर्नामेंट में भाग लिया',
-      zero: '$count स्विस टूर्नामेंट में भाग लिया',
     );
     return '$_temp0';
   }
@@ -219,7 +203,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$count टीमों में शामिल हुए',
       one: '$count टीम में शामिल हुए',
-      zero: '$count टीम में शामिल हुए',
     );
     return '$_temp0';
   }
@@ -863,7 +846,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$count समय खेले',
       one: '$count समय खेले',
-      zero: '$count समय खेले',
     );
     return '$_temp0';
   }
@@ -875,7 +857,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: 'पहेली की गणना मे से $count अंक नीचे',
       one: 'पहीली की गणना मे से एक अंक नीचे',
-      zero: 'पहीली की गणना मे से एक अंक नीचे',
     );
     return '$_temp0';
   }
@@ -887,7 +868,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: 'पहेली की गणना मे से $count अंक नीचे',
       one: 'पहेली की गणना मे से एक अंक नीचे',
-      zero: 'पहेली की गणना मे से एक अंक नीचे',
     );
     return '$_temp0';
   }
@@ -3955,7 +3935,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: 'आपके प्रतिद्वंद्वी ने खेल छोड़ दिया। आप $count सेकंड में जीत का दावा कर सकते हैं।',
       one: 'आपके प्रतिद्वंद्वी ने खेल छोड़ दिया। आप $count सेकंड में जीत का दावा कर सकते हैं।',
-      zero: 'आपके प्रतिद्वंद्वी ने खेल छोड़ दिया। आप $count सेकंड में जीत का दावा कर सकते हैं।',
     );
     return '$_temp0';
   }
@@ -3967,7 +3946,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$count आधे-कदम में चेकमैट',
       one: '$count हाफ मूव में मेट',
-      zero: '$count हाफ मूव में मेट',
     );
     return '$_temp0';
   }
@@ -3979,7 +3957,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$count गंभीर गल्तियां',
       one: '$count गंभीर गलती',
-      zero: '$count गंभीर गलती',
     );
     return '$_temp0';
   }
@@ -3991,7 +3968,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$count गलतियाँ',
       one: '$count ग़लती',
-      zero: '$count ग़लती',
     );
     return '$_temp0';
   }
@@ -4003,7 +3979,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$count अशुद्धियाँ',
       one: '$count अशुद्धि',
-      zero: '$count अशुद्धि',
     );
     return '$_temp0';
   }
@@ -4015,7 +3990,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$count खिलाड़ी',
       one: '$count खिलाड़ी',
-      zero: '$count खिलाड़ी',
     );
     return '$_temp0';
   }
@@ -4027,7 +4001,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$count खेल',
       one: '$count खेल',
-      zero: '$count खेल',
     );
     return '$_temp0';
   }
@@ -4039,7 +4012,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$count खेलों में $param2 रेटिंग',
       one: '$count खेलों में $param2 रेटिंग',
-      zero: '$count खेलों में $param2 रेटिंग',
     );
     return '$_temp0';
   }
@@ -4051,7 +4023,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$count पृष्ठ स्मृतियाँ',
       one: '$count पृष्ठ स्मृतियाँ',
-      zero: '$count पृष्ठ स्मृतियाँ',
     );
     return '$_temp0';
   }
@@ -4063,7 +4034,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$count दिन',
       one: '$count दिन',
-      zero: '$count दिन',
     );
     return '$_temp0';
   }
@@ -4075,7 +4045,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$count घंटे',
       one: '$count घंटे',
-      zero: '$count घंटे',
     );
     return '$_temp0';
   }
@@ -4087,7 +4056,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$count मिनट',
       one: '$count मिनट',
-      zero: '$count मिनट',
     );
     return '$_temp0';
   }
@@ -4099,7 +4067,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: 'पद को हर $count मिनटों में अपडेट किया जाता है',
       one: 'पद को हर मिनटों में अपडेट किया जाता है',
-      zero: 'पद को हर मिनटों में अपडेट किया जाता है',
     );
     return '$_temp0';
   }
@@ -4111,7 +4078,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$count पहेली',
       one: '$count पहेली',
-      zero: '$count पहेली',
     );
     return '$_temp0';
   }
@@ -4123,7 +4089,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: 'आपके साथ $count खेल',
       one: 'आपके साथ $count खेल',
-      zero: 'आपके साथ $count खेल',
     );
     return '$_temp0';
   }
@@ -4135,7 +4100,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$count रेटेड खेल',
       one: '$count रेटेड खेल',
-      zero: '$count रेटेड खेल',
     );
     return '$_temp0';
   }
@@ -4147,7 +4111,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$count जीत',
       one: '$count जीत',
-      zero: '$count जीत',
     );
     return '$_temp0';
   }
@@ -4159,7 +4122,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$count हार',
       one: '$count हार',
-      zero: '$count हार',
     );
     return '$_temp0';
   }
@@ -4171,7 +4133,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$count खेल बराबरी पे समाप्त',
       one: '$count खेल बराबरी पे समाप्त',
-      zero: '$count खेल बराबरी पे समाप्त',
     );
     return '$_temp0';
   }
@@ -4183,7 +4144,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$count खेल रहा है',
       one: '$count खेल रहा है',
-      zero: '$count खेल रहा है',
     );
     return '$_temp0';
   }
@@ -4195,7 +4155,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$count सेकंड्स दें',
       one: '$count सेकंड्स दें',
-      zero: '$count सेकंड्स दें',
     );
     return '$_temp0';
   }
@@ -4207,7 +4166,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$count टूर्नामेंट अंक',
       one: '$count टूर्नामेंट अंक',
-      zero: '$count टूर्नामेंट अंक',
     );
     return '$_temp0';
   }
@@ -4219,7 +4177,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$count अध्ययन',
       one: '$count अध्ययन',
-      zero: '$count अध्ययन',
     );
     return '$_temp0';
   }
@@ -4231,7 +4188,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$count सिमुल्स',
       one: '$count सिमुल',
-      zero: '$count सिमुल',
     );
     return '$_temp0';
   }
@@ -4243,7 +4199,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '≥ $count रेटेड खेल',
       one: '≥ $count रेटेड खेल',
-      zero: '≥ $count रेटेड खेल',
     );
     return '$_temp0';
   }
@@ -4255,7 +4210,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '≥ $count $param2 रेटेड खेल',
       one: '≥ $count $param2 रेटेड खेल',
-      zero: '≥ $count $param2 रेटेड खेल',
     );
     return '$_temp0';
   }
@@ -4267,7 +4221,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: 'आपको $count और $param2 रेटेड खेल खेलने की आवश्यकता है।',
       one: 'आपको $count और $param2 रेटेड खेल खेलने की आवश्यकता है।',
-      zero: 'आपको $count और $param2 रेटेड खेल खेलने की आवश्यकता है।',
     );
     return '$_temp0';
   }
@@ -4279,7 +4232,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: 'आपको $count और खेल में भाग लेने की आवश्यकता है',
       one: 'आपको $count और खेल में भाग लेने की आवश्यकता है',
-      zero: 'आपको $count और खेल में भाग लेने की आवश्यकता है',
     );
     return '$_temp0';
   }
@@ -4291,7 +4243,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$count खेल आयत (इम्पोर्ट) किये गए',
       one: '$count खेल आयत (इम्पोर्ट) किये गए',
-      zero: '$count खेल आयत (इम्पोर्ट) किये गए',
     );
     return '$_temp0';
   }
@@ -4303,7 +4254,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$count दोस्त ऑनलाइन',
       one: '$count मित्र ऑनलाइन',
-      zero: '$count मित्र ऑनलाइन',
     );
     return '$_temp0';
   }
@@ -4315,7 +4265,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$count अनुसरणकर्ता',
       one: '$count अनुसरणकर्ता',
-      zero: '$count अनुसरणकर्ता',
     );
     return '$_temp0';
   }
@@ -4327,7 +4276,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$count अनुगामी',
       one: '$count अनुगामी',
-      zero: '$count अनुगामी',
     );
     return '$_temp0';
   }
@@ -4339,7 +4287,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$count मिनट से कम',
       one: '$count मिनट से कम',
-      zero: '$count मिनट से कम',
     );
     return '$_temp0';
   }
@@ -4351,7 +4298,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$count खेल खेले जा रहे है',
       one: '$count खेल खेले जा रहे है',
-      zero: '$count खेल खेले जा रहे है',
     );
     return '$_temp0';
   }
@@ -4363,7 +4309,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: 'अधिकतम $count अक्षर|',
       one: 'अधिकतम $count अक्षर|',
-      zero: 'अधिकतम $count अक्षर|',
     );
     return '$_temp0';
   }
@@ -4375,7 +4320,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$count  अवस्र्द्ध (ब्लॉक)',
       one: '$count  अवस्र्द्ध (ब्लॉक)',
-      zero: '$count  अवस्र्द्ध (ब्लॉक)',
     );
     return '$_temp0';
   }
@@ -4387,7 +4331,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$count जनसभा (फोरम) ब्योरे (पोस्ट्स)',
       one: '$count जनसभा (फोरम) ब्योरे (पोस्ट्स)',
-      zero: '$count जनसभा (फोरम) ब्योरे (पोस्ट्स)',
     );
     return '$_temp0';
   }
@@ -4399,7 +4342,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$count $param2 खिलाड़ी इस सप्ताह।',
       one: '$count $param2 खिलाड़ी इस सप्ताह।',
-      zero: '$count $param2 खिलाड़ी इस सप्ताह।',
     );
     return '$_temp0';
   }
@@ -4411,7 +4353,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$count भाषाओं में उपलब्ध है !',
       one: '$count भाषाओं में उपलब्ध है !',
-      zero: '$count भाषाओं में उपलब्ध है !',
     );
     return '$_temp0';
   }
@@ -4423,7 +4364,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$count सेकंड का समय पहला चाल के लिए',
       one: '$count सेकंड का समय पहला चाल के लिए',
-      zero: '$count सेकंड का समय पहला चाल के लिए',
     );
     return '$_temp0';
   }
@@ -4435,7 +4375,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$count सेकंड',
       one: '$count सेकंड',
-      zero: '$count सेकंड',
     );
     return '$_temp0';
   }
@@ -4447,7 +4386,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: 'बाद में $count सक्रिय कदम को बचाओ',
       one: 'बाद में $count सक्रिय कदम को बचाओ',
-      zero: 'बाद में $count सक्रिय कदम को बचाओ',
     );
     return '$_temp0';
   }
@@ -4618,7 +4556,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: '$count रन',
       one: 'एक प्रयास',
-      zero: 'एक प्रयास',
     );
     return '$_temp0';
   }
@@ -4630,7 +4567,6 @@ class AppLocalizationsHi extends AppLocalizations {
       locale: localeName,
       other: 'Played $count runs of $param2',
       one: 'Played one run of $param2',
-      zero: 'Played one run of $param2',
     );
     return '$_temp0';
   }

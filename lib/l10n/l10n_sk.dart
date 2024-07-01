@@ -29,7 +29,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: 'Podporuje lichess.org $count mesiacov ako $param2',
       few: 'Podporuje lichess.org $count mesiace ako $param2',
       one: 'Podporuje lichess.org $count mesiac ako $param2',
-      zero: 'Podporuje lichess.org $count mesiac ako $param2',
     );
     return '$_temp0';
   }
@@ -43,7 +42,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: 'Precvičených $count pozícii v $param2',
       few: 'Precvičené $count pozície v $param2',
       one: 'Precvičená $count pozícia v $param2',
-      zero: 'Precvičená $count pozícia v $param2',
     );
     return '$_temp0';
   }
@@ -57,7 +55,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: 'Riešených $count taktických úloh',
       few: 'Riešené $count taktické úlohy',
       one: 'Riešená $count taktická úloha',
-      zero: 'Riešená $count taktická úloha',
     );
     return '$_temp0';
   }
@@ -71,7 +68,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: 'Odohraných $count $param2 partií',
       few: 'Odohrané $count $param2 partie',
       one: 'Odohraná $count $param2 partia',
-      zero: 'Odohraná $count $param2 partia',
     );
     return '$_temp0';
   }
@@ -85,7 +81,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: 'Uverejnených $count príspevkov v $param2',
       few: 'Uverejnené $count príspevky v $param2',
       one: 'Uverejnený $count príspevok v $param2',
-      zero: 'Uverejnený $count príspevok v $param2',
     );
     return '$_temp0';
   }
@@ -99,7 +94,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: 'Zharal $count ťahov',
       few: 'Zahral $count ťahy',
       one: 'Urobil $count ťah',
-      zero: 'Urobil $count ťah',
     );
     return '$_temp0';
   }
@@ -113,7 +107,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: 'v $count korešpondenčných hrách',
       few: 'v $count korešpondenčných hrách',
       one: 'v $count korešpondenčnej hre',
-      zero: 'v $count korešpondenčnej hre',
     );
     return '$_temp0';
   }
@@ -127,7 +120,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: 'Dohraných $count korešpondenčných partií',
       few: 'Dohrané $count korešpondenčné partie',
       one: 'Dohraná $count korešpondenčná partia',
-      zero: 'Dohraná $count korešpondenčná partia',
     );
     return '$_temp0';
   }
@@ -141,7 +133,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: 'Začal sledovať $count hráčov',
       few: 'Začal sledovať $count hráčov',
       one: 'Začiatok sledovania $count hráča',
-      zero: 'Začiatok sledovania $count hráča',
     );
     return '$_temp0';
   }
@@ -155,7 +146,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: 'Získal $count nových sledovateľov',
       few: 'Získal $count nových sledovateľov',
       one: 'Získal $count nového sledovateľa',
-      zero: 'Získal $count nového sledovateľa',
     );
     return '$_temp0';
   }
@@ -169,7 +159,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: 'Usporiadanie a odohranie $count simultánok',
       few: 'Usporiadanie a odohranie $count simultánok',
       one: 'Usporiadanie a odohranie $count simultánky',
-      zero: 'Usporiadanie a odohranie $count simultánky',
     );
     return '$_temp0';
   }
@@ -183,7 +172,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: 'Zúčastnil sa v $count simultánkach',
       few: 'Zúčastnil sa v $count simultánkach',
       one: 'Zúčastnenie sa v $count simultánke',
-      zero: 'Zúčastnenie sa v $count simultánke',
     );
     return '$_temp0';
   }
@@ -197,7 +185,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: 'Vytvorenie $count nových štúdií',
       few: 'Vytvorenie $count nových štúdií',
       one: 'Vytvorenie $count novej štúdie',
-      zero: 'Vytvorenie $count novej štúdie',
     );
     return '$_temp0';
   }
@@ -211,7 +198,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: 'Zúčastnil sa v $count turnajoch',
       few: 'Zúčastnil sa v $count turnajoch',
       one: 'Zúčastnil sa v $count turnaji',
-      zero: 'Zúčastnil sa v $count turnaji',
     );
     return '$_temp0';
   }
@@ -225,7 +211,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: 'Umiestnil sa na $count mieste (top $param2%) s $param3 partiami v $param4',
       few: 'Umiestnil sa na $count mieste (top $param2%) s $param3 partiami v $param4',
       one: 'Umiestnil sa na $count mieste (top $param2%) s $param3 partiou v $param4',
-      zero: 'Umiestnil sa na $count mieste (top $param2%) s $param3 partiou v $param4',
     );
     return '$_temp0';
   }
@@ -239,7 +224,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: 'Odohraných $count turnajov švajčiarskym systémom',
       few: 'Odohrané $count turnaje švajčiarskym systémom',
       one: 'Odohraný $count turnaj švajčiarskym systémom',
-      zero: 'Odohraný $count turnaj švajčiarskym systémom',
     );
     return '$_temp0';
   }
@@ -253,7 +237,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: 'Vstup do $count družstiev',
       few: 'Vstup do $count družstiev',
       one: 'Vstup do $count družstva',
-      zero: 'Vstup do $count družstva',
     );
     return '$_temp0';
   }
@@ -899,7 +882,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: 'Hrané $count-krát',
       few: 'Hrané $count-krát',
       one: 'Hrané $count-krát',
-      zero: 'Hrané $count-krát',
     );
     return '$_temp0';
   }
@@ -913,7 +895,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: 'O $count bodov nižšia ako Váš rating úloh',
       few: 'O $count body nižšia ako Váš rating úloh',
       one: 'O jeden bod nižšia ako Váš rating úloh',
-      zero: 'O jeden bod nižšia ako Váš rating úloh',
     );
     return '$_temp0';
   }
@@ -927,7 +908,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: 'O $count bodov vyššia ako Váš rating úloh',
       few: 'O $count body vyššia ako Váš rating úloh',
       one: 'O jeden bodov vyššia ako Váš rating úloh',
-      zero: 'O jeden bodov vyššia ako Váš rating úloh',
     );
     return '$_temp0';
   }
@@ -941,7 +921,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: '$count hraných',
       few: '$count hrané',
       one: '$count hraná',
-      zero: '$count hraná',
     );
     return '$_temp0';
   }
@@ -955,7 +934,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: '$count na zopakovanie',
       few: '$count na zopakovanie',
       one: '$count na zopakovanie',
-      zero: '$count na zopakovanie',
     );
     return '$_temp0';
   }
@@ -4005,7 +3983,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: 'Váš súper odišiel od šachovnice. O $count sekúnd si môžete nárokovať výhru.',
       few: 'Váš súper odišiel od šachovnice. O $count sekundy si môžete nárokovať výhru.',
       one: 'Váš súper odišiel od šachovnice. O $count sekundu si môžete nárokovať výhru.',
-      zero: 'Váš súper odišiel od šachovnice. O $count sekundu si môžete nárokovať výhru.',
     );
     return '$_temp0';
   }
@@ -4019,7 +3996,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: 'Mat v $count. polťahu',
       few: 'Mat v $count. polťahu',
       one: 'Mat v $count. polťahu',
-      zero: 'Mat v $count. polťahu',
     );
     return '$_temp0';
   }
@@ -4033,7 +4009,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: '$count hrubých chýb',
       few: '$count hrubé chyby',
       one: '$count hrubá chyba',
-      zero: '$count hrubá chyba',
     );
     return '$_temp0';
   }
@@ -4047,7 +4022,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: '$count chýb',
       few: '$count chyby',
       one: '$count chyba',
-      zero: '$count chyba',
     );
     return '$_temp0';
   }
@@ -4061,7 +4035,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: '$count nepresností',
       few: '$count nepresnosti',
       one: '$count nepresnosť',
-      zero: '$count nepresnosť',
     );
     return '$_temp0';
   }
@@ -4075,7 +4048,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: '$count pripojených hráčov',
       few: '$count pripojení hráči',
       one: '$count pripojený hráč',
-      zero: '$count pripojený hráč',
     );
     return '$_temp0';
   }
@@ -4089,7 +4061,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: '$count partií',
       few: '$count partie',
       one: '$count partia',
-      zero: '$count partia',
     );
     return '$_temp0';
   }
@@ -4103,7 +4074,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: '$count rating z $param2 partií',
       few: '$count rating z $param2 partií',
       one: '$count rating z $param2 partie',
-      zero: '$count rating z $param2 partie',
     );
     return '$_temp0';
   }
@@ -4117,7 +4087,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: '$count záložiek',
       few: '$count záložky',
       one: '$count záložka',
-      zero: '$count záložka',
     );
     return '$_temp0';
   }
@@ -4131,7 +4100,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: '$count dní',
       few: '$count dni',
       one: '$count deň',
-      zero: '$count deň',
     );
     return '$_temp0';
   }
@@ -4145,7 +4113,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: '$count hodín',
       few: '$count hodiny',
       one: '$count hodina',
-      zero: '$count hodina',
     );
     return '$_temp0';
   }
@@ -4159,7 +4126,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: '$count minút',
       few: '$count minúty',
       one: '$count minúta',
-      zero: '$count minúta',
     );
     return '$_temp0';
   }
@@ -4173,7 +4139,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: 'Poradie sa aktualizuje každých $count minút',
       few: 'Poradie sa aktualizuje každé $count minúty',
       one: 'Poradie sa aktualizuje každú minútu',
-      zero: 'Poradie sa aktualizuje každú minútu',
     );
     return '$_temp0';
   }
@@ -4187,7 +4152,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: '$count úloh',
       few: '$count úlohy',
       one: '$count úloha',
-      zero: '$count úloha',
     );
     return '$_temp0';
   }
@@ -4201,7 +4165,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: '$count partií s Vami',
       few: '$count partie s Vami',
       one: '$count partia s Vami',
-      zero: '$count partia s Vami',
     );
     return '$_temp0';
   }
@@ -4215,7 +4178,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: '$count hodnotených',
       few: '$count hodnotené',
       one: '$count hodnotená',
-      zero: '$count hodnotená',
     );
     return '$_temp0';
   }
@@ -4229,7 +4191,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: '$count výhier',
       few: '$count výhry',
       one: '$count výhra',
-      zero: '$count výhra',
     );
     return '$_temp0';
   }
@@ -4243,7 +4204,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: '$count prehier',
       few: '$count prehry',
       one: '$count prehra',
-      zero: '$count prehra',
     );
     return '$_temp0';
   }
@@ -4257,7 +4217,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: '$count remíz',
       few: '$count remízy',
       one: '$count remíza',
-      zero: '$count remíza',
     );
     return '$_temp0';
   }
@@ -4271,7 +4230,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: '$count práve sa hrá',
       few: '$count práve sa hrajú',
       one: '$count práve sa hrá',
-      zero: '$count práve sa hrá',
     );
     return '$_temp0';
   }
@@ -4285,7 +4243,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: 'Pridať $count sekúnd',
       few: 'Pridať $count sekundy',
       one: 'Pridať $count sekundu',
-      zero: 'Pridať $count sekundu',
     );
     return '$_temp0';
   }
@@ -4299,7 +4256,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: '$count turnajových bodov',
       few: '$count turnajové body',
       one: '$count turnajový bod',
-      zero: '$count turnajový bod',
     );
     return '$_temp0';
   }
@@ -4313,7 +4269,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: '$count štúdií',
       few: '$count štúdie',
       one: '$count štúdia',
-      zero: '$count štúdia',
     );
     return '$_temp0';
   }
@@ -4327,7 +4282,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: '$count simultánok',
       few: '$count simultánky',
       one: '$count simultánka',
-      zero: '$count simultánka',
     );
     return '$_temp0';
   }
@@ -4341,7 +4295,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: '≥ $count hodnotených partií',
       few: '≥ $count hodnotené partie',
       one: '≥ $count hodnotená partia',
-      zero: '≥ $count hodnotená partia',
     );
     return '$_temp0';
   }
@@ -4355,7 +4308,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: '≥ $count $param2 hodnotených partií',
       few: '≥ $count $param2 hodnotené partie',
       one: '≥ $count $param2 hodnotená partia',
-      zero: '≥ $count $param2 hodnotená partia',
     );
     return '$_temp0';
   }
@@ -4369,7 +4321,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: 'Potrebujete odohrať ešte $count $param2 hodnotených partií',
       few: 'Potrebujete odohrať ešte $count $param2 hodnotené partie',
       one: 'Potrebujete odohrať ešte $count $param2 hodnotenú partiu',
-      zero: 'Potrebujete odohrať ešte $count $param2 hodnotenú partiu',
     );
     return '$_temp0';
   }
@@ -4383,7 +4334,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: 'Potrebujete odohrať ešte $count hodnotených partií',
       few: 'Potrebujete odohrať ešte $count hodnotené partie',
       one: 'Potrebujete odohrať ešte $count hodnotenú partiu',
-      zero: 'Potrebujete odohrať ešte $count hodnotenú partiu',
     );
     return '$_temp0';
   }
@@ -4397,7 +4347,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: '$count importovaných partií',
       few: '$count importované partie',
       one: '$count importovaná partia',
-      zero: '$count importovaná partia',
     );
     return '$_temp0';
   }
@@ -4411,7 +4360,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: '$count priateľov online',
       few: '$count priatelia online',
       one: '$count priateľ online',
-      zero: '$count priateľ online',
     );
     return '$_temp0';
   }
@@ -4425,7 +4373,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: '$count sledujúcich',
       few: '$count sledujúci',
       one: '$count sledujúci',
-      zero: '$count sledujúci',
     );
     return '$_temp0';
   }
@@ -4439,7 +4386,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: '$count sledovaných',
       few: '$count sledovaní',
       one: '$count sledovaný',
-      zero: '$count sledovaný',
     );
     return '$_temp0';
   }
@@ -4453,7 +4399,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: 'Menej ako $count minút',
       few: 'Menej ako $count minúty',
       one: 'Menej ako $count minúta',
-      zero: 'Menej ako $count minúta',
     );
     return '$_temp0';
   }
@@ -4467,7 +4412,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: '$count rozohraných partií',
       few: '$count rozohrané partie',
       one: '$count rozohraná partia',
-      zero: '$count rozohraná partia',
     );
     return '$_temp0';
   }
@@ -4481,7 +4425,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: 'Maximum: $count znakov.',
       few: 'Maximum: $count znaky.',
       one: 'Maximum: $count znak.',
-      zero: 'Maximum: $count znak.',
     );
     return '$_temp0';
   }
@@ -4495,7 +4438,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: '$count blokovaných hráčov',
       few: '$count blokovaní hráči',
       one: '$count blokovaný hráč',
-      zero: '$count blokovaný hráč',
     );
     return '$_temp0';
   }
@@ -4509,7 +4451,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: '$count príspvkov vo fóre',
       few: '$count príspevky vo fóre',
       one: '$count príspevok vo fóre',
-      zero: '$count príspevok vo fóre',
     );
     return '$_temp0';
   }
@@ -4523,7 +4464,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: 'Tento týždeň hralo $param2 $count hráčov.',
       few: 'Tento týždeň hrali $param2 $count hráči.',
       one: 'Tento týždeň hral $param2 $count hráč.',
-      zero: 'Tento týždeň hral $param2 $count hráč.',
     );
     return '$_temp0';
   }
@@ -4537,7 +4477,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: 'Dostupné v $count jazykoch!',
       few: 'Dostupné v $count jazykoch!',
       one: 'Dostupné v $count jazyku!',
-      zero: 'Dostupné v $count jazyku!',
     );
     return '$_temp0';
   }
@@ -4551,7 +4490,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: '$count sekúnd na vykonanie prvého ťahu',
       few: '$count sekundy na vykonanie prvého ťahu',
       one: '$count sekunda na vykonanie prvého ťahu',
-      zero: '$count sekunda na vykonanie prvého ťahu',
     );
     return '$_temp0';
   }
@@ -4565,7 +4503,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: '$count sekúnd',
       few: '$count sekúnd',
       one: '$count sekunda',
-      zero: '$count sekunda',
     );
     return '$_temp0';
   }
@@ -4579,7 +4516,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: 'a uložiť $count variantov predťahu',
       few: 'a uložiť $count varianty predťahu',
       one: 'a uložiť $count variant predťahu',
-      zero: 'a uložiť $count variant predťahu',
     );
     return '$_temp0';
   }
@@ -4752,7 +4688,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: '$count pokusov',
       few: '$count pokusy',
       one: '1 pokus',
-      zero: '1 pokus',
     );
     return '$_temp0';
   }
@@ -4766,7 +4701,6 @@ class AppLocalizationsSk extends AppLocalizations {
       many: 'Odohraných $count pokusov $param2',
       few: 'Obohrané $count pokusy $param2',
       one: 'Odohraný jeden pokus $param2',
-      zero: 'Odohraný jeden pokus $param2',
     );
     return '$_temp0';
   }

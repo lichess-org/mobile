@@ -29,7 +29,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: 'תמכ/ה בליצ\'ס במשך $count חודשים כ$param2',
       two: 'תמכ/ה בליצ\'ס במשך $count חודשים כ$param2',
       one: 'תמכ/ה בליצ\'ס במשך חודש $count כ$param2',
-      zero: 'תמכ/ה בליצ\'ס במשך חודש $count כ$param2',
     );
     return '$_temp0';
   }
@@ -43,7 +42,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: 'התאמן/ה על $count עמדות ב$param2',
       two: 'התאמן/ה על $count עמדות ב$param2',
       one: 'התאמן/ה על עמדה $count ב$param2',
-      zero: 'התאמן/ה על עמדה $count ב$param2',
     );
     return '$_temp0';
   }
@@ -57,7 +55,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: 'פתר/ה $count פאזלים טקטיים',
       two: 'פתר/ה $count פאזלים טקטיים',
       one: 'פתר/ה פאזל טקטי $count',
-      zero: 'פתר/ה פאזל טקטי $count',
     );
     return '$_temp0';
   }
@@ -71,7 +68,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: 'שיחק/ה $count משחקי $param2',
       two: 'שיחק/ה $count משחקי $param2',
       one: 'שיחק/ה משחק $param2 $count',
-      zero: 'שיחק/ה משחק $param2 $count',
     );
     return '$_temp0';
   }
@@ -85,7 +81,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: 'פרסם/ה $count הודעות ב$param2',
       two: 'פרסם/ה $count הודעות ב$param2',
       one: 'פרסם/ה הודעה $count ב$param2',
-      zero: 'פרסם/ה הודעה $count ב$param2',
     );
     return '$_temp0';
   }
@@ -99,7 +94,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: 'שיחק/ה $count מהלכים',
       two: 'שיחק/ה $count מהלכים',
       one: 'שיחק/ה מהלך $count',
-      zero: 'שיחק/ה מהלך $count',
     );
     return '$_temp0';
   }
@@ -113,7 +107,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: 'ב$count משחקים בהתכתבות',
       two: 'ב$count משחקים בהתכתבות',
       one: 'במשחק $count בהתכתבות',
-      zero: 'במשחק $count בהתכתבות',
     );
     return '$_temp0';
   }
@@ -127,7 +120,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: 'השלים/ה $count משחקי התכתבות',
       two: 'השלים/ה $count משחקי התכתבות',
       one: 'השלים/ה משחק התכתבות $count',
-      zero: 'השלים/ה משחק התכתבות $count',
     );
     return '$_temp0';
   }
@@ -141,7 +133,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: 'התחיל/ה לעקוב אחר $count שחקנים',
       two: 'התחיל/ה לעקוב אחר $count שחקנים',
       one: 'התחיל/ה לעקוב אחר שחקן $count',
-      zero: 'התחיל/ה לעקוב אחר שחקן $count',
     );
     return '$_temp0';
   }
@@ -155,7 +146,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: 'השיג/ה $count עוקבים חדשים',
       two: 'השיג/ה $count עוקבים חדשים',
       one: 'השיג/ה עוקב/ת $count חדש/ה',
-      zero: 'השיג/ה עוקב/ת $count חדש/ה',
     );
     return '$_temp0';
   }
@@ -169,7 +159,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: 'אירח/ה $count משחקים סימולטניים',
       two: 'אירח/ה $count משחקים סימולטניים',
       one: 'אירח/ה משחק סימולטני $count',
-      zero: 'אירח/ה משחק סימולטני $count',
     );
     return '$_temp0';
   }
@@ -183,7 +172,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: 'השתתף/ה ב־$count משחקים סימולטניים',
       two: 'השתתף/ה ב־$count משחקים סימולטניים',
       one: 'השתתף/ה במשחק סימולטני $count',
-      zero: 'השתתף/ה במשחק סימולטני $count',
     );
     return '$_temp0';
   }
@@ -197,7 +185,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: 'יצר/ה $count לוחות למידה חדשים',
       two: 'יצר/ה $count לוחות למידה חדשים',
       one: 'יצר/ה לוח למידה $count חדש',
-      zero: 'יצר/ה לוח למידה $count חדש',
     );
     return '$_temp0';
   }
@@ -211,7 +198,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: 'השתתף/ה ב־$count טורנירי זירה',
       two: 'השתתף/ה ב־$count טורנירי זירה',
       one: 'השתתף/ה בטורניר זירה $count',
-      zero: 'השתתף/ה בטורניר זירה $count',
     );
     return '$_temp0';
   }
@@ -225,7 +211,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: 'סיים/ה במקום #$count (אחוזון %$param2) עם $param3 משחקים ב$param4',
       two: 'סיים/ה במקום #$count (אחוזון %$param2) עם $param3 משחקים ב$param4',
       one: 'סיים/ה במקום #$count (אחוזון %$param2) עם משחק $param3 ב־$param4',
-      zero: 'סיים/ה במקום #$count (אחוזון %$param2) עם משחק $param3 ב־$param4',
     );
     return '$_temp0';
   }
@@ -239,7 +224,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: 'השתתף/ה ב־$count טורנירים שוויצריים',
       two: 'השתתף/ה ב־$count טורנירים שוויצריים',
       one: 'השתתף/ה בטורניר שוויצרי $count',
-      zero: 'השתתף/ה בטורניר שוויצרי $count',
     );
     return '$_temp0';
   }
@@ -253,7 +237,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: 'הצטרף/ה ל־$count קבוצות',
       two: 'הצטרף/ה ל־$count קבוצות',
       one: 'הצטרף/ה לקבוצה $count',
-      zero: 'הצטרף/ה לקבוצה $count',
     );
     return '$_temp0';
   }
@@ -899,7 +882,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: 'שוחק $count פעמים',
       two: 'שוחק $count פעמים',
       one: 'שוחק פעם $count',
-      zero: 'שוחק פעם $count',
     );
     return '$_temp0';
   }
@@ -913,7 +895,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: '$count נקודות מתחת לדירוג החידות שלך',
       two: '$count נקודות מתחת לדירוג החידות שלך',
       one: 'נקודה $count מתחת לדירוג החידות שלך',
-      zero: 'נקודה $count מתחת לדירוג החידות שלך',
     );
     return '$_temp0';
   }
@@ -927,7 +908,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: '$count נקודות מעל לדירוג החידות שלך',
       two: 'נקודה 1 מתחת לדירוג הפזלים שלך',
       one: 'נקודה $count מעל לדירוג החידות שלך',
-      zero: 'נקודה $count מעל לדירוג החידות שלך',
     );
     return '$_temp0';
   }
@@ -941,7 +921,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: '$count שוחקו',
       two: '$count שוחקו',
       one: '$count שוּחק',
-      zero: '$count שוּחק',
     );
     return '$_temp0';
   }
@@ -955,7 +934,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: '$count שכדאי לפתור שוב',
       two: '$count שכדאי לפתור שוב',
       one: '$count שכדאי לפתור שוב',
-      zero: '$count שכדאי לפתור שוב',
     );
     return '$_temp0';
   }
@@ -4005,7 +3983,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: 'יריבך עזב את המשחק. תוכל/י לדרוש ניצחון בעוד $count שניות.',
       two: 'יריבך עזב את המשחק. תוכל/י להכריז על ניצחון בעוד $count שניות.',
       one: 'יריבך עזב את המשחק. תוכל/י להכריז על נצחון בעוד שנייה $count.',
-      zero: 'יריבך עזב את המשחק. תוכל/י להכריז על נצחון בעוד שנייה $count.',
     );
     return '$_temp0';
   }
@@ -4019,7 +3996,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: 'מט בעוד $count חצאי מהלכים',
       two: 'מט בעוד $count חצאי מהלכים',
       one: 'מט בעוד חצי מהלך $count',
-      zero: 'מט בעוד חצי מהלך $count',
     );
     return '$_temp0';
   }
@@ -4033,7 +4009,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: '$count טעויות גסות',
       two: '$count טעויות גסות',
       one: '$count טעות גסה',
-      zero: '$count טעות גסה',
     );
     return '$_temp0';
   }
@@ -4047,7 +4022,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: '$count שגיאות',
       two: '$count שגיאות',
       one: '$count שגיאה',
-      zero: '$count שגיאה',
     );
     return '$_temp0';
   }
@@ -4061,7 +4035,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: '$count אי־דיוקים',
       two: '$count אי־דיוקים',
       one: '$count אי־דיוק',
-      zero: '$count אי־דיוק',
     );
     return '$_temp0';
   }
@@ -4075,7 +4048,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: '$count שחקנים',
       two: '$count שחקנים',
       one: '$count שחקנים',
-      zero: '$count שחקנים',
     );
     return '$_temp0';
   }
@@ -4089,7 +4061,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: '$count משחקים',
       two: '$count משחקים',
       one: 'משחק $count',
-      zero: 'משחק $count',
     );
     return '$_temp0';
   }
@@ -4103,7 +4074,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: 'דירוג של $count לאורך $param2 משחקים',
       two: 'דירוג של $count לאורך $param2 משחקים',
       one: 'דירוג של $count לאורך משחק $param2',
-      zero: 'דירוג של $count לאורך משחק $param2',
     );
     return '$_temp0';
   }
@@ -4117,7 +4087,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: '$count מועדפים',
       two: '$count מועדפים',
       one: '$count מועדפים',
-      zero: '$count מועדפים',
     );
     return '$_temp0';
   }
@@ -4131,7 +4100,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: '$count ימים',
       two: '$count ימים',
       one: 'יום $count',
-      zero: 'יום $count',
     );
     return '$_temp0';
   }
@@ -4145,7 +4113,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: '$count שעות',
       two: '$count שעות',
       one: 'שעה $count',
-      zero: 'שעה $count',
     );
     return '$_temp0';
   }
@@ -4159,7 +4126,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: '$count דקות',
       two: '$count דקות',
       one: '$count דקות',
-      zero: '$count דקות',
     );
     return '$_temp0';
   }
@@ -4173,7 +4139,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: 'המיקום מתעדכן כל $count דקות',
       two: 'המיקום מתעדכן כל $count דקות',
       one: 'המיקום מתעדכן כל דקה',
-      zero: 'המיקום מתעדכן כל דקה',
     );
     return '$_temp0';
   }
@@ -4187,7 +4152,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: '$count חידות',
       two: '$count חידות',
       one: 'חידה $count',
-      zero: 'חידה $count',
     );
     return '$_temp0';
   }
@@ -4201,7 +4165,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: '$count משחקים איתך',
       two: '$count משחקים איתך',
       one: 'משחק $count איתך',
-      zero: 'משחק $count איתך',
     );
     return '$_temp0';
   }
@@ -4215,7 +4178,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: '$count מדורגים',
       two: '$count מדורגים',
       one: '$count מדורג',
-      zero: '$count מדורג',
     );
     return '$_temp0';
   }
@@ -4229,7 +4191,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: '$count ניצחונות',
       two: '$count ניצחונות',
       one: '$count ניצחון',
-      zero: '$count ניצחון',
     );
     return '$_temp0';
   }
@@ -4243,7 +4204,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: '$count הפסדים',
       two: '$count הפסדים',
       one: '$count הפסד',
-      zero: '$count הפסד',
     );
     return '$_temp0';
   }
@@ -4257,7 +4217,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: '$count תוצאות תיקו',
       two: '$count תוצאות תיקו',
       one: '$count תוצאת תיקו',
-      zero: '$count תוצאת תיקו',
     );
     return '$_temp0';
   }
@@ -4271,7 +4230,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: '$count נוכחיים',
       two: '$count נוכחיים',
       one: '$count נוכחי',
-      zero: '$count נוכחי',
     );
     return '$_temp0';
   }
@@ -4285,7 +4243,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: 'תן $count שניות',
       two: 'תן $count שניות',
       one: 'תן שנייה $count',
-      zero: 'תן שנייה $count',
     );
     return '$_temp0';
   }
@@ -4299,7 +4256,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: '$count נקודות טורניר',
       two: '$count נקודות טורניר',
       one: 'נקודת טורניר $count',
-      zero: 'נקודת טורניר $count',
     );
     return '$_temp0';
   }
@@ -4313,7 +4269,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: '$count לוחות למידה',
       two: '$count לוחות למידה',
       one: 'לוח למידה $count',
-      zero: 'לוח למידה $count',
     );
     return '$_temp0';
   }
@@ -4327,7 +4282,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: '$count משחקים סימולטניים',
       two: '$count משחקים סימולטניים',
       one: 'משחק סימולטני $count',
-      zero: 'משחק סימולטני $count',
     );
     return '$_temp0';
   }
@@ -4341,7 +4295,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: '$count משחקים מדורגים ≥',
       two: '$count משחקים מדורגים ≥',
       one: 'משחק מדורג $count ≥',
-      zero: 'משחק מדורג $count ≥',
     );
     return '$_temp0';
   }
@@ -4355,7 +4308,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: '≥ $count משחקי $param2 מדורגים',
       two: '≥ $count משחקי $param2 מדורגים',
       one: '≥ משחק $param2 מדורג $count',
-      zero: '≥ משחק $param2 מדורג $count',
     );
     return '$_temp0';
   }
@@ -4369,7 +4321,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: 'יש לשחק עוד $count משחקים מדורגים של $param2',
       two: 'יש לשחק עוד $count משחקים מדורגים של $param2',
       one: 'יש לשחק עוד משחק מדורג $count של $param2',
-      zero: 'יש לשחק עוד משחק מדורג $count של $param2',
     );
     return '$_temp0';
   }
@@ -4383,7 +4334,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: 'עליך לשחק עוד $count משחקים מדורגים',
       two: 'עליך לשחק עוד $count משחקים מדורגים',
       one: 'עליך לשחק עוד משחק מדורג $count',
-      zero: 'עליך לשחק עוד משחק מדורג $count',
     );
     return '$_temp0';
   }
@@ -4397,7 +4347,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: '$count משחקים מיובאים',
       two: '$count משחקים מיובאים',
       one: 'משחק מיובא $count',
-      zero: 'משחק מיובא $count',
     );
     return '$_temp0';
   }
@@ -4411,7 +4360,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: '$count חברים מחוברים',
       two: '$count חברים מחוברים',
       one: 'חבר $count מחובר',
-      zero: 'חבר $count מחובר',
     );
     return '$_temp0';
   }
@@ -4425,7 +4373,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: '$count עוקבים',
       two: '$count עוקבים',
       one: 'עוקב $count',
-      zero: 'עוקב $count',
     );
     return '$_temp0';
   }
@@ -4439,7 +4386,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: '$count ברשימת המעקב',
       two: '$count ברשימת המעקב',
       one: '$count ברשימת המעקב',
-      zero: '$count ברשימת המעקב',
     );
     return '$_temp0';
   }
@@ -4453,7 +4399,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: 'פחות מ$count דקות',
       two: 'פחות מ־ $count דקות',
       one: 'פחות מדקה $count',
-      zero: 'פחות מדקה $count',
     );
     return '$_temp0';
   }
@@ -4467,7 +4412,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: '$count משחקים בתהליך',
       two: '$count משחקים בתהליך',
       one: 'משחק $count בתהליך',
-      zero: 'משחק $count בתהליך',
     );
     return '$_temp0';
   }
@@ -4481,7 +4425,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: 'מספר תווים מירבי: $count.',
       two: 'מספר תווים מירבי: $count.',
       one: 'מספר תווים מירבי: $count.',
-      zero: 'מספר תווים מירבי: $count.',
     );
     return '$_temp0';
   }
@@ -4495,7 +4438,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: '$count חסומים',
       two: '$count חסומים',
       one: '$count חסום',
-      zero: '$count חסום',
     );
     return '$_temp0';
   }
@@ -4509,7 +4451,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: '$count פוסטים בפורום',
       two: '$count פוסטים בפורום',
       one: 'פוסט $count בפורום',
-      zero: 'פוסט $count בפורום',
     );
     return '$_temp0';
   }
@@ -4523,7 +4464,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: '$count שחקני $param2 השבוע.',
       two: '$count שחקני $param2 השבוע.',
       one: '$count שחקני $param2 השבוע.',
-      zero: '$count שחקני $param2 השבוע.',
     );
     return '$_temp0';
   }
@@ -4537,7 +4477,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: 'זמין ב$count שפות!',
       two: 'זמין ב$count שפות!',
       one: 'זמין בשפה $count!',
-      zero: 'זמין בשפה $count!',
     );
     return '$_temp0';
   }
@@ -4551,7 +4490,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: '$count שניות כדי לשחק את המסע הראשון',
       two: '$count שניות כדי לשחק את המסע הראשון',
       one: 'שנייה $count לשחק את המסע הראשון',
-      zero: 'שנייה $count לשחק את המסע הראשון',
     );
     return '$_temp0';
   }
@@ -4565,7 +4503,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: '$count שניות',
       two: '$count שניות',
       one: '$count שניה',
-      zero: '$count שניה',
     );
     return '$_temp0';
   }
@@ -4579,7 +4516,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: 'ושמרו $count המשכים מוגדרים מראש',
       two: 'ושמרו $count המשכים מוגדרים מראש',
       one: 'ושמרו המשך מוגדר מראש $count',
-      zero: 'ושמרו המשך מוגדר מראש $count',
     );
     return '$_temp0';
   }
@@ -4752,7 +4688,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: '$count ניסיונות',
       two: '$count ניסיונות',
       one: 'ניסיון אחד',
-      zero: 'ניסיון אחד',
     );
     return '$_temp0';
   }
@@ -4766,7 +4701,6 @@ class AppLocalizationsHe extends AppLocalizations {
       many: 'שוחקו $count ריצות של $param2',
       two: 'שוחקו $count ריצות של $param2',
       one: 'שוחקה ריצה אחת של $param2',
-      zero: 'שוחקה ריצה אחת של $param2',
     );
     return '$_temp0';
   }

@@ -27,7 +27,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: 'Har stött lichess.org i $count månader som en $param2',
       one: 'Har stött lichess.org i $count månad som en $param2',
-      zero: 'Har stött lichess.org i $count månad som en $param2',
     );
     return '$_temp0';
   }
@@ -39,7 +38,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: 'Tränade $count ställningar på $param2',
       one: 'Tränade $count ställning på $param2',
-      zero: 'Tränade $count ställning på $param2',
     );
     return '$_temp0';
   }
@@ -51,7 +49,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: 'Löste $count taktikproblem',
       one: 'Löste $count taktikproblem',
-      zero: 'Löste $count taktikproblem',
     );
     return '$_temp0';
   }
@@ -63,7 +60,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: 'Spelade $count $param2-partier',
       one: 'Spelade $count $param2-parti',
-      zero: 'Spelade $count $param2-parti',
     );
     return '$_temp0';
   }
@@ -75,7 +71,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: 'Postade $count inlägg i $param2',
       one: 'Postade $count inlägg i $param2',
-      zero: 'Postade $count inlägg i $param2',
     );
     return '$_temp0';
   }
@@ -87,7 +82,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: 'Spelade $count drag',
       one: 'Spelade $count drag',
-      zero: 'Spelade $count drag',
     );
     return '$_temp0';
   }
@@ -99,7 +93,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: 'i $count korrespondenspartier',
       one: 'i $count korrespondensparti',
-      zero: 'i $count korrespondensparti',
     );
     return '$_temp0';
   }
@@ -111,7 +104,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: 'Avslutade $count korrespondenspartier',
       one: 'Avslutade $count korrespondensparti',
-      zero: 'Avslutade $count korrespondensparti',
     );
     return '$_temp0';
   }
@@ -123,7 +115,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: 'Började följa $count spelare',
       one: 'Började följa $count spelare',
-      zero: 'Började följa $count spelare',
     );
     return '$_temp0';
   }
@@ -135,7 +126,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: 'Fick $count nya följare',
       one: 'Fick $count ny följare',
-      zero: 'Fick $count ny följare',
     );
     return '$_temp0';
   }
@@ -147,7 +137,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: 'Var värd för $count simultanmatcher',
       one: 'Var värd för $count simultanmatch',
-      zero: 'Var värd för $count simultanmatch',
     );
     return '$_temp0';
   }
@@ -159,7 +148,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: 'Deltog i $count simultanmatcher',
       one: 'Deltog i $count simultanmatch',
-      zero: 'Deltog i $count simultanmatch',
     );
     return '$_temp0';
   }
@@ -171,7 +159,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: 'Skapade $count nya studier',
       one: 'Skapade $count ny studie',
-      zero: 'Skapade $count ny studie',
     );
     return '$_temp0';
   }
@@ -183,7 +170,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: 'Tävlade i $count turneringar',
       one: 'Tävlade i $count turnering',
-      zero: 'Tävlade i $count turnering',
     );
     return '$_temp0';
   }
@@ -195,7 +181,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: 'Rankad #$count (topp $param2%) med $param3 partier i $param4',
       one: 'Rankad #$count (topp $param2%) med $param3 partier i $param4',
-      zero: 'Rankad #$count (topp $param2%) med $param3 partier i $param4',
     );
     return '$_temp0';
   }
@@ -207,7 +192,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: 'Tävlade i $count swissturneringar',
       one: 'Tävlade i $count swissturnering',
-      zero: 'Tävlade i $count swissturnering',
     );
     return '$_temp0';
   }
@@ -219,7 +203,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: 'Gick med i $count lag',
       one: 'Gick med i $count lag',
-      zero: 'Gick med i $count lag',
     );
     return '$_temp0';
   }
@@ -863,7 +846,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: 'Spelat $count gånger',
       one: 'Spelat $count gånger',
-      zero: 'Spelat $count gånger',
     );
     return '$_temp0';
   }
@@ -875,7 +857,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: '$count poäng under ditt pusselbetyg',
       one: 'En poäng under ditt pusselbetyg',
-      zero: 'En poäng under ditt pusselbetyg',
     );
     return '$_temp0';
   }
@@ -887,7 +868,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: '$count poäng över ditt pusselbetyg',
       one: 'En poäng över ditt pusselbetyg',
-      zero: 'En poäng över ditt pusselbetyg',
     );
     return '$_temp0';
   }
@@ -899,7 +879,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: '$count spelade',
       one: '$count spelad',
-      zero: '$count spelad',
     );
     return '$_temp0';
   }
@@ -911,7 +890,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: '$count att spela om',
       one: '$count att spela om',
-      zero: '$count att spela om',
     );
     return '$_temp0';
   }
@@ -3959,7 +3937,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: 'Din motståndare lämnade partiet. Du kan begära seger om $count sekunder.',
       one: 'Din motståndare lämnade partiet. Du kan begära seger om $count sekund.',
-      zero: 'Din motståndare lämnade partiet. Du kan begära seger om $count sekund.',
     );
     return '$_temp0';
   }
@@ -3971,7 +3948,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: 'Matt på $count halvdrag',
       one: 'Matt på $count halvdrag',
-      zero: 'Matt på $count halvdrag',
     );
     return '$_temp0';
   }
@@ -3983,7 +3959,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: '$count blundrar',
       one: '$count blunder',
-      zero: '$count blunder',
     );
     return '$_temp0';
   }
@@ -3995,7 +3970,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: '$count misstag',
       one: '$count misstag',
-      zero: '$count misstag',
     );
     return '$_temp0';
   }
@@ -4007,7 +3981,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: '$count felaktigheter',
       one: '$count felaktighet',
-      zero: '$count felaktighet',
     );
     return '$_temp0';
   }
@@ -4019,7 +3992,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: '$count spelare',
       one: '$count spelare',
-      zero: '$count spelare',
     );
     return '$_temp0';
   }
@@ -4031,7 +4003,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: '$count partier',
       one: '$count parti',
-      zero: '$count parti',
     );
     return '$_temp0';
   }
@@ -4043,7 +4014,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: '${count}ranking över $param2 partier',
       one: '${count}ranking över $param2 parti',
-      zero: '${count}ranking över $param2 parti',
     );
     return '$_temp0';
   }
@@ -4055,7 +4025,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: '$count bokmärken',
       one: '$count bokmärke',
-      zero: '$count bokmärke',
     );
     return '$_temp0';
   }
@@ -4067,7 +4036,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: '$count dagar',
       one: '$count dag',
-      zero: '$count dag',
     );
     return '$_temp0';
   }
@@ -4079,7 +4047,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: '$count timmar',
       one: '$count timme',
-      zero: '$count timme',
     );
     return '$_temp0';
   }
@@ -4091,7 +4058,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: '$count minuter',
       one: '$count minut',
-      zero: '$count minut',
     );
     return '$_temp0';
   }
@@ -4103,7 +4069,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: 'Placeringar uppdateras efter $count minuter',
       one: 'Placeringen uppdateras varje minut',
-      zero: 'Placeringen uppdateras varje minut',
     );
     return '$_temp0';
   }
@@ -4115,7 +4080,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: '$count schackproblem',
       one: '$count schackproblem',
-      zero: '$count schackproblem',
     );
     return '$_temp0';
   }
@@ -4127,7 +4091,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: '$count partier med dig',
       one: '$count parti med dig',
-      zero: '$count parti med dig',
     );
     return '$_temp0';
   }
@@ -4139,7 +4102,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: '$count rankade',
       one: '$count rankat',
-      zero: '$count rankat',
     );
     return '$_temp0';
   }
@@ -4151,7 +4113,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: '$count vinster',
       one: '$count vinst',
-      zero: '$count vinst',
     );
     return '$_temp0';
   }
@@ -4163,7 +4124,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: '$count förluster',
       one: '$count förlust',
-      zero: '$count förlust',
     );
     return '$_temp0';
   }
@@ -4175,7 +4135,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: '$count remier',
       one: '$count remi',
-      zero: '$count remi',
     );
     return '$_temp0';
   }
@@ -4187,7 +4146,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: '$count spelas',
       one: '$count spelas',
-      zero: '$count spelas',
     );
     return '$_temp0';
   }
@@ -4199,7 +4157,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: 'Ge $count sekunder',
       one: 'Ge $count sekund',
-      zero: 'Ge $count sekund',
     );
     return '$_temp0';
   }
@@ -4211,7 +4168,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: '$count turneringspoäng',
       one: '$count turneringspoäng',
-      zero: '$count turneringspoäng',
     );
     return '$_temp0';
   }
@@ -4223,7 +4179,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: '$count studier',
       one: '$count studie',
-      zero: '$count studie',
     );
     return '$_temp0';
   }
@@ -4235,7 +4190,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: '$count simultanpartier',
       one: '$count simultanparti',
-      zero: '$count simultanparti',
     );
     return '$_temp0';
   }
@@ -4247,7 +4201,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: '≥ $count rankade partier',
       one: '≥ $count rankat parti',
-      zero: '≥ $count rankat parti',
     );
     return '$_temp0';
   }
@@ -4259,7 +4212,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: '≥ $count rankade $param2 partier',
       one: '≥ $count rankat $param2 parti',
-      zero: '≥ $count rankat $param2 parti',
     );
     return '$_temp0';
   }
@@ -4271,7 +4223,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: 'Du behöver spela ytterligare $count rankade ${param2}partier',
       one: 'Du behöver spela ytterligare $count rankat ${param2}parti',
-      zero: 'Du behöver spela ytterligare $count rankat ${param2}parti',
     );
     return '$_temp0';
   }
@@ -4283,7 +4234,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: 'Du behöver spela ytterligare $count rankade partier',
       one: 'Du behöver spela ytterligare $count rankat parti',
-      zero: 'Du behöver spela ytterligare $count rankat parti',
     );
     return '$_temp0';
   }
@@ -4295,7 +4245,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: '$count Importerade partier',
       one: '$count Importerat parti',
-      zero: '$count Importerat parti',
     );
     return '$_temp0';
   }
@@ -4307,7 +4256,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: '$count vänner inloggade',
       one: '$count vän inloggad',
-      zero: '$count vän inloggad',
     );
     return '$_temp0';
   }
@@ -4319,7 +4267,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: '$count följare',
       one: '$count följare',
-      zero: '$count följare',
     );
     return '$_temp0';
   }
@@ -4331,7 +4278,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: 'följer $count',
       one: 'följer $count',
-      zero: 'följer $count',
     );
     return '$_temp0';
   }
@@ -4343,7 +4289,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: 'Mindre än $count minuter',
       one: 'Mindre än $count minut',
-      zero: 'Mindre än $count minut',
     );
     return '$_temp0';
   }
@@ -4355,7 +4300,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: '$count partier spelas',
       one: '$count parti spelas',
-      zero: '$count parti spelas',
     );
     return '$_temp0';
   }
@@ -4367,7 +4311,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: 'Max: $count tecken.',
       one: 'Max: $count tecken.',
-      zero: 'Max: $count tecken.',
     );
     return '$_temp0';
   }
@@ -4379,7 +4322,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: '$count blockeringar',
       one: '$count blockering',
-      zero: '$count blockering',
     );
     return '$_temp0';
   }
@@ -4391,7 +4333,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: '$count foruminlägg',
       one: '$count foruminlägg',
-      zero: '$count foruminlägg',
     );
     return '$_temp0';
   }
@@ -4403,7 +4344,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: '$count ${param2}spelare denna vecka.',
       one: '$count ${param2}spelare denna vecka.',
-      zero: '$count ${param2}spelare denna vecka.',
     );
     return '$_temp0';
   }
@@ -4415,7 +4355,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: 'Tillgänglig på $count olika språk!',
       one: 'Tillgänglig på $count olika språk!',
-      zero: 'Tillgänglig på $count olika språk!',
     );
     return '$_temp0';
   }
@@ -4427,7 +4366,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: '$count sekunder kvar för att spela första draget',
       one: '$count sekund kvar för att spela första draget',
-      zero: '$count sekund kvar för att spela första draget',
     );
     return '$_temp0';
   }
@@ -4439,7 +4377,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: '$count sekunder',
       one: '$count sekund',
-      zero: '$count sekund',
     );
     return '$_temp0';
   }
@@ -4451,7 +4388,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: 'och spara $count linje av förhandsdrag',
       one: 'och spara $count linje av förhandsdrag',
-      zero: 'och spara $count linje av förhandsdrag',
     );
     return '$_temp0';
   }
@@ -4622,7 +4558,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: '$count försök',
       one: '1 försök',
-      zero: '1 försök',
     );
     return '$_temp0';
   }
@@ -4634,7 +4569,6 @@ class AppLocalizationsSv extends AppLocalizations {
       locale: localeName,
       other: 'Spelade $count omgångar $param2',
       one: 'Spelade en omgång $param2',
-      zero: 'Spelade en omgång $param2',
     );
     return '$_temp0';
   }

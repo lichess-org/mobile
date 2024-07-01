@@ -27,7 +27,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: 'Личес-қа $count ай $param2 ретінде қолдау көрсетті',
       one: 'Личес-қа $count ай $param2 ретінде қолдау көрсетті',
-      zero: 'Личес-қа $count ай $param2 ретінде қолдау көрсетті',
     );
     return '$_temp0';
   }
@@ -39,7 +38,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$param2-да $count күйді меңгерді',
       one: '$param2-да $count күйді меңгерді',
-      zero: '$param2-да $count күйді меңгерді',
     );
     return '$_temp0';
   }
@@ -51,7 +49,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$count тактикалық жұмбақ шешті',
       one: '$count тактикалық жұмбақ шешті',
-      zero: '$count тактикалық жұмбақ шешті',
     );
     return '$_temp0';
   }
@@ -63,7 +60,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$count $param2 ойнады',
       one: '$count $param2 ойнады',
-      zero: '$count $param2 ойнады',
     );
     return '$_temp0';
   }
@@ -75,7 +71,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$param2 ішінде $count хабарлама жариялады',
       one: '$param2 ішінде $count хабарлама жариялады',
-      zero: '$param2 ішінде $count хабарлама жариялады',
     );
     return '$_temp0';
   }
@@ -87,7 +82,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$count жүріс жасады',
       one: '$count жүріс жасады',
-      zero: '$count жүріс жасады',
     );
     return '$_temp0';
   }
@@ -99,7 +93,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$count хат-хабарлы ойында',
       one: '$count хат-хабарлы ойында',
-      zero: '$count хат-хабарлы ойында',
     );
     return '$_temp0';
   }
@@ -111,7 +104,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$count хат-хабарлы ойынды аяғына жеткізді',
       one: '$count хат-хабарлы ойынды аяғына жеткізді',
-      zero: '$count хат-хабарлы ойынды аяғына жеткізді',
     );
     return '$_temp0';
   }
@@ -123,7 +115,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$count ойыншыға серік болып қосылды',
       one: '$count ойыншыға серік болып қосылды',
-      zero: '$count ойыншыға серік болып қосылды',
     );
     return '$_temp0';
   }
@@ -135,7 +126,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: 'Жаңа $count серік тапты',
       one: 'Жаңа $count серік тапты',
-      zero: 'Жаңа $count серік тапты',
     );
     return '$_temp0';
   }
@@ -147,7 +137,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$count қалың ойын бастады',
       one: '$count қалың ойын бастады',
-      zero: '$count қалың ойын бастады',
     );
     return '$_temp0';
   }
@@ -159,7 +148,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$count қалың ойынға қатысты',
       one: '$count қалың ойынға қатысты',
-      zero: '$count қалың ойынға қатысты',
     );
     return '$_temp0';
   }
@@ -171,7 +159,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$count жаңа зерттеу құрды',
       one: '$count жаңа зерттеу құрды',
-      zero: '$count жаңа зерттеу құрды',
     );
     return '$_temp0';
   }
@@ -183,7 +170,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$count жарысқа қатысты',
       one: '$count жарысқа қатысты',
-      zero: '$count жарысқа қатысты',
     );
     return '$_temp0';
   }
@@ -195,7 +181,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$param4 $param3 ойын нәтижесінде $count-ші орында ($param2% үздік)',
       one: '$param4 $param3 ойын нәтижесінде $count-ші орында ($param2% үздік)',
-      zero: '$param4 $param3 ойын нәтижесінде $count-ші орында ($param2% үздік)',
     );
     return '$_temp0';
   }
@@ -207,7 +192,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$count швейцарлық жарысқа қатысты',
       one: '$count швейцарлық жарысқа қатысты',
-      zero: '$count швейцарлық жарысқа қатысты',
     );
     return '$_temp0';
   }
@@ -219,7 +203,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$count топқа қосылды',
       one: '$count топқа қосылды',
-      zero: '$count топқа қосылды',
     );
     return '$_temp0';
   }
@@ -863,7 +846,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$count рет ойналды',
       one: '$count рет ойналды',
-      zero: '$count рет ойналды',
     );
     return '$_temp0';
   }
@@ -875,7 +857,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: 'Жұмбақ рейтингіңізден төмен $count ұпай',
       one: 'Жұмбақ рейтингіңізден төмен бір ұпай',
-      zero: 'Жұмбақ рейтингіңізден төмен бір ұпай',
     );
     return '$_temp0';
   }
@@ -887,7 +868,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: 'Жұмбақ рейтингіңізден жоғары $count ұпай',
       one: 'Жұмбақ рейтингіңізден жоғары бір ұпай',
-      zero: 'Жұмбақ рейтингіңізден жоғары бір ұпай',
     );
     return '$_temp0';
   }
@@ -899,7 +879,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$count ойнадыңыз',
       one: '$count ойнадыңыз',
-      zero: '$count ойнадыңыз',
     );
     return '$_temp0';
   }
@@ -911,7 +890,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$count-н қайта ойнау',
       one: '$count-н қайта ойнау',
-      zero: '$count-н қайта ойнау',
     );
     return '$_temp0';
   }
@@ -3959,7 +3937,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: 'Қарсылас ойыннан шықты. Сіз $count секундтан кейін жеңісті талап ете аласыз.',
       one: 'Қарсылас ойыннан шықты. Сіз $count секундтан кейін жеңісті талап ете аласыз.',
-      zero: 'Қарсылас ойыннан шықты. Сіз $count секундтан кейін жеңісті талап ете аласыз.',
     );
     return '$_temp0';
   }
@@ -3971,7 +3948,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$count жартыжүрісті мат',
       one: '$count жартыжүрісті мат',
-      zero: '$count жартыжүрісті мат',
     );
     return '$_temp0';
   }
@@ -3983,7 +3959,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$count өрескел қателік',
       one: '$count өрескел қателік',
-      zero: '$count өрескел қателік',
     );
     return '$_temp0';
   }
@@ -3995,7 +3970,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$count қателік',
       one: '$count қателік',
-      zero: '$count қателік',
     );
     return '$_temp0';
   }
@@ -4007,7 +3981,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$count ағаттық',
       one: '$count ағаттық',
-      zero: '$count ағаттық',
     );
     return '$_temp0';
   }
@@ -4019,7 +3992,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$count ойыншы',
       one: '$count ойыншы',
-      zero: '$count ойыншы',
     );
     return '$_temp0';
   }
@@ -4031,7 +4003,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$count ойын',
       one: '$count ойын',
-      zero: '$count ойын',
     );
     return '$_temp0';
   }
@@ -4043,7 +4014,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$param2 $count ойындардың қорытындысы',
       one: '$param2 $count ойынның қорытындысы',
-      zero: '$param2 $count ойынның қорытындысы',
     );
     return '$_temp0';
   }
@@ -4055,7 +4025,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$count бетбелгі',
       one: '$count бетбелгі',
-      zero: '$count бетбелгі',
     );
     return '$_temp0';
   }
@@ -4067,7 +4036,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$count күн',
       one: '$count күн',
-      zero: '$count күн',
     );
     return '$_temp0';
   }
@@ -4079,7 +4047,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$count сағат',
       one: '$count сағат',
-      zero: '$count сағат',
     );
     return '$_temp0';
   }
@@ -4091,7 +4058,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$count минут',
       one: '$count минут',
-      zero: '$count минут',
     );
     return '$_temp0';
   }
@@ -4103,7 +4069,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: 'Орын әр $count минут сайын жаңартылады',
       one: 'Орын әр минут сайын жаңартылады',
-      zero: 'Орын әр минут сайын жаңартылады',
     );
     return '$_temp0';
   }
@@ -4115,7 +4080,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$count жұмбақ',
       one: '$count жұмбақ',
-      zero: '$count жұмбақ',
     );
     return '$_temp0';
   }
@@ -4127,7 +4091,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: 'Сізбен $count ойын',
       one: 'Сізбен $count ойын',
-      zero: 'Сізбен $count ойын',
     );
     return '$_temp0';
   }
@@ -4139,7 +4102,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$count бағалы',
       one: '$count бағалы',
-      zero: '$count бағалы',
     );
     return '$_temp0';
   }
@@ -4151,7 +4113,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$count жеңіс',
       one: '$count жеңіс',
-      zero: '$count жеңіс',
     );
     return '$_temp0';
   }
@@ -4163,7 +4124,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$count жеңіліс',
       one: '$count жеңіліс',
-      zero: '$count жеңіліс',
     );
     return '$_temp0';
   }
@@ -4175,7 +4135,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$count тепе-тең',
       one: '$count тепе-тең',
-      zero: '$count тепе-тең',
     );
     return '$_temp0';
   }
@@ -4187,7 +4146,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$count ойналуда',
       one: '$count ойналуда',
-      zero: '$count ойналуда',
     );
     return '$_temp0';
   }
@@ -4199,7 +4157,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$count секунд беру',
       one: '$count секунд беру',
-      zero: '$count секунд беру',
     );
     return '$_temp0';
   }
@@ -4211,7 +4168,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$count жарыс ұпайы',
       one: '$count жарыс ұпайы',
-      zero: '$count жарыс ұпайы',
     );
     return '$_temp0';
   }
@@ -4223,7 +4179,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$count зерттеу',
       one: '$count зерттеу',
-      zero: '$count зерттеу',
     );
     return '$_temp0';
   }
@@ -4235,7 +4190,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$count қалың ойын',
       one: '$count қалың ойын',
-      zero: '$count қалың ойын',
     );
     return '$_temp0';
   }
@@ -4247,7 +4201,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '≥ $count бағалы ойын',
       one: '≥ $count бағалы ойын',
-      zero: '≥ $count бағалы ойын',
     );
     return '$_temp0';
   }
@@ -4259,7 +4212,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '≥ $count бағалы $param2 ойын',
       one: '≥ $count бағалы $param2 ойын',
-      zero: '≥ $count бағалы $param2 ойын',
     );
     return '$_temp0';
   }
@@ -4271,7 +4223,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: 'Сіз тағы $count бағалы $param2 ойнауыңыз керек',
       one: 'Сіз тағы $count бағалы $param2 ойнауыңыз керек',
-      zero: 'Сіз тағы $count бағалы $param2 ойнауыңыз керек',
     );
     return '$_temp0';
   }
@@ -4283,7 +4234,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: 'Сіз тағы $count бағалы ойын ойнауыңыз керек',
       one: 'Сіз тағы $count бағалы ойын ойнауыңыз керек',
-      zero: 'Сіз тағы $count бағалы ойын ойнауыңыз керек',
     );
     return '$_temp0';
   }
@@ -4295,7 +4245,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$count ойын салынды',
       one: '$count ойын салынды',
-      zero: '$count ойын салынды',
     );
     return '$_temp0';
   }
@@ -4307,7 +4256,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$count дос желіде',
       one: '$count дос желіде',
-      zero: '$count дос желіде',
     );
     return '$_temp0';
   }
@@ -4319,7 +4267,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$count серігі бар',
       one: '$count серігі бар',
-      zero: '$count серігі бар',
     );
     return '$_temp0';
   }
@@ -4331,7 +4278,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$count ойыншыға серік',
       one: '$count ойыншыға серік',
-      zero: '$count ойыншыға серік',
     );
     return '$_temp0';
   }
@@ -4343,7 +4289,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$count минутқа дейін',
       one: '$count минутқа дейін',
-      zero: '$count минутқа дейін',
     );
     return '$_temp0';
   }
@@ -4355,7 +4300,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$count ойын өтуде',
       one: '$count ойын өтуде',
-      zero: '$count ойын өтуде',
     );
     return '$_temp0';
   }
@@ -4367,7 +4311,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: 'Ең көбі: $count таңба.',
       one: 'Ең көбі: $count таңба.',
-      zero: 'Ең көбі: $count таңба.',
     );
     return '$_temp0';
   }
@@ -4379,7 +4322,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$count бұғатталды',
       one: '$count бұғатталды',
-      zero: '$count бұғатталды',
     );
     return '$_temp0';
   }
@@ -4391,7 +4333,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$count форумдағы жазба',
       one: '$count форумдағы жазба',
-      zero: '$count форумдағы жазба',
     );
     return '$_temp0';
   }
@@ -4403,7 +4344,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: 'Осы аптада $count $param2-ойыншы.',
       one: 'Осы аптада $count $param2-ойыншы.',
-      zero: 'Осы аптада $count $param2-ойыншы.',
     );
     return '$_temp0';
   }
@@ -4415,7 +4355,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$count тіліндегі нұсқасы бар!',
       one: '$count тіліндегі нұсқасы бар!',
-      zero: '$count тіліндегі нұсқасы бар!',
     );
     return '$_temp0';
   }
@@ -4427,7 +4366,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: 'Бірінші жүріске $count секунд бар',
       one: 'Бірінші жүріске $count секунд бар',
-      zero: 'Бірінші жүріске $count секунд бар',
     );
     return '$_temp0';
   }
@@ -4439,7 +4377,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$count секунд',
       one: '$count секунд',
-      zero: '$count секунд',
     );
     return '$_temp0';
   }
@@ -4451,7 +4388,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: 'әрі ертелі жүрістердің $count жолын сақтау',
       one: 'әрі ертелі жүрістердің $count жолын сақтау',
-      zero: 'әрі ертелі жүрістердің $count жолын сақтау',
     );
     return '$_temp0';
   }
@@ -4622,7 +4558,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$count кезең',
       one: '1 кезең',
-      zero: '1 кезең',
     );
     return '$_temp0';
   }
@@ -4634,7 +4569,6 @@ class AppLocalizationsKk extends AppLocalizations {
       locale: localeName,
       other: '$param2 кезеңнің $count ойналды',
       one: '$param2 кезеңнің бірі ойналды',
-      zero: '$param2 кезеңнің бірі ойналды',
     );
     return '$_temp0';
   }

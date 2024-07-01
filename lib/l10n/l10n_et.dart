@@ -27,7 +27,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Toeta Lichess.org\'i $count kuud $param2',
       one: 'Toeta Lichess.org\'i $count kuu $param2',
-      zero: 'Toeta Lichess.org\'i $count kuu $param2',
     );
     return '$_temp0';
   }
@@ -39,7 +38,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Harjutas $count seisu teemas $param2',
       one: 'Harjutas $count seisu teemas $param2',
-      zero: 'Harjutas $count seisu teemas $param2',
     );
     return '$_temp0';
   }
@@ -51,7 +49,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Lahendas $count taktikalist puslet',
       one: 'Lahendas $count taktikalise pusle',
-      zero: 'Lahendas $count taktikalise pusle',
     );
     return '$_temp0';
   }
@@ -63,7 +60,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Mängis $count $param2 mängu',
       one: 'Mängis $count $param2 mängu',
-      zero: 'Mängis $count $param2 mängu',
     );
     return '$_temp0';
   }
@@ -75,7 +71,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Postitas $count sõnumit foorumis $param2',
       one: 'Postitas $count sõnumi foorumis $param2',
-      zero: 'Postitas $count sõnumi foorumis $param2',
     );
     return '$_temp0';
   }
@@ -87,7 +82,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Mängis $count käiku',
       one: 'Mängis $count käigu',
-      zero: 'Mängis $count käigu',
     );
     return '$_temp0';
   }
@@ -99,7 +93,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'lõpetas $count kirjavahetusmängu',
       one: 'lõpetas $count kirjavahetusmängu',
-      zero: 'lõpetas $count kirjavahetusmängu',
     );
     return '$_temp0';
   }
@@ -111,7 +104,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Lõpetas $count kirjavahetusmängu',
       one: 'Lõpetas $count kirjavahetusmängu',
-      zero: 'Lõpetas $count kirjavahetusmängu',
     );
     return '$_temp0';
   }
@@ -123,7 +115,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Hakkas jälgima $count mängijat',
       one: 'Hakkas jälgima $count mängijat',
-      zero: 'Hakkas jälgima $count mängijat',
     );
     return '$_temp0';
   }
@@ -135,7 +126,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Sai $count uut jälgijat',
       one: 'Sai $count uue jälgija',
-      zero: 'Sai $count uue jälgija',
     );
     return '$_temp0';
   }
@@ -147,7 +137,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Korraldas $count simultaani',
       one: 'Korraldas $count simultaani',
-      zero: 'Korraldas $count simultaani',
     );
     return '$_temp0';
   }
@@ -159,7 +148,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Osales $count simultaanis',
       one: 'Osales $count simultaanis',
-      zero: 'Osales $count simultaanis',
     );
     return '$_temp0';
   }
@@ -171,7 +159,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Lõi $count uut õpet',
       one: 'Lõi $count uue õppe',
-      zero: 'Lõi $count uue õppe',
     );
     return '$_temp0';
   }
@@ -183,7 +170,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Võistles $count turniiril',
       one: 'Võistles $count turniiril',
-      zero: 'Võistles $count turniiril',
     );
     return '$_temp0';
   }
@@ -195,7 +181,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Saavutas #$count koha (parima $param2% seas) $param3 mänguga turniiril $param4',
       one: 'Saavutas #$count koha (parima $param2% seas) $param3 mänguga turniiril $param4',
-      zero: 'Saavutas #$count koha (parima $param2% seas) $param3 mänguga turniiril $param4',
     );
     return '$_temp0';
   }
@@ -207,7 +192,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Võistles $count šveitsi turniiril',
       one: 'Võistles $count šveitsi turniiril',
-      zero: 'Võistles $count šveitsi turniiril',
     );
     return '$_temp0';
   }
@@ -219,7 +203,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Liitus $count rühmaga',
       one: 'Liitus $count rühmaga',
-      zero: 'Liitus $count rühmaga',
     );
     return '$_temp0';
   }
@@ -863,7 +846,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Mängitud $count korda',
       one: 'Mängitud $count kord',
-      zero: 'Mängitud $count kord',
     );
     return '$_temp0';
   }
@@ -875,7 +857,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count points below your puzzle rating',
       one: 'One point below your puzzle rating',
-      zero: 'One point below your puzzle rating',
     );
     return '$_temp0';
   }
@@ -887,7 +868,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count points above your puzzle rating',
       one: 'One point above your puzzle rating',
-      zero: 'One point above your puzzle rating',
     );
     return '$_temp0';
   }
@@ -899,7 +879,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count mängitud',
       one: '$count mängitud',
-      zero: '$count mängitud',
     );
     return '$_temp0';
   }
@@ -911,7 +890,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count kodamiseks',
       one: '$count kodamiseks',
-      zero: '$count kodamiseks',
     );
     return '$_temp0';
   }
@@ -3959,7 +3937,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Vastane lahkus mängust. Saad kuulutada ennast võitjaks $count sekundi pärast.',
       one: 'Vastane lahkus mängust. Saate panna vastase alistuma $count sekundi pärast.',
-      zero: 'Vastane lahkus mängust. Saate panna vastase alistuma $count sekundi pärast.',
     );
     return '$_temp0';
   }
@@ -3971,7 +3948,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Šahh ja matt $count käiguga',
       one: 'Šahh ja Matt $count käiguga',
-      zero: 'Šahh ja Matt $count käiguga',
     );
     return '$_temp0';
   }
@@ -3983,7 +3959,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count prohmakat',
       one: '$count prohmakas',
-      zero: '$count prohmakas',
     );
     return '$_temp0';
   }
@@ -3995,7 +3970,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count viga',
       one: '$count viga',
-      zero: '$count viga',
     );
     return '$_temp0';
   }
@@ -4007,7 +3981,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count ebatäpsust',
       one: '$count ebatäpsus',
-      zero: '$count ebatäpsus',
     );
     return '$_temp0';
   }
@@ -4019,7 +3992,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count mängijat',
       one: '$count mängija',
-      zero: '$count mängija',
     );
     return '$_temp0';
   }
@@ -4031,7 +4003,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count mängu',
       one: '$count mäng',
-      zero: '$count mäng',
     );
     return '$_temp0';
   }
@@ -4043,7 +4014,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count rating over $param2 games',
       one: '$count rating over $param2 game',
-      zero: '$count rating over $param2 game',
     );
     return '$_temp0';
   }
@@ -4055,7 +4025,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count mängude järjehoidjad',
       one: '$count mängu järjehoidja',
-      zero: '$count mängu järjehoidja',
     );
     return '$_temp0';
   }
@@ -4067,7 +4036,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count päeva',
       one: '$count päev',
-      zero: '$count päev',
     );
     return '$_temp0';
   }
@@ -4079,7 +4047,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count tundi',
       one: '$count tund',
-      zero: '$count tund',
     );
     return '$_temp0';
   }
@@ -4091,7 +4058,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count minutit',
       one: '$count minut',
-      zero: '$count minut',
     );
     return '$_temp0';
   }
@@ -4103,7 +4069,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Reitingut uuendatakse iga $count minuti tagant',
       one: 'Reitingut uuendatakse iga minuti tagant',
-      zero: 'Reitingut uuendatakse iga minuti tagant',
     );
     return '$_temp0';
   }
@@ -4115,7 +4080,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count ülesannet',
       one: '$count ülesanne',
-      zero: '$count ülesanne',
     );
     return '$_temp0';
   }
@@ -4127,7 +4091,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count mängu sinuga',
       one: '$count mäng sinuga',
-      zero: '$count mäng sinuga',
     );
     return '$_temp0';
   }
@@ -4139,7 +4102,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count reitinguga',
       one: '$count reitinguga',
-      zero: '$count reitinguga',
     );
     return '$_temp0';
   }
@@ -4151,7 +4113,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count võitu',
       one: '$count võit',
-      zero: '$count võit',
     );
     return '$_temp0';
   }
@@ -4163,7 +4124,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count kaotust',
       one: '$count kaotus',
-      zero: '$count kaotus',
     );
     return '$_temp0';
   }
@@ -4175,7 +4135,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count viiki',
       one: '$count viik',
-      zero: '$count viik',
     );
     return '$_temp0';
   }
@@ -4187,7 +4146,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count mängimas',
       one: '$count mängimas',
-      zero: '$count mängimas',
     );
     return '$_temp0';
   }
@@ -4199,7 +4157,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Lisa $count sekundit',
       one: 'Lisa $count sekund',
-      zero: 'Lisa $count sekund',
     );
     return '$_temp0';
   }
@@ -4211,7 +4168,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count turniiri punkti',
       one: '$count turniiri punkt',
-      zero: '$count turniiri punkt',
     );
     return '$_temp0';
   }
@@ -4223,7 +4179,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count uuringut',
       one: '$count uuring',
-      zero: '$count uuring',
     );
     return '$_temp0';
   }
@@ -4235,7 +4190,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count simuls',
       one: '$count simul',
-      zero: '$count simul',
     );
     return '$_temp0';
   }
@@ -4247,7 +4201,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '≥ $count reitinguga mängu',
       one: '≥ $count reitinguga mäng',
-      zero: '≥ $count reitinguga mäng',
     );
     return '$_temp0';
   }
@@ -4259,7 +4212,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '≥ $count $param2 reitinguga mängu',
       one: '≥ $count $param2 reitinguga mäng',
-      zero: '≥ $count $param2 reitinguga mäng',
     );
     return '$_temp0';
   }
@@ -4271,7 +4223,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Peate mängima veel $count $param2 reitinguga mängu',
       one: 'Peate mängima veel $count $param2 reitinguga mängu',
-      zero: 'Peate mängima veel $count $param2 reitinguga mängu',
     );
     return '$_temp0';
   }
@@ -4283,7 +4234,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Peate veel mängima $count reitinguga mängu',
       one: 'Peate veel mängima $count reitinguga mängu',
-      zero: 'Peate veel mängima $count reitinguga mängu',
     );
     return '$_temp0';
   }
@@ -4295,7 +4245,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count Imporditud mängu',
       one: '$count Imporditud mäng',
-      zero: '$count Imporditud mäng',
     );
     return '$_temp0';
   }
@@ -4307,7 +4256,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count sõpra on kohal',
       one: '$count sõber on kohal',
-      zero: '$count sõber on kohal',
     );
     return '$_temp0';
   }
@@ -4319,7 +4267,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count jälgijat',
       one: '$count jälgija',
-      zero: '$count jälgija',
     );
     return '$_temp0';
   }
@@ -4331,7 +4278,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count jälgimist',
       one: '$count jälgimine',
-      zero: '$count jälgimine',
     );
     return '$_temp0';
   }
@@ -4343,7 +4289,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Alla $count minuti',
       one: 'Alla $count minuti',
-      zero: 'Alla $count minuti',
     );
     return '$_temp0';
   }
@@ -4355,7 +4300,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count mängu pooleli',
       one: '$count mäng pooleli',
-      zero: '$count mäng pooleli',
     );
     return '$_temp0';
   }
@@ -4367,7 +4311,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Maksimum: $count märki.',
       one: 'Maksimum: $count märk.',
-      zero: 'Maksimum: $count märk.',
     );
     return '$_temp0';
   }
@@ -4379,7 +4322,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count blokeeritud kasutajat',
       one: '$count blokeeritud kasutaja',
-      zero: '$count blokeeritud kasutaja',
     );
     return '$_temp0';
   }
@@ -4391,7 +4333,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count foorumipostitust',
       one: '$count foorumipostitus',
-      zero: '$count foorumipostitus',
     );
     return '$_temp0';
   }
@@ -4403,7 +4344,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count $param2 mängijat sellel nädalal.',
       one: '$count $param2 mängija sellel nädalal.',
-      zero: '$count $param2 mängija sellel nädalal.',
     );
     return '$_temp0';
   }
@@ -4415,7 +4355,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Saadaval $count keeles!',
       one: 'Saadaval $count keeles!',
-      zero: 'Saadaval $count keeles!',
     );
     return '$_temp0';
   }
@@ -4427,7 +4366,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count sekundit, et teha esimene käik',
       one: '$count sekund, et teha esimene käik',
-      zero: '$count sekund, et teha esimene käik',
     );
     return '$_temp0';
   }
@@ -4439,7 +4377,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count sekundit',
       one: '$count sekund',
-      zero: '$count sekund',
     );
     return '$_temp0';
   }
@@ -4451,7 +4388,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'ja salvesta $count ettekäigu variendid',
       one: 'ja salvesta $count ettekäigu variendid',
-      zero: 'ja salvesta $count ettekäigu variendid',
     );
     return '$_temp0';
   }
@@ -4622,7 +4558,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count mängu',
       one: '1 mäng',
-      zero: '1 mäng',
     );
     return '$_temp0';
   }
@@ -4634,7 +4569,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Mängis $count mängu ${param2}i',
       one: 'Mängis ühe mängu ${param2}i',
-      zero: 'Mängis ühe mängu ${param2}i',
     );
     return '$_temp0';
   }
