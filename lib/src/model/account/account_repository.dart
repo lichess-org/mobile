@@ -153,6 +153,7 @@ AccountPrefState _accountPreferencesFromPick(RequiredPick pick) {
     moretime: Moretime.fromInt(
       pick('moretime').asIntOrThrow(),
     ),
+    clockSound: BooleanPref(pick('clockSound').asBoolOrThrow()),
     confirmResign: BooleanPref.fromInt(
       pick('confirmResign').asIntOrThrow(),
     ),

@@ -22,6 +22,7 @@ typedef AccountPrefState = ({
   SubmitMove submitMove,
   // clock
   Moretime moretime,
+  BooleanPref clockSound,
   // privacy
   BooleanPref follow,
 });
@@ -34,6 +35,13 @@ final showRatingsPrefProvider = FutureProvider<bool>((ref) async {
   );
 });
 
+final clockSoundProvider = FutureProvider<bool>((ref) async {
+  return ref.watch(
+    accountPreferencesProvider
+        .selectAsync((state) => state?.clockSound.value ?? true),
+  );
+});
+
 final defaultAccountPreferences = (
   zenMode: Zen.no,
   showRatings: const BooleanPref(true),
@@ -42,6 +50,7 @@ final defaultAccountPreferences = (
   autoThreefold: AutoThreefold.always,
   takeback: Takeback.always,
   moretime: Moretime.always,
+  clockSound: const BooleanPref(true),
   confirmResign: const BooleanPref(true),
   submitMove: SubmitMove({
     SubmitMoveChoice.correspondence,
@@ -84,6 +93,8 @@ class AccountPreferences extends _$AccountPreferences {
   Future<void> setAutoThreefold(AutoThreefold value) =>
       _setPref('autoThreefold', value);
   Future<void> setMoretime(Moretime value) => _setPref('moretime', value);
+  Future<void> setClockSound(BooleanPref value) =>
+      _setPref('clockSound', value);
   Future<void> setConfirmResign(BooleanPref value) =>
       _setPref('confirmResign', value);
   Future<void> setSubmitMove(SubmitMove value) => _setPref('submitMove', value);

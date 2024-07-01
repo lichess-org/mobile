@@ -17,7 +17,10 @@ class CountdownClock extends ConsumerStatefulWidget {
 
   /// If [timeLeft] is less than [emergencyThreshold], the clock will change
   /// its background color to [ClockStyle.emergencyBackgroundColor] activeBackgroundColor
+  /// If [emergencySoundEnabled] is `true`, the clock will also play a sound.
   final Duration? emergencyThreshold;
+
+  final bool emergencySoundEnabled;
 
   /// If [active] is `true`, the clock starts counting down.
   final bool active;
@@ -38,6 +41,7 @@ class CountdownClock extends ConsumerStatefulWidget {
     required this.duration,
     required this.active,
     this.emergencyThreshold,
+    this.emergencySoundEnabled = true,
     this.onFlag,
     this.onStop,
     this.lightColorStyle,
@@ -93,7 +97,9 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
         (_nextEmergency == null || _nextEmergency!.isBefore(DateTime.now()))) {
       _shouldPlayEmergencyFeedback = false;
       _nextEmergency = DateTime.now().add(_emergencyDelay);
-      ref.read(soundServiceProvider).play(Sound.lowTime);
+      if (widget.emergencySoundEnabled) {
+        ref.read(soundServiceProvider).play(Sound.lowTime);
+      }
       HapticFeedback.heavyImpact();
     } else if (widget.emergencyThreshold != null &&
         timeLeft > widget.emergencyThreshold! * 1.5) {

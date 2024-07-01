@@ -322,6 +322,20 @@ class _AccountPreferencesScreenState
                       }
                     },
                   ),
+                  SwitchSettingTile(
+                    title:
+                        Text(context.l10n.preferencesSoundWhenTimeGetsCritical),
+                    value: data.clockSound.value,
+                    onChanged: isLoading
+                        ? null
+                        : (value) {
+                            _setPref(
+                              () => ref
+                                  .read(accountPreferencesProvider.notifier)
+                                  .setClockSound(BooleanPref(value)),
+                            );
+                          },
+                  ),
                 ],
               ),
               ListSection(
