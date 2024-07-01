@@ -1,3 +1,4 @@
+import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
@@ -42,8 +43,18 @@ class Broadcasts extends _$Broadcasts {
 Future<IList<BroadcastGameSnapshot>> round(
   RoundRef ref,
   String broadcastRoundId,
-) async {
+) {
   return ref.withClient(
     (client) => BroadcastRepository(client).getRound(broadcastRoundId),
+  );
+}
+
+@riverpod
+Stream<PgnGame> roundStream(
+  RoundStreamRef ref,
+  String broadcastRoundId,
+) {
+  return ref.withClientStream(
+    (client) => BroadcastRepository(client).getRoundStream(broadcastRoundId),
   );
 }

@@ -1,3 +1,4 @@
+import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
@@ -28,6 +29,17 @@ class BroadcastRepository {
       // They are only used for SEO, so we can safely use - for these parameters
       headers: {'Accept': 'application/x-ndjson'},
       mapper: _makeGamesFromJson,
+    );
+  }
+
+  Stream<PgnGame> getRoundStream(
+    String broadcastRoundId,
+  ) {
+    return client.readStream(
+      Uri(path: 'api/stream/broadcast/round/$broadcastRoundId.pgn'),
+      mapper: (pgn) {
+        return PgnGame.parsePgn(pgn);
+      },
     );
   }
 }
