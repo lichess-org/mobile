@@ -73,7 +73,7 @@ class _BodyState extends ConsumerState<_Body> {
   void _scrollListener() {
     if (_scrollController.position.pixels ==
         _scrollController.position.maxScrollExtent) {
-      final broadcastList = ref.read(broadcastsProvider);
+      final broadcastList = ref.read(broadcastsListProvider);
 
       if (!broadcastList.isLoading) {
         ref.read(broadcastPageProvider.notifier).next();
@@ -83,7 +83,7 @@ class _BodyState extends ConsumerState<_Body> {
 
   @override
   Widget build(BuildContext context) {
-    final broadcasts = ref.watch(broadcastsProvider);
+    final broadcasts = ref.watch(broadcastsListProvider);
     final itemsCount =
         broadcasts.value?.past.length ?? (broadcasts.isLoading ? 10 : 0);
 

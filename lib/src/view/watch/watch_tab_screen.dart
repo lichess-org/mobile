@@ -190,7 +190,7 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
 
 Future<void> _refreshData(WidgetRef ref) {
   return Future.wait([
-    ref.refresh(broadcastsProvider.future),
+    ref.refresh(broadcastsListProvider.future),
     ref.refresh(featuredChannelsProvider.future),
     ref.refresh(liveStreamersProvider.future),
   ]);
@@ -207,7 +207,7 @@ class _BroadcastWidget extends ConsumerWidget {
     return const SizedBox.shrink();
 
     // ignore: dead_code
-    final broadcastList = ref.watch(broadcastsProvider);
+    final broadcastList = ref.watch(broadcastsListProvider);
 
     return broadcastList.when(
       data: (data) {

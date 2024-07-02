@@ -22,7 +22,7 @@ class BroadcastPage extends _$BroadcastPage {
 }
 
 @riverpod
-class Broadcasts extends _$Broadcasts {
+class BroadcastsList extends _$BroadcastsList {
   @override
   Future<BroadcastResponse> build() async {
     final page = ref.watch(broadcastPageProvider);
@@ -42,8 +42,8 @@ class Broadcasts extends _$Broadcasts {
 }
 
 @riverpod
-Future<IList<BroadcastGameSnapshot>> round(
-  RoundRef ref,
+Future<IList<BroadcastGameSnapshot>> broadcastRound(
+  BroadcastRoundRef ref,
   String broadcastRoundId,
 ) async {
   return ref.withClient(
