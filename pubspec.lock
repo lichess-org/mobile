@@ -186,10 +186,10 @@ packages:
     dependency: "direct main"
     description:
       name: chessground
-      sha256: "9e6bf5e252eaa80b42f59d24e296bc8a810cfa42725be4d9693ff66976b7ecbc"
+      sha256: f538c1b4fa3676e91b8d8b052b5835119d74e717cd7d66e76dc6969682713063
       url: "https://pub.dev"
     source: hosted
-    version: "2.6.3"
+    version: "2.6.4"
   ci:
     dependency: transitive
     description:
@@ -662,18 +662,18 @@ packages:
     dependency: "direct dev"
     description:
       name: freezed
-      sha256: "5606fb95d54f3bb241b3e12dcfb65ba7494c775c4cb458334eccceb07334a3d9"
+      sha256: "52aac9d13f089f2bf8074977c6f0c17499fd75e16b3f5792d784098c4c61c317"
       url: "https://pub.dev"
     source: hosted
-    version: "2.5.3"
+    version: "2.5.4"
   freezed_annotation:
     dependency: "direct main"
     description:
       name: freezed_annotation
-      sha256: c3fd9336eb55a38cc1bbd79ab17573113a8deccd0ecbbf926cca3c62803b5c2d
+      sha256: f54946fdb1fa7b01f780841937b1a80783a20b393485f3f6cdf336fd6f4705f2
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.1"
+    version: "2.4.2"
   frontend_server_client:
     dependency: transitive
     description:
