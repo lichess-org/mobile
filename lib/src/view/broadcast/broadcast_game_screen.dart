@@ -64,7 +64,7 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final games = ref.watch(roundProvider(roundId));
+    final games = ref.watch(broadcastRoundProvider(roundId));
 
     return games.when(
       data: (games) => (games.isEmpty)
