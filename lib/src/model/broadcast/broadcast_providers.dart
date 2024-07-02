@@ -14,7 +14,10 @@ class BroadcastPage extends _$BroadcastPage {
   }
 
   void next() {
-    state = state + 1;
+    if (state < 20) {
+      // 20 is the last page
+      state = state + 1;
+    }
   }
 }
 
