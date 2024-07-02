@@ -7,6 +7,21 @@ class AppLocalizationsAf extends AppLocalizations {
   AppLocalizationsAf([String locale = 'af']) : super(locale);
 
   @override
+  String get mobileHomeTab => 'Tuis';
+
+  @override
+  String get mobilePuzzlesTab => 'Kopkrappers';
+
+  @override
+  String get mobileToolsTab => 'Hulpmiddels';
+
+  @override
+  String get mobileWatchTab => 'Hou dop';
+
+  @override
+  String get mobileSettingsTab => 'Instellings';
+
+  @override
   String get activityActivity => 'Aktiwiteite';
 
   @override
@@ -211,7 +226,7 @@ class AppLocalizationsAf extends AppLocalizations {
   String get broadcastBroadcasts => 'Uitsendings';
 
   @override
-  String get broadcastStartDate => 'Begin datum in jou eie tydsone';
+  String get broadcastLiveBroadcasts => 'Regstreekse toernooi uitsendings';
 
   @override
   String challengeChallengesX(String param1) {

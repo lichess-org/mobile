@@ -7,6 +7,21 @@ class AppLocalizationsFo extends AppLocalizations {
   AppLocalizationsFo([String locale = 'fo']) : super(locale);
 
   @override
+  String get mobileHomeTab => 'Home';
+
+  @override
+  String get mobilePuzzlesTab => 'Puzzles';
+
+  @override
+  String get mobileToolsTab => 'Tools';
+
+  @override
+  String get mobileWatchTab => 'Watch';
+
+  @override
+  String get mobileSettingsTab => 'Settings';
+
+  @override
   String get activityActivity => 'Virkni';
 
   @override
@@ -211,7 +226,7 @@ class AppLocalizationsFo extends AppLocalizations {
   String get broadcastBroadcasts => 'Sendingar';
 
   @override
-  String get broadcastStartDate => 'Byrjanardagfesting í tínum egna tíðarøki';
+  String get broadcastLiveBroadcasts => 'Beinleiðis sendingar frá kappingum';
 
   @override
   String challengeChallengesX(String param1) {

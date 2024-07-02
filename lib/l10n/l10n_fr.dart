@@ -7,6 +7,21 @@ class AppLocalizationsFr extends AppLocalizations {
   AppLocalizationsFr([String locale = 'fr']) : super(locale);
 
   @override
+  String get mobileHomeTab => 'Accueil';
+
+  @override
+  String get mobilePuzzlesTab => 'Problèmes';
+
+  @override
+  String get mobileToolsTab => 'Outils';
+
+  @override
+  String get mobileWatchTab => 'Regarder';
+
+  @override
+  String get mobileSettingsTab => 'Paramètres';
+
+  @override
   String get activityActivity => 'Activité';
 
   @override
@@ -211,7 +226,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get broadcastBroadcasts => 'Diffusions';
 
   @override
-  String get broadcastStartDate => 'Date de début dans votre fuseau horaire';
+  String get broadcastLiveBroadcasts => 'Diffusions de tournois en direct';
 
   @override
   String challengeChallengesX(String param1) {

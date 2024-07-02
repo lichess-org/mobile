@@ -21,7 +21,7 @@
   "activityCompetedInNbSwissTournaments": "{count, plural, =1{Osallistui {count} sveitsiläiseen turnaukseen} other{Osallistui {count} sveitsiläiseen turnaukseen}}",
   "activityJoinedNbTeams": "{count, plural, =1{Liittyi {count} joukkueeseen} other{Liittyi {count} joukkueeseen}}",
   "broadcastBroadcasts": "Lähetykset",
-  "broadcastStartDate": "Alkamispäivämäärä omalla aikavyöhykkeelläsi",
+  "broadcastLiveBroadcasts": "Suorat lähetykset turnauksista",
   "challengeChallengesX": "Haasteet: {param1}",
   "challengeChallengeToPlay": "Haasta peliin",
   "challengeChallengeDeclined": "Haasteesta kieltäydyttiin",

@@ -7,6 +7,21 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
+  String get mobileHomeTab => 'Home';
+
+  @override
+  String get mobilePuzzlesTab => 'Puzzles';
+
+  @override
+  String get mobileToolsTab => 'Tools';
+
+  @override
+  String get mobileWatchTab => 'Watch';
+
+  @override
+  String get mobileSettingsTab => 'Settings';
+
+  @override
   String get activityActivity => 'Activity';
 
   @override
@@ -211,7 +226,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get broadcastBroadcasts => 'Broadcasts';
 
   @override
-  String get broadcastStartDate => 'Start date in your own timezone';
+  String get broadcastLiveBroadcasts => 'Live tournament broadcasts';
 
   @override
   String challengeChallengesX(String param1) {
@@ -4790,7 +4805,7 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get broadcastBroadcasts => 'Broadcasts';
 
   @override
-  String get broadcastStartDate => 'Start date in your own timezone';
+  String get broadcastLiveBroadcasts => 'Live tournament broadcasts';
 
   @override
   String challengeChallengesX(String param1) {

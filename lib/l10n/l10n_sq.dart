@@ -7,6 +7,21 @@ class AppLocalizationsSq extends AppLocalizations {
   AppLocalizationsSq([String locale = 'sq']) : super(locale);
 
   @override
+  String get mobileHomeTab => 'Home';
+
+  @override
+  String get mobilePuzzlesTab => 'Puzzles';
+
+  @override
+  String get mobileToolsTab => 'Tools';
+
+  @override
+  String get mobileWatchTab => 'Watch';
+
+  @override
+  String get mobileSettingsTab => 'Settings';
+
+  @override
   String get activityActivity => 'Aktiviteti';
 
   @override
@@ -211,7 +226,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get broadcastBroadcasts => 'Transmetime';
 
   @override
-  String get broadcastStartDate => 'Datë fillimi në zonën tuaj kohore';
+  String get broadcastLiveBroadcasts => 'Transmetime të drejtpërdrejta turnesh';
 
   @override
   String challengeChallengesX(String param1) {

@@ -7,6 +7,21 @@ class AppLocalizationsAz extends AppLocalizations {
   AppLocalizationsAz([String locale = 'az']) : super(locale);
 
   @override
+  String get mobileHomeTab => 'Home';
+
+  @override
+  String get mobilePuzzlesTab => 'Puzzles';
+
+  @override
+  String get mobileToolsTab => 'Tools';
+
+  @override
+  String get mobileWatchTab => 'Watch';
+
+  @override
+  String get mobileSettingsTab => 'Settings';
+
+  @override
   String get activityActivity => 'Aktivlik';
 
   @override
@@ -211,7 +226,7 @@ class AppLocalizationsAz extends AppLocalizations {
   String get broadcastBroadcasts => 'Yayım';
 
   @override
-  String get broadcastStartDate => 'Öz saat qurşağınızdakı başlama tarixi';
+  String get broadcastLiveBroadcasts => 'Canlı turnir yayımları';
 
   @override
   String challengeChallengesX(String param1) {

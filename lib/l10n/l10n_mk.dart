@@ -7,6 +7,21 @@ class AppLocalizationsMk extends AppLocalizations {
   AppLocalizationsMk([String locale = 'mk']) : super(locale);
 
   @override
+  String get mobileHomeTab => 'Home';
+
+  @override
+  String get mobilePuzzlesTab => 'Puzzles';
+
+  @override
+  String get mobileToolsTab => 'Tools';
+
+  @override
+  String get mobileWatchTab => 'Watch';
+
+  @override
+  String get mobileSettingsTab => 'Settings';
+
+  @override
   String get activityActivity => 'Активност';
 
   @override
@@ -211,7 +226,7 @@ class AppLocalizationsMk extends AppLocalizations {
   String get broadcastBroadcasts => 'Емитувања';
 
   @override
-  String get broadcastStartDate => 'Почетен датум во вашата временска зона';
+  String get broadcastLiveBroadcasts => 'Пренос на турнири во живо';
 
   @override
   String challengeChallengesX(String param1) {

@@ -7,6 +7,21 @@ class AppLocalizationsEl extends AppLocalizations {
   AppLocalizationsEl([String locale = 'el']) : super(locale);
 
   @override
+  String get mobileHomeTab => 'Home';
+
+  @override
+  String get mobilePuzzlesTab => 'Puzzles';
+
+  @override
+  String get mobileToolsTab => 'Tools';
+
+  @override
+  String get mobileWatchTab => 'Watch';
+
+  @override
+  String get mobileSettingsTab => 'Settings';
+
+  @override
   String get activityActivity => 'Δραστηριότητα';
 
   @override
@@ -211,7 +226,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get broadcastBroadcasts => 'Αναμεταδόσεις';
 
   @override
-  String get broadcastStartDate => 'Ημερομηνία έναρξης στη δική σας ζώνη ώρας';
+  String get broadcastLiveBroadcasts => 'Αναμεταδόσεις ζωντανών τουρνούα';
 
   @override
   String challengeChallengesX(String param1) {

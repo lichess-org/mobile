@@ -7,6 +7,21 @@ class AppLocalizationsBr extends AppLocalizations {
   AppLocalizationsBr([String locale = 'br']) : super(locale);
 
   @override
+  String get mobileHomeTab => 'Home';
+
+  @override
+  String get mobilePuzzlesTab => 'Puzzles';
+
+  @override
+  String get mobileToolsTab => 'Tools';
+
+  @override
+  String get mobileWatchTab => 'Watch';
+
+  @override
+  String get mobileSettingsTab => 'Settings';
+
+  @override
   String get activityActivity => 'Obererezhioù diwezhañ';
 
   @override
@@ -262,7 +277,7 @@ class AppLocalizationsBr extends AppLocalizations {
   String get broadcastBroadcasts => 'War-eeun';
 
   @override
-  String get broadcastStartDate => 'Eur kregiñ en ho kwerzhid-eur';
+  String get broadcastLiveBroadcasts => 'Tournamantoù skignet war-eeun';
 
   @override
   String challengeChallengesX(String param1) {

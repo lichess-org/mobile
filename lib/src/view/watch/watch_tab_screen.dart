@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
@@ -189,7 +190,7 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
 
 Future<void> _refreshData(WidgetRef ref) {
   return Future.wait([
-    ref.refresh(broadcastsProvider.future),
+    ref.refresh(broadcastsListProvider.future),
     ref.refresh(featuredChannelsProvider.future),
     ref.refresh(liveStreamersProvider.future),
   ]);
@@ -206,7 +207,7 @@ class _BroadcastWidget extends ConsumerWidget {
     return const SizedBox.shrink();
 
     // ignore: dead_code
-    final broadcastList = ref.watch(broadcastsProvider);
+    final broadcastList = ref.watch(broadcastsListProvider);
 
     return broadcastList.when(
       data: (data) {
@@ -225,7 +226,7 @@ class _BroadcastWidget extends ConsumerWidget {
             ),
           ),
           children: [
-            ...data
+            ...CombinedIterableView([data.active, data.upcoming, data.past])
                 .take(numberOfItems)
                 .map((broadcast) => BroadcastTile(broadcast: broadcast)),
           ],

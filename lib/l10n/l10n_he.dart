@@ -7,6 +7,21 @@ class AppLocalizationsHe extends AppLocalizations {
   AppLocalizationsHe([String locale = 'he']) : super(locale);
 
   @override
+  String get mobileHomeTab => 'בית';
+
+  @override
+  String get mobilePuzzlesTab => 'חידות';
+
+  @override
+  String get mobileToolsTab => 'כלים';
+
+  @override
+  String get mobileWatchTab => 'צפייה';
+
+  @override
+  String get mobileSettingsTab => 'הגדרות';
+
+  @override
   String get activityActivity => 'פעילות';
 
   @override
@@ -245,7 +260,7 @@ class AppLocalizationsHe extends AppLocalizations {
   String get broadcastBroadcasts => 'הקרנות';
 
   @override
-  String get broadcastStartDate => 'תאריך ההתחלה באזור הזמן שלך';
+  String get broadcastLiveBroadcasts => 'צפייה ישירה בטורנירים';
 
   @override
   String challengeChallengesX(String param1) {

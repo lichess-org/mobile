@@ -7,6 +7,21 @@ class AppLocalizationsHi extends AppLocalizations {
   AppLocalizationsHi([String locale = 'hi']) : super(locale);
 
   @override
+  String get mobileHomeTab => 'Home';
+
+  @override
+  String get mobilePuzzlesTab => 'Puzzles';
+
+  @override
+  String get mobileToolsTab => 'Tools';
+
+  @override
+  String get mobileWatchTab => 'Watch';
+
+  @override
+  String get mobileSettingsTab => 'Settings';
+
+  @override
   String get activityActivity => 'कार्यकलाप';
 
   @override
@@ -211,7 +226,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get broadcastBroadcasts => 'प्रसारण';
 
   @override
-  String get broadcastStartDate => 'अपने स्वयं के समयक्षेत्र में प्रारंभ दिनांक';
+  String get broadcastLiveBroadcasts => 'लाइव टूर्नामेंट प्रसारण';
 
   @override
   String challengeChallengesX(String param1) {

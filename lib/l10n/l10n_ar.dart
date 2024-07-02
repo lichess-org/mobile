@@ -7,6 +7,21 @@ class AppLocalizationsAr extends AppLocalizations {
   AppLocalizationsAr([String locale = 'ar']) : super(locale);
 
   @override
+  String get mobileHomeTab => 'Home';
+
+  @override
+  String get mobilePuzzlesTab => 'Puzzles';
+
+  @override
+  String get mobileToolsTab => 'Tools';
+
+  @override
+  String get mobileWatchTab => 'Watch';
+
+  @override
+  String get mobileSettingsTab => 'Settings';
+
+  @override
   String get activityActivity => 'الأنشطة';
 
   @override
@@ -279,7 +294,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get broadcastBroadcasts => 'البثوث';
 
   @override
-  String get broadcastStartDate => 'تاريخ البدء في المنطقة الزمنية الخاصة بك';
+  String get broadcastLiveBroadcasts => 'بث البطولة المباشرة';
 
   @override
   String challengeChallengesX(String param1) {

@@ -12,7 +12,7 @@
   "activityRankedInTournament": "{count, plural, =1{{count} տեղ ({param2} % լավագույն)՝ {param4} մրցաշարում {param3} խաղերի արդյունքով} other{{count} տեղ ({param2} % լավագույն)՝ {param4} մրցաշարում {param3} խաղերի արդյունքով}}",
   "activityJoinedNbTeams": "{count, plural, =1{Ընդունվել է {count} թիմ} other{Ընդունվել է {count} թիմ}}",
   "broadcastBroadcasts": "Հեռարձակումներ",
-  "broadcastStartDate": "Սկսվելու ամսաթիվը Ձեր ժամագոտում",
+  "broadcastLiveBroadcasts": "Մրցաշարի ուղիղ հեռարձակումներ",
   "challengeChallengesX": "Մարտահրավերներ: {param1}",
   "challengeChallengeToPlay": "Ուղարկել խաղի մարտահրավեր",
   "challengeChallengeDeclined": "Մարտահրավերը մերժված է",

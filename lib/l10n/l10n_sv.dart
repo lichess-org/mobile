@@ -7,6 +7,21 @@ class AppLocalizationsSv extends AppLocalizations {
   AppLocalizationsSv([String locale = 'sv']) : super(locale);
 
   @override
+  String get mobileHomeTab => 'Home';
+
+  @override
+  String get mobilePuzzlesTab => 'Puzzles';
+
+  @override
+  String get mobileToolsTab => 'Tools';
+
+  @override
+  String get mobileWatchTab => 'Watch';
+
+  @override
+  String get mobileSettingsTab => 'Settings';
+
+  @override
   String get activityActivity => 'Aktivitet';
 
   @override
@@ -211,7 +226,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get broadcastBroadcasts => 'Sändningar';
 
   @override
-  String get broadcastStartDate => 'Startdatum i din egen tidszon';
+  String get broadcastLiveBroadcasts => 'Direktsända turneringar';
 
   @override
   String challengeChallengesX(String param1) {

@@ -7,6 +7,21 @@ class AppLocalizationsBg extends AppLocalizations {
   AppLocalizationsBg([String locale = 'bg']) : super(locale);
 
   @override
+  String get mobileHomeTab => 'Начало';
+
+  @override
+  String get mobilePuzzlesTab => 'Задачи';
+
+  @override
+  String get mobileToolsTab => 'Инструменти';
+
+  @override
+  String get mobileWatchTab => 'Гледай';
+
+  @override
+  String get mobileSettingsTab => 'Настройки';
+
+  @override
   String get activityActivity => 'Дейност';
 
   @override
@@ -211,7 +226,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get broadcastBroadcasts => 'Излъчване';
 
   @override
-  String get broadcastStartDate => 'Дата на започване във вашата часова зона';
+  String get broadcastLiveBroadcasts => 'Излъчвания на турнир на живо';
 
   @override
   String challengeChallengesX(String param1) {

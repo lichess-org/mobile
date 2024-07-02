@@ -64,9 +64,12 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final games = ref.watch(roundProvider(roundId));
+    final games = ref.watch(broadcastRoundProvider(roundId));
+
     return games.when(
-      data: (games) => BroadcastPreview(games: games),
+      data: (games) => (games.isEmpty)
+          ? const Text('No games to show for now')
+          : BroadcastPreview(games: games),
       loading: () => const Shimmer(
         child: ShimmerLoading(
           isLoading: true,

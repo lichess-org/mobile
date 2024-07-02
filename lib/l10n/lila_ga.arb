@@ -21,7 +21,7 @@
   "activityCompetedInNbSwissTournaments": "{count, plural, =1{San iomaíocht i gcomórtais swiss amháín} =2{San iomaíocht i {count} chomórtas swiss} few{San iomaíocht i {count} gcomórtas swiss} many{San iomaíocht i {count} comórtas swiss} other{San iomaíocht i {count} comórtas swiss}}",
   "activityJoinedNbTeams": "{count, plural, =1{Isteach i bhfoireann amháin} =2{Isteach i {count} fhoireann} few{Isteach i {count} bhfoireann} many{Isteach i {count} foireann} other{Isteach i {count} foireann}}",
   "broadcastBroadcasts": "Craoltaí",
-  "broadcastStartDate": "Dáta tosaigh i do chrios ama féin",
+  "broadcastLiveBroadcasts": "Craoltaí beo comórtais",
   "challengeChallengeToPlay": "Dúshlán cluiche",
   "challengeChallengeDeclined": "Dúshlán diúltaithe",
   "challengeChallengeAccepted": "Dúshlán glactha!",

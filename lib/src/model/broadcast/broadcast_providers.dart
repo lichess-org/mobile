@@ -7,14 +7,43 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'broadcast_providers.g.dart';
 
 @riverpod
-Future<IList<Broadcast>> broadcasts(BroadcastsRef ref) async {
-  return ref
-      .withClient((client) => BroadcastRepository(client).getBroadcasts());
+class BroadcastPage extends _$BroadcastPage {
+  @override
+  int build() {
+    return 1;
+  }
+
+  void next() {
+    if (state < 20) {
+      // 20 is the last page
+      state = state + 1;
+    }
+  }
 }
 
 @riverpod
-Future<IList<BroadcastGameSnapshot>> round(
-  RoundRef ref,
+class BroadcastsList extends _$BroadcastsList {
+  @override
+  Future<BroadcastResponse> build() async {
+    final page = ref.watch(broadcastPageProvider);
+
+    final broadcastResponse = await ref.withClient(
+      (client) => BroadcastRepository(client).getBroadcasts(page: page),
+    );
+
+    if (page == 1) {
+      return broadcastResponse;
+    } else {
+      return state.requireValue.copyWith(
+        past: state.requireValue.past.addAll(broadcastResponse.past),
+      );
+    }
+  }
+}
+
+@riverpod
+Future<IList<BroadcastGameSnapshot>> broadcastRound(
+  BroadcastRoundRef ref,
   String broadcastRoundId,
 ) async {
   return ref.withClient(

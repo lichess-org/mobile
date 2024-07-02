@@ -21,7 +21,7 @@
   "activityCompetedInNbSwissTournaments": "{count, plural, =1{A concurat în {count} turneu elvețian} few{A concurat în {count} turnee elvețiene} other{A concurat în {count} turnee elvețiene}}",
   "activityJoinedNbTeams": "{count, plural, =1{S-a alăturat la {count} echipă} few{S-a alăturat la {count} echipe} other{S-a alăturat la {count} echipe}}",
   "broadcastBroadcasts": "Transmisiuni",
-  "broadcastStartDate": "Data de începere conform fusului tău orar",
+  "broadcastLiveBroadcasts": "Difuzări de turnee în direct",
   "challengeChallengesX": "Provocări: {param1}",
   "challengeChallengeToPlay": "Provoacă la o partidă",
   "challengeChallengeDeclined": "Provocare refuzată",

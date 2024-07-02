@@ -7,6 +7,21 @@ class AppLocalizationsLv extends AppLocalizations {
   AppLocalizationsLv([String locale = 'lv']) : super(locale);
 
   @override
+  String get mobileHomeTab => 'Home';
+
+  @override
+  String get mobilePuzzlesTab => 'Puzzles';
+
+  @override
+  String get mobileToolsTab => 'Tools';
+
+  @override
+  String get mobileWatchTab => 'Watch';
+
+  @override
+  String get mobileSettingsTab => 'Settings';
+
+  @override
   String get activityActivity => 'Aktivitāte';
 
   @override
@@ -228,7 +243,7 @@ class AppLocalizationsLv extends AppLocalizations {
   String get broadcastBroadcasts => 'Raidījumi';
 
   @override
-  String get broadcastStartDate => 'Sākuma datums jūsu laika joslā';
+  String get broadcastLiveBroadcasts => 'Reāllaika turnīru raidījumi';
 
   @override
   String challengeChallengesX(String param1) {

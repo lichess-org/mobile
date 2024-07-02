@@ -21,7 +21,7 @@
   "activityCompetedInNbSwissTournaments": "{count, plural, other{Тәмам колындылар {count} швецар бәйгесе}}",
   "activityJoinedNbTeams": "{count, plural, other{{count} җәмәга кушылды}}",
   "broadcastBroadcasts": "Ишеттәрешләр",
-  "broadcastStartDate": "Башлагыз сәнә сезнең үзегезнең вакыт җирендән",
+  "broadcastLiveBroadcasts": "Хәяти бәйгеләр ишетләштерешләр",
   "challengeChallengeToPlay": "Сынаулар уенда",
   "challengeChallengeDeclined": "Сынаулар кире кагылды",
   "challengeChallengeAccepted": "Сынаулар алынды!",

@@ -20,7 +20,7 @@
   "activityRankedInTournament": "{count, plural, =1{Рангиран #{count} (првих {param2}%) са {param3} партијом у {param4}} few{Рангиран #{count} (првих {param2}%) са {param3} партије у {param4}} other{Рангиран #{count} (првих {param2}%) са {param3} партија у {param4}}}",
   "activityJoinedNbTeams": "{count, plural, =1{Ушли у {count} тим} few{Ушли у {count} тима} other{Ушли у {count} тимова}}",
   "broadcastBroadcasts": "Емитовања",
-  "broadcastStartDate": "Датум почетка у твојој временској зони",
+  "broadcastLiveBroadcasts": "Уживо емитовање турнира",
   "challengeChallengeToPlay": "Изазови на партију",
   "challengeChallengeDeclined": "Изазов одбијен",
   "challengeChallengeAccepted": "Изазов прихваћен!",

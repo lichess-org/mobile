@@ -7,6 +7,21 @@ class AppLocalizationsEt extends AppLocalizations {
   AppLocalizationsEt([String locale = 'et']) : super(locale);
 
   @override
+  String get mobileHomeTab => 'Home';
+
+  @override
+  String get mobilePuzzlesTab => 'Puzzles';
+
+  @override
+  String get mobileToolsTab => 'Tools';
+
+  @override
+  String get mobileWatchTab => 'Watch';
+
+  @override
+  String get mobileSettingsTab => 'Settings';
+
+  @override
   String get activityActivity => 'Aktiivsus';
 
   @override
@@ -211,7 +226,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get broadcastBroadcasts => 'Otseülekanded';
 
   @override
-  String get broadcastStartDate => 'Alguskuupäev sinu ajavööndis';
+  String get broadcastLiveBroadcasts => 'Otseülekanded turniirilt';
 
   @override
   String challengeChallengesX(String param1) {

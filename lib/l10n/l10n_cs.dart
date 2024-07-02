@@ -7,6 +7,21 @@ class AppLocalizationsCs extends AppLocalizations {
   AppLocalizationsCs([String locale = 'cs']) : super(locale);
 
   @override
+  String get mobileHomeTab => 'Home';
+
+  @override
+  String get mobilePuzzlesTab => 'Puzzles';
+
+  @override
+  String get mobileToolsTab => 'Tools';
+
+  @override
+  String get mobileWatchTab => 'Watch';
+
+  @override
+  String get mobileSettingsTab => 'Settings';
+
+  @override
   String get activityActivity => 'Aktivita';
 
   @override
@@ -245,7 +260,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get broadcastBroadcasts => 'Přenosy';
 
   @override
-  String get broadcastStartDate => 'Datum a čas zahájení ve vašem časovém pásmu';
+  String get broadcastLiveBroadcasts => 'Živé přenosy turnajů';
 
   @override
   String challengeChallengesX(String param1) {

@@ -7,6 +7,21 @@ class AppLocalizationsSl extends AppLocalizations {
   AppLocalizationsSl([String locale = 'sl']) : super(locale);
 
   @override
+  String get mobileHomeTab => 'Home';
+
+  @override
+  String get mobilePuzzlesTab => 'Puzzles';
+
+  @override
+  String get mobileToolsTab => 'Tools';
+
+  @override
+  String get mobileWatchTab => 'Watch';
+
+  @override
+  String get mobileSettingsTab => 'Settings';
+
+  @override
   String get activityActivity => 'Aktivnost';
 
   @override
@@ -245,7 +260,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get broadcastBroadcasts => 'Prenosi';
 
   @override
-  String get broadcastStartDate => 'Datum začetka v vaše časovnem pasu';
+  String get broadcastLiveBroadcasts => 'Prenos turnirjev v živo';
 
   @override
   String challengeChallengesX(String param1) {

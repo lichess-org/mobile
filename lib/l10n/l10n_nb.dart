@@ -7,6 +7,21 @@ class AppLocalizationsNb extends AppLocalizations {
   AppLocalizationsNb([String locale = 'nb']) : super(locale);
 
   @override
+  String get mobileHomeTab => 'Home';
+
+  @override
+  String get mobilePuzzlesTab => 'Puzzles';
+
+  @override
+  String get mobileToolsTab => 'Tools';
+
+  @override
+  String get mobileWatchTab => 'Watch';
+
+  @override
+  String get mobileSettingsTab => 'Settings';
+
+  @override
   String get activityActivity => 'Aktivitet';
 
   @override
@@ -211,7 +226,7 @@ class AppLocalizationsNb extends AppLocalizations {
   String get broadcastBroadcasts => 'Overføringer';
 
   @override
-  String get broadcastStartDate => 'Startdato i din egen tidssone';
+  String get broadcastLiveBroadcasts => 'Direkteoverføringer av turneringer';
 
   @override
   String challengeChallengesX(String param1) {

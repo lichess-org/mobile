@@ -7,6 +7,21 @@ class AppLocalizationsHy extends AppLocalizations {
   AppLocalizationsHy([String locale = 'hy']) : super(locale);
 
   @override
+  String get mobileHomeTab => 'Home';
+
+  @override
+  String get mobilePuzzlesTab => 'Puzzles';
+
+  @override
+  String get mobileToolsTab => 'Tools';
+
+  @override
+  String get mobileWatchTab => 'Watch';
+
+  @override
+  String get mobileSettingsTab => 'Settings';
+
+  @override
   String get activityActivity => 'Գործունեություն';
 
   @override
@@ -211,7 +226,7 @@ class AppLocalizationsHy extends AppLocalizations {
   String get broadcastBroadcasts => 'Հեռարձակումներ';
 
   @override
-  String get broadcastStartDate => 'Սկսվելու ամսաթիվը Ձեր ժամագոտում';
+  String get broadcastLiveBroadcasts => 'Մրցաշարի ուղիղ հեռարձակումներ';
 
   @override
   String challengeChallengesX(String param1) {

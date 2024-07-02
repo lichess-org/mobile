@@ -7,6 +7,21 @@ class AppLocalizationsBn extends AppLocalizations {
   AppLocalizationsBn([String locale = 'bn']) : super(locale);
 
   @override
+  String get mobileHomeTab => 'Home';
+
+  @override
+  String get mobilePuzzlesTab => 'Puzzles';
+
+  @override
+  String get mobileToolsTab => 'Tools';
+
+  @override
+  String get mobileWatchTab => 'Watch';
+
+  @override
+  String get mobileSettingsTab => 'Settings';
+
+  @override
   String get activityActivity => 'কার্যকলাপ';
 
   @override
@@ -211,7 +226,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get broadcastBroadcasts => 'সম্প্রচার';
 
   @override
-  String get broadcastStartDate => 'আপনার নিজস্ব সময় অঞ্চল শুরু করার তারিখ';
+  String get broadcastLiveBroadcasts => 'সরাসরি টুর্নামেন্ট সম্প্রচার';
 
   @override
   String challengeChallengesX(String param1) {

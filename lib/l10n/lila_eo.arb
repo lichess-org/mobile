@@ -21,7 +21,7 @@
   "activityCompetedInNbSwissTournaments": "{count, plural, =1{Konkuris en {count} svisa turniro} other{Konkuris en {count} svisaj turniroj}}",
   "activityJoinedNbTeams": "{count, plural, =1{Aliĝis {count} teamo} other{Aliĝis {count} teamoj}}",
   "broadcastBroadcasts": "Elsendoj",
-  "broadcastStartDate": "Komenca dato en via propra horzono",
+  "broadcastLiveBroadcasts": "Vivaj turniraj elsendoj",
   "challengeChallengesX": "Defioj: {param1}",
   "challengeChallengeToPlay": "Defii al nova ludo",
   "challengeChallengeDeclined": "Defio malakceptita",

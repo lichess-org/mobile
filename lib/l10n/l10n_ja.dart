@@ -7,6 +7,21 @@ class AppLocalizationsJa extends AppLocalizations {
   AppLocalizationsJa([String locale = 'ja']) : super(locale);
 
   @override
+  String get mobileHomeTab => 'Home';
+
+  @override
+  String get mobilePuzzlesTab => 'Puzzles';
+
+  @override
+  String get mobileToolsTab => 'Tools';
+
+  @override
+  String get mobileWatchTab => 'Watch';
+
+  @override
+  String get mobileSettingsTab => 'Settings';
+
+  @override
   String get activityActivity => '活動';
 
   @override
@@ -194,7 +209,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get broadcastBroadcasts => 'イベント中継';
 
   @override
-  String get broadcastStartDate => '開始日付（あなたの現地時間）';
+  String get broadcastLiveBroadcasts => '実戦トーナメントのライブ中継';
 
   @override
   String challengeChallengesX(String param1) {
