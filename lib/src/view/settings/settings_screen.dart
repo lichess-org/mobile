@@ -393,7 +393,8 @@ class _Body extends ConsumerWidget {
             title: const Text('Delete local database'),
             additionalInfo: dbSize.hasValue
                 ? Text(
-                    '${_bytesToMB(dbSize.value ?? (0)).toStringAsFixed(2)}MB')
+                    '${_bytesToMB(dbSize.value ?? (0)).toStringAsFixed(2)}MB',
+                  )
                 : null,
             trailing: Theme.of(context).platform == TargetPlatform.iOS
                 ? const CupertinoListTileChevron()
