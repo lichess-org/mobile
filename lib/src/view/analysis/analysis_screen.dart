@@ -377,6 +377,65 @@ class _Board extends ConsumerStatefulWidget {
 class _BoardState extends ConsumerState<_Board> {
   ISet<cg.Shape> userShapes = ISet();
 
+  ISet<cg.Shape> _computeBestMoveShapes(IList<MoveWithWinningChances> moves) {
+    // Scale down all moves with index > 0 based on how much worse their winning chances are compared to the best move
+    // (assume moves are ordered by their winning chances, so index==0 is the best move)
+    double scaleArrowAgainstBestMove(int index) {
+      final bestMove = moves[0];
+      final winningDiffComparedToBestMove =
+          bestMove.winningChances - moves[index].winningChances;
+      const minScale = 0.25;
+      // Force minimum scale if...
+      // 1) The best move is significantly better than this move
+      // 2) The signs differ, e.g. the best move is winning while this move draws (or even looses)
+      if (winningDiffComparedToBestMove > 0.3 ||
+          bestMove.winningChances.sign != moves[index].winningChances.sign) {
+        return minScale;
+      }
+      const winningDiffToScaleDiff = 5.0;
+      const maxScale = 1.0;
+      return math.max(
+        minScale,
+        maxScale - winningDiffToScaleDiff * winningDiffComparedToBestMove,
+      );
+    }
+
+    return ISet(
+      moves.mapIndexed(
+        (i, m) {
+          final move = m.move;
+          // Same colors as in the Web UI, the best move has a different color than the other moves
+          final color = Color((i == 0) ? 0x40003088 : 0x404A4A4A);
+          switch (move) {
+            case NormalMove(from: _, to: _, promotion: final promRole):
+              return [
+                cg.Arrow(
+                  color: color,
+                  orig: move.cg.from,
+                  dest: move.cg.to,
+                  scale: scaleArrowAgainstBestMove(i),
+                ),
+                if (promRole != null)
+                  cg.PieceShape(
+                    color: color,
+                    orig: move.cg.to,
+                    role: promRole.cg,
+                  ),
+              ];
+            case DropMove(role: final role, to: _):
+              return [
+                cg.PieceShape(
+                  color: color,
+                  orig: move.cg.to,
+                  role: role.cg,
+                ),
+              ];
+          }
+        },
+      ).expand((e) => e),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final ctrlProvider = analysisControllerProvider(widget.pgn, widget.options);
@@ -402,39 +461,7 @@ class _BoardState extends ConsumerState<_Board> {
     final ISet<cg.Shape> bestMoveShapes = showBestMoveArrow &&
             analysisState.isEngineAvailable &&
             bestMoves != null
-        ? ISet(
-            bestMoves.where((move) => move != null).mapIndexed(
-              (i, move) {
-                switch (move!) {
-                  case NormalMove(from: _, to: _, promotion: final promRole):
-                    return [
-                      cg.Arrow(
-                        color:
-                            const Color(0x40003088).withOpacity(0.4 - 0.15 * i),
-                        orig: move.cg.from,
-                        dest: move.cg.to,
-                      ),
-                      if (promRole != null)
-                        cg.PieceShape(
-                          color: const Color(0x40003088)
-                              .withOpacity(0.4 - 0.15 * i),
-                          orig: move.cg.to,
-                          role: promRole.cg,
-                        ),
-                    ];
-                  case DropMove(role: final role, to: _):
-                    return [
-                      cg.PieceShape(
-                        color:
-                            const Color(0x40003088).withOpacity(0.4 - 0.15 * i),
-                        orig: move.cg.to,
-                        role: role.cg,
-                      ),
-                    ];
-                }
-              },
-            ).expand((e) => e),
-          )
+        ? _computeBestMoveShapes(bestMoves)
         : ISet();
 
     return cg.Board(

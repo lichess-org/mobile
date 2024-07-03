@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -47,6 +48,16 @@ class ExternalEval with _$ExternalEval implements Eval {
   }
 }
 
+double _toWhiteWinningChances(int? cp, int? mate) {
+  if (mate != null) {
+    return mateWinningChances(mate);
+  } else if (cp != null) {
+    return cpWinningChances(cp);
+  } else {
+    return 0;
+  }
+}
+
 /// The eval from the client's own engine, typically stockfish.
 @freezed
 class ClientEval with _$ClientEval implements Eval {
@@ -71,10 +82,11 @@ class ClientEval with _$ClientEval implements Eval {
     return Move.fromUci(uci);
   }
 
-  IList<Move?> get bestMoves {
+  IList<MoveWithWinningChances> get bestMoves {
     return pvs
         .where((e) => e.moves.isNotEmpty)
-        .map((e) => Move.fromUci(e.moves.first))
+        .map((e) => e.firstMoveWithWinningChances(position.turn))
+        .whereNotNull()
         .toIList();
   }
 
@@ -89,13 +101,7 @@ class ClientEval with _$ClientEval implements Eval {
   double winningChances(Side side) => _toPov(side, _whiteWinningChances);
 
   double get _whiteWinningChances {
-    if (mate != null) {
-      return mateWinningChances(mate!);
-    } else if (cp != null) {
-      return cpWinningChances(cp!);
-    } else {
-      return 0;
-    }
+    return _toWhiteWinningChances(cp, mate);
   }
 }
 
@@ -136,7 +142,20 @@ class PvData with _$PvData {
     }
     return res;
   }
+
+  MoveWithWinningChances? firstMoveWithWinningChances(Side sideToMove) {
+    final uciMove = (moves.isNotEmpty) ? Move.fromUci(moves.first) : null;
+    return (uciMove != null)
+        ? (
+            move: uciMove,
+            winningChances:
+                _toPov(sideToMove, _toWhiteWinningChances(cp, mate)),
+          )
+        : null;
+  }
 }
+
+typedef MoveWithWinningChances = ({Move move, double winningChances});
 
 double cpToPawns(int cp) => cp / 100;
 
