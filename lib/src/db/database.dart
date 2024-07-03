@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:lichess_mobile/src/app_initialization.dart';
+import 'package:path/path.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -27,17 +30,32 @@ Database database(DatabaseRef ref) {
 Future<int?> sqliteVersion(SqliteVersionRef ref) async {
   final db = ref.read(databaseProvider);
   try {
-    final versionStr = (await db.rawQuery('SELECT sqlite_version()'))
-        .first
-        .values
-        .first
-        .toString();
-    final versionCells =
-        versionStr.split('.').map((i) => int.parse(i)).toList();
+    final versionStr = (await db.rawQuery('SELECT sqlite_version()')).first.values.first.toString();
+    final versionCells = versionStr.split('.').map((i) => int.parse(i)).toList();
     return versionCells[0] * 100000 + versionCells[1] * 1000 + versionCells[2];
   } catch (_) {
     return null;
   }
+}
+
+@Riverpod(keepAlive: true)
+Future<int> getDbSizeInBytes(GetDbSizeInBytesRef ref) async {
+  final dbPath = join(await getDatabasesPath(), kLichessDatabaseName);
+  final dbFile = File(dbPath);
+
+  return dbFile.length();
+}
+
+/// Clears all database rows regardless of TTL.
+Future<void> clearDatabase(Database db) async {
+  await Future.wait([
+    _deleteEntry(db, 'puzzle_batchs'),
+    _deleteEntry(db, 'puzzle'),
+    _deleteEntry(db, 'correspondence_game'),
+    _deleteEntry(db, 'game'),
+    _deleteEntry(db, 'chat_read_messages'),
+  ]);
+  await db.execute('VACUUM');
 }
 
 Future<Database> openDb(DatabaseFactory dbFactory, String path) async {
@@ -142,15 +160,30 @@ void _createChatReadMessagesTableV1(Batch batch) {
 
 Future<void> _deleteOldEntries(Database db, String table, Duration ttl) async {
   final date = DateTime.now().subtract(ttl);
-  final tableExists = await db.rawQuery(
-    "SELECT name FROM sqlite_master WHERE type='table' AND name='$table'",
-  );
-  if (tableExists.isEmpty) {
+
+  if (!await _doesTableExist(db, table)) {
     return;
   }
+
   await db.delete(
     table,
     where: 'lastModified < ?',
     whereArgs: [date.toIso8601String()],
   );
+}
+
+Future<void> _deleteEntry(Database db, String table) async {
+  if (!await _doesTableExist(db, table)) {
+    return;
+  }
+
+  await db.delete(table);
+}
+
+Future<bool> _doesTableExist(Database db, String table) async {
+  final tableExists = await db.rawQuery(
+    "SELECT name FROM sqlite_master WHERE type='table' AND name='$table'",
+  );
+
+  return tableExists.isNotEmpty;
 }
