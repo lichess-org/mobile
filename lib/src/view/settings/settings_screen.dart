@@ -398,7 +398,9 @@ class _Body extends ConsumerWidget {
                 : null,
             trailing: Theme.of(context).platform == TargetPlatform.iOS
                 ? const CupertinoListTileChevron()
-                : null,
+                : Text(
+                    '${_bytesToMB(dbSize.value ?? (0)).toStringAsFixed(2)}MB',
+                  ),
             onTap: () => showConfirmDialog<void>(
               context,
               title: const Text('Delete local database'),
