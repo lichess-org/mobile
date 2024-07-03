@@ -394,7 +394,7 @@ class _Body extends ConsumerWidget {
             additionalInfo: dbSize.hasValue
                 ? Text(
                     '${_bytesToMB(dbSize.value ?? (0)).toStringAsFixed(2)}MB')
-                : const SizedBox.shrink(),
+                : null,
             trailing: Theme.of(context).platform == TargetPlatform.iOS
                 ? const CupertinoListTileChevron()
                 : null,
