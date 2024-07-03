@@ -415,7 +415,7 @@ void main() {
         await tester.tap(find.byIcon(Icons.help));
 
         // wait for solution replay animation to finish
-        await tester.pump(const Duration(milliseconds: 150));
+        await tester.pump(const Duration(seconds: 1));
         await tester.pumpAndSettle();
 
         expect(find.byKey(const Key('h4-blackRook')), findsOneWidget);

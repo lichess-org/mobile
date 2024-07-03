@@ -181,7 +181,9 @@ class PuzzleController extends _$PuzzleController {
       mode: PuzzleMode.view,
     );
 
-    _goToNextNode();
+    Timer(const Duration(milliseconds: 800), () {
+      _goToNextNode();
+    });
   }
 
   void skipMove() {
