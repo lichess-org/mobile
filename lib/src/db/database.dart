@@ -30,8 +30,13 @@ Database database(DatabaseRef ref) {
 Future<int?> sqliteVersion(SqliteVersionRef ref) async {
   final db = ref.read(databaseProvider);
   try {
-    final versionStr = (await db.rawQuery('SELECT sqlite_version()')).first.values.first.toString();
-    final versionCells = versionStr.split('.').map((i) => int.parse(i)).toList();
+    final versionStr = (await db.rawQuery('SELECT sqlite_version()'))
+        .first
+        .values
+        .first
+        .toString();
+    final versionCells =
+        versionStr.split('.').map((i) => int.parse(i)).toList();
     return versionCells[0] * 100000 + versionCells[1] * 1000 + versionCells[2];
   } catch (_) {
     return null;

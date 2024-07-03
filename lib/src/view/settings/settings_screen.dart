@@ -102,27 +102,32 @@ class _Body extends ConsumerWidget {
     final androidVersionAsync = ref.watch(androidVersionProvider);
     final dbSize = ref.watch(getDbSizeInBytesProvider);
 
-    final Widget? donateButton = userSession == null || userSession.user.isPatron != true
-        ? PlatformListTile(
-            leading: Icon(
-              LichessIcons.patron,
-              semanticLabel: context.l10n.patronLichessPatron,
-              color: context.lichessColors.brag,
-            ),
-            title: Text(
-              context.l10n.patronDonate,
-              style: TextStyle(color: context.lichessColors.brag),
-            ),
-            trailing: Theme.of(context).platform == TargetPlatform.iOS ? const CupertinoListTileChevron() : null,
-            onTap: () {
-              launchUrl(Uri.parse('https://lichess.org/patron'));
-            },
-          )
-        : null;
+    final Widget? donateButton =
+        userSession == null || userSession.user.isPatron != true
+            ? PlatformListTile(
+                leading: Icon(
+                  LichessIcons.patron,
+                  semanticLabel: context.l10n.patronLichessPatron,
+                  color: context.lichessColors.brag,
+                ),
+                title: Text(
+                  context.l10n.patronDonate,
+                  style: TextStyle(color: context.lichessColors.brag),
+                ),
+                trailing: Theme.of(context).platform == TargetPlatform.iOS
+                    ? const CupertinoListTileChevron()
+                    : null,
+                onTap: () {
+                  launchUrl(Uri.parse('https://lichess.org/patron'));
+                },
+              )
+            : null;
 
     final List<Widget> content = [
       ListSection(
-        header: userSession != null ? UserFullNameWidget(user: userSession.user) : null,
+        header: userSession != null
+            ? UserFullNameWidget(user: userSession.user)
+            : null,
         hasLeading: true,
         showDivider: true,
         children: [
@@ -130,7 +135,9 @@ class _Body extends ConsumerWidget {
             PlatformListTile(
               leading: const Icon(Icons.person),
               title: Text(context.l10n.profile),
-              trailing: Theme.of(context).platform == TargetPlatform.iOS ? const CupertinoListTileChevron() : null,
+              trailing: Theme.of(context).platform == TargetPlatform.iOS
+                  ? const CupertinoListTileChevron()
+                  : null,
               onTap: () {
                 pushPlatformRoute(
                   context,
@@ -142,7 +149,9 @@ class _Body extends ConsumerWidget {
             PlatformListTile(
               leading: const Icon(Icons.manage_accounts),
               title: Text(context.l10n.preferencesPreferences),
-              trailing: Theme.of(context).platform == TargetPlatform.iOS ? const CupertinoListTileChevron() : null,
+              trailing: Theme.of(context).platform == TargetPlatform.iOS
+                  ? const CupertinoListTileChevron()
+                  : null,
               onTap: () {
                 pushPlatformRoute(
                   context,
@@ -179,7 +188,9 @@ class _Body extends ConsumerWidget {
                 },
               ),
           ],
-          if (Theme.of(context).platform == TargetPlatform.android && donateButton != null) donateButton,
+          if (Theme.of(context).platform == TargetPlatform.android &&
+              donateButton != null)
+            donateButton,
         ],
       ),
       ListSection(
@@ -198,7 +209,9 @@ class _Body extends ConsumerWidget {
                   selectedItem: soundTheme,
                   labelBuilder: (t) => Text(soundThemeL10n(context, t)),
                   onSelectedItemChanged: (SoundTheme? value) {
-                    ref.read(generalPreferencesProvider.notifier).setSoundTheme(value ?? SoundTheme.standard);
+                    ref
+                        .read(generalPreferencesProvider.notifier)
+                        .setSoundTheme(value ?? SoundTheme.standard);
                     ref.read(soundServiceProvider).changeTheme(
                           value ?? SoundTheme.standard,
                           playSound: true,
@@ -222,7 +235,9 @@ class _Body extends ConsumerWidget {
                       title: const Text('System colors'),
                       value: hasSystemColors,
                       onChanged: (value) {
-                        ref.read(generalPreferencesProvider.notifier).toggleSystemColors();
+                        ref
+                            .read(generalPreferencesProvider.notifier)
+                            .toggleSystemColors();
                       },
                     )
                   : const SizedBox.shrink(),
@@ -238,9 +253,11 @@ class _Body extends ConsumerWidget {
                   context,
                   choices: ThemeMode.values,
                   selectedItem: themeMode,
-                  labelBuilder: (t) => Text(ThemeModeScreen.themeTitle(context, t)),
-                  onSelectedItemChanged: (ThemeMode? value) =>
-                      ref.read(generalPreferencesProvider.notifier).setThemeMode(value ?? ThemeMode.system),
+                  labelBuilder: (t) =>
+                      Text(ThemeModeScreen.themeTitle(context, t)),
+                  onSelectedItemChanged: (ThemeMode? value) => ref
+                      .read(generalPreferencesProvider.notifier)
+                      .setThemeMode(value ?? ThemeMode.system),
                 );
               } else {
                 pushPlatformRoute(
@@ -278,7 +295,9 @@ class _Body extends ConsumerWidget {
           PlatformListTile(
             leading: const Icon(Icons.gamepad),
             title: Text(context.l10n.preferencesGameBehavior),
-            trailing: Theme.of(context).platform == TargetPlatform.iOS ? const CupertinoListTileChevron() : null,
+            trailing: Theme.of(context).platform == TargetPlatform.iOS
+                ? const CupertinoListTileChevron()
+                : null,
             onTap: () {
               pushPlatformRoute(
                 context,
@@ -296,7 +315,9 @@ class _Body extends ConsumerWidget {
           PlatformListTile(
             leading: const Icon(Icons.info),
             title: Text(context.l10n.aboutX('Lichess')),
-            trailing: Theme.of(context).platform == TargetPlatform.iOS ? const CupertinoListTileChevron() : null,
+            trailing: Theme.of(context).platform == TargetPlatform.iOS
+                ? const CupertinoListTileChevron()
+                : null,
             onTap: () {
               launchUrl(Uri.parse('https://lichess.org/about'));
             },
@@ -304,7 +325,9 @@ class _Body extends ConsumerWidget {
           PlatformListTile(
             leading: const Icon(Icons.feedback),
             title: const Text('Feedback'),
-            trailing: Theme.of(context).platform == TargetPlatform.iOS ? const CupertinoListTileChevron() : null,
+            trailing: Theme.of(context).platform == TargetPlatform.iOS
+                ? const CupertinoListTileChevron()
+                : null,
             onTap: () {
               launchUrl(Uri.parse('https://lichess.org/contact'));
             },
@@ -312,7 +335,9 @@ class _Body extends ConsumerWidget {
           PlatformListTile(
             leading: const Icon(Icons.article),
             title: Text(context.l10n.termsOfService),
-            trailing: Theme.of(context).platform == TargetPlatform.iOS ? const CupertinoListTileChevron() : null,
+            trailing: Theme.of(context).platform == TargetPlatform.iOS
+                ? const CupertinoListTileChevron()
+                : null,
             onTap: () {
               launchUrl(Uri.parse('https://lichess.org/terms-of-service'));
             },
@@ -320,7 +345,9 @@ class _Body extends ConsumerWidget {
           PlatformListTile(
             leading: const Icon(Icons.privacy_tip),
             title: Text(context.l10n.privacyPolicy),
-            trailing: Theme.of(context).platform == TargetPlatform.iOS ? const CupertinoListTileChevron() : null,
+            trailing: Theme.of(context).platform == TargetPlatform.iOS
+                ? const CupertinoListTileChevron()
+                : null,
             onTap: () {
               launchUrl(Uri.parse('https://lichess.org/privacy'));
             },
@@ -334,7 +361,9 @@ class _Body extends ConsumerWidget {
           PlatformListTile(
             leading: const Icon(Icons.code),
             title: Text(context.l10n.sourceCode),
-            trailing: Theme.of(context).platform == TargetPlatform.iOS ? const CupertinoListTileChevron() : null,
+            trailing: Theme.of(context).platform == TargetPlatform.iOS
+                ? const CupertinoListTileChevron()
+                : null,
             onTap: () {
               launchUrl(Uri.parse('https://lichess.org/source'));
             },
@@ -342,7 +371,9 @@ class _Body extends ConsumerWidget {
           PlatformListTile(
             leading: const Icon(Icons.bug_report),
             title: Text(context.l10n.contribute),
-            trailing: Theme.of(context).platform == TargetPlatform.iOS ? const CupertinoListTileChevron() : null,
+            trailing: Theme.of(context).platform == TargetPlatform.iOS
+                ? const CupertinoListTileChevron()
+                : null,
             onTap: () {
               launchUrl(Uri.parse('https://lichess.org/help/contribute'));
             },
@@ -350,7 +381,9 @@ class _Body extends ConsumerWidget {
           PlatformListTile(
             leading: const Icon(Icons.star),
             title: Text(context.l10n.thankYou),
-            trailing: Theme.of(context).platform == TargetPlatform.iOS ? const CupertinoListTileChevron() : null,
+            trailing: Theme.of(context).platform == TargetPlatform.iOS
+                ? const CupertinoListTileChevron()
+                : null,
             onTap: () {
               launchUrl(Uri.parse('https://lichess.org/thanks'));
             },
@@ -359,9 +392,12 @@ class _Body extends ConsumerWidget {
             leading: const Icon(Icons.storage),
             title: const Text('Delete local database'),
             additionalInfo: dbSize.hasValue
-                ? Text('${_bytesToMB(dbSize.value ?? (0)).toStringAsFixed(2)}MB')
+                ? Text(
+                    '${_bytesToMB(dbSize.value ?? (0)).toStringAsFixed(2)}MB')
                 : const SizedBox.shrink(),
-            trailing: Theme.of(context).platform == TargetPlatform.iOS ? const CupertinoListTileChevron() : null,
+            trailing: Theme.of(context).platform == TargetPlatform.iOS
+                ? const CupertinoListTileChevron()
+                : null,
             onTap: () => showConfirmDialog<void>(
               context,
               title: const Text('Delete local database'),
