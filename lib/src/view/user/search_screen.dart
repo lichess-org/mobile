@@ -135,9 +135,9 @@ class _Body extends ConsumerWidget {
           child: searchHistory.isEmpty
               ? kEmptyWidget
               : ListSection(
-                  header: const Text('Recent searches'),
+                  header: Text(context.l10n.mobileRecentSearches),
                   headerTrailing: NoPaddingTextButton(
-                    child: const Text('Clear'),
+                    child: Text(context.l10n.mobileClearButton),
                     onPressed: () =>
                         ref.read(searchHistoryProvider.notifier).clear(),
                   ),
@@ -175,7 +175,7 @@ class _UserList extends ConsumerWidget {
                   children: [
                     const Icon(Icons.person),
                     const SizedBox(width: 8),
-                    Text('Players with "$term"'),
+                    Text(context.l10n.mobilePlayersMatchingSearchTerm(term)),
                   ],
                 ),
                 hasLeading: true,
@@ -194,10 +194,10 @@ class _UserList extends ConsumerWidget {
                     )
                     .toList(),
               )
-            : const Column(
+            : Column(
                 children: [
-                  SizedBox(height: 16.0),
-                  Center(child: Text('No Result')),
+                  const SizedBox(height: 16.0),
+                  Center(child: Text(context.l10n.mobileNoSearchResults)),
                 ],
               ),
         error: (e, _) {
@@ -205,7 +205,7 @@ class _UserList extends ConsumerWidget {
           return const Column(
             children: [
               SizedBox(height: 16.0),
-              Center(child: Text('Error Loading Results')),
+              Center(child: Text('Could not load search results.')),
             ],
           );
         },

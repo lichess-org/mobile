@@ -68,8 +68,8 @@ class _Body extends ConsumerWidget {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
             if (following.isEmpty) {
-              return const Center(
-                child: Text('You are not following any user'),
+              return Center(
+                child: Text(context.l10n.mobileNotFollowingAnyUser),
               );
             }
             return SafeArea(

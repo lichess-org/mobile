@@ -129,7 +129,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
                   start: 16.0,
                   end: 8.0,
                 ),
-                largeTitle: const Text('Home'),
+                largeTitle: Text(context.l10n.mobileHomeTab),
                 leading: CupertinoButton(
                   alignment: Alignment.centerLeft,
                   padding: EdgeInsets.zero,

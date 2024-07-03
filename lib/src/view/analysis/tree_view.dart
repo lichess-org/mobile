@@ -550,7 +550,7 @@ class _MoveContextMenu extends ConsumerWidget {
               if (parent.children.any((c) => c.isHidden))
                 BottomSheetContextMenuAction(
                   icon: Icons.subtitles,
-                  child: const Text('Show variations'),
+                  child: Text(context.l10n.mobileShowVariations),
                   onPressed: () {
                     ref.read(ctrlProvider.notifier).showAllVariations(path);
                   },
@@ -558,7 +558,7 @@ class _MoveContextMenu extends ConsumerWidget {
               if (isSideline)
                 BottomSheetContextMenuAction(
                   icon: Icons.subtitles_off,
-                  child: const Text('Hide variation'),
+                  child: Text(context.l10n.mobileHideVariation),
                   onPressed: () {
                     ref.read(ctrlProvider.notifier).hideVariation(path);
                   },

@@ -127,7 +127,7 @@ class AnalysisSettings extends ConsumerWidget {
                 .toggleShowEvaluationGauge(),
           ),
           SwitchSettingTile(
-            title: const Text('Show comments'),
+            title: Text(context.l10n.mobileShowComments),
             value: prefs.showPgnComments,
             onChanged: (_) => ref
                 .read(analysisPreferencesProvider.notifier)
