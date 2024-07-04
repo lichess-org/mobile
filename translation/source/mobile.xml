@@ -5,4 +5,5 @@
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Tools</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Watch</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Settings</string>
+  <string name="deleteLocalDatabase" comment="The button in settings screen to delete local database. Also the confirm title that is displayed on a confirm dialog to confirm the action of deleting it.">Delete local database</string>
 </resources>

@@ -7,6 +7,24 @@ class AppLocalizationsAf extends AppLocalizations {
   AppLocalizationsAf([String locale = 'af']) : super(locale);
 
   @override
+  String get mobileHomeTab => 'Tuis';
+
+  @override
+  String get mobilePuzzlesTab => 'Kopkrappers';
+
+  @override
+  String get mobileToolsTab => 'Hulpmiddels';
+
+  @override
+  String get mobileWatchTab => 'Hou dop';
+
+  @override
+  String get mobileSettingsTab => 'Instellings';
+
+  @override
+  String get mobileDeleteLocalDatabase => 'Delete local database';
+
+  @override
   String get activityActivity => 'Aktiwiteite';
 
   @override

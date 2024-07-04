@@ -7,6 +7,24 @@ class AppLocalizationsFr extends AppLocalizations {
   AppLocalizationsFr([String locale = 'fr']) : super(locale);
 
   @override
+  String get mobileHomeTab => 'Accueil';
+
+  @override
+  String get mobilePuzzlesTab => 'Problèmes';
+
+  @override
+  String get mobileToolsTab => 'Outils';
+
+  @override
+  String get mobileWatchTab => 'Regarder';
+
+  @override
+  String get mobileSettingsTab => 'Paramètres';
+
+  @override
+  String get mobileDeleteLocalDatabase => 'Delete local database';
+
+  @override
   String get activityActivity => 'Activité';
 
   @override

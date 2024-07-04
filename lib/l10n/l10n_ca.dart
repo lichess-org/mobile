@@ -7,6 +7,24 @@ class AppLocalizationsCa extends AppLocalizations {
   AppLocalizationsCa([String locale = 'ca']) : super(locale);
 
   @override
+  String get mobileHomeTab => 'Inici';
+
+  @override
+  String get mobilePuzzlesTab => 'Problemes';
+
+  @override
+  String get mobileToolsTab => 'Eines';
+
+  @override
+  String get mobileWatchTab => 'Visualitza';
+
+  @override
+  String get mobileSettingsTab => 'Configuració';
+
+  @override
+  String get mobileDeleteLocalDatabase => 'Delete local database';
+
+  @override
   String get activityActivity => 'Activitat';
 
   @override

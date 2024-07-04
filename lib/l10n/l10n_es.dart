@@ -7,6 +7,24 @@ class AppLocalizationsEs extends AppLocalizations {
   AppLocalizationsEs([String locale = 'es']) : super(locale);
 
   @override
+  String get mobileHomeTab => 'Inicio';
+
+  @override
+  String get mobilePuzzlesTab => 'Ejercicios';
+
+  @override
+  String get mobileToolsTab => 'Herramientas';
+
+  @override
+  String get mobileWatchTab => 'Ver';
+
+  @override
+  String get mobileSettingsTab => 'Preferencias';
+
+  @override
+  String get mobileDeleteLocalDatabase => 'Delete local database';
+
+  @override
   String get activityActivity => 'Actividad';
 
   @override

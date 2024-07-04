@@ -186,7 +186,7 @@ abstract class AppLocalizations {
     Locale('nn'),
     Locale('pl'),
     Locale('pt'),
-    Locale('pt', 'BR'),
+    Locale('pt', 'PT'),
     Locale('ro'),
     Locale('ru'),
     Locale('sk'),
@@ -201,6 +201,42 @@ abstract class AppLocalizations {
     Locale('zh'),
     Locale('zh', 'TW')
   ];
+
+  /// No description provided for @mobileHomeTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get mobileHomeTab;
+
+  /// No description provided for @mobilePuzzlesTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Puzzles'**
+  String get mobilePuzzlesTab;
+
+  /// No description provided for @mobileToolsTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Tools'**
+  String get mobileToolsTab;
+
+  /// No description provided for @mobileWatchTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Watch'**
+  String get mobileWatchTab;
+
+  /// No description provided for @mobileSettingsTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get mobileSettingsTab;
+
+  /// No description provided for @mobileDeleteLocalDatabase.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete local database'**
+  String get mobileDeleteLocalDatabase;
 
   /// No description provided for @activityActivity.
   ///
@@ -7850,7 +7886,7 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
    }
     case 'pt': {
   switch (locale.countryCode) {
-    case 'BR': return AppLocalizationsPtBr();
+    case 'PT': return AppLocalizationsPtPt();
    }
   break;
    }

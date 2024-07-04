@@ -7,6 +7,24 @@ class AppLocalizationsBg extends AppLocalizations {
   AppLocalizationsBg([String locale = 'bg']) : super(locale);
 
   @override
+  String get mobileHomeTab => 'Начало';
+
+  @override
+  String get mobilePuzzlesTab => 'Задачи';
+
+  @override
+  String get mobileToolsTab => 'Инструменти';
+
+  @override
+  String get mobileWatchTab => 'Гледай';
+
+  @override
+  String get mobileSettingsTab => 'Настройки';
+
+  @override
+  String get mobileDeleteLocalDatabase => 'Delete local database';
+
+  @override
   String get activityActivity => 'Дейност';
 
   @override

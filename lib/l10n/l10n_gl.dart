@@ -7,6 +7,24 @@ class AppLocalizationsGl extends AppLocalizations {
   AppLocalizationsGl([String locale = 'gl']) : super(locale);
 
   @override
+  String get mobileHomeTab => 'Inicio';
+
+  @override
+  String get mobilePuzzlesTab => 'Crebacabezas';
+
+  @override
+  String get mobileToolsTab => 'Ferramentas';
+
+  @override
+  String get mobileWatchTab => 'Ver';
+
+  @override
+  String get mobileSettingsTab => 'Axustes';
+
+  @override
+  String get mobileDeleteLocalDatabase => 'Delete local database';
+
+  @override
   String get activityActivity => 'Actividade';
 
   @override

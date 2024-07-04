@@ -7,6 +7,24 @@ class AppLocalizationsDe extends AppLocalizations {
   AppLocalizationsDe([String locale = 'de']) : super(locale);
 
   @override
+  String get mobileHomeTab => 'Startseite';
+
+  @override
+  String get mobilePuzzlesTab => 'Aufgaben';
+
+  @override
+  String get mobileToolsTab => 'Werkzeuge';
+
+  @override
+  String get mobileWatchTab => 'Zuschauen';
+
+  @override
+  String get mobileSettingsTab => 'Einstellungen';
+
+  @override
+  String get mobileDeleteLocalDatabase => 'Delete local database';
+
+  @override
   String get activityActivity => 'Verlauf';
 
   @override

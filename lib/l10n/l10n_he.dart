@@ -7,6 +7,24 @@ class AppLocalizationsHe extends AppLocalizations {
   AppLocalizationsHe([String locale = 'he']) : super(locale);
 
   @override
+  String get mobileHomeTab => 'בית';
+
+  @override
+  String get mobilePuzzlesTab => 'חידות';
+
+  @override
+  String get mobileToolsTab => 'כלים';
+
+  @override
+  String get mobileWatchTab => 'צפייה';
+
+  @override
+  String get mobileSettingsTab => 'הגדרות';
+
+  @override
+  String get mobileDeleteLocalDatabase => 'Delete local database';
+
+  @override
   String get activityActivity => 'פעילות';
 
   @override

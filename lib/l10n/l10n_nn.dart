@@ -7,6 +7,24 @@ class AppLocalizationsNn extends AppLocalizations {
   AppLocalizationsNn([String locale = 'nn']) : super(locale);
 
   @override
+  String get mobileHomeTab => 'Startside';
+
+  @override
+  String get mobilePuzzlesTab => 'Oppgåver';
+
+  @override
+  String get mobileToolsTab => 'Verktøy';
+
+  @override
+  String get mobileWatchTab => 'Sjå';
+
+  @override
+  String get mobileSettingsTab => 'Innstillingar';
+
+  @override
+  String get mobileDeleteLocalDatabase => 'Delete local database';
+
+  @override
   String get activityActivity => 'Aktivitet';
 
   @override

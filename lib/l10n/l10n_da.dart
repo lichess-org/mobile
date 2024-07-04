@@ -7,6 +7,24 @@ class AppLocalizationsDa extends AppLocalizations {
   AppLocalizationsDa([String locale = 'da']) : super(locale);
 
   @override
+  String get mobileHomeTab => 'Hjem';
+
+  @override
+  String get mobilePuzzlesTab => 'Opgaver';
+
+  @override
+  String get mobileToolsTab => 'Værktøjer';
+
+  @override
+  String get mobileWatchTab => 'Se';
+
+  @override
+  String get mobileSettingsTab => 'Indstillinger';
+
+  @override
+  String get mobileDeleteLocalDatabase => 'Delete local database';
+
+  @override
   String get activityActivity => 'Aktivitet';
 
   @override

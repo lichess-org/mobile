@@ -4,6 +4,7 @@
   "mobileToolsTab": "Tools",
   "mobileWatchTab": "Watch",
   "mobileSettingsTab": "Settings",
+  "mobileDeleteLocalDatabase": "Delete local database",
   "activityActivity": "Activity",
   "activityHostedALiveStream": "Hosted a live stream",
   "activityRankedInSwissTournament": "Ranked #{param1} in {param2}",

@@ -390,7 +390,7 @@ class _Body extends ConsumerWidget {
           ),
           PlatformListTile(
             leading: const Icon(Icons.storage),
-            title: const Text('Delete local database'),
+            title: Text(context.l10n.mobileDeleteLocalDatabase),
             additionalInfo:
                 dbSize.hasValue ? Text(_getSizeString(dbSize.value)) : null,
             trailing: Theme.of(context).platform == TargetPlatform.iOS
@@ -398,7 +398,7 @@ class _Body extends ConsumerWidget {
                 : Text(_getSizeString(dbSize.value)),
             onTap: () => showConfirmDialog<void>(
               context,
-              title: const Text('Delete local database'),
+              title: Text(context.l10n.mobileDeleteLocalDatabase),
               onConfirm: (_) => _deleteDatabase(ref),
               isDestructiveAction: true,
             ),
