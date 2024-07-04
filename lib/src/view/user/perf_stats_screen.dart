@@ -296,8 +296,6 @@ class _Body extends ConsumerWidget {
                     style: TextButton.styleFrom(
                       alignment: Alignment.centerLeft,
                       padding: EdgeInsets.zero,
-                      minimumSize: Size.zero,
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
                     child: Text(context.l10n.perfStatViewTheGames),
                   ),
