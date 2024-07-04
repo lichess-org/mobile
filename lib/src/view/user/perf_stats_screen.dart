@@ -290,6 +290,7 @@ class _Body extends ConsumerWidget {
                         user: user.lightUser,
                         isOnline: true,
                         gamePerf: gamePerfMap[perf],
+                        games: data.totalGames,
                       ),
                     ),
                     child: Text(context.l10n.perfStatViewTheGames),

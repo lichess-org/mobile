@@ -14,11 +14,13 @@ class GameHistoryScreen extends ConsumerWidget {
     required this.user,
     required this.isOnline,
     this.gamePerf,
+    this.games,
     super.key,
   });
   final LightUser? user;
   final bool isOnline;
   final GamePerf? gamePerf;
+  final int? games;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -36,7 +38,7 @@ class GameHistoryScreen extends ConsumerWidget {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: nbGamesAsync.when(
-          data: (nbGames) => Text(context.l10n.nbGames(nbGames)),
+          data: (nbGames) => Text(context.l10n.nbGames(games ?? nbGames)),
           loading: () => const CupertinoActivityIndicator(),
           error: (e, s) => const Text('All Games'),
         ),
@@ -52,7 +54,7 @@ class GameHistoryScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: nbGamesAsync.when(
-          data: (nbGames) => Text(context.l10n.nbGames(nbGames)),
+          data: (nbGames) => Text(context.l10n.nbGames(games ?? nbGames)),
           loading: () => const ButtonLoadingIndicator(),
           error: (e, s) => const Text('All Games'),
         ),
