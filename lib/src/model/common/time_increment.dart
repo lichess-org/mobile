@@ -46,10 +46,9 @@ class TimeIncrement {
       case 90:
         return '1.5+$increment';
       default:
-      // General case for other times
+        // General case for other times
         return '${(time / 60).floor()}+$increment';
     }
-
   }
 
   @override
