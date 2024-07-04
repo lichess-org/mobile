@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/common/game_perf.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -12,10 +13,12 @@ class GameHistoryScreen extends ConsumerWidget {
   const GameHistoryScreen({
     required this.user,
     required this.isOnline,
+    this.gamePerf,
     super.key,
   });
   final LightUser? user;
   final bool isOnline;
+  final GamePerf? gamePerf;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
