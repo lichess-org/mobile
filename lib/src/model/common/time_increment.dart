@@ -30,24 +30,26 @@ class TimeIncrement {
   Speed get speed => Speed.fromTimeIncrement(this);
 
   String get display {
-    String displayTime = '';
     switch (time) {
       case 0:
         if (increment == 0) {
-          displayTime = '∞';
+          return '∞';
         } else {
-          displayTime = '0+$increment';
+          return '0+$increment';
         }
-      case 45:
-        displayTime = '¾+$increment';
-      case 30:
-        displayTime = '½+$increment';
       case 15:
-        displayTime = '¼+$increment';
+        return '¼+$increment';
+      case 30:
+        return '½+$increment';
+      case 45:
+        return '¾+$increment';
+      case 90:
+        return '1.5+$increment';
       default:
-        displayTime = '${(time / 60).floor()}+$increment';
+      // General case for other times
+        return '${(time / 60).floor()}+$increment';
     }
-    return displayTime;
+
   }
 
   @override
