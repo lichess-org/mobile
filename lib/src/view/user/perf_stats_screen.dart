@@ -293,6 +293,12 @@ class _Body extends ConsumerWidget {
                         games: data.totalGames,
                       ),
                     ),
+                    style: TextButton.styleFrom(
+                      alignment: Alignment.centerLeft,
+                      padding: EdgeInsets.zero,
+                      minimumSize: Size.zero,
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
                     child: Text(context.l10n.perfStatViewTheGames),
                   ),
                 subStatSpace,
