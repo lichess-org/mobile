@@ -4,12 +4,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/chat_controller.dart';
+import 'package:lichess_mobile/src/model/game/chat_presets_controller.dart';
+import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/view/game/preset_messages.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_text_field.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -99,7 +102,13 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final presetsController = chatPresetsControllerProvider(id);
     final chatStateAsync = ref.watch(chatControllerProvider(id));
+    final gameStateAsync = ref.watch(gameControllerProvider(id));
+    final chatPresetsStateAsync = ref.watch(presetsController);
+
+    final myColour = gameStateAsync.value?.game.youAre;
+    final chatPresetState = chatPresetsStateAsync.value;
 
     return Column(
       mainAxisSize: MainAxisSize.max,
@@ -118,9 +127,14 @@ class _Body extends ConsumerWidget {
                 itemBuilder: (context, index) {
                   final message =
                       chatState.messages[chatState.messages.length - index - 1];
+
+                  final isMyMessage = message.username != null
+                      ? message.username == me?.name
+                      : (message.colour == myColour?.name);
+
                   return (message.username == 'lichess')
                       ? _MessageAction(message: message.message)
-                      : (message.username == me?.name)
+                      : isMyMessage
                           ? _MessageBubble(
                               you: true,
                               message: message.message,
@@ -140,6 +154,18 @@ class _Body extends ConsumerWidget {
             ),
           ),
         ),
+        // Only show presets if the player is participating in the game and the presets state has become available
+        if (myColour != null && chatPresetState != null)
+          PresetMessages(
+            gameId: id,
+            alreadySaid: chatPresetState.alreadySaid,
+            presetMessageGroup: chatPresetState.currentPresetMessageGroup,
+            presetMessages: chatPresetState.presets,
+            sendChatPreset: (presetMessage) =>
+                ref.read(presetsController.notifier).sendPreset(presetMessage),
+          )
+        else
+          const SizedBox.shrink(),
         _ChatBottomBar(id: id),
       ],
     );

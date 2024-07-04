@@ -126,11 +126,9 @@ class ChatController extends _$ChatController {
       final data = event.data as Map<String, dynamic>;
       final message = data['t'] as String;
       final username = data['u'] as String?;
+      final colour = data['c'] as String?;
       _addMessage(
-        (
-          message: message,
-          username: username,
-        ),
+        (message: message, username: username, colour: colour),
       );
     }
   }
@@ -146,11 +144,12 @@ class ChatState with _$ChatState {
   }) = _ChatState;
 }
 
-typedef Message = ({String? username, String message});
+typedef Message = ({String? username, String? colour, String message});
 
 Message _messageFromPick(RequiredPick pick) {
   return (
     message: pick('t').asStringOrThrow(),
     username: pick('u').asStringOrNull(),
+    colour: pick('c').asStringOrNull(),
   );
 }

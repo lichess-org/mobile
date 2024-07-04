@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/chat_controller.dart';
+import 'package:lichess_mobile/src/model/game/chat_presets_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_preferences.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
@@ -423,6 +424,8 @@ class _GameBottomBar extends ConsumerWidget {
     final chatStateAsync = gamePrefs.enableChat == true
         ? ref.watch(chatControllerProvider(id))
         : null;
+
+    _keepChatPresetsState(ref);
 
     final List<Widget> children = gameStateAsync.when(
       data: (gameState) {
@@ -860,6 +863,15 @@ class _GameBottomBar extends ConsumerWidget {
     if (result == true) {
       onConfirm();
     }
+  }
+
+  void _keepChatPresetsState(WidgetRef ref) {
+    // By listening to the chat presets state we keep it available for the lifetime of the game.
+    // If we didn't do this, it would be lost each time the chat is closed
+    ref.listen(
+      chatPresetsControllerProvider(id),
+      (previous, next) => {},
+    );
   }
 }
 
