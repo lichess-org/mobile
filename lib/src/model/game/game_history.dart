@@ -6,6 +6,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/common/game_perf.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
@@ -63,9 +64,11 @@ Future<IList<LightArchivedGameWithPov>> myRecentGames(
 Future<IList<LightArchivedGameWithPov>> userRecentGames(
   UserRecentGamesRef ref, {
   required UserId userId,
+  GamePerf? gamePerf,
 }) {
   return ref.withClientCacheFor(
-    (client) => GameRepository(client).getUserGames(userId),
+    (client) => GameRepository(client)
+        .getUserGames(userId, perfType: gamePerf),
     // cache is important because the associated widget is in a [ListView] and
     // the provider may be instanciated multiple times in a short period of time
     // (e.g. when scrolling)
@@ -114,6 +117,7 @@ class UserGameHistory extends _$UserGameHistory {
     /// server. If this is false, the provider will fetch the games from the
     /// local storage.
     required bool isOnline,
+    GamePerf? gamePerf,
   }) async {
     ref.cacheFor(const Duration(minutes: 5));
     ref.onDispose(() {
@@ -123,7 +127,12 @@ class UserGameHistory extends _$UserGameHistory {
     final session = ref.watch(authSessionProvider);
 
     final recentGames = userId != null
-        ? ref.read(userRecentGamesProvider(userId: userId).future)
+        ? ref.read(
+            userRecentGamesProvider(
+              userId: userId,
+              gamePerf: gamePerf,
+            ).future,
+          )
         : ref.read(myRecentGamesProvider.future);
 
     _list.addAll(await recentGames);
@@ -134,6 +143,7 @@ class UserGameHistory extends _$UserGameHistory {
       hasMore: true,
       hasError: false,
       online: isOnline,
+      perfType: gamePerf,
       session: session,
     );
   }
@@ -151,6 +161,7 @@ class UserGameHistory extends _$UserGameHistory {
                 userId!,
                 max: _nbPerPage,
                 until: _list.last.game.createdAt,
+                perfType: currentVal.perfType,
               ),
             )
           : currentVal.online && currentVal.session != null
@@ -159,6 +170,7 @@ class UserGameHistory extends _$UserGameHistory {
                     currentVal.session!.user.id,
                     max: _nbPerPage,
                     until: _list.last.game.createdAt,
+                    perfType: currentVal.perfType,
                   ),
                 )
               : ref
@@ -208,6 +220,7 @@ class UserGameHistoryState with _$UserGameHistoryState {
   const factory UserGameHistoryState({
     required IList<LightArchivedGameWithPov> gameList,
     required bool isLoading,
+    GamePerf? perfType,
     required bool hasMore,
     required bool hasError,
     required bool online,

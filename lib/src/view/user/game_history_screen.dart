@@ -41,7 +41,7 @@ class GameHistoryScreen extends ConsumerWidget {
           error: (e, s) => const Text('All Games'),
         ),
       ),
-      child: _Body(user: user, isOnline: isOnline),
+      child: _Body(user: user, isOnline: isOnline, gamePerf: gamePerf),
     );
   }
 
@@ -57,16 +57,21 @@ class GameHistoryScreen extends ConsumerWidget {
           error: (e, s) => const Text('All Games'),
         ),
       ),
-      body: _Body(user: user, isOnline: isOnline),
+      body: _Body(user: user, isOnline: isOnline, gamePerf: gamePerf),
     );
   }
 }
 
 class _Body extends ConsumerStatefulWidget {
-  const _Body({required this.user, required this.isOnline});
+  const _Body({
+    required this.user,
+    required this.isOnline,
+    required this.gamePerf,
+  });
 
   final LightUser? user;
   final bool isOnline;
+  final GamePerf? gamePerf;
 
   @override
   ConsumerState<_Body> createState() => _BodyState();
@@ -95,6 +100,7 @@ class _BodyState extends ConsumerState<_Body> {
         userGameHistoryProvider(
           widget.user?.id,
           isOnline: widget.isOnline,
+          gamePerf: widget.gamePerf,
         ),
       );
 
@@ -111,6 +117,7 @@ class _BodyState extends ConsumerState<_Body> {
               userGameHistoryProvider(
                 widget.user?.id,
                 isOnline: widget.isOnline,
+                gamePerf: widget.gamePerf,
               ).notifier,
             )
             .getNext();
@@ -121,7 +128,11 @@ class _BodyState extends ConsumerState<_Body> {
   @override
   Widget build(BuildContext context) {
     final gameListState = ref.watch(
-      userGameHistoryProvider(widget.user?.id, isOnline: widget.isOnline),
+      userGameHistoryProvider(
+        widget.user?.id,
+        isOnline: widget.isOnline,
+        gamePerf: widget.gamePerf,
+      ),
     );
 
     return gameListState.when(
