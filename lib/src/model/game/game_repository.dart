@@ -50,8 +50,7 @@ class GameRepository {
               'max': max.toString(),
               if (until != null)
                 'until': until.millisecondsSinceEpoch.toString(),
-              if (perfType != null)
-                'perfType': perfType.name,
+              if (perfType != null) 'perfType': perfType.name,
               'moves': 'false',
               'lastFen': 'true',
               'accuracy': 'true',

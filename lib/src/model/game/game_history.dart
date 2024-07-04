@@ -67,8 +67,7 @@ Future<IList<LightArchivedGameWithPov>> userRecentGames(
   GamePerf? gamePerf,
 }) {
   return ref.withClientCacheFor(
-    (client) => GameRepository(client)
-        .getUserGames(userId, perfType: gamePerf),
+    (client) => GameRepository(client).getUserGames(userId, perfType: gamePerf),
     // cache is important because the associated widget is in a [ListView] and
     // the provider may be instanciated multiple times in a short period of time
     // (e.g. when scrolling)
