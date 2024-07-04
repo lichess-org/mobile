@@ -269,36 +269,38 @@ class _Body extends ConsumerWidget {
                 ]),
                 statGroupSpace,
                 Row(
-                  crossAxisAlignment: CrossAxisAlignment.baseline,
-                  textBaseline: TextBaseline.alphabetic,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      '${context.l10n.perfStatTotalGames} '.localizeNumbers(),
-                      style: Styles.sectionTitle,
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.baseline,
+                      textBaseline: TextBaseline.alphabetic,
+                      children: [
+                        Text(
+                          '${context.l10n.perfStatTotalGames} '
+                              .localizeNumbers(),
+                          style: Styles.sectionTitle,
+                        ),
+                        Text(
+                          data.totalGames.toString().localizeNumbers(),
+                          style: _mainValueStyle,
+                        ),
+                      ],
                     ),
-                    Text(
-                      data.totalGames.toString().localizeNumbers(),
-                      style: _mainValueStyle,
-                    ),
+                    if (gamePerfMap.keys.contains(perf))
+                      TextButton(
+                        onPressed: () => pushPlatformRoute(
+                          context,
+                          builder: (context) => GameHistoryScreen(
+                            user: user.lightUser,
+                            isOnline: true,
+                            gamePerf: gamePerfMap[perf],
+                            games: data.totalGames,
+                          ),
+                        ),
+                        child: Text(context.l10n.perfStatViewTheGames),
+                      ),
                   ],
                 ),
-                if (gamePerfMap.keys.contains(perf))
-                  TextButton(
-                    onPressed: () => pushPlatformRoute(
-                      context,
-                      builder: (context) => GameHistoryScreen(
-                        user: user.lightUser,
-                        isOnline: true,
-                        gamePerf: gamePerfMap[perf],
-                        games: data.totalGames,
-                      ),
-                    ),
-                    style: TextButton.styleFrom(
-                      alignment: Alignment.centerLeft,
-                      padding: EdgeInsets.zero,
-                    ),
-                    child: Text(context.l10n.perfStatViewTheGames),
-                  ),
                 subStatSpace,
                 StatCardRow([
                   StatCard(
