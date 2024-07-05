@@ -65,14 +65,14 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
   Future<void>? _pendingCreateGame;
   final _controller = TextEditingController();
 
-  String? textInput;
+  String? fromPositionFenInput;
 
   @override
   void initState() {
     super.initState();
     _controller.addListener(() {
       setState(() {
-        textInput = _controller.text;
+        fromPositionFenInput = _controller.text;
       });
     });
   }
@@ -87,10 +87,15 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
   Widget build(BuildContext context) {
     final accountAsync = ref.watch(accountProvider);
     final preferences = ref.watch(challengePreferencesProvider);
+
     final isValidTimeControl =
         preferences.timeControl != ChallengeTimeControlType.clock ||
             preferences.clock.time > Duration.zero ||
             preferences.clock.increment > Duration.zero;
+
+    final isValidPosition =
+        (fromPositionFenInput != null && fromPositionFenInput!.isNotEmpty) ||
+            preferences.variant != Variant.fromPosition;
 
     return accountAsync.when(
       data: (account) {
@@ -319,7 +324,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                   orientation: preferences.sideChoice == SideChoice.black
                       ? cg.Side.black
                       : cg.Side.white,
-                  fen: textInput ?? kEmptyFen,
+                  fen: fromPositionFenInput ?? kEmptyFen,
                   description: AdaptiveTextField(
                     maxLines: 5,
                     placeholder: context.l10n.pasteTheFenStringHere,
@@ -382,10 +387,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                     child: FatButton(
                       semanticsLabel: context.l10n.challengeChallengeToPlay,
                       onPressed: timeControl == ChallengeTimeControlType.clock
-                          ? isValidTimeControl &&
-                                  ((textInput != '' && textInput != null) ||
-                                      preferences.variant !=
-                                          Variant.fromPosition)
+                          ? isValidTimeControl && isValidPosition
                               ? () {
                                   pushPlatformRoute(
                                     context,
@@ -397,7 +399,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                                           preferences.variant !=
                                                   Variant.fromPosition
                                               ? null
-                                              : textInput,
+                                              : fromPositionFenInput,
                                         ),
                                       );
                                     },
