@@ -347,6 +347,7 @@ class _Body extends ConsumerWidget {
                                 Orientation.portrait,
                               ),
                             ),
+                          _OpeningExplorer(),
                         ],
                       );
               },
@@ -354,6 +355,91 @@ class _Body extends ConsumerWidget {
           ),
         ),
         _BottomBar(pgn: pgn, options: options),
+      ],
+    );
+  }
+}
+
+class _OpeningExplorer extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+      child: const Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text('e4'),
+              SizedBox(width: 16),
+              Text('44%'),
+              SizedBox(width: 8),
+              Text('308,469'),
+              SizedBox(width: 8),
+            ],
+          ),
+          Expanded(
+            child: _WinPercentageChart(
+              whitePercent: 30,
+              drawPercent: 48,
+              blackPercent: 23,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _WinPercentageChart extends StatelessWidget {
+  const _WinPercentageChart({
+    required this.whitePercent,
+    required this.drawPercent,
+    required this.blackPercent,
+  });
+
+  final int whitePercent;
+  final int drawPercent;
+  final int blackPercent;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          flex: whitePercent,
+          child: ColoredBox(
+            color: Colors.white,
+            child: Text(
+              '$whitePercent',
+              textAlign: TextAlign.center,
+              style: const TextStyle(color: Colors.black),
+            ),
+          ),
+        ),
+        Expanded(
+          flex: drawPercent,
+          child: ColoredBox(
+            color: Colors.grey,
+            child: Text(
+              '$drawPercent',
+              textAlign: TextAlign.center,
+              style: const TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
+        Expanded(
+          flex: blackPercent,
+          child: ColoredBox(
+            color: Colors.black,
+            child: Text(
+              '$blackPercent',
+              textAlign: TextAlign.center,
+              style: const TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
       ],
     );
   }
