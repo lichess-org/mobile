@@ -104,8 +104,9 @@ class ChallengeRequest
         if (clock != null)
           'clock.increment': clock!.increment.inSeconds.toString(),
         if (days != null) 'days': days.toString(),
-        'rated': rated.toString(),
+        'rated': variant == Variant.fromPosition ? 'false' : rated.toString(),
         'variant': variant.name,
+        if (variant == Variant.fromPosition) 'fen': initialFen,
         if (sideChoice != SideChoice.random) 'color': sideChoice.name,
       };
 }
