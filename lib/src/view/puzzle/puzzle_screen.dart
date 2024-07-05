@@ -502,6 +502,7 @@ class _BottomBar extends ConsumerWidget {
                       label: context.l10n.next,
                       icon: CupertinoIcons.chevron_forward,
                       showTooltip: false,
+                      blink: puzzleState.viewedSolutionRecently,
                     ),
                   ),
                 ),
