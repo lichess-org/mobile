@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
+import 'package:lichess_mobile/src/model/analysis/opening_explorer_repository.dart';
 import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -351,12 +352,7 @@ class _Body extends ConsumerWidget {
                               ),
                             ),
                           if (showOpeningExplorer)
-                            _OpeningExplorer(
-                              moves: [
-                                MoveOpening('e4', 100, 200, 50),
-                                MoveOpening('d4', 130, 110, 80),
-                              ].toIList(),
-                            ),
+                            const _OpeningExplorer(fen: ''),
                         ],
                       );
               },
@@ -369,49 +365,48 @@ class _Body extends ConsumerWidget {
   }
 }
 
-class MoveOpening {
-  String san;
-  int white;
-  int draws;
-  int black;
-
-  MoveOpening(this.san, this.white, this.draws, this.black);
-}
-
 class _OpeningExplorer extends StatelessWidget {
   const _OpeningExplorer({
-    required this.moves,
+    required this.fen,
   });
 
-  final IList<MoveOpening> moves;
+  final String fen;
 
   @override
   Widget build(BuildContext context) {
+    final explorer = OpeningExplorerRepository().getOpeningExplorer(fen);
+
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
       child: ListView(
         shrinkWrap: true,
-        children: moves
+        children: explorer.moves
             .map(
               (move) => Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(move.san),
-                      const SizedBox(width: 16),
-                      const Text('44%'),
-                      const SizedBox(width: 8),
-                      const Text('308,469'),
-                      const SizedBox(width: 8),
-                    ],
+                  Expanded(
+                    flex: 4,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(move.san),
+                        const SizedBox(width: 16),
+                        Text(
+                          '${((move.games / explorer.games) * 100).round()}%',
+                        ),
+                        const SizedBox(width: 8),
+                        Text('${move.games}'),
+                        const SizedBox(width: 8),
+                      ],
+                    ),
                   ),
                   Expanded(
+                    flex: 6,
                     child: _WinPercentageChart(
-                      whitePercent: move.white,
-                      drawPercent: move.draws,
-                      blackPercent: move.black,
+                      white: move.white,
+                      draws: move.draws,
+                      black: move.black,
                     ),
                   ),
                 ],
@@ -425,47 +420,47 @@ class _OpeningExplorer extends StatelessWidget {
 
 class _WinPercentageChart extends StatelessWidget {
   const _WinPercentageChart({
-    required this.whitePercent,
-    required this.drawPercent,
-    required this.blackPercent,
+    required this.white,
+    required this.draws,
+    required this.black,
   });
 
-  final int whitePercent;
-  final int drawPercent;
-  final int blackPercent;
+  final int white;
+  final int draws;
+  final int black;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         Expanded(
-          flex: whitePercent,
+          flex: white,
           child: ColoredBox(
             color: Colors.white,
             child: Text(
-              '$whitePercent',
+              '$white',
               textAlign: TextAlign.center,
               style: const TextStyle(color: Colors.black),
             ),
           ),
         ),
         Expanded(
-          flex: drawPercent,
+          flex: draws,
           child: ColoredBox(
             color: Colors.grey,
             child: Text(
-              '$drawPercent',
+              '$draws',
               textAlign: TextAlign.center,
               style: const TextStyle(color: Colors.white),
             ),
           ),
         ),
         Expanded(
-          flex: blackPercent,
+          flex: black,
           child: ColoredBox(
             color: Colors.black,
             child: Text(
-              '$blackPercent',
+              '$black',
               textAlign: TextAlign.center,
               style: const TextStyle(color: Colors.white),
             ),

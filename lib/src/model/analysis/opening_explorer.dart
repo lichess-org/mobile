@@ -6,6 +6,8 @@ part 'opening_explorer.freezed.dart';
 
 @freezed
 class OpeningExplorer with _$OpeningExplorer {
+  const OpeningExplorer._();
+
   const factory OpeningExplorer({
     required LightOpening opening,
     required int white,
@@ -16,10 +18,16 @@ class OpeningExplorer with _$OpeningExplorer {
     required IList<GameWithMove> recentGames,
     required IList<HistoryStat> history,
   }) = _OpeningExplorer;
+
+  int get games {
+    return white + draws + black;
+  }
 }
 
 @freezed
 class OpeningMove with _$OpeningMove {
+  const OpeningMove._();
+
   const factory OpeningMove({
     required String uci,
     required String san,
@@ -29,12 +37,14 @@ class OpeningMove with _$OpeningMove {
     required int black,
     Game? game,
   }) = _OpeningMove;
+
+  int get games {
+    return white + draws + black;
+  }
 }
 
 @freezed
 class Game with _$Game {
-  const Game._();
-
   factory Game({
     required String uci,
     required String id,
@@ -57,8 +67,6 @@ class GameWithMove with _$GameWithMove {
 
 @freezed
 class MasterPlayer with _$MasterPlayer {
-  const MasterPlayer._();
-
   const factory MasterPlayer({
     required String name,
     required int rating,
@@ -67,8 +75,6 @@ class MasterPlayer with _$MasterPlayer {
 
 @freezed
 class HistoryStat with _$HistoryStat {
-  const HistoryStat._();
-
   const factory HistoryStat({
     required String month,
     required int white,
