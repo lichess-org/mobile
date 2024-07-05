@@ -106,6 +106,7 @@ class PuzzleController extends _$PuzzleController {
       resultSent: false,
       isChangingDifficulty: false,
       isLocalEvalEnabled: false,
+      viewedSolutionRecently: false,
       streak: streak,
       nextPuzzleStreakFetchError: false,
       nextPuzzleStreakFetchIsRetrying: false,
@@ -179,10 +180,17 @@ class PuzzleController extends _$PuzzleController {
 
     state = state.copyWith(
       mode: PuzzleMode.view,
+      viewedSolutionRecently: true,
     );
 
     Timer(const Duration(milliseconds: 800), () {
       _goToNextNode();
+    });
+
+    Timer(const Duration(seconds: 3), () {
+      state = state.copyWith(
+        viewedSolutionRecently: false,
+      );
     });
   }
 
@@ -553,6 +561,7 @@ class PuzzleState with _$PuzzleState {
     required bool isLocalEvalEnabled,
     required bool resultSent,
     required bool isChangingDifficulty,
+    required bool viewedSolutionRecently,
     PuzzleContext? nextContext,
     PuzzleStreak? streak,
     // if the automatic attempt to fetch the next puzzle in the streak fails
