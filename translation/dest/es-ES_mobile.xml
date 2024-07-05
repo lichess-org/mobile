@@ -27,7 +27,7 @@
   <string name="showVariations" comment="Shown in the analysis screen.">Mostrar variaciones</string>
   <string name="hideVariation" comment="Shown in the analysis screen.">Ocultar variación</string>
   <string name="showComments" comment="Shown in the analysis screen.">Mostrar comentarios</string>
-  <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">¿Quieres terminar esta ejecución?</string>
+  <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">¿Quieres finalizar esta ronda?</string>
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Nada que mostrar, por favor cambia los filtros</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Cancelar oferta de revancha</string>
   <string name="cancelDrawOffer" comment="Menu action that cancels a previous draw offer">Cancelar ofertas de tablas</string>
