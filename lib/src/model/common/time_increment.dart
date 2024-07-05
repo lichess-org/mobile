@@ -29,6 +29,8 @@ class TimeIncrement {
 
   Speed get speed => Speed.fromTimeIncrement(this);
 
+  bool get isInfinite => time == 0 && increment == 0;
+
   String get display {
     String displayTime = '';
     switch (time) {

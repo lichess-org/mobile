@@ -185,7 +185,9 @@ class TimeControlModal extends ConsumerWidget {
                                 ],
                               ),
                               SecondaryButton(
-                                onPressed: () => onSelected(custom),
+                                onPressed: custom.isInfinite
+                                    ? null
+                                    : () => onSelected(custom),
                                 semanticsLabel: 'OK',
                                 child: Text(
                                   context.l10n.mobileOkButton,
