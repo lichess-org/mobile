@@ -5,4 +5,15 @@
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Инструменти</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Гледай</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Настройки</string>
+  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Изчисти</string>
+  <string name="noSearchResults" comment="This is shown when the search did not return any results.">Няма резултати</string>
+  <string name="areYouSure" comment="This is shown in confirmation dialogs.">Сигурни ли сте?</string>
+  <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Сподели тази задача</string>
+  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Сподели URL на играта</string>
+  <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Сподели PGN</string>
+  <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">Сподели позицията във формат FEN</string>
+  <string name="showVariations" comment="Shown in the analysis screen.">Покажи вариациите</string>
+  <string name="hideVariation" comment="Shown in the analysis screen.">Скрий вариацията</string>
+  <string name="showComments" comment="Shown in the analysis screen.">Покажи коментарите</string>
+  <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Възникна грешка.</string>
 </resources>
