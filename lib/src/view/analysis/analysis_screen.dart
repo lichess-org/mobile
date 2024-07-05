@@ -357,7 +357,7 @@ class _Body extends ConsumerWidget {
   }
 }
 
-class _Board extends ConsumerWidget {
+class _Board extends ConsumerStatefulWidget {
   const _Board(
     this.pgn,
     this.options,
@@ -371,8 +371,15 @@ class _Board extends ConsumerWidget {
   final bool isTablet;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = analysisControllerProvider(pgn, options);
+  ConsumerState<_Board> createState() => _BoardState();
+}
+
+class _BoardState extends ConsumerState<_Board> {
+  ISet<cg.Shape> userShapes = ISet();
+
+  @override
+  Widget build(BuildContext context) {
+    final ctrlProvider = analysisControllerProvider(widget.pgn, widget.options);
     final analysisState = ref.watch(ctrlProvider);
     final boardPrefs = ref.watch(boardPreferencesProvider);
     final showBestMoveArrow = ref.watch(
@@ -392,8 +399,46 @@ class _Board extends ConsumerWidget {
 
     final sanMove = currentNode.sanMove;
 
+    final ISet<cg.Shape> bestMoveShapes = showBestMoveArrow &&
+            analysisState.isEngineAvailable &&
+            bestMoves != null
+        ? ISet(
+            bestMoves.where((move) => move != null).mapIndexed(
+              (i, move) {
+                switch (move!) {
+                  case NormalMove(from: _, to: _, promotion: final promRole):
+                    return [
+                      cg.Arrow(
+                        color:
+                            const Color(0x40003088).withOpacity(0.4 - 0.15 * i),
+                        orig: move.cg.from,
+                        dest: move.cg.to,
+                      ),
+                      if (promRole != null)
+                        cg.PieceShape(
+                          color: const Color(0x40003088)
+                              .withOpacity(0.4 - 0.15 * i),
+                          orig: move.cg.to,
+                          role: promRole.cg,
+                        ),
+                    ];
+                  case DropMove(role: final role, to: _):
+                    return [
+                      cg.PieceShape(
+                        color:
+                            const Color(0x40003088).withOpacity(0.4 - 0.15 * i),
+                        orig: move.cg.to,
+                        role: role.cg,
+                      ),
+                    ];
+                }
+              },
+            ).expand((e) => e),
+          )
+        : ISet();
+
     return cg.Board(
-      size: boardSize,
+      size: widget.boardSize,
       onMove: (move, {isDrop, isPremove}) =>
           ref.read(ctrlProvider.notifier).onUserMove(Move.fromUci(move.uci)!),
       data: cg.BoardData(
@@ -408,47 +453,7 @@ class _Board extends ConsumerWidget {
         lastMove: analysisState.lastMove?.cg,
         sideToMove: analysisState.position.turn.cg,
         validMoves: analysisState.validMoves,
-        shapes: showBestMoveArrow &&
-                analysisState.isEngineAvailable &&
-                bestMoves != null
-            ? ISet(
-                bestMoves.where((move) => move != null).mapIndexed(
-                  (i, move) {
-                    switch (move!) {
-                      case NormalMove(
-                          from: _,
-                          to: _,
-                          promotion: final promRole
-                        ):
-                        return [
-                          cg.Arrow(
-                            color: const Color(0x40003088)
-                                .withOpacity(0.4 - 0.15 * i),
-                            orig: move.cg.from,
-                            dest: move.cg.to,
-                          ),
-                          if (promRole != null)
-                            cg.PieceShape(
-                              color: const Color(0x40003088)
-                                  .withOpacity(0.4 - 0.15 * i),
-                              orig: move.cg.to,
-                              role: promRole.cg,
-                            ),
-                        ];
-                      case DropMove(role: final role, to: _):
-                        return [
-                          cg.PieceShape(
-                            color: const Color(0x40003088)
-                                .withOpacity(0.4 - 0.15 * i),
-                            orig: move.cg.to,
-                            role: role.cg,
-                          ),
-                        ];
-                    }
-                  },
-                ).expand((e) => e),
-              )
-            : null,
+        shapes: userShapes.union(bestMoveShapes),
         annotations: sanMove != null && annotation != null
             ? altCastles.containsKey(sanMove.move.uci)
                 ? IMap({
@@ -465,12 +470,36 @@ class _Board extends ConsumerWidget {
         showLastMove: boardPrefs.boardHighlights,
         enableCoordinates: boardPrefs.coordinates,
         animationDuration: boardPrefs.pieceAnimationDuration,
-        borderRadius: isTablet
+        borderRadius: widget.isTablet
             ? const BorderRadius.all(Radius.circular(4.0))
             : BorderRadius.zero,
-        boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
+        boxShadow: widget.isTablet ? boardShadows : const <BoxShadow>[],
+        drawShape: cg.DrawShapeOptions(
+          enable: true,
+          onCompleteShape: _onCompleteShape,
+          onClearShapes: _onClearShapes,
+        ),
       ),
     );
+  }
+
+  void _onCompleteShape(cg.Shape shape) {
+    if (userShapes.any((element) => element == shape)) {
+      setState(() {
+        userShapes = userShapes.remove(shape);
+      });
+      return;
+    } else {
+      setState(() {
+        userShapes = userShapes.add(shape);
+      });
+    }
+  }
+
+  void _onClearShapes() {
+    setState(() {
+      userShapes = ISet();
+    });
   }
 }
 
