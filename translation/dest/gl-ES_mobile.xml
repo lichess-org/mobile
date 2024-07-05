@@ -9,4 +9,33 @@
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Cores do sistema</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Comentarios</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">OK</string>
+  <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">Vibración ó mover</string>
+  <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">Pantalla completa</string>
+  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Oculta a Interface de Usuario mentres xogas. Emprega esta opción se che molestan os xestos de navegación do sistema ós bordos da pantalla. Aplícase ás pantallas da partida e á Treboada de Crebacabezas.</string>
+  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Non estás a seguir a ningún usuario.</string>
+  <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Todas as partidas</string>
+  <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Procuras recentes</string>
+  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Borrar</string>
+  <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Xogadores con \"%s\"</string>
+  <string name="noSearchResults" comment="This is shown when the search did not return any results.">Sen resultados</string>
+  <string name="areYouSure" comment="This is shown in confirmation dialogs.">Estás seguro?</string>
+  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak.">Perderás a túa secuencia actual e o teu resultado gardarase.</string>
+  <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet">Non hai nada que amosar. Xoga unhas quendas de Treboada</string>
+  <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Compartir este crebacabezas</string>
+  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Compartir a URL da partida</string>
+  <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Compartir PGN</string>
+  <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">Compartir a posición coma FEN</string>
+  <string name="showVariations" comment="Shown in the analysis screen.">Amosar variantes</string>
+  <string name="hideVariation" comment="Shown in the analysis screen.">Ocultar variantes</string>
+  <string name="showComments" comment="Shown in the analysis screen.">Amosar comentarios</string>
+  <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Queres rematar esta quenda?</string>
+  <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Non aparece nada. Por favor, cambia os filtros</string>
+  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Cancelar a proposta de cambio</string>
+  <string name="cancelDrawOffer" comment="Menu action that cancels a previous draw offer">Cancelar a oferta de táboas</string>
+  <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Agardando un rival...</string>
+  <string name="blindfoldMode" comment="This button toggles blindfold mode">Á cega</string>
+  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Presentadores en directo</string>
+  <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Unirse a unha partida</string>
+  <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Borrar a xogada gardada</string>
+  <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Algo foi mal.</string>
 </resources>
