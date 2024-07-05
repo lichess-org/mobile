@@ -739,7 +739,8 @@ class _GameBottomBar extends ConsumerWidget {
           ),
         if (gameState.game.me?.proposingTakeback == true)
           BottomSheetAction(
-            makeLabel: (context) => const Text('Cancel takeback offer'),
+            makeLabel: (context) =>
+                Text(context.l10n.mobileCancelTakebackOffer),
             isDestructiveAction: true,
             onPressed: (context) {
               ref
@@ -749,7 +750,7 @@ class _GameBottomBar extends ConsumerWidget {
           ),
         if (gameState.game.me?.offeringDraw == true)
           BottomSheetAction(
-            makeLabel: (context) => const Text('Cancel draw offer'),
+            makeLabel: (context) => Text(context.l10n.mobileCancelDrawOffer),
             isDestructiveAction: true,
             onPressed: (context) {
               ref
@@ -856,7 +857,7 @@ class _GameBottomBar extends ConsumerWidget {
     final result = await showAdaptiveDialog<bool>(
       context: context,
       builder: (context) => YesNoDialog(
-        title: const Text('Are you sure?'),
+        title: Text(context.l10n.mobileAreYouSure),
         content: description,
         onYes: () {
           return Navigator.of(context).pop(true);

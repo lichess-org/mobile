@@ -200,8 +200,8 @@ class _Body extends ConsumerWidget {
                   ),
                 ),
               ] else
-                const Center(
-                  child: Text('Nothing to show. Play some runs of storm'),
+                Center(
+                  child: Text(context.l10n.mobilePuzzleStormNothingToShow),
                 ),
             ],
           ),

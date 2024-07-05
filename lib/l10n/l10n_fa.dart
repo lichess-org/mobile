@@ -7,6 +7,122 @@ class AppLocalizationsFa extends AppLocalizations {
   AppLocalizationsFa([String locale = 'fa']) : super(locale);
 
   @override
+  String get mobileHomeTab => 'خانه';
+
+  @override
+  String get mobilePuzzlesTab => 'معماها';
+
+  @override
+  String get mobileToolsTab => 'ابزارها';
+
+  @override
+  String get mobileWatchTab => 'تماشا';
+
+  @override
+  String get mobileSettingsTab => 'تنظیمات';
+
+  @override
+  String get mobileMustBeLoggedIn => 'You must be logged in to view this page.';
+
+  @override
+  String get mobileSystemColors => 'System colors';
+
+  @override
+  String get mobileFeedbackButton => 'Feedback';
+
+  @override
+  String get mobileOkButton => 'OK';
+
+  @override
+  String get mobileSettingsHapticFeedback => 'Haptic feedback';
+
+  @override
+  String get mobileSettingsImmersiveMode => 'Immersive mode';
+
+  @override
+  String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.';
+
+  @override
+  String get mobileNotFollowingAnyUser => 'You are not following any user.';
+
+  @override
+  String get mobileAllGames => 'All games';
+
+  @override
+  String get mobileRecentSearches => 'Recent searches';
+
+  @override
+  String get mobileClearButton => 'Clear';
+
+  @override
+  String mobilePlayersMatchingSearchTerm(String param) {
+    return 'Players with \"$param\"';
+  }
+
+  @override
+  String get mobileNoSearchResults => 'No results';
+
+  @override
+  String get mobileAreYouSure => 'Are you sure?';
+
+  @override
+  String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
+
+  @override
+  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of storm';
+
+  @override
+  String get mobileSharePuzzle => 'Share this puzzle';
+
+  @override
+  String get mobileShareGameURL => 'Share game URL';
+
+  @override
+  String get mobileShareGamePGN => 'Share PGN';
+
+  @override
+  String get mobileSharePositionAsFEN => 'Share position as FEN';
+
+  @override
+  String get mobileShowVariations => 'Show variations';
+
+  @override
+  String get mobileHideVariation => 'Hide variation';
+
+  @override
+  String get mobileShowComments => 'Show comments';
+
+  @override
+  String get mobilePuzzleStormConfirmEndRun => 'Do you want to end this run?';
+
+  @override
+  String get mobilePuzzleStormFilterNothingToShow => 'Nothing to show, please change the filters';
+
+  @override
+  String get mobileCancelTakebackOffer => 'Cancel takeback offer';
+
+  @override
+  String get mobileCancelDrawOffer => 'Cancel draw offer';
+
+  @override
+  String get mobileWaitingForOpponentToJoin => 'Waiting for opponent to join...';
+
+  @override
+  String get mobileBlindfoldMode => 'Blindfold';
+
+  @override
+  String get mobileLiveStreamers => 'Live streamers';
+
+  @override
+  String get mobileCustomGameJoinAGame => 'Join a game';
+
+  @override
+  String get mobileCorrespondenceClearSavedMove => 'Clear saved move';
+
+  @override
+  String get mobileSomethingWentWrong => 'Something went wrong.';
+
+  @override
   String get activityActivity => 'فعالیت';
 
   @override
@@ -2900,7 +3016,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get streamersMenu => 'بَرخَط-محتواسازها';
 
   @override
-  String get mobileApp => 'برنامه ی موبایل';
+  String get mobileApp => 'گوشی‌افزار';
 
   @override
   String get webmasters => 'وبداران';
@@ -3238,7 +3354,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get playChessEverywhere => 'همه جا شطرنج بازی کنید';
 
   @override
-  String get asFreeAsLichess => 'رایگان به مانند لیچس';
+  String get asFreeAsLichess => 'کاملا رایگان';
 
   @override
   String get builtForTheLoveOfChessNotMoney => 'ساخته شده با عشق به شطرنج نه پول';
@@ -3262,7 +3378,7 @@ class AppLocalizationsFa extends AppLocalizations {
   String get correspondenceChess => 'شطرنج مکاتبه ای';
 
   @override
-  String get onlineAndOfflinePlay => 'بازی کردن بَرخط و بُرون‌خط';
+  String get onlineAndOfflinePlay => 'بازی بَرخط و بُرون‌خط';
 
   @override
   String get viewTheSolution => 'دیدن راهِ حل';
@@ -4353,8 +4469,8 @@ class AppLocalizationsFa extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'در $count  زبان‌ها موجود است',
-      one: 'در $count  زبان‌ها موجود است',
+      other: 'در $count زبان موجود است!',
+      one: 'در $count زبان موجود است!',
     );
     return '$_temp0';
   }

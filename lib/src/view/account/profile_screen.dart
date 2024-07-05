@@ -53,8 +53,8 @@ class ProfileScreen extends ConsumerWidget {
       body: account.when(
         data: (user) {
           if (user == null) {
-            return const Center(
-              child: Text('You must be logged in to view this page.'),
+            return Center(
+              child: Text(context.l10n.mobileMustBeLoggedIn),
             );
           }
           return ListView(
@@ -100,8 +100,8 @@ class ProfileScreen extends ConsumerWidget {
       child: account.when(
         data: (user) {
           if (user == null) {
-            return const Center(
-              child: Text('You must be logged in to view this page.'),
+            return Center(
+              child: Text(context.l10n.mobileMustBeLoggedIn),
             );
           }
           return SafeArea(

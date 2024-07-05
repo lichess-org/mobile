@@ -22,15 +22,15 @@ enum BottomTab {
   String label(AppLocalizations strings) {
     switch (this) {
       case BottomTab.home:
-        return 'Home';
+        return strings.mobileHomeTab;
       case BottomTab.puzzles:
-        return 'Puzzles';
+        return strings.mobilePuzzlesTab;
       case BottomTab.tools:
-        return 'Tools';
+        return strings.mobileToolsTab;
       case BottomTab.watch:
-        return 'Watch';
+        return strings.mobileWatchTab;
       case BottomTab.settings:
-        return 'Settings';
+        return strings.mobileSettingsTab;
     }
   }
 
@@ -265,31 +265,31 @@ Widget _iOSTabBuilder(BuildContext context, int index) {
   switch (index) {
     case 0:
       return CupertinoTabView(
-        defaultTitle: 'Home',
+        defaultTitle: context.l10n.mobileHomeTab,
         navigatorKey: homeNavigatorKey,
         builder: (context) => const HomeTabScreen(),
       );
     case 1:
       return CupertinoTabView(
-        defaultTitle: context.l10n.puzzles,
+        defaultTitle: context.l10n.mobilePuzzlesTab,
         navigatorKey: puzzlesNavigatorKey,
         builder: (context) => const PuzzleTabScreen(),
       );
     case 2:
       return CupertinoTabView(
-        defaultTitle: context.l10n.tools,
+        defaultTitle: context.l10n.mobileToolsTab,
         navigatorKey: toolsNavigatorKey,
         builder: (context) => const ToolsTabScreen(),
       );
     case 3:
       return CupertinoTabView(
-        defaultTitle: context.l10n.watch,
+        defaultTitle: context.l10n.mobileWatchTab,
         navigatorKey: watchNavigatorKey,
         builder: (context) => const WatchTabScreen(),
       );
     case 4:
       return CupertinoTabView(
-        defaultTitle: context.l10n.settingsSettings,
+        defaultTitle: context.l10n.mobileSettingsTab,
         navigatorKey: settingsNavigatorKey,
         builder: (context) => const SettingsScreen(),
       );

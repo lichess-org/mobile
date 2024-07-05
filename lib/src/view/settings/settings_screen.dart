@@ -230,7 +230,7 @@ class _Body extends ConsumerWidget {
               data: (version) => version != null && version.sdkInt >= 31
                   ? SwitchSettingTile(
                       leading: const Icon(Icons.colorize),
-                      title: const Text('System colors'),
+                      title: Text(context.l10n.mobileSystemColors),
                       value: hasSystemColors,
                       onChanged: (value) {
                         ref
@@ -322,7 +322,7 @@ class _Body extends ConsumerWidget {
           ),
           PlatformListTile(
             leading: const Icon(Icons.feedback),
-            title: const Text('Feedback'),
+            title: Text(context.l10n.mobileFeedbackButton),
             trailing: Theme.of(context).platform == TargetPlatform.iOS
                 ? const CupertinoListTileChevron()
                 : null,
@@ -443,7 +443,7 @@ class _Body extends ConsumerWidget {
                 style: TextButton.styleFrom(
                   textStyle: Theme.of(context).textTheme.labelLarge,
                 ),
-                child: const Text('OK'),
+                child: Text(context.l10n.mobileOkButton),
                 onPressed: () async {
                   Navigator.of(context).pop();
                   await ref.read(authControllerProvider.notifier).signOut();

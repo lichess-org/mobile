@@ -52,7 +52,7 @@ class _Body extends ConsumerWidget {
             showDivider: false,
             children: [
               SwitchSettingTile(
-                title: const Text('Haptic feedback'),
+                title: Text(context.l10n.mobileSettingsHapticFeedback),
                 value: boardPrefs.hapticFeedback,
                 onChanged: (value) {
                   ref
@@ -65,9 +65,9 @@ class _Body extends ConsumerWidget {
                 androidVersionAsync.maybeWhen(
                   data: (version) => version != null && version.sdkInt >= 29
                       ? SwitchSettingTile(
-                          title: const Text('Immersive mode'),
-                          subtitle: const Text(
-                            '''Hide system UI while playing. Use this if you are bothered by the system's navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.''',
+                          title: Text(context.l10n.mobileSettingsImmersiveMode),
+                          subtitle: Text(
+                            context.l10n.mobileSettingsImmersiveModeSubtitle,
                             textAlign: TextAlign.justify,
                             maxLines: 5,
                           ),

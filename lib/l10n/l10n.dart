@@ -186,7 +186,7 @@ abstract class AppLocalizations {
     Locale('nn'),
     Locale('pl'),
     Locale('pt'),
-    Locale('pt', 'BR'),
+    Locale('pt', 'PT'),
     Locale('ro'),
     Locale('ru'),
     Locale('sk'),
@@ -201,6 +201,234 @@ abstract class AppLocalizations {
     Locale('zh'),
     Locale('zh', 'TW')
   ];
+
+  /// No description provided for @mobileHomeTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get mobileHomeTab;
+
+  /// No description provided for @mobilePuzzlesTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Puzzles'**
+  String get mobilePuzzlesTab;
+
+  /// No description provided for @mobileToolsTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Tools'**
+  String get mobileToolsTab;
+
+  /// No description provided for @mobileWatchTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Watch'**
+  String get mobileWatchTab;
+
+  /// No description provided for @mobileSettingsTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get mobileSettingsTab;
+
+  /// No description provided for @mobileMustBeLoggedIn.
+  ///
+  /// In en, this message translates to:
+  /// **'You must be logged in to view this page.'**
+  String get mobileMustBeLoggedIn;
+
+  /// No description provided for @mobileSystemColors.
+  ///
+  /// In en, this message translates to:
+  /// **'System colors'**
+  String get mobileSystemColors;
+
+  /// No description provided for @mobileFeedbackButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Feedback'**
+  String get mobileFeedbackButton;
+
+  /// No description provided for @mobileOkButton.
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get mobileOkButton;
+
+  /// No description provided for @mobileSettingsHapticFeedback.
+  ///
+  /// In en, this message translates to:
+  /// **'Haptic feedback'**
+  String get mobileSettingsHapticFeedback;
+
+  /// No description provided for @mobileSettingsImmersiveMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Immersive mode'**
+  String get mobileSettingsImmersiveMode;
+
+  /// No description provided for @mobileSettingsImmersiveModeSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.'**
+  String get mobileSettingsImmersiveModeSubtitle;
+
+  /// No description provided for @mobileNotFollowingAnyUser.
+  ///
+  /// In en, this message translates to:
+  /// **'You are not following any user.'**
+  String get mobileNotFollowingAnyUser;
+
+  /// No description provided for @mobileAllGames.
+  ///
+  /// In en, this message translates to:
+  /// **'All games'**
+  String get mobileAllGames;
+
+  /// No description provided for @mobileRecentSearches.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent searches'**
+  String get mobileRecentSearches;
+
+  /// No description provided for @mobileClearButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get mobileClearButton;
+
+  /// No description provided for @mobilePlayersMatchingSearchTerm.
+  ///
+  /// In en, this message translates to:
+  /// **'Players with \"{param}\"'**
+  String mobilePlayersMatchingSearchTerm(String param);
+
+  /// No description provided for @mobileNoSearchResults.
+  ///
+  /// In en, this message translates to:
+  /// **'No results'**
+  String get mobileNoSearchResults;
+
+  /// No description provided for @mobileAreYouSure.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure?'**
+  String get mobileAreYouSure;
+
+  /// No description provided for @mobilePuzzleStreakAbortWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'You will lose your current streak and your score will be saved.'**
+  String get mobilePuzzleStreakAbortWarning;
+
+  /// No description provided for @mobilePuzzleStormNothingToShow.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing to show. Play some runs of storm'**
+  String get mobilePuzzleStormNothingToShow;
+
+  /// No description provided for @mobileSharePuzzle.
+  ///
+  /// In en, this message translates to:
+  /// **'Share this puzzle'**
+  String get mobileSharePuzzle;
+
+  /// No description provided for @mobileShareGameURL.
+  ///
+  /// In en, this message translates to:
+  /// **'Share game URL'**
+  String get mobileShareGameURL;
+
+  /// No description provided for @mobileShareGamePGN.
+  ///
+  /// In en, this message translates to:
+  /// **'Share PGN'**
+  String get mobileShareGamePGN;
+
+  /// No description provided for @mobileSharePositionAsFEN.
+  ///
+  /// In en, this message translates to:
+  /// **'Share position as FEN'**
+  String get mobileSharePositionAsFEN;
+
+  /// No description provided for @mobileShowVariations.
+  ///
+  /// In en, this message translates to:
+  /// **'Show variations'**
+  String get mobileShowVariations;
+
+  /// No description provided for @mobileHideVariation.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide variation'**
+  String get mobileHideVariation;
+
+  /// No description provided for @mobileShowComments.
+  ///
+  /// In en, this message translates to:
+  /// **'Show comments'**
+  String get mobileShowComments;
+
+  /// No description provided for @mobilePuzzleStormConfirmEndRun.
+  ///
+  /// In en, this message translates to:
+  /// **'Do you want to end this run?'**
+  String get mobilePuzzleStormConfirmEndRun;
+
+  /// No description provided for @mobilePuzzleStormFilterNothingToShow.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing to show, please change the filters'**
+  String get mobilePuzzleStormFilterNothingToShow;
+
+  /// No description provided for @mobileCancelTakebackOffer.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel takeback offer'**
+  String get mobileCancelTakebackOffer;
+
+  /// No description provided for @mobileCancelDrawOffer.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel draw offer'**
+  String get mobileCancelDrawOffer;
+
+  /// No description provided for @mobileWaitingForOpponentToJoin.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for opponent to join...'**
+  String get mobileWaitingForOpponentToJoin;
+
+  /// No description provided for @mobileBlindfoldMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Blindfold'**
+  String get mobileBlindfoldMode;
+
+  /// No description provided for @mobileLiveStreamers.
+  ///
+  /// In en, this message translates to:
+  /// **'Live streamers'**
+  String get mobileLiveStreamers;
+
+  /// No description provided for @mobileCustomGameJoinAGame.
+  ///
+  /// In en, this message translates to:
+  /// **'Join a game'**
+  String get mobileCustomGameJoinAGame;
+
+  /// No description provided for @mobileCorrespondenceClearSavedMove.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear saved move'**
+  String get mobileCorrespondenceClearSavedMove;
+
+  /// No description provided for @mobileSomethingWentWrong.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong.'**
+  String get mobileSomethingWentWrong;
 
   /// No description provided for @activityActivity.
   ///
@@ -7850,7 +8078,7 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
    }
     case 'pt': {
   switch (locale.countryCode) {
-    case 'BR': return AppLocalizationsPtBr();
+    case 'PT': return AppLocalizationsPtPt();
    }
   break;
    }

@@ -161,7 +161,7 @@ class _EditPgnTagsForm extends ConsumerWidget {
                                 .makeGamePgn(),
                           );
                         },
-                        child: const Text('Share PGN'),
+                        child: Text(context.l10n.mobileShareGamePGN),
                       );
                     },
                   ),
