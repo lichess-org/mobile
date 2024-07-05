@@ -160,11 +160,17 @@ class PuzzleController extends _$PuzzleController {
   void userNext() {
     _viewSolutionTimer?.cancel();
     _goToNextNode(replaying: true);
+    state = state.copyWith(
+      viewedSolutionRecently: false,
+    );
   }
 
   void userPrevious() {
     _viewSolutionTimer?.cancel();
     _goToPreviousNode(replaying: true);
+    state = state.copyWith(
+      viewedSolutionRecently: false,
+    );
   }
 
   void viewSolution() {
@@ -180,17 +186,17 @@ class PuzzleController extends _$PuzzleController {
 
     state = state.copyWith(
       mode: PuzzleMode.view,
-      viewedSolutionRecently: true,
     );
 
     Timer(const Duration(milliseconds: 800), () {
       _goToNextNode();
-    });
 
-    Timer(const Duration(seconds: 3), () {
-      state = state.copyWith(
-        viewedSolutionRecently: false,
-      );
+      if (state.canGoNext) {
+        state = state.copyWith(viewedSolutionRecently: true);
+        Timer(const Duration(seconds: 5), () {
+          state = state.copyWith(viewedSolutionRecently: false);
+        });
+      }
     });
   }
 
