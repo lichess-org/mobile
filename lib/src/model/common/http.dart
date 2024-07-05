@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math' as math;
 
+import 'package:collection/collection.dart';
 import 'package:cronet_http/cronet_http.dart';
 import 'package:cupertino_http/cupertino_http.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -284,6 +285,19 @@ class LichessClient implements Client {
   }
 }
 
+/// An exception thrown when the server responds with a status code >= 400.
+class ServerException extends ClientException {
+  final int statusCode;
+  final Map<String, dynamic>? jsonError;
+
+  ServerException(
+    this.statusCode,
+    super.message,
+    Uri super.url,
+    this.jsonError,
+  );
+}
+
 /// Throws an error if [response] is not successful.
 void _checkResponseSuccess(Uri url, Response response) {
   if (response.statusCode < 400) return;
@@ -291,7 +305,21 @@ void _checkResponseSuccess(Uri url, Response response) {
   if (response.reasonPhrase != null) {
     message = '$message: ${response.reasonPhrase}';
   }
-  throw ClientException('$message.', url);
+  Map<String, dynamic>? jsonError;
+  if (response.body.isNotEmpty) {
+    try {
+      final json = jsonDecode(response.body);
+      if (json is Map<String, dynamic>) {
+        jsonError = json;
+        if (json.containsKey('error')) {
+          message = '$message: ${json['error']}';
+        }
+      }
+    } catch (e) {
+      _logger.warning('Could not decode error response from $url: $e');
+    }
+  }
+  throw ServerException(response.statusCode, '$message.', url, jsonError);
 }
 
 /// A JSON decoder that decodes UTF-8 bytes.
@@ -327,7 +355,7 @@ extension ClientExtension on Client {
     } catch (e, st) {
       _logger.severe('Could not read json object as $T: $e', e, st);
       throw ClientException(
-        'Could not read json object as $T: $e',
+        'Could not read json object as $T: $e\n$st',
         url,
       );
     }
@@ -387,6 +415,7 @@ extension ClientExtension on Client {
     Uri url, {
     Map<String, String>? headers,
     required T Function(Map<String, dynamic>) mapper,
+    int Function(T, T)? compare,
   }) async {
     final response = await get(url, headers: headers);
     _checkResponseSuccess(url, response);
@@ -394,11 +423,16 @@ extension ClientExtension on Client {
       final json = LineSplitter.split(utf8.decode(response.bodyBytes))
           .where((e) => e.isNotEmpty && e != '\n')
           .map((e) => jsonDecode(e) as Map<String, dynamic>);
-      return IList(json.map(mapper));
+      final result = json.map(mapper);
+      if (compare == null) {
+        return IList(result);
+      } else {
+        return IList(result.sorted(compare));
+      }
     } catch (e) {
       _logger.severe('Could not read nd-json objects as List<$T>.');
       throw ClientException(
-        'Could not read nd-json objects as List<$T>.',
+        'Could not read nd-json objects as List<$T>: $e',
         url,
       );
     }

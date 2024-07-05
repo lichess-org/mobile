@@ -109,8 +109,7 @@ const testUserResponse = '''
     "country": "France",
     "location": "Lille",
     "bio": "test bio",
-    "firstName": "John",
-    "lastName": "Doe",
+    "realName": "John Doe",
     "fideRating": 1800,
     "links": "http://test.com"
   }

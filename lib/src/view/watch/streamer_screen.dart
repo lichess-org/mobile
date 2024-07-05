@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/model/user/streamer.dart';
 import 'package:lichess_mobile/src/styles/social_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -21,7 +22,7 @@ class StreamerScreen extends StatelessWidget {
   Widget _buildAndroid(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Live Streamers'),
+        title: Text(context.l10n.mobileLiveStreamers),
       ),
       body: ListView(
         children: [
@@ -44,8 +45,8 @@ class StreamerScreen extends StatelessWidget {
 
   Widget _buildIos(BuildContext context) {
     return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(
-        middle: Text('Live Streamers'),
+      navigationBar: CupertinoNavigationBar(
+        middle: Text(context.l10n.mobileLiveStreamers),
       ),
       child: CustomScrollView(
         slivers: [

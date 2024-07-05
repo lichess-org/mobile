@@ -71,7 +71,7 @@ class GameSettings extends ConsumerWidget {
         },
       ),
       SwitchSettingTile(
-        title: const Text('Haptic feedback'),
+        title: Text(context.l10n.mobileSettingsHapticFeedback),
         value: boardPrefs.hapticFeedback,
         onChanged: (value) {
           ref.read(boardPreferencesProvider.notifier).toggleHapticFeedback();
@@ -108,7 +108,7 @@ class GameSettings extends ConsumerWidget {
         },
       ),
       SwitchSettingTile(
-        title: const Text('Blindfold'),
+        title: Text(context.l10n.mobileBlindfoldMode),
         value: gamePrefs.blindfoldMode ?? false,
         onChanged: (value) {
           ref.read(gamePreferencesProvider.notifier).toggleBlindfoldMode();

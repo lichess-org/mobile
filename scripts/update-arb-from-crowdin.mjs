@@ -16,12 +16,34 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 
 const tmpDir = `${__dirname}/tmp/translations`
 const destDir = `${__dirname}/../lib/l10n`
+
 const lilaSourcePath = `${tmpDir}/source`
 const lilaTranslationsPath = `${tmpDir}/[lichess-org.lila] master/translation/dest`
+
+const mobileSourcePath = `${__dirname}/../translation/source`
+const mobileTranslationsPath = `${tmpDir}/[lichess-org.mobile] main/translation/dest`
+
 const unzipMaxBufferSize = 1024 * 1024 * 10 // Set maxbuffer to 10MB to avoid errors when default 1MB used
 
 // selection of lila translation modules to include
-const modules = ['activity', 'contact', 'site', 'patron', 'preferences', 'puzzle', 'puzzleTheme', 'perfStat', 'search', 'settings', 'streamer', 'storm', 'study']
+const modules = [
+  'mobile', // mobile is not a module in crowdin, but another source of translations, we'll treat it as a module here for simplicity
+  'activity',
+  'broadcast',
+  'challenge',
+  'contact',
+  'patron',
+  'perfStat',
+  'preferences',
+  'puzzle',
+  'puzzleTheme',
+  'search',
+  'settings',
+  'site',
+  'storm',
+  'streamer',
+  'study',
+]
 
 // list of keys (per module) to include in the ARB file
 // If a module is not listed here, all keys will be included
@@ -31,6 +53,7 @@ const whiteLists = {
   'search': ['search'],
   'streamer': ['lichessStreamers'],
   'study': ['start', 'shareAndExport'],
+  'broadcast': ['broadcasts', 'startDate'],
 }
 
 
@@ -163,7 +186,7 @@ async function downloadLilaSourcesTo(dir) {
   console.log(colors.green('  Download complete.'))
 }
 
-function loadTranslations(dir, locale) {
+function loadLilaTranslations(dir, locale) {
   if (locale === 'en-GB')
     return parseStringPromise(
       readFileSync(`${lilaSourcePath}/${dir}.xml`)
@@ -173,6 +196,18 @@ function loadTranslations(dir, locale) {
       readFileSync(`${lilaTranslationsPath}/${dir}/${locale}.xml`)
     )
 }
+
+function loadMobileTranslation(locale) {
+  if (locale === 'en-GB')
+    return parseStringPromise(
+      readFileSync(`${mobileSourcePath}/mobile.xml`)
+    )
+  else
+    return parseStringPromise(
+      readFileSync(`${mobileTranslationsPath}/${locale}_mobile.xml`)
+    )
+}
+
 
 // in lila strings a percent sign is escaped with a double percent sign
 function unescape(str) {
@@ -249,17 +284,6 @@ function transformTranslations(data, locale, module, makeTemplate = false) {
     };
     let pluralString = '{count, plural,'
 
-    // add a zero quantity item if it doesn't exist
-    // to avoid translations like "0 players"
-    if (!plural.item.some((item) => item.$.quantity === 'zero')) {
-      const oneItem = plural.item.find((item) => item.$.quantity === 'one')
-      if (oneItem) {
-        plural.item.unshift({
-          $: { quantity: 'zero' },
-          _: oneItem._
-        })
-      }
-    }
     plural.item.forEach((child) => {
       const string = unescape(child._);
       let transformedString;
@@ -311,7 +335,11 @@ async function loadXml(localesToLoad, module) {
   for (const locale of localesToLoad) {
     console.log(colors.blue(`Loading translations for ${colors.bold(locale)}...`))
     try {
-      sectionXml[locale] = await loadTranslations(module, locale)
+      if (module === 'mobile') {
+        sectionXml[locale] = await loadMobileTranslation(locale)
+      } else {
+        sectionXml[locale] = await loadLilaTranslations(module, locale)
+      }
     } catch (_) {
       console.warn(colors.yellow(`Could not load ${module} translations for locale: ${locale}`))
     }

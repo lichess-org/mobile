@@ -7,6 +7,122 @@ class AppLocalizationsEl extends AppLocalizations {
   AppLocalizationsEl([String locale = 'el']) : super(locale);
 
   @override
+  String get mobileHomeTab => 'Home';
+
+  @override
+  String get mobilePuzzlesTab => 'Puzzles';
+
+  @override
+  String get mobileToolsTab => 'Tools';
+
+  @override
+  String get mobileWatchTab => 'Watch';
+
+  @override
+  String get mobileSettingsTab => 'Settings';
+
+  @override
+  String get mobileMustBeLoggedIn => 'You must be logged in to view this page.';
+
+  @override
+  String get mobileSystemColors => 'System colors';
+
+  @override
+  String get mobileFeedbackButton => 'Feedback';
+
+  @override
+  String get mobileOkButton => 'OK';
+
+  @override
+  String get mobileSettingsHapticFeedback => 'Haptic feedback';
+
+  @override
+  String get mobileSettingsImmersiveMode => 'Immersive mode';
+
+  @override
+  String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.';
+
+  @override
+  String get mobileNotFollowingAnyUser => 'You are not following any user.';
+
+  @override
+  String get mobileAllGames => 'All games';
+
+  @override
+  String get mobileRecentSearches => 'Recent searches';
+
+  @override
+  String get mobileClearButton => 'Clear';
+
+  @override
+  String mobilePlayersMatchingSearchTerm(String param) {
+    return 'Players with \"$param\"';
+  }
+
+  @override
+  String get mobileNoSearchResults => 'No results';
+
+  @override
+  String get mobileAreYouSure => 'Are you sure?';
+
+  @override
+  String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
+
+  @override
+  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of storm';
+
+  @override
+  String get mobileSharePuzzle => 'Share this puzzle';
+
+  @override
+  String get mobileShareGameURL => 'Share game URL';
+
+  @override
+  String get mobileShareGamePGN => 'Share PGN';
+
+  @override
+  String get mobileSharePositionAsFEN => 'Share position as FEN';
+
+  @override
+  String get mobileShowVariations => 'Show variations';
+
+  @override
+  String get mobileHideVariation => 'Hide variation';
+
+  @override
+  String get mobileShowComments => 'Show comments';
+
+  @override
+  String get mobilePuzzleStormConfirmEndRun => 'Do you want to end this run?';
+
+  @override
+  String get mobilePuzzleStormFilterNothingToShow => 'Nothing to show, please change the filters';
+
+  @override
+  String get mobileCancelTakebackOffer => 'Cancel takeback offer';
+
+  @override
+  String get mobileCancelDrawOffer => 'Cancel draw offer';
+
+  @override
+  String get mobileWaitingForOpponentToJoin => 'Waiting for opponent to join...';
+
+  @override
+  String get mobileBlindfoldMode => 'Blindfold';
+
+  @override
+  String get mobileLiveStreamers => 'Live streamers';
+
+  @override
+  String get mobileCustomGameJoinAGame => 'Join a game';
+
+  @override
+  String get mobileCorrespondenceClearSavedMove => 'Clear saved move';
+
+  @override
+  String get mobileSomethingWentWrong => 'Something went wrong.';
+
+  @override
   String get activityActivity => 'Δραστηριότητα';
 
   @override
@@ -27,7 +143,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Υποστήριξε το lichess για $count μήνες ως $param2',
       one: 'Υποστήριξε το lichess για $count μήνα ως $param2',
-      zero: 'Υποστήριξε το lichess για $count μήνα ως $param2',
     );
     return '$_temp0';
   }
@@ -39,7 +154,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Εξασκήθηκε $count θέσεις σε $param2',
       one: 'Εξασκήθηκε $count θέση σε $param2',
-      zero: 'Εξασκήθηκε $count θέση σε $param2',
     );
     return '$_temp0';
   }
@@ -51,7 +165,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Έλυσε $count τακτικούς γρίφους',
       one: 'Έλυσε $count τακτικό γρίφο',
-      zero: 'Έλυσε $count τακτικό γρίφο',
     );
     return '$_temp0';
   }
@@ -63,7 +176,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Έπαιξε $count παρτίδες $param2',
       one: 'Έπαιξε $count παρτίδα $param2',
-      zero: 'Έπαιξε $count παρτίδα $param2',
     );
     return '$_temp0';
   }
@@ -75,7 +187,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Δημοσίευσε $count μηνύματα στο $param2',
       one: 'Δημοσίευσε $count μήνυμα στο $param2',
-      zero: 'Δημοσίευσε $count μήνυμα στο $param2',
     );
     return '$_temp0';
   }
@@ -87,7 +198,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Έπαιξε $count κινήσεις',
       one: 'Έπαιξε $count κίνηση',
-      zero: 'Έπαιξε $count κίνηση',
     );
     return '$_temp0';
   }
@@ -99,7 +209,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'σε $count παρτίδες αλληλογραφίας',
       one: 'σε $count παρτίδα αλληλογραφίας',
-      zero: 'σε $count παρτίδα αλληλογραφίας',
     );
     return '$_temp0';
   }
@@ -111,7 +220,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Ολοκλήρωσε $count παρτίδες αλληλογραφίας',
       one: 'Ολοκλήρωσε $count παρτίδα αλληλογραφίας',
-      zero: 'Ολοκλήρωσε $count παρτίδα αλληλογραφίας',
     );
     return '$_temp0';
   }
@@ -123,7 +231,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Άρχισε να ακολουθεί $count παίκτες',
       one: 'Άρχισε να ακολουθεί $count παίκτη',
-      zero: 'Άρχισε να ακολουθεί $count παίκτη',
     );
     return '$_temp0';
   }
@@ -135,7 +242,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Απέκτησε $count νέους ακόλουθους',
       one: 'Απέκτησε $count νέο ακόλουθο',
-      zero: 'Απέκτησε $count νέο ακόλουθο',
     );
     return '$_temp0';
   }
@@ -147,7 +253,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Φιλοξένησε $count σιμουλτανέ',
       one: 'Φιλοξένησε $count σιμουλτανέ',
-      zero: 'Φιλοξένησε $count σιμουλτανέ',
     );
     return '$_temp0';
   }
@@ -159,7 +264,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Συμμετείχε σε $count σιμουλτανέ',
       one: 'Συμμετείχε σε $count σιμουλτανέ',
-      zero: 'Συμμετείχε σε $count σιμουλτανέ',
     );
     return '$_temp0';
   }
@@ -171,7 +275,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Δημιούργησε $count νέες μελέτες',
       one: 'Δημιούργησε $count νέα μελέτη',
-      zero: 'Δημιούργησε $count νέα μελέτη',
     );
     return '$_temp0';
   }
@@ -183,7 +286,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Αγωνίστηκε σε $count τουρνουά',
       one: 'Αγωνίστηκε σε $count τουρνουά',
-      zero: 'Αγωνίστηκε σε $count τουρνουά',
     );
     return '$_temp0';
   }
@@ -195,7 +297,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Κατατάχθηκε #$count (κορυφαίος $param2%) με $param3 παιχνίδια σε $param4',
       one: 'Κατατάχθηκε #$count (κορυφαίος $param2%) με $param3 παιχνίδι σε $param4',
-      zero: 'Κατατάχθηκε #$count (κορυφαίος $param2%) με $param3 παιχνίδι σε $param4',
     );
     return '$_temp0';
   }
@@ -207,7 +308,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Αγωνίστηκε σε $count ελβετικά τουρνουά',
       one: 'Αγωνίστηκε σε $count ελβετικό τουρνουά',
-      zero: 'Αγωνίστηκε σε $count ελβετικό τουρνουά',
     );
     return '$_temp0';
   }
@@ -219,16 +319,1097 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Έγινε μέλος $count ομαδών',
       one: 'Έγινε μέλος $count ομάδας',
-      zero: 'Έγινε μέλος $count ομάδας',
     );
     return '$_temp0';
   }
+
+  @override
+  String get broadcastBroadcasts => 'Αναμεταδόσεις';
+
+  @override
+  String get broadcastStartDate => 'Ημερομηνία έναρξης στη δική σας ζώνη ώρας';
+
+  @override
+  String challengeChallengesX(String param1) {
+    return 'Προκλήσεις: $param1';
+  }
+
+  @override
+  String get challengeChallengeToPlay => 'Προκαλέστε σε παιχνίδι';
+
+  @override
+  String get challengeChallengeDeclined => 'Η πρόκληση απορρίφθηκε';
+
+  @override
+  String get challengeChallengeAccepted => 'Η πρόκληση έγινε δεκτή!';
+
+  @override
+  String get challengeChallengeCanceled => 'Η πρόκληση ακυρώθηκε.';
+
+  @override
+  String get challengeRegisterToSendChallenges => 'Εγγραφείτε για να στείλετε προκλήσεις.';
+
+  @override
+  String challengeYouCannotChallengeX(String param) {
+    return 'Δεν μπορείτε να προκαλέσετε τον $param.';
+  }
+
+  @override
+  String challengeXDoesNotAcceptChallenges(String param) {
+    return '$param δε δέχεται προκλήσεις.';
+  }
+
+  @override
+  String challengeYourXRatingIsTooFarFromY(String param1, String param2) {
+    return 'Η βαθμολογία σας στο $param1 διαφέρει σημαντικά από αυτήν του χρήστη $param2.';
+  }
+
+  @override
+  String challengeCannotChallengeDueToProvisionalXRating(String param) {
+    return 'Δεν είναι δυνατή η πρόκληση λόγω της προσωρινής βαθμολογίας στο $param.';
+  }
+
+  @override
+  String challengeXOnlyAcceptsChallengesFromFriends(String param) {
+    return '$param δέχεται προκλήσεις μόνο από φίλους.';
+  }
+
+  @override
+  String get challengeDeclineGeneric => 'Δε δέχομαι προκλήσεις αυτή τη στιγμή.';
+
+  @override
+  String get challengeDeclineLater => 'Δεν είμαι διαθέσιμος αυτήν τη στιγμή, ρωτήστε με ξανά αργότερα.';
+
+  @override
+  String get challengeDeclineTooFast => 'Αυτός ο χρόνος είναι πολύ γρήγορος για μένα, προκαλέστε με ξανά με έναν πιο αργό.';
+
+  @override
+  String get challengeDeclineTooSlow => 'Αυτός ο χρόνος είναι πολύ αργός για μένα, προκαλέστε με ξανά με έναν πιο γρήγορο.';
+
+  @override
+  String get challengeDeclineTimeControl => 'Δεν δέχομαι προκλήσεις με τέτοιους χρόνους.';
+
+  @override
+  String get challengeDeclineRated => 'Στείλτε μου μία βαθμολογημένη και όχι φιλική πρόκληση.';
+
+  @override
+  String get challengeDeclineCasual => 'Στείλτε μου μία φιλική και όχι βαθμολογημένη πρόκληση.';
+
+  @override
+  String get challengeDeclineStandard => 'Δεν δέχομαι προκλήσεις με παραλλαγές αυτή τη στιγμή.';
+
+  @override
+  String get challengeDeclineVariant => 'Δεν είμαι πρόθυμος να παίξω αυτήν την παραλλαγή αυτή τη στιγμή.';
+
+  @override
+  String get challengeDeclineNoBot => 'Δεν δέχομαι προκλήσεις από bots.';
+
+  @override
+  String get challengeDeclineOnlyBot => 'Δέχομαι προκλήσεις μόνο από bots.';
+
+  @override
+  String get challengeInviteLichessUser => 'Ή προσκαλέστε έναν χρήστη του Lichess:';
 
   @override
   String get contactContact => 'Επικοινωνία';
 
   @override
   String get contactContactLichess => 'Επικοινωνήστε με Lichess';
+
+  @override
+  String get patronDonate => 'Κάντε δωρεά';
+
+  @override
+  String get patronLichessPatron => 'Υποστηρικτής του Lichess';
+
+  @override
+  String perfStatPerfStats(String param) {
+    return 'Στατιστικά $param';
+  }
+
+  @override
+  String get perfStatViewTheGames => 'Προβολή παρτίδων';
+
+  @override
+  String get perfStatProvisional => 'προσωρινή';
+
+  @override
+  String get perfStatNotEnoughRatedGames => 'Δεν έχουν παιχτεί αρκετές βαθμολογημένες παρτίδες ώστε να υπάρξει έμπιστη βαθμολογία.';
+
+  @override
+  String perfStatProgressOverLastXGames(String param) {
+    return 'Εξέλιξη βάσει των τελευταίων $param παρτίδων:';
+  }
+
+  @override
+  String perfStatRatingDeviation(String param) {
+    return 'Απόκλιση βαθμολογίας: $param.';
+  }
+
+  @override
+  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
+    return 'Χαμηλότερη τιμή σημαίνει ότι η βαθμολογία είναι πιο σταθερή. Βαθμολογίες πάνω από $param1 θεωρούνται προσωρινές. Για να συμπεριληφθείτε στην κατάταξη, η βαθμολογία σας πρέπει να είναι κάτω από $param2 (στο κανονικό σκάκι) ή $param3 (στις παραλλαγές).';
+  }
+
+  @override
+  String get perfStatTotalGames => 'Σύνολο παρτίδων';
+
+  @override
+  String get perfStatRatedGames => 'Βαθμολογημένες παρτίδες';
+
+  @override
+  String get perfStatTournamentGames => 'Παρτίδες σε τουρνουά';
+
+  @override
+  String get perfStatBerserkedGames => 'Παρτίδες με berserk';
+
+  @override
+  String get perfStatTimeSpentPlaying => 'Χρόνος που διατέθηκε παίζοντας';
+
+  @override
+  String get perfStatAverageOpponent => 'Μέση αξιολόγηση αντιπάλων';
+
+  @override
+  String get perfStatVictories => 'Νίκες';
+
+  @override
+  String get perfStatDefeats => 'Ήττες';
+
+  @override
+  String get perfStatDisconnections => 'Αποσυνδέσεις';
+
+  @override
+  String get perfStatNotEnoughGames => 'Δεν έχουν παιχτεί αρκετές παρτίδες';
+
+  @override
+  String perfStatHighestRating(String param) {
+    return 'Υψηλότερη βαθμολογία: $param';
+  }
+
+  @override
+  String perfStatLowestRating(String param) {
+    return 'Χαμηλότερη βαθμολογία: $param';
+  }
+
+  @override
+  String perfStatFromXToY(String param1, String param2) {
+    return 'από $param1 έως $param2';
+  }
+
+  @override
+  String get perfStatWinningStreak => 'Συνεχόμενες νίκες';
+
+  @override
+  String get perfStatLosingStreak => 'Συνεχόμενες ήττες';
+
+  @override
+  String perfStatLongestStreak(String param) {
+    return 'Μεγαλύτερο Σερί: $param';
+  }
+
+  @override
+  String perfStatCurrentStreak(String param) {
+    return 'Τρέχον σερί: $param';
+  }
+
+  @override
+  String get perfStatBestRated => 'Καλύτερες αξιολογήσιμες νίκες';
+
+  @override
+  String get perfStatGamesInARow => 'Συνεχόμενες παρτίδες';
+
+  @override
+  String get perfStatLessThanOneHour => 'Διάστημα λιγότερο από μία ώρα μεταξύ των παρτίδων';
+
+  @override
+  String get perfStatMaxTimePlaying => 'Μέγιστος χρόνος που διατέθηκε παίζοντας';
+
+  @override
+  String get perfStatNow => 'τώρα';
+
+  @override
+  String get preferencesPreferences => 'Προτιμήσεις';
+
+  @override
+  String get preferencesDisplay => 'Εμφάνιση';
+
+  @override
+  String get preferencesPrivacy => 'Απόρρητο';
+
+  @override
+  String get preferencesNotifications => 'Ειδοποιήσεις';
+
+  @override
+  String get preferencesPieceAnimation => 'Κίνηση πιονιών';
+
+  @override
+  String get preferencesMaterialDifference => 'Διαφορά υλικού';
+
+  @override
+  String get preferencesBoardHighlights => 'Φωτισμός σκακιέρας (τελευταία κίνηση και σαχ)';
+
+  @override
+  String get preferencesPieceDestinations => 'Προορισμοί κομματιών (έγκυρες κινήσεις και προκινήσεις)';
+
+  @override
+  String get preferencesBoardCoordinates => 'Συντεταγμένες σκακιέρας (A-H, 1-8)';
+
+  @override
+  String get preferencesMoveListWhilePlaying => 'Λίστα κινήσεων κατά τη διάρκεια της παρτίδας';
+
+  @override
+  String get preferencesPgnPieceNotation => 'Εμφάνιση κινήσεων';
+
+  @override
+  String get preferencesChessPieceSymbol => 'Σύμβολο πιονιού στο σκάκι';
+
+  @override
+  String get preferencesPgnLetter => 'Γράμμα (K, Q, R, B, N)';
+
+  @override
+  String get preferencesZenMode => 'Λειτουργία Zεν';
+
+  @override
+  String get preferencesShowPlayerRatings => 'Εμφάνιση αξιολογήσεων παικτών';
+
+  @override
+  String get preferencesShowFlairs => 'Show player flairs';
+
+  @override
+  String get preferencesExplainShowPlayerRatings => 'Αυτό επιτρέπει την απόκρυψη όλων τις βαθμολογίες από την ιστοσελίδα, έτσι ώστε να μπορείτε να επικεντρωθείτε στο σκάκι. Τα παιχνίδια θα αξιολογούνται, η ρύθμιση αυτή επηρεάζει την εμφάνιση μόνο.';
+
+  @override
+  String get preferencesDisplayBoardResizeHandle => 'Εμφάνιση χειριστηρίου αλλαγής μεγέθους σκακιέρας';
+
+  @override
+  String get preferencesOnlyOnInitialPosition => 'Μόνο στην αρχική διάταξη';
+
+  @override
+  String get preferencesInGameOnly => 'Μόνο κατά τη διάρκεια του παιχνιδιού';
+
+  @override
+  String get preferencesChessClock => 'Σκακιστικό χρονόμετρο';
+
+  @override
+  String get preferencesTenthsOfSeconds => 'Δέκατα του δευτερολέπτου';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'Όταν απομένουν < 10 δευτερόλεπτα';
+
+  @override
+  String get preferencesHorizontalGreenProgressBars => 'Οριζόντιες πράσινες γραμμές προόδου';
+
+  @override
+  String get preferencesSoundWhenTimeGetsCritical => 'Ηχητική ειδοποίηση όταν ο χρόνος γίνεται κρίσιμος';
+
+  @override
+  String get preferencesGiveMoreTime => 'Προσθέστε περισσότερο χρόνο';
+
+  @override
+  String get preferencesGameBehavior => 'Συμπεριφορά παιχνιδιού';
+
+  @override
+  String get preferencesHowDoYouMovePieces => 'Πώς θέλετε να μετακινείτε τα κομμάτια;';
+
+  @override
+  String get preferencesClickTwoSquares => 'Κάνοντας κλικ στα δύο τετράγωνα';
+
+  @override
+  String get preferencesDragPiece => 'Σέρνοντας ένα πιόνι';
+
+  @override
+  String get preferencesBothClicksAndDrag => 'Και τα δύο';
+
+  @override
+  String get preferencesPremovesPlayingDuringOpponentTurn => 'Προκινήσεις (παιγμένες κατά τον χρόνο σκέψης του αντιπάλου)';
+
+  @override
+  String get preferencesTakebacksWithOpponentApproval => 'Ανακλήσεις (με έγκριση του αντιπάλου)';
+
+  @override
+  String get preferencesInCasualGamesOnly => 'Μόνο σε φιλικά παιχνίδια';
+
+  @override
+  String get preferencesPromoteToQueenAutomatically => 'Αυτόματη προαγωγή σε βασίλισσα';
+
+  @override
+  String get preferencesExplainPromoteToQueenAutomatically => 'Κρατήστε πατημένο το πλήκτρο <ctrl> ενώ κάνετε την προαγωγή για να απενεργοποιήσετε προσωρινά την αυτόματη προαγωγή';
+
+  @override
+  String get preferencesWhenPremoving => 'Κατά προεπιλογή κίνησης';
+
+  @override
+  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Διεκδικήστε ισοπαλία αυτόματα σε τριπλή επανάληψη';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Όταν απομένουν < 30 δευτερόλεπτα';
+
+  @override
+  String get preferencesMoveConfirmation => 'Επιβεβαίωση κίνησης';
+
+  @override
+  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Μπορεί να απενεργοποιηθεί κατά τη διάρκεια ενός παιχνιδιού με το μενού του ταμπλό';
+
+  @override
+  String get preferencesInCorrespondenceGames => 'Στις παρτίδες δι\' αλληλογραφίας';
+
+  @override
+  String get preferencesCorrespondenceAndUnlimited => 'Δι\' αλληλογραφίας και απεριορίστου χρόνου';
+
+  @override
+  String get preferencesConfirmResignationAndDrawOffers => 'Επιβεβαίωση παραίτησης και προσφοράς ισοπαλίας';
+
+  @override
+  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Μέθοδος ροκέ';
+
+  @override
+  String get preferencesCastleByMovingTwoSquares => 'Ροκέ μετακινώντας τον βασιλιά δύο τετράγωνα';
+
+  @override
+  String get preferencesCastleByMovingOntoTheRook => 'Ροκέ μετακινώντας τον βασιλιά πάνω στον πύργο';
+
+  @override
+  String get preferencesInputMovesWithTheKeyboard => 'Κάντε κινήσεις με το πληκτρολόγιο';
+
+  @override
+  String get preferencesInputMovesWithVoice => 'Εισαγωγή κινήσεων με τη φωνή σας';
+
+  @override
+  String get preferencesSnapArrowsToValidMoves => 'Αγκύρωση βελών σε έγκυρες κινήσεις';
+
+  @override
+  String get preferencesSayGgWpAfterLosingOrDrawing => 'Αποστολή «Good game, well played» (Ωραίο παιχνίδι, καλά παιγμένο) μετά από ήττα ή ισοπαλία';
+
+  @override
+  String get preferencesYourPreferencesHaveBeenSaved => 'Οι προτιμήσεις σας αποθηκεύτηκαν.';
+
+  @override
+  String get preferencesScrollOnTheBoardToReplayMoves => 'Κυλίστε τον δρομέα πάνω στη σκακιέρα για να ξαναδείτε κινήσεις';
+
+  @override
+  String get preferencesCorrespondenceEmailNotification => 'Να δέχομαι ημερήσια ειδοποίηση ηλεκτρονικού ταχυδρομείου για τα παιχνίδια διά αλληλογραφίας μου';
+
+  @override
+  String get preferencesNotifyStreamStart => 'Streamer εκπέμπει ζωντανά';
+
+  @override
+  String get preferencesNotifyInboxMsg => 'Νέο εισερχόμενο μήνυμα';
+
+  @override
+  String get preferencesNotifyForumMention => 'Το σχόλιο του φόρουμ σας αναφέρει';
+
+  @override
+  String get preferencesNotifyInvitedStudy => 'Πρόσκληση μελέτης';
+
+  @override
+  String get preferencesNotifyGameEvent => 'Ενημερώσεις σε παιχνίδια αλληλογραφίας';
+
+  @override
+  String get preferencesNotifyChallenge => 'Προκλήσεις';
+
+  @override
+  String get preferencesNotifyTournamentSoon => 'Το τουρνουά ξεκινά σύντομα';
+
+  @override
+  String get preferencesNotifyTimeAlarm => 'Το ρολόι εξαντλείται στο παιχνίδι αλληλογραφίας';
+
+  @override
+  String get preferencesNotifyBell => 'Ειδοποίηση με καμπανάκι εντός του Lichess';
+
+  @override
+  String get preferencesNotifyPush => 'Ειδοποίηση συσκευής όταν δεν είστε στο Lichess';
+
+  @override
+  String get preferencesNotifyWeb => 'Browser';
+
+  @override
+  String get preferencesNotifyDevice => 'Συσκευή';
+
+  @override
+  String get preferencesBellNotificationSound => 'Ειδοποίηση με ήχο από καμπανάκι';
+
+  @override
+  String get puzzlePuzzles => 'Γρίφοι';
+
+  @override
+  String get puzzlePuzzleThemes => 'Θέματα γρίφων';
+
+  @override
+  String get puzzleRecommended => 'Προτεινόμενα';
+
+  @override
+  String get puzzlePhases => 'Φάσεις';
+
+  @override
+  String get puzzleMotifs => 'Μοτίβα';
+
+  @override
+  String get puzzleAdvanced => 'Για προχωρημένους';
+
+  @override
+  String get puzzleLengths => 'Μήκος γρίφου';
+
+  @override
+  String get puzzleMates => 'Ματ';
+
+  @override
+  String get puzzleGoals => 'Στόχοι';
+
+  @override
+  String get puzzleOrigin => 'Πηγή';
+
+  @override
+  String get puzzleSpecialMoves => 'Ειδικές κινήσεις';
+
+  @override
+  String get puzzleDidYouLikeThisPuzzle => 'Σας άρεσε αυτός ο γρίφος;';
+
+  @override
+  String get puzzleVoteToLoadNextOne => 'Ψηφίστε για να προχωρήσετε στο επόμενο!';
+
+  @override
+  String get puzzleUpVote => 'Up vote puzzle';
+
+  @override
+  String get puzzleDownVote => 'Down vote puzzle';
+
+  @override
+  String get puzzleYourPuzzleRatingWillNotChange => 'Οι βαθμοί αξιολόγησής σας δε θα αλλάξουν. Αυτοί οι βαθμοί χρησιμεύουν στην επιλογή γρίφων για το επίπεδό σας και όχι στον ανταγωνισμό.';
+
+  @override
+  String get puzzleFindTheBestMoveForWhite => 'Βρείτε την καλύτερη κίνηση για τα λευκά.';
+
+  @override
+  String get puzzleFindTheBestMoveForBlack => 'Βρείτε την καλύτερη κίνηση για τα μαύρα.';
+
+  @override
+  String get puzzleToGetPersonalizedPuzzles => 'Για να λύνετε εξατομικευμένους γρίφους:';
+
+  @override
+  String puzzlePuzzleId(String param) {
+    return 'Γρίφος $param';
+  }
+
+  @override
+  String get puzzlePuzzleOfTheDay => 'Γρίφος της ημέρας';
+
+  @override
+  String get puzzleDailyPuzzle => 'Ημερήσιος Γρίφος';
+
+  @override
+  String get puzzleClickToSolve => 'Κάντε κλικ για να τον λύσετε';
+
+  @override
+  String get puzzleGoodMove => 'Καλή κίνηση';
+
+  @override
+  String get puzzleBestMove => 'Παίξατε την καλύτερη κίνηση!';
+
+  @override
+  String get puzzleKeepGoing => 'Συνεχίστε…';
+
+  @override
+  String get puzzlePuzzleSuccess => 'Επιτυχία!';
+
+  @override
+  String get puzzlePuzzleComplete => 'Ο γρίφος ολοκληρώθηκε!';
+
+  @override
+  String get puzzleByOpenings => 'By openings';
+
+  @override
+  String get puzzlePuzzlesByOpenings => 'Puzzles by openings';
+
+  @override
+  String get puzzleOpeningsYouPlayedTheMost => 'Openings you played the most in rated games';
+
+  @override
+  String get puzzleUseFindInPage => 'Use \"Find in page\" in the browser menu to find your favourite opening!';
+
+  @override
+  String get puzzleUseCtrlF => 'Use Ctrl+f to find your favourite opening!';
+
+  @override
+  String get puzzleNotTheMove => 'Δεν είναι αυτή η κίνηση!';
+
+  @override
+  String get puzzleTrySomethingElse => 'Δοκιμάστε κάτι άλλο.';
+
+  @override
+  String puzzleRatingX(String param) {
+    return 'Βαθμολογία: $param';
+  }
+
+  @override
+  String get puzzleHidden => 'κρυφό';
+
+  @override
+  String puzzleFromGameLink(String param) {
+    return 'Από το παιχνίδι $param';
+  }
+
+  @override
+  String get puzzleContinueTraining => 'Συνέχεια εξάσκησης';
+
+  @override
+  String get puzzleDifficultyLevel => 'Επίπεδο δυσκολίας';
+
+  @override
+  String get puzzleNormal => 'Κανονικό';
+
+  @override
+  String get puzzleEasier => 'Εύκολο';
+
+  @override
+  String get puzzleEasiest => 'Πολύ εύκολο';
+
+  @override
+  String get puzzleHarder => 'Δύσκολο';
+
+  @override
+  String get puzzleHardest => 'Πολύ δύσκολο';
+
+  @override
+  String get puzzleExample => 'Παράδειγμα';
+
+  @override
+  String get puzzleAddAnotherTheme => 'Προσθήκη νέου θέματος';
+
+  @override
+  String get puzzleNextPuzzle => 'Επόμενος γρίφος';
+
+  @override
+  String get puzzleJumpToNextPuzzleImmediately => 'Μετάβαση στον επόμενο γρίφο αμέσως';
+
+  @override
+  String get puzzlePuzzleDashboard => 'Ταμπλό γρίφων';
+
+  @override
+  String get puzzleImprovementAreas => 'Τομείς βελτίωσης';
+
+  @override
+  String get puzzleStrengths => 'Δυνατά σημεία';
+
+  @override
+  String get puzzleHistory => 'Ιστορικό γρίφων';
+
+  @override
+  String get puzzleSolved => 'λύθηκε';
+
+  @override
+  String get puzzleFailed => 'απέτυχε';
+
+  @override
+  String get puzzleStreakDescription => 'Λύστε γρίφους που γίνονται όλο και πιο δύσκολοι και χτίστε σιγά σιγά ένα «σερί νικών». Δεν υπάρχει χρόνος, οπότε μη βιάζεστε. Μια λάθος κίνηση, και το παιχνίδι τέλειωσε! Μπορείτε να παραλείψετε μια κίνηση σε κάθε γύρο.';
+
+  @override
+  String puzzleYourStreakX(String param) {
+    return 'Το σερί νικών σας: $param';
+  }
+
+  @override
+  String get puzzleStreakSkipExplanation => 'Παραλείψτε αυτή την κίνηση για να διατηρήσετε το σερί νικών σας! Λειτουργεί μόνο μία φορά ανά γύρο.';
+
+  @override
+  String get puzzleContinueTheStreak => 'Συνεχίστε το σερί νικών';
+
+  @override
+  String get puzzleNewStreak => 'Νέο σερί νικών';
+
+  @override
+  String get puzzleFromMyGames => 'Από τα παιχνίδια μου';
+
+  @override
+  String get puzzleLookupOfPlayer => 'Αναζητήστε γρίφους από τα παιχνίδια ενός παίκτη';
+
+  @override
+  String puzzleFromXGames(String param) {
+    return 'Γρίφοι από τα παιχνίδια του χρήστη $param';
+  }
+
+  @override
+  String get puzzleSearchPuzzles => 'Αναζήτηση γρίφων';
+
+  @override
+  String get puzzleFromMyGamesNone => 'Δεν υπάρχουν γρίφοι από τα παιχνίδια σας στη βάση δεδομένων.\nΠαίξτε κλασικά ή rapid παιχνίδια για να αυξηθούν οι πιθανότητες προσθήκης γρίφων από τα παιχνίδια σας στη βάση δεδομένων!';
+
+  @override
+  String puzzleFromXGamesFound(String param1, String param2) {
+    return 'Βρέθηκαν $param1 γρίφοι στα παιχνίδια του χρήστη $param2';
+  }
+
+  @override
+  String get puzzlePuzzleDashboardDescription => 'Προπονηθείτε, αναλύστε, βελτιωθείτε';
+
+  @override
+  String puzzlePercentSolved(String param) {
+    return '$param λυμένα';
+  }
+
+  @override
+  String get puzzleNoPuzzlesToShow => 'Δεν υπάρχει τίποτα εδώ, ακόμα, λύστε μερικούς γρίφους πρώτα!';
+
+  @override
+  String get puzzleImprovementAreasDescription => 'Εκπαιδευτείτε σε αυτά για να βελτιώσετε την πρόοδό σας!';
+
+  @override
+  String get puzzleStrengthDescription => 'Τα πάτε καλύτερα στις εξής κατηγορίες';
+
+  @override
+  String puzzlePlayedXTimes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Λύθηκε $count φορές',
+      one: 'Λύθηκε $count φορά',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsBelowYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count πόντους κάτω από τη βαθμολογία γρίφων σας',
+      one: 'Έναν πόντο κάτω από τη βαθμολογία γρίφων σας',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsAboveYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count πόντους πάνω από την βαθμολογία γρίφων σας',
+      one: 'Έναν πόντο πάνω από την βαθμολογία γρίφων σας',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPlayed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count παίχτηκαν',
+      one: '$count παίχτηκε',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbToReplay(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count για επανάληψη',
+      one: '$count για επανάληψη',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get puzzleThemeAdvancedPawn => 'Προωθημένο πιόνι';
+
+  @override
+  String get puzzleThemeAdvancedPawnDescription => 'Ένα πιόνι που προάγεται ή απειλεί να προαχθεί είναι κλειδί για αυτή την τακτική.';
+
+  @override
+  String get puzzleThemeAdvantage => 'Πλεονέκτημα';
+
+  @override
+  String get puzzleThemeAdvantageDescription => 'Αρπάξτε την ευκαιρία ώστε να αποκτήσετε ένα αποφασιστικό πλεονέκτημα. (200cp ≤ eval ≤ 600cp)';
+
+  @override
+  String get puzzleThemeAnastasiaMate => 'To ματ της Αναστασίας';
+
+  @override
+  String get puzzleThemeAnastasiaMateDescription => 'Ένας ίππος και ένας πύργος ή βασίλισσα κάνουν ματ στον αντίπαλο βασιλιά στο περιθώριο της σκακιέρας, όταν ένα φιλικό κομμάτι του εμποδίζει την διαφυγή.';
+
+  @override
+  String get puzzleThemeArabianMate => 'Αραβικό ματ';
+
+  @override
+  String get puzzleThemeArabianMateDescription => 'Συνεργασία ίππου και πύργου για παγίδευση του αντίπαλου βασιλιά στην άκρη της σκακιέρας.';
+
+  @override
+  String get puzzleThemeAttackingF2F7 => 'Επίθεση στο f2 ή f7';
+
+  @override
+  String get puzzleThemeAttackingF2F7Description => 'Μια επίθεση που εστιάζει στο πιόνι f2 ή f7, όπως στην επίθεση Φράιντ Λίβερ.';
+
+  @override
+  String get puzzleThemeAttraction => 'Έλξη';
+
+  @override
+  String get puzzleThemeAttractionDescription => 'Μια ανταλλαγή ή θυσία που ενθαρρύνει ή αναγκάζει ένα αντίπαλο κομμάτι σε ένα τετράγωνο όπου δύναται μια επακόλουθη τακτική.';
+
+  @override
+  String get puzzleThemeBackRankMate => 'Ματ της τελευταίας γραμμής';
+
+  @override
+  String get puzzleThemeBackRankMateDescription => 'Κάντε ματ στον βασιλιά στην τελευταία γραμμή όταν είναι παγιδευμένος εκεί από τα κομμάτια του.';
+
+  @override
+  String get puzzleThemeBishopEndgame => 'Φινάλε Αξιωματικών';
+
+  @override
+  String get puzzleThemeBishopEndgameDescription => 'Ένα τέλος παρτίδας μόνο με αξιωματικούς και πιόνια.';
+
+  @override
+  String get puzzleThemeBodenMate => 'Ματ του Μποντάν';
+
+  @override
+  String get puzzleThemeBodenMateDescription => 'Δύο επιτιθέμενοι αξιωματικοί κινούμενοι διαγωνίως κάνουν ματ σε βασιλιά που εμποδίζεται από φιλικά κομμάτια.';
+
+  @override
+  String get puzzleThemeCastling => 'Pοκέ';
+
+  @override
+  String get puzzleThemeCastlingDescription => 'Εξασφαλίστε την ασφάλεια του βασιλιά και αναπτύξτε τον πύργο για επίθεση.';
+
+  @override
+  String get puzzleThemeCapturingDefender => 'Αιχμαλωτίστε τον αμυνόμενο';
+
+  @override
+  String get puzzleThemeCapturingDefenderDescription => 'Απομάκρυνση κομματιού που είναι σημαντικό για την υπεράσπιση άλλου κομματιού, επιτρέποντας την αιχμαλώτιση του πλέον ανυπεράσπιστου κομματιού στην επόμενη κίνηση.';
+
+  @override
+  String get puzzleThemeCrushing => 'Σύνθλιψη';
+
+  @override
+  String get puzzleThemeCrushingDescription => 'Εντοπίστε το σοβαρό λάθος του αντιπάλου για να αποκτήσετε συντριπτικό πλεονέκτημα. (eval ≥ 600cp)';
+
+  @override
+  String get puzzleThemeDoubleBishopMate => 'Ματ με δύο αξιωματικούς';
+
+  @override
+  String get puzzleThemeDoubleBishopMateDescription => 'Δύο επιτιθέμενοι αξιωματικοί σε κοντινή απόσταση κάνουν ματ σε βασιλιά που εμποδίζεται από φιλικά κομμάτια.';
+
+  @override
+  String get puzzleThemeDovetailMate => 'Dovetail ματ';
+
+  @override
+  String get puzzleThemeDovetailMateDescription => 'Βασίλισσα κάνει ματ σε παρακείμενο βασιλιά, του οποίου τα μοναδικά δύο τετράγωνα διαφυγής εμποδίζονται από φιλικά κομμάτια.';
+
+  @override
+  String get puzzleThemeEquality => 'Ισότητα';
+
+  @override
+  String get puzzleThemeEqualityDescription => 'Επιστρέψτε από μια χαμένη θέση και ασφαλίστε μια κλήρωση ή μια ισορροπημένη θέση. (eval ≤ 200cp)';
+
+  @override
+  String get puzzleThemeKingsideAttack => 'Επίθεση στην πλευρά του βασιλιά';
+
+  @override
+  String get puzzleThemeKingsideAttackDescription => 'Επίθεση στον αντίπαλο βασιλιά, μετά από μικρό ροκέ.';
+
+  @override
+  String get puzzleThemeClearance => 'Ελευθέρωση';
+
+  @override
+  String get puzzleThemeClearanceDescription => 'Μία κίνηση, συνήθως με tempo, που ελευθερώνει το τετράγωνο, στήλη ή διαγώνιο για την συνέχιση τακτικής ιδέας.';
+
+  @override
+  String get puzzleThemeDefensiveMove => 'Αμυντική κίνηση';
+
+  @override
+  String get puzzleThemeDefensiveMoveDescription => 'Μια ακριβής κίνηση ή ακολουθία κινήσεων που απαιτείται για να αποφευχθεί η απώλεια υλικού ή άλλου πλεονεκτήματος.';
+
+  @override
+  String get puzzleThemeDeflection => 'Εκτροπή';
+
+  @override
+  String get puzzleThemeDeflectionDescription => 'Μία κίνηση που απομακρύνει ένα αντίπαλο κομμάτι από υφιστάμενο καθήκον, όπως η φύλαξη ενός τετραγώνου κλειδί. Μερικές φορές ονομάζεται και \"υπερφόρτωση\".';
+
+  @override
+  String get puzzleThemeDiscoveredAttack => 'Επίθεση με αποκάλυψη';
+
+  @override
+  String get puzzleThemeDiscoveredAttackDescription => 'Μετακίνηση κομματιού που προηγουμένως εμπόδιζε την επίθεση από κομμάτι μεγάλης εμβέλειας, όπως ένας ίππος που εμπόδιζε έναν πύργο.';
+
+  @override
+  String get puzzleThemeDoubleCheck => 'Διπλό σαχ';
+
+  @override
+  String get puzzleThemeDoubleCheckDescription => 'Διπλό σαχ ως αποτέλεσμα μίας επίθεσης με αποκάλυψη, όπου και το μετακινούμενο κομμάτι δίνει σαχ.';
+
+  @override
+  String get puzzleThemeEndgame => 'Φινάλε';
+
+  @override
+  String get puzzleThemeEndgameDescription => 'Μια τακτική κατά την τελευταία φάση του παιχνιδιού.';
+
+  @override
+  String get puzzleThemeEnPassantDescription => 'Τακτικό που αφορά το κανόνα en passant, όπου ένα πιόνι μπορεί να αιχμαλωτίσει ένα αντίπαλο πιόνι που το προσπέρασε χρησιμοποιώντας την αρχική δύο τετραγώνων κίνηση.';
+
+  @override
+  String get puzzleThemeExposedKing => 'Εκτεθειμένος βασιλιάς';
+
+  @override
+  String get puzzleThemeExposedKingDescription => 'Τακτικό που αφορά βασιλιά με λίγα αμυντικά κομμάτια γύρω του, που συχνά οδηγεί σε ματ.';
+
+  @override
+  String get puzzleThemeFork => 'Πιρούνισμα';
+
+  @override
+  String get puzzleThemeForkDescription => 'Μια κίνηση όπου το μετακινούμενο κομμάτι επιτίθεται ταυτόχρονα σε δύο ή περισσότερα αντίπαλα κομμάτια.';
+
+  @override
+  String get puzzleThemeHangingPiece => 'Κρεμασμένα κομμάτια';
+
+  @override
+  String get puzzleThemeHangingPieceDescription => 'Μια τακτική όπου ένα αντίπαλο κομμάτι είναι ανυπεράσπιστο ή υπερασπιζόμενο ανεπαρκώς και μπορεί να παρθεί.';
+
+  @override
+  String get puzzleThemeHookMate => 'Ματ με αγκίστρι';
+
+  @override
+  String get puzzleThemeHookMateDescription => 'Ματ με πύργο, ίππο, και ένα πιόνι μαζί με ένα εχθρικό πιόνι που εμποδίζει την διαφυγή του αντίπαλου βασιλιά.';
+
+  @override
+  String get puzzleThemeInterference => 'Παρεμβολή';
+
+  @override
+  String get puzzleThemeInterferenceDescription => 'Μετακίνηση κομματιού ανάμεσα σε δύο αντίπαλα κομμάτια για να αφήσει ένα ή και τα δύο αντίπαλα κομμάτια ανυπεράσπιστα, όπως ένας ίππος σε υπερασπιζόμενο τετράγωνο ανάμεσα σε δύο πύργους.';
+
+  @override
+  String get puzzleThemeIntermezzo => 'Ενδιάμεση κίνηση';
+
+  @override
+  String get puzzleThemeIntermezzoDescription => 'Αντί για την αναμενόμενη κίνηση παίζουμε πρώτα μια άλλη κίνηση η οποία δημιουργεί μια άμεση απειλή και που ο αντίπαλος πρέπει να απαντήσει. Επίσης γνωστό ως \"Zwischenzug\" ή \"Intermezzo\".';
+
+  @override
+  String get puzzleThemeKnightEndgame => 'Φινάλε Ίππων';
+
+  @override
+  String get puzzleThemeKnightEndgameDescription => 'Ένα τέλος παρτίδας μόνο με ίππους και πιόνια.';
+
+  @override
+  String get puzzleThemeLong => 'Μεγάλος γρίφος';
+
+  @override
+  String get puzzleThemeLongDescription => 'Τρεις κινήσεις για να κερδίσετε.';
+
+  @override
+  String get puzzleThemeMaster => 'Master παιχνίδια';
+
+  @override
+  String get puzzleThemeMasterDescription => 'Γρίφοι από παρτίδες τιτλούχων παικτών.';
+
+  @override
+  String get puzzleThemeMasterVsMaster => 'Master vs Master παιχνίδια';
+
+  @override
+  String get puzzleThemeMasterVsMasterDescription => 'Γρίφοι από παρτίδες μεταξύ δύο τιτλούχων παικτών.';
+
+  @override
+  String get puzzleThemeMate => 'Ματ';
+
+  @override
+  String get puzzleThemeMateDescription => 'Κερδίστε το παιχνίδι με στυλ.';
+
+  @override
+  String get puzzleThemeMateIn1 => 'Ματ σε 1';
+
+  @override
+  String get puzzleThemeMateIn1Description => 'Κάντε ματ με μια κίνηση.';
+
+  @override
+  String get puzzleThemeMateIn2 => 'Ματ σε 2';
+
+  @override
+  String get puzzleThemeMateIn2Description => 'Κάντε ματ σε δύο κινήσεις.';
+
+  @override
+  String get puzzleThemeMateIn3 => 'Ματ σε 3';
+
+  @override
+  String get puzzleThemeMateIn3Description => 'Κάντε ματ σε τρεις κινήσεις.';
+
+  @override
+  String get puzzleThemeMateIn4 => 'Ματ σε 4';
+
+  @override
+  String get puzzleThemeMateIn4Description => 'Κάντε ματ σε τέσσερις κινήσεις.';
+
+  @override
+  String get puzzleThemeMateIn5 => 'Ματ σε 5 ή περισσότερο';
+
+  @override
+  String get puzzleThemeMateIn5Description => 'Βρείτε μία μακρά ακολουθία κινήσεων που οδηγεί σε ματ.';
+
+  @override
+  String get puzzleThemeMiddlegame => 'Μέση φάση παιχνιδιού';
+
+  @override
+  String get puzzleThemeMiddlegameDescription => 'Μια τακτική κατά τη δεύτερη φάση του παιχνιδιού.';
+
+  @override
+  String get puzzleThemeOneMove => 'Γρίφος μιας κίνησης';
+
+  @override
+  String get puzzleThemeOneMoveDescription => 'Ένας γρίφος που έχει μόνο μία κίνηση.';
+
+  @override
+  String get puzzleThemeOpening => 'Άνοιγμα';
+
+  @override
+  String get puzzleThemeOpeningDescription => 'Μια τακτική κατά την πρώτη φάση του παιχνιδιού.';
+
+  @override
+  String get puzzleThemePawnEndgame => 'Φινάλε Πιονιών';
+
+  @override
+  String get puzzleThemePawnEndgameDescription => 'Ένα τέλος παρτίδας μόνο με πιόνια.';
+
+  @override
+  String get puzzleThemePin => 'Κάρφωμα';
+
+  @override
+  String get puzzleThemePinDescription => 'Μια τακτική που περιλαμβάνει καρφώματα, όπου ένα κομμάτι αδυνατεί να μετακινηθεί χωρίς να αποκαλύψει μια επίθεση σε ένα κομμάτι μεγαλύτερης αξίας.';
+
+  @override
+  String get puzzleThemePromotion => 'Προαγωγή';
+
+  @override
+  String get puzzleThemePromotionDescription => 'Ένα πιόνι που προάγεται ή απειλεί να προαχθεί είναι κλειδί για αυτή την τακτική.';
+
+  @override
+  String get puzzleThemeQueenEndgame => 'Φινάλε Βασιλισσών';
+
+  @override
+  String get puzzleThemeQueenEndgameDescription => 'Ένα τέλος παρτίδας μόνο με βασίλισσες και πιόνια.';
+
+  @override
+  String get puzzleThemeQueenRookEndgame => 'Βασίλισσα και Πύργος';
+
+  @override
+  String get puzzleThemeQueenRookEndgameDescription => 'Ένα τέλος παρτίδας μόνο με βασίλισσες, πύργους και πιόνια.';
+
+  @override
+  String get puzzleThemeQueensideAttack => 'Επίθεση στην πλευρά της βασίλισσας';
+
+  @override
+  String get puzzleThemeQueensideAttackDescription => 'Επίθεση στον αντίπαλο βασιλιά, μετά από μεγάλο ροκέ.';
+
+  @override
+  String get puzzleThemeQuietMove => 'Ήσυχη κίνηση';
+
+  @override
+  String get puzzleThemeQuietMoveDescription => 'Μια κίνηση που δεν δίνει σαχ ή αιχμαλωτίζει, αλλά προετοιμάζει μια αναπόφευκτη απειλή σε επόμενη κίνηση.';
+
+  @override
+  String get puzzleThemeRookEndgame => 'Φινάλε Πύργων';
+
+  @override
+  String get puzzleThemeRookEndgameDescription => 'Ένα τέλος παρτίδας μόνο με πύργους και πιόνια.';
+
+  @override
+  String get puzzleThemeSacrifice => 'Θυσία';
+
+  @override
+  String get puzzleThemeSacrificeDescription => 'Μια τακτική που περιλαμβάνει την εγκατάλειψη υλικού βραχυπρόθεσμα, ώστε να κερδηθεί πλεονέκτημα μετά από μια εξαναγκασμένη ακολουθία κινήσεων.';
+
+  @override
+  String get puzzleThemeShort => 'Σύντομος γρίφος';
+
+  @override
+  String get puzzleThemeShortDescription => 'Δύο κινήσεις για να κερδίσετε.';
+
+  @override
+  String get puzzleThemeSkewer => 'Σούβλισμα';
+
+  @override
+  String get puzzleThemeSkewerDescription => 'Ένα μοτίβο όπου ένα κομμάτι υψηλής αξίας δέχεται επίθεση, κάνει στην άκρη, και επιτρέπει την επίθεση ή το πάρσιμο ενός κομματιού μικρότερης αξίας πίσω από αυτό, το αντίστροφο δηλαδή του καρφώματος.';
+
+  @override
+  String get puzzleThemeSmotheredMate => 'Ματ αποπνιγμού';
+
+  @override
+  String get puzzleThemeSmotheredMateDescription => 'Ένα ματ που γίνεται από έναν ίππο σε έναν βασιλιάς ο οποίος δεν μπορεί να μετακινηθεί όντας περιτριγυρισμένος (ή πνιγμένος) από δικά του κομμάτια.';
+
+  @override
+  String get puzzleThemeSuperGM => 'Παιχνίδια Super GM';
+
+  @override
+  String get puzzleThemeSuperGMDescription => 'Γρίφοι από παρτίδες που παίχθηκαν από κορυφαίους παίκτες του κόσμου.';
+
+  @override
+  String get puzzleThemeTrappedPiece => 'Παγιδευμένο κομμάτι';
+
+  @override
+  String get puzzleThemeTrappedPieceDescription => 'Ένα κομμάτι δεν μπορεί να αποφύγει την αιχμαλώτιση, καθώς έχει περιορισμένες κινήσεις.';
+
+  @override
+  String get puzzleThemeUnderPromotion => 'Προαγωγή σε κομμάτι μικρότερης αξίας';
+
+  @override
+  String get puzzleThemeUnderPromotionDescription => 'Προώθηση σε ιππότη, αξιωματικό ή πύργο.';
+
+  @override
+  String get puzzleThemeVeryLong => 'Πολύ μεγάλος γρίφος';
+
+  @override
+  String get puzzleThemeVeryLongDescription => 'Τέσσερις κινήσεις ή περισσότερα για να κερδίσετε.';
+
+  @override
+  String get puzzleThemeXRayAttack => 'Επίθεση ακτίνας Χ';
+
+  @override
+  String get puzzleThemeXRayAttackDescription => 'Κομμάτι που επιτίθεται ή αμύνεται ένα τετράγωνο, πίσω από εχθρικό κομμάτι.';
+
+  @override
+  String get puzzleThemeZugzwang => 'Τσούγκτσβανγκ';
+
+  @override
+  String get puzzleThemeZugzwangDescription => 'Ο αντίπαλος είναι περιορισμένος στις κινήσεις που μπορεί να κάνει και οποιαδήποτε κίνηση επιλέξει επιδεινώνει την θέση του.';
+
+  @override
+  String get puzzleThemeHealthyMix => 'Προτεινόμενο μίγμα';
+
+  @override
+  String get puzzleThemeHealthyMixDescription => 'Λίγο απ\' όλα. Δεν ξέρετε τι να περιμένετε, οπότε παραμένετε σε ετοιμότητα! Όπως στα πραγματικά παιχνίδια.';
+
+  @override
+  String get puzzleThemePlayerGames => 'Παιχνίδια παίκτη';
+
+  @override
+  String get puzzleThemePlayerGamesDescription => 'Αναζητήστε γρίφους που δημιουργήθηκαν από παιχνίδια είτε δικά σας είτε άλλων παικτών.';
+
+  @override
+  String puzzleThemePuzzleDownloadInformation(String param) {
+    return 'Αυτοί οι γρίφοι είναι δημόσιοι και μπορείτε να τους κατεβάσετε εδώ $param.';
+  }
+
+  @override
+  String get searchSearch => 'Αναζήτηση';
+
+  @override
+  String get settingsSettings => 'Επιλογές';
+
+  @override
+  String get settingsCloseAccount => 'Κλείσιμο λογαριασμού';
+
+  @override
+  String get settingsManagedAccountCannotBeClosed => 'Ο λογαριασμός σας βρίσκεται υπό διαχείριση και δεν μπορεί να κλείσει.';
+
+  @override
+  String get settingsClosingIsDefinitive => 'Η απενεργοποίηση είναι οριστική. Δεν υπάρχει τρόπος ανάκλησης. Είστε σίγουρος;';
+
+  @override
+  String get settingsCantOpenSimilarAccount => 'Δεν θα σας επιτραπεί η δημιουργία νέου λογαριασμού με το ίδιο όνομα, ακόμα κι αν μετατρέψετε έναν μικρό σε έναν κεφαλαίο ή το αντίστροφο.';
+
+  @override
+  String get settingsChangedMindDoNotCloseAccount => 'Άλλαξα γνώμη, μην κλείσετε τον λογαριασμό μου';
+
+  @override
+  String get settingsCloseAccountExplanation => 'Είστε σίγουροι πως θέλετε να απενεργοποιήσετε τον λογαριασμό σας; Η απενεργοποίηση είναι μια μόνιμη απόφαση. ΠΟΤΕ ΞΑΝΑ δεν θα μπορέσετε να συνδεθείτε.';
+
+  @override
+  String get settingsThisAccountIsClosed => 'Αυτός ο λογαριασμός έχει κλείσει.';
 
   @override
   String get playWithAFriend => 'Παίξτε με έναν φίλο';
@@ -431,6 +1612,12 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get deleteFromHere => 'Διαγραφή από εδώ';
+
+  @override
+  String get collapseVariations => 'Collapse variations';
+
+  @override
+  String get expandVariations => 'Expand variations';
 
   @override
   String get forceVariation => 'Θέσε σε βαριάντα';
@@ -1290,15 +2477,6 @@ class AppLocalizationsEl extends AppLocalizations {
   String get emptyTournamentName => 'Αφήστε το κενό για να πάρει το όνομά του τυχαία από κάποιον γνωστό σκακιστή.';
 
   @override
-  String get recommendNotTouching => 'Σας συνιστούμε να μην τα αλλάξετε αυτά.';
-
-  @override
-  String get fewerPlayers => 'Εάν ορίσετε προϋποθέσεις εισόδου, το τουρνουά σας θα έχει λιγότερους παίκτες.';
-
-  @override
-  String get showAdvancedSettings => 'Εμφάνιση ρυθμίσεων για προχωρημένους';
-
-  @override
   String get makePrivateTournament => 'Κάντε το τουρνουά ιδιωτικό, και περιορίστε την πρόσβαση με κωδικό';
 
   @override
@@ -1428,10 +2606,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get editProfile => 'Επεξεργασία προφίλ';
 
   @override
-  String get firstName => 'Όνομα';
-
-  @override
-  String get lastName => 'Επώνυμο';
+  String get realName => 'Real name';
 
   @override
   String get setFlair => 'Ορίστε τη νιφάδα σας';
@@ -1560,13 +2735,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get cheat => 'Απάτη';
 
   @override
-  String get insult => 'Προσβολή';
-
-  @override
   String get troll => 'Εμπαιγμός';
-
-  @override
-  String get ratingManipulation => 'Παραποίηση βαθμολογίας';
 
   @override
   String get other => 'Άλλο';
@@ -1673,6 +2842,9 @@ class AppLocalizationsEl extends AppLocalizations {
 
   @override
   String get outsideTheBoard => 'Εκτός της σκακιέρας';
+
+  @override
+  String get allSquaresOfTheBoard => 'Σε όλα τα τετράγωνα της σκακιέρας';
 
   @override
   String get onSlowGames => 'Σε αργά παιχνίδια';
@@ -2268,22 +3440,22 @@ class AppLocalizationsEl extends AppLocalizations {
   String get backgroundImageUrl => 'Διεύθυνση εικόνας φόντου:';
 
   @override
-  String get board => 'Board';
+  String get board => 'Σκακιέρα';
 
   @override
-  String get size => 'Size';
+  String get size => 'Μέγεθος';
 
   @override
-  String get opacity => 'Opacity';
+  String get opacity => 'Αδιαφάνεια';
 
   @override
-  String get brightness => 'Brightness';
+  String get brightness => 'Φωτεινότητα';
 
   @override
-  String get hue => 'Hue';
+  String get hue => 'Χροιά';
 
   @override
-  String get boardReset => 'Reset colors to default';
+  String get boardReset => 'Επαναφορά χρωμάτων στα προκαθορισμένα';
 
   @override
   String get pieceSet => 'Επιλογή κομματιών';
@@ -2881,7 +4053,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Ο αντίπαλος έφυγε από το παιχνίδι. Διεκδίκηση νίκης σε $count δευτερόλεπτα.',
       one: 'Ο αντίπαλός σας έφυγε από το παιχνίδι. Διεκδίκηση νίκης σε $count δευτερόλεπτο.',
-      zero: 'Ο αντίπαλός σας έφυγε από το παιχνίδι. Διεκδίκηση νίκης σε $count δευτερόλεπτο.',
     );
     return '$_temp0';
   }
@@ -2893,7 +4064,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Ματ σε $count μισές κινήσεις',
       one: 'Ματ σε $count μισή κίνηση',
-      zero: 'Ματ σε $count μισή κίνηση',
     );
     return '$_temp0';
   }
@@ -2905,7 +4075,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count σοβαρά σφάλματα',
       one: '$count σοβαρό σφάλμα',
-      zero: '$count σοβαρό σφάλμα',
     );
     return '$_temp0';
   }
@@ -2917,7 +4086,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count λάθη',
       one: '$count λάθος',
-      zero: '$count λάθος',
     );
     return '$_temp0';
   }
@@ -2929,7 +4097,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count ανακρίβειες',
       one: '$count ανακρίβεια',
-      zero: '$count ανακρίβεια',
     );
     return '$_temp0';
   }
@@ -2941,7 +4108,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count παίκτες',
       one: '$count παίκτης',
-      zero: '$count παίκτης',
     );
     return '$_temp0';
   }
@@ -2953,7 +4119,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count παιχνίδια',
       one: '$count παιχνίδι',
-      zero: '$count παιχνίδι',
     );
     return '$_temp0';
   }
@@ -2965,7 +4130,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Βαθμολογία $count για $param2 παιχνίδια',
       one: 'Βαθμολογία $count για $param2 παιχνίδι',
-      zero: 'Βαθμολογία $count για $param2 παιχνίδι',
     );
     return '$_temp0';
   }
@@ -2977,7 +4141,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count σελιδοδείκτες',
       one: '$count σελιδοδείκτης',
-      zero: '$count σελιδοδείκτης',
     );
     return '$_temp0';
   }
@@ -2989,7 +4152,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count ημέρες',
       one: '$count ημέρα',
-      zero: '$count ημέρα',
     );
     return '$_temp0';
   }
@@ -3001,7 +4163,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count ώρες',
       one: '$count ώρα',
-      zero: '$count ώρα',
     );
     return '$_temp0';
   }
@@ -3013,7 +4174,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count λεπτά',
       one: '$count λεπτό',
-      zero: '$count λεπτό',
     );
     return '$_temp0';
   }
@@ -3025,7 +4185,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Η κατάταξη ενημερώνεται κάθε $count λεπτά',
       one: 'Η κατάταξη ενημερώνεται κάθε λεπτό',
-      zero: 'Η κατάταξη ενημερώνεται κάθε λεπτό',
     );
     return '$_temp0';
   }
@@ -3037,7 +4196,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count γρίφοι',
       one: '$count γρίφος',
-      zero: '$count γρίφος',
     );
     return '$_temp0';
   }
@@ -3049,7 +4207,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count παιχνίδια με εσάς',
       one: '$count παιχνίδι με εσάς',
-      zero: '$count παιχνίδι με εσάς',
     );
     return '$_temp0';
   }
@@ -3061,7 +4218,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count βαθμολογημένα',
       one: '$count βαθμολογημένο',
-      zero: '$count βαθμολογημένο',
     );
     return '$_temp0';
   }
@@ -3073,7 +4229,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count νίκες',
       one: '$count νίκη',
-      zero: '$count νίκη',
     );
     return '$_temp0';
   }
@@ -3085,7 +4240,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count ήττες',
       one: '$count ήττα',
-      zero: '$count ήττα',
     );
     return '$_temp0';
   }
@@ -3097,7 +4251,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count ισοπαλίες',
       one: '$count ισοπαλία',
-      zero: '$count ισοπαλία',
     );
     return '$_temp0';
   }
@@ -3109,7 +4262,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count παίζονται',
       one: '$count παίζεται',
-      zero: '$count παίζεται',
     );
     return '$_temp0';
   }
@@ -3121,7 +4273,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Προσθέστε $count δευτερόλεπτα',
       one: 'Προσθέστε $count δευτερόλεπτα',
-      zero: 'Προσθέστε $count δευτερόλεπτα',
     );
     return '$_temp0';
   }
@@ -3133,7 +4284,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count πόντοι τουρνουά',
       one: '$count πόντος τουρνουά',
-      zero: '$count πόντος τουρνουά',
     );
     return '$_temp0';
   }
@@ -3145,7 +4295,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count μελέτες',
       one: '$count μελέτη',
-      zero: '$count μελέτη',
     );
     return '$_temp0';
   }
@@ -3157,7 +4306,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count σιμουλτανέ',
       one: '$count σιμουλτανέ',
-      zero: '$count σιμουλτανέ',
     );
     return '$_temp0';
   }
@@ -3169,7 +4317,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '≥ $count βαθμολογημένα παιχνίδια',
       one: '≥ $count βαθμολογημένο παιχνίδι',
-      zero: '≥ $count βαθμολογημένο παιχνίδι',
     );
     return '$_temp0';
   }
@@ -3181,7 +4328,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '≥ $count βαθμολογημένα παιχνίδια $param2',
       one: '≥ $count βαθμολογημένο παιχνίδι $param2',
-      zero: '≥ $count βαθμολογημένο παιχνίδι $param2',
     );
     return '$_temp0';
   }
@@ -3193,7 +4339,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Πρέπει να παίξετε $count επιπλέον $param2 βαθμολογημένα παιχνίδια',
       one: 'Πρέπει να παίξετε $count επιπλέον $param2 βαθμολογημένο παιχνίδι',
-      zero: 'Πρέπει να παίξετε $count επιπλέον $param2 βαθμολογημένο παιχνίδι',
     );
     return '$_temp0';
   }
@@ -3205,7 +4350,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Πρέπει να παίξετε $count βαθμολογημένα παιχνίδια',
       one: 'Πρέπει να παίξετε $count βαθμολογημένο παιχνίδι',
-      zero: 'Πρέπει να παίξετε $count βαθμολογημένο παιχνίδι',
     );
     return '$_temp0';
   }
@@ -3217,7 +4361,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count Εισαγόμενα παιχνίδια',
       one: '$count Εισαγόμενο παιχνίδι',
-      zero: '$count Εισαγόμενο παιχνίδι',
     );
     return '$_temp0';
   }
@@ -3229,7 +4372,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count φίλοι συνδεδεμένοι',
       one: '$count φίλος συνδεδεμένος',
-      zero: '$count φίλος συνδεδεμένος',
     );
     return '$_temp0';
   }
@@ -3241,7 +4383,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count ακόλουθοι',
       one: '$count ακόλουθος',
-      zero: '$count ακόλουθος',
     );
     return '$_temp0';
   }
@@ -3253,7 +4394,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count ακολουθούνται',
       one: '$count ακολουθείται',
-      zero: '$count ακολουθείται',
     );
     return '$_temp0';
   }
@@ -3265,7 +4405,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Λιγότερο από $count λεπτά',
       one: 'Λιγότερο από $count λεπτό',
-      zero: 'Λιγότερο από $count λεπτό',
     );
     return '$_temp0';
   }
@@ -3277,7 +4416,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count παιχνίδια παίζονται τώρα',
       one: '$count παιχνίδι παίζεται τώρα',
-      zero: '$count παιχνίδι παίζεται τώρα',
     );
     return '$_temp0';
   }
@@ -3289,7 +4427,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Όριο: $count χαρακτήρες.',
       one: 'Όριο: $count χαρακτήρες.',
-      zero: 'Όριο: $count χαρακτήρες.',
     );
     return '$_temp0';
   }
@@ -3301,7 +4438,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count αποκλεισμοί',
       one: '$count αποκλεισμός',
-      zero: '$count αποκλεισμός',
     );
     return '$_temp0';
   }
@@ -3313,7 +4449,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count δημοσιεύσεις φόρουμ',
       one: '$count δημοσίευση φόρουμ',
-      zero: '$count δημοσίευση φόρουμ',
     );
     return '$_temp0';
   }
@@ -3325,7 +4460,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count παίκτες $param2 αυτήν την εβδομάδα.',
       one: '$count παίκτης $param2 αυτήν την εβδομάδα.',
-      zero: '$count παίκτης $param2 αυτήν την εβδομάδα.',
     );
     return '$_temp0';
   }
@@ -3337,7 +4471,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Διαθέσιμο σε $count γλώσσες!',
       one: 'Διαθέσιμο σε $count γλώσσες!',
-      zero: 'Διαθέσιμο σε $count γλώσσες!',
     );
     return '$_temp0';
   }
@@ -3349,7 +4482,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count δευτερόλεπτα για την πρώτη κίνηση',
       one: '$count δευτερόλεπτο για την πρώτη κίνηση',
-      zero: '$count δευτερόλεπτο για την πρώτη κίνηση',
     );
     return '$_temp0';
   }
@@ -3361,7 +4493,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count δευτερόλεπτα',
       one: '$count δευτερόλεπτο',
-      zero: '$count δευτερόλεπτο',
     );
     return '$_temp0';
   }
@@ -3373,1013 +4504,9 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'και αποθηκεύστε $count γραμμές προκίνησης',
       one: 'και αποθηκεύστε $count γραμμή προκίνησης',
-      zero: 'και αποθηκεύστε $count γραμμή προκίνησης',
     );
     return '$_temp0';
   }
-
-  @override
-  String get patronDonate => 'Κάντε δωρεά';
-
-  @override
-  String get patronLichessPatron => 'Υποστηρικτής του Lichess';
-
-  @override
-  String get preferencesPreferences => 'Προτιμήσεις';
-
-  @override
-  String get preferencesDisplay => 'Εμφάνιση';
-
-  @override
-  String get preferencesPrivacy => 'Απόρρητο';
-
-  @override
-  String get preferencesNotifications => 'Ειδοποιήσεις';
-
-  @override
-  String get preferencesPieceAnimation => 'Κίνηση πιονιών';
-
-  @override
-  String get preferencesMaterialDifference => 'Διαφορά υλικού';
-
-  @override
-  String get preferencesBoardHighlights => 'Φωτισμός σκακιέρας (τελευταία κίνηση και σαχ)';
-
-  @override
-  String get preferencesPieceDestinations => 'Προορισμοί κομματιών (έγκυρες κινήσεις και προκινήσεις)';
-
-  @override
-  String get preferencesBoardCoordinates => 'Συντεταγμένες σκακιέρας (A-H, 1-8)';
-
-  @override
-  String get preferencesMoveListWhilePlaying => 'Λίστα κινήσεων κατά τη διάρκεια της παρτίδας';
-
-  @override
-  String get preferencesPgnPieceNotation => 'Εμφάνιση κινήσεων';
-
-  @override
-  String get preferencesChessPieceSymbol => 'Σύμβολο πιονιού στο σκάκι';
-
-  @override
-  String get preferencesPgnLetter => 'Γράμμα (K, Q, R, B, N)';
-
-  @override
-  String get preferencesZenMode => 'Λειτουργία Zεν';
-
-  @override
-  String get preferencesShowPlayerRatings => 'Εμφάνιση αξιολογήσεων παικτών';
-
-  @override
-  String get preferencesShowFlairs => 'Show player flairs';
-
-  @override
-  String get preferencesExplainShowPlayerRatings => 'Αυτό επιτρέπει την απόκρυψη όλων τις βαθμολογίες από την ιστοσελίδα, έτσι ώστε να μπορείτε να επικεντρωθείτε στο σκάκι. Τα παιχνίδια θα αξιολογούνται, η ρύθμιση αυτή επηρεάζει την εμφάνιση μόνο.';
-
-  @override
-  String get preferencesDisplayBoardResizeHandle => 'Εμφάνιση χειριστηρίου αλλαγής μεγέθους σκακιέρας';
-
-  @override
-  String get preferencesOnlyOnInitialPosition => 'Μόνο στην αρχική διάταξη';
-
-  @override
-  String get preferencesInGameOnly => 'Μόνο κατά τη διάρκεια του παιχνιδιού';
-
-  @override
-  String get preferencesChessClock => 'Σκακιστικό χρονόμετρο';
-
-  @override
-  String get preferencesTenthsOfSeconds => 'Δέκατα του δευτερολέπτου';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'Όταν απομένουν < 10 δευτερόλεπτα';
-
-  @override
-  String get preferencesHorizontalGreenProgressBars => 'Οριζόντιες πράσινες γραμμές προόδου';
-
-  @override
-  String get preferencesSoundWhenTimeGetsCritical => 'Ηχητική ειδοποίηση όταν ο χρόνος γίνεται κρίσιμος';
-
-  @override
-  String get preferencesGiveMoreTime => 'Προσθέστε περισσότερο χρόνο';
-
-  @override
-  String get preferencesGameBehavior => 'Συμπεριφορά παιχνιδιού';
-
-  @override
-  String get preferencesHowDoYouMovePieces => 'Πώς θέλετε να μετακινείτε τα κομμάτια;';
-
-  @override
-  String get preferencesClickTwoSquares => 'Κάνοντας κλικ στα δύο τετράγωνα';
-
-  @override
-  String get preferencesDragPiece => 'Σέρνοντας ένα πιόνι';
-
-  @override
-  String get preferencesBothClicksAndDrag => 'Και τα δύο';
-
-  @override
-  String get preferencesPremovesPlayingDuringOpponentTurn => 'Προκινήσεις (παιγμένες κατά τον χρόνο σκέψης του αντιπάλου)';
-
-  @override
-  String get preferencesTakebacksWithOpponentApproval => 'Ανακλήσεις (με έγκριση του αντιπάλου)';
-
-  @override
-  String get preferencesInCasualGamesOnly => 'Μόνο σε φιλικά παιχνίδια';
-
-  @override
-  String get preferencesPromoteToQueenAutomatically => 'Αυτόματη προαγωγή σε βασίλισσα';
-
-  @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Κρατήστε πατημένο το πλήκτρο <ctrl> ενώ κάνετε την προαγωγή για να απενεργοποιήσετε προσωρινά την αυτόματη προαγωγή';
-
-  @override
-  String get preferencesWhenPremoving => 'Κατά προεπιλογή κίνησης';
-
-  @override
-  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Διεκδικήστε ισοπαλία αυτόματα σε τριπλή επανάληψη';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Όταν απομένουν < 30 δευτερόλεπτα';
-
-  @override
-  String get preferencesMoveConfirmation => 'Επιβεβαίωση κίνησης';
-
-  @override
-  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Μπορεί να απενεργοποιηθεί κατά τη διάρκεια ενός παιχνιδιού με το μενού του ταμπλό';
-
-  @override
-  String get preferencesInCorrespondenceGames => 'Στις παρτίδες δι\' αλληλογραφίας';
-
-  @override
-  String get preferencesCorrespondenceAndUnlimited => 'Δι\' αλληλογραφίας και απεριορίστου χρόνου';
-
-  @override
-  String get preferencesConfirmResignationAndDrawOffers => 'Επιβεβαίωση παραίτησης και προσφοράς ισοπαλίας';
-
-  @override
-  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Μέθοδος ροκέ';
-
-  @override
-  String get preferencesCastleByMovingTwoSquares => 'Ροκέ μετακινώντας τον βασιλιά δύο τετράγωνα';
-
-  @override
-  String get preferencesCastleByMovingOntoTheRook => 'Ροκέ μετακινώντας τον βασιλιά πάνω στον πύργο';
-
-  @override
-  String get preferencesInputMovesWithTheKeyboard => 'Κάντε κινήσεις με το πληκτρολόγιο';
-
-  @override
-  String get preferencesInputMovesWithVoice => 'Εισαγωγή κινήσεων με τη φωνή σας';
-
-  @override
-  String get preferencesSnapArrowsToValidMoves => 'Αγκύρωση βελών σε έγκυρες κινήσεις';
-
-  @override
-  String get preferencesSayGgWpAfterLosingOrDrawing => 'Αποστολή «Good game, well played» (Ωραίο παιχνίδι, καλά παιγμένο) μετά από ήττα ή ισοπαλία';
-
-  @override
-  String get preferencesYourPreferencesHaveBeenSaved => 'Οι προτιμήσεις σας αποθηκεύτηκαν.';
-
-  @override
-  String get preferencesScrollOnTheBoardToReplayMoves => 'Κυλίστε τον δρομέα πάνω στη σκακιέρα για να ξαναδείτε κινήσεις';
-
-  @override
-  String get preferencesCorrespondenceEmailNotification => 'Να δέχομαι ημερήσια ειδοποίηση ηλεκτρονικού ταχυδρομείου για τα παιχνίδια διά αλληλογραφίας μου';
-
-  @override
-  String get preferencesNotifyStreamStart => 'Streamer εκπέμπει ζωντανά';
-
-  @override
-  String get preferencesNotifyInboxMsg => 'Νέο εισερχόμενο μήνυμα';
-
-  @override
-  String get preferencesNotifyForumMention => 'Το σχόλιο του φόρουμ σας αναφέρει';
-
-  @override
-  String get preferencesNotifyInvitedStudy => 'Πρόσκληση μελέτης';
-
-  @override
-  String get preferencesNotifyGameEvent => 'Ενημερώσεις σε παιχνίδια αλληλογραφίας';
-
-  @override
-  String get preferencesNotifyChallenge => 'Προκλήσεις';
-
-  @override
-  String get preferencesNotifyTournamentSoon => 'Το τουρνουά ξεκινά σύντομα';
-
-  @override
-  String get preferencesNotifyTimeAlarm => 'Το ρολόι εξαντλείται στο παιχνίδι αλληλογραφίας';
-
-  @override
-  String get preferencesNotifyBell => 'Ειδοποίηση με καμπανάκι εντός του Lichess';
-
-  @override
-  String get preferencesNotifyPush => 'Ειδοποίηση συσκευής όταν δεν είστε στο Lichess';
-
-  @override
-  String get preferencesNotifyWeb => 'Browser';
-
-  @override
-  String get preferencesNotifyDevice => 'Συσκευή';
-
-  @override
-  String get preferencesBellNotificationSound => 'Ειδοποίηση με ήχο από καμπανάκι';
-
-  @override
-  String get puzzlePuzzles => 'Γρίφοι';
-
-  @override
-  String get puzzlePuzzleThemes => 'Θέματα γρίφων';
-
-  @override
-  String get puzzleRecommended => 'Προτεινόμενα';
-
-  @override
-  String get puzzlePhases => 'Φάσεις';
-
-  @override
-  String get puzzleMotifs => 'Μοτίβα';
-
-  @override
-  String get puzzleAdvanced => 'Για προχωρημένους';
-
-  @override
-  String get puzzleLengths => 'Μήκος γρίφου';
-
-  @override
-  String get puzzleMates => 'Ματ';
-
-  @override
-  String get puzzleGoals => 'Στόχοι';
-
-  @override
-  String get puzzleOrigin => 'Πηγή';
-
-  @override
-  String get puzzleSpecialMoves => 'Ειδικές κινήσεις';
-
-  @override
-  String get puzzleDidYouLikeThisPuzzle => 'Σας άρεσε αυτός ο γρίφος;';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Ψηφίστε για να προχωρήσετε στο επόμενο!';
-
-  @override
-  String get puzzleUpVote => 'Up vote puzzle';
-
-  @override
-  String get puzzleDownVote => 'Down vote puzzle';
-
-  @override
-  String get puzzleYourPuzzleRatingWillNotChange => 'Οι βαθμοί αξιολόγησής σας δε θα αλλάξουν. Αυτοί οι βαθμοί χρησιμεύουν στην επιλογή γρίφων για το επίπεδό σας και όχι στον ανταγωνισμό.';
-
-  @override
-  String get puzzleFindTheBestMoveForWhite => 'Βρείτε την καλύτερη κίνηση για τα λευκά.';
-
-  @override
-  String get puzzleFindTheBestMoveForBlack => 'Βρείτε την καλύτερη κίνηση για τα μαύρα.';
-
-  @override
-  String get puzzleToGetPersonalizedPuzzles => 'Για να λύνετε εξατομικευμένους γρίφους:';
-
-  @override
-  String puzzlePuzzleId(String param) {
-    return 'Γρίφος $param';
-  }
-
-  @override
-  String get puzzlePuzzleOfTheDay => 'Γρίφος της ημέρας';
-
-  @override
-  String get puzzleDailyPuzzle => 'Ημερήσιος Γρίφος';
-
-  @override
-  String get puzzleClickToSolve => 'Κάντε κλικ για να τον λύσετε';
-
-  @override
-  String get puzzleGoodMove => 'Καλή κίνηση';
-
-  @override
-  String get puzzleBestMove => 'Παίξατε την καλύτερη κίνηση!';
-
-  @override
-  String get puzzleKeepGoing => 'Συνεχίστε…';
-
-  @override
-  String get puzzlePuzzleSuccess => 'Επιτυχία!';
-
-  @override
-  String get puzzlePuzzleComplete => 'Ο γρίφος ολοκληρώθηκε!';
-
-  @override
-  String get puzzleByOpenings => 'By openings';
-
-  @override
-  String get puzzlePuzzlesByOpenings => 'Puzzles by openings';
-
-  @override
-  String get puzzleOpeningsYouPlayedTheMost => 'Openings you played the most in rated games';
-
-  @override
-  String get puzzleUseFindInPage => 'Use \"Find in page\" in the browser menu to find your favourite opening!';
-
-  @override
-  String get puzzleUseCtrlF => 'Use Ctrl+f to find your favourite opening!';
-
-  @override
-  String get puzzleNotTheMove => 'Δεν είναι αυτή η κίνηση!';
-
-  @override
-  String get puzzleTrySomethingElse => 'Δοκιμάστε κάτι άλλο.';
-
-  @override
-  String puzzleRatingX(String param) {
-    return 'Βαθμολογία: $param';
-  }
-
-  @override
-  String get puzzleHidden => 'κρυφό';
-
-  @override
-  String puzzleFromGameLink(String param) {
-    return 'Από το παιχνίδι $param';
-  }
-
-  @override
-  String get puzzleContinueTraining => 'Συνέχεια εξάσκησης';
-
-  @override
-  String get puzzleDifficultyLevel => 'Επίπεδο δυσκολίας';
-
-  @override
-  String get puzzleNormal => 'Κανονικό';
-
-  @override
-  String get puzzleEasier => 'Εύκολο';
-
-  @override
-  String get puzzleEasiest => 'Πολύ εύκολο';
-
-  @override
-  String get puzzleHarder => 'Δύσκολο';
-
-  @override
-  String get puzzleHardest => 'Πολύ δύσκολο';
-
-  @override
-  String get puzzleExample => 'Παράδειγμα';
-
-  @override
-  String get puzzleAddAnotherTheme => 'Προσθήκη νέου θέματος';
-
-  @override
-  String get puzzleNextPuzzle => 'Επόμενος γρίφος';
-
-  @override
-  String get puzzleJumpToNextPuzzleImmediately => 'Μετάβαση στον επόμενο γρίφο αμέσως';
-
-  @override
-  String get puzzlePuzzleDashboard => 'Ταμπλό γρίφων';
-
-  @override
-  String get puzzleImprovementAreas => 'Τομείς βελτίωσης';
-
-  @override
-  String get puzzleStrengths => 'Δυνατά σημεία';
-
-  @override
-  String get puzzleHistory => 'Ιστορικό γρίφων';
-
-  @override
-  String get puzzleSolved => 'λύθηκε';
-
-  @override
-  String get puzzleFailed => 'απέτυχε';
-
-  @override
-  String get puzzleStreakDescription => 'Λύστε γρίφους που γίνονται όλο και πιο δύσκολοι και χτίστε σιγά σιγά ένα «σερί νικών». Δεν υπάρχει χρόνος, οπότε μη βιάζεστε. Μια λάθος κίνηση, και το παιχνίδι τέλειωσε! Μπορείτε να παραλείψετε μια κίνηση σε κάθε γύρο.';
-
-  @override
-  String puzzleYourStreakX(String param) {
-    return 'Το σερί νικών σας: $param';
-  }
-
-  @override
-  String get puzzleStreakSkipExplanation => 'Παραλείψτε αυτή την κίνηση για να διατηρήσετε το σερί νικών σας! Λειτουργεί μόνο μία φορά ανά γύρο.';
-
-  @override
-  String get puzzleContinueTheStreak => 'Συνεχίστε το σερί νικών';
-
-  @override
-  String get puzzleNewStreak => 'Νέο σερί νικών';
-
-  @override
-  String get puzzleFromMyGames => 'Από τα παιχνίδια μου';
-
-  @override
-  String get puzzleLookupOfPlayer => 'Αναζητήστε γρίφους από τα παιχνίδια ενός παίκτη';
-
-  @override
-  String puzzleFromXGames(String param) {
-    return 'Γρίφοι από τα παιχνίδια του χρήστη $param';
-  }
-
-  @override
-  String get puzzleSearchPuzzles => 'Αναζήτηση γρίφων';
-
-  @override
-  String get puzzleFromMyGamesNone => 'Δεν υπάρχουν γρίφοι από τα παιχνίδια σας στη βάση δεδομένων.\nΠαίξτε κλασικά ή rapid παιχνίδια για να αυξηθούν οι πιθανότητες προσθήκης γρίφων από τα παιχνίδια σας στη βάση δεδομένων!';
-
-  @override
-  String puzzleFromXGamesFound(String param1, String param2) {
-    return 'Βρέθηκαν $param1 γρίφοι στα παιχνίδια του χρήστη $param2';
-  }
-
-  @override
-  String get puzzlePuzzleDashboardDescription => 'Προπονηθείτε, αναλύστε, βελτιωθείτε';
-
-  @override
-  String puzzlePercentSolved(String param) {
-    return '$param λυμένα';
-  }
-
-  @override
-  String get puzzleNoPuzzlesToShow => 'Δεν υπάρχει τίποτα εδώ, ακόμα, λύστε μερικούς γρίφους πρώτα!';
-
-  @override
-  String get puzzleImprovementAreasDescription => 'Εκπαιδευτείτε σε αυτά για να βελτιώσετε την πρόοδό σας!';
-
-  @override
-  String get puzzleStrengthDescription => 'Τα πάτε καλύτερα στις εξής κατηγορίες';
-
-  @override
-  String puzzlePlayedXTimes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Λύθηκε $count φορές',
-      one: 'Λύθηκε $count φορά',
-      zero: 'Λύθηκε $count φορά',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsBelowYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count πόντους κάτω από τη βαθμολογία γρίφων σας',
-      one: 'Έναν πόντο κάτω από τη βαθμολογία γρίφων σας',
-      zero: 'Έναν πόντο κάτω από τη βαθμολογία γρίφων σας',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsAboveYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count πόντους πάνω από την βαθμολογία γρίφων σας',
-      one: 'Έναν πόντο πάνω από την βαθμολογία γρίφων σας',
-      zero: 'Έναν πόντο πάνω από την βαθμολογία γρίφων σας',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPlayed(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count παίχτηκαν',
-      one: '$count παίχτηκε',
-      zero: '$count παίχτηκε',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbToReplay(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count για επανάληψη',
-      one: '$count για επανάληψη',
-      zero: '$count για επανάληψη',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get puzzleThemeAdvancedPawn => 'Προωθημένο πιόνι';
-
-  @override
-  String get puzzleThemeAdvancedPawnDescription => 'Ένα πιόνι που προάγεται ή απειλεί να προαχθεί είναι κλειδί για αυτή την τακτική.';
-
-  @override
-  String get puzzleThemeAdvantage => 'Πλεονέκτημα';
-
-  @override
-  String get puzzleThemeAdvantageDescription => 'Αρπάξτε την ευκαιρία ώστε να αποκτήσετε ένα αποφασιστικό πλεονέκτημα. (200cp ≤ eval ≤ 600cp)';
-
-  @override
-  String get puzzleThemeAnastasiaMate => 'To ματ της Αναστασίας';
-
-  @override
-  String get puzzleThemeAnastasiaMateDescription => 'Ένας ίππος και ένας πύργος ή βασίλισσα κάνουν ματ στον αντίπαλο βασιλιά στο περιθώριο της σκακιέρας, όταν ένα φιλικό κομμάτι του εμποδίζει την διαφυγή.';
-
-  @override
-  String get puzzleThemeArabianMate => 'Αραβικό ματ';
-
-  @override
-  String get puzzleThemeArabianMateDescription => 'Συνεργασία ίππου και πύργου για παγίδευση του αντίπαλου βασιλιά στην άκρη της σκακιέρας.';
-
-  @override
-  String get puzzleThemeAttackingF2F7 => 'Επίθεση στο f2 ή f7';
-
-  @override
-  String get puzzleThemeAttackingF2F7Description => 'Μια επίθεση που εστιάζει στο πιόνι f2 ή f7, όπως στην επίθεση Φράιντ Λίβερ.';
-
-  @override
-  String get puzzleThemeAttraction => 'Έλξη';
-
-  @override
-  String get puzzleThemeAttractionDescription => 'Μια ανταλλαγή ή θυσία που ενθαρρύνει ή αναγκάζει ένα αντίπαλο κομμάτι σε ένα τετράγωνο όπου δύναται μια επακόλουθη τακτική.';
-
-  @override
-  String get puzzleThemeBackRankMate => 'Ματ της τελευταίας γραμμής';
-
-  @override
-  String get puzzleThemeBackRankMateDescription => 'Κάντε ματ στον βασιλιά στην τελευταία γραμμή όταν είναι παγιδευμένος εκεί από τα κομμάτια του.';
-
-  @override
-  String get puzzleThemeBishopEndgame => 'Φινάλε Αξιωματικών';
-
-  @override
-  String get puzzleThemeBishopEndgameDescription => 'Ένα τέλος παρτίδας μόνο με αξιωματικούς και πιόνια.';
-
-  @override
-  String get puzzleThemeBodenMate => 'Ματ του Μποντάν';
-
-  @override
-  String get puzzleThemeBodenMateDescription => 'Δύο επιτιθέμενοι αξιωματικοί κινούμενοι διαγωνίως κάνουν ματ σε βασιλιά που εμποδίζεται από φιλικά κομμάτια.';
-
-  @override
-  String get puzzleThemeCastling => 'Pοκέ';
-
-  @override
-  String get puzzleThemeCastlingDescription => 'Εξασφαλίστε την ασφάλεια του βασιλιά και αναπτύξτε τον πύργο για επίθεση.';
-
-  @override
-  String get puzzleThemeCapturingDefender => 'Αιχμαλωτίστε τον αμυνόμενο';
-
-  @override
-  String get puzzleThemeCapturingDefenderDescription => 'Απομάκρυνση κομματιού που είναι σημαντικό για την υπεράσπιση άλλου κομματιού, επιτρέποντας την αιχμαλώτιση του πλέον ανυπεράσπιστου κομματιού στην επόμενη κίνηση.';
-
-  @override
-  String get puzzleThemeCrushing => 'Σύνθλιψη';
-
-  @override
-  String get puzzleThemeCrushingDescription => 'Εντοπίστε το σοβαρό λάθος του αντιπάλου για να αποκτήσετε συντριπτικό πλεονέκτημα. (eval ≥ 600cp)';
-
-  @override
-  String get puzzleThemeDoubleBishopMate => 'Ματ με δύο αξιωματικούς';
-
-  @override
-  String get puzzleThemeDoubleBishopMateDescription => 'Δύο επιτιθέμενοι αξιωματικοί σε κοντινή απόσταση κάνουν ματ σε βασιλιά που εμποδίζεται από φιλικά κομμάτια.';
-
-  @override
-  String get puzzleThemeDovetailMate => 'Dovetail ματ';
-
-  @override
-  String get puzzleThemeDovetailMateDescription => 'Βασίλισσα κάνει ματ σε παρακείμενο βασιλιά, του οποίου τα μοναδικά δύο τετράγωνα διαφυγής εμποδίζονται από φιλικά κομμάτια.';
-
-  @override
-  String get puzzleThemeEquality => 'Ισότητα';
-
-  @override
-  String get puzzleThemeEqualityDescription => 'Επιστρέψτε από μια χαμένη θέση και ασφαλίστε μια κλήρωση ή μια ισορροπημένη θέση. (eval ≤ 200cp)';
-
-  @override
-  String get puzzleThemeKingsideAttack => 'Επίθεση στην πλευρά του βασιλιά';
-
-  @override
-  String get puzzleThemeKingsideAttackDescription => 'Επίθεση στον αντίπαλο βασιλιά, μετά από μικρό ροκέ.';
-
-  @override
-  String get puzzleThemeClearance => 'Ελευθέρωση';
-
-  @override
-  String get puzzleThemeClearanceDescription => 'Μία κίνηση, συνήθως με tempo, που ελευθερώνει το τετράγωνο, στήλη ή διαγώνιο για την συνέχιση τακτικής ιδέας.';
-
-  @override
-  String get puzzleThemeDefensiveMove => 'Αμυντική κίνηση';
-
-  @override
-  String get puzzleThemeDefensiveMoveDescription => 'Μια ακριβής κίνηση ή ακολουθία κινήσεων που απαιτείται για να αποφευχθεί η απώλεια υλικού ή άλλου πλεονεκτήματος.';
-
-  @override
-  String get puzzleThemeDeflection => 'Εκτροπή';
-
-  @override
-  String get puzzleThemeDeflectionDescription => 'Μία κίνηση που απομακρύνει ένα αντίπαλο κομμάτι από υφιστάμενο καθήκον, όπως η φύλαξη ενός τετραγώνου κλειδί. Μερικές φορές ονομάζεται και \"υπερφόρτωση\".';
-
-  @override
-  String get puzzleThemeDiscoveredAttack => 'Επίθεση με αποκάλυψη';
-
-  @override
-  String get puzzleThemeDiscoveredAttackDescription => 'Μετακίνηση κομματιού που προηγουμένως εμπόδιζε την επίθεση από κομμάτι μεγάλης εμβέλειας, όπως ένας ίππος που εμπόδιζε έναν πύργο.';
-
-  @override
-  String get puzzleThemeDoubleCheck => 'Διπλό σαχ';
-
-  @override
-  String get puzzleThemeDoubleCheckDescription => 'Διπλό σαχ ως αποτέλεσμα μίας επίθεσης με αποκάλυψη, όπου και το μετακινούμενο κομμάτι δίνει σαχ.';
-
-  @override
-  String get puzzleThemeEndgame => 'Φινάλε';
-
-  @override
-  String get puzzleThemeEndgameDescription => 'Μια τακτική κατά την τελευταία φάση του παιχνιδιού.';
-
-  @override
-  String get puzzleThemeEnPassantDescription => 'Τακτικό που αφορά το κανόνα en passant, όπου ένα πιόνι μπορεί να αιχμαλωτίσει ένα αντίπαλο πιόνι που το προσπέρασε χρησιμοποιώντας την αρχική δύο τετραγώνων κίνηση.';
-
-  @override
-  String get puzzleThemeExposedKing => 'Εκτεθειμένος βασιλιάς';
-
-  @override
-  String get puzzleThemeExposedKingDescription => 'Τακτικό που αφορά βασιλιά με λίγα αμυντικά κομμάτια γύρω του, που συχνά οδηγεί σε ματ.';
-
-  @override
-  String get puzzleThemeFork => 'Πιρούνισμα';
-
-  @override
-  String get puzzleThemeForkDescription => 'Μια κίνηση όπου το μετακινούμενο κομμάτι επιτίθεται ταυτόχρονα σε δύο ή περισσότερα αντίπαλα κομμάτια.';
-
-  @override
-  String get puzzleThemeHangingPiece => 'Κρεμασμένα κομμάτια';
-
-  @override
-  String get puzzleThemeHangingPieceDescription => 'Μια τακτική όπου ένα αντίπαλο κομμάτι είναι ανυπεράσπιστο ή υπερασπιζόμενο ανεπαρκώς και μπορεί να παρθεί.';
-
-  @override
-  String get puzzleThemeHookMate => 'Ματ με αγκίστρι';
-
-  @override
-  String get puzzleThemeHookMateDescription => 'Ματ με πύργο, ίππο, και ένα πιόνι μαζί με ένα εχθρικό πιόνι που εμποδίζει την διαφυγή του αντίπαλου βασιλιά.';
-
-  @override
-  String get puzzleThemeInterference => 'Παρεμβολή';
-
-  @override
-  String get puzzleThemeInterferenceDescription => 'Μετακίνηση κομματιού ανάμεσα σε δύο αντίπαλα κομμάτια για να αφήσει ένα ή και τα δύο αντίπαλα κομμάτια ανυπεράσπιστα, όπως ένας ίππος σε υπερασπιζόμενο τετράγωνο ανάμεσα σε δύο πύργους.';
-
-  @override
-  String get puzzleThemeIntermezzo => 'Ενδιάμεση κίνηση';
-
-  @override
-  String get puzzleThemeIntermezzoDescription => 'Αντί για την αναμενόμενη κίνηση παίζουμε πρώτα μια άλλη κίνηση η οποία δημιουργεί μια άμεση απειλή και που ο αντίπαλος πρέπει να απαντήσει. Επίσης γνωστό ως \"Zwischenzug\" ή \"Intermezzo\".';
-
-  @override
-  String get puzzleThemeKnightEndgame => 'Φινάλε Ίππων';
-
-  @override
-  String get puzzleThemeKnightEndgameDescription => 'Ένα τέλος παρτίδας μόνο με ίππους και πιόνια.';
-
-  @override
-  String get puzzleThemeLong => 'Μεγάλος γρίφος';
-
-  @override
-  String get puzzleThemeLongDescription => 'Τρεις κινήσεις για να κερδίσετε.';
-
-  @override
-  String get puzzleThemeMaster => 'Master παιχνίδια';
-
-  @override
-  String get puzzleThemeMasterDescription => 'Γρίφοι από παρτίδες τιτλούχων παικτών.';
-
-  @override
-  String get puzzleThemeMasterVsMaster => 'Master vs Master παιχνίδια';
-
-  @override
-  String get puzzleThemeMasterVsMasterDescription => 'Γρίφοι από παρτίδες μεταξύ δύο τιτλούχων παικτών.';
-
-  @override
-  String get puzzleThemeMate => 'Ματ';
-
-  @override
-  String get puzzleThemeMateDescription => 'Κερδίστε το παιχνίδι με στυλ.';
-
-  @override
-  String get puzzleThemeMateIn1 => 'Ματ σε 1';
-
-  @override
-  String get puzzleThemeMateIn1Description => 'Κάντε ματ με μια κίνηση.';
-
-  @override
-  String get puzzleThemeMateIn2 => 'Ματ σε 2';
-
-  @override
-  String get puzzleThemeMateIn2Description => 'Κάντε ματ σε δύο κινήσεις.';
-
-  @override
-  String get puzzleThemeMateIn3 => 'Ματ σε 3';
-
-  @override
-  String get puzzleThemeMateIn3Description => 'Κάντε ματ σε τρεις κινήσεις.';
-
-  @override
-  String get puzzleThemeMateIn4 => 'Ματ σε 4';
-
-  @override
-  String get puzzleThemeMateIn4Description => 'Κάντε ματ σε τέσσερις κινήσεις.';
-
-  @override
-  String get puzzleThemeMateIn5 => 'Ματ σε 5 ή περισσότερο';
-
-  @override
-  String get puzzleThemeMateIn5Description => 'Βρείτε μία μακρά ακολουθία κινήσεων που οδηγεί σε ματ.';
-
-  @override
-  String get puzzleThemeMiddlegame => 'Μέση φάση παιχνιδιού';
-
-  @override
-  String get puzzleThemeMiddlegameDescription => 'Μια τακτική κατά τη δεύτερη φάση του παιχνιδιού.';
-
-  @override
-  String get puzzleThemeOneMove => 'Γρίφος μιας κίνησης';
-
-  @override
-  String get puzzleThemeOneMoveDescription => 'Ένας γρίφος που έχει μόνο μία κίνηση.';
-
-  @override
-  String get puzzleThemeOpening => 'Άνοιγμα';
-
-  @override
-  String get puzzleThemeOpeningDescription => 'Μια τακτική κατά την πρώτη φάση του παιχνιδιού.';
-
-  @override
-  String get puzzleThemePawnEndgame => 'Φινάλε Πιονιών';
-
-  @override
-  String get puzzleThemePawnEndgameDescription => 'Ένα τέλος παρτίδας μόνο με πιόνια.';
-
-  @override
-  String get puzzleThemePin => 'Κάρφωμα';
-
-  @override
-  String get puzzleThemePinDescription => 'Μια τακτική που περιλαμβάνει καρφώματα, όπου ένα κομμάτι αδυνατεί να μετακινηθεί χωρίς να αποκαλύψει μια επίθεση σε ένα κομμάτι μεγαλύτερης αξίας.';
-
-  @override
-  String get puzzleThemePromotion => 'Προαγωγή';
-
-  @override
-  String get puzzleThemePromotionDescription => 'Ένα πιόνι που προάγεται ή απειλεί να προαχθεί είναι κλειδί για αυτή την τακτική.';
-
-  @override
-  String get puzzleThemeQueenEndgame => 'Φινάλε Βασιλισσών';
-
-  @override
-  String get puzzleThemeQueenEndgameDescription => 'Ένα τέλος παρτίδας μόνο με βασίλισσες και πιόνια.';
-
-  @override
-  String get puzzleThemeQueenRookEndgame => 'Βασίλισσα και Πύργος';
-
-  @override
-  String get puzzleThemeQueenRookEndgameDescription => 'Ένα τέλος παρτίδας μόνο με βασίλισσες, πύργους και πιόνια.';
-
-  @override
-  String get puzzleThemeQueensideAttack => 'Επίθεση στην πλευρά της βασίλισσας';
-
-  @override
-  String get puzzleThemeQueensideAttackDescription => 'Επίθεση στον αντίπαλο βασιλιά, μετά από μεγάλο ροκέ.';
-
-  @override
-  String get puzzleThemeQuietMove => 'Ήσυχη κίνηση';
-
-  @override
-  String get puzzleThemeQuietMoveDescription => 'Μια κίνηση που δεν δίνει σαχ ή αιχμαλωτίζει, αλλά προετοιμάζει μια αναπόφευκτη απειλή σε επόμενη κίνηση.';
-
-  @override
-  String get puzzleThemeRookEndgame => 'Φινάλε Πύργων';
-
-  @override
-  String get puzzleThemeRookEndgameDescription => 'Ένα τέλος παρτίδας μόνο με πύργους και πιόνια.';
-
-  @override
-  String get puzzleThemeSacrifice => 'Θυσία';
-
-  @override
-  String get puzzleThemeSacrificeDescription => 'Μια τακτική που περιλαμβάνει την εγκατάλειψη υλικού βραχυπρόθεσμα, ώστε να κερδηθεί πλεονέκτημα μετά από μια εξαναγκασμένη ακολουθία κινήσεων.';
-
-  @override
-  String get puzzleThemeShort => 'Σύντομος γρίφος';
-
-  @override
-  String get puzzleThemeShortDescription => 'Δύο κινήσεις για να κερδίσετε.';
-
-  @override
-  String get puzzleThemeSkewer => 'Σούβλισμα';
-
-  @override
-  String get puzzleThemeSkewerDescription => 'Ένα μοτίβο όπου ένα κομμάτι υψηλής αξίας δέχεται επίθεση, κάνει στην άκρη, και επιτρέπει την επίθεση ή το πάρσιμο ενός κομματιού μικρότερης αξίας πίσω από αυτό, το αντίστροφο δηλαδή του καρφώματος.';
-
-  @override
-  String get puzzleThemeSmotheredMate => 'Ματ αποπνιγμού';
-
-  @override
-  String get puzzleThemeSmotheredMateDescription => 'Ένα ματ που γίνεται από έναν ίππο σε έναν βασιλιάς ο οποίος δεν μπορεί να μετακινηθεί όντας περιτριγυρισμένος (ή πνιγμένος) από δικά του κομμάτια.';
-
-  @override
-  String get puzzleThemeSuperGM => 'Παιχνίδια Super GM';
-
-  @override
-  String get puzzleThemeSuperGMDescription => 'Γρίφοι από παρτίδες που παίχθηκαν από κορυφαίους παίκτες του κόσμου.';
-
-  @override
-  String get puzzleThemeTrappedPiece => 'Παγιδευμένο κομμάτι';
-
-  @override
-  String get puzzleThemeTrappedPieceDescription => 'Ένα κομμάτι δεν μπορεί να αποφύγει την αιχμαλώτιση, καθώς έχει περιορισμένες κινήσεις.';
-
-  @override
-  String get puzzleThemeUnderPromotion => 'Προαγωγή σε κομμάτι μικρότερης αξίας';
-
-  @override
-  String get puzzleThemeUnderPromotionDescription => 'Προώθηση σε ιππότη, αξιωματικό ή πύργο.';
-
-  @override
-  String get puzzleThemeVeryLong => 'Πολύ μεγάλος γρίφος';
-
-  @override
-  String get puzzleThemeVeryLongDescription => 'Τέσσερις κινήσεις ή περισσότερα για να κερδίσετε.';
-
-  @override
-  String get puzzleThemeXRayAttack => 'Επίθεση ακτίνας Χ';
-
-  @override
-  String get puzzleThemeXRayAttackDescription => 'Κομμάτι που επιτίθεται ή αμύνεται ένα τετράγωνο, πίσω από εχθρικό κομμάτι.';
-
-  @override
-  String get puzzleThemeZugzwang => 'Τσούγκτσβανγκ';
-
-  @override
-  String get puzzleThemeZugzwangDescription => 'Ο αντίπαλος είναι περιορισμένος στις κινήσεις που μπορεί να κάνει και οποιαδήποτε κίνηση επιλέξει επιδεινώνει την θέση του.';
-
-  @override
-  String get puzzleThemeHealthyMix => 'Προτεινόμενο μίγμα';
-
-  @override
-  String get puzzleThemeHealthyMixDescription => 'Λίγο απ\' όλα. Δεν ξέρετε τι να περιμένετε, οπότε παραμένετε σε ετοιμότητα! Όπως στα πραγματικά παιχνίδια.';
-
-  @override
-  String get puzzleThemePlayerGames => 'Παιχνίδια παίκτη';
-
-  @override
-  String get puzzleThemePlayerGamesDescription => 'Αναζητήστε γρίφους που δημιουργήθηκαν από παιχνίδια είτε δικά σας είτε άλλων παικτών.';
-
-  @override
-  String puzzleThemePuzzleDownloadInformation(String param) {
-    return 'Αυτοί οι γρίφοι είναι δημόσιοι και μπορείτε να τους κατεβάσετε εδώ $param.';
-  }
-
-  @override
-  String perfStatPerfStats(String param) {
-    return 'Στατιστικά $param';
-  }
-
-  @override
-  String get perfStatViewTheGames => 'Προβολή παρτίδων';
-
-  @override
-  String get perfStatProvisional => 'προσωρινή';
-
-  @override
-  String get perfStatNotEnoughRatedGames => 'Δεν έχουν παιχτεί αρκετές βαθμολογημένες παρτίδες ώστε να υπάρξει έμπιστη βαθμολογία.';
-
-  @override
-  String perfStatProgressOverLastXGames(String param) {
-    return 'Εξέλιξη βάσει των τελευταίων $param παρτίδων:';
-  }
-
-  @override
-  String perfStatRatingDeviation(String param) {
-    return 'Απόκλιση βαθμολογίας: $param.';
-  }
-
-  @override
-  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
-    return 'Χαμηλότερη τιμή σημαίνει ότι η βαθμολογία είναι πιο σταθερή. Βαθμολογίες πάνω από $param1 θεωρούνται προσωρινές. Για να συμπεριληφθείτε στην κατάταξη, η βαθμολογία σας πρέπει να είναι κάτω από $param2 (στο κανονικό σκάκι) ή $param3 (στις παραλλαγές).';
-  }
-
-  @override
-  String get perfStatTotalGames => 'Σύνολο παρτίδων';
-
-  @override
-  String get perfStatRatedGames => 'Βαθμολογημένες παρτίδες';
-
-  @override
-  String get perfStatTournamentGames => 'Παρτίδες σε τουρνουά';
-
-  @override
-  String get perfStatBerserkedGames => 'Παρτίδες με berserk';
-
-  @override
-  String get perfStatTimeSpentPlaying => 'Χρόνος που διατέθηκε παίζοντας';
-
-  @override
-  String get perfStatAverageOpponent => 'Μέση αξιολόγηση αντιπάλων';
-
-  @override
-  String get perfStatVictories => 'Νίκες';
-
-  @override
-  String get perfStatDefeats => 'Ήττες';
-
-  @override
-  String get perfStatDisconnections => 'Αποσυνδέσεις';
-
-  @override
-  String get perfStatNotEnoughGames => 'Δεν έχουν παιχτεί αρκετές παρτίδες';
-
-  @override
-  String perfStatHighestRating(String param) {
-    return 'Υψηλότερη βαθμολογία: $param';
-  }
-
-  @override
-  String perfStatLowestRating(String param) {
-    return 'Χαμηλότερη βαθμολογία: $param';
-  }
-
-  @override
-  String perfStatFromXToY(String param1, String param2) {
-    return 'από $param1 έως $param2';
-  }
-
-  @override
-  String get perfStatWinningStreak => 'Συνεχόμενες νίκες';
-
-  @override
-  String get perfStatLosingStreak => 'Συνεχόμενες ήττες';
-
-  @override
-  String perfStatLongestStreak(String param) {
-    return 'Μεγαλύτερο Σερί: $param';
-  }
-
-  @override
-  String perfStatCurrentStreak(String param) {
-    return 'Τρέχον σερί: $param';
-  }
-
-  @override
-  String get perfStatBestRated => 'Καλύτερες αξιολογήσιμες νίκες';
-
-  @override
-  String get perfStatGamesInARow => 'Συνεχόμενες παρτίδες';
-
-  @override
-  String get perfStatLessThanOneHour => 'Διάστημα λιγότερο από μία ώρα μεταξύ των παρτίδων';
-
-  @override
-  String get perfStatMaxTimePlaying => 'Μέγιστος χρόνος που διατέθηκε παίζοντας';
-
-  @override
-  String get perfStatNow => 'τώρα';
-
-  @override
-  String get searchSearch => 'Αναζήτηση';
-
-  @override
-  String get settingsSettings => 'Επιλογές';
-
-  @override
-  String get settingsCloseAccount => 'Κλείσιμο λογαριασμού';
-
-  @override
-  String get settingsManagedAccountCannotBeClosed => 'Ο λογαριασμός σας βρίσκεται υπό διαχείριση και δεν μπορεί να κλείσει.';
-
-  @override
-  String get settingsClosingIsDefinitive => 'Η απενεργοποίηση είναι οριστική. Δεν υπάρχει τρόπος ανάκλησης. Είστε σίγουρος;';
-
-  @override
-  String get settingsCantOpenSimilarAccount => 'Δεν θα σας επιτραπεί η δημιουργία νέου λογαριασμού με το ίδιο όνομα, ακόμα κι αν μετατρέψετε έναν μικρό σε έναν κεφαλαίο ή το αντίστροφο.';
-
-  @override
-  String get settingsChangedMindDoNotCloseAccount => 'Άλλαξα γνώμη, μην κλείσετε τον λογαριασμό μου';
-
-  @override
-  String get settingsCloseAccountExplanation => 'Είστε σίγουροι πως θέλετε να απενεργοποιήσετε τον λογαριασμό σας; Η απενεργοποίηση είναι μια μόνιμη απόφαση. ΠΟΤΕ ΞΑΝΑ δεν θα μπορέσετε να συνδεθείτε.';
-
-  @override
-  String get settingsThisAccountIsClosed => 'Αυτός ο λογαριασμός έχει κλείσει.';
-
-  @override
-  String get streamerLichessStreamers => 'Lichess streamers';
 
   @override
   String get stormMoveToStart => 'Μετακινήστε ένα κομμάτι για να αρχίσετε';
@@ -4547,7 +4674,6 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: '$count γύροι',
       one: '1 γύρος',
-      zero: '1 γύρος',
     );
     return '$_temp0';
   }
@@ -4559,10 +4685,12 @@ class AppLocalizationsEl extends AppLocalizations {
       locale: localeName,
       other: 'Έπαιξε $count γύρους $param2',
       one: 'Έπαιξε έναν γύρο $param2',
-      zero: 'Έπαιξε έναν γύρο $param2',
     );
     return '$_temp0';
   }
+
+  @override
+  String get streamerLichessStreamers => 'Lichess streamers';
 
   @override
   String get studyShareAndExport => 'Διαμοιρασμός & εξαγωγή';

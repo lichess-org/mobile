@@ -1,7 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
@@ -14,11 +13,21 @@ import 'user.dart';
 class UserRepository {
   UserRepository(this.client);
 
-  final http.Client client;
+  final LichessClient client;
 
-  Future<User> getUser(UserId id) {
+  Future<User> getUser(UserId id, {bool withCanChallenge = false}) {
     return client.readJson(
-      Uri(path: '/api/user/$id'),
+      Uri(
+        path: '/api/user/$id',
+        queryParameters: withCanChallenge ? {'challenge': 'true'} : null,
+      ),
+      mapper: User.fromServerJson,
+    );
+  }
+
+  Future<IList<User>> getOnlineBots() {
+    return client.readNdJsonList(
+      Uri(path: '/api/bot/online'),
       mapper: User.fromServerJson,
     );
   }

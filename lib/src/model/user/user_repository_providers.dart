@@ -30,7 +30,7 @@ Future<(User, UserStatus)> userAndStatus(
       final repo = UserRepository(client);
       return Future.wait(
         [
-          repo.getUser(id),
+          repo.getUser(id, withCanChallenge: true),
           repo.getUsersStatuses({id}.lock),
         ],
         eagerError: true,

@@ -79,8 +79,11 @@ class GamePlayer extends StatelessWidget {
                   player.user!.title!,
                   style: TextStyle(
                     fontSize: playerFontSize,
-                    fontWeight: FontWeight.bold,
-                    color: context.lichessColors.brag,
+                    fontWeight:
+                        player.user?.title == 'BOT' ? null : FontWeight.bold,
+                    color: player.user?.title == 'BOT'
+                        ? context.lichessColors.fancy
+                        : context.lichessColors.brag,
                   ),
                 ),
                 const SizedBox(width: 5),

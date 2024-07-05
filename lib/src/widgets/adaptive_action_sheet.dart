@@ -76,7 +76,7 @@ Future<T?> showConfirmDialog<T>(
               style: TextButton.styleFrom(
                 textStyle: Theme.of(context).textTheme.labelLarge,
               ),
-              child: const Text('OK'),
+              child: Text(context.l10n.mobileOkButton),
               onPressed: () {
                 Navigator.of(context).pop();
                 onConfirm(context);

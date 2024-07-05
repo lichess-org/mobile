@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
@@ -38,7 +39,7 @@ import 'game_player.dart';
 import 'game_result_dialog.dart';
 import 'game_screen_providers.dart';
 
-/// Common body for the [LobbyGameScreen] and [StandaloneGameScreen].
+/// Game body for the [GameScreen].
 ///
 /// This widget is responsible for displaying the board, the clocks, the players,
 /// and the bottom bar.
@@ -104,6 +105,10 @@ class GameBody extends ConsumerWidget {
     );
 
     final boardPreferences = ref.watch(boardPreferencesProvider);
+    final emergencySoundEnabled = ref.watch(clockSoundProvider).maybeWhen(
+          data: (clockSound) => clockSound,
+          orElse: () => true,
+        );
 
     final blindfoldMode = ref.watch(
       gamePreferencesProvider.select(
@@ -152,6 +157,7 @@ class GameBody extends ConsumerWidget {
                   emergencyThreshold: youAre == Side.black
                       ? gameState.game.meta.clock?.emergency
                       : null,
+                  emergencySoundEnabled: emergencySoundEnabled,
                   onFlag: () => ref.read(ctrlProvider.notifier).onFlag(),
                 )
               : gameState.game.correspondenceClock != null
@@ -192,6 +198,7 @@ class GameBody extends ConsumerWidget {
                   emergencyThreshold: youAre == Side.white
                       ? gameState.game.meta.clock?.emergency
                       : null,
+                  emergencySoundEnabled: emergencySoundEnabled,
                   onFlag: () => ref.read(ctrlProvider.notifier).onFlag(),
                 )
               : gameState.game.correspondenceClock != null
@@ -210,6 +217,12 @@ class GameBody extends ConsumerWidget {
         final topPlayer = topPlayerIsBlack ? black : white;
         final bottomPlayer = topPlayerIsBlack ? white : black;
 
+        final animationDuration =
+            gameState.game.meta.speed == Speed.ultraBullet ||
+                    gameState.game.meta.speed == Speed.bullet
+                ? Duration.zero
+                : boardPreferences.pieceAnimationDuration;
+
         final content = WakelockWidget(
           shouldEnableOnFocusGained: () => gameState.game.playable,
           child: PopScope(
@@ -223,6 +236,7 @@ class GameBody extends ConsumerWidget {
                     child: BoardTable(
                       key: boardKey,
                       boardSettingsOverrides: BoardSettingsOverrides(
+                        animationDuration: animationDuration,
                         autoQueenPromotion: gameState.canAutoQueen,
                         autoQueenPromotionOnPremove:
                             gameState.canAutoQueenOnPremove,
@@ -441,6 +455,23 @@ class _GameBottomBar extends ConsumerWidget {
               icon: Icons.menu,
             ),
           ),
+          if (!gameState.game.playable)
+            Expanded(
+              child: BottomBarButton(
+                label: 'Show result',
+                onTap: () {
+                  showAdaptiveDialog<void>(
+                    context: context,
+                    builder: (context) => GameResultDialog(
+                      id: id,
+                      onNewOpponentCallback: onNewOpponentCallback,
+                    ),
+                    barrierDismissible: true,
+                  );
+                },
+                icon: Icons.info_outline,
+              ),
+            ),
           if (gameState.game.playable &&
               gameState.game.opponent?.offeringDraw == true)
             Expanded(
@@ -531,8 +562,28 @@ class _GameBottomBar extends ConsumerWidget {
               ),
             )
           else
-            const SizedBox(
-              width: 44.0,
+            Expanded(
+              child: BottomBarButton(
+                label: context.l10n.resign,
+                onTap: gameState.game.resignable
+                    ? gameState.shouldConfirmResignAndDrawOffer
+                        ? () => _showConfirmDialog(
+                              context,
+                              description: Text(context.l10n.resignTheGame),
+                              onConfirm: () {
+                                ref
+                                    .read(gameControllerProvider(id).notifier)
+                                    .resignGame();
+                              },
+                            )
+                        : () {
+                            ref
+                                .read(gameControllerProvider(id).notifier)
+                                .resignGame();
+                          }
+                    : null,
+                icon: Icons.flag,
+              ),
             ),
           if (gameState.game.meta.speed == Speed.correspondence &&
               !gameState.game.finished)
@@ -688,7 +739,8 @@ class _GameBottomBar extends ConsumerWidget {
           ),
         if (gameState.game.me?.proposingTakeback == true)
           BottomSheetAction(
-            makeLabel: (context) => const Text('Cancel takeback offer'),
+            makeLabel: (context) =>
+                Text(context.l10n.mobileCancelTakebackOffer),
             isDestructiveAction: true,
             onPressed: (context) {
               ref
@@ -698,7 +750,7 @@ class _GameBottomBar extends ConsumerWidget {
           ),
         if (gameState.game.me?.offeringDraw == true)
           BottomSheetAction(
-            makeLabel: (context) => const Text('Cancel draw offer'),
+            makeLabel: (context) => Text(context.l10n.mobileCancelDrawOffer),
             isDestructiveAction: true,
             onPressed: (context) {
               ref
@@ -784,20 +836,6 @@ class _GameBottomBar extends ConsumerWidget {
             onPressed: (_) => onNewOpponentCallback(gameState.game),
           ),
         if (gameState.game.finished)
-          BottomSheetAction(
-            makeLabel: (context) => const Text('Show result'),
-            onPressed: (_) {
-              showAdaptiveDialog<void>(
-                context: context,
-                builder: (context) => GameResultDialog(
-                  id: id,
-                  onNewOpponentCallback: onNewOpponentCallback,
-                ),
-                barrierDismissible: true,
-              );
-            },
-          ),
-        if (gameState.game.finished)
           ...makeFinishedGameShareActions(
             gameState.game,
             currentGamePosition:
@@ -819,7 +857,7 @@ class _GameBottomBar extends ConsumerWidget {
     final result = await showAdaptiveDialog<bool>(
       context: context,
       builder: (context) => YesNoDialog(
-        title: const Text('Are you sure?'),
+        title: Text(context.l10n.mobileAreYouSure),
         content: description,
         onYes: () {
           return Navigator.of(context).pop(true);

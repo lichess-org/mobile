@@ -25,7 +25,7 @@ import 'package:lichess_mobile/src/utils/android.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
-import 'package:lichess_mobile/src/view/game/standalone_game_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_screen.dart';
 
 class LoadingAppScreen extends ConsumerWidget {
   const LoadingAppScreen({super.key});
@@ -364,10 +364,8 @@ class _EntryPointState extends ConsumerState<_EntryPointWidget> {
           pushPlatformRoute(
             context,
             rootNavigator: true,
-            builder: (_) => StandaloneGameScreen(
-              params: InitialStandaloneGameParams(
-                id: GameFullId(gameFullId),
-              ),
+            builder: (_) => GameScreen(
+              initialGameId: GameFullId(gameFullId),
             ),
           );
         }

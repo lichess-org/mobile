@@ -7,3 +7,7 @@ String lichessFlagSrc(String country) {
 String lichessFlairSrc(String flair) {
   return '$kLichessCDNHost/assets/flair/img/$flair.webp';
 }
+
+String lichessFideFedSrc(String name) {
+  return '$kLichessCDNHost/assets/images/fide-fed/$name.svg';
+}

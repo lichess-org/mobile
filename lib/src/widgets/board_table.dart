@@ -1,5 +1,6 @@
 import 'package:chessground/chessground.dart' hide BoardTheme;
 import 'package:collection/collection.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -25,7 +26,7 @@ const _moveListOpacity = 0.6;
 /// An optional move list can be displayed above the top table space.
 ///
 /// An optional overlay or error message can be displayed on top of the board.
-class BoardTable extends ConsumerWidget {
+class BoardTable extends ConsumerStatefulWidget {
   const BoardTable({
     this.onMove,
     this.onPremove,
@@ -91,7 +92,14 @@ class BoardTable extends ConsumerWidget {
   final bool showEngineGaugePlaceholder;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<BoardTable> createState() => _BoardTableState();
+}
+
+class _BoardTableState extends ConsumerState<BoardTable> {
+  ISet<Shape> userShapes = ISet();
+
+  @override
+  Widget build(BuildContext context) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
 
     return LayoutBuilder(
@@ -108,7 +116,7 @@ class BoardTable extends ConsumerWidget {
         final verticalSpaceLeftBoardOnPortrait =
             constraints.biggest.height - boardSize;
 
-        final error = errorMessage != null
+        final error = widget.errorMessage != null
             ? SizedBox.square(
                 dimension: boardSize,
                 child: Center(
@@ -125,7 +133,7 @@ class BoardTable extends ConsumerWidget {
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
-                        child: Text(errorMessage!),
+                        child: Text(widget.errorMessage!),
                       ),
                     ),
                   ),
@@ -144,24 +152,29 @@ class BoardTable extends ConsumerWidget {
               ? const BorderRadius.all(Radius.circular(4.0))
               : BorderRadius.zero,
           boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
+          drawShape: DrawShapeOptions(
+            enable: true,
+            onCompleteShape: _onCompleteShape,
+            onClearShapes: _onClearShapes,
+          ),
         );
 
-        final settings = boardSettingsOverrides != null
-            ? boardSettingsOverrides!.merge(defaultSettings)
+        final settings = widget.boardSettingsOverrides != null
+            ? widget.boardSettingsOverrides!.merge(defaultSettings)
             : defaultSettings;
 
         final board = Board(
-          key: boardKey,
+          key: widget.boardKey,
           size: boardSize,
-          data: boardData,
+          data: widget.boardData,
           settings: settings,
-          onMove: onMove,
-          onPremove: onPremove,
+          onMove: widget.onMove,
+          onPremove: widget.onPremove,
         );
 
         Widget boardWidget = board;
 
-        if (boardOverlay != null) {
+        if (widget.boardOverlay != null) {
           boardWidget = SizedBox.square(
             dimension: boardSize,
             child: Stack(
@@ -173,7 +186,7 @@ class BoardTable extends ConsumerWidget {
                     child: SizedBox(
                       width: (boardSize / 8) * 6.6,
                       height: (boardSize / 8) * 4.6,
-                      child: boardOverlay,
+                      child: widget.boardOverlay,
                     ),
                   ),
                 ),
@@ -192,7 +205,7 @@ class BoardTable extends ConsumerWidget {
           );
         }
 
-        final slicedMoves = moves?.asMap().entries.slices(2);
+        final slicedMoves = widget.moves?.asMap().entries.slices(2);
 
         return aspectRatio > 1
             ? Row(
@@ -207,12 +220,12 @@ class BoardTable extends ConsumerWidget {
                     child: Row(
                       children: [
                         boardWidget,
-                        if (engineGauge != null)
+                        if (widget.engineGauge != null)
                           EngineGauge(
-                            params: engineGauge!,
+                            params: widget.engineGauge!,
                             displayMode: EngineGaugeDisplayMode.vertical,
                           )
-                        else if (showEngineGaugePlaceholder)
+                        else if (widget.showEngineGaugePlaceholder)
                           const SizedBox(width: kEvalGaugeSize),
                       ],
                     ),
@@ -226,7 +239,7 @@ class BoardTable extends ConsumerWidget {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          Flexible(child: topTable),
+                          Flexible(child: widget.topTable),
                           if (slicedMoves != null)
                             Expanded(
                               child: Padding(
@@ -234,8 +247,9 @@ class BoardTable extends ConsumerWidget {
                                 child: MoveList(
                                   type: MoveListType.stacked,
                                   slicedMoves: slicedMoves,
-                                  currentMoveIndex: currentMoveIndex ?? 0,
-                                  onSelectMove: onSelectMove,
+                                  currentMoveIndex:
+                                      widget.currentMoveIndex ?? 0,
+                                  onSelectMove: widget.onSelectMove,
                                 ),
                               ),
                             )
@@ -247,7 +261,7 @@ class BoardTable extends ConsumerWidget {
                                 child: SizedBox(height: 40),
                               ),
                             ),
-                          Flexible(child: bottomTable),
+                          Flexible(child: widget.bottomTable),
                         ],
                       ),
                     ),
@@ -263,10 +277,10 @@ class BoardTable extends ConsumerWidget {
                     MoveList(
                       type: MoveListType.inline,
                       slicedMoves: slicedMoves,
-                      currentMoveIndex: currentMoveIndex ?? 0,
-                      onSelectMove: onSelectMove,
+                      currentMoveIndex: widget.currentMoveIndex ?? 0,
+                      onSelectMove: widget.onSelectMove,
                     )
-                  else if (showMoveListPlaceholder &&
+                  else if (widget.showMoveListPlaceholder &&
                       verticalSpaceLeftBoardOnPortrait >= 130)
                     const SizedBox(height: 40),
                   Expanded(
@@ -275,10 +289,10 @@ class BoardTable extends ConsumerWidget {
                         horizontal:
                             isTablet ? kTabletBoardTableSidePadding : 12.0,
                       ),
-                      child: topTable,
+                      child: widget.topTable,
                     ),
                   ),
-                  if (engineGauge != null)
+                  if (widget.engineGauge != null)
                     Padding(
                       padding: isTablet
                           ? const EdgeInsets.symmetric(
@@ -286,11 +300,11 @@ class BoardTable extends ConsumerWidget {
                             )
                           : EdgeInsets.zero,
                       child: EngineGauge(
-                        params: engineGauge!,
+                        params: widget.engineGauge!,
                         displayMode: EngineGaugeDisplayMode.horizontal,
                       ),
                     )
-                  else if (showEngineGaugePlaceholder)
+                  else if (widget.showEngineGaugePlaceholder)
                     const SizedBox(height: kEvalGaugeSize),
                   boardWidget,
                   Expanded(
@@ -299,13 +313,32 @@ class BoardTable extends ConsumerWidget {
                         horizontal:
                             isTablet ? kTabletBoardTableSidePadding : 12.0,
                       ),
-                      child: bottomTable,
+                      child: widget.bottomTable,
                     ),
                   ),
                 ],
               );
       },
     );
+  }
+
+  void _onCompleteShape(Shape shape) {
+    if (userShapes.any((element) => element == shape)) {
+      setState(() {
+        userShapes = userShapes.remove(shape);
+      });
+      return;
+    } else {
+      setState(() {
+        userShapes = userShapes.add(shape);
+      });
+    }
+  }
+
+  void _onClearShapes() {
+    setState(() {
+      userShapes = ISet();
+    });
   }
 }
 

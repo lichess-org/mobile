@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
+import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/lobby/create_game_service.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
@@ -22,8 +23,7 @@ import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/view/game/lobby_screen.dart';
-import 'package:lichess_mobile/src/view/game/standalone_game_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -142,7 +142,8 @@ class _CupertinoBodyState extends State<_CupertinoBody> {
               groupValue: _selectedSegment,
               children: {
                 _ViewMode.create: Text(context.l10n.createAGame),
-                _ViewMode.challenges: const Text('Join a game'),
+                _ViewMode.challenges:
+                    Text(context.l10n.mobileCustomGameJoinAGame),
               },
               onValueChanged: (_ViewMode? view) {
                 if (view != null) {
@@ -196,11 +197,7 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
               context,
               rootNavigator: true,
               builder: (BuildContext context) {
-                return StandaloneGameScreen(
-                  params: InitialStandaloneGameParams(
-                    id: gameFullId,
-                  ),
-                );
+                return GameScreen(initialGameId: gameFullId);
               },
             );
           }
@@ -228,7 +225,7 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
     return challengesAsync.when(
       data: (challenges) {
         final supportedChallenges = challenges
-            .where((challenge) => challenge.variant.isSupported)
+            .where((challenge) => challenge.variant.isPlaySupported)
             .toList();
         return ListView.separated(
           itemCount: supportedChallenges.length,
@@ -320,7 +317,7 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
         return const Center(child: CircularProgressIndicator.adaptive());
       },
       error: (error, stack) =>
-          const Center(child: Text('Could not load challenges.')),
+          Center(child: Text(context.l10n.mobileCustomGameJoinAGame)),
     );
   }
 }
@@ -361,7 +358,7 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                           fontWeight: FontWeight.bold,
                           fontSize: 18,
                         ),
-                        text: _clockTimeLabel(customTimeSeconds),
+                        text: clockLabelInMinutes(customTimeSeconds),
                       ),
                     ],
                   ),
@@ -369,7 +366,7 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                 subtitle: NonLinearSlider(
                   value: customTimeSeconds,
                   values: kAvailableTimesInSeconds,
-                  labelBuilder: _clockTimeLabel,
+                  labelBuilder: clockLabelInMinutes,
                   onChange: Theme.of(context).platform == TargetPlatform.iOS
                       ? (num value) {
                           setState(() {
@@ -571,7 +568,7 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                         choices: PlayableSide.values,
                         selectedItem: preferences.customSide,
                         labelBuilder: (PlayableSide side) =>
-                            Text(_customSideLabel(context, side)),
+                            Text(playableSideL10n(context.l10n, side)),
                         onSelectedItemChanged: (PlayableSide side) {
                           ref
                               .read(gameSetupPreferencesProvider.notifier)
@@ -580,7 +577,7 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                       );
                     },
                     child: Text(
-                      _customSideLabel(context, preferences.customSide),
+                      playableSideL10n(context.l10n, preferences.customSide),
                     ),
                   ),
                 ),
@@ -616,20 +613,15 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: FatButton(
-                      semanticsLabel: context.l10n.create,
+                      semanticsLabel: context.l10n.createAGame,
                       onPressed: timeControl == TimeControl.realTime
                           ? isValidTimeControl
                               ? () {
-                                  ref
-                                      .read(
-                                        gameSetupPreferencesProvider.notifier,
-                                      )
-                                      .setSeekMode(SeekMode.custom);
                                   pushPlatformRoute(
                                     context,
                                     rootNavigator: true,
                                     builder: (BuildContext context) {
-                                      return LobbyScreen(
+                                      return GameScreen(
                                         seek: GameSeek.custom(
                                           preferences,
                                           account,
@@ -654,7 +646,7 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                                   await _pendingCreateGame;
                                   widget.setViewMode(_ViewMode.challenges);
                                 },
-                      child: Text(context.l10n.create, style: Styles.bold),
+                      child: Text(context.l10n.createAGame, style: Styles.bold),
                     ),
                   );
                 },
@@ -673,30 +665,4 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
 
 String _daysLabel(num days) {
   return days == -1 ? '∞' : days.toString();
-}
-
-String _customSideLabel(BuildContext context, PlayableSide side) {
-  switch (side) {
-    case PlayableSide.white:
-      return context.l10n.white;
-    case PlayableSide.black:
-      return context.l10n.black;
-    case PlayableSide.random:
-      return context.l10n.randomColor;
-  }
-}
-
-String _clockTimeLabel(num seconds) {
-  switch (seconds) {
-    case 0:
-      return '0';
-    case 45:
-      return '¾';
-    case 30:
-      return '½';
-    case 15:
-      return '¼';
-    default:
-      return (seconds / 60).toString().replaceAll('.0', '');
-  }
 }

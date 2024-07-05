@@ -14,11 +14,18 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/rating.dart';
 
 class PerfCards extends StatelessWidget {
-  const PerfCards({required this.user, required this.isMe, super.key});
+  const PerfCards({
+    required this.user,
+    required this.isMe,
+    this.padding,
+    super.key,
+  });
 
   final User user;
 
   final bool isMe;
+
+  final EdgeInsetsGeometry? padding;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +48,7 @@ class PerfCards extends StatelessWidget {
 
     return RatingPrefAware(
       child: Padding(
-        padding: Styles.bodySectionPadding,
+        padding: padding ?? Styles.bodySectionPadding,
         child: SizedBox(
           height: 106,
           child: ListView.separated(

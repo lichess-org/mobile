@@ -41,8 +41,8 @@ class _AccountPreferencesScreenState
     final content = accountPrefs.when(
       data: (data) {
         if (data == null) {
-          return const Center(
-            child: Text('You must be logged in to view this page.'),
+          return Center(
+            child: Text(context.l10n.mobileMustBeLoggedIn),
           );
         }
 
@@ -322,6 +322,20 @@ class _AccountPreferencesScreenState
                       }
                     },
                   ),
+                  SwitchSettingTile(
+                    title:
+                        Text(context.l10n.preferencesSoundWhenTimeGetsCritical),
+                    value: data.clockSound.value,
+                    onChanged: isLoading
+                        ? null
+                        : (value) {
+                            _setPref(
+                              () => ref
+                                  .read(accountPreferencesProvider.notifier)
+                                  .setClockSound(BooleanPref(value)),
+                            );
+                          },
+                  ),
                 ],
               ),
               ListSection(
@@ -403,8 +417,8 @@ class _ZenSettingsScreenState extends ConsumerState<ZenSettingsScreen> {
     return accountPrefs.when(
       data: (data) {
         if (data == null) {
-          return const Center(
-            child: Text('You must be logged in to view this page.'),
+          return Center(
+            child: Text(context.l10n.mobileMustBeLoggedIn),
           );
         }
 
@@ -466,8 +480,8 @@ class _TakebackSettingsScreenState
     return accountPrefs.when(
       data: (data) {
         if (data == null) {
-          return const Center(
-            child: Text('You must be logged in to view this page.'),
+          return Center(
+            child: Text(context.l10n.mobileMustBeLoggedIn),
           );
         }
 
@@ -529,8 +543,8 @@ class _AutoQueenSettingsScreenState
     return accountPrefs.when(
       data: (data) {
         if (data == null) {
-          return const Center(
-            child: Text('You must be logged in to view this page.'),
+          return Center(
+            child: Text(context.l10n.mobileMustBeLoggedIn),
           );
         }
 
@@ -593,8 +607,8 @@ class _AutoThreefoldSettingsScreenState
     return accountPrefs.when(
       data: (data) {
         if (data == null) {
-          return const Center(
-            child: Text('You must be logged in to view this page.'),
+          return Center(
+            child: Text(context.l10n.mobileMustBeLoggedIn),
           );
         }
 
@@ -657,8 +671,8 @@ class _MoretimeSettingsScreenState
     return accountPrefs.when(
       data: (data) {
         if (data == null) {
-          return const Center(
-            child: Text('You must be logged in to view this page.'),
+          return Center(
+            child: Text(context.l10n.mobileMustBeLoggedIn),
           );
         }
 

@@ -7,7 +7,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart' as cg;
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/view/game/standalone_game_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
@@ -106,13 +106,11 @@ class OngoingGamePreview extends ConsumerWidget {
         pushPlatformRoute(
           context,
           rootNavigator: true,
-          builder: (context) => StandaloneGameScreen(
-            params: InitialStandaloneGameParams(
-              id: game.fullId,
-              fen: game.fen,
-              orientation: game.orientation,
-              lastMove: game.lastMove,
-            ),
+          builder: (context) => GameScreen(
+            initialGameId: game.fullId,
+            loadingFen: game.fen,
+            loadingOrientation: game.orientation,
+            loadingLastMove: game.lastMove,
           ),
         ).then((_) {
           if (context.mounted) {
