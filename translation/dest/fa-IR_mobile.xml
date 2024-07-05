@@ -6,7 +6,7 @@
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">تماشا</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">تنظیمات</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">برای دیدن این صفحه باید وارد حساب‌تان شده باشید.</string>
-  <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">رنگ‌های گوشی</string>
+  <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">رنگ‌های دستگاه</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">بازخوراند</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">باشه</string>
   <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">بازخوراند لمسی</string>
