@@ -37,7 +37,8 @@ class TimeIncrement {
     } else {
       return '${clockLabelInMinutes(time)}+$increment';
     }
-}
+  }
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||

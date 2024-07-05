@@ -10,7 +10,6 @@ void main() {
     });
 
     test('JSON Serialization', () {
-
       final json = const TimeIncrement(300, 5).toJson();
       expect(json['time'], 300);
       expect(json['increment'], 5);
@@ -31,8 +30,9 @@ void main() {
     });
 
     test('Estimated Duration', () {
-      expect(const TimeIncrement(300, 5).estimatedDuration, const Duration(seconds: 300 + 5 * 40));
-      expect(const TimeIncrement(0, 0).estimatedDuration,Duration.zero);
+      expect(const TimeIncrement(300, 5).estimatedDuration,
+          const Duration(seconds: 300 + 5 * 40));
+      expect(const TimeIncrement(0, 0).estimatedDuration, Duration.zero);
     });
 
     test('Equality and HashCode', () {
