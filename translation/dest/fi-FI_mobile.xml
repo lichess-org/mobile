@@ -5,4 +5,28 @@
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Työkalut</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Seuraa</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Asetukset</string>
+  <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Sinun täytyy olla kirjautuneena nähdäksesi tämän sivun.</string>
+  <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Järjestelmän värit</string>
+  <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Palaute</string>
+  <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">OK</string>
+  <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">Kosketuspalaute</string>
+  <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">Kokoruututila</string>
+  <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Kaikki pelit</string>
+  <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Viimeisimmät haut</string>
+  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Tyhjennä</string>
+  <string name="noSearchResults" comment="This is shown when the search did not return any results.">Ei hakutuloksia</string>
+  <string name="areYouSure" comment="This is shown in confirmation dialogs.">Oletko varma?</string>
+  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak.">Parhaillaan menossa oleva putkesi päättyy, ja pistemääräsi tallennetaan.</string>
+  <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Jaa tämä tehtävä</string>
+  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Jaa pelin URL</string>
+  <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Jaa PGN</string>
+  <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">Jaa asema FEN:nä</string>
+  <string name="showVariations" comment="Shown in the analysis screen.">Näytä muunnelmat</string>
+  <string name="hideVariation" comment="Shown in the analysis screen.">Piilota muunnelma</string>
+  <string name="showComments" comment="Shown in the analysis screen.">Näytä kommentit</string>
+  <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Odotetaan vastustajan löytymistä...</string>
+  <string name="blindfoldMode" comment="This button toggles blindfold mode">Sokko</string>
+  <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Liity peliin</string>
+  <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Poista tallennettu siirto</string>
+  <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Jokin meni vikaan.</string>
 </resources>
