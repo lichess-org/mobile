@@ -377,33 +377,28 @@ class _OpeningExplorer extends StatelessWidget {
     final explorer = OpeningExplorerRepository().getOpeningExplorer(fen);
 
     return Container(
+      width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-      child: ListView(
-        shrinkWrap: true,
-        children: explorer.moves
+      child: DataTable(
+        columnSpacing: 0,
+        horizontalMargin: 0,
+        columns: const [
+          DataColumn(label: Text('Move')),
+          DataColumn(label: Text('Games')),
+          DataColumn(label: Text('')),
+          DataColumn(label: Text('White / Draw / Black')),
+        ],
+        rows: explorer.moves
             .map(
-              (move) => Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    flex: 4,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(move.san),
-                        const SizedBox(width: 16),
-                        Text(
-                          '${((move.games / explorer.games) * 100).round()}%',
-                        ),
-                        const SizedBox(width: 8),
-                        Text('${move.games}'),
-                        const SizedBox(width: 8),
-                      ],
-                    ),
+              (move) => DataRow(
+                cells: [
+                  DataCell(Text(move.san)),
+                  DataCell(
+                    Text('${((move.games / explorer.games) * 100).round()}%'),
                   ),
-                  Expanded(
-                    flex: 6,
-                    child: _WinPercentageChart(
+                  DataCell(Text('${move.games}')),
+                  DataCell(
+                    _WinPercentageChart(
                       white: move.white,
                       draws: move.draws,
                       black: move.black,
