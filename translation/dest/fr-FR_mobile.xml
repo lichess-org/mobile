@@ -21,6 +21,7 @@
   <string name="showVariations" comment="Shown in the analysis screen.">Afficher les variantes</string>
   <string name="hideVariation" comment="Shown in the analysis screen.">Masquer les variantes</string>
   <string name="showComments" comment="Shown in the analysis screen.">Afficher les commentaires</string>
+  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Annuler la proposition de reprise du coup</string>
   <string name="cancelDrawOffer" comment="Menu action that cancels a previous draw offer">Annuler la proposition de nul</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">En attente d\'un adversaire...</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Rejoindre une partie</string>
