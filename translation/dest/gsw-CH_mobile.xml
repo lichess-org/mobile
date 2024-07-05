@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Afangssite</string>
+  <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Ufgabe</string>
+  <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Werchzüg</string>
+  <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Luege</string>
+  <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Ischtelle</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Muesch iglogt si, zum die Site z\'gseh.</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Syschtem-Farbe</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Rückmäldig</string>
@@ -16,4 +21,20 @@
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Bisch sicher?</string>
   <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak.">Du verlürsch din aktuelle Lauf und din Rekord wird g\'schpeicheret.</string>
   <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet">Nüt zum Zeige. Schpill es paar Storms</string>
+  <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Teil die Ufgab</string>
+  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Teil d\'Schpiel-URL</string>
+  <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Teil s\'PGN</string>
+  <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">Teil d\'Position als FEN</string>
+  <string name="showVariations" comment="Shown in the analysis screen.">Zeig Variante</string>
+  <string name="hideVariation" comment="Shown in the analysis screen.">Variante verberge</string>
+  <string name="showComments" comment="Shown in the analysis screen.">Zeig Kommentär</string>
+  <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Wottsch de Lauf beände?</string>
+  <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Nüt zum Zeige, bitte d\'Filter ändere</string>
+  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Zugsrücknam-Offerte zruggzieh</string>
+  <string name="cancelDrawOffer" comment="Menu action that cancels a previous draw offer">Remis-Agebot zruggzieh</string>
+  <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Warte bis en Gegner erschint...</string>
+  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Live Streamer</string>
+  <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Bi ere Partie mitschpille</string>
+  <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Lösch die gschpeicherete Züg</string>
+  <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Es isch öppis schief gange.</string>
 </resources>
