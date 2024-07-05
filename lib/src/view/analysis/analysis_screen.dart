@@ -230,6 +230,9 @@ class _Body extends ConsumerWidget {
     final showEvaluationGauge = ref.watch(
       analysisPreferencesProvider.select((value) => value.showEvaluationGauge),
     );
+    final showOpeningExplorer = ref.watch(
+      analysisPreferencesProvider.select((value) => value.showOpeningExplorer),
+    );
 
     final isEngineAvailable = ref.watch(
       ctrlProvider.select(
@@ -347,7 +350,8 @@ class _Body extends ConsumerWidget {
                                 Orientation.portrait,
                               ),
                             ),
-                          _OpeningExplorer(),
+                          if (showOpeningExplorer)
+                            _OpeningExplorer(),
                         ],
                       );
               },

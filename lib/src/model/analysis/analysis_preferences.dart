@@ -56,6 +56,14 @@ class AnalysisPreferences extends _$AnalysisPreferences {
     );
   }
 
+  Future<void> toggleOpeningExplorer() {
+    return _save(
+      state.copyWith(
+        showOpeningExplorer: !state.showOpeningExplorer,
+      ),
+    );
+  }
+
   Future<void> toggleShowBestMoveArrow() {
     return _save(
       state.copyWith(
@@ -102,6 +110,7 @@ class AnalysisPrefState with _$AnalysisPrefState {
     required bool showBestMoveArrow,
     required bool showAnnotations,
     required bool showPgnComments,
+    required bool showOpeningExplorer,
     @Assert('numEvalLines >= 1 && numEvalLines <= 3') required int numEvalLines,
     @Assert('numEngineCores >= 1 && numEngineCores <= maxEngineCores')
     required int numEngineCores,
@@ -113,6 +122,7 @@ class AnalysisPrefState with _$AnalysisPrefState {
     showBestMoveArrow: true,
     showAnnotations: true,
     showPgnComments: true,
+    showOpeningExplorer: true,
     numEvalLines: 2,
     numEngineCores: defaultEngineCores,
   );
