@@ -92,7 +92,7 @@ void main() {
         await tester.pumpAndSettle(const Duration(milliseconds: 100));
 
         expect(find.text('Players with "johnny"'), findsNothing);
-        expect(find.text('No Result'), findsOneWidget);
+        expect(find.text('No results'), findsOneWidget);
 
         // await debouce call for saving search history
         await tester.pump(const Duration(seconds: 2));

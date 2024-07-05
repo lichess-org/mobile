@@ -35,7 +35,7 @@ class GameHistoryScreen extends ConsumerWidget {
         middle: nbGamesAsync.when(
           data: (nbGames) => Text(context.l10n.nbGames(nbGames)),
           loading: () => const CupertinoActivityIndicator(),
-          error: (e, s) => const Text('All Games'),
+          error: (e, s) => Text(context.l10n.mobileAllGames),
         ),
       ),
       child: _Body(user: user, isOnline: isOnline),
@@ -51,7 +51,7 @@ class GameHistoryScreen extends ConsumerWidget {
         title: nbGamesAsync.when(
           data: (nbGames) => Text(context.l10n.nbGames(nbGames)),
           loading: () => const ButtonLoadingIndicator(),
-          error: (e, s) => const Text('All Games'),
+          error: (e, s) => Text(context.l10n.mobileAllGames),
         ),
       ),
       body: _Body(user: user, isOnline: isOnline),

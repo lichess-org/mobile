@@ -144,7 +144,7 @@ List<BottomSheetAction> makeFinishedGameShareActions(
 }) {
   return [
     BottomSheetAction(
-      makeLabel: (_) => const Text('Share game URL'),
+      makeLabel: (_) => Text(context.l10n.mobileShareGameURL),
       dismissOnPress: false,
       onPressed: (context) {
         launchShareDialog(

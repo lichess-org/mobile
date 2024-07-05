@@ -246,7 +246,7 @@ class _ContextMenu extends ConsumerWidget {
                 },
                 icon: CupertinoIcons.link,
                 closeOnPressed: false,
-                child: const Text('Share game URL'),
+                child: Text(context.l10n.mobileShareGameURL),
               ),
               // Builder is used to retrieve the context immediately surrounding the
               // BottomSheetContextMenuAction

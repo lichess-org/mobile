@@ -52,8 +52,8 @@ class _Body extends ConsumerWidget {
     return account.when(
       data: (data) {
         if (data == null) {
-          return const Center(
-            child: Text('You must be logged in to view this page.'),
+          return Center(
+            child: Text(context.l10n.mobileMustBeLoggedIn),
           );
         }
         return Padding(

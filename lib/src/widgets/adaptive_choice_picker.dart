@@ -150,7 +150,7 @@ Future<Set<T>?> showMultipleChoicesPicker<T extends Enum>(
                 ),
                 CupertinoDialogAction(
                   isDefaultAction: true,
-                  child: const Text('OK'),
+                  child: Text(context.l10n.mobileOkButton),
                   onPressed: () => Navigator.of(context).pop(items),
                 ),
               ]
@@ -160,7 +160,7 @@ Future<Set<T>?> showMultipleChoicesPicker<T extends Enum>(
                   onPressed: () => Navigator.of(context).pop(),
                 ),
                 TextButton(
-                  child: const Text('OK'),
+                  child: Text(context.l10n.mobileOkButton),
                   onPressed: () => Navigator.of(context).pop(items),
                 ),
               ],

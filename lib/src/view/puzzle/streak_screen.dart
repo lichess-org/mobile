@@ -239,10 +239,8 @@ class _Body extends ConsumerWidget {
         final shouldPop = await showAdaptiveDialog<bool>(
           context: context,
           builder: (context) => YesNoDialog(
-            title: const Text('Are you sure?'),
-            content: const Text(
-              'You will lose your current streak and your score will be saved.',
-            ),
+            title: Text(context.l10n.mobileAreYouSure),
+            content: Text(context.l10n.mobilePuzzleStreakAbortWarning),
             onYes: () {
               ref.read(ctrlProvider.notifier).sendStreakResult();
               return Navigator.of(context).pop(true);
@@ -389,7 +387,7 @@ class _BottomBar extends ConsumerWidget {
                 actions: [
                   CupertinoDialogAction(
                     onPressed: () => Navigator.of(context).pop(),
-                    child: const Text('OK'),
+                    child: Text(context.l10n.mobileOkButton),
                   ),
                 ],
               )
@@ -399,7 +397,7 @@ class _BottomBar extends ConsumerWidget {
                 actions: [
                   TextButton(
                     onPressed: () => Navigator.of(context).pop(),
-                    child: const Text('OK'),
+                    child: Text(context.l10n.mobileOkButton),
                   ),
                 ],
               );

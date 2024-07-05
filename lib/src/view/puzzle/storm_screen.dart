@@ -151,10 +151,8 @@ class _Body extends ConsumerWidget {
         final shouldPop = await showAdaptiveDialog<bool>(
           context: context,
           builder: (context) => YesNoDialog(
-            title: const Text('Are you sure?'),
-            content: const Text(
-              'Do you want to end this run?',
-            ),
+            title: Text(context.l10n.mobileAreYouSure),
+            content: Text(context.l10n.mobilePuzzleStormConfirmEndRun),
             onYes: () {
               return Navigator.of(context).pop(true);
             },
@@ -295,7 +293,7 @@ Future<void> _stormInfoDialogBuilder(BuildContext context) {
               actions: [
                 CupertinoDialogAction(
                   onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('OK'),
+                  child: Text(context.l10n.mobileOkButton),
                 ),
               ],
             )
@@ -305,7 +303,7 @@ Future<void> _stormInfoDialogBuilder(BuildContext context) {
               actions: [
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('OK'),
+                  child: Text(context.l10n.mobileOkButton),
                 ),
               ],
             );
@@ -839,8 +837,9 @@ class _RunStatsPopupState extends ConsumerState<_RunStatsPopup> {
                 if (puzzleList.isNotEmpty)
                   PuzzleHistoryPreview(puzzleList)
                 else
-                  const Center(
-                    child: Text('Nothing to show, go change the filters'),
+                  Center(
+                    child:
+                        Text(context.l10n.mobilePuzzleStormFilterNothingToShow),
                   ),
               ],
             ),

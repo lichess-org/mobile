@@ -324,12 +324,15 @@ class _BodyState extends ConsumerState<_Body> {
                   ),
                   Expanded(
                     child: BottomBarButton(
-                      label: 'Clear saved move',
+                      label: context.l10n.mobileCorrespondenceClearSavedMove,
                       onTap: game.registeredMoveAtPgn != null
                           ? () {
                               showConfirmDialog<void>(
                                 context,
-                                title: const Text('Clear saved move'),
+                                title: Text(
+                                  context
+                                      .l10n.mobileCorrespondenceClearSavedMove,
+                                ),
                                 isDestructiveAction: true,
                                 onConfirm: (_) => deleteRegisteredMove(),
                               );

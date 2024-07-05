@@ -44,7 +44,7 @@ class LobbyScreenLoadingContent extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const Text('Waiting for opponent to join...'),
+                      Text(context.l10n.mobileWaitingForOpponentToJoin),
                       const SizedBox(height: 26.0),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,

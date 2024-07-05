@@ -104,7 +104,7 @@ class FullScreenRetryRequest extends StatelessWidget {
         children: [
           // TODO translate
           Text(
-            'Something went wrong.',
+            context.l10n.mobileSomethingWentWrong,
             style: Styles.sectionTitle,
           ),
           const SizedBox(height: 10),

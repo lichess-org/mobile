@@ -186,7 +186,10 @@ class TimeControlModal extends ConsumerWidget {
                               SecondaryButton(
                                 onPressed: () => onSelected(custom),
                                 semanticsLabel: 'OK',
-                                child: const Text('OK', style: Styles.bold),
+                                child: Text(
+                                  context.l10n.mobileOkButton,
+                                  style: Styles.bold,
+                                ),
                               ),
                             ],
                           );
