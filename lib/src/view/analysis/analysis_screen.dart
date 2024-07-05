@@ -426,41 +426,51 @@ class _WinPercentageChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int percentGames(int games) =>
+        ((games / (white + draws + black)) * 100).round();
+
+    final percentWhite = percentGames(white);
+    final percentDraws = percentGames(draws);
+    final percentBlack = percentGames(black);
+
     return Row(
       children: [
-        Expanded(
-          flex: white,
-          child: ColoredBox(
-            color: Colors.white,
-            child: Text(
-              '$white',
-              textAlign: TextAlign.center,
-              style: const TextStyle(color: Colors.black),
+        if (percentWhite != 0)
+          Expanded(
+            flex: white,
+            child: ColoredBox(
+              color: Colors.white,
+              child: Text(
+                percentWhite < 5 ? '' : '${percentGames(white)}%',
+                textAlign: TextAlign.center,
+                style: const TextStyle(color: Colors.black),
+              ),
             ),
           ),
-        ),
-        Expanded(
-          flex: draws,
-          child: ColoredBox(
-            color: Colors.grey,
-            child: Text(
-              '$draws',
-              textAlign: TextAlign.center,
-              style: const TextStyle(color: Colors.white),
+        if (percentDraws != 0)
+          Expanded(
+            flex: draws,
+            child: ColoredBox(
+              color: Colors.grey,
+              child: Text(
+                percentDraws < 5 ? '' : '${percentGames(draws)}%',
+                textAlign: TextAlign.center,
+                style: const TextStyle(color: Colors.white),
+              ),
             ),
           ),
-        ),
-        Expanded(
-          flex: black,
-          child: ColoredBox(
-            color: Colors.black,
-            child: Text(
-              '$black',
-              textAlign: TextAlign.center,
-              style: const TextStyle(color: Colors.white),
+        if (percentBlack != 0)
+          Expanded(
+            flex: black,
+            child: ColoredBox(
+              color: Colors.black,
+              child: Text(
+                percentBlack < 5 ? '' : '${percentGames(black)}%',
+                textAlign: TextAlign.center,
+                style: const TextStyle(color: Colors.white),
+              ),
             ),
           ),
-        ),
       ],
     );
   }
