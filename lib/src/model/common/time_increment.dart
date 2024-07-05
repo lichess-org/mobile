@@ -64,3 +64,19 @@ class TimeIncrement {
   @override
   String toString() => 'TimeIncrement($time+$increment)';
 }
+
+/// Displays a chess clock time in minutes from an amount of seconds
+String clockLabelInMinutes(num seconds) {
+  switch (seconds) {
+    case 0:
+      return '0';
+    case 45:
+      return '¾';
+    case 30:
+      return '½';
+    case 15:
+      return '¼';
+    default:
+      return (seconds / 60).toString().replaceAll('.0', '');
+  }
+}

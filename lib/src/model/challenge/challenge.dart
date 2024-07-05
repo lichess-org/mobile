@@ -1,6 +1,7 @@
 import 'package:deep_pick/deep_pick.dart';
 import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
@@ -181,6 +182,17 @@ enum SideChoice {
   random,
   white,
   black,
+}
+
+String sideChoiceL10n(AppLocalizations l10n, SideChoice side) {
+  switch (side) {
+    case SideChoice.white:
+      return l10n.white;
+    case SideChoice.black:
+      return l10n.black;
+    case SideChoice.random:
+      return l10n.randomColor;
+  }
 }
 
 extension ChallengeExtension on Pick {

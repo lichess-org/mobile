@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_preferences.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -161,7 +162,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                                     fontWeight: FontWeight.bold,
                                     fontSize: 18,
                                   ),
-                                  text: _clockTimeLabel(seconds),
+                                  text: clockLabelInMinutes(seconds),
                                 ),
                               ],
                             ),
@@ -169,7 +170,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                           subtitle: NonLinearSlider(
                             value: seconds,
                             values: kAvailableTimesInSeconds,
-                            labelBuilder: _clockTimeLabel,
+                            labelBuilder: clockLabelInMinutes,
                             onChange:
                                 Theme.of(context).platform == TargetPlatform.iOS
                                     ? (num value) {
@@ -347,7 +348,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                         choices: SideChoice.values,
                         selectedItem: preferences.sideChoice,
                         labelBuilder: (SideChoice side) =>
-                            Text(_customSideLabel(context, side)),
+                            Text(sideChoiceL10n(context.l10n, side)),
                         onSelectedItemChanged: (SideChoice side) {
                           ref
                               .read(challengePreferencesProvider.notifier)
@@ -356,7 +357,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                       );
                     },
                     child: Text(
-                      _customSideLabel(context, preferences.sideChoice),
+                      sideChoiceL10n(context.l10n, preferences.sideChoice),
                     ),
                   ),
                 ),
@@ -455,30 +456,4 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
 
 String _daysLabel(num days) {
   return days == -1 ? '∞' : days.toString();
-}
-
-String _customSideLabel(BuildContext context, SideChoice side) {
-  switch (side) {
-    case SideChoice.white:
-      return context.l10n.white;
-    case SideChoice.black:
-      return context.l10n.black;
-    case SideChoice.random:
-      return context.l10n.randomColor;
-  }
-}
-
-String _clockTimeLabel(num seconds) {
-  switch (seconds) {
-    case 0:
-      return '0';
-    case 45:
-      return '¾';
-    case 30:
-      return '½';
-    case 15:
-      return '¼';
-    default:
-      return (seconds / 60).toString().replaceAll('.0', '');
-  }
 }

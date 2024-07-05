@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math' as math;
 
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/db/shared_preferences.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -15,6 +16,17 @@ part 'game_setup.freezed.dart';
 part 'game_setup.g.dart';
 
 enum PlayableSide { random, white, black }
+
+String playableSideL10n(AppLocalizations l10n, PlayableSide side) {
+  switch (side) {
+    case PlayableSide.white:
+      return l10n.white;
+    case PlayableSide.black:
+      return l10n.black;
+    case PlayableSide.random:
+      return l10n.randomColor;
+  }
+}
 
 enum TimeControl { realTime, correspondence }
 

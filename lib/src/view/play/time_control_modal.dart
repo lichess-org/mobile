@@ -125,6 +125,7 @@ class TimeControlModal extends ConsumerWidget {
                                     child: NonLinearSlider(
                                       value: custom.time,
                                       values: kAvailableTimesInSeconds,
+                                      labelBuilder: clockLabelInMinutes,
                                       onChange: Theme.of(context).platform ==
                                               TargetPlatform.iOS
                                           ? (num value) {

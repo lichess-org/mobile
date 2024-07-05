@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
+import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/lobby/create_game_service.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
@@ -357,7 +358,7 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                           fontWeight: FontWeight.bold,
                           fontSize: 18,
                         ),
-                        text: _clockTimeLabel(customTimeSeconds),
+                        text: clockLabelInMinutes(customTimeSeconds),
                       ),
                     ],
                   ),
@@ -365,7 +366,7 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                 subtitle: NonLinearSlider(
                   value: customTimeSeconds,
                   values: kAvailableTimesInSeconds,
-                  labelBuilder: _clockTimeLabel,
+                  labelBuilder: clockLabelInMinutes,
                   onChange: Theme.of(context).platform == TargetPlatform.iOS
                       ? (num value) {
                           setState(() {
@@ -567,7 +568,7 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                         choices: PlayableSide.values,
                         selectedItem: preferences.customSide,
                         labelBuilder: (PlayableSide side) =>
-                            Text(_customSideLabel(context, side)),
+                            Text(playableSideL10n(context.l10n, side)),
                         onSelectedItemChanged: (PlayableSide side) {
                           ref
                               .read(gameSetupPreferencesProvider.notifier)
@@ -576,7 +577,7 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                       );
                     },
                     child: Text(
-                      _customSideLabel(context, preferences.customSide),
+                      playableSideL10n(context.l10n, preferences.customSide),
                     ),
                   ),
                 ),
@@ -664,30 +665,4 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
 
 String _daysLabel(num days) {
   return days == -1 ? '∞' : days.toString();
-}
-
-String _customSideLabel(BuildContext context, PlayableSide side) {
-  switch (side) {
-    case PlayableSide.white:
-      return context.l10n.white;
-    case PlayableSide.black:
-      return context.l10n.black;
-    case PlayableSide.random:
-      return context.l10n.randomColor;
-  }
-}
-
-String _clockTimeLabel(num seconds) {
-  switch (seconds) {
-    case 0:
-      return '0';
-    case 45:
-      return '¾';
-    case 30:
-      return '½';
-    case 15:
-      return '¼';
-    default:
-      return (seconds / 60).toString().replaceAll('.0', '');
-  }
 }
