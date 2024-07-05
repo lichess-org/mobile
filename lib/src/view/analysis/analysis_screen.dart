@@ -351,7 +351,12 @@ class _Body extends ConsumerWidget {
                               ),
                             ),
                           if (showOpeningExplorer)
-                            _OpeningExplorer(),
+                            _OpeningExplorer(
+                              moves: [
+                                MoveOpening('e4', 100, 200, 50),
+                                MoveOpening('d4', 130, 110, 80),
+                              ].toIList(),
+                            ),
                         ],
                       );
               },
@@ -364,33 +369,55 @@ class _Body extends ConsumerWidget {
   }
 }
 
+class MoveOpening {
+  String san;
+  int white;
+  int draws;
+  int black;
+
+  MoveOpening(this.san, this.white, this.draws, this.black);
+}
+
 class _OpeningExplorer extends StatelessWidget {
+  const _OpeningExplorer({
+    required this.moves,
+  });
+
+  final IList<MoveOpening> moves;
+
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-      child: const Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Text('e4'),
-              SizedBox(width: 16),
-              Text('44%'),
-              SizedBox(width: 8),
-              Text('308,469'),
-              SizedBox(width: 8),
-            ],
-          ),
-          Expanded(
-            child: _WinPercentageChart(
-              whitePercent: 30,
-              drawPercent: 48,
-              blackPercent: 23,
-            ),
-          ),
-        ],
+      child: ListView(
+        shrinkWrap: true,
+        children: moves
+            .map(
+              (move) => Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(move.san),
+                      const SizedBox(width: 16),
+                      const Text('44%'),
+                      const SizedBox(width: 8),
+                      const Text('308,469'),
+                      const SizedBox(width: 8),
+                    ],
+                  ),
+                  Expanded(
+                    child: _WinPercentageChart(
+                      whitePercent: move.white,
+                      drawPercent: move.draws,
+                      blackPercent: move.black,
+                    ),
+                  ),
+                ],
+              ),
+            )
+            .toList(),
       ),
     );
   }
