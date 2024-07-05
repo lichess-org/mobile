@@ -5,4 +5,22 @@
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Werkzeuge</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Zuschauen</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Einstellungen</string>
+  <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Du musst angemeldet sein, um diese Seite anzuzeigen.</string>
+  <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Systemfarben</string>
+  <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Feedback</string>
+  <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">OK</string>
+  <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">Haptisches Feedback</string>
+  <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">Immersiver Modus</string>
+  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Löschen</string>
+  <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Spieler mit \"%s\"</string>
+  <string name="noSearchResults" comment="This is shown when the search did not return any results.">Keine Treffer</string>
+  <string name="areYouSure" comment="This is shown in confirmation dialogs.">Bist du sicher?</string>
+  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak.">Du verlierst deine aktuelle Serie und dein Ergebnis wird gespeichert.</string>
+  <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Teile dieses Puzzle</string>
+  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Link der Partie teilen</string>
+  <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">PGN teilen</string>
+  <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">Position als FEN teilen</string>
+  <string name="showVariations" comment="Shown in the analysis screen.">Varianten-Pfeile anzeigen</string>
+  <string name="hideVariation" comment="Shown in the analysis screen.">Variation ausblenden</string>
+  <string name="showComments" comment="Shown in the analysis screen.">Kommentare anzeigen</string>
 </resources>
