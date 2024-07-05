@@ -19,4 +19,12 @@
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">بازیکنانِ «%s»</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">بدون نتیجه</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">مطمئنید؟</string>
+  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak.">شما ریسه فعلی‌تان را خواهید باخت و امتیازتان ذخیره خواهد شد.</string>
+  <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet">چیزی برای نمایس نیست. چند دور معماباران بازی کنید</string>
+  <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">همرسانی این معما</string>
+  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">همرسانی وب‌نشانی بازی</string>
+  <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">همرسانی PGN</string>
+  <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">همرسانی چینش، به شکل FEN</string>
+  <string name="showComments" comment="Shown in the analysis screen.">نمایش نظرها</string>
+  <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">می‌خواهید این دور را پایان دهید؟</string>
 </resources>
