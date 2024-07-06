@@ -122,7 +122,7 @@ class AnalysisPrefState with _$AnalysisPrefState {
     showBestMoveArrow: true,
     showAnnotations: true,
     showPgnComments: true,
-    showOpeningExplorer: true,
+    showOpeningExplorer: false,
     numEvalLines: 2,
     numEngineCores: defaultEngineCores,
   );
