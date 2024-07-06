@@ -421,6 +421,7 @@ class _OpeningExplorer extends ConsumerWidget {
                     child: DataTable(
                       showCheckboxColumn: false,
                       columnSpacing: 5,
+                      horizontalMargin: 0,
                       columns: const [
                         DataColumn(label: Text('Move')),
                         DataColumn(label: Text('Games')),
