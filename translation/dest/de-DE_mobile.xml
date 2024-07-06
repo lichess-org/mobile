@@ -29,4 +29,12 @@
   <string name="showComments" comment="Shown in the analysis screen.">Kommentare anzeigen</string>
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Möchtest du diesen Run beenden?</string>
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Nichts zu zeigen, bitte passe deine Filter an</string>
+  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Zuckzurücknahme abbrechen</string>
+  <string name="cancelDrawOffer" comment="Menu action that cancels a previous draw offer">Remieangebot zurückziehen</string>
+  <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Warte auf einen Gegner...</string>
+  <string name="blindfoldMode" comment="This button toggles blindfold mode">Blind spielen</string>
+  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Livestreamer</string>
+  <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Einem Spiel beitreten</string>
+  <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Gespeicherten Zug löschen</string>
+  <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Etwas ist schief gelaufen.</string>
 </resources>
