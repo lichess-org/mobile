@@ -354,7 +354,7 @@ class _Body extends ConsumerWidget {
                               ),
                             ),
                           if (showOpeningExplorer)
-                            _OpeningExplorer(fen: position.fen),
+                            _OpeningExplorer(position: position),
                         ],
                       );
               },
@@ -369,14 +369,26 @@ class _Body extends ConsumerWidget {
 
 class _OpeningExplorer extends ConsumerWidget {
   const _OpeningExplorer({
-    required this.fen,
+    required this.position,
   });
 
-  final String fen;
+  final Position position;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final masterDatabaseAsync = ref.watch(masterDatabaseProvider(fen: fen));
+    if (position.fullmoves > 24) {
+      return const Expanded(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Max depth reached'),
+          ],
+        ),
+      );
+    }
+
+    final masterDatabaseAsync =
+        ref.watch(masterDatabaseProvider(fen: position.fen));
 
     return masterDatabaseAsync.when(
       data: (masterDatabase) {
