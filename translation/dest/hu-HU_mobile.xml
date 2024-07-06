@@ -5,4 +5,37 @@
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Eszközök</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Néznivaló</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Beállítás</string>
+  <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Az oldal megtekintéséhez be kell jelentkezned.</string>
+  <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Rendszerszínek</string>
+  <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Visszajelzés</string>
+  <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">OK</string>
+  <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">Haptikus visszajelzés</string>
+  <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">Teljes képernyős mód</string>
+  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">A rendszer gombjainak elrejtése játék közben. Kapcsold be, ha zavarnak a rendszer navigációs mozdulatai a képernyő sarkainál. A játszmaképernyőn és a Puzzle Storm képernyőjén működik.</string>
+  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Jelenleg nem követsz senkit.</string>
+  <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Az összes játszma</string>
+  <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Keresési előzmények</string>
+  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Törlés</string>
+  <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Játékosok %s felhasználónévvel</string>
+  <string name="noSearchResults" comment="This is shown when the search did not return any results.">Nincs találat</string>
+  <string name="areYouSure" comment="This is shown in confirmation dialogs.">Biztos vagy benne?</string>
+  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak.">A jelenlegi sorozatod elveszik és az eredményedet rögzítjük.</string>
+  <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet">Nincs semmi látnivaló. Játssz Puzzle Storm-ot</string>
+  <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Feladvány megosztása</string>
+  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Játszma URL megosztása</string>
+  <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">PGN megosztása</string>
+  <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">Állás megosztása FEN-ként</string>
+  <string name="showVariations" comment="Shown in the analysis screen.">Változatok megjelenítése</string>
+  <string name="hideVariation" comment="Shown in the analysis screen.">Változatok elrejtése</string>
+  <string name="showComments" comment="Shown in the analysis screen.">Megjegyzések megjelenítése</string>
+  <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Befejezed a futamot?</string>
+  <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Nincs megjeleníthető elem, változtasd meg a szűrőket</string>
+  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Visszalépés kérésének visszavonása</string>
+  <string name="cancelDrawOffer" comment="Menu action that cancels a previous draw offer">Döntetlenkérés visszavonása</string>
+  <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Várakozás az ellenfél csatlakozására...</string>
+  <string name="blindfoldMode" comment="This button toggles blindfold mode">Vakjátszma mód</string>
+  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Lichess streamerek</string>
+  <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Csatlakozás játszmához</string>
+  <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Mentett lépés törlése</string>
+  <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Hiba történt.</string>
 </resources>
