@@ -385,7 +385,6 @@ class _OpeningExplorer extends StatelessWidget {
         columns: const [
           DataColumn(label: Text('Move')),
           DataColumn(label: Text('Games')),
-          DataColumn(label: Text('')),
           DataColumn(label: Text('White / Draw / Black')),
         ],
         rows: explorer.moves
@@ -394,9 +393,10 @@ class _OpeningExplorer extends StatelessWidget {
                 cells: [
                   DataCell(Text(move.san)),
                   DataCell(
-                    Text('${((move.games / explorer.games) * 100).round()}%'),
+                    Text(
+                      '${((move.games / explorer.games) * 100).round()}% / ${move.games}',
+                    ),
                   ),
-                  DataCell(Text('${move.games}')),
                   DataCell(
                     _WinPercentageChart(
                       white: move.white,
