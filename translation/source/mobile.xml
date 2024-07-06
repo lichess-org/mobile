@@ -33,7 +33,7 @@
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Cancel takeback offer</string>
   <string name="cancelDrawOffer" comment="Menu action that cancels a previous draw offer">Cancel draw offer</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Waiting for opponent to join...</string>
-  <string name="blindfoldMode" comment="This button toggles blindfold mode">Blindfold</string>
+  <string name="blindfoldMode" comment="This button toggles blindfold mode. This mean the user can only see the board, but not the pieces.">Blindfold</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Live streamers</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Join a game</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Clear saved move</string>
