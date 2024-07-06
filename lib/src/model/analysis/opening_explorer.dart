@@ -58,7 +58,7 @@ class Game with _$Game {
     required MasterPlayer white,
     required MasterPlayer black,
     required int year,
-    required String month,
+    String? month,
   }) = _Game;
 
   factory Game.fromJson(Map<String, Object?> json) =>
@@ -74,7 +74,7 @@ class GameWithMove with _$GameWithMove {
     required MasterPlayer white,
     required MasterPlayer black,
     required int year,
-    required String month,
+    String? month,
   }) = _GameWithMove;
 
   factory GameWithMove.fromJson(Map<String, Object?> json) =>
