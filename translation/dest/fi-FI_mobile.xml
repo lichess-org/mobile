@@ -11,6 +11,8 @@
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">OK</string>
   <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">Kosketuspalaute</string>
   <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">Kokoruututila</string>
+  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Piilota laitteen käyttöliittymä pelatessasi. Valitse tämä, jos laitteesi navigointieleet näytön laidoilla ovat sinulle häiriöksi. Asetus vaikuttaa peli- ja Puzzle Storm -näkymiin.</string>
+  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Et seuraa yhtäkään käyttäjää.</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Kaikki pelit</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Viimeisimmät haut</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Tyhjennä</string>
@@ -26,6 +28,9 @@
   <string name="hideVariation" comment="Shown in the analysis screen.">Piilota muunnelma</string>
   <string name="showComments" comment="Shown in the analysis screen.">Näytä kommentit</string>
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Haluatko lopettaa tämän sarjan?</string>
+  <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Ei näytettävää, muuta suodatusehtoja</string>
+  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Peruuta siirron peruutuspyyntö</string>
+  <string name="cancelDrawOffer" comment="Menu action that cancels a previous draw offer">Peruuta tasapeliehdotus</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Odotetaan vastustajan löytymistä...</string>
   <string name="blindfoldMode" comment="This button toggles blindfold mode">Sokko</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Liity peliin</string>
