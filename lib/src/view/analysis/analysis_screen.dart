@@ -248,6 +248,8 @@ class _Body extends ConsumerWidget {
       ctrlProvider.select((value) => value.displayMode == DisplayMode.summary),
     );
 
+    final position = ref.watch(ctrlProvider.select((value) => value.position));
+
     return Column(
       children: [
         Expanded(
@@ -352,7 +354,7 @@ class _Body extends ConsumerWidget {
                               ),
                             ),
                           if (showOpeningExplorer)
-                            const _OpeningExplorer(fen: ''),
+                            _OpeningExplorer(fen: position.fen),
                         ],
                       );
               },
@@ -374,10 +376,10 @@ class _OpeningExplorer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final explorerAsync = ref.watch(openingExplorerProvider(fen: ''));
+    final masterDatabaseAsync = ref.watch(masterDatabaseProvider(fen: fen));
 
-    return explorerAsync.when(
-      data: (explorer) {
+    return masterDatabaseAsync.when(
+      data: (masterDatabase) {
         return Expanded(
           child: Container(
             width: MediaQuery.of(context).size.width,
@@ -393,16 +395,16 @@ class _OpeningExplorer extends ConsumerWidget {
                   DataColumn(label: Text('Games')),
                   DataColumn(label: Text('White / Draw / Black')),
                 ],
-                rows: explorer.moves == null
+                rows: masterDatabase.moves == null
                     ? []
-                    : explorer.moves!
+                    : masterDatabase.moves!
                         .map(
                           (move) => DataRow(
                             cells: [
                               DataCell(Text(move.san)),
                               DataCell(
                                 Text(
-                                  '${((move.games / explorer.games) * 100).round()}% / ${move.games}',
+                                  '${((move.games / masterDatabase.games) * 100).round()}% / ${move.games}',
                                 ),
                               ),
                               DataCell(

@@ -5,12 +5,12 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'opening_explorer_repository.g.dart';
 
 @riverpod
-Future<OpeningExplorer> openingExplorer(
-  OpeningExplorerRef ref, {
+Future<OpeningExplorer> masterDatabase(
+  MasterDatabaseRef ref, {
   required String fen,
 }) async {
   return ref.withClient(
-    (client) => OpeningExplorerRepository(client).getOpeningExplorer(fen),
+    (client) => OpeningExplorerRepository(client).getMasterDatabase(fen),
   );
 }
 
@@ -19,9 +19,9 @@ class OpeningExplorerRepository {
 
   final LichessClient client;
 
-  Future<OpeningExplorer> getOpeningExplorer(String fen) {
+  Future<OpeningExplorer> getMasterDatabase(String fen) {
     return client.readJson(
-      Uri(path: '/masters'),
+      Uri(path: '/masters', queryParameters: {'fen': fen}),
       mapper: OpeningExplorer.fromJson,
     );
   }
