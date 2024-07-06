@@ -378,40 +378,46 @@ class _OpeningExplorer extends ConsumerWidget {
 
     return explorerAsync.when(
       data: (explorer) {
-        return Container(
-          width: MediaQuery.of(context).size.width,
-          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-          child: DataTable(
-            columnSpacing: 0,
-            horizontalMargin: 0,
-            columns: const [
-              DataColumn(label: Text('Move')),
-              DataColumn(label: Text('Games')),
-              DataColumn(label: Text('White / Draw / Black')),
-            ],
-            rows: explorer.moves == null
-                ? []
-                : explorer.moves!
-                    .map(
-                  (move) => DataRow(
-                    cells: [
-                      DataCell(Text(move.san)),
-                      DataCell(
-                        Text(
-                          '${((move.games / explorer.games) * 100).round()}% / ${move.games}',
-                        ),
-                      ),
-                      DataCell(
-                        _WinPercentageChart(
-                          white: move.white,
-                          draws: move.draws,
-                          black: move.black,
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-                .toList(),
+        return Expanded(
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            padding:
+                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: DataTable(
+                columnSpacing: 0,
+                horizontalMargin: 0,
+                columns: const [
+                  DataColumn(label: Text('Move')),
+                  DataColumn(label: Text('Games')),
+                  DataColumn(label: Text('White / Draw / Black')),
+                ],
+                rows: explorer.moves == null
+                    ? []
+                    : explorer.moves!
+                        .map(
+                          (move) => DataRow(
+                            cells: [
+                              DataCell(Text(move.san)),
+                              DataCell(
+                                Text(
+                                  '${((move.games / explorer.games) * 100).round()}% / ${move.games}',
+                                ),
+                              ),
+                              DataCell(
+                                _WinPercentageChart(
+                                  white: move.white,
+                                  draws: move.draws,
+                                  black: move.black,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                        .toList(),
+              ),
+            ),
           ),
         );
       },
