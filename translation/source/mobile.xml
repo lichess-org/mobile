@@ -19,8 +19,8 @@
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Players with "%s"</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">No results</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Are you sure?</string>
-  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak.">You will lose your current streak and your score will be saved.</string>
-  <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet">Nothing to show. Play some runs of storm</string>
+  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">You will lose your current streak and your score will be saved.</string>
+  <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Nothing to show. Play some runs of Puzzle Storm.</string>
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Share this puzzle</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Share game URL</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Share PGN</string>
