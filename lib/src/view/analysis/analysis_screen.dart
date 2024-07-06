@@ -380,47 +380,56 @@ class _OpeningExplorer extends ConsumerWidget {
 
     return masterDatabaseAsync.when(
       data: (masterDatabase) {
-        return Expanded(
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            padding:
-                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-            child: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: DataTable(
-                columnSpacing: 5,
-                columns: const [
-                  DataColumn(label: Text('Move')),
-                  DataColumn(label: Text('Games')),
-                  DataColumn(label: Text('White / Draw / Black')),
-                ],
-                rows: masterDatabase.moves == null
-                    ? []
-                    : masterDatabase.moves!
-                        .map(
-                          (move) => DataRow(
-                            cells: [
-                              DataCell(Text(move.san)),
-                              DataCell(
-                                Text(
-                                  '${((move.games / masterDatabase.games) * 100).round()}% / ${move.games}',
+        return masterDatabase.moves.isEmpty
+            ? const Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('No game found'),
+                  ],
+                ),
+              )
+            : Expanded(
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 8.0,
+                    horizontal: 16.0,
+                  ),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: DataTable(
+                      columnSpacing: 5,
+                      columns: const [
+                        DataColumn(label: Text('Move')),
+                        DataColumn(label: Text('Games')),
+                        DataColumn(label: Text('White / Draw / Black')),
+                      ],
+                      rows: masterDatabase.moves
+                          .map(
+                            (move) => DataRow(
+                              cells: [
+                                DataCell(Text(move.san)),
+                                DataCell(
+                                  Text(
+                                    '${((move.games / masterDatabase.games) * 100).round()}% / ${move.games}',
+                                  ),
                                 ),
-                              ),
-                              DataCell(
-                                _WinPercentageChart(
-                                  white: move.white,
-                                  draws: move.draws,
-                                  black: move.black,
+                                DataCell(
+                                  _WinPercentageChart(
+                                    white: move.white,
+                                    draws: move.draws,
+                                    black: move.black,
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        )
-                        .toList(),
-              ),
-            ),
-          ),
-        );
+                              ],
+                            ),
+                          )
+                          .toList(),
+                    ),
+                  ),
+                ),
+              );
       },
       loading: () => const Center(
         child: CircularProgressIndicator(),

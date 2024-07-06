@@ -14,8 +14,8 @@ class OpeningExplorer with _$OpeningExplorer {
     required int white,
     required int draws,
     required int black,
-    IList<OpeningMove>? moves,
-    IList<GameWithMove>? topGames,
+    required IList<OpeningMove> moves,
+    required IList<GameWithMove> topGames,
     IList<GameWithMove>? recentGames,
     IList<HistoryStat>? history,
   }) = _OpeningExplorer;
