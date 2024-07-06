@@ -9,6 +9,9 @@
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Kolory systemowe</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Opinie</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">OK</string>
+  <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">Wibracja przy dotknięciu</string>
+  <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">Tryb pełnoekranowy</string>
+  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Ukryj interfejs użytkownika podczas gry. Użyj tego, jeśli rozpraszają Cię elementy nawigacji systemu na krawędziach ekranu. Dotyczy ekranów gry i rozwiązywania zadań.</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Nie obserwujesz żadnego gracza.</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Wszystkie partie</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Ostatnio wyszukiwane</string>
@@ -16,6 +19,8 @@
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Gracze pasujący do \"%s\"</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Brak wyników</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Jesteś pewien?</string>
+  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak.">Przerwiesz swoją dobrą passę, a Twój wynik zostanie zapisany.</string>
+  <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet">Nic do wyświetlenia. Rozegraj kilka serii</string>
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Udostępnij to zadanie</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Udostępnij adres URL partii</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Udostępnij PGN</string>
@@ -28,6 +33,8 @@
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Anuluj prośbę cofnięcia ruchu</string>
   <string name="cancelDrawOffer" comment="Menu action that cancels a previous draw offer">Anuluj propozycję remisu</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Oczekiwanie na dołączenie przeciwnika...</string>
+  <string name="blindfoldMode" comment="This button toggles blindfold mode">Gra na ślepo</string>
+  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Aktywni streamerzy</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Dołącz do partii</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Usuń zapisany ruch</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Coś poszło nie tak.</string>
