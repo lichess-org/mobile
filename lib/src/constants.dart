@@ -21,6 +21,11 @@ const kLichessCDNHost = String.fromEnvironment(
   defaultValue: 'https://lichess1.org',
 );
 
+const kLichessOpeningExplorerHost = String.fromEnvironment(
+  'LICHESS_OPENING_EXPLORER_HOST',
+  defaultValue: 'explorer.lichess.ovh',
+);
+
 const kLichessDevUser =
     String.fromEnvironment('LICHESS_DEV_USER', defaultValue: 'lichess');
 const kLichessDevPassword = String.fromEnvironment('LICHESS_DEV_PASSWORD');

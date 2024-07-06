@@ -3,28 +3,32 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 
 part 'opening_explorer.freezed.dart';
+part 'opening_explorer.g.dart';
 
-@freezed
+@Freezed(fromJson: true)
 class OpeningExplorer with _$OpeningExplorer {
   const OpeningExplorer._();
 
   const factory OpeningExplorer({
-    required LightOpening opening,
+    LightOpening? opening,
     required int white,
     required int draws,
     required int black,
-    required IList<OpeningMove> moves,
-    required IList<GameWithMove> topGames,
-    required IList<GameWithMove> recentGames,
-    required IList<HistoryStat> history,
+    IList<OpeningMove>? moves,
+    IList<GameWithMove>? topGames,
+    IList<GameWithMove>? recentGames,
+    IList<HistoryStat>? history,
   }) = _OpeningExplorer;
+
+  factory OpeningExplorer.fromJson(Map<String, Object?> json) =>
+      _$OpeningExplorerFromJson(json);
 
   int get games {
     return white + draws + black;
   }
 }
 
-@freezed
+@Freezed(fromJson: true)
 class OpeningMove with _$OpeningMove {
   const OpeningMove._();
 
@@ -38,42 +42,58 @@ class OpeningMove with _$OpeningMove {
     Game? game,
   }) = _OpeningMove;
 
+  factory OpeningMove.fromJson(Map<String, Object?> json) =>
+      _$OpeningMoveFromJson(json);
+
   int get games {
     return white + draws + black;
   }
 }
 
-@freezed
+@Freezed(fromJson: true)
 class Game with _$Game {
   factory Game({
-    required String uci,
     required String id,
-    required String winner,
+    String? winner,
     required MasterPlayer white,
     required MasterPlayer black,
     required int year,
     required String month,
   }) = _Game;
+
+  factory Game.fromJson(Map<String, Object?> json) =>
+      _$GameFromJson(json);
 }
 
-@freezed
+@Freezed(fromJson: true)
 class GameWithMove with _$GameWithMove {
   factory GameWithMove({
     required String uci,
-    required Game game,
+    required String id,
+    String? winner,
+    required MasterPlayer white,
+    required MasterPlayer black,
+    required int year,
+    required String month,
   }) = _GameWithMove;
+
+  factory GameWithMove.fromJson(Map<String, Object?> json) =>
+      _$GameWithMoveFromJson(json);
 }
 
 
-@freezed
+@Freezed(fromJson: true)
 class MasterPlayer with _$MasterPlayer {
   const factory MasterPlayer({
     required String name,
     required int rating,
   }) = _MasterPlayer;
+
+  factory MasterPlayer.fromJson(Map<String, Object?> json) =>
+      _$MasterPlayerFromJson(json);
 }
 
-@freezed
+@Freezed(fromJson: true)
 class HistoryStat with _$HistoryStat {
   const factory HistoryStat({
     required String month,
@@ -81,4 +101,7 @@ class HistoryStat with _$HistoryStat {
     required int draws,
     required int black,
   }) = _HistoryStat;
+
+  factory HistoryStat.fromJson(Map<String, Object?> json) =>
+      _$HistoryStatFromJson(json);
 }
