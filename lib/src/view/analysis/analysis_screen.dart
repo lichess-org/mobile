@@ -388,8 +388,7 @@ class _OpeningExplorer extends ConsumerWidget {
             child: SingleChildScrollView(
               scrollDirection: Axis.vertical,
               child: DataTable(
-                columnSpacing: 0,
-                horizontalMargin: 0,
+                columnSpacing: 5,
                 columns: const [
                   DataColumn(label: Text('Move')),
                   DataColumn(label: Text('Games')),
@@ -457,11 +456,10 @@ class _WinPercentageChart extends StatelessWidget {
       children: [
         if (percentWhite != 0)
           Expanded(
-            flex: white,
             child: ColoredBox(
               color: Colors.white,
               child: Text(
-                percentWhite < 5 ? '' : '${percentGames(white)}%',
+                percentWhite < 5 ? '' : '$percentWhite%',
                 textAlign: TextAlign.center,
                 style: const TextStyle(color: Colors.black),
               ),
@@ -469,11 +467,10 @@ class _WinPercentageChart extends StatelessWidget {
           ),
         if (percentDraws != 0)
           Expanded(
-            flex: draws,
             child: ColoredBox(
               color: Colors.grey,
               child: Text(
-                percentDraws < 5 ? '' : '${percentGames(draws)}%',
+                percentDraws < 5 ? '' : '$percentDraws%',
                 textAlign: TextAlign.center,
                 style: const TextStyle(color: Colors.white),
               ),
@@ -481,11 +478,10 @@ class _WinPercentageChart extends StatelessWidget {
           ),
         if (percentBlack != 0)
           Expanded(
-            flex: black,
             child: ColoredBox(
               color: Colors.black,
               child: Text(
-                percentBlack < 5 ? '' : '${percentGames(black)}%',
+                percentBlack < 5 ? '' : '$percentBlack%',
                 textAlign: TextAlign.center,
                 style: const TextStyle(color: Colors.white),
               ),
