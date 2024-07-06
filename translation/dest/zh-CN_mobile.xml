@@ -5,9 +5,28 @@
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">工具</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">观看</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">设置</string>
+  <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">您必须登录才能浏览此页面。</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">看</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site."></string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">好</string>
+  <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">震动反馈</string>
+  <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">沉浸模式</string>
+  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">你没有关注任何用户。</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">所有对局</string>
+  <string name="recentSearches" comment="Title of the recent searches section in the search screen.">最近搜索</string>
+  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">清空</string>
+  <string name="noSearchResults" comment="This is shown when the search did not return any results.">无结果</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">你确定吗？</string>
+  <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">分享这个谜题</string>
+  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">分享棋局链接</string>
+  <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">分享 PGN</string>
+  <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">保存局面为 FEN</string>
+  <string name="showComments" comment="Shown in the analysis screen.">显示评论</string>
+  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">取消悔棋请求</string>
+  <string name="cancelDrawOffer" comment="Menu action that cancels a previous draw offer">取消和棋请求</string>
+  <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">正在等待对手加入...</string>
+  <string name="blindfoldMode" comment="This button toggles blindfold mode">盲棋</string>
+  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">主播</string>
+  <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">加入一局游戏</string>
+  <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">发生一些错误。</string>
 </resources>
