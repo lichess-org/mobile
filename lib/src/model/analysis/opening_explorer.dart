@@ -61,8 +61,7 @@ class Game with _$Game {
     String? month,
   }) = _Game;
 
-  factory Game.fromJson(Map<String, Object?> json) =>
-      _$GameFromJson(json);
+  factory Game.fromJson(Map<String, Object?> json) => _$GameFromJson(json);
 }
 
 @Freezed(fromJson: true)
@@ -80,7 +79,6 @@ class GameWithMove with _$GameWithMove {
   factory GameWithMove.fromJson(Map<String, Object?> json) =>
       _$GameWithMoveFromJson(json);
 }
-
 
 @Freezed(fromJson: true)
 class MasterPlayer with _$MasterPlayer {
