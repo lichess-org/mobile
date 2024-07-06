@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/common/game_perf.dart';
+import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -13,13 +13,13 @@ class GameHistoryScreen extends ConsumerWidget {
   const GameHistoryScreen({
     required this.user,
     required this.isOnline,
-    this.gamePerf,
+    this.perf,
     this.games,
     super.key,
   });
   final LightUser? user;
   final bool isOnline;
-  final GamePerf? gamePerf;
+  final Perf? perf;
   final int? games;
 
   @override
@@ -43,7 +43,7 @@ class GameHistoryScreen extends ConsumerWidget {
           error: (e, s) => const Text('All Games'),
         ),
       ),
-      child: _Body(user: user, isOnline: isOnline, gamePerf: gamePerf),
+      child: _Body(user: user, isOnline: isOnline, perf: perf),
     );
   }
 
@@ -59,7 +59,7 @@ class GameHistoryScreen extends ConsumerWidget {
           error: (e, s) => const Text('All Games'),
         ),
       ),
-      body: _Body(user: user, isOnline: isOnline, gamePerf: gamePerf),
+      body: _Body(user: user, isOnline: isOnline, perf: perf),
     );
   }
 }
@@ -68,12 +68,12 @@ class _Body extends ConsumerStatefulWidget {
   const _Body({
     required this.user,
     required this.isOnline,
-    required this.gamePerf,
+    required this.perf,
   });
 
   final LightUser? user;
   final bool isOnline;
-  final GamePerf? gamePerf;
+  final Perf? perf;
 
   @override
   ConsumerState<_Body> createState() => _BodyState();
@@ -102,7 +102,7 @@ class _BodyState extends ConsumerState<_Body> {
         userGameHistoryProvider(
           widget.user?.id,
           isOnline: widget.isOnline,
-          gamePerf: widget.gamePerf,
+          perf: widget.perf,
         ),
       );
 
@@ -119,7 +119,7 @@ class _BodyState extends ConsumerState<_Body> {
               userGameHistoryProvider(
                 widget.user?.id,
                 isOnline: widget.isOnline,
-                gamePerf: widget.gamePerf,
+                perf: widget.perf,
               ).notifier,
             )
             .getNext();
@@ -133,7 +133,7 @@ class _BodyState extends ConsumerState<_Body> {
       userGameHistoryProvider(
         widget.user?.id,
         isOnline: widget.isOnline,
-        gamePerf: widget.gamePerf,
+        perf: widget.perf,
       ),
     );
 

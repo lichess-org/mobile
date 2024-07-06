@@ -11,7 +11,6 @@ import 'package:intl/intl.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/common/game_perf.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
@@ -286,19 +285,18 @@ class _Body extends ConsumerWidget {
                         ),
                       ],
                     ),
-                    if (gamePerfMap.keys.contains(perf))
-                      TextButton(
-                        onPressed: () => pushPlatformRoute(
-                          context,
-                          builder: (context) => GameHistoryScreen(
-                            user: user.lightUser,
-                            isOnline: true,
-                            gamePerf: gamePerfMap[perf],
-                            games: data.totalGames,
-                          ),
+                    TextButton(
+                      onPressed: () => pushPlatformRoute(
+                        context,
+                        builder: (context) => GameHistoryScreen(
+                          user: user.lightUser,
+                          isOnline: true,
+                          perf: perf,
+                          games: data.totalGames,
                         ),
-                        child: Text(context.l10n.perfStatViewTheGames),
                       ),
+                      child: Text(context.l10n.perfStatViewTheGames),
+                    ),
                   ],
                 ),
                 subStatSpace,
