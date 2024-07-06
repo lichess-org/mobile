@@ -354,7 +354,10 @@ class _Body extends ConsumerWidget {
                               ),
                             ),
                           if (showOpeningExplorer)
-                            _OpeningExplorer(position: position),
+                            _OpeningExplorer(
+                              position: position,
+                              ctrlProvider: ctrlProvider,
+                            ),
                         ],
                       );
               },
@@ -370,9 +373,11 @@ class _Body extends ConsumerWidget {
 class _OpeningExplorer extends ConsumerWidget {
   const _OpeningExplorer({
     required this.position,
+    required this.ctrlProvider,
   });
 
   final Position position;
+  final AnalysisControllerProvider ctrlProvider;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -411,6 +416,7 @@ class _OpeningExplorer extends ConsumerWidget {
                   child: SingleChildScrollView(
                     scrollDirection: Axis.vertical,
                     child: DataTable(
+                      showCheckboxColumn: false,
                       columnSpacing: 5,
                       columns: const [
                         DataColumn(label: Text('Move')),
@@ -420,6 +426,9 @@ class _OpeningExplorer extends ConsumerWidget {
                       rows: masterDatabase.moves
                           .map(
                             (move) => DataRow(
+                              onSelectChanged: (_) => ref
+                                  .read(ctrlProvider.notifier)
+                                  .onUserMove(Move.fromUci(move.uci)!),
                               cells: [
                                 DataCell(Text(move.san)),
                                 DataCell(
