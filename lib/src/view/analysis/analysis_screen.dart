@@ -423,30 +423,47 @@ class _OpeningExplorer extends ConsumerWidget {
                         DataColumn(label: Text('Games')),
                         DataColumn(label: Text('White / Draw / Black')),
                       ],
-                      rows: masterDatabase.moves
-                          .map(
-                            (move) => DataRow(
-                              onSelectChanged: (_) => ref
-                                  .read(ctrlProvider.notifier)
-                                  .onUserMove(Move.fromUci(move.uci)!),
-                              cells: [
-                                DataCell(Text(move.san)),
-                                DataCell(
-                                  Text(
-                                    '${((move.games / masterDatabase.games) * 100).round()}% / ${move.games}',
-                                  ),
+                      rows: [
+                        ...masterDatabase.moves.map(
+                          (move) => DataRow(
+                            onSelectChanged: (_) => ref
+                                .read(ctrlProvider.notifier)
+                                .onUserMove(Move.fromUci(move.uci)!),
+                            cells: [
+                              DataCell(Text(move.san)),
+                              DataCell(
+                                Text(
+                                  '${((move.games / masterDatabase.games) * 100).round()}% / ${move.games}',
                                 ),
-                                DataCell(
-                                  _WinPercentageChart(
-                                    white: move.white,
-                                    draws: move.draws,
-                                    black: move.black,
-                                  ),
+                              ),
+                              DataCell(
+                                _WinPercentageChart(
+                                  white: move.white,
+                                  draws: move.draws,
+                                  black: move.black,
                                 ),
-                              ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        DataRow(
+                          cells: [
+                            const DataCell(Icon(Icons.functions)),
+                            DataCell(
+                              Text(
+                                '100% / ${masterDatabase.games}',
+                              ),
                             ),
-                          )
-                          .toList(),
+                            DataCell(
+                              _WinPercentageChart(
+                                white: masterDatabase.white,
+                                draws: masterDatabase.draws,
+                                black: masterDatabase.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
                 ),
