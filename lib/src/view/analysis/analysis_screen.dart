@@ -9,6 +9,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
@@ -379,6 +380,8 @@ class _OpeningExplorer extends ConsumerWidget {
   final Position position;
   final AnalysisControllerProvider ctrlProvider;
 
+  String formatNum(int num) => NumberFormat.decimalPatternDigits().format(num);
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     if (position.fullmoves > 24) {
@@ -433,7 +436,7 @@ class _OpeningExplorer extends ConsumerWidget {
                               DataCell(Text(move.san)),
                               DataCell(
                                 Text(
-                                  '${((move.games / masterDatabase.games) * 100).round()}% / ${move.games}',
+                                  '${((move.games / masterDatabase.games) * 100).round()}% / ${formatNum(move.games)}',
                                 ),
                               ),
                               DataCell(
@@ -451,7 +454,7 @@ class _OpeningExplorer extends ConsumerWidget {
                             const DataCell(Icon(Icons.functions)),
                             DataCell(
                               Text(
-                                '100% / ${masterDatabase.games}',
+                                '100% / ${formatNum(masterDatabase.games)}',
                               ),
                             ),
                             DataCell(
