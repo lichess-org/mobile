@@ -176,16 +176,6 @@ class LightOpening with _$LightOpening implements Opening {
 
   factory LightOpening.fromJson(Map<String, dynamic> json) =>
       _$LightOpeningFromJson(json);
-
-  factory LightOpening.fromServerJson(Map<String, dynamic> json) =>
-      LightOpening.fromPick(pick(json).required());
-
-  factory LightOpening.fromPick(RequiredPick pick) {
-    return LightOpening(
-      eco: pick('eco').asStringOrThrow(),
-      name: pick('name').asStringOrThrow(),
-    );
-  }
 }
 
 @Freezed(fromJson: true, toJson: true)

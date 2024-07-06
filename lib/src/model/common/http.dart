@@ -44,10 +44,9 @@ Uri lichessUri(String unencodedPath, [Map<String, dynamic>? queryParameters]) {
   final host = _openingExplorerEndpoints.contains(unencodedPath)
       ? kLichessOpeningExplorerHost
       : kLichessHost;
-  final val = host.startsWith('localhost')
+  return host.startsWith('localhost')
       ? Uri.http(host, unencodedPath, queryParameters)
       : Uri.https(host, unencodedPath, queryParameters);
-  return val;
 }
 
 /// Creates the appropriate http client for the platform.
