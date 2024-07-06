@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">家</string>
-  <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">看</string>
+  <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">主页</string>
+  <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">谜题</string>
+  <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">工具</string>
+  <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">观看</string>
+  <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">设置</string>
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">看</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site."></string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">好</string>
-  <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">游戏</string>
+  <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">所有对局</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">你确定吗？</string>
 </resources>
