@@ -11,6 +11,7 @@
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">OK</string>
   <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">Haptisches Feedback</string>
   <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">Immersiver Modus</string>
+  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">System-UI während dem Spielen ausblenden. Benutzen Sie diese Option, wenn Sie von den Gesten des Systems am Bildschirmrand gestört werden. Gilt für Spiel- und für Puzzle Storm-Bildschirme.</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Du folgst keinem Nutzer.</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Alle Partien</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Kürzliche Suchen</string>
@@ -29,8 +30,8 @@
   <string name="showComments" comment="Shown in the analysis screen.">Kommentare anzeigen</string>
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Möchtest du diesen Run beenden?</string>
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Nichts zu zeigen, bitte passe deine Filter an</string>
-  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Zuckzurücknahme abbrechen</string>
-  <string name="cancelDrawOffer" comment="Menu action that cancels a previous draw offer">Remieangebot zurückziehen</string>
+  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Zugzurücknahme abbrechen</string>
+  <string name="cancelDrawOffer" comment="Menu action that cancels a previous draw offer">Remisangebot zurückziehen</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Warte auf einen Gegner...</string>
   <string name="blindfoldMode" comment="This button toggles blindfold mode">Blind spielen</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Livestreamer</string>
