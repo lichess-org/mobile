@@ -11,31 +11,31 @@
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">OK</string>
   <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">Haptisches Feedback</string>
   <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">Immersiver Modus</string>
-  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">System-UI während dem Spielen ausblenden. Benutzen Sie diese Option, wenn Sie von den Gesten des Systems am Bildschirmrand gestört werden. Gilt für Spiel- und für Puzzle Storm-Bildschirme.</string>
+  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">System-Benutzeroberfläche während des Spielens ausblenden. Nutzen Sie diese Option, wenn Sie die Navigationsverhalten des Systems an den Bildschirmrändern stören. Gilt für Spiel- und Puzzle-Storm-Bildschirme.</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Du folgst keinem Nutzer.</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Alle Partien</string>
-  <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Kürzliche Suchen</string>
+  <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Letzte Suchen</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Löschen</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Spieler mit \"%s\"</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Keine Treffer</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Bist du sicher?</string>
   <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak.">Du verlierst deine aktuelle Serie und dein Ergebnis wird gespeichert.</string>
-  <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet">Nichts zu zeigen. Spiele ein paar Runden Puzzle Storm</string>
+  <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet">Nichts anzuzeigen. Spiele ein paar Runden Puzzle Storm</string>
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Teile dieses Puzzle</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Link der Partie teilen</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">PGN teilen</string>
   <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">Position als FEN teilen</string>
   <string name="showVariations" comment="Shown in the analysis screen.">Varianten anzeigen</string>
-  <string name="hideVariation" comment="Shown in the analysis screen.">Varianten ausblenden</string>
+  <string name="hideVariation" comment="Shown in the analysis screen.">Variante ausblenden</string>
   <string name="showComments" comment="Shown in the analysis screen.">Kommentare anzeigen</string>
-  <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Möchtest du diesen Run beenden?</string>
-  <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Nichts zu zeigen, bitte passe deine Filter an</string>
-  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Zugzurücknahme abbrechen</string>
-  <string name="cancelDrawOffer" comment="Menu action that cancels a previous draw offer">Remisangebot zurückziehen</string>
-  <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Warte auf einen Gegner...</string>
+  <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Möchtest du diesen Durchlauf beenden?</string>
+  <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Nichts anzuzeigen, bitte passe deine Filter an</string>
+  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Zugzurücknahme-Angebot abbrechen</string>
+  <string name="cancelDrawOffer" comment="Menu action that cancels a previous draw offer">Remisangebot zurücknehmen</string>
+  <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Warte auf Beitritt eines Gegners...</string>
   <string name="blindfoldMode" comment="This button toggles blindfold mode">Blind spielen</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Livestreamer</string>
-  <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Einem Spiel beitreten</string>
+  <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Einer Partie beitreten</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Gespeicherten Zug löschen</string>
-  <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Etwas ist schief gelaufen.</string>
+  <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Etwas ist schiefgelaufen.</string>
 </resources>
