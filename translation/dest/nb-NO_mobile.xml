@@ -32,4 +32,10 @@
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Ingenting her, endre filteret</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Avbryt tilbud om å angre</string>
   <string name="cancelDrawOffer" comment="Menu action that cancels a previous draw offer">Avbryt remistilbud</string>
+  <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Venter på motstanderen ...</string>
+  <string name="blindfoldMode" comment="This button toggles blindfold mode">Blindsjakk</string>
+  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Direktestrømmere</string>
+  <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Bli med på et parti</string>
+  <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Fjern lagret trekk</string>
+  <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Noe gikk galt.</string>
 </resources>
