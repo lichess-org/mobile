@@ -19,6 +19,7 @@
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Sense resultats</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Estàs segur?</string>
   <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">Perdreu la vostra ratxa i la vostra puntuació es guardarà.</string>
+  <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Res a mostrar. Fes algunes rondes al Puzzle Storm.</string>
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Comparteix aquest problema</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Comparteix l\'enllaç a la partida</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Comparteix PGN</string>
