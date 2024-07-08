@@ -6,4 +6,27 @@
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">İzle</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Ayarlar</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Bu sayfayı görüntülemek için giriş yapmalısınız.</string>
+  <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Sistem renkleri</string>
+  <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Geri bildirimde bulun</string>
+  <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">Tamam</string>
+  <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">Titreşimli geri bildirim</string>
+  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Hiçbir kullanıcıyı takip etmiyorsunuz.</string>
+  <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Tüm oyunlar</string>
+  <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Son aramalar</string>
+  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Temizle</string>
+  <string name="noSearchResults" comment="This is shown when the search did not return any results.">Sonuç bulunamadı</string>
+  <string name="areYouSure" comment="This is shown in confirmation dialogs.">Emin misiniz?</string>
+  <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Bulmacayı paylaş</string>
+  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Oyun linkini paylaş</string>
+  <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">PGN\'yi paylaş</string>
+  <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">Konumu FEN olarak paylaş</string>
+  <string name="showVariations" comment="Shown in the analysis screen.">Varyasyonları göster</string>
+  <string name="hideVariation" comment="Shown in the analysis screen.">Varyasyonu gizle</string>
+  <string name="showComments" comment="Shown in the analysis screen.">Yorumları göster</string>
+  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Geri alma teklifini iptal et</string>
+  <string name="cancelDrawOffer" comment="Menu action that cancels a previous draw offer">Berabere teklifini iptal et</string>
+  <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Rakip bekleniyor...</string>
+  <string name="blindfoldMode" comment="This button toggles blindfold mode. This mean the user can only see the board, but not the pieces.">Körleme modu</string>
+  <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Bir oyuna katıl</string>
+  <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Birşeyler ters gitti.</string>
 </resources>
