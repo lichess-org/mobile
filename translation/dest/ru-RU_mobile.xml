@@ -2,7 +2,7 @@
 <resources>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Главная</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Задачи</string>
-  <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Сервис</string>
+  <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Анализ</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Просмотр</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Настройки</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Вы должны войти для просмотра этой страницы.</string>
@@ -11,20 +11,31 @@
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">ОК</string>
   <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">Виброотклик</string>
   <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">Полноэкранный режим</string>
+  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">Скрывать интерфейс во время игры. Воспользуйтесь, если вам мешает навигация по краям экрана. Применяется в режиме партий и задач.</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Вы не подписаны на других пользователей.</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Все игры</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Последние запросы</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Очистить</string>
+  <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Игроки, содержащие «%s»</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Ничего не найденo</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Вы уверены?</string>
   <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">Вы потеряете свою текущую серию, и результаты будут сохранены.</string>
+  <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Ничего нет. Сыграйте несколько попыток.</string>
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Поделиться задачей</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Поделиться ссылкой на игру</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Поделиться PGN</string>
   <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">Поделиться FEN</string>
   <string name="showVariations" comment="Shown in the analysis screen.">Показывать варианты</string>
+  <string name="hideVariation" comment="Shown in the analysis screen.">Скрыть варианты</string>
   <string name="showComments" comment="Shown in the analysis screen.">Показать комментарии</string>
-  <string name="blindfoldMode" comment="This button toggles blindfold mode. This mean the user can only see the board, but not the pieces.">Игра в слепую</string>
-  <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Присоединяйтесь к игре</string>
+  <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Хотите закончить эту попытку?</string>
+  <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Ничего не найдено, измените фильтры, пожалуйста</string>
+  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Отменить предложение о возврате хода</string>
+  <string name="cancelDrawOffer" comment="Menu action that cancels a previous draw offer">Отменить предложение ничьей</string>
+  <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Ожидание соперника...</string>
+  <string name="blindfoldMode" comment="This button toggles blindfold mode. This mean the user can only see the board, but not the pieces.">Игра вслепую</string>
+  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Стримеры в эфире</string>
+  <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Присоединиться к игре</string>
+  <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Очистить сохранённый ход</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Что-то пошло не так.</string>
 </resources>
