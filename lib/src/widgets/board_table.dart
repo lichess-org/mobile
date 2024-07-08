@@ -166,7 +166,9 @@ class _BoardTableState extends ConsumerState<BoardTable> {
         final board = Board(
           key: widget.boardKey,
           size: boardSize,
-          data: widget.boardData,
+          data: widget.boardData.copyWith(
+            shapes: userShapes.union(widget.boardData.shapes ?? ISet()),
+          ),
           settings: settings,
           onMove: widget.onMove,
           onPremove: widget.onPremove,
