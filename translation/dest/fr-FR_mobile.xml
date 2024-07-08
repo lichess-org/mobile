@@ -19,7 +19,7 @@
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Joueurs – \"%s\"</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Aucun résultat</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Êtes-vous sûr(e) ?</string>
-  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">Vous allez perdre votre série (streak) actuelle et votre résultat sera sauvegardé.</string>
+  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">Votre série actuelle (streak) prendra fin et votre résultat sera sauvegardé.</string>
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Partager ce problème</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Partager l\'URL de la partie</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Partager le PGN</string>
