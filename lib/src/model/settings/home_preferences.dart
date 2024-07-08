@@ -9,7 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 part 'home_preferences.freezed.dart';
 part 'home_preferences.g.dart';
 
-const _prefKey = 'preferences.general';
+const _prefKey = 'preferences.home';
 
 @Riverpod(keepAlive: true)
 class HomePreferences extends _$HomePreferences {
