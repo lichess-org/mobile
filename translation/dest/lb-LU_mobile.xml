@@ -18,6 +18,6 @@
   <string name="showVariations" comment="Shown in the analysis screen.">Variante weisen</string>
   <string name="hideVariation" comment="Shown in the analysis screen.">Variante verstoppen</string>
   <string name="showComments" comment="Shown in the analysis screen.">Kommentarer weisen</string>
-  <string name="blindfoldMode" comment="This button toggles blindfold mode">Blann</string>
+  <string name="blindfoldMode" comment="This button toggles blindfold mode. This mean the user can only see the board, but not the pieces.">Blann</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Et ass eppes schifgaang.</string>
 </resources>
