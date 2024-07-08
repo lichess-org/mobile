@@ -18,6 +18,7 @@
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Clear</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">No results</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Are you sure?</string>
+  <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Nothing to show. Play some runs of Puzzle Storm.</string>
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Share this puzzle</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Share game URL</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Share PGN</string>
