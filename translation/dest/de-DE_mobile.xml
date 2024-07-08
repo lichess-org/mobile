@@ -2,7 +2,7 @@
 <resources>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Start</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Aufgaben</string>
-  <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Werkzeuge</string>
+  <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Werkzeuge</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Zuschauen</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Optionen</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Du musst angemeldet sein, um diese Seite anzuzeigen.</string>
@@ -19,8 +19,7 @@
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Spieler mit \"%s\"</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Keine Treffer</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Bist du sicher?</string>
-  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak.">Du verlierst deine aktuelle Serie und dein Ergebnis wird gespeichert.</string>
-  <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet">Nichts anzuzeigen. Spiele ein paar Runden Puzzle Storm</string>
+  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">Du verlierst deine aktuelle Serie und dein Ergebnis wird gespeichert.</string>
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Teile dieses Puzzle</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Link der Partie teilen</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">PGN teilen</string>
@@ -33,7 +32,7 @@
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Zugzurücknahme-Angebot abbrechen</string>
   <string name="cancelDrawOffer" comment="Menu action that cancels a previous draw offer">Remisangebot zurücknehmen</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Warte auf Beitritt eines Gegners...</string>
-  <string name="blindfoldMode" comment="This button toggles blindfold mode">Blind spielen</string>
+  <string name="blindfoldMode" comment="This button toggles blindfold mode. This mean the user can only see the board, but not the pieces.">Blind spielen</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Livestreamer</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Einer Partie beitreten</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Gespeicherten Zug löschen</string>
