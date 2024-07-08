@@ -2,7 +2,7 @@
 <resources>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">主页</string>
   <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">谜题</string>
-  <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">工具</string>
+  <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">工具</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">观看</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">设置</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">您必须登录才能浏览此页面。</string>
@@ -25,7 +25,7 @@
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">取消悔棋请求</string>
   <string name="cancelDrawOffer" comment="Menu action that cancels a previous draw offer">取消和棋请求</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">正在等待对手加入...</string>
-  <string name="blindfoldMode" comment="This button toggles blindfold mode">盲棋</string>
+  <string name="blindfoldMode" comment="This button toggles blindfold mode. This mean the user can only see the board, but not the pieces.">盲棋</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">主播</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">加入一局游戏</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">发生一些错误。</string>
