@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Kreu</string>
-  <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Mjete</string>
+  <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">Mjete</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Shiheni</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">Rregullime</string>
   <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">Që të shihni këtë faqe, duhet të keni bërë hyrjen në llogari.</string>
@@ -29,7 +29,7 @@
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Anulojeni ofertën për prapakthim</string>
   <string name="cancelDrawOffer" comment="Menu action that cancels a previous draw offer">Anulojeni ofertën për barazim</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Po pritet që të vijë kundërshtari…</string>
-  <string name="blindfoldMode" comment="This button toggles blindfold mode">Me sytë lidhur</string>
+  <string name="blindfoldMode" comment="This button toggles blindfold mode. This mean the user can only see the board, but not the pieces.">Me sytë lidhur</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Transmetues drejtpërsëdrejti</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Merrni pjesë në një lojë</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Spastroje lëvizjen e ruajtur</string>
