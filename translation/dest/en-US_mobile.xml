@@ -16,4 +16,24 @@
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">All games</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Recent searches</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Clear</string>
+  <string name="noSearchResults" comment="This is shown when the search did not return any results.">No results</string>
+  <string name="areYouSure" comment="This is shown in confirmation dialogs.">Are you sure?</string>
+  <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet">Nothing to show. Play some runs of Storm</string>
+  <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Share this puzzle</string>
+  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Share game URL</string>
+  <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Share PGN</string>
+  <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">Share position as FEN</string>
+  <string name="showVariations" comment="Shown in the analysis screen.">Show variations</string>
+  <string name="hideVariation" comment="Shown in the analysis screen.">Hide variation</string>
+  <string name="showComments" comment="Shown in the analysis screen.">Show comments</string>
+  <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Do you want to end this run?</string>
+  <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Nothing to show, please change the filters</string>
+  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Cancel takeback offer</string>
+  <string name="cancelDrawOffer" comment="Menu action that cancels a previous draw offer">Cancel draw offer</string>
+  <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Waiting for opponent to join...</string>
+  <string name="blindfoldMode" comment="This button toggles blindfold mode">Blindfold</string>
+  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Live streamers</string>
+  <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Join a game</string>
+  <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Clear saved move</string>
+  <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Something went wrong.</string>
 </resources>
