@@ -16,6 +16,7 @@
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Spelers met \"%s\"</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Geen resultaten</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Weet je het zeker?</string>
+  <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Niets om te laten zien. Speel een aantal stappen van de Puzzle Storm.</string>
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Deel deze puzzel</string>
   <string name="showComments" comment="Shown in the analysis screen.">Opmerkingen weergeven</string>
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Wil je dit uitvoeren beëindigen?</string>
