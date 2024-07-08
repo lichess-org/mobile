@@ -430,12 +430,6 @@ abstract class AppLocalizations {
   /// **'Something went wrong.'**
   String get mobileSomethingWentWrong;
 
-  /// No description provided for @mobileDeleteLocalDatabase.
-  ///
-  /// In en, this message translates to:
-  /// **'Delete local database'**
-  String get mobileDeleteLocalDatabase;
-
   /// No description provided for @activityActivity.
   ///
   /// In en, this message translates to:

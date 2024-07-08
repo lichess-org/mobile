@@ -123,9 +123,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mobileSomethingWentWrong => 'Something went wrong.';
 
   @override
-  String get mobileDeleteLocalDatabase => 'Delete local database';
-
-  @override
   String get activityActivity => 'Activity';
 
   @override

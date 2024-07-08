@@ -38,5 +38,4 @@
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Join a game</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Clear saved move</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Something went wrong.</string>
-  <string name="deleteLocalDatabase" comment="The button in settings screen to delete local database. Also the confirm title that is displayed on a confirm dialog to confirm the action of deleting it.">Delete local database</string>
 </resources>
