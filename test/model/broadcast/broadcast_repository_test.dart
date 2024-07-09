@@ -4,6 +4,7 @@ import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 
 import '../../test_container.dart';
 import '../../test_utils.dart';
@@ -58,7 +59,7 @@ void main() {
       final client = container.read(lichessClientProvider);
       final repo = BroadcastRepository(client);
 
-      final response = await repo.getRound(roundId);
+      final response = await repo.getRound(const BroadcastRoundId(roundId));
 
       expect(response, isA<IList<BroadcastGameSnapshot>>());
       expect(response.length, 5);

@@ -1,6 +1,7 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 
 part 'broadcast.freezed.dart';
 
@@ -26,7 +27,7 @@ class Broadcast with _$Broadcast {
   factory Broadcast.loading() => Broadcast(
         tour: const BroadcastTournament(name: '', imageUrl: null),
         lastRound: BroadcastRound(
-          id: '',
+          id: const BroadcastRoundId(''),
           status: RoundStatus.finished,
           startsAt: DateTime.now(),
         ),
@@ -49,7 +50,7 @@ class BroadcastTournament with _$BroadcastTournament {
 @freezed
 class BroadcastRound with _$BroadcastRound {
   const factory BroadcastRound({
-    required String id,
+    required BroadcastRoundId id,
     required RoundStatus status,
     required DateTime startsAt,
   }) = _BroadcastRound;

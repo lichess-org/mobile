@@ -3,6 +3,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 
 class BroadcastRepository {
@@ -21,7 +22,9 @@ class BroadcastRepository {
     );
   }
 
-  Future<IList<BroadcastGameSnapshot>> getRound(String broadcastRoundId) {
+  Future<IList<BroadcastGameSnapshot>> getRound(
+    BroadcastRoundId broadcastRoundId,
+  ) {
     return client.readJson(
       Uri(path: 'api/broadcast/-/-/$broadcastRoundId'),
       // The path parameters with - are the broadcast tournament and round slug
@@ -58,7 +61,7 @@ Broadcast _broadcastFromPick(RequiredPick pick) {
       imageUrl: pick('tour', 'image').asStringOrNull(),
     ),
     lastRound: BroadcastRound(
-      id: pick('lastRound', 'id').asStringOrThrow(),
+      id: pick('lastRound', 'id').asBroadcastRoundIdOrThrow(),
       status: status,
       startsAt: pick('lastRound', 'startsAt')
           .asDateTimeFromMillisecondsOrThrow()
