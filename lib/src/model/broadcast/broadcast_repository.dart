@@ -47,8 +47,8 @@ BroadcastResponse _makeBroadcastResponseFromJson(Map<String, dynamic> json) {
 }
 
 Broadcast _broadcastFromPick(RequiredPick pick) {
-  final live = pick('lastRound', 'ongoing').asBoolOrFalse();
-  final finished = pick('lastRound', 'finished').asBoolOrFalse();
+  final live = pick('round', 'ongoing').asBoolOrFalse();
+  final finished = pick('round', 'finished').asBoolOrFalse();
   final status = live
       ? RoundStatus.live
       : finished
@@ -60,10 +60,10 @@ Broadcast _broadcastFromPick(RequiredPick pick) {
       name: pick('tour', 'name').asStringOrThrow(),
       imageUrl: pick('tour', 'image').asStringOrNull(),
     ),
-    lastRound: BroadcastRound(
-      id: pick('lastRound', 'id').asBroadcastRoundIdOrThrow(),
+    round: BroadcastRound(
+      id: pick('round', 'id').asBroadcastRoundIdOrThrow(),
       status: status,
-      startsAt: pick('lastRound', 'startsAt')
+      startsAt: pick('round', 'startsAt')
           .asDateTimeFromMillisecondsOrThrow()
           .toLocal(),
     ),

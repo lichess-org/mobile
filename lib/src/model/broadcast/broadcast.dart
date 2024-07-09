@@ -20,13 +20,13 @@ class Broadcast with _$Broadcast {
 
   const factory Broadcast({
     required BroadcastTournament tour,
-    required BroadcastRound lastRound,
+    required BroadcastRound round,
     required String? group,
   }) = _Broadcast;
 
   factory Broadcast.loading() => Broadcast(
         tour: const BroadcastTournament(name: '', imageUrl: null),
-        lastRound: BroadcastRound(
+        round: BroadcastRound(
           id: const BroadcastRoundId(''),
           status: RoundStatus.finished,
           startsAt: DateTime.now(),
@@ -34,7 +34,7 @@ class Broadcast with _$Broadcast {
         group: null,
       );
 
-  bool get isLive => lastRound.status == RoundStatus.live;
+  bool get isLive => round.status == RoundStatus.live;
 
   String get title => group ?? tour.name;
 }
