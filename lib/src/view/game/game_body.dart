@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
@@ -104,6 +105,10 @@ class GameBody extends ConsumerWidget {
     );
 
     final boardPreferences = ref.watch(boardPreferencesProvider);
+    final emergencySoundEnabled = ref.watch(clockSoundProvider).maybeWhen(
+          data: (clockSound) => clockSound,
+          orElse: () => true,
+        );
 
     final blindfoldMode = ref.watch(
       gamePreferencesProvider.select(
@@ -152,6 +157,7 @@ class GameBody extends ConsumerWidget {
                   emergencyThreshold: youAre == Side.black
                       ? gameState.game.meta.clock?.emergency
                       : null,
+                  emergencySoundEnabled: emergencySoundEnabled,
                   onFlag: () => ref.read(ctrlProvider.notifier).onFlag(),
                 )
               : gameState.game.correspondenceClock != null
@@ -192,6 +198,7 @@ class GameBody extends ConsumerWidget {
                   emergencyThreshold: youAre == Side.white
                       ? gameState.game.meta.clock?.emergency
                       : null,
+                  emergencySoundEnabled: emergencySoundEnabled,
                   onFlag: () => ref.read(ctrlProvider.notifier).onFlag(),
                 )
               : gameState.game.correspondenceClock != null
@@ -732,7 +739,8 @@ class _GameBottomBar extends ConsumerWidget {
           ),
         if (gameState.game.me?.proposingTakeback == true)
           BottomSheetAction(
-            makeLabel: (context) => const Text('Cancel takeback offer'),
+            makeLabel: (context) =>
+                Text(context.l10n.mobileCancelTakebackOffer),
             isDestructiveAction: true,
             onPressed: (context) {
               ref
@@ -742,7 +750,7 @@ class _GameBottomBar extends ConsumerWidget {
           ),
         if (gameState.game.me?.offeringDraw == true)
           BottomSheetAction(
-            makeLabel: (context) => const Text('Cancel draw offer'),
+            makeLabel: (context) => Text(context.l10n.mobileCancelDrawOffer),
             isDestructiveAction: true,
             onPressed: (context) {
               ref
@@ -849,7 +857,7 @@ class _GameBottomBar extends ConsumerWidget {
     final result = await showAdaptiveDialog<bool>(
       context: context,
       builder: (context) => YesNoDialog(
-        title: const Text('Are you sure?'),
+        title: Text(context.l10n.mobileAreYouSure),
         content: description,
         onYes: () {
           return Navigator.of(context).pop(true);

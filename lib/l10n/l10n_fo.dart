@@ -7,6 +7,122 @@ class AppLocalizationsFo extends AppLocalizations {
   AppLocalizationsFo([String locale = 'fo']) : super(locale);
 
   @override
+  String get mobileHomeTab => 'Home';
+
+  @override
+  String get mobilePuzzlesTab => 'Puzzles';
+
+  @override
+  String get mobileToolsTab => 'Tools';
+
+  @override
+  String get mobileWatchTab => 'Watch';
+
+  @override
+  String get mobileSettingsTab => 'Settings';
+
+  @override
+  String get mobileMustBeLoggedIn => 'You must be logged in to view this page.';
+
+  @override
+  String get mobileSystemColors => 'System colors';
+
+  @override
+  String get mobileFeedbackButton => 'Feedback';
+
+  @override
+  String get mobileOkButton => 'OK';
+
+  @override
+  String get mobileSettingsHapticFeedback => 'Haptic feedback';
+
+  @override
+  String get mobileSettingsImmersiveMode => 'Immersive mode';
+
+  @override
+  String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.';
+
+  @override
+  String get mobileNotFollowingAnyUser => 'You are not following any user.';
+
+  @override
+  String get mobileAllGames => 'All games';
+
+  @override
+  String get mobileRecentSearches => 'Recent searches';
+
+  @override
+  String get mobileClearButton => 'Clear';
+
+  @override
+  String mobilePlayersMatchingSearchTerm(String param) {
+    return 'Players with \"$param\"';
+  }
+
+  @override
+  String get mobileNoSearchResults => 'No results';
+
+  @override
+  String get mobileAreYouSure => 'Are you sure?';
+
+  @override
+  String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
+
+  @override
+  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of storm';
+
+  @override
+  String get mobileSharePuzzle => 'Share this puzzle';
+
+  @override
+  String get mobileShareGameURL => 'Share game URL';
+
+  @override
+  String get mobileShareGamePGN => 'Share PGN';
+
+  @override
+  String get mobileSharePositionAsFEN => 'Share position as FEN';
+
+  @override
+  String get mobileShowVariations => 'Show variations';
+
+  @override
+  String get mobileHideVariation => 'Hide variation';
+
+  @override
+  String get mobileShowComments => 'Show comments';
+
+  @override
+  String get mobilePuzzleStormConfirmEndRun => 'Do you want to end this run?';
+
+  @override
+  String get mobilePuzzleStormFilterNothingToShow => 'Nothing to show, please change the filters';
+
+  @override
+  String get mobileCancelTakebackOffer => 'Cancel takeback offer';
+
+  @override
+  String get mobileCancelDrawOffer => 'Cancel draw offer';
+
+  @override
+  String get mobileWaitingForOpponentToJoin => 'Waiting for opponent to join...';
+
+  @override
+  String get mobileBlindfoldMode => 'Blindfold';
+
+  @override
+  String get mobileLiveStreamers => 'Live streamers';
+
+  @override
+  String get mobileCustomGameJoinAGame => 'Join a game';
+
+  @override
+  String get mobileCorrespondenceClearSavedMove => 'Clear saved move';
+
+  @override
+  String get mobileSomethingWentWrong => 'Something went wrong.';
+
+  @override
   String get activityActivity => 'Virkni';
 
   @override
@@ -27,7 +143,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Stuðlaði lichess.org í $count mánaðir sum ein $param2',
       one: 'Stuðlaði lichess.org í $count mánaða sum ein $param2',
-      zero: 'Stuðlaði lichess.org í $count mánaða sum ein $param2',
     );
     return '$_temp0';
   }
@@ -39,7 +154,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Vandi $count støður í $param2',
       one: 'Vandi $count støðu í $param2',
-      zero: 'Vandi $count støðu í $param2',
     );
     return '$_temp0';
   }
@@ -51,7 +165,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Loysti $count taktiskar uppgávur',
       one: 'Loysti $count taktiska uppgávu',
-      zero: 'Loysti $count taktiska uppgávu',
     );
     return '$_temp0';
   }
@@ -63,7 +176,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Telvaði $count $param2 talv',
       one: 'Telvaði $count $param2 talv',
-      zero: 'Telvaði $count $param2 talv',
     );
     return '$_temp0';
   }
@@ -75,7 +187,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Skrivaði $count boð í $param2',
       one: 'Skrivaði $count boð í $param2',
-      zero: 'Skrivaði $count boð í $param2',
     );
     return '$_temp0';
   }
@@ -87,7 +198,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Telvaði $count leikir',
       one: 'Telvaði $count leik',
-      zero: 'Telvaði $count leik',
     );
     return '$_temp0';
   }
@@ -99,7 +209,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'í $count brævtalvum',
       one: 'í $count brævtalvi',
-      zero: 'í $count brævtalvi',
     );
     return '$_temp0';
   }
@@ -111,7 +220,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Fullførdi $count brævtalv',
       one: 'Fullførdi $count brævtalv',
-      zero: 'Fullførdi $count brævtalv',
     );
     return '$_temp0';
   }
@@ -123,7 +231,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Fór undir at fylgja $count telvarum',
       one: 'Fór undir at fylgja $count telvara',
-      zero: 'Fór undir at fylgja $count telvara',
     );
     return '$_temp0';
   }
@@ -135,7 +242,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Fekk $count nýggjar fylgjarar',
       one: 'Fekk $count nýggjan fylgjara',
-      zero: 'Fekk $count nýggjan fylgjara',
     );
     return '$_temp0';
   }
@@ -147,7 +253,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Var vertur fyri $count fjøltalvum',
       one: 'Var vertur fyri $count fjøltalvi',
-      zero: 'Var vertur fyri $count fjøltalvi',
     );
     return '$_temp0';
   }
@@ -159,7 +264,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Var við í $count fjøltalvum',
       one: 'Var við í $count fjøltalvi',
-      zero: 'Var við í $count fjøltalvi',
     );
     return '$_temp0';
   }
@@ -171,7 +275,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Stovnaði $count nýggjar rannsóknir',
       one: 'Stovnaði $count nýggja rannsókn',
-      zero: 'Stovnaði $count nýggja rannsókn',
     );
     return '$_temp0';
   }
@@ -183,7 +286,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Kappaðist í $count kappingum',
       one: 'Kappaðist í $count kapping',
-      zero: 'Kappaðist í $count kapping',
     );
     return '$_temp0';
   }
@@ -195,7 +297,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Styrkismettur #$count (top $param2%) við $param3 talvum í $param4',
       one: 'Styrkismettur #$count (top $param2%) við $param3 talvi í $param4',
-      zero: 'Styrkismettur #$count (top $param2%) við $param3 talvi í $param4',
     );
     return '$_temp0';
   }
@@ -207,7 +308,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Kappaðist í $count swisskappingum',
       one: 'Kappaðist í $count swisskapping',
-      zero: 'Kappaðist í $count swisskapping',
     );
     return '$_temp0';
   }
@@ -219,16 +319,15 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Fór upp í $count lið',
       one: 'Fór upp í $count lið',
-      zero: 'Fór upp í $count lið',
     );
     return '$_temp0';
   }
 
   @override
-  String get contactContact => 'Samband';
+  String get broadcastBroadcasts => 'Sendingar';
 
   @override
-  String get contactContactLichess => 'Set teg í samband við Lichess';
+  String get broadcastStartDate => 'Byrjanardagfesting í tínum egna tíðarøki';
 
   @override
   String challengeChallengesX(String param1) {
@@ -310,6 +409,1005 @@ class AppLocalizationsFo extends AppLocalizations {
 
   @override
   String get challengeInviteLichessUser => 'Or invite a Lichess user:';
+
+  @override
+  String get contactContact => 'Samband';
+
+  @override
+  String get contactContactLichess => 'Set teg í samband við Lichess';
+
+  @override
+  String get patronDonate => 'Stuðla';
+
+  @override
+  String get patronLichessPatron => 'Lichess stuðul';
+
+  @override
+  String perfStatPerfStats(String param) {
+    return '$param stats';
+  }
+
+  @override
+  String get perfStatViewTheGames => 'View the games';
+
+  @override
+  String get perfStatProvisional => 'provisional';
+
+  @override
+  String get perfStatNotEnoughRatedGames => 'Not enough rated games have been played to establish a reliable rating.';
+
+  @override
+  String perfStatProgressOverLastXGames(String param) {
+    return 'Progression over the last $param games:';
+  }
+
+  @override
+  String perfStatRatingDeviation(String param) {
+    return 'Rating deviation: $param.';
+  }
+
+  @override
+  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
+    return 'Lower value means the rating is more stable. Above $param1, the rating is considered provisional. To be included in the rankings, this value should be below $param2 (standard chess) or $param3 (variants).';
+  }
+
+  @override
+  String get perfStatTotalGames => 'Total games';
+
+  @override
+  String get perfStatRatedGames => 'Rated games';
+
+  @override
+  String get perfStatTournamentGames => 'Tournament games';
+
+  @override
+  String get perfStatBerserkedGames => 'Berserked games';
+
+  @override
+  String get perfStatTimeSpentPlaying => 'Time spent playing';
+
+  @override
+  String get perfStatAverageOpponent => 'Average opponent';
+
+  @override
+  String get perfStatVictories => 'Victories';
+
+  @override
+  String get perfStatDefeats => 'Defeats';
+
+  @override
+  String get perfStatDisconnections => 'Disconnections';
+
+  @override
+  String get perfStatNotEnoughGames => 'Not enough games played';
+
+  @override
+  String perfStatHighestRating(String param) {
+    return 'Highest rating: $param';
+  }
+
+  @override
+  String perfStatLowestRating(String param) {
+    return 'Lowest rating: $param';
+  }
+
+  @override
+  String perfStatFromXToY(String param1, String param2) {
+    return 'from $param1 to $param2';
+  }
+
+  @override
+  String get perfStatWinningStreak => 'Winning streak';
+
+  @override
+  String get perfStatLosingStreak => 'Losing streak';
+
+  @override
+  String perfStatLongestStreak(String param) {
+    return 'Longest streak: $param';
+  }
+
+  @override
+  String perfStatCurrentStreak(String param) {
+    return 'Current streak: $param';
+  }
+
+  @override
+  String get perfStatBestRated => 'Best rated victories';
+
+  @override
+  String get perfStatGamesInARow => 'Games played in a row';
+
+  @override
+  String get perfStatLessThanOneHour => 'Less than one hour between games';
+
+  @override
+  String get perfStatMaxTimePlaying => 'Max time spent playing';
+
+  @override
+  String get perfStatNow => 'nú';
+
+  @override
+  String get preferencesPreferences => 'Stillingar';
+
+  @override
+  String get preferencesDisplay => 'Display';
+
+  @override
+  String get preferencesPrivacy => 'Privacy';
+
+  @override
+  String get preferencesNotifications => 'Notifications';
+
+  @override
+  String get preferencesPieceAnimation => 'Snið á talvfólki';
+
+  @override
+  String get preferencesMaterialDifference => 'Virðismunur';
+
+  @override
+  String get preferencesBoardHighlights => 'Upplýstir talvpuntar (seinasti leikur og skák)';
+
+  @override
+  String get preferencesPieceDestinations => 'Ætlingastaðir (lógligir leikir)';
+
+  @override
+  String get preferencesBoardCoordinates => 'Talvborðskrosstøl (A-H, 1-8)';
+
+  @override
+  String get preferencesMoveListWhilePlaying => 'Leikalisti, meðan telvað verður';
+
+  @override
+  String get preferencesPgnPieceNotation => 'Teknskipan';
+
+  @override
+  String get preferencesChessPieceSymbol => 'Talvfólkaímyndir';
+
+  @override
+  String get preferencesPgnLetter => 'Bókstavir (K, Q, R, B, N)';
+
+  @override
+  String get preferencesZenMode => 'Zenstøða';
+
+  @override
+  String get preferencesShowPlayerRatings => 'Show player ratings';
+
+  @override
+  String get preferencesShowFlairs => 'Show player flairs';
+
+  @override
+  String get preferencesExplainShowPlayerRatings => 'This hides all ratings from Lichess, to help focus on the chess. Rated games still impact your rating, this is only about what you get to see.';
+
+  @override
+  String get preferencesDisplayBoardResizeHandle => 'Vís tól at vaksa og minka um talvborðið';
+
+  @override
+  String get preferencesOnlyOnInitialPosition => 'Bert við byrjanarstøðu';
+
+  @override
+  String get preferencesInGameOnly => 'In-game only';
+
+  @override
+  String get preferencesChessClock => 'Talvklokka';
+
+  @override
+  String get preferencesTenthsOfSeconds => 'Tíggjundapartar av sekundum';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'Tá ið minni enn 10 sekund eru eftir';
+
+  @override
+  String get preferencesHorizontalGreenProgressBars => 'Vatnrættar grønar framgongulinjur';
+
+  @override
+  String get preferencesSoundWhenTimeGetsCritical => 'Ljóð, tá ið lítil tíð er eftir';
+
+  @override
+  String get preferencesGiveMoreTime => 'Gev meira tíð';
+
+  @override
+  String get preferencesGameBehavior => 'Hvussu telvað verður';
+
+  @override
+  String get preferencesHowDoYouMovePieces => 'Hvussu flytir tú fólkini?';
+
+  @override
+  String get preferencesClickTwoSquares => 'Klikk á tveir puntar';
+
+  @override
+  String get preferencesDragPiece => 'Drag talvfólkið';
+
+  @override
+  String get preferencesBothClicksAndDrag => 'Bæði';
+
+  @override
+  String get preferencesPremovesPlayingDuringOpponentTurn => 'Forhandarleikur (at leika, meðan mótparturin eigur leik)';
+
+  @override
+  String get preferencesTakebacksWithOpponentApproval => 'Afturtøka (við loyvi frá mótleikaranum)';
+
+  @override
+  String get preferencesInCasualGamesOnly => 'Bert í talvum, ið ikki ávirka styrkitøl';
+
+  @override
+  String get preferencesPromoteToQueenAutomatically => 'Umskapa til frúgv sjálvvirkið';
+
+  @override
+  String get preferencesExplainPromoteToQueenAutomatically => 'Hold the <ctrl> key while promoting to temporarily disable auto-promotion';
+
+  @override
+  String get preferencesWhenPremoving => 'Við forhandarleikum';
+
+  @override
+  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Krev remis sjálvvirkið aftaná trífalda endurtøku';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Tá ið minni enn 30 sekund eru eftir';
+
+  @override
+  String get preferencesMoveConfirmation => 'Vátta leik';
+
+  @override
+  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Can be disabled during a game with the board menu';
+
+  @override
+  String get preferencesInCorrespondenceGames => 'Brævtalv';
+
+  @override
+  String get preferencesCorrespondenceAndUnlimited => 'Brævtalv og óavmarkað';
+
+  @override
+  String get preferencesConfirmResignationAndDrawOffers => 'Vátta, tá ið tú gevur upp ella býður remis';
+
+  @override
+  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Háttur at leypa í borg';
+
+  @override
+  String get preferencesCastleByMovingTwoSquares => 'Flyt kongin tveir puntar';
+
+  @override
+  String get preferencesCastleByMovingOntoTheRook => 'Flyt kongin yvir á rókin';
+
+  @override
+  String get preferencesInputMovesWithTheKeyboard => 'Skriva leikirnar við lyklaborðinum';
+
+  @override
+  String get preferencesInputMovesWithVoice => 'Input moves with your voice';
+
+  @override
+  String get preferencesSnapArrowsToValidMoves => 'Vís lógligar leikir við pílum';
+
+  @override
+  String get preferencesSayGgWpAfterLosingOrDrawing => 'Sig \"Gott talv, væl telvað,\" tá ið tú vinnur ella telvar javnt';
+
+  @override
+  String get preferencesYourPreferencesHaveBeenSaved => 'Tínar stillingar eru goymdar.';
+
+  @override
+  String get preferencesScrollOnTheBoardToReplayMoves => 'Scroll on the board to replay moves';
+
+  @override
+  String get preferencesCorrespondenceEmailNotification => 'Daily email listing your correspondence games';
+
+  @override
+  String get preferencesNotifyStreamStart => 'Streamer goes live';
+
+  @override
+  String get preferencesNotifyInboxMsg => 'New inbox message';
+
+  @override
+  String get preferencesNotifyForumMention => 'Forum comment mentions you';
+
+  @override
+  String get preferencesNotifyInvitedStudy => 'Study invite';
+
+  @override
+  String get preferencesNotifyGameEvent => 'Correspondence game updates';
+
+  @override
+  String get preferencesNotifyChallenge => 'Challenges';
+
+  @override
+  String get preferencesNotifyTournamentSoon => 'Tournament starting soon';
+
+  @override
+  String get preferencesNotifyTimeAlarm => 'Correspondence clock running out';
+
+  @override
+  String get preferencesNotifyBell => 'Bell notification within Lichess';
+
+  @override
+  String get preferencesNotifyPush => 'Device notification when you\'re not on Lichess';
+
+  @override
+  String get preferencesNotifyWeb => 'Browser';
+
+  @override
+  String get preferencesNotifyDevice => 'Device';
+
+  @override
+  String get preferencesBellNotificationSound => 'Bell notification sound';
+
+  @override
+  String get puzzlePuzzles => 'Uppgávur';
+
+  @override
+  String get puzzlePuzzleThemes => 'Uppgávuevni';
+
+  @override
+  String get puzzleRecommended => 'Viðmældar uppgávur';
+
+  @override
+  String get puzzlePhases => 'Skifti';
+
+  @override
+  String get puzzleMotifs => 'Ætlanir';
+
+  @override
+  String get puzzleAdvanced => 'Framkomið stig';
+
+  @override
+  String get puzzleLengths => 'Longdir';
+
+  @override
+  String get puzzleMates => 'Mát';
+
+  @override
+  String get puzzleGoals => 'Mál';
+
+  @override
+  String get puzzleOrigin => 'Uppruni';
+
+  @override
+  String get puzzleSpecialMoves => 'Serligir leikir';
+
+  @override
+  String get puzzleDidYouLikeThisPuzzle => 'Dámdi tær hesa uppgávuna?';
+
+  @override
+  String get puzzleVoteToLoadNextOne => 'Atkvøð at innlesa ta næstu!';
+
+  @override
+  String get puzzleUpVote => 'Up vote puzzle';
+
+  @override
+  String get puzzleDownVote => 'Down vote puzzle';
+
+  @override
+  String get puzzleYourPuzzleRatingWillNotChange => 'Your puzzle rating will not change. Note that puzzles are not a competition. Your rating helps selecting the best puzzles for your current skill.';
+
+  @override
+  String get puzzleFindTheBestMoveForWhite => 'Finn besta leikin hjá hvítum.';
+
+  @override
+  String get puzzleFindTheBestMoveForBlack => 'Finn besta leikin hjá svørtum.';
+
+  @override
+  String get puzzleToGetPersonalizedPuzzles => 'Fá uppgávur lagaðar til tín:';
+
+  @override
+  String puzzlePuzzleId(String param) {
+    return 'Uppgáva $param';
+  }
+
+  @override
+  String get puzzlePuzzleOfTheDay => 'Dagsins talvuppgáva';
+
+  @override
+  String get puzzleDailyPuzzle => 'Daily Puzzle';
+
+  @override
+  String get puzzleClickToSolve => 'Klikk á at loysa';
+
+  @override
+  String get puzzleGoodMove => 'Góður leikur';
+
+  @override
+  String get puzzleBestMove => 'Besti leikur!';
+
+  @override
+  String get puzzleKeepGoing => 'Halt fram…';
+
+  @override
+  String get puzzlePuzzleSuccess => 'Tað eydnaðist!';
+
+  @override
+  String get puzzlePuzzleComplete => 'Uppgávan er loyst!';
+
+  @override
+  String get puzzleByOpenings => 'By openings';
+
+  @override
+  String get puzzlePuzzlesByOpenings => 'Puzzles by openings';
+
+  @override
+  String get puzzleOpeningsYouPlayedTheMost => 'Openings you played the most in rated games';
+
+  @override
+  String get puzzleUseFindInPage => 'Use \"Find in page\" in the browser menu to find your favourite opening!';
+
+  @override
+  String get puzzleUseCtrlF => 'Use Ctrl+f to find your favourite opening!';
+
+  @override
+  String get puzzleNotTheMove => 'Hatta er ikki rætti leikurin!';
+
+  @override
+  String get puzzleTrySomethingElse => 'Royn okkurt annað.';
+
+  @override
+  String puzzleRatingX(String param) {
+    return 'Styrkital: $param';
+  }
+
+  @override
+  String get puzzleHidden => 'fjalt';
+
+  @override
+  String puzzleFromGameLink(String param) {
+    return 'Úr talvi $param';
+  }
+
+  @override
+  String get puzzleContinueTraining => 'Halt fram við venjing';
+
+  @override
+  String get puzzleDifficultyLevel => 'Torleikastig';
+
+  @override
+  String get puzzleNormal => 'Vanligt';
+
+  @override
+  String get puzzleEasier => 'Lættari';
+
+  @override
+  String get puzzleEasiest => 'Einfaldasta';
+
+  @override
+  String get puzzleHarder => 'Truplari';
+
+  @override
+  String get puzzleHardest => 'Truplasta';
+
+  @override
+  String get puzzleExample => 'Dømi';
+
+  @override
+  String get puzzleAddAnotherTheme => 'Legg eitt nýtt tema aftrat';
+
+  @override
+  String get puzzleNextPuzzle => 'Next puzzle';
+
+  @override
+  String get puzzleJumpToNextPuzzleImmediately => 'Far til næstu uppgávu beinanvegin';
+
+  @override
+  String get puzzlePuzzleDashboard => 'Uppgávuyvirlit';
+
+  @override
+  String get puzzleImprovementAreas => 'Øki at bøta um';
+
+  @override
+  String get puzzleStrengths => 'Styrkir';
+
+  @override
+  String get puzzleHistory => 'Uppgávusøga';
+
+  @override
+  String get puzzleSolved => 'loyst';
+
+  @override
+  String get puzzleFailed => 'miseydnaðist';
+
+  @override
+  String get puzzleStreakDescription => 'Solve progressively harder puzzles and build a win streak. There is no clock, so take your time. One wrong move, and it\'s game over! But you can skip one move per session.';
+
+  @override
+  String puzzleYourStreakX(String param) {
+    return 'Your streak: $param';
+  }
+
+  @override
+  String get puzzleStreakSkipExplanation => 'Skip this move to preserve your streak! Only works once per run.';
+
+  @override
+  String get puzzleContinueTheStreak => 'Continue the streak';
+
+  @override
+  String get puzzleNewStreak => 'New streak';
+
+  @override
+  String get puzzleFromMyGames => 'From my games';
+
+  @override
+  String get puzzleLookupOfPlayer => 'Lookup puzzles from a player\'s games';
+
+  @override
+  String puzzleFromXGames(String param) {
+    return 'Puzzles from $param\' games';
+  }
+
+  @override
+  String get puzzleSearchPuzzles => 'Search puzzles';
+
+  @override
+  String get puzzleFromMyGamesNone => 'You have no puzzles in the database, but Lichess still loves you very much.\n\nPlay rapid and classical games to increase your chances of having a puzzle of yours added!';
+
+  @override
+  String puzzleFromXGamesFound(String param1, String param2) {
+    return '$param1 puzzles found in $param2 games';
+  }
+
+  @override
+  String get puzzlePuzzleDashboardDescription => 'Train, analyse, improve';
+
+  @override
+  String puzzlePercentSolved(String param) {
+    return '$param solved';
+  }
+
+  @override
+  String get puzzleNoPuzzlesToShow => 'Nothing to show, go play some puzzles first!';
+
+  @override
+  String get puzzleImprovementAreasDescription => 'Train these to optimize your progress!';
+
+  @override
+  String get puzzleStrengthDescription => 'You perform the best in these themes';
+
+  @override
+  String puzzlePlayedXTimes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Telvað $count ferðir',
+      one: 'Telvað $count ferð',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsBelowYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count points below your puzzle rating',
+      one: 'One point below your puzzle rating',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsAboveYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count points above your puzzle rating',
+      one: 'One point above your puzzle rating',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPlayed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count played',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbToReplay(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count to replay',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get puzzleThemeAdvancedPawn => 'Frífinna';
+
+  @override
+  String get puzzleThemeAdvancedPawnDescription => 'Ein finna, ið umskapast ella hóttir við at umskapast, er lykilin til taktikkin.';
+
+  @override
+  String get puzzleThemeAdvantage => 'Fyrimunur';
+
+  @override
+  String get puzzleThemeAdvantageDescription => 'Tak av møguleikanum at fáa avgerandi fyrimun. (200cp ≤ eval ≤ 600cp)';
+
+  @override
+  String get puzzleThemeAnastasiaMate => 'Mát Anastasiu';
+
+  @override
+  String get puzzleThemeAnastasiaMateDescription => 'Riddari og rókur ella frúgv samstarva um at fanga mótstøðukongin millum síðuna á talvborðinum og eitt vinarligt sinnað fólk.';
+
+  @override
+  String get puzzleThemeArabianMate => 'Arábiskt mát';
+
+  @override
+  String get puzzleThemeArabianMateDescription => 'Ein riddari og ein rókur samstarva um at fanga mótstøðukongin í einum av hornunum á talvborðinum.';
+
+  @override
+  String get puzzleThemeAttackingF2F7 => 'Álop á f2 ella f7';
+
+  @override
+  String get puzzleThemeAttackingF2F7Description => 'Eitt álop, ið savnar seg um f2 ella f7-finnuna, eins og í fegatello-álopinum (Fried Liver Attack).';
+
+  @override
+  String get puzzleThemeAttraction => 'Atdráttur';
+
+  @override
+  String get puzzleThemeAttractionDescription => 'Eitt umbýti ella offur, ið eggjar ella noyðir eitt mótleikarafólk til ein punt, ið síðani letur upp fyri eini taktiskari atgerð.';
+
+  @override
+  String get puzzleThemeBackRankMate => 'Mát á aftasta rað';
+
+  @override
+  String get puzzleThemeBackRankMateDescription => 'Set kongin skák og mát á aftasta rað, har egnu fólk hansara byrgja hann inni.';
+
+  @override
+  String get puzzleThemeBishopEndgame => 'Bispaendaspæl';
+
+  @override
+  String get puzzleThemeBishopEndgameDescription => 'Endaspæl við bispum og finnum.';
+
+  @override
+  String get puzzleThemeBodenMate => 'Bodensmát';
+
+  @override
+  String get puzzleThemeBodenMateDescription => 'Tveir bispar, ið leypa á á krossandi hornalinjum (diagonalum), seta kongin, ið er forðaður av sínum egna fólki, skák og mát.';
+
+  @override
+  String get puzzleThemeCastling => 'At leypa í borg';
+
+  @override
+  String get puzzleThemeCastlingDescription => 'Flyt kongin í tryggleika, og tak rókin í nýtslu, so hann fær lopið á.';
+
+  @override
+  String get puzzleThemeCapturingDefender => 'Tak fólkið, ið verjir';
+
+  @override
+  String get puzzleThemeCapturingDefenderDescription => 'At beina eitt fólk burtur, ið hevur týdning í verjuni av einum øðrum fólki. Hetta ger tað møguligt at taka fólkið, ið nú er óvart, í einum seinni leiki.';
+
+  @override
+  String get puzzleThemeCrushing => 'At knúsa';
+
+  @override
+  String get puzzleThemeCrushingDescription => 'Finn mistakið hjá mótleikaranum til tess at ogna tær knúsandi fyrimun. (eval ≥ 600cp)';
+
+  @override
+  String get puzzleThemeDoubleBishopMate => 'Tvífalt bispamát';
+
+  @override
+  String get puzzleThemeDoubleBishopMateDescription => 'Tveir bispar, ið leypa á á tveimum grannahornalinjum, seta kongin, ið er forðaður av sínum egna fólki, skák og mát.';
+
+  @override
+  String get puzzleThemeDovetailMate => 'Sýlt mát (dúgvuvelamát)';
+
+  @override
+  String get puzzleThemeDovetailMateDescription => 'Ein frúgv stendur beint við mótstøðukongin og setir hann skák og mát, tí at kongsins egnu fólk forða konginum í at flýggja til einastu tveir puntarnar, ið eru tøkir.';
+
+  @override
+  String get puzzleThemeEquality => 'Javnstøða';
+
+  @override
+  String get puzzleThemeEqualityDescription => 'Kom afturíaftur úr eini tapandi støðu, og tryggja tær remis ella eina javna støðu. (eval ≤ 200cp)';
+
+  @override
+  String get puzzleThemeKingsideAttack => 'Álop kongamegin';
+
+  @override
+  String get puzzleThemeKingsideAttackDescription => 'Álop á mótstøðukongin, aftaná at hann er lopin í borg kongamegin.';
+
+  @override
+  String get puzzleThemeClearance => 'Rudding';
+
+  @override
+  String get puzzleThemeClearanceDescription => 'Ein leikur, ofta við tempo, ið ruddar ein punt, eitt rað ella eina tvørlinju, ið gevur møguleika fyri einari taktiskari atgerð.';
+
+  @override
+  String get puzzleThemeDefensiveMove => 'Verjuleikur';
+
+  @override
+  String get puzzleThemeDefensiveMoveDescription => 'Ein ávísur leikur ella ein røð av leikum, ið eru neyðugir, um sleppast skal undan at missa fólk ella annan fyrimun.';
+
+  @override
+  String get puzzleThemeDeflection => 'Avbending';
+
+  @override
+  String get puzzleThemeDeflectionDescription => 'Ein leikur, ið dregur eitt mótstøðufólk burtur frá at útynna eina aðra uppgávu; eitt nú at ansa eftir einum týdningarmiklum punti.';
+
+  @override
+  String get puzzleThemeDiscoveredAttack => 'Avdúkað álop';
+
+  @override
+  String get puzzleThemeDiscoveredAttackDescription => 'At flyta eitt fólk, ið frammanundan forðaði einum fólki í at leypa á; eitt nú at flyta ein riddara, ið stendur framman fyri ein rók.';
+
+  @override
+  String get puzzleThemeDoubleCheck => 'Tvískák';
+
+  @override
+  String get puzzleThemeDoubleCheckDescription => 'At skáka við tveimum fólkum samstundis. Úrslit av einum ávdúkaraálopi, har bæði fólkið, ið flutti, og fólkið, ið varð avdúkað, leypa á mótstøðukongin.';
+
+  @override
+  String get puzzleThemeEndgame => 'Endatalv';
+
+  @override
+  String get puzzleThemeEndgameDescription => 'Taktisk atgerð í seinasta skeiðinum av talvinum.';
+
+  @override
+  String get puzzleThemeEnPassantDescription => 'Taktisk atgerð, ið inniber at taka í framlopi, har ein finna kann taka eina mótstøðufinnu, ið er komin at standa undir liðini á henni, aftaná at finnan í fyrsta leiki sínum júst er flutt tveir puntar fram.';
+
+  @override
+  String get puzzleThemeExposedKing => 'Kongur í andgletti';
+
+  @override
+  String get puzzleThemeExposedKingDescription => 'Taktisk atgerð móti kongi, ið bert hevur fá verndarfólk um seg. Ber ofta skák og mát við sær.';
+
+  @override
+  String get puzzleThemeFork => 'Gaffil';
+
+  @override
+  String get puzzleThemeForkDescription => 'Leikur, har flutta fólkið loypur á tvey mótstøðufólk í senn.';
+
+  @override
+  String get puzzleThemeHangingPiece => 'Hangandi fólk';
+
+  @override
+  String get puzzleThemeHangingPieceDescription => 'Taktisk atgerð móti einum mótstøðufólki, ið ikki er vart ella ikki nóg væl vart, og tí lætt at taka.';
+
+  @override
+  String get puzzleThemeHookMate => 'Húkamát';
+
+  @override
+  String get puzzleThemeHookMateDescription => 'Skák og mát við róki, riddara og finnu, sum saman við einari fíggindafinnu forða mótstøðukonginum í at sleppa til rýmingar.';
+
+  @override
+  String get puzzleThemeInterference => 'Uppílegging';
+
+  @override
+  String get puzzleThemeInterferenceDescription => 'Flyt eitt fólk millum tvey mótstøðufólk, so annað mótstøðufólkið stendur óvart ella bæði standa óvard; flyt t.d. ein riddara á ein vardan punt millum tveir rókar.';
+
+  @override
+  String get puzzleThemeIntermezzo => 'Millumleikur';
+
+  @override
+  String get puzzleThemeIntermezzoDescription => 'Ístaðin fyri at leika tann væntaða leikin, skalt tú leika ein annan leik, ið er ein hóttandi vandi, ið mótleikarin má varða seg ímóti her og nú. Leikurin er eisini kendur sum \"Zwischenzug\" ella \"In between\".';
+
+  @override
+  String get puzzleThemeKnightEndgame => 'Riddaraendatalv';
+
+  @override
+  String get puzzleThemeKnightEndgameDescription => 'Endatalv við riddarum og finnum.';
+
+  @override
+  String get puzzleThemeLong => 'Long uppgáva';
+
+  @override
+  String get puzzleThemeLongDescription => 'Tríggir leikir, so er vunnið.';
+
+  @override
+  String get puzzleThemeMaster => 'Meistaratalv';
+
+  @override
+  String get puzzleThemeMasterDescription => 'Uppgávur úr talvum, ið telvarar við meistaraheitum hava telvað.';
+
+  @override
+  String get puzzleThemeMasterVsMaster => 'Meistari móti meistaratalvum';
+
+  @override
+  String get puzzleThemeMasterVsMasterDescription => 'Uppgávur úr talvum millum tveir telvarar við meistaraheitum.';
+
+  @override
+  String get puzzleThemeMate => 'Mát';
+
+  @override
+  String get puzzleThemeMateDescription => 'Vinn talvið við stíli.';
+
+  @override
+  String get puzzleThemeMateIn1 => 'Mát í einum';
+
+  @override
+  String get puzzleThemeMateIn1Description => 'Set skák og mát í einum leiki.';
+
+  @override
+  String get puzzleThemeMateIn2 => 'Mát í tveimum';
+
+  @override
+  String get puzzleThemeMateIn2Description => 'Set skák og mát í tveimum leikum.';
+
+  @override
+  String get puzzleThemeMateIn3 => 'Mát í trimum';
+
+  @override
+  String get puzzleThemeMateIn3Description => 'Set skák og mát í trimum leikum.';
+
+  @override
+  String get puzzleThemeMateIn4 => 'Mát í fýra';
+
+  @override
+  String get puzzleThemeMateIn4Description => 'Set skák og mát í fýra leikum.';
+
+  @override
+  String get puzzleThemeMateIn5 => 'Mát í fimm ella fleiri';
+
+  @override
+  String get puzzleThemeMateIn5Description => 'Finn útav eini langari mátraðfylgju.';
+
+  @override
+  String get puzzleThemeMiddlegame => 'Miðtalv';
+
+  @override
+  String get puzzleThemeMiddlegameDescription => 'Taktisk atgerð í seinna skeiði av talvinum.';
+
+  @override
+  String get puzzleThemeOneMove => 'Uppgáva við einum leiki';
+
+  @override
+  String get puzzleThemeOneMoveDescription => 'Uppgáva, ið bert krevur ein leik.';
+
+  @override
+  String get puzzleThemeOpening => 'Byrjanartalv';
+
+  @override
+  String get puzzleThemeOpeningDescription => 'Taktisk atgerð í fyrsta skeiðinum av talvinum.';
+
+  @override
+  String get puzzleThemePawnEndgame => 'Finnuendatalv';
+
+  @override
+  String get puzzleThemePawnEndgameDescription => 'Endatalv við finnum burturav.';
+
+  @override
+  String get puzzleThemePin => 'Binding';
+
+  @override
+  String get puzzleThemePinDescription => 'Taktisk atgerð við bindingum, har eitt fólk ikki er ført fyri at flyta uttan at lata upp fyri álopi á eitt fólk við hægri virði.';
+
+  @override
+  String get puzzleThemePromotion => 'Umskapan';
+
+  @override
+  String get puzzleThemePromotionDescription => 'Ein finna, ið umskapast ella hóttir við at umskapast, er lykilin til taktikkin.';
+
+  @override
+  String get puzzleThemeQueenEndgame => 'Frúgvaendatalv';
+
+  @override
+  String get puzzleThemeQueenEndgameDescription => 'Endatalv við frúgvum og finnum burturav.';
+
+  @override
+  String get puzzleThemeQueenRookEndgame => 'Frúgv og rókur';
+
+  @override
+  String get puzzleThemeQueenRookEndgameDescription => 'Endatalv við frúm, rókum og finnum.';
+
+  @override
+  String get puzzleThemeQueensideAttack => 'Álop frúgvamegin';
+
+  @override
+  String get puzzleThemeQueensideAttackDescription => 'Álop á mótstøðukongin, aftaná at hann er lopin í borg frúgvamegin.';
+
+  @override
+  String get puzzleThemeQuietMove => 'Stillførur leikur';
+
+  @override
+  String get puzzleThemeQuietMoveDescription => 'Leikur, ið hvørki skákar ella tekur, men slóðar fyri eini hóttan, ið ikki slepst undan, í einum seinni leiki.';
+
+  @override
+  String get puzzleThemeRookEndgame => 'Rókaendatalv';
+
+  @override
+  String get puzzleThemeRookEndgameDescription => 'Endatalv við rókum og finnum.';
+
+  @override
+  String get puzzleThemeSacrifice => 'Offur';
+
+  @override
+  String get puzzleThemeSacrificeDescription => 'Taktisk atgerð, ið inniber at geva fólk burtur, við tí fyri eyga at vinna sær ein fyrimun seinni aftaná eina røð av tvungnum leikum.';
+
+  @override
+  String get puzzleThemeShort => 'Stutt uppgáva';
+
+  @override
+  String get puzzleThemeShortDescription => 'Tveir leikir, so er vunnið.';
+
+  @override
+  String get puzzleThemeSkewer => 'Spjót';
+
+  @override
+  String get puzzleThemeSkewerDescription => 'Ein hugsan, ið inniber, at eitt fólk við høgum virði, ið verður álopið, flytur burtur, soleiðis at eitt fólk við lægri virði kann verða tikið ella vera fyri álopi. Tað øvuta av eini binding.';
+
+  @override
+  String get puzzleThemeSmotheredMate => 'Kvalt mát';
+
+  @override
+  String get puzzleThemeSmotheredMateDescription => 'Skák og mát, framt av einum riddara, har mátaði kongurin ikki er førur fyri at flyta, tí at hann er umgyrdur (ella kvaldur) av egnum fólki.';
+
+  @override
+  String get puzzleThemeSuperGM => 'Superstórmeistaratalv';
+
+  @override
+  String get puzzleThemeSuperGMDescription => 'Uppgávur úr talvum, ið heimsins bestu telvarar hava telvað.';
+
+  @override
+  String get puzzleThemeTrappedPiece => 'Innibyrgt fólk';
+
+  @override
+  String get puzzleThemeTrappedPieceDescription => 'Eitt fólk er ikki ført fyri at sleppa sær undan at verða tikið, tí tað hevur avmarkaðar leikmøguleikar.';
+
+  @override
+  String get puzzleThemeUnderPromotion => 'Undirumskapan';
+
+  @override
+  String get puzzleThemeUnderPromotionDescription => 'Umskapan til riddara, bisp ella rók.';
+
+  @override
+  String get puzzleThemeVeryLong => 'Sera long uppgáva';
+
+  @override
+  String get puzzleThemeVeryLongDescription => 'Fýra leikir ella fleiri til tess at vinna.';
+
+  @override
+  String get puzzleThemeXRayAttack => 'Geisling';
+
+  @override
+  String get puzzleThemeXRayAttackDescription => 'Eitt fólk loypur á ella verjir ein punt gjøgnum eitt mótstøðufólk.';
+
+  @override
+  String get puzzleThemeZugzwang => 'Leiktvingsil';
+
+  @override
+  String get puzzleThemeZugzwangDescription => 'Mótleikarin hevur avmarkaðar møguleikar at flyta, og allir leikir gera støðu hansara verri.';
+
+  @override
+  String get puzzleThemeHealthyMix => 'Sunt bland';
+
+  @override
+  String get puzzleThemeHealthyMixDescription => 'Eitt sindur av øllum. Tú veitst ikki, hvat tú kanst vænta tær, so ver til reiðar til alt! Júst sum í veruligum talvum.';
+
+  @override
+  String get puzzleThemePlayerGames => 'Player games';
+
+  @override
+  String get puzzleThemePlayerGamesDescription => 'Lookup puzzles generated from your games, or from another player\'s games.';
+
+  @override
+  String puzzleThemePuzzleDownloadInformation(String param) {
+    return 'These puzzles are in the public domain, and can be downloaded from $param.';
+  }
+
+  @override
+  String get searchSearch => 'Leita';
+
+  @override
+  String get settingsSettings => 'Stillingar';
+
+  @override
+  String get settingsCloseAccount => 'Lat kontu aftur';
+
+  @override
+  String get settingsManagedAccountCannotBeClosed => 'Your account is managed, and cannot be closed.';
+
+  @override
+  String get settingsClosingIsDefinitive => 'At lata eina kontu aftur er endaligt. Til ber ikki at venda við. Ert tú vís/ur í hesum?';
+
+  @override
+  String get settingsCantOpenSimilarAccount => 'Tú fært ikki loyvi at lata eina nýggja kontu upp við sama navni. Ei heldur, um bókstavirnir eru við stórum ella lítlum.';
+
+  @override
+  String get settingsChangedMindDoNotCloseAccount => 'Eg broytti meining. Lat ikki kontu mína aftur';
+
+  @override
+  String get settingsCloseAccountExplanation => 'Ert tú vís/ur í, at tú vilt lata kontu tína aftur? Hetta er ein endalig avgerð. Tað fer ikki at bera til at logga á aftur.';
+
+  @override
+  String get settingsThisAccountIsClosed => 'Henda konta er afturlatin.';
 
   @override
   String get playWithAFriend => 'Telva móti einum vini';
@@ -512,6 +1610,12 @@ class AppLocalizationsFo extends AppLocalizations {
 
   @override
   String get deleteFromHere => 'Tak burtur hiðani';
+
+  @override
+  String get collapseVariations => 'Collapse variations';
+
+  @override
+  String get expandVariations => 'Expand variations';
 
   @override
   String get forceVariation => 'Noyð frábrigdi';
@@ -1371,15 +2475,6 @@ class AppLocalizationsFo extends AppLocalizations {
   String get emptyTournamentName => 'Lat teigin vera tóman, um tú vilt, at kappingin verður nevnd eftir gitnum telvara.';
 
   @override
-  String get recommendNotTouching => 'Vit viðmæla ikki at nerta hesar.';
-
-  @override
-  String get fewerPlayers => 'Um tú setir luttøkutreytir, verða færri telvarar í kappingini.';
-
-  @override
-  String get showAdvancedSettings => 'Vís framkomnar stillingar';
-
-  @override
   String get makePrivateTournament => 'Ger so kappingin ikki er almen, og avmarka atgongdina við einum loyniorði';
 
   @override
@@ -1509,10 +2604,7 @@ class AppLocalizationsFo extends AppLocalizations {
   String get editProfile => 'Broyt vangamynd';
 
   @override
-  String get firstName => 'Fornavn';
-
-  @override
-  String get lastName => 'Eftirnavn';
+  String get realName => 'Real name';
 
   @override
   String get setFlair => 'Set your flair';
@@ -1641,13 +2733,7 @@ class AppLocalizationsFo extends AppLocalizations {
   String get cheat => 'Snýt';
 
   @override
-  String get insult => 'Háðar';
-
-  @override
   String get troll => 'Trøll';
-
-  @override
-  String get ratingManipulation => 'Svik við styrkitali';
 
   @override
   String get other => 'Annað';
@@ -1754,6 +2840,9 @@ class AppLocalizationsFo extends AppLocalizations {
 
   @override
   String get outsideTheBoard => 'Uttanfyri borðið';
+
+  @override
+  String get allSquaresOfTheBoard => 'All squares of the board';
 
   @override
   String get onSlowGames => 'Í seinførum talvum';
@@ -2793,7 +3882,7 @@ class AppLocalizationsFo extends AppLocalizations {
   String get tournDescriptionHelp => 'Anything special you want to tell the participants? Try to keep it short. Markdown links are available: [name](https://url)';
 
   @override
-  String get ratedFormHelp => 'Games are rated\nand impact players ratings';
+  String get ratedFormHelp => 'Games are rated and impact players ratings';
 
   @override
   String get onlyMembersOfTeam => 'Only members of team';
@@ -2962,7 +4051,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Títt mótstøðufólk fór frá talvinum. Tú kanst siga teg hava vunnið um $count sekund.',
       one: 'Mótleikarin fór frá talvinum. Tú kanst siga teg hava vunnið um $count sekund.',
-      zero: 'Mótleikarin fór frá talvinum. Tú kanst siga teg hava vunnið um $count sekund.',
     );
     return '$_temp0';
   }
@@ -2974,7 +4062,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Skák og mát í $count hálvum leikum',
       one: 'Skák og mát í $count hálvum leiki',
-      zero: 'Skák og mát í $count hálvum leiki',
     );
     return '$_temp0';
   }
@@ -2986,7 +4073,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count bukkar',
       one: '$count bukkur',
-      zero: '$count bukkur',
     );
     return '$_temp0';
   }
@@ -2998,7 +4084,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count mistøk',
       one: '$count mistak',
-      zero: '$count mistak',
     );
     return '$_temp0';
   }
@@ -3010,7 +4095,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count óneyvleikar',
       one: '$count óneyvleiki',
-      zero: '$count óneyvleiki',
     );
     return '$_temp0';
   }
@@ -3022,7 +4106,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count telvarar',
       one: '$count telvari',
-      zero: '$count telvari',
     );
     return '$_temp0';
   }
@@ -3034,7 +4117,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count talv',
       one: '$count talv',
-      zero: '$count talv',
     );
     return '$_temp0';
   }
@@ -3046,7 +4128,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count rating over $param2 games',
       one: '$count rating over $param2 game',
-      zero: '$count rating over $param2 game',
     );
     return '$_temp0';
   }
@@ -3058,7 +4139,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count bókamerki',
       one: '$count bókamerki',
-      zero: '$count bókamerki',
     );
     return '$_temp0';
   }
@@ -3070,7 +4150,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count dagar',
       one: '$count dag',
-      zero: '$count dag',
     );
     return '$_temp0';
   }
@@ -3082,7 +4161,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count tímar',
       one: '$count tími',
-      zero: '$count tími',
     );
     return '$_temp0';
   }
@@ -3094,7 +4172,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count minuttir',
       one: '$count minuttur',
-      zero: '$count minuttur',
     );
     return '$_temp0';
   }
@@ -3106,7 +4183,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Støða/tign verður dagførd $count minuttir ímillum',
       one: 'Støða/tign verður dagførd hvønn minutt',
-      zero: 'Støða/tign verður dagførd hvønn minutt',
     );
     return '$_temp0';
   }
@@ -3118,7 +4194,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count uppgávur',
       one: '$count uppgáva',
-      zero: '$count uppgáva',
     );
     return '$_temp0';
   }
@@ -3130,7 +4205,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count talv móti tær',
       one: '$count talv móti tær',
-      zero: '$count talv móti tær',
     );
     return '$_temp0';
   }
@@ -3142,7 +4216,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count styrkismett',
       one: '$count styrkismettur',
-      zero: '$count styrkismettur',
     );
     return '$_temp0';
   }
@@ -3154,7 +4227,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count sigrar',
       one: '$count sigur',
-      zero: '$count sigur',
     );
     return '$_temp0';
   }
@@ -3166,7 +4238,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count ósigrar',
       one: '$count ósigur',
-      zero: '$count ósigur',
     );
     return '$_temp0';
   }
@@ -3178,7 +4249,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count jøvn',
       one: '$count javnt',
-      zero: '$count javnt',
     );
     return '$_temp0';
   }
@@ -3190,7 +4260,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count í gongd',
       one: '$count í gongd',
-      zero: '$count í gongd',
     );
     return '$_temp0';
   }
@@ -3202,7 +4271,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Gev $count sekund',
       one: 'Gev $count sekund',
-      zero: 'Gev $count sekund',
     );
     return '$_temp0';
   }
@@ -3214,7 +4282,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count kappingastig',
       one: '$count kappingarstig',
-      zero: '$count kappingarstig',
     );
     return '$_temp0';
   }
@@ -3226,7 +4293,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count rannsóknir',
       one: '$count rannsókn',
-      zero: '$count rannsókn',
     );
     return '$_temp0';
   }
@@ -3238,7 +4304,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count simuls',
       one: '$count simul',
-      zero: '$count simul',
     );
     return '$_temp0';
   }
@@ -3250,7 +4315,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '≥ $count styrkismett talv',
       one: '≥ $count styrkismett talv',
-      zero: '≥ $count styrkismett talv',
     );
     return '$_temp0';
   }
@@ -3262,7 +4326,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '≥ $count $param2 styrkismett talv',
       one: '≥ $count $param2 styrkismett talv',
-      zero: '≥ $count $param2 styrkismett talv',
     );
     return '$_temp0';
   }
@@ -3274,7 +4337,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Tær nýtist at telva $count fleiri $param2 styrkismett talv',
       one: 'Tær nýtist at telva $count $param2 styrkismett talv aftrat',
-      zero: 'Tær nýtist at telva $count $param2 styrkismett talv aftrat',
     );
     return '$_temp0';
   }
@@ -3286,7 +4348,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Tær nýtist at telva $count styrkismett talv aftrat',
       one: 'Tær nýtist at telva $count styrkismett talv aftrat',
-      zero: 'Tær nýtist at telva $count styrkismett talv aftrat',
     );
     return '$_temp0';
   }
@@ -3298,7 +4359,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count innflutt talv',
       one: '$count innflutt talv',
-      zero: '$count innflutt talv',
     );
     return '$_temp0';
   }
@@ -3310,7 +4370,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count vinir á alnetinum',
       one: '$count vinur á alnetinum',
-      zero: '$count vinur á alnetinum',
     );
     return '$_temp0';
   }
@@ -3322,7 +4381,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count fylgjarar',
       one: '$count fylgjari',
-      zero: '$count fylgjari',
     );
     return '$_temp0';
   }
@@ -3334,7 +4392,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count fylgja',
       one: '$count fylgir',
-      zero: '$count fylgir',
     );
     return '$_temp0';
   }
@@ -3346,7 +4403,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Minni enn $count minuttir',
       one: 'Minni enn $count minuttur',
-      zero: 'Minni enn $count minuttur',
     );
     return '$_temp0';
   }
@@ -3358,7 +4414,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count talv verða telvað',
       one: '$count talv verður telvað',
-      zero: '$count talv verður telvað',
     );
     return '$_temp0';
   }
@@ -3370,7 +4425,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Í mesta lagi: $count bókstavir.',
       one: 'Í mesta lagi: $count bókstavur.',
-      zero: 'Í mesta lagi: $count bókstavur.',
     );
     return '$_temp0';
   }
@@ -3382,7 +4436,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count forðaðir',
       one: '$count forðaður',
-      zero: '$count forðaður',
     );
     return '$_temp0';
   }
@@ -3394,7 +4447,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count uppsløg á torgi',
       one: '$count uppslag á torgi',
-      zero: '$count uppslag á torgi',
     );
     return '$_temp0';
   }
@@ -3406,7 +4458,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count $param2 telvarar hesa vikuna.',
       one: '$count $param2 telvari hesa vikuna.',
-      zero: '$count $param2 telvari hesa vikuna.',
     );
     return '$_temp0';
   }
@@ -3418,7 +4469,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Tøkt á $count málum!',
       one: 'Tøkt á $count máli!',
-      zero: 'Tøkt á $count máli!',
     );
     return '$_temp0';
   }
@@ -3430,7 +4480,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count sekundir at flyta fyrsta leik',
       one: '$count sekund at flyta fyrsta leik',
-      zero: '$count sekund at flyta fyrsta leik',
     );
     return '$_temp0';
   }
@@ -3442,7 +4491,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count sekundir',
       one: '$count sekund',
-      zero: '$count sekund',
     );
     return '$_temp0';
   }
@@ -3454,1009 +4502,9 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'og goym $count undanleikir',
       one: 'og goym $count undanleik',
-      zero: 'og goym $count undanleik',
     );
     return '$_temp0';
   }
-
-  @override
-  String get patronDonate => 'Stuðla';
-
-  @override
-  String get patronLichessPatron => 'Lichess stuðul';
-
-  @override
-  String get preferencesPreferences => 'Stillingar';
-
-  @override
-  String get preferencesDisplay => 'Display';
-
-  @override
-  String get preferencesPrivacy => 'Privacy';
-
-  @override
-  String get preferencesNotifications => 'Notifications';
-
-  @override
-  String get preferencesPieceAnimation => 'Snið á talvfólki';
-
-  @override
-  String get preferencesMaterialDifference => 'Virðismunur';
-
-  @override
-  String get preferencesBoardHighlights => 'Upplýstir talvpuntar (seinasti leikur og skák)';
-
-  @override
-  String get preferencesPieceDestinations => 'Ætlingastaðir (lógligir leikir)';
-
-  @override
-  String get preferencesBoardCoordinates => 'Talvborðskrosstøl (A-H, 1-8)';
-
-  @override
-  String get preferencesMoveListWhilePlaying => 'Leikalisti, meðan telvað verður';
-
-  @override
-  String get preferencesPgnPieceNotation => 'Teknskipan';
-
-  @override
-  String get preferencesChessPieceSymbol => 'Talvfólkaímyndir';
-
-  @override
-  String get preferencesPgnLetter => 'Bókstavir (K, Q, R, B, N)';
-
-  @override
-  String get preferencesZenMode => 'Zenstøða';
-
-  @override
-  String get preferencesShowPlayerRatings => 'Show player ratings';
-
-  @override
-  String get preferencesShowFlairs => 'Show player flairs';
-
-  @override
-  String get preferencesExplainShowPlayerRatings => 'This hides all ratings from Lichess, to help focus on the chess. Rated games still impact your rating, this is only about what you get to see.';
-
-  @override
-  String get preferencesDisplayBoardResizeHandle => 'Vís tól at vaksa og minka um talvborðið';
-
-  @override
-  String get preferencesOnlyOnInitialPosition => 'Bert við byrjanarstøðu';
-
-  @override
-  String get preferencesInGameOnly => 'In-game only';
-
-  @override
-  String get preferencesChessClock => 'Talvklokka';
-
-  @override
-  String get preferencesTenthsOfSeconds => 'Tíggjundapartar av sekundum';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'Tá ið minni enn 10 sekund eru eftir';
-
-  @override
-  String get preferencesHorizontalGreenProgressBars => 'Vatnrættar grønar framgongulinjur';
-
-  @override
-  String get preferencesSoundWhenTimeGetsCritical => 'Ljóð, tá ið lítil tíð er eftir';
-
-  @override
-  String get preferencesGiveMoreTime => 'Gev meira tíð';
-
-  @override
-  String get preferencesGameBehavior => 'Hvussu telvað verður';
-
-  @override
-  String get preferencesHowDoYouMovePieces => 'Hvussu flytir tú fólkini?';
-
-  @override
-  String get preferencesClickTwoSquares => 'Klikk á tveir puntar';
-
-  @override
-  String get preferencesDragPiece => 'Drag talvfólkið';
-
-  @override
-  String get preferencesBothClicksAndDrag => 'Bæði';
-
-  @override
-  String get preferencesPremovesPlayingDuringOpponentTurn => 'Forhandarleikur (at leika, meðan mótparturin eigur leik)';
-
-  @override
-  String get preferencesTakebacksWithOpponentApproval => 'Afturtøka (við loyvi frá mótleikaranum)';
-
-  @override
-  String get preferencesInCasualGamesOnly => 'Bert í talvum, ið ikki ávirka styrkitøl';
-
-  @override
-  String get preferencesPromoteToQueenAutomatically => 'Umskapa til frúgv sjálvvirkið';
-
-  @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Hold the <ctrl> key while promoting to temporarily disable auto-promotion';
-
-  @override
-  String get preferencesWhenPremoving => 'Við forhandarleikum';
-
-  @override
-  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Krev remis sjálvvirkið aftaná trífalda endurtøku';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Tá ið minni enn 30 sekund eru eftir';
-
-  @override
-  String get preferencesMoveConfirmation => 'Vátta leik';
-
-  @override
-  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Can be disabled during a game with the board menu';
-
-  @override
-  String get preferencesInCorrespondenceGames => 'Brævtalv';
-
-  @override
-  String get preferencesCorrespondenceAndUnlimited => 'Brævtalv og óavmarkað';
-
-  @override
-  String get preferencesConfirmResignationAndDrawOffers => 'Vátta, tá ið tú gevur upp ella býður remis';
-
-  @override
-  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Háttur at leypa í borg';
-
-  @override
-  String get preferencesCastleByMovingTwoSquares => 'Flyt kongin tveir puntar';
-
-  @override
-  String get preferencesCastleByMovingOntoTheRook => 'Flyt kongin yvir á rókin';
-
-  @override
-  String get preferencesInputMovesWithTheKeyboard => 'Skriva leikirnar við lyklaborðinum';
-
-  @override
-  String get preferencesInputMovesWithVoice => 'Input moves with your voice';
-
-  @override
-  String get preferencesSnapArrowsToValidMoves => 'Vís lógligar leikir við pílum';
-
-  @override
-  String get preferencesSayGgWpAfterLosingOrDrawing => 'Sig \"Gott talv, væl telvað,\" tá ið tú vinnur ella telvar javnt';
-
-  @override
-  String get preferencesYourPreferencesHaveBeenSaved => 'Tínar stillingar eru goymdar.';
-
-  @override
-  String get preferencesScrollOnTheBoardToReplayMoves => 'Scroll on the board to replay moves';
-
-  @override
-  String get preferencesCorrespondenceEmailNotification => 'Daily email listing your correspondence games';
-
-  @override
-  String get preferencesNotifyStreamStart => 'Streamer goes live';
-
-  @override
-  String get preferencesNotifyInboxMsg => 'New inbox message';
-
-  @override
-  String get preferencesNotifyForumMention => 'Forum comment mentions you';
-
-  @override
-  String get preferencesNotifyInvitedStudy => 'Study invite';
-
-  @override
-  String get preferencesNotifyGameEvent => 'Correspondence game updates';
-
-  @override
-  String get preferencesNotifyChallenge => 'Challenges';
-
-  @override
-  String get preferencesNotifyTournamentSoon => 'Tournament starting soon';
-
-  @override
-  String get preferencesNotifyTimeAlarm => 'Correspondence clock running out';
-
-  @override
-  String get preferencesNotifyBell => 'Bell notification within Lichess';
-
-  @override
-  String get preferencesNotifyPush => 'Device notification when you\'re not on Lichess';
-
-  @override
-  String get preferencesNotifyWeb => 'Browser';
-
-  @override
-  String get preferencesNotifyDevice => 'Device';
-
-  @override
-  String get preferencesBellNotificationSound => 'Bell notification sound';
-
-  @override
-  String get puzzlePuzzles => 'Uppgávur';
-
-  @override
-  String get puzzlePuzzleThemes => 'Uppgávuevni';
-
-  @override
-  String get puzzleRecommended => 'Viðmældar uppgávur';
-
-  @override
-  String get puzzlePhases => 'Skifti';
-
-  @override
-  String get puzzleMotifs => 'Ætlanir';
-
-  @override
-  String get puzzleAdvanced => 'Framkomið stig';
-
-  @override
-  String get puzzleLengths => 'Longdir';
-
-  @override
-  String get puzzleMates => 'Mát';
-
-  @override
-  String get puzzleGoals => 'Mál';
-
-  @override
-  String get puzzleOrigin => 'Uppruni';
-
-  @override
-  String get puzzleSpecialMoves => 'Serligir leikir';
-
-  @override
-  String get puzzleDidYouLikeThisPuzzle => 'Dámdi tær hesa uppgávuna?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Atkvøð at innlesa ta næstu!';
-
-  @override
-  String get puzzleUpVote => 'Up vote puzzle';
-
-  @override
-  String get puzzleDownVote => 'Down vote puzzle';
-
-  @override
-  String get puzzleYourPuzzleRatingWillNotChange => 'Your puzzle rating will not change. Note that puzzles are not a competition. Your rating helps selecting the best puzzles for your current skill.';
-
-  @override
-  String get puzzleFindTheBestMoveForWhite => 'Finn besta leikin hjá hvítum.';
-
-  @override
-  String get puzzleFindTheBestMoveForBlack => 'Finn besta leikin hjá svørtum.';
-
-  @override
-  String get puzzleToGetPersonalizedPuzzles => 'Fá uppgávur lagaðar til tín:';
-
-  @override
-  String puzzlePuzzleId(String param) {
-    return 'Uppgáva $param';
-  }
-
-  @override
-  String get puzzlePuzzleOfTheDay => 'Dagsins talvuppgáva';
-
-  @override
-  String get puzzleDailyPuzzle => 'Daily Puzzle';
-
-  @override
-  String get puzzleClickToSolve => 'Klikk á at loysa';
-
-  @override
-  String get puzzleGoodMove => 'Góður leikur';
-
-  @override
-  String get puzzleBestMove => 'Besti leikur!';
-
-  @override
-  String get puzzleKeepGoing => 'Halt fram…';
-
-  @override
-  String get puzzlePuzzleSuccess => 'Tað eydnaðist!';
-
-  @override
-  String get puzzlePuzzleComplete => 'Uppgávan er loyst!';
-
-  @override
-  String get puzzleByOpenings => 'By openings';
-
-  @override
-  String get puzzlePuzzlesByOpenings => 'Puzzles by openings';
-
-  @override
-  String get puzzleOpeningsYouPlayedTheMost => 'Openings you played the most in rated games';
-
-  @override
-  String get puzzleUseFindInPage => 'Use \"Find in page\" in the browser menu to find your favourite opening!';
-
-  @override
-  String get puzzleUseCtrlF => 'Use Ctrl+f to find your favourite opening!';
-
-  @override
-  String get puzzleNotTheMove => 'Hatta er ikki rætti leikurin!';
-
-  @override
-  String get puzzleTrySomethingElse => 'Royn okkurt annað.';
-
-  @override
-  String puzzleRatingX(String param) {
-    return 'Styrkital: $param';
-  }
-
-  @override
-  String get puzzleHidden => 'fjalt';
-
-  @override
-  String puzzleFromGameLink(String param) {
-    return 'Úr talvi $param';
-  }
-
-  @override
-  String get puzzleContinueTraining => 'Halt fram við venjing';
-
-  @override
-  String get puzzleDifficultyLevel => 'Torleikastig';
-
-  @override
-  String get puzzleNormal => 'Vanligt';
-
-  @override
-  String get puzzleEasier => 'Lættari';
-
-  @override
-  String get puzzleEasiest => 'Einfaldasta';
-
-  @override
-  String get puzzleHarder => 'Truplari';
-
-  @override
-  String get puzzleHardest => 'Truplasta';
-
-  @override
-  String get puzzleExample => 'Dømi';
-
-  @override
-  String get puzzleAddAnotherTheme => 'Legg eitt nýtt tema aftrat';
-
-  @override
-  String get puzzleNextPuzzle => 'Next puzzle';
-
-  @override
-  String get puzzleJumpToNextPuzzleImmediately => 'Far til næstu uppgávu beinanvegin';
-
-  @override
-  String get puzzlePuzzleDashboard => 'Uppgávuyvirlit';
-
-  @override
-  String get puzzleImprovementAreas => 'Øki at bøta um';
-
-  @override
-  String get puzzleStrengths => 'Styrkir';
-
-  @override
-  String get puzzleHistory => 'Uppgávusøga';
-
-  @override
-  String get puzzleSolved => 'loyst';
-
-  @override
-  String get puzzleFailed => 'miseydnaðist';
-
-  @override
-  String get puzzleStreakDescription => 'Solve progressively harder puzzles and build a win streak. There is no clock, so take your time. One wrong move, and it\'s game over! But you can skip one move per session.';
-
-  @override
-  String puzzleYourStreakX(String param) {
-    return 'Your streak: $param';
-  }
-
-  @override
-  String get puzzleStreakSkipExplanation => 'Skip this move to preserve your streak! Only works once per run.';
-
-  @override
-  String get puzzleContinueTheStreak => 'Continue the streak';
-
-  @override
-  String get puzzleNewStreak => 'New streak';
-
-  @override
-  String get puzzleFromMyGames => 'From my games';
-
-  @override
-  String get puzzleLookupOfPlayer => 'Lookup puzzles from a player\'s games';
-
-  @override
-  String puzzleFromXGames(String param) {
-    return 'Puzzles from $param\' games';
-  }
-
-  @override
-  String get puzzleSearchPuzzles => 'Search puzzles';
-
-  @override
-  String get puzzleFromMyGamesNone => 'You have no puzzles in the database, but Lichess still loves you very much.\n\nPlay rapid and classical games to increase your chances of having a puzzle of yours added!';
-
-  @override
-  String puzzleFromXGamesFound(String param1, String param2) {
-    return '$param1 puzzles found in $param2 games';
-  }
-
-  @override
-  String get puzzlePuzzleDashboardDescription => 'Train, analyse, improve';
-
-  @override
-  String puzzlePercentSolved(String param) {
-    return '$param solved';
-  }
-
-  @override
-  String get puzzleNoPuzzlesToShow => 'Nothing to show, go play some puzzles first!';
-
-  @override
-  String get puzzleImprovementAreasDescription => 'Train these to optimize your progress!';
-
-  @override
-  String get puzzleStrengthDescription => 'You perform the best in these themes';
-
-  @override
-  String puzzlePlayedXTimes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Telvað $count ferðir',
-      one: 'Telvað $count ferð',
-      zero: 'Telvað $count ferð',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsBelowYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count points below your puzzle rating',
-      one: 'One point below your puzzle rating',
-      zero: 'One point below your puzzle rating',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsAboveYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count points above your puzzle rating',
-      one: 'One point above your puzzle rating',
-      zero: 'One point above your puzzle rating',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPlayed(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count played',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbToReplay(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count to replay',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get puzzleThemeAdvancedPawn => 'Frífinna';
-
-  @override
-  String get puzzleThemeAdvancedPawnDescription => 'Ein finna, ið umskapast ella hóttir við at umskapast, er lykilin til taktikkin.';
-
-  @override
-  String get puzzleThemeAdvantage => 'Fyrimunur';
-
-  @override
-  String get puzzleThemeAdvantageDescription => 'Tak av møguleikanum at fáa avgerandi fyrimun. (200cp ≤ eval ≤ 600cp)';
-
-  @override
-  String get puzzleThemeAnastasiaMate => 'Mát Anastasiu';
-
-  @override
-  String get puzzleThemeAnastasiaMateDescription => 'Riddari og rókur ella frúgv samstarva um at fanga mótstøðukongin millum síðuna á talvborðinum og eitt vinarligt sinnað fólk.';
-
-  @override
-  String get puzzleThemeArabianMate => 'Arábiskt mát';
-
-  @override
-  String get puzzleThemeArabianMateDescription => 'Ein riddari og ein rókur samstarva um at fanga mótstøðukongin í einum av hornunum á talvborðinum.';
-
-  @override
-  String get puzzleThemeAttackingF2F7 => 'Álop á f2 ella f7';
-
-  @override
-  String get puzzleThemeAttackingF2F7Description => 'Eitt álop, ið savnar seg um f2 ella f7-finnuna, eins og í fegatello-álopinum (Fried Liver Attack).';
-
-  @override
-  String get puzzleThemeAttraction => 'Atdráttur';
-
-  @override
-  String get puzzleThemeAttractionDescription => 'Eitt umbýti ella offur, ið eggjar ella noyðir eitt mótleikarafólk til ein punt, ið síðani letur upp fyri eini taktiskari atgerð.';
-
-  @override
-  String get puzzleThemeBackRankMate => 'Mát á aftasta rað';
-
-  @override
-  String get puzzleThemeBackRankMateDescription => 'Set kongin skák og mát á aftasta rað, har egnu fólk hansara byrgja hann inni.';
-
-  @override
-  String get puzzleThemeBishopEndgame => 'Bispaendaspæl';
-
-  @override
-  String get puzzleThemeBishopEndgameDescription => 'Endaspæl við bispum og finnum.';
-
-  @override
-  String get puzzleThemeBodenMate => 'Bodensmát';
-
-  @override
-  String get puzzleThemeBodenMateDescription => 'Tveir bispar, ið leypa á á krossandi hornalinjum (diagonalum), seta kongin, ið er forðaður av sínum egna fólki, skák og mát.';
-
-  @override
-  String get puzzleThemeCastling => 'At leypa í borg';
-
-  @override
-  String get puzzleThemeCastlingDescription => 'Flyt kongin í tryggleika, og tak rókin í nýtslu, so hann fær lopið á.';
-
-  @override
-  String get puzzleThemeCapturingDefender => 'Tak fólkið, ið verjir';
-
-  @override
-  String get puzzleThemeCapturingDefenderDescription => 'At beina eitt fólk burtur, ið hevur týdning í verjuni av einum øðrum fólki. Hetta ger tað møguligt at taka fólkið, ið nú er óvart, í einum seinni leiki.';
-
-  @override
-  String get puzzleThemeCrushing => 'At knúsa';
-
-  @override
-  String get puzzleThemeCrushingDescription => 'Finn mistakið hjá mótleikaranum til tess at ogna tær knúsandi fyrimun. (eval ≥ 600cp)';
-
-  @override
-  String get puzzleThemeDoubleBishopMate => 'Tvífalt bispamát';
-
-  @override
-  String get puzzleThemeDoubleBishopMateDescription => 'Tveir bispar, ið leypa á á tveimum grannahornalinjum, seta kongin, ið er forðaður av sínum egna fólki, skák og mát.';
-
-  @override
-  String get puzzleThemeDovetailMate => 'Sýlt mát (dúgvuvelamát)';
-
-  @override
-  String get puzzleThemeDovetailMateDescription => 'Ein frúgv stendur beint við mótstøðukongin og setir hann skák og mát, tí at kongsins egnu fólk forða konginum í at flýggja til einastu tveir puntarnar, ið eru tøkir.';
-
-  @override
-  String get puzzleThemeEquality => 'Javnstøða';
-
-  @override
-  String get puzzleThemeEqualityDescription => 'Kom afturíaftur úr eini tapandi støðu, og tryggja tær remis ella eina javna støðu. (eval ≤ 200cp)';
-
-  @override
-  String get puzzleThemeKingsideAttack => 'Álop kongamegin';
-
-  @override
-  String get puzzleThemeKingsideAttackDescription => 'Álop á mótstøðukongin, aftaná at hann er lopin í borg kongamegin.';
-
-  @override
-  String get puzzleThemeClearance => 'Rudding';
-
-  @override
-  String get puzzleThemeClearanceDescription => 'Ein leikur, ofta við tempo, ið ruddar ein punt, eitt rað ella eina tvørlinju, ið gevur møguleika fyri einari taktiskari atgerð.';
-
-  @override
-  String get puzzleThemeDefensiveMove => 'Verjuleikur';
-
-  @override
-  String get puzzleThemeDefensiveMoveDescription => 'Ein ávísur leikur ella ein røð av leikum, ið eru neyðugir, um sleppast skal undan at missa fólk ella annan fyrimun.';
-
-  @override
-  String get puzzleThemeDeflection => 'Avbending';
-
-  @override
-  String get puzzleThemeDeflectionDescription => 'Ein leikur, ið dregur eitt mótstøðufólk burtur frá at útynna eina aðra uppgávu; eitt nú at ansa eftir einum týdningarmiklum punti.';
-
-  @override
-  String get puzzleThemeDiscoveredAttack => 'Avdúkað álop';
-
-  @override
-  String get puzzleThemeDiscoveredAttackDescription => 'At flyta eitt fólk, ið frammanundan forðaði einum fólki í at leypa á; eitt nú at flyta ein riddara, ið stendur framman fyri ein rók.';
-
-  @override
-  String get puzzleThemeDoubleCheck => 'Tvískák';
-
-  @override
-  String get puzzleThemeDoubleCheckDescription => 'At skáka við tveimum fólkum samstundis. Úrslit av einum ávdúkaraálopi, har bæði fólkið, ið flutti, og fólkið, ið varð avdúkað, leypa á mótstøðukongin.';
-
-  @override
-  String get puzzleThemeEndgame => 'Endatalv';
-
-  @override
-  String get puzzleThemeEndgameDescription => 'Taktisk atgerð í seinasta skeiðinum av talvinum.';
-
-  @override
-  String get puzzleThemeEnPassantDescription => 'Taktisk atgerð, ið inniber at taka í framlopi, har ein finna kann taka eina mótstøðufinnu, ið er komin at standa undir liðini á henni, aftaná at finnan í fyrsta leiki sínum júst er flutt tveir puntar fram.';
-
-  @override
-  String get puzzleThemeExposedKing => 'Kongur í andgletti';
-
-  @override
-  String get puzzleThemeExposedKingDescription => 'Taktisk atgerð móti kongi, ið bert hevur fá verndarfólk um seg. Ber ofta skák og mát við sær.';
-
-  @override
-  String get puzzleThemeFork => 'Gaffil';
-
-  @override
-  String get puzzleThemeForkDescription => 'Leikur, har flutta fólkið loypur á tvey mótstøðufólk í senn.';
-
-  @override
-  String get puzzleThemeHangingPiece => 'Hangandi fólk';
-
-  @override
-  String get puzzleThemeHangingPieceDescription => 'Taktisk atgerð móti einum mótstøðufólki, ið ikki er vart ella ikki nóg væl vart, og tí lætt at taka.';
-
-  @override
-  String get puzzleThemeHookMate => 'Húkamát';
-
-  @override
-  String get puzzleThemeHookMateDescription => 'Skák og mát við róki, riddara og finnu, sum saman við einari fíggindafinnu forða mótstøðukonginum í at sleppa til rýmingar.';
-
-  @override
-  String get puzzleThemeInterference => 'Uppílegging';
-
-  @override
-  String get puzzleThemeInterferenceDescription => 'Flyt eitt fólk millum tvey mótstøðufólk, so annað mótstøðufólkið stendur óvart ella bæði standa óvard; flyt t.d. ein riddara á ein vardan punt millum tveir rókar.';
-
-  @override
-  String get puzzleThemeIntermezzo => 'Millumleikur';
-
-  @override
-  String get puzzleThemeIntermezzoDescription => 'Ístaðin fyri at leika tann væntaða leikin, skalt tú leika ein annan leik, ið er ein hóttandi vandi, ið mótleikarin má varða seg ímóti her og nú. Leikurin er eisini kendur sum \"Zwischenzug\" ella \"In between\".';
-
-  @override
-  String get puzzleThemeKnightEndgame => 'Riddaraendatalv';
-
-  @override
-  String get puzzleThemeKnightEndgameDescription => 'Endatalv við riddarum og finnum.';
-
-  @override
-  String get puzzleThemeLong => 'Long uppgáva';
-
-  @override
-  String get puzzleThemeLongDescription => 'Tríggir leikir, so er vunnið.';
-
-  @override
-  String get puzzleThemeMaster => 'Meistaratalv';
-
-  @override
-  String get puzzleThemeMasterDescription => 'Uppgávur úr talvum, ið telvarar við meistaraheitum hava telvað.';
-
-  @override
-  String get puzzleThemeMasterVsMaster => 'Meistari móti meistaratalvum';
-
-  @override
-  String get puzzleThemeMasterVsMasterDescription => 'Uppgávur úr talvum millum tveir telvarar við meistaraheitum.';
-
-  @override
-  String get puzzleThemeMate => 'Mát';
-
-  @override
-  String get puzzleThemeMateDescription => 'Vinn talvið við stíli.';
-
-  @override
-  String get puzzleThemeMateIn1 => 'Mát í einum';
-
-  @override
-  String get puzzleThemeMateIn1Description => 'Set skák og mát í einum leiki.';
-
-  @override
-  String get puzzleThemeMateIn2 => 'Mát í tveimum';
-
-  @override
-  String get puzzleThemeMateIn2Description => 'Set skák og mát í tveimum leikum.';
-
-  @override
-  String get puzzleThemeMateIn3 => 'Mát í trimum';
-
-  @override
-  String get puzzleThemeMateIn3Description => 'Set skák og mát í trimum leikum.';
-
-  @override
-  String get puzzleThemeMateIn4 => 'Mát í fýra';
-
-  @override
-  String get puzzleThemeMateIn4Description => 'Set skák og mát í fýra leikum.';
-
-  @override
-  String get puzzleThemeMateIn5 => 'Mát í fimm ella fleiri';
-
-  @override
-  String get puzzleThemeMateIn5Description => 'Finn útav eini langari mátraðfylgju.';
-
-  @override
-  String get puzzleThemeMiddlegame => 'Miðtalv';
-
-  @override
-  String get puzzleThemeMiddlegameDescription => 'Taktisk atgerð í seinna skeiði av talvinum.';
-
-  @override
-  String get puzzleThemeOneMove => 'Uppgáva við einum leiki';
-
-  @override
-  String get puzzleThemeOneMoveDescription => 'Uppgáva, ið bert krevur ein leik.';
-
-  @override
-  String get puzzleThemeOpening => 'Byrjanartalv';
-
-  @override
-  String get puzzleThemeOpeningDescription => 'Taktisk atgerð í fyrsta skeiðinum av talvinum.';
-
-  @override
-  String get puzzleThemePawnEndgame => 'Finnuendatalv';
-
-  @override
-  String get puzzleThemePawnEndgameDescription => 'Endatalv við finnum burturav.';
-
-  @override
-  String get puzzleThemePin => 'Binding';
-
-  @override
-  String get puzzleThemePinDescription => 'Taktisk atgerð við bindingum, har eitt fólk ikki er ført fyri at flyta uttan at lata upp fyri álopi á eitt fólk við hægri virði.';
-
-  @override
-  String get puzzleThemePromotion => 'Umskapan';
-
-  @override
-  String get puzzleThemePromotionDescription => 'Ein finna, ið umskapast ella hóttir við at umskapast, er lykilin til taktikkin.';
-
-  @override
-  String get puzzleThemeQueenEndgame => 'Frúgvaendatalv';
-
-  @override
-  String get puzzleThemeQueenEndgameDescription => 'Endatalv við frúgvum og finnum burturav.';
-
-  @override
-  String get puzzleThemeQueenRookEndgame => 'Frúgv og rókur';
-
-  @override
-  String get puzzleThemeQueenRookEndgameDescription => 'Endatalv við frúm, rókum og finnum.';
-
-  @override
-  String get puzzleThemeQueensideAttack => 'Álop frúgvamegin';
-
-  @override
-  String get puzzleThemeQueensideAttackDescription => 'Álop á mótstøðukongin, aftaná at hann er lopin í borg frúgvamegin.';
-
-  @override
-  String get puzzleThemeQuietMove => 'Stillførur leikur';
-
-  @override
-  String get puzzleThemeQuietMoveDescription => 'Leikur, ið hvørki skákar ella tekur, men slóðar fyri eini hóttan, ið ikki slepst undan, í einum seinni leiki.';
-
-  @override
-  String get puzzleThemeRookEndgame => 'Rókaendatalv';
-
-  @override
-  String get puzzleThemeRookEndgameDescription => 'Endatalv við rókum og finnum.';
-
-  @override
-  String get puzzleThemeSacrifice => 'Offur';
-
-  @override
-  String get puzzleThemeSacrificeDescription => 'Taktisk atgerð, ið inniber at geva fólk burtur, við tí fyri eyga at vinna sær ein fyrimun seinni aftaná eina røð av tvungnum leikum.';
-
-  @override
-  String get puzzleThemeShort => 'Stutt uppgáva';
-
-  @override
-  String get puzzleThemeShortDescription => 'Tveir leikir, so er vunnið.';
-
-  @override
-  String get puzzleThemeSkewer => 'Spjót';
-
-  @override
-  String get puzzleThemeSkewerDescription => 'Ein hugsan, ið inniber, at eitt fólk við høgum virði, ið verður álopið, flytur burtur, soleiðis at eitt fólk við lægri virði kann verða tikið ella vera fyri álopi. Tað øvuta av eini binding.';
-
-  @override
-  String get puzzleThemeSmotheredMate => 'Kvalt mát';
-
-  @override
-  String get puzzleThemeSmotheredMateDescription => 'Skák og mát, framt av einum riddara, har mátaði kongurin ikki er førur fyri at flyta, tí at hann er umgyrdur (ella kvaldur) av egnum fólki.';
-
-  @override
-  String get puzzleThemeSuperGM => 'Superstórmeistaratalv';
-
-  @override
-  String get puzzleThemeSuperGMDescription => 'Uppgávur úr talvum, ið heimsins bestu telvarar hava telvað.';
-
-  @override
-  String get puzzleThemeTrappedPiece => 'Innibyrgt fólk';
-
-  @override
-  String get puzzleThemeTrappedPieceDescription => 'Eitt fólk er ikki ført fyri at sleppa sær undan at verða tikið, tí tað hevur avmarkaðar leikmøguleikar.';
-
-  @override
-  String get puzzleThemeUnderPromotion => 'Undirumskapan';
-
-  @override
-  String get puzzleThemeUnderPromotionDescription => 'Umskapan til riddara, bisp ella rók.';
-
-  @override
-  String get puzzleThemeVeryLong => 'Sera long uppgáva';
-
-  @override
-  String get puzzleThemeVeryLongDescription => 'Fýra leikir ella fleiri til tess at vinna.';
-
-  @override
-  String get puzzleThemeXRayAttack => 'Geisling';
-
-  @override
-  String get puzzleThemeXRayAttackDescription => 'Eitt fólk loypur á ella verjir ein punt gjøgnum eitt mótstøðufólk.';
-
-  @override
-  String get puzzleThemeZugzwang => 'Leiktvingsil';
-
-  @override
-  String get puzzleThemeZugzwangDescription => 'Mótleikarin hevur avmarkaðar møguleikar at flyta, og allir leikir gera støðu hansara verri.';
-
-  @override
-  String get puzzleThemeHealthyMix => 'Sunt bland';
-
-  @override
-  String get puzzleThemeHealthyMixDescription => 'Eitt sindur av øllum. Tú veitst ikki, hvat tú kanst vænta tær, so ver til reiðar til alt! Júst sum í veruligum talvum.';
-
-  @override
-  String get puzzleThemePlayerGames => 'Player games';
-
-  @override
-  String get puzzleThemePlayerGamesDescription => 'Lookup puzzles generated from your games, or from another player\'s games.';
-
-  @override
-  String puzzleThemePuzzleDownloadInformation(String param) {
-    return 'These puzzles are in the public domain, and can be downloaded from $param.';
-  }
-
-  @override
-  String perfStatPerfStats(String param) {
-    return '$param stats';
-  }
-
-  @override
-  String get perfStatViewTheGames => 'View the games';
-
-  @override
-  String get perfStatProvisional => 'provisional';
-
-  @override
-  String get perfStatNotEnoughRatedGames => 'Not enough rated games have been played to establish a reliable rating.';
-
-  @override
-  String perfStatProgressOverLastXGames(String param) {
-    return 'Progression over the last $param games:';
-  }
-
-  @override
-  String perfStatRatingDeviation(String param) {
-    return 'Rating deviation: $param.';
-  }
-
-  @override
-  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
-    return 'Lower value means the rating is more stable. Above $param1, the rating is considered provisional. To be included in the rankings, this value should be below $param2 (standard chess) or $param3 (variants).';
-  }
-
-  @override
-  String get perfStatTotalGames => 'Total games';
-
-  @override
-  String get perfStatRatedGames => 'Rated games';
-
-  @override
-  String get perfStatTournamentGames => 'Tournament games';
-
-  @override
-  String get perfStatBerserkedGames => 'Berserked games';
-
-  @override
-  String get perfStatTimeSpentPlaying => 'Time spent playing';
-
-  @override
-  String get perfStatAverageOpponent => 'Average opponent';
-
-  @override
-  String get perfStatVictories => 'Victories';
-
-  @override
-  String get perfStatDefeats => 'Defeats';
-
-  @override
-  String get perfStatDisconnections => 'Disconnections';
-
-  @override
-  String get perfStatNotEnoughGames => 'Not enough games played';
-
-  @override
-  String perfStatHighestRating(String param) {
-    return 'Highest rating: $param';
-  }
-
-  @override
-  String perfStatLowestRating(String param) {
-    return 'Lowest rating: $param';
-  }
-
-  @override
-  String perfStatFromXToY(String param1, String param2) {
-    return 'from $param1 to $param2';
-  }
-
-  @override
-  String get perfStatWinningStreak => 'Winning streak';
-
-  @override
-  String get perfStatLosingStreak => 'Losing streak';
-
-  @override
-  String perfStatLongestStreak(String param) {
-    return 'Longest streak: $param';
-  }
-
-  @override
-  String perfStatCurrentStreak(String param) {
-    return 'Current streak: $param';
-  }
-
-  @override
-  String get perfStatBestRated => 'Best rated victories';
-
-  @override
-  String get perfStatGamesInARow => 'Games played in a row';
-
-  @override
-  String get perfStatLessThanOneHour => 'Less than one hour between games';
-
-  @override
-  String get perfStatMaxTimePlaying => 'Max time spent playing';
-
-  @override
-  String get perfStatNow => 'nú';
-
-  @override
-  String get searchSearch => 'Leita';
-
-  @override
-  String get settingsSettings => 'Stillingar';
-
-  @override
-  String get settingsCloseAccount => 'Lat kontu aftur';
-
-  @override
-  String get settingsManagedAccountCannotBeClosed => 'Your account is managed, and cannot be closed.';
-
-  @override
-  String get settingsClosingIsDefinitive => 'At lata eina kontu aftur er endaligt. Til ber ikki at venda við. Ert tú vís/ur í hesum?';
-
-  @override
-  String get settingsCantOpenSimilarAccount => 'Tú fært ikki loyvi at lata eina nýggja kontu upp við sama navni. Ei heldur, um bókstavirnir eru við stórum ella lítlum.';
-
-  @override
-  String get settingsChangedMindDoNotCloseAccount => 'Eg broytti meining. Lat ikki kontu mína aftur';
-
-  @override
-  String get settingsCloseAccountExplanation => 'Ert tú vís/ur í, at tú vilt lata kontu tína aftur? Hetta er ein endalig avgerð. Tað fer ikki at bera til at logga á aftur.';
-
-  @override
-  String get settingsThisAccountIsClosed => 'Henda konta er afturlatin.';
-
-  @override
-  String get streamerLichessStreamers => 'Lichess stroymarar';
 
   @override
   String get stormMoveToStart => 'Flyt eitt fólk at byrja';
@@ -4624,7 +4672,6 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: '$count umfør',
       one: '1 umfar',
-      zero: '1 umfar',
     );
     return '$_temp0';
   }
@@ -4636,20 +4683,16 @@ class AppLocalizationsFo extends AppLocalizations {
       locale: localeName,
       other: 'Telvaði $count umfør av $param2',
       one: 'Telvaði eitt umfar av $param2',
-      zero: 'Telvaði eitt umfar av $param2',
     );
     return '$_temp0';
   }
+
+  @override
+  String get streamerLichessStreamers => 'Lichess stroymarar';
 
   @override
   String get studyShareAndExport => 'Deil & flyt út';
 
   @override
   String get studyStart => 'Byrja';
-
-  @override
-  String get broadcastBroadcasts => 'Sendingar';
-
-  @override
-  String get broadcastStartDate => 'Byrjanardagfesting í tínum egna tíðarøki';
 }

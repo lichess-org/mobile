@@ -7,6 +7,122 @@ class AppLocalizationsIt extends AppLocalizations {
   AppLocalizationsIt([String locale = 'it']) : super(locale);
 
   @override
+  String get mobileHomeTab => 'Home';
+
+  @override
+  String get mobilePuzzlesTab => 'Puzzles';
+
+  @override
+  String get mobileToolsTab => 'Tools';
+
+  @override
+  String get mobileWatchTab => 'Watch';
+
+  @override
+  String get mobileSettingsTab => 'Settings';
+
+  @override
+  String get mobileMustBeLoggedIn => 'You must be logged in to view this page.';
+
+  @override
+  String get mobileSystemColors => 'System colors';
+
+  @override
+  String get mobileFeedbackButton => 'Feedback';
+
+  @override
+  String get mobileOkButton => 'OK';
+
+  @override
+  String get mobileSettingsHapticFeedback => 'Haptic feedback';
+
+  @override
+  String get mobileSettingsImmersiveMode => 'Immersive mode';
+
+  @override
+  String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.';
+
+  @override
+  String get mobileNotFollowingAnyUser => 'You are not following any user.';
+
+  @override
+  String get mobileAllGames => 'All games';
+
+  @override
+  String get mobileRecentSearches => 'Recent searches';
+
+  @override
+  String get mobileClearButton => 'Clear';
+
+  @override
+  String mobilePlayersMatchingSearchTerm(String param) {
+    return 'Players with \"$param\"';
+  }
+
+  @override
+  String get mobileNoSearchResults => 'No results';
+
+  @override
+  String get mobileAreYouSure => 'Are you sure?';
+
+  @override
+  String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
+
+  @override
+  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of storm';
+
+  @override
+  String get mobileSharePuzzle => 'Share this puzzle';
+
+  @override
+  String get mobileShareGameURL => 'Share game URL';
+
+  @override
+  String get mobileShareGamePGN => 'Share PGN';
+
+  @override
+  String get mobileSharePositionAsFEN => 'Share position as FEN';
+
+  @override
+  String get mobileShowVariations => 'Show variations';
+
+  @override
+  String get mobileHideVariation => 'Hide variation';
+
+  @override
+  String get mobileShowComments => 'Show comments';
+
+  @override
+  String get mobilePuzzleStormConfirmEndRun => 'Do you want to end this run?';
+
+  @override
+  String get mobilePuzzleStormFilterNothingToShow => 'Nothing to show, please change the filters';
+
+  @override
+  String get mobileCancelTakebackOffer => 'Cancel takeback offer';
+
+  @override
+  String get mobileCancelDrawOffer => 'Cancel draw offer';
+
+  @override
+  String get mobileWaitingForOpponentToJoin => 'Waiting for opponent to join...';
+
+  @override
+  String get mobileBlindfoldMode => 'Blindfold';
+
+  @override
+  String get mobileLiveStreamers => 'Live streamers';
+
+  @override
+  String get mobileCustomGameJoinAGame => 'Join a game';
+
+  @override
+  String get mobileCorrespondenceClearSavedMove => 'Clear saved move';
+
+  @override
+  String get mobileSomethingWentWrong => 'Something went wrong.';
+
+  @override
   String get activityActivity => 'Attività';
 
   @override
@@ -27,7 +143,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: 'Supporta lichess.org da $count mesi in qualità di $param2',
       one: 'Supporta lichess.org da $count mese in qualità di $param2',
-      zero: 'Supporta lichess.org da $count mese in qualità di $param2',
     );
     return '$_temp0';
   }
@@ -39,7 +154,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: 'Ha studiato $count posizioni in $param2',
       one: 'Ha studiato $count posizione in $param2',
-      zero: 'Ha studiato $count posizione in $param2',
     );
     return '$_temp0';
   }
@@ -51,7 +165,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: 'Ha risolto $count puzzle',
       one: 'Ha risolto $count puzzle',
-      zero: 'Ha risolto $count puzzle',
     );
     return '$_temp0';
   }
@@ -63,7 +176,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: 'Ha giocato $count partite $param2',
       one: 'Ha giocato $count partita $param2',
-      zero: 'Ha giocato $count partita $param2',
     );
     return '$_temp0';
   }
@@ -75,7 +187,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: 'Ha scritto $count messaggi in $param2',
       one: 'Ha scritto $count messaggio in $param2',
-      zero: 'Ha scritto $count messaggio in $param2',
     );
     return '$_temp0';
   }
@@ -87,7 +198,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: 'Ha giocato $count mosse',
       one: 'Ha giocato $count mossa',
-      zero: 'Ha giocato $count mossa',
     );
     return '$_temp0';
   }
@@ -99,7 +209,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: 'in $count partite per corrispondenza',
       one: 'in $count partita per corrispondenza',
-      zero: 'in $count partita per corrispondenza',
     );
     return '$_temp0';
   }
@@ -111,7 +220,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: 'Ha concluso $count partite per corrispondenza',
       one: 'Ha concluso $count partita per corrispondenza',
-      zero: 'Ha concluso $count partita per corrispondenza',
     );
     return '$_temp0';
   }
@@ -123,7 +231,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: 'Ha iniziato a seguire $count giocatori',
       one: 'Ha iniziato a seguire $count giocatore',
-      zero: 'Ha iniziato a seguire $count giocatore',
     );
     return '$_temp0';
   }
@@ -135,7 +242,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: 'Ha guadagnato $count nuovi follower',
       one: 'Ha guadagnato $count nuovo follower',
-      zero: 'Ha guadagnato $count nuovo follower',
     );
     return '$_temp0';
   }
@@ -147,7 +253,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: 'Ha ospitato $count esibizioni simultanee',
       one: 'Ha ospitato $count esibizione simultanea',
-      zero: 'Ha ospitato $count esibizione simultanea',
     );
     return '$_temp0';
   }
@@ -159,7 +264,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: 'Ha partecipato a $count esibizioni simultanee',
       one: 'Ha partecipato ad $count esibizione simultanea',
-      zero: 'Ha partecipato ad $count esibizione simultanea',
     );
     return '$_temp0';
   }
@@ -171,7 +275,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: 'Ha creato $count nuovi studi',
       one: 'Ha creato $count nuovo studio',
-      zero: 'Ha creato $count nuovo studio',
     );
     return '$_temp0';
   }
@@ -183,7 +286,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: 'Ha gareggiato in $count tornei',
       one: 'Ha gareggiato in $count torneo',
-      zero: 'Ha gareggiato in $count torneo',
     );
     return '$_temp0';
   }
@@ -195,7 +297,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: 'Si è classificato $count° (nel miglior $param2%) con $param3 partite in $param4',
       one: 'Si è classificato $count° (nel miglior $param2%) con $param3 partita in $param4',
-      zero: 'Si è classificato $count° (nel miglior $param2%) con $param3 partita in $param4',
     );
     return '$_temp0';
   }
@@ -207,7 +308,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: 'Ha gareggiato in $count tornei Svizzeri',
       one: 'Ha gareggiato in $count torneo Svizzero',
-      zero: 'Ha gareggiato in $count torneo Svizzero',
     );
     return '$_temp0';
   }
@@ -219,16 +319,15 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: 'Si è unito a $count squadre',
       one: 'Si è unito ad $count squadra',
-      zero: 'Si è unito ad $count squadra',
     );
     return '$_temp0';
   }
 
   @override
-  String get contactContact => 'Contattaci';
+  String get broadcastBroadcasts => 'Dirette';
 
   @override
-  String get contactContactLichess => 'Contatta Lichess';
+  String get broadcastStartDate => 'Data di inizio nel tuo fuso orario';
 
   @override
   String challengeChallengesX(String param1) {
@@ -310,6 +409,1007 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get challengeInviteLichessUser => 'Oppure invita un utente di Lichess:';
+
+  @override
+  String get contactContact => 'Contattaci';
+
+  @override
+  String get contactContactLichess => 'Contatta Lichess';
+
+  @override
+  String get patronDonate => 'Fai una donazione';
+
+  @override
+  String get patronLichessPatron => 'Patron di Lichess';
+
+  @override
+  String perfStatPerfStats(String param) {
+    return 'Statistiche di $param';
+  }
+
+  @override
+  String get perfStatViewTheGames => 'Visualizza le partite';
+
+  @override
+  String get perfStatProvisional => 'provvisorio';
+
+  @override
+  String get perfStatNotEnoughRatedGames => 'Non sono state giocate abbastanza partite classificate per stabilire un punteggio affidabile.';
+
+  @override
+  String perfStatProgressOverLastXGames(String param) {
+    return 'Progresso nelle ultime $param partite:';
+  }
+
+  @override
+  String perfStatRatingDeviation(String param) {
+    return 'Deviazione del punteggio: $param.';
+  }
+
+  @override
+  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
+    return 'Un valore inferiore indica che il punteggio è più stabile. Sopra $param1, il punteggio è considerato provvisorio. Per esser incluso nelle classifiche, questo valore dovrebbe essere inferiore a $param2 (scacchi standard) o $param3 (varianti).';
+  }
+
+  @override
+  String get perfStatTotalGames => 'Partite totali';
+
+  @override
+  String get perfStatRatedGames => 'Partite classificate';
+
+  @override
+  String get perfStatTournamentGames => 'Partite di torneo';
+
+  @override
+  String get perfStatBerserkedGames => 'Partite in berserk';
+
+  @override
+  String get perfStatTimeSpentPlaying => 'Tempo trascorso giocando';
+
+  @override
+  String get perfStatAverageOpponent => 'Punteggio medio degli avversari';
+
+  @override
+  String get perfStatVictories => 'Vittorie';
+
+  @override
+  String get perfStatDefeats => 'Sconfitte';
+
+  @override
+  String get perfStatDisconnections => 'Disconnessioni';
+
+  @override
+  String get perfStatNotEnoughGames => 'Non ci sono abbastanza partite giocate';
+
+  @override
+  String perfStatHighestRating(String param) {
+    return 'Punteggio più alto: $param';
+  }
+
+  @override
+  String perfStatLowestRating(String param) {
+    return 'Punteggio più basso: $param';
+  }
+
+  @override
+  String perfStatFromXToY(String param1, String param2) {
+    return 'da $param1 a $param2';
+  }
+
+  @override
+  String get perfStatWinningStreak => 'Serie di vittorie';
+
+  @override
+  String get perfStatLosingStreak => 'Serie di sconfitte';
+
+  @override
+  String perfStatLongestStreak(String param) {
+    return 'Serie più lunga: $param';
+  }
+
+  @override
+  String perfStatCurrentStreak(String param) {
+    return 'Serie attuale: $param';
+  }
+
+  @override
+  String get perfStatBestRated => 'Migliori vittorie classificate';
+
+  @override
+  String get perfStatGamesInARow => 'Partite giocate di fila';
+
+  @override
+  String get perfStatLessThanOneHour => 'Meno di un\'ora tra partite';
+
+  @override
+  String get perfStatMaxTimePlaying => 'Tempo massimo trascorso giocando';
+
+  @override
+  String get perfStatNow => 'ora';
+
+  @override
+  String get preferencesPreferences => 'Preferenze';
+
+  @override
+  String get preferencesDisplay => 'Mostra';
+
+  @override
+  String get preferencesPrivacy => 'Privacy';
+
+  @override
+  String get preferencesNotifications => 'Notifiche';
+
+  @override
+  String get preferencesPieceAnimation => 'Animazione dei pezzi';
+
+  @override
+  String get preferencesMaterialDifference => 'Differenza di materiale';
+
+  @override
+  String get preferencesBoardHighlights => 'Segnalazioni sulla scacchiera (ultima mossa e scacco)';
+
+  @override
+  String get preferencesPieceDestinations => 'Destinazioni del pezzo (mosse e pre-mosse valide)';
+
+  @override
+  String get preferencesBoardCoordinates => 'Coordinate della scacchiera (A-H, 1-8)';
+
+  @override
+  String get preferencesMoveListWhilePlaying => 'Lista delle mosse mentre giochi';
+
+  @override
+  String get preferencesPgnPieceNotation => 'Notazione mossa';
+
+  @override
+  String get preferencesChessPieceSymbol => 'Simbolo del pezzo';
+
+  @override
+  String get preferencesPgnLetter => 'Lettera (K, Q, R, B, N)';
+
+  @override
+  String get preferencesZenMode => 'Modalità Zen';
+
+  @override
+  String get preferencesShowPlayerRatings => 'Mostra punteggi giocatori';
+
+  @override
+  String get preferencesShowFlairs => 'Mostra le icone del giocatore';
+
+  @override
+  String get preferencesExplainShowPlayerRatings => 'Questa funzionalità permette di nascondere i punteggi dei giocatori per aiutare a concentrarti sulla partita. Le partite possono comunque essere classificate, questa impostazione riguarda solo ciò che vedi.';
+
+  @override
+  String get preferencesDisplayBoardResizeHandle => 'Mostra l\'icona di ridimensionamento della scacchiera';
+
+  @override
+  String get preferencesOnlyOnInitialPosition => 'Solo sulla posizione iniziale';
+
+  @override
+  String get preferencesInGameOnly => 'Solamente durante la partita';
+
+  @override
+  String get preferencesChessClock => 'Orologio';
+
+  @override
+  String get preferencesTenthsOfSeconds => 'Decimi di secondo';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'Quando il tempo rimanente è < 10 secondi';
+
+  @override
+  String get preferencesHorizontalGreenProgressBars => 'Barra verde orizzontale del tempo';
+
+  @override
+  String get preferencesSoundWhenTimeGetsCritical => 'Suono quando sei a corto di tempo';
+
+  @override
+  String get preferencesGiveMoreTime => 'Dai più tempo';
+
+  @override
+  String get preferencesGameBehavior => 'Preferenze di gioco';
+
+  @override
+  String get preferencesHowDoYouMovePieces => 'Come vuoi muovere i pezzi?';
+
+  @override
+  String get preferencesClickTwoSquares => 'Clicca su due caselle';
+
+  @override
+  String get preferencesDragPiece => 'Trascina il pezzo';
+
+  @override
+  String get preferencesBothClicksAndDrag => 'Entrambi';
+
+  @override
+  String get preferencesPremovesPlayingDuringOpponentTurn => 'Pre-mosse (mentre tocca all\'avversario)';
+
+  @override
+  String get preferencesTakebacksWithOpponentApproval => 'Ritiro della mossa (su accordo dell\'avversario)';
+
+  @override
+  String get preferencesInCasualGamesOnly => 'Solo nelle partite amichevoli';
+
+  @override
+  String get preferencesPromoteToQueenAutomatically => 'Promuovi a Donna automaticamente';
+
+  @override
+  String get preferencesExplainPromoteToQueenAutomatically => 'Tieni premuto il tasto <ctrl> durante la promozione per disabilitare temporaneamente la promozione automatica';
+
+  @override
+  String get preferencesWhenPremoving => 'Quando preseleziono una mossa';
+
+  @override
+  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Reclama patta automaticamente dopo triplice ripetizione';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Quando il tempo rimanente è < 30 secondi';
+
+  @override
+  String get preferencesMoveConfirmation => 'Conferma della mossa';
+
+  @override
+  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Può essere disabilitato durante una partita dal menu della scacchiera';
+
+  @override
+  String get preferencesInCorrespondenceGames => 'Partite per corrispondenza';
+
+  @override
+  String get preferencesCorrespondenceAndUnlimited => 'Corrispondenza e senza limiti di tempo';
+
+  @override
+  String get preferencesConfirmResignationAndDrawOffers => 'Conferma abbandono e offerte di patta';
+
+  @override
+  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Metodo di arrocco';
+
+  @override
+  String get preferencesCastleByMovingTwoSquares => 'Muovi il re di due caselle';
+
+  @override
+  String get preferencesCastleByMovingOntoTheRook => 'Muovi il re sopra la Torre';
+
+  @override
+  String get preferencesInputMovesWithTheKeyboard => 'Muovi utilizzando la tastiera';
+
+  @override
+  String get preferencesInputMovesWithVoice => 'Muovi con la tua voce';
+
+  @override
+  String get preferencesSnapArrowsToValidMoves => 'Collega le frecce a mosse valide';
+
+  @override
+  String get preferencesSayGgWpAfterLosingOrDrawing => 'Di\' \"Good game, well played\" alla sconfitta o al pareggio';
+
+  @override
+  String get preferencesYourPreferencesHaveBeenSaved => 'Le tue preferenze sono state salvate.';
+
+  @override
+  String get preferencesScrollOnTheBoardToReplayMoves => 'Scorri sulla scacchiera per riprodurre le mosse';
+
+  @override
+  String get preferencesCorrespondenceEmailNotification => 'Notifica di posta giornaliera che elenca le tue partite per corrispondenza';
+
+  @override
+  String get preferencesNotifyStreamStart => 'Lo streamer va in diretta';
+
+  @override
+  String get preferencesNotifyInboxMsg => 'Nuovo messaggio';
+
+  @override
+  String get preferencesNotifyForumMention => 'Un commento nel forum ti ha menzionato';
+
+  @override
+  String get preferencesNotifyInvitedStudy => 'Invito ad uno Studio';
+
+  @override
+  String get preferencesNotifyGameEvent => 'Aggiornamenti in una partita per corrispondenza';
+
+  @override
+  String get preferencesNotifyChallenge => 'Sfide';
+
+  @override
+  String get preferencesNotifyTournamentSoon => 'Il torneo sta per iniziare';
+
+  @override
+  String get preferencesNotifyTimeAlarm => 'Il tempo sta per scadere in una partita per corrispondenza';
+
+  @override
+  String get preferencesNotifyBell => 'Notifica sonora in Lichess';
+
+  @override
+  String get preferencesNotifyPush => 'Notifiche dispositivo (push) quando non sei collegato a Lichess';
+
+  @override
+  String get preferencesNotifyWeb => 'Browser';
+
+  @override
+  String get preferencesNotifyDevice => 'Dispositivo';
+
+  @override
+  String get preferencesBellNotificationSound => 'Tono notifica';
+
+  @override
+  String get puzzlePuzzles => 'Problemi';
+
+  @override
+  String get puzzlePuzzleThemes => 'Problemi a tema';
+
+  @override
+  String get puzzleRecommended => 'Consigliati';
+
+  @override
+  String get puzzlePhases => 'Fasi';
+
+  @override
+  String get puzzleMotifs => 'Temi';
+
+  @override
+  String get puzzleAdvanced => 'Avanzati';
+
+  @override
+  String get puzzleLengths => 'Per lunghezza';
+
+  @override
+  String get puzzleMates => 'Matti';
+
+  @override
+  String get puzzleGoals => 'Per obiettivo';
+
+  @override
+  String get puzzleOrigin => 'Per fonte';
+
+  @override
+  String get puzzleSpecialMoves => 'Mosse speciali';
+
+  @override
+  String get puzzleDidYouLikeThisPuzzle => 'Ti è piaciuto questo problema?';
+
+  @override
+  String get puzzleVoteToLoadNextOne => 'Vota per passare al prossimo!';
+
+  @override
+  String get puzzleUpVote => 'Valuta positivamente questo problema';
+
+  @override
+  String get puzzleDownVote => 'Valuta negativamente questo problema';
+
+  @override
+  String get puzzleYourPuzzleRatingWillNotChange => 'Il tuo punteggio per i problemi non cambierà. Nota che i problemi non sono competitivi. Il punteggio ci aiuta a selezionare i problemi migliori per il tuo livello di gioco.';
+
+  @override
+  String get puzzleFindTheBestMoveForWhite => 'Trova la mossa migliore per il bianco.';
+
+  @override
+  String get puzzleFindTheBestMoveForBlack => 'Trova la mossa migliore per il nero.';
+
+  @override
+  String get puzzleToGetPersonalizedPuzzles => 'Per ottenere problemi personalizzati:';
+
+  @override
+  String puzzlePuzzleId(String param) {
+    return 'Problema $param';
+  }
+
+  @override
+  String get puzzlePuzzleOfTheDay => 'Problema del giorno';
+
+  @override
+  String get puzzleDailyPuzzle => 'Tattica di oggi';
+
+  @override
+  String get puzzleClickToSolve => 'Clicca per provare a risolverla';
+
+  @override
+  String get puzzleGoodMove => 'Buona mossa';
+
+  @override
+  String get puzzleBestMove => 'La mossa migliore!';
+
+  @override
+  String get puzzleKeepGoing => 'Continua così…';
+
+  @override
+  String get puzzlePuzzleSuccess => 'Risolto!';
+
+  @override
+  String get puzzlePuzzleComplete => 'Problema completato!';
+
+  @override
+  String get puzzleByOpenings => 'Per apertura';
+
+  @override
+  String get puzzlePuzzlesByOpenings => 'Problemi ordinati per apertura';
+
+  @override
+  String get puzzleOpeningsYouPlayedTheMost => 'Aperture che hai giocato di più nelle partite classificate';
+
+  @override
+  String get puzzleUseFindInPage => 'Usa \"Trova nella pagina\" nel menu del browser per trovare la tua apertura preferita!';
+
+  @override
+  String get puzzleUseCtrlF => 'Usa Ctrl+F per trovare la tua apertura preferita!';
+
+  @override
+  String get puzzleNotTheMove => 'Non è la mossa esatta!';
+
+  @override
+  String get puzzleTrySomethingElse => 'Prova qualcos\'altro.';
+
+  @override
+  String puzzleRatingX(String param) {
+    return 'Punteggio: $param';
+  }
+
+  @override
+  String get puzzleHidden => 'nascosto';
+
+  @override
+  String puzzleFromGameLink(String param) {
+    return 'Dalla partita $param';
+  }
+
+  @override
+  String get puzzleContinueTraining => 'Continua ad allenarti';
+
+  @override
+  String get puzzleDifficultyLevel => 'Livello di difficoltà';
+
+  @override
+  String get puzzleNormal => 'Normale';
+
+  @override
+  String get puzzleEasier => 'Facile';
+
+  @override
+  String get puzzleEasiest => 'Facilissimo';
+
+  @override
+  String get puzzleHarder => 'Difficile';
+
+  @override
+  String get puzzleHardest => 'Difficilissimo';
+
+  @override
+  String get puzzleExample => 'Esempio';
+
+  @override
+  String get puzzleAddAnotherTheme => 'Aggiungi un altro tema';
+
+  @override
+  String get puzzleNextPuzzle => 'Problema successivo';
+
+  @override
+  String get puzzleJumpToNextPuzzleImmediately => 'Passa subito al problema successivo';
+
+  @override
+  String get puzzlePuzzleDashboard => 'I tuoi problemi';
+
+  @override
+  String get puzzleImprovementAreas => 'Aree di miglioramento';
+
+  @override
+  String get puzzleStrengths => 'Punti di forza';
+
+  @override
+  String get puzzleHistory => 'Cronologia dei problemi';
+
+  @override
+  String get puzzleSolved => 'risolto';
+
+  @override
+  String get puzzleFailed => 'sbagliato';
+
+  @override
+  String get puzzleStreakDescription => 'Risolvi problemi progressivamente più difficili e accumula una serie di vittorie. Non c\'è orologio, quindi fa\' con calma. Appena fai una mossa sbagliata è finita! Puoi saltare una mossa per sessione.';
+
+  @override
+  String puzzleYourStreakX(String param) {
+    return 'Punteggio: $param';
+  }
+
+  @override
+  String get puzzleStreakSkipExplanation => 'Salta questa mossa per mantenere il punteggio! È possibile farlo solo una volta per sessione.';
+
+  @override
+  String get puzzleContinueTheStreak => 'Continua';
+
+  @override
+  String get puzzleNewStreak => 'Nuova sessione';
+
+  @override
+  String get puzzleFromMyGames => 'Dalle mie partite';
+
+  @override
+  String get puzzleLookupOfPlayer => 'Genera problemi dalle partite di un giocatore';
+
+  @override
+  String puzzleFromXGames(String param) {
+    return 'Problema dalle partite di $param';
+  }
+
+  @override
+  String get puzzleSearchPuzzles => 'Cerca problemi';
+
+  @override
+  String get puzzleFromMyGamesNone => 'Nel database dei problemi di Lichess non è presente nessuna delle tue partite, ma Lichess ti vuole bene lo stesso.\nGioca altre partite rapide o classiche per aumentare le possibilità di avere un problema tratto dalle tue partite!';
+
+  @override
+  String puzzleFromXGamesFound(String param1, String param2) {
+    return '$param1 problemi generati dalle partite di $param2';
+  }
+
+  @override
+  String get puzzlePuzzleDashboardDescription => 'Allenati, analizza, migliora';
+
+  @override
+  String puzzlePercentSolved(String param) {
+    return '$param risolto';
+  }
+
+  @override
+  String get puzzleNoPuzzlesToShow => 'Non c\'è niente qui. Prova prima a risolvere qualche problema!';
+
+  @override
+  String get puzzleImprovementAreasDescription => 'Addestrali per ottimizzare il tuo progresso!';
+
+  @override
+  String get puzzleStrengthDescription => 'Dai il meglio di te in questi temi';
+
+  @override
+  String puzzlePlayedXTimes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Giocato $count volte',
+      one: 'Giocato $count volte',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsBelowYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count punti al di sotto del tuo punteggio per i problemi',
+      one: 'Un punto al di sotto del tuo punteggio per i problemi',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsAboveYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count punti al di sopra del tuo punteggio per i problemi',
+      one: 'Un punto al di sopra del tuo punteggio per i problemi',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPlayed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count giocati',
+      one: '$count giocato',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbToReplay(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count da rigiocare',
+      one: '$count da rigiocare',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get puzzleThemeAdvancedPawn => 'Pedone avanzato';
+
+  @override
+  String get puzzleThemeAdvancedPawnDescription => 'Un pedone che promuove o che minaccia di promuovere è la chiave della tattica.';
+
+  @override
+  String get puzzleThemeAdvantage => 'Vantaggio';
+
+  @override
+  String get puzzleThemeAdvantageDescription => 'Cogli l\'occasione per guadagnare un vantaggio decisivo. (200cp ≤ valutazione ≤ 600cp)';
+
+  @override
+  String get puzzleThemeAnastasiaMate => 'Matto di Anastasia';
+
+  @override
+  String get puzzleThemeAnastasiaMateDescription => 'Un cavallo e una torre o una donna si coordinano nell\'intrappolare il re avversario tra un suo pezzo e il bordo della scacchiera.';
+
+  @override
+  String get puzzleThemeArabianMate => 'Matto arabo';
+
+  @override
+  String get puzzleThemeArabianMateDescription => 'Un cavallo e una torre si coordinano nell\'intrappolare il re avversario in un angolo della scacchiera.';
+
+  @override
+  String get puzzleThemeAttackingF2F7 => 'Attacco su f2 o f7';
+
+  @override
+  String get puzzleThemeAttackingF2F7Description => 'Un attacco incentrato sul pedone f2 o f7, come nell\'attacco Fegatello.';
+
+  @override
+  String get puzzleThemeAttraction => 'Adescamento';
+
+  @override
+  String get puzzleThemeAttractionDescription => 'Un cambio o un sacrificio che spinge o forza un pezzo avversario su una casa che consente una successiva tattica.';
+
+  @override
+  String get puzzleThemeBackRankMate => 'Matto del corridoio';
+
+  @override
+  String get puzzleThemeBackRankMateDescription => 'Matto al re sulla traversa di partenza, dove è intrappolato dai suoi stessi pezzi.';
+
+  @override
+  String get puzzleThemeBishopEndgame => 'Finale d\'alfiere';
+
+  @override
+  String get puzzleThemeBishopEndgameDescription => 'Un finale con soli alfieri e pedoni.';
+
+  @override
+  String get puzzleThemeBodenMate => 'Matto di Boden';
+
+  @override
+  String get puzzleThemeBodenMateDescription => 'Due alfieri danno matto lungo diagonali perpendicolari ad un re ostruito dai suoi stessi pezzi.';
+
+  @override
+  String get puzzleThemeCastling => 'Arrocco';
+
+  @override
+  String get puzzleThemeCastlingDescription => 'Porta il re al sicuro, e sviluppa la torre per attaccare.';
+
+  @override
+  String get puzzleThemeCapturingDefender => 'Cattura del difensore';
+
+  @override
+  String get puzzleThemeCapturingDefenderDescription => 'Rimozione di un pezzo essenziale per la difesa di un altro pezzo, che permette al pezzo ora indifeso di essere catturato con una mossa successiva.';
+
+  @override
+  String get puzzleThemeCrushing => 'Posizione schiacciante';
+
+  @override
+  String get puzzleThemeCrushingDescription => 'Trova l\'errore grave del tuo avversario per ottenere un vantaggio schiacciante. (valutazione ≥ 600cp)';
+
+  @override
+  String get puzzleThemeDoubleBishopMate => 'Matto dei due alfieri';
+
+  @override
+  String get puzzleThemeDoubleBishopMateDescription => 'Due alfieri danno matto lungo diagonali adiacenti ad un re ostruito dai suoi stessi pezzi.';
+
+  @override
+  String get puzzleThemeDovetailMate => 'Matto a coda di rondine';
+
+  @override
+  String get puzzleThemeDovetailMateDescription => 'Una donna dà matto al re in una casa adiacente, mentre le due uniche case di fuga sono occupate da suoi pezzi.';
+
+  @override
+  String get puzzleThemeEquality => 'Parità';
+
+  @override
+  String get puzzleThemeEqualityDescription => 'Recupera una posizione persa e assicurati la patta o una posizione pari. (valutazione ≤ 200cp)';
+
+  @override
+  String get puzzleThemeKingsideAttack => 'Attacco sull\'ala di re';
+
+  @override
+  String get puzzleThemeKingsideAttackDescription => 'Un attacco al re avversario, dopo che ha arroccato corto.';
+
+  @override
+  String get puzzleThemeClearance => 'Sgombero';
+
+  @override
+  String get puzzleThemeClearanceDescription => 'Una mossa, spesso con tempo, che libera una casa, una colonna, una traversa o una diagonale per una successiva idea tattica.';
+
+  @override
+  String get puzzleThemeDefensiveMove => 'Mossa difensiva';
+
+  @override
+  String get puzzleThemeDefensiveMoveDescription => 'Una mossa precisa o una sequenza di mosse necessarie ad evitare perdite di materiale o di altri vantaggi.';
+
+  @override
+  String get puzzleThemeDeflection => 'Deviazione';
+
+  @override
+  String get puzzleThemeDeflectionDescription => 'Una mossa che rimuove un pezzo avversario da un compito, come ad esempio difendere una casa chiave.';
+
+  @override
+  String get puzzleThemeDiscoveredAttack => 'Attacco di scoperta';
+
+  @override
+  String get puzzleThemeDiscoveredAttackDescription => 'Mossa di un pezzo che precedentemente bloccava un attacco di un pezzo a lungo raggio, come ad esempio un cavallo che si sposta da una casa in fronte ad una torre.';
+
+  @override
+  String get puzzleThemeDoubleCheck => 'Doppio scacco';
+
+  @override
+  String get puzzleThemeDoubleCheckDescription => 'Scacco con due pezzi contemporaneamente, conseguente a un attacco di scoperta in cui sia il pezzo appena mosso che il pezzo scoperto attaccano il re avversario.';
+
+  @override
+  String get puzzleThemeEndgame => 'Finale';
+
+  @override
+  String get puzzleThemeEndgameDescription => 'Una tattica durante l\'ultima fase della partita.';
+
+  @override
+  String get puzzleThemeEnPassantDescription => 'Una tattica che coinvolge la regola dell\'en passant, in cui un pedone può catturare un pedone avversario che l\'ha superato usando la propria mossa iniziale di due caselle.';
+
+  @override
+  String get puzzleThemeExposedKing => 'Re esposto';
+
+  @override
+  String get puzzleThemeExposedKingDescription => 'Una tattica che coinvolge un re con pochi difensori vicini, il che spesso porta al matto.';
+
+  @override
+  String get puzzleThemeFork => 'Attacco doppio';
+
+  @override
+  String get puzzleThemeForkDescription => 'Una mossa in cui un pezzo attacca due pezzi avversari contemporaneamente.';
+
+  @override
+  String get puzzleThemeHangingPiece => 'Pezzo in presa';
+
+  @override
+  String get puzzleThemeHangingPieceDescription => 'Una tattica che coinvolge un pezzo indifeso o insufficientemente difeso, e che dunque può essere catturato.';
+
+  @override
+  String get puzzleThemeHookMate => 'Matto dell\'uncino';
+
+  @override
+  String get puzzleThemeHookMateDescription => 'Matto con torre, cavallo e pedone, con un pedone avversario che ostruisce il suo re.';
+
+  @override
+  String get puzzleThemeInterference => 'Interposizione';
+
+  @override
+  String get puzzleThemeInterferenceDescription => 'Spostamento di un pezzo tra due pezzi avversari per lasciare uno o entrambi i pezzi nemici senza difesa, come ad esempio un cavallo difeso tra due torri.';
+
+  @override
+  String get puzzleThemeIntermezzo => 'Intermezzo';
+
+  @override
+  String get puzzleThemeIntermezzoDescription => 'Esecuzione, prima della mossa più naturale, di un\'altra mossa che pone una minaccia più immediata, alla quale l\'avversario deve necessariamente reagire. Conosciuto anche come \"Zwischenzug\" o \"Mossa intermedia\".';
+
+  @override
+  String get puzzleThemeKnightEndgame => 'Finale di cavallo';
+
+  @override
+  String get puzzleThemeKnightEndgameDescription => 'Un finale con soli cavalli e pedoni.';
+
+  @override
+  String get puzzleThemeLong => 'Problema lungo';
+
+  @override
+  String get puzzleThemeLongDescription => 'Vittoria in tre mosse.';
+
+  @override
+  String get puzzleThemeMaster => 'Partite di Maestri';
+
+  @override
+  String get puzzleThemeMasterDescription => 'Problemi da partite giocate da scacchisti titolati.';
+
+  @override
+  String get puzzleThemeMasterVsMaster => 'Partite fra Maestri';
+
+  @override
+  String get puzzleThemeMasterVsMasterDescription => 'Problemi da partite giocate fra due scacchisti titolati.';
+
+  @override
+  String get puzzleThemeMate => 'Scacco matto';
+
+  @override
+  String get puzzleThemeMateDescription => 'Vinci la partita con stile.';
+
+  @override
+  String get puzzleThemeMateIn1 => 'Matto in 1';
+
+  @override
+  String get puzzleThemeMateIn1Description => 'Dai scacco matto in una mossa.';
+
+  @override
+  String get puzzleThemeMateIn2 => 'Matto in 2';
+
+  @override
+  String get puzzleThemeMateIn2Description => 'Dai scacco matto in due mosse.';
+
+  @override
+  String get puzzleThemeMateIn3 => 'Matto in 3';
+
+  @override
+  String get puzzleThemeMateIn3Description => 'Dai scacco matto in tre mosse.';
+
+  @override
+  String get puzzleThemeMateIn4 => 'Matto in 4';
+
+  @override
+  String get puzzleThemeMateIn4Description => 'Dai scacco matto in quattro mosse.';
+
+  @override
+  String get puzzleThemeMateIn5 => 'Matto in 5 o più mosse';
+
+  @override
+  String get puzzleThemeMateIn5Description => 'Trova una lunga sequenza di mosse per dare matto.';
+
+  @override
+  String get puzzleThemeMiddlegame => 'Mediogioco';
+
+  @override
+  String get puzzleThemeMiddlegameDescription => 'Una tattica durante la seconda fase della partita.';
+
+  @override
+  String get puzzleThemeOneMove => 'Problema da una mossa';
+
+  @override
+  String get puzzleThemeOneMoveDescription => 'Un problema lungo una sola mossa.';
+
+  @override
+  String get puzzleThemeOpening => 'Apertura';
+
+  @override
+  String get puzzleThemeOpeningDescription => 'Una tattica durante la prima fase della partita.';
+
+  @override
+  String get puzzleThemePawnEndgame => 'Finale di pedoni';
+
+  @override
+  String get puzzleThemePawnEndgameDescription => 'Un finale con soli pedoni.';
+
+  @override
+  String get puzzleThemePin => 'Inchiodatura';
+
+  @override
+  String get puzzleThemePinDescription => 'Una tattica in cui un pezzo non può muoversi senza scoprire un attacco ad un pezzo di maggior valore.';
+
+  @override
+  String get puzzleThemePromotion => 'Promozione';
+
+  @override
+  String get puzzleThemePromotionDescription => 'Un pedone che promuove o che minaccia di promuovere è la chiave della tattica.';
+
+  @override
+  String get puzzleThemeQueenEndgame => 'Finale di donna';
+
+  @override
+  String get puzzleThemeQueenEndgameDescription => 'Un finale con sole donne e pedoni.';
+
+  @override
+  String get puzzleThemeQueenRookEndgame => 'Finale di donna e torre';
+
+  @override
+  String get puzzleThemeQueenRookEndgameDescription => 'Un finale con sole donne, torri e pedoni.';
+
+  @override
+  String get puzzleThemeQueensideAttack => 'Attacco sull\'ala di donna';
+
+  @override
+  String get puzzleThemeQueensideAttackDescription => 'Un attacco al re avversario, dopo che ha arroccato lungo.';
+
+  @override
+  String get puzzleThemeQuietMove => 'Mossa calma';
+
+  @override
+  String get puzzleThemeQuietMoveDescription => 'Una mossa che non dà scacco e non cattura nulla, ma prepara una successiva minaccia inevitabile.';
+
+  @override
+  String get puzzleThemeRookEndgame => 'Finale di torre';
+
+  @override
+  String get puzzleThemeRookEndgameDescription => 'Un finale con sole torri e pedoni.';
+
+  @override
+  String get puzzleThemeSacrifice => 'Sacrificio';
+
+  @override
+  String get puzzleThemeSacrificeDescription => 'Una tattica che include la perdita di materiale nel breve termine per guadagnare un vantaggio dopo una serie di mosse forzate.';
+
+  @override
+  String get puzzleThemeShort => 'Problema breve';
+
+  @override
+  String get puzzleThemeShortDescription => 'Vittoria in due mosse.';
+
+  @override
+  String get puzzleThemeSkewer => 'Infilata';
+
+  @override
+  String get puzzleThemeSkewerDescription => 'Un tema che consiste in un pezzo di grande valore che viene attaccato e che si sposta, permettendo ad un pezzo dietro di esso di essere catturato o attaccato. Il contrario di un\'inchiodatura.';
+
+  @override
+  String get puzzleThemeSmotheredMate => 'Matto affogato';
+
+  @override
+  String get puzzleThemeSmotheredMateDescription => 'Uno scacco matto eseguito con un cavallo, in cui il re sotto scacco è incapace di spostarsi poiché circondato (\"affogato\") dai suoi stessi pezzi.';
+
+  @override
+  String get puzzleThemeSuperGM => 'Partite di Super-GM';
+
+  @override
+  String get puzzleThemeSuperGMDescription => 'Problemi da partite giocate dai migliori giocatori al mondo.';
+
+  @override
+  String get puzzleThemeTrappedPiece => 'Pezzo intrappolato';
+
+  @override
+  String get puzzleThemeTrappedPieceDescription => 'Un pezzo che non può evitare la cattura a causa delle sue mosse limitate.';
+
+  @override
+  String get puzzleThemeUnderPromotion => 'Sottopromozione';
+
+  @override
+  String get puzzleThemeUnderPromotionDescription => 'Promozione a cavallo, alfiere o torre.';
+
+  @override
+  String get puzzleThemeVeryLong => 'Problema lunghissimo';
+
+  @override
+  String get puzzleThemeVeryLongDescription => 'Vittoria in quattro o più mosse.';
+
+  @override
+  String get puzzleThemeXRayAttack => 'Attacco a raggi X';
+
+  @override
+  String get puzzleThemeXRayAttackDescription => 'Un pezzo che attacca o difende una casa attraverso un pezzo nemico.';
+
+  @override
+  String get puzzleThemeZugzwang => 'Zugzwang';
+
+  @override
+  String get puzzleThemeZugzwangDescription => 'L\'avversario è limitato nella sua scelta della mossa, e tutte le mosse possibili peggiorano la sua posizione.';
+
+  @override
+  String get puzzleThemeHealthyMix => 'Mix generale';
+
+  @override
+  String get puzzleThemeHealthyMixDescription => 'Un po\' di tutto. Nessuna aspettativa, affinché si possa rimanere pronti a qualsiasi cosa! Proprio come nelle partite vere.';
+
+  @override
+  String get puzzleThemePlayerGames => 'Partite tra giocatori';
+
+  @override
+  String get puzzleThemePlayerGamesDescription => 'Trova problemi tratti dalle tue partite o dalle partite di altri giocatori.';
+
+  @override
+  String puzzleThemePuzzleDownloadInformation(String param) {
+    return 'Questi problemi sono nel pubblico dominio e possono essere scaricati da $param.';
+  }
+
+  @override
+  String get searchSearch => 'Cerca';
+
+  @override
+  String get settingsSettings => 'Impostazioni';
+
+  @override
+  String get settingsCloseAccount => 'Elimina account';
+
+  @override
+  String get settingsManagedAccountCannotBeClosed => 'Il tuo account è gestito esternamente e non può essere chiuso.';
+
+  @override
+  String get settingsClosingIsDefinitive => 'L\'eliminazione dell\'account è definitiva. Una volta cancellato non è più possibile tornare indietro. Sei sicuro?';
+
+  @override
+  String get settingsCantOpenSimilarAccount => 'Non potrai creare un nuovo account con lo stesso nome, nemmeno con diverse maiuscole/minuscole.';
+
+  @override
+  String get settingsChangedMindDoNotCloseAccount => 'Ci ho ripensato, non eliminare il mio account';
+
+  @override
+  String get settingsCloseAccountExplanation => 'Sei sicuro di voler eliminare il tuo account? L\'eliminazione del tuo account è un\'azione irreversibile. Non ti sarà MAI più possibile effettuare il login e la pagina del tuo profilo non sarà più accessibile.';
+
+  @override
+  String get settingsThisAccountIsClosed => 'Questo account è stato eliminato.';
 
   @override
   String get playWithAFriend => 'Gioca con un amico';
@@ -512,6 +1612,12 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get deleteFromHere => 'Elimina da qui';
+
+  @override
+  String get collapseVariations => 'Collapse variations';
+
+  @override
+  String get expandVariations => 'Expand variations';
 
   @override
   String get forceVariation => 'Mostra come variante';
@@ -1371,15 +2477,6 @@ class AppLocalizationsIt extends AppLocalizations {
   String get emptyTournamentName => 'Lascia vuoto il nome del torneo per chiamarlo con il nome di un giocatore famoso casuale.';
 
   @override
-  String get recommendNotTouching => 'Si consiglia di non toccare queste impostazioni.';
-
-  @override
-  String get fewerPlayers => 'Se imponi condizioni d\'accesso il torneo avrà un minor numero di giocatori.';
-
-  @override
-  String get showAdvancedSettings => 'Mostra impostazioni avanzate';
-
-  @override
   String get makePrivateTournament => 'Rendi privato il torneo e limita l\'accesso con una password';
 
   @override
@@ -1509,10 +2606,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get editProfile => 'Modifica profilo';
 
   @override
-  String get firstName => 'Nome';
-
-  @override
-  String get lastName => 'Cognome';
+  String get realName => 'Real name';
 
   @override
   String get setFlair => 'Imposta la tua icona';
@@ -1641,13 +2735,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get cheat => 'Imbrogli';
 
   @override
-  String get insult => 'Insulti';
-
-  @override
   String get troll => 'Provocazioni';
-
-  @override
-  String get ratingManipulation => 'Manipolazione del rating';
 
   @override
   String get other => 'Altro';
@@ -1754,6 +2842,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get outsideTheBoard => 'Fuori la scacchiera';
+
+  @override
+  String get allSquaresOfTheBoard => 'All squares of the board';
 
   @override
   String get onSlowGames => 'Nelle partite lente';
@@ -2361,7 +3452,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get brightness => 'Luminosità';
 
   @override
-  String get hue => 'Hue';
+  String get hue => 'Tonalità';
 
   @override
   String get boardReset => 'Ripristina i colori predefiniti';
@@ -2962,7 +4053,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: 'Il tuo avversario ha lasciato la partita. Puoi reclamare la vittoria fra $count secondi.',
       one: 'Il tuo avversario ha lasciato la partita. Puoi reclamare la vittoria fra $count secondo.',
-      zero: 'Il tuo avversario ha lasciato la partita. Puoi reclamare la vittoria fra $count secondo.',
     );
     return '$_temp0';
   }
@@ -2974,7 +4064,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: 'Matto in $count semi-mosse',
       one: 'Matto in $count semi-mossa',
-      zero: 'Matto in $count semi-mossa',
     );
     return '$_temp0';
   }
@@ -2986,7 +4075,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: '$count errori gravi',
       one: '$count errore grave',
-      zero: '$count errore grave',
     );
     return '$_temp0';
   }
@@ -2998,7 +4086,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: '$count errori',
       one: '$count errore',
-      zero: '$count errore',
     );
     return '$_temp0';
   }
@@ -3010,7 +4097,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: '$count imprecisioni',
       one: '$count imprecisione',
-      zero: '$count imprecisione',
     );
     return '$_temp0';
   }
@@ -3022,7 +4108,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: '$count giocatori collegati',
       one: '$count giocatore collegato',
-      zero: '$count giocatore collegato',
     );
     return '$_temp0';
   }
@@ -3034,7 +4119,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: '$count partite',
       one: '$count partita',
-      zero: '$count partita',
     );
     return '$_temp0';
   }
@@ -3046,7 +4130,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: '$count punti in $param2 partite',
       one: '$count punti in $param2 partite',
-      zero: '$count punti in $param2 partite',
     );
     return '$_temp0';
   }
@@ -3058,7 +4141,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: '$count preferiti',
       one: '$count preferito',
-      zero: '$count preferito',
     );
     return '$_temp0';
   }
@@ -3070,7 +4152,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: '$count giorni',
       one: '$count giorno',
-      zero: '$count giorno',
     );
     return '$_temp0';
   }
@@ -3082,7 +4163,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: '$count ore',
       one: '$count ora',
-      zero: '$count ora',
     );
     return '$_temp0';
   }
@@ -3094,7 +4174,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: '$count minuti',
       one: '$count minuto',
-      zero: '$count minuto',
     );
     return '$_temp0';
   }
@@ -3106,7 +4185,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: 'La posizione viene aggiornata ogni $count minuti',
       one: 'La posizione viene aggiornata ogni minuto',
-      zero: 'La posizione viene aggiornata ogni minuto',
     );
     return '$_temp0';
   }
@@ -3118,7 +4196,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: '$count puzzle',
       one: '$count puzzle',
-      zero: '$count puzzle',
     );
     return '$_temp0';
   }
@@ -3130,7 +4207,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: '$count giocate con te',
       one: '$count giocate con te',
-      zero: '$count giocate con te',
     );
     return '$_temp0';
   }
@@ -3142,7 +4218,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: '$count classificate',
       one: '$count classificata',
-      zero: '$count classificata',
     );
     return '$_temp0';
   }
@@ -3154,7 +4229,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: '$count vittorie',
       one: '$count vittoria',
-      zero: '$count vittoria',
     );
     return '$_temp0';
   }
@@ -3166,7 +4240,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: '$count sconfitte',
       one: '$count sconfitta',
-      zero: '$count sconfitta',
     );
     return '$_temp0';
   }
@@ -3178,7 +4251,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: '$count patte',
       one: '$count patta',
-      zero: '$count patta',
     );
     return '$_temp0';
   }
@@ -3190,7 +4262,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: '$count in corso',
       one: '$count in corso',
-      zero: '$count in corso',
     );
     return '$_temp0';
   }
@@ -3202,7 +4273,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: 'Concedi $count secondi',
       one: 'Concedi $count secondo',
-      zero: 'Concedi $count secondo',
     );
     return '$_temp0';
   }
@@ -3214,7 +4284,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: '$count punti di torneo',
       one: '$count punto di torneo',
-      zero: '$count punto di torneo',
     );
     return '$_temp0';
   }
@@ -3226,7 +4295,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: '$count studi',
       one: '$count studio',
-      zero: '$count studio',
     );
     return '$_temp0';
   }
@@ -3238,7 +4306,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: '$count esibizioni simultanee',
       one: '$count esibizioni simultanee',
-      zero: '$count esibizioni simultanee',
     );
     return '$_temp0';
   }
@@ -3250,7 +4317,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: '≥ $count partite classificate',
       one: '≥ $count partita classificata',
-      zero: '≥ $count partita classificata',
     );
     return '$_temp0';
   }
@@ -3262,7 +4328,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: '≥ $count partite $param2 classificate',
       one: '≥ $count partita $param2 classificata',
-      zero: '≥ $count partita $param2 classificata',
     );
     return '$_temp0';
   }
@@ -3274,7 +4339,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: 'Ti mancano ancora $count partite $param2 classificate',
       one: 'Ti manca ancora $count partita $param2 classificata',
-      zero: 'Ti manca ancora $count partita $param2 classificata',
     );
     return '$_temp0';
   }
@@ -3286,7 +4350,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: 'Ti mancano ancora $count partite classificate',
       one: 'Ti manca ancora $count partita classificata',
-      zero: 'Ti manca ancora $count partita classificata',
     );
     return '$_temp0';
   }
@@ -3298,7 +4361,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: '$count partite importate',
       one: '$count partita importata',
-      zero: '$count partita importata',
     );
     return '$_temp0';
   }
@@ -3310,7 +4372,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: '$count amici online',
       one: '$count amico online',
-      zero: '$count amico online',
     );
     return '$_temp0';
   }
@@ -3322,7 +4383,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: '$count lo seguono',
       one: '$count lo segue',
-      zero: '$count lo segue',
     );
     return '$_temp0';
   }
@@ -3334,7 +4394,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: '$count persone seguite',
       one: '$count persona seguita',
-      zero: '$count persona seguita',
     );
     return '$_temp0';
   }
@@ -3346,7 +4405,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: 'Meno di $count minuti',
       one: 'Meno di $count minuto',
-      zero: 'Meno di $count minuto',
     );
     return '$_temp0';
   }
@@ -3358,7 +4416,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: '$count partite in gioco',
       one: '$count partita in gioco',
-      zero: '$count partita in gioco',
     );
     return '$_temp0';
   }
@@ -3370,7 +4427,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: 'Massimo: $count caratteri.',
       one: 'Massimo: $count carattere.',
-      zero: 'Massimo: $count carattere.',
     );
     return '$_temp0';
   }
@@ -3382,7 +4438,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: '$count giocatori bloccati',
       one: '$count giocatore bloccato',
-      zero: '$count giocatore bloccato',
     );
     return '$_temp0';
   }
@@ -3394,7 +4449,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: '$count post nel forum',
       one: '$count post nel forum',
-      zero: '$count post nel forum',
     );
     return '$_temp0';
   }
@@ -3406,7 +4460,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: '$count giocatori $param2 questa settimana.',
       one: '$count giocatore $param2 questa settimana.',
-      zero: '$count giocatore $param2 questa settimana.',
     );
     return '$_temp0';
   }
@@ -3418,7 +4471,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: 'Disponibile in $count lingue!',
       one: 'Disponibile in $count lingue!',
-      zero: 'Disponibile in $count lingue!',
     );
     return '$_temp0';
   }
@@ -3430,7 +4482,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: '$count secondi per giocare la prima mossa',
       one: '$count secondi per giocare la prima mossa',
-      zero: '$count secondi per giocare la prima mossa',
     );
     return '$_temp0';
   }
@@ -3442,7 +4493,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: '$count secondi',
       one: '$count secondo',
-      zero: '$count secondo',
     );
     return '$_temp0';
   }
@@ -3454,1013 +4504,9 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: 'e salva $count linee pre-mossa',
       one: 'e salva $count linea pre-mossa',
-      zero: 'e salva $count linea pre-mossa',
     );
     return '$_temp0';
   }
-
-  @override
-  String get patronDonate => 'Fai una donazione';
-
-  @override
-  String get patronLichessPatron => 'Patron di Lichess';
-
-  @override
-  String get preferencesPreferences => 'Preferenze';
-
-  @override
-  String get preferencesDisplay => 'Mostra';
-
-  @override
-  String get preferencesPrivacy => 'Privacy';
-
-  @override
-  String get preferencesNotifications => 'Notifiche';
-
-  @override
-  String get preferencesPieceAnimation => 'Animazione dei pezzi';
-
-  @override
-  String get preferencesMaterialDifference => 'Differenza di materiale';
-
-  @override
-  String get preferencesBoardHighlights => 'Segnalazioni sulla scacchiera (ultima mossa e scacco)';
-
-  @override
-  String get preferencesPieceDestinations => 'Destinazioni del pezzo (mosse e pre-mosse valide)';
-
-  @override
-  String get preferencesBoardCoordinates => 'Coordinate della scacchiera (A-H, 1-8)';
-
-  @override
-  String get preferencesMoveListWhilePlaying => 'Lista delle mosse mentre giochi';
-
-  @override
-  String get preferencesPgnPieceNotation => 'Notazione mossa';
-
-  @override
-  String get preferencesChessPieceSymbol => 'Simbolo del pezzo';
-
-  @override
-  String get preferencesPgnLetter => 'Lettera (K, Q, R, B, N)';
-
-  @override
-  String get preferencesZenMode => 'Modalità Zen';
-
-  @override
-  String get preferencesShowPlayerRatings => 'Mostra punteggi giocatori';
-
-  @override
-  String get preferencesShowFlairs => 'Mostra le icone del giocatore';
-
-  @override
-  String get preferencesExplainShowPlayerRatings => 'Questa funzionalità permette di nascondere i punteggi dei giocatori per aiutare a concentrarti sulla partita. Le partite possono comunque essere classificate, questa impostazione riguarda solo ciò che vedi.';
-
-  @override
-  String get preferencesDisplayBoardResizeHandle => 'Mostra l\'icona di ridimensionamento della scacchiera';
-
-  @override
-  String get preferencesOnlyOnInitialPosition => 'Solo sulla posizione iniziale';
-
-  @override
-  String get preferencesInGameOnly => 'Solamente durante la partita';
-
-  @override
-  String get preferencesChessClock => 'Orologio';
-
-  @override
-  String get preferencesTenthsOfSeconds => 'Decimi di secondo';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'Quando il tempo rimanente è < 10 secondi';
-
-  @override
-  String get preferencesHorizontalGreenProgressBars => 'Barra verde orizzontale del tempo';
-
-  @override
-  String get preferencesSoundWhenTimeGetsCritical => 'Suono quando sei a corto di tempo';
-
-  @override
-  String get preferencesGiveMoreTime => 'Dai più tempo';
-
-  @override
-  String get preferencesGameBehavior => 'Preferenze di gioco';
-
-  @override
-  String get preferencesHowDoYouMovePieces => 'Come vuoi muovere i pezzi?';
-
-  @override
-  String get preferencesClickTwoSquares => 'Clicca su due caselle';
-
-  @override
-  String get preferencesDragPiece => 'Trascina il pezzo';
-
-  @override
-  String get preferencesBothClicksAndDrag => 'Entrambi';
-
-  @override
-  String get preferencesPremovesPlayingDuringOpponentTurn => 'Pre-mosse (mentre tocca all\'avversario)';
-
-  @override
-  String get preferencesTakebacksWithOpponentApproval => 'Ritiro della mossa (su accordo dell\'avversario)';
-
-  @override
-  String get preferencesInCasualGamesOnly => 'Solo nelle partite amichevoli';
-
-  @override
-  String get preferencesPromoteToQueenAutomatically => 'Promuovi a Donna automaticamente';
-
-  @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Tieni premuto il tasto <ctrl> durante la promozione per disabilitare temporaneamente la promozione automatica';
-
-  @override
-  String get preferencesWhenPremoving => 'Quando preseleziono una mossa';
-
-  @override
-  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Reclama patta automaticamente dopo triplice ripetizione';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Quando il tempo rimanente è < 30 secondi';
-
-  @override
-  String get preferencesMoveConfirmation => 'Conferma della mossa';
-
-  @override
-  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Può essere disabilitato durante una partita dal menu della scacchiera';
-
-  @override
-  String get preferencesInCorrespondenceGames => 'Partite per corrispondenza';
-
-  @override
-  String get preferencesCorrespondenceAndUnlimited => 'Corrispondenza e senza limiti di tempo';
-
-  @override
-  String get preferencesConfirmResignationAndDrawOffers => 'Conferma abbandono e offerte di patta';
-
-  @override
-  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Metodo di arrocco';
-
-  @override
-  String get preferencesCastleByMovingTwoSquares => 'Muovi il re di due caselle';
-
-  @override
-  String get preferencesCastleByMovingOntoTheRook => 'Muovi il re sopra la Torre';
-
-  @override
-  String get preferencesInputMovesWithTheKeyboard => 'Muovi utilizzando la tastiera';
-
-  @override
-  String get preferencesInputMovesWithVoice => 'Muovi con la tua voce';
-
-  @override
-  String get preferencesSnapArrowsToValidMoves => 'Collega le frecce a mosse valide';
-
-  @override
-  String get preferencesSayGgWpAfterLosingOrDrawing => 'Di\' \"Good game, well played\" alla sconfitta o al pareggio';
-
-  @override
-  String get preferencesYourPreferencesHaveBeenSaved => 'Le tue preferenze sono state salvate.';
-
-  @override
-  String get preferencesScrollOnTheBoardToReplayMoves => 'Scorri sulla scacchiera per riprodurre le mosse';
-
-  @override
-  String get preferencesCorrespondenceEmailNotification => 'Notifica di posta giornaliera che elenca le tue partite per corrispondenza';
-
-  @override
-  String get preferencesNotifyStreamStart => 'Lo streamer va in diretta';
-
-  @override
-  String get preferencesNotifyInboxMsg => 'Nuovo messaggio';
-
-  @override
-  String get preferencesNotifyForumMention => 'Un commento nel forum ti ha menzionato';
-
-  @override
-  String get preferencesNotifyInvitedStudy => 'Invito ad uno Studio';
-
-  @override
-  String get preferencesNotifyGameEvent => 'Aggiornamenti in una partita per corrispondenza';
-
-  @override
-  String get preferencesNotifyChallenge => 'Sfide';
-
-  @override
-  String get preferencesNotifyTournamentSoon => 'Il torneo sta per iniziare';
-
-  @override
-  String get preferencesNotifyTimeAlarm => 'Il tempo sta per scadere in una partita per corrispondenza';
-
-  @override
-  String get preferencesNotifyBell => 'Notifica sonora in Lichess';
-
-  @override
-  String get preferencesNotifyPush => 'Notifiche dispositivo (push) quando non sei collegato a Lichess';
-
-  @override
-  String get preferencesNotifyWeb => 'Browser';
-
-  @override
-  String get preferencesNotifyDevice => 'Dispositivo';
-
-  @override
-  String get preferencesBellNotificationSound => 'Tono notifica';
-
-  @override
-  String get puzzlePuzzles => 'Problemi';
-
-  @override
-  String get puzzlePuzzleThemes => 'Problemi a tema';
-
-  @override
-  String get puzzleRecommended => 'Consigliati';
-
-  @override
-  String get puzzlePhases => 'Fasi';
-
-  @override
-  String get puzzleMotifs => 'Temi';
-
-  @override
-  String get puzzleAdvanced => 'Avanzati';
-
-  @override
-  String get puzzleLengths => 'Per lunghezza';
-
-  @override
-  String get puzzleMates => 'Matti';
-
-  @override
-  String get puzzleGoals => 'Per obiettivo';
-
-  @override
-  String get puzzleOrigin => 'Per fonte';
-
-  @override
-  String get puzzleSpecialMoves => 'Mosse speciali';
-
-  @override
-  String get puzzleDidYouLikeThisPuzzle => 'Ti è piaciuto questo problema?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Vota per passare al prossimo!';
-
-  @override
-  String get puzzleUpVote => 'Valuta positivamente questo problema';
-
-  @override
-  String get puzzleDownVote => 'Valuta negativamente questo problema';
-
-  @override
-  String get puzzleYourPuzzleRatingWillNotChange => 'Il tuo punteggio per i problemi non cambierà. Nota che i problemi non sono competitivi. Il punteggio ci aiuta a selezionare i problemi migliori per il tuo livello di gioco.';
-
-  @override
-  String get puzzleFindTheBestMoveForWhite => 'Trova la mossa migliore per il bianco.';
-
-  @override
-  String get puzzleFindTheBestMoveForBlack => 'Trova la mossa migliore per il nero.';
-
-  @override
-  String get puzzleToGetPersonalizedPuzzles => 'Per ottenere problemi personalizzati:';
-
-  @override
-  String puzzlePuzzleId(String param) {
-    return 'Problema $param';
-  }
-
-  @override
-  String get puzzlePuzzleOfTheDay => 'Problema del giorno';
-
-  @override
-  String get puzzleDailyPuzzle => 'Tattica di oggi';
-
-  @override
-  String get puzzleClickToSolve => 'Clicca per provare a risolverla';
-
-  @override
-  String get puzzleGoodMove => 'Buona mossa';
-
-  @override
-  String get puzzleBestMove => 'La mossa migliore!';
-
-  @override
-  String get puzzleKeepGoing => 'Continua così…';
-
-  @override
-  String get puzzlePuzzleSuccess => 'Risolto!';
-
-  @override
-  String get puzzlePuzzleComplete => 'Problema completato!';
-
-  @override
-  String get puzzleByOpenings => 'Per apertura';
-
-  @override
-  String get puzzlePuzzlesByOpenings => 'Problemi ordinati per apertura';
-
-  @override
-  String get puzzleOpeningsYouPlayedTheMost => 'Aperture che hai giocato di più nelle partite classificate';
-
-  @override
-  String get puzzleUseFindInPage => 'Usa \"Trova nella pagina\" nel menu del browser per trovare la tua apertura preferita!';
-
-  @override
-  String get puzzleUseCtrlF => 'Usa Ctrl+F per trovare la tua apertura preferita!';
-
-  @override
-  String get puzzleNotTheMove => 'Non è la mossa esatta!';
-
-  @override
-  String get puzzleTrySomethingElse => 'Prova qualcos\'altro.';
-
-  @override
-  String puzzleRatingX(String param) {
-    return 'Punteggio: $param';
-  }
-
-  @override
-  String get puzzleHidden => 'nascosto';
-
-  @override
-  String puzzleFromGameLink(String param) {
-    return 'Dalla partita $param';
-  }
-
-  @override
-  String get puzzleContinueTraining => 'Continua ad allenarti';
-
-  @override
-  String get puzzleDifficultyLevel => 'Livello di difficoltà';
-
-  @override
-  String get puzzleNormal => 'Normale';
-
-  @override
-  String get puzzleEasier => 'Facile';
-
-  @override
-  String get puzzleEasiest => 'Facilissimo';
-
-  @override
-  String get puzzleHarder => 'Difficile';
-
-  @override
-  String get puzzleHardest => 'Difficilissimo';
-
-  @override
-  String get puzzleExample => 'Esempio';
-
-  @override
-  String get puzzleAddAnotherTheme => 'Aggiungi un altro tema';
-
-  @override
-  String get puzzleNextPuzzle => 'Problema successivo';
-
-  @override
-  String get puzzleJumpToNextPuzzleImmediately => 'Passa subito al problema successivo';
-
-  @override
-  String get puzzlePuzzleDashboard => 'I tuoi problemi';
-
-  @override
-  String get puzzleImprovementAreas => 'Aree di miglioramento';
-
-  @override
-  String get puzzleStrengths => 'Punti di forza';
-
-  @override
-  String get puzzleHistory => 'Cronologia dei problemi';
-
-  @override
-  String get puzzleSolved => 'risolto';
-
-  @override
-  String get puzzleFailed => 'sbagliato';
-
-  @override
-  String get puzzleStreakDescription => 'Risolvi problemi progressivamente più difficili e accumula una serie di vittorie. Non c\'è orologio, quindi fa\' con calma. Appena fai una mossa sbagliata è finita! Puoi saltare una mossa per sessione.';
-
-  @override
-  String puzzleYourStreakX(String param) {
-    return 'Punteggio: $param';
-  }
-
-  @override
-  String get puzzleStreakSkipExplanation => 'Salta questa mossa per mantenere il punteggio! È possibile farlo solo una volta per sessione.';
-
-  @override
-  String get puzzleContinueTheStreak => 'Continua';
-
-  @override
-  String get puzzleNewStreak => 'Nuova sessione';
-
-  @override
-  String get puzzleFromMyGames => 'Dalle mie partite';
-
-  @override
-  String get puzzleLookupOfPlayer => 'Genera problemi dalle partite di un giocatore';
-
-  @override
-  String puzzleFromXGames(String param) {
-    return 'Problema dalle partite di $param';
-  }
-
-  @override
-  String get puzzleSearchPuzzles => 'Cerca problemi';
-
-  @override
-  String get puzzleFromMyGamesNone => 'Nel database dei problemi di Lichess non è presente nessuna delle tue partite, ma Lichess ti vuole bene lo stesso.\nGioca altre partite rapide o classiche per aumentare le possibilità di avere un problema tratto dalle tue partite!';
-
-  @override
-  String puzzleFromXGamesFound(String param1, String param2) {
-    return '$param1 problemi generati dalle partite di $param2';
-  }
-
-  @override
-  String get puzzlePuzzleDashboardDescription => 'Allenati, analizza, migliora';
-
-  @override
-  String puzzlePercentSolved(String param) {
-    return '$param risolto';
-  }
-
-  @override
-  String get puzzleNoPuzzlesToShow => 'Non c\'è niente qui. Prova prima a risolvere qualche problema!';
-
-  @override
-  String get puzzleImprovementAreasDescription => 'Addestrali per ottimizzare il tuo progresso!';
-
-  @override
-  String get puzzleStrengthDescription => 'Dai il meglio di te in questi temi';
-
-  @override
-  String puzzlePlayedXTimes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Giocato $count volte',
-      one: 'Giocato $count volte',
-      zero: 'Giocato $count volte',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsBelowYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count punti al di sotto del tuo punteggio per i problemi',
-      one: 'Un punto al di sotto del tuo punteggio per i problemi',
-      zero: 'Un punto al di sotto del tuo punteggio per i problemi',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsAboveYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count punti al di sopra del tuo punteggio per i problemi',
-      one: 'Un punto al di sopra del tuo punteggio per i problemi',
-      zero: 'Un punto al di sopra del tuo punteggio per i problemi',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPlayed(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count giocati',
-      one: '$count giocato',
-      zero: '$count giocato',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbToReplay(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count da rigiocare',
-      one: '$count da rigiocare',
-      zero: '$count da rigiocare',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get puzzleThemeAdvancedPawn => 'Pedone avanzato';
-
-  @override
-  String get puzzleThemeAdvancedPawnDescription => 'Un pedone che promuove o che minaccia di promuovere è la chiave della tattica.';
-
-  @override
-  String get puzzleThemeAdvantage => 'Vantaggio';
-
-  @override
-  String get puzzleThemeAdvantageDescription => 'Cogli l\'occasione per guadagnare un vantaggio decisivo. (200cp ≤ valutazione ≤ 600cp)';
-
-  @override
-  String get puzzleThemeAnastasiaMate => 'Matto di Anastasia';
-
-  @override
-  String get puzzleThemeAnastasiaMateDescription => 'Un cavallo e una torre o una donna si coordinano nell\'intrappolare il re avversario tra un suo pezzo e il bordo della scacchiera.';
-
-  @override
-  String get puzzleThemeArabianMate => 'Matto arabo';
-
-  @override
-  String get puzzleThemeArabianMateDescription => 'Un cavallo e una torre si coordinano nell\'intrappolare il re avversario in un angolo della scacchiera.';
-
-  @override
-  String get puzzleThemeAttackingF2F7 => 'Attacco su f2 o f7';
-
-  @override
-  String get puzzleThemeAttackingF2F7Description => 'Un attacco incentrato sul pedone f2 o f7, come nell\'attacco Fegatello.';
-
-  @override
-  String get puzzleThemeAttraction => 'Adescamento';
-
-  @override
-  String get puzzleThemeAttractionDescription => 'Un cambio o un sacrificio che spinge o forza un pezzo avversario su una casa che consente una successiva tattica.';
-
-  @override
-  String get puzzleThemeBackRankMate => 'Matto del corridoio';
-
-  @override
-  String get puzzleThemeBackRankMateDescription => 'Matto al re sulla traversa di partenza, dove è intrappolato dai suoi stessi pezzi.';
-
-  @override
-  String get puzzleThemeBishopEndgame => 'Finale d\'alfiere';
-
-  @override
-  String get puzzleThemeBishopEndgameDescription => 'Un finale con soli alfieri e pedoni.';
-
-  @override
-  String get puzzleThemeBodenMate => 'Matto di Boden';
-
-  @override
-  String get puzzleThemeBodenMateDescription => 'Due alfieri danno matto lungo diagonali perpendicolari ad un re ostruito dai suoi stessi pezzi.';
-
-  @override
-  String get puzzleThemeCastling => 'Arrocco';
-
-  @override
-  String get puzzleThemeCastlingDescription => 'Porta il re al sicuro, e sviluppa la torre per attaccare.';
-
-  @override
-  String get puzzleThemeCapturingDefender => 'Cattura del difensore';
-
-  @override
-  String get puzzleThemeCapturingDefenderDescription => 'Rimozione di un pezzo essenziale per la difesa di un altro pezzo, che permette al pezzo ora indifeso di essere catturato con una mossa successiva.';
-
-  @override
-  String get puzzleThemeCrushing => 'Posizione schiacciante';
-
-  @override
-  String get puzzleThemeCrushingDescription => 'Trova l\'errore grave del tuo avversario per ottenere un vantaggio schiacciante. (valutazione ≥ 600cp)';
-
-  @override
-  String get puzzleThemeDoubleBishopMate => 'Matto dei due alfieri';
-
-  @override
-  String get puzzleThemeDoubleBishopMateDescription => 'Due alfieri danno matto lungo diagonali adiacenti ad un re ostruito dai suoi stessi pezzi.';
-
-  @override
-  String get puzzleThemeDovetailMate => 'Matto a coda di rondine';
-
-  @override
-  String get puzzleThemeDovetailMateDescription => 'Una donna dà matto al re in una casa adiacente, mentre le due uniche case di fuga sono occupate da suoi pezzi.';
-
-  @override
-  String get puzzleThemeEquality => 'Parità';
-
-  @override
-  String get puzzleThemeEqualityDescription => 'Recupera una posizione persa e assicurati la patta o una posizione pari. (valutazione ≤ 200cp)';
-
-  @override
-  String get puzzleThemeKingsideAttack => 'Attacco sull\'ala di re';
-
-  @override
-  String get puzzleThemeKingsideAttackDescription => 'Un attacco al re avversario, dopo che ha arroccato corto.';
-
-  @override
-  String get puzzleThemeClearance => 'Sgombero';
-
-  @override
-  String get puzzleThemeClearanceDescription => 'Una mossa, spesso con tempo, che libera una casa, una colonna, una traversa o una diagonale per una successiva idea tattica.';
-
-  @override
-  String get puzzleThemeDefensiveMove => 'Mossa difensiva';
-
-  @override
-  String get puzzleThemeDefensiveMoveDescription => 'Una mossa precisa o una sequenza di mosse necessarie ad evitare perdite di materiale o di altri vantaggi.';
-
-  @override
-  String get puzzleThemeDeflection => 'Deviazione';
-
-  @override
-  String get puzzleThemeDeflectionDescription => 'Una mossa che rimuove un pezzo avversario da un compito, come ad esempio difendere una casa chiave.';
-
-  @override
-  String get puzzleThemeDiscoveredAttack => 'Attacco di scoperta';
-
-  @override
-  String get puzzleThemeDiscoveredAttackDescription => 'Mossa di un pezzo che precedentemente bloccava un attacco di un pezzo a lungo raggio, come ad esempio un cavallo che si sposta da una casa in fronte ad una torre.';
-
-  @override
-  String get puzzleThemeDoubleCheck => 'Doppio scacco';
-
-  @override
-  String get puzzleThemeDoubleCheckDescription => 'Scacco con due pezzi contemporaneamente, conseguente a un attacco di scoperta in cui sia il pezzo appena mosso che il pezzo scoperto attaccano il re avversario.';
-
-  @override
-  String get puzzleThemeEndgame => 'Finale';
-
-  @override
-  String get puzzleThemeEndgameDescription => 'Una tattica durante l\'ultima fase della partita.';
-
-  @override
-  String get puzzleThemeEnPassantDescription => 'Una tattica che coinvolge la regola dell\'en passant, in cui un pedone può catturare un pedone avversario che l\'ha superato usando la propria mossa iniziale di due caselle.';
-
-  @override
-  String get puzzleThemeExposedKing => 'Re esposto';
-
-  @override
-  String get puzzleThemeExposedKingDescription => 'Una tattica che coinvolge un re con pochi difensori vicini, il che spesso porta al matto.';
-
-  @override
-  String get puzzleThemeFork => 'Attacco doppio';
-
-  @override
-  String get puzzleThemeForkDescription => 'Una mossa in cui un pezzo attacca due pezzi avversari contemporaneamente.';
-
-  @override
-  String get puzzleThemeHangingPiece => 'Pezzo in presa';
-
-  @override
-  String get puzzleThemeHangingPieceDescription => 'Una tattica che coinvolge un pezzo indifeso o insufficientemente difeso, e che dunque può essere catturato.';
-
-  @override
-  String get puzzleThemeHookMate => 'Matto dell\'uncino';
-
-  @override
-  String get puzzleThemeHookMateDescription => 'Matto con torre, cavallo e pedone, con un pedone avversario che ostruisce il suo re.';
-
-  @override
-  String get puzzleThemeInterference => 'Interposizione';
-
-  @override
-  String get puzzleThemeInterferenceDescription => 'Spostamento di un pezzo tra due pezzi avversari per lasciare uno o entrambi i pezzi nemici senza difesa, come ad esempio un cavallo difeso tra due torri.';
-
-  @override
-  String get puzzleThemeIntermezzo => 'Intermezzo';
-
-  @override
-  String get puzzleThemeIntermezzoDescription => 'Esecuzione, prima della mossa più naturale, di un\'altra mossa che pone una minaccia più immediata, alla quale l\'avversario deve necessariamente reagire. Conosciuto anche come \"Zwischenzug\" o \"Mossa intermedia\".';
-
-  @override
-  String get puzzleThemeKnightEndgame => 'Finale di cavallo';
-
-  @override
-  String get puzzleThemeKnightEndgameDescription => 'Un finale con soli cavalli e pedoni.';
-
-  @override
-  String get puzzleThemeLong => 'Problema lungo';
-
-  @override
-  String get puzzleThemeLongDescription => 'Vittoria in tre mosse.';
-
-  @override
-  String get puzzleThemeMaster => 'Partite di Maestri';
-
-  @override
-  String get puzzleThemeMasterDescription => 'Problemi da partite giocate da scacchisti titolati.';
-
-  @override
-  String get puzzleThemeMasterVsMaster => 'Partite fra Maestri';
-
-  @override
-  String get puzzleThemeMasterVsMasterDescription => 'Problemi da partite giocate fra due scacchisti titolati.';
-
-  @override
-  String get puzzleThemeMate => 'Scacco matto';
-
-  @override
-  String get puzzleThemeMateDescription => 'Vinci la partita con stile.';
-
-  @override
-  String get puzzleThemeMateIn1 => 'Matto in 1';
-
-  @override
-  String get puzzleThemeMateIn1Description => 'Dai scacco matto in una mossa.';
-
-  @override
-  String get puzzleThemeMateIn2 => 'Matto in 2';
-
-  @override
-  String get puzzleThemeMateIn2Description => 'Dai scacco matto in due mosse.';
-
-  @override
-  String get puzzleThemeMateIn3 => 'Matto in 3';
-
-  @override
-  String get puzzleThemeMateIn3Description => 'Dai scacco matto in tre mosse.';
-
-  @override
-  String get puzzleThemeMateIn4 => 'Matto in 4';
-
-  @override
-  String get puzzleThemeMateIn4Description => 'Dai scacco matto in quattro mosse.';
-
-  @override
-  String get puzzleThemeMateIn5 => 'Matto in 5 o più mosse';
-
-  @override
-  String get puzzleThemeMateIn5Description => 'Trova una lunga sequenza di mosse per dare matto.';
-
-  @override
-  String get puzzleThemeMiddlegame => 'Mediogioco';
-
-  @override
-  String get puzzleThemeMiddlegameDescription => 'Una tattica durante la seconda fase della partita.';
-
-  @override
-  String get puzzleThemeOneMove => 'Problema da una mossa';
-
-  @override
-  String get puzzleThemeOneMoveDescription => 'Un problema lungo una sola mossa.';
-
-  @override
-  String get puzzleThemeOpening => 'Apertura';
-
-  @override
-  String get puzzleThemeOpeningDescription => 'Una tattica durante la prima fase della partita.';
-
-  @override
-  String get puzzleThemePawnEndgame => 'Finale di pedoni';
-
-  @override
-  String get puzzleThemePawnEndgameDescription => 'Un finale con soli pedoni.';
-
-  @override
-  String get puzzleThemePin => 'Inchiodatura';
-
-  @override
-  String get puzzleThemePinDescription => 'Una tattica in cui un pezzo non può muoversi senza scoprire un attacco ad un pezzo di maggior valore.';
-
-  @override
-  String get puzzleThemePromotion => 'Promozione';
-
-  @override
-  String get puzzleThemePromotionDescription => 'Un pedone che promuove o che minaccia di promuovere è la chiave della tattica.';
-
-  @override
-  String get puzzleThemeQueenEndgame => 'Finale di donna';
-
-  @override
-  String get puzzleThemeQueenEndgameDescription => 'Un finale con sole donne e pedoni.';
-
-  @override
-  String get puzzleThemeQueenRookEndgame => 'Finale di donna e torre';
-
-  @override
-  String get puzzleThemeQueenRookEndgameDescription => 'Un finale con sole donne, torri e pedoni.';
-
-  @override
-  String get puzzleThemeQueensideAttack => 'Attacco sull\'ala di donna';
-
-  @override
-  String get puzzleThemeQueensideAttackDescription => 'Un attacco al re avversario, dopo che ha arroccato lungo.';
-
-  @override
-  String get puzzleThemeQuietMove => 'Mossa calma';
-
-  @override
-  String get puzzleThemeQuietMoveDescription => 'Una mossa che non dà scacco e non cattura nulla, ma prepara una successiva minaccia inevitabile.';
-
-  @override
-  String get puzzleThemeRookEndgame => 'Finale di torre';
-
-  @override
-  String get puzzleThemeRookEndgameDescription => 'Un finale con sole torri e pedoni.';
-
-  @override
-  String get puzzleThemeSacrifice => 'Sacrificio';
-
-  @override
-  String get puzzleThemeSacrificeDescription => 'Una tattica che include la perdita di materiale nel breve termine per guadagnare un vantaggio dopo una serie di mosse forzate.';
-
-  @override
-  String get puzzleThemeShort => 'Problema breve';
-
-  @override
-  String get puzzleThemeShortDescription => 'Vittoria in due mosse.';
-
-  @override
-  String get puzzleThemeSkewer => 'Infilata';
-
-  @override
-  String get puzzleThemeSkewerDescription => 'Un tema che consiste in un pezzo di grande valore che viene attaccato e che si sposta, permettendo ad un pezzo dietro di esso di essere catturato o attaccato. Il contrario di un\'inchiodatura.';
-
-  @override
-  String get puzzleThemeSmotheredMate => 'Matto affogato';
-
-  @override
-  String get puzzleThemeSmotheredMateDescription => 'Uno scacco matto eseguito con un cavallo, in cui il re sotto scacco è incapace di spostarsi poiché circondato (\"affogato\") dai suoi stessi pezzi.';
-
-  @override
-  String get puzzleThemeSuperGM => 'Partite di Super-GM';
-
-  @override
-  String get puzzleThemeSuperGMDescription => 'Problemi da partite giocate dai migliori giocatori al mondo.';
-
-  @override
-  String get puzzleThemeTrappedPiece => 'Pezzo intrappolato';
-
-  @override
-  String get puzzleThemeTrappedPieceDescription => 'Un pezzo che non può evitare la cattura a causa delle sue mosse limitate.';
-
-  @override
-  String get puzzleThemeUnderPromotion => 'Sottopromozione';
-
-  @override
-  String get puzzleThemeUnderPromotionDescription => 'Promozione a cavallo, alfiere o torre.';
-
-  @override
-  String get puzzleThemeVeryLong => 'Problema lunghissimo';
-
-  @override
-  String get puzzleThemeVeryLongDescription => 'Vittoria in quattro o più mosse.';
-
-  @override
-  String get puzzleThemeXRayAttack => 'Attacco a raggi X';
-
-  @override
-  String get puzzleThemeXRayAttackDescription => 'Un pezzo che attacca o difende una casa attraverso un pezzo nemico.';
-
-  @override
-  String get puzzleThemeZugzwang => 'Zugzwang';
-
-  @override
-  String get puzzleThemeZugzwangDescription => 'L\'avversario è limitato nella sua scelta della mossa, e tutte le mosse possibili peggiorano la sua posizione.';
-
-  @override
-  String get puzzleThemeHealthyMix => 'Mix generale';
-
-  @override
-  String get puzzleThemeHealthyMixDescription => 'Un po\' di tutto. Nessuna aspettativa, affinché si possa rimanere pronti a qualsiasi cosa! Proprio come nelle partite vere.';
-
-  @override
-  String get puzzleThemePlayerGames => 'Partite tra giocatori';
-
-  @override
-  String get puzzleThemePlayerGamesDescription => 'Trova problemi tratti dalle tue partite o dalle partite di altri giocatori.';
-
-  @override
-  String puzzleThemePuzzleDownloadInformation(String param) {
-    return 'Questi problemi sono nel pubblico dominio e possono essere scaricati da $param.';
-  }
-
-  @override
-  String perfStatPerfStats(String param) {
-    return 'Statistiche di $param';
-  }
-
-  @override
-  String get perfStatViewTheGames => 'Visualizza le partite';
-
-  @override
-  String get perfStatProvisional => 'provvisorio';
-
-  @override
-  String get perfStatNotEnoughRatedGames => 'Non sono state giocate abbastanza partite classificate per stabilire un punteggio affidabile.';
-
-  @override
-  String perfStatProgressOverLastXGames(String param) {
-    return 'Progresso nelle ultime $param partite:';
-  }
-
-  @override
-  String perfStatRatingDeviation(String param) {
-    return 'Deviazione del punteggio: $param.';
-  }
-
-  @override
-  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
-    return 'Un valore inferiore indica che il punteggio è più stabile. Sopra $param1, il punteggio è considerato provvisorio. Per esser incluso nelle classifiche, questo valore dovrebbe essere inferiore a $param2 (scacchi standard) o $param3 (varianti).';
-  }
-
-  @override
-  String get perfStatTotalGames => 'Partite totali';
-
-  @override
-  String get perfStatRatedGames => 'Partite classificate';
-
-  @override
-  String get perfStatTournamentGames => 'Partite di torneo';
-
-  @override
-  String get perfStatBerserkedGames => 'Partite in berserk';
-
-  @override
-  String get perfStatTimeSpentPlaying => 'Tempo trascorso giocando';
-
-  @override
-  String get perfStatAverageOpponent => 'Punteggio medio degli avversari';
-
-  @override
-  String get perfStatVictories => 'Vittorie';
-
-  @override
-  String get perfStatDefeats => 'Sconfitte';
-
-  @override
-  String get perfStatDisconnections => 'Disconnessioni';
-
-  @override
-  String get perfStatNotEnoughGames => 'Non ci sono abbastanza partite giocate';
-
-  @override
-  String perfStatHighestRating(String param) {
-    return 'Punteggio più alto: $param';
-  }
-
-  @override
-  String perfStatLowestRating(String param) {
-    return 'Punteggio più basso: $param';
-  }
-
-  @override
-  String perfStatFromXToY(String param1, String param2) {
-    return 'da $param1 a $param2';
-  }
-
-  @override
-  String get perfStatWinningStreak => 'Serie di vittorie';
-
-  @override
-  String get perfStatLosingStreak => 'Serie di sconfitte';
-
-  @override
-  String perfStatLongestStreak(String param) {
-    return 'Serie più lunga: $param';
-  }
-
-  @override
-  String perfStatCurrentStreak(String param) {
-    return 'Serie attuale: $param';
-  }
-
-  @override
-  String get perfStatBestRated => 'Migliori vittorie classificate';
-
-  @override
-  String get perfStatGamesInARow => 'Partite giocate di fila';
-
-  @override
-  String get perfStatLessThanOneHour => 'Meno di un\'ora tra partite';
-
-  @override
-  String get perfStatMaxTimePlaying => 'Tempo massimo trascorso giocando';
-
-  @override
-  String get perfStatNow => 'ora';
-
-  @override
-  String get searchSearch => 'Cerca';
-
-  @override
-  String get settingsSettings => 'Impostazioni';
-
-  @override
-  String get settingsCloseAccount => 'Elimina account';
-
-  @override
-  String get settingsManagedAccountCannotBeClosed => 'Il tuo account è gestito esternamente e non può essere chiuso.';
-
-  @override
-  String get settingsClosingIsDefinitive => 'L\'eliminazione dell\'account è definitiva. Una volta cancellato non è più possibile tornare indietro. Sei sicuro?';
-
-  @override
-  String get settingsCantOpenSimilarAccount => 'Non potrai creare un nuovo account con lo stesso nome, nemmeno con diverse maiuscole/minuscole.';
-
-  @override
-  String get settingsChangedMindDoNotCloseAccount => 'Ci ho ripensato, non eliminare il mio account';
-
-  @override
-  String get settingsCloseAccountExplanation => 'Sei sicuro di voler eliminare il tuo account? L\'eliminazione del tuo account è un\'azione irreversibile. Non ti sarà MAI più possibile effettuare il login e la pagina del tuo profilo non sarà più accessibile.';
-
-  @override
-  String get settingsThisAccountIsClosed => 'Questo account è stato eliminato.';
-
-  @override
-  String get streamerLichessStreamers => 'Lichess streamer';
 
   @override
   String get stormMoveToStart => 'Fai una mossa per iniziare';
@@ -4628,7 +4674,6 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: '$count tentativi',
       one: '1 tentativo',
-      zero: '1 tentativo',
     );
     return '$_temp0';
   }
@@ -4640,20 +4685,16 @@ class AppLocalizationsIt extends AppLocalizations {
       locale: localeName,
       other: 'Ha fatto $count tentativi di $param2',
       one: 'Ha fatto un tentativo di $param2',
-      zero: 'Ha fatto un tentativo di $param2',
     );
     return '$_temp0';
   }
+
+  @override
+  String get streamerLichessStreamers => 'Lichess streamer';
 
   @override
   String get studyShareAndExport => 'Condividi & esporta';
 
   @override
   String get studyStart => 'Inizia';
-
-  @override
-  String get broadcastBroadcasts => 'Dirette';
-
-  @override
-  String get broadcastStartDate => 'Data di inizio nel tuo fuso orario';
 }

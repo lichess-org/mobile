@@ -7,6 +7,122 @@ class AppLocalizationsEt extends AppLocalizations {
   AppLocalizationsEt([String locale = 'et']) : super(locale);
 
   @override
+  String get mobileHomeTab => 'Home';
+
+  @override
+  String get mobilePuzzlesTab => 'Puzzles';
+
+  @override
+  String get mobileToolsTab => 'Tools';
+
+  @override
+  String get mobileWatchTab => 'Watch';
+
+  @override
+  String get mobileSettingsTab => 'Settings';
+
+  @override
+  String get mobileMustBeLoggedIn => 'You must be logged in to view this page.';
+
+  @override
+  String get mobileSystemColors => 'System colors';
+
+  @override
+  String get mobileFeedbackButton => 'Feedback';
+
+  @override
+  String get mobileOkButton => 'OK';
+
+  @override
+  String get mobileSettingsHapticFeedback => 'Haptic feedback';
+
+  @override
+  String get mobileSettingsImmersiveMode => 'Immersive mode';
+
+  @override
+  String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.';
+
+  @override
+  String get mobileNotFollowingAnyUser => 'You are not following any user.';
+
+  @override
+  String get mobileAllGames => 'All games';
+
+  @override
+  String get mobileRecentSearches => 'Recent searches';
+
+  @override
+  String get mobileClearButton => 'Clear';
+
+  @override
+  String mobilePlayersMatchingSearchTerm(String param) {
+    return 'Players with \"$param\"';
+  }
+
+  @override
+  String get mobileNoSearchResults => 'No results';
+
+  @override
+  String get mobileAreYouSure => 'Are you sure?';
+
+  @override
+  String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
+
+  @override
+  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of storm';
+
+  @override
+  String get mobileSharePuzzle => 'Share this puzzle';
+
+  @override
+  String get mobileShareGameURL => 'Share game URL';
+
+  @override
+  String get mobileShareGamePGN => 'Share PGN';
+
+  @override
+  String get mobileSharePositionAsFEN => 'Share position as FEN';
+
+  @override
+  String get mobileShowVariations => 'Show variations';
+
+  @override
+  String get mobileHideVariation => 'Hide variation';
+
+  @override
+  String get mobileShowComments => 'Show comments';
+
+  @override
+  String get mobilePuzzleStormConfirmEndRun => 'Do you want to end this run?';
+
+  @override
+  String get mobilePuzzleStormFilterNothingToShow => 'Nothing to show, please change the filters';
+
+  @override
+  String get mobileCancelTakebackOffer => 'Cancel takeback offer';
+
+  @override
+  String get mobileCancelDrawOffer => 'Cancel draw offer';
+
+  @override
+  String get mobileWaitingForOpponentToJoin => 'Waiting for opponent to join...';
+
+  @override
+  String get mobileBlindfoldMode => 'Blindfold';
+
+  @override
+  String get mobileLiveStreamers => 'Live streamers';
+
+  @override
+  String get mobileCustomGameJoinAGame => 'Join a game';
+
+  @override
+  String get mobileCorrespondenceClearSavedMove => 'Clear saved move';
+
+  @override
+  String get mobileSomethingWentWrong => 'Something went wrong.';
+
+  @override
   String get activityActivity => 'Aktiivsus';
 
   @override
@@ -27,7 +143,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Toeta Lichess.org\'i $count kuud $param2',
       one: 'Toeta Lichess.org\'i $count kuu $param2',
-      zero: 'Toeta Lichess.org\'i $count kuu $param2',
     );
     return '$_temp0';
   }
@@ -39,7 +154,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Harjutas $count seisu teemas $param2',
       one: 'Harjutas $count seisu teemas $param2',
-      zero: 'Harjutas $count seisu teemas $param2',
     );
     return '$_temp0';
   }
@@ -51,7 +165,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Lahendas $count taktikalist puslet',
       one: 'Lahendas $count taktikalise pusle',
-      zero: 'Lahendas $count taktikalise pusle',
     );
     return '$_temp0';
   }
@@ -63,7 +176,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Mängis $count $param2 mängu',
       one: 'Mängis $count $param2 mängu',
-      zero: 'Mängis $count $param2 mängu',
     );
     return '$_temp0';
   }
@@ -75,7 +187,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Postitas $count sõnumit foorumis $param2',
       one: 'Postitas $count sõnumi foorumis $param2',
-      zero: 'Postitas $count sõnumi foorumis $param2',
     );
     return '$_temp0';
   }
@@ -87,7 +198,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Mängis $count käiku',
       one: 'Mängis $count käigu',
-      zero: 'Mängis $count käigu',
     );
     return '$_temp0';
   }
@@ -99,7 +209,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'lõpetas $count kirjavahetusmängu',
       one: 'lõpetas $count kirjavahetusmängu',
-      zero: 'lõpetas $count kirjavahetusmängu',
     );
     return '$_temp0';
   }
@@ -111,7 +220,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Lõpetas $count kirjavahetusmängu',
       one: 'Lõpetas $count kirjavahetusmängu',
-      zero: 'Lõpetas $count kirjavahetusmängu',
     );
     return '$_temp0';
   }
@@ -123,7 +231,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Hakkas jälgima $count mängijat',
       one: 'Hakkas jälgima $count mängijat',
-      zero: 'Hakkas jälgima $count mängijat',
     );
     return '$_temp0';
   }
@@ -135,7 +242,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Sai $count uut jälgijat',
       one: 'Sai $count uue jälgija',
-      zero: 'Sai $count uue jälgija',
     );
     return '$_temp0';
   }
@@ -147,7 +253,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Korraldas $count simultaani',
       one: 'Korraldas $count simultaani',
-      zero: 'Korraldas $count simultaani',
     );
     return '$_temp0';
   }
@@ -159,7 +264,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Osales $count simultaanis',
       one: 'Osales $count simultaanis',
-      zero: 'Osales $count simultaanis',
     );
     return '$_temp0';
   }
@@ -171,7 +275,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Lõi $count uut õpet',
       one: 'Lõi $count uue õppe',
-      zero: 'Lõi $count uue õppe',
     );
     return '$_temp0';
   }
@@ -183,7 +286,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Võistles $count turniiril',
       one: 'Võistles $count turniiril',
-      zero: 'Võistles $count turniiril',
     );
     return '$_temp0';
   }
@@ -195,7 +297,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Saavutas #$count koha (parima $param2% seas) $param3 mänguga turniiril $param4',
       one: 'Saavutas #$count koha (parima $param2% seas) $param3 mänguga turniiril $param4',
-      zero: 'Saavutas #$count koha (parima $param2% seas) $param3 mänguga turniiril $param4',
     );
     return '$_temp0';
   }
@@ -207,7 +308,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Võistles $count šveitsi turniiril',
       one: 'Võistles $count šveitsi turniiril',
-      zero: 'Võistles $count šveitsi turniiril',
     );
     return '$_temp0';
   }
@@ -219,16 +319,15 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Liitus $count rühmaga',
       one: 'Liitus $count rühmaga',
-      zero: 'Liitus $count rühmaga',
     );
     return '$_temp0';
   }
 
   @override
-  String get contactContact => 'Kontakt';
+  String get broadcastBroadcasts => 'Otseülekanded';
 
   @override
-  String get contactContactLichess => 'Kontakteerumine';
+  String get broadcastStartDate => 'Alguskuupäev sinu ajavööndis';
 
   @override
   String challengeChallengesX(String param1) {
@@ -310,6 +409,1007 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String get challengeInviteLichessUser => 'Või kutsu Lichessi kasutaja:';
+
+  @override
+  String get contactContact => 'Kontakt';
+
+  @override
+  String get contactContactLichess => 'Kontakteerumine';
+
+  @override
+  String get patronDonate => 'Anneta';
+
+  @override
+  String get patronLichessPatron => 'Lichessi toetaja';
+
+  @override
+  String perfStatPerfStats(String param) {
+    return '$param statistika';
+  }
+
+  @override
+  String get perfStatViewTheGames => 'Vaata mängud';
+
+  @override
+  String get perfStatProvisional => 'ajutine';
+
+  @override
+  String get perfStatNotEnoughRatedGames => 'Pole mängitud piisavalt reitinguga mänge, et luua usaldusväärset reitingut.';
+
+  @override
+  String perfStatProgressOverLastXGames(String param) {
+    return 'Areng viimase $param mängu jooksul:';
+  }
+
+  @override
+  String perfStatRatingDeviation(String param) {
+    return 'Reitingunihe: $param.';
+  }
+
+  @override
+  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
+    return 'Väiksem väärtus tähendab, et reiting on stabiilsem. Rohkem kui $param1 tähendab ajutist reitingut. Rankingu saamiseks see väärtus peab olema väiksem kui $param2 (tavamale) või $param3 (variandid).';
+  }
+
+  @override
+  String get perfStatTotalGames => 'Mänge kokku';
+
+  @override
+  String get perfStatRatedGames => 'Reitinguga mängu';
+
+  @override
+  String get perfStatTournamentGames => 'Turniirimänge';
+
+  @override
+  String get perfStatBerserkedGames => 'Berserk mänge';
+
+  @override
+  String get perfStatTimeSpentPlaying => 'Mängimiseks kulutatud aeg';
+
+  @override
+  String get perfStatAverageOpponent => 'Keskmine vastane';
+
+  @override
+  String get perfStatVictories => 'Võite';
+
+  @override
+  String get perfStatDefeats => 'Kaotusi';
+
+  @override
+  String get perfStatDisconnections => 'Ühendus kaotatud';
+
+  @override
+  String get perfStatNotEnoughGames => 'Ei ole piisavalt palju mängitud';
+
+  @override
+  String perfStatHighestRating(String param) {
+    return 'Kõrgeim reiting: $param';
+  }
+
+  @override
+  String perfStatLowestRating(String param) {
+    return 'Madalaim reiting: $param';
+  }
+
+  @override
+  String perfStatFromXToY(String param1, String param2) {
+    return 'ajavahemikus $param1 - $param2';
+  }
+
+  @override
+  String get perfStatWinningStreak => 'Võitude seeria';
+
+  @override
+  String get perfStatLosingStreak => 'Kaotuste seeria';
+
+  @override
+  String perfStatLongestStreak(String param) {
+    return 'Pikim seeria: $param';
+  }
+
+  @override
+  String perfStatCurrentStreak(String param) {
+    return 'Praegune seeria: $param';
+  }
+
+  @override
+  String get perfStatBestRated => 'Parimad reitinguga võidud';
+
+  @override
+  String get perfStatGamesInARow => 'Järjestikusi mänge';
+
+  @override
+  String get perfStatLessThanOneHour => 'Mängude vahel vähem kui tund';
+
+  @override
+  String get perfStatMaxTimePlaying => 'Pikim aeg mängimas';
+
+  @override
+  String get perfStatNow => 'nüüd';
+
+  @override
+  String get preferencesPreferences => 'Sätted';
+
+  @override
+  String get preferencesDisplay => 'Kuva';
+
+  @override
+  String get preferencesPrivacy => 'Privaatsus';
+
+  @override
+  String get preferencesNotifications => 'Teavitused';
+
+  @override
+  String get preferencesPieceAnimation => 'Malendite liikumine';
+
+  @override
+  String get preferencesMaterialDifference => 'Materjali erinevus';
+
+  @override
+  String get preferencesBoardHighlights => 'Rõhutata viimast käiku ja tuld';
+
+  @override
+  String get preferencesPieceDestinations => 'Malendi sihtkohad (reeglipärased käigud ja eelkäigud)';
+
+  @override
+  String get preferencesBoardCoordinates => 'Laua koordinaadid (A-H, 1-8)';
+
+  @override
+  String get preferencesMoveListWhilePlaying => 'Käikude loend mängides';
+
+  @override
+  String get preferencesPgnPieceNotation => 'Käikude notatsioon';
+
+  @override
+  String get preferencesChessPieceSymbol => 'Malendi sümbol';
+
+  @override
+  String get preferencesPgnLetter => 'Täht (K, Q, R, B, N)';
+
+  @override
+  String get preferencesZenMode => 'Keskendumis mood';
+
+  @override
+  String get preferencesShowPlayerRatings => 'Kuva mängijate reitingud';
+
+  @override
+  String get preferencesShowFlairs => 'Show player flairs';
+
+  @override
+  String get preferencesExplainShowPlayerRatings => 'Kui valid \"Ei\", siis peidetakse kõikide mängijate reitingud, et saaksid paremini malele keskenduda. Partiidel on ikka reitingud, muutub ainult mida kuvatakse.';
+
+  @override
+  String get preferencesDisplayBoardResizeHandle => 'Näita laua suuruse muutmis suvandit';
+
+  @override
+  String get preferencesOnlyOnInitialPosition => 'Ainult algasendis';
+
+  @override
+  String get preferencesInGameOnly => 'In-game only';
+
+  @override
+  String get preferencesChessClock => 'Malekell';
+
+  @override
+  String get preferencesTenthsOfSeconds => 'Kümnendikku sekundit';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'Kui aega on jäänud < 10 sekundit';
+
+  @override
+  String get preferencesHorizontalGreenProgressBars => 'Horisontaalne roheline progressi riba';
+
+  @override
+  String get preferencesSoundWhenTimeGetsCritical => 'Heli kui aeg hakkab lõppema';
+
+  @override
+  String get preferencesGiveMoreTime => 'Anna lisaaega';
+
+  @override
+  String get preferencesGameBehavior => 'Mängu seaded';
+
+  @override
+  String get preferencesHowDoYouMovePieces => 'Kuidas malendeid liigutada?';
+
+  @override
+  String get preferencesClickTwoSquares => 'Vajuta kahele ruudule';
+
+  @override
+  String get preferencesDragPiece => 'Lohista malendit';
+
+  @override
+  String get preferencesBothClicksAndDrag => 'Mõlemad';
+
+  @override
+  String get preferencesPremovesPlayingDuringOpponentTurn => 'Eelkäik (käigu tegemine vastase käigu ajal)';
+
+  @override
+  String get preferencesTakebacksWithOpponentApproval => 'Tagasivõtmised (vastase nõusolekul)';
+
+  @override
+  String get preferencesInCasualGamesOnly => 'Ainult ilma reitinguta mängudes';
+
+  @override
+  String get preferencesPromoteToQueenAutomatically => 'Automaatselt edenda lipuks';
+
+  @override
+  String get preferencesExplainPromoteToQueenAutomatically => 'Hoia edendamise ajal <ctrl> klahvi all, et ajutiselt keelata automaatne edendamine';
+
+  @override
+  String get preferencesWhenPremoving => 'Eelkäiguga';
+
+  @override
+  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Kuuluta viik kolmekordsel kordusel automaatselt';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Kui aega on jäänud < 30 sekundit';
+
+  @override
+  String get preferencesMoveConfirmation => 'Käigu kinnitus';
+
+  @override
+  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Can be disabled during a game with the board menu';
+
+  @override
+  String get preferencesInCorrespondenceGames => 'Kirjavahetus mängud';
+
+  @override
+  String get preferencesCorrespondenceAndUnlimited => 'Kirjavahetus ja piiramatu';
+
+  @override
+  String get preferencesConfirmResignationAndDrawOffers => 'Kinnita alistumise ja viigi pakkumised';
+
+  @override
+  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Vangerdamise meetod';
+
+  @override
+  String get preferencesCastleByMovingTwoSquares => 'Liiguta kuningat kaks ruutu';
+
+  @override
+  String get preferencesCastleByMovingOntoTheRook => 'Liiguta kuningas vankri peale';
+
+  @override
+  String get preferencesInputMovesWithTheKeyboard => 'Sisesta käigud klaviatuuril';
+
+  @override
+  String get preferencesInputMovesWithVoice => 'Input moves with your voice';
+
+  @override
+  String get preferencesSnapArrowsToValidMoves => 'Liiguta nooled kehtivate käikude juurde';
+
+  @override
+  String get preferencesSayGgWpAfterLosingOrDrawing => 'Ütle kaotuse või viigi korral \"Good game, well played\" (Hea mäng, hästi mängitud)';
+
+  @override
+  String get preferencesYourPreferencesHaveBeenSaved => 'Teie eelistused on salvestatud.';
+
+  @override
+  String get preferencesScrollOnTheBoardToReplayMoves => 'Käikude kordamiseks keri laual';
+
+  @override
+  String get preferencesCorrespondenceEmailNotification => 'Igapäevane e-kiri, mis sisaldab pooleliolevaid kirjavahetusmänge';
+
+  @override
+  String get preferencesNotifyStreamStart => 'Striimija alustab otseülekannet';
+
+  @override
+  String get preferencesNotifyInboxMsg => 'Postkastis on uus sõnum';
+
+  @override
+  String get preferencesNotifyForumMention => 'Mainimised foorumis';
+
+  @override
+  String get preferencesNotifyInvitedStudy => 'Kutse uuringule';
+
+  @override
+  String get preferencesNotifyGameEvent => 'Kirimale mängu uuendused';
+
+  @override
+  String get preferencesNotifyChallenge => 'Väljakutsed';
+
+  @override
+  String get preferencesNotifyTournamentSoon => 'Turniir algab peatselt';
+
+  @override
+  String get preferencesNotifyTimeAlarm => 'Kirimale aeg hakkab lõppema';
+
+  @override
+  String get preferencesNotifyBell => 'Lichessi teavitus kellukesega';
+
+  @override
+  String get preferencesNotifyPush => 'Mobiiliteavitus, kui oled Lichessist eemal';
+
+  @override
+  String get preferencesNotifyWeb => 'Brauser';
+
+  @override
+  String get preferencesNotifyDevice => 'Seade';
+
+  @override
+  String get preferencesBellNotificationSound => 'Teavituste heli';
+
+  @override
+  String get puzzlePuzzles => 'Pusled';
+
+  @override
+  String get puzzlePuzzleThemes => 'Pusle teemad';
+
+  @override
+  String get puzzleRecommended => 'Soovitame';
+
+  @override
+  String get puzzlePhases => 'Etapid';
+
+  @override
+  String get puzzleMotifs => 'Motiivid';
+
+  @override
+  String get puzzleAdvanced => 'Edasijõudnutele';
+
+  @override
+  String get puzzleLengths => 'Pikkused';
+
+  @override
+  String get puzzleMates => 'Matid';
+
+  @override
+  String get puzzleGoals => 'Eesmärgid';
+
+  @override
+  String get puzzleOrigin => 'Allikas';
+
+  @override
+  String get puzzleSpecialMoves => 'Erilised käigud';
+
+  @override
+  String get puzzleDidYouLikeThisPuzzle => 'Kas sulle meeldis see pusle?';
+
+  @override
+  String get puzzleVoteToLoadNextOne => 'Hääleta, nii saad edasi!';
+
+  @override
+  String get puzzleUpVote => 'Hääleta poolt';
+
+  @override
+  String get puzzleDownVote => 'Hääleta vastu';
+
+  @override
+  String get puzzleYourPuzzleRatingWillNotChange => 'Teie pusle reiting ei muutu. Pidage meeles, et pusled ei ole võistlus. Teie reiting aitab valida kõige sobilikumad pusled olenevalt teie oskustele.';
+
+  @override
+  String get puzzleFindTheBestMoveForWhite => 'Leia parim käik valgele.';
+
+  @override
+  String get puzzleFindTheBestMoveForBlack => 'Leia parim käik mustale.';
+
+  @override
+  String get puzzleToGetPersonalizedPuzzles => 'Saa personaalseid puslesid:';
+
+  @override
+  String puzzlePuzzleId(String param) {
+    return '$param ülesanne';
+  }
+
+  @override
+  String get puzzlePuzzleOfTheDay => 'Päevaülesanne';
+
+  @override
+  String get puzzleDailyPuzzle => 'Päeva pusle';
+
+  @override
+  String get puzzleClickToSolve => 'Lahendamiseks vajuta';
+
+  @override
+  String get puzzleGoodMove => 'Hea käik';
+
+  @override
+  String get puzzleBestMove => 'Parim käik!';
+
+  @override
+  String get puzzleKeepGoing => 'Jätka samas vaimus…';
+
+  @override
+  String get puzzlePuzzleSuccess => 'Edukas!';
+
+  @override
+  String get puzzlePuzzleComplete => 'Pusle lahendatud!';
+
+  @override
+  String get puzzleByOpenings => 'By openings';
+
+  @override
+  String get puzzlePuzzlesByOpenings => 'Puzzles by openings';
+
+  @override
+  String get puzzleOpeningsYouPlayedTheMost => 'Openings you played the most in rated games';
+
+  @override
+  String get puzzleUseFindInPage => 'Use \"Find in page\" in the browser menu to find your favourite opening!';
+
+  @override
+  String get puzzleUseCtrlF => 'Use Ctrl+f to find your favourite opening!';
+
+  @override
+  String get puzzleNotTheMove => 'See ei ole õige käik!';
+
+  @override
+  String get puzzleTrySomethingElse => 'Proovi midagi muud.';
+
+  @override
+  String puzzleRatingX(String param) {
+    return 'Reiting: $param';
+  }
+
+  @override
+  String get puzzleHidden => 'peidetud';
+
+  @override
+  String puzzleFromGameLink(String param) {
+    return '$param mängust';
+  }
+
+  @override
+  String get puzzleContinueTraining => 'Jätka harjutamist';
+
+  @override
+  String get puzzleDifficultyLevel => 'Raskusaste';
+
+  @override
+  String get puzzleNormal => 'Tavaline';
+
+  @override
+  String get puzzleEasier => 'Kerge';
+
+  @override
+  String get puzzleEasiest => 'Väga kerge';
+
+  @override
+  String get puzzleHarder => 'Raske';
+
+  @override
+  String get puzzleHardest => 'Väga raske';
+
+  @override
+  String get puzzleExample => 'Näide';
+
+  @override
+  String get puzzleAddAnotherTheme => 'Lisa teine teema';
+
+  @override
+  String get puzzleNextPuzzle => 'Järgmine pusle';
+
+  @override
+  String get puzzleJumpToNextPuzzleImmediately => 'Mine kohe järgmise pusle juurde';
+
+  @override
+  String get puzzlePuzzleDashboard => 'Puslepaneel';
+
+  @override
+  String get puzzleImprovementAreas => 'Paranda neid';
+
+  @override
+  String get puzzleStrengths => 'Tugevused';
+
+  @override
+  String get puzzleHistory => 'Puslede ajalugu';
+
+  @override
+  String get puzzleSolved => 'lahendatud';
+
+  @override
+  String get puzzleFailed => 'ebaõnnestus';
+
+  @override
+  String get puzzleStreakDescription => 'Lahenda järjest keerukamaid puslesid ja suurenda oma võitude seeriat. Kella ei ole, seega võta rahulikult. Üks vale samm ja on mäng läbi! Kuid sa võid ühe käigu sessiooni kohta vahele jätta.';
+
+  @override
+  String puzzleYourStreakX(String param) {
+    return 'Praegune seeria: $param';
+  }
+
+  @override
+  String get puzzleStreakSkipExplanation => 'Jäta see käik vahele, et säilitada oma seeria! Toimib ainult üks kord sessiooni kohta.';
+
+  @override
+  String get puzzleContinueTheStreak => 'Jätka seeriat';
+
+  @override
+  String get puzzleNewStreak => 'Uus seeria';
+
+  @override
+  String get puzzleFromMyGames => 'Minu mängudest';
+
+  @override
+  String get puzzleLookupOfPlayer => 'Otsi puslesid mängija partiidest';
+
+  @override
+  String puzzleFromXGames(String param) {
+    return 'Pusled $param mängudest';
+  }
+
+  @override
+  String get puzzleSearchPuzzles => 'Otsi puslesid';
+
+  @override
+  String get puzzleFromMyGamesNone => 'Sul ei ole puslesid andmebaasis, aga oled Lichessile ikkagi tähtis.\n\nMängi kiirmalet või klassikalist malet tõstmaks võimalusi, et lisatakse pusle sinu mängust!';
+
+  @override
+  String puzzleFromXGamesFound(String param1, String param2) {
+    return '$param1 puslet leitud $param2 mängudes';
+  }
+
+  @override
+  String get puzzlePuzzleDashboardDescription => 'Treeni, analüüsi, täiusta';
+
+  @override
+  String puzzlePercentSolved(String param) {
+    return '$param lahendatud';
+  }
+
+  @override
+  String get puzzleNoPuzzlesToShow => 'Midagi pole näidata, lahenda ennem mõned pusled!';
+
+  @override
+  String get puzzleImprovementAreasDescription => 'Harjuta neid, et optimeerida oma edusamme!';
+
+  @override
+  String get puzzleStrengthDescription => 'Sa lahendad kõige paremini neid teemasid';
+
+  @override
+  String puzzlePlayedXTimes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Mängitud $count korda',
+      one: 'Mängitud $count kord',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsBelowYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count points below your puzzle rating',
+      one: 'One point below your puzzle rating',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsAboveYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count points above your puzzle rating',
+      one: 'One point above your puzzle rating',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPlayed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count mängitud',
+      one: '$count mängitud',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbToReplay(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count kodamiseks',
+      one: '$count kodamiseks',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get puzzleThemeAdvancedPawn => 'Arenenud ettur';
+
+  @override
+  String get puzzleThemeAdvancedPawnDescription => 'Üks etturitest on sügaval vastase poolel, võib-olla kohe valmis muunduma.';
+
+  @override
+  String get puzzleThemeAdvantage => 'Eelis';
+
+  @override
+  String get puzzleThemeAdvantageDescription => 'Haara võimalusest kinni, et saavutada otsustav edu. (200cp ≤ eval ≤ 600cp)';
+
+  @override
+  String get puzzleThemeAnastasiaMate => 'Anastasia matt';
+
+  @override
+  String get puzzleThemeAnastasiaMateDescription => 'Ratsu ja vanker või lipp teevad koostööd, et panna vastase kuningas lõksu laua ääre ja oma malendi vahele.';
+
+  @override
+  String get puzzleThemeArabianMate => 'Araabia matt';
+
+  @override
+  String get puzzleThemeArabianMateDescription => 'Ratsu ja vanker teevad koostööd vastase kuninga lõksu saamiseks laua nurgas.';
+
+  @override
+  String get puzzleThemeAttackingF2F7 => 'Rünnak f2 või f7';
+
+  @override
+  String get puzzleThemeAttackingF2F7Description => 'f2 või f7 etturile suunatud rünnak, sarnaselt fried liver avangule.';
+
+  @override
+  String get puzzleThemeAttraction => 'Ahvatlus';
+
+  @override
+  String get puzzleThemeAttractionDescription => 'An exchange or sacrifice encouraging or forcing an opponent piece to a square that allows a follow-up tactic.';
+
+  @override
+  String get puzzleThemeBackRankMate => 'Tagumise rea matt';
+
+  @override
+  String get puzzleThemeBackRankMateDescription => 'Checkmate the king on the home rank, when it is trapped there by its own pieces.';
+
+  @override
+  String get puzzleThemeBishopEndgame => 'Odalõppmäng';
+
+  @override
+  String get puzzleThemeBishopEndgameDescription => 'Lõppmäng ainult odade ja etturitega.';
+
+  @override
+  String get puzzleThemeBodenMate => 'Bodeni matt';
+
+  @override
+  String get puzzleThemeBodenMateDescription => 'Kaks ründavat oda ristuvatel diagonaalidel tekitavad matiseisundi kuningale, mille liikumist takistavad omad malendid.';
+
+  @override
+  String get puzzleThemeCastling => 'Vangerdus';
+
+  @override
+  String get puzzleThemeCastlingDescription => 'Too kuningas ohust eemale ja valmista vanker rünnakuks ette.';
+
+  @override
+  String get puzzleThemeCapturingDefender => 'Capture the defender';
+
+  @override
+  String get puzzleThemeCapturingDefenderDescription => 'Removing a piece that is critical to defence of another piece, allowing the now undefended piece to be captured on a following move.';
+
+  @override
+  String get puzzleThemeCrushing => 'Crushing';
+
+  @override
+  String get puzzleThemeCrushingDescription => 'Spot the opponent blunder to obtain a crushing advantage. (eval ≥ 600cp)';
+
+  @override
+  String get puzzleThemeDoubleBishopMate => 'Kahe oda matt';
+
+  @override
+  String get puzzleThemeDoubleBishopMateDescription => 'Kaks ründavat oda kõrvalistel diagonaalidel tekitavad matiseisundi kuningale, kelle liikumist takistavad omad vigurid.';
+
+  @override
+  String get puzzleThemeDovetailMate => 'Cozio matt';
+
+  @override
+  String get puzzleThemeDovetailMateDescription => 'A queen delivers mate to an adjacent king, whose only two escape squares are obstructed by friendly pieces.';
+
+  @override
+  String get puzzleThemeEquality => 'Võrdsus';
+
+  @override
+  String get puzzleThemeEqualityDescription => 'Come back from a losing position, and secure a draw or a balanced position. (eval ≤ 200cp)';
+
+  @override
+  String get puzzleThemeKingsideAttack => 'Kuningapoolne rünnak';
+
+  @override
+  String get puzzleThemeKingsideAttackDescription => 'Rünnak vastase kuningale pärast vastase vangerdamist kuningapoolele.';
+
+  @override
+  String get puzzleThemeClearance => 'Clearance';
+
+  @override
+  String get puzzleThemeClearanceDescription => 'A move, often with tempo, that clears a square, file or diagonal for a follow-up tactical idea.';
+
+  @override
+  String get puzzleThemeDefensiveMove => 'Kaitsev käik';
+
+  @override
+  String get puzzleThemeDefensiveMoveDescription => 'Täpne käik või mitu käiku, mis on vaja vältimaks materiali kaotamist või teist eelist.';
+
+  @override
+  String get puzzleThemeDeflection => 'Deflection';
+
+  @override
+  String get puzzleThemeDeflectionDescription => 'A move that distracts an opponent piece from another duty that it performs, such as guarding a key square. Sometimes also called \"overloading\".';
+
+  @override
+  String get puzzleThemeDiscoveredAttack => 'Discovered attack';
+
+  @override
+  String get puzzleThemeDiscoveredAttackDescription => 'Moving a piece (such as a knight), that previously blocked an attack by a long range piece (such as a rook), out of the way of that piece.';
+
+  @override
+  String get puzzleThemeDoubleCheck => 'Topelt tuli';
+
+  @override
+  String get puzzleThemeDoubleCheckDescription => 'Checking with two pieces at once, as a result of a discovered attack where both the moving piece and the unveiled piece attack the opponent\'s king.';
+
+  @override
+  String get puzzleThemeEndgame => 'Lõppmäng';
+
+  @override
+  String get puzzleThemeEndgameDescription => 'Taktika mängu viimases faasis.';
+
+  @override
+  String get puzzleThemeEnPassantDescription => 'Taktika, kus rakendatakse en passant reeglit, kus ettur saab lüüa mööda läinud vastase etturit kasutades algset kahe ruutu käiku.';
+
+  @override
+  String get puzzleThemeExposedKing => 'Paljas kuningas';
+
+  @override
+  String get puzzleThemeExposedKingDescription => 'Taktika seoses kuningaga kellel on vähe kaitsjaid enda ümber, lõpeb tihti mattiga.';
+
+  @override
+  String get puzzleThemeFork => 'Kahvel';
+
+  @override
+  String get puzzleThemeForkDescription => 'Käik, millega mängija ründab oma malendiga korraga mitut vastase malendit.';
+
+  @override
+  String get puzzleThemeHangingPiece => 'Kaitseta malend';
+
+  @override
+  String get puzzleThemeHangingPieceDescription => 'Taktika, kus vastase malend on kaitsetu või halvasti kaitstud ja tasuta löödav.';
+
+  @override
+  String get puzzleThemeHookMate => 'Hook mate';
+
+  @override
+  String get puzzleThemeHookMateDescription => 'Checkmate with a rook, knight, and pawn along with one enemy pawn to limit the enemy king\'s escape.';
+
+  @override
+  String get puzzleThemeInterference => 'Interference';
+
+  @override
+  String get puzzleThemeInterferenceDescription => 'Moving a piece between two opponent pieces to leave one or both opponent pieces undefended, such as a knight on a defended square between two rooks.';
+
+  @override
+  String get puzzleThemeIntermezzo => 'Intermezzo';
+
+  @override
+  String get puzzleThemeIntermezzoDescription => 'Instead of playing the expected move, first interpose another move posing an immediate threat that the opponent must answer. Also known as \"Zwischenzug\" or \"In between\".';
+
+  @override
+  String get puzzleThemeKnightEndgame => 'Ratsulõppmäng';
+
+  @override
+  String get puzzleThemeKnightEndgameDescription => 'Lõppmäng ainult ratsude ja etturitega.';
+
+  @override
+  String get puzzleThemeLong => 'Pikk ülesanne';
+
+  @override
+  String get puzzleThemeLongDescription => 'Kolm käiku võiduni.';
+
+  @override
+  String get puzzleThemeMaster => 'Meistrite mängud';
+
+  @override
+  String get puzzleThemeMasterDescription => 'Ülesanded mängudest, mida on mänginud tiitlitega mängijad.';
+
+  @override
+  String get puzzleThemeMasterVsMaster => 'Meister meistri vastu';
+
+  @override
+  String get puzzleThemeMasterVsMasterDescription => 'Ülesanded kahe tiitli saanud mängija vahelistest mängudest.';
+
+  @override
+  String get puzzleThemeMate => 'Matt';
+
+  @override
+  String get puzzleThemeMateDescription => 'Võida mäng stiiliga.';
+
+  @override
+  String get puzzleThemeMateIn1 => 'Matt 1 käiguga';
+
+  @override
+  String get puzzleThemeMateIn1Description => 'Soorita matt ühe käiguga.';
+
+  @override
+  String get puzzleThemeMateIn2 => 'Matt 2 käiguga';
+
+  @override
+  String get puzzleThemeMateIn2Description => 'Soorita matt kahe käiguga.';
+
+  @override
+  String get puzzleThemeMateIn3 => 'Matt 3 käiguga';
+
+  @override
+  String get puzzleThemeMateIn3Description => 'Soorita matt kolme käiguga.';
+
+  @override
+  String get puzzleThemeMateIn4 => 'Matt 4 käiguga';
+
+  @override
+  String get puzzleThemeMateIn4Description => 'Soorita matt nelja käiguga.';
+
+  @override
+  String get puzzleThemeMateIn5 => 'Matt 5+ käiguga';
+
+  @override
+  String get puzzleThemeMateIn5Description => 'Leia mitme käiguga matt.';
+
+  @override
+  String get puzzleThemeMiddlegame => 'Keskmäng';
+
+  @override
+  String get puzzleThemeMiddlegameDescription => 'Taktika mängu teises faasis.';
+
+  @override
+  String get puzzleThemeOneMove => 'Ühekäiguline ülesanne';
+
+  @override
+  String get puzzleThemeOneMoveDescription => 'Ülesanne, mille lahendamiseks on vaja ainult ühte liigutust.';
+
+  @override
+  String get puzzleThemeOpening => 'Avang';
+
+  @override
+  String get puzzleThemeOpeningDescription => 'Taktika mängu esimeses faasis.';
+
+  @override
+  String get puzzleThemePawnEndgame => 'Etturilõppmäng';
+
+  @override
+  String get puzzleThemePawnEndgameDescription => 'Lõppmäng ainult etturitega.';
+
+  @override
+  String get puzzleThemePin => 'Sidumine';
+
+  @override
+  String get puzzleThemePinDescription => 'Taktika, kus malendi tulejoonel oleva vastaspoole malend ei saa liikuda, sest ära liikumise korral satub tulejoone alla väärtuslikum malend.';
+
+  @override
+  String get puzzleThemePromotion => 'Muundamine';
+
+  @override
+  String get puzzleThemePromotionDescription => 'Muunda oma ettur lipuks või teiseks viguriks.';
+
+  @override
+  String get puzzleThemeQueenEndgame => 'Lipulõppmäng';
+
+  @override
+  String get puzzleThemeQueenEndgameDescription => 'Lõppmäng ainult lippude ja etturitega.';
+
+  @override
+  String get puzzleThemeQueenRookEndgame => 'Lipp ja vanker';
+
+  @override
+  String get puzzleThemeQueenRookEndgameDescription => 'Lõppmäng ainult lippude, vankrite ja etturitega.';
+
+  @override
+  String get puzzleThemeQueensideAttack => 'Lipupoolne rünnak';
+
+  @override
+  String get puzzleThemeQueensideAttackDescription => 'Rünnak vastase kuningale pärast vastase vangerdamist lipupoolele.';
+
+  @override
+  String get puzzleThemeQuietMove => 'Quiet move';
+
+  @override
+  String get puzzleThemeQuietMoveDescription => 'A move that does neither make a check or capture, nor an immediate threat to capture, but does prepare a more hidden unavoidable threat for a later move.';
+
+  @override
+  String get puzzleThemeRookEndgame => 'Vankrilõppmäng';
+
+  @override
+  String get puzzleThemeRookEndgameDescription => 'Lõppmäng ainult vankrite ja etturitega.';
+
+  @override
+  String get puzzleThemeSacrifice => 'Ohverdus';
+
+  @override
+  String get puzzleThemeSacrificeDescription => 'Taktika, mis põhineb malendi äraandmisel. Eesmärk on saavutada eelis mõne sunnitud käigu järel.';
+
+  @override
+  String get puzzleThemeShort => 'Lühike ülesanne';
+
+  @override
+  String get puzzleThemeShortDescription => 'Kaks käiku võiduni.';
+
+  @override
+  String get puzzleThemeSkewer => 'Tagurpidisidumine';
+
+  @override
+  String get puzzleThemeSkewerDescription => 'A motif involving a high value piece being attacked, moving out the way, and allowing a lower value piece behind it to be captured or attacked, the inverse of a pin.';
+
+  @override
+  String get puzzleThemeSmotheredMate => 'Umbmatt';
+
+  @override
+  String get puzzleThemeSmotheredMateDescription => 'A checkmate delivered by a knight in which the mated king is unable to move because it is surrounded (or smothered) by its own pieces.';
+
+  @override
+  String get puzzleThemeSuperGM => 'Supersuurmeistrite mängud';
+
+  @override
+  String get puzzleThemeSuperGMDescription => 'Ülesanded mängudest maailma parimate mängijate vahel.';
+
+  @override
+  String get puzzleThemeTrappedPiece => 'Lõksus malend';
+
+  @override
+  String get puzzleThemeTrappedPieceDescription => 'A piece is unable to escape capture as it has limited moves.';
+
+  @override
+  String get puzzleThemeUnderPromotion => 'Underpromotion';
+
+  @override
+  String get puzzleThemeUnderPromotionDescription => 'Promotion to a knight, bishop, or rook.';
+
+  @override
+  String get puzzleThemeVeryLong => 'Väga pikk ülesanne';
+
+  @override
+  String get puzzleThemeVeryLongDescription => 'Four moves or more to win.';
+
+  @override
+  String get puzzleThemeXRayAttack => 'X-Ray attack';
+
+  @override
+  String get puzzleThemeXRayAttackDescription => 'A piece attacks or defends a square, through an enemy piece.';
+
+  @override
+  String get puzzleThemeZugzwang => 'Vahekäik';
+
+  @override
+  String get puzzleThemeZugzwangDescription => 'Vastasel on piiratud võimalused teha lubatud käike ja kõik halvendavad vastase olukorda.';
+
+  @override
+  String get puzzleThemeHealthyMix => 'Tervislik segu';
+
+  @override
+  String get puzzleThemeHealthyMixDescription => 'Natuke kõike. Kunagi ei tea mida oodata ehk ole valmis kõigeks! Täpselt nagu päris mängudes.';
+
+  @override
+  String get puzzleThemePlayerGames => 'Player games';
+
+  @override
+  String get puzzleThemePlayerGamesDescription => 'Lookup puzzles generated from your games, or from another player\'s games.';
+
+  @override
+  String puzzleThemePuzzleDownloadInformation(String param) {
+    return 'These puzzles are in the public domain, and can be downloaded from $param.';
+  }
+
+  @override
+  String get searchSearch => 'Otsi';
+
+  @override
+  String get settingsSettings => 'Seaded';
+
+  @override
+  String get settingsCloseAccount => 'Sulge konto';
+
+  @override
+  String get settingsManagedAccountCannotBeClosed => 'Sinu konto on valve all ja seda ei saa sulgeda.';
+
+  @override
+  String get settingsClosingIsDefinitive => 'Sulgemist ei saa tagasi võtta. Oled sa kindel?';
+
+  @override
+  String get settingsCantOpenSimilarAccount => 'Uut samanimelist kontot ei saa luua, isegi kui sümbolite register on erinev.';
+
+  @override
+  String get settingsChangedMindDoNotCloseAccount => 'Ma muutsin meelt, ärge sulgege kontot';
+
+  @override
+  String get settingsCloseAccountExplanation => 'Kas olete kindel, et soovite oma konto sulgeda? Konto sulgemine on pöördumatu. Sellesse EI SAA ENAM KUNAGI siseneda.';
+
+  @override
+  String get settingsThisAccountIsClosed => 'See konto on suletud.';
 
   @override
   String get playWithAFriend => 'Mängi sõbraga';
@@ -512,6 +1612,12 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String get deleteFromHere => 'Kustuta alates siit';
+
+  @override
+  String get collapseVariations => 'Collapse variations';
+
+  @override
+  String get expandVariations => 'Expand variations';
 
   @override
   String get forceVariation => 'Tee variatsiooniks';
@@ -1371,15 +2477,6 @@ class AppLocalizationsEt extends AppLocalizations {
   String get emptyTournamentName => 'Jäta tühjaks, et nimetada turniir juhusliku suurmeistri järgi.';
 
   @override
-  String get recommendNotTouching => 'Me ei soovita neid muuta.';
-
-  @override
-  String get fewerPlayers => 'Kui sa lisad osalemiseks tingimusi, siis osaleb turniiril vähem inimesi.';
-
-  @override
-  String get showAdvancedSettings => 'Näita täpsemaid sätteid';
-
-  @override
   String get makePrivateTournament => 'Tee turniir privaatseks ja piira juurdepääsu parooliga';
 
   @override
@@ -1509,10 +2606,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get editProfile => 'Muuda profiili';
 
   @override
-  String get firstName => 'Eesnimi';
-
-  @override
-  String get lastName => 'Perekonnanimi';
+  String get realName => 'Real name';
 
   @override
   String get setFlair => 'Set your flair';
@@ -1641,13 +2735,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get cheat => 'Sohk';
 
   @override
-  String get insult => 'Solvang';
-
-  @override
   String get troll => 'Troll';
-
-  @override
-  String get ratingManipulation => 'Reitingu manipulatsioon';
 
   @override
   String get other => 'Muu';
@@ -1754,6 +2842,9 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String get outsideTheBoard => 'Lauast väljas';
+
+  @override
+  String get allSquaresOfTheBoard => 'All squares of the board';
 
   @override
   String get onSlowGames => 'Aeglastes mängudes';
@@ -2962,7 +4053,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Vastane lahkus mängust. Saad kuulutada ennast võitjaks $count sekundi pärast.',
       one: 'Vastane lahkus mängust. Saate panna vastase alistuma $count sekundi pärast.',
-      zero: 'Vastane lahkus mängust. Saate panna vastase alistuma $count sekundi pärast.',
     );
     return '$_temp0';
   }
@@ -2974,7 +4064,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Šahh ja matt $count käiguga',
       one: 'Šahh ja Matt $count käiguga',
-      zero: 'Šahh ja Matt $count käiguga',
     );
     return '$_temp0';
   }
@@ -2986,7 +4075,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count prohmakat',
       one: '$count prohmakas',
-      zero: '$count prohmakas',
     );
     return '$_temp0';
   }
@@ -2998,7 +4086,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count viga',
       one: '$count viga',
-      zero: '$count viga',
     );
     return '$_temp0';
   }
@@ -3010,7 +4097,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count ebatäpsust',
       one: '$count ebatäpsus',
-      zero: '$count ebatäpsus',
     );
     return '$_temp0';
   }
@@ -3022,7 +4108,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count mängijat',
       one: '$count mängija',
-      zero: '$count mängija',
     );
     return '$_temp0';
   }
@@ -3034,7 +4119,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count mängu',
       one: '$count mäng',
-      zero: '$count mäng',
     );
     return '$_temp0';
   }
@@ -3046,7 +4130,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count rating over $param2 games',
       one: '$count rating over $param2 game',
-      zero: '$count rating over $param2 game',
     );
     return '$_temp0';
   }
@@ -3058,7 +4141,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count mängude järjehoidjad',
       one: '$count mängu järjehoidja',
-      zero: '$count mängu järjehoidja',
     );
     return '$_temp0';
   }
@@ -3070,7 +4152,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count päeva',
       one: '$count päev',
-      zero: '$count päev',
     );
     return '$_temp0';
   }
@@ -3082,7 +4163,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count tundi',
       one: '$count tund',
-      zero: '$count tund',
     );
     return '$_temp0';
   }
@@ -3094,7 +4174,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count minutit',
       one: '$count minut',
-      zero: '$count minut',
     );
     return '$_temp0';
   }
@@ -3106,7 +4185,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Reitingut uuendatakse iga $count minuti tagant',
       one: 'Reitingut uuendatakse iga minuti tagant',
-      zero: 'Reitingut uuendatakse iga minuti tagant',
     );
     return '$_temp0';
   }
@@ -3118,7 +4196,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count ülesannet',
       one: '$count ülesanne',
-      zero: '$count ülesanne',
     );
     return '$_temp0';
   }
@@ -3130,7 +4207,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count mängu sinuga',
       one: '$count mäng sinuga',
-      zero: '$count mäng sinuga',
     );
     return '$_temp0';
   }
@@ -3142,7 +4218,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count reitinguga',
       one: '$count reitinguga',
-      zero: '$count reitinguga',
     );
     return '$_temp0';
   }
@@ -3154,7 +4229,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count võitu',
       one: '$count võit',
-      zero: '$count võit',
     );
     return '$_temp0';
   }
@@ -3166,7 +4240,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count kaotust',
       one: '$count kaotus',
-      zero: '$count kaotus',
     );
     return '$_temp0';
   }
@@ -3178,7 +4251,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count viiki',
       one: '$count viik',
-      zero: '$count viik',
     );
     return '$_temp0';
   }
@@ -3190,7 +4262,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count mängimas',
       one: '$count mängimas',
-      zero: '$count mängimas',
     );
     return '$_temp0';
   }
@@ -3202,7 +4273,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Lisa $count sekundit',
       one: 'Lisa $count sekund',
-      zero: 'Lisa $count sekund',
     );
     return '$_temp0';
   }
@@ -3214,7 +4284,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count turniiri punkti',
       one: '$count turniiri punkt',
-      zero: '$count turniiri punkt',
     );
     return '$_temp0';
   }
@@ -3226,7 +4295,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count uuringut',
       one: '$count uuring',
-      zero: '$count uuring',
     );
     return '$_temp0';
   }
@@ -3238,7 +4306,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count simuls',
       one: '$count simul',
-      zero: '$count simul',
     );
     return '$_temp0';
   }
@@ -3250,7 +4317,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '≥ $count reitinguga mängu',
       one: '≥ $count reitinguga mäng',
-      zero: '≥ $count reitinguga mäng',
     );
     return '$_temp0';
   }
@@ -3262,7 +4328,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '≥ $count $param2 reitinguga mängu',
       one: '≥ $count $param2 reitinguga mäng',
-      zero: '≥ $count $param2 reitinguga mäng',
     );
     return '$_temp0';
   }
@@ -3274,7 +4339,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Peate mängima veel $count $param2 reitinguga mängu',
       one: 'Peate mängima veel $count $param2 reitinguga mängu',
-      zero: 'Peate mängima veel $count $param2 reitinguga mängu',
     );
     return '$_temp0';
   }
@@ -3286,7 +4350,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Peate veel mängima $count reitinguga mängu',
       one: 'Peate veel mängima $count reitinguga mängu',
-      zero: 'Peate veel mängima $count reitinguga mängu',
     );
     return '$_temp0';
   }
@@ -3298,7 +4361,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count Imporditud mängu',
       one: '$count Imporditud mäng',
-      zero: '$count Imporditud mäng',
     );
     return '$_temp0';
   }
@@ -3310,7 +4372,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count sõpra on kohal',
       one: '$count sõber on kohal',
-      zero: '$count sõber on kohal',
     );
     return '$_temp0';
   }
@@ -3322,7 +4383,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count jälgijat',
       one: '$count jälgija',
-      zero: '$count jälgija',
     );
     return '$_temp0';
   }
@@ -3334,7 +4394,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count jälgimist',
       one: '$count jälgimine',
-      zero: '$count jälgimine',
     );
     return '$_temp0';
   }
@@ -3346,7 +4405,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Alla $count minuti',
       one: 'Alla $count minuti',
-      zero: 'Alla $count minuti',
     );
     return '$_temp0';
   }
@@ -3358,7 +4416,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count mängu pooleli',
       one: '$count mäng pooleli',
-      zero: '$count mäng pooleli',
     );
     return '$_temp0';
   }
@@ -3370,7 +4427,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Maksimum: $count märki.',
       one: 'Maksimum: $count märk.',
-      zero: 'Maksimum: $count märk.',
     );
     return '$_temp0';
   }
@@ -3382,7 +4438,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count blokeeritud kasutajat',
       one: '$count blokeeritud kasutaja',
-      zero: '$count blokeeritud kasutaja',
     );
     return '$_temp0';
   }
@@ -3394,7 +4449,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count foorumipostitust',
       one: '$count foorumipostitus',
-      zero: '$count foorumipostitus',
     );
     return '$_temp0';
   }
@@ -3406,7 +4460,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count $param2 mängijat sellel nädalal.',
       one: '$count $param2 mängija sellel nädalal.',
-      zero: '$count $param2 mängija sellel nädalal.',
     );
     return '$_temp0';
   }
@@ -3418,7 +4471,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Saadaval $count keeles!',
       one: 'Saadaval $count keeles!',
-      zero: 'Saadaval $count keeles!',
     );
     return '$_temp0';
   }
@@ -3430,7 +4482,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count sekundit, et teha esimene käik',
       one: '$count sekund, et teha esimene käik',
-      zero: '$count sekund, et teha esimene käik',
     );
     return '$_temp0';
   }
@@ -3442,7 +4493,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count sekundit',
       one: '$count sekund',
-      zero: '$count sekund',
     );
     return '$_temp0';
   }
@@ -3454,1013 +4504,9 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'ja salvesta $count ettekäigu variendid',
       one: 'ja salvesta $count ettekäigu variendid',
-      zero: 'ja salvesta $count ettekäigu variendid',
     );
     return '$_temp0';
   }
-
-  @override
-  String get patronDonate => 'Anneta';
-
-  @override
-  String get patronLichessPatron => 'Lichessi toetaja';
-
-  @override
-  String get preferencesPreferences => 'Sätted';
-
-  @override
-  String get preferencesDisplay => 'Kuva';
-
-  @override
-  String get preferencesPrivacy => 'Privaatsus';
-
-  @override
-  String get preferencesNotifications => 'Teavitused';
-
-  @override
-  String get preferencesPieceAnimation => 'Malendite liikumine';
-
-  @override
-  String get preferencesMaterialDifference => 'Materjali erinevus';
-
-  @override
-  String get preferencesBoardHighlights => 'Rõhutata viimast käiku ja tuld';
-
-  @override
-  String get preferencesPieceDestinations => 'Malendi sihtkohad (reeglipärased käigud ja eelkäigud)';
-
-  @override
-  String get preferencesBoardCoordinates => 'Laua koordinaadid (A-H, 1-8)';
-
-  @override
-  String get preferencesMoveListWhilePlaying => 'Käikude loend mängides';
-
-  @override
-  String get preferencesPgnPieceNotation => 'Käikude notatsioon';
-
-  @override
-  String get preferencesChessPieceSymbol => 'Malendi sümbol';
-
-  @override
-  String get preferencesPgnLetter => 'Täht (K, Q, R, B, N)';
-
-  @override
-  String get preferencesZenMode => 'Keskendumis mood';
-
-  @override
-  String get preferencesShowPlayerRatings => 'Kuva mängijate reitingud';
-
-  @override
-  String get preferencesShowFlairs => 'Show player flairs';
-
-  @override
-  String get preferencesExplainShowPlayerRatings => 'Kui valid \"Ei\", siis peidetakse kõikide mängijate reitingud, et saaksid paremini malele keskenduda. Partiidel on ikka reitingud, muutub ainult mida kuvatakse.';
-
-  @override
-  String get preferencesDisplayBoardResizeHandle => 'Näita laua suuruse muutmis suvandit';
-
-  @override
-  String get preferencesOnlyOnInitialPosition => 'Ainult algasendis';
-
-  @override
-  String get preferencesInGameOnly => 'In-game only';
-
-  @override
-  String get preferencesChessClock => 'Malekell';
-
-  @override
-  String get preferencesTenthsOfSeconds => 'Kümnendikku sekundit';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'Kui aega on jäänud < 10 sekundit';
-
-  @override
-  String get preferencesHorizontalGreenProgressBars => 'Horisontaalne roheline progressi riba';
-
-  @override
-  String get preferencesSoundWhenTimeGetsCritical => 'Heli kui aeg hakkab lõppema';
-
-  @override
-  String get preferencesGiveMoreTime => 'Anna lisaaega';
-
-  @override
-  String get preferencesGameBehavior => 'Mängu seaded';
-
-  @override
-  String get preferencesHowDoYouMovePieces => 'Kuidas malendeid liigutada?';
-
-  @override
-  String get preferencesClickTwoSquares => 'Vajuta kahele ruudule';
-
-  @override
-  String get preferencesDragPiece => 'Lohista malendit';
-
-  @override
-  String get preferencesBothClicksAndDrag => 'Mõlemad';
-
-  @override
-  String get preferencesPremovesPlayingDuringOpponentTurn => 'Eelkäik (käigu tegemine vastase käigu ajal)';
-
-  @override
-  String get preferencesTakebacksWithOpponentApproval => 'Tagasivõtmised (vastase nõusolekul)';
-
-  @override
-  String get preferencesInCasualGamesOnly => 'Ainult ilma reitinguta mängudes';
-
-  @override
-  String get preferencesPromoteToQueenAutomatically => 'Automaatselt edenda lipuks';
-
-  @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Hoia edendamise ajal <ctrl> klahvi all, et ajutiselt keelata automaatne edendamine';
-
-  @override
-  String get preferencesWhenPremoving => 'Eelkäiguga';
-
-  @override
-  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Kuuluta viik kolmekordsel kordusel automaatselt';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Kui aega on jäänud < 30 sekundit';
-
-  @override
-  String get preferencesMoveConfirmation => 'Käigu kinnitus';
-
-  @override
-  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Can be disabled during a game with the board menu';
-
-  @override
-  String get preferencesInCorrespondenceGames => 'Kirjavahetus mängud';
-
-  @override
-  String get preferencesCorrespondenceAndUnlimited => 'Kirjavahetus ja piiramatu';
-
-  @override
-  String get preferencesConfirmResignationAndDrawOffers => 'Kinnita alistumise ja viigi pakkumised';
-
-  @override
-  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Vangerdamise meetod';
-
-  @override
-  String get preferencesCastleByMovingTwoSquares => 'Liiguta kuningat kaks ruutu';
-
-  @override
-  String get preferencesCastleByMovingOntoTheRook => 'Liiguta kuningas vankri peale';
-
-  @override
-  String get preferencesInputMovesWithTheKeyboard => 'Sisesta käigud klaviatuuril';
-
-  @override
-  String get preferencesInputMovesWithVoice => 'Input moves with your voice';
-
-  @override
-  String get preferencesSnapArrowsToValidMoves => 'Liiguta nooled kehtivate käikude juurde';
-
-  @override
-  String get preferencesSayGgWpAfterLosingOrDrawing => 'Ütle kaotuse või viigi korral \"Good game, well played\" (Hea mäng, hästi mängitud)';
-
-  @override
-  String get preferencesYourPreferencesHaveBeenSaved => 'Teie eelistused on salvestatud.';
-
-  @override
-  String get preferencesScrollOnTheBoardToReplayMoves => 'Käikude kordamiseks keri laual';
-
-  @override
-  String get preferencesCorrespondenceEmailNotification => 'Igapäevane e-kiri, mis sisaldab pooleliolevaid kirjavahetusmänge';
-
-  @override
-  String get preferencesNotifyStreamStart => 'Striimija alustab otseülekannet';
-
-  @override
-  String get preferencesNotifyInboxMsg => 'Postkastis on uus sõnum';
-
-  @override
-  String get preferencesNotifyForumMention => 'Mainimised foorumis';
-
-  @override
-  String get preferencesNotifyInvitedStudy => 'Kutse uuringule';
-
-  @override
-  String get preferencesNotifyGameEvent => 'Kirimale mängu uuendused';
-
-  @override
-  String get preferencesNotifyChallenge => 'Väljakutsed';
-
-  @override
-  String get preferencesNotifyTournamentSoon => 'Turniir algab peatselt';
-
-  @override
-  String get preferencesNotifyTimeAlarm => 'Kirimale aeg hakkab lõppema';
-
-  @override
-  String get preferencesNotifyBell => 'Lichessi teavitus kellukesega';
-
-  @override
-  String get preferencesNotifyPush => 'Mobiiliteavitus, kui oled Lichessist eemal';
-
-  @override
-  String get preferencesNotifyWeb => 'Brauser';
-
-  @override
-  String get preferencesNotifyDevice => 'Seade';
-
-  @override
-  String get preferencesBellNotificationSound => 'Teavituste heli';
-
-  @override
-  String get puzzlePuzzles => 'Pusled';
-
-  @override
-  String get puzzlePuzzleThemes => 'Pusle teemad';
-
-  @override
-  String get puzzleRecommended => 'Soovitame';
-
-  @override
-  String get puzzlePhases => 'Etapid';
-
-  @override
-  String get puzzleMotifs => 'Motiivid';
-
-  @override
-  String get puzzleAdvanced => 'Edasijõudnutele';
-
-  @override
-  String get puzzleLengths => 'Pikkused';
-
-  @override
-  String get puzzleMates => 'Matid';
-
-  @override
-  String get puzzleGoals => 'Eesmärgid';
-
-  @override
-  String get puzzleOrigin => 'Allikas';
-
-  @override
-  String get puzzleSpecialMoves => 'Erilised käigud';
-
-  @override
-  String get puzzleDidYouLikeThisPuzzle => 'Kas sulle meeldis see pusle?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Hääleta, nii saad edasi!';
-
-  @override
-  String get puzzleUpVote => 'Hääleta poolt';
-
-  @override
-  String get puzzleDownVote => 'Hääleta vastu';
-
-  @override
-  String get puzzleYourPuzzleRatingWillNotChange => 'Teie pusle reiting ei muutu. Pidage meeles, et pusled ei ole võistlus. Teie reiting aitab valida kõige sobilikumad pusled olenevalt teie oskustele.';
-
-  @override
-  String get puzzleFindTheBestMoveForWhite => 'Leia parim käik valgele.';
-
-  @override
-  String get puzzleFindTheBestMoveForBlack => 'Leia parim käik mustale.';
-
-  @override
-  String get puzzleToGetPersonalizedPuzzles => 'Saa personaalseid puslesid:';
-
-  @override
-  String puzzlePuzzleId(String param) {
-    return '$param ülesanne';
-  }
-
-  @override
-  String get puzzlePuzzleOfTheDay => 'Päevaülesanne';
-
-  @override
-  String get puzzleDailyPuzzle => 'Päeva pusle';
-
-  @override
-  String get puzzleClickToSolve => 'Lahendamiseks vajuta';
-
-  @override
-  String get puzzleGoodMove => 'Hea käik';
-
-  @override
-  String get puzzleBestMove => 'Parim käik!';
-
-  @override
-  String get puzzleKeepGoing => 'Jätka samas vaimus…';
-
-  @override
-  String get puzzlePuzzleSuccess => 'Edukas!';
-
-  @override
-  String get puzzlePuzzleComplete => 'Pusle lahendatud!';
-
-  @override
-  String get puzzleByOpenings => 'By openings';
-
-  @override
-  String get puzzlePuzzlesByOpenings => 'Puzzles by openings';
-
-  @override
-  String get puzzleOpeningsYouPlayedTheMost => 'Openings you played the most in rated games';
-
-  @override
-  String get puzzleUseFindInPage => 'Use \"Find in page\" in the browser menu to find your favourite opening!';
-
-  @override
-  String get puzzleUseCtrlF => 'Use Ctrl+f to find your favourite opening!';
-
-  @override
-  String get puzzleNotTheMove => 'See ei ole õige käik!';
-
-  @override
-  String get puzzleTrySomethingElse => 'Proovi midagi muud.';
-
-  @override
-  String puzzleRatingX(String param) {
-    return 'Reiting: $param';
-  }
-
-  @override
-  String get puzzleHidden => 'peidetud';
-
-  @override
-  String puzzleFromGameLink(String param) {
-    return '$param mängust';
-  }
-
-  @override
-  String get puzzleContinueTraining => 'Jätka harjutamist';
-
-  @override
-  String get puzzleDifficultyLevel => 'Raskusaste';
-
-  @override
-  String get puzzleNormal => 'Tavaline';
-
-  @override
-  String get puzzleEasier => 'Kerge';
-
-  @override
-  String get puzzleEasiest => 'Väga kerge';
-
-  @override
-  String get puzzleHarder => 'Raske';
-
-  @override
-  String get puzzleHardest => 'Väga raske';
-
-  @override
-  String get puzzleExample => 'Näide';
-
-  @override
-  String get puzzleAddAnotherTheme => 'Lisa teine teema';
-
-  @override
-  String get puzzleNextPuzzle => 'Järgmine pusle';
-
-  @override
-  String get puzzleJumpToNextPuzzleImmediately => 'Mine kohe järgmise pusle juurde';
-
-  @override
-  String get puzzlePuzzleDashboard => 'Puslepaneel';
-
-  @override
-  String get puzzleImprovementAreas => 'Paranda neid';
-
-  @override
-  String get puzzleStrengths => 'Tugevused';
-
-  @override
-  String get puzzleHistory => 'Puslede ajalugu';
-
-  @override
-  String get puzzleSolved => 'lahendatud';
-
-  @override
-  String get puzzleFailed => 'ebaõnnestus';
-
-  @override
-  String get puzzleStreakDescription => 'Lahenda järjest keerukamaid puslesid ja suurenda oma võitude seeriat. Kella ei ole, seega võta rahulikult. Üks vale samm ja on mäng läbi! Kuid sa võid ühe käigu sessiooni kohta vahele jätta.';
-
-  @override
-  String puzzleYourStreakX(String param) {
-    return 'Praegune seeria: $param';
-  }
-
-  @override
-  String get puzzleStreakSkipExplanation => 'Jäta see käik vahele, et säilitada oma seeria! Toimib ainult üks kord sessiooni kohta.';
-
-  @override
-  String get puzzleContinueTheStreak => 'Jätka seeriat';
-
-  @override
-  String get puzzleNewStreak => 'Uus seeria';
-
-  @override
-  String get puzzleFromMyGames => 'Minu mängudest';
-
-  @override
-  String get puzzleLookupOfPlayer => 'Otsi puslesid mängija partiidest';
-
-  @override
-  String puzzleFromXGames(String param) {
-    return 'Pusled $param mängudest';
-  }
-
-  @override
-  String get puzzleSearchPuzzles => 'Otsi puslesid';
-
-  @override
-  String get puzzleFromMyGamesNone => 'Sul ei ole puslesid andmebaasis, aga oled Lichessile ikkagi tähtis.\n\nMängi kiirmalet või klassikalist malet tõstmaks võimalusi, et lisatakse pusle sinu mängust!';
-
-  @override
-  String puzzleFromXGamesFound(String param1, String param2) {
-    return '$param1 puslet leitud $param2 mängudes';
-  }
-
-  @override
-  String get puzzlePuzzleDashboardDescription => 'Treeni, analüüsi, täiusta';
-
-  @override
-  String puzzlePercentSolved(String param) {
-    return '$param lahendatud';
-  }
-
-  @override
-  String get puzzleNoPuzzlesToShow => 'Midagi pole näidata, lahenda ennem mõned pusled!';
-
-  @override
-  String get puzzleImprovementAreasDescription => 'Harjuta neid, et optimeerida oma edusamme!';
-
-  @override
-  String get puzzleStrengthDescription => 'Sa lahendad kõige paremini neid teemasid';
-
-  @override
-  String puzzlePlayedXTimes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Mängitud $count korda',
-      one: 'Mängitud $count kord',
-      zero: 'Mängitud $count kord',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsBelowYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count points below your puzzle rating',
-      one: 'One point below your puzzle rating',
-      zero: 'One point below your puzzle rating',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsAboveYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count points above your puzzle rating',
-      one: 'One point above your puzzle rating',
-      zero: 'One point above your puzzle rating',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPlayed(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count mängitud',
-      one: '$count mängitud',
-      zero: '$count mängitud',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbToReplay(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count kodamiseks',
-      one: '$count kodamiseks',
-      zero: '$count kodamiseks',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get puzzleThemeAdvancedPawn => 'Arenenud ettur';
-
-  @override
-  String get puzzleThemeAdvancedPawnDescription => 'Üks etturitest on sügaval vastase poolel, võib-olla kohe valmis muunduma.';
-
-  @override
-  String get puzzleThemeAdvantage => 'Eelis';
-
-  @override
-  String get puzzleThemeAdvantageDescription => 'Haara võimalusest kinni, et saavutada otsustav edu. (200cp ≤ eval ≤ 600cp)';
-
-  @override
-  String get puzzleThemeAnastasiaMate => 'Anastasia matt';
-
-  @override
-  String get puzzleThemeAnastasiaMateDescription => 'Ratsu ja vanker või lipp teevad koostööd, et panna vastase kuningas lõksu laua ääre ja oma malendi vahele.';
-
-  @override
-  String get puzzleThemeArabianMate => 'Araabia matt';
-
-  @override
-  String get puzzleThemeArabianMateDescription => 'Ratsu ja vanker teevad koostööd vastase kuninga lõksu saamiseks laua nurgas.';
-
-  @override
-  String get puzzleThemeAttackingF2F7 => 'Rünnak f2 või f7';
-
-  @override
-  String get puzzleThemeAttackingF2F7Description => 'f2 või f7 etturile suunatud rünnak, sarnaselt fried liver avangule.';
-
-  @override
-  String get puzzleThemeAttraction => 'Ahvatlus';
-
-  @override
-  String get puzzleThemeAttractionDescription => 'An exchange or sacrifice encouraging or forcing an opponent piece to a square that allows a follow-up tactic.';
-
-  @override
-  String get puzzleThemeBackRankMate => 'Tagumise rea matt';
-
-  @override
-  String get puzzleThemeBackRankMateDescription => 'Checkmate the king on the home rank, when it is trapped there by its own pieces.';
-
-  @override
-  String get puzzleThemeBishopEndgame => 'Odalõppmäng';
-
-  @override
-  String get puzzleThemeBishopEndgameDescription => 'Lõppmäng ainult odade ja etturitega.';
-
-  @override
-  String get puzzleThemeBodenMate => 'Bodeni matt';
-
-  @override
-  String get puzzleThemeBodenMateDescription => 'Kaks ründavat oda ristuvatel diagonaalidel tekitavad matiseisundi kuningale, mille liikumist takistavad omad malendid.';
-
-  @override
-  String get puzzleThemeCastling => 'Vangerdus';
-
-  @override
-  String get puzzleThemeCastlingDescription => 'Too kuningas ohust eemale ja valmista vanker rünnakuks ette.';
-
-  @override
-  String get puzzleThemeCapturingDefender => 'Capture the defender';
-
-  @override
-  String get puzzleThemeCapturingDefenderDescription => 'Removing a piece that is critical to defence of another piece, allowing the now undefended piece to be captured on a following move.';
-
-  @override
-  String get puzzleThemeCrushing => 'Crushing';
-
-  @override
-  String get puzzleThemeCrushingDescription => 'Spot the opponent blunder to obtain a crushing advantage. (eval ≥ 600cp)';
-
-  @override
-  String get puzzleThemeDoubleBishopMate => 'Kahe oda matt';
-
-  @override
-  String get puzzleThemeDoubleBishopMateDescription => 'Kaks ründavat oda kõrvalistel diagonaalidel tekitavad matiseisundi kuningale, kelle liikumist takistavad omad vigurid.';
-
-  @override
-  String get puzzleThemeDovetailMate => 'Cozio matt';
-
-  @override
-  String get puzzleThemeDovetailMateDescription => 'A queen delivers mate to an adjacent king, whose only two escape squares are obstructed by friendly pieces.';
-
-  @override
-  String get puzzleThemeEquality => 'Võrdsus';
-
-  @override
-  String get puzzleThemeEqualityDescription => 'Come back from a losing position, and secure a draw or a balanced position. (eval ≤ 200cp)';
-
-  @override
-  String get puzzleThemeKingsideAttack => 'Kuningapoolne rünnak';
-
-  @override
-  String get puzzleThemeKingsideAttackDescription => 'Rünnak vastase kuningale pärast vastase vangerdamist kuningapoolele.';
-
-  @override
-  String get puzzleThemeClearance => 'Clearance';
-
-  @override
-  String get puzzleThemeClearanceDescription => 'A move, often with tempo, that clears a square, file or diagonal for a follow-up tactical idea.';
-
-  @override
-  String get puzzleThemeDefensiveMove => 'Kaitsev käik';
-
-  @override
-  String get puzzleThemeDefensiveMoveDescription => 'Täpne käik või mitu käiku, mis on vaja vältimaks materiali kaotamist või teist eelist.';
-
-  @override
-  String get puzzleThemeDeflection => 'Deflection';
-
-  @override
-  String get puzzleThemeDeflectionDescription => 'A move that distracts an opponent piece from another duty that it performs, such as guarding a key square. Sometimes also called \"overloading\".';
-
-  @override
-  String get puzzleThemeDiscoveredAttack => 'Discovered attack';
-
-  @override
-  String get puzzleThemeDiscoveredAttackDescription => 'Moving a piece (such as a knight), that previously blocked an attack by a long range piece (such as a rook), out of the way of that piece.';
-
-  @override
-  String get puzzleThemeDoubleCheck => 'Topelt tuli';
-
-  @override
-  String get puzzleThemeDoubleCheckDescription => 'Checking with two pieces at once, as a result of a discovered attack where both the moving piece and the unveiled piece attack the opponent\'s king.';
-
-  @override
-  String get puzzleThemeEndgame => 'Lõppmäng';
-
-  @override
-  String get puzzleThemeEndgameDescription => 'Taktika mängu viimases faasis.';
-
-  @override
-  String get puzzleThemeEnPassantDescription => 'Taktika, kus rakendatakse en passant reeglit, kus ettur saab lüüa mööda läinud vastase etturit kasutades algset kahe ruutu käiku.';
-
-  @override
-  String get puzzleThemeExposedKing => 'Paljas kuningas';
-
-  @override
-  String get puzzleThemeExposedKingDescription => 'Taktika seoses kuningaga kellel on vähe kaitsjaid enda ümber, lõpeb tihti mattiga.';
-
-  @override
-  String get puzzleThemeFork => 'Kahvel';
-
-  @override
-  String get puzzleThemeForkDescription => 'Käik, millega mängija ründab oma malendiga korraga mitut vastase malendit.';
-
-  @override
-  String get puzzleThemeHangingPiece => 'Kaitseta malend';
-
-  @override
-  String get puzzleThemeHangingPieceDescription => 'Taktika, kus vastase malend on kaitsetu või halvasti kaitstud ja tasuta löödav.';
-
-  @override
-  String get puzzleThemeHookMate => 'Hook mate';
-
-  @override
-  String get puzzleThemeHookMateDescription => 'Checkmate with a rook, knight, and pawn along with one enemy pawn to limit the enemy king\'s escape.';
-
-  @override
-  String get puzzleThemeInterference => 'Interference';
-
-  @override
-  String get puzzleThemeInterferenceDescription => 'Moving a piece between two opponent pieces to leave one or both opponent pieces undefended, such as a knight on a defended square between two rooks.';
-
-  @override
-  String get puzzleThemeIntermezzo => 'Intermezzo';
-
-  @override
-  String get puzzleThemeIntermezzoDescription => 'Instead of playing the expected move, first interpose another move posing an immediate threat that the opponent must answer. Also known as \"Zwischenzug\" or \"In between\".';
-
-  @override
-  String get puzzleThemeKnightEndgame => 'Ratsulõppmäng';
-
-  @override
-  String get puzzleThemeKnightEndgameDescription => 'Lõppmäng ainult ratsude ja etturitega.';
-
-  @override
-  String get puzzleThemeLong => 'Pikk ülesanne';
-
-  @override
-  String get puzzleThemeLongDescription => 'Kolm käiku võiduni.';
-
-  @override
-  String get puzzleThemeMaster => 'Meistrite mängud';
-
-  @override
-  String get puzzleThemeMasterDescription => 'Ülesanded mängudest, mida on mänginud tiitlitega mängijad.';
-
-  @override
-  String get puzzleThemeMasterVsMaster => 'Meister meistri vastu';
-
-  @override
-  String get puzzleThemeMasterVsMasterDescription => 'Ülesanded kahe tiitli saanud mängija vahelistest mängudest.';
-
-  @override
-  String get puzzleThemeMate => 'Matt';
-
-  @override
-  String get puzzleThemeMateDescription => 'Võida mäng stiiliga.';
-
-  @override
-  String get puzzleThemeMateIn1 => 'Matt 1 käiguga';
-
-  @override
-  String get puzzleThemeMateIn1Description => 'Soorita matt ühe käiguga.';
-
-  @override
-  String get puzzleThemeMateIn2 => 'Matt 2 käiguga';
-
-  @override
-  String get puzzleThemeMateIn2Description => 'Soorita matt kahe käiguga.';
-
-  @override
-  String get puzzleThemeMateIn3 => 'Matt 3 käiguga';
-
-  @override
-  String get puzzleThemeMateIn3Description => 'Soorita matt kolme käiguga.';
-
-  @override
-  String get puzzleThemeMateIn4 => 'Matt 4 käiguga';
-
-  @override
-  String get puzzleThemeMateIn4Description => 'Soorita matt nelja käiguga.';
-
-  @override
-  String get puzzleThemeMateIn5 => 'Matt 5+ käiguga';
-
-  @override
-  String get puzzleThemeMateIn5Description => 'Leia mitme käiguga matt.';
-
-  @override
-  String get puzzleThemeMiddlegame => 'Keskmäng';
-
-  @override
-  String get puzzleThemeMiddlegameDescription => 'Taktika mängu teises faasis.';
-
-  @override
-  String get puzzleThemeOneMove => 'Ühekäiguline ülesanne';
-
-  @override
-  String get puzzleThemeOneMoveDescription => 'Ülesanne, mille lahendamiseks on vaja ainult ühte liigutust.';
-
-  @override
-  String get puzzleThemeOpening => 'Avang';
-
-  @override
-  String get puzzleThemeOpeningDescription => 'Taktika mängu esimeses faasis.';
-
-  @override
-  String get puzzleThemePawnEndgame => 'Etturilõppmäng';
-
-  @override
-  String get puzzleThemePawnEndgameDescription => 'Lõppmäng ainult etturitega.';
-
-  @override
-  String get puzzleThemePin => 'Sidumine';
-
-  @override
-  String get puzzleThemePinDescription => 'Taktika, kus malendi tulejoonel oleva vastaspoole malend ei saa liikuda, sest ära liikumise korral satub tulejoone alla väärtuslikum malend.';
-
-  @override
-  String get puzzleThemePromotion => 'Muundamine';
-
-  @override
-  String get puzzleThemePromotionDescription => 'Muunda oma ettur lipuks või teiseks viguriks.';
-
-  @override
-  String get puzzleThemeQueenEndgame => 'Lipulõppmäng';
-
-  @override
-  String get puzzleThemeQueenEndgameDescription => 'Lõppmäng ainult lippude ja etturitega.';
-
-  @override
-  String get puzzleThemeQueenRookEndgame => 'Lipp ja vanker';
-
-  @override
-  String get puzzleThemeQueenRookEndgameDescription => 'Lõppmäng ainult lippude, vankrite ja etturitega.';
-
-  @override
-  String get puzzleThemeQueensideAttack => 'Lipupoolne rünnak';
-
-  @override
-  String get puzzleThemeQueensideAttackDescription => 'Rünnak vastase kuningale pärast vastase vangerdamist lipupoolele.';
-
-  @override
-  String get puzzleThemeQuietMove => 'Quiet move';
-
-  @override
-  String get puzzleThemeQuietMoveDescription => 'A move that does neither make a check or capture, nor an immediate threat to capture, but does prepare a more hidden unavoidable threat for a later move.';
-
-  @override
-  String get puzzleThemeRookEndgame => 'Vankrilõppmäng';
-
-  @override
-  String get puzzleThemeRookEndgameDescription => 'Lõppmäng ainult vankrite ja etturitega.';
-
-  @override
-  String get puzzleThemeSacrifice => 'Ohverdus';
-
-  @override
-  String get puzzleThemeSacrificeDescription => 'Taktika, mis põhineb malendi äraandmisel. Eesmärk on saavutada eelis mõne sunnitud käigu järel.';
-
-  @override
-  String get puzzleThemeShort => 'Lühike ülesanne';
-
-  @override
-  String get puzzleThemeShortDescription => 'Kaks käiku võiduni.';
-
-  @override
-  String get puzzleThemeSkewer => 'Tagurpidisidumine';
-
-  @override
-  String get puzzleThemeSkewerDescription => 'A motif involving a high value piece being attacked, moving out the way, and allowing a lower value piece behind it to be captured or attacked, the inverse of a pin.';
-
-  @override
-  String get puzzleThemeSmotheredMate => 'Umbmatt';
-
-  @override
-  String get puzzleThemeSmotheredMateDescription => 'A checkmate delivered by a knight in which the mated king is unable to move because it is surrounded (or smothered) by its own pieces.';
-
-  @override
-  String get puzzleThemeSuperGM => 'Supersuurmeistrite mängud';
-
-  @override
-  String get puzzleThemeSuperGMDescription => 'Ülesanded mängudest maailma parimate mängijate vahel.';
-
-  @override
-  String get puzzleThemeTrappedPiece => 'Lõksus malend';
-
-  @override
-  String get puzzleThemeTrappedPieceDescription => 'A piece is unable to escape capture as it has limited moves.';
-
-  @override
-  String get puzzleThemeUnderPromotion => 'Underpromotion';
-
-  @override
-  String get puzzleThemeUnderPromotionDescription => 'Promotion to a knight, bishop, or rook.';
-
-  @override
-  String get puzzleThemeVeryLong => 'Väga pikk ülesanne';
-
-  @override
-  String get puzzleThemeVeryLongDescription => 'Four moves or more to win.';
-
-  @override
-  String get puzzleThemeXRayAttack => 'X-Ray attack';
-
-  @override
-  String get puzzleThemeXRayAttackDescription => 'A piece attacks or defends a square, through an enemy piece.';
-
-  @override
-  String get puzzleThemeZugzwang => 'Vahekäik';
-
-  @override
-  String get puzzleThemeZugzwangDescription => 'Vastasel on piiratud võimalused teha lubatud käike ja kõik halvendavad vastase olukorda.';
-
-  @override
-  String get puzzleThemeHealthyMix => 'Tervislik segu';
-
-  @override
-  String get puzzleThemeHealthyMixDescription => 'Natuke kõike. Kunagi ei tea mida oodata ehk ole valmis kõigeks! Täpselt nagu päris mängudes.';
-
-  @override
-  String get puzzleThemePlayerGames => 'Player games';
-
-  @override
-  String get puzzleThemePlayerGamesDescription => 'Lookup puzzles generated from your games, or from another player\'s games.';
-
-  @override
-  String puzzleThemePuzzleDownloadInformation(String param) {
-    return 'These puzzles are in the public domain, and can be downloaded from $param.';
-  }
-
-  @override
-  String perfStatPerfStats(String param) {
-    return '$param statistika';
-  }
-
-  @override
-  String get perfStatViewTheGames => 'Vaata mängud';
-
-  @override
-  String get perfStatProvisional => 'ajutine';
-
-  @override
-  String get perfStatNotEnoughRatedGames => 'Pole mängitud piisavalt reitinguga mänge, et luua usaldusväärset reitingut.';
-
-  @override
-  String perfStatProgressOverLastXGames(String param) {
-    return 'Areng viimase $param mängu jooksul:';
-  }
-
-  @override
-  String perfStatRatingDeviation(String param) {
-    return 'Reitingunihe: $param.';
-  }
-
-  @override
-  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
-    return 'Väiksem väärtus tähendab, et reiting on stabiilsem. Rohkem kui $param1 tähendab ajutist reitingut. Rankingu saamiseks see väärtus peab olema väiksem kui $param2 (tavamale) või $param3 (variandid).';
-  }
-
-  @override
-  String get perfStatTotalGames => 'Mänge kokku';
-
-  @override
-  String get perfStatRatedGames => 'Reitinguga mängu';
-
-  @override
-  String get perfStatTournamentGames => 'Turniirimänge';
-
-  @override
-  String get perfStatBerserkedGames => 'Berserk mänge';
-
-  @override
-  String get perfStatTimeSpentPlaying => 'Mängimiseks kulutatud aeg';
-
-  @override
-  String get perfStatAverageOpponent => 'Keskmine vastane';
-
-  @override
-  String get perfStatVictories => 'Võite';
-
-  @override
-  String get perfStatDefeats => 'Kaotusi';
-
-  @override
-  String get perfStatDisconnections => 'Ühendus kaotatud';
-
-  @override
-  String get perfStatNotEnoughGames => 'Ei ole piisavalt palju mängitud';
-
-  @override
-  String perfStatHighestRating(String param) {
-    return 'Kõrgeim reiting: $param';
-  }
-
-  @override
-  String perfStatLowestRating(String param) {
-    return 'Madalaim reiting: $param';
-  }
-
-  @override
-  String perfStatFromXToY(String param1, String param2) {
-    return 'ajavahemikus $param1 - $param2';
-  }
-
-  @override
-  String get perfStatWinningStreak => 'Võitude seeria';
-
-  @override
-  String get perfStatLosingStreak => 'Kaotuste seeria';
-
-  @override
-  String perfStatLongestStreak(String param) {
-    return 'Pikim seeria: $param';
-  }
-
-  @override
-  String perfStatCurrentStreak(String param) {
-    return 'Praegune seeria: $param';
-  }
-
-  @override
-  String get perfStatBestRated => 'Parimad reitinguga võidud';
-
-  @override
-  String get perfStatGamesInARow => 'Järjestikusi mänge';
-
-  @override
-  String get perfStatLessThanOneHour => 'Mängude vahel vähem kui tund';
-
-  @override
-  String get perfStatMaxTimePlaying => 'Pikim aeg mängimas';
-
-  @override
-  String get perfStatNow => 'nüüd';
-
-  @override
-  String get searchSearch => 'Otsi';
-
-  @override
-  String get settingsSettings => 'Seaded';
-
-  @override
-  String get settingsCloseAccount => 'Sulge konto';
-
-  @override
-  String get settingsManagedAccountCannotBeClosed => 'Sinu konto on valve all ja seda ei saa sulgeda.';
-
-  @override
-  String get settingsClosingIsDefinitive => 'Sulgemist ei saa tagasi võtta. Oled sa kindel?';
-
-  @override
-  String get settingsCantOpenSimilarAccount => 'Uut samanimelist kontot ei saa luua, isegi kui sümbolite register on erinev.';
-
-  @override
-  String get settingsChangedMindDoNotCloseAccount => 'Ma muutsin meelt, ärge sulgege kontot';
-
-  @override
-  String get settingsCloseAccountExplanation => 'Kas olete kindel, et soovite oma konto sulgeda? Konto sulgemine on pöördumatu. Sellesse EI SAA ENAM KUNAGI siseneda.';
-
-  @override
-  String get settingsThisAccountIsClosed => 'See konto on suletud.';
-
-  @override
-  String get streamerLichessStreamers => 'Lichessi striimijad';
 
   @override
   String get stormMoveToStart => 'Alusta käiguga';
@@ -4628,7 +4674,6 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: '$count mängu',
       one: '1 mäng',
-      zero: '1 mäng',
     );
     return '$_temp0';
   }
@@ -4640,20 +4685,16 @@ class AppLocalizationsEt extends AppLocalizations {
       locale: localeName,
       other: 'Mängis $count mängu ${param2}i',
       one: 'Mängis ühe mängu ${param2}i',
-      zero: 'Mängis ühe mängu ${param2}i',
     );
     return '$_temp0';
   }
+
+  @override
+  String get streamerLichessStreamers => 'Lichessi striimijad';
 
   @override
   String get studyShareAndExport => 'Jaga & ekspordi';
 
   @override
   String get studyStart => 'Alusta';
-
-  @override
-  String get broadcastBroadcasts => 'Otseülekanded';
-
-  @override
-  String get broadcastStartDate => 'Alguskuupäev sinu ajavööndis';
 }

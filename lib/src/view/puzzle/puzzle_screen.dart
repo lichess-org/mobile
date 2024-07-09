@@ -532,7 +532,7 @@ class _BottomBar extends ConsumerWidget {
       context: context,
       actions: [
         BottomSheetAction(
-          makeLabel: (context) => const Text('Share this puzzle'),
+          makeLabel: (context) => Text(context.l10n.mobileSharePuzzle),
           onPressed: (context) {
             launchShareDialog(
               context,

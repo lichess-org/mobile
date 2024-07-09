@@ -125,6 +125,7 @@ class TimeControlModal extends ConsumerWidget {
                                     child: NonLinearSlider(
                                       value: custom.time,
                                       values: kAvailableTimesInSeconds,
+                                      labelBuilder: clockLabelInMinutes,
                                       onChange: Theme.of(context).platform ==
                                               TargetPlatform.iOS
                                           ? (num value) {
@@ -184,9 +185,14 @@ class TimeControlModal extends ConsumerWidget {
                                 ],
                               ),
                               SecondaryButton(
-                                onPressed: () => onSelected(custom),
+                                onPressed: custom.isInfinite
+                                    ? null
+                                    : () => onSelected(custom),
                                 semanticsLabel: 'OK',
-                                child: const Text('OK', style: Styles.bold),
+                                child: Text(
+                                  context.l10n.mobileOkButton,
+                                  style: Styles.bold,
+                                ),
                               ),
                             ],
                           );

@@ -52,8 +52,8 @@ class _Body extends ConsumerWidget {
     return account.when(
       data: (data) {
         if (data == null) {
-          return const Center(
-            child: Text('You must be logged in to view this page.'),
+          return Center(
+            child: Text(context.l10n.mobileMustBeLoggedIn),
           );
         }
         return Padding(
@@ -182,7 +182,7 @@ class _EditProfileFormState extends ConsumerState<_EditProfileForm> {
             maxLength: 80,
           ),
           _textField(
-            label: context.l10n.name,
+            label: context.l10n.realName,
             initialValue: widget.user.profile?.realName,
             formKey: 'realName',
             controller: TextEditingController(

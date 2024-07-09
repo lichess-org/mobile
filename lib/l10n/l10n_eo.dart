@@ -7,6 +7,122 @@ class AppLocalizationsEo extends AppLocalizations {
   AppLocalizationsEo([String locale = 'eo']) : super(locale);
 
   @override
+  String get mobileHomeTab => 'Home';
+
+  @override
+  String get mobilePuzzlesTab => 'Puzzles';
+
+  @override
+  String get mobileToolsTab => 'Tools';
+
+  @override
+  String get mobileWatchTab => 'Watch';
+
+  @override
+  String get mobileSettingsTab => 'Settings';
+
+  @override
+  String get mobileMustBeLoggedIn => 'You must be logged in to view this page.';
+
+  @override
+  String get mobileSystemColors => 'System colors';
+
+  @override
+  String get mobileFeedbackButton => 'Feedback';
+
+  @override
+  String get mobileOkButton => 'OK';
+
+  @override
+  String get mobileSettingsHapticFeedback => 'Haptic feedback';
+
+  @override
+  String get mobileSettingsImmersiveMode => 'Immersive mode';
+
+  @override
+  String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.';
+
+  @override
+  String get mobileNotFollowingAnyUser => 'You are not following any user.';
+
+  @override
+  String get mobileAllGames => 'All games';
+
+  @override
+  String get mobileRecentSearches => 'Recent searches';
+
+  @override
+  String get mobileClearButton => 'Clear';
+
+  @override
+  String mobilePlayersMatchingSearchTerm(String param) {
+    return 'Players with \"$param\"';
+  }
+
+  @override
+  String get mobileNoSearchResults => 'No results';
+
+  @override
+  String get mobileAreYouSure => 'Are you sure?';
+
+  @override
+  String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
+
+  @override
+  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of storm';
+
+  @override
+  String get mobileSharePuzzle => 'Share this puzzle';
+
+  @override
+  String get mobileShareGameURL => 'Share game URL';
+
+  @override
+  String get mobileShareGamePGN => 'Share PGN';
+
+  @override
+  String get mobileSharePositionAsFEN => 'Share position as FEN';
+
+  @override
+  String get mobileShowVariations => 'Show variations';
+
+  @override
+  String get mobileHideVariation => 'Hide variation';
+
+  @override
+  String get mobileShowComments => 'Show comments';
+
+  @override
+  String get mobilePuzzleStormConfirmEndRun => 'Do you want to end this run?';
+
+  @override
+  String get mobilePuzzleStormFilterNothingToShow => 'Nothing to show, please change the filters';
+
+  @override
+  String get mobileCancelTakebackOffer => 'Cancel takeback offer';
+
+  @override
+  String get mobileCancelDrawOffer => 'Cancel draw offer';
+
+  @override
+  String get mobileWaitingForOpponentToJoin => 'Waiting for opponent to join...';
+
+  @override
+  String get mobileBlindfoldMode => 'Blindfold';
+
+  @override
+  String get mobileLiveStreamers => 'Live streamers';
+
+  @override
+  String get mobileCustomGameJoinAGame => 'Join a game';
+
+  @override
+  String get mobileCorrespondenceClearSavedMove => 'Clear saved move';
+
+  @override
+  String get mobileSomethingWentWrong => 'Something went wrong.';
+
+  @override
   String get activityActivity => 'Aktiveco';
 
   @override
@@ -27,7 +143,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: 'Subtenis lichess.org dum $count monatoj kiel $param2',
       one: 'Subtenis lichess.org dum $count monato kiel $param2',
-      zero: 'Subtenis lichess.org dum $count monato kiel $param2',
     );
     return '$_temp0';
   }
@@ -39,7 +154,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: 'Praktikis $count poziciojn $param2',
       one: 'Praktikis $count pozicion $param2',
-      zero: 'Praktikis $count pozicion $param2',
     );
     return '$_temp0';
   }
@@ -51,7 +165,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: 'Solvis $count taktikajn puzlojn',
       one: 'Solvis $count taktikan puzlon',
-      zero: 'Solvis $count taktikan puzlon',
     );
     return '$_temp0';
   }
@@ -63,7 +176,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: 'Ludis $count $param2 ludojn',
       one: 'Ludis $count $param2 ludon',
-      zero: 'Ludis $count $param2 ludon',
     );
     return '$_temp0';
   }
@@ -75,7 +187,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: 'Afiŝis $count mesaĝoj en $param2',
       one: 'Afiŝis $count mesaĝo en $param2',
-      zero: 'Afiŝis $count mesaĝo en $param2',
     );
     return '$_temp0';
   }
@@ -87,7 +198,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: 'Ludis $count movojn',
       one: 'Ludis $count movon',
-      zero: 'Ludis $count movon',
     );
     return '$_temp0';
   }
@@ -99,7 +209,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: 'en $count korespondadaj ludoj',
       one: 'en $count korespondada ludo',
-      zero: 'en $count korespondada ludo',
     );
     return '$_temp0';
   }
@@ -111,7 +220,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: 'Finiĝis $count korespondaj ludoj',
       one: 'Finiĝis $count koresponda ludo',
-      zero: 'Finiĝis $count koresponda ludo',
     );
     return '$_temp0';
   }
@@ -123,7 +231,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: 'Komencis sekvi $count ludantojn',
       one: 'Komencis sekvi $count ludanton',
-      zero: 'Komencis sekvi $count ludanton',
     );
     return '$_temp0';
   }
@@ -135,7 +242,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: 'Gajnis $count novajn sekvantojn',
       one: 'Gajnis $count novan sekvanton',
-      zero: 'Gajnis $count novan sekvanton',
     );
     return '$_temp0';
   }
@@ -147,7 +253,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: 'Gastigis $count samtempajn ekspoziciojn',
       one: 'Gastigis $count samtempan ekspozicion',
-      zero: 'Gastigis $count samtempan ekspozicion',
     );
     return '$_temp0';
   }
@@ -159,7 +264,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: 'Partoprenita en $count samtempaj ekspozicioj',
       one: 'Partoprenita en $count samtempa ekspozicio',
-      zero: 'Partoprenita en $count samtempa ekspozicio',
     );
     return '$_temp0';
   }
@@ -171,7 +275,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: 'Kreis $count novajn studojn',
       one: 'Kreis $count novan studon',
-      zero: 'Kreis $count novan studon',
     );
     return '$_temp0';
   }
@@ -183,7 +286,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: 'Konkurencis en $count turniroj',
       one: 'Konkurencis en $count turniro',
-      zero: 'Konkurencis en $count turniro',
     );
     return '$_temp0';
   }
@@ -195,7 +297,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: 'Rangita #$count (supro $param2%) kun $param3 ludoj en $param4',
       one: 'Rangita #$count (supro $param2%) kun $param3 ludo en $param4',
-      zero: 'Rangita #$count (supro $param2%) kun $param3 ludo en $param4',
     );
     return '$_temp0';
   }
@@ -207,7 +308,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: 'Konkuris en $count svisaj turniroj',
       one: 'Konkuris en $count svisa turniro',
-      zero: 'Konkuris en $count svisa turniro',
     );
     return '$_temp0';
   }
@@ -219,16 +319,15 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: 'Aliĝis $count teamoj',
       one: 'Aliĝis $count teamo',
-      zero: 'Aliĝis $count teamo',
     );
     return '$_temp0';
   }
 
   @override
-  String get contactContact => 'Kontakto';
+  String get broadcastBroadcasts => 'Elsendoj';
 
   @override
-  String get contactContactLichess => 'Kontakti Lichess';
+  String get broadcastStartDate => 'Komenca dato en via propra horzono';
 
   @override
   String challengeChallengesX(String param1) {
@@ -310,6 +409,1007 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get challengeInviteLichessUser => 'Aŭ invitu Lichess uzanton:';
+
+  @override
+  String get contactContact => 'Kontakto';
+
+  @override
+  String get contactContactLichess => 'Kontakti Lichess';
+
+  @override
+  String get patronDonate => 'Donaci';
+
+  @override
+  String get patronLichessPatron => 'Lichess Patrono';
+
+  @override
+  String perfStatPerfStats(String param) {
+    return '$param statikoj';
+  }
+
+  @override
+  String get perfStatViewTheGames => 'Rigardi la ludojn';
+
+  @override
+  String get perfStatProvisional => 'provizora';
+
+  @override
+  String get perfStatNotEnoughRatedGames => 'Ne sufiĉe taksitaj ludoj estis luditaj por estigi fidindan rangon.';
+
+  @override
+  String perfStatProgressOverLastXGames(String param) {
+    return 'Progreso dum la lastaj $param ludoj:';
+  }
+
+  @override
+  String perfStatRatingDeviation(String param) {
+    return 'Taksa devio: $param.';
+  }
+
+  @override
+  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
+    return 'Pli malalta valoro signifas, ke la rango estas pli stabila. Super $param1 la rango estas konsiderata provizora. Por esti inkluzivita en la rangotabeloj, ĉi tiu valoro devus esti sub $param2 (norma ŝako) aŭ $param3 (variaĵoj).';
+  }
+
+  @override
+  String get perfStatTotalGames => 'Totalaj ludoj';
+
+  @override
+  String get perfStatRatedGames => 'Rangitaj ludoj';
+
+  @override
+  String get perfStatTournamentGames => 'Turniraj ludoj';
+
+  @override
+  String get perfStatBerserkedGames => 'Berserk ludoj';
+
+  @override
+  String get perfStatTimeSpentPlaying => 'Tempo pasita ludante';
+
+  @override
+  String get perfStatAverageOpponent => 'Meznombra kontraŭulo';
+
+  @override
+  String get perfStatVictories => 'Venkoj';
+
+  @override
+  String get perfStatDefeats => 'Malvenkoj';
+
+  @override
+  String get perfStatDisconnections => 'Malkonektoj';
+
+  @override
+  String get perfStatNotEnoughGames => 'Ne sufiĉaj luditaj ludoj';
+
+  @override
+  String perfStatHighestRating(String param) {
+    return 'Plej alta rango: $param';
+  }
+
+  @override
+  String perfStatLowestRating(String param) {
+    return 'Plej malalta rango: $param';
+  }
+
+  @override
+  String perfStatFromXToY(String param1, String param2) {
+    return 'de $param1 al $param2';
+  }
+
+  @override
+  String get perfStatWinningStreak => 'Sinsekva gajnado';
+
+  @override
+  String get perfStatLosingStreak => 'Sinsekva perdado';
+
+  @override
+  String perfStatLongestStreak(String param) {
+    return 'Plej longa sinsekva rezulto: $param';
+  }
+
+  @override
+  String perfStatCurrentStreak(String param) {
+    return 'Nuntempa sinsekva rezulto: $param';
+  }
+
+  @override
+  String get perfStatBestRated => 'Plej bonaj venkoj laŭ kontraŭula rango';
+
+  @override
+  String get perfStatGamesInARow => 'Ludoj sinsekve luditaj';
+
+  @override
+  String get perfStatLessThanOneHour => 'Malpli ol unu horo inter ludoj';
+
+  @override
+  String get perfStatMaxTimePlaying => 'Maksimuma tempo pasita ludante';
+
+  @override
+  String get perfStatNow => 'nun';
+
+  @override
+  String get preferencesPreferences => 'Preferoj';
+
+  @override
+  String get preferencesDisplay => 'Montri';
+
+  @override
+  String get preferencesPrivacy => 'Privateco';
+
+  @override
+  String get preferencesNotifications => 'Sciigoj';
+
+  @override
+  String get preferencesPieceAnimation => 'Animacio de ŝakpecoj';
+
+  @override
+  String get preferencesMaterialDifference => 'Materiala diferenco';
+
+  @override
+  String get preferencesBoardHighlights => 'Emfazaj aperoj sur tabulo (lasta movo kaj ŝakoj)';
+
+  @override
+  String get preferencesPieceDestinations => 'Destinoj de ŝakpecoj (eblaj movoj kaj antaŭmovoj)';
+
+  @override
+  String get preferencesBoardCoordinates => 'Tabulaj koordinatoj (A-H, 1-8)';
+
+  @override
+  String get preferencesMoveListWhilePlaying => 'Listo de movoj dum ludado';
+
+  @override
+  String get preferencesPgnPieceNotation => 'Mova notado';
+
+  @override
+  String get preferencesChessPieceSymbol => 'Ŝakpecaj simboloj';
+
+  @override
+  String get preferencesPgnLetter => 'Litero (K, Q, R, B, N)';
+
+  @override
+  String get preferencesZenMode => 'Zena modo';
+
+  @override
+  String get preferencesShowPlayerRatings => 'Montri rangojn de ludanto';
+
+  @override
+  String get preferencesShowFlairs => 'Montri ludantajn emoĝiojn';
+
+  @override
+  String get preferencesExplainShowPlayerRatings => 'Ĉi tio permesas kaŝi ĉiujn rangojn el la retejo, por helpi koncentriĝas pri la ŝako. Ludoj povas daŭre esti range, ĉi tiu temas nur pri tio, kion vi vidas.';
+
+  @override
+  String get preferencesDisplayBoardResizeHandle => 'Montri la grandecregilon de la ŝaktabulo';
+
+  @override
+  String get preferencesOnlyOnInitialPosition => 'Nur sur komenca pozicio';
+
+  @override
+  String get preferencesInGameOnly => 'Nur en ludo';
+
+  @override
+  String get preferencesChessClock => 'Ŝakhorloĝo';
+
+  @override
+  String get preferencesTenthsOfSeconds => 'Dekonoj da sekundoj';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'Kiam restas malpli ol 10 sekundoj';
+
+  @override
+  String get preferencesHorizontalGreenProgressBars => 'Horizontalaj verdaj progreso-strioj';
+
+  @override
+  String get preferencesSoundWhenTimeGetsCritical => 'Sono, kiam tempo iĝas tre malmulta';
+
+  @override
+  String get preferencesGiveMoreTime => 'Doni pli da tempo';
+
+  @override
+  String get preferencesGameBehavior => 'Luda konduto';
+
+  @override
+  String get preferencesHowDoYouMovePieces => 'Kiel movi pecojn?';
+
+  @override
+  String get preferencesClickTwoSquares => 'Klaku du kvadratojn';
+
+  @override
+  String get preferencesDragPiece => 'Ŝovi pecon';
+
+  @override
+  String get preferencesBothClicksAndDrag => 'Ambaŭ';
+
+  @override
+  String get preferencesPremovesPlayingDuringOpponentTurn => 'Antaŭmovoj (ludi dum la vico de kontraŭulo)';
+
+  @override
+  String get preferencesTakebacksWithOpponentApproval => 'Reprenoj (kun konsento de kontraŭulo)';
+
+  @override
+  String get preferencesInCasualGamesOnly => 'Nur ĉe amikaj ludoj';
+
+  @override
+  String get preferencesPromoteToQueenAutomatically => 'Memage rangaltigi soldatojn al damoj';
+
+  @override
+  String get preferencesExplainPromoteToQueenAutomatically => 'Premu la <ctrl> klavon dum rangaltigo por momente malŝalti memagan rangaltiĝon';
+
+  @override
+  String get preferencesWhenPremoving => 'Ĉe antaŭmovoj';
+
+  @override
+  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Memage postuli egalvenkon post trifoja ripetado';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Kiam restas malpli ol 30 sekundoj';
+
+  @override
+  String get preferencesMoveConfirmation => 'Konfirmo de movo';
+
+  @override
+  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Povas esti malebligita dum ludo kun la tabulo menuo';
+
+  @override
+  String get preferencesInCorrespondenceGames => 'Korespondaj ludoj';
+
+  @override
+  String get preferencesCorrespondenceAndUnlimited => 'Korespondado kaj sen tempolimo';
+
+  @override
+  String get preferencesConfirmResignationAndDrawOffers => 'Konfirmi proponojn de resignoj kaj egalvenkoj';
+
+  @override
+  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Aroka metodo';
+
+  @override
+  String get preferencesCastleByMovingTwoSquares => 'Movi reĝon je du kvadratoj';
+
+  @override
+  String get preferencesCastleByMovingOntoTheRook => 'Movi reĝon al la turo';
+
+  @override
+  String get preferencesInputMovesWithTheKeyboard => 'Enigi movojn per klavaro';
+
+  @override
+  String get preferencesInputMovesWithVoice => 'Enigi movojn per via voĉo';
+
+  @override
+  String get preferencesSnapArrowsToValidMoves => 'Montri per sagoj nur validajn movojn';
+
+  @override
+  String get preferencesSayGgWpAfterLosingOrDrawing => 'Skribi \"Good game, well played\" post malvenko aŭ egalvenko';
+
+  @override
+  String get preferencesYourPreferencesHaveBeenSaved => 'Viaj preferoj estis konservitaj.';
+
+  @override
+  String get preferencesScrollOnTheBoardToReplayMoves => 'Uzi rulumilon sur la tabelo por ripeti movojn';
+
+  @override
+  String get preferencesCorrespondenceEmailNotification => 'Tage retpoŝta sciigo listante viajn korespondajn partiojn';
+
+  @override
+  String get preferencesNotifyStreamStart => 'Filmprezentisto iĝas vive';
+
+  @override
+  String get preferencesNotifyInboxMsg => 'Nova enirkesto mesaĝo';
+
+  @override
+  String get preferencesNotifyForumMention => 'Foruma komento mencias vin';
+
+  @override
+  String get preferencesNotifyInvitedStudy => 'Studa invito';
+
+  @override
+  String get preferencesNotifyGameEvent => 'Koresponde ludaj novaĵoj';
+
+  @override
+  String get preferencesNotifyChallenge => 'Defioj';
+
+  @override
+  String get preferencesNotifyTournamentSoon => 'Turniro baldaŭ komencos';
+
+  @override
+  String get preferencesNotifyTimeAlarm => 'Koresponda horloĝo baldaŭ finiĝas';
+
+  @override
+  String get preferencesNotifyBell => 'Sonorilaj sciigoj en Lichess mem';
+
+  @override
+  String get preferencesNotifyPush => 'Aparta sciigo kiam vi ne ĉe Licess';
+
+  @override
+  String get preferencesNotifyWeb => 'Retumilo';
+
+  @override
+  String get preferencesNotifyDevice => 'Aparato';
+
+  @override
+  String get preferencesBellNotificationSound => 'Sonorile sciiga sono';
+
+  @override
+  String get puzzlePuzzles => 'Puzloj';
+
+  @override
+  String get puzzlePuzzleThemes => 'Puzlaj temoj';
+
+  @override
+  String get puzzleRecommended => 'Rekomendita';
+
+  @override
+  String get puzzlePhases => 'Fazoj';
+
+  @override
+  String get puzzleMotifs => 'Motivoj';
+
+  @override
+  String get puzzleAdvanced => 'Progresinta';
+
+  @override
+  String get puzzleLengths => 'Longecoj';
+
+  @override
+  String get puzzleMates => 'Matoj';
+
+  @override
+  String get puzzleGoals => 'Celoj';
+
+  @override
+  String get puzzleOrigin => 'Originoj';
+
+  @override
+  String get puzzleSpecialMoves => 'Specialaj movoj';
+
+  @override
+  String get puzzleDidYouLikeThisPuzzle => 'Ĉu vi ŝatis la puzlon?';
+
+  @override
+  String get puzzleVoteToLoadNextOne => 'Voĉdonu por iri al la venonta puzlo!';
+
+  @override
+  String get puzzleUpVote => 'Supren voĉdoni puzlo';
+
+  @override
+  String get puzzleDownVote => 'Malsupren voĉdoni puzlo';
+
+  @override
+  String get puzzleYourPuzzleRatingWillNotChange => 'Via puzla rango ne ŝanĝiĝos. Notu, ke puzloj ne estas konkurso. Via rango helpis elekti la plej bonaj puzloj por via nuna lerto.';
+
+  @override
+  String get puzzleFindTheBestMoveForWhite => 'Trovu la plej bonan movon por blanko.';
+
+  @override
+  String get puzzleFindTheBestMoveForBlack => 'Trovu la plej bonan movon por nigro.';
+
+  @override
+  String get puzzleToGetPersonalizedPuzzles => 'Por akiri personigitajn puzlojn:';
+
+  @override
+  String puzzlePuzzleId(String param) {
+    return 'Puzlo $param';
+  }
+
+  @override
+  String get puzzlePuzzleOfTheDay => 'Puzlo de la tago';
+
+  @override
+  String get puzzleDailyPuzzle => 'Taga puzlo';
+
+  @override
+  String get puzzleClickToSolve => 'Klaku por solvi';
+
+  @override
+  String get puzzleGoodMove => 'Bona movo';
+
+  @override
+  String get puzzleBestMove => 'Plej bona movo!';
+
+  @override
+  String get puzzleKeepGoing => 'Daŭrigu…';
+
+  @override
+  String get puzzlePuzzleSuccess => 'Sukceso!';
+
+  @override
+  String get puzzlePuzzleComplete => 'Puzlo kompletigita!';
+
+  @override
+  String get puzzleByOpenings => 'Laŭ malfermoj';
+
+  @override
+  String get puzzlePuzzlesByOpenings => 'Puzloj laŭ malfermoj';
+
+  @override
+  String get puzzleOpeningsYouPlayedTheMost => 'Malfermoj kiujn vi plej ludis en rangaj ludoj';
+
+  @override
+  String get puzzleUseFindInPage => 'Uzu \"Serĉi ĉi tiun paĝon\" de la retumila menuo por trovi vian plej favora malfermo!';
+
+  @override
+  String get puzzleUseCtrlF => 'Uzu Ctrl+f por trovi vian plej ŝatatan malfermon!';
+
+  @override
+  String get puzzleNotTheMove => 'Tiu ne estas la movo!';
+
+  @override
+  String get puzzleTrySomethingElse => 'Provu ion alian.';
+
+  @override
+  String puzzleRatingX(String param) {
+    return 'Taksado: $param';
+  }
+
+  @override
+  String get puzzleHidden => 'kaŝita';
+
+  @override
+  String puzzleFromGameLink(String param) {
+    return 'El ludo $param';
+  }
+
+  @override
+  String get puzzleContinueTraining => 'Daŭrigi la trejnadon';
+
+  @override
+  String get puzzleDifficultyLevel => 'Malfacileca nivelo';
+
+  @override
+  String get puzzleNormal => 'Normale';
+
+  @override
+  String get puzzleEasier => 'Facile';
+
+  @override
+  String get puzzleEasiest => 'Tre facile';
+
+  @override
+  String get puzzleHarder => 'Malfacile';
+
+  @override
+  String get puzzleHardest => 'Tre malfacile';
+
+  @override
+  String get puzzleExample => 'Ekzamplo';
+
+  @override
+  String get puzzleAddAnotherTheme => 'Aldonu novan temon';
+
+  @override
+  String get puzzleNextPuzzle => 'Sekva puzlo';
+
+  @override
+  String get puzzleJumpToNextPuzzleImmediately => 'Tuj iri al la venonta puzlo';
+
+  @override
+  String get puzzlePuzzleDashboard => 'Puzla panelo';
+
+  @override
+  String get puzzleImprovementAreas => 'Pliboniĝaj areoj';
+
+  @override
+  String get puzzleStrengths => 'Fortoj';
+
+  @override
+  String get puzzleHistory => 'Puzla historio';
+
+  @override
+  String get puzzleSolved => 'solvita';
+
+  @override
+  String get puzzleFailed => 'malsukcesis';
+
+  @override
+  String get puzzleStreakDescription => 'Solvu sinsekve pli malfacilaj puzloj por konstrui venkan sinsekvon. Ne estas horloĝo, do prenu vian tempon. Unu malĝusta movo, kaj estas ludfino! Vi povas preterpasi unu movon po sesio.';
+
+  @override
+  String puzzleYourStreakX(String param) {
+    return 'Via sinsekvo: $param';
+  }
+
+  @override
+  String get puzzleStreakSkipExplanation => 'Preterpasu ĉi tiun movon por ŝirmi vian sinsekvo! Nur laboras unu per kuro.';
+
+  @override
+  String get puzzleContinueTheStreak => 'Daŭrigi la sinsekvon';
+
+  @override
+  String get puzzleNewStreak => 'Nova sinsekvo';
+
+  @override
+  String get puzzleFromMyGames => 'De miaj ludoj';
+
+  @override
+  String get puzzleLookupOfPlayer => 'Elserĉi puzlojn el ludoj de ludanto';
+
+  @override
+  String puzzleFromXGames(String param) {
+    return 'Puzloj el $param\' ludoj';
+  }
+
+  @override
+  String get puzzleSearchPuzzles => 'Serĉi puzlojn';
+
+  @override
+  String get puzzleFromMyGamesNone => 'Vi ne havas puzlojn en la datumbazo, sed Lichess ankoraŭ tre amas vin.\n\nLudu rapidaj kaj klasikaj ludoj por pliigi viajn ŝancojn de aldoni puzlon de vi!';
+
+  @override
+  String puzzleFromXGamesFound(String param1, String param2) {
+    return '$param1 puzlojn trovis en $param2 ludoj';
+  }
+
+  @override
+  String get puzzlePuzzleDashboardDescription => 'Trejnu, analizu, pliboniĝu';
+
+  @override
+  String puzzlePercentSolved(String param) {
+    return '$param solvita';
+  }
+
+  @override
+  String get puzzleNoPuzzlesToShow => 'Nenio por montri, ludu iujn puzlojn unue!';
+
+  @override
+  String get puzzleImprovementAreasDescription => 'Trajnu ĉi tiujn por optimumigi vian progreson!';
+
+  @override
+  String get puzzleStrengthDescription => 'Via rendimento estas plej bona en ĉi tiuj temoj';
+
+  @override
+  String puzzlePlayedXTimes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Ludita $count foje',
+      one: 'Ludita $count foje',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsBelowYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count poentoj sub via puzla rango',
+      one: 'Unu poento sub via puzla rango',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsAboveYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count poentoj super via puzla rango',
+      one: 'Unu poento super via puzla rango',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPlayed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ludita',
+      one: '$count ludita',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbToReplay(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count por reludi',
+      one: '$count por reludi',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get puzzleThemeAdvancedPawn => 'Altnivela soldato';
+
+  @override
+  String get puzzleThemeAdvancedPawnDescription => 'Unu el viaj soldatoj profundas en la kontraŭa flanko, kaj ĝia ebla rangaltiĝo minacas.';
+
+  @override
+  String get puzzleThemeAdvantage => 'Avantaĝo';
+
+  @override
+  String get puzzleThemeAdvantageDescription => 'Profitu viajn ŝancojn por havi decida avantaĝo. (200cp ≤ eval ≤ 600cp)';
+
+  @override
+  String get puzzleThemeAnastasiaMate => 'Anastasia ŝakmato';
+
+  @override
+  String get puzzleThemeAnastasiaMateDescription => 'Ĉevalo kaj turo aŭ damo laboras kune por kapti la kontraŭa reĝo inter la flanko de la tabulo kaj amika ŝakpeco.';
+
+  @override
+  String get puzzleThemeArabianMate => 'Araba ŝakmato';
+
+  @override
+  String get puzzleThemeArabianMateDescription => 'Ĉevalo kaj turo laboras kune por kapti la kontraŭa reĝo en angulo de la tabulo.';
+
+  @override
+  String get puzzleThemeAttackingF2F7 => 'Atako al f2 aŭ f7';
+
+  @override
+  String get puzzleThemeAttackingF2F7Description => 'Atako fokusata al la soldatojn ĉe f2 kaj f7, samkiel la malfermo ·«fritita hepataĵa».';
+
+  @override
+  String get puzzleThemeAttraction => 'Altiro';
+
+  @override
+  String get puzzleThemeAttractionDescription => 'Interŝanĝo aŭ ofero kiu instigas aŭ trudas kontraŭulan ŝakpecon al kvadrato ke ebligas taktikon.';
+
+  @override
+  String get puzzleThemeBackRankMate => 'Malantaŭvico mato';
+
+  @override
+  String get puzzleThemeBackRankMateDescription => 'Ŝakmati la reĝo sur la hejmrango, kiam ĝi estas kaptita per ĝiaj propraj ŝakpecoj.';
+
+  @override
+  String get puzzleThemeBishopEndgame => 'Kuriera finaĵo';
+
+  @override
+  String get puzzleThemeBishopEndgameDescription => 'Finaĵo nur kun kurieroj kaj soldatoj.';
+
+  @override
+  String get puzzleThemeBodenMate => 'Boden ŝakmato';
+
+  @override
+  String get puzzleThemeBodenMateDescription => 'Du kontraŭaj kurieroj sur interkruciĝantaj diagonaloj liveras maton al reĝo ĉirkaŭbarita per amikaj ŝakpecoj.';
+
+  @override
+  String get puzzleThemeCastling => 'Aroko';
+
+  @override
+  String get puzzleThemeCastlingDescription => 'Alportu la reĝo en sekurecon, kaj lanĉu la turon por atako.';
+
+  @override
+  String get puzzleThemeCapturingDefender => 'Kapti la defendanton';
+
+  @override
+  String get puzzleThemeCapturingDefenderDescription => 'Forprenu ŝakpecon, kiu estas grava por defendo de alia ŝakpeco, ebligante la kapto de la nun nedefendata ŝakpeco dum sekva movo.';
+
+  @override
+  String get puzzleThemeCrushing => 'Aplomba';
+
+  @override
+  String get puzzleThemeCrushingDescription => 'Trovu la kontraŭulan eraregon por akiri disbatantan avantaĝon. (takso ≥ 600cp)';
+
+  @override
+  String get puzzleThemeDoubleBishopMate => 'Duokuriera ŝakmato';
+
+  @override
+  String get puzzleThemeDoubleBishopMateDescription => 'Du kontraŭaj kurieroj sur apudaj diagonaloj liveras maton al reĝo ĉirkaŭbarita per amikaj ŝakpecoj.';
+
+  @override
+  String get puzzleThemeDovetailMate => 'Mato de Cozio';
+
+  @override
+  String get puzzleThemeDovetailMateDescription => 'Damo liveras maton al apuda reĝo, kies du eskapajn ĉelojn blokas amikaj ŝakpecoj.';
+
+  @override
+  String get puzzleThemeEquality => 'Egaligi';
+
+  @override
+  String get puzzleThemeEqualityDescription => 'Reiru el malvenkanta pozicio, kaj sekurigi egalvenkon aŭ egalan pozicion. (takso ≤ 200cp)';
+
+  @override
+  String get puzzleThemeKingsideAttack => 'Atako al la reĝa flanko';
+
+  @override
+  String get puzzleThemeKingsideAttackDescription => 'Atako al la kontraŭula reĝo, post kiam li arokis reĝflanke.';
+
+  @override
+  String get puzzleThemeClearance => 'Senigo';
+
+  @override
+  String get puzzleThemeClearanceDescription => 'Movo, ofte kun tempo, kiu malplenigas ĉelon, kolumnon, aŭ diagonalon por sekva taktika ideo.';
+
+  @override
+  String get puzzleThemeDefensiveMove => 'Defenda movo';
+
+  @override
+  String get puzzleThemeDefensiveMoveDescription => 'Preciza movo aŭ vico de movoj, kiu estas bezona por eviti perdon de materialo aŭ alia avantaĝo.';
+
+  @override
+  String get puzzleThemeDeflection => 'Devio';
+
+  @override
+  String get puzzleThemeDeflectionDescription => 'Movo, kiu distras kontraŭan ŝakpecon de alia devo, kio ĝi faras, kiel gardo de grava ĉelo. Kelkfoje ankaŭ nomiĝas \"troŝargo\".';
+
+  @override
+  String get puzzleThemeDiscoveredAttack => 'Malkovrita atako';
+
+  @override
+  String get puzzleThemeDiscoveredAttackDescription => 'Movo de peco (kiel ĉevalo), kiu antaŭe blokis atakon de longdistanca peco (kiel turo), fore de vojo de tiu peco.';
+
+  @override
+  String get puzzleThemeDoubleCheck => 'Duobla ŝako';
+
+  @override
+  String get puzzleThemeDoubleCheckDescription => 'Ŝakanta per du ŝakpecoj samtempe, kiel rezulto de malkovrita atako, kie kaj la moviĝa ŝakpeco kaj la malvualita ŝakpeco ataki la reĝo de la kontraŭulo.';
+
+  @override
+  String get puzzleThemeEndgame => 'Finaĵo';
+
+  @override
+  String get puzzleThemeEndgameDescription => 'Taktiko dum la lasta fazo de la ludo.';
+
+  @override
+  String get puzzleThemeEnPassantDescription => 'Taktiko kiu temas pri la preterpasa prena regulo, per kiu soldato povas kapti kontraŭan soldaton kiu preterpasis ĝin dum sia komenca du-ĉela movo.';
+
+  @override
+  String get puzzleThemeExposedKing => 'Neprotektita reĝo';
+
+  @override
+  String get puzzleThemeExposedKingDescription => 'Taktiko temas pri reĝo kun iometaj defendantoj ĉirkaŭ ĝin, ofte kondukanta al ŝakmato.';
+
+  @override
+  String get puzzleThemeFork => 'Forko';
+
+  @override
+  String get puzzleThemeForkDescription => 'Movo, kie la movita ŝakpeco atakas du kontraŭajn ŝakpecojn samtempe.';
+
+  @override
+  String get puzzleThemeHangingPiece => 'Pendanta ŝakpeco';
+
+  @override
+  String get puzzleThemeHangingPieceDescription => 'Taktiko temas pri kontraŭa ŝakpeco, kiu estas nedefendita aŭ malsufiĉe defendita kaj libera por kapti.';
+
+  @override
+  String get puzzleThemeHookMate => 'Hoka ŝakmato';
+
+  @override
+  String get puzzleThemeHookMateDescription => 'Ŝakmato per turo, ĉevalo, kaj soldato plus unu kontraŭa soldato por limigi la fuĝon de la kontraŭa reĝo.';
+
+  @override
+  String get puzzleThemeInterference => 'Interfero';
+
+  @override
+  String get puzzleThemeInterferenceDescription => 'Movo de peco inter du kontraŭaj pecoj por lasi unu aŭ ambaŭ kontraŭaj pecoj sendefenda, kiel ĉevalo sur defendita ĉelo inter du turoj.';
+
+  @override
+  String get puzzleThemeIntermezzo => 'Intermeza movo';
+
+  @override
+  String get puzzleThemeIntermezzoDescription => 'Anstataŭ ludo de la atendita movo, unue intermetu alian movon, kiu faras tujan minacon, al kiu via kontraŭulo devas respondi.';
+
+  @override
+  String get puzzleThemeKnightEndgame => 'Ĉevala finaĵo';
+
+  @override
+  String get puzzleThemeKnightEndgameDescription => 'Finaĵo nur kun ĉevaloj kaj soldatoj.';
+
+  @override
+  String get puzzleThemeLong => 'Longa puzlo';
+
+  @override
+  String get puzzleThemeLongDescription => 'Tri movoj por venki.';
+
+  @override
+  String get puzzleThemeMaster => 'Majstraj ludoj';
+
+  @override
+  String get puzzleThemeMasterDescription => 'Puzloj el ludoj ludantaj de titolaj ludantoj.';
+
+  @override
+  String get puzzleThemeMasterVsMaster => 'Majstro kontraŭ Majtro ludoj';
+
+  @override
+  String get puzzleThemeMasterVsMasterDescription => 'Puzloj el ludoj inter du titolitaj ŝakistoj.';
+
+  @override
+  String get puzzleThemeMate => 'Mato';
+
+  @override
+  String get puzzleThemeMateDescription => 'Gajni la ludon stile.';
+
+  @override
+  String get puzzleThemeMateIn1 => 'Mato en 1';
+
+  @override
+  String get puzzleThemeMateIn1Description => 'Liveri ŝakmaton en unu movo.';
+
+  @override
+  String get puzzleThemeMateIn2 => 'Mato en 2';
+
+  @override
+  String get puzzleThemeMateIn2Description => 'Liveri ŝakmaton en du movoj.';
+
+  @override
+  String get puzzleThemeMateIn3 => 'Mato en 3';
+
+  @override
+  String get puzzleThemeMateIn3Description => 'Liveri ŝakmaton en tri movoj.';
+
+  @override
+  String get puzzleThemeMateIn4 => 'Mato en 4';
+
+  @override
+  String get puzzleThemeMateIn4Description => 'Liveri ŝakmaton en kvar movoj.';
+
+  @override
+  String get puzzleThemeMateIn5 => 'Mato en 5 aŭ pli';
+
+  @override
+  String get puzzleThemeMateIn5Description => 'Solvi longan matantan vicon.';
+
+  @override
+  String get puzzleThemeMiddlegame => 'Mezludo';
+
+  @override
+  String get puzzleThemeMiddlegameDescription => 'Taktiko dum la dua fazo de la ludo.';
+
+  @override
+  String get puzzleThemeOneMove => 'Unumova puzlo';
+
+  @override
+  String get puzzleThemeOneMoveDescription => 'Puzlo, kiu estas nur unu movo longa.';
+
+  @override
+  String get puzzleThemeOpening => 'Malfermo';
+
+  @override
+  String get puzzleThemeOpeningDescription => 'Taktiko dum la unua fazo de la ludo.';
+
+  @override
+  String get puzzleThemePawnEndgame => 'Peona finaĵo';
+
+  @override
+  String get puzzleThemePawnEndgameDescription => 'Finaĵo nur kun soldatoj.';
+
+  @override
+  String get puzzleThemePin => 'Alpinglo';
+
+  @override
+  String get puzzleThemePinDescription => 'Taktiko temas pri alpingloj, kie ŝakpeco ne povas movi sen malkovri atakon sur pli valora ŝakpeco.';
+
+  @override
+  String get puzzleThemePromotion => 'Damigo';
+
+  @override
+  String get puzzleThemePromotionDescription => 'Rangaltigi soldaton al damo aŭ malpli grava peco.';
+
+  @override
+  String get puzzleThemeQueenEndgame => 'Dama finaĵo';
+
+  @override
+  String get puzzleThemeQueenEndgameDescription => 'Finaĵo nur kun damoj kaj soldatoj.';
+
+  @override
+  String get puzzleThemeQueenRookEndgame => 'Damo kaj Turo';
+
+  @override
+  String get puzzleThemeQueenRookEndgameDescription => 'Finaĵo nur kun damoj, turoj kaj soldatoj.';
+
+  @override
+  String get puzzleThemeQueensideAttack => 'Atako al la dama flanko';
+
+  @override
+  String get puzzleThemeQueensideAttackDescription => 'Atako al la kontraŭula reĝo, post kiam ri arokis damflanke.';
+
+  @override
+  String get puzzleThemeQuietMove => 'Trankvila movo';
+
+  @override
+  String get puzzleThemeQuietMoveDescription => 'Movo, ke nek faras ŝako aŭ kapto, nek subita minaco de kapto, sed preparas pli kaŝita neevitebla minaco por posta movo.';
+
+  @override
+  String get puzzleThemeRookEndgame => 'Tura finaĵo';
+
+  @override
+  String get puzzleThemeRookEndgameDescription => 'Finaĵo nur kun turoj kaj soldatoj.';
+
+  @override
+  String get puzzleThemeSacrifice => 'Ofero';
+
+  @override
+  String get puzzleThemeSacrificeDescription => 'Taktiko temas pri cedo de materialo dum la mallongtempo, por regajni avantaĝon dum devigita vico de movoj.';
+
+  @override
+  String get puzzleThemeShort => 'Mallonga puzlo';
+
+  @override
+  String get puzzleThemeShortDescription => 'Du movoj por venki.';
+
+  @override
+  String get puzzleThemeSkewer => 'Trapiko';
+
+  @override
+  String get puzzleThemeSkewerDescription => 'Motivo temas pri altvalora peco, kiu estas atakita, tiam moviĝas for de vojo permesante kapton de plimalaltvalora peco malantaŭ si. La inverso de alpinglo.';
+
+  @override
+  String get puzzleThemeSmotheredMate => 'Sufokita mato';
+
+  @override
+  String get puzzleThemeSmotheredMateDescription => 'Ŝakmato liverita per ĉevalo, kiam la matita rego ne povas moviĝi, ĉar ĝi estas ĉirkaŭbarita (aŭ sufokita) per siaj propraj ŝakpecoj.';
+
+  @override
+  String get puzzleThemeSuperGM => 'Super GM ludoj';
+
+  @override
+  String get puzzleThemeSuperGMDescription => 'Puzloj de ludoj luditaj de la plej bonaj ludantoj en la mondo.';
+
+  @override
+  String get puzzleThemeTrappedPiece => 'Kaptita ŝakpeco';
+
+  @override
+  String get puzzleThemeTrappedPieceDescription => 'Peco ne povas eskapi kapton, ĉar ĝi havas limigitajn movojn.';
+
+  @override
+  String get puzzleThemeUnderPromotion => 'Subdamigo';
+
+  @override
+  String get puzzleThemeUnderPromotionDescription => 'Damigi al ĉevalo, kuriero aŭ turo.';
+
+  @override
+  String get puzzleThemeVeryLong => 'Tre longa puzlo';
+
+  @override
+  String get puzzleThemeVeryLongDescription => 'Kvar aŭ pliaj movoj por venki.';
+
+  @override
+  String get puzzleThemeXRayAttack => 'X-radia atako';
+
+  @override
+  String get puzzleThemeXRayAttackDescription => 'Peco atakas aŭ defendas kvadraton, tra malamika peco.';
+
+  @override
+  String get puzzleThemeZugzwang => 'Movdevigo';
+
+  @override
+  String get puzzleThemeZugzwangDescription => 'La opcioj de la kontraŭulo por moviĝi estas limigitaj, kaj ĉiuj movoj plimalbonigas rian pozicion.';
+
+  @override
+  String get puzzleThemeHealthyMix => 'Sana miksaĵo';
+
+  @override
+  String get puzzleThemeHealthyMixDescription => 'Iom de ĉio. Vi ne scias kion atendi, do vi restas preta por io ajn! Same kiel en realaj ludoj.';
+
+  @override
+  String get puzzleThemePlayerGames => 'Ludantaj ludoj';
+
+  @override
+  String get puzzleThemePlayerGamesDescription => 'Serĉu enigmojn generitajn de viaj ludoj, aŭ de la ludoj de alia ludanto.';
+
+  @override
+  String puzzleThemePuzzleDownloadInformation(String param) {
+    return 'Ĉi tiuj enigmoj estas en la publika domeno, kaj povas esti elŝutitaj de $param.';
+  }
+
+  @override
+  String get searchSearch => 'Serĉi';
+
+  @override
+  String get settingsSettings => 'Agordoj';
+
+  @override
+  String get settingsCloseAccount => 'Fermi konton';
+
+  @override
+  String get settingsManagedAccountCannotBeClosed => 'Via konto estas administrata, kaj ne povas esti fermata.';
+
+  @override
+  String get settingsClosingIsDefinitive => 'Fermado estas definitiva. Ne eblos malfari. Ĉu vi certas?';
+
+  @override
+  String get settingsCantOpenSimilarAccount => 'Vi ne rajtos malfermi novan konton kun la sama nomo, eĉ se la uskleco estos malsama.';
+
+  @override
+  String get settingsChangedMindDoNotCloseAccount => 'Mi ŝanĝis mian opinion, mi ne volas fermi mian konton';
+
+  @override
+  String get settingsCloseAccountExplanation => 'Ĉu vi certas, ke vi volas fermi vian konton? Fermi vian konton estas konstanta decido. Vi NENIAM DENOVE povos ensaluti per ĝi.';
+
+  @override
+  String get settingsThisAccountIsClosed => 'Tiu ĉi konto estas fermita.';
 
   @override
   String get playWithAFriend => 'Ludi kun amiko';
@@ -512,6 +1612,12 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get deleteFromHere => 'Forigi ekde tie ĉi';
+
+  @override
+  String get collapseVariations => 'Collapse variations';
+
+  @override
+  String get expandVariations => 'Expand variations';
 
   @override
   String get forceVariation => 'Devigi variaĵon';
@@ -1371,15 +2477,6 @@ class AppLocalizationsEo extends AppLocalizations {
   String get emptyTournamentName => 'Se vi lasas ĝin malplena, ni uzos la nomon de fama ŝakludisto.';
 
   @override
-  String get recommendNotTouching => 'Ni rekomendi ke vi ne tuŝas ĉi tiujn.';
-
-  @override
-  String get fewerPlayers => 'Se vi aldonas aliĝpostulojn, via turniro havos malpli da ludantoj.';
-
-  @override
-  String get showAdvancedSettings => 'Montri spertulajn agordojn';
-
-  @override
   String get makePrivateTournament => 'Faru la turniron privata kaj restriktu la aliron per pasvorto';
 
   @override
@@ -1509,10 +2606,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get editProfile => 'Redakti profilon';
 
   @override
-  String get firstName => 'Persona nomo';
-
-  @override
-  String get lastName => 'Familia nomo';
+  String get realName => 'Real name';
 
   @override
   String get setFlair => 'Agordi viaj emoĝio';
@@ -1563,7 +2657,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get success => 'Sukceso';
 
   @override
-  String get automaticallyProceedToNextGameAfterMoving => 'Aŭtomate iri al la sekvanta ludo post movi';
+  String get automaticallyProceedToNextGameAfterMoving => 'Memage iri al sekvanta ludo post via movo';
 
   @override
   String get autoSwitch => 'Aŭtomata ludŝanĝado';
@@ -1641,13 +2735,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get cheat => 'Trompo';
 
   @override
-  String get insult => 'Insulto';
-
-  @override
   String get troll => 'Trolo';
-
-  @override
-  String get ratingManipulation => 'Manipulado de rango';
 
   @override
   String get other => 'Io alia';
@@ -1754,6 +2842,9 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get outsideTheBoard => 'Ekstere de la tabulo';
+
+  @override
+  String get allSquaresOfTheBoard => 'All squares of the board';
 
   @override
   String get onSlowGames => 'Ĉe malrapidaj ludoj';
@@ -2962,7 +4053,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: 'Via kontraŭulo forlasis la ludon. Vi povas postuli venkon en $count sekundoj.',
       one: 'Via kontraŭulo forlasis la ludon. Vi povas postuli venkon en $count sekundo.',
-      zero: 'Via kontraŭulo forlasis la ludon. Vi povas postuli venkon en $count sekundo.',
     );
     return '$_temp0';
   }
@@ -2974,7 +4064,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: 'Mato post $count duonmovoj',
       one: 'Mato post $count duonmovo',
-      zero: 'Mato post $count duonmovo',
     );
     return '$_temp0';
   }
@@ -2986,7 +4075,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: '$count eraregoj',
       one: '$count erarego',
-      zero: '$count erarego',
     );
     return '$_temp0';
   }
@@ -2998,7 +4086,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: '$count eraroj',
       one: '$count eraro',
-      zero: '$count eraro',
     );
     return '$_temp0';
   }
@@ -3010,7 +4097,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: '$count eraretoj',
       one: '$count erareto',
-      zero: '$count erareto',
     );
     return '$_temp0';
   }
@@ -3022,7 +4108,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: '$count konektitaj ludantoj',
       one: '$count konektita ludanto',
-      zero: '$count konektita ludanto',
     );
     return '$_temp0';
   }
@@ -3034,7 +4119,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: '$count ludoj',
       one: '$count ludo',
-      zero: '$count ludo',
     );
     return '$_temp0';
   }
@@ -3046,7 +4130,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: '$count rangoj trans $param2 ludoj',
       one: '$count rango trans $param2 ludo',
-      zero: '$count rango trans $param2 ludo',
     );
     return '$_temp0';
   }
@@ -3058,7 +4141,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: '$count paĝmarkoj',
       one: '$count paĝmarko',
-      zero: '$count paĝmarko',
     );
     return '$_temp0';
   }
@@ -3070,7 +4152,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: '$count tagoj',
       one: '$count tago',
-      zero: '$count tago',
     );
     return '$_temp0';
   }
@@ -3082,7 +4163,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: '$count horoj',
       one: '$count horo',
-      zero: '$count horo',
     );
     return '$_temp0';
   }
@@ -3094,7 +4174,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: '$count minutoj',
       one: '$count minuto',
-      zero: '$count minuto',
     );
     return '$_temp0';
   }
@@ -3106,7 +4185,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: 'Posicio aktualiĝas en ĉiu $count minutoj',
       one: 'Posicio aktualiĝas en ĉiu minuto',
-      zero: 'Posicio aktualiĝas en ĉiu minuto',
     );
     return '$_temp0';
   }
@@ -3118,7 +4196,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: '$count puzloj',
       one: '$count puzlo',
-      zero: '$count puzlo',
     );
     return '$_temp0';
   }
@@ -3130,7 +4207,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: '$count ludoj kun vi',
       one: '$count ludo kun vi',
-      zero: '$count ludo kun vi',
     );
     return '$_temp0';
   }
@@ -3142,7 +4218,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: '$count taksaj ludoj',
       one: '$count taksaj ludoj',
-      zero: '$count taksaj ludoj',
     );
     return '$_temp0';
   }
@@ -3154,7 +4229,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: '$count venkoj',
       one: '$count venkoj',
-      zero: '$count venkoj',
     );
     return '$_temp0';
   }
@@ -3166,7 +4240,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: '$count malvenkoj',
       one: '$count malvenkoj',
-      zero: '$count malvenkoj',
     );
     return '$_temp0';
   }
@@ -3178,7 +4251,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: '$count egalvenkoj',
       one: '$count egalvenkoj',
-      zero: '$count egalvenkoj',
     );
     return '$_temp0';
   }
@@ -3190,7 +4262,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: '$count aktualaj',
       one: '$count aktualaj',
-      zero: '$count aktualaj',
     );
     return '$_temp0';
   }
@@ -3202,7 +4273,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: 'Doni $count sekundojn',
       one: 'Doni $count sekundojn',
-      zero: 'Doni $count sekundojn',
     );
     return '$_temp0';
   }
@@ -3214,7 +4284,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: '$count turnira poento',
       one: '$count turnira poento',
-      zero: '$count turnira poento',
     );
     return '$_temp0';
   }
@@ -3226,7 +4295,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: '$count studoj',
       one: '$count studo',
-      zero: '$count studo',
     );
     return '$_temp0';
   }
@@ -3238,7 +4306,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: '$count samtempludoj',
       one: '$count samtempludo',
-      zero: '$count samtempludo',
     );
     return '$_temp0';
   }
@@ -3250,7 +4317,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: '≥ $count taksaj ludoj',
       one: '≥ $count taksa ludo',
-      zero: '≥ $count taksa ludo',
     );
     return '$_temp0';
   }
@@ -3262,7 +4328,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: '≥ $count taksaj ludoj de $param2',
       one: '≥ $count taksa ludo de $param2',
-      zero: '≥ $count taksa ludo de $param2',
     );
     return '$_temp0';
   }
@@ -3274,7 +4339,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: 'Vi devas ludi $count pli de taksaj $param2 ludoj',
       one: 'Vi devas ludi $count pli de taksa $param2 ludo',
-      zero: 'Vi devas ludi $count pli de taksa $param2 ludo',
     );
     return '$_temp0';
   }
@@ -3286,7 +4350,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: 'Vi devas ludi $count pli de taksaj ludoj',
       one: 'Vi devas ludi $count pli de taksa ludo',
-      zero: 'Vi devas ludi $count pli de taksa ludo',
     );
     return '$_temp0';
   }
@@ -3298,7 +4361,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: '$count Importitaj ludoj',
       one: '$count Importitaj ludoj',
-      zero: '$count Importitaj ludoj',
     );
     return '$_temp0';
   }
@@ -3310,7 +4372,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: '$count amikoj enretaj',
       one: '$count amiko enreta',
-      zero: '$count amiko enreta',
     );
     return '$_temp0';
   }
@@ -3322,7 +4383,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: '$count sekvantoj',
       one: '$count sekvanto',
-      zero: '$count sekvanto',
     );
     return '$_temp0';
   }
@@ -3334,7 +4394,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: '$count sekvatoj',
       one: '$count sekvatoj',
-      zero: '$count sekvatoj',
     );
     return '$_temp0';
   }
@@ -3346,7 +4405,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: 'Malpli ol $count minutoj',
       one: 'Malpli ol $count minuto',
-      zero: 'Malpli ol $count minuto',
     );
     return '$_temp0';
   }
@@ -3358,7 +4416,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: '$count aktivaj ludoj',
       one: '$count aktivaj ludoj',
-      zero: '$count aktivaj ludoj',
     );
     return '$_temp0';
   }
@@ -3370,7 +4427,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: 'Maksimumo: $count signoj.',
       one: 'Maksimumo: $count signoj.',
-      zero: 'Maksimumo: $count signoj.',
     );
     return '$_temp0';
   }
@@ -3382,7 +4438,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: '$count blokitaj ludantoj',
       one: '$count blokitaj ludantoj',
-      zero: '$count blokitaj ludantoj',
     );
     return '$_temp0';
   }
@@ -3394,7 +4449,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: '$count Forumaj Afiŝoj',
       one: '$count Forumaj Afiŝoj',
-      zero: '$count Forumaj Afiŝoj',
     );
     return '$_temp0';
   }
@@ -3406,7 +4460,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: '$count $param2 ludantoj ĉi tiu semajno.',
       one: 'Unu $param2 ludanto ĉi tiu semajno.',
-      zero: 'Unu $param2 ludanto ĉi tiu semajno.',
     );
     return '$_temp0';
   }
@@ -3418,7 +4471,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: 'Havebla en $count lingvoj!',
       one: 'Havebla en $count lingvo!',
-      zero: 'Havebla en $count lingvo!',
     );
     return '$_temp0';
   }
@@ -3430,7 +4482,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: '$count sekundoj por ludi la unuan movon',
       one: '$count sekundo por ludi la unuan movon',
-      zero: '$count sekundo por ludi la unuan movon',
     );
     return '$_temp0';
   }
@@ -3442,7 +4493,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: '$count sekundoj',
       one: '$count sekundo',
-      zero: '$count sekundo',
     );
     return '$_temp0';
   }
@@ -3454,1013 +4504,9 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: 'kaj savi $count antaŭmovajn vicojn',
       one: 'kaj savi $count antaŭmovan vicon',
-      zero: 'kaj savi $count antaŭmovan vicon',
     );
     return '$_temp0';
   }
-
-  @override
-  String get patronDonate => 'Donaci';
-
-  @override
-  String get patronLichessPatron => 'Lichess Patrono';
-
-  @override
-  String get preferencesPreferences => 'Preferoj';
-
-  @override
-  String get preferencesDisplay => 'Montri';
-
-  @override
-  String get preferencesPrivacy => 'Privateco';
-
-  @override
-  String get preferencesNotifications => 'Sciigoj';
-
-  @override
-  String get preferencesPieceAnimation => 'Animacio de ŝakpecoj';
-
-  @override
-  String get preferencesMaterialDifference => 'Materiala diferenco';
-
-  @override
-  String get preferencesBoardHighlights => 'Emfazaj aperoj sur tabulo (lasta movo kaj ŝakoj)';
-
-  @override
-  String get preferencesPieceDestinations => 'Destinoj de ŝakpecoj (eblaj movoj kaj antaŭmovoj)';
-
-  @override
-  String get preferencesBoardCoordinates => 'Tabulaj koordinatoj (A-H, 1-8)';
-
-  @override
-  String get preferencesMoveListWhilePlaying => 'Listo de movoj dum ludado';
-
-  @override
-  String get preferencesPgnPieceNotation => 'Mova notado';
-
-  @override
-  String get preferencesChessPieceSymbol => 'Ŝakpecaj simboloj';
-
-  @override
-  String get preferencesPgnLetter => 'Litero (K, Q, R, B, N)';
-
-  @override
-  String get preferencesZenMode => 'Zena modo';
-
-  @override
-  String get preferencesShowPlayerRatings => 'Montri rangojn de ludanto';
-
-  @override
-  String get preferencesShowFlairs => 'Montri ludantajn emoĝiojn';
-
-  @override
-  String get preferencesExplainShowPlayerRatings => 'Ĉi tio permesas kaŝi ĉiujn rangojn el la retejo, por helpi koncentriĝas pri la ŝako. Ludoj povas daŭre esti range, ĉi tiu temas nur pri tio, kion vi vidas.';
-
-  @override
-  String get preferencesDisplayBoardResizeHandle => 'Montri la grandecregilon de la ŝaktabulo';
-
-  @override
-  String get preferencesOnlyOnInitialPosition => 'Nur sur komenca pozicio';
-
-  @override
-  String get preferencesInGameOnly => 'Nur en ludo';
-
-  @override
-  String get preferencesChessClock => 'Ŝakhorloĝo';
-
-  @override
-  String get preferencesTenthsOfSeconds => 'Dekonoj da sekundoj';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'Kiam restas malpli ol 10 sekundoj';
-
-  @override
-  String get preferencesHorizontalGreenProgressBars => 'Horizontalaj verdaj progreso-strioj';
-
-  @override
-  String get preferencesSoundWhenTimeGetsCritical => 'Sono, kiam tempo iĝas tre malmulta';
-
-  @override
-  String get preferencesGiveMoreTime => 'Doni pli da tempo';
-
-  @override
-  String get preferencesGameBehavior => 'Luda konduto';
-
-  @override
-  String get preferencesHowDoYouMovePieces => 'Kiel movi pecojn?';
-
-  @override
-  String get preferencesClickTwoSquares => 'Klaku du kvadratojn';
-
-  @override
-  String get preferencesDragPiece => 'Ŝovi pecon';
-
-  @override
-  String get preferencesBothClicksAndDrag => 'Ambaŭ';
-
-  @override
-  String get preferencesPremovesPlayingDuringOpponentTurn => 'Antaŭmovoj (ludi dum la vico de kontraŭulo)';
-
-  @override
-  String get preferencesTakebacksWithOpponentApproval => 'Reprenoj (kun konsento de kontraŭulo)';
-
-  @override
-  String get preferencesInCasualGamesOnly => 'Nur ĉe amikaj ludoj';
-
-  @override
-  String get preferencesPromoteToQueenAutomatically => 'Aŭtomata ŝanĝo (de peonoj) al Damoj';
-
-  @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Premu la <ctrl> klavon dum promocio por dumtempe malebligi aŭtomatan promocion';
-
-  @override
-  String get preferencesWhenPremoving => 'Ĉe antaŭmovoj';
-
-  @override
-  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Aŭtomate postuli egalvenkon post trifoja ripetado';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Kiam restas malpli ol 30 sekundoj';
-
-  @override
-  String get preferencesMoveConfirmation => 'Konfirmo de movo';
-
-  @override
-  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Povas esti malebligita dum ludo kun la tabulo menuo';
-
-  @override
-  String get preferencesInCorrespondenceGames => 'Korespondaj ludoj';
-
-  @override
-  String get preferencesCorrespondenceAndUnlimited => 'Korespondado kaj sen tempolimo';
-
-  @override
-  String get preferencesConfirmResignationAndDrawOffers => 'Konfirmi proponojn de resignoj kaj egalvenkoj';
-
-  @override
-  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Aroka metodo';
-
-  @override
-  String get preferencesCastleByMovingTwoSquares => 'Movi reĝon je du kvadratoj';
-
-  @override
-  String get preferencesCastleByMovingOntoTheRook => 'Movi reĝon al la turo';
-
-  @override
-  String get preferencesInputMovesWithTheKeyboard => 'Enigi movojn per klavaro';
-
-  @override
-  String get preferencesInputMovesWithVoice => 'Enigi movojn per via voĉo';
-
-  @override
-  String get preferencesSnapArrowsToValidMoves => 'Montri per sagoj nur validajn movojn';
-
-  @override
-  String get preferencesSayGgWpAfterLosingOrDrawing => 'Skribi \"Good game, well played\" post malvenko aŭ egalvenko';
-
-  @override
-  String get preferencesYourPreferencesHaveBeenSaved => 'Viaj preferoj estis konservitaj.';
-
-  @override
-  String get preferencesScrollOnTheBoardToReplayMoves => 'Uzi rulumilon sur la tabelo por ripeti movojn';
-
-  @override
-  String get preferencesCorrespondenceEmailNotification => 'Tage retpoŝta sciigo listante viajn korespondajn partiojn';
-
-  @override
-  String get preferencesNotifyStreamStart => 'Filmprezentisto iĝas vive';
-
-  @override
-  String get preferencesNotifyInboxMsg => 'Nova enirkesto mesaĝo';
-
-  @override
-  String get preferencesNotifyForumMention => 'Foruma komento mencias vin';
-
-  @override
-  String get preferencesNotifyInvitedStudy => 'Studa invito';
-
-  @override
-  String get preferencesNotifyGameEvent => 'Koresponde ludaj novaĵoj';
-
-  @override
-  String get preferencesNotifyChallenge => 'Defioj';
-
-  @override
-  String get preferencesNotifyTournamentSoon => 'Turniro baldaŭ komencos';
-
-  @override
-  String get preferencesNotifyTimeAlarm => 'Koresponda horloĝo baldaŭ finiĝas';
-
-  @override
-  String get preferencesNotifyBell => 'Sonorilaj sciigoj en Lichess mem';
-
-  @override
-  String get preferencesNotifyPush => 'Aparta sciigo kiam vi ne ĉe Licess';
-
-  @override
-  String get preferencesNotifyWeb => 'Retumilo';
-
-  @override
-  String get preferencesNotifyDevice => 'Aparato';
-
-  @override
-  String get preferencesBellNotificationSound => 'Sonorile sciiga sono';
-
-  @override
-  String get puzzlePuzzles => 'Puzloj';
-
-  @override
-  String get puzzlePuzzleThemes => 'Puzlaj temoj';
-
-  @override
-  String get puzzleRecommended => 'Rekomendita';
-
-  @override
-  String get puzzlePhases => 'Fazoj';
-
-  @override
-  String get puzzleMotifs => 'Motivoj';
-
-  @override
-  String get puzzleAdvanced => 'Progresinta';
-
-  @override
-  String get puzzleLengths => 'Longecoj';
-
-  @override
-  String get puzzleMates => 'Matoj';
-
-  @override
-  String get puzzleGoals => 'Celoj';
-
-  @override
-  String get puzzleOrigin => 'Originoj';
-
-  @override
-  String get puzzleSpecialMoves => 'Specialaj movoj';
-
-  @override
-  String get puzzleDidYouLikeThisPuzzle => 'Ĉu vi ŝatis la puzlon?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Voĉdonu por iri al la venonta puzlo!';
-
-  @override
-  String get puzzleUpVote => 'Supren voĉdoni puzlo';
-
-  @override
-  String get puzzleDownVote => 'Malsupren voĉdoni puzlo';
-
-  @override
-  String get puzzleYourPuzzleRatingWillNotChange => 'Via puzla rango ne ŝanĝiĝos. Notu, ke puzloj ne estas konkurso. Via rango helpis elekti la plej bonaj puzloj por via nuna lerto.';
-
-  @override
-  String get puzzleFindTheBestMoveForWhite => 'Trovu la plej bonan movon por blanko.';
-
-  @override
-  String get puzzleFindTheBestMoveForBlack => 'Trovu la plej bonan movon por nigro.';
-
-  @override
-  String get puzzleToGetPersonalizedPuzzles => 'Por akiri personigitajn puzlojn:';
-
-  @override
-  String puzzlePuzzleId(String param) {
-    return 'Puzlo $param';
-  }
-
-  @override
-  String get puzzlePuzzleOfTheDay => 'Puzlo de la tago';
-
-  @override
-  String get puzzleDailyPuzzle => 'Taga puzlo';
-
-  @override
-  String get puzzleClickToSolve => 'Klaku por solvi';
-
-  @override
-  String get puzzleGoodMove => 'Bona movo';
-
-  @override
-  String get puzzleBestMove => 'Plej bona movo!';
-
-  @override
-  String get puzzleKeepGoing => 'Daŭrigu…';
-
-  @override
-  String get puzzlePuzzleSuccess => 'Sukceso!';
-
-  @override
-  String get puzzlePuzzleComplete => 'Puzlo kompletigita!';
-
-  @override
-  String get puzzleByOpenings => 'Laŭ malfermoj';
-
-  @override
-  String get puzzlePuzzlesByOpenings => 'Puzloj laŭ malfermoj';
-
-  @override
-  String get puzzleOpeningsYouPlayedTheMost => 'Malfermoj kiujn vi plej ludis en rangaj ludoj';
-
-  @override
-  String get puzzleUseFindInPage => 'Uzu \"Serĉi ĉi tiun paĝon\" de la retumila menuo por trovi vian plej favora malfermo!';
-
-  @override
-  String get puzzleUseCtrlF => 'Uzu Ctrl+f por trovi vian plej ŝatatan malfermon!';
-
-  @override
-  String get puzzleNotTheMove => 'Tiu ne estas la movo!';
-
-  @override
-  String get puzzleTrySomethingElse => 'Provu ion alian.';
-
-  @override
-  String puzzleRatingX(String param) {
-    return 'Taksado: $param';
-  }
-
-  @override
-  String get puzzleHidden => 'kaŝita';
-
-  @override
-  String puzzleFromGameLink(String param) {
-    return 'El ludo $param';
-  }
-
-  @override
-  String get puzzleContinueTraining => 'Daŭrigi la trejnadon';
-
-  @override
-  String get puzzleDifficultyLevel => 'Malfacileca nivelo';
-
-  @override
-  String get puzzleNormal => 'Normale';
-
-  @override
-  String get puzzleEasier => 'Facile';
-
-  @override
-  String get puzzleEasiest => 'Tre facile';
-
-  @override
-  String get puzzleHarder => 'Malfacile';
-
-  @override
-  String get puzzleHardest => 'Tre malfacile';
-
-  @override
-  String get puzzleExample => 'Ekzamplo';
-
-  @override
-  String get puzzleAddAnotherTheme => 'Aldonu novan temon';
-
-  @override
-  String get puzzleNextPuzzle => 'Sekva puzlo';
-
-  @override
-  String get puzzleJumpToNextPuzzleImmediately => 'Tuj iri al la venonta puzlo';
-
-  @override
-  String get puzzlePuzzleDashboard => 'Puzla panelo';
-
-  @override
-  String get puzzleImprovementAreas => 'Pliboniĝaj areoj';
-
-  @override
-  String get puzzleStrengths => 'Fortoj';
-
-  @override
-  String get puzzleHistory => 'Puzla historio';
-
-  @override
-  String get puzzleSolved => 'solvita';
-
-  @override
-  String get puzzleFailed => 'malsukcesis';
-
-  @override
-  String get puzzleStreakDescription => 'Solvu sinsekve pli malfacilaj puzloj por konstrui venkan sinsekvon. Ne estas horloĝo, do prenu vian tempon. Unu malĝusta movo, kaj estas ludfino! Vi povas preterpasi unu movon po sesio.';
-
-  @override
-  String puzzleYourStreakX(String param) {
-    return 'Via sinsekvo: $param';
-  }
-
-  @override
-  String get puzzleStreakSkipExplanation => 'Preterpasu ĉi tiun movon por ŝirmi vian sinsekvo! Nur laboras unu per kuro.';
-
-  @override
-  String get puzzleContinueTheStreak => 'Daŭrigi la sinsekvon';
-
-  @override
-  String get puzzleNewStreak => 'Nova sinsekvo';
-
-  @override
-  String get puzzleFromMyGames => 'De miaj ludoj';
-
-  @override
-  String get puzzleLookupOfPlayer => 'Elserĉi puzlojn el ludoj de ludanto';
-
-  @override
-  String puzzleFromXGames(String param) {
-    return 'Puzloj el $param\' ludoj';
-  }
-
-  @override
-  String get puzzleSearchPuzzles => 'Serĉi puzlojn';
-
-  @override
-  String get puzzleFromMyGamesNone => 'Vi ne havas puzlojn en la datumbazo, sed Lichess ankoraŭ tre amas vin.\n\nLudu rapidaj kaj klasikaj ludoj por pliigi viajn ŝancojn de aldoni puzlon de vi!';
-
-  @override
-  String puzzleFromXGamesFound(String param1, String param2) {
-    return '$param1 puzlojn trovis en $param2 ludoj';
-  }
-
-  @override
-  String get puzzlePuzzleDashboardDescription => 'Trejnu, analizu, pliboniĝu';
-
-  @override
-  String puzzlePercentSolved(String param) {
-    return '$param solvita';
-  }
-
-  @override
-  String get puzzleNoPuzzlesToShow => 'Nenio por montri, ludu iujn puzlojn unue!';
-
-  @override
-  String get puzzleImprovementAreasDescription => 'Trajnu ĉi tiujn por optimumigi vian progreson!';
-
-  @override
-  String get puzzleStrengthDescription => 'Via rendimento estas plej bona en ĉi tiuj temoj';
-
-  @override
-  String puzzlePlayedXTimes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Ludita $count foje',
-      one: 'Ludita $count foje',
-      zero: 'Ludita $count foje',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsBelowYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count poentoj sub via puzla rango',
-      one: 'Unu poento sub via puzla rango',
-      zero: 'Unu poento sub via puzla rango',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsAboveYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count poentoj super via puzla rango',
-      one: 'Unu poento super via puzla rango',
-      zero: 'Unu poento super via puzla rango',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPlayed(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count ludita',
-      one: '$count ludita',
-      zero: '$count ludita',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbToReplay(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count por reludi',
-      one: '$count por reludi',
-      zero: '$count por reludi',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get puzzleThemeAdvancedPawn => 'Antaŭenigita peono';
-
-  @override
-  String get puzzleThemeAdvancedPawnDescription => 'Unu de viaj peonoj estas avancita en kontraŭula pozicio, ĝi eble minacas promocii.';
-
-  @override
-  String get puzzleThemeAdvantage => 'Avantaĝo';
-
-  @override
-  String get puzzleThemeAdvantageDescription => 'Profitu viajn ŝancojn por havi decida avantaĝo. (200cp ≤ eval ≤ 600cp)';
-
-  @override
-  String get puzzleThemeAnastasiaMate => 'Anastasia ŝakmato';
-
-  @override
-  String get puzzleThemeAnastasiaMateDescription => 'Ĉevalo kaj turo aŭ damo laboras kune por kapti la kontraŭa reĝo inter la flanko de la tabulo kaj amika ŝakpeco.';
-
-  @override
-  String get puzzleThemeArabianMate => 'Araba ŝakmato';
-
-  @override
-  String get puzzleThemeArabianMateDescription => 'Ĉevalo kaj turo laboras kune por kapti la kontraŭa reĝo en angulo de la tabulo.';
-
-  @override
-  String get puzzleThemeAttackingF2F7 => 'Atako al f2 aŭ f7';
-
-  @override
-  String get puzzleThemeAttackingF2F7Description => 'Atako fokusiĝas sur la f2 aŭ f7 peono, kiel en la fritita hepataĵa malfermo.';
-
-  @override
-  String get puzzleThemeAttraction => 'Altiro';
-
-  @override
-  String get puzzleThemeAttractionDescription => 'Interŝanĝo aŭ ofero kiu instigas aŭ trudas kontraŭulan ŝakpecon al kvadrato ke ebligas taktikon.';
-
-  @override
-  String get puzzleThemeBackRankMate => 'Malantaŭvico mato';
-
-  @override
-  String get puzzleThemeBackRankMateDescription => 'Ŝakmati la reĝo sur la hejmrango, kiam ĝi estas kaptita per ĝiaj propraj ŝakpecoj.';
-
-  @override
-  String get puzzleThemeBishopEndgame => 'Kuriera finaĵo';
-
-  @override
-  String get puzzleThemeBishopEndgameDescription => 'Finaĵo nur kun kurieroj kaj peonoj.';
-
-  @override
-  String get puzzleThemeBodenMate => 'Boden ŝakmato';
-
-  @override
-  String get puzzleThemeBodenMateDescription => 'Du kontraŭaj kurieroj sur interkruciĝantaj diagonaloj liveras maton al reĝo ĉirkaŭbarita per amikaj ŝakpecoj.';
-
-  @override
-  String get puzzleThemeCastling => 'Aroko';
-
-  @override
-  String get puzzleThemeCastlingDescription => 'Alportu la reĝo en sekurecon, kaj lanĉu la turon por atako.';
-
-  @override
-  String get puzzleThemeCapturingDefender => 'Kapti la defendanton';
-
-  @override
-  String get puzzleThemeCapturingDefenderDescription => 'Forprenu ŝakpecon, kiu estas grava por defendo de alia ŝakpeco, ebligante la kapto de la nun nedefendata ŝakpeco dum sekva movo.';
-
-  @override
-  String get puzzleThemeCrushing => 'Aplomba';
-
-  @override
-  String get puzzleThemeCrushingDescription => 'Trovu la kontraŭulan eraregon por akiri disbatantan avantaĝon. (takso ≥ 600cp)';
-
-  @override
-  String get puzzleThemeDoubleBishopMate => 'Duokuriera ŝakmato';
-
-  @override
-  String get puzzleThemeDoubleBishopMateDescription => 'Du kontraŭaj kurieroj sur apudaj diagonaloj liveras maton al reĝo ĉirkaŭbarita per amikaj ŝakpecoj.';
-
-  @override
-  String get puzzleThemeDovetailMate => 'Mato de Cozio';
-
-  @override
-  String get puzzleThemeDovetailMateDescription => 'Damo liveras maton al apuda reĝo, kies du eskapajn ĉelojn blokas amikaj ŝakpecoj.';
-
-  @override
-  String get puzzleThemeEquality => 'Egaligi';
-
-  @override
-  String get puzzleThemeEqualityDescription => 'Reiru el malvenkanta pozicio, kaj sekurigi egalvenkon aŭ egalan pozicion. (takso ≤ 200cp)';
-
-  @override
-  String get puzzleThemeKingsideAttack => 'Atako al la reĝa flanko';
-
-  @override
-  String get puzzleThemeKingsideAttackDescription => 'Atako al la kontraŭula reĝo, post kiam li arokis reĝflanke.';
-
-  @override
-  String get puzzleThemeClearance => 'Senigo';
-
-  @override
-  String get puzzleThemeClearanceDescription => 'Movo, ofte kun tempo, kiu malplenigas ĉelon, kolumnon, aŭ diagonalon por sekva taktika ideo.';
-
-  @override
-  String get puzzleThemeDefensiveMove => 'Defenda movo';
-
-  @override
-  String get puzzleThemeDefensiveMoveDescription => 'Preciza movo aŭ vico de movoj, kiu estas bezona por eviti perdon de materialo aŭ alia avantaĝo.';
-
-  @override
-  String get puzzleThemeDeflection => 'Devio';
-
-  @override
-  String get puzzleThemeDeflectionDescription => 'Movo, kiu distras kontraŭan ŝakpecon de alia devo, kio ĝi faras, kiel gardo de grava ĉelo. Kelkfoje ankaŭ nomiĝas \"troŝargo\".';
-
-  @override
-  String get puzzleThemeDiscoveredAttack => 'Malkovrita atako';
-
-  @override
-  String get puzzleThemeDiscoveredAttackDescription => 'Movo de peco (kiel ĉevalo), kiu antaŭe blokis atakon de longdistanca peco (kiel turo), fore de vojo de tiu peco.';
-
-  @override
-  String get puzzleThemeDoubleCheck => 'Duobla ŝako';
-
-  @override
-  String get puzzleThemeDoubleCheckDescription => 'Ŝakanta per du ŝakpecoj samtempe, kiel rezulto de malkovrita atako, kie kaj la moviĝa ŝakpeco kaj la malvualita ŝakpeco ataki la reĝo de la kontraŭulo.';
-
-  @override
-  String get puzzleThemeEndgame => 'Finaĵo';
-
-  @override
-  String get puzzleThemeEndgameDescription => 'Taktiko dum la lasta fazo de la ludo.';
-
-  @override
-  String get puzzleThemeEnPassantDescription => 'Taktiko temas pri la preterpasa prena regulo, kie peono povas kapti kontraŭulan peonon, kiu preterpasis ĝin dum sia komenca du-ĉela movo.';
-
-  @override
-  String get puzzleThemeExposedKing => 'Neprotektita reĝo';
-
-  @override
-  String get puzzleThemeExposedKingDescription => 'Taktiko temas pri reĝo kun iometaj defendantoj ĉirkaŭ ĝin, ofte kondukanta al ŝakmato.';
-
-  @override
-  String get puzzleThemeFork => 'Forko';
-
-  @override
-  String get puzzleThemeForkDescription => 'Movo, kie la movita ŝakpeco atakas du kontraŭajn ŝakpecojn samtempe.';
-
-  @override
-  String get puzzleThemeHangingPiece => 'Pendanta ŝakpeco';
-
-  @override
-  String get puzzleThemeHangingPieceDescription => 'Taktiko temas pri kontraŭa ŝakpeco, kiu estas nedefendita aŭ malsufiĉe defendita kaj libera por kapti.';
-
-  @override
-  String get puzzleThemeHookMate => 'Hoka ŝakmato';
-
-  @override
-  String get puzzleThemeHookMateDescription => 'Ŝakmato per turo, ĉevalo, kaj peono plus unu kontraŭa peono por limigi la eskapon de la kontraŭa reĝo.';
-
-  @override
-  String get puzzleThemeInterference => 'Interfero';
-
-  @override
-  String get puzzleThemeInterferenceDescription => 'Movo de peco inter du kontraŭaj pecoj por lasi unu aŭ ambaŭ kontraŭaj pecoj sendefenda, kiel ĉevalo sur defendita ĉelo inter du turoj.';
-
-  @override
-  String get puzzleThemeIntermezzo => 'Intermeza movo';
-
-  @override
-  String get puzzleThemeIntermezzoDescription => 'Anstataŭ ludo de la atendita movo, unue intermetu alian movon, kiu faras tujan minacon, al kiu via kontraŭulo devas respondi.';
-
-  @override
-  String get puzzleThemeKnightEndgame => 'Ĉevala finaĵo';
-
-  @override
-  String get puzzleThemeKnightEndgameDescription => 'Finaĵo nur kun ĉevaloj kaj peonoj.';
-
-  @override
-  String get puzzleThemeLong => 'Longa puzlo';
-
-  @override
-  String get puzzleThemeLongDescription => 'Tri movoj por venki.';
-
-  @override
-  String get puzzleThemeMaster => 'Majstraj ludoj';
-
-  @override
-  String get puzzleThemeMasterDescription => 'Puzloj el ludoj ludantaj de titolaj ludantoj.';
-
-  @override
-  String get puzzleThemeMasterVsMaster => 'Majstro kontraŭ Majtro ludoj';
-
-  @override
-  String get puzzleThemeMasterVsMasterDescription => 'Puzloj el ludoj inter du titolitaj ŝakistoj.';
-
-  @override
-  String get puzzleThemeMate => 'Mato';
-
-  @override
-  String get puzzleThemeMateDescription => 'Gajni la ludon stile.';
-
-  @override
-  String get puzzleThemeMateIn1 => 'Mato en 1';
-
-  @override
-  String get puzzleThemeMateIn1Description => 'Liveri ŝakmaton en unu movo.';
-
-  @override
-  String get puzzleThemeMateIn2 => 'Mato en 2';
-
-  @override
-  String get puzzleThemeMateIn2Description => 'Liveri ŝakmaton en du movoj.';
-
-  @override
-  String get puzzleThemeMateIn3 => 'Mato en 3';
-
-  @override
-  String get puzzleThemeMateIn3Description => 'Liveri ŝakmaton en tri movoj.';
-
-  @override
-  String get puzzleThemeMateIn4 => 'Mato en 4';
-
-  @override
-  String get puzzleThemeMateIn4Description => 'Liveri ŝakmaton en kvar movoj.';
-
-  @override
-  String get puzzleThemeMateIn5 => 'Mato en 5 aŭ pli';
-
-  @override
-  String get puzzleThemeMateIn5Description => 'Solvi longan matantan vicon.';
-
-  @override
-  String get puzzleThemeMiddlegame => 'Mezludo';
-
-  @override
-  String get puzzleThemeMiddlegameDescription => 'Taktiko dum la dua fazo de la ludo.';
-
-  @override
-  String get puzzleThemeOneMove => 'Unumova puzlo';
-
-  @override
-  String get puzzleThemeOneMoveDescription => 'Puzlo, kiu estas nur unu movo longa.';
-
-  @override
-  String get puzzleThemeOpening => 'Malfermo';
-
-  @override
-  String get puzzleThemeOpeningDescription => 'Taktiko dum la unua fazo de la ludo.';
-
-  @override
-  String get puzzleThemePawnEndgame => 'Peona finaĵo';
-
-  @override
-  String get puzzleThemePawnEndgameDescription => 'Finaĵo nur kun peonoj.';
-
-  @override
-  String get puzzleThemePin => 'Alpinglo';
-
-  @override
-  String get puzzleThemePinDescription => 'Taktiko temas pri alpingloj, kie ŝakpeco ne povas movi sen malkovri atakon sur pli valora ŝakpeco.';
-
-  @override
-  String get puzzleThemePromotion => 'Damigo';
-
-  @override
-  String get puzzleThemePromotionDescription => 'Damigi unu el viaj peonoj al damo, ĉevalo, kuriero aŭ turo.';
-
-  @override
-  String get puzzleThemeQueenEndgame => 'Dama finaĵo';
-
-  @override
-  String get puzzleThemeQueenEndgameDescription => 'Finaĵo nur kun damoj kaj peonoj.';
-
-  @override
-  String get puzzleThemeQueenRookEndgame => 'Damo kaj Turo';
-
-  @override
-  String get puzzleThemeQueenRookEndgameDescription => 'Finaĵo nur kun damoj, turoj kaj peonoj.';
-
-  @override
-  String get puzzleThemeQueensideAttack => 'Atako al la dama flanko';
-
-  @override
-  String get puzzleThemeQueensideAttackDescription => 'Atako al la kontraŭula reĝo, post kiam ri arokis damflanke.';
-
-  @override
-  String get puzzleThemeQuietMove => 'Trankvila movo';
-
-  @override
-  String get puzzleThemeQuietMoveDescription => 'Movo, ke nek faras ŝako aŭ kapto, nek subita minaco de kapto, sed preparas pli kaŝita neevitebla minaco por posta movo.';
-
-  @override
-  String get puzzleThemeRookEndgame => 'Tura finaĵo';
-
-  @override
-  String get puzzleThemeRookEndgameDescription => 'Finaĵo nur kun turoj kaj peonoj.';
-
-  @override
-  String get puzzleThemeSacrifice => 'Ofero';
-
-  @override
-  String get puzzleThemeSacrificeDescription => 'Taktiko temas pri cedo de materialo dum la mallongtempo, por regajni avantaĝon dum devigita vico de movoj.';
-
-  @override
-  String get puzzleThemeShort => 'Mallonga puzlo';
-
-  @override
-  String get puzzleThemeShortDescription => 'Du movoj por venki.';
-
-  @override
-  String get puzzleThemeSkewer => 'Trapiko';
-
-  @override
-  String get puzzleThemeSkewerDescription => 'Motivo temas pri altvalora peco, kiu estas atakita, tiam moviĝas for de vojo permesante kapton de plimalaltvalora peco malantaŭ si. La inverso de alpinglo.';
-
-  @override
-  String get puzzleThemeSmotheredMate => 'Sufokita mato';
-
-  @override
-  String get puzzleThemeSmotheredMateDescription => 'Ŝakmato liverita per ĉevalo, kiam la matita rego ne povas moviĝi, ĉar ĝi estas ĉirkaŭbarita (aŭ sufokita) per siaj propraj ŝakpecoj.';
-
-  @override
-  String get puzzleThemeSuperGM => 'Super GM ludoj';
-
-  @override
-  String get puzzleThemeSuperGMDescription => 'Puzloj de ludoj luditaj de la plej bonaj ludantoj en la mondo.';
-
-  @override
-  String get puzzleThemeTrappedPiece => 'Kaptita ŝakpeco';
-
-  @override
-  String get puzzleThemeTrappedPieceDescription => 'Peco ne povas eskapi kapton, ĉar ĝi havas limigitajn movojn.';
-
-  @override
-  String get puzzleThemeUnderPromotion => 'Subdamigo';
-
-  @override
-  String get puzzleThemeUnderPromotionDescription => 'Damigi al ĉevalo, kuriero aŭ turo.';
-
-  @override
-  String get puzzleThemeVeryLong => 'Tre longa puzlo';
-
-  @override
-  String get puzzleThemeVeryLongDescription => 'Kvar aŭ pliaj movoj por venki.';
-
-  @override
-  String get puzzleThemeXRayAttack => 'X-radia atako';
-
-  @override
-  String get puzzleThemeXRayAttackDescription => 'Peco atakas aŭ defendas kvadraton, tra malamika peco.';
-
-  @override
-  String get puzzleThemeZugzwang => 'Movdevigo';
-
-  @override
-  String get puzzleThemeZugzwangDescription => 'La opcioj de la kontraŭulo por moviĝi estas limigitaj, kaj ĉiuj movoj plimalbonigas rian pozicion.';
-
-  @override
-  String get puzzleThemeHealthyMix => 'Sana miksaĵo';
-
-  @override
-  String get puzzleThemeHealthyMixDescription => 'Iom de ĉio. Vi ne scias kion atendi, do vi restas preta por io ajn! Same kiel en realaj ludoj.';
-
-  @override
-  String get puzzleThemePlayerGames => 'Ludantaj ludoj';
-
-  @override
-  String get puzzleThemePlayerGamesDescription => 'Serĉu enigmojn generitajn de viaj ludoj, aŭ de la ludoj de alia ludanto.';
-
-  @override
-  String puzzleThemePuzzleDownloadInformation(String param) {
-    return 'Ĉi tiuj enigmoj estas en la publika domeno, kaj povas esti elŝutitaj de $param.';
-  }
-
-  @override
-  String perfStatPerfStats(String param) {
-    return '$param statikoj';
-  }
-
-  @override
-  String get perfStatViewTheGames => 'Rigardi la ludojn';
-
-  @override
-  String get perfStatProvisional => 'provizora';
-
-  @override
-  String get perfStatNotEnoughRatedGames => 'Ne sufiĉe taksitaj ludoj estis luditaj por estigi fidindan rangon.';
-
-  @override
-  String perfStatProgressOverLastXGames(String param) {
-    return 'Progreso dum la lastaj $param ludoj:';
-  }
-
-  @override
-  String perfStatRatingDeviation(String param) {
-    return 'Taksa devio: $param.';
-  }
-
-  @override
-  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
-    return 'Pli malalta valoro signifas, ke la rango estas pli stabila. Super $param1 la rango estas konsiderata provizora. Por esti inkluzivita en la rangotabeloj, ĉi tiu valoro devus esti sub $param2 (norma ŝako) aŭ $param3 (variaĵoj).';
-  }
-
-  @override
-  String get perfStatTotalGames => 'Totalaj ludoj';
-
-  @override
-  String get perfStatRatedGames => 'Rangitaj ludoj';
-
-  @override
-  String get perfStatTournamentGames => 'Turniraj ludoj';
-
-  @override
-  String get perfStatBerserkedGames => 'Berserk ludoj';
-
-  @override
-  String get perfStatTimeSpentPlaying => 'Tempo pasita ludante';
-
-  @override
-  String get perfStatAverageOpponent => 'Meznombra kontraŭulo';
-
-  @override
-  String get perfStatVictories => 'Venkoj';
-
-  @override
-  String get perfStatDefeats => 'Malvenkoj';
-
-  @override
-  String get perfStatDisconnections => 'Malkonektoj';
-
-  @override
-  String get perfStatNotEnoughGames => 'Ne sufiĉaj luditaj ludoj';
-
-  @override
-  String perfStatHighestRating(String param) {
-    return 'Plej alta rango: $param';
-  }
-
-  @override
-  String perfStatLowestRating(String param) {
-    return 'Plej malalta rango: $param';
-  }
-
-  @override
-  String perfStatFromXToY(String param1, String param2) {
-    return 'de $param1 al $param2';
-  }
-
-  @override
-  String get perfStatWinningStreak => 'Sinsekva gajnado';
-
-  @override
-  String get perfStatLosingStreak => 'Sinsekva perdado';
-
-  @override
-  String perfStatLongestStreak(String param) {
-    return 'Plej longa sinsekva rezulto: $param';
-  }
-
-  @override
-  String perfStatCurrentStreak(String param) {
-    return 'Nuntempa sinsekva rezulto: $param';
-  }
-
-  @override
-  String get perfStatBestRated => 'Plej bonaj venkoj laŭ kontraŭula rango';
-
-  @override
-  String get perfStatGamesInARow => 'Ludoj sinsekve luditaj';
-
-  @override
-  String get perfStatLessThanOneHour => 'Malpli ol unu horo inter ludoj';
-
-  @override
-  String get perfStatMaxTimePlaying => 'Maksimuma tempo pasita ludante';
-
-  @override
-  String get perfStatNow => 'nun';
-
-  @override
-  String get searchSearch => 'Serĉi';
-
-  @override
-  String get settingsSettings => 'Agordoj';
-
-  @override
-  String get settingsCloseAccount => 'Fermi konton';
-
-  @override
-  String get settingsManagedAccountCannotBeClosed => 'Via konto estas administrata, kaj ne povas esti fermata.';
-
-  @override
-  String get settingsClosingIsDefinitive => 'Fermado estas definitiva. Ne eblos malfari. Ĉu vi certas?';
-
-  @override
-  String get settingsCantOpenSimilarAccount => 'Vi ne rajtos malfermi novan konton kun la sama nomo, eĉ se la uskleco estos malsama.';
-
-  @override
-  String get settingsChangedMindDoNotCloseAccount => 'Mi ŝanĝis mian opinion, mi ne volas fermi mian konton';
-
-  @override
-  String get settingsCloseAccountExplanation => 'Ĉu vi certas, ke vi volas fermi vian konton? Fermi vian konton estas konstanta decido. Vi NENIAM DENOVE povos ensaluti per ĝi.';
-
-  @override
-  String get settingsThisAccountIsClosed => 'Tiu ĉi konto estas fermita.';
-
-  @override
-  String get streamerLichessStreamers => 'Lichess filmprezentistoj';
 
   @override
   String get stormMoveToStart => 'Movu por komenci';
@@ -4628,7 +4674,6 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: '$count kuroj',
       one: '1 kuro',
-      zero: '1 kuro',
     );
     return '$_temp0';
   }
@@ -4640,20 +4685,16 @@ class AppLocalizationsEo extends AppLocalizations {
       locale: localeName,
       other: 'Ludis $count kurojn de $param2',
       one: 'Ludis unu kuron de $param2',
-      zero: 'Ludis unu kuron de $param2',
     );
     return '$_temp0';
   }
+
+  @override
+  String get streamerLichessStreamers => 'Lichess filmprezentistoj';
 
   @override
   String get studyShareAndExport => 'Konigi & eksporti';
 
   @override
   String get studyStart => 'Komenci';
-
-  @override
-  String get broadcastBroadcasts => 'Elsendoj';
-
-  @override
-  String get broadcastStartDate => 'Komenca dato en via propra horzono';
 }

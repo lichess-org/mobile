@@ -189,7 +189,8 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
 
 Future<void> _refreshData(WidgetRef ref) {
   return Future.wait([
-    ref.refresh(broadcastsProvider.future),
+    // TODO uncomment when broadcasts feature is ready
+    // ref.refresh(broadcastsProvider.future),
     ref.refresh(featuredChannelsProvider.future),
     ref.refresh(liveStreamersProvider.future),
   ]);

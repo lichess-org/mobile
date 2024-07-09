@@ -7,6 +7,122 @@ class AppLocalizationsSq extends AppLocalizations {
   AppLocalizationsSq([String locale = 'sq']) : super(locale);
 
   @override
+  String get mobileHomeTab => 'Home';
+
+  @override
+  String get mobilePuzzlesTab => 'Puzzles';
+
+  @override
+  String get mobileToolsTab => 'Tools';
+
+  @override
+  String get mobileWatchTab => 'Watch';
+
+  @override
+  String get mobileSettingsTab => 'Settings';
+
+  @override
+  String get mobileMustBeLoggedIn => 'You must be logged in to view this page.';
+
+  @override
+  String get mobileSystemColors => 'System colors';
+
+  @override
+  String get mobileFeedbackButton => 'Feedback';
+
+  @override
+  String get mobileOkButton => 'OK';
+
+  @override
+  String get mobileSettingsHapticFeedback => 'Haptic feedback';
+
+  @override
+  String get mobileSettingsImmersiveMode => 'Immersive mode';
+
+  @override
+  String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.';
+
+  @override
+  String get mobileNotFollowingAnyUser => 'You are not following any user.';
+
+  @override
+  String get mobileAllGames => 'All games';
+
+  @override
+  String get mobileRecentSearches => 'Recent searches';
+
+  @override
+  String get mobileClearButton => 'Clear';
+
+  @override
+  String mobilePlayersMatchingSearchTerm(String param) {
+    return 'Players with \"$param\"';
+  }
+
+  @override
+  String get mobileNoSearchResults => 'No results';
+
+  @override
+  String get mobileAreYouSure => 'Are you sure?';
+
+  @override
+  String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
+
+  @override
+  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of storm';
+
+  @override
+  String get mobileSharePuzzle => 'Share this puzzle';
+
+  @override
+  String get mobileShareGameURL => 'Share game URL';
+
+  @override
+  String get mobileShareGamePGN => 'Share PGN';
+
+  @override
+  String get mobileSharePositionAsFEN => 'Share position as FEN';
+
+  @override
+  String get mobileShowVariations => 'Show variations';
+
+  @override
+  String get mobileHideVariation => 'Hide variation';
+
+  @override
+  String get mobileShowComments => 'Show comments';
+
+  @override
+  String get mobilePuzzleStormConfirmEndRun => 'Do you want to end this run?';
+
+  @override
+  String get mobilePuzzleStormFilterNothingToShow => 'Nothing to show, please change the filters';
+
+  @override
+  String get mobileCancelTakebackOffer => 'Cancel takeback offer';
+
+  @override
+  String get mobileCancelDrawOffer => 'Cancel draw offer';
+
+  @override
+  String get mobileWaitingForOpponentToJoin => 'Waiting for opponent to join...';
+
+  @override
+  String get mobileBlindfoldMode => 'Blindfold';
+
+  @override
+  String get mobileLiveStreamers => 'Live streamers';
+
+  @override
+  String get mobileCustomGameJoinAGame => 'Join a game';
+
+  @override
+  String get mobileCorrespondenceClearSavedMove => 'Clear saved move';
+
+  @override
+  String get mobileSomethingWentWrong => 'Something went wrong.';
+
+  @override
   String get activityActivity => 'Aktiviteti';
 
   @override
@@ -27,7 +143,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Mbështeti lichess.org për $count muaj si $param2',
       one: 'Mbështeti lichess.org për $count muaj si $param2',
-      zero: 'Mbështeti lichess.org për $count muaj si $param2',
     );
     return '$_temp0';
   }
@@ -39,7 +154,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Ushtroi $count pozicione në $param2',
       one: 'U praktikua pozicioni $count në $param2',
-      zero: 'U praktikua pozicioni $count në $param2',
     );
     return '$_temp0';
   }
@@ -51,7 +165,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Zgjidhi $count ushtrime taktike',
       one: 'Zgjidhet enigma taktike $count',
-      zero: 'Zgjidhet enigma taktike $count',
     );
     return '$_temp0';
   }
@@ -63,7 +176,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Luajti $count lojëra $param2',
       one: 'Luajti lojë $count $param2',
-      zero: 'Luajti lojë $count $param2',
     );
     return '$_temp0';
   }
@@ -75,7 +187,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Postoi $count mesazhe në $param2',
       one: 'Postuar $count mesazh në $param2',
-      zero: 'Postuar $count mesazh në $param2',
     );
     return '$_temp0';
   }
@@ -87,7 +198,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Bëri $count lëvizje',
       one: 'Luajti lëvizje $count',
-      zero: 'Luajti lëvizje $count',
     );
     return '$_temp0';
   }
@@ -99,7 +209,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'në $count lojëra korrespondence',
       one: 'në lojën e korrespondencës $count',
-      zero: 'në lojën e korrespondencës $count',
     );
     return '$_temp0';
   }
@@ -111,7 +220,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Plotësoi $count lojëra me korrespondencë',
       one: 'Përfundoi lojën e korrespondencës $count',
-      zero: 'Përfundoi lojën e korrespondencës $count',
     );
     return '$_temp0';
   }
@@ -123,7 +231,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Filloi të ndjekë $count lojtarë',
       one: 'Filloi të ndjek lojtarin $count',
-      zero: 'Filloi të ndjek lojtarin $count',
     );
     return '$_temp0';
   }
@@ -135,7 +242,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Përfitoi $count ndjekës të ri',
       one: 'Fitoi %një ndjekës të ri',
-      zero: 'Fitoi %një ndjekës të ri',
     );
     return '$_temp0';
   }
@@ -147,7 +253,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Zhvilloi $count lojëra të njëkohësishme',
       one: 'Zhvilloi $count lojëra të njëkohësishme',
-      zero: 'Zhvilloi $count lojëra të njëkohësishme',
     );
     return '$_temp0';
   }
@@ -159,7 +264,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Mori pjesë në $count ndeshje të njëkohësishme',
       one: 'Mori pjesë në $count ndeshje të njëkohësishme',
-      zero: 'Mori pjesë në $count ndeshje të njëkohësishme',
     );
     return '$_temp0';
   }
@@ -171,7 +275,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Krijoi $count mësime të reja',
       one: 'Krijoi $count studim të ri',
-      zero: 'Krijoi $count studim të ri',
     );
     return '$_temp0';
   }
@@ -183,7 +286,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Ndeshur në $count turne Arenë',
       one: 'Konkuroi në turneun $count Arena',
-      zero: 'Konkuroi në turneun $count Arena',
     );
     return '$_temp0';
   }
@@ -195,7 +297,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'U rendit i $count ($param2% kryesuesit) me $param3 lojëra në $param4',
       one: 'U rendit i $count ($param2% kryesuesit) me $param3 lojë në $param4',
-      zero: 'U rendit i $count ($param2% kryesuesit) me $param3 lojë në $param4',
     );
     return '$_temp0';
   }
@@ -207,7 +308,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Ndeshur në $count turne zviceranë',
       one: 'Konkuroi në turneun zviceran $count',
-      zero: 'Konkuroi në turneun zviceran $count',
     );
     return '$_temp0';
   }
@@ -219,16 +319,15 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'U bë pjesë e $count ekipive',
       one: 'U bashkua me ekipin $count',
-      zero: 'U bashkua me ekipin $count',
     );
     return '$_temp0';
   }
 
   @override
-  String get contactContact => 'Kontakt';
+  String get broadcastBroadcasts => 'Transmetime';
 
   @override
-  String get contactContactLichess => 'Kontaktoni me Lichess-in';
+  String get broadcastStartDate => 'Datë fillimi në zonën tuaj kohore';
 
   @override
   String challengeChallengesX(String param1) {
@@ -310,6 +409,1007 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get challengeInviteLichessUser => 'Ose ftoni një Përdorues Lichess-i:';
+
+  @override
+  String get contactContact => 'Kontakt';
+
+  @override
+  String get contactContactLichess => 'Kontaktoni me Lichess-in';
+
+  @override
+  String get patronDonate => 'Dhuroni';
+
+  @override
+  String get patronLichessPatron => 'Bamirës Lichess-i';
+
+  @override
+  String perfStatPerfStats(String param) {
+    return 'Statistika për $param';
+  }
+
+  @override
+  String get perfStatViewTheGames => 'Shihni lojëra';
+
+  @override
+  String get perfStatProvisional => 'i përkohshëm';
+
+  @override
+  String get perfStatNotEnoughRatedGames => 'S’janë luajtur lojëra të mjaftueshme për të vendosur një klasifikim të besueshëm.';
+
+  @override
+  String perfStatProgressOverLastXGames(String param) {
+    return 'Ecuria përgjatë $param lojërave të fundit:';
+  }
+
+  @override
+  String perfStatRatingDeviation(String param) {
+    return 'Shmangie vlerësimi: $param.';
+  }
+
+  @override
+  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
+    return 'Një vlerë e ulët do të thotë se vlerësimi është më i qëndrueshëm. Mbi $param1, vlerësimi konsiderohet i përkohshëm. Që të përfshiheni në klasifikime, kjo vlerë duhet të jetë $param2 (shah standard), ose $param3 (variante).';
+  }
+
+  @override
+  String get perfStatTotalGames => 'Lojëra gjithsej';
+
+  @override
+  String get perfStatRatedGames => 'Lojë të vlerësuara';
+
+  @override
+  String get perfStatTournamentGames => 'Lojëra turneu';
+
+  @override
+  String get perfStatBerserkedGames => 'Lojëra berserk';
+
+  @override
+  String get perfStatTimeSpentPlaying => 'Kohë e shpenzuar në lojë';
+
+  @override
+  String get perfStatAverageOpponent => 'Kundërshtari mesatar';
+
+  @override
+  String get perfStatVictories => 'Fitore';
+
+  @override
+  String get perfStatDefeats => 'Humbje';
+
+  @override
+  String get perfStatDisconnections => 'Shkëputje';
+
+  @override
+  String get perfStatNotEnoughGames => 'Numër i pamjaftueshëm lojërash';
+
+  @override
+  String perfStatHighestRating(String param) {
+    return 'Vlerësimi më i lartë: $param';
+  }
+
+  @override
+  String perfStatLowestRating(String param) {
+    return 'Vlerësimi më i ulet: $param';
+  }
+
+  @override
+  String perfStatFromXToY(String param1, String param2) {
+    return 'nga $param1 deri $param2';
+  }
+
+  @override
+  String get perfStatWinningStreak => 'Fitore radhazi';
+
+  @override
+  String get perfStatLosingStreak => 'Humbje radhazi';
+
+  @override
+  String perfStatLongestStreak(String param) {
+    return 'Vijimësia më e gjatë: $param';
+  }
+
+  @override
+  String perfStatCurrentStreak(String param) {
+    return 'Vijimësi aktuale: $param';
+  }
+
+  @override
+  String get perfStatBestRated => 'Fitoret më të mira';
+
+  @override
+  String get perfStatGamesInARow => 'Lojëra radhazi';
+
+  @override
+  String get perfStatLessThanOneHour => 'Më pak se një orë mes lojërave';
+
+  @override
+  String get perfStatMaxTimePlaying => 'Maksimum kohe shpenzuar në lojë';
+
+  @override
+  String get perfStatNow => 'tani';
+
+  @override
+  String get preferencesPreferences => 'Parapëlqime';
+
+  @override
+  String get preferencesDisplay => 'Shfaqje';
+
+  @override
+  String get preferencesPrivacy => 'Privatësi';
+
+  @override
+  String get preferencesNotifications => 'Njoftime';
+
+  @override
+  String get preferencesPieceAnimation => 'Animimi i figurave';
+
+  @override
+  String get preferencesMaterialDifference => 'Ndryshimi në material';
+
+  @override
+  String get preferencesBoardHighlights => 'Thekso fushën, (lëvizjen e fundit dhe shah)';
+
+  @override
+  String get preferencesPieceDestinations => 'Vendmbërritja e figurave (lëvizje të vlefshme dhe të paracaktuara)';
+
+  @override
+  String get preferencesBoardCoordinates => 'Koordinatat e fushës (A-H, 1-8)';
+
+  @override
+  String get preferencesMoveListWhilePlaying => 'Listë lëvizjesh teksa luhet';
+
+  @override
+  String get preferencesPgnPieceNotation => 'Shënime lëvizjesh';
+
+  @override
+  String get preferencesChessPieceSymbol => 'Simboli i figurës së shahut';
+
+  @override
+  String get preferencesPgnLetter => 'Shkronja (K, Q, R, B, N)';
+
+  @override
+  String get preferencesZenMode => 'Mënyra Zen';
+
+  @override
+  String get preferencesShowPlayerRatings => 'Shfaq klasifikim lojtarësh';
+
+  @override
+  String get preferencesShowFlairs => 'Show player flairs';
+
+  @override
+  String get preferencesExplainShowPlayerRatings => 'Kjo lejon të bëhet fshehja e krejt klasifikimeve në sajt, për të ndihmuar përqendrimin në shah. Lojërat prapë mund të vlerësohen, kjo ka të bëjë vetëm me ato çka shihni.';
+
+  @override
+  String get preferencesDisplayBoardResizeHandle => 'Shfaq mundësi ripërmasimi fushe';
+
+  @override
+  String get preferencesOnlyOnInitialPosition => 'Vetëm në pozicionin fillestar';
+
+  @override
+  String get preferencesInGameOnly => 'In-game only';
+
+  @override
+  String get preferencesChessClock => 'Ora e shahut';
+
+  @override
+  String get preferencesTenthsOfSeconds => 'Të dhjeta të sekondës';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'Kur koha e mbetur <10 sekonda';
+
+  @override
+  String get preferencesHorizontalGreenProgressBars => 'Shtyllë ecurie horizontale e gjelbër';
+
+  @override
+  String get preferencesSoundWhenTimeGetsCritical => 'Tingull kur koha i afrohet kritikes';
+
+  @override
+  String get preferencesGiveMoreTime => 'Jep më shumë kohë';
+
+  @override
+  String get preferencesGameBehavior => 'Sjellje loje';
+
+  @override
+  String get preferencesHowDoYouMovePieces => 'Si i lëvizni figurat?';
+
+  @override
+  String get preferencesClickTwoSquares => 'Klikoni dy kuadrate';
+
+  @override
+  String get preferencesDragPiece => 'Tërhiqni një figurë';
+
+  @override
+  String get preferencesBothClicksAndDrag => 'Cilëndo';
+
+  @override
+  String get preferencesPremovesPlayingDuringOpponentTurn => 'Lëvizje e paracaktuar (luajtur gjatë radhës së kundërshtarit)';
+
+  @override
+  String get preferencesTakebacksWithOpponentApproval => 'Marrje mbrapsht (me miratimin e kundërshtarit)';
+
+  @override
+  String get preferencesInCasualGamesOnly => 'Vetëm në lojëra të rastësishme';
+
+  @override
+  String get preferencesPromoteToQueenAutomatically => 'Dalja automatike në mbretëreshë';
+
+  @override
+  String get preferencesExplainPromoteToQueenAutomatically => 'Mbani të shtypur tastin <Ctrl> gjatë daljes, për të çaktivizuar përkohësisht daljet e automatizuara';
+
+  @override
+  String get preferencesWhenPremoving => 'Kur bëhet lëvizje e paracaktuar';
+
+  @override
+  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Kërko automatikisht barazim pas përsëritjeje të trefishtë';
+
+  @override
+  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Kur koha e mbetur <30 sekonda';
+
+  @override
+  String get preferencesMoveConfirmation => 'Ripohim lëvizjesh';
+
+  @override
+  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Mund të çaktivizohet gjatë një loje me menu tabele';
+
+  @override
+  String get preferencesInCorrespondenceGames => 'Lojëra me korrespondencë';
+
+  @override
+  String get preferencesCorrespondenceAndUnlimited => 'Me korrespondencë dhe e pakufizuar';
+
+  @override
+  String get preferencesConfirmResignationAndDrawOffers => 'Ripoho dorëzimin dhe ofrime barazimi';
+
+  @override
+  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Metodë rokade';
+
+  @override
+  String get preferencesCastleByMovingTwoSquares => 'Lëvize mbretin dy kuadrate';
+
+  @override
+  String get preferencesCastleByMovingOntoTheRook => 'Lëvize mbretin tek torra';
+
+  @override
+  String get preferencesInputMovesWithTheKeyboard => 'Jepni lëvizje përmes tastiere';
+
+  @override
+  String get preferencesInputMovesWithVoice => 'Kryeni lëvizje përmes zërit tuaj';
+
+  @override
+  String get preferencesSnapArrowsToValidMoves => 'Snap arrows to valid moves';
+
+  @override
+  String get preferencesSayGgWpAfterLosingOrDrawing => 'Shkruaj “Lojë e mirë, bukur luajtët” pas barazimit ose humbjes';
+
+  @override
+  String get preferencesYourPreferencesHaveBeenSaved => 'Parapëlqimet tuaja u ruajtën.';
+
+  @override
+  String get preferencesScrollOnTheBoardToReplayMoves => 'Rrëshqitni nëpër tabelë që të riluhen lëvizje';
+
+  @override
+  String get preferencesCorrespondenceEmailNotification => 'Njoftim i përditshëm me email, që paraqet lojërat tuaja me korrespondencë';
+
+  @override
+  String get preferencesNotifyStreamStart => 'Streamer goes live';
+
+  @override
+  String get preferencesNotifyInboxMsg => 'Mesazh i ri te Të marrë';
+
+  @override
+  String get preferencesNotifyForumMention => 'Koment forumi ku përmendeni';
+
+  @override
+  String get preferencesNotifyInvitedStudy => 'Ftesë për ushtrim';
+
+  @override
+  String get preferencesNotifyGameEvent => 'Përditësime loje me korrespondencë';
+
+  @override
+  String get preferencesNotifyChallenge => 'Challenges';
+
+  @override
+  String get preferencesNotifyTournamentSoon => 'Turne që fillon së shpejti';
+
+  @override
+  String get preferencesNotifyTimeAlarm => 'Correspondence clock running out';
+
+  @override
+  String get preferencesNotifyBell => 'Njoftim zileje brenda Lichess-it';
+
+  @override
+  String get preferencesNotifyPush => 'Njoftim pajisjeje kur s’gjendeni në Lichess';
+
+  @override
+  String get preferencesNotifyWeb => 'Shfletues';
+
+  @override
+  String get preferencesNotifyDevice => 'Pajisje';
+
+  @override
+  String get preferencesBellNotificationSound => 'Tingull zileje njoftimesh';
+
+  @override
+  String get puzzlePuzzles => 'Ushtrime';
+
+  @override
+  String get puzzlePuzzleThemes => 'Tema ushtrimesh';
+
+  @override
+  String get puzzleRecommended => 'Të rekomanduara';
+
+  @override
+  String get puzzlePhases => 'Faza';
+
+  @override
+  String get puzzleMotifs => 'Motive';
+
+  @override
+  String get puzzleAdvanced => 'Të mëtejshme';
+
+  @override
+  String get puzzleLengths => 'Gjatësi';
+
+  @override
+  String get puzzleMates => 'Mate';
+
+  @override
+  String get puzzleGoals => 'Objektiva';
+
+  @override
+  String get puzzleOrigin => 'Origjinë';
+
+  @override
+  String get puzzleSpecialMoves => 'Lëvizje speciale';
+
+  @override
+  String get puzzleDidYouLikeThisPuzzle => 'Ju pëlqeu ky ushtrim?';
+
+  @override
+  String get puzzleVoteToLoadNextOne => 'Votojeni, që të ngarkohet pasuesi!';
+
+  @override
+  String get puzzleUpVote => 'Jepini një votë ushtrimit';
+
+  @override
+  String get puzzleDownVote => 'Hiqini një votë ushtrimit';
+
+  @override
+  String get puzzleYourPuzzleRatingWillNotChange => 'Vlerësimi juaj për ushtrimet nuk do të ndryshojë. Kini parasysh se ushtrimet nuk janë garë. Vlerësimi juaj ndihmon në përzgjedhjen e ushtrimeve më të mira për aftësitë tuaja të tanishme.';
+
+  @override
+  String get puzzleFindTheBestMoveForWhite => 'Gjej lëvizjen më të mirë për të bardhin.';
+
+  @override
+  String get puzzleFindTheBestMoveForBlack => 'Gjej lëvizjen më të mirë për të ziun.';
+
+  @override
+  String get puzzleToGetPersonalizedPuzzles => 'Për të marrë ushtrime të personalizuara:';
+
+  @override
+  String puzzlePuzzleId(String param) {
+    return 'Ushtrimi $param';
+  }
+
+  @override
+  String get puzzlePuzzleOfTheDay => 'Ushtrimi i ditës';
+
+  @override
+  String get puzzleDailyPuzzle => 'Daily Puzzle';
+
+  @override
+  String get puzzleClickToSolve => 'Klikoni për t’a zgjidhur';
+
+  @override
+  String get puzzleGoodMove => 'Lëvizje e mirë';
+
+  @override
+  String get puzzleBestMove => 'Lëvizja më e mirë!';
+
+  @override
+  String get puzzleKeepGoing => 'Vazhdoni…';
+
+  @override
+  String get puzzlePuzzleSuccess => 'Sukses!';
+
+  @override
+  String get puzzlePuzzleComplete => 'Ushtrimi u plotësua!';
+
+  @override
+  String get puzzleByOpenings => 'Sipas hapjesh';
+
+  @override
+  String get puzzlePuzzlesByOpenings => 'Puzzles by openings';
+
+  @override
+  String get puzzleOpeningsYouPlayedTheMost => 'Hapje që bëtë në lojërat më të vlerësuara';
+
+  @override
+  String get puzzleUseFindInPage => 'Që të gjeni hapen tuaj të parapëlqyer, përdorni “Gjej në faqe” te menuja e shfletuesit!';
+
+  @override
+  String get puzzleUseCtrlF => 'Që të gjeni hapjen tuaj të parapëlqyer, përdorni Ctrl+f!';
+
+  @override
+  String get puzzleNotTheMove => 'S’është lëvizja e duhur!';
+
+  @override
+  String get puzzleTrySomethingElse => 'Provoni diçka tjetër.';
+
+  @override
+  String puzzleRatingX(String param) {
+    return 'Vlerësimi: $param';
+  }
+
+  @override
+  String get puzzleHidden => 'i fshehur';
+
+  @override
+  String puzzleFromGameLink(String param) {
+    return 'Prej lojës $param';
+  }
+
+  @override
+  String get puzzleContinueTraining => 'Vazhdoni trajnimin';
+
+  @override
+  String get puzzleDifficultyLevel => 'Shkallë vështirësie';
+
+  @override
+  String get puzzleNormal => 'Normale';
+
+  @override
+  String get puzzleEasier => 'Më e lehtë';
+
+  @override
+  String get puzzleEasiest => 'Më e lehta';
+
+  @override
+  String get puzzleHarder => 'Më e vështirë';
+
+  @override
+  String get puzzleHardest => 'Më e vështira';
+
+  @override
+  String get puzzleExample => 'Shembull';
+
+  @override
+  String get puzzleAddAnotherTheme => 'Shtoni temë tjetër';
+
+  @override
+  String get puzzleNextPuzzle => 'Ushtrimi pasues';
+
+  @override
+  String get puzzleJumpToNextPuzzleImmediately => 'Kalo menjëherë në ushtrimin pasues';
+
+  @override
+  String get puzzlePuzzleDashboard => 'Pult Ushtrimesh';
+
+  @override
+  String get puzzleImprovementAreas => 'Fusha përmirësimi';
+
+  @override
+  String get puzzleStrengths => 'Vështirësi';
+
+  @override
+  String get puzzleHistory => 'Historik ushtrimesh';
+
+  @override
+  String get puzzleSolved => 'të zgjidhura';
+
+  @override
+  String get puzzleFailed => 'të pazgjidhura';
+
+  @override
+  String get puzzleStreakDescription => 'Zgjidh ushtrime që bëhen më të vështira. Nuk ka kufizim kohe, kështu qe mendohu mirë, një lëvizje e gabuar, dhe humb! Mund ta kapërcesh vetëm një ushtrim.';
+
+  @override
+  String puzzleYourStreakX(String param) {
+    return 'Rrezultati juaj: $param';
+  }
+
+  @override
+  String get puzzleStreakSkipExplanation => 'Kapërce këtë lëvizje qe te ruash kombinimet! Bën vetëm një herë per garë.';
+
+  @override
+  String get puzzleContinueTheStreak => 'Vazhdoje raundin';
+
+  @override
+  String get puzzleNewStreak => 'Raund i ri';
+
+  @override
+  String get puzzleFromMyGames => 'Nga lojërat e mia';
+
+  @override
+  String get puzzleLookupOfPlayer => 'Kërkoni te ushtrime prej lojërave të një lojtari';
+
+  @override
+  String puzzleFromXGames(String param) {
+    return 'Ushtrime nga lojërat e $param';
+  }
+
+  @override
+  String get puzzleSearchPuzzles => 'Kërkoni në ushtrime';
+
+  @override
+  String get puzzleFromMyGamesNone => 'S’keni ushtrime te baza e të dhënave, por Lichess-i prapë ju do fort.\n\nLuani lojëra të shpejta dhe klasike, që të rriten shanset tuaja për të pasur një ushtrim nga tuajt të shtuar atje!';
+
+  @override
+  String puzzleFromXGamesFound(String param1, String param2) {
+    return 'U gjetën $param1 ushtrime në $param2 lojëra';
+  }
+
+  @override
+  String get puzzlePuzzleDashboardDescription => 'Stërvituni, analizoni, përmirësohuni';
+
+  @override
+  String puzzlePercentSolved(String param) {
+    return '$param të zgjidhur';
+  }
+
+  @override
+  String get puzzleNoPuzzlesToShow => 'S’ka gjë për shfaqje, shkoni e luani ca ushtrime, së pari!';
+
+  @override
+  String get puzzleImprovementAreasDescription => 'Stërvituni me këto, që të optimizoni përparimin tuaj!';
+
+  @override
+  String get puzzleStrengthDescription => 'Dilni më mirë në këto tema';
+
+  @override
+  String puzzlePlayedXTimes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Luajtur $count herë',
+      one: 'Luajtur $count herë',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsBelowYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count pikë nën vlerësimin tuaj në ushtrime',
+      one: 'Një pikë nën vlerësimin tuaj në ushtrime',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPointsAboveYourPuzzleRating(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count pikë mbi vlerësimin tuaj në ushtrime',
+      one: 'Një pikë mbi vlerësimin tuaj në ushtrime',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbPlayed(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count të luajtur',
+      one: '$count i luajtur',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String puzzleNbToReplay(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count për t’u riluajtur',
+      one: '$count për t’u riluajtur',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get puzzleThemeAdvancedPawn => 'Ushtar i përparuar';
+
+  @override
+  String get puzzleThemeAdvancedPawnDescription => 'Një nga ushtarët tuaj ka hyrë thellë në territorin e kundërshtarit, ndoshta duke kërcënuar të gradohet.';
+
+  @override
+  String get puzzleThemeAdvantage => 'Avantazh';
+
+  @override
+  String get puzzleThemeAdvantageDescription => 'Shfrytëzoni shansin tuaj që të përfitoni një avantazh vendimtar. (200cp ≤ vlerë ≤ 600cp)';
+
+  @override
+  String get puzzleThemeAnastasiaMate => 'Mati i Anastasisë';
+
+  @override
+  String get puzzleThemeAnastasiaMateDescription => 'Një kalë dhe torrë ose mbretëreshë bëhen tok për të bllokuar mbretin kundërshtar mes anës së fushës dhe një guri miqësor.';
+
+  @override
+  String get puzzleThemeArabianMate => 'Mat arab';
+
+  @override
+  String get puzzleThemeArabianMateDescription => 'Një kalë dhe një torrë bëhen tok për të bllokuar mbretin kundërshtar në një cep të fushës.';
+
+  @override
+  String get puzzleThemeAttackingF2F7 => 'Sulmim i f2-shit ose f7-s';
+
+  @override
+  String get puzzleThemeAttackingF2F7Description => 'Një sulm që synon ushtarin në f2 ose f7, si te hapja “mëlçi të skuqura”.';
+
+  @override
+  String get puzzleThemeAttraction => 'Tërheqje';
+
+  @override
+  String get puzzleThemeAttractionDescription => 'Një shkëmbim ose sakrificë që e nxit ose e detyron një gur të kundërshtarit të shkojë në një kuadrat që lejon më pas një lëvizje taktike.';
+
+  @override
+  String get puzzleThemeBackRankMate => 'Mat në rreshtin e fundit';
+
+  @override
+  String get puzzleThemeBackRankMateDescription => 'Jepini mat mbretin në rreshtin e tij, kur ai është bllokuar atje nga gurë të vetët.';
+
+  @override
+  String get puzzleThemeBishopEndgame => 'Fund loje me oficer';
+
+  @override
+  String get puzzleThemeBishopEndgameDescription => 'Fund loje me vetëm oficerë dhe ushtarë.';
+
+  @override
+  String get puzzleThemeBodenMate => 'Mati i Bodenit';
+
+  @override
+  String get puzzleThemeBodenMateDescription => 'Dy fila sulmues në diagonalet kryqëzuese i bëjne mat një mbreti të penguar nga figura miqësore.';
+
+  @override
+  String get puzzleThemeCastling => 'Rokadë';
+
+  @override
+  String get puzzleThemeCastlingDescription => 'Siguroni mbretin dhe futeni torrën në sulm.';
+
+  @override
+  String get puzzleThemeCapturingDefender => 'Merrni mbrojtësin';
+
+  @override
+  String get puzzleThemeCapturingDefenderDescription => 'Heqja e një pjese që është kritike për mbrojtjen e një pjese tjetër, çka tani lejon që pjesa e pambrojtur të merret me një lëvizje vijuese.';
+
+  @override
+  String get puzzleThemeCrushing => 'Shkatërrim';
+
+  @override
+  String get puzzleThemeCrushingDescription => 'Shfrytëzoni gafën e kundërshtarit për të përfituar një avantazh shkatërrues. (vlera ≥ 600 cp)';
+
+  @override
+  String get puzzleThemeDoubleBishopMate => 'Mat me dy oficerë';
+
+  @override
+  String get puzzleThemeDoubleBishopMateDescription => 'Dy oficerë në sulm, në diagonale krah njëra-tjetrës, i japin mat mbretit të penguar nga figura miqësore.';
+
+  @override
+  String get puzzleThemeDovetailMate => 'Mati bishtpëllumb';
+
+  @override
+  String get puzzleThemeDovetailMateDescription => 'Një mbretëreshë i jep mat një mbretit afër, dy kuadratet e vetme të shpëtimit të të cilit janë zënë nga gurë të vetët.';
+
+  @override
+  String get puzzleThemeEquality => 'Barazim';
+
+  @override
+  String get puzzleThemeEqualityDescription => 'Kthehuni nga një pozicion humbës dhe siguroni një barazim ose një pozicion të ekuilibruar. (vlera ≤ 200cp)';
+
+  @override
+  String get puzzleThemeKingsideAttack => 'Sulmi nga ana e mbretit';
+
+  @override
+  String get puzzleThemeKingsideAttackDescription => 'Një sulm në anë të mbretit, pasi bëri rrokade në anë te mbretit.';
+
+  @override
+  String get puzzleThemeClearance => 'Largim';
+
+  @override
+  String get puzzleThemeClearanceDescription => 'Një lëvizje, shpesh me tempo, që pastron një katror, kolonë ose diagonale për një ide taktike vijuese.';
+
+  @override
+  String get puzzleThemeDefensiveMove => 'Lëvizje mbrojtëse';
+
+  @override
+  String get puzzleThemeDefensiveMoveDescription => 'Një lëvizje apo varg lëvizjesh të sakta që janë të nevojshme për të shmangur humbje materiali, apo për avantazh tjetër.';
+
+  @override
+  String get puzzleThemeDeflection => 'Shmangie';
+
+  @override
+  String get puzzleThemeDeflectionDescription => 'Një lëvizje që tërheq vëmendjen e një figure të kundërshtarit nga një detyrë tjetër që ajo kryen, siç është ruajtja e një sheshi kryesor. Ndonjëherë quhet edhe \"mbingarkesë\".';
+
+  @override
+  String get puzzleThemeDiscoveredAttack => 'Sulm me zbulim';
+
+  @override
+  String get puzzleThemeDiscoveredAttackDescription => 'Lëvizja e një figure (për shembull një kalë) që më parë bllokoi një sulm nga një figurë me distancë të gjatë (për shembull një torre), nga rruga e asaj figure.';
+
+  @override
+  String get puzzleThemeDoubleCheck => 'Shah i dyfishtë';
+
+  @override
+  String get puzzleThemeDoubleCheckDescription => 'Shah me dy figura njëherësh, si pasojë e një sulmi me zbulim, kur që të dy, guri që lëviz dhe guri i pazbuluar sulmojnë mbretin e kundërshtarit.';
+
+  @override
+  String get puzzleThemeEndgame => 'Fund loje';
+
+  @override
+  String get puzzleThemeEndgameDescription => 'Një taktikë gjatë fazës së fundit të lojës.';
+
+  @override
+  String get puzzleThemeEnPassantDescription => 'Një taktikë që përfshin rregullin “me prerje”, ku një ushtar mund të marrë një ushtar kundërshtar që e ka kaluar atë duke përdorur lëvizjen e vet fillestare të dy kuadrateve.';
+
+  @override
+  String get puzzleThemeExposedKing => 'Mbreti i ekspozuar';
+
+  @override
+  String get puzzleThemeExposedKingDescription => 'Një taktikë që përfshin një mbret me pak mbrojtës rreth tij, që shpesh çon në shah mat.';
+
+  @override
+  String get puzzleThemeFork => 'Sfurk';
+
+  @override
+  String get puzzleThemeForkDescription => 'Një lëvizje ku guri i lëvizur sulmon njëherësh dy gurë të kundërshtarit.';
+
+  @override
+  String get puzzleThemeHangingPiece => 'Gur i pambrojtur';
+
+  @override
+  String get puzzleThemeHangingPieceDescription => 'Një taktikë që përfshin një gur të pambrojtur të kundërshtarit, ose të mbrojtur në mënyrë të pamjaftueshme dhe që është i lirë të marrë gurë.';
+
+  @override
+  String get puzzleThemeHookMate => 'Mati Huk';
+
+  @override
+  String get puzzleThemeHookMateDescription => 'Shat mat me një torrë, kalë dhe një ushtar, tok me një ushtar të kundërshtarit, për të kufizuar arratisjen e mbretit të kundërshtarit.';
+
+  @override
+  String get puzzleThemeInterference => 'Ndërhyrje';
+
+  @override
+  String get puzzleThemeInterferenceDescription => 'Lëvizja e një guri mes dy gurësh të kundërshtarit për të lënë të pambrojtur një ose të dy gurët e kundërshtarit, bie fjala, një kalë në një kuadrat mes dy torresh.';
+
+  @override
+  String get puzzleThemeIntermezzo => 'Ndërmjetësim';
+
+  @override
+  String get puzzleThemeIntermezzoDescription => 'Në vend që të luhet lëvizja e pritshme, së pari ndërhyni një lëvizje tjetër që paraqet një kërcënim të menjëhershëm, që kundërshtari duhet t\'i përgjigjet. Njihet gjithashtu si \"Zwischenzug\" ose \"Në mes\".';
+
+  @override
+  String get puzzleThemeKnightEndgame => 'Fund loje me kalë';
+
+  @override
+  String get puzzleThemeKnightEndgameDescription => 'Një fund loje vetëm me kuaj dhe ushtarë.';
+
+  @override
+  String get puzzleThemeLong => 'Ushtrim i gjatë';
+
+  @override
+  String get puzzleThemeLongDescription => 'Tri lëvizje për të fituar.';
+
+  @override
+  String get puzzleThemeMaster => 'Lojëra Mjeshtrash';
+
+  @override
+  String get puzzleThemeMasterDescription => 'Ushtrime nga lojëra të luajtura nga lojtarë me tituj.';
+
+  @override
+  String get puzzleThemeMasterVsMaster => 'Lojëra mjeshtër kundër mjeshtri';
+
+  @override
+  String get puzzleThemeMasterVsMasterDescription => 'Ushtrime nga lojëra të luajtura mes dy lojtarësh me tituj.';
+
+  @override
+  String get puzzleThemeMate => 'Shat mat';
+
+  @override
+  String get puzzleThemeMateDescription => 'Fitojeni lojën me stil.';
+
+  @override
+  String get puzzleThemeMateIn1 => 'Mat me 1';
+
+  @override
+  String get puzzleThemeMateIn1Description => 'Jepni shah-mat me një lëvizje.';
+
+  @override
+  String get puzzleThemeMateIn2 => 'Mat me 2';
+
+  @override
+  String get puzzleThemeMateIn2Description => 'Jepni shah-mat me dy lëvizje.';
+
+  @override
+  String get puzzleThemeMateIn3 => 'Mat me 3';
+
+  @override
+  String get puzzleThemeMateIn3Description => 'Jepni shah-mat me tre lëvizje.';
+
+  @override
+  String get puzzleThemeMateIn4 => 'Mat me 4';
+
+  @override
+  String get puzzleThemeMateIn4Description => 'Jepni shah-mat me katër lëvizje.';
+
+  @override
+  String get puzzleThemeMateIn5 => 'Mat me 5 ose më tepër';
+
+  @override
+  String get puzzleThemeMateIn5Description => 'Gjeni një varg të gjatë lëvizjesh për mat.';
+
+  @override
+  String get puzzleThemeMiddlegame => 'Lojë e mesme';
+
+  @override
+  String get puzzleThemeMiddlegameDescription => 'Një taktikë gjatë fazës së dytë të lojës.';
+
+  @override
+  String get puzzleThemeOneMove => 'Ushtrime me një lëvizje';
+
+  @override
+  String get puzzleThemeOneMoveDescription => 'Një ushtrim që zgjidhet me një lëvizje.';
+
+  @override
+  String get puzzleThemeOpening => 'Hapje';
+
+  @override
+  String get puzzleThemeOpeningDescription => 'Një taktikë gjatë fazës së parë të lojës.';
+
+  @override
+  String get puzzleThemePawnEndgame => 'Fund loje me ushtar';
+
+  @override
+  String get puzzleThemePawnEndgameDescription => 'Një fund loje vetëm me ushtarë.';
+
+  @override
+  String get puzzleThemePin => 'Mbërthimi';
+
+  @override
+  String get puzzleThemePinDescription => 'Një taktikë që përfshin mbërthim, ku një pjesë s’është në gjendje të lëvizë pa zbuluar një sulm ndaj një guri me vlerë më të lartë.';
+
+  @override
+  String get puzzleThemePromotion => 'Gradim';
+
+  @override
+  String get puzzleThemePromotionDescription => 'Gradoni një nga ushtarët tuaj si mbretëreshë ose një gur më të ulët.';
+
+  @override
+  String get puzzleThemeQueenEndgame => 'Fund loje me mbretëreshë';
+
+  @override
+  String get puzzleThemeQueenEndgameDescription => 'Një fund loje me vetëm mbretëresha dhe ushtarë.';
+
+  @override
+  String get puzzleThemeQueenRookEndgame => 'Mbretëreshë dhe Torrë';
+
+  @override
+  String get puzzleThemeQueenRookEndgameDescription => 'Një fund loje me vetëm mbretëresha, torra dhe ushtarë.';
+
+  @override
+  String get puzzleThemeQueensideAttack => 'Sulm më anë të mbretëreshës';
+
+  @override
+  String get puzzleThemeQueensideAttackDescription => 'Sulm ndaj mbretit të kundërshtarit, pas rokade më anë të mbretëreshësh.';
+
+  @override
+  String get puzzleThemeQuietMove => 'Lëvizje e qetë';
+
+  @override
+  String get puzzleThemeQuietMoveDescription => 'Një lëvizje që s’jep shah ose kap gur, as edhe përbën kërcënim imediat për kapje guri, por përgatit një kërcënim më të fshehur, të pashmangshëm për një lëvizje të mëvonshme.';
+
+  @override
+  String get puzzleThemeRookEndgame => 'Fund loje me torre';
+
+  @override
+  String get puzzleThemeRookEndgameDescription => 'Një fund loje vetëm me torra dhe ushtarë.';
+
+  @override
+  String get puzzleThemeSacrifice => 'Sakrifikim';
+
+  @override
+  String get puzzleThemeSacrificeDescription => 'Një taktikë që përfshin heqjen dorë për pak kohë nga materiali, për të fituar sërish avantazh pas një vargu të detyruar lëvizjesh.';
+
+  @override
+  String get puzzleThemeShort => 'Ushtrim i shkurtër';
+
+  @override
+  String get puzzleThemeShortDescription => 'Dy lëvizje për të fituar.';
+
+  @override
+  String get puzzleThemeSkewer => 'Hell';
+
+  @override
+  String get puzzleThemeSkewerDescription => 'Një motiv që përfshin një gur me vlerë të madhe i cili ngaqë po sulmohet, hap rrugën dhe lejon të hahet ose të sulmohet një gur me vlerë më të vogël prapa tij, e kundërta e mbërthimit.';
+
+  @override
+  String get puzzleThemeSmotheredMate => 'Mat i mbuluar';
+
+  @override
+  String get puzzleThemeSmotheredMateDescription => 'Një shah-mat dhënë me kalë, në të cilin mbreti i zënë mat s’është në gjendje të lëvizë ngaqë është i rrethuar (i mbuluar) nga gurët e vet.';
+
+  @override
+  String get puzzleThemeSuperGM => 'Lojëra Super Mjeshtërash të Mëdhenj';
+
+  @override
+  String get puzzleThemeSuperGMDescription => 'Ushtrime prej lojërash të luajtura nga lojtarët më të mirë të botës.';
+
+  @override
+  String get puzzleThemeTrappedPiece => 'Gur i bllokuar';
+
+  @override
+  String get puzzleThemeTrappedPieceDescription => 'Një gur s’është në gjendje t’i shpëtojë marrjes, pasi ka lëvizje të kufizuara.';
+
+  @override
+  String get puzzleThemeUnderPromotion => 'Nëngradim';
+
+  @override
+  String get puzzleThemeUnderPromotionDescription => 'Gradim si kalë, oficer, ose torrë.';
+
+  @override
+  String get puzzleThemeVeryLong => 'Ushtrim shumë i gjatë';
+
+  @override
+  String get puzzleThemeVeryLongDescription => 'Katër ose më tepër lëvizje për të fituar.';
+
+  @override
+  String get puzzleThemeXRayAttack => 'Sulm Rreze-X';
+
+  @override
+  String get puzzleThemeXRayAttackDescription => 'Një gur sulmon ose mbron një kuadrat, përmes një guri të kundërshtarit.';
+
+  @override
+  String get puzzleThemeZugzwang => 'Zugzwang';
+
+  @override
+  String get puzzleThemeZugzwangDescription => 'Kundërshtari është i kufizuar në lëvizjet që mund të bëjë dhe krejt lëvizjet përkeqësojnë pozicionin e tij.';
+
+  @override
+  String get puzzleThemeHealthyMix => 'Përzierje e ushtrimeve';
+
+  @override
+  String get puzzleThemeHealthyMixDescription => 'Pak nga të gjitha. S’dini ç’të prisni, ndaj mbeteni gati për gjithçka! Mu si në lojëra të njëmendta.';
+
+  @override
+  String get puzzleThemePlayerGames => 'Lojëra të lojëtarit';
+
+  @override
+  String get puzzleThemePlayerGamesDescription => 'Lookup puzzles generated from your games, or from another player\'s games.';
+
+  @override
+  String puzzleThemePuzzleDownloadInformation(String param) {
+    return 'Këto ushtrime janë nën përkatësi publike dhe mund të shkarkohen nga $param.';
+  }
+
+  @override
+  String get searchSearch => 'Kërko';
+
+  @override
+  String get settingsSettings => 'Rregullime';
+
+  @override
+  String get settingsCloseAccount => 'Mbyll llogarinë';
+
+  @override
+  String get settingsManagedAccountCannotBeClosed => 'Llogaria juaj administrohet dhe nuk mund të mbyllet.';
+
+  @override
+  String get settingsClosingIsDefinitive => 'Mbyllja është përfundimtare. Nuk ka kthim prapa. A jeni i sigurt?';
+
+  @override
+  String get settingsCantOpenSimilarAccount => 'S’do të lejoheni të hapni një llogari të re me të njëjtin emër, edhe nëse ndryshohet një nga shkronjat.';
+
+  @override
+  String get settingsChangedMindDoNotCloseAccount => 'Ndryshova mendje, mos e mbyll llogarinë time';
+
+  @override
+  String get settingsCloseAccountExplanation => 'Jeni i sigurt se doni të mbyllet llogaria juaj? Mbyllja e llogarisë tuaj është një vendim përfundimtar. S’do të jeni MË KURRË në gjendje të ribëni hyrjen.';
+
+  @override
+  String get settingsThisAccountIsClosed => 'Kjo llogari është e mbyllur';
 
   @override
   String get playWithAFriend => 'Luani me një shok';
@@ -512,6 +1612,12 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get deleteFromHere => 'Fshije nga këtu';
+
+  @override
+  String get collapseVariations => 'Tkurri variantet';
+
+  @override
+  String get expandVariations => 'Shfaqi variantet';
 
   @override
   String get forceVariation => 'Detyro variant';
@@ -1371,15 +2477,6 @@ class AppLocalizationsSq extends AppLocalizations {
   String get emptyTournamentName => 'Për ta emërtuar turneun me emrin e një lojtari të njohur shahu, lëreni të zbrazët.';
 
   @override
-  String get recommendNotTouching => 'Rekomandojmë të mos i prekni këto.';
-
-  @override
-  String get fewerPlayers => 'Nëse ujdisni domosdoshmëri pjesëmarrjeje, turneu juaj do të ketë më pak lojtarë.';
-
-  @override
-  String get showAdvancedSettings => 'Shfaq rregullimet të thelluara';
-
-  @override
   String get makePrivateTournament => 'Bëjeni turneun privat dhe kufizojeni hyrjen me një fjalëkalim';
 
   @override
@@ -1509,10 +2606,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get editProfile => 'Përpunoni profilin';
 
   @override
-  String get firstName => 'Emër';
-
-  @override
-  String get lastName => 'Mbiemër';
+  String get realName => 'Emër i njëmendtë';
 
   @override
   String get setFlair => 'Set your flair';
@@ -1641,13 +2735,7 @@ class AppLocalizationsSq extends AppLocalizations {
   String get cheat => 'Hile';
 
   @override
-  String get insult => 'Fyerje';
-
-  @override
   String get troll => 'Troll';
-
-  @override
-  String get ratingManipulation => 'Manipulim vlerësimi';
 
   @override
   String get other => 'Tjetër';
@@ -1754,6 +2842,9 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get outsideTheBoard => 'Jashtë fushës';
+
+  @override
+  String get allSquaresOfTheBoard => 'Në krejt katrorët e fushës';
 
   @override
   String get onSlowGames => 'Në lojëra të ngadalta';
@@ -2349,22 +3440,22 @@ class AppLocalizationsSq extends AppLocalizations {
   String get backgroundImageUrl => 'URL figure sfondi:';
 
   @override
-  String get board => 'Board';
+  String get board => 'Fushë';
 
   @override
-  String get size => 'Size';
+  String get size => 'Madhësi';
 
   @override
-  String get opacity => 'Opacity';
+  String get opacity => 'Patejdukshmëri';
 
   @override
-  String get brightness => 'Brightness';
+  String get brightness => 'Ndriçim';
 
   @override
-  String get hue => 'Hue';
+  String get hue => 'Ngjyrim';
 
   @override
-  String get boardReset => 'Reset colours to default';
+  String get boardReset => 'Riktheji ngjyrat te parazgjedhjet';
 
   @override
   String get pieceSet => 'Figura';
@@ -2962,7 +4053,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Kundërshtari juaj la lojën. Mund të kërkoni fitoren pas $count sekondash.',
       one: 'Kundërshtari juaj la lojën. Mund të kërkoni fitoren pas $count sekondash.',
-      zero: 'Kundërshtari juaj la lojën. Mund të kërkoni fitoren pas $count sekondash.',
     );
     return '$_temp0';
   }
@@ -2974,7 +4064,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Mat në $count gjysmë lëvizje',
       one: 'Mat në $count gjysmë lëvizje',
-      zero: 'Mat në $count gjysmë lëvizje',
     );
     return '$_temp0';
   }
@@ -2986,7 +4075,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count gafa',
       one: '$count gafë',
-      zero: '$count gafë',
     );
     return '$_temp0';
   }
@@ -2998,7 +4086,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count gabime',
       one: '$count gabim',
-      zero: '$count gabim',
     );
     return '$_temp0';
   }
@@ -3010,7 +4097,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count pasaktësi',
       one: '$count pasaktësi',
-      zero: '$count pasaktësi',
     );
     return '$_temp0';
   }
@@ -3022,7 +4108,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count lojtarë',
       one: '$count lojtar',
-      zero: '$count lojtar',
     );
     return '$_temp0';
   }
@@ -3034,7 +4119,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count lojëra',
       one: '$count lojë',
-      zero: '$count lojë',
     );
     return '$_temp0';
   }
@@ -3046,7 +4130,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Vlerësuar me $count për $param2 lojëra',
       one: 'Vlerësuar me $count për $param2 lojë',
-      zero: 'Vlerësuar me $count për $param2 lojë',
     );
     return '$_temp0';
   }
@@ -3058,7 +4141,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count faqerojtës',
       one: '$count faqerojtës',
-      zero: '$count faqerojtës',
     );
     return '$_temp0';
   }
@@ -3070,7 +4152,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count ditë',
       one: '$count ditë',
-      zero: '$count ditë',
     );
     return '$_temp0';
   }
@@ -3082,7 +4163,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count orë',
       one: '$count orë',
-      zero: '$count orë',
     );
     return '$_temp0';
   }
@@ -3094,7 +4174,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count minuta',
       one: '$count minutë',
-      zero: '$count minutë',
     );
     return '$_temp0';
   }
@@ -3106,7 +4185,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Renditja përditësohet çdo $count minuta',
       one: 'Renditja përditësohet çdo minutë',
-      zero: 'Renditja përditësohet çdo minutë',
     );
     return '$_temp0';
   }
@@ -3118,7 +4196,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count ushtrime',
       one: '$count ushtrimi',
-      zero: '$count ushtrimi',
     );
     return '$_temp0';
   }
@@ -3130,7 +4207,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count lojëra me ju',
       one: '$count lojë me ju',
-      zero: '$count lojë me ju',
     );
     return '$_temp0';
   }
@@ -3142,7 +4218,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count të vlerësuara',
       one: '$count e vlerësuar',
-      zero: '$count e vlerësuar',
     );
     return '$_temp0';
   }
@@ -3154,7 +4229,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count fitore',
       one: '$count fitore',
-      zero: '$count fitore',
     );
     return '$_temp0';
   }
@@ -3166,7 +4240,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count humbje',
       one: '$count humbje',
-      zero: '$count humbje',
     );
     return '$_temp0';
   }
@@ -3178,7 +4251,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count barazime',
       one: '$count barazim',
-      zero: '$count barazim',
     );
     return '$_temp0';
   }
@@ -3190,7 +4262,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count duke luajtur',
       one: '$count po luan',
-      zero: '$count po luan',
     );
     return '$_temp0';
   }
@@ -3202,7 +4273,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Dhuro $count sekonda',
       one: 'Jep $count sekondë',
-      zero: 'Jep $count sekondë',
     );
     return '$_temp0';
   }
@@ -3214,7 +4284,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count pikë nga turnetë',
       one: '$count pikë nga turnetë',
-      zero: '$count pikë nga turnetë',
     );
     return '$_temp0';
   }
@@ -3226,7 +4295,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count studime',
       one: '$count studim',
-      zero: '$count studim',
     );
     return '$_temp0';
   }
@@ -3238,7 +4306,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count simultane',
       one: '$count simultane',
-      zero: '$count simultane',
     );
     return '$_temp0';
   }
@@ -3250,7 +4317,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Lojëra të vlerësuara me ≥ $count',
       one: 'Lojë e vlerësuar me ≥ $count',
-      zero: 'Lojë e vlerësuar me ≥ $count',
     );
     return '$_temp0';
   }
@@ -3262,7 +4328,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Lojëra të vlerësuara me ≥ $count $param2',
       one: 'Lojë e vlerësuar me ≥ $count $param2',
-      zero: 'Lojë e vlerësuar me ≥ $count $param2',
     );
     return '$_temp0';
   }
@@ -3274,7 +4339,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Lypset të luani edhe $count lojëra të vlerësuara me $param2',
       one: 'Lypset të luani edhe $count lojë të vlerësuar me $param2',
-      zero: 'Lypset të luani edhe $count lojë të vlerësuar me $param2',
     );
     return '$_temp0';
   }
@@ -3286,7 +4350,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Lypset të luani edhe $count lojëra të vlerësuara',
       one: 'Lypset të luani edhe $count lojë të vlerësuar',
-      zero: 'Lypset të luani edhe $count lojë të vlerësuar',
     );
     return '$_temp0';
   }
@@ -3298,7 +4361,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count lojëra të importuara',
       one: '$count lojë e importuar',
-      zero: '$count lojë e importuar',
     );
     return '$_temp0';
   }
@@ -3310,7 +4372,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count shokë në linjë',
       one: '$count shok në linjë',
-      zero: '$count shok në linjë',
     );
     return '$_temp0';
   }
@@ -3322,7 +4383,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count ndjekës',
       one: '$count ndjekës',
-      zero: '$count ndjekës',
     );
     return '$_temp0';
   }
@@ -3334,7 +4394,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count që ndiqen',
       one: '$count që ndiqet',
-      zero: '$count që ndiqet',
     );
     return '$_temp0';
   }
@@ -3346,7 +4405,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Më pak se $count minuta',
       one: 'Më pak se $count minutë',
-      zero: 'Më pak se $count minutë',
     );
     return '$_temp0';
   }
@@ -3358,7 +4416,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count lojëra duke u luajtur',
       one: '$count lojë duke u luajtur',
-      zero: '$count lojë duke u luajtur',
     );
     return '$_temp0';
   }
@@ -3370,7 +4427,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'E shumta:$count shenja.',
       one: 'E shumta:$count shenjë.',
-      zero: 'E shumta:$count shenjë.',
     );
     return '$_temp0';
   }
@@ -3382,7 +4438,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count bllokime',
       one: '$count bllokim',
-      zero: '$count bllokim',
     );
     return '$_temp0';
   }
@@ -3394,7 +4449,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count postime forumi',
       one: '$count postim forumi',
-      zero: '$count postim forumi',
     );
     return '$_temp0';
   }
@@ -3406,7 +4460,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count $param2 lojtarë këtë javë.',
       one: '$count $param2 lojtar këtë javë.',
-      zero: '$count $param2 lojtar këtë javë.',
     );
     return '$_temp0';
   }
@@ -3418,7 +4471,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'I përdorshëm në $count gjuhë!',
       one: 'I përdorshëm në $count gjuhë!',
-      zero: 'I përdorshëm në $count gjuhë!',
     );
     return '$_temp0';
   }
@@ -3430,7 +4482,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count sekonda për kryerjen e lëvizjes së parë',
       one: '$count sekondë për kryerjen e lëvizjes së parë',
-      zero: '$count sekondë për kryerjen e lëvizjes së parë',
     );
     return '$_temp0';
   }
@@ -3442,7 +4493,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count sekonda',
       one: '$count sekondë',
-      zero: '$count sekondë',
     );
     return '$_temp0';
   }
@@ -3454,1013 +4504,9 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'edhe ruaj $count linja premove',
       one: 'edhe ruaj $count linja premove',
-      zero: 'edhe ruaj $count linja premove',
     );
     return '$_temp0';
   }
-
-  @override
-  String get patronDonate => 'Dhuroni';
-
-  @override
-  String get patronLichessPatron => 'Bamirës Lichess-i';
-
-  @override
-  String get preferencesPreferences => 'Parapëlqime';
-
-  @override
-  String get preferencesDisplay => 'Shfaqje';
-
-  @override
-  String get preferencesPrivacy => 'Privatësi';
-
-  @override
-  String get preferencesNotifications => 'Njoftime';
-
-  @override
-  String get preferencesPieceAnimation => 'Animimi i figurave';
-
-  @override
-  String get preferencesMaterialDifference => 'Ndryshimi në material';
-
-  @override
-  String get preferencesBoardHighlights => 'Thekso fushën, (lëvizjen e fundit dhe shah)';
-
-  @override
-  String get preferencesPieceDestinations => 'Vendmbërritja e figurave (lëvizje të vlefshme dhe të paracaktuara)';
-
-  @override
-  String get preferencesBoardCoordinates => 'Koordinatat e fushës (A-H, 1-8)';
-
-  @override
-  String get preferencesMoveListWhilePlaying => 'Listë lëvizjesh teksa luhet';
-
-  @override
-  String get preferencesPgnPieceNotation => 'Shënime lëvizjesh';
-
-  @override
-  String get preferencesChessPieceSymbol => 'Simboli i figurës së shahut';
-
-  @override
-  String get preferencesPgnLetter => 'Shkronja (K, Q, R, B, N)';
-
-  @override
-  String get preferencesZenMode => 'Mënyra Zen';
-
-  @override
-  String get preferencesShowPlayerRatings => 'Shfaq klasifikim lojtarësh';
-
-  @override
-  String get preferencesShowFlairs => 'Show player flairs';
-
-  @override
-  String get preferencesExplainShowPlayerRatings => 'Kjo lejon të bëhet fshehja e krejt klasifikimeve në sajt, për të ndihmuar përqendrimin në shah. Lojërat prapë mund të vlerësohen, kjo ka të bëjë vetëm me ato çka shihni.';
-
-  @override
-  String get preferencesDisplayBoardResizeHandle => 'Shfaq mundësi ripërmasimi fushe';
-
-  @override
-  String get preferencesOnlyOnInitialPosition => 'Vetëm në pozicionin fillestar';
-
-  @override
-  String get preferencesInGameOnly => 'In-game only';
-
-  @override
-  String get preferencesChessClock => 'Ora e shahut';
-
-  @override
-  String get preferencesTenthsOfSeconds => 'Të dhjeta të sekondës';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanTenSeconds => 'Kur koha e mbetur <10 sekonda';
-
-  @override
-  String get preferencesHorizontalGreenProgressBars => 'Shtyllë ecurie horizontale e gjelbër';
-
-  @override
-  String get preferencesSoundWhenTimeGetsCritical => 'Tingull kur koha i afrohet kritikes';
-
-  @override
-  String get preferencesGiveMoreTime => 'Jep më shumë kohë';
-
-  @override
-  String get preferencesGameBehavior => 'Sjellje loje';
-
-  @override
-  String get preferencesHowDoYouMovePieces => 'Si i lëvizni figurat?';
-
-  @override
-  String get preferencesClickTwoSquares => 'Klikoni dy kuadrate';
-
-  @override
-  String get preferencesDragPiece => 'Tërhiqni një figurë';
-
-  @override
-  String get preferencesBothClicksAndDrag => 'Cilëndo';
-
-  @override
-  String get preferencesPremovesPlayingDuringOpponentTurn => 'Lëvizje e paracaktuar (luajtur gjatë radhës së kundërshtarit)';
-
-  @override
-  String get preferencesTakebacksWithOpponentApproval => 'Marrje mbrapsht (me miratimin e kundërshtarit)';
-
-  @override
-  String get preferencesInCasualGamesOnly => 'Vetëm në lojëra të rastësishme';
-
-  @override
-  String get preferencesPromoteToQueenAutomatically => 'Dalja automatike në mbretëreshë';
-
-  @override
-  String get preferencesExplainPromoteToQueenAutomatically => 'Mbani të shtypur tastin <Ctrl> gjatë daljes, për të çaktivizuar përkohësisht daljet e automatizuara';
-
-  @override
-  String get preferencesWhenPremoving => 'Kur bëhet lëvizje e paracaktuar';
-
-  @override
-  String get preferencesClaimDrawOnThreefoldRepetitionAutomatically => 'Kërko automatikisht barazim pas përsëritjeje të trefishtë';
-
-  @override
-  String get preferencesWhenTimeRemainingLessThanThirtySeconds => 'Kur koha e mbetur <30 sekonda';
-
-  @override
-  String get preferencesMoveConfirmation => 'Ripohim lëvizjesh';
-
-  @override
-  String get preferencesExplainCanThenBeTemporarilyDisabled => 'Mund të çaktivizohet gjatë një loje me menu tabele';
-
-  @override
-  String get preferencesInCorrespondenceGames => 'Lojëra me korrespondencë';
-
-  @override
-  String get preferencesCorrespondenceAndUnlimited => 'Me korrespondencë dhe e pakufizuar';
-
-  @override
-  String get preferencesConfirmResignationAndDrawOffers => 'Ripoho dorëzimin dhe ofrime barazimi';
-
-  @override
-  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Metodë rokade';
-
-  @override
-  String get preferencesCastleByMovingTwoSquares => 'Lëvize mbretin dy kuadrate';
-
-  @override
-  String get preferencesCastleByMovingOntoTheRook => 'Lëvize mbretin tek torra';
-
-  @override
-  String get preferencesInputMovesWithTheKeyboard => 'Jepni lëvizje përmes tastiere';
-
-  @override
-  String get preferencesInputMovesWithVoice => 'Kryeni lëvizje përmes zërit tuaj';
-
-  @override
-  String get preferencesSnapArrowsToValidMoves => 'Snap arrows to valid moves';
-
-  @override
-  String get preferencesSayGgWpAfterLosingOrDrawing => 'Shkruaj “Lojë e mirë, bukur luajtët” pas barazimit ose humbjes';
-
-  @override
-  String get preferencesYourPreferencesHaveBeenSaved => 'Parapëlqimet tuaja u ruajtën.';
-
-  @override
-  String get preferencesScrollOnTheBoardToReplayMoves => 'Rrëshqitni nëpër tabelë që të riluhen lëvizje';
-
-  @override
-  String get preferencesCorrespondenceEmailNotification => 'Njoftim i përditshëm me email, që paraqet lojërat tuaja me korrespondencë';
-
-  @override
-  String get preferencesNotifyStreamStart => 'Streamer goes live';
-
-  @override
-  String get preferencesNotifyInboxMsg => 'Mesazh i ri te Të marrë';
-
-  @override
-  String get preferencesNotifyForumMention => 'Koment forumi ku përmendeni';
-
-  @override
-  String get preferencesNotifyInvitedStudy => 'Ftesë për ushtrim';
-
-  @override
-  String get preferencesNotifyGameEvent => 'Përditësime loje me korrespondencë';
-
-  @override
-  String get preferencesNotifyChallenge => 'Challenges';
-
-  @override
-  String get preferencesNotifyTournamentSoon => 'Turne që fillon së shpejti';
-
-  @override
-  String get preferencesNotifyTimeAlarm => 'Correspondence clock running out';
-
-  @override
-  String get preferencesNotifyBell => 'Njoftim zileje brenda Lichess-it';
-
-  @override
-  String get preferencesNotifyPush => 'Njoftim pajisjeje kur s’gjendeni në Lichess';
-
-  @override
-  String get preferencesNotifyWeb => 'Shfletues';
-
-  @override
-  String get preferencesNotifyDevice => 'Pajisje';
-
-  @override
-  String get preferencesBellNotificationSound => 'Tingull zileje njoftimesh';
-
-  @override
-  String get puzzlePuzzles => 'Ushtrime';
-
-  @override
-  String get puzzlePuzzleThemes => 'Tema ushtrimesh';
-
-  @override
-  String get puzzleRecommended => 'Të rekomanduara';
-
-  @override
-  String get puzzlePhases => 'Faza';
-
-  @override
-  String get puzzleMotifs => 'Motive';
-
-  @override
-  String get puzzleAdvanced => 'Të mëtejshme';
-
-  @override
-  String get puzzleLengths => 'Gjatësi';
-
-  @override
-  String get puzzleMates => 'Mate';
-
-  @override
-  String get puzzleGoals => 'Objektiva';
-
-  @override
-  String get puzzleOrigin => 'Origjinë';
-
-  @override
-  String get puzzleSpecialMoves => 'Lëvizje speciale';
-
-  @override
-  String get puzzleDidYouLikeThisPuzzle => 'Ju pëlqeu ky ushtrim?';
-
-  @override
-  String get puzzleVoteToLoadNextOne => 'Votojeni, që të ngarkohet pasuesi!';
-
-  @override
-  String get puzzleUpVote => 'Jepini një votë ushtrimit';
-
-  @override
-  String get puzzleDownVote => 'Hiqini një votë ushtrimit';
-
-  @override
-  String get puzzleYourPuzzleRatingWillNotChange => 'Vlerësimi juaj për ushtrimet nuk do të ndryshojë. Kini parasysh se ushtrimet nuk janë garë. Vlerësimi juaj ndihmon në përzgjedhjen e ushtrimeve më të mira për aftësitë tuaja të tanishme.';
-
-  @override
-  String get puzzleFindTheBestMoveForWhite => 'Gjej lëvizjen më të mirë për të bardhin.';
-
-  @override
-  String get puzzleFindTheBestMoveForBlack => 'Gjej lëvizjen më të mirë për të ziun.';
-
-  @override
-  String get puzzleToGetPersonalizedPuzzles => 'Për të marrë ushtrime të personalizuara:';
-
-  @override
-  String puzzlePuzzleId(String param) {
-    return 'Ushtrimi $param';
-  }
-
-  @override
-  String get puzzlePuzzleOfTheDay => 'Ushtrimi i ditës';
-
-  @override
-  String get puzzleDailyPuzzle => 'Daily Puzzle';
-
-  @override
-  String get puzzleClickToSolve => 'Klikoni për t’a zgjidhur';
-
-  @override
-  String get puzzleGoodMove => 'Lëvizje e mirë';
-
-  @override
-  String get puzzleBestMove => 'Lëvizja më e mirë!';
-
-  @override
-  String get puzzleKeepGoing => 'Vazhdoni…';
-
-  @override
-  String get puzzlePuzzleSuccess => 'Sukses!';
-
-  @override
-  String get puzzlePuzzleComplete => 'Ushtrimi u plotësua!';
-
-  @override
-  String get puzzleByOpenings => 'Sipas hapjesh';
-
-  @override
-  String get puzzlePuzzlesByOpenings => 'Puzzles by openings';
-
-  @override
-  String get puzzleOpeningsYouPlayedTheMost => 'Hapje që bëtë në lojërat më të vlerësuara';
-
-  @override
-  String get puzzleUseFindInPage => 'Që të gjeni hapen tuaj të parapëlqyer, përdorni “Gjej në faqe” te menuja e shfletuesit!';
-
-  @override
-  String get puzzleUseCtrlF => 'Që të gjeni hapjen tuaj të parapëlqyer, përdorni Ctrl+f!';
-
-  @override
-  String get puzzleNotTheMove => 'S’është lëvizja e duhur!';
-
-  @override
-  String get puzzleTrySomethingElse => 'Provoni diçka tjetër.';
-
-  @override
-  String puzzleRatingX(String param) {
-    return 'Vlerësimi: $param';
-  }
-
-  @override
-  String get puzzleHidden => 'i fshehur';
-
-  @override
-  String puzzleFromGameLink(String param) {
-    return 'Prej lojës $param';
-  }
-
-  @override
-  String get puzzleContinueTraining => 'Vazhdoni trajnimin';
-
-  @override
-  String get puzzleDifficultyLevel => 'Shkallë vështirësie';
-
-  @override
-  String get puzzleNormal => 'Normale';
-
-  @override
-  String get puzzleEasier => 'Më e lehtë';
-
-  @override
-  String get puzzleEasiest => 'Më e lehta';
-
-  @override
-  String get puzzleHarder => 'Më e vështirë';
-
-  @override
-  String get puzzleHardest => 'Më e vështira';
-
-  @override
-  String get puzzleExample => 'Shembull';
-
-  @override
-  String get puzzleAddAnotherTheme => 'Shtoni temë tjetër';
-
-  @override
-  String get puzzleNextPuzzle => 'Ushtrimi pasues';
-
-  @override
-  String get puzzleJumpToNextPuzzleImmediately => 'Kalo menjëherë në ushtrimin pasues';
-
-  @override
-  String get puzzlePuzzleDashboard => 'Pult Ushtrimesh';
-
-  @override
-  String get puzzleImprovementAreas => 'Fusha përmirësimi';
-
-  @override
-  String get puzzleStrengths => 'Vështirësi';
-
-  @override
-  String get puzzleHistory => 'Historik ushtrimesh';
-
-  @override
-  String get puzzleSolved => 'të zgjidhura';
-
-  @override
-  String get puzzleFailed => 'të pazgjidhura';
-
-  @override
-  String get puzzleStreakDescription => 'Zgjidh ushtrime që bëhen më të vështira. Nuk ka kufizim kohe, kështu qe mendohu mirë, një lëvizje e gabuar, dhe humb! Mund ta kapërcesh vetëm një ushtrim.';
-
-  @override
-  String puzzleYourStreakX(String param) {
-    return 'Rrezultati juaj: $param';
-  }
-
-  @override
-  String get puzzleStreakSkipExplanation => 'Kapërce këtë lëvizje qe te ruash kombinimet! Bën vetëm një herë per garë.';
-
-  @override
-  String get puzzleContinueTheStreak => 'Vazhdoje raundin';
-
-  @override
-  String get puzzleNewStreak => 'Raund i ri';
-
-  @override
-  String get puzzleFromMyGames => 'Nga lojërat e mia';
-
-  @override
-  String get puzzleLookupOfPlayer => 'Kërkoni te ushtrime prej lojërave të një lojtari';
-
-  @override
-  String puzzleFromXGames(String param) {
-    return 'Ushtrime nga lojërat e $param';
-  }
-
-  @override
-  String get puzzleSearchPuzzles => 'Kërkoni në ushtrime';
-
-  @override
-  String get puzzleFromMyGamesNone => 'S’keni ushtrime te baza e të dhënave, por Lichess-i prapë ju do fort.\n\nLuani lojëra të shpejta dhe klasike, që të rriten shanset tuaja për të pasur një ushtrim nga tuajt të shtuar atje!';
-
-  @override
-  String puzzleFromXGamesFound(String param1, String param2) {
-    return 'U gjetën $param1 ushtrime në $param2 lojëra';
-  }
-
-  @override
-  String get puzzlePuzzleDashboardDescription => 'Stërvituni, analizoni, përmirësohuni';
-
-  @override
-  String puzzlePercentSolved(String param) {
-    return '$param të zgjidhur';
-  }
-
-  @override
-  String get puzzleNoPuzzlesToShow => 'S’ka gjë për shfaqje, shkoni e luani ca ushtrime, së pari!';
-
-  @override
-  String get puzzleImprovementAreasDescription => 'Stërvituni me këto, që të optimizoni përparimin tuaj!';
-
-  @override
-  String get puzzleStrengthDescription => 'Dilni më mirë në këto tema';
-
-  @override
-  String puzzlePlayedXTimes(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Luajtur $count herë',
-      one: 'Luajtur $count herë',
-      zero: 'Luajtur $count herë',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsBelowYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count pikë nën vlerësimin tuaj në ushtrime',
-      one: 'Një pikë nën vlerësimin tuaj në ushtrime',
-      zero: 'Një pikë nën vlerësimin tuaj në ushtrime',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPointsAboveYourPuzzleRating(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count pikë mbi vlerësimin tuaj në ushtrime',
-      one: 'Një pikë mbi vlerësimin tuaj në ushtrime',
-      zero: 'Një pikë mbi vlerësimin tuaj në ushtrime',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbPlayed(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count të luajtur',
-      one: '$count i luajtur',
-      zero: '$count i luajtur',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String puzzleNbToReplay(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count për t’u riluajtur',
-      one: '$count për t’u riluajtur',
-      zero: '$count për t’u riluajtur',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get puzzleThemeAdvancedPawn => 'Ushtar i përparuar';
-
-  @override
-  String get puzzleThemeAdvancedPawnDescription => 'Një nga ushtarët tuaj ka hyrë thellë në territorin e kundërshtarit, ndoshta duke kërcënuar të gradohet.';
-
-  @override
-  String get puzzleThemeAdvantage => 'Avantazh';
-
-  @override
-  String get puzzleThemeAdvantageDescription => 'Shfrytëzoni shansin tuaj që të përfitoni një avantazh vendimtar. (200cp ≤ vlerë ≤ 600cp)';
-
-  @override
-  String get puzzleThemeAnastasiaMate => 'Mati i Anastasisë';
-
-  @override
-  String get puzzleThemeAnastasiaMateDescription => 'Një kalë dhe torrë ose mbretëreshë bëhen tok për të bllokuar mbretin kundërshtar mes anës së fushës dhe një guri miqësor.';
-
-  @override
-  String get puzzleThemeArabianMate => 'Mat arab';
-
-  @override
-  String get puzzleThemeArabianMateDescription => 'Një kalë dhe një torrë bëhen tok për të bllokuar mbretin kundërshtar në një cep të fushës.';
-
-  @override
-  String get puzzleThemeAttackingF2F7 => 'Sulmim i f2-shit ose f7-s';
-
-  @override
-  String get puzzleThemeAttackingF2F7Description => 'Një sulm që synon ushtarin në f2 ose f7, si te hapja “mëlçi të skuqura”.';
-
-  @override
-  String get puzzleThemeAttraction => 'Tërheqje';
-
-  @override
-  String get puzzleThemeAttractionDescription => 'Një shkëmbim ose sakrificë që e nxit ose e detyron një gur të kundërshtarit të shkojë në një kuadrat që lejon më pas një lëvizje taktike.';
-
-  @override
-  String get puzzleThemeBackRankMate => 'Mat në rreshtin e fundit';
-
-  @override
-  String get puzzleThemeBackRankMateDescription => 'Jepini mat mbretin në rreshtin e tij, kur ai është bllokuar atje nga gurë të vetët.';
-
-  @override
-  String get puzzleThemeBishopEndgame => 'Fund loje me oficer';
-
-  @override
-  String get puzzleThemeBishopEndgameDescription => 'Fund loje me vetëm oficerë dhe ushtarë.';
-
-  @override
-  String get puzzleThemeBodenMate => 'Mati i Bodenit';
-
-  @override
-  String get puzzleThemeBodenMateDescription => 'Dy fila sulmues në diagonalet kryqëzuese i bëjne mat një mbreti të penguar nga figura miqësore.';
-
-  @override
-  String get puzzleThemeCastling => 'Rokadë';
-
-  @override
-  String get puzzleThemeCastlingDescription => 'Siguroni mbretin dhe futeni torrën në sulm.';
-
-  @override
-  String get puzzleThemeCapturingDefender => 'Merrni mbrojtësin';
-
-  @override
-  String get puzzleThemeCapturingDefenderDescription => 'Heqja e një pjese që është kritike për mbrojtjen e një pjese tjetër, çka tani lejon që pjesa e pambrojtur të merret me një lëvizje vijuese.';
-
-  @override
-  String get puzzleThemeCrushing => 'Shkatërrim';
-
-  @override
-  String get puzzleThemeCrushingDescription => 'Shfrytëzoni gafën e kundërshtarit për të përfituar një avantazh shkatërrues. (vlera ≥ 600 cp)';
-
-  @override
-  String get puzzleThemeDoubleBishopMate => 'Mat me dy oficerë';
-
-  @override
-  String get puzzleThemeDoubleBishopMateDescription => 'Dy oficerë në sulm, në diagonale krah njëra-tjetrës, i japin mat mbretit të penguar nga figura miqësore.';
-
-  @override
-  String get puzzleThemeDovetailMate => 'Mati bishtpëllumb';
-
-  @override
-  String get puzzleThemeDovetailMateDescription => 'Një mbretëreshë i jep mat një mbretit afër, dy kuadratet e vetme të shpëtimit të të cilit janë zënë nga gurë të vetët.';
-
-  @override
-  String get puzzleThemeEquality => 'Barazim';
-
-  @override
-  String get puzzleThemeEqualityDescription => 'Kthehuni nga një pozicion humbës dhe siguroni një barazim ose një pozicion të ekuilibruar. (vlera ≤ 200cp)';
-
-  @override
-  String get puzzleThemeKingsideAttack => 'Sulmi nga ana e mbretit';
-
-  @override
-  String get puzzleThemeKingsideAttackDescription => 'Një sulm në anë të mbretit, pasi bëri rrokade në anë te mbretit.';
-
-  @override
-  String get puzzleThemeClearance => 'Largim';
-
-  @override
-  String get puzzleThemeClearanceDescription => 'Një lëvizje, shpesh me tempo, që pastron një katror, kolonë ose diagonale për një ide taktike vijuese.';
-
-  @override
-  String get puzzleThemeDefensiveMove => 'Lëvizje mbrojtëse';
-
-  @override
-  String get puzzleThemeDefensiveMoveDescription => 'Një lëvizje apo varg lëvizjesh të sakta që janë të nevojshme për të shmangur humbje materiali, apo për avantazh tjetër.';
-
-  @override
-  String get puzzleThemeDeflection => 'Shmangie';
-
-  @override
-  String get puzzleThemeDeflectionDescription => 'Një lëvizje që tërheq vëmendjen e një figure të kundërshtarit nga një detyrë tjetër që ajo kryen, siç është ruajtja e një sheshi kryesor. Ndonjëherë quhet edhe \"mbingarkesë\".';
-
-  @override
-  String get puzzleThemeDiscoveredAttack => 'Sulm me zbulim';
-
-  @override
-  String get puzzleThemeDiscoveredAttackDescription => 'Lëvizja e një figure (për shembull një kalë) që më parë bllokoi një sulm nga një figurë me distancë të gjatë (për shembull një torre), nga rruga e asaj figure.';
-
-  @override
-  String get puzzleThemeDoubleCheck => 'Shah i dyfishtë';
-
-  @override
-  String get puzzleThemeDoubleCheckDescription => 'Shah me dy figura njëherësh, si pasojë e një sulmi me zbulim, kur që të dy, guri që lëviz dhe guri i pazbuluar sulmojnë mbretin e kundërshtarit.';
-
-  @override
-  String get puzzleThemeEndgame => 'Fund loje';
-
-  @override
-  String get puzzleThemeEndgameDescription => 'Një taktikë gjatë fazës së fundit të lojës.';
-
-  @override
-  String get puzzleThemeEnPassantDescription => 'Një taktikë që përfshin rregullin “me prerje”, ku një ushtar mund të marrë një ushtar kundërshtar që e ka kaluar atë duke përdorur lëvizjen e vet fillestare të dy kuadrateve.';
-
-  @override
-  String get puzzleThemeExposedKing => 'Mbreti i ekspozuar';
-
-  @override
-  String get puzzleThemeExposedKingDescription => 'Një taktikë që përfshin një mbret me pak mbrojtës rreth tij, që shpesh çon në shah mat.';
-
-  @override
-  String get puzzleThemeFork => 'Sfurk';
-
-  @override
-  String get puzzleThemeForkDescription => 'Një lëvizje ku guri i lëvizur sulmon njëherësh dy gurë të kundërshtarit.';
-
-  @override
-  String get puzzleThemeHangingPiece => 'Gur i pambrojtur';
-
-  @override
-  String get puzzleThemeHangingPieceDescription => 'Një taktikë që përfshin një gur të pambrojtur të kundërshtarit, ose të mbrojtur në mënyrë të pamjaftueshme dhe që është i lirë të marrë gurë.';
-
-  @override
-  String get puzzleThemeHookMate => 'Mati Huk';
-
-  @override
-  String get puzzleThemeHookMateDescription => 'Shat mat me një torrë, kalë dhe një ushtar, tok me një ushtar të kundërshtarit, për të kufizuar arratisjen e mbretit të kundërshtarit.';
-
-  @override
-  String get puzzleThemeInterference => 'Ndërhyrje';
-
-  @override
-  String get puzzleThemeInterferenceDescription => 'Lëvizja e një guri mes dy gurësh të kundërshtarit për të lënë të pambrojtur një ose të dy gurët e kundërshtarit, bie fjala, një kalë në një kuadrat mes dy torresh.';
-
-  @override
-  String get puzzleThemeIntermezzo => 'Ndërmjetësim';
-
-  @override
-  String get puzzleThemeIntermezzoDescription => 'Në vend që të luhet lëvizja e pritshme, së pari ndërhyni një lëvizje tjetër që paraqet një kërcënim të menjëhershëm, që kundërshtari duhet t\'i përgjigjet. Njihet gjithashtu si \"Zwischenzug\" ose \"Në mes\".';
-
-  @override
-  String get puzzleThemeKnightEndgame => 'Fund loje me kalë';
-
-  @override
-  String get puzzleThemeKnightEndgameDescription => 'Një fund loje vetëm me kuaj dhe ushtarë.';
-
-  @override
-  String get puzzleThemeLong => 'Ushtrim i gjatë';
-
-  @override
-  String get puzzleThemeLongDescription => 'Tri lëvizje për të fituar.';
-
-  @override
-  String get puzzleThemeMaster => 'Lojëra Mjeshtrash';
-
-  @override
-  String get puzzleThemeMasterDescription => 'Ushtrime nga lojëra të luajtura nga lojtarë me tituj.';
-
-  @override
-  String get puzzleThemeMasterVsMaster => 'Lojëra mjeshtër kundër mjeshtri';
-
-  @override
-  String get puzzleThemeMasterVsMasterDescription => 'Ushtrime nga lojëra të luajtura mes dy lojtarësh me tituj.';
-
-  @override
-  String get puzzleThemeMate => 'Shat mat';
-
-  @override
-  String get puzzleThemeMateDescription => 'Fitojeni lojën me stil.';
-
-  @override
-  String get puzzleThemeMateIn1 => 'Mat me 1';
-
-  @override
-  String get puzzleThemeMateIn1Description => 'Jepni shah-mat me një lëvizje.';
-
-  @override
-  String get puzzleThemeMateIn2 => 'Mat me 2';
-
-  @override
-  String get puzzleThemeMateIn2Description => 'Jepni shah-mat me dy lëvizje.';
-
-  @override
-  String get puzzleThemeMateIn3 => 'Mat me 3';
-
-  @override
-  String get puzzleThemeMateIn3Description => 'Jepni shah-mat me tre lëvizje.';
-
-  @override
-  String get puzzleThemeMateIn4 => 'Mat me 4';
-
-  @override
-  String get puzzleThemeMateIn4Description => 'Jepni shah-mat me katër lëvizje.';
-
-  @override
-  String get puzzleThemeMateIn5 => 'Mat me 5 ose më tepër';
-
-  @override
-  String get puzzleThemeMateIn5Description => 'Gjeni një varg të gjatë lëvizjesh për mat.';
-
-  @override
-  String get puzzleThemeMiddlegame => 'Lojë e mesme';
-
-  @override
-  String get puzzleThemeMiddlegameDescription => 'Një taktikë gjatë fazës së dytë të lojës.';
-
-  @override
-  String get puzzleThemeOneMove => 'Ushtrime me një lëvizje';
-
-  @override
-  String get puzzleThemeOneMoveDescription => 'Një ushtrim që zgjidhet me një lëvizje.';
-
-  @override
-  String get puzzleThemeOpening => 'Hapje';
-
-  @override
-  String get puzzleThemeOpeningDescription => 'Një taktikë gjatë fazës së parë të lojës.';
-
-  @override
-  String get puzzleThemePawnEndgame => 'Fund loje me ushtar';
-
-  @override
-  String get puzzleThemePawnEndgameDescription => 'Një fund loje vetëm me ushtarë.';
-
-  @override
-  String get puzzleThemePin => 'Mbërthimi';
-
-  @override
-  String get puzzleThemePinDescription => 'Një taktikë që përfshin mbërthim, ku një pjesë s’është në gjendje të lëvizë pa zbuluar një sulm ndaj një guri me vlerë më të lartë.';
-
-  @override
-  String get puzzleThemePromotion => 'Gradim';
-
-  @override
-  String get puzzleThemePromotionDescription => 'Gradoni një nga ushtarët tuaj si mbretëreshë ose një gur më të ulët.';
-
-  @override
-  String get puzzleThemeQueenEndgame => 'Fund loje me mbretëreshë';
-
-  @override
-  String get puzzleThemeQueenEndgameDescription => 'Një fund loje me vetëm mbretëresha dhe ushtarë.';
-
-  @override
-  String get puzzleThemeQueenRookEndgame => 'Mbretëreshë dhe Torrë';
-
-  @override
-  String get puzzleThemeQueenRookEndgameDescription => 'Një fund loje me vetëm mbretëresha, torra dhe ushtarë.';
-
-  @override
-  String get puzzleThemeQueensideAttack => 'Sulm më anë të mbretëreshës';
-
-  @override
-  String get puzzleThemeQueensideAttackDescription => 'Sulm ndaj mbretit të kundërshtarit, pas rokade më anë të mbretëreshësh.';
-
-  @override
-  String get puzzleThemeQuietMove => 'Lëvizje e qetë';
-
-  @override
-  String get puzzleThemeQuietMoveDescription => 'Një lëvizje që s’jep shah ose kap gur, as edhe përbën kërcënim imediat për kapje guri, por përgatit një kërcënim më të fshehur, të pashmangshëm për një lëvizje të mëvonshme.';
-
-  @override
-  String get puzzleThemeRookEndgame => 'Fund loje me torre';
-
-  @override
-  String get puzzleThemeRookEndgameDescription => 'Një fund loje vetëm me torra dhe ushtarë.';
-
-  @override
-  String get puzzleThemeSacrifice => 'Sakrifikim';
-
-  @override
-  String get puzzleThemeSacrificeDescription => 'Një taktikë që përfshin heqjen dorë për pak kohë nga materiali, për të fituar sërish avantazh pas një vargu të detyruar lëvizjesh.';
-
-  @override
-  String get puzzleThemeShort => 'Ushtrim i shkurtër';
-
-  @override
-  String get puzzleThemeShortDescription => 'Dy lëvizje për të fituar.';
-
-  @override
-  String get puzzleThemeSkewer => 'Hell';
-
-  @override
-  String get puzzleThemeSkewerDescription => 'Një motiv që përfshin një gur me vlerë të madhe i cili ngaqë po sulmohet, hap rrugën dhe lejon të hahet ose të sulmohet një gur me vlerë më të vogël prapa tij, e kundërta e mbërthimit.';
-
-  @override
-  String get puzzleThemeSmotheredMate => 'Mat i mbuluar';
-
-  @override
-  String get puzzleThemeSmotheredMateDescription => 'Një shah-mat dhënë me kalë, në të cilin mbreti i zënë mat s’është në gjendje të lëvizë ngaqë është i rrethuar (i mbuluar) nga gurët e vet.';
-
-  @override
-  String get puzzleThemeSuperGM => 'Lojëra Super Mjeshtërash të Mëdhenj';
-
-  @override
-  String get puzzleThemeSuperGMDescription => 'Ushtrime prej lojërash të luajtura nga lojtarët më të mirë të botës.';
-
-  @override
-  String get puzzleThemeTrappedPiece => 'Gur i bllokuar';
-
-  @override
-  String get puzzleThemeTrappedPieceDescription => 'Një gur s’është në gjendje t’i shpëtojë marrjes, pasi ka lëvizje të kufizuara.';
-
-  @override
-  String get puzzleThemeUnderPromotion => 'Nëngradim';
-
-  @override
-  String get puzzleThemeUnderPromotionDescription => 'Gradim si kalë, oficer, ose torrë.';
-
-  @override
-  String get puzzleThemeVeryLong => 'Ushtrim shumë i gjatë';
-
-  @override
-  String get puzzleThemeVeryLongDescription => 'Katër ose më tepër lëvizje për të fituar.';
-
-  @override
-  String get puzzleThemeXRayAttack => 'Sulm Rreze-X';
-
-  @override
-  String get puzzleThemeXRayAttackDescription => 'Një gur sulmon ose mbron një kuadrat, përmes një guri të kundërshtarit.';
-
-  @override
-  String get puzzleThemeZugzwang => 'Zugzwang';
-
-  @override
-  String get puzzleThemeZugzwangDescription => 'Kundërshtari është i kufizuar në lëvizjet që mund të bëjë dhe krejt lëvizjet përkeqësojnë pozicionin e tij.';
-
-  @override
-  String get puzzleThemeHealthyMix => 'Përzierje e ushtrimeve';
-
-  @override
-  String get puzzleThemeHealthyMixDescription => 'Pak nga të gjitha. S’dini ç’të prisni, ndaj mbeteni gati për gjithçka! Mu si në lojëra të njëmendta.';
-
-  @override
-  String get puzzleThemePlayerGames => 'Lojëra të lojëtarit';
-
-  @override
-  String get puzzleThemePlayerGamesDescription => 'Lookup puzzles generated from your games, or from another player\'s games.';
-
-  @override
-  String puzzleThemePuzzleDownloadInformation(String param) {
-    return 'Këto ushtrime janë nën përkatësi publike dhe mund të shkarkohen nga $param.';
-  }
-
-  @override
-  String perfStatPerfStats(String param) {
-    return 'Statistika për $param';
-  }
-
-  @override
-  String get perfStatViewTheGames => 'Shihni lojëra';
-
-  @override
-  String get perfStatProvisional => 'i përkohshëm';
-
-  @override
-  String get perfStatNotEnoughRatedGames => 'S’janë luajtur lojëra të mjaftueshme për të vendosur një klasifikim të besueshëm.';
-
-  @override
-  String perfStatProgressOverLastXGames(String param) {
-    return 'Ecuria përgjatë $param lojërave të fundit:';
-  }
-
-  @override
-  String perfStatRatingDeviation(String param) {
-    return 'Shmangie vlerësimi: $param.';
-  }
-
-  @override
-  String perfStatRatingDeviationTooltip(String param1, String param2, String param3) {
-    return 'Një vlerë e ulët do të thotë se vlerësimi është më i qëndrueshëm. Mbi $param1, vlerësimi konsiderohet i përkohshëm. Që të përfshiheni në klasifikime, kjo vlerë duhet të jetë $param2 (shah standard), ose $param3 (variante).';
-  }
-
-  @override
-  String get perfStatTotalGames => 'Lojëra gjithsej';
-
-  @override
-  String get perfStatRatedGames => 'Lojë të vlerësuara';
-
-  @override
-  String get perfStatTournamentGames => 'Lojëra turneu';
-
-  @override
-  String get perfStatBerserkedGames => 'Lojëra berserk';
-
-  @override
-  String get perfStatTimeSpentPlaying => 'Kohë e shpenzuar në lojë';
-
-  @override
-  String get perfStatAverageOpponent => 'Kundërshtari mesatar';
-
-  @override
-  String get perfStatVictories => 'Fitore';
-
-  @override
-  String get perfStatDefeats => 'Humbje';
-
-  @override
-  String get perfStatDisconnections => 'Shkëputje';
-
-  @override
-  String get perfStatNotEnoughGames => 'Numër i pamjaftueshëm lojërash';
-
-  @override
-  String perfStatHighestRating(String param) {
-    return 'Vlerësimi më i lartë: $param';
-  }
-
-  @override
-  String perfStatLowestRating(String param) {
-    return 'Vlerësimi më i ulet: $param';
-  }
-
-  @override
-  String perfStatFromXToY(String param1, String param2) {
-    return 'nga $param1 deri $param2';
-  }
-
-  @override
-  String get perfStatWinningStreak => 'Fitore radhazi';
-
-  @override
-  String get perfStatLosingStreak => 'Humbje radhazi';
-
-  @override
-  String perfStatLongestStreak(String param) {
-    return 'Vijimësia më e gjatë: $param';
-  }
-
-  @override
-  String perfStatCurrentStreak(String param) {
-    return 'Vijimësi aktuale: $param';
-  }
-
-  @override
-  String get perfStatBestRated => 'Fitoret më të mira';
-
-  @override
-  String get perfStatGamesInARow => 'Lojëra radhazi';
-
-  @override
-  String get perfStatLessThanOneHour => 'Më pak se një orë mes lojërave';
-
-  @override
-  String get perfStatMaxTimePlaying => 'Maksimum kohe shpenzuar në lojë';
-
-  @override
-  String get perfStatNow => 'tani';
-
-  @override
-  String get searchSearch => 'Kërko';
-
-  @override
-  String get settingsSettings => 'Rregullime';
-
-  @override
-  String get settingsCloseAccount => 'Mbyll llogarinë';
-
-  @override
-  String get settingsManagedAccountCannotBeClosed => 'Llogaria juaj administrohet dhe nuk mund të mbyllet.';
-
-  @override
-  String get settingsClosingIsDefinitive => 'Mbyllja është përfundimtare. Nuk ka kthim prapa. A jeni i sigurt?';
-
-  @override
-  String get settingsCantOpenSimilarAccount => 'S’do të lejoheni të hapni një llogari të re me të njëjtin emër, edhe nëse ndryshohet një nga shkronjat.';
-
-  @override
-  String get settingsChangedMindDoNotCloseAccount => 'Ndryshova mendje, mos e mbyll llogarinë time';
-
-  @override
-  String get settingsCloseAccountExplanation => 'Jeni i sigurt se doni të mbyllet llogaria juaj? Mbyllja e llogarisë tuaj është një vendim përfundimtar. S’do të jeni MË KURRË në gjendje të ribëni hyrjen.';
-
-  @override
-  String get settingsThisAccountIsClosed => 'Kjo llogari është e mbyllur';
-
-  @override
-  String get streamerLichessStreamers => 'Transmetues Lichess-i';
 
   @override
   String get stormMoveToStart => 'Bëni një lëvizje, që të fillohet';
@@ -4628,7 +4674,6 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: '$count raunde',
       one: '1 raund',
-      zero: '1 raund',
     );
     return '$_temp0';
   }
@@ -4640,20 +4685,16 @@ class AppLocalizationsSq extends AppLocalizations {
       locale: localeName,
       other: 'Luajti $count raunde nga $param2',
       one: 'Luajti një raund nga $param2',
-      zero: 'Luajti një raund nga $param2',
     );
     return '$_temp0';
   }
+
+  @override
+  String get streamerLichessStreamers => 'Transmetues Lichess-i';
 
   @override
   String get studyShareAndExport => 'Ndajeni me të tjerë & eksportoni';
 
   @override
   String get studyStart => 'Fillo';
-
-  @override
-  String get broadcastBroadcasts => 'Transmetime';
-
-  @override
-  String get broadcastStartDate => 'Datë fillimi në zonën tuaj kohore';
 }
