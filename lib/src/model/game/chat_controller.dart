@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
+import 'package:lichess_mobile/src/model/game/message_presets.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -18,12 +19,30 @@ String _storeKey(GameFullId id) => 'game.$id';
 
 @riverpod
 class ChatController extends _$ChatController {
+  static const Map<PresetMessageGroup, List<PresetMessage>> _presetMessages = {
+    PresetMessageGroup.start: [
+      (label: 'HI', value: 'Hello'),
+      (label: 'GL', value: 'Good luck'),
+      (label: 'HF', value: 'Have fun!'),
+      (label: 'U2', value: 'You too!'),
+    ],
+    PresetMessageGroup.end: [
+      (label: 'GG', value: 'Good game'),
+      (label: 'WP', value: 'Well played'),
+      (label: 'TY', value: 'Thank you'),
+      (label: 'GTG', value: "I've got to go"),
+      (label: 'BYE', value: 'Bye!'),
+    ],
+  };
+
   StreamSubscription<SocketEvent>? _subscription;
 
   late SocketClient _socketClient;
 
   @override
   Future<ChatState> build(GameFullId id) async {
+    print("Testaroonie");
+
     _socketClient =
         ref.read(socketPoolProvider).open(GameController.gameSocketUri(id));
 
@@ -33,6 +52,15 @@ class ChatController extends _$ChatController {
     ref.onDispose(() {
       _subscription?.cancel();
     });
+
+    final presetMessageGroup = await ref.watch(
+      gameControllerProvider(id).selectAsync(
+        (gameState) => PresetMessageGroup.fromGame(gameState.game),
+      ),
+    );
+
+    print("Testaroonie2");
+    print(presetMessageGroup);
 
     final messages = await _socketClient.stream
         .firstWhere((event) => event.topic == 'full')
@@ -47,6 +75,11 @@ class ChatController extends _$ChatController {
     return ChatState(
       messages: messages ?? IList(),
       unreadMessages: (messages?.length ?? 0) - readMessagesCount,
+      chatPresets: (
+        presets: _presetMessages,
+        alreadySaid: [],
+        currentPresetMessageGroup: null
+      ),
     );
   }
 
@@ -56,6 +89,22 @@ class ChatController extends _$ChatController {
       'talk',
       message,
     );
+  }
+
+  // Sends a chat preset to the chat and marks it as sent
+  void sendPreset(PresetMessage message) {
+    sendMessage(message.value);
+
+    state = state.whenData((s) {
+      final state = s.copyWith(
+        chatPresets: (
+          alreadySaid: [...s.chatPresets.alreadySaid, message],
+          currentPresetMessageGroup: s.chatPresets.currentPresetMessageGroup,
+          presets: s.chatPresets.presets
+        ),
+      );
+      return state;
+    });
   }
 
   /// Resets the unread messages count to 0 and saves the number of read messages.
@@ -141,8 +190,15 @@ class ChatState with _$ChatState {
   const factory ChatState({
     required IList<Message> messages,
     required int unreadMessages,
+    required ChatPresets chatPresets,
   }) = _ChatState;
 }
+
+typedef ChatPresets = ({
+  Map<PresetMessageGroup, List<PresetMessage>> presets,
+  List<PresetMessage> alreadySaid,
+  PresetMessageGroup? currentPresetMessageGroup
+});
 
 typedef Message = ({String? username, String? colour, String message});
 

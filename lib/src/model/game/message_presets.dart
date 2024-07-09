@@ -5,16 +5,6 @@ enum PresetMessageGroup {
   start,
   end;
 
-  static PresetMessageGroup? fromString(String groupName) {
-    if (groupName == 'start') {
-      return start;
-    } else if (groupName == 'end') {
-      return end;
-    } else {
-      return null;
-    }
-  }
-
   static PresetMessageGroup? fromGame(PlayableGame game) {
     if (game.status.value <= GameStatus.mate.value && game.steps.length < 4) {
       return start;

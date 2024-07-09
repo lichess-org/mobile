@@ -1,18 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/message_presets.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 
 class PresetMessages extends ConsumerWidget {
-  final GameFullId gameId;
   final List<PresetMessage> alreadySaid;
   final PresetMessageGroup? presetMessageGroup;
   final Map<PresetMessageGroup, List<PresetMessage>> presetMessages;
   final void Function(PresetMessage presetMessage) sendChatPreset;
 
   const PresetMessages({
-    required this.gameId,
     required this.alreadySaid,
     required this.presetMessageGroup,
     required this.presetMessages,
