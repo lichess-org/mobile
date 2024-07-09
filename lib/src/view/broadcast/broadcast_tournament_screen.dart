@@ -85,7 +85,7 @@ class _BodyState extends ConsumerState<_Body> {
   Widget build(BuildContext context) {
     final broadcasts = ref.watch(broadcastsListProvider);
     final itemsCount =
-        broadcasts.value?.past.length ?? (broadcasts.isLoading ? 10 : 0);
+        (broadcasts.value?.past.length ?? 0) + (broadcasts.isLoading ? 10 : 0);
 
     if (!broadcasts.hasValue && broadcasts.isLoading) {
       return const Center(
@@ -159,7 +159,7 @@ class _BodyState extends ConsumerState<_Body> {
               mainAxisSpacing: 10,
             ),
             itemBuilder: (context, index) => (broadcasts.isLoading &&
-                    index > itemsCount - 10)
+                    index >= itemsCount - 10)
                 ? Shimmer(
                     child: ShimmerLoading(
                       isLoading: true,
