@@ -223,10 +223,10 @@ class PuzzleController extends _$PuzzleController {
     return nextPuzzle;
   }
 
-  void loadPuzzle(PuzzleContext nextContext) {
+  void loadPuzzle(PuzzleContext nextContext, {PuzzleStreak? nextStreak}) {
     ref.read(evaluationServiceProvider).disposeEngine();
 
-    state = _loadNewContext(nextContext, state.streak);
+    state = _loadNewContext(nextContext, nextStreak ?? state.streak);
   }
 
   void sendStreakResult() {
@@ -384,13 +384,14 @@ class PuzzleController extends _$PuzzleController {
           final result = await _nextPuzzleFuture!;
           result.match(
             onSuccess: (nextContext) async {
-              state = state.copyWith.streak!(
-                index: state.streak!.index + 1,
-              );
               if (nextContext != null) {
                 await Future<void>.delayed(const Duration(milliseconds: 250));
                 soundService.play(Sound.confirmation);
-                loadPuzzle(nextContext);
+                loadPuzzle(
+                  nextContext,
+                  nextStreak:
+                      state.streak!.copyWith(index: state.streak!.index + 1),
+                );
               } else {
                 // no more puzzle
                 state = state.copyWith.streak!(
