@@ -74,19 +74,17 @@ class _BodyState extends ConsumerState<_Body> {
   void _scrollListener() {
     if (_scrollController.position.pixels ==
         _scrollController.position.maxScrollExtent) {
-      final broadcastList = ref.read(broadcastsListProvider);
+      final broadcastList = ref.read(broadcastTournamentsListProvider);
 
       if (!broadcastList.isLoading) {
-        ref.read(broadcastPageProvider.notifier).next();
+        ref.read(broadcastTournamentsListProvider.notifier).next();
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final broadcasts = ref.watch(broadcastsListProvider);
-    final itemsCount =
-        (broadcasts.value?.past.length ?? 0) + (broadcasts.isLoading ? 10 : 0);
+    final broadcasts = ref.watch(broadcastTournamentsListProvider);
 
     if (!broadcasts.hasValue && broadcasts.isLoading) {
       return const Center(
@@ -100,6 +98,9 @@ class _BodyState extends ConsumerState<_Body> {
       );
       return const Center(child: Text('Could not load broadcast tournaments'));
     }
+
+    final itemsCount =
+        broadcasts.requireValue.past.length + (broadcasts.isLoading ? 10 : 0);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0),

@@ -11,7 +11,7 @@ class BroadcastRepository {
 
   final LichessClient client;
 
-  Future<BroadcastResponse> getBroadcasts({int page = 1}) {
+  Future<BroadcastTournamentsListState> getBroadcasts({int page = 1}) {
     return client.readJson(
       Uri(
         path: '/api/broadcast/top',
@@ -35,14 +35,17 @@ class BroadcastRepository {
   }
 }
 
-BroadcastResponse _makeBroadcastResponseFromJson(Map<String, dynamic> json) {
-  return BroadcastResponse(
+BroadcastTournamentsListState _makeBroadcastResponseFromJson(
+  Map<String, dynamic> json,
+) {
+  return BroadcastTournamentsListState(
     active: pick(json, 'active').asListOrThrow(_broadcastFromPick).toIList(),
     upcoming:
         pick(json, 'upcoming').asListOrThrow(_broadcastFromPick).toIList(),
     past: pick(json, 'past', 'currentPageResults')
         .asListOrThrow(_broadcastFromPick)
         .toIList(),
+    nextPage: pick(json, 'past', 'nextPage').asIntOrThrow(),
   );
 }
 

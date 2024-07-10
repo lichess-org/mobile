@@ -6,12 +6,13 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 part 'broadcast.freezed.dart';
 
 @freezed
-class BroadcastResponse with _$BroadcastResponse {
-  const factory BroadcastResponse({
+class BroadcastTournamentsListState with _$BroadcastTournamentsListState {
+  const factory BroadcastTournamentsListState({
     required IList<Broadcast> active,
     required IList<Broadcast> upcoming,
     required IList<Broadcast> past,
-  }) = _BroadcastResponse;
+    required int nextPage,
+  }) = _BroadcastTournamentList;
 }
 
 @freezed

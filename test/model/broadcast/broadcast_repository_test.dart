@@ -34,7 +34,7 @@ void main() {
 
       final response = await repo.getBroadcasts();
 
-      expect(response, isA<BroadcastResponse>());
+      expect(response, isA<BroadcastTournamentsListState>());
       expect(response.active.isNotEmpty, true);
       expect(response.upcoming.isNotEmpty, true);
       expect(response.past.isNotEmpty, true);

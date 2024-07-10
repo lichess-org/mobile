@@ -7,38 +7,36 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'broadcast_providers.g.dart';
 
+/// This provider is used to get a list of tournaments broadcasts.
+/// It implements pagination with a maximum number of pages of 20.
 @riverpod
-class BroadcastPage extends _$BroadcastPage {
+class BroadcastTournamentsList extends _$BroadcastTournamentsList {
   @override
-  int build() {
-    return 1;
-  }
-
-  void next() {
-    if (state < 20) {
-      // 20 is the last page
-      state = state + 1;
-    }
-  }
-}
-
-@riverpod
-class BroadcastsList extends _$BroadcastsList {
-  @override
-  Future<BroadcastResponse> build() async {
-    final page = ref.watch(broadcastPageProvider);
-
+  Future<BroadcastTournamentsListState> build() async {
     final broadcastResponse = await ref.withClient(
-      (client) => BroadcastRepository(client).getBroadcasts(page: page),
+      (client) => BroadcastRepository(client).getBroadcasts(),
     );
 
-    if (page == 1) {
-      return broadcastResponse;
-    } else {
-      return state.requireValue.copyWith(
+    return broadcastResponse;
+  }
+
+  Future<void> next() async {
+    final nextPage = state.requireValue.nextPage;
+
+    if (nextPage > 20) return;
+
+    state = const AsyncLoading();
+
+    final broadcastResponse = await ref.withClient(
+      (client) => BroadcastRepository(client).getBroadcasts(page: nextPage),
+    );
+
+    state = AsyncData(
+      state.requireValue.copyWith(
         past: state.requireValue.past.addAll(broadcastResponse.past),
-      );
-    }
+        nextPage: broadcastResponse.nextPage,
+      ),
+    );
   }
 }
 
