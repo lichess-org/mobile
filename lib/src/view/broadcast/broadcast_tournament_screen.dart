@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/styles/transparent_image.dart';
@@ -185,7 +186,16 @@ class BroadcastPicture extends StatelessWidget {
 
   const BroadcastPicture({required this.broadcast});
 
-  BroadcastPicture.loading() : broadcast = Broadcast.loading();
+  BroadcastPicture.loading()
+      : broadcast = Broadcast(
+          tour: const BroadcastTournament(name: '', imageUrl: null),
+          round: BroadcastRound(
+            id: const BroadcastRoundId(''),
+            status: RoundStatus.finished,
+            startsAt: DateTime.now(),
+          ),
+          group: null,
+        );
 
   @override
   Widget build(BuildContext context) {
