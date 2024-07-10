@@ -41,8 +41,6 @@ class ChatController extends _$ChatController {
 
   @override
   Future<ChatState> build(GameFullId id) async {
-    print("Testaroonie");
-
     _socketClient =
         ref.read(socketPoolProvider).open(GameController.gameSocketUri(id));
 
@@ -53,22 +51,15 @@ class ChatController extends _$ChatController {
       _subscription?.cancel();
     });
 
-    final presetMessageGroup = await ref.watch(
-      gameControllerProvider(id).selectAsync(
-        (gameState) => PresetMessageGroup.fromGame(gameState.game),
-      ),
+    final messages = await _socketClient.stream.firstWhere((event) {
+      return event.topic == 'full';
+    }).then(
+      (event) => pick(event.data, 'chat', 'lines')
+          .asListOrNull(_messageFromPick)
+          ?.toIList(),
     );
 
-    print("Testaroonie2");
-    print(presetMessageGroup);
-
-    final messages = await _socketClient.stream
-        .firstWhere((event) => event.topic == 'full')
-        .then(
-          (event) => pick(event.data, 'chat', 'lines')
-              .asListOrNull(_messageFromPick)
-              ?.toIList(),
-        );
+    ref.listen(gameControllerProvider(id), _handleGameStateChange);
 
     final readMessagesCount = await _getReadMessagesCount();
 
@@ -81,6 +72,34 @@ class ChatController extends _$ChatController {
         currentPresetMessageGroup: null
       ),
     );
+  }
+
+  void _handleGameStateChange(
+    AsyncValue<GameState>? previousGame,
+    AsyncValue<GameState> currentGame,
+  ) {
+    final newGameState = currentGame.value;
+
+    if (newGameState != null) {
+      final newMessageGroup = PresetMessageGroup.fromGame(newGameState.game);
+
+      final currentMessageGroup =
+          state.value?.chatPresets.currentPresetMessageGroup;
+
+      if (newMessageGroup != currentMessageGroup) {
+        state = state.whenData((s) {
+          final newState = s.copyWith(
+            chatPresets: (
+              currentPresetMessageGroup: newMessageGroup,
+              presets: _presetMessages,
+              alreadySaid: []
+            ),
+          );
+
+          return newState;
+        });
+      }
+    }
   }
 
   /// Sends a message to the chat.
