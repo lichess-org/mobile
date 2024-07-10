@@ -51,54 +51,44 @@ class ChatController extends _$ChatController {
       _subscription?.cancel();
     });
 
-    final messages = await _socketClient.stream.firstWhere((event) {
-      return event.topic == 'full';
-    }).then(
-      (event) => pick(event.data, 'chat', 'lines')
-          .asListOrNull(_messageFromPick)
-          ?.toIList(),
+    final readMessagesCount = await _getReadMessagesCount();
+    final messages = await _getMessages();
+
+    final presetMessageGroup = await ref.watch(
+      gameControllerProvider(id).selectAsync(
+        (gameState) => PresetMessageGroup.fromGame(gameState.game),
+      ),
     );
 
-    ref.listen(gameControllerProvider(id), _handleGameStateChange);
-
-    final readMessagesCount = await _getReadMessagesCount();
-
     return ChatState(
+      alreadySynced: true,
       messages: messages ?? IList(),
       unreadMessages: (messages?.length ?? 0) - readMessagesCount,
       chatPresets: (
         presets: _presetMessages,
         alreadySaid: [],
-        currentPresetMessageGroup: null
+        currentPresetMessageGroup: presetMessageGroup
       ),
     );
   }
 
-  void _handleGameStateChange(
-    AsyncValue<GameState>? previousGame,
-    AsyncValue<GameState> currentGame,
-  ) {
-    final newGameState = currentGame.value;
+  Future<IList<({String? colour, String message, String? username})>?>
+      _getMessages() {
+    // Once underlying socket has been opened the 'full' sync message will only be received once
+    // so when the provider state is rebuilt we should use the existing state
+    final alreadySynced = state.value?.alreadySynced == true;
+    final IList<Message>? existingMessages = state.value?.messages;
 
-    if (newGameState != null) {
-      final newMessageGroup = PresetMessageGroup.fromGame(newGameState.game);
-
-      final currentMessageGroup =
-          state.value?.chatPresets.currentPresetMessageGroup;
-
-      if (newMessageGroup != currentMessageGroup) {
-        state = state.whenData((s) {
-          final newState = s.copyWith(
-            chatPresets: (
-              currentPresetMessageGroup: newMessageGroup,
-              presets: _presetMessages,
-              alreadySaid: []
-            ),
-          );
-
-          return newState;
-        });
-      }
+    if (alreadySynced) {
+      return Future.value(existingMessages);
+    } else {
+      return _socketClient.stream.firstWhere((event) {
+        return event.topic == 'full';
+      }).then(
+        (event) => pick(event.data, 'chat', 'lines')
+            .asListOrNull(_messageFromPick)
+            ?.toIList(),
+      );
     }
   }
 
@@ -207,6 +197,7 @@ class ChatState with _$ChatState {
   const ChatState._();
 
   const factory ChatState({
+    required bool alreadySynced,
     required IList<Message> messages,
     required int unreadMessages,
     required ChatPresets chatPresets,
