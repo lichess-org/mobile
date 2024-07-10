@@ -82,6 +82,12 @@ class SettingsScreen extends ConsumerWidget {
 class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen(currentBottomTabProvider, (prev, current) {
+      if (prev != BottomTab.settings && current == BottomTab.settings) {
+        _refreshData(ref);
+      }
+    });
+
     final themeMode = ref.watch(
       generalPreferencesProvider.select((state) => state.themeMode),
     );
@@ -481,6 +487,10 @@ class _Body extends ConsumerWidget {
   Future<void> _deleteDatabase(WidgetRef ref) async {
     final db = ref.read(databaseProvider);
     await clearDatabase(db);
+    ref.invalidate(getDbSizeInBytesProvider);
+  }
+
+  void _refreshData(WidgetRef ref) {
     ref.invalidate(getDbSizeInBytesProvider);
   }
 }
