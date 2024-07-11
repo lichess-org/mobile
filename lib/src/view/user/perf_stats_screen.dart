@@ -267,37 +267,40 @@ class _Body extends ConsumerWidget {
                   ),
                 ]),
                 statGroupSpace,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.baseline,
-                      textBaseline: TextBaseline.alphabetic,
-                      children: [
-                        Text(
-                          '${context.l10n.perfStatTotalGames} '
-                              .localizeNumbers(),
-                          style: Styles.sectionTitle,
+                GestureDetector(
+                  onTap: () {
+                    pushPlatformRoute(
+                      context,
+                      builder: (context) => GameHistoryScreen(
+                        user: user.lightUser,
+                        isOnline: true,
+                        perf: perf,
+                        games: data.totalGames,
+                      ),
+                    );
+                  },
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    textBaseline: TextBaseline.alphabetic,
+                    children: [
+                      Text(
+                        '${context.l10n.perfStatTotalGames} '.localizeNumbers(),
+                        style: Styles.sectionTitle,
+                      ),
+                      Text(
+                        data.totalGames.toString().localizeNumbers(),
+                        style: _mainValueStyle,
+                      ),
+                      Text(
+                        String.fromCharCode(
+                          Icons.arrow_forward_ios.codePoint,
                         ),
-                        Text(
-                          data.totalGames.toString().localizeNumbers(),
-                          style: _mainValueStyle,
-                        ),
-                      ],
-                    ),
-                    TextButton(
-                      onPressed: () => pushPlatformRoute(
-                        context,
-                        builder: (context) => GameHistoryScreen(
-                          user: user.lightUser,
-                          isOnline: true,
-                          perf: perf,
-                          games: data.totalGames,
+                        style: Styles.sectionTitle.copyWith(
+                          fontFamily: 'MaterialIcons',
                         ),
                       ),
-                      child: Text(context.l10n.perfStatViewTheGames),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 subStatSpace,
                 StatCardRow([
