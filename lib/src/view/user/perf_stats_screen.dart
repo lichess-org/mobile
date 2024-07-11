@@ -267,39 +267,53 @@ class _Body extends ConsumerWidget {
                   ),
                 ]),
                 statGroupSpace,
-                GestureDetector(
-                  onTap: () {
-                    pushPlatformRoute(
-                      context,
-                      builder: (context) => GameHistoryScreen(
-                        user: user.lightUser,
-                        isOnline: true,
-                        perf: perf,
-                        games: data.totalGames,
-                      ),
-                    );
-                  },
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.baseline,
-                    textBaseline: TextBaseline.alphabetic,
-                    children: [
-                      Text(
-                        '${context.l10n.perfStatTotalGames} '.localizeNumbers(),
-                        style: Styles.sectionTitle,
-                      ),
-                      Text(
-                        data.totalGames.toString().localizeNumbers(),
-                        style: _mainValueStyle,
-                      ),
-                      Text(
-                        String.fromCharCode(
-                          Icons.arrow_forward_ios.codePoint,
+                Semantics(
+                  container: true,
+                  enabled: true,
+                  button: true,
+                  label: context.l10n.perfStatViewTheGames,
+                  child: Tooltip(
+                    excludeFromSemantics: true,
+                    message: context.l10n.perfStatViewTheGames,
+                    child: AdaptiveInkWell(
+                      onTap: () {
+                        pushPlatformRoute(
+                          context,
+                          builder: (context) => GameHistoryScreen(
+                            user: user.lightUser,
+                            isOnline: true,
+                            perf: perf,
+                            games: data.totalGames,
+                          ),
+                        );
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 3.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.baseline,
+                          textBaseline: TextBaseline.alphabetic,
+                          children: [
+                            Text(
+                              '${context.l10n.perfStatTotalGames} '
+                                  .localizeNumbers(),
+                              style: Styles.sectionTitle,
+                            ),
+                            Text(
+                              data.totalGames.toString().localizeNumbers(),
+                              style: _mainValueStyle,
+                            ),
+                            Text(
+                              String.fromCharCode(
+                                Icons.arrow_forward_ios.codePoint,
+                              ),
+                              style: Styles.sectionTitle.copyWith(
+                                fontFamily: 'MaterialIcons',
+                              ),
+                            ),
+                          ],
                         ),
-                        style: Styles.sectionTitle.copyWith(
-                          fontFamily: 'MaterialIcons',
-                        ),
                       ),
-                    ],
+                    ),
                   ),
                 ),
                 subStatSpace,
