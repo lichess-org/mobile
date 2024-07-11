@@ -3,6 +3,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 
@@ -39,7 +40,12 @@ class GameRepository {
     UserId userId, {
     int max = 20,
     DateTime? until,
+    Perf? perfType,
   }) {
+    assert(
+      ![Perf.fromPosition, Perf.puzzle, Perf.storm, Perf.streak]
+          .contains(perfType),
+    );
     return client
         .readNdJsonList(
           Uri(
@@ -48,6 +54,7 @@ class GameRepository {
               'max': max.toString(),
               if (until != null)
                 'until': until.millisecondsSinceEpoch.toString(),
+              if (perfType != null) 'perfType': perfType.name,
               'moves': 'false',
               'lastFen': 'true',
               'accuracy': 'true',

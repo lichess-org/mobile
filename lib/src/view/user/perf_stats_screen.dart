@@ -23,6 +23,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
+import 'package:lichess_mobile/src/view/user/game_history_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -267,16 +268,34 @@ class _Body extends ConsumerWidget {
                 ]),
                 statGroupSpace,
                 Row(
-                  crossAxisAlignment: CrossAxisAlignment.baseline,
-                  textBaseline: TextBaseline.alphabetic,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      '${context.l10n.perfStatTotalGames} '.localizeNumbers(),
-                      style: Styles.sectionTitle,
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.baseline,
+                      textBaseline: TextBaseline.alphabetic,
+                      children: [
+                        Text(
+                          '${context.l10n.perfStatTotalGames} '
+                              .localizeNumbers(),
+                          style: Styles.sectionTitle,
+                        ),
+                        Text(
+                          data.totalGames.toString().localizeNumbers(),
+                          style: _mainValueStyle,
+                        ),
+                      ],
                     ),
-                    Text(
-                      data.totalGames.toString().localizeNumbers(),
-                      style: _mainValueStyle,
+                    TextButton(
+                      onPressed: () => pushPlatformRoute(
+                        context,
+                        builder: (context) => GameHistoryScreen(
+                          user: user.lightUser,
+                          isOnline: true,
+                          perf: perf,
+                          games: data.totalGames,
+                        ),
+                      ),
+                      child: Text(context.l10n.perfStatViewTheGames),
                     ),
                   ],
                 ),
