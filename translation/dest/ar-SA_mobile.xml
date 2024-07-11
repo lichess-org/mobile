@@ -1,2 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+  <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">الرئيسية</string>
+  <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">ألغاز</string>
+  <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">أدوات</string>
+  <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">شاهد</string>
+  <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">الإعدادات</string>
+  <string name="mustBeLoggedIn" comment="This is shown when the user tries to access a feature that requires login.">لعرض هذه الصفحة، قم بتسجيل الدخول.</string>
+  <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">ألوان النظام</string>
+  <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">الملاحظات</string>
+  <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">موافق</string>
+  <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">التعليقات اللمسية</string>
+  <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">وضع ملء الشاشة</string>
+  <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">إخفاء واجهة المستخدم خلال التشغيل. استخدم هذا إذا كنت مزعجاً من إيماءات التنقل للنظام عند حواف الشاشة. ينطبق على المباريات في اللعبة والألغاز.</string>
+  <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">أنت لا تتبع أي مستخدم.</string>
+  <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">جميع الألعاب</string>
+  <string name="recentSearches" comment="Title of the recent searches section in the search screen.">عمليات البحث الأخيرة</string>
+  <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">مسح</string>
+  <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">لاعبين مع \"%s\"</string>
+  <string name="noSearchResults" comment="This is shown when the search did not return any results.">لا توجد نتائج</string>
+  <string name="areYouSure" comment="This is shown in confirmation dialogs.">هل أنت متأكد؟</string>
+  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">سوف تفقد تسلقك الحالي وسيتم حفظ نتيجتك.</string>
+  <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">لا شيء لإظهاره. العب بعض الألغاز.</string>
+  <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">شارك هذا اللغز</string>
+  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">شارك رابط المباراة</string>
+  <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">شارك الPGN</string>
+  <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">مشاركة الموضع كFEN</string>
+  <string name="showVariations" comment="Shown in the analysis screen.">أظهر سلسلة النقلات المرشحة</string>
+  <string name="hideVariation" comment="Shown in the analysis screen.">إخفاء سلسلة النقلات المرشحة</string>
+  <string name="showComments" comment="Shown in the analysis screen.">عرض التعليقات</string>
+  <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">هل تريد إنهاء هذا التشغيل؟</string>
+  <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">لا شيء لإظهاره، الرجاء تغيير الفلاتر</string>
+  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">إلغاء عرض الاسترداد</string>
+  <string name="cancelDrawOffer" comment="Menu action that cancels a previous draw offer">إلغاء عرض التعادل</string>
+  <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">في انتظار انضمام الطرف الآخر...</string>
+  <string name="blindfoldMode" comment="This button toggles blindfold mode. This mean the user can only see the board, but not the pieces.">عصب العينين</string>
+  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">البثوث المباشرة</string>
+  <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">الانضمام إلى لعبة</string>
+  <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">مسح النقل المحفوظ</string>
+</resources>
