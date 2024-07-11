@@ -37,4 +37,5 @@
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">البثوث المباشرة</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">الانضمام إلى لعبة</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">مسح النقل المحفوظ</string>
+  <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">لقد حدث خطأ ما.</string>
 </resources>
