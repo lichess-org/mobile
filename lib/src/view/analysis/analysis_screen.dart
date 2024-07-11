@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'dart:ui';
 
 import 'package:chessground/chessground.dart' as cg;
 import 'package:collection/collection.dart';
@@ -381,22 +382,24 @@ class _BoardState extends ConsumerState<_Board> {
     // Scale down all moves with index > 0 based on how much worse their winning chances are compared to the best move
     // (assume moves are ordered by their winning chances, so index==0 is the best move)
     double scaleArrowAgainstBestMove(int index) {
+      const minScale = 0.15;
+      const maxScale = 1.0;
+      const winningDiffScaleFactor = 2.5;
+
       final bestMove = moves[0];
       final winningDiffComparedToBestMove =
           bestMove.winningChances - moves[index].winningChances;
-      const minScale = 0.25;
-      // Force minimum scale if...
-      // 1) The best move is significantly better than this move
-      // 2) The signs differ, e.g. the best move is winning while this move draws (or even looses)
-      if (winningDiffComparedToBestMove > 0.3 ||
-          bestMove.winningChances.sign != moves[index].winningChances.sign) {
+      // Force minimum scale if the best move is significantly better than this move
+      if (winningDiffComparedToBestMove > 0.3) {
         return minScale;
       }
-      const winningDiffToScaleDiff = 5.0;
-      const maxScale = 1.0;
-      return math.max(
-        minScale,
-        maxScale - winningDiffToScaleDiff * winningDiffComparedToBestMove,
+      return clampDouble(
+        math.max(
+          minScale,
+          maxScale - winningDiffScaleFactor * winningDiffComparedToBestMove,
+        ),
+        0,
+        1,
       );
     }
 
@@ -404,8 +407,9 @@ class _BoardState extends ConsumerState<_Board> {
       moves.mapIndexed(
         (i, m) {
           final move = m.move;
-          // Same colors as in the Web UI, the best move has a different color than the other moves
-          final color = Color((i == 0) ? 0x40003088 : 0x404A4A4A);
+          // Same colors as in the Web UI with a slightly different opacity
+          // The best move has a different color than the other moves
+          final color = Color((i == 0) ? 0x66003088 : 0x664A4A4A);
           switch (move) {
             case NormalMove(from: _, to: _, promotion: final promRole):
               return [

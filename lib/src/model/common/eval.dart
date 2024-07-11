@@ -85,8 +85,9 @@ class ClientEval with _$ClientEval implements Eval {
   IList<MoveWithWinningChances> get bestMoves {
     return pvs
         .where((e) => e.moves.isNotEmpty)
-        .map((e) => e.firstMoveWithWinningChances(position.turn))
+        .map((e) => e._firstMoveWithWinningChances(position.turn))
         .whereNotNull()
+        .sorted((a, b) => b.winningChances.compareTo(a.winningChances))
         .toIList();
   }
 
@@ -143,7 +144,7 @@ class PvData with _$PvData {
     return res;
   }
 
-  MoveWithWinningChances? firstMoveWithWinningChances(Side sideToMove) {
+  MoveWithWinningChances? _firstMoveWithWinningChances(Side sideToMove) {
     final uciMove = (moves.isNotEmpty) ? Move.fromUci(moves.first) : null;
     return (uciMove != null)
         ? (
