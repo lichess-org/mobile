@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_batch_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
+import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../test_app.dart';
@@ -424,6 +425,14 @@ void main() {
           find.text('Puzzle complete!'),
           findsOneWidget,
         );
+
+        final nextMoveBtnEnabled = find.byWidgetPredicate(
+          (widget) =>
+              widget is BottomBarButton &&
+              widget.icon == CupertinoIcons.chevron_forward &&
+              widget.enabled,
+        );
+        expect(nextMoveBtnEnabled, findsOneWidget);
 
         expect(find.byIcon(CupertinoIcons.play_arrow_solid), findsOneWidget);
 

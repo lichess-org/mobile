@@ -66,16 +66,15 @@ class BottomBarButton extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    if (blink) ...[
+                    if (blink)
                       _BlinkIcon(
                         icon: icon,
                         color: highlighted
                             ? primary
                             : Theme.of(context).iconTheme.color ?? Colors.black,
-                      ),
-                    ] else ...[
+                      )
+                    else
                       Icon(icon, color: highlighted ? primary : null),
-                    ],
                     if (showLabel)
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
