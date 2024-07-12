@@ -9,7 +9,7 @@ typedef BroadcastsList = ({
   IList<Broadcast> active,
   IList<Broadcast> upcoming,
   IList<Broadcast> past,
-  int nextPage,
+  int? nextPage,
 });
 
 @freezed
