@@ -27,7 +27,7 @@ typedef AccountPrefState = ({
   BooleanPref follow,
 });
 
-/// A provider that tells if the user has wants to see ratings in the app.
+/// A provider that tells if the user wants to see ratings in the app.
 final showRatingsPrefProvider = FutureProvider<bool>((ref) async {
   return ref.watch(
     accountPreferencesProvider
