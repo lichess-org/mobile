@@ -5,8 +5,9 @@
 - [Set up your development environment](https://docs.flutter.dev/get-started/install);
 - Communicate with other devs on [Discord](https://discord.gg/lichess).
 - You may want to install a local instance of lila, [see lila wiki for that](https://github.com/lichess-org/lila/wiki/Lichess-Development-Onboarding);
-- check the [docs](https://github.com/lichess-org/mobile/tree/main/docs) for more documentation
+- read the [coding style guide](https://github.com/lichess-org/mobile/blob/main/docs/coding_style.md)
 - don't edit manually the `app_en.arb` file! See [about internationalization](https://github.com/lichess-org/mobile/blob/main/docs/internationalisation.md) in the docs.
+- check the [docs](https://github.com/lichess-org/mobile/tree/main/docs) for more documentation
 
 ### What to work on
 
