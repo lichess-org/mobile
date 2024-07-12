@@ -74,17 +74,17 @@ class _BodyState extends ConsumerState<_Body> {
   void _scrollListener() {
     if (_scrollController.position.pixels ==
         _scrollController.position.maxScrollExtent) {
-      final broadcastList = ref.read(broadcastTournamentsListProvider);
+      final broadcastList = ref.read(broadcastsPaginatorProvider);
 
       if (!broadcastList.isLoading) {
-        ref.read(broadcastTournamentsListProvider.notifier).next();
+        ref.read(broadcastsPaginatorProvider.notifier).next();
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final broadcasts = ref.watch(broadcastTournamentsListProvider);
+    final broadcasts = ref.watch(broadcastsPaginatorProvider);
 
     if (!broadcasts.hasValue && broadcasts.isLoading) {
       return const Center(
@@ -189,8 +189,8 @@ class BroadcastPicture extends StatelessWidget {
 
   BroadcastPicture.loading()
       : broadcast = Broadcast(
-          tour: const BroadcastTournament(name: '', imageUrl: null),
-          round: BroadcastRound(
+          tour: const (name: '', imageUrl: null),
+          round: (
             id: const BroadcastRoundId(''),
             status: RoundStatus.finished,
             startsAt: DateTime.now(),

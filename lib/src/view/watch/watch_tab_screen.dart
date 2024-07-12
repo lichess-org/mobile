@@ -191,7 +191,7 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
 Future<void> _refreshData(WidgetRef ref) {
   return Future.wait([
     // TODO uncomment when broadcasts feature is ready
-    ref.refresh(broadcastTournamentsListProvider.future),
+    ref.refresh(broadcastsPaginatorProvider.future),
     ref.refresh(featuredChannelsProvider.future),
     ref.refresh(liveStreamersProvider.future),
   ]);
@@ -208,7 +208,7 @@ class _BroadcastWidget extends ConsumerWidget {
     // return const SizedBox.shrink();
 
     // ignore: dead_code
-    final broadcastList = ref.watch(broadcastTournamentsListProvider);
+    final broadcastList = ref.watch(broadcastsPaginatorProvider);
 
     return broadcastList.when(
       data: (data) {

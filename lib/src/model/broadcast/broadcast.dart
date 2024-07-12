@@ -5,15 +5,12 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 
 part 'broadcast.freezed.dart';
 
-@freezed
-class BroadcastTournamentsListState with _$BroadcastTournamentsListState {
-  const factory BroadcastTournamentsListState({
-    required IList<Broadcast> active,
-    required IList<Broadcast> upcoming,
-    required IList<Broadcast> past,
-    required int nextPage,
-  }) = _BroadcastTournamentList;
-}
+typedef BroadcastsList = ({
+  IList<Broadcast> active,
+  IList<Broadcast> upcoming,
+  IList<Broadcast> past,
+  int nextPage,
+});
 
 @freezed
 class Broadcast with _$Broadcast {
@@ -30,43 +27,31 @@ class Broadcast with _$Broadcast {
   String get title => group ?? tour.name;
 }
 
-@freezed
-class BroadcastTournament with _$BroadcastTournament {
-  const factory BroadcastTournament({
-    required String name,
-    required String? imageUrl,
-  }) = _BroadcastTournament;
-}
+typedef BroadcastTournament = ({
+  String name,
+  String? imageUrl,
+});
 
-@freezed
-class BroadcastRound with _$BroadcastRound {
-  const factory BroadcastRound({
-    required BroadcastRoundId id,
-    required RoundStatus status,
-    required DateTime startsAt,
-  }) = _BroadcastRound;
-}
+typedef BroadcastRound = ({
+  BroadcastRoundId id,
+  RoundStatus status,
+  DateTime startsAt,
+});
 
-@freezed
-class BroadcastGameSnapshot with _$BroadcastGameSnapshot {
-  const factory BroadcastGameSnapshot({
-    required IList<BroadcastPlayer> players,
-    required String fen,
-    required Move? lastMove,
-    required String status,
-  }) = _BroadcastGameSnapshot;
-}
+typedef BroadcastGameSnapshot = ({
+  IList<BroadcastPlayer> players,
+  String fen,
+  Move? lastMove,
+  String status,
+});
 
-@freezed
-class BroadcastPlayer with _$BroadcastPlayer {
-  const factory BroadcastPlayer({
-    required String name,
-    required String? title,
-    required int? rating,
-    required Duration? clock,
-    required String? federation,
-  }) = _BroadcastPlayer;
-}
+typedef BroadcastPlayer = ({
+  String name,
+  String? title,
+  int? rating,
+  Duration? clock,
+  String? federation,
+});
 
 enum RoundStatus {
   live,

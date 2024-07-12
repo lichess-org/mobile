@@ -11,7 +11,7 @@ class BroadcastRepository {
 
   final LichessClient client;
 
-  Future<BroadcastTournamentsListState> getBroadcasts({int page = 1}) {
+  Future<BroadcastsList> getBroadcasts({int page = 1}) {
     return client.readJson(
       Uri(
         path: '/api/broadcast/top',
@@ -35,10 +35,10 @@ class BroadcastRepository {
   }
 }
 
-BroadcastTournamentsListState _makeBroadcastResponseFromJson(
+BroadcastsList _makeBroadcastResponseFromJson(
   Map<String, dynamic> json,
 ) {
-  return BroadcastTournamentsListState(
+  return (
     active: pick(json, 'active').asListOrThrow(_broadcastFromPick).toIList(),
     upcoming:
         pick(json, 'upcoming').asListOrThrow(_broadcastFromPick).toIList(),
@@ -59,11 +59,11 @@ Broadcast _broadcastFromPick(RequiredPick pick) {
           : RoundStatus.upcoming;
 
   return Broadcast(
-    tour: BroadcastTournament(
+    tour: (
       name: pick('tour', 'name').asStringOrThrow(),
       imageUrl: pick('tour', 'image').asStringOrNull(),
     ),
-    round: BroadcastRound(
+    round: (
       id: pick('round', 'id').asBroadcastRoundIdOrThrow(),
       status: status,
       startsAt: pick('round', 'startsAt')
@@ -81,7 +81,7 @@ IList<BroadcastGameSnapshot> _gamesFromPick(RequiredPick pick) =>
     pick('games').asListOrEmpty(_gameFromPick).toIList();
 
 BroadcastGameSnapshot _gameFromPick(RequiredPick pick) {
-  return BroadcastGameSnapshot(
+  return (
     players: pick('players').asListOrThrow(_playerFromPick).toIList(),
     fen: pick('fen').asStringOrNull() ?? Variant.standard.initialPosition.fen,
     lastMove: pick('lastMove').asUciMoveOrNull(),
@@ -90,7 +90,7 @@ BroadcastGameSnapshot _gameFromPick(RequiredPick pick) {
 }
 
 BroadcastPlayer _playerFromPick(RequiredPick pick) {
-  return BroadcastPlayer(
+  return (
     name: pick('name').asStringOrThrow(),
     title: pick('title').asStringOrNull(),
     rating: pick('rating').asIntOrNull(),
