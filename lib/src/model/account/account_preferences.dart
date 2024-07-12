@@ -45,8 +45,10 @@ final clockSoundProvider = FutureProvider<bool>((ref) async {
 
 final pieceNotationProvider = FutureProvider<PieceNotation>((ref) async {
   return ref.watch(
-    accountPreferencesProvider.selectAsync((state) =>
-        state?.pieceNotation ?? defaultAccountPreferences.pieceNotation),
+    accountPreferencesProvider.selectAsync(
+      (state) =>
+          state?.pieceNotation ?? defaultAccountPreferences.pieceNotation,
+    ),
   );
 });
 
