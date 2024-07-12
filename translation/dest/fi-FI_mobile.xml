@@ -19,6 +19,7 @@
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Ei hakutuloksia</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Oletko varma?</string>
   <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">Parhaillaan menossa oleva putkesi päättyy, ja pistemääräsi tallennetaan.</string>
+  <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Ei näytettävää. Pelaa ensin muutama sarja Puzzle Stormia.</string>
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Jaa tämä tehtävä</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Jaa pelin URL</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Jaa PGN</string>
