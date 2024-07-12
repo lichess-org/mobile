@@ -12,6 +12,7 @@ part 'account_preferences.g.dart';
 typedef AccountPrefState = ({
   // game display
   Zen zenMode,
+  PieceNotation pieceNotation,
   BooleanPref showRatings,
   // game behavior
   BooleanPref premove,
@@ -42,8 +43,16 @@ final clockSoundProvider = FutureProvider<bool>((ref) async {
   );
 });
 
+final pieceNotationProvider = FutureProvider<PieceNotation>((ref) async {
+  return ref.watch(
+    accountPreferencesProvider.selectAsync((state) =>
+        state?.pieceNotation ?? defaultAccountPreferences.pieceNotation),
+  );
+});
+
 final defaultAccountPreferences = (
   zenMode: Zen.no,
+  pieceNotation: PieceNotation.symbol,
   showRatings: const BooleanPref(true),
   premove: const BooleanPref(true),
   autoQueen: AutoQueen.premove,
@@ -85,6 +94,8 @@ class AccountPreferences extends _$AccountPreferences {
   }
 
   Future<void> setZen(Zen value) => _setPref('zen', value);
+  Future<void> setPieceNotation(PieceNotation value) =>
+      _setPref('pieceNotation', value);
   Future<void> setShowRatings(BooleanPref value) => _setPref('ratings', value);
 
   Future<void> setPremove(BooleanPref value) => _setPref('premove', value);
@@ -169,6 +180,39 @@ enum Zen implements AccountPref<int> {
         return Zen.gameAuto;
       default:
         throw Exception('Invalid value for Zen');
+    }
+  }
+}
+
+enum PieceNotation implements AccountPref<int> {
+  symbol(0),
+  letter(1);
+
+  const PieceNotation(this.value);
+
+  @override
+  final int value;
+
+  @override
+  String get toFormData => value.toString();
+
+  String label(BuildContext context) {
+    switch (this) {
+      case PieceNotation.symbol:
+        return context.l10n.preferencesChessPieceSymbol;
+      case PieceNotation.letter:
+        return context.l10n.preferencesPgnLetter;
+    }
+  }
+
+  static PieceNotation fromInt(int value) {
+    switch (value) {
+      case 0:
+        return PieceNotation.symbol;
+      case 1:
+        return PieceNotation.letter;
+      default:
+        throw Exception('Invalid value for PieceNotation');
     }
   }
 }
