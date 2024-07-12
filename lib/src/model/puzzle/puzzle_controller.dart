@@ -106,6 +106,7 @@ class PuzzleController extends _$PuzzleController {
       resultSent: false,
       isChangingDifficulty: false,
       isLocalEvalEnabled: false,
+      viewedSolutionRecently: false,
       streak: streak,
       nextPuzzleStreakFetchError: false,
       nextPuzzleStreakFetchIsRetrying: false,
@@ -159,11 +160,17 @@ class PuzzleController extends _$PuzzleController {
   void userNext() {
     _viewSolutionTimer?.cancel();
     _goToNextNode(replaying: true);
+    state = state.copyWith(
+      viewedSolutionRecently: false,
+    );
   }
 
   void userPrevious() {
     _viewSolutionTimer?.cancel();
     _goToPreviousNode(replaying: true);
+    state = state.copyWith(
+      viewedSolutionRecently: false,
+    );
   }
 
   void viewSolution() {
@@ -181,12 +188,14 @@ class PuzzleController extends _$PuzzleController {
       mode: PuzzleMode.view,
     );
 
-    _viewSolutionTimer =
-        Timer.periodic(const Duration(milliseconds: 800), (timer) {
+    Timer(const Duration(milliseconds: 800), () {
+      _goToNextNode();
+
       if (state.canGoNext) {
-        _goToNextNode();
-      } else {
-        timer.cancel();
+        state = state.copyWith(viewedSolutionRecently: true);
+        Timer(const Duration(seconds: 5), () {
+          state = state.copyWith(viewedSolutionRecently: false);
+        });
       }
     });
   }
@@ -559,6 +568,7 @@ class PuzzleState with _$PuzzleState {
     required bool isLocalEvalEnabled,
     required bool resultSent,
     required bool isChangingDifficulty,
+    required bool viewedSolutionRecently,
     PuzzleContext? nextContext,
     PuzzleStreak? streak,
     // if the automatic attempt to fetch the next puzzle in the streak fails

@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_batch_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
+import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../test_app.dart';
@@ -415,15 +416,23 @@ void main() {
         await tester.tap(find.byIcon(Icons.help));
 
         // wait for solution replay animation to finish
-        await tester.pump(const Duration(seconds: 3));
+        await tester.pump(const Duration(seconds: 1));
         await tester.pumpAndSettle();
 
         expect(find.byKey(const Key('h4-blackRook')), findsOneWidget);
-        expect(find.byKey(const Key('h8-whiteQueen')), findsNothing);
+        expect(find.byKey(const Key('h8-whiteQueen')), findsOneWidget);
         expect(
           find.text('Puzzle complete!'),
           findsOneWidget,
         );
+
+        final nextMoveBtnEnabled = find.byWidgetPredicate(
+          (widget) =>
+              widget is BottomBarButton &&
+              widget.icon == CupertinoIcons.chevron_forward &&
+              widget.enabled,
+        );
+        expect(nextMoveBtnEnabled, findsOneWidget);
 
         expect(find.byIcon(CupertinoIcons.play_arrow_solid), findsOneWidget);
 
