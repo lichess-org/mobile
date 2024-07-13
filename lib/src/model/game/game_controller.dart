@@ -269,6 +269,15 @@ class GameController extends _$GameController {
       ),
     );
   }
+  
+  void toggleAutoQueen() {
+    final curState = state.requireValue;
+    state = AsyncValue.data(
+      curState.copyWith(
+        autoQueenSettingOverride: !(curState.autoQueenSettingOverride ?? true),
+      ),
+    );
+  }
 
   void onToggleChat(bool isChatEnabled) {
     if (isChatEnabled) {
@@ -919,6 +928,9 @@ class GameState with _$GameState {
 
     /// Game only setting to override the account preference
     bool? moveConfirmSettingOverride,
+    
+    /// Game only setting to override the account preference
+    bool? autoQueenSettingOverride,
 
     /// Zen mode setting if account preference is set to [Zen.gameAuto]
     bool? zenModeGameSetting,
@@ -941,7 +953,7 @@ class GameState with _$GameState {
   bool get canPremove =>
       game.meta.speed != Speed.correspondence &&
       (game.prefs?.enablePremove ?? true);
-  bool get canAutoQueen => game.prefs?.autoQueen == AutoQueen.always;
+  bool get canAutoQueen => autoQueenSettingOverride ?? (game.prefs?.autoQueen == AutoQueen.always);
   bool get canAutoQueenOnPremove => game.prefs?.autoQueen == AutoQueen.premove;
   bool get shouldConfirmResignAndDrawOffer => game.prefs?.confirmResign ?? true;
   bool get shouldConfirmMove =>
