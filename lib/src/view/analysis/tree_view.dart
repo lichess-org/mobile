@@ -361,7 +361,9 @@ class InlineMove extends ConsumerWidget {
             : null);
 
     final moveWithNag = move.san +
-        (branch.nags != null ? moveAnnotationChar(branch.nags!) : '');
+        (branch.nags != null && shouldShowAnnotations
+            ? moveAnnotationChar(branch.nags!)
+            : '');
 
     return Row(
       mainAxisSize: MainAxisSize.min,
