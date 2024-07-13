@@ -20,6 +20,7 @@
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Ingen treff</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Er du sikker?</string>
   <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">Du mister rekken og poengsummen din blir lagret.</string>
+  <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Ingenting her. Spill noen runder med Puzzle Storm.</string>
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Del denne sjakknøtten</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Del URL til partiet</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Del PGN</string>
