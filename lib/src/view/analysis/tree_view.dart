@@ -114,11 +114,16 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
       analysisPreferencesProvider.select((value) => value.showPgnComments),
     );
 
+    final shouldShowAnnotations = ref.watch(
+      analysisPreferencesProvider.select((value) => value.showAnnotations),
+    );
+
     final List<Widget> moveWidgets = _buildTreeWidget(
       widget.pgn,
       widget.options,
       parent: root,
       nodes: root.children,
+      shouldShowAnnotations: shouldShowAnnotations,
       shouldShowComments: shouldShowComments,
       inMainline: true,
       startMainline: true,
@@ -176,6 +181,7 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
     required bool inMainline,
     required bool startMainline,
     required bool startSideline,
+    required bool shouldShowAnnotations,
     required bool shouldShowComments,
     required UciPath initialPath,
   }) {
@@ -196,6 +202,7 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
         branch: firstChild,
         isCurrentMove: currentMove,
         key: currentMove ? currentMoveKey : null,
+        shouldShowAnnotations: shouldShowAnnotations,
         shouldShowComments: shouldShowComments,
         isSideline: !inMainline,
         startMainline: startMainline,
@@ -220,6 +227,7 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
                 options,
                 parent: parent,
                 nodes: [nodes[i]].lockUnsafe,
+                shouldShowAnnotations: shouldShowAnnotations,
                 shouldShowComments: shouldShowComments,
                 inMainline: false,
                 startMainline: false,
@@ -236,6 +244,7 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
             options,
             parent: parent,
             nodes: [nodes[i]].lockUnsafe,
+            shouldShowAnnotations: shouldShowAnnotations,
             shouldShowComments: shouldShowComments,
             inMainline: false,
             startMainline: false,
@@ -253,6 +262,7 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
         options,
         parent: firstChild,
         nodes: firstChild.children,
+        shouldShowAnnotations: shouldShowAnnotations,
         shouldShowComments: shouldShowComments,
         inMainline: inMainline,
         startMainline: false,
@@ -289,6 +299,7 @@ class InlineMove extends ConsumerWidget {
     required this.path,
     required this.parent,
     required this.branch,
+    required this.shouldShowAnnotations,
     required this.shouldShowComments,
     required this.isCurrentMove,
     required this.isSideline,
@@ -303,6 +314,7 @@ class InlineMove extends ConsumerWidget {
   final UciPath path;
   final ViewNode parent;
   final ViewBranch branch;
+  final bool shouldShowAnnotations;
   final bool shouldShowComments;
   final bool isCurrentMove;
   final bool isSideline;
@@ -411,7 +423,9 @@ class InlineMove extends ConsumerWidget {
                         context,
                         1,
                         isLichessGameAnalysis: options.isLichessGameAnalysis,
-                        nag: branch.nags?.firstOrNull,
+                        nag: shouldShowAnnotations
+                            ? branch.nags?.firstOrNull
+                            : null,
                       ),
                     )
                   : textStyle.copyWith(
@@ -419,7 +433,9 @@ class InlineMove extends ConsumerWidget {
                         context,
                         0.9,
                         isLichessGameAnalysis: options.isLichessGameAnalysis,
-                        nag: branch.nags?.firstOrNull,
+                        nag: shouldShowAnnotations
+                            ? branch.nags?.firstOrNull
+                            : null,
                       ),
                     ),
             ),

@@ -450,6 +450,9 @@ class _BoardState extends ConsumerState<_Board> {
         (value) => value.showBestMoveArrow,
       ),
     );
+    final showAnnotationsOnBoard = ref.watch(
+      analysisPreferencesProvider.select((value) => value.showAnnotations),
+    );
 
     final evalBestMoves = ref.watch(
       engineEvaluationProvider.select((s) => s.eval?.bestMoves),
@@ -485,14 +488,15 @@ class _BoardState extends ConsumerState<_Board> {
         sideToMove: analysisState.position.turn.cg,
         validMoves: analysisState.validMoves,
         shapes: userShapes.union(bestMoveShapes),
-        annotations: sanMove != null && annotation != null
-            ? altCastles.containsKey(sanMove.move.uci)
-                ? IMap({
-                    Move.fromUci(altCastles[sanMove.move.uci]!)!.cg.to:
-                        annotation,
-                  })
-                : IMap({sanMove.move.cg.to: annotation})
-            : null,
+        annotations:
+            sanMove != null && annotation != null && showAnnotationsOnBoard
+                ? altCastles.containsKey(sanMove.move.uci)
+                    ? IMap({
+                        Move.fromUci(altCastles[sanMove.move.uci]!)!.cg.to:
+                            annotation,
+                      })
+                    : IMap({sanMove.move.cg.to: annotation})
+                : null,
       ),
       settings: cg.BoardSettings(
         pieceAssets: boardPrefs.pieceSet.assets,
