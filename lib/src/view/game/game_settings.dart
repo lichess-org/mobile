@@ -51,7 +51,7 @@ class GameSettings extends ConsumerWidget {
                       .toggleMoveConfirmation();
                 },
               ),
-            if (data.prefs?.autoQueen == AutoQueen.always) 
+            if (data.prefs?.autoQueen == AutoQueen.always)
               SwitchSettingTile(
                 title: Text(
                   context.l10n.preferencesPromoteToQueenAutomatically,
