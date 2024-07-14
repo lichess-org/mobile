@@ -33,6 +33,10 @@ class BoardPreferences extends _$BoardPreferences {
     await _save(state.copyWith(boardTheme: boardTheme));
   }
 
+  Future<void> setPieceShiftMethod(PieceShiftMethod pieceShiftMethod) async {
+    await _save(state.copyWith(pieceShiftMethod: pieceShiftMethod));
+  }
+
   Future<void> toggleHapticFeedback() {
     return _save(state.copyWith(hapticFeedback: !state.hapticFeedback));
   }
@@ -91,6 +95,7 @@ class BoardPrefs with _$BoardPrefs {
     required bool coordinates,
     required bool pieceAnimation,
     required bool showMaterialDifference,
+    required PieceShiftMethod pieceShiftMethod,
   }) = _BoardPrefs;
 
   static const defaults = BoardPrefs(
@@ -103,6 +108,7 @@ class BoardPrefs with _$BoardPrefs {
     coordinates: true,
     pieceAnimation: true,
     showMaterialDifference: true,
+    pieceShiftMethod: PieceShiftMethod.either,
   );
 
   factory BoardPrefs.fromJson(Map<String, dynamic> json) {

@@ -515,6 +515,7 @@ class _BoardState extends ConsumerState<_Board> {
           onCompleteShape: _onCompleteShape,
           onClearShapes: _onClearShapes,
         ),
+        pieceShiftMethod: boardPrefs.pieceShiftMethod,
       ),
     );
   }

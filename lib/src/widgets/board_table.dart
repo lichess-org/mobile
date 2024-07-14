@@ -162,6 +162,7 @@ class _BoardTableState extends ConsumerState<BoardTable> {
             onCompleteShape: _onCompleteShape,
             onClearShapes: _onClearShapes,
           ),
+          pieceShiftMethod: boardPrefs.pieceShiftMethod,
         );
 
         final settings = widget.boardSettingsOverrides != null

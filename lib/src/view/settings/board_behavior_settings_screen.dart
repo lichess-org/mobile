@@ -1,10 +1,14 @@
+import 'package:chessground/chessground.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/utils/android.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
+import 'package:lichess_mobile/src/view/settings/piece_shift_method_settings_screen.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
@@ -51,6 +55,36 @@ class _Body extends ConsumerWidget {
             hasLeading: false,
             showDivider: false,
             children: [
+              SettingsListTile(
+                settingsLabel: Text(context.l10n.preferencesHowDoYouMovePieces),
+                settingsValue:
+                    pieceShiftMethodl10n(context, boardPrefs.pieceShiftMethod),
+                onTap: () {
+                  if (Theme.of(context).platform == TargetPlatform.android) {
+                    showChoicePicker(
+                      context,
+                      choices: PieceShiftMethod.values,
+                      selectedItem: boardPrefs.pieceShiftMethod,
+                      labelBuilder: (t) =>
+                          Text(pieceShiftMethodl10n(context, t)),
+                      onSelectedItemChanged: (PieceShiftMethod? value) {
+                        ref
+                            .read(boardPreferencesProvider.notifier)
+                            .setPieceShiftMethod(
+                              value ?? PieceShiftMethod.either,
+                            );
+                      },
+                    );
+                  } else {
+                    pushPlatformRoute(
+                      context,
+                      title: context.l10n.preferencesHowDoYouMovePieces,
+                      builder: (context) =>
+                          const PieceShiftMethodSettingsScreen(),
+                    );
+                  }
+                },
+              ),
               SwitchSettingTile(
                 title: Text(context.l10n.mobileSettingsHapticFeedback),
                 value: boardPrefs.hapticFeedback,
