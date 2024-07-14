@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
-import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
@@ -71,12 +71,12 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final games = ref.watch(broadcastRoundProvider(roundId));
+    final games = ref.watch(broadcastControllerProvider(roundId));
 
     return games.when(
       data: (games) => (games.isEmpty)
           ? const Text('No games to show for now')
-          : BroadcastPreview(games: games),
+          : BroadcastPreview(games: games.values.toIList()),
       loading: () => const Shimmer(
         child: ShimmerLoading(
           isLoading: true,
@@ -141,14 +141,14 @@ class BroadcastPreview extends StatelessWidget {
               size: boardWidth,
               header: _PlayerWidget(
                 width: boardWidth,
-                player: game.players[1],
+                player: game.players[dartchess.Side.black]!,
                 gameStatus: game.status,
                 side: Side.black,
                 playingSide: playingSide,
               ),
               footer: _PlayerWidget(
                 width: boardWidth,
-                player: game.players[0],
+                player: game.players[dartchess.Side.white]!,
                 gameStatus: game.status,
                 side: Side.white,
                 playingSide: playingSide,

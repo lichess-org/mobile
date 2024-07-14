@@ -1,4 +1,5 @@
 import 'package:chessground/chessground.dart';
+import 'package:dartchess/dartchess.dart' as dartchess;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -21,7 +22,7 @@ class BoardThumbnail extends ConsumerStatefulWidget {
     this.header,
     this.footer,
   })  : orientation = Side.white,
-        fen = kInitialFen,
+        fen = dartchess.kInitialFEN,
         lastMove = null,
         onTap = null;
 

@@ -46,12 +46,14 @@ class BroadcastRound with _$BroadcastRound {
   }) = _BroadcastRound;
 }
 
+typedef BroadcastMapGames = IMap<BroadcastGameId, BroadcastGameSnapshot>;
+
 @freezed
 class BroadcastGameSnapshot with _$BroadcastGameSnapshot {
   const BroadcastGameSnapshot._();
 
   const factory BroadcastGameSnapshot({
-    required IList<BroadcastPlayer> players,
+    required IMap<Side, BroadcastPlayer> players,
     required String fen,
     required Move? lastMove,
     required String status,
