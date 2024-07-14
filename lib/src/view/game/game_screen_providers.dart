@@ -33,13 +33,8 @@ Future<bool> shouldPreventGoingBack(
 
 /// User game preferences, defined server-side.
 @riverpod
-Future<
-    ({
-      GamePrefs? prefs,
-      bool shouldConfirmMove,
-      bool isZenModeEnabled,
-      bool canAutoQueen
-    })> userGamePrefs(
+Future<({GamePrefs? prefs, bool shouldConfirmMove, bool isZenModeEnabled, bool canAutoQueen})>
+    userGamePrefs(
   UserGamePrefsRef ref,
   GameFullId gameId,
 ) async {
