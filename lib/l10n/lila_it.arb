@@ -21,7 +21,7 @@
   "activityCompetedInNbSwissTournaments": "{count, plural, =1{Ha gareggiato in {count} torneo Svizzero} other{Ha gareggiato in {count} tornei Svizzeri}}",
   "activityJoinedNbTeams": "{count, plural, =1{Si è unito ad {count} squadra} other{Si è unito a {count} squadre}}",
   "broadcastBroadcasts": "Dirette",
-  "broadcastStartDate": "Data di inizio nel tuo fuso orario",
+  "broadcastLiveBroadcasts": "Tornei in diretta",
   "challengeChallengesX": "Sfide: {param1}",
   "challengeChallengeToPlay": "Sfida a una partita",
   "challengeChallengeDeclined": "Sfida rifiutata",

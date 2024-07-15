@@ -327,7 +327,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get broadcastBroadcasts => 'Broadcasts';
 
   @override
-  String get broadcastStartDate => 'Start date in your own timezone';
+  String get broadcastLiveBroadcasts => 'Live tournament broadcasts';
 
   @override
   String challengeChallengesX(String param1) {
@@ -4906,7 +4906,7 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get broadcastBroadcasts => 'Broadcasts';
 
   @override
-  String get broadcastStartDate => 'Start date in your own timezone';
+  String get broadcastLiveBroadcasts => 'Live tournament broadcasts';
 
   @override
   String challengeChallengesX(String param1) {

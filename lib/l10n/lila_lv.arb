@@ -21,7 +21,7 @@
   "activityCompetedInNbSwissTournaments": "{count, plural, =0{Sacentās {count} Šveices turnīros} =1{Sacentās {count} Šveices turnīrā} other{Sacentās {count} Šveices turnīros}}",
   "activityJoinedNbTeams": "{count, plural, =0{Pievienojās {count} komandām} =1{Pievienojās {count} komandai} other{Pievienojās {count} komandām}}",
   "broadcastBroadcasts": "Raidījumi",
-  "broadcastStartDate": "Sākuma datums jūsu laika joslā",
+  "broadcastLiveBroadcasts": "Reāllaika turnīru raidījumi",
   "challengeChallengesX": "Izaicinājumi: {param1}",
   "challengeChallengeToPlay": "Izaicināt uz spēli",
   "challengeChallengeDeclined": "Izaicinājums noraidīts",

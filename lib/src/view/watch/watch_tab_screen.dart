@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,7 +16,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_tile.dart';
-import 'package:lichess_mobile/src/view/broadcast/broadcast_tournament_screen.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcasts_list_screen.dart';
 import 'package:lichess_mobile/src/view/watch/live_tv_channels_screen.dart';
 import 'package:lichess_mobile/src/view/watch/streamer_screen.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
@@ -190,7 +191,7 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
 Future<void> _refreshData(WidgetRef ref) {
   return Future.wait([
     // TODO uncomment when broadcasts feature is ready
-    // ref.refresh(broadcastsProvider.future),
+    // ref.refresh(broadcastsPaginatorProvider.future),
     ref.refresh(featuredChannelsProvider.future),
     ref.refresh(liveStreamersProvider.future),
   ]);
@@ -207,7 +208,7 @@ class _BroadcastWidget extends ConsumerWidget {
     return const SizedBox.shrink();
 
     // ignore: dead_code
-    final broadcastList = ref.watch(broadcastsProvider);
+    final broadcastList = ref.watch(broadcastsPaginatorProvider);
 
     return broadcastList.when(
       data: (data) {
@@ -218,7 +219,7 @@ class _BroadcastWidget extends ConsumerWidget {
             onPressed: () {
               pushPlatformRoute(
                 context,
-                builder: (context) => const BroadcastTournamentScreen(),
+                builder: (context) => const BroadcastsListScreen(),
               );
             },
             child: Text(
@@ -226,7 +227,7 @@ class _BroadcastWidget extends ConsumerWidget {
             ),
           ),
           children: [
-            ...data
+            ...CombinedIterableView([data.active, data.upcoming, data.past])
                 .take(numberOfItems)
                 .map((broadcast) => BroadcastTile(broadcast: broadcast)),
           ],

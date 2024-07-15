@@ -327,7 +327,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get broadcastBroadcasts => 'Transmissões';
 
   @override
-  String get broadcastStartDate => 'Data de início em seu próprio fuso horário';
+  String get broadcastLiveBroadcasts => 'Transmissões ao vivo do torneio';
 
   @override
   String challengeChallengesX(String param1) {
@@ -4908,7 +4908,7 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get broadcastBroadcasts => 'Transmissões';
 
   @override
-  String get broadcastStartDate => 'Data de início no teu fuso horário';
+  String get broadcastLiveBroadcasts => 'Transmissões do torneio em direto';
 
   @override
   String challengeChallengesX(String param1) {

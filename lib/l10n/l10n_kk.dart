@@ -327,7 +327,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get broadcastBroadcasts => 'Көрсетілімдер';
 
   @override
-  String get broadcastStartDate => 'Басталу күні (өз уақыт белдеуіңізде)';
+  String get broadcastLiveBroadcasts => 'Жарыстың тікелей көрсетілімдері';
 
   @override
   String challengeChallengesX(String param1) {

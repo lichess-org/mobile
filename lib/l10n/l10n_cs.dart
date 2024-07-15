@@ -361,7 +361,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get broadcastBroadcasts => 'Přenosy';
 
   @override
-  String get broadcastStartDate => 'Datum a čas zahájení ve vašem časovém pásmu';
+  String get broadcastLiveBroadcasts => 'Živé přenosy turnajů';
 
   @override
   String challengeChallengesX(String param1) {

@@ -310,7 +310,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get broadcastBroadcasts => 'イベント中継';
 
   @override
-  String get broadcastStartDate => '開始日付（あなたの現地時間）';
+  String get broadcastLiveBroadcasts => '実戦トーナメントのライブ中継';
 
   @override
   String challengeChallengesX(String param1) {

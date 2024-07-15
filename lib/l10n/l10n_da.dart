@@ -327,7 +327,7 @@ class AppLocalizationsDa extends AppLocalizations {
   String get broadcastBroadcasts => 'Udsendelser';
 
   @override
-  String get broadcastStartDate => 'Startdato i din egen tidszone';
+  String get broadcastLiveBroadcasts => 'Live turnerings-udsendelser';
 
   @override
   String challengeChallengesX(String param1) {

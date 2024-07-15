@@ -21,7 +21,7 @@
   "activityCompetedInNbSwissTournaments": "{count, plural, =1{{count} İsviçre Sistemi turnuvasına katıldı} other{{count} İsviçre Sistemi turnuvasına katıldı}}",
   "activityJoinedNbTeams": "{count, plural, =1{{count} takıma katıldı} other{{count} takıma katıldı}}",
   "broadcastBroadcasts": "Canlı Turnuvalar",
-  "broadcastStartDate": "Kendi saat diliminizdeki başlangıç zamanı",
+  "broadcastLiveBroadcasts": "Canlı Turnuva Yayınları",
   "challengeChallengesX": "{param1} karşılaşmaları",
   "challengeChallengeToPlay": "Oyun teklif et",
   "challengeChallengeDeclined": "Oyun teklifi reddedildi",

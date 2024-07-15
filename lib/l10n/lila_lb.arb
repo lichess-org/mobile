@@ -21,7 +21,7 @@
   "activityCompetedInNbSwissTournaments": "{count, plural, =1{Huet bei {count} Turnéier nom Schwäizer System matgemaach} other{Huet bei {count} Turnéieren nom Schwäizer System matgemaach}}",
   "activityJoinedNbTeams": "{count, plural, =1{Ass {count} Ekipp bäigetrueden} other{Ass {count} Ekippe bäigetrueden}}",
   "broadcastBroadcasts": "Iwwerdroungen",
-  "broadcastStartDate": "Startdatum an denger eegener Zäitzon",
+  "broadcastLiveBroadcasts": "Live Turnéier Iwwerdroungen",
   "challengeChallengesX": "Erausfuerderungen: {param1}",
   "challengeChallengeToPlay": "Erausfuerderung zu enger Partie",
   "challengeChallengeDeclined": "Erausfuerderung ofgeleent",

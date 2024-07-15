@@ -21,7 +21,7 @@
   "activityCompetedInNbSwissTournaments": "{count, plural, =0{تنافس في {count} بطولة سويسرية} =1{تنافس في {count} بطولة سويسرية} =2{تنافس في {count} بطولة سويسرية} few{تنافس في {count} بطولة سويسرية} many{تنافس في {count} بطولة سويسرية} other{تنافس في {count} بطولة سويسرية}}",
   "activityJoinedNbTeams": "{count, plural, =0{إنضم ل {count} فريق} =1{إنضم ل {count} فريق} =2{إنضم لفريقين {count}} few{إنضم ل {count} فرق} many{إنضم ل {count} فرقة} other{إنضم ل {count} فريقًا}}",
   "broadcastBroadcasts": "البثوث",
-  "broadcastStartDate": "تاريخ البدء في المنطقة الزمنية الخاصة بك",
+  "broadcastLiveBroadcasts": "بث البطولة المباشرة",
   "challengeChallengesX": "التحديات: {param1}",
   "challengeChallengeToPlay": "تحدى في مباراة",
   "challengeChallengeDeclined": "تم رفض التحدي",

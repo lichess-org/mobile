@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/styles/transparent_image.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/view/broadcast/broadcast_description_screen.dart';
-import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/default_broadcast_image.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 
@@ -28,14 +27,10 @@ class BroadcastTile extends StatelessWidget {
       onTap: () {
         pushPlatformRoute(
           context,
-          builder: (context) => (broadcast.curentRound != null)
-              ? BroadcastGameScreen(
-                  broadCastTitle: broadcast.tour.name,
-                  roundId: broadcast.curentRound!.id,
-                )
-              : BroadcastDescriptionScreen(
-                  broadcast: broadcast,
-                ),
+          builder: (context) => BroadcastScreen(
+            broadCastTitle: broadcast.tour.name,
+            roundId: broadcast.round.id,
+          ),
         );
       },
       title: Padding(
@@ -44,7 +39,7 @@ class BroadcastTile extends StatelessWidget {
           children: [
             Flexible(
               child: Text(
-                broadcast.tour.name,
+                broadcast.title,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -52,7 +47,7 @@ class BroadcastTile extends StatelessWidget {
           ],
         ),
       ),
-      trailing: (broadcast.rounds.any((r) => r.status == RoundStatus.live))
+      trailing: (broadcast.isLive)
           ? const Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

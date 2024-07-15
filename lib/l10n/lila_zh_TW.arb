@@ -21,7 +21,7 @@
   "activityCompetedInNbSwissTournaments": "{count, plural, other{參與過{count}'場瑞士制錦標賽}}",
   "activityJoinedNbTeams": "{count, plural, other{加入{count}團隊}}",
   "broadcastBroadcasts": "比賽直播",
-  "broadcastStartDate": "開始日期 (當地時間)",
+  "broadcastLiveBroadcasts": "錦標賽直播",
   "challengeChallengesX": "挑戰: {param1}",
   "challengeChallengeToPlay": "邀請對弈",
   "challengeChallengeDeclined": "對弈邀請已拒絕",

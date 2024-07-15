@@ -21,7 +21,7 @@
   "activityCompetedInNbSwissTournaments": "{count, plural, other{Sudah mengikuti {count} turnamen swiss}}",
   "activityJoinedNbTeams": "{count, plural, other{Bergabung {count} tim}}",
   "broadcastBroadcasts": "Siaran",
-  "broadcastStartDate": "Tanggal mulai di zona waktu Anda sendiri",
+  "broadcastLiveBroadcasts": "Siaran turnamen langsung",
   "challengeChallengeToPlay": "Menantang ke permainan",
   "challengeChallengeDeclined": "Tantangan ditolak",
   "challengeChallengeAccepted": "Tantangan diterima!",

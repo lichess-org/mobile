@@ -344,7 +344,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get broadcastBroadcasts => 'Transmisiuni';
 
   @override
-  String get broadcastStartDate => 'Data de începere conform fusului tău orar';
+  String get broadcastLiveBroadcasts => 'Difuzări de turnee în direct';
 
   @override
   String challengeChallengesX(String param1) {

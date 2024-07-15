@@ -21,7 +21,7 @@
   "activityCompetedInNbSwissTournaments": "{count, plural, =1{Kappaðist í {count} swisskapping} other{Kappaðist í {count} swisskappingum}}",
   "activityJoinedNbTeams": "{count, plural, =1{Fór upp í {count} lið} other{Fór upp í {count} lið}}",
   "broadcastBroadcasts": "Sendingar",
-  "broadcastStartDate": "Byrjanardagfesting í tínum egna tíðarøki",
+  "broadcastLiveBroadcasts": "Beinleiðis sendingar frá kappingum",
   "challengeChallengeToPlay": "Bjóða av at telva",
   "challengeChallengeDeclined": "Avbjóðing avvíst",
   "challengeChallengeAccepted": "Avbjóðing góðtikin!",

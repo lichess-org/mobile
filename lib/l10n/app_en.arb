@@ -216,7 +216,7 @@
     }
   },
   "broadcastBroadcasts": "Broadcasts",
-  "broadcastStartDate": "Start date in your own timezone",
+  "broadcastLiveBroadcasts": "Live tournament broadcasts",
   "challengeChallengesX": "Challenges: {param1}",
   "@challengeChallengesX": {
     "placeholders": {

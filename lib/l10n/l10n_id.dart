@@ -310,7 +310,7 @@ class AppLocalizationsId extends AppLocalizations {
   String get broadcastBroadcasts => 'Siaran';
 
   @override
-  String get broadcastStartDate => 'Tanggal mulai di zona waktu Anda sendiri';
+  String get broadcastLiveBroadcasts => 'Siaran turnamen langsung';
 
   @override
   String challengeChallengesX(String param1) {

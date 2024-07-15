@@ -344,7 +344,7 @@ class AppLocalizationsBs extends AppLocalizations {
   String get broadcastBroadcasts => 'Emitovanja';
 
   @override
-  String get broadcastStartDate => 'Datum početka po Vašoj vremenskoj zoni';
+  String get broadcastLiveBroadcasts => 'Prenos turnira uživo';
 
   @override
   String challengeChallengesX(String param1) {

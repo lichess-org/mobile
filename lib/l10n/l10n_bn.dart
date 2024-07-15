@@ -327,7 +327,7 @@ class AppLocalizationsBn extends AppLocalizations {
   String get broadcastBroadcasts => 'সম্প্রচার';
 
   @override
-  String get broadcastStartDate => 'আপনার নিজস্ব সময় অঞ্চল শুরু করার তারিখ';
+  String get broadcastLiveBroadcasts => 'সরাসরি টুর্নামেন্ট সম্প্রচার';
 
   @override
   String challengeChallengesX(String param1) {

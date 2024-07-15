@@ -327,7 +327,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get broadcastBroadcasts => 'Elsendoj';
 
   @override
-  String get broadcastStartDate => 'Komenca dato en via propra horzono';
+  String get broadcastLiveBroadcasts => 'Vivaj turniraj elsendoj';
 
   @override
   String challengeChallengesX(String param1) {

@@ -327,7 +327,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get broadcastBroadcasts => 'Lähetykset';
 
   @override
-  String get broadcastStartDate => 'Alkamispäivämäärä omalla aikavyöhykkeelläsi';
+  String get broadcastLiveBroadcasts => 'Suorat lähetykset turnauksista';
 
   @override
   String challengeChallengesX(String param1) {

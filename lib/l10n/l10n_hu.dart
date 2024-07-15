@@ -327,7 +327,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get broadcastBroadcasts => 'Versenyközvetítések';
 
   @override
-  String get broadcastStartDate => 'Kezdés időpontja a saját időzónádban';
+  String get broadcastLiveBroadcasts => 'Közvetítések élő versenyekről';
 
   @override
   String challengeChallengesX(String param1) {

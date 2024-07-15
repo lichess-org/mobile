@@ -26,7 +26,7 @@
   "activityCompetedInNbSwissTournaments": "{count, plural, =1{השתתף/ה בטורניר שוויצרי {count}} =2{השתתף/ה ב־{count} טורנירים שוויצריים} many{השתתף/ה ב־{count} טורנירים שוויצריים} other{השתתף/ה ב־{count} טורנירים שוויצריים}}",
   "activityJoinedNbTeams": "{count, plural, =1{הצטרף/ה לקבוצה {count}} =2{הצטרף/ה ל־{count} קבוצות} many{הצטרף/ה ל־{count} קבוצות} other{הצטרף/ה ל־{count} קבוצות}}",
   "broadcastBroadcasts": "הקרנות",
-  "broadcastStartDate": "תאריך ההתחלה באזור הזמן שלך",
+  "broadcastLiveBroadcasts": "צפייה ישירה בטורנירים",
   "challengeChallengesX": "הזמנות למשחק: {param1}",
   "challengeChallengeToPlay": "הזמינו למשחק",
   "challengeChallengeDeclined": "ההזמנה למשחק נדחתה",

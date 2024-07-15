@@ -310,7 +310,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get broadcastBroadcasts => '방송';
 
   @override
-  String get broadcastStartDate => '본인 시간대 기준 시작일';
+  String get broadcastLiveBroadcasts => '실시간 대회 방송';
 
   @override
   String challengeChallengesX(String param1) {
