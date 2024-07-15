@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -11,8 +12,11 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/default_broadcast_image.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
+
+final _dateFormatter = DateFormat.MMMd(Intl.getCurrentLocale()).add_Hm();
 
 class BroadcastTournamentScreen extends StatelessWidget {
   const BroadcastTournamentScreen({super.key});
@@ -115,7 +119,7 @@ class _BodyState extends ConsumerState<_Body> {
                 mainAxisSpacing: 10,
               ),
               itemBuilder: (context, index) =>
-                  BroadcastPicture(broadcast: broadcasts.value!.active[index]),
+                  BroadcastGridItem(broadcast: broadcasts.value!.active[index]),
               itemCount: broadcasts.value!.active.length,
             ),
           ),
@@ -136,7 +140,7 @@ class _BodyState extends ConsumerState<_Body> {
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
               ),
-              itemBuilder: (context, index) => BroadcastPicture(
+              itemBuilder: (context, index) => BroadcastGridItem(
                 broadcast: broadcasts.value!.upcoming[index],
               ),
               itemCount: broadcasts.value!.upcoming.length,
@@ -164,10 +168,10 @@ class _BodyState extends ConsumerState<_Body> {
                   ? Shimmer(
                       child: ShimmerLoading(
                         isLoading: true,
-                        child: BroadcastPicture.loading(),
+                        child: BroadcastGridItem.loading(),
                       ),
                     )
-                  : BroadcastPicture(broadcast: broadcasts.value!.past[index]),
+                  : BroadcastGridItem(broadcast: broadcasts.value!.past[index]),
               itemCount: itemsCount,
             ),
           ),
@@ -182,16 +186,17 @@ class _BodyState extends ConsumerState<_Body> {
   }
 }
 
-class BroadcastPicture extends StatelessWidget {
+class BroadcastGridItem extends StatelessWidget {
   final Broadcast broadcast;
 
-  const BroadcastPicture({required this.broadcast});
+  const BroadcastGridItem({required this.broadcast});
 
-  BroadcastPicture.loading()
+  BroadcastGridItem.loading()
       : broadcast = Broadcast(
           tour: const (name: '', imageUrl: null),
           round: (
             id: const BroadcastRoundId(''),
+            name: '',
             status: RoundStatus.finished,
             startsAt: DateTime.now(),
           ),
@@ -200,7 +205,8 @@ class BroadcastPicture extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return AdaptiveInkWell(
+      borderRadius: BorderRadius.circular(20),
       onTap: () {
         pushPlatformRoute(
           context,
@@ -211,7 +217,7 @@ class BroadcastPicture extends StatelessWidget {
         );
       },
       child: Container(
-        clipBehavior: Clip.antiAlias,
+        clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
@@ -232,44 +238,67 @@ class BroadcastPicture extends StatelessWidget {
           children: [
             if (broadcast.tour.imageUrl != null)
               AspectRatio(
-                aspectRatio: 2,
+                aspectRatio: 2.0,
                 child: FadeInImage.memoryNetwork(
                   placeholder: transparentImage,
                   image: broadcast.tour.imageUrl!,
                 ),
               )
             else
-              const DefaultBroadcastImage(),
+              const DefaultBroadcastImage(aspectRatio: 2.0),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Row(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Flexible(
-                      child: Text(
-                        broadcast.title,
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    if (broadcast.isLive) ...[
-                      const SizedBox(width: 5),
-                      const Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.circle, color: Colors.red, size: 15),
-                          SizedBox(height: 5),
+                    Row(
+                      children: [
+                        if (!broadcast.isFinished) ...[
                           Text(
+                            broadcast.round.name,
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelMedium
+                                ?.copyWith(
+                                  color: textShade(context, 0.5),
+                                ),
+                          ),
+                          const SizedBox(width: 4.0),
+                        ],
+                        if (broadcast.isLive)
+                          const Text(
                             'LIVE',
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
                               color: Colors.red,
                             ),
+                          )
+                        else
+                          Text(
+                            _dateFormatter.format(broadcast.round.startsAt),
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelSmall
+                                ?.copyWith(
+                                  color: textShade(context, 0.5),
+                                ),
                           ),
-                        ],
+                      ],
+                    ),
+                    const SizedBox(height: 4.0),
+                    Flexible(
+                      child: Text(
+                        broadcast.title,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
-                    ],
+                    ),
                   ],
                 ),
               ),

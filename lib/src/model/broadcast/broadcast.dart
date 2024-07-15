@@ -24,6 +24,8 @@ class Broadcast with _$Broadcast {
 
   bool get isLive => round.status == RoundStatus.live;
 
+  bool get isFinished => round.status == RoundStatus.finished;
+
   String get title => group ?? tour.name;
 }
 
@@ -34,6 +36,7 @@ typedef BroadcastTournament = ({
 
 typedef BroadcastRound = ({
   BroadcastRoundId id,
+  String name,
   RoundStatus status,
   DateTime startsAt,
 });

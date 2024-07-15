@@ -65,6 +65,7 @@ Broadcast _broadcastFromPick(RequiredPick pick) {
     ),
     round: (
       id: pick('round', 'id').asBroadcastRoundIdOrThrow(),
+      name: pick('round', 'name').asStringOrThrow(),
       status: status,
       startsAt: pick('round', 'startsAt')
           .asDateTimeFromMillisecondsOrThrow()

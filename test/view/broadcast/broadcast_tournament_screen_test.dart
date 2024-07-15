@@ -44,7 +44,7 @@ void main() {
           () => tester.pump(const Duration(milliseconds: 50)),
         );
 
-        expect(find.byType(BroadcastPicture), findsAtLeast(1));
+        expect(find.byType(BroadcastGridItem), findsAtLeast(1));
       },
     );
 
