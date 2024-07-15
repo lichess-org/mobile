@@ -17,11 +17,11 @@ import 'package:lichess_mobile/src/widgets/grid_board.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
-class BroadcastGameScreen extends StatelessWidget {
+class BroadcastScreen extends StatelessWidget {
   final String broadCastTitle;
   final BroadcastRoundId roundId;
 
-  const BroadcastGameScreen({
+  const BroadcastScreen({
     super.key,
     required this.broadCastTitle,
     required this.roundId,

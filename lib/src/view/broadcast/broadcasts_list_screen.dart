@@ -10,7 +10,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/styles/transparent_image.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/default_broadcast_image.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -210,7 +210,7 @@ class BroadcastGridItem extends StatelessWidget {
       onTap: () {
         pushPlatformRoute(
           context,
-          builder: (context) => BroadcastGameScreen(
+          builder: (context) => BroadcastScreen(
             broadCastTitle: broadcast.tour.name,
             roundId: broadcast.round.id,
           ),
