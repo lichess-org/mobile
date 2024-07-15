@@ -24,7 +24,7 @@
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">همرسانی این معما</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">همرسانی وب‌نشانی بازی</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">همرسانی PGN</string>
-  <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">همرسانی چینش، به شکل FEN</string>
+  <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">همرسانی وضعیت، به شکل FEN</string>
   <string name="showVariations" comment="Shown in the analysis screen.">باز کردن شاخه‌ها</string>
   <string name="hideVariation" comment="Shown in the analysis screen.">بستن شاخه‌ها</string>
   <string name="showComments" comment="Shown in the analysis screen.">نمایش نظرها</string>
