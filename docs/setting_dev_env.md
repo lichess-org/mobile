@@ -32,6 +32,14 @@ This will allow the app to communicate with the local server. 9663 is for `http`
 and 9664 is for `websocket`. It assumes that the server is running on the
 default ports.
 
+When using [lila-docker](https://github.com/lichess-org/lila-docker), first run `./lila-docker hostname` and select your computer's IP address.
+Then, instead of the commands above, use this:
+
+```bash
+adb reverse tcp:9663 tcp:8080
+adb reverse tcp:9664 tcp:8080
+```
+
 #### Troubleshooting
 
 If Chrome instacrashes, it is likely you need to disable vulkan in emulator settings.
