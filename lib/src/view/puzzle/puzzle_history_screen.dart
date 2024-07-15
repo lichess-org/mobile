@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_layout_grid/flutter_layout_grid.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
@@ -17,7 +18,6 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
-import 'package:lichess_mobile/src/widgets/grid_board.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -46,6 +46,7 @@ class PuzzleHistoryScreen extends StatelessWidget {
   }
 }
 
+/// Shows a short preview of the puzzle history.
 class PuzzleHistoryPreview extends ConsumerWidget {
   const PuzzleHistoryPreview(this.history, {this.maxRows, super.key});
 
@@ -54,7 +55,7 @@ class PuzzleHistoryPreview extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return GridBoard(
+    return _PreviewBoardsGrid(
       rowGap: 16,
       builder: (crossAxisCount, boardWidth) {
         final cappedHistory =
@@ -309,6 +310,45 @@ class _PuzzleResult extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _PreviewBoardsGrid extends StatelessWidget {
+  final List<BoardThumbnail> Function(int, double) builder;
+  final double rowGap;
+
+  const _PreviewBoardsGrid({
+    required this.builder,
+    required this.rowGap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final crossAxisCount = constraints.maxWidth > 600
+            ? 4
+            : constraints.maxWidth > 450
+                ? 3
+                : 2;
+        const columnGap = 12.0;
+        final boardWidth =
+            (constraints.maxWidth - (columnGap * crossAxisCount - columnGap)) /
+                crossAxisCount;
+        final boards = builder(crossAxisCount, boardWidth);
+
+        return LayoutGrid(
+          columnSizes: List.generate(crossAxisCount, (_) => 1.fr),
+          rowSizes: List.generate(
+            (boards.length / crossAxisCount).ceil(),
+            (_) => auto,
+          ),
+          rowGap: rowGap,
+          columnGap: columnGap,
+          children: boards,
+        );
+      },
     );
   }
 }
