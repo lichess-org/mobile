@@ -18,8 +18,8 @@ import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 final _dateFormatter = DateFormat.MMMd(Intl.getCurrentLocale()).add_Hm();
 
-class BroadcastTournamentScreen extends StatelessWidget {
-  const BroadcastTournamentScreen({super.key});
+class BroadcastsListScreen extends StatelessWidget {
+  const BroadcastsListScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +98,7 @@ class _BodyState extends ConsumerState<_Body> {
 
     if (!broadcasts.hasValue && broadcasts.isLoading) {
       debugPrint(
-        'SEVERE: [BroadcastTournamentScreen] could not load broadcast tournaments',
+        'SEVERE: [BroadcastsListScreen] could not load broadcast tournaments',
       );
       return const Center(child: Text('Could not load broadcast tournaments'));
     }
