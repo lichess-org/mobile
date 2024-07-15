@@ -63,7 +63,7 @@ Broadcast _broadcastFromPick(RequiredPick pick) {
       name: pick('tour', 'name').asStringOrThrow(),
       imageUrl: pick('tour', 'image').asStringOrNull(),
     ),
-    round: (
+    round: BroadcastRound(
       id: pick('round', 'id').asBroadcastRoundIdOrThrow(),
       name: pick('round', 'name').asStringOrThrow(),
       status: status,
@@ -82,7 +82,7 @@ IList<BroadcastGameSnapshot> _gamesFromPick(RequiredPick pick) =>
     pick('games').asListOrEmpty(_gameFromPick).toIList();
 
 BroadcastGameSnapshot _gameFromPick(RequiredPick pick) {
-  return (
+  return BroadcastGameSnapshot(
     players: pick('players').asListOrThrow(_playerFromPick).toIList(),
     fen: pick('fen').asStringOrNull() ?? Variant.standard.initialPosition.fen,
     lastMove: pick('lastMove').asUciMoveOrNull(),
@@ -91,7 +91,7 @@ BroadcastGameSnapshot _gameFromPick(RequiredPick pick) {
 }
 
 BroadcastPlayer _playerFromPick(RequiredPick pick) {
-  return (
+  return BroadcastPlayer(
     name: pick('name').asStringOrThrow(),
     title: pick('title').asStringOrNull(),
     rating: pick('rating').asIntOrNull(),

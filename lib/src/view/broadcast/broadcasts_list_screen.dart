@@ -194,7 +194,7 @@ class BroadcastGridItem extends StatelessWidget {
   BroadcastGridItem.loading()
       : broadcast = Broadcast(
           tour: const (name: '', imageUrl: null),
-          round: (
+          round: BroadcastRound(
             id: const BroadcastRoundId(''),
             name: '',
             status: RoundStatus.finished,

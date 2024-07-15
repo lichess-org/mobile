@@ -34,27 +34,42 @@ typedef BroadcastTournament = ({
   String? imageUrl,
 });
 
-typedef BroadcastRound = ({
-  BroadcastRoundId id,
-  String name,
-  RoundStatus status,
-  DateTime startsAt,
-});
+@freezed
+class BroadcastRound with _$BroadcastRound {
+  const BroadcastRound._();
 
-typedef BroadcastGameSnapshot = ({
-  IList<BroadcastPlayer> players,
-  String fen,
-  Move? lastMove,
-  String status,
-});
+  const factory BroadcastRound({
+    required BroadcastRoundId id,
+    required String name,
+    required RoundStatus status,
+    required DateTime startsAt,
+  }) = _BroadcastRound;
+}
 
-typedef BroadcastPlayer = ({
-  String name,
-  String? title,
-  int? rating,
-  Duration? clock,
-  String? federation,
-});
+@freezed
+class BroadcastGameSnapshot with _$BroadcastGameSnapshot {
+  const BroadcastGameSnapshot._();
+
+  const factory BroadcastGameSnapshot({
+    required IList<BroadcastPlayer> players,
+    required String fen,
+    required Move? lastMove,
+    required String status,
+  }) = _BroadcastGameSnapshot;
+}
+
+@freezed
+class BroadcastPlayer with _$BroadcastPlayer {
+  const BroadcastPlayer._();
+
+  const factory BroadcastPlayer({
+    required String name,
+    required String? title,
+    required int? rating,
+    required Duration? clock,
+    required String? federation,
+  }) = _BroadcastPlayer;
+}
 
 enum RoundStatus {
   live,
