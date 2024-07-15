@@ -45,7 +45,7 @@ BroadcastsList _makeBroadcastResponseFromJson(
     past: pick(json, 'past', 'currentPageResults')
         .asListOrThrow(_broadcastFromPick)
         .toIList(),
-    nextPage: pick(json, 'past', 'nextPage').asIntOrThrow(),
+    nextPage: pick(json, 'past', 'nextPage').asIntOrNull(),
   );
 }
 
