@@ -127,6 +127,13 @@ class AnalysisSettings extends ConsumerWidget {
                 .toggleShowEvaluationGauge(),
           ),
           SwitchSettingTile(
+            title: Text(context.l10n.toggleGlyphAnnotations),
+            value: prefs.showAnnotations,
+            onChanged: (_) => ref
+                .read(analysisPreferencesProvider.notifier)
+                .toggleAnnotations(),
+          ),
+          SwitchSettingTile(
             title: Text(context.l10n.mobileShowComments),
             value: prefs.showPgnComments,
             onChanged: (_) => ref

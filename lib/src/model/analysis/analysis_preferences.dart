@@ -40,6 +40,14 @@ class AnalysisPreferences extends _$AnalysisPreferences {
     );
   }
 
+  Future<void> toggleAnnotations() {
+    return _save(
+      state.copyWith(
+        showAnnotations: !state.showAnnotations,
+      ),
+    );
+  }
+
   Future<void> togglePgnComments() {
     return _save(
       state.copyWith(
@@ -92,6 +100,7 @@ class AnalysisPrefState with _$AnalysisPrefState {
     required bool enableLocalEvaluation,
     required bool showEvaluationGauge,
     required bool showBestMoveArrow,
+    required bool showAnnotations,
     required bool showPgnComments,
     @Assert('numEvalLines >= 1 && numEvalLines <= 3') required int numEvalLines,
     @Assert('numEngineCores >= 1 && numEngineCores <= maxEngineCores')
@@ -102,6 +111,7 @@ class AnalysisPrefState with _$AnalysisPrefState {
     enableLocalEvaluation: true,
     showEvaluationGauge: true,
     showBestMoveArrow: true,
+    showAnnotations: true,
     showPgnComments: true,
     numEvalLines: 2,
     numEngineCores: defaultEngineCores,
