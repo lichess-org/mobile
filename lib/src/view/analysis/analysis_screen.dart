@@ -489,7 +489,7 @@ class _BoardState extends ConsumerState<_Board> {
         validMoves: analysisState.validMoves,
         shapes: userShapes.union(bestMoveShapes),
         annotations:
-            sanMove != null && annotation != null && showAnnotationsOnBoard
+            showAnnotationsOnBoard && sanMove != null && annotation != null
                 ? altCastles.containsKey(sanMove.move.uci)
                     ? IMap({
                         Move.fromUci(altCastles[sanMove.move.uci]!)!.cg.to:
