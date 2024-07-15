@@ -327,7 +327,7 @@ class AppLocalizationsLb extends AppLocalizations {
   String get broadcastBroadcasts => 'Iwwerdroungen';
 
   @override
-  String get broadcastStartDate => 'Startdatum an denger eegener Zäitzon';
+  String get broadcastLiveBroadcasts => 'Live Turnéier Iwwerdroungen';
 
   @override
   String challengeChallengesX(String param1) {

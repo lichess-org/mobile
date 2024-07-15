@@ -361,7 +361,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get broadcastBroadcasts => 'Vysielanie';
 
   @override
-  String get broadcastStartDate => 'Dátum a čas začiatku, vo vašej časovej zóne';
+  String get broadcastLiveBroadcasts => 'Živé vysielanie turnaja';
 
   @override
   String challengeChallengesX(String param1) {

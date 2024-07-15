@@ -21,7 +21,7 @@
   "activityCompetedInNbSwissTournaments": "{count, plural, =1{{count} स्विस टूर्नामेंट में भाग लिया} other{{count} स्विस टुर्नामेंटों में भाग लिया}}",
   "activityJoinedNbTeams": "{count, plural, =1{{count} टीम में शामिल हुए} other{{count} टीमों में शामिल हुए}}",
   "broadcastBroadcasts": "प्रसारण",
-  "broadcastStartDate": "अपने स्वयं के समयक्षेत्र में प्रारंभ दिनांक",
+  "broadcastLiveBroadcasts": "लाइव टूर्नामेंट प्रसारण",
   "challengeChallengeToPlay": "एक खेल के लिए चुनौती",
   "challengeChallengeDeclined": "चुनौती इंकार कर दिया",
   "challengeChallengeAccepted": "चुनौती स्वीकार की गई!",

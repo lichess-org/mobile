@@ -327,7 +327,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get broadcastBroadcasts => 'Canlı Turnuvalar';
 
   @override
-  String get broadcastStartDate => 'Kendi saat diliminizdeki başlangıç zamanı';
+  String get broadcastLiveBroadcasts => 'Canlı Turnuva Yayınları';
 
   @override
   String challengeChallengesX(String param1) {

@@ -21,7 +21,7 @@
   "activityCompetedInNbSwissTournaments": "{count, plural, other{Đã hoàn thành {count} giải đấu hệ Thụy Sĩ}}",
   "activityJoinedNbTeams": "{count, plural, other{Đã tham gia {count} đội}}",
   "broadcastBroadcasts": "Các phát sóng",
-  "broadcastStartDate": "Ngày bắt đầu theo múi giờ của bạn",
+  "broadcastLiveBroadcasts": "Các giải đấu phát sóng trực tiếp",
   "challengeChallengesX": "Số thách đấu: {param1}",
   "challengeChallengeToPlay": "Thách đấu một ván cờ",
   "challengeChallengeDeclined": "Lời thách đấu bị từ chối.",

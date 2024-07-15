@@ -310,7 +310,7 @@ class AppLocalizationsTt extends AppLocalizations {
   String get broadcastBroadcasts => 'Ишеттәрешләр';
 
   @override
-  String get broadcastStartDate => 'Башлагыз сәнә сезнең үзегезнең вакыт җирендән';
+  String get broadcastLiveBroadcasts => 'Хәяти бәйгеләр ишетләштерешләр';
 
   @override
   String challengeChallengesX(String param1) {

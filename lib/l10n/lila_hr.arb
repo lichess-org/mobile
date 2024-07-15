@@ -21,7 +21,7 @@
   "activityCompetedInNbSwissTournaments": "{count, plural, =1{Natjecao se u {count} švicarskom turniru} few{Natjecao se u {count} švicarska turniru} other{Natjecao se u {count} švicarskih turnira}}",
   "activityJoinedNbTeams": "{count, plural, =1{Pridružio/la se {count} timu} few{Pridružio/la se {count} tima} other{Pridružio/la se {count} timova}}",
   "broadcastBroadcasts": "Prijenosi",
-  "broadcastStartDate": "Datum početka u vlastitoj vremenskoj zoni",
+  "broadcastLiveBroadcasts": "Prijenosi turnira uživo",
   "challengeChallengeToPlay": "Poziv na partiju",
   "challengeChallengeDeclined": "Izazov odbijen",
   "challengeChallengeAccepted": "Izazov prihvaćen!",

@@ -327,7 +327,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get broadcastBroadcasts => 'Αναμεταδόσεις';
 
   @override
-  String get broadcastStartDate => 'Ημερομηνία έναρξης στη δική σας ζώνη ώρας';
+  String get broadcastLiveBroadcasts => 'Αναμεταδόσεις ζωντανών τουρνούα';
 
   @override
   String challengeChallengesX(String param1) {

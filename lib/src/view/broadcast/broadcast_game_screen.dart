@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
@@ -18,7 +19,7 @@ import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 class BroadcastGameScreen extends StatelessWidget {
   final String broadCastTitle;
-  final String roundId;
+  final BroadcastRoundId roundId;
 
   const BroadcastGameScreen({
     super.key,
@@ -58,15 +59,18 @@ class BroadcastGameScreen extends StatelessWidget {
 }
 
 class _Body extends ConsumerWidget {
-  final String roundId;
+  final BroadcastRoundId roundId;
 
   const _Body(this.roundId);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final games = ref.watch(roundProvider(roundId));
+    final games = ref.watch(broadcastRoundProvider(roundId));
+
     return games.when(
-      data: (games) => BroadcastPreview(games: games),
+      data: (games) => (games.isEmpty)
+          ? const Text('No games to show for now')
+          : BroadcastPreview(games: games),
       loading: () => const Shimmer(
         child: ShimmerLoading(
           isLoading: true,

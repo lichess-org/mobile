@@ -327,7 +327,7 @@ class AppLocalizationsEu extends AppLocalizations {
   String get broadcastBroadcasts => 'Emanaldiak';
 
   @override
-  String get broadcastStartDate => 'Zure ordu-zonako hasiera data';
+  String get broadcastLiveBroadcasts => 'Txapelketen zuzeneko emanaldiak';
 
   @override
   String challengeChallengesX(String param1) {

@@ -1,9 +1,9 @@
-import 'package:collection/collection.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 
 class BroadcastRepository {
@@ -11,16 +11,20 @@ class BroadcastRepository {
 
   final LichessClient client;
 
-  Future<IList<Broadcast>> getBroadcasts() {
-    return client.readNdJsonList(
-      Uri(path: '/api/broadcast'),
-      headers: {'Accept': 'application/x-ndjson'},
-      mapper: _makeBroadcastFromJson,
-      compare: (Broadcast a, Broadcast b) => b.priority.compareTo(a.priority),
+  Future<BroadcastsList> getBroadcasts({int page = 1}) {
+    return client.readJson(
+      Uri(
+        path: '/api/broadcast/top',
+        queryParameters: {'page': page.toString()},
+      ),
+      headers: {'Accept': 'application/json'},
+      mapper: _makeBroadcastResponseFromJson,
     );
   }
 
-  Future<IList<BroadcastGameSnapshot>> getRound(String broadcastRoundId) {
+  Future<IList<BroadcastGameSnapshot>> getRound(
+    BroadcastRoundId broadcastRoundId,
+  ) {
     return client.readJson(
       Uri(path: 'api/broadcast/-/-/$broadcastRoundId'),
       // The path parameters with - are the broadcast tournament and round slug
@@ -31,40 +35,42 @@ class BroadcastRepository {
   }
 }
 
-Broadcast _makeBroadcastFromJson(Map<String, dynamic> json) =>
-    _broadcastFromPick(pick(json).required());
-
-Broadcast _broadcastFromPick(RequiredPick pick) {
-  return Broadcast(
-    tour: BroadcastTournament(
-      name: pick('tour', 'name').asStringOrThrow(),
-      description: pick('tour', 'description').asStringOrThrow(),
-      imageUrl: pick('tour', 'image').asStringOrNull(),
-      tier: pick('tour', 'tier').asIntOrThrow(),
-    ),
-    rounds: pick('rounds')
-        .asListOrEmpty(_roundFromPick)
-        .sorted(
-          (BroadcastRound a, BroadcastRound b) =>
-              a.startsAt.compareTo(b.startsAt),
-        )
+BroadcastsList _makeBroadcastResponseFromJson(
+  Map<String, dynamic> json,
+) {
+  return (
+    active: pick(json, 'active').asListOrThrow(_broadcastFromPick).toIList(),
+    upcoming:
+        pick(json, 'upcoming').asListOrThrow(_broadcastFromPick).toIList(),
+    past: pick(json, 'past', 'currentPageResults')
+        .asListOrThrow(_broadcastFromPick)
         .toIList(),
+    nextPage: pick(json, 'past', 'nextPage').asIntOrThrow(),
   );
 }
 
-BroadcastRound _roundFromPick(RequiredPick pick) {
-  final live = pick('ongoing').asBoolOrFalse();
-  final finished = pick('finished').asBoolOrFalse();
+Broadcast _broadcastFromPick(RequiredPick pick) {
+  final live = pick('round', 'ongoing').asBoolOrFalse();
+  final finished = pick('round', 'finished').asBoolOrFalse();
   final status = live
       ? RoundStatus.live
       : finished
           ? RoundStatus.finished
           : RoundStatus.upcoming;
 
-  return BroadcastRound(
-    id: pick('id').asStringOrThrow(),
-    status: status,
-    startsAt: pick('startsAt').asDateTimeFromMillisecondsOrThrow().toLocal(),
+  return Broadcast(
+    tour: (
+      name: pick('tour', 'name').asStringOrThrow(),
+      imageUrl: pick('tour', 'image').asStringOrNull(),
+    ),
+    round: (
+      id: pick('round', 'id').asBroadcastRoundIdOrThrow(),
+      status: status,
+      startsAt: pick('round', 'startsAt')
+          .asDateTimeFromMillisecondsOrThrow()
+          .toLocal(),
+    ),
+    group: pick('group').asStringOrNull(),
   );
 }
 
@@ -75,7 +81,7 @@ IList<BroadcastGameSnapshot> _gamesFromPick(RequiredPick pick) =>
     pick('games').asListOrEmpty(_gameFromPick).toIList();
 
 BroadcastGameSnapshot _gameFromPick(RequiredPick pick) {
-  return BroadcastGameSnapshot(
+  return (
     players: pick('players').asListOrThrow(_playerFromPick).toIList(),
     fen: pick('fen').asStringOrNull() ?? Variant.standard.initialPosition.fen,
     lastMove: pick('lastMove').asUciMoveOrNull(),
@@ -84,7 +90,7 @@ BroadcastGameSnapshot _gameFromPick(RequiredPick pick) {
 }
 
 BroadcastPlayer _playerFromPick(RequiredPick pick) {
-  return BroadcastPlayer(
+  return (
     name: pick('name').asStringOrThrow(),
     title: pick('title').asStringOrNull(),
     rating: pick('rating').asIntOrNull(),

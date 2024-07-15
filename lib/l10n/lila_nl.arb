@@ -26,7 +26,7 @@
   "activityCompetedInNbSwissTournaments": "{count, plural, =1{Nam deel aan {count} Zwitsers toernooi} other{Nam deel aan {count} Zwitserse toernooien}}",
   "activityJoinedNbTeams": "{count, plural, =1{Sloot zich aan bij {count} team} other{Sloot zich aan bij {count} teams}}",
   "broadcastBroadcasts": "Uitzendingen",
-  "broadcastStartDate": "Aanvangsdatum in je eigen tijdzone",
+  "broadcastLiveBroadcasts": "Live toernooi uitzendingen",
   "challengeChallengesX": "Uitdagingen: {param1}",
   "challengeChallengeToPlay": "Uitdagen voor een partij",
   "challengeChallengeDeclined": "Uitdaging geweigerd",

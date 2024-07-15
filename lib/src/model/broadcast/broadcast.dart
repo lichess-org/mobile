@@ -1,8 +1,16 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 
 part 'broadcast.freezed.dart';
+
+typedef BroadcastsList = ({
+  IList<Broadcast> active,
+  IList<Broadcast> upcoming,
+  IList<Broadcast> past,
+  int? nextPage,
+});
 
 @freezed
 class Broadcast with _$Broadcast {
@@ -10,79 +18,40 @@ class Broadcast with _$Broadcast {
 
   const factory Broadcast({
     required BroadcastTournament tour,
-    required IList<BroadcastRound> rounds,
+    required BroadcastRound round,
+    required String? group,
   }) = _Broadcast;
 
-  BroadcastRound? get curentRound =>
-      rounds.where((r) => r.status == RoundStatus.live).firstOrNull ??
-      rounds.where((r) => r.status == RoundStatus.finished).lastOrNull;
+  bool get isLive => round.status == RoundStatus.live;
 
-  BroadcastStatus get status {
-    if (curentRound == null) return BroadcastStatus.upcoming;
-    if (curentRound!.status == RoundStatus.live) return BroadcastStatus.live;
-    return (curentRound! != rounds.last)
-        ? BroadcastStatus.ongoing
-        : BroadcastStatus.finished;
-  }
-
-  int get priority {
-    final statusPriority = switch (status) {
-      BroadcastStatus.live => 2,
-      BroadcastStatus.ongoing => 0,
-      BroadcastStatus.finished => -1,
-      BroadcastStatus.upcoming => -1,
-    };
-
-    return tour.tier + statusPriority;
-  }
+  String get title => group ?? tour.name;
 }
 
-@freezed
-class BroadcastTournament with _$BroadcastTournament {
-  const factory BroadcastTournament({
-    required String name,
-    required String description,
-    required String? imageUrl,
-    required int tier,
-  }) = _BroadcastTournament;
-}
+typedef BroadcastTournament = ({
+  String name,
+  String? imageUrl,
+});
 
-@freezed
-class BroadcastRound with _$BroadcastRound {
-  const factory BroadcastRound({
-    required String id,
-    required RoundStatus status,
-    required DateTime startsAt,
-  }) = _BroadcastRound;
-}
+typedef BroadcastRound = ({
+  BroadcastRoundId id,
+  RoundStatus status,
+  DateTime startsAt,
+});
 
-@freezed
-class BroadcastGameSnapshot with _$BroadcastGameSnapshot {
-  const factory BroadcastGameSnapshot({
-    required IList<BroadcastPlayer> players,
-    required String fen,
-    required Move? lastMove,
-    required String status,
-  }) = _BroadcastGameSnapshot;
-}
+typedef BroadcastGameSnapshot = ({
+  IList<BroadcastPlayer> players,
+  String fen,
+  Move? lastMove,
+  String status,
+});
 
-@freezed
-class BroadcastPlayer with _$BroadcastPlayer {
-  const factory BroadcastPlayer({
-    required String name,
-    required String? title,
-    required int? rating,
-    required Duration? clock,
-    required String? federation,
-  }) = _BroadcastPlayer;
-}
-
-enum BroadcastStatus {
-  ongoing,
-  live,
-  finished,
-  upcoming,
-}
+typedef BroadcastPlayer = ({
+  String name,
+  String? title,
+  int? rating,
+  Duration? clock,
+  String? federation,
+});
 
 enum RoundStatus {
   live,

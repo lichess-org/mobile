@@ -562,11 +562,11 @@ abstract class AppLocalizations {
   /// **'Broadcasts'**
   String get broadcastBroadcasts;
 
-  /// No description provided for @broadcastStartDate.
+  /// No description provided for @broadcastLiveBroadcasts.
   ///
   /// In en, this message translates to:
-  /// **'Start date in your own timezone'**
-  String get broadcastStartDate;
+  /// **'Live tournament broadcasts'**
+  String get broadcastLiveBroadcasts;
 
   /// No description provided for @challengeChallengesX.
   ///
