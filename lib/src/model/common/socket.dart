@@ -36,6 +36,7 @@ const _kDisconnectOnBackgroundTimeout = Duration(minutes: 5);
 
 final _logger = Logger('Socket');
 
+/// Set of topics that are allowed to be broadcasted to the global stream.
 const _globalSocketStreamAllowedTopics = {
   'n',
   'message',
@@ -43,7 +44,11 @@ const _globalSocketStreamAllowedTopics = {
 
 final _globalStreamController = StreamController<SocketEvent>.broadcast();
 
-/// The global socket events broadcast stream.
+/// The global socket broadcast stream.
+///
+/// Only a subset of topics are allowed to be broadcasted to the global stream:
+/// - 'n' (number of players and games currently on the server)
+/// - 'message'
 final socketGlobalStream = _globalStreamController.stream;
 
 /// Creates a WebSocket URI for the lichess server.
