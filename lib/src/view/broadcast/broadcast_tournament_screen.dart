@@ -30,7 +30,7 @@ class BroadcastTournamentScreen extends StatelessWidget {
   ) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.l10n.broadcastBroadcasts),
+        title: Text(context.l10n.broadcastLiveBroadcasts),
       ),
       body: const _Body(),
     );
@@ -41,7 +41,7 @@ class BroadcastTournamentScreen extends StatelessWidget {
   ) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text(context.l10n.broadcastBroadcasts),
+        middle: Text(context.l10n.broadcastLiveBroadcasts),
       ),
       child: const _Body(),
     );
@@ -102,74 +102,74 @@ class _BodyState extends ConsumerState<_Body> {
     final itemsCount =
         broadcasts.requireValue.past.length + (broadcasts.isLoading ? 10 : 0);
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+    return SafeArea(
       child: CustomScrollView(
         controller: _scrollController,
         slivers: [
-          SliverToBoxAdapter(
-            child: ListTile(
-              dense: true,
-              title: DefaultTextStyle.merge(
-                style: Styles.sectionTitle,
-                child: Text(context.l10n.broadcastLiveBroadcasts),
+          SliverPadding(
+            padding: Styles.bodySectionPadding,
+            sliver: SliverGrid.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
               ),
+              itemBuilder: (context, index) =>
+                  BroadcastPicture(broadcast: broadcasts.value!.active[index]),
+              itemCount: broadcasts.value!.active.length,
             ),
           ),
-          SliverGrid.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
-            ),
-            itemBuilder: (context, index) =>
-                BroadcastPicture(broadcast: broadcasts.value!.active[index]),
-            itemCount: broadcasts.value!.active.length,
-          ),
-          SliverToBoxAdapter(
-            child: ListTile(
-              dense: true,
-              title: DefaultTextStyle.merge(
+          SliverPadding(
+            padding: Styles.horizontalBodyPadding.add(Styles.sectionTopPadding),
+            sliver: SliverToBoxAdapter(
+              child: DefaultTextStyle.merge(
                 style: Styles.sectionTitle,
                 child: const Text('Upcoming broadcasts'),
               ),
             ),
           ),
-          SliverGrid.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
+          SliverPadding(
+            padding: Styles.bodySectionPadding,
+            sliver: SliverGrid.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+              ),
+              itemBuilder: (context, index) => BroadcastPicture(
+                broadcast: broadcasts.value!.upcoming[index],
+              ),
+              itemCount: broadcasts.value!.upcoming.length,
             ),
-            itemBuilder: (context, index) =>
-                BroadcastPicture(broadcast: broadcasts.value!.upcoming[index]),
-            itemCount: broadcasts.value!.upcoming.length,
           ),
-          SliverToBoxAdapter(
-            child: ListTile(
-              dense: true,
-              title: DefaultTextStyle.merge(
+          SliverPadding(
+            padding: Styles.horizontalBodyPadding.add(Styles.sectionTopPadding),
+            sliver: SliverToBoxAdapter(
+              child: DefaultTextStyle.merge(
                 style: Styles.sectionTitle,
                 child: const Text('Past broadcasts'),
               ),
             ),
           ),
-          SliverGrid.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
+          SliverPadding(
+            padding: Styles.bodySectionPadding,
+            sliver: SliverGrid.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+              ),
+              itemBuilder: (context, index) => (broadcasts.isLoading &&
+                      index >= itemsCount - 10)
+                  ? Shimmer(
+                      child: ShimmerLoading(
+                        isLoading: true,
+                        child: BroadcastPicture.loading(),
+                      ),
+                    )
+                  : BroadcastPicture(broadcast: broadcasts.value!.past[index]),
+              itemCount: itemsCount,
             ),
-            itemBuilder: (context, index) => (broadcasts.isLoading &&
-                    index >= itemsCount - 10)
-                ? Shimmer(
-                    child: ShimmerLoading(
-                      isLoading: true,
-                      child: BroadcastPicture.loading(),
-                    ),
-                  )
-                : BroadcastPicture(broadcast: broadcasts.value!.past[index]),
-            itemCount: itemsCount,
           ),
           const SliverToBoxAdapter(
             child: SizedBox(
