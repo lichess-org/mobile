@@ -21,4 +21,13 @@
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Você tem certeza?</string>
   <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">Você perderá a sua sequência atual e sua pontuação será salva.</string>
   <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Nada para mostrar aqui. Jogue algumas rodadas da Puzzle Storm.</string>
+  <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Tentar novamente este quebra-cabeça</string>
+  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Compartilhar URL do jogo</string>
+  <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Compartilhar PGN</string>
+  <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">Compartilhar posição como FEN</string>
+  <string name="showVariations" comment="Shown in the analysis screen.">Mostrar setas da variantes</string>
+  <string name="hideVariation" comment="Shown in the analysis screen.">Ocultar variante forçada</string>
+  <string name="showComments" comment="Shown in the analysis screen.">Mostrar comentários</string>
+  <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Você quer terminar o turno?</string>
+  <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Nada para mostrar aqui, por favor, altere os filtros</string>
 </resources>
