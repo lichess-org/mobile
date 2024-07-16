@@ -88,6 +88,45 @@ class _AccountPreferencesScreenState
                       }
                     },
                   ),
+                  SettingsListTile(
+                    settingsLabel: Text(
+                      context.l10n.preferencesPgnPieceNotation,
+                    ),
+                    settingsValue: data.pieceNotation.label(context),
+                    showCupertinoTrailingValue: false,
+                    onTap: () {
+                      if (Theme.of(context).platform ==
+                          TargetPlatform.android) {
+                        showChoicePicker(
+                          context,
+                          choices: PieceNotation.values,
+                          selectedItem: data.pieceNotation,
+                          labelBuilder: (t) => Text(t.label(context)),
+                          onSelectedItemChanged: isLoading
+                              ? null
+                              : (PieceNotation? value) {
+                                  _setPref(
+                                    () => ref
+                                        .read(
+                                          accountPreferencesProvider.notifier,
+                                        )
+                                        .setPieceNotation(
+                                          value ?? data.pieceNotation,
+                                        ),
+                                  );
+                                },
+                        );
+                      } else {
+                        pushPlatformRoute(
+                          context,
+                          title: context
+                              .l10n.preferencesPromoteToQueenAutomatically,
+                          builder: (context) =>
+                              const PieceNotationSettingsScreen(),
+                        );
+                      }
+                    },
+                  ),
                   SwitchSettingTile(
                     title: Text(context.l10n.preferencesShowPlayerRatings),
                     subtitle: Text(
@@ -454,6 +493,70 @@ class _ZenSettingsScreenState extends ConsumerState<ZenSettingsScreen> {
               ],
             ),
           ),
+        );
+      },
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (err, stack) => Center(child: Text(err.toString())),
+    );
+  }
+}
+
+class PieceNotationSettingsScreen extends ConsumerStatefulWidget {
+  const PieceNotationSettingsScreen({super.key});
+
+  @override
+  ConsumerState<PieceNotationSettingsScreen> createState() =>
+      _PieceNotationSettingsScreenState();
+}
+
+class _PieceNotationSettingsScreenState
+    extends ConsumerState<PieceNotationSettingsScreen> {
+  Future<void>? _pendingSetPieceNotation;
+
+  @override
+  Widget build(BuildContext context) {
+    final accountPrefs = ref.watch(accountPreferencesProvider);
+    return accountPrefs.when(
+      data: (data) {
+        if (data == null) {
+          return Center(
+            child: Text(context.l10n.mobileMustBeLoggedIn),
+          );
+        }
+
+        return FutureBuilder(
+          future: _pendingSetPieceNotation,
+          builder: (context, snapshot) {
+            return CupertinoPageScaffold(
+              navigationBar: CupertinoNavigationBar(
+                trailing: snapshot.connectionState == ConnectionState.waiting
+                    ? const CircularProgressIndicator.adaptive()
+                    : null,
+              ),
+              child: SafeArea(
+                child: ListView(
+                  children: [
+                    ChoicePicker(
+                      choices: PieceNotation.values,
+                      selectedItem: data.pieceNotation,
+                      titleBuilder: (t) => Text(t.label(context)),
+                      onSelectedItemChanged: snapshot.connectionState ==
+                              ConnectionState.waiting
+                          ? null
+                          : (PieceNotation? v) {
+                              final future = ref
+                                  .read(accountPreferencesProvider.notifier)
+                                  .setPieceNotation(v ?? data.pieceNotation);
+                              setState(() {
+                                _pendingSetPieceNotation = future;
+                              });
+                            },
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
         );
       },
       loading: () => const Center(child: CircularProgressIndicator()),

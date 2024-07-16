@@ -10,6 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
@@ -668,6 +669,11 @@ class _Engineline extends ConsumerWidget {
       );
     }
 
+    final pieceNotation = ref.watch(pieceNotationProvider).maybeWhen(
+          data: (value) => value,
+          orElse: () => defaultAccountPreferences.pieceNotation,
+        );
+
     final lineBuffer = StringBuffer();
     int ply = fromPosition.ply + 1;
     pvData.sanMoves(fromPosition).forEachIndexed((i, s) {
@@ -725,8 +731,10 @@ class _Engineline extends ConsumerWidget {
                   lineBuffer.toString(),
                   maxLines: 1,
                   softWrap: false,
-                  style: const TextStyle(
-                    fontFamily: 'ChessFont',
+                  style: TextStyle(
+                    fontFamily: pieceNotation == PieceNotation.symbol
+                        ? 'ChessFont'
+                        : null,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),

@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
@@ -369,7 +370,7 @@ class BoardSettingsOverrides {
 
 enum MoveListType { inline, stacked }
 
-class MoveList extends StatefulWidget {
+class MoveList extends ConsumerStatefulWidget {
   const MoveList({
     required this.type,
     required this.slicedMoves,
@@ -385,10 +386,10 @@ class MoveList extends StatefulWidget {
   final void Function(int moveIndex)? onSelectMove;
 
   @override
-  State<MoveList> createState() => _MoveListState();
+  ConsumerState<MoveList> createState() => _MoveListState();
 }
 
-class _MoveListState extends State<MoveList> {
+class _MoveListState extends ConsumerState<MoveList> {
   final currentMoveKey = GlobalKey();
   final _debounce = Debouncer(const Duration(milliseconds: 100));
 
@@ -428,6 +429,11 @@ class _MoveListState extends State<MoveList> {
 
   @override
   Widget build(BuildContext context) {
+    final pieceNotation = ref.watch(pieceNotationProvider).maybeWhen(
+          data: (value) => value,
+          orElse: () => defaultAccountPreferences.pieceNotation,
+        );
+
     return widget.type == MoveListType.inline
         ? Container(
             padding: const EdgeInsets.only(left: 5),
@@ -451,6 +457,7 @@ class _MoveListState extends State<MoveList> {
                                 return InlineMoveItem(
                                   key: isCurrentMove ? currentMoveKey : null,
                                   move: move,
+                                  pieceNotation: pieceNotation,
                                   current: isCurrentMove,
                                   onSelectMove: widget.onSelectMove,
                                 );
@@ -534,12 +541,14 @@ class InlineMoveCount extends StatelessWidget {
 class InlineMoveItem extends StatelessWidget {
   const InlineMoveItem({
     required this.move,
+    required this.pieceNotation,
     this.current,
     this.onSelectMove,
     super.key,
   });
 
   final MapEntry<int, String> move;
+  final PieceNotation pieceNotation;
   final bool? current;
   final void Function(int moveIndex)? onSelectMove;
 
@@ -566,6 +575,8 @@ class InlineMoveItem extends StatelessWidget {
         child: Text(
           move.value,
           style: TextStyle(
+            fontFamily:
+                pieceNotation == PieceNotation.symbol ? 'ChessFont' : null,
             fontWeight: FontWeight.w600,
             color:
                 current != true ? textShade(context, _moveListOpacity) : null,

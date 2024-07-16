@@ -46,6 +46,7 @@ void main() {
     "insightShare": 1,
     "keyboardMove": 0,
     "zen": 0,
+    "pieceNotation": 0,
     "ratings": 1,
     "moveEvent": 2,
     "rookCastle": 1
