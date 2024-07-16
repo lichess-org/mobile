@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:chessground/chessground.dart' hide BoardTheme;
+import 'package:chessground/chessground.dart';
 import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/db/shared_preferences.dart';
