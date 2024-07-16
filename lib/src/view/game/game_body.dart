@@ -287,6 +287,7 @@ class GameBody extends ConsumerWidget {
                       onSelectMove: (moveIndex) {
                         ref.read(ctrlProvider.notifier).cursorAt(moveIndex);
                       },
+                      zenMode: gameState.isZenModeActive,
                     ),
                   ),
                 ),

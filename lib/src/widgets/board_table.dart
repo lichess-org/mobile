@@ -44,6 +44,7 @@ class BoardTable extends ConsumerStatefulWidget {
     this.showMoveListPlaceholder = false,
     this.showEngineGaugePlaceholder = false,
     this.boardKey,
+    this.zenMode = false,
     super.key,
   }) : assert(
           moves == null || currentMoveIndex != null,
@@ -91,6 +92,9 @@ class BoardTable extends ConsumerStatefulWidget {
 
   /// Whether to show the engine gauge placeholder.
   final bool showEngineGaugePlaceholder;
+
+  /// If true, the move list will be hidden
+  final bool zenMode;
 
   @override
   ConsumerState<BoardTable> createState() => _BoardTableState();
@@ -243,7 +247,7 @@ class _BoardTableState extends ConsumerState<BoardTable> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           Flexible(child: widget.topTable),
-                          if (slicedMoves != null)
+                          if (!widget.zenMode && slicedMoves != null)
                             Expanded(
                               child: Padding(
                                 padding: const EdgeInsets.all(16.0),
@@ -275,7 +279,8 @@ class _BoardTableState extends ConsumerState<BoardTable> {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  if (slicedMoves != null &&
+                  if (!widget.zenMode &&
+                      slicedMoves != null &&
                       verticalSpaceLeftBoardOnPortrait >= 130)
                     MoveList(
                       type: MoveListType.inline,
