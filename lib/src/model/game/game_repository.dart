@@ -104,4 +104,19 @@ class GameRepository {
       mapper: LightArchivedGame.fromServerJson,
     );
   }
+
+  Future<void> bookmark(GameId id, {int v = -1}) async {
+    // if v is -1, toggle the bookmark value on server
+    // otherwise explicitly set the new value
+    final uri = v == -1
+        ? Uri(path: '/bookmark/$id')
+        : Uri(path: '/bookmark/$id', queryParameters: {'v': v.toString()});
+    final response = await client.post(uri);
+    if (response.statusCode >= 400) {
+      throw http.ClientException(
+        'Failed to bookmark game: ${response.statusCode}',
+        uri,
+      );
+    }
+  }
 }

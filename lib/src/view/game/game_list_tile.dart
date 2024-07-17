@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
+import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
@@ -247,6 +248,16 @@ class _ContextMenu extends ConsumerWidget {
                 icon: CupertinoIcons.link,
                 closeOnPressed: false,
                 child: Text(context.l10n.mobileShareGameURL),
+              ),
+              BottomSheetContextMenuAction(
+                onPressed: () {
+                  ref.withClient(
+                    (client) => GameRepository(client).bookmark(game.id, v: 1),
+                  );
+                },
+                icon: CupertinoIcons.star,
+                closeOnPressed: false,
+                child: const Text('Bookmark Game'),
               ),
               // Builder is used to retrieve the context immediately surrounding the
               // BottomSheetContextMenuAction
