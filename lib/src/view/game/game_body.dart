@@ -135,7 +135,6 @@ class GameBody extends ConsumerWidget {
           timeToMove: gameState.game.sideToMove == Side.black
               ? gameState.timeToMove
               : null,
-          shouldLinkToUserProfile: youAre != Side.black,
           mePlaying: youAre == Side.black,
           zenMode: gameState.isZenModeActive,
           confirmMoveCallbacks:
@@ -176,7 +175,6 @@ class GameBody extends ConsumerWidget {
           timeToMove: gameState.game.sideToMove == Side.white
               ? gameState.timeToMove
               : null,
-          shouldLinkToUserProfile: youAre != Side.white,
           mePlaying: youAre == Side.white,
           zenMode: gameState.isZenModeActive,
           confirmMoveCallbacks:
