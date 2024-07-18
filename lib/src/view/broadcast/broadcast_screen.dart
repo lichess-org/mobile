@@ -1,5 +1,4 @@
 import 'package:chessground/chessground.dart';
-import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart' as dartchess;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
@@ -85,8 +84,6 @@ class _Body extends ConsumerWidget {
   }
 }
 
-const _kGridPadding = 10.0;
-
 class BroadcastPreview extends StatelessWidget {
   final IList<BroadcastGameSnapshot>? games;
 
@@ -94,11 +91,22 @@ class BroadcastPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const numberLoadingBoardRows = 6;
+    const numberLoadingBoards = 12;
+    const textHeight = 19.0;
+    const headerAndFooterPadding = EdgeInsets.symmetric(vertical: 5);
+    const boardSpacing = 10.0;
+    final headerAndFooterHeight = textHeight + headerAndFooterPadding.vertical;
+    final numberOfBoardsByRow = isTabletOrLarger(context) ? 4 : 2;
+    final screenWidth = MediaQuery.sizeOf(context).width;
+    final boardWidth = (screenWidth -
+            Styles.bodyPadding.horizontal -
+            (numberOfBoardsByRow - 1) * boardSpacing) /
+        numberOfBoardsByRow;
     final fakeHeaderAndFooter = Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5),
+      padding: headerAndFooterPadding,
       child: Container(
-        height: 24,
+        width: boardWidth,
+        height: textHeight,
         decoration: BoxDecoration(
           color: Colors.black,
           borderRadius: BorderRadius.circular(5),
@@ -106,83 +114,51 @@ class BroadcastPreview extends StatelessWidget {
       ),
     );
 
-    final crossAxisCount =
-        MediaQuery.sizeOf(context).width > FormFactor.tablet ? 4 : 2;
-    final columnsGap = _kGridPadding * crossAxisCount + _kGridPadding;
-    final boardWidth =
-        (MediaQuery.sizeOf(context).width - columnsGap) / crossAxisCount;
-
-    final List<Iterable<BroadcastGameSnapshot>> list = [];
-    if (games != null) {
-      list.addAll(games!.slices(crossAxisCount));
-    }
-
     return SafeArea(
-      child: ListView.builder(
-        itemCount: list.isEmpty ? numberLoadingBoardRows : list.length,
-        itemBuilder: (context, index) {
-          final itemPadding = EdgeInsets.only(
-            left: _kGridPadding,
-            top: _kGridPadding / 2,
-            bottom: index == list.length - 1 ? _kGridPadding : 0,
-          );
+      child: Padding(
+        padding: Styles.bodyPadding,
+        child: GridView.builder(
+          itemCount: games == null ? numberLoadingBoards : games!.length,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: numberOfBoardsByRow,
+            crossAxisSpacing: boardSpacing,
+            mainAxisSpacing: boardSpacing,
+            mainAxisExtent: boardWidth + 2 * headerAndFooterHeight,
+          ),
+          itemBuilder: (context, index) {
+            if (games == null) {
+              return BoardThumbnail.loading(
+                size: boardWidth,
+                header: fakeHeaderAndFooter,
+                footer: fakeHeaderAndFooter,
+              );
+            }
 
-          if (games == null) {
-            return Padding(
-              padding: const EdgeInsets.only(right: _kGridPadding),
-              child: Row(
-                children: List.generate(crossAxisCount, (_) => null)
-                    .map(
-                      (_) => Padding(
-                        padding: itemPadding,
-                        child: BoardThumbnail.loading(
-                          size: boardWidth,
-                          header: fakeHeaderAndFooter,
-                          footer: fakeHeaderAndFooter,
-                        ),
-                      ),
-                    )
-                    .toList(growable: false),
+            final game = games![index];
+            final playingSide = dartchess.Setup.parseFen(game.fen).turn.cg;
+
+            return BoardThumbnail(
+              orientation: Side.white,
+              fen: game.fen,
+              lastMove: game.lastMove?.cg,
+              size: boardWidth,
+              header: _PlayerWidget(
+                width: boardWidth,
+                player: game.players[1],
+                gameStatus: game.status,
+                side: Side.black,
+                playingSide: playingSide,
+              ),
+              footer: _PlayerWidget(
+                width: boardWidth,
+                player: game.players[0],
+                gameStatus: game.status,
+                side: Side.white,
+                playingSide: playingSide,
               ),
             );
-          }
-
-          final entry = list[index];
-
-          return Padding(
-            padding: const EdgeInsets.only(right: _kGridPadding),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: entry.map((game) {
-                final playingSide = dartchess.Setup.parseFen(game.fen).turn.cg;
-
-                return Padding(
-                  padding: itemPadding,
-                  child: BoardThumbnail(
-                    orientation: Side.white,
-                    fen: game.fen,
-                    lastMove: game.lastMove?.cg,
-                    size: boardWidth,
-                    header: _PlayerWidget(
-                      width: boardWidth,
-                      player: game.players[1],
-                      gameStatus: game.status,
-                      side: Side.black,
-                      playingSide: playingSide,
-                    ),
-                    footer: _PlayerWidget(
-                      width: boardWidth,
-                      player: game.players[0],
-                      gameStatus: game.status,
-                      side: Side.white,
-                      playingSide: playingSide,
-                    ),
-                  ),
-                );
-              }).toList(growable: false),
-            ),
-          );
-        },
+          },
+        ),
       ),
     );
   }
