@@ -41,7 +41,7 @@ String pieceShiftMethodl10n(
       // This is called 'Either' in the Web UI, but in the app we might display this string
       // without having the other values as context, so we need to be more explicit.
       // TODO add this to mobile translations
-      PieceShiftMethod.either => 'Click or drag pieces',
+      PieceShiftMethod.either => 'Either click or drag',
       PieceShiftMethod.drag => context.l10n.preferencesDragPiece,
       // TODO This string uses 'click', we might want to use 'tap' instead in a mobile-specific translation
       PieceShiftMethod.tapTwoSquares => context.l10n.preferencesClickTwoSquares,

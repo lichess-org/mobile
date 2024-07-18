@@ -59,6 +59,7 @@ class _Body extends ConsumerWidget {
                 settingsLabel: Text(context.l10n.preferencesHowDoYouMovePieces),
                 settingsValue:
                     pieceShiftMethodl10n(context, boardPrefs.pieceShiftMethod),
+                showCupertinoTrailingValue: false,
                 onTap: () {
                   if (Theme.of(context).platform == TargetPlatform.android) {
                     showChoicePicker(
