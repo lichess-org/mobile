@@ -1,4 +1,4 @@
-import 'package:chessground/chessground.dart' hide BoardTheme;
+import 'package:chessground/chessground.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';

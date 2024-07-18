@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:chessground/chessground.dart' hide BoardTheme;
+import 'package:chessground/chessground.dart';
 import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/db/shared_preferences.dart';
@@ -31,6 +31,10 @@ class BoardPreferences extends _$BoardPreferences {
 
   Future<void> setBoardTheme(BoardTheme boardTheme) async {
     await _save(state.copyWith(boardTheme: boardTheme));
+  }
+
+  Future<void> setPieceShiftMethod(PieceShiftMethod pieceShiftMethod) async {
+    await _save(state.copyWith(pieceShiftMethod: pieceShiftMethod));
   }
 
   Future<void> toggleHapticFeedback() {
@@ -91,6 +95,7 @@ class BoardPrefs with _$BoardPrefs {
     required bool coordinates,
     required bool pieceAnimation,
     required bool showMaterialDifference,
+    required PieceShiftMethod pieceShiftMethod,
   }) = _BoardPrefs;
 
   static const defaults = BoardPrefs(
@@ -103,6 +108,7 @@ class BoardPrefs with _$BoardPrefs {
     coordinates: true,
     pieceAnimation: true,
     showMaterialDifference: true,
+    pieceShiftMethod: PieceShiftMethod.either,
   );
 
   factory BoardPrefs.fromJson(Map<String, dynamic> json) {

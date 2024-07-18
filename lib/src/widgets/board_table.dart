@@ -1,4 +1,4 @@
-import 'package:chessground/chessground.dart' hide BoardTheme;
+import 'package:chessground/chessground.dart';
 import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
@@ -162,6 +162,7 @@ class _BoardTableState extends ConsumerState<BoardTable> {
             onCompleteShape: _onCompleteShape,
             onClearShapes: _onClearShapes,
           ),
+          pieceShiftMethod: boardPrefs.pieceShiftMethod,
         );
 
         final settings = widget.boardSettingsOverrides != null
