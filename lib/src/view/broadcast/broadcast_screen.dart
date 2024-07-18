@@ -17,6 +17,12 @@ import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
+// height of 1.0 is important because we need to determine the height of the text
+// to calculate the height of the header and footer of the board
+const _kPlayerWidgetTextStyle = TextStyle(fontSize: 13, height: 1.0);
+
+const _kPlayerWidgetPadding = EdgeInsets.symmetric(vertical: 5.0);
+
 class BroadcastScreen extends StatelessWidget {
   final String broadCastTitle;
   final BroadcastRoundId roundId;
@@ -92,31 +98,22 @@ class BroadcastPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const numberLoadingBoards = 12;
-    const textHeight = 19.0;
-    const headerAndFooterPadding = EdgeInsets.symmetric(vertical: 5);
     const boardSpacing = 10.0;
-    final headerAndFooterHeight = textHeight + headerAndFooterPadding.vertical;
+    // height of the text based on the font size
+    // since the TextStyle is defined with an height at 1.0, this is the real height
+    // see: https://api.flutter.dev/flutter/painting/TextStyle/height.html
+    final textHeight = _kPlayerWidgetTextStyle.fontSize!;
+    final headerAndFooterHeight = textHeight + _kPlayerWidgetPadding.vertical;
     final numberOfBoardsByRow = isTabletOrLarger(context) ? 4 : 2;
     final screenWidth = MediaQuery.sizeOf(context).width;
     final boardWidth = (screenWidth -
-            Styles.bodyPadding.horizontal -
+            Styles.horizontalBodyPadding.horizontal -
             (numberOfBoardsByRow - 1) * boardSpacing) /
         numberOfBoardsByRow;
-    final fakeHeaderAndFooter = Padding(
-      padding: headerAndFooterPadding,
-      child: Container(
-        width: boardWidth,
-        height: textHeight,
-        decoration: BoxDecoration(
-          color: Colors.black,
-          borderRadius: BorderRadius.circular(5),
-        ),
-      ),
-    );
 
     return SafeArea(
       child: Padding(
-        padding: Styles.bodyPadding,
+        padding: Styles.horizontalBodyPadding,
         child: GridView.builder(
           itemCount: games == null ? numberLoadingBoards : games!.length,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -129,8 +126,8 @@ class BroadcastPreview extends StatelessWidget {
             if (games == null) {
               return BoardThumbnail.loading(
                 size: boardWidth,
-                header: fakeHeaderAndFooter,
-                footer: fakeHeaderAndFooter,
+                header: _PlayerWidget.loading(width: boardWidth),
+                footer: _PlayerWidget.loading(width: boardWidth),
               );
             }
 
@@ -165,28 +162,60 @@ class BroadcastPreview extends StatelessWidget {
 }
 
 class _PlayerWidget extends StatelessWidget {
-  final BroadcastPlayer player;
-  final String gameStatus;
-  final Side side;
-  final Side playingSide;
-  final double width;
-
   const _PlayerWidget({
     required this.width,
     required this.player,
     required this.gameStatus,
     required this.side,
     required this.playingSide,
-  });
+  }) : _displayShimmerPlaceholder = false;
+
+  const _PlayerWidget.loading({
+    required this.width,
+  })  : player = const BroadcastPlayer(
+          name: '',
+          title: null,
+          rating: null,
+          clock: null,
+          federation: null,
+        ),
+        gameStatus = '*',
+        side = Side.white,
+        playingSide = Side.white,
+        _displayShimmerPlaceholder = true;
+
+  final BroadcastPlayer player;
+  final String gameStatus;
+  final Side side;
+  final Side playingSide;
+  final double width;
+
+  final bool _displayShimmerPlaceholder;
 
   @override
   Widget build(BuildContext context) {
+    if (_displayShimmerPlaceholder) {
+      return SizedBox(
+        width: width,
+        child: Padding(
+          padding: _kPlayerWidgetPadding,
+          child: Container(
+            height: _kPlayerWidgetTextStyle.fontSize,
+            decoration: BoxDecoration(
+              color: Colors.black,
+              borderRadius: BorderRadius.circular(5),
+            ),
+          ),
+        ),
+      );
+    }
+
     return SizedBox(
       width: width,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 5),
+        padding: _kPlayerWidgetPadding,
         child: DefaultTextStyle.merge(
-          style: const TextStyle(fontSize: 13),
+          style: _kPlayerWidgetTextStyle,
           child: Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
