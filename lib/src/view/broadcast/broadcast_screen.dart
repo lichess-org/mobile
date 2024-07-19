@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart' as dartchess;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
@@ -272,20 +274,59 @@ class _PlayerWidget extends StatelessWidget {
                       const TextStyle().copyWith(fontWeight: FontWeight.bold),
                 )
               else if (player.clock != null)
-                Text(
-                  (player.clock! -
-                          ((side == playingSide && thinkTime != null)
-                              ? thinkTime!
-                              : Duration.zero))
-                      .toHoursMinutesSeconds(),
-                  style: side == playingSide
-                      ? const TextStyle().copyWith(color: Colors.orange[900])
-                      : null,
-                ),
+                if (side == playingSide)
+                  _Clock(
+                    clock: player.clock! - (thinkTime ?? Duration.zero),
+                  )
+                else
+                  Text(player.clock!.toHoursMinutesSeconds()),
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class _Clock extends StatefulWidget {
+  const _Clock({required this.clock});
+
+  final Duration clock;
+
+  @override
+  _ClockState createState() => _ClockState();
+}
+
+class _ClockState extends State<_Clock> {
+  late Timer _timer;
+  late Duration _clock;
+
+  @override
+  void initState() {
+    super.initState();
+    _clock = widget.clock;
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        _clock = _clock - const Duration(seconds: 1);
+      });
+      if (_clock.inSeconds == 0) {
+        timer.cancel();
+        return;
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      _clock.toHoursMinutesSeconds(),
+      style: const TextStyle().copyWith(color: Colors.orange[900]),
     );
   }
 }

@@ -69,6 +69,7 @@ class BroadcastController extends _$BroadcastController {
             ),
             fen: fen,
             lastMove: pick(event.data, 'n', 'uci').asUciMoveOrThrow(),
+            thinkTime: null,
           ),
         ),
       );
