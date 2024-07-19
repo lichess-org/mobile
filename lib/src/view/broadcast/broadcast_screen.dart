@@ -143,6 +143,7 @@ class BroadcastPreview extends StatelessWidget {
                 width: boardWidth,
                 player: game.players[dartchess.Side.black]!,
                 gameStatus: game.status,
+                thinkTime: game.thinkTime,
                 side: Side.black,
                 playingSide: playingSide,
               ),
@@ -150,6 +151,7 @@ class BroadcastPreview extends StatelessWidget {
                 width: boardWidth,
                 player: game.players[dartchess.Side.white]!,
                 gameStatus: game.status,
+                thinkTime: game.thinkTime,
                 side: Side.white,
                 playingSide: playingSide,
               ),
@@ -166,6 +168,7 @@ class _PlayerWidget extends StatelessWidget {
     required this.width,
     required this.player,
     required this.gameStatus,
+    required this.thinkTime,
     required this.side,
     required this.playingSide,
   }) : _displayShimmerPlaceholder = false;
@@ -180,12 +183,14 @@ class _PlayerWidget extends StatelessWidget {
           federation: null,
         ),
         gameStatus = '*',
+        thinkTime = null,
         side = Side.white,
         playingSide = Side.white,
         _displayShimmerPlaceholder = true;
 
   final BroadcastPlayer player;
   final String gameStatus;
+  final Duration? thinkTime;
   final Side side;
   final Side playingSide;
   final double width;
@@ -268,7 +273,11 @@ class _PlayerWidget extends StatelessWidget {
                 )
               else if (player.clock != null)
                 Text(
-                  player.clock!.toHoursMinutesSeconds(),
+                  (player.clock! -
+                          ((side == playingSide && thinkTime != null)
+                              ? thinkTime!
+                              : Duration.zero))
+                      .toHoursMinutesSeconds(),
                   style: side == playingSide
                       ? const TextStyle().copyWith(color: Colors.orange[900])
                       : null,

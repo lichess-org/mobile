@@ -57,6 +57,7 @@ class BroadcastGameSnapshot with _$BroadcastGameSnapshot {
     required String fen,
     required Move? lastMove,
     required String status,
+    required Duration? thinkTime,
   }) = _BroadcastGameSnapshot;
 }
 
