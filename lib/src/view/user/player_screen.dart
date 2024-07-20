@@ -42,23 +42,68 @@ class PlayerScreen extends ConsumerWidget {
   }
 
   Widget _androidBuilder(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(context.l10n.players),
-      ),
-      body: _Body(),
+    return const Scaffold(
+      body: _AndroidBody(),
     );
   }
 
   Widget _iosBuilder(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(),
-      child: _Body(),
+    // return CupertinoPageScaffold(
+    //   navigationBar: const CupertinoNavigationBar(),
+    //   child: _Body(),
+    // );
+    return const Placeholder();
+  }
+}
+
+class _AndroidBody extends StatefulWidget {
+  const _AndroidBody();
+
+  @override
+  State<_AndroidBody> createState() => _AndriodBodyState();
+}
+
+class _AndriodBodyState extends State<_AndroidBody>
+    with TickerProviderStateMixin {
+  late final TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(context.l10n.players),
+        bottom: TabBar(
+          controller: _tabController,
+          tabs: <Widget>[
+            Tab(text: context.l10n.friends),
+            Tab(text: context.l10n.preferencesNotifyChallenge),
+          ],
+        ),
+      ),
+      body: TabBarView(
+        controller: _tabController,
+        children: <Widget>[
+          _PlayersBody(),
+          _ChallengesBody(),
+        ],
+      ),
     );
   }
 }
 
-class _Body extends ConsumerWidget {
+class _PlayersBody extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final session = ref.watch(authSessionProvider);
@@ -75,6 +120,13 @@ class _Body extends ConsumerWidget {
         ],
       ),
     );
+  }
+}
+
+class _ChallengesBody extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return const Placeholder();
   }
 }
 
