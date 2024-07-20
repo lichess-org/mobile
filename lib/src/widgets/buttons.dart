@@ -193,6 +193,58 @@ class AppBarIconButton extends StatelessWidget {
   }
 }
 
+/// Platform agnostic icon button to appear in the app bar, that has a notification bubble.
+class AppBarNotificationIconButton extends StatelessWidget {
+  const AppBarNotificationIconButton({
+    required this.icon,
+    required this.onPressed,
+    required this.semanticsLabel,
+    required this.count,
+    this.color,
+    super.key,
+  });
+
+  final Widget icon;
+  final VoidCallback? onPressed;
+  final String semanticsLabel;
+  final Color? color;
+  final int count;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        AppBarIconButton(
+          icon: icon,
+          onPressed: onPressed,
+          semanticsLabel: semanticsLabel,
+        ),
+        if (count > 0)
+          Positioned(
+            top: 0,
+            right: 5,
+            child: Container(
+              padding: const EdgeInsets.fromLTRB(4, 1, 4, 1),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: color ?? Colors.red,
+              ),
+              child: Text(
+                count.toString(),
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          )
+        else
+          Container(),
+      ],
+    );
+  }
+}
+
 class AdaptiveTextButton extends StatelessWidget {
   const AdaptiveTextButton({
     required this.child,

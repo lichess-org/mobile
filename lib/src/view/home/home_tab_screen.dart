@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/settings/home_preferences.dart';
@@ -923,9 +924,11 @@ class _PlayerScreenButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final connectivity = ref.watch(connectivityChangesProvider);
+    final challenges = ref.watch(challengesListProvider);
+    final count = challenges.valueOrNull?.inward.length;
 
     return connectivity.maybeWhen(
-      data: (connectivity) => AppBarIconButton(
+      data: (connectivity) => AppBarNotificationIconButton(
         icon: const Icon(Icons.group),
         semanticsLabel: context.l10n.players,
         onPressed: !connectivity.isOnline
@@ -937,6 +940,7 @@ class _PlayerScreenButton extends ConsumerWidget {
                   builder: (_) => const PlayerScreen(),
                 );
               },
+        count: count ?? 0,
       ),
       orElse: () => AppBarIconButton(
         icon: const Icon(Icons.group),
