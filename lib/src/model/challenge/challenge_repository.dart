@@ -1,9 +1,37 @@
+import 'dart:async';
+
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/socket.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'challenge_repository.g.dart';
+
+@Riverpod(keepAlive: true)
+ChallengeRepository challengeRepository(ChallengeRepositoryRef ref) {
+  final repo = ChallengeRepository(ref.read(lichessClientProvider));
+  final socketClient =
+      ref.read(socketPoolProvider).open(Uri(path: '/lobby/socket/v5'));
+  socketClient.stream.listen(
+    (event) {
+      if (event.topic != 'challenges') return;
+      ref.invalidate(challengesListProvider);
+    },
+  );
+  return repo;
+}
+
+@riverpod
+Future<ChallengesList> challengesList(
+  ChallengesListRef ref,
+) {
+  final repo = ref.read(challengeRepositoryProvider);
+  return repo.list();
+}
 
 typedef ChallengesList = ({
   IList<Challenge> inward,
