@@ -2,10 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
+import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
@@ -137,39 +141,69 @@ class _BodyState extends ConsumerState<_Body> {
       ),
     );
 
+    final gameFilterState = ref.watch(gameFilterProvider);
+    final perfFilterLabel = gameFilterState.perf?.title ??
+        '${context.l10n.timeControl} / ${context.l10n.variant}';
+
     return gameListState.when(
       data: (state) {
         final list = state.gameList;
 
         return SafeArea(
-          child: ListView.builder(
-            controller: _scrollController,
-            itemCount: list.length + (state.isLoading ? 1 : 0),
-            itemBuilder: (context, index) {
-              if (state.isLoading && index == list.length) {
-                return const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 32.0),
-                  child: CenterLoadingIndicator(),
-                );
-              } else if (state.hasError &&
-                  state.hasMore &&
-                  index == list.length) {
-                // TODO: add a retry button
-                return const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 32.0),
-                  child: Center(
-                    child: Text(
-                      'Could not load more games',
+          child: Column(
+            children: [
+              Container(
+                padding: Styles.bodyPadding,
+                child: Row(
+                  children: [
+                    FatButton(
+                      semanticsLabel: perfFilterLabel,
+                      onPressed: () => showChoicePicker(
+                        context,
+                        choices: Perf.values,
+                        selectedItem: gameFilterState.perf,
+                        labelBuilder: (t) => Text(t!.title),
+                        onSelectedItemChanged: (Perf? value) => ref
+                            .read(gameFilterProvider.notifier)
+                            .setPerf(value),
+                      ),
+                      child: Text(perfFilterLabel),
                     ),
-                  ),
-                );
-              }
+                  ],
+                ),
+              ),
+              Expanded(
+                child: ListView.builder(
+                  controller: _scrollController,
+                  itemCount: list.length + (state.isLoading ? 1 : 0),
+                  itemBuilder: (context, index) {
+                    if (state.isLoading && index == list.length) {
+                      return const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 32.0),
+                        child: CenterLoadingIndicator(),
+                      );
+                    } else if (state.hasError &&
+                        state.hasMore &&
+                        index == list.length) {
+                      // TODO: add a retry button
+                      return const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 32.0),
+                        child: Center(
+                          child: Text(
+                            'Could not load more games',
+                          ),
+                        ),
+                      );
+                    }
 
-              return ExtendedGameListTile(
-                item: list[index],
-                userId: widget.user?.id,
-              );
-            },
+                    return ExtendedGameListTile(
+                      item: list[index],
+                      userId: widget.user?.id,
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
         );
       },

@@ -7,11 +7,12 @@ part 'game_filter.g.dart';
 
 @riverpod
 class GameFilter extends _$GameFilter {
-
   @override
   GameFilterState build() {
     return const GameFilterState();
   }
+
+  void setPerf(Perf? perf) => state = state.copyWith(perf: perf);
 }
 
 @freezed
