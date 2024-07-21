@@ -156,41 +156,20 @@ class _BodyState extends ConsumerState<_Body> {
                 padding: Styles.bodyPadding,
                 child: Row(
                   children: [
-                    FatButton(
-                      semanticsLabel: perfFilterLabel,
-                      onPressed: () => showMultipleChoicesPicker(
-                        context,
-                        choices: Perf.values,
-                        selectedItems: gameFilterState.perfs,
-                        labelBuilder: (t) => Text(t.title),
-                      ).then(
-                        (value) => value != null
-                            ? ref
-                                .read(
-                                  gameFilterProvider(
-                                    perfs: widget.gameFilters.perfs,
-                                  ).notifier,
-                                )
-                                .setPerfs(value)
-                            : null,
-                      ),
-                      child: Row(
-                        children: [
-                          if (gameFilterState.perfs.length > 1)
-                            Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle,
-                              ),
-                              child: Text(
-                                '${gameFilterState.perfs.length}',
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          Text(' $perfFilterLabel'),
-                        ],
-                      ),
+                    _MultipleChoiceFilter(
+                      filterLabel: perfFilterLabel,
+                      choices: Perf.values,
+                      selectedItems: gameFilterState.perfs,
+                      choiceLabelBuilder: (t) => Text(t.title),
+                      onChanged: (value) => value != null
+                          ? ref
+                              .read(
+                                gameFilterProvider(
+                                  perfs: widget.gameFilters.perfs,
+                                ).notifier,
+                              )
+                              .setPerfs(value)
+                          : null,
                     ),
                   ],
                 ),
@@ -237,6 +216,52 @@ class _BodyState extends ConsumerState<_Body> {
         return const Center(child: Text('Could not load Game History'));
       },
       loading: () => const CenterLoadingIndicator(),
+    );
+  }
+}
+
+class _MultipleChoiceFilter<T extends Enum> extends StatelessWidget {
+  const _MultipleChoiceFilter({
+    required this.filterLabel,
+    required this.choices,
+    required this.selectedItems,
+    required this.choiceLabelBuilder,
+    required this.onChanged,
+  });
+
+  final String filterLabel;
+  final Iterable<T> choices;
+  final Set<T> selectedItems;
+  final Widget Function(T choice) choiceLabelBuilder;
+  final void Function(Set<T>? value) onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return FatButton(
+      semanticsLabel: filterLabel,
+      onPressed: () => showMultipleChoicesPicker<T>(
+        context,
+        choices: choices,
+        selectedItems: selectedItems,
+        labelBuilder: choiceLabelBuilder,
+      ).then(onChanged),
+      child: Row(
+        children: [
+          if (selectedItems.length > 1)
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+              ),
+              child: Text(
+                '${selectedItems.length}',
+                textAlign: TextAlign.center,
+              ),
+            ),
+          Text(' $filterLabel'),
+        ],
+      ),
     );
   }
 }
