@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
+import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
@@ -34,7 +35,7 @@ const _nbPerPage = 20;
 @riverpod
 Future<IList<LightArchivedGameWithPov>> myRecentGames(
   MyRecentGamesRef ref, {
-  Perf? perf,
+  GameFilterState filters = const GameFilterState(),
 }) async {
   final online = await ref
       .watch(connectivityChangesProvider.selectAsync((c) => c.isOnline));
@@ -44,7 +45,7 @@ Future<IList<LightArchivedGameWithPov>> myRecentGames(
       (client) => GameRepository(client).getUserGames(
         session.user.id,
         max: kNumberOfRecentGames,
-        perfType: perf,
+        perfType: filters.perf,
       ),
       const Duration(hours: 1),
     );
@@ -68,10 +69,11 @@ Future<IList<LightArchivedGameWithPov>> myRecentGames(
 Future<IList<LightArchivedGameWithPov>> userRecentGames(
   UserRecentGamesRef ref, {
   required UserId userId,
-  Perf? perf,
+  GameFilterState filters = const GameFilterState(),
 }) {
   return ref.withClientCacheFor(
-    (client) => GameRepository(client).getUserGames(userId, perfType: perf),
+    (client) =>
+        GameRepository(client).getUserGames(userId, perfType: filters.perf),
     // cache is important because the associated widget is in a [ListView] and
     // the provider may be instanciated multiple times in a short period of time
     // (e.g. when scrolling)
@@ -120,7 +122,7 @@ class UserGameHistory extends _$UserGameHistory {
     /// server. If this is false, the provider will fetch the games from the
     /// local storage.
     required bool isOnline,
-    Perf? perf,
+    GameFilterState filters = const GameFilterState(),
   }) async {
     ref.cacheFor(const Duration(minutes: 5));
     ref.onDispose(() {
@@ -133,10 +135,10 @@ class UserGameHistory extends _$UserGameHistory {
         ? ref.read(
             userRecentGamesProvider(
               userId: userId,
-              perf: perf,
+              filters: filters,
             ).future,
           )
-        : ref.read(myRecentGamesProvider(perf: perf).future);
+        : ref.read(myRecentGamesProvider(filters: filters).future);
 
     _list.addAll(await recentGames);
 
@@ -146,7 +148,7 @@ class UserGameHistory extends _$UserGameHistory {
       hasMore: true,
       hasError: false,
       online: isOnline,
-      perfType: perf,
+      filters: filters,
       session: session,
     );
   }
@@ -164,7 +166,7 @@ class UserGameHistory extends _$UserGameHistory {
                 userId!,
                 max: _nbPerPage,
                 until: _list.last.game.createdAt,
-                perfType: currentVal.perfType,
+                perfType: currentVal.filters.perf,
               ),
             )
           : currentVal.online && currentVal.session != null
@@ -173,7 +175,7 @@ class UserGameHistory extends _$UserGameHistory {
                     currentVal.session!.user.id,
                     max: _nbPerPage,
                     until: _list.last.game.createdAt,
-                    perfType: currentVal.perfType,
+                    perfType: currentVal.filters.perf,
                   ),
                 )
               : ref
@@ -223,7 +225,7 @@ class UserGameHistoryState with _$UserGameHistoryState {
   const factory UserGameHistoryState({
     required IList<LightArchivedGameWithPov> gameList,
     required bool isLoading,
-    Perf? perfType,
+    required GameFilterState filters,
     required bool hasMore,
     required bool hasError,
     required bool online,

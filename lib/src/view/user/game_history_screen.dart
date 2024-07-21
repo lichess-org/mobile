@@ -17,13 +17,13 @@ class GameHistoryScreen extends ConsumerWidget {
   const GameHistoryScreen({
     required this.user,
     required this.isOnline,
-    this.perf,
+    this.gameFilters = const GameFilterState(),
     this.games,
     super.key,
   });
   final LightUser? user;
   final bool isOnline;
-  final Perf? perf;
+  final GameFilterState gameFilters;
   final int? games;
 
   @override
@@ -47,7 +47,7 @@ class GameHistoryScreen extends ConsumerWidget {
           error: (e, s) => Text(context.l10n.mobileAllGames),
         ),
       ),
-      child: _Body(user: user, isOnline: isOnline, perf: perf),
+      child: _Body(user: user, isOnline: isOnline, gameFilters: gameFilters),
     );
   }
 
@@ -63,7 +63,7 @@ class GameHistoryScreen extends ConsumerWidget {
           error: (e, s) => Text(context.l10n.mobileAllGames),
         ),
       ),
-      body: _Body(user: user, isOnline: isOnline, perf: perf),
+      body: _Body(user: user, isOnline: isOnline, gameFilters: gameFilters),
     );
   }
 }
@@ -72,12 +72,12 @@ class _Body extends ConsumerStatefulWidget {
   const _Body({
     required this.user,
     required this.isOnline,
-    required this.perf,
+    required this.gameFilters,
   });
 
   final LightUser? user;
   final bool isOnline;
-  final Perf? perf;
+  final GameFilterState gameFilters;
 
   @override
   ConsumerState<_Body> createState() => _BodyState();
@@ -131,12 +131,13 @@ class _BodyState extends ConsumerState<_Body> {
 
   @override
   Widget build(BuildContext context) {
-    final gameFilterState = ref.watch(gameFilterProvider(perf: widget.perf));
+    final gameFilterState =
+        ref.watch(gameFilterProvider(perf: widget.gameFilters.perf));
     final gameListState = ref.watch(
       userGameHistoryProvider(
         widget.user?.id,
         isOnline: widget.isOnline,
-        perf: gameFilterState.perf,
+        filters: gameFilterState,
       ),
     );
 
@@ -162,7 +163,11 @@ class _BodyState extends ConsumerState<_Body> {
                         selectedItem: gameFilterState.perf,
                         labelBuilder: (t) => Text(t!.title),
                         onSelectedItemChanged: (Perf? value) => ref
-                            .read(gameFilterProvider().notifier)
+                            .read(
+                              gameFilterProvider(
+                                perf: widget.gameFilters.perf,
+                              ).notifier,
+                            )
                             .setPerf(value),
                       ),
                       child: Text(perfFilterLabel),
