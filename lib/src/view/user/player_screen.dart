@@ -20,6 +20,8 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
+enum _ViewMode { players, challenges }
+
 class PlayerScreen extends ConsumerWidget {
   const PlayerScreen({super.key});
 
@@ -48,11 +50,10 @@ class PlayerScreen extends ConsumerWidget {
   }
 
   Widget _iosBuilder(BuildContext context) {
-    // return CupertinoPageScaffold(
-    //   navigationBar: const CupertinoNavigationBar(),
-    //   child: _Body(),
-    // );
-    return const Placeholder();
+    return const CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(),
+      child: _CupertinoBody(),
+    );
   }
 }
 
@@ -97,6 +98,52 @@ class _AndriodBodyState extends State<_AndroidBody>
         children: <Widget>[
           _PlayersBody(),
           _ChallengesBody(),
+        ],
+      ),
+    );
+  }
+}
+
+class _CupertinoBody extends StatefulWidget {
+  const _CupertinoBody();
+
+  @override
+  _CupertinoBodyState createState() => _CupertinoBodyState();
+}
+
+class _CupertinoBodyState extends State<_CupertinoBody> {
+  _ViewMode _selectedSegment = _ViewMode.players;
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: Styles.bodyPadding,
+            child: CupertinoSlidingSegmentedControl<_ViewMode>(
+              groupValue: _selectedSegment,
+              children: {
+                _ViewMode.players: Text(context.l10n.players),
+                _ViewMode.challenges:
+                    Text(context.l10n.preferencesNotifyChallenge),
+              },
+              onValueChanged: (_ViewMode? view) {
+                if (view != null) {
+                  setState(() {
+                    _selectedSegment = view;
+                  });
+                }
+              },
+            ),
+          ),
+          Expanded(
+            child: _selectedSegment == _ViewMode.players
+                ? _PlayersBody()
+                : _ChallengesBody(),
+          ),
         ],
       ),
     );
