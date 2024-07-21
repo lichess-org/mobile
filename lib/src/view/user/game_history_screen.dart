@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
@@ -165,9 +166,20 @@ class _BodyState extends ConsumerState<_Body> {
                 );
               }
 
-              return ExtendedGameListTile(
-                item: list[index],
-                userId: widget.user?.id,
+              return Slidable(
+                endActionPane: const ActionPane(
+                  motion: ScrollMotion(),
+                  children: [
+                    SlidableAction(
+                      onPressed: null,
+                      icon: Icons.bookmark_add_outlined,
+                      label: 'Bookmark',
+                    ),
+                  ],
+                ),
+                child: ExtendedGameListTile(
+                  item: list[index],
+                ),
               );
             },
           ),

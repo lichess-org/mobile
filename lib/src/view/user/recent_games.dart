@@ -67,7 +67,7 @@ class RecentGamesWidget extends ConsumerWidget {
                 )
               : null,
           children: data.map((item) {
-            return ExtendedGameListTile(item: item, userId: userId);
+            return ExtendedGameListTile(item: item);
           }).toList(),
         );
       },

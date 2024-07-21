@@ -425,10 +425,9 @@ class _ContextMenu extends ConsumerWidget {
 
 /// A list tile that shows extended game info including an accuracy meter and a result icon.
 class ExtendedGameListTile extends StatelessWidget {
-  const ExtendedGameListTile({required this.item, this.userId});
+  const ExtendedGameListTile({required this.item});
 
   final LightArchivedGameWithPov item;
-  final UserId? userId;
 
   @override
   Widget build(BuildContext context) {
