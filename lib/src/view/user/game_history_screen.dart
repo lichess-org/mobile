@@ -141,11 +141,9 @@ class _BodyState extends ConsumerState<_Body> {
       ),
     );
 
-    final perfFilterLabel = gameFilterState.perfs.isEmpty
-        ? '${context.l10n.timeControl} / ${context.l10n.variant}'
-        : gameFilterState.perfs.length == 1
-            ? gameFilterState.perfs.first.title
-            : '${gameFilterState.perfs.length}';
+    final perfFilterLabel = gameFilterState.perfs.length == 1
+        ? gameFilterState.perfs.first.title
+        : '${context.l10n.timeControl} / ${context.l10n.variant}';
 
     return gameListState.when(
       data: (state) {
@@ -176,7 +174,23 @@ class _BodyState extends ConsumerState<_Body> {
                                 .setPerfs(value)
                             : null,
                       ),
-                      child: Text(perfFilterLabel),
+                      child: Row(
+                        children: [
+                          if (gameFilterState.perfs.length > 1)
+                            Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Text(
+                                '${gameFilterState.perfs.length}',
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          Text(' $perfFilterLabel'),
+                        ],
+                      ),
                     ),
                   ],
                 ),
