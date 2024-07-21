@@ -51,6 +51,9 @@ class ArchivedGameScreen extends ConsumerWidget {
       appBar: AppBar(
         title: _GameTitle(gameData: gameData),
         actions: [
+          BookmarkButton(
+            id: gameData.id,
+          ),
           ToggleSoundButton(),
         ],
       ),
@@ -71,7 +74,15 @@ class ArchivedGameScreen extends ConsumerWidget {
         border: null,
         middle: _GameTitle(gameData: gameData),
         padding: const EdgeInsetsDirectional.only(end: 16.0),
-        trailing: ToggleSoundButton(),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            BookmarkButton(
+              id: gameData.id,
+            ),
+            ToggleSoundButton(),
+          ],
+        ),
       ),
       child: SafeArea(
         bottom: false,

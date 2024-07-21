@@ -254,7 +254,7 @@ class _ContextMenu extends ConsumerWidget {
                     (client) => GameRepository(client).bookmark(game.id, v: 1),
                   );
                 },
-                icon: CupertinoIcons.star,
+                icon: Icons.star_border_rounded,
                 closeOnPressed: false,
                 child: const Text('Bookmark Game'),
               ),

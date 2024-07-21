@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
+import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -20,6 +21,42 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'game_screen_providers.dart';
 import 'game_settings.dart';
 import 'ping_rating.dart';
+
+class BookmarkButton extends ConsumerWidget {
+  const BookmarkButton({required this.id});
+  final GameId id;
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return AppBarIconButton(
+      onPressed: () {
+        ref.withClient(
+          (client) => GameRepository(client).bookmark(id.gameId, v: 1),
+        );
+      },
+      semanticsLabel: 'Bookmark Game',
+      icon: const Icon(Icons.star_border_rounded),
+    );
+  }
+}
+
+class _SettingButton extends ConsumerWidget {
+  const _SettingButton({required this.id});
+  final GameFullId id;
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return AppBarIconButton(
+      onPressed: () => showAdaptiveBottomSheet<void>(
+        context: context,
+        isDismissible: true,
+        isScrollControlled: true,
+        showDragHandle: true,
+        builder: (_) => GameSettings(id: id),
+      ),
+      semanticsLabel: context.l10n.settingsSettings,
+      icon: const Icon(Icons.settings),
+    );
+  }
+}
 
 class GameAppBar extends ConsumerWidget implements PreferredSizeWidget {
   const GameAppBar({this.id, this.seek, this.challenge, super.key});
@@ -52,18 +89,14 @@ class GameAppBar extends ConsumerWidget implements PreferredSizeWidget {
                   ? _ChallengeGameTitle(challenge: challenge!)
                   : const SizedBox.shrink(),
       actions: [
-        if (id != null)
-          AppBarIconButton(
-            onPressed: () => showAdaptiveBottomSheet<void>(
-              context: context,
-              isDismissible: true,
-              isScrollControlled: true,
-              showDragHandle: true,
-              builder: (_) => GameSettings(id: id!),
-            ),
-            semanticsLabel: context.l10n.settingsSettings,
-            icon: const Icon(Icons.settings),
+        if (id != null) ...[
+          BookmarkButton(
+            id: id!.gameId,
           ),
+          _SettingButton(
+            id: id!,
+          ),
+        ],
       ],
     );
   }
@@ -106,19 +139,19 @@ class GameCupertinoNavBar extends ConsumerWidget
               : challenge != null
                   ? _ChallengeGameTitle(challenge: challenge!)
                   : const SizedBox.shrink(),
-      trailing: id != null
-          ? AppBarIconButton(
-              onPressed: () => showAdaptiveBottomSheet<void>(
-                context: context,
-                isDismissible: true,
-                isScrollControlled: true,
-                showDragHandle: true,
-                builder: (_) => GameSettings(id: id!),
-              ),
-              semanticsLabel: context.l10n.settingsSettings,
-              icon: const Icon(Icons.settings),
-            )
-          : null,
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (id != null) ...[
+            BookmarkButton(
+              id: id!.gameId,
+            ),
+            _SettingButton(
+              id: id!,
+            ),
+          ],
+        ],
+      ),
     );
   }
 
