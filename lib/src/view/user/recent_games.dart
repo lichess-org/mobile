@@ -25,8 +25,6 @@ class RecentGamesWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final connectivity = ref.watch(connectivityChangesProvider);
-    final session = ref.watch(authSessionProvider);
-    final userId = user?.id ?? session?.user.id;
 
     final recentGames = user != null
         ? ref.watch(userRecentGamesProvider(userId: user!.id))
