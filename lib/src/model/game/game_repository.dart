@@ -40,12 +40,12 @@ class GameRepository {
     UserId userId, {
     int max = 20,
     DateTime? until,
-    Perf? perfType,
+    Set<Perf> perfs = const {},
   }) {
-    assert(
-      ![Perf.fromPosition, Perf.puzzle, Perf.storm, Perf.streak]
-          .contains(perfType),
-    );
+    assert(!perfs.contains(Perf.fromPosition));
+    assert(!perfs.contains(Perf.puzzle));
+    assert(!perfs.contains(Perf.storm));
+    assert(!perfs.contains(Perf.streak));
     return client
         .readNdJsonList(
           Uri(
@@ -54,7 +54,8 @@ class GameRepository {
               'max': max.toString(),
               if (until != null)
                 'until': until.millisecondsSinceEpoch.toString(),
-              if (perfType != null) 'perfType': perfType.name,
+              if (perfs.isNotEmpty)
+                'perfType': perfs.map((perf) => perf.name).join(','),
               'moves': 'false',
               'lastFen': 'true',
               'accuracy': 'true',

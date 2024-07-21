@@ -132,7 +132,7 @@ class _BodyState extends ConsumerState<_Body> {
   @override
   Widget build(BuildContext context) {
     final gameFilterState =
-        ref.watch(gameFilterProvider(perf: widget.gameFilters.perf));
+        ref.watch(gameFilterProvider(perfs: widget.gameFilters.perfs));
     final gameListState = ref.watch(
       userGameHistoryProvider(
         widget.user?.id,
@@ -141,8 +141,11 @@ class _BodyState extends ConsumerState<_Body> {
       ),
     );
 
-    final perfFilterLabel = gameFilterState.perf?.title ??
-        '${context.l10n.timeControl} / ${context.l10n.variant}';
+    final perfFilterLabel = gameFilterState.perfs.isEmpty
+        ? '${context.l10n.timeControl} / ${context.l10n.variant}'
+        : gameFilterState.perfs.length == 1
+            ? gameFilterState.perfs.first.title
+            : '${gameFilterState.perfs.length}';
 
     return gameListState.when(
       data: (state) {
@@ -157,18 +160,21 @@ class _BodyState extends ConsumerState<_Body> {
                   children: [
                     FatButton(
                       semanticsLabel: perfFilterLabel,
-                      onPressed: () => showChoicePicker(
+                      onPressed: () => showMultipleChoicesPicker(
                         context,
                         choices: Perf.values,
-                        selectedItem: gameFilterState.perf,
-                        labelBuilder: (t) => Text(t!.title),
-                        onSelectedItemChanged: (Perf? value) => ref
-                            .read(
-                              gameFilterProvider(
-                                perf: widget.gameFilters.perf,
-                              ).notifier,
-                            )
-                            .setPerf(value),
+                        selectedItems: gameFilterState.perfs,
+                        labelBuilder: (t) => Text(t.title),
+                      ).then(
+                        (value) => value != null
+                            ? ref
+                                .read(
+                                  gameFilterProvider(
+                                    perfs: widget.gameFilters.perfs,
+                                  ).notifier,
+                                )
+                                .setPerfs(value)
+                            : null,
                       ),
                       child: Text(perfFilterLabel),
                     ),

@@ -8,16 +8,16 @@ part 'game_filter.g.dart';
 @riverpod
 class GameFilter extends _$GameFilter {
   @override
-  GameFilterState build({Perf? perf}) {
-    return GameFilterState(perf: perf);
+  GameFilterState build({Set<Perf>? perfs}) {
+    return GameFilterState(perfs: perfs ?? {});
   }
 
-  void setPerf(Perf? perf) => state = state.copyWith(perf: perf);
+  void setPerfs(Set<Perf>? perfs) => state = state.copyWith(perfs: perfs ?? {});
 }
 
 @freezed
 class GameFilterState with _$GameFilterState {
   const factory GameFilterState({
-    Perf? perf,
+    @Default(<Perf>{}) Set<Perf> perfs,
   }) = _GameFilterState;
 }

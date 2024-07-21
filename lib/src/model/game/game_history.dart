@@ -8,7 +8,6 @@ import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
@@ -45,7 +44,7 @@ Future<IList<LightArchivedGameWithPov>> myRecentGames(
       (client) => GameRepository(client).getUserGames(
         session.user.id,
         max: kNumberOfRecentGames,
-        perfType: filters.perf,
+        perfs: filters.perfs,
       ),
       const Duration(hours: 1),
     );
@@ -73,7 +72,7 @@ Future<IList<LightArchivedGameWithPov>> userRecentGames(
 }) {
   return ref.withClientCacheFor(
     (client) =>
-        GameRepository(client).getUserGames(userId, perfType: filters.perf),
+        GameRepository(client).getUserGames(userId, perfs: filters.perfs),
     // cache is important because the associated widget is in a [ListView] and
     // the provider may be instanciated multiple times in a short period of time
     // (e.g. when scrolling)
@@ -166,7 +165,7 @@ class UserGameHistory extends _$UserGameHistory {
                 userId!,
                 max: _nbPerPage,
                 until: _list.last.game.createdAt,
-                perfType: currentVal.filters.perf,
+                perfs: currentVal.filters.perfs,
               ),
             )
           : currentVal.online && currentVal.session != null
@@ -175,7 +174,7 @@ class UserGameHistory extends _$UserGameHistory {
                     currentVal.session!.user.id,
                     max: _nbPerPage,
                     until: _list.last.game.createdAt,
-                    perfType: currentVal.filters.perf,
+                    perfs: currentVal.filters.perfs,
                   ),
                 )
               : ref
