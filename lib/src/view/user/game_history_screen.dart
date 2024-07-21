@@ -86,6 +86,8 @@ class _BodyState extends ConsumerState<_Body> {
         userGameHistoryProvider(
           widget.user?.id,
           isOnline: widget.isOnline,
+          filters:
+              ref.read(gameFilterProvider(perfs: widget.gameFilters.perfs)),
         ),
       );
 
@@ -102,6 +104,8 @@ class _BodyState extends ConsumerState<_Body> {
               userGameHistoryProvider(
                 widget.user?.id,
                 isOnline: widget.isOnline,
+                filters: ref
+                    .read(gameFilterProvider(perfs: widget.gameFilters.perfs)),
               ).notifier,
             )
             .getNext();
