@@ -1,11 +1,9 @@
 import 'dart:async';
 
-import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -19,7 +17,6 @@ import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
-import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -27,12 +24,12 @@ import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/challenge_display.dart';
 import 'package:lichess_mobile/src/widgets/expanded_section.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
 import 'common_play_widgets.dart';
 
@@ -242,73 +239,45 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
             final isMySeek =
                 UserId.fromUserName(challenge.username) == session?.user.id;
 
-            return Container(
+            return CorrespondenceChallengeDisplay(
+              challenge: challenge,
+              user: LightUser(
+                id: UserId.fromUserName(challenge.username),
+                name: challenge.username,
+                title: challenge.title,
+              ),
+              subtitle: subtitle,
               color: isMySeek ? LichessColors.green.withOpacity(0.2) : null,
-              child: Slidable(
-                endActionPane: isMySeek
-                    ? ActionPane(
-                        motion: const ScrollMotion(),
-                        extentRatio: 0.3,
-                        children: [
-                          SlidableAction(
-                            onPressed: (BuildContext context) {
+              onPressed: isMySeek
+                  ? null
+                  : session == null
+                      ? () {
+                          showPlatformSnackbar(
+                            context,
+                            context.l10n.youNeedAnAccountToDoThat,
+                          );
+                        }
+                      : () {
+                          showConfirmDialog<void>(
+                            context,
+                            title: Text(context.l10n.accept),
+                            isDestructiveAction: true,
+                            onConfirm: (_) {
                               socketClient.send(
-                                'cancelSeek',
+                                'joinSeek',
                                 challenge.id.toString(),
                               );
                             },
-                            backgroundColor: context.lichessColors.error,
-                            foregroundColor: Colors.white,
-                            icon: Icons.cancel,
-                            label: context.l10n.cancel,
-                          ),
-                        ],
-                      )
-                    : null,
-                child: PlatformListTile(
-                  padding: Styles.bodyPadding,
-                  leading: Icon(challenge.perf.icon),
-                  trailing: Icon(
-                    challenge.side == null
-                        ? LichessIcons.adjust
-                        : challenge.side == Side.white
-                            ? LichessIcons.circle
-                            : LichessIcons.circle_empty,
-                  ),
-                  title: UserFullNameWidget(
-                    user: LightUser(
-                      id: UserId.fromUserName(challenge.username),
-                      name: challenge.username,
-                      title: challenge.title,
-                    ),
-                    rating: challenge.rating,
-                    provisional: challenge.provisional,
-                  ),
-                  subtitle: Text(subtitle),
-                  onTap: isMySeek
-                      ? null
-                      : session == null
-                          ? () {
-                              showPlatformSnackbar(
-                                context,
-                                context.l10n.youNeedAnAccountToDoThat,
-                              );
-                            }
-                          : () {
-                              showConfirmDialog<void>(
-                                context,
-                                title: Text(context.l10n.accept),
-                                isDestructiveAction: true,
-                                onConfirm: (_) {
-                                  socketClient.send(
-                                    'joinSeek',
-                                    challenge.id.toString(),
-                                  );
-                                },
-                              );
-                            },
-                ),
-              ),
+                          );
+                        },
+              onCancel: isMySeek
+                  ? () {
+                      socketClient.send(
+                        'cancelSeek',
+                        challenge.id.toString(),
+                      );
+                    }
+                  : null,
             );
           },
         );
