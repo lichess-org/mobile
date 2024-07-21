@@ -242,31 +242,41 @@ class _MultipleChoiceFilter<T extends Enum> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FatButton(
-      semanticsLabel: filterLabel,
-      onPressed: () => showMultipleChoicesPicker<T>(
-        context,
-        choices: choices,
-        selectedItems: selectedItems,
-        labelBuilder: choiceLabelBuilder,
-      ).then(onChanged),
-      child: Row(
-        children: [
-          if (selectedItems.length > 1)
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-              ),
-              child: Text(
-                '${selectedItems.length}',
-                textAlign: TextAlign.center,
-              ),
+    void onPressed() => showMultipleChoicesPicker<T>(
+          context,
+          choices: choices,
+          selectedItems: selectedItems,
+          labelBuilder: choiceLabelBuilder,
+        ).then(onChanged);
+
+    final Widget child = Row(
+      children: [
+        if (selectedItems.length > 1)
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
             ),
-          Text(' $filterLabel'),
-        ],
-      ),
+            child: Text(
+              '${selectedItems.length}',
+              textAlign: TextAlign.center,
+            ),
+          ),
+        Text(' $filterLabel'),
+      ],
     );
+
+    return selectedItems.isEmpty
+        ? SecondaryButton(
+            semanticsLabel: filterLabel,
+            onPressed: onPressed,
+            child: child,
+          )
+        : FatButton(
+            semanticsLabel: filterLabel,
+            onPressed: onPressed,
+            child: child,
+          );
   }
 }
