@@ -43,42 +43,83 @@ class BroadcastController extends _$BroadcastController {
   void _handleSocketEvent(SocketEvent event) {
     if (!state.hasValue) return;
 
-    // Sent when a move is played in a game
-    if (event.topic == 'addNode') {
-      final broadcastGameId =
-          pick(event.data, 'p', 'chapterId').asBroadcastGameIdOrThrow();
+    switch (event.topic) {
+      // Sent when a move is played in a game
+      case 'chapters':
+        _handleChaptersEvent(event);
+      // Sent when a game ended
+      case 'addNode':
+        _handleAddNodeEvent(event);
+      case 'clock':
+        _handleClockEvent(event);
+    }
+  }
 
-      final fen = pick(event.data, 'n', 'fen').asStringOrThrow();
+  void _handleAddNodeEvent(SocketEvent event) {
+    final relayPath = pick(event.data, 'p', 'relayPath').asUciPathOrThrow();
+    final path = pick(event.data, 'd', 'p', 'path').asUciPathOrThrow();
+    final id = pick(event.data, 'd', 'n', 'id').asUciCharPairOrThrow();
 
-      final playingSide = Setup.parseFen(fen).turn.opposite;
+    // We check that the event we received is for the last move of the game
+    if (relayPath != path + id) return;
 
-      state = AsyncData(
-        state.requireValue.update(
-          broadcastGameId,
-          (broadcastGameSnapshot) => broadcastGameSnapshot.copyWith(
-            players: IMap(
-              {
-                playingSide:
-                    broadcastGameSnapshot.players[playingSide]!.copyWith(
-                  clock: pick(event.data, 'n', 'clock')
-                      .asDurationFromCentiSecondsOrNull(),
-                ),
-                playingSide.opposite:
-                    broadcastGameSnapshot.players[playingSide.opposite]!,
-              },
-            ),
-            fen: fen,
-            lastMove: pick(event.data, 'n', 'uci').asUciMoveOrThrow(),
-            thinkTime: null,
+    final broadcastGameId =
+        pick(event.data, 'p', 'chapterId').asBroadcastGameIdOrThrow();
+
+    final fen = pick(event.data, 'n', 'fen').asStringOrThrow();
+
+    final playingSide = Setup.parseFen(fen).turn.opposite;
+
+    state = AsyncData(
+      state.requireValue.update(
+        broadcastGameId,
+        (broadcastGameSnapshot) => broadcastGameSnapshot.copyWith(
+          players: IMap(
+            {
+              playingSide: broadcastGameSnapshot.players[playingSide]!.copyWith(
+                clock: pick(event.data, 'n', 'clock')
+                    .asDurationFromCentiSecondsOrNull(),
+              ),
+              playingSide.opposite:
+                  broadcastGameSnapshot.players[playingSide.opposite]!,
+            },
+          ),
+          fen: fen,
+          lastMove: pick(event.data, 'n', 'uci').asUciMoveOrThrow(),
+          thinkTime: null,
+        ),
+      ),
+    );
+  }
+
+  void _handleChaptersEvent(SocketEvent event) {
+    final games = pick(event.data).asListOrThrow(gameFromPick);
+    state = AsyncData(IMap.fromEntries(games));
+  }
+
+  void _handleClockEvent(SocketEvent event) {
+    final broadcastGameId =
+        pick(event.data, 'p', 'chapterId').asBroadcastGameIdOrThrow();
+    final whiteClock = pick(event.data, 'p', 'relayClocks', 0)
+        .asDurationFromCentiSecondsOrNull();
+    final blackClock = pick(event.data, 'p', 'relayClocks', 1)
+        .asDurationFromCentiSecondsOrNull();
+    state = AsyncData(
+      state.requireValue.update(
+        broadcastGameId,
+        (broadcastGameSnapshot) => broadcastGameSnapshot.copyWith(
+          players: IMap(
+            {
+              Side.white: broadcastGameSnapshot.players[Side.white]!.copyWith(
+                clock: whiteClock,
+              ),
+              Side.black: broadcastGameSnapshot.players[Side.black]!.copyWith(
+                clock: blackClock,
+              ),
+            },
           ),
         ),
-      );
-    }
-
-    // Sent when a game ended
-    if (event.topic == 'chapters') {
-      final games = pick(event.data).asListOrThrow(gameFromPick);
-      state = AsyncData(IMap.fromEntries(games));
-    }
+      ),
+    );
   }
 }
