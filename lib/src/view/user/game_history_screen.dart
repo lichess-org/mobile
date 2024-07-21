@@ -154,37 +154,47 @@ class _BodyState extends ConsumerState<_Body> {
                   ],
                 ),
               ),
-              Expanded(
-                child: ListView.builder(
-                  controller: _scrollController,
-                  itemCount: list.length + (state.isLoading ? 1 : 0),
-                  itemBuilder: (context, index) {
-                    if (state.isLoading && index == list.length) {
-                      return const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 32.0),
-                        child: CenterLoadingIndicator(),
-                      );
-                    } else if (state.hasError &&
-                        state.hasMore &&
-                        index == list.length) {
-                      // TODO: add a retry button
-                      return const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 32.0),
-                        child: Center(
-                          child: Text(
-                            'Could not load more games',
+              if (list.isEmpty)
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 32.0),
+                  child: Center(
+                    child: Text(
+                      'No games found',
+                    ),
+                  ),
+                )
+              else
+                Expanded(
+                  child: ListView.builder(
+                    controller: _scrollController,
+                    itemCount: list.length + (state.isLoading ? 1 : 0),
+                    itemBuilder: (context, index) {
+                      if (state.isLoading && index == list.length) {
+                        return const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 32.0),
+                          child: CenterLoadingIndicator(),
+                        );
+                      } else if (state.hasError &&
+                          state.hasMore &&
+                          index == list.length) {
+                        // TODO: add a retry button
+                        return const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 32.0),
+                          child: Center(
+                            child: Text(
+                              'Could not load more games',
+                            ),
                           ),
-                        ),
-                      );
-                    }
+                        );
+                      }
 
-                    return ExtendedGameListTile(
-                      item: list[index],
-                      userId: widget.user?.id,
-                    );
-                  },
+                      return ExtendedGameListTile(
+                        item: list[index],
+                        userId: widget.user?.id,
+                      );
+                    },
+                  ),
                 ),
-              ),
             ],
           ),
         );
