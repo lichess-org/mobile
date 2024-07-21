@@ -30,7 +30,7 @@ class BookmarkButton extends ConsumerWidget {
     return AppBarIconButton(
       onPressed: () {
         ref.withClient(
-          (client) => GameRepository(client).bookmark(id.gameId, v: 1),
+          (client) => GameRepository(client).bookmark(id, v: 1),
         );
       },
       semanticsLabel: 'Bookmark Game',

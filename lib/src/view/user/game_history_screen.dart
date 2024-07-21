@@ -2,8 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
+import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
@@ -167,12 +169,17 @@ class _BodyState extends ConsumerState<_Body> {
               }
 
               return Slidable(
-                endActionPane: const ActionPane(
-                  motion: ScrollMotion(),
+                endActionPane: ActionPane(
+                  motion: const ScrollMotion(),
                   children: [
                     SlidableAction(
-                      onPressed: null,
-                      icon: Icons.bookmark_add_outlined,
+                      onPressed: (BuildContext context) {
+                        ref.withClient(
+                          (client) => GameRepository(client)
+                              .bookmark(list[index].game.id, v: 1),
+                        );
+                      },
+                      icon: Icons.star_outline_rounded,
                       label: 'Bookmark',
                     ),
                   ],
