@@ -18,13 +18,11 @@ class GameHistoryScreen extends ConsumerWidget {
     required this.user,
     required this.isOnline,
     this.gameFilters = const GameFilterState(),
-    this.games,
     super.key,
   });
   final LightUser? user;
   final bool isOnline;
   final GameFilterState gameFilters;
-  final int? games;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -36,33 +34,15 @@ class GameHistoryScreen extends ConsumerWidget {
   }
 
   Widget _buildIos(BuildContext context, WidgetRef ref) {
-    final nbGamesAsync = ref.watch(
-      userNumberOfGamesProvider(user, isOnline: isOnline),
-    );
     return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        middle: nbGamesAsync.when(
-          data: (nbGames) => Text(context.l10n.nbGames(games ?? nbGames)),
-          loading: () => const CupertinoActivityIndicator(),
-          error: (e, s) => Text(context.l10n.mobileAllGames),
-        ),
-      ),
+      navigationBar: CupertinoNavigationBar(middle: Text(context.l10n.games)),
       child: _Body(user: user, isOnline: isOnline, gameFilters: gameFilters),
     );
   }
 
   Widget _buildAndroid(BuildContext context, WidgetRef ref) {
-    final nbGamesAsync = ref.watch(
-      userNumberOfGamesProvider(user, isOnline: isOnline),
-    );
     return Scaffold(
-      appBar: AppBar(
-        title: nbGamesAsync.when(
-          data: (nbGames) => Text(context.l10n.nbGames(games ?? nbGames)),
-          loading: () => const ButtonLoadingIndicator(),
-          error: (e, s) => Text(context.l10n.mobileAllGames),
-        ),
-      ),
+      appBar: AppBar(title: Text(context.l10n.games)),
       body: _Body(user: user, isOnline: isOnline, gameFilters: gameFilters),
     );
   }

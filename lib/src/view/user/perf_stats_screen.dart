@@ -284,7 +284,6 @@ class _Body extends ConsumerWidget {
                             user: user.lightUser,
                             isOnline: true,
                             gameFilters: GameFilterState(perfs: {perf}),
-                            games: data.totalGames,
                           ),
                         );
                       },
