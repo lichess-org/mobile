@@ -254,13 +254,14 @@ class _MultipleChoiceFilter<T extends Enum> extends StatelessWidget {
         if (selectedItems.length > 1)
           Container(
             padding: const EdgeInsets.all(8),
-            decoration: const BoxDecoration(
-              color: Colors.white,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.onPrimary,
               shape: BoxShape.circle,
             ),
             child: Text(
               '${selectedItems.length}',
               textAlign: TextAlign.center,
+              style: TextStyle(color: Theme.of(context).colorScheme.primary),
             ),
           ),
         Text(' $filterLabel'),
