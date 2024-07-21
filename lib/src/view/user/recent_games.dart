@@ -30,7 +30,7 @@ class RecentGamesWidget extends ConsumerWidget {
 
     final recentGames = user != null
         ? ref.watch(userRecentGamesProvider(userId: user!.id))
-        : ref.watch(myRecentGamesProvider);
+        : ref.watch(myRecentGamesProvider());
 
     final nbOfGames = ref
             .watch(

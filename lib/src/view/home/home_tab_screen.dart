@@ -179,7 +179,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
   Future<void> _refreshData() {
     return Future.wait([
       ref.refresh(accountProvider.future),
-      ref.refresh(myRecentGamesProvider.future),
+      ref.refresh(myRecentGamesProvider().future),
       ref.refresh(ongoingGamesProvider.future),
     ]);
   }
@@ -214,7 +214,7 @@ class _HomeBody extends ConsumerWidget {
       data: (status) {
         final session = ref.watch(authSessionProvider);
         final isTablet = isTabletOrLarger(context);
-        final emptyRecent = ref.watch(myRecentGamesProvider).maybeWhen(
+        final emptyRecent = ref.watch(myRecentGamesProvider()).maybeWhen(
               data: (data) => data.isEmpty,
               orElse: () => false,
             );

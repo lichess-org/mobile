@@ -33,15 +33,19 @@ const _nbPerPage = 20;
 /// stored locally are fetched instead.
 @riverpod
 Future<IList<LightArchivedGameWithPov>> myRecentGames(
-  MyRecentGamesRef ref,
-) async {
+  MyRecentGamesRef ref, {
+  Perf? perf,
+}) async {
   final online = await ref
       .watch(connectivityChangesProvider.selectAsync((c) => c.isOnline));
   final session = ref.watch(authSessionProvider);
   if (session != null && online) {
     return ref.withClientCacheFor(
-      (client) => GameRepository(client)
-          .getUserGames(session.user.id, max: kNumberOfRecentGames),
+      (client) => GameRepository(client).getUserGames(
+        session.user.id,
+        max: kNumberOfRecentGames,
+        perfType: perf,
+      ),
       const Duration(hours: 1),
     );
   } else {
@@ -132,7 +136,7 @@ class UserGameHistory extends _$UserGameHistory {
               perf: perf,
             ).future,
           )
-        : ref.read(myRecentGamesProvider.future);
+        : ref.read(myRecentGamesProvider(perf: perf).future);
 
     _list.addAll(await recentGames);
 

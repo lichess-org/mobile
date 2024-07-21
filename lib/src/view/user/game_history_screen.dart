@@ -106,7 +106,6 @@ class _BodyState extends ConsumerState<_Body> {
         userGameHistoryProvider(
           widget.user?.id,
           isOnline: widget.isOnline,
-          perf: widget.perf,
         ),
       );
 
@@ -123,7 +122,6 @@ class _BodyState extends ConsumerState<_Body> {
               userGameHistoryProvider(
                 widget.user?.id,
                 isOnline: widget.isOnline,
-                perf: widget.perf,
               ).notifier,
             )
             .getNext();
@@ -133,15 +131,15 @@ class _BodyState extends ConsumerState<_Body> {
 
   @override
   Widget build(BuildContext context) {
+    final gameFilterState = ref.watch(gameFilterProvider(perf: widget.perf));
     final gameListState = ref.watch(
       userGameHistoryProvider(
         widget.user?.id,
         isOnline: widget.isOnline,
-        perf: widget.perf,
+        perf: gameFilterState.perf,
       ),
     );
 
-    final gameFilterState = ref.watch(gameFilterProvider);
     final perfFilterLabel = gameFilterState.perf?.title ??
         '${context.l10n.timeControl} / ${context.l10n.variant}';
 
@@ -164,7 +162,7 @@ class _BodyState extends ConsumerState<_Body> {
                         selectedItem: gameFilterState.perf,
                         labelBuilder: (t) => Text(t!.title),
                         onSelectedItemChanged: (Perf? value) => ref
-                            .read(gameFilterProvider.notifier)
+                            .read(gameFilterProvider().notifier)
                             .setPerf(value),
                       ),
                       child: Text(perfFilterLabel),
