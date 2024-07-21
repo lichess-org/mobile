@@ -138,7 +138,22 @@ class _BodyState extends ConsumerState<_Body> {
                   children: [
                     _MultipleChoiceFilter(
                       filterLabel: perfFilterLabel,
-                      choices: Perf.values,
+                      choices: const [
+                        Perf.ultraBullet,
+                        Perf.bullet,
+                        Perf.blitz,
+                        Perf.rapid,
+                        Perf.classical,
+                        Perf.correspondence,
+                        Perf.chess960,
+                        Perf.antichess,
+                        Perf.kingOfTheHill,
+                        Perf.threeCheck,
+                        Perf.atomic,
+                        Perf.horde,
+                        Perf.racingKings,
+                        Perf.crazyhouse,
+                      ],
                       selectedItems: gameFilterState.perfs,
                       choiceLabelBuilder: (t) => Text(t.title),
                       onChanged: (value) => value != null
