@@ -1,3 +1,4 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -8,16 +9,16 @@ part 'game_filter.g.dart';
 @riverpod
 class GameFilter extends _$GameFilter {
   @override
-  GameFilterState build({Set<Perf>? perfs}) {
-    return GameFilterState(perfs: perfs ?? {});
+  GameFilterState build({ISet<Perf>? perfs}) {
+    return GameFilterState(perfs: perfs ?? const ISet.empty());
   }
 
-  void setPerfs(Set<Perf> perfs) => state = state.copyWith(perfs: perfs);
+  void setPerfs(ISet<Perf> perfs) => state = state.copyWith(perfs: perfs);
 }
 
 @freezed
 class GameFilterState with _$GameFilterState {
   const factory GameFilterState({
-    @Default(<Perf>{}) Set<Perf> perfs,
+    @Default(ISet<Perf>.empty()) ISet<Perf> perfs,
   }) = _GameFilterState;
 }

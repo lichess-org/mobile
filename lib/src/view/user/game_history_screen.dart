@@ -1,3 +1,4 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -236,9 +237,9 @@ class _MultipleChoiceFilter<T extends Enum> extends StatefulWidget {
 
   final String filterLabel;
   final Iterable<T> choices;
-  final Set<T> selectedItems;
+  final ISet<T> selectedItems;
   final Widget Function(T choice) choiceLabelBuilder;
-  final void Function(Set<T> value) onChanged;
+  final void Function(ISet<T> value) onChanged;
 
   @override
   State<_MultipleChoiceFilter<T>> createState() => _MultipleChoiceFilterState<T>();
@@ -246,12 +247,12 @@ class _MultipleChoiceFilter<T extends Enum> extends StatefulWidget {
 
 class _MultipleChoiceFilterState<T extends Enum>
     extends State<_MultipleChoiceFilter<T>> {
-  late Set<T> items;
+  late ISet<T> items;
 
   @override
   void initState() {
     super.initState();
-    items = {...widget.selectedItems};
+    items = widget.selectedItems;
   }
 
   @override

@@ -40,7 +40,7 @@ class GameRepository {
     UserId userId, {
     int max = 20,
     DateTime? until,
-    Set<Perf> perfs = const {},
+    ISet<Perf> perfs = const ISet.empty(),
   }) {
     assert(!perfs.contains(Perf.fromPosition));
     assert(!perfs.contains(Perf.puzzle));

@@ -283,7 +283,7 @@ class _Body extends ConsumerWidget {
                           builder: (context) => GameHistoryScreen(
                             user: user.lightUser,
                             isOnline: true,
-                            gameFilters: GameFilterState(perfs: {perf}),
+                            gameFilters: GameFilterState(perfs: ISet({perf})),
                           ),
                         );
                       },
