@@ -282,11 +282,19 @@ class _MultipleChoiceFilterState<T extends Enum>
           TextButton(
         onPressed: () =>
             controller.isOpen ? controller.close() : controller.open(),
+        style: TextButton.styleFrom(
+          backgroundColor: items.isEmpty
+              ? Theme.of(context).colorScheme.secondary
+              : Theme.of(context).colorScheme.primary,
+          foregroundColor: items.isEmpty
+              ? Theme.of(context).colorScheme.onSecondary
+              : Theme.of(context).colorScheme.onPrimary,
+        ),
         child: Row(
           children: [
             if (items.length > 1)
               Container(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(4),
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.onPrimary,
                   shape: BoxShape.circle,
