@@ -44,12 +44,13 @@ class BroadcastController extends _$BroadcastController {
     if (!state.hasValue) return;
 
     switch (event.topic) {
-      // Sent when a move is played in a game
-      case 'chapters':
-        _handleChaptersEvent(event);
-      // Sent when a game ended
+      // Sent when a node is recevied from the broadcast
       case 'addNode':
         _handleAddNodeEvent(event);
+      // Sent when a game ends
+      case 'chapters':
+        _handleChaptersEvent(event);
+      // Sent when clocks are updated from the broadcast
       case 'clock':
         _handleClockEvent(event);
     }
