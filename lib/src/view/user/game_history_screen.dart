@@ -8,8 +8,6 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
-import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
@@ -160,15 +158,13 @@ class _BodyState extends ConsumerState<_Body> {
                       ],
                       selectedItems: gameFilterState.perfs,
                       choiceLabelBuilder: (t) => Text(t.title),
-                      onChanged: (value) => value != null
-                          ? ref
-                              .read(
-                                gameFilterProvider(
-                                  perfs: widget.gameFilters.perfs,
-                                ).notifier,
-                              )
-                              .setPerfs(value)
-                          : null,
+                      onChanged: (value) => ref
+                          .read(
+                            gameFilterProvider(
+                              perfs: widget.gameFilters.perfs,
+                            ).notifier,
+                          )
+                          .setPerfs(value),
                     ),
                   ],
                 ),
@@ -229,7 +225,7 @@ class _BodyState extends ConsumerState<_Body> {
   }
 }
 
-class _MultipleChoiceFilter<T extends Enum> extends StatelessWidget {
+class _MultipleChoiceFilter<T extends Enum> extends StatefulWidget {
   const _MultipleChoiceFilter({
     required this.filterLabel,
     required this.choices,
@@ -242,46 +238,69 @@ class _MultipleChoiceFilter<T extends Enum> extends StatelessWidget {
   final Iterable<T> choices;
   final Set<T> selectedItems;
   final Widget Function(T choice) choiceLabelBuilder;
-  final void Function(Set<T>? value) onChanged;
+  final void Function(Set<T> value) onChanged;
+
+  @override
+  State<_MultipleChoiceFilter<T>> createState() => _MultipleChoiceFilterState<T>();
+}
+
+class _MultipleChoiceFilterState<T extends Enum>
+    extends State<_MultipleChoiceFilter<T>> {
+  late Set<T> items;
+
+  @override
+  void initState() {
+    super.initState();
+    items = {...widget.selectedItems};
+  }
 
   @override
   Widget build(BuildContext context) {
-    void onPressed() => showMultipleChoicesPicker<T>(
-          context,
-          choices: choices,
-          selectedItems: selectedItems,
-          labelBuilder: choiceLabelBuilder,
-        ).then(onChanged);
-
-    final Widget child = Row(
-      children: [
-        if (selectedItems.length > 1)
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.onPrimary,
-              shape: BoxShape.circle,
+    return MenuAnchor(
+      onClose: () => widget.onChanged(items),
+      menuChildren: widget.choices
+          .map(
+            (choice) => FilterChip(
+              label: widget.choiceLabelBuilder(choice),
+              selected: items.contains(choice),
+              onSelected: (value) {
+                setState(() {
+                  items = value
+                      ? items.union({choice})
+                      : items.difference({choice});
+                });
+              },
             ),
-            child: Text(
-              '${selectedItems.length}',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Theme.of(context).colorScheme.primary),
-            ),
-          ),
-        Text(' $filterLabel'),
-      ],
-    );
-
-    return selectedItems.isEmpty
-        ? SecondaryButton(
-            semanticsLabel: filterLabel,
-            onPressed: onPressed,
-            child: child,
           )
-        : FatButton(
-            semanticsLabel: filterLabel,
-            onPressed: onPressed,
-            child: child,
-          );
+          .toList(growable: false),
+      builder: (
+        BuildContext context,
+        MenuController controller,
+        Widget? child,
+      ) =>
+          TextButton(
+        onPressed: () =>
+            controller.isOpen ? controller.close() : controller.open(),
+        child: Row(
+          children: [
+            if (items.length > 1)
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.onPrimary,
+                  shape: BoxShape.circle,
+                ),
+                child: Text(
+                  '${items.length}',
+                  textAlign: TextAlign.center,
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.primary),
+                ),
+              ),
+            Text(' ${widget.filterLabel}'),
+          ],
+        ),
+      ),
+    );
   }
 }

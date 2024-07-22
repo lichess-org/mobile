@@ -12,7 +12,7 @@ class GameFilter extends _$GameFilter {
     return GameFilterState(perfs: perfs ?? {});
   }
 
-  void setPerfs(Set<Perf>? perfs) => state = state.copyWith(perfs: perfs ?? {});
+  void setPerfs(Set<Perf> perfs) => state = state.copyWith(perfs: perfs);
 }
 
 @freezed
