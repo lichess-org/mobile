@@ -713,6 +713,11 @@ class _GameListWidget extends ConsumerWidget {
                         : Side.black,
                   ),
                 );
+              } else if (context.mounted && gameData != null) {
+                showPlatformSnackbar(
+                  context,
+                  'This variant is not supported yet',
+                );
               }
             },
             playerTitle: UserFullNameWidget(

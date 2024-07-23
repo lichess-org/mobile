@@ -234,7 +234,13 @@ class _ContextMenu extends ConsumerWidget {
                           ),
                         );
                       }
-                    : null,
+                    : () {
+                        showPlatformSnackbar(
+                          context,
+                          'This variant is not supported yet.',
+                          type: SnackBarType.info,
+                        );
+                      },
                 child: Text(context.l10n.gameAnalysis),
               ),
               BottomSheetContextMenuAction(
@@ -466,7 +472,13 @@ class ExtendedGameListTile extends StatelessWidget {
                       ),
               );
             }
-          : null,
+          : () {
+              showPlatformSnackbar(
+                context,
+                'This variant is not supported yet.',
+                type: SnackBarType.info,
+              );
+            },
       icon: game.perf.icon,
       opponentTitle: UserFullNameWidget.player(
         user: opponent.user,
