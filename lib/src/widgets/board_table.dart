@@ -158,7 +158,7 @@ class _BoardTableState extends ConsumerState<BoardTable> {
               : BorderRadius.zero,
           boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
           drawShape: DrawShapeOptions(
-            enable: true,
+            enable: boardPrefs.enableShapeDrawings,
             onCompleteShape: _onCompleteShape,
             onClearShapes: _onClearShapes,
           ),

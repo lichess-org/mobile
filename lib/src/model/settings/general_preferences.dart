@@ -75,8 +75,9 @@ class GeneralPreferences extends _$GeneralPreferences {
 @Freezed(fromJson: true, toJson: true)
 class GeneralPrefsState with _$GeneralPrefsState {
   const factory GeneralPrefsState({
-    required ThemeMode themeMode,
+    @JsonKey(unknownEnumValue: ThemeMode.system) required ThemeMode themeMode,
     required bool isSoundEnabled,
+    @JsonKey(unknownEnumValue: SoundTheme.standard)
     required SoundTheme soundTheme,
 
     /// Should enable system color palette (android 12+ only)

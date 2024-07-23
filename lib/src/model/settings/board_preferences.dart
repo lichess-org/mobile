@@ -71,6 +71,12 @@ class BoardPreferences extends _$BoardPreferences {
     );
   }
 
+  Future<void> toggleEnableShapeDrawings() {
+    return _save(
+      state.copyWith(enableShapeDrawings: !state.enableShapeDrawings),
+    );
+  }
+
   Future<void> _save(BoardPrefs newState) async {
     final prefs = ref.read(sharedPreferencesProvider);
     await prefs.setString(
@@ -95,7 +101,14 @@ class BoardPrefs with _$BoardPrefs {
     required bool coordinates,
     required bool pieceAnimation,
     required bool showMaterialDifference,
+    @JsonKey(
+      defaultValue: PieceShiftMethod.either,
+      unknownEnumValue: PieceShiftMethod.either,
+    )
     required PieceShiftMethod pieceShiftMethod,
+
+    /// Whether to enable shape drawings on the board for games and puzzles.
+    @JsonKey(defaultValue: false) required bool enableShapeDrawings,
   }) = _BoardPrefs;
 
   static const defaults = BoardPrefs(
@@ -109,6 +122,7 @@ class BoardPrefs with _$BoardPrefs {
     pieceAnimation: true,
     showMaterialDifference: true,
     pieceShiftMethod: PieceShiftMethod.either,
+    enableShapeDrawings: false,
   );
 
   factory BoardPrefs.fromJson(Map<String, dynamic> json) {

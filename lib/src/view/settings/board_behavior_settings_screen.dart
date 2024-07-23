@@ -87,6 +87,20 @@ class _Body extends ConsumerWidget {
                 },
               ),
               SwitchSettingTile(
+                title: const Text('Enable shapes drawing'),
+                subtitle: const Text(
+                  'Draw shapes using two fingers on game and puzzle boards (it is always enabled in analysis boards).',
+                  maxLines: 5,
+                  textAlign: TextAlign.justify,
+                ),
+                value: boardPrefs.enableShapeDrawings,
+                onChanged: (value) {
+                  ref
+                      .read(boardPreferencesProvider.notifier)
+                      .toggleEnableShapeDrawings();
+                },
+              ),
+              SwitchSettingTile(
                 title: Text(context.l10n.mobileSettingsHapticFeedback),
                 value: boardPrefs.hapticFeedback,
                 onChanged: (value) {
