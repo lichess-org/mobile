@@ -286,7 +286,9 @@ class _HomeBody extends ConsumerWidget {
                   widget: EnabledWidget.perfCards,
                   isEditing: isEditing,
                   shouldShow: session != null,
-                  child: AccountPerfCards(padding: Styles.bodySectionPadding),
+                  child: const AccountPerfCards(
+                    padding: Styles.horizontalBodyPadding,
+                  ),
                 ),
                 _EditableWidget(
                   widget: EnabledWidget.quickPairing,
