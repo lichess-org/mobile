@@ -325,7 +325,7 @@ abstract class AppLocalizations {
   /// No description provided for @mobilePuzzleStormNothingToShow.
   ///
   /// In en, this message translates to:
-  /// **'Nothing to show. Play some runs of storm'**
+  /// **'Nothing to show. Play some runs of Puzzle Storm.'**
   String get mobilePuzzleStormNothingToShow;
 
   /// No description provided for @mobileSharePuzzle.
@@ -429,6 +429,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Something went wrong.'**
   String get mobileSomethingWentWrong;
+
+  /// No description provided for @mobileShowResult.
+  ///
+  /// In en, this message translates to:
+  /// **'Show result'**
+  String get mobileShowResult;
+
+  /// No description provided for @mobilePuzzleThemesSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Play puzzles from your favorite openings, or choose a theme.'**
+  String get mobilePuzzleThemesSubtitle;
+
+  /// No description provided for @mobilePuzzleStormSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Solve as many puzzles as possible in 3 minutes.'**
+  String get mobilePuzzleStormSubtitle;
+
+  /// No description provided for @mobileGreeting.
+  ///
+  /// In en, this message translates to:
+  /// **'Hello, {param}'**
+  String mobileGreeting(String param);
+
+  /// No description provided for @mobileGreetingWithoutName.
+  ///
+  /// In en, this message translates to:
+  /// **'Hello'**
+  String get mobileGreetingWithoutName;
 
   /// No description provided for @activityActivity.
   ///
@@ -3424,6 +3454,12 @@ abstract class AppLocalizations {
   /// **'Friends'**
   String get friends;
 
+  /// No description provided for @otherPlayers.
+  ///
+  /// In en, this message translates to:
+  /// **'other players'**
+  String get otherPlayers;
+
   /// No description provided for @discussions.
   ///
   /// In en, this message translates to:
@@ -4965,6 +5001,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Yes'**
   String get yes;
+
+  /// No description provided for @website.
+  ///
+  /// In en, this message translates to:
+  /// **'Website'**
+  String get website;
+
+  /// No description provided for @mobile.
+  ///
+  /// In en, this message translates to:
+  /// **'Mobile'**
+  String get mobile;
 
   /// No description provided for @help.
   ///

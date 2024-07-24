@@ -457,7 +457,7 @@ class _GameBottomBar extends ConsumerWidget {
           if (!gameState.game.playable)
             Expanded(
               child: BottomBarButton(
-                label: 'Show result',
+                label: context.l10n.mobileShowResult,
                 onTap: () {
                   showAdaptiveDialog<void>(
                     context: context,

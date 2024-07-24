@@ -69,7 +69,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
 
   @override
-  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of storm';
+  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of Puzzle Storm.';
 
   @override
   String get mobileSharePuzzle => 'Share this puzzle';
@@ -121,6 +121,23 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get mobileSomethingWentWrong => 'Something went wrong.';
+
+  @override
+  String get mobileShowResult => 'Show result';
+
+  @override
+  String get mobilePuzzleThemesSubtitle => 'Play puzzles from your favorite openings, or choose a theme.';
+
+  @override
+  String get mobilePuzzleStormSubtitle => 'Solve as many puzzles as possible in 3 minutes.';
+
+  @override
+  String mobileGreeting(String param) {
+    return 'Hello, $param';
+  }
+
+  @override
+  String get mobileGreetingWithoutName => 'Hello';
 
   @override
   String get activityActivity => 'Aktivita';
@@ -1900,6 +1917,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get friends => 'Přátelé';
 
   @override
+  String get otherPlayers => 'other players';
+
+  @override
   String get discussions => 'Konverzace';
 
   @override
@@ -2729,6 +2749,12 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get yes => 'Ano';
+
+  @override
+  String get website => 'Website';
+
+  @override
+  String get mobile => 'Mobile';
 
   @override
   String get help => 'Nápověda:';
