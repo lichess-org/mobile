@@ -124,10 +124,6 @@ class _BodyState extends ConsumerState<_Body> {
       ),
     );
 
-    final perfFilterLabel = gameFilterState.perfs.length == 1
-        ? gameFilterState.perfs.first.title
-        : '${context.l10n.timeControl} / ${context.l10n.variant}';
-
     return gameListState.when(
       data: (state) {
         final list = state.gameList;
@@ -140,7 +136,8 @@ class _BodyState extends ConsumerState<_Body> {
                 child: Row(
                   children: [
                     _MultipleChoiceFilter(
-                      filterLabel: perfFilterLabel,
+                      filterName:
+                          '${context.l10n.timeControl} / ${context.l10n.variant}',
                       choices: const [
                         Perf.ultraBullet,
                         Perf.bullet,
@@ -158,7 +155,7 @@ class _BodyState extends ConsumerState<_Body> {
                         Perf.crazyhouse,
                       ],
                       selectedItems: gameFilterState.perfs,
-                      choiceLabelBuilder: (t) => Text(t.title),
+                      choiceLabel: (t) => t.title,
                       onChanged: (value) => ref
                           .read(
                             gameFilterProvider(
@@ -228,17 +225,17 @@ class _BodyState extends ConsumerState<_Body> {
 
 class _MultipleChoiceFilter<T extends Enum> extends StatefulWidget {
   const _MultipleChoiceFilter({
-    required this.filterLabel,
+    required this.filterName,
     required this.choices,
     required this.selectedItems,
-    required this.choiceLabelBuilder,
+    required this.choiceLabel,
     required this.onChanged,
   });
 
-  final String filterLabel;
+  final String filterName;
   final Iterable<T> choices;
   final ISet<T> selectedItems;
-  final Widget Function(T choice) choiceLabelBuilder;
+  final String Function(T choice) choiceLabel;
   final void Function(ISet<T> value) onChanged;
 
   @override
@@ -262,7 +259,7 @@ class _MultipleChoiceFilterState<T extends Enum>
       menuChildren: widget.choices
           .map(
             (choice) => FilterChip(
-              label: widget.choiceLabelBuilder(choice),
+              label: Text(widget.choiceLabel(choice)),
               selected: selectedItems.contains(choice),
               onSelected: (value) {
                 setState(() {
@@ -306,7 +303,11 @@ class _MultipleChoiceFilterState<T extends Enum>
                       TextStyle(color: Theme.of(context).colorScheme.primary),
                 ),
               ),
-            Text(' ${widget.filterLabel}'),
+            Text(
+              selectedItems.length == 1
+                  ? widget.choiceLabel(selectedItems.first)
+                  : widget.filterName,
+            ),
           ],
         ),
       ),
