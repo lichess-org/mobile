@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:material_color_utilities/utils/math_utils.dart';
 
 class GameHistoryScreen extends ConsumerWidget {
   const GameHistoryScreen({
@@ -239,7 +240,8 @@ class _MultipleChoiceFilter<T extends Enum> extends StatefulWidget {
   final void Function(ISet<T> value) onChanged;
 
   @override
-  State<_MultipleChoiceFilter<T>> createState() => _MultipleChoiceFilterState<T>();
+  State<_MultipleChoiceFilter<T>> createState() =>
+      _MultipleChoiceFilterState<T>();
 }
 
 class _MultipleChoiceFilterState<T extends Enum>
@@ -255,6 +257,13 @@ class _MultipleChoiceFilterState<T extends Enum>
   @override
   Widget build(BuildContext context) {
     return MenuAnchor(
+      style: MenuStyle(
+        maximumSize: WidgetStatePropertyAll(
+          Size.fromHeight(
+            MediaQuery.sizeOf(context).height * 0.7,
+          ),
+        ),
+      ),
       onClose: () => widget.onChanged(selectedItems),
       menuChildren: widget.choices
           .map(
@@ -292,6 +301,7 @@ class _MultipleChoiceFilterState<T extends Enum>
             if (selectedItems.length > 1)
               Container(
                 padding: const EdgeInsets.all(4),
+                margin: const EdgeInsets.only(right: 5),
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.onPrimary,
                   shape: BoxShape.circle,
