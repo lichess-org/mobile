@@ -11,7 +11,6 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:material_color_utilities/utils/math_utils.dart';
 
 class GameHistoryScreen extends ConsumerWidget {
   const GameHistoryScreen({
@@ -248,8 +247,11 @@ class _MultipleChoiceFilter<T extends Enum> extends StatelessWidget {
         choices: choices,
         selectedItems: selectedItems,
         choiceLabel: choiceLabel,
-        onChanged: onChanged,
-      ),
+      ).then((value) {
+        if (value != null) {
+          onChanged(value);
+        }
+      }),
       style: TextButton.styleFrom(
         backgroundColor: selectedItems.isEmpty
             ? Theme.of(context).colorScheme.secondary
@@ -291,23 +293,35 @@ Future<ISet<T>?> showMultipleChoiceFilter<T extends Enum>(
   required Iterable<T> choices,
   required ISet<T> selectedItems,
   required String Function(T choice) choiceLabel,
-  required void Function(ISet<T> value) onChanged,
 }) {
   return showAdaptiveDialog<ISet<T>>(
     context: context,
     builder: (context) {
       ISet<T> items = selectedItems;
+      const paddingTop = 12.0;
       return AlertDialog.adaptive(
-        contentPadding: const EdgeInsets.only(top: 12),
+        contentPadding: const EdgeInsets.only(top: paddingTop),
         scrollable: true,
         content: StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
-            final size = MediaQuery.sizeOf(context);
+            final width = MediaQuery.sizeOf(context).width;
+            const aspectRatio = 4.0;
+            const itemsPerRow = 2;
+            const verticalSpacing = 8.0;
+            const horizontalSpacing = 8.0;
+
+            final chipWidth = width / itemsPerRow - horizontalSpacing;
+            final chipHeight = chipWidth / aspectRatio + verticalSpacing;
+            final rows = (choices.length / itemsPerRow).ceil();
+            final height = chipHeight * rows - verticalSpacing - paddingTop;
             return SizedBox(
-              width: size.width,
-              height: size.height / 2,
+              width: width,
+              height: height,
               child: GridView.count(
-                crossAxisCount: 2,
+                childAspectRatio: aspectRatio,
+                crossAxisCount: itemsPerRow,
+                mainAxisSpacing: verticalSpacing,
+                crossAxisSpacing: horizontalSpacing,
                 children: choices
                     .map(
                       (choice) => FilterChip(
@@ -336,10 +350,7 @@ Future<ISet<T>?> showMultipleChoiceFilter<T extends Enum>(
                 CupertinoDialogAction(
                   isDefaultAction: true,
                   child: Text(context.l10n.mobileOkButton),
-                  onPressed: () {
-                    onChanged(items);
-                    Navigator.of(context).pop(items);
-                  },
+                  onPressed: () => Navigator.of(context).pop(items),
                 ),
               ]
             : [
@@ -349,10 +360,7 @@ Future<ISet<T>?> showMultipleChoiceFilter<T extends Enum>(
                 ),
                 TextButton(
                   child: Text(context.l10n.mobileOkButton),
-                  onPressed: () {
-                    onChanged(items);
-                    Navigator.of(context).pop(items);
-                  },
+                  onPressed: () => Navigator.of(context).pop(items),
                 ),
               ],
       );
