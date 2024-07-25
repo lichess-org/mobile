@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
+import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
@@ -507,8 +508,6 @@ class _HelloWidget extends ConsumerWidget {
 
     final user = accountUser ?? session?.user;
 
-    final greetingParts = context.l10n.mobileGreeting.split('%s');
-
     return Padding(
       padding:
           Styles.horizontalBodyPadding.add(Styles.sectionBottomPadding).add(
@@ -530,11 +529,13 @@ class _HelloWidget extends ConsumerWidget {
               color: context.lichessColors.brag,
             ),
             const SizedBox(width: 5.0),
-            if (user != null && greetingParts.length == 2) ...[
-              Text(greetingParts[0], style: style),
-              UserFullNameWidget(user: user, style: style),
-              Text(greetingParts[1], style: style),
-            ] else
+            if (user != null)
+              replaceL10nPlaceholderWithWidget(
+                context.l10n.mobileGreeting,
+                UserFullNameWidget(user: user, style: style),
+                textStyle: style,
+              )
+            else
               Text(context.l10n.mobileGreetingWithoutName, style: style),
           ],
         ),
