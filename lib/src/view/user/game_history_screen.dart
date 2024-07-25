@@ -224,7 +224,7 @@ class _BodyState extends ConsumerState<_Body> {
   }
 }
 
-class _MultipleChoiceFilter<T extends Enum> extends StatefulWidget {
+class _MultipleChoiceFilter<T extends Enum> extends StatelessWidget {
   const _MultipleChoiceFilter({
     required this.filterName,
     required this.choices,
@@ -240,87 +240,122 @@ class _MultipleChoiceFilter<T extends Enum> extends StatefulWidget {
   final void Function(ISet<T> value) onChanged;
 
   @override
-  State<_MultipleChoiceFilter<T>> createState() =>
-      _MultipleChoiceFilterState<T>();
-}
-
-class _MultipleChoiceFilterState<T extends Enum>
-    extends State<_MultipleChoiceFilter<T>> {
-  late ISet<T> selectedItems;
-
-  @override
-  void initState() {
-    super.initState();
-    selectedItems = widget.selectedItems;
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return MenuAnchor(
-      style: MenuStyle(
-        maximumSize: WidgetStatePropertyAll(
-          Size.fromHeight(
-            MediaQuery.sizeOf(context).height * 0.7,
-          ),
-        ),
+    return TextButton(
+      onPressed: () => showMultipleChoiceFilter(
+        context,
+        filterName: filterName,
+        choices: choices,
+        selectedItems: selectedItems,
+        choiceLabel: choiceLabel,
+        onChanged: onChanged,
       ),
-      onClose: () => widget.onChanged(selectedItems),
-      menuChildren: widget.choices
-          .map(
-            (choice) => FilterChip(
-              label: Text(widget.choiceLabel(choice)),
-              selected: selectedItems.contains(choice),
-              onSelected: (value) {
-                setState(() {
-                  selectedItems = value
-                      ? selectedItems.add(choice)
-                      : selectedItems.remove(choice);
-                });
-              },
-            ),
-          )
-          .toList(growable: false),
-      builder: (
-        BuildContext context,
-        MenuController controller,
-        Widget? child,
-      ) =>
-          TextButton(
-        onPressed: () =>
-            controller.isOpen ? controller.close() : controller.open(),
-        style: TextButton.styleFrom(
-          backgroundColor: selectedItems.isEmpty
-              ? Theme.of(context).colorScheme.secondary
-              : Theme.of(context).colorScheme.primary,
-          foregroundColor: selectedItems.isEmpty
-              ? Theme.of(context).colorScheme.onSecondary
-              : Theme.of(context).colorScheme.onPrimary,
-        ),
-        child: Row(
-          children: [
-            if (selectedItems.length > 1)
-              Container(
-                padding: const EdgeInsets.all(4),
-                margin: const EdgeInsets.only(right: 5),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.onPrimary,
-                  shape: BoxShape.circle,
-                ),
-                child: Text(
-                  '${selectedItems.length}',
-                  textAlign: TextAlign.center,
-                  style:
-                      TextStyle(color: Theme.of(context).colorScheme.primary),
-                ),
+      style: TextButton.styleFrom(
+        backgroundColor: selectedItems.isEmpty
+            ? Theme.of(context).colorScheme.secondary
+            : Theme.of(context).colorScheme.primary,
+        foregroundColor: selectedItems.isEmpty
+            ? Theme.of(context).colorScheme.onSecondary
+            : Theme.of(context).colorScheme.onPrimary,
+      ),
+      child: Row(
+        children: [
+          if (selectedItems.length > 1)
+            Container(
+              padding: const EdgeInsets.all(4),
+              margin: const EdgeInsets.only(right: 5),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.onPrimary,
+                shape: BoxShape.circle,
               ),
-            Text(
-              selectedItems.length == 1
-                  ? widget.choiceLabel(selectedItems.first)
-                  : widget.filterName,
+              child: Text(
+                '${selectedItems.length}',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Theme.of(context).colorScheme.primary),
+              ),
             ),
-          ],
-        ),
+          Text(
+            selectedItems.length == 1
+                ? choiceLabel(selectedItems.first)
+                : filterName,
+          ),
+        ],
       ),
     );
   }
+}
+
+Future<ISet<T>?> showMultipleChoiceFilter<T extends Enum>(
+  BuildContext context, {
+  required String filterName,
+  required Iterable<T> choices,
+  required ISet<T> selectedItems,
+  required String Function(T choice) choiceLabel,
+  required void Function(ISet<T> value) onChanged,
+}) {
+  return showAdaptiveDialog<ISet<T>>(
+    context: context,
+    builder: (context) {
+      ISet<T> items = selectedItems;
+      return AlertDialog.adaptive(
+        contentPadding: const EdgeInsets.only(top: 12),
+        scrollable: true,
+        content: StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            final size = MediaQuery.sizeOf(context);
+            return SizedBox(
+              width: size.width,
+              height: size.height / 2,
+              child: GridView.count(
+                crossAxisCount: 2,
+                children: choices
+                    .map(
+                      (choice) => FilterChip(
+                        label: Text(choiceLabel(choice)),
+                        selected: items.contains(choice),
+                        onSelected: (value) {
+                          setState(() {
+                            items = value
+                                ? items.add(choice)
+                                : items.remove(choice);
+                          });
+                        },
+                      ),
+                    )
+                    .toList(growable: false),
+              ),
+            );
+          },
+        ),
+        actions: Theme.of(context).platform == TargetPlatform.iOS
+            ? [
+                CupertinoDialogAction(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text(context.l10n.cancel),
+                ),
+                CupertinoDialogAction(
+                  isDefaultAction: true,
+                  child: Text(context.l10n.mobileOkButton),
+                  onPressed: () {
+                    onChanged(items);
+                    Navigator.of(context).pop(items);
+                  },
+                ),
+              ]
+            : [
+                TextButton(
+                  child: Text(context.l10n.cancel),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+                TextButton(
+                  child: Text(context.l10n.mobileOkButton),
+                  onPressed: () {
+                    onChanged(items);
+                    Navigator.of(context).pop(items);
+                  },
+                ),
+              ],
+      );
+    },
+  );
 }
