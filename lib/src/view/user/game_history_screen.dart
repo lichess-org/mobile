@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -306,7 +307,7 @@ Future<ISet<T>?> showMultipleChoiceFilter<T extends Enum>(
           builder: (BuildContext context, StateSetter setState) {
             final width = MediaQuery.sizeOf(context).width;
             const aspectRatio = 4.0;
-            const itemsPerRow = 2;
+            final itemsPerRow = isTabletOrLarger(context) ? 4 : 2;
             const verticalSpacing = 8.0;
             const horizontalSpacing = 8.0;
 
