@@ -2,6 +2,8 @@ import 'package:intl/intl.dart' as intl;
 
 import 'l10n.dart';
 
+// ignore_for_file: type=lint
+
 /// The translations for Afrikaans (`af`).
 class AppLocalizationsAf extends AppLocalizations {
   AppLocalizationsAf([String locale = 'af']) : super(locale);
