@@ -247,28 +247,28 @@ class _MultipleChoiceFilter<T extends Enum> extends StatefulWidget {
 
 class _MultipleChoiceFilterState<T extends Enum>
     extends State<_MultipleChoiceFilter<T>> {
-  late ISet<T> items;
+  late ISet<T> selectedItems;
 
   @override
   void initState() {
     super.initState();
-    items = widget.selectedItems;
+    selectedItems = widget.selectedItems;
   }
 
   @override
   Widget build(BuildContext context) {
     return MenuAnchor(
-      onClose: () => widget.onChanged(items),
+      onClose: () => widget.onChanged(selectedItems),
       menuChildren: widget.choices
           .map(
             (choice) => FilterChip(
               label: widget.choiceLabelBuilder(choice),
-              selected: items.contains(choice),
+              selected: selectedItems.contains(choice),
               onSelected: (value) {
                 setState(() {
-                  items = value
-                      ? items.union({choice})
-                      : items.difference({choice});
+                  selectedItems = value
+                      ? selectedItems.add(choice)
+                      : selectedItems.remove(choice);
                 });
               },
             ),
@@ -283,16 +283,16 @@ class _MultipleChoiceFilterState<T extends Enum>
         onPressed: () =>
             controller.isOpen ? controller.close() : controller.open(),
         style: TextButton.styleFrom(
-          backgroundColor: items.isEmpty
+          backgroundColor: selectedItems.isEmpty
               ? Theme.of(context).colorScheme.secondary
               : Theme.of(context).colorScheme.primary,
-          foregroundColor: items.isEmpty
+          foregroundColor: selectedItems.isEmpty
               ? Theme.of(context).colorScheme.onSecondary
               : Theme.of(context).colorScheme.onPrimary,
         ),
         child: Row(
           children: [
-            if (items.length > 1)
+            if (selectedItems.length > 1)
               Container(
                 padding: const EdgeInsets.all(4),
                 decoration: BoxDecoration(
@@ -300,7 +300,7 @@ class _MultipleChoiceFilterState<T extends Enum>
                   shape: BoxShape.circle,
                 ),
                 child: Text(
-                  '${items.length}',
+                  '${selectedItems.length}',
                   textAlign: TextAlign.center,
                   style:
                       TextStyle(color: Theme.of(context).colorScheme.primary),
