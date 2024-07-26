@@ -38,4 +38,5 @@
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Einer Partie beitreten</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Gespeicherten Zug löschen</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Etwas ist schiefgelaufen.</string>
+  <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">Ergebnis anzeigen</string>
 </resources>
