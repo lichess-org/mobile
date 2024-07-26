@@ -2,8 +2,6 @@ import 'package:intl/intl.dart' as intl;
 
 import 'l10n.dart';
 
-// ignore_for_file: type=lint
-
 /// The translations for Croatian (`hr`).
 class AppLocalizationsHr extends AppLocalizations {
   AppLocalizationsHr([String locale = 'hr']) : super(locale);
