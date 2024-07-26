@@ -6,12 +6,9 @@ import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
 
 class GameHistoryScreen extends ConsumerWidget {
   const GameHistoryScreen({
@@ -26,23 +23,75 @@ class GameHistoryScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ConsumerPlatformWidget(
-      ref: ref,
-      androidBuilder: _buildAndroid,
-      iosBuilder: _buildIos,
-    );
+    final gameFilterState =
+        ref.watch(gameFilterProvider(perfs: gameFilters.perfs));
+
+    final perfFilter = _MultipleChoiceFilter(
+              filterName: context.l10n.variant,
+              choices: const [
+                Perf.ultraBullet,
+                Perf.bullet,
+                Perf.blitz,
+                Perf.rapid,
+                Perf.classical,
+                Perf.correspondence,
+                Perf.chess960,
+                Perf.antichess,
+                Perf.kingOfTheHill,
+                Perf.threeCheck,
+                Perf.atomic,
+                Perf.horde,
+                Perf.racingKings,
+                Perf.crazyhouse,
+              ],
+              selectedItems: gameFilterState.perfs,
+              choiceLabel: (t) => t.title,
+              onChanged: (value) => ref
+                  .read(
+                    gameFilterProvider(
+                      perfs: gameFilters.perfs,
+                    ).notifier,
+                  )
+                  .setPerfs(value),
+            );
+
+    switch (Theme.of(context).platform) {
+      case TargetPlatform.android:
+        return _buildAndroid(context, ref, perfFilter: perfFilter);
+      case TargetPlatform.iOS:
+        return _buildIos(context, ref, perfFilter: perfFilter);
+      default:
+        assert(false, 'Unexpected platform ${Theme.of(context).platform}');
+        return const SizedBox.shrink();
+    }
   }
 
-  Widget _buildIos(BuildContext context, WidgetRef ref) {
+  Widget _buildIos(BuildContext context, WidgetRef ref, {
+    required Widget perfFilter,
+  }) {
     return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(middle: Text(context.l10n.games)),
+      navigationBar: CupertinoNavigationBar(
+        middle: Row(
+          children: [
+            perfFilter,
+          ],
+        ),
+      ),
       child: _Body(user: user, isOnline: isOnline, gameFilters: gameFilters),
     );
   }
 
-  Widget _buildAndroid(BuildContext context, WidgetRef ref) {
+  Widget _buildAndroid(BuildContext context, WidgetRef ref, {
+    required Widget perfFilter,
+  }) {
     return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.games)),
+      appBar: AppBar(
+        title: Row(
+          children: [
+            perfFilter,
+          ],
+        ),
+      ),
       body: _Body(user: user, isOnline: isOnline, gameFilters: gameFilters),
     );
   }
@@ -130,45 +179,8 @@ class _BodyState extends ConsumerState<_Body> {
         final list = state.gameList;
 
         return SafeArea(
-          child: Column(
-            children: [
-              Container(
-                padding: Styles.bodyPadding,
-                child: Row(
-                  children: [
-                    _MultipleChoiceFilter(
-                      filterName: context.l10n.variant,
-                      choices: const [
-                        Perf.ultraBullet,
-                        Perf.bullet,
-                        Perf.blitz,
-                        Perf.rapid,
-                        Perf.classical,
-                        Perf.correspondence,
-                        Perf.chess960,
-                        Perf.antichess,
-                        Perf.kingOfTheHill,
-                        Perf.threeCheck,
-                        Perf.atomic,
-                        Perf.horde,
-                        Perf.racingKings,
-                        Perf.crazyhouse,
-                      ],
-                      selectedItems: gameFilterState.perfs,
-                      choiceLabel: (t) => t.title,
-                      onChanged: (value) => ref
-                          .read(
-                            gameFilterProvider(
-                              perfs: widget.gameFilters.perfs,
-                            ).notifier,
-                          )
-                          .setPerfs(value),
-                    ),
-                  ],
-                ),
-              ),
-              if (list.isEmpty)
-                const Padding(
+          child: list.isEmpty
+              ? const Padding(
                   padding: EdgeInsets.symmetric(vertical: 32.0),
                   child: Center(
                     child: Text(
@@ -176,8 +188,7 @@ class _BodyState extends ConsumerState<_Body> {
                     ),
                   ),
                 )
-              else
-                Expanded(
+              : Expanded(
                   child: ListView.builder(
                     controller: _scrollController,
                     itemCount: list.length + (state.isLoading ? 1 : 0),
@@ -208,8 +219,6 @@ class _BodyState extends ConsumerState<_Body> {
                     },
                   ),
                 ),
-            ],
-          ),
         );
       },
       error: (e, s) {
