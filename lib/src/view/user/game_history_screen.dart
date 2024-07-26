@@ -27,33 +27,37 @@ class GameHistoryScreen extends ConsumerWidget {
         ref.watch(gameFilterProvider(perfs: gameFilters.perfs));
 
     final perfFilter = _MultipleChoiceFilter(
-              filterName: context.l10n.variant,
-              choices: const [
-                Perf.ultraBullet,
-                Perf.bullet,
-                Perf.blitz,
-                Perf.rapid,
-                Perf.classical,
-                Perf.correspondence,
-                Perf.chess960,
-                Perf.antichess,
-                Perf.kingOfTheHill,
-                Perf.threeCheck,
-                Perf.atomic,
-                Perf.horde,
-                Perf.racingKings,
-                Perf.crazyhouse,
-              ],
-              selectedItems: gameFilterState.perfs,
-              choiceLabel: (t) => t.title,
-              onChanged: (value) => ref
-                  .read(
-                    gameFilterProvider(
-                      perfs: gameFilters.perfs,
-                    ).notifier,
-                  )
-                  .setPerfs(value),
-            );
+      filterName: context.l10n.variant,
+      choicesGroups: const [
+        [
+          Perf.ultraBullet,
+          Perf.bullet,
+          Perf.blitz,
+          Perf.rapid,
+          Perf.classical,
+          Perf.correspondence,
+        ],
+        [
+          Perf.chess960,
+          Perf.antichess,
+          Perf.kingOfTheHill,
+          Perf.threeCheck,
+          Perf.atomic,
+          Perf.horde,
+          Perf.racingKings,
+          Perf.crazyhouse,
+        ],
+      ],
+      selectedItems: gameFilterState.perfs,
+      choiceLabel: (t) => t.title,
+      onChanged: (value) => ref
+          .read(
+            gameFilterProvider(
+              perfs: gameFilters.perfs,
+            ).notifier,
+          )
+          .setPerfs(value),
+    );
 
     switch (Theme.of(context).platform) {
       case TargetPlatform.android:
@@ -66,7 +70,9 @@ class GameHistoryScreen extends ConsumerWidget {
     }
   }
 
-  Widget _buildIos(BuildContext context, WidgetRef ref, {
+  Widget _buildIos(
+    BuildContext context,
+    WidgetRef ref, {
     required Widget perfFilter,
   }) {
     return CupertinoPageScaffold(
@@ -81,7 +87,9 @@ class GameHistoryScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildAndroid(BuildContext context, WidgetRef ref, {
+  Widget _buildAndroid(
+    BuildContext context,
+    WidgetRef ref, {
     required Widget perfFilter,
   }) {
     return Scaffold(
@@ -235,14 +243,14 @@ class _BodyState extends ConsumerState<_Body> {
 class _MultipleChoiceFilter<T extends Enum> extends StatelessWidget {
   const _MultipleChoiceFilter({
     required this.filterName,
-    required this.choices,
+    required this.choicesGroups,
     required this.selectedItems,
     required this.choiceLabel,
     required this.onChanged,
   });
 
   final String filterName;
-  final Iterable<T> choices;
+  final Iterable<Iterable<T>> choicesGroups;
   final ISet<T> selectedItems;
   final String Function(T choice) choiceLabel;
   final void Function(ISet<T> value) onChanged;
@@ -253,7 +261,7 @@ class _MultipleChoiceFilter<T extends Enum> extends StatelessWidget {
       onPressed: () => showMultipleChoiceFilter(
         context,
         filterName: filterName,
-        choices: choices,
+        choicesGroups: choicesGroups,
         selectedItems: selectedItems,
         choiceLabel: choiceLabel,
       ).then((value) {
@@ -299,7 +307,7 @@ class _MultipleChoiceFilter<T extends Enum> extends StatelessWidget {
 Future<ISet<T>?> showMultipleChoiceFilter<T extends Enum>(
   BuildContext context, {
   required String filterName,
-  required Iterable<T> choices,
+  required Iterable<Iterable<T>> choicesGroups,
   required ISet<T> selectedItems,
   required String Function(T choice) choiceLabel,
 }) {
@@ -312,20 +320,35 @@ Future<ISet<T>?> showMultipleChoiceFilter<T extends Enum>(
         scrollable: true,
         content: StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
-            return Wrap(
-              spacing: 8.0,
-              runSpacing: 8.0,
-              children: choices
+            return Column(
+              children: choicesGroups
                   .map(
-                    (choice) => FilterChip(
-                      label: Text(choiceLabel(choice)),
-                      selected: items.contains(choice),
-                      onSelected: (value) {
-                        setState(() {
-                          items =
-                              value ? items.add(choice) : items.remove(choice);
-                        });
-                      },
+                    (group) => Column(
+                      children: [
+                        SizedBox(
+                          width: double.infinity,
+                          child: Wrap(
+                            spacing: 8.0,
+                            runSpacing: 8.0,
+                            children: group
+                                .map(
+                                  (choice) => FilterChip(
+                                    label: Text(choiceLabel(choice)),
+                                    selected: items.contains(choice),
+                                    onSelected: (value) {
+                                      setState(() {
+                                        items = value
+                                            ? items.add(choice)
+                                            : items.remove(choice);
+                                      });
+                                    },
+                                  ),
+                                )
+                                .toList(growable: false),
+                          ),
+                        ),
+                        if (choicesGroups.isNotLast(group)) const Divider(),
+                      ],
                     ),
                   )
                   .toList(growable: false),
