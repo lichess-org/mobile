@@ -137,8 +137,7 @@ class _BodyState extends ConsumerState<_Body> {
                 child: Row(
                   children: [
                     _MultipleChoiceFilter(
-                      filterName:
-                          '${context.l10n.timeControl} / ${context.l10n.variant}',
+                      filterName: context.l10n.variant,
                       choices: const [
                         Perf.ultraBullet,
                         Perf.bullet,
