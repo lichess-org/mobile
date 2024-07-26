@@ -52,3 +52,45 @@ class _LocaleObserver extends WidgetsBindingObserver {
     _didChangeLocales(locales);
   }
 }
+
+/// Takes a localization function ([l10nWithPlaceholder]) (from lib/l10n/l10n.dart) with a single placeholder
+/// and returns a Text widget containing the localized string with the placeholder replaced by the given [widget].
+///
+/// The [textStyle] parameter can be used to style the displayed text parts of the localized string.
+///
+/// For example:
+///
+/// ```dart
+/// String translationFun(String name) {
+///   return 'Hello, ${name}!';
+/// }
+///
+/// // returns a text widget containing MyFancyWidget('Magnus') in place of the placeholder
+/// replaceL10nPlaceholderWithWidget(translationFun, MyFancyWidget('Magnus'));
+/// ```
+Text replaceL10nPlaceholderWithWidget<T extends Widget>(
+  String Function(String) l10nWithPlaceholder,
+  T widget, {
+  TextStyle? textStyle,
+}) {
+  final localizedStringWithPlaceholder = l10nWithPlaceholder('%s');
+
+  final parts = localizedStringWithPlaceholder.split('%s');
+
+  // Localized string did not actually contain the placeholder
+  if (parts[0] == localizedStringWithPlaceholder) {
+    return Text(localizedStringWithPlaceholder);
+  }
+
+  return Text.rich(
+    TextSpan(
+      children: <InlineSpan>[
+        if (parts[0].isNotEmpty) TextSpan(text: parts[0], style: textStyle),
+        if (parts[0] != localizedStringWithPlaceholder)
+          WidgetSpan(child: widget),
+        if (parts.length > 1 && parts[1].isNotEmpty)
+          TextSpan(text: parts[1], style: textStyle),
+      ],
+    ),
+  );
+}
