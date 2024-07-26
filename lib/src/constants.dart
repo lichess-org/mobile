@@ -98,6 +98,7 @@ const kSupportedLocales = [
   Locale('fr', 'FR'),
   Locale('ga', 'IE'),
   Locale('gl', 'ES'),
+  Locale('gsw', 'CH'),
   Locale('he', 'IL'),
   Locale('hi', 'IN'),
   Locale('hr', 'HR'),
