@@ -53,27 +53,24 @@ class _LocaleObserver extends WidgetsBindingObserver {
   }
 }
 
-/// Takes a localization function ([l10nWithPlaceholder]) (from lib/l10n/l10n.dart) with a single placeholder
-/// and returns a Text widget containing the localized string with the placeholder replaced by the given [widget].
+/// Returns a localized string with a single placeholder replaced by a widget.
 ///
 /// The [textStyle] parameter can be used to style the displayed text parts of the localized string.
 ///
 /// For example:
-///
 /// ```dart
 /// String translationFun(String name) {
 ///   return 'Hello, ${name}!';
 /// }
-///
 /// // returns a text widget containing MyFancyWidget('Magnus') in place of the placeholder
-/// replaceL10nPlaceholderWithWidget(translationFun, MyFancyWidget('Magnus'));
+/// l10nWithWidget(translationFun, MyFancyWidget('Magnus'));
 /// ```
-Text replaceL10nPlaceholderWithWidget<T extends Widget>(
-  String Function(String) l10nWithPlaceholder,
+Text l10nWithWidget<T extends Widget>(
+  String Function(String) l10nFunction,
   T widget, {
   TextStyle? textStyle,
 }) {
-  final localizedStringWithPlaceholder = l10nWithPlaceholder('%s');
+  final localizedStringWithPlaceholder = l10nFunction('%s');
 
   final parts = localizedStringWithPlaceholder.split('%s');
 

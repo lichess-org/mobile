@@ -4,10 +4,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 
 void main() {
-  group('replaceL10nPlaceholderWithWidget', () {
+  group('l10nWithWidget', () {
     const widget = Text('I am a widget');
     test('placeholder in the middle', () {
-      final text = replaceL10nPlaceholderWithWidget(
+      final text = l10nWithWidget(
         (_) => 'foo %s bar',
         widget,
       );
@@ -19,7 +19,7 @@ void main() {
     });
 
     test('no placeholder', () {
-      final text = replaceL10nPlaceholderWithWidget(
+      final text = l10nWithWidget(
         (_) => 'foo bar',
         widget,
       );
@@ -27,7 +27,7 @@ void main() {
     });
 
     test('placeholder at the beginning', () {
-      final text = replaceL10nPlaceholderWithWidget(
+      final text = l10nWithWidget(
         (_) => '%s foo bar',
         widget,
       );
@@ -38,7 +38,7 @@ void main() {
     });
 
     test('placeholder at the end', () {
-      final text = replaceL10nPlaceholderWithWidget(
+      final text = l10nWithWidget(
         (_) => 'foo bar %s',
         widget,
       );
@@ -49,7 +49,7 @@ void main() {
     });
 
     test('passes textStyle', () {
-      final text = replaceL10nPlaceholderWithWidget(
+      final text = l10nWithWidget(
         (_) => 'foo %s bar',
         widget,
         textStyle: const TextStyle(fontWeight: FontWeight.bold),

@@ -530,7 +530,7 @@ class _HelloWidget extends ConsumerWidget {
             ),
             const SizedBox(width: 5.0),
             if (user != null)
-              replaceL10nPlaceholderWithWidget(
+              l10nWithWidget(
                 context.l10n.mobileGreeting,
                 UserFullNameWidget(user: user, style: style),
                 textStyle: style,
