@@ -133,7 +133,7 @@ class _ContextMenu extends ConsumerWidget {
                               size: constraints.maxWidth -
                                   (constraints.maxWidth / 1.618),
                               fen: game.lastFen!,
-                              orientation: mySide.cg,
+                              orientation: mySide,
                               lastMove: game.lastMove?.cg,
                             ),
                           Expanded(

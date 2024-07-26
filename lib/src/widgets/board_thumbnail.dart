@@ -1,4 +1,5 @@
 import 'package:chessground/chessground.dart';
+import 'package:dartchess/dartchess.dart' as dc;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -20,7 +21,7 @@ class BoardThumbnail extends ConsumerStatefulWidget {
     required this.size,
     this.header,
     this.footer,
-  })  : orientation = Side.white,
+  })  : orientation = dc.Side.white,
         fen = kInitialFen,
         lastMove = null,
         onTap = null;
@@ -29,7 +30,7 @@ class BoardThumbnail extends ConsumerStatefulWidget {
   final double size;
 
   /// Side by which the board is oriented.
-  final Side orientation;
+  final dc.Side orientation;
 
   /// FEN string describing the position of the board.
   final String fen;
@@ -66,15 +67,15 @@ class _BoardThumbnailState extends ConsumerState<BoardThumbnail> {
   Widget build(BuildContext context) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
 
-    final board = Board(
+    final board = Chessboard(
       size: widget.size,
-      data: BoardData(
+      state: ChessboardState(
         interactableSide: InteractableSide.none,
         fen: widget.fen,
         orientation: widget.orientation,
         lastMove: widget.lastMove,
       ),
-      settings: BoardSettings(
+      settings: ChessboardSettings(
         enableCoordinates: false,
         borderRadius: const BorderRadius.all(Radius.circular(4.0)),
         boxShadow: boardShadows,

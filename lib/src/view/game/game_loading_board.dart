@@ -29,11 +29,7 @@ class LobbyScreenLoadingContent extends StatelessWidget {
           child: SafeArea(
             bottom: false,
             child: BoardTable(
-              boardData: const cg.BoardData(
-                interactableSide: cg.InteractableSide.none,
-                orientation: cg.Side.white,
-                fen: kEmptyFen,
-              ),
+              boardState: kEmptyBoardState,
               topTable: const SizedBox.shrink(),
               bottomTable: const SizedBox.shrink(),
               showMoveListPlaceholder: true,
@@ -112,11 +108,7 @@ class ChallengeLoadingContent extends StatelessWidget {
           child: SafeArea(
             bottom: false,
             child: BoardTable(
-              boardData: const cg.BoardData(
-                interactableSide: cg.InteractableSide.none,
-                orientation: cg.Side.white,
-                fen: kEmptyFen,
-              ),
+              boardState: kEmptyBoardState,
               topTable: const SizedBox.shrink(),
               bottomTable: const SizedBox.shrink(),
               showMoveListPlaceholder: true,
@@ -192,9 +184,9 @@ class StandaloneGameLoadingBoard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BoardTable(
-      boardData: cg.BoardData(
+      boardState: cg.ChessboardState(
         interactableSide: cg.InteractableSide.none,
-        orientation: orientation?.cg ?? cg.Side.white,
+        orientation: orientation ?? Side.white,
         fen: fen ?? kEmptyFen,
         lastMove: lastMove?.cg,
       ),
@@ -218,9 +210,9 @@ class LoadGameError extends StatelessWidget {
           child: SafeArea(
             bottom: false,
             child: BoardTable(
-              boardData: const cg.BoardData(
+              boardState: const cg.ChessboardState(
                 interactableSide: cg.InteractableSide.none,
-                orientation: cg.Side.white,
+                orientation: Side.white,
                 fen: kEmptyFen,
               ),
               topTable: const SizedBox.shrink(),
@@ -263,9 +255,9 @@ class ChallengeDeclinedBoard extends StatelessWidget {
           child: SafeArea(
             bottom: false,
             child: BoardTable(
-              boardData: const cg.BoardData(
+              boardState: const cg.ChessboardState(
                 interactableSide: cg.InteractableSide.none,
-                orientation: cg.Side.white,
+                orientation: Side.white,
                 fen: kEmptyFen,
               ),
               topTable: const SizedBox.shrink(),

@@ -153,9 +153,9 @@ class _BoardBody extends ConsumerWidget {
     final topPlayer = orientation == Side.white ? black : white;
     final bottomPlayer = orientation == Side.white ? white : black;
     final loadingBoard = BoardTable(
-      boardData: cg.BoardData(
+      boardState: cg.ChessboardState(
         interactableSide: cg.InteractableSide.none,
-        orientation: (isBoardTurned ? orientation.opposite : orientation).cg,
+        orientation: (isBoardTurned ? orientation.opposite : orientation),
         fen: gameData.lastFen ?? kInitialBoardFEN,
       ),
       topTable: topPlayer,
@@ -196,13 +196,12 @@ class _BoardBody extends ConsumerWidget {
         final position = game.positionAt(cursor);
 
         return BoardTable(
-          boardData: cg.BoardData(
+          boardState: cg.ChessboardState(
             interactableSide: cg.InteractableSide.none,
-            orientation:
-                (isBoardTurned ? orientation.opposite : orientation).cg,
+            orientation: (isBoardTurned ? orientation.opposite : orientation),
             fen: position.fen,
             lastMove: game.moveAt(cursor)?.cg,
-            sideToMove: position.turn.cg,
+            sideToMove: position.turn,
             isCheck: position.isCheck,
           ),
           topTable: topPlayer,

@@ -47,7 +47,7 @@ void main() {
         await tester.pumpWidget(app);
 
         // data shown immediately
-        expect(find.byType(cg.Board), findsOneWidget);
+        expect(find.byType(cg.Chessboard), findsOneWidget);
         expect(find.byType(cg.PieceWidget), findsNWidgets(25));
         expect(find.widgetWithText(GamePlayer, 'veloce'), findsOneWidget);
         expect(
@@ -57,7 +57,10 @@ void main() {
 
         // cannot interact with board
         expect(
-          tester.widget<cg.Board>(find.byType(cg.Board)).data.interactableSide,
+          tester
+              .widget<cg.Chessboard>(find.byType(cg.Chessboard))
+              .state
+              .interactableSide,
           cg.InteractableSide.none,
         );
 
@@ -78,7 +81,7 @@ void main() {
         await tester.pumpAndSettle();
 
         // same info still displayed
-        expect(find.byType(cg.Board), findsOneWidget);
+        expect(find.byType(cg.Chessboard), findsOneWidget);
         expect(find.byType(cg.PieceWidget), findsNWidgets(25));
         expect(find.widgetWithText(GamePlayer, 'veloce'), findsOneWidget);
         expect(

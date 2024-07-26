@@ -75,7 +75,7 @@ class PuzzleHistoryPreview extends ConsumerWidget {
                 ),
               );
             },
-            orientation: side.cg,
+            orientation: side,
             fen: fen,
             lastMove: lastMove.cg,
             footer: Padding(
@@ -241,7 +241,7 @@ class _HistoryBoard extends ConsumerWidget {
             ),
           );
         },
-        orientation: turn.cg,
+        orientation: turn,
         fen: fen,
         lastMove: lastMove.cg,
         footer: Padding(

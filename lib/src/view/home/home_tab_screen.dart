@@ -744,7 +744,7 @@ class _GamePreviewCarouselItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return BoardCarouselItem(
       fen: game.fen,
-      orientation: game.orientation.cg,
+      orientation: game.orientation,
       lastMove: game.lastMove?.cg,
       description: Align(
         alignment: Alignment.centerLeft,

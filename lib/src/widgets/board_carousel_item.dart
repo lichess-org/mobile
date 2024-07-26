@@ -1,4 +1,5 @@
 import 'package:chessground/chessground.dart';
+import 'package:dartchess/dartchess.dart' as dc;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -21,7 +22,7 @@ class BoardCarouselItem extends ConsumerWidget {
   });
 
   /// Side by which the board is oriented.
-  final Side orientation;
+  final dc.Side orientation;
 
   /// FEN string describing the position of the board.
   final String fen;
@@ -79,15 +80,15 @@ class BoardCarouselItem extends ConsumerWidget {
                   },
                   child: SizedBox(
                     height: boardSize,
-                    child: Board(
+                    child: Chessboard(
                       size: boardSize,
-                      data: BoardData(
+                      state: ChessboardState(
                         interactableSide: InteractableSide.none,
                         fen: fen,
                         orientation: orientation,
                         lastMove: lastMove,
                       ),
-                      settings: BoardSettings(
+                      settings: ChessboardSettings(
                         enableCoordinates: false,
                         borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(10.0),

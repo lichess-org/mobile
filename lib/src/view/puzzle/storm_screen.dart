@@ -101,11 +101,7 @@ class _Load extends ConsumerWidget {
           child: BoardTable(
             topTable: kEmptyWidget,
             bottomTable: kEmptyWidget,
-            boardData: const cg.BoardData(
-              fen: kEmptyFen,
-              interactableSide: cg.InteractableSide.none,
-              orientation: cg.Side.white,
-            ),
+            boardState: kEmptyBoardState,
             errorMessage: e.toString(),
           ),
         );
@@ -176,8 +172,8 @@ class _Body extends ConsumerWidget {
                       .onUserMove(Move.fromUci(move.uci)!),
                   onPremove: (move) =>
                       ref.read(ctrlProvider.notifier).setPremove(move),
-                  boardData: cg.BoardData(
-                    orientation: stormState.pov.cg,
+                  boardState: cg.ChessboardState(
+                    orientation: stormState.pov,
                     interactableSide: !stormState.firstMovePlayed ||
                             stormState.mode == StormMode.ended ||
                             stormState.position.isGameOver
@@ -189,7 +185,7 @@ class _Body extends ConsumerWidget {
                     isCheck: boardPreferences.boardHighlights &&
                         stormState.position.isCheck,
                     lastMove: stormState.lastMove?.cg,
-                    sideToMove: stormState.position.turn.cg,
+                    sideToMove: stormState.position.turn,
                     validMoves: stormState.validMoves,
                     premove: stormState.premove,
                   ),

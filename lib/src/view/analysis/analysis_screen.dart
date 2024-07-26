@@ -424,7 +424,7 @@ class _BoardState extends ConsumerState<_Board> {
                   cg.PieceShape(
                     color: color,
                     orig: move.cg.to,
-                    role: promRole.cg,
+                    role: promRole,
                   ),
               ];
             case DropMove(role: final role, to: _):
@@ -432,7 +432,7 @@ class _BoardState extends ConsumerState<_Board> {
                 cg.PieceShape(
                   color: color,
                   orig: move.cg.to,
-                  role: role.cg,
+                  role: role,
                 ),
               ];
           }
@@ -472,12 +472,12 @@ class _BoardState extends ConsumerState<_Board> {
         ? _computeBestMoveShapes(bestMoves)
         : ISet();
 
-    return cg.Board(
+    return cg.Chessboard(
       size: widget.boardSize,
       onMove: (move, {isDrop, isPremove}) =>
           ref.read(ctrlProvider.notifier).onUserMove(Move.fromUci(move.uci)!),
-      data: cg.BoardData(
-        orientation: analysisState.pov.cg,
+      state: cg.ChessboardState(
+        orientation: analysisState.pov,
         interactableSide: analysisState.position.isGameOver
             ? cg.InteractableSide.none
             : analysisState.position.turn == Side.white
@@ -486,7 +486,7 @@ class _BoardState extends ConsumerState<_Board> {
         fen: analysisState.position.fen,
         isCheck: boardPrefs.boardHighlights && analysisState.position.isCheck,
         lastMove: analysisState.lastMove?.cg,
-        sideToMove: analysisState.position.turn.cg,
+        sideToMove: analysisState.position.turn,
         validMoves: analysisState.validMoves,
         shapes: userShapes.union(bestMoveShapes),
         annotations:
@@ -499,7 +499,7 @@ class _BoardState extends ConsumerState<_Board> {
                     : IMap({sanMove.move.cg.to: annotation})
                 : null,
       ),
-      settings: cg.BoardSettings(
+      settings: cg.ChessboardSettings(
         pieceAssets: boardPrefs.pieceSet.assets,
         colorScheme: boardPrefs.boardTheme.colors,
         showValidMoves: boardPrefs.showLegalMoves,

@@ -1,4 +1,5 @@
 import 'package:chessground/chessground.dart';
+import 'package:dartchess/dartchess.dart' as dc;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,7 +19,7 @@ class SmallBoardPreview extends ConsumerStatefulWidget {
   });
 
   /// Side by which the board is oriented.
-  final Side orientation;
+  final dc.Side orientation;
 
   /// FEN string describing the position of the board.
   final String fen;
@@ -64,15 +65,15 @@ class _SmallBoardPreviewState extends ConsumerState<SmallBoardPreview> {
               height: boardSize,
               child: Row(
                 children: [
-                  Board(
+                  Chessboard(
                     size: boardSize,
-                    data: BoardData(
+                    state: ChessboardState(
                       interactableSide: InteractableSide.none,
                       fen: widget.fen,
                       orientation: widget.orientation,
                       lastMove: widget.lastMove,
                     ),
-                    settings: BoardSettings(
+                    settings: ChessboardSettings(
                       enableCoordinates: false,
                       borderRadius:
                           const BorderRadius.all(Radius.circular(4.0)),

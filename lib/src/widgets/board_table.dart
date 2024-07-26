@@ -31,7 +31,7 @@ class BoardTable extends ConsumerStatefulWidget {
   const BoardTable({
     this.onMove,
     this.onPremove,
-    required this.boardData,
+    required this.boardState,
     this.boardSettingsOverrides,
     required this.topTable,
     required this.bottomTable,
@@ -54,7 +54,7 @@ class BoardTable extends ConsumerStatefulWidget {
   final void Function(Move, {bool? isDrop, bool? isPremove})? onMove;
   final void Function(Move?)? onPremove;
 
-  final BoardData boardData;
+  final ChessboardState boardState;
 
   final BoardSettingsOverrides? boardSettingsOverrides;
 
@@ -146,7 +146,7 @@ class _BoardTableState extends ConsumerState<BoardTable> {
               )
             : null;
 
-        final defaultSettings = BoardSettings(
+        final defaultSettings = ChessboardSettings(
           pieceAssets: boardPrefs.pieceSet.assets,
           colorScheme: boardPrefs.boardTheme.colors,
           showValidMoves: boardPrefs.showLegalMoves,
@@ -169,11 +169,11 @@ class _BoardTableState extends ConsumerState<BoardTable> {
             ? widget.boardSettingsOverrides!.merge(defaultSettings)
             : defaultSettings;
 
-        final board = Board(
+        final board = Chessboard(
           key: widget.boardKey,
           size: boardSize,
-          data: widget.boardData.copyWith(
-            shapes: userShapes.union(widget.boardData.shapes ?? ISet()),
+          state: widget.boardState.copyWith(
+            shapes: userShapes.union(widget.boardState.shapes ?? ISet()),
           ),
           settings: settings,
           onMove: widget.onMove,
@@ -364,7 +364,7 @@ class BoardSettingsOverrides {
   final bool? autoQueenPromotionOnPremove;
   final bool? blindfoldMode;
 
-  BoardSettings merge(BoardSettings settings) {
+  ChessboardSettings merge(ChessboardSettings settings) {
     return settings.copyWith(
       animationDuration: animationDuration,
       autoQueenPromotion: autoQueenPromotion,

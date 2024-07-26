@@ -232,18 +232,18 @@ class _BodyState extends ConsumerState<_Body> {
               onMove: (move, {isDrop, isPremove}) {
                 onUserMove(Move.fromUci(move.uci)!);
               },
-              boardData: cg.BoardData(
+              boardState: cg.ChessboardState(
                 interactableSide: game.playable && !isReplaying
                     ? youAre == Side.white
                         ? cg.InteractableSide.white
                         : cg.InteractableSide.black
                     : cg.InteractableSide.none,
-                orientation: isBoardTurned ? youAre.opposite.cg : youAre.cg,
+                orientation: isBoardTurned ? youAre.opposite : youAre,
                 fen: position.fen,
                 lastMove: game.moveAt(stepCursor)?.cg,
                 isCheck: position.isCheck,
-                sideToMove: sideToMove.cg,
-                validMoves: algebraicLegalMoves(position),
+                sideToMove: sideToMove,
+                validMoves: algebraicLegalMovesAsSquareIds(position),
               ),
               topTable: topPlayer,
               bottomTable: bottomPlayer,

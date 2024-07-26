@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
+import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:result_extensions/result_extensions.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -345,7 +346,8 @@ class StormState with _$StormState {
 
   bool get isOver => moveIndex >= puzzle.solution.length - 1;
 
-  IMap<String, ISet<String>> get validMoves => algebraicLegalMoves(position);
+  IMap<cg.SquareId, ISet<cg.SquareId>> get validMoves =>
+      algebraicLegalMovesAsSquareIds(position);
 }
 
 enum StormMode { initial, running, ended }

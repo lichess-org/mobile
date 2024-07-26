@@ -122,11 +122,11 @@ class _Body extends ConsumerWidget {
                     gameState.game.positionAt(gameState.stepCursor);
                 final sideToMove = position.turn;
 
-                final boardData = cg.BoardData(
+                final boardData = cg.ChessboardState(
                   interactableSide: cg.InteractableSide.none,
-                  orientation: gameState.orientation.cg,
+                  orientation: gameState.orientation,
                   fen: position.fen,
-                  sideToMove: sideToMove.cg,
+                  sideToMove: sideToMove,
                   lastMove: game.moveAt(gameState.stepCursor)?.cg,
                   isCheck: boardPreferences.boardHighlights && position.isCheck,
                 );
@@ -153,7 +153,7 @@ class _Body extends ConsumerWidget {
                   materialDiff: game.lastMaterialDiffAt(Side.white),
                 );
                 return BoardTable(
-                  boardData: boardData,
+                  boardState: boardData,
                   boardSettingsOverrides: const BoardSettingsOverrides(
                     animationDuration: Duration.zero,
                   ),
@@ -173,11 +173,7 @@ class _Body extends ConsumerWidget {
               loading: () => const BoardTable(
                 topTable: kEmptyWidget,
                 bottomTable: kEmptyWidget,
-                boardData: cg.BoardData(
-                  interactableSide: cg.InteractableSide.none,
-                  orientation: cg.Side.white,
-                  fen: kEmptyFen,
-                ),
+                boardState: kEmptyBoardState,
                 showMoveListPlaceholder: true,
               ),
               error: (err, stackTrace) {
@@ -187,11 +183,7 @@ class _Body extends ConsumerWidget {
                 return const BoardTable(
                   topTable: kEmptyWidget,
                   bottomTable: kEmptyWidget,
-                  boardData: cg.BoardData(
-                    fen: kEmptyFen,
-                    interactableSide: cg.InteractableSide.none,
-                    orientation: cg.Side.white,
-                  ),
+                  boardState: kEmptyBoardState,
                   errorMessage: 'Could not load TV stream.',
                   showMoveListPlaceholder: true,
                 );

@@ -1,3 +1,5 @@
+import 'package:chessground/chessground.dart' as cg;
+import 'package:dartchess/dartchess.dart' as dc;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -53,6 +55,12 @@ const kInitialFen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 const kTabletBoardTableSidePadding = 16.0;
 const kBottomBarHeight = 56.0;
 const kMaterialPopupMenuMaxWidth = 500.0;
+
+const cg.ChessboardState kEmptyBoardState = cg.ChessboardState(
+  fen: kEmptyFen,
+  interactableSide: cg.InteractableSide.none,
+  orientation: dc.Side.white,
+);
 
 /// The threshold to detect screens with a small remaining height left board.
 const kSmallRemainingHeightLeftBoardThreshold = 160;

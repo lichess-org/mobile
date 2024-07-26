@@ -1,4 +1,3 @@
-import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart' as dartchess;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
@@ -132,10 +131,10 @@ class BroadcastPreview extends StatelessWidget {
             }
 
             final game = games![index];
-            final playingSide = dartchess.Setup.parseFen(game.fen).turn.cg;
+            final playingSide = dartchess.Setup.parseFen(game.fen).turn;
 
             return BoardThumbnail(
-              orientation: Side.white,
+              orientation: dartchess.Side.white,
               fen: game.fen,
               lastMove: game.lastMove?.cg,
               size: boardWidth,
@@ -143,14 +142,14 @@ class BroadcastPreview extends StatelessWidget {
                 width: boardWidth,
                 player: game.players[1],
                 gameStatus: game.status,
-                side: Side.black,
+                side: dartchess.Side.black,
                 playingSide: playingSide,
               ),
               footer: _PlayerWidget(
                 width: boardWidth,
                 player: game.players[0],
                 gameStatus: game.status,
-                side: Side.white,
+                side: dartchess.Side.white,
                 playingSide: playingSide,
               ),
             );
@@ -180,14 +179,14 @@ class _PlayerWidget extends StatelessWidget {
           federation: null,
         ),
         gameStatus = '*',
-        side = Side.white,
-        playingSide = Side.white,
+        side = dartchess.Side.white,
+        playingSide = dartchess.Side.white,
         _displayShimmerPlaceholder = true;
 
   final BroadcastPlayer player;
   final String gameStatus;
-  final Side side;
-  final Side playingSide;
+  final dartchess.Side side;
+  final dartchess.Side playingSide;
   final double width;
 
   final bool _displayShimmerPlaceholder;
@@ -257,10 +256,10 @@ class _PlayerWidget extends StatelessWidget {
                   (gameStatus == '½-½')
                       ? '½'
                       : (gameStatus == '1-0')
-                          ? side == Side.white
+                          ? side == dartchess.Side.white
                               ? '1'
                               : '0'
-                          : side == Side.black
+                          : side == dartchess.Side.black
                               ? '1'
                               : '0',
                   style:

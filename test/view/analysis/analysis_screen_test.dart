@@ -45,7 +45,7 @@ void main() {
 
       await tester.pumpWidget(app);
 
-      expect(find.byType(cg.Board), findsOneWidget);
+      expect(find.byType(cg.Chessboard), findsOneWidget);
       expect(find.byType(cg.PieceWidget), findsNWidgets(25));
       final currentMove = find.widgetWithText(InlineMove, 'Qe1#');
       expect(currentMove, findsOneWidget);

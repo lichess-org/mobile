@@ -69,7 +69,7 @@ class OngoingGamePreview extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SmallBoardPreview(
-      orientation: game.orientation.cg,
+      orientation: game.orientation,
       lastMove: game.lastMove?.cg,
       fen: game.fen,
       description: Column(

@@ -175,11 +175,7 @@ class _LoadNextPuzzle extends ConsumerWidget {
             child: BoardTable(
               topTable: kEmptyWidget,
               bottomTable: kEmptyWidget,
-              boardData: cg.BoardData(
-                fen: kEmptyFen,
-                interactableSide: cg.InteractableSide.none,
-                orientation: cg.Side.white,
-              ),
+              boardState: kEmptyBoardState,
               errorMessage: 'No more puzzles. Go online to get more.',
             ),
           );
@@ -198,11 +194,7 @@ class _LoadNextPuzzle extends ConsumerWidget {
           child: BoardTable(
             topTable: kEmptyWidget,
             bottomTable: kEmptyWidget,
-            boardData: const cg.BoardData(
-              fen: kEmptyFen,
-              interactableSide: cg.InteractableSide.none,
-              orientation: cg.Side.white,
-            ),
+            boardState: kEmptyBoardState,
             errorMessage: e.toString(),
           ),
         );
@@ -238,10 +230,10 @@ class _LoadPuzzleFromId extends ConsumerWidget {
             child: SafeArea(
               bottom: false,
               child: BoardTable(
-                boardData: cg.BoardData(
+                boardState: cg.ChessboardState(
                   fen: kEmptyFen,
                   interactableSide: cg.InteractableSide.none,
-                  orientation: cg.Side.white,
+                  orientation: Side.white,
                 ),
                 topTable: kEmptyWidget,
                 bottomTable: kEmptyWidget,
@@ -261,11 +253,7 @@ class _LoadPuzzleFromId extends ConsumerWidget {
               child: SafeArea(
                 bottom: false,
                 child: BoardTable(
-                  boardData: const cg.BoardData(
-                    fen: kEmptyFen,
-                    interactableSide: cg.InteractableSide.none,
-                    orientation: cg.Side.white,
-                  ),
+                  boardState: kEmptyBoardState,
                   topTable: kEmptyWidget,
                   bottomTable: kEmptyWidget,
                   errorMessage: e.toString(),
@@ -311,8 +299,8 @@ class _Body extends ConsumerWidget {
                     .read(ctrlProvider.notifier)
                     .onUserMove(Move.fromUci(move.uci)!);
               },
-              boardData: cg.BoardData(
-                orientation: puzzleState.pov.cg,
+              boardState: cg.ChessboardState(
+                orientation: puzzleState.pov,
                 interactableSide: puzzleState.mode == PuzzleMode.load ||
                         puzzleState.position.isGameOver
                     ? cg.InteractableSide.none
@@ -325,7 +313,7 @@ class _Body extends ConsumerWidget {
                 isCheck: boardPreferences.boardHighlights &&
                     puzzleState.position.isCheck,
                 lastMove: puzzleState.lastMove?.cg,
-                sideToMove: puzzleState.position.turn.cg,
+                sideToMove: puzzleState.position.turn,
                 validMoves: puzzleState.validMoves,
                 shapes: puzzleState.isEngineEnabled && evalBestMove != null
                     ? ISet([

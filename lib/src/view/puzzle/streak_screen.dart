@@ -102,11 +102,7 @@ class _Load extends ConsumerWidget {
           child: BoardTable(
             topTable: kEmptyWidget,
             bottomTable: kEmptyWidget,
-            boardData: const cg.BoardData(
-              fen: kEmptyFen,
-              interactableSide: cg.InteractableSide.none,
-              orientation: cg.Side.white,
-            ),
+            boardState: kEmptyBoardState,
             errorMessage: e.toString(),
           ),
         );
@@ -154,8 +150,8 @@ class _Body extends ConsumerWidget {
                       .read(ctrlProvider.notifier)
                       .onUserMove(Move.fromUci(move.uci)!);
                 },
-                boardData: cg.BoardData(
-                  orientation: puzzleState.pov.cg,
+                boardState: cg.ChessboardState(
+                  orientation: puzzleState.pov,
                   interactableSide: puzzleState.mode == PuzzleMode.load ||
                           puzzleState.position.isGameOver
                       ? cg.InteractableSide.none
@@ -167,7 +163,7 @@ class _Body extends ConsumerWidget {
                   fen: puzzleState.fen,
                   isCheck: puzzleState.position.isCheck,
                   lastMove: puzzleState.lastMove?.cg,
-                  sideToMove: puzzleState.position.turn.cg,
+                  sideToMove: puzzleState.position.turn,
                   validMoves: puzzleState.validMoves,
                 ),
                 topTable: Center(

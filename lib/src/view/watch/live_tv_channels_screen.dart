@@ -84,7 +84,7 @@ class _Body extends ConsumerWidget {
                   ),
                 );
               },
-              orientation: game.orientation.cg,
+              orientation: game.orientation,
               fen: game.fen ?? kEmptyFen,
               lastMove: game.lastMove?.cg,
               description: Column(

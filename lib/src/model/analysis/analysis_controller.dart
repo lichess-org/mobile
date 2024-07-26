@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:chessground/chessground.dart' as cg;
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
@@ -18,6 +19,7 @@ import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
+import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -656,8 +658,8 @@ class AnalysisState with _$AnalysisState {
     IList<PgnComment>? pgnRootComments,
   }) = _AnalysisState;
 
-  IMap<String, ISet<String>> get validMoves =>
-      algebraicLegalMoves(currentNode.position);
+  IMap<cg.SquareId, ISet<cg.SquareId>> get validMoves =>
+      algebraicLegalMovesAsSquareIds(currentNode.position);
 
   /// Whether the user can request server analysis.
   ///

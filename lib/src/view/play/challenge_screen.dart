@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:chessground/chessground.dart' as cg;
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -323,8 +322,8 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                 expand: preferences.variant == Variant.fromPosition,
                 child: SmallBoardPreview(
                   orientation: preferences.sideChoice == SideChoice.black
-                      ? cg.Side.black
-                      : cg.Side.white,
+                      ? Side.black
+                      : Side.white,
                   fen: fromPositionFenInput ?? kEmptyFen,
                   description: AdaptiveTextField(
                     maxLines: 5,

@@ -252,22 +252,21 @@ class GameBody extends ConsumerWidget {
                               ref.read(ctrlProvider.notifier).setPremove(move);
                             }
                           : null,
-                      boardData: cg.BoardData(
+                      boardState: cg.ChessboardState(
                         interactableSide:
                             gameState.game.playable && !gameState.isReplaying
                                 ? youAre == Side.white
                                     ? cg.InteractableSide.white
                                     : cg.InteractableSide.black
                                 : cg.InteractableSide.none,
-                        orientation:
-                            isBoardTurned ? youAre.opposite.cg : youAre.cg,
+                        orientation: isBoardTurned ? youAre.opposite : youAre,
                         fen: position.fen,
                         lastMove:
                             gameState.game.moveAt(gameState.stepCursor)?.cg,
                         isCheck: boardPreferences.boardHighlights &&
                             position.isCheck,
-                        sideToMove: position.turn.cg,
-                        validMoves: algebraicLegalMoves(position),
+                        sideToMove: position.turn,
+                        validMoves: algebraicLegalMovesAsSquareIds(position),
                         premove: gameState.premove,
                       ),
                       topTable: topPlayer,

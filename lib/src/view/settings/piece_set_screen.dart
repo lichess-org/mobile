@@ -1,4 +1,5 @@
 import 'package:chessground/chessground.dart';
+import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -40,12 +41,12 @@ class _Body extends ConsumerWidget {
 
     List<AssetImage> getPieceImages(PieceSet set) {
       return [
-        set.assets[PieceKind.whiteKing]!,
-        set.assets[PieceKind.blackQueen]!,
-        set.assets[PieceKind.whiteRook]!,
-        set.assets[PieceKind.blackBishop]!,
-        set.assets[PieceKind.whiteKnight]!,
-        set.assets[PieceKind.blackPawn]!,
+        set.assets[kWhiteKingKind]!,
+        set.assets[kBlackQueenKind]!,
+        set.assets[kWhiteRookKind]!,
+        set.assets[kBlackBishopKind]!,
+        set.assets[kWhiteKnightKind]!,
+        set.assets[kBlackPawnKind]!,
       ];
     }
 

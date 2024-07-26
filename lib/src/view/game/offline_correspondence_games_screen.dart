@@ -77,7 +77,7 @@ class OfflineCorrespondenceGamePreview extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SmallBoardPreview(
-      orientation: game.orientation.cg,
+      orientation: game.orientation,
       lastMove: game.lastMove?.cg,
       fen: game.lastPosition.fen,
       description: Column(
