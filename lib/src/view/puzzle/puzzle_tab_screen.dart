@@ -13,7 +13,6 @@ import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/puzzle_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -432,9 +431,9 @@ class _DailyPuzzle extends ConsumerWidget {
       data: (data) {
         final preview = PuzzlePreview.fromPuzzle(data);
         return SmallBoardPreview(
-          orientation: preview.orientation.cg,
+          orientation: preview.orientation,
           fen: preview.initialFen,
-          lastMove: preview.initialMove.cg,
+          lastMove: preview.initialMove,
           description: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -480,7 +479,7 @@ class _DailyPuzzle extends ConsumerWidget {
         );
       },
       loading: () => SmallBoardPreview(
-        orientation: Side.white.cg,
+        orientation: Side.white,
         fen: kEmptyFen,
         description: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -514,9 +513,9 @@ class _OfflinePuzzlePreview extends ConsumerWidget {
         final preview =
             data != null ? PuzzlePreview.fromPuzzle(data.puzzle) : null;
         return SmallBoardPreview(
-          orientation: preview?.orientation.cg ?? Side.white.cg,
+          orientation: preview?.orientation ?? Side.white,
           fen: preview?.initialFen ?? kEmptyFen,
-          lastMove: preview?.initialMove.cg,
+          lastMove: preview?.initialMove,
           description: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,

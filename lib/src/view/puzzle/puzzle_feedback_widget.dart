@@ -1,4 +1,3 @@
-import 'package:chessground/chessground.dart' as cg;
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -30,9 +29,7 @@ class PuzzleFeedbackWidget extends ConsumerWidget {
         ref.watch(boardPreferencesProvider.select((state) => state.boardTheme));
     final brightness = ref.watch(currentBrightnessProvider);
 
-    final piece = state.pov == Side.white
-        ? cg.PieceKind.whiteKing
-        : cg.PieceKind.blackKing;
+    final piece = state.pov == Side.white ? kWhiteKingKind : kBlackKingKind;
     final asset = pieceSet.assets[piece]!;
 
     switch (state.mode) {

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:chessground/chessground.dart' as cg;
+import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -45,8 +45,8 @@ void main() {
 
       await tester.pumpWidget(app);
 
-      expect(find.byType(cg.Board), findsOneWidget);
-      expect(find.byType(cg.PieceWidget), findsNWidgets(25));
+      expect(find.byType(Chessboard), findsOneWidget);
+      expect(find.byType(PieceWidget), findsNWidgets(25));
       final currentMove = find.widgetWithText(InlineMove, 'Qe1#');
       expect(currentMove, findsOneWidget);
       expect(

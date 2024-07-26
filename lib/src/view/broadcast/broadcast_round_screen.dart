@@ -1,7 +1,6 @@
 import 'dart:async';
 
-import 'package:chessground/chessground.dart';
-import 'package:dartchess/dartchess.dart' as dartchess;
+import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +11,6 @@ import 'package:lichess_mobile/src/model/broadcast/broadcast_round_controller.da
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
@@ -136,16 +134,16 @@ class BroadcastPreview extends StatelessWidget {
             }
 
             final game = games![index];
-            final playingSide = dartchess.Setup.parseFen(game.fen).turn.cg;
+            final playingSide = Setup.parseFen(game.fen).turn;
 
             return BoardThumbnail(
               orientation: Side.white,
               fen: game.fen,
-              lastMove: game.lastMove?.cg,
+              lastMove: game.lastMove,
               size: boardWidth,
               header: _PlayerWidget(
                 width: boardWidth,
-                player: game.players[dartchess.Side.black]!,
+                player: game.players[Side.black]!,
                 gameStatus: game.status,
                 thinkTime: game.thinkTime,
                 side: Side.black,
@@ -153,7 +151,7 @@ class BroadcastPreview extends StatelessWidget {
               ),
               footer: _PlayerWidget(
                 width: boardWidth,
-                player: game.players[dartchess.Side.white]!,
+                player: game.players[Side.white]!,
                 gameStatus: game.status,
                 thinkTime: game.thinkTime,
                 side: Side.white,

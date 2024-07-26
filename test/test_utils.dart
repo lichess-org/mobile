@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:chessground/chessground.dart' as cg;
+import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -65,15 +65,22 @@ Future<void> meetsTapTargetGuideline(WidgetTester tester) async {
 }
 
 Offset squareOffset(
-  cg.SquareId id,
+  Square square,
   Rect boardRect, {
-  cg.Side orientation = cg.Side.white,
+  Side orientation = Side.white,
 }) {
   final squareSize = boardRect.width / 8;
-  final o = cg.Coord.fromSquareId(id).offset(orientation, squareSize);
+
+  final dx =
+      (orientation == Side.white ? square.file.value : 7 - square.file.value) *
+          squareSize;
+  final dy =
+      (orientation == Side.white ? 7 - square.rank.value : square.rank.value) *
+          squareSize;
+
   return Offset(
-    o.dx + boardRect.left + squareSize / 2,
-    o.dy + boardRect.top + squareSize / 2,
+    dx + boardRect.left + squareSize / 2,
+    dy + boardRect.top + squareSize / 2,
   );
 }
 
@@ -82,11 +89,15 @@ Future<void> playMove(
   Rect boardRect,
   String from,
   String to, {
-  cg.Side orientation = cg.Side.white,
+  Side orientation = Side.white,
 }) async {
-  await tester.tapAt(squareOffset(from, boardRect, orientation: orientation));
+  await tester.tapAt(
+    squareOffset(Square.fromName(from), boardRect, orientation: orientation),
+  );
   await tester.pump();
-  await tester.tapAt(squareOffset(to, boardRect, orientation: orientation));
+  await tester.tapAt(
+    squareOffset(Square.fromName(to), boardRect, orientation: orientation),
+  );
   await tester.pump();
 }
 

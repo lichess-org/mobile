@@ -1,4 +1,4 @@
-import 'package:chessground/chessground.dart' as cg;
+import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +7,6 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
@@ -153,9 +152,9 @@ class _BoardBody extends ConsumerWidget {
     final topPlayer = orientation == Side.white ? black : white;
     final bottomPlayer = orientation == Side.white ? white : black;
     final loadingBoard = BoardTable(
-      boardData: cg.BoardData(
-        interactableSide: cg.InteractableSide.none,
-        orientation: (isBoardTurned ? orientation.opposite : orientation).cg,
+      boardState: ChessboardState(
+        interactableSide: InteractableSide.none,
+        orientation: (isBoardTurned ? orientation.opposite : orientation),
         fen: gameData.lastFen ?? kInitialBoardFEN,
       ),
       topTable: topPlayer,
@@ -196,13 +195,12 @@ class _BoardBody extends ConsumerWidget {
         final position = game.positionAt(cursor);
 
         return BoardTable(
-          boardData: cg.BoardData(
-            interactableSide: cg.InteractableSide.none,
-            orientation:
-                (isBoardTurned ? orientation.opposite : orientation).cg,
+          boardState: ChessboardState(
+            interactableSide: InteractableSide.none,
+            orientation: (isBoardTurned ? orientation.opposite : orientation),
             fen: position.fen,
-            lastMove: game.moveAt(cursor)?.cg,
-            sideToMove: position.turn.cg,
+            lastMove: game.moveAt(cursor) as NormalMove?,
+            sideToMove: position.turn,
             isCheck: position.isCheck,
           ),
           topTable: topPlayer,
