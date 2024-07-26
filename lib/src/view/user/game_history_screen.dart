@@ -299,46 +299,28 @@ Future<ISet<T>?> showMultipleChoiceFilter<T extends Enum>(
     context: context,
     builder: (context) {
       ISet<T> items = selectedItems;
-      const paddingTop = 12.0;
       return AlertDialog.adaptive(
-        contentPadding: const EdgeInsets.only(top: paddingTop),
+        contentPadding: const EdgeInsets.all(16.0),
         scrollable: true,
         content: StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
-            final width = MediaQuery.sizeOf(context).width;
-            const aspectRatio = 4.0;
-            final itemsPerRow = isTabletOrLarger(context) ? 4 : 2;
-            const verticalSpacing = 8.0;
-            const horizontalSpacing = 8.0;
-
-            final chipWidth = width / itemsPerRow - horizontalSpacing;
-            final chipHeight = chipWidth / aspectRatio + verticalSpacing;
-            final rows = (choices.length / itemsPerRow).ceil();
-            final height = chipHeight * rows - verticalSpacing - paddingTop;
-            return SizedBox(
-              width: width,
-              height: height,
-              child: GridView.count(
-                childAspectRatio: aspectRatio,
-                crossAxisCount: itemsPerRow,
-                mainAxisSpacing: verticalSpacing,
-                crossAxisSpacing: horizontalSpacing,
-                children: choices
-                    .map(
-                      (choice) => FilterChip(
-                        label: Text(choiceLabel(choice)),
-                        selected: items.contains(choice),
-                        onSelected: (value) {
-                          setState(() {
-                            items = value
-                                ? items.add(choice)
-                                : items.remove(choice);
-                          });
-                        },
-                      ),
-                    )
-                    .toList(growable: false),
-              ),
+            return Wrap(
+              spacing: 8.0,
+              runSpacing: 8.0,
+              children: choices
+                  .map(
+                    (choice) => FilterChip(
+                      label: Text(choiceLabel(choice)),
+                      selected: items.contains(choice),
+                      onSelected: (value) {
+                        setState(() {
+                          items =
+                              value ? items.add(choice) : items.remove(choice);
+                        });
+                      },
+                    ),
+                  )
+                  .toList(growable: false),
             );
           },
         ),
