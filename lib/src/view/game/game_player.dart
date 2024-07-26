@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
+import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -191,9 +192,11 @@ class GamePlayer extends StatelessWidget {
                           ? () {
                               pushPlatformRoute(
                                 context,
-                                builder: (context) => UserScreen(
-                                  user: player.user!,
-                                ),
+                                builder: (context) => mePlaying
+                                    ? const ProfileScreen()
+                                    : UserScreen(
+                                        user: player.user!,
+                                      ),
                               );
                             }
                           : null,

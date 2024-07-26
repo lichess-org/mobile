@@ -21,7 +21,7 @@
   "activityCompetedInNbSwissTournaments": "{count, plural, =1{{count} швейцарлық жарысқа қатысты} other{{count} швейцарлық жарысқа қатысты}}",
   "activityJoinedNbTeams": "{count, plural, =1{{count} топқа қосылды} other{{count} топқа қосылды}}",
   "broadcastBroadcasts": "Көрсетілімдер",
-  "broadcastStartDate": "Басталу күні (өз уақыт белдеуіңізде)",
+  "broadcastLiveBroadcasts": "Жарыстың тікелей көрсетілімдері",
   "challengeChallengesX": "Шақырулар: {param1}",
   "challengeChallengeToPlay": "Ойынға шақыру",
   "challengeChallengeDeclined": "Шақыруды қабылдамады",

@@ -2,6 +2,8 @@ import 'package:intl/intl.dart' as intl;
 
 import 'l10n.dart';
 
+// ignore_for_file: type=lint
+
 /// The translations for Arabic (`ar`).
 class AppLocalizationsAr extends AppLocalizations {
   AppLocalizationsAr([String locale = 'ar']) : super(locale);
@@ -69,7 +71,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
 
   @override
-  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of storm';
+  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of Puzzle Storm.';
 
   @override
   String get mobileSharePuzzle => 'Share this puzzle';
@@ -121,6 +123,23 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get mobileSomethingWentWrong => 'Something went wrong.';
+
+  @override
+  String get mobileShowResult => 'Show result';
+
+  @override
+  String get mobilePuzzleThemesSubtitle => 'Play puzzles from your favorite openings, or choose a theme.';
+
+  @override
+  String get mobilePuzzleStormSubtitle => 'Solve as many puzzles as possible in 3 minutes.';
+
+  @override
+  String mobileGreeting(String param) {
+    return 'Hello, $param';
+  }
+
+  @override
+  String get mobileGreetingWithoutName => 'Hello';
 
   @override
   String get activityActivity => 'الأنشطة';
@@ -395,7 +414,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get broadcastBroadcasts => 'البثوث';
 
   @override
-  String get broadcastStartDate => 'تاريخ البدء في المنطقة الزمنية الخاصة بك';
+  String get broadcastLiveBroadcasts => 'بث البطولة المباشرة';
 
   @override
   String challengeChallengesX(String param1) {
@@ -1944,6 +1963,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get friends => 'الأصدقاء';
 
   @override
+  String get otherPlayers => 'other players';
+
+  @override
   String get discussions => 'المحادثات';
 
   @override
@@ -2773,6 +2795,12 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get yes => 'نعم';
+
+  @override
+  String get website => 'Website';
+
+  @override
+  String get mobile => 'Mobile';
 
   @override
   String get help => 'مساعدة:';

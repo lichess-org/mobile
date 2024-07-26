@@ -21,7 +21,7 @@
   "activityCompetedInNbSwissTournaments": "{count, plural, =1{সুইস টুর্নামেন্ট শেষ করেছেন {count} এর ভেতর} other{সুইস টুর্নামেন্ট শেষ করেছেন {count} এর ভেতর}}",
   "activityJoinedNbTeams": "{count, plural, =1{যুক্ত হয়েছে {count} দল} other{যুক্ত হয়েছে {count} দল}}",
   "broadcastBroadcasts": "সম্প্রচার",
-  "broadcastStartDate": "আপনার নিজস্ব সময় অঞ্চল শুরু করার তারিখ",
+  "broadcastLiveBroadcasts": "সরাসরি টুর্নামেন্ট সম্প্রচার",
   "challengeChallengesX": "প্রতিদ্বন্দ্বীরা:{param1}",
   "challengeChallengeToPlay": "খেলার জন্য চ্যালেঞ্জ করুন",
   "challengeChallengeDeclined": "চ্যালেঞ্জ প্রত্যাখ্যান করা হয়েছে",

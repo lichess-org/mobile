@@ -2,6 +2,8 @@ import 'package:intl/intl.dart' as intl;
 
 import 'l10n.dart';
 
+// ignore_for_file: type=lint
+
 /// The translations for Tatar (`tt`).
 class AppLocalizationsTt extends AppLocalizations {
   AppLocalizationsTt([String locale = 'tt']) : super(locale);
@@ -69,7 +71,7 @@ class AppLocalizationsTt extends AppLocalizations {
   String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
 
   @override
-  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of storm';
+  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of Puzzle Storm.';
 
   @override
   String get mobileSharePuzzle => 'Share this puzzle';
@@ -121,6 +123,23 @@ class AppLocalizationsTt extends AppLocalizations {
 
   @override
   String get mobileSomethingWentWrong => 'Something went wrong.';
+
+  @override
+  String get mobileShowResult => 'Show result';
+
+  @override
+  String get mobilePuzzleThemesSubtitle => 'Play puzzles from your favorite openings, or choose a theme.';
+
+  @override
+  String get mobilePuzzleStormSubtitle => 'Solve as many puzzles as possible in 3 minutes.';
+
+  @override
+  String mobileGreeting(String param) {
+    return 'Hello, $param';
+  }
+
+  @override
+  String get mobileGreetingWithoutName => 'Hello';
 
   @override
   String get activityActivity => 'Эшчәнлек';
@@ -310,7 +329,7 @@ class AppLocalizationsTt extends AppLocalizations {
   String get broadcastBroadcasts => 'Ишеттәрешләр';
 
   @override
-  String get broadcastStartDate => 'Башлагыз сәнә сезнең үзегезнең вакыт җирендән';
+  String get broadcastLiveBroadcasts => 'Хәяти бәйгеләр ишетләштерешләр';
 
   @override
   String challengeChallengesX(String param1) {
@@ -1834,6 +1853,9 @@ class AppLocalizationsTt extends AppLocalizations {
   String get friends => 'Дуслар';
 
   @override
+  String get otherPlayers => 'other players';
+
+  @override
   String get discussions => 'Әңгәмәләр';
 
   @override
@@ -2663,6 +2685,12 @@ class AppLocalizationsTt extends AppLocalizations {
 
   @override
   String get yes => 'Әйе';
+
+  @override
+  String get website => 'Website';
+
+  @override
+  String get mobile => 'Mobile';
 
   @override
   String get help => 'Булышу:';

@@ -2,6 +2,8 @@ import 'package:intl/intl.dart' as intl;
 
 import 'l10n.dart';
 
+// ignore_for_file: type=lint
+
 /// The translations for Italian (`it`).
 class AppLocalizationsIt extends AppLocalizations {
   AppLocalizationsIt([String locale = 'it']) : super(locale);
@@ -69,7 +71,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
 
   @override
-  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of storm';
+  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of Puzzle Storm.';
 
   @override
   String get mobileSharePuzzle => 'Share this puzzle';
@@ -121,6 +123,23 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get mobileSomethingWentWrong => 'Something went wrong.';
+
+  @override
+  String get mobileShowResult => 'Show result';
+
+  @override
+  String get mobilePuzzleThemesSubtitle => 'Play puzzles from your favorite openings, or choose a theme.';
+
+  @override
+  String get mobilePuzzleStormSubtitle => 'Solve as many puzzles as possible in 3 minutes.';
+
+  @override
+  String mobileGreeting(String param) {
+    return 'Hello, $param';
+  }
+
+  @override
+  String get mobileGreetingWithoutName => 'Hello';
 
   @override
   String get activityActivity => 'Attività';
@@ -327,7 +346,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get broadcastBroadcasts => 'Dirette';
 
   @override
-  String get broadcastStartDate => 'Data di inizio nel tuo fuso orario';
+  String get broadcastLiveBroadcasts => 'Tornei in diretta';
 
   @override
   String challengeChallengesX(String param1) {
@@ -1856,6 +1875,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get friends => 'Amici';
 
   @override
+  String get otherPlayers => 'other players';
+
+  @override
   String get discussions => 'Conversazioni';
 
   @override
@@ -2685,6 +2707,12 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get yes => 'Sì';
+
+  @override
+  String get website => 'Website';
+
+  @override
+  String get mobile => 'Mobile';
 
   @override
   String get help => 'Aiuto:';

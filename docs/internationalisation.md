@@ -71,3 +71,7 @@ described above, they can be used like the other translations, however a `mobile
 > Such messages are mostly edge cases in the sense they should be rarely seen and people would understand that something
 > went wrong and could not load without understanding the actual meaning of the error message.
 
+> **Note**
+> Do not translate names such as "Puzzle Storm" and "Puzzle Streak". If such names appear in a translation string,
+> add a comment that they should not be translated.
+

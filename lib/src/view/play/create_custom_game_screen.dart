@@ -98,7 +98,7 @@ class _AndroidBodyState extends State<_AndroidBody>
           controller: _tabController,
           tabs: <Widget>[
             Tab(text: context.l10n.createAGame),
-            const Tab(text: 'Join a game'),
+            Tab(text: context.l10n.mobileCustomGameJoinAGame),
           ],
         ),
       ),

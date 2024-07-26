@@ -32,24 +32,11 @@ class TimeIncrement {
   bool get isInfinite => time == 0 && increment == 0;
 
   String get display {
-    String displayTime = '';
-    switch (time) {
-      case 0:
-        if (increment == 0) {
-          displayTime = '∞';
-        } else {
-          displayTime = '0+$increment';
-        }
-      case 45:
-        displayTime = '¾+$increment';
-      case 30:
-        displayTime = '½+$increment';
-      case 15:
-        displayTime = '¼+$increment';
-      default:
-        displayTime = '${(time / 60).floor()}+$increment';
+    if (isInfinite) {
+      return '∞';
+    } else {
+      return '${clockLabelInMinutes(time)}+$increment';
     }
-    return displayTime;
   }
 
   @override

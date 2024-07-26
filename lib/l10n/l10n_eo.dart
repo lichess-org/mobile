@@ -2,6 +2,8 @@ import 'package:intl/intl.dart' as intl;
 
 import 'l10n.dart';
 
+// ignore_for_file: type=lint
+
 /// The translations for Esperanto (`eo`).
 class AppLocalizationsEo extends AppLocalizations {
   AppLocalizationsEo([String locale = 'eo']) : super(locale);
@@ -69,7 +71,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
 
   @override
-  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of storm';
+  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of Puzzle Storm.';
 
   @override
   String get mobileSharePuzzle => 'Share this puzzle';
@@ -121,6 +123,23 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get mobileSomethingWentWrong => 'Something went wrong.';
+
+  @override
+  String get mobileShowResult => 'Show result';
+
+  @override
+  String get mobilePuzzleThemesSubtitle => 'Play puzzles from your favorite openings, or choose a theme.';
+
+  @override
+  String get mobilePuzzleStormSubtitle => 'Solve as many puzzles as possible in 3 minutes.';
+
+  @override
+  String mobileGreeting(String param) {
+    return 'Hello, $param';
+  }
+
+  @override
+  String get mobileGreetingWithoutName => 'Hello';
 
   @override
   String get activityActivity => 'Aktiveco';
@@ -327,7 +346,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get broadcastBroadcasts => 'Elsendoj';
 
   @override
-  String get broadcastStartDate => 'Komenca dato en via propra horzono';
+  String get broadcastLiveBroadcasts => 'Vivaj turniraj elsendoj';
 
   @override
   String challengeChallengesX(String param1) {
@@ -1856,6 +1875,9 @@ class AppLocalizationsEo extends AppLocalizations {
   String get friends => 'Amikoj';
 
   @override
+  String get otherPlayers => 'other players';
+
+  @override
   String get discussions => 'Konversacioj';
 
   @override
@@ -2685,6 +2707,12 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get yes => 'Jes';
+
+  @override
+  String get website => 'Website';
+
+  @override
+  String get mobile => 'Mobile';
 
   @override
   String get help => 'Helpo:';

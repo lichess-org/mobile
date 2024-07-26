@@ -21,7 +21,7 @@
   "activityCompetedInNbSwissTournaments": "{count, plural, =1{Har deltatt i {count} sveitserturnering} other{Har deltatt i {count} sveitserturneringer}}",
   "activityJoinedNbTeams": "{count, plural, =1{Er medlem av {count} lag} other{Er medlem av {count} lag}}",
   "broadcastBroadcasts": "Overføringer",
-  "broadcastStartDate": "Startdato i din egen tidssone",
+  "broadcastLiveBroadcasts": "Direkteoverføringer av turneringer",
   "challengeChallengesX": "Utfordringer: {param1}",
   "challengeChallengeToPlay": "Utfordre til et parti",
   "challengeChallengeDeclined": "Utfordring avslått",

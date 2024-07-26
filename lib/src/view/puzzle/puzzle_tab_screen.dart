@@ -263,8 +263,7 @@ class _PuzzleMenu extends StatelessWidget {
         _PuzzleMenuListTile(
           icon: PuzzleIcons.opening,
           title: context.l10n.puzzlePuzzleThemes,
-          subtitle:
-              'Play puzzles from your favorite openings, or choose a theme.',
+          subtitle: context.l10n.mobilePuzzleThemesSubtitle,
           onTap: () {
             pushPlatformRoute(
               context,
@@ -299,7 +298,7 @@ class _PuzzleMenu extends StatelessWidget {
           child: _PuzzleMenuListTile(
             icon: LichessIcons.storm,
             title: 'Puzzle Storm',
-            subtitle: 'Solve as many puzzles as possible in 3 minutes.',
+            subtitle: context.l10n.mobilePuzzleStormSubtitle,
             onTap: isOnline
                 ? () {
                     pushPlatformRoute(

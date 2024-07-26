@@ -2,6 +2,8 @@ import 'package:intl/intl.dart' as intl;
 
 import 'l10n.dart';
 
+// ignore_for_file: type=lint
+
 /// The translations for Portuguese (`pt`).
 class AppLocalizationsPt extends AppLocalizations {
   AppLocalizationsPt([String locale = 'pt']) : super(locale);
@@ -69,7 +71,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
 
   @override
-  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of storm';
+  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of Puzzle Storm.';
 
   @override
   String get mobileSharePuzzle => 'Share this puzzle';
@@ -121,6 +123,23 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get mobileSomethingWentWrong => 'Something went wrong.';
+
+  @override
+  String get mobileShowResult => 'Show result';
+
+  @override
+  String get mobilePuzzleThemesSubtitle => 'Play puzzles from your favorite openings, or choose a theme.';
+
+  @override
+  String get mobilePuzzleStormSubtitle => 'Solve as many puzzles as possible in 3 minutes.';
+
+  @override
+  String mobileGreeting(String param) {
+    return 'Hello, $param';
+  }
+
+  @override
+  String get mobileGreetingWithoutName => 'Hello';
 
   @override
   String get activityActivity => 'Atividade';
@@ -327,7 +346,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get broadcastBroadcasts => 'Transmissões';
 
   @override
-  String get broadcastStartDate => 'Data de início em seu próprio fuso horário';
+  String get broadcastLiveBroadcasts => 'Transmissões ao vivo do torneio';
 
   @override
   String challengeChallengesX(String param1) {
@@ -1856,6 +1875,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get friends => 'Amigos';
 
   @override
+  String get otherPlayers => 'other players';
+
+  @override
   String get discussions => 'Discussões';
 
   @override
@@ -2685,6 +2707,12 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get yes => 'Sim';
+
+  @override
+  String get website => 'Website';
+
+  @override
+  String get mobile => 'Mobile';
 
   @override
   String get help => 'Ajuda:';
@@ -4908,7 +4936,7 @@ class AppLocalizationsPtPt extends AppLocalizationsPt {
   String get broadcastBroadcasts => 'Transmissões';
 
   @override
-  String get broadcastStartDate => 'Data de início no teu fuso horário';
+  String get broadcastLiveBroadcasts => 'Transmissões do torneio em direto';
 
   @override
   String challengeChallengesX(String param1) {

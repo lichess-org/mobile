@@ -21,7 +21,7 @@
   "activityCompetedInNbSwissTournaments": "{count, plural, =1{Uczestniczył(a) w {count} turnieju szwajcarskim} few{Uczestniczył(a) w {count} turniejach szwajcarskich} many{Uczestniczył(a) w {count} turniejach szwajcarskich} other{Uczestniczył(a) w {count} turniejach szwajcarskich}}",
   "activityJoinedNbTeams": "{count, plural, =1{Dołączenie do klubu} few{Dołączenie do {count} klubów} many{Dołączenie do {count} klubów} other{Dołączono do {count} zespołów}}",
   "broadcastBroadcasts": "Transmisje",
-  "broadcastStartDate": "Data rozpoczęcia wydarzenia w Twojej strefie czasowej",
+  "broadcastLiveBroadcasts": "Transmisje turniejów na żywo",
   "challengeChallengesX": "Wyzwania: {param1}",
   "challengeChallengeToPlay": "Zaproś do gry",
   "challengeChallengeDeclined": "Wyzwanie odrzucone",

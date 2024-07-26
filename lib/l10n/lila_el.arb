@@ -21,7 +21,7 @@
   "activityCompetedInNbSwissTournaments": "{count, plural, =1{Αγωνίστηκε σε {count} ελβετικό τουρνουά} other{Αγωνίστηκε σε {count} ελβετικά τουρνουά}}",
   "activityJoinedNbTeams": "{count, plural, =1{Έγινε μέλος {count} ομάδας} other{Έγινε μέλος {count} ομαδών}}",
   "broadcastBroadcasts": "Αναμεταδόσεις",
-  "broadcastStartDate": "Ημερομηνία έναρξης στη δική σας ζώνη ώρας",
+  "broadcastLiveBroadcasts": "Αναμεταδόσεις ζωντανών τουρνούα",
   "challengeChallengesX": "Προκλήσεις: {param1}",
   "challengeChallengeToPlay": "Προκαλέστε σε παιχνίδι",
   "challengeChallengeDeclined": "Η πρόκληση απορρίφθηκε",

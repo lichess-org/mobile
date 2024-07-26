@@ -2,6 +2,8 @@ import 'package:intl/intl.dart' as intl;
 
 import 'l10n.dart';
 
+// ignore_for_file: type=lint
+
 /// The translations for Korean (`ko`).
 class AppLocalizationsKo extends AppLocalizations {
   AppLocalizationsKo([String locale = 'ko']) : super(locale);
@@ -69,7 +71,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
 
   @override
-  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of storm';
+  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of Puzzle Storm.';
 
   @override
   String get mobileSharePuzzle => 'Share this puzzle';
@@ -121,6 +123,23 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get mobileSomethingWentWrong => 'Something went wrong.';
+
+  @override
+  String get mobileShowResult => 'Show result';
+
+  @override
+  String get mobilePuzzleThemesSubtitle => 'Play puzzles from your favorite openings, or choose a theme.';
+
+  @override
+  String get mobilePuzzleStormSubtitle => 'Solve as many puzzles as possible in 3 minutes.';
+
+  @override
+  String mobileGreeting(String param) {
+    return 'Hello, $param';
+  }
+
+  @override
+  String get mobileGreetingWithoutName => 'Hello';
 
   @override
   String get activityActivity => '활동';
@@ -310,7 +329,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get broadcastBroadcasts => '방송';
 
   @override
-  String get broadcastStartDate => '본인 시간대 기준 시작일';
+  String get broadcastLiveBroadcasts => '실시간 대회 방송';
 
   @override
   String challengeChallengesX(String param1) {
@@ -1834,6 +1853,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get friends => '친구들';
 
   @override
+  String get otherPlayers => 'other players';
+
+  @override
   String get discussions => '토론';
 
   @override
@@ -2663,6 +2685,12 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get yes => '예';
+
+  @override
+  String get website => 'Website';
+
+  @override
+  String get mobile => 'Mobile';
 
   @override
   String get help => '힌트:';

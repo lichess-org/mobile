@@ -1,10 +1,11 @@
-import 'package:chessground/chessground.dart' hide BoardTheme;
+import 'package:chessground/chessground.dart';
 import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
@@ -43,6 +44,7 @@ class BoardTable extends ConsumerStatefulWidget {
     this.showMoveListPlaceholder = false,
     this.showEngineGaugePlaceholder = false,
     this.boardKey,
+    this.zenMode = false,
     super.key,
   }) : assert(
           moves == null || currentMoveIndex != null,
@@ -90,6 +92,9 @@ class BoardTable extends ConsumerStatefulWidget {
 
   /// Whether to show the engine gauge placeholder.
   final bool showEngineGaugePlaceholder;
+
+  /// If true, the move list will be hidden
+  final bool zenMode;
 
   @override
   ConsumerState<BoardTable> createState() => _BoardTableState();
@@ -153,10 +158,11 @@ class _BoardTableState extends ConsumerState<BoardTable> {
               : BorderRadius.zero,
           boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
           drawShape: DrawShapeOptions(
-            enable: true,
+            enable: boardPrefs.enableShapeDrawings,
             onCompleteShape: _onCompleteShape,
             onClearShapes: _onClearShapes,
           ),
+          pieceShiftMethod: boardPrefs.pieceShiftMethod,
         );
 
         final settings = widget.boardSettingsOverrides != null
@@ -166,7 +172,9 @@ class _BoardTableState extends ConsumerState<BoardTable> {
         final board = Board(
           key: widget.boardKey,
           size: boardSize,
-          data: widget.boardData,
+          data: widget.boardData.copyWith(
+            shapes: userShapes.union(widget.boardData.shapes ?? ISet()),
+          ),
           settings: settings,
           onMove: widget.onMove,
           onPremove: widget.onPremove,
@@ -240,7 +248,7 @@ class _BoardTableState extends ConsumerState<BoardTable> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           Flexible(child: widget.topTable),
-                          if (slicedMoves != null)
+                          if (!widget.zenMode && slicedMoves != null)
                             Expanded(
                               child: Padding(
                                 padding: const EdgeInsets.all(16.0),
@@ -272,7 +280,8 @@ class _BoardTableState extends ConsumerState<BoardTable> {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  if (slicedMoves != null &&
+                  if (!widget.zenMode &&
+                      slicedMoves != null &&
                       verticalSpaceLeftBoardOnPortrait >= 130)
                     MoveList(
                       type: MoveListType.inline,
@@ -367,7 +376,7 @@ class BoardSettingsOverrides {
 
 enum MoveListType { inline, stacked }
 
-class MoveList extends StatefulWidget {
+class MoveList extends ConsumerStatefulWidget {
   const MoveList({
     required this.type,
     required this.slicedMoves,
@@ -383,10 +392,10 @@ class MoveList extends StatefulWidget {
   final void Function(int moveIndex)? onSelectMove;
 
   @override
-  State<MoveList> createState() => _MoveListState();
+  ConsumerState<MoveList> createState() => _MoveListState();
 }
 
-class _MoveListState extends State<MoveList> {
+class _MoveListState extends ConsumerState<MoveList> {
   final currentMoveKey = GlobalKey();
   final _debounce = Debouncer(const Duration(milliseconds: 100));
 
@@ -426,6 +435,11 @@ class _MoveListState extends State<MoveList> {
 
   @override
   Widget build(BuildContext context) {
+    final pieceNotation = ref.watch(pieceNotationProvider).maybeWhen(
+          data: (value) => value,
+          orElse: () => defaultAccountPreferences.pieceNotation,
+        );
+
     return widget.type == MoveListType.inline
         ? Container(
             padding: const EdgeInsets.only(left: 5),
@@ -449,6 +463,7 @@ class _MoveListState extends State<MoveList> {
                                 return InlineMoveItem(
                                   key: isCurrentMove ? currentMoveKey : null,
                                   move: move,
+                                  pieceNotation: pieceNotation,
                                   current: isCurrentMove,
                                   onSelectMove: widget.onSelectMove,
                                 );
@@ -532,12 +547,14 @@ class InlineMoveCount extends StatelessWidget {
 class InlineMoveItem extends StatelessWidget {
   const InlineMoveItem({
     required this.move,
+    required this.pieceNotation,
     this.current,
     this.onSelectMove,
     super.key,
   });
 
   final MapEntry<int, String> move;
+  final PieceNotation pieceNotation;
   final bool? current;
   final void Function(int moveIndex)? onSelectMove;
 
@@ -564,6 +581,8 @@ class InlineMoveItem extends StatelessWidget {
         child: Text(
           move.value,
           style: TextStyle(
+            fontFamily:
+                pieceNotation == PieceNotation.symbol ? 'ChessFont' : null,
             fontWeight: FontWeight.w600,
             color:
                 current != true ? textShade(context, _moveListOpacity) : null,

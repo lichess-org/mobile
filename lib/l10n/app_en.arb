@@ -26,7 +26,7 @@
   "mobileNoSearchResults": "No results",
   "mobileAreYouSure": "Are you sure?",
   "mobilePuzzleStreakAbortWarning": "You will lose your current streak and your score will be saved.",
-  "mobilePuzzleStormNothingToShow": "Nothing to show. Play some runs of storm",
+  "mobilePuzzleStormNothingToShow": "Nothing to show. Play some runs of Puzzle Storm.",
   "mobileSharePuzzle": "Share this puzzle",
   "mobileShareGameURL": "Share game URL",
   "mobileShareGamePGN": "Share PGN",
@@ -44,6 +44,18 @@
   "mobileCustomGameJoinAGame": "Join a game",
   "mobileCorrespondenceClearSavedMove": "Clear saved move",
   "mobileSomethingWentWrong": "Something went wrong.",
+  "mobileShowResult": "Show result",
+  "mobilePuzzleThemesSubtitle": "Play puzzles from your favorite openings, or choose a theme.",
+  "mobilePuzzleStormSubtitle": "Solve as many puzzles as possible in 3 minutes.",
+  "mobileGreeting": "Hello, {param}",
+  "@mobileGreeting": {
+    "placeholders": {
+      "param": {
+        "type": "String"
+      }
+    }
+  },
+  "mobileGreetingWithoutName": "Hello",
   "activityActivity": "Activity",
   "activityHostedALiveStream": "Hosted a live stream",
   "activityRankedInSwissTournament": "Ranked #{param1} in {param2}",
@@ -216,7 +228,7 @@
     }
   },
   "broadcastBroadcasts": "Broadcasts",
-  "broadcastStartDate": "Start date in your own timezone",
+  "broadcastLiveBroadcasts": "Live tournament broadcasts",
   "challengeChallengesX": "Challenges: {param1}",
   "@challengeChallengesX": {
     "placeholders": {
@@ -958,6 +970,7 @@
   "latestForumPosts": "Latest forum posts",
   "players": "Players",
   "friends": "Friends",
+  "otherPlayers": "other players",
   "discussions": "Conversations",
   "today": "Today",
   "yesterday": "Yesterday",
@@ -1449,6 +1462,8 @@
   "descPrivateHelp": "Text that only the team members will see. If set, replaces the public description for team members.",
   "no": "No",
   "yes": "Yes",
+  "website": "Website",
+  "mobile": "Mobile",
   "help": "Help:",
   "createANewTopic": "Create a new topic",
   "topics": "Topics",

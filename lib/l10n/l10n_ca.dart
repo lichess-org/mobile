@@ -2,6 +2,8 @@ import 'package:intl/intl.dart' as intl;
 
 import 'l10n.dart';
 
+// ignore_for_file: type=lint
+
 /// The translations for Catalan Valencian (`ca`).
 class AppLocalizationsCa extends AppLocalizations {
   AppLocalizationsCa([String locale = 'ca']) : super(locale);
@@ -69,7 +71,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
 
   @override
-  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of storm';
+  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of Puzzle Storm.';
 
   @override
   String get mobileSharePuzzle => 'Share this puzzle';
@@ -121,6 +123,23 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get mobileSomethingWentWrong => 'Something went wrong.';
+
+  @override
+  String get mobileShowResult => 'Show result';
+
+  @override
+  String get mobilePuzzleThemesSubtitle => 'Play puzzles from your favorite openings, or choose a theme.';
+
+  @override
+  String get mobilePuzzleStormSubtitle => 'Solve as many puzzles as possible in 3 minutes.';
+
+  @override
+  String mobileGreeting(String param) {
+    return 'Hello, $param';
+  }
+
+  @override
+  String get mobileGreetingWithoutName => 'Hello';
 
   @override
   String get activityActivity => 'Activitat';
@@ -327,7 +346,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get broadcastBroadcasts => 'Retransmissions';
 
   @override
-  String get broadcastStartDate => 'Data d\'inici en la teva zona horària';
+  String get broadcastLiveBroadcasts => 'Retransmissions de tornejos en directe';
 
   @override
   String challengeChallengesX(String param1) {
@@ -1856,6 +1875,9 @@ class AppLocalizationsCa extends AppLocalizations {
   String get friends => 'Amics';
 
   @override
+  String get otherPlayers => 'other players';
+
+  @override
   String get discussions => 'Missatges';
 
   @override
@@ -2685,6 +2707,12 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get yes => 'Sí';
+
+  @override
+  String get website => 'Website';
+
+  @override
+  String get mobile => 'Mobile';
 
   @override
   String get help => 'Ajuda:';

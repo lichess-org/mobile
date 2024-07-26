@@ -33,8 +33,8 @@ import 'piece_set_screen.dart';
 import 'sound_settings_screen.dart';
 import 'theme_mode_screen.dart';
 
-class SettingsScreen extends ConsumerWidget {
-  const SettingsScreen({super.key});
+class SettingsTabScreen extends ConsumerWidget {
+  const SettingsTabScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -354,9 +354,7 @@ class _Body extends ConsumerWidget {
           PlatformListTile(
             leading: const Icon(Icons.info),
             title: Text(context.l10n.aboutX('Lichess')),
-            trailing: Theme.of(context).platform == TargetPlatform.iOS
-                ? const CupertinoListTileChevron()
-                : null,
+            trailing: const _OpenInNewIcon(),
             onTap: () {
               launchUrl(Uri.parse('https://lichess.org/about'));
             },
@@ -364,9 +362,7 @@ class _Body extends ConsumerWidget {
           PlatformListTile(
             leading: const Icon(Icons.feedback),
             title: Text(context.l10n.mobileFeedbackButton),
-            trailing: Theme.of(context).platform == TargetPlatform.iOS
-                ? const CupertinoListTileChevron()
-                : null,
+            trailing: const _OpenInNewIcon(),
             onTap: () {
               launchUrl(Uri.parse('https://lichess.org/contact'));
             },
@@ -374,9 +370,7 @@ class _Body extends ConsumerWidget {
           PlatformListTile(
             leading: const Icon(Icons.article),
             title: Text(context.l10n.termsOfService),
-            trailing: Theme.of(context).platform == TargetPlatform.iOS
-                ? const CupertinoListTileChevron()
-                : null,
+            trailing: const _OpenInNewIcon(),
             onTap: () {
               launchUrl(Uri.parse('https://lichess.org/terms-of-service'));
             },
@@ -384,9 +378,7 @@ class _Body extends ConsumerWidget {
           PlatformListTile(
             leading: const Icon(Icons.privacy_tip),
             title: Text(context.l10n.privacyPolicy),
-            trailing: Theme.of(context).platform == TargetPlatform.iOS
-                ? const CupertinoListTileChevron()
-                : null,
+            trailing: const _OpenInNewIcon(),
             onTap: () {
               launchUrl(Uri.parse('https://lichess.org/privacy'));
             },
@@ -400,9 +392,7 @@ class _Body extends ConsumerWidget {
           PlatformListTile(
             leading: const Icon(Icons.code),
             title: Text(context.l10n.sourceCode),
-            trailing: Theme.of(context).platform == TargetPlatform.iOS
-                ? const CupertinoListTileChevron()
-                : null,
+            trailing: const _OpenInNewIcon(),
             onTap: () {
               launchUrl(Uri.parse('https://lichess.org/source'));
             },
@@ -410,9 +400,7 @@ class _Body extends ConsumerWidget {
           PlatformListTile(
             leading: const Icon(Icons.bug_report),
             title: Text(context.l10n.contribute),
-            trailing: Theme.of(context).platform == TargetPlatform.iOS
-                ? const CupertinoListTileChevron()
-                : null,
+            trailing: const _OpenInNewIcon(),
             onTap: () {
               launchUrl(Uri.parse('https://lichess.org/help/contribute'));
             },
@@ -420,9 +408,7 @@ class _Body extends ConsumerWidget {
           PlatformListTile(
             leading: const Icon(Icons.star),
             title: Text(context.l10n.thankYou),
-            trailing: Theme.of(context).platform == TargetPlatform.iOS
-                ? const CupertinoListTileChevron()
-                : null,
+            trailing: const _OpenInNewIcon(),
             onTap: () {
               launchUrl(Uri.parse('https://lichess.org/thanks'));
             },
@@ -560,6 +546,20 @@ class _SettingsSliderDialogState extends State<_SettingsSliderDialog> {
           child: const Text('OK'),
         ),
       ],
+    );
+  }
+}
+
+class _OpenInNewIcon extends StatelessWidget {
+  const _OpenInNewIcon();
+
+  @override
+  Widget build(BuildContext context) {
+    return Icon(
+      Icons.open_in_new,
+      color: Theme.of(context).platform == TargetPlatform.iOS
+          ? CupertinoColors.systemGrey2.resolveFrom(context)
+          : null,
     );
   }
 }

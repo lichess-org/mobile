@@ -21,7 +21,7 @@
   "activityCompetedInNbSwissTournaments": "{count, plural, =1{Competed in {count} Swiss tournament} other{Competed in {count} Swiss tournaments}}",
   "activityJoinedNbTeams": "{count, plural, =1{Joined {count} team} other{Joined {count} teams}}",
   "broadcastBroadcasts": "Broadcasts",
-  "broadcastStartDate": "Start date in your own timezone",
+  "broadcastLiveBroadcasts": "Live tournament broadcasts",
   "challengeChallengesX": "Challenges: {param1}",
   "challengeChallengeToPlay": "Challenge to a game",
   "challengeChallengeDeclined": "Challenge declined",

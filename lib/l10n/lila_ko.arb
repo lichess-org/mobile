@@ -21,7 +21,7 @@
   "activityCompetedInNbSwissTournaments": "{count, plural, other{{count} 번 토너먼트에 참가함}}",
   "activityJoinedNbTeams": "{count, plural, other{{count} 팀에 참가함}}",
   "broadcastBroadcasts": "방송",
-  "broadcastStartDate": "본인 시간대 기준 시작일",
+  "broadcastLiveBroadcasts": "실시간 대회 방송",
   "challengeChallengesX": "도전: {param1}",
   "challengeChallengeToPlay": "도전 신청",
   "challengeChallengeDeclined": "도전 거절됨",

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:chessground/chessground.dart' hide BoardTheme;
+import 'package:chessground/chessground.dart';
 import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/db/shared_preferences.dart';
@@ -31,6 +31,10 @@ class BoardPreferences extends _$BoardPreferences {
 
   Future<void> setBoardTheme(BoardTheme boardTheme) async {
     await _save(state.copyWith(boardTheme: boardTheme));
+  }
+
+  Future<void> setPieceShiftMethod(PieceShiftMethod pieceShiftMethod) async {
+    await _save(state.copyWith(pieceShiftMethod: pieceShiftMethod));
   }
 
   Future<void> toggleHapticFeedback() {
@@ -67,6 +71,12 @@ class BoardPreferences extends _$BoardPreferences {
     );
   }
 
+  Future<void> toggleEnableShapeDrawings() {
+    return _save(
+      state.copyWith(enableShapeDrawings: !state.enableShapeDrawings),
+    );
+  }
+
   Future<void> _save(BoardPrefs newState) async {
     final prefs = ref.read(sharedPreferencesProvider);
     await prefs.setString(
@@ -91,6 +101,14 @@ class BoardPrefs with _$BoardPrefs {
     required bool coordinates,
     required bool pieceAnimation,
     required bool showMaterialDifference,
+    @JsonKey(
+      defaultValue: PieceShiftMethod.either,
+      unknownEnumValue: PieceShiftMethod.either,
+    )
+    required PieceShiftMethod pieceShiftMethod,
+
+    /// Whether to enable shape drawings on the board for games and puzzles.
+    @JsonKey(defaultValue: false) required bool enableShapeDrawings,
   }) = _BoardPrefs;
 
   static const defaults = BoardPrefs(
@@ -103,6 +121,8 @@ class BoardPrefs with _$BoardPrefs {
     coordinates: true,
     pieceAnimation: true,
     showMaterialDifference: true,
+    pieceShiftMethod: PieceShiftMethod.either,
+    enableShapeDrawings: false,
   );
 
   factory BoardPrefs.fromJson(Map<String, dynamic> json) {
