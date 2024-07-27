@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
+import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 
 class GameRepository {
@@ -40,12 +41,12 @@ class GameRepository {
     UserId userId, {
     int max = 20,
     DateTime? until,
-    ISet<Perf> perfs = const ISet.empty(),
+    GameFilterState filter = const GameFilterState(),
   }) {
-    assert(!perfs.contains(Perf.fromPosition));
-    assert(!perfs.contains(Perf.puzzle));
-    assert(!perfs.contains(Perf.storm));
-    assert(!perfs.contains(Perf.streak));
+    assert(!filter.perfs.contains(Perf.fromPosition));
+    assert(!filter.perfs.contains(Perf.puzzle));
+    assert(!filter.perfs.contains(Perf.storm));
+    assert(!filter.perfs.contains(Perf.streak));
     return client
         .readNdJsonList(
           Uri(
@@ -54,12 +55,13 @@ class GameRepository {
               'max': max.toString(),
               if (until != null)
                 'until': until.millisecondsSinceEpoch.toString(),
-              if (perfs.isNotEmpty)
-                'perfType': perfs.map((perf) => perf.name).join(','),
               'moves': 'false',
               'lastFen': 'true',
               'accuracy': 'true',
               'opening': 'true',
+              if (filter.perfs.isNotEmpty)
+                'perfType': filter.perfs.map((perf) => perf.name).join(','),
+              if (filter.side != null) 'color': filter.side!.name,
             },
           ),
           headers: {'Accept': 'application/x-ndjson'},

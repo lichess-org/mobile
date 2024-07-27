@@ -1,4 +1,4 @@
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:chessground/chessground.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,12 +16,12 @@ class GameHistoryScreen extends ConsumerWidget {
   const GameHistoryScreen({
     required this.user,
     required this.isOnline,
-    this.gameFilters = const GameFilterState(),
+    this.gameFilter = const GameFilterState(),
     super.key,
   });
   final LightUser? user;
   final bool isOnline;
-  final GameFilterState gameFilters;
+  final GameFilterState gameFilter;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -42,22 +42,18 @@ class GameHistoryScreen extends ConsumerWidget {
           onPressed: () => showAdaptiveBottomSheet<GameFilterState>(
             context: context,
             builder: (_) => _FilterGames(
-              filter: ref.read(
-                gameFilterProvider(perfs: gameFilters.perfs),
-              ),
+              filter: ref.read(gameFilterProvider(filter: gameFilter)),
             ),
           ).then((value) {
             if (value != null) {
               ref
-                  .read(
-                    gameFilterProvider(perfs: gameFilters.perfs).notifier,
-                  )
+                  .read(gameFilterProvider(filter: gameFilter).notifier)
                   .setFilter(value);
             }
           }),
         ),
       ),
-      child: _Body(user: user, isOnline: isOnline, gameFilters: gameFilters),
+      child: _Body(user: user, isOnline: isOnline, gameFilter: gameFilter),
     );
   }
 
@@ -72,23 +68,19 @@ class GameHistoryScreen extends ConsumerWidget {
             onPressed: () => showAdaptiveBottomSheet<GameFilterState>(
               context: context,
               builder: (_) => _FilterGames(
-                filter: ref.read(
-                  gameFilterProvider(perfs: gameFilters.perfs),
-                ),
+                filter: ref.read(gameFilterProvider(filter: gameFilter)),
               ),
             ).then((value) {
               if (value != null) {
                 ref
-                    .read(
-                      gameFilterProvider(perfs: gameFilters.perfs).notifier,
-                    )
+                    .read(gameFilterProvider(filter: gameFilter).notifier)
                     .setFilter(value);
               }
             }),
           ),
         ],
       ),
-      body: _Body(user: user, isOnline: isOnline, gameFilters: gameFilters),
+      body: _Body(user: user, isOnline: isOnline, gameFilter: gameFilter),
     );
   }
 }
@@ -97,12 +89,12 @@ class _Body extends ConsumerStatefulWidget {
   const _Body({
     required this.user,
     required this.isOnline,
-    required this.gameFilters,
+    required this.gameFilter,
   });
 
   final LightUser? user;
   final bool isOnline;
-  final GameFilterState gameFilters;
+  final GameFilterState gameFilter;
 
   @override
   ConsumerState<_Body> createState() => _BodyState();
@@ -131,8 +123,7 @@ class _BodyState extends ConsumerState<_Body> {
         userGameHistoryProvider(
           widget.user?.id,
           isOnline: widget.isOnline,
-          filters:
-              ref.read(gameFilterProvider(perfs: widget.gameFilters.perfs)),
+          filter: ref.read(gameFilterProvider(filter: widget.gameFilter)),
         ),
       );
 
@@ -149,8 +140,7 @@ class _BodyState extends ConsumerState<_Body> {
               userGameHistoryProvider(
                 widget.user?.id,
                 isOnline: widget.isOnline,
-                filters: ref
-                    .read(gameFilterProvider(perfs: widget.gameFilters.perfs)),
+                filter: ref.read(gameFilterProvider(filter: widget.gameFilter)),
               ).notifier,
             )
             .getNext();
@@ -161,12 +151,12 @@ class _BodyState extends ConsumerState<_Body> {
   @override
   Widget build(BuildContext context) {
     final gameFilterState =
-        ref.watch(gameFilterProvider(perfs: widget.gameFilters.perfs));
+        ref.watch(gameFilterProvider(filter: widget.gameFilter));
     final gameListState = ref.watch(
       userGameHistoryProvider(
         widget.user?.id,
         isOnline: widget.isOnline,
-        filters: gameFilterState,
+        filter: gameFilterState,
       ),
     );
 
@@ -252,8 +242,9 @@ class _FilterGamesState extends State<_FilterGames> {
       padding: const EdgeInsets.all(16),
       child: Column(
         children: [
-          _MultipleChoiceFilter<Perf>(
+          _Filter<Perf>(
             filterName: context.l10n.variant,
+            filterType: FilterType.multipleChoice,
             choices: const [
               Perf.ultraBullet,
               Perf.bullet,
@@ -270,7 +261,7 @@ class _FilterGamesState extends State<_FilterGames> {
               Perf.racingKings,
               Perf.crazyhouse,
             ],
-            selectedItems: filter.perfs,
+            choiceSelected: (choice) => filter.perfs.contains(choice),
             choiceLabel: (t) => t.title,
             onSelected: (value, selected) => setState(
               () {
@@ -279,6 +270,23 @@ class _FilterGamesState extends State<_FilterGames> {
                       ? filter.perfs.add(value)
                       : filter.perfs.remove(value),
                 );
+              },
+            ),
+          ),
+          const Divider(),
+          const SizedBox(height: 10.0),
+          _Filter<Side>(
+            filterName: context.l10n.side,
+            filterType: FilterType.singleChoice,
+            choices: Side.values,
+            choiceSelected: (choice) => filter.side == choice,
+            choiceLabel: (t) => switch (t) {
+              Side.white => context.l10n.white,
+              Side.black => context.l10n.black,
+            },
+            onSelected: (value, selected) => setState(
+              () {
+                filter = filter.copyWith(side: selected ? value : null);
               },
             ),
           ),
@@ -302,18 +310,25 @@ class _FilterGamesState extends State<_FilterGames> {
   }
 }
 
-class _MultipleChoiceFilter<T extends Enum> extends StatelessWidget {
-  const _MultipleChoiceFilter({
+enum FilterType {
+  singleChoice,
+  multipleChoice,
+}
+
+class _Filter<T extends Enum> extends StatelessWidget {
+  const _Filter({
     required this.filterName,
+    required this.filterType,
     required this.choices,
-    required this.selectedItems,
+    required this.choiceSelected,
     required this.choiceLabel,
     required this.onSelected,
   });
 
   final String filterName;
+  final FilterType filterType;
   final Iterable<T> choices;
-  final ISet<T> selectedItems;
+  final bool Function(T choice) choiceSelected;
   final String Function(T choice) choiceLabel;
   final void Function(T value, bool selected) onSelected;
 
@@ -330,11 +345,18 @@ class _MultipleChoiceFilter<T extends Enum> extends StatelessWidget {
             runSpacing: 8.0,
             children: choices
                 .map(
-                  (choice) => FilterChip(
-                    label: Text(choiceLabel(choice)),
-                    selected: selectedItems.contains(choice),
-                    onSelected: (value) => onSelected(choice, value),
-                  ),
+                  (choice) => switch (filterType) {
+                    FilterType.singleChoice => ChoiceChip(
+                        label: Text(choiceLabel(choice)),
+                        selected: choiceSelected(choice),
+                        onSelected: (value) => onSelected(choice, value),
+                      ),
+                    FilterType.multipleChoice => FilterChip(
+                        label: Text(choiceLabel(choice)),
+                        selected: choiceSelected(choice),
+                        onSelected: (value) => onSelected(choice, value),
+                      ),
+                  },
                 )
                 .toList(growable: false),
           ),

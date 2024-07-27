@@ -1,3 +1,4 @@
+import 'package:chessground/chessground.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
@@ -9,12 +10,13 @@ part 'game_filter.g.dart';
 @riverpod
 class GameFilter extends _$GameFilter {
   @override
-  GameFilterState build({ISet<Perf>? perfs}) {
-    return GameFilterState(perfs: perfs ?? const ISet.empty());
+  GameFilterState build({GameFilterState? filter}) {
+    return filter ?? const GameFilterState();
   }
 
   void setFilter(GameFilterState filter) => state = state.copyWith(
         perfs: filter.perfs,
+        side: filter.side,
       );
 }
 
@@ -22,5 +24,6 @@ class GameFilter extends _$GameFilter {
 class GameFilterState with _$GameFilterState {
   const factory GameFilterState({
     @Default(ISet<Perf>.empty()) ISet<Perf> perfs,
+    Side? side,
   }) = _GameFilterState;
 }

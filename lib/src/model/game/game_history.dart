@@ -34,7 +34,7 @@ const _nbPerPage = 20;
 @riverpod
 Future<IList<LightArchivedGameWithPov>> myRecentGames(
   MyRecentGamesRef ref, {
-  GameFilterState filters = const GameFilterState(),
+  GameFilterState filter = const GameFilterState(),
 }) async {
   final online = await ref
       .watch(connectivityChangesProvider.selectAsync((c) => c.isOnline));
@@ -44,7 +44,7 @@ Future<IList<LightArchivedGameWithPov>> myRecentGames(
       (client) => GameRepository(client).getUserGames(
         session.user.id,
         max: kNumberOfRecentGames,
-        perfs: filters.perfs,
+        filter: filter,
       ),
       const Duration(hours: 1),
     );
@@ -68,11 +68,10 @@ Future<IList<LightArchivedGameWithPov>> myRecentGames(
 Future<IList<LightArchivedGameWithPov>> userRecentGames(
   UserRecentGamesRef ref, {
   required UserId userId,
-  GameFilterState filters = const GameFilterState(),
+  GameFilterState filter = const GameFilterState(),
 }) {
   return ref.withClientCacheFor(
-    (client) =>
-        GameRepository(client).getUserGames(userId, perfs: filters.perfs),
+    (client) => GameRepository(client).getUserGames(userId, filter: filter),
     // cache is important because the associated widget is in a [ListView] and
     // the provider may be instanciated multiple times in a short period of time
     // (e.g. when scrolling)
@@ -121,7 +120,7 @@ class UserGameHistory extends _$UserGameHistory {
     /// server. If this is false, the provider will fetch the games from the
     /// local storage.
     required bool isOnline,
-    GameFilterState filters = const GameFilterState(),
+    GameFilterState filter = const GameFilterState(),
   }) async {
     ref.cacheFor(const Duration(minutes: 5));
     ref.onDispose(() {
@@ -134,10 +133,10 @@ class UserGameHistory extends _$UserGameHistory {
         ? ref.read(
             userRecentGamesProvider(
               userId: userId,
-              filters: filters,
+              filter: filter,
             ).future,
           )
-        : ref.read(myRecentGamesProvider(filters: filters).future);
+        : ref.read(myRecentGamesProvider(filter: filter).future);
 
     _list.addAll(await recentGames);
 
@@ -147,7 +146,7 @@ class UserGameHistory extends _$UserGameHistory {
       hasMore: true,
       hasError: false,
       online: isOnline,
-      filters: filters,
+      filter: filter,
       session: session,
     );
   }
@@ -165,7 +164,7 @@ class UserGameHistory extends _$UserGameHistory {
                 userId!,
                 max: _nbPerPage,
                 until: _list.last.game.createdAt,
-                perfs: currentVal.filters.perfs,
+                filter: currentVal.filter,
               ),
             )
           : currentVal.online && currentVal.session != null
@@ -174,7 +173,7 @@ class UserGameHistory extends _$UserGameHistory {
                     currentVal.session!.user.id,
                     max: _nbPerPage,
                     until: _list.last.game.createdAt,
-                    perfs: currentVal.filters.perfs,
+                    filter: currentVal.filter,
                   ),
                 )
               : ref
@@ -224,7 +223,7 @@ class UserGameHistoryState with _$UserGameHistoryState {
   const factory UserGameHistoryState({
     required IList<LightArchivedGameWithPov> gameList,
     required bool isLoading,
-    required GameFilterState filters,
+    required GameFilterState filter,
     required bool hasMore,
     required bool hasError,
     required bool online,
