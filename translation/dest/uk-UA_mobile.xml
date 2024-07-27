@@ -20,6 +20,7 @@
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Немає результатів </string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Ви впевнені?</string>
   <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">Ви втратите поточну серію, і ваш рахунок буде збережено.</string>
+  <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Нічого показати. Зіграйте в гру Puzzle Storm.</string>
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Поділитися задачею</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Поділитися посиланням на гру</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Поділитися PGN</string>
@@ -27,6 +28,7 @@
   <string name="showVariations" comment="Shown in the analysis screen.">Показати варіанти</string>
   <string name="hideVariation" comment="Shown in the analysis screen.">Сховати варіанти</string>
   <string name="showComments" comment="Shown in the analysis screen.">Показати коментарі</string>
+  <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Ви хочете закінчити цю серію?</string>
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Нічого не знайдено, будь ласка, змініть фільтри</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Скасувати пропозицію повернення ходу</string>
   <string name="cancelDrawOffer" comment="Menu action that cancels a previous draw offer">Скасувати пропозицію нічиєї</string>
