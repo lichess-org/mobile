@@ -41,6 +41,8 @@ class GameHistoryScreen extends ConsumerWidget {
           tooltip: context.l10n.filterGames,
           onPressed: () => showAdaptiveBottomSheet<GameFilterState>(
             context: context,
+            isScrollControlled: true,
+            showDragHandle: true,
             builder: (_) => _FilterGames(
               filter: ref.read(gameFilterProvider(filter: gameFilter)),
             ),
@@ -67,6 +69,8 @@ class GameHistoryScreen extends ConsumerWidget {
             tooltip: context.l10n.filterGames,
             onPressed: () => showAdaptiveBottomSheet<GameFilterState>(
               context: context,
+              isScrollControlled: true,
+              showDragHandle: true,
               builder: (_) => _FilterGames(
                 filter: ref.read(gameFilterProvider(filter: gameFilter)),
               ),
@@ -240,71 +244,78 @@ class _FilterGamesState extends State<_FilterGames> {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16),
-      child: Column(
-        children: [
-          _Filter<Perf>(
-            filterName: context.l10n.variant,
-            filterType: FilterType.multipleChoice,
-            choices: const [
-              Perf.ultraBullet,
-              Perf.bullet,
-              Perf.blitz,
-              Perf.rapid,
-              Perf.classical,
-              Perf.correspondence,
-              Perf.chess960,
-              Perf.antichess,
-              Perf.kingOfTheHill,
-              Perf.threeCheck,
-              Perf.atomic,
-              Perf.horde,
-              Perf.racingKings,
-              Perf.crazyhouse,
-            ],
-            choiceSelected: (choice) => filter.perfs.contains(choice),
-            choiceLabel: (t) => t.title,
-            onSelected: (value, selected) => setState(
-              () {
-                filter = filter.copyWith(
-                  perfs: selected
-                      ? filter.perfs.add(value)
-                      : filter.perfs.remove(value),
-                );
-              },
-            ),
-          ),
-          const Divider(),
-          const SizedBox(height: 10.0),
-          _Filter<Side>(
-            filterName: context.l10n.side,
-            filterType: FilterType.singleChoice,
-            choices: Side.values,
-            choiceSelected: (choice) => filter.side == choice,
-            choiceLabel: (t) => switch (t) {
-              Side.white => context.l10n.white,
-              Side.black => context.l10n.black,
-            },
-            onSelected: (value, selected) => setState(
-              () {
-                filter = filter.copyWith(side: selected ? value : null);
-              },
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: const Text('Cancel'),
+      child: DraggableScrollableSheet(
+        initialChildSize: .7,
+        expand: false,
+        snap: true,
+        snapSizes: const [.7],
+        builder: (context, scrollController) => ListView(
+          controller: scrollController,
+          children: [
+            _Filter<Perf>(
+              filterName: context.l10n.variant,
+              filterType: FilterType.multipleChoice,
+              choices: const [
+                Perf.ultraBullet,
+                Perf.bullet,
+                Perf.blitz,
+                Perf.rapid,
+                Perf.classical,
+                Perf.correspondence,
+                Perf.chess960,
+                Perf.antichess,
+                Perf.kingOfTheHill,
+                Perf.threeCheck,
+                Perf.atomic,
+                Perf.horde,
+                Perf.racingKings,
+                Perf.crazyhouse,
+              ],
+              choiceSelected: (choice) => filter.perfs.contains(choice),
+              choiceLabel: (t) => t.title,
+              onSelected: (value, selected) => setState(
+                () {
+                  filter = filter.copyWith(
+                    perfs: selected
+                        ? filter.perfs.add(value)
+                        : filter.perfs.remove(value),
+                  );
+                },
               ),
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(filter),
-                child: const Text('OK'),
+            ),
+            const Divider(),
+            const SizedBox(height: 10.0),
+            _Filter<Side>(
+              filterName: context.l10n.side,
+              filterType: FilterType.singleChoice,
+              choices: Side.values,
+              choiceSelected: (choice) => filter.side == choice,
+              choiceLabel: (t) => switch (t) {
+                Side.white => context.l10n.white,
+                Side.black => context.l10n.black,
+              },
+              onSelected: (value, selected) => setState(
+                () {
+                  filter = filter.copyWith(side: selected ? value : null);
+                },
               ),
-            ],
-          ),
-        ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('Cancel'),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(filter),
+                  child: const Text('OK'),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
