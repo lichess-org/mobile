@@ -38,7 +38,7 @@ body:
   - type: input
     attributes:
       label: App version
-      description: Specify application version (eg: 0.7.8).
+      description: Specify the application version (e.g. 0.7.8).
     validations:
       required: true
   - type: input
