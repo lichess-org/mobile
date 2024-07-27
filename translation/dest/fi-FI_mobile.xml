@@ -40,4 +40,5 @@
   <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">Tee tehtäviä suosikkiavauksistasi tai valitse tehtäväteema.</string>
   <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">Ratkaise mahdollisimman monta tehtävää 3 minuutissa.</string>
   <string name="greeting" comment="A greeting that is shown on the app's home page, e.g. 'Hello, GM Magnus'. %s is substituted with the user's name">Hei %s</string>
+  <string name="greetingWithoutName" comment="Greeing that is shown on the app's home page when the user is not logged in.">Hei</string>
 </resources>
