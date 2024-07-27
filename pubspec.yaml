@@ -58,15 +58,13 @@ dependencies:
   share_plus: ^9.0.0
   shared_preferences: ^2.1.0
   signal_strength_indicator: ^0.4.1
-  sound_effect:
-    path: ../sound_effect
+  sound_effect: ^0.0.1
   sqflite: ^2.2.5
   stockfish:
-   git:
-     url: https://github.com/lichess-org/dart-stockfish.git
-     ref: 982a98258676165bdb268024bbcdc272290c9b3a
+    git:
+      url: https://github.com/lichess-org/dart-stockfish.git
+      ref: 0965a99ea143db00ec495eecbd54dfe10acf70ea
   stream_transform: ^2.1.0
-  system_info_plus: ^0.0.5
   timeago: ^3.6.0
   url_launcher: ^6.1.9
   visibility_detector: ^0.4.0

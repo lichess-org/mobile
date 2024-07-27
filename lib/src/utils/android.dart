@@ -15,7 +15,7 @@ final androidVersionProvider =
 });
 
 class AndroidStorage {
-  static const _channel = MethodChannel('mobile.lichess.org/storage');
+  static const _channel = MethodChannel('mobile.lichess.org/system');
 
   const AndroidStorage._();
 

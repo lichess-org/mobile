@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/utils/color_palette.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
+import 'package:lichess_mobile/src/utils/system.dart';
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart' as p;
@@ -23,7 +24,6 @@ import 'package:pub_semver/pub_semver.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:system_info_plus/system_info_plus.dart';
 
 part 'app_initialization.freezed.dart';
 part 'app_initialization.g.dart';
@@ -120,7 +120,7 @@ Future<AppInitializationData> appInitialization(
     }
   }
 
-  final physicalMemory = await SystemInfoPlus.physicalMemory ?? 256.0;
+  final physicalMemory = await System.instance.getTotalRam() ?? 256.0;
   final engineMaxMemory = (physicalMemory / 10).ceil();
 
   return AppInitializationData(

@@ -83,7 +83,7 @@ class GeneralPrefsState with _$GeneralPrefsState {
     required bool isSoundEnabled,
     @JsonKey(unknownEnumValue: SoundTheme.standard)
     required SoundTheme soundTheme,
-    @JsonKey(defaultValue: 1.0) required double masterVolume,
+    @JsonKey(defaultValue: 0.8) required double masterVolume,
 
     /// Should enable system color palette (android 12+ only)
     required bool systemColors,
@@ -93,7 +93,7 @@ class GeneralPrefsState with _$GeneralPrefsState {
     themeMode: ThemeMode.system,
     isSoundEnabled: true,
     soundTheme: SoundTheme.standard,
-    masterVolume: 1.0,
+    masterVolume: 0.8,
     systemColors: true,
   );
 
