@@ -29,4 +29,5 @@
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">主播</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">加入一局游戏</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">发生一些错误。</string>
+  <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">在3分钟内尽可能多地解决谜题</string>
 </resources>
