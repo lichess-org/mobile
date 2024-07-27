@@ -28,23 +28,23 @@ body:
     attributes:
       label: What did you expect to happen?
     validations:
-      required: true
+      required: false
   - type: textarea
     id: outcome
     attributes:
       label: What happened instead?
     validations:
-      required: true
+      required: false
   - type: input
     attributes:
-      label: Device Info
-      description: Specify the device you are using the app on (e.g. Pixel 7)
+      label: App version
+      description: Specify application version (eg: `0.7.8`).
     validations:
       required: true
   - type: input
     attributes:
-      label: Operating System Version
-      description: Example. Android 14 or iOS 16
+      label: Device Info
+      description: Specify the device and Operating System you are using the app on (e.g. Pixel 7 / Android 14)
     validations:
       required: true
   - type: textarea
