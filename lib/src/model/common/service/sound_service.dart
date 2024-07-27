@@ -30,22 +30,25 @@ SoundService soundService(SoundServiceRef ref) {
 
 final _extension = defaultTargetPlatform == TargetPlatform.iOS ? 'aifc' : 'mp3';
 
-/// Load sounds from assets. Make them ready to be played.
-Future<void> _loadSounds(SoundTheme soundTheme) async {
-  final themePath = 'assets/sounds/${soundTheme.name}';
-  const standardPath = 'assets/sounds/standard';
+/// Loads all sounds of the given [SoundTheme].
+Future<void> _loadAllSounds(SoundTheme soundTheme) async {
+  await Future.wait(Sound.values.map((sound) => _loadSound(soundTheme, sound)));
+}
 
-  for (final sound in Sound.values) {
-    final soundId = sound.name;
-    final file = '$soundId.$_extension';
-    String fullPath = '$themePath/$file';
-    try {
-      await rootBundle.load(fullPath);
-    } catch (_) {
-      fullPath = '$standardPath/$file';
-    }
-    _soundEffectPlugin.load(soundId, fullPath);
+/// Loads a single sound from the given [SoundTheme].
+Future<void> _loadSound(SoundTheme theme, Sound sound) async {
+  final themePath = 'assets/sounds/${theme.name}';
+  const standardPath = 'assets/sounds/standard';
+  final soundId = sound.name;
+  final file = '$soundId.$_extension';
+  String fullPath = '$themePath/$file';
+  // If the sound file is not found in the theme, fallback to the standard theme.
+  try {
+    await rootBundle.load(fullPath);
+  } catch (_) {
+    fullPath = '$standardPath/$file';
   }
+  await _soundEffectPlugin.load(soundId, fullPath);
 }
 
 /// Service to play game sounds.
@@ -59,7 +62,7 @@ class SoundService {
   /// This will load the sounds from assets and make them ready to be played.
   Future<void> initialize(SoundTheme theme) async {
     await _soundEffectPlugin.initialize();
-    await _loadSounds(theme);
+    await _loadAllSounds(theme);
   }
 
   /// Play the given sound if sound is enabled.
@@ -81,7 +84,7 @@ class SoundService {
   }) async {
     await _soundEffectPlugin.release();
     await _soundEffectPlugin.initialize();
-    await _loadSounds(theme);
+    await _loadAllSounds(theme);
     if (playSound) {
       play(Sound.move);
     }

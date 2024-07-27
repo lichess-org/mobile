@@ -1243,10 +1243,10 @@ packages:
     dependency: "direct main"
     description:
       name: sound_effect
-      sha256: dcbe1a6c2b80ad5de6d31b646843dc2bb9188eb8913a65e821b09d790e0550c8
+      sha256: "745885446f835e22946f060572461ba50b34eecd03432fc33b292a4f9a2c79d5"
       url: "https://pub.dev"
     source: hosted
-    version: "0.0.1"
+    version: "0.0.2"
   source_gen:
     dependency: transitive
     description:
