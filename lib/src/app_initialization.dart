@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -23,7 +22,6 @@ import 'package:path/path.dart' as p;
 import 'package:pub_semver/pub_semver.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:soundpool/soundpool.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:system_info_plus/system_info_plus.dart';
 
@@ -41,10 +39,6 @@ Future<AppInitializationData> appInitialization(
   final pInfo = await PackageInfo.fromPlatform();
   final deviceInfo = await DeviceInfoPlugin().deviceInfo;
   final prefs = await SharedPreferences.getInstance();
-  final soundTheme = GeneralPreferences.fetchFromStorage(prefs).soundTheme;
-  final masterVolume = GeneralPreferences.fetchFromStorage(prefs).volume;
-  final soundPool =
-      await ref.watch(soundPoolProvider(soundTheme, masterVolume).future);
 
   final dbPath = p.join(await getDatabasesPath(), kLichessDatabaseName);
 
@@ -55,6 +49,11 @@ Future<AppInitializationData> appInitialization(
       Version.parse(installedVersion) != appVersion) {
     prefs.setString('installed_version', appVersion.canonicalizedVersion);
   }
+
+  // preload sounds
+  final soundTheme = GeneralPreferences.fetchFromStorage(prefs).soundTheme;
+  final soundService = ref.read(soundServiceProvider);
+  await soundService.initialize(soundTheme);
 
   final db = await openDb(databaseFactory, dbPath);
 
@@ -128,7 +127,6 @@ Future<AppInitializationData> appInitialization(
     packageInfo: pInfo,
     deviceInfo: deviceInfo,
     sharedPreferences: prefs,
-    soundPool: soundPool,
     userSession: await sessionStorage.read(),
     database: db,
     sri: sri,
@@ -142,7 +140,6 @@ class AppInitializationData with _$AppInitializationData {
     required PackageInfo packageInfo,
     required BaseDeviceInfo deviceInfo,
     required SharedPreferences sharedPreferences,
-    required (Soundpool, IMap<Sound, int>) soundPool,
     required AuthSessionState? userSession,
     required Database database,
     required String sri,

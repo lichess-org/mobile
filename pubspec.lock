@@ -1239,15 +1239,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
-  soundpool:
+  sound_effect:
     dependency: "direct main"
     description:
-      path: "."
-      ref: "575ba7e5c55986caeef66101f49fa695d65e5a5a"
-      resolved-ref: "575ba7e5c55986caeef66101f49fa695d65e5a5a"
-      url: "https://github.com/lichess-org/flutter-soundpool.git"
-    source: git
-    version: "2.4.0"
+      path: "../sound_effect"
+      relative: true
+    source: path
+    version: "0.0.1"
   source_gen:
     dependency: transitive
     description:
@@ -1634,5 +1632,5 @@ packages:
     source: hosted
     version: "3.1.2"
 sdks:
-  dart: ">=3.4.0 <4.0.0"
+  dart: ">=3.5.0-180.3.beta <4.0.0"
   flutter: ">=3.22.0"

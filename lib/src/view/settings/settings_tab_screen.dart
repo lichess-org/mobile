@@ -82,22 +82,7 @@ class SettingsTabScreen extends ConsumerWidget {
 class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeMode = ref.watch(
-      generalPreferencesProvider.select((state) => state.themeMode),
-    );
-
-    final soundTheme = ref.watch(
-      generalPreferencesProvider.select((state) => state.soundTheme),
-    );
-
-    final volume = ref.watch(
-      generalPreferencesProvider.select((state) => state.volume),
-    );
-
-    final hasSystemColors = ref.watch(
-      generalPreferencesProvider.select((state) => state.systemColors),
-    );
-
+    final generalPrefs = ref.watch(generalPreferencesProvider);
     final authController = ref.watch(authControllerProvider);
     final userSession = ref.watch(authSessionProvider);
     final packageInfo = ref.watch(packageInfoProvider);
@@ -204,13 +189,13 @@ class _Body extends ConsumerWidget {
           SettingsListTile(
             icon: const Icon(Icons.music_note),
             settingsLabel: Text(context.l10n.sound),
-            settingsValue: soundThemeL10n(context, soundTheme),
+            settingsValue: soundThemeL10n(context, generalPrefs.soundTheme),
             onTap: () {
               if (Theme.of(context).platform == TargetPlatform.android) {
                 showChoicePicker(
                   context,
                   choices: SoundTheme.values,
-                  selectedItem: soundTheme,
+                  selectedItem: generalPrefs.soundTheme,
                   labelBuilder: (t) => Text(soundThemeL10n(context, t)),
                   onSelectedItemChanged: (SoundTheme? value) {
                     ref
@@ -218,7 +203,6 @@ class _Body extends ConsumerWidget {
                         .setSoundTheme(value ?? SoundTheme.standard);
                     ref.read(soundServiceProvider).changeTheme(
                           value ?? SoundTheme.standard,
-                          volume,
                           playSound: true,
                         );
                   },
@@ -236,7 +220,7 @@ class _Body extends ConsumerWidget {
             icon: const Icon(Icons.volume_up),
             // TODO: translate
             settingsLabel: const Text('Volume'),
-            settingsValue: volumeLabel(volume),
+            settingsValue: volumeLabel(generalPrefs.masterVolume),
             onTap: () {
               if (Theme.of(context).platform == TargetPlatform.iOS) {
                 pushPlatformRoute(
@@ -250,14 +234,12 @@ class _Body extends ConsumerWidget {
                   builder: (context) {
                     return _SettingsSliderDialog(
                       title: 'Volume',
-                      value: volume,
+                      value: generalPrefs.masterVolume,
                       values: kMasterVolumeValues,
                       onChangeEnd: (double value) {
                         ref
                             .read(generalPreferencesProvider.notifier)
-                            .setVolume(value);
-
-                        ref.read(soundServiceProvider).setVolume(value);
+                            .setMasterVolume(value);
                       },
                       labelBuilder: volumeLabel,
                     );
@@ -272,7 +254,7 @@ class _Body extends ConsumerWidget {
                   ? SwitchSettingTile(
                       leading: const Icon(Icons.colorize),
                       title: Text(context.l10n.mobileSystemColors),
-                      value: hasSystemColors,
+                      value: generalPrefs.systemColors,
                       onChanged: (value) {
                         ref
                             .read(generalPreferencesProvider.notifier)
@@ -285,13 +267,14 @@ class _Body extends ConsumerWidget {
           SettingsListTile(
             icon: const Icon(Icons.brightness_medium),
             settingsLabel: Text(context.l10n.background),
-            settingsValue: ThemeModeScreen.themeTitle(context, themeMode),
+            settingsValue:
+                ThemeModeScreen.themeTitle(context, generalPrefs.themeMode),
             onTap: () {
               if (Theme.of(context).platform == TargetPlatform.android) {
                 showChoicePicker(
                   context,
                   choices: ThemeMode.values,
-                  selectedItem: themeMode,
+                  selectedItem: generalPrefs.themeMode,
                   labelBuilder: (t) =>
                       Text(ThemeModeScreen.themeTitle(context, t)),
                   onSelectedItemChanged: (ThemeMode? value) => ref

@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -51,7 +50,7 @@ class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final volume = ref.watch(
-      generalPreferencesProvider.select((state) => state.volume),
+      generalPreferencesProvider.select((state) => state.masterVolume),
     );
 
     return SafeArea(
@@ -65,9 +64,7 @@ class _Body extends ConsumerWidget {
                 onChangeEnd: (value) {
                   ref
                       .read(generalPreferencesProvider.notifier)
-                      .setVolume(value);
-
-                  ref.read(soundServiceProvider).setVolume(value);
+                      .setMasterVolume(value);
                 },
                 labelBuilder: (value) => '${(value * 100).round()}%',
               ),

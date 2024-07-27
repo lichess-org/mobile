@@ -46,17 +46,12 @@ class _Body extends ConsumerWidget {
       ),
     );
 
-    final volume = ref.watch(
-      generalPreferencesProvider.select((state) => state.volume),
-    );
-
     void onChanged(SoundTheme? value) {
       ref
           .read(generalPreferencesProvider.notifier)
           .setSoundTheme(value ?? SoundTheme.standard);
       ref.read(soundServiceProvider).changeTheme(
             value ?? SoundTheme.standard,
-            volume,
             playSound: true,
           );
     }

@@ -3,20 +3,17 @@ import 'package:lichess_mobile/src/model/settings/sound_theme.dart';
 
 class FakeSoundService implements SoundService {
   @override
-  Future<int?> play(Sound sound) async {
-    return null;
-  }
-
-  @override
-  Future<void> setVolume(double volume) async {}
-
-  @override
-  Future<void> stopCurrent() async {}
+  Future<void> play(Sound sound) async {}
 
   @override
   Future<void> changeTheme(
-    SoundTheme theme,
-    double volume, {
+    SoundTheme theme, {
     bool playSound = false,
   }) async {}
+
+  @override
+  Future<void> initialize(SoundTheme theme) async {}
+
+  @override
+  Future<void> release() async {}
 }
