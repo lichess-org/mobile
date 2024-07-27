@@ -13,7 +13,9 @@ class GameFilter extends _$GameFilter {
     return GameFilterState(perfs: perfs ?? const ISet.empty());
   }
 
-  void setPerfs(ISet<Perf> perfs) => state = state.copyWith(perfs: perfs);
+  void setFilter(GameFilterState filter) => state = state.copyWith(
+        perfs: filter.perfs,
+      );
 }
 
 @freezed

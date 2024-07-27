@@ -8,7 +8,9 @@ import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 
 class GameHistoryScreen extends ConsumerWidget {
   const GameHistoryScreen({
@@ -23,82 +25,68 @@ class GameHistoryScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final gameFilterState =
-        ref.watch(gameFilterProvider(perfs: gameFilters.perfs));
-
-    final perfFilter = _MultipleChoiceFilter(
-      filterName: context.l10n.variant,
-      choicesGroups: const [
-        [
-          Perf.ultraBullet,
-          Perf.bullet,
-          Perf.blitz,
-          Perf.rapid,
-          Perf.classical,
-          Perf.correspondence,
-        ],
-        [
-          Perf.chess960,
-          Perf.antichess,
-          Perf.kingOfTheHill,
-          Perf.threeCheck,
-          Perf.atomic,
-          Perf.horde,
-          Perf.racingKings,
-          Perf.crazyhouse,
-        ],
-      ],
-      selectedItems: gameFilterState.perfs,
-      choiceLabel: (t) => t.title,
-      onChanged: (value) => ref
-          .read(
-            gameFilterProvider(
-              perfs: gameFilters.perfs,
-            ).notifier,
-          )
-          .setPerfs(value),
+    return ConsumerPlatformWidget(
+      ref: ref,
+      androidBuilder: _buildAndroid,
+      iosBuilder: _buildIos,
     );
-
-    switch (Theme.of(context).platform) {
-      case TargetPlatform.android:
-        return _buildAndroid(context, ref, perfFilter: perfFilter);
-      case TargetPlatform.iOS:
-        return _buildIos(context, ref, perfFilter: perfFilter);
-      default:
-        assert(false, 'Unexpected platform ${Theme.of(context).platform}');
-        return const SizedBox.shrink();
-    }
   }
 
-  Widget _buildIos(
-    BuildContext context,
-    WidgetRef ref, {
-    required Widget perfFilter,
-  }) {
+  Widget _buildIos(BuildContext context, WidgetRef ref) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Row(
-          children: [
-            perfFilter,
-          ],
+        middle: Text(context.l10n.games),
+        trailing: IconButton(
+          icon: const Icon(Icons.tune),
+          tooltip: context.l10n.filterGames,
+          onPressed: () => showAdaptiveBottomSheet<GameFilterState>(
+            context: context,
+            builder: (_) => _FilterGames(
+              filter: ref.read(
+                gameFilterProvider(perfs: gameFilters.perfs),
+              ),
+            ),
+          ).then((value) {
+            if (value != null) {
+              ref
+                  .read(
+                    gameFilterProvider(perfs: gameFilters.perfs).notifier,
+                  )
+                  .setFilter(value);
+            }
+          }),
         ),
       ),
       child: _Body(user: user, isOnline: isOnline, gameFilters: gameFilters),
     );
   }
 
-  Widget _buildAndroid(
-    BuildContext context,
-    WidgetRef ref, {
-    required Widget perfFilter,
-  }) {
+  Widget _buildAndroid(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          children: [
-            perfFilter,
-          ],
-        ),
+        title: Text(context.l10n.games),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.tune),
+            tooltip: context.l10n.filterGames,
+            onPressed: () => showAdaptiveBottomSheet<GameFilterState>(
+              context: context,
+              builder: (_) => _FilterGames(
+                filter: ref.read(
+                  gameFilterProvider(perfs: gameFilters.perfs),
+                ),
+              ),
+            ).then((value) {
+              if (value != null) {
+                ref
+                    .read(
+                      gameFilterProvider(perfs: gameFilters.perfs).notifier,
+                    )
+                    .setFilter(value);
+              }
+            }),
+          ),
+        ],
       ),
       body: _Body(user: user, isOnline: isOnline, gameFilters: gameFilters),
     );
@@ -240,63 +228,75 @@ class _BodyState extends ConsumerState<_Body> {
   }
 }
 
-class _MultipleChoiceFilter<T extends Enum> extends StatelessWidget {
-  const _MultipleChoiceFilter({
-    required this.filterName,
-    required this.choicesGroups,
-    required this.selectedItems,
-    required this.choiceLabel,
-    required this.onChanged,
+class _FilterGames extends StatefulWidget {
+  const _FilterGames({
+    required this.filter,
   });
 
-  final String filterName;
-  final Iterable<Iterable<T>> choicesGroups;
-  final ISet<T> selectedItems;
-  final String Function(T choice) choiceLabel;
-  final void Function(ISet<T> value) onChanged;
+  final GameFilterState filter;
+
+  @override
+  State<_FilterGames> createState() => _FilterGamesState();
+}
+
+class _FilterGamesState extends State<_FilterGames> {
+  late GameFilterState filter;
+
+  @override
+  void initState() {
+    super.initState();
+    filter = widget.filter;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: () => showMultipleChoiceFilter(
-        context,
-        filterName: filterName,
-        choicesGroups: choicesGroups,
-        selectedItems: selectedItems,
-        choiceLabel: choiceLabel,
-      ).then((value) {
-        if (value != null) {
-          onChanged(value);
-        }
-      }),
-      style: TextButton.styleFrom(
-        backgroundColor: selectedItems.isEmpty
-            ? Theme.of(context).colorScheme.secondary
-            : Theme.of(context).colorScheme.primary,
-        foregroundColor: selectedItems.isEmpty
-            ? Theme.of(context).colorScheme.onSecondary
-            : Theme.of(context).colorScheme.onPrimary,
-      ),
-      child: Row(
+    return Container(
+      padding: const EdgeInsets.all(16),
+      child: Column(
         children: [
-          if (selectedItems.length > 1)
-            Container(
-              padding: const EdgeInsets.all(4),
-              margin: const EdgeInsets.only(right: 5),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.onPrimary,
-                shape: BoxShape.circle,
-              ),
-              child: Text(
-                '${selectedItems.length}',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Theme.of(context).colorScheme.primary),
-              ),
+          _MultipleChoiceFilter<Perf>(
+            filterName: context.l10n.variant,
+            choices: const [
+              Perf.ultraBullet,
+              Perf.bullet,
+              Perf.blitz,
+              Perf.rapid,
+              Perf.classical,
+              Perf.correspondence,
+              Perf.chess960,
+              Perf.antichess,
+              Perf.kingOfTheHill,
+              Perf.threeCheck,
+              Perf.atomic,
+              Perf.horde,
+              Perf.racingKings,
+              Perf.crazyhouse,
+            ],
+            selectedItems: filter.perfs,
+            choiceLabel: (t) => t.title,
+            onSelected: (value, selected) => setState(
+              () {
+                filter = filter.copyWith(
+                  perfs: selected
+                      ? filter.perfs.add(value)
+                      : filter.perfs.remove(value),
+                );
+              },
             ),
-          Text(
-            selectedItems.length == 1
-                ? choiceLabel(selectedItems.first)
-                : filterName,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(filter),
+                child: const Text('OK'),
+              ),
+            ],
           ),
         ],
       ),
@@ -304,80 +304,44 @@ class _MultipleChoiceFilter<T extends Enum> extends StatelessWidget {
   }
 }
 
-Future<ISet<T>?> showMultipleChoiceFilter<T extends Enum>(
-  BuildContext context, {
-  required String filterName,
-  required Iterable<Iterable<T>> choicesGroups,
-  required ISet<T> selectedItems,
-  required String Function(T choice) choiceLabel,
-}) {
-  return showAdaptiveDialog<ISet<T>>(
-    context: context,
-    builder: (context) {
-      ISet<T> items = selectedItems;
-      return AlertDialog.adaptive(
-        contentPadding: const EdgeInsets.all(16.0),
-        scrollable: true,
-        content: StatefulBuilder(
-          builder: (BuildContext context, StateSetter setState) {
-            return Column(
-              children: choicesGroups
-                  .map(
-                    (group) => Column(
-                      children: [
-                        SizedBox(
-                          width: double.infinity,
-                          child: Wrap(
-                            spacing: 8.0,
-                            runSpacing: 8.0,
-                            children: group
-                                .map(
-                                  (choice) => FilterChip(
-                                    label: Text(choiceLabel(choice)),
-                                    selected: items.contains(choice),
-                                    onSelected: (value) {
-                                      setState(() {
-                                        items = value
-                                            ? items.add(choice)
-                                            : items.remove(choice);
-                                      });
-                                    },
-                                  ),
-                                )
-                                .toList(growable: false),
-                          ),
-                        ),
-                        if (choicesGroups.isNotLast(group)) const Divider(),
-                      ],
-                    ),
-                  )
-                  .toList(growable: false),
-            );
-          },
+class _MultipleChoiceFilter<T extends Enum> extends StatelessWidget {
+  const _MultipleChoiceFilter({
+    required this.filterName,
+    required this.choices,
+    required this.selectedItems,
+    required this.choiceLabel,
+    required this.onSelected,
+  });
+
+  final String filterName;
+  final Iterable<T> choices;
+  final ISet<T> selectedItems;
+  final String Function(T choice) choiceLabel;
+  final void Function(T value, bool selected) onSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(filterName, style: const TextStyle(fontSize: 18)),
+        SizedBox(
+          width: double.infinity,
+          child: Wrap(
+            spacing: 8.0,
+            runSpacing: 8.0,
+            children: choices
+                .map(
+                  (choice) => FilterChip(
+                    label: Text(choiceLabel(choice)),
+                    selected: selectedItems.contains(choice),
+                    onSelected: (value) => onSelected(choice, value),
+                  ),
+                )
+                .toList(growable: false),
+          ),
         ),
-        actions: Theme.of(context).platform == TargetPlatform.iOS
-            ? [
-                CupertinoDialogAction(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: Text(context.l10n.cancel),
-                ),
-                CupertinoDialogAction(
-                  isDefaultAction: true,
-                  child: Text(context.l10n.mobileOkButton),
-                  onPressed: () => Navigator.of(context).pop(items),
-                ),
-              ]
-            : [
-                TextButton(
-                  child: Text(context.l10n.cancel),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-                TextButton(
-                  child: Text(context.l10n.mobileOkButton),
-                  onPressed: () => Navigator.of(context).pop(items),
-                ),
-              ],
-      );
-    },
-  );
+      ],
+    );
+  }
 }
