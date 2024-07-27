@@ -30,9 +30,18 @@ SoundService soundService(SoundServiceRef ref) {
 
 final _extension = defaultTargetPlatform == TargetPlatform.iOS ? 'aifc' : 'mp3';
 
+const Set<Sound> _emtpySet = {};
+
 /// Loads all sounds of the given [SoundTheme].
-Future<void> _loadAllSounds(SoundTheme soundTheme) async {
-  await Future.wait(Sound.values.map((sound) => _loadSound(soundTheme, sound)));
+Future<void> _loadAllSounds(
+  SoundTheme soundTheme, {
+  Set<Sound> excluded = _emtpySet,
+}) async {
+  await Future.wait(
+    Sound.values
+        .where((s) => !excluded.contains(s))
+        .map((sound) => _loadSound(soundTheme, sound)),
+  );
 }
 
 /// Loads a single sound from the given [SoundTheme].
@@ -78,16 +87,19 @@ class SoundService {
   /// Change the sound theme and optionally play a move sound.
   ///
   /// This will release the previous sounds and load the new ones.
+  ///
+  /// If [playSound] is true, a move sound will be played.
   Future<void> changeTheme(
     SoundTheme theme, {
     bool playSound = false,
   }) async {
     await _soundEffectPlugin.release();
     await _soundEffectPlugin.initialize();
-    await _loadAllSounds(theme);
+    await _loadSound(theme, Sound.move);
     if (playSound) {
       play(Sound.move);
     }
+    await _loadAllSounds(theme, excluded: {Sound.move});
   }
 
   Future<void> release() async {
