@@ -54,22 +54,22 @@ class SoundService {
 
   final SoundServiceRef _ref;
 
-  /// Play the given sound if sound is enabled.
-  Future<void> play(Sound sound) async {
-    final isEnabled = _ref.read(generalPreferencesProvider).isSoundEnabled;
-    if (!isEnabled) {
-      return;
-    }
-    final volume = _ref.read(generalPreferencesProvider).masterVolume;
-    _soundEffectPlugin.play(sound.name, volume: volume);
-  }
-
   /// Initialize the sound service with the given sound theme.
   ///
   /// This will load the sounds from assets and make them ready to be played.
   Future<void> initialize(SoundTheme theme) async {
     await _soundEffectPlugin.initialize();
     await _loadSounds(theme);
+  }
+
+  /// Play the given sound if sound is enabled.
+  Future<void> play(Sound sound) async {
+    final isEnabled = _ref.read(generalPreferencesProvider).isSoundEnabled;
+    final volume = _ref.read(generalPreferencesProvider).masterVolume;
+    if (!isEnabled || volume == 0.0) {
+      return;
+    }
+    _soundEffectPlugin.play(sound.name, volume: volume);
   }
 
   /// Change the sound theme and optionally play a move sound.

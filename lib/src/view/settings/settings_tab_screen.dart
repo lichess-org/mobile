@@ -15,7 +15,6 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/package_info.dart';
 import 'package:lichess_mobile/src/utils/system.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
-import 'package:lichess_mobile/src/view/settings/volume_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -111,7 +110,6 @@ class _Body extends ConsumerWidget {
               )
             : null;
 
-    String volumeLabel(double volume) => '${(volume * 100).toInt()}%';
     final List<Widget> content = [
       ListSection(
         header: userSession != null
@@ -189,63 +187,14 @@ class _Body extends ConsumerWidget {
           SettingsListTile(
             icon: const Icon(Icons.music_note),
             settingsLabel: Text(context.l10n.sound),
-            settingsValue: soundThemeL10n(context, generalPrefs.soundTheme),
+            settingsValue:
+                '${soundThemeL10n(context, generalPrefs.soundTheme)} (${volumeLabel(generalPrefs.masterVolume)})',
             onTap: () {
-              if (Theme.of(context).platform == TargetPlatform.android) {
-                showChoicePicker(
-                  context,
-                  choices: SoundTheme.values,
-                  selectedItem: generalPrefs.soundTheme,
-                  labelBuilder: (t) => Text(soundThemeL10n(context, t)),
-                  onSelectedItemChanged: (SoundTheme? value) {
-                    ref
-                        .read(generalPreferencesProvider.notifier)
-                        .setSoundTheme(value ?? SoundTheme.standard);
-                    ref.read(soundServiceProvider).changeTheme(
-                          value ?? SoundTheme.standard,
-                          playSound: true,
-                        );
-                  },
-                );
-              } else {
-                pushPlatformRoute(
-                  context,
-                  title: context.l10n.sound,
-                  builder: (context) => const SoundSettingsScreen(),
-                );
-              }
-            },
-          ),
-          SettingsListTile(
-            icon: const Icon(Icons.volume_up),
-            // TODO: translate
-            settingsLabel: const Text('Volume'),
-            settingsValue: volumeLabel(generalPrefs.masterVolume),
-            onTap: () {
-              if (Theme.of(context).platform == TargetPlatform.iOS) {
-                pushPlatformRoute(
-                  context,
-                  title: 'Volume',
-                  builder: (context) => const VolumeScreen(),
-                );
-              } else {
-                showDialog<void>(
-                  context: context,
-                  builder: (context) {
-                    return _SettingsSliderDialog(
-                      title: 'Volume',
-                      value: generalPrefs.masterVolume,
-                      values: kMasterVolumeValues,
-                      onChangeEnd: (double value) {
-                        ref
-                            .read(generalPreferencesProvider.notifier)
-                            .setMasterVolume(value);
-                      },
-                      labelBuilder: volumeLabel,
-                    );
-                  },
-                );
-              }
+              pushPlatformRoute(
+                context,
+                title: context.l10n.sound,
+                builder: (context) => const SoundSettingsScreen(),
+              );
             },
           ),
           if (Theme.of(context).platform == TargetPlatform.android)
@@ -464,72 +413,6 @@ class _Body extends ConsumerWidget {
         },
       );
     }
-  }
-}
-
-class _SettingsSliderDialog extends StatefulWidget {
-  const _SettingsSliderDialog({
-    required this.title,
-    required this.value,
-    required this.values,
-    required this.onChangeEnd,
-    this.labelBuilder,
-  });
-
-  final String title;
-  final double value;
-  final List<double> values;
-  final void Function(double value) onChangeEnd;
-  final String Function(double)? labelBuilder;
-
-  @override
-  _SettingsSliderDialogState createState() => _SettingsSliderDialogState();
-}
-
-class _SettingsSliderDialogState extends State<_SettingsSliderDialog> {
-  late int _index = widget.values.indexOf(widget.value);
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text(widget.title),
-      content: StatefulBuilder(
-        builder: (context, setState) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Slider.adaptive(
-                value: _index.toDouble(),
-                min: 0,
-                max: widget.values.length - 1,
-                divisions: widget.values.length - 1,
-                label: widget.labelBuilder?.call(widget.values[_index]) ??
-                    widget.values[_index].toString(),
-                onChanged: (double value) {
-                  setState(() {
-                    _index = value.toInt();
-                  });
-                },
-                onChangeEnd: (double value) {
-                  widget.onChangeEnd.call(widget.values[_index]);
-                },
-              ),
-              Text(
-                widget.labelBuilder?.call(widget.values[_index]) ??
-                    widget.values[_index].toString(),
-                textAlign: TextAlign.center,
-              ),
-            ],
-          );
-        },
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: const Text('OK'),
-        ),
-      ],
-    );
   }
 }
 
