@@ -3,17 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
-import 'package:lichess_mobile/src/model/settings/sound_theme.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/android.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/package_info.dart';
+import 'package:lichess_mobile/src/utils/system.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
@@ -81,18 +79,7 @@ class SettingsTabScreen extends ConsumerWidget {
 class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeMode = ref.watch(
-      generalPreferencesProvider.select((state) => state.themeMode),
-    );
-
-    final soundTheme = ref.watch(
-      generalPreferencesProvider.select((state) => state.soundTheme),
-    );
-
-    final hasSystemColors = ref.watch(
-      generalPreferencesProvider.select((state) => state.systemColors),
-    );
-
+    final generalPrefs = ref.watch(generalPreferencesProvider);
     final authController = ref.watch(authControllerProvider);
     final userSession = ref.watch(authSessionProvider);
     final packageInfo = ref.watch(packageInfoProvider);
@@ -198,31 +185,14 @@ class _Body extends ConsumerWidget {
           SettingsListTile(
             icon: const Icon(Icons.music_note),
             settingsLabel: Text(context.l10n.sound),
-            settingsValue: soundThemeL10n(context, soundTheme),
+            settingsValue:
+                '${soundThemeL10n(context, generalPrefs.soundTheme)} (${volumeLabel(generalPrefs.masterVolume)})',
             onTap: () {
-              if (Theme.of(context).platform == TargetPlatform.android) {
-                showChoicePicker(
-                  context,
-                  choices: SoundTheme.values,
-                  selectedItem: soundTheme,
-                  labelBuilder: (t) => Text(soundThemeL10n(context, t)),
-                  onSelectedItemChanged: (SoundTheme? value) {
-                    ref
-                        .read(generalPreferencesProvider.notifier)
-                        .setSoundTheme(value ?? SoundTheme.standard);
-                    ref.read(soundServiceProvider).changeTheme(
-                          value ?? SoundTheme.standard,
-                          playSound: true,
-                        );
-                  },
-                );
-              } else {
-                pushPlatformRoute(
-                  context,
-                  title: context.l10n.sound,
-                  builder: (context) => const SoundSettingsScreen(),
-                );
-              }
+              pushPlatformRoute(
+                context,
+                title: context.l10n.sound,
+                builder: (context) => const SoundSettingsScreen(),
+              );
             },
           ),
           if (Theme.of(context).platform == TargetPlatform.android)
@@ -231,7 +201,7 @@ class _Body extends ConsumerWidget {
                   ? SwitchSettingTile(
                       leading: const Icon(Icons.colorize),
                       title: Text(context.l10n.mobileSystemColors),
-                      value: hasSystemColors,
+                      value: generalPrefs.systemColors,
                       onChanged: (value) {
                         ref
                             .read(generalPreferencesProvider.notifier)
@@ -244,13 +214,14 @@ class _Body extends ConsumerWidget {
           SettingsListTile(
             icon: const Icon(Icons.brightness_medium),
             settingsLabel: Text(context.l10n.background),
-            settingsValue: ThemeModeScreen.themeTitle(context, themeMode),
+            settingsValue:
+                ThemeModeScreen.themeTitle(context, generalPrefs.themeMode),
             onTap: () {
               if (Theme.of(context).platform == TargetPlatform.android) {
                 showChoicePicker(
                   context,
                   choices: ThemeMode.values,
-                  selectedItem: themeMode,
+                  selectedItem: generalPrefs.themeMode,
                   labelBuilder: (t) =>
                       Text(ThemeModeScreen.themeTitle(context, t)),
                   onSelectedItemChanged: (ThemeMode? value) => ref

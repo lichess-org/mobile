@@ -1239,15 +1239,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
-  soundpool:
+  sound_effect:
     dependency: "direct main"
     description:
-      path: "."
-      ref: "575ba7e5c55986caeef66101f49fa695d65e5a5a"
-      resolved-ref: "575ba7e5c55986caeef66101f49fa695d65e5a5a"
-      url: "https://github.com/lichess-org/flutter-soundpool.git"
-    source: git
-    version: "2.4.0"
+      name: sound_effect
+      sha256: "745885446f835e22946f060572461ba50b34eecd03432fc33b292a4f9a2c79d5"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.2"
   source_gen:
     dependency: transitive
     description:
@@ -1332,11 +1331,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "982a98258676165bdb268024bbcdc272290c9b3a"
-      resolved-ref: "982a98258676165bdb268024bbcdc272290c9b3a"
+      ref: "0965a99ea143db00ec495eecbd54dfe10acf70ea"
+      resolved-ref: "0965a99ea143db00ec495eecbd54dfe10acf70ea"
       url: "https://github.com/lichess-org/dart-stockfish.git"
     source: git
-    version: "1.6.0"
+    version: "1.6.1"
   stream_channel:
     dependency: "direct dev"
     description:
@@ -1369,14 +1368,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.0+1"
-  system_info_plus:
-    dependency: "direct main"
-    description:
-      name: system_info_plus
-      sha256: b915c811c6605b802f3988859bc2bb79c95f735762a75b5451741f7a2b949d1b
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.0.5"
   term_glyph:
     dependency: transitive
     description:

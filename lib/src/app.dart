@@ -21,10 +21,10 @@ import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/notification_service.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/android.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
+import 'package:lichess_mobile/src/utils/system.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 
 class LoadingAppScreen extends ConsumerWidget {
@@ -71,7 +71,7 @@ class LoadingAppScreen extends ConsumerWidget {
                           const SizedBox(height: 16.0),
                           ElevatedButton(
                             onPressed: () {
-                              AndroidStorage.instance.clearUserData();
+                              System.instance.clearUserData();
                             },
                             child: const Text('Clear storage'),
                           ),

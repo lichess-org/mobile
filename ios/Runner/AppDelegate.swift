@@ -9,10 +9,13 @@ import Flutter
   ) -> Bool {
 
     let controller : FlutterViewController = window?.rootViewController as! FlutterViewController
-    let badgeChannel = FlutterMethodChannel(name: "mobile.lichess.org/badge",
+    let BADGE_CHANNEL = FlutterMethodChannel(name: "mobile.lichess.org/badge",
                                                     binaryMessenger: controller.binaryMessenger)
 
-    badgeChannel.setMethodCallHandler({
+    let SYSTEM_CHANNEL = FlutterMethodChannel(name: "mobile.lichess.org/system",
+                                                    binaryMessenger: controller.binaryMessenger)
+
+    BADGE_CHANNEL.setMethodCallHandler({
       (call: FlutterMethodCall, result: @escaping FlutterResult) -> Void in
       guard call.method == "setBadge" else {
         result(FlutterMethodNotImplemented)
@@ -28,7 +31,24 @@ import Flutter
         }
     })
 
+    SYSTEM_CHANNEL.setMethodCallHandler({
+      (call: FlutterMethodCall, result: @escaping FlutterResult) -> Void in
+      guard call.method == "getTotalRam" else {
+        result(FlutterMethodNotImplemented)
+        return
+      }
+
+      result(self.getPhysicalMemory())
+    })
+
     GeneratedPluginRegistrant.register(with: self)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+  }
+
+  private func getPhysicalMemory() -> Int {
+    let memory : Int = Int(ProcessInfo.processInfo.physicalMemory)
+    let constant : Int = 1_048_576
+    let res = memory / constant
+    return Int(res)
   }
 }
