@@ -2,6 +2,7 @@ import 'package:chessground/chessground.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
@@ -26,6 +27,13 @@ class GameHistoryScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 
+    final session = ref.read(authSessionProvider);
+    final username = user?.name ?? session?.user.name;
+    final title = Text(
+      username != null
+          ? '$username ${context.l10n.games.toLowerCase()}'
+          : context.l10n.games,
+    );
     final filtersInUse = ref
         .read(gameFilterProvider(filter: gameFilter).notifier)
         .countFiltersInUse();
@@ -80,9 +88,9 @@ class GameHistoryScreen extends ConsumerWidget {
 
     switch (Theme.of(context).platform) {
       case TargetPlatform.android:
-        return _buildAndroid(context, ref, filterBtn: filterBtn);
+        return _buildAndroid(context, ref, title: title, filterBtn: filterBtn);
       case TargetPlatform.iOS:
-        return _buildIos(context, ref, filterBtn: filterBtn);
+        return _buildIos(context, ref, title: title, filterBtn: filterBtn);
       default:
         assert(false, 'Unexpected platform ${Theme.of(context).platform}');
         return const SizedBox.shrink();
@@ -90,11 +98,12 @@ class GameHistoryScreen extends ConsumerWidget {
   }
 
   Widget _buildIos(BuildContext context, WidgetRef ref, {
+    required Widget title,
     required Widget filterBtn,
   }) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text(context.l10n.games),
+        middle: title,
         trailing: filterBtn,
       ),
       child: _Body(user: user, isOnline: isOnline, gameFilter: gameFilter),
@@ -102,11 +111,12 @@ class GameHistoryScreen extends ConsumerWidget {
   }
 
   Widget _buildAndroid(BuildContext context, WidgetRef ref, {
+    required Widget title,
     required Widget filterBtn,
   }) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.l10n.games),
+        title: title,
         actions: [filterBtn],
       ),
       body: _Body(user: user, isOnline: isOnline, gameFilter: gameFilter),
