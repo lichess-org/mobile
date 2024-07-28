@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
@@ -49,6 +50,7 @@ class GameHistoryScreen extends ConsumerWidget {
             showDragHandle: true,
             builder: (_) => _FilterGames(
               filter: ref.read(gameFilterProvider(filter: gameFilter)),
+              user: user,
             ),
           ).then((value) {
             if (value != null) {
@@ -255,18 +257,20 @@ class _BodyState extends ConsumerState<_Body> {
   }
 }
 
-class _FilterGames extends StatefulWidget {
+class _FilterGames extends ConsumerStatefulWidget {
   const _FilterGames({
     required this.filter,
+    required this.user,
   });
 
   final GameFilterState filter;
+  final LightUser? user;
 
   @override
-  State<_FilterGames> createState() => _FilterGamesState();
+  ConsumerState<_FilterGames> createState() => _FilterGamesState();
 }
 
-class _FilterGamesState extends State<_FilterGames> {
+class _FilterGamesState extends ConsumerState<_FilterGames> {
   late GameFilterState filter;
 
   @override
@@ -277,6 +281,56 @@ class _FilterGamesState extends State<_FilterGames> {
 
   @override
   Widget build(BuildContext context) {
+    const gamePerfs = [
+      Perf.ultraBullet,
+      Perf.bullet,
+      Perf.blitz,
+      Perf.rapid,
+      Perf.classical,
+      Perf.correspondence,
+      Perf.chess960,
+      Perf.antichess,
+      Perf.kingOfTheHill,
+      Perf.threeCheck,
+      Perf.atomic,
+      Perf.horde,
+      Perf.racingKings,
+      Perf.crazyhouse,
+    ];
+
+    final session = ref.read(authSessionProvider);
+    final userId = widget.user?.id ?? session?.user.id;
+
+    List<Perf> availablePerfs(User user) {
+      final perfs = gamePerfs.where((perf) {
+        final p = user.perfs[perf];
+        return p != null && p.numberOfGamesOrRuns > 0;
+      }).toList(growable: false);
+      perfs.sort(
+        (p1, p2) => user.perfs[p2]!.numberOfGamesOrRuns
+            .compareTo(user.perfs[p1]!.numberOfGamesOrRuns),
+      );
+      return perfs;
+    } 
+
+    Widget perfFilter(List<Perf> choices) => _Filter<Perf>(
+          filterName: context.l10n.variant,
+          icon: const Icon(LichessIcons.classical),
+          filterType: FilterType.multipleChoice,
+          choices: choices,
+          choiceSelected: (choice) => filter.perfs.contains(choice),
+          choiceLabel: (t) => t.title,
+          onSelected: (value, selected) => setState(
+            () {
+              filter = filter.copyWith(
+                perfs: selected
+                    ? filter.perfs.add(value)
+                    : filter.perfs.remove(value),
+              );
+            },
+          ),
+        );
+
     return Container(
       padding: const EdgeInsets.all(16),
       child: DraggableScrollableSheet(
@@ -287,38 +341,16 @@ class _FilterGamesState extends State<_FilterGames> {
         builder: (context, scrollController) => ListView(
           controller: scrollController,
           children: [
-            _Filter<Perf>(
-              filterName: context.l10n.variant,
-              icon: const Icon(LichessIcons.classical),
-              filterType: FilterType.multipleChoice,
-              choices: const [
-                Perf.ultraBullet,
-                Perf.bullet,
-                Perf.blitz,
-                Perf.rapid,
-                Perf.classical,
-                Perf.correspondence,
-                Perf.chess960,
-                Perf.antichess,
-                Perf.kingOfTheHill,
-                Perf.threeCheck,
-                Perf.atomic,
-                Perf.horde,
-                Perf.racingKings,
-                Perf.crazyhouse,
-              ],
-              choiceSelected: (choice) => filter.perfs.contains(choice),
-              choiceLabel: (t) => t.title,
-              onSelected: (value, selected) => setState(
-                () {
-                  filter = filter.copyWith(
-                    perfs: selected
-                        ? filter.perfs.add(value)
-                        : filter.perfs.remove(value),
-                  );
-                },
-              ),
-            ),
+            if (userId != null)
+              ref.watch(userProvider(id: userId)).when(
+                    data: (user) => perfFilter(availablePerfs(user)),
+                    loading: () => const Center(
+                      child: CircularProgressIndicator.adaptive(),
+                    ),
+                    error: (_, __) => perfFilter(gamePerfs),
+                  )
+            else
+              perfFilter(gamePerfs),
             const Divider(),
             const SizedBox(height: 10.0),
             _Filter<Side>(
