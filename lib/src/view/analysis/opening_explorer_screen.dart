@@ -119,8 +119,6 @@ class _Body extends ConsumerWidget {
                       )
                     : Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.max,
-                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           if (isTablet)
                             Padding(
@@ -136,7 +134,9 @@ class _Body extends ConsumerWidget {
                             )
                           else
                             AnalysisBoard(pgn, options, boardSize, isTablet: isTablet),
-                          _OpeningExplorer(pgn: pgn, options: options),
+                          Expanded(
+                            child: _OpeningExplorer(pgn: pgn, options: options),
+                          ),
                         ],
                       );
               },
@@ -179,74 +179,70 @@ class _OpeningExplorer extends ConsumerWidget {
     return masterDatabaseAsync.when(
       data: (masterDatabase) {
         return masterDatabase.moves.isEmpty
-            ? const Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('No game found'),
-                  ],
-                ),
+            ? const Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('No game found'),
+                ],
               )
-            : Expanded(
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 8.0,
-                    horizontal: 16.0,
-                  ),
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: DataTable(
-                      showCheckboxColumn: false,
-                      columnSpacing: 5,
-                      horizontalMargin: 0,
-                      columns: const [
-                        DataColumn(label: Text('Move')),
-                        DataColumn(label: Text('Games')),
-                        DataColumn(label: Text('White / Draw / Black')),
-                      ],
-                      rows: [
-                        ...masterDatabase.moves.map(
-                          (move) => DataRow(
-                            onSelectChanged: (_) => ref
-                                .read(ctrlProvider.notifier)
-                                .onUserMove(Move.fromUci(move.uci)!),
-                            cells: [
-                              DataCell(Text(move.san)),
-                              DataCell(
-                                Text(
-                                  '${((move.games / masterDatabase.games) * 100).round()}% / ${formatNum(move.games)}',
-                                ),
-                              ),
-                              DataCell(
-                                _WinPercentageChart(
-                                  white: move.white,
-                                  draws: move.draws,
-                                  black: move.black,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        DataRow(
+            : Container(
+                width: MediaQuery.of(context).size.width,
+                padding: const EdgeInsets.symmetric(
+                  vertical: 8.0,
+                  horizontal: 16.0,
+                ),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: DataTable(
+                    showCheckboxColumn: false,
+                    columnSpacing: 5,
+                    horizontalMargin: 0,
+                    columns: const [
+                      DataColumn(label: Text('Move')),
+                      DataColumn(label: Text('Games')),
+                      DataColumn(label: Text('White / Draw / Black')),
+                    ],
+                    rows: [
+                      ...masterDatabase.moves.map(
+                        (move) => DataRow(
+                          onSelectChanged: (_) => ref
+                              .read(ctrlProvider.notifier)
+                              .onUserMove(Move.fromUci(move.uci)!),
                           cells: [
-                            const DataCell(Icon(Icons.functions)),
+                            DataCell(Text(move.san)),
                             DataCell(
                               Text(
-                                '100% / ${formatNum(masterDatabase.games)}',
+                                '${((move.games / masterDatabase.games) * 100).round()}% / ${formatNum(move.games)}',
                               ),
                             ),
                             DataCell(
                               _WinPercentageChart(
-                                white: masterDatabase.white,
-                                draws: masterDatabase.draws,
-                                black: masterDatabase.black,
+                                white: move.white,
+                                draws: move.draws,
+                                black: move.black,
                               ),
                             ),
                           ],
                         ),
-                      ],
-                    ),
+                      ),
+                      DataRow(
+                        cells: [
+                          const DataCell(Icon(Icons.functions)),
+                          DataCell(
+                            Text(
+                              '100% / ${formatNum(masterDatabase.games)}',
+                            ),
+                          ),
+                          DataCell(
+                            _WinPercentageChart(
+                              white: masterDatabase.white,
+                              draws: masterDatabase.draws,
+                              black: masterDatabase.black,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               );
