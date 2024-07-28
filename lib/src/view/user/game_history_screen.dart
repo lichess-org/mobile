@@ -10,7 +10,6 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
 
 class GameHistoryScreen extends ConsumerWidget {
   const GameHistoryScreen({
@@ -25,18 +24,14 @@ class GameHistoryScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ConsumerPlatformWidget(
-      ref: ref,
-      androidBuilder: _buildAndroid,
-      iosBuilder: _buildIos,
-    );
-  }
 
-  Widget _buildIos(BuildContext context, WidgetRef ref) {
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        middle: Text(context.l10n.games),
-        trailing: IconButton(
+    final filtersInUse = ref
+        .read(gameFilterProvider(filter: gameFilter).notifier)
+        .countFiltersInUse();
+    final filterBtn = Stack(
+      alignment: Alignment.center,
+      children: [
+        IconButton(
           icon: const Icon(Icons.tune),
           tooltip: context.l10n.filterGames,
           onPressed: () => showAdaptiveBottomSheet<GameFilterState>(
@@ -54,35 +49,64 @@ class GameHistoryScreen extends ConsumerWidget {
             }
           }),
         ),
+        if (filtersInUse > 0)
+          Positioned(
+            top: 2.0,
+            right: 2.0,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Icon(
+                  Icons.brightness_1,
+                  size: 20.0,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+                FittedBox(
+                  fit: BoxFit.contain,
+                  child: DefaultTextStyle.merge(
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSecondary,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    child: Text(filtersInUse.toString()),
+                  ),
+                ),
+              ],
+            ),
+          ),
+      ],
+    );
+
+    switch (Theme.of(context).platform) {
+      case TargetPlatform.android:
+        return _buildAndroid(context, ref, filterBtn: filterBtn);
+      case TargetPlatform.iOS:
+        return _buildIos(context, ref, filterBtn: filterBtn);
+      default:
+        assert(false, 'Unexpected platform ${Theme.of(context).platform}');
+        return const SizedBox.shrink();
+    }
+  }
+
+  Widget _buildIos(BuildContext context, WidgetRef ref, {
+    required Widget filterBtn,
+  }) {
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        middle: Text(context.l10n.games),
+        trailing: filterBtn,
       ),
       child: _Body(user: user, isOnline: isOnline, gameFilter: gameFilter),
     );
   }
 
-  Widget _buildAndroid(BuildContext context, WidgetRef ref) {
+  Widget _buildAndroid(BuildContext context, WidgetRef ref, {
+    required Widget filterBtn,
+  }) {
     return Scaffold(
       appBar: AppBar(
         title: Text(context.l10n.games),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.tune),
-            tooltip: context.l10n.filterGames,
-            onPressed: () => showAdaptiveBottomSheet<GameFilterState>(
-              context: context,
-              isScrollControlled: true,
-              showDragHandle: true,
-              builder: (_) => _FilterGames(
-                filter: ref.read(gameFilterProvider(filter: gameFilter)),
-              ),
-            ).then((value) {
-              if (value != null) {
-                ref
-                    .read(gameFilterProvider(filter: gameFilter).notifier)
-                    .setFilter(value);
-              }
-            }),
-          ),
-        ],
+        actions: [filterBtn],
       ),
       body: _Body(user: user, isOnline: isOnline, gameFilter: gameFilter),
     );
