@@ -27,7 +27,6 @@ class GameHistoryScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     final session = ref.read(authSessionProvider);
     final username = user?.name ?? session?.user.name;
     final title = Text(
@@ -99,7 +98,9 @@ class GameHistoryScreen extends ConsumerWidget {
     }
   }
 
-  Widget _buildIos(BuildContext context, WidgetRef ref, {
+  Widget _buildIos(
+    BuildContext context,
+    WidgetRef ref, {
     required Widget title,
     required Widget filterBtn,
   }) {
@@ -112,7 +113,9 @@ class GameHistoryScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildAndroid(BuildContext context, WidgetRef ref, {
+  Widget _buildAndroid(
+    BuildContext context,
+    WidgetRef ref, {
     required Widget title,
     required Widget filterBtn,
   }) {
@@ -297,6 +300,7 @@ class _FilterGamesState extends ConsumerState<_FilterGames> {
       Perf.racingKings,
       Perf.crazyhouse,
     ];
+    const filterGroupSpace = SizedBox(height: 10.0);
 
     final session = ref.read(authSessionProvider);
     final userId = widget.user?.id ?? session?.user.id;
@@ -311,7 +315,7 @@ class _FilterGamesState extends ConsumerState<_FilterGames> {
             .compareTo(user.perfs[p1]!.numberOfGamesOrRuns),
       );
       return perfs;
-    } 
+    }
 
     Widget perfFilter(List<Perf> choices) => _Filter<Perf>(
           filterName: context.l10n.variant,
@@ -352,7 +356,7 @@ class _FilterGamesState extends ConsumerState<_FilterGames> {
             else
               perfFilter(gamePerfs),
             const Divider(),
-            const SizedBox(height: 10.0),
+            filterGroupSpace,
             _Filter<Side>(
               filterName: context.l10n.side,
               icon: const Icon(LichessIcons.chess_pawn),
@@ -428,11 +432,11 @@ class _Filter<T extends Enum> extends StatelessWidget {
             Text(filterName, style: const TextStyle(fontSize: 18)),
           ],
         ),
+        const SizedBox(height: 10),
         SizedBox(
           width: double.infinity,
           child: Wrap(
             spacing: 8.0,
-            runSpacing: 8.0,
             children: choices
                 .map(
                   (choice) => switch (filterType) {
