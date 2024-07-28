@@ -142,6 +142,9 @@ class AppLocalizationsLb extends AppLocalizations {
   String get mobileGreetingWithoutName => 'Moien';
 
   @override
+  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
+
+  @override
   String get activityActivity => 'Verlaf';
 
   @override

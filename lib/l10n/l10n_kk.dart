@@ -142,6 +142,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get mobileGreetingWithoutName => 'Ассаламу ғалейкүм';
 
   @override
+  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
+
+  @override
   String get activityActivity => 'Белсенділігі';
 
   @override

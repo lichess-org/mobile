@@ -65,6 +65,14 @@ class BoardPreferences extends _$BoardPreferences {
     return _save(state.copyWith(pieceAnimation: !state.pieceAnimation));
   }
 
+  Future<void> toggleMagnifyDraggedPiece() {
+    return _save(
+      state.copyWith(
+        magnifyDraggedPiece: !state.magnifyDraggedPiece,
+      ),
+    );
+  }
+
   Future<void> toggleShowMaterialDifference() {
     return _save(
       state.copyWith(showMaterialDifference: !state.showMaterialDifference),
@@ -109,6 +117,7 @@ class BoardPrefs with _$BoardPrefs {
 
     /// Whether to enable shape drawings on the board for games and puzzles.
     @JsonKey(defaultValue: false) required bool enableShapeDrawings,
+    @JsonKey(defaultValue: true) required bool magnifyDraggedPiece,
   }) = _BoardPrefs;
 
   static const defaults = BoardPrefs(
@@ -123,6 +132,7 @@ class BoardPrefs with _$BoardPrefs {
     showMaterialDifference: true,
     pieceShiftMethod: PieceShiftMethod.either,
     enableShapeDrawings: false,
+    magnifyDraggedPiece: true,
   );
 
   factory BoardPrefs.fromJson(Map<String, dynamic> json) {

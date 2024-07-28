@@ -506,6 +506,9 @@ class _BoardState extends ConsumerState<_Board> {
         showLastMove: boardPrefs.boardHighlights,
         enableCoordinates: boardPrefs.coordinates,
         animationDuration: boardPrefs.pieceAnimationDuration,
+        dragFeedbackSize: boardPrefs.magnifyDraggedPiece ? 2.0 : 1.0,
+        dragFeedbackOffset:
+            Offset(0.0, boardPrefs.magnifyDraggedPiece ? -1.0 : 0.0),
         borderRadius: widget.isTablet
             ? const BorderRadius.all(Radius.circular(4.0))
             : BorderRadius.zero,

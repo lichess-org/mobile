@@ -56,6 +56,7 @@
     }
   },
   "mobileGreetingWithoutName": "Hello",
+  "mobilePrefMagnifyDraggedPiece": "Magnify dragged piece",
   "activityActivity": "Activity",
   "activityHostedALiveStream": "Hosted a live stream",
   "activityRankedInSwissTournament": "Ranked #{param1} in {param2}",
@@ -470,7 +471,7 @@
   "preferencesNotifyDevice": "Device",
   "preferencesBellNotificationSound": "Bell notification sound",
   "puzzlePuzzles": "Puzzles",
-  "puzzlePuzzleThemes": "Puzzle themes",
+  "puzzlePuzzleThemes": "Puzzle Themes",
   "puzzleRecommended": "Recommended",
   "puzzlePhases": "Phases",
   "puzzleMotifs": "Motifs",

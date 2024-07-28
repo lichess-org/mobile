@@ -142,6 +142,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get mobileGreetingWithoutName => 'Привет';
 
   @override
+  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
+
+  @override
   String get activityActivity => 'Активность';
 
   @override

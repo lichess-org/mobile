@@ -142,6 +142,9 @@ class AppLocalizationsSl extends AppLocalizations {
   String get mobileGreetingWithoutName => 'Živjo';
 
   @override
+  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
+
+  @override
   String get activityActivity => 'Aktivnost';
 
   @override

@@ -142,6 +142,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mobileGreetingWithoutName => 'Hello';
 
   @override
+  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
+
+  @override
   String get activityActivity => 'Activity';
 
   @override
@@ -751,7 +754,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get puzzlePuzzles => 'Puzzles';
 
   @override
-  String get puzzlePuzzleThemes => 'Puzzle themes';
+  String get puzzlePuzzleThemes => 'Puzzle Themes';
 
   @override
   String get puzzleRecommended => 'Recommended';

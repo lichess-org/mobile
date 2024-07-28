@@ -142,6 +142,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mobileGreetingWithoutName => '你好！';
 
   @override
+  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
+
+  @override
   String get activityActivity => '动态';
 
   @override

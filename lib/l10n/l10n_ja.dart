@@ -142,6 +142,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get mobileGreetingWithoutName => 'こんにちは';
 
   @override
+  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
+
+  @override
   String get activityActivity => '活動';
 
   @override

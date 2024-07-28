@@ -462,6 +462,12 @@ abstract class AppLocalizations {
   /// **'Hello'**
   String get mobileGreetingWithoutName;
 
+  /// No description provided for @mobilePrefMagnifyDraggedPiece.
+  ///
+  /// In en, this message translates to:
+  /// **'Magnify dragged piece'**
+  String get mobilePrefMagnifyDraggedPiece;
+
   /// No description provided for @activityActivity.
   ///
   /// In en, this message translates to:
@@ -1347,7 +1353,7 @@ abstract class AppLocalizations {
   /// No description provided for @puzzlePuzzleThemes.
   ///
   /// In en, this message translates to:
-  /// **'Puzzle themes'**
+  /// **'Puzzle Themes'**
   String get puzzlePuzzleThemes;
 
   /// No description provided for @puzzleRecommended.
