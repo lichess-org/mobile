@@ -10,6 +10,7 @@
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Feedback</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">OK</string>
   <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">Haptische feedback</string>
+  <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">Volledig scherm-modus</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">U volgt geen gebruiker.</string>
   <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Alle partijen</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Recente zoekopdrachten</string>
@@ -22,6 +23,8 @@
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Partij URL delen</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">PGN delen</string>
   <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">Stelling delen als FEN</string>
+  <string name="showVariations" comment="Shown in the analysis screen.">Toon varianten</string>
+  <string name="hideVariation" comment="Shown in the analysis screen.">Verberg varianten</string>
   <string name="showComments" comment="Shown in the analysis screen.">Opmerkingen weergeven</string>
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Wil je dit uitvoeren beëindigen?</string>
   <string name="cancelDrawOffer" comment="Menu action that cancels a previous draw offer">Remiseaanbod intrekken</string>
