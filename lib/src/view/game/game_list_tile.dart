@@ -418,7 +418,7 @@ class _ContextMenu extends ConsumerWidget {
   }
 }
 
-/// A list tile that shows extended game info including an accuracy meter and a result icon.
+/// A list tile that shows extended game info including a result icon and analysis icon.
 class ExtendedGameListTile extends StatelessWidget {
   const ExtendedGameListTile({required this.item, this.userId});
 
@@ -492,21 +492,9 @@ class ExtendedGameListTile extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           if (me.analysis != null) ...[
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  CupertinoIcons.chart_bar_alt_fill,
-                  color: textShade(context, 0.5),
-                ),
-                Text(
-                  me.analysis!.accuracy.toString(),
-                  style: TextStyle(
-                    fontSize: 10,
-                    color: textShade(context, Styles.subtitleOpacity),
-                  ),
-                ),
-              ],
+            Icon(
+              CupertinoIcons.chart_bar_alt_fill,
+              color: textShade(context, 0.5),
             ),
             const SizedBox(width: 5),
           ],
