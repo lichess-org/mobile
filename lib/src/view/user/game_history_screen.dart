@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
@@ -278,6 +279,7 @@ class _FilterGamesState extends State<_FilterGames> {
           children: [
             _Filter<Perf>(
               filterName: context.l10n.variant,
+              icon: const Icon(LichessIcons.classical),
               filterType: FilterType.multipleChoice,
               choices: const [
                 Perf.ultraBullet,
@@ -311,6 +313,7 @@ class _FilterGamesState extends State<_FilterGames> {
             const SizedBox(height: 10.0),
             _Filter<Side>(
               filterName: context.l10n.side,
+              icon: const Icon(LichessIcons.chess_pawn),
               filterType: FilterType.singleChoice,
               choices: Side.values,
               choiceSelected: (choice) => filter.side == choice,
@@ -353,6 +356,7 @@ enum FilterType {
 class _Filter<T extends Enum> extends StatelessWidget {
   const _Filter({
     required this.filterName,
+    required this.icon,
     required this.filterType,
     required this.choices,
     required this.choiceSelected,
@@ -361,6 +365,7 @@ class _Filter<T extends Enum> extends StatelessWidget {
   });
 
   final String filterName;
+  final Icon icon;
   final FilterType filterType;
   final Iterable<T> choices;
   final bool Function(T choice) choiceSelected;
@@ -372,7 +377,15 @@ class _Filter<T extends Enum> extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(filterName, style: const TextStyle(fontSize: 18)),
+        Row(
+          children: [
+            Container(
+              margin: const EdgeInsets.only(right: 10),
+              child: icon,
+            ),
+            Text(filterName, style: const TextStyle(fontSize: 18)),
+          ],
+        ),
         SizedBox(
           width: double.infinity,
           child: Wrap(
