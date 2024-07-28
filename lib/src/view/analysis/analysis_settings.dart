@@ -141,13 +141,6 @@ class AnalysisSettings extends ConsumerWidget {
                 .togglePgnComments(),
           ),
           SwitchSettingTile(
-            title: Text(context.l10n.openingExplorer),
-            value: prefs.showOpeningExplorer,
-            onChanged: (_) => ref
-                .read(analysisPreferencesProvider.notifier)
-                .toggleOpeningExplorer(),
-          ),
-          SwitchSettingTile(
             title: Text(context.l10n.sound),
             value: isSoundEnabled,
             onChanged: (value) {
