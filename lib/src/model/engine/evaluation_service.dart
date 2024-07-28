@@ -27,6 +27,7 @@ final defaultEngineCores =
 const engineSupportedVariants = {
   Variant.standard,
   Variant.chess960,
+  Variant.fromPosition,
 };
 
 class EvaluationService {
