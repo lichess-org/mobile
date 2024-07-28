@@ -38,4 +38,9 @@
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">เข้าร่วมเกม</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">ลบการเดินที่บันทึกไว้</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">บางอย่างผิดพลาด</string>
+  <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">แสดงผลลัพธ์</string>
+  <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">แก้ปริศนาหมากรุกจากการเปิดหมากที่คุณชอบหรือเลือกธีมก็ได้</string>
+  <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">ไขปริศนาหมากรุกให้ได้มากที่สุดภายในเวลา 3 นาที</string>
+  <string name="greeting" comment="A greeting that is shown on the app's home page, e.g. 'Hello, GM Magnus'. %s is substituted with the user's name">สวัสดี %s</string>
+  <string name="greetingWithoutName" comment="Greeing that is shown on the app's home page when the user is not logged in.">สวัสดี</string>
 </resources>
