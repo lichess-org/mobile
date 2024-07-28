@@ -15,33 +15,25 @@ import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
-import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
-import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
-import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:popover/popover.dart';
 
-import '../../utils/share.dart';
-import 'analysis_board.dart';
 import 'analysis_settings.dart';
-import 'analysis_share_screen.dart';
+import 'analysis_widgets.dart';
 import 'tree_view.dart';
 
 class AcplChart extends ConsumerWidget {
@@ -610,7 +602,12 @@ class _Body extends ConsumerWidget {
                               ),
                             )
                           else
-                            AnalysisBoard(pgn, options, boardSize, isTablet: isTablet),
+                            AnalysisBoard(
+                              pgn,
+                              options,
+                              boardSize,
+                              isTablet: isTablet,
+                            ),
                           if (showAnalysisSummary)
                             Expanded(child: ServerAnalysisSummary(pgn, options))
                           else
@@ -627,173 +624,7 @@ class _Body extends ConsumerWidget {
             ),
           ),
         ),
-        _BottomBar(pgn: pgn, options: options),
-      ],
-    );
-  }
-}
-
-class _BottomBar extends ConsumerWidget {
-  final String pgn;
-
-  final AnalysisOptions options;
-  const _BottomBar({
-    required this.pgn,
-    required this.options,
-  });
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = analysisControllerProvider(pgn, options);
-    final canGoBack =
-        ref.watch(ctrlProvider.select((value) => value.canGoBack));
-    final canGoNext =
-        ref.watch(ctrlProvider.select((value) => value.canGoNext));
-    final displayMode =
-        ref.watch(ctrlProvider.select((value) => value.displayMode));
-    final canShowGameSummary =
-        ref.watch(ctrlProvider.select((value) => value.canShowGameSummary));
-
-    return Container(
-      color: Theme.of(context).platform == TargetPlatform.iOS
-          ? CupertinoTheme.of(context).barBackgroundColor
-          : Theme.of(context).bottomAppBarTheme.color,
-      child: SafeArea(
-        top: false,
-        child: SizedBox(
-          height: kBottomBarHeight,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Expanded(
-                child: BottomBarButton(
-                  label: context.l10n.menu,
-                  onTap: () {
-                    _showAnalysisMenu(context, ref);
-                  },
-                  icon: Icons.menu,
-                ),
-              ),
-              if (canShowGameSummary)
-                Expanded(
-                  child: BottomBarButton(
-                    label: displayMode == DisplayMode.summary
-                        ? 'Moves'
-                        : 'Summary',
-                    onTap: () {
-                      ref.read(ctrlProvider.notifier).toggleDisplayMode();
-                    },
-                    icon: displayMode == DisplayMode.summary
-                        ? LichessIcons.flow_cascade
-                        : Icons.area_chart,
-                  ),
-                ),
-              Expanded(
-                child: RepeatButton(
-                  onLongPress: canGoBack ? () => _moveBackward(ref) : null,
-                  child: BottomBarButton(
-                    key: const ValueKey('goto-previous'),
-                    onTap: canGoBack ? () => _moveBackward(ref) : null,
-                    label: 'Previous',
-                    icon: CupertinoIcons.chevron_back,
-                    showTooltip: false,
-                  ),
-                ),
-              ),
-              Expanded(
-                child: RepeatButton(
-                  onLongPress: canGoNext ? () => _moveForward(ref) : null,
-                  child: BottomBarButton(
-                    key: const ValueKey('goto-next'),
-                    icon: CupertinoIcons.chevron_forward,
-                    label: context.l10n.next,
-                    onTap: canGoNext ? () => _moveForward(ref) : null,
-                    showTooltip: false,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  void _moveBackward(WidgetRef ref) => ref
-      .read(analysisControllerProvider(pgn, options).notifier)
-      .userPrevious();
-  void _moveForward(WidgetRef ref) =>
-      ref.read(analysisControllerProvider(pgn, options).notifier).userNext();
-
-  Future<void> _showAnalysisMenu(BuildContext context, WidgetRef ref) {
-    return showAdaptiveActionSheet(
-      context: context,
-      actions: [
-        BottomSheetAction(
-          makeLabel: (context) => Text(context.l10n.flipBoard),
-          onPressed: (context) {
-            ref
-                .read(analysisControllerProvider(pgn, options).notifier)
-                .toggleBoard();
-          },
-        ),
-        BottomSheetAction(
-          makeLabel: (context) => Text(context.l10n.mobileShareGamePGN),
-          onPressed: (_) {
-            pushPlatformRoute(
-              context,
-              title: context.l10n.studyShareAndExport,
-              builder: (_) => AnalysisShareScreen(pgn: pgn, options: options),
-            );
-          },
-        ),
-        BottomSheetAction(
-          makeLabel: (context) => Text(context.l10n.mobileSharePositionAsFEN),
-          onPressed: (_) {
-            launchShareDialog(
-              context,
-              text: ref
-                  .read(analysisControllerProvider(pgn, options))
-                  .position
-                  .fen,
-            );
-          },
-        ),
-        if (options.gameAnyId != null)
-          BottomSheetAction(
-            makeLabel: (context) =>
-                Text(context.l10n.screenshotCurrentPosition),
-            onPressed: (_) async {
-              final gameId = options.gameAnyId!.gameId;
-              final state = ref.read(analysisControllerProvider(pgn, options));
-              try {
-                final image =
-                    await ref.read(gameShareServiceProvider).screenshotPosition(
-                          gameId,
-                          options.orientation,
-                          state.position.fen,
-                          state.lastMove,
-                        );
-                if (context.mounted) {
-                  launchShareDialog(
-                    context,
-                    files: [image],
-                    subject: context.l10n.puzzleFromGameLink(
-                      lichessUri('/$gameId').toString(),
-                    ),
-                  );
-                }
-              } catch (e) {
-                if (context.mounted) {
-                  showPlatformSnackbar(
-                    context,
-                    'Failed to get GIF',
-                    type: SnackBarType.error,
-                  );
-                }
-              }
-            },
-          ),
+        BottomBar(pgn: pgn, options: options),
       ],
     );
   }

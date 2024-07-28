@@ -122,7 +122,8 @@ class _Body extends StatelessWidget {
               ),
               title: Padding(
                 padding: tilePadding,
-                child: Text(context.l10n.openingExplorer, style: Styles.callout),
+                child:
+                    Text(context.l10n.openingExplorer, style: Styles.callout),
               ),
               trailing: Theme.of(context).platform == TargetPlatform.iOS
                   ? const CupertinoListTileChevron()

@@ -11,7 +11,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
-import 'analysis_board.dart';
+import 'analysis_widgets.dart';
 
 class OpeningExplorerScreen extends StatelessWidget {
   const OpeningExplorerScreen({required this.pgn, required this.options});
@@ -133,7 +133,12 @@ class _Body extends ConsumerWidget {
                               ),
                             )
                           else
-                            AnalysisBoard(pgn, options, boardSize, isTablet: isTablet),
+                            AnalysisBoard(
+                              pgn,
+                              options,
+                              boardSize,
+                              isTablet: isTablet,
+                            ),
                           Expanded(
                             child: _OpeningExplorer(pgn: pgn, options: options),
                           ),
@@ -143,6 +148,7 @@ class _Body extends ConsumerWidget {
             ),
           ),
         ),
+        BottomBar(pgn: pgn, options: options),
       ],
     );
   }
