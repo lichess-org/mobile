@@ -27,7 +27,6 @@ class OpeningExplorerSettings extends ConsumerWidget {
             subtitle: const SizedBox.shrink(),
           ),
           const SizedBox(height: 8.0),
-          
         ],
       ),
     );

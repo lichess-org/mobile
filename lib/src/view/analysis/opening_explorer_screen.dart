@@ -205,6 +205,30 @@ class _OpeningExplorer extends ConsumerWidget {
     final ctrlProvider = analysisControllerProvider(pgn, options);
     final position = ref.watch(ctrlProvider.select((value) => value.position));
 
+    if (position.fullmoves > 24) {
+      return const Expanded(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Max depth reached'),
+          ],
+        ),
+      );
+    }
+
+    final primaryColor = Theme.of(context).platform == TargetPlatform.iOS
+        ? CupertinoDynamicColor.resolve(
+            CupertinoColors.systemGrey5,
+            context,
+          )
+        : Theme.of(context).colorScheme.secondaryContainer;
+    const rowVerticalPadding = 6.0;
+    const rowHorizontalPadding = 6.0;
+    const tableRowPadding = EdgeInsets.symmetric(
+      vertical: rowVerticalPadding,
+      horizontal: rowHorizontalPadding,
+    );
+
     final isRootNode = ref.watch(
       ctrlProvider.select((s) => s.currentNode.isRoot),
     );
@@ -221,17 +245,6 @@ class _OpeningExplorer extends ConsumerWidget {
           )
         : nodeOpening ?? branchOpening ?? contextOpening;
 
-    if (position.fullmoves > 24) {
-      return const Expanded(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('Max depth reached'),
-          ],
-        ),
-      );
-    }
-
     final masterDatabaseAsync =
         ref.watch(masterDatabaseProvider(fen: position.fen));
 
@@ -244,71 +257,140 @@ class _OpeningExplorer extends ConsumerWidget {
                   Text('No game found'),
                 ],
               )
-            : Container(
-                padding: Styles.bodyPadding,
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (opening != null)
-                        Text('${opening.eco} ${opening.name}'),
-                      SizedBox(
-                        width: MediaQuery.sizeOf(context).width,
-                        child: DataTable(
-                          showCheckboxColumn: false,
-                          columnSpacing: 5,
-                          horizontalMargin: 0,
-                          columns: const [
-                            DataColumn(label: Text('Move')),
-                            DataColumn(label: Text('Games')),
-                            DataColumn(label: Text('White / Draw / Black')),
-                          ],
-                          rows: [
-                            ...masterDatabase.moves.map(
-                              (move) => DataRow(
-                                onSelectChanged: (_) => ref
-                                    .read(ctrlProvider.notifier)
-                                    .onUserMove(Move.fromUci(move.uci)!),
-                                cells: [
-                                  DataCell(Text(move.san)),
-                                  DataCell(
-                                    Text(
-                                      '${((move.games / masterDatabase.games) * 100).round()}% / ${formatNum(move.games)}',
+            : SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (opening != null)
+                      Container(
+                        padding:
+                            const EdgeInsets.only(left: rowHorizontalPadding),
+                        color: primaryColor,
+                        child: Expanded(
+                          child: Row(
+                            children: [
+                              if (opening.eco.isEmpty)
+                                Text(opening.name)
+                              else
+                                Text('${opening.eco} ${opening.name}'),
+                            ],
+                          ),
+                        ),
+                      ),
+                    SizedBox(
+                      child: Table(
+                        children: [
+                          TableRow(
+                            decoration: BoxDecoration(
+                              color: primaryColor,
+                            ),
+                            children: [
+                              Container(
+                                padding: tableRowPadding,
+                                child: Text(context.l10n.move),
+                              ),
+                              Container(
+                                padding: tableRowPadding,
+                                child: Text(context.l10n.games),
+                              ),
+                              Container(
+                                padding: tableRowPadding,
+                                child: Text(context.l10n.whiteDrawBlack),
+                              ),
+                            ],
+                          ),
+                          ...List.generate(
+                            masterDatabase.moves.length,
+                            (int index) {
+                              final move = masterDatabase.moves.get(index);
+                              final percentGames =
+                                  ((move.games / masterDatabase.games) * 100)
+                                      .round();
+                              return TableRow(
+                                decoration: BoxDecoration(
+                                  color: index.isEven
+                                      ? Theme.of(context)
+                                          .colorScheme
+                                          .surfaceContainerLow
+                                      : Theme.of(context)
+                                          .colorScheme
+                                          .surfaceContainerHigh,
+                                ),
+                                children: [
+                                  TableRowInkWell(
+                                    onTap: () => ref
+                                        .read(ctrlProvider.notifier)
+                                        .onUserMove(Move.fromUci(move.uci)!),
+                                    child: Container(
+                                      padding: tableRowPadding,
+                                      child: Text(move.san),
                                     ),
                                   ),
-                                  DataCell(
-                                    _WinPercentageChart(
-                                      white: move.white,
-                                      draws: move.draws,
-                                      black: move.black,
+                                  TableRowInkWell(
+                                    onTap: () => ref
+                                        .read(ctrlProvider.notifier)
+                                        .onUserMove(Move.fromUci(move.uci)!),
+                                    child: Container(
+                                      padding: tableRowPadding,
+                                      child: Text(
+                                        '$percentGames% / ${formatNum(move.games)}',
+                                      ),
+                                    ),
+                                  ),
+                                  TableRowInkWell(
+                                    onTap: () => ref
+                                        .read(ctrlProvider.notifier)
+                                        .onUserMove(Move.fromUci(move.uci)!),
+                                    child: Container(
+                                      padding: tableRowPadding,
+                                      child: _WinPercentageChart(
+                                        white: move.white,
+                                        draws: move.draws,
+                                        black: move.black,
+                                      ),
                                     ),
                                   ),
                                 ],
+                              );
+                            },
+                          ),
+                          TableRow(
+                            decoration: BoxDecoration(
+                              color: masterDatabase.moves.length.isEven
+                                  ? Theme.of(context)
+                                      .colorScheme
+                                      .surfaceContainerLow
+                                  : Theme.of(context)
+                                      .colorScheme
+                                      .surfaceContainerHigh,
+                            ),
+                            children: [
+                              Container(
+                                padding: tableRowPadding,
+                                alignment: Alignment.centerLeft,
+                                child: const Icon(Icons.functions),
                               ),
-                            ),
-                            DataRow(
-                              cells: [
-                                const DataCell(Icon(Icons.functions)),
-                                DataCell(
-                                  Text(
-                                    '100% / ${formatNum(masterDatabase.games)}',
-                                  ),
+                              Container(
+                                padding: tableRowPadding,
+                                child: Text(
+                                  '100% / ${formatNum(masterDatabase.games)}',
                                 ),
-                                DataCell(
-                                  _WinPercentageChart(
-                                    white: masterDatabase.white,
-                                    draws: masterDatabase.draws,
-                                    black: masterDatabase.black,
-                                  ),
+                              ),
+                              Container(
+                                padding: tableRowPadding,
+                                child: _WinPercentageChart(
+                                  white: masterDatabase.white,
+                                  draws: masterDatabase.draws,
+                                  black: masterDatabase.black,
                                 ),
-                              ],
-                            ),
-                          ],
-                        ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               );
       },
