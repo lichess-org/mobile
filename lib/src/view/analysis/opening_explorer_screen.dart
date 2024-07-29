@@ -407,82 +407,63 @@ class _OpeningExplorer extends ConsumerWidget {
                         (int index) {
                       final game = masterDatabase.topGames.get(index);
                       const paddingResultContainer = EdgeInsets.all(5);
-                      return AdaptiveInkWell(
-                        onTap: () async {
-                          final archivedGame = await ref.read(
-                            archivedGameProvider(id: GameId(game.id)).future,
-                          );
-                          if (context.mounted) {
-                            pushPlatformRoute(
-                              context,
-                              builder: (_) => ArchivedGameScreen(
-                                gameData: archivedGame.data,
-                                orientation: Side.white,
-                              ),
-                            );
-                          }
-                        },
-                        child: Container(
-                          padding: rowPadding,
-                          color: index.isEven
-                              ? Theme.of(context)
-                                  .colorScheme
-                                  .surfaceContainerLow
-                              : Theme.of(context)
-                                  .colorScheme
-                                  .surfaceContainerHigh,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Column(
-                                children: [
-                                  Text(game.white.rating.toString()),
-                                  Text(game.black.rating.toString()),
-                                ],
-                              ),
-                              Column(
-                                children: [
-                                  Text(game.white.name),
-                                  Text(game.black.name),
-                                ],
-                              ),
-                              if (game.winner == 'white')
-                                Container(
-                                  padding: paddingResultContainer,
-                                  color: Colors.white,
-                                  child: const Text(
-                                    '1-0',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                )
-                              else if (game.winner == 'black')
-                                Container(
-                                  padding: paddingResultContainer,
-                                  color: Colors.black,
-                                  child: const Text(
-                                    '0-1',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                )
-                              else
-                                Container(
-                                  padding: paddingResultContainer,
-                                  color: Colors.grey,
-                                  child: const Text(
-                                    '½-½',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                    ),
+                      return Container(
+                        padding: rowPadding,
+                        color: index.isEven
+                            ? Theme.of(context).colorScheme.surfaceContainerLow
+                            : Theme.of(context)
+                                .colorScheme
+                                .surfaceContainerHigh,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Column(
+                              children: [
+                                Text(game.white.rating.toString()),
+                                Text(game.black.rating.toString()),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Text(game.white.name),
+                                Text(game.black.name),
+                              ],
+                            ),
+                            if (game.winner == 'white')
+                              Container(
+                                padding: paddingResultContainer,
+                                color: Colors.white,
+                                child: const Text(
+                                  '1-0',
+                                  style: TextStyle(
+                                    color: Colors.black,
                                   ),
                                 ),
-                                
-                              if (game.month != null) Text(game.month!),
-                            ],
-                          ),
+                              )
+                            else if (game.winner == 'black')
+                              Container(
+                                padding: paddingResultContainer,
+                                color: Colors.black,
+                                child: const Text(
+                                  '0-1',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              )
+                            else
+                              Container(
+                                padding: paddingResultContainer,
+                                color: Colors.grey,
+                                child: const Text(
+                                  '½-½',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            if (game.month != null) Text(game.month!),
+                          ],
                         ),
                       );
                     }),
