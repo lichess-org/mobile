@@ -148,7 +148,6 @@ class _Body extends ConsumerWidget {
             ),
           ),
         ),
-        BottomBar(pgn: pgn, options: options),
       ],
     );
   }
