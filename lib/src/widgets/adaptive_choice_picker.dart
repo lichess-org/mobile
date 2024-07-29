@@ -17,21 +17,25 @@ Future<void> showChoicePicker<T>(
           return AlertDialog(
             contentPadding: const EdgeInsets.only(top: 12),
             scrollable: true,
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: choices.map((value) {
-                return RadioListTile<T>(
-                  title: labelBuilder(value),
-                  value: value,
-                  groupValue: selectedItem,
-                  onChanged: (value) {
-                    if (value != null && onSelectedItemChanged != null) {
-                      onSelectedItemChanged(value);
-                      Navigator.of(context).pop();
-                    }
-                  },
-                );
-              }).toList(growable: false),
+            content: SizedBox(
+              width: double.maxFinite,
+              height: 400,
+              child: ListView(
+                shrinkWrap: true,
+                children: choices.map((value) {
+                  return RadioListTile<T>(
+                    title: labelBuilder(value),
+                    value: value,
+                    groupValue: selectedItem,
+                    onChanged: (value) {
+                      if (value != null && onSelectedItemChanged != null) {
+                        onSelectedItemChanged(value);
+                        Navigator.of(context).pop();
+                      }
+                    },
+                  );
+                }).toList(growable: false),
+              ),
             ),
             actions: [
               TextButton(
