@@ -84,7 +84,11 @@ Text l10nWithWidget<T extends Widget>(
       children: <InlineSpan>[
         if (parts[0].isNotEmpty) TextSpan(text: parts[0], style: textStyle),
         if (parts[0] != localizedStringWithPlaceholder)
-          WidgetSpan(child: widget),
+          WidgetSpan(
+            child: widget,
+            alignment: PlaceholderAlignment.middle,
+            style: textStyle,
+          ),
         if (parts.length > 1 && parts[1].isNotEmpty)
           TextSpan(text: parts[1], style: textStyle),
       ],
