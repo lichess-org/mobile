@@ -413,9 +413,9 @@ class _OpeningExplorer extends ConsumerWidget {
 
 class _WinPercentageChart extends StatelessWidget {
   final int white;
-
   final int draws;
   final int black;
+
   const _WinPercentageChart({
     required this.white,
     required this.draws,
@@ -430,43 +430,47 @@ class _WinPercentageChart extends StatelessWidget {
     final percentWhite = percentGames(white);
     final percentDraws = percentGames(draws);
     final percentBlack = percentGames(black);
+    String label(int percent) => percent < 20 ? '' : '$percent%';
 
-    return Row(
-      children: [
-        if (percentWhite != 0)
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(5),
+      child: Row(
+        children: [
           Expanded(
+            flex: percentWhite,
             child: ColoredBox(
               color: Colors.white,
               child: Text(
-                percentWhite < 5 ? '' : '$percentWhite%',
+                label(percentWhite),
                 textAlign: TextAlign.center,
                 style: const TextStyle(color: Colors.black),
               ),
             ),
           ),
-        if (percentDraws != 0)
           Expanded(
+            flex: percentDraws,
             child: ColoredBox(
               color: Colors.grey,
               child: Text(
-                percentDraws < 5 ? '' : '$percentDraws%',
+                label(percentDraws),
                 textAlign: TextAlign.center,
                 style: const TextStyle(color: Colors.white),
               ),
             ),
           ),
-        if (percentBlack != 0)
           Expanded(
+            flex: percentBlack,
             child: ColoredBox(
               color: Colors.black,
               child: Text(
-                percentBlack < 5 ? '' : '$percentBlack%',
+                label(percentBlack),
                 textAlign: TextAlign.center,
                 style: const TextStyle(color: Colors.white),
               ),
             ),
           ),
-      ],
+        ],
+      ),
     );
   }
 }
