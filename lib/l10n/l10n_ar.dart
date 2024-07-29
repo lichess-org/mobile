@@ -9,120 +9,120 @@ class AppLocalizationsAr extends AppLocalizations {
   AppLocalizationsAr([String locale = 'ar']) : super(locale);
 
   @override
-  String get mobileHomeTab => 'Home';
+  String get mobileHomeTab => 'الرئيسية';
 
   @override
-  String get mobilePuzzlesTab => 'Puzzles';
+  String get mobilePuzzlesTab => 'ألغاز';
 
   @override
-  String get mobileToolsTab => 'Tools';
+  String get mobileToolsTab => 'أدوات';
 
   @override
-  String get mobileWatchTab => 'Watch';
+  String get mobileWatchTab => 'شاهد';
 
   @override
-  String get mobileSettingsTab => 'Settings';
+  String get mobileSettingsTab => 'الإعدادات';
 
   @override
-  String get mobileMustBeLoggedIn => 'You must be logged in to view this page.';
+  String get mobileMustBeLoggedIn => 'لعرض هذه الصفحة، قم بتسجيل الدخول.';
 
   @override
-  String get mobileSystemColors => 'System colors';
+  String get mobileSystemColors => 'ألوان النظام';
 
   @override
-  String get mobileFeedbackButton => 'Feedback';
+  String get mobileFeedbackButton => 'الملاحظات';
 
   @override
-  String get mobileOkButton => 'OK';
+  String get mobileOkButton => 'موافق';
 
   @override
-  String get mobileSettingsHapticFeedback => 'Haptic feedback';
+  String get mobileSettingsHapticFeedback => 'التعليقات اللمسية';
 
   @override
-  String get mobileSettingsImmersiveMode => 'Immersive mode';
+  String get mobileSettingsImmersiveMode => 'وضع ملء الشاشة';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.';
+  String get mobileSettingsImmersiveModeSubtitle => 'إخفاء واجهة المستخدم خلال التشغيل. استخدم هذا إذا كنت مزعجاً من إيماءات التنقل للنظام عند حواف الشاشة. ينطبق على المباريات في اللعبة والألغاز.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'You are not following any user.';
+  String get mobileNotFollowingAnyUser => 'أنت لا تتبع أي مستخدم.';
 
   @override
-  String get mobileAllGames => 'All games';
+  String get mobileAllGames => 'جميع الألعاب';
 
   @override
-  String get mobileRecentSearches => 'Recent searches';
+  String get mobileRecentSearches => 'عمليات البحث الأخيرة';
 
   @override
-  String get mobileClearButton => 'Clear';
+  String get mobileClearButton => 'مسح';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
-    return 'Players with \"$param\"';
+    return 'لاعبين مع \"$param\"';
   }
 
   @override
-  String get mobileNoSearchResults => 'No results';
+  String get mobileNoSearchResults => 'لا توجد نتائج';
 
   @override
-  String get mobileAreYouSure => 'Are you sure?';
+  String get mobileAreYouSure => 'هل أنت متأكد؟';
 
   @override
-  String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
+  String get mobilePuzzleStreakAbortWarning => 'سوف تفقد تسلقك الحالي وسيتم حفظ نتيجتك.';
 
   @override
-  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of Puzzle Storm.';
+  String get mobilePuzzleStormNothingToShow => 'لا شيء لإظهاره. العب بعض الألغاز.';
 
   @override
-  String get mobileSharePuzzle => 'Share this puzzle';
+  String get mobileSharePuzzle => 'شارك هذا اللغز';
 
   @override
-  String get mobileShareGameURL => 'Share game URL';
+  String get mobileShareGameURL => 'شارك رابط المباراة';
 
   @override
-  String get mobileShareGamePGN => 'Share PGN';
+  String get mobileShareGamePGN => 'شارك الPGN';
 
   @override
-  String get mobileSharePositionAsFEN => 'Share position as FEN';
+  String get mobileSharePositionAsFEN => 'مشاركة الموضع كFEN';
 
   @override
-  String get mobileShowVariations => 'Show variations';
+  String get mobileShowVariations => 'أظهر سلسلة النقلات المرشحة';
 
   @override
-  String get mobileHideVariation => 'Hide variation';
+  String get mobileHideVariation => 'إخفاء سلسلة النقلات المرشحة';
 
   @override
-  String get mobileShowComments => 'Show comments';
+  String get mobileShowComments => 'عرض التعليقات';
 
   @override
-  String get mobilePuzzleStormConfirmEndRun => 'Do you want to end this run?';
+  String get mobilePuzzleStormConfirmEndRun => 'هل تريد إنهاء هذا التشغيل؟';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow => 'Nothing to show, please change the filters';
+  String get mobilePuzzleStormFilterNothingToShow => 'لا شيء لإظهاره، الرجاء تغيير الفلاتر';
 
   @override
-  String get mobileCancelTakebackOffer => 'Cancel takeback offer';
+  String get mobileCancelTakebackOffer => 'إلغاء عرض الاسترداد';
 
   @override
-  String get mobileCancelDrawOffer => 'Cancel draw offer';
+  String get mobileCancelDrawOffer => 'إلغاء عرض التعادل';
 
   @override
-  String get mobileWaitingForOpponentToJoin => 'Waiting for opponent to join...';
+  String get mobileWaitingForOpponentToJoin => 'في انتظار انضمام الطرف الآخر...';
 
   @override
-  String get mobileBlindfoldMode => 'Blindfold';
+  String get mobileBlindfoldMode => 'عصب العينين';
 
   @override
-  String get mobileLiveStreamers => 'Live streamers';
+  String get mobileLiveStreamers => 'البثوث المباشرة';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Join a game';
+  String get mobileCustomGameJoinAGame => 'الانضمام إلى لعبة';
 
   @override
-  String get mobileCorrespondenceClearSavedMove => 'Clear saved move';
+  String get mobileCorrespondenceClearSavedMove => 'مسح النقل المحفوظ';
 
   @override
-  String get mobileSomethingWentWrong => 'Something went wrong.';
+  String get mobileSomethingWentWrong => 'لقد حدث خطأ ما.';
 
   @override
   String get mobileShowResult => 'Show result';
@@ -1963,7 +1963,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get friends => 'الأصدقاء';
 
   @override
-  String get otherPlayers => 'other players';
+  String get otherPlayers => 'لاعبون آخرون';
 
   @override
   String get discussions => 'المحادثات';
@@ -2716,7 +2716,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get editProfile => 'حرر الملف الشخصي';
 
   @override
-  String get realName => 'Real name';
+  String get realName => 'الاسم الحقيقي';
 
   @override
   String get setFlair => 'اختيار الشارة';
@@ -2797,10 +2797,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get yes => 'نعم';
 
   @override
-  String get website => 'Website';
+  String get website => 'الموقع';
 
   @override
-  String get mobile => 'Mobile';
+  String get mobile => 'الهاتف المحمول';
 
   @override
   String get help => 'مساعدة:';
@@ -2960,7 +2960,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get outsideTheBoard => 'خارج الرقعة';
 
   @override
-  String get allSquaresOfTheBoard => 'All squares of the board';
+  String get allSquaresOfTheBoard => 'جميع مربعات اللوح';
 
   @override
   String get onSlowGames => 'في المباريات البطيئة';

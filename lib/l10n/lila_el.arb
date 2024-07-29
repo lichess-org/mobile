@@ -1,4 +1,8 @@
 {
+  "mobileShowResult": "Εμφάνιση αποτελέσματος",
+  "mobilePuzzleStormSubtitle": "Λύστε όσους γρίφους όσο το δυνατόν, σε 3 λεπτά.",
+  "mobileGreeting": "Καλωσορίσατε, {param}",
+  "mobileGreetingWithoutName": "Καλωσορίσατε",
   "activityActivity": "Δραστηριότητα",
   "activityHostedALiveStream": "Μεταδίδει ζωντανά",
   "activityRankedInSwissTournament": "Κατατάχθηκε #{param1} στο {param2}",

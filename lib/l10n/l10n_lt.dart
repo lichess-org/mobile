@@ -626,7 +626,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get preferencesShowPlayerRatings => 'Rodyti žaidėjų reitingus';
 
   @override
-  String get preferencesShowFlairs => 'Show player flairs';
+  String get preferencesShowFlairs => 'Parodykite žaidėjo emociją';
 
   @override
   String get preferencesExplainShowPlayerRatings => 'Tai leidžia iš svetainės paslėpti visus reitingus ir padeda susifokusuoti ties šachmatais. Partijos vis dar gali būti reitinguojamos. Šis pasirinkimas skirtas tik nustatyti, ką galite matyti.';
@@ -1677,10 +1677,10 @@ class AppLocalizationsLt extends AppLocalizations {
   String get deleteFromHere => 'Ištrinti nuo čia';
 
   @override
-  String get collapseVariations => 'Collapse variations';
+  String get collapseVariations => 'Slėpti variantus';
 
   @override
-  String get expandVariations => 'Expand variations';
+  String get expandVariations => 'Plėtoti variantus';
 
   @override
   String get forceVariation => 'Rodyti kaip variaciją';
@@ -2672,16 +2672,16 @@ class AppLocalizationsLt extends AppLocalizations {
   String get editProfile => 'Redaguoti profilį';
 
   @override
-  String get realName => 'Real name';
+  String get realName => 'Tikrasis vardas';
 
   @override
   String get setFlair => 'Pasirinkite savo atskiriamąjį ženklą - avatarą';
 
   @override
-  String get flair => 'Atskiriamasis ženklas';
+  String get flair => 'Skiriamasis ženklas';
 
   @override
-  String get youCanHideFlair => 'Yra nustatymas leidžiantis atjungti visų žaidėjų skiriamuosius ženklus.';
+  String get youCanHideFlair => 'Tai nustatymas, leidžiantis atjungti visų žaidėjų skiriamuosius ženklus.';
 
   @override
   String get biography => 'Aprašymas';
@@ -2732,7 +2732,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get puzzles => 'Užduotys';
 
   @override
-  String get onlineBots => 'Prisijungę robotai';
+  String get onlineBots => 'Online robotai';
 
   @override
   String get name => 'Pavadinimas';
@@ -2916,7 +2916,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get outsideTheBoard => 'Šalia lentos';
 
   @override
-  String get allSquaresOfTheBoard => 'All squares of the board';
+  String get allSquaresOfTheBoard => 'Visi lentos laukeliai';
 
   @override
   String get onSlowGames => 'Lėtose partijose';
@@ -3214,7 +3214,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get keyGoToStartOrEnd => 'eiti į pradžią/pabaigą';
 
   @override
-  String get keyCycleSelectedVariation => 'Pereiti pasirinktą variantą';
+  String get keyCycleSelectedVariation => 'Praeiti pasirinktą variantą';
 
   @override
   String get keyShowOrHideComments => 'rodyti/slėpti komentarus';
@@ -3241,13 +3241,13 @@ class AppLocalizationsLt extends AppLocalizations {
   String get keyPreviousBranch => 'Praeita atšaka';
 
   @override
-  String get keyNextBranch => 'Kita atšaka';
+  String get keyNextBranch => 'Sekanti atšaka';
 
   @override
   String get toggleVariationArrows => 'Rodyti variacijų rodykles';
 
   @override
-  String get cyclePreviousOrNextVariation => 'Eiti į praeitą/sekantį variantą';
+  String get cyclePreviousOrNextVariation => 'Eiti į ankstesnį/sekantį variantą';
 
   @override
   String get toggleGlyphAnnotations => 'Įjungti ėjimų komentarus';
@@ -3256,7 +3256,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get togglePositionAnnotations => 'Įjungti pozicijos komentarus';
 
   @override
-  String get variationArrowsInfo => 'Variacijų rodyklės leidžia jums naviguoti nenaudojant ėjimų lentelės.';
+  String get variationArrowsInfo => 'Variacijų rodyklės leidžia jums naviguoti nenaudojant ėjimų sarašo.';
 
   @override
   String get playSelectedMove => 'padaryti pasirinktą ėjimą';
@@ -3268,7 +3268,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get tournamentHomeTitle => 'Šachmatų turnyras su įvairiomis laiko kontrolėmis ir variantais';
 
   @override
-  String get tournamentHomeDescription => 'Žaiskite aukšto tempo šachmatų turnyruose! Prisijunkite prie oficialaus suplanuoto turnyro arba sukurkite savo.';
+  String get tournamentHomeDescription => 'Žaiskite aukšto tempo šachmatų turnyruose! Prisijunkite prie oficialaus suplanuoto turnyro arba sukurkite savo. Kulka, žaibas, klasikiniai, Chess960, King of the Hill, Threecheck ir daugiau parinkčių, skirtų begalinėms šachmatų pramogoms.';
 
   @override
   String get tournamentNotFound => 'Turnyras nerastas';
@@ -3444,7 +3444,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get phoneAndTablet => 'Telefonui ir planšetei';
 
   @override
-  String get bulletBlitzClassical => 'Žaibo, blic, klasikiniai';
+  String get bulletBlitzClassical => 'Kulka, Žaibas, klasikiniai';
 
   @override
   String get correspondenceChess => 'Korespondenciniai';
@@ -3790,10 +3790,10 @@ class AppLocalizationsLt extends AppLocalizations {
   String get edit => 'Keisti';
 
   @override
-  String get bullet => 'Naujiena';
+  String get bullet => 'Kulka';
 
   @override
-  String get blitz => 'Blitz';
+  String get blitz => 'Žaibas';
 
   @override
   String get rapid => 'Greitieji';
@@ -3808,7 +3808,7 @@ class AppLocalizationsLt extends AppLocalizations {
   String get bulletDesc => 'Labai greitos partijos: mažiau nei 3 minutės';
 
   @override
-  String get blitzDesc => 'Blic partijos: nuo 3 iki 8 minučių';
+  String get blitzDesc => 'Žaibo partijos: nuo 3 iki 8 minučių';
 
   @override
   String get rapidDesc => 'Greitosios partijos: nuo 8 iki 25 minučių';

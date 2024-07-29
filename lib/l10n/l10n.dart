@@ -189,7 +189,7 @@ abstract class AppLocalizations {
     Locale('nn'),
     Locale('pl'),
     Locale('pt'),
-    Locale('pt', 'PT'),
+    Locale('pt', 'BR'),
     Locale('ro'),
     Locale('ru'),
     Locale('sk'),
@@ -8128,7 +8128,7 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
    }
     case 'pt': {
   switch (locale.countryCode) {
-    case 'PT': return AppLocalizationsPtPt();
+    case 'BR': return AppLocalizationsPtBr();
    }
   break;
    }

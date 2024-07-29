@@ -2628,7 +2628,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get editProfile => 'Ändra profil';
 
   @override
-  String get realName => 'Real name';
+  String get realName => 'Verkligt namn';
 
   @override
   String get setFlair => 'Ställ in din flair';

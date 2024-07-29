@@ -125,21 +125,21 @@ class AppLocalizationsSl extends AppLocalizations {
   String get mobileSomethingWentWrong => 'Something went wrong.';
 
   @override
-  String get mobileShowResult => 'Show result';
+  String get mobileShowResult => 'Pokaži rezultat';
 
   @override
-  String get mobilePuzzleThemesSubtitle => 'Play puzzles from your favorite openings, or choose a theme.';
+  String get mobilePuzzleThemesSubtitle => 'Igrajte uganke iz svojih najljubših otvoritev ali izberite temo.';
 
   @override
-  String get mobilePuzzleStormSubtitle => 'Solve as many puzzles as possible in 3 minutes.';
+  String get mobilePuzzleStormSubtitle => 'V 3 minutah rešite čim več ugank.';
 
   @override
   String mobileGreeting(String param) {
-    return 'Hello, $param';
+    return 'Pozdravljeni $param';
   }
 
   @override
-  String get mobileGreetingWithoutName => 'Hello';
+  String get mobileGreetingWithoutName => 'Živjo';
 
   @override
   String get activityActivity => 'Aktivnost';
