@@ -223,8 +223,8 @@ enum BoardTheme {
 
   Widget get thumbnail => this == BoardTheme.system
       ? SizedBox(
-          height: 32,
-          width: 32 * 6,
+          height: 44,
+          width: 44 * 6,
           child: Row(
             children: [
               for (final c in const [1, 2, 3, 4, 5, 6])
@@ -239,7 +239,7 @@ enum BoardTheme {
         )
       : Image.asset(
           'assets/board-thumbnails/$name.jpg',
-          height: 32,
+          height: 44,
           errorBuilder: (context, o, st) => const SizedBox.shrink(),
         );
 }

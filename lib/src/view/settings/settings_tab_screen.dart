@@ -264,7 +264,7 @@ class _Body extends ConsumerWidget {
             },
           ),
           PlatformListTile(
-            leading: const Icon(Icons.gamepad),
+            leading: const Icon(Icons.sports_esports),
             title: Text(context.l10n.preferencesGameBehavior),
             trailing: Theme.of(context).platform == TargetPlatform.iOS
                 ? const CupertinoListTileChevron()
