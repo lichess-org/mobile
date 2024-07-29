@@ -8,6 +8,8 @@ import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/opening_explorer_repository.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -16,6 +18,7 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_share_screen.dart';
+import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
@@ -390,6 +393,58 @@ class _OpeningExplorer extends ConsumerWidget {
                           ],
                         ),
                       ],
+                    ),
+                    Container(
+                      padding: tableRowPadding,
+                      color: primaryColor,
+                      child: Row(
+                        children: [
+                          Text(context.l10n.topGames),
+                        ],
+                      ),
+                    ),
+                    ...masterDatabase.topGames.map(
+                      (game) => AdaptiveInkWell(
+                        onTap: () async {
+                          final archivedGame = await ref.read(
+                            archivedGameProvider(id: GameId(game.id)).future,
+                          );
+                          if (context.mounted) {
+                            pushPlatformRoute(
+                              context,
+                              builder: (_) => ArchivedGameScreen(
+                                gameData: archivedGame.data,
+                                orientation: Side.white,
+                              ),
+                            );
+                          }
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Column(
+                              children: [
+                                Text(game.white.rating.toString()),
+                                Text(game.black.rating.toString()),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Text(game.white.name),
+                                Text(game.black.name),
+                              ],
+                            ),
+                            Text(
+                              game.winner == 'white'
+                                  ? '1-0'
+                                  : game.winner == 'black'
+                                      ? '0-1'
+                                      : '1/2-1/2',
+                            ),
+                            if (game.month != null) Text(game.month!),
+                          ],
+                        ),
+                      ),
                     ),
                   ],
                 ),
