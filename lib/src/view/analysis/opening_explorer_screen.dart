@@ -280,6 +280,11 @@ class _OpeningExplorer extends ConsumerWidget {
                       ),
                     SizedBox(
                       child: Table(
+                        columnWidths: const {
+                          0: FractionColumnWidth(0.2),
+                          1: FractionColumnWidth(0.3),
+                          2: FractionColumnWidth(0.5),
+                        },
                         children: [
                           TableRow(
                             decoration: BoxDecoration(
