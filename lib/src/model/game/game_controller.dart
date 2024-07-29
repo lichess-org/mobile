@@ -103,6 +103,10 @@ class GameController extends _$GameController {
 
         _socketEventVersion = fullEvent.socketEventVersion;
 
+        if (game.status == GameStatus.started && game.steps.length == 1) {
+          ref.read(soundServiceProvider).play(Sound.dong);
+        }
+
         return GameState(
           gameFullId: gameFullId,
           game: game,
