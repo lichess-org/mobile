@@ -177,17 +177,18 @@ class _UserProfileListView extends ConsumerWidget {
           ListSection(
             hasLeading: true,
             children: [
-              if (user.canChallenge == true)
-                PlatformListTile(
-                  title: Text(context.l10n.challengeChallengeToPlay),
-                  leading: const Icon(LichessIcons.crossed_swords),
-                  onTap: () {
-                    pushPlatformRoute(
-                      context,
-                      builder: (context) => ChallengeScreen(user.lightUser),
-                    );
-                  },
-                ),
+              // TODO: re-enable when challenges are fully supported
+              // if (user.canChallenge == true)
+              //   PlatformListTile(
+              //     title: Text(context.l10n.challengeChallengeToPlay),
+              //     leading: const Icon(LichessIcons.crossed_swords),
+              //     onTap: () {
+              //       pushPlatformRoute(
+              //         context,
+              //         builder: (context) => ChallengeScreen(user.lightUser),
+              //       );
+              //     },
+              //   ),
               if (user.followable == true && user.following != true)
                 PlatformListTile(
                   leading: const Icon(Icons.person_add),
