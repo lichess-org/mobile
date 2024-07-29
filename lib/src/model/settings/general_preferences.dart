@@ -14,30 +14,6 @@ part 'general_preferences.g.dart';
 
 const _prefKey = 'preferences.general';
 
-String? localeToJson(Locale? locale) {
-  return jsonEncode(
-    locale != null
-        ? {
-            'languageCode': locale.languageCode,
-            'countryCode': locale.countryCode,
-            'scriptCode': locale.scriptCode,
-          }
-        : null,
-  );
-}
-
-Locale? localeFromJson(String? json) {
-  if (json == null) {
-    return null;
-  }
-  final map = jsonDecode(json) as Map<String, dynamic>;
-  return Locale.fromSubtags(
-    languageCode: map['languageCode'] as String,
-    countryCode: map['countryCode'] as String?,
-    scriptCode: map['scriptCode'] as String?,
-  );
-}
-
 @Riverpod(keepAlive: true)
 class GeneralPreferences extends _$GeneralPreferences {
   static GeneralPrefsState fetchFromStorage(SharedPreferences prefs) {
@@ -118,8 +94,7 @@ class GeneralPrefsState with _$GeneralPrefsState {
     required bool systemColors,
 
     /// Locale to use in the app, use system locale if null
-    @JsonKey(toJson: localeToJson, fromJson: localeFromJson)
-    required Locale? locale,
+    @JsonKey(toJson: _localeToJson, fromJson: _localeFromJson) Locale? locale,
   }) = _GeneralPrefsState;
 
   static const defaults = GeneralPrefsState(
@@ -128,14 +103,35 @@ class GeneralPrefsState with _$GeneralPrefsState {
     soundTheme: SoundTheme.standard,
     masterVolume: 0.8,
     systemColors: true,
-    locale: null,
   );
 
   factory GeneralPrefsState.fromJson(Map<String, dynamic> json) {
     try {
       return _$GeneralPrefsStateFromJson(json);
-    } catch (_) {
+    } catch (e) {
+      debugPrint('Error parsing GeneralPrefsState: $e');
       return defaults;
     }
   }
+}
+
+Map<String, dynamic>? _localeToJson(Locale? locale) {
+  return locale != null
+      ? {
+          'languageCode': locale.languageCode,
+          'countryCode': locale.countryCode,
+          'scriptCode': locale.scriptCode,
+        }
+      : null;
+}
+
+Locale? _localeFromJson(Map<String, dynamic>? json) {
+  if (json == null) {
+    return null;
+  }
+  return Locale.fromSubtags(
+    languageCode: json['languageCode'] as String,
+    countryCode: json['countryCode'] as String?,
+    scriptCode: json['scriptCode'] as String?,
+  );
 }
