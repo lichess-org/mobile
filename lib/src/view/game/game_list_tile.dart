@@ -2,6 +2,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -24,6 +25,8 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:timeago/timeago.dart' as timeago;
+
+final _dateFormatter = DateFormat.yMMMd(Intl.getCurrentLocale()).add_Hm();
 
 /// A list tile that shows game info.
 class GameListTile extends StatelessWidget {
@@ -106,6 +109,8 @@ class _ContextMenu extends ConsumerWidget {
 
     final customColors = Theme.of(context).extension<CustomColors>();
 
+    final player = mySide == Side.white ? game.white : game.black;
+
     return DraggableScrollableSheet(
       initialChildSize: .7,
       expand: false,
@@ -118,6 +123,22 @@ class _ContextMenu extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0).add(
+                  const EdgeInsets.only(bottom: 8.0),
+                ),
+                child: Text(
+                  context.l10n.resVsX(
+                    game.white.fullName(context),
+                    game.black.fullName(context),
+                  ),
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: -0.5,
+                  ),
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0).add(
                   const EdgeInsets.only(bottom: 8.0),
@@ -151,24 +172,19 @@ class _ContextMenu extends ConsumerWidget {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        context.l10n.resVsX(
-                                          game.white.fullName(context),
-                                          game.black.fullName(context),
-                                        ),
+                                        '${game.clockDisplay} • ${game.rated ? context.l10n.rated : context.l10n.casual}',
                                         style: const TextStyle(
-                                          fontSize: 16,
                                           fontWeight: FontWeight.w500,
-                                          letterSpacing: -0.5,
                                         ),
                                       ),
-                                      const SizedBox(height: 2.0),
                                       Text(
-                                        '${game.clockDisplay} • ${game.rated ? context.l10n.rated : context.l10n.casual}',
+                                        _dateFormatter.format(game.lastMoveAt),
                                         style: TextStyle(
                                           color: textShade(
                                             context,
                                             Styles.subtitleOpacity,
                                           ),
+                                          fontSize: 12,
                                         ),
                                       ),
                                     ],
