@@ -16,12 +16,14 @@ import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_share_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
 import 'analysis_widgets.dart';
+import 'opening_explorer_settings.dart';
 
 class OpeningExplorerScreen extends StatelessWidget {
   const OpeningExplorerScreen({required this.pgn, required this.options});
@@ -41,6 +43,19 @@ class OpeningExplorerScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(context.l10n.openingExplorer),
+        actions: [
+          AppBarIconButton(
+            onPressed: () => showAdaptiveBottomSheet<void>(
+              context: context,
+              isScrollControlled: true,
+              showDragHandle: true,
+              isDismissible: true,
+              builder: (_) => OpeningExplorerSettings(pgn, options),
+            ),
+            semanticsLabel: context.l10n.settingsSettings,
+            icon: const Icon(Icons.settings),
+          ),
+        ],
       ),
       body: _Body(pgn: pgn, options: options),
     );
@@ -52,6 +67,17 @@ class OpeningExplorerScreen extends StatelessWidget {
         backgroundColor: Styles.cupertinoScaffoldColor.resolveFrom(context),
         border: null,
         middle: Text(context.l10n.openingExplorer),
+        trailing: AppBarIconButton(
+          onPressed: () => showAdaptiveBottomSheet<void>(
+            context: context,
+            isScrollControlled: true,
+            showDragHandle: true,
+            isDismissible: true,
+            builder: (_) => OpeningExplorerSettings(pgn, options),
+          ),
+          semanticsLabel: context.l10n.settingsSettings,
+          icon: const Icon(Icons.settings),
+        ),
       ),
       child: _Body(pgn: pgn, options: options),
     );
