@@ -218,7 +218,7 @@ class _SettingsTitle extends StatelessWidget {
 }
 
 /// A platform agnostic choice picker
-class ChoicePicker<T extends Enum> extends StatelessWidget {
+class ChoicePicker<T> extends StatelessWidget {
   const ChoicePicker({
     super.key,
     required this.choices,

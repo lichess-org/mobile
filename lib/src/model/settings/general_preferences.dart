@@ -14,6 +14,30 @@ part 'general_preferences.g.dart';
 
 const _prefKey = 'preferences.general';
 
+String? localeToJson(Locale? locale) {
+  return jsonEncode(
+    locale != null
+        ? {
+            'languageCode': locale.languageCode,
+            'countryCode': locale.countryCode,
+            'scriptCode': locale.scriptCode,
+          }
+        : null,
+  );
+}
+
+Locale? localeFromJson(String? json) {
+  if (json == null) {
+    return null;
+  }
+  final map = jsonDecode(json) as Map<String, dynamic>;
+  return Locale.fromSubtags(
+    languageCode: map['languageCode'] as String,
+    countryCode: map['countryCode'] as String?,
+    scriptCode: map['scriptCode'] as String?,
+  );
+}
+
 @Riverpod(keepAlive: true)
 class GeneralPreferences extends _$GeneralPreferences {
   static GeneralPrefsState fetchFromStorage(SharedPreferences prefs) {
@@ -37,6 +61,10 @@ class GeneralPreferences extends _$GeneralPreferences {
 
   Future<void> toggleSoundEnabled() {
     return _save(state.copyWith(isSoundEnabled: !state.isSoundEnabled));
+  }
+
+  Future<void> setLocale(Locale? locale) {
+    return _save(state.copyWith(locale: locale));
   }
 
   Future<void> setSoundTheme(SoundTheme soundTheme) {
@@ -87,6 +115,10 @@ class GeneralPrefsState with _$GeneralPrefsState {
 
     /// Should enable system color palette (android 12+ only)
     required bool systemColors,
+
+    /// Locale to use in the app, use system locale if null
+    @JsonKey(toJson: localeToJson, fromJson: localeFromJson)
+    required Locale? locale,
   }) = _GeneralPrefsState;
 
   static const defaults = GeneralPrefsState(
@@ -95,6 +127,7 @@ class GeneralPrefsState with _$GeneralPrefsState {
     soundTheme: SoundTheme.standard,
     masterVolume: 0.8,
     systemColors: true,
+    locale: null,
   );
 
   factory GeneralPrefsState.fromJson(Map<String, dynamic> json) {

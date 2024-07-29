@@ -1,6 +1,8 @@
+import 'package:app_settings/app_settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -273,6 +275,29 @@ class _Body extends ConsumerWidget {
                 title: context.l10n.preferencesGameBehavior,
                 builder: (context) => const BoardBehaviorSettingsScreen(),
               );
+            },
+          ),
+          SettingsListTile(
+            icon: const Icon(Icons.language),
+            settingsLabel: Text(context.l10n.language),
+            settingsValue: localeToLocalizedName(
+              generalPrefs.locale ?? Localizations.localeOf(context),
+            ),
+            onTap: () {
+              if (Theme.of(context).platform == TargetPlatform.android) {
+                showChoicePicker<Locale>(
+                  context,
+                  choices: kSupportedLocales,
+                  selectedItem:
+                      generalPrefs.locale ?? Localizations.localeOf(context),
+                  labelBuilder: (t) => Text(localeToLocalizedName(t)),
+                  onSelectedItemChanged: (Locale? locale) => ref
+                      .read(generalPreferencesProvider.notifier)
+                      .setLocale(locale),
+                );
+              } else {
+                AppSettings.openAppSettings();
+              }
             },
           ),
         ],
