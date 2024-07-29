@@ -402,30 +402,14 @@ class _DashboardButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final session = ref.watch(authSessionProvider);
     if (session != null) {
-      switch (Theme.of(context).platform) {
-        case TargetPlatform.iOS:
-          return CupertinoIconButton(
-            padding: EdgeInsets.zero,
-            onPressed: () {
-              ref.invalidate(puzzleDashboardProvider);
-              _showDashboard(context, session);
-            },
-            semanticsLabel: context.l10n.puzzlePuzzleDashboard,
-            icon: const Icon(Icons.history),
-          );
-        case TargetPlatform.android:
-          return IconButton(
-            tooltip: context.l10n.puzzlePuzzleDashboard,
-            onPressed: () {
-              ref.invalidate(puzzleDashboardProvider);
-              _showDashboard(context, session);
-            },
-            icon: const Icon(Icons.history),
-          );
-        default:
-          assert(false, 'Unexpected platform $Theme.of(context).platform');
-          return const SizedBox.shrink();
-      }
+      return AppBarIconButton(
+        icon: const Icon(Icons.history),
+        semanticsLabel: context.l10n.puzzlePuzzleDashboard,
+        onPressed: () {
+          ref.invalidate(puzzleDashboardProvider);
+          _showDashboard(context, session);
+        },
+      );
     }
     return const SizedBox.shrink();
   }
