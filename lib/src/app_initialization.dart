@@ -53,7 +53,11 @@ Future<AppInitializationData> appInitialization(
   // preload sounds
   final soundTheme = GeneralPreferences.fetchFromStorage(prefs).soundTheme;
   final soundService = ref.read(soundServiceProvider);
-  await soundService.initialize(soundTheme);
+  try {
+    await soundService.initialize(soundTheme);
+  } catch (e) {
+    _logger.warning('Cannot initialize SoundService: $e');
+  }
 
   final db = await openDb(databaseFactory, dbPath);
 
