@@ -2,8 +2,6 @@ import 'package:intl/intl.dart' as intl;
 
 import 'l10n.dart';
 
-// ignore_for_file: type=lint
-
 /// The translations for Albanian (`sq`).
 class AppLocalizationsSq extends AppLocalizations {
   AppLocalizationsSq([String locale = 'sq']) : super(locale);

@@ -135,17 +135,11 @@ class _AppState extends ConsumerState<Application> {
 
   @override
   Widget build(BuildContext context) {
-    final themeMode = ref.watch(
-      generalPreferencesProvider.select(
-        (state) => state.themeMode,
-      ),
-    );
+    final generalPrefs = ref.watch(generalPreferencesProvider);
+
     final brightness = ref.watch(currentBrightnessProvider);
     final boardTheme = ref.watch(
       boardPreferencesProvider.select((state) => state.boardTheme),
-    );
-    final hasSystemColors = ref.watch(
-      generalPreferencesProvider.select((state) => state.systemColors),
     );
 
     final remainingHeight = estimateRemainingHeightLeftBoard(context);
@@ -164,12 +158,13 @@ class _AppState extends ConsumerState<Application> {
         final dynamicColorScheme =
             brightness == Brightness.light ? fixedLightScheme : fixedDarkScheme;
 
-        final colorScheme = hasSystemColors && dynamicColorScheme != null
-            ? dynamicColorScheme
-            : ColorScheme.fromSeed(
-                seedColor: boardTheme.colors.darkSquare,
-                brightness: brightness,
-              );
+        final colorScheme =
+            generalPrefs.systemColors && dynamicColorScheme != null
+                ? dynamicColorScheme
+                : ColorScheme.fromSeed(
+                    seedColor: boardTheme.colors.darkSquare,
+                    brightness: brightness,
+                  );
 
         final cupertinoColorScheme = ColorScheme.fromSeed(
           seedColor: boardTheme.colors.darkSquare,
@@ -204,6 +199,7 @@ class _AppState extends ConsumerState<Application> {
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: kSupportedLocales,
           onGenerateTitle: (BuildContext context) => 'lichess.org',
+          locale: generalPrefs.locale,
           theme: ThemeData.from(
             colorScheme: colorScheme,
             textTheme: Theme.of(context).platform == TargetPlatform.iOS
@@ -226,7 +222,7 @@ class _AppState extends ConsumerState<Application> {
               ),
             ],
           ),
-          themeMode: themeMode,
+          themeMode: generalPrefs.themeMode,
           builder: Theme.of(context).platform == TargetPlatform.iOS
               ? (context, child) {
                   return CupertinoTheme(

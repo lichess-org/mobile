@@ -29,6 +29,7 @@ import 'l10n_fo.dart';
 import 'l10n_fr.dart';
 import 'l10n_ga.dart';
 import 'l10n_gl.dart';
+import 'l10n_gsw.dart';
 import 'l10n_he.dart';
 import 'l10n_hi.dart';
 import 'l10n_hr.dart';
@@ -56,12 +57,9 @@ import 'l10n_sq.dart';
 import 'l10n_sr.dart';
 import 'l10n_sv.dart';
 import 'l10n_tr.dart';
-import 'l10n_tt.dart';
 import 'l10n_uk.dart';
 import 'l10n_vi.dart';
 import 'l10n_zh.dart';
-
-// ignore_for_file: type=lint
 
 /// Callers can lookup localized strings with an instance of AppLocalizations
 /// returned by `AppLocalizations.of(context)`.
@@ -169,6 +167,7 @@ abstract class AppLocalizations {
     Locale('fr'),
     Locale('ga'),
     Locale('gl'),
+    Locale('gsw'),
     Locale('he'),
     Locale('hi'),
     Locale('hr'),
@@ -197,7 +196,6 @@ abstract class AppLocalizations {
     Locale('sr'),
     Locale('sv'),
     Locale('tr'),
-    Locale('tt'),
     Locale('uk'),
     Locale('vi'),
     Locale('zh'),
@@ -8110,7 +8108,7 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['en', 'af', 'ar', 'az', 'be', 'bg', 'bn', 'br', 'bs', 'ca', 'cs', 'da', 'de', 'el', 'eo', 'es', 'et', 'eu', 'fa', 'fi', 'fo', 'fr', 'ga', 'gl', 'he', 'hi', 'hr', 'hu', 'hy', 'id', 'it', 'ja', 'kk', 'ko', 'lb', 'lt', 'lv', 'mk', 'nb', 'nl', 'nn', 'pl', 'pt', 'ro', 'ru', 'sk', 'sl', 'sq', 'sr', 'sv', 'tr', 'tt', 'uk', 'vi', 'zh'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['en', 'af', 'ar', 'az', 'be', 'bg', 'bn', 'br', 'bs', 'ca', 'cs', 'da', 'de', 'el', 'eo', 'es', 'et', 'eu', 'fa', 'fi', 'fo', 'fr', 'ga', 'gl', 'gsw', 'he', 'hi', 'hr', 'hu', 'hy', 'id', 'it', 'ja', 'kk', 'ko', 'lb', 'lt', 'lv', 'mk', 'nb', 'nl', 'nn', 'pl', 'pt', 'ro', 'ru', 'sk', 'sl', 'sq', 'sr', 'sv', 'tr', 'uk', 'vi', 'zh'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -8166,6 +8164,7 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
     case 'fr': return AppLocalizationsFr();
     case 'ga': return AppLocalizationsGa();
     case 'gl': return AppLocalizationsGl();
+    case 'gsw': return AppLocalizationsGsw();
     case 'he': return AppLocalizationsHe();
     case 'hi': return AppLocalizationsHi();
     case 'hr': return AppLocalizationsHr();
@@ -8193,7 +8192,6 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
     case 'sr': return AppLocalizationsSr();
     case 'sv': return AppLocalizationsSv();
     case 'tr': return AppLocalizationsTr();
-    case 'tt': return AppLocalizationsTt();
     case 'uk': return AppLocalizationsUk();
     case 'vi': return AppLocalizationsVi();
     case 'zh': return AppLocalizationsZh();

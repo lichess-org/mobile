@@ -2,8 +2,6 @@ import 'package:intl/intl.dart' as intl;
 
 import 'l10n.dart';
 
-// ignore_for_file: type=lint
-
 /// The translations for Danish (`da`).
 class AppLocalizationsDa extends AppLocalizations {
   AppLocalizationsDa([String locale = 'da']) : super(locale);
