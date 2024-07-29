@@ -109,8 +109,6 @@ class _ContextMenu extends ConsumerWidget {
 
     final customColors = Theme.of(context).extension<CustomColors>();
 
-    final player = mySide == Side.white ? game.white : game.black;
-
     return DraggableScrollableSheet(
       initialChildSize: .7,
       expand: false,
@@ -501,9 +499,7 @@ class ExtendedGameListTile extends StatelessWidget {
         aiLevel: opponent.aiLevel,
         rating: opponent.rating,
       ),
-      subtitle: Text(
-        timeago.format(game.lastMoveAt),
-      ),
+      subtitle: Text(timeago.format(game.lastMoveAt)),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
