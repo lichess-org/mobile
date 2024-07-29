@@ -229,7 +229,7 @@ enum BoardTheme {
             children: [
               for (final c in const [1, 2, 3, 4, 5, 6])
                 Container(
-                  width: 32,
+                  width: 44,
                   color: c.isEven
                       ? BoardTheme.system.colors.darkSquare
                       : BoardTheme.system.colors.lightSquare,

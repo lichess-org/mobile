@@ -107,6 +107,7 @@ class GeneralPreferences extends _$GeneralPreferences {
 @Freezed(fromJson: true, toJson: true)
 class GeneralPrefsState with _$GeneralPrefsState {
   const factory GeneralPrefsState({
+    /// Background theme mode to use in the app
     @JsonKey(unknownEnumValue: ThemeMode.system) required ThemeMode themeMode,
     required bool isSoundEnabled,
     @JsonKey(unknownEnumValue: SoundTheme.standard)
