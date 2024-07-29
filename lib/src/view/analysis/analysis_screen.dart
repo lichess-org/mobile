@@ -42,6 +42,7 @@ import 'package:popover/popover.dart';
 import '../../utils/share.dart';
 import 'analysis_settings.dart';
 import 'analysis_widgets.dart';
+import 'opening_explorer_screen.dart';
 import 'tree_view.dart';
 
 class AnalysisScreen extends StatelessWidget {
@@ -623,6 +624,19 @@ class _BottomBar extends ConsumerWidget {
                         : Icons.area_chart,
                   ),
                 ),
+              Expanded(
+                child: BottomBarButton(
+                  label: context.l10n.openingExplorer,
+                  onTap: () => pushReplacementPlatformRoute(
+                    context,
+                    builder: (_) => OpeningExplorerScreen(
+                      pgn: pgn,
+                      options: options,
+                    ),
+                  ),
+                  icon: Icons.explore,
+                ),
+              ),
               Expanded(
                 child: RepeatButton(
                   onLongPress: canGoBack ? () => _moveBackward(ref) : null,
