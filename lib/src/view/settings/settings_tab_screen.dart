@@ -27,7 +27,7 @@ import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'account_preferences_screen.dart';
-import 'board_behavior_settings_screen.dart';
+import 'board_settings_screen.dart';
 import 'sound_settings_screen.dart';
 
 class SettingsTabScreen extends ConsumerWidget {
@@ -253,16 +253,16 @@ class _Body extends ConsumerWidget {
                 : null,
           ),
           PlatformListTile(
-            leading: const Icon(Icons.sports_esports),
-            title: Text(context.l10n.preferencesGameBehavior),
+            leading: const Icon(LichessIcons.chess_board),
+            title: Text(context.l10n.board),
             trailing: Theme.of(context).platform == TargetPlatform.iOS
                 ? const CupertinoListTileChevron()
                 : null,
             onTap: () {
               pushPlatformRoute(
                 context,
-                title: context.l10n.preferencesGameBehavior,
-                builder: (context) => const BoardBehaviorSettingsScreen(),
+                title: context.l10n.board,
+                builder: (context) => const BoardSettingsScreen(),
               );
             },
           ),

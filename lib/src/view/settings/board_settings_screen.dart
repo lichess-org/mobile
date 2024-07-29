@@ -13,8 +13,8 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
-class BoardBehaviorSettingsScreen extends StatelessWidget {
-  const BoardBehaviorSettingsScreen({super.key});
+class BoardSettingsScreen extends StatelessWidget {
+  const BoardSettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class BoardBehaviorSettingsScreen extends StatelessWidget {
 
   Widget _androidBuilder(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.preferencesGameBehavior)),
+      appBar: AppBar(title: Text(context.l10n.board)),
       body: const _Body(),
     );
   }
