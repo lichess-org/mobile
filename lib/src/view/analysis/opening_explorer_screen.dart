@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/opening_explorer_repository.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -204,6 +205,22 @@ class _OpeningExplorer extends ConsumerWidget {
     final ctrlProvider = analysisControllerProvider(pgn, options);
     final position = ref.watch(ctrlProvider.select((value) => value.position));
 
+    final isRootNode = ref.watch(
+      ctrlProvider.select((s) => s.currentNode.isRoot),
+    );
+    final nodeOpening =
+        ref.watch(ctrlProvider.select((s) => s.currentNode.opening));
+    final branchOpening =
+        ref.watch(ctrlProvider.select((s) => s.currentBranchOpening));
+    final contextOpening =
+        ref.watch(ctrlProvider.select((s) => s.contextOpening));
+    final opening = isRootNode
+        ? LightOpening(
+            eco: '',
+            name: context.l10n.startPosition,
+          )
+        : nodeOpening ?? branchOpening ?? contextOpening;
+
     if (position.fullmoves > 24) {
       return const Expanded(
         child: Column(
@@ -228,61 +245,67 @@ class _OpeningExplorer extends ConsumerWidget {
                 ],
               )
             : Container(
-                width: MediaQuery.of(context).size.width,
-                padding: const EdgeInsets.symmetric(
-                  vertical: 8.0,
-                  horizontal: 16.0,
-                ),
+                padding: Styles.bodyPadding,
                 child: SingleChildScrollView(
                   scrollDirection: Axis.vertical,
-                  child: DataTable(
-                    showCheckboxColumn: false,
-                    columnSpacing: 5,
-                    horizontalMargin: 0,
-                    columns: const [
-                      DataColumn(label: Text('Move')),
-                      DataColumn(label: Text('Games')),
-                      DataColumn(label: Text('White / Draw / Black')),
-                    ],
-                    rows: [
-                      ...masterDatabase.moves.map(
-                        (move) => DataRow(
-                          onSelectChanged: (_) => ref
-                              .read(ctrlProvider.notifier)
-                              .onUserMove(Move.fromUci(move.uci)!),
-                          cells: [
-                            DataCell(Text(move.san)),
-                            DataCell(
-                              Text(
-                                '${((move.games / masterDatabase.games) * 100).round()}% / ${formatNum(move.games)}',
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (opening != null)
+                        Text('${opening.eco} ${opening.name}'),
+                      SizedBox(
+                        width: MediaQuery.sizeOf(context).width,
+                        child: DataTable(
+                          showCheckboxColumn: false,
+                          columnSpacing: 5,
+                          horizontalMargin: 0,
+                          columns: const [
+                            DataColumn(label: Text('Move')),
+                            DataColumn(label: Text('Games')),
+                            DataColumn(label: Text('White / Draw / Black')),
+                          ],
+                          rows: [
+                            ...masterDatabase.moves.map(
+                              (move) => DataRow(
+                                onSelectChanged: (_) => ref
+                                    .read(ctrlProvider.notifier)
+                                    .onUserMove(Move.fromUci(move.uci)!),
+                                cells: [
+                                  DataCell(Text(move.san)),
+                                  DataCell(
+                                    Text(
+                                      '${((move.games / masterDatabase.games) * 100).round()}% / ${formatNum(move.games)}',
+                                    ),
+                                  ),
+                                  DataCell(
+                                    _WinPercentageChart(
+                                      white: move.white,
+                                      draws: move.draws,
+                                      black: move.black,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                            DataCell(
-                              _WinPercentageChart(
-                                white: move.white,
-                                draws: move.draws,
-                                black: move.black,
-                              ),
+                            DataRow(
+                              cells: [
+                                const DataCell(Icon(Icons.functions)),
+                                DataCell(
+                                  Text(
+                                    '100% / ${formatNum(masterDatabase.games)}',
+                                  ),
+                                ),
+                                DataCell(
+                                  _WinPercentageChart(
+                                    white: masterDatabase.white,
+                                    draws: masterDatabase.draws,
+                                    black: masterDatabase.black,
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
-                      ),
-                      DataRow(
-                        cells: [
-                          const DataCell(Icon(Icons.functions)),
-                          DataCell(
-                            Text(
-                              '100% / ${formatNum(masterDatabase.games)}',
-                            ),
-                          ),
-                          DataCell(
-                            _WinPercentageChart(
-                              white: masterDatabase.white,
-                              draws: masterDatabase.draws,
-                              black: masterDatabase.black,
-                            ),
-                          ),
-                        ],
                       ),
                     ],
                   ),
