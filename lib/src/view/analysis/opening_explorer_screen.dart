@@ -227,7 +227,7 @@ class _OpeningExplorer extends ConsumerWidget {
         : Theme.of(context).colorScheme.secondaryContainer;
     const rowVerticalPadding = 6.0;
     const rowHorizontalPadding = 6.0;
-    const tableRowPadding = EdgeInsets.symmetric(
+    const rowPadding = EdgeInsets.symmetric(
       vertical: rowVerticalPadding,
       horizontal: rowHorizontalPadding,
     );
@@ -292,15 +292,15 @@ class _OpeningExplorer extends ConsumerWidget {
                           ),
                           children: [
                             Container(
-                              padding: tableRowPadding,
+                              padding: rowPadding,
                               child: Text(context.l10n.move),
                             ),
                             Container(
-                              padding: tableRowPadding,
+                              padding: rowPadding,
                               child: Text(context.l10n.games),
                             ),
                             Container(
-                              padding: tableRowPadding,
+                              padding: rowPadding,
                               child: Text(context.l10n.whiteDrawBlack),
                             ),
                           ],
@@ -328,7 +328,7 @@ class _OpeningExplorer extends ConsumerWidget {
                                       .read(ctrlProvider.notifier)
                                       .onUserMove(Move.fromUci(move.uci)!),
                                   child: Container(
-                                    padding: tableRowPadding,
+                                    padding: rowPadding,
                                     child: Text(move.san),
                                   ),
                                 ),
@@ -337,7 +337,7 @@ class _OpeningExplorer extends ConsumerWidget {
                                       .read(ctrlProvider.notifier)
                                       .onUserMove(Move.fromUci(move.uci)!),
                                   child: Container(
-                                    padding: tableRowPadding,
+                                    padding: rowPadding,
                                     child: Text(
                                       '$percentGames% / ${formatNum(move.games)}',
                                     ),
@@ -348,7 +348,7 @@ class _OpeningExplorer extends ConsumerWidget {
                                       .read(ctrlProvider.notifier)
                                       .onUserMove(Move.fromUci(move.uci)!),
                                   child: Container(
-                                    padding: tableRowPadding,
+                                    padding: rowPadding,
                                     child: _WinPercentageChart(
                                       white: move.white,
                                       draws: move.draws,
@@ -372,18 +372,18 @@ class _OpeningExplorer extends ConsumerWidget {
                           ),
                           children: [
                             Container(
-                              padding: tableRowPadding,
+                              padding: rowPadding,
                               alignment: Alignment.centerLeft,
                               child: const Icon(Icons.functions),
                             ),
                             Container(
-                              padding: tableRowPadding,
+                              padding: rowPadding,
                               child: Text(
                                 '100% / ${formatNum(masterDatabase.games)}',
                               ),
                             ),
                             Container(
-                              padding: tableRowPadding,
+                              padding: rowPadding,
                               child: _WinPercentageChart(
                                 white: masterDatabase.white,
                                 draws: masterDatabase.draws,
@@ -395,7 +395,7 @@ class _OpeningExplorer extends ConsumerWidget {
                       ],
                     ),
                     Container(
-                      padding: tableRowPadding,
+                      padding: rowPadding,
                       color: primaryColor,
                       child: Row(
                         children: [
@@ -403,8 +403,11 @@ class _OpeningExplorer extends ConsumerWidget {
                         ],
                       ),
                     ),
-                    ...masterDatabase.topGames.map(
-                      (game) => AdaptiveInkWell(
+                    ...List.generate(masterDatabase.topGames.length,
+                        (int index) {
+                      final game = masterDatabase.topGames.get(index);
+                      const paddingResultContainer = EdgeInsets.all(5);
+                      return AdaptiveInkWell(
                         onTap: () async {
                           final archivedGame = await ref.read(
                             archivedGameProvider(id: GameId(game.id)).future,
@@ -419,33 +422,70 @@ class _OpeningExplorer extends ConsumerWidget {
                             );
                           }
                         },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Column(
-                              children: [
-                                Text(game.white.rating.toString()),
-                                Text(game.black.rating.toString()),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Text(game.white.name),
-                                Text(game.black.name),
-                              ],
-                            ),
-                            Text(
-                              game.winner == 'white'
-                                  ? '1-0'
-                                  : game.winner == 'black'
-                                      ? '0-1'
-                                      : '1/2-1/2',
-                            ),
-                            if (game.month != null) Text(game.month!),
-                          ],
+                        child: Container(
+                          padding: rowPadding,
+                          color: index.isEven
+                              ? Theme.of(context)
+                                  .colorScheme
+                                  .surfaceContainerLow
+                              : Theme.of(context)
+                                  .colorScheme
+                                  .surfaceContainerHigh,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Column(
+                                children: [
+                                  Text(game.white.rating.toString()),
+                                  Text(game.black.rating.toString()),
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  Text(game.white.name),
+                                  Text(game.black.name),
+                                ],
+                              ),
+                              if (game.winner == 'white')
+                                Container(
+                                  padding: paddingResultContainer,
+                                  color: Colors.white,
+                                  child: const Text(
+                                    '1-0',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                )
+                              else if (game.winner == 'black')
+                                Container(
+                                  padding: paddingResultContainer,
+                                  color: Colors.black,
+                                  child: const Text(
+                                    '0-1',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                )
+                              else
+                                Container(
+                                  padding: paddingResultContainer,
+                                  color: Colors.grey,
+                                  child: const Text(
+                                    '½-½',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                                
+                              if (game.month != null) Text(game.month!),
+                            ],
+                          ),
                         ),
-                      ),
-                    ),
+                      );
+                    }),
                   ],
                 ),
               );
