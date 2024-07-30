@@ -406,7 +406,8 @@ class _OpeningExplorer extends ConsumerWidget {
                     ...List.generate(masterDatabase.topGames.length,
                         (int index) {
                       final game = masterDatabase.topGames.get(index);
-                      const paddingResultContainer = EdgeInsets.all(5);
+                      const widthResultBox = 50.0;
+                      const paddingResultBox = EdgeInsets.all(5);
                       return Container(
                         padding: rowPadding,
                         color: index.isEven
@@ -415,54 +416,74 @@ class _OpeningExplorer extends ConsumerWidget {
                                 .colorScheme
                                 .surfaceContainerHigh,
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Column(
+                            Row(
                               children: [
-                                Text(game.white.rating.toString()),
-                                Text(game.black.rating.toString()),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(game.white.rating.toString()),
+                                    Text(game.black.rating.toString()),
+                                  ],
+                                ),
+                                const SizedBox(width: 10),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(game.white.name),
+                                    Text(game.black.name),
+                                  ],
+                                ),
                               ],
                             ),
-                            Column(
+                            Row(
                               children: [
-                                Text(game.white.name),
-                                Text(game.black.name),
-                              ],
-                            ),
-                            if (game.winner == 'white')
-                              Container(
-                                padding: paddingResultContainer,
-                                color: Colors.white,
-                                child: const Text(
-                                  '1-0',
-                                  style: TextStyle(
+                                if (game.winner == 'white')
+                                  Container(
+                                    width: widthResultBox,
+                                    padding: paddingResultBox,
+                                    color: Colors.white,
+                                    child: const Text(
+                                      '1-0',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  )
+                                else if (game.winner == 'black')
+                                  Container(
+                                    width: widthResultBox,
+                                    padding: paddingResultBox,
                                     color: Colors.black,
+                                    child: const Text(
+                                      '0-1',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  )
+                                else
+                                  Container(
+                                    width: widthResultBox,
+                                    padding: paddingResultBox,
+                                    color: Colors.grey,
+                                    child: const Text(
+                                      '½-½',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              )
-                            else if (game.winner == 'black')
-                              Container(
-                                padding: paddingResultContainer,
-                                color: Colors.black,
-                                child: const Text(
-                                  '0-1',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              )
-                            else
-                              Container(
-                                padding: paddingResultContainer,
-                                color: Colors.grey,
-                                child: const Text(
-                                  '½-½',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                            if (game.month != null) Text(game.month!),
+                                if (game.month != null) ...[
+                                  const SizedBox(width: 5.0),
+                                  Text(game.month!),
+                                ],
+                              ],
+                            ),
                           ],
                         ),
                       );
