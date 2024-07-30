@@ -1,10 +1,12 @@
 import 'package:dartchess/dartchess.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/analysis/opening_explorer.dart';
 import 'package:lichess_mobile/src/model/analysis/opening_explorer_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/opening_explorer_repository.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -201,8 +203,6 @@ class _OpeningExplorer extends ConsumerWidget {
   final String pgn;
   final AnalysisOptions options;
 
-  String formatNum(int num) => NumberFormat.decimalPatternDigits().format(num);
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = analysisControllerProvider(pgn, options);
@@ -216,19 +216,6 @@ class _OpeningExplorer extends ConsumerWidget {
         ),
       );
     }
-
-    final primaryColor = Theme.of(context).platform == TargetPlatform.iOS
-        ? CupertinoDynamicColor.resolve(
-            CupertinoColors.systemGrey5,
-            context,
-          )
-        : Theme.of(context).colorScheme.secondaryContainer;
-    const rowVerticalPadding = 6.0;
-    const rowHorizontalPadding = 6.0;
-    const rowPadding = EdgeInsets.symmetric(
-      vertical: rowVerticalPadding,
-      horizontal: rowHorizontalPadding,
-    );
 
     final isRootNode = ref.watch(
       ctrlProvider.select((s) => s.currentNode.isRoot),
@@ -246,33 +233,69 @@ class _OpeningExplorer extends ConsumerWidget {
           )
         : nodeOpening ?? branchOpening ?? contextOpening;
 
-    final prefs = ref.watch(openingExplorerPreferencesProvider);
-    final masterDatabaseAsync = ref.watch(
-      masterDatabaseProvider(
-        fen: position.fen,
-        sinceYear: prefs.masterDb.sinceYear,
-        untilYear: prefs.masterDb.untilYear,
+    final openingDb = ref.watch(
+      openingExplorerPreferencesProvider.select(
+        (state) => state.db,
       ),
     );
 
-    return masterDatabaseAsync.when(
-      data: (masterDatabase) {
+    return switch (openingDb) {
+      OpeningDatabase.master => _MasterOpeningExplorer(
+          ctrlProvider: ctrlProvider,
+          opening: opening,
+        ),
+      OpeningDatabase.lichess => _LichessOpeningExplorer(
+          ctrlProvider: ctrlProvider,
+          opening: opening,
+        ),
+    };
+  }
+}
+
+class _MasterOpeningExplorer extends ConsumerWidget {
+  const _MasterOpeningExplorer({
+    required this.ctrlProvider,
+    required this.opening,
+  });
+
+  final AnalysisControllerProvider ctrlProvider;
+  final Opening? opening;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final primaryColor = Theme.of(context).platform == TargetPlatform.iOS
+        ? CupertinoDynamicColor.resolve(
+            CupertinoColors.systemGrey5,
+            context,
+          )
+        : Theme.of(context).colorScheme.secondaryContainer;
+
+    final position = ref.watch(ctrlProvider.select((value) => value.position));
+
+    final masterDbAsync = ref.watch(
+      masterOpeningDatabaseProvider(
+        fen: position.fen,
+      ),
+    );
+
+    return masterDbAsync.when(
+      data: (masterDb) {
         return Column(
           children: [
             if (opening != null)
               Container(
-                padding: const EdgeInsets.only(left: rowHorizontalPadding),
+                padding: const EdgeInsets.only(left: 6.0),
                 color: primaryColor,
                 child: Row(
                   children: [
-                    if (opening.eco.isEmpty)
-                      Text(opening.name)
+                    if (opening!.eco.isEmpty)
+                      Text(opening!.name)
                     else
-                      Text('${opening.eco} ${opening.name}'),
+                      Text('${opening!.eco} ${opening!.name}'),
                   ],
                 ),
               ),
-            if (masterDatabase.moves.isEmpty)
+            if (masterDb.moves.isEmpty)
               const Expanded(
                 child: Align(
                   alignment: Alignment.center,
@@ -286,221 +309,19 @@ class _OpeningExplorer extends ConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Table(
-                        columnWidths: const {
-                          0: FractionColumnWidth(0.2),
-                          1: FractionColumnWidth(0.3),
-                          2: FractionColumnWidth(0.5),
-                        },
-                        children: [
-                          TableRow(
-                            decoration: BoxDecoration(
-                              color: primaryColor,
-                            ),
-                            children: [
-                              Container(
-                                padding: rowPadding,
-                                child: Text(context.l10n.move),
-                              ),
-                              Container(
-                                padding: rowPadding,
-                                child: Text(context.l10n.games),
-                              ),
-                              Container(
-                                padding: rowPadding,
-                                child: Text(context.l10n.whiteDrawBlack),
-                              ),
-                            ],
-                          ),
-                          ...List.generate(
-                            masterDatabase.moves.length,
-                            (int index) {
-                              final move = masterDatabase.moves.get(index);
-                              final percentGames =
-                                  ((move.games / masterDatabase.games) * 100)
-                                      .round();
-                              return TableRow(
-                                decoration: BoxDecoration(
-                                  color: index.isEven
-                                      ? Theme.of(context)
-                                          .colorScheme
-                                          .surfaceContainerLow
-                                      : Theme.of(context)
-                                          .colorScheme
-                                          .surfaceContainerHigh,
-                                ),
-                                children: [
-                                  TableRowInkWell(
-                                    onTap: () => ref
-                                        .read(ctrlProvider.notifier)
-                                        .onUserMove(Move.fromUci(move.uci)!),
-                                    child: Container(
-                                      padding: rowPadding,
-                                      child: Text(move.san),
-                                    ),
-                                  ),
-                                  TableRowInkWell(
-                                    onTap: () => ref
-                                        .read(ctrlProvider.notifier)
-                                        .onUserMove(Move.fromUci(move.uci)!),
-                                    child: Container(
-                                      padding: rowPadding,
-                                      child: Tooltip(
-                                        message: '$percentGames%',
-                                        child: Text(formatNum(move.games)),
-                                      ),
-                                    ),
-                                  ),
-                                  TableRowInkWell(
-                                    onTap: () => ref
-                                        .read(ctrlProvider.notifier)
-                                        .onUserMove(Move.fromUci(move.uci)!),
-                                    child: Container(
-                                      padding: rowPadding,
-                                      child: _WinPercentageChart(
-                                        white: move.white,
-                                        draws: move.draws,
-                                        black: move.black,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              );
-                            },
-                          ),
-                          TableRow(
-                            decoration: BoxDecoration(
-                              color: masterDatabase.moves.length.isEven
-                                  ? Theme.of(context)
-                                      .colorScheme
-                                      .surfaceContainerLow
-                                  : Theme.of(context)
-                                      .colorScheme
-                                      .surfaceContainerHigh,
-                            ),
-                            children: [
-                              Container(
-                                padding: rowPadding,
-                                alignment: Alignment.centerLeft,
-                                child: const Icon(Icons.functions),
-                              ),
-                              Container(
-                                padding: rowPadding,
-                                child: Tooltip(
-                                  message: '100%',
-                                  child: Text(formatNum(masterDatabase.games)),
-                                ),
-                              ),
-                              Container(
-                                padding: rowPadding,
-                                child: _WinPercentageChart(
-                                  white: masterDatabase.white,
-                                  draws: masterDatabase.draws,
-                                  black: masterDatabase.black,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
+                      _MoveTable(
+                        moves: masterDb.moves,
+                        whiteWins: masterDb.white,
+                        draws: masterDb.draws,
+                        blackWins: masterDb.black,
+                        ctrlProvider: ctrlProvider,
                       ),
-                      Container(
-                        padding: rowPadding,
-                        color: primaryColor,
-                        child: Row(
-                          children: [
-                            Text(context.l10n.topGames),
-                          ],
-                        ),
+                      _GameList(
+                        title: context.l10n.topGames,
+                        games: masterDb.topGames
+                            .map((g) => Game.fromTopGame(g))
+                            .toIList(),
                       ),
-                      ...List.generate(masterDatabase.topGames.length,
-                          (int index) {
-                        final game = masterDatabase.topGames.get(index);
-                        const widthResultBox = 50.0;
-                        const paddingResultBox = EdgeInsets.all(5);
-                        return Container(
-                          padding: rowPadding,
-                          color: index.isEven
-                              ? Theme.of(context)
-                                  .colorScheme
-                                  .surfaceContainerLow
-                              : Theme.of(context)
-                                  .colorScheme
-                                  .surfaceContainerHigh,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(game.white.rating.toString()),
-                                      Text(game.black.rating.toString()),
-                                    ],
-                                  ),
-                                  const SizedBox(width: 10),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(game.white.name),
-                                      Text(game.black.name),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  if (game.winner == 'white')
-                                    Container(
-                                      width: widthResultBox,
-                                      padding: paddingResultBox,
-                                      color: Colors.white,
-                                      child: const Text(
-                                        '1-0',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                    )
-                                  else if (game.winner == 'black')
-                                    Container(
-                                      width: widthResultBox,
-                                      padding: paddingResultBox,
-                                      color: Colors.black,
-                                      child: const Text(
-                                        '0-1',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    )
-                                  else
-                                    Container(
-                                      width: widthResultBox,
-                                      padding: paddingResultBox,
-                                      color: Colors.grey,
-                                      child: const Text(
-                                        '½-½',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ),
-                                  if (game.month != null) ...[
-                                    const SizedBox(width: 5.0),
-                                    Text(game.month!),
-                                  ],
-                                ],
-                              ),
-                            ],
-                          ),
-                        );
-                      }),
                     ],
                   ),
                 ),
@@ -513,6 +334,370 @@ class _OpeningExplorer extends ConsumerWidget {
       ),
       error: (error, stackTrace) => Center(
         child: Text(error.toString()),
+      ),
+    );
+  }
+}
+
+class _LichessOpeningExplorer extends ConsumerWidget {
+  const _LichessOpeningExplorer({
+    required this.ctrlProvider,
+    required this.opening,
+  });
+
+  final AnalysisControllerProvider ctrlProvider;
+  final Opening? opening;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final primaryColor = Theme.of(context).platform == TargetPlatform.iOS
+        ? CupertinoDynamicColor.resolve(
+            CupertinoColors.systemGrey5,
+            context,
+          )
+        : Theme.of(context).colorScheme.secondaryContainer;
+
+    final position = ref.watch(ctrlProvider.select((value) => value.position));
+
+    final lichessDbAsync = ref.watch(
+      lichessOpeningDatabaseProvider(
+        fen: position.fen,
+      ),
+    );
+
+    return lichessDbAsync.when(
+      data: (lichessDb) {
+        return Column(
+          children: [
+            if (opening != null)
+              Container(
+                padding: const EdgeInsets.only(left: 6.0),
+                color: primaryColor,
+                child: Row(
+                  children: [
+                    if (opening!.eco.isEmpty)
+                      Text(opening!.name)
+                    else
+                      Text('${opening!.eco} ${opening!.name}'),
+                  ],
+                ),
+              ),
+            if (lichessDb.moves.isEmpty)
+              const Expanded(
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text('No game found'),
+                ),
+              )
+            else
+              Expanded(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _MoveTable(
+                        moves: lichessDb.moves,
+                        whiteWins: lichessDb.white,
+                        draws: lichessDb.draws,
+                        blackWins: lichessDb.black,
+                        ctrlProvider: ctrlProvider,
+                      ),
+                      _GameList(
+                        title: context.l10n.recentGames,
+                        games: lichessDb.recentGames
+                            .map((g) => Game.fromRecentGame(g))
+                            .toIList(),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+          ],
+        );
+      },
+      loading: () => const Center(
+        child: CircularProgressIndicator(),
+      ),
+      error: (error, stackTrace) => Center(
+        child: Text(error.toString()),
+      ),
+    );
+  }
+}
+
+class _MoveTable extends ConsumerWidget {
+  const _MoveTable({
+    required this.moves,
+    required this.whiteWins,
+    required this.draws,
+    required this.blackWins,
+    required this.ctrlProvider,
+  });
+
+  final IList<OpeningMove> moves;
+  final int whiteWins;
+  final int draws;
+  final int blackWins;
+  final AnalysisControllerProvider ctrlProvider;
+
+  String formatNum(int num) => NumberFormat.decimalPatternDigits().format(num);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final primaryColor = Theme.of(context).platform == TargetPlatform.iOS
+        ? CupertinoDynamicColor.resolve(
+            CupertinoColors.systemGrey5,
+            context,
+          )
+        : Theme.of(context).colorScheme.secondaryContainer;
+    const rowPadding = EdgeInsets.all(6.0);
+
+    final games = whiteWins + draws + blackWins;
+
+    return Table(
+      columnWidths: const {
+        0: FractionColumnWidth(0.2),
+        1: FractionColumnWidth(0.3),
+        2: FractionColumnWidth(0.5),
+      },
+      children: [
+        TableRow(
+          decoration: BoxDecoration(
+            color: primaryColor,
+          ),
+          children: [
+            Container(
+              padding: rowPadding,
+              child: Text(context.l10n.move),
+            ),
+            Container(
+              padding: rowPadding,
+              child: Text(context.l10n.games),
+            ),
+            Container(
+              padding: rowPadding,
+              child: Text(context.l10n.whiteDrawBlack),
+            ),
+          ],
+        ),
+        ...List.generate(
+          moves.length,
+          (int index) {
+            final move = moves.get(index);
+            final percentGames = ((move.games / games) * 100).round();
+            return TableRow(
+              decoration: BoxDecoration(
+                color: index.isEven
+                    ? Theme.of(context).colorScheme.surfaceContainerLow
+                    : Theme.of(context).colorScheme.surfaceContainerHigh,
+              ),
+              children: [
+                TableRowInkWell(
+                  onTap: () => ref
+                      .read(ctrlProvider.notifier)
+                      .onUserMove(Move.fromUci(move.uci)!),
+                  child: Container(
+                    padding: rowPadding,
+                    child: Text(move.san),
+                  ),
+                ),
+                TableRowInkWell(
+                  onTap: () => ref
+                      .read(ctrlProvider.notifier)
+                      .onUserMove(Move.fromUci(move.uci)!),
+                  child: Container(
+                    padding: rowPadding,
+                    child: Tooltip(
+                      message: '$percentGames%',
+                      child: Text(formatNum(move.games)),
+                    ),
+                  ),
+                ),
+                TableRowInkWell(
+                  onTap: () => ref
+                      .read(ctrlProvider.notifier)
+                      .onUserMove(Move.fromUci(move.uci)!),
+                  child: Container(
+                    padding: rowPadding,
+                    child: _WinPercentageChart(
+                      white: move.white,
+                      draws: move.draws,
+                      black: move.black,
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
+        TableRow(
+          decoration: BoxDecoration(
+            color: moves.length.isEven
+                ? Theme.of(context).colorScheme.surfaceContainerLow
+                : Theme.of(context).colorScheme.surfaceContainerHigh,
+          ),
+          children: [
+            Container(
+              padding: rowPadding,
+              alignment: Alignment.centerLeft,
+              child: const Icon(Icons.functions),
+            ),
+            Container(
+              padding: rowPadding,
+              child: Tooltip(
+                message: '100%',
+                child: Text(formatNum(games)),
+              ),
+            ),
+            Container(
+              padding: rowPadding,
+              child: _WinPercentageChart(
+                white: whiteWins,
+                draws: draws,
+                black: blackWins,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _GameList extends StatelessWidget {
+  const _GameList({
+    required this.title,
+    required this.games,
+  });
+
+  final String title;
+  final IList<Game> games;
+
+  @override
+  Widget build(BuildContext context) {
+    final primaryColor = Theme.of(context).platform == TargetPlatform.iOS
+        ? CupertinoDynamicColor.resolve(
+            CupertinoColors.systemGrey5,
+            context,
+          )
+        : Theme.of(context).colorScheme.secondaryContainer;
+
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(6.0),
+          color: primaryColor,
+          child: Row(
+            children: [
+              Text(title),
+            ],
+          ),
+        ),
+        ...List.generate(games.length, (int index) {
+          return _Game(
+            game: games.get(index),
+            color: index.isEven
+                ? Theme.of(context).colorScheme.surfaceContainerLow
+                : Theme.of(context).colorScheme.surfaceContainerHigh,
+          );
+        }),
+      ],
+    );
+  }
+}
+
+class _Game extends StatelessWidget {
+  const _Game({
+    required this.game,
+    required this.color,
+  });
+
+  final Game game;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    const widthResultBox = 50.0;
+    const paddingResultBox = EdgeInsets.all(5);
+
+    return Container(
+      padding: const EdgeInsets.all(6.0),
+      color: color,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(game.white.rating.toString()),
+                  Text(game.black.rating.toString()),
+                ],
+              ),
+              const SizedBox(width: 10),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(game.white.name),
+                  Text(game.black.name),
+                ],
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              if (game.winner == 'white')
+                Container(
+                  width: widthResultBox,
+                  padding: paddingResultBox,
+                  color: Colors.white,
+                  child: const Text(
+                    '1-0',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
+                )
+              else if (game.winner == 'black')
+                Container(
+                  width: widthResultBox,
+                  padding: paddingResultBox,
+                  color: Colors.black,
+                  child: const Text(
+                    '0-1',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                )
+              else
+                Container(
+                  width: widthResultBox,
+                  padding: paddingResultBox,
+                  color: Colors.grey,
+                  child: const Text(
+                    '½-½',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              if (game.month != null) ...[
+                const SizedBox(width: 10.0),
+                Text(game.month!),
+              ],
+              if (game.speed != null) ...[
+                const SizedBox(width: 10.0),
+                Icon(game.speed!.icon),
+              ],
+            ],
+          ),
+        ],
       ),
     );
   }

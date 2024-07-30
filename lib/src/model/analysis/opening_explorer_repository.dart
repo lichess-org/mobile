@@ -1,19 +1,47 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/model/analysis/opening_explorer.dart';
+import 'package:lichess_mobile/src/model/analysis/opening_explorer_preferences.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
+import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'opening_explorer_repository.g.dart';
 
 @riverpod
-Future<OpeningExplorer> masterDatabase(
-  MasterDatabaseRef ref, {
+Future<MasterOpeningExplorer> masterOpeningDatabase(
+  MasterOpeningDatabaseRef ref, {
   required String fen,
-  int? sinceYear,
-  int? untilYear,
 }) async {
+  final prefs = ref.watch(
+    openingExplorerPreferencesProvider.select(
+      (state) => state.masterDb,
+    ),
+  );
   return ref.withClient(
-    (client) => OpeningExplorerRepository(client)
-        .getMasterDatabase(fen, since: sinceYear, until: untilYear),
+    (client) => OpeningExplorerRepository(client).getMasterDatabase(
+      fen,
+      since: prefs.sinceYear,
+      until: prefs.untilYear,
+    ),
+  );
+}
+
+@riverpod
+Future<LichessOpeningExplorer> lichessOpeningDatabase(
+  LichessOpeningDatabaseRef ref, {
+  required String fen,
+}) async {
+  final prefs = ref.watch(
+    openingExplorerPreferencesProvider.select(
+      (state) => state.lichessDb,
+    ),
+  );
+  return ref.withClient(
+    (client) => OpeningExplorerRepository(client).getLichessDatabase(
+      fen,
+      speeds: prefs.speeds,
+      ratings: prefs.ratings,
+    ),
   );
 }
 
@@ -22,7 +50,7 @@ class OpeningExplorerRepository {
 
   final LichessClient client;
 
-  Future<OpeningExplorer> getMasterDatabase(
+  Future<MasterOpeningExplorer> getMasterDatabase(
     String fen, {
     int? since,
     int? until,
@@ -36,7 +64,30 @@ class OpeningExplorerRepository {
           if (until != null) 'until': until.toString(),
         },
       ),
-      mapper: OpeningExplorer.fromJson,
+      mapper: MasterOpeningExplorer.fromJson,
+    );
+  }
+
+  Future<LichessOpeningExplorer> getLichessDatabase(
+    String fen, {
+    required ISet<Perf> speeds,
+    required ISet<int> ratings,
+    String? since,
+    String? until,
+  }) {
+    return client.readJson(
+      Uri(
+        path: '/lichess',
+        queryParameters: {
+          'fen': fen,
+          if (speeds.isNotEmpty)
+            'speeds': speeds.map((speed) => speed.name).join(','),
+          if (ratings.isNotEmpty) 'ratings': ratings.join(','),
+          if (since != null) 'since': since,
+          if (until != null) 'until': until,
+        },
+      ),
+      mapper: LichessOpeningExplorer.fromJson,
     );
   }
 }

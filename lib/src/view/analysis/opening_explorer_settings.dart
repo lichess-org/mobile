@@ -53,13 +53,6 @@ class OpeningExplorerSettings extends ConsumerWidget {
                       .read(openingExplorerPreferencesProvider.notifier)
                       .setDatabase(OpeningDatabase.lichess),
                 ),
-                ChoiceChip(
-                  label: Text(context.l10n.player),
-                  selected: prefs.db == OpeningDatabase.player,
-                  onSelected: (value) => ref
-                      .read(openingExplorerPreferencesProvider.notifier)
-                      .setDatabase(OpeningDatabase.player),
-                ),
               ],
             ),
           ),
@@ -114,6 +107,47 @@ class OpeningExplorerSettings extends ConsumerWidget {
                 onChangeEnd: (value) => ref
                     .read(openingExplorerPreferencesProvider.notifier)
                     .setMasterDbUntil(value.toInt()),
+              ),
+            ),
+          ] else if (prefs.db == OpeningDatabase.lichess) ...[
+            PlatformListTile(
+              title: Text(context.l10n.timeControl),
+              subtitle: Wrap(
+                spacing: 5,
+                children: LichessDbPrefState.availableSpeeds
+                    .map(
+                      (speed) => FilterChip(
+                        label: Icon(speed.icon),
+                        tooltip: speed.title,
+                        selected: prefs.lichessDb.speeds.contains(speed),
+                        onSelected: (value) => ref
+                            .read(openingExplorerPreferencesProvider.notifier)
+                            .toggleLichessDbSpeed(speed),
+                      ),
+                    )
+                    .toList(growable: false),
+              ),
+            ),
+            PlatformListTile(
+              title: Text(context.l10n.rating),
+              subtitle: Wrap(
+                spacing: 5,
+                children: LichessDbPrefState.availableRatings
+                    .map(
+                      (rating) => FilterChip(
+                        label: Text(rating.toString()),
+                        tooltip: rating == 0
+                            ? '0-1000'
+                            : rating == 2500
+                                ? '2500+'
+                                : '$rating-${rating + 200}',
+                        selected: prefs.lichessDb.ratings.contains(rating),
+                        onSelected: (value) => ref
+                            .read(openingExplorerPreferencesProvider.notifier)
+                            .toggleLichessDbRating(rating),
+                      ),
+                    )
+                    .toList(growable: false),
               ),
             ),
           ],
