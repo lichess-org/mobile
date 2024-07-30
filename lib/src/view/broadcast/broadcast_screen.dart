@@ -305,6 +305,10 @@ class _ClockState extends State<_Clock> {
   void initState() {
     super.initState();
     _clock = widget.clock;
+    if (_clock.inSeconds <= 0) {
+      _clock = Duration.zero;
+      return;
+    }
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
         _clock = _clock - const Duration(seconds: 1);
