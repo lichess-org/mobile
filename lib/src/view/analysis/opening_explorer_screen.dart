@@ -8,8 +8,6 @@ import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/opening_explorer_repository.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -18,7 +16,6 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_share_screen.dart';
-import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
@@ -257,8 +254,7 @@ class _OpeningExplorer extends ConsumerWidget {
           children: [
             if (opening != null)
               Container(
-                padding:
-                    const EdgeInsets.only(left: rowHorizontalPadding),
+                padding: const EdgeInsets.only(left: rowHorizontalPadding),
                 color: primaryColor,
                 child: Row(
                   children: [
@@ -269,7 +265,6 @@ class _OpeningExplorer extends ConsumerWidget {
                   ],
                 ),
               ),
-
             if (masterDatabase.moves.isEmpty)
               const Expanded(
                 child: Align(
