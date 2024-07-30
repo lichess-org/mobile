@@ -46,7 +46,7 @@ class BroadcastRound with _$BroadcastRound {
   }) = _BroadcastRound;
 }
 
-typedef BroadcastMapGames = IMap<BroadcastGameId, BroadcastGameSnapshot>;
+typedef BroadcastRoundGames = IMap<BroadcastGameId, BroadcastGameSnapshot>;
 
 @freezed
 class BroadcastGameSnapshot with _$BroadcastGameSnapshot {

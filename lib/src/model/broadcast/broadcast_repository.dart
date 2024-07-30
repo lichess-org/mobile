@@ -23,7 +23,7 @@ class BroadcastRepository {
     );
   }
 
-  Future<BroadcastMapGames> getRound(
+  Future<BroadcastRoundGames> getRound(
     BroadcastRoundId broadcastRoundId,
   ) {
     return client.readJson(
@@ -76,10 +76,10 @@ Broadcast _broadcastFromPick(RequiredPick pick) {
   );
 }
 
-BroadcastMapGames _makeGamesFromJson(Map<String, dynamic> json) =>
+BroadcastRoundGames _makeGamesFromJson(Map<String, dynamic> json) =>
     _gamesFromPick(pick(json).required());
 
-BroadcastMapGames _gamesFromPick(
+BroadcastRoundGames _gamesFromPick(
   RequiredPick pick,
 ) =>
     IMap.fromEntries(pick('games').asListOrThrow(gameFromPick));

@@ -60,7 +60,7 @@ void main() {
 
       final response = await repo.getRound(const BroadcastRoundId(roundId));
 
-      expect(response, isA<BroadcastMapGames>());
+      expect(response, isA<BroadcastRoundGames>());
       expect(response.length, 5);
     });
   });

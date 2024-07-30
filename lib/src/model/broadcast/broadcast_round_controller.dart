@@ -12,10 +12,10 @@ import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'broadcast_controller.g.dart';
+part 'broadcast_round_controller.g.dart';
 
 @riverpod
-class BroadcastController extends _$BroadcastController {
+class BroadcastRoundController extends _$BroadcastRoundController {
   static Uri broadcastSocketUri(BroadcastRoundId broadcastRoundId) =>
       Uri(path: 'study/$broadcastRoundId/socket/v6');
 
@@ -24,10 +24,10 @@ class BroadcastController extends _$BroadcastController {
   late SocketClient _socketClient;
 
   @override
-  Future<BroadcastMapGames> build(BroadcastRoundId broadcastRoundId) async {
+  Future<BroadcastRoundGames> build(BroadcastRoundId broadcastRoundId) async {
     _socketClient = ref
         .read(socketPoolProvider)
-        .open(BroadcastController.broadcastSocketUri(broadcastRoundId));
+        .open(BroadcastRoundController.broadcastSocketUri(broadcastRoundId));
 
     _subscription = _socketClient.stream.listen(_handleSocketEvent);
 
@@ -57,12 +57,14 @@ class BroadcastController extends _$BroadcastController {
   }
 
   void _handleAddNodeEvent(SocketEvent event) {
-    final relayPath = pick(event.data, 'p', 'relayPath').asUciPathOrThrow();
+    // The path of the last and current move of the broadcasted game
+    final currentPath = pick(event.data, 'p', 'relayPath').asUciPathOrThrow();
+    // The path for the node that was received
     final path = pick(event.data, 'd', 'p', 'path').asUciPathOrThrow();
-    final id = pick(event.data, 'd', 'n', 'id').asUciCharPairOrThrow();
+    final nodeId = pick(event.data, 'd', 'n', 'nodeId').asUciCharPairOrThrow();
 
     // We check that the event we received is for the last move of the game
-    if (relayPath != path + id) return;
+    if (currentPath != path + nodeId) return;
 
     final broadcastGameId =
         pick(event.data, 'p', 'chapterId').asBroadcastGameIdOrThrow();
