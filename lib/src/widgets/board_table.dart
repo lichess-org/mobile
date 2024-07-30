@@ -146,27 +146,17 @@ class _BoardTableState extends ConsumerState<BoardTable> {
               )
             : null;
 
-        final defaultSettings = BoardSettings(
-          pieceAssets: boardPrefs.pieceSet.assets,
-          colorScheme: boardPrefs.boardTheme.colors,
-          showValidMoves: boardPrefs.showLegalMoves,
-          showLastMove: boardPrefs.boardHighlights,
-          enableCoordinates: boardPrefs.coordinates,
-          animationDuration: boardPrefs.pieceAnimationDuration,
-          dragFeedbackSize: boardPrefs.magnifyDraggedPiece ? 2.0 : 1.0,
-          dragFeedbackOffset:
-              Offset(0.0, boardPrefs.magnifyDraggedPiece ? -1.0 : 0.0),
-          borderRadius: isTablet
-              ? const BorderRadius.all(Radius.circular(4.0))
-              : BorderRadius.zero,
-          boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
-          drawShape: DrawShapeOptions(
-            enable: boardPrefs.enableShapeDrawings,
-            onCompleteShape: _onCompleteShape,
-            onClearShapes: _onClearShapes,
-          ),
-          pieceShiftMethod: boardPrefs.pieceShiftMethod,
-        );
+        final defaultSettings = boardPrefs.toBoardSettings().copyWith(
+              borderRadius: isTablet
+                  ? const BorderRadius.all(Radius.circular(4.0))
+                  : BorderRadius.zero,
+              boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
+              drawShape: DrawShapeOptions(
+                enable: boardPrefs.enableShapeDrawings,
+                onCompleteShape: _onCompleteShape,
+                onClearShapes: _onClearShapes,
+              ),
+            );
 
         final settings = widget.boardSettingsOverrides != null
             ? widget.boardSettingsOverrides!.merge(defaultSettings)

@@ -135,6 +135,23 @@ class BoardPrefs with _$BoardPrefs {
     magnifyDraggedPiece: true,
   );
 
+  BoardSettings toBoardSettings() {
+    return BoardSettings(
+      pieceAssets: pieceSet.assets,
+      colorScheme: boardTheme.colors,
+      showValidMoves: showLegalMoves,
+      showLastMove: boardHighlights,
+      enableCoordinates: coordinates,
+      animationDuration: pieceAnimationDuration,
+      dragFeedbackSize: magnifyDraggedPiece ? 2.0 : 1.0,
+      dragFeedbackOffset: Offset(0.0, magnifyDraggedPiece ? -1.0 : 0.0),
+      pieceShiftMethod: pieceShiftMethod,
+      drawShape: DrawShapeOptions(
+        enable: enableShapeDrawings,
+      ),
+    );
+  }
+
   factory BoardPrefs.fromJson(Map<String, dynamic> json) {
     try {
       return _$BoardPrefsFromJson(json);
