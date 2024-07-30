@@ -203,6 +203,8 @@ class _OpeningExplorer extends ConsumerWidget {
   final String pgn;
   final AnalysisOptions options;
 
+  String formatNum(int num) => NumberFormat.decimalPatternDigits().format(num);
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = analysisControllerProvider(pgn, options);
@@ -338,8 +340,9 @@ class _OpeningExplorer extends ConsumerWidget {
                                       .onUserMove(Move.fromUci(move.uci)!),
                                   child: Container(
                                     padding: rowPadding,
-                                    child: Text(
-                                      '$percentGames% / ${formatNum(move.games)}',
+                                    child: Tooltip(
+                                      message: '$percentGames%',
+                                      child: Text(formatNum(move.games)),
                                     ),
                                   ),
                                 ),
@@ -378,8 +381,9 @@ class _OpeningExplorer extends ConsumerWidget {
                             ),
                             Container(
                               padding: rowPadding,
-                              child: Text(
-                                '100% / ${formatNum(masterDatabase.games)}',
+                              child: Tooltip(
+                                message: '100%',
+                                child: Text(formatNum(masterDatabase.games)),
                               ),
                             ),
                             Container(
@@ -500,20 +504,20 @@ class _OpeningExplorer extends ConsumerWidget {
       ),
     );
   }
-
-  String formatNum(int num) => NumberFormat.decimalPatternDigits().format(num);
 }
 
 class _WinPercentageChart extends StatelessWidget {
-  final int white;
-  final int draws;
-  final int black;
-
   const _WinPercentageChart({
     required this.white,
     required this.draws,
     required this.black,
   });
+
+  final int white;
+  final int draws;
+  final int black;
+
+  String label(int percent) => percent < 20 ? '' : '$percent%';
 
   @override
   Widget build(BuildContext context) {
@@ -523,7 +527,6 @@ class _WinPercentageChart extends StatelessWidget {
     final percentWhite = percentGames(white);
     final percentDraws = percentGames(draws);
     final percentBlack = percentGames(black);
-    String label(int percent) => percent < 20 ? '' : '$percent%';
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(5),
