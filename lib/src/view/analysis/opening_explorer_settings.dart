@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/model/analysis/opening_explorer_preferences.d
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 
 class OpeningExplorerSettings extends ConsumerWidget {
   const OpeningExplorerSettings(this.pgn, this.options);
@@ -14,11 +15,10 @@ class OpeningExplorerSettings extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final openingDatabase = ref.watch(
-      openingExplorerPreferencesProvider.select(
-        (state) => state.db,
-      ),
-    );
+    final prefs = ref.watch(openingExplorerPreferencesProvider);
+
+    const earliestYear = 1952;
+    final years = DateTime.now().year - earliestYear + 1;
 
     return DraggableScrollableSheet(
       initialChildSize: .7,
@@ -41,21 +41,21 @@ class OpeningExplorerSettings extends ConsumerWidget {
               children: [
                 ChoiceChip(
                   label: const Text('Masters'),
-                  selected: openingDatabase == OpeningDatabase.master,
+                  selected: prefs.db == OpeningDatabase.master,
                   onSelected: (value) => ref
                       .read(openingExplorerPreferencesProvider.notifier)
                       .setDatabase(OpeningDatabase.master),
                 ),
                 ChoiceChip(
                   label: const Text('Lichess'),
-                  selected: openingDatabase == OpeningDatabase.lichess,
+                  selected: prefs.db == OpeningDatabase.lichess,
                   onSelected: (value) => ref
                       .read(openingExplorerPreferencesProvider.notifier)
                       .setDatabase(OpeningDatabase.lichess),
                 ),
                 ChoiceChip(
                   label: Text(context.l10n.player),
-                  selected: openingDatabase == OpeningDatabase.player,
+                  selected: prefs.db == OpeningDatabase.player,
                   onSelected: (value) => ref
                       .read(openingExplorerPreferencesProvider.notifier)
                       .setDatabase(OpeningDatabase.player),
@@ -63,6 +63,60 @@ class OpeningExplorerSettings extends ConsumerWidget {
               ],
             ),
           ),
+          if (prefs.db == OpeningDatabase.master) ...[
+            PlatformListTile(
+              title: Text.rich(
+                TextSpan(
+                  text: '${context.l10n.since}: ',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.normal,
+                  ),
+                  children: [
+                    TextSpan(
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                      text: prefs.masterDb.sinceYear.toString(),
+                    ),
+                  ],
+                ),
+              ),
+              subtitle: NonLinearSlider(
+                value: prefs.masterDb.sinceYear,
+                values: List.generate(years, (index) => earliestYear + index),
+                onChangeEnd: (value) => ref
+                    .read(openingExplorerPreferencesProvider.notifier)
+                    .setMasterDbSince(value.toInt()),
+              ),
+            ),
+            PlatformListTile(
+              title: Text.rich(
+                TextSpan(
+                  text: '${context.l10n.until}: ',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.normal,
+                  ),
+                  children: [
+                    TextSpan(
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                      text: prefs.masterDb.untilYear.toString(),
+                    ),
+                  ],
+                ),
+              ),
+              subtitle: NonLinearSlider(
+                value: prefs.masterDb.untilYear,
+                values: List.generate(years, (index) => earliestYear + index),
+                onChangeEnd: (value) => ref
+                    .read(openingExplorerPreferencesProvider.notifier)
+                    .setMasterDbUntil(value.toInt()),
+              ),
+            ),
+          ],
         ],
       ),
     );

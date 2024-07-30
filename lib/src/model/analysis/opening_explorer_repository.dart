@@ -8,9 +8,12 @@ part 'opening_explorer_repository.g.dart';
 Future<OpeningExplorer> masterDatabase(
   MasterDatabaseRef ref, {
   required String fen,
+  int? sinceYear,
+  int? untilYear,
 }) async {
   return ref.withClient(
-    (client) => OpeningExplorerRepository(client).getMasterDatabase(fen),
+    (client) => OpeningExplorerRepository(client)
+        .getMasterDatabase(fen, since: sinceYear, until: untilYear),
   );
 }
 
@@ -19,9 +22,20 @@ class OpeningExplorerRepository {
 
   final LichessClient client;
 
-  Future<OpeningExplorer> getMasterDatabase(String fen) {
+  Future<OpeningExplorer> getMasterDatabase(
+    String fen, {
+    int? since,
+    int? until,
+  }) {
     return client.readJson(
-      Uri(path: '/masters', queryParameters: {'fen': fen}),
+      Uri(
+        path: '/masters',
+        queryParameters: {
+          'fen': fen,
+          if (since != null) 'since': since.toString(),
+          if (until != null) 'until': until.toString(),
+        },
+      ),
       mapper: OpeningExplorer.fromJson,
     );
   }

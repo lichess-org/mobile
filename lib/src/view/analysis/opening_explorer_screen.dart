@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/analysis/opening_explorer_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/opening_explorer_repository.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
@@ -245,8 +246,14 @@ class _OpeningExplorer extends ConsumerWidget {
           )
         : nodeOpening ?? branchOpening ?? contextOpening;
 
-    final masterDatabaseAsync =
-        ref.watch(masterDatabaseProvider(fen: position.fen));
+    final prefs = ref.watch(openingExplorerPreferencesProvider);
+    final masterDatabaseAsync = ref.watch(
+      masterDatabaseProvider(
+        fen: position.fen,
+        sinceYear: prefs.masterDb.sinceYear,
+        untilYear: prefs.masterDb.untilYear,
+      ),
+    );
 
     return masterDatabaseAsync.when(
       data: (masterDatabase) {
