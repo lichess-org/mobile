@@ -263,15 +263,7 @@ class _MasterOpeningExplorer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final primaryColor = Theme.of(context).platform == TargetPlatform.iOS
-        ? CupertinoDynamicColor.resolve(
-            CupertinoColors.systemGrey5,
-            context,
-          )
-        : Theme.of(context).colorScheme.secondaryContainer;
-
     final position = ref.watch(ctrlProvider.select((value) => value.position));
-
     final masterDbAsync = ref.watch(
       masterOpeningDatabaseProvider(
         fen: position.fen,
@@ -282,19 +274,6 @@ class _MasterOpeningExplorer extends ConsumerWidget {
       data: (masterDb) {
         return Column(
           children: [
-            if (opening != null)
-              Container(
-                padding: const EdgeInsets.only(left: 6.0),
-                color: primaryColor,
-                child: Row(
-                  children: [
-                    if (opening!.eco.isEmpty)
-                      Text(opening!.name)
-                    else
-                      Text('${opening!.eco} ${opening!.name}'),
-                  ],
-                ),
-              ),
             if (masterDb.moves.isEmpty)
               const Expanded(
                 child: Align(
@@ -309,6 +288,8 @@ class _MasterOpeningExplorer extends ConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      if (opening != null)
+                        _Opening(opening: opening!),
                       _MoveTable(
                         moves: masterDb.moves,
                         whiteWins: masterDb.white,
@@ -318,9 +299,7 @@ class _MasterOpeningExplorer extends ConsumerWidget {
                       ),
                       _GameList(
                         title: context.l10n.topGames,
-                        games: masterDb.topGames
-                            .map((g) => Game.fromTopGame(g))
-                            .toIList(),
+                        games: masterDb.topGames,
                       ),
                     ],
                   ),
@@ -350,15 +329,7 @@ class _LichessOpeningExplorer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final primaryColor = Theme.of(context).platform == TargetPlatform.iOS
-        ? CupertinoDynamicColor.resolve(
-            CupertinoColors.systemGrey5,
-            context,
-          )
-        : Theme.of(context).colorScheme.secondaryContainer;
-
     final position = ref.watch(ctrlProvider.select((value) => value.position));
-
     final lichessDbAsync = ref.watch(
       lichessOpeningDatabaseProvider(
         fen: position.fen,
@@ -369,19 +340,6 @@ class _LichessOpeningExplorer extends ConsumerWidget {
       data: (lichessDb) {
         return Column(
           children: [
-            if (opening != null)
-              Container(
-                padding: const EdgeInsets.only(left: 6.0),
-                color: primaryColor,
-                child: Row(
-                  children: [
-                    if (opening!.eco.isEmpty)
-                      Text(opening!.name)
-                    else
-                      Text('${opening!.eco} ${opening!.name}'),
-                  ],
-                ),
-              ),
             if (lichessDb.moves.isEmpty)
               const Expanded(
                 child: Align(
@@ -396,6 +354,8 @@ class _LichessOpeningExplorer extends ConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      if (opening != null)
+                        _Opening(opening: opening!),
                       _MoveTable(
                         moves: lichessDb.moves,
                         whiteWins: lichessDb.white,
@@ -405,9 +365,7 @@ class _LichessOpeningExplorer extends ConsumerWidget {
                       ),
                       _GameList(
                         title: context.l10n.recentGames,
-                        games: lichessDb.recentGames
-                            .map((g) => Game.fromRecentGame(g))
-                            .toIList(),
+                        games: lichessDb.recentGames,
                       ),
                     ],
                   ),
@@ -421,6 +379,27 @@ class _LichessOpeningExplorer extends ConsumerWidget {
       ),
       error: (error, stackTrace) => Center(
         child: Text(error.toString()),
+      ),
+    );
+  }
+}
+
+class _Opening extends StatelessWidget {
+  const _Opening({required this.opening});
+
+  final Opening opening;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(left: 6.0),
+      color: Theme.of(context).colorScheme.primaryContainer,
+      child: Row(
+        children: [
+          if (opening.eco.isEmpty)
+            Text(opening.name)
+          else
+            Text('${opening.eco} ${opening.name}'),
+        ],
       ),
     );
   }
@@ -445,14 +424,7 @@ class _MoveTable extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final primaryColor = Theme.of(context).platform == TargetPlatform.iOS
-        ? CupertinoDynamicColor.resolve(
-            CupertinoColors.systemGrey5,
-            context,
-          )
-        : Theme.of(context).colorScheme.secondaryContainer;
     const rowPadding = EdgeInsets.all(6.0);
-
     final games = whiteWins + draws + blackWins;
 
     return Table(
@@ -464,7 +436,7 @@ class _MoveTable extends ConsumerWidget {
       children: [
         TableRow(
           decoration: BoxDecoration(
-            color: primaryColor,
+            color: Theme.of(context).colorScheme.primaryContainer,
           ),
           children: [
             Container(
@@ -521,9 +493,9 @@ class _MoveTable extends ConsumerWidget {
                   child: Container(
                     padding: rowPadding,
                     child: _WinPercentageChart(
-                      white: move.white,
+                      whiteWins: move.white,
                       draws: move.draws,
-                      black: move.black,
+                      blackWins: move.black,
                     ),
                   ),
                 ),
@@ -553,9 +525,9 @@ class _MoveTable extends ConsumerWidget {
             Container(
               padding: rowPadding,
               child: _WinPercentageChart(
-                white: whiteWins,
+                whiteWins: whiteWins,
                 draws: draws,
-                black: blackWins,
+                blackWins: blackWins,
               ),
             ),
           ],
@@ -576,18 +548,11 @@ class _GameList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final primaryColor = Theme.of(context).platform == TargetPlatform.iOS
-        ? CupertinoDynamicColor.resolve(
-            CupertinoColors.systemGrey5,
-            context,
-          )
-        : Theme.of(context).colorScheme.secondaryContainer;
-
     return Column(
       children: [
         Container(
           padding: const EdgeInsets.all(6.0),
-          color: primaryColor,
+          color: Theme.of(context).colorScheme.primaryContainer,
           child: Row(
             children: [
               Text(title),
@@ -705,25 +670,24 @@ class _Game extends StatelessWidget {
 
 class _WinPercentageChart extends StatelessWidget {
   const _WinPercentageChart({
-    required this.white,
+    required this.whiteWins,
     required this.draws,
-    required this.black,
+    required this.blackWins,
   });
 
-  final int white;
+  final int whiteWins;
   final int draws;
-  final int black;
+  final int blackWins;
 
+  int percentGames(int games) =>
+      ((games / (whiteWins + draws + blackWins)) * 100).round();
   String label(int percent) => percent < 20 ? '' : '$percent%';
 
   @override
   Widget build(BuildContext context) {
-    int percentGames(int games) =>
-        ((games / (white + draws + black)) * 100).round();
-
-    final percentWhite = percentGames(white);
+    final percentWhite = percentGames(whiteWins);
     final percentDraws = percentGames(draws);
-    final percentBlack = percentGames(black);
+    final percentBlack = percentGames(blackWins);
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(5),
