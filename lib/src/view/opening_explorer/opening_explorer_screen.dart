@@ -8,8 +8,11 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer.dart';
+import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer_preferences.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer_repository.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -19,6 +22,7 @@ import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_board.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_share_screen.dart';
+import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
@@ -481,7 +485,7 @@ class _GameList extends StatelessWidget {
   }
 }
 
-class _GameTile extends StatelessWidget {
+class _GameTile extends ConsumerWidget {
   const _GameTile({
     required this.game,
     required this.color,
@@ -491,87 +495,110 @@ class _GameTile extends StatelessWidget {
   final Color color;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     const widthResultBox = 50.0;
     const paddingResultBox = EdgeInsets.all(5);
+
+    final openingDb = ref.watch(openingExplorerPreferencesProvider).db;
 
     return Container(
       padding: const EdgeInsets.all(6.0),
       color: color,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(game.white.rating.toString()),
-                  Text(game.black.rating.toString()),
-                ],
-              ),
-              const SizedBox(width: 10),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(game.white.name),
-                  Text(game.black.name),
-                ],
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              if (game.winner == 'white')
-                Container(
-                  width: widthResultBox,
-                  padding: paddingResultBox,
-                  color: Colors.white,
-                  child: const Text(
-                    '1-0',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.black,
-                    ),
+      child: AdaptiveInkWell(
+        onTap: () async {
+          switch (openingDb) {
+            case OpeningDatabase.master:
+              return;
+            case OpeningDatabase.lichess:
+              final archivedGame = await ref.read(
+                archivedGameProvider(id: GameId(game.id)).future,
+              );
+              if (context.mounted) {
+                pushPlatformRoute(
+                  context,
+                  builder: (_) => ArchivedGameScreen(
+                    gameData: archivedGame.data,
+                    orientation: Side.white,
                   ),
-                )
-              else if (game.winner == 'black')
-                Container(
-                  width: widthResultBox,
-                  padding: paddingResultBox,
-                  color: Colors.black,
-                  child: const Text(
-                    '0-1',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                )
-              else
-                Container(
-                  width: widthResultBox,
-                  padding: paddingResultBox,
-                  color: Colors.grey,
-                  child: const Text(
-                    '½-½',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
+                );
+              }
+          }
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(game.white.rating.toString()),
+                    Text(game.black.rating.toString()),
+                  ],
                 ),
-              if (game.month != null) ...[
-                const SizedBox(width: 10.0),
-                Text(game.month!),
+                const SizedBox(width: 10),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(game.white.name),
+                    Text(game.black.name),
+                  ],
+                ),
               ],
-              if (game.speed != null) ...[
-                const SizedBox(width: 10.0),
-                Icon(game.speed!.icon),
+            ),
+            Row(
+              children: [
+                if (game.winner == 'white')
+                  Container(
+                    width: widthResultBox,
+                    padding: paddingResultBox,
+                    color: Colors.white,
+                    child: const Text(
+                      '1-0',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
+                  )
+                else if (game.winner == 'black')
+                  Container(
+                    width: widthResultBox,
+                    padding: paddingResultBox,
+                    color: Colors.black,
+                    child: const Text(
+                      '0-1',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  )
+                else
+                  Container(
+                    width: widthResultBox,
+                    padding: paddingResultBox,
+                    color: Colors.grey,
+                    child: const Text(
+                      '½-½',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                if (game.month != null) ...[
+                  const SizedBox(width: 10.0),
+                  Text(game.month!),
+                ],
+                if (game.speed != null) ...[
+                  const SizedBox(width: 10.0),
+                  Icon(game.speed!.icon),
+                ],
               ],
-            ],
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }
