@@ -8,37 +8,21 @@ part 'opening_explorer.freezed.dart';
 part 'opening_explorer.g.dart';
 
 @Freezed(fromJson: true)
-class MasterOpeningExplorer with _$MasterOpeningExplorer {
-  const MasterOpeningExplorer._();
+class OpeningExplorer with _$OpeningExplorer {
+  const OpeningExplorer._();
 
-  const factory MasterOpeningExplorer({
+  const factory OpeningExplorer({
     LightOpening? opening,
     required int white,
     required int draws,
     required int black,
     required IList<OpeningMove> moves,
-    required IList<Game> topGames,
-  }) = _MasterOpeningExplorer;
+    IList<Game>? topGames,
+    IList<Game>? recentGames,
+  }) = _OpeningExplorer;
 
-  factory MasterOpeningExplorer.fromJson(Map<String, Object?> json) =>
-      _$MasterOpeningExplorerFromJson(json);
-}
-
-@Freezed(fromJson: true)
-class LichessOpeningExplorer with _$LichessOpeningExplorer {
-  const LichessOpeningExplorer._();
-
-  const factory LichessOpeningExplorer({
-    LightOpening? opening,
-    required int white,
-    required int draws,
-    required int black,
-    required IList<OpeningMove> moves,
-    required IList<Game> recentGames,
-  }) = _LichessOpeningExplorer;
-
-  factory LichessOpeningExplorer.fromJson(Map<String, Object?> json) =>
-      _$LichessOpeningExplorerFromJson(json);
+  factory OpeningExplorer.fromJson(Map<String, Object?> json) =>
+      _$OpeningExplorerFromJson(json);
 }
 
 @Freezed(fromJson: true)

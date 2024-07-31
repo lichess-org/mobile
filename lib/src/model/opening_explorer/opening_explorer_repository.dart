@@ -8,42 +8,28 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'opening_explorer_repository.g.dart';
 
 @riverpod
-Future<MasterOpeningExplorer> masterOpeningDatabase(
-  MasterOpeningDatabaseRef ref, {
+Future<OpeningExplorer> openingExplorer(
+  OpeningExplorerRef ref, {
   required String fen,
 }) async {
-  final prefs = ref.watch(
-    openingExplorerPreferencesProvider.select(
-      (state) => state.masterDb,
-    ),
-  );
+  final prefs = ref.watch(openingExplorerPreferencesProvider);
   return ref.withClient(
-    (client) => OpeningExplorerRepository(client).getMasterDatabase(
-      fen,
-      since: prefs.sinceYear,
-      until: prefs.untilYear,
-    ),
-  );
-}
-
-@riverpod
-Future<LichessOpeningExplorer> lichessOpeningDatabase(
-  LichessOpeningDatabaseRef ref, {
-  required String fen,
-}) async {
-  final prefs = ref.watch(
-    openingExplorerPreferencesProvider.select(
-      (state) => state.lichessDb,
-    ),
-  );
-  return ref.withClient(
-    (client) => OpeningExplorerRepository(client).getLichessDatabase(
-      fen,
-      speeds: prefs.speeds,
-      ratings: prefs.ratings,
-      since: prefs.since,
-      until: prefs.until,
-    ),
+    (client) => switch (prefs.db) {
+      OpeningDatabase.master =>
+        OpeningExplorerRepository(client).getMasterDatabase(
+          fen,
+          since: prefs.masterDb.sinceYear,
+          until: prefs.masterDb.untilYear,
+        ),
+      OpeningDatabase.lichess =>
+        OpeningExplorerRepository(client).getLichessDatabase(
+          fen,
+          speeds: prefs.lichessDb.speeds,
+          ratings: prefs.lichessDb.ratings,
+          since: prefs.lichessDb.since,
+          until: prefs.lichessDb.until,
+        ),
+    },
   );
 }
 
@@ -52,7 +38,7 @@ class OpeningExplorerRepository {
 
   final LichessClient client;
 
-  Future<MasterOpeningExplorer> getMasterDatabase(
+  Future<OpeningExplorer> getMasterDatabase(
     String fen, {
     int? since,
     int? until,
@@ -66,11 +52,11 @@ class OpeningExplorerRepository {
           if (until != null) 'until': until.toString(),
         },
       ),
-      mapper: MasterOpeningExplorer.fromJson,
+      mapper: OpeningExplorer.fromJson,
     );
   }
 
-  Future<LichessOpeningExplorer> getLichessDatabase(
+  Future<OpeningExplorer> getLichessDatabase(
     String fen, {
     required ISet<Perf> speeds,
     required ISet<int> ratings,
@@ -89,7 +75,7 @@ class OpeningExplorerRepository {
           if (until != null) 'until': '${until.year}-${until.month}',
         },
       ),
-      mapper: LichessOpeningExplorer.fromJson,
+      mapper: OpeningExplorer.fromJson,
     );
   }
 }

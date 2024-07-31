@@ -10,7 +10,6 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer.dart';
-import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer_preferences.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer_repository.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -233,48 +232,17 @@ class _OpeningExplorer extends ConsumerWidget {
           )
         : nodeOpening ?? branchOpening ?? contextOpening;
 
-    final openingDb = ref.watch(
-      openingExplorerPreferencesProvider.select(
-        (state) => state.db,
-      ),
-    );
-
-    return switch (openingDb) {
-      OpeningDatabase.master => _MasterOpeningExplorer(
-          ctrlProvider: ctrlProvider,
-          opening: opening,
-        ),
-      OpeningDatabase.lichess => _LichessOpeningExplorer(
-          ctrlProvider: ctrlProvider,
-          opening: opening,
-        ),
-    };
-  }
-}
-
-class _MasterOpeningExplorer extends ConsumerWidget {
-  const _MasterOpeningExplorer({
-    required this.ctrlProvider,
-    required this.opening,
-  });
-
-  final AnalysisControllerProvider ctrlProvider;
-  final Opening? opening;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final position = ref.watch(ctrlProvider.select((value) => value.position));
-    final masterDbAsync = ref.watch(
-      masterOpeningDatabaseProvider(
+    final openingExplorerAsync = ref.watch(
+      openingExplorerProvider(
         fen: position.fen,
       ),
     );
 
-    return masterDbAsync.when(
-      data: (masterDb) {
+    return openingExplorerAsync.when(
+      data: (openingExplorer) {
         return Column(
           children: [
-            if (masterDb.moves.isEmpty)
+            if (openingExplorer.moves.isEmpty)
               const Expanded(
                 child: Align(
                   alignment: Alignment.center,
@@ -288,83 +256,26 @@ class _MasterOpeningExplorer extends ConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (opening != null) _Opening(opening: opening!),
+                      if (opening != null) _Opening(opening: opening),
                       _MoveTable(
-                        moves: masterDb.moves,
-                        whiteWins: masterDb.white,
-                        draws: masterDb.draws,
-                        blackWins: masterDb.black,
+                        moves: openingExplorer.moves,
+                        whiteWins: openingExplorer.white,
+                        draws: openingExplorer.draws,
+                        blackWins: openingExplorer.black,
                         ctrlProvider: ctrlProvider,
                       ),
-                      _GameList(
-                        title: context.l10n.topGames,
-                        games: masterDb.topGames,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-          ],
-        );
-      },
-      loading: () => const Center(
-        child: CircularProgressIndicator(),
-      ),
-      error: (error, stackTrace) => Center(
-        child: Text(error.toString()),
-      ),
-    );
-  }
-}
-
-class _LichessOpeningExplorer extends ConsumerWidget {
-  const _LichessOpeningExplorer({
-    required this.ctrlProvider,
-    required this.opening,
-  });
-
-  final AnalysisControllerProvider ctrlProvider;
-  final Opening? opening;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final position = ref.watch(ctrlProvider.select((value) => value.position));
-    final lichessDbAsync = ref.watch(
-      lichessOpeningDatabaseProvider(
-        fen: position.fen,
-      ),
-    );
-
-    return lichessDbAsync.when(
-      data: (lichessDb) {
-        return Column(
-          children: [
-            if (lichessDb.moves.isEmpty)
-              const Expanded(
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Text('No game found'),
-                ),
-              )
-            else
-              Expanded(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (opening != null) _Opening(opening: opening!),
-                      _MoveTable(
-                        moves: lichessDb.moves,
-                        whiteWins: lichessDb.white,
-                        draws: lichessDb.draws,
-                        blackWins: lichessDb.black,
-                        ctrlProvider: ctrlProvider,
-                      ),
-                      _GameList(
-                        title: context.l10n.recentGames,
-                        games: lichessDb.recentGames,
-                      ),
+                      if (openingExplorer.topGames != null &&
+                          openingExplorer.topGames!.isNotEmpty)
+                        _GameList(
+                          title: context.l10n.topGames,
+                          games: openingExplorer.topGames!,
+                        ),
+                      if (openingExplorer.recentGames != null &&
+                          openingExplorer.recentGames!.isNotEmpty)
+                        _GameList(
+                          title: context.l10n.recentGames,
+                          games: openingExplorer.recentGames!,
+                        ),
                     ],
                   ),
                 ),

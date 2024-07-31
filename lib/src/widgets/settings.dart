@@ -339,7 +339,7 @@ class DatePickerSettingsTile extends StatelessWidget {
   final DateTime firstDate;
   final void Function(DateTime) onChanged;
   final bool Function(DateTime)? selectableDayPredicate;
-  
+
   @override
   Widget build(BuildContext context) {
     return PlatformListTile(
