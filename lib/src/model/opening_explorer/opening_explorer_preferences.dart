@@ -55,6 +55,14 @@ class OpeningExplorerPreferences extends _$OpeningExplorerPreferences {
         ),
       );
 
+  Future<void> setLichessDbSince(DateTime since) => _save(
+        state.copyWith(lichessDb: state.lichessDb.copyWith(since: since)),
+      );
+
+  Future<void> setLichessDbUntil(DateTime until) => _save(
+        state.copyWith(lichessDb: state.lichessDb.copyWith(until: until)),
+      );
+
   Future<void> _save(OpeningExplorerPrefState newState) async {
     final prefs = ref.read(sharedPreferencesProvider);
     await prefs.setString(
@@ -104,8 +112,9 @@ class MasterDbPrefState with _$MasterDbPrefState {
     required int untilYear,
   }) = _MasterDbPrefState;
 
+  static const earliestYear = 1952;
   static final defaults = MasterDbPrefState(
-    sinceYear: 1952,
+    sinceYear: earliestYear,
     untilYear: DateTime.now().year,
   );
 
@@ -125,8 +134,8 @@ class LichessDbPrefState with _$LichessDbPrefState {
   const factory LichessDbPrefState({
     required ISet<Perf> speeds,
     required ISet<int> ratings,
-    required String since,
-    required String until,
+    required DateTime since,
+    required DateTime until,
   }) = _LichessDbPrefState;
 
   static const availableSpeeds = ISetConst({
@@ -148,11 +157,12 @@ class LichessDbPrefState with _$LichessDbPrefState {
     2200,
     2500,
   });
+  static final earliestDate = DateTime.parse('2012-12-01');
   static final defaults = LichessDbPrefState(
     speeds: availableSpeeds,
     ratings: availableRatings,
-    since: '1952-01',
-    until: '${DateTime.now().year}-${DateTime.now().month}',
+    since: earliestDate,
+    until: DateTime.now(),
   );
 
   factory LichessDbPrefState.fromJson(Map<String, dynamic> json) {

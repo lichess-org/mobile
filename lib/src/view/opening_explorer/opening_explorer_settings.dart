@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
+import 'package:lichess_mobile/src/widgets/settings.dart';
 
 class OpeningExplorerSettings extends ConsumerWidget {
   const OpeningExplorerSettings(this.pgn, this.options);
@@ -17,8 +18,7 @@ class OpeningExplorerSettings extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final prefs = ref.watch(openingExplorerPreferencesProvider);
 
-    const earliestYear = 1952;
-    final years = DateTime.now().year - earliestYear + 1;
+    final years = DateTime.now().year - MasterDbPrefState.earliestYear + 1;
 
     final List<Widget> masterDbSettings = [
       PlatformListTile(
@@ -41,7 +41,10 @@ class OpeningExplorerSettings extends ConsumerWidget {
         ),
         subtitle: NonLinearSlider(
           value: prefs.masterDb.sinceYear,
-          values: List.generate(years, (index) => earliestYear + index),
+          values: List.generate(
+            years,
+            (index) => MasterDbPrefState.earliestYear + index,
+          ),
           onChangeEnd: (value) => ref
               .read(openingExplorerPreferencesProvider.notifier)
               .setMasterDbSince(value.toInt()),
@@ -67,7 +70,10 @@ class OpeningExplorerSettings extends ConsumerWidget {
         ),
         subtitle: NonLinearSlider(
           value: prefs.masterDb.untilYear,
-          values: List.generate(years, (index) => earliestYear + index),
+          values: List.generate(
+            years,
+            (index) => MasterDbPrefState.earliestYear + index,
+          ),
           onChangeEnd: (value) => ref
               .read(openingExplorerPreferencesProvider.notifier)
               .setMasterDbUntil(value.toInt()),
@@ -116,13 +122,29 @@ class OpeningExplorerSettings extends ConsumerWidget {
               .toList(growable: false),
         ),
       ),
+      DatePickerSettingsTile(
+        title: context.l10n.since,
+        value: prefs.lichessDb.since,
+        firstDate: LichessDbPrefState.earliestDate,
+        onChanged: (value) => ref
+            .read(openingExplorerPreferencesProvider.notifier)
+            .setLichessDbSince(value),
+      ),
+      DatePickerSettingsTile(
+        title: context.l10n.until,
+        value: prefs.lichessDb.until,
+        firstDate: LichessDbPrefState.earliestDate,
+        onChanged: (value) => ref
+            .read(openingExplorerPreferencesProvider.notifier)
+            .setLichessDbUntil(value),
+      ),
     ];
 
     return DraggableScrollableSheet(
-      initialChildSize: .7,
+      initialChildSize: .8,
       expand: false,
       snap: true,
-      snapSizes: const [.7],
+      snapSizes: const [.8],
       builder: (context, scrollController) => ListView(
         controller: scrollController,
         children: [

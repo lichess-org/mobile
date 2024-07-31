@@ -41,6 +41,8 @@ Future<LichessOpeningExplorer> lichessOpeningDatabase(
       fen,
       speeds: prefs.speeds,
       ratings: prefs.ratings,
+      since: prefs.since,
+      until: prefs.until,
     ),
   );
 }
@@ -72,8 +74,8 @@ class OpeningExplorerRepository {
     String fen, {
     required ISet<Perf> speeds,
     required ISet<int> ratings,
-    String? since,
-    String? until,
+    DateTime? since,
+    DateTime? until,
   }) {
     return client.readJson(
       Uri(
@@ -83,8 +85,8 @@ class OpeningExplorerRepository {
           if (speeds.isNotEmpty)
             'speeds': speeds.map((speed) => speed.name).join(','),
           if (ratings.isNotEmpty) 'ratings': ratings.join(','),
-          if (since != null) 'since': since,
-          if (until != null) 'until': until,
+          if (since != null) 'since': '${since.year}-${since.month}',
+          if (until != null) 'until': '${until.year}-${until.month}',
         },
       ),
       mapper: LichessOpeningExplorer.fromJson,
