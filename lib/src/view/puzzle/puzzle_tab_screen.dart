@@ -374,13 +374,21 @@ class PuzzleHistoryWidget extends ConsumerWidget {
         );
       },
       error: (e, s) {
+        final connectivity = ref.watch(connectivityChangesProvider);
+        final isOnline = connectivity.value?.isOnline ?? true;
+
         debugPrint(
           'SEVERE: [PuzzleHistoryWidget] could not load puzzle history',
         );
-        return Padding(
-          padding: Styles.bodySectionPadding,
-          child: const Text('Could not load Puzzle history.'),
-        );
+
+        if (isOnline) {
+          return Padding(
+            padding: Styles.bodySectionPadding,
+            child: const Text('Could not load Puzzle history.'),
+          );
+        } else {
+          return const SizedBox.shrink();
+        }
       },
       loading: () => Shimmer(
         child: ShimmerLoading(

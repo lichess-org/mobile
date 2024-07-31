@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
@@ -127,25 +128,33 @@ class PuzzleDashboardWidget extends ConsumerWidget {
         );
       },
       error: (e, s) {
+        final connectivity = ref.watch(connectivityChangesProvider);
+        final isOnline = connectivity.value?.isOnline ?? true;
+
         debugPrint(
           'SEVERE: [PuzzleDashboardWidget] could not load puzzle dashboard; $e\n$s',
         );
-        return Padding(
-          padding: Styles.bodySectionPadding,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                context.l10n.puzzlePuzzleDashboard,
-                style: Styles.sectionTitle,
-              ),
-              if (e is ClientException && e.message.contains('404'))
-                Text(context.l10n.puzzleNoPuzzlesToShow)
-              else
-                const Text('Could not load dashboard.'),
-            ],
-          ),
-        );
+
+        if (isOnline) {
+          return Padding(
+            padding: Styles.bodySectionPadding,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  context.l10n.puzzlePuzzleDashboard,
+                  style: Styles.sectionTitle,
+                ),
+                if (e is ClientException && e.message.contains('404'))
+                  Text(context.l10n.puzzleNoPuzzlesToShow)
+                else
+                  const Text('Could not load dashboard.'),
+              ],
+            ),
+          );
+        } else {
+          return const SizedBox.shrink();
+        }
       },
       loading: () {
         final loaderHeight = MediaQuery.sizeOf(context).width;
