@@ -30,6 +30,7 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_share_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
+import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
@@ -40,9 +41,8 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:popover/popover.dart';
 
 import '../../utils/share.dart';
+import 'analysis_board.dart';
 import 'analysis_settings.dart';
-import 'analysis_widgets.dart';
-import 'opening_explorer_screen.dart';
 import 'tree_view.dart';
 
 class AnalysisScreen extends StatelessWidget {

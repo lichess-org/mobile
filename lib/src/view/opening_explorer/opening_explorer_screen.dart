@@ -6,17 +6,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
-import 'package:lichess_mobile/src/model/analysis/opening_explorer.dart';
-import 'package:lichess_mobile/src/model/analysis/opening_explorer_preferences.dart';
-import 'package:lichess_mobile/src/model/analysis/opening_explorer_repository.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
+import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer.dart';
+import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer_preferences.dart';
+import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer_repository.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_board.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_share_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
@@ -26,7 +27,6 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
-import 'analysis_widgets.dart';
 import 'opening_explorer_settings.dart';
 
 class OpeningExplorerScreen extends StatelessWidget {
@@ -288,8 +288,7 @@ class _MasterOpeningExplorer extends ConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (opening != null)
-                        _Opening(opening: opening!),
+                      if (opening != null) _Opening(opening: opening!),
                       _MoveTable(
                         moves: masterDb.moves,
                         whiteWins: masterDb.white,
@@ -354,8 +353,7 @@ class _LichessOpeningExplorer extends ConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (opening != null)
-                        _Opening(opening: opening!),
+                      if (opening != null) _Opening(opening: opening!),
                       _MoveTable(
                         moves: lichessDb.moves,
                         whiteWins: lichessDb.white,
@@ -560,7 +558,7 @@ class _GameList extends StatelessWidget {
           ),
         ),
         ...List.generate(games.length, (int index) {
-          return _Game(
+          return _GameTile(
             game: games.get(index),
             color: index.isEven
                 ? Theme.of(context).colorScheme.surfaceContainerLow
@@ -572,8 +570,8 @@ class _GameList extends StatelessWidget {
   }
 }
 
-class _Game extends StatelessWidget {
-  const _Game({
+class _GameTile extends StatelessWidget {
+  const _GameTile({
     required this.game,
     required this.color,
   });
