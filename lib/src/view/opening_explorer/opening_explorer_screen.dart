@@ -527,75 +527,81 @@ class _GameTile extends ConsumerWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(game.white.rating.toString()),
-                    Text(game.black.rating.toString()),
-                  ],
-                ),
-                const SizedBox(width: 10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(game.white.name),
-                    Text(game.black.name),
-                  ],
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                if (game.winner == 'white')
-                  Container(
-                    width: widthResultBox,
-                    padding: paddingResultBox,
-                    color: Colors.white,
-                    child: const Text(
-                      '1-0',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.black,
-                      ),
-                    ),
-                  )
-                else if (game.winner == 'black')
-                  Container(
-                    width: widthResultBox,
-                    padding: paddingResultBox,
-                    color: Colors.black,
-                    child: const Text(
-                      '0-1',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                  )
-                else
-                  Container(
-                    width: widthResultBox,
-                    padding: paddingResultBox,
-                    color: Colors.grey,
-                    child: const Text(
-                      '½-½',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
+            Expanded(
+              flex: 6,
+              child: Row(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(game.white.rating.toString()),
+                      Text(game.black.rating.toString()),
+                    ],
                   ),
-                if (game.month != null) ...[
-                  const SizedBox(width: 10.0),
-                  Text(game.month!),
+                  const SizedBox(width: 10),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(game.white.name),
+                      Text(game.black.name),
+                    ],
+                  ),
                 ],
-                if (game.speed != null) ...[
-                  const SizedBox(width: 10.0),
-                  Icon(game.speed!.icon),
+              ),
+            ),
+            Expanded(
+              flex: 4,
+              child: Row(
+                children: [
+                  if (game.winner == 'white')
+                    Container(
+                      width: widthResultBox,
+                      padding: paddingResultBox,
+                      color: Colors.white,
+                      child: const Text(
+                        '1-0',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
+                      ),
+                    )
+                  else if (game.winner == 'black')
+                    Container(
+                      width: widthResultBox,
+                      padding: paddingResultBox,
+                      color: Colors.black,
+                      child: const Text(
+                        '0-1',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    )
+                  else
+                    Container(
+                      width: widthResultBox,
+                      padding: paddingResultBox,
+                      color: Colors.grey,
+                      child: const Text(
+                        '½-½',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  if (game.month != null) ...[
+                    const SizedBox(width: 10.0),
+                    Text(game.month!),
+                  ],
+                  if (game.speed != null) ...[
+                    const SizedBox(width: 10.0),
+                    Icon(game.speed!.icon),
+                  ],
                 ],
-              ],
+              ),
             ),
           ],
         ),
