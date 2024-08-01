@@ -927,7 +927,7 @@ class _PlayerScreenButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final connectivity = ref.watch(connectivityChangesProvider);
-    final challenges = ref.watch(challengesListProvider);
+    final challenges = ref.watch(challengesProvider);
     final count = challenges.valueOrNull?.inward.length;
 
     return connectivity.maybeWhen(
