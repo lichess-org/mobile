@@ -29,7 +29,7 @@ class BroadcastTile extends StatelessWidget {
           context,
           builder: (context) => BroadcastScreen(
             broadCastTitle: broadcast.tour.name,
-            roundId: broadcast.round.id,
+            roundId: broadcast.roundToLinkId,
           ),
         );
       },

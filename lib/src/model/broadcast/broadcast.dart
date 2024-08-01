@@ -20,6 +20,9 @@ class Broadcast with _$Broadcast {
     required BroadcastTournament tour,
     required BroadcastRound round,
     required String? group,
+
+    /// The round to which the user should be brought when cliking on the tournament
+    required BroadcastRoundId roundToLinkId,
   }) = _Broadcast;
 
   bool get isLive => round.status == RoundStatus.live;

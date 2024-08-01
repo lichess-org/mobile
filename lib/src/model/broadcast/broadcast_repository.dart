@@ -58,6 +58,7 @@ Broadcast _broadcastFromPick(RequiredPick pick) {
       : finished
           ? RoundStatus.finished
           : RoundStatus.upcoming;
+  final roundId = pick('round', 'id').asBroadcastRoundIdOrThrow();
 
   return Broadcast(
     tour: (
@@ -65,7 +66,7 @@ Broadcast _broadcastFromPick(RequiredPick pick) {
       imageUrl: pick('tour', 'image').asStringOrNull(),
     ),
     round: BroadcastRound(
-      id: pick('round', 'id').asBroadcastRoundIdOrThrow(),
+      id: roundId,
       name: pick('round', 'name').asStringOrThrow(),
       status: status,
       startsAt: pick('round', 'startsAt')
@@ -73,6 +74,8 @@ Broadcast _broadcastFromPick(RequiredPick pick) {
           .toLocal(),
     ),
     group: pick('group').asStringOrNull(),
+    roundToLinkId:
+        pick('roundToLink', 'id').asBroadcastRoundIddOrNull() ?? roundId,
   );
 }
 
