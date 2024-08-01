@@ -57,6 +57,8 @@ class BroadcastGameSnapshot with _$BroadcastGameSnapshot {
     required String fen,
     required Move? lastMove,
     required String status,
+
+    /// The amount of time that the player whose turn it is has been thinking since his last move
     required Duration? thinkTime,
   }) = _BroadcastGameSnapshot;
 }
