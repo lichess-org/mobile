@@ -11,26 +11,9 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'challenge_repository.g.dart';
 
-@Riverpod(keepAlive: true)
-ChallengeRepository challengeRepository(ChallengeRepositoryRef ref) {
-  final repo = ChallengeRepository(ref.read(lichessClientProvider));
-  final socketClient =
-      ref.read(socketPoolProvider).open(Uri(path: '/lobby/socket/v5'));
-  socketClient.stream.listen(
-    (event) {
-      if (event.topic != 'challenges') return;
-      ref.invalidate(challengesListProvider);
-    },
-  );
-  return repo;
-}
-
 @riverpod
-Future<ChallengesList> challengesList(
-  ChallengesListRef ref,
-) {
-  final repo = ref.read(challengeRepositoryProvider);
-  return repo.list();
+ChallengeRepository challengeRepository(ChallengeRepositoryRef ref) {
+  return ChallengeRepository(ref.read(lichessClientProvider));
 }
 
 typedef ChallengesList = ({
@@ -108,5 +91,59 @@ class ChallengeRepository {
         uri,
       );
     }
+  }
+}
+
+@Riverpod(keepAlive: true)
+class Challenges extends _$Challenges {
+  StreamSubscription<SocketEvent>? _subscription;
+
+  late SocketClient _socketClient;
+
+  @override
+  Future<ChallengesList> build() async {
+    _socketClient = ref.watch(socketPoolProvider).open(Uri(path: '/socket/v5'));
+
+    _subscription?.cancel();
+    _subscription = _socketClient.stream.listen(_handleSocketEvent);
+
+    ref.onDispose(() {
+      _subscription?.cancel();
+    });
+
+    return ref.read(challengeRepositoryProvider).list();
+  }
+
+  Future<GameFullId?> accept(ChallengeId id) async {
+    final repo = ref.read(challengeRepositoryProvider);
+    return repo
+        .accept(id)
+        .then((_) => repo.show(id).then((challenge) => challenge.gameFullId));
+  }
+
+  void cancel(ChallengeId id) {
+    ref.read(challengeRepositoryProvider).cancel(id);
+  }
+
+  void _handleSocketEvent(SocketEvent event) {
+    if (event.topic != 'challenges') return;
+
+    final listPick = pick(event.data).required();
+    final inward = listPick('in').asListOrEmpty(Challenge.fromPick);
+    final outward = listPick('out').asListOrEmpty(Challenge.fromPick);
+
+    final prevIds = state.value?.inward.map((element) => element.id) ?? [];
+    // find any challenges that weren't in the inward list before
+    inward
+        .map((element) => element.id)
+        .where((id) => !prevIds.contains(id))
+        .map((id) => inward.firstWhere((element) => element.id == id))
+        .forEach(_notifyUser);
+
+    state = AsyncValue.data((inward: inward.lock, outward: outward.lock));
+  }
+
+  void _notifyUser(Challenge challenge) {
+    // send a notification to the user
   }
 }

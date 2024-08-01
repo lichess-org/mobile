@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_preferences.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
+import 'package:lichess_mobile/src/model/lobby/create_game_service.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -406,15 +407,47 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                                   );
                                 }
                               : null
-                          : snapshot.connectionState == ConnectionState.waiting
-                              ? null
-                              // TODO handle correspondence time control
-                              : () async {
+                          : timeControl ==
+                                  ChallengeTimeControlType.correspondence
+                              ? () async {
+                                  final createGameService =
+                                      ref.read(createGameServiceProvider);
                                   showPlatformSnackbar(
                                     context,
-                                    'Correspondence time control is not supported yet',
+                                    'Sent challenge to ${widget.user.name}',
                                   );
-                                },
+                                  final response =
+                                      createGameService.newChallenge(
+                                    preferences.makeRequest(
+                                      widget.user,
+                                      preferences.variant !=
+                                              Variant.fromPosition
+                                          ? null
+                                          : fromPositionFenInput,
+                                    ),
+                                  );
+                                  response.then((value) {
+                                    if (!context.mounted) return;
+
+                                    if (value.$1 != null) {
+                                      pushPlatformRoute(
+                                        context,
+                                        rootNavigator: true,
+                                        builder: (BuildContext context) {
+                                          return GameScreen(
+                                            initialGameId: value.$1,
+                                          );
+                                        },
+                                      );
+                                    } else {
+                                      showPlatformSnackbar(
+                                        context,
+                                        '${widget.user.name}: ${declineReasonMessage(context, value.$2!)}',
+                                      );
+                                    }
+                                  });
+                                }
+                              : null,
                       child: Text(
                         context.l10n.challengeChallengeToPlay,
                         style: Styles.bold,
