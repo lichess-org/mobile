@@ -12,13 +12,14 @@ class OpeningExplorer with _$OpeningExplorer {
   const OpeningExplorer._();
 
   const factory OpeningExplorer({
-    LightOpening? opening,
     required int white,
     required int draws,
     required int black,
     required IList<OpeningMove> moves,
     IList<Game>? topGames,
     IList<Game>? recentGames,
+    LightOpening? opening,
+    int? queuePosition,
   }) = _OpeningExplorer;
 
   factory OpeningExplorer.fromJson(Map<String, Object?> json) =>
@@ -32,12 +33,13 @@ class OpeningMove with _$OpeningMove {
   const factory OpeningMove({
     required String uci,
     required String san,
-    int? averageRating,
-    int? averageOpponentRating,
-    int? performance,
     required int white,
     required int draws,
     required int black,
+    int? averageRating,
+    int? averageOpponentRating,
+    int? performance,
+    Game? game,
   }) = _OpeningMove;
 
   factory OpeningMove.fromJson(Map<String, Object?> json) =>
