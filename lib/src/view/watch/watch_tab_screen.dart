@@ -191,7 +191,7 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
 Future<void> _refreshData(WidgetRef ref) {
   return Future.wait([
     // TODO uncomment when broadcasts feature is ready
-    ref.refresh(broadcastsPaginatorProvider.future),
+    // ref.refresh(broadcastsPaginatorProvider.future),
     ref.refresh(featuredChannelsProvider.future),
     ref.refresh(liveStreamersProvider.future),
   ]);
@@ -205,7 +205,7 @@ class _BroadcastWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // TODO: show widget when broadcasts feature is ready
-    // return const SizedBox.shrink();
+    return const SizedBox.shrink();
 
     // ignore: dead_code
     final broadcastList = ref.watch(broadcastsPaginatorProvider);
