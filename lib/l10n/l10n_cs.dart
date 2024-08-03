@@ -142,6 +142,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobileGreetingWithoutName => 'Hello';
 
   @override
+  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
+
+  @override
   String get activityActivity => 'Aktivita';
 
   @override
@@ -626,7 +629,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get preferencesShowPlayerRatings => 'Zobrazit hodnocení hráčů';
 
   @override
-  String get preferencesShowFlairs => 'Zobrazit hráčův rating';
+  String get preferencesShowFlairs => 'Zobrazovat ikony hráčů';
 
   @override
   String get preferencesExplainShowPlayerRatings => 'Toto umožňuje skrýt rating z webových stránek, což pomůže soustředit se pouze na šachy. Hodnocené hry budou mít stále dopad na Váš rating.';

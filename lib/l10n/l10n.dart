@@ -29,6 +29,7 @@ import 'l10n_fo.dart';
 import 'l10n_fr.dart';
 import 'l10n_ga.dart';
 import 'l10n_gl.dart';
+import 'l10n_gsw.dart';
 import 'l10n_he.dart';
 import 'l10n_hi.dart';
 import 'l10n_hr.dart';
@@ -56,7 +57,6 @@ import 'l10n_sq.dart';
 import 'l10n_sr.dart';
 import 'l10n_sv.dart';
 import 'l10n_tr.dart';
-import 'l10n_tt.dart';
 import 'l10n_uk.dart';
 import 'l10n_vi.dart';
 import 'l10n_zh.dart';
@@ -169,6 +169,7 @@ abstract class AppLocalizations {
     Locale('fr'),
     Locale('ga'),
     Locale('gl'),
+    Locale('gsw'),
     Locale('he'),
     Locale('hi'),
     Locale('hr'),
@@ -188,7 +189,7 @@ abstract class AppLocalizations {
     Locale('nn'),
     Locale('pl'),
     Locale('pt'),
-    Locale('pt', 'PT'),
+    Locale('pt', 'BR'),
     Locale('ro'),
     Locale('ru'),
     Locale('sk'),
@@ -197,7 +198,6 @@ abstract class AppLocalizations {
     Locale('sr'),
     Locale('sv'),
     Locale('tr'),
-    Locale('tt'),
     Locale('uk'),
     Locale('vi'),
     Locale('zh'),
@@ -461,6 +461,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Hello'**
   String get mobileGreetingWithoutName;
+
+  /// No description provided for @mobilePrefMagnifyDraggedPiece.
+  ///
+  /// In en, this message translates to:
+  /// **'Magnify dragged piece'**
+  String get mobilePrefMagnifyDraggedPiece;
 
   /// No description provided for @activityActivity.
   ///
@@ -1347,7 +1353,7 @@ abstract class AppLocalizations {
   /// No description provided for @puzzlePuzzleThemes.
   ///
   /// In en, this message translates to:
-  /// **'Puzzle themes'**
+  /// **'Puzzle Themes'**
   String get puzzlePuzzleThemes;
 
   /// No description provided for @puzzleRecommended.
@@ -8110,7 +8116,7 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['en', 'af', 'ar', 'az', 'be', 'bg', 'bn', 'br', 'bs', 'ca', 'cs', 'da', 'de', 'el', 'eo', 'es', 'et', 'eu', 'fa', 'fi', 'fo', 'fr', 'ga', 'gl', 'he', 'hi', 'hr', 'hu', 'hy', 'id', 'it', 'ja', 'kk', 'ko', 'lb', 'lt', 'lv', 'mk', 'nb', 'nl', 'nn', 'pl', 'pt', 'ro', 'ru', 'sk', 'sl', 'sq', 'sr', 'sv', 'tr', 'tt', 'uk', 'vi', 'zh'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['en', 'af', 'ar', 'az', 'be', 'bg', 'bn', 'br', 'bs', 'ca', 'cs', 'da', 'de', 'el', 'eo', 'es', 'et', 'eu', 'fa', 'fi', 'fo', 'fr', 'ga', 'gl', 'gsw', 'he', 'hi', 'hr', 'hu', 'hy', 'id', 'it', 'ja', 'kk', 'ko', 'lb', 'lt', 'lv', 'mk', 'nb', 'nl', 'nn', 'pl', 'pt', 'ro', 'ru', 'sk', 'sl', 'sq', 'sr', 'sv', 'tr', 'uk', 'vi', 'zh'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -8128,7 +8134,7 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
    }
     case 'pt': {
   switch (locale.countryCode) {
-    case 'PT': return AppLocalizationsPtPt();
+    case 'BR': return AppLocalizationsPtBr();
    }
   break;
    }
@@ -8166,6 +8172,7 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
     case 'fr': return AppLocalizationsFr();
     case 'ga': return AppLocalizationsGa();
     case 'gl': return AppLocalizationsGl();
+    case 'gsw': return AppLocalizationsGsw();
     case 'he': return AppLocalizationsHe();
     case 'hi': return AppLocalizationsHi();
     case 'hr': return AppLocalizationsHr();
@@ -8193,7 +8200,6 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
     case 'sr': return AppLocalizationsSr();
     case 'sv': return AppLocalizationsSv();
     case 'tr': return AppLocalizationsTr();
-    case 'tt': return AppLocalizationsTt();
     case 'uk': return AppLocalizationsUk();
     case 'vi': return AppLocalizationsVi();
     case 'zh': return AppLocalizationsZh();

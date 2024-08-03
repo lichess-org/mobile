@@ -9,37 +9,37 @@ class AppLocalizationsHi extends AppLocalizations {
   AppLocalizationsHi([String locale = 'hi']) : super(locale);
 
   @override
-  String get mobileHomeTab => 'Home';
+  String get mobileHomeTab => 'होम';
 
   @override
-  String get mobilePuzzlesTab => 'Puzzles';
+  String get mobilePuzzlesTab => 'पज़ल';
 
   @override
-  String get mobileToolsTab => 'Tools';
+  String get mobileToolsTab => 'टूल्स';
 
   @override
-  String get mobileWatchTab => 'Watch';
+  String get mobileWatchTab => 'देखें';
 
   @override
-  String get mobileSettingsTab => 'Settings';
+  String get mobileSettingsTab => 'सेटिंग';
 
   @override
-  String get mobileMustBeLoggedIn => 'You must be logged in to view this page.';
+  String get mobileMustBeLoggedIn => 'इस पेज को देखने के लिए आपको login करना होगा';
 
   @override
   String get mobileSystemColors => 'System colors';
 
   @override
-  String get mobileFeedbackButton => 'Feedback';
+  String get mobileFeedbackButton => 'फीडबैक';
 
   @override
-  String get mobileOkButton => 'OK';
+  String get mobileOkButton => 'ओके';
 
   @override
-  String get mobileSettingsHapticFeedback => 'Haptic feedback';
+  String get mobileSettingsHapticFeedback => 'कंपन फीडबैक';
 
   @override
-  String get mobileSettingsImmersiveMode => 'Immersive mode';
+  String get mobileSettingsImmersiveMode => 'इमर्सिव मोड';
 
   @override
   String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.';
@@ -48,7 +48,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get mobileNotFollowingAnyUser => 'You are not following any user.';
 
   @override
-  String get mobileAllGames => 'All games';
+  String get mobileAllGames => 'सारे गेम्स';
 
   @override
   String get mobileRecentSearches => 'Recent searches';
@@ -62,10 +62,10 @@ class AppLocalizationsHi extends AppLocalizations {
   }
 
   @override
-  String get mobileNoSearchResults => 'No results';
+  String get mobileNoSearchResults => 'कोई परिणाम नहीं';
 
   @override
-  String get mobileAreYouSure => 'Are you sure?';
+  String get mobileAreYouSure => 'क्या आप सुनिश्चित हैं?';
 
   @override
   String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
@@ -74,25 +74,25 @@ class AppLocalizationsHi extends AppLocalizations {
   String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of Puzzle Storm.';
 
   @override
-  String get mobileSharePuzzle => 'Share this puzzle';
+  String get mobileSharePuzzle => 'पज़ल शरीर करें';
 
   @override
-  String get mobileShareGameURL => 'Share game URL';
+  String get mobileShareGameURL => 'गेम URL शेयर करें';
 
   @override
-  String get mobileShareGamePGN => 'Share PGN';
+  String get mobileShareGamePGN => 'PGN शेयर करें';
 
   @override
-  String get mobileSharePositionAsFEN => 'Share position as FEN';
+  String get mobileSharePositionAsFEN => 'पोजीशन FEN के रूप में शेयर करें';
 
   @override
-  String get mobileShowVariations => 'Show variations';
+  String get mobileShowVariations => 'वेरिएशन देखें';
 
   @override
-  String get mobileHideVariation => 'Hide variation';
+  String get mobileHideVariation => 'वेरिएशन छुपाए';
 
   @override
-  String get mobileShowComments => 'Show comments';
+  String get mobileShowComments => 'कमेंट्स देखें';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Do you want to end this run?';
@@ -101,10 +101,10 @@ class AppLocalizationsHi extends AppLocalizations {
   String get mobilePuzzleStormFilterNothingToShow => 'Nothing to show, please change the filters';
 
   @override
-  String get mobileCancelTakebackOffer => 'Cancel takeback offer';
+  String get mobileCancelTakebackOffer => 'Takeback प्रस्ताव रद्द करें';
 
   @override
-  String get mobileCancelDrawOffer => 'Cancel draw offer';
+  String get mobileCancelDrawOffer => 'Draw प्रस्ताव रद्द करें';
 
   @override
   String get mobileWaitingForOpponentToJoin => 'Waiting for opponent to join...';
@@ -113,7 +113,7 @@ class AppLocalizationsHi extends AppLocalizations {
   String get mobileBlindfoldMode => 'Blindfold';
 
   @override
-  String get mobileLiveStreamers => 'Live streamers';
+  String get mobileLiveStreamers => 'लाइव स्ट्रीमर्स';
 
   @override
   String get mobileCustomGameJoinAGame => 'Join a game';
@@ -140,6 +140,9 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get mobileGreetingWithoutName => 'Hello';
+
+  @override
+  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
 
   @override
   String get activityActivity => 'कार्यकलाप';

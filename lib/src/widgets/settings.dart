@@ -15,7 +15,8 @@ class SettingsListTile extends StatelessWidget {
     super.key,
   });
 
-  final Icon? icon;
+  /// The icon of the settings value.
+  final Widget? icon;
 
   /// The label of the settings value.
   final Text settingsLabel;
@@ -217,8 +218,11 @@ class _SettingsTitle extends StatelessWidget {
   }
 }
 
-/// A platform agnostic choice picker
-class ChoicePicker<T extends Enum> extends StatelessWidget {
+/// A platform agnostic choice picker.
+///
+/// It is best used for settings where the user can choose between a relatively
+/// small number of options.
+class ChoicePicker<T> extends StatelessWidget {
   const ChoicePicker({
     super.key,
     required this.choices,

@@ -26,7 +26,7 @@ class AnalysisPositionChoiceScreen extends StatelessWidget {
   Widget _androidBuilder(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.l10n.analysis),
+        title: Text(context.l10n.loadPosition),
       ),
       body: const _Body(),
     );
@@ -37,7 +37,7 @@ class AnalysisPositionChoiceScreen extends StatelessWidget {
       navigationBar: CupertinoNavigationBar(
         backgroundColor: Styles.cupertinoScaffoldColor.resolveFrom(context),
         border: null,
-        middle: Text(context.l10n.analysis),
+        middle: Text(context.l10n.loadPosition),
       ),
       child: const _Body(),
     );

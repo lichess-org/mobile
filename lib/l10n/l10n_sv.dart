@@ -142,6 +142,9 @@ class AppLocalizationsSv extends AppLocalizations {
   String get mobileGreetingWithoutName => 'Hello';
 
   @override
+  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
+
+  @override
   String get activityActivity => 'Aktivitet';
 
   @override
@@ -2628,7 +2631,7 @@ class AppLocalizationsSv extends AppLocalizations {
   String get editProfile => 'Ändra profil';
 
   @override
-  String get realName => 'Real name';
+  String get realName => 'Verkligt namn';
 
   @override
   String get setFlair => 'Ställ in din flair';

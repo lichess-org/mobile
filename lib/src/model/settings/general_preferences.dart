@@ -39,6 +39,10 @@ class GeneralPreferences extends _$GeneralPreferences {
     return _save(state.copyWith(isSoundEnabled: !state.isSoundEnabled));
   }
 
+  Future<void> setLocale(Locale? locale) {
+    return _save(state.copyWith(locale: locale));
+  }
+
   Future<void> setSoundTheme(SoundTheme soundTheme) {
     return _save(state.copyWith(soundTheme: soundTheme));
   }
@@ -79,6 +83,7 @@ class GeneralPreferences extends _$GeneralPreferences {
 @Freezed(fromJson: true, toJson: true)
 class GeneralPrefsState with _$GeneralPrefsState {
   const factory GeneralPrefsState({
+    /// Background theme mode to use in the app
     @JsonKey(unknownEnumValue: ThemeMode.system) required ThemeMode themeMode,
     required bool isSoundEnabled,
     @JsonKey(unknownEnumValue: SoundTheme.standard)
@@ -87,6 +92,9 @@ class GeneralPrefsState with _$GeneralPrefsState {
 
     /// Should enable system color palette (android 12+ only)
     required bool systemColors,
+
+    /// Locale to use in the app, use system locale if null
+    @JsonKey(toJson: _localeToJson, fromJson: _localeFromJson) Locale? locale,
   }) = _GeneralPrefsState;
 
   static const defaults = GeneralPrefsState(
@@ -100,8 +108,30 @@ class GeneralPrefsState with _$GeneralPrefsState {
   factory GeneralPrefsState.fromJson(Map<String, dynamic> json) {
     try {
       return _$GeneralPrefsStateFromJson(json);
-    } catch (_) {
+    } catch (e) {
+      debugPrint('Error parsing GeneralPrefsState: $e');
       return defaults;
     }
   }
+}
+
+Map<String, dynamic>? _localeToJson(Locale? locale) {
+  return locale != null
+      ? {
+          'languageCode': locale.languageCode,
+          'countryCode': locale.countryCode,
+          'scriptCode': locale.scriptCode,
+        }
+      : null;
+}
+
+Locale? _localeFromJson(Map<String, dynamic>? json) {
+  if (json == null) {
+    return null;
+  }
+  return Locale.fromSubtags(
+    languageCode: json['languageCode'] as String,
+    countryCode: json['countryCode'] as String?,
+    scriptCode: json['scriptCode'] as String?,
+  );
 }

@@ -1,6 +1,8 @@
+import 'package:app_settings/app_settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -8,11 +10,14 @@ import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/package_info.dart';
 import 'package:lichess_mobile/src/utils/system.dart';
 import 'package:lichess_mobile/src/view/account/profile_screen.dart';
+import 'package:lichess_mobile/src/view/settings/app_background_mode_screen.dart';
+import 'package:lichess_mobile/src/view/settings/theme_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -24,11 +29,8 @@ import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'account_preferences_screen.dart';
-import 'board_behavior_settings_screen.dart';
-import 'board_theme_screen.dart';
-import 'piece_set_screen.dart';
+import 'board_settings_screen.dart';
 import 'sound_settings_screen.dart';
-import 'theme_mode_screen.dart';
 
 class SettingsTabScreen extends ConsumerWidget {
   const SettingsTabScreen({super.key});
@@ -80,10 +82,10 @@ class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final generalPrefs = ref.watch(generalPreferencesProvider);
+    final boardPrefs = ref.watch(boardPreferencesProvider);
     final authController = ref.watch(authControllerProvider);
     final userSession = ref.watch(authSessionProvider);
     final packageInfo = ref.watch(packageInfoProvider);
-    final boardPrefs = ref.watch(boardPreferencesProvider);
 
     final androidVersionAsync = ref.watch(androidVersionProvider);
 
@@ -214,8 +216,10 @@ class _Body extends ConsumerWidget {
           SettingsListTile(
             icon: const Icon(Icons.brightness_medium),
             settingsLabel: Text(context.l10n.background),
-            settingsValue:
-                ThemeModeScreen.themeTitle(context, generalPrefs.themeMode),
+            settingsValue: AppBackgroundModeScreen.themeTitle(
+              context,
+              generalPrefs.themeMode,
+            ),
             onTap: () {
               if (Theme.of(context).platform == TargetPlatform.android) {
                 showChoicePicker(
@@ -223,7 +227,7 @@ class _Body extends ConsumerWidget {
                   choices: ThemeMode.values,
                   selectedItem: generalPrefs.themeMode,
                   labelBuilder: (t) =>
-                      Text(ThemeModeScreen.themeTitle(context, t)),
+                      Text(AppBackgroundModeScreen.themeTitle(context, t)),
                   onSelectedItemChanged: (ThemeMode? value) => ref
                       .read(generalPreferencesProvider.notifier)
                       .setThemeMode(value ?? ThemeMode.system),
@@ -232,47 +236,59 @@ class _Body extends ConsumerWidget {
                 pushPlatformRoute(
                   context,
                   title: context.l10n.background,
-                  builder: (context) => const ThemeModeScreen(),
+                  builder: (context) => const AppBackgroundModeScreen(),
                 );
               }
             },
           ),
           SettingsListTile(
-            icon: const Icon(LichessIcons.chess_board),
-            settingsLabel: Text(context.l10n.board),
-            settingsValue: boardPrefs.boardTheme.label,
+            icon: const Icon(Icons.palette),
+            settingsLabel: const Text('Theme'),
+            settingsValue:
+                '${boardPrefs.boardTheme.label} / ${boardPrefs.pieceSet.label}',
             onTap: () {
               pushPlatformRoute(
                 context,
-                title: context.l10n.board,
-                builder: (context) => const BoardThemeScreen(),
-              );
-            },
-          ),
-          SettingsListTile(
-            icon: const Icon(LichessIcons.chess_pawn),
-            settingsLabel: Text(context.l10n.pieceSet),
-            settingsValue: boardPrefs.pieceSet.label,
-            onTap: () {
-              pushPlatformRoute(
-                context,
-                title: context.l10n.pieceSet,
-                builder: (context) => const PieceSetScreen(),
+                title: 'Theme',
+                builder: (context) => const ThemeScreen(),
               );
             },
           ),
           PlatformListTile(
-            leading: const Icon(Icons.gamepad),
-            title: Text(context.l10n.preferencesGameBehavior),
+            leading: const Icon(LichessIcons.chess_board),
+            title: Text(context.l10n.board),
             trailing: Theme.of(context).platform == TargetPlatform.iOS
                 ? const CupertinoListTileChevron()
                 : null,
             onTap: () {
               pushPlatformRoute(
                 context,
-                title: context.l10n.preferencesGameBehavior,
-                builder: (context) => const BoardBehaviorSettingsScreen(),
+                title: context.l10n.board,
+                builder: (context) => const BoardSettingsScreen(),
               );
+            },
+          ),
+          SettingsListTile(
+            icon: const Icon(Icons.language),
+            settingsLabel: Text(context.l10n.language),
+            settingsValue: localeToLocalizedName(
+              generalPrefs.locale ?? Localizations.localeOf(context),
+            ),
+            onTap: () {
+              if (Theme.of(context).platform == TargetPlatform.android) {
+                showChoicePicker<Locale>(
+                  context,
+                  choices: kSupportedLocales,
+                  selectedItem:
+                      generalPrefs.locale ?? Localizations.localeOf(context),
+                  labelBuilder: (t) => Text(localeToLocalizedName(t)),
+                  onSelectedItemChanged: (Locale? locale) => ref
+                      .read(generalPreferencesProvider.notifier)
+                      .setLocale(locale),
+                );
+              } else {
+                AppSettings.openAppSettings();
+              }
             },
           ),
         ],

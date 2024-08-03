@@ -9,52 +9,52 @@ class AppLocalizationsFi extends AppLocalizations {
   AppLocalizationsFi([String locale = 'fi']) : super(locale);
 
   @override
-  String get mobileHomeTab => 'Home';
+  String get mobileHomeTab => 'Etusivu';
 
   @override
-  String get mobilePuzzlesTab => 'Puzzles';
+  String get mobilePuzzlesTab => 'Tehtävät';
 
   @override
-  String get mobileToolsTab => 'Tools';
+  String get mobileToolsTab => 'Työkalut';
 
   @override
-  String get mobileWatchTab => 'Watch';
+  String get mobileWatchTab => 'Seuraa';
 
   @override
-  String get mobileSettingsTab => 'Settings';
+  String get mobileSettingsTab => 'Asetukset';
 
   @override
-  String get mobileMustBeLoggedIn => 'You must be logged in to view this page.';
+  String get mobileMustBeLoggedIn => 'Sinun täytyy olla kirjautuneena nähdäksesi tämän sivun.';
 
   @override
-  String get mobileSystemColors => 'System colors';
+  String get mobileSystemColors => 'Järjestelmän värit';
 
   @override
-  String get mobileFeedbackButton => 'Feedback';
+  String get mobileFeedbackButton => 'Palaute';
 
   @override
   String get mobileOkButton => 'OK';
 
   @override
-  String get mobileSettingsHapticFeedback => 'Haptic feedback';
+  String get mobileSettingsHapticFeedback => 'Kosketuspalaute';
 
   @override
-  String get mobileSettingsImmersiveMode => 'Immersive mode';
+  String get mobileSettingsImmersiveMode => 'Kokoruututila';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.';
+  String get mobileSettingsImmersiveModeSubtitle => 'Piilota laitteen käyttöliittymä pelatessasi. Valitse tämä, jos laitteesi navigointieleet näytön laidoilla ovat sinulle häiriöksi. Asetus vaikuttaa peli- ja Puzzle Storm -näkymiin.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'You are not following any user.';
+  String get mobileNotFollowingAnyUser => 'Et seuraa yhtäkään käyttäjää.';
 
   @override
-  String get mobileAllGames => 'All games';
+  String get mobileAllGames => 'Kaikki pelit';
 
   @override
-  String get mobileRecentSearches => 'Recent searches';
+  String get mobileRecentSearches => 'Viimeisimmät haut';
 
   @override
-  String get mobileClearButton => 'Clear';
+  String get mobileClearButton => 'Tyhjennä';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -62,84 +62,87 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
-  String get mobileNoSearchResults => 'No results';
+  String get mobileNoSearchResults => 'Ei hakutuloksia';
 
   @override
-  String get mobileAreYouSure => 'Are you sure?';
+  String get mobileAreYouSure => 'Oletko varma?';
 
   @override
-  String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
+  String get mobilePuzzleStreakAbortWarning => 'Parhaillaan menossa oleva putkesi päättyy, ja pistemääräsi tallennetaan.';
 
   @override
-  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of Puzzle Storm.';
+  String get mobilePuzzleStormNothingToShow => 'Ei näytettävää. Pelaa ensin muutama sarja Puzzle Stormia.';
 
   @override
-  String get mobileSharePuzzle => 'Share this puzzle';
+  String get mobileSharePuzzle => 'Jaa tämä tehtävä';
 
   @override
-  String get mobileShareGameURL => 'Share game URL';
+  String get mobileShareGameURL => 'Jaa pelin URL';
 
   @override
-  String get mobileShareGamePGN => 'Share PGN';
+  String get mobileShareGamePGN => 'Jaa PGN';
 
   @override
-  String get mobileSharePositionAsFEN => 'Share position as FEN';
+  String get mobileSharePositionAsFEN => 'Jaa asema FEN:nä';
 
   @override
-  String get mobileShowVariations => 'Show variations';
+  String get mobileShowVariations => 'Näytä muunnelmat';
 
   @override
-  String get mobileHideVariation => 'Hide variation';
+  String get mobileHideVariation => 'Piilota muunnelma';
 
   @override
-  String get mobileShowComments => 'Show comments';
+  String get mobileShowComments => 'Näytä kommentit';
 
   @override
-  String get mobilePuzzleStormConfirmEndRun => 'Do you want to end this run?';
+  String get mobilePuzzleStormConfirmEndRun => 'Haluatko lopettaa tämän sarjan?';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow => 'Nothing to show, please change the filters';
+  String get mobilePuzzleStormFilterNothingToShow => 'Ei näytettävää, muuta suodatusehtoja';
 
   @override
-  String get mobileCancelTakebackOffer => 'Cancel takeback offer';
+  String get mobileCancelTakebackOffer => 'Peruuta siirron peruutuspyyntö';
 
   @override
-  String get mobileCancelDrawOffer => 'Cancel draw offer';
+  String get mobileCancelDrawOffer => 'Peruuta tasapeliehdotus';
 
   @override
-  String get mobileWaitingForOpponentToJoin => 'Waiting for opponent to join...';
+  String get mobileWaitingForOpponentToJoin => 'Odotetaan vastustajan löytymistä...';
 
   @override
-  String get mobileBlindfoldMode => 'Blindfold';
+  String get mobileBlindfoldMode => 'Sokko';
 
   @override
   String get mobileLiveStreamers => 'Live streamers';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Join a game';
+  String get mobileCustomGameJoinAGame => 'Liity peliin';
 
   @override
-  String get mobileCorrespondenceClearSavedMove => 'Clear saved move';
+  String get mobileCorrespondenceClearSavedMove => 'Poista tallennettu siirto';
 
   @override
-  String get mobileSomethingWentWrong => 'Something went wrong.';
+  String get mobileSomethingWentWrong => 'Jokin meni vikaan.';
 
   @override
-  String get mobileShowResult => 'Show result';
+  String get mobileShowResult => 'Näytä lopputulos';
 
   @override
-  String get mobilePuzzleThemesSubtitle => 'Play puzzles from your favorite openings, or choose a theme.';
+  String get mobilePuzzleThemesSubtitle => 'Tee tehtäviä suosikkiavauksistasi tai valitse tehtäväteema.';
 
   @override
-  String get mobilePuzzleStormSubtitle => 'Solve as many puzzles as possible in 3 minutes.';
+  String get mobilePuzzleStormSubtitle => 'Ratkaise mahdollisimman monta tehtävää 3 minuutissa.';
 
   @override
   String mobileGreeting(String param) {
-    return 'Hello, $param';
+    return 'Hei $param';
   }
 
   @override
-  String get mobileGreetingWithoutName => 'Hello';
+  String get mobileGreetingWithoutName => 'Hei';
+
+  @override
+  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
 
   @override
   String get activityActivity => 'Toiminta';
@@ -676,7 +679,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get preferencesCorrespondenceAndUnlimited => 'Kirjeshakki ja aikarajaton';
 
   @override
-  String get preferencesConfirmResignationAndDrawOffers => 'Vahvista luovutukset ja tasapelitarjoukset';
+  String get preferencesConfirmResignationAndDrawOffers => 'Vahvista luovutukset ja tasapeliehdotukset';
 
   @override
   String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Kuinka linnoittaudut';
@@ -1875,7 +1878,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get friends => 'Kaverit';
 
   @override
-  String get otherPlayers => 'other players';
+  String get otherPlayers => 'muiden pelaajien';
 
   @override
   String get discussions => 'Keskustelut';
@@ -2214,19 +2217,19 @@ class AppLocalizationsFi extends AppLocalizations {
   String get takeback => 'Peruuta siirto';
 
   @override
-  String get proposeATakeback => 'Ehdota siirron peruutusta';
+  String get proposeATakeback => 'Pyydä siirron peruutusta';
 
   @override
-  String get takebackPropositionSent => 'Siirron peruutusta ehdotettu';
+  String get takebackPropositionSent => 'Siirron peruutusta pyydetty';
 
   @override
-  String get takebackPropositionDeclined => 'Siirron peruutuksen ehdotus hylätty';
+  String get takebackPropositionDeclined => 'Siirron peruutuspyyntö torjuttu';
 
   @override
-  String get takebackPropositionAccepted => 'Siirron peruutuksen ehdotus hyväksytty';
+  String get takebackPropositionAccepted => 'Siirron peruutuspyyntö hyväksytty';
 
   @override
-  String get takebackPropositionCanceled => 'Siirron peruutuksen ehdotus peruttu';
+  String get takebackPropositionCanceled => 'Siirron peruutuspyyntö vedetty pois';
 
   @override
   String get yourOpponentProposesATakeback => 'Vastustajasi ehdottaa siirron peruutusta';
@@ -2709,10 +2712,10 @@ class AppLocalizationsFi extends AppLocalizations {
   String get yes => 'Kyllä';
 
   @override
-  String get website => 'Website';
+  String get website => 'Verkkosivusto';
 
   @override
-  String get mobile => 'Mobile';
+  String get mobile => 'Mobiili';
 
   @override
   String get help => 'Apu:';

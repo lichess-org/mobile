@@ -9,137 +9,140 @@ class AppLocalizationsJa extends AppLocalizations {
   AppLocalizationsJa([String locale = 'ja']) : super(locale);
 
   @override
-  String get mobileHomeTab => 'Home';
+  String get mobileHomeTab => 'ホーム';
 
   @override
-  String get mobilePuzzlesTab => 'Puzzles';
+  String get mobilePuzzlesTab => '問題';
 
   @override
-  String get mobileToolsTab => 'Tools';
+  String get mobileToolsTab => 'ツール';
 
   @override
-  String get mobileWatchTab => 'Watch';
+  String get mobileWatchTab => '見る';
 
   @override
-  String get mobileSettingsTab => 'Settings';
+  String get mobileSettingsTab => '設定';
 
   @override
-  String get mobileMustBeLoggedIn => 'You must be logged in to view this page.';
+  String get mobileMustBeLoggedIn => 'このページを見るにはログインが必要です。';
 
   @override
-  String get mobileSystemColors => 'System colors';
+  String get mobileSystemColors => 'OS と同じ色設定';
 
   @override
-  String get mobileFeedbackButton => 'Feedback';
+  String get mobileFeedbackButton => 'フィードバック';
 
   @override
   String get mobileOkButton => 'OK';
 
   @override
-  String get mobileSettingsHapticFeedback => 'Haptic feedback';
+  String get mobileSettingsHapticFeedback => '振動フィードバック';
 
   @override
-  String get mobileSettingsImmersiveMode => 'Immersive mode';
+  String get mobileSettingsImmersiveMode => '没入モード';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.';
+  String get mobileSettingsImmersiveModeSubtitle => '対局中にシステム用の UI を隠します。画面端のナビゲーションなどがじゃまな人はこれを使ってください。対局と問題ストームの画面に適用されます。';
 
   @override
-  String get mobileNotFollowingAnyUser => 'You are not following any user.';
+  String get mobileNotFollowingAnyUser => '誰もフォローしていません。';
 
   @override
-  String get mobileAllGames => 'All games';
+  String get mobileAllGames => 'すべて';
 
   @override
-  String get mobileRecentSearches => 'Recent searches';
+  String get mobileRecentSearches => '最近の検索';
 
   @override
-  String get mobileClearButton => 'Clear';
+  String get mobileClearButton => 'クリア';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
-    return 'Players with \"$param\"';
+    return '「$param」を含むプレイヤー';
   }
 
   @override
-  String get mobileNoSearchResults => 'No results';
+  String get mobileNoSearchResults => '検索結果なし';
 
   @override
-  String get mobileAreYouSure => 'Are you sure?';
+  String get mobileAreYouSure => '本当にいいですか？';
 
   @override
-  String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
+  String get mobilePuzzleStreakAbortWarning => '現在の連続正解が終わり、スコアが保存されます。';
 
   @override
-  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of Puzzle Storm.';
+  String get mobilePuzzleStormNothingToShow => 'データがありません。まず問題ストームをプレイして。';
 
   @override
-  String get mobileSharePuzzle => 'Share this puzzle';
+  String get mobileSharePuzzle => 'この問題を共有する';
 
   @override
-  String get mobileShareGameURL => 'Share game URL';
+  String get mobileShareGameURL => 'ゲーム URLを共有';
 
   @override
-  String get mobileShareGamePGN => 'Share PGN';
+  String get mobileShareGamePGN => 'PGN を共有';
 
   @override
-  String get mobileSharePositionAsFEN => 'Share position as FEN';
+  String get mobileSharePositionAsFEN => '局面を FEN で共有';
 
   @override
-  String get mobileShowVariations => 'Show variations';
+  String get mobileShowVariations => '変化手順を表示';
 
   @override
-  String get mobileHideVariation => 'Hide variation';
+  String get mobileHideVariation => '変化手順を隠す';
 
   @override
-  String get mobileShowComments => 'Show comments';
+  String get mobileShowComments => 'コメントを表示';
 
   @override
-  String get mobilePuzzleStormConfirmEndRun => 'Do you want to end this run?';
+  String get mobilePuzzleStormConfirmEndRun => 'このストームを終了しますか？';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow => 'Nothing to show, please change the filters';
+  String get mobilePuzzleStormFilterNothingToShow => '条件に合う問題がありません。フィルターを変更してください';
 
   @override
-  String get mobileCancelTakebackOffer => 'Cancel takeback offer';
+  String get mobileCancelTakebackOffer => '待ったをキャンセル';
 
   @override
-  String get mobileCancelDrawOffer => 'Cancel draw offer';
+  String get mobileCancelDrawOffer => 'ドロー提案をキャンセル';
 
   @override
-  String get mobileWaitingForOpponentToJoin => 'Waiting for opponent to join...';
+  String get mobileWaitingForOpponentToJoin => '対戦相手の参加を待っています…';
 
   @override
-  String get mobileBlindfoldMode => 'Blindfold';
+  String get mobileBlindfoldMode => 'めかくしモード';
 
   @override
-  String get mobileLiveStreamers => 'Live streamers';
+  String get mobileLiveStreamers => 'ライブ配信者';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Join a game';
+  String get mobileCustomGameJoinAGame => 'ゲームに参加';
 
   @override
-  String get mobileCorrespondenceClearSavedMove => 'Clear saved move';
+  String get mobileCorrespondenceClearSavedMove => '保存した手を削除';
 
   @override
-  String get mobileSomethingWentWrong => 'Something went wrong.';
+  String get mobileSomethingWentWrong => '問題が発生しました。';
 
   @override
-  String get mobileShowResult => 'Show result';
+  String get mobileShowResult => '結果を表示';
 
   @override
-  String get mobilePuzzleThemesSubtitle => 'Play puzzles from your favorite openings, or choose a theme.';
+  String get mobilePuzzleThemesSubtitle => 'お気に入りのオープニングやテーマの問題が選べます。';
 
   @override
-  String get mobilePuzzleStormSubtitle => 'Solve as many puzzles as possible in 3 minutes.';
+  String get mobilePuzzleStormSubtitle => '3 分間でできるだけ多くの問題を解いてください。';
 
   @override
   String mobileGreeting(String param) {
-    return 'Hello, $param';
+    return 'こんにちは $param さん';
   }
 
   @override
-  String get mobileGreetingWithoutName => 'Hello';
+  String get mobileGreetingWithoutName => 'こんにちは';
+
+  @override
+  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
 
   @override
   String get activityActivity => '活動';
@@ -1853,7 +1856,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get friends => '友達';
 
   @override
-  String get otherPlayers => 'other players';
+  String get otherPlayers => 'その他のプレイヤー';
 
   @override
   String get discussions => 'トピック';
@@ -2687,10 +2690,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get yes => 'はい';
 
   @override
-  String get website => 'Website';
+  String get website => 'ウェブサイト';
 
   @override
-  String get mobile => 'Mobile';
+  String get mobile => 'モバイル';
 
   @override
   String get help => 'ヘルプ：';

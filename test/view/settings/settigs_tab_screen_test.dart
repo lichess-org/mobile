@@ -19,7 +19,7 @@ final client = MockClient((request) {
 });
 
 void main() {
-  group('SettingsScreen', () {
+  group('SettingsTabScreen', () {
     testWidgets(
       'meets accessibility guidelines',
       (WidgetTester tester) async {

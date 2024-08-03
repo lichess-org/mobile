@@ -125,21 +125,24 @@ class AppLocalizationsEl extends AppLocalizations {
   String get mobileSomethingWentWrong => 'Something went wrong.';
 
   @override
-  String get mobileShowResult => 'Show result';
+  String get mobileShowResult => 'Εμφάνιση αποτελέσματος';
 
   @override
   String get mobilePuzzleThemesSubtitle => 'Play puzzles from your favorite openings, or choose a theme.';
 
   @override
-  String get mobilePuzzleStormSubtitle => 'Solve as many puzzles as possible in 3 minutes.';
+  String get mobilePuzzleStormSubtitle => 'Λύστε όσους γρίφους όσο το δυνατόν, σε 3 λεπτά.';
 
   @override
   String mobileGreeting(String param) {
-    return 'Hello, $param';
+    return 'Καλωσορίσατε, $param';
   }
 
   @override
-  String get mobileGreetingWithoutName => 'Hello';
+  String get mobileGreetingWithoutName => 'Καλωσορίσατε';
+
+  @override
+  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
 
   @override
   String get activityActivity => 'Δραστηριότητα';

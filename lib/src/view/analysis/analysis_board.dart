@@ -96,24 +96,17 @@ class AnalysisBoardState extends ConsumerState<AnalysisBoard> {
                     : IMap({sanMove.move.cg.to: annotation})
                 : null,
       ),
-      settings: cg.BoardSettings(
-        pieceAssets: boardPrefs.pieceSet.assets,
-        colorScheme: boardPrefs.boardTheme.colors,
-        showValidMoves: boardPrefs.showLegalMoves,
-        showLastMove: boardPrefs.boardHighlights,
-        enableCoordinates: boardPrefs.coordinates,
-        animationDuration: boardPrefs.pieceAnimationDuration,
-        borderRadius: widget.isTablet
-            ? const BorderRadius.all(Radius.circular(4.0))
-            : BorderRadius.zero,
-        boxShadow: widget.isTablet ? boardShadows : const <BoxShadow>[],
-        drawShape: cg.DrawShapeOptions(
-          enable: true,
-          onCompleteShape: _onCompleteShape,
-          onClearShapes: _onClearShapes,
-        ),
-        pieceShiftMethod: boardPrefs.pieceShiftMethod,
-      ),
+      settings: boardPrefs.toBoardSettings().copyWith(
+            borderRadius: widget.isTablet
+                ? const BorderRadius.all(Radius.circular(4.0))
+                : BorderRadius.zero,
+            boxShadow: widget.isTablet ? boardShadows : const <BoxShadow>[],
+            drawShape: cg.DrawShapeOptions(
+              enable: true,
+              onCompleteShape: _onCompleteShape,
+              onClearShapes: _onClearShapes,
+            ),
+          ),
     );
   }
 

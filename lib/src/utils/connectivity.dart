@@ -27,6 +27,8 @@ class ConnectivityChanges extends _$ConnectivityChanges {
 
   final _connectivityChangesDebouncer = Debouncer(const Duration(seconds: 5));
 
+  Client get _defaultClient => ref.read(defaultClientProvider);
+
   @override
   Future<ConnectivityStatus> build() {
     ref.onDispose(() {
@@ -74,23 +76,18 @@ class ConnectivityChanges extends _$ConnectivityChanges {
 
     final wasOnline = state.requireValue.isOnline;
 
-    final client = httpClientFactory();
-    try {
-      _logger.fine('Connectivity changed: $result');
-      final isOnline = await _onlineCheck(client);
-      _logger.fine('Online check result: $isOnline');
+    _logger.fine('Connectivity changed: $result');
+    final newIsOnline = await isOnline(_defaultClient);
+    _logger.fine('Online check result: $isOnline');
 
-      if (isOnline != wasOnline) {
-        _logger.info('Connectivity status: $result, isOnline: $isOnline');
-        state = AsyncValue.data(
-          ConnectivityStatus(
-            isOnline: isOnline,
-            appState: state.valueOrNull?.appState,
-          ),
-        );
-      }
-    } finally {
-      client.close();
+    if (newIsOnline != wasOnline) {
+      _logger.info('Connectivity status: $result, isOnline: $isOnline');
+      state = AsyncValue.data(
+        ConnectivityStatus(
+          isOnline: newIsOnline,
+          appState: state.valueOrNull?.appState,
+        ),
+      );
     }
   }
 
@@ -98,18 +95,12 @@ class ConnectivityChanges extends _$ConnectivityChanges {
     List<ConnectivityResult> result,
     AppLifecycleState? appState,
   ) async {
-    final client = httpClientFactory();
-    try {
-      final status = ConnectivityStatus(
-        isOnline: await _onlineCheck(client),
-        appState: appState,
-      );
-      _logger
-          .info('Connectivity status: $result, isOnline: ${status.isOnline}');
-      return status;
-    } finally {
-      client.close();
-    }
+    final status = ConnectivityStatus(
+      isOnline: await isOnline(_defaultClient),
+      appState: appState,
+    );
+    _logger.info('Connectivity status: $result, isOnline: ${status.isOnline}');
+    return status;
   }
 }
 
@@ -126,7 +117,8 @@ final _internetCheckUris = [
   Uri.parse('$kLichessCDNHost/assets/logo/lichess-favicon-32.png'),
 ];
 
-Future<bool> _onlineCheck(Client client) {
+/// Checks if the device is online by making a HEAD request to a list of URIs.
+Future<bool> isOnline(Client client) {
   final completer = Completer<bool>();
   try {
     int remaining = _internetCheckUris.length;

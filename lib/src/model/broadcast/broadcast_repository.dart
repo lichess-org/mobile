@@ -1,3 +1,4 @@
+import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
@@ -22,7 +23,7 @@ class BroadcastRepository {
     );
   }
 
-  Future<IList<BroadcastGameSnapshot>> getRound(
+  Future<BroadcastRoundGames> getRound(
     BroadcastRoundId broadcastRoundId,
   ) {
     return client.readJson(
@@ -57,6 +58,7 @@ Broadcast _broadcastFromPick(RequiredPick pick) {
       : finished
           ? RoundStatus.finished
           : RoundStatus.upcoming;
+  final roundId = pick('round', 'id').asBroadcastRoundIdOrThrow();
 
   return Broadcast(
     tour: (
@@ -64,7 +66,7 @@ Broadcast _broadcastFromPick(RequiredPick pick) {
       imageUrl: pick('tour', 'image').asStringOrNull(),
     ),
     round: BroadcastRound(
-      id: pick('round', 'id').asBroadcastRoundIdOrThrow(),
+      id: roundId,
       name: pick('round', 'name').asStringOrThrow(),
       status: status,
       startsAt: pick('round', 'startsAt')
@@ -72,23 +74,36 @@ Broadcast _broadcastFromPick(RequiredPick pick) {
           .toLocal(),
     ),
     group: pick('group').asStringOrNull(),
+    roundToLinkId:
+        pick('roundToLink', 'id').asBroadcastRoundIddOrNull() ?? roundId,
   );
 }
 
-IList<BroadcastGameSnapshot> _makeGamesFromJson(Map<String, dynamic> json) =>
+BroadcastRoundGames _makeGamesFromJson(Map<String, dynamic> json) =>
     _gamesFromPick(pick(json).required());
 
-IList<BroadcastGameSnapshot> _gamesFromPick(RequiredPick pick) =>
-    pick('games').asListOrEmpty(_gameFromPick).toIList();
+BroadcastRoundGames _gamesFromPick(
+  RequiredPick pick,
+) =>
+    IMap.fromEntries(pick('games').asListOrThrow(gameFromPick));
 
-BroadcastGameSnapshot _gameFromPick(RequiredPick pick) {
-  return BroadcastGameSnapshot(
-    players: pick('players').asListOrThrow(_playerFromPick).toIList(),
-    fen: pick('fen').asStringOrNull() ?? Variant.standard.initialPosition.fen,
-    lastMove: pick('lastMove').asUciMoveOrNull(),
-    status: pick('status').asStringOrThrow(),
-  );
-}
+MapEntry<BroadcastGameId, BroadcastGameSnapshot> gameFromPick(
+  RequiredPick pick,
+) =>
+    MapEntry(
+      pick('id').asBroadcastGameIdOrThrow(),
+      BroadcastGameSnapshot(
+        players: IMap({
+          Side.white: _playerFromPick(pick('players', 0).required()),
+          Side.black: _playerFromPick(pick('players', 1).required()),
+        }),
+        fen: pick('fen').asStringOrNull() ??
+            Variant.standard.initialPosition.fen,
+        lastMove: pick('lastMove').asUciMoveOrNull(),
+        status: pick('status').asStringOrThrow(),
+        thinkTime: pick('thinkTime').asDurationFromSecondsOrNull(),
+      ),
+    );
 
 BroadcastPlayer _playerFromPick(RequiredPick pick) {
   return BroadcastPlayer(

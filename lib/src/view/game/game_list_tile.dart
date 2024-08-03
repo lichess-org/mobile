@@ -2,6 +2,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -24,6 +25,8 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:timeago/timeago.dart' as timeago;
+
+final _dateFormatter = DateFormat.yMMMd(Intl.getCurrentLocale()).add_Hm();
 
 /// A list tile that shows game info.
 class GameListTile extends StatelessWidget {
@@ -122,6 +125,22 @@ class _ContextMenu extends ConsumerWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 16.0).add(
                   const EdgeInsets.only(bottom: 8.0),
                 ),
+                child: Text(
+                  context.l10n.resVsX(
+                    game.white.fullName(context),
+                    game.black.fullName(context),
+                  ),
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: -0.5,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0).add(
+                  const EdgeInsets.only(bottom: 8.0),
+                ),
                 child: LayoutBuilder(
                   builder: (context, constraints) {
                     return IntrinsicHeight(
@@ -151,24 +170,19 @@ class _ContextMenu extends ConsumerWidget {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        context.l10n.resVsX(
-                                          game.white.fullName(context),
-                                          game.black.fullName(context),
-                                        ),
+                                        '${game.clockDisplay} • ${game.rated ? context.l10n.rated : context.l10n.casual}',
                                         style: const TextStyle(
-                                          fontSize: 16,
                                           fontWeight: FontWeight.w500,
-                                          letterSpacing: -0.5,
                                         ),
                                       ),
-                                      const SizedBox(height: 2.0),
                                       Text(
-                                        '${game.clockDisplay} • ${game.rated ? context.l10n.rated : context.l10n.casual}',
+                                        _dateFormatter.format(game.lastMoveAt),
                                         style: TextStyle(
                                           color: textShade(
                                             context,
                                             Styles.subtitleOpacity,
                                           ),
+                                          fontSize: 12,
                                         ),
                                       ),
                                     ],
@@ -418,7 +432,7 @@ class _ContextMenu extends ConsumerWidget {
   }
 }
 
-/// A list tile that shows extended game info including an accuracy meter and a result icon.
+/// A list tile that shows extended game info including a result icon and analysis icon.
 class ExtendedGameListTile extends StatelessWidget {
   const ExtendedGameListTile({required this.item, this.userId});
 
@@ -485,28 +499,14 @@ class ExtendedGameListTile extends StatelessWidget {
         aiLevel: opponent.aiLevel,
         rating: opponent.rating,
       ),
-      subtitle: Text(
-        timeago.format(game.lastMoveAt),
-      ),
+      subtitle: Text(timeago.format(game.lastMoveAt)),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           if (me.analysis != null) ...[
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  CupertinoIcons.chart_bar_alt_fill,
-                  color: textShade(context, 0.5),
-                ),
-                Text(
-                  me.analysis!.accuracy.toString(),
-                  style: TextStyle(
-                    fontSize: 10,
-                    color: textShade(context, Styles.subtitleOpacity),
-                  ),
-                ),
-              ],
+            Icon(
+              CupertinoIcons.chart_bar_alt_fill,
+              color: textShade(context, 0.5),
             ),
             const SizedBox(width: 5),
           ],

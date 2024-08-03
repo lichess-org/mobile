@@ -9,137 +9,140 @@ class AppLocalizationsSk extends AppLocalizations {
   AppLocalizationsSk([String locale = 'sk']) : super(locale);
 
   @override
-  String get mobileHomeTab => 'Home';
+  String get mobileHomeTab => 'Domov';
 
   @override
-  String get mobilePuzzlesTab => 'Puzzles';
+  String get mobilePuzzlesTab => 'Úlohy';
 
   @override
-  String get mobileToolsTab => 'Tools';
+  String get mobileToolsTab => 'Nástroje';
 
   @override
-  String get mobileWatchTab => 'Watch';
+  String get mobileWatchTab => 'Sledovať';
 
   @override
-  String get mobileSettingsTab => 'Settings';
+  String get mobileSettingsTab => 'Nastavenia';
 
   @override
-  String get mobileMustBeLoggedIn => 'You must be logged in to view this page.';
+  String get mobileMustBeLoggedIn => 'Na zobrazenie tejto stránky musíte byť prihlásený.';
 
   @override
-  String get mobileSystemColors => 'System colors';
+  String get mobileSystemColors => 'Farby operačného systému';
 
   @override
-  String get mobileFeedbackButton => 'Feedback';
+  String get mobileFeedbackButton => 'Spätná väzba';
 
   @override
   String get mobileOkButton => 'OK';
 
   @override
-  String get mobileSettingsHapticFeedback => 'Haptic feedback';
+  String get mobileSettingsHapticFeedback => 'Vibrovanie zariadenia';
 
   @override
-  String get mobileSettingsImmersiveMode => 'Immersive mode';
+  String get mobileSettingsImmersiveMode => 'Režim celej obrazovky';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.';
+  String get mobileSettingsImmersiveModeSubtitle => 'Skrytie používateľského rozhrania systému počas hrania. Túto funkciu použite, ak vám prekážajú navigačné gestá systému na okrajoch obrazovky. Vzťahuje sa na obrazovku počas partie a Puzzle Storm.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'You are not following any user.';
+  String get mobileNotFollowingAnyUser => 'Nesledujete žiadneho používateľa.';
 
   @override
-  String get mobileAllGames => 'All games';
+  String get mobileAllGames => 'Všetky partie';
 
   @override
-  String get mobileRecentSearches => 'Recent searches';
+  String get mobileRecentSearches => 'Posledné vyhľadávania';
 
   @override
-  String get mobileClearButton => 'Clear';
+  String get mobileClearButton => 'Odstrániť';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
-    return 'Players with \"$param\"';
+    return 'Hráči s \"$param\"';
   }
 
   @override
-  String get mobileNoSearchResults => 'No results';
+  String get mobileNoSearchResults => 'Nič sa nenašlo';
 
   @override
-  String get mobileAreYouSure => 'Are you sure?';
+  String get mobileAreYouSure => 'Ste si istý?';
 
   @override
-  String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
+  String get mobilePuzzleStreakAbortWarning => 'Stratíte svoju aktuálnu sériu a vaše skóre sa uloží.';
 
   @override
-  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of Puzzle Storm.';
+  String get mobilePuzzleStormNothingToShow => 'Niet čo zobraziť. Zahrajte si niekoľko kôl Puzzle Storm.';
 
   @override
-  String get mobileSharePuzzle => 'Share this puzzle';
+  String get mobileSharePuzzle => 'Zdieľať túto úlohu';
 
   @override
-  String get mobileShareGameURL => 'Share game URL';
+  String get mobileShareGameURL => 'Zdieľať URL partie';
 
   @override
-  String get mobileShareGamePGN => 'Share PGN';
+  String get mobileShareGamePGN => 'Zdieľať PGN';
 
   @override
-  String get mobileSharePositionAsFEN => 'Share position as FEN';
+  String get mobileSharePositionAsFEN => 'Zdieľať pozíciu vo formáte FEN';
 
   @override
-  String get mobileShowVariations => 'Show variations';
+  String get mobileShowVariations => 'Zobraziť varianty';
 
   @override
-  String get mobileHideVariation => 'Hide variation';
+  String get mobileHideVariation => 'Skryť varianty';
 
   @override
-  String get mobileShowComments => 'Show comments';
+  String get mobileShowComments => 'Zobraziť komentáre';
 
   @override
-  String get mobilePuzzleStormConfirmEndRun => 'Do you want to end this run?';
+  String get mobilePuzzleStormConfirmEndRun => 'Chcete ukončiť tento pokus?';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow => 'Nothing to show, please change the filters';
+  String get mobilePuzzleStormFilterNothingToShow => 'Niet čo zobraziť, prosím, zmeňte filtre';
 
   @override
-  String get mobileCancelTakebackOffer => 'Cancel takeback offer';
+  String get mobileCancelTakebackOffer => 'Zrušiť žiadosť o vrátenie ťahu';
 
   @override
-  String get mobileCancelDrawOffer => 'Cancel draw offer';
+  String get mobileCancelDrawOffer => 'Zrušiť navrhnutie remízy';
 
   @override
-  String get mobileWaitingForOpponentToJoin => 'Waiting for opponent to join...';
+  String get mobileWaitingForOpponentToJoin => 'Čaká sa na pripojenie súpera...';
 
   @override
-  String get mobileBlindfoldMode => 'Blindfold';
+  String get mobileBlindfoldMode => 'Naslepo';
 
   @override
-  String get mobileLiveStreamers => 'Live streamers';
+  String get mobileLiveStreamers => 'Vysielajúci strímeri';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Join a game';
+  String get mobileCustomGameJoinAGame => 'Pripojiť sa k partii';
 
   @override
-  String get mobileCorrespondenceClearSavedMove => 'Clear saved move';
+  String get mobileCorrespondenceClearSavedMove => 'Vymazať uložený ťah';
 
   @override
-  String get mobileSomethingWentWrong => 'Something went wrong.';
+  String get mobileSomethingWentWrong => 'Došlo k chybe.';
 
   @override
-  String get mobileShowResult => 'Show result';
+  String get mobileShowResult => 'Zobraziť výsledok';
 
   @override
-  String get mobilePuzzleThemesSubtitle => 'Play puzzles from your favorite openings, or choose a theme.';
+  String get mobilePuzzleThemesSubtitle => 'Riešte úlohy zo svojich obľúbených otvorení alebo si vyberte tému.';
 
   @override
-  String get mobilePuzzleStormSubtitle => 'Solve as many puzzles as possible in 3 minutes.';
+  String get mobilePuzzleStormSubtitle => 'Vyriešte čo najviac úloh za 3 minúty.';
 
   @override
   String mobileGreeting(String param) {
-    return 'Hello, $param';
+    return 'Ahoj, $param';
   }
 
   @override
-  String get mobileGreetingWithoutName => 'Hello';
+  String get mobileGreetingWithoutName => 'Ahoj';
+
+  @override
+  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
 
   @override
   String get activityActivity => 'Aktivita';
@@ -961,7 +964,7 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
-  String get puzzleStreakSkipExplanation => 'Preskočte tento ťah, aby ste neprerušili sériu! Funguje len raz za sériu.';
+  String get puzzleStreakSkipExplanation => 'Preskočte tento ťah, aby ste neprerušili sériu! Funguje len raz za kolo.';
 
   @override
   String get puzzleContinueTheStreak => 'Pokračovať v sérii výhier';
@@ -1000,7 +1003,7 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
-  String get puzzleNoPuzzlesToShow => 'Niet tu čo ukázať, choďte najprv riešiť pár úloh!';
+  String get puzzleNoPuzzlesToShow => 'Niet čo zobraziť, vyriešte najprv zopár úloh!';
 
   @override
   String get puzzleImprovementAreasDescription => 'Precvičujte tieto úlohy aby ste napredovali čo najrýchlejšie!';
@@ -1919,7 +1922,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get friends => 'Priatelia';
 
   @override
-  String get otherPlayers => 'other players';
+  String get otherPlayers => 'iní hráči';
 
   @override
   String get discussions => 'Konverzácie';
@@ -2162,7 +2165,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get standard => 'Štandard';
 
   @override
-  String get customPosition => 'Custom position';
+  String get customPosition => 'Vlastná pozícia';
 
   @override
   String get unlimited => 'Bez času';
@@ -2732,7 +2735,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get puzzles => 'Šachové úlohy';
 
   @override
-  String get onlineBots => 'Online bots';
+  String get onlineBots => 'Online boti';
 
   @override
   String get name => 'Meno';
@@ -2753,10 +2756,10 @@ class AppLocalizationsSk extends AppLocalizations {
   String get yes => 'Áno';
 
   @override
-  String get website => 'Website';
+  String get website => 'Webstránka';
 
   @override
-  String get mobile => 'Mobile';
+  String get mobile => 'Mobil';
 
   @override
   String get help => 'Pomoc:';
@@ -3085,7 +3088,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get videoLibrary => 'Video knižnica';
 
   @override
-  String get streamersMenu => 'Streameri';
+  String get streamersMenu => 'Strímeri';
 
   @override
   String get mobileApp => 'Mobilná aplikácia';
@@ -3214,7 +3217,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get keyGoToStartOrEnd => 'ísť na začiatok/koniec';
 
   @override
-  String get keyCycleSelectedVariation => 'Cycle selected variation';
+  String get keyCycleSelectedVariation => 'Vybrať variant';
 
   @override
   String get keyShowOrHideComments => 'zobraziť/skryť komentáre';
@@ -3238,28 +3241,28 @@ class AppLocalizationsSk extends AppLocalizations {
   String get keyNextInaccuracy => 'Ďalšia nepresnosť';
 
   @override
-  String get keyPreviousBranch => 'Previous branch';
+  String get keyPreviousBranch => 'Predchádzajúca vetva';
 
   @override
-  String get keyNextBranch => 'Next branch';
+  String get keyNextBranch => 'Nasledujúca vetva';
 
   @override
-  String get toggleVariationArrows => 'Toggle variation arrows';
+  String get toggleVariationArrows => 'Prepnúť šípky variantov';
 
   @override
-  String get cyclePreviousOrNextVariation => 'Cycle previous/next variation';
+  String get cyclePreviousOrNextVariation => 'Zakomponovať predchádzajúci/nasledujúci variant';
 
   @override
-  String get toggleGlyphAnnotations => 'Toggle move annotations';
+  String get toggleGlyphAnnotations => 'Prepnúť poznámky k ťahom';
 
   @override
-  String get togglePositionAnnotations => 'Toggle position annotations';
+  String get togglePositionAnnotations => 'Prepnúť poznámky k pozíciám';
 
   @override
-  String get variationArrowsInfo => 'Variation arrows let you navigate without using the move list.';
+  String get variationArrowsInfo => 'Šípky variantov umožňujú navigáciu bez použitia záznamu ťahov.';
 
   @override
-  String get playSelectedMove => 'play selected move';
+  String get playSelectedMove => 'zahrať zvolený ťah';
 
   @override
   String get newTournament => 'Nový turnaj';
@@ -3394,7 +3397,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get kidMode => 'Detský režim';
 
   @override
-  String get kidModeIsEnabled => 'Kid mode is enabled.';
+  String get kidModeIsEnabled => 'Detský režim je povolený.';
 
   @override
   String get kidModeExplanation => 'V detskom režime je pre ochranu detí a mládeže pred ostatnými užívateľmi akákoľvek komunikácia zablokovaná.';
@@ -3719,10 +3722,10 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
-  String get showUnreadLichessMessage => 'You have received a private message from Lichess.';
+  String get showUnreadLichessMessage => 'Obdržali ste súkromnú správu od Lichess.';
 
   @override
-  String get clickHereToReadIt => 'Click here to read it';
+  String get clickHereToReadIt => 'Kliknutím sem si ju môžete prečítať';
 
   @override
   String get sorry => 'Prepáčte :(';
@@ -4116,7 +4119,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get lichessPatronInfo => 'Lichess je bezplatný a úplne slobodný/nezávislý softvér s otvoreným zdrojovým kódom. Všetky prevádzkové náklady, vývoj a obsah sú financované výlučne z darov používateľov.';
 
   @override
-  String get nothingToSeeHere => 'Nothing to see here at the moment.';
+  String get nothingToSeeHere => 'Momentálne tu nie je nič k zobrazeniu.';
 
   @override
   String opponentLeftCounter(int count) {
@@ -4726,22 +4729,22 @@ class AppLocalizationsSk extends AppLocalizations {
   String get stormPuzzlesPlayed => 'Riešené úlohy';
 
   @override
-  String get stormNewRun => 'Nový pokus (kláves. skratka: Medzerník)';
+  String get stormNewRun => 'Nové kolo (kláves. skratka: Medzerník)';
 
   @override
-  String get stormEndRun => 'Ukončiť pokus (kláves. skratka: Enter)';
+  String get stormEndRun => 'Ukončiť kolo (kláves. skratka: Enter)';
 
   @override
   String get stormHighscores => 'Najvyššie skóre';
 
   @override
-  String get stormViewBestRuns => 'Prezrieť najlepšie pokusy';
+  String get stormViewBestRuns => 'Prezrieť najlepšie kolá';
 
   @override
-  String get stormBestRunOfDay => 'Najlepší pokus dňa';
+  String get stormBestRunOfDay => 'Najlepšie kolo dňa';
 
   @override
-  String get stormRuns => 'Pokusy';
+  String get stormRuns => 'Kolá';
 
   @override
   String get stormGetReady => 'Pripravte sa!';
@@ -4818,20 +4821,20 @@ class AppLocalizationsSk extends AppLocalizations {
   String get stormClickToReload => 'Kliknite pre opätovné načítanie';
 
   @override
-  String get stormThisRunHasExpired => 'Tento pokus vypršal!';
+  String get stormThisRunHasExpired => 'Čas tohto kola vypršal!';
 
   @override
-  String get stormThisRunWasOpenedInAnotherTab => 'Tento pokus ste otvorili v inej záložke!';
+  String get stormThisRunWasOpenedInAnotherTab => 'Toto kolo ste otvorili v inej záložke!';
 
   @override
   String stormXRuns(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count pokusov',
-      many: '$count pokusov',
-      few: '$count pokusy',
-      one: '1 pokus',
+      other: '$count kôl',
+      many: '$count kôl',
+      few: '$count kolá',
+      one: '1 kolo',
     );
     return '$_temp0';
   }
@@ -4841,10 +4844,10 @@ class AppLocalizationsSk extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Odohraných $count pokusov $param2',
-      many: 'Odohraných $count pokusov $param2',
-      few: 'Obohrané $count pokusy $param2',
-      one: 'Odohraný jeden pokus $param2',
+      other: 'Odohraných $count kôl $param2',
+      many: 'Odohraných $count kôl $param2',
+      few: 'Obohrané $count kolá $param2',
+      one: 'Odohrané jedeno kolo $param2',
     );
     return '$_temp0';
   }

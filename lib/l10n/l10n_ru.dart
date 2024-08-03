@@ -9,137 +9,140 @@ class AppLocalizationsRu extends AppLocalizations {
   AppLocalizationsRu([String locale = 'ru']) : super(locale);
 
   @override
-  String get mobileHomeTab => 'Home';
+  String get mobileHomeTab => 'Главная';
 
   @override
-  String get mobilePuzzlesTab => 'Puzzles';
+  String get mobilePuzzlesTab => 'Задачи';
 
   @override
-  String get mobileToolsTab => 'Tools';
+  String get mobileToolsTab => 'Анализ';
 
   @override
-  String get mobileWatchTab => 'Watch';
+  String get mobileWatchTab => 'Просмотр';
 
   @override
-  String get mobileSettingsTab => 'Settings';
+  String get mobileSettingsTab => 'Настройки';
 
   @override
-  String get mobileMustBeLoggedIn => 'You must be logged in to view this page.';
+  String get mobileMustBeLoggedIn => 'Вы должны войти для просмотра этой страницы.';
 
   @override
-  String get mobileSystemColors => 'System colors';
+  String get mobileSystemColors => 'Цвет интерфейса';
 
   @override
-  String get mobileFeedbackButton => 'Feedback';
+  String get mobileFeedbackButton => 'Отзыв';
 
   @override
-  String get mobileOkButton => 'OK';
+  String get mobileOkButton => 'ОК';
 
   @override
-  String get mobileSettingsHapticFeedback => 'Haptic feedback';
+  String get mobileSettingsHapticFeedback => 'Виброотклик';
 
   @override
-  String get mobileSettingsImmersiveMode => 'Immersive mode';
+  String get mobileSettingsImmersiveMode => 'Полноэкранный режим';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.';
+  String get mobileSettingsImmersiveModeSubtitle => 'Скрывать интерфейс во время игры. Воспользуйтесь, если вам мешает навигация по краям экрана. Применяется в режиме партий и задач.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'You are not following any user.';
+  String get mobileNotFollowingAnyUser => 'Вы не подписаны на других пользователей.';
 
   @override
-  String get mobileAllGames => 'All games';
+  String get mobileAllGames => 'Все игры';
 
   @override
-  String get mobileRecentSearches => 'Recent searches';
+  String get mobileRecentSearches => 'Последние запросы';
 
   @override
-  String get mobileClearButton => 'Clear';
+  String get mobileClearButton => 'Очистить';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
-    return 'Players with \"$param\"';
+    return 'Игроки, содержащие «$param»';
   }
 
   @override
-  String get mobileNoSearchResults => 'No results';
+  String get mobileNoSearchResults => 'Ничего не найденo';
 
   @override
-  String get mobileAreYouSure => 'Are you sure?';
+  String get mobileAreYouSure => 'Вы уверены?';
 
   @override
-  String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
+  String get mobilePuzzleStreakAbortWarning => 'Вы потеряете свою текущую серию, и результаты будут сохранены.';
 
   @override
-  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of Puzzle Storm.';
+  String get mobilePuzzleStormNothingToShow => 'Ничего нет. Сыграйте несколько попыток.';
 
   @override
-  String get mobileSharePuzzle => 'Share this puzzle';
+  String get mobileSharePuzzle => 'Поделиться задачей';
 
   @override
-  String get mobileShareGameURL => 'Share game URL';
+  String get mobileShareGameURL => 'Поделиться ссылкой на игру';
 
   @override
-  String get mobileShareGamePGN => 'Share PGN';
+  String get mobileShareGamePGN => 'Поделиться PGN';
 
   @override
-  String get mobileSharePositionAsFEN => 'Share position as FEN';
+  String get mobileSharePositionAsFEN => 'Поделиться FEN';
 
   @override
-  String get mobileShowVariations => 'Show variations';
+  String get mobileShowVariations => 'Показывать варианты';
 
   @override
-  String get mobileHideVariation => 'Hide variation';
+  String get mobileHideVariation => 'Скрыть варианты';
 
   @override
-  String get mobileShowComments => 'Show comments';
+  String get mobileShowComments => 'Показать комментарии';
 
   @override
-  String get mobilePuzzleStormConfirmEndRun => 'Do you want to end this run?';
+  String get mobilePuzzleStormConfirmEndRun => 'Хотите закончить эту попытку?';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow => 'Nothing to show, please change the filters';
+  String get mobilePuzzleStormFilterNothingToShow => 'Ничего не найдено, измените фильтры, пожалуйста';
 
   @override
-  String get mobileCancelTakebackOffer => 'Cancel takeback offer';
+  String get mobileCancelTakebackOffer => 'Отменить предложение о возврате хода';
 
   @override
-  String get mobileCancelDrawOffer => 'Cancel draw offer';
+  String get mobileCancelDrawOffer => 'Отменить предложение ничьей';
 
   @override
-  String get mobileWaitingForOpponentToJoin => 'Waiting for opponent to join...';
+  String get mobileWaitingForOpponentToJoin => 'Ожидание соперника...';
 
   @override
-  String get mobileBlindfoldMode => 'Blindfold';
+  String get mobileBlindfoldMode => 'Игра вслепую';
 
   @override
-  String get mobileLiveStreamers => 'Live streamers';
+  String get mobileLiveStreamers => 'Стримеры в эфире';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Join a game';
+  String get mobileCustomGameJoinAGame => 'Присоединиться к игре';
 
   @override
-  String get mobileCorrespondenceClearSavedMove => 'Clear saved move';
+  String get mobileCorrespondenceClearSavedMove => 'Очистить сохранённый ход';
 
   @override
-  String get mobileSomethingWentWrong => 'Something went wrong.';
+  String get mobileSomethingWentWrong => 'Что-то пошло не так.';
 
   @override
-  String get mobileShowResult => 'Show result';
+  String get mobileShowResult => 'Показать результат';
 
   @override
-  String get mobilePuzzleThemesSubtitle => 'Play puzzles from your favorite openings, or choose a theme.';
+  String get mobilePuzzleThemesSubtitle => 'Решайте задачи по вашим любимым дебютам или выберите тему.';
 
   @override
-  String get mobilePuzzleStormSubtitle => 'Solve as many puzzles as possible in 3 minutes.';
+  String get mobilePuzzleStormSubtitle => 'Решите как можно больше задач за 3 минуты.';
 
   @override
   String mobileGreeting(String param) {
-    return 'Hello, $param';
+    return 'Привет, $param';
   }
 
   @override
-  String get mobileGreetingWithoutName => 'Hello';
+  String get mobileGreetingWithoutName => 'Привет';
+
+  @override
+  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
 
   @override
   String get activityActivity => 'Активность';
@@ -1490,7 +1493,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get waitingForOpponent => 'Ожидание соперника';
 
   @override
-  String get orLetYourOpponentScanQrCode => 'Или дайте вашему сопернику отсканировать этот QR-код';
+  String get orLetYourOpponentScanQrCode => 'Или позвольте вашему сопернику отсканировать этот QR-код';
 
   @override
   String get waiting => 'Ожидание';
@@ -1919,7 +1922,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get friends => 'Друзья';
 
   @override
-  String get otherPlayers => 'other players';
+  String get otherPlayers => 'другие игроки';
 
   @override
   String get discussions => 'Беседы';
@@ -2672,7 +2675,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get editProfile => 'Редактировать профиль';
 
   @override
-  String get realName => 'Real name';
+  String get realName => 'Настоящее имя';
 
   @override
   String get setFlair => 'Задайте свой эмодзи';
@@ -2753,10 +2756,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String get yes => 'Да';
 
   @override
-  String get website => 'Website';
+  String get website => 'Сайт';
 
   @override
-  String get mobile => 'Mobile';
+  String get mobile => 'Мобильный';
 
   @override
   String get help => 'Помощь:';
@@ -2916,7 +2919,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get outsideTheBoard => 'Вне доски';
 
   @override
-  String get allSquaresOfTheBoard => 'All squares of the board';
+  String get allSquaresOfTheBoard => 'Все поля на доске';
 
   @override
   String get onSlowGames => 'В медленных играх';
@@ -3749,7 +3752,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get playEveryGame => 'Доигрывайте все партии, которые начинали.';
 
   @override
-  String get tryToWin => 'Пытайтесь выиграть (или хотя бы свести на ничью) каждую свою партию.';
+  String get tryToWin => 'Попытайтесь выиграть (или хотя бы свести вничью) каждую свою партию.';
 
   @override
   String get resignLostGames => 'Сдавайтесь в безнадёжной позиции (а не ждите, когда время закончится).';
