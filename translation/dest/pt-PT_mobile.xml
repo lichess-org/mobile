@@ -37,4 +37,5 @@
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Entrar num jogo</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Limpar movimento salvo</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Algo deu errado.</string>
+  <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">Ampliar peça arrastada</string>
 </resources>
