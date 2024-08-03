@@ -102,25 +102,16 @@ Future<AppInitializationData> appInitialization(
 
   final storedSession = await sessionStorage.read();
   if (storedSession != null) {
-    final client = httpClientFactory();
-    try {
-      final response = await client.get(
-        lichessUri('/api/account'),
-        headers: {
-          'Authorization': 'Bearer ${signBearerToken(storedSession.token)}',
-          'User-Agent':
-              makeUserAgent(pInfo, deviceInfo, sri, storedSession.user),
-        },
-      ).timeout(const Duration(seconds: 3));
-      if (response.statusCode == 401) {
-        await sessionStorage.delete();
-      }
-    } catch (e) {
-      debugPrint(
-        'WARNING: [AppInitialization] Error while checking session: $e',
-      );
-    } finally {
-      client.close();
+    final client = ref.read(defaultClientProvider);
+    final response = await client.get(
+      lichessUri('/api/account'),
+      headers: {
+        'Authorization': 'Bearer ${signBearerToken(storedSession.token)}',
+        'User-Agent': makeUserAgent(pInfo, deviceInfo, sri, storedSession.user),
+      },
+    ).timeout(const Duration(seconds: 3));
+    if (response.statusCode == 401) {
+      await sessionStorage.delete();
     }
   }
 
