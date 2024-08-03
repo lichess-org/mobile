@@ -518,8 +518,9 @@ class _GameTile extends ConsumerWidget {
               return;
             case OpeningDatabase.lichess:
             case OpeningDatabase.player:
+              final gameId = GameId(game.id);
               final archivedGame = await ref.read(
-                archivedGameProvider(id: GameId(game.id)).future,
+                archivedGameProvider(id: gameId).future,
               );
               if (context.mounted) {
                 pushPlatformRoute(

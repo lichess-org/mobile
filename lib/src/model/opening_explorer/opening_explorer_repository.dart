@@ -28,16 +28,16 @@ Future<OpeningExplorer> openingExplorer(
           ratings: prefs.lichessDb.ratings,
           since: prefs.lichessDb.since,
         ),
-      OpeningDatabase.player => OpeningExplorerRepository(client)
-          .getPlayerDatabase(
-            fen,
-            // null check handled by widget
-            usernameOrId: prefs.playerDb.usernameOrId!,
-            color: prefs.playerDb.side,
-            speeds: prefs.playerDb.speeds,
-            modes: prefs.playerDb.modes,
-            since: prefs.playerDb.since,
-          )
+      OpeningDatabase.player =>
+        OpeningExplorerRepository(client).getPlayerDatabase(
+          fen,
+          // null check handled by widget
+          usernameOrId: prefs.playerDb.usernameOrId!,
+          color: prefs.playerDb.side,
+          speeds: prefs.playerDb.speeds,
+          modes: prefs.playerDb.modes,
+          since: prefs.playerDb.since,
+        )
     },
   );
 }
