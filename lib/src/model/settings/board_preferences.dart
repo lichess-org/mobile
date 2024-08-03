@@ -116,7 +116,7 @@ class BoardPrefs with _$BoardPrefs {
     required PieceShiftMethod pieceShiftMethod,
 
     /// Whether to enable shape drawings on the board for games and puzzles.
-    @JsonKey(defaultValue: false) required bool enableShapeDrawings,
+    @JsonKey(defaultValue: true) required bool enableShapeDrawings,
     @JsonKey(defaultValue: true) required bool magnifyDraggedPiece,
   }) = _BoardPrefs;
 
@@ -131,7 +131,7 @@ class BoardPrefs with _$BoardPrefs {
     pieceAnimation: true,
     showMaterialDifference: true,
     pieceShiftMethod: PieceShiftMethod.either,
-    enableShapeDrawings: false,
+    enableShapeDrawings: true,
     magnifyDraggedPiece: true,
   );
 

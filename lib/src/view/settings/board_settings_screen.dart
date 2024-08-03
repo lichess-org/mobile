@@ -87,9 +87,10 @@ class _Body extends ConsumerWidget {
                 },
               ),
               SwitchSettingTile(
-                title: const Text('Enable shapes drawing'),
+                // TODO: Add l10n
+                title: const Text('Shape drawing'),
                 subtitle: const Text(
-                  'Draw shapes using two fingers on game and puzzle boards (it is always enabled in analysis boards).',
+                  'Draw shapes using two fingers on game and puzzle boards.',
                   maxLines: 5,
                   textAlign: TextAlign.justify,
                 ),
