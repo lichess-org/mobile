@@ -34,9 +34,6 @@ class OpeningExplorerPreferences extends _$OpeningExplorerPreferences {
   Future<void> setMasterDbSince(int year) =>
       _save(state.copyWith(masterDb: state.masterDb.copyWith(sinceYear: year)));
 
-  Future<void> setMasterDbUntil(int year) =>
-      _save(state.copyWith(masterDb: state.masterDb.copyWith(untilYear: year)));
-
   Future<void> toggleLichessDbSpeed(Perf speed) => _save(
         state.copyWith(
           lichessDb: state.lichessDb.copyWith(
@@ -59,10 +56,6 @@ class OpeningExplorerPreferences extends _$OpeningExplorerPreferences {
 
   Future<void> setLichessDbSince(DateTime since) => _save(
         state.copyWith(lichessDb: state.lichessDb.copyWith(since: since)),
-      );
-
-  Future<void> setLichessDbUntil(DateTime until) => _save(
-        state.copyWith(lichessDb: state.lichessDb.copyWith(until: until)),
       );
 
   Future<void> setPlayerDbUsernameOrId(String usernameOrId) => _save(
@@ -99,10 +92,6 @@ class OpeningExplorerPreferences extends _$OpeningExplorerPreferences {
 
   Future<void> setPlayerDbSince(DateTime since) => _save(
         state.copyWith(playerDb: state.playerDb.copyWith(since: since)),
-      );
-
-  Future<void> setPlayerDbUntil(DateTime until) => _save(
-        state.copyWith(playerDb: state.playerDb.copyWith(until: until)),
       );
 
   Future<void> _save(OpeningExplorerPrefState newState) async {
@@ -154,14 +143,17 @@ class MasterDbPrefState with _$MasterDbPrefState {
 
   const factory MasterDbPrefState({
     required int sinceYear,
-    required int untilYear,
   }) = _MasterDbPrefState;
 
   static const kEarliestYear = 1952;
-  static final defaults = MasterDbPrefState(
-    sinceYear: kEarliestYear,
-    untilYear: DateTime.now().year,
-  );
+  static final now = DateTime.now();
+  static final datesMap = {
+    'Last 3 years': now.year - 3,
+    'Last 10 years': now.year - 10,
+    'Last 20 years': now.year - 20,
+    'All time': kEarliestYear,
+  };
+  static const defaults = MasterDbPrefState(sinceYear: kEarliestYear);
 
   factory MasterDbPrefState.fromJson(Map<String, dynamic> json) {
     try {
@@ -180,7 +172,6 @@ class LichessDbPrefState with _$LichessDbPrefState {
     required ISet<Perf> speeds,
     required ISet<int> ratings,
     required DateTime since,
-    required DateTime until,
   }) = _LichessDbPrefState;
 
   static const kAvailableSpeeds = ISetConst({
@@ -202,12 +193,18 @@ class LichessDbPrefState with _$LichessDbPrefState {
     2200,
     2500,
   });
-  static final earliestDate = DateTime.parse('2012-12-01');
+  static final earliestDate = DateTime.utc(2012, 12);
+  static final now = DateTime.now();
+  static const kDaysInAYear = 365;
+  static final datesMap = {
+    'Last year': now.subtract(const Duration(days: kDaysInAYear)),
+    'Last 5 years': now.subtract(const Duration(days: kDaysInAYear * 5)),
+    'All time': earliestDate,
+  };
   static final defaults = LichessDbPrefState(
     speeds: kAvailableSpeeds,
     ratings: kAvailableRatings,
     since: earliestDate,
-    until: DateTime.now(),
   );
 
   factory LichessDbPrefState.fromJson(Map<String, dynamic> json) {
@@ -229,7 +226,6 @@ class PlayerDbPrefState with _$PlayerDbPrefState {
     required ISet<Perf> speeds,
     required ISet<Mode> modes,
     required DateTime since,
-    required DateTime until,
   }) = _PlayerDbPrefState;
 
   static const kAvailableSpeeds = ISetConst({
@@ -240,13 +236,20 @@ class PlayerDbPrefState with _$PlayerDbPrefState {
     Perf.classical,
     Perf.correspondence,
   });
-  static final earliestDate = DateTime.utc(2012, 12, 1);
+  static final earliestDate = DateTime.utc(2012, 12);
+  static final now = DateTime.now();
+  static final datesMap = {
+    'This month': now,
+    'Last month': now.subtract(const Duration(days: 32)),
+    'Last 6 months': now.subtract(const Duration(days: 183)),
+    'Last year': now.subtract(const Duration(days: 365)),
+    'All time': earliestDate,
+  };
   static final defaults = PlayerDbPrefState(
     side: Side.white,
     speeds: kAvailableSpeeds,
     modes: Mode.values.toISet(),
     since: earliestDate,
-    until: DateTime.now(),
   );
 
   factory PlayerDbPrefState.fromJson(Map<String, dynamic> json) {

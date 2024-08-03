@@ -20,7 +20,6 @@ Future<OpeningExplorer> openingExplorer(
         OpeningExplorerRepository(client).getMasterDatabase(
           fen,
           since: prefs.masterDb.sinceYear,
-          until: prefs.masterDb.untilYear,
         ),
       OpeningDatabase.lichess =>
         OpeningExplorerRepository(client).getLichessDatabase(
@@ -28,7 +27,6 @@ Future<OpeningExplorer> openingExplorer(
           speeds: prefs.lichessDb.speeds,
           ratings: prefs.lichessDb.ratings,
           since: prefs.lichessDb.since,
-          until: prefs.lichessDb.until,
         ),
       OpeningDatabase.player =>
         OpeningExplorerRepository(client).getPlayerDatabase(
@@ -39,7 +37,6 @@ Future<OpeningExplorer> openingExplorer(
           speeds: prefs.playerDb.speeds,
           modes: prefs.playerDb.modes,
           since: prefs.playerDb.since,
-          until: prefs.playerDb.until,
         ),
     },
   );
@@ -53,7 +50,6 @@ class OpeningExplorerRepository {
   Future<OpeningExplorer> getMasterDatabase(
     String fen, {
     int? since,
-    int? until,
   }) {
     return client.readJson(
       Uri(
@@ -61,7 +57,6 @@ class OpeningExplorerRepository {
         queryParameters: {
           'fen': fen,
           if (since != null) 'since': since.toString(),
-          if (until != null) 'until': until.toString(),
         },
       ),
       mapper: OpeningExplorer.fromJson,
@@ -73,7 +68,6 @@ class OpeningExplorerRepository {
     required ISet<Perf> speeds,
     required ISet<int> ratings,
     DateTime? since,
-    DateTime? until,
   }) {
     return client.readJson(
       Uri(
@@ -84,7 +78,6 @@ class OpeningExplorerRepository {
             'speeds': speeds.map((speed) => speed.name).join(','),
           if (ratings.isNotEmpty) 'ratings': ratings.join(','),
           if (since != null) 'since': '${since.year}-${since.month}',
-          if (until != null) 'until': '${until.year}-${until.month}',
         },
       ),
       mapper: OpeningExplorer.fromJson,
@@ -98,7 +91,6 @@ class OpeningExplorerRepository {
     required ISet<Perf> speeds,
     required ISet<Mode> modes,
     DateTime? since,
-    DateTime? until,
   }) {
     return client.readJson(
       Uri(
@@ -112,7 +104,6 @@ class OpeningExplorerRepository {
           if (modes.isNotEmpty)
             'modes': modes.map((mode) => mode.name).join(','),
           if (since != null) 'since': '${since.year}-${since.month}',
-          if (until != null) 'until': '${until.year}-${until.month}',
         },
       ),
       mapper: OpeningExplorer.fromJson,

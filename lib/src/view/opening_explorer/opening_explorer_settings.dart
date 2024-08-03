@@ -11,9 +11,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/user/player_screen.dart';
 import 'package:lichess_mobile/src/view/user/search_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/settings.dart';
 
 class OpeningExplorerSettings extends ConsumerWidget {
   const OpeningExplorerSettings(this.pgn, this.options);
@@ -25,65 +23,23 @@ class OpeningExplorerSettings extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final prefs = ref.watch(openingExplorerPreferencesProvider);
 
-    final years = DateTime.now().year - MasterDbPrefState.kEarliestYear + 1;
-
     final List<Widget> masterDbSettings = [
       PlatformListTile(
-        title: Text.rich(
-          TextSpan(
-            text: '${context.l10n.since}: ',
-            style: const TextStyle(
-              fontWeight: FontWeight.normal,
-            ),
-            children: [
-              TextSpan(
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
+        title: const Text('Timespan'),
+        subtitle: Wrap(
+          spacing: 5,
+          children: MasterDbPrefState.datesMap.keys
+              .map(
+                (key) => ChoiceChip(
+                  label: Text(key),
+                  selected: prefs.masterDb.sinceYear ==
+                      MasterDbPrefState.datesMap[key],
+                  onSelected: (_) => ref
+                      .read(openingExplorerPreferencesProvider.notifier)
+                      .setMasterDbSince(MasterDbPrefState.datesMap[key]!),
                 ),
-                text: prefs.masterDb.sinceYear.toString(),
-              ),
-            ],
-          ),
-        ),
-        subtitle: NonLinearSlider(
-          value: prefs.masterDb.sinceYear,
-          values: List.generate(
-            years,
-            (index) => MasterDbPrefState.kEarliestYear + index,
-          ),
-          onChangeEnd: (value) => ref
-              .read(openingExplorerPreferencesProvider.notifier)
-              .setMasterDbSince(value.toInt()),
-        ),
-      ),
-      PlatformListTile(
-        title: Text.rich(
-          TextSpan(
-            text: '${context.l10n.until}: ',
-            style: const TextStyle(
-              fontWeight: FontWeight.normal,
-            ),
-            children: [
-              TextSpan(
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                ),
-                text: prefs.masterDb.untilYear.toString(),
-              ),
-            ],
-          ),
-        ),
-        subtitle: NonLinearSlider(
-          value: prefs.masterDb.untilYear,
-          values: List.generate(
-            years,
-            (index) => MasterDbPrefState.kEarliestYear + index,
-          ),
-          onChangeEnd: (value) => ref
-              .read(openingExplorerPreferencesProvider.notifier)
-              .setMasterDbUntil(value.toInt()),
+              )
+              .toList(growable: false),
         ),
       ),
     ];
@@ -99,7 +55,7 @@ class OpeningExplorerSettings extends ConsumerWidget {
                   label: Icon(speed.icon),
                   tooltip: speed.title,
                   selected: prefs.lichessDb.speeds.contains(speed),
-                  onSelected: (value) => ref
+                  onSelected: (_) => ref
                       .read(openingExplorerPreferencesProvider.notifier)
                       .toggleLichessDbSpeed(speed),
                 ),
@@ -121,7 +77,7 @@ class OpeningExplorerSettings extends ConsumerWidget {
                           ? '2500+'
                           : '$rating-${rating + 200}',
                   selected: prefs.lichessDb.ratings.contains(rating),
-                  onSelected: (value) => ref
+                  onSelected: (_) => ref
                       .read(openingExplorerPreferencesProvider.notifier)
                       .toggleLichessDbRating(rating),
                 ),
@@ -129,21 +85,23 @@ class OpeningExplorerSettings extends ConsumerWidget {
               .toList(growable: false),
         ),
       ),
-      DatePickerSettingsTile(
-        title: context.l10n.since,
-        value: prefs.lichessDb.since,
-        firstDate: LichessDbPrefState.earliestDate,
-        onChanged: (value) => ref
-            .read(openingExplorerPreferencesProvider.notifier)
-            .setLichessDbSince(value),
-      ),
-      DatePickerSettingsTile(
-        title: context.l10n.until,
-        value: prefs.lichessDb.until,
-        firstDate: LichessDbPrefState.earliestDate,
-        onChanged: (value) => ref
-            .read(openingExplorerPreferencesProvider.notifier)
-            .setLichessDbUntil(value),
+      PlatformListTile(
+        title: const Text('Timespan'),
+        subtitle: Wrap(
+          spacing: 5,
+          children: LichessDbPrefState.datesMap.keys
+              .map(
+                (key) => ChoiceChip(
+                  label: Text(key),
+                  selected:
+                      prefs.lichessDb.since == LichessDbPrefState.datesMap[key],
+                  onSelected: (_) => ref
+                      .read(openingExplorerPreferencesProvider.notifier)
+                      .setLichessDbSince(LichessDbPrefState.datesMap[key]!),
+                ),
+              )
+              .toList(growable: false),
+        ),
       ),
     ];
     final List<Widget> playerDbSettings = [
@@ -213,7 +171,7 @@ class OpeningExplorerSettings extends ConsumerWidget {
                     Side.black => const Text('Black'),
                   },
                   selected: prefs.playerDb.side == side,
-                  onSelected: (value) => ref
+                  onSelected: (_) => ref
                       .read(openingExplorerPreferencesProvider.notifier)
                       .setPlayerDbSide(side),
                 ),
@@ -231,7 +189,7 @@ class OpeningExplorerSettings extends ConsumerWidget {
                   label: Icon(speed.icon),
                   tooltip: speed.title,
                   selected: prefs.playerDb.speeds.contains(speed),
-                  onSelected: (value) => ref
+                  onSelected: (_) => ref
                       .read(openingExplorerPreferencesProvider.notifier)
                       .togglePlayerDbSpeed(speed),
                 ),
@@ -248,7 +206,7 @@ class OpeningExplorerSettings extends ConsumerWidget {
                 (mode) => FilterChip(
                   label: Text(mode.title),
                   selected: prefs.playerDb.modes.contains(mode),
-                  onSelected: (value) => ref
+                  onSelected: (_) => ref
                       .read(openingExplorerPreferencesProvider.notifier)
                       .togglePlayerDbMode(mode),
                 ),
@@ -256,21 +214,23 @@ class OpeningExplorerSettings extends ConsumerWidget {
               .toList(growable: false),
         ),
       ),
-      DatePickerSettingsTile(
-        title: context.l10n.since,
-        value: prefs.playerDb.since,
-        firstDate: PlayerDbPrefState.earliestDate,
-        onChanged: (value) => ref
-            .read(openingExplorerPreferencesProvider.notifier)
-            .setPlayerDbSince(value),
-      ),
-      DatePickerSettingsTile(
-        title: context.l10n.until,
-        value: prefs.playerDb.until,
-        firstDate: PlayerDbPrefState.earliestDate,
-        onChanged: (value) => ref
-            .read(openingExplorerPreferencesProvider.notifier)
-            .setPlayerDbUntil(value),
+      PlatformListTile(
+        title: const Text('Timespan'),
+        subtitle: Wrap(
+          spacing: 5,
+          children: PlayerDbPrefState.datesMap.keys
+              .map(
+                (key) => ChoiceChip(
+                  label: Text(key),
+                  selected:
+                      prefs.playerDb.since == PlayerDbPrefState.datesMap[key],
+                  onSelected: (_) => ref
+                      .read(openingExplorerPreferencesProvider.notifier)
+                      .setPlayerDbSince(PlayerDbPrefState.datesMap[key]!),
+                ),
+              )
+              .toList(growable: false),
+        ),
       ),
     ];
 
@@ -296,21 +256,21 @@ class OpeningExplorerSettings extends ConsumerWidget {
                 ChoiceChip(
                   label: const Text('Masters'),
                   selected: prefs.db == OpeningDatabase.master,
-                  onSelected: (value) => ref
+                  onSelected: (_) => ref
                       .read(openingExplorerPreferencesProvider.notifier)
                       .setDatabase(OpeningDatabase.master),
                 ),
                 ChoiceChip(
                   label: const Text('Lichess'),
                   selected: prefs.db == OpeningDatabase.lichess,
-                  onSelected: (value) => ref
+                  onSelected: (_) => ref
                       .read(openingExplorerPreferencesProvider.notifier)
                       .setDatabase(OpeningDatabase.lichess),
                 ),
                 ChoiceChip(
                   label: Text(context.l10n.player),
                   selected: prefs.db == OpeningDatabase.player,
-                  onSelected: (value) => ref
+                  onSelected: (_) => ref
                       .read(openingExplorerPreferencesProvider.notifier)
                       .setDatabase(OpeningDatabase.player),
                 ),

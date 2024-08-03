@@ -212,22 +212,18 @@ class _OpeningExplorer extends ConsumerWidget {
     final position = ref.watch(ctrlProvider.select((value) => value.position));
 
     if (position.fullmoves > 24) {
-      return const Expanded(
-        child: Align(
-          alignment: Alignment.center,
-          child: Text('Max depth reached'),
-        ),
+      return const Align(
+        alignment: Alignment.center,
+        child: Text('Max depth reached'),
       );
     }
 
-    final prefs = ref.read(openingExplorerPreferencesProvider);
+    final prefs = ref.watch(openingExplorerPreferencesProvider);
     if (prefs.db == OpeningDatabase.player &&
         prefs.playerDb.usernameOrId == null) {
-      return const Expanded(
-        child: Align(
-          alignment: Alignment.center,
-          child: Text('Select a lichess player in the settings'),
-        ),
+      return const Align(
+        alignment: Alignment.center,
+        child: Text('Select a lichess player in the settings'),
       );
     }
 
