@@ -1,5 +1,6 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
@@ -114,48 +115,29 @@ class OpeningExplorerSettings extends ConsumerWidget {
             ),
             children: [
               TextSpan(
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () => pushPlatformRoute(
+                        context,
+                        fullscreenDialog: true,
+                        builder: (_) => SearchScreen(
+                          onUserTap: (user) => {
+                            ref
+                                .read(
+                                  openingExplorerPreferencesProvider.notifier,
+                                )
+                                .setPlayerDbUsernameOrId(user.name),
+                            Navigator.of(context).pop(),
+                          },
+                        ),
+                      ),
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
+                  decoration: TextDecoration.underline,
                 ),
-                text: prefs.playerDb.usernameOrId,
+                text: prefs.playerDb.usernameOrId ?? 'Select a Lichess player',
               ),
             ],
-          ),
-        ),
-        subtitle: PlatformWidget(
-          androidBuilder: (context) => SearchBar(
-            leading: const Icon(Icons.search),
-            hintText: context.l10n.searchSearch,
-            focusNode: AlwaysDisabledFocusNode(),
-            onTap: () => pushPlatformRoute(
-              context,
-              fullscreenDialog: true,
-              builder: (_) => SearchScreen(
-                onUserTap: (user) => {
-                  ref
-                      .read(openingExplorerPreferencesProvider.notifier)
-                      .setPlayerDbUsernameOrId(user.name),
-                  Navigator.of(context).pop(),
-                },
-              ),
-            ),
-          ),
-          iosBuilder: (context) => CupertinoSearchTextField(
-            placeholder: context.l10n.searchSearch,
-            focusNode: AlwaysDisabledFocusNode(),
-            onTap: () => pushPlatformRoute(
-              context,
-              fullscreenDialog: true,
-              builder: (_) => SearchScreen(
-                onUserTap: (user) => {
-                  ref
-                      .read(openingExplorerPreferencesProvider.notifier)
-                      .setPlayerDbUsernameOrId(user.name),
-                  Navigator.of(context).pop(),
-                },
-              ),
-            ),
           ),
         ),
       ),
@@ -235,10 +217,10 @@ class OpeningExplorerSettings extends ConsumerWidget {
     ];
 
     return DraggableScrollableSheet(
-      initialChildSize: .8,
+      initialChildSize: .85,
       expand: false,
       snap: true,
-      snapSizes: const [.8],
+      snapSizes: const [.85],
       builder: (context, scrollController) => ListView(
         controller: scrollController,
         children: [

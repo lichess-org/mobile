@@ -223,7 +223,7 @@ class _OpeningExplorer extends ConsumerWidget {
         prefs.playerDb.usernameOrId == null) {
       return const Align(
         alignment: Alignment.center,
-        child: Text('Select a lichess player in the settings'),
+        child: Text('Select a Lichess player in the settings'),
       );
     }
 
