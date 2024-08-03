@@ -25,7 +25,7 @@ class OpeningExplorerSettings extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final prefs = ref.watch(openingExplorerPreferencesProvider);
 
-    final years = DateTime.now().year - MasterDbPrefState.earliestYear + 1;
+    final years = DateTime.now().year - MasterDbPrefState.kEarliestYear + 1;
 
     final List<Widget> masterDbSettings = [
       PlatformListTile(
@@ -50,7 +50,7 @@ class OpeningExplorerSettings extends ConsumerWidget {
           value: prefs.masterDb.sinceYear,
           values: List.generate(
             years,
-            (index) => MasterDbPrefState.earliestYear + index,
+            (index) => MasterDbPrefState.kEarliestYear + index,
           ),
           onChangeEnd: (value) => ref
               .read(openingExplorerPreferencesProvider.notifier)
@@ -79,7 +79,7 @@ class OpeningExplorerSettings extends ConsumerWidget {
           value: prefs.masterDb.untilYear,
           values: List.generate(
             years,
-            (index) => MasterDbPrefState.earliestYear + index,
+            (index) => MasterDbPrefState.kEarliestYear + index,
           ),
           onChangeEnd: (value) => ref
               .read(openingExplorerPreferencesProvider.notifier)
@@ -93,7 +93,7 @@ class OpeningExplorerSettings extends ConsumerWidget {
         title: Text(context.l10n.timeControl),
         subtitle: Wrap(
           spacing: 5,
-          children: LichessDbPrefState.availableSpeeds
+          children: LichessDbPrefState.kAvailableSpeeds
               .map(
                 (speed) => FilterChip(
                   label: Icon(speed.icon),
@@ -111,7 +111,7 @@ class OpeningExplorerSettings extends ConsumerWidget {
         title: Text(context.l10n.rating),
         subtitle: Wrap(
           spacing: 5,
-          children: LichessDbPrefState.availableRatings
+          children: LichessDbPrefState.kAvailableRatings
               .map(
                 (rating) => FilterChip(
                   label: Text(rating.toString()),
@@ -225,7 +225,7 @@ class OpeningExplorerSettings extends ConsumerWidget {
         title: Text(context.l10n.timeControl),
         subtitle: Wrap(
           spacing: 5,
-          children: PlayerDbPrefState.availableSpeeds
+          children: PlayerDbPrefState.kAvailableSpeeds
               .map(
                 (speed) => FilterChip(
                   label: Icon(speed.icon),

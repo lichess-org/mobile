@@ -157,9 +157,9 @@ class MasterDbPrefState with _$MasterDbPrefState {
     required int untilYear,
   }) = _MasterDbPrefState;
 
-  static const earliestYear = 1952;
+  static const kEarliestYear = 1952;
   static final defaults = MasterDbPrefState(
-    sinceYear: earliestYear,
+    sinceYear: kEarliestYear,
     untilYear: DateTime.now().year,
   );
 
@@ -183,7 +183,7 @@ class LichessDbPrefState with _$LichessDbPrefState {
     required DateTime until,
   }) = _LichessDbPrefState;
 
-  static const availableSpeeds = ISetConst({
+  static const kAvailableSpeeds = ISetConst({
     Perf.ultraBullet,
     Perf.bullet,
     Perf.blitz,
@@ -191,7 +191,7 @@ class LichessDbPrefState with _$LichessDbPrefState {
     Perf.classical,
     Perf.correspondence,
   });
-  static const availableRatings = ISetConst({
+  static const kAvailableRatings = ISetConst({
     0,
     1000,
     1200,
@@ -204,8 +204,8 @@ class LichessDbPrefState with _$LichessDbPrefState {
   });
   static final earliestDate = DateTime.parse('2012-12-01');
   static final defaults = LichessDbPrefState(
-    speeds: availableSpeeds,
-    ratings: availableRatings,
+    speeds: kAvailableSpeeds,
+    ratings: kAvailableRatings,
     since: earliestDate,
     until: DateTime.now(),
   );
@@ -232,7 +232,7 @@ class PlayerDbPrefState with _$PlayerDbPrefState {
     required DateTime until,
   }) = _PlayerDbPrefState;
 
-  static const availableSpeeds = ISetConst({
+  static const kAvailableSpeeds = ISetConst({
     Perf.ultraBullet,
     Perf.bullet,
     Perf.blitz,
@@ -240,10 +240,10 @@ class PlayerDbPrefState with _$PlayerDbPrefState {
     Perf.classical,
     Perf.correspondence,
   });
-  static final earliestDate = DateTime.parse('2012-12-01');
+  static final earliestDate = DateTime.utc(2012, 12, 1);
   static final defaults = PlayerDbPrefState(
     side: Side.white,
-    speeds: availableSpeeds,
+    speeds: kAvailableSpeeds,
     modes: Mode.values.toISet(),
     since: earliestDate,
     until: DateTime.now(),
