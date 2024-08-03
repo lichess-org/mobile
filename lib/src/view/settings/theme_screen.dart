@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 import 'package:chessground/chessground.dart';
+import 'package:dartchess/dartchess.dart' as dartchess;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -67,7 +68,7 @@ class _Body extends ConsumerWidget {
                     data: const BoardData(
                       interactableSide: InteractableSide.none,
                       orientation: Side.white,
-                      fen: kInitialFen,
+                      fen: dartchess.kInitialFEN,
                     ),
                     settings: BoardSettings(
                       enableCoordinates: false,
