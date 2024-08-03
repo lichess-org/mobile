@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart' as dartchess;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
@@ -6,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
-import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast_round_controller.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
@@ -71,12 +73,12 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final games = ref.watch(broadcastRoundProvider(roundId));
+    final games = ref.watch(broadcastRoundControllerProvider(roundId));
 
     return games.when(
       data: (games) => (games.isEmpty)
           ? const Text('No games to show for now')
-          : BroadcastPreview(games: games),
+          : BroadcastPreview(games: games.values.toIList()),
       loading: () => const Shimmer(
         child: ShimmerLoading(
           isLoading: true,
@@ -141,15 +143,17 @@ class BroadcastPreview extends StatelessWidget {
               size: boardWidth,
               header: _PlayerWidget(
                 width: boardWidth,
-                player: game.players[1],
+                player: game.players[dartchess.Side.black]!,
                 gameStatus: game.status,
+                thinkTime: game.thinkTime,
                 side: Side.black,
                 playingSide: playingSide,
               ),
               footer: _PlayerWidget(
                 width: boardWidth,
-                player: game.players[0],
+                player: game.players[dartchess.Side.white]!,
                 gameStatus: game.status,
+                thinkTime: game.thinkTime,
                 side: Side.white,
                 playingSide: playingSide,
               ),
@@ -166,6 +170,7 @@ class _PlayerWidget extends StatelessWidget {
     required this.width,
     required this.player,
     required this.gameStatus,
+    required this.thinkTime,
     required this.side,
     required this.playingSide,
   }) : _displayShimmerPlaceholder = false;
@@ -180,12 +185,14 @@ class _PlayerWidget extends StatelessWidget {
           federation: null,
         ),
         gameStatus = '*',
+        thinkTime = null,
         side = Side.white,
         playingSide = Side.white,
         _displayShimmerPlaceholder = true;
 
   final BroadcastPlayer player;
   final String gameStatus;
+  final Duration? thinkTime;
   final Side side;
   final Side playingSide;
   final double width;
@@ -267,16 +274,63 @@ class _PlayerWidget extends StatelessWidget {
                       const TextStyle().copyWith(fontWeight: FontWeight.bold),
                 )
               else if (player.clock != null)
-                Text(
-                  player.clock!.toHoursMinutesSeconds(),
-                  style: side == playingSide
-                      ? const TextStyle().copyWith(color: Colors.orange[900])
-                      : null,
-                ),
+                if (side == playingSide)
+                  _Clock(
+                    clock: player.clock! - (thinkTime ?? Duration.zero),
+                  )
+                else
+                  Text(player.clock!.toHoursMinutesSeconds()),
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class _Clock extends StatefulWidget {
+  const _Clock({required this.clock});
+
+  final Duration clock;
+
+  @override
+  _ClockState createState() => _ClockState();
+}
+
+class _ClockState extends State<_Clock> {
+  Timer? _timer;
+  late Duration _clock;
+
+  @override
+  void initState() {
+    super.initState();
+    _clock = widget.clock;
+    if (_clock.inSeconds <= 0) {
+      _clock = Duration.zero;
+      return;
+    }
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        _clock = _clock - const Duration(seconds: 1);
+      });
+      if (_clock.inSeconds == 0) {
+        timer.cancel();
+        return;
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      _clock.toHoursMinutesSeconds(),
+      style: const TextStyle().copyWith(color: Colors.orange[900]),
     );
   }
 }

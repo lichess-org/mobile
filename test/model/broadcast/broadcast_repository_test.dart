@@ -1,4 +1,3 @@
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
@@ -61,7 +60,7 @@ void main() {
 
       final response = await repo.getRound(const BroadcastRoundId(roundId));
 
-      expect(response, isA<IList<BroadcastGameSnapshot>>());
+      expect(response, isA<BroadcastRoundGames>());
       expect(response.length, 5);
     });
   });

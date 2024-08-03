@@ -51,6 +51,8 @@ extension type const ChallengeId(String value) implements StringId {}
 
 extension type const BroadcastRoundId(String value) implements StringId {}
 
+extension type const BroadcastGameId(String value) implements StringId {}
+
 extension IDPick on Pick {
   UserId asUserIdOrThrow() {
     final value = required().value;
@@ -161,6 +163,25 @@ extension IDPick on Pick {
     if (value == null) return null;
     try {
       return asBroadcastRoundIdOrThrow();
+    } catch (_) {
+      return null;
+    }
+  }
+
+  BroadcastGameId asBroadcastGameIdOrThrow() {
+    final value = required().value;
+    if (value is String) {
+      return BroadcastGameId(value);
+    }
+    throw PickException(
+      "value $value at $debugParsingExit can't be casted to BroadcastRoundId",
+    );
+  }
+
+  BroadcastGameId? asBroadcastGameIddOrNull() {
+    if (value == null) return null;
+    try {
+      return asBroadcastGameIdOrThrow();
     } catch (_) {
       return null;
     }
