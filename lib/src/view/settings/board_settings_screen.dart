@@ -164,6 +164,15 @@ class _Body extends ConsumerWidget {
                 },
               ),
               SwitchSettingTile(
+                title: Text(context.l10n.mobilePrefMagnifyDraggedPiece),
+                value: boardPrefs.magnifyDraggedPiece,
+                onChanged: (value) {
+                  ref
+                      .read(boardPreferencesProvider.notifier)
+                      .toggleMagnifyDraggedPiece();
+                },
+              ),
+              SwitchSettingTile(
                 title: Text(
                   context.l10n.preferencesPieceAnimation,
                 ),

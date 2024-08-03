@@ -142,6 +142,9 @@ class AppLocalizationsGsw extends AppLocalizations {
   String get mobileGreetingWithoutName => 'Hoi';
 
   @override
+  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
+
+  @override
   String get activityActivity => 'Aktivitäte';
 
   @override

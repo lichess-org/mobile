@@ -142,6 +142,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get mobileGreetingWithoutName => 'Hei';
 
   @override
+  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
+
+  @override
   String get activityActivity => 'Toiminta';
 
   @override

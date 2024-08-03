@@ -142,6 +142,9 @@ class AppLocalizationsFa extends AppLocalizations {
   String get mobileGreetingWithoutName => 'سلام';
 
   @override
+  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
+
+  @override
   String get activityActivity => 'فعالیت';
 
   @override
