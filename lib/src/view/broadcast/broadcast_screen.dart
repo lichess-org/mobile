@@ -336,7 +336,10 @@ class _ClockState extends State<_Clock> {
   Widget build(BuildContext context) {
     return Text(
       _clock.toHoursMinutesSeconds(),
-      style: const TextStyle().copyWith(color: Colors.orange[900]),
+      style: TextStyle(
+        color: Colors.orange[900],
+        fontFeatures: const [FontFeature.tabularFigures()],
+      ),
     );
   }
 }
