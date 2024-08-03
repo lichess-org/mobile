@@ -27,8 +27,9 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/system.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 
-class LoadingAppScreen extends ConsumerWidget {
-  const LoadingAppScreen({super.key});
+/// Application initialization and main entry point.
+class AppInitializationScreen extends ConsumerWidget {
+  const AppInitializationScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -85,6 +86,10 @@ class LoadingAppScreen extends ConsumerWidget {
   }
 }
 
+/// The main application widget.
+///
+/// This widget is the root of the application and is responsible for setting up
+/// the theme, locale, and other global settings.
 class Application extends ConsumerStatefulWidget {
   const Application({super.key});
 
@@ -265,6 +270,15 @@ class _AppState extends ConsumerState<Application> {
   }
 }
 
+/// The entry point widget for the application.
+///
+/// This widget needs to be a desendant of [MaterialApp] to be able to handle
+/// the [Navigator] properly.
+///
+/// This widget is responsible for setting up the bottom navigation scaffold and
+/// the main navigation routes.
+///
+/// It also sets up the push notifications and handles incoming messages.
 class _EntryPointWidget extends ConsumerStatefulWidget {
   const _EntryPointWidget();
 
@@ -274,6 +288,10 @@ class _EntryPointWidget extends ConsumerStatefulWidget {
 
 class _EntryPointState extends ConsumerState<_EntryPointWidget> {
   StreamSubscription<String>? _fcmTokenRefreshSubscription;
+  ProviderSubscription<AsyncValue<ConnectivityStatus>>?
+      _connectivitySubscription;
+
+  bool _pushNotificationsSetup = false;
 
   @override
   Widget build(BuildContext context) {
@@ -284,12 +302,24 @@ class _EntryPointState extends ConsumerState<_EntryPointWidget> {
   void initState() {
     super.initState();
 
-    _setupPushNotifications();
+    _connectivitySubscription =
+        ref.listenManual(connectivityChangesProvider, (prev, current) async {
+      // setup push notifications once when the app comes online
+      if (current.value?.isOnline == true && !_pushNotificationsSetup) {
+        try {
+          await _setupPushNotifications();
+          _pushNotificationsSetup = true;
+        } catch (e, st) {
+          debugPrint('Could not sync correspondence games; $e\n$st');
+        }
+      }
+    });
   }
 
   @override
   void dispose() {
     _fcmTokenRefreshSubscription?.cancel();
+    _connectivitySubscription?.close();
     super.dispose();
   }
 
@@ -321,7 +351,7 @@ class _EntryPointState extends ConsumerState<_EntryPointWidget> {
     });
 
     // Register the device with the server.
-    ref.read(notificationServiceProvider).registerDevice();
+    await ref.read(notificationServiceProvider).registerDevice();
 
     // Get any messages which caused the application to open from
     // a terminated state.

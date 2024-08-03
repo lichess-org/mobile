@@ -97,7 +97,7 @@ Future<void> _startFlutterApp() async {
       observers: [
         ProviderLogger(),
       ],
-      child: const LoadingAppScreen(),
+      child: const AppInitializationScreen(),
     ),
   );
 }
