@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_round_controller.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/chessground_compat.dart';
@@ -232,9 +233,14 @@ class _PlayerWidget extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     if (player.federation != null) ...[
-                      SvgPicture.network(
-                        lichessFideFedSrc(player.federation!),
-                        height: 12,
+                      Consumer(
+                        builder: (context, widgetRef, _) {
+                          return SvgPicture.network(
+                            lichessFideFedSrc(player.federation!),
+                            height: 12,
+                            httpClient: widgetRef.read(defaultClientProvider),
+                          );
+                        },
                       ),
                     ],
                     const SizedBox(width: 5),
