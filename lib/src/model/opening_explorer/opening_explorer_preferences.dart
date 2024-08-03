@@ -1,9 +1,11 @@
 import 'dart:convert';
 
+import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/db/shared_preferences.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
+import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'opening_explorer_preferences.freezed.dart';
@@ -63,6 +65,46 @@ class OpeningExplorerPreferences extends _$OpeningExplorerPreferences {
         state.copyWith(lichessDb: state.lichessDb.copyWith(until: until)),
       );
 
+  Future<void> setPlayerDbUsernameOrId(String usernameOrId) => _save(
+        state.copyWith(
+          playerDb: state.playerDb.copyWith(
+            usernameOrId: usernameOrId,
+          ),
+        ),
+      );
+
+  Future<void> setPlayerDbSide(Side side) => _save(
+        state.copyWith(playerDb: state.playerDb.copyWith(side: side)),
+      );
+
+  Future<void> togglePlayerDbSpeed(Perf speed) => _save(
+        state.copyWith(
+          playerDb: state.playerDb.copyWith(
+            speeds: state.playerDb.speeds.contains(speed)
+                ? state.playerDb.speeds.remove(speed)
+                : state.playerDb.speeds.add(speed),
+          ),
+        ),
+      );
+
+  Future<void> togglePlayerDbMode(Mode mode) => _save(
+        state.copyWith(
+          playerDb: state.playerDb.copyWith(
+            modes: state.playerDb.modes.contains(mode)
+                ? state.playerDb.modes.remove(mode)
+                : state.playerDb.modes.add(mode),
+          ),
+        ),
+      );
+
+  Future<void> setPlayerDbSince(DateTime since) => _save(
+        state.copyWith(playerDb: state.playerDb.copyWith(since: since)),
+      );
+
+  Future<void> setPlayerDbUntil(DateTime until) => _save(
+        state.copyWith(playerDb: state.playerDb.copyWith(until: until)),
+      );
+
   Future<void> _save(OpeningExplorerPrefState newState) async {
     final prefs = ref.read(sharedPreferencesProvider);
     await prefs.setString(
@@ -76,6 +118,7 @@ class OpeningExplorerPreferences extends _$OpeningExplorerPreferences {
 enum OpeningDatabase {
   master,
   lichess,
+  player,
 }
 
 @Freezed(fromJson: true, toJson: true)
@@ -86,12 +129,14 @@ class OpeningExplorerPrefState with _$OpeningExplorerPrefState {
     required OpeningDatabase db,
     required MasterDbPrefState masterDb,
     required LichessDbPrefState lichessDb,
+    required PlayerDbPrefState playerDb,
   }) = _OpeningExplorerPrefState;
 
   static final defaults = OpeningExplorerPrefState(
     db: OpeningDatabase.master,
     masterDb: MasterDbPrefState.defaults,
     lichessDb: LichessDbPrefState.defaults,
+    playerDb: PlayerDbPrefState.defaults,
   );
 
   factory OpeningExplorerPrefState.fromJson(Map<String, dynamic> json) {
@@ -168,6 +213,45 @@ class LichessDbPrefState with _$LichessDbPrefState {
   factory LichessDbPrefState.fromJson(Map<String, dynamic> json) {
     try {
       return _$LichessDbPrefStateFromJson(json);
+    } catch (_) {
+      return defaults;
+    }
+  }
+}
+
+@Freezed(fromJson: true, toJson: true)
+class PlayerDbPrefState with _$PlayerDbPrefState {
+  const PlayerDbPrefState._();
+
+  const factory PlayerDbPrefState({
+    String? usernameOrId,
+    required Side side,
+    required ISet<Perf> speeds,
+    required ISet<Mode> modes,
+    required DateTime since,
+    required DateTime until,
+  }) = _PlayerDbPrefState;
+
+  static const availableSpeeds = ISetConst({
+    Perf.ultraBullet,
+    Perf.bullet,
+    Perf.blitz,
+    Perf.rapid,
+    Perf.classical,
+    Perf.correspondence,
+  });
+  static final earliestDate = DateTime.parse('2012-12-01');
+  static final defaults = PlayerDbPrefState(
+    side: Side.white,
+    speeds: availableSpeeds,
+    modes: Mode.values.toISet(),
+    since: earliestDate,
+    until: DateTime.now(),
+  );
+
+  factory PlayerDbPrefState.fromJson(Map<String, dynamic> json) {
+    try {
+      return _$PlayerDbPrefStateFromJson(json);
     } catch (_) {
       return defaults;
     }

@@ -1,3 +1,4 @@
+import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
@@ -28,6 +29,17 @@ Future<OpeningExplorer> openingExplorer(
           ratings: prefs.lichessDb.ratings,
           since: prefs.lichessDb.since,
           until: prefs.lichessDb.until,
+        ),
+      OpeningDatabase.player =>
+        OpeningExplorerRepository(client).getPlayerDatabase(
+          fen,
+          // null check handled by widget
+          usernameOrId: prefs.playerDb.usernameOrId!,
+          color: prefs.playerDb.side,
+          speeds: prefs.playerDb.speeds,
+          modes: prefs.playerDb.modes,
+          since: prefs.playerDb.since,
+          until: prefs.playerDb.until,
         ),
     },
   );
@@ -71,6 +83,34 @@ class OpeningExplorerRepository {
           if (speeds.isNotEmpty)
             'speeds': speeds.map((speed) => speed.name).join(','),
           if (ratings.isNotEmpty) 'ratings': ratings.join(','),
+          if (since != null) 'since': '${since.year}-${since.month}',
+          if (until != null) 'until': '${until.year}-${until.month}',
+        },
+      ),
+      mapper: OpeningExplorer.fromJson,
+    );
+  }
+
+  Future<OpeningExplorer> getPlayerDatabase(
+    String fen, {
+    required String usernameOrId,
+    required Side color,
+    required ISet<Perf> speeds,
+    required ISet<Mode> modes,
+    DateTime? since,
+    DateTime? until,
+  }) {
+    return client.readJson(
+      Uri(
+        path: '/player',
+        queryParameters: {
+          'fen': fen,
+          'player': usernameOrId,
+          'color': color.name,
+          if (speeds.isNotEmpty)
+            'speeds': speeds.map((speed) => speed.name).join(','),
+          if (modes.isNotEmpty)
+            'modes': modes.map((mode) => mode.name).join(','),
           if (since != null) 'since': '${since.year}-${since.month}',
           if (until != null) 'until': '${until.year}-${until.month}',
         },

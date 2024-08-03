@@ -220,6 +220,17 @@ class _OpeningExplorer extends ConsumerWidget {
       );
     }
 
+    final prefs = ref.read(openingExplorerPreferencesProvider);
+    if (prefs.db == OpeningDatabase.player &&
+        prefs.playerDb.usernameOrId == null) {
+      return const Expanded(
+        child: Align(
+          alignment: Alignment.center,
+          child: Text('Select a lichess player in the settings'),
+        ),
+      );
+    }
+
     final isRootNode = ref.watch(
       ctrlProvider.select((s) => s.currentNode.isRoot),
     );
@@ -510,6 +521,7 @@ class _GameTile extends ConsumerWidget {
             case OpeningDatabase.master:
               return;
             case OpeningDatabase.lichess:
+            case OpeningDatabase.player:
               final archivedGame = await ref.read(
                 archivedGameProvider(id: GameId(game.id)).future,
               );

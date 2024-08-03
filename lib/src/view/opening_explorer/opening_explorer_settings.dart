@@ -1,11 +1,18 @@
+import 'package:dartchess/dartchess.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/user/player_screen.dart';
+import 'package:lichess_mobile/src/view/user/search_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
+import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
 class OpeningExplorerSettings extends ConsumerWidget {
@@ -139,6 +146,133 @@ class OpeningExplorerSettings extends ConsumerWidget {
             .setLichessDbUntil(value),
       ),
     ];
+    final List<Widget> playerDbSettings = [
+      PlatformListTile(
+        title: Text.rich(
+          TextSpan(
+            text: '${context.l10n.player}: ',
+            style: const TextStyle(
+              fontWeight: FontWeight.normal,
+            ),
+            children: [
+              TextSpan(
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+                text: prefs.playerDb.usernameOrId,
+              ),
+            ],
+          ),
+        ),
+        subtitle: PlatformWidget(
+          androidBuilder: (context) => SearchBar(
+            leading: const Icon(Icons.search),
+            hintText: context.l10n.searchSearch,
+            focusNode: AlwaysDisabledFocusNode(),
+            onTap: () => pushPlatformRoute(
+              context,
+              fullscreenDialog: true,
+              builder: (_) => SearchScreen(
+                onUserTap: (user) => {
+                  ref
+                      .read(openingExplorerPreferencesProvider.notifier)
+                      .setPlayerDbUsernameOrId(user.name),
+                  Navigator.of(context).pop(),
+                },
+              ),
+            ),
+          ),
+          iosBuilder: (context) => CupertinoSearchTextField(
+            placeholder: context.l10n.searchSearch,
+            focusNode: AlwaysDisabledFocusNode(),
+            onTap: () => pushPlatformRoute(
+              context,
+              fullscreenDialog: true,
+              builder: (_) => SearchScreen(
+                onUserTap: (user) => {
+                  ref
+                      .read(openingExplorerPreferencesProvider.notifier)
+                      .setPlayerDbUsernameOrId(user.name),
+                  Navigator.of(context).pop(),
+                },
+              ),
+            ),
+          ),
+        ),
+      ),
+      PlatformListTile(
+        title: Text(context.l10n.side),
+        subtitle: Wrap(
+          spacing: 5,
+          children: Side.values
+              .map(
+                (side) => ChoiceChip(
+                  label: switch (side) {
+                    Side.white => const Text('White'),
+                    Side.black => const Text('Black'),
+                  },
+                  selected: prefs.playerDb.side == side,
+                  onSelected: (value) => ref
+                      .read(openingExplorerPreferencesProvider.notifier)
+                      .setPlayerDbSide(side),
+                ),
+              )
+              .toList(growable: false),
+        ),
+      ),
+      PlatformListTile(
+        title: Text(context.l10n.timeControl),
+        subtitle: Wrap(
+          spacing: 5,
+          children: PlayerDbPrefState.availableSpeeds
+              .map(
+                (speed) => FilterChip(
+                  label: Icon(speed.icon),
+                  tooltip: speed.title,
+                  selected: prefs.playerDb.speeds.contains(speed),
+                  onSelected: (value) => ref
+                      .read(openingExplorerPreferencesProvider.notifier)
+                      .togglePlayerDbSpeed(speed),
+                ),
+              )
+              .toList(growable: false),
+        ),
+      ),
+      PlatformListTile(
+        title: Text(context.l10n.mode),
+        subtitle: Wrap(
+          spacing: 5,
+          children: Mode.values
+              .map(
+                (mode) => FilterChip(
+                  label: Text(mode.title),
+                  selected: prefs.playerDb.modes.contains(mode),
+                  onSelected: (value) => ref
+                      .read(openingExplorerPreferencesProvider.notifier)
+                      .togglePlayerDbMode(mode),
+                ),
+              )
+              .toList(growable: false),
+        ),
+      ),
+      DatePickerSettingsTile(
+        title: context.l10n.since,
+        value: prefs.playerDb.since,
+        firstDate: PlayerDbPrefState.earliestDate,
+        onChanged: (value) => ref
+            .read(openingExplorerPreferencesProvider.notifier)
+            .setPlayerDbSince(value),
+      ),
+      DatePickerSettingsTile(
+        title: context.l10n.until,
+        value: prefs.playerDb.until,
+        firstDate: PlayerDbPrefState.earliestDate,
+        onChanged: (value) => ref
+            .read(openingExplorerPreferencesProvider.notifier)
+            .setPlayerDbUntil(value),
+      ),
+    ];
 
     return DraggableScrollableSheet(
       initialChildSize: .8,
@@ -173,13 +307,21 @@ class OpeningExplorerSettings extends ConsumerWidget {
                       .read(openingExplorerPreferencesProvider.notifier)
                       .setDatabase(OpeningDatabase.lichess),
                 ),
+                ChoiceChip(
+                  label: Text(context.l10n.player),
+                  selected: prefs.db == OpeningDatabase.player,
+                  onSelected: (value) => ref
+                      .read(openingExplorerPreferencesProvider.notifier)
+                      .setDatabase(OpeningDatabase.player),
+                ),
               ],
             ),
           ),
-          if (prefs.db == OpeningDatabase.master)
-            ...masterDbSettings
-          else if (prefs.db == OpeningDatabase.lichess)
-            ...lichessDbSettings,
+          ...switch (prefs.db) {
+            OpeningDatabase.master => masterDbSettings,
+            OpeningDatabase.lichess => lichessDbSettings,
+            OpeningDatabase.player => playerDbSettings,
+          },
         ],
       ),
     );

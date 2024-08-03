@@ -32,7 +32,9 @@ class OpeningMove with _$OpeningMove {
   const factory OpeningMove({
     required String uci,
     required String san,
-    required int averageRating,
+    int? averageRating,
+    int? averageOpponentRating,
+    int? performance,
     required int white,
     required int draws,
     required int black,
@@ -78,7 +80,14 @@ class Game with _$Game {
   }
 }
 
-enum Mode { casual, rated }
+enum Mode {
+  casual('Casual'),
+  rated('Rated');
+
+  const Mode(this.title);
+
+  final String title;
+}
 
 extension ModeExtension on Pick {
   Mode asModeOrThrow() {

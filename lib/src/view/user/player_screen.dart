@@ -88,6 +88,11 @@ class _SearchButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void onTapUser(LightUser user) => pushPlatformRoute(
+          context,
+          builder: (ctx) => UserScreen(user: user),
+        );
+
     return PlatformWidget(
       androidBuilder: (context) => SearchBar(
         leading: const Icon(Icons.search),
@@ -96,7 +101,7 @@ class _SearchButton extends StatelessWidget {
         onTap: () => pushPlatformRoute(
           context,
           fullscreenDialog: true,
-          builder: (_) => const SearchScreen(),
+          builder: (_) => SearchScreen(onUserTap: onTapUser),
         ),
       ),
       iosBuilder: (context) => CupertinoSearchTextField(
@@ -105,7 +110,7 @@ class _SearchButton extends StatelessWidget {
         onTap: () => pushPlatformRoute(
           context,
           fullscreenDialog: true,
-          builder: (_) => const SearchScreen(),
+          builder: (_) => SearchScreen(onUserTap: onTapUser),
         ),
       ),
     );
