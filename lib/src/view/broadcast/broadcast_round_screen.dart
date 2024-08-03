@@ -26,11 +26,12 @@ const _kPlayerWidgetTextStyle = TextStyle(fontSize: 13, height: 1.0);
 
 const _kPlayerWidgetPadding = EdgeInsets.symmetric(vertical: 5.0);
 
-class BroadcastScreen extends StatelessWidget {
+/// A screen that displays the live games of a broadcast round.
+class BroadcastRoundScreen extends StatelessWidget {
   final String broadCastTitle;
   final BroadcastRoundId roundId;
 
-  const BroadcastScreen({
+  const BroadcastRoundScreen({
     super.key,
     required this.broadCastTitle,
     required this.roundId,
