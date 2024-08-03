@@ -24,4 +24,5 @@
   <string name="hideVariation" comment="Shown in the analysis screen.">Скрий вариацията</string>
   <string name="showComments" comment="Shown in the analysis screen.">Покажи коментарите</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Възникна грешка.</string>
+  <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">Покажи резултат</string>
 </resources>
