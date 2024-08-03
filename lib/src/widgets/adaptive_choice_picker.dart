@@ -2,6 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
+/// Shows a platform adaptive choice picker dialog
+///
+/// On Android, it shows a dialog with radio buttons.
+/// On iOS, it shows a modal action sheet if the number of choices is less than or equal to 10.
+/// Otherwise, it shows a [CupertinoPicker].
 Future<void> showChoicePicker<T>(
   BuildContext context, {
   required List<T> choices,
@@ -11,18 +16,16 @@ Future<void> showChoicePicker<T>(
 }) {
   switch (Theme.of(context).platform) {
     case TargetPlatform.android:
+      final deviceHeight = MediaQuery.sizeOf(context).height;
       return showDialog<void>(
         context: context,
         builder: (context) {
           return AlertDialog(
             contentPadding: const EdgeInsets.only(top: 12),
             scrollable: true,
-            content: SizedBox(
-              width: double.maxFinite,
-              height: 400,
-              child: ListView(
-                shrinkWrap: true,
-                children: choices.map((value) {
+            content: Builder(
+              builder: (context) {
+                final List<Widget> choiceWidgets = choices.map((value) {
                   return RadioListTile<T>(
                     title: labelBuilder(value),
                     value: value,
@@ -34,8 +37,21 @@ Future<void> showChoicePicker<T>(
                       }
                     },
                   );
-                }).toList(growable: false),
-              ),
+                }).toList(growable: false);
+                return choiceWidgets.length >= 10
+                    ? SizedBox(
+                        width: double.maxFinite,
+                        height: deviceHeight * 0.6,
+                        child: ListView(
+                          shrinkWrap: true,
+                          children: choiceWidgets,
+                        ),
+                      )
+                    : Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: choiceWidgets,
+                      );
+              },
             ),
             actions: [
               TextButton(
