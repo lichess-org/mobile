@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
@@ -81,6 +82,7 @@ class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final generalPrefs = ref.watch(generalPreferencesProvider);
+    final boardPrefs = ref.watch(boardPreferencesProvider);
     final authController = ref.watch(authControllerProvider);
     final userSession = ref.watch(authSessionProvider);
     final packageInfo = ref.watch(packageInfoProvider);
@@ -239,9 +241,11 @@ class _Body extends ConsumerWidget {
               }
             },
           ),
-          PlatformListTile(
-            leading: const Icon(Icons.palette),
-            title: const Text('Theme'),
+          SettingsListTile(
+            icon: const Icon(Icons.palette),
+            settingsLabel: const Text('Theme'),
+            settingsValue:
+                '${boardPrefs.boardTheme.label} / ${boardPrefs.pieceSet.label}',
             onTap: () {
               pushPlatformRoute(
                 context,
@@ -249,9 +253,6 @@ class _Body extends ConsumerWidget {
                 builder: (context) => const ThemeScreen(),
               );
             },
-            trailing: Theme.of(context).platform == TargetPlatform.iOS
-                ? const CupertinoListTileChevron()
-                : null,
           ),
           PlatformListTile(
             leading: const Icon(LichessIcons.chess_board),
