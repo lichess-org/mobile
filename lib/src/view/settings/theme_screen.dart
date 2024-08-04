@@ -84,6 +84,7 @@ class _Body extends ConsumerWidget {
             },
           ),
           ListSection(
+            hasLeading: true,
             children: [
               SettingsListTile(
                 icon: const Icon(LichessIcons.chess_board),
