@@ -85,6 +85,10 @@ class BoardPreferences extends _$BoardPreferences {
     );
   }
 
+  Future<void> setShapeColor(ShapeColor shapeColor) {
+    return _save(state.copyWith(shapeColor: shapeColor));
+  }
+
   Future<void> _save(BoardPrefs newState) async {
     final prefs = ref.read(sharedPreferencesProvider);
     await prefs.setString(
@@ -118,6 +122,11 @@ class BoardPrefs with _$BoardPrefs {
     /// Whether to enable shape drawings on the board for games and puzzles.
     @JsonKey(defaultValue: true) required bool enableShapeDrawings,
     @JsonKey(defaultValue: true) required bool magnifyDraggedPiece,
+    @JsonKey(
+      defaultValue: ShapeColor.green,
+      unknownEnumValue: ShapeColor.green,
+    )
+    required ShapeColor shapeColor,
   }) = _BoardPrefs;
 
   static const defaults = BoardPrefs(
@@ -133,6 +142,7 @@ class BoardPrefs with _$BoardPrefs {
     pieceShiftMethod: PieceShiftMethod.either,
     enableShapeDrawings: true,
     magnifyDraggedPiece: true,
+    shapeColor: ShapeColor.green,
   );
 
   ChessboardSettings toBoardSettings() {
@@ -148,6 +158,7 @@ class BoardPrefs with _$BoardPrefs {
       pieceShiftMethod: pieceShiftMethod,
       drawShape: DrawShapeOptions(
         enable: enableShapeDrawings,
+        newShapeColor: shapeColor.color,
       ),
     );
   }
@@ -162,6 +173,23 @@ class BoardPrefs with _$BoardPrefs {
 
   Duration get pieceAnimationDuration =>
       pieceAnimation ? const Duration(milliseconds: 150) : Duration.zero;
+}
+
+/// Colors taken from lila: https://github.com/lichess-org/chessground/blob/54a7e71bf88701c1109d3b9b8106b464012b94cf/src/state.ts#L178
+enum ShapeColor {
+  green,
+  red,
+  blue,
+  yellow;
+
+  Color get color => Color(
+        switch (this) {
+          ShapeColor.green => 0x15781B,
+          ShapeColor.red => 0x882020,
+          ShapeColor.blue => 0x003088,
+          ShapeColor.yellow => 0xe68f00,
+        },
+      ).withAlpha(0xAA);
 }
 
 /// The chessboard theme.

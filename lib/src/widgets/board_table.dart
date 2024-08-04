@@ -156,6 +156,7 @@ class _BoardTableState extends ConsumerState<BoardTable> {
                 enable: boardPrefs.enableShapeDrawings,
                 onCompleteShape: _onCompleteShape,
                 onClearShapes: _onClearShapes,
+                newShapeColor: boardPrefs.shapeColor.color,
               ),
             );
 
