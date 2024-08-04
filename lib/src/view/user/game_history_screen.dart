@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
 class GameHistoryScreen extends ConsumerWidget {
@@ -142,8 +143,12 @@ class _BodyState extends ConsumerState<_Body> {
         final list = state.gameList;
 
         return SafeArea(
-          child: ListView.builder(
+          child: ListView.separated(
             controller: _scrollController,
+            separatorBuilder: (context, index) => Theme.of(context).platform ==
+                    TargetPlatform.iOS
+                ? const PlatformDivider(height: 1, cupertinoHasLeading: true)
+                : const PlatformDivider(height: 1, color: Colors.transparent),
             itemCount: list.length + (state.isLoading ? 1 : 0),
             itemBuilder: (context, index) {
               if (state.isLoading && index == list.length) {
@@ -168,6 +173,10 @@ class _BodyState extends ConsumerState<_Body> {
               return ExtendedGameListTile(
                 item: list[index],
                 userId: widget.user?.id,
+                // see: https://github.com/flutter/flutter/blob/master/packages/flutter/lib/src/cupertino/list_tile.dart#L30 for horizontal padding value
+                padding: Theme.of(context).platform == TargetPlatform.iOS
+                    ? const EdgeInsets.symmetric(horizontal: 14.0, vertical: 12.0)
+                    : null,
               );
             },
           ),
