@@ -175,7 +175,10 @@ class _BodyState extends ConsumerState<_Body> {
                 userId: widget.user?.id,
                 // see: https://github.com/flutter/flutter/blob/master/packages/flutter/lib/src/cupertino/list_tile.dart#L30 for horizontal padding value
                 padding: Theme.of(context).platform == TargetPlatform.iOS
-                    ? const EdgeInsets.symmetric(horizontal: 14.0, vertical: 12.0)
+                    ? const EdgeInsets.symmetric(
+                        horizontal: 14.0,
+                        vertical: 12.0,
+                      )
                     : null,
               );
             },
