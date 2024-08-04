@@ -148,7 +148,6 @@ class GameSettings extends ConsumerWidget {
     return DraggableScrollableSheet(
       initialChildSize: 1.0,
       expand: false,
-      snap: true,
       builder: (context, scrollController) => ListView(
         controller: scrollController,
         children: content,

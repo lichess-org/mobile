@@ -28,8 +28,6 @@ class PuzzleSettingsScreen extends ConsumerWidget {
     return DraggableScrollableSheet(
       initialChildSize: .6,
       expand: false,
-      snap: true,
-      snapSizes: const [.6],
       builder: (context, scrollController) => ListView(
         controller: scrollController,
         children: [

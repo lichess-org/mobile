@@ -31,10 +31,8 @@ class AnalysisSettings extends ConsumerWidget {
     );
 
     return DraggableScrollableSheet(
-      initialChildSize: .7,
+      initialChildSize: 1.0,
       expand: false,
-      snap: true,
-      snapSizes: const [.7],
       builder: (context, scrollController) => ListView(
         controller: scrollController,
         children: [
