@@ -15,6 +15,7 @@ import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
+import 'package:lichess_mobile/src/model/notifications/local_notification_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
@@ -105,6 +106,8 @@ class _AppState extends ConsumerState<Application> {
     if (Theme.of(context).platform == TargetPlatform.android) {
       setOptimalDisplayMode();
     }
+
+    ref.read(localNotificationServiceProvider).init();
 
     ref.listenManual(connectivityChangesProvider, (prev, current) async {
       // Play registered moves whenever the app comes back online.
