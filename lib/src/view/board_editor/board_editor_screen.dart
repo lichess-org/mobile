@@ -57,8 +57,6 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.read(boardEditorControllerProvider.notifier);
-
     final boardEditorState = ref.watch(boardEditorControllerProvider);
 
     return Column(
@@ -134,6 +132,7 @@ class _BoardEditor extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final editorState = ref.watch(boardEditorControllerProvider);
     final boardPrefs = ref.watch(boardPreferencesProvider);
 
     return ChessboardEditor(
@@ -149,13 +148,14 @@ class _BoardEditor extends ConsumerWidget {
             : BorderRadius.zero,
         boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
       ),
-      pointerMode: ref.watch(boardEditorControllerProvider).editorPointerMode,
-      onDiscardedPiece:
-          ref.read(boardEditorControllerProvider.notifier).discardPiece,
-      onDroppedPiece:
-          ref.read(boardEditorControllerProvider.notifier).movePiece,
-      onEditedSquare:
-          ref.read(boardEditorControllerProvider.notifier).editSquare,
+      pointerMode: editorState.editorPointerMode,
+      onDiscardedPiece: (Square square) =>
+          ref.read(boardEditorControllerProvider.notifier).discardPiece(square),
+      onDroppedPiece: (Square? origin, Square dest, Piece piece) => ref
+          .read(boardEditorControllerProvider.notifier)
+          .movePiece(origin, dest, piece),
+      onEditedSquare: (Square square) =>
+          ref.read(boardEditorControllerProvider.notifier).editSquare(square),
     );
   }
 }
@@ -184,6 +184,7 @@ class _PieceMenuState extends ConsumerState<_PieceMenu> {
   @override
   Widget build(BuildContext context) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
+    final editorState = ref.watch(boardEditorControllerProvider);
 
     final squareSize = widget.boardSize / 8;
 
@@ -268,10 +269,9 @@ class _PieceMenuState extends ConsumerState<_PieceMenu> {
               width: squareSize,
               height: squareSize,
               child: ColoredBox(
-                color:
-                    ref.read(boardEditorControllerProvider).deletePiecesActive
-                        ? Theme.of(context).colorScheme.error
-                        : Colors.transparent,
+                color: editorState.deletePiecesActive
+                    ? Theme.of(context).colorScheme.error
+                    : Colors.transparent,
                 child: GestureDetector(
                   onTap: () => {
                     ref
@@ -297,8 +297,7 @@ class _BottomBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final pgn = ref.watch(boardEditorControllerProvider).pgn;
-    final orientation = ref.read(boardEditorControllerProvider).orientation;
+    final editorState = ref.watch(boardEditorControllerProvider);
 
     return Container(
       color: Theme.of(context).platform == TargetPlatform.iOS
@@ -337,17 +336,17 @@ class _BottomBar extends ConsumerWidget {
                 child: BottomBarButton(
                   label: context.l10n.analysis,
                   key: const Key('analysis-board-button'),
-                  onTap: pgn != null
+                  onTap: editorState.pgn != null
                       ? () {
                           pushPlatformRoute(
                             context,
                             rootNavigator: true,
                             builder: (context) => AnalysisScreen(
-                              pgnOrId: pgn,
+                              pgnOrId: editorState.pgn!,
                               options: AnalysisOptions(
                                 isLocalEvaluationAllowed: true,
                                 variant: Variant.fromPosition,
-                                orientation: orientation,
+                                orientation: editorState.orientation,
                                 id: standaloneAnalysisId,
                               ),
                             ),
@@ -362,7 +361,7 @@ class _BottomBar extends ConsumerWidget {
                   label: context.l10n.mobileSharePositionAsFEN,
                   onTap: () => launchShareDialog(
                     context,
-                    text: ref.read(boardEditorControllerProvider).fen,
+                    text: editorState.fen,
                   ),
                   icon: Icons.share,
                 ),
