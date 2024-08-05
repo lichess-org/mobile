@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/model/correspondence/correspondence_game_stor
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/settings/home_preferences.dart';
 import 'package:lichess_mobile/src/navigation.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
@@ -26,6 +27,7 @@ import 'package:lichess_mobile/src/view/play/ongoing_games_screen.dart';
 import 'package:lichess_mobile/src/view/play/play_screen.dart';
 import 'package:lichess_mobile/src/view/play/quick_game_button.dart';
 import 'package:lichess_mobile/src/view/play/quick_game_matrix.dart';
+import 'package:lichess_mobile/src/view/user/challenge_requests_screen.dart';
 import 'package:lichess_mobile/src/view/user/player_screen.dart';
 import 'package:lichess_mobile/src/view/user/recent_games.dart';
 import 'package:lichess_mobile/src/widgets/board_carousel_item.dart';
@@ -88,6 +90,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
             icon: Icon(isEditing ? Icons.save : Icons.app_registration),
             tooltip: isEditing ? 'Save' : 'Edit',
           ),
+          const _ChallengeScreenButton(),
           const _PlayerScreenButton(),
         ],
       ),
@@ -924,11 +927,9 @@ class _PlayerScreenButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final connectivity = ref.watch(connectivityChangesProvider);
-    final challenges = ref.watch(challengesProvider);
-    final count = challenges.valueOrNull?.inward.length;
 
     return connectivity.maybeWhen(
-      data: (connectivity) => AppBarNotificationIconButton(
+      data: (connectivity) => AppBarIconButton(
         icon: const Icon(Icons.group),
         semanticsLabel: context.l10n.players,
         onPressed: !connectivity.isOnline
@@ -940,11 +941,43 @@ class _PlayerScreenButton extends ConsumerWidget {
                   builder: (_) => const PlayerScreen(),
                 );
               },
-        count: count ?? 0,
       ),
       orElse: () => AppBarIconButton(
         icon: const Icon(Icons.group),
         semanticsLabel: context.l10n.players,
+        onPressed: null,
+      ),
+    );
+  }
+}
+
+class _ChallengeScreenButton extends ConsumerWidget {
+  const _ChallengeScreenButton();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final connectivity = ref.watch(connectivityChangesProvider);
+    final challenges = ref.watch(challengesProvider);
+    final count = challenges.valueOrNull?.inward.length;
+
+    return connectivity.maybeWhen(
+      data: (connectivity) => AppBarNotificationIconButton(
+        icon: const Icon(LichessIcons.crossed_swords),
+        semanticsLabel: context.l10n.preferencesNotifyChallenge,
+        onPressed: !connectivity.isOnline
+            ? null
+            : () {
+                pushPlatformRoute(
+                  context,
+                  title: context.l10n.preferencesNotifyChallenge,
+                  builder: (_) => const ChallengeRequestsScreen(),
+                );
+              },
+        count: count ?? 0,
+      ),
+      orElse: () => AppBarIconButton(
+        icon: const Icon(LichessIcons.crossed_swords),
+        semanticsLabel: context.l10n.preferencesNotifyChallenge,
         onPressed: null,
       ),
     );

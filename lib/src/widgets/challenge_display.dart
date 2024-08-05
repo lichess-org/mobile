@@ -18,6 +18,7 @@ class ChallengeDisplay extends StatelessWidget {
     required this.challenge,
     required this.user,
     required this.subtitle,
+    this.cancelText,
     this.color,
     this.onPressed,
     this.onCancel,
@@ -26,6 +27,7 @@ class ChallengeDisplay extends StatelessWidget {
   final Challenge challenge;
   final LightUser user;
   final String subtitle;
+  final String? cancelText;
   final Color? color;
   final VoidCallback? onPressed;
   final VoidCallback? onCancel;
@@ -45,7 +47,7 @@ class ChallengeDisplay extends StatelessWidget {
                     backgroundColor: context.lichessColors.error,
                     foregroundColor: Colors.white,
                     icon: Icons.cancel,
-                    label: context.l10n.cancel,
+                    label: cancelText ?? context.l10n.cancel,
                   ),
                 ],
               )

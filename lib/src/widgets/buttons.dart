@@ -213,6 +213,7 @@ class AppBarNotificationIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
+      alignment: AlignmentDirectional.center,
       children: [
         AppBarIconButton(
           icon: icon,

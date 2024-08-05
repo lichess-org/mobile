@@ -9,6 +9,8 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/notifications/challenge_notification.dart';
 import 'package:lichess_mobile/src/model/notifications/local_notification_service.dart';
+import 'package:lichess_mobile/src/navigation.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'challenge_repository.g.dart';
@@ -153,9 +155,19 @@ class Challenges extends _$Challenges {
   }
 
   void _notifyUser(Challenge challenge) {
+    final context = ref.read(currentNavigatorKeyProvider).currentContext;
+
+    final time = challenge.days == null
+        ? '∞'
+        : '${context?.l10n.daysPerTurn}: ${challenge.days}';
+    final body = challenge.rated
+        ? '${context?.l10n.rated} • $time'
+        : '${context?.l10n.casual} • $time';
+
     ref.read(localNotificationServiceProvider).show(
           ChallengeNotification(challenge.id).build(
             'Challenge request from ${challenge.challenger!.user.name}',
+            body: context != null ? body : null,
           ),
         );
   }

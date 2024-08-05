@@ -203,9 +203,9 @@ extension ChallengeExtension on Pick {
     }
     if (value is String) {
       switch (value) {
-        case 'outward':
+        case 'outward' || 'out':
           return ChallengeDirection.outward;
-        case 'inward':
+        case 'inward' || 'in':
           return ChallengeDirection.inward;
         default:
           throw PickException(
