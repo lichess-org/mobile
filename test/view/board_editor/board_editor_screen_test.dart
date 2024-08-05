@@ -225,7 +225,8 @@ Future<BoardEditorController> setupBoardEditor(WidgetTester tester) async {
     tester,
     home: const BoardEditorScreen(),
     overrides: [
-      boardEditorControllerProvider.overrideWith(() => boardEditorController),
+      boardEditorControllerProvider(null)
+          .overrideWith(() => boardEditorController),
     ],
   );
   await tester.pumpWidget(app);
