@@ -927,11 +927,9 @@ class _PlayerScreenButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final connectivity = ref.watch(connectivityChangesProvider);
-    final challenges = ref.watch(challengesProvider);
-    final count = challenges.valueOrNull?.inward.length;
 
     return connectivity.maybeWhen(
-      data: (connectivity) => AppBarNotificationIconButton(
+      data: (connectivity) => AppBarIconButton(
         icon: const Icon(Icons.group),
         semanticsLabel: context.l10n.players,
         onPressed: !connectivity.isOnline
@@ -943,7 +941,6 @@ class _PlayerScreenButton extends ConsumerWidget {
                   builder: (_) => const PlayerScreen(),
                 );
               },
-        count: count ?? 0,
       ),
       orElse: () => AppBarIconButton(
         icon: const Icon(Icons.group),
