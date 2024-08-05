@@ -8,10 +8,10 @@ import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
-import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 
@@ -28,37 +28,25 @@ class GameHistoryScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final session = ref.read(authSessionProvider);
-    final username = user?.name ?? session?.user.name;
-    final filtersInUse = ref.watch(
-      gameFilterProvider(filter: gameFilter).select(
-        (state) => state.count,
-      ),
-    );
+    final filtersInUse = ref.watch(gameFilterProvider(filter: gameFilter));
     final nbGamesAsync = ref.watch(
       userNumberOfGamesProvider(user, isOnline: isOnline),
     );
-    final title = filtersInUse == 0
+    final title = filtersInUse.count == 0
         ? nbGamesAsync.when(
             data: (nbGames) => Text(context.l10n.nbGames(nbGames)),
             loading: () => const ButtonLoadingIndicator(),
             error: (e, s) => Text(context.l10n.mobileAllGames),
           )
-        : Text(
-            username != null
-                ? '$username ${context.l10n.games.toLowerCase()}'
-                : context.l10n.games,
-          );
+        : Text(filtersInUse.selectionLabel(context));
     final filterBtn = Stack(
       alignment: Alignment.center,
       children: [
-        IconButton(
+        AppBarIconButton(
           icon: const Icon(Icons.tune),
-          tooltip: context.l10n.filterGames,
+          semanticsLabel: context.l10n.filterGames,
           onPressed: () => showAdaptiveBottomSheet<GameFilterState>(
             context: context,
-            isScrollControlled: true,
-            showDragHandle: true,
             builder: (_) => _FilterGames(
               filter: ref.read(gameFilterProvider(filter: gameFilter)),
               user: user,
@@ -71,7 +59,7 @@ class GameHistoryScreen extends ConsumerWidget {
             }
           }),
         ),
-        if (filtersInUse > 0)
+        if (filtersInUse.count > 0)
           Positioned(
             top: 2.0,
             right: 2.0,
@@ -90,7 +78,7 @@ class GameHistoryScreen extends ConsumerWidget {
                       color: Theme.of(context).colorScheme.onSecondary,
                       fontWeight: FontWeight.bold,
                     ),
-                    child: Text(filtersInUse.toString()),
+                    child: Text(filtersInUse.count.toString()),
                   ),
                 ),
               ],
@@ -118,6 +106,10 @@ class GameHistoryScreen extends ConsumerWidget {
   }) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
+        padding: const EdgeInsetsDirectional.only(
+          start: 16.0,
+          end: 8.0,
+        ),
         middle: title,
         trailing: filterBtn,
       ),
@@ -348,11 +340,10 @@ class _FilterGamesState extends ConsumerState<_FilterGames> {
 
     Widget perfFilter(List<Perf> choices) => _Filter<Perf>(
           filterName: context.l10n.variant,
-          icon: const Icon(LichessIcons.classical),
           filterType: FilterType.multipleChoice,
           choices: choices,
           choiceSelected: (choice) => filter.perfs.contains(choice),
-          choiceLabel: (t) => t.title,
+          choiceLabel: (t) => t.shortTitle,
           onSelected: (value, selected) => setState(
             () {
               filter = filter.copyWith(
@@ -364,16 +355,13 @@ class _FilterGamesState extends ConsumerState<_FilterGames> {
           ),
         );
 
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: DraggableScrollableSheet(
-        initialChildSize: .7,
-        expand: false,
-        snap: true,
-        snapSizes: const [.7],
-        builder: (context, scrollController) => ListView(
-          controller: scrollController,
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
+            const SizedBox(height: 12.0),
             if (userId != null)
               ref.watch(userProvider(id: userId)).when(
                     data: (user) => perfFilter(availablePerfs(user)),
@@ -384,11 +372,10 @@ class _FilterGamesState extends ConsumerState<_FilterGames> {
                   )
             else
               perfFilter(gamePerfs),
-            const Divider(),
+            const PlatformDivider(thickness: 1, indent: 0),
             filterGroupSpace,
             _Filter<Side>(
               filterName: context.l10n.side,
-              icon: const Icon(LichessIcons.chess_pawn),
               filterType: FilterType.singleChoice,
               choices: Side.values,
               choiceSelected: (choice) => filter.side == choice,
@@ -406,13 +393,14 @@ class _FilterGamesState extends ConsumerState<_FilterGames> {
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('Cancel'),
+                AdaptiveTextButton(
+                  onPressed: () =>
+                      setState(() => filter = const GameFilterState()),
+                  child: Text(context.l10n.reset),
                 ),
-                TextButton(
+                AdaptiveTextButton(
                   onPressed: () => Navigator.of(context).pop(filter),
-                  child: const Text('OK'),
+                  child: Text(context.l10n.apply),
                 ),
               ],
             ),
@@ -431,7 +419,6 @@ enum FilterType {
 class _Filter<T extends Enum> extends StatelessWidget {
   const _Filter({
     required this.filterName,
-    required this.icon,
     required this.filterType,
     required this.choices,
     required this.choiceSelected,
@@ -440,7 +427,6 @@ class _Filter<T extends Enum> extends StatelessWidget {
   });
 
   final String filterName;
-  final Icon icon;
   final FilterType filterType;
   final Iterable<T> choices;
   final bool Function(T choice) choiceSelected;
@@ -452,15 +438,7 @@ class _Filter<T extends Enum> extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Container(
-              margin: const EdgeInsets.only(right: 10),
-              child: icon,
-            ),
-            Text(filterName, style: const TextStyle(fontSize: 18)),
-          ],
-        ),
+        Text(filterName, style: const TextStyle(fontSize: 18)),
         const SizedBox(height: 10),
         SizedBox(
           width: double.infinity,
