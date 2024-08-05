@@ -165,14 +165,6 @@ Future<void> _deleteOldEntries(Database db, String table, Duration ttl) async {
   );
 }
 
-Future<void> _deleteEntry(Database db, String table) async {
-  if (!await _doesTableExist(db, table)) {
-    return;
-  }
-
-  await db.delete(table);
-}
-
 Future<bool> _doesTableExist(Database db, String table) async {
   final tableExists = await db.rawQuery(
     "SELECT name FROM sqlite_master WHERE type='table' AND name='$table'",
