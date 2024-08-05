@@ -79,7 +79,7 @@ class ClientEval with _$ClientEval implements Eval {
   Move? get bestMove {
     final uci = pvs.firstOrNull?.moves.firstOrNull;
     if (uci == null) return null;
-    return Move.fromUci(uci);
+    return Move.parse(uci);
   }
 
   IList<MoveWithWinningChances> get bestMoves {
@@ -132,7 +132,7 @@ class PvData with _$PvData {
     final List<String> res = [];
     for (final uciMove in moves.sublist(0, math.min(12, moves.length))) {
       // assume uciMove string is valid as it comes from stockfish
-      final move = Move.fromUci(uciMove)!;
+      final move = Move.parse(uciMove)!;
       if (pos.isLegal(move)) {
         final (newPos, san) = pos.makeSanUnchecked(move);
         res.add(san);
@@ -145,7 +145,7 @@ class PvData with _$PvData {
   }
 
   MoveWithWinningChances? _firstMoveWithWinningChances(Side sideToMove) {
-    final uciMove = (moves.isNotEmpty) ? Move.fromUci(moves.first) : null;
+    final uciMove = (moves.isNotEmpty) ? Move.parse(moves.first) : null;
     return (uciMove != null)
         ? (
             move: uciMove,

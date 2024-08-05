@@ -1,4 +1,4 @@
-import 'package:chessground/chessground.dart' as cg;
+import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +16,6 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_streak.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -102,11 +101,7 @@ class _Load extends ConsumerWidget {
           child: BoardTable(
             topTable: kEmptyWidget,
             bottomTable: kEmptyWidget,
-            boardData: const cg.BoardData(
-              fen: kEmptyFen,
-              interactableSide: cg.InteractableSide.none,
-              orientation: cg.Side.white,
-            ),
+            boardState: kEmptyBoardState,
             errorMessage: e.toString(),
           ),
         );
@@ -152,22 +147,22 @@ class _Body extends ConsumerWidget {
                 onMove: (move, {isDrop, isPremove}) {
                   ref
                       .read(ctrlProvider.notifier)
-                      .onUserMove(Move.fromUci(move.uci)!);
+                      .onUserMove(Move.parse(move.uci)!);
                 },
-                boardData: cg.BoardData(
-                  orientation: puzzleState.pov.cg,
+                boardState: ChessboardState(
+                  orientation: puzzleState.pov,
                   interactableSide: puzzleState.mode == PuzzleMode.load ||
                           puzzleState.position.isGameOver
-                      ? cg.InteractableSide.none
+                      ? InteractableSide.none
                       : puzzleState.mode == PuzzleMode.view
-                          ? cg.InteractableSide.both
+                          ? InteractableSide.both
                           : puzzleState.pov == Side.white
-                              ? cg.InteractableSide.white
-                              : cg.InteractableSide.black,
+                              ? InteractableSide.white
+                              : InteractableSide.black,
                   fen: puzzleState.fen,
                   isCheck: puzzleState.position.isCheck,
-                  lastMove: puzzleState.lastMove?.cg,
-                  sideToMove: puzzleState.position.turn.cg,
+                  lastMove: puzzleState.lastMove as NormalMove?,
+                  sideToMove: puzzleState.position.turn,
                   validMoves: puzzleState.validMoves,
                 ),
                 topTable: Center(

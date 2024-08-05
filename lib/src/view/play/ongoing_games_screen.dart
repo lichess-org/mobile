@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/chessground_compat.dart' as cg;
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
@@ -69,8 +68,8 @@ class OngoingGamePreview extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SmallBoardPreview(
-      orientation: game.orientation.cg,
-      lastMove: game.lastMove?.cg,
+      orientation: game.orientation,
+      lastMove: game.lastMove,
       fen: game.fen,
       description: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

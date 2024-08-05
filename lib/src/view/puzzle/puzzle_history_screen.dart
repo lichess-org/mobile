@@ -10,8 +10,6 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_activity.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/chessground_compat.dart' as cg;
-import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
@@ -75,9 +73,9 @@ class PuzzleHistoryPreview extends ConsumerWidget {
                 ),
               );
             },
-            orientation: side.cg,
+            orientation: side,
             fen: fen,
-            lastMove: lastMove.cg,
+            lastMove: lastMove,
             footer: Padding(
               padding: const EdgeInsets.only(top: 2.0),
               child: Row(
@@ -241,9 +239,9 @@ class _HistoryBoard extends ConsumerWidget {
             ),
           );
         },
-        orientation: turn.cg,
+        orientation: turn,
         fen: fen,
-        lastMove: lastMove.cg,
+        lastMove: lastMove,
         footer: Padding(
           padding: const EdgeInsets.only(top: 2),
           child: _PuzzleResult(puzzle),

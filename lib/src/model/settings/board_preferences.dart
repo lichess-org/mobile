@@ -135,15 +135,15 @@ class BoardPrefs with _$BoardPrefs {
     magnifyDraggedPiece: true,
   );
 
-  BoardSettings toBoardSettings() {
-    return BoardSettings(
+  ChessboardSettings toBoardSettings() {
+    return ChessboardSettings(
       pieceAssets: pieceSet.assets,
       colorScheme: boardTheme.colors,
       showValidMoves: showLegalMoves,
       showLastMove: boardHighlights,
       enableCoordinates: coordinates,
       animationDuration: pieceAnimationDuration,
-      dragFeedbackSize: magnifyDraggedPiece ? 2.0 : 1.0,
+      dragFeedbackScale: magnifyDraggedPiece ? 2.0 : 1.0,
       dragFeedbackOffset: Offset(0.0, magnifyDraggedPiece ? -1.0 : 0.0),
       pieceShiftMethod: pieceShiftMethod,
       drawShape: DrawShapeOptions(
@@ -195,56 +195,56 @@ enum BoardTheme {
 
   const BoardTheme(this.label);
 
-  BoardColorScheme get colors {
+  ChessboardColorScheme get colors {
     switch (this) {
       case BoardTheme.system:
-        return getBoardColorScheme() ?? BoardColorScheme.brown;
+        return getBoardColorScheme() ?? ChessboardColorScheme.brown;
       case BoardTheme.blue:
-        return BoardColorScheme.blue;
+        return ChessboardColorScheme.blue;
       case BoardTheme.blue2:
-        return BoardColorScheme.blue2;
+        return ChessboardColorScheme.blue2;
       case BoardTheme.blue3:
-        return BoardColorScheme.blue3;
+        return ChessboardColorScheme.blue3;
       case BoardTheme.blueMarble:
-        return BoardColorScheme.blueMarble;
+        return ChessboardColorScheme.blueMarble;
       case BoardTheme.canvas:
-        return BoardColorScheme.canvas;
+        return ChessboardColorScheme.canvas;
       case BoardTheme.wood:
-        return BoardColorScheme.wood;
+        return ChessboardColorScheme.wood;
       case BoardTheme.wood2:
-        return BoardColorScheme.wood2;
+        return ChessboardColorScheme.wood2;
       case BoardTheme.wood3:
-        return BoardColorScheme.wood3;
+        return ChessboardColorScheme.wood3;
       case BoardTheme.wood4:
-        return BoardColorScheme.wood4;
+        return ChessboardColorScheme.wood4;
       case BoardTheme.maple:
-        return BoardColorScheme.maple;
+        return ChessboardColorScheme.maple;
       case BoardTheme.maple2:
-        return BoardColorScheme.maple2;
+        return ChessboardColorScheme.maple2;
       case BoardTheme.brown:
-        return BoardColorScheme.brown;
+        return ChessboardColorScheme.brown;
       case BoardTheme.leather:
-        return BoardColorScheme.leather;
+        return ChessboardColorScheme.leather;
       case BoardTheme.green:
-        return BoardColorScheme.green;
+        return ChessboardColorScheme.green;
       case BoardTheme.marble:
-        return BoardColorScheme.marble;
+        return ChessboardColorScheme.marble;
       case BoardTheme.greenPlastic:
-        return BoardColorScheme.greenPlastic;
+        return ChessboardColorScheme.greenPlastic;
       case BoardTheme.grey:
-        return BoardColorScheme.grey;
+        return ChessboardColorScheme.grey;
       case BoardTheme.metal:
-        return BoardColorScheme.metal;
+        return ChessboardColorScheme.metal;
       case BoardTheme.olive:
-        return BoardColorScheme.olive;
+        return ChessboardColorScheme.olive;
       case BoardTheme.newspaper:
-        return BoardColorScheme.newspaper;
+        return ChessboardColorScheme.newspaper;
       case BoardTheme.purpleDiag:
-        return BoardColorScheme.purpleDiag;
+        return ChessboardColorScheme.purpleDiag;
       case BoardTheme.pinkPyramid:
-        return BoardColorScheme.pinkPyramid;
+        return ChessboardColorScheme.pinkPyramid;
       case BoardTheme.horsey:
-        return BoardColorScheme.horsey;
+        return ChessboardColorScheme.horsey;
     }
   }
 

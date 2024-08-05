@@ -11,7 +11,6 @@ import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
@@ -155,8 +154,8 @@ class _ContextMenu extends ConsumerWidget {
                               size: constraints.maxWidth -
                                   (constraints.maxWidth / 1.618),
                               fen: game.lastFen!,
-                              orientation: mySide.cg,
-                              lastMove: game.lastMove?.cg,
+                              orientation: mySide,
+                              lastMove: game.lastMove,
                             ),
                           Expanded(
                             child: Padding(
