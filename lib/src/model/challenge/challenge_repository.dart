@@ -7,6 +7,8 @@ import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
+import 'package:lichess_mobile/src/model/notifications/challenge_notification.dart';
+import 'package:lichess_mobile/src/model/notifications/local_notification_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'challenge_repository.g.dart';
@@ -116,6 +118,13 @@ class Challenges extends _$Challenges {
 
   Future<GameFullId?> accept(ChallengeId id) async {
     final repo = ref.read(challengeRepositoryProvider);
+
+    final inward = state.value!.inward;
+    final outward = state.value!.outward;
+    final newInward =
+        inward.remove(inward.firstWhere((challenge) => challenge.id == id));
+    state = AsyncValue.data((inward: newInward, outward: outward));
+
     return repo
         .accept(id)
         .then((_) => repo.show(id).then((challenge) => challenge.gameFullId));
@@ -144,6 +153,10 @@ class Challenges extends _$Challenges {
   }
 
   void _notifyUser(Challenge challenge) {
-    // send a notification to the user
+    ref.read(localNotificationServiceProvider).show(
+          ChallengeNotification(challenge.id).build(
+            'Challenge request from ${challenge.challenger!.user.name}',
+          ),
+        );
   }
 }
