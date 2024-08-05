@@ -1,11 +1,16 @@
 import 'dart:async';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/notifications/challenge_notification.dart';
+import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'local_notification_service.g.dart';
+part 'local_notification_service.freezed.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 LocalNotificationService localNotificationService(
   LocalNotificationServiceRef ref,
 ) {
@@ -13,9 +18,12 @@ LocalNotificationService localNotificationService(
 }
 
 class LocalNotificationService {
-  static final instance = LocalNotificationService();
+  LocalNotificationService(this._log);
+  static final instance =
+      LocalNotificationService(Logger('LocalNotificationService'));
 
   final _notificationPlugin = FlutterLocalNotificationsPlugin();
+  final Logger _log;
   int currentId = 0;
 
   Future<void> init() async {
@@ -34,40 +42,14 @@ class LocalNotificationService {
     );
   }
 
-  Future<int> showActionNotification(
-    String title,
-    ActionNotification notification, {
-    String? body,
-  }) async {
+  Future<int> show(LocalNotification notification) async {
     final id = currentId++;
     await _notificationPlugin.show(
       id,
-      title,
-      body,
+      notification.title,
+      notification.body,
       notification.notificationDetails,
       payload: notification.payload,
-    );
-    return id;
-  }
-
-  Future<int> show(
-    String title, {
-    String? body,
-  }) async {
-    const notificationDetails = NotificationDetails(
-      android: AndroidNotificationDetails(
-        'info',
-        'Information',
-        importance: Importance.high,
-        priority: Priority.high,
-      ),
-    );
-    final id = currentId++;
-    await _notificationPlugin.show(
-      id,
-      title,
-      body,
-      notificationDetails,
     );
     return id;
   }
@@ -78,18 +60,32 @@ class LocalNotificationService {
 
   @pragma('vm:entry-point')
   static void _notificationRespsonse(NotificationResponse response) {
-    final splits = response.payload?.split(':');
-    if (splits == null) return;
+    if (response.payload == null) return;
 
-    final id = splits[0];
-    final payload = splits[1];
-    switch (id) {}
+    try {
+      final splits = response.payload!.split(':');
+
+      final id = splits[0];
+      final payload = splits[1];
+      switch (id) {
+        case 'challenge-notification':
+          final notification = ChallengeNotification(ChallengeId(payload));
+          notification.callback(response.actionId);
+      }
+    } catch (error) {
+      LocalNotificationService.instance._log.warning(
+        'Malformed notification payload: [ID: ${response.id}] ${response.payload}',
+      );
+    }
   }
 }
 
-abstract class ActionNotification {
-  void callback(String? actionId);
-  String? get payload;
-  NotificationDetails get notificationDetails;
-  DarwinNotificationCategory get darwinNotificationCategory;
+@freezed
+class LocalNotification with _$LocalNotification {
+  factory LocalNotification({
+    required String title,
+    String? body,
+    String? payload,
+    required NotificationDetails notificationDetails,
+  }) = _LocalNotification;
 }
