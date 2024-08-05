@@ -29,14 +29,16 @@ class GameHistoryScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final session = ref.read(authSessionProvider);
     final username = user?.name ?? session?.user.name;
+    final filtersInUse = ref.watch(
+      gameFilterProvider(filter: gameFilter).select(
+        (state) => state.count,
+      ),
+    );
     final title = Text(
       username != null
           ? '$username ${context.l10n.games.toLowerCase()}'
           : context.l10n.games,
     );
-    final filtersInUse = ref
-        .read(gameFilterProvider(filter: gameFilter).notifier)
-        .countFiltersInUse();
     final filterBtn = Stack(
       alignment: Alignment.center,
       children: [
@@ -335,7 +337,7 @@ class _FilterGamesState extends ConsumerState<_FilterGames> {
           ),
         );
 
-    return Container(
+    return Padding(
       padding: const EdgeInsets.all(16),
       child: DraggableScrollableSheet(
         initialChildSize: .7,

@@ -18,19 +18,21 @@ class GameFilter extends _$GameFilter {
         perfs: filter.perfs,
         side: filter.side,
       );
-
-  int countFiltersInUse() {
-    final fields = [state.perfs, state.side];
-    return fields
-        .where((field) => field is Iterable ? field.isNotEmpty : field != null)
-        .length;
-  }
 }
 
 @freezed
 class GameFilterState with _$GameFilterState {
+  const GameFilterState._();
+
   const factory GameFilterState({
     @Default(ISet<Perf>.empty()) ISet<Perf> perfs,
     Side? side,
   }) = _GameFilterState;
+
+  int get count {
+    final fields = [perfs, side];
+    return fields
+        .where((field) => field is Iterable ? field.isNotEmpty : field != null)
+        .length;
+  }
 }
