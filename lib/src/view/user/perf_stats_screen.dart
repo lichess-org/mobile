@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
+import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
@@ -282,8 +283,7 @@ class _Body extends ConsumerWidget {
                           builder: (context) => GameHistoryScreen(
                             user: user.lightUser,
                             isOnline: true,
-                            perf: perf,
-                            games: data.totalGames,
+                            gameFilter: GameFilterState(perfs: ISet({perf})),
                           ),
                         );
                       },

@@ -1,6 +1,7 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
+import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/game_storage.dart';
 
 class MockGameStorage implements GameStorage {
@@ -19,6 +20,7 @@ class MockGameStorage implements GameStorage {
     UserId? userId,
     DateTime? until,
     int max = 10,
+    GameFilterState filter = const GameFilterState(),
   }) {
     return Future.value(IList());
   }
