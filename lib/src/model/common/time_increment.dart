@@ -29,25 +29,14 @@ class TimeIncrement {
 
   Speed get speed => Speed.fromTimeIncrement(this);
 
+  bool get isInfinite => time == 0 && increment == 0;
+
   String get display {
-    String displayTime = '';
-    switch (time) {
-      case 0:
-        if (increment == 0) {
-          displayTime = '∞';
-        } else {
-          displayTime = '0+$increment';
-        }
-      case 45:
-        displayTime = '¾+$increment';
-      case 30:
-        displayTime = '½+$increment';
-      case 15:
-        displayTime = '¼+$increment';
-      default:
-        displayTime = '${(time / 60).floor()}+$increment';
+    if (isInfinite) {
+      return '∞';
+    } else {
+      return '${clockLabelInMinutes(time)}+$increment';
     }
-    return displayTime;
   }
 
   @override
@@ -63,4 +52,20 @@ class TimeIncrement {
 
   @override
   String toString() => 'TimeIncrement($time+$increment)';
+}
+
+/// Displays a chess clock time in minutes from an amount of seconds
+String clockLabelInMinutes(num seconds) {
+  switch (seconds) {
+    case 0:
+      return '0';
+    case 45:
+      return '¾';
+    case 30:
+      return '½';
+    case 15:
+      return '¼';
+    default:
+      return (seconds / 60).toString().replaceAll('.0', '');
+  }
 }

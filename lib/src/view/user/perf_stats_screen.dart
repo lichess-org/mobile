@@ -23,6 +23,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
+import 'package:lichess_mobile/src/view/user/game_history_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -266,19 +267,54 @@ class _Body extends ConsumerWidget {
                   ),
                 ]),
                 statGroupSpace,
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.baseline,
-                  textBaseline: TextBaseline.alphabetic,
-                  children: [
-                    Text(
-                      '${context.l10n.perfStatTotalGames} '.localizeNumbers(),
-                      style: Styles.sectionTitle,
+                Semantics(
+                  container: true,
+                  enabled: true,
+                  button: true,
+                  label: context.l10n.perfStatViewTheGames,
+                  child: Tooltip(
+                    excludeFromSemantics: true,
+                    message: context.l10n.perfStatViewTheGames,
+                    child: AdaptiveInkWell(
+                      onTap: () {
+                        pushPlatformRoute(
+                          context,
+                          builder: (context) => GameHistoryScreen(
+                            user: user.lightUser,
+                            isOnline: true,
+                            perf: perf,
+                            games: data.totalGames,
+                          ),
+                        );
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 3.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.baseline,
+                          textBaseline: TextBaseline.alphabetic,
+                          children: [
+                            Text(
+                              '${context.l10n.perfStatTotalGames} '
+                                  .localizeNumbers(),
+                              style: Styles.sectionTitle,
+                            ),
+                            Text(
+                              data.totalGames.toString().localizeNumbers(),
+                              style: _mainValueStyle,
+                            ),
+                            Text(
+                              String.fromCharCode(
+                                Icons.arrow_forward_ios.codePoint,
+                              ),
+                              style: Styles.sectionTitle.copyWith(
+                                fontFamily: 'MaterialIcons',
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                    Text(
-                      data.totalGames.toString().localizeNumbers(),
-                      style: _mainValueStyle,
-                    ),
-                  ],
+                  ),
                 ),
                 subStatSpace,
                 StatCardRow([
@@ -676,6 +712,11 @@ class _GameListWidget extends ConsumerWidget {
                         ? Side.white
                         : Side.black,
                   ),
+                );
+              } else if (context.mounted && gameData != null) {
+                showPlatformSnackbar(
+                  context,
+                  'This variant is not supported yet',
                 );
               }
             },

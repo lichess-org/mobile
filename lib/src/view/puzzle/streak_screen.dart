@@ -126,10 +126,8 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = puzzleControllerProvider(
-      initialPuzzleContext,
-      initialStreak: streak,
-    );
+    final ctrlProvider =
+        puzzleControllerProvider(initialPuzzleContext, initialStreak: streak);
     final puzzleState = ref.watch(ctrlProvider);
 
     ref.listen<bool>(ctrlProvider.select((s) => s.nextPuzzleStreakFetchError),
@@ -138,7 +136,8 @@ class _Body extends ConsumerWidget {
         showAdaptiveDialog<void>(
           context: context,
           builder: (context) => _RetryFetchPuzzleDialog(
-            ctrlProvider: ctrlProvider,
+            initialPuzzleContext: initialPuzzleContext,
+            streak: streak,
           ),
         );
       }
@@ -224,7 +223,7 @@ class _Body extends ConsumerWidget {
         ),
         _BottomBar(
           initialPuzzleContext: initialPuzzleContext,
-          ctrlProvider: ctrlProvider,
+          streak: streak,
         ),
       ],
     );
@@ -260,14 +259,16 @@ class _Body extends ConsumerWidget {
 class _BottomBar extends ConsumerWidget {
   const _BottomBar({
     required this.initialPuzzleContext,
-    required this.ctrlProvider,
+    required this.streak,
   });
 
   final PuzzleContext initialPuzzleContext;
-  final PuzzleControllerProvider ctrlProvider;
+  final PuzzleStreak streak;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final ctrlProvider =
+        puzzleControllerProvider(initialPuzzleContext, initialStreak: streak);
     final puzzleState = ref.watch(ctrlProvider);
 
     return Container(
@@ -408,16 +409,20 @@ class _BottomBar extends ConsumerWidget {
 
 class _RetryFetchPuzzleDialog extends ConsumerWidget {
   const _RetryFetchPuzzleDialog({
-    required this.ctrlProvider,
+    required this.initialPuzzleContext,
+    required this.streak,
   });
 
-  final PuzzleControllerProvider ctrlProvider;
+  final PuzzleContext initialPuzzleContext;
+  final PuzzleStreak streak;
 
   static const title = 'Could not fetch the puzzle';
   static const content = 'Please check your internet connection and try again.';
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final ctrlProvider =
+        puzzleControllerProvider(initialPuzzleContext, initialStreak: streak);
     final state = ref.watch(ctrlProvider);
 
     Future<void> retryStreakNext() async {
@@ -430,7 +435,11 @@ class _RetryFetchPuzzleDialog extends ConsumerWidget {
             Navigator.of(context).pop();
           }
           if (data != null) {
-            ref.read(ctrlProvider.notifier).loadPuzzle(data);
+            ref.read(ctrlProvider.notifier).loadPuzzle(
+                  data,
+                  nextStreak:
+                      state.streak!.copyWith(index: state.streak!.index + 1),
+                );
           }
         },
       );

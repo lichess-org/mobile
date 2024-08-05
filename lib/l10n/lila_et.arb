@@ -21,7 +21,7 @@
   "activityCompetedInNbSwissTournaments": "{count, plural, =1{Võistles {count} šveitsi turniiril} other{Võistles {count} šveitsi turniiril}}",
   "activityJoinedNbTeams": "{count, plural, =1{Liitus {count} rühmaga} other{Liitus {count} rühmaga}}",
   "broadcastBroadcasts": "Otseülekanded",
-  "broadcastStartDate": "Alguskuupäev sinu ajavööndis",
+  "broadcastLiveBroadcasts": "Otseülekanded turniirilt",
   "challengeChallengeToPlay": "Väljakutse mängule",
   "challengeChallengeDeclined": "Väljakutse tagasi lükatud",
   "challengeChallengeAccepted": "Väljakutse vastu võetud!",

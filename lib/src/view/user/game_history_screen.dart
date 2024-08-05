@@ -1,21 +1,27 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
 class GameHistoryScreen extends ConsumerWidget {
   const GameHistoryScreen({
     required this.user,
     required this.isOnline,
+    this.perf,
+    this.games,
     super.key,
   });
   final LightUser? user;
   final bool isOnline;
+  final Perf? perf;
+  final int? games;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -33,12 +39,12 @@ class GameHistoryScreen extends ConsumerWidget {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: nbGamesAsync.when(
-          data: (nbGames) => Text(context.l10n.nbGames(nbGames)),
+          data: (nbGames) => Text(context.l10n.nbGames(games ?? nbGames)),
           loading: () => const CupertinoActivityIndicator(),
           error: (e, s) => Text(context.l10n.mobileAllGames),
         ),
       ),
-      child: _Body(user: user, isOnline: isOnline),
+      child: _Body(user: user, isOnline: isOnline, perf: perf),
     );
   }
 
@@ -49,21 +55,26 @@ class GameHistoryScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: nbGamesAsync.when(
-          data: (nbGames) => Text(context.l10n.nbGames(nbGames)),
+          data: (nbGames) => Text(context.l10n.nbGames(games ?? nbGames)),
           loading: () => const ButtonLoadingIndicator(),
           error: (e, s) => Text(context.l10n.mobileAllGames),
         ),
       ),
-      body: _Body(user: user, isOnline: isOnline),
+      body: _Body(user: user, isOnline: isOnline, perf: perf),
     );
   }
 }
 
 class _Body extends ConsumerStatefulWidget {
-  const _Body({required this.user, required this.isOnline});
+  const _Body({
+    required this.user,
+    required this.isOnline,
+    required this.perf,
+  });
 
   final LightUser? user;
   final bool isOnline;
+  final Perf? perf;
 
   @override
   ConsumerState<_Body> createState() => _BodyState();
@@ -92,6 +103,7 @@ class _BodyState extends ConsumerState<_Body> {
         userGameHistoryProvider(
           widget.user?.id,
           isOnline: widget.isOnline,
+          perf: widget.perf,
         ),
       );
 
@@ -108,6 +120,7 @@ class _BodyState extends ConsumerState<_Body> {
               userGameHistoryProvider(
                 widget.user?.id,
                 isOnline: widget.isOnline,
+                perf: widget.perf,
               ).notifier,
             )
             .getNext();
@@ -118,7 +131,11 @@ class _BodyState extends ConsumerState<_Body> {
   @override
   Widget build(BuildContext context) {
     final gameListState = ref.watch(
-      userGameHistoryProvider(widget.user?.id, isOnline: widget.isOnline),
+      userGameHistoryProvider(
+        widget.user?.id,
+        isOnline: widget.isOnline,
+        perf: widget.perf,
+      ),
     );
 
     return gameListState.when(
@@ -126,8 +143,12 @@ class _BodyState extends ConsumerState<_Body> {
         final list = state.gameList;
 
         return SafeArea(
-          child: ListView.builder(
+          child: ListView.separated(
             controller: _scrollController,
+            separatorBuilder: (context, index) => Theme.of(context).platform ==
+                    TargetPlatform.iOS
+                ? const PlatformDivider(height: 1, cupertinoHasLeading: true)
+                : const PlatformDivider(height: 1, color: Colors.transparent),
             itemCount: list.length + (state.isLoading ? 1 : 0),
             itemBuilder: (context, index) {
               if (state.isLoading && index == list.length) {
@@ -152,6 +173,13 @@ class _BodyState extends ConsumerState<_Body> {
               return ExtendedGameListTile(
                 item: list[index],
                 userId: widget.user?.id,
+                // see: https://github.com/flutter/flutter/blob/master/packages/flutter/lib/src/cupertino/list_tile.dart#L30 for horizontal padding value
+                padding: Theme.of(context).platform == TargetPlatform.iOS
+                    ? const EdgeInsets.symmetric(
+                        horizontal: 14.0,
+                        vertical: 12.0,
+                      )
+                    : null,
               );
             },
           ),

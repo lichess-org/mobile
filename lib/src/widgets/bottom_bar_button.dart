@@ -11,6 +11,7 @@ class BottomBarButton extends StatelessWidget {
     this.highlighted = false,
     this.showLabel = false,
     this.showTooltip = true,
+    this.blink = false,
     this.tooltip,
     super.key,
   });
@@ -23,6 +24,7 @@ class BottomBarButton extends StatelessWidget {
   final bool highlighted;
   final bool showLabel;
   final bool showTooltip;
+  final bool blink;
 
   /// In case we want to override the tooltip message. If null, the [label] will
   /// be used.
@@ -64,10 +66,15 @@ class BottomBarButton extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Icon(
-                      icon,
-                      color: highlighted ? primary : null,
-                    ),
+                    if (blink)
+                      _BlinkIcon(
+                        icon: icon,
+                        color: highlighted
+                            ? primary
+                            : Theme.of(context).iconTheme.color ?? Colors.black,
+                      )
+                    else
+                      Icon(icon, color: highlighted ? primary : null),
                     if (showLabel)
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -111,6 +118,66 @@ class BottomBarButton extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _BlinkIcon extends StatefulWidget {
+  const _BlinkIcon({
+    required this.icon,
+    required this.color,
+  });
+
+  final IconData icon;
+  final Color color;
+
+  @override
+  _BlinkIconState createState() => _BlinkIconState();
+}
+
+class _BlinkIconState extends State<_BlinkIcon>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<Color?> _colorAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 500),
+      vsync: this,
+    );
+
+    _colorAnimation =
+        ColorTween(begin: widget.color, end: null).animate(_controller)
+          ..addStatusListener((status) {
+            if (_controller.status == AnimationStatus.completed) {
+              _controller.reverse();
+            } else if (_controller.status == AnimationStatus.dismissed) {
+              _controller.forward();
+            }
+          });
+
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _colorAnimation,
+      builder: (context, child) {
+        return Icon(
+          widget.icon,
+          color: _colorAnimation.value ?? Colors.transparent,
+        );
+      },
     );
   }
 }

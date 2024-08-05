@@ -1,5 +1,4 @@
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -25,7 +24,6 @@ import 'package:logging/logging.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:soundpool/soundpool.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -36,8 +34,6 @@ import 'fake_notification_service.dart';
 import 'model/common/fake_websocket_channel.dart';
 import 'model/game/mock_game_storage.dart';
 import 'utils/fake_connectivity_changes.dart';
-
-class MockSoundPool extends Mock implements Soundpool {}
 
 class MockDatabase extends Mock implements Database {}
 
@@ -139,7 +135,6 @@ Future<Widget> buildTestApp(
             'isPhysicalDevice': true,
           }),
           sharedPreferences: sharedPreferences,
-          soundPool: (MockSoundPool(), IMap<Sound, int>(const {})),
           userSession: userSession,
           database: MockDatabase(),
           sri: 'test',

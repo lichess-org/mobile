@@ -29,18 +29,36 @@ class PerfCards extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Perf> userPerfs = Perf.values.where((element) {
+    const puzzlePerfsSet = {Perf.puzzle, Perf.streak, Perf.storm};
+    final List<Perf> gamePerfs = Perf.values.where((element) {
+      if (puzzlePerfsSet.contains(element)) {
+        return false;
+      }
       final p = user.perfs[element];
       return p != null &&
           p.numberOfGamesOrRuns > 0 &&
           p.ratingDeviation < kClueLessDeviation;
     }).toList(growable: false);
 
-    userPerfs.sort(
-      (p1, p2) => user.perfs[p1]!.numberOfGamesOrRuns
-          .compareTo(user.perfs[p2]!.numberOfGamesOrRuns),
+    gamePerfs.sort(
+      (p1, p2) => user.perfs[p2]!.numberOfGamesOrRuns
+          .compareTo(user.perfs[p1]!.numberOfGamesOrRuns),
     );
-    userPerfs = userPerfs.reversed.toList();
+
+    final List<Perf> puzzlePerfs = Perf.values.where((element) {
+      if (!puzzlePerfsSet.contains(element)) {
+        return false;
+      }
+      final p = user.perfs[element];
+      return p != null && p.numberOfGamesOrRuns > 0;
+    }).toList(growable: false);
+
+    puzzlePerfs.sort(
+      (p1, p2) => user.perfs[p2]!.numberOfGamesOrRuns
+          .compareTo(user.perfs[p1]!.numberOfGamesOrRuns),
+    );
+
+    final userPerfs = [...gamePerfs, ...puzzlePerfs];
 
     if (userPerfs.isEmpty) {
       return const SizedBox.shrink();

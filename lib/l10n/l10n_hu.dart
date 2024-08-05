@@ -2,125 +2,147 @@ import 'package:intl/intl.dart' as intl;
 
 import 'l10n.dart';
 
+// ignore_for_file: type=lint
+
 /// The translations for Hungarian (`hu`).
 class AppLocalizationsHu extends AppLocalizations {
   AppLocalizationsHu([String locale = 'hu']) : super(locale);
 
   @override
-  String get mobileHomeTab => 'Home';
+  String get mobileHomeTab => 'Kezdőlap';
 
   @override
-  String get mobilePuzzlesTab => 'Puzzles';
+  String get mobilePuzzlesTab => 'Feladvány';
 
   @override
-  String get mobileToolsTab => 'Tools';
+  String get mobileToolsTab => 'Eszközök';
 
   @override
-  String get mobileWatchTab => 'Watch';
+  String get mobileWatchTab => 'Néznivaló';
 
   @override
-  String get mobileSettingsTab => 'Settings';
+  String get mobileSettingsTab => 'Beállítás';
 
   @override
-  String get mobileMustBeLoggedIn => 'You must be logged in to view this page.';
+  String get mobileMustBeLoggedIn => 'Az oldal megtekintéséhez be kell jelentkezned.';
 
   @override
-  String get mobileSystemColors => 'System colors';
+  String get mobileSystemColors => 'Rendszerszínek';
 
   @override
-  String get mobileFeedbackButton => 'Feedback';
+  String get mobileFeedbackButton => 'Visszajelzés';
 
   @override
   String get mobileOkButton => 'OK';
 
   @override
-  String get mobileSettingsHapticFeedback => 'Haptic feedback';
+  String get mobileSettingsHapticFeedback => 'Haptikus visszajelzés';
 
   @override
-  String get mobileSettingsImmersiveMode => 'Immersive mode';
+  String get mobileSettingsImmersiveMode => 'Teljes képernyős mód';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.';
+  String get mobileSettingsImmersiveModeSubtitle => 'A rendszer gombjainak elrejtése játék közben. Kapcsold be, ha zavarnak a rendszer navigációs mozdulatai a képernyő sarkainál. A játszmaképernyőn és a Puzzle Storm képernyőjén működik.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'You are not following any user.';
+  String get mobileNotFollowingAnyUser => 'Jelenleg nem követsz senkit.';
 
   @override
-  String get mobileAllGames => 'All games';
+  String get mobileAllGames => 'Az összes játszma';
 
   @override
-  String get mobileRecentSearches => 'Recent searches';
+  String get mobileRecentSearches => 'Keresési előzmények';
 
   @override
-  String get mobileClearButton => 'Clear';
+  String get mobileClearButton => 'Törlés';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
-    return 'Players with \"$param\"';
+    return 'Játékosok $param felhasználónévvel';
   }
 
   @override
-  String get mobileNoSearchResults => 'No results';
+  String get mobileNoSearchResults => 'Nincs találat';
 
   @override
-  String get mobileAreYouSure => 'Are you sure?';
+  String get mobileAreYouSure => 'Biztos vagy benne?';
 
   @override
-  String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
+  String get mobilePuzzleStreakAbortWarning => 'A jelenlegi sorozatod elveszik és az eredményedet rögzítjük.';
 
   @override
-  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of storm';
+  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of Puzzle Storm.';
 
   @override
-  String get mobileSharePuzzle => 'Share this puzzle';
+  String get mobileSharePuzzle => 'Feladvány megosztása';
 
   @override
-  String get mobileShareGameURL => 'Share game URL';
+  String get mobileShareGameURL => 'Játszma URL megosztása';
 
   @override
-  String get mobileShareGamePGN => 'Share PGN';
+  String get mobileShareGamePGN => 'PGN megosztása';
 
   @override
-  String get mobileSharePositionAsFEN => 'Share position as FEN';
+  String get mobileSharePositionAsFEN => 'Állás megosztása FEN-ként';
 
   @override
-  String get mobileShowVariations => 'Show variations';
+  String get mobileShowVariations => 'Változatok megjelenítése';
 
   @override
-  String get mobileHideVariation => 'Hide variation';
+  String get mobileHideVariation => 'Változatok elrejtése';
 
   @override
-  String get mobileShowComments => 'Show comments';
+  String get mobileShowComments => 'Megjegyzések megjelenítése';
 
   @override
-  String get mobilePuzzleStormConfirmEndRun => 'Do you want to end this run?';
+  String get mobilePuzzleStormConfirmEndRun => 'Befejezed a futamot?';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow => 'Nothing to show, please change the filters';
+  String get mobilePuzzleStormFilterNothingToShow => 'Nincs megjeleníthető elem, változtasd meg a szűrőket';
 
   @override
-  String get mobileCancelTakebackOffer => 'Cancel takeback offer';
+  String get mobileCancelTakebackOffer => 'Visszalépés kérésének visszavonása';
 
   @override
-  String get mobileCancelDrawOffer => 'Cancel draw offer';
+  String get mobileCancelDrawOffer => 'Döntetlenkérés visszavonása';
 
   @override
-  String get mobileWaitingForOpponentToJoin => 'Waiting for opponent to join...';
+  String get mobileWaitingForOpponentToJoin => 'Várakozás az ellenfél csatlakozására...';
 
   @override
-  String get mobileBlindfoldMode => 'Blindfold';
+  String get mobileBlindfoldMode => 'Vakjátszma mód';
 
   @override
-  String get mobileLiveStreamers => 'Live streamers';
+  String get mobileLiveStreamers => 'Lichess streamerek';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Join a game';
+  String get mobileCustomGameJoinAGame => 'Csatlakozás játszmához';
 
   @override
-  String get mobileCorrespondenceClearSavedMove => 'Clear saved move';
+  String get mobileCorrespondenceClearSavedMove => 'Mentett lépés törlése';
 
   @override
-  String get mobileSomethingWentWrong => 'Something went wrong.';
+  String get mobileSomethingWentWrong => 'Hiba történt.';
+
+  @override
+  String get mobileShowResult => 'Show result';
+
+  @override
+  String get mobilePuzzleThemesSubtitle => 'Play puzzles from your favorite openings, or choose a theme.';
+
+  @override
+  String get mobilePuzzleStormSubtitle => 'Solve as many puzzles as possible in 3 minutes.';
+
+  @override
+  String mobileGreeting(String param) {
+    return 'Hello, $param';
+  }
+
+  @override
+  String get mobileGreetingWithoutName => 'Hello';
+
+  @override
+  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
 
   @override
   String get activityActivity => 'Aktivitás';
@@ -327,7 +349,7 @@ class AppLocalizationsHu extends AppLocalizations {
   String get broadcastBroadcasts => 'Versenyközvetítések';
 
   @override
-  String get broadcastStartDate => 'Kezdés időpontja a saját időzónádban';
+  String get broadcastLiveBroadcasts => 'Közvetítések élő versenyekről';
 
   @override
   String challengeChallengesX(String param1) {
@@ -1856,6 +1878,9 @@ class AppLocalizationsHu extends AppLocalizations {
   String get friends => 'Barátok';
 
   @override
+  String get otherPlayers => 'other players';
+
+  @override
   String get discussions => 'Beszélgetések';
 
   @override
@@ -2685,6 +2710,12 @@ class AppLocalizationsHu extends AppLocalizations {
 
   @override
   String get yes => 'Igen';
+
+  @override
+  String get website => 'Website';
+
+  @override
+  String get mobile => 'Mobile';
 
   @override
   String get help => 'Segítség';

@@ -2,6 +2,8 @@ import 'package:intl/intl.dart' as intl;
 
 import 'l10n.dart';
 
+// ignore_for_file: type=lint
+
 /// The translations for Luxembourgish Letzeburgesch (`lb`).
 class AppLocalizationsLb extends AppLocalizations {
   AppLocalizationsLb([String locale = 'lb']) : super(locale);
@@ -10,7 +12,7 @@ class AppLocalizationsLb extends AppLocalizations {
   String get mobileHomeTab => 'Home';
 
   @override
-  String get mobilePuzzlesTab => 'Puzzles';
+  String get mobilePuzzlesTab => 'Aufgaben';
 
   @override
   String get mobileToolsTab => 'Tools';
@@ -22,10 +24,10 @@ class AppLocalizationsLb extends AppLocalizations {
   String get mobileSettingsTab => 'Settings';
 
   @override
-  String get mobileMustBeLoggedIn => 'You must be logged in to view this page.';
+  String get mobileMustBeLoggedIn => 'Du muss ageloggt si fir dës Säit ze gesinn.';
 
   @override
-  String get mobileSystemColors => 'System colors';
+  String get mobileSystemColors => 'Systemsfaarwen';
 
   @override
   String get mobileFeedbackButton => 'Feedback';
@@ -34,10 +36,10 @@ class AppLocalizationsLb extends AppLocalizations {
   String get mobileOkButton => 'OK';
 
   @override
-  String get mobileSettingsHapticFeedback => 'Haptic feedback';
+  String get mobileSettingsHapticFeedback => 'Haptesche Feedback';
 
   @override
-  String get mobileSettingsImmersiveMode => 'Immersive mode';
+  String get mobileSettingsImmersiveMode => 'Immersive Modus';
 
   @override
   String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.';
@@ -46,7 +48,7 @@ class AppLocalizationsLb extends AppLocalizations {
   String get mobileNotFollowingAnyUser => 'You are not following any user.';
 
   @override
-  String get mobileAllGames => 'All games';
+  String get mobileAllGames => 'All Partien';
 
   @override
   String get mobileRecentSearches => 'Recent searches';
@@ -56,41 +58,41 @@ class AppLocalizationsLb extends AppLocalizations {
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
-    return 'Players with \"$param\"';
+    return 'Spiller mat „$param“';
   }
 
   @override
-  String get mobileNoSearchResults => 'No results';
+  String get mobileNoSearchResults => 'Keng Resultater';
 
   @override
-  String get mobileAreYouSure => 'Are you sure?';
+  String get mobileAreYouSure => 'Bass de sécher?';
 
   @override
   String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
 
   @override
-  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of storm';
+  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of Puzzle Storm.';
 
   @override
-  String get mobileSharePuzzle => 'Share this puzzle';
+  String get mobileSharePuzzle => 'Dës Aufgab deelen';
 
   @override
-  String get mobileShareGameURL => 'Share game URL';
+  String get mobileShareGameURL => 'URL vun der Partie deelen';
 
   @override
-  String get mobileShareGamePGN => 'Share PGN';
+  String get mobileShareGamePGN => 'PGN deelen';
 
   @override
-  String get mobileSharePositionAsFEN => 'Share position as FEN';
+  String get mobileSharePositionAsFEN => 'Stellung als FEN deelen';
 
   @override
-  String get mobileShowVariations => 'Show variations';
+  String get mobileShowVariations => 'Variante weisen';
 
   @override
-  String get mobileHideVariation => 'Hide variation';
+  String get mobileHideVariation => 'Variante verstoppen';
 
   @override
-  String get mobileShowComments => 'Show comments';
+  String get mobileShowComments => 'Kommentarer weisen';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Do you want to end this run?';
@@ -108,7 +110,7 @@ class AppLocalizationsLb extends AppLocalizations {
   String get mobileWaitingForOpponentToJoin => 'Waiting for opponent to join...';
 
   @override
-  String get mobileBlindfoldMode => 'Blindfold';
+  String get mobileBlindfoldMode => 'Blann';
 
   @override
   String get mobileLiveStreamers => 'Live streamers';
@@ -120,7 +122,27 @@ class AppLocalizationsLb extends AppLocalizations {
   String get mobileCorrespondenceClearSavedMove => 'Clear saved move';
 
   @override
-  String get mobileSomethingWentWrong => 'Something went wrong.';
+  String get mobileSomethingWentWrong => 'Et ass eppes schifgaang.';
+
+  @override
+  String get mobileShowResult => 'Resultat weisen';
+
+  @override
+  String get mobilePuzzleThemesSubtitle => 'Maach Aufgaben aus denge Liiblingserëffnungen oder sich dir een Theema eraus.';
+
+  @override
+  String get mobilePuzzleStormSubtitle => 'Léis sou vill Aufgabe wéi méiglech an 3 Minutten.';
+
+  @override
+  String mobileGreeting(String param) {
+    return 'Moien, $param';
+  }
+
+  @override
+  String get mobileGreetingWithoutName => 'Moien';
+
+  @override
+  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
 
   @override
   String get activityActivity => 'Verlaf';
@@ -327,7 +349,7 @@ class AppLocalizationsLb extends AppLocalizations {
   String get broadcastBroadcasts => 'Iwwerdroungen';
 
   @override
-  String get broadcastStartDate => 'Startdatum an denger eegener Zäitzon';
+  String get broadcastLiveBroadcasts => 'Live Turnéier Iwwerdroungen';
 
   @override
   String challengeChallengesX(String param1) {
@@ -1856,6 +1878,9 @@ class AppLocalizationsLb extends AppLocalizations {
   String get friends => 'Kolleegen';
 
   @override
+  String get otherPlayers => 'aner Spiller';
+
+  @override
   String get discussions => 'Konversatiounen';
 
   @override
@@ -2606,7 +2631,7 @@ class AppLocalizationsLb extends AppLocalizations {
   String get editProfile => 'Profil änneren';
 
   @override
-  String get realName => 'Real name';
+  String get realName => 'Richtegen Numm';
 
   @override
   String get setFlair => 'Set your flair';
@@ -2685,6 +2710,12 @@ class AppLocalizationsLb extends AppLocalizations {
 
   @override
   String get yes => 'Jo';
+
+  @override
+  String get website => 'Websäit';
+
+  @override
+  String get mobile => 'Mobile';
 
   @override
   String get help => 'Hëllef:';
@@ -2844,7 +2875,7 @@ class AppLocalizationsLb extends AppLocalizations {
   String get outsideTheBoard => 'Außerhalb vum Briet';
 
   @override
-  String get allSquaresOfTheBoard => 'All squares of the board';
+  String get allSquaresOfTheBoard => 'All d\'Felder um Briet';
 
   @override
   String get onSlowGames => 'An luesen Partien';

@@ -135,7 +135,6 @@ class GameBody extends ConsumerWidget {
           timeToMove: gameState.game.sideToMove == Side.black
               ? gameState.timeToMove
               : null,
-          shouldLinkToUserProfile: youAre != Side.black,
           mePlaying: youAre == Side.black,
           zenMode: gameState.isZenModeActive,
           confirmMoveCallbacks:
@@ -176,7 +175,6 @@ class GameBody extends ConsumerWidget {
           timeToMove: gameState.game.sideToMove == Side.white
               ? gameState.timeToMove
               : null,
-          shouldLinkToUserProfile: youAre != Side.white,
           mePlaying: youAre == Side.white,
           zenMode: gameState.isZenModeActive,
           confirmMoveCallbacks:
@@ -287,6 +285,7 @@ class GameBody extends ConsumerWidget {
                       onSelectMove: (moveIndex) {
                         ref.read(ctrlProvider.notifier).cursorAt(moveIndex);
                       },
+                      zenMode: gameState.isZenModeActive,
                     ),
                   ),
                 ),
@@ -458,7 +457,7 @@ class _GameBottomBar extends ConsumerWidget {
           if (!gameState.game.playable)
             Expanded(
               child: BottomBarButton(
-                label: 'Show result',
+                label: context.l10n.mobileShowResult,
                 onTap: () {
                   showAdaptiveDialog<void>(
                     context: context,

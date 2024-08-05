@@ -4,10 +4,12 @@ import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 
 class DefaultBroadcastImage extends StatelessWidget {
   final double? width;
+  final double aspectRatio;
 
   const DefaultBroadcastImage({
     super.key,
     this.width,
+    this.aspectRatio = 2.0,
   });
 
   @override
@@ -15,7 +17,7 @@ class DefaultBroadcastImage extends StatelessWidget {
     return SizedBox(
       width: width,
       child: AspectRatio(
-        aspectRatio: 2,
+        aspectRatio: aspectRatio,
         child: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(

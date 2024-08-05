@@ -1,12 +1,17 @@
 import 'dart:async';
 
+import 'package:chessground/chessground.dart' as cg;
+import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_preferences.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -14,6 +19,8 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_text_field.dart';
+import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/expanded_section.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -57,15 +64,39 @@ class _ChallengeBody extends ConsumerStatefulWidget {
 
 class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
   Future<void>? _pendingCreateGame;
+  final _controller = TextEditingController();
+
+  String? fromPositionFenInput;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.addListener(() {
+      setState(() {
+        fromPositionFenInput = _controller.text;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final accountAsync = ref.watch(accountProvider);
     final preferences = ref.watch(challengePreferencesProvider);
+
     final isValidTimeControl =
         preferences.timeControl != ChallengeTimeControlType.clock ||
             preferences.clock.time > Duration.zero ||
-            preferences.clock.increment >= Duration.zero;
+            preferences.clock.increment > Duration.zero;
+
+    final isValidPosition =
+        (fromPositionFenInput != null && fromPositionFenInput!.isNotEmpty) ||
+            preferences.variant != Variant.fromPosition;
 
     return accountAsync.when(
       data: (account) {
@@ -131,7 +162,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                                     fontWeight: FontWeight.bold,
                                     fontSize: 18,
                                   ),
-                                  text: _clockTimeLabel(seconds),
+                                  text: clockLabelInMinutes(seconds),
                                 ),
                               ],
                             ),
@@ -139,7 +170,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                           subtitle: NonLinearSlider(
                             value: seconds,
                             values: kAvailableTimesInSeconds,
-                            labelBuilder: _clockTimeLabel,
+                            labelBuilder: clockLabelInMinutes,
                             onChange:
                                 Theme.of(context).platform == TargetPlatform.iOS
                                     ? (num value) {
@@ -271,7 +302,11 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                   onPressed: () {
                     showChoicePicker(
                       context,
-                      choices: [Variant.standard, Variant.chess960],
+                      choices: [
+                        Variant.standard,
+                        Variant.chess960,
+                        Variant.fromPosition,
+                      ],
                       selectedItem: preferences.variant,
                       labelBuilder: (Variant variant) => Text(variant.label),
                       onSelectedItemChanged: (Variant variant) {
@@ -285,7 +320,24 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                 ),
               ),
               ExpandedSection(
-                expand: preferences.rated == false,
+                expand: preferences.variant == Variant.fromPosition,
+                child: SmallBoardPreview(
+                  orientation: preferences.sideChoice == SideChoice.black
+                      ? cg.Side.black
+                      : cg.Side.white,
+                  fen: fromPositionFenInput ?? kEmptyFen,
+                  description: AdaptiveTextField(
+                    maxLines: 5,
+                    placeholder: context.l10n.pasteTheFenStringHere,
+                    controller: _controller,
+                    readOnly: true,
+                    onTap: _getClipboardData,
+                  ),
+                ),
+              ),
+              ExpandedSection(
+                expand: preferences.rated == false ||
+                    preferences.variant == Variant.fromPosition,
                 child: PlatformListTile(
                   harmonizeCupertinoTitleStyle: true,
                   title: Text(context.l10n.side),
@@ -296,7 +348,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                         choices: SideChoice.values,
                         selectedItem: preferences.sideChoice,
                         labelBuilder: (SideChoice side) =>
-                            Text(_customSideLabel(context, side)),
+                            Text(sideChoiceL10n(context.l10n, side)),
                         onSelectedItemChanged: (SideChoice side) {
                           ref
                               .read(challengePreferencesProvider.notifier)
@@ -305,23 +357,26 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                       );
                     },
                     child: Text(
-                      _customSideLabel(context, preferences.sideChoice),
+                      sideChoiceL10n(context.l10n, preferences.sideChoice),
                     ),
                   ),
                 ),
               ),
               if (account != null)
-                PlatformListTile(
-                  harmonizeCupertinoTitleStyle: true,
-                  title: Text(context.l10n.rated),
-                  trailing: Switch.adaptive(
-                    applyCupertinoTheme: true,
-                    value: preferences.rated,
-                    onChanged: (bool value) {
-                      ref
-                          .read(challengePreferencesProvider.notifier)
-                          .setRated(value);
-                    },
+                ExpandedSection(
+                  expand: preferences.variant != Variant.fromPosition,
+                  child: PlatformListTile(
+                    harmonizeCupertinoTitleStyle: true,
+                    title: Text(context.l10n.rated),
+                    trailing: Switch.adaptive(
+                      applyCupertinoTheme: true,
+                      value: preferences.rated,
+                      onChanged: (bool value) {
+                        ref
+                            .read(challengePreferencesProvider.notifier)
+                            .setRated(value);
+                      },
+                    ),
                   ),
                 ),
               const SizedBox(height: 20),
@@ -333,15 +388,20 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                     child: FatButton(
                       semanticsLabel: context.l10n.challengeChallengeToPlay,
                       onPressed: timeControl == ChallengeTimeControlType.clock
-                          ? isValidTimeControl
+                          ? isValidTimeControl && isValidPosition
                               ? () {
                                   pushPlatformRoute(
                                     context,
                                     rootNavigator: true,
                                     builder: (BuildContext context) {
                                       return GameScreen(
-                                        challenge: preferences
-                                            .makeRequest(widget.user),
+                                        challenge: preferences.makeRequest(
+                                          widget.user,
+                                          preferences.variant !=
+                                                  Variant.fromPosition
+                                              ? null
+                                              : fromPositionFenInput,
+                                        ),
                                       );
                                     },
                                   );
@@ -374,34 +434,26 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
       ),
     );
   }
+
+  Future<void> _getClipboardData() async {
+    final ClipboardData? data = await Clipboard.getData(Clipboard.kTextPlain);
+    if (data != null) {
+      try {
+        Chess.fromSetup(Setup.parseFen(data.text!.trim()));
+        _controller.text = data.text!;
+      } catch (_, __) {
+        if (mounted) {
+          showPlatformSnackbar(
+            context,
+            context.l10n.invalidFen,
+            type: SnackBarType.error,
+          );
+        }
+      }
+    }
+  }
 }
 
 String _daysLabel(num days) {
   return days == -1 ? '∞' : days.toString();
-}
-
-String _customSideLabel(BuildContext context, SideChoice side) {
-  switch (side) {
-    case SideChoice.white:
-      return context.l10n.white;
-    case SideChoice.black:
-      return context.l10n.black;
-    case SideChoice.random:
-      return context.l10n.randomColor;
-  }
-}
-
-String _clockTimeLabel(num seconds) {
-  switch (seconds) {
-    case 0:
-      return '0';
-    case 45:
-      return '¾';
-    case 30:
-      return '½';
-    case 15:
-      return '¼';
-    default:
-      return (seconds / 60).toString().replaceAll('.0', '');
-  }
 }
