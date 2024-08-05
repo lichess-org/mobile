@@ -87,7 +87,7 @@ class _Body extends ConsumerWidget {
         _refreshData(ref);
       }
     });
-    
+
     final generalPrefs = ref.watch(generalPreferencesProvider);
     final boardPrefs = ref.watch(boardPreferencesProvider);
     final authController = ref.watch(authControllerProvider);
