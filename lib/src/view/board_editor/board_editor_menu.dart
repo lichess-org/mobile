@@ -21,7 +21,7 @@ class BoardEditorMenu extends ConsumerWidget {
           width: double.infinity,
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Padding(
                 padding: Styles.horizontalBodyPadding,
