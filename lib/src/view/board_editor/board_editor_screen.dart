@@ -20,7 +20,9 @@ import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
 class BoardEditorScreen extends StatelessWidget {
-  const BoardEditorScreen({super.key});
+  const BoardEditorScreen({super.key, this.initialFen});
+
+  final String? initialFen;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +37,7 @@ class BoardEditorScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(context.l10n.boardEditor),
       ),
-      body: const _Body(),
+      body: _Body(initialFen),
     );
   }
 
@@ -46,17 +48,20 @@ class BoardEditorScreen extends StatelessWidget {
         border: null,
         middle: Text(context.l10n.boardEditor),
       ),
-      child: const _Body(),
+      child: _Body(initialFen),
     );
   }
 }
 
 class _Body extends ConsumerWidget {
-  const _Body();
+  const _Body(this.initialFen);
+
+  final String? initialFen;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final boardEditorState = ref.watch(boardEditorControllerProvider);
+    final boardEditorState =
+        ref.watch(boardEditorControllerProvider(initialFen));
 
     return Column(
       children: [
@@ -88,18 +93,21 @@ class _Body extends ConsumerWidget {
                   children: [
                     _PieceMenu(
                       boardSize,
+                      initialFen: initialFen,
                       direction: flipAxis(direction),
                       side: boardEditorState.orientation.opposite,
                       isTablet: isTablet,
                     ),
                     _BoardEditor(
                       boardSize,
+                      initialFen: initialFen,
                       orientation: boardEditorState.orientation,
                       isTablet: isTablet,
                       pieces: boardEditorState.pieces.unlock,
                     ),
                     _PieceMenu(
                       boardSize,
+                      initialFen: initialFen,
                       direction: flipAxis(direction),
                       side: boardEditorState.orientation,
                       isTablet: isTablet,
@@ -110,7 +118,7 @@ class _Body extends ConsumerWidget {
             ),
           ),
         ),
-        const _BottomBar(),
+        _BottomBar(initialFen),
       ],
     );
   }
@@ -119,11 +127,13 @@ class _Body extends ConsumerWidget {
 class _BoardEditor extends ConsumerWidget {
   const _BoardEditor(
     this.boardSize, {
+    required this.initialFen,
     required this.isTablet,
     required this.orientation,
     required this.pieces,
   });
 
+  final String? initialFen;
   final double boardSize;
   final bool isTablet;
   final Side orientation;
@@ -131,7 +141,7 @@ class _BoardEditor extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final editorState = ref.watch(boardEditorControllerProvider);
+    final editorState = ref.watch(boardEditorControllerProvider(initialFen));
     final boardPrefs = ref.watch(boardPreferencesProvider);
 
     return ChessboardEditor(
@@ -148,13 +158,15 @@ class _BoardEditor extends ConsumerWidget {
         boxShadow: isTablet ? boardShadows : const <BoxShadow>[],
       ),
       pointerMode: editorState.editorPointerMode,
-      onDiscardedPiece: (Square square) =>
-          ref.read(boardEditorControllerProvider.notifier).discardPiece(square),
+      onDiscardedPiece: (Square square) => ref
+          .read(boardEditorControllerProvider(initialFen).notifier)
+          .discardPiece(square),
       onDroppedPiece: (Square? origin, Square dest, Piece piece) => ref
-          .read(boardEditorControllerProvider.notifier)
+          .read(boardEditorControllerProvider(initialFen).notifier)
           .movePiece(origin, dest, piece),
-      onEditedSquare: (Square square) =>
-          ref.read(boardEditorControllerProvider.notifier).editSquare(square),
+      onEditedSquare: (Square square) => ref
+          .read(boardEditorControllerProvider(initialFen).notifier)
+          .editSquare(square),
     );
   }
 }
@@ -162,10 +174,13 @@ class _BoardEditor extends ConsumerWidget {
 class _PieceMenu extends ConsumerStatefulWidget {
   const _PieceMenu(
     this.boardSize, {
+    required this.initialFen,
     required this.direction,
     required this.side,
     required this.isTablet,
   });
+
+  final String? initialFen;
 
   final double boardSize;
 
@@ -183,7 +198,8 @@ class _PieceMenuState extends ConsumerState<_PieceMenu> {
   @override
   Widget build(BuildContext context) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
-    final editorState = ref.watch(boardEditorControllerProvider);
+    final editorController = boardEditorControllerProvider(widget.initialFen);
+    final editorState = ref.watch(editorController);
 
     final squareSize = widget.boardSize / 8;
 
@@ -207,15 +223,12 @@ class _PieceMenuState extends ConsumerState<_PieceMenu> {
               height: squareSize,
               child: ColoredBox(
                 key: Key('drag-button-${widget.side.name}'),
-                color: ref
-                            .watch(boardEditorControllerProvider)
-                            .editorPointerMode ==
-                        EditorPointerMode.drag
+                color: editorState.editorPointerMode == EditorPointerMode.drag
                     ? context.lichessColors.good
                     : Colors.transparent,
                 child: GestureDetector(
                   onTap: () => ref
-                      .read(boardEditorControllerProvider.notifier)
+                      .read(editorController.notifier)
                       .updateMode(EditorPointerMode.drag),
                   child: Icon(
                     CupertinoIcons.hand_draw,
@@ -238,7 +251,11 @@ class _PieceMenuState extends ConsumerState<_PieceMenu> {
                     'piece-button-${piece.color.name}-${piece.role.name}',
                   ),
                   color: ref
-                              .read(boardEditorControllerProvider)
+                              .read(
+                                boardEditorControllerProvider(
+                                  widget.initialFen,
+                                ),
+                              )
                               .activePieceOnEdit ==
                           piece
                       ? Theme.of(context).colorScheme.primary
@@ -253,11 +270,11 @@ class _PieceMenuState extends ConsumerState<_PieceMenu> {
                       ),
                       child: pieceWidget,
                       onDragEnd: (_) => ref
-                          .read(boardEditorControllerProvider.notifier)
+                          .read(editorController.notifier)
                           .updateMode(EditorPointerMode.drag),
                     ),
                     onTap: () => ref
-                        .read(boardEditorControllerProvider.notifier)
+                        .read(editorController.notifier)
                         .updateMode(EditorPointerMode.edit, piece),
                   ),
                 );
@@ -274,7 +291,7 @@ class _PieceMenuState extends ConsumerState<_PieceMenu> {
                 child: GestureDetector(
                   onTap: () => {
                     ref
-                        .read(boardEditorControllerProvider.notifier)
+                        .read(editorController.notifier)
                         .updateMode(EditorPointerMode.edit, null),
                   },
                   child: Icon(
@@ -292,11 +309,13 @@ class _PieceMenuState extends ConsumerState<_PieceMenu> {
 }
 
 class _BottomBar extends ConsumerWidget {
-  const _BottomBar();
+  const _BottomBar(this.initialFen);
+
+  final String? initialFen;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final editorState = ref.watch(boardEditorControllerProvider);
+    final editorState = ref.watch(boardEditorControllerProvider(initialFen));
 
     return Container(
       color: Theme.of(context).platform == TargetPlatform.iOS
@@ -317,7 +336,9 @@ class _BottomBar extends ConsumerWidget {
                   label: context.l10n.menu,
                   onTap: () => showAdaptiveBottomSheet<void>(
                     context: context,
-                    builder: (BuildContext context) => const BoardEditorMenu(),
+                    builder: (BuildContext context) => BoardEditorMenu(
+                      initialFen: initialFen,
+                    ),
                   ),
                   icon: Icons.tune,
                 ),
@@ -327,7 +348,7 @@ class _BottomBar extends ConsumerWidget {
                   key: const Key('flip-button'),
                   label: context.l10n.flipBoard,
                   onTap: ref
-                      .read(boardEditorControllerProvider.notifier)
+                      .read(boardEditorControllerProvider(initialFen).notifier)
                       .flipBoard,
                   icon: CupertinoIcons.arrow_2_squarepath,
                 ),

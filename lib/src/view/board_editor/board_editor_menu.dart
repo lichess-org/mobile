@@ -6,13 +6,14 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
 class BoardEditorMenu extends ConsumerWidget {
-  const BoardEditorMenu();
+  const BoardEditorMenu({required this.initialFen, super.key});
+
+  final String? initialFen;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final editorState = ref.watch(boardEditorControllerProvider);
-    final boardEditorNotifier =
-        ref.read(boardEditorControllerProvider.notifier);
+    final editorController = boardEditorControllerProvider(initialFen);
+    final editorState = ref.watch(editorController);
 
     return SafeArea(
       child: Padding(
@@ -37,7 +38,9 @@ class BoardEditorMenu extends ConsumerWidget {
                       selected: editorState.sideToPlay == side,
                       onSelected: (selected) {
                         if (selected) {
-                          boardEditorNotifier.setSideToPlay(side);
+                          ref
+                              .read(editorController.notifier)
+                              .setSideToPlay(side);
                         }
                       },
                     );
@@ -66,11 +69,11 @@ class BoardEditorMenu extends ConsumerWidget {
                         selected:
                             editorState.isCastlingAllowed(side, castlingSide),
                         onSelected: (selected) {
-                          boardEditorNotifier.setCastling(
-                            side,
-                            castlingSide,
-                            selected,
-                          );
+                          ref.read(editorController.notifier).setCastling(
+                                side,
+                                castlingSide,
+                                selected,
+                              );
                         },
                       );
                     }).toList(),

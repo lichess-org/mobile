@@ -10,11 +10,11 @@ part 'board_editor_controller.g.dart';
 @riverpod
 class BoardEditorController extends _$BoardEditorController {
   @override
-  BoardEditorState build() {
+  BoardEditorState build(String? initialFen) {
     return BoardEditorState(
       orientation: Side.white,
       sideToPlay: Side.white,
-      pieces: readFen(kInitialFEN).lock,
+      pieces: readFen(initialFen ?? kInitialFEN).lock,
       unmovedRooks: SquareSet.corners,
       editorPointerMode: EditorPointerMode.drag,
       pieceToAddOnEdit: null,

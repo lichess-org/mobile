@@ -8,10 +8,10 @@ import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/view/analysis/analysis_position_choice_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
 import 'package:lichess_mobile/src/view/clock/clock_screen.dart';
+import 'package:lichess_mobile/src/view/tools/load_position_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
@@ -80,6 +80,31 @@ class _Body extends StatelessWidget {
                 : EdgeInsets.zero,
             child: PlatformListTile(
               leading: Icon(
+                Icons.upload_file,
+                size: Styles.mainListTileIconSize,
+                color: Theme.of(context).platform == TargetPlatform.iOS
+                    ? CupertinoTheme.of(context).primaryColor
+                    : Theme.of(context).colorScheme.primary,
+              ),
+              title: Padding(
+                padding: tilePadding,
+                child: Text(context.l10n.loadPosition, style: Styles.callout),
+              ),
+              trailing: Theme.of(context).platform == TargetPlatform.iOS
+                  ? const CupertinoListTileChevron()
+                  : null,
+              onTap: () => pushPlatformRoute(
+                context,
+                builder: (context) => const LoadPositionScreen(),
+              ),
+            ),
+          ),
+          Padding(
+            padding: Theme.of(context).platform == TargetPlatform.android
+                ? const EdgeInsets.only(bottom: 16.0)
+                : EdgeInsets.zero,
+            child: PlatformListTile(
+              leading: Icon(
                 Icons.biotech,
                 size: Styles.mainListTileIconSize,
                 color: Theme.of(context).platform == TargetPlatform.iOS
@@ -131,31 +156,6 @@ class _Body extends StatelessWidget {
                 context,
                 builder: (context) => const BoardEditorScreen(),
                 rootNavigator: true,
-              ),
-            ),
-          ),
-          Padding(
-            padding: Theme.of(context).platform == TargetPlatform.android
-                ? const EdgeInsets.only(bottom: 16.0)
-                : EdgeInsets.zero,
-            child: PlatformListTile(
-              leading: Icon(
-                Icons.upload_file,
-                size: Styles.mainListTileIconSize,
-                color: Theme.of(context).platform == TargetPlatform.iOS
-                    ? CupertinoTheme.of(context).primaryColor
-                    : Theme.of(context).colorScheme.primary,
-              ),
-              title: Padding(
-                padding: tilePadding,
-                child: Text(context.l10n.loadPosition, style: Styles.callout),
-              ),
-              trailing: Theme.of(context).platform == TargetPlatform.iOS
-                  ? const CupertinoListTileChevron()
-                  : null,
-              onTap: () => pushPlatformRoute(
-                context,
-                builder: (context) => const AnalysisPositionChoiceScreen(),
               ),
             ),
           ),
