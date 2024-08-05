@@ -24,10 +24,10 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileSettingsTab => 'Instellingen';
 
   @override
-  String get mobileMustBeLoggedIn => 'You must be logged in to view this page.';
+  String get mobileMustBeLoggedIn => 'Je moet ingelogd zijn om deze pagina te bekijken.';
 
   @override
-  String get mobileSystemColors => 'System colors';
+  String get mobileSystemColors => 'Systeemkleuren';
 
   @override
   String get mobileFeedbackButton => 'Feedback';
@@ -36,66 +36,66 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileOkButton => 'OK';
 
   @override
-  String get mobileSettingsHapticFeedback => 'Haptic feedback';
+  String get mobileSettingsHapticFeedback => 'Haptische feedback';
 
   @override
-  String get mobileSettingsImmersiveMode => 'Immersive mode';
+  String get mobileSettingsImmersiveMode => 'Volledig scherm-modus';
 
   @override
   String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'You are not following any user.';
+  String get mobileNotFollowingAnyUser => 'U volgt geen gebruiker.';
 
   @override
-  String get mobileAllGames => 'All games';
+  String get mobileAllGames => 'Alle partijen';
 
   @override
-  String get mobileRecentSearches => 'Recent searches';
+  String get mobileRecentSearches => 'Recente zoekopdrachten';
 
   @override
-  String get mobileClearButton => 'Clear';
+  String get mobileClearButton => 'Wissen';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
-    return 'Players with \"$param\"';
+    return 'Spelers met \"$param\"';
   }
 
   @override
-  String get mobileNoSearchResults => 'No results';
+  String get mobileNoSearchResults => 'Geen resultaten';
 
   @override
-  String get mobileAreYouSure => 'Are you sure?';
+  String get mobileAreYouSure => 'Weet je het zeker?';
 
   @override
-  String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
+  String get mobilePuzzleStreakAbortWarning => 'Je verliest je huidige reeks en de score wordt opgeslagen.';
 
   @override
-  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of storm';
+  String get mobilePuzzleStormNothingToShow => 'Niets om te tonen. Speel een aantal reeksen Puzzle Storm.';
 
   @override
-  String get mobileSharePuzzle => 'Share this puzzle';
+  String get mobileSharePuzzle => 'Deze puzzel delen';
 
   @override
-  String get mobileShareGameURL => 'Share game URL';
+  String get mobileShareGameURL => 'Partij URL delen';
 
   @override
-  String get mobileShareGamePGN => 'Share PGN';
+  String get mobileShareGamePGN => 'PGN delen';
 
   @override
-  String get mobileSharePositionAsFEN => 'Share position as FEN';
+  String get mobileSharePositionAsFEN => 'Stelling delen als FEN';
 
   @override
-  String get mobileShowVariations => 'Show variations';
+  String get mobileShowVariations => 'Toon varianten';
 
   @override
-  String get mobileHideVariation => 'Hide variation';
+  String get mobileHideVariation => 'Verberg varianten';
 
   @override
-  String get mobileShowComments => 'Show comments';
+  String get mobileShowComments => 'Opmerkingen weergeven';
 
   @override
-  String get mobilePuzzleStormConfirmEndRun => 'Do you want to end this run?';
+  String get mobilePuzzleStormConfirmEndRun => 'Wil je dit uitvoeren beëindigen?';
 
   @override
   String get mobilePuzzleStormFilterNothingToShow => 'Nothing to show, please change the filters';
@@ -104,10 +104,10 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileCancelTakebackOffer => 'Cancel takeback offer';
 
   @override
-  String get mobileCancelDrawOffer => 'Cancel draw offer';
+  String get mobileCancelDrawOffer => 'Remiseaanbod intrekken';
 
   @override
-  String get mobileWaitingForOpponentToJoin => 'Waiting for opponent to join...';
+  String get mobileWaitingForOpponentToJoin => 'Wachten op een tegenstander...';
 
   @override
   String get mobileBlindfoldMode => 'Blindfold';
@@ -116,13 +116,33 @@ class AppLocalizationsNl extends AppLocalizations {
   String get mobileLiveStreamers => 'Live streamers';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Join a game';
+  String get mobileCustomGameJoinAGame => 'Een partij beginnen';
 
   @override
-  String get mobileCorrespondenceClearSavedMove => 'Clear saved move';
+  String get mobileCorrespondenceClearSavedMove => 'Opgeslagen zet wissen';
 
   @override
-  String get mobileSomethingWentWrong => 'Something went wrong.';
+  String get mobileSomethingWentWrong => 'Er is iets fout gegaan.';
+
+  @override
+  String get mobileShowResult => 'Toon resultaat';
+
+  @override
+  String get mobilePuzzleThemesSubtitle => 'Speel puzzels uit je favorieten openingen, of kies een thema.';
+
+  @override
+  String get mobilePuzzleStormSubtitle => 'Los zoveel mogelijk puzzels op in 3 minuten.';
+
+  @override
+  String mobileGreeting(String param) {
+    return 'Hallo, $param';
+  }
+
+  @override
+  String get mobileGreetingWithoutName => 'Hallo';
+
+  @override
+  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
 
   @override
   String get activityActivity => 'Activiteit';
@@ -1858,6 +1878,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get friends => 'Vrienden';
 
   @override
+  String get otherPlayers => 'andere spelers';
+
+  @override
   String get discussions => 'Discussies';
 
   @override
@@ -2687,6 +2710,12 @@ class AppLocalizationsNl extends AppLocalizations {
 
   @override
   String get yes => 'Ja';
+
+  @override
+  String get website => 'Website';
+
+  @override
+  String get mobile => 'Mobiel';
 
   @override
   String get help => 'Help:';

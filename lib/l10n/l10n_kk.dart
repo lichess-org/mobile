@@ -9,78 +9,78 @@ class AppLocalizationsKk extends AppLocalizations {
   AppLocalizationsKk([String locale = 'kk']) : super(locale);
 
   @override
-  String get mobileHomeTab => 'Home';
+  String get mobileHomeTab => 'Үйге';
 
   @override
-  String get mobilePuzzlesTab => 'Puzzles';
+  String get mobilePuzzlesTab => 'Жұмбақ';
 
   @override
-  String get mobileToolsTab => 'Tools';
+  String get mobileToolsTab => 'Құрал';
 
   @override
-  String get mobileWatchTab => 'Watch';
+  String get mobileWatchTab => 'Бақылау';
 
   @override
-  String get mobileSettingsTab => 'Settings';
+  String get mobileSettingsTab => 'Баптау';
 
   @override
-  String get mobileMustBeLoggedIn => 'You must be logged in to view this page.';
+  String get mobileMustBeLoggedIn => 'Бұл бетті көру үшін тіркелгіге кіріңіз.';
 
   @override
-  String get mobileSystemColors => 'System colors';
+  String get mobileSystemColors => 'Жүйе түстері';
 
   @override
-  String get mobileFeedbackButton => 'Feedback';
+  String get mobileFeedbackButton => 'Пікір айту';
 
   @override
-  String get mobileOkButton => 'OK';
+  String get mobileOkButton => 'Иә';
 
   @override
-  String get mobileSettingsHapticFeedback => 'Haptic feedback';
+  String get mobileSettingsHapticFeedback => 'Дірілмен білдіру';
 
   @override
-  String get mobileSettingsImmersiveMode => 'Immersive mode';
+  String get mobileSettingsImmersiveMode => 'Оқшау көрініс';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.';
+  String get mobileSettingsImmersiveModeSubtitle => 'Ойын кезінде жүйенің элементтерін жасыру. Экран жиегіндегі жүйенің навигация қимыл белгілері сізге кедергі келтірсе - қолданарлық жағдай. Ойын мен Жұмбақ Дауылы кезінде жұмыс істейді.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'You are not following any user.';
+  String get mobileNotFollowingAnyUser => 'Сіз әзір ешкіге серік емессіз.';
 
   @override
-  String get mobileAllGames => 'All games';
+  String get mobileAllGames => 'Барлық ойындар';
 
   @override
-  String get mobileRecentSearches => 'Recent searches';
+  String get mobileRecentSearches => 'Кейінгі іздеулер';
 
   @override
-  String get mobileClearButton => 'Clear';
+  String get mobileClearButton => 'Өшіру';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
-    return 'Players with \"$param\"';
+    return 'Атауында \"$param\" бар ойыншылар';
   }
 
   @override
-  String get mobileNoSearchResults => 'No results';
+  String get mobileNoSearchResults => 'Нәтиже жоқ';
 
   @override
-  String get mobileAreYouSure => 'Are you sure?';
+  String get mobileAreYouSure => 'Растайсыз ба?';
 
   @override
-  String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
+  String get mobilePuzzleStreakAbortWarning => 'Қазіргі тізбектен айрыласыз, нәтиже сақталады.';
 
   @override
-  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of storm';
+  String get mobilePuzzleStormNothingToShow => 'Нәтиже әзір жоқ. Жұмбақ Дауылын ойнап көріңіз.';
 
   @override
-  String get mobileSharePuzzle => 'Share this puzzle';
+  String get mobileSharePuzzle => 'Бұл жұмбақты тарату';
 
   @override
-  String get mobileShareGameURL => 'Share game URL';
+  String get mobileShareGameURL => 'Ойын сілтемесін тарату';
 
   @override
-  String get mobileShareGamePGN => 'Share PGN';
+  String get mobileShareGamePGN => 'PGN тарату';
 
   @override
   String get mobileSharePositionAsFEN => 'Share position as FEN';
@@ -123,6 +123,26 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get mobileSomethingWentWrong => 'Something went wrong.';
+
+  @override
+  String get mobileShowResult => 'Нәтижесін көру';
+
+  @override
+  String get mobilePuzzleThemesSubtitle => 'Өз бастауларыңызға негізделген жұмбақтар, не кез-келген тақырып.';
+
+  @override
+  String get mobilePuzzleStormSubtitle => '3 минутта барынша көп жұмбақ шешіп көр.';
+
+  @override
+  String mobileGreeting(String param) {
+    return 'Ассаламу ғалейкүм, $param';
+  }
+
+  @override
+  String get mobileGreetingWithoutName => 'Ассаламу ғалейкүм';
+
+  @override
+  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
 
   @override
   String get activityActivity => 'Белсенділігі';
@@ -1858,6 +1878,9 @@ class AppLocalizationsKk extends AppLocalizations {
   String get friends => 'Достарыңыз';
 
   @override
+  String get otherPlayers => 'other players';
+
+  @override
   String get discussions => 'Сұхбаттар';
 
   @override
@@ -2687,6 +2710,12 @@ class AppLocalizationsKk extends AppLocalizations {
 
   @override
   String get yes => 'Иә';
+
+  @override
+  String get website => 'Website';
+
+  @override
+  String get mobile => 'Mobile';
 
   @override
   String get help => 'Көмек:';
@@ -3694,7 +3723,7 @@ class AppLocalizationsKk extends AppLocalizations {
   String get thankYouForReading => 'Оқығаныңыз үшін рахмет!';
 
   @override
-  String get lifetimeScore => 'Жалпы ұпайлар';
+  String get lifetimeScore => 'Жалпы нәтиже';
 
   @override
   String get currentMatchScore => 'Осы жарыстағы нәтижеңіз';

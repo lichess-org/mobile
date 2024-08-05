@@ -49,7 +49,6 @@ const kCardTextScaleFactor = 1.64;
 const kMaxClockTextScaleFactor = 1.94;
 const kEmptyWidget = SizedBox.shrink();
 const kEmptyFen = '8/8/8/8/8/8/8/8 w - - 0 1';
-const kInitialFen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 const kTabletBoardTableSidePadding = 16.0;
 const kBottomBarHeight = 56.0;
 const kMaterialPopupMenuMaxWidth = 500.0;
@@ -86,7 +85,6 @@ const kSupportedLocales = [
   Locale('cs', 'CZ'),
   Locale('da', 'DK'),
   Locale('de', 'DE'),
-  Locale('de', 'CH'),
   Locale('el', 'GR'),
   Locale('en', 'US'),
   Locale('eo', 'UY'),
@@ -99,6 +97,7 @@ const kSupportedLocales = [
   Locale('fr', 'FR'),
   Locale('ga', 'IE'),
   Locale('gl', 'ES'),
+  Locale('gsw', 'CH'),
   Locale('he', 'IL'),
   Locale('hi', 'IN'),
   Locale('hr', 'HR'),
@@ -127,10 +126,8 @@ const kSupportedLocales = [
   Locale('sr', 'SP'),
   Locale('sv', 'SE'),
   Locale('tr', 'TR'),
-  Locale('tt', 'RU'),
   Locale('uk', 'UA'),
   Locale('vi', 'VN'),
-  Locale('zh', ''),
   Locale('zh', 'CN'),
   Locale('zh', 'TW'),
 ];

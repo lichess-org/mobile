@@ -15,7 +15,7 @@ class AppLocalizationsBg extends AppLocalizations {
   String get mobilePuzzlesTab => 'Задачи';
 
   @override
-  String get mobileToolsTab => 'Инструменти';
+  String get mobileToolsTab => 'Анализ';
 
   @override
   String get mobileWatchTab => 'Гледай';
@@ -24,22 +24,22 @@ class AppLocalizationsBg extends AppLocalizations {
   String get mobileSettingsTab => 'Настройки';
 
   @override
-  String get mobileMustBeLoggedIn => 'You must be logged in to view this page.';
+  String get mobileMustBeLoggedIn => 'За да видите тази страница, трябва да влезете в профила си.';
 
   @override
-  String get mobileSystemColors => 'System colors';
+  String get mobileSystemColors => 'Системни цветове';
 
   @override
-  String get mobileFeedbackButton => 'Feedback';
+  String get mobileFeedbackButton => 'Отзиви';
 
   @override
-  String get mobileOkButton => 'OK';
+  String get mobileOkButton => 'ОК';
 
   @override
-  String get mobileSettingsHapticFeedback => 'Haptic feedback';
+  String get mobileSettingsHapticFeedback => 'Вибрация при докосване';
 
   @override
-  String get mobileSettingsImmersiveMode => 'Immersive mode';
+  String get mobileSettingsImmersiveMode => 'Режим \"Цял екран\"';
 
   @override
   String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.';
@@ -48,13 +48,13 @@ class AppLocalizationsBg extends AppLocalizations {
   String get mobileNotFollowingAnyUser => 'You are not following any user.';
 
   @override
-  String get mobileAllGames => 'All games';
+  String get mobileAllGames => 'Всички игри';
 
   @override
-  String get mobileRecentSearches => 'Recent searches';
+  String get mobileRecentSearches => 'Последни търсения';
 
   @override
-  String get mobileClearButton => 'Clear';
+  String get mobileClearButton => 'Изчисти';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
@@ -62,37 +62,37 @@ class AppLocalizationsBg extends AppLocalizations {
   }
 
   @override
-  String get mobileNoSearchResults => 'No results';
+  String get mobileNoSearchResults => 'Няма резултати';
 
   @override
-  String get mobileAreYouSure => 'Are you sure?';
+  String get mobileAreYouSure => 'Сигурни ли сте?';
 
   @override
   String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
 
   @override
-  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of storm';
+  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of Puzzle Storm.';
 
   @override
-  String get mobileSharePuzzle => 'Share this puzzle';
+  String get mobileSharePuzzle => 'Сподели тази задача';
 
   @override
-  String get mobileShareGameURL => 'Share game URL';
+  String get mobileShareGameURL => 'Сподели URL на играта';
 
   @override
-  String get mobileShareGamePGN => 'Share PGN';
+  String get mobileShareGamePGN => 'Сподели PGN';
 
   @override
-  String get mobileSharePositionAsFEN => 'Share position as FEN';
+  String get mobileSharePositionAsFEN => 'Сподели позицията във формат FEN';
 
   @override
-  String get mobileShowVariations => 'Show variations';
+  String get mobileShowVariations => 'Покажи вариациите';
 
   @override
-  String get mobileHideVariation => 'Hide variation';
+  String get mobileHideVariation => 'Скрий вариацията';
 
   @override
-  String get mobileShowComments => 'Show comments';
+  String get mobileShowComments => 'Покажи коментарите';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Do you want to end this run?';
@@ -122,7 +122,27 @@ class AppLocalizationsBg extends AppLocalizations {
   String get mobileCorrespondenceClearSavedMove => 'Clear saved move';
 
   @override
-  String get mobileSomethingWentWrong => 'Something went wrong.';
+  String get mobileSomethingWentWrong => 'Възникна грешка.';
+
+  @override
+  String get mobileShowResult => 'Show result';
+
+  @override
+  String get mobilePuzzleThemesSubtitle => 'Play puzzles from your favorite openings, or choose a theme.';
+
+  @override
+  String get mobilePuzzleStormSubtitle => 'Solve as many puzzles as possible in 3 minutes.';
+
+  @override
+  String mobileGreeting(String param) {
+    return 'Hello, $param';
+  }
+
+  @override
+  String get mobileGreetingWithoutName => 'Hello';
+
+  @override
+  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
 
   @override
   String get activityActivity => 'Дейност';
@@ -1858,6 +1878,9 @@ class AppLocalizationsBg extends AppLocalizations {
   String get friends => 'Приятели';
 
   @override
+  String get otherPlayers => 'други играчи';
+
+  @override
   String get discussions => 'Разговори';
 
   @override
@@ -2687,6 +2710,12 @@ class AppLocalizationsBg extends AppLocalizations {
 
   @override
   String get yes => 'Да';
+
+  @override
+  String get website => 'Уебсайт';
+
+  @override
+  String get mobile => 'Мобилен';
 
   @override
   String get help => 'Помощ:';

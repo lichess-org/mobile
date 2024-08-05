@@ -65,6 +65,14 @@ class BoardPreferences extends _$BoardPreferences {
     return _save(state.copyWith(pieceAnimation: !state.pieceAnimation));
   }
 
+  Future<void> toggleMagnifyDraggedPiece() {
+    return _save(
+      state.copyWith(
+        magnifyDraggedPiece: !state.magnifyDraggedPiece,
+      ),
+    );
+  }
+
   Future<void> toggleShowMaterialDifference() {
     return _save(
       state.copyWith(showMaterialDifference: !state.showMaterialDifference),
@@ -108,7 +116,8 @@ class BoardPrefs with _$BoardPrefs {
     required PieceShiftMethod pieceShiftMethod,
 
     /// Whether to enable shape drawings on the board for games and puzzles.
-    @JsonKey(defaultValue: false) required bool enableShapeDrawings,
+    @JsonKey(defaultValue: true) required bool enableShapeDrawings,
+    @JsonKey(defaultValue: true) required bool magnifyDraggedPiece,
   }) = _BoardPrefs;
 
   static const defaults = BoardPrefs(
@@ -122,8 +131,26 @@ class BoardPrefs with _$BoardPrefs {
     pieceAnimation: true,
     showMaterialDifference: true,
     pieceShiftMethod: PieceShiftMethod.either,
-    enableShapeDrawings: false,
+    enableShapeDrawings: true,
+    magnifyDraggedPiece: true,
   );
+
+  BoardSettings toBoardSettings() {
+    return BoardSettings(
+      pieceAssets: pieceSet.assets,
+      colorScheme: boardTheme.colors,
+      showValidMoves: showLegalMoves,
+      showLastMove: boardHighlights,
+      enableCoordinates: coordinates,
+      animationDuration: pieceAnimationDuration,
+      dragFeedbackSize: magnifyDraggedPiece ? 2.0 : 1.0,
+      dragFeedbackOffset: Offset(0.0, magnifyDraggedPiece ? -1.0 : 0.0),
+      pieceShiftMethod: pieceShiftMethod,
+      drawShape: DrawShapeOptions(
+        enable: enableShapeDrawings,
+      ),
+    );
+  }
 
   factory BoardPrefs.fromJson(Map<String, dynamic> json) {
     try {
@@ -223,13 +250,13 @@ enum BoardTheme {
 
   Widget get thumbnail => this == BoardTheme.system
       ? SizedBox(
-          height: 32,
-          width: 32 * 6,
+          height: 44,
+          width: 44 * 6,
           child: Row(
             children: [
               for (final c in const [1, 2, 3, 4, 5, 6])
                 Container(
-                  width: 32,
+                  width: 44,
                   color: c.isEven
                       ? BoardTheme.system.colors.darkSquare
                       : BoardTheme.system.colors.lightSquare,
@@ -239,7 +266,7 @@ enum BoardTheme {
         )
       : Image.asset(
           'assets/board-thumbnails/$name.jpg',
-          height: 32,
+          height: 44,
           errorBuilder: (context, o, st) => const SizedBox.shrink(),
         );
 }

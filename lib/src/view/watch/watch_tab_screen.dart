@@ -87,6 +87,13 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
     );
   }
 
+  List<Widget> get watchTabWidgets => const [
+        // TODO: show widget when broadcasts feature is ready
+        //_BroadcastWidget(),
+        _WatchTvWidget(),
+        _StreamerWidget(),
+      ];
+
   Widget _buildAndroid(BuildContext context, WidgetRef ref) {
     return PopScope(
       canPop: false,
@@ -108,11 +115,7 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
                 return orientation == Orientation.portrait
                     ? ListView(
                         controller: watchScrollController,
-                        children: const [
-                          _BroadcastWidget(),
-                          _WatchTvWidget(),
-                          _StreamerWidget(),
-                        ],
+                        children: watchTabWidgets,
                       )
                     : GridView(
                         controller: watchScrollController,
@@ -121,11 +124,7 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
                           crossAxisCount: 2,
                           childAspectRatio: 0.92,
                         ),
-                        children: const [
-                          _BroadcastWidget(),
-                          _WatchTvWidget(),
-                          _StreamerWidget(),
-                        ],
+                        children: watchTabWidgets,
                       );
               },
             ),
@@ -156,11 +155,7 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
                 sliver: orientation == Orientation.portrait
                     ? SliverList(
                         delegate: SliverChildListDelegate(
-                          const [
-                            _BroadcastWidget(),
-                            _WatchTvWidget(),
-                            _StreamerWidget(),
-                          ],
+                          watchTabWidgets,
                         ),
                       )
                     : SliverGrid(
@@ -169,13 +164,7 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
                           crossAxisCount: 2,
                           childAspectRatio: 0.92,
                         ),
-                        delegate: SliverChildListDelegate(
-                          const [
-                            _BroadcastWidget(),
-                            _WatchTvWidget(),
-                            _StreamerWidget(),
-                          ],
-                        ),
+                        delegate: SliverChildListDelegate(watchTabWidgets),
                       ),
               ),
             ],
@@ -197,6 +186,8 @@ Future<void> _refreshData(WidgetRef ref) {
   ]);
 }
 
+// TODO remove this ignore comment when broadcasts feature is ready
+// ignore: unused_element
 class _BroadcastWidget extends ConsumerWidget {
   const _BroadcastWidget();
 
@@ -204,10 +195,6 @@ class _BroadcastWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // TODO: show widget when broadcasts feature is ready
-    return const SizedBox.shrink();
-
-    // ignore: dead_code
     final broadcastList = ref.watch(broadcastsPaginatorProvider);
 
     return broadcastList.when(

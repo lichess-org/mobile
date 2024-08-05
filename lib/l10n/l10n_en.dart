@@ -71,7 +71,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
 
   @override
-  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of storm';
+  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of Puzzle Storm.';
 
   @override
   String get mobileSharePuzzle => 'Share this puzzle';
@@ -123,6 +123,26 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mobileSomethingWentWrong => 'Something went wrong.';
+
+  @override
+  String get mobileShowResult => 'Show result';
+
+  @override
+  String get mobilePuzzleThemesSubtitle => 'Play puzzles from your favorite openings, or choose a theme.';
+
+  @override
+  String get mobilePuzzleStormSubtitle => 'Solve as many puzzles as possible in 3 minutes.';
+
+  @override
+  String mobileGreeting(String param) {
+    return 'Hello, $param';
+  }
+
+  @override
+  String get mobileGreetingWithoutName => 'Hello';
+
+  @override
+  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
 
   @override
   String get activityActivity => 'Activity';
@@ -734,7 +754,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get puzzlePuzzles => 'Puzzles';
 
   @override
-  String get puzzlePuzzleThemes => 'Puzzle themes';
+  String get puzzlePuzzleThemes => 'Puzzle Themes';
 
   @override
   String get puzzleRecommended => 'Recommended';
@@ -1856,6 +1876,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get friends => 'Friends';
 
   @override
+  String get otherPlayers => 'other players';
+
+  @override
   String get discussions => 'Conversations';
 
   @override
@@ -2685,6 +2708,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get yes => 'Yes';
+
+  @override
+  String get website => 'Website';
+
+  @override
+  String get mobile => 'Mobile';
 
   @override
   String get help => 'Help:';
@@ -4704,6 +4733,134 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   AppLocalizationsEnUs(): super('en_US');
 
   @override
+  String get mobileHomeTab => 'Home';
+
+  @override
+  String get mobilePuzzlesTab => 'Puzzles';
+
+  @override
+  String get mobileToolsTab => 'Tools';
+
+  @override
+  String get mobileWatchTab => 'Watch';
+
+  @override
+  String get mobileSettingsTab => 'Settings';
+
+  @override
+  String get mobileMustBeLoggedIn => 'You must be logged in to view this page.';
+
+  @override
+  String get mobileSystemColors => 'System colors';
+
+  @override
+  String get mobileFeedbackButton => 'Feedback';
+
+  @override
+  String get mobileOkButton => 'OK';
+
+  @override
+  String get mobileSettingsHapticFeedback => 'Haptic feedback';
+
+  @override
+  String get mobileSettingsImmersiveMode => 'Immersive mode';
+
+  @override
+  String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.';
+
+  @override
+  String get mobileNotFollowingAnyUser => 'You are not following any user.';
+
+  @override
+  String get mobileAllGames => 'All games';
+
+  @override
+  String get mobileRecentSearches => 'Recent searches';
+
+  @override
+  String get mobileClearButton => 'Clear';
+
+  @override
+  String get mobileNoSearchResults => 'No results';
+
+  @override
+  String get mobileAreYouSure => 'Are you sure?';
+
+  @override
+  String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak, but your score will be saved.';
+
+  @override
+  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of Puzzle Storm.';
+
+  @override
+  String get mobileSharePuzzle => 'Share this puzzle';
+
+  @override
+  String get mobileShareGameURL => 'Share game URL';
+
+  @override
+  String get mobileShareGamePGN => 'Share PGN';
+
+  @override
+  String get mobileSharePositionAsFEN => 'Share position as FEN';
+
+  @override
+  String get mobileShowVariations => 'Show variations';
+
+  @override
+  String get mobileHideVariation => 'Hide variation';
+
+  @override
+  String get mobileShowComments => 'Show comments';
+
+  @override
+  String get mobilePuzzleStormConfirmEndRun => 'Do you want to end this run?';
+
+  @override
+  String get mobilePuzzleStormFilterNothingToShow => 'Nothing to show, please change the filters';
+
+  @override
+  String get mobileCancelTakebackOffer => 'Cancel takeback offer';
+
+  @override
+  String get mobileCancelDrawOffer => 'Cancel draw offer';
+
+  @override
+  String get mobileWaitingForOpponentToJoin => 'Waiting for opponent to join...';
+
+  @override
+  String get mobileBlindfoldMode => 'Blindfold';
+
+  @override
+  String get mobileLiveStreamers => 'Live streamers';
+
+  @override
+  String get mobileCustomGameJoinAGame => 'Join a game';
+
+  @override
+  String get mobileCorrespondenceClearSavedMove => 'Clear saved move';
+
+  @override
+  String get mobileSomethingWentWrong => 'Something went wrong.';
+
+  @override
+  String get mobileShowResult => 'Show result';
+
+  @override
+  String get mobilePuzzleThemesSubtitle => 'Play puzzles from your favorite openings, or choose a theme.';
+
+  @override
+  String get mobilePuzzleStormSubtitle => 'Solve as many puzzles as possible in 3 minutes.';
+
+  @override
+  String mobileGreeting(String param) {
+    return 'Hello, $param';
+  }
+
+  @override
+  String get mobileGreetingWithoutName => 'Hello';
+
+  @override
   String get activityActivity => 'Activity';
 
   @override
@@ -5313,7 +5470,7 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get puzzlePuzzles => 'Chess Puzzles';
 
   @override
-  String get puzzlePuzzleThemes => 'Puzzle themes';
+  String get puzzlePuzzleThemes => 'Puzzle Themes';
 
   @override
   String get puzzleRecommended => 'Recommended';
@@ -6437,6 +6594,9 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
   String get friends => 'Friends';
 
   @override
+  String get otherPlayers => 'other players';
+
+  @override
   String get discussions => 'Conversations';
 
   @override
@@ -7266,6 +7426,12 @@ class AppLocalizationsEnUs extends AppLocalizationsEn {
 
   @override
   String get yes => 'Yes';
+
+  @override
+  String get website => 'Website';
+
+  @override
+  String get mobile => 'Mobile';
 
   @override
   String get help => 'Help:';

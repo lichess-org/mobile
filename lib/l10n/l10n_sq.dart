@@ -9,120 +9,140 @@ class AppLocalizationsSq extends AppLocalizations {
   AppLocalizationsSq([String locale = 'sq']) : super(locale);
 
   @override
-  String get mobileHomeTab => 'Home';
+  String get mobileHomeTab => 'Kreu';
 
   @override
   String get mobilePuzzlesTab => 'Puzzles';
 
   @override
-  String get mobileToolsTab => 'Tools';
+  String get mobileToolsTab => 'Mjete';
 
   @override
-  String get mobileWatchTab => 'Watch';
+  String get mobileWatchTab => 'Shiheni';
 
   @override
-  String get mobileSettingsTab => 'Settings';
+  String get mobileSettingsTab => 'Rregullime';
 
   @override
-  String get mobileMustBeLoggedIn => 'You must be logged in to view this page.';
+  String get mobileMustBeLoggedIn => 'Që të shihni këtë faqe, duhet të keni bërë hyrjen në llogari.';
 
   @override
-  String get mobileSystemColors => 'System colors';
+  String get mobileSystemColors => 'Ngjyra sistemi';
 
   @override
-  String get mobileFeedbackButton => 'Feedback';
+  String get mobileFeedbackButton => 'Përshtypje';
 
   @override
   String get mobileOkButton => 'OK';
 
   @override
-  String get mobileSettingsHapticFeedback => 'Haptic feedback';
+  String get mobileSettingsHapticFeedback => 'Dridhje gjatë lëvizjesh';
 
   @override
   String get mobileSettingsImmersiveMode => 'Immersive mode';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.';
+  String get mobileSettingsImmersiveModeSubtitle => 'Fshihni ndërfaqen e sistemit teksa luani. Përdoreni këtë nëse ju bezdisin gjeste sistemi për lëvizjet në skaje të ekranit. Ka vend për lojëra dhe skena Puzzle Storm.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'You are not following any user.';
+  String get mobileNotFollowingAnyUser => 'S’ndiqni ndonjë përdorues.';
 
   @override
-  String get mobileAllGames => 'All games';
+  String get mobileAllGames => 'Krejt lojërat';
 
   @override
-  String get mobileRecentSearches => 'Recent searches';
+  String get mobileRecentSearches => 'Kërkime së fundi';
 
   @override
-  String get mobileClearButton => 'Clear';
+  String get mobileClearButton => 'Spastroje';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
-    return 'Players with \"$param\"';
+    return 'Lojëtarë me “$param”';
   }
 
   @override
-  String get mobileNoSearchResults => 'No results';
+  String get mobileNoSearchResults => 'S’ka përfundime';
 
   @override
-  String get mobileAreYouSure => 'Are you sure?';
+  String get mobileAreYouSure => 'Jeni i sigurt?';
 
   @override
   String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
 
   @override
-  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of storm';
+  String get mobilePuzzleStormNothingToShow => 'S’ka gjë për shfaqje. Luani ndonjë raund Puzzle Storm.';
 
   @override
-  String get mobileSharePuzzle => 'Share this puzzle';
+  String get mobileSharePuzzle => 'Ndajeni këtë ushtrim me të tjerët';
 
   @override
-  String get mobileShareGameURL => 'Share game URL';
+  String get mobileShareGameURL => 'Ndani URL loje me të tjerë';
 
   @override
-  String get mobileShareGamePGN => 'Share PGN';
+  String get mobileShareGamePGN => 'Ndani PGN me të tjerë';
 
   @override
-  String get mobileSharePositionAsFEN => 'Share position as FEN';
+  String get mobileSharePositionAsFEN => 'Tregojuni të tjerëve pozicionin si FEN';
 
   @override
-  String get mobileShowVariations => 'Show variations';
+  String get mobileShowVariations => 'Shfaq variante';
 
   @override
-  String get mobileHideVariation => 'Hide variation';
+  String get mobileHideVariation => 'Fshihe variantin';
 
   @override
-  String get mobileShowComments => 'Show comments';
+  String get mobileShowComments => 'Shfaq komente';
 
   @override
-  String get mobilePuzzleStormConfirmEndRun => 'Do you want to end this run?';
+  String get mobilePuzzleStormConfirmEndRun => 'Doni të përfundohen ku raund?';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow => 'Nothing to show, please change the filters';
+  String get mobilePuzzleStormFilterNothingToShow => 'S’ka gjë për t’u shfaqur, ju lutemi, ndryshoni filtrat';
 
   @override
-  String get mobileCancelTakebackOffer => 'Cancel takeback offer';
+  String get mobileCancelTakebackOffer => 'Anulojeni ofertën për prapakthim';
 
   @override
-  String get mobileCancelDrawOffer => 'Cancel draw offer';
+  String get mobileCancelDrawOffer => 'Anulojeni ofertën për barazim';
 
   @override
-  String get mobileWaitingForOpponentToJoin => 'Waiting for opponent to join...';
+  String get mobileWaitingForOpponentToJoin => 'Po pritet që të vijë kundërshtari…';
 
   @override
-  String get mobileBlindfoldMode => 'Blindfold';
+  String get mobileBlindfoldMode => 'Me sytë lidhur';
 
   @override
-  String get mobileLiveStreamers => 'Live streamers';
+  String get mobileLiveStreamers => 'Transmetues drejtpërsëdrejti';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Join a game';
+  String get mobileCustomGameJoinAGame => 'Merrni pjesë në një lojë';
 
   @override
-  String get mobileCorrespondenceClearSavedMove => 'Clear saved move';
+  String get mobileCorrespondenceClearSavedMove => 'Spastroje lëvizjen e ruajtur';
 
   @override
-  String get mobileSomethingWentWrong => 'Something went wrong.';
+  String get mobileSomethingWentWrong => 'Diç shkoi ters.';
+
+  @override
+  String get mobileShowResult => 'Shfaq përfundimin';
+
+  @override
+  String get mobilePuzzleThemesSubtitle => 'Luani puzzle-e nga hapjet tuaja të parapëlqyera, ose zgjidhni një temë.';
+
+  @override
+  String get mobilePuzzleStormSubtitle => 'Zgjidhni sa më shumë puzzle-e të mundeni brenda 3 minutash.';
+
+  @override
+  String mobileGreeting(String param) {
+    return 'Tungjatjeta, $param';
+  }
+
+  @override
+  String get mobileGreetingWithoutName => 'Tungjatjeta';
+
+  @override
+  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
 
   @override
   String get activityActivity => 'Aktiviteti';
@@ -1858,6 +1878,9 @@ class AppLocalizationsSq extends AppLocalizations {
   String get friends => 'Miqtë';
 
   @override
+  String get otherPlayers => 'lojtarë të tjerë';
+
+  @override
   String get discussions => 'Biseda';
 
   @override
@@ -2687,6 +2710,12 @@ class AppLocalizationsSq extends AppLocalizations {
 
   @override
   String get yes => 'Po';
+
+  @override
+  String get website => 'Sajt';
+
+  @override
+  String get mobile => 'Celular';
 
   @override
   String get help => 'Ndihmë:';

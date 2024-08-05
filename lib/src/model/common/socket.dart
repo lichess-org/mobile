@@ -298,6 +298,10 @@ class SocketClient {
   ///
   /// The [SocketPool] will call this method when the client is no longer needed.
   void _dispose() {
+    _socketStreamSubscription?.cancel();
+    _pingTimer?.cancel();
+    _reconnectTimer?.cancel();
+    _ackResendTimer?.cancel();
     _streamController.close();
     _averageLag.dispose();
     isDisposed = true;

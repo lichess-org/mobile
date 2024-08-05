@@ -383,9 +383,9 @@ class AnalysisController extends _$AnalysisController {
         ? _root.view
         : state.root;
 
+    final isForward = path.size > state.currentPath.size;
     if (currentNode is Branch) {
       if (!replaying) {
-        final isForward = path.size > state.currentPath.size;
         if (isForward) {
           final isCheck = currentNode.sanMove.isCheck;
           if (currentNode.sanMove.isCapture) {
@@ -396,7 +396,7 @@ class AnalysisController extends _$AnalysisController {
             ref.read(moveFeedbackServiceProvider).moveFeedback(check: isCheck);
           }
         }
-      } else {
+      } else if (isForward) {
         final soundService = ref.read(soundServiceProvider);
         if (currentNode.sanMove.isCapture) {
           soundService.play(Sound.capture);

@@ -6,8 +6,8 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
-class ThemeModeScreen extends StatelessWidget {
-  const ThemeModeScreen({super.key});
+class AppBackgroundModeScreen extends StatelessWidget {
+  const AppBackgroundModeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +60,8 @@ class _Body extends ConsumerWidget {
           ChoicePicker(
             choices: ThemeMode.values,
             selectedItem: themeMode,
-            titleBuilder: (t) => Text(ThemeModeScreen.themeTitle(context, t)),
+            titleBuilder: (t) =>
+                Text(AppBackgroundModeScreen.themeTitle(context, t)),
             onSelectedItemChanged: onChanged,
           ),
         ],

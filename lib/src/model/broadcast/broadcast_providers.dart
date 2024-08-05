@@ -1,8 +1,6 @@
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'broadcast_providers.g.dart';
@@ -41,14 +39,4 @@ class BroadcastsPaginator extends _$BroadcastsPaginator {
       ),
     );
   }
-}
-
-@riverpod
-Future<IList<BroadcastGameSnapshot>> broadcastRound(
-  BroadcastRoundRef ref,
-  BroadcastRoundId broadcastRoundId,
-) async {
-  return ref.withClient(
-    (client) => BroadcastRepository(client).getRound(broadcastRoundId),
-  );
 }

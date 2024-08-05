@@ -1,4 +1,9 @@
 {
+  "mobileShowResult": "Pokaži rezultat",
+  "mobilePuzzleThemesSubtitle": "Igrajte uganke iz svojih najljubših otvoritev ali izberite temo.",
+  "mobilePuzzleStormSubtitle": "V 3 minutah rešite čim več ugank.",
+  "mobileGreeting": "Pozdravljeni {param}",
+  "mobileGreetingWithoutName": "Živjo",
   "activityActivity": "Aktivnost",
   "activityHostedALiveStream": "Gostil prenos v živo",
   "activityRankedInSwissTournament": "Uvrščen #{param1} v {param2}",

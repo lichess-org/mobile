@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
@@ -13,6 +14,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_batch_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
+import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:mocktail/mocktail.dart';
@@ -249,10 +251,9 @@ void main() {
       },
     );
 
-    testWidgets(
-      'fails a puzzle',
-      variant: kPlatformVariant,
-      (tester) async {
+    for (final showRatings in [true, false]) {
+      testWidgets('fails a puzzle, (showRatings: $showRatings)',
+          variant: kPlatformVariant, (tester) async {
         final mockClient = MockClient((request) {
           if (request.url.path == '/api/puzzle/batch/mix') {
             return mockResponse(batchOf1, 200);
@@ -277,6 +278,9 @@ void main() {
               return mockBatchStorage;
             }),
             puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
+            showRatingsPrefProvider.overrideWith((ref) {
+              return showRatings;
+            }),
           ],
         );
 
@@ -343,14 +347,24 @@ void main() {
           find.text('Puzzle complete!'),
           findsOneWidget,
         );
+        final expectedPlayedXTimes =
+            'Played ${puzzle2.puzzle.plays.toString().localizeNumbers()} times.';
+        expect(
+          find.text(
+            showRatings
+                ? 'Rating: ${puzzle2.puzzle.rating}. $expectedPlayedXTimes'
+                : expectedPlayedXTimes,
+          ),
+          findsOneWidget,
+        );
 
         // wait for move animation
         await tester.pumpAndSettle();
 
         // called once to save solution and once after fetching a new puzzle
         verify(saveDBReq).called(2);
-      },
-    );
+      });
+    }
 
     testWidgets(
       'view solution',
