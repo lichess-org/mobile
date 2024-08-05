@@ -349,9 +349,9 @@ class _MoveTable extends ConsumerWidget {
 
     return Table(
       columnWidths: const {
-        0: FractionColumnWidth(0.2),
-        1: FractionColumnWidth(0.3),
-        2: FractionColumnWidth(0.5),
+        0: FractionColumnWidth(0.15),
+        1: FractionColumnWidth(0.35),
+        2: FractionColumnWidth(0.50),
       },
       children: [
         TableRow(
@@ -400,10 +400,7 @@ class _MoveTable extends ConsumerWidget {
                       .onUserMove(Move.fromUci(move.uci)!),
                   child: Container(
                     padding: rowPadding,
-                    child: Tooltip(
-                      message: '$percentGames%',
-                      child: Text(formatNum(move.games)),
-                    ),
+                    child: Text('${formatNum(move.games)} ($percentGames%)'),
                   ),
                 ),
                 TableRowInkWell(
@@ -437,10 +434,7 @@ class _MoveTable extends ConsumerWidget {
             ),
             Container(
               padding: rowPadding,
-              child: Tooltip(
-                message: '100%',
-                child: Text(formatNum(games)),
-              ),
+              child: Text('${formatNum(games)} (100%)'),
             ),
             Container(
               padding: rowPadding,
