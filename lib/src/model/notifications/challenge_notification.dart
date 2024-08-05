@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/notifications/local_notification_servic
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
+import 'package:lichess_mobile/src/view/user/challenge_requests_screen.dart';
 
 class ChallengeNotificationDetails {
   ChallengeNotificationDetails(this._locale) {
@@ -79,7 +80,7 @@ class ChallengeNotification {
 
   void _callback(String? actionId, LocalNotificationServiceRef ref) {
     switch (actionId) {
-      case 'accept':
+      case 'accept': // accept the game and open board
         final repo = ref.read(challengesProvider.notifier);
         repo.accept(id).then((fullId) {
           pushPlatformRoute(
@@ -88,6 +89,11 @@ class ChallengeNotification {
                 GameScreen(initialGameId: fullId),
           );
         });
+      case null: // open the challenge screen
+        pushPlatformRoute(
+          ref.read(currentNavigatorKeyProvider).currentContext!,
+          builder: (BuildContext context) => const ChallengeRequestsScreen(),
+        );
       case 'decline':
         ref.read(challengeRepositoryProvider).decline(id);
     }
