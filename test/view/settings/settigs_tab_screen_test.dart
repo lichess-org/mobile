@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
-import 'package:lichess_mobile/src/view/settings/settings_screen.dart';
+import 'package:lichess_mobile/src/view/settings/settings_tab_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 
 import '../../model/auth/fake_session_storage.dart';
@@ -19,7 +19,7 @@ final client = MockClient((request) {
 });
 
 void main() {
-  group('SettingsScreen', () {
+  group('SettingsTabScreen', () {
     testWidgets(
       'meets accessibility guidelines',
       (WidgetTester tester) async {
@@ -27,7 +27,7 @@ void main() {
 
         final app = await buildTestApp(
           tester,
-          home: const SettingsScreen(),
+          home: const SettingsTabScreen(),
         );
 
         await tester.pumpWidget(app);
@@ -47,7 +47,7 @@ void main() {
       (WidgetTester tester) async {
         final app = await buildTestApp(
           tester,
-          home: const SettingsScreen(),
+          home: const SettingsTabScreen(),
         );
 
         await tester.pumpWidget(app);
@@ -62,7 +62,7 @@ void main() {
       (WidgetTester tester) async {
         final app = await buildTestApp(
           tester,
-          home: const SettingsScreen(),
+          home: const SettingsTabScreen(),
           userSession: fakeSession,
           overrides: [
             lichessClientProvider

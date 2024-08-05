@@ -276,7 +276,7 @@ class _BottomBar extends ConsumerWidget {
                 data: (data) {
                   return Expanded(
                     child: BottomBarButton(
-                      label: 'Show result',
+                      label: context.l10n.mobileShowResult,
                       icon: Icons.info_outline,
                       onTap: () {
                         showAdaptiveDialog<void>(

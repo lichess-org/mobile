@@ -725,6 +725,7 @@
   "ifNoneLeaveEmpty": "Om ingen, lämna tomt",
   "profile": "Profil",
   "editProfile": "Ändra profil",
+  "realName": "Verkligt namn",
   "setFlair": "Ställ in din flair",
   "flair": "Flair",
   "youCanHideFlair": "Det finns en inställning för att dölja alla användarflairs över hela webbplatsen.",

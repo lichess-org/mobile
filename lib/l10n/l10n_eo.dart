@@ -2,74 +2,76 @@ import 'package:intl/intl.dart' as intl;
 
 import 'l10n.dart';
 
+// ignore_for_file: type=lint
+
 /// The translations for Esperanto (`eo`).
 class AppLocalizationsEo extends AppLocalizations {
   AppLocalizationsEo([String locale = 'eo']) : super(locale);
 
   @override
-  String get mobileHomeTab => 'Home';
+  String get mobileHomeTab => 'Hejmo';
 
   @override
-  String get mobilePuzzlesTab => 'Puzzles';
+  String get mobilePuzzlesTab => 'Puzloj';
 
   @override
-  String get mobileToolsTab => 'Tools';
+  String get mobileToolsTab => 'Iloj';
 
   @override
-  String get mobileWatchTab => 'Watch';
+  String get mobileWatchTab => 'Spekti';
 
   @override
-  String get mobileSettingsTab => 'Settings';
+  String get mobileSettingsTab => 'Agordoj';
 
   @override
-  String get mobileMustBeLoggedIn => 'You must be logged in to view this page.';
+  String get mobileMustBeLoggedIn => 'Vi devas esti ensalutata por spekti ĉi tiun paĝon.';
 
   @override
-  String get mobileSystemColors => 'System colors';
+  String get mobileSystemColors => 'Sistemaj koloroj';
 
   @override
-  String get mobileFeedbackButton => 'Feedback';
+  String get mobileFeedbackButton => 'Prikomentado';
 
   @override
-  String get mobileOkButton => 'OK';
+  String get mobileOkButton => 'Bone';
 
   @override
-  String get mobileSettingsHapticFeedback => 'Haptic feedback';
+  String get mobileSettingsHapticFeedback => 'Tuŝ-retrokuplado';
 
   @override
-  String get mobileSettingsImmersiveMode => 'Immersive mode';
+  String get mobileSettingsImmersiveMode => 'Enakviĝa reĝimo';
 
   @override
   String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'You are not following any user.';
+  String get mobileNotFollowingAnyUser => 'Vi ne abonas ĉiun uzanton.';
 
   @override
-  String get mobileAllGames => 'All games';
+  String get mobileAllGames => 'Ĉiuj ludoj';
 
   @override
-  String get mobileRecentSearches => 'Recent searches';
+  String get mobileRecentSearches => 'Lastaj serĉoj';
 
   @override
-  String get mobileClearButton => 'Clear';
+  String get mobileClearButton => 'Malplenigi';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
-    return 'Players with \"$param\"';
+    return 'Ludantanto kun \"$param\"';
   }
 
   @override
-  String get mobileNoSearchResults => 'No results';
+  String get mobileNoSearchResults => 'Neniu rezultoj';
 
   @override
-  String get mobileAreYouSure => 'Are you sure?';
+  String get mobileAreYouSure => 'Ĉu vi certas?';
 
   @override
   String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
 
   @override
-  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of storm';
+  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of Puzzle Storm.';
 
   @override
   String get mobileSharePuzzle => 'Share this puzzle';
@@ -121,6 +123,26 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get mobileSomethingWentWrong => 'Something went wrong.';
+
+  @override
+  String get mobileShowResult => 'Show result';
+
+  @override
+  String get mobilePuzzleThemesSubtitle => 'Play puzzles from your favorite openings, or choose a theme.';
+
+  @override
+  String get mobilePuzzleStormSubtitle => 'Solve as many puzzles as possible in 3 minutes.';
+
+  @override
+  String mobileGreeting(String param) {
+    return 'Hello, $param';
+  }
+
+  @override
+  String get mobileGreetingWithoutName => 'Hello';
+
+  @override
+  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
 
   @override
   String get activityActivity => 'Aktiveco';
@@ -1614,10 +1636,10 @@ class AppLocalizationsEo extends AppLocalizations {
   String get deleteFromHere => 'Forigi ekde tie ĉi';
 
   @override
-  String get collapseVariations => 'Collapse variations';
+  String get collapseVariations => 'Malatendi variaĵojn';
 
   @override
-  String get expandVariations => 'Expand variations';
+  String get expandVariations => 'Etendi variaĵojn';
 
   @override
   String get forceVariation => 'Devigi variaĵon';
@@ -1854,6 +1876,9 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get friends => 'Amikoj';
+
+  @override
+  String get otherPlayers => 'other players';
 
   @override
   String get discussions => 'Konversacioj';
@@ -2096,7 +2121,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get standard => 'Normale';
 
   @override
-  String get customPosition => 'Custom position';
+  String get customPosition => 'Tajlora pozicio';
 
   @override
   String get unlimited => 'Senlime';
@@ -2606,7 +2631,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get editProfile => 'Redakti profilon';
 
   @override
-  String get realName => 'Real name';
+  String get realName => 'Fakta nomo';
 
   @override
   String get setFlair => 'Agordi viaj emoĝio';
@@ -2666,7 +2691,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get puzzles => 'Puzloj';
 
   @override
-  String get onlineBots => 'Online bots';
+  String get onlineBots => 'Retaj robotoj';
 
   @override
   String get name => 'Nomo';
@@ -2685,6 +2710,12 @@ class AppLocalizationsEo extends AppLocalizations {
 
   @override
   String get yes => 'Jes';
+
+  @override
+  String get website => 'Website';
+
+  @override
+  String get mobile => 'Mobile';
 
   @override
   String get help => 'Helpo:';
@@ -2844,7 +2875,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get outsideTheBoard => 'Ekstere de la tabulo';
 
   @override
-  String get allSquaresOfTheBoard => 'All squares of the board';
+  String get allSquaresOfTheBoard => 'Ĉiuj kvadratoj de la ŝaktabulo';
 
   @override
   String get onSlowGames => 'Ĉe malrapidaj ludoj';
@@ -3178,10 +3209,10 @@ class AppLocalizationsEo extends AppLocalizations {
   String get cyclePreviousOrNextVariation => 'Cickligi antaŭan/sekvan variaĵon';
 
   @override
-  String get toggleGlyphAnnotations => 'Baskuligi signobildan prinotadon';
+  String get toggleGlyphAnnotations => 'Baskuligi movajn prinotaĵojn';
 
   @override
-  String get togglePositionAnnotations => 'Toggle position annotations';
+  String get togglePositionAnnotations => 'Baskuligi poziciajn prinotaĵojn';
 
   @override
   String get variationArrowsInfo => 'Variaĵaj sagoj lasi vin navigi neutile la movlisto.';
@@ -3440,22 +3471,22 @@ class AppLocalizationsEo extends AppLocalizations {
   String get backgroundImageUrl => 'Malantaŭografikaĵo URL:';
 
   @override
-  String get board => 'Board';
+  String get board => 'Ŝaktabulo';
 
   @override
-  String get size => 'Size';
+  String get size => 'Amplekso';
 
   @override
-  String get opacity => 'Opacity';
+  String get opacity => 'Opakeco';
 
   @override
-  String get brightness => 'Brightness';
+  String get brightness => 'Lumeco';
 
   @override
-  String get hue => 'Hue';
+  String get hue => 'Kolortono';
 
   @override
-  String get boardReset => 'Reset colours to default';
+  String get boardReset => 'Restarigi kolorojn al la defaŭlta';
 
   @override
   String get pieceSet => 'Ŝakpecaro';
@@ -4044,7 +4075,7 @@ class AppLocalizationsEo extends AppLocalizations {
   String get lichessPatronInfo => 'Lichess estas almoza kaj tute libera malfermitkoda programaro.\nĈiu funkciada elspezo, ellaborado, kaj enhavo estas financita sole de uzantajn donacojn.';
 
   @override
-  String get nothingToSeeHere => 'Nothing to see here at the moment.';
+  String get nothingToSeeHere => 'Nenio videbla ĉi tie nuntempe.';
 
   @override
   String opponentLeftCounter(int count) {

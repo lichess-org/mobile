@@ -2,6 +2,8 @@ import 'package:intl/intl.dart' as intl;
 
 import 'l10n.dart';
 
+// ignore_for_file: type=lint
+
 /// The translations for Serbian (`sr`).
 class AppLocalizationsSr extends AppLocalizations {
   AppLocalizationsSr([String locale = 'sr']) : super(locale);
@@ -69,7 +71,7 @@ class AppLocalizationsSr extends AppLocalizations {
   String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
 
   @override
-  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of storm';
+  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of Puzzle Storm.';
 
   @override
   String get mobileSharePuzzle => 'Share this puzzle';
@@ -121,6 +123,26 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get mobileSomethingWentWrong => 'Something went wrong.';
+
+  @override
+  String get mobileShowResult => 'Show result';
+
+  @override
+  String get mobilePuzzleThemesSubtitle => 'Play puzzles from your favorite openings, or choose a theme.';
+
+  @override
+  String get mobilePuzzleStormSubtitle => 'Solve as many puzzles as possible in 3 minutes.';
+
+  @override
+  String mobileGreeting(String param) {
+    return 'Hello, $param';
+  }
+
+  @override
+  String get mobileGreetingWithoutName => 'Hello';
+
+  @override
+  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
 
   @override
   String get activityActivity => 'Активност';
@@ -1871,6 +1893,9 @@ class AppLocalizationsSr extends AppLocalizations {
   String get friends => 'Пријатељи';
 
   @override
+  String get otherPlayers => 'other players';
+
+  @override
   String get discussions => 'Разговори';
 
   @override
@@ -2700,6 +2725,12 @@ class AppLocalizationsSr extends AppLocalizations {
 
   @override
   String get yes => 'Да';
+
+  @override
+  String get website => 'Website';
+
+  @override
+  String get mobile => 'Mobile';
 
   @override
   String get help => 'Помоћ';

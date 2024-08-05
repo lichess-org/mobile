@@ -2,6 +2,8 @@ import 'package:intl/intl.dart' as intl;
 
 import 'l10n.dart';
 
+// ignore_for_file: type=lint
+
 /// The translations for Estonian (`et`).
 class AppLocalizationsEt extends AppLocalizations {
   AppLocalizationsEt([String locale = 'et']) : super(locale);
@@ -69,7 +71,7 @@ class AppLocalizationsEt extends AppLocalizations {
   String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
 
   @override
-  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of storm';
+  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of Puzzle Storm.';
 
   @override
   String get mobileSharePuzzle => 'Share this puzzle';
@@ -121,6 +123,26 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String get mobileSomethingWentWrong => 'Something went wrong.';
+
+  @override
+  String get mobileShowResult => 'Show result';
+
+  @override
+  String get mobilePuzzleThemesSubtitle => 'Play puzzles from your favorite openings, or choose a theme.';
+
+  @override
+  String get mobilePuzzleStormSubtitle => 'Solve as many puzzles as possible in 3 minutes.';
+
+  @override
+  String mobileGreeting(String param) {
+    return 'Hello, $param';
+  }
+
+  @override
+  String get mobileGreetingWithoutName => 'Hello';
+
+  @override
+  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
 
   @override
   String get activityActivity => 'Aktiivsus';
@@ -1856,6 +1878,9 @@ class AppLocalizationsEt extends AppLocalizations {
   String get friends => 'Sõbrad';
 
   @override
+  String get otherPlayers => 'other players';
+
+  @override
   String get discussions => 'Vestlused';
 
   @override
@@ -2685,6 +2710,12 @@ class AppLocalizationsEt extends AppLocalizations {
 
   @override
   String get yes => 'Jah';
+
+  @override
+  String get website => 'Website';
+
+  @override
+  String get mobile => 'Mobile';
 
   @override
   String get help => 'Abi:';

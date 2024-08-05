@@ -2,125 +2,147 @@ import 'package:intl/intl.dart' as intl;
 
 import 'l10n.dart';
 
+// ignore_for_file: type=lint
+
 /// The translations for Vietnamese (`vi`).
 class AppLocalizationsVi extends AppLocalizations {
   AppLocalizationsVi([String locale = 'vi']) : super(locale);
 
   @override
-  String get mobileHomeTab => 'Home';
+  String get mobileHomeTab => 'Trang chủ';
 
   @override
-  String get mobilePuzzlesTab => 'Puzzles';
+  String get mobilePuzzlesTab => 'Câu đố';
 
   @override
-  String get mobileToolsTab => 'Tools';
+  String get mobileToolsTab => 'Công cụ';
 
   @override
-  String get mobileWatchTab => 'Watch';
+  String get mobileWatchTab => 'Xem';
 
   @override
-  String get mobileSettingsTab => 'Settings';
+  String get mobileSettingsTab => 'Cài đặt';
 
   @override
-  String get mobileMustBeLoggedIn => 'You must be logged in to view this page.';
+  String get mobileMustBeLoggedIn => 'Bạn phải đăng nhập để xem trang này.';
 
   @override
-  String get mobileSystemColors => 'System colors';
+  String get mobileSystemColors => 'Màu hệ thống';
 
   @override
-  String get mobileFeedbackButton => 'Feedback';
+  String get mobileFeedbackButton => 'Phản hồi';
 
   @override
   String get mobileOkButton => 'OK';
 
   @override
-  String get mobileSettingsHapticFeedback => 'Haptic feedback';
+  String get mobileSettingsHapticFeedback => 'Rung phản hồi';
 
   @override
-  String get mobileSettingsImmersiveMode => 'Immersive mode';
+  String get mobileSettingsImmersiveMode => 'Chế độ toàn màn hình';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.';
+  String get mobileSettingsImmersiveModeSubtitle => 'Ẩn UI hệ thống trong khi chơi. Sử dụng điều này nếu bạn bị làm phiền bởi các cử chỉ điều hướng của hệ thống ở các cạnh của màn hình. Áp dụng cho màn hình ván đấu và Puzzle Strom.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'You are not following any user.';
+  String get mobileNotFollowingAnyUser => 'Bạn chưa theo dõi người dùng nào.';
 
   @override
-  String get mobileAllGames => 'All games';
+  String get mobileAllGames => 'Tất cả ván đấu';
 
   @override
-  String get mobileRecentSearches => 'Recent searches';
+  String get mobileRecentSearches => 'Tìm kiếm gần đây';
 
   @override
-  String get mobileClearButton => 'Clear';
+  String get mobileClearButton => 'Xóa';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
-    return 'Players with \"$param\"';
+    return 'chơi với \"$param\"';
   }
 
   @override
-  String get mobileNoSearchResults => 'No results';
+  String get mobileNoSearchResults => 'Không có kết quả';
 
   @override
-  String get mobileAreYouSure => 'Are you sure?';
+  String get mobileAreYouSure => 'Bạn chắc chứ?';
 
   @override
-  String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
+  String get mobilePuzzleStreakAbortWarning => 'Bạn sẽ mất chuỗi hiện tại và điểm của bạn sẽ được lưu.';
 
   @override
-  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of storm';
+  String get mobilePuzzleStormNothingToShow => 'Không có gì để xem. Chơi một vài ván Puzzle Storm.';
 
   @override
-  String get mobileSharePuzzle => 'Share this puzzle';
+  String get mobileSharePuzzle => 'Chia sẻ câu đố này';
 
   @override
-  String get mobileShareGameURL => 'Share game URL';
+  String get mobileShareGameURL => 'Chia sẻ URL ván cờ';
 
   @override
-  String get mobileShareGamePGN => 'Share PGN';
+  String get mobileShareGamePGN => 'Chia sẻ tập tin PGN';
 
   @override
-  String get mobileSharePositionAsFEN => 'Share position as FEN';
+  String get mobileSharePositionAsFEN => 'Chia sẻ thế cờ dạng FEN';
 
   @override
-  String get mobileShowVariations => 'Show variations';
+  String get mobileShowVariations => 'Hiện các biến';
 
   @override
-  String get mobileHideVariation => 'Hide variation';
+  String get mobileHideVariation => 'Ẩn các biến';
 
   @override
-  String get mobileShowComments => 'Show comments';
+  String get mobileShowComments => 'Hiển thị bình luận';
 
   @override
-  String get mobilePuzzleStormConfirmEndRun => 'Do you want to end this run?';
+  String get mobilePuzzleStormConfirmEndRun => 'Bạn có muốn kết thúc lượt chạy này không?';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow => 'Nothing to show, please change the filters';
+  String get mobilePuzzleStormFilterNothingToShow => 'Không có gì để hiển thị, vui lòng thay đổi bộ lọc';
 
   @override
-  String get mobileCancelTakebackOffer => 'Cancel takeback offer';
+  String get mobileCancelTakebackOffer => 'Hủy đề nghị đi lại';
 
   @override
-  String get mobileCancelDrawOffer => 'Cancel draw offer';
+  String get mobileCancelDrawOffer => 'Hủy đề nghị hòa';
 
   @override
-  String get mobileWaitingForOpponentToJoin => 'Waiting for opponent to join...';
+  String get mobileWaitingForOpponentToJoin => 'Đang chờ đối thủ tham gia...';
 
   @override
-  String get mobileBlindfoldMode => 'Blindfold';
+  String get mobileBlindfoldMode => 'Bịt mắt';
 
   @override
-  String get mobileLiveStreamers => 'Live streamers';
+  String get mobileLiveStreamers => 'Các Streamer phát trực tiếp';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Join a game';
+  String get mobileCustomGameJoinAGame => 'Tham gia một ván cờ';
 
   @override
-  String get mobileCorrespondenceClearSavedMove => 'Clear saved move';
+  String get mobileCorrespondenceClearSavedMove => 'Xóa nước cờ đã lưu';
 
   @override
-  String get mobileSomethingWentWrong => 'Something went wrong.';
+  String get mobileSomethingWentWrong => 'Đã xảy ra lỗi.';
+
+  @override
+  String get mobileShowResult => 'Xem kết quả';
+
+  @override
+  String get mobilePuzzleThemesSubtitle => 'Giải câu đố từ những khai cuộc yêu thích của bạn hoặc chọn một chủ đề.';
+
+  @override
+  String get mobilePuzzleStormSubtitle => 'Solve as many puzzles as possible in 3 minutes.';
+
+  @override
+  String mobileGreeting(String param) {
+    return 'Hello, $param';
+  }
+
+  @override
+  String get mobileGreetingWithoutName => 'Hello';
+
+  @override
+  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
 
   @override
   String get activityActivity => 'Hoạt động';
@@ -281,7 +303,7 @@ class AppLocalizationsVi extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Được hạng #$count (lọt top $param2%) với $param3 ván trong giải $param4',
+      other: 'Được hạng #$count (tốp $param2%) với $param3 ván trong giải $param4',
     );
     return '$_temp0';
   }
@@ -760,10 +782,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get puzzleYourPuzzleRatingWillNotChange => 'Hệ số giải câu đố của bạn sẽ không thay đổi. Lưu ý rằng giải câu đố không phải một cuộc thi. Hệ số của bạn nhằm giúp chọn những câu đố phù hợp nhất với trình độ của bạn.';
 
   @override
-  String get puzzleFindTheBestMoveForWhite => 'Tìm nước tối ưu cho Trắng.';
+  String get puzzleFindTheBestMoveForWhite => 'Tìm nước tối ưu cho bên trắng.';
 
   @override
-  String get puzzleFindTheBestMoveForBlack => 'Tìm nước tối ưu cho Đen.';
+  String get puzzleFindTheBestMoveForBlack => 'Tìm nước tối ưu cho bên đen.';
 
   @override
   String get puzzleToGetPersonalizedPuzzles => 'Để có được các thế cờ dành riêng cho bạn:';
@@ -1458,10 +1480,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get createAGame => 'Tạo một ván cờ';
 
   @override
-  String get whiteIsVictorious => 'Bên Trắng thắng';
+  String get whiteIsVictorious => 'Bên trắng thắng';
 
   @override
-  String get blackIsVictorious => 'Bên Đen thắng';
+  String get blackIsVictorious => 'Bên đen thắng';
 
   @override
   String get youPlayTheWhitePieces => 'Bạn chơi quân trắng';
@@ -1497,10 +1519,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get joinTheGame => 'Tham gia ván cờ';
 
   @override
-  String get whitePlays => 'Lượt Trắng đi';
+  String get whitePlays => 'Lượt trắng đi';
 
   @override
-  String get blackPlays => 'Lượt Đen đi';
+  String get blackPlays => 'Lượt đen đi';
 
   @override
   String get opponentLeftChoices => 'Đối thủ của bạn đã rời khỏi ván cờ. Bạn có thể tuyên bố chiến thắng, chọn hòa hoặc đợi.';
@@ -1518,16 +1540,16 @@ class AppLocalizationsVi extends AppLocalizations {
   String get theFirstPersonToComeOnThisUrlWillPlayWithYou => 'Người đầu tiên sử dụng URL này sẽ bắt đầu chơi với bạn.';
 
   @override
-  String get whiteResigned => 'Trắng chịu thua';
+  String get whiteResigned => 'Bên trắng chịu thua';
 
   @override
   String get blackResigned => 'Đen chịu thua';
 
   @override
-  String get whiteLeftTheGame => 'Trắng đã rời khỏi ván cờ';
+  String get whiteLeftTheGame => 'Bên trắng đã rời khỏi ván cờ';
 
   @override
-  String get blackLeftTheGame => 'Đen đã rời khỏi ván cờ';
+  String get blackLeftTheGame => 'Bên đen đã rời khỏi ván cờ';
 
   @override
   String get whiteDidntMove => 'Bên trắng không đi quân';
@@ -1640,7 +1662,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get database => 'Cơ sở dữ liệu';
 
   @override
-  String get whiteDrawBlack => 'Trắng / Hòa / Đen';
+  String get whiteDrawBlack => 'Trắng thắng / Hòa / Đen thắng';
 
   @override
   String averageRatingX(String param) {
@@ -1834,6 +1856,9 @@ class AppLocalizationsVi extends AppLocalizations {
   String get friends => 'Bạn bè';
 
   @override
+  String get otherPlayers => 'các kỳ thủ khác';
+
+  @override
   String get discussions => 'Trò chuyện';
 
   @override
@@ -2020,10 +2045,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get cancel => 'Hủy';
 
   @override
-  String get whiteTimeOut => 'Trắng hết giờ';
+  String get whiteTimeOut => 'Bên trắng hết giờ';
 
   @override
-  String get blackTimeOut => 'Đen hết giờ';
+  String get blackTimeOut => 'Bên đen hết giờ';
 
   @override
   String get drawOfferSent => 'Đã gửi đề nghị hòa';
@@ -2035,16 +2060,16 @@ class AppLocalizationsVi extends AppLocalizations {
   String get drawOfferCanceled => 'Đã hủy bỏ đề nghị hoà';
 
   @override
-  String get whiteOffersDraw => 'Trắng đề nghị hòa';
+  String get whiteOffersDraw => 'Bên trắng đề nghị hòa';
 
   @override
-  String get blackOffersDraw => 'Đen đề nghị hòa';
+  String get blackOffersDraw => 'Bên đen đề nghị hòa';
 
   @override
-  String get whiteDeclinesDraw => 'Trắng từ chối hòa';
+  String get whiteDeclinesDraw => 'Bên trắng từ chối hòa';
 
   @override
-  String get blackDeclinesDraw => 'Đen từ chối hòa';
+  String get blackDeclinesDraw => 'Bên đen từ chối hòa';
 
   @override
   String get yourOpponentOffersADraw => 'Đối thủ xin hoà';
@@ -2345,10 +2370,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get notACheckmate => 'Không phải là một nước chiếu hết';
 
   @override
-  String get whiteCheckmatesInOneMove => 'Trắng chiếu hết trong một nước đi';
+  String get whiteCheckmatesInOneMove => 'Bên trắng hãy chiếu hết trong một nước đi';
 
   @override
-  String get blackCheckmatesInOneMove => 'Đen chiếu hết trong một nước đi';
+  String get blackCheckmatesInOneMove => 'Bên đen hãy chiếu hết trong một nước đi';
 
   @override
   String get retry => 'Thử lại';
@@ -2663,6 +2688,12 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get yes => 'Có';
+
+  @override
+  String get website => 'Trang mạng';
+
+  @override
+  String get mobile => 'Điện thoại di động';
 
   @override
   String get help => 'Hỗ trợ:';
@@ -3093,7 +3124,7 @@ class AppLocalizationsVi extends AppLocalizations {
   String get simulAddExtraTimePerPlayer => 'Thêm thời gian ban đầu vào đồng hồ của bạn cho mỗi người chơi tham gia sự kiện đồng loạt.';
 
   @override
-  String get simulHostExtraTimePerPlayer => 'Thời gian thêm cho mỗi người tham gia';
+  String get simulHostExtraTimePerPlayer => 'Thời gian thêm cho người chủ trì theo số người tham gia';
 
   @override
   String get lichessTournaments => 'Các giải đấu của Lichess';
@@ -3551,7 +3582,7 @@ class AppLocalizationsVi extends AppLocalizations {
   }
 
   @override
-  String get findBetterMoveForWhite => 'Tìm nước đi tốt hơn cho trắng';
+  String get findBetterMoveForWhite => 'Tìm nước đi tốt hơn cho bên trắng';
 
   @override
   String get findBetterMoveForBlack => 'Tìm nước đi tốt hơn cho đen';
@@ -3563,10 +3594,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get youCanDoBetter => 'Bạn có thể làm tốt hơn';
 
   @override
-  String get tryAnotherMoveForWhite => 'Tìm nước đi khác cho trắng';
+  String get tryAnotherMoveForWhite => 'Tìm nước đi khác cho bên trắng';
 
   @override
-  String get tryAnotherMoveForBlack => 'Tìm nước đi khác cho đen';
+  String get tryAnotherMoveForBlack => 'Tìm nước đi khác cho bên đen';
 
   @override
   String get solution => 'Đáp án';
@@ -3590,10 +3621,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String get doItAgain => 'Thử lại một lần nữa';
 
   @override
-  String get reviewWhiteMistakes => 'Đánh giá lỗi bên trắng';
+  String get reviewWhiteMistakes => 'Xem lại sai lầm của bên trắng';
 
   @override
-  String get reviewBlackMistakes => 'Đánh giá lỗi bên đen';
+  String get reviewBlackMistakes => 'Xem lại sai lầm của bên đen';
 
   @override
   String get advantage => 'Lợi thế';

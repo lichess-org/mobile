@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
-import 'package:lichess_mobile/src/utils/android.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/system.dart';
+import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/settings.dart';
 
 class BoardThemeScreen extends StatelessWidget {
   const BoardThemeScreen({super.key});
@@ -61,25 +61,35 @@ class _Body extends ConsumerWidget {
         .read(boardPreferencesProvider.notifier)
         .setBoardTheme(value ?? BoardTheme.brown);
 
+    final checkedIcon = Theme.of(context).platform == TargetPlatform.android
+        ? const Icon(Icons.check)
+        : Icon(
+            CupertinoIcons.check_mark_circled_solid,
+            color: CupertinoTheme.of(context).primaryColor,
+          );
+
     return SafeArea(
-      child: ListView(
-        children: [
-          ChoicePicker(
-            notchedTile: true,
-            tileContentPadding: const EdgeInsets.symmetric(
-              horizontal: 16.0,
-              vertical: 8.0,
-            ),
-            choices: choices,
-            selectedItem: boardTheme,
-            titleBuilder: (t) => Text(t.label),
-            subtitleBuilder: (t) => Align(
-              alignment: Alignment.topLeft,
-              child: t.thumbnail,
-            ),
-            onSelectedItemChanged: onChanged,
-          ),
-        ],
+      child: ListView.separated(
+        itemBuilder: (context, index) {
+          final t = choices[index];
+          return PlatformListTile(
+            selected: t == boardTheme,
+            trailing: t == boardTheme ? checkedIcon : null,
+            title: Text(t.label),
+            subtitle: Align(alignment: Alignment.topLeft, child: t.thumbnail),
+            onTap: () => onChanged(t),
+          );
+        },
+        separatorBuilder: (_, __) => PlatformDivider(
+          height: 1,
+          // on iOS: 14 (default indent) + 16 (padding)
+          indent:
+              Theme.of(context).platform == TargetPlatform.iOS ? 14 + 16 : null,
+          color: Theme.of(context).platform == TargetPlatform.iOS
+              ? null
+              : Colors.transparent,
+        ),
+        itemCount: choices.length,
       ),
     );
   }

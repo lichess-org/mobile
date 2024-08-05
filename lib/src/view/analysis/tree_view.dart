@@ -3,6 +3,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
@@ -324,7 +325,6 @@ class InlineMove extends ConsumerWidget {
 
   static const borderRadius = BorderRadius.all(Radius.circular(4.0));
   static const baseTextStyle = TextStyle(
-    fontFamily: 'ChessFont',
     fontSize: 16.0,
     height: 1.5,
   );
@@ -334,12 +334,21 @@ class InlineMove extends ConsumerWidget {
     final ctrlProvider = analysisControllerProvider(pgn, options);
     final move = branch.sanMove;
     final ply = branch.position.ply;
+
+    final pieceNotation = ref.watch(pieceNotationProvider).maybeWhen(
+          data: (value) => value,
+          orElse: () => defaultAccountPreferences.pieceNotation,
+        );
+    final fontFamily =
+        pieceNotation == PieceNotation.symbol ? 'ChessFont' : null;
+
     final textStyle = isSideline
         ? TextStyle(
-            fontFamily: 'ChessFont',
+            fontFamily: fontFamily,
             color: _textColor(context, 0.6),
           )
         : baseTextStyle.copyWith(
+            fontFamily: fontFamily,
             color: _textColor(context, 0.9),
             fontWeight: FontWeight.w600,
           );

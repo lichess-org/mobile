@@ -2,125 +2,147 @@ import 'package:intl/intl.dart' as intl;
 
 import 'l10n.dart';
 
+// ignore_for_file: type=lint
+
 /// The translations for Ukrainian (`uk`).
 class AppLocalizationsUk extends AppLocalizations {
   AppLocalizationsUk([String locale = 'uk']) : super(locale);
 
   @override
-  String get mobileHomeTab => 'Home';
+  String get mobileHomeTab => 'Головна';
 
   @override
-  String get mobilePuzzlesTab => 'Puzzles';
+  String get mobilePuzzlesTab => 'Задачі';
 
   @override
-  String get mobileToolsTab => 'Tools';
+  String get mobileToolsTab => 'Інструм.';
 
   @override
-  String get mobileWatchTab => 'Watch';
+  String get mobileWatchTab => 'Дивитися';
 
   @override
-  String get mobileSettingsTab => 'Settings';
+  String get mobileSettingsTab => 'Налашт.';
 
   @override
-  String get mobileMustBeLoggedIn => 'You must be logged in to view this page.';
+  String get mobileMustBeLoggedIn => 'Ви повинні ввійти, аби переглянути цю сторінку.';
 
   @override
-  String get mobileSystemColors => 'System colors';
+  String get mobileSystemColors => 'Системні кольори';
 
   @override
-  String get mobileFeedbackButton => 'Feedback';
+  String get mobileFeedbackButton => 'Відгук';
 
   @override
-  String get mobileOkButton => 'OK';
+  String get mobileOkButton => 'Гаразд';
 
   @override
-  String get mobileSettingsHapticFeedback => 'Haptic feedback';
+  String get mobileSettingsHapticFeedback => 'Вібрація при ході';
 
   @override
-  String get mobileSettingsImmersiveMode => 'Immersive mode';
+  String get mobileSettingsImmersiveMode => 'Повноекранний режим';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.';
+  String get mobileSettingsImmersiveModeSubtitle => 'Приховати інтерфейс системи під час гри. Використовуйте, якщо вас турбують навігаційні жести системи по краях екрану. Застосовується до екранів гри та задач.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'You are not following any user.';
+  String get mobileNotFollowingAnyUser => 'Ви ні на кого не підписані.';
 
   @override
-  String get mobileAllGames => 'All games';
+  String get mobileAllGames => 'Усі ігри';
 
   @override
-  String get mobileRecentSearches => 'Recent searches';
+  String get mobileRecentSearches => 'Недавні пошуки';
 
   @override
-  String get mobileClearButton => 'Clear';
+  String get mobileClearButton => 'Очистити';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
-    return 'Players with \"$param\"';
+    return 'Гравці з «$param»';
   }
 
   @override
-  String get mobileNoSearchResults => 'No results';
+  String get mobileNoSearchResults => 'Немає результатів ';
 
   @override
-  String get mobileAreYouSure => 'Are you sure?';
+  String get mobileAreYouSure => 'Ви впевнені?';
 
   @override
-  String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
+  String get mobilePuzzleStreakAbortWarning => 'Ви втратите поточну серію, і ваш рахунок буде збережено.';
 
   @override
-  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of storm';
+  String get mobilePuzzleStormNothingToShow => 'Нічого показати. Зіграйте в гру Puzzle Storm.';
 
   @override
-  String get mobileSharePuzzle => 'Share this puzzle';
+  String get mobileSharePuzzle => 'Поділитися задачею';
 
   @override
-  String get mobileShareGameURL => 'Share game URL';
+  String get mobileShareGameURL => 'Поділитися посиланням на гру';
 
   @override
-  String get mobileShareGamePGN => 'Share PGN';
+  String get mobileShareGamePGN => 'Поділитися PGN';
 
   @override
-  String get mobileSharePositionAsFEN => 'Share position as FEN';
+  String get mobileSharePositionAsFEN => 'Поділитися FEN';
 
   @override
-  String get mobileShowVariations => 'Show variations';
+  String get mobileShowVariations => 'Показати варіанти';
 
   @override
-  String get mobileHideVariation => 'Hide variation';
+  String get mobileHideVariation => 'Сховати варіанти';
 
   @override
-  String get mobileShowComments => 'Show comments';
+  String get mobileShowComments => 'Показати коментарі';
 
   @override
-  String get mobilePuzzleStormConfirmEndRun => 'Do you want to end this run?';
+  String get mobilePuzzleStormConfirmEndRun => 'Ви хочете закінчити цю серію?';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow => 'Nothing to show, please change the filters';
+  String get mobilePuzzleStormFilterNothingToShow => 'Нічого не знайдено, будь ласка, змініть фільтри';
 
   @override
-  String get mobileCancelTakebackOffer => 'Cancel takeback offer';
+  String get mobileCancelTakebackOffer => 'Скасувати пропозицію повернення ходу';
 
   @override
-  String get mobileCancelDrawOffer => 'Cancel draw offer';
+  String get mobileCancelDrawOffer => 'Скасувати пропозицію нічиєї';
 
   @override
-  String get mobileWaitingForOpponentToJoin => 'Waiting for opponent to join...';
+  String get mobileWaitingForOpponentToJoin => 'Очікування на суперника...';
 
   @override
-  String get mobileBlindfoldMode => 'Blindfold';
+  String get mobileBlindfoldMode => 'Наосліп';
 
   @override
-  String get mobileLiveStreamers => 'Live streamers';
+  String get mobileLiveStreamers => 'Стримери в прямому етері';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Join a game';
+  String get mobileCustomGameJoinAGame => 'Приєднатися до гри';
 
   @override
-  String get mobileCorrespondenceClearSavedMove => 'Clear saved move';
+  String get mobileCorrespondenceClearSavedMove => 'Очистити збережений хід';
 
   @override
-  String get mobileSomethingWentWrong => 'Something went wrong.';
+  String get mobileSomethingWentWrong => 'Щось пішло не так.';
+
+  @override
+  String get mobileShowResult => 'Показати результат';
+
+  @override
+  String get mobilePuzzleThemesSubtitle => 'Розв\'язуйте задачі з улюбленими дебютами або обирайте тему.';
+
+  @override
+  String get mobilePuzzleStormSubtitle => 'Розв\'яжіть якомога більше задач за 3 хвилини.';
+
+  @override
+  String mobileGreeting(String param) {
+    return 'Привіт, $param';
+  }
+
+  @override
+  String get mobileGreetingWithoutName => 'Привіт';
+
+  @override
+  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
 
   @override
   String get activityActivity => 'Активність';
@@ -1900,6 +1922,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get friends => 'Друзі';
 
   @override
+  String get otherPlayers => 'інші гравці';
+
+  @override
   String get discussions => 'Обговорення';
 
   @override
@@ -2731,6 +2756,12 @@ class AppLocalizationsUk extends AppLocalizations {
   String get yes => 'Так';
 
   @override
+  String get website => 'Вебсайт';
+
+  @override
+  String get mobile => 'Застосунок';
+
+  @override
   String get help => 'Допомога:';
 
   @override
@@ -3422,7 +3453,7 @@ class AppLocalizationsUk extends AppLocalizations {
   String get correspondenceChess => 'Заочні';
 
   @override
-  String get onlineAndOfflinePlay => 'Гра онлайн та оффлайн';
+  String get onlineAndOfflinePlay => 'Гра онлайн та офлайн';
 
   @override
   String get viewTheSolution => 'Дивитись рішення';

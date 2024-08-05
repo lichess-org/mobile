@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
+import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 
 class PuzzleFeedbackWidget extends ConsumerWidget {
   const PuzzleFeedbackWidget({
@@ -61,7 +62,10 @@ class PuzzleFeedbackWidget extends ConsumerWidget {
                 ),
           subtitle: onStreak && state.result == PuzzleResult.lose
               ? null
-              : Text('$puzzleRating. $playedXTimes.'),
+              : RatingPrefAware(
+                  orElse: Text('$playedXTimes.'),
+                  child: Text('$puzzleRating. $playedXTimes.'),
+                ),
         );
       case PuzzleMode.load:
       case PuzzleMode.play:

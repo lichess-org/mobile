@@ -1,4 +1,19 @@
 import 'package:deep_pick/deep_pick.dart';
+import 'package:lichess_mobile/src/model/common/uci.dart';
+
+extension UciExtension on Pick {
+  /// Matches a UciCharPair from a string.
+  UciCharPair asUciCharPairOrThrow() {
+    final value = required().asStringOrThrow();
+    return UciCharPair.fromStringId(value);
+  }
+
+  /// Matches a UciPath from a string.
+  UciPath asUciPathOrThrow() {
+    final value = required().asStringOrThrow();
+    return UciPath(value);
+  }
+}
 
 extension TimeExtension on Pick {
   /// Matches a DateTime from milliseconds since unix epoch.

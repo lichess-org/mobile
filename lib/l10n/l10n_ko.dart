@@ -2,86 +2,88 @@ import 'package:intl/intl.dart' as intl;
 
 import 'l10n.dart';
 
+// ignore_for_file: type=lint
+
 /// The translations for Korean (`ko`).
 class AppLocalizationsKo extends AppLocalizations {
   AppLocalizationsKo([String locale = 'ko']) : super(locale);
 
   @override
-  String get mobileHomeTab => 'Home';
+  String get mobileHomeTab => '홈';
 
   @override
-  String get mobilePuzzlesTab => 'Puzzles';
+  String get mobilePuzzlesTab => '퍼즐';
 
   @override
-  String get mobileToolsTab => 'Tools';
+  String get mobileToolsTab => '도구';
 
   @override
-  String get mobileWatchTab => 'Watch';
+  String get mobileWatchTab => '관람';
 
   @override
-  String get mobileSettingsTab => 'Settings';
+  String get mobileSettingsTab => '설정';
 
   @override
-  String get mobileMustBeLoggedIn => 'You must be logged in to view this page.';
+  String get mobileMustBeLoggedIn => '이 페이지를 보려면 로그인해야 합니다.';
 
   @override
-  String get mobileSystemColors => 'System colors';
+  String get mobileSystemColors => '시스템 색상';
 
   @override
-  String get mobileFeedbackButton => 'Feedback';
+  String get mobileFeedbackButton => '피드백';
 
   @override
-  String get mobileOkButton => 'OK';
+  String get mobileOkButton => '확인';
 
   @override
-  String get mobileSettingsHapticFeedback => 'Haptic feedback';
+  String get mobileSettingsHapticFeedback => '터치 시 진동';
 
   @override
-  String get mobileSettingsImmersiveMode => 'Immersive mode';
+  String get mobileSettingsImmersiveMode => '전체 화면 모드';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.';
+  String get mobileSettingsImmersiveModeSubtitle => '플레이 중 시스템 UI를 숨깁니다. 화면 가장자리의 시스템 내비게이션 제스처가 불편하다면 사용하세요. 대국과 퍼즐 스톰 화면에서 적용됩니다.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'You are not following any user.';
+  String get mobileNotFollowingAnyUser => '팔로우한 사용자가 없습니다.';
 
   @override
-  String get mobileAllGames => 'All games';
+  String get mobileAllGames => '모든 대국';
 
   @override
-  String get mobileRecentSearches => 'Recent searches';
+  String get mobileRecentSearches => '최근 검색어';
 
   @override
-  String get mobileClearButton => 'Clear';
+  String get mobileClearButton => '지우기';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
-    return 'Players with \"$param\"';
+    return '닉네임에 \"$param\"가 포함된 플레이어';
   }
 
   @override
-  String get mobileNoSearchResults => 'No results';
+  String get mobileNoSearchResults => '결과 없음';
 
   @override
-  String get mobileAreYouSure => 'Are you sure?';
+  String get mobileAreYouSure => '확실하십니까?';
 
   @override
-  String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
+  String get mobilePuzzleStreakAbortWarning => '현재 연속 해결 기록을 잃고 점수는 저장됩니다.';
 
   @override
-  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of storm';
+  String get mobilePuzzleStormNothingToShow => '표시할 것이 없습니다. 먼저 퍼즐 스톰을 플레이하세요.';
 
   @override
-  String get mobileSharePuzzle => 'Share this puzzle';
+  String get mobileSharePuzzle => '이 퍼즐 공유';
 
   @override
-  String get mobileShareGameURL => 'Share game URL';
+  String get mobileShareGameURL => '게임 URL 공유';
 
   @override
-  String get mobileShareGamePGN => 'Share PGN';
+  String get mobileShareGamePGN => 'PGN 공유';
 
   @override
-  String get mobileSharePositionAsFEN => 'Share position as FEN';
+  String get mobileSharePositionAsFEN => 'FEN으로 공유';
 
   @override
   String get mobileShowVariations => 'Show variations';
@@ -90,37 +92,57 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mobileHideVariation => 'Hide variation';
 
   @override
-  String get mobileShowComments => 'Show comments';
+  String get mobileShowComments => '댓글 보기';
 
   @override
-  String get mobilePuzzleStormConfirmEndRun => 'Do you want to end this run?';
+  String get mobilePuzzleStormConfirmEndRun => '이 도전을 종료하시겠습니까?';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow => 'Nothing to show, please change the filters';
+  String get mobilePuzzleStormFilterNothingToShow => '표시할 것이 없습니다. 필터를 변경해 주세요';
 
   @override
-  String get mobileCancelTakebackOffer => 'Cancel takeback offer';
+  String get mobileCancelTakebackOffer => '무르기 요청 취소';
 
   @override
-  String get mobileCancelDrawOffer => 'Cancel draw offer';
+  String get mobileCancelDrawOffer => '무승부 요청 취소';
 
   @override
-  String get mobileWaitingForOpponentToJoin => 'Waiting for opponent to join...';
+  String get mobileWaitingForOpponentToJoin => '상대 참가를 기다리는 중...';
 
   @override
   String get mobileBlindfoldMode => 'Blindfold';
 
   @override
-  String get mobileLiveStreamers => 'Live streamers';
+  String get mobileLiveStreamers => '방송 중인 스트리머';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Join a game';
+  String get mobileCustomGameJoinAGame => '게임 참가';
 
   @override
-  String get mobileCorrespondenceClearSavedMove => 'Clear saved move';
+  String get mobileCorrespondenceClearSavedMove => '저장된 수 삭제';
 
   @override
-  String get mobileSomethingWentWrong => 'Something went wrong.';
+  String get mobileSomethingWentWrong => '문제가 발생했습니다.';
+
+  @override
+  String get mobileShowResult => 'Show result';
+
+  @override
+  String get mobilePuzzleThemesSubtitle => 'Play puzzles from your favorite openings, or choose a theme.';
+
+  @override
+  String get mobilePuzzleStormSubtitle => 'Solve as many puzzles as possible in 3 minutes.';
+
+  @override
+  String mobileGreeting(String param) {
+    return 'Hello, $param';
+  }
+
+  @override
+  String get mobileGreetingWithoutName => 'Hello';
+
+  @override
+  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
 
   @override
   String get activityActivity => '활동';
@@ -1834,6 +1856,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get friends => '친구들';
 
   @override
+  String get otherPlayers => 'other players';
+
+  @override
   String get discussions => '토론';
 
   @override
@@ -2584,7 +2609,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get editProfile => '프로필 수정';
 
   @override
-  String get realName => 'Real name';
+  String get realName => '본명';
 
   @override
   String get setFlair => 'Set your flair';
@@ -2663,6 +2688,12 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get yes => '예';
+
+  @override
+  String get website => 'Website';
+
+  @override
+  String get mobile => 'Mobile';
 
   @override
   String get help => '힌트:';

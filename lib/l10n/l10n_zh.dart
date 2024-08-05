@@ -2,125 +2,147 @@ import 'package:intl/intl.dart' as intl;
 
 import 'l10n.dart';
 
+// ignore_for_file: type=lint
+
 /// The translations for Chinese (`zh`).
 class AppLocalizationsZh extends AppLocalizations {
   AppLocalizationsZh([String locale = 'zh']) : super(locale);
 
   @override
-  String get mobileHomeTab => 'Home';
+  String get mobileHomeTab => '主页';
 
   @override
-  String get mobilePuzzlesTab => 'Puzzles';
+  String get mobilePuzzlesTab => '谜题';
 
   @override
-  String get mobileToolsTab => 'Tools';
+  String get mobileToolsTab => '工具';
 
   @override
-  String get mobileWatchTab => 'Watch';
+  String get mobileWatchTab => '观看';
 
   @override
-  String get mobileSettingsTab => 'Settings';
+  String get mobileSettingsTab => '设置';
 
   @override
-  String get mobileMustBeLoggedIn => 'You must be logged in to view this page.';
+  String get mobileMustBeLoggedIn => '您必须登录才能浏览此页面。';
 
   @override
-  String get mobileSystemColors => 'System colors';
+  String get mobileSystemColors => '系统颜色';
 
   @override
-  String get mobileFeedbackButton => 'Feedback';
+  String get mobileFeedbackButton => '问题反馈';
 
   @override
-  String get mobileOkButton => 'OK';
+  String get mobileOkButton => '好';
 
   @override
-  String get mobileSettingsHapticFeedback => 'Haptic feedback';
+  String get mobileSettingsHapticFeedback => '震动反馈';
 
   @override
-  String get mobileSettingsImmersiveMode => 'Immersive mode';
+  String get mobileSettingsImmersiveMode => '沉浸模式';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.';
+  String get mobileSettingsImmersiveModeSubtitle => '播放时隐藏系统UI。 如果您对屏幕边缘的系统导航手势感到困扰，请使用此功能。 适用于游戏和益智风暴屏幕。';
 
   @override
-  String get mobileNotFollowingAnyUser => 'You are not following any user.';
+  String get mobileNotFollowingAnyUser => '你没有关注任何用户。';
 
   @override
-  String get mobileAllGames => 'All games';
+  String get mobileAllGames => '所有对局';
 
   @override
-  String get mobileRecentSearches => 'Recent searches';
+  String get mobileRecentSearches => '最近搜索';
 
   @override
-  String get mobileClearButton => 'Clear';
+  String get mobileClearButton => '清空';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
-    return 'Players with \"$param\"';
+    return '拥有\"$param\"的玩家';
   }
 
   @override
-  String get mobileNoSearchResults => 'No results';
+  String get mobileNoSearchResults => '无结果';
 
   @override
-  String get mobileAreYouSure => 'Are you sure?';
+  String get mobileAreYouSure => '你确定吗？';
 
   @override
-  String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
+  String get mobilePuzzleStreakAbortWarning => '你将失去你目前的连胜，你的分数将被保存。';
 
   @override
-  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of storm';
+  String get mobilePuzzleStormNothingToShow => '没什么好表现的。 玩拼图风暴的一些运行。';
 
   @override
-  String get mobileSharePuzzle => 'Share this puzzle';
+  String get mobileSharePuzzle => '分享这个谜题';
 
   @override
-  String get mobileShareGameURL => 'Share game URL';
+  String get mobileShareGameURL => '分享棋局链接';
 
   @override
-  String get mobileShareGamePGN => 'Share PGN';
+  String get mobileShareGamePGN => '分享 PGN';
 
   @override
-  String get mobileSharePositionAsFEN => 'Share position as FEN';
+  String get mobileSharePositionAsFEN => '保存局面为 FEN';
 
   @override
-  String get mobileShowVariations => 'Show variations';
+  String get mobileShowVariations => '显示变化';
 
   @override
-  String get mobileHideVariation => 'Hide variation';
+  String get mobileHideVariation => '隐藏变异';
 
   @override
-  String get mobileShowComments => 'Show comments';
+  String get mobileShowComments => '显示评论';
 
   @override
-  String get mobilePuzzleStormConfirmEndRun => 'Do you want to end this run?';
+  String get mobilePuzzleStormConfirmEndRun => '你想结束这次跑步吗？';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow => 'Nothing to show, please change the filters';
+  String get mobilePuzzleStormFilterNothingToShow => '没有显示，请更改过滤器';
 
   @override
-  String get mobileCancelTakebackOffer => 'Cancel takeback offer';
+  String get mobileCancelTakebackOffer => '取消悔棋请求';
 
   @override
-  String get mobileCancelDrawOffer => 'Cancel draw offer';
+  String get mobileCancelDrawOffer => '取消和棋请求';
 
   @override
-  String get mobileWaitingForOpponentToJoin => 'Waiting for opponent to join...';
+  String get mobileWaitingForOpponentToJoin => '正在等待对手加入...';
 
   @override
-  String get mobileBlindfoldMode => 'Blindfold';
+  String get mobileBlindfoldMode => '盲棋';
 
   @override
-  String get mobileLiveStreamers => 'Live streamers';
+  String get mobileLiveStreamers => '主播';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Join a game';
+  String get mobileCustomGameJoinAGame => '加入一局游戏';
 
   @override
-  String get mobileCorrespondenceClearSavedMove => 'Clear saved move';
+  String get mobileCorrespondenceClearSavedMove => '清除已保存的移动';
 
   @override
-  String get mobileSomethingWentWrong => 'Something went wrong.';
+  String get mobileSomethingWentWrong => '发生一些错误。';
+
+  @override
+  String get mobileShowResult => '显示结果';
+
+  @override
+  String get mobilePuzzleThemesSubtitle => '从你最喜欢的开口玩拼图，或选择一个主题。';
+
+  @override
+  String get mobilePuzzleStormSubtitle => '在3分钟内尽可能多地解决谜题';
+
+  @override
+  String mobileGreeting(String param) {
+    return '你好，$param';
+  }
+
+  @override
+  String get mobileGreetingWithoutName => '你好！';
+
+  @override
+  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
 
   @override
   String get activityActivity => '动态';
@@ -1834,6 +1856,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get friends => '棋友';
 
   @override
+  String get otherPlayers => '其他玩家';
+
+  @override
   String get discussions => '讨论组';
 
   @override
@@ -2665,6 +2690,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get yes => '是';
 
   @override
+  String get website => '网站';
+
+  @override
+  String get mobile => '流动电话';
+
+  @override
   String get help => '帮助：';
 
   @override
@@ -2822,7 +2853,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get outsideTheBoard => '棋盘外';
 
   @override
-  String get allSquaresOfTheBoard => 'All squares of the board';
+  String get allSquaresOfTheBoard => '棋盘上的所有格子';
 
   @override
   String get onSlowGames => '在慢棋时';
@@ -3436,7 +3467,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get boardReset => '重置颜色设置';
 
   @override
-  String get pieceSet => '棋子设定';
+  String get pieceSet => '棋子风格';
 
   @override
   String get embedInYourWebsite => '嵌入到你的网站上';
@@ -4636,6 +4667,60 @@ class AppLocalizationsZh extends AppLocalizations {
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
 class AppLocalizationsZhTw extends AppLocalizationsZh {
   AppLocalizationsZhTw(): super('zh_TW');
+
+  @override
+  String get mobileHomeTab => '主頁';
+
+  @override
+  String get mobilePuzzlesTab => '謎題';
+
+  @override
+  String get mobileToolsTab => '工具';
+
+  @override
+  String get mobileWatchTab => '觀看';
+
+  @override
+  String get mobileSettingsTab => '設置';
+
+  @override
+  String get mobileMustBeLoggedIn => '你必須登入才能查看此頁面。';
+
+  @override
+  String get mobileSystemColors => '系统颜色';
+
+  @override
+  String get mobileFeedbackButton => '問題反饋';
+
+  @override
+  String get mobileOkButton => '確認';
+
+  @override
+  String get mobileSettingsHapticFeedback => '震動回饋';
+
+  @override
+  String get mobileSettingsImmersiveMode => '沉浸模式';
+
+  @override
+  String get mobileAllGames => '所有遊戲';
+
+  @override
+  String get mobileRecentSearches => '最近搜尋';
+
+  @override
+  String get mobileClearButton => '清除';
+
+  @override
+  String get mobileNoSearchResults => '無結果';
+
+  @override
+  String get mobileAreYouSure => '您確定嗎？';
+
+  @override
+  String get mobileShareGamePGN => '分享 PGN';
+
+  @override
+  String get mobileCustomGameJoinAGame => '加入遊戲';
 
   @override
   String get activityActivity => '活動';

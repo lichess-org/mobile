@@ -15,7 +15,8 @@ class SettingsListTile extends StatelessWidget {
     super.key,
   });
 
-  final Icon? icon;
+  /// The icon of the settings value.
+  final Widget? icon;
 
   /// The label of the settings value.
   final Text settingsLabel;
@@ -97,6 +98,58 @@ class SwitchSettingTile extends StatelessWidget {
   }
 }
 
+class SliderSettingsTile extends StatefulWidget {
+  const SliderSettingsTile({
+    this.icon,
+    required this.value,
+    required this.values,
+    required this.onChangeEnd,
+    this.labelBuilder,
+  });
+
+  final Widget? icon;
+  final double value;
+  final List<double> values;
+  final void Function(double value) onChangeEnd;
+  final String Function(double)? labelBuilder;
+
+  @override
+  State<SliderSettingsTile> createState() => _SliderSettingsTileState();
+}
+
+class _SliderSettingsTileState extends State<SliderSettingsTile> {
+  late int _index = widget.values.indexOf(widget.value);
+
+  @override
+  Widget build(BuildContext context) {
+    final slider = Slider.adaptive(
+      value: _index.toDouble(),
+      min: 0,
+      max: widget.values.length.toDouble() - 1,
+      divisions: widget.values.length - 1,
+      label: widget.labelBuilder?.call(widget.values[_index]) ??
+          widget.values[_index].toString(),
+      onChanged: (value) {
+        final newIndex = value.toInt();
+        setState(() {
+          _index = newIndex;
+        });
+      },
+      onChangeEnd: (value) {
+        widget.onChangeEnd(widget.values[_index]);
+      },
+    );
+
+    return PlatformListTile(
+      leading: widget.icon,
+      title: slider,
+      trailing: widget.labelBuilder != null
+          ? Text(widget.labelBuilder!.call(widget.values[_index]))
+          : null,
+    );
+  }
+}
+
 class SettingsSectionTitle extends StatelessWidget {
   const SettingsSectionTitle(this.title, {super.key});
 
@@ -165,8 +218,11 @@ class _SettingsTitle extends StatelessWidget {
   }
 }
 
-/// A platform agnostic choice picker
-class ChoicePicker<T extends Enum> extends StatelessWidget {
+/// A platform agnostic choice picker.
+///
+/// It is best used for settings where the user can choose between a relatively
+/// small number of options.
+class ChoicePicker<T> extends StatelessWidget {
   const ChoicePicker({
     super.key,
     required this.choices,

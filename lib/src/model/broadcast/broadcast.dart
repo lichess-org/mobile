@@ -20,6 +20,9 @@ class Broadcast with _$Broadcast {
     required BroadcastTournament tour,
     required BroadcastRound round,
     required String? group,
+
+    /// The round to which the user should be brought when cliking on the tournament
+    required BroadcastRoundId roundToLinkId,
   }) = _Broadcast;
 
   bool get isLive => round.status == RoundStatus.live;
@@ -46,15 +49,20 @@ class BroadcastRound with _$BroadcastRound {
   }) = _BroadcastRound;
 }
 
+typedef BroadcastRoundGames = IMap<BroadcastGameId, BroadcastGameSnapshot>;
+
 @freezed
 class BroadcastGameSnapshot with _$BroadcastGameSnapshot {
   const BroadcastGameSnapshot._();
 
   const factory BroadcastGameSnapshot({
-    required IList<BroadcastPlayer> players,
+    required IMap<Side, BroadcastPlayer> players,
     required String fen,
     required Move? lastMove,
     required String status,
+
+    /// The amount of time that the player whose turn it is has been thinking since his last move
+    required Duration? thinkTime,
   }) = _BroadcastGameSnapshot;
 }
 

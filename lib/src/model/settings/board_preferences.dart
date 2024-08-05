@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:chessground/chessground.dart' hide BoardTheme;
+import 'package:chessground/chessground.dart';
 import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/db/shared_preferences.dart';
@@ -33,6 +33,10 @@ class BoardPreferences extends _$BoardPreferences {
     await _save(state.copyWith(boardTheme: boardTheme));
   }
 
+  Future<void> setPieceShiftMethod(PieceShiftMethod pieceShiftMethod) async {
+    await _save(state.copyWith(pieceShiftMethod: pieceShiftMethod));
+  }
+
   Future<void> toggleHapticFeedback() {
     return _save(state.copyWith(hapticFeedback: !state.hapticFeedback));
   }
@@ -61,9 +65,23 @@ class BoardPreferences extends _$BoardPreferences {
     return _save(state.copyWith(pieceAnimation: !state.pieceAnimation));
   }
 
+  Future<void> toggleMagnifyDraggedPiece() {
+    return _save(
+      state.copyWith(
+        magnifyDraggedPiece: !state.magnifyDraggedPiece,
+      ),
+    );
+  }
+
   Future<void> toggleShowMaterialDifference() {
     return _save(
       state.copyWith(showMaterialDifference: !state.showMaterialDifference),
+    );
+  }
+
+  Future<void> toggleEnableShapeDrawings() {
+    return _save(
+      state.copyWith(enableShapeDrawings: !state.enableShapeDrawings),
     );
   }
 
@@ -91,6 +109,15 @@ class BoardPrefs with _$BoardPrefs {
     required bool coordinates,
     required bool pieceAnimation,
     required bool showMaterialDifference,
+    @JsonKey(
+      defaultValue: PieceShiftMethod.either,
+      unknownEnumValue: PieceShiftMethod.either,
+    )
+    required PieceShiftMethod pieceShiftMethod,
+
+    /// Whether to enable shape drawings on the board for games and puzzles.
+    @JsonKey(defaultValue: true) required bool enableShapeDrawings,
+    @JsonKey(defaultValue: true) required bool magnifyDraggedPiece,
   }) = _BoardPrefs;
 
   static const defaults = BoardPrefs(
@@ -103,7 +130,27 @@ class BoardPrefs with _$BoardPrefs {
     coordinates: true,
     pieceAnimation: true,
     showMaterialDifference: true,
+    pieceShiftMethod: PieceShiftMethod.either,
+    enableShapeDrawings: true,
+    magnifyDraggedPiece: true,
   );
+
+  BoardSettings toBoardSettings() {
+    return BoardSettings(
+      pieceAssets: pieceSet.assets,
+      colorScheme: boardTheme.colors,
+      showValidMoves: showLegalMoves,
+      showLastMove: boardHighlights,
+      enableCoordinates: coordinates,
+      animationDuration: pieceAnimationDuration,
+      dragFeedbackSize: magnifyDraggedPiece ? 2.0 : 1.0,
+      dragFeedbackOffset: Offset(0.0, magnifyDraggedPiece ? -1.0 : 0.0),
+      pieceShiftMethod: pieceShiftMethod,
+      drawShape: DrawShapeOptions(
+        enable: enableShapeDrawings,
+      ),
+    );
+  }
 
   factory BoardPrefs.fromJson(Map<String, dynamic> json) {
     try {
@@ -203,13 +250,13 @@ enum BoardTheme {
 
   Widget get thumbnail => this == BoardTheme.system
       ? SizedBox(
-          height: 32,
-          width: 32 * 6,
+          height: 44,
+          width: 44 * 6,
           child: Row(
             children: [
               for (final c in const [1, 2, 3, 4, 5, 6])
                 Container(
-                  width: 32,
+                  width: 44,
                   color: c.isEven
                       ? BoardTheme.system.colors.darkSquare
                       : BoardTheme.system.colors.lightSquare,
@@ -219,7 +266,7 @@ enum BoardTheme {
         )
       : Image.asset(
           'assets/board-thumbnails/$name.jpg',
-          height: 32,
+          height: 44,
           errorBuilder: (context, o, st) => const SizedBox.shrink(),
         );
 }

@@ -44,6 +44,8 @@ Uri lichessUri(String unencodedPath, [Map<String, dynamic>? queryParameters]) =>
         : Uri.https(kLichessHost, unencodedPath, queryParameters);
 
 /// Creates the appropriate http client for the platform.
+///
+/// Do not use directly, use [defaultClient] or [lichessClient] instead.
 Client httpClientFactory() {
   const userAgent = 'Lichess Mobile';
   if (Platform.isAndroid) {

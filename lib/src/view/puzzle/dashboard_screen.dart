@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -115,7 +116,10 @@ class PuzzleDashboardWidget extends ConsumerWidget {
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: AspectRatio(
-                  aspectRatio: 1.2,
+                  aspectRatio:
+                      MediaQuery.sizeOf(context).width > FormFactor.desktop
+                          ? 2.8
+                          : 1.2,
                   child: PuzzleChart(chartData),
                 ),
               ),

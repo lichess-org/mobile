@@ -2,6 +2,8 @@ import 'package:intl/intl.dart' as intl;
 
 import 'l10n.dart';
 
+// ignore_for_file: type=lint
+
 /// The translations for Galician (`gl`).
 class AppLocalizationsGl extends AppLocalizations {
   AppLocalizationsGl([String locale = 'gl']) : super(locale);
@@ -10,7 +12,7 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobileHomeTab => 'Inicio';
 
   @override
-  String get mobilePuzzlesTab => 'Crebacabezas';
+  String get mobilePuzzlesTab => 'Problemas';
 
   @override
   String get mobileToolsTab => 'Ferramentas';
@@ -22,105 +24,125 @@ class AppLocalizationsGl extends AppLocalizations {
   String get mobileSettingsTab => 'Axustes';
 
   @override
-  String get mobileMustBeLoggedIn => 'You must be logged in to view this page.';
+  String get mobileMustBeLoggedIn => 'Debes iniciar sesión para ver esta páxina.';
 
   @override
-  String get mobileSystemColors => 'System colors';
+  String get mobileSystemColors => 'Cores do sistema';
 
   @override
-  String get mobileFeedbackButton => 'Feedback';
+  String get mobileFeedbackButton => 'Comentarios';
 
   @override
   String get mobileOkButton => 'OK';
 
   @override
-  String get mobileSettingsHapticFeedback => 'Haptic feedback';
+  String get mobileSettingsHapticFeedback => 'Vibración ó mover';
 
   @override
-  String get mobileSettingsImmersiveMode => 'Immersive mode';
+  String get mobileSettingsImmersiveMode => 'Pantalla completa';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.';
+  String get mobileSettingsImmersiveModeSubtitle => 'Oculta a Interface de Usuario mentres xogas. Emprega esta opción se che molestan os xestos de navegación do sistema ós bordos da pantalla. Aplícase ás pantallas da partida e á de Puzzle Storm.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'You are not following any user.';
+  String get mobileNotFollowingAnyUser => 'Non estás a seguir a ningún usuario.';
 
   @override
-  String get mobileAllGames => 'All games';
+  String get mobileAllGames => 'Todas as partidas';
 
   @override
-  String get mobileRecentSearches => 'Recent searches';
+  String get mobileRecentSearches => 'Procuras recentes';
 
   @override
-  String get mobileClearButton => 'Clear';
+  String get mobileClearButton => 'Borrar';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
-    return 'Players with \"$param\"';
+    return 'Xogadores con \"$param\"';
   }
 
   @override
-  String get mobileNoSearchResults => 'No results';
+  String get mobileNoSearchResults => 'Sen resultados';
 
   @override
-  String get mobileAreYouSure => 'Are you sure?';
+  String get mobileAreYouSure => 'Estás seguro?';
 
   @override
-  String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
+  String get mobilePuzzleStreakAbortWarning => 'Perderás a túa secuencia actual e o teu resultado gardarase.';
 
   @override
-  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of storm';
+  String get mobilePuzzleStormNothingToShow => 'Non hai nada que amosar. Primeiro xoga algunha quenda de Puzzle Storm.';
 
   @override
-  String get mobileSharePuzzle => 'Share this puzzle';
+  String get mobileSharePuzzle => 'Compartir este crebacabezas';
 
   @override
-  String get mobileShareGameURL => 'Share game URL';
+  String get mobileShareGameURL => 'Compartir a URL da partida';
 
   @override
-  String get mobileShareGamePGN => 'Share PGN';
+  String get mobileShareGamePGN => 'Compartir PGN';
 
   @override
-  String get mobileSharePositionAsFEN => 'Share position as FEN';
+  String get mobileSharePositionAsFEN => 'Compartir a posición coma FEN';
 
   @override
-  String get mobileShowVariations => 'Show variations';
+  String get mobileShowVariations => 'Amosar variantes';
 
   @override
-  String get mobileHideVariation => 'Hide variation';
+  String get mobileHideVariation => 'Ocultar variantes';
 
   @override
-  String get mobileShowComments => 'Show comments';
+  String get mobileShowComments => 'Amosar comentarios';
 
   @override
-  String get mobilePuzzleStormConfirmEndRun => 'Do you want to end this run?';
+  String get mobilePuzzleStormConfirmEndRun => 'Queres rematar esta quenda?';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow => 'Nothing to show, please change the filters';
+  String get mobilePuzzleStormFilterNothingToShow => 'Non aparece nada. Por favor, cambia os filtros';
 
   @override
-  String get mobileCancelTakebackOffer => 'Cancel takeback offer';
+  String get mobileCancelTakebackOffer => 'Cancelar a proposta de cambio';
 
   @override
-  String get mobileCancelDrawOffer => 'Cancel draw offer';
+  String get mobileCancelDrawOffer => 'Cancelar a oferta de táboas';
 
   @override
-  String get mobileWaitingForOpponentToJoin => 'Waiting for opponent to join...';
+  String get mobileWaitingForOpponentToJoin => 'Agardando un rival...';
 
   @override
-  String get mobileBlindfoldMode => 'Blindfold';
+  String get mobileBlindfoldMode => 'Á cega';
 
   @override
-  String get mobileLiveStreamers => 'Live streamers';
+  String get mobileLiveStreamers => 'Presentadores en directo';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Join a game';
+  String get mobileCustomGameJoinAGame => 'Unirse a unha partida';
 
   @override
-  String get mobileCorrespondenceClearSavedMove => 'Clear saved move';
+  String get mobileCorrespondenceClearSavedMove => 'Borrar a xogada gardada';
 
   @override
-  String get mobileSomethingWentWrong => 'Something went wrong.';
+  String get mobileSomethingWentWrong => 'Algo foi mal.';
+
+  @override
+  String get mobileShowResult => 'Amosar o resultado';
+
+  @override
+  String get mobilePuzzleThemesSubtitle => 'Resolve crebacabezas das túas aperturas favoritas ou elixe un tema.';
+
+  @override
+  String get mobilePuzzleStormSubtitle => 'Resolve tantos crebacabezas como sexa posible en 3 minutos.';
+
+  @override
+  String mobileGreeting(String param) {
+    return 'Ola, $param';
+  }
+
+  @override
+  String get mobileGreetingWithoutName => 'Ola';
+
+  @override
+  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
 
   @override
   String get activityActivity => 'Actividade';
@@ -1856,6 +1878,9 @@ class AppLocalizationsGl extends AppLocalizations {
   String get friends => 'Amizades';
 
   @override
+  String get otherPlayers => 'outros xogadores';
+
+  @override
   String get discussions => 'Conversas';
 
   @override
@@ -2685,6 +2710,12 @@ class AppLocalizationsGl extends AppLocalizations {
 
   @override
   String get yes => 'Si';
+
+  @override
+  String get website => 'Páxina web';
+
+  @override
+  String get mobile => 'Móbil';
 
   @override
   String get help => 'Axuda:';

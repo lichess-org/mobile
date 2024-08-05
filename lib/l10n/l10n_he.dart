@@ -2,6 +2,8 @@ import 'package:intl/intl.dart' as intl;
 
 import 'l10n.dart';
 
+// ignore_for_file: type=lint
+
 /// The translations for Hebrew (`he`).
 class AppLocalizationsHe extends AppLocalizations {
   AppLocalizationsHe([String locale = 'he']) : super(locale);
@@ -22,105 +24,125 @@ class AppLocalizationsHe extends AppLocalizations {
   String get mobileSettingsTab => 'הגדרות';
 
   @override
-  String get mobileMustBeLoggedIn => 'You must be logged in to view this page.';
+  String get mobileMustBeLoggedIn => 'יש להתחבר כדי לצפות בדף זה.';
 
   @override
-  String get mobileSystemColors => 'System colors';
+  String get mobileSystemColors => 'צבעי מערכת ההפעלה';
 
   @override
-  String get mobileFeedbackButton => 'Feedback';
+  String get mobileFeedbackButton => 'משוב';
 
   @override
-  String get mobileOkButton => 'OK';
+  String get mobileOkButton => 'בסדר';
 
   @override
-  String get mobileSettingsHapticFeedback => 'Haptic feedback';
+  String get mobileSettingsHapticFeedback => 'רטט בכל מהלך';
 
   @override
-  String get mobileSettingsImmersiveMode => 'Immersive mode';
+  String get mobileSettingsImmersiveMode => 'מצב ריכוז';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.';
+  String get mobileSettingsImmersiveModeSubtitle => 'הסתירו את שאר הממשק במהלך המשחק. מומלץ להפעיל הגדרה זו אם אפשרויות הניווט בקצות הלוח מפריעות לכם לשחק. רלוונטי למשחקים ול־Puzzle Storm.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'You are not following any user.';
+  String get mobileNotFollowingAnyUser => 'אינכם עוקבים אחר אף אחד.';
 
   @override
-  String get mobileAllGames => 'All games';
+  String get mobileAllGames => 'כל המשחקים';
 
   @override
-  String get mobileRecentSearches => 'Recent searches';
+  String get mobileRecentSearches => 'חיפושים אחרונים';
 
   @override
-  String get mobileClearButton => 'Clear';
+  String get mobileClearButton => 'ניקוי';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
-    return 'Players with \"$param\"';
+    return 'שחקנים עם ״$param״';
   }
 
   @override
-  String get mobileNoSearchResults => 'No results';
+  String get mobileNoSearchResults => 'אין תוצאות';
 
   @override
-  String get mobileAreYouSure => 'Are you sure?';
+  String get mobileAreYouSure => 'בטוח?';
 
   @override
-  String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
+  String get mobilePuzzleStreakAbortWarning => 'הרצף הנוכחי שלך ייאבד אך הניקוד יישמר.';
 
   @override
-  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of storm';
+  String get mobilePuzzleStormNothingToShow => 'אין מה להראות. שחקו כמה סיבובים של Puzzle Storm קודם.';
 
   @override
-  String get mobileSharePuzzle => 'Share this puzzle';
+  String get mobileSharePuzzle => 'שיתוף החידה';
 
   @override
-  String get mobileShareGameURL => 'Share game URL';
+  String get mobileShareGameURL => 'שיתוף הקישור למשחק';
 
   @override
-  String get mobileShareGamePGN => 'Share PGN';
+  String get mobileShareGamePGN => 'שיתוף ה־PGN';
 
   @override
-  String get mobileSharePositionAsFEN => 'Share position as FEN';
+  String get mobileSharePositionAsFEN => 'שיתוף העמדה כ־FEN';
 
   @override
-  String get mobileShowVariations => 'Show variations';
+  String get mobileShowVariations => 'הצגת וריאציות';
 
   @override
-  String get mobileHideVariation => 'Hide variation';
+  String get mobileHideVariation => 'הסתרת וריאציות';
 
   @override
-  String get mobileShowComments => 'Show comments';
+  String get mobileShowComments => 'הצגת הערות';
 
   @override
-  String get mobilePuzzleStormConfirmEndRun => 'Do you want to end this run?';
+  String get mobilePuzzleStormConfirmEndRun => 'האם לסיים את הסבב?';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow => 'Nothing to show, please change the filters';
+  String get mobilePuzzleStormFilterNothingToShow => 'אין מה להראות. ניתן לשנות את חתכי הסינון';
 
   @override
-  String get mobileCancelTakebackOffer => 'Cancel takeback offer';
+  String get mobileCancelTakebackOffer => 'ביטול ההצעה להחזיר את המהלך האחרון';
 
   @override
-  String get mobileCancelDrawOffer => 'Cancel draw offer';
+  String get mobileCancelDrawOffer => 'ביטול הצעת התיקו';
 
   @override
-  String get mobileWaitingForOpponentToJoin => 'Waiting for opponent to join...';
+  String get mobileWaitingForOpponentToJoin => 'ממתין שיריב יצטרף...';
 
   @override
-  String get mobileBlindfoldMode => 'Blindfold';
+  String get mobileBlindfoldMode => 'משחק עיוור';
 
   @override
-  String get mobileLiveStreamers => 'Live streamers';
+  String get mobileLiveStreamers => 'שדרנים בשידור חי';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Join a game';
+  String get mobileCustomGameJoinAGame => 'הצטרפות למשחק';
 
   @override
-  String get mobileCorrespondenceClearSavedMove => 'Clear saved move';
+  String get mobileCorrespondenceClearSavedMove => 'ניקוי המהלך השמור';
 
   @override
-  String get mobileSomethingWentWrong => 'Something went wrong.';
+  String get mobileSomethingWentWrong => 'משהו השתבש.';
+
+  @override
+  String get mobileShowResult => 'הצגת תוצאת המשחק';
+
+  @override
+  String get mobilePuzzleThemesSubtitle => 'פתרו חידות עם הפתיחות האהובות עליכם או בחרו ממגוון נושאים.';
+
+  @override
+  String get mobilePuzzleStormSubtitle => 'פתרו כמה שיותר חידות ב־3 דקות.';
+
+  @override
+  String mobileGreeting(String param) {
+    return 'שלום, $param';
+  }
+
+  @override
+  String get mobileGreetingWithoutName => 'שלום';
+
+  @override
+  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
 
   @override
   String get activityActivity => 'פעילות';
@@ -167,10 +189,10 @@ class AppLocalizationsHe extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'פתר/ה $count פאזלים טקטיים',
-      many: 'פתר/ה $count פאזלים טקטיים',
-      two: 'פתר/ה $count פאזלים טקטיים',
-      one: 'פתר/ה פאזל טקטי $count',
+      other: 'פתר/ה $count חידות טקטיות',
+      many: 'פתר/ה $count חידות טקטיות',
+      two: 'פתר/ה $count חידות טקטיות',
+      one: 'פתר/ה חידה טקטית $count',
     );
     return '$_temp0';
   }
@@ -1900,6 +1922,9 @@ class AppLocalizationsHe extends AppLocalizations {
   String get friends => 'חברים';
 
   @override
+  String get otherPlayers => 'שחקנים אחרים';
+
+  @override
   String get discussions => 'דיונים';
 
   @override
@@ -2729,6 +2754,12 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get yes => 'כן';
+
+  @override
+  String get website => 'אתר האינטרנט';
+
+  @override
+  String get mobile => 'האפליקציה';
 
   @override
   String get help => 'עזרה:';
