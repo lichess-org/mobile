@@ -32,7 +32,7 @@ class MoveConverter implements JsonConverter<Move, String> {
 
   // assume we are serializing only valid uci strings
   @override
-  Move fromJson(String json) => Move.fromUci(json)!;
+  Move fromJson(String json) => Move.parse(json)!;
 
   @override
   String toJson(Move object) => object.uci;
@@ -208,7 +208,7 @@ extension ChessExtension on Pick {
       return value;
     }
     if (value is String) {
-      final move = Move.fromUci(value);
+      final move = Move.parse(value);
       if (move != null) {
         return move;
       } else {

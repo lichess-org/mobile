@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 import 'dart:ui';
 
-import 'package:chessground/chessground.dart' as cg;
+import 'package:chessground/chessground.dart';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
@@ -27,7 +27,6 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
@@ -377,9 +376,9 @@ class _Board extends ConsumerStatefulWidget {
 }
 
 class _BoardState extends ConsumerState<_Board> {
-  ISet<cg.Shape> userShapes = ISet();
+  ISet<Shape> userShapes = ISet();
 
-  ISet<cg.Shape> _computeBestMoveShapes(IList<MoveWithWinningChances> moves) {
+  ISet<Shape> _computeBestMoveShapes(IList<MoveWithWinningChances> moves) {
     // Scale down all moves with index > 0 based on how much worse their winning chances are compared to the best move
     // (assume moves are ordered by their winning chances, so index==0 is the best move)
     double scaleArrowAgainstBestMove(int index) {
@@ -414,25 +413,25 @@ class _BoardState extends ConsumerState<_Board> {
           switch (move) {
             case NormalMove(from: _, to: _, promotion: final promRole):
               return [
-                cg.Arrow(
+                Arrow(
                   color: color,
-                  orig: move.cg.from,
-                  dest: move.cg.to,
+                  orig: move.from,
+                  dest: move.to,
                   scale: scaleArrowAgainstBestMove(i),
                 ),
                 if (promRole != null)
-                  cg.PieceShape(
+                  PieceShape(
                     color: color,
-                    orig: move.cg.to,
-                    role: promRole.cg,
+                    orig: move.to,
+                    role: promRole,
                   ),
               ];
             case DropMove(role: final role, to: _):
               return [
-                cg.PieceShape(
+                PieceShape(
                   color: color,
-                  orig: move.cg.to,
-                  role: role.cg,
+                  orig: move.to,
+                  role: role,
                 ),
               ];
           }
@@ -466,45 +465,45 @@ class _BoardState extends ConsumerState<_Board> {
 
     final sanMove = currentNode.sanMove;
 
-    final ISet<cg.Shape> bestMoveShapes = showBestMoveArrow &&
+    final ISet<Shape> bestMoveShapes = showBestMoveArrow &&
             analysisState.isEngineAvailable &&
             bestMoves != null
         ? _computeBestMoveShapes(bestMoves)
         : ISet();
 
-    return cg.Board(
+    return Chessboard(
       size: widget.boardSize,
       onMove: (move, {isDrop, isPremove}) =>
-          ref.read(ctrlProvider.notifier).onUserMove(Move.fromUci(move.uci)!),
-      data: cg.BoardData(
-        orientation: analysisState.pov.cg,
+          ref.read(ctrlProvider.notifier).onUserMove(Move.parse(move.uci)!),
+      state: ChessboardState(
+        orientation: analysisState.pov,
         interactableSide: analysisState.position.isGameOver
-            ? cg.InteractableSide.none
+            ? InteractableSide.none
             : analysisState.position.turn == Side.white
-                ? cg.InteractableSide.white
-                : cg.InteractableSide.black,
+                ? InteractableSide.white
+                : InteractableSide.black,
         fen: analysisState.position.fen,
         isCheck: boardPrefs.boardHighlights && analysisState.position.isCheck,
-        lastMove: analysisState.lastMove?.cg,
-        sideToMove: analysisState.position.turn.cg,
+        lastMove: analysisState.lastMove as NormalMove?,
+        sideToMove: analysisState.position.turn,
         validMoves: analysisState.validMoves,
         shapes: userShapes.union(bestMoveShapes),
-        annotations:
-            showAnnotationsOnBoard && sanMove != null && annotation != null
-                ? altCastles.containsKey(sanMove.move.uci)
-                    ? IMap({
-                        Move.fromUci(altCastles[sanMove.move.uci]!)!.cg.to:
-                            annotation,
-                      })
-                    : IMap({sanMove.move.cg.to: annotation})
-                : null,
+        annotations: showAnnotationsOnBoard &&
+                sanMove != null &&
+                annotation != null
+            ? altCastles.containsKey(sanMove.move.uci)
+                ? IMap({
+                    Move.parse(altCastles[sanMove.move.uci]!)!.to: annotation,
+                  })
+                : IMap({sanMove.move.to: annotation})
+            : null,
       ),
       settings: boardPrefs.toBoardSettings().copyWith(
             borderRadius: widget.isTablet
                 ? const BorderRadius.all(Radius.circular(4.0))
                 : BorderRadius.zero,
             boxShadow: widget.isTablet ? boardShadows : const <BoxShadow>[],
-            drawShape: cg.DrawShapeOptions(
+            drawShape: DrawShapeOptions(
               enable: true,
               onCompleteShape: _onCompleteShape,
               onClearShapes: _onClearShapes,
@@ -513,7 +512,7 @@ class _BoardState extends ConsumerState<_Board> {
     );
   }
 
-  void _onCompleteShape(cg.Shape shape) {
+  void _onCompleteShape(Shape shape) {
     if (userShapes.any((element) => element == shape)) {
       setState(() {
         userShapes = userShapes.remove(shape);
@@ -687,7 +686,7 @@ class _Engineline extends ConsumerWidget {
     return AdaptiveInkWell(
       onTap: () => ref
           .read(ctrlProvider.notifier)
-          .onUserMove(Move.fromUci(pvData.moves[0])!),
+          .onUserMove(Move.parse(pvData.moves[0])!),
       child: SizedBox(
         height: kEvalGaugeSize,
         child: Padding(

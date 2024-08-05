@@ -5,18 +5,18 @@ import 'package:lichess_mobile/src/model/common/uci.dart';
 void main() {
   test('UciCharPair', () {
     // regular moves
-    expect(UciCharPair.fromMove(Move.fromUci('a1b1')!).toString(), '#\$');
-    expect(UciCharPair.fromMove(Move.fromUci('a1a2')!).toString(), '#+');
-    expect(UciCharPair.fromMove(Move.fromUci('h7h8')!).toString(), 'Zb');
+    expect(UciCharPair.fromMove(Move.parse('a1b1')!).toString(), '#\$');
+    expect(UciCharPair.fromMove(Move.parse('a1a2')!).toString(), '#+');
+    expect(UciCharPair.fromMove(Move.parse('h7h8')!).toString(), 'Zb');
 
     // promotions
-    expect(UciCharPair.fromMove(Move.fromUci('b7b8q')!).toString(), 'Td');
-    expect(UciCharPair.fromMove(Move.fromUci('b7c8q')!).toString(), 'Te');
-    expect(UciCharPair.fromMove(Move.fromUci('b7c8n')!).toString(), 'T}');
+    expect(UciCharPair.fromMove(Move.parse('b7b8q')!).toString(), 'Td');
+    expect(UciCharPair.fromMove(Move.parse('b7c8q')!).toString(), 'Te');
+    expect(UciCharPair.fromMove(Move.parse('b7c8n')!).toString(), 'T}');
 
     // drops
-    expect(UciCharPair.fromMove(Move.fromUci('P@a1')!).toString(), '#\x8f');
-    expect(UciCharPair.fromMove(Move.fromUci('Q@h8')!).toString(), 'b\x8b');
+    expect(UciCharPair.fromMove(Move.parse('P@a1')!).toString(), '#\x8f');
+    expect(UciCharPair.fromMove(Move.parse('Q@h8')!).toString(), 'b\x8b');
   });
 
   group('UciPath', () {

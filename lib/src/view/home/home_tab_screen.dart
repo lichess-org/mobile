@@ -11,7 +11,6 @@ import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/settings/home_preferences.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -744,8 +743,8 @@ class _GamePreviewCarouselItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return BoardCarouselItem(
       fen: game.fen,
-      orientation: game.orientation.cg,
-      lastMove: game.lastMove?.cg,
+      orientation: game.orientation,
+      lastMove: game.lastMove,
       description: Align(
         alignment: Alignment.centerLeft,
         child: Padding(

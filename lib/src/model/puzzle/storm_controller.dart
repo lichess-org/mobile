@@ -3,7 +3,6 @@ import 'dart:core';
 import 'dart:math' as math;
 
 import 'package:async/async.dart';
-import 'package:chessground/chessground.dart' as cg;
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/services.dart';
@@ -119,7 +118,7 @@ class StormController extends _$StormController {
     }
   }
 
-  void setPremove(cg.Move? move) {
+  void setPremove(Move? move) {
     state = state.copyWith(
       premove: move,
     );
@@ -335,17 +334,17 @@ class StormState with _$StormState {
     required bool firstMovePlayed,
 
     /// premove to be played
-    cg.Move? premove,
+    Move? premove,
   }) = _StormState;
 
-  Move? get expectedMove => Move.fromUci(puzzle.solution[moveIndex + 1]);
+  Move? get expectedMove => Move.parse(puzzle.solution[moveIndex + 1]);
 
   Move? get lastMove =>
-      moveIndex == -1 ? null : Move.fromUci(puzzle.solution[moveIndex]);
+      moveIndex == -1 ? null : Move.parse(puzzle.solution[moveIndex]);
 
   bool get isOver => moveIndex >= puzzle.solution.length - 1;
 
-  IMap<String, ISet<String>> get validMoves => algebraicLegalMoves(position);
+  IMap<Square, ISet<Square>> get validMoves => makeLegalMoves(position);
 }
 
 enum StormMode { initial, running, ended }

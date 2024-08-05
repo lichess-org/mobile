@@ -8,12 +8,13 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
+import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_text_field.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
-class AnalysisPositionChoiceScreen extends StatelessWidget {
-  const AnalysisPositionChoiceScreen({super.key});
+class LoadPositionScreen extends StatelessWidget {
+  const LoadPositionScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +86,7 @@ class _BodyState extends State<_Body> {
               child: AdaptiveTextField(
                 maxLines: 500,
                 placeholder:
-                    '${context.l10n.pasteTheFenStringHere}\n\n${context.l10n.pasteThePgnStringHere}\n\nLeave empty for initial position',
+                    '${context.l10n.pasteTheFenStringHere} / ${context.l10n.pasteThePgnStringHere}',
                 controller: _controller,
                 readOnly: true,
                 onTap: _getClipboardData,
@@ -94,19 +95,36 @@ class _BodyState extends State<_Body> {
           ),
           Padding(
             padding: Styles.bodySectionBottomPadding,
-            child: FatButton(
-              semanticsLabel: context.l10n.analysis,
-              onPressed: parsedInput != null
-                  ? () => pushPlatformRoute(
-                        context,
-                        rootNavigator: true,
-                        builder: (context) => AnalysisScreen(
-                          pgnOrId: parsedInput!.$1,
-                          options: parsedInput!.$2,
-                        ),
-                      )
-                  : null,
-              child: Text(context.l10n.studyStart),
+            child: Column(
+              children: [
+                FatButton(
+                  semanticsLabel: context.l10n.analysis,
+                  onPressed: parsedInput != null
+                      ? () => pushPlatformRoute(
+                            context,
+                            rootNavigator: true,
+                            builder: (context) => AnalysisScreen(
+                              pgnOrId: parsedInput!.pgn,
+                              options: parsedInput!.options,
+                            ),
+                          )
+                      : null,
+                  child: Text(context.l10n.analysis),
+                ),
+                const SizedBox(height: 16.0),
+                FatButton(
+                  semanticsLabel: context.l10n.boardEditor,
+                  onPressed: parsedInput != null
+                      ? () => pushPlatformRoute(
+                            context,
+                            rootNavigator: true,
+                            builder: (context) =>
+                                BoardEditorScreen(initialFen: parsedInput!.fen),
+                          )
+                      : null,
+                  child: Text(context.l10n.boardEditor),
+                ),
+              ],
             ),
           ),
         ],
@@ -121,25 +139,18 @@ class _BodyState extends State<_Body> {
     }
   }
 
-  (String, AnalysisOptions)? get parsedInput {
+  ({String pgn, String fen, AnalysisOptions options})? get parsedInput {
     if (textInput == null || textInput!.trim().isEmpty) {
-      return const (
-        '',
-        AnalysisOptions(
-          isLocalEvaluationAllowed: true,
-          variant: Variant.standard,
-          orientation: Side.white,
-          id: standaloneAnalysisId,
-        )
-      );
+      return null;
     }
 
     // try to parse as FEN first
     try {
       final pos = Chess.fromSetup(Setup.parseFen(textInput!.trim()));
       return (
-        '[FEN "${pos.fen}"]',
-        const AnalysisOptions(
+        pgn: '[FEN "${pos.fen}"]',
+        fen: pos.fen,
+        options: const AnalysisOptions(
           isLocalEvaluationAllowed: true,
           variant: Variant.standard,
           orientation: Side.white,
@@ -162,9 +173,15 @@ class _BodyState extends State<_Body> {
         return null;
       }
 
+      final lastPosition = mainlineMoves.fold(
+        initialPosition,
+        (pos, move) => pos.play(pos.parseSan(move.san)!),
+      );
+
       return (
-        textInput!,
-        AnalysisOptions(
+        pgn: textInput!,
+        fen: lastPosition.fen,
+        options: AnalysisOptions(
           isLocalEvaluationAllowed: true,
           variant: rule != null ? Variant.fromRule(rule) : Variant.standard,
           initialMoveCursor: mainlineMoves.isEmpty ? 0 : 1,

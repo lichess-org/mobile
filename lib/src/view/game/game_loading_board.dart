@@ -1,4 +1,4 @@
-import 'package:chessground/chessground.dart' as cg;
+import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +8,6 @@ import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_numbers.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
@@ -29,11 +28,7 @@ class LobbyScreenLoadingContent extends StatelessWidget {
           child: SafeArea(
             bottom: false,
             child: BoardTable(
-              boardData: const cg.BoardData(
-                interactableSide: cg.InteractableSide.none,
-                orientation: cg.Side.white,
-                fen: kEmptyFen,
-              ),
+              boardState: kEmptyBoardState,
               topTable: const SizedBox.shrink(),
               bottomTable: const SizedBox.shrink(),
               showMoveListPlaceholder: true,
@@ -112,11 +107,7 @@ class ChallengeLoadingContent extends StatelessWidget {
           child: SafeArea(
             bottom: false,
             child: BoardTable(
-              boardData: const cg.BoardData(
-                interactableSide: cg.InteractableSide.none,
-                orientation: cg.Side.white,
-                fen: kEmptyFen,
-              ),
+              boardState: kEmptyBoardState,
               topTable: const SizedBox.shrink(),
               bottomTable: const SizedBox.shrink(),
               showMoveListPlaceholder: true,
@@ -192,11 +183,11 @@ class StandaloneGameLoadingBoard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BoardTable(
-      boardData: cg.BoardData(
-        interactableSide: cg.InteractableSide.none,
-        orientation: orientation?.cg ?? cg.Side.white,
+      boardState: ChessboardState(
+        interactableSide: InteractableSide.none,
+        orientation: orientation ?? Side.white,
         fen: fen ?? kEmptyFen,
-        lastMove: lastMove?.cg,
+        lastMove: lastMove as NormalMove?,
       ),
       topTable: const SizedBox.shrink(),
       bottomTable: const SizedBox.shrink(),
@@ -218,9 +209,9 @@ class LoadGameError extends StatelessWidget {
           child: SafeArea(
             bottom: false,
             child: BoardTable(
-              boardData: const cg.BoardData(
-                interactableSide: cg.InteractableSide.none,
-                orientation: cg.Side.white,
+              boardState: const ChessboardState(
+                interactableSide: InteractableSide.none,
+                orientation: Side.white,
                 fen: kEmptyFen,
               ),
               topTable: const SizedBox.shrink(),
@@ -263,9 +254,9 @@ class ChallengeDeclinedBoard extends StatelessWidget {
           child: SafeArea(
             bottom: false,
             child: BoardTable(
-              boardData: const cg.BoardData(
-                interactableSide: cg.InteractableSide.none,
-                orientation: cg.Side.white,
+              boardState: const ChessboardState(
+                interactableSide: InteractableSide.none,
+                orientation: Side.white,
                 fen: kEmptyFen,
               ),
               topTable: const SizedBox.shrink(),

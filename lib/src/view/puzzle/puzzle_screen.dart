@@ -1,4 +1,4 @@
-import 'package:chessground/chessground.dart' as cg;
+import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
@@ -23,7 +23,6 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -175,11 +174,7 @@ class _LoadNextPuzzle extends ConsumerWidget {
             child: BoardTable(
               topTable: kEmptyWidget,
               bottomTable: kEmptyWidget,
-              boardData: cg.BoardData(
-                fen: kEmptyFen,
-                interactableSide: cg.InteractableSide.none,
-                orientation: cg.Side.white,
-              ),
+              boardState: kEmptyBoardState,
               errorMessage: 'No more puzzles. Go online to get more.',
             ),
           );
@@ -198,11 +193,7 @@ class _LoadNextPuzzle extends ConsumerWidget {
           child: BoardTable(
             topTable: kEmptyWidget,
             bottomTable: kEmptyWidget,
-            boardData: const cg.BoardData(
-              fen: kEmptyFen,
-              interactableSide: cg.InteractableSide.none,
-              orientation: cg.Side.white,
-            ),
+            boardState: kEmptyBoardState,
             errorMessage: e.toString(),
           ),
         );
@@ -238,10 +229,10 @@ class _LoadPuzzleFromId extends ConsumerWidget {
             child: SafeArea(
               bottom: false,
               child: BoardTable(
-                boardData: cg.BoardData(
+                boardState: ChessboardState(
                   fen: kEmptyFen,
-                  interactableSide: cg.InteractableSide.none,
-                  orientation: cg.Side.white,
+                  interactableSide: InteractableSide.none,
+                  orientation: Side.white,
                 ),
                 topTable: kEmptyWidget,
                 bottomTable: kEmptyWidget,
@@ -261,11 +252,7 @@ class _LoadPuzzleFromId extends ConsumerWidget {
               child: SafeArea(
                 bottom: false,
                 child: BoardTable(
-                  boardData: const cg.BoardData(
-                    fen: kEmptyFen,
-                    interactableSide: cg.InteractableSide.none,
-                    orientation: cg.Side.white,
-                  ),
+                  boardState: kEmptyBoardState,
                   topTable: kEmptyWidget,
                   bottomTable: kEmptyWidget,
                   errorMessage: e.toString(),
@@ -298,7 +285,7 @@ class _Body extends ConsumerWidget {
       engineEvaluationProvider.select((s) => s.eval?.bestMove),
     );
     final evalBestMove =
-        (currentEvalBest ?? puzzleState.node.eval?.bestMove)?.cg;
+        (currentEvalBest ?? puzzleState.node.eval?.bestMove) as NormalMove?;
 
     return Column(
       children: [
@@ -309,27 +296,27 @@ class _Body extends ConsumerWidget {
               onMove: (move, {isDrop, isPremove}) {
                 ref
                     .read(ctrlProvider.notifier)
-                    .onUserMove(Move.fromUci(move.uci)!);
+                    .onUserMove(Move.parse(move.uci)!);
               },
-              boardData: cg.BoardData(
-                orientation: puzzleState.pov.cg,
+              boardState: ChessboardState(
+                orientation: puzzleState.pov,
                 interactableSide: puzzleState.mode == PuzzleMode.load ||
                         puzzleState.position.isGameOver
-                    ? cg.InteractableSide.none
+                    ? InteractableSide.none
                     : puzzleState.mode == PuzzleMode.view
-                        ? cg.InteractableSide.both
+                        ? InteractableSide.both
                         : puzzleState.pov == Side.white
-                            ? cg.InteractableSide.white
-                            : cg.InteractableSide.black,
+                            ? InteractableSide.white
+                            : InteractableSide.black,
                 fen: puzzleState.fen,
                 isCheck: boardPreferences.boardHighlights &&
                     puzzleState.position.isCheck,
-                lastMove: puzzleState.lastMove?.cg,
-                sideToMove: puzzleState.position.turn.cg,
+                lastMove: puzzleState.lastMove as NormalMove?,
+                sideToMove: puzzleState.position.turn,
                 validMoves: puzzleState.validMoves,
                 shapes: puzzleState.isEngineEnabled && evalBestMove != null
                     ? ISet([
-                        cg.Arrow(
+                        Arrow(
                           color: const Color(0x40003088),
                           orig: evalBestMove.from,
                           dest: evalBestMove.to,

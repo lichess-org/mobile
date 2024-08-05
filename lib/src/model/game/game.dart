@@ -384,7 +384,7 @@ IList<GameStep> stepsFromJson(String json) {
     if (uci == null || san == null) {
       break;
     }
-    final move = Move.fromUci(uci)!;
+    final move = Move.parse(uci)!;
     position = position.playUnchecked(move);
     steps.add(
       GameStep(

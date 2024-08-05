@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math' as math;
 
-import 'package:chessground/chessground.dart' as cg;
+import 'package:chessground/chessground.dart';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
@@ -17,7 +17,6 @@ import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_preferences.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
-import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -242,7 +241,7 @@ class GameBody extends ConsumerWidget {
                       ),
                       onMove: (move, {isDrop, isPremove}) {
                         ref.read(ctrlProvider.notifier).onUserMove(
-                              Move.fromUci(move.uci)!,
+                              Move.parse(move.uci)!,
                               isPremove: isPremove,
                               isDrop: isDrop,
                             );
@@ -252,23 +251,22 @@ class GameBody extends ConsumerWidget {
                               ref.read(ctrlProvider.notifier).setPremove(move);
                             }
                           : null,
-                      boardData: cg.BoardData(
+                      boardState: ChessboardState(
                         interactableSide:
                             gameState.game.playable && !gameState.isReplaying
                                 ? youAre == Side.white
-                                    ? cg.InteractableSide.white
-                                    : cg.InteractableSide.black
-                                : cg.InteractableSide.none,
-                        orientation:
-                            isBoardTurned ? youAre.opposite.cg : youAre.cg,
+                                    ? InteractableSide.white
+                                    : InteractableSide.black
+                                : InteractableSide.none,
+                        orientation: isBoardTurned ? youAre.opposite : youAre,
                         fen: position.fen,
-                        lastMove:
-                            gameState.game.moveAt(gameState.stepCursor)?.cg,
+                        lastMove: gameState.game.moveAt(gameState.stepCursor)
+                            as NormalMove?,
                         isCheck: boardPreferences.boardHighlights &&
                             position.isCheck,
-                        sideToMove: position.turn.cg,
-                        validMoves: algebraicLegalMoves(position),
-                        premove: gameState.premove,
+                        sideToMove: position.turn,
+                        validMoves: makeLegalMoves(position),
+                        premove: gameState.premove as NormalMove?,
                       ),
                       topTable: topPlayer,
                       bottomTable: gameState.canShowClaimWinCountdown &&

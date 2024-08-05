@@ -208,7 +208,7 @@ abstract class Node {
   /// castling move and converts it to the corresponding standard castling move if so.
   Move? convertAltCastlingMove(Move move) {
     return altCastles.containsValue(move.uci)
-        ? Move.fromUci(
+        ? Move.parse(
             altCastles.entries.firstWhere((e) => e.value == move.uci).key,
           )
         : move;

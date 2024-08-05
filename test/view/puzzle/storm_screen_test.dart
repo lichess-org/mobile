@@ -1,4 +1,5 @@
-import 'package:chessground/chessground.dart' as cg;
+import 'package:chessground/chessground.dart';
+import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -60,7 +61,7 @@ void main() {
 
         await tester.pumpWidget(app);
 
-        expect(find.byType(cg.Board), findsOneWidget);
+        expect(find.byType(Chessboard), findsOneWidget);
         expect(
           find.text('You play the white pieces in all puzzles'),
           findsWidgets,
@@ -85,43 +86,43 @@ void main() {
         await tester.pumpWidget(app);
 
         // before the first move is played, puzzle is not interactable
-        expect(find.byKey(const Key('h5-whiteRook')), findsOneWidget);
-        await tester.tap(find.byKey(const Key('h5-whiteRook')));
+        expect(find.byKey(const Key('h5-whiterook')), findsOneWidget);
+        await tester.tap(find.byKey(const Key('h5-whiterook')));
         await tester.pump();
         expect(find.byKey(const Key('h5-selected')), findsNothing);
 
         // wait for first move to be played
         await tester.pump(const Duration(seconds: 1));
 
-        expect(find.byKey(const Key('g8-blackKing')), findsOneWidget);
+        expect(find.byKey(const Key('g8-blackking')), findsOneWidget);
 
-        final boardRect = tester.getRect(find.byType(cg.Board));
+        final boardRect = tester.getRect(find.byType(Chessboard));
 
         await playMove(
           tester,
           boardRect,
           'h5',
           'h7',
-          orientation: cg.Side.white,
+          orientation: Side.white,
         );
 
         await tester.pump(const Duration(milliseconds: 500));
         await tester.pumpAndSettle();
-        expect(find.byKey(const Key('h7-whiteRook')), findsOneWidget);
-        expect(find.byKey(const Key('d1-blackQueen')), findsOneWidget);
+        expect(find.byKey(const Key('h7-whiterook')), findsOneWidget);
+        expect(find.byKey(const Key('d1-blackqueen')), findsOneWidget);
 
         await playMove(
           tester,
           boardRect,
           'e3',
           'g1',
-          orientation: cg.Side.white,
+          orientation: Side.white,
         );
 
         await tester.pump(const Duration(milliseconds: 500));
 
         // should have loaded next puzzle
-        expect(find.byKey(const Key('h6-blackKing')), findsOneWidget);
+        expect(find.byKey(const Key('h6-blackking')), findsOneWidget);
       },
       variant: kPlatformVariant,
     );
@@ -142,14 +143,14 @@ void main() {
       // wait for first move to be played
       await tester.pump(const Duration(seconds: 1));
 
-      final boardRect = tester.getRect(find.byType(cg.Board));
+      final boardRect = tester.getRect(find.byType(Chessboard));
 
       await playMove(
         tester,
         boardRect,
         'h5',
         'h7',
-        orientation: cg.Side.white,
+        orientation: Side.white,
       );
 
       await tester.pump(const Duration(milliseconds: 500));
@@ -158,12 +159,12 @@ void main() {
         boardRect,
         'e3',
         'g1',
-        orientation: cg.Side.white,
+        orientation: Side.white,
       );
 
       await tester.pump(const Duration(milliseconds: 500));
       // should have loaded next puzzle
-      expect(find.byKey(const Key('h6-blackKing')), findsOneWidget);
+      expect(find.byKey(const Key('h6-blackking')), findsOneWidget);
 
       await tester.tap(find.text('End run'));
       await tester.pumpAndSettle();
@@ -185,12 +186,12 @@ void main() {
       await tester.pumpWidget(app);
 
       await tester.pump(const Duration(seconds: 1));
-      final boardRect = tester.getRect(find.byType(cg.Board));
+      final boardRect = tester.getRect(find.byType(Chessboard));
 
       await playMove(tester, boardRect, 'h5', 'h6');
 
       await tester.pump(const Duration(milliseconds: 500));
-      expect(find.byKey(const Key('h6-blackKing')), findsOneWidget);
+      expect(find.byKey(const Key('h6-blackking')), findsOneWidget);
     });
   });
 }
