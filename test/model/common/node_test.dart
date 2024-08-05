@@ -13,15 +13,15 @@ void main() {
       expect(root.position, equals(Chess.initial));
       expect(root.children.length, equals(1));
       final child = root.children.first;
-      expect(child.id, equals(UciCharPair.fromMove(Move.fromUci('e2e4')!)));
-      expect(child.sanMove, equals(SanMove('e4', Move.fromUci('e2e4')!)));
+      expect(child.id, equals(UciCharPair.fromMove(Move.parse('e2e4')!)));
+      expect(child.sanMove, equals(SanMove('e4', Move.parse('e2e4')!)));
       expect(
         child.position.fen,
         equals('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1'),
       );
       expect(
         child.position,
-        equals(Chess.initial.playUnchecked(Move.fromUci('e2e4')!)),
+        equals(Chess.initial.playUnchecked(Move.parse('e2e4')!)),
       );
     });
 
@@ -71,7 +71,7 @@ void main() {
 
     test('branchesOn, with variation', () {
       final root = Root.fromPgnMoves('e4 e5 Nf3');
-      final move = Move.fromUci('b1c3')!;
+      final move = Move.parse('b1c3')!;
       final (newPath, _) = root.addMoveAt(
         UciPath.fromIds(
           [UciCharPair.fromUci('e2e4'), UciCharPair.fromUci('e7e5')].lock,
@@ -98,8 +98,8 @@ void main() {
 
       expect(mainline.length, equals(2));
       final list = mainline.toList();
-      expect(list[0].sanMove, equals(SanMove('e4', Move.fromUci('e2e4')!)));
-      expect(list[1].sanMove, equals(SanMove('e5', Move.fromUci('e7e5')!)));
+      expect(list[0].sanMove, equals(SanMove('e4', Move.parse('e2e4')!)));
+      expect(list[1].sanMove, equals(SanMove('e5', Move.parse('e7e5')!)));
     });
 
     test('isOnMainline', () {
@@ -107,7 +107,7 @@ void main() {
       final path = UciPath.fromId(UciCharPair.fromUci('e2e4'));
       expect(root.isOnMainline(path), isTrue);
 
-      final move = Move.fromUci('b1c3')!;
+      final move = Move.parse('b1c3')!;
       final (newPath, _) = root.addMoveAt(
         UciPath.fromIds(
           [UciCharPair.fromUci('e2e4'), UciCharPair.fromUci('e7e5')].lock,
@@ -123,7 +123,7 @@ void main() {
         position: Chess.initial,
       );
       final child = Branch(
-        sanMove: SanMove('e4', Move.fromUci('e2e4')!),
+        sanMove: SanMove('e4', Move.parse('e2e4')!),
         position: Chess.initial,
       );
       root.addChild(child);
@@ -134,7 +134,7 @@ void main() {
     test('prepend child', () {
       final root = Root.fromPgnMoves('e4 e5');
       final child = Branch(
-        sanMove: SanMove('d4', Move.fromUci('d2d4')!),
+        sanMove: SanMove('d4', Move.parse('d2d4')!),
         position: Chess.initial,
       );
       root.prependChild(child);
@@ -177,7 +177,7 @@ void main() {
     test('updateAt', () {
       final root = Root.fromPgnMoves('e4 e5');
       final branch = Branch(
-        sanMove: SanMove('Nc6', Move.fromUci('b8c6')!),
+        sanMove: SanMove('Nc6', Move.parse('b8c6')!),
         position: Chess.initial,
       );
 
@@ -250,7 +250,7 @@ void main() {
     test('addNodeAt', () {
       final root = Root.fromPgnMoves('e4 e5');
       final branch = Branch(
-        sanMove: SanMove('Nc6', Move.fromUci('b8c6')!),
+        sanMove: SanMove('Nc6', Move.parse('b8c6')!),
         position: Chess.initial,
       );
       final (newPath, isNewNode) =
@@ -275,7 +275,7 @@ void main() {
     test('addNodeAt, prepend', () {
       final root = Root.fromPgnMoves('e4 e5');
       final branch = Branch(
-        sanMove: SanMove('Nc6', Move.fromUci('b8c6')!),
+        sanMove: SanMove('Nc6', Move.parse('b8c6')!),
         position: Chess.initial,
       );
       root.addNodeAt(
@@ -292,7 +292,7 @@ void main() {
     test('addNodeAt, with an existing node at path', () {
       final root = Root.fromPgnMoves('e4 e5');
       final branch = Branch(
-        sanMove: SanMove('e5', Move.fromUci('e7e5')!),
+        sanMove: SanMove('e5', Move.parse('e7e5')!),
         position: Chess.initial,
       );
       final (newPath, isNewNode) =
@@ -319,11 +319,11 @@ void main() {
     test('addNodesAt', () {
       final root = Root.fromPgnMoves('e4 e5');
       final branch = Branch(
-        sanMove: SanMove('Nc6', Move.fromUci('b8c6')!),
+        sanMove: SanMove('Nc6', Move.parse('b8c6')!),
         position: Chess.initial,
       );
       final branch2 = Branch(
-        sanMove: SanMove('Na6', Move.fromUci('b8a6')!),
+        sanMove: SanMove('Na6', Move.parse('b8a6')!),
         position: Chess.initial,
       );
       root.addNodesAt(
@@ -339,7 +339,7 @@ void main() {
 
     test('addMoveAt', () {
       final root = Root.fromPgnMoves('e4 e5');
-      final move = Move.fromUci('b1c3')!;
+      final move = Move.parse('b1c3')!;
       final path = UciPath.fromIds(
         [UciCharPair.fromUci('e2e4'), UciCharPair.fromUci('e7e5')].lock,
       );
@@ -459,12 +459,12 @@ void main() {
         final initialPath = root.mainlinePath;
         final initialPng = root.makePgn();
 
-        final move = Move.fromUci(alt1);
+        final move = Move.parse(alt1);
         expect(move, isNotNull);
 
         final newMove = root.convertAltCastlingMove(move!);
         expect(newMove, isNotNull);
-        expect(newMove, Move.fromUci(alt2));
+        expect(newMove, Move.parse(alt2));
         expect(root.mainline.last.sanMove.move, newMove);
 
         final previousUciPath = root.mainlinePath.penultimate;
@@ -512,7 +512,7 @@ void main() {
       final root = Root.fromPgnGame(PgnGame.parsePgn(pgn));
       final initialPng = root.makePgn();
       final previousUciPath = root.mainlinePath.penultimate;
-      final move = Move.fromUci('e1g1');
+      final move = Move.parse('e1g1');
       root.addMoveAt(previousUciPath, move!);
       expect(root.makePgn(), isNot(initialPng));
     });

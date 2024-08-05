@@ -1,4 +1,4 @@
-import 'package:chessground/chessground.dart' as cg;
+import 'package:chessground/chessground.dart';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,7 +15,6 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/gestures_exclusion.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -101,11 +100,7 @@ class _Load extends ConsumerWidget {
           child: BoardTable(
             topTable: kEmptyWidget,
             bottomTable: kEmptyWidget,
-            boardData: const cg.BoardData(
-              fen: kEmptyFen,
-              interactableSide: cg.InteractableSide.none,
-              orientation: cg.Side.white,
-            ),
+            boardState: kEmptyBoardState,
             errorMessage: e.toString(),
           ),
         );
@@ -173,25 +168,25 @@ class _Body extends ConsumerWidget {
                   boardKey: boardKey,
                   onMove: (move, {isDrop, isPremove}) => ref
                       .read(ctrlProvider.notifier)
-                      .onUserMove(Move.fromUci(move.uci)!),
+                      .onUserMove(Move.parse(move.uci)!),
                   onPremove: (move) =>
                       ref.read(ctrlProvider.notifier).setPremove(move),
-                  boardData: cg.BoardData(
-                    orientation: stormState.pov.cg,
+                  boardState: ChessboardState(
+                    orientation: stormState.pov,
                     interactableSide: !stormState.firstMovePlayed ||
                             stormState.mode == StormMode.ended ||
                             stormState.position.isGameOver
-                        ? cg.InteractableSide.none
+                        ? InteractableSide.none
                         : stormState.pov == Side.white
-                            ? cg.InteractableSide.white
-                            : cg.InteractableSide.black,
+                            ? InteractableSide.white
+                            : InteractableSide.black,
                     fen: stormState.position.fen,
                     isCheck: boardPreferences.boardHighlights &&
                         stormState.position.isCheck,
-                    lastMove: stormState.lastMove?.cg,
-                    sideToMove: stormState.position.turn.cg,
+                    lastMove: stormState.lastMove as NormalMove?,
+                    sideToMove: stormState.position.turn,
                     validMoves: stormState.validMoves,
-                    premove: stormState.premove,
+                    premove: stormState.premove as NormalMove?,
                   ),
                   topTable: _TopTable(data),
                   bottomTable: _Combo(stormState.combo),

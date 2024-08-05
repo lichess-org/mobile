@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -17,15 +16,14 @@ import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/utils/color_palette.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
+import 'package:lichess_mobile/src/utils/system.dart';
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart' as p;
 import 'package:pub_semver/pub_semver.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:soundpool/soundpool.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:system_info_plus/system_info_plus.dart';
 
 part 'app_initialization.freezed.dart';
 part 'app_initialization.g.dart';
@@ -41,8 +39,6 @@ Future<AppInitializationData> appInitialization(
   final pInfo = await PackageInfo.fromPlatform();
   final deviceInfo = await DeviceInfoPlugin().deviceInfo;
   final prefs = await SharedPreferences.getInstance();
-  final soundTheme = GeneralPreferences.fetchFromStorage(prefs).soundTheme;
-  final soundPool = await ref.watch(soundPoolProvider(soundTheme).future);
 
   final dbPath = p.join(await getDatabasesPath(), kLichessDatabaseName);
 
@@ -52,6 +48,15 @@ Future<AppInitializationData> appInitialization(
   if (installedVersion == null ||
       Version.parse(installedVersion) != appVersion) {
     prefs.setString('installed_version', appVersion.canonicalizedVersion);
+  }
+
+  // preload sounds
+  final soundTheme = GeneralPreferences.fetchFromStorage(prefs).soundTheme;
+  final soundService = ref.read(soundServiceProvider);
+  try {
+    await soundService.initialize(soundTheme);
+  } catch (e) {
+    _logger.warning('Cannot initialize SoundService: $e');
   }
 
   final db = await openDb(databaseFactory, dbPath);
@@ -97,36 +102,26 @@ Future<AppInitializationData> appInitialization(
 
   final storedSession = await sessionStorage.read();
   if (storedSession != null) {
-    final client = httpClientFactory();
-    try {
-      final response = await client.get(
-        lichessUri('/api/account'),
-        headers: {
-          'Authorization': 'Bearer ${signBearerToken(storedSession.token)}',
-          'User-Agent':
-              makeUserAgent(pInfo, deviceInfo, sri, storedSession.user),
-        },
-      ).timeout(const Duration(seconds: 3));
-      if (response.statusCode == 401) {
-        await sessionStorage.delete();
-      }
-    } catch (e) {
-      debugPrint(
-        'WARNING: [AppInitialization] Error while checking session: $e',
-      );
-    } finally {
-      client.close();
+    final client = ref.read(defaultClientProvider);
+    final response = await client.get(
+      lichessUri('/api/account'),
+      headers: {
+        'Authorization': 'Bearer ${signBearerToken(storedSession.token)}',
+        'User-Agent': makeUserAgent(pInfo, deviceInfo, sri, storedSession.user),
+      },
+    ).timeout(const Duration(seconds: 3));
+    if (response.statusCode == 401) {
+      await sessionStorage.delete();
     }
   }
 
-  final physicalMemory = await SystemInfoPlus.physicalMemory ?? 256.0;
+  final physicalMemory = await System.instance.getTotalRam() ?? 256.0;
   final engineMaxMemory = (physicalMemory / 10).ceil();
 
   return AppInitializationData(
     packageInfo: pInfo,
     deviceInfo: deviceInfo,
     sharedPreferences: prefs,
-    soundPool: soundPool,
     userSession: await sessionStorage.read(),
     database: db,
     sri: sri,
@@ -140,7 +135,6 @@ class AppInitializationData with _$AppInitializationData {
     required PackageInfo packageInfo,
     required BaseDeviceInfo deviceInfo,
     required SharedPreferences sharedPreferences,
-    required (Soundpool, IMap<Sound, int>) soundPool,
     required AuthSessionState? userSession,
     required Database database,
     required String sri,

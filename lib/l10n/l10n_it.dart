@@ -2,6 +2,8 @@ import 'package:intl/intl.dart' as intl;
 
 import 'l10n.dart';
 
+// ignore_for_file: type=lint
+
 /// The translations for Italian (`it`).
 class AppLocalizationsIt extends AppLocalizations {
   AppLocalizationsIt([String locale = 'it']) : super(locale);
@@ -10,117 +12,137 @@ class AppLocalizationsIt extends AppLocalizations {
   String get mobileHomeTab => 'Home';
 
   @override
-  String get mobilePuzzlesTab => 'Puzzles';
+  String get mobilePuzzlesTab => 'Tattiche';
 
   @override
-  String get mobileToolsTab => 'Tools';
+  String get mobileToolsTab => 'Strumenti';
 
   @override
-  String get mobileWatchTab => 'Watch';
+  String get mobileWatchTab => 'Guarda';
 
   @override
-  String get mobileSettingsTab => 'Settings';
+  String get mobileSettingsTab => 'Settaggi';
 
   @override
-  String get mobileMustBeLoggedIn => 'You must be logged in to view this page.';
+  String get mobileMustBeLoggedIn => 'Devi aver effettuato l\'accesso per visualizzare questa pagina.';
 
   @override
-  String get mobileSystemColors => 'System colors';
+  String get mobileSystemColors => 'Tema app';
 
   @override
-  String get mobileFeedbackButton => 'Feedback';
+  String get mobileFeedbackButton => 'Suggerimenti';
 
   @override
-  String get mobileOkButton => 'OK';
+  String get mobileOkButton => 'Ok';
 
   @override
-  String get mobileSettingsHapticFeedback => 'Haptic feedback';
+  String get mobileSettingsHapticFeedback => 'Feedback tattile';
 
   @override
-  String get mobileSettingsImmersiveMode => 'Immersive mode';
+  String get mobileSettingsImmersiveMode => 'Modalità immersiva';
 
   @override
-  String get mobileSettingsImmersiveModeSubtitle => 'Hide system UI while playing. Use this if you are bothered by the system\'s navigation gestures at the edges of the screen. Applies to game and Puzzle Storm screens.';
+  String get mobileSettingsImmersiveModeSubtitle => 'Nascondi la UI di sistema mentre giochi. Attiva se i gesti di navigazione ai bordi dello schermo ti danno fastidio. Si applica alla schermata di gioco e Puzzle Storm.';
 
   @override
-  String get mobileNotFollowingAnyUser => 'You are not following any user.';
+  String get mobileNotFollowingAnyUser => 'Non stai seguendo nessun utente.';
 
   @override
-  String get mobileAllGames => 'All games';
+  String get mobileAllGames => 'Tutte le partite';
 
   @override
-  String get mobileRecentSearches => 'Recent searches';
+  String get mobileRecentSearches => 'Ricerche recenti';
 
   @override
-  String get mobileClearButton => 'Clear';
+  String get mobileClearButton => 'Elimina';
 
   @override
   String mobilePlayersMatchingSearchTerm(String param) {
-    return 'Players with \"$param\"';
+    return 'Giocatori con \"$param\"';
   }
 
   @override
-  String get mobileNoSearchResults => 'No results';
+  String get mobileNoSearchResults => 'Nessun risultato';
 
   @override
-  String get mobileAreYouSure => 'Are you sure?';
+  String get mobileAreYouSure => 'Sei sicuro?';
 
   @override
-  String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
+  String get mobilePuzzleStreakAbortWarning => 'Perderai la tua serie corrente e il tuo punteggio verrà salvato.';
 
   @override
-  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of storm';
+  String get mobilePuzzleStormNothingToShow => 'Niente da mostrare. Gioca ad alcune partite di Puzzle Storm.';
 
   @override
-  String get mobileSharePuzzle => 'Share this puzzle';
+  String get mobileSharePuzzle => 'Condividi questa tattica';
 
   @override
-  String get mobileShareGameURL => 'Share game URL';
+  String get mobileShareGameURL => 'Condividi URL della partita';
 
   @override
-  String get mobileShareGamePGN => 'Share PGN';
+  String get mobileShareGamePGN => 'Condividi PGN';
 
   @override
-  String get mobileSharePositionAsFEN => 'Share position as FEN';
+  String get mobileSharePositionAsFEN => 'Condividi posizione come FEN';
 
   @override
-  String get mobileShowVariations => 'Show variations';
+  String get mobileShowVariations => 'Mostra varianti';
 
   @override
-  String get mobileHideVariation => 'Hide variation';
+  String get mobileHideVariation => 'Nascondi variante';
 
   @override
-  String get mobileShowComments => 'Show comments';
+  String get mobileShowComments => 'Mostra commenti';
 
   @override
-  String get mobilePuzzleStormConfirmEndRun => 'Do you want to end this run?';
+  String get mobilePuzzleStormConfirmEndRun => 'Vuoi terminare questa serie?';
 
   @override
-  String get mobilePuzzleStormFilterNothingToShow => 'Nothing to show, please change the filters';
+  String get mobilePuzzleStormFilterNothingToShow => 'Nessun risultato, per favore modifica i filtri';
 
   @override
-  String get mobileCancelTakebackOffer => 'Cancel takeback offer';
+  String get mobileCancelTakebackOffer => 'Annulla richiesta di ritiro mossa';
 
   @override
-  String get mobileCancelDrawOffer => 'Cancel draw offer';
+  String get mobileCancelDrawOffer => 'Annulla richiesta di patta';
 
   @override
-  String get mobileWaitingForOpponentToJoin => 'Waiting for opponent to join...';
+  String get mobileWaitingForOpponentToJoin => 'In attesa dell\'avversario...';
 
   @override
-  String get mobileBlindfoldMode => 'Blindfold';
+  String get mobileBlindfoldMode => 'Alla cieca';
 
   @override
-  String get mobileLiveStreamers => 'Live streamers';
+  String get mobileLiveStreamers => 'Streamer in diretta';
 
   @override
-  String get mobileCustomGameJoinAGame => 'Join a game';
+  String get mobileCustomGameJoinAGame => 'Unisciti a una partita';
 
   @override
-  String get mobileCorrespondenceClearSavedMove => 'Clear saved move';
+  String get mobileCorrespondenceClearSavedMove => 'Cancella mossa salvata';
 
   @override
-  String get mobileSomethingWentWrong => 'Something went wrong.';
+  String get mobileSomethingWentWrong => 'Si è verificato un errore.';
+
+  @override
+  String get mobileShowResult => 'Show result';
+
+  @override
+  String get mobilePuzzleThemesSubtitle => 'Play puzzles from your favorite openings, or choose a theme.';
+
+  @override
+  String get mobilePuzzleStormSubtitle => 'Solve as many puzzles as possible in 3 minutes.';
+
+  @override
+  String mobileGreeting(String param) {
+    return 'Hello, $param';
+  }
+
+  @override
+  String get mobileGreetingWithoutName => 'Hello';
+
+  @override
+  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
 
   @override
   String get activityActivity => 'Attività';
@@ -327,7 +349,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get broadcastBroadcasts => 'Dirette';
 
   @override
-  String get broadcastStartDate => 'Data di inizio nel tuo fuso orario';
+  String get broadcastLiveBroadcasts => 'Tornei in diretta';
 
   @override
   String challengeChallengesX(String param1) {
@@ -660,7 +682,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get preferencesConfirmResignationAndDrawOffers => 'Conferma abbandono e offerte di patta';
 
   @override
-  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Metodo di arrocco';
+  String get preferencesCastleByMovingTheKingTwoSquaresOrOntoTheRook => 'Modalità di arrocco';
 
   @override
   String get preferencesCastleByMovingTwoSquares => 'Muovi il re di due caselle';
@@ -1614,10 +1636,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get deleteFromHere => 'Elimina da qui';
 
   @override
-  String get collapseVariations => 'Collapse variations';
+  String get collapseVariations => 'Riduci varianti';
 
   @override
-  String get expandVariations => 'Expand variations';
+  String get expandVariations => 'Espandi varianti';
 
   @override
   String get forceVariation => 'Mostra come variante';
@@ -1854,6 +1876,9 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get friends => 'Amici';
+
+  @override
+  String get otherPlayers => 'other players';
 
   @override
   String get discussions => 'Conversazioni';
@@ -2606,7 +2631,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get editProfile => 'Modifica profilo';
 
   @override
-  String get realName => 'Real name';
+  String get realName => 'Nome reale';
 
   @override
   String get setFlair => 'Imposta la tua icona';
@@ -2685,6 +2710,12 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get yes => 'Sì';
+
+  @override
+  String get website => 'Website';
+
+  @override
+  String get mobile => 'Mobile';
 
   @override
   String get help => 'Aiuto:';
@@ -2844,7 +2875,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get outsideTheBoard => 'Fuori la scacchiera';
 
   @override
-  String get allSquaresOfTheBoard => 'All squares of the board';
+  String get allSquaresOfTheBoard => 'Su tutte le case della scacchiera';
 
   @override
   String get onSlowGames => 'Nelle partite lente';

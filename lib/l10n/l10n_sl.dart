@@ -2,6 +2,8 @@ import 'package:intl/intl.dart' as intl;
 
 import 'l10n.dart';
 
+// ignore_for_file: type=lint
+
 /// The translations for Slovenian (`sl`).
 class AppLocalizationsSl extends AppLocalizations {
   AppLocalizationsSl([String locale = 'sl']) : super(locale);
@@ -69,7 +71,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
 
   @override
-  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of storm';
+  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of Puzzle Storm.';
 
   @override
   String get mobileSharePuzzle => 'Share this puzzle';
@@ -121,6 +123,26 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get mobileSomethingWentWrong => 'Something went wrong.';
+
+  @override
+  String get mobileShowResult => 'Pokaži rezultat';
+
+  @override
+  String get mobilePuzzleThemesSubtitle => 'Igrajte uganke iz svojih najljubših otvoritev ali izberite temo.';
+
+  @override
+  String get mobilePuzzleStormSubtitle => 'V 3 minutah rešite čim več ugank.';
+
+  @override
+  String mobileGreeting(String param) {
+    return 'Pozdravljeni $param';
+  }
+
+  @override
+  String get mobileGreetingWithoutName => 'Živjo';
+
+  @override
+  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
 
   @override
   String get activityActivity => 'Aktivnost';
@@ -361,7 +383,7 @@ class AppLocalizationsSl extends AppLocalizations {
   String get broadcastBroadcasts => 'Prenosi';
 
   @override
-  String get broadcastStartDate => 'Datum začetka v vaše časovnem pasu';
+  String get broadcastLiveBroadcasts => 'Prenos turnirjev v živo';
 
   @override
   String challengeChallengesX(String param1) {
@@ -1900,6 +1922,9 @@ class AppLocalizationsSl extends AppLocalizations {
   String get friends => 'Prijatelji';
 
   @override
+  String get otherPlayers => 'other players';
+
+  @override
   String get discussions => 'Pogovori';
 
   @override
@@ -2729,6 +2754,12 @@ class AppLocalizationsSl extends AppLocalizations {
 
   @override
   String get yes => 'Da';
+
+  @override
+  String get website => 'Website';
+
+  @override
+  String get mobile => 'Mobile';
 
   @override
   String get help => 'Pomoč:';

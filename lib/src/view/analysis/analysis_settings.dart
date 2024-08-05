@@ -31,10 +31,8 @@ class AnalysisSettings extends ConsumerWidget {
     );
 
     return DraggableScrollableSheet(
-      initialChildSize: .7,
+      initialChildSize: 1.0,
       expand: false,
-      snap: true,
-      snapSizes: const [.7],
       builder: (context, scrollController) => ListView(
         controller: scrollController,
         children: [
@@ -125,6 +123,13 @@ class AnalysisSettings extends ConsumerWidget {
             onChanged: (value) => ref
                 .read(analysisPreferencesProvider.notifier)
                 .toggleShowEvaluationGauge(),
+          ),
+          SwitchSettingTile(
+            title: Text(context.l10n.toggleGlyphAnnotations),
+            value: prefs.showAnnotations,
+            onChanged: (_) => ref
+                .read(analysisPreferencesProvider.notifier)
+                .toggleAnnotations(),
           ),
           SwitchSettingTile(
             title: Text(context.l10n.mobileShowComments),

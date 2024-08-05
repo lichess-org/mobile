@@ -1,4 +1,4 @@
-import 'package:chessground/chessground.dart' as cg;
+import 'package:chessground/chessground.dart';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,7 +15,6 @@ import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
-import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
@@ -230,20 +229,20 @@ class _BodyState extends ConsumerState<_Body> {
             bottom: false,
             child: BoardTable(
               onMove: (move, {isDrop, isPremove}) {
-                onUserMove(Move.fromUci(move.uci)!);
+                onUserMove(Move.parse(move.uci)!);
               },
-              boardData: cg.BoardData(
+              boardState: ChessboardState(
                 interactableSide: game.playable && !isReplaying
                     ? youAre == Side.white
-                        ? cg.InteractableSide.white
-                        : cg.InteractableSide.black
-                    : cg.InteractableSide.none,
-                orientation: isBoardTurned ? youAre.opposite.cg : youAre.cg,
+                        ? InteractableSide.white
+                        : InteractableSide.black
+                    : InteractableSide.none,
+                orientation: isBoardTurned ? youAre.opposite : youAre,
                 fen: position.fen,
-                lastMove: game.moveAt(stepCursor)?.cg,
+                lastMove: game.moveAt(stepCursor) as NormalMove?,
                 isCheck: position.isCheck,
-                sideToMove: sideToMove.cg,
-                validMoves: algebraicLegalMoves(position),
+                sideToMove: sideToMove,
+                validMoves: makeLegalMoves(position),
               ),
               topTable: topPlayer,
               bottomTable: bottomPlayer,

@@ -2,12 +2,14 @@ import 'package:intl/intl.dart' as intl;
 
 import 'l10n.dart';
 
+// ignore_for_file: type=lint
+
 /// The translations for Romanian Moldavian Moldovan (`ro`).
 class AppLocalizationsRo extends AppLocalizations {
   AppLocalizationsRo([String locale = 'ro']) : super(locale);
 
   @override
-  String get mobileHomeTab => 'Home';
+  String get mobileHomeTab => 'Acasă';
 
   @override
   String get mobilePuzzlesTab => 'Puzzles';
@@ -19,10 +21,10 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileWatchTab => 'Watch';
 
   @override
-  String get mobileSettingsTab => 'Settings';
+  String get mobileSettingsTab => 'Setări';
 
   @override
-  String get mobileMustBeLoggedIn => 'You must be logged in to view this page.';
+  String get mobileMustBeLoggedIn => 'Trebuie să te autentifici pentru a accesa această pagină.';
 
   @override
   String get mobileSystemColors => 'System colors';
@@ -46,7 +48,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileNotFollowingAnyUser => 'You are not following any user.';
 
   @override
-  String get mobileAllGames => 'All games';
+  String get mobileAllGames => 'Toate jocurile';
 
   @override
   String get mobileRecentSearches => 'Recent searches';
@@ -69,7 +71,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
 
   @override
-  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of storm';
+  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of Puzzle Storm.';
 
   @override
   String get mobileSharePuzzle => 'Share this puzzle';
@@ -90,7 +92,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mobileHideVariation => 'Hide variation';
 
   @override
-  String get mobileShowComments => 'Show comments';
+  String get mobileShowComments => 'Afişează сomentarii';
 
   @override
   String get mobilePuzzleStormConfirmEndRun => 'Do you want to end this run?';
@@ -121,6 +123,26 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get mobileSomethingWentWrong => 'Something went wrong.';
+
+  @override
+  String get mobileShowResult => 'Arată rezultatul';
+
+  @override
+  String get mobilePuzzleThemesSubtitle => 'Play puzzles from your favorite openings, or choose a theme.';
+
+  @override
+  String get mobilePuzzleStormSubtitle => 'Rezolvă cât mai multe puzzle-uri în 3 minute.';
+
+  @override
+  String mobileGreeting(String param) {
+    return 'Salut, $param';
+  }
+
+  @override
+  String get mobileGreetingWithoutName => 'Salut';
+
+  @override
+  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
 
   @override
   String get activityActivity => 'Activitate';
@@ -344,7 +366,7 @@ class AppLocalizationsRo extends AppLocalizations {
   String get broadcastBroadcasts => 'Transmisiuni';
 
   @override
-  String get broadcastStartDate => 'Data de începere conform fusului tău orar';
+  String get broadcastLiveBroadcasts => 'Difuzări de turnee în direct';
 
   @override
   String challengeChallengesX(String param1) {
@@ -1878,6 +1900,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String get friends => 'Prieteni';
 
   @override
+  String get otherPlayers => 'alți jucători';
+
+  @override
   String get discussions => 'Discuții';
 
   @override
@@ -2707,6 +2732,12 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get yes => 'Da';
+
+  @override
+  String get website => 'Website';
+
+  @override
+  String get mobile => 'Mobile';
 
   @override
   String get help => 'Ajutor:';

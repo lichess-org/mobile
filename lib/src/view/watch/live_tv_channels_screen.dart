@@ -5,7 +5,6 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/tv/live_tv_channels.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/watch/tv_screen.dart';
@@ -84,9 +83,9 @@ class _Body extends ConsumerWidget {
                   ),
                 );
               },
-              orientation: game.orientation.cg,
+              orientation: game.orientation,
               fen: game.fen ?? kEmptyFen,
-              lastMove: game.lastMove?.cg,
+              lastMove: game.lastMove,
               description: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.max,

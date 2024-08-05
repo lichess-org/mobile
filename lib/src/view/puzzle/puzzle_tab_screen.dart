@@ -13,7 +13,6 @@ import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/puzzle_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -263,8 +262,7 @@ class _PuzzleMenu extends StatelessWidget {
         _PuzzleMenuListTile(
           icon: PuzzleIcons.opening,
           title: context.l10n.puzzlePuzzleThemes,
-          subtitle:
-              'Play puzzles from your favorite openings, or choose a theme.',
+          subtitle: context.l10n.mobilePuzzleThemesSubtitle,
           onTap: () {
             pushPlatformRoute(
               context,
@@ -299,7 +297,7 @@ class _PuzzleMenu extends StatelessWidget {
           child: _PuzzleMenuListTile(
             icon: LichessIcons.storm,
             title: 'Puzzle Storm',
-            subtitle: 'Solve as many puzzles as possible in 3 minutes.',
+            subtitle: context.l10n.mobilePuzzleStormSubtitle,
             onTap: isOnline
                 ? () {
                     pushPlatformRoute(
@@ -403,30 +401,14 @@ class _DashboardButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final session = ref.watch(authSessionProvider);
     if (session != null) {
-      switch (Theme.of(context).platform) {
-        case TargetPlatform.iOS:
-          return CupertinoIconButton(
-            padding: EdgeInsets.zero,
-            onPressed: () {
-              ref.invalidate(puzzleDashboardProvider);
-              _showDashboard(context, session);
-            },
-            semanticsLabel: context.l10n.puzzlePuzzleDashboard,
-            icon: const Icon(Icons.history),
-          );
-        case TargetPlatform.android:
-          return IconButton(
-            tooltip: context.l10n.puzzlePuzzleDashboard,
-            onPressed: () {
-              ref.invalidate(puzzleDashboardProvider);
-              _showDashboard(context, session);
-            },
-            icon: const Icon(Icons.history),
-          );
-        default:
-          assert(false, 'Unexpected platform $Theme.of(context).platform');
-          return const SizedBox.shrink();
-      }
+      return AppBarIconButton(
+        icon: const Icon(Icons.history),
+        semanticsLabel: context.l10n.puzzlePuzzleDashboard,
+        onPressed: () {
+          ref.invalidate(puzzleDashboardProvider);
+          _showDashboard(context, session);
+        },
+      );
     }
     return const SizedBox.shrink();
   }
@@ -449,9 +431,9 @@ class _DailyPuzzle extends ConsumerWidget {
       data: (data) {
         final preview = PuzzlePreview.fromPuzzle(data);
         return SmallBoardPreview(
-          orientation: preview.orientation.cg,
+          orientation: preview.orientation,
           fen: preview.initialFen,
-          lastMove: preview.initialMove.cg,
+          lastMove: preview.initialMove,
           description: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -497,7 +479,7 @@ class _DailyPuzzle extends ConsumerWidget {
         );
       },
       loading: () => SmallBoardPreview(
-        orientation: Side.white.cg,
+        orientation: Side.white,
         fen: kEmptyFen,
         description: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -531,9 +513,9 @@ class _OfflinePuzzlePreview extends ConsumerWidget {
         final preview =
             data != null ? PuzzlePreview.fromPuzzle(data.puzzle) : null;
         return SmallBoardPreview(
-          orientation: preview?.orientation.cg ?? Side.white.cg,
+          orientation: preview?.orientation ?? Side.white,
           fen: preview?.initialFen ?? kEmptyFen,
-          lastMove: preview?.initialMove.cg,
+          lastMove: preview?.initialMove,
           description: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,

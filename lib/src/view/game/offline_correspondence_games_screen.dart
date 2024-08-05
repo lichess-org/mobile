@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
 import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_game.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/chessground_compat.dart' as cg;
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/correspondence/offline_correspondence_game_screen.dart';
@@ -77,8 +76,8 @@ class OfflineCorrespondenceGamePreview extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SmallBoardPreview(
-      orientation: game.orientation.cg,
-      lastMove: game.lastMove?.cg,
+      orientation: game.orientation,
+      lastMove: game.lastMove,
       fen: game.lastPosition.fen,
       description: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

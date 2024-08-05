@@ -3,7 +3,9 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
+import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 
 class GameRepository {
@@ -39,7 +41,12 @@ class GameRepository {
     UserId userId, {
     int max = 20,
     DateTime? until,
+    GameFilterState filter = const GameFilterState(),
   }) {
+    assert(!filter.perfs.contains(Perf.fromPosition));
+    assert(!filter.perfs.contains(Perf.puzzle));
+    assert(!filter.perfs.contains(Perf.storm));
+    assert(!filter.perfs.contains(Perf.streak));
     return client
         .readNdJsonList(
           Uri(
@@ -52,6 +59,9 @@ class GameRepository {
               'lastFen': 'true',
               'accuracy': 'true',
               'opening': 'true',
+              if (filter.perfs.isNotEmpty)
+                'perfType': filter.perfs.map((perf) => perf.name).join(','),
+              if (filter.side != null) 'color': filter.side!.name,
             },
           ),
           headers: {'Accept': 'application/x-ndjson'},

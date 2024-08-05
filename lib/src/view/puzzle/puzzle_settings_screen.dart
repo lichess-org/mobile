@@ -26,10 +26,8 @@ class PuzzleSettingsScreen extends ConsumerWidget {
     final boardPrefs = ref.watch(boardPreferencesProvider);
 
     return DraggableScrollableSheet(
-      initialChildSize: .4,
+      initialChildSize: .6,
       expand: false,
-      snap: true,
-      snapSizes: const [.4, .7],
       builder: (context, scrollController) => ListView(
         controller: scrollController,
         children: [
@@ -55,6 +53,21 @@ class PuzzleSettingsScreen extends ConsumerWidget {
               ref
                   .read(puzzlePreferencesProvider(userId).notifier)
                   .setAutoNext(value);
+            },
+          ),
+          SwitchSettingTile(
+            // TODO: Add l10n
+            title: const Text('Shape drawing'),
+            subtitle: const Text(
+              'Draw shapes using two fingers.',
+              maxLines: 5,
+              textAlign: TextAlign.justify,
+            ),
+            value: boardPrefs.enableShapeDrawings,
+            onChanged: (value) {
+              ref
+                  .read(boardPreferencesProvider.notifier)
+                  .toggleEnableShapeDrawings();
             },
           ),
           SwitchSettingTile(

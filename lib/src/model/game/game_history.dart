@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
+import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
@@ -114,6 +115,7 @@ class UserGameHistory extends _$UserGameHistory {
     /// server. If this is false, the provider will fetch the games from the
     /// local storage.
     required bool isOnline,
+    GameFilterState filter = const GameFilterState(),
   }) async {
     ref.cacheFor(const Duration(minutes: 5));
     ref.onDispose(() {
@@ -121,10 +123,25 @@ class UserGameHistory extends _$UserGameHistory {
     });
 
     final session = ref.watch(authSessionProvider);
+    final online = await ref
+        .watch(connectivityChangesProvider.selectAsync((c) => c.isOnline));
+    final storage = ref.watch(gameStorageProvider);
 
-    final recentGames = userId != null
-        ? ref.read(userRecentGamesProvider(userId: userId).future)
-        : ref.read(myRecentGamesProvider.future);
+    final id = userId ?? session?.user.id;
+    final recentGames = id != null && online
+        ? ref.withClient(
+            (client) => GameRepository(client).getUserGames(id, filter: filter),
+          )
+        : storage.page(userId: id, filter: filter).then(
+              (value) => value
+                  // we can assume that `youAre` is not null either for logged
+                  // in users or for anonymous users
+                  .map(
+                    (e) =>
+                        (game: e.game.data, pov: e.game.youAre ?? Side.white),
+                  )
+                  .toIList(),
+            );
 
     _list.addAll(await recentGames);
 
@@ -134,6 +151,7 @@ class UserGameHistory extends _$UserGameHistory {
       hasMore: true,
       hasError: false,
       online: isOnline,
+      filter: filter,
       session: session,
     );
   }
@@ -151,6 +169,7 @@ class UserGameHistory extends _$UserGameHistory {
                 userId!,
                 max: _nbPerPage,
                 until: _list.last.game.createdAt,
+                filter: currentVal.filter,
               ),
             )
           : currentVal.online && currentVal.session != null
@@ -159,6 +178,7 @@ class UserGameHistory extends _$UserGameHistory {
                     currentVal.session!.user.id,
                     max: _nbPerPage,
                     until: _list.last.game.createdAt,
+                    filter: currentVal.filter,
                   ),
                 )
               : ref
@@ -208,6 +228,7 @@ class UserGameHistoryState with _$UserGameHistoryState {
   const factory UserGameHistoryState({
     required IList<LightArchivedGameWithPov> gameList,
     required bool isLoading,
+    required GameFilterState filter,
     required bool hasMore,
     required bool hasError,
     required bool online,

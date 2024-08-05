@@ -6,7 +6,7 @@ import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/home/home_tab_screen.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_tab_screen.dart';
-import 'package:lichess_mobile/src/view/settings/settings_screen.dart';
+import 'package:lichess_mobile/src/view/settings/settings_tab_screen.dart';
 import 'package:lichess_mobile/src/view/tools/tools_tab_screen.dart';
 import 'package:lichess_mobile/src/view/watch/watch_tab_screen.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -253,7 +253,7 @@ Widget _androidTabBuilder(BuildContext context, int index) {
       return _MaterialTabView(
         navigatorKey: settingsNavigatorKey,
         tab: BottomTab.settings,
-        builder: (context) => const SettingsScreen(),
+        builder: (context) => const SettingsTabScreen(),
       );
     default:
       assert(false, 'Unexpected tab');
@@ -291,7 +291,7 @@ Widget _iOSTabBuilder(BuildContext context, int index) {
       return CupertinoTabView(
         defaultTitle: context.l10n.mobileSettingsTab,
         navigatorKey: settingsNavigatorKey,
-        builder: (context) => const SettingsScreen(),
+        builder: (context) => const SettingsTabScreen(),
       );
     default:
       assert(false, 'Unexpected tab');

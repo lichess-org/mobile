@@ -1,4 +1,9 @@
 {
+  "mobileShowResult": "Pokaži rezultat",
+  "mobilePuzzleThemesSubtitle": "Igrajte uganke iz svojih najljubših otvoritev ali izberite temo.",
+  "mobilePuzzleStormSubtitle": "V 3 minutah rešite čim več ugank.",
+  "mobileGreeting": "Pozdravljeni {param}",
+  "mobileGreetingWithoutName": "Živjo",
   "activityActivity": "Aktivnost",
   "activityHostedALiveStream": "Gostil prenos v živo",
   "activityRankedInSwissTournament": "Uvrščen #{param1} v {param2}",
@@ -21,7 +26,7 @@
   "activityCompetedInNbSwissTournaments": "{count, plural, =1{Tekmoval na {count} švicarskem turnirju} =2{Tekmoval na {count} švicarskih turnirjih} few{Tekmoval na {count} švicarskih turnirjih} other{Tekmoval na {count} švicarskih turnirjih}}",
   "activityJoinedNbTeams": "{count, plural, =1{Pridružen {count} ekipi} =2{Pridružen {count} ekipam} few{Pridružen {count} ekipam} other{Pridružen {count} ekipam}}",
   "broadcastBroadcasts": "Prenosi",
-  "broadcastStartDate": "Datum začetka v vaše časovnem pasu",
+  "broadcastLiveBroadcasts": "Prenos turnirjev v živo",
   "challengeChallengesX": "Izzivi:{param1}",
   "challengeChallengeToPlay": "Izzovi na partijo",
   "challengeChallengeDeclined": "Izziv zavrnjen",

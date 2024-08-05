@@ -29,6 +29,7 @@ import 'l10n_fo.dart';
 import 'l10n_fr.dart';
 import 'l10n_ga.dart';
 import 'l10n_gl.dart';
+import 'l10n_gsw.dart';
 import 'l10n_he.dart';
 import 'l10n_hi.dart';
 import 'l10n_hr.dart';
@@ -56,10 +57,11 @@ import 'l10n_sq.dart';
 import 'l10n_sr.dart';
 import 'l10n_sv.dart';
 import 'l10n_tr.dart';
-import 'l10n_tt.dart';
 import 'l10n_uk.dart';
 import 'l10n_vi.dart';
 import 'l10n_zh.dart';
+
+// ignore_for_file: type=lint
 
 /// Callers can lookup localized strings with an instance of AppLocalizations
 /// returned by `AppLocalizations.of(context)`.
@@ -167,6 +169,7 @@ abstract class AppLocalizations {
     Locale('fr'),
     Locale('ga'),
     Locale('gl'),
+    Locale('gsw'),
     Locale('he'),
     Locale('hi'),
     Locale('hr'),
@@ -186,7 +189,7 @@ abstract class AppLocalizations {
     Locale('nn'),
     Locale('pl'),
     Locale('pt'),
-    Locale('pt', 'PT'),
+    Locale('pt', 'BR'),
     Locale('ro'),
     Locale('ru'),
     Locale('sk'),
@@ -195,7 +198,6 @@ abstract class AppLocalizations {
     Locale('sr'),
     Locale('sv'),
     Locale('tr'),
-    Locale('tt'),
     Locale('uk'),
     Locale('vi'),
     Locale('zh'),
@@ -325,7 +327,7 @@ abstract class AppLocalizations {
   /// No description provided for @mobilePuzzleStormNothingToShow.
   ///
   /// In en, this message translates to:
-  /// **'Nothing to show. Play some runs of storm'**
+  /// **'Nothing to show. Play some runs of Puzzle Storm.'**
   String get mobilePuzzleStormNothingToShow;
 
   /// No description provided for @mobileSharePuzzle.
@@ -429,6 +431,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Something went wrong.'**
   String get mobileSomethingWentWrong;
+
+  /// No description provided for @mobileShowResult.
+  ///
+  /// In en, this message translates to:
+  /// **'Show result'**
+  String get mobileShowResult;
+
+  /// No description provided for @mobilePuzzleThemesSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Play puzzles from your favorite openings, or choose a theme.'**
+  String get mobilePuzzleThemesSubtitle;
+
+  /// No description provided for @mobilePuzzleStormSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Solve as many puzzles as possible in 3 minutes.'**
+  String get mobilePuzzleStormSubtitle;
+
+  /// No description provided for @mobileGreeting.
+  ///
+  /// In en, this message translates to:
+  /// **'Hello, {param}'**
+  String mobileGreeting(String param);
+
+  /// No description provided for @mobileGreetingWithoutName.
+  ///
+  /// In en, this message translates to:
+  /// **'Hello'**
+  String get mobileGreetingWithoutName;
+
+  /// No description provided for @mobilePrefMagnifyDraggedPiece.
+  ///
+  /// In en, this message translates to:
+  /// **'Magnify dragged piece'**
+  String get mobilePrefMagnifyDraggedPiece;
 
   /// No description provided for @activityActivity.
   ///
@@ -562,11 +600,11 @@ abstract class AppLocalizations {
   /// **'Broadcasts'**
   String get broadcastBroadcasts;
 
-  /// No description provided for @broadcastStartDate.
+  /// No description provided for @broadcastLiveBroadcasts.
   ///
   /// In en, this message translates to:
-  /// **'Start date in your own timezone'**
-  String get broadcastStartDate;
+  /// **'Live tournament broadcasts'**
+  String get broadcastLiveBroadcasts;
 
   /// No description provided for @challengeChallengesX.
   ///
@@ -1315,7 +1353,7 @@ abstract class AppLocalizations {
   /// No description provided for @puzzlePuzzleThemes.
   ///
   /// In en, this message translates to:
-  /// **'Puzzle themes'**
+  /// **'Puzzle Themes'**
   String get puzzlePuzzleThemes;
 
   /// No description provided for @puzzleRecommended.
@@ -3424,6 +3462,12 @@ abstract class AppLocalizations {
   /// **'Friends'**
   String get friends;
 
+  /// No description provided for @otherPlayers.
+  ///
+  /// In en, this message translates to:
+  /// **'other players'**
+  String get otherPlayers;
+
   /// No description provided for @discussions.
   ///
   /// In en, this message translates to:
@@ -4965,6 +5009,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Yes'**
   String get yes;
+
+  /// No description provided for @website.
+  ///
+  /// In en, this message translates to:
+  /// **'Website'**
+  String get website;
+
+  /// No description provided for @mobile.
+  ///
+  /// In en, this message translates to:
+  /// **'Mobile'**
+  String get mobile;
 
   /// No description provided for @help.
   ///
@@ -8060,7 +8116,7 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['en', 'af', 'ar', 'az', 'be', 'bg', 'bn', 'br', 'bs', 'ca', 'cs', 'da', 'de', 'el', 'eo', 'es', 'et', 'eu', 'fa', 'fi', 'fo', 'fr', 'ga', 'gl', 'he', 'hi', 'hr', 'hu', 'hy', 'id', 'it', 'ja', 'kk', 'ko', 'lb', 'lt', 'lv', 'mk', 'nb', 'nl', 'nn', 'pl', 'pt', 'ro', 'ru', 'sk', 'sl', 'sq', 'sr', 'sv', 'tr', 'tt', 'uk', 'vi', 'zh'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>['en', 'af', 'ar', 'az', 'be', 'bg', 'bn', 'br', 'bs', 'ca', 'cs', 'da', 'de', 'el', 'eo', 'es', 'et', 'eu', 'fa', 'fi', 'fo', 'fr', 'ga', 'gl', 'gsw', 'he', 'hi', 'hr', 'hu', 'hy', 'id', 'it', 'ja', 'kk', 'ko', 'lb', 'lt', 'lv', 'mk', 'nb', 'nl', 'nn', 'pl', 'pt', 'ro', 'ru', 'sk', 'sl', 'sq', 'sr', 'sv', 'tr', 'uk', 'vi', 'zh'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -8078,7 +8134,7 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
    }
     case 'pt': {
   switch (locale.countryCode) {
-    case 'PT': return AppLocalizationsPtPt();
+    case 'BR': return AppLocalizationsPtBr();
    }
   break;
    }
@@ -8116,6 +8172,7 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
     case 'fr': return AppLocalizationsFr();
     case 'ga': return AppLocalizationsGa();
     case 'gl': return AppLocalizationsGl();
+    case 'gsw': return AppLocalizationsGsw();
     case 'he': return AppLocalizationsHe();
     case 'hi': return AppLocalizationsHi();
     case 'hr': return AppLocalizationsHr();
@@ -8143,7 +8200,6 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
     case 'sr': return AppLocalizationsSr();
     case 'sv': return AppLocalizationsSv();
     case 'tr': return AppLocalizationsTr();
-    case 'tt': return AppLocalizationsTt();
     case 'uk': return AppLocalizationsUk();
     case 'vi': return AppLocalizationsVi();
     case 'zh': return AppLocalizationsZh();

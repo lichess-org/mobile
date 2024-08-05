@@ -1,4 +1,4 @@
-import 'package:chessground/chessground.dart' as cg;
+import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +16,6 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_streak.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -102,11 +101,7 @@ class _Load extends ConsumerWidget {
           child: BoardTable(
             topTable: kEmptyWidget,
             bottomTable: kEmptyWidget,
-            boardData: const cg.BoardData(
-              fen: kEmptyFen,
-              interactableSide: cg.InteractableSide.none,
-              orientation: cg.Side.white,
-            ),
+            boardState: kEmptyBoardState,
             errorMessage: e.toString(),
           ),
         );
@@ -126,10 +121,8 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = puzzleControllerProvider(
-      initialPuzzleContext,
-      initialStreak: streak,
-    );
+    final ctrlProvider =
+        puzzleControllerProvider(initialPuzzleContext, initialStreak: streak);
     final puzzleState = ref.watch(ctrlProvider);
 
     ref.listen<bool>(ctrlProvider.select((s) => s.nextPuzzleStreakFetchError),
@@ -138,7 +131,8 @@ class _Body extends ConsumerWidget {
         showAdaptiveDialog<void>(
           context: context,
           builder: (context) => _RetryFetchPuzzleDialog(
-            ctrlProvider: ctrlProvider,
+            initialPuzzleContext: initialPuzzleContext,
+            streak: streak,
           ),
         );
       }
@@ -153,22 +147,22 @@ class _Body extends ConsumerWidget {
                 onMove: (move, {isDrop, isPremove}) {
                   ref
                       .read(ctrlProvider.notifier)
-                      .onUserMove(Move.fromUci(move.uci)!);
+                      .onUserMove(Move.parse(move.uci)!);
                 },
-                boardData: cg.BoardData(
-                  orientation: puzzleState.pov.cg,
+                boardState: ChessboardState(
+                  orientation: puzzleState.pov,
                   interactableSide: puzzleState.mode == PuzzleMode.load ||
                           puzzleState.position.isGameOver
-                      ? cg.InteractableSide.none
+                      ? InteractableSide.none
                       : puzzleState.mode == PuzzleMode.view
-                          ? cg.InteractableSide.both
+                          ? InteractableSide.both
                           : puzzleState.pov == Side.white
-                              ? cg.InteractableSide.white
-                              : cg.InteractableSide.black,
+                              ? InteractableSide.white
+                              : InteractableSide.black,
                   fen: puzzleState.fen,
                   isCheck: puzzleState.position.isCheck,
-                  lastMove: puzzleState.lastMove?.cg,
-                  sideToMove: puzzleState.position.turn.cg,
+                  lastMove: puzzleState.lastMove as NormalMove?,
+                  sideToMove: puzzleState.position.turn,
                   validMoves: puzzleState.validMoves,
                 ),
                 topTable: Center(
@@ -224,7 +218,7 @@ class _Body extends ConsumerWidget {
         ),
         _BottomBar(
           initialPuzzleContext: initialPuzzleContext,
-          ctrlProvider: ctrlProvider,
+          streak: streak,
         ),
       ],
     );
@@ -260,14 +254,16 @@ class _Body extends ConsumerWidget {
 class _BottomBar extends ConsumerWidget {
   const _BottomBar({
     required this.initialPuzzleContext,
-    required this.ctrlProvider,
+    required this.streak,
   });
 
   final PuzzleContext initialPuzzleContext;
-  final PuzzleControllerProvider ctrlProvider;
+  final PuzzleStreak streak;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final ctrlProvider =
+        puzzleControllerProvider(initialPuzzleContext, initialStreak: streak);
     final puzzleState = ref.watch(ctrlProvider);
 
     return Container(
@@ -408,16 +404,20 @@ class _BottomBar extends ConsumerWidget {
 
 class _RetryFetchPuzzleDialog extends ConsumerWidget {
   const _RetryFetchPuzzleDialog({
-    required this.ctrlProvider,
+    required this.initialPuzzleContext,
+    required this.streak,
   });
 
-  final PuzzleControllerProvider ctrlProvider;
+  final PuzzleContext initialPuzzleContext;
+  final PuzzleStreak streak;
 
   static const title = 'Could not fetch the puzzle';
   static const content = 'Please check your internet connection and try again.';
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final ctrlProvider =
+        puzzleControllerProvider(initialPuzzleContext, initialStreak: streak);
     final state = ref.watch(ctrlProvider);
 
     Future<void> retryStreakNext() async {
@@ -430,7 +430,11 @@ class _RetryFetchPuzzleDialog extends ConsumerWidget {
             Navigator.of(context).pop();
           }
           if (data != null) {
-            ref.read(ctrlProvider.notifier).loadPuzzle(data);
+            ref.read(ctrlProvider.notifier).loadPuzzle(
+                  data,
+                  nextStreak:
+                      state.streak!.copyWith(index: state.streak!.index + 1),
+                );
           }
         },
       );

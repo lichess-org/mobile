@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_preferences.dart';
@@ -35,6 +36,20 @@ class GameSettings extends ConsumerWidget {
         subtitle: const SizedBox.shrink(),
       ),
       const SizedBox(height: 8.0),
+      SwitchSettingTile(
+        title: Text(context.l10n.sound),
+        value: isSoundEnabled,
+        onChanged: (value) {
+          ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled();
+        },
+      ),
+      SwitchSettingTile(
+        title: Text(context.l10n.mobileSettingsHapticFeedback),
+        value: boardPrefs.hapticFeedback,
+        onChanged: (value) {
+          ref.read(boardPreferencesProvider.notifier).toggleHapticFeedback();
+        },
+      ),
       ...userPrefsAsync.maybeWhen(
         data: (data) {
           return [
@@ -48,6 +63,18 @@ class GameSettings extends ConsumerWidget {
                   ref
                       .read(gameControllerProvider(id).notifier)
                       .toggleMoveConfirmation();
+                },
+              ),
+            if (data.prefs?.autoQueen == AutoQueen.always)
+              SwitchSettingTile(
+                title: Text(
+                  context.l10n.preferencesPromoteToQueenAutomatically,
+                ),
+                value: data.canAutoQueen,
+                onChanged: (value) {
+                  ref
+                      .read(gameControllerProvider(id).notifier)
+                      .toggleAutoQueen();
                 },
               ),
             SwitchSettingTile(
@@ -64,17 +91,18 @@ class GameSettings extends ConsumerWidget {
         orElse: () => [],
       ),
       SwitchSettingTile(
-        title: Text(context.l10n.sound),
-        value: isSoundEnabled,
+        // TODO: Add l10n
+        title: const Text('Shape drawing'),
+        subtitle: const Text(
+          'Draw shapes using two fingers.',
+          maxLines: 5,
+          textAlign: TextAlign.justify,
+        ),
+        value: boardPrefs.enableShapeDrawings,
         onChanged: (value) {
-          ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled();
-        },
-      ),
-      SwitchSettingTile(
-        title: Text(context.l10n.mobileSettingsHapticFeedback),
-        value: boardPrefs.hapticFeedback,
-        onChanged: (value) {
-          ref.read(boardPreferencesProvider.notifier).toggleHapticFeedback();
+          ref
+              .read(boardPreferencesProvider.notifier)
+              .toggleEnableShapeDrawings();
         },
       ),
       SwitchSettingTile(
@@ -118,10 +146,8 @@ class GameSettings extends ConsumerWidget {
     ];
 
     return DraggableScrollableSheet(
-      initialChildSize: .7,
+      initialChildSize: 1.0,
       expand: false,
-      snap: true,
-      snapSizes: const [.7],
       builder: (context, scrollController) => ListView(
         controller: scrollController,
         children: content,

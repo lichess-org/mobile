@@ -1,4 +1,3 @@
-import 'package:chessground/chessground.dart' as cg;
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,6 +8,7 @@ import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
+import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 
 class PuzzleFeedbackWidget extends ConsumerWidget {
   const PuzzleFeedbackWidget({
@@ -29,9 +29,7 @@ class PuzzleFeedbackWidget extends ConsumerWidget {
         ref.watch(boardPreferencesProvider.select((state) => state.boardTheme));
     final brightness = ref.watch(currentBrightnessProvider);
 
-    final piece = state.pov == Side.white
-        ? cg.PieceKind.whiteKing
-        : cg.PieceKind.blackKing;
+    final piece = state.pov == Side.white ? kWhiteKingKind : kBlackKingKind;
     final asset = pieceSet.assets[piece]!;
 
     switch (state.mode) {
@@ -61,7 +59,10 @@ class PuzzleFeedbackWidget extends ConsumerWidget {
                 ),
           subtitle: onStreak && state.result == PuzzleResult.lose
               ? null
-              : Text('$puzzleRating. $playedXTimes.'),
+              : RatingPrefAware(
+                  orElse: Text('$playedXTimes.'),
+                  child: Text('$puzzleRating. $playedXTimes.'),
+                ),
         );
       case PuzzleMode.load:
       case PuzzleMode.play:

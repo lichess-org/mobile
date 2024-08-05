@@ -6,7 +6,7 @@ class LichessColors {
   LichessColors._();
 
   // material colors palette generated with:
-  // http://mcg.mbitson.com
+  // http://mmbitson.com
 
   // primary: blue
   static const MaterialColor primary =

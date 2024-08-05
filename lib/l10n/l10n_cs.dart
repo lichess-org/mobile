@@ -2,6 +2,8 @@ import 'package:intl/intl.dart' as intl;
 
 import 'l10n.dart';
 
+// ignore_for_file: type=lint
+
 /// The translations for Czech (`cs`).
 class AppLocalizationsCs extends AppLocalizations {
   AppLocalizationsCs([String locale = 'cs']) : super(locale);
@@ -69,7 +71,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get mobilePuzzleStreakAbortWarning => 'You will lose your current streak and your score will be saved.';
 
   @override
-  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of storm';
+  String get mobilePuzzleStormNothingToShow => 'Nothing to show. Play some runs of Puzzle Storm.';
 
   @override
   String get mobileSharePuzzle => 'Share this puzzle';
@@ -121,6 +123,26 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get mobileSomethingWentWrong => 'Something went wrong.';
+
+  @override
+  String get mobileShowResult => 'Show result';
+
+  @override
+  String get mobilePuzzleThemesSubtitle => 'Play puzzles from your favorite openings, or choose a theme.';
+
+  @override
+  String get mobilePuzzleStormSubtitle => 'Solve as many puzzles as possible in 3 minutes.';
+
+  @override
+  String mobileGreeting(String param) {
+    return 'Hello, $param';
+  }
+
+  @override
+  String get mobileGreetingWithoutName => 'Hello';
+
+  @override
+  String get mobilePrefMagnifyDraggedPiece => 'Magnify dragged piece';
 
   @override
   String get activityActivity => 'Aktivita';
@@ -361,7 +383,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get broadcastBroadcasts => 'Přenosy';
 
   @override
-  String get broadcastStartDate => 'Datum a čas zahájení ve vašem časovém pásmu';
+  String get broadcastLiveBroadcasts => 'Živé přenosy turnajů';
 
   @override
   String challengeChallengesX(String param1) {
@@ -607,7 +629,7 @@ class AppLocalizationsCs extends AppLocalizations {
   String get preferencesShowPlayerRatings => 'Zobrazit hodnocení hráčů';
 
   @override
-  String get preferencesShowFlairs => 'Zobrazit hráčův rating';
+  String get preferencesShowFlairs => 'Zobrazovat ikony hráčů';
 
   @override
   String get preferencesExplainShowPlayerRatings => 'Toto umožňuje skrýt rating z webových stránek, což pomůže soustředit se pouze na šachy. Hodnocené hry budou mít stále dopad na Váš rating.';
@@ -1900,6 +1922,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get friends => 'Přátelé';
 
   @override
+  String get otherPlayers => 'other players';
+
+  @override
   String get discussions => 'Konverzace';
 
   @override
@@ -2729,6 +2754,12 @@ class AppLocalizationsCs extends AppLocalizations {
 
   @override
   String get yes => 'Ano';
+
+  @override
+  String get website => 'Website';
+
+  @override
+  String get mobile => 'Mobile';
 
   @override
   String get help => 'Nápověda:';

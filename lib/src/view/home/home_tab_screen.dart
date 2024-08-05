@@ -11,8 +11,8 @@ import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/settings/home_preferences.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
+import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
@@ -286,7 +286,9 @@ class _HomeBody extends ConsumerWidget {
                   widget: EnabledWidget.perfCards,
                   isEditing: isEditing,
                   shouldShow: session != null,
-                  child: AccountPerfCards(padding: Styles.bodySectionPadding),
+                  child: const AccountPerfCards(
+                    padding: Styles.horizontalBodyPadding,
+                  ),
                 ),
                 _EditableWidget(
                   widget: EnabledWidget.quickPairing,
@@ -526,11 +528,14 @@ class _HelloWidget extends ConsumerWidget {
               color: context.lichessColors.brag,
             ),
             const SizedBox(width: 5.0),
-            Text(
-              'Hello${user != null ? ', ' : ''}',
-              style: style,
-            ),
-            if (user != null) UserFullNameWidget(user: user, style: style),
+            if (user != null)
+              l10nWithWidget(
+                context.l10n.mobileGreeting,
+                UserFullNameWidget(user: user, style: style),
+                textStyle: style,
+              )
+            else
+              Text(context.l10n.mobileGreetingWithoutName, style: style),
           ],
         ),
       ),
@@ -738,8 +743,8 @@ class _GamePreviewCarouselItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return BoardCarouselItem(
       fen: game.fen,
-      orientation: game.orientation.cg,
-      lastMove: game.lastMove?.cg,
+      orientation: game.orientation,
+      lastMove: game.lastMove,
       description: Align(
         alignment: Alignment.centerLeft,
         child: Padding(

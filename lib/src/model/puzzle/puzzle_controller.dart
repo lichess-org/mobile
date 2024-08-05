@@ -106,6 +106,7 @@ class PuzzleController extends _$PuzzleController {
       resultSent: false,
       isChangingDifficulty: false,
       isLocalEvalEnabled: false,
+      viewedSolutionRecently: false,
       streak: streak,
       nextPuzzleStreakFetchError: false,
       nextPuzzleStreakFetchIsRetrying: false,
@@ -137,7 +138,7 @@ class PuzzleController extends _$PuzzleController {
         // another puzzle move: let's continue
         else if (nextUci != null) {
           await Future<void>.delayed(const Duration(milliseconds: 500));
-          _addMove(Move.fromUci(nextUci)!);
+          _addMove(Move.parse(nextUci)!);
         }
         // no more puzzle move: it's a win
         else {
@@ -159,11 +160,17 @@ class PuzzleController extends _$PuzzleController {
   void userNext() {
     _viewSolutionTimer?.cancel();
     _goToNextNode(replaying: true);
+    state = state.copyWith(
+      viewedSolutionRecently: false,
+    );
   }
 
   void userPrevious() {
     _viewSolutionTimer?.cancel();
     _goToPreviousNode(replaying: true);
+    state = state.copyWith(
+      viewedSolutionRecently: false,
+    );
   }
 
   void viewSolution() {
@@ -181,12 +188,14 @@ class PuzzleController extends _$PuzzleController {
       mode: PuzzleMode.view,
     );
 
-    _viewSolutionTimer =
-        Timer.periodic(const Duration(milliseconds: 800), (timer) {
+    Timer(const Duration(milliseconds: 800), () {
+      _goToNextNode();
+
       if (state.canGoNext) {
-        _goToNextNode();
-      } else {
-        timer.cancel();
+        state = state.copyWith(viewedSolutionRecently: true);
+        Timer(const Duration(seconds: 5), () {
+          state = state.copyWith(viewedSolutionRecently: false);
+        });
       }
     });
   }
@@ -196,7 +205,7 @@ class PuzzleController extends _$PuzzleController {
       state = state.copyWith.streak!(hasSkipped: true);
       final moveIndex = state.currentPath.size - state.initialPath.size;
       final solution = state.puzzle.puzzle.solution[moveIndex];
-      onUserMove(Move.fromUci(solution)!);
+      onUserMove(Move.parse(solution)!);
     }
   }
 
@@ -223,10 +232,10 @@ class PuzzleController extends _$PuzzleController {
     return nextPuzzle;
   }
 
-  void loadPuzzle(PuzzleContext nextContext) {
+  void loadPuzzle(PuzzleContext nextContext, {PuzzleStreak? nextStreak}) {
     ref.read(evaluationServiceProvider).disposeEngine();
 
-    state = _loadNewContext(nextContext, state.streak);
+    state = _loadNewContext(nextContext, nextStreak ?? state.streak);
   }
 
   void sendStreakResult() {
@@ -384,13 +393,14 @@ class PuzzleController extends _$PuzzleController {
           final result = await _nextPuzzleFuture!;
           result.match(
             onSuccess: (nextContext) async {
-              state = state.copyWith.streak!(
-                index: state.streak!.index + 1,
-              );
               if (nextContext != null) {
                 await Future<void>.delayed(const Duration(milliseconds: 250));
                 soundService.play(Sound.confirmation);
-                loadPuzzle(nextContext);
+                loadPuzzle(
+                  nextContext,
+                  nextStreak:
+                      state.streak!.copyWith(index: state.streak!.index + 1),
+                );
               } else {
                 // no more puzzle
                 state = state.copyWith.streak!(
@@ -465,7 +475,7 @@ class PuzzleController extends _$PuzzleController {
     var currentPosition = initPosition;
     final pgnMoves = state.puzzle.puzzle.solution.fold<List<String>>([],
         (List<String> acc, move) {
-      final moveObj = Move.fromUci(move);
+      final moveObj = Move.parse(move);
       if (moveObj != null) {
         final String san;
         (currentPosition, san) = currentPosition.makeSan(moveObj);
@@ -514,7 +524,7 @@ class PuzzleController extends _$PuzzleController {
     final (_, newNodes) = state.puzzle.puzzle.solution.foldIndexed(
       (initialNode.position, IList<Branch>(const [])),
       (index, previous, uci) {
-        final move = Move.fromUci(uci);
+        final move = Move.parse(uci);
         final (pos, nodes) = previous;
         final (newPos, newSan) = pos.makeSan(move!);
         return (
@@ -558,6 +568,7 @@ class PuzzleState with _$PuzzleState {
     required bool isLocalEvalEnabled,
     required bool resultSent,
     required bool isChangingDifficulty,
+    required bool viewedSolutionRecently,
     PuzzleContext? nextContext,
     PuzzleStreak? streak,
     // if the automatic attempt to fetch the next puzzle in the streak fails
@@ -581,5 +592,5 @@ class PuzzleState with _$PuzzleState {
   bool get canGoBack =>
       mode == PuzzleMode.view && currentPath.size > initialPath.size;
 
-  IMap<String, ISet<String>> get validMoves => algebraicLegalMoves(position);
+  IMap<Square, ISet<Square>> get validMoves => makeLegalMoves(position);
 }

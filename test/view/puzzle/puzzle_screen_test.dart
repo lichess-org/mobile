@@ -1,10 +1,11 @@
-import 'package:chessground/chessground.dart' as cg;
+import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
+import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
@@ -13,7 +14,9 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_batch_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
+import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
+import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../test_app.dart';
@@ -95,7 +98,7 @@ void main() {
         // wait for the puzzle to load
         await tester.pump(const Duration(milliseconds: 200));
 
-        expect(find.byType(cg.Board), findsOneWidget);
+        expect(find.byType(Chessboard), findsOneWidget);
         expect(find.text('Your turn'), findsOneWidget);
       },
     );
@@ -124,13 +127,13 @@ void main() {
 
       await tester.pumpWidget(app);
 
-      expect(find.byType(cg.Board), findsNothing);
+      expect(find.byType(Chessboard), findsNothing);
       expect(find.text('Your turn'), findsNothing);
 
       // wait for the puzzle to load
       await tester.pump(const Duration(milliseconds: 200));
 
-      expect(find.byType(cg.Board), findsOneWidget);
+      expect(find.byType(Chessboard), findsOneWidget);
       expect(find.text('Your turn'), findsOneWidget);
     });
 
@@ -186,16 +189,16 @@ void main() {
         // wait for the puzzle to load
         await tester.pump(const Duration(milliseconds: 200));
 
-        expect(find.byType(cg.Board), findsOneWidget);
+        expect(find.byType(Chessboard), findsOneWidget);
         expect(find.text('Your turn'), findsOneWidget);
 
         // before the first move is played, puzzle is not interactable
-        expect(find.byKey(const Key('g4-blackRook')), findsOneWidget);
-        await tester.tap(find.byKey(const Key('g4-blackRook')));
+        expect(find.byKey(const Key('g4-blackrook')), findsOneWidget);
+        await tester.tap(find.byKey(const Key('g4-blackrook')));
         await tester.pump();
         expect(find.byKey(const Key('g4-selected')), findsNothing);
 
-        const orientation = cg.Side.black;
+        const orientation = Side.black;
 
         // await for first move to be played
         await tester.pump(const Duration(milliseconds: 1500));
@@ -205,25 +208,25 @@ void main() {
         // in play mode we see the solution button
         expect(find.byIcon(Icons.help), findsOneWidget);
 
-        expect(find.byKey(const Key('g4-blackRook')), findsOneWidget);
-        expect(find.byKey(const Key('h8-whiteQueen')), findsOneWidget);
+        expect(find.byKey(const Key('g4-blackrook')), findsOneWidget);
+        expect(find.byKey(const Key('h8-whitequeen')), findsOneWidget);
 
-        final boardRect = tester.getRect(find.byType(cg.Board));
+        final boardRect = tester.getRect(find.byType(Chessboard));
 
         await playMove(tester, boardRect, 'g4', 'h4', orientation: orientation);
 
-        expect(find.byKey(const Key('h4-blackRook')), findsOneWidget);
+        expect(find.byKey(const Key('h4-blackrook')), findsOneWidget);
         expect(find.text('Best move!'), findsOneWidget);
 
         // wait for line reply and move animation
         await tester.pump(const Duration(milliseconds: 500));
         await tester.pumpAndSettle();
 
-        expect(find.byKey(const Key('h4-whiteQueen')), findsOneWidget);
+        expect(find.byKey(const Key('h4-whitequeen')), findsOneWidget);
 
         await playMove(tester, boardRect, 'b4', 'h4', orientation: orientation);
 
-        expect(find.byKey(const Key('h4-blackRook')), findsOneWidget);
+        expect(find.byKey(const Key('h4-blackrook')), findsOneWidget);
         expect(find.text('Success!'), findsOneWidget);
 
         // wait for move animation
@@ -248,10 +251,9 @@ void main() {
       },
     );
 
-    testWidgets(
-      'fails a puzzle',
-      variant: kPlatformVariant,
-      (tester) async {
+    for (final showRatings in [true, false]) {
+      testWidgets('fails a puzzle, (showRatings: $showRatings)',
+          variant: kPlatformVariant, (tester) async {
         final mockClient = MockClient((request) {
           if (request.url.path == '/api/puzzle/batch/mix') {
             return mockResponse(batchOf1, 200);
@@ -276,6 +278,9 @@ void main() {
               return mockBatchStorage;
             }),
             puzzleStorageProvider.overrideWith((ref) => mockHistoryStorage),
+            showRatingsPrefProvider.overrideWith((ref) {
+              return showRatings;
+            }),
           ],
         );
 
@@ -300,17 +305,17 @@ void main() {
         // wait for the puzzle to load
         await tester.pump(const Duration(milliseconds: 200));
 
-        expect(find.byType(cg.Board), findsOneWidget);
+        expect(find.byType(Chessboard), findsOneWidget);
         expect(find.text('Your turn'), findsOneWidget);
 
-        const orientation = cg.Side.black;
+        const orientation = Side.black;
 
         // await for first move to be played
         await tester.pump(const Duration(milliseconds: 1500));
 
-        expect(find.byKey(const Key('g4-blackRook')), findsOneWidget);
+        expect(find.byKey(const Key('g4-blackrook')), findsOneWidget);
 
-        final boardRect = tester.getRect(find.byType(cg.Board));
+        final boardRect = tester.getRect(find.byType(Chessboard));
 
         await playMove(tester, boardRect, 'g4', 'f4', orientation: orientation);
 
@@ -324,11 +329,11 @@ void main() {
         await tester.pumpAndSettle();
 
         // can still play the puzzle
-        expect(find.byKey(const Key('g4-blackRook')), findsOneWidget);
+        expect(find.byKey(const Key('g4-blackrook')), findsOneWidget);
 
         await playMove(tester, boardRect, 'g4', 'h4', orientation: orientation);
 
-        expect(find.byKey(const Key('h4-blackRook')), findsOneWidget);
+        expect(find.byKey(const Key('h4-blackrook')), findsOneWidget);
         expect(find.text('Best move!'), findsOneWidget);
 
         // wait for line reply and move animation
@@ -337,9 +342,19 @@ void main() {
 
         await playMove(tester, boardRect, 'b4', 'h4', orientation: orientation);
 
-        expect(find.byKey(const Key('h4-blackRook')), findsOneWidget);
+        expect(find.byKey(const Key('h4-blackrook')), findsOneWidget);
         expect(
           find.text('Puzzle complete!'),
+          findsOneWidget,
+        );
+        final expectedPlayedXTimes =
+            'Played ${puzzle2.puzzle.plays.toString().localizeNumbers()} times.';
+        expect(
+          find.text(
+            showRatings
+                ? 'Rating: ${puzzle2.puzzle.rating}. $expectedPlayedXTimes'
+                : expectedPlayedXTimes,
+          ),
           findsOneWidget,
         );
 
@@ -348,8 +363,8 @@ void main() {
 
         // called once to save solution and once after fetching a new puzzle
         verify(saveDBReq).called(2);
-      },
-    );
+      });
+    }
 
     testWidgets(
       'view solution',
@@ -403,27 +418,35 @@ void main() {
         // wait for the puzzle to load
         await tester.pump(const Duration(milliseconds: 200));
 
-        expect(find.byType(cg.Board), findsOneWidget);
+        expect(find.byType(Chessboard), findsOneWidget);
         expect(find.text('Your turn'), findsOneWidget);
 
         // await for first move to be played and view solution button to appear
         await tester.pump(const Duration(seconds: 5));
 
-        expect(find.byKey(const Key('g4-blackRook')), findsOneWidget);
+        expect(find.byKey(const Key('g4-blackrook')), findsOneWidget);
 
         expect(find.byIcon(Icons.help), findsOneWidget);
         await tester.tap(find.byIcon(Icons.help));
 
         // wait for solution replay animation to finish
-        await tester.pump(const Duration(seconds: 3));
+        await tester.pump(const Duration(seconds: 1));
         await tester.pumpAndSettle();
 
-        expect(find.byKey(const Key('h4-blackRook')), findsOneWidget);
-        expect(find.byKey(const Key('h8-whiteQueen')), findsNothing);
+        expect(find.byKey(const Key('h4-blackrook')), findsOneWidget);
+        expect(find.byKey(const Key('h8-whitequeen')), findsOneWidget);
         expect(
           find.text('Puzzle complete!'),
           findsOneWidget,
         );
+
+        final nextMoveBtnEnabled = find.byWidgetPredicate(
+          (widget) =>
+              widget is BottomBarButton &&
+              widget.icon == CupertinoIcons.chevron_forward &&
+              widget.enabled,
+        );
+        expect(nextMoveBtnEnabled, findsOneWidget);
 
         expect(find.byIcon(CupertinoIcons.play_arrow_solid), findsOneWidget);
 
