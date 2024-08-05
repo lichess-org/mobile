@@ -396,18 +396,12 @@ class _Body extends ConsumerWidget {
           ),
           PlatformListTile(
             leading: const Icon(Icons.storage),
-            title: const Text('Delete local database'),
+            title: const Text('Local database size'),
             additionalInfo:
                 dbSize.hasValue ? Text(_getSizeString(dbSize.value)) : null,
             trailing: Theme.of(context).platform == TargetPlatform.iOS
                 ? const CupertinoListTileChevron()
                 : Text(_getSizeString(dbSize.value)),
-            onTap: () => showConfirmDialog<void>(
-              context,
-              title: const Text('Delete local database'),
-              onConfirm: (_) => _deleteDatabase(ref),
-              isDestructiveAction: true,
-            ),
           ),
         ],
       ),
@@ -483,12 +477,6 @@ class _Body extends ConsumerWidget {
       '${_bytesToMB(bytes ?? (0)).toStringAsFixed(2)}MB';
 
   double _bytesToMB(int bytes) => bytes * 0.000001;
-
-  Future<void> _deleteDatabase(WidgetRef ref) async {
-    final db = ref.read(databaseProvider);
-    await clearDatabase(db);
-    ref.invalidate(getDbSizeInBytesProvider);
-  }
 
   void _refreshData(WidgetRef ref) {
     ref.invalidate(getDbSizeInBytesProvider);

@@ -51,18 +51,6 @@ Future<int> getDbSizeInBytes(GetDbSizeInBytesRef ref) async {
   return dbFile.length();
 }
 
-/// Clears all database rows regardless of TTL.
-Future<void> clearDatabase(Database db) async {
-  await Future.wait([
-    _deleteEntry(db, 'puzzle_batchs'),
-    _deleteEntry(db, 'puzzle'),
-    _deleteEntry(db, 'correspondence_game'),
-    _deleteEntry(db, 'game'),
-    _deleteEntry(db, 'chat_read_messages'),
-  ]);
-  await db.execute('VACUUM');
-}
-
 Future<Database> openDb(DatabaseFactory dbFactory, String path) async {
   return dbFactory.openDatabase(
     path,
