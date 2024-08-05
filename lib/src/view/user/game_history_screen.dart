@@ -34,11 +34,20 @@ class GameHistoryScreen extends ConsumerWidget {
         (state) => state.count,
       ),
     );
-    final title = Text(
-      username != null
-          ? '$username ${context.l10n.games.toLowerCase()}'
-          : context.l10n.games,
+    final nbGamesAsync = ref.watch(
+      userNumberOfGamesProvider(user, isOnline: isOnline),
     );
+    final title = filtersInUse == 0
+        ? nbGamesAsync.when(
+            data: (nbGames) => Text(context.l10n.nbGames(nbGames)),
+            loading: () => const ButtonLoadingIndicator(),
+            error: (e, s) => Text(context.l10n.mobileAllGames),
+          )
+        : Text(
+            username != null
+                ? '$username ${context.l10n.games.toLowerCase()}'
+                : context.l10n.games,
+          );
     final filterBtn = Stack(
       alignment: Alignment.center,
       children: [
