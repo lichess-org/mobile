@@ -32,6 +32,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
+import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
@@ -142,6 +143,7 @@ class _LoadedAnalysisScreen extends ConsumerWidget {
         title: _Title(options: options, title: title),
         actions: [
           _EngineDepth(ctrlProvider),
+          BookmarkButton(id: options.id as GameId),
           AppBarIconButton(
             onPressed: () => showAdaptiveBottomSheet<void>(
               context: context,
@@ -173,6 +175,7 @@ class _LoadedAnalysisScreen extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             _EngineDepth(ctrlProvider),
+            BookmarkButton(id: options.id as GameId),
             AppBarIconButton(
               onPressed: () => showAdaptiveBottomSheet<void>(
                 context: context,

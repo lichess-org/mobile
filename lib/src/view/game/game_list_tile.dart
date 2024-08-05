@@ -5,8 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
+import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
@@ -270,6 +270,16 @@ class _ContextMenu extends ConsumerWidget {
                 closeOnPressed: false,
                 child: Text(context.l10n.mobileShareGameURL),
               ),
+              BottomSheetContextMenuAction(
+                onPressed: () {
+                  ref.withClient(
+                    (client) => GameRepository(client).bookmark(game.id, v: 1),
+                  );
+                },
+                icon: Icons.star_border_rounded,
+                closeOnPressed: false,
+                child: const Text('Bookmark Game'),
+              ),
               // Builder is used to retrieve the context immediately surrounding the
               // BottomSheetContextMenuAction
               // This is necessary to get the correct context for the iPad share dialog
@@ -438,12 +448,10 @@ class _ContextMenu extends ConsumerWidget {
 class ExtendedGameListTile extends StatelessWidget {
   const ExtendedGameListTile({
     required this.item,
-    this.userId,
     this.padding,
   });
 
   final LightArchivedGameWithPov item;
-  final UserId? userId;
 
   final EdgeInsetsGeometry? padding;
 
