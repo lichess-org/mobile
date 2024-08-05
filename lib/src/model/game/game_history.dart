@@ -132,7 +132,7 @@ class UserGameHistory extends _$UserGameHistory {
         ? ref.withClient(
             (client) => GameRepository(client).getUserGames(id, filter: filter),
           )
-        : storage.page(userId: id, max: kNumberOfRecentGames).then(
+        : storage.page(userId: id, filter: filter).then(
               (value) => value
                   // we can assume that `youAre` is not null either for logged
                   // in users or for anonymous users
