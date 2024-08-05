@@ -4,6 +4,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
+import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -44,6 +45,7 @@ class GameStorage {
     UserId? userId,
     DateTime? until,
     int max = 20,
+    GameFilterState filter = const GameFilterState(),
   }) async {
     final list = await _db.query(
       kGameStorageTable,
@@ -59,20 +61,27 @@ class GameStorage {
       limit: max,
     );
 
-    return list.map((e) {
-      final raw = e['data']! as String;
-      final json = jsonDecode(raw);
-      if (json is! Map<String, dynamic>) {
-        throw const FormatException(
-          '[GameStorage] cannot fetch game: expected an object',
-        );
-      }
-      return (
-        userId: UserId(e['userId']! as String),
-        lastModified: DateTime.parse(e['lastModified']! as String),
-        game: ArchivedGame.fromJson(json),
-      );
-    }).toIList();
+    return list
+        .map((e) {
+          final raw = e['data']! as String;
+          final json = jsonDecode(raw);
+          if (json is! Map<String, dynamic>) {
+            throw const FormatException(
+              '[GameStorage] cannot fetch game: expected an object',
+            );
+          }
+          return (
+            userId: UserId(e['userId']! as String),
+            lastModified: DateTime.parse(e['lastModified']! as String),
+            game: ArchivedGame.fromJson(json),
+          );
+        })
+        .where(
+          (e) =>
+              filter.perfs.isEmpty || filter.perfs.contains(e.game.meta.perf),
+        )
+        .where((e) => filter.side == null || filter.side == e.game.youAre)
+        .toIList();
   }
 
   Future<ArchivedGame?> fetch({
