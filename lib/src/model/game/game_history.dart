@@ -33,19 +33,15 @@ const _nbPerPage = 20;
 /// stored locally are fetched instead.
 @riverpod
 Future<IList<LightArchivedGameWithPov>> myRecentGames(
-  MyRecentGamesRef ref, {
-  GameFilterState filter = const GameFilterState(),
-}) async {
+  MyRecentGamesRef ref,
+) async {
   final online = await ref
       .watch(connectivityChangesProvider.selectAsync((c) => c.isOnline));
   final session = ref.watch(authSessionProvider);
   if (session != null && online) {
     return ref.withClientCacheFor(
-      (client) => GameRepository(client).getUserGames(
-        session.user.id,
-        max: kNumberOfRecentGames,
-        filter: filter,
-      ),
+      (client) => GameRepository(client)
+          .getUserGames(session.user.id, max: kNumberOfRecentGames),
       const Duration(hours: 1),
     );
   } else {
@@ -68,10 +64,9 @@ Future<IList<LightArchivedGameWithPov>> myRecentGames(
 Future<IList<LightArchivedGameWithPov>> userRecentGames(
   UserRecentGamesRef ref, {
   required UserId userId,
-  GameFilterState filter = const GameFilterState(),
 }) {
   return ref.withClientCacheFor(
-    (client) => GameRepository(client).getUserGames(userId, filter: filter),
+    (client) => GameRepository(client).getUserGames(userId),
     // cache is important because the associated widget is in a [ListView] and
     // the provider may be instanciated multiple times in a short period of time
     // (e.g. when scrolling)
@@ -128,15 +123,25 @@ class UserGameHistory extends _$UserGameHistory {
     });
 
     final session = ref.watch(authSessionProvider);
+    final online = await ref
+        .watch(connectivityChangesProvider.selectAsync((c) => c.isOnline));
+    final storage = ref.watch(gameStorageProvider);
 
-    final recentGames = userId != null
-        ? ref.read(
-            userRecentGamesProvider(
-              userId: userId,
-              filter: filter,
-            ).future,
+    final id = userId ?? session?.user.id;
+    final recentGames = id != null && online
+        ? ref.withClient(
+            (client) => GameRepository(client).getUserGames(id, filter: filter),
           )
-        : ref.read(myRecentGamesProvider(filter: filter).future);
+        : storage.page(userId: id, max: kNumberOfRecentGames).then(
+              (value) => value
+                  // we can assume that `youAre` is not null either for logged
+                  // in users or for anonymous users
+                  .map(
+                    (e) =>
+                        (game: e.game.data, pov: e.game.youAre ?? Side.white),
+                  )
+                  .toIList(),
+            );
 
     _list.addAll(await recentGames);
 
