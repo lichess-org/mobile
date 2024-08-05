@@ -69,20 +69,21 @@ class BoardEditorController extends _$BoardEditorController {
     state = state.copyWith(pieces: pieces);
   }
 
-  void setWhiteKingsideCastlingAllowed(bool allowed) {
-    _setRookUnmoved(Square.h1, allowed);
-  }
-
-  void setWhiteQueensideCastlingAllowed(bool allowed) {
-    _setRookUnmoved(Square.a1, allowed);
-  }
-
-  void setBlackKingsideCastlingAllowed(bool allowed) {
-    _setRookUnmoved(Square.h8, allowed);
-  }
-
-  void setBlackQueensideCastlingAllowed(bool allowed) {
-    _setRookUnmoved(Square.a8, allowed);
+  void setCastling(Side side, CastlingSide castlingSide, bool allowed) {
+    switch (side) {
+      case Side.white:
+        if (castlingSide == CastlingSide.king) {
+          _setRookUnmoved(Square.h1, allowed);
+        } else {
+          _setRookUnmoved(Square.a1, allowed);
+        }
+      case Side.black:
+        if (castlingSide == CastlingSide.king) {
+          _setRookUnmoved(Square.h8, allowed);
+        } else {
+          _setRookUnmoved(Square.a8, allowed);
+        }
+    }
   }
 
   void _setRookUnmoved(Square square, bool unmoved) {
@@ -109,10 +110,17 @@ class BoardEditorState with _$BoardEditorState {
     required Piece? pieceToAddOnEdit,
   }) = _BoardEditorState;
 
-  bool get canWhiteCastleKingside => unmovedRooks.has(Square.h1);
-  bool get canWhiteCastleQueenside => unmovedRooks.has(Square.a1);
-  bool get canBlackCastleKingside => unmovedRooks.has(Square.h8);
-  bool get canBlackCastleQueenside => unmovedRooks.has(Square.a8);
+  bool isCastlingAllowed(Side side, CastlingSide castlingSide) =>
+      switch (side) {
+        Side.white => switch (castlingSide) {
+            CastlingSide.king => unmovedRooks.has(Square.h1),
+            CastlingSide.queen => unmovedRooks.has(Square.a1),
+          },
+        Side.black => switch (castlingSide) {
+            CastlingSide.king => unmovedRooks.has(Square.h8),
+            CastlingSide.queen => unmovedRooks.has(Square.a8),
+          },
+      };
 
   Setup get _setup {
     final boardFen = writeFen(pieces.unlock);
@@ -134,6 +142,9 @@ class BoardEditorState with _$BoardEditorState {
 
   String get fen => _setup.fen;
 
+  /// Returns the PGN representation of the current position if it is valid.
+  ///
+  /// Returns `null` if the position is invalid.
   String? get pgn {
     try {
       final position = Chess.fromSetup(_setup);

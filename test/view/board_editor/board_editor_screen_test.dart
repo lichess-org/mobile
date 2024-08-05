@@ -59,31 +59,31 @@ void main() {
         'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1',
       );
 
-      boardEditorController.setWhiteKingsideCastlingAllowed(false);
+      boardEditorController.setCastling(Side.white, CastlingSide.king, false);
       expect(
         boardEditorController.state.fen,
         'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b Qkq - 0 1',
       );
 
-      boardEditorController.setWhiteQueensideCastlingAllowed(false);
+      boardEditorController.setCastling(Side.white, CastlingSide.queen, false);
       expect(
         boardEditorController.state.fen,
         'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b kq - 0 1',
       );
 
-      boardEditorController.setBlackKingsideCastlingAllowed(false);
+      boardEditorController.setCastling(Side.black, CastlingSide.king, false);
       expect(
         boardEditorController.state.fen,
         'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b q - 0 1',
       );
 
-      boardEditorController.setBlackQueensideCastlingAllowed(false);
+      boardEditorController.setCastling(Side.black, CastlingSide.queen, false);
       expect(
         boardEditorController.state.fen,
         'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b - - 0 1',
       );
 
-      boardEditorController.setWhiteKingsideCastlingAllowed(true);
+      boardEditorController.setCastling(Side.white, CastlingSide.king, true);
       expect(
         boardEditorController.state.fen,
         'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b K - 0 1',

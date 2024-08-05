@@ -8,7 +8,6 @@ import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/board_editor/board_editor_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
-import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -212,7 +211,7 @@ class _PieceMenuState extends ConsumerState<_PieceMenu> {
                             .watch(boardEditorControllerProvider)
                             .editorPointerMode ==
                         EditorPointerMode.drag
-                    ? Theme.of(context).colorScheme.tertiary
+                    ? context.lichessColors.good
                     : Colors.transparent,
                 child: GestureDetector(
                   onTap: () => ref
@@ -270,7 +269,7 @@ class _PieceMenuState extends ConsumerState<_PieceMenu> {
               height: squareSize,
               child: ColoredBox(
                 color: editorState.deletePiecesActive
-                    ? Theme.of(context).colorScheme.error
+                    ? context.lichessColors.error
                     : Colors.transparent,
                 child: GestureDetector(
                   onTap: () => {
@@ -301,7 +300,10 @@ class _BottomBar extends ConsumerWidget {
 
     return Container(
       color: Theme.of(context).platform == TargetPlatform.iOS
-          ? CupertinoTheme.of(context).barBackgroundColor
+          ? CupertinoDynamicColor.resolve(
+              CupertinoColors.tertiarySystemGroupedBackground,
+              context,
+            )
           : Theme.of(context).bottomAppBarTheme.color,
       child: SafeArea(
         top: false,
@@ -315,11 +317,9 @@ class _BottomBar extends ConsumerWidget {
                   label: context.l10n.menu,
                   onTap: () => showAdaptiveBottomSheet<void>(
                     context: context,
-                    isScrollControlled: true,
-                    showDragHandle: true,
                     builder: (BuildContext context) => const BoardEditorMenu(),
                   ),
-                  icon: Icons.menu,
+                  icon: Icons.tune,
                 ),
               ),
               Expanded(
@@ -329,7 +329,7 @@ class _BottomBar extends ConsumerWidget {
                   onTap: ref
                       .read(boardEditorControllerProvider.notifier)
                       .flipBoard,
-                  icon: Icons.flip,
+                  icon: CupertinoIcons.arrow_2_squarepath,
                 ),
               ),
               Expanded(
@@ -353,7 +353,7 @@ class _BottomBar extends ConsumerWidget {
                           );
                         }
                       : null,
-                  icon: LichessIcons.microscope,
+                  icon: Icons.biotech,
                 ),
               ),
               Expanded(
@@ -363,7 +363,9 @@ class _BottomBar extends ConsumerWidget {
                     context,
                     text: editorState.fen,
                   ),
-                  icon: Icons.share,
+                  icon: Theme.of(context).platform == TargetPlatform.iOS
+                      ? CupertinoIcons.share
+                      : Icons.share,
                 ),
               ),
               const SizedBox(height: 26.0),

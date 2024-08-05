@@ -37,7 +37,7 @@ class UciCharPair with _$UciCharPair {
             String.fromCharCode(35 + f),
             String.fromCharCode(
               p != null
-                  ? 35 + 64 + 8 * _promotionRoles.indexOf(p) + t.file.value
+                  ? 35 + 64 + 8 * _promotionRoles.indexOf(p) + t.file
                   : 35 + t,
             ),
           ),
