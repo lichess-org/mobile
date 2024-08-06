@@ -1,2 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+  <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">მთავარი</string>
+  <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">დიახ</string>
+</resources>
