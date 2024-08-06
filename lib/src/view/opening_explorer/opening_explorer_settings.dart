@@ -69,8 +69,8 @@ class OpeningExplorerSettings extends ConsumerWidget {
               .map(
                 (rating) => FilterChip(
                   label: Text(rating.toString()),
-                  tooltip: rating == 0
-                      ? '0-1000'
+                  tooltip: rating == 400
+                      ? '400-1000'
                       : rating == 2500
                           ? '2500+'
                           : '$rating-${rating + 200}',

@@ -183,7 +183,7 @@ class LichessDbPrefState with _$LichessDbPrefState {
     Perf.correspondence,
   });
   static const kAvailableRatings = ISetConst({
-    0,
+    400,
     1000,
     1200,
     1400,
