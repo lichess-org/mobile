@@ -25,16 +25,23 @@
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">게임 URL 공유</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">PGN 공유</string>
   <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">FEN으로 공유</string>
+  <string name="showVariations" comment="Shown in the analysis screen.">바리에이션 보이기</string>
+  <string name="hideVariation" comment="Shown in the analysis screen.">바리에이션 숨기기</string>
   <string name="showComments" comment="Shown in the analysis screen.">댓글 보기</string>
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">이 도전을 종료하시겠습니까?</string>
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">표시할 것이 없습니다. 필터를 변경해 주세요</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">무르기 요청 취소</string>
   <string name="cancelDrawOffer" comment="Menu action that cancels a previous draw offer">무승부 요청 취소</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">상대 참가를 기다리는 중...</string>
+  <string name="blindfoldMode" comment="This button toggles blindfold mode. This mean the user can only see the board, but not the pieces.">기물 가리기</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">방송 중인 스트리머</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">게임 참가</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">저장된 수 삭제</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">문제가 발생했습니다.</string>
+  <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">결과 표시</string>
+  <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">당신이 가장 좋아하는 오프닝으로부터의 퍼즐을 플레이하거나, 테마를 선택하십시오.</string>
   <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">3분 이내에 최대한 많은 퍼즐을 해결하십시오.</string>
   <string name="greeting" comment="A greeting that is shown on the app's home page, e.g. 'Hello, GM Magnus'. %s is substituted with the user's name">안녕하세요, %s</string>
+  <string name="greetingWithoutName" comment="Greeing that is shown on the app's home page when the user is not logged in.">안녕하세요</string>
+  <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">드래그한 기물 확대하기</string>
 </resources>
