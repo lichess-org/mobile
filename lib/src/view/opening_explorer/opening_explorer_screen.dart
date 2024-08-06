@@ -458,7 +458,7 @@ class _GameList extends StatelessWidget {
   });
 
   final String title;
-  final IList<Game> games;
+  final IList<OpeningGame> games;
 
   @override
   Widget build(BuildContext context) {
@@ -492,7 +492,7 @@ class _GameTile extends ConsumerWidget {
     required this.color,
   });
 
-  final Game game;
+  final OpeningGame game;
   final Color color;
 
   @override

@@ -16,8 +16,8 @@ class OpeningExplorer with _$OpeningExplorer {
     required int draws,
     required int black,
     required IList<OpeningMove> moves,
-    IList<Game>? topGames,
-    IList<Game>? recentGames,
+    IList<OpeningGame>? topGames,
+    IList<OpeningGame>? recentGames,
     LightOpening? opening,
     int? queuePosition,
   }) = _OpeningExplorer;
@@ -39,7 +39,7 @@ class OpeningMove with _$OpeningMove {
     int? averageRating,
     int? averageOpponentRating,
     int? performance,
-    Game? game,
+    OpeningGame? game,
   }) = _OpeningMove;
 
   factory OpeningMove.fromJson(Map<String, Object?> json) =>
@@ -51,32 +51,32 @@ class OpeningMove with _$OpeningMove {
 }
 
 @Freezed(fromJson: true)
-class Game with _$Game {
-  factory Game({
-    required String uci,
+class OpeningGame with _$OpeningGame {
+  factory OpeningGame({
     required String id,
+    required OpeningPlayer white,
+    required OpeningPlayer black,
+    String? uci,
     String? winner,
     Perf? speed,
     Mode? mode,
-    required Player white,
-    required Player black,
-    required int year,
+    int? year,
     String? month,
-  }) = _Game;
+  }) = _OpeningGame;
 
-  factory Game.fromJson(Map<String, Object?> json) =>
-      Game.fromPick(pick(json).required());
+  factory OpeningGame.fromJson(Map<String, Object?> json) =>
+      OpeningGame.fromPick(pick(json).required());
 
-  factory Game.fromPick(RequiredPick pick) {
-    return Game(
-      uci: pick('uci').asStringOrThrow(),
+  factory OpeningGame.fromPick(RequiredPick pick) {
+    return OpeningGame(
       id: pick('id').asStringOrThrow(),
+      white: pick('white').letOrThrow(OpeningPlayer.fromPick),
+      black: pick('black').letOrThrow(OpeningPlayer.fromPick),
+      uci: pick('uci').asStringOrNull(),
       winner: pick('winner').asStringOrNull(),
       speed: pick('speed').asPerfOrNull(),
       mode: pick('mode').asModeOrNull(),
-      white: pick('white').letOrThrow(Player.fromPick),
-      black: pick('black').letOrThrow(Player.fromPick),
-      year: pick('year').asIntOrThrow(),
+      year: pick('year').asIntOrNull(),
       month: pick('month').asStringOrNull(),
     );
   }
@@ -116,16 +116,17 @@ extension ModeExtension on Pick {
 }
 
 @Freezed(fromJson: true)
-class Player with _$Player {
-  const factory Player({
+class OpeningPlayer with _$OpeningPlayer {
+  const factory OpeningPlayer({
     required String name,
     required int rating,
-  }) = _Player;
+  }) = _OpeningPlayer;
 
-  factory Player.fromJson(Map<String, Object?> json) => _$PlayerFromJson(json);
+  factory OpeningPlayer.fromJson(Map<String, Object?> json) =>
+      _$OpeningPlayerFromJson(json);
 
-  factory Player.fromPick(RequiredPick pick) {
-    return Player(
+  factory OpeningPlayer.fromPick(RequiredPick pick) {
+    return OpeningPlayer(
       name: pick('name').asStringOrThrow(),
       rating: pick('rating').asIntOrThrow(),
     );
