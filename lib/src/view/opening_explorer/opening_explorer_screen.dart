@@ -500,31 +500,23 @@ class _GameTile extends ConsumerWidget {
     const widthResultBox = 50.0;
     const paddingResultBox = EdgeInsets.all(5);
 
-    final openingDb = ref.watch(openingExplorerPreferencesProvider).db;
-
     return Container(
       padding: const EdgeInsets.all(6.0),
       color: color,
       child: AdaptiveInkWell(
         onTap: () async {
-          switch (openingDb) {
-            case OpeningDatabase.master:
-              return;
-            case OpeningDatabase.lichess:
-            case OpeningDatabase.player:
-              final gameId = GameId(game.id);
-              final archivedGame = await ref.read(
-                archivedGameProvider(id: gameId).future,
-              );
-              if (context.mounted) {
-                pushPlatformRoute(
-                  context,
-                  builder: (_) => ArchivedGameScreen(
-                    gameData: archivedGame.data,
-                    orientation: Side.white,
-                  ),
-                );
-              }
+          final gameId = GameId(game.id);
+          final archivedGame = await ref.read(
+            archivedGameProvider(id: gameId).future,
+          );
+          if (context.mounted) {
+            pushPlatformRoute(
+              context,
+              builder: (_) => ArchivedGameScreen(
+                gameData: archivedGame.data,
+                orientation: Side.white,
+              ),
+            );
           }
         },
         child: Row(
