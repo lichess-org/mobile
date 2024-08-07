@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:collection/collection.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
@@ -9,7 +11,11 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/notifications/challenge_notification.dart';
 import 'package:lichess_mobile/src/model/notifications/local_notification_service.dart';
+import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/game/game_screen.dart';
+import 'package:lichess_mobile/src/view/user/challenge_requests_screen.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'challenge_repository.g.dart';
@@ -119,16 +125,17 @@ class Challenges extends _$Challenges {
 
   Future<GameFullId?> accept(ChallengeId id) async {
     final repo = ref.read(challengeRepositoryProvider);
-
-    final inward = state.value!.inward;
-    final outward = state.value!.outward;
-    final newInward =
-        inward.remove(inward.firstWhere((challenge) => challenge.id == id));
-    state = AsyncValue.data((inward: newInward, outward: outward));
+    _stateRemove(id);
 
     return repo
         .accept(id)
         .then((_) => repo.show(id).then((challenge) => challenge.gameFullId));
+  }
+
+  Future<void> decline(ChallengeId id) async {
+    final repo = ref.read(challengeRepositoryProvider);
+    _stateRemove(id);
+    return repo.decline(id);
   }
 
   void cancel(ChallengeId id) {
@@ -153,19 +160,49 @@ class Challenges extends _$Challenges {
     state = AsyncValue.data((inward: inward.lock, outward: outward.lock));
   }
 
+  void _stateRemove(ChallengeId id) {
+    final inward = state.value!.inward;
+    final outward = state.value!.outward;
+    final challengeIn =
+        inward.firstWhereOrNull((challenge) => challenge.id == id);
+    final challengeOut =
+        outward.firstWhereOrNull((challenge) => challenge.id == id);
+
+    final newInward = challengeIn == null ? inward : inward.remove(challengeIn);
+    final newOutward =
+        challengeOut == null ? outward : outward.remove(challengeOut);
+    state = AsyncValue.data((inward: newInward, outward: newOutward));
+  }
+
   void _notifyUser(Challenge challenge) {
     final l10n = ref.read(l10nProvider).strings;
 
-    final time =
-        challenge.days == null ? '∞' : '${l10n.daysPerTurn}: ${challenge.days}';
-    final body =
-        challenge.rated ? '${l10n.rated} • $time' : '${l10n.casual} • $time';
-
-    ref.read(localNotificationServiceProvider).show(
-          ChallengeNotification(challenge.id).build(
-            'Challenge request from ${challenge.challenger!.user.name}',
-            body: body,
-          ),
-        );
+    ref.read(localNotificationServiceProvider).show(ChallengeNotification(
+          challenge,
+          l10n,
+          onPressed: (action, id) {
+            switch (action) {
+              case ChallengeNotificationAction
+                    .accept: // accept the game and open board
+                final repo = ref.read(challengesProvider.notifier);
+                repo.accept(id).then((fullId) {
+                  pushPlatformRoute(
+                    ref.read(currentNavigatorKeyProvider).currentContext!,
+                    builder: (BuildContext context) =>
+                        GameScreen(initialGameId: fullId),
+                  );
+                });
+              case ChallengeNotificationAction
+                    .pressed: // open the challenge screen
+                pushPlatformRoute(
+                  ref.read(currentNavigatorKeyProvider).currentContext!,
+                  builder: (BuildContext context) =>
+                      const ChallengeRequestsScreen(),
+                );
+              case ChallengeNotificationAction.decline:
+                decline(id);
+            }
+          },
+        ));
   }
 }

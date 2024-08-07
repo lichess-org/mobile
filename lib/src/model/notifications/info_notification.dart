@@ -25,14 +25,7 @@ class InfoNotificationDetails {
       );
 }
 
-class InfoNotification {
-  InfoNotification();
-
-  LocalNotification build(String title, {String? body}) {
-    return LocalNotification(
-      title: title,
-      body: body,
-      notificationDetails: InfoNotificationDetails.instance.notificationDetails,
-    );
-  }
+class InfoNotification extends LocalNotification {
+  InfoNotification(String title, {super.body})
+      : super(title, InfoNotificationDetails.instance.notificationDetails);
 }

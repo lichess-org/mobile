@@ -1,14 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/l10n/l10n_en.dart';
-import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
+import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/notifications/local_notification_service.dart';
-import 'package:lichess_mobile/src/navigation.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/view/game/game_screen.dart';
-import 'package:lichess_mobile/src/view/user/challenge_requests_screen.dart';
 
 class ChallengeNotificationDetails {
   ChallengeNotificationDetails(this._locale) {
@@ -73,41 +68,44 @@ class ChallengeNotificationDetails {
       );
 }
 
-class ChallengeNotification {
-  ChallengeNotification(this.id);
+enum ChallengeNotificationAction { accept, decline, pressed }
 
-  final ChallengeId id;
-
-  void _callback(String? actionId, LocalNotificationServiceRef ref) {
-    switch (actionId) {
-      case 'accept': // accept the game and open board
-        final repo = ref.read(challengesProvider.notifier);
-        repo.accept(id).then((fullId) {
-          pushPlatformRoute(
-            ref.read(currentNavigatorKeyProvider).currentContext!,
-            builder: (BuildContext context) =>
-                GameScreen(initialGameId: fullId),
-          );
-        });
-      case null: // open the challenge screen
-        pushPlatformRoute(
-          ref.read(currentNavigatorKeyProvider).currentContext!,
-          builder: (BuildContext context) => const ChallengeRequestsScreen(),
+class ChallengeNotification extends LocalNotification
+    implements LocalNotificationCallback {
+  ChallengeNotification(this._challenge, this._locale, {this.onPressed})
+      : super(
+          '${_challenge.challenger!.user.name} challenges you!',
+          ChallengeNotificationDetails.instance.notificationDetails,
         );
-      case 'decline':
-        ref.read(challengeRepositoryProvider).decline(id);
-    }
+
+  final Challenge _challenge;
+  final AppLocalizations _locale;
+  final void Function(ChallengeNotificationAction action, ChallengeId id)?
+      onPressed;
+
+  @override
+  String get payload => _challenge.id.value;
+
+  @override
+  String get body => _body();
+
+  String _body() {
+    final time = _challenge.days == null
+        ? '∞'
+        : '${_locale.daysPerTurn}: ${_challenge.days}';
+    return _challenge.rated
+        ? '${_locale.rated} • $time'
+        : '${_locale.casual} • $time';
   }
 
-  NotificationCallback get callback => _callback;
-
-  LocalNotification build(String title, {String? body}) {
-    return LocalNotification(
-      title: title,
-      body: body,
-      payload: 'challenge-notification:${id.value}',
-      notificationDetails:
-          ChallengeNotificationDetails.instance.notificationDetails,
-    );
+  @override
+  void callback(String? actionId, String? payload) {
+    final action = switch (actionId) {
+      'accept' => ChallengeNotificationAction.accept,
+      'decline' => ChallengeNotificationAction.decline,
+      null || String() => ChallengeNotificationAction.pressed,
+    };
+    final id = ChallengeId(payload!);
+    onPressed!(action, id);
   }
 }
