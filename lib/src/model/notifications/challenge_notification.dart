@@ -22,6 +22,7 @@ class ChallengeNotificationDetails {
           _locale.preferencesNotifyChallenge,
           importance: Importance.max,
           priority: Priority.high,
+          autoCancel: false,
           actions: <AndroidNotificationAction>[
             AndroidNotificationAction(
               'accept',

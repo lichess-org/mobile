@@ -177,32 +177,34 @@ class Challenges extends _$Challenges {
   void _notifyUser(Challenge challenge) {
     final l10n = ref.read(l10nProvider).strings;
 
-    ref.read(localNotificationServiceProvider).show(ChallengeNotification(
-          challenge,
-          l10n,
-          onPressed: (action, id) {
-            switch (action) {
-              case ChallengeNotificationAction
-                    .accept: // accept the game and open board
-                final repo = ref.read(challengesProvider.notifier);
-                repo.accept(id).then((fullId) {
+    ref.read(localNotificationServiceProvider).show(
+          ChallengeNotification(
+            challenge,
+            l10n,
+            onPressed: (action, id) {
+              switch (action) {
+                case ChallengeNotificationAction
+                      .accept: // accept the game and open board
+                  final repo = ref.read(challengesProvider.notifier);
+                  repo.accept(id).then((fullId) {
+                    pushPlatformRoute(
+                      ref.read(currentNavigatorKeyProvider).currentContext!,
+                      builder: (BuildContext context) =>
+                          GameScreen(initialGameId: fullId),
+                    );
+                  });
+                case ChallengeNotificationAction
+                      .pressed: // open the challenge screen
                   pushPlatformRoute(
                     ref.read(currentNavigatorKeyProvider).currentContext!,
                     builder: (BuildContext context) =>
-                        GameScreen(initialGameId: fullId),
+                        const ChallengeRequestsScreen(),
                   );
-                });
-              case ChallengeNotificationAction
-                    .pressed: // open the challenge screen
-                pushPlatformRoute(
-                  ref.read(currentNavigatorKeyProvider).currentContext!,
-                  builder: (BuildContext context) =>
-                      const ChallengeRequestsScreen(),
-                );
-              case ChallengeNotificationAction.decline:
-                decline(id);
-            }
-          },
-        ));
+                case ChallengeNotificationAction.decline:
+                  decline(id);
+              }
+            },
+          ),
+        );
   }
 }
