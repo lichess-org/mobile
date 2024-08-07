@@ -12,12 +12,13 @@ class InfoNotificationDetails {
   static InfoNotificationDetails instance =
       InfoNotificationDetails(AppLocalizationsEn());
 
+  // ignore: unused_field
   final AppLocalizations _locale;
 
-  NotificationDetails get notificationDetails => NotificationDetails(
+  NotificationDetails get notificationDetails => const NotificationDetails(
         android: AndroidNotificationDetails(
           'general',
-          _locale.mobileGeneralNotificationCategory,
+          'General',
           importance: Importance.high,
           priority: Priority.high,
         ),
