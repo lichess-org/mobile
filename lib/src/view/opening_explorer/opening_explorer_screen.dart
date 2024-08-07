@@ -272,8 +272,17 @@ class _OpeningExplorer extends ConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (opening != null) _Opening(opening: opening),
-                      if (isIndexing) const Text('Indexing...'),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 6.0),
+                        color: Theme.of(context).colorScheme.primaryContainer,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            if (opening != null) _Opening(opening: opening),
+                            if (isIndexing) _IndexingIndicator(),
+                          ],
+                        ),
+                      ),
                       _MoveTable(
                         moves: openingExplorer.moves,
                         whiteWins: openingExplorer.white,
@@ -316,17 +325,54 @@ class _Opening extends StatelessWidget {
   final Opening opening;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(left: 6.0),
-      color: Theme.of(context).colorScheme.primaryContainer,
-      child: Row(
-        children: [
-          if (opening.eco.isEmpty)
-            Text(opening.name)
-          else
-            Text('${opening.eco} ${opening.name}'),
-        ],
-      ),
+    return opening.eco.isEmpty
+        ? Text(opening.name)
+        : Text('${opening.eco} ${opening.name}');
+  }
+}
+
+class _IndexingIndicator extends StatefulWidget {
+
+  @override
+  State<_IndexingIndicator> createState() => _IndexingIndicatorState();
+}
+
+class _IndexingIndicatorState extends State<_IndexingIndicator> with TickerProviderStateMixin {
+  late AnimationController controller;
+
+  @override
+  void initState() {
+    controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 3),
+    )..addListener(() {
+      setState(() {});
+    });
+    controller.repeat();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        SizedBox(
+          width: 10,
+          height: 10,
+          child: CircularProgressIndicator.adaptive(
+            value: controller.value,
+            semanticsLabel: 'Indexing...',
+          ),
+        ),
+        const SizedBox(width: 10),
+        const Text('Indexing...'),
+      ],
     );
   }
 }
