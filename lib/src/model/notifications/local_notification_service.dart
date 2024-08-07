@@ -2,9 +2,7 @@ import 'dart:async';
 import 'dart:isolate';
 import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/notifications/challenge_notification.dart';
 import 'package:lichess_mobile/src/model/notifications/info_notification.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
@@ -12,7 +10,6 @@ import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'local_notification_service.g.dart';
-part 'local_notification_service.freezed.dart';
 
 @Riverpod(keepAlive: true)
 LocalNotificationService localNotificationService(
@@ -21,17 +18,13 @@ LocalNotificationService localNotificationService(
   return LocalNotificationService(ref, Logger('LocalNotificationService'));
 }
 
-typedef NotificationCallback = void Function(
-  String?,
-  LocalNotificationServiceRef,
-);
-
 class LocalNotificationService {
   LocalNotificationService(this._ref, this._log);
 
   static LocalNotificationService? instance;
   final LocalNotificationServiceRef _ref;
   final Logger _log;
+  final Map<int, void Function(String?, String?)> _callbacks = {};
   final _notificationPlugin = FlutterLocalNotificationsPlugin();
   final _receivePort = ReceivePort();
 
@@ -82,16 +75,20 @@ class LocalNotificationService {
     _log.info(
       '[Local Notifications] Sent notification: ($id | ${notification.title}) ${notification.body} (Payload: ${notification.payload})',
     );
+
+    // if the notification implements LocalNotificaitonCallback
+    if (notification is LocalNotificationCallback) {
+      _callbacks[id] = (notification as LocalNotificationCallback).callback;
+      _log.info('[Local Notifications] registered callback for id [$id]');
+    }
+
     return id;
   }
 
   Future<void> cancel(int id) async {
-    _log.info('[Local Notifications] canceled notification (id: $id)');
+    _log.info('[Local Notifications] canceled notification id: [$id]');
     return _notificationPlugin.cancel(id);
   }
-
-  void call(NotificationCallback callback, String? actionId) =>
-      callback(actionId, _ref);
 
   void _onReceivePortMessage(dynamic message) {
     try {
@@ -113,10 +110,8 @@ class LocalNotificationService {
   }
 
   void _notificationResponse(NotificationResponse response) {
-    _log.info('[Local Notifcations] recieved notification resopnse');
-    debugPrint('hello!');
-
-    if (response.payload == null) return;
+    final callback = _callbacks[response.id];
+    if (callback != null) callback(response.actionId, response.payload);
   }
 
   @pragma('vm:entry-point')
@@ -135,12 +130,20 @@ class LocalNotificationService {
   }
 }
 
-@freezed
-class LocalNotification with _$LocalNotification {
-  factory LocalNotification({
-    required String title,
-    String? body,
-    String? payload,
-    required NotificationDetails notificationDetails,
-  }) = _LocalNotification;
+abstract class LocalNotification {
+  LocalNotification(
+    this.title,
+    this.notificationDetails, {
+    this.body,
+    this.payload,
+  });
+
+  String title;
+  String? body;
+  String? payload;
+  NotificationDetails notificationDetails;
+}
+
+abstract class LocalNotificationCallback {
+  void callback(String? actionId, String? payload);
 }
