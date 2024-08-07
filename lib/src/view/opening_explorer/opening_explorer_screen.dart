@@ -278,8 +278,16 @@ class _OpeningExplorer extends ConsumerWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            if (opening != null) _Opening(opening: opening),
-                            if (isIndexing) _IndexingIndicator(),
+                            if (opening != null)
+                              Expanded(
+                                flex: 75,
+                                child: _Opening(opening: opening),
+                              ),
+                            if (isIndexing)
+                              Expanded(
+                                flex: 25,
+                                child: _IndexingIndicator(),
+                              ),
                           ],
                         ),
                       ),
@@ -325,19 +333,19 @@ class _Opening extends StatelessWidget {
   final Opening opening;
   @override
   Widget build(BuildContext context) {
-    return opening.eco.isEmpty
-        ? Text(opening.name)
-        : Text('${opening.eco} ${opening.name}');
+    return Text(
+      '${opening.eco.isEmpty ? "" : "${opening.eco} "}${opening.name}',
+    );
   }
 }
 
 class _IndexingIndicator extends StatefulWidget {
-
   @override
   State<_IndexingIndicator> createState() => _IndexingIndicatorState();
 }
 
-class _IndexingIndicatorState extends State<_IndexingIndicator> with TickerProviderStateMixin {
+class _IndexingIndicatorState extends State<_IndexingIndicator>
+    with TickerProviderStateMixin {
   late AnimationController controller;
 
   @override
@@ -346,8 +354,8 @@ class _IndexingIndicatorState extends State<_IndexingIndicator> with TickerProvi
       vsync: this,
       duration: const Duration(seconds: 3),
     )..addListener(() {
-      setState(() {});
-    });
+        setState(() {});
+      });
     controller.repeat();
     super.initState();
   }
