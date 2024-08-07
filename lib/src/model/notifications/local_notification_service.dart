@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:isolate';
+import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/notifications/challenge_notification.dart';
 import 'package:lichess_mobile/src/model/notifications/info_notification.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
@@ -28,9 +30,11 @@ class LocalNotificationService {
   LocalNotificationService(this._ref, this._log);
 
   static LocalNotificationService? instance;
-  final _notificationPlugin = FlutterLocalNotificationsPlugin();
   final LocalNotificationServiceRef _ref;
   final Logger _log;
+  final _notificationPlugin = FlutterLocalNotificationsPlugin();
+  final _receivePort = ReceivePort();
+
   int currentId = 0;
 
   Future<void> init() async {
@@ -40,6 +44,12 @@ class LocalNotificationService {
     // update localizations
     InfoNotificationDetails(l10n.strings);
     ChallengeNotificationDetails(l10n.strings);
+
+    IsolateNameServer.registerPortWithName(
+      _receivePort.sendPort,
+      'localNotificationServicePort',
+    );
+    _receivePort.listen(_onReceivePortMessage);
 
     await _notificationPlugin.initialize(
       InitializationSettings(
@@ -53,12 +63,11 @@ class LocalNotificationService {
           ],
         ),
       ),
-      onDidReceiveNotificationResponse: _notificationRespsonse,
-      onDidReceiveBackgroundNotificationResponse: _notificationRespsonse,
+      onDidReceiveNotificationResponse: _notificationResponse,
+      onDidReceiveBackgroundNotificationResponse:
+          _notificationBackgroundResponse,
     );
-    _log.info(
-      '[Local Notifications] initialized',
-    );
+    _log.info('[Local Notifications] initialized');
   }
 
   Future<int> show(LocalNotification notification) async {
@@ -77,37 +86,52 @@ class LocalNotificationService {
   }
 
   Future<void> cancel(int id) async {
-    _log.info(
-      '[Local Notifications] canceled notification (id: $id)',
-    );
+    _log.info('[Local Notifications] canceled notification (id: $id)');
     return _notificationPlugin.cancel(id);
   }
 
   void call(NotificationCallback callback, String? actionId) =>
       callback(actionId, _ref);
 
-  @pragma('vm:entry-point')
-  static void _notificationRespsonse(NotificationResponse response) {
-    if (response.payload == null) return;
-
-    final service = LocalNotificationService.instance;
-    if (service == null) return;
-
+  void _onReceivePortMessage(dynamic message) {
     try {
-      final splits = response.payload!.split(':');
-
-      final id = splits[0];
-      final payload = splits[1];
-      switch (id) {
-        case 'challenge-notification':
-          final notification = ChallengeNotification(ChallengeId(payload));
-          service.call(notification.callback, response.actionId);
-      }
-    } catch (error) {
-      Logger('LocalNotificationService').warning(
-        'Malformed notification payload: [ID: ${response.id}] ${response.payload}',
+      final data = message as Map<String, Object?>;
+      final response = NotificationResponse(
+        notificationResponseType:
+            NotificationResponseType.values[data['index']! as int],
+        id: data['id'] as int?,
+        actionId: data['actionId'] as String?,
+        input: data['input'] as String?,
+        payload: data['payload'] as String?,
+      );
+      _notificationResponse(response);
+    } catch (e) {
+      _log.severe(
+        '[Local Notifications] failed to parse message from background isoalte',
       );
     }
+  }
+
+  void _notificationResponse(NotificationResponse response) {
+    _log.info('[Local Notifcations] recieved notification resopnse');
+    debugPrint('hello!');
+
+    if (response.payload == null) return;
+  }
+
+  @pragma('vm:entry-point')
+  static void _notificationBackgroundResponse(NotificationResponse response) {
+    final sendPort =
+        IsolateNameServer.lookupPortByName('localNotificationServicePort');
+    sendPort!.send(
+      {
+        'index': response.notificationResponseType.index,
+        'id': response.id,
+        'actionId': response.actionId,
+        'input': response.input,
+        'payload': response.payload,
+      },
+    );
   }
 }
 
