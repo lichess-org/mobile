@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
+import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -100,9 +101,10 @@ class _Body extends ConsumerWidget {
                                     challengeNotifier
                                         .accept(challenge.id)
                                         .then((id) {
-                                      if (!context.mounted) return;
                                       pushPlatformRoute(
-                                        context,
+                                        ref
+                                            .read(currentNavigatorKeyProvider)
+                                            .currentContext!,
                                         rootNavigator: true,
                                         builder: (BuildContext context) {
                                           return GameScreen(

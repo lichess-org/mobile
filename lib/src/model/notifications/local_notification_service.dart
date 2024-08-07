@@ -38,6 +38,8 @@ class LocalNotificationService {
     InfoNotificationDetails(l10n.strings);
     ChallengeNotificationDetails(l10n.strings);
 
+    // hot reloading doesnt remove the port so we just make sure it doesnt exist before registering it
+    IsolateNameServer.removePortNameMapping('localNotificationServicePort');
     IsolateNameServer.registerPortWithName(
       _receivePort.sendPort,
       'localNotificationServicePort',
