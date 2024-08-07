@@ -243,6 +243,11 @@ class _OpeningExplorer extends ConsumerWidget {
           )
         : nodeOpening ?? branchOpening ?? contextOpening;
 
+    final isIndexing = ref.watch(
+      openingExplorerDataProvider.select(
+        (state) => state.isIndexing,
+      ),
+    );
     final openingExplorerAsync = ref.watch(
       openingExplorerProvider(
         fen: position.fen,
@@ -268,6 +273,7 @@ class _OpeningExplorer extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       if (opening != null) _Opening(opening: opening),
+                      if (isIndexing) const Text('Indexing...'),
                       _MoveTable(
                         moves: openingExplorer.moves,
                         whiteWins: openingExplorer.white,

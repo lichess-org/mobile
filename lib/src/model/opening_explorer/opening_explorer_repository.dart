@@ -1,5 +1,6 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer.dart';
@@ -7,39 +8,47 @@ import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer_prefe
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'opening_explorer_repository.g.dart';
+part 'opening_explorer_repository.freezed.dart';
 
 @riverpod
-Future<OpeningExplorer> openingExplorer(
+Stream<OpeningExplorer> openingExplorer(
   OpeningExplorerRef ref, {
   required String fen,
-}) async {
+}) async* {
   final prefs = ref.watch(openingExplorerPreferencesProvider);
-  return ref.withClient(
-    (client) => switch (prefs.db) {
-      OpeningDatabase.master =>
-        OpeningExplorerRepository(client).getMasterDatabase(
+  final client = ref.read(lichessClientProvider);
+  final stream = switch (prefs.db) {
+    OpeningDatabase.master => OpeningExplorerRepository(client)
+        .getMasterDatabase(
           fen,
           since: prefs.masterDb.sinceYear,
-        ),
-      OpeningDatabase.lichess =>
-        OpeningExplorerRepository(client).getLichessDatabase(
+        )
+        .asStream(),
+    OpeningDatabase.lichess => OpeningExplorerRepository(client)
+        .getLichessDatabase(
           fen,
           speeds: prefs.lichessDb.speeds,
           ratings: prefs.lichessDb.ratings,
           since: prefs.lichessDb.since,
-        ),
-      OpeningDatabase.player =>
-        OpeningExplorerRepository(client).getPlayerDatabase(
-          fen,
-          // null check handled by widget
-          usernameOrId: prefs.playerDb.usernameOrId!,
-          color: prefs.playerDb.side,
-          speeds: prefs.playerDb.speeds,
-          modes: prefs.playerDb.modes,
-          since: prefs.playerDb.since,
         )
-    },
-  );
+        .asStream(),
+    OpeningDatabase.player =>
+      await OpeningExplorerRepository(client).getPlayerDatabase(
+        fen,
+        // null check handled by widget
+        usernameOrId: prefs.playerDb.usernameOrId!,
+        color: prefs.playerDb.side,
+        speeds: prefs.playerDb.speeds,
+        modes: prefs.playerDb.modes,
+        since: prefs.playerDb.since,
+      ),
+  };
+
+  ref.read(openingExplorerDataProvider.notifier).setIndexing(true);
+  await for (final openingExplorer in stream) {
+    yield openingExplorer;
+  }
+  ref.read(openingExplorerDataProvider.notifier).setIndexing(false);
 }
 
 class OpeningExplorerRepository {
@@ -84,7 +93,7 @@ class OpeningExplorerRepository {
     );
   }
 
-  Future<OpeningExplorer> getPlayerDatabase(
+  Future<Stream<OpeningExplorer>> getPlayerDatabase(
     String fen, {
     required String usernameOrId,
     required Side color,
@@ -92,7 +101,7 @@ class OpeningExplorerRepository {
     required ISet<Mode> modes,
     DateTime? since,
   }) {
-    return client.readJson(
+    return client.readNdJsonStream(
       Uri(
         path: '/player',
         queryParameters: {
@@ -109,4 +118,24 @@ class OpeningExplorerRepository {
       mapper: OpeningExplorer.fromJson,
     );
   }
+}
+
+@riverpod
+class OpeningExplorerData extends _$OpeningExplorerData {
+  @override
+  OpeningExplorerDataState build() {
+    return const OpeningExplorerDataState(
+      isIndexing: false,
+    );
+  }
+
+  void setIndexing(bool isIndexing) =>
+      state = state.copyWith(isIndexing: isIndexing);
+}
+
+@freezed
+class OpeningExplorerDataState with _$OpeningExplorerDataState {
+  const factory OpeningExplorerDataState({
+    required bool isIndexing,
+  }) = _OpeningExplorerDataState;
 }
