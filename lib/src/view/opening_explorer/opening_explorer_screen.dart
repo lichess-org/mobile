@@ -243,11 +243,20 @@ class _OpeningExplorer extends ConsumerWidget {
           )
         : nodeOpening ?? branchOpening ?? contextOpening;
 
-    final isIndexing = ref.watch(
-      openingExplorerDataProvider.select(
-        (state) => state.isIndexing,
-      ),
+    final isIndexing = ref.read(
+      openingExplorerCacheProvider
+          .select(
+            (state) => state.get(
+              OpeningExplorerCacheKey(
+                fen: position.fen,
+                prefs: prefs,
+              ),
+            ),
+          )
+          .select((state) => state?.isIndexing),
     );
+
+    ref.watch(openingExplorerCacheProvider);
     final openingExplorerAsync = ref.watch(
       openingExplorerProvider(
         fen: position.fen,
@@ -283,7 +292,7 @@ class _OpeningExplorer extends ConsumerWidget {
                                 flex: 75,
                                 child: _Opening(opening: opening),
                               ),
-                            if (isIndexing)
+                            if (isIndexing != null && isIndexing)
                               Expanded(
                                 flex: 25,
                                 child: _IndexingIndicator(),

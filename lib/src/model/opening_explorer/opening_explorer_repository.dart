@@ -16,6 +16,16 @@ Stream<OpeningExplorer> openingExplorer(
   required String fen,
 }) async* {
   final prefs = ref.watch(openingExplorerPreferencesProvider);
+  final cacheKey = OpeningExplorerCacheKey(
+    fen: fen,
+    prefs: prefs,
+  );
+  final cacheEntry = ref.read(openingExplorerCacheProvider).get(cacheKey);
+  if (cacheEntry != null) {
+    yield cacheEntry.openingExplorer;
+    return;
+  }
+
   final client = ref.read(lichessClientProvider);
   final stream = switch (prefs.db) {
     OpeningDatabase.master => OpeningExplorerRepository(client)
@@ -44,11 +54,17 @@ Stream<OpeningExplorer> openingExplorer(
       ),
   };
 
-  ref.read(openingExplorerDataProvider.notifier).setIndexing(true);
   await for (final openingExplorer in stream) {
+    ref.read(openingExplorerCacheProvider.notifier).addEntry(
+          cacheKey,
+          OpeningExplorerCacheEntry(
+            openingExplorer: openingExplorer,
+            isIndexing: true,
+          ),
+        );
     yield openingExplorer;
   }
-  ref.read(openingExplorerDataProvider.notifier).setIndexing(false);
+  ref.read(openingExplorerCacheProvider.notifier).setIndexing(cacheKey, false);
 }
 
 class OpeningExplorerRepository {
@@ -121,21 +137,44 @@ class OpeningExplorerRepository {
 }
 
 @riverpod
-class OpeningExplorerData extends _$OpeningExplorerData {
+class OpeningExplorerCache extends _$OpeningExplorerCache {
   @override
-  OpeningExplorerDataState build() {
-    return const OpeningExplorerDataState(
-      isIndexing: false,
-    );
+  IMap<OpeningExplorerCacheKey, OpeningExplorerCacheEntry> build() {
+    return const IMap.empty();
   }
 
-  void setIndexing(bool isIndexing) =>
-      state = state.copyWith(isIndexing: isIndexing);
+  void addEntry(OpeningExplorerCacheKey key, OpeningExplorerCacheEntry entry) {
+    state = state.add(key, entry);
+  }
+
+  void setIndexing(OpeningExplorerCacheKey key, bool isIndexing) {
+    final entry = state.get(key);
+    if (entry != null) {
+      state = state.add(
+        key,
+        OpeningExplorerCacheEntry(
+          openingExplorer: entry.openingExplorer,
+          isIndexing: isIndexing,
+        ),
+      );
+    }
+  }
 }
 
 @freezed
-class OpeningExplorerDataState with _$OpeningExplorerDataState {
-  const factory OpeningExplorerDataState({
+class OpeningExplorerCacheKey with _$OpeningExplorerCacheKey {
+  const OpeningExplorerCacheKey._();
+
+  const factory OpeningExplorerCacheKey({
+    required String fen,
+    required OpeningExplorerPrefState prefs,
+  }) = _OpeningExplorerCacheKey;
+}
+
+@freezed
+class OpeningExplorerCacheEntry with _$OpeningExplorerCacheEntry {
+  const factory OpeningExplorerCacheEntry({
+    required OpeningExplorer openingExplorer,
     required bool isIndexing,
-  }) = _OpeningExplorerDataState;
+  }) = _OpeningExplorerCacheEntry;
 }
