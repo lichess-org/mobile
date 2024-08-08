@@ -11,7 +11,6 @@ import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/chessground_compat.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
@@ -38,6 +37,7 @@ class GameListTile extends StatelessWidget {
     this.subtitle,
     this.trailing,
     this.onTap,
+    this.padding,
   });
 
   final LightArchivedGame game;
@@ -48,6 +48,7 @@ class GameListTile extends StatelessWidget {
   final Widget? subtitle;
   final Widget? trailing;
   final GestureTapCallback? onTap;
+  final EdgeInsetsGeometry? padding;
 
   @override
   Widget build(BuildContext context) {
@@ -81,6 +82,7 @@ class GameListTile extends StatelessWidget {
             )
           : null,
       trailing: trailing,
+      padding: padding,
     );
   }
 }
@@ -152,8 +154,8 @@ class _ContextMenu extends ConsumerWidget {
                               size: constraints.maxWidth -
                                   (constraints.maxWidth / 1.618),
                               fen: game.lastFen!,
-                              orientation: mySide.cg,
-                              lastMove: game.lastMove?.cg,
+                              orientation: mySide,
+                              lastMove: game.lastMove,
                             ),
                           Expanded(
                             child: Padding(
@@ -434,10 +436,16 @@ class _ContextMenu extends ConsumerWidget {
 
 /// A list tile that shows extended game info including a result icon and analysis icon.
 class ExtendedGameListTile extends StatelessWidget {
-  const ExtendedGameListTile({required this.item, this.userId});
+  const ExtendedGameListTile({
+    required this.item,
+    this.userId,
+    this.padding,
+  });
 
   final LightArchivedGameWithPov item;
   final UserId? userId;
+
+  final EdgeInsetsGeometry? padding;
 
   @override
   Widget build(BuildContext context) {
@@ -473,6 +481,7 @@ class ExtendedGameListTile extends StatelessWidget {
     return GameListTile(
       game: game,
       mySide: youAre,
+      padding: padding,
       onTap: game.variant.isReadSupported
           ? () {
               pushPlatformRoute(

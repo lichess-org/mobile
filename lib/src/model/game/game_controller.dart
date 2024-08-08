@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:async/async.dart';
-import 'package:chessground/chessground.dart' as cg;
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
@@ -196,7 +195,7 @@ class GameController extends _$GameController {
   }
 
   /// Set or unset a premove.
-  void setPremove(cg.Move? move) {
+  void setPremove(Move? move) {
     final curState = state.requireValue;
     state = AsyncValue.data(
       curState.copyWith(
@@ -530,7 +529,7 @@ class GameController extends _$GameController {
         // add opponent move
         if (data.ply == curState.game.lastPly + 1) {
           final lastPos = curState.game.lastPosition;
-          final move = Move.fromUci(data.uci)!;
+          final move = Move.parse(data.uci)!;
           final sanMove = SanMove(data.san, move);
           final newPos = lastPos.playUnchecked(move);
           final newStep = GameStep(
@@ -924,7 +923,7 @@ class GameState with _$GameState {
     int? lastDrawOfferAtPly,
     Duration? opponentLeftCountdown,
     required bool stopClockWaitingForServerAck,
-    cg.Move? premove,
+    Move? premove,
 
     /// Game only setting to override the account preference
     bool? moveConfirmSettingOverride,

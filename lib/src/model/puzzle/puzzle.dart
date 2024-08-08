@@ -155,7 +155,7 @@ class LitePuzzle with _$LitePuzzle {
 
   (Side, String, Move) get preview {
     final pos1 = Chess.fromSetup(Setup.parseFen(fen));
-    final move = Move.fromUci(solution.first);
+    final move = Move.parse(solution.first);
     final pos = pos1.play(move!);
     return (pos.turn, pos.fen, move);
   }

@@ -245,7 +245,6 @@ class _OpeningExplorer extends ConsumerWidget {
         : nodeOpening ?? branchOpening ?? contextOpening;
 
     final wikiBooksUrl = ref.watch(ctrlProvider.select((s) => s.wikiBooksUrl));
-    print('wikiBooksUrl: $wikiBooksUrl');
 
     final cache = ref.watch(openingExplorerCacheProvider);
     final isIndexing = cache
@@ -475,7 +474,7 @@ class _MoveTable extends ConsumerWidget {
                 TableRowInkWell(
                   onTap: () => ref
                       .read(ctrlProvider.notifier)
-                      .onUserMove(Move.fromUci(move.uci)!),
+                      .onUserMove(Move.parse(move.uci)!),
                   child: Container(
                     padding: rowPadding,
                     child: Text(move.san),
@@ -484,7 +483,7 @@ class _MoveTable extends ConsumerWidget {
                 TableRowInkWell(
                   onTap: () => ref
                       .read(ctrlProvider.notifier)
-                      .onUserMove(Move.fromUci(move.uci)!),
+                      .onUserMove(Move.parse(move.uci)!),
                   child: Container(
                     padding: rowPadding,
                     child: Text('${formatNum(move.games)} ($percentGames%)'),
@@ -493,7 +492,7 @@ class _MoveTable extends ConsumerWidget {
                 TableRowInkWell(
                   onTap: () => ref
                       .read(ctrlProvider.notifier)
-                      .onUserMove(Move.fromUci(move.uci)!),
+                      .onUserMove(Move.parse(move.uci)!),
                   child: Container(
                     padding: rowPadding,
                     child: _WinPercentageChart(

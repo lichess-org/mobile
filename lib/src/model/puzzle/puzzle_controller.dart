@@ -138,7 +138,7 @@ class PuzzleController extends _$PuzzleController {
         // another puzzle move: let's continue
         else if (nextUci != null) {
           await Future<void>.delayed(const Duration(milliseconds: 500));
-          _addMove(Move.fromUci(nextUci)!);
+          _addMove(Move.parse(nextUci)!);
         }
         // no more puzzle move: it's a win
         else {
@@ -205,7 +205,7 @@ class PuzzleController extends _$PuzzleController {
       state = state.copyWith.streak!(hasSkipped: true);
       final moveIndex = state.currentPath.size - state.initialPath.size;
       final solution = state.puzzle.puzzle.solution[moveIndex];
-      onUserMove(Move.fromUci(solution)!);
+      onUserMove(Move.parse(solution)!);
     }
   }
 
@@ -475,7 +475,7 @@ class PuzzleController extends _$PuzzleController {
     var currentPosition = initPosition;
     final pgnMoves = state.puzzle.puzzle.solution.fold<List<String>>([],
         (List<String> acc, move) {
-      final moveObj = Move.fromUci(move);
+      final moveObj = Move.parse(move);
       if (moveObj != null) {
         final String san;
         (currentPosition, san) = currentPosition.makeSan(moveObj);
@@ -524,7 +524,7 @@ class PuzzleController extends _$PuzzleController {
     final (_, newNodes) = state.puzzle.puzzle.solution.foldIndexed(
       (initialNode.position, IList<Branch>(const [])),
       (index, previous, uci) {
-        final move = Move.fromUci(uci);
+        final move = Move.parse(uci);
         final (pos, nodes) = previous;
         final (newPos, newSan) = pos.makeSan(move!);
         return (
@@ -592,5 +592,5 @@ class PuzzleState with _$PuzzleState {
   bool get canGoBack =>
       mode == PuzzleMode.view && currentPath.size > initialPath.size;
 
-  IMap<String, ISet<String>> get validMoves => algebraicLegalMoves(position);
+  IMap<Square, ISet<Square>> get validMoves => makeLegalMoves(position);
 }

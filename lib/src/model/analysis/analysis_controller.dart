@@ -551,7 +551,7 @@ class AnalysisController extends _$AnalysisController {
       } else {
         final uci = n2child['uci'] as String;
         final san = n2child['san'] as String;
-        final move = Move.fromUci(uci)!;
+        final move = Move.parse(uci)!;
         n1.addChild(
           Branch(
             position: n1.position.playUnchecked(move),
@@ -672,8 +672,8 @@ class AnalysisState with _$AnalysisState {
     IList<PgnComment>? pgnRootComments,
   }) = _AnalysisState;
 
-  IMap<String, ISet<String>> get validMoves =>
-      algebraicLegalMoves(currentNode.position);
+  IMap<Square, ISet<Square>> get validMoves =>
+      makeLegalMoves(currentNode.position);
 
   /// Whether the user can request server analysis.
   ///

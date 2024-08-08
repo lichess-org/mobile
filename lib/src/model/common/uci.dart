@@ -24,7 +24,7 @@ class UciCharPair with _$UciCharPair {
   ///
   /// Throws an [ArgumentError] if the move is invalid.
   factory UciCharPair.fromUci(String uci) {
-    final move = Move.fromUci(uci);
+    final move = Move.parse(uci);
     if (move == null) {
       throw ArgumentError('Invalid uci $uci');
     }
@@ -37,7 +37,7 @@ class UciCharPair with _$UciCharPair {
             String.fromCharCode(35 + f),
             String.fromCharCode(
               p != null
-                  ? 35 + 64 + 8 * _promotionRoles.indexOf(p) + squareFile(t)
+                  ? 35 + 64 + 8 * _promotionRoles.indexOf(p) + t.file
                   : 35 + t,
             ),
           ),

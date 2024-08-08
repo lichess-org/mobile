@@ -192,7 +192,7 @@ class TvController extends _$TvController {
         final curState = state.requireValue;
         final data = MoveEvent.fromJson(event.data as Map<String, dynamic>);
         final lastPos = curState.game.lastPosition;
-        final move = Move.fromUci(data.uci)!;
+        final move = Move.parse(data.uci)!;
         final sanMove = SanMove(data.san, move);
         final newPos = lastPos.playUnchecked(move);
         final newStep = GameStep(

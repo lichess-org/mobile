@@ -1,4 +1,4 @@
-import 'package:chessground/chessground.dart' as cg;
+import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -47,8 +47,8 @@ void main() {
         await tester.pumpWidget(app);
 
         // data shown immediately
-        expect(find.byType(cg.Board), findsOneWidget);
-        expect(find.byType(cg.PieceWidget), findsNWidgets(25));
+        expect(find.byType(Chessboard), findsOneWidget);
+        expect(find.byType(PieceWidget), findsNWidgets(25));
         expect(find.widgetWithText(GamePlayer, 'veloce'), findsOneWidget);
         expect(
           find.widgetWithText(GamePlayer, 'Stockfish level 1'),
@@ -57,8 +57,11 @@ void main() {
 
         // cannot interact with board
         expect(
-          tester.widget<cg.Board>(find.byType(cg.Board)).data.interactableSide,
-          cg.InteractableSide.none,
+          tester
+              .widget<Chessboard>(find.byType(Chessboard))
+              .state
+              .interactableSide,
+          InteractableSide.none,
         );
 
         // moves are not loaded
@@ -78,8 +81,8 @@ void main() {
         await tester.pumpAndSettle();
 
         // same info still displayed
-        expect(find.byType(cg.Board), findsOneWidget);
-        expect(find.byType(cg.PieceWidget), findsNWidgets(25));
+        expect(find.byType(Chessboard), findsOneWidget);
+        expect(find.byType(PieceWidget), findsNWidgets(25));
         expect(find.widgetWithText(GamePlayer, 'veloce'), findsOneWidget);
         expect(
           find.widgetWithText(GamePlayer, 'Stockfish level 1'),
