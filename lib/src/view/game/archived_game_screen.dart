@@ -189,8 +189,11 @@ class _BoardBody extends ConsumerWidget {
               : null,
           materialDiff: game.materialDiffAt(cursor, Side.white),
         );
-        final topPlayer = orientation == Side.white ? black : white;
-        final bottomPlayer = orientation == Side.white ? white : black;
+
+        final topPlayerIsBlack = orientation == Side.white && !isBoardTurned ||
+            orientation == Side.black && isBoardTurned;
+        final topPlayer = topPlayerIsBlack ? black : white;
+        final bottomPlayer = topPlayerIsBlack ? white : black;
 
         final position = game.positionAt(cursor);
 
