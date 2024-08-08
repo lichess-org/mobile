@@ -144,14 +144,13 @@ class _Body extends ConsumerWidget {
                 icon: const Icon(LichessIcons.arrow_full_upperright),
                 settingsLabel: const Text('Shape color'),
                 settingsValue: shapeColorL10n(context, boardPrefs.shapeColor),
-                showCupertinoTrailingValue: false,
                 onTap: () {
                   showChoicePicker(
                     context,
                     choices: ShapeColor.values,
                     selectedItem: boardPrefs.shapeColor,
-                    labelBuilder: (t) => RichText(
-                      text: TextSpan(
+                    labelBuilder: (t) => Text.rich(
+                      TextSpan(
                         children: [
                           TextSpan(
                             text: shapeColorL10n(context, t),
