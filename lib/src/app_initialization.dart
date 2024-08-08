@@ -102,16 +102,21 @@ Future<AppInitializationData> appInitialization(
 
   final storedSession = await sessionStorage.read();
   if (storedSession != null) {
-    final client = ref.read(defaultClientProvider);
-    final response = await client.get(
-      lichessUri('/api/account'),
-      headers: {
-        'Authorization': 'Bearer ${signBearerToken(storedSession.token)}',
-        'User-Agent': makeUserAgent(pInfo, deviceInfo, sri, storedSession.user),
-      },
-    ).timeout(const Duration(seconds: 3));
-    if (response.statusCode == 401) {
-      await sessionStorage.delete();
+    try {
+      final client = ref.read(defaultClientProvider);
+      final response = await client.get(
+        lichessUri('/api/account'),
+        headers: {
+          'Authorization': 'Bearer ${signBearerToken(storedSession.token)}',
+          'User-Agent':
+              makeUserAgent(pInfo, deviceInfo, sri, storedSession.user),
+        },
+      ).timeout(const Duration(seconds: 3));
+      if (response.statusCode == 401) {
+        await sessionStorage.delete();
+      }
+    } catch (e) {
+      _logger.warning('Could not while checking session: $e');
     }
   }
 
