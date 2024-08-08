@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -81,11 +82,18 @@ class SettingsTabScreen extends ConsumerWidget {
 class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen(currentBottomTabProvider, (prev, current) {
+      if (prev != BottomTab.settings && current == BottomTab.settings) {
+        _refreshData(ref);
+      }
+    });
+
     final generalPrefs = ref.watch(generalPreferencesProvider);
     final boardPrefs = ref.watch(boardPreferencesProvider);
     final authController = ref.watch(authControllerProvider);
     final userSession = ref.watch(authSessionProvider);
     final packageInfo = ref.watch(packageInfoProvider);
+    final dbSize = ref.watch(getDbSizeInBytesProvider);
 
     final androidVersionAsync = ref.watch(androidVersionProvider);
 
@@ -359,6 +367,15 @@ class _Body extends ConsumerWidget {
               launchUrl(Uri.parse('https://lichess.org/thanks'));
             },
           ),
+          PlatformListTile(
+            leading: const Icon(Icons.storage),
+            title: const Text('Local database size'),
+            additionalInfo:
+                dbSize.hasValue ? Text(_getSizeString(dbSize.value)) : null,
+            trailing: Theme.of(context).platform == TargetPlatform.iOS
+                ? const CupertinoListTileChevron()
+                : Text(_getSizeString(dbSize.value)),
+          ),
         ],
       ),
       Padding(
@@ -427,6 +444,15 @@ class _Body extends ConsumerWidget {
         },
       );
     }
+  }
+
+  String _getSizeString(int? bytes) =>
+      '${_bytesToMB(bytes ?? (0)).toStringAsFixed(2)}MB';
+
+  double _bytesToMB(int bytes) => bytes * 0.000001;
+
+  void _refreshData(WidgetRef ref) {
+    ref.invalidate(getDbSizeInBytesProvider);
   }
 }
 

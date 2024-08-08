@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:lichess_mobile/src/app_initialization.dart';
+import 'package:path/path.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -38,6 +41,14 @@ Future<int?> sqliteVersion(SqliteVersionRef ref) async {
   } catch (_) {
     return null;
   }
+}
+
+@Riverpod(keepAlive: true)
+Future<int> getDbSizeInBytes(GetDbSizeInBytesRef ref) async {
+  final dbPath = join(await getDatabasesPath(), kLichessDatabaseName);
+  final dbFile = File(dbPath);
+
+  return dbFile.length();
 }
 
 Future<Database> openDb(DatabaseFactory dbFactory, String path) async {
@@ -142,15 +153,22 @@ void _createChatReadMessagesTableV1(Batch batch) {
 
 Future<void> _deleteOldEntries(Database db, String table, Duration ttl) async {
   final date = DateTime.now().subtract(ttl);
-  final tableExists = await db.rawQuery(
-    "SELECT name FROM sqlite_master WHERE type='table' AND name='$table'",
-  );
-  if (tableExists.isEmpty) {
+
+  if (!await _doesTableExist(db, table)) {
     return;
   }
+
   await db.delete(
     table,
     where: 'lastModified < ?',
     whereArgs: [date.toIso8601String()],
   );
+}
+
+Future<bool> _doesTableExist(Database db, String table) async {
+  final tableExists = await db.rawQuery(
+    "SELECT name FROM sqlite_master WHERE type='table' AND name='$table'",
+  );
+
+  return tableExists.isNotEmpty;
 }
