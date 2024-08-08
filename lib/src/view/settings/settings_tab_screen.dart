@@ -367,14 +367,20 @@ class _Body extends ConsumerWidget {
               launchUrl(Uri.parse('https://lichess.org/thanks'));
             },
           ),
+        ],
+      ),
+      ListSection(
+        hasLeading: true,
+        showDivider: true,
+        children: [
           PlatformListTile(
             leading: const Icon(Icons.storage),
             title: const Text('Local database size'),
+            subtitle: Theme.of(context).platform == TargetPlatform.iOS
+                ? null
+                : Text(_getSizeString(dbSize.value)),
             additionalInfo:
                 dbSize.hasValue ? Text(_getSizeString(dbSize.value)) : null,
-            trailing: Theme.of(context).platform == TargetPlatform.iOS
-                ? const CupertinoListTileChevron()
-                : Text(_getSizeString(dbSize.value)),
           ),
         ],
       ),
