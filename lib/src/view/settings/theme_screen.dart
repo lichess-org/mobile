@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 import 'package:chessground/chessground.dart';
-import 'package:dartchess/dartchess.dart' as dartchess;
 import 'package:dartchess/dartchess.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/settings/board_theme_screen.dart';
 import 'package:lichess_mobile/src/view/settings/piece_set_screen.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
@@ -42,6 +43,18 @@ class ThemeScreen extends StatelessWidget {
   }
 }
 
+String shapeColorL10n(
+  BuildContext context,
+  ShapeColor shapeColor,
+) =>
+    // TODO add l10n
+    switch (shapeColor) {
+      ShapeColor.green => 'Green',
+      ShapeColor.red => 'Red',
+      ShapeColor.blue => 'Blue',
+      ShapeColor.yellow => 'Yellow',
+    };
+
 class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -66,10 +79,26 @@ class _Body extends ConsumerWidget {
                 child: Center(
                   child: Chessboard(
                     size: boardSize,
-                    state: const ChessboardState(
+                    state: ChessboardState(
                       interactableSide: InteractableSide.none,
                       orientation: Side.white,
-                      fen: dartchess.kInitialFEN,
+                      fen: kInitialFEN,
+                      shapes: <Shape>{
+                        Arrow(
+                          color: boardPrefs.shapeColor.color,
+                          orig: Square.fromName('e2'),
+                          dest: Square.fromName('e4'),
+                        ),
+                        Circle(
+                          color: boardPrefs.shapeColor.color,
+                          orig: Square.fromName('d2'),
+                        ),
+                        Arrow(
+                          color: boardPrefs.shapeColor.color,
+                          orig: Square.fromName('b1'),
+                          dest: Square.fromName('c3'),
+                        ),
+                      }.lock,
                     ),
                     settings: ChessboardSettings(
                       enableCoordinates: false,
@@ -108,6 +137,41 @@ class _Body extends ConsumerWidget {
                     context,
                     title: context.l10n.pieceSet,
                     builder: (context) => const PieceSetScreen(),
+                  );
+                },
+              ),
+              SettingsListTile(
+                icon: const Icon(LichessIcons.arrow_full_upperright),
+                settingsLabel: const Text('Shape color'),
+                settingsValue: shapeColorL10n(context, boardPrefs.shapeColor),
+                showCupertinoTrailingValue: false,
+                onTap: () {
+                  showChoicePicker(
+                    context,
+                    choices: ShapeColor.values,
+                    selectedItem: boardPrefs.shapeColor,
+                    labelBuilder: (t) => RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: shapeColorL10n(context, t),
+                          ),
+                          const TextSpan(text: '   '),
+                          WidgetSpan(
+                            child: Container(
+                              width: 15,
+                              height: 15,
+                              color: t.color,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    onSelectedItemChanged: (ShapeColor? value) {
+                      ref
+                          .read(boardPreferencesProvider.notifier)
+                          .setShapeColor(value ?? ShapeColor.green);
+                    },
                   );
                 },
               ),

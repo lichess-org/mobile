@@ -507,6 +507,7 @@ class _BoardState extends ConsumerState<_Board> {
               enable: true,
               onCompleteShape: _onCompleteShape,
               onClearShapes: _onClearShapes,
+              newShapeColor: boardPrefs.shapeColor.color,
             ),
           ),
     );
