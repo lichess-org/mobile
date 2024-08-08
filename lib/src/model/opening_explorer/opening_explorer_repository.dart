@@ -21,50 +21,51 @@ Stream<OpeningExplorer> openingExplorer(
     prefs: prefs,
   );
   final cacheEntry = ref.read(openingExplorerCacheProvider).get(cacheKey);
-  if (cacheEntry != null) {
+  if (cacheEntry != null && !cacheEntry.isIndexing) {
     yield cacheEntry.openingExplorer;
-    return;
-  }
-
-  final client = ref.read(lichessClientProvider);
-  final stream = switch (prefs.db) {
-    OpeningDatabase.master => OpeningExplorerRepository(client)
-        .getMasterDatabase(
+  } else {
+    final client = ref.read(lichessClientProvider);
+    final stream = switch (prefs.db) {
+      OpeningDatabase.master => OpeningExplorerRepository(client)
+          .getMasterDatabase(
+            fen,
+            since: prefs.masterDb.sinceYear,
+          )
+          .asStream(),
+      OpeningDatabase.lichess => OpeningExplorerRepository(client)
+          .getLichessDatabase(
+            fen,
+            speeds: prefs.lichessDb.speeds,
+            ratings: prefs.lichessDb.ratings,
+            since: prefs.lichessDb.since,
+          )
+          .asStream(),
+      OpeningDatabase.player =>
+        await OpeningExplorerRepository(client).getPlayerDatabase(
           fen,
-          since: prefs.masterDb.sinceYear,
-        )
-        .asStream(),
-    OpeningDatabase.lichess => OpeningExplorerRepository(client)
-        .getLichessDatabase(
-          fen,
-          speeds: prefs.lichessDb.speeds,
-          ratings: prefs.lichessDb.ratings,
-          since: prefs.lichessDb.since,
-        )
-        .asStream(),
-    OpeningDatabase.player =>
-      await OpeningExplorerRepository(client).getPlayerDatabase(
-        fen,
-        // null check handled by widget
-        usernameOrId: prefs.playerDb.usernameOrId!,
-        color: prefs.playerDb.side,
-        speeds: prefs.playerDb.speeds,
-        modes: prefs.playerDb.modes,
-        since: prefs.playerDb.since,
-      ),
-  };
+          // null check handled by widget
+          usernameOrId: prefs.playerDb.usernameOrId!,
+          color: prefs.playerDb.side,
+          speeds: prefs.playerDb.speeds,
+          modes: prefs.playerDb.modes,
+          since: prefs.playerDb.since,
+        ),
+    };
 
-  await for (final openingExplorer in stream) {
-    ref.read(openingExplorerCacheProvider.notifier).addEntry(
-          cacheKey,
-          OpeningExplorerCacheEntry(
-            openingExplorer: openingExplorer,
-            isIndexing: true,
-          ),
-        );
-    yield openingExplorer;
+    await for (final openingExplorer in stream) {
+      ref.read(openingExplorerCacheProvider.notifier).addEntry(
+            cacheKey,
+            OpeningExplorerCacheEntry(
+              openingExplorer: openingExplorer,
+              isIndexing: true,
+            ),
+          );
+      yield openingExplorer;
+    }
+    ref
+        .read(openingExplorerCacheProvider.notifier)
+        .setIndexing(cacheKey, false);
   }
-  ref.read(openingExplorerCacheProvider.notifier).setIndexing(cacheKey, false);
 }
 
 class OpeningExplorerRepository {
