@@ -29,6 +29,7 @@ import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'opening_explorer_settings.dart';
 
@@ -243,6 +244,9 @@ class _OpeningExplorer extends ConsumerWidget {
           )
         : nodeOpening ?? branchOpening ?? contextOpening;
 
+    final wikiBooksUrl = ref.watch(ctrlProvider.select((s) => s.wikiBooksUrl));
+    print('wikiBooksUrl: $wikiBooksUrl');
+
     final cache = ref.watch(openingExplorerCacheProvider);
     final isIndexing = cache
         .get(
@@ -282,7 +286,10 @@ class _OpeningExplorer extends ConsumerWidget {
                             if (opening != null)
                               Expanded(
                                 flex: 75,
-                                child: _Opening(opening: opening),
+                                child: _Opening(
+                                  opening: opening,
+                                  wikiBooksUrl: wikiBooksUrl,
+                                ),
                               ),
                             if (isIndexing != null && isIndexing)
                               Expanded(
@@ -328,14 +335,33 @@ class _OpeningExplorer extends ConsumerWidget {
   }
 }
 
-class _Opening extends StatelessWidget {
-  const _Opening({required this.opening});
+class _Opening extends ConsumerWidget {
+  const _Opening({
+    required this.opening,
+    required this.wikiBooksUrl,
+  });
 
   final Opening opening;
+  final String wikiBooksUrl;
   @override
-  Widget build(BuildContext context) {
-    return Text(
+  Widget build(BuildContext context, WidgetRef ref) {
+    final wikiBooksPageExistsAsync = ref.watch(
+      wikiBooksPageExistsProvider(url: wikiBooksUrl),
+    );
+
+    final openingWidget = Text(
       '${opening.eco.isEmpty ? "" : "${opening.eco} "}${opening.name}',
+    );
+
+    return wikiBooksPageExistsAsync.when(
+      data: (wikiBooksPageExists) => wikiBooksPageExists
+          ? GestureDetector(
+              onTap: () => launchUrl(Uri.parse(wikiBooksUrl)),
+              child: openingWidget,
+            )
+          : openingWidget,
+      loading: () => openingWidget,
+      error: (e, s) => openingWidget,
     );
   }
 }

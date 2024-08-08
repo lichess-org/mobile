@@ -179,3 +179,13 @@ class OpeningExplorerCacheEntry with _$OpeningExplorerCacheEntry {
     required bool isIndexing,
   }) = _OpeningExplorerCacheEntry;
 }
+
+@riverpod
+Future<bool> wikiBooksPageExists(
+  WikiBooksPageExistsRef ref, {
+  required String url,
+}) async {
+  final client = ref.read(defaultClientProvider);
+  final response = await client.get(Uri.parse(url));
+  return response.statusCode == 200;
+}
