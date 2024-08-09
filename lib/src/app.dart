@@ -115,15 +115,14 @@ class _AppState extends ConsumerState<Application> {
     ref.read(localNotificationServiceProvider).init();
 
     ref.listenManual(challengesProvider, (prev, current) {
-      final prevIds = prev!.value!.inward.map((challenge) => challenge.id);
+      if (prev == null || !prev.hasValue || !current.hasValue) return;
+      final prevIds = prev.value!.inward.map((challenge) => challenge.id);
       final inward = current.value!.inward;
       final repo = ref.read(challengeRepositoryProvider);
       final l10n = ref.read(l10nProvider).strings;
 
       inward
-          .map((element) => element.id)
-          .where((id) => !prevIds.contains(id))
-          .map((id) => inward.firstWhere((element) => element.id == id))
+          .where((challenge) => !prevIds.contains(challenge.id))
           .forEach((challenge) {
         ref.read(localNotificationServiceProvider).show(
               ChallengeNotification(
