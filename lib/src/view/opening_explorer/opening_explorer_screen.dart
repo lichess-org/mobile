@@ -209,10 +209,9 @@ class _OpeningExplorer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = analysisControllerProvider(pgn, options);
-    final position = ref.watch(ctrlProvider.select((value) => value.position));
+    final ctrlProvider = ref.watch(analysisControllerProvider(pgn, options));
 
-    if (position.fullmoves > 24) {
+    if (ctrlProvider.position.fullmoves > 24) {
       return const Align(
         alignment: Alignment.center,
         child: Text('Max depth reached'),
@@ -228,33 +227,24 @@ class _OpeningExplorer extends ConsumerWidget {
       );
     }
 
-    final isRootNode = ref.watch(
-      ctrlProvider.select((s) => s.currentNode.isRoot),
-    );
-    final nodeOpening =
-        ref.watch(ctrlProvider.select((s) => s.currentNode.opening));
-    final branchOpening =
-        ref.watch(ctrlProvider.select((s) => s.currentBranchOpening));
-    final contextOpening =
-        ref.watch(ctrlProvider.select((s) => s.contextOpening));
-    final opening = isRootNode
+    final opening = ctrlProvider.currentNode.isRoot
         ? LightOpening(
             eco: '',
             name: context.l10n.startPosition,
           )
-        : nodeOpening ?? branchOpening ?? contextOpening;
-
-    final wikiBooksUrl = ref.watch(ctrlProvider.select((s) => s.wikiBooksUrl));
+        : ctrlProvider.currentNode.opening ??
+            ctrlProvider.currentBranchOpening ??
+            ctrlProvider.contextOpening;
 
     final cache = ref.watch(openingExplorerCacheProvider);
     final isIndexing = cache
         .get(
-          OpeningExplorerCacheKey(fen: position.fen, prefs: prefs),
+          OpeningExplorerCacheKey(fen: ctrlProvider.position.fen, prefs: prefs),
         )
         ?.isIndexing;
     final openingExplorerAsync = ref.watch(
       openingExplorerProvider(
-        fen: position.fen,
+        fen: ctrlProvider.position.fen,
       ),
     );
 
@@ -287,7 +277,7 @@ class _OpeningExplorer extends ConsumerWidget {
                                 flex: 75,
                                 child: _Opening(
                                   opening: opening,
-                                  wikiBooksUrl: wikiBooksUrl,
+                                  wikiBooksUrl: ctrlProvider.wikiBooksUrl,
                                 ),
                               ),
                             if (isIndexing != null && isIndexing)
@@ -303,7 +293,8 @@ class _OpeningExplorer extends ConsumerWidget {
                         whiteWins: openingExplorer.white,
                         draws: openingExplorer.draws,
                         blackWins: openingExplorer.black,
-                        ctrlProvider: ctrlProvider,
+                        pgn: pgn,
+                        options: options,
                       ),
                       if (openingExplorer.topGames != null &&
                           openingExplorer.topGames!.isNotEmpty)
@@ -327,9 +318,14 @@ class _OpeningExplorer extends ConsumerWidget {
       loading: () => const Center(
         child: CircularProgressIndicator(),
       ),
-      error: (error, stackTrace) => Center(
-        child: Text(error.toString()),
-      ),
+      error: (e, s) {
+        debugPrint(
+          'SEVERE: [OpeningExplorerScreen] could not load opening explorer data; $e\n$s',
+        );
+        return Center(
+          child: Text(e.toString()),
+        );
+      },
     );
   }
 }
@@ -417,14 +413,16 @@ class _MoveTable extends ConsumerWidget {
     required this.whiteWins,
     required this.draws,
     required this.blackWins,
-    required this.ctrlProvider,
+    required this.pgn,
+    required this.options,
   });
 
   final IList<OpeningMove> moves;
   final int whiteWins;
   final int draws;
   final int blackWins;
-  final AnalysisControllerProvider ctrlProvider;
+  final String pgn;
+  final AnalysisOptions options;
 
   String formatNum(int num) => NumberFormat.decimalPatternDigits().format(num);
 
@@ -432,6 +430,8 @@ class _MoveTable extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     const rowPadding = EdgeInsets.all(6.0);
     final games = whiteWins + draws + blackWins;
+
+    final ctrlProvider = analysisControllerProvider(pgn, options);
 
     return Table(
       columnWidths: const {
@@ -445,15 +445,15 @@ class _MoveTable extends ConsumerWidget {
             color: Theme.of(context).colorScheme.primaryContainer,
           ),
           children: [
-            Container(
+            Padding(
               padding: rowPadding,
               child: Text(context.l10n.move),
             ),
-            Container(
+            Padding(
               padding: rowPadding,
               child: Text(context.l10n.games),
             ),
-            Container(
+            Padding(
               padding: rowPadding,
               child: Text(context.l10n.whiteDrawBlack),
             ),
@@ -475,7 +475,7 @@ class _MoveTable extends ConsumerWidget {
                   onTap: () => ref
                       .read(ctrlProvider.notifier)
                       .onUserMove(Move.parse(move.uci)!),
-                  child: Container(
+                  child: Padding(
                     padding: rowPadding,
                     child: Text(move.san),
                   ),
@@ -484,7 +484,7 @@ class _MoveTable extends ConsumerWidget {
                   onTap: () => ref
                       .read(ctrlProvider.notifier)
                       .onUserMove(Move.parse(move.uci)!),
-                  child: Container(
+                  child: Padding(
                     padding: rowPadding,
                     child: Text('${formatNum(move.games)} ($percentGames%)'),
                   ),
@@ -493,7 +493,7 @@ class _MoveTable extends ConsumerWidget {
                   onTap: () => ref
                       .read(ctrlProvider.notifier)
                       .onUserMove(Move.parse(move.uci)!),
-                  child: Container(
+                  child: Padding(
                     padding: rowPadding,
                     child: _WinPercentageChart(
                       whiteWins: move.white,
@@ -518,11 +518,11 @@ class _MoveTable extends ConsumerWidget {
               alignment: Alignment.centerLeft,
               child: const Icon(Icons.functions),
             ),
-            Container(
+            Padding(
               padding: rowPadding,
               child: Text('${formatNum(games)} (100%)'),
             ),
-            Container(
+            Padding(
               padding: rowPadding,
               child: _WinPercentageChart(
                 whiteWins: whiteWins,
