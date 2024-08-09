@@ -12,9 +12,12 @@ import 'package:lichess_mobile/main.dart';
 import 'package:lichess_mobile/src/app_initialization.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
+import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
+import 'package:lichess_mobile/src/model/challenge/challenges.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
+import 'package:lichess_mobile/src/model/notifications/challenge_notification.dart';
 import 'package:lichess_mobile/src/model/notifications/local_notification_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
@@ -23,10 +26,12 @@ import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/notification_service.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
+import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/system.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
+import 'package:lichess_mobile/src/view/user/challenge_requests_screen.dart';
 
 /// Application initialization and main entry point.
 class AppInitializationScreen extends ConsumerWidget {
@@ -108,6 +113,54 @@ class _AppState extends ConsumerState<Application> {
     }
 
     ref.read(localNotificationServiceProvider).init();
+
+    ref.listenManual(challengesProvider, (prev, current) {
+      final prevIds = prev!.value!.inward.map((challenge) => challenge.id);
+      final inward = current.value!.inward;
+      final repo = ref.read(challengeRepositoryProvider);
+      final l10n = ref.read(l10nProvider).strings;
+
+      inward
+          .map((element) => element.id)
+          .where((id) => !prevIds.contains(id))
+          .map((id) => inward.firstWhere((element) => element.id == id))
+          .forEach((challenge) {
+        ref.read(localNotificationServiceProvider).show(
+              ChallengeNotification(
+                challenge,
+                l10n,
+                onPressed: (action, id) async {
+                  switch (action) {
+                    case ChallengeNotificationAction
+                          .accept: // accept the game and open board
+                      await repo.accept(challenge.id);
+                      final fullId = await repo.show(challenge.id).then(
+                            (challenge) => challenge.gameFullId,
+                          );
+                      pushPlatformRoute(
+                        ref.read(currentNavigatorKeyProvider).currentContext!,
+                        rootNavigator: true,
+                        builder: (BuildContext context) {
+                          return GameScreen(
+                            initialGameId: fullId,
+                          );
+                        },
+                      );
+                    case ChallengeNotificationAction
+                          .pressed: // open the challenge screen
+                      pushPlatformRoute(
+                        ref.read(currentNavigatorKeyProvider).currentContext!,
+                        builder: (BuildContext context) =>
+                            const ChallengeRequestsScreen(),
+                      );
+                    case ChallengeNotificationAction.decline:
+                      repo.decline(id);
+                  }
+                },
+              ),
+            );
+      });
+    });
 
     ref.listenManual(connectivityChangesProvider, (prev, current) async {
       // Play registered moves whenever the app comes back online.
