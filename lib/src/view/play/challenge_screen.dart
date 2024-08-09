@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_preferences.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/lobby/create_game_service.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
@@ -63,7 +64,7 @@ class _ChallengeBody extends ConsumerStatefulWidget {
 }
 
 class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
-  Future<void>? _pendingCreateGame;
+  Future<(GameFullId?, DeclineReason?)>? _pendingCreateChallenge;
   final _controller = TextEditingController();
 
   String? fromPositionFenInput;
@@ -381,7 +382,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                 ),
               const SizedBox(height: 20),
               FutureBuilder(
-                future: _pendingCreateGame,
+                future: _pendingCreateChallenge,
                 builder: (context, snapshot) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -416,7 +417,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                                     context,
                                     'Sent challenge to ${widget.user.name}',
                                   );
-                                  final response =
+                                  _pendingCreateChallenge =
                                       createGameService.newChallenge(
                                     preferences.makeRequest(
                                       widget.user,
@@ -426,23 +427,26 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                                           : fromPositionFenInput,
                                     ),
                                   );
-                                  response.then((value) {
+
+                                  _pendingCreateChallenge!.then((value) {
                                     if (!context.mounted) return;
 
-                                    if (value.$1 != null) {
+                                    final (fullId, declineReason) = value;
+
+                                    if (fullId != null) {
                                       pushPlatformRoute(
                                         context,
                                         rootNavigator: true,
                                         builder: (BuildContext context) {
                                           return GameScreen(
-                                            initialGameId: value.$1,
+                                            initialGameId: fullId,
                                           );
                                         },
                                       );
                                     } else {
                                       showPlatformSnackbar(
                                         context,
-                                        '${widget.user.name}: ${declineReasonMessage(context, value.$2!)}',
+                                        '${widget.user.name}: ${declineReasonMessage(context, declineReason!)}',
                                       );
                                     }
                                   });
