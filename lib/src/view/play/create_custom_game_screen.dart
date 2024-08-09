@@ -239,7 +239,7 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
             final isMySeek =
                 UserId.fromUserName(challenge.username) == session?.user.id;
 
-            return CorrespondenceChallengeDisplay(
+            return CorrespondenceChallengeListItem(
               challenge: challenge,
               user: LightUser(
                 id: UserId.fromUserName(challenge.username),

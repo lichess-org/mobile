@@ -76,7 +76,7 @@ class _Body extends ConsumerWidget {
                   final isMyChallenge =
                       challenge.direction == ChallengeDirection.outward;
 
-                  return ChallengeDisplay(
+                  return ChallengeListItem(
                     challenge: challenge,
                     user: user,
                     subtitle: subtitle,
