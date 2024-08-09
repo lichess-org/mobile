@@ -1,6 +1,8 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:http/http.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer.dart';
@@ -24,7 +26,7 @@ Stream<OpeningExplorerEntry> openingExplorer(
   if (cacheEntry != null && !cacheEntry.isIndexing) {
     yield cacheEntry.openingExplorerEntry;
   } else {
-    final client = ref.read(lichessClientProvider);
+    final client = ref.read(defaultClientProvider);
     final stream = switch (prefs.db) {
       OpeningDatabase.master => OpeningExplorerRepository(client)
           .getMasterDatabase(
@@ -71,16 +73,17 @@ Stream<OpeningExplorerEntry> openingExplorer(
 class OpeningExplorerRepository {
   const OpeningExplorerRepository(this.client);
 
-  final LichessClient client;
+  final Client client;
 
   Future<OpeningExplorerEntry> getMasterDatabase(
     String fen, {
     int? since,
   }) {
     return client.readJson(
-      Uri(
-        path: '/masters',
-        queryParameters: {
+      Uri.https(
+        kLichessOpeningExplorerHost,
+        '/masters',
+        {
           'fen': fen,
           if (since != null) 'since': since.toString(),
         },
@@ -96,9 +99,10 @@ class OpeningExplorerRepository {
     DateTime? since,
   }) {
     return client.readJson(
-      Uri(
-        path: '/lichess',
-        queryParameters: {
+      Uri.https(
+        kLichessOpeningExplorerHost,
+        '/lichess',
+        {
           'fen': fen,
           if (speeds.isNotEmpty)
             'speeds': speeds.map((speed) => speed.name).join(','),
@@ -119,9 +123,10 @@ class OpeningExplorerRepository {
     DateTime? since,
   }) {
     return client.readNdJsonStream(
-      Uri(
-        path: '/player',
-        queryParameters: {
+      Uri.https(
+        kLichessOpeningExplorerHost,
+        '/player',
+        {
           'fen': fen,
           'player': usernameOrId,
           'color': color.name,
