@@ -5,6 +5,7 @@ import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
 import 'package:lichess_mobile/src/model/challenge/challenges.dart';
+import 'package:lichess_mobile/src/model/notifications/local_notification_service.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -122,7 +123,12 @@ class _Body extends ConsumerWidget {
                     cancelText: !isMyChallenge ? context.l10n.decline : null,
                     onCancel: isMyChallenge
                         ? () => challengeRepo.cancel(challenge.id)
-                        : () => challengeRepo.decline(challenge.id),
+                        : () {
+                            challengeRepo.decline(challenge.id);
+                            ref
+                                .read(localNotificationServiceProvider)
+                                .cancel(challenge.id.value.hashCode);
+                          },
                   );
                 },
               );
