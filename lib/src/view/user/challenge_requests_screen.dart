@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
+import 'package:lichess_mobile/src/model/challenge/challenges.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -46,7 +47,7 @@ class ChallengeRequestsScreen extends ConsumerWidget {
 class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final challengeNotifier = ref.read(challengesProvider.notifier);
+    final challengeRepo = ref.read(challengeRepositoryProvider);
     final challenges = ref.watch(challengesProvider);
     final session = ref.watch(authSessionProvider);
 
@@ -97,35 +98,31 @@ class _Body extends ConsumerWidget {
                                   context,
                                   title: Text(context.l10n.accept),
                                   isDestructiveAction: true,
-                                  onConfirm: (_) {
-                                    challengeNotifier
-                                        .accept(challenge.id)
-                                        .then((id) {
-                                      pushPlatformRoute(
-                                        ref
-                                            .read(currentNavigatorKeyProvider)
-                                            .currentContext!,
-                                        rootNavigator: true,
-                                        builder: (BuildContext context) {
-                                          return GameScreen(
-                                            initialGameId: id,
-                                          );
-                                        },
-                                      );
-                                    });
+                                  onConfirm: (_) async {
+                                    await challengeRepo.accept(challenge.id);
+                                    final fullId = await challengeRepo
+                                        .show(challenge.id)
+                                        .then(
+                                          (challenge) => challenge.gameFullId,
+                                        );
+                                    pushPlatformRoute(
+                                      ref
+                                          .read(currentNavigatorKeyProvider)
+                                          .currentContext!,
+                                      rootNavigator: true,
+                                      builder: (BuildContext context) {
+                                        return GameScreen(
+                                          initialGameId: fullId,
+                                        );
+                                      },
+                                    );
                                   },
                                 );
                               },
                     cancelText: !isMyChallenge ? context.l10n.decline : null,
                     onCancel: isMyChallenge
-                        ? () {
-                            challengeNotifier.cancel(challenge.id);
-                          }
-                        : () {
-                            ref
-                                .read(challengeRepositoryProvider)
-                                .decline(challenge.id);
-                          },
+                        ? () => challengeRepo.cancel(challenge.id)
+                        : () => challengeRepo.decline(challenge.id),
                   );
                 },
               );
