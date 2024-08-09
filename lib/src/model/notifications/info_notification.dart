@@ -28,4 +28,7 @@ class InfoNotificationDetails {
 class InfoNotification extends LocalNotification {
   InfoNotification(String title, {super.body})
       : super(title, InfoNotificationDetails.instance.notificationDetails);
+
+  @override
+  int get id => hashCode;
 }

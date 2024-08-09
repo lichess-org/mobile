@@ -28,8 +28,6 @@ class LocalNotificationService {
   final _notificationPlugin = FlutterLocalNotificationsPlugin();
   final _receivePort = ReceivePort();
 
-  int currentId = 0;
-
   Future<void> init() async {
     _updateLocalisations();
     _ref.listen(generalPreferencesProvider, (prev, now) {
@@ -61,7 +59,7 @@ class LocalNotificationService {
       onDidReceiveBackgroundNotificationResponse:
           _notificationBackgroundResponse,
     );
-    _log.info('[Local Notifications] initialized');
+    _log.info('initialized');
   }
 
   void _updateLocalisations() {
@@ -71,7 +69,7 @@ class LocalNotificationService {
   }
 
   Future<int> show(LocalNotification notification) async {
-    final id = currentId++;
+    final id = notification.id;
     await _notificationPlugin.show(
       id,
       notification.title,
@@ -80,20 +78,19 @@ class LocalNotificationService {
       payload: notification.payload,
     );
     _log.info(
-      '[Local Notifications] Sent notification: ($id | ${notification.title}) ${notification.body} (Payload: ${notification.payload})',
+      'Sent notification: ($id | ${notification.title}) ${notification.body} (Payload: ${notification.payload})',
     );
 
-    // if the notification implements LocalNotificaitonCallback
-    if (notification is LocalNotificationCallback) {
-      _callbacks[id] = (notification as LocalNotificationCallback).callback;
-      _log.info('[Local Notifications] registered callback for id [$id]');
+    if (notification.callback != null) {
+      _callbacks[id] = notification.callback!;
+      _log.info('registered callback for id [$id]');
     }
 
     return id;
   }
 
   Future<void> cancel(int id) async {
-    _log.info('[Local Notifications] canceled notification id: [$id]');
+    _log.info('canceled notification id: [$id]');
     return _notificationPlugin.cancel(id);
   }
 
@@ -111,7 +108,7 @@ class LocalNotificationService {
       _notificationResponse(response);
     } catch (e) {
       _log.severe(
-        '[Local Notifications] failed to parse message from background isoalte',
+        'failed to parse message from background isoalte',
       );
     }
   }
@@ -145,12 +142,11 @@ abstract class LocalNotification {
     this.payload,
   });
 
+  int get id;
+
   final String title;
   final String? body;
   final String? payload;
   final NotificationDetails notificationDetails;
-}
-
-abstract class LocalNotificationCallback {
-  void callback(String? actionId, String? payload);
+  final void Function(String? actionId, String? payload)? callback = null;
 }

@@ -71,8 +71,7 @@ class ChallengeNotificationDetails {
 
 enum ChallengeNotificationAction { accept, decline, pressed }
 
-class ChallengeNotification extends LocalNotification
-    implements LocalNotificationCallback {
+class ChallengeNotification extends LocalNotification {
   ChallengeNotification(this._challenge, this._l10n, {this.onPressed})
       : super(
           '${_challenge.challenger!.user.name} challenges you!',
@@ -85,10 +84,16 @@ class ChallengeNotification extends LocalNotification
       onPressed;
 
   @override
+  int get id => _challenge.id.value.hashCode;
+
+  @override
   String get payload => _challenge.id.value;
 
   @override
   String get body => _body();
+
+  @override
+  void Function(String? actionId, String? payload) get callback => _callback;
 
   String _body() {
     final time = _challenge.days == null
@@ -99,14 +104,13 @@ class ChallengeNotification extends LocalNotification
         : '${_l10n.casual} • $time';
   }
 
-  @override
-  void callback(String? actionId, String? payload) {
+  void _callback(String? actionId, String? payload) {
     final action = switch (actionId) {
       'accept' => ChallengeNotificationAction.accept,
       'decline' => ChallengeNotificationAction.decline,
       null || String() => ChallengeNotificationAction.pressed,
     };
     final id = ChallengeId(payload!);
-    onPressed!(action, id);
+    onPressed?.call(action, id);
   }
 }
