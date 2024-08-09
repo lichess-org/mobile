@@ -12,8 +12,8 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
-class ChallengeDisplay extends StatelessWidget {
-  const ChallengeDisplay({
+class ChallengeListItem extends StatelessWidget {
+  const ChallengeListItem({
     super.key,
     required this.challenge,
     required this.user,
@@ -71,8 +71,8 @@ class ChallengeDisplay extends StatelessWidget {
   }
 }
 
-class CorrespondenceChallengeDisplay extends StatelessWidget {
-  const CorrespondenceChallengeDisplay({
+class CorrespondenceChallengeListItem extends StatelessWidget {
+  const CorrespondenceChallengeListItem({
     super.key,
     required this.challenge,
     required this.user,
@@ -91,7 +91,7 @@ class CorrespondenceChallengeDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChallengeDisplay(
+    return ChallengeListItem(
       challenge: Challenge(
         id: ChallengeId(challenge.id.value),
         status: ChallengeStatus.created,
