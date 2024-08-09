@@ -140,10 +140,10 @@ abstract class LocalNotification {
     this.payload,
   });
 
-  String title;
-  String? body;
-  String? payload;
-  NotificationDetails notificationDetails;
+  final String title;
+  final String? body;
+  final String? payload;
+  final NotificationDetails notificationDetails;
 }
 
 abstract class LocalNotificationCallback {
