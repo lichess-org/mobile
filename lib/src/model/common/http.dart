@@ -38,11 +38,10 @@ final _logger = Logger('HttpClient');
 const _maxCacheSize = 2 * 1024 * 1024;
 
 /// Creates a Uri pointing to lichess server with the given unencoded path and query parameters.
-Uri lichessUri(String unencodedPath, [Map<String, dynamic>? queryParameters]) {
-  return kLichessHost.startsWith('localhost')
-      ? Uri.http(kLichessHost, unencodedPath, queryParameters)
-      : Uri.https(kLichessHost, unencodedPath, queryParameters);
-}
+Uri lichessUri(String unencodedPath, [Map<String, dynamic>? queryParameters]) =>
+    kLichessHost.startsWith('localhost')
+        ? Uri.http(kLichessHost, unencodedPath, queryParameters)
+        : Uri.https(kLichessHost, unencodedPath, queryParameters);
 
 /// Creates the appropriate http client for the platform.
 ///
@@ -446,10 +445,8 @@ extension ClientExtension on Client {
     Map<String, String>? headers,
     required T Function(Map<String, dynamic>) mapper,
   }) async {
-    final request = Request(
-      'GET',
-      lichessUri(url.path, url.hasQuery ? url.queryParameters : null),
-    );
+    final request = Request('GET', url);
+    if (headers != null) request.headers.addAll(headers);
     final response = await send(request);
     if (response.statusCode > 400) {
       var message = 'Request to $url failed with status ${response.statusCode}';
