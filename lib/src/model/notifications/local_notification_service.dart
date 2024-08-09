@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:lichess_mobile/src/model/notifications/challenge_notification.dart';
 import 'package:lichess_mobile/src/model/notifications/info_notification.dart';
+import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -21,7 +22,6 @@ LocalNotificationService localNotificationService(
 class LocalNotificationService {
   LocalNotificationService(this._ref, this._log);
 
-  static LocalNotificationService? instance;
   final LocalNotificationServiceRef _ref;
   final Logger _log;
   final Map<int, void Function(String?, String?)> _callbacks = {};
@@ -31,12 +31,11 @@ class LocalNotificationService {
   int currentId = 0;
 
   Future<void> init() async {
-    instance = this;
-    final l10n = _ref.watch(l10nProvider);
-
-    // update localizations
-    InfoNotificationDetails(l10n.strings);
-    ChallengeNotificationDetails(l10n.strings);
+    _updateLocalisations();
+    _ref.listen(generalPreferencesProvider, (prev, now) {
+      if (prev!.locale == now.locale) return;
+      _updateLocalisations();
+    });
 
     // hot reloading doesnt remove the port so we just make sure it doesnt exist before registering it
     IsolateNameServer.removePortNameMapping('localNotificationServicePort');
@@ -63,6 +62,12 @@ class LocalNotificationService {
           _notificationBackgroundResponse,
     );
     _log.info('[Local Notifications] initialized');
+  }
+
+  void _updateLocalisations() {
+    final l10n = _ref.read(l10nProvider);
+    InfoNotificationDetails(l10n.strings);
+    ChallengeNotificationDetails(l10n.strings);
   }
 
   Future<int> show(LocalNotification notification) async {
