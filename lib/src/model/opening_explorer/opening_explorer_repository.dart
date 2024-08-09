@@ -11,7 +11,7 @@ part 'opening_explorer_repository.g.dart';
 part 'opening_explorer_repository.freezed.dart';
 
 @riverpod
-Stream<OpeningExplorer> openingExplorer(
+Stream<OpeningExplorerEntry> openingExplorer(
   OpeningExplorerRef ref, {
   required String fen,
 }) async* {
@@ -22,7 +22,7 @@ Stream<OpeningExplorer> openingExplorer(
   );
   final cacheEntry = ref.read(openingExplorerCacheProvider).get(cacheKey);
   if (cacheEntry != null && !cacheEntry.isIndexing) {
-    yield cacheEntry.openingExplorer;
+    yield cacheEntry.openingExplorerEntry;
   } else {
     final client = ref.read(lichessClientProvider);
     final stream = switch (prefs.db) {
@@ -47,7 +47,7 @@ Stream<OpeningExplorer> openingExplorer(
           usernameOrId: prefs.playerDb.usernameOrId!,
           color: prefs.playerDb.side,
           speeds: prefs.playerDb.speeds,
-          modes: prefs.playerDb.modes,
+          gameModes: prefs.playerDb.gameModes,
           since: prefs.playerDb.since,
         ),
     };
@@ -56,7 +56,7 @@ Stream<OpeningExplorer> openingExplorer(
       ref.read(openingExplorerCacheProvider.notifier).addEntry(
             cacheKey,
             OpeningExplorerCacheEntry(
-              openingExplorer: openingExplorer,
+              openingExplorerEntry: openingExplorer,
               isIndexing: true,
             ),
           );
@@ -73,7 +73,7 @@ class OpeningExplorerRepository {
 
   final LichessClient client;
 
-  Future<OpeningExplorer> getMasterDatabase(
+  Future<OpeningExplorerEntry> getMasterDatabase(
     String fen, {
     int? since,
   }) {
@@ -85,11 +85,11 @@ class OpeningExplorerRepository {
           if (since != null) 'since': since.toString(),
         },
       ),
-      mapper: OpeningExplorer.fromJson,
+      mapper: OpeningExplorerEntry.fromJson,
     );
   }
 
-  Future<OpeningExplorer> getLichessDatabase(
+  Future<OpeningExplorerEntry> getLichessDatabase(
     String fen, {
     required ISet<Perf> speeds,
     required ISet<int> ratings,
@@ -106,16 +106,16 @@ class OpeningExplorerRepository {
           if (since != null) 'since': '${since.year}-${since.month}',
         },
       ),
-      mapper: OpeningExplorer.fromJson,
+      mapper: OpeningExplorerEntry.fromJson,
     );
   }
 
-  Future<Stream<OpeningExplorer>> getPlayerDatabase(
+  Future<Stream<OpeningExplorerEntry>> getPlayerDatabase(
     String fen, {
     required String usernameOrId,
     required Side color,
     required ISet<Perf> speeds,
-    required ISet<Mode> modes,
+    required ISet<GameMode> gameModes,
     DateTime? since,
   }) {
     return client.readNdJsonStream(
@@ -127,12 +127,12 @@ class OpeningExplorerRepository {
           'color': color.name,
           if (speeds.isNotEmpty)
             'speeds': speeds.map((speed) => speed.name).join(','),
-          if (modes.isNotEmpty)
-            'modes': modes.map((mode) => mode.name).join(','),
+          if (gameModes.isNotEmpty)
+            'modes': gameModes.map((gameMode) => gameMode.name).join(','),
           if (since != null) 'since': '${since.year}-${since.month}',
         },
       ),
-      mapper: OpeningExplorer.fromJson,
+      mapper: OpeningExplorerEntry.fromJson,
     );
   }
 }
@@ -154,7 +154,7 @@ class OpeningExplorerCache extends _$OpeningExplorerCache {
       state = state.add(
         key,
         OpeningExplorerCacheEntry(
-          openingExplorer: entry.openingExplorer,
+          openingExplorerEntry: entry.openingExplorerEntry,
           isIndexing: isIndexing,
         ),
       );
@@ -175,7 +175,7 @@ class OpeningExplorerCacheKey with _$OpeningExplorerCacheKey {
 @freezed
 class OpeningExplorerCacheEntry with _$OpeningExplorerCacheEntry {
   const factory OpeningExplorerCacheEntry({
-    required OpeningExplorer openingExplorer,
+    required OpeningExplorerEntry openingExplorerEntry,
     required bool isIndexing,
   }) = _OpeningExplorerCacheEntry;
 }

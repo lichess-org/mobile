@@ -8,22 +8,22 @@ part 'opening_explorer.freezed.dart';
 part 'opening_explorer.g.dart';
 
 @Freezed(fromJson: true)
-class OpeningExplorer with _$OpeningExplorer {
-  const OpeningExplorer._();
+class OpeningExplorerEntry with _$OpeningExplorerEntry {
+  const OpeningExplorerEntry._();
 
-  const factory OpeningExplorer({
+  const factory OpeningExplorerEntry({
     required int white,
     required int draws,
     required int black,
     required IList<OpeningMove> moves,
-    IList<OpeningGame>? topGames,
-    IList<OpeningGame>? recentGames,
+    IList<OpeningExplorerGame>? topGames,
+    IList<OpeningExplorerGame>? recentGames,
     LightOpening? opening,
     int? queuePosition,
-  }) = _OpeningExplorer;
+  }) = _OpeningExplorerEntry;
 
-  factory OpeningExplorer.fromJson(Map<String, Object?> json) =>
-      _$OpeningExplorerFromJson(json);
+  factory OpeningExplorerEntry.fromJson(Map<String, Object?> json) =>
+      _$OpeningExplorerEntryFromJson(json);
 }
 
 @Freezed(fromJson: true)
@@ -39,7 +39,7 @@ class OpeningMove with _$OpeningMove {
     int? averageRating,
     int? averageOpponentRating,
     int? performance,
-    OpeningGame? game,
+    OpeningExplorerGame? game,
   }) = _OpeningMove;
 
   factory OpeningMove.fromJson(Map<String, Object?> json) =>
@@ -51,84 +51,52 @@ class OpeningMove with _$OpeningMove {
 }
 
 @Freezed(fromJson: true)
-class OpeningGame with _$OpeningGame {
-  factory OpeningGame({
+class OpeningExplorerGame with _$OpeningExplorerGame {
+  factory OpeningExplorerGame({
     required String id,
-    required OpeningPlayer white,
-    required OpeningPlayer black,
+    required ({String name, int rating}) white,
+    required ({String name, int rating}) black,
     String? uci,
     String? winner,
     Perf? speed,
-    Mode? mode,
+    GameMode? mode,
     int? year,
     String? month,
-  }) = _OpeningGame;
+  }) = _OpeningExplorerGame;
 
-  factory OpeningGame.fromJson(Map<String, Object?> json) =>
-      OpeningGame.fromPick(pick(json).required());
+  factory OpeningExplorerGame.fromJson(Map<String, Object?> json) =>
+      OpeningExplorerGame.fromPick(pick(json).required());
 
-  factory OpeningGame.fromPick(RequiredPick pick) {
-    return OpeningGame(
+  factory OpeningExplorerGame.fromPick(RequiredPick pick) {
+    return OpeningExplorerGame(
       id: pick('id').asStringOrThrow(),
-      white: pick('white').letOrThrow(OpeningPlayer.fromPick),
-      black: pick('black').letOrThrow(OpeningPlayer.fromPick),
+      white: pick('white').letOrThrow(
+        (pick) => (
+          name: pick('name').asStringOrThrow(),
+          rating: pick('rating').asIntOrThrow()
+        ),
+      ),
+      black: pick('black').letOrThrow(
+        (pick) => (
+          name: pick('name').asStringOrThrow(),
+          rating: pick('rating').asIntOrThrow()
+        ),
+      ),
       uci: pick('uci').asStringOrNull(),
       winner: pick('winner').asStringOrNull(),
       speed: pick('speed').asPerfOrNull(),
-      mode: pick('mode').asModeOrNull(),
+      mode: switch (pick('mode').value) {
+        'casual' => GameMode.casual,
+        'rated' => GameMode.rated,
+        _ => null,
+      },
       year: pick('year').asIntOrNull(),
       month: pick('month').asStringOrNull(),
     );
   }
 }
 
-enum Mode {
-  casual('Casual'),
-  rated('Rated');
-
-  const Mode(this.title);
-
-  final String title;
-}
-
-extension ModeExtension on Pick {
-  Mode asModeOrThrow() {
-    switch (this.required().value) {
-      case 'casual':
-        return Mode.casual;
-      case 'rated':
-        return Mode.rated;
-      default:
-        throw PickException(
-          "value $value at $debugParsingExit can't be casted to Mode",
-        );
-    }
-  }
-
-  Mode? asModeOrNull() {
-    if (value == null) return null;
-    try {
-      return asModeOrThrow();
-    } catch (_) {
-      return null;
-    }
-  }
-}
-
-@Freezed(fromJson: true)
-class OpeningPlayer with _$OpeningPlayer {
-  const factory OpeningPlayer({
-    required String name,
-    required int rating,
-  }) = _OpeningPlayer;
-
-  factory OpeningPlayer.fromJson(Map<String, Object?> json) =>
-      _$OpeningPlayerFromJson(json);
-
-  factory OpeningPlayer.fromPick(RequiredPick pick) {
-    return OpeningPlayer(
-      name: pick('name').asStringOrThrow(),
-      rating: pick('rating').asIntOrThrow(),
-    );
-  }
+enum GameMode {
+  casual,
+  rated,
 }

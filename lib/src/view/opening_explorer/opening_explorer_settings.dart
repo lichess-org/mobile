@@ -180,14 +180,19 @@ class OpeningExplorerSettings extends ConsumerWidget {
         title: Text(context.l10n.mode),
         subtitle: Wrap(
           spacing: 5,
-          children: Mode.values
+          children: GameMode.values
               .map(
-                (mode) => FilterChip(
-                  label: Text(mode.title),
-                  selected: prefs.playerDb.modes.contains(mode),
+                (gameMode) => FilterChip(
+                  label: Text(
+                    switch (gameMode) {
+                      GameMode.casual => 'Casual',
+                      GameMode.rated => 'Rated',
+                    },
+                  ),
+                  selected: prefs.playerDb.gameModes.contains(gameMode),
                   onSelected: (_) => ref
                       .read(openingExplorerPreferencesProvider.notifier)
-                      .togglePlayerDbMode(mode),
+                      .togglePlayerDbGameMode(gameMode),
                 ),
               )
               .toList(growable: false),

@@ -80,12 +80,12 @@ class OpeningExplorerPreferences extends _$OpeningExplorerPreferences {
         ),
       );
 
-  Future<void> togglePlayerDbMode(Mode mode) => _save(
+  Future<void> togglePlayerDbGameMode(GameMode gameMode) => _save(
         state.copyWith(
           playerDb: state.playerDb.copyWith(
-            modes: state.playerDb.modes.contains(mode)
-                ? state.playerDb.modes.remove(mode)
-                : state.playerDb.modes.add(mode),
+            gameModes: state.playerDb.gameModes.contains(gameMode)
+                ? state.playerDb.gameModes.remove(gameMode)
+                : state.playerDb.gameModes.add(gameMode),
           ),
         ),
       );
@@ -224,7 +224,7 @@ class PlayerDbPrefState with _$PlayerDbPrefState {
     String? usernameOrId,
     required Side side,
     required ISet<Perf> speeds,
-    required ISet<Mode> modes,
+    required ISet<GameMode> gameModes,
     required DateTime since,
   }) = _PlayerDbPrefState;
 
@@ -248,7 +248,7 @@ class PlayerDbPrefState with _$PlayerDbPrefState {
   static final defaults = PlayerDbPrefState(
     side: Side.white,
     speeds: kAvailableSpeeds,
-    modes: Mode.values.toISet(),
+    gameModes: GameMode.values.toISet(),
     since: earliestDate,
   );
 

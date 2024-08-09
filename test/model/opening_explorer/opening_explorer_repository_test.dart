@@ -87,7 +87,7 @@ void main() {
       final repo = OpeningExplorerRepository(client);
 
       final result = await repo.getMasterDatabase('fen');
-      expect(result, isA<OpeningExplorer>());
+      expect(result, isA<OpeningExplorerEntry>());
       expect(result.moves.length, 2);
       expect(result.topGames, isNotNull);
       expect(result.topGames!.length, 2);
@@ -153,7 +153,7 @@ void main() {
         speeds: const ISetConst({Perf.rapid}),
         ratings: const ISetConst({1000, 1200}),
       );
-      expect(result, isA<OpeningExplorer>());
+      expect(result, isA<OpeningExplorerEntry>());
       expect(result.moves.length, 1);
       expect(result.recentGames, isNotNull);
       expect(result.recentGames!.length, 1);
@@ -222,11 +222,11 @@ void main() {
         usernameOrId: 'baz',
         color: Side.white,
         speeds: const ISetConst({Perf.bullet}),
-        modes: const ISetConst({Mode.rated}),
+        gameModes: const ISetConst({GameMode.rated}),
       );
-      expect(results, isA<Stream<OpeningExplorer>>());
+      expect(results, isA<Stream<OpeningExplorerEntry>>());
       await for (final result in results) {
-        expect(result, isA<OpeningExplorer>());
+        expect(result, isA<OpeningExplorerEntry>());
         expect(result.moves.length, 1);
         expect(result.recentGames, isNotNull);
         expect(result.recentGames!.length, 1);
