@@ -7,10 +7,8 @@ import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
-import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer_preferences.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer_repository.dart';
@@ -18,16 +16,12 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
-import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_board.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
-import 'package:lichess_mobile/src/view/analysis/analysis_share_screen.dart';
 import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -785,24 +779,9 @@ class _BottomBar extends ConsumerWidget {
             children: [
               Expanded(
                 child: BottomBarButton(
-                  label: context.l10n.menu,
-                  onTap: () {
-                    _showAnalysisMenu(context, ref);
-                  },
-                  icon: Icons.menu,
-                ),
-              ),
-              Expanded(
-                child: BottomBarButton(
-                  label: context.l10n.analysis,
-                  onTap: () => pushReplacementPlatformRoute(
-                    context,
-                    builder: (_) => AnalysisScreen(
-                      pgnOrId: pgn,
-                      options: options,
-                    ),
-                  ),
-                  icon: Icons.biotech,
+                  label: context.l10n.flipBoard,
+                  onTap: () => ref.read(ctrlProvider.notifier).toggleBoard(),
+                  icon: CupertinoIcons.arrow_2_squarepath,
                 ),
               ),
               Expanded(
@@ -841,77 +820,4 @@ class _BottomBar extends ConsumerWidget {
   void _moveBackward(WidgetRef ref) => ref
       .read(analysisControllerProvider(pgn, options).notifier)
       .userPrevious();
-
-  Future<void> _showAnalysisMenu(BuildContext context, WidgetRef ref) {
-    return showAdaptiveActionSheet(
-      context: context,
-      actions: [
-        BottomSheetAction(
-          makeLabel: (context) => Text(context.l10n.flipBoard),
-          onPressed: (context) {
-            ref
-                .read(analysisControllerProvider(pgn, options).notifier)
-                .toggleBoard();
-          },
-        ),
-        BottomSheetAction(
-          makeLabel: (context) => Text(context.l10n.mobileShareGamePGN),
-          onPressed: (_) {
-            pushPlatformRoute(
-              context,
-              title: context.l10n.studyShareAndExport,
-              builder: (_) => AnalysisShareScreen(pgn: pgn, options: options),
-            );
-          },
-        ),
-        BottomSheetAction(
-          makeLabel: (context) => Text(context.l10n.mobileSharePositionAsFEN),
-          onPressed: (_) {
-            launchShareDialog(
-              context,
-              text: ref
-                  .read(analysisControllerProvider(pgn, options))
-                  .position
-                  .fen,
-            );
-          },
-        ),
-        if (options.gameAnyId != null)
-          BottomSheetAction(
-            makeLabel: (context) =>
-                Text(context.l10n.screenshotCurrentPosition),
-            onPressed: (_) async {
-              final gameId = options.gameAnyId!.gameId;
-              final state = ref.read(analysisControllerProvider(pgn, options));
-              try {
-                final image =
-                    await ref.read(gameShareServiceProvider).screenshotPosition(
-                          gameId,
-                          options.orientation,
-                          state.position.fen,
-                          state.lastMove,
-                        );
-                if (context.mounted) {
-                  launchShareDialog(
-                    context,
-                    files: [image],
-                    subject: context.l10n.puzzleFromGameLink(
-                      lichessUri('/$gameId').toString(),
-                    ),
-                  );
-                }
-              } catch (e) {
-                if (context.mounted) {
-                  showPlatformSnackbar(
-                    context,
-                    'Failed to get GIF',
-                    type: SnackBarType.error,
-                  );
-                }
-              }
-            },
-          ),
-      ],
-    );
-  }
 }

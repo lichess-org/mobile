@@ -627,7 +627,7 @@ class _BottomBar extends ConsumerWidget {
               Expanded(
                 child: BottomBarButton(
                   label: context.l10n.openingExplorer,
-                  onTap: () => pushReplacementPlatformRoute(
+                  onTap: () => pushPlatformRoute(
                     context,
                     builder: (_) => OpeningExplorerScreen(
                       pgn: pgn,

@@ -160,7 +160,7 @@ class _Body extends StatelessWidget {
                 builder: (context) => const OpeningExplorerScreen(
                   pgn: '',
                   options: AnalysisOptions(
-                    isLocalEvaluationAllowed: true,
+                    isLocalEvaluationAllowed: false,
                     variant: Variant.standard,
                     orientation: Side.white,
                     id: standaloneAnalysisId,
