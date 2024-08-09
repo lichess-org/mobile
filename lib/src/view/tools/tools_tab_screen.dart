@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
 import 'package:lichess_mobile/src/view/clock/clock_screen.dart';
+import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_screen.dart';
 import 'package:lichess_mobile/src/view/tools/load_position_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -125,6 +126,41 @@ class _Body extends StatelessWidget {
                   pgnOrId: '',
                   options: AnalysisOptions(
                     isLocalEvaluationAllowed: true,
+                    variant: Variant.standard,
+                    orientation: Side.white,
+                    id: standaloneAnalysisId,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: Theme.of(context).platform == TargetPlatform.android
+                ? const EdgeInsets.only(bottom: 16.0)
+                : EdgeInsets.zero,
+            child: PlatformListTile(
+              leading: Icon(
+                Icons.explore,
+                size: Styles.mainListTileIconSize,
+                color: Theme.of(context).platform == TargetPlatform.iOS
+                    ? CupertinoTheme.of(context).primaryColor
+                    : Theme.of(context).colorScheme.primary,
+              ),
+              title: Padding(
+                padding: tilePadding,
+                child:
+                    Text(context.l10n.openingExplorer, style: Styles.callout),
+              ),
+              trailing: Theme.of(context).platform == TargetPlatform.iOS
+                  ? const CupertinoListTileChevron()
+                  : null,
+              onTap: () => pushPlatformRoute(
+                context,
+                rootNavigator: true,
+                builder: (context) => const OpeningExplorerScreen(
+                  pgn: '',
+                  options: AnalysisOptions(
+                    isLocalEvaluationAllowed: false,
                     variant: Variant.standard,
                     orientation: Side.white,
                     id: standaloneAnalysisId,

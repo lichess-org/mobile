@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/user/search_history.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
-import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -17,7 +16,11 @@ import 'package:lichess_mobile/src/widgets/user_list_tile.dart';
 const _kSaveHistoryDebouncTimer = Duration(seconds: 2);
 
 class SearchScreen extends ConsumerStatefulWidget {
-  const SearchScreen();
+  const SearchScreen({
+    this.onUserTap,
+  });
+
+  final void Function(LightUser)? onUserTap;
 
   @override
   ConsumerState<SearchScreen> createState() => _SearchScreenState();
@@ -91,7 +94,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
           autoFocus: true,
         ),
       ),
-      body: _Body(_term, setSearchText),
+      body: _Body(_term, setSearchText, widget.onUserTap),
     );
   }
 
@@ -112,21 +115,22 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      child: _Body(_term, setSearchText),
+      child: _Body(_term, setSearchText, widget.onUserTap),
     );
   }
 }
 
 class _Body extends ConsumerWidget {
-  const _Body(this.term, this.onRecentSearchTap);
+  const _Body(this.term, this.onRecentSearchTap, this.onUserTap);
 
   final String? term;
   final void Function(String) onRecentSearchTap;
+  final void Function(LightUser)? onUserTap;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     if (term != null) {
       return SafeArea(
-        child: _UserList(term!),
+        child: _UserList(term!, onUserTap),
       );
     } else {
       final searchHistory = ref.watch(searchHistoryProvider).history;
@@ -160,9 +164,10 @@ class _Body extends ConsumerWidget {
 }
 
 class _UserList extends ConsumerWidget {
-  const _UserList(this.term);
+  const _UserList(this.term, this.onUserTap);
 
   final String term;
+  final void Function(LightUser)? onUserTap;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -184,11 +189,10 @@ class _UserList extends ConsumerWidget {
                     .map(
                       (user) => UserListTile.fromLightUser(
                         user,
-                        onTap: () => {
-                          pushPlatformRoute(
-                            context,
-                            builder: (ctx) => UserScreen(user: user),
-                          ),
+                        onTap: () {
+                          if (onUserTap != null) {
+                            onUserTap!.call(user);
+                          }
                         },
                       ),
                     )
