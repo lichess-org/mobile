@@ -6,7 +6,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/notifications/local_notification_service.dart';
 
 class ChallengeNotificationDetails {
-  ChallengeNotificationDetails(this._locale) {
+  ChallengeNotificationDetails(this._l10n) {
     ChallengeNotificationDetails.instance = this;
   }
 
@@ -14,26 +14,26 @@ class ChallengeNotificationDetails {
   static ChallengeNotificationDetails instance =
       ChallengeNotificationDetails(AppLocalizationsEn());
 
-  final AppLocalizations _locale;
+  final AppLocalizations _l10n;
 
   NotificationDetails get notificationDetails => NotificationDetails(
         android: AndroidNotificationDetails(
           'challenges',
-          _locale.preferencesNotifyChallenge,
+          _l10n.preferencesNotifyChallenge,
           importance: Importance.max,
           priority: Priority.high,
           autoCancel: false,
           actions: <AndroidNotificationAction>[
             AndroidNotificationAction(
               'accept',
-              _locale.accept,
+              _l10n.accept,
               icon: const DrawableResourceAndroidBitmap('tick'),
               showsUserInterface: true,
               contextual: true,
             ),
             AndroidNotificationAction(
               'decline',
-              _locale.decline,
+              _l10n.decline,
               icon: const DrawableResourceAndroidBitmap('cross'),
               contextual: true,
             ),
@@ -50,14 +50,14 @@ class ChallengeNotificationDetails {
         actions: <DarwinNotificationAction>[
           DarwinNotificationAction.plain(
             'accept',
-            _locale.accept,
+            _l10n.accept,
             options: <DarwinNotificationActionOption>{
               DarwinNotificationActionOption.foreground,
             },
           ),
           DarwinNotificationAction.plain(
             'decline',
-            _locale.decline,
+            _l10n.decline,
             options: <DarwinNotificationActionOption>{
               DarwinNotificationActionOption.destructive,
             },
@@ -73,14 +73,14 @@ enum ChallengeNotificationAction { accept, decline, pressed }
 
 class ChallengeNotification extends LocalNotification
     implements LocalNotificationCallback {
-  ChallengeNotification(this._challenge, this._locale, {this.onPressed})
+  ChallengeNotification(this._challenge, this._l10n, {this.onPressed})
       : super(
           '${_challenge.challenger!.user.name} challenges you!',
           ChallengeNotificationDetails.instance.notificationDetails,
         );
 
   final Challenge _challenge;
-  final AppLocalizations _locale;
+  final AppLocalizations _l10n;
   final void Function(ChallengeNotificationAction action, ChallengeId id)?
       onPressed;
 
@@ -93,10 +93,10 @@ class ChallengeNotification extends LocalNotification
   String _body() {
     final time = _challenge.days == null
         ? '∞'
-        : '${_locale.daysPerTurn}: ${_challenge.days}';
+        : '${_l10n.daysPerTurn}: ${_challenge.days}';
     return _challenge.rated
-        ? '${_locale.rated} • $time'
-        : '${_locale.casual} • $time';
+        ? '${_l10n.rated} • $time'
+        : '${_l10n.casual} • $time';
   }
 
   @override

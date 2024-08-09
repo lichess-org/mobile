@@ -4,7 +4,7 @@ import 'package:lichess_mobile/l10n/l10n_en.dart';
 import 'package:lichess_mobile/src/model/notifications/local_notification_service.dart';
 
 class InfoNotificationDetails {
-  InfoNotificationDetails(this._locale) {
+  InfoNotificationDetails(this._l10n) {
     InfoNotificationDetails.instance = this;
   }
 
@@ -13,7 +13,7 @@ class InfoNotificationDetails {
       InfoNotificationDetails(AppLocalizationsEn());
 
   // ignore: unused_field
-  final AppLocalizations _locale;
+  final AppLocalizations _l10n;
 
   NotificationDetails get notificationDetails => const NotificationDetails(
         android: AndroidNotificationDetails(
