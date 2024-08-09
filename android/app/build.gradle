@@ -36,6 +36,7 @@ android {
     ndkVersion flutter.ndkVersion
 
     compileOptions {
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -49,6 +50,7 @@ android {
     }
 
     defaultConfig {
+        multiDexEnabled true
         applicationId "org.lichess.mobileV2"
         minSdkVersion 26
         targetSdkVersion flutter.targetSdkVersion
@@ -96,4 +98,5 @@ flutter {
 }
 
 dependencies {
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2'
 }

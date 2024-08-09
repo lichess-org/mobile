@@ -45,7 +45,7 @@ class Challenge with _$Challenge, BaseChallenge implements BaseChallenge {
     'Either clock or days must be set but not both.',
   )
   const factory Challenge({
-    required int socketVersion,
+    int? socketVersion,
     required ChallengeId id,
     GameFullId? gameFullId,
     required ChallengeStatus status,
@@ -203,9 +203,9 @@ extension ChallengeExtension on Pick {
     }
     if (value is String) {
       switch (value) {
-        case 'outward':
+        case 'outward' || 'out':
           return ChallengeDirection.outward;
-        case 'inward':
+        case 'inward' || 'in':
           return ChallengeDirection.inward;
         default:
           throw PickException(
@@ -382,7 +382,7 @@ extension ChallengeExtension on Pick {
 
 Challenge _challengeFromPick(RequiredPick pick) {
   return Challenge(
-    socketVersion: pick('socketVersion').asIntOrThrow(),
+    socketVersion: pick('socketVersion').asIntOrNull(),
     id: pick('id').asChallengeIdOrThrow(),
     gameFullId: pick('fullId').asGameFullIdOrNull(),
     status: pick('status').asChallengeStatusOrThrow(),

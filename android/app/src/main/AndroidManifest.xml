@@ -48,5 +48,7 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2"/>
+        <receiver android:exported="false"
+            android:name="com.dexterous.flutterlocalnotifications.ActionBroadcastReceiver"/>
     </application>
 </manifest>
