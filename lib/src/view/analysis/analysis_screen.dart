@@ -378,7 +378,11 @@ class _Board extends ConsumerStatefulWidget {
 class _BoardState extends ConsumerState<_Board> {
   ISet<Shape> userShapes = ISet();
 
-  ISet<Shape> _computeBestMoveShapes(IList<MoveWithWinningChances> moves) {
+  ISet<Shape> _computeBestMoveShapes(
+    IList<MoveWithWinningChances> moves,
+    Side sideToMove,
+    PieceAssets pieceAssets,
+  ) {
     // Scale down all moves with index > 0 based on how much worse their winning chances are compared to the best move
     // (assume moves are ordered by their winning chances, so index==0 is the best move)
     double scaleArrowAgainstBestMove(int index) {
@@ -421,17 +425,18 @@ class _BoardState extends ConsumerState<_Board> {
                 ),
                 if (promRole != null)
                   PieceShape(
-                    color: color,
                     orig: move.to,
-                    role: promRole,
+                    pieceAssets: pieceAssets,
+                    piece: Piece(color: sideToMove, role: promRole),
                   ),
               ];
             case DropMove(role: final role, to: _):
               return [
                 PieceShape(
-                  color: color,
                   orig: move.to,
-                  role: role,
+                  pieceAssets: pieceAssets,
+                  opacity: 0.5,
+                  piece: Piece(color: sideToMove, role: role),
                 ),
               ];
           }
@@ -468,7 +473,11 @@ class _BoardState extends ConsumerState<_Board> {
     final ISet<Shape> bestMoveShapes = showBestMoveArrow &&
             analysisState.isEngineAvailable &&
             bestMoves != null
-        ? _computeBestMoveShapes(bestMoves)
+        ? _computeBestMoveShapes(
+            bestMoves,
+            currentNode.position.turn,
+            boardPrefs.pieceSet.assets,
+          )
         : ISet();
 
     return Chessboard(
