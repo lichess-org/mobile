@@ -205,7 +205,7 @@ class _OpeningExplorer extends ConsumerStatefulWidget {
 }
 
 class _OpeningExplorerState extends ConsumerState<_OpeningExplorer> {
-  final Map<String, OpeningExplorerEntry> cache = {};
+  final Map<OpeningExplorerCacheKey, OpeningExplorerEntry> cache = {};
 
   @override
   Widget build(BuildContext context) {
@@ -220,10 +220,6 @@ class _OpeningExplorerState extends ConsumerState<_OpeningExplorer> {
     }
 
     final prefs = ref.watch(openingExplorerPreferencesProvider);
-    ref.listen(
-      openingExplorerPreferencesProvider,
-      (prev, cur) => cache.clear(),
-    );
     if (prefs.db == OpeningDatabase.player &&
         prefs.playerDb.usernameOrId == null) {
       return const Align(
@@ -241,19 +237,23 @@ class _OpeningExplorerState extends ConsumerState<_OpeningExplorer> {
             ctrlProvider.currentBranchOpening ??
             ctrlProvider.contextOpening;
 
-    final openingExplorerAsync = cache[ctrlProvider.position.fen] != null
+    final cacheKey = OpeningExplorerCacheKey(
+      fen: ctrlProvider.position.fen,
+      prefs: prefs,
+    );
+    final cacheOpeningExplorer = cache[cacheKey];
+    final openingExplorerAsync = cacheOpeningExplorer != null
         ? AsyncValue.data(
-            (entry: cache[ctrlProvider.position.fen]!, isIndexing: false),
+            (entry: cacheOpeningExplorer, isIndexing: false),
           )
         : ref.watch(openingExplorerProvider(fen: ctrlProvider.position.fen));
 
-    if (cache[ctrlProvider.position.fen] == null) {
+    if (cacheOpeningExplorer == null) {
       ref.listen(openingExplorerProvider(fen: ctrlProvider.position.fen),
           (_, curAsync) {
         curAsync.whenData((cur) {
-          if (!cur.isIndexing &&
-              !cache.containsKey(ctrlProvider.position.fen)) {
-            cache[ctrlProvider.position.fen] = cur.entry;
+          if (!cur.isIndexing) {
+            cache[cacheKey] = cur.entry;
           }
         });
       });
