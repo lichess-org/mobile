@@ -220,8 +220,7 @@ class _OpeningExplorerState extends ConsumerState<_OpeningExplorer> {
     }
 
     final prefs = ref.watch(openingExplorerPreferencesProvider);
-    if (prefs.db == OpeningDatabase.player &&
-        prefs.playerDb.usernameOrId == null) {
+    if (prefs.db == OpeningDatabase.player && prefs.playerDb.username == null) {
       return const Align(
         alignment: Alignment.center,
         child: Text('Select a Lichess player in the settings'),

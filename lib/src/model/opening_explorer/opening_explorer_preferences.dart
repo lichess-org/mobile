@@ -4,8 +4,10 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/db/shared_preferences.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'opening_explorer_preferences.freezed.dart';
@@ -18,13 +20,15 @@ class OpeningExplorerPreferences extends _$OpeningExplorerPreferences {
   @override
   OpeningExplorerPrefState build() {
     final prefs = ref.watch(sharedPreferencesProvider);
+    final session = ref.watch(authSessionProvider);
 
     final stored = prefs.getString(prefKey);
     return stored != null
         ? OpeningExplorerPrefState.fromJson(
             jsonDecode(stored) as Map<String, dynamic>,
+            user: session?.user,
           )
-        : OpeningExplorerPrefState.defaults;
+        : OpeningExplorerPrefState.defaults(user: session?.user);
   }
 
   Future<void> setDatabase(OpeningDatabase db) => _save(
@@ -58,10 +62,10 @@ class OpeningExplorerPreferences extends _$OpeningExplorerPreferences {
         state.copyWith(lichessDb: state.lichessDb.copyWith(since: since)),
       );
 
-  Future<void> setPlayerDbUsernameOrId(String usernameOrId) => _save(
+  Future<void> setPlayerDbUsernameOrId(String username) => _save(
         state.copyWith(
           playerDb: state.playerDb.copyWith(
-            usernameOrId: usernameOrId,
+            username: username,
           ),
         ),
       );
@@ -121,18 +125,22 @@ class OpeningExplorerPrefState with _$OpeningExplorerPrefState {
     required PlayerDbPrefState playerDb,
   }) = _OpeningExplorerPrefState;
 
-  static final defaults = OpeningExplorerPrefState(
-    db: OpeningDatabase.master,
-    masterDb: MasterDbPrefState.defaults,
-    lichessDb: LichessDbPrefState.defaults,
-    playerDb: PlayerDbPrefState.defaults,
-  );
+  factory OpeningExplorerPrefState.defaults({LightUser? user}) =>
+      OpeningExplorerPrefState(
+        db: OpeningDatabase.master,
+        masterDb: MasterDbPrefState.defaults,
+        lichessDb: LichessDbPrefState.defaults,
+        playerDb: PlayerDbPrefState.defaults(user: user),
+      );
 
-  factory OpeningExplorerPrefState.fromJson(Map<String, dynamic> json) {
+  factory OpeningExplorerPrefState.fromJson(
+    Map<String, dynamic> json, {
+    LightUser? user,
+  }) {
     try {
       return _$OpeningExplorerPrefStateFromJson(json);
     } catch (_) {
-      return defaults;
+      return OpeningExplorerPrefState.defaults(user: user);
     }
   }
 }
@@ -221,7 +229,7 @@ class PlayerDbPrefState with _$PlayerDbPrefState {
   const PlayerDbPrefState._();
 
   const factory PlayerDbPrefState({
-    String? usernameOrId,
+    String? username,
     required Side side,
     required ISet<Perf> speeds,
     required ISet<GameMode> gameModes,
@@ -245,18 +253,22 @@ class PlayerDbPrefState with _$PlayerDbPrefState {
     'Last year': now.subtract(const Duration(days: 365)),
     'All time': earliestDate,
   };
-  static final defaults = PlayerDbPrefState(
-    side: Side.white,
-    speeds: kAvailableSpeeds,
-    gameModes: GameMode.values.toISet(),
-    since: earliestDate,
-  );
+  factory PlayerDbPrefState.defaults({LightUser? user}) => PlayerDbPrefState(
+        username: user?.name,
+        side: Side.white,
+        speeds: kAvailableSpeeds,
+        gameModes: GameMode.values.toISet(),
+        since: earliestDate,
+      );
 
-  factory PlayerDbPrefState.fromJson(Map<String, dynamic> json) {
+  factory PlayerDbPrefState.fromJson(
+    Map<String, dynamic> json, {
+    LightUser? user,
+  }) {
     try {
       return _$PlayerDbPrefStateFromJson(json);
     } catch (_) {
-      return defaults;
+      return PlayerDbPrefState.defaults(user: user);
     }
   }
 }

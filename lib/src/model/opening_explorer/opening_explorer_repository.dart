@@ -39,7 +39,7 @@ Stream<({OpeningExplorerEntry entry, bool isIndexing})> openingExplorer(
           await OpeningExplorerRepository(client).getPlayerDatabase(
         fen,
         // null check handled by widget
-        usernameOrId: prefs.playerDb.usernameOrId!,
+        usernameOrId: prefs.playerDb.username!,
         color: prefs.playerDb.side,
         speeds: prefs.playerDb.speeds,
         gameModes: prefs.playerDb.gameModes,
