@@ -191,7 +191,7 @@ class _Body extends ConsumerWidget {
   }
 }
 
-class _OpeningExplorer extends ConsumerWidget {
+class _OpeningExplorer extends ConsumerStatefulWidget {
   const _OpeningExplorer({
     required this.pgn,
     required this.options,
@@ -201,8 +201,16 @@ class _OpeningExplorer extends ConsumerWidget {
   final AnalysisOptions options;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = ref.watch(analysisControllerProvider(pgn, options));
+  ConsumerState<_OpeningExplorer> createState() => _OpeningExplorerState();
+}
+
+class _OpeningExplorerState extends ConsumerState<_OpeningExplorer> {
+  final Map<String, OpeningExplorerEntry> cache = {};
+
+  @override
+  Widget build(BuildContext context) {
+    final ctrlProvider =
+        ref.watch(analysisControllerProvider(widget.pgn, widget.options));
 
     if (ctrlProvider.position.fullmoves > 24) {
       return const Align(
@@ -212,6 +220,10 @@ class _OpeningExplorer extends ConsumerWidget {
     }
 
     final prefs = ref.watch(openingExplorerPreferencesProvider);
+    ref.listen(
+      openingExplorerPreferencesProvider,
+      (prev, cur) => cache.clear(),
+    );
     if (prefs.db == OpeningDatabase.player &&
         prefs.playerDb.usernameOrId == null) {
       return const Align(
@@ -229,23 +241,29 @@ class _OpeningExplorer extends ConsumerWidget {
             ctrlProvider.currentBranchOpening ??
             ctrlProvider.contextOpening;
 
-    final cache = ref.watch(openingExplorerCacheProvider);
-    final isIndexing = cache
-        .get(
-          OpeningExplorerCacheKey(fen: ctrlProvider.position.fen, prefs: prefs),
-        )
-        ?.isIndexing;
-    final openingExplorerAsync = ref.watch(
-      openingExplorerProvider(
-        fen: ctrlProvider.position.fen,
-      ),
-    );
+    final openingExplorerAsync = cache[ctrlProvider.position.fen] != null
+        ? AsyncValue.data(
+            (entry: cache[ctrlProvider.position.fen]!, isIndexing: false),
+          )
+        : ref.watch(openingExplorerProvider(fen: ctrlProvider.position.fen));
+
+    if (cache[ctrlProvider.position.fen] == null) {
+      ref.listen(openingExplorerProvider(fen: ctrlProvider.position.fen),
+          (_, curAsync) {
+        curAsync.whenData((cur) {
+          if (!cur.isIndexing &&
+              !cache.containsKey(ctrlProvider.position.fen)) {
+            cache[ctrlProvider.position.fen] = cur.entry;
+          }
+        });
+      });
+    }
 
     return openingExplorerAsync.when(
       data: (openingExplorer) {
         return Column(
           children: [
-            if (openingExplorer.moves.isEmpty)
+            if (openingExplorer.entry.moves.isEmpty)
               const Expanded(
                 child: Align(
                   alignment: Alignment.center,
@@ -273,7 +291,7 @@ class _OpeningExplorer extends ConsumerWidget {
                                   wikiBooksUrl: ctrlProvider.wikiBooksUrl,
                                 ),
                               ),
-                            if (isIndexing != null && isIndexing)
+                            if (openingExplorer.isIndexing)
                               Expanded(
                                 flex: 25,
                                 child: _IndexingIndicator(),
@@ -282,24 +300,24 @@ class _OpeningExplorer extends ConsumerWidget {
                         ),
                       ),
                       _MoveTable(
-                        moves: openingExplorer.moves,
-                        whiteWins: openingExplorer.white,
-                        draws: openingExplorer.draws,
-                        blackWins: openingExplorer.black,
-                        pgn: pgn,
-                        options: options,
+                        moves: openingExplorer.entry.moves,
+                        whiteWins: openingExplorer.entry.white,
+                        draws: openingExplorer.entry.draws,
+                        blackWins: openingExplorer.entry.black,
+                        pgn: widget.pgn,
+                        options: widget.options,
                       ),
-                      if (openingExplorer.topGames != null &&
-                          openingExplorer.topGames!.isNotEmpty)
+                      if (openingExplorer.entry.topGames != null &&
+                          openingExplorer.entry.topGames!.isNotEmpty)
                         _GameList(
                           title: context.l10n.topGames,
-                          games: openingExplorer.topGames!,
+                          games: openingExplorer.entry.topGames!,
                         ),
-                      if (openingExplorer.recentGames != null &&
-                          openingExplorer.recentGames!.isNotEmpty)
+                      if (openingExplorer.entry.recentGames != null &&
+                          openingExplorer.entry.recentGames!.isNotEmpty)
                         _GameList(
                           title: context.l10n.recentGames,
-                          games: openingExplorer.recentGames!,
+                          games: openingExplorer.entry.recentGames!,
                         ),
                     ],
                   ),

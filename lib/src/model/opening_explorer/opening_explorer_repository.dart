@@ -1,6 +1,5 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:http/http.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
@@ -10,63 +9,49 @@ import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer_prefe
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'opening_explorer_repository.g.dart';
-part 'opening_explorer_repository.freezed.dart';
 
 @riverpod
-Stream<OpeningExplorerEntry> openingExplorer(
+Stream<({OpeningExplorerEntry entry, bool isIndexing})> openingExplorer(
   OpeningExplorerRef ref, {
   required String fen,
 }) async* {
   final prefs = ref.watch(openingExplorerPreferencesProvider);
-  final cacheKey = OpeningExplorerCacheKey(
-    fen: fen,
-    prefs: prefs,
-  );
-  final cacheEntry = ref.read(openingExplorerCacheProvider).get(cacheKey);
-  if (cacheEntry != null && !cacheEntry.isIndexing) {
-    yield cacheEntry.openingExplorerEntry;
-  } else {
-    final client = ref.read(defaultClientProvider);
-    final stream = switch (prefs.db) {
-      OpeningDatabase.master => OpeningExplorerRepository(client)
-          .getMasterDatabase(
-            fen,
-            since: prefs.masterDb.sinceYear,
-          )
-          .asStream(),
-      OpeningDatabase.lichess => OpeningExplorerRepository(client)
-          .getLichessDatabase(
-            fen,
-            speeds: prefs.lichessDb.speeds,
-            ratings: prefs.lichessDb.ratings,
-            since: prefs.lichessDb.since,
-          )
-          .asStream(),
-      OpeningDatabase.player =>
-        await OpeningExplorerRepository(client).getPlayerDatabase(
-          fen,
-          // null check handled by widget
-          usernameOrId: prefs.playerDb.usernameOrId!,
-          color: prefs.playerDb.side,
-          speeds: prefs.playerDb.speeds,
-          gameModes: prefs.playerDb.gameModes,
-          since: prefs.playerDb.since,
-        ),
-    };
+  final client = ref.read(defaultClientProvider);
+  switch (prefs.db) {
+    case OpeningDatabase.master:
+      final openingExplorer =
+          await OpeningExplorerRepository(client).getMasterDatabase(
+        fen,
+        since: prefs.masterDb.sinceYear,
+      );
+      yield (entry: openingExplorer, isIndexing: false);
+    case OpeningDatabase.lichess:
+      final openingExplorer =
+          await OpeningExplorerRepository(client).getLichessDatabase(
+        fen,
+        speeds: prefs.lichessDb.speeds,
+        ratings: prefs.lichessDb.ratings,
+        since: prefs.lichessDb.since,
+      );
+      yield (entry: openingExplorer, isIndexing: false);
+    case OpeningDatabase.player:
+      final openingExplorerStream =
+          await OpeningExplorerRepository(client).getPlayerDatabase(
+        fen,
+        // null check handled by widget
+        usernameOrId: prefs.playerDb.usernameOrId!,
+        color: prefs.playerDb.side,
+        speeds: prefs.playerDb.speeds,
+        gameModes: prefs.playerDb.gameModes,
+        since: prefs.playerDb.since,
+      );
 
-    await for (final openingExplorer in stream) {
-      ref.read(openingExplorerCacheProvider.notifier).addEntry(
-            cacheKey,
-            OpeningExplorerCacheEntry(
-              openingExplorerEntry: openingExplorer,
-              isIndexing: true,
-            ),
-          );
-      yield openingExplorer;
-    }
-    ref
-        .read(openingExplorerCacheProvider.notifier)
-        .setIndexing(cacheKey, false);
+      OpeningExplorerEntry openingExplorer = OpeningExplorerEntry.empty();
+      await for (final value in openingExplorerStream) {
+        openingExplorer = value;
+        yield (entry: openingExplorer, isIndexing: true);
+      }
+      yield (entry: openingExplorer, isIndexing: false);
   }
 }
 
@@ -140,49 +125,6 @@ class OpeningExplorerRepository {
       mapper: OpeningExplorerEntry.fromJson,
     );
   }
-}
-
-@riverpod
-class OpeningExplorerCache extends _$OpeningExplorerCache {
-  @override
-  IMap<OpeningExplorerCacheKey, OpeningExplorerCacheEntry> build() {
-    return const IMap.empty();
-  }
-
-  void addEntry(OpeningExplorerCacheKey key, OpeningExplorerCacheEntry entry) {
-    state = state.add(key, entry);
-  }
-
-  void setIndexing(OpeningExplorerCacheKey key, bool isIndexing) {
-    final entry = state.get(key);
-    if (entry != null) {
-      state = state.add(
-        key,
-        OpeningExplorerCacheEntry(
-          openingExplorerEntry: entry.openingExplorerEntry,
-          isIndexing: isIndexing,
-        ),
-      );
-    }
-  }
-}
-
-@freezed
-class OpeningExplorerCacheKey with _$OpeningExplorerCacheKey {
-  const OpeningExplorerCacheKey._();
-
-  const factory OpeningExplorerCacheKey({
-    required String fen,
-    required OpeningExplorerPrefState prefs,
-  }) = _OpeningExplorerCacheKey;
-}
-
-@freezed
-class OpeningExplorerCacheEntry with _$OpeningExplorerCacheEntry {
-  const factory OpeningExplorerCacheEntry({
-    required OpeningExplorerEntry openingExplorerEntry,
-    required bool isIndexing,
-  }) = _OpeningExplorerCacheEntry;
 }
 
 @riverpod

@@ -22,6 +22,13 @@ class OpeningExplorerEntry with _$OpeningExplorerEntry {
     int? queuePosition,
   }) = _OpeningExplorerEntry;
 
+  factory OpeningExplorerEntry.empty() => const OpeningExplorerEntry(
+        white: 0,
+        draws: 0,
+        black: 0,
+        moves: IList.empty(),
+      );
+
   factory OpeningExplorerEntry.fromJson(Map<String, Object?> json) =>
       _$OpeningExplorerEntryFromJson(json);
 }
