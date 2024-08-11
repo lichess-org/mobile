@@ -457,7 +457,10 @@ class AnalysisController extends _$AnalysisController {
     }
   }
 
-  String _wikiBooksUrl(UciPath path) {
+  String? _wikiBooksUrl(UciPath path) {
+    if (_root.position.ply > 30) {
+      return null;
+    }
     final nodes = _root.branchesOn(path);
     final moves = nodes.map((node) {
       final move = node.view.sanMove.san;
@@ -655,7 +658,7 @@ class AnalysisState with _$AnalysisState {
     Opening? currentBranchOpening,
 
     /// wikibooks.org opening theory page for the current path
-    required String wikiBooksUrl,
+    String? wikiBooksUrl,
 
     /// Optional server analysis to display player stats.
     ({PlayerAnalysis white, PlayerAnalysis black})? playersAnalysis,

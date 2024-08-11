@@ -212,10 +212,10 @@ class _OpeningExplorerState extends ConsumerState<_OpeningExplorer> {
     final ctrlProvider =
         ref.watch(analysisControllerProvider(widget.pgn, widget.options));
 
-    if (ctrlProvider.position.fullmoves > 24) {
-      return const Align(
+    if (ctrlProvider.position.ply >= 50) {
+      return Align(
         alignment: Alignment.center,
-        child: Text('Max depth reached'),
+        child: Text(context.l10n.maxDepthReached),
       );
     }
 
@@ -348,13 +348,9 @@ class _Opening extends ConsumerWidget {
   });
 
   final Opening opening;
-  final String wikiBooksUrl;
+  final String? wikiBooksUrl;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final wikiBooksPageExistsAsync = ref.watch(
-      wikiBooksPageExistsProvider(url: wikiBooksUrl),
-    );
-
     final openingWidget = Text(
       '${opening.eco.isEmpty ? "" : "${opening.eco} "}${opening.name}',
       style: TextStyle(
@@ -363,16 +359,18 @@ class _Opening extends ConsumerWidget {
       ),
     );
 
-    return wikiBooksPageExistsAsync.when(
-      data: (wikiBooksPageExists) => wikiBooksPageExists
-          ? GestureDetector(
-              onTap: () => launchUrl(Uri.parse(wikiBooksUrl)),
-              child: openingWidget,
-            )
-          : openingWidget,
-      loading: () => openingWidget,
-      error: (e, s) => openingWidget,
-    );
+    return wikiBooksUrl == null
+        ? openingWidget
+        : ref.watch(wikiBooksPageExistsProvider(url: wikiBooksUrl!)).when(
+              data: (wikiBooksPageExists) => wikiBooksPageExists
+                  ? GestureDetector(
+                      onTap: () => launchUrl(Uri.parse(wikiBooksUrl!)),
+                      child: openingWidget,
+                    )
+                  : openingWidget,
+              loading: () => openingWidget,
+              error: (e, s) => openingWidget,
+            );
   }
 }
 
