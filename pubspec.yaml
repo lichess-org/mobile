@@ -50,7 +50,7 @@ dependencies:
   material_color_utilities: ^0.11.1
   meta: ^1.8.0
   network_image_mock: ^2.1.1
-  package_info_plus: ^8.0.0
+  package_info_plus: ^8.0.2
   path: ^1.8.2
   popover: ^0.3.0
   pub_semver: ^2.1.4
