@@ -446,6 +446,7 @@ class _MoveTable extends ConsumerWidget {
     final ctrlProvider = analysisControllerProvider(pgn, options);
 
     return Table(
+      key: const Key('moves-table'),
       columnWidths: const {
         0: FractionColumnWidth(0.15),
         1: FractionColumnWidth(0.35),
@@ -561,8 +562,10 @@ class _GameList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      key: const Key('game-list'),
       children: [
         Container(
+          key: const Key('game-list-title'),
           padding: const EdgeInsets.all(6.0),
           color: Theme.of(context).colorScheme.primaryContainer,
           child: Row(
@@ -599,6 +602,7 @@ class _GameTile extends ConsumerWidget {
     const paddingResultBox = EdgeInsets.all(5);
 
     return Container(
+      key: const Key('game-tile'),
       padding: const EdgeInsets.all(6.0),
       color: color,
       child: AdaptiveInkWell(
