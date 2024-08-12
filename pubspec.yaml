@@ -52,7 +52,7 @@ dependencies:
   network_image_mock: ^2.1.1
   package_info_plus: ^8.0.0
   path: ^1.8.2
-  popover: ^0.3.0
+  popover: ^0.3.1
   pub_semver: ^2.1.4
   result_extensions: ^0.1.0
   riverpod_annotation: ^2.3.0
