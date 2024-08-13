@@ -372,7 +372,12 @@ class _EditableWidget extends ConsumerWidget {
                   },
                 ),
               ),
-              Expanded(child: child),
+              Expanded(
+                child: IgnorePointer(
+                  ignoring: isEditing,
+                  child: child,
+                ),
+              ),
             ],
           )
         : isEnabled
