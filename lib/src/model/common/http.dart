@@ -419,18 +419,7 @@ extension ClientExtension on Client {
   }) async {
     final response = await get(url, headers: headers);
     _checkResponseSuccess(url, response);
-    try {
-      final json = LineSplitter.split(utf8.decode(response.bodyBytes))
-          .where((e) => e.isNotEmpty && e != '\n')
-          .map((e) => jsonDecode(e) as Map<String, dynamic>);
-      return IList(json.map(mapper));
-    } catch (e) {
-      _logger.severe('Could not read nd-json objects as List<$T>.');
-      throw ClientException(
-        'Could not read nd-json objects as List<$T>: $e',
-        url,
-      );
-    }
+    return _readNdJsonList(response, mapper);
   }
 
   /// Sends an HTTP POST request with the given headers and body to the given URL and
@@ -484,16 +473,27 @@ extension ClientExtension on Client {
     final response =
         await post(url, headers: headers, body: body, encoding: encoding);
     _checkResponseSuccess(url, response);
+    return _readNdJsonList(response, mapper);
+  }
+
+  IList<T> _readNdJsonList<T>(
+    Response response,
+    T Function(Map<String, dynamic>) mapper,
+  ) {
     try {
-      final json = LineSplitter.split(utf8.decode(response.bodyBytes))
-          .where((e) => e.isNotEmpty && e != '\n')
-          .map((e) => jsonDecode(e) as Map<String, dynamic>);
-      return IList(json.map(mapper));
+      return IList(
+        LineSplitter.split(utf8.decode(response.bodyBytes))
+            .where((e) => e.isNotEmpty && e != '\n')
+            .map((e) {
+          final json = jsonDecode(e) as Map<String, dynamic>;
+          return mapper(json);
+        }),
+      );
     } catch (e) {
       _logger.severe('Could not read nd-json objects as List<$T>.');
       throw ClientException(
-        'Could not read nd-json objects as List<$T>.',
-        url,
+        'Could not read nd-json objects as List<$T>: $e',
+        response.request?.url,
       );
     }
   }
