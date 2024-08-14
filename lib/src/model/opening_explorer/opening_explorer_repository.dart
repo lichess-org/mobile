@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:http/http.dart';
@@ -11,47 +13,67 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'opening_explorer_repository.g.dart';
 
 @riverpod
-Stream<({OpeningExplorerEntry entry, bool isIndexing})> openingExplorer(
-  OpeningExplorerRef ref, {
-  required String fen,
-}) async* {
-  final prefs = ref.watch(openingExplorerPreferencesProvider);
-  final client = ref.read(defaultClientProvider);
-  switch (prefs.db) {
-    case OpeningDatabase.master:
-      final openingExplorer =
-          await OpeningExplorerRepository(client).getMasterDatabase(
-        fen,
-        since: prefs.masterDb.sinceYear,
-      );
-      yield (entry: openingExplorer, isIndexing: false);
-    case OpeningDatabase.lichess:
-      final openingExplorer =
-          await OpeningExplorerRepository(client).getLichessDatabase(
-        fen,
-        speeds: prefs.lichessDb.speeds,
-        ratings: prefs.lichessDb.ratings,
-        since: prefs.lichessDb.since,
-      );
-      yield (entry: openingExplorer, isIndexing: false);
-    case OpeningDatabase.player:
-      final openingExplorerStream =
-          await OpeningExplorerRepository(client).getPlayerDatabase(
-        fen,
-        // null check handled by widget
-        usernameOrId: prefs.playerDb.username!,
-        color: prefs.playerDb.side,
-        speeds: prefs.playerDb.speeds,
-        gameModes: prefs.playerDb.gameModes,
-        since: prefs.playerDb.since,
-      );
+class OpeningExplorer extends _$OpeningExplorer {
+  @override
+  Future<({OpeningExplorerEntry entry, bool isIndexing})> build({
+    required String fen,
+  }) {
+    final prefs = ref.watch(openingExplorerPreferencesProvider);
+    final client = ref.read(defaultClientProvider);
+    switch (prefs.db) {
+      case OpeningDatabase.master:
+        final openingExplorerFuture =
+            OpeningExplorerRepository(client).getMasterDatabase(
+          fen,
+          since: prefs.masterDb.sinceYear,
+        );
+        return openingExplorerFuture.then(
+          (openingExplorer) => (entry: openingExplorer, isIndexing: false),
+        );
+      case OpeningDatabase.lichess:
+        final openingExplorerFuture =
+            OpeningExplorerRepository(client).getLichessDatabase(
+          fen,
+          speeds: prefs.lichessDb.speeds,
+          ratings: prefs.lichessDb.ratings,
+          since: prefs.lichessDb.since,
+        );
+        return openingExplorerFuture.then(
+          (openingExplorer) => (entry: openingExplorer, isIndexing: false),
+        );
+      case OpeningDatabase.player:
+        final openingExplorerStreamFuture =
+            OpeningExplorerRepository(client).getPlayerDatabase(
+          fen,
+          // null check handled by widget
+          usernameOrId: prefs.playerDb.username!,
+          color: prefs.playerDb.side,
+          speeds: prefs.playerDb.speeds,
+          gameModes: prefs.playerDb.gameModes,
+          since: prefs.playerDb.since,
+        );
 
-      OpeningExplorerEntry openingExplorer = OpeningExplorerEntry.empty();
-      await for (final value in openingExplorerStream) {
-        openingExplorer = value;
-        yield (entry: openingExplorer, isIndexing: true);
-      }
-      yield (entry: openingExplorer, isIndexing: false);
+        openingExplorerStreamFuture.then(
+          (openingExplorerStream) => openingExplorerStream.listen(
+            (openingExplorer) => state =
+                AsyncValue.data((entry: openingExplorer, isIndexing: true)),
+            onDone: () => state.value != null
+                ? state = AsyncValue.data(
+                    (entry: state.value!.entry, isIndexing: false),
+                  )
+                : state = AsyncValue.error(
+                    'No opening explorer data returned for player ${prefs.playerDb.username}',
+                    StackTrace.current,
+                  ),
+          ),
+        );
+        return Future.value(
+          (
+            entry: OpeningExplorerEntry.empty(),
+            isIndexing: true,
+          ),
+        );
+    }
   }
 }
 
