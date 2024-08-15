@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -5,33 +7,44 @@ import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer_preferences.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_screen.dart';
 
 import '../../test_app.dart';
 import '../../test_utils.dart';
 
-MockClient client(OpeningDatabase db) => MockClient((request) {
-      return request.url.host == 'explorer.lichess.ovh'
-          ? switch (db) {
-              OpeningDatabase.master =>
-                mockResponse(mastersOpeningExplorerResponse, 200),
-              OpeningDatabase.lichess =>
-                mockResponse(lichessOpeningExplorerResponse, 200),
-              OpeningDatabase.player =>
-                mockResponse(playerOpeningExplorerResponse, 200),
-            }
-          : request.url.host == 'en.wikibooks.org'
-              ? mockResponse('', 200)
-              : mockResponse('', 404);
-    });
-
 void main() {
+  final mockClient = MockClient((request) {
+    if (request.url.host == 'explorer.lichess.ovh') {
+      if (request.url.path == '/masters') {
+        return mockResponse(mastersOpeningExplorerResponse, 200);
+      }
+      if (request.url.path == '/lichess') {
+        return mockResponse(lichessOpeningExplorerResponse, 200);
+      }
+      if (request.url.path == '/player') {
+        return mockResponse(playerOpeningExplorerResponse, 200);
+      }
+    }
+    if (request.url.host == 'en.wikibooks.org') {
+      return mockResponse('', 200);
+    }
+    return mockResponse('', 404);
+  });
+
   const options = AnalysisOptions(
     id: standaloneAnalysisId,
     isLocalEvaluationAllowed: false,
     orientation: Side.white,
     variant: Variant.standard,
+  );
+
+  const name = 'John';
+  final user = LightUser(
+    id: UserId.fromUserName(name),
+    name: name,
   );
 
   group('OpeningExplorerScreen', () {
@@ -47,8 +60,7 @@ void main() {
             options: options,
           ),
           overrides: [
-            defaultClientProvider
-                .overrideWithValue(client(OpeningDatabase.master)),
+            defaultClientProvider.overrideWithValue(mockClient),
           ],
         );
 
@@ -76,9 +88,15 @@ void main() {
             options: options,
           ),
           overrides: [
-            defaultClientProvider
-                .overrideWithValue(client(OpeningDatabase.master)),
+            defaultClientProvider.overrideWithValue(mockClient),
           ],
+          defaultPreferences: {
+            OpeningExplorerPreferences.prefKey: jsonEncode(
+              OpeningExplorerPrefState.defaults()
+                  .copyWith(db: OpeningDatabase.master)
+                  .toJson(),
+            ),
+          },
         );
         await tester.pumpWidget(app);
 
@@ -120,9 +138,15 @@ void main() {
             options: options,
           ),
           overrides: [
-            defaultClientProvider
-                .overrideWithValue(client(OpeningDatabase.lichess)),
+            defaultClientProvider.overrideWithValue(mockClient),
           ],
+          defaultPreferences: {
+            OpeningExplorerPreferences.prefKey: jsonEncode(
+              OpeningExplorerPrefState.defaults()
+                  .copyWith(db: OpeningDatabase.lichess)
+                  .toJson(),
+            ),
+          },
         );
         await tester.pumpWidget(app);
 
@@ -163,9 +187,15 @@ void main() {
             options: options,
           ),
           overrides: [
-            defaultClientProvider
-                .overrideWithValue(client(OpeningDatabase.player)),
+            defaultClientProvider.overrideWithValue(mockClient),
           ],
+          defaultPreferences: {
+            OpeningExplorerPreferences.prefKey: jsonEncode(
+              OpeningExplorerPrefState.defaults(user: user)
+                  .copyWith(db: OpeningDatabase.player)
+                  .toJson(),
+            ),
+          },
         );
         await tester.pumpWidget(app);
 

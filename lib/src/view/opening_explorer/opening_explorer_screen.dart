@@ -209,10 +209,10 @@ class _OpeningExplorerState extends ConsumerState<_OpeningExplorer> {
 
   @override
   Widget build(BuildContext context) {
-    final ctrlProvider =
+    final analysisState =
         ref.watch(analysisControllerProvider(widget.pgn, widget.options));
 
-    if (ctrlProvider.position.ply >= 50) {
+    if (analysisState.position.ply >= 50) {
       return Align(
         alignment: Alignment.center,
         child: Text(context.l10n.maxDepthReached),
@@ -227,17 +227,17 @@ class _OpeningExplorerState extends ConsumerState<_OpeningExplorer> {
       );
     }
 
-    final opening = ctrlProvider.currentNode.isRoot
+    final opening = analysisState.currentNode.isRoot
         ? LightOpening(
             eco: '',
             name: context.l10n.startPosition,
           )
-        : ctrlProvider.currentNode.opening ??
-            ctrlProvider.currentBranchOpening ??
-            ctrlProvider.contextOpening;
+        : analysisState.currentNode.opening ??
+            analysisState.currentBranchOpening ??
+            analysisState.contextOpening;
 
     final cacheKey = OpeningExplorerCacheKey(
-      fen: ctrlProvider.position.fen,
+      fen: analysisState.position.fen,
       prefs: prefs,
     );
     final cacheOpeningExplorer = cache[cacheKey];
@@ -245,13 +245,13 @@ class _OpeningExplorerState extends ConsumerState<_OpeningExplorer> {
         ? AsyncValue.data(
             (entry: cacheOpeningExplorer, isIndexing: false),
           )
-        : ref.watch(openingExplorerProvider(fen: ctrlProvider.position.fen));
+        : ref.watch(openingExplorerProvider(fen: analysisState.position.fen));
 
     if (cacheOpeningExplorer == null) {
-      ref.listen(openingExplorerProvider(fen: ctrlProvider.position.fen),
+      ref.listen(openingExplorerProvider(fen: analysisState.position.fen),
           (_, curAsync) {
         curAsync.whenData((cur) {
-          if (!cur.isIndexing) {
+          if (cur != null && !cur.isIndexing) {
             cache[cacheKey] = cur.entry;
           }
         });
@@ -260,68 +260,77 @@ class _OpeningExplorerState extends ConsumerState<_OpeningExplorer> {
 
     return openingExplorerAsync.when(
       data: (openingExplorer) {
-        return Column(
-          children: [
-            if (openingExplorer.entry.moves.isEmpty)
-              const Expanded(
+        if (openingExplorer == null) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        if (openingExplorer.entry.moves.isEmpty) {
+          return const Column(
+            children: [
+              Expanded(
                 child: Align(
                   alignment: Alignment.center,
                   child: Text('No game found'),
                 ),
-              )
-            else
-              Expanded(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 6.0),
-                        color: Theme.of(context).colorScheme.primaryContainer,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            if (opening != null)
-                              Expanded(
-                                flex: 75,
-                                child: _Opening(
-                                  opening: opening,
-                                  wikiBooksUrl: ctrlProvider.wikiBooksUrl,
-                                ),
+              ),
+            ],
+          );
+        }
+        return Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 6.0),
+                      color: Theme.of(context).colorScheme.primaryContainer,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          if (opening != null)
+                            Expanded(
+                              flex: 75,
+                              child: _Opening(
+                                opening: opening,
+                                wikiBooksUrl: analysisState.wikiBooksUrl,
                               ),
-                            if (openingExplorer.isIndexing)
-                              Expanded(
-                                flex: 25,
-                                child: _IndexingIndicator(),
-                              ),
-                          ],
-                        ),
+                            ),
+                          if (openingExplorer.isIndexing)
+                            Expanded(
+                              flex: 25,
+                              child: _IndexingIndicator(),
+                            ),
+                        ],
                       ),
-                      _MoveTable(
-                        moves: openingExplorer.entry.moves,
-                        whiteWins: openingExplorer.entry.white,
-                        draws: openingExplorer.entry.draws,
-                        blackWins: openingExplorer.entry.black,
-                        pgn: widget.pgn,
-                        options: widget.options,
+                    ),
+                    _MoveTable(
+                      moves: openingExplorer.entry.moves,
+                      whiteWins: openingExplorer.entry.white,
+                      draws: openingExplorer.entry.draws,
+                      blackWins: openingExplorer.entry.black,
+                      pgn: widget.pgn,
+                      options: widget.options,
+                    ),
+                    if (openingExplorer.entry.topGames != null &&
+                        openingExplorer.entry.topGames!.isNotEmpty)
+                      _GameList(
+                        title: context.l10n.topGames,
+                        games: openingExplorer.entry.topGames!,
                       ),
-                      if (openingExplorer.entry.topGames != null &&
-                          openingExplorer.entry.topGames!.isNotEmpty)
-                        _GameList(
-                          title: context.l10n.topGames,
-                          games: openingExplorer.entry.topGames!,
-                        ),
-                      if (openingExplorer.entry.recentGames != null &&
-                          openingExplorer.entry.recentGames!.isNotEmpty)
-                        _GameList(
-                          title: context.l10n.recentGames,
-                          games: openingExplorer.entry.recentGames!,
-                        ),
-                    ],
-                  ),
+                    if (openingExplorer.entry.recentGames != null &&
+                        openingExplorer.entry.recentGames!.isNotEmpty)
+                      _GameList(
+                        title: context.l10n.recentGames,
+                        games: openingExplorer.entry.recentGames!,
+                      ),
+                  ],
                 ),
               ),
+            ),
           ],
         );
       },

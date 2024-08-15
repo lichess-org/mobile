@@ -14,36 +14,38 @@ part 'opening_explorer_repository.g.dart';
 
 @riverpod
 class OpeningExplorer extends _$OpeningExplorer {
+  StreamSubscription<OpeningExplorerEntry>? _openingExplorerSubscription;
+
   @override
-  Future<({OpeningExplorerEntry entry, bool isIndexing})> build({
+  Future<({OpeningExplorerEntry entry, bool isIndexing})?> build({
     required String fen,
-  }) {
+  }) async {
+    ref.onDispose(() {
+      _openingExplorerSubscription?.cancel();
+    });
+
     final prefs = ref.watch(openingExplorerPreferencesProvider);
     final client = ref.read(defaultClientProvider);
     switch (prefs.db) {
       case OpeningDatabase.master:
-        final openingExplorerFuture =
-            OpeningExplorerRepository(client).getMasterDatabase(
+        final openingExplorer =
+            await OpeningExplorerRepository(client).getMasterDatabase(
           fen,
           since: prefs.masterDb.sinceYear,
         );
-        return openingExplorerFuture.then(
-          (openingExplorer) => (entry: openingExplorer, isIndexing: false),
-        );
+        return (entry: openingExplorer, isIndexing: false);
       case OpeningDatabase.lichess:
-        final openingExplorerFuture =
-            OpeningExplorerRepository(client).getLichessDatabase(
+        final openingExplorer =
+            await OpeningExplorerRepository(client).getLichessDatabase(
           fen,
           speeds: prefs.lichessDb.speeds,
           ratings: prefs.lichessDb.ratings,
           since: prefs.lichessDb.since,
         );
-        return openingExplorerFuture.then(
-          (openingExplorer) => (entry: openingExplorer, isIndexing: false),
-        );
+        return (entry: openingExplorer, isIndexing: false);
       case OpeningDatabase.player:
-        final openingExplorerStreamFuture =
-            OpeningExplorerRepository(client).getPlayerDatabase(
+        final openingExplorerStream =
+            await OpeningExplorerRepository(client).getPlayerDatabase(
           fen,
           // null check handled by widget
           usernameOrId: prefs.playerDb.username!,
@@ -53,26 +55,19 @@ class OpeningExplorer extends _$OpeningExplorer {
           since: prefs.playerDb.since,
         );
 
-        openingExplorerStreamFuture.then(
-          (openingExplorerStream) => openingExplorerStream.listen(
-            (openingExplorer) => state =
-                AsyncValue.data((entry: openingExplorer, isIndexing: true)),
-            onDone: () => state.value != null
-                ? state = AsyncValue.data(
-                    (entry: state.value!.entry, isIndexing: false),
-                  )
-                : state = AsyncValue.error(
-                    'No opening explorer data returned for player ${prefs.playerDb.username}',
-                    StackTrace.current,
-                  ),
-          ),
+        _openingExplorerSubscription = openingExplorerStream.listen(
+          (openingExplorer) => state =
+              AsyncValue.data((entry: openingExplorer, isIndexing: true)),
+          onDone: () => state.value != null
+              ? state = AsyncValue.data(
+                  (entry: state.value!.entry, isIndexing: false),
+                )
+              : state = AsyncValue.error(
+                  'No opening explorer data returned for player ${prefs.playerDb.username}',
+                  StackTrace.current,
+                ),
         );
-        return Future.value(
-          (
-            entry: OpeningExplorerEntry.empty(),
-            isIndexing: true,
-          ),
-        );
+        return null;
     }
   }
 }

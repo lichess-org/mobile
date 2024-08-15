@@ -459,8 +459,10 @@ extension ClientExtension on Client {
       return response.stream
           .map(utf8.decode)
           .where((e) => e.isNotEmpty && e != '\n')
-          .map((e) => jsonDecode(e) as Map<String, dynamic>)
-          .map(mapper);
+          .map((e) {
+        final json = jsonDecode(e) as Map<String, dynamic>;
+        return mapper(json);
+      });
     } catch (e) {
       _logger.severe('Could not read nd-json object as $T.');
       throw ClientException(
