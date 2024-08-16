@@ -64,6 +64,18 @@ Broadcast _broadcastFromPick(RequiredPick pick) {
     tour: (
       name: pick('tour', 'name').asStringOrThrow(),
       imageUrl: pick('tour', 'image').asStringOrNull(),
+      description: pick('tour', 'description').asStringOrThrow(),
+      information: (
+        format: pick('tour', 'info', 'format').asStringOrNull(),
+        timeControl: pick('tour', 'info', 'tc').asStringOrNull(),
+        players: pick('tour', 'info', 'players').asStringOrNull(),
+        dates: pick('tour', 'dates').letOrNull(
+          (pick) => (
+            startsAt: pick(0).asDateTimeFromMillisecondsOrThrow().toLocal(),
+            endsAt: pick(1).asDateTimeFromMillisecondsOrNull()?.toLocal(),
+          ),
+        ),
+      ),
     ),
     round: BroadcastRound(
       id: roundId,

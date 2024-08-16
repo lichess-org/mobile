@@ -10,7 +10,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/styles/transparent_image.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/view/broadcast/broadcast_round_screen.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/default_broadcast_image.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -194,7 +194,20 @@ class BroadcastGridItem extends StatelessWidget {
 
   BroadcastGridItem.loading()
       : broadcast = Broadcast(
-          tour: const (name: '', imageUrl: null),
+          tour: (
+            name: '',
+            imageUrl: null,
+            description: '',
+            information: (
+              format: '',
+              timeControl: '',
+              players: '',
+              dates: (
+                startsAt: DateTime.now(),
+                endsAt: DateTime.now(),
+              ),
+            ),
+          ),
           round: BroadcastRound(
             id: const BroadcastRoundId(''),
             name: '',
@@ -212,10 +225,9 @@ class BroadcastGridItem extends StatelessWidget {
       onTap: () {
         pushPlatformRoute(
           context,
-          builder: (context) => BroadcastRoundScreen(
-            broadCastTitle: broadcast.tour.name,
-            roundId: broadcast.roundToLinkId,
-          ),
+          title: context.l10n.broadcastBroadcasts,
+          rootNavigator: true,
+          builder: (context) => BroadcastScreen(broadcast: broadcast),
         );
       },
       child: Container(

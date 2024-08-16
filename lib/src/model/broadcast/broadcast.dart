@@ -35,6 +35,20 @@ class Broadcast with _$Broadcast {
 typedef BroadcastTournament = ({
   String name,
   String? imageUrl,
+  String description,
+  BroadcastTournamentInformation information,
+});
+
+typedef BroadcastTournamentInformation = ({
+  String? format,
+  String? timeControl,
+  String? players,
+  BroadcastTournamentDates? dates,
+});
+
+typedef BroadcastTournamentDates = ({
+  DateTime startsAt,
+  DateTime? endsAt,
 });
 
 @freezed
