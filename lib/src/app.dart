@@ -12,7 +12,6 @@ import 'package:lichess_mobile/main.dart';
 import 'package:lichess_mobile/src/app_initialization.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
-import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
 import 'package:lichess_mobile/src/model/challenge/challenges.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
@@ -31,7 +30,6 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/system.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
-import 'package:lichess_mobile/src/view/user/challenge_requests_screen.dart';
 
 /// Application initialization and main entry point.
 class AppInitializationScreen extends ConsumerWidget {
@@ -111,55 +109,6 @@ class _AppState extends ConsumerState<Application> {
     if (Theme.of(context).platform == TargetPlatform.android) {
       setOptimalDisplayMode();
     }
-
-    ref.read(localNotificationServiceProvider).init();
-
-    ref.listenManual(challengesProvider, (prev, current) {
-      if (prev == null || !prev.hasValue || !current.hasValue) return;
-      final prevIds = prev.value!.inward.map((challenge) => challenge.id);
-      final inward = current.value!.inward;
-      final repo = ref.read(challengeRepositoryProvider);
-      final l10n = ref.read(l10nProvider).strings;
-
-      inward
-          .where((challenge) => !prevIds.contains(challenge.id))
-          .forEach((challenge) {
-        ref.read(localNotificationServiceProvider).show(
-              ChallengeNotification(
-                challenge,
-                l10n,
-                onPressed: (action, id) async {
-                  switch (action) {
-                    case ChallengeNotificationAction
-                          .accept: // accept the game and open board
-                      await repo.accept(challenge.id);
-                      final fullId = await repo.show(challenge.id).then(
-                            (challenge) => challenge.gameFullId,
-                          );
-                      pushPlatformRoute(
-                        ref.read(currentNavigatorKeyProvider).currentContext!,
-                        rootNavigator: true,
-                        builder: (BuildContext context) {
-                          return GameScreen(
-                            initialGameId: fullId,
-                          );
-                        },
-                      );
-                    case ChallengeNotificationAction
-                          .pressed: // open the challenge screen
-                      pushPlatformRoute(
-                        ref.read(currentNavigatorKeyProvider).currentContext!,
-                        builder: (BuildContext context) =>
-                            const ChallengeRequestsScreen(),
-                      );
-                    case ChallengeNotificationAction.decline:
-                      repo.decline(id);
-                  }
-                },
-              ),
-            );
-      });
-    });
 
     ref.listenManual(connectivityChangesProvider, (prev, current) async {
       // Play registered moves whenever the app comes back online.
@@ -358,6 +307,21 @@ class _EntryPointState extends ConsumerState<_EntryPointWidget> {
           debugPrint('Could not sync correspondence games; $e\n$st');
         }
       }
+    });
+
+    ref.read(localNotificationServiceProvider).init();
+
+    ref.listenManual(challengesProvider, (prev, current) {
+      if (prev == null || !prev.hasValue || !current.hasValue) return;
+      final prevIds = prev.value!.inward.map((challenge) => challenge.id);
+      final inward = current.value!.inward;
+      final l10n = ref.read(l10nProvider).strings;
+
+      inward.where((challenge) => !prevIds.contains(challenge.id)).forEach(
+            (challenge) => ref
+                .read(localNotificationServiceProvider)
+                .show(ChallengeNotification(challenge, l10n)),
+          );
     });
   }
 
