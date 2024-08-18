@@ -1,9 +1,78 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/l10n/l10n_en.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
+import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
+import 'package:lichess_mobile/src/model/challenge/challenges.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/notifications/local_notification_service.dart';
+import 'package:lichess_mobile/src/navigation.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/game/game_screen.dart';
+import 'package:lichess_mobile/src/view/user/challenge_requests_screen.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'challenge_notification.g.dart';
+
+@riverpod
+ChallengeService challengeService(ChallengeServiceRef ref) {
+  return ChallengeService(ref);
+}
+
+class ChallengeService {
+  ChallengeService(this.ref);
+
+  final ChallengeServiceRef ref;
+
+  Future<void> onNotificationResponse(
+    int id,
+    String? actionid,
+    ChallengePayload payload,
+  ) async {
+    switch (actionid) {
+      case 'accept':
+        final repo = ref.read(challengeRepositoryProvider);
+        await repo.accept(payload.id);
+
+        final fullId = await repo
+            .show(payload.id)
+            .then((challenge) => challenge.gameFullId);
+
+        final context = ref.read(currentNavigatorKeyProvider).currentContext!;
+        if (!context.mounted) break;
+
+        final navState = Navigator.of(context);
+        if (navState.canPop()) {
+          navState.popUntil((route) => route.isFirst);
+        }
+
+        // sometimes becuase GameScreen connects to a socket we dont recieve a new event on the event listener in time
+        // so we just make sure to refresh this value when we go back to the home tab
+        ref.invalidate(challengesProvider);
+        pushPlatformRoute(
+          context,
+          rootNavigator: true,
+          builder: (BuildContext context) => GameScreen(initialGameId: fullId),
+        );
+
+      case null:
+        final context = ref.read(currentNavigatorKeyProvider).currentContext!;
+        final navState = Navigator.of(context);
+        if (navState.canPop()) {
+          navState.popUntil((route) => route.isFirst);
+        }
+        pushPlatformRoute(
+          context,
+          builder: (BuildContext context) => const ChallengeRequestsScreen(),
+        );
+      case 'decline':
+        final repo = ref.read(challengeRepositoryProvider);
+        repo.decline(payload.id);
+    }
+  }
+}
+
 class ChallengeNotification extends LocalNotification {
   ChallengeNotification(this._challenge, this._l10n)
       : super(

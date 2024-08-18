@@ -1,8 +1,11 @@
 import 'dart:async';
-import 'dart:isolate';
-import 'dart:ui';
+import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/app_initialization.dart';
 import 'package:lichess_mobile/src/model/notifications/challenge_notification.dart';
 import 'package:lichess_mobile/src/model/notifications/info_notification.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
@@ -11,6 +14,7 @@ import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'local_notification_service.g.dart';
+part 'local_notification_service.freezed.dart';
 
 @Riverpod(keepAlive: true)
 LocalNotificationService localNotificationService(
@@ -24,9 +28,7 @@ class LocalNotificationService {
 
   final LocalNotificationServiceRef _ref;
   final Logger _log;
-  final Map<int, void Function(String?, String?)> _callbacks = {};
   final _notificationPlugin = FlutterLocalNotificationsPlugin();
-  final _receivePort = ReceivePort();
 
   Future<void> init() async {
     _updateLocalisations();
@@ -34,14 +36,6 @@ class LocalNotificationService {
       if (prev!.locale == now.locale) return;
       _updateLocalisations();
     });
-
-    // hot reloading doesnt remove the port so we just make sure it doesnt exist before registering it
-    IsolateNameServer.removePortNameMapping('localNotificationServicePort');
-    IsolateNameServer.registerPortWithName(
-      _receivePort.sendPort,
-      'localNotificationServicePort',
-    );
-    _receivePort.listen(_onReceivePortMessage);
 
     await _notificationPlugin.initialize(
       InitializationSettings(
@@ -70,21 +64,20 @@ class LocalNotificationService {
 
   Future<int> show(LocalNotification notification) async {
     final id = notification.id;
+    final payload = notification.payload != null
+        ? jsonEncode(notification.payload!.toJson())
+        : '';
+
     await _notificationPlugin.show(
       id,
       notification.title,
       notification.body,
       notification.notificationDetails,
-      payload: notification.payload,
+      payload: payload,
     );
     _log.info(
       'Sent notification: ($id | ${notification.title}) ${notification.body} (Payload: ${notification.payload})',
     );
-
-    if (notification.callback != null) {
-      _callbacks[id] = notification.callback!;
-      _log.info('registered callback for id [$id]');
-    }
 
     return id;
   }
@@ -94,44 +87,88 @@ class LocalNotificationService {
     return _notificationPlugin.cancel(id);
   }
 
-  void _onReceivePortMessage(dynamic message) {
-    try {
-      final data = message as Map<String, Object?>;
-      final response = NotificationResponse(
-        notificationResponseType:
-            NotificationResponseType.values[data['index']! as int],
-        id: data['id'] as int?,
-        actionId: data['actionId'] as String?,
-        input: data['input'] as String?,
-        payload: data['payload'] as String?,
-      );
-      _notificationResponse(response);
-    } catch (e) {
-      _log.severe(
-        'failed to parse message from background isoalte',
-      );
+  void _handleResponse(int id, String? actionId, NotificationPayload payload) {
+    switch (payload.type) {
+      case PayloadType.info:
+      case PayloadType.challenge:
+        _ref.read(challengeServiceProvider).onNotificationResponse(
+              id,
+              actionId,
+              ChallengePayload.fromNotificationPayload(payload),
+            );
     }
   }
 
   void _notificationResponse(NotificationResponse response) {
-    final callback = _callbacks[response.id];
-    if (callback != null) callback(response.actionId, response.payload);
+    _log.info('processing response in foreground. id [${response.id}]');
+    if (response.id == null || response.payload == null) return;
+
+    try {
+      final payload = NotificationPayload.fromJson(
+        jsonDecode(response.payload!) as Map<String, dynamic>,
+      );
+      _handleResponse(response.id!, response.actionId, payload);
+    } catch (e) {
+      _log.warning('Failed to parse notification payload: $e');
+    }
   }
 
   @pragma('vm:entry-point')
-  static void _notificationBackgroundResponse(NotificationResponse response) {
-    final sendPort =
-        IsolateNameServer.lookupPortByName('localNotificationServicePort');
-    sendPort!.send(
-      {
-        'index': response.notificationResponseType.index,
-        'id': response.id,
-        'actionId': response.actionId,
-        'input': response.input,
-        'payload': response.payload,
+  static void _notificationBackgroundResponse(
+    NotificationResponse response,
+  ) {
+    final logger = Logger('LocalNotificationService');
+    logger.info('processing response in background. id [${response.id}]');
+
+    // create a new provider scope for the background isolate
+    final ref = ProviderContainer();
+
+    ref.listen(
+      appInitializationProvider,
+      (prev, now) {
+        if (!now.hasValue) return;
+
+        try {
+          final payload = NotificationPayload.fromJson(
+            jsonDecode(response.payload!) as Map<String, dynamic>,
+          );
+          ref
+              .read(localNotificationServiceProvider)
+              ._handleResponse(response.id!, response.actionId, payload);
+        } catch (e) {
+          logger.warning('failed to parse notification payload: $e');
+        }
       },
     );
+
+    ref.read(appInitializationProvider);
   }
+}
+
+enum PayloadType {
+  info,
+  challenge,
+}
+
+@freezed
+class LocalnotificationResponse with _$LocalnotificationResponse {
+  factory LocalnotificationResponse({
+    required int id,
+    required String? actionId,
+    required NotificationPayload payload,
+    String? input,
+  }) = _LocalnotificationResponse;
+}
+
+@Freezed(fromJson: true, toJson: true)
+class NotificationPayload with _$NotificationPayload {
+  factory NotificationPayload({
+    required PayloadType type,
+    required Map<String, dynamic> data,
+  }) = _NotificationPayload;
+
+  factory NotificationPayload.fromJson(Map<String, dynamic> json) =>
+      _$NotificationPayloadFromJson(json);
 }
 
 abstract class LocalNotification {
@@ -146,7 +183,6 @@ abstract class LocalNotification {
 
   final String title;
   final String? body;
-  final String? payload;
+  final NotificationPayload? payload;
   final NotificationDetails notificationDetails;
-  final void Function(String? actionId, String? payload)? callback = null;
 }
