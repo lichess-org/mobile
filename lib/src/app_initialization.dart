@@ -120,7 +120,7 @@ Future<AppInitializationData> appInitialization(
     }
   }
 
-  final physicalMemory = await System.instance.getTotalRam() ?? 256.0;
+  final physicalMemory = await System.instance.getTotalRam();
   final engineMaxMemory = (physicalMemory / 10).ceil();
 
   return AppInitializationData(

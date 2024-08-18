@@ -14,12 +14,11 @@ class System {
   static const instance = System._();
 
   /// Returns the system total RAM in megabytes.
-  Future<int?> getTotalRam() async {
+  Future<int> getTotalRam() async {
     try {
-      return await _channel.invokeMethod<int>('getTotalRam');
-    } on PlatformException catch (e) {
-      debugPrint('Failed to get total RAM: ${e.message}');
-      return null;
+      return (await _channel.invokeMethod<int>('getTotalRam'))!;
+    } catch (_) {
+      return 256;
     }
   }
 
