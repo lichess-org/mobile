@@ -150,16 +150,6 @@ enum PayloadType {
   challenge,
 }
 
-@freezed
-class LocalnotificationResponse with _$LocalnotificationResponse {
-  factory LocalnotificationResponse({
-    required int id,
-    required String? actionId,
-    required NotificationPayload payload,
-    String? input,
-  }) = _LocalnotificationResponse;
-}
-
 @Freezed(fromJson: true, toJson: true)
 class NotificationPayload with _$NotificationPayload {
   factory NotificationPayload({
