@@ -317,6 +317,16 @@ class _EntryPointState extends ConsumerState<_EntryPointWidget> {
       final inward = current.value!.inward;
       final l10n = ref.read(l10nProvider).strings;
 
+      // if a challenge was cancelled by the challenger
+      prevIds
+          .where((id) => !inward.map((challenge) => challenge.id).contains(id))
+          .forEach(
+            (id) => ref
+                .read(localNotificationServiceProvider)
+                .cancel(id.value.hashCode),
+          );
+
+      // if there is a new challenge
       inward.where((challenge) => !prevIds.contains(challenge.id)).forEach(
             (challenge) => ref
                 .read(localNotificationServiceProvider)
