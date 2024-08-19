@@ -9,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
@@ -16,6 +17,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
+import 'package:lichess_mobile/src/model/game/over_the_board_game.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -302,6 +304,61 @@ class ArchivedGameResultDialog extends StatelessWidget {
         GameResult(game: game),
         const SizedBox(height: 16.0),
         PlayerSummary(game: game),
+      ],
+    );
+
+    return _adaptiveDialog(context, content);
+  }
+}
+
+class OverTheBoardGameResultDialog extends StatelessWidget {
+  const OverTheBoardGameResultDialog({
+    super.key,
+    required this.game,
+    required this.onRematch,
+  });
+
+  final OverTheBoardGame game;
+
+  final void Function() onRematch;
+
+  @override
+  Widget build(BuildContext context) {
+    final content = Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        GameResult(game: game),
+        SecondaryButton(
+          semanticsLabel: context.l10n.rematch,
+          onPressed: onRematch,
+          child: Text(
+            context.l10n.rematch,
+            textAlign: TextAlign.center,
+          ),
+        ),
+        SecondaryButton(
+          semanticsLabel: context.l10n.analysis,
+          onPressed: () {
+            pushPlatformRoute(
+              context,
+              builder: (_) => AnalysisScreen(
+                pgnOrId: game.makePgn(),
+                options: AnalysisOptions(
+                  isLocalEvaluationAllowed: true,
+                  variant: game.meta.variant,
+                  orientation: Side.white,
+                  id: standaloneAnalysisId,
+                ),
+                title: context.l10n.gameAnalysis,
+              ),
+            );
+          },
+          child: Text(
+            context.l10n.analysis,
+            textAlign: TextAlign.center,
+          ),
+        ),
       ],
     );
 
