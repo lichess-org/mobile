@@ -144,21 +144,56 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
 
   @override
   Widget build(BuildContext context) {
+    final brightness = ref.watch(currentBrightnessProvider);
+    return Clock(
+      timeLeft: timeLeft,
+      active: widget.active,
+      emergencyThreshold: widget.emergencyThreshold,
+      clockStyle: getStyle(brightness),
+    );
+  }
+}
+
+/// A stateless widget that displays the time left on the clock.
+///
+/// For a clock widget that automatically counts down, see [CountdownClock].
+class Clock extends StatelessWidget {
+  /// The time left to be displayed on the clock.
+  final Duration timeLeft;
+
+  /// If `true`, [ClockStyle.activeBackgroundColor] will be used, otherwise [ClockStyle.backgroundColor].
+  final bool active;
+
+  /// If [timeLeft] is less than [emergencyThreshold], the clock will set
+  /// its background color to [ClockStyle.emergencyBackgroundColor].
+  final Duration? emergencyThreshold;
+
+  /// Clock style to use.
+  final ClockStyle clockStyle;
+
+  const Clock({
+    required this.timeLeft,
+    required this.active,
+    required this.clockStyle,
+    this.emergencyThreshold,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     final hours = timeLeft.inHours;
     final mins = timeLeft.inMinutes.remainder(60);
     final secs = timeLeft.inSeconds.remainder(60).toString().padLeft(2, '0');
     final showTenths = timeLeft < const Duration(seconds: 10);
-    final isEmergency = widget.emergencyThreshold != null &&
-        timeLeft <= widget.emergencyThreshold!;
-    final brightness = ref.watch(currentBrightnessProvider);
-    final clockStyle = getStyle(brightness);
+    final isEmergency =
+        emergencyThreshold != null && timeLeft <= emergencyThreshold!;
     final remainingHeight = estimateRemainingHeightLeftBoard(context);
 
     return RepaintBoundary(
       child: Container(
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-          color: widget.active
+          color: active
               ? isEmergency
                   ? clockStyle.emergencyBackgroundColor
                   : clockStyle.activeBackgroundColor
@@ -174,7 +209,7 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
                     ? '$hours:${mins.toString().padLeft(2, '0')}:$secs'
                     : '$mins:$secs',
                 style: TextStyle(
-                  color: widget.active
+                  color: active
                       ? isEmergency
                           ? clockStyle.emergencyTextColor
                           : clockStyle.activeTextColor
@@ -195,7 +230,7 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
                           '.${timeLeft.inMilliseconds.remainder(1000) ~/ 100}',
                       style: const TextStyle(fontSize: 20),
                     ),
-                  if (!widget.active && timeLeft < const Duration(seconds: 1))
+                  if (!active && timeLeft < const Duration(seconds: 1))
                     TextSpan(
                       text:
                           '${timeLeft.inMilliseconds.remainder(1000) ~/ 10 % 10}',
