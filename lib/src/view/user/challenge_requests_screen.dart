@@ -7,7 +7,6 @@ import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
 import 'package:lichess_mobile/src/model/challenge/challenges.dart';
 import 'package:lichess_mobile/src/model/notifications/local_notification_service.dart';
 import 'package:lichess_mobile/src/navigation.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
@@ -69,23 +68,10 @@ class _Body extends ConsumerWidget {
                   final user = challenge.challenger?.user;
                   if (user == null) return null;
 
-                  final time = challenge.days == null
-                      ? '∞'
-                      : '${context.l10n.daysPerTurn}: ${challenge.days}';
-                  final subtitle = challenge.rated
-                      ? '${context.l10n.rated} • $time'
-                      : '${context.l10n.casual} • $time';
-                  final isMyChallenge =
-                      challenge.direction == ChallengeDirection.outward;
-
                   return ChallengeListItem(
                     challenge: challenge,
                     user: user,
-                    subtitle: subtitle,
-                    color: isMyChallenge
-                        ? LichessColors.green.withOpacity(0.2)
-                        : null,
-                    onPressed: isMyChallenge
+                    onPressed: challenge.direction == ChallengeDirection.outward
                         ? null
                         : session == null
                             ? () {
@@ -120,8 +106,7 @@ class _Body extends ConsumerWidget {
                                   },
                                 );
                               },
-                    cancelText: !isMyChallenge ? context.l10n.decline : null,
-                    onCancel: isMyChallenge
+                    onCancel: challenge.direction == ChallengeDirection.outward
                         ? () => challengeRepo.cancel(challenge.id)
                         : () {
                             challengeRepo.decline(challenge.id);

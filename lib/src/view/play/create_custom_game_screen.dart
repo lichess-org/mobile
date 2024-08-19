@@ -16,7 +16,6 @@ import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_repository.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -230,12 +229,6 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
               const PlatformDivider(height: 1, cupertinoHasLeading: true),
           itemBuilder: (context, index) {
             final challenge = supportedChallenges[index];
-            final time = challenge.days == null
-                ? '∞'
-                : '${context.l10n.daysPerTurn}: ${challenge.days}';
-            final subtitle = challenge.rated
-                ? '${context.l10n.rated} • $time'
-                : '${context.l10n.casual} • $time';
             final isMySeek =
                 UserId.fromUserName(challenge.username) == session?.user.id;
 
@@ -246,8 +239,6 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
                 name: challenge.username,
                 title: challenge.title,
               ),
-              subtitle: subtitle,
-              color: isMySeek ? LichessColors.green.withOpacity(0.2) : null,
               onPressed: isMySeek
                   ? null
                   : session == null

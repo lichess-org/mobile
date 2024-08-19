@@ -4,6 +4,7 @@ import 'package:deep_pick/deep_pick.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
+import 'package:lichess_mobile/src/model/challenge/challenges.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
@@ -143,6 +144,7 @@ class CreateGameService {
           );
         }),
         socketClient.stream.listen((event) async {
+          if (event.topic == 'challenges') ref.invalidate(challengesProvider);
           if (event.topic == 'reload') {
             try {
               final updatedChallenge = await repo.show(challenge.id);
