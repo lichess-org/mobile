@@ -16,10 +16,8 @@ import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
-import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
@@ -45,10 +43,68 @@ import 'analysis_board.dart';
 import 'analysis_settings.dart';
 import 'tree_view.dart';
 
-class AnalysisScreen extends StatelessWidget {
+typedef OptionsAndPgn = ({AnalysisOptions options, String pgn});
+
+class AnalysisLoadingScreen extends ConsumerWidget {
+  const AnalysisLoadingScreen({
+    required this.pgnAndOptionsProvider,
+    this.title,
+  });
+
+  /// The async provider that returns analysis options and pgn.
+  final ProviderListenable<AsyncValue<OptionsAndPgn>> pgnAndOptionsProvider;
+
+  final String? title;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final pgnAndOptions = ref.watch(pgnAndOptionsProvider);
+
+    Widget buildPlatformScreen({required Widget child}) =>
+        switch (Theme.of(context).platform) {
+          TargetPlatform.android => _androidBuilder(context, child),
+          TargetPlatform.iOS => _iosBuilder(context, child),
+          _ => throw UnimplementedError(
+              'Unexpected platform ${Theme.of(context).platform}',
+            )
+        };
+
+    return pgnAndOptions.when(
+      data: (pgnAndOptions) => AnalysisScreen(
+        pgn: pgnAndOptions.pgn,
+        options: pgnAndOptions.options,
+        title: title,
+      ),
+      loading: () => buildPlatformScreen(
+          child: const Center(child: CircularProgressIndicator.adaptive())),
+      error: (error, _) => buildPlatformScreen(
+        child: Center(
+          child: Text('Cannot load game analysis: $error'),
+        ),
+      ),
+    );
+  }
+
+  Widget _androidBuilder(BuildContext context, Widget child) => Scaffold(
+        appBar: AppBar(
+          title: Text(title ?? context.l10n.analysis),
+        ),
+        body: child,
+      );
+
+  Widget _iosBuilder(BuildContext context, Widget child) =>
+      CupertinoPageScaffold(
+        navigationBar: CupertinoNavigationBar(
+          middle: Text(title ?? context.l10n.analysis),
+        ),
+        child: child,
+      );
+}
+
+class AnalysisScreen extends ConsumerWidget {
   const AnalysisScreen({
     required this.options,
-    required this.pgnOrId,
+    required this.pgn,
     this.title,
   });
 
@@ -56,68 +112,6 @@ class AnalysisScreen extends StatelessWidget {
   final AnalysisOptions options;
 
   /// The PGN or game ID to load.
-  final String pgnOrId;
-
-  final String? title;
-
-  @override
-  Widget build(BuildContext context) {
-    return pgnOrId.length == 8 && GameId(pgnOrId).isValid
-        ? _LoadGame(GameId(pgnOrId), options, title)
-        : _LoadedAnalysisScreen(
-            options: options,
-            pgn: pgnOrId,
-            title: title,
-          );
-  }
-}
-
-class _LoadGame extends ConsumerWidget {
-  const _LoadGame(this.gameId, this.options, this.title);
-
-  final AnalysisOptions options;
-  final GameId gameId;
-  final String? title;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final gameAsync = ref.watch(archivedGameProvider(id: gameId));
-
-    return gameAsync.when(
-      data: (game) {
-        final serverAnalysis =
-            game.white.analysis != null && game.black.analysis != null
-                ? (white: game.white.analysis!, black: game.black.analysis!)
-                : null;
-        return _LoadedAnalysisScreen(
-          options: options.copyWith(
-            id: game.id,
-            opening: game.meta.opening,
-            division: game.meta.division,
-            serverAnalysis: serverAnalysis,
-          ),
-          pgn: game.makePgn(),
-          title: title,
-        );
-      },
-      loading: () => const Center(child: CircularProgressIndicator.adaptive()),
-      error: (error, _) {
-        return Center(
-          child: Text('Cannot load game analysis: $error'),
-        );
-      },
-    );
-  }
-}
-
-class _LoadedAnalysisScreen extends ConsumerWidget {
-  const _LoadedAnalysisScreen({
-    required this.options,
-    required this.pgn,
-    this.title,
-  });
-
-  final AnalysisOptions options;
   final String pgn;
 
   final String? title;

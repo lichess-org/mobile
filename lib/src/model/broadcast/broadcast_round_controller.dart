@@ -48,7 +48,7 @@ class BroadcastRoundController extends _$BroadcastRoundController {
       // Sent when a node is recevied from the broadcast
       case 'addNode':
         _handleAddNodeEvent(event);
-      // Sent when a game ends
+      // Sent when the state of games changes
       case 'chapters':
         _handleChaptersEvent(event);
       // Sent when clocks are updated from the broadcast
@@ -61,9 +61,6 @@ class BroadcastRoundController extends _$BroadcastRoundController {
     // The path of the last and current move of the broadcasted game
     // Its value is "!" if the path is identical to one of the node that was received
     final currentPath = pick(event.data, 'relayPath').asUciPathOrThrow();
-    // The path for the node that was received
-    // final path = pick(event.data, 'p', 'path').asUciPathOrThrow();
-    // final nodeId = pick(event.data, 'n', 'id').asUciCharPairOrThrow();
 
     // We check that the event we received is for the last move of the game
     if (currentPath.value != '!') return;

@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
@@ -17,6 +16,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
+import 'package:lichess_mobile/src/view/game/game_list_tile_providers.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/status_l10n.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
@@ -239,15 +239,12 @@ class _ContextMenu extends ConsumerWidget {
                     ? () {
                         pushPlatformRoute(
                           context,
-                          builder: (context) => AnalysisScreen(
-                            title: context.l10n.gameAnalysis,
-                            pgnOrId: game.id.value,
-                            options: AnalysisOptions(
-                              isLocalEvaluationAllowed: true,
-                              variant: game.variant,
-                              orientation: orientation,
+                          builder: (context) => AnalysisLoadingScreen(
+                            pgnAndOptionsProvider: archivedGameAnalysisProvider(
                               id: game.id,
+                              orientation: orientation,
                             ),
+                            title: context.l10n.gameAnalysis,
                           ),
                         );
                       }

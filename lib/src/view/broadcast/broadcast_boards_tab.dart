@@ -12,7 +12,10 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_boards_tab_provider.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
@@ -39,11 +42,14 @@ class BroadcastBoardsTab extends ConsumerWidget {
                 padding: Styles.bodyPadding,
                 child: Text('No boards to show for now'),
               )
-            : BroadcastPreview(games: games.values.toIList()),
+            : BroadcastPreview(
+                games: games.values.toIList(),
+                roundId: roundId,
+              ),
         loading: () => const Shimmer(
           child: ShimmerLoading(
             isLoading: true,
-            child: BroadcastPreview(),
+            child: BroadcastPreview(roundId: BroadcastRoundId('')),
           ),
         ),
         error: (error, stackTrace) => Center(
@@ -54,13 +60,14 @@ class BroadcastBoardsTab extends ConsumerWidget {
   }
 }
 
-class BroadcastPreview extends StatelessWidget {
+class BroadcastPreview extends ConsumerWidget {
+  final BroadcastRoundId roundId;
   final IList<BroadcastGameSnapshot>? games;
 
-  const BroadcastPreview({super.key, this.games});
+  const BroadcastPreview({super.key, required this.roundId, this.games});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     const numberLoadingBoards = 12;
     const boardSpacing = 10.0;
     // height of the text based on the font size
@@ -97,6 +104,17 @@ class BroadcastPreview extends StatelessWidget {
         final playingSide = Setup.parseFen(game.fen).turn;
 
         return BoardThumbnail(
+          onTap: () {
+            pushPlatformRoute(
+              context,
+              builder: (context) => AnalysisLoadingScreen(
+                pgnAndOptionsProvider: broadcastGameAnalysisProvider(
+                  roundId: roundId,
+                  gameId: game.id,
+                ),
+              ),
+            );
+          },
           orientation: Side.white,
           fen: game.fen,
           lastMove: game.lastMove,

@@ -62,3 +62,14 @@ Future<BroadcastRoundGames> broadcastRound(
     (client) => BroadcastRepository(client).getRound(broadcastRoundId),
   );
 }
+
+@riverpod
+Future<String> broadcastGame(
+  BroadcastGameRef ref, {
+  required BroadcastRoundId roundId,
+  required BroadcastGameId gameId,
+}) {
+  return ref.withClient(
+    (client) => BroadcastRepository(client).getGame(roundId, gameId),
+  );
+}

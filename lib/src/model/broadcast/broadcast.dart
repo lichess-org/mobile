@@ -89,6 +89,7 @@ class BroadcastGameSnapshot with _$BroadcastGameSnapshot {
   const BroadcastGameSnapshot._();
 
   const factory BroadcastGameSnapshot({
+    required BroadcastGameId id,
     required IMap<Side, BroadcastPlayer> players,
     required String fen,
     required Move? lastMove,

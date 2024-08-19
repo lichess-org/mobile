@@ -104,7 +104,7 @@ class _BodyState extends State<_Body> {
                             context,
                             rootNavigator: true,
                             builder: (context) => AnalysisScreen(
-                              pgnOrId: parsedInput!.pgn,
+                              pgn: parsedInput!.pgn,
                               options: parsedInput!.options,
                             ),
                           )

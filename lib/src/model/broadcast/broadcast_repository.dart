@@ -44,6 +44,16 @@ class BroadcastRepository {
       mapper: _makeGamesFromJson,
     );
   }
+
+  Future<String> getGame(
+    BroadcastRoundId roundId,
+    BroadcastGameId gameId,
+  ) {
+    return client.read(
+      Uri(path: 'api/study/$roundId/$gameId.pgn'),
+      headers: {'Accept': 'application/json'},
+    );
+  }
 }
 
 BroadcastsList _makeBroadcastResponseFromJson(
@@ -144,6 +154,7 @@ MapEntry<BroadcastGameId, BroadcastGameSnapshot> gameFromPick(
     MapEntry(
       pick('id').asBroadcastGameIdOrThrow(),
       BroadcastGameSnapshot(
+        id: pick('id').asBroadcastGameIdOrThrow(),
         players: IMap({
           Side.white: _playerFromPick(pick('players', 0).required()),
           Side.black: _playerFromPick(pick('players', 1).required()),
