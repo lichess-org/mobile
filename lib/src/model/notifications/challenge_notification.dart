@@ -94,9 +94,23 @@ class ChallengeNotification extends LocalNotification {
   String get body => _body();
 
   String _body() {
-    final time = _challenge.days == null
-        ? '∞'
-        : '${_l10n.daysPerTurn}: ${_challenge.days}';
+    final time = switch (_challenge.timeControl) {
+      ChallengeTimeControlType.clock => () {
+          final clock = _challenge.clock!;
+          final minutes = switch (clock.time.inSeconds) {
+            15 => '¼',
+            30 => '½',
+            45 => '¾',
+            90 => '1.5',
+            _ => clock.time.inMinutes,
+          };
+          return '$minutes+${clock.increment.inSeconds}';
+        }(),
+      ChallengeTimeControlType.correspondence =>
+        '${_l10n.daysPerTurn}: ${_challenge.days}',
+      ChallengeTimeControlType.unlimited => '∞',
+    };
+
     return _challenge.rated
         ? '${_l10n.rated} • $time'
         : '${_l10n.casual} • $time';
