@@ -4,9 +4,9 @@ import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
@@ -26,7 +26,7 @@ class BroadcastRoundController extends _$BroadcastRoundController {
   @override
   Future<BroadcastRoundGames> build(BroadcastRoundId broadcastRoundId) async {
     _socketClient = ref
-        .read(socketPoolProvider)
+        .watch(socketPoolProvider)
         .open(BroadcastRoundController.broadcastSocketUri(broadcastRoundId));
 
     _subscription = _socketClient.stream.listen(_handleSocketEvent);
@@ -35,9 +35,10 @@ class BroadcastRoundController extends _$BroadcastRoundController {
       _subscription?.cancel();
     });
 
-    return await ref.withClient(
-      (client) => BroadcastRepository(client).getRound(broadcastRoundId),
-    );
+    final games =
+        await ref.watch(broadcastRoundProvider(broadcastRoundId).future);
+
+    return games;
   }
 
   void _handleSocketEvent(SocketEvent event) {

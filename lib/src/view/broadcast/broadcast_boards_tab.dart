@@ -26,24 +26,29 @@ const _kPlayerWidgetPadding = EdgeInsets.symmetric(vertical: 5.0);
 class BroadcastBoardsTab extends ConsumerWidget {
   final BroadcastRoundId roundId;
 
-  const BroadcastBoardsTab(this.roundId);
+  const BroadcastBoardsTab({super.key, required this.roundId});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final games = ref.watch(broadcastRoundControllerProvider(roundId));
 
-    return games.when(
-      data: (games) => (games.isEmpty)
-          ? const Text('No boards to show for now')
-          : BroadcastPreview(games: games.values.toIList()),
-      loading: () => const Shimmer(
-        child: ShimmerLoading(
-          isLoading: true,
-          child: BroadcastPreview(),
+    return SafeArea(
+      child: games.when(
+        data: (games) => (games.isEmpty)
+            ? const Padding(
+                padding: Styles.bodyPadding,
+                child: Text('No boards to show for now'),
+              )
+            : BroadcastPreview(games: games.values.toIList()),
+        loading: () => const Shimmer(
+          child: ShimmerLoading(
+            isLoading: true,
+            child: BroadcastPreview(),
+          ),
         ),
-      ),
-      error: (error, stackTrace) => Center(
-        child: Text(error.toString()),
+        error: (error, stackTrace) => Center(
+          child: Text(error.toString()),
+        ),
       ),
     );
   }
@@ -71,6 +76,7 @@ class BroadcastPreview extends StatelessWidget {
         numberOfBoardsByRow;
 
     return GridView.builder(
+      padding: Styles.bodyPadding,
       itemCount: games == null ? numberLoadingBoards : games!.length,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: numberOfBoardsByRow,

@@ -23,6 +23,16 @@ class BroadcastRepository {
     );
   }
 
+  Future<BroadcastTournament> getTournament(
+    BroadcastTournamentId broadcastTournamentId,
+  ) {
+    return client.readJson(
+      Uri(path: 'api/broadcast/$broadcastTournamentId'),
+      headers: {'Accept': 'application/json'},
+      mapper: _makeTournamentFromJson,
+    );
+  }
+
   Future<BroadcastRoundGames> getRound(
     BroadcastRoundId broadcastRoundId,
   ) {
@@ -51,43 +61,72 @@ BroadcastsList _makeBroadcastResponseFromJson(
 }
 
 Broadcast _broadcastFromPick(RequiredPick pick) {
-  final live = pick('round', 'ongoing').asBoolOrFalse();
-  final finished = pick('round', 'finished').asBoolOrFalse();
-  final status = live
-      ? RoundStatus.live
-      : finished
-          ? RoundStatus.finished
-          : RoundStatus.upcoming;
   final roundId = pick('round', 'id').asBroadcastRoundIdOrThrow();
 
   return Broadcast(
-    tour: (
-      name: pick('tour', 'name').asStringOrThrow(),
-      imageUrl: pick('tour', 'image').asStringOrNull(),
-      description: pick('tour', 'description').asStringOrThrow(),
+    tour: _tournamentDataFromPick(pick('tour').required()),
+    round: _roundFromPick(pick('round').required()),
+    group: pick('group').asStringOrNull(),
+    roundToLinkId:
+        pick('roundToLink', 'id').asBroadcastRoundIddOrNull() ?? roundId,
+  );
+}
+
+BroadcastTournamentData _tournamentDataFromPick(
+  RequiredPick pick,
+) =>
+    BroadcastTournamentData(
+      id: pick('id').asBroadcastTournamentIdOrThrow(),
+      name: pick('name').asStringOrThrow(),
+      imageUrl: pick('image').asStringOrNull(),
+      description: pick('description').asStringOrThrow(),
       information: (
-        format: pick('tour', 'info', 'format').asStringOrNull(),
-        timeControl: pick('tour', 'info', 'tc').asStringOrNull(),
-        players: pick('tour', 'info', 'players').asStringOrNull(),
-        dates: pick('tour', 'dates').letOrNull(
+        format: pick('info', 'format').asStringOrNull(),
+        timeControl: pick('info', 'tc').asStringOrNull(),
+        players: pick('info', 'players').asStringOrNull(),
+        dates: pick('dates').letOrNull(
           (pick) => (
             startsAt: pick(0).asDateTimeFromMillisecondsOrThrow().toLocal(),
             endsAt: pick(1).asDateTimeFromMillisecondsOrNull()?.toLocal(),
           ),
         ),
       ),
-    ),
-    round: BroadcastRound(
-      id: roundId,
-      name: pick('round', 'name').asStringOrThrow(),
-      status: status,
-      startsAt: pick('round', 'startsAt')
-          .asDateTimeFromMillisecondsOrThrow()
-          .toLocal(),
-    ),
-    group: pick('group').asStringOrNull(),
-    roundToLinkId:
-        pick('roundToLink', 'id').asBroadcastRoundIddOrNull() ?? roundId,
+    );
+
+BroadcastTournament _makeTournamentFromJson(
+  Map<String, dynamic> json,
+) {
+  return BroadcastTournament(
+    data: _tournamentDataFromPick(pick(json, 'tour').required()),
+    rounds: pick(json, 'rounds').asListOrThrow(_roundFromPick).toIList(),
+    defaultRoundId: pick(json, 'defaultRoundId').asBroadcastRoundIdOrThrow(),
+    group: pick(json, 'group', 'tours')
+        .asListOrNull(_tournamentGroupFromPick)
+        ?.toIList(),
+  );
+}
+
+BroadcastTournamentGroup _tournamentGroupFromPick(RequiredPick pick) {
+  final id = pick('id').asBroadcastTournamentIdOrThrow();
+  final name = pick('name').asStringOrThrow();
+
+  return (id: id, name: name);
+}
+
+BroadcastRound _roundFromPick(RequiredPick pick) {
+  final live = pick('ongoing').asBoolOrFalse();
+  final finished = pick('finished').asBoolOrFalse();
+  final status = live
+      ? RoundStatus.live
+      : finished
+          ? RoundStatus.finished
+          : RoundStatus.upcoming;
+
+  return BroadcastRound(
+    id: pick('id').asBroadcastRoundIdOrThrow(),
+    name: pick('name').asStringOrThrow(),
+    status: status,
+    startsAt: pick('startsAt').asDateTimeFromMillisecondsOrNull()?.toLocal(),
   );
 }
 

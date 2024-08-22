@@ -187,14 +187,15 @@ class _BodyState extends ConsumerState<_Body> {
   }
 }
 
-class BroadcastGridItem extends StatelessWidget {
+class BroadcastGridItem extends ConsumerWidget {
   final Broadcast broadcast;
 
   const BroadcastGridItem({required this.broadcast});
 
   BroadcastGridItem.loading()
       : broadcast = Broadcast(
-          tour: (
+          tour: BroadcastTournamentData(
+            id: const BroadcastTournamentId(''),
             name: '',
             imageUrl: null,
             description: '',
@@ -219,7 +220,7 @@ class BroadcastGridItem extends StatelessWidget {
         );
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return AdaptiveInkWell(
       borderRadius: BorderRadius.circular(20),
       onTap: () {
@@ -290,9 +291,9 @@ class BroadcastGridItem extends StatelessWidget {
                               color: Colors.red,
                             ),
                           )
-                        else
+                        else if (broadcast.round.startsAt != null)
                           Text(
-                            _dateFormatter.format(broadcast.round.startsAt),
+                            _dateFormatter.format(broadcast.round.startsAt!),
                             style: Theme.of(context)
                                 .textTheme
                                 .labelSmall

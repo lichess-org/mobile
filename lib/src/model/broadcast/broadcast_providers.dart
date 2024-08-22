@@ -1,6 +1,7 @@
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'broadcast_providers.g.dart';
@@ -39,4 +40,25 @@ class BroadcastsPaginator extends _$BroadcastsPaginator {
       ),
     );
   }
+}
+
+@riverpod
+Future<BroadcastTournament> broadcastTournament(
+  BroadcastTournamentRef ref,
+  BroadcastTournamentId broadcastTournamentId,
+) {
+  return ref.withClient(
+    (client) =>
+        BroadcastRepository(client).getTournament(broadcastTournamentId),
+  );
+}
+
+@riverpod
+Future<BroadcastRoundGames> broadcastRound(
+  BroadcastRoundRef ref,
+  BroadcastRoundId broadcastRoundId,
+) {
+  return ref.withClient(
+    (client) => BroadcastRepository(client).getRound(broadcastRoundId),
+  );
 }

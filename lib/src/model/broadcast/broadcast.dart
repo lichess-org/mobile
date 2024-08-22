@@ -17,7 +17,7 @@ class Broadcast with _$Broadcast {
   const Broadcast._();
 
   const factory Broadcast({
-    required BroadcastTournament tour,
+    required BroadcastTournamentData tour,
     required BroadcastRound round,
     required String? group,
 
@@ -32,12 +32,26 @@ class Broadcast with _$Broadcast {
   String get title => group ?? tour.name;
 }
 
-typedef BroadcastTournament = ({
-  String name,
-  String? imageUrl,
-  String description,
-  BroadcastTournamentInformation information,
-});
+@freezed
+class BroadcastTournament with _$BroadcastTournament {
+  const factory BroadcastTournament({
+    required BroadcastTournamentData data,
+    required IList<BroadcastRound> rounds,
+    required BroadcastRoundId defaultRoundId,
+    required IList<BroadcastTournamentGroup>? group,
+  }) = _BroadcastTournament;
+}
+
+@freezed
+class BroadcastTournamentData with _$BroadcastTournamentData {
+  const factory BroadcastTournamentData({
+    required BroadcastTournamentId id,
+    required String name,
+    required String? imageUrl,
+    required String description,
+    required BroadcastTournamentInformation information,
+  }) = _BroadcastTournamentData;
+}
 
 typedef BroadcastTournamentInformation = ({
   String? format,
@@ -51,6 +65,11 @@ typedef BroadcastTournamentDates = ({
   DateTime? endsAt,
 });
 
+typedef BroadcastTournamentGroup = ({
+  BroadcastTournamentId id,
+  String name,
+});
+
 @freezed
 class BroadcastRound with _$BroadcastRound {
   const BroadcastRound._();
@@ -59,7 +78,7 @@ class BroadcastRound with _$BroadcastRound {
     required BroadcastRoundId id,
     required String name,
     required RoundStatus status,
-    required DateTime startsAt,
+    required DateTime? startsAt,
   }) = _BroadcastRound;
 }
 

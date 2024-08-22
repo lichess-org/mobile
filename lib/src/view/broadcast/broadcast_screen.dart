@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_boards_tab.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_overview_tab.dart';
@@ -40,11 +43,27 @@ class _AndroidBody extends StatefulWidget {
 class _AndroidBodyState extends State<_AndroidBody>
     with SingleTickerProviderStateMixin {
   late final TabController _tabController;
+  late BroadcastTournamentId _selectedTournamentId;
+  late BroadcastRoundId _selectedRoundId;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(initialIndex: 1, length: 2, vsync: this);
+    _selectedTournamentId = widget.broadcast.tour.id;
+    _selectedRoundId = widget.broadcast.roundToLinkId;
+  }
+
+  void setTournamentId(BroadcastTournamentId tournamentId) {
+    setState(() {
+      _selectedTournamentId = tournamentId;
+    });
+  }
+
+  void setRoundId(BroadcastRoundId roundId) {
+    setState(() {
+      _selectedRoundId = roundId;
+    });
   }
 
   @override
@@ -69,19 +88,16 @@ class _AndroidBodyState extends State<_AndroidBody>
       body: TabBarView(
         controller: _tabController,
         children: <Widget>[
-          SafeArea(
-            child: Padding(
-              padding: Styles.bodyPadding,
-              child: BroadcastOverviewTab(widget.broadcast),
-            ),
-          ),
-          SafeArea(
-            child: Padding(
-              padding: Styles.bodyPadding,
-              child: BroadcastBoardsTab(widget.broadcast.roundToLinkId),
-            ),
-          ),
+          BroadcastOverviewTab(tournamentId: _selectedTournamentId),
+          BroadcastBoardsTab(roundId: _selectedRoundId),
         ],
+      ),
+      bottomNavigationBar: BottomAppBar(
+        child: TournamentAndRoundDropdowns(
+          tournamentId: _selectedTournamentId,
+          setTournamentId: setTournamentId,
+          setRoundId: setRoundId,
+        ),
       ),
     );
   }
@@ -100,6 +116,15 @@ enum _ViewMode { overview, boards }
 
 class _CupertinoBodyState extends State<_CupertinoBody> {
   _ViewMode _selectedSegment = _ViewMode.boards;
+  late BroadcastTournamentId _selectedTournamentId;
+  late BroadcastRoundId _selectedRoundId;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedTournamentId = widget.broadcast.tour.id;
+    _selectedRoundId = widget.broadcast.roundToLinkId;
+  }
 
   void setViewMode(_ViewMode mode) {
     setState(() {
@@ -107,16 +132,27 @@ class _CupertinoBodyState extends State<_CupertinoBody> {
     });
   }
 
+  void setTournamentId(BroadcastTournamentId tournamentId) {
+    setState(() {
+      _selectedTournamentId = tournamentId;
+    });
+  }
+
+  void setRoundId(BroadcastRoundId roundId) {
+    setState(() {
+      _selectedRoundId = roundId;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Padding(
-            padding: Styles.bodyPadding,
-            child: CupertinoSlidingSegmentedControl<_ViewMode>(
+      child: Padding(
+        padding: Styles.bodyPadding,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            CupertinoSlidingSegmentedControl<_ViewMode>(
               groupValue: _selectedSegment,
               children: const {
                 _ViewMode.overview: Text('Overview'),
@@ -130,14 +166,92 @@ class _CupertinoBodyState extends State<_CupertinoBody> {
                 }
               },
             ),
-          ),
-          Expanded(
-            child: _selectedSegment == _ViewMode.overview
-                ? BroadcastOverviewTab(widget.broadcast)
-                : BroadcastBoardsTab(widget.broadcast.roundToLinkId),
-          ),
-        ],
+            const SizedBox(height: 16),
+            TournamentAndRoundDropdowns(
+              tournamentId: _selectedTournamentId,
+              setTournamentId: setTournamentId,
+              setRoundId: setRoundId,
+            ),
+            const SizedBox(height: 16),
+            Expanded(
+              child: _selectedSegment == _ViewMode.overview
+                  ? BroadcastOverviewTab(tournamentId: _selectedTournamentId)
+                  : BroadcastBoardsTab(roundId: _selectedRoundId),
+            ),
+          ],
+        ),
       ),
+    );
+  }
+}
+
+class TournamentAndRoundDropdowns extends ConsumerWidget {
+  final BroadcastTournamentId tournamentId;
+  final void Function(BroadcastTournamentId) setTournamentId;
+  final void Function(BroadcastRoundId) setRoundId;
+
+  const TournamentAndRoundDropdowns({
+    super.key,
+    required this.tournamentId,
+    required this.setTournamentId,
+    required this.setRoundId,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final tournament = ref.watch(broadcastTournamentProvider(tournamentId));
+
+    return tournament.when(
+      data: (tournament) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            if (tournament.group != null)
+              Flexible(
+                child: DropdownMenu<BroadcastTournamentId>(
+                  label: const Text('Tournament'),
+                  initialSelection: tournament.data.id,
+                  dropdownMenuEntries: tournament.group!
+                      .map(
+                        (tournament) =>
+                            DropdownMenuEntry<BroadcastTournamentId>(
+                          value: tournament.id,
+                          label: tournament.name,
+                        ),
+                      )
+                      .toList(),
+                  onSelected: (BroadcastTournamentId? value) async {
+                    setTournamentId(value!);
+                    final newTournament = await ref.read(
+                      broadcastTournamentProvider(value).future,
+                    );
+                    setRoundId(newTournament.defaultRoundId);
+                  },
+                ),
+              ),
+            Flexible(
+              child: DropdownMenu<BroadcastRoundId>(
+                label: const Text('Round'),
+                initialSelection: tournament.defaultRoundId,
+                dropdownMenuEntries: tournament.rounds
+                    .map(
+                      (BroadcastRound round) =>
+                          DropdownMenuEntry<BroadcastRoundId>(
+                        value: round.id,
+                        label: round.name,
+                      ),
+                    )
+                    .toList(),
+                onSelected: (BroadcastRoundId? value) {
+                  setRoundId(value!);
+                },
+              ),
+            ),
+          ],
+        );
+      },
+      loading: () => const SizedBox.shrink(),
+      error: (error, stackTrace) => Center(child: Text(error.toString())),
     );
   }
 }
