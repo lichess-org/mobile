@@ -53,7 +53,7 @@ class Profile with _$Profile {
             }
             return link;
           })
-          .whereNotNull()
+          .nonNulls
           .toIList(),
     );
   }
