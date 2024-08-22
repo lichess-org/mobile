@@ -119,8 +119,7 @@ class _AccountPreferencesScreenState
                       } else {
                         pushPlatformRoute(
                           context,
-                          title: context
-                              .l10n.preferencesPromoteToQueenAutomatically,
+                          title: context.l10n.preferencesPgnPieceNotation,
                           builder: (context) =>
                               const PieceNotationSettingsScreen(),
                         );
