@@ -33,6 +33,7 @@ import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -590,81 +591,57 @@ class _BottomBar extends ConsumerWidget {
     final canShowGameSummary =
         ref.watch(ctrlProvider.select((value) => value.canShowGameSummary));
 
-    return Container(
-      color: Theme.of(context).platform == TargetPlatform.iOS
-          ? CupertinoTheme.of(context).barBackgroundColor
-          : Theme.of(context).bottomAppBarTheme.color,
-      child: SafeArea(
-        top: false,
-        child: SizedBox(
-          height: kBottomBarHeight,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Expanded(
-                child: BottomBarButton(
-                  label: context.l10n.menu,
-                  onTap: () {
-                    _showAnalysisMenu(context, ref);
-                  },
-                  icon: Icons.menu,
-                ),
-              ),
-              if (canShowGameSummary)
-                Expanded(
-                  child: BottomBarButton(
-                    label: displayMode == DisplayMode.summary
-                        ? 'Moves'
-                        : 'Summary',
-                    onTap: () {
-                      ref.read(ctrlProvider.notifier).toggleDisplayMode();
-                    },
-                    icon: displayMode == DisplayMode.summary
-                        ? LichessIcons.flow_cascade
-                        : Icons.area_chart,
-                  ),
-                ),
-              Expanded(
-                child: BottomBarButton(
-                  label: context.l10n.openingExplorer,
-                  onTap: () => pushPlatformRoute(
-                    context,
-                    builder: (_) => OpeningExplorerScreen(
-                      pgn: pgn,
-                      options: options,
-                    ),
-                  ),
-                  icon: Icons.explore,
-                ),
-              ),
-              Expanded(
-                child: RepeatButton(
-                  onLongPress: canGoBack ? () => _moveBackward(ref) : null,
-                  child: BottomBarButton(
-                    key: const ValueKey('goto-previous'),
-                    onTap: canGoBack ? () => _moveBackward(ref) : null,
-                    label: 'Previous',
-                    icon: CupertinoIcons.chevron_back,
-                    showTooltip: false,
-                  ),
-                ),
-              ),
-              Expanded(
-                child: RepeatButton(
-                  onLongPress: canGoNext ? () => _moveForward(ref) : null,
-                  child: BottomBarButton(
-                    key: const ValueKey('goto-next'),
-                    icon: CupertinoIcons.chevron_forward,
-                    label: context.l10n.next,
-                    onTap: canGoNext ? () => _moveForward(ref) : null,
-                    showTooltip: false,
-                  ),
-                ),
-              ),
-            ],
+    return BottomBar(
+      children: [
+        BottomBarButton(
+          label: context.l10n.menu,
+          onTap: () {
+            _showAnalysisMenu(context, ref);
+          },
+          icon: Icons.menu,
+        ),
+        if (canShowGameSummary)
+          BottomBarButton(
+            label: displayMode == DisplayMode.summary ? 'Moves' : 'Summary',
+            onTap: () {
+              ref.read(ctrlProvider.notifier).toggleDisplayMode();
+            },
+            icon: displayMode == DisplayMode.summary
+                ? LichessIcons.flow_cascade
+                : Icons.area_chart,
+          ),
+        BottomBarButton(
+          label: context.l10n.openingExplorer,
+          onTap: () => pushPlatformRoute(
+            context,
+            builder: (_) => OpeningExplorerScreen(
+              pgn: pgn,
+              options: options,
+            ),
+          ),
+          icon: Icons.explore,
+        ),
+        RepeatButton(
+          onLongPress: canGoBack ? () => _moveBackward(ref) : null,
+          child: BottomBarButton(
+            key: const ValueKey('goto-previous'),
+            onTap: canGoBack ? () => _moveBackward(ref) : null,
+            label: 'Previous',
+            icon: CupertinoIcons.chevron_back,
+            showTooltip: false,
           ),
         ),
-      ),
+        RepeatButton(
+          onLongPress: canGoNext ? () => _moveForward(ref) : null,
+          child: BottomBarButton(
+            key: const ValueKey('goto-next'),
+            icon: CupertinoIcons.chevron_forward,
+            label: context.l10n.next,
+            onTap: canGoNext ? () => _moveForward(ref) : null,
+            showTooltip: false,
+          ),
+        ),
+      ],
     );
   }
 

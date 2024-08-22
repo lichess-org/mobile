@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/model/lobby/lobby_numbers.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
+import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
@@ -73,7 +74,7 @@ class LobbyScreenLoadingContent extends StatelessWidget {
             ),
           ),
         ),
-        _BottomBar(
+        BottomBar(
           children: [
             BottomBarButton(
               onTap: () async {
@@ -148,7 +149,7 @@ class ChallengeLoadingContent extends StatelessWidget {
             ),
           ),
         ),
-        _BottomBar(
+        BottomBar(
           children: [
             BottomBarButton(
               onTap: () async {
@@ -221,7 +222,7 @@ class LoadGameError extends StatelessWidget {
             ),
           ),
         ),
-        _BottomBar(
+        BottomBar(
           children: [
             BottomBarButton(
               onTap: () => Navigator.of(context).pop(),
@@ -295,7 +296,7 @@ class ChallengeDeclinedBoard extends StatelessWidget {
             ),
           ),
         ),
-        _BottomBar(
+        BottomBar(
           children: [
             BottomBarButton(
               onTap: () => Navigator.of(context).pop(),
@@ -306,33 +307,6 @@ class ChallengeDeclinedBoard extends StatelessWidget {
           ],
         ),
       ],
-    );
-  }
-}
-
-class _BottomBar extends StatelessWidget {
-  const _BottomBar({
-    required this.children,
-  });
-
-  final List<Widget> children;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Theme.of(context).platform == TargetPlatform.iOS
-          ? CupertinoTheme.of(context).barBackgroundColor
-          : Theme.of(context).bottomAppBarTheme.color,
-      child: SafeArea(
-        top: false,
-        child: SizedBox(
-          height: kBottomBarHeight,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: children,
-          ),
-        ),
-      ),
     );
   }
 }

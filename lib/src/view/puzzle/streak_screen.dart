@@ -23,6 +23,7 @@ import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
+import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
@@ -266,109 +267,87 @@ class _BottomBar extends ConsumerWidget {
         puzzleControllerProvider(initialPuzzleContext, initialStreak: streak);
     final puzzleState = ref.watch(ctrlProvider);
 
-    return Container(
-      color: Theme.of(context).platform == TargetPlatform.iOS
-          ? null
-          : Theme.of(context).bottomAppBarTheme.color,
-      child: SafeArea(
-        top: false,
-        child: SizedBox(
-          height: kBottomBarHeight,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              if (!puzzleState.streak!.finished)
-                BottomBarButton(
-                  icon: Icons.info_outline,
-                  label: context.l10n.aboutX('Streak'),
-                  showLabel: true,
-                  onTap: () => _streakInfoDialogBuilder(context),
-                ),
-              if (!puzzleState.streak!.finished)
-                BottomBarButton(
-                  icon: Icons.skip_next,
-                  label: context.l10n.skipThisMove,
-                  showLabel: true,
-                  onTap: puzzleState.streak!.hasSkipped ||
-                          puzzleState.mode == PuzzleMode.view
-                      ? null
-                      : () => ref.read(ctrlProvider.notifier).skipMove(),
-                ),
-              if (puzzleState.streak!.finished)
-                Expanded(
-                  child: BottomBarButton(
-                    onTap: () {
-                      launchShareDialog(
-                        context,
-                        text: lichessUri(
-                          '/training/${puzzleState.puzzle.puzzle.id}',
-                        ).toString(),
-                      );
-                    },
-                    label: 'Share this puzzle',
-                    icon: Theme.of(context).platform == TargetPlatform.iOS
-                        ? CupertinoIcons.share
-                        : Icons.share,
-                  ),
-                ),
-              if (puzzleState.streak!.finished)
-                Expanded(
-                  child: BottomBarButton(
-                    onTap: () {
-                      pushPlatformRoute(
-                        context,
-                        builder: (context) => AnalysisScreen(
-                          title: context.l10n.analysis,
-                          pgnOrId: ref.read(ctrlProvider.notifier).makePgn(),
-                          options: AnalysisOptions(
-                            isLocalEvaluationAllowed: true,
-                            variant: Variant.standard,
-                            orientation: puzzleState.pov,
-                            id: standaloneAnalysisId,
-                            initialMoveCursor: 0,
-                          ),
-                        ),
-                      );
-                    },
-                    label: context.l10n.analysis,
-                    icon: Icons.biotech,
-                  ),
-                ),
-              if (puzzleState.streak!.finished)
-                Expanded(
-                  child: BottomBarButton(
-                    onTap: puzzleState.canGoBack
-                        ? () => ref.read(ctrlProvider.notifier).userPrevious()
-                        : null,
-                    label: 'Previous',
-                    icon: CupertinoIcons.chevron_back,
-                  ),
-                ),
-              if (puzzleState.streak!.finished)
-                Expanded(
-                  child: BottomBarButton(
-                    onTap: puzzleState.canGoNext
-                        ? () => ref.read(ctrlProvider.notifier).userNext()
-                        : null,
-                    label: context.l10n.next,
-                    icon: CupertinoIcons.chevron_forward,
-                  ),
-                ),
-              if (puzzleState.streak!.finished)
-                Expanded(
-                  child: BottomBarButton(
-                    onTap: ref.read(streakProvider).isLoading == false
-                        ? () => ref.invalidate(streakProvider)
-                        : null,
-                    highlighted: true,
-                    label: context.l10n.puzzleNewStreak,
-                    icon: CupertinoIcons.play_arrow_solid,
-                  ),
-                ),
-            ],
+    return BottomBar(
+      children: [
+        if (!puzzleState.streak!.finished)
+          BottomBarButton(
+            icon: Icons.info_outline,
+            label: context.l10n.aboutX('Streak'),
+            showLabel: true,
+            onTap: () => _streakInfoDialogBuilder(context),
           ),
-        ),
-      ),
+        if (!puzzleState.streak!.finished)
+          BottomBarButton(
+            icon: Icons.skip_next,
+            label: context.l10n.skipThisMove,
+            showLabel: true,
+            onTap: puzzleState.streak!.hasSkipped ||
+                    puzzleState.mode == PuzzleMode.view
+                ? null
+                : () => ref.read(ctrlProvider.notifier).skipMove(),
+          ),
+        if (puzzleState.streak!.finished)
+          BottomBarButton(
+            onTap: () {
+              launchShareDialog(
+                context,
+                text: lichessUri(
+                  '/training/${puzzleState.puzzle.puzzle.id}',
+                ).toString(),
+              );
+            },
+            label: 'Share this puzzle',
+            icon: Theme.of(context).platform == TargetPlatform.iOS
+                ? CupertinoIcons.share
+                : Icons.share,
+          ),
+        if (puzzleState.streak!.finished)
+          BottomBarButton(
+            onTap: () {
+              pushPlatformRoute(
+                context,
+                builder: (context) => AnalysisScreen(
+                  title: context.l10n.analysis,
+                  pgnOrId: ref.read(ctrlProvider.notifier).makePgn(),
+                  options: AnalysisOptions(
+                    isLocalEvaluationAllowed: true,
+                    variant: Variant.standard,
+                    orientation: puzzleState.pov,
+                    id: standaloneAnalysisId,
+                    initialMoveCursor: 0,
+                  ),
+                ),
+              );
+            },
+            label: context.l10n.analysis,
+            icon: Icons.biotech,
+          ),
+        if (puzzleState.streak!.finished)
+          BottomBarButton(
+            onTap: puzzleState.canGoBack
+                ? () => ref.read(ctrlProvider.notifier).userPrevious()
+                : null,
+            label: 'Previous',
+            icon: CupertinoIcons.chevron_back,
+          ),
+        if (puzzleState.streak!.finished)
+          BottomBarButton(
+            onTap: puzzleState.canGoNext
+                ? () => ref.read(ctrlProvider.notifier).userNext()
+                : null,
+            label: context.l10n.next,
+            icon: CupertinoIcons.chevron_forward,
+          ),
+        if (puzzleState.streak!.finished)
+          BottomBarButton(
+            onTap: ref.read(streakProvider).isLoading == false
+                ? () => ref.invalidate(streakProvider)
+                : null,
+            highlighted: true,
+            label: context.l10n.puzzleNewStreak,
+            icon: CupertinoIcons.play_arrow_solid,
+          ),
+      ],
     );
   }
 

@@ -37,6 +37,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
+import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -412,105 +413,79 @@ class _BottomBar extends ConsumerWidget {
     final puzzleState = ref.watch(ctrlProvider);
     final isDailyPuzzle = puzzleState.puzzle.isDailyPuzzle == true;
 
-    return Container(
-      color: Theme.of(context).platform == TargetPlatform.iOS
-          ? null
-          : Theme.of(context).bottomAppBarTheme.color,
-      child: SafeArea(
-        top: false,
-        child: SizedBox(
-          height: kBottomBarHeight,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              if (initialPuzzleContext.userId != null &&
-                  !isDailyPuzzle &&
-                  puzzleState.mode != PuzzleMode.view)
-                _DifficultySelector(
-                  initialPuzzleContext: initialPuzzleContext,
-                  ctrlProvider: ctrlProvider,
-                ),
-              if (puzzleState.mode != PuzzleMode.view)
-                BottomBarButton(
-                  icon: Icons.help,
-                  label: context.l10n.viewTheSolution,
-                  showLabel: true,
-                  onTap: puzzleState.canViewSolution
-                      ? () => ref.read(ctrlProvider.notifier).viewSolution()
-                      : null,
-                ),
-              if (puzzleState.mode == PuzzleMode.view)
-                Expanded(
-                  child: BottomBarButton(
-                    label: context.l10n.menu,
-                    onTap: () {
-                      _showPuzzleMenu(context, ref);
-                    },
-                    icon: Icons.menu,
-                  ),
-                ),
-              if (puzzleState.mode == PuzzleMode.view)
-                Expanded(
-                  child: BottomBarButton(
-                    onTap: () {
-                      ref.read(ctrlProvider.notifier).toggleLocalEvaluation();
-                    },
-                    label: context.l10n.toggleLocalEvaluation,
-                    icon: CupertinoIcons.gauge,
-                    highlighted: puzzleState.isLocalEvalEnabled,
-                  ),
-                ),
-              if (puzzleState.mode == PuzzleMode.view)
-                Expanded(
-                  child: RepeatButton(
-                    triggerDelays: _repeatTriggerDelays,
-                    onLongPress:
-                        puzzleState.canGoBack ? () => _moveBackward(ref) : null,
-                    child: BottomBarButton(
-                      onTap: puzzleState.canGoBack
-                          ? () => _moveBackward(ref)
-                          : null,
-                      label: 'Previous',
-                      icon: CupertinoIcons.chevron_back,
-                      showTooltip: false,
-                    ),
-                  ),
-                ),
-              if (puzzleState.mode == PuzzleMode.view)
-                Expanded(
-                  child: RepeatButton(
-                    triggerDelays: _repeatTriggerDelays,
-                    onLongPress:
-                        puzzleState.canGoNext ? () => _moveForward(ref) : null,
-                    child: BottomBarButton(
-                      onTap: puzzleState.canGoNext
-                          ? () => _moveForward(ref)
-                          : null,
-                      label: context.l10n.next,
-                      icon: CupertinoIcons.chevron_forward,
-                      showTooltip: false,
-                      blink: puzzleState.viewedSolutionRecently,
-                    ),
-                  ),
-                ),
-              if (puzzleState.mode == PuzzleMode.view)
-                Expanded(
-                  child: BottomBarButton(
-                    onTap: puzzleState.mode == PuzzleMode.view &&
-                            puzzleState.nextContext != null
-                        ? () => ref
-                            .read(ctrlProvider.notifier)
-                            .loadPuzzle(puzzleState.nextContext!)
-                        : null,
-                    highlighted: true,
-                    label: context.l10n.puzzleContinueTraining,
-                    icon: CupertinoIcons.play_arrow_solid,
-                  ),
-                ),
-            ],
+    return BottomBar(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        if (initialPuzzleContext.userId != null &&
+            !isDailyPuzzle &&
+            puzzleState.mode != PuzzleMode.view)
+          _DifficultySelector(
+            initialPuzzleContext: initialPuzzleContext,
+            ctrlProvider: ctrlProvider,
           ),
-        ),
-      ),
+        if (puzzleState.mode != PuzzleMode.view)
+          BottomBarButton(
+            icon: Icons.help,
+            label: context.l10n.viewTheSolution,
+            showLabel: true,
+            onTap: puzzleState.canViewSolution
+                ? () => ref.read(ctrlProvider.notifier).viewSolution()
+                : null,
+          ),
+        if (puzzleState.mode == PuzzleMode.view)
+          BottomBarButton(
+            label: context.l10n.menu,
+            onTap: () {
+              _showPuzzleMenu(context, ref);
+            },
+            icon: Icons.menu,
+          ),
+        if (puzzleState.mode == PuzzleMode.view)
+          BottomBarButton(
+            onTap: () {
+              ref.read(ctrlProvider.notifier).toggleLocalEvaluation();
+            },
+            label: context.l10n.toggleLocalEvaluation,
+            icon: CupertinoIcons.gauge,
+            highlighted: puzzleState.isLocalEvalEnabled,
+          ),
+        if (puzzleState.mode == PuzzleMode.view)
+          RepeatButton(
+            triggerDelays: _repeatTriggerDelays,
+            onLongPress:
+                puzzleState.canGoBack ? () => _moveBackward(ref) : null,
+            child: BottomBarButton(
+              onTap: puzzleState.canGoBack ? () => _moveBackward(ref) : null,
+              label: 'Previous',
+              icon: CupertinoIcons.chevron_back,
+              showTooltip: false,
+            ),
+          ),
+        if (puzzleState.mode == PuzzleMode.view)
+          RepeatButton(
+            triggerDelays: _repeatTriggerDelays,
+            onLongPress: puzzleState.canGoNext ? () => _moveForward(ref) : null,
+            child: BottomBarButton(
+              onTap: puzzleState.canGoNext ? () => _moveForward(ref) : null,
+              label: context.l10n.next,
+              icon: CupertinoIcons.chevron_forward,
+              showTooltip: false,
+              blink: puzzleState.viewedSolutionRecently,
+            ),
+          ),
+        if (puzzleState.mode == PuzzleMode.view)
+          BottomBarButton(
+            onTap: puzzleState.mode == PuzzleMode.view &&
+                    puzzleState.nextContext != null
+                ? () => ref
+                    .read(ctrlProvider.notifier)
+                    .loadPuzzle(puzzleState.nextContext!)
+                : null,
+            highlighted: true,
+            label: context.l10n.puzzleContinueTraining,
+            icon: CupertinoIcons.play_arrow_solid,
+          ),
+      ],
     );
   }
 
