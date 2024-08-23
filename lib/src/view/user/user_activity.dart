@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/model/user/user_repository.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/current_locale.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/account/rating_pref_aware.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -18,8 +19,6 @@ import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'user_activity.g.dart';
-
-final _dateFormatter = DateFormat.yMMMd(Intl.getCurrentLocale());
 
 @riverpod
 Future<IList<UserActivity>> _userActivity(
@@ -98,6 +97,8 @@ class UserActivityEntry extends ConsumerWidget {
     final redColor = theme.extension<CustomColors>()?.error;
     final greenColor = theme.extension<CustomColors>()?.good;
 
+    final dateFormatter = ref.withLocale((locale) => DateFormat.yMMMd(locale));
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -109,7 +110,7 @@ class UserActivityEntry extends ConsumerWidget {
             bottom: 4.0,
           ),
           child: Text(
-            _dateFormatter.format(entry.startTime),
+            dateFormatter.format(entry.startTime),
             style: TextStyle(
               color: context.lichessColors.brag,
               fontWeight: FontWeight.bold,

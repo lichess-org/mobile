@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/styles/transparent_image.dart';
+import 'package:lichess_mobile/src/utils/current_locale.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_screen.dart';
@@ -15,8 +16,6 @@ import 'package:lichess_mobile/src/view/broadcast/default_broadcast_image.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
-
-final _dateFormatter = DateFormat.MMMd(Intl.getCurrentLocale()).add_Hm();
 
 /// A screen that displays a paginated list of broadcasts.
 class BroadcastsListScreen extends StatelessWidget {
@@ -221,6 +220,9 @@ class BroadcastGridItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final dateFormatter =
+        ref.withLocale((locale) => DateFormat.yMMMd(locale).add_Hm());
+
     return AdaptiveInkWell(
       borderRadius: BorderRadius.circular(20),
       onTap: () {
@@ -293,7 +295,7 @@ class BroadcastGridItem extends ConsumerWidget {
                           )
                         else if (broadcast.round.startsAt != null)
                           Text(
-                            _dateFormatter.format(broadcast.round.startsAt!),
+                            dateFormatter.format(broadcast.round.startsAt!),
                             style: Theme.of(context)
                                 .textTheme
                                 .labelSmall
