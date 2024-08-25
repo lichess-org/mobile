@@ -92,7 +92,7 @@ class _BodyState extends ConsumerState<_Body> {
 
     if (!broadcasts.hasValue && broadcasts.isLoading) {
       return const Center(
-        child: CircularProgressIndicator(),
+        child: CircularProgressIndicator.adaptive(),
       );
     }
 
