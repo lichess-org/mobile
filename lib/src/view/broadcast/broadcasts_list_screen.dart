@@ -186,7 +186,7 @@ class _BodyState extends ConsumerState<_Body> {
   }
 }
 
-class BroadcastGridItem extends ConsumerWidget {
+class BroadcastGridItem extends StatelessWidget {
   final Broadcast broadcast;
 
   const BroadcastGridItem({required this.broadcast});
@@ -219,110 +219,126 @@ class BroadcastGridItem extends ConsumerWidget {
         );
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final dateFormatter =
-        ref.withLocale((locale) => DateFormat.yMMMd(locale).add_Hm());
-
-    return AdaptiveInkWell(
-      borderRadius: BorderRadius.circular(20),
-      onTap: () {
-        pushPlatformRoute(
-          context,
-          title: context.l10n.broadcastBroadcasts,
-          rootNavigator: true,
-          builder: (context) => BroadcastScreen(broadcast: broadcast),
-        );
-      },
-      child: Container(
-        clipBehavior: Clip.hardEdge,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: LichessColors.grey.withOpacity(0.5),
-              blurRadius: 5,
-              spreadRadius: 1,
-            ),
-          ],
-        ),
-        foregroundDecoration: BoxDecoration(
-          border: (broadcast.isLive)
-              ? Border.all(color: LichessColors.red, width: 2)
-              : Border.all(color: LichessColors.grey),
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Column(
-          children: [
-            if (broadcast.tour.imageUrl != null)
-              AspectRatio(
-                aspectRatio: 2.0,
-                child: FadeInImage.memoryNetwork(
-                  placeholder: transparentImage,
-                  image: broadcast.tour.imageUrl!,
-                ),
-              )
-            else
-              const DefaultBroadcastImage(aspectRatio: 2.0),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        if (!broadcast.isFinished) ...[
-                          Text(
-                            broadcast.round.name,
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelMedium
-                                ?.copyWith(
-                                  color: textShade(context, 0.5),
-                                ),
-                          ),
-                          const SizedBox(width: 4.0),
+  Widget build(BuildContext context) => AdaptiveInkWell(
+        borderRadius: BorderRadius.circular(20),
+        onTap: () {
+          pushPlatformRoute(
+            context,
+            title: context.l10n.broadcastBroadcasts,
+            rootNavigator: true,
+            builder: (context) => BroadcastScreen(broadcast: broadcast),
+          );
+        },
+        child: Container(
+          clipBehavior: Clip.hardEdge,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: LichessColors.grey.withOpacity(0.5),
+                blurRadius: 5,
+                spreadRadius: 1,
+              ),
+            ],
+          ),
+          foregroundDecoration: BoxDecoration(
+            border: (broadcast.isLive)
+                ? Border.all(color: LichessColors.red, width: 2)
+                : Border.all(color: LichessColors.grey),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Column(
+            children: [
+              if (broadcast.tour.imageUrl != null)
+                AspectRatio(
+                  aspectRatio: 2.0,
+                  child: FadeInImage.memoryNetwork(
+                    placeholder: transparentImage,
+                    image: broadcast.tour.imageUrl!,
+                  ),
+                )
+              else
+                const DefaultBroadcastImage(aspectRatio: 2.0),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          if (!broadcast.isFinished) ...[
+                            Text(
+                              broadcast.round.name,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelMedium
+                                  ?.copyWith(
+                                    color: textShade(context, 0.5),
+                                  ),
+                            ),
+                            const SizedBox(width: 4.0),
+                          ],
+                          if (broadcast.isLive)
+                            const Text(
+                              'LIVE',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.red,
+                              ),
+                            )
+                          else if (broadcast.round.startsAt != null)
+                            StartsRoundDate(
+                              startsAt: broadcast.round.startsAt!,
+                            ),
                         ],
-                        if (broadcast.isLive)
-                          const Text(
-                            'LIVE',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.red,
-                            ),
-                          )
-                        else if (broadcast.round.startsAt != null)
-                          Text(
-                            dateFormatter.format(broadcast.round.startsAt!),
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelSmall
-                                ?.copyWith(
-                                  color: textShade(context, 0.5),
-                                ),
-                          ),
-                      ],
-                    ),
-                    const SizedBox(height: 4.0),
-                    Flexible(
-                      child: Text(
-                        broadcast.title,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 4.0),
+                      Flexible(
+                        child: Text(
+                          broadcast.title,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style:
+                              Theme.of(context).textTheme.labelLarge?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
+      );
+}
+
+class StartsRoundDate extends ConsumerWidget {
+  final DateTime startsAt;
+
+  const StartsRoundDate({required this.startsAt});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final dateFormatter =
+        ref.withLocale((locale) => DateFormat.MMMd(locale).add_Hm());
+    final dateFormatterWithYear =
+        ref.withLocale((locale) => DateFormat.yMMMd(locale).add_Hm());
+    final timeBeforeRound = startsAt.difference(DateTime.now());
+
+    return Text(
+      timeBeforeRound.inDays == 0
+          ? 'In ${timeBeforeRound.inHours} hours'
+          : timeBeforeRound.inDays < 365
+              ? dateFormatter.format(startsAt)
+              : dateFormatterWithYear.format(startsAt),
+      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+            color: textShade(context, 0.5),
+          ),
+      overflow: TextOverflow.ellipsis,
     );
   }
 }
