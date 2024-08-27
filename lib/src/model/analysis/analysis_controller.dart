@@ -145,6 +145,7 @@ class AnalysisController extends _$AnalysisController {
       lastMove: lastMove,
       pov: options.orientation,
       contextOpening: options.opening,
+      wikiBooksUrl: _wikiBooksUrl(currentPath),
       isLocalEvaluationAllowed: options.isLocalEvaluationAllowed,
       isLocalEvaluationEnabled: prefs.enableLocalEvaluation,
       displayMode: DisplayMode.moves,
@@ -413,8 +414,9 @@ class AnalysisController extends _$AnalysisController {
         currentPath: path,
         isOnMainline: _root.isOnMainline(path),
         currentNode: AnalysisCurrentNode.fromNode(currentNode),
-        lastMove: currentNode.sanMove.move,
         currentBranchOpening: opening,
+        wikiBooksUrl: _wikiBooksUrl(path),
+        lastMove: currentNode.sanMove.move,
         root: rootView,
       );
     } else {
@@ -423,6 +425,7 @@ class AnalysisController extends _$AnalysisController {
         isOnMainline: _root.isOnMainline(path),
         currentNode: AnalysisCurrentNode.fromNode(currentNode),
         currentBranchOpening: opening,
+        wikiBooksUrl: _wikiBooksUrl(path),
         lastMove: null,
         root: rootView,
       );
@@ -452,6 +455,19 @@ class AnalysisController extends _$AnalysisController {
         );
       }
     }
+  }
+
+  String? _wikiBooksUrl(UciPath path) {
+    if (_root.position.ply > 30) {
+      return null;
+    }
+    final nodes = _root.branchesOn(path);
+    final moves = nodes.map((node) {
+      final move = node.view.sanMove.san;
+      final moveNr = (node.position.ply / 2).ceil();
+      return node.position.ply.isOdd ? '$moveNr._$move' : '$moveNr...$move';
+    });
+    return 'https://en.wikibooks.org/wiki/Chess_Opening_Theory/${moves.join("/")}';
   }
 
   void _startEngineEval() {
@@ -640,6 +656,9 @@ class AnalysisState with _$AnalysisState {
 
     /// The opening of the current branch.
     Opening? currentBranchOpening,
+
+    /// wikibooks.org opening theory page for the current path
+    String? wikiBooksUrl,
 
     /// Optional server analysis to display player stats.
     ({PlayerAnalysis white, PlayerAnalysis black})? playersAnalysis,
