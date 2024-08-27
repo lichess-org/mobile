@@ -331,7 +331,9 @@ class StartsRoundDate extends ConsumerWidget {
 
     return Text(
       timeBeforeRound.inDays == 0
-          ? 'In ${timeBeforeRound.inHours} hours'
+          ? timeBeforeRound.inHours == 0
+              ? 'In ${timeBeforeRound.inMinutes} minutes' // TODO: translate
+              : 'In ${timeBeforeRound.inHours} hours' // TODO: translate
           : timeBeforeRound.inDays < 365
               ? dateFormatter.format(startsAt)
               : dateFormatterWithYear.format(startsAt),
