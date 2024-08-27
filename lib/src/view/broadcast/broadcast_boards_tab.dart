@@ -160,14 +160,14 @@ class _PlayerWidget extends StatelessWidget {
           clock: null,
           federation: null,
         ),
-        gameStatus = '*',
+        gameStatus = null,
         thinkTime = null,
         side = Side.white,
         playingSide = Side.white,
         _displayShimmerPlaceholder = true;
 
   final BroadcastPlayer player;
-  final String gameStatus;
+  final String? gameStatus;
   final Duration? thinkTime;
   final Side side;
   final Side playingSide;
@@ -240,7 +240,7 @@ class _PlayerWidget extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 5),
-              if (gameStatus != '*')
+              if (gameStatus != null && gameStatus != '*')
                 Text(
                   (gameStatus == '½-½')
                       ? '½'
