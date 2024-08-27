@@ -63,7 +63,7 @@ class PuzzleSession extends _$PuzzleSession {
   Future<void> _update(
     PuzzleSessionData Function(PuzzleSessionData d) update,
   ) async {
-    await _store.setString(_storageKey, jsonEncode((update(state)).toJson()));
+    await _store.setString(_storageKey, jsonEncode(update(state).toJson()));
   }
 
   PuzzleSessionData? get _stored {

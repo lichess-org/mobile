@@ -50,12 +50,6 @@ class AuthRepository {
       ),
     );
 
-    if (authResp == null) {
-      throw Exception(
-        'FlutterAppAuth.authorizeAndExchangeCode failed to get token',
-      );
-    }
-
     _log.fine('Got oAuth response $authResp');
 
     final token = authResp.accessToken;

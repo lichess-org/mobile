@@ -86,7 +86,7 @@ class ClientEval with _$ClientEval implements Eval {
     return pvs
         .where((e) => e.moves.isNotEmpty)
         .map((e) => e._firstMoveWithWinningChances(position.turn))
-        .whereNotNull()
+        .nonNulls
         .sorted((a, b) => b.winningChances.compareTo(a.winningChances))
         .toIList();
   }
