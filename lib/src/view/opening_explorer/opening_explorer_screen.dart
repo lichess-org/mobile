@@ -420,8 +420,9 @@ class _OpeningExplorerView extends StatelessWidget {
               ],
             ),
           ),
-          Opacity(
-            opacity: loading ? 0.5 : 1.0,
+          AnimatedOpacity(
+            duration: const Duration(milliseconds: 500),
+            opacity: loading ? 0.4 : 1.0,
             child: Column(
               children: explorerContent,
             ),
