@@ -51,12 +51,13 @@ Future<Widget> buildTestApp(
   required Widget home,
   List<Override>? overrides,
   AuthSessionState? userSession,
+  Map<String, Object>? defaultPreferences,
 }) async {
   await tester.binding.setSurfaceSize(kTestSurfaceSize);
 
   VisibilityDetectorController.instance.updateInterval = Duration.zero;
 
-  SharedPreferences.setMockInitialValues({});
+  SharedPreferences.setMockInitialValues(defaultPreferences ?? {});
 
   final sharedPreferences = await SharedPreferences.getInstance();
 

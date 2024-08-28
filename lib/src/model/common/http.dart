@@ -422,6 +422,45 @@ extension ClientExtension on Client {
     return _readNdJsonList(response, mapper);
   }
 
+  /// Sends an HTTP GET request with the given headers to the given URL and
+  /// returns a Future that completes to the stream of the response as a ND-JSON
+  /// object mapped to T.
+  ///
+  /// The Future will emit a [ClientException] if the response doesn't have a
+  /// success status code or if an object in the response body can't be read
+  /// as ND-JSON.
+  Future<Stream<T>> readNdJsonStream<T>(
+    Uri url, {
+    Map<String, String>? headers,
+    required T Function(Map<String, dynamic>) mapper,
+  }) async {
+    final request = Request('GET', url);
+    if (headers != null) request.headers.addAll(headers);
+    final response = await send(request);
+    if (response.statusCode > 400) {
+      var message = 'Request to $url failed with status ${response.statusCode}';
+      if (response.reasonPhrase != null) {
+        message = '$message: ${response.reasonPhrase}';
+      }
+      throw ServerException(response.statusCode, '$message.', url, null);
+    }
+    try {
+      return response.stream
+          .map(utf8.decode)
+          .where((e) => e.isNotEmpty && e != '\n')
+          .map((e) {
+        final json = jsonDecode(e) as Map<String, dynamic>;
+        return mapper(json);
+      });
+    } catch (e) {
+      _logger.severe('Could not read nd-json object as $T.');
+      throw ClientException(
+        'Could not read nd-json object as $T: $e',
+        url,
+      );
+    }
+  }
+
   /// Sends an HTTP POST request with the given headers and body to the given URL and
   /// returns a Future that completes to the body of the response as a JSON object
   /// mapped to [T].

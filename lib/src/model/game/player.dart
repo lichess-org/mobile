@@ -13,6 +13,7 @@ class Player with _$Player {
 
   const factory Player({
     LightUser? user,
+    String? name,
     int? aiLevel,
     int? rating,
     int? ratingDiff,
@@ -47,6 +48,7 @@ class Player with _$Player {
   /// Returns the name of the player, without title
   String displayName(BuildContext context) =>
       user?.name ??
+      name ??
       (aiLevel != null
           ? context.l10n.aiNameLevelAiLevel(
               'Stockfish',

@@ -1,7 +1,5 @@
 import 'dart:math' as math;
-import 'dart:ui';
 
-import 'package:chessground/chessground.dart';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
@@ -23,7 +21,6 @@ import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
-import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -31,7 +28,9 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_share_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
+import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
@@ -42,9 +41,8 @@ import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:popover/popover.dart';
 
 import '../../utils/share.dart';
+import 'analysis_board.dart';
 import 'analysis_settings.dart';
-import 'analysis_share_screen.dart';
-import 'annotations.dart';
 import 'tree_view.dart';
 
 class AnalysisScreen extends StatelessWidget {
@@ -273,7 +271,7 @@ class _Body extends ConsumerWidget {
                             ),
                             child: Row(
                               children: [
-                                _Board(
+                                AnalysisBoard(
                                   pgn,
                                   options,
                                   boardSize,
@@ -327,7 +325,7 @@ class _Body extends ConsumerWidget {
                               padding: const EdgeInsets.all(
                                 kTabletBoardTableSidePadding,
                               ),
-                              child: _Board(
+                              child: AnalysisBoard(
                                 pgn,
                                 options,
                                 boardSize,
@@ -335,7 +333,12 @@ class _Body extends ConsumerWidget {
                               ),
                             )
                           else
-                            _Board(pgn, options, boardSize, isTablet: isTablet),
+                            AnalysisBoard(
+                              pgn,
+                              options,
+                              boardSize,
+                              isTablet: isTablet,
+                            ),
                           if (showAnalysisSummary)
                             Expanded(child: ServerAnalysisSummary(pgn, options))
                           else
@@ -355,181 +358,6 @@ class _Body extends ConsumerWidget {
         _BottomBar(pgn: pgn, options: options),
       ],
     );
-  }
-}
-
-class _Board extends ConsumerStatefulWidget {
-  const _Board(
-    this.pgn,
-    this.options,
-    this.boardSize, {
-    required this.isTablet,
-  });
-
-  final String pgn;
-  final AnalysisOptions options;
-  final double boardSize;
-  final bool isTablet;
-
-  @override
-  ConsumerState<_Board> createState() => _BoardState();
-}
-
-class _BoardState extends ConsumerState<_Board> {
-  ISet<Shape> userShapes = ISet();
-
-  ISet<Shape> _computeBestMoveShapes(IList<MoveWithWinningChances> moves) {
-    // Scale down all moves with index > 0 based on how much worse their winning chances are compared to the best move
-    // (assume moves are ordered by their winning chances, so index==0 is the best move)
-    double scaleArrowAgainstBestMove(int index) {
-      const minScale = 0.15;
-      const maxScale = 1.0;
-      const winningDiffScaleFactor = 2.5;
-
-      final bestMove = moves[0];
-      final winningDiffComparedToBestMove =
-          bestMove.winningChances - moves[index].winningChances;
-      // Force minimum scale if the best move is significantly better than this move
-      if (winningDiffComparedToBestMove > 0.3) {
-        return minScale;
-      }
-      return clampDouble(
-        math.max(
-          minScale,
-          maxScale - winningDiffScaleFactor * winningDiffComparedToBestMove,
-        ),
-        0,
-        1,
-      );
-    }
-
-    return ISet(
-      moves.mapIndexed(
-        (i, m) {
-          final move = m.move;
-          // Same colors as in the Web UI with a slightly different opacity
-          // The best move has a different color than the other moves
-          final color = Color((i == 0) ? 0x66003088 : 0x664A4A4A);
-          switch (move) {
-            case NormalMove(from: _, to: _, promotion: final promRole):
-              return [
-                Arrow(
-                  color: color,
-                  orig: move.from,
-                  dest: move.to,
-                  scale: scaleArrowAgainstBestMove(i),
-                ),
-                if (promRole != null)
-                  PieceShape(
-                    color: color,
-                    orig: move.to,
-                    role: promRole,
-                  ),
-              ];
-            case DropMove(role: final role, to: _):
-              return [
-                PieceShape(
-                  color: color,
-                  orig: move.to,
-                  role: role,
-                ),
-              ];
-          }
-        },
-      ).expand((e) => e),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final ctrlProvider = analysisControllerProvider(widget.pgn, widget.options);
-    final analysisState = ref.watch(ctrlProvider);
-    final boardPrefs = ref.watch(boardPreferencesProvider);
-    final showBestMoveArrow = ref.watch(
-      analysisPreferencesProvider.select(
-        (value) => value.showBestMoveArrow,
-      ),
-    );
-    final showAnnotationsOnBoard = ref.watch(
-      analysisPreferencesProvider.select((value) => value.showAnnotations),
-    );
-
-    final evalBestMoves = ref.watch(
-      engineEvaluationProvider.select((s) => s.eval?.bestMoves),
-    );
-
-    final currentNode = analysisState.currentNode;
-    final annotation = makeAnnotation(currentNode.nags);
-
-    final bestMoves = evalBestMoves ?? currentNode.eval?.bestMoves;
-
-    final sanMove = currentNode.sanMove;
-
-    final ISet<Shape> bestMoveShapes = showBestMoveArrow &&
-            analysisState.isEngineAvailable &&
-            bestMoves != null
-        ? _computeBestMoveShapes(bestMoves)
-        : ISet();
-
-    return Chessboard(
-      size: widget.boardSize,
-      onMove: (move, {isDrop, isPremove}) =>
-          ref.read(ctrlProvider.notifier).onUserMove(Move.parse(move.uci)!),
-      state: ChessboardState(
-        orientation: analysisState.pov,
-        interactableSide: analysisState.position.isGameOver
-            ? InteractableSide.none
-            : analysisState.position.turn == Side.white
-                ? InteractableSide.white
-                : InteractableSide.black,
-        fen: analysisState.position.fen,
-        isCheck: boardPrefs.boardHighlights && analysisState.position.isCheck,
-        lastMove: analysisState.lastMove as NormalMove?,
-        sideToMove: analysisState.position.turn,
-        validMoves: analysisState.validMoves,
-        shapes: userShapes.union(bestMoveShapes),
-        annotations: showAnnotationsOnBoard &&
-                sanMove != null &&
-                annotation != null
-            ? altCastles.containsKey(sanMove.move.uci)
-                ? IMap({
-                    Move.parse(altCastles[sanMove.move.uci]!)!.to: annotation,
-                  })
-                : IMap({sanMove.move.to: annotation})
-            : null,
-      ),
-      settings: boardPrefs.toBoardSettings().copyWith(
-            borderRadius: widget.isTablet
-                ? const BorderRadius.all(Radius.circular(4.0))
-                : BorderRadius.zero,
-            boxShadow: widget.isTablet ? boardShadows : const <BoxShadow>[],
-            drawShape: DrawShapeOptions(
-              enable: true,
-              onCompleteShape: _onCompleteShape,
-              onClearShapes: _onClearShapes,
-              newShapeColor: boardPrefs.shapeColor.color,
-            ),
-          ),
-    );
-  }
-
-  void _onCompleteShape(Shape shape) {
-    if (userShapes.any((element) => element == shape)) {
-      setState(() {
-        userShapes = userShapes.remove(shape);
-      });
-      return;
-    } else {
-      setState(() {
-        userShapes = userShapes.add(shape);
-      });
-    }
-  }
-
-  void _onClearShapes() {
-    setState(() {
-      userShapes = ISet();
-    });
   }
 }
 
@@ -796,6 +624,19 @@ class _BottomBar extends ConsumerWidget {
                         : Icons.area_chart,
                   ),
                 ),
+              Expanded(
+                child: BottomBarButton(
+                  label: context.l10n.openingExplorer,
+                  onTap: () => pushPlatformRoute(
+                    context,
+                    builder: (_) => OpeningExplorerScreen(
+                      pgn: pgn,
+                      options: options,
+                    ),
+                  ),
+                  icon: Icons.explore,
+                ),
+              ),
               Expanded(
                 child: RepeatButton(
                   onLongPress: canGoBack ? () => _moveBackward(ref) : null,
