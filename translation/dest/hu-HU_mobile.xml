@@ -9,11 +9,11 @@
   <string name="systemColors" comment="The title of the system colors setting. When enabling this, tha app's colors will match those of the operating system.">Rendszerszínek</string>
   <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">Visszajelzés</string>
   <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">OK</string>
-  <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">Haptikus visszajelzés</string>
+  <string name="settingsHapticFeedback" comment="Title used in the settings. When enabled, the device will vibrate when making a move.">Érintésalapú visszajelzés</string>
   <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">Teljes képernyős mód</string>
   <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">A rendszer gombjainak elrejtése játék közben. Kapcsold be, ha zavarnak a rendszer navigációs mozdulatai a képernyő sarkainál. A játszmaképernyőn és a Puzzle Storm képernyőjén működik.</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Jelenleg nem követsz senkit.</string>
-  <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Az összes játszma</string>
+  <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Összes játszma</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Keresési előzmények</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Törlés</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Játékosok %s felhasználónévvel</string>
@@ -37,4 +37,10 @@
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Csatlakozás játszmához</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Mentett lépés törlése</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Hiba történt.</string>
+  <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">Eredmény mutatása</string>
+  <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">Oldj feladványokat kedvenc megnyitásaid kapcsán vagy válassz egy tematikát.</string>
+  <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">Oldd meg a lehető legtöbb feladványt 3 perc alatt.</string>
+  <string name="greeting" comment="A greeting that is shown on the app's home page, e.g. 'Hello, GM Magnus'. %s is substituted with the user's name">Üdv %s!</string>
+  <string name="greetingWithoutName" comment="Greeing that is shown on the app's home page when the user is not logged in.">Üdv</string>
+  <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">Mozdított bábu nagyítása</string>
 </resources>
