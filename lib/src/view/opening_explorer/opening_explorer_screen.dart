@@ -276,7 +276,7 @@ class _OpeningExplorerState extends ConsumerState<_OpeningExplorer> {
                   Shimmer(
                     child: ShimmerLoading(
                       isLoading: true,
-                      child: _MoveTable.loading(
+                      child: OpeningExplorerMoveTable.loading(
                         pgn: widget.pgn,
                         options: widget.options,
                       ),
@@ -300,7 +300,7 @@ class _OpeningExplorerState extends ConsumerState<_OpeningExplorer> {
         }
 
         final explorerContent = [
-          _MoveTable(
+          OpeningExplorerMoveTable(
             moves: openingExplorer.entry.moves,
             whiteWins: openingExplorer.entry.white,
             draws: openingExplorer.entry.draws,
@@ -310,13 +310,13 @@ class _OpeningExplorerState extends ConsumerState<_OpeningExplorer> {
           ),
           if (openingExplorer.entry.topGames != null &&
               openingExplorer.entry.topGames!.isNotEmpty)
-            _GameList(
+            OpeningExplorerGameList(
               title: context.l10n.topGames,
               games: openingExplorer.entry.topGames!,
             ),
           if (openingExplorer.entry.recentGames != null &&
               openingExplorer.entry.recentGames!.isNotEmpty)
-            _GameList(
+            OpeningExplorerGameList(
               title: context.l10n.recentGames,
               games: openingExplorer.entry.recentGames!,
             ),
@@ -343,7 +343,7 @@ class _OpeningExplorerState extends ConsumerState<_OpeningExplorer> {
               Shimmer(
                 child: ShimmerLoading(
                   isLoading: true,
-                  child: _MoveTable.loading(
+                  child: OpeningExplorerMoveTable.loading(
                     pgn: widget.pgn,
                     options: widget.options,
                   ),
@@ -512,8 +512,9 @@ class _IndexingIndicatorState extends State<_IndexingIndicator>
   }
 }
 
-class _MoveTable extends ConsumerWidget {
-  const _MoveTable({
+/// Table of moves for the opening explorer.
+class OpeningExplorerMoveTable extends ConsumerWidget {
+  const OpeningExplorerMoveTable({
     required this.moves,
     required this.whiteWins,
     required this.draws,
@@ -522,7 +523,7 @@ class _MoveTable extends ConsumerWidget {
     required this.options,
   }) : _isLoading = false;
 
-  const _MoveTable.loading({
+  const OpeningExplorerMoveTable.loading({
     required this.pgn,
     required this.options,
   })  : _isLoading = true,
@@ -700,8 +701,9 @@ class _MoveTable extends ConsumerWidget {
   }
 }
 
-class _GameList extends StatelessWidget {
-  const _GameList({
+/// List of games for the opening explorer.
+class OpeningExplorerGameList extends StatelessWidget {
+  const OpeningExplorerGameList({
     required this.title,
     required this.games,
   });
@@ -721,7 +723,7 @@ class _GameList extends StatelessWidget {
           ),
         ),
         ...List.generate(games.length, (int index) {
-          return _GameTile(
+          return OpeningExplorerGameTile(
             game: games.get(index),
             color: index.isEven
                 ? Theme.of(context).colorScheme.surfaceContainerLow
@@ -733,8 +735,9 @@ class _GameList extends StatelessWidget {
   }
 }
 
-class _GameTile extends ConsumerWidget {
-  const _GameTile({
+/// A game tile for the opening explorer.
+class OpeningExplorerGameTile extends ConsumerWidget {
+  const OpeningExplorerGameTile({
     required this.game,
     required this.color,
   });

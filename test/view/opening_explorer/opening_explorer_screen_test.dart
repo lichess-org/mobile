@@ -107,7 +107,7 @@ void main() {
           'e4',
           'd4',
         ];
-        expect(find.byKey(const Key('moves-table')), findsOneWidget);
+        expect(find.byType(OpeningExplorerMoveTable), findsOneWidget);
         for (final move in moves) {
           expect(find.widgetWithText(TableRowInkWell, move), findsOneWidget);
         }
@@ -115,11 +115,11 @@ void main() {
         expect(find.widgetWithText(Container, 'Top games'), findsOneWidget);
         expect(find.widgetWithText(Container, 'Recent games'), findsNothing);
         expect(
-          find.byKey(const Key('game-list')),
+          find.byType(OpeningExplorerGameList),
           findsOneWidget,
         );
         expect(
-          find.byKey(const Key('game-tile')),
+          find.byType(OpeningExplorerGameTile),
           findsNWidgets(2),
         );
 
@@ -156,7 +156,7 @@ void main() {
         final moves = [
           'd4',
         ];
-        expect(find.byKey(const Key('moves-table')), findsOneWidget);
+        expect(find.byType(OpeningExplorerMoveTable), findsOneWidget);
         for (final move in moves) {
           expect(find.widgetWithText(TableRowInkWell, move), findsOneWidget);
         }
@@ -164,11 +164,11 @@ void main() {
         expect(find.widgetWithText(Container, 'Top games'), findsNothing);
         expect(find.widgetWithText(Container, 'Recent games'), findsOneWidget);
         expect(
-          find.byKey(const Key('game-list')),
+          find.byType(OpeningExplorerGameList),
           findsOneWidget,
         );
         expect(
-          find.byKey(const Key('game-tile')),
+          find.byType(OpeningExplorerGameTile),
           findsOneWidget,
         );
 
@@ -205,7 +205,7 @@ void main() {
         final moves = [
           'c4',
         ];
-        expect(find.byKey(const Key('moves-table')), findsOneWidget);
+        expect(find.byType(OpeningExplorerMoveTable), findsOneWidget);
         for (final move in moves) {
           expect(find.widgetWithText(TableRowInkWell, move), findsOneWidget);
         }
@@ -213,11 +213,11 @@ void main() {
         expect(find.widgetWithText(Container, 'Top games'), findsNothing);
         expect(find.widgetWithText(Container, 'Recent games'), findsOneWidget);
         expect(
-          find.byKey(const Key('game-list')),
+          find.byType(OpeningExplorerGameList),
           findsOneWidget,
         );
         expect(
-          find.byKey(const Key('game-tile')),
+          find.byType(OpeningExplorerGameTile),
           findsOneWidget,
         );
 
