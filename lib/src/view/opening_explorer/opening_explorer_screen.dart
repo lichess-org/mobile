@@ -122,6 +122,9 @@ class _Body extends ConsumerWidget {
                               children: [
                                 Expanded(
                                   child: PlatformCard(
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(4.0),
+                                    ),
                                     margin: const EdgeInsets.all(
                                       kTabletBoardTableSidePadding,
                                     ),
@@ -380,12 +383,21 @@ class _OpeningExplorerView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isLandscape =
+        MediaQuery.orientationOf(context) == Orientation.landscape;
+
     return Column(
       mainAxisSize: MainAxisSize.max,
       children: [
         Container(
           padding: _kTableRowPadding,
-          color: Theme.of(context).colorScheme.primaryContainer,
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.primaryContainer,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(isLandscape ? 4.0 : 0),
+              topRight: Radius.circular(isLandscape ? 4.0 : 0),
+            ),
+          ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
