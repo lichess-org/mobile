@@ -287,12 +287,17 @@ class _OpeningExplorerState extends ConsumerState<_OpeningExplorer> {
         }
         if (openingExplorer.entry.moves.isEmpty) {
           lastExplorerWidgets = null;
-          return const Column(
-            children: [
-              Expanded(
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Text('No game found'),
+          return _OpeningExplorerView(
+            pgn: widget.pgn,
+            options: widget.options,
+            opening: opening,
+            openingExplorer: openingExplorer,
+            wikiBooksUrl: analysisState.wikiBooksUrl,
+            explorerContent: [
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(context.l10n.noGameFound),
                 ),
               ),
             ],
@@ -393,42 +398,52 @@ class _OpeningExplorerView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.vertical,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 6.0),
-            color: Theme.of(context).colorScheme.primaryContainer,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 6.0),
+          color: Theme.of(context).colorScheme.primaryContainer,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              if (opening != null)
+                Expanded(
+                  flex: 75,
+                  child: _Opening(
+                    opening: opening!,
+                    wikiBooksUrl: wikiBooksUrl,
+                  ),
+                ),
+              if (openingExplorer?.isIndexing == true)
+                Expanded(
+                  flex: 25,
+                  child: _IndexingIndicator(),
+                ),
+            ],
+          ),
+        ),
+        Expanded(
+          child: Center(
+            child: Stack(
               children: [
-                if (opening != null)
-                  Expanded(
-                    flex: 75,
-                    child: _Opening(
-                      opening: opening!,
-                      wikiBooksUrl: wikiBooksUrl,
+                ListView(children: explorerContent),
+                Positioned.fill(
+                  child: IgnorePointer(
+                    ignoring: !loading,
+                    child: AnimatedOpacity(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.fastOutSlowIn,
+                      opacity: loading ? 0.5 : 0.0,
+                      child: const ColoredBox(color: Colors.white),
                     ),
                   ),
-                if (openingExplorer?.isIndexing == true)
-                  Expanded(
-                    flex: 25,
-                    child: _IndexingIndicator(),
-                  ),
+                ),
               ],
             ),
           ),
-          AnimatedOpacity(
-            duration: const Duration(milliseconds: 500),
-            opacity: loading ? 0.4 : 1.0,
-            child: Column(
-              children: explorerContent,
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
