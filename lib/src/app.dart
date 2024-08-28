@@ -171,18 +171,12 @@ class _AppState extends ConsumerState<Application> {
                     brightness: brightness,
                   );
 
-        final cupertinoColorScheme = ColorScheme.fromSeed(
-          seedColor: boardTheme.colors.darkSquare,
-          brightness: brightness,
-          dynamicSchemeVariant: DynamicSchemeVariant.fidelity,
-        );
-
         final cupertinoThemeData = CupertinoThemeData(
-          primaryColor: cupertinoColorScheme.primary,
-          primaryContrastingColor: cupertinoColorScheme.onPrimary,
+          primaryColor: colorScheme.primary,
+          primaryContrastingColor: colorScheme.onPrimary,
           brightness: brightness,
           textTheme: CupertinoTheme.of(context).textTheme.copyWith(
-                primaryColor: cupertinoColorScheme.primary,
+                primaryColor: colorScheme.primary,
                 textStyle: CupertinoTheme.of(context)
                     .textTheme
                     .textStyle
@@ -220,11 +214,7 @@ class _AppState extends ConsumerState<Application> {
                   : null,
             ),
             extensions: [
-              lichessCustomColors.harmonized(
-                Theme.of(context).platform == TargetPlatform.iOS
-                    ? cupertinoColorScheme
-                    : colorScheme,
-              ),
+              lichessCustomColors.harmonized(colorScheme),
             ],
           ),
           themeMode: generalPrefs.themeMode,
