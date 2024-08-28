@@ -210,8 +210,8 @@ class LichessDbPrefState with _$LichessDbPrefState {
     'All time': earliestDate,
   };
   static final defaults = LichessDbPrefState(
-    speeds: kAvailableSpeeds,
-    ratings: kAvailableRatings,
+    speeds: kAvailableSpeeds.remove(Perf.ultraBullet),
+    ratings: kAvailableRatings.remove(400),
     since: earliestDate,
   );
 

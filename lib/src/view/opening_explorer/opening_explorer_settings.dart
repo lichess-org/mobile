@@ -227,12 +227,6 @@ class OpeningExplorerSettings extends ConsumerWidget {
         controller: scrollController,
         children: [
           PlatformListTile(
-            title:
-                Text(context.l10n.settingsSettings, style: Styles.sectionTitle),
-            subtitle: const SizedBox.shrink(),
-          ),
-          const SizedBox(height: 8.0),
-          PlatformListTile(
             title: Text(context.l10n.database),
             subtitle: Wrap(
               spacing: 5,

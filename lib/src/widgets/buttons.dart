@@ -179,14 +179,11 @@ class AppBarIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Theme.of(context).platform == TargetPlatform.iOS
-        ? IconTheme(
-            data: const IconThemeData(size: 26.0),
-            child: CupertinoIconButton(
-              padding: EdgeInsets.zero,
-              semanticsLabel: semanticsLabel,
-              onPressed: onPressed,
-              icon: icon,
-            ),
+        ? CupertinoIconButton(
+            padding: EdgeInsets.zero,
+            semanticsLabel: semanticsLabel,
+            onPressed: onPressed,
+            icon: icon,
           )
         : IconButton(
             tooltip: semanticsLabel,

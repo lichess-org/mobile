@@ -66,7 +66,7 @@ class OpeningExplorerScreen extends StatelessWidget {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         backgroundColor: Styles.cupertinoScaffoldColor.resolveFrom(context),
-        border: null,
+        padding: Styles.cupertinoAppBarTrailingWidgetPadding,
         middle: Text(context.l10n.openingExplorer),
         trailing: AppBarIconButton(
           onPressed: () => showAdaptiveBottomSheet<void>(
@@ -207,6 +207,8 @@ class _OpeningExplorer extends ConsumerStatefulWidget {
 class _OpeningExplorerState extends ConsumerState<_OpeningExplorer> {
   final Map<OpeningExplorerCacheKey, OpeningExplorerEntry> cache = {};
 
+  List<Widget>? _cachedExplorerContent;
+
   @override
   Widget build(BuildContext context) {
     final analysisState =
@@ -266,6 +268,7 @@ class _OpeningExplorerState extends ConsumerState<_OpeningExplorer> {
           );
         }
         if (openingExplorer.entry.moves.isEmpty) {
+          _cachedExplorerContent = null;
           return const Column(
             children: [
               Expanded(
@@ -277,65 +280,52 @@ class _OpeningExplorerState extends ConsumerState<_OpeningExplorer> {
             ],
           );
         }
-        return Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6.0),
-                      color: Theme.of(context).colorScheme.primaryContainer,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          if (opening != null)
-                            Expanded(
-                              flex: 75,
-                              child: _Opening(
-                                opening: opening,
-                                wikiBooksUrl: analysisState.wikiBooksUrl,
-                              ),
-                            ),
-                          if (openingExplorer.isIndexing)
-                            Expanded(
-                              flex: 25,
-                              child: _IndexingIndicator(),
-                            ),
-                        ],
-                      ),
-                    ),
-                    _MoveTable(
-                      moves: openingExplorer.entry.moves,
-                      whiteWins: openingExplorer.entry.white,
-                      draws: openingExplorer.entry.draws,
-                      blackWins: openingExplorer.entry.black,
-                      pgn: widget.pgn,
-                      options: widget.options,
-                    ),
-                    if (openingExplorer.entry.topGames != null &&
-                        openingExplorer.entry.topGames!.isNotEmpty)
-                      _GameList(
-                        title: context.l10n.topGames,
-                        games: openingExplorer.entry.topGames!,
-                      ),
-                    if (openingExplorer.entry.recentGames != null &&
-                        openingExplorer.entry.recentGames!.isNotEmpty)
-                      _GameList(
-                        title: context.l10n.recentGames,
-                        games: openingExplorer.entry.recentGames!,
-                      ),
-                  ],
-                ),
-              ),
+
+        final explorerContent = [
+          _MoveTable(
+            moves: openingExplorer.entry.moves,
+            whiteWins: openingExplorer.entry.white,
+            draws: openingExplorer.entry.draws,
+            blackWins: openingExplorer.entry.black,
+            pgn: widget.pgn,
+            options: widget.options,
+          ),
+          if (openingExplorer.entry.topGames != null &&
+              openingExplorer.entry.topGames!.isNotEmpty)
+            _GameList(
+              title: context.l10n.topGames,
+              games: openingExplorer.entry.topGames!,
             ),
-          ],
+          if (openingExplorer.entry.recentGames != null &&
+              openingExplorer.entry.recentGames!.isNotEmpty)
+            _GameList(
+              title: context.l10n.recentGames,
+              games: openingExplorer.entry.recentGames!,
+            ),
+        ];
+
+        _cachedExplorerContent = explorerContent;
+
+        return _OpeningExplorerContent(
+          pgn: widget.pgn,
+          options: widget.options,
+          opening: opening,
+          openingExplorer: openingExplorer,
+          wikiBooksUrl: analysisState.wikiBooksUrl,
+          explorerContent: explorerContent,
         );
       },
-      loading: () => const Center(
-        child: CircularProgressIndicator(),
+      loading: () => _OpeningExplorerContent.loading(
+        pgn: widget.pgn,
+        options: widget.options,
+        opening: opening,
+        wikiBooksUrl: analysisState.wikiBooksUrl,
+        explorerContent: _cachedExplorerContent ??
+            const [
+              Center(
+                child: CircularProgressIndicator.adaptive(),
+              ),
+            ],
       ),
       error: (e, s) {
         debugPrint(
@@ -345,6 +335,76 @@ class _OpeningExplorerState extends ConsumerState<_OpeningExplorer> {
           child: Text(e.toString()),
         );
       },
+    );
+  }
+}
+
+class _OpeningExplorerContent extends StatelessWidget {
+  const _OpeningExplorerContent({
+    required this.pgn,
+    required this.options,
+    required this.opening,
+    required this.openingExplorer,
+    required this.wikiBooksUrl,
+    required this.explorerContent,
+  }) : loading = false;
+
+  const _OpeningExplorerContent.loading({
+    required this.pgn,
+    required this.options,
+    required this.opening,
+    required this.wikiBooksUrl,
+    required this.explorerContent,
+  })  : loading = true,
+        openingExplorer = null;
+
+  final String pgn;
+  final AnalysisOptions options;
+  final Opening? opening;
+  final ({OpeningExplorerEntry entry, bool isIndexing})? openingExplorer;
+  final String? wikiBooksUrl;
+  final List<Widget> explorerContent;
+  final bool loading;
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 6.0).add(
+              const EdgeInsets.only(top: 6.0),
+            ),
+            color: Theme.of(context).colorScheme.primaryContainer,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                if (opening != null)
+                  Expanded(
+                    flex: 75,
+                    child: _Opening(
+                      opening: opening!,
+                      wikiBooksUrl: wikiBooksUrl,
+                    ),
+                  ),
+                if (openingExplorer?.isIndexing == true)
+                  Expanded(
+                    flex: 25,
+                    child: _IndexingIndicator(),
+                  ),
+              ],
+            ),
+          ),
+          Opacity(
+            opacity: loading ? 0.5 : 1.0,
+            child: Column(
+              children: explorerContent,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -455,7 +515,6 @@ class _MoveTable extends ConsumerWidget {
     final ctrlProvider = analysisControllerProvider(pgn, options);
 
     return Table(
-      key: const Key('moves-table'),
       columnWidths: const {
         0: FractionColumnWidth(0.15),
         1: FractionColumnWidth(0.35),
@@ -571,16 +630,12 @@ class _GameList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      key: const Key('game-list'),
       children: [
         Container(
-          key: const Key('game-list-title'),
           padding: const EdgeInsets.all(6.0),
           color: Theme.of(context).colorScheme.primaryContainer,
           child: Row(
-            children: [
-              Text(title),
-            ],
+            children: [Text(title)],
           ),
         ),
         ...List.generate(games.length, (int index) {
@@ -611,7 +666,6 @@ class _GameTile extends ConsumerWidget {
     const paddingResultBox = EdgeInsets.all(5);
 
     return Container(
-      key: const Key('game-tile'),
       padding: const EdgeInsets.all(6.0),
       color: color,
       child: AdaptiveInkWell(
@@ -631,83 +685,84 @@ class _GameTile extends ConsumerWidget {
           }
         },
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(game.white.rating.toString()),
+                Text(game.black.rating.toString()),
+              ],
+            ),
+            const SizedBox(width: 10),
             Expanded(
-              flex: 6,
-              child: Row(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(game.white.rating.toString()),
-                      Text(game.black.rating.toString()),
-                    ],
-                  ),
-                  const SizedBox(width: 10),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(game.white.name),
-                      Text(game.black.name),
-                    ],
-                  ),
+                  Text(game.white.name, overflow: TextOverflow.ellipsis),
+                  Text(game.black.name, overflow: TextOverflow.ellipsis),
                 ],
               ),
             ),
-            Expanded(
-              flex: 4,
-              child: Row(
-                children: [
-                  if (game.winner == 'white')
-                    Container(
-                      width: widthResultBox,
-                      padding: paddingResultBox,
+            Row(
+              children: [
+                if (game.winner == 'white')
+                  Container(
+                    width: widthResultBox,
+                    padding: paddingResultBox,
+                    decoration: BoxDecoration(
                       color: Colors.white,
-                      child: const Text(
-                        '1-0',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.black,
-                        ),
-                      ),
-                    )
-                  else if (game.winner == 'black')
-                    Container(
-                      width: widthResultBox,
-                      padding: paddingResultBox,
-                      color: Colors.black,
-                      child: const Text(
-                        '0-1',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                    )
-                  else
-                    Container(
-                      width: widthResultBox,
-                      padding: paddingResultBox,
-                      color: Colors.grey,
-                      child: const Text(
-                        '½-½',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: const Text(
+                      '1-0',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.black,
                       ),
                     ),
-                  if (game.month != null) ...[
-                    const SizedBox(width: 10.0),
-                    Text(game.month!),
-                  ],
-                  if (game.speed != null) ...[
-                    const SizedBox(width: 10.0),
-                    Icon(game.speed!.icon),
-                  ],
+                  )
+                else if (game.winner == 'black')
+                  Container(
+                    width: widthResultBox,
+                    padding: paddingResultBox,
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: const Text(
+                      '0-1',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  )
+                else
+                  Container(
+                    width: widthResultBox,
+                    padding: paddingResultBox,
+                    decoration: BoxDecoration(
+                      color: Colors.grey,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: const Text(
+                      '½-½',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                if (game.month != null) ...[
+                  const SizedBox(width: 10.0),
+                  Text(game.month!),
                 ],
-              ),
+                if (game.speed != null) ...[
+                  const SizedBox(width: 10.0),
+                  Icon(game.speed!.icon, size: 20),
+                ],
+              ],
             ),
           ],
         ),
