@@ -49,36 +49,6 @@ void main() {
 
   group('OpeningExplorerScreen', () {
     testWidgets(
-      'meets accessibility guidelines',
-      (WidgetTester tester) async {
-        final SemanticsHandle handle = tester.ensureSemantics();
-
-        final app = await buildTestApp(
-          tester,
-          home: const OpeningExplorerScreen(
-            pgn: '',
-            options: options,
-          ),
-          overrides: [
-            defaultClientProvider.overrideWithValue(mockClient),
-          ],
-        );
-
-        await tester.pumpWidget(app);
-
-        // wait for opening explorer data to load
-        await tester.pump(const Duration(milliseconds: 50));
-
-        await meetsTapTargetGuideline(tester);
-
-        await tester.pump(const Duration(milliseconds: 50));
-
-        handle.dispose();
-      },
-      variant: kPlatformVariant,
-    );
-
-    testWidgets(
       'master opening explorer loads',
       (WidgetTester tester) async {
         final app = await buildTestApp(

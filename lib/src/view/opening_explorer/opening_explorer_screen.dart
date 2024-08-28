@@ -27,6 +27,13 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'opening_explorer_settings.dart';
 
+const _kTableRowVerticalPadding = 10.0;
+const _kTableRowHorizontalPadding = 8.0;
+const _kTableRowPadding = EdgeInsets.symmetric(
+  horizontal: _kTableRowHorizontalPadding,
+  vertical: _kTableRowVerticalPadding,
+);
+
 class OpeningExplorerScreen extends StatelessWidget {
   const OpeningExplorerScreen({required this.pgn, required this.options});
 
@@ -377,7 +384,7 @@ class _OpeningExplorerView extends StatelessWidget {
       mainAxisSize: MainAxisSize.max,
       children: [
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 6.0),
+          padding: _kTableRowPadding,
           color: Theme.of(context).colorScheme.primaryContainer,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -535,7 +542,6 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    const rowPadding = EdgeInsets.all(6.0);
     const columnWidths = {
       0: FractionColumnWidth(0.15),
       1: FractionColumnWidth(0.35),
@@ -550,7 +556,7 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
           (int index) => TableRow(
             children: [
               Padding(
-                padding: rowPadding,
+                padding: _kTableRowPadding,
                 child: Container(
                   height: 20,
                   width: double.infinity,
@@ -561,7 +567,7 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
                 ),
               ),
               Padding(
-                padding: rowPadding,
+                padding: _kTableRowPadding,
                 child: Container(
                   height: 20,
                   width: double.infinity,
@@ -572,7 +578,7 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
                 ),
               ),
               Padding(
-                padding: rowPadding,
+                padding: _kTableRowPadding,
                 child: Container(
                   height: 20,
                   width: double.infinity,
@@ -591,6 +597,8 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
     final games = whiteWins + draws + blackWins;
     final ctrlProvider = analysisControllerProvider(pgn, options);
 
+    const topPadding = EdgeInsets.only(top: _kTableRowVerticalPadding);
+
     return Table(
       columnWidths: columnWidths,
       children: [
@@ -600,15 +608,15 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
           ),
           children: [
             Padding(
-              padding: rowPadding.subtract(const EdgeInsets.only(top: 6.0)),
+              padding: _kTableRowPadding.subtract(topPadding),
               child: Text(context.l10n.move),
             ),
             Padding(
-              padding: rowPadding.subtract(const EdgeInsets.only(top: 6.0)),
+              padding: _kTableRowPadding.subtract(topPadding),
               child: Text(context.l10n.games),
             ),
             Padding(
-              padding: rowPadding.subtract(const EdgeInsets.only(top: 6.0)),
+              padding: _kTableRowPadding.subtract(topPadding),
               child: Text(context.l10n.whiteDrawBlack),
             ),
           ],
@@ -630,7 +638,7 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
                       .read(ctrlProvider.notifier)
                       .onUserMove(Move.parse(move.uci)!),
                   child: Padding(
-                    padding: rowPadding,
+                    padding: _kTableRowPadding,
                     child: Text(move.san),
                   ),
                 ),
@@ -639,7 +647,7 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
                       .read(ctrlProvider.notifier)
                       .onUserMove(Move.parse(move.uci)!),
                   child: Padding(
-                    padding: rowPadding,
+                    padding: _kTableRowPadding,
                     child: Text('${formatNum(move.games)} ($percentGames%)'),
                   ),
                 ),
@@ -648,7 +656,7 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
                       .read(ctrlProvider.notifier)
                       .onUserMove(Move.parse(move.uci)!),
                   child: Padding(
-                    padding: rowPadding,
+                    padding: _kTableRowPadding,
                     child: _WinPercentageChart(
                       whiteWins: move.white,
                       draws: move.draws,
@@ -668,16 +676,16 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
           ),
           children: [
             Container(
-              padding: rowPadding,
+              padding: _kTableRowPadding,
               alignment: Alignment.centerLeft,
               child: const Icon(Icons.functions),
             ),
             Padding(
-              padding: rowPadding,
+              padding: _kTableRowPadding,
               child: Text('${formatNum(games)} (100%)'),
             ),
             Padding(
-              padding: rowPadding,
+              padding: _kTableRowPadding,
               child: _WinPercentageChart(
                 whiteWins: whiteWins,
                 draws: draws,
@@ -706,7 +714,7 @@ class OpeningExplorerGameList extends StatelessWidget {
     return Column(
       children: [
         Container(
-          padding: const EdgeInsets.all(6.0),
+          padding: _kTableRowPadding,
           color: Theme.of(context).colorScheme.primaryContainer,
           child: Row(
             children: [Text(title)],
@@ -741,7 +749,7 @@ class OpeningExplorerGameTile extends ConsumerWidget {
     const paddingResultBox = EdgeInsets.all(5);
 
     return Container(
-      padding: const EdgeInsets.all(6.0),
+      padding: _kTableRowPadding,
       color: color,
       child: AdaptiveInkWell(
         onTap: () async {
