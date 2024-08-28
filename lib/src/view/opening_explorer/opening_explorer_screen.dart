@@ -22,6 +22,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'opening_explorer_settings.dart';
@@ -207,7 +208,9 @@ class _OpeningExplorer extends ConsumerStatefulWidget {
 class _OpeningExplorerState extends ConsumerState<_OpeningExplorer> {
   final Map<OpeningExplorerCacheKey, OpeningExplorerEntry> cache = {};
 
-  List<Widget>? _cachedExplorerContent;
+  /// Last explorer content that was successfully loaded. This is used to
+  /// display a loading indicator while the new content is being fetched.
+  List<Widget>? lastExplorerWidgets;
 
   @override
   Widget build(BuildContext context) {
@@ -263,12 +266,27 @@ class _OpeningExplorerState extends ConsumerState<_OpeningExplorer> {
     return openingExplorerAsync.when(
       data: (openingExplorer) {
         if (openingExplorer == null) {
-          return const Center(
-            child: CircularProgressIndicator(),
+          return _OpeningExplorerView.loading(
+            pgn: widget.pgn,
+            options: widget.options,
+            opening: opening,
+            wikiBooksUrl: analysisState.wikiBooksUrl,
+            explorerContent: lastExplorerWidgets ??
+                [
+                  Shimmer(
+                    child: ShimmerLoading(
+                      isLoading: true,
+                      child: _MoveTable.loading(
+                        pgn: widget.pgn,
+                        options: widget.options,
+                      ),
+                    ),
+                  ),
+                ],
           );
         }
         if (openingExplorer.entry.moves.isEmpty) {
-          _cachedExplorerContent = null;
+          lastExplorerWidgets = null;
           return const Column(
             children: [
               Expanded(
@@ -304,9 +322,9 @@ class _OpeningExplorerState extends ConsumerState<_OpeningExplorer> {
             ),
         ];
 
-        _cachedExplorerContent = explorerContent;
+        lastExplorerWidgets = explorerContent;
 
-        return _OpeningExplorerContent(
+        return _OpeningExplorerView(
           pgn: widget.pgn,
           options: widget.options,
           opening: opening,
@@ -315,15 +333,21 @@ class _OpeningExplorerState extends ConsumerState<_OpeningExplorer> {
           explorerContent: explorerContent,
         );
       },
-      loading: () => _OpeningExplorerContent.loading(
+      loading: () => _OpeningExplorerView.loading(
         pgn: widget.pgn,
         options: widget.options,
         opening: opening,
         wikiBooksUrl: analysisState.wikiBooksUrl,
-        explorerContent: _cachedExplorerContent ??
-            const [
-              Center(
-                child: CircularProgressIndicator.adaptive(),
+        explorerContent: lastExplorerWidgets ??
+            [
+              Shimmer(
+                child: ShimmerLoading(
+                  isLoading: true,
+                  child: _MoveTable.loading(
+                    pgn: widget.pgn,
+                    options: widget.options,
+                  ),
+                ),
               ),
             ],
       ),
@@ -339,8 +363,9 @@ class _OpeningExplorerState extends ConsumerState<_OpeningExplorer> {
   }
 }
 
-class _OpeningExplorerContent extends StatelessWidget {
-  const _OpeningExplorerContent({
+/// The opening header and the opening explorer move table.
+class _OpeningExplorerView extends StatelessWidget {
+  const _OpeningExplorerView({
     required this.pgn,
     required this.options,
     required this.opening,
@@ -349,7 +374,7 @@ class _OpeningExplorerContent extends StatelessWidget {
     required this.explorerContent,
   }) : loading = false;
 
-  const _OpeningExplorerContent.loading({
+  const _OpeningExplorerView.loading({
     required this.pgn,
     required this.options,
     required this.opening,
@@ -374,9 +399,7 @@ class _OpeningExplorerContent extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 6.0).add(
-              const EdgeInsets.only(top: 6.0),
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 6.0),
             color: Theme.of(context).colorScheme.primaryContainer,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -496,7 +519,16 @@ class _MoveTable extends ConsumerWidget {
     required this.blackWins,
     required this.pgn,
     required this.options,
-  });
+  }) : _isLoading = false;
+
+  const _MoveTable.loading({
+    required this.pgn,
+    required this.options,
+  })  : _isLoading = true,
+        moves = const IListConst([]),
+        whiteWins = 0,
+        draws = 0,
+        blackWins = 0;
 
   final IList<OpeningMove> moves;
   final int whiteWins;
@@ -505,21 +537,70 @@ class _MoveTable extends ConsumerWidget {
   final String pgn;
   final AnalysisOptions options;
 
+  final bool _isLoading;
+
   String formatNum(int num) => NumberFormat.decimalPatternDigits().format(num);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     const rowPadding = EdgeInsets.all(6.0);
-    final games = whiteWins + draws + blackWins;
+    const columnWidths = {
+      0: FractionColumnWidth(0.15),
+      1: FractionColumnWidth(0.35),
+      2: FractionColumnWidth(0.50),
+    };
 
+    if (_isLoading) {
+      return Table(
+        columnWidths: columnWidths,
+        children: List.generate(
+          10,
+          (int index) => TableRow(
+            children: [
+              Padding(
+                padding: rowPadding,
+                child: Container(
+                  height: 20,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: rowPadding,
+                child: Container(
+                  height: 20,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: rowPadding,
+                child: Container(
+                  height: 20,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    final games = whiteWins + draws + blackWins;
     final ctrlProvider = analysisControllerProvider(pgn, options);
 
     return Table(
-      columnWidths: const {
-        0: FractionColumnWidth(0.15),
-        1: FractionColumnWidth(0.35),
-        2: FractionColumnWidth(0.50),
-      },
+      columnWidths: columnWidths,
       children: [
         TableRow(
           decoration: BoxDecoration(
@@ -527,15 +608,15 @@ class _MoveTable extends ConsumerWidget {
           ),
           children: [
             Padding(
-              padding: rowPadding,
+              padding: rowPadding.subtract(const EdgeInsets.only(top: 6.0)),
               child: Text(context.l10n.move),
             ),
             Padding(
-              padding: rowPadding,
+              padding: rowPadding.subtract(const EdgeInsets.only(top: 6.0)),
               child: Text(context.l10n.games),
             ),
             Padding(
-              padding: rowPadding,
+              padding: rowPadding.subtract(const EdgeInsets.only(top: 6.0)),
               child: Text(context.l10n.whiteDrawBlack),
             ),
           ],
