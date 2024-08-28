@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer_preferences.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/user/search_screen.dart';
@@ -219,10 +218,10 @@ class OpeningExplorerSettings extends ConsumerWidget {
     ];
 
     return DraggableScrollableSheet(
-      initialChildSize: .85,
+      initialChildSize: .5,
       expand: false,
       snap: true,
-      snapSizes: const [.85],
+      snapSizes: const [.5, .75],
       builder: (context, scrollController) => ListView(
         controller: scrollController,
         children: [

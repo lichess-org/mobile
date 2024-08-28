@@ -45,19 +45,6 @@ class OpeningExplorerScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(context.l10n.openingExplorer),
-        actions: [
-          AppBarIconButton(
-            onPressed: () => showAdaptiveBottomSheet<void>(
-              context: context,
-              isScrollControlled: true,
-              showDragHandle: true,
-              isDismissible: true,
-              builder: (_) => OpeningExplorerSettings(pgn, options),
-            ),
-            semanticsLabel: context.l10n.settingsSettings,
-            icon: const Icon(Icons.settings),
-          ),
-        ],
       ),
       body: _Body(pgn: pgn, options: options),
     );
@@ -67,19 +54,7 @@ class OpeningExplorerScreen extends StatelessWidget {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         backgroundColor: Styles.cupertinoScaffoldColor.resolveFrom(context),
-        padding: Styles.cupertinoAppBarTrailingWidgetPadding,
         middle: Text(context.l10n.openingExplorer),
-        trailing: AppBarIconButton(
-          onPressed: () => showAdaptiveBottomSheet<void>(
-            context: context,
-            isScrollControlled: true,
-            showDragHandle: true,
-            isDismissible: true,
-            builder: (_) => OpeningExplorerSettings(pgn, options),
-          ),
-          semanticsLabel: context.l10n.settingsSettings,
-          icon: const Icon(Icons.settings),
-        ),
       ),
       child: _Body(pgn: pgn, options: options),
     );
@@ -946,11 +921,19 @@ class _BottomBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final db = ref
+        .watch(openingExplorerPreferencesProvider.select((value) => value.db));
     final ctrlProvider = analysisControllerProvider(pgn, options);
     final canGoBack =
         ref.watch(ctrlProvider.select((value) => value.canGoBack));
     final canGoNext =
         ref.watch(ctrlProvider.select((value) => value.canGoNext));
+
+    final dbLabel = switch (db) {
+      OpeningDatabase.master => 'Masters',
+      OpeningDatabase.lichess => 'Lichess',
+      OpeningDatabase.player => context.l10n.player,
+    };
 
     return Container(
       color: Theme.of(context).platform == TargetPlatform.iOS
@@ -965,7 +948,23 @@ class _BottomBar extends ConsumerWidget {
             children: [
               Expanded(
                 child: BottomBarButton(
-                  label: context.l10n.flipBoard,
+                  label: dbLabel,
+                  showLabel: true,
+                  onTap: () => showAdaptiveBottomSheet<void>(
+                    context: context,
+                    isScrollControlled: true,
+                    showDragHandle: true,
+                    isDismissible: true,
+                    builder: (_) => OpeningExplorerSettings(pgn, options),
+                  ),
+                  icon: Icons.tune,
+                ),
+              ),
+              Expanded(
+                child: BottomBarButton(
+                  label: 'Flip',
+                  tooltip: context.l10n.flipBoard,
+                  showLabel: true,
                   onTap: () => ref.read(ctrlProvider.notifier).toggleBoard(),
                   icon: CupertinoIcons.arrow_2_squarepath,
                 ),
@@ -974,9 +973,9 @@ class _BottomBar extends ConsumerWidget {
                 child: RepeatButton(
                   onLongPress: canGoBack ? () => _moveBackward(ref) : null,
                   child: BottomBarButton(
-                    key: const ValueKey('goto-previous'),
                     onTap: canGoBack ? () => _moveBackward(ref) : null,
                     label: 'Previous',
+                    showLabel: true,
                     icon: CupertinoIcons.chevron_back,
                     showTooltip: false,
                   ),
@@ -986,9 +985,9 @@ class _BottomBar extends ConsumerWidget {
                 child: RepeatButton(
                   onLongPress: canGoNext ? () => _moveForward(ref) : null,
                   child: BottomBarButton(
-                    key: const ValueKey('goto-next'),
                     icon: CupertinoIcons.chevron_forward,
-                    label: context.l10n.next,
+                    label: 'Next',
+                    showLabel: true,
                     onTap: canGoNext ? () => _moveForward(ref) : null,
                     showTooltip: false,
                   ),
