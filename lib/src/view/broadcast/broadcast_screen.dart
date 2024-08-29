@@ -1,12 +1,15 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_boards_tab.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_overview_tab.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
 class BroadcastScreen extends StatelessWidget {
@@ -19,28 +22,23 @@ class BroadcastScreen extends StatelessWidget {
     return PlatformWidget(androidBuilder: _buildAndroid, iosBuilder: _buildIos);
   }
 
-  Widget _buildIos(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(),
-      child: _CupertinoBody(broadcast: broadcast),
-    );
-  }
+  Widget _buildAndroid(BuildContext context) =>
+      _AndroidScreen(broadcast: broadcast);
 
-  Widget _buildAndroid(BuildContext context) {
-    return _AndroidBody(broadcast: broadcast);
-  }
+  Widget _buildIos(BuildContext context) =>
+      _CupertinoScreen(broadcast: broadcast);
 }
 
-class _AndroidBody extends StatefulWidget {
+class _AndroidScreen extends StatefulWidget {
   final Broadcast broadcast;
 
-  const _AndroidBody({required this.broadcast});
+  const _AndroidScreen({required this.broadcast});
 
   @override
-  State<_AndroidBody> createState() => _AndroidBodyState();
+  State<_AndroidScreen> createState() => _AndroidScreenState();
 }
 
-class _AndroidBodyState extends State<_AndroidBody>
+class _AndroidScreenState extends State<_AndroidScreen>
     with SingleTickerProviderStateMixin {
   late final TabController _tabController;
   late BroadcastTournamentId _selectedTournamentId;
@@ -93,7 +91,7 @@ class _AndroidBodyState extends State<_AndroidBody>
         ],
       ),
       bottomNavigationBar: BottomAppBar(
-        child: TournamentAndRoundDropdowns(
+        child: _AndroidTournamentAndRoundSelector(
           tournamentId: _selectedTournamentId,
           setTournamentId: setTournamentId,
           setRoundId: setRoundId,
@@ -103,18 +101,18 @@ class _AndroidBodyState extends State<_AndroidBody>
   }
 }
 
-class _CupertinoBody extends StatefulWidget {
+class _CupertinoScreen extends StatefulWidget {
   final Broadcast broadcast;
 
-  const _CupertinoBody({required this.broadcast});
+  const _CupertinoScreen({required this.broadcast});
 
   @override
-  _CupertinoBodyState createState() => _CupertinoBodyState();
+  _CupertinoScreenState createState() => _CupertinoScreenState();
 }
 
 enum _ViewMode { overview, boards }
 
-class _CupertinoBodyState extends State<_CupertinoBody> {
+class _CupertinoScreenState extends State<_CupertinoScreen> {
   _ViewMode _selectedSegment = _ViewMode.boards;
   late BroadcastTournamentId _selectedTournamentId;
   late BroadcastRoundId _selectedRoundId;
@@ -146,52 +144,48 @@ class _CupertinoBodyState extends State<_CupertinoBody> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Padding(
-        padding: Styles.bodyPadding,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            CupertinoSlidingSegmentedControl<_ViewMode>(
-              groupValue: _selectedSegment,
-              children: const {
-                _ViewMode.overview: Text('Overview'),
-                _ViewMode.boards: Text('Boards'),
-              },
-              onValueChanged: (_ViewMode? view) {
-                if (view != null) {
-                  setState(() {
-                    _selectedSegment = view;
-                  });
-                }
-              },
-            ),
-            const SizedBox(height: 16),
-            TournamentAndRoundDropdowns(
-              tournamentId: _selectedTournamentId,
-              setTournamentId: setTournamentId,
-              setRoundId: setRoundId,
-            ),
-            const SizedBox(height: 16),
-            Expanded(
-              child: _selectedSegment == _ViewMode.overview
-                  ? BroadcastOverviewTab(tournamentId: _selectedTournamentId)
-                  : BroadcastBoardsTab(roundId: _selectedRoundId),
-            ),
-          ],
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        middle: CupertinoSlidingSegmentedControl<_ViewMode>(
+          groupValue: _selectedSegment,
+          children: const {
+            _ViewMode.overview: Text('Overview'),
+            _ViewMode.boards: Text('Boards'),
+          },
+          onValueChanged: (_ViewMode? view) {
+            if (view != null) {
+              setState(() {
+                _selectedSegment = view;
+              });
+            }
+          },
         ),
+      ),
+      child: Column(
+        children: [
+          Expanded(
+            child: _selectedSegment == _ViewMode.overview
+                ? BroadcastOverviewTab(tournamentId: _selectedTournamentId)
+                : BroadcastBoardsTab(roundId: _selectedRoundId),
+          ),
+          _IOSTournamentAndRoundSelector(
+            tournamentId: _selectedTournamentId,
+            roundId: _selectedRoundId,
+            setTournamentId: setTournamentId,
+            setRoundId: setRoundId,
+          ),
+        ],
       ),
     );
   }
 }
 
-class TournamentAndRoundDropdowns extends ConsumerWidget {
+class _AndroidTournamentAndRoundSelector extends ConsumerWidget {
   final BroadcastTournamentId tournamentId;
   final void Function(BroadcastTournamentId) setTournamentId;
   final void Function(BroadcastRoundId) setRoundId;
 
-  const TournamentAndRoundDropdowns({
-    super.key,
+  const _AndroidTournamentAndRoundSelector({
     required this.tournamentId,
     required this.setTournamentId,
     required this.setRoundId,
@@ -248,6 +242,178 @@ class TournamentAndRoundDropdowns extends ConsumerWidget {
               ),
             ),
           ],
+        );
+      },
+      loading: () => const SizedBox.shrink(),
+      error: (error, stackTrace) => Center(child: Text(error.toString())),
+    );
+  }
+}
+
+const Color _kDefaultToolBarBorderColor = Color(0x4D000000);
+
+const Border _kDefaultToolBarBorder = Border(
+  top: BorderSide(
+    color: _kDefaultToolBarBorderColor,
+    width: 0.0, // 0.0 means one physical pixel
+  ),
+);
+
+// Code taken from the Cupertino navigation bar widget
+Widget _wrapWithBackground({
+  Border? border,
+  required Color backgroundColor,
+  Brightness? brightness,
+  required Widget child,
+  bool updateSystemUiOverlay = true,
+}) {
+  Widget result = child;
+  if (updateSystemUiOverlay) {
+    final bool isDark = backgroundColor.computeLuminance() < 0.179;
+    final Brightness newBrightness =
+        brightness ?? (isDark ? Brightness.dark : Brightness.light);
+    final SystemUiOverlayStyle overlayStyle = switch (newBrightness) {
+      Brightness.dark => SystemUiOverlayStyle.light,
+      Brightness.light => SystemUiOverlayStyle.dark,
+    };
+    result = AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle(
+        statusBarColor: overlayStyle.statusBarColor,
+        statusBarBrightness: overlayStyle.statusBarBrightness,
+        statusBarIconBrightness: overlayStyle.statusBarIconBrightness,
+        systemStatusBarContrastEnforced:
+            overlayStyle.systemStatusBarContrastEnforced,
+      ),
+      child: result,
+    );
+  }
+  final DecoratedBox childWithBackground = DecoratedBox(
+    decoration: BoxDecoration(
+      border: border,
+      color: backgroundColor,
+    ),
+    child: result,
+  );
+
+  if (backgroundColor.alpha == 0xFF) {
+    return childWithBackground;
+  }
+
+  return ClipRect(
+    child: BackdropFilter(
+      filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+      child: childWithBackground,
+    ),
+  );
+}
+
+class _IOSTournamentAndRoundSelector extends ConsumerWidget {
+  final BroadcastTournamentId tournamentId;
+  final BroadcastRoundId roundId;
+  final void Function(BroadcastTournamentId) setTournamentId;
+  final void Function(BroadcastRoundId) setRoundId;
+
+  const _IOSTournamentAndRoundSelector({
+    required this.tournamentId,
+    required this.roundId,
+    required this.setTournamentId,
+    required this.setRoundId,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final backgroundColor = CupertinoTheme.of(context).barBackgroundColor;
+    final tournament = ref.watch(broadcastTournamentProvider(tournamentId));
+
+    return tournament.when(
+      data: (tournament) {
+        /// It should be replaced with a Flutter toolbar widget once it is implemented.
+        /// See https://github.com/flutter/flutter/issues/134454
+
+        return _wrapWithBackground(
+          backgroundColor: backgroundColor,
+          border: _kDefaultToolBarBorder,
+          child: SafeArea(
+            top: false,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Row(
+                spacing: 16.0,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  if (tournament.group != null)
+                    Flexible(
+                      child: CupertinoButton.tinted(
+                        child: Text(
+                          tournament.group!
+                              .firstWhere(
+                                (tournament) => tournament.id == tournamentId,
+                              )
+                              .name,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        onPressed: () {
+                          showChoicePicker<BroadcastTournamentId>(
+                            context,
+                            choices: tournament.group!
+                                .map((tournament) => tournament.id)
+                                .toList(),
+                            labelBuilder: (tournamentId) => Text(
+                              tournament.group!
+                                  .firstWhere(
+                                    (tournament) =>
+                                        tournament.id == tournamentId,
+                                  )
+                                  .name,
+                            ),
+                            selectedItem: tournamentId,
+                            onSelectedItemChanged: (tournamentId) async {
+                              setTournamentId(tournamentId);
+                              final newTournament = await ref.read(
+                                broadcastTournamentProvider(tournamentId)
+                                    .future,
+                              );
+                              setRoundId(newTournament.defaultRoundId);
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                  Flexible(
+                    child: CupertinoButton.tinted(
+                      child: Text(
+                        tournament.rounds
+                            .firstWhere(
+                              (round) => round.id == roundId,
+                            )
+                            .name,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      onPressed: () {
+                        showChoicePicker<BroadcastRoundId>(
+                          context,
+                          choices: tournament.rounds
+                              .map(
+                                (round) => round.id,
+                              )
+                              .toList(),
+                          labelBuilder: (roundId) => Text(
+                            tournament.rounds
+                                .firstWhere((round) => round.id == roundId)
+                                .name,
+                          ),
+                          selectedItem: roundId,
+                          onSelectedItemChanged: (roundId) {
+                            setRoundId(roundId);
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         );
       },
       loading: () => const SizedBox.shrink(),

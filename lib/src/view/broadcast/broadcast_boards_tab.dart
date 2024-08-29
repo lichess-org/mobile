@@ -36,6 +36,7 @@ class BroadcastBoardsTab extends ConsumerWidget {
     final games = ref.watch(broadcastRoundControllerProvider(roundId));
 
     return SafeArea(
+      bottom: false,
       child: games.when(
         data: (games) => (games.isEmpty)
             ? const Padding(

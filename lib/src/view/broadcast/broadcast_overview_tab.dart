@@ -21,6 +21,7 @@ class BroadcastOverviewTab extends ConsumerWidget {
     final dateFormatter = ref.withLocale((locale) => DateFormat.MMMd(locale));
 
     return SafeArea(
+      bottom: false,
       child: Padding(
         padding: Styles.bodyPadding,
         child: tournament.when(
