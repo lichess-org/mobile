@@ -12,29 +12,19 @@ part 'challenges.g.dart';
 
 @Riverpod(keepAlive: true)
 class Challenges extends _$Challenges {
-  StreamSubscription<SocketEvent>? _subscription;
-
-  late SocketClient _socketClient;
-
   @override
   Future<ChallengesList> build() async {
-    _socketClient = ref.watch(socketPoolProvider).open(Uri(path: '/socket/v5'));
+    socketGlobalStream.listen(_handleSocketEvent);
 
-    _subscription?.cancel();
-    _subscription = _socketClient.stream.listen(_handleSocketEvent);
-
-    // invalidate the challenges list if the user signs out
-    ref.listen(
-      authSessionProvider,
-      (prev, now) {
-        if (now == null) return;
-        ref.invalidateSelf();
-      },
-    );
-
-    ref.onDispose(() {
-      _subscription?.cancel();
-    });
+    final session = ref.watch(authSessionProvider);
+    if (session == null) {
+      return Future.value(
+        (
+          inward: const IList<Challenge>.empty(),
+          outward: const IList<Challenge>.empty(),
+        ),
+      );
+    }
 
     return ref.read(challengeRepositoryProvider).list();
   }
