@@ -8,6 +8,7 @@ import 'package:lichess_mobile/src/model/challenge/challenges.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/notifications/local_notification_service.dart';
 import 'package:lichess_mobile/src/navigation.dart';
+import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/user/challenge_requests_screen.dart';
@@ -15,7 +16,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'challenge_notification.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 ChallengeService challengeService(ChallengeServiceRef ref) {
   return ChallengeService(ref);
 }
@@ -24,6 +25,31 @@ class ChallengeService {
   ChallengeService(this.ref);
 
   final ChallengeServiceRef ref;
+
+  void init() {
+    ref.listen(challengesProvider, (prev, current) {
+      if (prev == null || !prev.hasValue || !current.hasValue) return;
+      final prevIds = prev.value!.inward.map((challenge) => challenge.id);
+      final inward = current.value!.inward;
+      final l10n = ref.read(l10nProvider).strings;
+
+      // if a challenge was cancelled by the challenger
+      prevIds
+          .where((id) => !inward.map((challenge) => challenge.id).contains(id))
+          .forEach(
+            (id) => ref
+                .read(localNotificationServiceProvider)
+                .cancel(id.value.hashCode),
+          );
+
+      // if there is a new challenge
+      inward.where((challenge) => !prevIds.contains(challenge.id)).forEach(
+            (challenge) => ref
+                .read(localNotificationServiceProvider)
+                .show(ChallengeNotification(challenge, l10n)),
+          );
+    });
+  }
 
   Future<void> onNotificationResponse(
     int id,
@@ -47,9 +73,6 @@ class ChallengeService {
           navState.popUntil((route) => route.isFirst);
         }
 
-        // sometimes becuase GameScreen connects to a socket we dont recieve a new event on the event listener in time
-        // so we just make sure to refresh this value when we go back to the home tab
-        ref.invalidate(challengesProvider);
         pushPlatformRoute(
           context,
           rootNavigator: true,
@@ -88,7 +111,7 @@ class ChallengeNotification extends LocalNotification {
 
   @override
   NotificationPayload get payload =>
-      ChallengePayload(_challenge.id).toNotifiationPayload();
+      ChallengePayload(_challenge.id).notificationPayload;
 
   @override
   String get body => _body();
@@ -122,14 +145,12 @@ class ChallengePayload {
 
   final ChallengeId id;
 
-  NotificationPayload toNotifiationPayload() {
-    return NotificationPayload(
-      type: PayloadType.challenge,
-      data: {
-        'id': id.value,
-      },
-    );
-  }
+  NotificationPayload get notificationPayload => NotificationPayload(
+        type: PayloadType.challenge,
+        data: {
+          'id': id.value,
+        },
+      );
 
   factory ChallengePayload.fromNotificationPayload(
     NotificationPayload payload,

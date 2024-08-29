@@ -12,11 +12,9 @@ import 'package:lichess_mobile/main.dart';
 import 'package:lichess_mobile/src/app_initialization.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
-import 'package:lichess_mobile/src/model/challenge/challenges.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
-import 'package:lichess_mobile/src/model/notifications/challenge_notification.dart';
 import 'package:lichess_mobile/src/model/notifications/local_notification_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
@@ -25,7 +23,6 @@ import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/notification_service.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
-import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/system.dart';
@@ -310,29 +307,6 @@ class _EntryPointState extends ConsumerState<_EntryPointWidget> {
     });
 
     ref.read(localNotificationServiceProvider).init();
-
-    ref.listenManual(challengesProvider, (prev, current) {
-      if (prev == null || !prev.hasValue || !current.hasValue) return;
-      final prevIds = prev.value!.inward.map((challenge) => challenge.id);
-      final inward = current.value!.inward;
-      final l10n = ref.read(l10nProvider).strings;
-
-      // if a challenge was cancelled by the challenger
-      prevIds
-          .where((id) => !inward.map((challenge) => challenge.id).contains(id))
-          .forEach(
-            (id) => ref
-                .read(localNotificationServiceProvider)
-                .cancel(id.value.hashCode),
-          );
-
-      // if there is a new challenge
-      inward.where((challenge) => !prevIds.contains(challenge.id)).forEach(
-            (challenge) => ref
-                .read(localNotificationServiceProvider)
-                .show(ChallengeNotification(challenge, l10n)),
-          );
-    });
   }
 
   @override

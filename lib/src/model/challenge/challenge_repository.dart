@@ -10,7 +10,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'challenge_repository.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 ChallengeRepository challengeRepository(ChallengeRepositoryRef ref) {
   return ChallengeRepository(ref.read(lichessClientProvider));
 }

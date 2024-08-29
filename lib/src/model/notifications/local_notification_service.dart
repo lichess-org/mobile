@@ -37,6 +37,8 @@ class LocalNotificationService {
       _updateLocalisations();
     });
 
+    _initServices();
+
     await _notificationPlugin.initialize(
       InitializationSettings(
         android: const AndroidInitializationSettings('logo_black'),
@@ -54,6 +56,10 @@ class LocalNotificationService {
           _notificationBackgroundResponse,
     );
     _log.info('initialized');
+  }
+
+  void _initServices() {
+    _ref.read(challengeServiceProvider).init();
   }
 
   void _updateLocalisations() {
@@ -90,6 +96,7 @@ class LocalNotificationService {
   void _handleResponse(int id, String? actionId, NotificationPayload payload) {
     switch (payload.type) {
       case PayloadType.info:
+        break;
       case PayloadType.challenge:
         _ref.read(challengeServiceProvider).onNotificationResponse(
               id,
@@ -117,9 +124,6 @@ class LocalNotificationService {
   static void _notificationBackgroundResponse(
     NotificationResponse response,
   ) {
-    final logger = Logger('LocalNotificationService');
-    logger.info('processing response in background. id [${response.id}]');
-
     // create a new provider scope for the background isolate
     final ref = ProviderContainer();
 
@@ -136,7 +140,9 @@ class LocalNotificationService {
               .read(localNotificationServiceProvider)
               ._handleResponse(response.id!, response.actionId, payload);
         } catch (e) {
-          logger.warning('failed to parse notification payload: $e');
+          debugPrint(
+            'failed to parse notification payload: $e',
+          ); // loggers dont work from the background isolate
         }
       },
     );
