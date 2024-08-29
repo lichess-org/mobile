@@ -57,15 +57,16 @@ class BroadcastOverviewTab extends ConsumerWidget {
                       ),
                   ],
                 ),
-                Expanded(
-                  child: Markdown(
-                    data: description,
-                    onTapLink: (text, url, title) {
-                      if (url == null) return;
-                      launchUrl(Uri.parse(url));
-                    },
+                if (description != null)
+                  Expanded(
+                    child: Markdown(
+                      data: description,
+                      onTapLink: (text, url, title) {
+                        if (url == null) return;
+                        launchUrl(Uri.parse(url));
+                      },
+                    ),
                   ),
-                ),
               ],
             );
           },

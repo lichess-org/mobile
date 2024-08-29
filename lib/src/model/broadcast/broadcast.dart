@@ -48,7 +48,7 @@ class BroadcastTournamentData with _$BroadcastTournamentData {
     required BroadcastTournamentId id,
     required String name,
     required String? imageUrl,
-    required String description,
+    required String? description,
     required BroadcastTournamentInformation information,
   }) = _BroadcastTournamentData;
 }
