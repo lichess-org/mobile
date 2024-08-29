@@ -31,7 +31,7 @@ class ChallengeListItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final me = ref.read(authSessionProvider)?.user;
+    final me = ref.watch(authSessionProvider)?.user;
     final isMyChallenge = me != null && me.id == user.id;
 
     final time = switch (challenge.timeControl) {
