@@ -103,7 +103,8 @@ class _Body extends ConsumerWidget {
                       initialFen: initialFen,
                       orientation: boardEditorState.orientation,
                       isTablet: isTablet,
-                      pieces: boardEditorState.pieces.unlock,
+                      // unlockView is safe because chessground will never modify the pieces
+                      pieces: boardEditorState.pieces.unlockView,
                     ),
                     _PieceMenu(
                       boardSize,
