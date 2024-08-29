@@ -28,25 +28,23 @@ class _Body extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(clockControllerProvider);
 
-    return SafeArea(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(
-            child: ClockTile(
-              playerType: ClockPlayerType.top,
-              clockState: state,
-            ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: ClockTile(
+            playerType: ClockPlayerType.top,
+            clockState: state,
           ),
-          const ClockSettings(),
-          Expanded(
-            child: ClockTile(
-              playerType: ClockPlayerType.bottom,
-              clockState: state,
-            ),
+        ),
+        const ClockSettings(),
+        Expanded(
+          child: ClockTile(
+            playerType: ClockPlayerType.bottom,
+            clockState: state,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
