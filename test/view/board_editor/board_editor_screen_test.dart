@@ -143,6 +143,44 @@ void main() {
       );
     });
 
+    testWidgets('Possible en passant squares are calculated correctly',
+        (tester) async {
+      final app = await buildTestApp(
+        tester,
+        home: const BoardEditorScreen(),
+      );
+      await tester.pumpWidget(app);
+
+      final container = ProviderScope.containerOf(
+        tester.element(find.byType(ChessboardEditor)),
+      );
+      final controllerProvider = boardEditorControllerProvider(null);
+      container
+          .read(controllerProvider.notifier)
+          .loadFen('1nbqkbn1/pppppppp/8/8/8/8/PPPPPPPP/1NBQKBN1');
+
+      expect(
+        container.read(controllerProvider.notifier).calculateEnPassantOptions(),
+        SquareSet.empty,
+      );
+
+      container.read(controllerProvider.notifier).loadFen(
+            'r1bqkbnr/4p1p1/3n4/pPppPppP/8/8/P1PP1P2/RNBQKBNR w KQkq - 0 1',
+          );
+      expect(
+        container.read(controllerProvider.notifier).calculateEnPassantOptions(),
+        SquareSet.fromSquares([Square.a6, Square.c6, Square.f6]),
+      );
+      container.read(controllerProvider.notifier).loadFen(
+            'rnbqkbnr/pp1p1p1p/8/8/PpPpPQpP/8/NPRP1PP1/2B1KBNR b Kkq - 0 1',
+          );
+      container.read(controllerProvider.notifier).setSideToPlay(Side.black);
+      expect(
+        container.read(controllerProvider.notifier).calculateEnPassantOptions(),
+        SquareSet.fromSquares([Square.e3, Square.h3]),
+      );
+    });
+
     testWidgets('Can drag pieces to new squares', (tester) async {
       final app = await buildTestApp(
         tester,
