@@ -39,52 +39,26 @@ class GameHistoryScreen extends ConsumerWidget {
             error: (e, s) => Text(context.l10n.mobileAllGames),
           )
         : Text(filtersInUse.selectionLabel(context));
-    final filterBtn = Stack(
-      alignment: Alignment.center,
-      children: [
-        AppBarIconButton(
-          icon: const Icon(Icons.tune),
-          semanticsLabel: context.l10n.filterGames,
-          onPressed: () => showAdaptiveBottomSheet<GameFilterState>(
-            context: context,
-            builder: (_) => _FilterGames(
-              filter: ref.read(gameFilterProvider(filter: gameFilter)),
-              user: user,
-            ),
-          ).then((value) {
-            if (value != null) {
-              ref
-                  .read(gameFilterProvider(filter: gameFilter).notifier)
-                  .setFilter(value);
-            }
-          }),
+    final filterBtn = AppBarIconButton(
+      icon: Badge.count(
+        count: filtersInUse.count,
+        isLabelVisible: filtersInUse.count > 0,
+        child: const Icon(Icons.tune),
+      ),
+      semanticsLabel: context.l10n.filterGames,
+      onPressed: () => showAdaptiveBottomSheet<GameFilterState>(
+        context: context,
+        builder: (_) => _FilterGames(
+          filter: ref.read(gameFilterProvider(filter: gameFilter)),
+          user: user,
         ),
-        if (filtersInUse.count > 0)
-          Positioned(
-            top: 2.0,
-            right: 2.0,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                Icon(
-                  Icons.brightness_1,
-                  size: 20.0,
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
-                FittedBox(
-                  fit: BoxFit.contain,
-                  child: DefaultTextStyle.merge(
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.onSecondary,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    child: Text(filtersInUse.count.toString()),
-                  ),
-                ),
-              ],
-            ),
-          ),
-      ],
+      ).then((value) {
+        if (value != null) {
+          ref
+              .read(gameFilterProvider(filter: gameFilter).notifier)
+              .setFilter(value);
+        }
+      }),
     );
 
     return PlatformScaffold(

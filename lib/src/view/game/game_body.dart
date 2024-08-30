@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math' as math;
 
 import 'package:chessground/chessground.dart';
 import 'package:collection/collection.dart';
@@ -444,10 +443,12 @@ class _GameBottomBar extends ConsumerWidget {
           final isChatEnabled =
               chatStateAsync != null && !gameState.isZenModeActive;
 
-          final chatUnreadChip = isChatEnabled
+          final chatUnreadLabel = isChatEnabled
               ? chatStateAsync.maybeWhen(
                   data: (s) => s.unreadMessages > 0
-                      ? Text(math.min(9, s.unreadMessages).toString())
+                      ? (s.unreadMessages < 10)
+                          ? s.unreadMessages.toString()
+                          : '9+'
                       : null,
                   orElse: () => null,
                 )
@@ -626,7 +627,7 @@ class _GameBottomBar extends ConsumerWidget {
               icon: Theme.of(context).platform == TargetPlatform.iOS
                   ? CupertinoIcons.chat_bubble
                   : Icons.chat_bubble_outline,
-              chip: chatUnreadChip,
+              badgeLabel: chatUnreadLabel,
             ),
             RepeatButton(
               onLongPress:
