@@ -15,8 +15,7 @@ import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
-import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
-import 'package:lichess_mobile/src/view/broadcast/broadcast_boards_tab_provider.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/evaluation_bar.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
@@ -30,8 +29,13 @@ const _kPlayerWidgetPadding = EdgeInsets.symmetric(vertical: 5.0);
 /// A tab that displays the live games of a broadcast round.
 class BroadcastBoardsTab extends ConsumerWidget {
   final BroadcastRoundId roundId;
+  final String title;
 
-  const BroadcastBoardsTab({super.key, required this.roundId});
+  const BroadcastBoardsTab({
+    super.key,
+    required this.roundId,
+    required this.title,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -48,11 +52,15 @@ class BroadcastBoardsTab extends ConsumerWidget {
             : BroadcastPreview(
                 games: games.values.toIList(),
                 roundId: roundId,
+                title: title,
               ),
         loading: () => const Shimmer(
           child: ShimmerLoading(
             isLoading: true,
-            child: BroadcastPreview(roundId: BroadcastRoundId('')),
+            child: BroadcastPreview(
+              roundId: BroadcastRoundId(''),
+              title: '',
+            ),
           ),
         ),
         error: (error, stackTrace) => Center(
@@ -65,9 +73,15 @@ class BroadcastBoardsTab extends ConsumerWidget {
 
 class BroadcastPreview extends ConsumerWidget {
   final BroadcastRoundId roundId;
-  final IList<BroadcastGameSnapshot>? games;
+  final IList<BroadcastGame>? games;
+  final String title;
 
-  const BroadcastPreview({super.key, required this.roundId, this.games});
+  const BroadcastPreview({
+    super.key,
+    required this.roundId,
+    this.games,
+    required this.title,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -118,13 +132,15 @@ class BroadcastPreview extends ConsumerWidget {
 
         return BoardThumbnail(
           onTap: () {
+            ref
+                .read(BroadcastRoundControllerProvider(roundId).notifier)
+                .setPgn(game.id);
             pushPlatformRoute(
               context,
-              builder: (context) => AnalysisLoadingScreen(
-                pgnAndOptionsProvider: broadcastGameAnalysisProvider(
-                  roundId: roundId,
-                  gameId: game.id,
-                ),
+              builder: (context) => BroadcastGameScreen(
+                roundId: roundId,
+                gameId: game.id,
+                title: title,
               ),
             );
           },

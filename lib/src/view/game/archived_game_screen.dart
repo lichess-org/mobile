@@ -294,7 +294,7 @@ class _BottomBar extends ConsumerWidget {
                             context,
                             builder: (context) => AnalysisScreen(
                               title: context.l10n.gameAnalysis,
-                              pgn: game.makePgn(),
+                              pgnOrId: game.makePgn(),
                               options: AnalysisOptions(
                                 isLocalEvaluationAllowed: true,
                                 variant: gameData.variant,

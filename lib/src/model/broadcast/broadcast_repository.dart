@@ -148,12 +148,12 @@ BroadcastRoundGames _gamesFromPick(
 ) =>
     IMap.fromEntries(pick('games').asListOrThrow(gameFromPick));
 
-MapEntry<BroadcastGameId, BroadcastGameSnapshot> gameFromPick(
+MapEntry<BroadcastGameId, BroadcastGame> gameFromPick(
   RequiredPick pick,
 ) =>
     MapEntry(
       pick('id').asBroadcastGameIdOrThrow(),
-      BroadcastGameSnapshot(
+      BroadcastGame(
         id: pick('id').asBroadcastGameIdOrThrow(),
         players: IMap({
           Side.white: _playerFromPick(pick('players', 0).required()),
@@ -164,6 +164,7 @@ MapEntry<BroadcastGameId, BroadcastGameSnapshot> gameFromPick(
         lastMove: pick('lastMove').asUciMoveOrNull(),
         status: pick('status').asStringOrNull(),
         thinkTime: pick('thinkTime').asDurationFromSecondsOrNull(),
+        pgn: null,
       ),
     );
 

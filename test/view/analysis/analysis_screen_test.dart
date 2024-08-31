@@ -32,7 +32,7 @@ void main() {
       final app = await buildTestApp(
         tester,
         home: AnalysisScreen(
-          pgn: sanMoves,
+          pgnOrId: sanMoves,
           options: AnalysisOptions(
             isLocalEvaluationAllowed: false,
             variant: Variant.standard,
@@ -59,7 +59,7 @@ void main() {
       final app = await buildTestApp(
         tester,
         home: AnalysisScreen(
-          pgn: sanMoves,
+          pgnOrId: sanMoves,
           options: AnalysisOptions(
             isLocalEvaluationAllowed: false,
             variant: Variant.standard,

@@ -123,7 +123,7 @@ class _Body extends StatelessWidget {
                 context,
                 rootNavigator: true,
                 builder: (context) => const AnalysisScreen(
-                  pgn: '',
+                  pgnOrId: '',
                   options: AnalysisOptions(
                     isLocalEvaluationAllowed: true,
                     variant: Variant.standard,

@@ -10,7 +10,6 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_activity.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/current_locale.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
@@ -19,6 +18,8 @@ import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:timeago/timeago.dart' as timeago;
+
+final _dateFormatter = DateFormat.yMMMd(Intl.getCurrentLocale());
 
 class PuzzleHistoryScreen extends StatelessWidget {
   @override
@@ -127,7 +128,6 @@ class _BodyState extends ConsumerState<_Body> {
   @override
   Widget build(BuildContext context) {
     final historyState = ref.watch(puzzleActivityProvider);
-    final dateFormatter = ref.withLocale((locale) => DateFormat.yMMMd(locale));
 
     return historyState.when(
       data: (state) {
@@ -182,7 +182,7 @@ class _BodyState extends ConsumerState<_Body> {
               );
             } else if (element is DateTime) {
               final title = DateTime.now().difference(element).inDays >= 15
-                  ? dateFormatter.format(element)
+                  ? _dateFormatter.format(element)
                   : timeago.format(element);
               return Padding(
                 padding: const EdgeInsets.only(left: _kPuzzlePadding)

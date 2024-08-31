@@ -319,7 +319,7 @@ class _BottomBar extends ConsumerWidget {
                         context,
                         builder: (context) => AnalysisScreen(
                           title: context.l10n.analysis,
-                          pgn: ref.read(ctrlProvider.notifier).makePgn(),
+                          pgnOrId: ref.read(ctrlProvider.notifier).makePgn(),
                           options: AnalysisOptions(
                             isLocalEvaluationAllowed: true,
                             variant: Variant.standard,

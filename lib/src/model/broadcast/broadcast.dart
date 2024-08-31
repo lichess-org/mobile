@@ -82,22 +82,23 @@ class BroadcastRound with _$BroadcastRound {
   }) = _BroadcastRound;
 }
 
-typedef BroadcastRoundGames = IMap<BroadcastGameId, BroadcastGameSnapshot>;
+typedef BroadcastRoundGames = IMap<BroadcastGameId, BroadcastGame>;
 
 @freezed
-class BroadcastGameSnapshot with _$BroadcastGameSnapshot {
-  const BroadcastGameSnapshot._();
+class BroadcastGame with _$BroadcastGame {
+  const BroadcastGame._();
 
-  const factory BroadcastGameSnapshot({
+  const factory BroadcastGame({
     required BroadcastGameId id,
     required IMap<Side, BroadcastPlayer> players,
     required String fen,
     required Move? lastMove,
     required String? status,
+    required String? pgn,
 
     /// The amount of time that the player whose turn it is has been thinking since his last move
     required Duration? thinkTime,
-  }) = _BroadcastGameSnapshot;
+  }) = _BroadcastGame;
 }
 
 @freezed

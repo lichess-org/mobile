@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
@@ -10,13 +11,11 @@ import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/current_locale.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
-import 'package:lichess_mobile/src/view/game/game_list_tile_providers.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/game/status_l10n.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
@@ -25,6 +24,8 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:timeago/timeago.dart' as timeago;
+
+final _dateFormatter = DateFormat.yMMMd(Intl.getCurrentLocale()).add_Hm();
 
 /// A list tile that shows game info.
 class GameListTile extends StatelessWidget {
@@ -109,8 +110,6 @@ class _ContextMenu extends ConsumerWidget {
     final orientation = mySide;
 
     final customColors = Theme.of(context).extension<CustomColors>();
-    final dateFormatter =
-        ref.withLocale((locale) => DateFormat.yMMMd(locale).add_Hm());
 
     return DraggableScrollableSheet(
       initialChildSize: .7,
@@ -179,7 +178,7 @@ class _ContextMenu extends ConsumerWidget {
                                         ),
                                       ),
                                       Text(
-                                        dateFormatter.format(game.lastMoveAt),
+                                        _dateFormatter.format(game.lastMoveAt),
                                         style: TextStyle(
                                           color: textShade(
                                             context,
@@ -239,12 +238,15 @@ class _ContextMenu extends ConsumerWidget {
                     ? () {
                         pushPlatformRoute(
                           context,
-                          builder: (context) => AnalysisLoadingScreen(
-                            pgnAndOptionsProvider: archivedGameAnalysisProvider(
-                              id: game.id,
-                              orientation: orientation,
-                            ),
+                          builder: (context) => AnalysisScreen(
                             title: context.l10n.gameAnalysis,
+                            pgnOrId: game.id.value,
+                            options: AnalysisOptions(
+                              isLocalEvaluationAllowed: true,
+                              variant: game.variant,
+                              orientation: orientation,
+                              id: game.id,
+                            ),
                           ),
                         );
                       }

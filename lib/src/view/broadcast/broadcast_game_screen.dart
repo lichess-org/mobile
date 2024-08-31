@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:collection/collection.dart';
@@ -7,28 +8,36 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast_round_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
-import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
+import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_board.dart';
+import 'package:lichess_mobile/src/view/analysis/analysis_settings.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_share_screen.dart';
+import 'package:lichess_mobile/src/view/analysis/tree_view.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
@@ -40,87 +49,23 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:popover/popover.dart';
 
-import '../../utils/share.dart';
-import 'analysis_board.dart';
-import 'analysis_settings.dart';
-import 'tree_view.dart';
+const _options = AnalysisOptions(
+  id: StringId('standalone_analysis'),
+  isLocalEvaluationAllowed: true,
+  orientation: Side.white,
+  variant: Variant.standard,
+);
 
-class AnalysisScreen extends StatelessWidget {
-  const AnalysisScreen({
-    required this.options,
-    required this.pgnOrId,
-    this.title,
+class BroadcastGameScreen extends ConsumerWidget {
+  final BroadcastRoundId roundId;
+  final BroadcastGameId gameId;
+  final String title;
+
+  const BroadcastGameScreen({
+    required this.roundId,
+    required this.gameId,
+    required this.title,
   });
-
-  /// The analysis options.
-  final AnalysisOptions options;
-
-  /// The PGN or game ID to load.
-  final String pgnOrId;
-
-  final String? title;
-
-  @override
-  Widget build(BuildContext context) {
-    return pgnOrId.length == 8 && GameId(pgnOrId).isValid
-        ? _LoadGame(GameId(pgnOrId), options, title)
-        : _LoadedAnalysisScreen(
-            options: options,
-            pgn: pgnOrId,
-            title: title,
-          );
-  }
-}
-
-class _LoadGame extends ConsumerWidget {
-  const _LoadGame(this.gameId, this.options, this.title);
-
-  final AnalysisOptions options;
-  final GameId gameId;
-  final String? title;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final gameAsync = ref.watch(archivedGameProvider(id: gameId));
-
-    return gameAsync.when(
-      data: (game) {
-        final serverAnalysis =
-            game.white.analysis != null && game.black.analysis != null
-                ? (white: game.white.analysis!, black: game.black.analysis!)
-                : null;
-        return _LoadedAnalysisScreen(
-          options: options.copyWith(
-            id: game.id,
-            opening: game.meta.opening,
-            division: game.meta.division,
-            serverAnalysis: serverAnalysis,
-          ),
-          pgn: game.makePgn(),
-          title: title,
-        );
-      },
-      loading: () => const Center(child: CircularProgressIndicator.adaptive()),
-      error: (error, _) {
-        return Center(
-          child: Text('Cannot load game analysis: $error'),
-        );
-      },
-    );
-  }
-}
-
-class _LoadedAnalysisScreen extends ConsumerWidget {
-  const _LoadedAnalysisScreen({
-    required this.options,
-    required this.pgn,
-    this.title,
-  });
-
-  final AnalysisOptions options;
-  final String pgn;
-
-  final String? title;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -132,33 +77,50 @@ class _LoadedAnalysisScreen extends ConsumerWidget {
   }
 
   Widget _androidBuilder(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = analysisControllerProvider(pgn, options);
+    final game = ref.watch(
+      broadcastRoundControllerProvider(
+        roundId,
+      ).select((games) => games.value?[gameId]),
+    );
+    final pgn = game?.pgn;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: _Title(options: options, title: title),
+        title: Text(title),
         actions: [
-          _EngineDepth(ctrlProvider),
-          AppBarIconButton(
-            onPressed: () => showAdaptiveBottomSheet<void>(
-              context: context,
-              isScrollControlled: true,
-              showDragHandle: true,
-              isDismissible: true,
-              builder: (_) => AnalysisSettings(pgn, options),
+          if (pgn != null)
+            _EngineDepth(
+              analysisControllerProvider(pgn, _options),
             ),
+          AppBarIconButton(
+            onPressed: () => (pgn != null)
+                ? showAdaptiveBottomSheet<void>(
+                    context: context,
+                    isScrollControlled: true,
+                    showDragHandle: true,
+                    isDismissible: true,
+                    builder: (_) => AnalysisSettings(pgn, _options),
+                  )
+                : null,
             semanticsLabel: context.l10n.settingsSettings,
             icon: const Icon(Icons.settings),
           ),
         ],
       ),
-      body: _Body(pgn: pgn, options: options),
+      body: (pgn != null)
+          ? _Body(game: game!, options: _options)
+          : const Center(child: CircularProgressIndicator.adaptive()),
     );
   }
 
   Widget _iosBuilder(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = analysisControllerProvider(pgn, options);
+    final game = ref.watch(
+      broadcastRoundControllerProvider(
+        roundId,
+      ).select((games) => games.value?[gameId]),
+    );
+    final pgn = game?.pgn;
 
     return CupertinoPageScaffold(
       resizeToAvoidBottomInset: false,
@@ -166,64 +128,46 @@ class _LoadedAnalysisScreen extends ConsumerWidget {
         backgroundColor: Styles.cupertinoScaffoldColor.resolveFrom(context),
         border: null,
         padding: Styles.cupertinoAppBarTrailingWidgetPadding,
-        middle: _Title(options: options, title: title),
+        middle: Text(title),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _EngineDepth(ctrlProvider),
-            AppBarIconButton(
-              onPressed: () => showAdaptiveBottomSheet<void>(
-                context: context,
-                isScrollControlled: true,
-                showDragHandle: true,
-                isDismissible: true,
-                builder: (_) => AnalysisSettings(pgn, options),
+            if (pgn != null)
+              _EngineDepth(
+                analysisControllerProvider(pgn, _options),
               ),
+            AppBarIconButton(
+              onPressed: () => (pgn != null)
+                  ? showAdaptiveBottomSheet<void>(
+                      context: context,
+                      isScrollControlled: true,
+                      showDragHandle: true,
+                      isDismissible: true,
+                      builder: (_) => AnalysisSettings(pgn, _options),
+                    )
+                  : null,
               semanticsLabel: context.l10n.settingsSettings,
               icon: const Icon(Icons.settings),
             ),
           ],
         ),
       ),
-      child: _Body(pgn: pgn, options: options),
+      child: (pgn != null)
+          ? _Body(game: game!, options: _options)
+          : const Center(child: CircularProgressIndicator.adaptive()),
     );
   }
 }
 
-class _Title extends StatelessWidget {
-  const _Title({
-    required this.options,
-    this.title,
-  });
-  final AnalysisOptions options;
-  final String? title;
-
-  @override
-  Widget build(BuildContext context) {
-    return title != null
-        ? Text(title!)
-        : Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (options.variant != Variant.standard) ...[
-                Icon(options.variant.icon),
-                const SizedBox(width: 5.0),
-              ],
-              Text(context.l10n.analysis),
-            ],
-          );
-  }
-}
-
 class _Body extends ConsumerWidget {
-  const _Body({required this.pgn, required this.options});
+  const _Body({required this.game, required this.options});
 
-  final String pgn;
+  final BroadcastGame game;
   final AnalysisOptions options;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = analysisControllerProvider(pgn, options);
+    final ctrlProvider = analysisControllerProvider(game.pgn!, options);
     final showEvaluationGauge = ref.watch(
       analysisPreferencesProvider.select((value) => value.showEvaluationGauge),
     );
@@ -240,6 +184,8 @@ class _Body extends ConsumerWidget {
     final showAnalysisSummary = ref.watch(
       ctrlProvider.select((value) => value.displayMode == DisplayMode.summary),
     );
+
+    final pov = ref.watch(ctrlProvider.select((value) => value.pov));
 
     return Column(
       children: [
@@ -271,9 +217,9 @@ class _Body extends ConsumerWidget {
                             ),
                             child: Row(
                               children: [
-                                AnalysisBoard(
-                                  pgn,
-                                  options,
+                                _AnalysisBoardPlayersAndClocks(
+                                  game,
+                                  pov,
                                   boardSize,
                                   isTablet: isTablet,
                                 ),
@@ -301,9 +247,12 @@ class _Body extends ConsumerWidget {
                                     ),
                                     semanticContainer: false,
                                     child: showAnalysisSummary
-                                        ? ServerAnalysisSummary(pgn, options)
+                                        ? ServerAnalysisSummary(
+                                            game.pgn!,
+                                            options,
+                                          )
                                         : AnalysisTreeView(
-                                            pgn,
+                                            game.pgn!,
                                             options,
                                             Orientation.landscape,
                                           ),
@@ -325,26 +274,28 @@ class _Body extends ConsumerWidget {
                               padding: const EdgeInsets.all(
                                 kTabletBoardTableSidePadding,
                               ),
-                              child: AnalysisBoard(
-                                pgn,
-                                options,
+                              child: _AnalysisBoardPlayersAndClocks(
+                                game,
+                                pov,
                                 boardSize,
                                 isTablet: isTablet,
                               ),
                             )
                           else
-                            AnalysisBoard(
-                              pgn,
-                              options,
+                            _AnalysisBoardPlayersAndClocks(
+                              game,
+                              pov,
                               boardSize,
                               isTablet: isTablet,
                             ),
                           if (showAnalysisSummary)
-                            Expanded(child: ServerAnalysisSummary(pgn, options))
+                            Expanded(
+                              child: ServerAnalysisSummary(game.pgn!, options),
+                            )
                           else
                             Expanded(
                               child: AnalysisTreeView(
-                                pgn,
+                                game.pgn!,
                                 options,
                                 Orientation.portrait,
                               ),
@@ -355,8 +306,219 @@ class _Body extends ConsumerWidget {
             ),
           ),
         ),
-        _BottomBar(pgn: pgn, options: options),
+        _BottomBar(pgn: game.pgn!, options: options),
       ],
+    );
+  }
+}
+
+enum _PlayerWidgetSide { bottom, top }
+
+class _AnalysisBoardPlayersAndClocks extends StatelessWidget {
+  final BroadcastGame game;
+  final Side pov;
+  final double boardSize;
+  final bool isTablet;
+
+  const _AnalysisBoardPlayersAndClocks(
+    this.game,
+    this.pov,
+    this.boardSize, {
+    required this.isTablet,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final playingSide = Setup.parseFen(game.fen).turn;
+
+    return Column(
+      children: [
+        _PlayerWidget(
+          width: boardSize,
+          player: game.players[pov.opposite]!,
+          gameStatus: game.status,
+          thinkTime: game.thinkTime,
+          pov: pov.opposite,
+          playingSide: playingSide,
+          side: _PlayerWidgetSide.top,
+        ),
+        AnalysisBoard(
+          game.pgn!,
+          _options,
+          boardSize,
+          isTablet: isTablet,
+        ),
+        _PlayerWidget(
+          width: boardSize,
+          player: game.players[pov]!,
+          gameStatus: game.status,
+          thinkTime: game.thinkTime,
+          pov: pov,
+          playingSide: playingSide,
+          side: _PlayerWidgetSide.bottom,
+        ),
+      ],
+    );
+  }
+}
+
+class _PlayerWidget extends StatelessWidget {
+  const _PlayerWidget({
+    required this.width,
+    required this.player,
+    required this.gameStatus,
+    required this.thinkTime,
+    required this.pov,
+    required this.playingSide,
+    required this.side,
+  });
+
+  final BroadcastPlayer player;
+  final String? gameStatus;
+  final Duration? thinkTime;
+  final Side pov;
+  final Side playingSide;
+  final double width;
+  final _PlayerWidgetSide side;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: width,
+      child: Card(
+        margin: EdgeInsets.zero,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(side == _PlayerWidgetSide.top ? 8 : 0),
+            topRight: Radius.circular(side == _PlayerWidgetSide.top ? 8 : 0),
+            bottomLeft:
+                Radius.circular(side == _PlayerWidgetSide.bottom ? 8 : 0),
+            bottomRight:
+                Radius.circular(side == _PlayerWidgetSide.bottom ? 8 : 0),
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Row(
+                  children: [
+                    if (gameStatus != null && gameStatus != '*') ...[
+                      Text(
+                        (gameStatus == '½-½')
+                            ? '½'
+                            : (gameStatus == '1-0')
+                                ? pov == Side.white
+                                    ? '1'
+                                    : '0'
+                                : pov == Side.black
+                                    ? '1'
+                                    : '0',
+                        style: const TextStyle()
+                            .copyWith(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(width: 15),
+                    ],
+                    if (player.federation != null) ...[
+                      Consumer(
+                        builder: (context, widgetRef, _) {
+                          return SvgPicture.network(
+                            lichessFideFedSrc(player.federation!),
+                            height: 12,
+                            httpClient: widgetRef.read(defaultClientProvider),
+                          );
+                        },
+                      ),
+                    ],
+                    const SizedBox(width: 5),
+                    if (player.title != null) ...[
+                      Text(
+                        player.title!,
+                        style: const TextStyle().copyWith(
+                          color: context.lichessColors.brag,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(width: 5),
+                    ],
+                    Text(
+                      player.name,
+                      style: const TextStyle().copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(width: 5),
+                    Text(player.rating.toString(), style: const TextStyle()),
+                  ],
+                ),
+              ),
+              if (player.clock != null)
+                (pov == playingSide)
+                    ? _Clock(
+                        clock: player.clock! - (thinkTime ?? Duration.zero),
+                      )
+                    : Text(
+                        player.clock!.toHoursMinutesSeconds(),
+                        style: const TextStyle(
+                          fontFeatures: [FontFeature.tabularFigures()],
+                        ),
+                      ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _Clock extends StatefulWidget {
+  const _Clock({required this.clock});
+
+  final Duration clock;
+
+  @override
+  _ClockState createState() => _ClockState();
+}
+
+class _ClockState extends State<_Clock> {
+  Timer? _timer;
+  late Duration _clock;
+
+  @override
+  void initState() {
+    super.initState();
+    _clock = widget.clock;
+    if (_clock.inSeconds <= 0) {
+      _clock = Duration.zero;
+      return;
+    }
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        _clock = _clock - const Duration(seconds: 1);
+      });
+      if (_clock.inSeconds == 0) {
+        timer.cancel();
+        return;
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      _clock.toHoursMinutesSeconds(),
+      style: TextStyle(
+        color: Colors.orange[900],
+        fontFeatures: const [FontFeature.tabularFigures()],
+      ),
     );
   }
 }
