@@ -1,4 +1,5 @@
 import 'package:dartchess/dartchess.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
@@ -8,6 +9,7 @@ import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/view/game/game_list_detail_tile.dart';
 import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
@@ -15,6 +17,8 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
+
+final _isDetailView = StateProvider<bool>((ref) => true);
 
 class GameHistoryScreen extends ConsumerWidget {
   const GameHistoryScreen({
@@ -42,11 +46,6 @@ class GameHistoryScreen extends ConsumerWidget {
         : Text(filtersInUse.selectionLabel(context));
     final filterBtn = AppBarIconButton(
       icon: Badge.count(
-        backgroundColor: Theme.of(context).colorScheme.secondary,
-        textStyle: TextStyle(
-          color: Theme.of(context).colorScheme.onSecondary,
-          fontWeight: FontWeight.bold,
-        ),
         count: filtersInUse.count,
         isLabelVisible: filtersInUse.count > 0,
         child: const Icon(Icons.tune),
@@ -54,7 +53,6 @@ class GameHistoryScreen extends ConsumerWidget {
       semanticsLabel: context.l10n.filterGames,
       onPressed: () => showAdaptiveBottomSheet<GameFilterState>(
         context: context,
-        isScrollControlled: true,
         builder: (_) => _FilterGames(
           filter: ref.read(gameFilterProvider(filter: gameFilter)),
           user: user,
@@ -68,10 +66,22 @@ class GameHistoryScreen extends ConsumerWidget {
       }),
     );
 
+    final bool isDetailView = ref.watch(_isDetailView);
+    final actions = [
+      AppBarIconButton(
+        icon: ref.watch(_isDetailView)
+            ? const Icon(CupertinoIcons.square_grid_2x2)
+            : const Icon(CupertinoIcons.rectangle_grid_1x2),
+        semanticsLabel: 'Switch view',
+        onPressed: () => ref.read(_isDetailView.notifier).state = !isDetailView,
+      ),
+      filterBtn,
+    ];
+
     return PlatformScaffold(
       appBar: PlatformAppBar(
         title: title,
-        actions: [filterBtn],
+        actions: actions,
       ),
       body: _Body(user: user, isOnline: isOnline, gameFilter: gameFilter),
     );
@@ -200,17 +210,20 @@ class _BodyState extends ConsumerState<_Body> {
                       );
                     }
 
-                    return ExtendedGameListTile(
-                      item: list[index],
-                      userId: widget.user?.id,
-                      // see: https://github.com/flutter/flutter/blob/master/packages/flutter/lib/src/cupertino/list_tile.dart#L30 for horizontal padding value
-                      padding: Theme.of(context).platform == TargetPlatform.iOS
-                          ? const EdgeInsets.symmetric(
-                              horizontal: 14.0,
-                              vertical: 12.0,
-                            )
-                          : null,
-                    );
+                    return ref.watch(_isDetailView)
+                        ? GameListDetailTile(item: list[index])
+                        : ExtendedGameListTile(
+                            item: list[index],
+                            userId: widget.user?.id,
+                            // see: https://github.com/flutter/flutter/blob/master/packages/flutter/lib/src/cupertino/list_tile.dart#L30 for horizontal padding value
+                            padding:
+                                Theme.of(context).platform == TargetPlatform.iOS
+                                    ? const EdgeInsets.symmetric(
+                                        horizontal: 14.0,
+                                        vertical: 12.0,
+                                      )
+                                    : null,
+                          );
                   },
                 ),
         );

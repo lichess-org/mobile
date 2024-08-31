@@ -123,7 +123,7 @@ class UserFullNameWidget extends ConsumerWidget {
         ],
         if (shouldShowRating && ratingStr != null) ...[
           const SizedBox(width: 5),
-          Text(ratingStr),
+          Text(ratingStr, style: style),
         ],
       ],
     );
