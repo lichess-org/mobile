@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_round_controller.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -17,6 +18,7 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_boards_tab_provider.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
+import 'package:lichess_mobile/src/widgets/evaluation_bar.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 // height of 1.0 is important because we need to determine the height of the text
@@ -69,6 +71,9 @@ class BroadcastPreview extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final showEvaluationBar = ref.watch(
+      broadcastPreferencesProvider.select((value) => value.showEvaluationBar),
+    );
     const numberLoadingBoards = 12;
     const boardSpacing = 10.0;
     // height of the text based on the font size
@@ -78,7 +83,7 @@ class BroadcastPreview extends ConsumerWidget {
     final headerAndFooterHeight = textHeight + _kPlayerWidgetPadding.vertical;
     final numberOfBoardsByRow = isTabletOrLarger(context) ? 4 : 2;
     final screenWidth = MediaQuery.sizeOf(context).width;
-    final boardWidth = (screenWidth -
+    final boardWithMaybeEvalBarWidth = (screenWidth -
             Styles.horizontalBodyPadding.horizontal -
             (numberOfBoardsByRow - 1) * boardSpacing) /
         numberOfBoardsByRow;
@@ -90,14 +95,21 @@ class BroadcastPreview extends ConsumerWidget {
         crossAxisCount: numberOfBoardsByRow,
         crossAxisSpacing: boardSpacing,
         mainAxisSpacing: boardSpacing,
-        mainAxisExtent: boardWidth + 2 * headerAndFooterHeight,
+        mainAxisExtent: boardWithMaybeEvalBarWidth + 2 * headerAndFooterHeight,
+        childAspectRatio: 1 + evaluationBarAspectRatio,
       ),
       itemBuilder: (context, index) {
+        final boardSize = boardWithMaybeEvalBarWidth -
+            (showEvaluationBar
+                ? evaluationBarAspectRatio * boardWithMaybeEvalBarWidth
+                : 0);
+
         if (games == null) {
           return BoardThumbnail.loading(
-            size: boardWidth,
-            header: _PlayerWidget.loading(width: boardWidth),
-            footer: _PlayerWidget.loading(width: boardWidth),
+            size: boardSize,
+            header: _PlayerWidget.loading(width: boardWithMaybeEvalBarWidth),
+            footer: _PlayerWidget.loading(width: boardWithMaybeEvalBarWidth),
+            showEvaluationBar: showEvaluationBar,
           );
         }
 
@@ -118,10 +130,11 @@ class BroadcastPreview extends ConsumerWidget {
           },
           orientation: Side.white,
           fen: game.fen,
+          showEvaluationBar: showEvaluationBar,
           lastMove: game.lastMove,
-          size: boardWidth,
+          size: boardSize,
           header: _PlayerWidget(
-            width: boardWidth,
+            width: boardWithMaybeEvalBarWidth,
             player: game.players[Side.black]!,
             gameStatus: game.status,
             thinkTime: game.thinkTime,
@@ -129,7 +142,7 @@ class BroadcastPreview extends ConsumerWidget {
             playingSide: playingSide,
           ),
           footer: _PlayerWidget(
-            width: boardWidth,
+            width: boardWithMaybeEvalBarWidth,
             player: game.players[Side.white]!,
             gameStatus: game.status,
             thinkTime: game.thinkTime,
