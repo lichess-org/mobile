@@ -8,7 +8,6 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/model/tv/tv_controller.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_player.dart';
@@ -17,7 +16,7 @@ import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 class TvScreen extends ConsumerStatefulWidget {
   const TvScreen({required this.channel, this.initialGame, super.key});
@@ -47,46 +46,19 @@ class _TvScreenState extends ConsumerState<TvScreen> {
           ref.read(_tvGameCtrl.notifier).stopWatching();
         }
       },
-      child: PlatformWidget(
-        androidBuilder: _androidBuilder,
-        iosBuilder: _iosBuilder,
-      ),
-    );
-  }
-
-  Widget _androidBuilder(
-    BuildContext context,
-  ) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('${widget.channel.label} TV'),
-        actions: [
-          ToggleSoundButton(),
-        ],
-      ),
-      body: _Body(
-        widget.channel,
-        widget.initialGame,
-        whiteClockKey: _whiteClockKey,
-        blackClockKey: _blackClockKey,
-      ),
-    );
-  }
-
-  Widget _iosBuilder(
-    BuildContext context,
-  ) {
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        padding: Styles.cupertinoAppBarTrailingWidgetPadding,
-        middle: Text('${widget.channel.label} TV'),
-        trailing: ToggleSoundButton(),
-      ),
-      child: _Body(
-        widget.channel,
-        widget.initialGame,
-        whiteClockKey: _whiteClockKey,
-        blackClockKey: _blackClockKey,
+      child: PlatformScaffold(
+        appBar: PlatformAppBar(
+          title: Text('${widget.channel.label} TV'),
+          actions: [
+            ToggleSoundButton(),
+          ],
+        ),
+        body: _Body(
+          widget.channel,
+          widget.initialGame,
+          whiteClockKey: _whiteClockKey,
+          blackClockKey: _blackClockKey,
+        ),
       ),
     );
   }

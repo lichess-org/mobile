@@ -22,7 +22,6 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/navigation.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -40,7 +39,7 @@ import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 import 'puzzle_feedback_widget.dart';
 import 'puzzle_session_widget.dart';
@@ -90,44 +89,17 @@ class _PuzzleScreenState extends ConsumerState<PuzzleScreen> with RouteAware {
   @override
   Widget build(BuildContext context) {
     return WakelockWidget(
-      child: PlatformWidget(
-        androidBuilder: _androidBuilder,
-        iosBuilder: _iosBuilder,
-      ),
-    );
-  }
-
-  Widget _androidBuilder(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        actions: const [
-          _PuzzleSettingsButton(),
-        ],
-        title: _Title(angle: widget.angle),
-      ),
-      body: widget.puzzleId != null
-          ? _LoadPuzzleFromId(angle: widget.angle, id: widget.puzzleId!)
-          : _LoadNextPuzzle(angle: widget.angle),
-    );
-  }
-
-  Widget _iosBuilder(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        backgroundColor: Styles.cupertinoScaffoldColor.resolveFrom(context),
-        border: null,
-        padding: Styles.cupertinoAppBarTrailingWidgetPadding,
-        middle: _Title(angle: widget.angle),
-        trailing: const Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
+      child: PlatformScaffold(
+        appBar: PlatformAppBar(
+          actions: const [
             _PuzzleSettingsButton(),
           ],
+          title: _Title(angle: widget.angle),
         ),
+        body: widget.puzzleId != null
+            ? _LoadPuzzleFromId(angle: widget.angle, id: widget.puzzleId!)
+            : _LoadNextPuzzle(angle: widget.angle),
       ),
-      child: widget.puzzleId != null
-          ? _LoadPuzzleFromId(angle: widget.angle, id: widget.puzzleId!)
-          : _LoadNextPuzzle(angle: widget.angle),
     );
   }
 }

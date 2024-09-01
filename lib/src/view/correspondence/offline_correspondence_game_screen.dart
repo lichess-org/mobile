@@ -24,7 +24,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 class OfflineCorrespondenceGameScreen extends StatefulWidget {
   const OfflineCorrespondenceGameScreen({
@@ -57,31 +57,10 @@ class _OfflineCorrespondenceGameScreenState
 
   @override
   Widget build(BuildContext context) {
-    return PlatformWidget(
-      androidBuilder: _androidBuilder,
-      iosBuilder: _iosBuilder,
-    );
-  }
-
-  Widget _androidBuilder(BuildContext context) {
     final (lastModified, game) = currentGame;
-    return Scaffold(
-      appBar: AppBar(title: _Title(game)),
+    return PlatformScaffold(
+      appBar: PlatformAppBar(title: _Title(game)),
       body: _Body(
-        game: game,
-        lastModified: lastModified,
-        onGameChanged: goToNextGame,
-      ),
-    );
-  }
-
-  Widget _iosBuilder(BuildContext context) {
-    final (lastModified, game) = currentGame;
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        middle: _Title(game),
-      ),
-      child: _Body(
         game: game,
         lastModified: lastModified,
         onGameChanged: goToNextGame,

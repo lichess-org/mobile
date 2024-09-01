@@ -12,7 +12,7 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_text_field.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 class MessageScreen extends ConsumerStatefulWidget {
   final GameFullId id;
@@ -53,37 +53,12 @@ class _MessageScreenState extends ConsumerState<MessageScreen> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
-    final body = _Body(me: widget.me, id: widget.id);
-
-    return PlatformWidget(
-      androidBuilder: (context) =>
-          _androidBuilder(context: context, body: body),
-      iosBuilder: (context) => _iosBuilder(context: context, body: body),
-    );
-  }
-
-  Widget _androidBuilder({
-    required BuildContext context,
-    required Widget body,
-  }) {
-    return Scaffold(
-      appBar: AppBar(
+    return PlatformScaffold(
+      appBar: PlatformAppBar(
         title: widget.title,
         centerTitle: true,
       ),
-      body: body,
-    );
-  }
-
-  Widget _iosBuilder({
-    required BuildContext context,
-    required Widget body,
-  }) {
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        middle: widget.title,
-      ),
-      child: body,
+      body: _Body(me: widget.me, id: widget.id),
     );
   }
 }

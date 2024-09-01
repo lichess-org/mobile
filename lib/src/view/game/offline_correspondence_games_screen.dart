@@ -8,7 +8,7 @@ import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/correspondence/offline_correspondence_game_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -17,27 +17,13 @@ class OfflineCorrespondenceGamesScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ConsumerPlatformWidget(
-      ref: ref,
-      androidBuilder: _buildAndroid,
-      iosBuilder: _buildIos,
-    );
-  }
-
-  Widget _buildIos(BuildContext context, WidgetRef ref) {
-    return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(),
-      child: _Body(),
-    );
-  }
-
-  Widget _buildAndroid(BuildContext context, WidgetRef ref) {
     final offlineGames = ref.watch(offlineOngoingCorrespondenceGamesProvider);
-    return Scaffold(
-      appBar: offlineGames.maybeWhen(
-        data: (data) =>
-            AppBar(title: Text(context.l10n.nbGamesInPlay(data.length))),
-        orElse: () => AppBar(title: const SizedBox.shrink()),
+    return PlatformScaffold(
+      appBar: PlatformAppBar(
+        title: offlineGames.maybeWhen(
+          data: (data) => Text(context.l10n.nbGamesInPlay(data.length)),
+          orElse: () => const SizedBox.shrink(),
+        ),
       ),
       body: _Body(),
     );
