@@ -163,10 +163,12 @@ abstract mixin class BaseGame {
         'Site': lichessUri('/$id').toString(),
         'Date': _dateFormat.format(meta.createdAt),
         'White': white.user?.name ??
+            white.name ??
             (white.aiLevel != null
                 ? 'Stockfish level ${white.aiLevel}'
                 : 'Anonymous'),
         'Black': black.user?.name ??
+            black.name ??
             (black.aiLevel != null
                 ? 'Stockfish level ${black.aiLevel}'
                 : 'Anonymous'),
