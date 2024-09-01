@@ -332,8 +332,8 @@ class StartsRoundDate extends ConsumerWidget {
     return Text(
       timeBeforeRound.inDays == 0
           ? timeBeforeRound.inHours == 0
-              ? 'In ${timeBeforeRound.inMinutes} minutes' // TODO: translate with https://github.com/lichess-org/lila/blob/65b28ea8e43e0133df6c7ed40e03c2954f247d1e/translation/source/timeago.xml#L8
-              : 'In ${timeBeforeRound.inHours} hours' // TODO: translate with https://github.com/lichess-org/lila/blob/65b28ea8e43e0133df6c7ed40e03c2954f247d1e/translation/source/timeago.xml#L12
+              ? 'In ${timeBeforeRound.inMinutes} minutes' // TODO translate with https://github.com/lichess-org/lila/blob/65b28ea8e43e0133df6c7ed40e03c2954f247d1e/translation/source/timeago.xml#L8
+              : 'In ${timeBeforeRound.inHours} hours' // TODO translate with https://github.com/lichess-org/lila/blob/65b28ea8e43e0133df6c7ed40e03c2954f247d1e/translation/source/timeago.xml#L12
           : timeBeforeRound.inDays < 365
               ? dateFormatter.format(startsAt)
               : dateFormatterWithYear.format(startsAt),

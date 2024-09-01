@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
+// TODO remove when eval bar is ready
+// ignore: unused_import
 import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_round_controller.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
@@ -85,9 +87,12 @@ class BroadcastPreview extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final showEvaluationBar = ref.watch(
-      broadcastPreferencesProvider.select((value) => value.showEvaluationBar),
-    );
+    // TODO uncomment when eval bar is ready
+    // final showEvaluationBar = ref.watch(
+    //   broadcastPreferencesProvider.select((value) => value.showEvaluationBar),
+    // );
+    // TODO remove when eval bar is ready
+    const showEvaluationBar = false;
     const numberLoadingBoards = 12;
     const boardSpacing = 10.0;
     // height of the text based on the font size
@@ -115,6 +120,8 @@ class BroadcastPreview extends ConsumerWidget {
       itemBuilder: (context, index) {
         final boardSize = boardWithMaybeEvalBarWidth -
             (showEvaluationBar
+                // TODO remove when eval bar is ready
+                // ignore: dead_code
                 ? evaluationBarAspectRatio * boardWithMaybeEvalBarWidth
                 : 0);
 

@@ -89,7 +89,8 @@ class _AndroidScreenState extends State<_AndroidScreen>
             Tab(text: 'Boards'),
           ],
         ),
-        actions: [_BroadcastSettingsButton()],
+        // TODO uncomment when eval bar is ready
+        // actions: [_BroadcastSettingsButton()],
       ),
       body: TabBarView(
         controller: _tabController,
