@@ -160,8 +160,14 @@ class GameController extends _$GameController {
     }
   }
 
-  void onPromotionSelect(Role role) {
+  void onPromotionSelection(Role? role) {
     final curState = state.requireValue;
+    if (role == null) {
+      state = AsyncValue.data(
+        curState.copyWith(promotionMove: null),
+      );
+      return;
+    }
     if (curState.promotionMove == null) {
       assert(false, 'promotionMove must not be null on promotion select');
       return;
@@ -169,13 +175,6 @@ class GameController extends _$GameController {
 
     final move = curState.promotionMove!.withPromotion(role);
     userMove(move, isDrop: true);
-  }
-
-  void onPromotionCancel() {
-    final curState = state.requireValue;
-    state = AsyncValue.data(
-      curState.copyWith(promotionMove: null),
-    );
   }
 
   /// Called if the player cancels the move when confirm move preference is enabled

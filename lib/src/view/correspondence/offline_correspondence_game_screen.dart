@@ -224,8 +224,7 @@ class _BodyState extends ConsumerState<_Body> {
                 onMove: (move, {isDrop, captured}) {
                   onUserMove(move);
                 },
-                onPromotionSelect: onPromotionSelected,
-                onPromotionCancel: onPromotionCanceled,
+                onPromotionSelection: onPromotionSelection,
               ),
               topTable: topPlayer,
               bottomTable: bottomPlayer,
@@ -377,17 +376,17 @@ class _BodyState extends ConsumerState<_Body> {
     _moveFeedback(sanMove);
   }
 
-  void onPromotionSelected(Role role) {
+  void onPromotionSelection(Role? role) {
+    if (role == null) {
+      setState(() {
+        promotionMove = null;
+      });
+      return;
+    }
     if (promotionMove != null) {
       final move = promotionMove!.withPromotion(role);
       onUserMove(move);
     }
-  }
-
-  void onPromotionCanceled() {
-    setState(() {
-      promotionMove = null;
-    });
   }
 
   void confirmMove() {

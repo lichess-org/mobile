@@ -195,16 +195,16 @@ class AnalysisController extends _$AnalysisController {
     }
   }
 
-  void onPromotionSelect(Role role) {
+  void onPromotionSelection(Role? role) {
+    if (role == null) {
+      state = state.copyWith(promotionMove: null);
+      return;
+    }
     final promotionMove = state.promotionMove;
     if (promotionMove != null) {
       final promotion = promotionMove.withPromotion(role);
       onUserMove(promotion);
     }
-  }
-
-  void onPromotionCancel() {
-    state = state.copyWith(promotionMove: null);
   }
 
   void userNext() {

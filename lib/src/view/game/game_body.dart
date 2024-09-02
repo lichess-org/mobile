@@ -261,13 +261,10 @@ class GameBody extends ConsumerWidget {
                                 isDrop: isDrop,
                               );
                         },
-                        onPromotionSelect: (role) {
+                        onPromotionSelection: (role) {
                           ref
                               .read(ctrlProvider.notifier)
-                              .onPromotionSelect(role);
-                        },
-                        onPromotionCancel: () {
-                          ref.read(ctrlProvider.notifier).onPromotionCancel();
+                              .onPromotionSelection(role);
                         },
                         premovable: gameState.canPremove
                             ? (

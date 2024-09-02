@@ -162,10 +162,9 @@ class _Body extends ConsumerWidget {
                     promotionMove: stormState.promotionMove,
                     onMove: (move, {isDrop, captured}) =>
                         ref.read(ctrlProvider.notifier).onUserMove(move),
-                    onPromotionSelect: (role) =>
-                        ref.read(ctrlProvider.notifier).onPromotionSelect(role),
-                    onPromotionCancel: () =>
-                        ref.read(ctrlProvider.notifier).onPromotionCancel(),
+                    onPromotionSelection: (role) => ref
+                        .read(ctrlProvider.notifier)
+                        .onPromotionSelection(role),
                   ),
                   topTable: _TopTable(data),
                   bottomTable: _Combo(stormState.combo),

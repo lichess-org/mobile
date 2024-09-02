@@ -145,11 +145,8 @@ class _Body extends ConsumerWidget {
                   onMove: (move, {isDrop, captured}) {
                     ref.read(ctrlProvider.notifier).onUserMove(move);
                   },
-                  onPromotionSelect: (role) {
-                    ref.read(ctrlProvider.notifier).onPromotionSelect(role);
-                  },
-                  onPromotionCancel: () {
-                    ref.read(ctrlProvider.notifier).onPromotionCancel();
+                  onPromotionSelection: (role) {
+                    ref.read(ctrlProvider.notifier).onPromotionSelection(role);
                   },
                 ),
                 topTable: Center(

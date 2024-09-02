@@ -162,18 +162,16 @@ class PuzzleController extends _$PuzzleController {
     }
   }
 
-  void onPromotionSelect(Role role) {
+  void onPromotionSelection(Role? role) {
+    if (role == null) {
+      state = state.copyWith(promotionMove: null);
+      return;
+    }
     final promotionMove = state.promotionMove;
     if (promotionMove != null) {
       final move = promotionMove.withPromotion(role);
       onUserMove(move);
     }
-  }
-
-  void onPromotionCancel() {
-    state = state.copyWith(
-      promotionMove: null,
-    );
   }
 
   void userNext() {
