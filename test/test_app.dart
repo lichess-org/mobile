@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +20,7 @@ import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/game/game_storage.dart';
+import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/notification_service.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:logging/logging.dart';
@@ -57,7 +60,19 @@ Future<Widget> buildTestApp(
 
   VisibilityDetectorController.instance.updateInterval = Duration.zero;
 
-  SharedPreferences.setMockInitialValues(defaultPreferences ?? {});
+  SharedPreferences.setMockInitialValues(
+    defaultPreferences ??
+        {
+          // disable piece animation to simplify tests
+          'preferences.board': jsonEncode(
+            BoardPrefs.defaults
+                .copyWith(
+                  pieceAnimation: false,
+                )
+                .toJson(),
+          ),
+        },
+  );
 
   final sharedPreferences = await SharedPreferences.getInstance();
 
