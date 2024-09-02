@@ -283,7 +283,7 @@ class _Body extends ConsumerWidget {
                 sideToMove: puzzleState.position.turn,
                 validMoves: puzzleState.validMoves,
                 promotionMove: puzzleState.promotionMove,
-                onMove: (move, {isDrop, captured}) {
+                onMove: (move, {isDrop}) {
                   ref.read(ctrlProvider.notifier).onUserMove(move);
                 },
                 onPromotionSelection: (role) {
