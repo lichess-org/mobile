@@ -77,29 +77,26 @@ class _Body extends ConsumerWidget {
                   vertical: 16,
                 ),
                 child: Center(
-                  child: Chessboard(
+                  child: Chessboard.fixed(
                     size: boardSize,
-                    state: ChessboardState(
-                      interactableSide: InteractableSide.none,
-                      orientation: Side.white,
-                      fen: kInitialFEN,
-                      shapes: <Shape>{
-                        Arrow(
-                          color: boardPrefs.shapeColor.color,
-                          orig: Square.fromName('e2'),
-                          dest: Square.fromName('e4'),
-                        ),
-                        Circle(
-                          color: boardPrefs.shapeColor.color,
-                          orig: Square.fromName('d2'),
-                        ),
-                        Arrow(
-                          color: boardPrefs.shapeColor.color,
-                          orig: Square.fromName('b1'),
-                          dest: Square.fromName('c3'),
-                        ),
-                      }.lock,
-                    ),
+                    orientation: Side.white,
+                    fen: kInitialFEN,
+                    shapes: <Shape>{
+                      Arrow(
+                        color: boardPrefs.shapeColor.color,
+                        orig: Square.fromName('e2'),
+                        dest: Square.fromName('e4'),
+                      ),
+                      Circle(
+                        color: boardPrefs.shapeColor.color,
+                        orig: Square.fromName('d2'),
+                      ),
+                      Arrow(
+                        color: boardPrefs.shapeColor.color,
+                        orig: Square.fromName('b1'),
+                        dest: Square.fromName('c3'),
+                      ),
+                    }.lock,
                     settings: ChessboardSettings(
                       enableCoordinates: false,
                       borderRadius:

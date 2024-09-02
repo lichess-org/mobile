@@ -30,12 +30,14 @@ const _moveListOpacity = 0.6;
 /// An optional overlay or error message can be displayed on top of the board.
 class BoardTable extends ConsumerStatefulWidget {
   const BoardTable({
-    this.onMove,
-    this.onPremove,
-    required this.boardState,
+    required this.fen,
+    required this.orientation,
+    this.gameData,
+    this.lastMove,
     this.boardSettingsOverrides,
     required this.topTable,
     required this.bottomTable,
+    this.shapes,
     this.engineGauge,
     this.moves,
     this.currentMoveIndex,
@@ -52,12 +54,17 @@ class BoardTable extends ConsumerStatefulWidget {
           'You must provide `currentMoveIndex` along with `moves`',
         );
 
-  final void Function(Move, {bool? isDrop, bool? isPremove})? onMove;
-  final void Function(Move?)? onPremove;
+  final String fen;
 
-  final ChessboardState boardState;
+  final Side orientation;
+
+  final GameData? gameData;
+
+  final Move? lastMove;
 
   final BoardSettingsOverrides? boardSettingsOverrides;
+
+  final ISet<Shape>? shapes;
 
   /// [GlobalKey] for the board.
   ///
@@ -167,12 +174,12 @@ class _BoardTableState extends ConsumerState<BoardTable> {
         final board = Chessboard(
           key: widget.boardKey,
           size: boardSize,
-          state: widget.boardState.copyWith(
-            shapes: userShapes.union(widget.boardState.shapes ?? ISet()),
-          ),
+          fen: widget.fen,
+          orientation: widget.orientation,
+          game: widget.gameData,
+          lastMove: widget.lastMove,
+          shapes: userShapes.union(widget.shapes ?? ISet()),
           settings: settings,
-          onMove: widget.onMove,
-          onPremove: widget.onPremove,
         );
 
         Widget boardWidget = board;

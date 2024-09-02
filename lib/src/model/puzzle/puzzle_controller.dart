@@ -113,7 +113,12 @@ class PuzzleController extends _$PuzzleController {
     );
   }
 
-  Future<void> onUserMove(Move move) async {
+  Future<void> onUserMove(NormalMove move) async {
+    if (isPromotionPawnMove(state.position, move)) {
+      state = state.copyWith(promotionMove: move);
+      return;
+    }
+
     _addMove(move);
 
     if (state.mode == PuzzleMode.play) {
@@ -155,6 +160,20 @@ class PuzzleController extends _$PuzzleController {
         }
       }
     }
+  }
+
+  void onPromotionSelect(Role role) {
+    final promotionMove = state.promotionMove;
+    if (promotionMove != null) {
+      final move = promotionMove.withPromotion(role);
+      onUserMove(move);
+    }
+  }
+
+  void onPromotionCancel() {
+    state = state.copyWith(
+      promotionMove: null,
+    );
   }
 
   void userNext() {
@@ -205,7 +224,7 @@ class PuzzleController extends _$PuzzleController {
       state = state.copyWith.streak!(hasSkipped: true);
       final moveIndex = state.currentPath.size - state.initialPath.size;
       final solution = state.puzzle.puzzle.solution[moveIndex];
-      onUserMove(Move.parse(solution)!);
+      onUserMove(NormalMove.fromUci(solution));
     }
   }
 
@@ -451,6 +470,7 @@ class PuzzleController extends _$PuzzleController {
       currentPath: path,
       node: newNode,
       lastMove: sanMove.move,
+      promotionMove: null,
     );
 
     if (pathChange) {
@@ -562,6 +582,7 @@ class PuzzleState with _$PuzzleState {
     required Side pov,
     required ViewBranch node,
     Move? lastMove,
+    NormalMove? promotionMove,
     PuzzleResult? result,
     PuzzleFeedback? feedback,
     required bool canViewSolution,

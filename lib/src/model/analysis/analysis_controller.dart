@@ -177,8 +177,14 @@ class AnalysisController extends _$AnalysisController {
         initialPosition: _root.position,
       );
 
-  void onUserMove(Move move) {
+  void onUserMove(NormalMove move) {
     if (!state.position.isLegal(move)) return;
+
+    if (isPromotionPawnMove(state.position, move)) {
+      state = state.copyWith(promotionMove: move);
+      return;
+    }
+
     final (newPath, isNewNode) = _root.addMoveAt(state.currentPath, move);
     if (newPath != null) {
       _setPath(
@@ -187,6 +193,18 @@ class AnalysisController extends _$AnalysisController {
         shouldForceShowVariation: true,
       );
     }
+  }
+
+  void onPromotionSelect(Role role) {
+    final promotionMove = state.promotionMove;
+    if (promotionMove != null) {
+      final promotion = promotionMove.withPromotion(role);
+      onUserMove(promotion);
+    }
+  }
+
+  void onPromotionCancel() {
+    state = state.copyWith(promotionMove: null);
   }
 
   void userNext() {
@@ -417,6 +435,7 @@ class AnalysisController extends _$AnalysisController {
         currentBranchOpening: opening,
         wikiBooksUrl: _wikiBooksUrl(path),
         lastMove: currentNode.sanMove.move,
+        promotionMove: null,
         root: rootView,
       );
     } else {
@@ -427,6 +446,7 @@ class AnalysisController extends _$AnalysisController {
         currentBranchOpening: opening,
         wikiBooksUrl: _wikiBooksUrl(path),
         lastMove: null,
+        promotionMove: null,
         root: rootView,
       );
     }
@@ -650,6 +670,9 @@ class AnalysisState with _$AnalysisState {
 
     /// The last move played.
     Move? lastMove,
+
+    /// Possible promotion move to be played.
+    NormalMove? promotionMove,
 
     /// Opening of the analysis context (from lichess archived games).
     Opening? contextOpening,

@@ -37,7 +37,92 @@ class AnalysisBoard extends ConsumerStatefulWidget {
 class AnalysisBoardState extends ConsumerState<AnalysisBoard> {
   ISet<Shape> userShapes = ISet();
 
-  ISet<Shape> _computeBestMoveShapes(IList<MoveWithWinningChances> moves) {
+  @override
+  Widget build(BuildContext context) {
+    final ctrlProvider = analysisControllerProvider(widget.pgn, widget.options);
+    final analysisState = ref.watch(ctrlProvider);
+    final boardPrefs = ref.watch(boardPreferencesProvider);
+    final showBestMoveArrow = ref.watch(
+      analysisPreferencesProvider.select(
+        (value) => value.showBestMoveArrow,
+      ),
+    );
+    final showAnnotationsOnBoard = ref.watch(
+      analysisPreferencesProvider.select((value) => value.showAnnotations),
+    );
+
+    final evalBestMoves = ref.watch(
+      engineEvaluationProvider.select((s) => s.eval?.bestMoves),
+    );
+
+    final currentNode = analysisState.currentNode;
+    final annotation = makeAnnotation(currentNode.nags);
+
+    final bestMoves = evalBestMoves ?? currentNode.eval?.bestMoves;
+
+    final sanMove = currentNode.sanMove;
+
+    final ISet<Shape> bestMoveShapes = showBestMoveArrow &&
+            analysisState.isEngineAvailable &&
+            bestMoves != null
+        ? _computeBestMoveShapes(
+            bestMoves,
+            currentNode.position.turn,
+            boardPrefs.pieceSet.assets,
+          )
+        : ISet();
+
+    return Chessboard(
+      size: widget.boardSize,
+      fen: analysisState.position.fen,
+      lastMove: analysisState.lastMove as NormalMove?,
+      orientation: analysisState.pov,
+      game: GameData(
+        playerSide: analysisState.position.isGameOver
+            ? PlayerSide.none
+            : analysisState.position.turn == Side.white
+                ? PlayerSide.white
+                : PlayerSide.black,
+        isCheck: boardPrefs.boardHighlights && analysisState.position.isCheck,
+        sideToMove: analysisState.position.turn,
+        validMoves: analysisState.validMoves,
+        promotionMove: analysisState.promotionMove,
+        onMove: (move, {isDrop, captured}) =>
+            ref.read(ctrlProvider.notifier).onUserMove(move),
+        onPromotionSelect: (role) =>
+            ref.read(ctrlProvider.notifier).onPromotionSelect(role),
+        onPromotionCancel: () =>
+            ref.read(ctrlProvider.notifier).onPromotionCancel(),
+      ),
+      shapes: userShapes.union(bestMoveShapes),
+      annotations:
+          showAnnotationsOnBoard && sanMove != null && annotation != null
+              ? altCastles.containsKey(sanMove.move.uci)
+                  ? IMap({
+                      Move.parse(altCastles[sanMove.move.uci]!)!.to: annotation,
+                    })
+                  : IMap({sanMove.move.to: annotation})
+              : null,
+      settings: boardPrefs.toBoardSettings().copyWith(
+            borderRadius: widget.isTablet
+                ? const BorderRadius.all(Radius.circular(4.0))
+                : BorderRadius.zero,
+            boxShadow: widget.isTablet ? boardShadows : const <BoxShadow>[],
+            drawShape: DrawShapeOptions(
+              enable: true,
+              onCompleteShape: _onCompleteShape,
+              onClearShapes: _onClearShapes,
+              newShapeColor: boardPrefs.shapeColor.color,
+            ),
+          ),
+    );
+  }
+
+  ISet<Shape> _computeBestMoveShapes(
+    IList<MoveWithWinningChances> moves,
+    Side sideToMove,
+    PieceAssets pieceAssets,
+  ) {
     // Scale down all moves with index > 0 based on how much worse their winning chances are compared to the best move
     // (assume moves are ordered by their winning chances, so index==0 is the best move)
     double scaleArrowAgainstBestMove(int index) {
@@ -82,7 +167,8 @@ class AnalysisBoardState extends ConsumerState<AnalysisBoard> {
                   PieceShape(
                     color: color,
                     orig: move.to,
-                    role: promRole,
+                    pieceAssets: pieceAssets,
+                    piece: Piece(color: sideToMove, role: promRole),
                   ),
               ];
             case DropMove(role: final role, to: _):
@@ -90,85 +176,14 @@ class AnalysisBoardState extends ConsumerState<AnalysisBoard> {
                 PieceShape(
                   color: color,
                   orig: move.to,
-                  role: role,
+                  pieceAssets: pieceAssets,
+                  opacity: 0.5,
+                  piece: Piece(color: sideToMove, role: role),
                 ),
               ];
           }
         },
       ).expand((e) => e),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final ctrlProvider = analysisControllerProvider(widget.pgn, widget.options);
-    final analysisState = ref.watch(ctrlProvider);
-    final boardPrefs = ref.watch(boardPreferencesProvider);
-    final showBestMoveArrow = ref.watch(
-      analysisPreferencesProvider.select(
-        (value) => value.showBestMoveArrow,
-      ),
-    );
-    final showAnnotationsOnBoard = ref.watch(
-      analysisPreferencesProvider.select((value) => value.showAnnotations),
-    );
-
-    final evalBestMoves = ref.watch(
-      engineEvaluationProvider.select((s) => s.eval?.bestMoves),
-    );
-
-    final currentNode = analysisState.currentNode;
-    final annotation = makeAnnotation(currentNode.nags);
-
-    final bestMoves = evalBestMoves ?? currentNode.eval?.bestMoves;
-
-    final sanMove = currentNode.sanMove;
-
-    final ISet<Shape> bestMoveShapes = showBestMoveArrow &&
-            analysisState.isEngineAvailable &&
-            bestMoves != null
-        ? _computeBestMoveShapes(bestMoves)
-        : ISet();
-
-    return Chessboard(
-      size: widget.boardSize,
-      onMove: (move, {isDrop, isPremove}) =>
-          ref.read(ctrlProvider.notifier).onUserMove(Move.parse(move.uci)!),
-      state: ChessboardState(
-        orientation: analysisState.pov,
-        interactableSide: analysisState.position.isGameOver
-            ? InteractableSide.none
-            : analysisState.position.turn == Side.white
-                ? InteractableSide.white
-                : InteractableSide.black,
-        fen: analysisState.position.fen,
-        isCheck: boardPrefs.boardHighlights && analysisState.position.isCheck,
-        lastMove: analysisState.lastMove as NormalMove?,
-        sideToMove: analysisState.position.turn,
-        validMoves: analysisState.validMoves,
-        shapes: userShapes.union(bestMoveShapes),
-        annotations: showAnnotationsOnBoard &&
-                sanMove != null &&
-                annotation != null
-            ? altCastles.containsKey(sanMove.move.uci)
-                ? IMap({
-                    Move.parse(altCastles[sanMove.move.uci]!)!.to: annotation,
-                  })
-                : IMap({sanMove.move.to: annotation})
-            : null,
-      ),
-      settings: boardPrefs.toBoardSettings().copyWith(
-            borderRadius: widget.isTablet
-                ? const BorderRadius.all(Radius.circular(4.0))
-                : BorderRadius.zero,
-            boxShadow: widget.isTablet ? boardShadows : const <BoxShadow>[],
-            drawShape: DrawShapeOptions(
-              enable: true,
-              onCompleteShape: _onCompleteShape,
-              onClearShapes: _onClearShapes,
-              newShapeColor: boardPrefs.shapeColor.color,
-            ),
-          ),
     );
   }
 

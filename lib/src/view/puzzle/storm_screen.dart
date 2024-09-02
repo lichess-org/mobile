@@ -77,7 +77,8 @@ class _Load extends ConsumerWidget {
           child: BoardTable(
             topTable: kEmptyWidget,
             bottomTable: kEmptyWidget,
-            boardState: kEmptyBoardState,
+            fen: kEmptyFen,
+            orientation: Side.white,
             errorMessage: e.toString(),
           ),
         );
@@ -143,27 +144,28 @@ class _Body extends ConsumerWidget {
                 bottom: false,
                 child: BoardTable(
                   boardKey: boardKey,
-                  onMove: (move, {isDrop, isPremove}) => ref
-                      .read(ctrlProvider.notifier)
-                      .onUserMove(Move.parse(move.uci)!),
-                  onPremove: (move) =>
-                      ref.read(ctrlProvider.notifier).setPremove(move),
-                  boardState: ChessboardState(
-                    orientation: stormState.pov,
-                    interactableSide: !stormState.firstMovePlayed ||
+                  orientation: stormState.pov,
+                  lastMove: stormState.lastMove as NormalMove?,
+                  fen: stormState.position.fen,
+                  gameData: GameData(
+                    playerSide: !stormState.firstMovePlayed ||
                             stormState.mode == StormMode.ended ||
                             stormState.position.isGameOver
-                        ? InteractableSide.none
+                        ? PlayerSide.none
                         : stormState.pov == Side.white
-                            ? InteractableSide.white
-                            : InteractableSide.black,
-                    fen: stormState.position.fen,
+                            ? PlayerSide.white
+                            : PlayerSide.black,
                     isCheck: boardPreferences.boardHighlights &&
                         stormState.position.isCheck,
-                    lastMove: stormState.lastMove as NormalMove?,
                     sideToMove: stormState.position.turn,
                     validMoves: stormState.validMoves,
-                    premove: stormState.premove as NormalMove?,
+                    promotionMove: stormState.promotionMove,
+                    onMove: (move, {isDrop, captured}) =>
+                        ref.read(ctrlProvider.notifier).onUserMove(move),
+                    onPromotionSelect: (role) =>
+                        ref.read(ctrlProvider.notifier).onPromotionSelect(role),
+                    onPromotionCancel: () =>
+                        ref.read(ctrlProvider.notifier).onPromotionCancel(),
                   ),
                   topTable: _TopTable(data),
                   bottomTable: _Combo(stormState.combo),

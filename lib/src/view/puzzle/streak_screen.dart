@@ -82,7 +82,8 @@ class _Load extends ConsumerWidget {
           child: BoardTable(
             topTable: kEmptyWidget,
             bottomTable: kEmptyWidget,
-            boardState: kEmptyBoardState,
+            fen: kEmptyFen,
+            orientation: Side.white,
             errorMessage: e.toString(),
           ),
         );
@@ -125,26 +126,31 @@ class _Body extends ConsumerWidget {
           child: Center(
             child: SafeArea(
               child: BoardTable(
-                onMove: (move, {isDrop, isPremove}) {
-                  ref
-                      .read(ctrlProvider.notifier)
-                      .onUserMove(Move.parse(move.uci)!);
-                },
-                boardState: ChessboardState(
-                  orientation: puzzleState.pov,
-                  interactableSide: puzzleState.mode == PuzzleMode.load ||
+                orientation: puzzleState.pov,
+                fen: puzzleState.fen,
+                lastMove: puzzleState.lastMove as NormalMove?,
+                gameData: GameData(
+                  playerSide: puzzleState.mode == PuzzleMode.load ||
                           puzzleState.position.isGameOver
-                      ? InteractableSide.none
+                      ? PlayerSide.none
                       : puzzleState.mode == PuzzleMode.view
-                          ? InteractableSide.both
+                          ? PlayerSide.both
                           : puzzleState.pov == Side.white
-                              ? InteractableSide.white
-                              : InteractableSide.black,
-                  fen: puzzleState.fen,
+                              ? PlayerSide.white
+                              : PlayerSide.black,
                   isCheck: puzzleState.position.isCheck,
-                  lastMove: puzzleState.lastMove as NormalMove?,
                   sideToMove: puzzleState.position.turn,
                   validMoves: puzzleState.validMoves,
+                  promotionMove: puzzleState.promotionMove,
+                  onMove: (move, {isDrop, captured}) {
+                    ref.read(ctrlProvider.notifier).onUserMove(move);
+                  },
+                  onPromotionSelect: (role) {
+                    ref.read(ctrlProvider.notifier).onPromotionSelect(role);
+                  },
+                  onPromotionCancel: () {
+                    ref.read(ctrlProvider.notifier).onPromotionCancel();
+                  },
                 ),
                 topTable: Center(
                   child: Padding(

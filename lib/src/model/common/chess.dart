@@ -46,6 +46,14 @@ const altCastles = {
   'e8h8': 'e8g8',
 };
 
+/// Returns `true` if the move is a pawn promotion move that is not yet promoted.
+bool isPromotionPawnMove(Position position, NormalMove move) {
+  return move.promotion == null &&
+      position.board.roleAt(move.from) == Role.pawn &&
+      ((move.to.rank == Rank.first && position.turn == Side.black) ||
+          (move.to.rank == Rank.eighth && position.turn == Side.white));
+}
+
 /// Set of supported variants for reading a game (not playing).
 const ISet<Variant> readSupportedVariants = ISetConst({
   Variant.standard,

@@ -116,6 +116,7 @@ class _BodyState extends ConsumerState<_Body> {
   int stepCursor = 0;
   (String, Move)? moveToConfirm;
   bool isBoardTurned = false;
+  NormalMove? promotionMove;
 
   bool get isReplaying => stepCursor < game.steps.length - 1;
   bool get canGoForward => stepCursor < game.steps.length - 1;
@@ -207,21 +208,24 @@ class _BodyState extends ConsumerState<_Body> {
           child: SafeArea(
             bottom: false,
             child: BoardTable(
-              onMove: (move, {isDrop, isPremove}) {
-                onUserMove(Move.parse(move.uci)!);
-              },
-              boardState: ChessboardState(
-                interactableSide: game.playable && !isReplaying
+              orientation: isBoardTurned ? youAre.opposite : youAre,
+              fen: position.fen,
+              lastMove: game.moveAt(stepCursor) as NormalMove?,
+              gameData: GameData(
+                playerSide: game.playable && !isReplaying
                     ? youAre == Side.white
-                        ? InteractableSide.white
-                        : InteractableSide.black
-                    : InteractableSide.none,
-                orientation: isBoardTurned ? youAre.opposite : youAre,
-                fen: position.fen,
-                lastMove: game.moveAt(stepCursor) as NormalMove?,
+                        ? PlayerSide.white
+                        : PlayerSide.black
+                    : PlayerSide.none,
                 isCheck: position.isCheck,
                 sideToMove: sideToMove,
                 validMoves: makeLegalMoves(position),
+                promotionMove: promotionMove,
+                onMove: (move, {isDrop, captured}) {
+                  onUserMove(move);
+                },
+                onPromotionSelect: onPromotionSelected,
+                onPromotionCancel: onPromotionCanceled,
               ),
               topTable: topPlayer,
               bottomTable: bottomPlayer,
@@ -345,7 +349,14 @@ class _BodyState extends ConsumerState<_Body> {
     }
   }
 
-  void onUserMove(Move move) {
+  void onUserMove(NormalMove move) {
+    if (isPromotionPawnMove(game.lastPosition, move)) {
+      setState(() {
+        promotionMove = move;
+      });
+      return;
+    }
+
     final (newPos, newSan) = game.lastPosition.makeSan(move);
     final sanMove = SanMove(newSan, move);
     final newStep = GameStep(
@@ -359,10 +370,24 @@ class _BodyState extends ConsumerState<_Body> {
       game = game.copyWith(
         steps: game.steps.add(newStep),
       );
+      promotionMove = null;
       stepCursor = stepCursor + 1;
     });
 
     _moveFeedback(sanMove);
+  }
+
+  void onPromotionSelected(Role role) {
+    if (promotionMove != null) {
+      final move = promotionMove!.withPromotion(role);
+      onUserMove(move);
+    }
+  }
+
+  void onPromotionCanceled() {
+    setState(() {
+      promotionMove = null;
+    });
   }
 
   void confirmMove() {
