@@ -19,7 +19,7 @@ dependencies:
   cupertino_http: ^1.1.0
   cupertino_icons: ^1.0.2
   dartchess: ^0.8.0
-  deep_pick: ^1.0.0
+  deep_pick: ^1.1.0
   device_info_plus: ^10.1.0
   dynamic_color: ^1.6.9
   fast_immutable_collections: ^10.0.0
