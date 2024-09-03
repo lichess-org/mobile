@@ -24,6 +24,7 @@ import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
@@ -589,6 +590,8 @@ class _BottomBar extends ConsumerWidget {
         ref.watch(ctrlProvider.select((value) => value.displayMode));
     final canShowGameSummary =
         ref.watch(ctrlProvider.select((value) => value.canShowGameSummary));
+    final isOnline =
+        ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
 
     return BottomBar(
       children: [
@@ -611,13 +614,17 @@ class _BottomBar extends ConsumerWidget {
           ),
         BottomBarButton(
           label: context.l10n.openingExplorer,
-          onTap: () => pushPlatformRoute(
-            context,
-            builder: (_) => OpeningExplorerScreen(
-              pgn: pgn,
-              options: options,
-            ),
-          ),
+          onTap: isOnline
+              ? () {
+                  pushPlatformRoute(
+                    context,
+                    builder: (_) => OpeningExplorerScreen(
+                      pgn: pgn,
+                      options: options,
+                    ),
+                  );
+                }
+              : null,
           icon: Icons.explore,
         ),
         RepeatButton(
