@@ -986,7 +986,8 @@ class GameState with _$GameState {
   }) = _GameState;
 
   /// Whether the zen mode is active
-  bool get isZenModeActive => game.playable && isZenModeEnabled;
+  bool get isZenModeActive =>
+      game.playable ? isZenModeEnabled : game.prefs?.zenMode == Zen.yes;
 
   /// Whether zen mode is enabled by account preference or local game setting
   bool get isZenModeEnabled =>
