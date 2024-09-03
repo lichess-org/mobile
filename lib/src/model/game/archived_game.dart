@@ -259,14 +259,32 @@ ClockData _clockDataFromPick(RequiredPick pick) {
 }
 
 Player _playerFromUserGamePick(RequiredPick pick) {
+  final originalName = pick('name').asStringOrNull();
   return Player(
     user: pick('user').asLightUserOrNull(),
-    name: pick('name').asStringOrNull(),
-    rating: pick('rating').asIntOrNull(),
+    name: _removeRatingFromName(originalName),
+    rating:
+        pick('rating').asIntOrNull() ?? _extractRatingFromName(originalName),
     ratingDiff: pick('ratingDiff').asIntOrNull(),
     aiLevel: pick('aiLevel').asIntOrNull(),
     analysis: pick('analysis').letOrNull(_playerAnalysisFromPick),
   );
+}
+
+int? _extractRatingFromName(String? name) {
+  if (name == null) return null;
+  final regex = RegExp(r'\((\d+)\)');
+  final match = regex.firstMatch(name);
+  if (match != null) {
+    return int.tryParse(match.group(1)!);
+  }
+  return null;
+}
+
+String? _removeRatingFromName(String? name) {
+  if (name == null) return null;
+  final regex = RegExp(r'\s*\(\d+\)\s*');
+  return name.replaceAll(regex, '');
 }
 
 PlayerAnalysis _playerAnalysisFromPick(RequiredPick pick) {

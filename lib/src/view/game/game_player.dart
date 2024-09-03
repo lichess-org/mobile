@@ -61,11 +61,13 @@ class GamePlayer extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Icon(
-                player.onGame == true ? Icons.cloud : Icons.cloud_off,
-                color: player.onGame == true ? LichessColors.green : null,
-                size: 14,
-              ),
+              if (player.user != null) ...[
+                Icon(
+                  player.onGame == true ? Icons.cloud : Icons.cloud_off,
+                  color: player.onGame == true ? LichessColors.green : null,
+                  size: 14,
+                ),
+              ],
               const SizedBox(width: 5),
               if (player.user?.isPatron == true) ...[
                 Icon(
