@@ -19,6 +19,7 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_board.dart';
 import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -955,68 +956,48 @@ class _BottomBar extends ConsumerWidget {
       OpeningDatabase.player => context.l10n.player,
     };
 
-    return Container(
-      color: Theme.of(context).platform == TargetPlatform.iOS
-          ? CupertinoTheme.of(context).barBackgroundColor
-          : Theme.of(context).bottomAppBarTheme.color,
-      child: SafeArea(
-        top: false,
-        child: SizedBox(
-          height: kBottomBarHeight,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Expanded(
-                child: BottomBarButton(
-                  label: dbLabel,
-                  showLabel: true,
-                  onTap: () => showAdaptiveBottomSheet<void>(
-                    context: context,
-                    isScrollControlled: true,
-                    showDragHandle: true,
-                    isDismissible: true,
-                    builder: (_) => OpeningExplorerSettings(pgn, options),
-                  ),
-                  icon: Icons.tune,
-                ),
-              ),
-              Expanded(
-                child: BottomBarButton(
-                  label: 'Flip',
-                  tooltip: context.l10n.flipBoard,
-                  showLabel: true,
-                  onTap: () => ref.read(ctrlProvider.notifier).toggleBoard(),
-                  icon: CupertinoIcons.arrow_2_squarepath,
-                ),
-              ),
-              Expanded(
-                child: RepeatButton(
-                  onLongPress: canGoBack ? () => _moveBackward(ref) : null,
-                  child: BottomBarButton(
-                    onTap: canGoBack ? () => _moveBackward(ref) : null,
-                    label: 'Previous',
-                    showLabel: true,
-                    icon: CupertinoIcons.chevron_back,
-                    showTooltip: false,
-                  ),
-                ),
-              ),
-              Expanded(
-                child: RepeatButton(
-                  onLongPress: canGoNext ? () => _moveForward(ref) : null,
-                  child: BottomBarButton(
-                    icon: CupertinoIcons.chevron_forward,
-                    label: 'Next',
-                    showLabel: true,
-                    onTap: canGoNext ? () => _moveForward(ref) : null,
-                    showTooltip: false,
-                  ),
-                ),
-              ),
-            ],
+    return BottomBar(
+      children: [
+        BottomBarButton(
+          label: dbLabel,
+          showLabel: true,
+          onTap: () => showAdaptiveBottomSheet<void>(
+            context: context,
+            isScrollControlled: true,
+            showDragHandle: true,
+            isDismissible: true,
+            builder: (_) => OpeningExplorerSettings(pgn, options),
+          ),
+          icon: Icons.tune,
+        ),
+        BottomBarButton(
+          label: 'Flip',
+          tooltip: context.l10n.flipBoard,
+          showLabel: true,
+          onTap: () => ref.read(ctrlProvider.notifier).toggleBoard(),
+          icon: CupertinoIcons.arrow_2_squarepath,
+        ),
+        RepeatButton(
+          onLongPress: canGoBack ? () => _moveBackward(ref) : null,
+          child: BottomBarButton(
+            onTap: canGoBack ? () => _moveBackward(ref) : null,
+            label: 'Previous',
+            showLabel: true,
+            icon: CupertinoIcons.chevron_back,
+            showTooltip: false,
           ),
         ),
-      ),
+        RepeatButton(
+          onLongPress: canGoNext ? () => _moveForward(ref) : null,
+          child: BottomBarButton(
+            icon: CupertinoIcons.chevron_forward,
+            label: 'Next',
+            showLabel: true,
+            onTap: canGoNext ? () => _moveForward(ref) : null,
+            showTooltip: false,
+          ),
+        ),
+      ],
     );
   }
 

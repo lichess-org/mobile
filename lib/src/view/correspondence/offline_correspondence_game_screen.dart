@@ -4,7 +4,6 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
@@ -22,6 +21,7 @@ import 'package:lichess_mobile/src/view/game/correspondence_clock_widget.dart';
 import 'package:lichess_mobile/src/view/game/game_player.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
+import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
@@ -257,115 +257,92 @@ class _BodyState extends ConsumerState<_Body> {
             ),
           ),
         ),
-        Container(
-          color: Theme.of(context).platform == TargetPlatform.iOS
-              ? CupertinoTheme.of(context).barBackgroundColor
-              : Theme.of(context).bottomAppBarTheme.color,
-          child: SafeArea(
-            top: false,
-            child: SizedBox(
-              height: kBottomBarHeight,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Expanded(
-                    child: BottomBarButton(
-                      label: context.l10n.flipBoard,
-                      onTap: () {
-                        setState(() {
-                          isBoardTurned = !isBoardTurned;
-                        });
-                      },
-                      icon: CupertinoIcons.arrow_2_squarepath,
+        BottomBar(
+          children: [
+            BottomBarButton(
+              label: context.l10n.flipBoard,
+              onTap: () {
+                setState(() {
+                  isBoardTurned = !isBoardTurned;
+                });
+              },
+              icon: CupertinoIcons.arrow_2_squarepath,
+            ),
+            BottomBarButton(
+              label: context.l10n.analysis,
+              onTap: () {
+                pushPlatformRoute(
+                  context,
+                  builder: (_) => AnalysisScreen(
+                    pgnOrId: game.makePgn(),
+                    options: AnalysisOptions(
+                      isLocalEvaluationAllowed: false,
+                      variant: game.variant,
+                      initialMoveCursor: stepCursor,
+                      orientation: game.youAre,
+                      id: game.id,
+                      division: game.meta.division,
                     ),
+                    title: context.l10n.analysis,
                   ),
-                  Expanded(
-                    child: BottomBarButton(
-                      label: context.l10n.analysis,
-                      onTap: () {
-                        pushPlatformRoute(
-                          context,
-                          builder: (_) => AnalysisScreen(
-                            pgnOrId: game.makePgn(),
-                            options: AnalysisOptions(
-                              isLocalEvaluationAllowed: false,
-                              variant: game.variant,
-                              initialMoveCursor: stepCursor,
-                              orientation: game.youAre,
-                              id: game.id,
-                              division: game.meta.division,
-                            ),
-                            title: context.l10n.analysis,
-                          ),
-                        );
-                      },
-                      icon: Icons.biotech,
-                    ),
-                  ),
-                  Expanded(
-                    child: BottomBarButton(
-                      label: 'Go to the next game',
-                      icon: Icons.skip_next,
-                      onTap: offlineOngoingGames.maybeWhen(
-                        data: (games) {
-                          final nextTurn = games
-                              .whereNot((g) => g.$2.id == game.id)
-                              .firstWhereOrNull((g) => g.$2.isPlayerTurn);
-                          return nextTurn != null
-                              ? () {
-                                  widget.onGameChanged(nextTurn);
-                                }
-                              : null;
-                        },
-                        orElse: () => null,
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: BottomBarButton(
-                      label: context.l10n.mobileCorrespondenceClearSavedMove,
-                      onTap: game.registeredMoveAtPgn != null
-                          ? () {
-                              showConfirmDialog<void>(
-                                context,
-                                title: Text(
-                                  context
-                                      .l10n.mobileCorrespondenceClearSavedMove,
-                                ),
-                                isDestructiveAction: true,
-                                onConfirm: (_) => deleteRegisteredMove(),
-                              );
-                            }
-                          : null,
-                      icon: Icons.save,
-                    ),
-                  ),
-                  Expanded(
-                    child: RepeatButton(
-                      onLongPress: canGoBackward ? () => moveBackward() : null,
-                      child: BottomBarButton(
-                        onTap: canGoBackward ? () => moveBackward() : null,
-                        label: 'Previous',
-                        icon: CupertinoIcons.chevron_back,
-                        showTooltip: false,
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: RepeatButton(
-                      onLongPress: canGoForward ? () => moveForward() : null,
-                      child: BottomBarButton(
-                        onTap: canGoForward ? () => moveForward() : null,
-                        label: context.l10n.next,
-                        icon: CupertinoIcons.chevron_forward,
-                        showTooltip: false,
-                      ),
-                    ),
-                  ),
-                ],
+                );
+              },
+              icon: Icons.biotech,
+            ),
+            BottomBarButton(
+              label: 'Go to the next game',
+              icon: Icons.skip_next,
+              onTap: offlineOngoingGames.maybeWhen(
+                data: (games) {
+                  final nextTurn = games
+                      .whereNot((g) => g.$2.id == game.id)
+                      .firstWhereOrNull((g) => g.$2.isPlayerTurn);
+                  return nextTurn != null
+                      ? () {
+                          widget.onGameChanged(nextTurn);
+                        }
+                      : null;
+                },
+                orElse: () => null,
               ),
             ),
-          ),
+            BottomBarButton(
+              label: context.l10n.mobileCorrespondenceClearSavedMove,
+              onTap: game.registeredMoveAtPgn != null
+                  ? () {
+                      showConfirmDialog<void>(
+                        context,
+                        title: Text(
+                          context.l10n.mobileCorrespondenceClearSavedMove,
+                        ),
+                        isDestructiveAction: true,
+                        onConfirm: (_) => deleteRegisteredMove(),
+                      );
+                    }
+                  : null,
+              icon: Icons.save,
+            ),
+            RepeatButton(
+              onLongPress: canGoBackward ? () => moveBackward() : null,
+              child: BottomBarButton(
+                onTap: canGoBackward ? () => moveBackward() : null,
+                label: 'Previous',
+                icon: CupertinoIcons.chevron_back,
+                showTooltip: false,
+              ),
+            ),
+            Expanded(
+              child: RepeatButton(
+                onLongPress: canGoForward ? () => moveForward() : null,
+                child: BottomBarButton(
+                  onTap: canGoForward ? () => moveForward() : null,
+                  label: context.l10n.next,
+                  icon: CupertinoIcons.chevron_forward,
+                  showTooltip: false,
+                ),
+              ),
+            ),
+          ],
         ),
       ],
     );

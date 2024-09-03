@@ -7,7 +7,6 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -26,6 +25,7 @@ import 'package:lichess_mobile/src/view/game/correspondence_clock_widget.dart';
 import 'package:lichess_mobile/src/view/game/message_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
+import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
@@ -443,212 +443,189 @@ class _GameBottomBar extends ConsumerWidget {
             : null;
 
         return [
-          Expanded(
-            child: BottomBarButton(
-              label: context.l10n.menu,
-              onTap: () {
-                _showGameMenu(context, ref);
-              },
-              icon: Icons.menu,
-            ),
+          BottomBarButton(
+            label: context.l10n.menu,
+            onTap: () {
+              _showGameMenu(context, ref);
+            },
+            icon: Icons.menu,
           ),
           if (!gameState.game.playable)
-            Expanded(
-              child: BottomBarButton(
-                label: context.l10n.mobileShowResult,
-                onTap: () {
-                  showAdaptiveDialog<void>(
-                    context: context,
-                    builder: (context) => GameResultDialog(
-                      id: id,
-                      onNewOpponentCallback: onNewOpponentCallback,
-                    ),
-                    barrierDismissible: true,
-                  );
-                },
-                icon: Icons.info_outline,
-              ),
+            BottomBarButton(
+              label: context.l10n.mobileShowResult,
+              onTap: () {
+                showAdaptiveDialog<void>(
+                  context: context,
+                  builder: (context) => GameResultDialog(
+                    id: id,
+                    onNewOpponentCallback: onNewOpponentCallback,
+                  ),
+                  barrierDismissible: true,
+                );
+              },
+              icon: Icons.info_outline,
             ),
           if (gameState.game.playable &&
               gameState.game.opponent?.offeringDraw == true)
-            Expanded(
-              child: BottomBarButton(
-                label: context.l10n.yourOpponentOffersADraw,
-                highlighted: true,
-                onTap: () {
-                  showAdaptiveDialog<void>(
-                    context: context,
-                    builder: (context) => _GameNegotiationDialog(
-                      title: Text(context.l10n.yourOpponentOffersADraw),
-                      onAccept: () {
-                        ref
-                            .read(gameControllerProvider(id).notifier)
-                            .offerOrAcceptDraw();
-                      },
-                      onDecline: () {
-                        ref
-                            .read(gameControllerProvider(id).notifier)
-                            .cancelOrDeclineDraw();
-                      },
-                    ),
-                    barrierDismissible: true,
-                  );
-                },
-                icon: Icons.handshake_outlined,
-              ),
+            BottomBarButton(
+              label: context.l10n.yourOpponentOffersADraw,
+              highlighted: true,
+              onTap: () {
+                showAdaptiveDialog<void>(
+                  context: context,
+                  builder: (context) => _GameNegotiationDialog(
+                    title: Text(context.l10n.yourOpponentOffersADraw),
+                    onAccept: () {
+                      ref
+                          .read(gameControllerProvider(id).notifier)
+                          .offerOrAcceptDraw();
+                    },
+                    onDecline: () {
+                      ref
+                          .read(gameControllerProvider(id).notifier)
+                          .cancelOrDeclineDraw();
+                    },
+                  ),
+                  barrierDismissible: true,
+                );
+              },
+              icon: Icons.handshake_outlined,
             )
           else if (gameState.game.playable &&
               gameState.game.isThreefoldRepetition == true)
-            Expanded(
-              child: BottomBarButton(
-                label: context.l10n.threefoldRepetition,
-                highlighted: true,
-                onTap: () {
-                  showAdaptiveDialog<void>(
-                    context: context,
-                    builder: (context) => _ThreefoldDialog(id: id),
-                    barrierDismissible: true,
-                  );
-                },
-                icon: Icons.handshake_outlined,
-              ),
+            BottomBarButton(
+              label: context.l10n.threefoldRepetition,
+              highlighted: true,
+              onTap: () {
+                showAdaptiveDialog<void>(
+                  context: context,
+                  builder: (context) => _ThreefoldDialog(id: id),
+                  barrierDismissible: true,
+                );
+              },
+              icon: Icons.handshake_outlined,
             )
           else if (gameState.game.playable &&
               gameState.game.opponent?.proposingTakeback == true)
-            Expanded(
-              child: BottomBarButton(
-                label: context.l10n.yourOpponentProposesATakeback,
-                highlighted: true,
-                onTap: () {
-                  showAdaptiveDialog<void>(
-                    context: context,
-                    builder: (context) => _GameNegotiationDialog(
-                      title: Text(context.l10n.yourOpponentProposesATakeback),
-                      onAccept: () {
-                        ref
-                            .read(gameControllerProvider(id).notifier)
-                            .acceptTakeback();
-                      },
-                      onDecline: () {
-                        ref
-                            .read(gameControllerProvider(id).notifier)
-                            .cancelOrDeclineTakeback();
-                      },
-                    ),
-                    barrierDismissible: true,
-                  );
-                },
-                icon: CupertinoIcons.arrowshape_turn_up_left,
-              ),
+            BottomBarButton(
+              label: context.l10n.yourOpponentProposesATakeback,
+              highlighted: true,
+              onTap: () {
+                showAdaptiveDialog<void>(
+                  context: context,
+                  builder: (context) => _GameNegotiationDialog(
+                    title: Text(context.l10n.yourOpponentProposesATakeback),
+                    onAccept: () {
+                      ref
+                          .read(gameControllerProvider(id).notifier)
+                          .acceptTakeback();
+                    },
+                    onDecline: () {
+                      ref
+                          .read(gameControllerProvider(id).notifier)
+                          .cancelOrDeclineTakeback();
+                    },
+                  ),
+                  barrierDismissible: true,
+                );
+              },
+              icon: CupertinoIcons.arrowshape_turn_up_left,
             )
           else if (gameState.game.finished)
-            Expanded(
-              child: BottomBarButton(
-                label: context.l10n.gameAnalysis,
-                icon: Icons.biotech,
-                onTap: () {
-                  pushPlatformRoute(
-                    context,
-                    builder: (_) => AnalysisScreen(
-                      pgnOrId: gameState.analysisPgn,
-                      options: gameState.analysisOptions,
-                      title: context.l10n.gameAnalysis,
-                    ),
-                  );
-                },
-              ),
+            BottomBarButton(
+              label: context.l10n.gameAnalysis,
+              icon: Icons.biotech,
+              onTap: () {
+                pushPlatformRoute(
+                  context,
+                  builder: (_) => AnalysisScreen(
+                    pgnOrId: gameState.analysisPgn,
+                    options: gameState.analysisOptions,
+                    title: context.l10n.gameAnalysis,
+                  ),
+                );
+              },
             )
           else
-            Expanded(
-              child: BottomBarButton(
-                label: context.l10n.resign,
-                onTap: gameState.game.resignable
-                    ? gameState.shouldConfirmResignAndDrawOffer
-                        ? () => _showConfirmDialog(
-                              context,
-                              description: Text(context.l10n.resignTheGame),
-                              onConfirm: () {
-                                ref
-                                    .read(gameControllerProvider(id).notifier)
-                                    .resignGame();
-                              },
-                            )
-                        : () {
-                            ref
-                                .read(gameControllerProvider(id).notifier)
-                                .resignGame();
-                          }
-                    : null,
-                icon: Icons.flag,
-              ),
+            BottomBarButton(
+              label: context.l10n.resign,
+              onTap: gameState.game.resignable
+                  ? gameState.shouldConfirmResignAndDrawOffer
+                      ? () => _showConfirmDialog(
+                            context,
+                            description: Text(context.l10n.resignTheGame),
+                            onConfirm: () {
+                              ref
+                                  .read(gameControllerProvider(id).notifier)
+                                  .resignGame();
+                            },
+                          )
+                      : () {
+                          ref
+                              .read(gameControllerProvider(id).notifier)
+                              .resignGame();
+                        }
+                  : null,
+              icon: Icons.flag,
             ),
           if (gameState.game.meta.speed == Speed.correspondence &&
               !gameState.game.finished)
-            Expanded(
-              child: BottomBarButton(
-                label: 'Go to the next game',
-                icon: Icons.skip_next,
-                onTap: ongoingGames.maybeWhen(
-                  data: (games) {
-                    final nextTurn = games
-                        .whereNot((g) => g.fullId == id)
-                        .firstWhereOrNull((g) => g.isMyTurn);
-                    return nextTurn != null
-                        ? () => onLoadGameCallback(nextTurn.fullId)
-                        : null;
-                  },
-                  orElse: () => null,
-                ),
+            BottomBarButton(
+              label: 'Go to the next game',
+              icon: Icons.skip_next,
+              onTap: ongoingGames.maybeWhen(
+                data: (games) {
+                  final nextTurn = games
+                      .whereNot((g) => g.fullId == id)
+                      .firstWhereOrNull((g) => g.isMyTurn);
+                  return nextTurn != null
+                      ? () => onLoadGameCallback(nextTurn.fullId)
+                      : null;
+                },
+                orElse: () => null,
               ),
             ),
-          Expanded(
+          BottomBarButton(
+            label: context.l10n.chat,
+            onTap: isChatEnabled
+                ? () {
+                    pushPlatformRoute(
+                      context,
+                      builder: (BuildContext context) {
+                        return MessageScreen(
+                          title: UserFullNameWidget(
+                            user: gameState.game.opponent?.user,
+                          ),
+                          me: gameState.game.me?.user,
+                          id: id,
+                        );
+                      },
+                    );
+                  }
+                : null,
+            icon: Theme.of(context).platform == TargetPlatform.iOS
+                ? CupertinoIcons.chat_bubble
+                : Icons.chat_bubble_outline,
+            chip: chatUnreadChip,
+          ),
+          RepeatButton(
+            onLongPress:
+                gameState.canGoBackward ? () => _moveBackward(ref) : null,
             child: BottomBarButton(
-              label: context.l10n.chat,
-              onTap: isChatEnabled
-                  ? () {
-                      pushPlatformRoute(
-                        context,
-                        builder: (BuildContext context) {
-                          return MessageScreen(
-                            title: UserFullNameWidget(
-                              user: gameState.game.opponent?.user,
-                            ),
-                            me: gameState.game.me?.user,
-                            id: id,
-                          );
-                        },
-                      );
-                    }
-                  : null,
-              icon: Theme.of(context).platform == TargetPlatform.iOS
-                  ? CupertinoIcons.chat_bubble
-                  : Icons.chat_bubble_outline,
-              chip: chatUnreadChip,
+              onTap: gameState.canGoBackward ? () => _moveBackward(ref) : null,
+              label: 'Previous',
+              icon: CupertinoIcons.chevron_back,
+              showTooltip: false,
             ),
           ),
-          Expanded(
-            child: RepeatButton(
-              onLongPress:
-                  gameState.canGoBackward ? () => _moveBackward(ref) : null,
-              child: BottomBarButton(
-                onTap:
-                    gameState.canGoBackward ? () => _moveBackward(ref) : null,
-                label: 'Previous',
-                icon: CupertinoIcons.chevron_back,
-                showTooltip: false,
-              ),
-            ),
-          ),
-          Expanded(
-            child: RepeatButton(
-              onLongPress:
-                  gameState.canGoForward ? () => _moveForward(ref) : null,
-              child: BottomBarButton(
-                onTap: gameState.canGoForward ? () => _moveForward(ref) : null,
-                label: context.l10n.next,
-                icon: CupertinoIcons.chevron_forward,
-                showTooltip: false,
-              ),
+          RepeatButton(
+            onLongPress:
+                gameState.canGoForward ? () => _moveForward(ref) : null,
+            child: BottomBarButton(
+              onTap: gameState.canGoForward ? () => _moveForward(ref) : null,
+              label: context.l10n.next,
+              icon: CupertinoIcons.chevron_forward,
+              showTooltip: false,
             ),
           ),
         ];
@@ -657,19 +634,8 @@ class _GameBottomBar extends ConsumerWidget {
       error: (e, s) => [],
     );
 
-    return Container(
-      color: Theme.of(context).platform == TargetPlatform.iOS
-          ? null
-          : Theme.of(context).bottomAppBarTheme.color,
-      child: SafeArea(
-        top: false,
-        child: SizedBox(
-          height: kBottomBarHeight,
-          child: Row(
-            children: children,
-          ),
-        ),
-      ),
+    return BottomBar(
+      children: children,
     );
   }
 

@@ -24,6 +24,7 @@ import 'package:lichess_mobile/src/view/puzzle/storm_clock.dart';
 import 'package:lichess_mobile/src/view/puzzle/storm_dashboard.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
+import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -607,58 +608,45 @@ class _BottomBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final stormState = ref.watch(ctrl);
-    return Container(
-      color: Theme.of(context).platform == TargetPlatform.iOS
-          ? null
-          : Theme.of(context).bottomAppBarTheme.color,
-      child: SafeArea(
-        top: false,
-        child: SizedBox(
-          height: kBottomBarHeight,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              if (stormState.mode == StormMode.initial)
-                BottomBarButton(
-                  icon: Icons.info_outline,
-                  label: context.l10n.aboutX('Storm'),
-                  showLabel: true,
-                  onTap: () => _stormInfoDialogBuilder(context),
-                ),
-              BottomBarButton(
-                icon: Icons.delete,
-                label: context.l10n.stormNewRun.split('(').first.trimRight(),
-                showLabel: true,
-                onTap: () {
-                  stormState.clock.reset();
-                  ref.invalidate(stormProvider);
-                },
-              ),
-              if (stormState.mode == StormMode.running)
-                BottomBarButton(
-                  icon: LichessIcons.flag,
-                  label: context.l10n.stormEndRun.split('(').first.trimRight(),
-                  showLabel: true,
-                  onTap: stormState.puzzleIndex >= 1
-                      ? () {
-                          if (stormState.clock.startAt != null) {
-                            stormState.clock.sendEnd();
-                          }
-                        }
-                      : null,
-                ),
-              if (stormState.mode == StormMode.ended &&
-                  stormState.stats != null)
-                BottomBarButton(
-                  icon: Icons.open_in_new,
-                  label: 'Result',
-                  showLabel: true,
-                  onTap: () => _showStats(context, stormState.stats!),
-                ),
-            ],
+    return BottomBar(
+      children: [
+        if (stormState.mode == StormMode.initial)
+          BottomBarButton(
+            icon: Icons.info_outline,
+            label: context.l10n.aboutX('Storm'),
+            showLabel: true,
+            onTap: () => _stormInfoDialogBuilder(context),
           ),
+        BottomBarButton(
+          icon: Icons.delete,
+          label: context.l10n.stormNewRun.split('(').first.trimRight(),
+          showLabel: true,
+          onTap: () {
+            stormState.clock.reset();
+            ref.invalidate(stormProvider);
+          },
         ),
-      ),
+        if (stormState.mode == StormMode.running)
+          BottomBarButton(
+            icon: LichessIcons.flag,
+            label: context.l10n.stormEndRun.split('(').first.trimRight(),
+            showLabel: true,
+            onTap: stormState.puzzleIndex >= 1
+                ? () {
+                    if (stormState.clock.startAt != null) {
+                      stormState.clock.sendEnd();
+                    }
+                  }
+                : null,
+          ),
+        if (stormState.mode == StormMode.ended && stormState.stats != null)
+          BottomBarButton(
+            icon: Icons.open_in_new,
+            label: 'Result',
+            showLabel: true,
+            onTap: () => _showStats(context, stormState.stats!),
+          ),
+      ],
     );
   }
 }
