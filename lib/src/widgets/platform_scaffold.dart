@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
 /// Displays an [AppBar] for Android and a [CupertinoNavigationBar] for iOS.
@@ -37,8 +36,6 @@ class PlatformAppBar extends StatelessWidget {
   final List<Widget> actions;
 
   /// Will be passed to [CupertinoNavigationBar.padding] on iOS. Has no effect on Android.
-  ///
-  /// If null, will use [Styles.cupertinoAppBarTrailingWidgetPadding].
   final EdgeInsetsDirectional? cupertinoPadding;
 
   /// Will be passed to [AppBar.titleSpacing] on Android. Has no effect on iOS.
@@ -46,7 +43,6 @@ class PlatformAppBar extends StatelessWidget {
 
   AppBar _androidBuilder(BuildContext context) {
     return AppBar(
-      key: key,
       titleSpacing: androidTitleSpacing,
       leading: leading,
       title: title,
@@ -57,10 +53,7 @@ class PlatformAppBar extends StatelessWidget {
 
   CupertinoNavigationBar _iosBuilder(BuildContext context) {
     return CupertinoNavigationBar(
-      key: key,
-      backgroundColor: Styles.cupertinoScaffoldColor.resolveFrom(context),
-      border: null,
-      padding: cupertinoPadding ?? Styles.cupertinoAppBarTrailingWidgetPadding,
+      padding: cupertinoPadding,
       middle: title,
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
