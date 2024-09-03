@@ -214,19 +214,16 @@ class _BottomBar extends ConsumerWidget {
         ),
         gameCursor.when(
           data: (data) {
-            return Expanded(
-              child: BottomBarButton(
-                label: context.l10n.mobileShowResult,
-                icon: Icons.info_outline,
-                onTap: () {
-                  showAdaptiveDialog<void>(
-                    context: context,
-                    builder: (context) =>
-                        ArchivedGameResultDialog(game: data.$1),
-                    barrierDismissible: true,
-                  );
-                },
-              ),
+            return BottomBarButton(
+              label: context.l10n.mobileShowResult,
+              icon: Icons.info_outline,
+              onTap: () {
+                showAdaptiveDialog<void>(
+                  context: context,
+                  builder: (context) => ArchivedGameResultDialog(game: data.$1),
+                  barrierDismissible: true,
+                );
+              },
             );
           },
           loading: () => const SizedBox.shrink(),
