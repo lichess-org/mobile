@@ -362,7 +362,7 @@ class _ContextMenu extends ConsumerWidget {
               Builder(
                 builder: (context) {
                   return BottomSheetContextMenuAction(
-                    icon: CupertinoIcons.share,
+                    icon: Icons.text_snippet,
                     closeOnPressed:
                         false, // needed for the share dialog on iPad
                     child: Text('PGN: ${context.l10n.downloadAnnotated}'),
@@ -397,7 +397,7 @@ class _ContextMenu extends ConsumerWidget {
               Builder(
                 builder: (context) {
                   return BottomSheetContextMenuAction(
-                    icon: CupertinoIcons.share,
+                    icon: Icons.text_snippet,
                     closeOnPressed:
                         false, // needed for the share dialog on iPad
                     // TODO improve translation
