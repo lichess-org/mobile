@@ -35,6 +35,16 @@ const _kTableRowPadding = EdgeInsets.symmetric(
   vertical: _kTableRowVerticalPadding,
 );
 
+Color _whiteBoxColor(BuildContext context) =>
+    Theme.of(context).brightness == Brightness.dark
+        ? Colors.white.withOpacity(0.8)
+        : Colors.white;
+
+Color _blackBoxColor(BuildContext context) =>
+    Theme.of(context).brightness == Brightness.light
+        ? Colors.black.withOpacity(0.7)
+        : Colors.black;
+
 class OpeningExplorerScreen extends StatelessWidget {
   const OpeningExplorerScreen({required this.pgn, required this.options});
 
@@ -370,6 +380,10 @@ class _OpeningExplorerView extends StatelessWidget {
     final isLandscape =
         MediaQuery.orientationOf(context) == Orientation.landscape;
 
+    final loadingOverlayColor = Theme.of(context).brightness == Brightness.dark
+        ? Colors.black
+        : Colors.white;
+
     return Column(
       mainAxisSize: MainAxisSize.max,
       children: [
@@ -413,7 +427,7 @@ class _OpeningExplorerView extends StatelessWidget {
                       duration: const Duration(milliseconds: 300),
                       curve: Curves.fastOutSlowIn,
                       opacity: loading ? 0.5 : 0.0,
-                      child: const ColoredBox(color: Colors.white),
+                      child: ColoredBox(color: loadingOverlayColor),
                     ),
                   ),
                 ),
@@ -790,7 +804,7 @@ class OpeningExplorerGameTile extends ConsumerWidget {
                     width: widthResultBox,
                     padding: paddingResultBox,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: _whiteBoxColor(context),
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: const Text(
@@ -806,7 +820,7 @@ class OpeningExplorerGameTile extends ConsumerWidget {
                     width: widthResultBox,
                     padding: paddingResultBox,
                     decoration: BoxDecoration(
-                      color: Colors.black,
+                      color: _blackBoxColor(context),
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: const Text(
@@ -878,7 +892,7 @@ class _WinPercentageChart extends StatelessWidget {
           Expanded(
             flex: percentWhite,
             child: ColoredBox(
-              color: Colors.white,
+              color: _whiteBoxColor(context),
               child: Text(
                 label(percentWhite),
                 textAlign: TextAlign.center,
@@ -900,7 +914,7 @@ class _WinPercentageChart extends StatelessWidget {
           Expanded(
             flex: percentBlack,
             child: ColoredBox(
-              color: Colors.black,
+              color: _blackBoxColor(context),
               child: Text(
                 label(percentBlack),
                 textAlign: TextAlign.center,
