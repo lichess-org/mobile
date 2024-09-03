@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
@@ -19,7 +18,7 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 import 'archived_game_screen_providers.dart';
 
@@ -38,54 +37,24 @@ class ArchivedGameScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ConsumerPlatformWidget(
-      ref: ref,
-      androidBuilder: _androidBuilder,
-      iosBuilder: _iosBuilder,
-    );
-  }
-
-  Widget _androidBuilder(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      appBar: AppBar(
+    return PlatformScaffold(
+      appBar: PlatformAppBar(
         title: _GameTitle(gameData: gameData),
         actions: [
           ToggleSoundButton(),
         ],
       ),
-      body: _BoardBody(
-        gameData: gameData,
-        orientation: orientation,
-        initialCursor: initialCursor,
-      ),
-      bottomNavigationBar:
-          _BottomBar(gameData: gameData, orientation: orientation),
-    );
-  }
-
-  Widget _iosBuilder(BuildContext context, WidgetRef ref) {
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        backgroundColor: Styles.cupertinoScaffoldColor.resolveFrom(context),
-        border: null,
-        middle: _GameTitle(gameData: gameData),
-        padding: const EdgeInsetsDirectional.only(end: 16.0),
-        trailing: ToggleSoundButton(),
-      ),
-      child: SafeArea(
-        bottom: false,
-        child: Column(
-          children: [
-            Expanded(
-              child: _BoardBody(
-                gameData: gameData,
-                orientation: orientation,
-                initialCursor: initialCursor,
-              ),
+      body: Column(
+        children: [
+          Expanded(
+            child: _BoardBody(
+              gameData: gameData,
+              orientation: orientation,
+              initialCursor: initialCursor,
             ),
-            _BottomBar(gameData: gameData, orientation: orientation),
-          ],
-        ),
+          ),
+          _BottomBar(gameData: gameData, orientation: orientation),
+        ],
       ),
     );
   }

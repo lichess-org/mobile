@@ -1,6 +1,5 @@
 import 'package:collection/collection.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' show ClientException;
@@ -15,6 +14,7 @@ import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/stat_card.dart';
 
@@ -25,21 +25,13 @@ class PuzzleDashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Theme.of(context).platform == TargetPlatform.iOS
-        ? const CupertinoPageScaffold(
-            navigationBar: CupertinoNavigationBar(
-              middle: SizedBox.shrink(),
-              trailing: DaysSelector(),
-            ),
-            child: _Body(),
-          )
-        : Scaffold(
-            body: const _Body(),
-            appBar: AppBar(
-              title: const SizedBox.shrink(),
-              actions: const [DaysSelector()],
-            ),
-          );
+    return const PlatformScaffold(
+      body: _Body(),
+      appBar: PlatformAppBar(
+        title: SizedBox.shrink(),
+        actions: [DaysSelector()],
+      ),
+    );
   }
 }
 

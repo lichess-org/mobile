@@ -14,7 +14,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/user_list_tile.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -33,19 +33,8 @@ class FollowingScreen extends StatelessWidget {
   const FollowingScreen({super.key});
   @override
   Widget build(BuildContext context) {
-    return PlatformWidget(androidBuilder: _buildAndroid, iosBuilder: _buildIos);
-  }
-
-  Widget _buildIos(BuildContext context) {
-    return const CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(),
-      child: _Body(),
-    );
-  }
-
-  Widget _buildAndroid(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
+    return PlatformScaffold(
+      appBar: PlatformAppBar(
         title: Text(context.l10n.friends),
       ),
       body: const _Body(),

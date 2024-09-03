@@ -29,7 +29,7 @@ import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 
 class StormScreen extends ConsumerStatefulWidget {
@@ -45,37 +45,13 @@ class _StormScreenState extends ConsumerState<StormScreen> {
   @override
   Widget build(BuildContext context) {
     return WakelockWidget(
-      child: PlatformWidget(
-        androidBuilder: _androidBuilder,
-        iosBuilder: _iosBuilder,
-      ),
-    );
-  }
-
-  Widget _androidBuilder(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        actions: [_StormDashboardButton(), ToggleSoundButton()],
-        title: const Text('Puzzle Storm'),
-      ),
-      body: _Load(_boardKey),
-    );
-  }
-
-  Widget _iosBuilder(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        backgroundColor: Styles.cupertinoScaffoldColor.resolveFrom(context),
-        border: null,
-        padding: Styles.cupertinoAppBarTrailingWidgetPadding,
-        middle: const Text('Puzzle Storm'),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [_StormDashboardButton(), ToggleSoundButton()],
+      child: PlatformScaffold(
+        appBar: PlatformAppBar(
+          actions: [_StormDashboardButton(), ToggleSoundButton()],
+          title: const Text('Puzzle Storm'),
         ),
+        body: _Load(_boardKey),
       ),
-      child: _Load(_boardKey),
     );
   }
 }
@@ -657,28 +633,16 @@ class _RunStats extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Theme.of(context).platform == TargetPlatform.iOS
-        ? CupertinoPageScaffold(
-            navigationBar: CupertinoNavigationBar(
-              leading: CupertinoButton(
-                padding: EdgeInsets.zero,
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text(context.l10n.close),
-              ),
-            ),
-            child: _RunStatsPopup(stats),
-          )
-        : Scaffold(
-            body: _RunStatsPopup(stats),
-            appBar: AppBar(
-              leading: IconButton(
-                icon: const Icon(Icons.close),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-            ),
-          );
+    return PlatformScaffold(
+      body: _RunStatsPopup(stats),
+      appBar: PlatformAppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.close),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        title: const SizedBox.shrink(),
+      ),
+    );
   }
 }
 

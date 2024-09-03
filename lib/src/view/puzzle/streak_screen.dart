@@ -25,7 +25,7 @@ import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 import 'package:result_extensions/result_extensions.dart';
 
@@ -37,33 +37,13 @@ class StreakScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WakelockWidget(
-      child: PlatformWidget(
-        androidBuilder: _androidBuilder,
-        iosBuilder: _iosBuilder,
+      child: PlatformScaffold(
+        appBar: PlatformAppBar(
+          actions: [ToggleSoundButton()],
+          title: const Text('Puzzle Streak'),
+        ),
+        body: const _Load(),
       ),
-    );
-  }
-
-  Widget _androidBuilder(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        actions: [ToggleSoundButton()],
-        title: const Text('Puzzle Streak'),
-      ),
-      body: const _Load(),
-    );
-  }
-
-  Widget _iosBuilder(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        backgroundColor: Styles.cupertinoScaffoldColor.resolveFrom(context),
-        border: null,
-        padding: Styles.cupertinoAppBarTrailingWidgetPadding,
-        middle: const Text('Puzzle Streak'),
-        trailing: ToggleSoundButton(),
-      ),
-      child: const _Load(),
     );
   }
 }

@@ -39,6 +39,7 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:popover/popover.dart';
 
 import '../../utils/share.dart';
@@ -135,9 +136,9 @@ class _LoadedAnalysisScreen extends ConsumerWidget {
   Widget _androidBuilder(BuildContext context, WidgetRef ref) {
     final ctrlProvider = analysisControllerProvider(pgn, options);
 
-    return Scaffold(
+    return PlatformScaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
+      appBar: PlatformAppBar(
         title: _Title(options: options, title: title),
         actions: [
           _EngineDepth(ctrlProvider),

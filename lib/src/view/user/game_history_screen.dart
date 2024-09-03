@@ -1,5 +1,4 @@
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
@@ -14,6 +13,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 class GameHistoryScreen extends ConsumerWidget {
   const GameHistoryScreen({
@@ -87,44 +87,12 @@ class GameHistoryScreen extends ConsumerWidget {
       ],
     );
 
-    switch (Theme.of(context).platform) {
-      case TargetPlatform.android:
-        return _buildAndroid(context, ref, title: title, filterBtn: filterBtn);
-      case TargetPlatform.iOS:
-        return _buildIos(context, ref, title: title, filterBtn: filterBtn);
-      default:
-        assert(false, 'Unexpected platform ${Theme.of(context).platform}');
-        return const SizedBox.shrink();
-    }
-  }
-
-  Widget _buildIos(
-    BuildContext context,
-    WidgetRef ref, {
-    required Widget title,
-    required Widget filterBtn,
-  }) {
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        padding: const EdgeInsetsDirectional.only(
+    return PlatformScaffold(
+      appBar: PlatformAppBar(
+        cupertinoPadding: const EdgeInsetsDirectional.only(
           start: 16.0,
           end: 8.0,
         ),
-        middle: title,
-        trailing: filterBtn,
-      ),
-      child: _Body(user: user, isOnline: isOnline, gameFilter: gameFilter),
-    );
-  }
-
-  Widget _buildAndroid(
-    BuildContext context,
-    WidgetRef ref, {
-    required Widget title,
-    required Widget filterBtn,
-  }) {
-    return Scaffold(
-      appBar: AppBar(
         title: title,
         actions: [filterBtn],
       ),
