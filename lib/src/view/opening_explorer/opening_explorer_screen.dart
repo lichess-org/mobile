@@ -632,7 +632,7 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
                 TableRowInkWell(
                   onTap: () => ref
                       .read(ctrlProvider.notifier)
-                      .onUserMove(Move.parse(move.uci)!),
+                      .onUserMove(NormalMove.fromUci(move.uci)),
                   child: Padding(
                     padding: _kTableRowPadding,
                     child: Text(move.san),
@@ -641,7 +641,7 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
                 TableRowInkWell(
                   onTap: () => ref
                       .read(ctrlProvider.notifier)
-                      .onUserMove(Move.parse(move.uci)!),
+                      .onUserMove(NormalMove.fromUci(move.uci)),
                   child: Padding(
                     padding: _kTableRowPadding,
                     child: Text('${formatNum(move.games)} ($percentGames%)'),
@@ -650,7 +650,7 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
                 TableRowInkWell(
                   onTap: () => ref
                       .read(ctrlProvider.notifier)
-                      .onUserMove(Move.parse(move.uci)!),
+                      .onUserMove(NormalMove.fromUci(move.uci)),
                   child: Padding(
                     padding: _kTableRowPadding,
                     child: _WinPercentageChart(

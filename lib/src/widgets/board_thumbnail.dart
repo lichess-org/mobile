@@ -67,14 +67,11 @@ class _BoardThumbnailState extends ConsumerState<BoardThumbnail> {
   Widget build(BuildContext context) {
     final boardPrefs = ref.watch(boardPreferencesProvider);
 
-    final board = Chessboard(
+    final board = Chessboard.fixed(
       size: widget.size,
-      state: ChessboardState(
-        interactableSide: InteractableSide.none,
-        fen: widget.fen,
-        orientation: widget.orientation,
-        lastMove: widget.lastMove as NormalMove?,
-      ),
+      fen: widget.fen,
+      orientation: widget.orientation,
+      lastMove: widget.lastMove as NormalMove?,
       settings: ChessboardSettings(
         enableCoordinates: false,
         borderRadius: const BorderRadius.all(Radius.circular(4.0)),

@@ -1,11 +1,8 @@
-import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/model/tv/tv_controller.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
@@ -80,7 +77,6 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final boardPreferences = ref.watch(boardPreferencesProvider);
     final asyncGame = ref.watch(tvControllerProvider(channel, initialGame));
 
     return Column(
@@ -92,16 +88,7 @@ class _Body extends ConsumerWidget {
                 final game = gameState.game;
                 final position =
                     gameState.game.positionAt(gameState.stepCursor);
-                final sideToMove = position.turn;
 
-                final boardData = ChessboardState(
-                  interactableSide: InteractableSide.none,
-                  orientation: gameState.orientation,
-                  fen: position.fen,
-                  sideToMove: sideToMove,
-                  lastMove: game.moveAt(gameState.stepCursor) as NormalMove?,
-                  isCheck: boardPreferences.boardHighlights && position.isCheck,
-                );
                 final blackPlayerWidget = GamePlayer(
                   player: game.black.setOnGame(true),
                   clock: gameState.game.clock != null
@@ -125,7 +112,8 @@ class _Body extends ConsumerWidget {
                   materialDiff: game.lastMaterialDiffAt(Side.white),
                 );
                 return BoardTable(
-                  boardState: boardData,
+                  orientation: gameState.orientation,
+                  fen: position.fen,
                   boardSettingsOverrides: const BoardSettingsOverrides(
                     animationDuration: Duration.zero,
                   ),
@@ -145,7 +133,8 @@ class _Body extends ConsumerWidget {
               loading: () => const BoardTable(
                 topTable: kEmptyWidget,
                 bottomTable: kEmptyWidget,
-                boardState: kEmptyBoardState,
+                orientation: Side.white,
+                fen: kEmptyFEN,
                 showMoveListPlaceholder: true,
               ),
               error: (err, stackTrace) {
@@ -155,7 +144,8 @@ class _Body extends ConsumerWidget {
                 return const BoardTable(
                   topTable: kEmptyWidget,
                   bottomTable: kEmptyWidget,
-                  boardState: kEmptyBoardState,
+                  orientation: Side.white,
+                  fen: kEmptyFEN,
                   errorMessage: 'Could not load TV stream.',
                   showMoveListPlaceholder: true,
                 );

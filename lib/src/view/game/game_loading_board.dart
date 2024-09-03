@@ -1,4 +1,3 @@
-import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +28,8 @@ class LobbyScreenLoadingContent extends StatelessWidget {
           child: SafeArea(
             bottom: false,
             child: BoardTable(
-              boardState: kEmptyBoardState,
+              orientation: Side.white,
+              fen: kEmptyFen,
               topTable: const SizedBox.shrink(),
               bottomTable: const SizedBox.shrink(),
               showMoveListPlaceholder: true,
@@ -108,7 +108,8 @@ class ChallengeLoadingContent extends StatelessWidget {
           child: SafeArea(
             bottom: false,
             child: BoardTable(
-              boardState: kEmptyBoardState,
+              orientation: Side.white,
+              fen: kEmptyFen,
               topTable: const SizedBox.shrink(),
               bottomTable: const SizedBox.shrink(),
               showMoveListPlaceholder: true,
@@ -184,12 +185,9 @@ class StandaloneGameLoadingBoard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BoardTable(
-      boardState: ChessboardState(
-        interactableSide: InteractableSide.none,
-        orientation: orientation ?? Side.white,
-        fen: fen ?? kEmptyFen,
-        lastMove: lastMove as NormalMove?,
-      ),
+      orientation: orientation ?? Side.white,
+      fen: fen ?? kEmptyFen,
+      lastMove: lastMove as NormalMove?,
       topTable: const SizedBox.shrink(),
       bottomTable: const SizedBox.shrink(),
       showMoveListPlaceholder: true,
@@ -210,11 +208,8 @@ class LoadGameError extends StatelessWidget {
           child: SafeArea(
             bottom: false,
             child: BoardTable(
-              boardState: const ChessboardState(
-                interactableSide: InteractableSide.none,
-                orientation: Side.white,
-                fen: kEmptyFen,
-              ),
+              orientation: Side.white,
+              fen: kEmptyFen,
               topTable: const SizedBox.shrink(),
               bottomTable: const SizedBox.shrink(),
               showMoveListPlaceholder: true,
@@ -255,11 +250,8 @@ class ChallengeDeclinedBoard extends StatelessWidget {
           child: SafeArea(
             bottom: false,
             child: BoardTable(
-              boardState: const ChessboardState(
-                interactableSide: InteractableSide.none,
-                orientation: Side.white,
-                fen: kEmptyFen,
-              ),
+              orientation: Side.white,
+              fen: kEmptyFen,
               topTable: const SizedBox.shrink(),
               bottomTable: const SizedBox.shrink(),
               showMoveListPlaceholder: true,

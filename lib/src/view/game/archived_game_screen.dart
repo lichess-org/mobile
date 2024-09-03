@@ -1,4 +1,3 @@
-import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -121,11 +120,8 @@ class _BoardBody extends ConsumerWidget {
     final topPlayer = orientation == Side.white ? black : white;
     final bottomPlayer = orientation == Side.white ? white : black;
     final loadingBoard = BoardTable(
-      boardState: ChessboardState(
-        interactableSide: InteractableSide.none,
-        orientation: (isBoardTurned ? orientation.opposite : orientation),
-        fen: gameData.lastFen ?? kInitialBoardFEN,
-      ),
+      orientation: (isBoardTurned ? orientation.opposite : orientation),
+      fen: gameData.lastFen ?? kInitialBoardFEN,
       topTable: topPlayer,
       bottomTable: bottomPlayer,
       showMoveListPlaceholder: true,
@@ -167,14 +163,9 @@ class _BoardBody extends ConsumerWidget {
         final position = game.positionAt(cursor);
 
         return BoardTable(
-          boardState: ChessboardState(
-            interactableSide: InteractableSide.none,
-            orientation: (isBoardTurned ? orientation.opposite : orientation),
-            fen: position.fen,
-            lastMove: game.moveAt(cursor) as NormalMove?,
-            sideToMove: position.turn,
-            isCheck: position.isCheck,
-          ),
+          orientation: (isBoardTurned ? orientation.opposite : orientation),
+          fen: position.fen,
+          lastMove: game.moveAt(cursor) as NormalMove?,
           topTable: topPlayer,
           bottomTable: bottomPlayer,
           moves: game.steps

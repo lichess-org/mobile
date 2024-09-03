@@ -517,7 +517,7 @@ class _Engineline extends ConsumerWidget {
     return AdaptiveInkWell(
       onTap: () => ref
           .read(ctrlProvider.notifier)
-          .onUserMove(Move.parse(pvData.moves[0])!),
+          .onUserMove(NormalMove.fromUci(pvData.moves[0])),
       child: SizedBox(
         height: kEvalGaugeSize,
         child: Padding(

@@ -239,34 +239,43 @@ class GameBody extends ConsumerWidget {
                             gameState.canAutoQueenOnPremove,
                         blindfoldMode: blindfoldMode,
                       ),
-                      onMove: (move, {isDrop, isPremove}) {
-                        ref.read(ctrlProvider.notifier).onUserMove(
-                              Move.parse(move.uci)!,
-                              isPremove: isPremove,
-                              isDrop: isDrop,
-                            );
-                      },
-                      onPremove: gameState.canPremove
-                          ? (move) {
-                              ref.read(ctrlProvider.notifier).setPremove(move);
-                            }
-                          : null,
-                      boardState: ChessboardState(
-                        interactableSide:
+                      orientation: isBoardTurned ? youAre.opposite : youAre,
+                      fen: position.fen,
+                      lastMove: gameState.game.moveAt(gameState.stepCursor)
+                          as NormalMove?,
+                      gameData: GameData(
+                        playerSide:
                             gameState.game.playable && !gameState.isReplaying
                                 ? youAre == Side.white
-                                    ? InteractableSide.white
-                                    : InteractableSide.black
-                                : InteractableSide.none,
-                        orientation: isBoardTurned ? youAre.opposite : youAre,
-                        fen: position.fen,
-                        lastMove: gameState.game.moveAt(gameState.stepCursor)
-                            as NormalMove?,
+                                    ? PlayerSide.white
+                                    : PlayerSide.black
+                                : PlayerSide.none,
                         isCheck: boardPreferences.boardHighlights &&
                             position.isCheck,
                         sideToMove: position.turn,
                         validMoves: makeLegalMoves(position),
-                        premove: gameState.premove as NormalMove?,
+                        promotionMove: gameState.promotionMove,
+                        onMove: (move, {isDrop}) {
+                          ref.read(ctrlProvider.notifier).userMove(
+                                move,
+                                isDrop: isDrop,
+                              );
+                        },
+                        onPromotionSelection: (role) {
+                          ref
+                              .read(ctrlProvider.notifier)
+                              .onPromotionSelection(role);
+                        },
+                        premovable: gameState.canPremove
+                            ? (
+                                onSetPremove: (move) {
+                                  ref
+                                      .read(ctrlProvider.notifier)
+                                      .setPremove(move);
+                                },
+                                premove: gameState.premove,
+                              )
+                            : null,
                       ),
                       topTable: topPlayer,
                       bottomTable: gameState.canShowClaimWinCountdown &&

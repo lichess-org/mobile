@@ -65,14 +65,11 @@ class _SmallBoardPreviewState extends ConsumerState<SmallBoardPreview> {
               height: boardSize,
               child: Row(
                 children: [
-                  Chessboard(
+                  Chessboard.fixed(
                     size: boardSize,
-                    state: ChessboardState(
-                      interactableSide: InteractableSide.none,
-                      fen: widget.fen,
-                      orientation: widget.orientation,
-                      lastMove: widget.lastMove as NormalMove?,
-                    ),
+                    fen: widget.fen,
+                    orientation: widget.orientation,
+                    lastMove: widget.lastMove as NormalMove?,
                     settings: ChessboardSettings(
                       enableCoordinates: false,
                       borderRadius:
