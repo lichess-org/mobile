@@ -390,7 +390,7 @@ class _OpeningExplorerView extends StatelessWidget {
         Container(
           padding: _kTableRowPadding,
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.primaryContainer,
+            color: Theme.of(context).colorScheme.secondaryContainer,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(isLandscape ? 4.0 : 0),
               topRight: Radius.circular(isLandscape ? 4.0 : 0),
@@ -453,7 +453,7 @@ class _Opening extends ConsumerWidget {
     final openingWidget = Text(
       '${opening.eco.isEmpty ? "" : "${opening.eco} "}${opening.name}',
       style: TextStyle(
-        color: Theme.of(context).colorScheme.primary,
+        color: Theme.of(context).colorScheme.onSecondaryContainer,
         fontWeight: FontWeight.bold,
       ),
     );
@@ -614,7 +614,7 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
       children: [
         TableRow(
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.primaryContainer,
+            color: Theme.of(context).colorScheme.secondaryContainer,
           ),
           children: [
             Padding(
@@ -725,7 +725,7 @@ class OpeningExplorerGameList extends StatelessWidget {
       children: [
         Container(
           padding: _kTableRowPadding,
-          color: Theme.of(context).colorScheme.primaryContainer,
+          color: Theme.of(context).colorScheme.secondaryContainer,
           child: Row(
             children: [Text(title)],
           ),
