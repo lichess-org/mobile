@@ -29,6 +29,7 @@ import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
+import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 
@@ -874,35 +875,19 @@ class _GameNegotiationDialog extends StatelessWidget {
       onAccept();
     }
 
-    if (Theme.of(context).platform == TargetPlatform.iOS) {
-      return CupertinoAlertDialog(
-        content: title,
-        actions: [
-          CupertinoDialogAction(
-            onPressed: accept,
-            child: Text(context.l10n.accept),
-          ),
-          CupertinoDialogAction(
-            onPressed: decline,
-            child: Text(context.l10n.decline),
-          ),
-        ],
-      );
-    } else {
-      return AlertDialog(
-        content: title,
-        actions: [
-          TextButton(
-            onPressed: accept,
-            child: Text(context.l10n.accept),
-          ),
-          TextButton(
-            onPressed: decline,
-            child: Text(context.l10n.decline),
-          ),
-        ],
-      );
-    }
+    return PlatformAlertDialog(
+      content: title,
+      actions: [
+        PlatformDialogAction(
+          onPressed: accept,
+          child: Text(context.l10n.accept),
+        ),
+        PlatformDialogAction(
+          onPressed: decline,
+          child: Text(context.l10n.decline),
+        ),
+      ],
+    );
   }
 }
 
@@ -926,35 +911,19 @@ class _ThreefoldDialog extends ConsumerWidget {
       ref.read(gameControllerProvider(id).notifier).claimDraw();
     }
 
-    if (Theme.of(context).platform == TargetPlatform.iOS) {
-      return CupertinoAlertDialog(
-        content: content,
-        actions: [
-          CupertinoDialogAction(
-            onPressed: accept,
-            child: Text(context.l10n.claimADraw),
-          ),
-          CupertinoDialogAction(
-            onPressed: decline,
-            child: Text(context.l10n.cancel),
-          ),
-        ],
-      );
-    } else {
-      return AlertDialog(
-        content: content,
-        actions: [
-          TextButton(
-            onPressed: accept,
-            child: Text(context.l10n.claimADraw),
-          ),
-          TextButton(
-            onPressed: decline,
-            child: Text(context.l10n.cancel),
-          ),
-        ],
-      );
-    }
+    return PlatformAlertDialog(
+      content: content,
+      actions: [
+        PlatformDialogAction(
+          onPressed: accept,
+          child: Text(context.l10n.claimADraw),
+        ),
+        PlatformDialogAction(
+          onPressed: decline,
+          child: Text(context.l10n.cancel),
+        ),
+      ],
+    );
   }
 }
 
@@ -982,36 +951,20 @@ class _ClaimWinDialog extends ConsumerWidget {
       ref.read(ctrlProvider.notifier).forceDraw();
     }
 
-    if (Theme.of(context).platform == TargetPlatform.iOS) {
-      return CupertinoAlertDialog(
-        content: content,
-        actions: [
-          CupertinoDialogAction(
-            onPressed: gameState.game.canClaimWin ? onClaimWin : null,
-            isDefaultAction: true,
-            child: Text(context.l10n.forceResignation),
-          ),
-          CupertinoDialogAction(
-            onPressed: gameState.game.canClaimWin ? onClaimDraw : null,
-            child: Text(context.l10n.forceDraw),
-          ),
-        ],
-      );
-    } else {
-      return AlertDialog(
-        content: content,
-        actions: [
-          TextButton(
-            onPressed: gameState.game.canClaimWin ? onClaimWin : null,
-            child: Text(context.l10n.forceResignation),
-          ),
-          TextButton(
-            onPressed: gameState.game.canClaimWin ? onClaimDraw : null,
-            child: Text(context.l10n.forceDraw),
-          ),
-        ],
-      );
-    }
+    return PlatformAlertDialog(
+      content: content,
+      actions: [
+        PlatformDialogAction(
+          onPressed: gameState.game.canClaimWin ? onClaimWin : null,
+          cupertinoIsDefaultAction: true,
+          child: Text(context.l10n.forceResignation),
+        ),
+        PlatformDialogAction(
+          onPressed: gameState.game.canClaimWin ? onClaimDraw : null,
+          child: Text(context.l10n.forceDraw),
+        ),
+      ],
+    );
   }
 }
 

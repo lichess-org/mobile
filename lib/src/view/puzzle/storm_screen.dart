@@ -29,6 +29,7 @@ import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 
@@ -259,27 +260,17 @@ Future<void> _stormInfoDialogBuilder(BuildContext context) {
           ),
         ),
       );
-      return Theme.of(context).platform == TargetPlatform.iOS
-          ? CupertinoAlertDialog(
-              title: Text(context.l10n.aboutX('Puzzle Storm')),
-              content: content,
-              actions: [
-                CupertinoDialogAction(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: Text(context.l10n.mobileOkButton),
-                ),
-              ],
-            )
-          : AlertDialog(
-              title: Text(context.l10n.aboutX('Puzzle Storm')),
-              content: content,
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: Text(context.l10n.mobileOkButton),
-                ),
-              ],
-            );
+
+      return PlatformAlertDialog(
+        title: Text(context.l10n.aboutX('Puzzle Storm')),
+        content: content,
+        actions: [
+          PlatformDialogAction(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(context.l10n.mobileOkButton),
+          ),
+        ],
+      );
     },
   );
 }
