@@ -84,10 +84,12 @@ void main() {
 
         expect(find.widgetWithText(Container, 'Top games'), findsOneWidget);
         expect(find.widgetWithText(Container, 'Recent games'), findsNothing);
-        expect(
-          find.byType(OpeningExplorerGameList),
-          findsOneWidget,
+
+        await tester.scrollUntilVisible(
+          find.text('Firouzja, A.'),
+          200,
         );
+
         expect(
           find.byType(OpeningExplorerGameTile),
           findsNWidgets(2),
@@ -133,10 +135,11 @@ void main() {
 
         expect(find.widgetWithText(Container, 'Top games'), findsNothing);
         expect(find.widgetWithText(Container, 'Recent games'), findsOneWidget);
-        expect(
-          find.byType(OpeningExplorerGameList),
-          findsOneWidget,
+        await tester.scrollUntilVisible(
+          find.byType(OpeningExplorerGameTile),
+          200,
         );
+
         expect(
           find.byType(OpeningExplorerGameTile),
           findsOneWidget,
@@ -182,10 +185,11 @@ void main() {
 
         expect(find.widgetWithText(Container, 'Top games'), findsNothing);
         expect(find.widgetWithText(Container, 'Recent games'), findsOneWidget);
-        expect(
-          find.byType(OpeningExplorerGameList),
-          findsOneWidget,
+        await tester.scrollUntilVisible(
+          find.byType(OpeningExplorerGameTile),
+          200,
         );
+
         expect(
           find.byType(OpeningExplorerGameTile),
           findsOneWidget,
@@ -248,8 +252,8 @@ const mastersOpeningExplorerResponse = '''
         "rating": 2882
       },
       "white": {
-        "name": "Caruana, F.",
-        "rating": 2818
+        "name": "Firouzja, A.",
+        "rating": 2808
       },
       "year": 2019,
       "month": "2019-08"

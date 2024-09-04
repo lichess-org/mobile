@@ -70,11 +70,11 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Column(
-      children: [
-        Expanded(
-          child: SafeArea(
-            bottom: false,
+    return SafeArea(
+      bottom: false,
+      child: Column(
+        children: [
+          Expanded(
             child: LayoutBuilder(
               builder: (context, constraints) {
                 final aspectRatio = constraints.biggest.aspectRatio;
@@ -135,7 +135,6 @@ class _Body extends ConsumerWidget {
                         ],
                       )
                     : Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           if (isTablet)
                             Padding(
@@ -164,9 +163,9 @@ class _Body extends ConsumerWidget {
               },
             ),
           ),
-        ),
-        _BottomBar(pgn: pgn, options: options),
-      ],
+          _BottomBar(pgn: pgn, options: options),
+        ],
+      ),
     );
   }
 }
@@ -283,6 +282,9 @@ class _OpeningExplorerState extends ConsumerState<_OpeningExplorer> {
           );
         }
 
+        final topGames = openingExplorer.entry.topGames;
+        final recentGames = openingExplorer.entry.recentGames;
+
         final explorerContent = [
           OpeningExplorerMoveTable(
             moves: openingExplorer.entry.moves,
@@ -292,18 +294,36 @@ class _OpeningExplorerState extends ConsumerState<_OpeningExplorer> {
             pgn: widget.pgn,
             options: widget.options,
           ),
-          if (openingExplorer.entry.topGames != null &&
-              openingExplorer.entry.topGames!.isNotEmpty)
-            OpeningExplorerGameList(
-              title: context.l10n.topGames,
-              games: openingExplorer.entry.topGames!,
+          if (topGames != null && topGames.isNotEmpty) ...[
+            _OpeningExplorerHeader(child: Text(context.l10n.topGames)),
+            ...List.generate(
+              topGames.length,
+              (int index) {
+                return OpeningExplorerGameTile(
+                  game: topGames.get(index),
+                  color: index.isEven
+                      ? Theme.of(context).colorScheme.surfaceContainerLow
+                      : Theme.of(context).colorScheme.surfaceContainerHigh,
+                );
+              },
+              growable: false,
             ),
-          if (openingExplorer.entry.recentGames != null &&
-              openingExplorer.entry.recentGames!.isNotEmpty)
-            OpeningExplorerGameList(
-              title: context.l10n.recentGames,
-              games: openingExplorer.entry.recentGames!,
+          ],
+          if (recentGames != null && recentGames.isNotEmpty) ...[
+            _OpeningExplorerHeader(child: Text(context.l10n.recentGames)),
+            ...List.generate(
+              recentGames.length,
+              (int index) {
+                return OpeningExplorerGameTile(
+                  game: recentGames.get(index),
+                  color: index.isEven
+                      ? Theme.of(context).colorScheme.surfaceContainerLow
+                      : Theme.of(context).colorScheme.surfaceContainerHigh,
+                );
+              },
+              growable: false,
             ),
+          ],
         ];
 
         lastExplorerWidgets = explorerContent;
@@ -385,7 +405,6 @@ class _OpeningExplorerView extends StatelessWidget {
         : Colors.white;
 
     return Column(
-      mainAxisSize: MainAxisSize.max,
       children: [
         Container(
           padding: _kTableRowPadding,
@@ -416,23 +435,21 @@ class _OpeningExplorerView extends StatelessWidget {
           ),
         ),
         Expanded(
-          child: Center(
-            child: Stack(
-              children: [
-                ListView(children: explorerContent),
-                Positioned.fill(
-                  child: IgnorePointer(
-                    ignoring: !loading,
-                    child: AnimatedOpacity(
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.fastOutSlowIn,
-                      opacity: loading ? 0.5 : 0.0,
-                      child: ColoredBox(color: loadingOverlayColor),
-                    ),
+          child: Stack(
+            children: [
+              ListView(padding: EdgeInsets.zero, children: explorerContent),
+              Positioned.fill(
+                child: IgnorePointer(
+                  ignoring: !loading,
+                  child: AnimatedOpacity(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.fastOutSlowIn,
+                    opacity: loading ? 0.5 : 0.0,
+                    child: ColoredBox(color: loadingOverlayColor),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ],
@@ -550,58 +567,16 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
 
   String formatNum(int num) => NumberFormat.decimalPatternDigits().format(num);
 
+  static const columnWidths = {
+    0: FractionColumnWidth(0.15),
+    1: FractionColumnWidth(0.35),
+    2: FractionColumnWidth(0.50),
+  };
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    const columnWidths = {
-      0: FractionColumnWidth(0.15),
-      1: FractionColumnWidth(0.35),
-      2: FractionColumnWidth(0.50),
-    };
-
     if (_isLoading) {
-      return Table(
-        columnWidths: columnWidths,
-        children: List.generate(
-          10,
-          (int index) => TableRow(
-            children: [
-              Padding(
-                padding: _kTableRowPadding,
-                child: Container(
-                  height: 20,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: _kTableRowPadding,
-                child: Container(
-                  height: 20,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: _kTableRowPadding,
-                child: Container(
-                  height: 20,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
+      return loadingTable;
     }
 
     final games = whiteWins + draws + blackWins;
@@ -707,40 +682,50 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
       ],
     );
   }
-}
 
-/// List of games for the opening explorer.
-class OpeningExplorerGameList extends StatelessWidget {
-  const OpeningExplorerGameList({
-    required this.title,
-    required this.games,
-  });
-
-  final String title;
-  final IList<OpeningExplorerGame> games;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          padding: _kTableRowPadding,
-          color: Theme.of(context).colorScheme.secondaryContainer,
-          child: Row(
-            children: [Text(title)],
+  static final loadingTable = Table(
+    columnWidths: columnWidths,
+    children: List.generate(
+      10,
+      (int index) => TableRow(
+        children: [
+          Padding(
+            padding: _kTableRowPadding,
+            child: Container(
+              height: 20,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.circular(5),
+              ),
+            ),
           ),
-        ),
-        ...List.generate(games.length, (int index) {
-          return OpeningExplorerGameTile(
-            game: games.get(index),
-            color: index.isEven
-                ? Theme.of(context).colorScheme.surfaceContainerLow
-                : Theme.of(context).colorScheme.surfaceContainerHigh,
-          );
-        }),
-      ],
-    );
-  }
+          Padding(
+            padding: _kTableRowPadding,
+            child: Container(
+              height: 20,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.circular(5),
+              ),
+            ),
+          ),
+          Padding(
+            padding: _kTableRowPadding,
+            child: Container(
+              height: 20,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.circular(5),
+              ),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
 }
 
 /// A game tile for the opening explorer.
@@ -849,7 +834,12 @@ class OpeningExplorerGameTile extends ConsumerWidget {
                   ),
                 if (game.month != null) ...[
                   const SizedBox(width: 10.0),
-                  Text(game.month!),
+                  Text(
+                    game.month!,
+                    style: const TextStyle(
+                      fontFeatures: [FontFeature.tabularFigures()],
+                    ),
+                  ),
                 ],
                 if (game.speed != null) ...[
                   const SizedBox(width: 10.0),
@@ -860,6 +850,24 @@ class OpeningExplorerGameTile extends ConsumerWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _OpeningExplorerHeader extends StatelessWidget {
+  const _OpeningExplorerHeader({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: _kTableRowPadding,
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.secondaryContainer,
+      ),
+      child: child,
     );
   }
 }
