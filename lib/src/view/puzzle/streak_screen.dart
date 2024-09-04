@@ -25,6 +25,7 @@ import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
+import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 import 'package:result_extensions/result_extensions.dart';
@@ -337,29 +338,16 @@ class _BottomBar extends ConsumerWidget {
   Future<void> _streakInfoDialogBuilder(BuildContext context) {
     return showAdaptiveDialog(
       context: context,
-      builder: (context) {
-        return Theme.of(context).platform == TargetPlatform.iOS
-            ? CupertinoAlertDialog(
-                title: Text(context.l10n.aboutX('Puzzle Streak')),
-                content: Text(context.l10n.puzzleStreakDescription),
-                actions: [
-                  CupertinoDialogAction(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: Text(context.l10n.mobileOkButton),
-                  ),
-                ],
-              )
-            : AlertDialog(
-                title: Text(context.l10n.aboutX('Puzzle Streak')),
-                content: Text(context.l10n.puzzleStreakDescription),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: Text(context.l10n.mobileOkButton),
-                  ),
-                ],
-              );
-      },
+      builder: (context) => PlatformAlertDialog(
+        title: Text(context.l10n.aboutX('Puzzle Streak')),
+        content: Text(context.l10n.puzzleStreakDescription),
+        actions: [
+          PlatformDialogAction(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(context.l10n.mobileOkButton),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -405,38 +393,21 @@ class _RetryFetchPuzzleDialog extends ConsumerWidget {
     final canRetry = state.nextPuzzleStreakFetchError &&
         !state.nextPuzzleStreakFetchIsRetrying;
 
-    if (Theme.of(context).platform == TargetPlatform.iOS) {
-      return CupertinoAlertDialog(
-        title: const Text(title),
-        content: const Text(content),
-        actions: [
-          CupertinoDialogAction(
-            onPressed: () => Navigator.of(context).pop(),
-            isDestructiveAction: true,
-            child: Text(context.l10n.cancel),
-          ),
-          CupertinoDialogAction(
-            onPressed: canRetry ? retryStreakNext : null,
-            isDefaultAction: true,
-            child: Text(context.l10n.retry),
-          ),
-        ],
-      );
-    } else {
-      return AlertDialog(
-        title: const Text(title),
-        content: const Text(content),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text(context.l10n.cancel),
-          ),
-          TextButton(
-            onPressed: canRetry ? retryStreakNext : null,
-            child: Text(context.l10n.retry),
-          ),
-        ],
-      );
-    }
+    return PlatformAlertDialog(
+      title: const Text(title),
+      content: const Text(content),
+      actions: [
+        PlatformDialogAction(
+          onPressed: () => Navigator.of(context).pop(),
+          cupertinoIsDestructiveAction: true,
+          child: Text(context.l10n.cancel),
+        ),
+        PlatformDialogAction(
+          onPressed: canRetry ? retryStreakNext : null,
+          cupertinoIsDefaultAction: true,
+          child: Text(context.l10n.retry),
+        ),
+      ],
+    );
   }
 }
