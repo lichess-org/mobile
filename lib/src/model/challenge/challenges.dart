@@ -1,20 +1,26 @@
 import 'dart:async';
 
-import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
-import 'package:lichess_mobile/src/model/common/socket.dart';
+import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'challenges.g.dart';
 
-@Riverpod(keepAlive: true)
+@riverpod
 class Challenges extends _$Challenges {
+  StreamSubscription<ChallengesList>? _subscription;
+
   @override
   Future<ChallengesList> build() async {
-    socketGlobalStream.listen(_handleSocketEvent);
+    _subscription =
+        challengeStream.listen((list) => state = AsyncValue.data(list));
+
+    ref.onDispose(() {
+      _subscription?.cancel();
+    });
 
     final session = ref.watch(authSessionProvider);
     if (session == null) {
@@ -27,15 +33,5 @@ class Challenges extends _$Challenges {
     }
 
     return ref.read(challengeRepositoryProvider).list();
-  }
-
-  void _handleSocketEvent(SocketEvent event) {
-    if (event.topic != 'challenges') return;
-
-    final listPick = pick(event.data).required();
-    final inward = listPick('in').asListOrEmpty(Challenge.fromPick);
-    final outward = listPick('out').asListOrEmpty(Challenge.fromPick);
-
-    state = AsyncValue.data((inward: inward.lock, outward: outward.lock));
   }
 }
