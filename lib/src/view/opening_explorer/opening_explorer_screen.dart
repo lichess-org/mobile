@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer_preferences.dart';
@@ -285,6 +285,8 @@ class _OpeningExplorerState extends ConsumerState<_OpeningExplorer> {
         final topGames = openingExplorer.entry.topGames;
         final recentGames = openingExplorer.entry.recentGames;
 
+        final ply = analysisState.position.ply;
+
         final explorerContent = [
           OpeningExplorerMoveTable(
             moves: openingExplorer.entry.moves,
@@ -295,30 +297,40 @@ class _OpeningExplorerState extends ConsumerState<_OpeningExplorer> {
             options: widget.options,
           ),
           if (topGames != null && topGames.isNotEmpty) ...[
-            _OpeningExplorerHeader(child: Text(context.l10n.topGames)),
+            _OpeningExplorerHeader(
+              key: const Key('topGamesHeader'),
+              child: Text(context.l10n.topGames),
+            ),
             ...List.generate(
               topGames.length,
               (int index) {
                 return OpeningExplorerGameTile(
+                  key: Key('top-game-${topGames.get(index).id}'),
                   game: topGames.get(index),
                   color: index.isEven
                       ? Theme.of(context).colorScheme.surfaceContainerLow
                       : Theme.of(context).colorScheme.surfaceContainerHigh,
+                  ply: ply,
                 );
               },
               growable: false,
             ),
           ],
           if (recentGames != null && recentGames.isNotEmpty) ...[
-            _OpeningExplorerHeader(child: Text(context.l10n.recentGames)),
+            _OpeningExplorerHeader(
+              key: const Key('recentGamesHeader'),
+              child: Text(context.l10n.recentGames),
+            ),
             ...List.generate(
               recentGames.length,
               (int index) {
                 return OpeningExplorerGameTile(
+                  key: Key('recent-game-${recentGames.get(index).id}'),
                   game: recentGames.get(index),
                   color: index.isEven
                       ? Theme.of(context).colorScheme.surfaceContainerLow
                       : Theme.of(context).colorScheme.surfaceContainerHigh,
+                  ply: ply,
                 );
               },
               growable: false,
@@ -729,133 +741,164 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
 }
 
 /// A game tile for the opening explorer.
-class OpeningExplorerGameTile extends ConsumerWidget {
+class OpeningExplorerGameTile extends ConsumerStatefulWidget {
   const OpeningExplorerGameTile({
     required this.game,
     required this.color,
+    required this.ply,
+    super.key,
   });
 
   final OpeningExplorerGame game;
   final Color color;
+  final int ply;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<OpeningExplorerGameTile> createState() =>
+      _OpeningExplorerGameTileState();
+}
+
+class _OpeningExplorerGameTileState
+    extends ConsumerState<OpeningExplorerGameTile> {
+  Future<ArchivedGame>? gameRequest;
+
+  @override
+  Widget build(BuildContext context) {
     const widthResultBox = 50.0;
     const paddingResultBox = EdgeInsets.all(5);
 
     return Container(
       padding: _kTableRowPadding,
-      color: color,
-      child: AdaptiveInkWell(
-        onTap: () async {
-          final gameId = GameId(game.id);
-          final archivedGame = await ref.read(
-            archivedGameProvider(id: gameId).future,
+      color: widget.color,
+      child: FutureBuilder<void>(
+        future: gameRequest,
+        builder: (context, snapshot) {
+          return AdaptiveInkWell(
+            onTap: snapshot.connectionState == ConnectionState.waiting
+                ? null
+                : () async {
+                    if (gameRequest == null) {
+                      setState(() {
+                        gameRequest = ref.read(
+                          archivedGameProvider(id: widget.game.id).future,
+                        );
+                      });
+                    }
+
+                    final archivedGame = await gameRequest!;
+                    if (context.mounted) {
+                      pushPlatformRoute(
+                        context,
+                        builder: (_) => ArchivedGameScreen(
+                          gameData: archivedGame.data,
+                          orientation: Side.white,
+                          initialCursor: widget.ply,
+                        ),
+                      );
+                    }
+                  },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(widget.game.white.rating.toString()),
+                    Text(widget.game.black.rating.toString()),
+                  ],
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.game.white.name,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
+                        widget.game.black.name,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
+                Row(
+                  children: [
+                    if (widget.game.winner == 'white')
+                      Container(
+                        width: widthResultBox,
+                        padding: paddingResultBox,
+                        decoration: BoxDecoration(
+                          color: _whiteBoxColor(context),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: const Text(
+                          '1-0',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.black,
+                          ),
+                        ),
+                      )
+                    else if (widget.game.winner == 'black')
+                      Container(
+                        width: widthResultBox,
+                        padding: paddingResultBox,
+                        decoration: BoxDecoration(
+                          color: _blackBoxColor(context),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: const Text(
+                          '0-1',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      )
+                    else
+                      Container(
+                        width: widthResultBox,
+                        padding: paddingResultBox,
+                        decoration: BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: const Text(
+                          '½-½',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    if (widget.game.month != null) ...[
+                      const SizedBox(width: 10.0),
+                      Text(
+                        widget.game.month!,
+                        style: const TextStyle(
+                          fontFeatures: [FontFeature.tabularFigures()],
+                        ),
+                      ),
+                    ],
+                    if (widget.game.speed != null) ...[
+                      const SizedBox(width: 10.0),
+                      Icon(widget.game.speed!.icon, size: 20),
+                    ],
+                  ],
+                ),
+              ],
+            ),
           );
-          if (context.mounted) {
-            pushPlatformRoute(
-              context,
-              builder: (_) => ArchivedGameScreen(
-                gameData: archivedGame.data,
-                orientation: Side.white,
-              ),
-            );
-          }
         },
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(game.white.rating.toString()),
-                Text(game.black.rating.toString()),
-              ],
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(game.white.name, overflow: TextOverflow.ellipsis),
-                  Text(game.black.name, overflow: TextOverflow.ellipsis),
-                ],
-              ),
-            ),
-            Row(
-              children: [
-                if (game.winner == 'white')
-                  Container(
-                    width: widthResultBox,
-                    padding: paddingResultBox,
-                    decoration: BoxDecoration(
-                      color: _whiteBoxColor(context),
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: const Text(
-                      '1-0',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.black,
-                      ),
-                    ),
-                  )
-                else if (game.winner == 'black')
-                  Container(
-                    width: widthResultBox,
-                    padding: paddingResultBox,
-                    decoration: BoxDecoration(
-                      color: _blackBoxColor(context),
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: const Text(
-                      '0-1',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                  )
-                else
-                  Container(
-                    width: widthResultBox,
-                    padding: paddingResultBox,
-                    decoration: BoxDecoration(
-                      color: Colors.grey,
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: const Text(
-                      '½-½',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                if (game.month != null) ...[
-                  const SizedBox(width: 10.0),
-                  Text(
-                    game.month!,
-                    style: const TextStyle(
-                      fontFeatures: [FontFeature.tabularFigures()],
-                    ),
-                  ),
-                ],
-                if (game.speed != null) ...[
-                  const SizedBox(width: 10.0),
-                  Icon(game.speed!.icon, size: 20),
-                ],
-              ],
-            ),
-          ],
-        ),
       ),
     );
   }
 }
 
 class _OpeningExplorerHeader extends StatelessWidget {
-  const _OpeningExplorerHeader({required this.child});
+  const _OpeningExplorerHeader({required this.child, super.key});
 
   final Widget child;
 
