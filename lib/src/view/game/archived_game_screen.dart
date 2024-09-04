@@ -43,17 +43,20 @@ class ArchivedGameScreen extends ConsumerWidget {
           ToggleSoundButton(),
         ],
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: _BoardBody(
-              gameData: gameData,
-              orientation: orientation,
-              initialCursor: initialCursor,
+      body: SafeArea(
+        bottom: false,
+        child: Column(
+          children: [
+            Expanded(
+              child: _BoardBody(
+                gameData: gameData,
+                orientation: orientation,
+                initialCursor: initialCursor,
+              ),
             ),
-          ),
-          _BottomBar(gameData: gameData, orientation: orientation),
-        ],
+            _BottomBar(gameData: gameData, orientation: orientation),
+          ],
+        ),
       ),
     );
   }
