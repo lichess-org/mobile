@@ -40,10 +40,6 @@ abstract mixin class BaseChallenge {
 class Challenge with _$Challenge, BaseChallenge implements BaseChallenge {
   const Challenge._();
 
-  @Assert(
-    'clock != null || days != null',
-    'Either clock or days must be set but not both.',
-  )
   const factory Challenge({
     int? socketVersion,
     required ChallengeId id,
