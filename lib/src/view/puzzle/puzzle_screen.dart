@@ -484,7 +484,6 @@ class _BottomBar extends ConsumerWidget {
             pushPlatformRoute(
               context,
               builder: (context) => AnalysisScreen(
-                title: context.l10n.analysis,
                 pgnOrId: ref.read(ctrlProvider.notifier).makePgn(),
                 options: AnalysisOptions(
                   isLocalEvaluationAllowed: true,

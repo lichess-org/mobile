@@ -265,7 +265,6 @@ class _BodyState extends ConsumerState<_Body> {
                       id: game.id,
                       division: game.meta.division,
                     ),
-                    title: context.l10n.analysis,
                   ),
                 );
               },

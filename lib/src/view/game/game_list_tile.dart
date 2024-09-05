@@ -239,7 +239,6 @@ class _ContextMenu extends ConsumerWidget {
                         pushPlatformRoute(
                           context,
                           builder: (context) => AnalysisScreen(
-                            title: context.l10n.gameAnalysis,
                             pgnOrId: game.id.value,
                             options: AnalysisOptions(
                               isLocalEvaluationAllowed: true,
