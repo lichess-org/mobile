@@ -213,7 +213,6 @@ class _GameEndDialogState extends ConsumerState<GameResultDialog> {
                 builder: (_) => AnalysisScreen(
                   pgnOrId: gameState.analysisPgn,
                   options: gameState.analysisOptions,
-                  title: context.l10n.gameAnalysis,
                 ),
               );
             },

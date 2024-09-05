@@ -245,7 +245,6 @@ class _BottomBar extends ConsumerWidget {
                   pushPlatformRoute(
                     context,
                     builder: (context) => AnalysisScreen(
-                      title: context.l10n.gameAnalysis,
                       pgnOrId: game.makePgn(),
                       options: AnalysisOptions(
                         isLocalEvaluationAllowed: true,

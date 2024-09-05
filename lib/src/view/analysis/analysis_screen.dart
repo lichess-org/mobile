@@ -52,7 +52,6 @@ class AnalysisScreen extends StatelessWidget {
   const AnalysisScreen({
     required this.options,
     required this.pgnOrId,
-    this.title,
   });
 
   /// The analysis options.
@@ -61,26 +60,22 @@ class AnalysisScreen extends StatelessWidget {
   /// The PGN or game ID to load.
   final String pgnOrId;
 
-  final String? title;
-
   @override
   Widget build(BuildContext context) {
     return pgnOrId.length == 8 && GameId(pgnOrId).isValid
-        ? _LoadGame(GameId(pgnOrId), options, title)
+        ? _LoadGame(GameId(pgnOrId), options)
         : _LoadedAnalysisScreen(
             options: options,
             pgn: pgnOrId,
-            title: title,
           );
   }
 }
 
 class _LoadGame extends ConsumerWidget {
-  const _LoadGame(this.gameId, this.options, this.title);
+  const _LoadGame(this.gameId, this.options);
 
   final AnalysisOptions options;
   final GameId gameId;
-  final String? title;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -100,7 +95,6 @@ class _LoadGame extends ConsumerWidget {
             serverAnalysis: serverAnalysis,
           ),
           pgn: game.makePgn(),
-          title: title,
         );
       },
       loading: () => const Center(child: CircularProgressIndicator.adaptive()),
@@ -117,13 +111,10 @@ class _LoadedAnalysisScreen extends ConsumerWidget {
   const _LoadedAnalysisScreen({
     required this.options,
     required this.pgn,
-    this.title,
   });
 
   final AnalysisOptions options;
   final String pgn;
-
-  final String? title;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -140,7 +131,7 @@ class _LoadedAnalysisScreen extends ConsumerWidget {
     return PlatformScaffold(
       resizeToAvoidBottomInset: false,
       appBar: PlatformAppBar(
-        title: _Title(options: options, title: title),
+        title: _Title(options: options),
         actions: [
           _EngineDepth(ctrlProvider),
           AppBarIconButton(
@@ -167,7 +158,7 @@ class _LoadedAnalysisScreen extends ConsumerWidget {
       resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
         padding: Styles.cupertinoAppBarTrailingWidgetPadding,
-        middle: _Title(options: options, title: title),
+        middle: _Title(options: options),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -192,27 +183,21 @@ class _LoadedAnalysisScreen extends ConsumerWidget {
 }
 
 class _Title extends StatelessWidget {
-  const _Title({
-    required this.options,
-    this.title,
-  });
+  const _Title({required this.options});
   final AnalysisOptions options;
-  final String? title;
 
   @override
   Widget build(BuildContext context) {
-    return title != null
-        ? Text(title!)
-        : Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (options.variant != Variant.standard) ...[
-                Icon(options.variant.icon),
-                const SizedBox(width: 5.0),
-              ],
-              Text(context.l10n.analysis),
-            ],
-          );
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (options.variant != Variant.standard) ...[
+          Icon(options.variant.icon),
+          const SizedBox(width: 5.0),
+        ],
+        Text(context.l10n.analysis),
+      ],
+    );
   }
 }
 

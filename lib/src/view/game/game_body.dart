@@ -552,7 +552,6 @@ class _GameBottomBar extends ConsumerWidget {
                     builder: (_) => AnalysisScreen(
                       pgnOrId: gameState.analysisPgn,
                       options: gameState.analysisOptions,
-                      title: context.l10n.gameAnalysis,
                     ),
                   );
                 },
@@ -688,7 +687,6 @@ class _GameBottomBar extends ConsumerWidget {
                   options: gameState.analysisOptions.copyWith(
                     isLocalEvaluationAllowed: false,
                   ),
-                  title: context.l10n.analysis,
                 ),
               );
             },
