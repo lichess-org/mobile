@@ -71,6 +71,7 @@ class BottomBarButton extends StatelessWidget {
                   )
                 else
                   Badge(
+                    backgroundColor: Theme.of(context).colorScheme.onSecondary,
                     isLabelVisible: badgeLabel != null,
                     label: (badgeLabel != null) ? Text(badgeLabel!) : null,
                     child: Icon(icon, color: highlighted ? primary : null),
@@ -149,6 +150,7 @@ class _BlinkIconState extends State<_BlinkIcon>
       animation: _colorAnimation,
       builder: (context, child) {
         return Badge(
+          backgroundColor: Theme.of(context).colorScheme.onSecondary,
           isLabelVisible: widget.badgeLabel != null,
           label: widget.badgeLabel != null ? Text(widget.badgeLabel!) : null,
           child: Icon(
