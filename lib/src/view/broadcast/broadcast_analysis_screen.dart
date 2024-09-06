@@ -335,27 +335,23 @@ class _AnalysisBoardPlayersAndClocks extends StatelessWidget {
       children: [
         _PlayerWidget(
           width: boardSize,
-          player: game.players[pov.opposite]!,
-          gameStatus: game.status,
-          thinkTime: game.thinkTime,
-          pov: pov.opposite,
+          game: game,
+          side: pov.opposite,
           playingSide: playingSide,
-          side: _PlayerWidgetSide.top,
+          boardSide: _PlayerWidgetSide.top,
         ),
         AnalysisBoard(
           game.pgn!,
-          _options,
+          broadcastAnalysisOptions,
           boardSize,
           isTablet: isTablet,
         ),
         _PlayerWidget(
           width: boardSize,
-          player: game.players[pov]!,
-          gameStatus: game.status,
-          thinkTime: game.thinkTime,
-          pov: pov,
+          game: game,
+          side: pov,
           playingSide: playingSide,
-          side: _PlayerWidgetSide.bottom,
+          boardSide: _PlayerWidgetSide.bottom,
         ),
       ],
     );
@@ -365,36 +361,37 @@ class _AnalysisBoardPlayersAndClocks extends StatelessWidget {
 class _PlayerWidget extends StatelessWidget {
   const _PlayerWidget({
     required this.width,
-    required this.player,
-    required this.gameStatus,
-    required this.thinkTime,
-    required this.pov,
-    required this.playingSide,
+    required this.game,
     required this.side,
+    required this.playingSide,
+    required this.boardSide,
   });
 
-  final BroadcastPlayer player;
-  final String? gameStatus;
-  final Duration? thinkTime;
-  final Side pov;
+  final BroadcastGame game;
+  final Side side;
   final Side playingSide;
   final double width;
-  final _PlayerWidgetSide side;
+  final _PlayerWidgetSide boardSide;
 
   @override
   Widget build(BuildContext context) {
+    final player = game.players[side]!;
+    final gameStatus = game.status;
+
     return SizedBox(
       width: width,
       child: Card(
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(side == _PlayerWidgetSide.top ? 8 : 0),
-            topRight: Radius.circular(side == _PlayerWidgetSide.top ? 8 : 0),
+            topLeft:
+                Radius.circular(boardSide == _PlayerWidgetSide.top ? 8 : 0),
+            topRight:
+                Radius.circular(boardSide == _PlayerWidgetSide.top ? 8 : 0),
             bottomLeft:
-                Radius.circular(side == _PlayerWidgetSide.bottom ? 8 : 0),
+                Radius.circular(boardSide == _PlayerWidgetSide.bottom ? 8 : 0),
             bottomRight:
-                Radius.circular(side == _PlayerWidgetSide.bottom ? 8 : 0),
+                Radius.circular(boardSide == _PlayerWidgetSide.bottom ? 8 : 0),
           ),
         ),
         child: Padding(
@@ -410,10 +407,10 @@ class _PlayerWidget extends StatelessWidget {
                         (gameStatus == '½-½')
                             ? '½'
                             : (gameStatus == '1-0')
-                                ? pov == Side.white
+                                ? side == Side.white
                                     ? '1'
                                     : '0'
-                                : pov == Side.black
+                                : side == Side.black
                                     ? '1'
                                     : '0',
                         style: const TextStyle()
@@ -455,10 +452,9 @@ class _PlayerWidget extends StatelessWidget {
                 ),
               ),
               if (player.clock != null)
-                (pov == playingSide)
+                (side == playingSide)
                     ? Text(
-                        (player.clock! - (thinkTime ?? Duration.zero))
-                            .toHoursMinutesSeconds(),
+                        game.timeLeft!.toHoursMinutesSeconds(),
                         style: TextStyle(
                           color: Colors.orange[900],
                           fontFeatures: const [FontFeature.tabularFigures()],

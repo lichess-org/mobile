@@ -163,7 +163,8 @@ MapEntry<BroadcastGameId, BroadcastGame> gameFromPick(
             Variant.standard.initialPosition.fen,
         lastMove: pick('lastMove').asUciMoveOrNull(),
         status: pick('status').asStringOrNull(),
-        thinkTime: pick('thinkTime').asDurationFromSecondsOrNull(),
+        thinkTime:
+            pick('thinkTime').asDurationFromSecondsOrNull() ?? Duration.zero,
         pgn: null,
       ),
     );

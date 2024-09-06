@@ -53,25 +53,9 @@ class BroadcastRoundController extends _$BroadcastRoundController {
     state = AsyncData(
       state.requireValue.map((gameId, game) {
         if (!game.isPlaying) return MapEntry(gameId, game);
-        final playingSide = Setup.parseFen(game.fen).turn;
-        final clock = game.players[playingSide]!.clock;
-        final newClock =
-            (clock != null) ? clock - const Duration(seconds: 1) : null;
-        return MapEntry(
-          gameId,
-          game.copyWith(
-            players: IMap(
-              {
-                playingSide: game.players[playingSide]!.copyWith(
-                  clock: (newClock?.isNegative ?? false)
-                      ? Duration.zero
-                      : newClock,
-                ),
-                playingSide.opposite: game.players[playingSide.opposite]!,
-              },
-            ),
-          ),
-        );
+        final thinkTime = game.thinkTime;
+        final newThinkTime = thinkTime + const Duration(seconds: 1);
+        return MapEntry(gameId, game.copyWith(thinkTime: newThinkTime));
       }),
     );
   }
@@ -143,7 +127,7 @@ class BroadcastRoundController extends _$BroadcastRoundController {
           ),
           fen: fen,
           lastMove: pick(event.data, 'n', 'uci').asUciMoveOrThrow(),
-          thinkTime: null,
+          thinkTime: Duration.zero,
         ),
       ),
     );

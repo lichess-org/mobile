@@ -97,10 +97,19 @@ class BroadcastGame with _$BroadcastGame {
     required String? pgn,
 
     /// The amount of time that the player whose turn it is has been thinking since his last move
-    required Duration? thinkTime,
+    required Duration thinkTime,
   }) = _BroadcastGame;
 
   bool get isPlaying => status == '*';
+  Side get playingSide => Setup.parseFen(fen).turn;
+  Duration? get timeLeft {
+    final clock = players[playingSide]!.clock;
+    if (clock == null) return null;
+    final timeLeftMaybeNegative = clock - thinkTime;
+    return timeLeftMaybeNegative.isNegative
+        ? Duration.zero
+        : timeLeftMaybeNegative;
+  }
 }
 
 @freezed

@@ -126,8 +126,8 @@ class BroadcastPreview extends ConsumerWidget {
         if (games == null) {
           return BoardThumbnail.loading(
             size: boardSize,
-            header: _PlayerWidget.loading(width: boardWithMaybeEvalBarWidth),
-            footer: _PlayerWidget.loading(width: boardWithMaybeEvalBarWidth),
+            header: _PlayerWidgetLoading(width: boardWithMaybeEvalBarWidth),
+            footer: _PlayerWidgetLoading(width: boardWithMaybeEvalBarWidth),
             showEvaluationBar: showEvaluationBar,
           );
         }
@@ -156,17 +156,13 @@ class BroadcastPreview extends ConsumerWidget {
           size: boardSize,
           header: _PlayerWidget(
             width: boardWithMaybeEvalBarWidth,
-            player: game.players[Side.black]!,
-            gameStatus: game.status,
-            thinkTime: game.thinkTime,
+            game: game,
             side: Side.black,
             playingSide: playingSide,
           ),
           footer: _PlayerWidget(
             width: boardWithMaybeEvalBarWidth,
-            player: game.players[Side.white]!,
-            gameStatus: game.status,
-            thinkTime: game.thinkTime,
+            game: game,
             side: Side.white,
             playingSide: playingSide,
           ),
@@ -176,57 +172,48 @@ class BroadcastPreview extends ConsumerWidget {
   }
 }
 
+class _PlayerWidgetLoading extends StatelessWidget {
+  const _PlayerWidgetLoading({
+    required this.width,
+  });
+
+  final double width;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: width,
+      child: Padding(
+        padding: _kPlayerWidgetPadding,
+        child: Container(
+          height: _kPlayerWidgetTextStyle.fontSize,
+          decoration: BoxDecoration(
+            color: Colors.black,
+            borderRadius: BorderRadius.circular(5),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _PlayerWidget extends StatelessWidget {
   const _PlayerWidget({
     required this.width,
-    required this.player,
-    required this.gameStatus,
-    required this.thinkTime,
+    required this.game,
     required this.side,
     required this.playingSide,
-  }) : _displayShimmerPlaceholder = false;
+  });
 
-  const _PlayerWidget.loading({
-    required this.width,
-  })  : player = const BroadcastPlayer(
-          name: '',
-          title: null,
-          rating: null,
-          clock: null,
-          federation: null,
-        ),
-        gameStatus = null,
-        thinkTime = null,
-        side = Side.white,
-        playingSide = Side.white,
-        _displayShimmerPlaceholder = true;
-
-  final BroadcastPlayer player;
-  final String? gameStatus;
-  final Duration? thinkTime;
+  final BroadcastGame game;
   final Side side;
   final Side playingSide;
   final double width;
 
-  final bool _displayShimmerPlaceholder;
-
   @override
   Widget build(BuildContext context) {
-    if (_displayShimmerPlaceholder) {
-      return SizedBox(
-        width: width,
-        child: Padding(
-          padding: _kPlayerWidgetPadding,
-          child: Container(
-            height: _kPlayerWidgetTextStyle.fontSize,
-            decoration: BoxDecoration(
-              color: Colors.black,
-              borderRadius: BorderRadius.circular(5),
-            ),
-          ),
-        ),
-      );
-    }
+    final player = game.players[side]!;
+    final gameStatus = game.status;
 
     return SizedBox(
       width: width,
@@ -292,8 +279,7 @@ class _PlayerWidget extends StatelessWidget {
               else if (player.clock != null)
                 if (side == playingSide)
                   Text(
-                    (player.clock! - (thinkTime ?? Duration.zero))
-                        .toHoursMinutesSeconds(),
+                    (game.timeLeft!).toHoursMinutesSeconds(),
                     style: TextStyle(
                       color: Colors.orange[900],
                       fontFeatures: const [FontFeature.tabularFigures()],
