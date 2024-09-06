@@ -56,12 +56,12 @@ const _options = AnalysisOptions(
   variant: Variant.standard,
 );
 
-class BroadcastGameScreen extends ConsumerWidget {
+class BroadcastAnalysisScreen extends ConsumerWidget {
   final BroadcastRoundId roundId;
   final BroadcastGameId gameId;
   final String title;
 
-  const BroadcastGameScreen({
+  const BroadcastAnalysisScreen({
     required this.roundId,
     required this.gameId,
     required this.title,

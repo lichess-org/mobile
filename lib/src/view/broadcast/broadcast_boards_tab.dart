@@ -15,7 +15,7 @@ import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
-import 'package:lichess_mobile/src/view/broadcast/broadcast_game_screen.dart';
+import 'package:lichess_mobile/src/view/broadcast/broadcast_analysis_screen.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/evaluation_bar.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
@@ -142,7 +142,7 @@ class BroadcastPreview extends ConsumerWidget {
                 .setPgn(game.id);
             pushPlatformRoute(
               context,
-              builder: (context) => BroadcastGameScreen(
+              builder: (context) => BroadcastAnalysisScreen(
                 roundId: roundId,
                 gameId: game.id,
                 title: title,
