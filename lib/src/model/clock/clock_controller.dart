@@ -10,8 +10,15 @@ part 'clock_controller.g.dart';
 class ClockController extends _$ClockController {
   @override
   ClockState build() {
+    const time = Duration(minutes: 10);
+    const increment = Duration.zero;
     return ClockState.fromOptions(
-      const ClockOptions(time: Duration(minutes: 10), increment: Duration.zero),
+      const ClockOptions(
+        timePlayerTop: time,
+        timePlayerBottom: time,
+        incrementPlayerTop: increment,
+        incrementPlayerBottom: increment,
+      ),
     );
   }
 
@@ -39,15 +46,39 @@ class ClockController extends _$ClockController {
     }
 
     if (playerType == ClockPlayerType.top) {
-      state = state.copyWith(playerTopTime: duration + state.options.increment);
+      state = state.copyWith(
+        playerTopTime: duration + state.options.incrementPlayerTop,
+      );
     } else {
-      state =
-          state.copyWith(playerBottomTime: duration + state.options.increment);
+      state = state.copyWith(
+        playerBottomTime: duration + state.options.incrementPlayerBottom,
+      );
     }
   }
 
   void updateOptions(TimeIncrement timeIncrement) =>
       state = ClockState.fromTimeIncrement(timeIncrement);
+
+  void updateOptionsCustom(
+    TimeIncrement clock,
+    ClockPlayerType player,
+  ) =>
+      state = ClockState.fromOptions(
+        ClockOptions(
+          timePlayerTop: player == ClockPlayerType.top
+              ? Duration(seconds: clock.time)
+              : state.options.timePlayerTop,
+          timePlayerBottom: player == ClockPlayerType.bottom
+              ? Duration(seconds: clock.time)
+              : state.options.timePlayerBottom,
+          incrementPlayerTop: player == ClockPlayerType.top
+              ? Duration(seconds: clock.increment)
+              : state.options.incrementPlayerTop,
+          incrementPlayerBottom: player == ClockPlayerType.bottom
+              ? Duration(seconds: clock.increment)
+              : state.options.incrementPlayerBottom,
+        ),
+      );
 
   void setLoser(ClockPlayerType playerType) =>
       state = state.copyWith(currentPlayer: null, loser: playerType);
@@ -66,8 +97,10 @@ class ClockOptions with _$ClockOptions {
   const ClockOptions._();
 
   const factory ClockOptions({
-    required Duration time,
-    required Duration increment,
+    required Duration timePlayerTop,
+    required Duration timePlayerBottom,
+    required Duration incrementPlayerTop,
+    required Duration incrementPlayerBottom,
   }) = _ClockOptions;
 }
 
@@ -90,15 +123,35 @@ class ClockState with _$ClockState {
 
   factory ClockState.fromTimeIncrement(TimeIncrement timeIncrement) {
     final options = ClockOptions(
-      time: Duration(seconds: timeIncrement.time),
-      increment: Duration(seconds: timeIncrement.increment),
+      timePlayerTop: Duration(seconds: timeIncrement.time),
+      timePlayerBottom: Duration(seconds: timeIncrement.time),
+      incrementPlayerTop: Duration(seconds: timeIncrement.increment),
+      incrementPlayerBottom: Duration(seconds: timeIncrement.increment),
     );
 
     return ClockState(
       id: DateTime.now().millisecondsSinceEpoch,
       options: options,
-      playerTopTime: options.time,
-      playerBottomTime: options.time,
+      playerTopTime: options.timePlayerTop,
+      playerBottomTime: options.timePlayerBottom,
+    );
+  }
+
+  factory ClockState.fromSeparateTimeIncrements(
+    TimeIncrement playerTop,
+    TimeIncrement playerBottom,
+  ) {
+    final options = ClockOptions(
+      timePlayerTop: Duration(seconds: playerTop.time),
+      timePlayerBottom: Duration(seconds: playerBottom.time),
+      incrementPlayerTop: Duration(seconds: playerTop.increment),
+      incrementPlayerBottom: Duration(seconds: playerBottom.increment),
+    );
+    return ClockState(
+      id: DateTime.now().millisecondsSinceEpoch,
+      options: options,
+      playerTopTime: options.timePlayerTop,
+      playerBottomTime: options.timePlayerBottom,
     );
   }
 
@@ -106,8 +159,8 @@ class ClockState with _$ClockState {
     return ClockState(
       id: DateTime.now().millisecondsSinceEpoch,
       options: options,
-      playerTopTime: options.time,
-      playerBottomTime: options.time,
+      playerTopTime: options.timePlayerTop,
+      playerBottomTime: options.timePlayerBottom,
     );
   }
 
