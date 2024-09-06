@@ -1,12 +1,9 @@
-import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
@@ -16,10 +13,11 @@ import 'package:lichess_mobile/src/view/game/game_result_dialog.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
+import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 import 'archived_game_screen_providers.dart';
 
@@ -38,41 +36,14 @@ class ArchivedGameScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ConsumerPlatformWidget(
-      ref: ref,
-      androidBuilder: _androidBuilder,
-      iosBuilder: _iosBuilder,
-    );
-  }
-
-  Widget _androidBuilder(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      appBar: AppBar(
+    return PlatformScaffold(
+      appBar: PlatformAppBar(
         title: _GameTitle(gameData: gameData),
         actions: [
           ToggleSoundButton(),
         ],
       ),
-      body: _BoardBody(
-        gameData: gameData,
-        orientation: orientation,
-        initialCursor: initialCursor,
-      ),
-      bottomNavigationBar:
-          _BottomBar(gameData: gameData, orientation: orientation),
-    );
-  }
-
-  Widget _iosBuilder(BuildContext context, WidgetRef ref) {
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        backgroundColor: Styles.cupertinoScaffoldColor.resolveFrom(context),
-        border: null,
-        middle: _GameTitle(gameData: gameData),
-        padding: const EdgeInsetsDirectional.only(end: 16.0),
-        trailing: ToggleSoundButton(),
-      ),
-      child: SafeArea(
+      body: SafeArea(
         bottom: false,
         child: Column(
           children: [
@@ -152,11 +123,8 @@ class _BoardBody extends ConsumerWidget {
     final topPlayer = orientation == Side.white ? black : white;
     final bottomPlayer = orientation == Side.white ? white : black;
     final loadingBoard = BoardTable(
-      boardState: ChessboardState(
-        interactableSide: InteractableSide.none,
-        orientation: (isBoardTurned ? orientation.opposite : orientation),
-        fen: gameData.lastFen ?? kInitialBoardFEN,
-      ),
+      orientation: (isBoardTurned ? orientation.opposite : orientation),
+      fen: gameData.lastFen ?? kInitialBoardFEN,
       topTable: topPlayer,
       bottomTable: bottomPlayer,
       showMoveListPlaceholder: true,
@@ -189,20 +157,18 @@ class _BoardBody extends ConsumerWidget {
               : null,
           materialDiff: game.materialDiffAt(cursor, Side.white),
         );
-        final topPlayer = orientation == Side.white ? black : white;
-        final bottomPlayer = orientation == Side.white ? white : black;
+
+        final topPlayerIsBlack = orientation == Side.white && !isBoardTurned ||
+            orientation == Side.black && isBoardTurned;
+        final topPlayer = topPlayerIsBlack ? black : white;
+        final bottomPlayer = topPlayerIsBlack ? white : black;
 
         final position = game.positionAt(cursor);
 
         return BoardTable(
-          boardState: ChessboardState(
-            interactableSide: InteractableSide.none,
-            orientation: (isBoardTurned ? orientation.opposite : orientation),
-            fen: position.fen,
-            lastMove: game.moveAt(cursor) as NormalMove?,
-            sideToMove: position.turn,
-            isCheck: position.isCheck,
-          ),
+          orientation: (isBoardTurned ? orientation.opposite : orientation),
+          fen: position.fen,
+          lastMove: game.moveAt(cursor) as NormalMove?,
           topTable: topPlayer,
           bottomTable: bottomPlayer,
           moves: game.steps
@@ -240,109 +206,85 @@ class _BottomBar extends ConsumerWidget {
     final canGoBackward = ref.watch(canGoBackwardProvider(gameData.id));
     final gameCursor = ref.watch(gameCursorProvider(gameData.id));
 
-    return Container(
-      color: Theme.of(context).platform == TargetPlatform.iOS
-          ? null
-          : Theme.of(context).bottomAppBarTheme.color,
-      child: SafeArea(
-        top: false,
-        child: SizedBox(
-          height: kBottomBarHeight,
-          child: Row(
-            children: [
-              Expanded(
-                child: BottomBarButton(
-                  label: context.l10n.menu,
-                  onTap: () {
-                    _showGameMenu(context, ref);
-                  },
-                  icon: Icons.menu,
-                ),
-              ),
-              gameCursor.when(
-                data: (data) {
-                  return Expanded(
-                    child: BottomBarButton(
-                      label: context.l10n.mobileShowResult,
-                      icon: Icons.info_outline,
-                      onTap: () {
-                        showAdaptiveDialog<void>(
-                          context: context,
-                          builder: (context) =>
-                              ArchivedGameResultDialog(game: data.$1),
-                          barrierDismissible: true,
-                        );
-                      },
+    return BottomBar(
+      children: [
+        BottomBarButton(
+          label: context.l10n.menu,
+          onTap: () {
+            _showGameMenu(context, ref);
+          },
+          icon: Icons.menu,
+        ),
+        gameCursor.when(
+          data: (data) {
+            return BottomBarButton(
+              label: context.l10n.mobileShowResult,
+              icon: Icons.info_outline,
+              onTap: () {
+                showAdaptiveDialog<void>(
+                  context: context,
+                  builder: (context) => ArchivedGameResultDialog(game: data.$1),
+                  barrierDismissible: true,
+                );
+              },
+            );
+          },
+          loading: () => const SizedBox.shrink(),
+          error: (_, __) => const SizedBox.shrink(),
+        ),
+        BottomBarButton(
+          label: context.l10n.gameAnalysis,
+          onTap: ref.read(gameCursorProvider(gameData.id)).hasValue
+              ? () {
+                  final (game, cursor) = ref
+                      .read(
+                        gameCursorProvider(gameData.id),
+                      )
+                      .requireValue;
+
+                  pushPlatformRoute(
+                    context,
+                    builder: (context) => AnalysisScreen(
+                      pgnOrId: game.makePgn(),
+                      options: AnalysisOptions(
+                        isLocalEvaluationAllowed: true,
+                        variant: gameData.variant,
+                        initialMoveCursor: cursor,
+                        orientation: orientation,
+                        id: gameData.id,
+                        opening: gameData.opening,
+                        serverAnalysis: game.serverAnalysis,
+                        division: game.meta.division,
+                      ),
                     ),
                   );
-                },
-                loading: () => const SizedBox.shrink(),
-                error: (_, __) => const SizedBox.shrink(),
-              ),
-              Expanded(
-                child: BottomBarButton(
-                  label: context.l10n.gameAnalysis,
-                  onTap: ref.read(gameCursorProvider(gameData.id)).hasValue
-                      ? () {
-                          final (game, cursor) = ref
-                              .read(
-                                gameCursorProvider(gameData.id),
-                              )
-                              .requireValue;
-
-                          pushPlatformRoute(
-                            context,
-                            builder: (context) => AnalysisScreen(
-                              title: context.l10n.gameAnalysis,
-                              pgnOrId: game.makePgn(),
-                              options: AnalysisOptions(
-                                isLocalEvaluationAllowed: true,
-                                variant: gameData.variant,
-                                initialMoveCursor: cursor,
-                                orientation: orientation,
-                                id: gameData.id,
-                                opening: gameData.opening,
-                                serverAnalysis: game.serverAnalysis,
-                                division: game.meta.division,
-                              ),
-                            ),
-                          );
-                        }
-                      : null,
-                  icon: Icons.biotech,
-                ),
-              ),
-              Expanded(
-                child: RepeatButton(
-                  onLongPress:
-                      canGoBackward ? () => _cursorBackward(ref) : null,
-                  child: BottomBarButton(
-                    key: const ValueKey('cursor-back'),
-                    // TODO add translation
-                    label: 'Backward',
-                    showTooltip: false,
-                    onTap: canGoBackward ? () => _cursorBackward(ref) : null,
-                    icon: CupertinoIcons.chevron_back,
-                  ),
-                ),
-              ),
-              Expanded(
-                child: RepeatButton(
-                  onLongPress: canGoForward ? () => _cursorForward(ref) : null,
-                  child: BottomBarButton(
-                    key: const ValueKey('cursor-forward'),
-                    // TODO add translation
-                    label: 'Forward',
-                    showTooltip: false,
-                    onTap: canGoForward ? () => _cursorForward(ref) : null,
-                    icon: CupertinoIcons.chevron_forward,
-                  ),
-                ),
-              ),
-            ],
+                }
+              : null,
+          icon: Icons.biotech,
+        ),
+        RepeatButton(
+          onLongPress: canGoBackward ? () => _cursorBackward(ref) : null,
+          child: BottomBarButton(
+            key: const ValueKey('cursor-back'),
+            // TODO add translation
+            label: 'Backward',
+            showTooltip: false,
+            onTap: canGoBackward ? () => _cursorBackward(ref) : null,
+            icon: CupertinoIcons.chevron_back,
           ),
         ),
-      ),
+        RepeatButton(
+          onLongPress: canGoForward ? () => _cursorForward(ref) : null,
+          child: BottomBarButton(
+            key: const ValueKey('cursor-forward'),
+            // TODO add translation
+            label: 'Forward',
+            showTooltip: false,
+            onTap: canGoForward ? () => _cursorForward(ref) : null,
+            icon: CupertinoIcons.chevron_forward,
+          ),
+        ),
+      ],
     );
   }
 

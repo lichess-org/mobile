@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
@@ -61,14 +62,17 @@ class ToolsTabScreen extends ConsumerWidget {
   }
 }
 
-class _Body extends StatelessWidget {
+class _Body extends ConsumerWidget {
   const _Body();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final tilePadding = Theme.of(context).platform == TargetPlatform.iOS
         ? const EdgeInsets.symmetric(vertical: 8.0)
         : EdgeInsets.zero;
+
+    final isOnline =
+        ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
 
     final content = [
       const SizedBox(height: 16.0),
@@ -134,41 +138,42 @@ class _Body extends StatelessWidget {
               ),
             ),
           ),
-          Padding(
-            padding: Theme.of(context).platform == TargetPlatform.android
-                ? const EdgeInsets.only(bottom: 16.0)
-                : EdgeInsets.zero,
-            child: PlatformListTile(
-              leading: Icon(
-                Icons.explore,
-                size: Styles.mainListTileIconSize,
-                color: Theme.of(context).platform == TargetPlatform.iOS
-                    ? CupertinoTheme.of(context).primaryColor
-                    : Theme.of(context).colorScheme.primary,
-              ),
-              title: Padding(
-                padding: tilePadding,
-                child:
-                    Text(context.l10n.openingExplorer, style: Styles.callout),
-              ),
-              trailing: Theme.of(context).platform == TargetPlatform.iOS
-                  ? const CupertinoListTileChevron()
-                  : null,
-              onTap: () => pushPlatformRoute(
-                context,
-                rootNavigator: true,
-                builder: (context) => const OpeningExplorerScreen(
-                  pgn: '',
-                  options: AnalysisOptions(
-                    isLocalEvaluationAllowed: false,
-                    variant: Variant.standard,
-                    orientation: Side.white,
-                    id: standaloneAnalysisId,
+          if (isOnline)
+            Padding(
+              padding: Theme.of(context).platform == TargetPlatform.android
+                  ? const EdgeInsets.only(bottom: 16.0)
+                  : EdgeInsets.zero,
+              child: PlatformListTile(
+                leading: Icon(
+                  Icons.explore,
+                  size: Styles.mainListTileIconSize,
+                  color: Theme.of(context).platform == TargetPlatform.iOS
+                      ? CupertinoTheme.of(context).primaryColor
+                      : Theme.of(context).colorScheme.primary,
+                ),
+                title: Padding(
+                  padding: tilePadding,
+                  child:
+                      Text(context.l10n.openingExplorer, style: Styles.callout),
+                ),
+                trailing: Theme.of(context).platform == TargetPlatform.iOS
+                    ? const CupertinoListTileChevron()
+                    : null,
+                onTap: () => pushPlatformRoute(
+                  context,
+                  rootNavigator: true,
+                  builder: (context) => const OpeningExplorerScreen(
+                    pgn: '',
+                    options: AnalysisOptions(
+                      isLocalEvaluationAllowed: false,
+                      variant: Variant.standard,
+                      orientation: Side.white,
+                      id: standaloneAnalysisId,
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
           Padding(
             padding: Theme.of(context).platform == TargetPlatform.android
                 ? const EdgeInsets.only(bottom: 16.0)

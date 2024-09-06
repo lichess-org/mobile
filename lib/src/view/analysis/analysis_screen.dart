@@ -24,6 +24,7 @@ import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
@@ -33,11 +34,13 @@ import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:popover/popover.dart';
 
 import '../../utils/share.dart';
@@ -49,7 +52,6 @@ class AnalysisScreen extends StatelessWidget {
   const AnalysisScreen({
     required this.options,
     required this.pgnOrId,
-    this.title,
   });
 
   /// The analysis options.
@@ -58,26 +60,22 @@ class AnalysisScreen extends StatelessWidget {
   /// The PGN or game ID to load.
   final String pgnOrId;
 
-  final String? title;
-
   @override
   Widget build(BuildContext context) {
     return pgnOrId.length == 8 && GameId(pgnOrId).isValid
-        ? _LoadGame(GameId(pgnOrId), options, title)
+        ? _LoadGame(GameId(pgnOrId), options)
         : _LoadedAnalysisScreen(
             options: options,
             pgn: pgnOrId,
-            title: title,
           );
   }
 }
 
 class _LoadGame extends ConsumerWidget {
-  const _LoadGame(this.gameId, this.options, this.title);
+  const _LoadGame(this.gameId, this.options);
 
   final AnalysisOptions options;
   final GameId gameId;
-  final String? title;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -97,7 +95,6 @@ class _LoadGame extends ConsumerWidget {
             serverAnalysis: serverAnalysis,
           ),
           pgn: game.makePgn(),
-          title: title,
         );
       },
       loading: () => const Center(child: CircularProgressIndicator.adaptive()),
@@ -114,13 +111,10 @@ class _LoadedAnalysisScreen extends ConsumerWidget {
   const _LoadedAnalysisScreen({
     required this.options,
     required this.pgn,
-    this.title,
   });
 
   final AnalysisOptions options;
   final String pgn;
-
-  final String? title;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -134,10 +128,10 @@ class _LoadedAnalysisScreen extends ConsumerWidget {
   Widget _androidBuilder(BuildContext context, WidgetRef ref) {
     final ctrlProvider = analysisControllerProvider(pgn, options);
 
-    return Scaffold(
+    return PlatformScaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: _Title(options: options, title: title),
+      appBar: PlatformAppBar(
+        title: _Title(options: options),
         actions: [
           _EngineDepth(ctrlProvider),
           AppBarIconButton(
@@ -163,10 +157,8 @@ class _LoadedAnalysisScreen extends ConsumerWidget {
     return CupertinoPageScaffold(
       resizeToAvoidBottomInset: false,
       navigationBar: CupertinoNavigationBar(
-        backgroundColor: Styles.cupertinoScaffoldColor.resolveFrom(context),
-        border: null,
         padding: Styles.cupertinoAppBarTrailingWidgetPadding,
-        middle: _Title(options: options, title: title),
+        middle: _Title(options: options),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -191,27 +183,21 @@ class _LoadedAnalysisScreen extends ConsumerWidget {
 }
 
 class _Title extends StatelessWidget {
-  const _Title({
-    required this.options,
-    this.title,
-  });
+  const _Title({required this.options});
   final AnalysisOptions options;
-  final String? title;
 
   @override
   Widget build(BuildContext context) {
-    return title != null
-        ? Text(title!)
-        : Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (options.variant != Variant.standard) ...[
-                Icon(options.variant.icon),
-                const SizedBox(width: 5.0),
-              ],
-              Text(context.l10n.analysis),
-            ],
-          );
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (options.variant != Variant.standard) ...[
+          Icon(options.variant.icon),
+          const SizedBox(width: 5.0),
+        ],
+        Text(context.l10n.analysis),
+      ],
+    );
   }
 }
 
@@ -515,7 +501,7 @@ class _Engineline extends ConsumerWidget {
     return AdaptiveInkWell(
       onTap: () => ref
           .read(ctrlProvider.notifier)
-          .onUserMove(Move.parse(pvData.moves[0])!),
+          .onUserMove(NormalMove.fromUci(pvData.moves[0])),
       child: SizedBox(
         height: kEvalGaugeSize,
         child: Padding(
@@ -589,82 +575,64 @@ class _BottomBar extends ConsumerWidget {
         ref.watch(ctrlProvider.select((value) => value.displayMode));
     final canShowGameSummary =
         ref.watch(ctrlProvider.select((value) => value.canShowGameSummary));
+    final isOnline =
+        ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
 
-    return Container(
-      color: Theme.of(context).platform == TargetPlatform.iOS
-          ? CupertinoTheme.of(context).barBackgroundColor
-          : Theme.of(context).bottomAppBarTheme.color,
-      child: SafeArea(
-        top: false,
-        child: SizedBox(
-          height: kBottomBarHeight,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Expanded(
-                child: BottomBarButton(
-                  label: context.l10n.menu,
-                  onTap: () {
-                    _showAnalysisMenu(context, ref);
-                  },
-                  icon: Icons.menu,
-                ),
-              ),
-              if (canShowGameSummary)
-                Expanded(
-                  child: BottomBarButton(
-                    label: displayMode == DisplayMode.summary
-                        ? 'Moves'
-                        : 'Summary',
-                    onTap: () {
-                      ref.read(ctrlProvider.notifier).toggleDisplayMode();
-                    },
-                    icon: displayMode == DisplayMode.summary
-                        ? LichessIcons.flow_cascade
-                        : Icons.area_chart,
-                  ),
-                ),
-              Expanded(
-                child: BottomBarButton(
-                  label: context.l10n.openingExplorer,
-                  onTap: () => pushPlatformRoute(
+    return BottomBar(
+      children: [
+        BottomBarButton(
+          label: context.l10n.menu,
+          onTap: () {
+            _showAnalysisMenu(context, ref);
+          },
+          icon: Icons.menu,
+        ),
+        if (canShowGameSummary)
+          BottomBarButton(
+            label: displayMode == DisplayMode.summary ? 'Moves' : 'Summary',
+            onTap: () {
+              ref.read(ctrlProvider.notifier).toggleDisplayMode();
+            },
+            icon: displayMode == DisplayMode.summary
+                ? LichessIcons.flow_cascade
+                : Icons.area_chart,
+          ),
+        BottomBarButton(
+          label: context.l10n.openingExplorer,
+          onTap: isOnline
+              ? () {
+                  pushPlatformRoute(
                     context,
                     builder: (_) => OpeningExplorerScreen(
                       pgn: pgn,
                       options: options,
                     ),
-                  ),
-                  icon: Icons.explore,
-                ),
-              ),
-              Expanded(
-                child: RepeatButton(
-                  onLongPress: canGoBack ? () => _moveBackward(ref) : null,
-                  child: BottomBarButton(
-                    key: const ValueKey('goto-previous'),
-                    onTap: canGoBack ? () => _moveBackward(ref) : null,
-                    label: 'Previous',
-                    icon: CupertinoIcons.chevron_back,
-                    showTooltip: false,
-                  ),
-                ),
-              ),
-              Expanded(
-                child: RepeatButton(
-                  onLongPress: canGoNext ? () => _moveForward(ref) : null,
-                  child: BottomBarButton(
-                    key: const ValueKey('goto-next'),
-                    icon: CupertinoIcons.chevron_forward,
-                    label: context.l10n.next,
-                    onTap: canGoNext ? () => _moveForward(ref) : null,
-                    showTooltip: false,
-                  ),
-                ),
-              ),
-            ],
+                  );
+                }
+              : null,
+          icon: Icons.explore,
+        ),
+        RepeatButton(
+          onLongPress: canGoBack ? () => _moveBackward(ref) : null,
+          child: BottomBarButton(
+            key: const ValueKey('goto-previous'),
+            onTap: canGoBack ? () => _moveBackward(ref) : null,
+            label: 'Previous',
+            icon: CupertinoIcons.chevron_back,
+            showTooltip: false,
           ),
         ),
-      ),
+        RepeatButton(
+          onLongPress: canGoNext ? () => _moveForward(ref) : null,
+          child: BottomBarButton(
+            key: const ValueKey('goto-next'),
+            icon: CupertinoIcons.chevron_forward,
+            label: context.l10n.next,
+            onTap: canGoNext ? () => _moveForward(ref) : null,
+            showTooltip: false,
+          ),
+        ),
+      ],
     );
   }
 

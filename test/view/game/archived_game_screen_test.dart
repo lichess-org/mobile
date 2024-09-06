@@ -57,11 +57,8 @@ void main() {
 
         // cannot interact with board
         expect(
-          tester
-              .widget<Chessboard>(find.byType(Chessboard))
-              .state
-              .interactableSide,
-          InteractableSide.none,
+          tester.widget<Chessboard>(find.byType(Chessboard)).game,
+          null,
         );
 
         // moves are not loaded

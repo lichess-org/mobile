@@ -16,8 +16,9 @@ import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/board_editor/board_editor_menu.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 class BoardEditorScreen extends StatelessWidget {
   const BoardEditorScreen({super.key, this.initialFen});
@@ -26,29 +27,11 @@ class BoardEditorScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformWidget(
-      androidBuilder: _androidBuilder,
-      iosBuilder: _iosBuilder,
-    );
-  }
-
-  Widget _androidBuilder(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
+    return PlatformScaffold(
+      appBar: PlatformAppBar(
         title: Text(context.l10n.boardEditor),
       ),
       body: _Body(initialFen),
-    );
-  }
-
-  Widget _iosBuilder(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        backgroundColor: Styles.cupertinoScaffoldColor.resolveFrom(context),
-        border: null,
-        middle: Text(context.l10n.boardEditor),
-      ),
-      child: _Body(initialFen),
     );
   }
 }
@@ -318,84 +301,59 @@ class _BottomBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final editorState = ref.watch(boardEditorControllerProvider(initialFen));
 
-    return Container(
-      color: Theme.of(context).platform == TargetPlatform.iOS
-          ? CupertinoDynamicColor.resolve(
-              CupertinoColors.tertiarySystemGroupedBackground,
-              context,
-            )
-          : Theme.of(context).bottomAppBarTheme.color,
-      child: SafeArea(
-        top: false,
-        child: SizedBox(
-          height: kBottomBarHeight,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Expanded(
-                child: BottomBarButton(
-                  label: context.l10n.menu,
-                  onTap: () => showAdaptiveBottomSheet<void>(
-                    context: context,
-                    builder: (BuildContext context) => BoardEditorMenu(
-                      initialFen: initialFen,
-                    ),
-                  ),
-                  icon: Icons.tune,
-                ),
-              ),
-              Expanded(
-                child: BottomBarButton(
-                  key: const Key('flip-button'),
-                  label: context.l10n.flipBoard,
-                  onTap: ref
-                      .read(boardEditorControllerProvider(initialFen).notifier)
-                      .flipBoard,
-                  icon: CupertinoIcons.arrow_2_squarepath,
-                ),
-              ),
-              Expanded(
-                child: BottomBarButton(
-                  label: context.l10n.analysis,
-                  key: const Key('analysis-board-button'),
-                  onTap: editorState.pgn != null
-                      ? () {
-                          pushPlatformRoute(
-                            context,
-                            rootNavigator: true,
-                            builder: (context) => AnalysisScreen(
-                              pgnOrId: editorState.pgn!,
-                              options: AnalysisOptions(
-                                isLocalEvaluationAllowed: true,
-                                variant: Variant.fromPosition,
-                                orientation: editorState.orientation,
-                                id: standaloneAnalysisId,
-                              ),
-                            ),
-                          );
-                        }
-                      : null,
-                  icon: Icons.biotech,
-                ),
-              ),
-              Expanded(
-                child: BottomBarButton(
-                  label: context.l10n.mobileSharePositionAsFEN,
-                  onTap: () => launchShareDialog(
-                    context,
-                    text: editorState.fen,
-                  ),
-                  icon: Theme.of(context).platform == TargetPlatform.iOS
-                      ? CupertinoIcons.share
-                      : Icons.share,
-                ),
-              ),
-              const SizedBox(height: 26.0),
-              const SizedBox(height: 20.0),
-            ],
+    return BottomBar(
+      children: [
+        BottomBarButton(
+          label: context.l10n.menu,
+          onTap: () => showAdaptiveBottomSheet<void>(
+            context: context,
+            builder: (BuildContext context) => BoardEditorMenu(
+              initialFen: initialFen,
+            ),
           ),
+          icon: Icons.tune,
         ),
-      ),
+        BottomBarButton(
+          key: const Key('flip-button'),
+          label: context.l10n.flipBoard,
+          onTap: ref
+              .read(boardEditorControllerProvider(initialFen).notifier)
+              .flipBoard,
+          icon: CupertinoIcons.arrow_2_squarepath,
+        ),
+        BottomBarButton(
+          label: context.l10n.analysis,
+          key: const Key('analysis-board-button'),
+          onTap: editorState.pgn != null
+              ? () {
+                  pushPlatformRoute(
+                    context,
+                    rootNavigator: true,
+                    builder: (context) => AnalysisScreen(
+                      pgnOrId: editorState.pgn!,
+                      options: AnalysisOptions(
+                        isLocalEvaluationAllowed: true,
+                        variant: Variant.fromPosition,
+                        orientation: editorState.orientation,
+                        id: standaloneAnalysisId,
+                      ),
+                    ),
+                  );
+                }
+              : null,
+          icon: Icons.biotech,
+        ),
+        BottomBarButton(
+          label: context.l10n.mobileSharePositionAsFEN,
+          onTap: () => launchShareDialog(
+            context,
+            text: editorState.fen,
+          ),
+          icon: Theme.of(context).platform == TargetPlatform.iOS
+              ? CupertinoIcons.share
+              : Icons.share,
+        ),
+      ],
     );
   }
 }

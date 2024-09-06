@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
+import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
 class AccountPreferencesScreen extends ConsumerStatefulWidget {
@@ -409,33 +410,15 @@ class _AccountPreferencesScreenState
       },
     );
 
-    return Theme.of(context).platform == TargetPlatform.android
-        ? Scaffold(
-            appBar: AppBar(
-              title: Text(context.l10n.preferencesPreferences),
-              actions: [
-                if (isLoading)
-                  const Padding(
-                    padding: EdgeInsets.only(right: 16),
-                    child: SizedBox(
-                      height: 24,
-                      width: 24,
-                      child: Center(
-                        child: CircularProgressIndicator.adaptive(),
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-            body: content,
-          )
-        : CupertinoPageScaffold(
-            navigationBar: CupertinoNavigationBar(
-              trailing:
-                  isLoading ? const CircularProgressIndicator.adaptive() : null,
-            ),
-            child: content,
-          );
+    return PlatformScaffold(
+      appBar: PlatformAppBar(
+        title: Text(context.l10n.preferencesPreferences),
+        actions: [
+          if (isLoading) const PlatformAppBarLoadingIndicator(),
+        ],
+      ),
+      body: content,
+    );
   }
 }
 

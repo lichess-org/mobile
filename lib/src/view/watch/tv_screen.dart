@@ -1,23 +1,20 @@
-import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/tv/tv_channel.dart';
 import 'package:lichess_mobile/src/model/tv/tv_controller.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/focus_detector.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_player.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
+import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 class TvScreen extends ConsumerStatefulWidget {
   const TvScreen({required this.channel, this.initialGame, super.key});
@@ -47,46 +44,19 @@ class _TvScreenState extends ConsumerState<TvScreen> {
           ref.read(_tvGameCtrl.notifier).stopWatching();
         }
       },
-      child: PlatformWidget(
-        androidBuilder: _androidBuilder,
-        iosBuilder: _iosBuilder,
-      ),
-    );
-  }
-
-  Widget _androidBuilder(
-    BuildContext context,
-  ) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('${widget.channel.label} TV'),
-        actions: [
-          ToggleSoundButton(),
-        ],
-      ),
-      body: _Body(
-        widget.channel,
-        widget.initialGame,
-        whiteClockKey: _whiteClockKey,
-        blackClockKey: _blackClockKey,
-      ),
-    );
-  }
-
-  Widget _iosBuilder(
-    BuildContext context,
-  ) {
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        padding: Styles.cupertinoAppBarTrailingWidgetPadding,
-        middle: Text('${widget.channel.label} TV'),
-        trailing: ToggleSoundButton(),
-      ),
-      child: _Body(
-        widget.channel,
-        widget.initialGame,
-        whiteClockKey: _whiteClockKey,
-        blackClockKey: _blackClockKey,
+      child: PlatformScaffold(
+        appBar: PlatformAppBar(
+          title: Text('${widget.channel.label} TV'),
+          actions: [
+            ToggleSoundButton(),
+          ],
+        ),
+        body: _Body(
+          widget.channel,
+          widget.initialGame,
+          whiteClockKey: _whiteClockKey,
+          blackClockKey: _blackClockKey,
+        ),
       ),
     );
   }
@@ -107,7 +77,6 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final boardPreferences = ref.watch(boardPreferencesProvider);
     final asyncGame = ref.watch(tvControllerProvider(channel, initialGame));
 
     return Column(
@@ -119,16 +88,7 @@ class _Body extends ConsumerWidget {
                 final game = gameState.game;
                 final position =
                     gameState.game.positionAt(gameState.stepCursor);
-                final sideToMove = position.turn;
 
-                final boardData = ChessboardState(
-                  interactableSide: InteractableSide.none,
-                  orientation: gameState.orientation,
-                  fen: position.fen,
-                  sideToMove: sideToMove,
-                  lastMove: game.moveAt(gameState.stepCursor) as NormalMove?,
-                  isCheck: boardPreferences.boardHighlights && position.isCheck,
-                );
                 final blackPlayerWidget = GamePlayer(
                   player: game.black.setOnGame(true),
                   clock: gameState.game.clock != null
@@ -152,7 +112,8 @@ class _Body extends ConsumerWidget {
                   materialDiff: game.lastMaterialDiffAt(Side.white),
                 );
                 return BoardTable(
-                  boardState: boardData,
+                  orientation: gameState.orientation,
+                  fen: position.fen,
                   boardSettingsOverrides: const BoardSettingsOverrides(
                     animationDuration: Duration.zero,
                   ),
@@ -172,7 +133,8 @@ class _Body extends ConsumerWidget {
               loading: () => const BoardTable(
                 topTable: kEmptyWidget,
                 bottomTable: kEmptyWidget,
-                boardState: kEmptyBoardState,
+                orientation: Side.white,
+                fen: kEmptyFEN,
                 showMoveListPlaceholder: true,
               ),
               error: (err, stackTrace) {
@@ -182,7 +144,8 @@ class _Body extends ConsumerWidget {
                 return const BoardTable(
                   topTable: kEmptyWidget,
                   bottomTable: kEmptyWidget,
-                  boardState: kEmptyBoardState,
+                  orientation: Side.white,
+                  fen: kEmptyFEN,
                   errorMessage: 'Could not load TV stream.',
                   showMoveListPlaceholder: true,
                 );
@@ -209,72 +172,54 @@ class _BottomBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Container(
-      color: Theme.of(context).platform == TargetPlatform.iOS
-          ? null
-          : Theme.of(context).bottomAppBarTheme.color,
-      child: SafeArea(
-        top: false,
-        child: SizedBox(
-          height: kBottomBarHeight,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Expanded(
-                child: BottomBarButton(
-                  label: context.l10n.flipBoard,
-                  onTap: () => _flipBoard(ref),
-                  icon: CupertinoIcons.arrow_2_squarepath,
-                ),
-              ),
-              Expanded(
-                child: RepeatButton(
-                  onLongPress: ref
-                          .read(tvControllerProvider(tvChannel, game).notifier)
-                          .canGoBack()
-                      ? () => _moveBackward(ref)
-                      : null,
-                  child: BottomBarButton(
-                    key: const ValueKey('goto-previous'),
-                    onTap: ref
-                            .read(
-                              tvControllerProvider(tvChannel, game).notifier,
-                            )
-                            .canGoBack()
-                        ? () => _moveBackward(ref)
-                        : null,
-                    label: 'Previous',
-                    icon: CupertinoIcons.chevron_back,
-                    showTooltip: false,
-                  ),
-                ),
-              ),
-              Expanded(
-                child: RepeatButton(
-                  onLongPress: ref
-                          .read(tvControllerProvider(tvChannel, game).notifier)
-                          .canGoForward()
-                      ? () => _moveForward(ref)
-                      : null,
-                  child: BottomBarButton(
-                    key: const ValueKey('goto-next'),
-                    icon: CupertinoIcons.chevron_forward,
-                    label: context.l10n.next,
-                    onTap: ref
-                            .read(
-                              tvControllerProvider(tvChannel, game).notifier,
-                            )
-                            .canGoForward()
-                        ? () => _moveForward(ref)
-                        : null,
-                    showTooltip: false,
-                  ),
-                ),
-              ),
-            ],
+    return BottomBar(
+      children: [
+        BottomBarButton(
+          label: context.l10n.flipBoard,
+          onTap: () => _flipBoard(ref),
+          icon: CupertinoIcons.arrow_2_squarepath,
+        ),
+        RepeatButton(
+          onLongPress: ref
+                  .read(tvControllerProvider(tvChannel, game).notifier)
+                  .canGoBack()
+              ? () => _moveBackward(ref)
+              : null,
+          child: BottomBarButton(
+            key: const ValueKey('goto-previous'),
+            onTap: ref
+                    .read(
+                      tvControllerProvider(tvChannel, game).notifier,
+                    )
+                    .canGoBack()
+                ? () => _moveBackward(ref)
+                : null,
+            label: 'Previous',
+            icon: CupertinoIcons.chevron_back,
+            showTooltip: false,
           ),
         ),
-      ),
+        RepeatButton(
+          onLongPress: ref
+                  .read(tvControllerProvider(tvChannel, game).notifier)
+                  .canGoForward()
+              ? () => _moveForward(ref)
+              : null,
+          child: BottomBarButton(
+            key: const ValueKey('goto-next'),
+            icon: CupertinoIcons.chevron_forward,
+            label: context.l10n.next,
+            onTap: ref
+                    .read(
+                      tvControllerProvider(tvChannel, game).notifier,
+                    )
+                    .canGoForward()
+                ? () => _moveForward(ref)
+                : null,
+            showTooltip: false,
+          ),
+        ),
+      ],
     );
   }
 

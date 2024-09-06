@@ -7,7 +7,6 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -26,9 +25,11 @@ import 'package:lichess_mobile/src/view/game/correspondence_clock_widget.dart';
 import 'package:lichess_mobile/src/view/game/message_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
+import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
+import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 
@@ -239,34 +240,43 @@ class GameBody extends ConsumerWidget {
                             gameState.canAutoQueenOnPremove,
                         blindfoldMode: blindfoldMode,
                       ),
-                      onMove: (move, {isDrop, isPremove}) {
-                        ref.read(ctrlProvider.notifier).onUserMove(
-                              Move.parse(move.uci)!,
-                              isPremove: isPremove,
-                              isDrop: isDrop,
-                            );
-                      },
-                      onPremove: gameState.canPremove
-                          ? (move) {
-                              ref.read(ctrlProvider.notifier).setPremove(move);
-                            }
-                          : null,
-                      boardState: ChessboardState(
-                        interactableSide:
+                      orientation: isBoardTurned ? youAre.opposite : youAre,
+                      fen: position.fen,
+                      lastMove: gameState.game.moveAt(gameState.stepCursor)
+                          as NormalMove?,
+                      gameData: GameData(
+                        playerSide:
                             gameState.game.playable && !gameState.isReplaying
                                 ? youAre == Side.white
-                                    ? InteractableSide.white
-                                    : InteractableSide.black
-                                : InteractableSide.none,
-                        orientation: isBoardTurned ? youAre.opposite : youAre,
-                        fen: position.fen,
-                        lastMove: gameState.game.moveAt(gameState.stepCursor)
-                            as NormalMove?,
+                                    ? PlayerSide.white
+                                    : PlayerSide.black
+                                : PlayerSide.none,
                         isCheck: boardPreferences.boardHighlights &&
                             position.isCheck,
                         sideToMove: position.turn,
                         validMoves: makeLegalMoves(position),
-                        premove: gameState.premove as NormalMove?,
+                        promotionMove: gameState.promotionMove,
+                        onMove: (move, {isDrop}) {
+                          ref.read(ctrlProvider.notifier).userMove(
+                                move,
+                                isDrop: isDrop,
+                              );
+                        },
+                        onPromotionSelection: (role) {
+                          ref
+                              .read(ctrlProvider.notifier)
+                              .onPromotionSelection(role);
+                        },
+                        premovable: gameState.canPremove
+                            ? (
+                                onSetPremove: (move) {
+                                  ref
+                                      .read(ctrlProvider.notifier)
+                                      .setPremove(move);
+                                },
+                                premove: gameState.premove,
+                              )
+                            : null,
                       ),
                       topTable: topPlayer,
                       bottomTable: gameState.canShowClaimWinCountdown &&
@@ -428,33 +438,31 @@ class _GameBottomBar extends ConsumerWidget {
         ? ref.watch(chatControllerProvider(id))
         : null;
 
-    final List<Widget> children = gameStateAsync.when(
-      data: (gameState) {
-        final isChatEnabled =
-            chatStateAsync != null && !gameState.isZenModeActive;
+    return BottomBar(
+      children: gameStateAsync.when(
+        data: (gameState) {
+          final isChatEnabled =
+              chatStateAsync != null && !gameState.isZenModeActive;
 
-        final chatUnreadChip = isChatEnabled
-            ? chatStateAsync.maybeWhen(
-                data: (s) => s.unreadMessages > 0
-                    ? Text(math.min(9, s.unreadMessages).toString())
-                    : null,
-                orElse: () => null,
-              )
-            : null;
+          final chatUnreadChip = isChatEnabled
+              ? chatStateAsync.maybeWhen(
+                  data: (s) => s.unreadMessages > 0
+                      ? Text(math.min(9, s.unreadMessages).toString())
+                      : null,
+                  orElse: () => null,
+                )
+              : null;
 
-        return [
-          Expanded(
-            child: BottomBarButton(
+          return [
+            BottomBarButton(
               label: context.l10n.menu,
               onTap: () {
                 _showGameMenu(context, ref);
               },
               icon: Icons.menu,
             ),
-          ),
-          if (!gameState.game.playable)
-            Expanded(
-              child: BottomBarButton(
+            if (!gameState.game.playable)
+              BottomBarButton(
                 label: context.l10n.mobileShowResult,
                 onTap: () {
                   showAdaptiveDialog<void>(
@@ -468,11 +476,9 @@ class _GameBottomBar extends ConsumerWidget {
                 },
                 icon: Icons.info_outline,
               ),
-            ),
-          if (gameState.game.playable &&
-              gameState.game.opponent?.offeringDraw == true)
-            Expanded(
-              child: BottomBarButton(
+            if (gameState.game.playable &&
+                gameState.game.opponent?.offeringDraw == true)
+              BottomBarButton(
                 label: context.l10n.yourOpponentOffersADraw,
                 highlighted: true,
                 onTap: () {
@@ -495,12 +501,10 @@ class _GameBottomBar extends ConsumerWidget {
                   );
                 },
                 icon: Icons.handshake_outlined,
-              ),
-            )
-          else if (gameState.game.playable &&
-              gameState.game.isThreefoldRepetition == true)
-            Expanded(
-              child: BottomBarButton(
+              )
+            else if (gameState.game.playable &&
+                gameState.game.isThreefoldRepetition == true)
+              BottomBarButton(
                 label: context.l10n.threefoldRepetition,
                 highlighted: true,
                 onTap: () {
@@ -511,12 +515,10 @@ class _GameBottomBar extends ConsumerWidget {
                   );
                 },
                 icon: Icons.handshake_outlined,
-              ),
-            )
-          else if (gameState.game.playable &&
-              gameState.game.opponent?.proposingTakeback == true)
-            Expanded(
-              child: BottomBarButton(
+              )
+            else if (gameState.game.playable &&
+                gameState.game.opponent?.proposingTakeback == true)
+              BottomBarButton(
                 label: context.l10n.yourOpponentProposesATakeback,
                 highlighted: true,
                 onTap: () {
@@ -539,11 +541,9 @@ class _GameBottomBar extends ConsumerWidget {
                   );
                 },
                 icon: CupertinoIcons.arrowshape_turn_up_left,
-              ),
-            )
-          else if (gameState.game.finished)
-            Expanded(
-              child: BottomBarButton(
+              )
+            else if (gameState.game.finished)
+              BottomBarButton(
                 label: context.l10n.gameAnalysis,
                 icon: Icons.biotech,
                 onTap: () {
@@ -552,15 +552,13 @@ class _GameBottomBar extends ConsumerWidget {
                     builder: (_) => AnalysisScreen(
                       pgnOrId: gameState.analysisPgn,
                       options: gameState.analysisOptions,
-                      title: context.l10n.gameAnalysis,
                     ),
                   );
                 },
-              ),
-            )
-          else
-            Expanded(
-              child: BottomBarButton(
+              )
+            else if (gameState.game.meta.speed == Speed.bullet ||
+                gameState.game.meta.speed == Speed.ultraBullet)
+              BottomBarButton(
                 label: context.l10n.resign,
                 onTap: gameState.game.resignable
                     ? gameState.shouldConfirmResignAndDrawOffer
@@ -580,12 +578,18 @@ class _GameBottomBar extends ConsumerWidget {
                           }
                     : null,
                 icon: Icons.flag,
+              )
+            else
+              BottomBarButton(
+                label: context.l10n.flipBoard,
+                onTap: () {
+                  ref.read(isBoardTurnedProvider.notifier).toggle();
+                },
+                icon: CupertinoIcons.arrow_2_squarepath,
               ),
-            ),
-          if (gameState.game.meta.speed == Speed.correspondence &&
-              !gameState.game.finished)
-            Expanded(
-              child: BottomBarButton(
+            if (gameState.game.meta.speed == Speed.correspondence &&
+                !gameState.game.finished)
+              BottomBarButton(
                 label: 'Go to the next game',
                 icon: Icons.skip_next,
                 onTap: ongoingGames.maybeWhen(
@@ -600,9 +604,7 @@ class _GameBottomBar extends ConsumerWidget {
                   orElse: () => null,
                 ),
               ),
-            ),
-          Expanded(
-            child: BottomBarButton(
+            BottomBarButton(
               label: context.l10n.chat,
               onTap: isChatEnabled
                   ? () {
@@ -625,9 +627,7 @@ class _GameBottomBar extends ConsumerWidget {
                   : Icons.chat_bubble_outline,
               chip: chatUnreadChip,
             ),
-          ),
-          Expanded(
-            child: RepeatButton(
+            RepeatButton(
               onLongPress:
                   gameState.canGoBackward ? () => _moveBackward(ref) : null,
               child: BottomBarButton(
@@ -638,9 +638,7 @@ class _GameBottomBar extends ConsumerWidget {
                 showTooltip: false,
               ),
             ),
-          ),
-          Expanded(
-            child: RepeatButton(
+            RepeatButton(
               onLongPress:
                   gameState.canGoForward ? () => _moveForward(ref) : null,
               child: BottomBarButton(
@@ -650,25 +648,10 @@ class _GameBottomBar extends ConsumerWidget {
                 showTooltip: false,
               ),
             ),
-          ),
-        ];
-      },
-      loading: () => [],
-      error: (e, s) => [],
-    );
-
-    return Container(
-      color: Theme.of(context).platform == TargetPlatform.iOS
-          ? null
-          : Theme.of(context).bottomAppBarTheme.color,
-      child: SafeArea(
-        top: false,
-        child: SizedBox(
-          height: kBottomBarHeight,
-          child: Row(
-            children: children,
-          ),
-        ),
+          ];
+        },
+        loading: () => [],
+        error: (e, s) => [],
       ),
     );
   }
@@ -704,7 +687,6 @@ class _GameBottomBar extends ConsumerWidget {
                   options: gameState.analysisOptions.copyWith(
                     isLocalEvaluationAllowed: false,
                   ),
-                  title: context.l10n.analysis,
                 ),
               );
             },
@@ -891,35 +873,19 @@ class _GameNegotiationDialog extends StatelessWidget {
       onAccept();
     }
 
-    if (Theme.of(context).platform == TargetPlatform.iOS) {
-      return CupertinoAlertDialog(
-        content: title,
-        actions: [
-          CupertinoDialogAction(
-            onPressed: accept,
-            child: Text(context.l10n.accept),
-          ),
-          CupertinoDialogAction(
-            onPressed: decline,
-            child: Text(context.l10n.decline),
-          ),
-        ],
-      );
-    } else {
-      return AlertDialog(
-        content: title,
-        actions: [
-          TextButton(
-            onPressed: accept,
-            child: Text(context.l10n.accept),
-          ),
-          TextButton(
-            onPressed: decline,
-            child: Text(context.l10n.decline),
-          ),
-        ],
-      );
-    }
+    return PlatformAlertDialog(
+      content: title,
+      actions: [
+        PlatformDialogAction(
+          onPressed: accept,
+          child: Text(context.l10n.accept),
+        ),
+        PlatformDialogAction(
+          onPressed: decline,
+          child: Text(context.l10n.decline),
+        ),
+      ],
+    );
   }
 }
 
@@ -943,35 +909,19 @@ class _ThreefoldDialog extends ConsumerWidget {
       ref.read(gameControllerProvider(id).notifier).claimDraw();
     }
 
-    if (Theme.of(context).platform == TargetPlatform.iOS) {
-      return CupertinoAlertDialog(
-        content: content,
-        actions: [
-          CupertinoDialogAction(
-            onPressed: accept,
-            child: Text(context.l10n.claimADraw),
-          ),
-          CupertinoDialogAction(
-            onPressed: decline,
-            child: Text(context.l10n.cancel),
-          ),
-        ],
-      );
-    } else {
-      return AlertDialog(
-        content: content,
-        actions: [
-          TextButton(
-            onPressed: accept,
-            child: Text(context.l10n.claimADraw),
-          ),
-          TextButton(
-            onPressed: decline,
-            child: Text(context.l10n.cancel),
-          ),
-        ],
-      );
-    }
+    return PlatformAlertDialog(
+      content: content,
+      actions: [
+        PlatformDialogAction(
+          onPressed: accept,
+          child: Text(context.l10n.claimADraw),
+        ),
+        PlatformDialogAction(
+          onPressed: decline,
+          child: Text(context.l10n.cancel),
+        ),
+      ],
+    );
   }
 }
 
@@ -999,36 +949,20 @@ class _ClaimWinDialog extends ConsumerWidget {
       ref.read(ctrlProvider.notifier).forceDraw();
     }
 
-    if (Theme.of(context).platform == TargetPlatform.iOS) {
-      return CupertinoAlertDialog(
-        content: content,
-        actions: [
-          CupertinoDialogAction(
-            onPressed: gameState.game.canClaimWin ? onClaimWin : null,
-            isDefaultAction: true,
-            child: Text(context.l10n.forceResignation),
-          ),
-          CupertinoDialogAction(
-            onPressed: gameState.game.canClaimWin ? onClaimDraw : null,
-            child: Text(context.l10n.forceDraw),
-          ),
-        ],
-      );
-    } else {
-      return AlertDialog(
-        content: content,
-        actions: [
-          TextButton(
-            onPressed: gameState.game.canClaimWin ? onClaimWin : null,
-            child: Text(context.l10n.forceResignation),
-          ),
-          TextButton(
-            onPressed: gameState.game.canClaimWin ? onClaimDraw : null,
-            child: Text(context.l10n.forceDraw),
-          ),
-        ],
-      );
-    }
+    return PlatformAlertDialog(
+      content: content,
+      actions: [
+        PlatformDialogAction(
+          onPressed: gameState.game.canClaimWin ? onClaimWin : null,
+          cupertinoIsDefaultAction: true,
+          child: Text(context.l10n.forceResignation),
+        ),
+        PlatformDialogAction(
+          onPressed: gameState.game.canClaimWin ? onClaimDraw : null,
+          child: Text(context.l10n.forceDraw),
+        ),
+      ],
+    );
   }
 }
 

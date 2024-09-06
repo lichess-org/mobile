@@ -13,7 +13,7 @@ import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_loading_board.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'game_body.dart';
@@ -174,17 +174,10 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
                     destUser: widget.challenge?.destUser,
                   )
                 : const LoadGameError('Could not create the game.');
-        return PlatformWidget(
-          androidBuilder: (context) => Scaffold(
-            resizeToAvoidBottomInset: false,
-            appBar: GameAppBar(id: gameId),
-            body: body,
-          ),
-          iosBuilder: (context) => CupertinoPageScaffold(
-            resizeToAvoidBottomInset: false,
-            navigationBar: GameCupertinoNavBar(id: gameId),
-            child: body,
-          ),
+        return PlatformScaffold(
+          resizeToAvoidBottomInset: false,
+          appBar: GameAppBar(id: gameId),
+          body: body,
         );
       },
       loading: () {
@@ -200,22 +193,12 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
                   )
                 : const StandaloneGameLoadingBoard();
 
-        return PlatformWidget(
-          androidBuilder: (context) => Scaffold(
-            resizeToAvoidBottomInset: false,
-            appBar: GameAppBar(seek: widget.seek),
-            body: PopScope(
-              canPop: false,
-              child: loadingBoard,
-            ),
-          ),
-          iosBuilder: (context) => CupertinoPageScaffold(
-            resizeToAvoidBottomInset: false,
-            navigationBar: GameCupertinoNavBar(seek: widget.seek),
-            child: PopScope(
-              canPop: false,
-              child: loadingBoard,
-            ),
+        return PlatformScaffold(
+          resizeToAvoidBottomInset: false,
+          appBar: GameAppBar(seek: widget.seek),
+          body: PopScope(
+            canPop: false,
+            child: loadingBoard,
           ),
         );
       },
@@ -235,17 +218,9 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
 
         final body = PopScope(child: message);
 
-        return PlatformWidget(
-          androidBuilder: (context) => Scaffold(
-            resizeToAvoidBottomInset: false,
-            appBar: GameAppBar(seek: widget.seek),
-            body: body,
-          ),
-          iosBuilder: (context) => CupertinoPageScaffold(
-            resizeToAvoidBottomInset: false,
-            navigationBar: GameCupertinoNavBar(seek: widget.seek),
-            child: body,
-          ),
+        return PlatformScaffold(
+          appBar: GameAppBar(seek: widget.seek),
+          body: body,
         );
       },
     );

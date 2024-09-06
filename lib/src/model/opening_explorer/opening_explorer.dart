@@ -2,6 +2,7 @@ import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer_preferences.dart';
 
@@ -61,7 +62,7 @@ class OpeningMove with _$OpeningMove {
 @Freezed(fromJson: true)
 class OpeningExplorerGame with _$OpeningExplorerGame {
   factory OpeningExplorerGame({
-    required String id,
+    required GameId id,
     required ({String name, int rating}) white,
     required ({String name, int rating}) black,
     String? uci,
@@ -77,7 +78,7 @@ class OpeningExplorerGame with _$OpeningExplorerGame {
 
   factory OpeningExplorerGame.fromPick(RequiredPick pick) {
     return OpeningExplorerGame(
-      id: pick('id').asStringOrThrow(),
+      id: pick('id').asGameIdOrThrow(),
       white: pick('white').letOrThrow(
         (pick) => (
           name: pick('name').asStringOrThrow(),

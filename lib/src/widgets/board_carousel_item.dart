@@ -80,14 +80,11 @@ class BoardCarouselItem extends ConsumerWidget {
                   },
                   child: SizedBox(
                     height: boardSize,
-                    child: Chessboard(
+                    child: Chessboard.fixed(
                       size: boardSize,
-                      state: ChessboardState(
-                        interactableSide: InteractableSide.none,
-                        fen: fen,
-                        orientation: orientation,
-                        lastMove: lastMove as NormalMove?,
-                      ),
+                      fen: fen,
+                      orientation: orientation,
+                      lastMove: lastMove,
                       settings: ChessboardSettings(
                         enableCoordinates: false,
                         borderRadius: const BorderRadius.only(

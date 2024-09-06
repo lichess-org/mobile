@@ -22,7 +22,6 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/navigation.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -37,10 +36,11 @@ import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
+import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 import 'puzzle_feedback_widget.dart';
 import 'puzzle_session_widget.dart';
@@ -90,44 +90,17 @@ class _PuzzleScreenState extends ConsumerState<PuzzleScreen> with RouteAware {
   @override
   Widget build(BuildContext context) {
     return WakelockWidget(
-      child: PlatformWidget(
-        androidBuilder: _androidBuilder,
-        iosBuilder: _iosBuilder,
-      ),
-    );
-  }
-
-  Widget _androidBuilder(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        actions: const [
-          _PuzzleSettingsButton(),
-        ],
-        title: _Title(angle: widget.angle),
-      ),
-      body: widget.puzzleId != null
-          ? _LoadPuzzleFromId(angle: widget.angle, id: widget.puzzleId!)
-          : _LoadNextPuzzle(angle: widget.angle),
-    );
-  }
-
-  Widget _iosBuilder(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        backgroundColor: Styles.cupertinoScaffoldColor.resolveFrom(context),
-        border: null,
-        padding: Styles.cupertinoAppBarTrailingWidgetPadding,
-        middle: _Title(angle: widget.angle),
-        trailing: const Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
+      child: PlatformScaffold(
+        appBar: PlatformAppBar(
+          actions: const [
             _PuzzleSettingsButton(),
           ],
+          title: _Title(angle: widget.angle),
         ),
+        body: widget.puzzleId != null
+            ? _LoadPuzzleFromId(angle: widget.angle, id: widget.puzzleId!)
+            : _LoadNextPuzzle(angle: widget.angle),
       ),
-      child: widget.puzzleId != null
-          ? _LoadPuzzleFromId(angle: widget.angle, id: widget.puzzleId!)
-          : _LoadNextPuzzle(angle: widget.angle),
     );
   }
 }
@@ -174,7 +147,8 @@ class _LoadNextPuzzle extends ConsumerWidget {
             child: BoardTable(
               topTable: kEmptyWidget,
               bottomTable: kEmptyWidget,
-              boardState: kEmptyBoardState,
+              fen: kEmptyFen,
+              orientation: Side.white,
               errorMessage: 'No more puzzles. Go online to get more.',
             ),
           );
@@ -193,7 +167,8 @@ class _LoadNextPuzzle extends ConsumerWidget {
           child: BoardTable(
             topTable: kEmptyWidget,
             bottomTable: kEmptyWidget,
-            boardState: kEmptyBoardState,
+            fen: kEmptyFen,
+            orientation: Side.white,
             errorMessage: e.toString(),
           ),
         );
@@ -229,11 +204,8 @@ class _LoadPuzzleFromId extends ConsumerWidget {
             child: SafeArea(
               bottom: false,
               child: BoardTable(
-                boardState: ChessboardState(
-                  fen: kEmptyFen,
-                  interactableSide: InteractableSide.none,
-                  orientation: Side.white,
-                ),
+                fen: kEmptyFen,
+                orientation: Side.white,
                 topTable: kEmptyWidget,
                 bottomTable: kEmptyWidget,
               ),
@@ -252,7 +224,8 @@ class _LoadPuzzleFromId extends ConsumerWidget {
               child: SafeArea(
                 bottom: false,
                 child: BoardTable(
-                  boardState: kEmptyBoardState,
+                  fen: kEmptyFen,
+                  orientation: Side.white,
                   topTable: kEmptyWidget,
                   bottomTable: kEmptyWidget,
                   errorMessage: e.toString(),
@@ -293,37 +266,39 @@ class _Body extends ConsumerWidget {
           child: SafeArea(
             bottom: false,
             child: BoardTable(
-              onMove: (move, {isDrop, isPremove}) {
-                ref
-                    .read(ctrlProvider.notifier)
-                    .onUserMove(Move.parse(move.uci)!);
-              },
-              boardState: ChessboardState(
-                orientation: puzzleState.pov,
-                interactableSide: puzzleState.mode == PuzzleMode.load ||
+              orientation: puzzleState.pov,
+              fen: puzzleState.fen,
+              lastMove: puzzleState.lastMove as NormalMove?,
+              gameData: GameData(
+                playerSide: puzzleState.mode == PuzzleMode.load ||
                         puzzleState.position.isGameOver
-                    ? InteractableSide.none
+                    ? PlayerSide.none
                     : puzzleState.mode == PuzzleMode.view
-                        ? InteractableSide.both
+                        ? PlayerSide.both
                         : puzzleState.pov == Side.white
-                            ? InteractableSide.white
-                            : InteractableSide.black,
-                fen: puzzleState.fen,
+                            ? PlayerSide.white
+                            : PlayerSide.black,
                 isCheck: boardPreferences.boardHighlights &&
                     puzzleState.position.isCheck,
-                lastMove: puzzleState.lastMove as NormalMove?,
                 sideToMove: puzzleState.position.turn,
                 validMoves: puzzleState.validMoves,
-                shapes: puzzleState.isEngineEnabled && evalBestMove != null
-                    ? ISet([
-                        Arrow(
-                          color: const Color(0x40003088),
-                          orig: evalBestMove.from,
-                          dest: evalBestMove.to,
-                        ),
-                      ])
-                    : null,
+                promotionMove: puzzleState.promotionMove,
+                onMove: (move, {isDrop}) {
+                  ref.read(ctrlProvider.notifier).onUserMove(move);
+                },
+                onPromotionSelection: (role) {
+                  ref.read(ctrlProvider.notifier).onPromotionSelection(role);
+                },
               ),
+              shapes: puzzleState.isEngineEnabled && evalBestMove != null
+                  ? ISet([
+                      Arrow(
+                        color: const Color(0x40003088),
+                        orig: evalBestMove.from,
+                        dest: evalBestMove.to,
+                      ),
+                    ])
+                  : null,
               engineGauge: puzzleState.isEngineEnabled
                   ? EngineGaugeParams(
                       orientation: puzzleState.pov,
@@ -412,105 +387,79 @@ class _BottomBar extends ConsumerWidget {
     final puzzleState = ref.watch(ctrlProvider);
     final isDailyPuzzle = puzzleState.puzzle.isDailyPuzzle == true;
 
-    return Container(
-      color: Theme.of(context).platform == TargetPlatform.iOS
-          ? null
-          : Theme.of(context).bottomAppBarTheme.color,
-      child: SafeArea(
-        top: false,
-        child: SizedBox(
-          height: kBottomBarHeight,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              if (initialPuzzleContext.userId != null &&
-                  !isDailyPuzzle &&
-                  puzzleState.mode != PuzzleMode.view)
-                _DifficultySelector(
-                  initialPuzzleContext: initialPuzzleContext,
-                  ctrlProvider: ctrlProvider,
-                ),
-              if (puzzleState.mode != PuzzleMode.view)
-                BottomBarButton(
-                  icon: Icons.help,
-                  label: context.l10n.viewTheSolution,
-                  showLabel: true,
-                  onTap: puzzleState.canViewSolution
-                      ? () => ref.read(ctrlProvider.notifier).viewSolution()
-                      : null,
-                ),
-              if (puzzleState.mode == PuzzleMode.view)
-                Expanded(
-                  child: BottomBarButton(
-                    label: context.l10n.menu,
-                    onTap: () {
-                      _showPuzzleMenu(context, ref);
-                    },
-                    icon: Icons.menu,
-                  ),
-                ),
-              if (puzzleState.mode == PuzzleMode.view)
-                Expanded(
-                  child: BottomBarButton(
-                    onTap: () {
-                      ref.read(ctrlProvider.notifier).toggleLocalEvaluation();
-                    },
-                    label: context.l10n.toggleLocalEvaluation,
-                    icon: CupertinoIcons.gauge,
-                    highlighted: puzzleState.isLocalEvalEnabled,
-                  ),
-                ),
-              if (puzzleState.mode == PuzzleMode.view)
-                Expanded(
-                  child: RepeatButton(
-                    triggerDelays: _repeatTriggerDelays,
-                    onLongPress:
-                        puzzleState.canGoBack ? () => _moveBackward(ref) : null,
-                    child: BottomBarButton(
-                      onTap: puzzleState.canGoBack
-                          ? () => _moveBackward(ref)
-                          : null,
-                      label: 'Previous',
-                      icon: CupertinoIcons.chevron_back,
-                      showTooltip: false,
-                    ),
-                  ),
-                ),
-              if (puzzleState.mode == PuzzleMode.view)
-                Expanded(
-                  child: RepeatButton(
-                    triggerDelays: _repeatTriggerDelays,
-                    onLongPress:
-                        puzzleState.canGoNext ? () => _moveForward(ref) : null,
-                    child: BottomBarButton(
-                      onTap: puzzleState.canGoNext
-                          ? () => _moveForward(ref)
-                          : null,
-                      label: context.l10n.next,
-                      icon: CupertinoIcons.chevron_forward,
-                      showTooltip: false,
-                      blink: puzzleState.viewedSolutionRecently,
-                    ),
-                  ),
-                ),
-              if (puzzleState.mode == PuzzleMode.view)
-                Expanded(
-                  child: BottomBarButton(
-                    onTap: puzzleState.mode == PuzzleMode.view &&
-                            puzzleState.nextContext != null
-                        ? () => ref
-                            .read(ctrlProvider.notifier)
-                            .loadPuzzle(puzzleState.nextContext!)
-                        : null,
-                    highlighted: true,
-                    label: context.l10n.puzzleContinueTraining,
-                    icon: CupertinoIcons.play_arrow_solid,
-                  ),
-                ),
-            ],
+    return BottomBar(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        if (initialPuzzleContext.userId != null &&
+            !isDailyPuzzle &&
+            puzzleState.mode != PuzzleMode.view)
+          _DifficultySelector(
+            initialPuzzleContext: initialPuzzleContext,
+            ctrlProvider: ctrlProvider,
           ),
-        ),
-      ),
+        if (puzzleState.mode != PuzzleMode.view)
+          BottomBarButton(
+            icon: Icons.help,
+            label: context.l10n.viewTheSolution,
+            showLabel: true,
+            onTap: puzzleState.canViewSolution
+                ? () => ref.read(ctrlProvider.notifier).viewSolution()
+                : null,
+          ),
+        if (puzzleState.mode == PuzzleMode.view)
+          BottomBarButton(
+            label: context.l10n.menu,
+            onTap: () {
+              _showPuzzleMenu(context, ref);
+            },
+            icon: Icons.menu,
+          ),
+        if (puzzleState.mode == PuzzleMode.view)
+          BottomBarButton(
+            onTap: () {
+              ref.read(ctrlProvider.notifier).toggleLocalEvaluation();
+            },
+            label: context.l10n.toggleLocalEvaluation,
+            icon: CupertinoIcons.gauge,
+            highlighted: puzzleState.isLocalEvalEnabled,
+          ),
+        if (puzzleState.mode == PuzzleMode.view)
+          RepeatButton(
+            triggerDelays: _repeatTriggerDelays,
+            onLongPress:
+                puzzleState.canGoBack ? () => _moveBackward(ref) : null,
+            child: BottomBarButton(
+              onTap: puzzleState.canGoBack ? () => _moveBackward(ref) : null,
+              label: 'Previous',
+              icon: CupertinoIcons.chevron_back,
+              showTooltip: false,
+            ),
+          ),
+        if (puzzleState.mode == PuzzleMode.view)
+          RepeatButton(
+            triggerDelays: _repeatTriggerDelays,
+            onLongPress: puzzleState.canGoNext ? () => _moveForward(ref) : null,
+            child: BottomBarButton(
+              onTap: puzzleState.canGoNext ? () => _moveForward(ref) : null,
+              label: context.l10n.next,
+              icon: CupertinoIcons.chevron_forward,
+              showTooltip: false,
+              blink: puzzleState.viewedSolutionRecently,
+            ),
+          ),
+        if (puzzleState.mode == PuzzleMode.view)
+          BottomBarButton(
+            onTap: puzzleState.mode == PuzzleMode.view &&
+                    puzzleState.nextContext != null
+                ? () => ref
+                    .read(ctrlProvider.notifier)
+                    .loadPuzzle(puzzleState.nextContext!)
+                : null,
+            highlighted: true,
+            label: context.l10n.puzzleContinueTraining,
+            icon: CupertinoIcons.play_arrow_solid,
+          ),
+      ],
     );
   }
 
@@ -535,7 +484,6 @@ class _BottomBar extends ConsumerWidget {
             pushPlatformRoute(
               context,
               builder: (context) => AnalysisScreen(
-                title: context.l10n.analysis,
                 pgnOrId: ref.read(ctrlProvider.notifier).makePgn(),
                 options: AnalysisOptions(
                   isLocalEvaluationAllowed: true,

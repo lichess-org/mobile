@@ -23,8 +23,10 @@ import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
+import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
+import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 import 'package:result_extensions/result_extensions.dart';
 
@@ -36,33 +38,13 @@ class StreakScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WakelockWidget(
-      child: PlatformWidget(
-        androidBuilder: _androidBuilder,
-        iosBuilder: _iosBuilder,
+      child: PlatformScaffold(
+        appBar: PlatformAppBar(
+          actions: [ToggleSoundButton()],
+          title: const Text('Puzzle Streak'),
+        ),
+        body: const _Load(),
       ),
-    );
-  }
-
-  Widget _androidBuilder(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        actions: [ToggleSoundButton()],
-        title: const Text('Puzzle Streak'),
-      ),
-      body: const _Load(),
-    );
-  }
-
-  Widget _iosBuilder(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        backgroundColor: Styles.cupertinoScaffoldColor.resolveFrom(context),
-        border: null,
-        padding: Styles.cupertinoAppBarTrailingWidgetPadding,
-        middle: const Text('Puzzle Streak'),
-        trailing: ToggleSoundButton(),
-      ),
-      child: const _Load(),
     );
   }
 }
@@ -101,7 +83,8 @@ class _Load extends ConsumerWidget {
           child: BoardTable(
             topTable: kEmptyWidget,
             bottomTable: kEmptyWidget,
-            boardState: kEmptyBoardState,
+            fen: kEmptyFen,
+            orientation: Side.white,
             errorMessage: e.toString(),
           ),
         );
@@ -144,26 +127,28 @@ class _Body extends ConsumerWidget {
           child: Center(
             child: SafeArea(
               child: BoardTable(
-                onMove: (move, {isDrop, isPremove}) {
-                  ref
-                      .read(ctrlProvider.notifier)
-                      .onUserMove(Move.parse(move.uci)!);
-                },
-                boardState: ChessboardState(
-                  orientation: puzzleState.pov,
-                  interactableSide: puzzleState.mode == PuzzleMode.load ||
+                orientation: puzzleState.pov,
+                fen: puzzleState.fen,
+                lastMove: puzzleState.lastMove as NormalMove?,
+                gameData: GameData(
+                  playerSide: puzzleState.mode == PuzzleMode.load ||
                           puzzleState.position.isGameOver
-                      ? InteractableSide.none
+                      ? PlayerSide.none
                       : puzzleState.mode == PuzzleMode.view
-                          ? InteractableSide.both
+                          ? PlayerSide.both
                           : puzzleState.pov == Side.white
-                              ? InteractableSide.white
-                              : InteractableSide.black,
-                  fen: puzzleState.fen,
+                              ? PlayerSide.white
+                              : PlayerSide.black,
                   isCheck: puzzleState.position.isCheck,
-                  lastMove: puzzleState.lastMove as NormalMove?,
                   sideToMove: puzzleState.position.turn,
                   validMoves: puzzleState.validMoves,
+                  promotionMove: puzzleState.promotionMove,
+                  onMove: (move, {isDrop, captured}) {
+                    ref.read(ctrlProvider.notifier).onUserMove(move);
+                  },
+                  onPromotionSelection: (role) {
+                    ref.read(ctrlProvider.notifier).onPromotionSelection(role);
+                  },
                 ),
                 topTable: Center(
                   child: Padding(
@@ -266,138 +251,102 @@ class _BottomBar extends ConsumerWidget {
         puzzleControllerProvider(initialPuzzleContext, initialStreak: streak);
     final puzzleState = ref.watch(ctrlProvider);
 
-    return Container(
-      color: Theme.of(context).platform == TargetPlatform.iOS
-          ? null
-          : Theme.of(context).bottomAppBarTheme.color,
-      child: SafeArea(
-        top: false,
-        child: SizedBox(
-          height: kBottomBarHeight,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              if (!puzzleState.streak!.finished)
-                BottomBarButton(
-                  icon: Icons.info_outline,
-                  label: context.l10n.aboutX('Streak'),
-                  showLabel: true,
-                  onTap: () => _streakInfoDialogBuilder(context),
-                ),
-              if (!puzzleState.streak!.finished)
-                BottomBarButton(
-                  icon: Icons.skip_next,
-                  label: context.l10n.skipThisMove,
-                  showLabel: true,
-                  onTap: puzzleState.streak!.hasSkipped ||
-                          puzzleState.mode == PuzzleMode.view
-                      ? null
-                      : () => ref.read(ctrlProvider.notifier).skipMove(),
-                ),
-              if (puzzleState.streak!.finished)
-                Expanded(
-                  child: BottomBarButton(
-                    onTap: () {
-                      launchShareDialog(
-                        context,
-                        text: lichessUri(
-                          '/training/${puzzleState.puzzle.puzzle.id}',
-                        ).toString(),
-                      );
-                    },
-                    label: 'Share this puzzle',
-                    icon: Theme.of(context).platform == TargetPlatform.iOS
-                        ? CupertinoIcons.share
-                        : Icons.share,
-                  ),
-                ),
-              if (puzzleState.streak!.finished)
-                Expanded(
-                  child: BottomBarButton(
-                    onTap: () {
-                      pushPlatformRoute(
-                        context,
-                        builder: (context) => AnalysisScreen(
-                          title: context.l10n.analysis,
-                          pgnOrId: ref.read(ctrlProvider.notifier).makePgn(),
-                          options: AnalysisOptions(
-                            isLocalEvaluationAllowed: true,
-                            variant: Variant.standard,
-                            orientation: puzzleState.pov,
-                            id: standaloneAnalysisId,
-                            initialMoveCursor: 0,
-                          ),
-                        ),
-                      );
-                    },
-                    label: context.l10n.analysis,
-                    icon: Icons.biotech,
-                  ),
-                ),
-              if (puzzleState.streak!.finished)
-                Expanded(
-                  child: BottomBarButton(
-                    onTap: puzzleState.canGoBack
-                        ? () => ref.read(ctrlProvider.notifier).userPrevious()
-                        : null,
-                    label: 'Previous',
-                    icon: CupertinoIcons.chevron_back,
-                  ),
-                ),
-              if (puzzleState.streak!.finished)
-                Expanded(
-                  child: BottomBarButton(
-                    onTap: puzzleState.canGoNext
-                        ? () => ref.read(ctrlProvider.notifier).userNext()
-                        : null,
-                    label: context.l10n.next,
-                    icon: CupertinoIcons.chevron_forward,
-                  ),
-                ),
-              if (puzzleState.streak!.finished)
-                Expanded(
-                  child: BottomBarButton(
-                    onTap: ref.read(streakProvider).isLoading == false
-                        ? () => ref.invalidate(streakProvider)
-                        : null,
-                    highlighted: true,
-                    label: context.l10n.puzzleNewStreak,
-                    icon: CupertinoIcons.play_arrow_solid,
-                  ),
-                ),
-            ],
+    return BottomBar(
+      children: [
+        if (!puzzleState.streak!.finished)
+          BottomBarButton(
+            icon: Icons.info_outline,
+            label: context.l10n.aboutX('Streak'),
+            showLabel: true,
+            onTap: () => _streakInfoDialogBuilder(context),
           ),
-        ),
-      ),
+        if (!puzzleState.streak!.finished)
+          BottomBarButton(
+            icon: Icons.skip_next,
+            label: context.l10n.skipThisMove,
+            showLabel: true,
+            onTap: puzzleState.streak!.hasSkipped ||
+                    puzzleState.mode == PuzzleMode.view
+                ? null
+                : () => ref.read(ctrlProvider.notifier).skipMove(),
+          ),
+        if (puzzleState.streak!.finished)
+          BottomBarButton(
+            onTap: () {
+              launchShareDialog(
+                context,
+                text: lichessUri(
+                  '/training/${puzzleState.puzzle.puzzle.id}',
+                ).toString(),
+              );
+            },
+            label: 'Share this puzzle',
+            icon: Theme.of(context).platform == TargetPlatform.iOS
+                ? CupertinoIcons.share
+                : Icons.share,
+          ),
+        if (puzzleState.streak!.finished)
+          BottomBarButton(
+            onTap: () {
+              pushPlatformRoute(
+                context,
+                builder: (context) => AnalysisScreen(
+                  pgnOrId: ref.read(ctrlProvider.notifier).makePgn(),
+                  options: AnalysisOptions(
+                    isLocalEvaluationAllowed: true,
+                    variant: Variant.standard,
+                    orientation: puzzleState.pov,
+                    id: standaloneAnalysisId,
+                    initialMoveCursor: 0,
+                  ),
+                ),
+              );
+            },
+            label: context.l10n.analysis,
+            icon: Icons.biotech,
+          ),
+        if (puzzleState.streak!.finished)
+          BottomBarButton(
+            onTap: puzzleState.canGoBack
+                ? () => ref.read(ctrlProvider.notifier).userPrevious()
+                : null,
+            label: 'Previous',
+            icon: CupertinoIcons.chevron_back,
+          ),
+        if (puzzleState.streak!.finished)
+          BottomBarButton(
+            onTap: puzzleState.canGoNext
+                ? () => ref.read(ctrlProvider.notifier).userNext()
+                : null,
+            label: context.l10n.next,
+            icon: CupertinoIcons.chevron_forward,
+          ),
+        if (puzzleState.streak!.finished)
+          BottomBarButton(
+            onTap: ref.read(streakProvider).isLoading == false
+                ? () => ref.invalidate(streakProvider)
+                : null,
+            highlighted: true,
+            label: context.l10n.puzzleNewStreak,
+            icon: CupertinoIcons.play_arrow_solid,
+          ),
+      ],
     );
   }
 
   Future<void> _streakInfoDialogBuilder(BuildContext context) {
     return showAdaptiveDialog(
       context: context,
-      builder: (context) {
-        return Theme.of(context).platform == TargetPlatform.iOS
-            ? CupertinoAlertDialog(
-                title: Text(context.l10n.aboutX('Puzzle Streak')),
-                content: Text(context.l10n.puzzleStreakDescription),
-                actions: [
-                  CupertinoDialogAction(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: Text(context.l10n.mobileOkButton),
-                  ),
-                ],
-              )
-            : AlertDialog(
-                title: Text(context.l10n.aboutX('Puzzle Streak')),
-                content: Text(context.l10n.puzzleStreakDescription),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: Text(context.l10n.mobileOkButton),
-                  ),
-                ],
-              );
-      },
+      builder: (context) => PlatformAlertDialog(
+        title: Text(context.l10n.aboutX('Puzzle Streak')),
+        content: Text(context.l10n.puzzleStreakDescription),
+        actions: [
+          PlatformDialogAction(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(context.l10n.mobileOkButton),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -443,38 +392,21 @@ class _RetryFetchPuzzleDialog extends ConsumerWidget {
     final canRetry = state.nextPuzzleStreakFetchError &&
         !state.nextPuzzleStreakFetchIsRetrying;
 
-    if (Theme.of(context).platform == TargetPlatform.iOS) {
-      return CupertinoAlertDialog(
-        title: const Text(title),
-        content: const Text(content),
-        actions: [
-          CupertinoDialogAction(
-            onPressed: () => Navigator.of(context).pop(),
-            isDestructiveAction: true,
-            child: Text(context.l10n.cancel),
-          ),
-          CupertinoDialogAction(
-            onPressed: canRetry ? retryStreakNext : null,
-            isDefaultAction: true,
-            child: Text(context.l10n.retry),
-          ),
-        ],
-      );
-    } else {
-      return AlertDialog(
-        title: const Text(title),
-        content: const Text(content),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text(context.l10n.cancel),
-          ),
-          TextButton(
-            onPressed: canRetry ? retryStreakNext : null,
-            child: Text(context.l10n.retry),
-          ),
-        ],
-      );
-    }
+    return PlatformAlertDialog(
+      title: const Text(title),
+      content: const Text(content),
+      actions: [
+        PlatformDialogAction(
+          onPressed: () => Navigator.of(context).pop(),
+          cupertinoIsDestructiveAction: true,
+          child: Text(context.l10n.cancel),
+        ),
+        PlatformDialogAction(
+          onPressed: canRetry ? retryStreakNext : null,
+          cupertinoIsDefaultAction: true,
+          child: Text(context.l10n.retry),
+        ),
+      ],
+    );
   }
 }

@@ -8,6 +8,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/services.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
@@ -75,9 +76,15 @@ class StormController extends _$StormController {
     return newState;
   }
 
-  Future<void> onUserMove(Move move) async {
+  Future<void> onUserMove(NormalMove move) async {
     if (state.clock.endAt != null) return;
     state.clock.start();
+
+    if (isPromotionPawnMove(state.position, move)) {
+      state = state.copyWith(promotionMove: move);
+      return;
+    }
+
     final expected = state.expectedMove;
     _addMove(move, ComboState.noChange, runStarted: true, userMove: true);
     state = state.copyWith(moves: state.moves + 1);
@@ -118,10 +125,16 @@ class StormController extends _$StormController {
     }
   }
 
-  void setPremove(Move? move) {
-    state = state.copyWith(
-      premove: move,
-    );
+  void onPromotionSelection(Role? role) {
+    if (role == null) {
+      state = state.copyWith(promotionMove: null);
+      return;
+    }
+    final promotionMove = state.promotionMove;
+    if (promotionMove != null) {
+      final move = promotionMove.withPromotion(role);
+      onUserMove(move);
+    }
   }
 
   Future<void> end() async {
@@ -227,6 +240,7 @@ class StormController extends _$StormController {
         current: newComboCurrent,
         best: math.max(state.combo.best, state.combo.current + 1),
       ),
+      promotionMove: null,
     );
     Future<void>.delayed(
         userMove ? Duration.zero : const Duration(milliseconds: 250), () {
@@ -333,8 +347,8 @@ class StormState with _$StormState {
     /// bool to indicate that the first move has been played
     required bool firstMovePlayed,
 
-    /// premove to be played
-    Move? premove,
+    /// Promotion move to be selected
+    NormalMove? promotionMove,
   }) = _StormState;
 
   Move? get expectedMove => Move.parse(puzzle.solution[moveIndex + 1]);

@@ -112,8 +112,15 @@ class GameController extends _$GameController {
     );
   }
 
-  void onUserMove(Move move, {bool? isDrop, bool? isPremove}) {
+  void userMove(NormalMove move, {bool? isDrop, bool? isPremove}) {
     final curState = state.requireValue;
+
+    if (isPromotionPawnMove(curState.game.lastPosition, move)) {
+      state = AsyncValue.data(
+        curState.copyWith(promotionMove: move),
+      );
+      return;
+    }
 
     final (newPos, newSan) = curState.game.lastPosition.makeSan(move);
     final sanMove = SanMove(newSan, move);
@@ -133,6 +140,8 @@ class GameController extends _$GameController {
         stepCursor: curState.stepCursor + 1,
         stopClockWaitingForServerAck: !shouldConfirmMove,
         moveToConfirm: shouldConfirmMove ? move : null,
+        promotionMove: null,
+        premove: null,
       ),
     );
 
@@ -149,6 +158,23 @@ class GameController extends _$GameController {
             curState.game.clock != null && curState.activeClockSide == null,
       );
     }
+  }
+
+  void onPromotionSelection(Role? role) {
+    final curState = state.requireValue;
+    if (role == null) {
+      state = AsyncValue.data(
+        curState.copyWith(promotionMove: null),
+      );
+      return;
+    }
+    if (curState.promotionMove == null) {
+      assert(false, 'promotionMove must not be null on promotion select');
+      return;
+    }
+
+    final move = curState.promotionMove!.withPromotion(role);
+    userMove(move, isDrop: true);
   }
 
   /// Called if the player cancels the move when confirm move preference is enabled
@@ -195,7 +221,7 @@ class GameController extends _$GameController {
   }
 
   /// Set or unset a premove.
-  void setPremove(Move? move) {
+  void setPremove(NormalMove? move) {
     final curState = state.requireValue;
     state = AsyncValue.data(
       curState.copyWith(
@@ -597,6 +623,19 @@ class GameController extends _$GameController {
               .updateGame(gameFullId, newState.game);
         }
 
+        if (!curState.isReplaying &&
+            playedSide == curState.game.youAre?.opposite &&
+            curState.premove != null) {
+          Timer.run(() {
+            final postMovePremove = state.valueOrNull?.premove;
+            final postMovePosition = state.valueOrNull?.game.lastPosition;
+            if (postMovePremove != null &&
+                postMovePosition?.isLegal(postMovePremove) == true) {
+              userMove(postMovePremove, isPremove: true);
+            }
+          });
+        }
+
         state = AsyncValue.data(newState);
 
       // End game event
@@ -923,7 +962,12 @@ class GameState with _$GameState {
     int? lastDrawOfferAtPly,
     Duration? opponentLeftCountdown,
     required bool stopClockWaitingForServerAck,
-    Move? premove,
+
+    /// Promotion waiting to be selected (only if auto queen is disabled)
+    NormalMove? promotionMove,
+
+    /// Premove waiting to be played
+    NormalMove? premove,
 
     /// Game only setting to override the account preference
     bool? moveConfirmSettingOverride,
@@ -942,7 +986,8 @@ class GameState with _$GameState {
   }) = _GameState;
 
   /// Whether the zen mode is active
-  bool get isZenModeActive => game.playable && isZenModeEnabled;
+  bool get isZenModeActive =>
+      game.playable ? isZenModeEnabled : game.prefs?.zenMode == Zen.yes;
 
   /// Whether zen mode is enabled by account preference or local game setting
   bool get isZenModeEnabled =>

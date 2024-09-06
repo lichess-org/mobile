@@ -4,7 +4,6 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
@@ -22,9 +21,10 @@ import 'package:lichess_mobile/src/view/game/correspondence_clock_widget.dart';
 import 'package:lichess_mobile/src/view/game/game_player.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
+import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 class OfflineCorrespondenceGameScreen extends StatefulWidget {
   const OfflineCorrespondenceGameScreen({
@@ -57,31 +57,10 @@ class _OfflineCorrespondenceGameScreenState
 
   @override
   Widget build(BuildContext context) {
-    return PlatformWidget(
-      androidBuilder: _androidBuilder,
-      iosBuilder: _iosBuilder,
-    );
-  }
-
-  Widget _androidBuilder(BuildContext context) {
     final (lastModified, game) = currentGame;
-    return Scaffold(
-      appBar: AppBar(title: _Title(game)),
+    return PlatformScaffold(
+      appBar: PlatformAppBar(title: _Title(game)),
       body: _Body(
-        game: game,
-        lastModified: lastModified,
-        onGameChanged: goToNextGame,
-      ),
-    );
-  }
-
-  Widget _iosBuilder(BuildContext context) {
-    final (lastModified, game) = currentGame;
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        middle: _Title(game),
-      ),
-      child: _Body(
         game: game,
         lastModified: lastModified,
         onGameChanged: goToNextGame,
@@ -137,6 +116,7 @@ class _BodyState extends ConsumerState<_Body> {
   int stepCursor = 0;
   (String, Move)? moveToConfirm;
   bool isBoardTurned = false;
+  NormalMove? promotionMove;
 
   bool get isReplaying => stepCursor < game.steps.length - 1;
   bool get canGoForward => stepCursor < game.steps.length - 1;
@@ -228,21 +208,23 @@ class _BodyState extends ConsumerState<_Body> {
           child: SafeArea(
             bottom: false,
             child: BoardTable(
-              onMove: (move, {isDrop, isPremove}) {
-                onUserMove(Move.parse(move.uci)!);
-              },
-              boardState: ChessboardState(
-                interactableSide: game.playable && !isReplaying
+              orientation: isBoardTurned ? youAre.opposite : youAre,
+              fen: position.fen,
+              lastMove: game.moveAt(stepCursor) as NormalMove?,
+              gameData: GameData(
+                playerSide: game.playable && !isReplaying
                     ? youAre == Side.white
-                        ? InteractableSide.white
-                        : InteractableSide.black
-                    : InteractableSide.none,
-                orientation: isBoardTurned ? youAre.opposite : youAre,
-                fen: position.fen,
-                lastMove: game.moveAt(stepCursor) as NormalMove?,
+                        ? PlayerSide.white
+                        : PlayerSide.black
+                    : PlayerSide.none,
                 isCheck: position.isCheck,
                 sideToMove: sideToMove,
                 validMoves: makeLegalMoves(position),
+                promotionMove: promotionMove,
+                onMove: (move, {isDrop, captured}) {
+                  onUserMove(move);
+                },
+                onPromotionSelection: onPromotionSelection,
               ),
               topTable: topPlayer,
               bottomTable: bottomPlayer,
@@ -257,115 +239,91 @@ class _BodyState extends ConsumerState<_Body> {
             ),
           ),
         ),
-        Container(
-          color: Theme.of(context).platform == TargetPlatform.iOS
-              ? CupertinoTheme.of(context).barBackgroundColor
-              : Theme.of(context).bottomAppBarTheme.color,
-          child: SafeArea(
-            top: false,
-            child: SizedBox(
-              height: kBottomBarHeight,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Expanded(
-                    child: BottomBarButton(
-                      label: context.l10n.flipBoard,
-                      onTap: () {
-                        setState(() {
-                          isBoardTurned = !isBoardTurned;
-                        });
-                      },
-                      icon: CupertinoIcons.arrow_2_squarepath,
+        BottomBar(
+          children: [
+            BottomBarButton(
+              label: context.l10n.flipBoard,
+              onTap: () {
+                setState(() {
+                  isBoardTurned = !isBoardTurned;
+                });
+              },
+              icon: CupertinoIcons.arrow_2_squarepath,
+            ),
+            BottomBarButton(
+              label: context.l10n.analysis,
+              onTap: () {
+                pushPlatformRoute(
+                  context,
+                  builder: (_) => AnalysisScreen(
+                    pgnOrId: game.makePgn(),
+                    options: AnalysisOptions(
+                      isLocalEvaluationAllowed: false,
+                      variant: game.variant,
+                      initialMoveCursor: stepCursor,
+                      orientation: game.youAre,
+                      id: game.id,
+                      division: game.meta.division,
                     ),
                   ),
-                  Expanded(
-                    child: BottomBarButton(
-                      label: context.l10n.analysis,
-                      onTap: () {
-                        pushPlatformRoute(
-                          context,
-                          builder: (_) => AnalysisScreen(
-                            pgnOrId: game.makePgn(),
-                            options: AnalysisOptions(
-                              isLocalEvaluationAllowed: false,
-                              variant: game.variant,
-                              initialMoveCursor: stepCursor,
-                              orientation: game.youAre,
-                              id: game.id,
-                              division: game.meta.division,
-                            ),
-                            title: context.l10n.analysis,
-                          ),
-                        );
-                      },
-                      icon: Icons.biotech,
-                    ),
-                  ),
-                  Expanded(
-                    child: BottomBarButton(
-                      label: 'Go to the next game',
-                      icon: Icons.skip_next,
-                      onTap: offlineOngoingGames.maybeWhen(
-                        data: (games) {
-                          final nextTurn = games
-                              .whereNot((g) => g.$2.id == game.id)
-                              .firstWhereOrNull((g) => g.$2.isPlayerTurn);
-                          return nextTurn != null
-                              ? () {
-                                  widget.onGameChanged(nextTurn);
-                                }
-                              : null;
-                        },
-                        orElse: () => null,
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: BottomBarButton(
-                      label: context.l10n.mobileCorrespondenceClearSavedMove,
-                      onTap: game.registeredMoveAtPgn != null
-                          ? () {
-                              showConfirmDialog<void>(
-                                context,
-                                title: Text(
-                                  context
-                                      .l10n.mobileCorrespondenceClearSavedMove,
-                                ),
-                                isDestructiveAction: true,
-                                onConfirm: (_) => deleteRegisteredMove(),
-                              );
-                            }
-                          : null,
-                      icon: Icons.save,
-                    ),
-                  ),
-                  Expanded(
-                    child: RepeatButton(
-                      onLongPress: canGoBackward ? () => moveBackward() : null,
-                      child: BottomBarButton(
-                        onTap: canGoBackward ? () => moveBackward() : null,
-                        label: 'Previous',
-                        icon: CupertinoIcons.chevron_back,
-                        showTooltip: false,
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: RepeatButton(
-                      onLongPress: canGoForward ? () => moveForward() : null,
-                      child: BottomBarButton(
-                        onTap: canGoForward ? () => moveForward() : null,
-                        label: context.l10n.next,
-                        icon: CupertinoIcons.chevron_forward,
-                        showTooltip: false,
-                      ),
-                    ),
-                  ),
-                ],
+                );
+              },
+              icon: Icons.biotech,
+            ),
+            BottomBarButton(
+              label: 'Go to the next game',
+              icon: Icons.skip_next,
+              onTap: offlineOngoingGames.maybeWhen(
+                data: (games) {
+                  final nextTurn = games
+                      .whereNot((g) => g.$2.id == game.id)
+                      .firstWhereOrNull((g) => g.$2.isPlayerTurn);
+                  return nextTurn != null
+                      ? () {
+                          widget.onGameChanged(nextTurn);
+                        }
+                      : null;
+                },
+                orElse: () => null,
               ),
             ),
-          ),
+            BottomBarButton(
+              label: context.l10n.mobileCorrespondenceClearSavedMove,
+              onTap: game.registeredMoveAtPgn != null
+                  ? () {
+                      showConfirmDialog<void>(
+                        context,
+                        title: Text(
+                          context.l10n.mobileCorrespondenceClearSavedMove,
+                        ),
+                        isDestructiveAction: true,
+                        onConfirm: (_) => deleteRegisteredMove(),
+                      );
+                    }
+                  : null,
+              icon: Icons.save,
+            ),
+            RepeatButton(
+              onLongPress: canGoBackward ? () => moveBackward() : null,
+              child: BottomBarButton(
+                onTap: canGoBackward ? () => moveBackward() : null,
+                label: 'Previous',
+                icon: CupertinoIcons.chevron_back,
+                showTooltip: false,
+              ),
+            ),
+            Expanded(
+              child: RepeatButton(
+                onLongPress: canGoForward ? () => moveForward() : null,
+                child: BottomBarButton(
+                  onTap: canGoForward ? () => moveForward() : null,
+                  label: context.l10n.next,
+                  icon: CupertinoIcons.chevron_forward,
+                  showTooltip: false,
+                ),
+              ),
+            ),
+          ],
         ),
       ],
     );
@@ -389,7 +347,14 @@ class _BodyState extends ConsumerState<_Body> {
     }
   }
 
-  void onUserMove(Move move) {
+  void onUserMove(NormalMove move) {
+    if (isPromotionPawnMove(game.lastPosition, move)) {
+      setState(() {
+        promotionMove = move;
+      });
+      return;
+    }
+
     final (newPos, newSan) = game.lastPosition.makeSan(move);
     final sanMove = SanMove(newSan, move);
     final newStep = GameStep(
@@ -403,10 +368,24 @@ class _BodyState extends ConsumerState<_Body> {
       game = game.copyWith(
         steps: game.steps.add(newStep),
       );
+      promotionMove = null;
       stepCursor = stepCursor + 1;
     });
 
     _moveFeedback(sanMove);
+  }
+
+  void onPromotionSelection(Role? role) {
+    if (role == null) {
+      setState(() {
+        promotionMove = null;
+      });
+      return;
+    }
+    if (promotionMove != null) {
+      final move = promotionMove!.withPromotion(role);
+      onUserMove(move);
+    }
   }
 
   void confirmMove() {

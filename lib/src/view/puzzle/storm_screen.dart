@@ -24,11 +24,13 @@ import 'package:lichess_mobile/src/view/puzzle/storm_clock.dart';
 import 'package:lichess_mobile/src/view/puzzle/storm_dashboard.dart';
 import 'package:lichess_mobile/src/view/settings/toggle_sound_button.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
+import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
+import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/yes_no_dialog.dart';
 
 class StormScreen extends ConsumerStatefulWidget {
@@ -44,37 +46,13 @@ class _StormScreenState extends ConsumerState<StormScreen> {
   @override
   Widget build(BuildContext context) {
     return WakelockWidget(
-      child: PlatformWidget(
-        androidBuilder: _androidBuilder,
-        iosBuilder: _iosBuilder,
-      ),
-    );
-  }
-
-  Widget _androidBuilder(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        actions: [_StormDashboardButton(), ToggleSoundButton()],
-        title: const Text('Puzzle Storm'),
-      ),
-      body: _Load(_boardKey),
-    );
-  }
-
-  Widget _iosBuilder(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        backgroundColor: Styles.cupertinoScaffoldColor.resolveFrom(context),
-        border: null,
-        padding: Styles.cupertinoAppBarTrailingWidgetPadding,
-        middle: const Text('Puzzle Storm'),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [_StormDashboardButton(), ToggleSoundButton()],
+      child: PlatformScaffold(
+        appBar: PlatformAppBar(
+          actions: [_StormDashboardButton(), ToggleSoundButton()],
+          title: const Text('Puzzle Storm'),
         ),
+        body: _Load(_boardKey),
       ),
-      child: _Load(_boardKey),
     );
   }
 }
@@ -100,7 +78,8 @@ class _Load extends ConsumerWidget {
           child: BoardTable(
             topTable: kEmptyWidget,
             bottomTable: kEmptyWidget,
-            boardState: kEmptyBoardState,
+            fen: kEmptyFen,
+            orientation: Side.white,
             errorMessage: e.toString(),
           ),
         );
@@ -166,27 +145,27 @@ class _Body extends ConsumerWidget {
                 bottom: false,
                 child: BoardTable(
                   boardKey: boardKey,
-                  onMove: (move, {isDrop, isPremove}) => ref
-                      .read(ctrlProvider.notifier)
-                      .onUserMove(Move.parse(move.uci)!),
-                  onPremove: (move) =>
-                      ref.read(ctrlProvider.notifier).setPremove(move),
-                  boardState: ChessboardState(
-                    orientation: stormState.pov,
-                    interactableSide: !stormState.firstMovePlayed ||
+                  orientation: stormState.pov,
+                  lastMove: stormState.lastMove as NormalMove?,
+                  fen: stormState.position.fen,
+                  gameData: GameData(
+                    playerSide: !stormState.firstMovePlayed ||
                             stormState.mode == StormMode.ended ||
                             stormState.position.isGameOver
-                        ? InteractableSide.none
+                        ? PlayerSide.none
                         : stormState.pov == Side.white
-                            ? InteractableSide.white
-                            : InteractableSide.black,
-                    fen: stormState.position.fen,
+                            ? PlayerSide.white
+                            : PlayerSide.black,
                     isCheck: boardPreferences.boardHighlights &&
                         stormState.position.isCheck,
-                    lastMove: stormState.lastMove as NormalMove?,
                     sideToMove: stormState.position.turn,
                     validMoves: stormState.validMoves,
-                    premove: stormState.premove as NormalMove?,
+                    promotionMove: stormState.promotionMove,
+                    onMove: (move, {isDrop, captured}) =>
+                        ref.read(ctrlProvider.notifier).onUserMove(move),
+                    onPromotionSelection: (role) => ref
+                        .read(ctrlProvider.notifier)
+                        .onPromotionSelection(role),
                   ),
                   topTable: _TopTable(data),
                   bottomTable: _Combo(stormState.combo),
@@ -281,27 +260,17 @@ Future<void> _stormInfoDialogBuilder(BuildContext context) {
           ),
         ),
       );
-      return Theme.of(context).platform == TargetPlatform.iOS
-          ? CupertinoAlertDialog(
-              title: Text(context.l10n.aboutX('Puzzle Storm')),
-              content: content,
-              actions: [
-                CupertinoDialogAction(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: Text(context.l10n.mobileOkButton),
-                ),
-              ],
-            )
-          : AlertDialog(
-              title: Text(context.l10n.aboutX('Puzzle Storm')),
-              content: content,
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: Text(context.l10n.mobileOkButton),
-                ),
-              ],
-            );
+
+      return PlatformAlertDialog(
+        title: Text(context.l10n.aboutX('Puzzle Storm')),
+        content: content,
+        actions: [
+          PlatformDialogAction(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(context.l10n.mobileOkButton),
+          ),
+        ],
+      );
     },
   );
 }
@@ -607,58 +576,45 @@ class _BottomBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final stormState = ref.watch(ctrl);
-    return Container(
-      color: Theme.of(context).platform == TargetPlatform.iOS
-          ? null
-          : Theme.of(context).bottomAppBarTheme.color,
-      child: SafeArea(
-        top: false,
-        child: SizedBox(
-          height: kBottomBarHeight,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              if (stormState.mode == StormMode.initial)
-                BottomBarButton(
-                  icon: Icons.info_outline,
-                  label: context.l10n.aboutX('Storm'),
-                  showLabel: true,
-                  onTap: () => _stormInfoDialogBuilder(context),
-                ),
-              BottomBarButton(
-                icon: Icons.delete,
-                label: context.l10n.stormNewRun.split('(').first.trimRight(),
-                showLabel: true,
-                onTap: () {
-                  stormState.clock.reset();
-                  ref.invalidate(stormProvider);
-                },
-              ),
-              if (stormState.mode == StormMode.running)
-                BottomBarButton(
-                  icon: LichessIcons.flag,
-                  label: context.l10n.stormEndRun.split('(').first.trimRight(),
-                  showLabel: true,
-                  onTap: stormState.puzzleIndex >= 1
-                      ? () {
-                          if (stormState.clock.startAt != null) {
-                            stormState.clock.sendEnd();
-                          }
-                        }
-                      : null,
-                ),
-              if (stormState.mode == StormMode.ended &&
-                  stormState.stats != null)
-                BottomBarButton(
-                  icon: Icons.open_in_new,
-                  label: 'Result',
-                  showLabel: true,
-                  onTap: () => _showStats(context, stormState.stats!),
-                ),
-            ],
+    return BottomBar(
+      children: [
+        if (stormState.mode == StormMode.initial)
+          BottomBarButton(
+            icon: Icons.info_outline,
+            label: context.l10n.aboutX('Storm'),
+            showLabel: true,
+            onTap: () => _stormInfoDialogBuilder(context),
           ),
+        BottomBarButton(
+          icon: Icons.delete,
+          label: context.l10n.stormNewRun.split('(').first.trimRight(),
+          showLabel: true,
+          onTap: () {
+            stormState.clock.reset();
+            ref.invalidate(stormProvider);
+          },
         ),
-      ),
+        if (stormState.mode == StormMode.running)
+          BottomBarButton(
+            icon: LichessIcons.flag,
+            label: context.l10n.stormEndRun.split('(').first.trimRight(),
+            showLabel: true,
+            onTap: stormState.puzzleIndex >= 1
+                ? () {
+                    if (stormState.clock.startAt != null) {
+                      stormState.clock.sendEnd();
+                    }
+                  }
+                : null,
+          ),
+        if (stormState.mode == StormMode.ended && stormState.stats != null)
+          BottomBarButton(
+            icon: Icons.open_in_new,
+            label: 'Result',
+            showLabel: true,
+            onTap: () => _showStats(context, stormState.stats!),
+          ),
+      ],
     );
   }
 }
@@ -669,28 +625,16 @@ class _RunStats extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Theme.of(context).platform == TargetPlatform.iOS
-        ? CupertinoPageScaffold(
-            navigationBar: CupertinoNavigationBar(
-              leading: CupertinoButton(
-                padding: EdgeInsets.zero,
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text(context.l10n.close),
-              ),
-            ),
-            child: _RunStatsPopup(stats),
-          )
-        : Scaffold(
-            body: _RunStatsPopup(stats),
-            appBar: AppBar(
-              leading: IconButton(
-                icon: const Icon(Icons.close),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-            ),
-          );
+    return PlatformScaffold(
+      body: _RunStatsPopup(stats),
+      appBar: PlatformAppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.close),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        title: const SizedBox.shrink(),
+      ),
+    );
   }
 }
 
