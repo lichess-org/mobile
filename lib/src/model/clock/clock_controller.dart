@@ -27,13 +27,13 @@ class ClockController extends _$ClockController {
     if (playerType == ClockPlayerType.top) {
       state = state.copyWith(
         started: true,
-        currentPlayer: ClockPlayerType.bottom,
+        activeSide: ClockPlayerType.bottom,
         playerTopMoves: started ? state.playerTopMoves + 1 : 0,
       );
     } else {
       state = state.copyWith(
         started: true,
-        currentPlayer: ClockPlayerType.top,
+        activeSide: ClockPlayerType.top,
         playerBottomMoves: started ? state.playerBottomMoves + 1 : 0,
       );
     }
@@ -41,7 +41,7 @@ class ClockController extends _$ClockController {
   }
 
   void updateDuration(ClockPlayerType playerType, Duration duration) {
-    if (state.loser != null || state.currentPlayer == null || state.paused) {
+    if (state.loser != null || state.paused) {
       return;
     }
 
@@ -80,10 +80,15 @@ class ClockController extends _$ClockController {
         ),
       );
 
+  void setActiveSide(ClockPlayerType playerType) =>
+      state = state.copyWith(activeSide: playerType);
+
   void setLoser(ClockPlayerType playerType) =>
-      state = state.copyWith(currentPlayer: null, loser: playerType);
+      state = state.copyWith(loser: playerType);
 
   void reset() => state = ClockState.fromOptions(state.options);
+
+  void start() => state = state.copyWith(started: true);
 
   void pause() => state = state.copyWith(paused: true);
 
@@ -113,7 +118,7 @@ class ClockState with _$ClockState {
     required ClockOptions options,
     required Duration playerTopTime,
     required Duration playerBottomTime,
-    ClockPlayerType? currentPlayer,
+    required ClockPlayerType activeSide,
     ClockPlayerType? loser,
     @Default(false) bool started,
     @Default(false) bool paused,
@@ -132,6 +137,7 @@ class ClockState with _$ClockState {
     return ClockState(
       id: DateTime.now().millisecondsSinceEpoch,
       options: options,
+      activeSide: ClockPlayerType.top,
       playerTopTime: options.timePlayerTop,
       playerBottomTime: options.timePlayerBottom,
     );
@@ -149,6 +155,7 @@ class ClockState with _$ClockState {
     );
     return ClockState(
       id: DateTime.now().millisecondsSinceEpoch,
+      activeSide: ClockPlayerType.top,
       options: options,
       playerTopTime: options.timePlayerTop,
       playerBottomTime: options.timePlayerBottom,
@@ -158,6 +165,7 @@ class ClockState with _$ClockState {
   factory ClockState.fromOptions(ClockOptions options) {
     return ClockState(
       id: DateTime.now().millisecondsSinceEpoch,
+      activeSide: ClockPlayerType.top,
       options: options,
       playerTopTime: options.timePlayerTop,
       playerBottomTime: options.timePlayerBottom,
@@ -171,13 +179,13 @@ class ClockState with _$ClockState {
       playerType == ClockPlayerType.top ? playerTopMoves : playerBottomMoves;
 
   bool isPlayersTurn(ClockPlayerType playerType) =>
-      currentPlayer == playerType || (currentPlayer == null && loser == null);
+      started && activeSide == playerType && loser == null;
 
   bool isPlayersMoveAllowed(ClockPlayerType playerType) =>
       isPlayersTurn(playerType) && !paused;
 
   bool isActivePlayer(ClockPlayerType playerType) =>
-      currentPlayer == playerType && !paused;
+      isPlayersTurn(playerType) && !paused;
 
   bool isLoser(ClockPlayerType playerType) => loser == playerType;
 }

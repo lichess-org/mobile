@@ -42,10 +42,11 @@ class ClockTile extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final backgroundColor = clockState.isLoser(playerType)
         ? LichessColors.red
-        : clockState.isPlayersTurn(playerType) &&
-                clockState.currentPlayer != null
+        : clockState.isPlayersTurn(playerType)
             ? LichessColors.brag
-            : Colors.grey;
+            : clockState.activeSide == playerType
+                ? Colors.grey
+                : Colors.grey[300];
 
     return RotatedBox(
       quarterTurns: playerType == ClockPlayerType.top ? 2 : 0,
@@ -58,8 +59,16 @@ class ClockTile extends ConsumerWidget {
               color: backgroundColor,
               child: InkWell(
                 splashFactory: NoSplash.splashFactory,
-                onTap: clockState.isPlayersMoveAllowed(playerType)
+                onTap: !clockState.started
                     ? () {
+                        ref
+                            .read(clockControllerProvider.notifier)
+                            .setActiveSide(playerType);
+                      }
+                    : null,
+                onTapDown: clockState.started &&
+                        clockState.isPlayersMoveAllowed(playerType)
+                    ? (_) {
                         ref
                             .read(clockControllerProvider.notifier)
                             .onTap(playerType);
