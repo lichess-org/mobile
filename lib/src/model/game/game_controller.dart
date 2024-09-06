@@ -626,7 +626,7 @@ class GameController extends _$GameController {
         if (!curState.isReplaying &&
             playedSide == curState.game.youAre?.opposite &&
             curState.premove != null) {
-          Timer.run(() {
+          scheduleMicrotask(() {
             final postMovePremove = state.valueOrNull?.premove;
             final postMovePosition = state.valueOrNull?.game.lastPosition;
             if (postMovePremove != null &&
