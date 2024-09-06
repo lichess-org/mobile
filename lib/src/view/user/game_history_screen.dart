@@ -41,6 +41,11 @@ class GameHistoryScreen extends ConsumerWidget {
         : Text(filtersInUse.selectionLabel(context));
     final filterBtn = AppBarIconButton(
       icon: Badge.count(
+        backgroundColor: Theme.of(context).colorScheme.secondary,
+        textStyle: TextStyle(
+          color: Theme.of(context).colorScheme.onSecondary,
+          fontWeight: FontWeight.bold,
+        ),
         count: filtersInUse.count,
         isLabelVisible: filtersInUse.count > 0,
         child: const Icon(Icons.tune),
