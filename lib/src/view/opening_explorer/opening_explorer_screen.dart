@@ -248,7 +248,6 @@ class _OpeningExplorerState extends ConsumerState<_OpeningExplorer> {
             pgn: widget.pgn,
             options: widget.options,
             opening: opening,
-            wikiBooksUrl: analysisState.wikiBooksUrl,
             explorerContent: lastExplorerWidgets ??
                 [
                   Shimmer(
@@ -270,7 +269,6 @@ class _OpeningExplorerState extends ConsumerState<_OpeningExplorer> {
             options: widget.options,
             opening: opening,
             openingExplorer: openingExplorer,
-            wikiBooksUrl: analysisState.wikiBooksUrl,
             explorerContent: [
               Center(
                 child: Padding(
@@ -345,7 +343,6 @@ class _OpeningExplorerState extends ConsumerState<_OpeningExplorer> {
           options: widget.options,
           opening: opening,
           openingExplorer: openingExplorer,
-          wikiBooksUrl: analysisState.wikiBooksUrl,
           explorerContent: explorerContent,
         );
       },
@@ -353,7 +350,6 @@ class _OpeningExplorerState extends ConsumerState<_OpeningExplorer> {
         pgn: widget.pgn,
         options: widget.options,
         opening: opening,
-        wikiBooksUrl: analysisState.wikiBooksUrl,
         explorerContent: lastExplorerWidgets ??
             [
               Shimmer(
@@ -386,7 +382,6 @@ class _OpeningExplorerView extends StatelessWidget {
     required this.options,
     required this.opening,
     required this.openingExplorer,
-    required this.wikiBooksUrl,
     required this.explorerContent,
   }) : loading = false;
 
@@ -394,7 +389,6 @@ class _OpeningExplorerView extends StatelessWidget {
     required this.pgn,
     required this.options,
     required this.opening,
-    required this.wikiBooksUrl,
     required this.explorerContent,
   })  : loading = true,
         openingExplorer = null;
@@ -403,7 +397,6 @@ class _OpeningExplorerView extends StatelessWidget {
   final AnalysisOptions options;
   final Opening? opening;
   final ({OpeningExplorerEntry entry, bool isIndexing})? openingExplorer;
-  final String? wikiBooksUrl;
   final List<Widget> explorerContent;
   final bool loading;
 
@@ -435,7 +428,6 @@ class _OpeningExplorerView extends StatelessWidget {
                   flex: 75,
                   child: _Opening(
                     opening: opening!,
-                    wikiBooksUrl: wikiBooksUrl,
                   ),
                 ),
               if (openingExplorer?.isIndexing == true)
@@ -472,33 +464,25 @@ class _OpeningExplorerView extends StatelessWidget {
 class _Opening extends ConsumerWidget {
   const _Opening({
     required this.opening,
-    required this.wikiBooksUrl,
   });
 
   final Opening opening;
-  final String? wikiBooksUrl;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final openingWidget = Text(
-      '${opening.eco.isEmpty ? "" : "${opening.eco} "}${opening.name}',
-      style: TextStyle(
-        color: Theme.of(context).colorScheme.onSecondaryContainer,
-        fontWeight: FontWeight.bold,
+    return GestureDetector(
+      onTap: opening.name == context.l10n.startPosition
+          ? null
+          : () => launchUrl(
+                Uri.parse('https://lichess.org/opening/${opening.name}'),
+              ),
+      child: Text(
+        '${opening.eco.isEmpty ? "" : "${opening.eco} "}${opening.name}',
+        style: TextStyle(
+          color: Theme.of(context).colorScheme.onSecondaryContainer,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
-
-    return wikiBooksUrl == null
-        ? openingWidget
-        : ref.watch(wikiBooksPageExistsProvider(url: wikiBooksUrl!)).when(
-              data: (wikiBooksPageExists) => wikiBooksPageExists
-                  ? GestureDetector(
-                      onTap: () => launchUrl(Uri.parse(wikiBooksUrl!)),
-                      child: openingWidget,
-                    )
-                  : openingWidget,
-              loading: () => openingWidget,
-              error: (e, s) => openingWidget,
-            );
   }
 }
 

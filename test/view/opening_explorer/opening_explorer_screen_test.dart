@@ -28,9 +28,6 @@ void main() {
         return mockResponse(playerOpeningExplorerResponse, 200);
       }
     }
-    if (request.url.host == 'en.wikibooks.org') {
-      return mockResponse('', 200);
-    }
     return mockResponse('', 404);
   });
 
