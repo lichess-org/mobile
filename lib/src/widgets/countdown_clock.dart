@@ -20,6 +20,7 @@ class CountdownClock extends ConsumerStatefulWidget {
   /// If [emergencySoundEnabled] is `true`, the clock will also play a sound.
   final Duration? emergencyThreshold;
 
+  /// Whether to play an emergency sound when the clock reaches the emergency
   final bool emergencySoundEnabled;
 
   /// If [active] is `true`, the clock starts counting down.
@@ -37,6 +38,9 @@ class CountdownClock extends ConsumerStatefulWidget {
   /// Custom dark color style
   final ClockStyle? darkColorStyle;
 
+  /// Whether to pad with a leading zero (default is `false`).
+  final bool padLeft;
+
   const CountdownClock({
     required this.duration,
     required this.active,
@@ -46,6 +50,7 @@ class CountdownClock extends ConsumerStatefulWidget {
     this.onStop,
     this.lightColorStyle,
     this.darkColorStyle,
+    this.padLeft = false,
     super.key,
   });
 
@@ -83,6 +88,12 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
   }
 
   void stopClock() {
+    setState(() {
+      timeLeft = timeLeft - _stopwatch.elapsed;
+      if (timeLeft < Duration.zero) {
+        timeLeft = Duration.zero;
+      }
+    });
     _timer?.cancel();
     _stopwatch.stop();
     scheduleMicrotask(() {
@@ -154,6 +165,11 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
     final clockStyle = getStyle(brightness);
     final remainingHeight = estimateRemainingHeightLeftBoard(context);
 
+    final hoursDisplay =
+        widget.padLeft ? hours.toString().padLeft(2, '0') : hours.toString();
+    final minsDisplay =
+        widget.padLeft ? mins.toString().padLeft(2, '0') : mins.toString();
+
     return RepaintBoundary(
       child: Container(
         decoration: BoxDecoration(
@@ -171,8 +187,8 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
             child: RichText(
               text: TextSpan(
                 text: hours > 0
-                    ? '$hours:${mins.toString().padLeft(2, '0')}:$secs'
-                    : '$mins:$secs',
+                    ? '$hoursDisplay:${mins.toString().padLeft(2, '0')}:$secs'
+                    : '$minsDisplay:$secs',
                 style: TextStyle(
                   color: widget.active
                       ? isEmergency

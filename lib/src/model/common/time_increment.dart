@@ -8,6 +8,11 @@ class TimeIncrement {
   const TimeIncrement(this.time, this.increment)
       : assert(time >= 0 && increment >= 0);
 
+  TimeIncrement.fromDurations(Duration time, Duration increment)
+      : time = time.inSeconds,
+        increment = increment.inSeconds,
+        assert(time >= Duration.zero && increment >= Duration.zero);
+
   /// Clock initial time in seconds
   final int time;
 
