@@ -88,6 +88,12 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
   }
 
   void stopClock() {
+    setState(() {
+      timeLeft = timeLeft - _stopwatch.elapsed;
+      if (timeLeft < Duration.zero) {
+        timeLeft = Duration.zero;
+      }
+    });
     _timer?.cancel();
     _stopwatch.stop();
     scheduleMicrotask(() {
