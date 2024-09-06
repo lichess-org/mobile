@@ -255,6 +255,7 @@ class BroadcastGridItem extends StatelessWidget {
                                   ?.copyWith(
                                     color: textShade(context, 0.5),
                                   ),
+                              overflow: TextOverflow.ellipsis,
                             ),
                             const SizedBox(width: 4.0),
                           ],
@@ -266,6 +267,7 @@ class BroadcastGridItem extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                                 color: Colors.red,
                               ),
+                              overflow: TextOverflow.ellipsis,
                             )
                           else if (broadcast.round.startsAt != null)
                             StartsRoundDate(

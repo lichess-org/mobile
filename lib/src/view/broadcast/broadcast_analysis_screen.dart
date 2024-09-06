@@ -445,9 +445,16 @@ class _PlayerWidget extends StatelessWidget {
                       style: const TextStyle().copyWith(
                         fontWeight: FontWeight.bold,
                       ),
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(width: 5),
-                    Text(player.rating.toString(), style: const TextStyle()),
+                    if (player.rating != null) ...[
+                      const SizedBox(width: 5),
+                      Text(
+                        player.rating.toString(),
+                        style: const TextStyle(),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
                   ],
                 ),
               ),
