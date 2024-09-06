@@ -99,6 +99,8 @@ class BroadcastGame with _$BroadcastGame {
     /// The amount of time that the player whose turn it is has been thinking since his last move
     required Duration? thinkTime,
   }) = _BroadcastGame;
+
+  bool get isPlaying => status == '*';
 }
 
 @freezed

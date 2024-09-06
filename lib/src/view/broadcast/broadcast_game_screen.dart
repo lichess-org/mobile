@@ -456,8 +456,13 @@ class _PlayerWidget extends StatelessWidget {
               ),
               if (player.clock != null)
                 (pov == playingSide)
-                    ? _Clock(
-                        clock: player.clock! - (thinkTime ?? Duration.zero),
+                    ? Text(
+                        (player.clock! - (thinkTime ?? Duration.zero))
+                            .toHoursMinutesSeconds(),
+                        style: TextStyle(
+                          color: Colors.orange[900],
+                          fontFeatures: const [FontFeature.tabularFigures()],
+                        ),
                       )
                     : Text(
                         player.clock!.toHoursMinutesSeconds(),
@@ -468,56 +473,6 @@ class _PlayerWidget extends StatelessWidget {
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _Clock extends StatefulWidget {
-  const _Clock({required this.clock});
-
-  final Duration clock;
-
-  @override
-  _ClockState createState() => _ClockState();
-}
-
-class _ClockState extends State<_Clock> {
-  Timer? _timer;
-  late Duration _clock;
-
-  @override
-  void initState() {
-    super.initState();
-    _clock = widget.clock;
-    if (_clock.inSeconds <= 0) {
-      _clock = Duration.zero;
-      return;
-    }
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      setState(() {
-        _clock = _clock - const Duration(seconds: 1);
-      });
-      if (_clock.inSeconds == 0) {
-        timer.cancel();
-        return;
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      _clock.toHoursMinutesSeconds(),
-      style: TextStyle(
-        color: Colors.orange[900],
-        fontFeatures: const [FontFeature.tabularFigures()],
       ),
     );
   }

@@ -21,6 +21,8 @@ class BroadcastRoundController extends _$BroadcastRoundController {
 
   StreamSubscription<SocketEvent>? _subscription;
 
+  Timer? _timer;
+
   late SocketClient _socketClient;
 
   @override
@@ -33,12 +35,45 @@ class BroadcastRoundController extends _$BroadcastRoundController {
 
     ref.onDispose(() {
       _subscription?.cancel();
+      _timer?.cancel();
     });
 
     final games =
         await ref.watch(broadcastRoundProvider(broadcastRoundId).future);
 
+    _timer = Timer.periodic(
+      const Duration(seconds: 1),
+      (_) => _updateClocks(),
+    );
+
     return games;
+  }
+
+  void _updateClocks() {
+    state = AsyncData(
+      state.requireValue.map((gameId, game) {
+        if (!game.isPlaying) return MapEntry(gameId, game);
+        final playingSide = Setup.parseFen(game.fen).turn;
+        final clock = game.players[playingSide]!.clock;
+        final newClock =
+            (clock != null) ? clock - const Duration(seconds: 1) : null;
+        return MapEntry(
+          gameId,
+          game.copyWith(
+            players: IMap(
+              {
+                playingSide: game.players[playingSide]!.copyWith(
+                  clock: (newClock?.isNegative ?? false)
+                      ? Duration.zero
+                      : newClock,
+                ),
+                playingSide.opposite: game.players[playingSide.opposite]!,
+              },
+            ),
+          ),
+        );
+      }),
+    );
   }
 
   Future<void> setPgn(BroadcastGameId gameId) async {
@@ -90,7 +125,7 @@ class BroadcastRoundController extends _$BroadcastRoundController {
 
     final fen = pick(event.data, 'n', 'fen').asStringOrThrow();
 
-    final playingSide = Setup.parseFen(fen).turn.opposite;
+    final playingSide = Setup.parseFen(fen).turn;
 
     state = AsyncData(
       state.requireValue.update(
@@ -98,12 +133,12 @@ class BroadcastRoundController extends _$BroadcastRoundController {
         (broadcastGame) => broadcastGame.copyWith(
           players: IMap(
             {
-              playingSide: broadcastGame.players[playingSide]!.copyWith(
+              playingSide: broadcastGame.players[playingSide]!,
+              playingSide.opposite:
+                  broadcastGame.players[playingSide.opposite]!.copyWith(
                 clock: pick(event.data, 'n', 'clock')
                     .asDurationFromCentiSecondsOrNull(),
               ),
-              playingSide.opposite:
-                  broadcastGame.players[playingSide.opposite]!,
             },
           ),
           fen: fen,
@@ -170,7 +205,6 @@ class BroadcastRoundController extends _$BroadcastRoundController {
     );
   }
 }
-
 
 // void _handleAddNodeEvent(SocketEvent event) {
 //   final gameId =

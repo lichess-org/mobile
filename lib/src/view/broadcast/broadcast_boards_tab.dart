@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
@@ -293,64 +291,24 @@ class _PlayerWidget extends StatelessWidget {
                 )
               else if (player.clock != null)
                 if (side == playingSide)
-                  _Clock(
-                    clock: player.clock! - (thinkTime ?? Duration.zero),
+                  Text(
+                    (player.clock! - (thinkTime ?? Duration.zero))
+                        .toHoursMinutesSeconds(),
+                    style: TextStyle(
+                      color: Colors.orange[900],
+                      fontFeatures: const [FontFeature.tabularFigures()],
+                    ),
                   )
                 else
-                  Text(player.clock!.toHoursMinutesSeconds()),
+                  Text(
+                    player.clock!.toHoursMinutesSeconds(),
+                    style: const TextStyle(
+                      fontFeatures: [FontFeature.tabularFigures()],
+                    ),
+                  ),
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _Clock extends StatefulWidget {
-  const _Clock({required this.clock});
-
-  final Duration clock;
-
-  @override
-  _ClockState createState() => _ClockState();
-}
-
-class _ClockState extends State<_Clock> {
-  Timer? _timer;
-  late Duration _clock;
-
-  @override
-  void initState() {
-    super.initState();
-    _clock = widget.clock;
-    if (_clock.inSeconds <= 0) {
-      _clock = Duration.zero;
-      return;
-    }
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      setState(() {
-        _clock = _clock - const Duration(seconds: 1);
-      });
-      if (_clock.inSeconds == 0) {
-        timer.cancel();
-        return;
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      _clock.toHoursMinutesSeconds(),
-      style: TextStyle(
-        color: Colors.orange[900],
-        fontFeatures: const [FontFeature.tabularFigures()],
       ),
     );
   }
