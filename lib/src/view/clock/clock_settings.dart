@@ -14,10 +14,8 @@ class ClockSettings extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final controller = ref.read(clockControllerProvider.notifier);
-    final buttonsEnabled = ref.watch(
-      clockControllerProvider.select((value) => value.paused),
-    );
+    final state = ref.watch(clockControllerProvider);
+    final buttonsEnabled = !state.started || state.paused;
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -28,7 +26,11 @@ class ClockSettings extends ConsumerWidget {
           PlatformIconButton(
             semanticsLabel: context.l10n.reset,
             iconSize: _iconSize,
-            onTap: buttonsEnabled ? () => controller.reset() : null,
+            onTap: buttonsEnabled
+                ? () {
+                    ref.read(clockControllerProvider.notifier).reset();
+                  }
+                : null,
             icon: Icons.refresh,
           ),
           PlatformIconButton(
@@ -57,7 +59,9 @@ class ClockSettings extends ConsumerWidget {
                             options.incrementPlayerTop.inSeconds,
                           ),
                           onSelected: (choice) {
-                            controller.updateOptions(choice);
+                            ref
+                                .read(clockControllerProvider.notifier)
+                                .updateOptions(choice);
                           },
                         );
                       },
