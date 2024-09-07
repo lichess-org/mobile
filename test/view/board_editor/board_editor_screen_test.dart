@@ -160,7 +160,7 @@ void main() {
           .loadFen('1nbqkbn1/pppppppp/8/8/8/8/PPPPPPPP/1NBQKBN1');
 
       expect(
-        container.read(controllerProvider.notifier).calculateEnPassantOptions(),
+        container.read(controllerProvider).enPassantOptions,
         SquareSet.empty,
       );
 
@@ -168,7 +168,7 @@ void main() {
             'r1bqkbnr/4p1p1/3n4/pPppPppP/8/8/P1PP1P2/RNBQKBNR w KQkq - 0 1',
           );
       expect(
-        container.read(controllerProvider.notifier).calculateEnPassantOptions(),
+        container.read(controllerProvider).enPassantOptions,
         SquareSet.fromSquares([Square.a6, Square.c6, Square.f6]),
       );
       container.read(controllerProvider.notifier).loadFen(
@@ -176,7 +176,7 @@ void main() {
           );
       container.read(controllerProvider.notifier).setSideToPlay(Side.black);
       expect(
-        container.read(controllerProvider.notifier).calculateEnPassantOptions(),
+        container.read(controllerProvider).enPassantOptions,
         SquareSet.fromSquares([Square.e3, Square.h3]),
       );
     });

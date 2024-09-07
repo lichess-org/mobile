@@ -17,6 +17,7 @@ class BoardEditorController extends _$BoardEditorController {
       pieces: readFen(initialFen ?? kInitialFEN).lock,
       unmovedRooks: SquareSet.corners,
       editorPointerMode: EditorPointerMode.drag,
+      enPassantOptions: SquareSet.empty,
       enPassantSquare: null,
       pieceToAddOnEdit: null,
     );
@@ -60,6 +61,7 @@ class BoardEditorController extends _$BoardEditorController {
     state = state.copyWith(
       sideToPlay: side,
     );
+    _calculateEnPassantOptions();
   }
 
   void loadFen(String fen) {
@@ -67,10 +69,10 @@ class BoardEditorController extends _$BoardEditorController {
   }
 
   /// Calculates the squares where an en passant capture could be possible.
-  SquareSet calculateEnPassantOptions() {
+  void _calculateEnPassantOptions() {
     final side = state.sideToPlay;
     final pieces = state.pieces;
-    SquareSet enPassantSquares = SquareSet.empty;
+    SquareSet enPassantOptions = SquareSet.empty;
     final boardFen = writeFen(pieces.unlock);
     final board = Board.parseFen(boardFen);
 
@@ -92,8 +94,8 @@ class BoardEditorController extends _$BoardEditorController {
           board.roleAt(adjacentSquare) == Role.pawn &&
           board.sideAt(targetSquare) == null &&
           board.sideAt(originSquare) == null) {
-        enPassantSquares =
-            enPassantSquares.union(SquareSet.fromSquare(targetSquare));
+        enPassantOptions =
+            enPassantOptions.union(SquareSet.fromSquare(targetSquare));
       }
     }
 
@@ -107,7 +109,7 @@ class BoardEditorController extends _$BoardEditorController {
       }
     });
 
-    return enPassantSquares;
+    state = state.copyWith(enPassantOptions: enPassantOptions);
   }
 
   void toggleEnPassantSquare(Square square) {
@@ -118,6 +120,7 @@ class BoardEditorController extends _$BoardEditorController {
 
   void _updatePosition(IMap<Square, Piece> pieces) {
     state = state.copyWith(pieces: pieces);
+    _calculateEnPassantOptions();
   }
 
   void setCastling(Side side, CastlingSide castlingSide, bool allowed) {
@@ -156,6 +159,7 @@ class BoardEditorState with _$BoardEditorState {
     required IMap<Square, Piece> pieces,
     required SquareSet unmovedRooks,
     required EditorPointerMode editorPointerMode,
+    required SquareSet enPassantOptions,
     required Square? enPassantSquare,
 
     /// When null, clears squares when in edit mode. Has no effect in drag mode.

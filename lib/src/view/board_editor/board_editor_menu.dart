@@ -15,9 +15,6 @@ class BoardEditorMenu extends ConsumerWidget {
     final editorController = boardEditorControllerProvider(initialFen);
     final editorState = ref.watch(editorController);
 
-    final enPassantSquares =
-        ref.read(editorController.notifier).calculateEnPassantOptions();
-
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
@@ -83,14 +80,14 @@ class BoardEditorMenu extends ConsumerWidget {
                   ),
                 );
               }),
-              if (enPassantSquares.isNotEmpty) ...[
+              if (editorState.enPassantOptions.isNotEmpty) ...[
                 Padding(
                   padding: Styles.bodySectionPadding,
                   child: const Text('En passant', style: Styles.subtitle),
                 ),
                 Wrap(
                   spacing: 8.0,
-                  children: enPassantSquares.squares.map((square) {
+                  children: editorState.enPassantOptions.squares.map((square) {
                     return ChoiceChip(
                       label: Text(square.name),
                       selected: editorState.enPassantSquare == square,
