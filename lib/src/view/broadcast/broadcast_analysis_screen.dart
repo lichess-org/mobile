@@ -85,7 +85,7 @@ class BroadcastAnalysisScreen extends ConsumerWidget {
           if (pgn.hasValue)
             _EngineDepth(
               analysisControllerProvider(
-                  pgn.requireValue, broadcastAnalysisOptions),
+                  pgn.requireValue, broadcastAnalysisOptions,),
             ),
           AppBarIconButton(
             onPressed: () => (pgn.hasValue)
@@ -95,7 +95,7 @@ class BroadcastAnalysisScreen extends ConsumerWidget {
                     showDragHandle: true,
                     isDismissible: true,
                     builder: (_) => AnalysisSettings(
-                        pgn.requireValue, broadcastAnalysisOptions),
+                        pgn.requireValue, broadcastAnalysisOptions,),
                   )
                 : null,
             semanticsLabel: context.l10n.settingsSettings,
@@ -142,7 +142,7 @@ class BroadcastAnalysisScreen extends ConsumerWidget {
             if (pgn.hasValue)
               _EngineDepth(
                 analysisControllerProvider(
-                    pgn.requireValue, broadcastAnalysisOptions),
+                    pgn.requireValue, broadcastAnalysisOptions,),
               ),
             AppBarIconButton(
               onPressed: () => (pgn.hasValue)
@@ -152,7 +152,7 @@ class BroadcastAnalysisScreen extends ConsumerWidget {
                       showDragHandle: true,
                       isDismissible: true,
                       builder: (_) => AnalysisSettings(
-                          pgn.requireValue, broadcastAnalysisOptions),
+                          pgn.requireValue, broadcastAnalysisOptions,),
                     )
                   : null,
               semanticsLabel: context.l10n.settingsSettings,
