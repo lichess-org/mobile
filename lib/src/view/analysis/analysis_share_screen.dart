@@ -66,6 +66,26 @@ class _EditPgnTagsFormState extends ConsumerState<_EditPgnTagsForm> {
   final Map<String, FocusNode> _focusNodes = {};
 
   @override
+  void initState() {
+    super.initState();
+    final ctrlProvider = analysisControllerProvider(widget.pgn, widget.options);
+    final pgnHeaders = ref.read(ctrlProvider).pgnHeaders;
+
+    for (final entry in pgnHeaders.entries) {
+      _controllers[entry.key] = TextEditingController(text: entry.value);
+      _focusNodes[entry.key] = FocusNode();
+      _focusNodes[entry.key]!.addListener(() {
+        if (!_focusNodes[entry.key]!.hasFocus) {
+          ref.read(ctrlProvider.notifier).updatePgnHeader(
+                entry.key,
+                _controllers[entry.key]!.text,
+              );
+        }
+      });
+    }
+  }
+
+  @override
   void dispose() {
     for (final controller in _controllers.values) {
       controller.dispose();
@@ -123,20 +143,6 @@ class _EditPgnTagsFormState extends ConsumerState<_EditPgnTagsForm> {
                     (e) => showRatings || !_ratingHeaders.contains(e.key),
                   )
                       .mapIndexed((index, e) {
-                    if (!_controllers.containsKey(e.key)) {
-                      _controllers[e.key] =
-                          TextEditingController(text: e.value);
-                      _focusNodes[e.key] = FocusNode();
-                      _focusNodes[e.key]!.addListener(() {
-                        if (!_focusNodes[e.key]!.hasFocus) {
-                          ref.read(ctrlProvider.notifier).updatePgnHeader(
-                                e.key,
-                                _controllers[e.key]!.text,
-                              );
-                        }
-                      });
-                    }
-
                     return Padding(
                       padding: Styles.horizontalBodyPadding
                           .add(const EdgeInsets.only(bottom: 8.0)),
