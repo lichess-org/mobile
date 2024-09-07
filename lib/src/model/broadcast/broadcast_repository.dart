@@ -165,7 +165,6 @@ MapEntry<BroadcastGameId, BroadcastGame> gameFromPick(
         status: pick('status').asStringOrNull(),
         thinkTime:
             pick('thinkTime').asDurationFromSecondsOrNull() ?? Duration.zero,
-        pgn: null,
       ),
     );
 

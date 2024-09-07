@@ -94,7 +94,6 @@ class BroadcastGame with _$BroadcastGame {
     required String fen,
     required Move? lastMove,
     required String? status,
-    required String? pgn,
 
     /// The amount of time that the player whose turn it is has been thinking since his last move
     required Duration thinkTime,

@@ -60,23 +60,6 @@ class BroadcastRoundController extends _$BroadcastRoundController {
     );
   }
 
-  Future<void> setPgn(BroadcastGameId gameId) async {
-    final pgn = await ref.watch(
-      broadcastGameProvider(
-        roundId: broadcastRoundId,
-        gameId: gameId,
-      ).future,
-    );
-    state = AsyncData(
-      state.requireValue.update(
-        gameId,
-        (broadcastGame) => broadcastGame.copyWith(
-          pgn: pgn,
-        ),
-      ),
-    );
-  }
-
   void _handleSocketEvent(SocketEvent event) {
     if (!state.hasValue) return;
 
@@ -90,9 +73,6 @@ class BroadcastRoundController extends _$BroadcastRoundController {
       // Sent when clocks are updated from the broadcast
       case 'clock':
         _handleClockEvent(event);
-      // Sent when a pgn tag changes
-      case 'setTags':
-        _handleSetTagsEvent(event);
     }
   }
 
@@ -163,54 +143,4 @@ class BroadcastRoundController extends _$BroadcastRoundController {
       ),
     );
   }
-
-  void _handleSetTagsEvent(SocketEvent event) {
-    final gameId = pick(event.data, 'chapterId').asBroadcastGameIdOrThrow();
-
-    if (state.requireValue[gameId]?.pgn == null) return;
-
-    final headers = pick(event.data, 'tags').asMapOrThrow<String, String>();
-
-    final pgnGame = PgnGame.parsePgn(state.requireValue[gameId]!.pgn!);
-
-    final newPgnGame = PgnGame(
-      headers: headers,
-      moves: pgnGame.moves,
-      comments: pgnGame.comments,
-    );
-
-    state = AsyncData(
-      state.requireValue.update(
-        gameId,
-        (broadcastsGame) => broadcastsGame.copyWith(
-          pgn: newPgnGame.makePgn(),
-        ),
-      ),
-    );
-  }
 }
-
-// void _handleAddNodeEvent(SocketEvent event) {
-//   final gameId =
-//       pick(event.data, 'p', 'chapterId').asBroadcastGameIdOrThrow();
-
-//   // We check that the event we received is for the game we are currently watching
-//   if (gameId != broadcastGameId) return;
-
-//   // The path of the last and current move of the broadcasted game
-//   // Its value is "!" if the path is identical to one of the node that was received
-//   final currentPath = pick(event.data, 'relayPath').asUciPathOrThrow();
-
-//   // We check that the event we received is for the last move of the game
-//   if (currentPath.value != '!') return;
-
-//   // The path for the node that was received
-//   final path = pick(event.data, 'p', 'path').asUciPathOrThrow();
-//   final nodeId = pick(event.data, 'n', 'id').asUciCharPairOrThrow();
-
-//   final newPgn = (Root.fromPgnGame(PgnGame.parsePgn(state.requireValue))
-//         ..promoteAt(path + nodeId, toMainline: true))
-//       .makePgn();
-
-//   state = AsyncData(newPgn);
-// }

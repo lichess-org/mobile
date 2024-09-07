@@ -137,9 +137,6 @@ class BroadcastPreview extends ConsumerWidget {
 
         return BoardThumbnail(
           onTap: () {
-            ref
-                .read(BroadcastRoundControllerProvider(roundId).notifier)
-                .setPgn(game.id);
             pushPlatformRoute(
               context,
               builder: (context) => BroadcastAnalysisScreen(

@@ -195,6 +195,18 @@ class AnalysisController extends _$AnalysisController {
     }
   }
 
+  void onBroadcastMove(UciPath path, Move move) {
+    final (newPath, isNewNode) = _root.addMoveAt(path, move);
+
+    if (newPath != null) {
+      _setPath(
+        newPath,
+        shouldRecomputeRootView: isNewNode,
+        shouldForceShowVariation: true,
+      );
+    }
+  }
+
   void onPromotionSelection(Role? role) {
     if (role == null) {
       state = state.copyWith(promotionMove: null);
