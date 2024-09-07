@@ -7,8 +7,6 @@ import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/game/archived_game.dart';
-import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer_preferences.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer_repository.dart';
@@ -557,11 +555,13 @@ class OpeningExplorerMoveTable extends ConsumerWidget {
     required this.blackWins,
     required this.pgn,
     required this.options,
+    super.key,
   }) : _isLoading = false;
 
   const OpeningExplorerMoveTable.loading({
     required this.pgn,
     required this.options,
+    super.key,
   })  : _isLoading = true,
         moves = const IListConst([]),
         whiteWins = 0,
@@ -760,8 +760,6 @@ class OpeningExplorerGameTile extends ConsumerStatefulWidget {
 
 class _OpeningExplorerGameTileState
     extends ConsumerState<OpeningExplorerGameTile> {
-  Future<ArchivedGame>? gameRequest;
-
   @override
   Widget build(BuildContext context) {
     const widthResultBox = 50.0;
@@ -770,128 +768,110 @@ class _OpeningExplorerGameTileState
     return Container(
       padding: _kTableRowPadding,
       color: widget.color,
-      child: FutureBuilder<void>(
-        future: gameRequest,
-        builder: (context, snapshot) {
-          return AdaptiveInkWell(
-            onTap: snapshot.connectionState == ConnectionState.waiting
-                ? null
-                : () async {
-                    if (gameRequest == null) {
-                      setState(() {
-                        gameRequest = ref.read(
-                          archivedGameProvider(id: widget.game.id).future,
-                        );
-                      });
-                    }
-
-                    final archivedGame = await gameRequest!;
-                    if (context.mounted) {
-                      pushPlatformRoute(
-                        context,
-                        builder: (_) => ArchivedGameScreen(
-                          gameData: archivedGame.data,
-                          orientation: Side.white,
-                          initialCursor: widget.ply,
-                        ),
-                      );
-                    }
-                  },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(widget.game.white.rating.toString()),
-                    Text(widget.game.black.rating.toString()),
-                  ],
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.game.white.name,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      Text(
-                        widget.game.black.name,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                ),
-                Row(
-                  children: [
-                    if (widget.game.winner == 'white')
-                      Container(
-                        width: widthResultBox,
-                        padding: paddingResultBox,
-                        decoration: BoxDecoration(
-                          color: _whiteBoxColor(context),
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: const Text(
-                          '1-0',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.black,
-                          ),
-                        ),
-                      )
-                    else if (widget.game.winner == 'black')
-                      Container(
-                        width: widthResultBox,
-                        padding: paddingResultBox,
-                        decoration: BoxDecoration(
-                          color: _blackBoxColor(context),
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: const Text(
-                          '0-1',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                      )
-                    else
-                      Container(
-                        width: widthResultBox,
-                        padding: paddingResultBox,
-                        decoration: BoxDecoration(
-                          color: Colors.grey,
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: const Text(
-                          '½-½',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    if (widget.game.month != null) ...[
-                      const SizedBox(width: 10.0),
-                      Text(
-                        widget.game.month!,
-                        style: const TextStyle(
-                          fontFeatures: [FontFeature.tabularFigures()],
-                        ),
-                      ),
-                    ],
-                    if (widget.game.speed != null) ...[
-                      const SizedBox(width: 10.0),
-                      Icon(widget.game.speed!.icon, size: 20),
-                    ],
-                  ],
-                ),
-              ],
+      child: AdaptiveInkWell(
+        onTap: () {
+          pushPlatformRoute(
+            context,
+            builder: (_) => ArchivedGameScreen(
+              gameId: widget.game.id,
+              orientation: Side.white,
+              initialCursor: widget.ply,
             ),
           );
         },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(widget.game.white.rating.toString()),
+                Text(widget.game.black.rating.toString()),
+              ],
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.game.white.name,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Text(
+                    widget.game.black.name,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
+            ),
+            Row(
+              children: [
+                if (widget.game.winner == 'white')
+                  Container(
+                    width: widthResultBox,
+                    padding: paddingResultBox,
+                    decoration: BoxDecoration(
+                      color: _whiteBoxColor(context),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: const Text(
+                      '1-0',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
+                  )
+                else if (widget.game.winner == 'black')
+                  Container(
+                    width: widthResultBox,
+                    padding: paddingResultBox,
+                    decoration: BoxDecoration(
+                      color: _blackBoxColor(context),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: const Text(
+                      '0-1',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  )
+                else
+                  Container(
+                    width: widthResultBox,
+                    padding: paddingResultBox,
+                    decoration: BoxDecoration(
+                      color: Colors.grey,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: const Text(
+                      '½-½',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                if (widget.game.month != null) ...[
+                  const SizedBox(width: 10.0),
+                  Text(
+                    widget.game.month!,
+                    style: const TextStyle(
+                      fontFeatures: [FontFeature.tabularFigures()],
+                    ),
+                  ),
+                ],
+                if (widget.game.speed != null) ...[
+                  const SizedBox(width: 10.0),
+                  Icon(widget.game.speed!.icon, size: 20),
+                ],
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

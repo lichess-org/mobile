@@ -85,7 +85,7 @@ class PlatformAppBarLoadingIndicator extends StatelessWidget {
           height: 24,
           width: 24,
           child: Center(
-            child: CircularProgressIndicator.adaptive(),
+            child: CircularProgressIndicator(),
           ),
         ),
       ),

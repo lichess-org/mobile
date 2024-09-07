@@ -29,6 +29,7 @@ const _moveListOpacity = 0.6;
 ///
 /// An optional overlay or error message can be displayed on top of the board.
 class BoardTable extends ConsumerStatefulWidget {
+  /// Creates a board table with the given values.
   const BoardTable({
     required this.fen,
     required this.orientation,
@@ -53,6 +54,27 @@ class BoardTable extends ConsumerStatefulWidget {
           moves == null || currentMoveIndex != null,
           'You must provide `currentMoveIndex` along with `moves`',
         );
+
+  /// Creates an empty board table (useful for loading).
+  const BoardTable.empty({
+    this.showMoveListPlaceholder = false,
+    this.showEngineGaugePlaceholder = false,
+    this.errorMessage,
+  })  : fen = kEmptyBoardFEN,
+        orientation = Side.white,
+        gameData = null,
+        lastMove = null,
+        boardSettingsOverrides = null,
+        topTable = const SizedBox.shrink(),
+        bottomTable = const SizedBox.shrink(),
+        shapes = null,
+        engineGauge = null,
+        moves = null,
+        currentMoveIndex = null,
+        onSelectMove = null,
+        boardOverlay = null,
+        boardKey = null,
+        zenMode = false;
 
   final String fen;
 
