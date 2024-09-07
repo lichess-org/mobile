@@ -40,6 +40,7 @@ class AnalysisOptions with _$AnalysisOptions {
     int? initialMoveCursor,
     LightOpening? opening,
     Division? division,
+    @Default(false) bool isBroadcast,
 
     /// Optional server analysis to display player stats.
     ({PlayerAnalysis white, PlayerAnalysis black})? serverAnalysis,
@@ -137,6 +138,7 @@ class AnalysisController extends _$AnalysisController {
       variant: options.variant,
       id: options.id,
       currentPath: currentPath,
+      livePath: options.isBroadcast ? currentPath : null,
       isOnMainline: _root.isOnMainline(currentPath),
       root: _root.view,
       currentNode: AnalysisCurrentNode.fromNode(currentNode),
@@ -199,11 +201,17 @@ class AnalysisController extends _$AnalysisController {
     final (newPath, isNewNode) = _root.addMoveAt(path, move);
 
     if (newPath != null) {
-      _setPath(
-        newPath,
-        shouldRecomputeRootView: isNewNode,
-        shouldForceShowVariation: true,
-      );
+      if (state.livePath == state.currentPath) {
+        _setPath(
+          newPath,
+          shouldRecomputeRootView: isNewNode,
+          shouldForceShowVariation: true,
+          isBroadcastMove: true,
+        );
+      } else {
+        _root.promoteAt(newPath, toMainline: true);
+        state = state.copyWith(livePath: newPath, root: _root.view);
+      }
     }
   }
 
@@ -394,6 +402,7 @@ class AnalysisController extends _$AnalysisController {
     bool shouldForceShowVariation = false,
     bool shouldRecomputeRootView = false,
     bool replaying = false,
+    bool isBroadcastMove = false,
   }) {
     final pathChange = state.currentPath != path;
     final (currentNode, opening) = _nodeOpeningAt(_root, path);
@@ -442,6 +451,7 @@ class AnalysisController extends _$AnalysisController {
 
       state = state.copyWith(
         currentPath: path,
+        livePath: isBroadcastMove ? path : state.livePath,
         isOnMainline: _root.isOnMainline(path),
         currentNode: AnalysisCurrentNode.fromNode(currentNode),
         currentBranchOpening: opening,
@@ -453,6 +463,7 @@ class AnalysisController extends _$AnalysisController {
     } else {
       state = state.copyWith(
         currentPath: path,
+        livePath: isBroadcastMove ? path : state.livePath,
         isOnMainline: _root.isOnMainline(path),
         currentNode: AnalysisCurrentNode.fromNode(currentNode),
         currentBranchOpening: opening,
@@ -664,6 +675,9 @@ class AnalysisState with _$AnalysisState {
 
     /// The path to the current node in the analysis view.
     required UciPath currentPath,
+
+    // The path to the current broadcast live move.
+    required UciPath? livePath,
 
     /// Whether the current path is on the mainline.
     required bool isOnMainline,

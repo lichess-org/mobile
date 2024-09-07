@@ -119,6 +119,12 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
       analysisPreferencesProvider.select((value) => value.showAnnotations),
     );
 
+    final broadcastPath = ref.watch(
+      analysisControllerProvider(widget.pgn, widget.options).select(
+        (value) => value.livePath,
+      ),
+    );
+
     final List<Widget> moveWidgets = _buildTreeWidget(
       widget.pgn,
       widget.options,
@@ -130,6 +136,7 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
       startMainline: true,
       startSideline: false,
       initialPath: UciPath.empty,
+      broadcastPath: broadcastPath,
     );
 
     // trick to make auto-scroll work when returning to the root position
@@ -181,6 +188,7 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
     required bool shouldShowAnnotations,
     required bool shouldShowComments,
     required UciPath initialPath,
+    required UciPath? broadcastPath,
   }) {
     if (nodes.isEmpty) return [];
     final List<Widget> widgets = [];
@@ -188,6 +196,7 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
     final firstChild = nodes.first;
     final newPath = initialPath + firstChild.id;
     final currentMove = newPath == currentPath;
+    final broadcastMove = newPath == broadcastPath;
 
     // add the first child
     widgets.add(
@@ -205,6 +214,7 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
         startMainline: startMainline,
         startSideline: startSideline,
         endSideline: !inMainline && firstChild.children.isEmpty,
+        isLiveMove: broadcastMove,
       ),
     );
 
@@ -230,6 +240,7 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
                 startMainline: false,
                 startSideline: true,
                 initialPath: initialPath,
+                broadcastPath: broadcastPath,
               ),
             ),
           ),
@@ -247,6 +258,7 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
             startMainline: false,
             startSideline: true,
             initialPath: initialPath,
+            broadcastPath: broadcastPath,
           ),
         );
       }
@@ -265,6 +277,7 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
         startMainline: false,
         startSideline: false,
         initialPath: newPath,
+        broadcastPath: broadcastPath,
       ),
     );
 
@@ -421,14 +434,16 @@ class InlineMove extends ConsumerWidget {
                         : Theme.of(context).focusColor,
                     shape: BoxShape.rectangle,
                     borderRadius: borderRadius,
-                    border:
-                        isLiveMove ? Border.all(color: Colors.orange) : null,
+                    border: isLiveMove
+                        ? Border.all(width: 2, color: Colors.orange)
+                        : null,
                   )
                 : BoxDecoration(
                     shape: BoxShape.rectangle,
                     borderRadius: borderRadius,
-                    border:
-                        isLiveMove ? Border.all(color: Colors.orange) : null,
+                    border: isLiveMove
+                        ? Border.all(width: 2, color: Colors.orange)
+                        : null,
                   ),
             child: Text(
               moveWithNag,

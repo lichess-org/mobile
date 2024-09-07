@@ -17,6 +17,7 @@ const broadcastAnalysisOptions = AnalysisOptions(
   isLocalEvaluationAllowed: true,
   orientation: Side.white,
   variant: Variant.standard,
+  isBroadcast: true,
 );
 
 @riverpod
