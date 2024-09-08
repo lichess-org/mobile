@@ -388,6 +388,12 @@ class _AnalysisBoardPlayersAndClocks extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final clocks = ref.watch(ctrlProvider.select((value) => value.clocks));
+    final currentPath = ref.watch(
+      ctrlProvider.select((value) => value.currentPath),
+    );
+    final livePath = ref.watch(
+      ctrlProvider.select((value) => value.livePath),
+    );
     final playingSide =
         ref.watch(ctrlProvider.select((value) => value.position.turn));
     final game = ref.watch(
@@ -407,6 +413,7 @@ class _AnalysisBoardPlayersAndClocks extends ConsumerWidget {
             side: pov.opposite,
             boardSide: _PlayerWidgetSide.top,
             playingSide: playingSide,
+            playClock: currentPath == livePath,
           ),
         AnalysisBoard(
           pgn,
@@ -422,6 +429,7 @@ class _AnalysisBoardPlayersAndClocks extends ConsumerWidget {
             side: pov,
             boardSide: _PlayerWidgetSide.bottom,
             playingSide: playingSide,
+            playClock: currentPath == livePath,
           ),
       ],
     );
@@ -436,6 +444,7 @@ class _PlayerWidget extends StatelessWidget {
     required this.side,
     required this.boardSide,
     required this.playingSide,
+    required this.playClock,
   });
 
   final BroadcastGame game;
@@ -444,6 +453,7 @@ class _PlayerWidget extends StatelessWidget {
   final double width;
   final _PlayerWidgetSide boardSide;
   final Side playingSide;
+  final bool playClock;
 
   @override
   Widget build(BuildContext context) {
@@ -452,102 +462,168 @@ class _PlayerWidget extends StatelessWidget {
 
     return SizedBox(
       width: width,
-      child: Card(
-        margin: EdgeInsets.zero,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            topLeft:
-                Radius.circular(boardSide == _PlayerWidgetSide.top ? 8 : 0),
-            topRight:
-                Radius.circular(boardSide == _PlayerWidgetSide.top ? 8 : 0),
-            bottomLeft:
-                Radius.circular(boardSide == _PlayerWidgetSide.bottom ? 8 : 0),
-            bottomRight:
-                Radius.circular(boardSide == _PlayerWidgetSide.bottom ? 8 : 0),
-          ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
+      child: Row(
+        children: [
+          if (gameStatus != null && gameStatus != '*')
+            Card(
+              margin: EdgeInsets.zero,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(
+                    boardSide == _PlayerWidgetSide.top ? 8 : 0,
+                  ),
+                  bottomLeft: Radius.circular(
+                    boardSide == _PlayerWidgetSide.bottom ? 8 : 0,
+                  ),
+                ),
+              ),
+              child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8.0,
+                    vertical: 4.0,
+                  ),
+                  child: Text(
+                    (gameStatus == '½-½')
+                        ? '½'
+                        : (gameStatus == '1-0')
+                            ? side == Side.white
+                                ? '1'
+                                : '0'
+                            : side == Side.black
+                                ? '1'
+                                : '0',
+                    style:
+                        const TextStyle().copyWith(fontWeight: FontWeight.bold),
+                  )),
+            ),
+          Expanded(
+            child: Card(
+              margin: EdgeInsets.zero,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(
+                    boardSide == _PlayerWidgetSide.top &&
+                            (gameStatus == null || gameStatus == '*')
+                        ? 8
+                        : 0,
+                  ),
+                  topRight: Radius.circular(
+                    boardSide == _PlayerWidgetSide.top && clock == null ? 8 : 0,
+                  ),
+                  bottomLeft: Radius.circular(
+                    boardSide == _PlayerWidgetSide.bottom &&
+                            (gameStatus == null || gameStatus == '*')
+                        ? 8
+                        : 0,
+                  ),
+                  bottomRight: Radius.circular(
+                    boardSide == _PlayerWidgetSide.bottom && clock == null
+                        ? 8
+                        : 0,
+                  ),
+                ),
+              ),
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    if (gameStatus != null && gameStatus != '*') ...[
-                      Text(
-                        (gameStatus == '½-½')
-                            ? '½'
-                            : (gameStatus == '1-0')
-                                ? side == Side.white
-                                    ? '1'
-                                    : '0'
-                                : side == Side.black
-                                    ? '1'
-                                    : '0',
-                        style: const TextStyle()
-                            .copyWith(fontWeight: FontWeight.bold),
+                    Expanded(
+                      child: Row(
+                        children: [
+                          if (player.federation != null) ...[
+                            Consumer(
+                              builder: (context, widgetRef, _) {
+                                return SvgPicture.network(
+                                  lichessFideFedSrc(player.federation!),
+                                  height: 12,
+                                  httpClient:
+                                      widgetRef.read(defaultClientProvider),
+                                );
+                              },
+                            ),
+                            const SizedBox(width: 5),
+                          ],
+                          if (player.title != null) ...[
+                            Text(
+                              player.title!,
+                              style: const TextStyle().copyWith(
+                                color: context.lichessColors.brag,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(width: 5),
+                          ],
+                          Text(
+                            player.name,
+                            style: const TextStyle().copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          if (player.rating != null) ...[
+                            const SizedBox(width: 5),
+                            Text(
+                              player.rating.toString(),
+                              style: const TextStyle(),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ],
                       ),
-                      const SizedBox(width: 15),
-                    ],
-                    if (player.federation != null) ...[
-                      Consumer(
-                        builder: (context, widgetRef, _) {
-                          return SvgPicture.network(
-                            lichessFideFedSrc(player.federation!),
-                            height: 12,
-                            httpClient: widgetRef.read(defaultClientProvider),
-                          );
-                        },
-                      ),
-                    ],
-                    const SizedBox(width: 5),
-                    if (player.title != null) ...[
-                      Text(
-                        player.title!,
-                        style: const TextStyle().copyWith(
-                          color: context.lichessColors.brag,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(width: 5),
-                    ],
-                    Text(
-                      player.name,
-                      style: const TextStyle().copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                      overflow: TextOverflow.ellipsis,
                     ),
-                    if (player.rating != null) ...[
-                      const SizedBox(width: 5),
-                      Text(
-                        player.rating.toString(),
-                        style: const TextStyle(),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
                   ],
                 ),
               ),
-              if (clock != null)
-                (side == playingSide && game.isPlaying)
+            ),
+          ),
+          if (clock != null)
+            Card(
+              color: (side == playingSide)
+                  ? playClock
+                      ? Theme.of(context).colorScheme.tertiaryContainer
+                      : Theme.of(context).colorScheme.secondaryContainer
+                  : null,
+              margin: EdgeInsets.zero,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(
+                    boardSide == _PlayerWidgetSide.top ? 8 : 0,
+                  ),
+                  bottomRight: Radius.circular(
+                    boardSide == _PlayerWidgetSide.bottom ? 8 : 0,
+                  ),
+                ),
+              ),
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                child: (side == playingSide && playClock)
                     ? Text(
                         game.timeLeft!.toHoursMinutesSeconds(),
                         style: TextStyle(
-                          color: Colors.orange[900],
-                          fontFeatures: const [FontFeature.tabularFigures()],
+                          color:
+                              Theme.of(context).colorScheme.onTertiaryContainer,
+                          fontFeatures: const [
+                            FontFeature.tabularFigures(),
+                          ],
                         ),
                       )
                     : Text(
                         clock!.toHoursMinutesSeconds(),
-                        style: const TextStyle(
-                          fontFeatures: [FontFeature.tabularFigures()],
+                        style: TextStyle(
+                          color: (side == playingSide)
+                              ? Theme.of(context)
+                                  .colorScheme
+                                  .onSecondaryContainer
+                              : null,
+                          fontFeatures: const [FontFeature.tabularFigures()],
                         ),
                       ),
-            ],
-          ),
-        ),
+              ),
+            ),
+        ],
       ),
     );
   }

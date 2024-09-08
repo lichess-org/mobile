@@ -138,7 +138,9 @@ class AnalysisController extends _$AnalysisController {
       variant: options.variant,
       id: options.id,
       currentPath: currentPath,
-      livePath: options.isBroadcast ? currentPath : null,
+      livePath: options.isBroadcast && pgnHeaders['Result'] == '*'
+          ? currentPath
+          : null,
       isOnMainline: _root.isOnMainline(currentPath),
       root: _root.view,
       currentNode: AnalysisCurrentNode.fromNode(currentNode),
