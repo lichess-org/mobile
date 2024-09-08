@@ -255,6 +255,7 @@ class _Body extends ConsumerWidget {
                             child: Row(
                               children: [
                                 _AnalysisBoardPlayersAndClocks(
+                                  ctrlProvider,
                                   roundId,
                                   gameId,
                                   pgn,
@@ -314,6 +315,7 @@ class _Body extends ConsumerWidget {
                                 kTabletBoardTableSidePadding,
                               ),
                               child: _AnalysisBoardPlayersAndClocks(
+                                ctrlProvider,
                                 roundId,
                                 gameId,
                                 pgn,
@@ -324,6 +326,7 @@ class _Body extends ConsumerWidget {
                             )
                           else
                             _AnalysisBoardPlayersAndClocks(
+                              ctrlProvider,
                               roundId,
                               gameId,
                               pgn,
@@ -364,6 +367,7 @@ class _Body extends ConsumerWidget {
 enum _PlayerWidgetSide { bottom, top }
 
 class _AnalysisBoardPlayersAndClocks extends ConsumerWidget {
+  final AnalysisControllerProvider ctrlProvider;
   final BroadcastRoundId roundId;
   final BroadcastGameId gameId;
   final String pgn;
@@ -372,6 +376,7 @@ class _AnalysisBoardPlayersAndClocks extends ConsumerWidget {
   final bool isTablet;
 
   const _AnalysisBoardPlayersAndClocks(
+    this.ctrlProvider,
     this.roundId,
     this.gameId,
     this.pgn,
@@ -382,6 +387,9 @@ class _AnalysisBoardPlayersAndClocks extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final clocks = ref.watch(ctrlProvider.select((value) => value.clocks));
+    final playingSide =
+        ref.watch(ctrlProvider.select((value) => value.position.turn));
     final game = ref.watch(
       broadcastRoundControllerProvider(roundId)
           .select((game) => game.value?[gameId]),
@@ -391,10 +399,14 @@ class _AnalysisBoardPlayersAndClocks extends ConsumerWidget {
       children: [
         if (game != null)
           _PlayerWidget(
+            clock: (playingSide == pov.opposite)
+                ? clocks?.parentClock
+                : clocks?.clock,
             width: boardSize,
             game: game,
             side: pov.opposite,
             boardSide: _PlayerWidgetSide.top,
+            playingSide: playingSide,
           ),
         AnalysisBoard(
           pgn,
@@ -404,10 +416,12 @@ class _AnalysisBoardPlayersAndClocks extends ConsumerWidget {
         ),
         if (game != null)
           _PlayerWidget(
+            clock: (playingSide == pov) ? clocks?.parentClock : clocks?.clock,
             width: boardSize,
             game: game,
             side: pov,
             boardSide: _PlayerWidgetSide.bottom,
+            playingSide: playingSide,
           ),
       ],
     );
@@ -417,21 +431,24 @@ class _AnalysisBoardPlayersAndClocks extends ConsumerWidget {
 class _PlayerWidget extends StatelessWidget {
   const _PlayerWidget({
     required this.width,
+    required this.clock,
     required this.game,
     required this.side,
     required this.boardSide,
+    required this.playingSide,
   });
 
   final BroadcastGame game;
+  final Duration? clock;
   final Side side;
   final double width;
   final _PlayerWidgetSide boardSide;
+  final Side playingSide;
 
   @override
   Widget build(BuildContext context) {
     final player = game.players[side]!;
     final gameStatus = game.status;
-    final playingSide = game.playingSide;
 
     return SizedBox(
       width: width,
@@ -513,8 +530,8 @@ class _PlayerWidget extends StatelessWidget {
                   ],
                 ),
               ),
-              if (player.clock != null)
-                (side == playingSide)
+              if (clock != null)
+                (side == playingSide && game.isPlaying)
                     ? Text(
                         game.timeLeft!.toHoursMinutesSeconds(),
                         style: TextStyle(
@@ -523,7 +540,7 @@ class _PlayerWidget extends StatelessWidget {
                         ),
                       )
                     : Text(
-                        player.clock!.toHoursMinutesSeconds(),
+                        clock!.toHoursMinutesSeconds(),
                         style: const TextStyle(
                           fontFeatures: [FontFeature.tabularFigures()],
                         ),

@@ -153,6 +153,7 @@ class AnalysisController extends _$AnalysisController {
       displayMode: DisplayMode.moves,
       playersAnalysis: options.serverAnalysis,
       acplChartData: _makeAcplChartData(),
+      clocks: options.isBroadcast ? _makeClocks(currentPath) : null,
     );
 
     if (analysisState.isEngineAvailable) {
@@ -197,8 +198,8 @@ class AnalysisController extends _$AnalysisController {
     }
   }
 
-  void onBroadcastMove(UciPath path, Move move) {
-    final (newPath, isNewNode) = _root.addMoveAt(path, move);
+  void onBroadcastMove(UciPath path, Move move, Duration? clock) {
+    final (newPath, isNewNode) = _root.addMoveAt(path, move, clock: clock);
 
     if (newPath != null) {
       if (state.livePath == state.currentPath) {
@@ -459,6 +460,7 @@ class AnalysisController extends _$AnalysisController {
         lastMove: currentNode.sanMove.move,
         promotionMove: null,
         root: rootView,
+        clocks: options.isBroadcast ? _makeClocks(path) : null,
       );
     } else {
       state = state.copyWith(
@@ -471,6 +473,7 @@ class AnalysisController extends _$AnalysisController {
         lastMove: null,
         promotionMove: null,
         root: rootView,
+        clocks: options.isBroadcast ? _makeClocks(path) : null,
       );
     }
 
@@ -645,6 +648,16 @@ class AnalysisController extends _$AnalysisController {
     ).toList(growable: false);
     return list.isEmpty ? null : IList(list);
   }
+
+  ({Duration? parentClock, Duration? clock}) _makeClocks(UciPath path) {
+    final nodeView = _root.nodeAt(path).view;
+    final parentView = _root.parentAt(path).view;
+
+    return (
+      parentClock: (parentView is ViewBranch) ? parentView.clock : null,
+      clock: (nodeView is ViewBranch) ? nodeView.clock : null,
+    );
+  }
 }
 
 enum DisplayMode {
@@ -693,6 +706,9 @@ class AnalysisState with _$AnalysisState {
 
     /// Whether to show the ACPL chart instead of tree view.
     required DisplayMode displayMode,
+
+    /// Clocks if avaible. Only used by the broadcast analysis screen.
+    ({Duration? parentClock, Duration? clock})? clocks,
 
     /// The last move played.
     Move? lastMove,

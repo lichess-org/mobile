@@ -77,13 +77,15 @@ class BroadcastGameController extends _$BroadcastGameController {
     // The path for the node that was received
     final path = pick(event.data, 'p', 'path').asUciPathOrThrow();
     final uciMove = pick(event.data, 'n', 'uci').asUciMoveOrThrow();
+    final clock =
+        pick(event.data, 'n', 'clock').asDurationFromCentiSecondsOrNull();
 
     final ctrlProviderNotifier = ref.read(
       analysisControllerProvider(state.requireValue, broadcastAnalysisOptions)
           .notifier,
     );
 
-    ctrlProviderNotifier.onBroadcastMove(path, uciMove);
+    ctrlProviderNotifier.onBroadcastMove(path, uciMove, clock);
   }
 
   void _handleSetTagsEvent(SocketEvent event) {

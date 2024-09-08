@@ -190,6 +190,7 @@ abstract class Node {
     UciPath path,
     Move move, {
     bool prepend = false,
+    Duration? clock,
   }) {
     final pos = nodeAt(path).position;
     final isKingMove =
@@ -200,6 +201,7 @@ abstract class Node {
     final newNode = Branch(
       sanMove: SanMove(newSan, convertedMove),
       position: newPos,
+      comments: (clock != null) ? [PgnComment(clock: clock)] : null,
     );
     return addNodeAt(path, newNode, prepend: prepend);
   }
