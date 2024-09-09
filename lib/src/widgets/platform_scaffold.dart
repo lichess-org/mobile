@@ -2,6 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
+const kCupertinoAppBarWithActionPadding = EdgeInsetsDirectional.only(
+  start: 16.0,
+  end: 8.0,
+);
+
 /// Displays an [AppBar] for Android and a [CupertinoNavigationBar] for iOS.
 ///
 /// Intended to be passed to [PlatformScaffold].
@@ -12,7 +17,6 @@ class PlatformAppBar extends StatelessWidget {
     this.centerTitle = false,
     this.leading,
     this.actions = const [],
-    this.cupertinoPadding,
     this.androidTitleSpacing,
   });
 
@@ -35,9 +39,6 @@ class PlatformAppBar extends StatelessWidget {
   /// On iOS, this is wrapped in a [Row] and passed to [CupertinoNavigationBar.trailing]
   final List<Widget> actions;
 
-  /// Will be passed to [CupertinoNavigationBar.padding] on iOS. Has no effect on Android.
-  final EdgeInsetsDirectional? cupertinoPadding;
-
   /// Will be passed to [AppBar.titleSpacing] on Android. Has no effect on iOS.
   final double? androidTitleSpacing;
 
@@ -53,7 +54,7 @@ class PlatformAppBar extends StatelessWidget {
 
   CupertinoNavigationBar _iosBuilder(BuildContext context) {
     return CupertinoNavigationBar(
-      padding: cupertinoPadding,
+      padding: actions.isNotEmpty ? kCupertinoAppBarWithActionPadding : null,
       middle: title,
       trailing: Row(
         mainAxisSize: MainAxisSize.min,

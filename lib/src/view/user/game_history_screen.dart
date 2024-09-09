@@ -69,10 +69,6 @@ class GameHistoryScreen extends ConsumerWidget {
 
     return PlatformScaffold(
       appBar: PlatformAppBar(
-        cupertinoPadding: const EdgeInsetsDirectional.only(
-          start: 16.0,
-          end: 8.0,
-        ),
         title: title,
         actions: [filterBtn],
       ),
