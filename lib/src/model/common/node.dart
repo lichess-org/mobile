@@ -192,10 +192,14 @@ abstract class Node {
     bool prepend = false,
   }) {
     final pos = nodeAt(path).position;
-    final isKingMove =
-        move is NormalMove && pos.board.roleAt(move.from) == Role.king;
+
+    final potentialAltCastlingMove = move is NormalMove &&
+        pos.board.roleAt(move.from) == Role.king &&
+        pos.board.roleAt(move.to) != Role.rook;
+
     final convertedMove =
-        isKingMove ? convertAltCastlingMove(move) ?? move : move;
+        potentialAltCastlingMove ? convertAltCastlingMove(move) ?? move : move;
+
     final (newPos, newSan) = pos.makeSan(convertedMove);
     final newNode = Branch(
       sanMove: SanMove(newSan, convertedMove),
