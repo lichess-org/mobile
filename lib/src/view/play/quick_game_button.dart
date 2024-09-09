@@ -70,7 +70,7 @@ class QuickGameButton extends ConsumerWidget {
         Expanded(
           flex: kFlexGoldenRatio,
           child: Theme.of(context).platform == TargetPlatform.iOS
-              ? CupertinoButton.filled(
+              ? CupertinoButton.tinted(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 8.0,
                     vertical: 16.0,

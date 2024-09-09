@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 
 /// Platform agnostic button which is used for important actions.
 ///
-/// Will use an [FilledButton] on Android and a [CupertinoButton.filled] on iOS.
+/// Will use an [FilledButton] on Android and a [CupertinoButton.tinted] on iOS.
 class FatButton extends StatelessWidget {
   const FatButton({
     required this.semanticsLabel,
@@ -29,7 +29,7 @@ class FatButton extends StatelessWidget {
       label: semanticsLabel,
       excludeSemantics: true,
       child: Theme.of(context).platform == TargetPlatform.iOS
-          ? CupertinoButton.filled(onPressed: onPressed, child: child)
+          ? CupertinoButton.tinted(onPressed: onPressed, child: child)
           : FilledButton(
               onPressed: onPressed,
               child: child,
