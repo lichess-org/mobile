@@ -762,12 +762,14 @@ class _GamePreviewCarouselItem extends StatelessWidget {
                 opacity: game.isMyTurn ? 1.0 : 0.6,
                 child: Row(
                   children: [
-                    Icon(
-                      game.isMyTurn ? Icons.timer : Icons.timer_off,
-                      size: 16.0,
-                      color: Colors.white,
-                    ),
-                    const SizedBox(width: 4.0),
+                    if (game.isMyTurn) ...const [
+                      Icon(
+                        Icons.timer,
+                        size: 16.0,
+                        color: Colors.white,
+                      ),
+                      SizedBox(width: 4.0),
+                    ],
                     Text(
                       game.secondsLeft != null && game.isMyTurn
                           ? timeago.format(
