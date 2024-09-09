@@ -35,8 +35,7 @@ import 'package:lichess_mobile/src/widgets/rating.dart';
 import 'package:lichess_mobile/src/widgets/stat_card.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
-final _currentLocale = Intl.getCurrentLocale();
-final _dateFormatter = DateFormat.yMMMd(_currentLocale);
+final _dateFormatter = DateFormat.yMMMd();
 
 const _customOpacity = 0.6;
 const _defaultStatFontSize = 12.0;
@@ -846,11 +845,11 @@ class _EloChartState extends State<_EloChart> {
         Theme.of(context).colorScheme.onSurface.withOpacity(0.5);
     final chartColor = Theme.of(context).colorScheme.tertiary;
     final chartDateFormatter = switch (_selectedRange) {
-      DateRange.oneWeek => DateFormat.MMMd(_currentLocale),
-      DateRange.oneMonth => DateFormat.MMMd(_currentLocale),
-      DateRange.threeMonths => DateFormat.yMMM(_currentLocale),
-      DateRange.oneYear => DateFormat.yMMM(_currentLocale),
-      DateRange.allTime => DateFormat.yMMM(_currentLocale),
+      DateRange.oneWeek => DateFormat.MMMd(),
+      DateRange.oneMonth => DateFormat.MMMd(),
+      DateRange.threeMonths => DateFormat.yMMM(),
+      DateRange.oneYear => DateFormat.yMMM(),
+      DateRange.allTime => DateFormat.yMMM(),
     };
 
     String formatDateFromTimestamp(double nbDays) => chartDateFormatter.format(
@@ -858,7 +857,7 @@ class _EloChartState extends State<_EloChart> {
         );
 
     String formatDateFromTimestampForTooltip(double nbDays) =>
-        DateFormat.yMMMd(_currentLocale).format(
+        DateFormat.yMMMd().format(
           _firstDate.add(Duration(days: nbDays.toInt())),
         );
 

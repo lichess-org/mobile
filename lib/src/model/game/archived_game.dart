@@ -47,6 +47,11 @@ class ArchivedGame
     required IList<GameStep> steps,
     String? initialFen,
     required GameStatus status,
+    @JsonKey(
+      defaultValue: GameSource.unknown,
+      unknownEnumValue: GameSource.unknown,
+    )
+    required GameSource source,
     Side? winner,
 
     /// The point of view of the current player or null if spectating.
@@ -113,6 +118,7 @@ class LightArchivedGame with _$LightArchivedGame {
     required Player white,
     required Player black,
     required Variant variant,
+    GameSource? source,
     LightOpening? opening,
     String? lastFen,
     @MoveConverter() Move? lastMove,
@@ -182,6 +188,10 @@ ArchivedGame _archivedGameFromPick(RequiredPick pick) {
       opening: data.opening,
       division: division,
     ),
+    source: pick('source').letOrThrow(
+      (pick) =>
+          GameSource.nameMap[pick.asStringOrThrow()] ?? GameSource.unknown,
+    ),
     data: data,
     status: data.status,
     winner: data.winner,
@@ -227,6 +237,10 @@ LightArchivedGame _lightArchivedGameFromPick(RequiredPick pick) {
   return LightArchivedGame(
     id: pick('id').asGameIdOrThrow(),
     fullId: pick('fullId').asGameFullIdOrNull(),
+    source: pick('source').letOrNull(
+      (pick) =>
+          GameSource.nameMap[pick.asStringOrThrow()] ?? GameSource.unknown,
+    ),
     rated: pick('rated').asBoolOrThrow(),
     speed: pick('speed').asSpeedOrThrow(),
     perf: pick('perf').asPerfOrThrow(),

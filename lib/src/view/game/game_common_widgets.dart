@@ -2,6 +2,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -21,12 +22,23 @@ import 'game_screen_providers.dart';
 import 'game_settings.dart';
 import 'ping_rating.dart';
 
+final _gameTitledateFormat = DateFormat.yMMMd();
+
 class GameAppBar extends ConsumerWidget {
-  const GameAppBar({this.id, this.seek, this.challenge, super.key});
+  const GameAppBar({
+    this.id,
+    this.seek,
+    this.challenge,
+    this.lastMoveAt,
+    super.key,
+  });
 
   final GameSeek? seek;
   final ChallengeRequest? challenge;
   final GameFullId? id;
+
+  /// The date of the last move played in the game. If null, the game is in progress.
+  final DateTime? lastMoveAt;
 
   static const pingRating = Padding(
     padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 18.0),
@@ -45,7 +57,7 @@ class GameAppBar extends ConsumerWidget {
         orElse: () => pingRating,
       ),
       title: id != null
-          ? StandaloneGameTitle(id: id!)
+          ? _StandaloneGameTitle(id: id!, lastMoveAt: lastMoveAt)
           : seek != null
               ? _LobbyGameTitle(seek: seek!)
               : challenge != null
@@ -297,9 +309,7 @@ class GameShareBottomSheet extends ConsumerWidget {
 }
 
 class _LobbyGameTitle extends ConsumerWidget {
-  const _LobbyGameTitle({
-    required this.seek,
-  });
+  const _LobbyGameTitle({required this.seek});
 
   final GameSeek seek;
 
@@ -352,12 +362,15 @@ class _ChallengeGameTitle extends ConsumerWidget {
   }
 }
 
-class StandaloneGameTitle extends ConsumerWidget {
-  const StandaloneGameTitle({
+class _StandaloneGameTitle extends ConsumerWidget {
+  const _StandaloneGameTitle({
     required this.id,
+    this.lastMoveAt,
   });
 
   final GameFullId id;
+
+  final DateTime? lastMoveAt;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -367,6 +380,11 @@ class StandaloneGameTitle extends ConsumerWidget {
         final mode = meta.rated
             ? ' • ${context.l10n.rated}'
             : ' • ${context.l10n.casual}';
+
+        final info = lastMoveAt != null
+            ? ' • ${_gameTitledateFormat.format(lastMoveAt!)}'
+            : mode;
+
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -377,14 +395,14 @@ class StandaloneGameTitle extends ConsumerWidget {
             const SizedBox(width: 4.0),
             if (meta.clock != null)
               Text(
-                '${TimeIncrement(meta.clock!.initial.inSeconds, meta.clock!.increment.inSeconds).display}$mode',
+                '${TimeIncrement(meta.clock!.initial.inSeconds, meta.clock!.increment.inSeconds).display}$info',
               )
             else if (meta.daysPerTurn != null)
               Text(
-                '${context.l10n.nbDays(meta.daysPerTurn!)}$mode',
+                '${context.l10n.nbDays(meta.daysPerTurn!)}$info',
               )
             else
-              Text('${meta.perf.title}$mode'),
+              Text('${meta.perf.title}$info'),
           ],
         );
       },

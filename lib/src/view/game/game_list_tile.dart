@@ -25,7 +25,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-final _dateFormatter = DateFormat.yMMMd(Intl.getCurrentLocale()).add_Hm();
+final _dateFormatter = DateFormat.yMMMd().add_Hm();
 
 /// A list tile that shows game info.
 class GameListTile extends StatelessWidget {
@@ -487,7 +487,13 @@ class ExtendedGameListTile extends StatelessWidget {
                 context,
                 rootNavigator: true,
                 builder: (context) => game.fullId != null
-                    ? GameScreen(initialGameId: game.fullId)
+                    ? GameScreen(
+                        initialGameId: game.fullId,
+                        loadingFen: game.lastFen,
+                        loadingLastMove: game.lastMove,
+                        loadingOrientation: youAre,
+                        lastMoveAt: game.lastMoveAt,
+                      )
                     : ArchivedGameScreen(
                         gameData: game,
                         orientation: youAre,

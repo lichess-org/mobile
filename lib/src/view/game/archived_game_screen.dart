@@ -2,10 +2,12 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
+import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -163,19 +165,30 @@ class _GameTitle extends StatelessWidget {
 
   final LightArchivedGame gameData;
 
+  static final _dateFormat = DateFormat.yMMMd();
+
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Icon(
-          gameData.perf.icon,
-          color: DefaultTextStyle.of(context).style.color,
-        ),
+        if (gameData.source == GameSource.import)
+          Icon(
+            Icons.cloud_upload,
+            color: DefaultTextStyle.of(context).style.color,
+          )
+        else
+          Icon(
+            gameData.perf.icon,
+            color: DefaultTextStyle.of(context).style.color,
+          ),
         const SizedBox(width: 4.0),
-        Text(
-          '${gameData.clockDisplay} • ${gameData.rated ? context.l10n.rated : context.l10n.casual}',
-        ),
+        if (gameData.source == GameSource.import)
+          Text('Import • ${_dateFormat.format(gameData.createdAt)}')
+        else
+          Text(
+            '${gameData.clockDisplay} • ${_dateFormat.format(gameData.lastMoveAt)}',
+          ),
       ],
     );
   }
