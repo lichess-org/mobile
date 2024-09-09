@@ -185,7 +185,7 @@ class _EditPgnTagsFormState extends ConsumerState<_EditPgnTagsForm> {
                                     widget.options,
                                   ).notifier,
                                 )
-                                .makeGamePgn(),
+                                .makeExportPgn(),
                           );
                         },
                         child: Text(context.l10n.mobileShareGamePGN),

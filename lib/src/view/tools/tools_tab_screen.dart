@@ -168,7 +168,7 @@ class _Body extends ConsumerWidget {
                       isLocalEvaluationAllowed: false,
                       variant: Variant.standard,
                       orientation: Side.white,
-                      id: standaloneAnalysisId,
+                      id: standaloneOpeningExplorerId,
                     ),
                   ),
                 ),
