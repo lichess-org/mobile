@@ -60,8 +60,8 @@ class BoardEditorController extends _$BoardEditorController {
   void setSideToPlay(Side side) {
     state = state.copyWith(
       sideToPlay: side,
+      enPassantOptions: _calculateEnPassantOptions(state.pieces, side),
     );
-    _calculateEnPassantOptions();
   }
 
   void loadFen(String fen) {
@@ -69,9 +69,7 @@ class BoardEditorController extends _$BoardEditorController {
   }
 
   /// Calculates the squares where an en passant capture could be possible.
-  void _calculateEnPassantOptions() {
-    final side = state.sideToPlay;
-    final pieces = state.pieces;
+  SquareSet _calculateEnPassantOptions(IMap<Square, Piece> pieces, Side side) {
     SquareSet enPassantOptions = SquareSet.empty;
     final boardFen = writeFen(pieces.unlock);
     final board = Board.parseFen(boardFen);
@@ -109,7 +107,7 @@ class BoardEditorController extends _$BoardEditorController {
       }
     });
 
-    state = state.copyWith(enPassantOptions: enPassantOptions);
+    return enPassantOptions;
   }
 
   void toggleEnPassantSquare(Square square) {
@@ -119,8 +117,10 @@ class BoardEditorController extends _$BoardEditorController {
   }
 
   void _updatePosition(IMap<Square, Piece> pieces) {
-    state = state.copyWith(pieces: pieces);
-    _calculateEnPassantOptions();
+    state = state.copyWith(
+      pieces: pieces,
+      enPassantOptions: _calculateEnPassantOptions(pieces, state.sideToPlay),
+    );
   }
 
   void setCastling(Side side, CastlingSide castlingSide, bool allowed) {
