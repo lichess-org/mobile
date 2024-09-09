@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
@@ -35,17 +36,84 @@ const Set<String> _ratingHeaders = {
   'BlackRatingDiff',
 };
 
-class _EditPgnTagsForm extends ConsumerWidget {
+class _EditPgnTagsForm extends ConsumerStatefulWidget {
   const _EditPgnTagsForm(this.pgn, this.options);
 
   final String pgn;
   final AnalysisOptions options;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = analysisControllerProvider(pgn, options);
+  _EditPgnTagsFormState createState() => _EditPgnTagsFormState();
+}
+
+class _EditPgnTagsFormState extends ConsumerState<_EditPgnTagsForm> {
+  final Map<String, TextEditingController> _controllers = {};
+  final Map<String, FocusNode> _focusNodes = {};
+
+  @override
+  void initState() {
+    super.initState();
+    final ctrlProvider = analysisControllerProvider(widget.pgn, widget.options);
+    final pgnHeaders = ref.read(ctrlProvider).pgnHeaders;
+
+    for (final entry in pgnHeaders.entries) {
+      _controllers[entry.key] = TextEditingController(text: entry.value);
+      _focusNodes[entry.key] = FocusNode();
+      _focusNodes[entry.key]!.addListener(() {
+        if (!_focusNodes[entry.key]!.hasFocus) {
+          ref.read(ctrlProvider.notifier).updatePgnHeader(
+                entry.key,
+                _controllers[entry.key]!.text,
+              );
+        }
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    for (final controller in _controllers.values) {
+      controller.dispose();
+    }
+    for (final focusNode in _focusNodes.values) {
+      focusNode.dispose();
+    }
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final ctrlProvider = analysisControllerProvider(widget.pgn, widget.options);
     final pgnHeaders = ref.watch(ctrlProvider.select((c) => c.pgnHeaders));
     final showRatingAsync = ref.watch(showRatingsPrefProvider);
+
+    /// Moves focus to the next field or shows a picker for 'Result'.
+    void focusAndSelectNextField(int index, IMap<String, String> pgnHeaders) {
+      if (index + 1 < pgnHeaders.entries.length) {
+        final nextEntry = pgnHeaders.entries.elementAt(index + 1);
+        if (nextEntry.key == 'Result') {
+          showChoicePicker(
+            context,
+            choices: ['1-0', '0-1', '1/2-1/2', '*'],
+            selectedItem: nextEntry.value,
+            labelBuilder: (choice) => Text(choice),
+            onSelectedItemChanged: (choice) {
+              ref
+                  .read(ctrlProvider.notifier)
+                  .updatePgnHeader(nextEntry.key, choice);
+              _controllers[nextEntry.key]!.text = choice;
+              focusAndSelectNextField(index + 1, pgnHeaders);
+            },
+          );
+        } else {
+          _focusNodes[nextEntry.key]!.requestFocus();
+          _controllers[nextEntry.key]!.selection = TextSelection(
+            baseOffset: 0,
+            extentOffset: _controllers[nextEntry.key]!.text.length,
+          );
+        }
+      }
+    }
 
     return showRatingAsync.maybeWhen(
       data: (showRatings) {
@@ -78,6 +146,7 @@ class _EditPgnTagsForm extends ConsumerWidget {
                           const SizedBox(width: 8),
                           Expanded(
                             child: AdaptiveTextField(
+                              focusNode: _focusNodes[e.key],
                               cupertinoDecoration: BoxDecoration(
                                 color: CupertinoColors.tertiarySystemBackground,
                                 border: Border.all(
@@ -86,21 +155,18 @@ class _EditPgnTagsForm extends ConsumerWidget {
                                 ),
                                 borderRadius: BorderRadius.circular(8),
                               ),
-                              controller: TextEditingController.fromValue(
-                                TextEditingValue(
-                                  text: e.value,
-                                  selection: TextSelection(
-                                    baseOffset: 0,
-                                    extentOffset: e.value.length,
-                                  ),
-                                ),
-                              ),
+                              controller: _controllers[e.key],
                               textInputAction: TextInputAction.next,
                               keyboardType:
                                   e.key == 'WhiteElo' || e.key == 'BlackElo'
                                       ? TextInputType.number
                                       : TextInputType.text,
                               onTap: () {
+                                _controllers[e.key]!.selection = TextSelection(
+                                  baseOffset: 0,
+                                  extentOffset:
+                                      _controllers[e.key]!.text.length,
+                                );
                                 if (e.key == 'Result') {
                                   showChoicePicker(
                                     context,
@@ -111,6 +177,11 @@ class _EditPgnTagsForm extends ConsumerWidget {
                                       ref
                                           .read(ctrlProvider.notifier)
                                           .updatePgnHeader(e.key, choice);
+                                      _controllers[e.key]!.text = choice;
+                                      focusAndSelectNextField(
+                                        index,
+                                        pgnHeaders,
+                                      );
                                     },
                                   );
                                 }
@@ -119,6 +190,7 @@ class _EditPgnTagsForm extends ConsumerWidget {
                                 ref
                                     .read(ctrlProvider.notifier)
                                     .updatePgnHeader(e.key, value);
+                                focusAndSelectNextField(index, pgnHeaders);
                               },
                             ),
                           ),
@@ -139,8 +211,8 @@ class _EditPgnTagsForm extends ConsumerWidget {
                             text: ref
                                 .read(
                                   analysisControllerProvider(
-                                    pgn,
-                                    options,
+                                    widget.pgn,
+                                    widget.options,
                                   ).notifier,
                                 )
                                 .makeGamePgn(),
