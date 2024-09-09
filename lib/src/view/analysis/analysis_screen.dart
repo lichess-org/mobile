@@ -604,8 +604,11 @@ class _BottomBar extends ConsumerWidget {
                   pushPlatformRoute(
                     context,
                     builder: (_) => OpeningExplorerScreen(
-                      pgn: pgn,
-                      options: options,
+                      pgn: ref.read(ctrlProvider.notifier).makeInternalPgn(),
+                      options: options.copyWith(
+                        isLocalEvaluationAllowed: false,
+                        id: standaloneOpeningExplorerId,
+                      ),
                     ),
                   );
                 }

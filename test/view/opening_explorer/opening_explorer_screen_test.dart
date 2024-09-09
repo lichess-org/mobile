@@ -32,7 +32,7 @@ void main() {
   });
 
   const options = AnalysisOptions(
-    id: standaloneAnalysisId,
+    id: standaloneOpeningExplorerId,
     isLocalEvaluationAllowed: false,
     orientation: Side.white,
     variant: Variant.standard,

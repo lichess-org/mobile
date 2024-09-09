@@ -26,13 +26,19 @@ part 'analysis_controller.freezed.dart';
 part 'analysis_controller.g.dart';
 
 const standaloneAnalysisId = StringId('standalone_analysis');
+const standaloneOpeningExplorerId = StringId('standalone_opening_explorer');
+
 final _dateFormat = DateFormat('yyyy.MM.dd');
+
+/// Whether the analysis is a standalone analysis (not a lichess game analysis).
+bool _isStandaloneAnalysis(StringId id) =>
+    id == standaloneAnalysisId || id == standaloneOpeningExplorerId;
 
 @freezed
 class AnalysisOptions with _$AnalysisOptions {
   const AnalysisOptions._();
   const factory AnalysisOptions({
-    /// The ID of the analysis. Can be a game ID or a standalone analysis ID.
+    /// The ID of the analysis. Can be a game ID or a standalone ID.
     required StringId id,
     required bool isLocalEvaluationAllowed,
     required Side orientation,
@@ -50,7 +56,7 @@ class AnalysisOptions with _$AnalysisOptions {
 
   /// The game ID of the analysis, if it's a lichess game.
   GameAnyId? get gameAnyId =>
-      id != standaloneAnalysisId ? GameAnyId(id.value) : null;
+      _isStandaloneAnalysis(id) ? null : GameAnyId(id.value);
 }
 
 @riverpod
@@ -66,10 +72,15 @@ class AnalysisController extends _$AnalysisController {
     final evaluationService = ref.watch(evaluationServiceProvider);
     final serverAnalysisService = ref.watch(serverAnalysisServiceProvider);
 
+    final isEngineAllowed = options.isLocalEvaluationAllowed &&
+        engineSupportedVariants.contains(options.variant);
+
     ref.onDispose(() {
       _startEngineEvalTimer?.cancel();
       _engineEvalDebounce.dispose();
-      evaluationService.disposeEngine();
+      if (isEngineAllowed) {
+        evaluationService.disposeEngine();
+      }
       serverAnalysisService.lastAnalysisEvent
           .removeListener(_listenToServerAnalysisEvents);
     });
@@ -184,7 +195,11 @@ class AnalysisController extends _$AnalysisController {
       return;
     }
 
-    final (newPath, isNewNode) = _root.addMoveAt(state.currentPath, move);
+    // For the opening explorer, last played move should always be the mainline
+    final shouldPrepend = options.id == standaloneOpeningExplorerId;
+
+    final (newPath, isNewNode) =
+        _root.addMoveAt(state.currentPath, move, prepend: shouldPrepend);
     if (newPath != null) {
       _setPath(
         newPath,
@@ -372,8 +387,14 @@ class AnalysisController extends _$AnalysisController {
     }
   }
 
-  String makeGamePgn() {
+  /// Makes a full PGN string (including headers and comments) of the current game state.
+  String makeExportPgn() {
     return _root.makePgn(state.pgnHeaders, state.pgnRootComments);
+  }
+
+  /// Makes an internal PGN string (without headers and comments) of the current game state.
+  String makeInternalPgn() {
+    return _root.makePgn();
   }
 
   void _setPath(
@@ -679,6 +700,13 @@ class AnalysisState with _$AnalysisState {
     IList<PgnComment>? pgnRootComments,
   }) = _AnalysisState;
 
+  /// The game ID of the analysis, if it's a lichess game.
+  GameAnyId? get gameAnyId =>
+      _isStandaloneAnalysis(id) ? null : GameAnyId(id.value);
+
+  /// Whether the analysis is for a lichess game.
+  bool get isLichessGameAnalysis => gameAnyId != null;
+
   IMap<Square, ISet<Square>> get validMoves =>
       makeLegalMoves(currentNode.position);
 
@@ -686,7 +714,7 @@ class AnalysisState with _$AnalysisState {
   ///
   /// It must be a lichess game, which is finished and not already analyzed.
   bool get canRequestServerAnalysis =>
-      id != standaloneAnalysisId &&
+      gameAnyId != null &&
       (id.length == 8 || id.length == 12) &&
       !hasServerAnalysis &&
       pgnHeaders['Result'] != '*';
@@ -702,11 +730,12 @@ class AnalysisState with _$AnalysisState {
           acplChartData != null &&
           acplChartData!.isNotEmpty);
 
+  /// Whether the engine is allowed for this analysis and variant.
+  bool get isEngineAllowed =>
+      isLocalEvaluationAllowed && engineSupportedVariants.contains(variant);
+
   /// Whether the engine is available for evaluation
-  bool get isEngineAvailable =>
-      isLocalEvaluationAllowed &&
-      engineSupportedVariants.contains(variant) &&
-      isLocalEvaluationEnabled;
+  bool get isEngineAvailable => isEngineAllowed && isLocalEvaluationEnabled;
 
   Position get position => currentNode.position;
   bool get canGoNext => currentNode.hasChild;
