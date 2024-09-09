@@ -217,50 +217,44 @@ class OpeningExplorerSettings extends ConsumerWidget {
       ),
     ];
 
-    return DraggableScrollableSheet(
-      initialChildSize: .5,
-      expand: false,
-      snap: true,
-      snapSizes: const [.5, .75],
-      builder: (context, scrollController) => ListView(
-        controller: scrollController,
-        children: [
-          PlatformListTile(
-            title: Text(context.l10n.database),
-            subtitle: Wrap(
-              spacing: 5,
-              children: [
-                ChoiceChip(
-                  label: const Text('Masters'),
-                  selected: prefs.db == OpeningDatabase.master,
-                  onSelected: (_) => ref
-                      .read(openingExplorerPreferencesProvider.notifier)
-                      .setDatabase(OpeningDatabase.master),
-                ),
-                ChoiceChip(
-                  label: const Text('Lichess'),
-                  selected: prefs.db == OpeningDatabase.lichess,
-                  onSelected: (_) => ref
-                      .read(openingExplorerPreferencesProvider.notifier)
-                      .setDatabase(OpeningDatabase.lichess),
-                ),
-                ChoiceChip(
-                  label: Text(context.l10n.player),
-                  selected: prefs.db == OpeningDatabase.player,
-                  onSelected: (_) => ref
-                      .read(openingExplorerPreferencesProvider.notifier)
-                      .setDatabase(OpeningDatabase.player),
-                ),
-              ],
-            ),
+    return ListView(
+      shrinkWrap: true,
+      children: [
+        PlatformListTile(
+          title: Text(context.l10n.database),
+          subtitle: Wrap(
+            spacing: 5,
+            children: [
+              ChoiceChip(
+                label: const Text('Masters'),
+                selected: prefs.db == OpeningDatabase.master,
+                onSelected: (_) => ref
+                    .read(openingExplorerPreferencesProvider.notifier)
+                    .setDatabase(OpeningDatabase.master),
+              ),
+              ChoiceChip(
+                label: const Text('Lichess'),
+                selected: prefs.db == OpeningDatabase.lichess,
+                onSelected: (_) => ref
+                    .read(openingExplorerPreferencesProvider.notifier)
+                    .setDatabase(OpeningDatabase.lichess),
+              ),
+              ChoiceChip(
+                label: Text(context.l10n.player),
+                selected: prefs.db == OpeningDatabase.player,
+                onSelected: (_) => ref
+                    .read(openingExplorerPreferencesProvider.notifier)
+                    .setDatabase(OpeningDatabase.player),
+              ),
+            ],
           ),
-          ...switch (prefs.db) {
-            OpeningDatabase.master => masterDbSettings,
-            OpeningDatabase.lichess => lichessDbSettings,
-            OpeningDatabase.player => playerDbSettings,
-          },
-        ],
-      ),
+        ),
+        ...switch (prefs.db) {
+          OpeningDatabase.master => masterDbSettings,
+          OpeningDatabase.lichess => lichessDbSettings,
+          OpeningDatabase.player => playerDbSettings,
+        },
+      ],
     );
   }
 }

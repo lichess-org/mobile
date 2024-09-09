@@ -111,324 +111,303 @@ class _ContextMenu extends ConsumerWidget {
 
     final customColors = Theme.of(context).extension<CustomColors>();
 
-    return DraggableScrollableSheet(
-      initialChildSize: .7,
-      expand: false,
-      snap: true,
-      snapSizes: const [.7],
-      builder: (context, scrollController) => SingleChildScrollView(
-        controller: scrollController,
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: 16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0).add(
-                  const EdgeInsets.only(bottom: 8.0),
-                ),
-                child: Text(
-                  context.l10n.resVsX(
-                    game.white.fullName(context),
-                    game.black.fullName(context),
-                  ),
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: -0.5,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0).add(
-                  const EdgeInsets.only(bottom: 8.0),
-                ),
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    return IntrinsicHeight(
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          if (game.lastFen != null)
-                            BoardThumbnail(
-                              size: constraints.maxWidth -
-                                  (constraints.maxWidth / 1.618),
-                              fen: game.lastFen!,
-                              orientation: mySide,
-                              lastMove: game.lastMove,
-                            ),
-                          Expanded(
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        '${game.clockDisplay} • ${game.rated ? context.l10n.rated : context.l10n.casual}',
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                      Text(
-                                        _dateFormatter.format(game.lastMoveAt),
-                                        style: TextStyle(
-                                          color: textShade(
-                                            context,
-                                            Styles.subtitleOpacity,
-                                          ),
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  if (game.lastFen != null)
-                                    Text(
-                                      gameStatusL10n(
-                                        context,
-                                        variant: game.variant,
-                                        status: game.status,
-                                        lastPosition: Position.setupPosition(
-                                          game.variant.rule,
-                                          Setup.parseFen(game.lastFen!),
-                                        ),
-                                        winner: game.winner,
-                                      ),
-                                      style: TextStyle(
-                                        color: game.winner == null
-                                            ? customColors?.brag
-                                            : game.winner == mySide
-                                                ? customColors?.good
-                                                : customColors?.error,
-                                      ),
-                                    ),
-                                  if (game.opening != null)
-                                    Text(
-                                      game.opening!.name,
-                                      maxLines: 2,
-                                      style: TextStyle(
-                                        color: textShade(
-                                          context,
-                                          Styles.subtitleOpacity,
-                                        ),
-                                        fontSize: 12,
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              ),
-              BottomSheetContextMenuAction(
-                icon: Icons.biotech,
-                onPressed: game.variant.isReadSupported
-                    ? () {
-                        pushPlatformRoute(
-                          context,
-                          builder: (context) => AnalysisScreen(
-                            pgnOrId: game.id.value,
-                            options: AnalysisOptions(
-                              isLocalEvaluationAllowed: true,
-                              variant: game.variant,
-                              orientation: orientation,
-                              id: game.id,
-                            ),
-                          ),
-                        );
-                      }
-                    : () {
-                        showPlatformSnackbar(
-                          context,
-                          'This variant is not supported yet.',
-                          type: SnackBarType.info,
-                        );
-                      },
-                child: Text(context.l10n.gameAnalysis),
-              ),
-              BottomSheetContextMenuAction(
-                onPressed: () {
-                  launchShareDialog(
-                    context,
-                    uri: lichessUri('/${game.id}'),
-                  );
-                },
-                icon: CupertinoIcons.link,
-                closeOnPressed: false,
-                child: Text(context.l10n.mobileShareGameURL),
-              ),
-              // Builder is used to retrieve the context immediately surrounding the
-              // BottomSheetContextMenuAction
-              // This is necessary to get the correct context for the iPad share dialog
-              // which needs the position of the action to display the share dialog
-              Builder(
-                builder: (context) {
-                  return BottomSheetContextMenuAction(
-                    icon: Icons.gif,
-                    closeOnPressed:
-                        false, // needed for the share dialog on iPad
-                    child: Text(context.l10n.gameAsGIF),
-                    onPressed: () async {
-                      try {
-                        final gif = await ref
-                            .read(gameShareServiceProvider)
-                            .gameGif(game.id, orientation);
-                        if (context.mounted) {
-                          launchShareDialog(
-                            context,
-                            files: [gif],
-                            subject:
-                                '${game.perf.title} • ${context.l10n.resVsX(
-                              game.white.fullName(context),
-                              game.black.fullName(context),
-                            )}',
-                          );
-                        }
-                      } catch (e) {
-                        debugPrint(e.toString());
-                        if (context.mounted) {
-                          showPlatformSnackbar(
-                            context,
-                            'Failed to get GIF',
-                            type: SnackBarType.error,
-                          );
-                        }
-                      }
-                    },
-                  );
-                },
-              ),
-              if (game.lastFen != null)
-                // Builder is used to retrieve the context immediately surrounding the
-                // BottomSheetContextMenuAction
-                // This is necessary to get the correct context for the iPad share dialog
-                // which needs the position of the action to display the share dialog
-                Builder(
-                  builder: (context) {
-                    return BottomSheetContextMenuAction(
-                      icon: Icons.image,
-                      closeOnPressed:
-                          false, // needed for the share dialog on iPad
-                      child: Text(context.l10n.screenshotCurrentPosition),
-                      onPressed: () async {
-                        try {
-                          final image = await ref
-                              .read(gameShareServiceProvider)
-                              .screenshotPosition(
-                                game.id,
-                                orientation,
-                                game.lastFen!,
-                                game.lastMove,
-                              );
-                          if (context.mounted) {
-                            launchShareDialog(
-                              context,
-                              files: [image],
-                              subject: context.l10n.puzzleFromGameLink(
-                                lichessUri('/${game.id}').toString(),
-                              ),
-                            );
-                          }
-                        } catch (e) {
-                          if (context.mounted) {
-                            showPlatformSnackbar(
-                              context,
-                              'Failed to get GIF',
-                              type: SnackBarType.error,
-                            );
-                          }
-                        }
-                      },
-                    );
-                  },
-                ),
-              // Builder is used to retrieve the context immediately surrounding the
-              // BottomSheetContextMenuAction
-              // This is necessary to get the correct context for the iPad share dialog
-              // which needs the position of the action to display the share dialog
-              Builder(
-                builder: (context) {
-                  return BottomSheetContextMenuAction(
-                    icon: Icons.text_snippet,
-                    closeOnPressed:
-                        false, // needed for the share dialog on iPad
-                    child: Text('PGN: ${context.l10n.downloadAnnotated}'),
-                    onPressed: () async {
-                      try {
-                        final pgn = await ref
-                            .read(gameShareServiceProvider)
-                            .annotatedPgn(game.id);
-                        if (context.mounted) {
-                          launchShareDialog(
-                            context,
-                            text: pgn,
-                          );
-                        }
-                      } catch (e) {
-                        if (context.mounted) {
-                          showPlatformSnackbar(
-                            context,
-                            'Failed to get PGN',
-                            type: SnackBarType.error,
-                          );
-                        }
-                      }
-                    },
-                  );
-                },
-              ),
-              // Builder is used to retrieve the context immediately surrounding the
-              // BottomSheetContextMenuAction
-              // This is necessary to get the correct context for the iPad share dialog
-              // which needs the position of the action to display the share dialog
-              Builder(
-                builder: (context) {
-                  return BottomSheetContextMenuAction(
-                    icon: Icons.text_snippet,
-                    closeOnPressed:
-                        false, // needed for the share dialog on iPad
-                    // TODO improve translation
-                    child: Text('PGN: ${context.l10n.downloadRaw}'),
-                    onPressed: () async {
-                      try {
-                        final pgn = await ref
-                            .read(gameShareServiceProvider)
-                            .rawPgn(game.id);
-                        if (context.mounted) {
-                          launchShareDialog(
-                            context,
-                            text: pgn,
-                          );
-                        }
-                      } catch (e) {
-                        if (context.mounted) {
-                          showPlatformSnackbar(
-                            context,
-                            'Failed to get PGN',
-                            type: SnackBarType.error,
-                          );
-                        }
-                      }
-                    },
-                  );
-                },
-              ),
-            ],
+    return ListView(
+      shrinkWrap: true,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0).add(
+            const EdgeInsets.only(bottom: 8.0),
+          ),
+          child: Text(
+            context.l10n.resVsX(
+              game.white.fullName(context),
+              game.black.fullName(context),
+            ),
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              letterSpacing: -0.5,
+            ),
           ),
         ),
-      ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0).add(
+            const EdgeInsets.only(bottom: 8.0),
+          ),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return IntrinsicHeight(
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    if (game.lastFen != null)
+                      BoardThumbnail(
+                        size: constraints.maxWidth -
+                            (constraints.maxWidth / 1.618),
+                        fen: game.lastFen!,
+                        orientation: mySide,
+                        lastMove: game.lastMove,
+                      ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '${game.clockDisplay} • ${game.rated ? context.l10n.rated : context.l10n.casual}',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                Text(
+                                  _dateFormatter.format(game.lastMoveAt),
+                                  style: TextStyle(
+                                    color: textShade(
+                                      context,
+                                      Styles.subtitleOpacity,
+                                    ),
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            if (game.lastFen != null)
+                              Text(
+                                gameStatusL10n(
+                                  context,
+                                  variant: game.variant,
+                                  status: game.status,
+                                  lastPosition: Position.setupPosition(
+                                    game.variant.rule,
+                                    Setup.parseFen(game.lastFen!),
+                                  ),
+                                  winner: game.winner,
+                                ),
+                                style: TextStyle(
+                                  color: game.winner == null
+                                      ? customColors?.brag
+                                      : game.winner == mySide
+                                          ? customColors?.good
+                                          : customColors?.error,
+                                ),
+                              ),
+                            if (game.opening != null)
+                              Text(
+                                game.opening!.name,
+                                maxLines: 2,
+                                style: TextStyle(
+                                  color: textShade(
+                                    context,
+                                    Styles.subtitleOpacity,
+                                  ),
+                                  fontSize: 12,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+        BottomSheetContextMenuAction(
+          icon: Icons.biotech,
+          onPressed: game.variant.isReadSupported
+              ? () {
+                  pushPlatformRoute(
+                    context,
+                    builder: (context) => AnalysisScreen(
+                      pgnOrId: game.id.value,
+                      options: AnalysisOptions(
+                        isLocalEvaluationAllowed: true,
+                        variant: game.variant,
+                        orientation: orientation,
+                        id: game.id,
+                      ),
+                    ),
+                  );
+                }
+              : () {
+                  showPlatformSnackbar(
+                    context,
+                    'This variant is not supported yet.',
+                    type: SnackBarType.info,
+                  );
+                },
+          child: Text(context.l10n.gameAnalysis),
+        ),
+        BottomSheetContextMenuAction(
+          onPressed: () {
+            launchShareDialog(
+              context,
+              uri: lichessUri('/${game.id}'),
+            );
+          },
+          icon: CupertinoIcons.link,
+          closeOnPressed: false,
+          child: Text(context.l10n.mobileShareGameURL),
+        ),
+        // Builder is used to retrieve the context immediately surrounding the
+        // BottomSheetContextMenuAction
+        // This is necessary to get the correct context for the iPad share dialog
+        // which needs the position of the action to display the share dialog
+        Builder(
+          builder: (context) {
+            return BottomSheetContextMenuAction(
+              icon: Icons.gif,
+              closeOnPressed: false, // needed for the share dialog on iPad
+              child: Text(context.l10n.gameAsGIF),
+              onPressed: () async {
+                try {
+                  final gif = await ref
+                      .read(gameShareServiceProvider)
+                      .gameGif(game.id, orientation);
+                  if (context.mounted) {
+                    launchShareDialog(
+                      context,
+                      files: [gif],
+                      subject: '${game.perf.title} • ${context.l10n.resVsX(
+                        game.white.fullName(context),
+                        game.black.fullName(context),
+                      )}',
+                    );
+                  }
+                } catch (e) {
+                  debugPrint(e.toString());
+                  if (context.mounted) {
+                    showPlatformSnackbar(
+                      context,
+                      'Failed to get GIF',
+                      type: SnackBarType.error,
+                    );
+                  }
+                }
+              },
+            );
+          },
+        ),
+        if (game.lastFen != null)
+          // Builder is used to retrieve the context immediately surrounding the
+          // BottomSheetContextMenuAction
+          // This is necessary to get the correct context for the iPad share dialog
+          // which needs the position of the action to display the share dialog
+          Builder(
+            builder: (context) {
+              return BottomSheetContextMenuAction(
+                icon: Icons.image,
+                closeOnPressed: false, // needed for the share dialog on iPad
+                child: Text(context.l10n.screenshotCurrentPosition),
+                onPressed: () async {
+                  try {
+                    final image = await ref
+                        .read(gameShareServiceProvider)
+                        .screenshotPosition(
+                          game.id,
+                          orientation,
+                          game.lastFen!,
+                          game.lastMove,
+                        );
+                    if (context.mounted) {
+                      launchShareDialog(
+                        context,
+                        files: [image],
+                        subject: context.l10n.puzzleFromGameLink(
+                          lichessUri('/${game.id}').toString(),
+                        ),
+                      );
+                    }
+                  } catch (e) {
+                    if (context.mounted) {
+                      showPlatformSnackbar(
+                        context,
+                        'Failed to get GIF',
+                        type: SnackBarType.error,
+                      );
+                    }
+                  }
+                },
+              );
+            },
+          ),
+        // Builder is used to retrieve the context immediately surrounding the
+        // BottomSheetContextMenuAction
+        // This is necessary to get the correct context for the iPad share dialog
+        // which needs the position of the action to display the share dialog
+        Builder(
+          builder: (context) {
+            return BottomSheetContextMenuAction(
+              icon: Icons.text_snippet,
+              closeOnPressed: false, // needed for the share dialog on iPad
+              child: Text('PGN: ${context.l10n.downloadAnnotated}'),
+              onPressed: () async {
+                try {
+                  final pgn = await ref
+                      .read(gameShareServiceProvider)
+                      .annotatedPgn(game.id);
+                  if (context.mounted) {
+                    launchShareDialog(
+                      context,
+                      text: pgn,
+                    );
+                  }
+                } catch (e) {
+                  if (context.mounted) {
+                    showPlatformSnackbar(
+                      context,
+                      'Failed to get PGN',
+                      type: SnackBarType.error,
+                    );
+                  }
+                }
+              },
+            );
+          },
+        ),
+        // Builder is used to retrieve the context immediately surrounding the
+        // BottomSheetContextMenuAction
+        // This is necessary to get the correct context for the iPad share dialog
+        // which needs the position of the action to display the share dialog
+        Builder(
+          builder: (context) {
+            return BottomSheetContextMenuAction(
+              icon: Icons.text_snippet,
+              closeOnPressed: false, // needed for the share dialog on iPad
+              // TODO improve translation
+              child: Text('PGN: ${context.l10n.downloadRaw}'),
+              onPressed: () async {
+                try {
+                  final pgn =
+                      await ref.read(gameShareServiceProvider).rawPgn(game.id);
+                  if (context.mounted) {
+                    launchShareDialog(
+                      context,
+                      text: pgn,
+                    );
+                  }
+                } catch (e) {
+                  if (context.mounted) {
+                    showPlatformSnackbar(
+                      context,
+                      'Failed to get PGN',
+                      type: SnackBarType.error,
+                    );
+                  }
+                }
+              },
+            );
+          },
+        ),
+      ],
     );
   }
 }
