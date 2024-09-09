@@ -6,6 +6,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
@@ -40,6 +41,7 @@ part 'game_controller.g.dart';
 class GameController extends _$GameController {
   final _logger = Logger('GameController');
 
+  AppLifecycleListener? _appLifecycleListener;
   StreamSubscription<SocketEvent>? _socketSubscription;
 
   /// Periodic timer when the opponent has left the game, to display the countdown
@@ -81,6 +83,7 @@ class GameController extends _$GameController {
       _socketSubscription?.cancel();
       _opponentLeftCountdownTimer?.cancel();
       _transientMoveTimer?.cancel();
+      _appLifecycleListener?.dispose();
     });
 
     return _socketClient.stream.firstWhere((e) => e.topic == 'full').then(
@@ -101,6 +104,16 @@ class GameController extends _$GameController {
         }
 
         _socketEventVersion = fullEvent.socketEventVersion;
+
+        if (game.playable) {
+          _appLifecycleListener = AppLifecycleListener(
+            onResume: () {
+              if (_socketClient.isConnected) {
+                _resyncGameData();
+              }
+            },
+          );
+        }
 
         return GameState(
           gameFullId: gameFullId,
