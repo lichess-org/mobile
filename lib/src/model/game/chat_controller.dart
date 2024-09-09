@@ -4,9 +4,11 @@ import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/db/database.dart';
+import 'package:lichess_mobile/src/model/chat/chat.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
+import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -15,6 +17,8 @@ part 'chat_controller.g.dart';
 
 const _tableName = 'chat_read_messages';
 String _storeKey(GameFullId id) => 'game.$id';
+
+final _logger = Logger('ChatController');
 
 @riverpod
 class ChatController extends _$ChatController {
@@ -34,20 +38,24 @@ class ChatController extends _$ChatController {
       _subscription?.cancel();
     });
 
-    final messages = await _socketClient.stream
-        .firstWhere((event) => event.topic == 'full')
-        .then(
-          (event) => pick(event.data, 'chat', 'lines')
-              .asListOrNull(_messageFromPick)
-              ?.toIList(),
-        );
+    try {
+      final messages = await _socketClient.stream
+          .firstWhere((event) => event.topic == 'full')
+          .then(
+            (event) => pick(event.data, 'chat', 'lines')
+                .asListOrThrow(ChatMessage.fromPick)
+                .toIList(),
+          );
 
-    final readMessagesCount = await _getReadMessagesCount();
+      final readMessagesCount = await _getReadMessagesCount();
 
-    return ChatState(
-      messages: messages ?? IList(),
-      unreadMessages: (messages?.length ?? 0) - readMessagesCount,
-    );
+      return ChatState(
+        messages: messages,
+        unreadMessages: messages.length - readMessagesCount,
+      );
+    } catch (e) {
+      return ChatState(messages: IList(), unreadMessages: 0);
+    }
   }
 
   /// Sends a message to the chat.
@@ -92,7 +100,7 @@ class ChatController extends _$ChatController {
     );
   }
 
-  Future<void> _setMessages(IList<Message> messages) async {
+  Future<void> _setMessages(IList<ChatMessage> messages) async {
     final readMessagesCount = await _getReadMessagesCount();
 
     state = state.whenData(
@@ -103,7 +111,7 @@ class ChatController extends _$ChatController {
     );
   }
 
-  void _addMessage(Message message) {
+  void _addMessage(ChatMessage message) {
     state = state.whenData(
       (s) => s.copyWith(
         messages: s.messages.add(message),
@@ -115,22 +123,23 @@ class ChatController extends _$ChatController {
   void _handleSocketEvent(SocketEvent event) {
     if (!state.hasValue) return;
 
-    if (event.topic == 'full') {
-      final messages = pick(event.data, 'chat', 'lines')
-          .asListOrNull(_messageFromPick)
-          ?.toIList();
-      if (messages != null) {
-        _setMessages(messages);
+    try {
+      if (event.topic == 'full') {
+        _setMessages(
+          pick(event.data, 'chat', 'lines')
+              .asListOrThrow(ChatMessage.fromPick)
+              .toIList(),
+        );
+      } else if (event.topic == 'message') {
+        _addMessage(
+          ChatMessage.fromJson(event.data as Map<String, dynamic>),
+        );
       }
-    } else if (event.topic == 'message') {
-      final data = event.data as Map<String, dynamic>;
-      final message = data['t'] as String;
-      final username = data['u'] as String?;
-      _addMessage(
-        (
-          message: message,
-          username: username,
-        ),
+    } catch (e, st) {
+      _logger.severe(
+        'Failed to parse chat message for event ${event.topic}: $e',
+        e,
+        st,
       );
     }
   }
@@ -141,16 +150,7 @@ class ChatState with _$ChatState {
   const ChatState._();
 
   const factory ChatState({
-    required IList<Message> messages,
+    required IList<ChatMessage> messages,
     required int unreadMessages,
   }) = _ChatState;
-}
-
-typedef Message = ({String? username, String message});
-
-Message _messageFromPick(RequiredPick pick) {
-  return (
-    message: pick('t').asStringOrThrow(),
-    username: pick('u').asStringOrNull(),
-  );
 }
