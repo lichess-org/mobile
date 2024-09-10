@@ -5,7 +5,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:http/http.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
-import 'package:lichess_mobile/src/model/common/perf.dart';
+import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer_preferences.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -96,7 +96,7 @@ class OpeningExplorerRepository {
 
   Future<OpeningExplorerEntry> getLichessDatabase(
     String fen, {
-    required ISet<Perf> speeds,
+    required ISet<Speed> speeds,
     required ISet<int> ratings,
     DateTime? since,
   }) {
@@ -120,7 +120,7 @@ class OpeningExplorerRepository {
     String fen, {
     required String usernameOrId,
     required Side color,
-    required ISet<Perf> speeds,
+    required ISet<Speed> speeds,
     required ISet<GameMode> gameModes,
     DateTime? since,
   }) {

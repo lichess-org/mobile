@@ -304,7 +304,13 @@ class _OpeningExplorerView extends StatelessWidget {
         Expanded(
           child: Stack(
             children: [
-              ListView(padding: EdgeInsets.zero, children: explorerContent),
+              Center(
+                child: ListView(
+                  shrinkWrap: true,
+                  padding: EdgeInsets.zero,
+                  children: explorerContent,
+                ),
+              ),
               Positioned.fill(
                 child: IgnorePointer(
                   ignoring: !loading,

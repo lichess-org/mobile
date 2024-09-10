@@ -222,7 +222,15 @@ class _AppState extends ConsumerState<Application> {
               ? (context, child) {
                   return CupertinoTheme(
                     data: cupertinoThemeData,
-                    child: Material(child: child),
+                    child: IconTheme.merge(
+                      data: IconThemeData(
+                        color: CupertinoTheme.of(context)
+                            .textTheme
+                            .textStyle
+                            .color,
+                      ),
+                      child: Material(child: child),
+                    ),
                   );
                 }
               : null,

@@ -160,7 +160,8 @@ class AnalysisController extends _$AnalysisController {
       isLocalEvaluationEnabled: prefs.enableLocalEvaluation,
       displayMode: DisplayMode.moves,
       playersAnalysis: options.serverAnalysis,
-      acplChartData: _makeAcplChartData(),
+      acplChartData:
+          options.serverAnalysis != null ? _makeAcplChartData() : null,
     );
 
     if (analysisState.isEngineAvailable) {
@@ -357,12 +358,8 @@ class AnalysisController extends _$AnalysisController {
     state = state.copyWith(pgnHeaders: headers);
   }
 
-  void toggleDisplayMode() {
-    state = state.copyWith(
-      displayMode: state.displayMode == DisplayMode.moves
-          ? DisplayMode.summary
-          : DisplayMode.moves,
-    );
+  void setDisplayMode(DisplayMode mode) {
+    state = state.copyWith(displayMode: mode);
   }
 
   Future<void> requestServerAnalysis() {
@@ -632,6 +629,7 @@ class AnalysisController extends _$AnalysisController {
 enum DisplayMode {
   moves,
   summary,
+  openingExplorer,
 }
 
 @freezed
@@ -670,7 +668,9 @@ class AnalysisState with _$AnalysisState {
     /// Whether the user has enabled local evaluation.
     required bool isLocalEvaluationEnabled,
 
-    /// Whether to show the ACPL chart instead of tree view.
+    /// The display mode of the analysis.
+    ///
+    /// It can be either moves, summary or opening explorer.
     required DisplayMode displayMode,
 
     /// The last move played.

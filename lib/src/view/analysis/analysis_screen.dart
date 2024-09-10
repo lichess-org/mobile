@@ -21,6 +21,7 @@ import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
+import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -31,7 +32,8 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_share_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
-import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_screen.dart';
+import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_settings.dart';
+import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_widget.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
@@ -223,9 +225,8 @@ class _Body extends ConsumerWidget {
     final hasEval =
         ref.watch(ctrlProvider.select((value) => value.hasAvailableEval));
 
-    final showAnalysisSummary = ref.watch(
-      ctrlProvider.select((value) => value.displayMode == DisplayMode.summary),
-    );
+    final displayMode =
+        ref.watch(ctrlProvider.select((value) => value.displayMode));
 
     return Column(
       children: [
@@ -245,98 +246,103 @@ class _Body extends ConsumerWidget {
                     ? defaultBoardSize - kTabletBoardTableSidePadding * 2
                     : defaultBoardSize;
 
-                return aspectRatio > 1
-                    ? Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              left: kTabletBoardTableSidePadding,
-                              top: kTabletBoardTableSidePadding,
-                              bottom: kTabletBoardTableSidePadding,
-                            ),
-                            child: Row(
-                              children: [
-                                AnalysisBoard(
-                                  pgn,
-                                  options,
-                                  boardSize,
-                                  isTablet: isTablet,
-                                ),
-                                if (hasEval && showEvaluationGauge) ...[
-                                  const SizedBox(width: 4.0),
-                                  _EngineGaugeVertical(ctrlProvider),
-                                ],
-                              ],
-                            ),
-                          ),
-                          Flexible(
-                            fit: FlexFit.loose,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                if (isEngineAvailable)
-                                  _EngineLines(
-                                    ctrlProvider,
-                                    isLandscape: true,
-                                  ),
-                                Expanded(
-                                  child: PlatformCard(
-                                    margin: const EdgeInsets.all(
-                                      kTabletBoardTableSidePadding,
-                                    ),
-                                    semanticContainer: false,
-                                    child: showAnalysisSummary
-                                        ? ServerAnalysisSummary(pgn, options)
-                                        : AnalysisTreeView(
-                                            pgn,
-                                            options,
-                                            Orientation.landscape,
-                                          ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      )
-                    : Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.max,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          _ColumnTopTable(ctrlProvider),
-                          if (isTablet)
-                            Padding(
-                              padding: const EdgeInsets.all(
-                                kTabletBoardTableSidePadding,
-                              ),
-                              child: AnalysisBoard(
-                                pgn,
-                                options,
-                                boardSize,
-                                isTablet: isTablet,
-                              ),
-                            )
-                          else
+                final display = switch (displayMode) {
+                  DisplayMode.openingExplorer => OpeningExplorerWidget(
+                      pgn: pgn,
+                      options: options,
+                    ),
+                  DisplayMode.summary => ServerAnalysisSummary(pgn, options),
+                  DisplayMode.moves => AnalysisTreeView(
+                      pgn,
+                      options,
+                      aspectRatio > 1
+                          ? Orientation.landscape
+                          : Orientation.portrait,
+                    ),
+                };
+
+                // If the aspect ratio is greater than 1, we are in landscape mode.
+                if (aspectRatio > 1) {
+                  return Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          left: kTabletBoardTableSidePadding,
+                          top: kTabletBoardTableSidePadding,
+                          bottom: kTabletBoardTableSidePadding,
+                        ),
+                        child: Row(
+                          children: [
                             AnalysisBoard(
                               pgn,
                               options,
                               boardSize,
                               isTablet: isTablet,
                             ),
-                          if (showAnalysisSummary)
-                            Expanded(child: ServerAnalysisSummary(pgn, options))
-                          else
+                            if (hasEval && showEvaluationGauge) ...[
+                              const SizedBox(width: 4.0),
+                              _EngineGaugeVertical(ctrlProvider),
+                            ],
+                          ],
+                        ),
+                      ),
+                      Flexible(
+                        fit: FlexFit.loose,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            if (isEngineAvailable)
+                              _EngineLines(
+                                ctrlProvider,
+                                isLandscape: true,
+                              ),
                             Expanded(
-                              child: AnalysisTreeView(
-                                pgn,
-                                options,
-                                Orientation.portrait,
+                              child: PlatformCard(
+                                margin: const EdgeInsets.all(
+                                  kTabletBoardTableSidePadding,
+                                ),
+                                semanticContainer: false,
+                                child: display,
                               ),
                             ),
-                        ],
-                      );
+                          ],
+                        ),
+                      ),
+                    ],
+                  );
+                }
+                // If the aspect ratio is less than 1, we are in portrait mode.
+                else {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      _ColumnTopTable(ctrlProvider),
+                      if (isTablet)
+                        Padding(
+                          padding: const EdgeInsets.all(
+                            kTabletBoardTableSidePadding,
+                          ),
+                          child: AnalysisBoard(
+                            pgn,
+                            options,
+                            boardSize,
+                            isTablet: isTablet,
+                          ),
+                        )
+                      else
+                        AnalysisBoard(
+                          pgn,
+                          options,
+                          boardSize,
+                          isTablet: isTablet,
+                        ),
+                      Expanded(child: display),
+                    ],
+                  );
+                }
               },
             ),
           ),
@@ -381,6 +387,9 @@ class _ColumnTopTable extends ConsumerWidget {
       analysisPreferencesProvider.select((p) => p.showEvaluationGauge),
     );
 
+    final displayMode =
+        ref.watch(ctrlProvider.select((value) => value.displayMode));
+
     return analysisState.hasAvailableEval
         ? Column(
             mainAxisSize: MainAxisSize.min,
@@ -391,7 +400,8 @@ class _ColumnTopTable extends ConsumerWidget {
                   displayMode: EngineGaugeDisplayMode.horizontal,
                   params: analysisState.engineGaugeParams,
                 ),
-              if (analysisState.isEngineAvailable)
+              if (displayMode != DisplayMode.openingExplorer &&
+                  analysisState.isEngineAvailable)
                 _EngineLines(ctrlProvider, isLandscape: false),
             ],
           )
@@ -587,30 +597,44 @@ class _BottomBar extends ConsumerWidget {
           },
           icon: Icons.menu,
         ),
-        if (canShowGameSummary)
+        if (displayMode != DisplayMode.openingExplorer && canShowGameSummary)
           BottomBarButton(
+            // TODO: l10n
             label: displayMode == DisplayMode.summary ? 'Moves' : 'Summary',
-            onTap: () {
-              ref.read(ctrlProvider.notifier).toggleDisplayMode();
-            },
+            onTap: displayMode != DisplayMode.openingExplorer
+                ? () {
+                    final newMode = displayMode == DisplayMode.summary
+                        ? DisplayMode.moves
+                        : DisplayMode.summary;
+                    ref.read(ctrlProvider.notifier).setDisplayMode(newMode);
+                  }
+                : null,
             icon: displayMode == DisplayMode.summary
                 ? LichessIcons.flow_cascade
                 : Icons.area_chart,
           ),
+        if (displayMode == DisplayMode.openingExplorer)
+          BottomBarButton(
+            label: 'Opening Explorer Settings',
+            onTap: () => showAdaptiveBottomSheet<void>(
+              context: context,
+              isScrollControlled: true,
+              showDragHandle: true,
+              isDismissible: true,
+              builder: (_) => OpeningExplorerSettings(pgn, options),
+            ),
+            icon: Icons.tune,
+          ),
         BottomBarButton(
           label: context.l10n.openingExplorer,
+          highlighted: displayMode == DisplayMode.openingExplorer,
           onTap: isOnline
               ? () {
-                  pushPlatformRoute(
-                    context,
-                    builder: (_) => OpeningExplorerScreen(
-                      pgn: ref.read(ctrlProvider.notifier).makeInternalPgn(),
-                      options: options.copyWith(
-                        isLocalEvaluationAllowed: false,
-                        id: standaloneOpeningExplorerId,
-                      ),
-                    ),
-                  );
+                  ref.read(ctrlProvider.notifier).setDisplayMode(
+                        displayMode == DisplayMode.openingExplorer
+                            ? DisplayMode.moves
+                            : DisplayMode.openingExplorer,
+                      );
                 }
               : null,
           icon: Icons.explore,
