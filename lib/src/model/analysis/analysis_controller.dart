@@ -389,9 +389,10 @@ class AnalysisController extends _$AnalysisController {
     return _root.makePgn(state.pgnHeaders, state.pgnRootComments);
   }
 
-  /// Makes an internal PGN string (without headers and comments) of the current game state.
-  String makeInternalPgn() {
-    return _root.makePgn();
+  /// Makes a PGN string up to the current node only.
+  String makeCurrentNodePgn() {
+    final nodes = _root.branchesOn(state.currentPath);
+    return nodes.map((node) => node.sanMove.san).join(' ');
   }
 
   void _setPath(

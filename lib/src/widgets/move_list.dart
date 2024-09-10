@@ -221,8 +221,9 @@ class InlineMoveItem extends StatelessWidget {
             fontFamily:
                 pieceNotation == PieceNotation.symbol ? 'ChessFont' : null,
             fontWeight: FontWeight.w600,
-            color:
-                current != true ? textShade(context, _moveListOpacity) : null,
+            color: current != true
+                ? textShade(context, _moveListOpacity)
+                : Theme.of(context).colorScheme.primary,
           ),
         ),
       ),

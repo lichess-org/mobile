@@ -36,6 +36,8 @@ class OpeningExplorerScreen extends StatelessWidget {
   }
 }
 
+const _kTabletBoardRadius = BorderRadius.all(Radius.circular(4.0));
+
 class _Body extends ConsumerWidget {
   final String pgn;
 
@@ -44,16 +46,25 @@ class _Body extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isTablet = isTabletOrLarger(context);
+
     return SafeArea(
       bottom: false,
       child: Column(
         children: [
+          Padding(
+            padding: isTablet
+                ? const EdgeInsets.symmetric(
+                    horizontal: kTabletBoardTableSidePadding,
+                  )
+                : EdgeInsets.zero,
+            child: _MoveList(pgn: pgn, options: options),
+          ),
           Expanded(
             child: LayoutBuilder(
               builder: (context, constraints) {
                 final aspectRatio = constraints.biggest.aspectRatio;
                 final defaultBoardSize = constraints.biggest.shortestSide;
-                final isTablet = isTabletOrLarger(context);
                 final remainingHeight =
                     constraints.maxHeight - defaultBoardSize;
                 final isSmallScreen =
@@ -73,15 +84,11 @@ class _Body extends ConsumerWidget {
                           top: kTabletBoardTableSidePadding,
                           bottom: kTabletBoardTableSidePadding,
                         ),
-                        child: Row(
-                          children: [
-                            AnalysisBoard(
-                              pgn,
-                              options,
-                              boardSize,
-                              isTablet: isTablet,
-                            ),
-                          ],
+                        child: AnalysisBoard(
+                          pgn,
+                          options,
+                          boardSize,
+                          borderRadius: isTablet ? _kTabletBoardRadius : null,
                         ),
                       ),
                       Flexible(
@@ -91,6 +98,7 @@ class _Body extends ConsumerWidget {
                           children: [
                             Expanded(
                               child: PlatformCard(
+                                clipBehavior: Clip.hardEdge,
                                 borderRadius: const BorderRadius.all(
                                   Radius.circular(4.0),
                                 ),
@@ -116,29 +124,30 @@ class _Body extends ConsumerWidget {
                     children: [
                       Padding(
                         padding: isTablet
-                            ? const EdgeInsets.symmetric(
-                                horizontal: kTabletBoardTableSidePadding,
-                              )
-                            : EdgeInsets.zero,
-                        child: _MoveList(pgn: pgn, options: options),
-                      ),
-                      Padding(
-                        padding: isTablet
-                            ? const EdgeInsets.all(
-                                kTabletBoardTableSidePadding,
+                            ? const EdgeInsets.only(
+                                left: kTabletBoardTableSidePadding,
+                                right: kTabletBoardTableSidePadding,
+                                bottom: kTabletBoardTableSidePadding,
                               )
                             : EdgeInsets.zero,
                         child: AnalysisBoard(
                           pgn,
                           options,
                           boardSize,
-                          isTablet: isTablet,
+                          borderRadius: isTablet ? _kTabletBoardRadius : null,
                         ),
                       ),
                       Expanded(
-                        child: OpeningExplorerWidget(
-                          pgn: pgn,
-                          options: options,
+                        child: Padding(
+                          padding: isTablet
+                              ? const EdgeInsets.symmetric(
+                                  horizontal: kTabletBoardTableSidePadding,
+                                )
+                              : EdgeInsets.zero,
+                          child: OpeningExplorerWidget(
+                            pgn: pgn,
+                            options: options,
+                          ),
                         ),
                       ),
                     ],

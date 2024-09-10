@@ -108,10 +108,7 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerWidget> {
       data: (openingExplorer) {
         if (openingExplorer == null) {
           return _OpeningExplorerView.loading(
-            pgn: widget.pgn,
-            options: widget.options,
-            opening: opening,
-            explorerContent: lastExplorerWidgets ??
+            children: lastExplorerWidgets ??
                 [
                   Shimmer(
                     child: ShimmerLoading(
@@ -127,12 +124,8 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerWidget> {
         }
         if (openingExplorer.entry.moves.isEmpty) {
           lastExplorerWidgets = null;
-          return _OpeningExplorerView(
-            pgn: widget.pgn,
-            options: widget.options,
-            opening: opening,
-            openingExplorer: openingExplorer,
-            explorerContent: [
+          return _OpeningExplorerView.empty(
+            children: [
               Center(
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
@@ -148,7 +141,30 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerWidget> {
 
         final ply = analysisState.position.ply;
 
-        final explorerContent = [
+        final children = [
+          Container(
+            padding: _kTableRowPadding,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.secondaryContainer,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                if (opening != null)
+                  Expanded(
+                    flex: 75,
+                    child: _Opening(
+                      opening: opening,
+                    ),
+                  ),
+                if (openingExplorer.isIndexing == true)
+                  Expanded(
+                    flex: 25,
+                    child: _IndexingIndicator(),
+                  ),
+              ],
+            ),
+          ),
           _OpeningExplorerMoveTable(
             moves: openingExplorer.entry.moves,
             whiteWins: openingExplorer.entry.white,
@@ -199,21 +215,14 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerWidget> {
           ],
         ];
 
-        lastExplorerWidgets = explorerContent;
+        lastExplorerWidgets = children;
 
         return _OpeningExplorerView(
-          pgn: widget.pgn,
-          options: widget.options,
-          opening: opening,
-          openingExplorer: openingExplorer,
-          explorerContent: explorerContent,
+          children: children,
         );
       },
       loading: () => _OpeningExplorerView.loading(
-        pgn: widget.pgn,
-        options: widget.options,
-        opening: opening,
-        explorerContent: lastExplorerWidgets ??
+        children: lastExplorerWidgets ??
             [
               Shimmer(
                 child: ShimmerLoading(
@@ -241,88 +250,50 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerWidget> {
 /// The opening header and the opening explorer move table.
 class _OpeningExplorerView extends StatelessWidget {
   const _OpeningExplorerView({
-    required this.pgn,
-    required this.options,
-    required this.opening,
-    required this.openingExplorer,
-    required this.explorerContent,
-  }) : loading = false;
+    required this.children,
+  })  : loading = false,
+        empty = false;
 
   const _OpeningExplorerView.loading({
-    required this.pgn,
-    required this.options,
-    required this.opening,
-    required this.explorerContent,
+    required this.children,
   })  : loading = true,
-        openingExplorer = null;
+        empty = false;
 
-  final String pgn;
-  final AnalysisOptions options;
-  final Opening? opening;
-  final ({OpeningExplorerEntry entry, bool isIndexing})? openingExplorer;
-  final List<Widget> explorerContent;
+  const _OpeningExplorerView.empty({
+    required this.children,
+  })  : loading = false,
+        empty = true;
+
+  final List<Widget> children;
   final bool loading;
+  final bool empty;
 
   @override
   Widget build(BuildContext context) {
-    final isLandscape =
-        MediaQuery.orientationOf(context) == Orientation.landscape;
-
     final loadingOverlayColor = Theme.of(context).brightness == Brightness.dark
         ? Colors.black
         : Colors.white;
 
-    return Column(
+    return Stack(
       children: [
-        Container(
-          padding: _kTableRowPadding,
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.secondaryContainer,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(isLandscape ? 4.0 : 0),
-              topRight: Radius.circular(isLandscape ? 4.0 : 0),
+        if (empty)
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: children,
+          )
+        else
+          Center(
+            child: ListView(padding: EdgeInsets.zero, children: children),
+          ),
+        Positioned.fill(
+          child: IgnorePointer(
+            ignoring: !loading,
+            child: AnimatedOpacity(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.fastOutSlowIn,
+              opacity: loading ? 0.5 : 0.0,
+              child: ColoredBox(color: loadingOverlayColor),
             ),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              if (opening != null)
-                Expanded(
-                  flex: 75,
-                  child: _Opening(
-                    opening: opening!,
-                  ),
-                ),
-              if (openingExplorer?.isIndexing == true)
-                Expanded(
-                  flex: 25,
-                  child: _IndexingIndicator(),
-                ),
-            ],
-          ),
-        ),
-        Expanded(
-          child: Stack(
-            children: [
-              Center(
-                child: ListView(
-                  shrinkWrap: true,
-                  padding: EdgeInsets.zero,
-                  children: explorerContent,
-                ),
-              ),
-              Positioned.fill(
-                child: IgnorePointer(
-                  ignoring: !loading,
-                  child: AnimatedOpacity(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.fastOutSlowIn,
-                    opacity: loading ? 0.5 : 0.0,
-                    child: ColoredBox(color: loadingOverlayColor),
-                  ),
-                ),
-              ),
-            ],
           ),
         ),
       ],

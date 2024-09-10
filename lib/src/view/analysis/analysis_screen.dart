@@ -244,6 +244,9 @@ class _Body extends ConsumerWidget {
                     ? defaultBoardSize - kTabletBoardTableSidePadding * 2
                     : defaultBoardSize;
 
+                const tabletBoardRadius =
+                    BorderRadius.all(Radius.circular(4.0));
+
                 final display = switch (displayMode) {
                   DisplayMode.summary => ServerAnalysisSummary(pgn, options),
                   DisplayMode.moves => AnalysisTreeView(
@@ -272,7 +275,7 @@ class _Body extends ConsumerWidget {
                               pgn,
                               options,
                               boardSize,
-                              isTablet: isTablet,
+                              borderRadius: isTablet ? tabletBoardRadius : null,
                             ),
                             if (hasEval && showEvaluationGauge) ...[
                               const SizedBox(width: 4.0),
@@ -293,6 +296,10 @@ class _Body extends ConsumerWidget {
                               ),
                             Expanded(
                               child: PlatformCard(
+                                clipBehavior: Clip.hardEdge,
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(4.0),
+                                ),
                                 margin: const EdgeInsets.all(
                                   kTabletBoardTableSidePadding,
                                 ),
@@ -323,7 +330,7 @@ class _Body extends ConsumerWidget {
                             pgn,
                             options,
                             boardSize,
-                            isTablet: isTablet,
+                            borderRadius: isTablet ? tabletBoardRadius : null,
                           ),
                         )
                       else
@@ -331,9 +338,18 @@ class _Body extends ConsumerWidget {
                           pgn,
                           options,
                           boardSize,
-                          isTablet: isTablet,
+                          borderRadius: isTablet ? tabletBoardRadius : null,
                         ),
-                      Expanded(child: display),
+                      Expanded(
+                        child: Padding(
+                          padding: isTablet
+                              ? const EdgeInsets.symmetric(
+                                  horizontal: kTabletBoardTableSidePadding,
+                                )
+                              : EdgeInsets.zero,
+                          child: display,
+                        ),
+                      ),
                     ],
                   );
                 }
@@ -604,7 +620,7 @@ class _BottomBar extends ConsumerWidget {
                     context,
                     title: context.l10n.openingExplorer,
                     builder: (_) => OpeningExplorerScreen(
-                      pgn: pgn,
+                      pgn: ref.read(ctrlProvider.notifier).makeCurrentNodePgn(),
                       options: analysisState.openingExplorerOptions,
                     ),
                   );

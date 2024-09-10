@@ -718,18 +718,7 @@ class _Opening extends ConsumerWidget {
             height: kOpeningHeaderHeight,
             width: double.infinity,
             decoration: BoxDecoration(
-              color: Theme.of(context).platform == TargetPlatform.iOS
-                  ? CupertinoDynamicColor.resolve(
-                      CupertinoColors.systemGrey5,
-                      context,
-                    )
-                  : Theme.of(context).colorScheme.secondaryContainer,
-              borderRadius: displayMode == Orientation.landscape
-                  ? const BorderRadius.only(
-                      topLeft: Radius.circular(10.0),
-                      topRight: Radius.circular(10.0),
-                    )
-                  : null,
+              color: Theme.of(context).colorScheme.secondaryContainer,
             ),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
