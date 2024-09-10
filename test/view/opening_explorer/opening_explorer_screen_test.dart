@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer_preferences.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_screen.dart';
+import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_widget.dart';
 
 import '../../test_app.dart';
 import '../../test_utils.dart';
@@ -74,7 +75,7 @@ void main() {
           'e4',
           'd4',
         ];
-        expect(find.byType(OpeningExplorerMoveTable), findsOneWidget);
+        expect(find.byType(Table), findsOneWidget);
         for (final move in moves) {
           expect(find.widgetWithText(TableRowInkWell, move), findsOneWidget);
         }
@@ -125,7 +126,7 @@ void main() {
         final moves = [
           'd4',
         ];
-        expect(find.byType(OpeningExplorerMoveTable), findsOneWidget);
+        expect(find.byType(Table), findsOneWidget);
         for (final move in moves) {
           expect(find.widgetWithText(TableRowInkWell, move), findsOneWidget);
         }
@@ -175,7 +176,7 @@ void main() {
         final moves = [
           'c4',
         ];
-        expect(find.byType(OpeningExplorerMoveTable), findsOneWidget);
+        expect(find.byType(Table), findsOneWidget);
         for (final move in moves) {
           expect(find.widgetWithText(TableRowInkWell, move), findsOneWidget);
         }
