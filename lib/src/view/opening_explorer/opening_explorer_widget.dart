@@ -153,8 +153,23 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerWidget> {
                 if (opening != null)
                   Expanded(
                     flex: 75,
-                    child: _Opening(
-                      opening: opening,
+                    child: GestureDetector(
+                      onTap: opening.name == context.l10n.startPosition
+                          ? null
+                          : () => launchUrl(
+                                Uri.parse(
+                                  'https://lichess.org/opening/${opening.name}',
+                                ),
+                              ),
+                      child: Text(
+                        '${opening.eco.isEmpty ? "" : "${opening.eco} "}${opening.name}',
+                        style: TextStyle(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSecondaryContainer,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ),
                 if (openingExplorer.isIndexing == true)
@@ -301,31 +316,6 @@ class _OpeningExplorerView extends StatelessWidget {
   }
 }
 
-class _Opening extends ConsumerWidget {
-  const _Opening({
-    required this.opening,
-  });
-
-  final Opening opening;
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return GestureDetector(
-      onTap: opening.name == context.l10n.startPosition
-          ? null
-          : () => launchUrl(
-                Uri.parse('https://lichess.org/opening/${opening.name}'),
-              ),
-      child: Text(
-        '${opening.eco.isEmpty ? "" : "${opening.eco} "}${opening.name}',
-        style: TextStyle(
-          color: Theme.of(context).colorScheme.onSecondaryContainer,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
-  }
-}
-
 class _IndexingIndicator extends StatefulWidget {
   @override
   State<_IndexingIndicator> createState() => _IndexingIndicatorState();
@@ -419,6 +409,7 @@ class _OpeningExplorerMoveTable extends ConsumerWidget {
     final ctrlProvider = analysisControllerProvider(pgn, options);
 
     const topPadding = EdgeInsets.only(top: _kTableRowVerticalPadding);
+    const headerTextStyle = TextStyle(fontSize: 12);
 
     return Table(
       columnWidths: columnWidths,
@@ -430,15 +421,15 @@ class _OpeningExplorerMoveTable extends ConsumerWidget {
           children: [
             Padding(
               padding: _kTableRowPadding.subtract(topPadding),
-              child: Text(context.l10n.move),
+              child: Text(context.l10n.move, style: headerTextStyle),
             ),
             Padding(
               padding: _kTableRowPadding.subtract(topPadding),
-              child: Text(context.l10n.games),
+              child: Text(context.l10n.games, style: headerTextStyle),
             ),
             Padding(
               padding: _kTableRowPadding.subtract(topPadding),
-              child: Text(context.l10n.whiteDrawBlack),
+              child: Text(context.l10n.whiteDrawBlack, style: headerTextStyle),
             ),
           ],
         ),
