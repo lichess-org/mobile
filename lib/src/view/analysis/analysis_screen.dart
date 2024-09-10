@@ -31,8 +31,7 @@ import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_share_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
-import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_settings.dart';
-import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_widget.dart';
+import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
@@ -246,10 +245,6 @@ class _Body extends ConsumerWidget {
                     : defaultBoardSize;
 
                 final display = switch (displayMode) {
-                  DisplayMode.openingExplorer => OpeningExplorerWidget(
-                      pgn: pgn,
-                      options: options,
-                    ),
                   DisplayMode.summary => ServerAnalysisSummary(pgn, options),
                   DisplayMode.moves => AnalysisTreeView(
                       pgn,
@@ -386,9 +381,6 @@ class _ColumnTopTable extends ConsumerWidget {
       analysisPreferencesProvider.select((p) => p.showEvaluationGauge),
     );
 
-    final displayMode =
-        ref.watch(ctrlProvider.select((value) => value.displayMode));
-
     return analysisState.hasAvailableEval
         ? Column(
             mainAxisSize: MainAxisSize.min,
@@ -399,8 +391,7 @@ class _ColumnTopTable extends ConsumerWidget {
                   displayMode: EngineGaugeDisplayMode.horizontal,
                   params: analysisState.engineGaugeParams,
                 ),
-              if (displayMode != DisplayMode.openingExplorer &&
-                  analysisState.isEngineAvailable)
+              if (analysisState.isEngineAvailable)
                 _EngineLines(ctrlProvider, isLandscape: false),
             ],
           )
@@ -576,14 +567,7 @@ class _BottomBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = analysisControllerProvider(pgn, options);
-    final canGoBack =
-        ref.watch(ctrlProvider.select((value) => value.canGoBack));
-    final canGoNext =
-        ref.watch(ctrlProvider.select((value) => value.canGoNext));
-    final displayMode =
-        ref.watch(ctrlProvider.select((value) => value.displayMode));
-    final canShowGameSummary =
-        ref.watch(ctrlProvider.select((value) => value.canShowGameSummary));
+    final analysisState = ref.watch(ctrlProvider);
     final isOnline =
         ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
 
@@ -596,65 +580,56 @@ class _BottomBar extends ConsumerWidget {
           },
           icon: Icons.menu,
         ),
-        if (displayMode != DisplayMode.openingExplorer && canShowGameSummary)
+        if (analysisState.canShowGameSummary)
           BottomBarButton(
             // TODO: l10n
-            label: displayMode == DisplayMode.summary ? 'Moves' : 'Summary',
-            onTap: displayMode != DisplayMode.openingExplorer
-                ? () {
-                    final newMode = displayMode == DisplayMode.summary
-                        ? DisplayMode.moves
-                        : DisplayMode.summary;
-                    ref.read(ctrlProvider.notifier).setDisplayMode(newMode);
-                  }
-                : null,
-            icon: displayMode == DisplayMode.summary
+            label: analysisState.displayMode == DisplayMode.summary
+                ? 'Moves'
+                : 'Summary',
+            onTap: () {
+              final newMode = analysisState.displayMode == DisplayMode.summary
+                  ? DisplayMode.moves
+                  : DisplayMode.summary;
+              ref.read(ctrlProvider.notifier).setDisplayMode(newMode);
+            },
+            icon: analysisState.displayMode == DisplayMode.summary
                 ? LichessIcons.flow_cascade
                 : Icons.area_chart,
           ),
-        if (displayMode == DisplayMode.openingExplorer)
-          BottomBarButton(
-            label: 'Opening Explorer Settings',
-            onTap: () => showAdaptiveBottomSheet<void>(
-              context: context,
-              isScrollControlled: true,
-              showDragHandle: true,
-              isDismissible: true,
-              builder: (_) => OpeningExplorerSettings(pgn, options),
-            ),
-            icon: Icons.tune,
-          ),
         BottomBarButton(
           label: context.l10n.openingExplorer,
-          highlighted: displayMode == DisplayMode.openingExplorer,
           onTap: isOnline
               ? () {
-                  ref.read(ctrlProvider.notifier).setDisplayMode(
-                        displayMode == DisplayMode.openingExplorer
-                            ? DisplayMode.moves
-                            : DisplayMode.openingExplorer,
-                      );
+                  pushPlatformRoute(
+                    context,
+                    title: context.l10n.openingExplorer,
+                    builder: (_) => OpeningExplorerScreen(
+                      pgn: pgn,
+                      options: analysisState.openingExplorerOptions,
+                    ),
+                  );
                 }
               : null,
           icon: Icons.explore,
         ),
         RepeatButton(
-          onLongPress: canGoBack ? () => _moveBackward(ref) : null,
+          onLongPress:
+              analysisState.canGoBack ? () => _moveBackward(ref) : null,
           child: BottomBarButton(
             key: const ValueKey('goto-previous'),
-            onTap: canGoBack ? () => _moveBackward(ref) : null,
+            onTap: analysisState.canGoBack ? () => _moveBackward(ref) : null,
             label: 'Previous',
             icon: CupertinoIcons.chevron_back,
             showTooltip: false,
           ),
         ),
         RepeatButton(
-          onLongPress: canGoNext ? () => _moveForward(ref) : null,
+          onLongPress: analysisState.canGoNext ? () => _moveForward(ref) : null,
           child: BottomBarButton(
             key: const ValueKey('goto-next'),
             icon: CupertinoIcons.chevron_forward,
             label: context.l10n.next,
-            onTap: canGoNext ? () => _moveForward(ref) : null,
+            onTap: analysisState.canGoNext ? () => _moveForward(ref) : null,
             showTooltip: false,
           ),
         ),

@@ -629,7 +629,6 @@ class AnalysisController extends _$AnalysisController {
 enum DisplayMode {
   moves,
   summary,
-  openingExplorer,
 }
 
 @freezed
@@ -746,6 +745,14 @@ class AnalysisState with _$AnalysisState {
         isLocalEngineAvailable: isEngineAvailable,
         position: position,
         savedEval: currentNode.eval ?? currentNode.serverEval,
+      );
+
+  AnalysisOptions get openingExplorerOptions => AnalysisOptions(
+        id: standaloneOpeningExplorerId,
+        isLocalEvaluationAllowed: false,
+        orientation: pov,
+        variant: variant,
+        initialMoveCursor: currentPath.size,
       );
 }
 

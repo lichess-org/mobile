@@ -179,6 +179,9 @@ class _MoveList extends ConsumerWidget {
       type: MoveListType.inline,
       slicedMoves: slicedMoves,
       currentMoveIndex: currentMoveIndex,
+      onSelectMove: (index) {
+        ref.read(ctrlProvider.notifier).jumpToNthNodeOnMainline(index - 1);
+      },
     );
   }
 }
