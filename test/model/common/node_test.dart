@@ -530,6 +530,19 @@ void main() {
       expect(root.mainline.last.sanMove.move, move);
     });
   });
+
+  group('ViewNode', () {
+    test('mainline', () {
+      final root = Root.fromPgnMoves('e4 e5');
+      final viewRoot = root.view;
+      final mainline = viewRoot.mainline;
+
+      expect(mainline.length, equals(2));
+      final list = mainline.toList();
+      expect(list[0].sanMove, equals(SanMove('e4', Move.parse('e2e4')!)));
+      expect(list[1].sanMove, equals(SanMove('e5', Move.parse('e7e5')!)));
+    });
+  });
 }
 
 const fisherSpasskyPgn = '''

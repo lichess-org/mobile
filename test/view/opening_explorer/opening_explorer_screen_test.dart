@@ -17,6 +17,11 @@ import '../../test_app.dart';
 import '../../test_utils.dart';
 
 void main() {
+  final explorerViewFinder = find.descendant(
+    of: find.byType(OpeningExplorerWidget),
+    matching: find.byType(Scrollable),
+  );
+
   final mockClient = MockClient((request) {
     if (request.url.host == 'explorer.lichess.ovh') {
       if (request.url.path == '/masters') {
@@ -86,6 +91,7 @@ void main() {
         await tester.scrollUntilVisible(
           find.text('Firouzja, A.'),
           200,
+          scrollable: explorerViewFinder,
         );
 
         expect(
@@ -136,6 +142,7 @@ void main() {
         await tester.scrollUntilVisible(
           find.byType(OpeningExplorerGameTile),
           200,
+          scrollable: explorerViewFinder,
         );
 
         expect(
@@ -186,6 +193,7 @@ void main() {
         await tester.scrollUntilVisible(
           find.byType(OpeningExplorerGameTile),
           200,
+          scrollable: explorerViewFinder,
         );
 
         expect(

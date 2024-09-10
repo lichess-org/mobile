@@ -197,10 +197,10 @@ class AnalysisController extends _$AnalysisController {
     }
 
     // For the opening explorer, last played move should always be the mainline
-    final shouldPrepend = options.id == standaloneOpeningExplorerId;
+    final shouldReplace = options.id == standaloneOpeningExplorerId;
 
     final (newPath, isNewNode) =
-        _root.addMoveAt(state.currentPath, move, prepend: shouldPrepend);
+        _root.addMoveAt(state.currentPath, move, replace: shouldReplace);
     if (newPath != null) {
       _setPath(
         newPath,

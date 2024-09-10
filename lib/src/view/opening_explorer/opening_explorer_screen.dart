@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,6 +12,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/move_list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
@@ -60,87 +62,123 @@ class _Body extends ConsumerWidget {
                     ? defaultBoardSize - kTabletBoardTableSidePadding * 2
                     : defaultBoardSize;
 
-                return aspectRatio > 1
-                    ? Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              left: kTabletBoardTableSidePadding,
-                              top: kTabletBoardTableSidePadding,
-                              bottom: kTabletBoardTableSidePadding,
-                            ),
-                            child: Row(
-                              children: [
-                                AnalysisBoard(
-                                  pgn,
-                                  options,
-                                  boardSize,
-                                  isTablet: isTablet,
-                                ),
-                              ],
-                            ),
-                          ),
-                          Flexible(
-                            fit: FlexFit.loose,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  child: PlatformCard(
-                                    borderRadius: const BorderRadius.all(
-                                      Radius.circular(4.0),
-                                    ),
-                                    margin: const EdgeInsets.all(
-                                      kTabletBoardTableSidePadding,
-                                    ),
-                                    semanticContainer: false,
-                                    child: OpeningExplorerWidget(
-                                      pgn: pgn,
-                                      options: options,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      )
-                    : Column(
-                        children: [
-                          if (isTablet)
-                            Padding(
-                              padding: const EdgeInsets.all(
-                                kTabletBoardTableSidePadding,
-                              ),
-                              child: AnalysisBoard(
-                                pgn,
-                                options,
-                                boardSize,
-                                isTablet: isTablet,
-                              ),
-                            )
-                          else
+                // If the aspect ratio is greater than 1, we are in landscape mode
+                if (aspectRatio > 1) {
+                  return Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          left: kTabletBoardTableSidePadding,
+                          top: kTabletBoardTableSidePadding,
+                          bottom: kTabletBoardTableSidePadding,
+                        ),
+                        child: Row(
+                          children: [
                             AnalysisBoard(
                               pgn,
                               options,
                               boardSize,
                               isTablet: isTablet,
                             ),
-                          Expanded(
-                            child: OpeningExplorerWidget(
-                              pgn: pgn,
-                              options: options,
+                          ],
+                        ),
+                      ),
+                      Flexible(
+                        fit: FlexFit.loose,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: PlatformCard(
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(4.0),
+                                ),
+                                margin: const EdgeInsets.all(
+                                  kTabletBoardTableSidePadding,
+                                ),
+                                semanticContainer: false,
+                                child: OpeningExplorerWidget(
+                                  pgn: pgn,
+                                  options: options,
+                                ),
+                              ),
                             ),
-                          ),
-                        ],
-                      );
+                          ],
+                        ),
+                      ),
+                    ],
+                  );
+                }
+                // If the aspect ratio is less than 1, we are in portrait mode
+                else {
+                  return Column(
+                    children: [
+                      Padding(
+                        padding: isTablet
+                            ? const EdgeInsets.symmetric(
+                                horizontal: kTabletBoardTableSidePadding,
+                              )
+                            : EdgeInsets.zero,
+                        child: _MoveList(pgn: pgn, options: options),
+                      ),
+                      Padding(
+                        padding: isTablet
+                            ? const EdgeInsets.all(
+                                kTabletBoardTableSidePadding,
+                              )
+                            : EdgeInsets.zero,
+                        child: AnalysisBoard(
+                          pgn,
+                          options,
+                          boardSize,
+                          isTablet: isTablet,
+                        ),
+                      ),
+                      Expanded(
+                        child: OpeningExplorerWidget(
+                          pgn: pgn,
+                          options: options,
+                        ),
+                      ),
+                    ],
+                  );
+                }
               },
             ),
           ),
           _BottomBar(pgn: pgn, options: options),
         ],
       ),
+    );
+  }
+}
+
+class _MoveList extends ConsumerWidget {
+  const _MoveList({
+    required this.pgn,
+    required this.options,
+  });
+
+  final String pgn;
+  final AnalysisOptions options;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final ctrlProvider = analysisControllerProvider(pgn, options);
+    final state = ref.watch(ctrlProvider);
+    final slicedMoves = state.root.mainline
+        .map((e) => e.sanMove.san)
+        .toList()
+        .asMap()
+        .entries
+        .slices(2);
+    final currentMoveIndex = state.currentNode.position.ply;
+
+    return MoveList(
+      type: MoveListType.inline,
+      slicedMoves: slicedMoves,
+      currentMoveIndex: currentMoveIndex,
     );
   }
 }

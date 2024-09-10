@@ -3,7 +3,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
-import 'package:lichess_mobile/src/model/common/perf.dart';
+import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer_repository.dart';
 
@@ -150,7 +150,7 @@ void main() {
 
       final result = await repo.getLichessDatabase(
         'fen',
-        speeds: const ISetConst({Perf.rapid}),
+        speeds: const ISetConst({Speed.rapid}),
         ratings: const ISetConst({1000, 1200}),
       );
       expect(result, isA<OpeningExplorerEntry>());
@@ -221,7 +221,7 @@ void main() {
         'fen',
         usernameOrId: 'baz',
         color: Side.white,
-        speeds: const ISetConst({Perf.bullet}),
+        speeds: const ISetConst({Speed.bullet}),
         gameModes: const ISetConst({GameMode.rated}),
       );
       expect(results, isA<Stream<OpeningExplorerEntry>>());

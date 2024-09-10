@@ -144,16 +144,23 @@ abstract class Node {
   /// Returns null if the node at path does not exist.
   ///
   /// If the node already exists, it is not added again.
+  ///
+  /// If [prepend] is true, the new node is added at the beginning of the children.
+  /// If [replace] is true, the children of the existing node are replaced.
   (UciPath?, bool) addNodeAt(
     UciPath path,
     Branch newNode, {
     bool prepend = false,
+    bool replace = false,
   }) {
     final newPath = path + newNode.id;
     final node = nodeAtOrNull(path);
     if (node != null) {
       final existing = nodeAtOrNull(newPath) != null;
       if (!existing) {
+        if (replace) {
+          node.children.clear();
+        }
         if (prepend) {
           node.prependChild(newNode);
         } else {
@@ -186,10 +193,14 @@ abstract class Node {
   /// Returns null if the node at path does not exist.
   ///
   /// If the node already exists, it is not added again.
+  ///
+  /// If [prepend] is true, the new node is added at the beginning of the children.
+  /// If [replace] is true, the children of the existing node are replaced.
   (UciPath?, bool) addMoveAt(
     UciPath path,
     Move move, {
     bool prepend = false,
+    bool replace = false,
   }) {
     final pos = nodeAt(path).position;
 
@@ -205,7 +216,7 @@ abstract class Node {
       sanMove: SanMove(newSan, convertedMove),
       position: newPos,
     );
-    return addNodeAt(path, newNode, prepend: prepend);
+    return addNodeAt(path, newNode, prepend: prepend, replace: replace);
   }
 
   /// The function `convertAltCastlingMove` checks if a move is an alternative
@@ -527,6 +538,7 @@ abstract class ViewNode {
   IList<PgnComment>? get comments;
   IList<PgnComment>? get lichessAnalysisComments;
   IList<int>? get nags;
+  Iterable<ViewBranch> get mainline;
 }
 
 /// An immutable view of a [Root] node.
@@ -559,6 +571,14 @@ class ViewRoot with _$ViewRoot implements ViewNode {
 
   @override
   IList<int>? get nags => null;
+
+  @override
+  Iterable<ViewBranch> get mainline sync* {
+    for (final child in children) {
+      yield child;
+      yield* child.mainline;
+    }
+  }
 }
 
 /// An immutable view of a [Branch] node.
@@ -605,4 +625,12 @@ class ViewBranch with _$ViewBranch implements ViewNode {
 
   @override
   UciCharPair get id => UciCharPair.fromMove(sanMove.move);
+
+  @override
+  Iterable<ViewBranch> get mainline sync* {
+    for (final child in children) {
+      yield child;
+      yield* child.mainline;
+    }
+  }
 }
