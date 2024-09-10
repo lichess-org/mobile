@@ -7,9 +7,7 @@ import 'package:lichess_mobile/src/model/game/game_controller.dart';
 import 'package:lichess_mobile/src/model/game/game_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
 import 'game_screen_providers.dart';
@@ -30,128 +28,117 @@ class GameSettings extends ConsumerWidget {
     final gamePrefs = ref.watch(gamePreferencesProvider);
     final userPrefsAsync = ref.watch(userGamePrefsProvider(id));
 
-    final List<Widget> content = [
-      PlatformListTile(
-        title: Text(context.l10n.settingsSettings, style: Styles.sectionTitle),
-        subtitle: const SizedBox.shrink(),
-      ),
-      const SizedBox(height: 8.0),
-      SwitchSettingTile(
-        title: Text(context.l10n.sound),
-        value: isSoundEnabled,
-        onChanged: (value) {
-          ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled();
-        },
-      ),
-      SwitchSettingTile(
-        title: Text(context.l10n.mobileSettingsHapticFeedback),
-        value: boardPrefs.hapticFeedback,
-        onChanged: (value) {
-          ref.read(boardPreferencesProvider.notifier).toggleHapticFeedback();
-        },
-      ),
-      ...userPrefsAsync.maybeWhen(
-        data: (data) {
-          return [
-            if (data.prefs?.submitMove == true)
+    return ListView(
+      shrinkWrap: true,
+      children: [
+        SwitchSettingTile(
+          title: Text(context.l10n.sound),
+          value: isSoundEnabled,
+          onChanged: (value) {
+            ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled();
+          },
+        ),
+        SwitchSettingTile(
+          title: Text(context.l10n.mobileSettingsHapticFeedback),
+          value: boardPrefs.hapticFeedback,
+          onChanged: (value) {
+            ref.read(boardPreferencesProvider.notifier).toggleHapticFeedback();
+          },
+        ),
+        ...userPrefsAsync.maybeWhen(
+          data: (data) {
+            return [
+              if (data.prefs?.submitMove == true)
+                SwitchSettingTile(
+                  title: Text(
+                    context.l10n.preferencesMoveConfirmation,
+                  ),
+                  value: data.shouldConfirmMove,
+                  onChanged: (value) {
+                    ref
+                        .read(gameControllerProvider(id).notifier)
+                        .toggleMoveConfirmation();
+                  },
+                ),
+              if (data.prefs?.autoQueen == AutoQueen.always)
+                SwitchSettingTile(
+                  title: Text(
+                    context.l10n.preferencesPromoteToQueenAutomatically,
+                  ),
+                  value: data.canAutoQueen,
+                  onChanged: (value) {
+                    ref
+                        .read(gameControllerProvider(id).notifier)
+                        .toggleAutoQueen();
+                  },
+                ),
               SwitchSettingTile(
                 title: Text(
-                  context.l10n.preferencesMoveConfirmation,
+                  context.l10n.preferencesZenMode,
                 ),
-                value: data.shouldConfirmMove,
+                value: data.isZenModeEnabled,
                 onChanged: (value) {
-                  ref
-                      .read(gameControllerProvider(id).notifier)
-                      .toggleMoveConfirmation();
+                  ref.read(gameControllerProvider(id).notifier).toggleZenMode();
                 },
               ),
-            if (data.prefs?.autoQueen == AutoQueen.always)
-              SwitchSettingTile(
-                title: Text(
-                  context.l10n.preferencesPromoteToQueenAutomatically,
-                ),
-                value: data.canAutoQueen,
-                onChanged: (value) {
-                  ref
-                      .read(gameControllerProvider(id).notifier)
-                      .toggleAutoQueen();
-                },
-              ),
-            SwitchSettingTile(
-              title: Text(
-                context.l10n.preferencesZenMode,
-              ),
-              value: data.isZenModeEnabled,
-              onChanged: (value) {
-                ref.read(gameControllerProvider(id).notifier).toggleZenMode();
-              },
-            ),
-          ];
-        },
-        orElse: () => [],
-      ),
-      SwitchSettingTile(
-        // TODO: Add l10n
-        title: const Text('Shape drawing'),
-        subtitle: const Text(
-          'Draw shapes using two fingers.',
-          maxLines: 5,
-          textAlign: TextAlign.justify,
+            ];
+          },
+          orElse: () => [],
         ),
-        value: boardPrefs.enableShapeDrawings,
-        onChanged: (value) {
-          ref
-              .read(boardPreferencesProvider.notifier)
-              .toggleEnableShapeDrawings();
-        },
-      ),
-      SwitchSettingTile(
-        title: Text(
-          context.l10n.preferencesPieceAnimation,
+        SwitchSettingTile(
+          // TODO: Add l10n
+          title: const Text('Shape drawing'),
+          subtitle: const Text(
+            'Draw shapes using two fingers.',
+            maxLines: 5,
+            textAlign: TextAlign.justify,
+          ),
+          value: boardPrefs.enableShapeDrawings,
+          onChanged: (value) {
+            ref
+                .read(boardPreferencesProvider.notifier)
+                .toggleEnableShapeDrawings();
+          },
         ),
-        value: boardPrefs.pieceAnimation,
-        onChanged: (value) {
-          ref.read(boardPreferencesProvider.notifier).togglePieceAnimation();
-        },
-      ),
-      SwitchSettingTile(
-        title: Text(
-          context.l10n.preferencesMaterialDifference,
+        SwitchSettingTile(
+          title: Text(
+            context.l10n.preferencesPieceAnimation,
+          ),
+          value: boardPrefs.pieceAnimation,
+          onChanged: (value) {
+            ref.read(boardPreferencesProvider.notifier).togglePieceAnimation();
+          },
         ),
-        value: boardPrefs.showMaterialDifference,
-        onChanged: (value) {
-          ref
-              .read(boardPreferencesProvider.notifier)
-              .toggleShowMaterialDifference();
-        },
-      ),
-      SwitchSettingTile(
-        title: Text(
-          context.l10n.toggleTheChat,
+        SwitchSettingTile(
+          title: Text(
+            context.l10n.preferencesMaterialDifference,
+          ),
+          value: boardPrefs.showMaterialDifference,
+          onChanged: (value) {
+            ref
+                .read(boardPreferencesProvider.notifier)
+                .toggleShowMaterialDifference();
+          },
         ),
-        value: gamePrefs.enableChat ?? false,
-        onChanged: (value) {
-          ref.read(gamePreferencesProvider.notifier).toggleChat();
-          ref.read(gameControllerProvider(id).notifier).onToggleChat(value);
-        },
-      ),
-      SwitchSettingTile(
-        title: Text(context.l10n.mobileBlindfoldMode),
-        value: gamePrefs.blindfoldMode ?? false,
-        onChanged: (value) {
-          ref.read(gamePreferencesProvider.notifier).toggleBlindfoldMode();
-        },
-      ),
-      const SizedBox(height: 16.0),
-    ];
-
-    return DraggableScrollableSheet(
-      initialChildSize: 1.0,
-      expand: false,
-      builder: (context, scrollController) => ListView(
-        controller: scrollController,
-        children: content,
-      ),
+        SwitchSettingTile(
+          title: Text(
+            context.l10n.toggleTheChat,
+          ),
+          value: gamePrefs.enableChat ?? false,
+          onChanged: (value) {
+            ref.read(gamePreferencesProvider.notifier).toggleChat();
+            ref.read(gameControllerProvider(id).notifier).onToggleChat(value);
+          },
+        ),
+        SwitchSettingTile(
+          title: Text(context.l10n.mobileBlindfoldMode),
+          value: gamePrefs.blindfoldMode ?? false,
+          onChanged: (value) {
+            ref.read(gamePreferencesProvider.notifier).toggleBlindfoldMode();
+          },
+        ),
+        const SizedBox(height: 16.0),
+      ],
     );
   }
 }

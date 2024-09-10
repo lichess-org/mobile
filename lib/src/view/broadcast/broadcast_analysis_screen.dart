@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:collection/collection.dart';
@@ -27,6 +26,7 @@ import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
@@ -42,6 +42,7 @@ import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -86,7 +87,7 @@ class BroadcastAnalysisScreen extends ConsumerWidget {
             _EngineDepth(
               analysisControllerProvider(
                 pgn.requireValue,
-                broadcastAnalysisOptions,
+                AnalysisState.broadcastOptions,
               ),
             ),
           AppBarIconButton(
@@ -98,7 +99,7 @@ class BroadcastAnalysisScreen extends ConsumerWidget {
                     isDismissible: true,
                     builder: (_) => AnalysisSettings(
                       pgn.requireValue,
-                      broadcastAnalysisOptions,
+                      AnalysisState.broadcastOptions,
                     ),
                   )
                 : null,
@@ -112,7 +113,6 @@ class BroadcastAnalysisScreen extends ConsumerWidget {
           roundId: roundId,
           gameId: gameId,
           pgn: pgn,
-          broadcastAnalysisOptions: broadcastAnalysisOptions,
         ),
         loading: () =>
             const Center(child: CircularProgressIndicator.adaptive()),
@@ -147,7 +147,7 @@ class BroadcastAnalysisScreen extends ConsumerWidget {
               _EngineDepth(
                 analysisControllerProvider(
                   pgn.requireValue,
-                  broadcastAnalysisOptions,
+                  AnalysisState.broadcastOptions,
                 ),
               ),
             AppBarIconButton(
@@ -159,7 +159,7 @@ class BroadcastAnalysisScreen extends ConsumerWidget {
                       isDismissible: true,
                       builder: (_) => AnalysisSettings(
                         pgn.requireValue,
-                        broadcastAnalysisOptions,
+                        AnalysisState.broadcastOptions,
                       ),
                     )
                   : null,
@@ -174,7 +174,6 @@ class BroadcastAnalysisScreen extends ConsumerWidget {
           roundId: roundId,
           gameId: gameId,
           pgn: pgn,
-          broadcastAnalysisOptions: broadcastAnalysisOptions,
         ),
         loading: () =>
             const Center(child: CircularProgressIndicator.adaptive()),
@@ -193,18 +192,16 @@ class _Body extends ConsumerWidget {
     required this.roundId,
     required this.gameId,
     required this.pgn,
-    required this.broadcastAnalysisOptions,
   });
 
   final BroadcastRoundId roundId;
   final BroadcastGameId gameId;
   final String pgn;
-  final AnalysisOptions broadcastAnalysisOptions;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider =
-        analysisControllerProvider(pgn, broadcastAnalysisOptions);
+        analysisControllerProvider(pgn, AnalysisState.broadcastOptions);
     final showEvaluationGauge = ref.watch(
       analysisPreferencesProvider.select((value) => value.showEvaluationGauge),
     );
@@ -218,9 +215,8 @@ class _Body extends ConsumerWidget {
     final hasEval =
         ref.watch(ctrlProvider.select((value) => value.hasAvailableEval));
 
-    final showAnalysisSummary = ref.watch(
-      ctrlProvider.select((value) => value.displayMode == DisplayMode.summary),
-    );
+    final displayMode =
+        ref.watch(ctrlProvider.select((value) => value.displayMode));
 
     final pov = ref.watch(ctrlProvider.select((value) => value.pov));
 
@@ -242,89 +238,34 @@ class _Body extends ConsumerWidget {
                     ? defaultBoardSize - kTabletBoardTableSidePadding * 2
                     : defaultBoardSize;
 
-                return aspectRatio > 1
-                    ? Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              left: kTabletBoardTableSidePadding,
-                              top: kTabletBoardTableSidePadding,
-                              bottom: kTabletBoardTableSidePadding,
-                            ),
-                            child: Row(
-                              children: [
-                                _AnalysisBoardPlayersAndClocks(
-                                  ctrlProvider,
-                                  roundId,
-                                  gameId,
-                                  pgn,
-                                  pov,
-                                  boardSize,
-                                  isTablet: isTablet,
-                                ),
-                                if (hasEval && showEvaluationGauge) ...[
-                                  const SizedBox(width: 4.0),
-                                  _EngineGaugeVertical(ctrlProvider),
-                                ],
-                              ],
-                            ),
-                          ),
-                          Flexible(
-                            fit: FlexFit.loose,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                if (isEngineAvailable)
-                                  _EngineLines(
-                                    ctrlProvider,
-                                    isLandscape: true,
-                                  ),
-                                Expanded(
-                                  child: PlatformCard(
-                                    margin: const EdgeInsets.all(
-                                      kTabletBoardTableSidePadding,
-                                    ),
-                                    semanticContainer: false,
-                                    child: showAnalysisSummary
-                                        ? ServerAnalysisSummary(
-                                            pgn,
-                                            broadcastAnalysisOptions,
-                                          )
-                                        : AnalysisTreeView(
-                                            pgn,
-                                            broadcastAnalysisOptions,
-                                            Orientation.landscape,
-                                          ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      )
-                    : Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.max,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          _ColumnTopTable(ctrlProvider),
-                          if (isTablet)
-                            Padding(
-                              padding: const EdgeInsets.all(
-                                kTabletBoardTableSidePadding,
-                              ),
-                              child: _AnalysisBoardPlayersAndClocks(
-                                ctrlProvider,
-                                roundId,
-                                gameId,
-                                pgn,
-                                pov,
-                                boardSize,
-                                isTablet: isTablet,
-                              ),
-                            )
-                          else
+                const tabletBoardRadius =
+                    BorderRadius.all(Radius.circular(4.0));
+
+                final display = switch (displayMode) {
+                  DisplayMode.summary =>
+                    ServerAnalysisSummary(pgn, AnalysisState.broadcastOptions),
+                  DisplayMode.moves => AnalysisTreeView(
+                      pgn,
+                      AnalysisState.broadcastOptions,
+                      aspectRatio > 1
+                          ? Orientation.landscape
+                          : Orientation.portrait,
+                    ),
+                };
+
+                // If the aspect ratio is greater than 1, we are in landscape mode.
+                if (aspectRatio > 1) {
+                  return Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          left: kTabletBoardTableSidePadding,
+                          top: kTabletBoardTableSidePadding,
+                          bottom: kTabletBoardTableSidePadding,
+                        ),
+                        child: Row(
+                          children: [
                             _AnalysisBoardPlayersAndClocks(
                               ctrlProvider,
                               roundId,
@@ -332,33 +273,95 @@ class _Body extends ConsumerWidget {
                               pgn,
                               pov,
                               boardSize,
-                              isTablet: isTablet,
+                              borderRadius: isTablet ? tabletBoardRadius : null,
                             ),
-                          if (showAnalysisSummary)
-                            Expanded(
-                              child: ServerAnalysisSummary(
-                                pgn,
-                                broadcastAnalysisOptions,
+                            if (hasEval && showEvaluationGauge) ...[
+                              const SizedBox(width: 4.0),
+                              _EngineGaugeVertical(ctrlProvider),
+                            ],
+                          ],
+                        ),
+                      ),
+                      Flexible(
+                        fit: FlexFit.loose,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            if (isEngineAvailable)
+                              _EngineLines(
+                                ctrlProvider,
+                                isLandscape: true,
                               ),
-                            )
-                          else
                             Expanded(
-                              child: AnalysisTreeView(
-                                pgn,
-                                broadcastAnalysisOptions,
-                                Orientation.portrait,
+                              child: PlatformCard(
+                                clipBehavior: Clip.hardEdge,
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(4.0),
+                                ),
+                                margin: const EdgeInsets.all(
+                                  kTabletBoardTableSidePadding,
+                                ),
+                                semanticContainer: false,
+                                child: display,
                               ),
                             ),
-                        ],
-                      );
+                          ],
+                        ),
+                      ),
+                    ],
+                  );
+                }
+                // If the aspect ratio is less than 1, we are in portrait mode.
+                else {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      _ColumnTopTable(ctrlProvider),
+                      if (isTablet)
+                        Padding(
+                          padding: const EdgeInsets.all(
+                            kTabletBoardTableSidePadding,
+                          ),
+                          child: _AnalysisBoardPlayersAndClocks(
+                            ctrlProvider,
+                            roundId,
+                            gameId,
+                            pgn,
+                            pov,
+                            boardSize,
+                            borderRadius: isTablet ? tabletBoardRadius : null,
+                          ),
+                        )
+                      else
+                        _AnalysisBoardPlayersAndClocks(
+                          ctrlProvider,
+                          roundId,
+                          gameId,
+                          pgn,
+                          pov,
+                          boardSize,
+                          borderRadius: isTablet ? tabletBoardRadius : null,
+                        ),
+                      Expanded(
+                        child: Padding(
+                          padding: isTablet
+                              ? const EdgeInsets.symmetric(
+                                  horizontal: kTabletBoardTableSidePadding,
+                                )
+                              : EdgeInsets.zero,
+                          child: display,
+                        ),
+                      ),
+                    ],
+                  );
+                }
               },
             ),
           ),
         ),
-        _BottomBar(
-          pgn: pgn,
-          broadcastAnalysisOptions: broadcastAnalysisOptions,
-        ),
+        _BottomBar(pgn: pgn, options: AnalysisState.broadcastOptions),
       ],
     );
   }
@@ -373,7 +376,7 @@ class _AnalysisBoardPlayersAndClocks extends ConsumerWidget {
   final String pgn;
   final Side pov;
   final double boardSize;
-  final bool isTablet;
+  final BorderRadius? borderRadius;
 
   const _AnalysisBoardPlayersAndClocks(
     this.ctrlProvider,
@@ -382,7 +385,7 @@ class _AnalysisBoardPlayersAndClocks extends ConsumerWidget {
     this.pgn,
     this.pov,
     this.boardSize, {
-    required this.isTablet,
+    required this.borderRadius,
   });
 
   @override
@@ -417,9 +420,9 @@ class _AnalysisBoardPlayersAndClocks extends ConsumerWidget {
           ),
         AnalysisBoard(
           pgn,
-          broadcastAnalysisOptions,
+          AnalysisState.broadcastOptions,
           boardSize,
-          isTablet: isTablet,
+          borderRadius: borderRadius,
         ),
         if (game != null)
           _PlayerWidget(
@@ -478,23 +481,24 @@ class _PlayerWidget extends StatelessWidget {
                 ),
               ),
               child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8.0,
-                    vertical: 4.0,
-                  ),
-                  child: Text(
-                    (gameStatus == '½-½')
-                        ? '½'
-                        : (gameStatus == '1-0')
-                            ? side == Side.white
-                                ? '1'
-                                : '0'
-                            : side == Side.black
-                                ? '1'
-                                : '0',
-                    style:
-                        const TextStyle().copyWith(fontWeight: FontWeight.bold),
-                  )),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 8.0,
+                  vertical: 4.0,
+                ),
+                child: Text(
+                  (gameStatus == '½-½')
+                      ? '½'
+                      : (gameStatus == '1-0')
+                          ? side == Side.white
+                              ? '1'
+                              : '0'
+                          : side == Side.black
+                              ? '1'
+                              : '0',
+                  style:
+                      const TextStyle().copyWith(fontWeight: FontWeight.bold),
+                ),
+              ),
             ),
           Expanded(
             child: Card(
@@ -840,108 +844,89 @@ class _Engineline extends ConsumerWidget {
 class _BottomBar extends ConsumerWidget {
   const _BottomBar({
     required this.pgn,
-    required this.broadcastAnalysisOptions,
+    required this.options,
   });
 
   final String pgn;
-  final AnalysisOptions broadcastAnalysisOptions;
+  final AnalysisOptions options;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider =
-        analysisControllerProvider(pgn, broadcastAnalysisOptions);
-    final canGoBack =
-        ref.watch(ctrlProvider.select((value) => value.canGoBack));
-    final canGoNext =
-        ref.watch(ctrlProvider.select((value) => value.canGoNext));
-    final displayMode =
-        ref.watch(ctrlProvider.select((value) => value.displayMode));
-    final canShowGameSummary =
-        ref.watch(ctrlProvider.select((value) => value.canShowGameSummary));
+    final ctrlProvider = analysisControllerProvider(pgn, options);
+    final analysisState = ref.watch(ctrlProvider);
+    final isOnline =
+        ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
 
-    return Container(
-      color: Theme.of(context).platform == TargetPlatform.iOS
-          ? CupertinoTheme.of(context).barBackgroundColor
-          : Theme.of(context).bottomAppBarTheme.color,
-      child: SafeArea(
-        top: false,
-        child: SizedBox(
-          height: kBottomBarHeight,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Expanded(
-                child: BottomBarButton(
-                  label: context.l10n.menu,
-                  onTap: () {
-                    _showAnalysisMenu(context, ref);
-                  },
-                  icon: Icons.menu,
-                ),
-              ),
-              if (canShowGameSummary)
-                Expanded(
-                  child: BottomBarButton(
-                    label: displayMode == DisplayMode.summary
-                        ? 'Moves'
-                        : 'Summary',
-                    onTap: () {
-                      ref.read(ctrlProvider.notifier).toggleDisplayMode();
-                    },
-                    icon: displayMode == DisplayMode.summary
-                        ? LichessIcons.flow_cascade
-                        : Icons.area_chart,
-                  ),
-                ),
-              Expanded(
-                child: BottomBarButton(
-                  label: context.l10n.openingExplorer,
-                  onTap: () => pushPlatformRoute(
+    return BottomBar(
+      children: [
+        BottomBarButton(
+          label: context.l10n.menu,
+          onTap: () {
+            _showAnalysisMenu(context, ref);
+          },
+          icon: Icons.menu,
+        ),
+        if (analysisState.canShowGameSummary)
+          BottomBarButton(
+            // TODO: l10n
+            label: analysisState.displayMode == DisplayMode.summary
+                ? 'Moves'
+                : 'Summary',
+            onTap: () {
+              final newMode = analysisState.displayMode == DisplayMode.summary
+                  ? DisplayMode.moves
+                  : DisplayMode.summary;
+              ref.read(ctrlProvider.notifier).setDisplayMode(newMode);
+            },
+            icon: analysisState.displayMode == DisplayMode.summary
+                ? LichessIcons.flow_cascade
+                : Icons.area_chart,
+          ),
+        BottomBarButton(
+          label: context.l10n.openingExplorer,
+          onTap: isOnline
+              ? () {
+                  pushPlatformRoute(
                     context,
+                    title: context.l10n.openingExplorer,
                     builder: (_) => OpeningExplorerScreen(
-                      pgn: pgn,
-                      options: broadcastAnalysisOptions,
+                      pgn: ref.read(ctrlProvider.notifier).makeCurrentNodePgn(),
+                      options: analysisState.openingExplorerOptions,
                     ),
-                  ),
-                  icon: Icons.explore,
-                ),
-              ),
-              Expanded(
-                child: RepeatButton(
-                  onLongPress: canGoBack ? () => _moveBackward(ref) : null,
-                  child: BottomBarButton(
-                    key: const ValueKey('goto-previous'),
-                    onTap: canGoBack ? () => _moveBackward(ref) : null,
-                    label: 'Previous',
-                    icon: CupertinoIcons.chevron_back,
-                    showTooltip: false,
-                  ),
-                ),
-              ),
-              Expanded(
-                child: RepeatButton(
-                  onLongPress: canGoNext ? () => _moveForward(ref) : null,
-                  child: BottomBarButton(
-                    key: const ValueKey('goto-next'),
-                    icon: CupertinoIcons.chevron_forward,
-                    label: context.l10n.next,
-                    onTap: canGoNext ? () => _moveForward(ref) : null,
-                    showTooltip: false,
-                  ),
-                ),
-              ),
-            ],
+                  );
+                }
+              : null,
+          icon: Icons.explore,
+        ),
+        RepeatButton(
+          onLongPress:
+              analysisState.canGoBack ? () => _moveBackward(ref) : null,
+          child: BottomBarButton(
+            key: const ValueKey('goto-previous'),
+            onTap: analysisState.canGoBack ? () => _moveBackward(ref) : null,
+            label: 'Previous',
+            icon: CupertinoIcons.chevron_back,
+            showTooltip: false,
           ),
         ),
-      ),
+        RepeatButton(
+          onLongPress: analysisState.canGoNext ? () => _moveForward(ref) : null,
+          child: BottomBarButton(
+            key: const ValueKey('goto-next'),
+            icon: CupertinoIcons.chevron_forward,
+            label: context.l10n.next,
+            onTap: analysisState.canGoNext ? () => _moveForward(ref) : null,
+            showTooltip: false,
+          ),
+        ),
+      ],
     );
   }
 
-  void _moveForward(WidgetRef ref) => ref
-      .read(analysisControllerProvider(pgn, broadcastAnalysisOptions).notifier)
-      .userNext();
+  void _moveForward(WidgetRef ref) =>
+      ref.read(analysisControllerProvider(pgn, options).notifier).userNext();
   void _moveBackward(WidgetRef ref) => ref
-      .read(analysisControllerProvider(pgn, broadcastAnalysisOptions).notifier)
+      .read(analysisControllerProvider(pgn, options).notifier)
       .userPrevious();
 
   Future<void> _showAnalysisMenu(BuildContext context, WidgetRef ref) {
@@ -952,10 +937,7 @@ class _BottomBar extends ConsumerWidget {
           makeLabel: (context) => Text(context.l10n.flipBoard),
           onPressed: (context) {
             ref
-                .read(
-                  analysisControllerProvider(pgn, broadcastAnalysisOptions)
-                      .notifier,
-                )
+                .read(analysisControllerProvider(pgn, options).notifier)
                 .toggleBoard();
           },
         ),
@@ -965,10 +947,7 @@ class _BottomBar extends ConsumerWidget {
             pushPlatformRoute(
               context,
               title: context.l10n.studyShareAndExport,
-              builder: (_) => AnalysisShareScreen(
-                pgn: pgn,
-                options: broadcastAnalysisOptions,
-              ),
+              builder: (_) => AnalysisShareScreen(pgn: pgn, options: options),
             );
           },
         ),
@@ -978,28 +957,24 @@ class _BottomBar extends ConsumerWidget {
             launchShareDialog(
               context,
               text: ref
-                  .read(
-                    analysisControllerProvider(pgn, broadcastAnalysisOptions),
-                  )
+                  .read(analysisControllerProvider(pgn, options))
                   .position
                   .fen,
             );
           },
         ),
-        if (broadcastAnalysisOptions.gameAnyId != null)
+        if (options.gameAnyId != null)
           BottomSheetAction(
             makeLabel: (context) =>
                 Text(context.l10n.screenshotCurrentPosition),
             onPressed: (_) async {
-              final gameId = broadcastAnalysisOptions.gameAnyId!.gameId;
-              final state = ref.read(
-                analysisControllerProvider(pgn, broadcastAnalysisOptions),
-              );
+              final gameId = options.gameAnyId!.gameId;
+              final state = ref.read(analysisControllerProvider(pgn, options));
               try {
                 final image =
                     await ref.read(gameShareServiceProvider).screenshotPosition(
                           gameId,
-                          broadcastAnalysisOptions.orientation,
+                          options.orientation,
                           state.position.fen,
                           state.lastMove,
                         );
@@ -1142,15 +1117,14 @@ class _StockfishInfo extends ConsumerWidget {
 }
 
 class ServerAnalysisSummary extends ConsumerWidget {
-  const ServerAnalysisSummary(this.pgn, this.broadcastAnalysisOptions);
+  const ServerAnalysisSummary(this.pgn, this.options);
 
   final String pgn;
-  final AnalysisOptions broadcastAnalysisOptions;
+  final AnalysisOptions options;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider =
-        analysisControllerProvider(pgn, broadcastAnalysisOptions);
+    final ctrlProvider = analysisControllerProvider(pgn, options);
     final playersAnalysis =
         ref.watch(ctrlProvider.select((value) => value.playersAnalysis));
     final pgnHeaders =
@@ -1160,13 +1134,12 @@ class ServerAnalysisSummary extends ConsumerWidget {
     return playersAnalysis != null
         ? ListView(
             children: [
-              if (currentGameAnalysis ==
-                  broadcastAnalysisOptions.gameAnyId?.gameId)
+              if (currentGameAnalysis == options.gameAnyId?.gameId)
                 const Padding(
                   padding: EdgeInsets.only(top: 16.0),
                   child: WaitingForServerAnalysis(),
                 ),
-              AcplChart(pgn, broadcastAnalysisOptions),
+              AcplChart(pgn, options),
               Center(
                 child: SizedBox(
                   width: math.min(MediaQuery.sizeOf(context).width, 500),
@@ -1293,8 +1266,7 @@ class ServerAnalysisSummary extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Spacer(),
-              if (currentGameAnalysis ==
-                  broadcastAnalysisOptions.gameAnyId?.gameId)
+              if (currentGameAnalysis == options.gameAnyId?.gameId)
                 const Center(
                   child: Padding(
                     padding: EdgeInsets.symmetric(vertical: 16.0),
@@ -1450,10 +1422,10 @@ class _SummaryPlayerName extends StatelessWidget {
 }
 
 class AcplChart extends ConsumerWidget {
-  const AcplChart(this.pgn, this.broadcastAnalysisOptions);
+  const AcplChart(this.pgn, this.options);
 
   final String pgn;
-  final AnalysisOptions broadcastAnalysisOptions;
+  final AnalysisOptions options;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -1488,22 +1460,22 @@ class AcplChart extends ConsumerWidget {
         );
 
     final data = ref.watch(
-      analysisControllerProvider(pgn, broadcastAnalysisOptions)
+      analysisControllerProvider(pgn, options)
           .select((value) => value.acplChartData),
     );
 
     final rootPly = ref.watch(
-      analysisControllerProvider(pgn, broadcastAnalysisOptions)
+      analysisControllerProvider(pgn, options)
           .select((value) => value.root.position.ply),
     );
 
     final currentNode = ref.watch(
-      analysisControllerProvider(pgn, broadcastAnalysisOptions)
+      analysisControllerProvider(pgn, options)
           .select((value) => value.currentNode),
     );
 
     final isOnMainline = ref.watch(
-      analysisControllerProvider(pgn, broadcastAnalysisOptions)
+      analysisControllerProvider(pgn, options)
           .select((value) => value.isOnMainline),
     );
 
@@ -1519,12 +1491,12 @@ class AcplChart extends ConsumerWidget {
 
     final divisionLines = <VerticalLine>[];
 
-    if (broadcastAnalysisOptions.division?.middlegame != null) {
-      if (broadcastAnalysisOptions.division!.middlegame! > 0) {
+    if (options.division?.middlegame != null) {
+      if (options.division!.middlegame! > 0) {
         divisionLines.add(phaseVerticalBar(0.0, context.l10n.opening));
         divisionLines.add(
           phaseVerticalBar(
-            broadcastAnalysisOptions.division!.middlegame! - 1,
+            options.division!.middlegame! - 1,
             context.l10n.middlegame,
           ),
         );
@@ -1533,11 +1505,11 @@ class AcplChart extends ConsumerWidget {
       }
     }
 
-    if (broadcastAnalysisOptions.division?.endgame != null) {
-      if (broadcastAnalysisOptions.division!.endgame! > 0) {
+    if (options.division?.endgame != null) {
+      if (options.division!.endgame! > 0) {
         divisionLines.add(
           phaseVerticalBar(
-            broadcastAnalysisOptions.division!.endgame! - 1,
+            options.division!.endgame! - 1,
             context.l10n.endgame,
           ),
         );
@@ -1579,12 +1551,7 @@ class AcplChart extends ConsumerWidget {
                     );
                     final closestNodeIndex = closestSpot.x.round();
                     ref
-                        .read(
-                          analysisControllerProvider(
-                            pgn,
-                            broadcastAnalysisOptions,
-                          ).notifier,
-                        )
+                        .read(analysisControllerProvider(pgn, options).notifier)
                         .jumpToNthNodeOnMainline(closestNodeIndex);
                   }
                 },

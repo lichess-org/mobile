@@ -70,6 +70,7 @@ class GameScreen extends ConsumerStatefulWidget {
     this.loadingFen,
     this.loadingLastMove,
     this.loadingOrientation,
+    this.lastMoveAt,
     super.key,
   }) : assert(
           initialGameId != null || seek != null || challenge != null,
@@ -85,6 +86,9 @@ class GameScreen extends ConsumerStatefulWidget {
   final String? loadingFen;
   final Move? loadingLastMove;
   final Side? loadingOrientation;
+
+  /// The date of the last move played in the game. If null, the game is in progress.
+  final DateTime? lastMoveAt;
 
   _GameSource get source {
     if (initialGameId != null) {
@@ -144,7 +148,11 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
         final body = gameId != null
             ? GameBody(
                 id: gameId,
-                loadingBoardWidget: const StandaloneGameLoadingBoard(),
+                loadingBoardWidget: StandaloneGameLoadingBoard(
+                  fen: widget.loadingFen,
+                  lastMove: widget.loadingLastMove,
+                  orientation: widget.loadingOrientation,
+                ),
                 whiteClockKey: _whiteClockKey,
                 blackClockKey: _blackClockKey,
                 boardKey: _boardKey,
@@ -176,7 +184,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
                 : const LoadGameError('Could not create the game.');
         return PlatformScaffold(
           resizeToAvoidBottomInset: false,
-          appBar: GameAppBar(id: gameId),
+          appBar: GameAppBar(id: gameId, lastMoveAt: widget.lastMoveAt),
           body: body,
         );
       },
@@ -195,7 +203,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
 
         return PlatformScaffold(
           resizeToAvoidBottomInset: false,
-          appBar: GameAppBar(seek: widget.seek),
+          appBar: GameAppBar(seek: widget.seek, lastMoveAt: widget.lastMoveAt),
           body: PopScope(
             canPop: false,
             child: loadingBoard,
@@ -219,7 +227,7 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
         final body = PopScope(child: message);
 
         return PlatformScaffold(
-          appBar: GameAppBar(seek: widget.seek),
+          appBar: GameAppBar(seek: widget.seek, lastMoveAt: widget.lastMoveAt),
           body: body,
         );
       },

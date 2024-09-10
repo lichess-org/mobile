@@ -14,11 +14,8 @@ class ClockSettings extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final controller = ref.read(clockControllerProvider.notifier);
-    final buttonsEnabled = ref.watch(
-      clockControllerProvider
-          .select((value) => value.paused || value.currentPlayer == null),
-    );
+    final state = ref.watch(clockControllerProvider);
+    final buttonsEnabled = !state.started || state.paused;
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -29,8 +26,12 @@ class ClockSettings extends ConsumerWidget {
           PlatformIconButton(
             semanticsLabel: context.l10n.reset,
             iconSize: _iconSize,
-            onTap: buttonsEnabled ? () => controller.reset() : null,
-            icon: Icons.cached,
+            onTap: buttonsEnabled
+                ? () {
+                    ref.read(clockControllerProvider.notifier).reset();
+                  }
+                : null,
+            icon: Icons.refresh,
           ),
           PlatformIconButton(
             semanticsLabel: context.l10n.settingsSettings,
@@ -54,11 +55,13 @@ class ClockSettings extends ConsumerWidget {
                         return TimeControlModal(
                           excludeUltraBullet: true,
                           value: TimeIncrement(
-                            options.time.inSeconds,
-                            options.increment.inSeconds,
+                            options.timePlayerTop.inSeconds,
+                            options.incrementPlayerTop.inSeconds,
                           ),
                           onSelected: (choice) {
-                            controller.updateOptions(choice);
+                            ref
+                                .read(clockControllerProvider.notifier)
+                                .updateOptions(choice);
                           },
                         );
                       },
@@ -86,6 +89,16 @@ class _PlayResumeButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = ref.read(clockControllerProvider.notifier);
     final state = ref.watch(clockControllerProvider);
+
+    if (!state.started) {
+      return PlatformIconButton(
+        semanticsLabel: context.l10n.play,
+        iconSize: 35,
+        onTap: () => controller.start(),
+        icon: Icons.play_arrow,
+      );
+    }
+
     if (state.paused) {
       return PlatformIconButton(
         semanticsLabel: context.l10n.resume,
@@ -94,10 +107,11 @@ class _PlayResumeButton extends ConsumerWidget {
         icon: Icons.play_arrow,
       );
     }
+
     return PlatformIconButton(
       semanticsLabel: context.l10n.pause,
       iconSize: 35,
-      onTap: state.currentPlayer != null ? () => controller.pause() : null,
+      onTap: () => controller.pause(),
       icon: Icons.pause,
     );
   }

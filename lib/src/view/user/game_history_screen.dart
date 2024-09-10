@@ -39,60 +39,36 @@ class GameHistoryScreen extends ConsumerWidget {
             error: (e, s) => Text(context.l10n.mobileAllGames),
           )
         : Text(filtersInUse.selectionLabel(context));
-    final filterBtn = Stack(
-      alignment: Alignment.center,
-      children: [
-        AppBarIconButton(
-          icon: const Icon(Icons.tune),
-          semanticsLabel: context.l10n.filterGames,
-          onPressed: () => showAdaptiveBottomSheet<GameFilterState>(
-            context: context,
-            builder: (_) => _FilterGames(
-              filter: ref.read(gameFilterProvider(filter: gameFilter)),
-              user: user,
-            ),
-          ).then((value) {
-            if (value != null) {
-              ref
-                  .read(gameFilterProvider(filter: gameFilter).notifier)
-                  .setFilter(value);
-            }
-          }),
+    final filterBtn = AppBarIconButton(
+      icon: Badge.count(
+        backgroundColor: Theme.of(context).colorScheme.secondary,
+        textStyle: TextStyle(
+          color: Theme.of(context).colorScheme.onSecondary,
+          fontWeight: FontWeight.bold,
         ),
-        if (filtersInUse.count > 0)
-          Positioned(
-            top: 2.0,
-            right: 2.0,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                Icon(
-                  Icons.brightness_1,
-                  size: 20.0,
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
-                FittedBox(
-                  fit: BoxFit.contain,
-                  child: DefaultTextStyle.merge(
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.onSecondary,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    child: Text(filtersInUse.count.toString()),
-                  ),
-                ),
-              ],
-            ),
-          ),
-      ],
+        count: filtersInUse.count,
+        isLabelVisible: filtersInUse.count > 0,
+        child: const Icon(Icons.tune),
+      ),
+      semanticsLabel: context.l10n.filterGames,
+      onPressed: () => showAdaptiveBottomSheet<GameFilterState>(
+        context: context,
+        isScrollControlled: true,
+        builder: (_) => _FilterGames(
+          filter: ref.read(gameFilterProvider(filter: gameFilter)),
+          user: user,
+        ),
+      ).then((value) {
+        if (value != null) {
+          ref
+              .read(gameFilterProvider(filter: gameFilter).notifier)
+              .setFilter(value);
+        }
+      }),
     );
 
     return PlatformScaffold(
       appBar: PlatformAppBar(
-        cupertinoPadding: const EdgeInsetsDirectional.only(
-          start: 16.0,
-          end: 8.0,
-        ),
         title: title,
         actions: [filterBtn],
       ),
@@ -271,75 +247,48 @@ class _FilterGamesState extends ConsumerState<_FilterGames> {
     filter = widget.filter;
   }
 
+  static const gamePerfs = [
+    Perf.ultraBullet,
+    Perf.bullet,
+    Perf.blitz,
+    Perf.rapid,
+    Perf.classical,
+    Perf.correspondence,
+    Perf.chess960,
+    Perf.antichess,
+    Perf.kingOfTheHill,
+    Perf.threeCheck,
+    Perf.atomic,
+    Perf.horde,
+    Perf.racingKings,
+    Perf.crazyhouse,
+  ];
+  static const filterGroupSpace = SizedBox(height: 10.0);
+
   @override
   Widget build(BuildContext context) {
-    const gamePerfs = [
-      Perf.ultraBullet,
-      Perf.bullet,
-      Perf.blitz,
-      Perf.rapid,
-      Perf.classical,
-      Perf.correspondence,
-      Perf.chess960,
-      Perf.antichess,
-      Perf.kingOfTheHill,
-      Perf.threeCheck,
-      Perf.atomic,
-      Perf.horde,
-      Perf.racingKings,
-      Perf.crazyhouse,
-    ];
-    const filterGroupSpace = SizedBox(height: 10.0);
-
     final session = ref.read(authSessionProvider);
     final userId = widget.user?.id ?? session?.user.id;
 
-    List<Perf> availablePerfs(User user) {
-      final perfs = gamePerfs.where((perf) {
-        final p = user.perfs[perf];
-        return p != null && p.numberOfGamesOrRuns > 0;
-      }).toList(growable: false);
-      perfs.sort(
-        (p1, p2) => user.perfs[p2]!.numberOfGamesOrRuns
-            .compareTo(user.perfs[p1]!.numberOfGamesOrRuns),
-      );
-      return perfs;
-    }
-
-    Widget perfFilter(List<Perf> choices) => _Filter<Perf>(
-          filterName: context.l10n.variant,
-          filterType: FilterType.multipleChoice,
-          choices: choices,
-          choiceSelected: (choice) => filter.perfs.contains(choice),
-          choiceLabel: (t) => t.shortTitle,
-          onSelected: (value, selected) => setState(
-            () {
-              filter = filter.copyWith(
-                perfs: selected
-                    ? filter.perfs.add(value)
-                    : filter.perfs.remove(value),
-              );
-            },
-          ),
-        );
+    final Widget filters = userId != null
+        ? ref.watch(userProvider(id: userId)).when(
+              data: (user) => perfFilter(availablePerfs(user)),
+              loading: () => const Center(
+                child: CircularProgressIndicator.adaptive(),
+              ),
+              error: (_, __) => perfFilter(gamePerfs),
+            )
+        : perfFilter(gamePerfs);
 
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            filters,
             const SizedBox(height: 12.0),
-            if (userId != null)
-              ref.watch(userProvider(id: userId)).when(
-                    data: (user) => perfFilter(availablePerfs(user)),
-                    loading: () => const Center(
-                      child: CircularProgressIndicator.adaptive(),
-                    ),
-                    error: (_, __) => perfFilter(gamePerfs),
-                  )
-            else
-              perfFilter(gamePerfs),
             const PlatformDivider(thickness: 1, indent: 0),
             filterGroupSpace,
             _Filter<Side>(
@@ -377,6 +326,35 @@ class _FilterGamesState extends ConsumerState<_FilterGames> {
       ),
     );
   }
+
+  List<Perf> availablePerfs(User user) {
+    final perfs = gamePerfs.where((perf) {
+      final p = user.perfs[perf];
+      return p != null && p.numberOfGamesOrRuns > 0;
+    }).toList(growable: false);
+    perfs.sort(
+      (p1, p2) => user.perfs[p2]!.numberOfGamesOrRuns
+          .compareTo(user.perfs[p1]!.numberOfGamesOrRuns),
+    );
+    return perfs;
+  }
+
+  Widget perfFilter(List<Perf> choices) => _Filter<Perf>(
+        filterName: context.l10n.variant,
+        filterType: FilterType.multipleChoice,
+        choices: choices,
+        choiceSelected: (choice) => filter.perfs.contains(choice),
+        choiceLabel: (t) => t.shortTitle,
+        onSelected: (value, selected) => setState(
+          () {
+            filter = filter.copyWith(
+              perfs: selected
+                  ? filter.perfs.add(value)
+                  : filter.perfs.remove(value),
+            );
+          },
+        ),
+      );
 }
 
 enum FilterType {

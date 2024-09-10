@@ -17,6 +17,8 @@ class BoardEditorController extends _$BoardEditorController {
       pieces: readFen(initialFen ?? kInitialFEN).lock,
       unmovedRooks: SquareSet.corners,
       editorPointerMode: EditorPointerMode.drag,
+      enPassantOptions: SquareSet.empty,
+      enPassantSquare: null,
       pieceToAddOnEdit: null,
     );
   }
@@ -58,6 +60,7 @@ class BoardEditorController extends _$BoardEditorController {
   void setSideToPlay(Side side) {
     state = state.copyWith(
       sideToPlay: side,
+      enPassantOptions: _calculateEnPassantOptions(state.pieces, side),
     );
   }
 
@@ -65,8 +68,59 @@ class BoardEditorController extends _$BoardEditorController {
     _updatePosition(readFen(fen).lock);
   }
 
+  /// Calculates the squares where an en passant capture could be possible.
+  SquareSet _calculateEnPassantOptions(IMap<Square, Piece> pieces, Side side) {
+    SquareSet enPassantOptions = SquareSet.empty;
+    final boardFen = writeFen(pieces.unlock);
+    final board = Board.parseFen(boardFen);
+
+    /// For en passant to be possible, there needs to be an adjacent pawn which has moved two squares forward.
+    /// So the two squares behind must be empty
+    void checkEnPassant(Square square, int fileOffset) {
+      final adjacentSquare =
+          Square.fromCoords(square.file.offset(fileOffset)!, square.rank);
+      final targetSquare = Square.fromCoords(
+        square.file.offset(fileOffset)!,
+        square.rank.offset(side == Side.white ? 1 : -1)!,
+      );
+      final originSquare = Square.fromCoords(
+        square.file.offset(fileOffset)!,
+        square.rank.offset(side == Side.white ? 2 : -2)!,
+      );
+
+      if (board.sideAt(adjacentSquare) == side.opposite &&
+          board.roleAt(adjacentSquare) == Role.pawn &&
+          board.sideAt(targetSquare) == null &&
+          board.sideAt(originSquare) == null) {
+        enPassantOptions =
+            enPassantOptions.union(SquareSet.fromSquare(targetSquare));
+      }
+    }
+
+    pieces.forEach((square, piece) {
+      if (piece.color == side && piece.role == Role.pawn) {
+        if ((side == Side.white && square.rank == Rank.fifth) ||
+            (side == Side.black && square.rank == Rank.fourth)) {
+          if (square.file != File.a) checkEnPassant(square, -1);
+          if (square.file != File.h) checkEnPassant(square, 1);
+        }
+      }
+    });
+
+    return enPassantOptions;
+  }
+
+  void toggleEnPassantSquare(Square square) {
+    state = state.copyWith(
+      enPassantSquare: state.enPassantSquare == square ? null : square,
+    );
+  }
+
   void _updatePosition(IMap<Square, Piece> pieces) {
-    state = state.copyWith(pieces: pieces);
+    state = state.copyWith(
+      pieces: pieces,
+      enPassantOptions: _calculateEnPassantOptions(pieces, state.sideToPlay),
+    );
   }
 
   void setCastling(Side side, CastlingSide castlingSide, bool allowed) {
@@ -105,6 +159,8 @@ class BoardEditorState with _$BoardEditorState {
     required IMap<Square, Piece> pieces,
     required SquareSet unmovedRooks,
     required EditorPointerMode editorPointerMode,
+    required SquareSet enPassantOptions,
+    required Square? enPassantSquare,
 
     /// When null, clears squares when in edit mode. Has no effect in drag mode.
     required Piece? pieceToAddOnEdit,
@@ -129,6 +185,7 @@ class BoardEditorState with _$BoardEditorState {
       board: board,
       unmovedRooks: unmovedRooks,
       turn: sideToPlay == Side.white ? Side.white : Side.black,
+      epSquare: enPassantSquare,
       halfmoves: 0,
       fullmoves: 1,
     );

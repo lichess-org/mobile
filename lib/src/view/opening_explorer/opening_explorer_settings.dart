@@ -3,6 +3,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -49,8 +51,17 @@ class OpeningExplorerSettings extends ConsumerWidget {
           children: LichessDbPrefState.kAvailableSpeeds
               .map(
                 (speed) => FilterChip(
-                  label: Icon(speed.icon),
-                  tooltip: speed.title,
+                  label: Text(
+                    String.fromCharCode(speed.icon.codePoint),
+                    style: TextStyle(
+                      fontFamily: speed.icon.fontFamily,
+                      fontSize: 18.0,
+                    ),
+                  ),
+                  tooltip: Perf.fromVariantAndSpeed(
+                    Variant.standard,
+                    speed,
+                  ).title,
                   selected: prefs.lichessDb.speeds.contains(speed),
                   onSelected: (_) => ref
                       .read(openingExplorerPreferencesProvider.notifier)
@@ -164,8 +175,17 @@ class OpeningExplorerSettings extends ConsumerWidget {
           children: PlayerDbPrefState.kAvailableSpeeds
               .map(
                 (speed) => FilterChip(
-                  label: Icon(speed.icon),
-                  tooltip: speed.title,
+                  label: Text(
+                    String.fromCharCode(speed.icon.codePoint),
+                    style: TextStyle(
+                      fontFamily: speed.icon.fontFamily,
+                      fontSize: 18.0,
+                    ),
+                  ),
+                  tooltip: Perf.fromVariantAndSpeed(
+                    Variant.standard,
+                    speed,
+                  ).title,
                   selected: prefs.playerDb.speeds.contains(speed),
                   onSelected: (_) => ref
                       .read(openingExplorerPreferencesProvider.notifier)
@@ -217,50 +237,44 @@ class OpeningExplorerSettings extends ConsumerWidget {
       ),
     ];
 
-    return DraggableScrollableSheet(
-      initialChildSize: .5,
-      expand: false,
-      snap: true,
-      snapSizes: const [.5, .75],
-      builder: (context, scrollController) => ListView(
-        controller: scrollController,
-        children: [
-          PlatformListTile(
-            title: Text(context.l10n.database),
-            subtitle: Wrap(
-              spacing: 5,
-              children: [
-                ChoiceChip(
-                  label: const Text('Masters'),
-                  selected: prefs.db == OpeningDatabase.master,
-                  onSelected: (_) => ref
-                      .read(openingExplorerPreferencesProvider.notifier)
-                      .setDatabase(OpeningDatabase.master),
-                ),
-                ChoiceChip(
-                  label: const Text('Lichess'),
-                  selected: prefs.db == OpeningDatabase.lichess,
-                  onSelected: (_) => ref
-                      .read(openingExplorerPreferencesProvider.notifier)
-                      .setDatabase(OpeningDatabase.lichess),
-                ),
-                ChoiceChip(
-                  label: Text(context.l10n.player),
-                  selected: prefs.db == OpeningDatabase.player,
-                  onSelected: (_) => ref
-                      .read(openingExplorerPreferencesProvider.notifier)
-                      .setDatabase(OpeningDatabase.player),
-                ),
-              ],
-            ),
+    return ListView(
+      shrinkWrap: true,
+      children: [
+        PlatformListTile(
+          title: Text(context.l10n.database),
+          subtitle: Wrap(
+            spacing: 5,
+            children: [
+              ChoiceChip(
+                label: const Text('Masters'),
+                selected: prefs.db == OpeningDatabase.master,
+                onSelected: (_) => ref
+                    .read(openingExplorerPreferencesProvider.notifier)
+                    .setDatabase(OpeningDatabase.master),
+              ),
+              ChoiceChip(
+                label: const Text('Lichess'),
+                selected: prefs.db == OpeningDatabase.lichess,
+                onSelected: (_) => ref
+                    .read(openingExplorerPreferencesProvider.notifier)
+                    .setDatabase(OpeningDatabase.lichess),
+              ),
+              ChoiceChip(
+                label: Text(context.l10n.player),
+                selected: prefs.db == OpeningDatabase.player,
+                onSelected: (_) => ref
+                    .read(openingExplorerPreferencesProvider.notifier)
+                    .setDatabase(OpeningDatabase.player),
+              ),
+            ],
           ),
-          ...switch (prefs.db) {
-            OpeningDatabase.master => masterDbSettings,
-            OpeningDatabase.lichess => lichessDbSettings,
-            OpeningDatabase.player => playerDbSettings,
-          },
-        ],
-      ),
+        ),
+        ...switch (prefs.db) {
+          OpeningDatabase.master => masterDbSettings,
+          OpeningDatabase.lichess => lichessDbSettings,
+          OpeningDatabase.player => playerDbSettings,
+        },
+      ],
     );
   }
 }

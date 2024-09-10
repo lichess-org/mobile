@@ -26,13 +26,22 @@ part 'analysis_controller.freezed.dart';
 part 'analysis_controller.g.dart';
 
 const standaloneAnalysisId = StringId('standalone_analysis');
+const standaloneOpeningExplorerId = StringId('standalone_opening_explorer');
+const standaloneBroadcastId = StringId('standalone_broadcast');
+
 final _dateFormat = DateFormat('yyyy.MM.dd');
+
+/// Whether the analysis is a standalone analysis (not a lichess game analysis).
+bool _isStandaloneAnalysis(StringId id) =>
+    id == standaloneAnalysisId ||
+    id == standaloneOpeningExplorerId ||
+    id == standaloneBroadcastId;
 
 @freezed
 class AnalysisOptions with _$AnalysisOptions {
   const AnalysisOptions._();
   const factory AnalysisOptions({
-    /// The ID of the analysis. Can be a game ID or a standalone analysis ID.
+    /// The ID of the analysis. Can be a game ID or a standalone ID.
     required StringId id,
     required bool isLocalEvaluationAllowed,
     required Side orientation,
@@ -51,7 +60,7 @@ class AnalysisOptions with _$AnalysisOptions {
 
   /// The game ID of the analysis, if it's a lichess game.
   GameAnyId? get gameAnyId =>
-      id != standaloneAnalysisId ? GameAnyId(id.value) : null;
+      _isStandaloneAnalysis(id) ? null : GameAnyId(id.value);
 }
 
 @riverpod
@@ -67,10 +76,15 @@ class AnalysisController extends _$AnalysisController {
     final evaluationService = ref.watch(evaluationServiceProvider);
     final serverAnalysisService = ref.watch(serverAnalysisServiceProvider);
 
+    final isEngineAllowed = options.isLocalEvaluationAllowed &&
+        engineSupportedVariants.contains(options.variant);
+
     ref.onDispose(() {
       _startEngineEvalTimer?.cancel();
       _engineEvalDebounce.dispose();
-      evaluationService.disposeEngine();
+      if (isEngineAllowed) {
+        evaluationService.disposeEngine();
+      }
       serverAnalysisService.lastAnalysisEvent
           .removeListener(_listenToServerAnalysisEvents);
     });
@@ -149,12 +163,12 @@ class AnalysisController extends _$AnalysisController {
       lastMove: lastMove,
       pov: options.orientation,
       contextOpening: options.opening,
-      wikiBooksUrl: _wikiBooksUrl(currentPath),
       isLocalEvaluationAllowed: options.isLocalEvaluationAllowed,
       isLocalEvaluationEnabled: prefs.enableLocalEvaluation,
       displayMode: DisplayMode.moves,
       playersAnalysis: options.serverAnalysis,
-      acplChartData: _makeAcplChartData(),
+      acplChartData:
+          options.serverAnalysis != null ? _makeAcplChartData() : null,
       clocks: options.isBroadcast ? _makeClocks(currentPath) : null,
     );
 
@@ -190,7 +204,11 @@ class AnalysisController extends _$AnalysisController {
       return;
     }
 
-    final (newPath, isNewNode) = _root.addMoveAt(state.currentPath, move);
+    // For the opening explorer, last played move should always be the mainline
+    final shouldReplace = options.id == standaloneOpeningExplorerId;
+
+    final (newPath, isNewNode) =
+        _root.addMoveAt(state.currentPath, move, replace: shouldReplace);
     if (newPath != null) {
       _setPath(
         newPath,
@@ -366,12 +384,8 @@ class AnalysisController extends _$AnalysisController {
     state = state.copyWith(pgnHeaders: headers);
   }
 
-  void toggleDisplayMode() {
-    state = state.copyWith(
-      displayMode: state.displayMode == DisplayMode.moves
-          ? DisplayMode.summary
-          : DisplayMode.moves,
-    );
+  void setDisplayMode(DisplayMode mode) {
+    state = state.copyWith(displayMode: mode);
   }
 
   Future<void> requestServerAnalysis() {
@@ -396,8 +410,15 @@ class AnalysisController extends _$AnalysisController {
     }
   }
 
-  String makeGamePgn() {
+  /// Makes a full PGN string (including headers and comments) of the current game state.
+  String makeExportPgn() {
     return _root.makePgn(state.pgnHeaders, state.pgnRootComments);
+  }
+
+  /// Makes a PGN string up to the current node only.
+  String makeCurrentNodePgn() {
+    final nodes = _root.branchesOn(state.currentPath);
+    return nodes.map((node) => node.sanMove.san).join(' ');
   }
 
   void _setPath(
@@ -458,7 +479,6 @@ class AnalysisController extends _$AnalysisController {
         isOnMainline: _root.isOnMainline(path),
         currentNode: AnalysisCurrentNode.fromNode(currentNode),
         currentBranchOpening: opening,
-        wikiBooksUrl: _wikiBooksUrl(path),
         lastMove: currentNode.sanMove.move,
         promotionMove: null,
         root: rootView,
@@ -471,7 +491,6 @@ class AnalysisController extends _$AnalysisController {
         isOnMainline: _root.isOnMainline(path),
         currentNode: AnalysisCurrentNode.fromNode(currentNode),
         currentBranchOpening: opening,
-        wikiBooksUrl: _wikiBooksUrl(path),
         lastMove: null,
         promotionMove: null,
         root: rootView,
@@ -503,19 +522,6 @@ class AnalysisController extends _$AnalysisController {
         );
       }
     }
-  }
-
-  String? _wikiBooksUrl(UciPath path) {
-    if (_root.position.ply > 30) {
-      return null;
-    }
-    final nodes = _root.branchesOn(path);
-    final moves = nodes.map((node) {
-      final move = node.view.sanMove.san;
-      final moveNr = (node.position.ply / 2).ceil();
-      return node.position.ply.isOdd ? '$moveNr._$move' : '$moveNr...$move';
-    });
-    return 'https://en.wikibooks.org/wiki/Chess_Opening_Theory/${moves.join("/")}';
   }
 
   void _startEngineEval() {
@@ -706,7 +712,9 @@ class AnalysisState with _$AnalysisState {
     /// Whether the user has enabled local evaluation.
     required bool isLocalEvaluationEnabled,
 
-    /// Whether to show the ACPL chart instead of tree view.
+    /// The display mode of the analysis.
+    ///
+    /// It can be either moves, summary or opening explorer.
     required DisplayMode displayMode,
 
     /// Clocks if avaible. Only used by the broadcast analysis screen.
@@ -724,9 +732,6 @@ class AnalysisState with _$AnalysisState {
     /// The opening of the current branch.
     Opening? currentBranchOpening,
 
-    /// wikibooks.org opening theory page for the current path
-    String? wikiBooksUrl,
-
     /// Optional server analysis to display player stats.
     ({PlayerAnalysis white, PlayerAnalysis black})? playersAnalysis,
 
@@ -742,6 +747,13 @@ class AnalysisState with _$AnalysisState {
     IList<PgnComment>? pgnRootComments,
   }) = _AnalysisState;
 
+  /// The game ID of the analysis, if it's a lichess game.
+  GameAnyId? get gameAnyId =>
+      _isStandaloneAnalysis(id) ? null : GameAnyId(id.value);
+
+  /// Whether the analysis is for a lichess game.
+  bool get isLichessGameAnalysis => gameAnyId != null;
+
   IMap<Square, ISet<Square>> get validMoves =>
       makeLegalMoves(currentNode.position);
 
@@ -749,7 +761,7 @@ class AnalysisState with _$AnalysisState {
   ///
   /// It must be a lichess game, which is finished and not already analyzed.
   bool get canRequestServerAnalysis =>
-      id != standaloneAnalysisId &&
+      gameAnyId != null &&
       (id.length == 8 || id.length == 12) &&
       !hasServerAnalysis &&
       pgnHeaders['Result'] != '*';
@@ -765,11 +777,12 @@ class AnalysisState with _$AnalysisState {
           acplChartData != null &&
           acplChartData!.isNotEmpty);
 
+  /// Whether the engine is allowed for this analysis and variant.
+  bool get isEngineAllowed =>
+      isLocalEvaluationAllowed && engineSupportedVariants.contains(variant);
+
   /// Whether the engine is available for evaluation
-  bool get isEngineAvailable =>
-      isLocalEvaluationAllowed &&
-      engineSupportedVariants.contains(variant) &&
-      isLocalEvaluationEnabled;
+  bool get isEngineAvailable => isEngineAllowed && isLocalEvaluationEnabled;
 
   Position get position => currentNode.position;
   bool get canGoNext => currentNode.hasChild;
@@ -780,6 +793,22 @@ class AnalysisState with _$AnalysisState {
         isLocalEngineAvailable: isEngineAvailable,
         position: position,
         savedEval: currentNode.eval ?? currentNode.serverEval,
+      );
+
+  AnalysisOptions get openingExplorerOptions => AnalysisOptions(
+        id: standaloneOpeningExplorerId,
+        isLocalEvaluationAllowed: false,
+        orientation: pov,
+        variant: variant,
+        initialMoveCursor: currentPath.size,
+      );
+
+  static AnalysisOptions get broadcastOptions => const AnalysisOptions(
+        id: standaloneAnalysisId,
+        isLocalEvaluationAllowed: true,
+        orientation: Side.white,
+        variant: Variant.standard,
+        isBroadcast: true,
       );
 }
 

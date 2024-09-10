@@ -11,16 +11,17 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 
 class TimeControlModal extends ConsumerWidget {
-  final ValueSetter<TimeIncrement> onSelected;
-  final TimeIncrement value;
-  final bool excludeUltraBullet;
-
   const TimeControlModal({
-    required this.onSelected,
     required this.value,
+    required this.onSelected,
     this.excludeUltraBullet = false,
     super.key,
   });
+
+  final TimeIncrement value;
+  final ValueSetter<TimeIncrement> onSelected;
+
+  final bool excludeUltraBullet;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

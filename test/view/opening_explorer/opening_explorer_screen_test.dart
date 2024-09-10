@@ -11,11 +11,17 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer_preferences.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_screen.dart';
+import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_widget.dart';
 
 import '../../test_app.dart';
 import '../../test_utils.dart';
 
 void main() {
+  final explorerViewFinder = find.descendant(
+    of: find.byType(OpeningExplorerWidget),
+    matching: find.byType(Scrollable),
+  );
+
   final mockClient = MockClient((request) {
     if (request.url.host == 'explorer.lichess.ovh') {
       if (request.url.path == '/masters') {
@@ -28,14 +34,11 @@ void main() {
         return mockResponse(playerOpeningExplorerResponse, 200);
       }
     }
-    if (request.url.host == 'en.wikibooks.org') {
-      return mockResponse('', 200);
-    }
     return mockResponse('', 404);
   });
 
   const options = AnalysisOptions(
-    id: standaloneAnalysisId,
+    id: standaloneOpeningExplorerId,
     isLocalEvaluationAllowed: false,
     orientation: Side.white,
     variant: Variant.standard,
@@ -77,7 +80,7 @@ void main() {
           'e4',
           'd4',
         ];
-        expect(find.byType(OpeningExplorerMoveTable), findsOneWidget);
+        expect(find.byType(Table), findsOneWidget);
         for (final move in moves) {
           expect(find.widgetWithText(TableRowInkWell, move), findsOneWidget);
         }
@@ -88,6 +91,7 @@ void main() {
         await tester.scrollUntilVisible(
           find.text('Firouzja, A.'),
           200,
+          scrollable: explorerViewFinder,
         );
 
         expect(
@@ -128,7 +132,7 @@ void main() {
         final moves = [
           'd4',
         ];
-        expect(find.byType(OpeningExplorerMoveTable), findsOneWidget);
+        expect(find.byType(Table), findsOneWidget);
         for (final move in moves) {
           expect(find.widgetWithText(TableRowInkWell, move), findsOneWidget);
         }
@@ -138,6 +142,7 @@ void main() {
         await tester.scrollUntilVisible(
           find.byType(OpeningExplorerGameTile),
           200,
+          scrollable: explorerViewFinder,
         );
 
         expect(
@@ -178,7 +183,7 @@ void main() {
         final moves = [
           'c4',
         ];
-        expect(find.byType(OpeningExplorerMoveTable), findsOneWidget);
+        expect(find.byType(Table), findsOneWidget);
         for (final move in moves) {
           expect(find.widgetWithText(TableRowInkWell, move), findsOneWidget);
         }
@@ -188,6 +193,7 @@ void main() {
         await tester.scrollUntilVisible(
           find.byType(OpeningExplorerGameTile),
           200,
+          scrollable: explorerViewFinder,
         );
 
         expect(

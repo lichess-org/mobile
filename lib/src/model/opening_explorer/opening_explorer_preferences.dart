@@ -5,7 +5,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/db/shared_preferences.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/common/perf.dart';
+import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -38,7 +38,7 @@ class OpeningExplorerPreferences extends _$OpeningExplorerPreferences {
   Future<void> setMasterDbSince(int year) =>
       _save(state.copyWith(masterDb: state.masterDb.copyWith(sinceYear: year)));
 
-  Future<void> toggleLichessDbSpeed(Perf speed) => _save(
+  Future<void> toggleLichessDbSpeed(Speed speed) => _save(
         state.copyWith(
           lichessDb: state.lichessDb.copyWith(
             speeds: state.lichessDb.speeds.contains(speed)
@@ -74,7 +74,7 @@ class OpeningExplorerPreferences extends _$OpeningExplorerPreferences {
         state.copyWith(playerDb: state.playerDb.copyWith(side: side)),
       );
 
-  Future<void> togglePlayerDbSpeed(Perf speed) => _save(
+  Future<void> togglePlayerDbSpeed(Speed speed) => _save(
         state.copyWith(
           playerDb: state.playerDb.copyWith(
             speeds: state.playerDb.speeds.contains(speed)
@@ -177,18 +177,18 @@ class LichessDbPrefState with _$LichessDbPrefState {
   const LichessDbPrefState._();
 
   const factory LichessDbPrefState({
-    required ISet<Perf> speeds,
+    required ISet<Speed> speeds,
     required ISet<int> ratings,
     required DateTime since,
   }) = _LichessDbPrefState;
 
   static const kAvailableSpeeds = ISetConst({
-    Perf.ultraBullet,
-    Perf.bullet,
-    Perf.blitz,
-    Perf.rapid,
-    Perf.classical,
-    Perf.correspondence,
+    Speed.ultraBullet,
+    Speed.bullet,
+    Speed.blitz,
+    Speed.rapid,
+    Speed.classical,
+    Speed.correspondence,
   });
   static const kAvailableRatings = ISetConst({
     400,
@@ -210,7 +210,7 @@ class LichessDbPrefState with _$LichessDbPrefState {
     'All time': earliestDate,
   };
   static final defaults = LichessDbPrefState(
-    speeds: kAvailableSpeeds.remove(Perf.ultraBullet),
+    speeds: kAvailableSpeeds.remove(Speed.ultraBullet),
     ratings: kAvailableRatings.remove(400),
     since: earliestDate,
   );
@@ -231,18 +231,18 @@ class PlayerDbPrefState with _$PlayerDbPrefState {
   const factory PlayerDbPrefState({
     String? username,
     required Side side,
-    required ISet<Perf> speeds,
+    required ISet<Speed> speeds,
     required ISet<GameMode> gameModes,
     required DateTime since,
   }) = _PlayerDbPrefState;
 
   static const kAvailableSpeeds = ISetConst({
-    Perf.ultraBullet,
-    Perf.bullet,
-    Perf.blitz,
-    Perf.rapid,
-    Perf.classical,
-    Perf.correspondence,
+    Speed.ultraBullet,
+    Speed.bullet,
+    Speed.blitz,
+    Speed.rapid,
+    Speed.classical,
+    Speed.correspondence,
   });
   static final earliestDate = DateTime.utc(2012, 12);
   static final now = DateTime.now();

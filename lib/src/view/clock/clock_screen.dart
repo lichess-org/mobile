@@ -16,7 +16,7 @@ class _ClockScreenState extends State<ClockScreen> {
   @override
   Widget build(BuildContext context) {
     return const ImmersiveModeWidget(
-      child: Scaffold(body: _Body()),
+      child: PopScope(canPop: false, child: Scaffold(body: _Body())),
     );
   }
 }

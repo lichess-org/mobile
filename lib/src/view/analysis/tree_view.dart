@@ -508,138 +508,125 @@ class _MoveContextMenu extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = analysisControllerProvider(pgn, options);
 
-    return DraggableScrollableSheet(
-      initialChildSize: .3,
-      expand: false,
-      snap: true,
-      snapSizes: const [.3, .7],
-      builder: (context, scrollController) => SingleChildScrollView(
-        controller: scrollController,
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: 16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      title,
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    if (branch.clock != null)
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+    return SafeArea(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  title,
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                if (branch.clock != null)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Icon(
-                                Icons.punch_clock,
-                              ),
-                              const SizedBox(width: 4.0),
-                              Text(
-                                branch.clock!.toHoursMinutesSeconds(
-                                  showTenths: branch.clock! <
-                                      const Duration(minutes: 1),
-                                ),
-                              ),
-                            ],
+                          const Icon(
+                            Icons.punch_clock,
                           ),
-                          if (branch.elapsedMoveTime != null) ...[
-                            const SizedBox(height: 4.0),
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const Icon(
-                                  Icons.hourglass_bottom,
-                                ),
-                                const SizedBox(width: 4.0),
-                                Text(
-                                  branch.elapsedMoveTime!
-                                      .toHoursMinutesSeconds(showTenths: true),
-                                ),
-                              ],
+                          const SizedBox(width: 4.0),
+                          Text(
+                            branch.clock!.toHoursMinutesSeconds(
+                              showTenths:
+                                  branch.clock! < const Duration(minutes: 1),
                             ),
-                          ],
+                          ),
                         ],
                       ),
-                  ],
-                ),
-              ),
-              if (branch.hasLichessAnalysisTextComment)
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16.0,
-                    vertical: 8.0,
+                      if (branch.elapsedMoveTime != null) ...[
+                        const SizedBox(height: 4.0),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(
+                              Icons.hourglass_bottom,
+                            ),
+                            const SizedBox(width: 4.0),
+                            Text(
+                              branch.elapsedMoveTime!
+                                  .toHoursMinutesSeconds(showTenths: true),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ],
                   ),
-                  child: Text(
-                    branch.lichessAnalysisComments!
-                        .map((c) => c.text ?? '')
-                        .join(' '),
-                  ),
-                ),
-              if (branch.hasTextComment)
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16.0,
-                    vertical: 8.0,
-                  ),
-                  child: Text(
-                    branch.comments!.map((c) => c.text ?? '').join(' '),
-                  ),
-                ),
-              const PlatformDivider(indent: 0),
-              if (parent.children.any((c) => c.isHidden))
-                BottomSheetContextMenuAction(
-                  icon: Icons.subtitles,
-                  child: Text(context.l10n.mobileShowVariations),
-                  onPressed: () {
-                    ref.read(ctrlProvider.notifier).showAllVariations(path);
-                  },
-                ),
-              if (isSideline)
-                BottomSheetContextMenuAction(
-                  icon: Icons.subtitles_off,
-                  child: Text(context.l10n.mobileHideVariation),
-                  onPressed: () {
-                    ref.read(ctrlProvider.notifier).hideVariation(path);
-                  },
-                ),
-              if (isSideline)
-                BottomSheetContextMenuAction(
-                  icon: Icons.expand_less,
-                  child: Text(context.l10n.promoteVariation),
-                  onPressed: () {
-                    ref
-                        .read(ctrlProvider.notifier)
-                        .promoteVariation(path, false);
-                  },
-                ),
-              if (isSideline)
-                BottomSheetContextMenuAction(
-                  icon: Icons.check,
-                  child: Text(context.l10n.makeMainLine),
-                  onPressed: () {
-                    ref
-                        .read(ctrlProvider.notifier)
-                        .promoteVariation(path, true);
-                  },
-                ),
-              BottomSheetContextMenuAction(
-                icon: Icons.delete,
-                child: Text(context.l10n.deleteFromHere),
-                onPressed: () {
-                  ref.read(ctrlProvider.notifier).deleteFromHere(path);
-                },
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
+          if (branch.hasLichessAnalysisTextComment)
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 8.0,
+              ),
+              child: Text(
+                branch.lichessAnalysisComments!
+                    .map((c) => c.text ?? '')
+                    .join(' '),
+              ),
+            ),
+          if (branch.hasTextComment)
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 8.0,
+              ),
+              child: Text(
+                branch.comments!.map((c) => c.text ?? '').join(' '),
+              ),
+            ),
+          const PlatformDivider(indent: 0),
+          if (parent.children.any((c) => c.isHidden))
+            BottomSheetContextMenuAction(
+              icon: Icons.subtitles,
+              child: Text(context.l10n.mobileShowVariations),
+              onPressed: () {
+                ref.read(ctrlProvider.notifier).showAllVariations(path);
+              },
+            ),
+          if (isSideline)
+            BottomSheetContextMenuAction(
+              icon: Icons.subtitles_off,
+              child: Text(context.l10n.mobileHideVariation),
+              onPressed: () {
+                ref.read(ctrlProvider.notifier).hideVariation(path);
+              },
+            ),
+          if (isSideline)
+            BottomSheetContextMenuAction(
+              icon: Icons.expand_less,
+              child: Text(context.l10n.promoteVariation),
+              onPressed: () {
+                ref.read(ctrlProvider.notifier).promoteVariation(path, false);
+              },
+            ),
+          if (isSideline)
+            BottomSheetContextMenuAction(
+              icon: Icons.check,
+              child: Text(context.l10n.makeMainLine),
+              onPressed: () {
+                ref.read(ctrlProvider.notifier).promoteVariation(path, true);
+              },
+            ),
+          BottomSheetContextMenuAction(
+            icon: Icons.delete,
+            child: Text(context.l10n.deleteFromHere),
+            onPressed: () {
+              ref.read(ctrlProvider.notifier).deleteFromHere(path);
+            },
+          ),
+          const SizedBox(height: 8.0),
+        ],
       ),
     );
   }
@@ -659,31 +646,26 @@ class _Comments extends StatelessWidget {
         showAdaptiveBottomSheet<void>(
           context: context,
           isDismissible: true,
+          showDragHandle: true,
           isScrollControlled: true,
-          builder: (context) => DraggableScrollableSheet(
-            initialChildSize: 0.3,
-            expand: false,
-            snap: true,
-            snapSizes: const [.3, .7],
-            builder: (context, scrollController) => SingleChildScrollView(
-              controller: scrollController,
-              child: Padding(
-                padding: const EdgeInsets.all(24.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: comments.map(
-                    (comment) {
-                      if (comment.text == null || comment.text!.isEmpty) {
-                        return const SizedBox.shrink();
-                      }
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 16.0),
-                        child: Text(comment.text!.replaceAll('\n', ' ')),
-                      );
-                    },
-                  ).toList(),
-                ),
-              ),
+          builder: (context) => Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: 8.0,
+              horizontal: 16.0,
+            ),
+            child: ListView(
+              shrinkWrap: true,
+              children: comments.map(
+                (comment) {
+                  if (comment.text == null || comment.text!.isEmpty) {
+                    return const SizedBox.shrink();
+                  }
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 16.0),
+                    child: Text(comment.text!.replaceAll('\n', ' ')),
+                  );
+                },
+              ).toList(),
             ),
           ),
         );
@@ -734,18 +716,7 @@ class _OpeningHeader extends ConsumerWidget {
             height: kOpeningHeaderHeight,
             width: double.infinity,
             decoration: BoxDecoration(
-              color: Theme.of(context).platform == TargetPlatform.iOS
-                  ? CupertinoDynamicColor.resolve(
-                      CupertinoColors.systemGrey5,
-                      context,
-                    )
-                  : Theme.of(context).colorScheme.secondaryContainer,
-              borderRadius: displayMode == Orientation.landscape
-                  ? const BorderRadius.only(
-                      topLeft: Radius.circular(10.0),
-                      topRight: Radius.circular(10.0),
-                    )
-                  : null,
+              color: Theme.of(context).colorScheme.secondaryContainer,
             ),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),

@@ -107,6 +107,7 @@ final game = ArchivedGame(
     speed: Speed.correspondence,
     variant: Variant.standard,
   ),
+  source: GameSource.lobby,
   data: LightArchivedGame(
     id: gameId,
     variant: Variant.standard,
@@ -167,6 +168,7 @@ final games = List.generate(100, (index) {
       speed: Speed.correspondence,
       variant: Variant.standard,
     ),
+    source: GameSource.lobby,
     data: LightArchivedGame(
       id: id,
       variant: Variant.standard,

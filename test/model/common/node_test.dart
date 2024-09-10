@@ -516,6 +516,32 @@ void main() {
       root.addMoveAt(previousUciPath, move!);
       expect(root.makePgn(), isNot(initialPng));
     });
+    test(
+        'do not convert castling move if rook is on the alternative castling square',
+        () {
+      const pgn =
+          '[FEN "rnbqkbnr/pppppppp/8/8/8/2NBQ3/PPPPPPPP/2R1KBNR w KQkq - 0 1"]';
+      final root = Root.fromPgnGame(PgnGame.parsePgn(pgn));
+      final initialPng = root.makePgn();
+      final previousUciPath = root.mainlinePath.penultimate;
+      final move = Move.parse('e1c1');
+      root.addMoveAt(previousUciPath, move!);
+      expect(root.makePgn(), isNot(initialPng));
+      expect(root.mainline.last.sanMove.move, move);
+    });
+  });
+
+  group('ViewNode', () {
+    test('mainline', () {
+      final root = Root.fromPgnMoves('e4 e5');
+      final viewRoot = root.view;
+      final mainline = viewRoot.mainline;
+
+      expect(mainline.length, equals(2));
+      final list = mainline.toList();
+      expect(list[0].sanMove, equals(SanMove('e4', Move.parse('e2e4')!)));
+      expect(list[1].sanMove, equals(SanMove('e5', Move.parse('e7e5')!)));
+    });
   });
 }
 

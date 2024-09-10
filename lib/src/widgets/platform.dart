@@ -71,6 +71,7 @@ class PlatformCard extends StatelessWidget {
     this.elevation,
     this.color,
     this.shadowColor,
+    this.clipBehavior,
   });
 
   final Widget child;
@@ -79,6 +80,7 @@ class PlatformCard extends StatelessWidget {
   final double? elevation;
   final Color? color;
   final Color? shadowColor;
+  final Clip? clipBehavior;
 
   /// The empty space that surrounds the card.
   ///
@@ -106,6 +108,7 @@ class PlatformCard extends StatelessWidget {
                       borderRadius: BorderRadius.all(Radius.circular(10.0)),
                     ),
               semanticContainer: semanticContainer,
+              clipBehavior: clipBehavior,
               child: child,
             )
           : Card(
@@ -121,6 +124,7 @@ class PlatformCard extends StatelessWidget {
               semanticContainer: semanticContainer,
               elevation: elevation,
               margin: margin,
+              clipBehavior: clipBehavior,
               child: child,
             ),
     );

@@ -80,21 +80,18 @@ class _Body extends ConsumerWidget {
                   child: Chessboard.fixed(
                     size: boardSize,
                     orientation: Side.white,
-                    fen: kInitialFEN,
+                    lastMove: const NormalMove(from: Square.e2, to: Square.e4),
+                    fen:
+                        'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1',
                     shapes: <Shape>{
-                      Arrow(
-                        color: boardPrefs.shapeColor.color,
-                        orig: Square.fromName('e2'),
-                        dest: Square.fromName('e4'),
-                      ),
                       Circle(
                         color: boardPrefs.shapeColor.color,
-                        orig: Square.fromName('d2'),
+                        orig: Square.fromName('b8'),
                       ),
                       Arrow(
                         color: boardPrefs.shapeColor.color,
-                        orig: Square.fromName('b1'),
-                        dest: Square.fromName('c3'),
+                        orig: Square.fromName('b8'),
+                        dest: Square.fromName('c6'),
                       ),
                     }.lock,
                     settings: ChessboardSettings(

@@ -22,13 +22,13 @@ class AnalysisBoard extends ConsumerStatefulWidget {
     this.pgn,
     this.options,
     this.boardSize, {
-    required this.isTablet,
+    this.borderRadius,
   });
 
   final String pgn;
   final AnalysisOptions options;
   final double boardSize;
-  final bool isTablet;
+  final BorderRadiusGeometry? borderRadius;
 
   @override
   ConsumerState<AnalysisBoard> createState() => AnalysisBoardState();
@@ -102,10 +102,10 @@ class AnalysisBoardState extends ConsumerState<AnalysisBoard> {
                   : IMap({sanMove.move.to: annotation})
               : null,
       settings: boardPrefs.toBoardSettings().copyWith(
-            borderRadius: widget.isTablet
-                ? const BorderRadius.all(Radius.circular(4.0))
-                : BorderRadius.zero,
-            boxShadow: widget.isTablet ? boardShadows : const <BoxShadow>[],
+            borderRadius: widget.borderRadius,
+            boxShadow: widget.borderRadius != null
+                ? boardShadows
+                : const <BoxShadow>[],
             drawShape: DrawShapeOptions(
               enable: true,
               onCompleteShape: _onCompleteShape,

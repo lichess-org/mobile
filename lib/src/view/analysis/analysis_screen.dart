@@ -223,9 +223,8 @@ class _Body extends ConsumerWidget {
     final hasEval =
         ref.watch(ctrlProvider.select((value) => value.hasAvailableEval));
 
-    final showAnalysisSummary = ref.watch(
-      ctrlProvider.select((value) => value.displayMode == DisplayMode.summary),
-    );
+    final displayMode =
+        ref.watch(ctrlProvider.select((value) => value.displayMode));
 
     return Column(
       children: [
@@ -245,98 +244,115 @@ class _Body extends ConsumerWidget {
                     ? defaultBoardSize - kTabletBoardTableSidePadding * 2
                     : defaultBoardSize;
 
-                return aspectRatio > 1
-                    ? Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              left: kTabletBoardTableSidePadding,
-                              top: kTabletBoardTableSidePadding,
-                              bottom: kTabletBoardTableSidePadding,
-                            ),
-                            child: Row(
-                              children: [
-                                AnalysisBoard(
-                                  pgn,
-                                  options,
-                                  boardSize,
-                                  isTablet: isTablet,
-                                ),
-                                if (hasEval && showEvaluationGauge) ...[
-                                  const SizedBox(width: 4.0),
-                                  _EngineGaugeVertical(ctrlProvider),
-                                ],
-                              ],
-                            ),
-                          ),
-                          Flexible(
-                            fit: FlexFit.loose,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                if (isEngineAvailable)
-                                  _EngineLines(
-                                    ctrlProvider,
-                                    isLandscape: true,
-                                  ),
-                                Expanded(
-                                  child: PlatformCard(
-                                    margin: const EdgeInsets.all(
-                                      kTabletBoardTableSidePadding,
-                                    ),
-                                    semanticContainer: false,
-                                    child: showAnalysisSummary
-                                        ? ServerAnalysisSummary(pgn, options)
-                                        : AnalysisTreeView(
-                                            pgn,
-                                            options,
-                                            Orientation.landscape,
-                                          ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      )
-                    : Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.max,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          _ColumnTopTable(ctrlProvider),
-                          if (isTablet)
-                            Padding(
-                              padding: const EdgeInsets.all(
-                                kTabletBoardTableSidePadding,
-                              ),
-                              child: AnalysisBoard(
-                                pgn,
-                                options,
-                                boardSize,
-                                isTablet: isTablet,
-                              ),
-                            )
-                          else
+                const tabletBoardRadius =
+                    BorderRadius.all(Radius.circular(4.0));
+
+                final display = switch (displayMode) {
+                  DisplayMode.summary => ServerAnalysisSummary(pgn, options),
+                  DisplayMode.moves => AnalysisTreeView(
+                      pgn,
+                      options,
+                      aspectRatio > 1
+                          ? Orientation.landscape
+                          : Orientation.portrait,
+                    ),
+                };
+
+                // If the aspect ratio is greater than 1, we are in landscape mode.
+                if (aspectRatio > 1) {
+                  return Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          left: kTabletBoardTableSidePadding,
+                          top: kTabletBoardTableSidePadding,
+                          bottom: kTabletBoardTableSidePadding,
+                        ),
+                        child: Row(
+                          children: [
                             AnalysisBoard(
                               pgn,
                               options,
                               boardSize,
-                              isTablet: isTablet,
+                              borderRadius: isTablet ? tabletBoardRadius : null,
                             ),
-                          if (showAnalysisSummary)
-                            Expanded(child: ServerAnalysisSummary(pgn, options))
-                          else
+                            if (hasEval && showEvaluationGauge) ...[
+                              const SizedBox(width: 4.0),
+                              _EngineGaugeVertical(ctrlProvider),
+                            ],
+                          ],
+                        ),
+                      ),
+                      Flexible(
+                        fit: FlexFit.loose,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            if (isEngineAvailable)
+                              _EngineLines(
+                                ctrlProvider,
+                                isLandscape: true,
+                              ),
                             Expanded(
-                              child: AnalysisTreeView(
-                                pgn,
-                                options,
-                                Orientation.portrait,
+                              child: PlatformCard(
+                                clipBehavior: Clip.hardEdge,
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(4.0),
+                                ),
+                                margin: const EdgeInsets.all(
+                                  kTabletBoardTableSidePadding,
+                                ),
+                                semanticContainer: false,
+                                child: display,
                               ),
                             ),
-                        ],
-                      );
+                          ],
+                        ),
+                      ),
+                    ],
+                  );
+                }
+                // If the aspect ratio is less than 1, we are in portrait mode.
+                else {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      _ColumnTopTable(ctrlProvider),
+                      if (isTablet)
+                        Padding(
+                          padding: const EdgeInsets.all(
+                            kTabletBoardTableSidePadding,
+                          ),
+                          child: AnalysisBoard(
+                            pgn,
+                            options,
+                            boardSize,
+                            borderRadius: isTablet ? tabletBoardRadius : null,
+                          ),
+                        )
+                      else
+                        AnalysisBoard(
+                          pgn,
+                          options,
+                          boardSize,
+                          borderRadius: isTablet ? tabletBoardRadius : null,
+                        ),
+                      Expanded(
+                        child: Padding(
+                          padding: isTablet
+                              ? const EdgeInsets.symmetric(
+                                  horizontal: kTabletBoardTableSidePadding,
+                                )
+                              : EdgeInsets.zero,
+                          child: display,
+                        ),
+                      ),
+                    ],
+                  );
+                }
               },
             ),
           ),
@@ -567,14 +583,7 @@ class _BottomBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = analysisControllerProvider(pgn, options);
-    final canGoBack =
-        ref.watch(ctrlProvider.select((value) => value.canGoBack));
-    final canGoNext =
-        ref.watch(ctrlProvider.select((value) => value.canGoNext));
-    final displayMode =
-        ref.watch(ctrlProvider.select((value) => value.displayMode));
-    final canShowGameSummary =
-        ref.watch(ctrlProvider.select((value) => value.canShowGameSummary));
+    final analysisState = ref.watch(ctrlProvider);
     final isOnline =
         ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
 
@@ -587,13 +596,19 @@ class _BottomBar extends ConsumerWidget {
           },
           icon: Icons.menu,
         ),
-        if (canShowGameSummary)
+        if (analysisState.canShowGameSummary)
           BottomBarButton(
-            label: displayMode == DisplayMode.summary ? 'Moves' : 'Summary',
+            // TODO: l10n
+            label: analysisState.displayMode == DisplayMode.summary
+                ? 'Moves'
+                : 'Summary',
             onTap: () {
-              ref.read(ctrlProvider.notifier).toggleDisplayMode();
+              final newMode = analysisState.displayMode == DisplayMode.summary
+                  ? DisplayMode.moves
+                  : DisplayMode.summary;
+              ref.read(ctrlProvider.notifier).setDisplayMode(newMode);
             },
-            icon: displayMode == DisplayMode.summary
+            icon: analysisState.displayMode == DisplayMode.summary
                 ? LichessIcons.flow_cascade
                 : Icons.area_chart,
           ),
@@ -603,9 +618,10 @@ class _BottomBar extends ConsumerWidget {
               ? () {
                   pushPlatformRoute(
                     context,
+                    title: context.l10n.openingExplorer,
                     builder: (_) => OpeningExplorerScreen(
-                      pgn: pgn,
-                      options: options,
+                      pgn: ref.read(ctrlProvider.notifier).makeCurrentNodePgn(),
+                      options: analysisState.openingExplorerOptions,
                     ),
                   );
                 }
@@ -613,22 +629,23 @@ class _BottomBar extends ConsumerWidget {
           icon: Icons.explore,
         ),
         RepeatButton(
-          onLongPress: canGoBack ? () => _moveBackward(ref) : null,
+          onLongPress:
+              analysisState.canGoBack ? () => _moveBackward(ref) : null,
           child: BottomBarButton(
             key: const ValueKey('goto-previous'),
-            onTap: canGoBack ? () => _moveBackward(ref) : null,
+            onTap: analysisState.canGoBack ? () => _moveBackward(ref) : null,
             label: 'Previous',
             icon: CupertinoIcons.chevron_back,
             showTooltip: false,
           ),
         ),
         RepeatButton(
-          onLongPress: canGoNext ? () => _moveForward(ref) : null,
+          onLongPress: analysisState.canGoNext ? () => _moveForward(ref) : null,
           child: BottomBarButton(
             key: const ValueKey('goto-next'),
             icon: CupertinoIcons.chevron_forward,
             label: context.l10n.next,
-            onTap: canGoNext ? () => _moveForward(ref) : null,
+            onTap: analysisState.canGoNext ? () => _moveForward(ref) : null,
             showTooltip: false,
           ),
         ),

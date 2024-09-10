@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
@@ -11,14 +10,6 @@ import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'broadcast_game_controller.g.dart';
-
-const broadcastAnalysisOptions = AnalysisOptions(
-  id: StringId('standalone_analysis'),
-  isLocalEvaluationAllowed: true,
-  orientation: Side.white,
-  variant: Variant.standard,
-  isBroadcast: true,
-);
 
 @riverpod
 class BroadcastGameController extends _$BroadcastGameController {
@@ -81,8 +72,10 @@ class BroadcastGameController extends _$BroadcastGameController {
         pick(event.data, 'n', 'clock').asDurationFromCentiSecondsOrNull();
 
     final ctrlProviderNotifier = ref.read(
-      analysisControllerProvider(state.requireValue, broadcastAnalysisOptions)
-          .notifier,
+      analysisControllerProvider(
+        state.requireValue,
+        AnalysisState.broadcastOptions,
+      ).notifier,
     );
 
     ctrlProviderNotifier.onBroadcastMove(path, uciMove, clock);
@@ -96,8 +89,10 @@ class BroadcastGameController extends _$BroadcastGameController {
     if (broadcastGameId != gameId) return;
 
     final ctrlProviderNotifier = ref.read(
-      analysisControllerProvider(state.requireValue, broadcastAnalysisOptions)
-          .notifier,
+      analysisControllerProvider(
+        state.requireValue,
+        AnalysisState.broadcastOptions,
+      ).notifier,
     );
 
     final headers = Map.fromEntries(

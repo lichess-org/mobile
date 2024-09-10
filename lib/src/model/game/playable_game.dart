@@ -137,6 +137,7 @@ class PlayableGame
     return ArchivedGame(
       id: id,
       meta: meta,
+      source: source,
       data: LightArchivedGame(
         id: id,
         variant: meta.variant,

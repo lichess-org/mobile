@@ -194,10 +194,10 @@ packages:
     dependency: "direct main"
     description:
       name: chessground
-      sha256: ac2bfe069b6ad96d7c1299d6901a4c6aeb15223fdcc3dd5c4e8073d2a9baa5e9
+      sha256: "3267db8b04e0857761c40eab5895c556a885263388386f0f26b85d61401a1e05"
       url: "https://pub.dev"
     source: hosted
-    version: "5.1.0"
+    version: "5.1.1"
   ci:
     dependency: transitive
     description:
@@ -314,18 +314,18 @@ packages:
     dependency: "direct dev"
     description:
       name: custom_lint
-      sha256: "4939d89e580c36215e48a7de8fd92f22c79dcc3eb11fda84f3402b3b45aec663"
+      sha256: "6e1ec47427ca968f22bce734d00028ae7084361999b41673291138945c5baca0"
       url: "https://pub.dev"
     source: hosted
-    version: "0.6.5"
+    version: "0.6.7"
   custom_lint_builder:
     dependency: transitive
     description:
       name: custom_lint_builder
-      sha256: d9e5bb63ed52c1d006f5a1828992ba6de124c27a531e8fba0a31afffa81621b3
+      sha256: ba2f90fff4eff71d202d097eb14b14f87087eaaef742e956208c0eb9d3a40a21
       url: "https://pub.dev"
     source: hosted
-    version: "0.6.5"
+    version: "0.6.7"
   custom_lint_core:
     dependency: transitive
     description:

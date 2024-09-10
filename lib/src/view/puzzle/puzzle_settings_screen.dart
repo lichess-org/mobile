@@ -5,9 +5,7 @@ import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
-import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
 class PuzzleSettingsScreen extends ConsumerWidget {
@@ -25,64 +23,50 @@ class PuzzleSettingsScreen extends ConsumerWidget {
     );
     final boardPrefs = ref.watch(boardPreferencesProvider);
 
-    return DraggableScrollableSheet(
-      initialChildSize: .6,
-      expand: false,
-      builder: (context, scrollController) => ListView(
-        controller: scrollController,
-        children: [
-          PlatformListTile(
-            title:
-                Text(context.l10n.settingsSettings, style: Styles.sectionTitle),
-            subtitle: const SizedBox.shrink(),
+    return ListView(
+      shrinkWrap: true,
+      children: [
+        SwitchSettingTile(
+          title: Text(context.l10n.sound),
+          value: isSoundEnabled,
+          onChanged: (value) {
+            ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled();
+          },
+        ),
+        SwitchSettingTile(
+          title: Text(context.l10n.puzzleJumpToNextPuzzleImmediately),
+          value: autoNext,
+          onChanged: (value) {
+            ref
+                .read(puzzlePreferencesProvider(userId).notifier)
+                .setAutoNext(value);
+          },
+        ),
+        SwitchSettingTile(
+          // TODO: Add l10n
+          title: const Text('Shape drawing'),
+          subtitle: const Text(
+            'Draw shapes using two fingers.',
+            maxLines: 5,
+            textAlign: TextAlign.justify,
           ),
-          const SizedBox(height: 8.0),
-          SwitchSettingTile(
-            title: Text(context.l10n.sound),
-            value: isSoundEnabled,
-            onChanged: (value) {
-              ref
-                  .read(generalPreferencesProvider.notifier)
-                  .toggleSoundEnabled();
-            },
+          value: boardPrefs.enableShapeDrawings,
+          onChanged: (value) {
+            ref
+                .read(boardPreferencesProvider.notifier)
+                .toggleEnableShapeDrawings();
+          },
+        ),
+        SwitchSettingTile(
+          title: Text(
+            context.l10n.preferencesPieceAnimation,
           ),
-          SwitchSettingTile(
-            title: Text(context.l10n.puzzleJumpToNextPuzzleImmediately),
-            value: autoNext,
-            onChanged: (value) {
-              ref
-                  .read(puzzlePreferencesProvider(userId).notifier)
-                  .setAutoNext(value);
-            },
-          ),
-          SwitchSettingTile(
-            // TODO: Add l10n
-            title: const Text('Shape drawing'),
-            subtitle: const Text(
-              'Draw shapes using two fingers.',
-              maxLines: 5,
-              textAlign: TextAlign.justify,
-            ),
-            value: boardPrefs.enableShapeDrawings,
-            onChanged: (value) {
-              ref
-                  .read(boardPreferencesProvider.notifier)
-                  .toggleEnableShapeDrawings();
-            },
-          ),
-          SwitchSettingTile(
-            title: Text(
-              context.l10n.preferencesPieceAnimation,
-            ),
-            value: boardPrefs.pieceAnimation,
-            onChanged: (value) {
-              ref
-                  .read(boardPreferencesProvider.notifier)
-                  .togglePieceAnimation();
-            },
-          ),
-        ],
-      ),
+          value: boardPrefs.pieceAnimation,
+          onChanged: (value) {
+            ref.read(boardPreferencesProvider.notifier).togglePieceAnimation();
+          },
+        ),
+      ],
     );
   }
 }

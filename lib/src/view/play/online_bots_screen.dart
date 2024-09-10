@@ -168,6 +168,7 @@ class _Body extends ConsumerWidget {
                 useRootNavigator: true,
                 isDismissible: true,
                 isScrollControlled: true,
+                showDragHandle: true,
                 builder: (context) => _ContextMenu(bot: bot),
               );
             },
@@ -194,72 +195,69 @@ class _ContextMenu extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return DraggableScrollableSheet(
-      initialChildSize: .6,
-      expand: false,
-      snap: true,
-      snapSizes: const [.6, .8],
-      builder: (context, scrollController) => ListView(
-        controller: scrollController,
-        children: [
-          Padding(
-            padding: Styles.bodyPadding.add(const EdgeInsets.only(top: 8.0)),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                UserFullNameWidget(
-                  user: bot.lightUser,
-                  style: Styles.title,
-                ),
-                const SizedBox(height: 8.0),
-                if (bot.profile?.bio != null)
-                  Linkify(
-                    onOpen: (link) async {
-                      if (link.originText.startsWith('@')) {
-                        final username = link.originText.substring(1);
-                        pushPlatformRoute(
-                          context,
-                          builder: (ctx) => UserScreen(
-                            user: LightUser(
-                              id: UserId.fromUserName(username),
-                              name: username,
-                            ),
+    return ListView(
+      shrinkWrap: true,
+      children: [
+        Padding(
+          padding: Styles.horizontalBodyPadding.add(
+            const EdgeInsets.only(bottom: 16.0),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              UserFullNameWidget(
+                user: bot.lightUser,
+                style: Styles.title,
+              ),
+              const SizedBox(height: 8.0),
+              if (bot.profile?.bio != null)
+                Linkify(
+                  onOpen: (link) async {
+                    if (link.originText.startsWith('@')) {
+                      final username = link.originText.substring(1);
+                      pushPlatformRoute(
+                        context,
+                        builder: (ctx) => UserScreen(
+                          user: LightUser(
+                            id: UserId.fromUserName(username),
+                            name: username,
                           ),
-                        );
-                      } else {
-                        launchUrl(Uri.parse(link.url));
-                      }
-                    },
-                    linkifiers: const [
-                      UrlLinkifier(),
-                      EmailLinkifier(),
-                      UserTagLinkifier(),
-                    ],
-                    text: bot.profile!.bio!,
-                    maxLines: 20,
-                    overflow: TextOverflow.ellipsis,
-                    linkStyle: const TextStyle(
-                      color: Colors.blueAccent,
-                      decoration: TextDecoration.none,
-                    ),
+                        ),
+                      );
+                    } else {
+                      launchUrl(Uri.parse(link.url));
+                    }
+                  },
+                  linkifiers: const [
+                    UrlLinkifier(),
+                    EmailLinkifier(),
+                    UserTagLinkifier(),
+                  ],
+                  text: bot.profile!.bio!,
+                  maxLines: 20,
+                  overflow: TextOverflow.ellipsis,
+                  linkStyle: const TextStyle(
+                    color: Colors.blueAccent,
+                    decoration: TextDecoration.none,
                   ),
-              ],
-            ),
-          ),
-          BottomSheetContextMenuAction(
-            onPressed: () {
-              pushPlatformRoute(
-                context,
-                builder: (context) => UserScreen(
-                  user: bot.lightUser,
                 ),
-              );
-            },
-            icon: Icons.person,
-            child: Text(context.l10n.profile),
+            ],
           ),
-        ],
-      ),
+        ),
+        const PlatformDivider(),
+        BottomSheetContextMenuAction(
+          onPressed: () {
+            pushPlatformRoute(
+              context,
+              builder: (context) => UserScreen(
+                user: bot.lightUser,
+              ),
+            );
+          },
+          icon: Icons.person,
+          child: Text(context.l10n.profile),
+        ),
+      ],
     );
   }
 }

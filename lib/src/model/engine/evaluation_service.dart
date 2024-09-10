@@ -64,9 +64,11 @@ class EvaluationService {
     Engine Function() engineFactory = StockfishEngine.new,
     EvaluationOptions? options,
   }) async {
+    if (context != _context) {
+      await disposeEngine();
+    }
     _context = context;
     if (options != null) _options = options;
-    await (_engine?.dispose() ?? Future<void>.value());
     _engine = engineFactory.call();
     _engine!.state.addListener(() {
       debugPrint('Engine state: ${_engine?.state.value}');
@@ -89,11 +91,12 @@ class EvaluationService {
     _options = options;
   }
 
-  void disposeEngine() {
-    _engine?.dispose().then((_) {
-      _engine = null;
-    });
-    _context = null;
+  Future<void> disposeEngine() {
+    return _engine?.dispose().then((_) {
+          _engine = null;
+          _context = null;
+        }) ??
+        Future.value();
   }
 
   /// Start the engine evaluation with the given [path] and [steps].
