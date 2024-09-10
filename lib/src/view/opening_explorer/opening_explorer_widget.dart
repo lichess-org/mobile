@@ -143,7 +143,9 @@ class _OpeningExplorerState extends ConsumerState<OpeningExplorerWidget> {
 
         final children = [
           Container(
-            padding: _kTableRowPadding,
+            padding: _kTableRowPadding.subtract(
+              const EdgeInsets.only(bottom: _kTableRowVerticalPadding / 2),
+            ),
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.secondaryContainer,
             ),
@@ -408,7 +410,7 @@ class _OpeningExplorerMoveTable extends ConsumerWidget {
     final games = whiteWins + draws + blackWins;
     final ctrlProvider = analysisControllerProvider(pgn, options);
 
-    const topPadding = EdgeInsets.only(top: _kTableRowVerticalPadding);
+    const topPadding = EdgeInsets.only(top: _kTableRowVerticalPadding / 2);
     const headerTextStyle = TextStyle(fontSize: 12);
 
     return Table(
