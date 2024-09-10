@@ -488,122 +488,126 @@ class _MoveContextMenu extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final ctrlProvider = analysisControllerProvider(pgn, options);
 
-    return ListView(
-      shrinkWrap: true,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                title,
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              if (branch.clock != null)
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(
-                          Icons.punch_clock,
-                        ),
-                        const SizedBox(width: 4.0),
-                        Text(
-                          branch.clock!.toHoursMinutesSeconds(
-                            showTenths:
-                                branch.clock! < const Duration(minutes: 1),
-                          ),
-                        ),
-                      ],
-                    ),
-                    if (branch.elapsedMoveTime != null) ...[
-                      const SizedBox(height: 4.0),
+    return SafeArea(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  title,
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+                if (branch.clock != null)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           const Icon(
-                            Icons.hourglass_bottom,
+                            Icons.punch_clock,
                           ),
                           const SizedBox(width: 4.0),
                           Text(
-                            branch.elapsedMoveTime!
-                                .toHoursMinutesSeconds(showTenths: true),
+                            branch.clock!.toHoursMinutesSeconds(
+                              showTenths:
+                                  branch.clock! < const Duration(minutes: 1),
+                            ),
                           ),
                         ],
                       ),
+                      if (branch.elapsedMoveTime != null) ...[
+                        const SizedBox(height: 4.0),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(
+                              Icons.hourglass_bottom,
+                            ),
+                            const SizedBox(width: 4.0),
+                            Text(
+                              branch.elapsedMoveTime!
+                                  .toHoursMinutesSeconds(showTenths: true),
+                            ),
+                          ],
+                        ),
+                      ],
                     ],
-                  ],
-                ),
-            ],
-          ),
-        ),
-        if (branch.hasLichessAnalysisTextComment)
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16.0,
-              vertical: 8.0,
-            ),
-            child: Text(
-              branch.lichessAnalysisComments!
-                  .map((c) => c.text ?? '')
-                  .join(' '),
+                  ),
+              ],
             ),
           ),
-        if (branch.hasTextComment)
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16.0,
-              vertical: 8.0,
+          if (branch.hasLichessAnalysisTextComment)
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 8.0,
+              ),
+              child: Text(
+                branch.lichessAnalysisComments!
+                    .map((c) => c.text ?? '')
+                    .join(' '),
+              ),
             ),
-            child: Text(
-              branch.comments!.map((c) => c.text ?? '').join(' '),
+          if (branch.hasTextComment)
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 8.0,
+              ),
+              child: Text(
+                branch.comments!.map((c) => c.text ?? '').join(' '),
+              ),
             ),
-          ),
-        const PlatformDivider(indent: 0),
-        if (parent.children.any((c) => c.isHidden))
+          const PlatformDivider(indent: 0),
+          if (parent.children.any((c) => c.isHidden))
+            BottomSheetContextMenuAction(
+              icon: Icons.subtitles,
+              child: Text(context.l10n.mobileShowVariations),
+              onPressed: () {
+                ref.read(ctrlProvider.notifier).showAllVariations(path);
+              },
+            ),
+          if (isSideline)
+            BottomSheetContextMenuAction(
+              icon: Icons.subtitles_off,
+              child: Text(context.l10n.mobileHideVariation),
+              onPressed: () {
+                ref.read(ctrlProvider.notifier).hideVariation(path);
+              },
+            ),
+          if (isSideline)
+            BottomSheetContextMenuAction(
+              icon: Icons.expand_less,
+              child: Text(context.l10n.promoteVariation),
+              onPressed: () {
+                ref.read(ctrlProvider.notifier).promoteVariation(path, false);
+              },
+            ),
+          if (isSideline)
+            BottomSheetContextMenuAction(
+              icon: Icons.check,
+              child: Text(context.l10n.makeMainLine),
+              onPressed: () {
+                ref.read(ctrlProvider.notifier).promoteVariation(path, true);
+              },
+            ),
           BottomSheetContextMenuAction(
-            icon: Icons.subtitles,
-            child: Text(context.l10n.mobileShowVariations),
+            icon: Icons.delete,
+            child: Text(context.l10n.deleteFromHere),
             onPressed: () {
-              ref.read(ctrlProvider.notifier).showAllVariations(path);
+              ref.read(ctrlProvider.notifier).deleteFromHere(path);
             },
           ),
-        if (isSideline)
-          BottomSheetContextMenuAction(
-            icon: Icons.subtitles_off,
-            child: Text(context.l10n.mobileHideVariation),
-            onPressed: () {
-              ref.read(ctrlProvider.notifier).hideVariation(path);
-            },
-          ),
-        if (isSideline)
-          BottomSheetContextMenuAction(
-            icon: Icons.expand_less,
-            child: Text(context.l10n.promoteVariation),
-            onPressed: () {
-              ref.read(ctrlProvider.notifier).promoteVariation(path, false);
-            },
-          ),
-        if (isSideline)
-          BottomSheetContextMenuAction(
-            icon: Icons.check,
-            child: Text(context.l10n.makeMainLine),
-            onPressed: () {
-              ref.read(ctrlProvider.notifier).promoteVariation(path, true);
-            },
-          ),
-        BottomSheetContextMenuAction(
-          icon: Icons.delete,
-          child: Text(context.l10n.deleteFromHere),
-          onPressed: () {
-            ref.read(ctrlProvider.notifier).deleteFromHere(path);
-          },
-        ),
-      ],
+          const SizedBox(height: 8.0),
+        ],
+      ),
     );
   }
 }
