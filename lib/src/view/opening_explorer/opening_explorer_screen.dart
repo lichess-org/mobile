@@ -411,9 +411,8 @@ class _OpeningExplorerView extends StatelessWidget {
                       children: [
                         ListView(
                           padding: isTablet
-                              ? const EdgeInsets.only(
-                                  left: kTabletBoardTableSidePadding,
-                                  right: kTabletBoardTableSidePadding,
+                              ? const EdgeInsets.symmetric(
+                                  horizontal: kTabletBoardTableSidePadding,
                                 )
                               : EdgeInsets.zero,
                           children: [
@@ -421,8 +420,6 @@ class _OpeningExplorerView extends StatelessWidget {
                               pgn,
                               options,
                               boardSize,
-                              borderRadius:
-                                  isTablet ? _kTabletBoardRadius : null,
                               disableDraggingPieces: true,
                             ),
                             ...children,
