@@ -77,108 +77,95 @@ class _ConfigureOverTheBoardGameSheetState
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Padding(
-        padding: Styles.bodyPadding,
-        child: ListView(
-          shrinkWrap: true,
-          children: [
-            ListSection(
-              header: const SettingsSectionTitle('Start new game'),
-              hasLeading: false,
+    return BottomSheetScrollableContainer(
+      padding: Styles.bodyPadding,
+      children: [
+        SettingsListTile(
+          settingsLabel: Text(context.l10n.variant),
+          settingsValue: chosenVariant.label,
+          onTap: () {
+            showChoicePicker<Variant>(
+              context,
+              choices: playSupportedVariants
+                  .where(
+                    (variant) => variant != Variant.fromPosition,
+                  )
+                  .toList(),
+              selectedItem: chosenVariant,
+              labelBuilder: (Variant variant) => Text(variant.label),
+              onSelectedItemChanged: (Variant variant) => setState(() {
+                chosenVariant = variant;
+              }),
+            );
+          },
+        ),
+        PlatformListTile(
+          title: Text.rich(
+            TextSpan(
+              text: '${context.l10n.minutesPerSide}: ',
               children: [
-                SettingsListTile(
-                  settingsLabel: Text(context.l10n.variant),
-                  settingsValue: chosenVariant.label,
-                  onTap: () {
-                    showChoicePicker<Variant>(
-                      context,
-                      choices: Variant.values
-                          .where(
-                            (variant) => variant != Variant.fromPosition,
-                          )
-                          .toList(),
-                      selectedItem: chosenVariant,
-                      labelBuilder: (Variant variant) => Text(variant.label),
-                      onSelectedItemChanged: (Variant variant) => setState(() {
-                        chosenVariant = variant;
-                      }),
-                    );
-                  },
-                ),
-                PlatformListTile(
-                  title: Text.rich(
-                    TextSpan(
-                      text: '${context.l10n.minutesPerSide}: ',
-                      children: [
-                        TextSpan(
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                          text: clockLabelInMinutes(timeIncrement.time),
-                        ),
-                      ],
-                    ),
+                TextSpan(
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
                   ),
-                  subtitle: NonLinearSlider(
-                    value: timeIncrement.time,
-                    values: kAvailableTimesInSeconds,
-                    labelBuilder: clockLabelInMinutes,
-                    onChange: Theme.of(context).platform == TargetPlatform.iOS
-                        ? _setTotalTime
-                        : null,
-                    onChangeEnd: _setTotalTime,
-                  ),
-                ),
-                PlatformListTile(
-                  title: Text.rich(
-                    TextSpan(
-                      text: '${context.l10n.incrementInSeconds}: ',
-                      children: [
-                        TextSpan(
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                          text: timeIncrement.increment.toString(),
-                        ),
-                      ],
-                    ),
-                  ),
-                  subtitle: NonLinearSlider(
-                    value: timeIncrement.increment,
-                    values: kAvailableIncrementsInSeconds,
-                    onChange: Theme.of(context).platform == TargetPlatform.iOS
-                        ? _setIncrement
-                        : null,
-                    onChangeEnd: _setIncrement,
-                  ),
+                  text: clockLabelInMinutes(timeIncrement.time),
                 ),
               ],
             ),
-            SecondaryButton(
-              onPressed: () {
-                ref
-                    .read(overTheBoardClockProvider.notifier)
-                    .setupClock(timeIncrement);
-                ref
-                    .read(overTheBoardGameControllerProvider.notifier)
-                    .startNewGame(
-                      chosenVariant,
-                      timeIncrement,
-                    );
-                Navigator.pop(context);
-              },
-              semanticsLabel: context.l10n.play,
-              child: Text(
-                context.l10n.play,
-                style: Styles.bold,
-              ),
-            ),
-          ],
+          ),
+          subtitle: NonLinearSlider(
+            value: timeIncrement.time,
+            values: kAvailableTimesInSeconds,
+            labelBuilder: clockLabelInMinutes,
+            onChange: Theme.of(context).platform == TargetPlatform.iOS
+                ? _setTotalTime
+                : null,
+            onChangeEnd: _setTotalTime,
+          ),
         ),
-      ),
+        PlatformListTile(
+          title: Text.rich(
+            TextSpan(
+              text: '${context.l10n.incrementInSeconds}: ',
+              children: [
+                TextSpan(
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                  ),
+                  text: timeIncrement.increment.toString(),
+                ),
+              ],
+            ),
+          ),
+          subtitle: NonLinearSlider(
+            value: timeIncrement.increment,
+            values: kAvailableIncrementsInSeconds,
+            onChange: Theme.of(context).platform == TargetPlatform.iOS
+                ? _setIncrement
+                : null,
+            onChangeEnd: _setIncrement,
+          ),
+        ),
+        SecondaryButton(
+          onPressed: () {
+            ref
+                .read(overTheBoardClockProvider.notifier)
+                .setupClock(timeIncrement);
+            ref.read(overTheBoardGameControllerProvider.notifier).startNewGame(
+                  chosenVariant,
+                  timeIncrement,
+                );
+            Navigator.pop(context);
+          },
+          semanticsLabel: context.l10n.play,
+          child: Text(
+            context.l10n.play,
+            style: Styles.bold,
+          ),
+        ),
+      ],
     );
   }
 }
@@ -201,34 +188,23 @@ class OverTheBoardDisplaySettings extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final prefs = ref.watch(overTheBoardPreferencesProvider);
 
-    return DraggableScrollableSheet(
-      initialChildSize: 1.0,
-      expand: false,
-      builder: (context, scrollController) => ListView(
-        controller: scrollController,
-        children: [
-          ListSection(
-            header: SettingsSectionTitle(context.l10n.settingsSettings),
-            hasLeading: false,
-            children: [
-              SwitchSettingTile(
-                title: const Text('Use symmetric pieces'),
-                value: prefs.symmetricPieces,
-                onChanged: (_) => ref
-                    .read(overTheBoardPreferencesProvider.notifier)
-                    .toggleSymmetricPieces(),
-              ),
-              SwitchSettingTile(
-                title: const Text('Flip pieces and oponent info after move'),
-                value: prefs.flipPiecesAfterMove,
-                onChanged: (_) => ref
-                    .read(overTheBoardPreferencesProvider.notifier)
-                    .toggleFlipPiecesAfterMove(),
-              ),
-            ],
-          ),
-        ],
-      ),
+    return BottomSheetScrollableContainer(
+      children: [
+        SwitchSettingTile(
+          title: const Text('Use symmetric pieces'),
+          value: prefs.symmetricPieces,
+          onChanged: (_) => ref
+              .read(overTheBoardPreferencesProvider.notifier)
+              .toggleSymmetricPieces(),
+        ),
+        SwitchSettingTile(
+          title: const Text('Flip pieces and oponent info after move'),
+          value: prefs.flipPiecesAfterMove,
+          onChanged: (_) => ref
+              .read(overTheBoardPreferencesProvider.notifier)
+              .toggleFlipPiecesAfterMove(),
+        ),
+      ],
     );
   }
 }

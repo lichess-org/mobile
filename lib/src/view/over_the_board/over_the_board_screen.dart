@@ -204,7 +204,7 @@ class _BottomBar extends ConsumerWidget {
         BottomBarButton(
           label: 'Configure game',
           onTap: () => showConfigureGameSheet(context, isDismissible: true),
-          icon: Icons.add_circle,
+          icon: Icons.add,
         ),
         BottomBarButton(
           key: const Key('flip-button'),
