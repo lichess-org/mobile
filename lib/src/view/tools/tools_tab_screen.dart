@@ -185,7 +185,7 @@ class _Body extends ConsumerWidget {
             ),
           ),
           _ToolsButton(
-            icon: LichessIcons.chess_board,
+            icon: Icons.where_to_vote_outlined,
             title: 'Coordinate Training', // TODO l10n
             onTap: () => pushPlatformRoute(
               context,
