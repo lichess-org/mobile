@@ -32,11 +32,39 @@ Future<void> _coordinateTrainingInfoDialogBuilder(BuildContext context) {
         child: RichText(
           text: TextSpan(
             style: DefaultTextStyle.of(context).style,
+            // TODO translate
             children: const [
+              TextSpan(
+                text:
+                    'Knowing the chessboard coordinates is a very important skill for several reasons:\n',
+              ),
+              TextSpan(
+                text:
+                    '  • Most chess courses and exercises use the algebraic notation extensively.\n',
+              ),
+              TextSpan(
+                text:
+                    "  • It makes it easier to talk to your chess friends, since you both understand the 'language of chess'.\n",
+              ),
+              TextSpan(
+                text:
+                    '  • You can analyse a game more effectively if you can quickly recognise coordinates.\n',
+              ),
               TextSpan(
                 text: '\n',
               ),
-              // TODO add explanation here once l10n download from crowdin works again
+              TextSpan(
+                text: 'Find Square\n',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              TextSpan(
+                text:
+                    'A coordinate appears on the board and you must click on the corresponding square.\n',
+              ),
+              TextSpan(
+                text:
+                    'You have 30 seconds to correctly map as many squares as possible!\n',
+              ),
             ],
           ),
         ),
