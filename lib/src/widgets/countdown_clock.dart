@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
-import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 
 part 'countdown_clock.freezed.dart';
@@ -158,12 +157,14 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
 
   @override
   Widget build(BuildContext context) {
-    final brightness = ref.watch(currentBrightnessProvider);
-    return Clock(
-      timeLeft: timeLeft,
-      active: widget.active,
-      emergencyThreshold: widget.emergencyThreshold,
-      clockStyle: getStyle(brightness),
+    final brightness = Theme.of(context).brightness;
+    return RepaintBoundary(
+      child: Clock(
+        timeLeft: timeLeft,
+        active: widget.active,
+        emergencyThreshold: widget.emergencyThreshold,
+        clockStyle: getStyle(brightness),
+      ),
     );
   }
 }
@@ -172,6 +173,15 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
 ///
 /// For a clock widget that automatically counts down, see [CountdownClock].
 class Clock extends StatelessWidget {
+  const Clock({
+    required this.timeLeft,
+    required this.active,
+    required this.clockStyle,
+    this.emergencyThreshold,
+    this.padLeft = false,
+    super.key,
+  });
+
   /// The time left to be displayed on the clock.
   final Duration timeLeft;
 
@@ -185,13 +195,8 @@ class Clock extends StatelessWidget {
   /// Clock style to use.
   final ClockStyle clockStyle;
 
-  const Clock({
-    required this.timeLeft,
-    required this.active,
-    required this.clockStyle,
-    this.emergencyThreshold,
-    super.key,
-  });
+  /// Whether to pad with a leading zero (default is `false`).
+  final bool padLeft;
 
   @override
   Widget build(BuildContext context) {
@@ -204,59 +209,56 @@ class Clock extends StatelessWidget {
     final remainingHeight = estimateRemainingHeightLeftBoard(context);
 
     final hoursDisplay =
-        widget.padLeft ? hours.toString().padLeft(2, '0') : hours.toString();
+        padLeft ? hours.toString().padLeft(2, '0') : hours.toString();
     final minsDisplay =
-        widget.padLeft ? mins.toString().padLeft(2, '0') : mins.toString();
+        padLeft ? mins.toString().padLeft(2, '0') : mins.toString();
 
-    return RepaintBoundary(
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-          color: active
-              ? isEmergency
-                  ? clockStyle.emergencyBackgroundColor
-                  : clockStyle.activeBackgroundColor
-              : clockStyle.backgroundColor,
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 5.0),
-          child: MediaQuery.withClampedTextScaling(
-            maxScaleFactor: kMaxClockTextScaleFactor,
-            child: RichText(
-              text: TextSpan(
-                text: hours > 0
-                    ? '$hoursDisplay:${mins.toString().padLeft(2, '0')}:$secs'
-                    : '$minsDisplay:$secs',
-                style: TextStyle(
-                  color: active
-                      ? isEmergency
-                          ? clockStyle.emergencyTextColor
-                          : clockStyle.activeTextColor
-                      : clockStyle.textColor,
-                  fontSize: 26,
-                  height:
-                      remainingHeight < kSmallRemainingHeightLeftBoardThreshold
-                          ? 1.0
-                          : null,
-                  fontFeatures: const [
-                    FontFeature.tabularFigures(),
-                  ],
-                ),
-                children: [
-                  if (showTenths)
-                    TextSpan(
-                      text:
-                          '.${timeLeft.inMilliseconds.remainder(1000) ~/ 100}',
-                      style: const TextStyle(fontSize: 20),
-                    ),
-                  if (!active && timeLeft < const Duration(seconds: 1))
-                    TextSpan(
-                      text:
-                          '${timeLeft.inMilliseconds.remainder(1000) ~/ 10 % 10}',
-                      style: const TextStyle(fontSize: 18),
-                    ),
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+        color: active
+            ? isEmergency
+                ? clockStyle.emergencyBackgroundColor
+                : clockStyle.activeBackgroundColor
+            : clockStyle.backgroundColor,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 5.0),
+        child: MediaQuery.withClampedTextScaling(
+          maxScaleFactor: kMaxClockTextScaleFactor,
+          child: RichText(
+            text: TextSpan(
+              text: hours > 0
+                  ? '$hoursDisplay:${mins.toString().padLeft(2, '0')}:$secs'
+                  : '$minsDisplay:$secs',
+              style: TextStyle(
+                color: active
+                    ? isEmergency
+                        ? clockStyle.emergencyTextColor
+                        : clockStyle.activeTextColor
+                    : clockStyle.textColor,
+                fontSize: 26,
+                height:
+                    remainingHeight < kSmallRemainingHeightLeftBoardThreshold
+                        ? 1.0
+                        : null,
+                fontFeatures: const [
+                  FontFeature.tabularFigures(),
                 ],
               ),
+              children: [
+                if (showTenths)
+                  TextSpan(
+                    text: '.${timeLeft.inMilliseconds.remainder(1000) ~/ 100}',
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                if (!active && timeLeft < const Duration(seconds: 1))
+                  TextSpan(
+                    text:
+                        '${timeLeft.inMilliseconds.remainder(1000) ~/ 10 % 10}',
+                    style: const TextStyle(fontSize: 18),
+                  ),
+              ],
             ),
           ),
         ),

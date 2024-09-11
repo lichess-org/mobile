@@ -349,7 +349,6 @@ class OverTheBoardGameResultDialog extends StatelessWidget {
                   orientation: Side.white,
                   id: standaloneAnalysisId,
                 ),
-                title: context.l10n.gameAnalysis,
               ),
             );
           },
