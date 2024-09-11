@@ -374,12 +374,18 @@ class BoardSettingsOverrides {
     this.autoQueenPromotion,
     this.autoQueenPromotionOnPremove,
     this.blindfoldMode,
+    this.drawShape,
+    this.pieceOrientationBehavior,
+    this.pieceAssets,
   });
 
   final Duration? animationDuration;
   final bool? autoQueenPromotion;
   final bool? autoQueenPromotionOnPremove;
   final bool? blindfoldMode;
+  final DrawShapeOptions? drawShape;
+  final PieceOrientationBehavior? pieceOrientationBehavior;
+  final PieceAssets? pieceAssets;
 
   ChessboardSettings merge(ChessboardSettings settings) {
     return settings.copyWith(
@@ -387,6 +393,9 @@ class BoardSettingsOverrides {
       autoQueenPromotion: autoQueenPromotion,
       autoQueenPromotionOnPremove: autoQueenPromotionOnPremove,
       blindfoldMode: blindfoldMode,
+      drawShape: drawShape,
+      pieceOrientationBehavior: pieceOrientationBehavior,
+      pieceAssets: pieceAssets,
     );
   }
 }

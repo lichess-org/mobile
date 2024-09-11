@@ -125,6 +125,9 @@ enum Variant {
       case Variant.standard:
         return Chess.initial;
       case Variant.chess960:
+        throw ArgumentError(
+          'Chess960 has not single initial position, use randomChess960Position() instead.',
+        );
       case Variant.fromPosition:
         throw ArgumentError('This variant has no defined initial position!');
       case Variant.antichess:
