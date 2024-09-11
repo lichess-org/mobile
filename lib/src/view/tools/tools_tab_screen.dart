@@ -82,7 +82,7 @@ class _ToolsButton extends StatelessWidget {
 
   final String title;
 
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -94,22 +94,25 @@ class _ToolsButton extends StatelessWidget {
       padding: Theme.of(context).platform == TargetPlatform.android
           ? const EdgeInsets.only(bottom: 16.0)
           : EdgeInsets.zero,
-      child: PlatformListTile(
-        leading: Icon(
-          icon,
-          size: Styles.mainListTileIconSize,
-          color: Theme.of(context).platform == TargetPlatform.iOS
-              ? CupertinoTheme.of(context).primaryColor
-              : Theme.of(context).colorScheme.primary,
+      child: Opacity(
+        opacity: onTap == null ? 0.5 : 1.0,
+        child: PlatformListTile(
+          leading: Icon(
+            icon,
+            size: Styles.mainListTileIconSize,
+            color: Theme.of(context).platform == TargetPlatform.iOS
+                ? CupertinoTheme.of(context).primaryColor
+                : Theme.of(context).colorScheme.primary,
+          ),
+          title: Padding(
+            padding: tilePadding,
+            child: Text(title, style: Styles.callout),
+          ),
+          trailing: Theme.of(context).platform == TargetPlatform.iOS
+              ? const CupertinoListTileChevron()
+              : null,
+          onTap: onTap,
         ),
-        title: Padding(
-          padding: tilePadding,
-          child: Text(title, style: Styles.callout),
-        ),
-        trailing: Theme.of(context).platform == TargetPlatform.iOS
-            ? const CupertinoListTileChevron()
-            : null,
-        onTap: onTap,
       ),
     );
   }
@@ -153,24 +156,25 @@ class _Body extends ConsumerWidget {
               ),
             ),
           ),
-          if (isOnline)
-            _ToolsButton(
-              icon: Icons.explore,
-              title: context.l10n.openingExplorer,
-              onTap: () => pushPlatformRoute(
-                context,
-                rootNavigator: true,
-                builder: (context) => const OpeningExplorerScreen(
-                  pgn: '',
-                  options: AnalysisOptions(
-                    isLocalEvaluationAllowed: false,
-                    variant: Variant.standard,
-                    orientation: Side.white,
-                    id: standaloneOpeningExplorerId,
-                  ),
-                ),
-              ),
-            ),
+          _ToolsButton(
+            icon: Icons.explore,
+            title: context.l10n.openingExplorer,
+            onTap: isOnline
+                ? () => pushPlatformRoute(
+                      context,
+                      rootNavigator: true,
+                      builder: (context) => const OpeningExplorerScreen(
+                        pgn: '',
+                        options: AnalysisOptions(
+                          isLocalEvaluationAllowed: false,
+                          variant: Variant.standard,
+                          orientation: Side.white,
+                          id: standaloneOpeningExplorerId,
+                        ),
+                      ),
+                    )
+                : null,
+          ),
           _ToolsButton(
             icon: Icons.edit,
             title: context.l10n.boardEditor,
