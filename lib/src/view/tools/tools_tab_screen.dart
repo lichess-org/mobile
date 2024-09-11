@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
 import 'package:lichess_mobile/src/view/clock/clock_screen.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_screen.dart';
 import 'package:lichess_mobile/src/view/tools/load_position_screen.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
@@ -41,7 +42,12 @@ class ToolsTabScreen extends ConsumerWidget {
         appBar: AppBar(
           title: Text(context.l10n.tools),
         ),
-        body: const Center(child: _Body()),
+        body: const Column(
+          children: [
+            ConnectivityBanner(),
+            Expanded(child: _Body()),
+          ],
+        ),
       ),
     );
   }
@@ -52,6 +58,7 @@ class ToolsTabScreen extends ConsumerWidget {
         controller: puzzlesScrollController,
         slivers: [
           CupertinoSliverNavigationBar(largeTitle: Text(context.l10n.tools)),
+          const SliverToBoxAdapter(child: ConnectivityBanner()),
           const SliverSafeArea(
             top: false,
             sliver: _Body(),
