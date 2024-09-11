@@ -34,6 +34,7 @@ const _kTableRowPadding = EdgeInsets.symmetric(
   horizontal: _kTableRowHorizontalPadding,
   vertical: _kTableRowVerticalPadding,
 );
+const _kTabletBoardRadius = BorderRadius.all(Radius.circular(4.0));
 
 Color _whiteBoxColor(BuildContext context) =>
     Theme.of(context).brightness == Brightness.dark
@@ -45,50 +46,17 @@ Color _blackBoxColor(BuildContext context) =>
         ? Colors.black.withOpacity(0.7)
         : Colors.black;
 
-class OpeningExplorerScreen extends ConsumerWidget {
+class OpeningExplorerScreen extends ConsumerStatefulWidget {
   const OpeningExplorerScreen({required this.pgn, required this.options});
 
   final String pgn;
   final AnalysisOptions options;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final fen = ref.watch(
-      analysisControllerProvider(pgn, options)
-          .select((value) => value.currentNode.position.fen),
-    );
-    final isIndexing =
-        ref.watch(openingExplorerProvider(fen: fen)).valueOrNull?.isIndexing ??
-            false;
-
-    return PlatformScaffold(
-      appBar: PlatformAppBar(
-        title: Text(context.l10n.openingExplorer),
-        actions: [
-          if (isIndexing) const _IndexingIndicator(),
-        ],
-      ),
-      body: _Body(pgn: pgn, options: options),
-    );
-  }
+  ConsumerState<OpeningExplorerScreen> createState() => _OpeningExplorerState();
 }
 
-const _kTabletBoardRadius = BorderRadius.all(Radius.circular(4.0));
-
-class _Body extends ConsumerStatefulWidget {
-  const _Body({
-    required this.pgn,
-    required this.options,
-  });
-
-  final String pgn;
-  final AnalysisOptions options;
-
-  @override
-  ConsumerState<_Body> createState() => _OpeningExplorerState();
-}
-
-class _OpeningExplorerState extends ConsumerState<_Body> {
+class _OpeningExplorerState extends ConsumerState<OpeningExplorerScreen> {
   final Map<OpeningExplorerCacheKey, OpeningExplorerEntry> cache = {};
 
   /// Last explorer content that was successfully loaded. This is used to
@@ -151,6 +119,7 @@ class _OpeningExplorerState extends ConsumerState<_Body> {
         pgn: widget.pgn,
         options: widget.options,
         isLoading: false,
+        isIndexing: false,
         children: [
           openingHeader,
           _OpeningExplorerMoveTable.maxDepth(
@@ -168,6 +137,7 @@ class _OpeningExplorerState extends ConsumerState<_Body> {
         pgn: widget.pgn,
         options: widget.options,
         isLoading: false,
+        isIndexing: false,
         children: [
           openingHeader,
           const Padding(
@@ -210,6 +180,7 @@ class _OpeningExplorerState extends ConsumerState<_Body> {
       pgn: widget.pgn,
       options: widget.options,
       isLoading: isLoading,
+      isIndexing: openingExplorerAsync.value?.isIndexing ?? false,
       children: openingExplorerAsync.when(
         data: (openingExplorer) {
           if (openingExplorer == null) {
@@ -325,12 +296,14 @@ class _OpeningExplorerView extends StatelessWidget {
     required this.options,
     required this.children,
     required this.isLoading,
+    required this.isIndexing,
   });
 
   final String pgn;
   final AnalysisOptions options;
   final List<Widget> children;
   final bool isLoading;
+  final bool isIndexing;
 
   @override
   Widget build(BuildContext context) {
@@ -339,123 +312,132 @@ class _OpeningExplorerView extends StatelessWidget {
         ? Colors.black
         : Colors.white;
 
-    return SafeArea(
-      bottom: false,
-      child: Column(
-        children: [
-          Padding(
-            padding: isTablet
-                ? const EdgeInsets.symmetric(
-                    horizontal: kTabletBoardTableSidePadding,
-                  )
-                : EdgeInsets.zero,
-            child: _MoveList(pgn: pgn, options: options),
-          ),
-          Expanded(
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                final aspectRatio = constraints.biggest.aspectRatio;
-                final defaultBoardSize = constraints.biggest.shortestSide;
-                final remainingHeight =
-                    constraints.maxHeight - defaultBoardSize;
-                final isSmallScreen =
-                    remainingHeight < kSmallRemainingHeightLeftBoardThreshold;
-                final boardSize = isTablet || isSmallScreen
-                    ? defaultBoardSize - kTabletBoardTableSidePadding * 2
-                    : defaultBoardSize;
+    return PlatformScaffold(
+      appBar: PlatformAppBar(
+        title: Text(context.l10n.openingExplorer),
+        actions: [
+          if (isIndexing) const _IndexingIndicator(),
+        ],
+      ),
+      body: SafeArea(
+        bottom: false,
+        child: Column(
+          children: [
+            Padding(
+              padding: isTablet
+                  ? const EdgeInsets.symmetric(
+                      horizontal: kTabletBoardTableSidePadding,
+                    )
+                  : EdgeInsets.zero,
+              child: _MoveList(pgn: pgn, options: options),
+            ),
+            Expanded(
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final aspectRatio = constraints.biggest.aspectRatio;
+                  final defaultBoardSize = constraints.biggest.shortestSide;
+                  final remainingHeight =
+                      constraints.maxHeight - defaultBoardSize;
+                  final isSmallScreen =
+                      remainingHeight < kSmallRemainingHeightLeftBoardThreshold;
+                  final boardSize = isTablet || isSmallScreen
+                      ? defaultBoardSize - kTabletBoardTableSidePadding * 2
+                      : defaultBoardSize;
 
-                final isLandscape = aspectRatio > 1;
+                  final isLandscape = aspectRatio > 1;
 
-                final loadingOverlay = Positioned.fill(
-                  child: IgnorePointer(
-                    ignoring: !isLoading,
-                    child: AnimatedOpacity(
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.fastOutSlowIn,
-                      opacity: isLoading ? 0.3 : 0.0,
-                      child: ColoredBox(color: loadingOverlayColor),
+                  final loadingOverlay = Positioned.fill(
+                    child: IgnorePointer(
+                      ignoring: !isLoading,
+                      child: AnimatedOpacity(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.fastOutSlowIn,
+                        opacity: isLoading ? 0.3 : 0.0,
+                        child: ColoredBox(color: loadingOverlayColor),
+                      ),
                     ),
-                  ),
-                );
-
-                if (isLandscape) {
-                  return Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          left: kTabletBoardTableSidePadding,
-                          top: kTabletBoardTableSidePadding,
-                          bottom: kTabletBoardTableSidePadding,
-                        ),
-                        child: AnalysisBoard(
-                          pgn,
-                          options,
-                          boardSize,
-                          borderRadius: isTablet ? _kTabletBoardRadius : null,
-                        ),
-                      ),
-                      Flexible(
-                        fit: FlexFit.loose,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: PlatformCard(
-                                clipBehavior: Clip.hardEdge,
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(4.0),
-                                ),
-                                margin: const EdgeInsets.all(
-                                  kTabletBoardTableSidePadding,
-                                ),
-                                semanticContainer: false,
-                                child: Stack(
-                                  children: [
-                                    ListView(
-                                      padding: EdgeInsets.zero,
-                                      children: children,
-                                    ),
-                                    loadingOverlay,
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
                   );
-                } else {
-                  return Stack(
-                    children: [
-                      ListView(
-                        padding: isTablet
-                            ? const EdgeInsets.only(
-                                left: kTabletBoardTableSidePadding,
-                                right: kTabletBoardTableSidePadding,
-                              )
-                            : EdgeInsets.zero,
-                        children: [
-                          AnalysisBoard(
+
+                  if (isLandscape) {
+                    return Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            left: kTabletBoardTableSidePadding,
+                            top: kTabletBoardTableSidePadding,
+                            bottom: kTabletBoardTableSidePadding,
+                          ),
+                          child: AnalysisBoard(
                             pgn,
                             options,
                             boardSize,
                             borderRadius: isTablet ? _kTabletBoardRadius : null,
-                            disableDraggingPieces: true,
                           ),
-                          ...children,
-                        ],
-                      ),
-                      loadingOverlay,
-                    ],
-                  );
-                }
-              },
+                        ),
+                        Flexible(
+                          fit: FlexFit.loose,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: PlatformCard(
+                                  clipBehavior: Clip.hardEdge,
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(4.0),
+                                  ),
+                                  margin: const EdgeInsets.all(
+                                    kTabletBoardTableSidePadding,
+                                  ),
+                                  semanticContainer: false,
+                                  child: Stack(
+                                    children: [
+                                      ListView(
+                                        padding: EdgeInsets.zero,
+                                        children: children,
+                                      ),
+                                      loadingOverlay,
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    );
+                  } else {
+                    return Stack(
+                      children: [
+                        ListView(
+                          padding: isTablet
+                              ? const EdgeInsets.only(
+                                  left: kTabletBoardTableSidePadding,
+                                  right: kTabletBoardTableSidePadding,
+                                )
+                              : EdgeInsets.zero,
+                          children: [
+                            AnalysisBoard(
+                              pgn,
+                              options,
+                              boardSize,
+                              borderRadius:
+                                  isTablet ? _kTabletBoardRadius : null,
+                              disableDraggingPieces: true,
+                            ),
+                            ...children,
+                          ],
+                        ),
+                        loadingOverlay,
+                      ],
+                    );
+                  }
+                },
+              ),
             ),
-          ),
-          _BottomBar(pgn: pgn, options: options),
-        ],
+            _BottomBar(pgn: pgn, options: options),
+          ],
+        ),
       ),
     );
   }

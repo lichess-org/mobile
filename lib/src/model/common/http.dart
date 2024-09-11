@@ -11,6 +11,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart'
     show
+        BaseClient,
         BaseRequest,
         BaseResponse,
         Client,
@@ -74,7 +75,7 @@ Client httpClientFactory() {
 /// Only one instance of this client is created and kept alive for the whole app.
 @Riverpod(keepAlive: true)
 Client defaultClient(DefaultClientRef ref) {
-  final client = httpClientFactory();
+  final client = LoggingClient(httpClientFactory());
   ref.onDispose(() => client.close());
   return client;
 }
@@ -130,6 +131,19 @@ String makeUserAgent(
   }
 
   return base;
+}
+
+/// A [Client] that logs all requests.
+class LoggingClient extends BaseClient {
+  LoggingClient(this._inner);
+
+  final Client _inner;
+
+  @override
+  Future<StreamedResponse> send(BaseRequest request) {
+    _logger.info('${request.method} ${request.url}');
+    return _inner.send(request);
+  }
 }
 
 /// Lichess HTTP client.
