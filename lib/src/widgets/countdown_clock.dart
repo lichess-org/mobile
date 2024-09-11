@@ -3,10 +3,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
+
+part 'countdown_clock.freezed.dart';
 
 /// A simple countdown clock.
 ///
@@ -227,16 +230,16 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
   }
 }
 
-@immutable
-class ClockStyle {
-  const ClockStyle({
-    required this.textColor,
-    required this.activeTextColor,
-    required this.emergencyTextColor,
-    required this.backgroundColor,
-    required this.activeBackgroundColor,
-    required this.emergencyBackgroundColor,
-  });
+@freezed
+class ClockStyle with _$ClockStyle {
+  const factory ClockStyle({
+    required Color textColor,
+    required Color activeTextColor,
+    required Color emergencyTextColor,
+    required Color backgroundColor,
+    required Color activeBackgroundColor,
+    required Color emergencyBackgroundColor,
+  }) = _ClockStyle;
 
   static const darkThemeStyle = ClockStyle(
     textColor: Colors.grey,
@@ -255,11 +258,4 @@ class ClockStyle {
     activeBackgroundColor: Color(0xFFD0E0BD),
     emergencyBackgroundColor: Color(0xFFF2CCCC),
   );
-
-  final Color textColor;
-  final Color activeTextColor;
-  final Color emergencyTextColor;
-  final Color backgroundColor;
-  final Color activeBackgroundColor;
-  final Color emergencyBackgroundColor;
 }

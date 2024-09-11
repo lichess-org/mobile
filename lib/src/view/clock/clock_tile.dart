@@ -51,6 +51,7 @@ class ClockTile extends ConsumerWidget {
     return RotatedBox(
       quarterTurns: playerType == ClockPlayerType.top ? 2 : 0,
       child: Stack(
+        alignment: Alignment.center,
         fit: StackFit.expand,
         children: [
           Opacity(
@@ -108,37 +109,6 @@ class ClockTile extends ConsumerWidget {
                               : CrossFadeState.showFirst,
                         ),
                       ),
-                      if (!clockState.started)
-                        PlatformIconButton(
-                          semanticsLabel: context.l10n.settingsSettings,
-                          iconSize: 32,
-                          icon: Icons.tune,
-                          onTap: () => showAdaptiveBottomSheet<void>(
-                            context: context,
-                            builder: (BuildContext context) =>
-                                CustomClockSettings(
-                              player: playerType,
-                              clock: playerType == ClockPlayerType.top
-                                  ? TimeIncrement.fromDurations(
-                                      clockState.options.timePlayerTop,
-                                      clockState.options.incrementPlayerTop,
-                                    )
-                                  : TimeIncrement.fromDurations(
-                                      clockState.options.timePlayerBottom,
-                                      clockState.options.incrementPlayerBottom,
-                                    ),
-                              onSubmit: (
-                                ClockPlayerType player,
-                                TimeIncrement clock,
-                              ) {
-                                Navigator.of(context).pop();
-                                ref
-                                    .read(clockControllerProvider.notifier)
-                                    .updateOptionsCustom(clock, player);
-                              },
-                            ),
-                          ),
-                        ),
                     ],
                   ),
                 ),
@@ -151,6 +121,48 @@ class ClockTile extends ConsumerWidget {
             child: Text(
               '${context.l10n.stormMoves}: ${clockState.getMovesCount(playerType)}',
               style: const TextStyle(fontSize: 13, color: Colors.black),
+            ),
+          ),
+          Positioned(
+            bottom: MediaQuery.paddingOf(context).bottom + 24.0,
+            child: AnimatedOpacity(
+              opacity: clockState.started ? 0 : 1.0,
+              duration: const Duration(milliseconds: 300),
+              child: PlatformIconButton(
+                semanticsLabel: context.l10n.settingsSettings,
+                iconSize: 32,
+                icon: Icons.tune,
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? _darkClockStyle.textColor
+                    : _lightClockStyle.textColor,
+                onTap: clockState.started
+                    ? null
+                    : () => showAdaptiveBottomSheet<void>(
+                          context: context,
+                          builder: (BuildContext context) =>
+                              CustomClockSettings(
+                            player: playerType,
+                            clock: playerType == ClockPlayerType.top
+                                ? TimeIncrement.fromDurations(
+                                    clockState.options.timePlayerTop,
+                                    clockState.options.incrementPlayerTop,
+                                  )
+                                : TimeIncrement.fromDurations(
+                                    clockState.options.timePlayerBottom,
+                                    clockState.options.incrementPlayerBottom,
+                                  ),
+                            onSubmit: (
+                              ClockPlayerType player,
+                              TimeIncrement clock,
+                            ) {
+                              Navigator.of(context).pop();
+                              ref
+                                  .read(clockControllerProvider.notifier)
+                                  .updateOptionsCustom(clock, player);
+                            },
+                          ),
+                        ),
+              ),
             ),
           ),
         ],
