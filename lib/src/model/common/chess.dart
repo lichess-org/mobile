@@ -270,6 +270,19 @@ extension ChessExtension on Pick {
     }
   }
 
+  Square asSquareOrThrow() {
+    return Square.parse(this.required().value as String)!;
+  }
+
+  Square? asSquareOrNull() {
+    if (value == null) return null;
+    try {
+      return asSquareOrThrow();
+    } catch (_) {
+      return null;
+    }
+  }
+
   Variant asVariantOrThrow() {
     final value = this.required().value;
     if (value is Variant) {
