@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
@@ -29,8 +30,7 @@ class AnalysisSettings extends ConsumerWidget {
       generalPreferencesProvider.select((pref) => pref.isSoundEnabled),
     );
 
-    return ListView(
-      shrinkWrap: true,
+    return BottomSheetScrollableContainer(
       children: [
         SwitchSettingTile(
           title: Text(context.l10n.toggleLocalEvaluation),

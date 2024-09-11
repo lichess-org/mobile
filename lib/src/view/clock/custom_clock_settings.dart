@@ -4,6 +4,7 @@ import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
@@ -36,35 +37,26 @@ class _CustomClockSettingsState extends State<CustomClockSettings> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
-        child: SizedBox(
-          width: double.infinity,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              _PlayerTimeSlider(
-                clock: TimeIncrement(time, increment),
-                updateTime: (int t) => setState(() => time = t),
-                updateIncrement: (int inc) => setState(() => increment = inc),
-              ),
-              Padding(
-                padding: Styles.horizontalBodyPadding,
-                child: FatButton(
-                  semanticsLabel: context.l10n.apply,
-                  child: Text(context.l10n.apply),
-                  onPressed: () => widget.onSubmit(
-                    widget.player,
-                    TimeIncrement(time, increment),
-                  ),
-                ),
-              ),
-            ],
+    return BottomSheetScrollableContainer(
+      padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
+      children: [
+        _PlayerTimeSlider(
+          clock: TimeIncrement(time, increment),
+          updateTime: (int t) => setState(() => time = t),
+          updateIncrement: (int inc) => setState(() => increment = inc),
+        ),
+        Padding(
+          padding: Styles.horizontalBodyPadding,
+          child: FatButton(
+            semanticsLabel: context.l10n.apply,
+            child: Text(context.l10n.apply),
+            onPressed: () => widget.onSubmit(
+              widget.player,
+              TimeIncrement(time, increment),
+            ),
           ),
         ),
-      ),
+      ],
     );
   }
 }

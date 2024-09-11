@@ -128,8 +128,7 @@ class GameShareBottomSheet extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ListView(
-      shrinkWrap: true,
+    return BottomSheetScrollableContainer(
       children: [
         BottomSheetContextMenuAction(
           icon: CupertinoIcons.link,

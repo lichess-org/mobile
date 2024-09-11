@@ -265,41 +265,32 @@ class _CoordinateTrainingMenu extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final trainingPrefs = ref.watch(coordinateTrainingPreferencesProvider);
 
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
-        child: SizedBox(
-          width: double.infinity,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              ListSection(
-                header: Text(
-                  context.l10n.preferencesDisplay,
-                  style: Styles.sectionTitle,
-                ),
-                children: [
-                  SwitchSettingTile(
-                    title: const Text('Show Coordinates'),
-                    value: trainingPrefs.showCoordinates,
-                    onChanged: ref
-                        .read(coordinateTrainingPreferencesProvider.notifier)
-                        .setShowCoordinates,
-                  ),
-                  SwitchSettingTile(
-                    title: const Text('Show Pieces'),
-                    value: trainingPrefs.showPieces,
-                    onChanged: ref
-                        .read(coordinateTrainingPreferencesProvider.notifier)
-                        .setShowPieces,
-                  ),
-                ],
-              ),
-            ],
+    return BottomSheetScrollableContainer(
+      padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
+      children: [
+        ListSection(
+          header: Text(
+            context.l10n.preferencesDisplay,
+            style: Styles.sectionTitle,
           ),
+          children: [
+            SwitchSettingTile(
+              title: const Text('Show Coordinates'),
+              value: trainingPrefs.showCoordinates,
+              onChanged: ref
+                  .read(coordinateTrainingPreferencesProvider.notifier)
+                  .setShowCoordinates,
+            ),
+            SwitchSettingTile(
+              title: const Text('Show Pieces'),
+              value: trainingPrefs.showPieces,
+              onChanged: ref
+                  .read(coordinateTrainingPreferencesProvider.notifier)
+                  .setShowPieces,
+            ),
+          ],
         ),
-      ),
+      ],
     );
   }
 }

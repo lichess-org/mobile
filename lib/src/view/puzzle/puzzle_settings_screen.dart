@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
 class PuzzleSettingsScreen extends ConsumerWidget {
@@ -23,8 +24,7 @@ class PuzzleSettingsScreen extends ConsumerWidget {
     );
     final boardPrefs = ref.watch(boardPreferencesProvider);
 
-    return ListView(
-      shrinkWrap: true,
+    return BottomSheetScrollableContainer(
       children: [
         SwitchSettingTile(
           title: Text(context.l10n.sound),

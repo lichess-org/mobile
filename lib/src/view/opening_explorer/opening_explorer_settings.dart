@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer_prefe
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/user/search_screen.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 
 class OpeningExplorerSettings extends ConsumerWidget {
@@ -237,8 +238,7 @@ class OpeningExplorerSettings extends ConsumerWidget {
       ),
     ];
 
-    return ListView(
-      shrinkWrap: true,
+    return BottomSheetScrollableContainer(
       children: [
         PlatformListTile(
           title: Text(context.l10n.database),

@@ -280,50 +280,43 @@ class _FilterGamesState extends ConsumerState<_FilterGames> {
             )
         : perfFilter(gamePerfs);
 
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
+    return BottomSheetScrollableContainer(
+      padding: const EdgeInsets.all(16.0),
+      children: [
+        filters,
+        const SizedBox(height: 12.0),
+        const PlatformDivider(thickness: 1, indent: 0),
+        filterGroupSpace,
+        _Filter<Side>(
+          filterName: context.l10n.side,
+          filterType: FilterType.singleChoice,
+          choices: Side.values,
+          choiceSelected: (choice) => filter.side == choice,
+          choiceLabel: (t) => switch (t) {
+            Side.white => context.l10n.white,
+            Side.black => context.l10n.black,
+          },
+          onSelected: (value, selected) => setState(
+            () {
+              filter = filter.copyWith(side: selected ? value : null);
+            },
+          ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            filters,
-            const SizedBox(height: 12.0),
-            const PlatformDivider(thickness: 1, indent: 0),
-            filterGroupSpace,
-            _Filter<Side>(
-              filterName: context.l10n.side,
-              filterType: FilterType.singleChoice,
-              choices: Side.values,
-              choiceSelected: (choice) => filter.side == choice,
-              choiceLabel: (t) => switch (t) {
-                Side.white => context.l10n.white,
-                Side.black => context.l10n.black,
-              },
-              onSelected: (value, selected) => setState(
-                () {
-                  filter = filter.copyWith(side: selected ? value : null);
-                },
-              ),
+            AdaptiveTextButton(
+              onPressed: () => setState(() => filter = const GameFilterState()),
+              child: Text(context.l10n.reset),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                AdaptiveTextButton(
-                  onPressed: () =>
-                      setState(() => filter = const GameFilterState()),
-                  child: Text(context.l10n.reset),
-                ),
-                AdaptiveTextButton(
-                  onPressed: () => Navigator.of(context).pop(filter),
-                  child: Text(context.l10n.apply),
-                ),
-              ],
+            AdaptiveTextButton(
+              onPressed: () => Navigator.of(context).pop(filter),
+              child: Text(context.l10n.apply),
             ),
           ],
         ),
-      ),
+      ],
     );
   }
 

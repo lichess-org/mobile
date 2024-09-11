@@ -111,8 +111,7 @@ class _ContextMenu extends ConsumerWidget {
 
     final customColors = Theme.of(context).extension<CustomColors>();
 
-    return ListView(
-      shrinkWrap: true,
+    return BottomSheetScrollableContainer(
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0).add(

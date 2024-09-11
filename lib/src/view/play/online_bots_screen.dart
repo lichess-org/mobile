@@ -195,8 +195,7 @@ class _ContextMenu extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ListView(
-      shrinkWrap: true,
+    return BottomSheetScrollableContainer(
       children: [
         Padding(
           padding: Styles.horizontalBodyPadding.add(
