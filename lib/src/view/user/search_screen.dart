@@ -44,6 +44,9 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   }
 
   void _onSearchChanged() {
+    if (!context.mounted) {
+      return;
+    }
     final term = _searchController.text;
     if (term.length >= 3) {
       ref.read(autoCompleteUserProvider(term));
