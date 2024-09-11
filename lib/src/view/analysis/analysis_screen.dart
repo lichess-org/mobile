@@ -186,12 +186,14 @@ class _Title extends StatelessWidget {
   const _Title({required this.options});
   final AnalysisOptions options;
 
+  static const excludedIcons = [Variant.standard, Variant.fromPosition];
+
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (options.variant != Variant.standard) ...[
+        if (!excludedIcons.contains(options.variant)) ...[
           Icon(options.variant.icon),
           const SizedBox(width: 5.0),
         ],
