@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
-import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 
 part 'countdown_clock.freezed.dart';
@@ -158,70 +157,108 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
 
   @override
   Widget build(BuildContext context) {
+    final brightness = Theme.of(context).brightness;
+    return RepaintBoundary(
+      child: Clock(
+        timeLeft: timeLeft,
+        active: widget.active,
+        emergencyThreshold: widget.emergencyThreshold,
+        clockStyle: getStyle(brightness),
+      ),
+    );
+  }
+}
+
+/// A stateless widget that displays the time left on the clock.
+///
+/// For a clock widget that automatically counts down, see [CountdownClock].
+class Clock extends StatelessWidget {
+  const Clock({
+    required this.timeLeft,
+    required this.active,
+    required this.clockStyle,
+    this.emergencyThreshold,
+    this.padLeft = false,
+    super.key,
+  });
+
+  /// The time left to be displayed on the clock.
+  final Duration timeLeft;
+
+  /// If `true`, [ClockStyle.activeBackgroundColor] will be used, otherwise [ClockStyle.backgroundColor].
+  final bool active;
+
+  /// If [timeLeft] is less than [emergencyThreshold], the clock will set
+  /// its background color to [ClockStyle.emergencyBackgroundColor].
+  final Duration? emergencyThreshold;
+
+  /// Clock style to use.
+  final ClockStyle clockStyle;
+
+  /// Whether to pad with a leading zero (default is `false`).
+  final bool padLeft;
+
+  @override
+  Widget build(BuildContext context) {
     final hours = timeLeft.inHours;
     final mins = timeLeft.inMinutes.remainder(60);
     final secs = timeLeft.inSeconds.remainder(60).toString().padLeft(2, '0');
     final showTenths = timeLeft < const Duration(seconds: 10);
-    final isEmergency = widget.emergencyThreshold != null &&
-        timeLeft <= widget.emergencyThreshold!;
-    final brightness = ref.watch(currentBrightnessProvider);
-    final clockStyle = getStyle(brightness);
+    final isEmergency =
+        emergencyThreshold != null && timeLeft <= emergencyThreshold!;
     final remainingHeight = estimateRemainingHeightLeftBoard(context);
 
     final hoursDisplay =
-        widget.padLeft ? hours.toString().padLeft(2, '0') : hours.toString();
+        padLeft ? hours.toString().padLeft(2, '0') : hours.toString();
     final minsDisplay =
-        widget.padLeft ? mins.toString().padLeft(2, '0') : mins.toString();
+        padLeft ? mins.toString().padLeft(2, '0') : mins.toString();
 
-    return RepaintBoundary(
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-          color: widget.active
-              ? isEmergency
-                  ? clockStyle.emergencyBackgroundColor
-                  : clockStyle.activeBackgroundColor
-              : clockStyle.backgroundColor,
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 5.0),
-          child: MediaQuery.withClampedTextScaling(
-            maxScaleFactor: kMaxClockTextScaleFactor,
-            child: RichText(
-              text: TextSpan(
-                text: hours > 0
-                    ? '$hoursDisplay:${mins.toString().padLeft(2, '0')}:$secs'
-                    : '$minsDisplay:$secs',
-                style: TextStyle(
-                  color: widget.active
-                      ? isEmergency
-                          ? clockStyle.emergencyTextColor
-                          : clockStyle.activeTextColor
-                      : clockStyle.textColor,
-                  fontSize: 26,
-                  height:
-                      remainingHeight < kSmallRemainingHeightLeftBoardThreshold
-                          ? 1.0
-                          : null,
-                  fontFeatures: const [
-                    FontFeature.tabularFigures(),
-                  ],
-                ),
-                children: [
-                  if (showTenths)
-                    TextSpan(
-                      text:
-                          '.${timeLeft.inMilliseconds.remainder(1000) ~/ 100}',
-                      style: const TextStyle(fontSize: 20),
-                    ),
-                  if (!widget.active && timeLeft < const Duration(seconds: 1))
-                    TextSpan(
-                      text:
-                          '${timeLeft.inMilliseconds.remainder(1000) ~/ 10 % 10}',
-                      style: const TextStyle(fontSize: 18),
-                    ),
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+        color: active
+            ? isEmergency
+                ? clockStyle.emergencyBackgroundColor
+                : clockStyle.activeBackgroundColor
+            : clockStyle.backgroundColor,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 5.0),
+        child: MediaQuery.withClampedTextScaling(
+          maxScaleFactor: kMaxClockTextScaleFactor,
+          child: RichText(
+            text: TextSpan(
+              text: hours > 0
+                  ? '$hoursDisplay:${mins.toString().padLeft(2, '0')}:$secs'
+                  : '$minsDisplay:$secs',
+              style: TextStyle(
+                color: active
+                    ? isEmergency
+                        ? clockStyle.emergencyTextColor
+                        : clockStyle.activeTextColor
+                    : clockStyle.textColor,
+                fontSize: 26,
+                height:
+                    remainingHeight < kSmallRemainingHeightLeftBoardThreshold
+                        ? 1.0
+                        : null,
+                fontFeatures: const [
+                  FontFeature.tabularFigures(),
                 ],
               ),
+              children: [
+                if (showTenths)
+                  TextSpan(
+                    text: '.${timeLeft.inMilliseconds.remainder(1000) ~/ 100}',
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                if (!active && timeLeft < const Duration(seconds: 1))
+                  TextSpan(
+                    text:
+                        '${timeLeft.inMilliseconds.remainder(1000) ~/ 10 % 10}',
+                    style: const TextStyle(fontSize: 18),
+                  ),
+              ],
             ),
           ),
         ),
