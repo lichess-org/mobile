@@ -11,14 +11,13 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer_preferences.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_screen.dart';
-import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_widget.dart';
 
 import '../../test_app.dart';
 import '../../test_utils.dart';
 
 void main() {
   final explorerViewFinder = find.descendant(
-    of: find.byType(OpeningExplorerWidget),
+    of: find.byType(LayoutBuilder),
     matching: find.byType(Scrollable),
   );
 
