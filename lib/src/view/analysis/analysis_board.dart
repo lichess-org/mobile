@@ -23,12 +23,17 @@ class AnalysisBoard extends ConsumerStatefulWidget {
     this.options,
     this.boardSize, {
     this.borderRadius,
+    this.disableDraggingPieces,
   });
 
   final String pgn;
   final AnalysisOptions options;
   final double boardSize;
   final BorderRadiusGeometry? borderRadius;
+
+  /// If true, the user won't be able to drag pieces. This settings is meant for
+  /// the opening explorer screen, where the user can drag the board.
+  final bool? disableDraggingPieces;
 
   @override
   ConsumerState<AnalysisBoard> createState() => AnalysisBoardState();
@@ -72,6 +77,8 @@ class AnalysisBoardState extends ConsumerState<AnalysisBoard> {
           )
         : ISet();
 
+    final boardPrefSettings = boardPrefs.toBoardSettings();
+
     return Chessboard(
       size: widget.boardSize,
       fen: analysisState.position.fen,
@@ -101,18 +108,20 @@ class AnalysisBoardState extends ConsumerState<AnalysisBoard> {
                     })
                   : IMap({sanMove.move.to: annotation})
               : null,
-      settings: boardPrefs.toBoardSettings().copyWith(
-            borderRadius: widget.borderRadius,
-            boxShadow: widget.borderRadius != null
-                ? boardShadows
-                : const <BoxShadow>[],
-            drawShape: DrawShapeOptions(
-              enable: true,
-              onCompleteShape: _onCompleteShape,
-              onClearShapes: _onClearShapes,
-              newShapeColor: boardPrefs.shapeColor.color,
-            ),
-          ),
+      settings: boardPrefSettings.copyWith(
+        borderRadius: widget.borderRadius,
+        boxShadow:
+            widget.borderRadius != null ? boardShadows : const <BoxShadow>[],
+        drawShape: DrawShapeOptions(
+          enable: true,
+          onCompleteShape: _onCompleteShape,
+          onClearShapes: _onClearShapes,
+          newShapeColor: boardPrefs.shapeColor.color,
+        ),
+        pieceShiftMethod: widget.disableDraggingPieces == true
+            ? PieceShiftMethod.tapTwoSquares
+            : boardPrefSettings.pieceShiftMethod,
+      ),
     );
   }
 
