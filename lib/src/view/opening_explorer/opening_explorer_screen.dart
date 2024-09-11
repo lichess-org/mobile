@@ -472,10 +472,10 @@ class _IndexingIndicatorState extends State<_IndexingIndicator>
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(6.0),
+      padding: const EdgeInsets.all(10.0),
       child: SizedBox(
-        width: 10,
-        height: 10,
+        width: 16,
+        height: 16,
         child: CircularProgressIndicator.adaptive(
           value: controller.value,
           // TODO: l10n
