@@ -1,10 +1,13 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 
 class ToggleSoundButton extends ConsumerWidget {
+  const ToggleSoundButton({this.iconSize, super.key});
+
+  final double? iconSize;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isSoundEnabled = ref.watch(
@@ -13,32 +16,13 @@ class ToggleSoundButton extends ConsumerWidget {
       ),
     );
 
-    switch (Theme.of(context).platform) {
-      case TargetPlatform.android:
-        return IconButton(
-          // TODO translate
-          tooltip: 'Toggle sound',
-          icon: isSoundEnabled
-              ? const Icon(Icons.volume_up)
-              : const Icon(Icons.volume_off),
-          onPressed: () => ref
-              .read(generalPreferencesProvider.notifier)
-              .toggleSoundEnabled(),
-        );
-      case TargetPlatform.iOS:
-        return CupertinoIconButton(
-          padding: EdgeInsets.zero,
-          semanticsLabel: 'Toggle sound',
-          icon: isSoundEnabled
-              ? const Icon(CupertinoIcons.volume_up)
-              : const Icon(CupertinoIcons.volume_off),
-          onPressed: () => ref
-              .read(generalPreferencesProvider.notifier)
-              .toggleSoundEnabled(),
-        );
-      default:
-        assert(false, 'Unexpected platform $Theme.of(context).platform');
-        return const SizedBox.shrink();
-    }
+    return PlatformIconButton(
+      iconSize: iconSize,
+      // TODO: translate
+      semanticsLabel: 'Toggle sound',
+      onTap: () =>
+          ref.read(generalPreferencesProvider.notifier).toggleSoundEnabled(),
+      icon: isSoundEnabled ? Icons.volume_up : Icons.volume_off,
+    );
   }
 }

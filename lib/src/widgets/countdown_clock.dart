@@ -14,6 +14,18 @@ part 'countdown_clock.freezed.dart';
 ///
 /// The clock starts only when [active] is `true`.
 class CountdownClock extends ConsumerStatefulWidget {
+  const CountdownClock({
+    required this.duration,
+    required this.active,
+    this.emergencyThreshold,
+    this.emergencySoundEnabled = true,
+    this.onFlag,
+    this.onStop,
+    this.clockStyle,
+    this.padLeft = false,
+    super.key,
+  });
+
   /// The duration left on the clock.
   final Duration duration;
 
@@ -34,27 +46,11 @@ class CountdownClock extends ConsumerStatefulWidget {
   /// Callback with the remaining duration when the clock stops
   final ValueSetter<Duration>? onStop;
 
-  /// Custom light color style
-  final ClockStyle? lightColorStyle;
-
-  /// Custom dark color style
-  final ClockStyle? darkColorStyle;
+  /// Custom color style
+  final ClockStyle? clockStyle;
 
   /// Whether to pad with a leading zero (default is `false`).
   final bool padLeft;
-
-  const CountdownClock({
-    required this.duration,
-    required this.active,
-    this.emergencyThreshold,
-    this.emergencySoundEnabled = true,
-    this.onFlag,
-    this.onStop,
-    this.lightColorStyle,
-    this.darkColorStyle,
-    this.padLeft = false,
-    super.key,
-  });
 
   @override
   ConsumerState<CountdownClock> createState() => _CountdownClockState();
@@ -120,14 +116,6 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
     }
   }
 
-  ClockStyle getStyle(Brightness brightness) {
-    if (brightness == Brightness.dark) {
-      return widget.darkColorStyle ?? ClockStyle.darkThemeStyle;
-    }
-
-    return widget.lightColorStyle ?? ClockStyle.lightThemeStyle;
-  }
-
   @override
   void initState() {
     super.initState();
@@ -157,13 +145,13 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
 
   @override
   Widget build(BuildContext context) {
-    final brightness = Theme.of(context).brightness;
     return RepaintBoundary(
       child: Clock(
+        padLeft: widget.padLeft,
         timeLeft: timeLeft,
         active: widget.active,
         emergencyThreshold: widget.emergencyThreshold,
-        clockStyle: getStyle(brightness),
+        clockStyle: widget.clockStyle,
       ),
     );
   }
@@ -176,7 +164,7 @@ class Clock extends StatelessWidget {
   const Clock({
     required this.timeLeft,
     required this.active,
-    required this.clockStyle,
+    this.clockStyle,
     this.emergencyThreshold,
     this.padLeft = false,
     super.key,
@@ -193,7 +181,7 @@ class Clock extends StatelessWidget {
   final Duration? emergencyThreshold;
 
   /// Clock style to use.
-  final ClockStyle clockStyle;
+  final ClockStyle? clockStyle;
 
   /// Whether to pad with a leading zero (default is `false`).
   final bool padLeft;
@@ -213,14 +201,20 @@ class Clock extends StatelessWidget {
     final minsDisplay =
         padLeft ? mins.toString().padLeft(2, '0') : mins.toString();
 
+    final brightness = Theme.of(context).brightness;
+    final activeClockStyle = clockStyle ??
+        (brightness == Brightness.dark
+            ? ClockStyle.darkThemeStyle
+            : ClockStyle.lightThemeStyle);
+
     return Container(
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(Radius.circular(5.0)),
         color: active
             ? isEmergency
-                ? clockStyle.emergencyBackgroundColor
-                : clockStyle.activeBackgroundColor
-            : clockStyle.backgroundColor,
+                ? activeClockStyle.emergencyBackgroundColor
+                : activeClockStyle.activeBackgroundColor
+            : activeClockStyle.backgroundColor,
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 5.0),
@@ -234,9 +228,9 @@ class Clock extends StatelessWidget {
               style: TextStyle(
                 color: active
                     ? isEmergency
-                        ? clockStyle.emergencyTextColor
-                        : clockStyle.activeTextColor
-                    : clockStyle.textColor,
+                        ? activeClockStyle.emergencyTextColor
+                        : activeClockStyle.activeTextColor
+                    : activeClockStyle.textColor,
                 fontSize: 26,
                 height:
                     remainingHeight < kSmallRemainingHeightLeftBoardThreshold
