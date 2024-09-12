@@ -346,7 +346,7 @@ class _OpeningExplorerView extends StatelessWidget {
                     child: AnimatedOpacity(
                       duration: const Duration(milliseconds: 300),
                       curve: Curves.fastOutSlowIn,
-                      opacity: isLoading ? 0.3 : 0.0,
+                      opacity: isLoading ? 0.15 : 0.0,
                       child: ColoredBox(color: loadingOverlayColor),
                     ),
                   ),
@@ -437,6 +437,9 @@ class _OpeningExplorerView extends StatelessWidget {
         appBar: AppBar(
           title: Text(context.l10n.openingExplorer),
           bottom: _MoveList(pgn: pgn, options: options),
+          actions: [
+            if (isIndexing) const _IndexingIndicator(),
+          ],
         ),
       ),
       iosBuilder: (_) => CupertinoPageScaffold(
@@ -444,6 +447,7 @@ class _OpeningExplorerView extends StatelessWidget {
           middle: Text(context.l10n.openingExplorer),
           automaticBackgroundVisibility: false,
           border: null,
+          trailing: isIndexing ? const _IndexingIndicator() : null,
         ),
         child: body,
       ),
