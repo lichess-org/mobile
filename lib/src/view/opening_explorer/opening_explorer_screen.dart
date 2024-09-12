@@ -308,9 +308,6 @@ class _OpeningExplorerView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isTablet = isTabletOrLarger(context);
-    final loadingOverlayColor = Theme.of(context).brightness == Brightness.dark
-        ? Colors.black
-        : Colors.white;
 
     final body = SafeArea(
       bottom: false,
@@ -346,8 +343,8 @@ class _OpeningExplorerView extends StatelessWidget {
                     child: AnimatedOpacity(
                       duration: const Duration(milliseconds: 300),
                       curve: Curves.fastOutSlowIn,
-                      opacity: isLoading ? 0.15 : 0.0,
-                      child: ColoredBox(color: loadingOverlayColor),
+                      opacity: isLoading ? 0.10 : 0.0,
+                      child: const ColoredBox(color: Colors.black),
                     ),
                   ),
                 );
