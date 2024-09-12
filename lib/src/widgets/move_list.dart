@@ -20,7 +20,7 @@ class MoveList extends ConsumerStatefulWidget {
     required this.slicedMoves,
     required this.currentMoveIndex,
     this.inlineColor,
-    this.inlineBackgroundColor,
+    this.inlineDecoration,
     this.onSelectMove,
   });
 
@@ -28,7 +28,7 @@ class MoveList extends ConsumerStatefulWidget {
 
   final Color? inlineColor;
 
-  final Color? inlineBackgroundColor;
+  final BoxDecoration? inlineDecoration;
 
   final Iterable<List<MapEntry<int, String>>> slicedMoves;
 
@@ -86,7 +86,7 @@ class _MoveListState extends ConsumerState<MoveList> {
 
     return widget.type == MoveListType.inline
         ? Container(
-            color: widget.inlineBackgroundColor,
+            decoration: widget.inlineDecoration,
             padding: const EdgeInsets.only(left: 5),
             height: _kMoveListHeight,
             width: double.infinity,
@@ -253,7 +253,7 @@ class StackedMoveCount extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: _kMoveListHeight,
+      width: 40.0,
       child: Text(
         '$count.',
         style: TextStyle(

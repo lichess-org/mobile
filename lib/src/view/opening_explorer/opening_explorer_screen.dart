@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer_preferences.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer_repository.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
@@ -22,7 +23,6 @@ import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
-import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -312,17 +312,11 @@ class _OpeningExplorerView extends StatelessWidget {
         ? Colors.black
         : Colors.white;
 
-    return PlatformScaffold(
-      appBar: PlatformAppBar(
-        title: Text(context.l10n.openingExplorer),
-        actions: [
-          if (isIndexing) const _IndexingIndicator(),
-        ],
-      ),
-      body: SafeArea(
-        bottom: false,
-        child: Column(
-          children: [
+    final body = SafeArea(
+      bottom: false,
+      child: Column(
+        children: [
+          if (Theme.of(context).platform == TargetPlatform.iOS)
             Padding(
               padding: isTablet
                   ? const EdgeInsets.symmetric(
@@ -331,110 +325,127 @@ class _OpeningExplorerView extends StatelessWidget {
                   : EdgeInsets.zero,
               child: _MoveList(pgn: pgn, options: options),
             ),
-            Expanded(
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  final aspectRatio = constraints.biggest.aspectRatio;
-                  final defaultBoardSize = constraints.biggest.shortestSide;
-                  final remainingHeight =
-                      constraints.maxHeight - defaultBoardSize;
-                  final isSmallScreen =
-                      remainingHeight < kSmallRemainingHeightLeftBoardThreshold;
-                  final boardSize = isTablet || isSmallScreen
-                      ? defaultBoardSize - kTabletBoardTableSidePadding * 2
-                      : defaultBoardSize;
+          Expanded(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final aspectRatio = constraints.biggest.aspectRatio;
+                final defaultBoardSize = constraints.biggest.shortestSide;
+                final remainingHeight =
+                    constraints.maxHeight - defaultBoardSize;
+                final isSmallScreen =
+                    remainingHeight < kSmallRemainingHeightLeftBoardThreshold;
+                final boardSize = isTablet || isSmallScreen
+                    ? defaultBoardSize - kTabletBoardTableSidePadding * 2
+                    : defaultBoardSize;
 
-                  final isLandscape = aspectRatio > 1;
+                final isLandscape = aspectRatio > 1;
 
-                  final loadingOverlay = Positioned.fill(
-                    child: IgnorePointer(
-                      ignoring: !isLoading,
-                      child: AnimatedOpacity(
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.fastOutSlowIn,
-                        opacity: isLoading ? 0.3 : 0.0,
-                        child: ColoredBox(color: loadingOverlayColor),
-                      ),
+                final loadingOverlay = Positioned.fill(
+                  child: IgnorePointer(
+                    ignoring: !isLoading,
+                    child: AnimatedOpacity(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.fastOutSlowIn,
+                      opacity: isLoading ? 0.3 : 0.0,
+                      child: ColoredBox(color: loadingOverlayColor),
                     ),
-                  );
+                  ),
+                );
 
-                  if (isLandscape) {
-                    return Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            left: kTabletBoardTableSidePadding,
-                            top: kTabletBoardTableSidePadding,
-                            bottom: kTabletBoardTableSidePadding,
-                          ),
-                          child: AnalysisBoard(
+                if (isLandscape) {
+                  return Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          left: kTabletBoardTableSidePadding,
+                          top: kTabletBoardTableSidePadding,
+                          bottom: kTabletBoardTableSidePadding,
+                        ),
+                        child: AnalysisBoard(
+                          pgn,
+                          options,
+                          boardSize,
+                          borderRadius: isTablet ? _kTabletBoardRadius : null,
+                        ),
+                      ),
+                      Flexible(
+                        fit: FlexFit.loose,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: PlatformCard(
+                                clipBehavior: Clip.hardEdge,
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(4.0),
+                                ),
+                                margin: const EdgeInsets.all(
+                                  kTabletBoardTableSidePadding,
+                                ),
+                                semanticContainer: false,
+                                child: Stack(
+                                  children: [
+                                    ListView(
+                                      padding: EdgeInsets.zero,
+                                      children: children,
+                                    ),
+                                    loadingOverlay,
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  );
+                } else {
+                  return Stack(
+                    children: [
+                      ListView(
+                        padding: isTablet
+                            ? const EdgeInsets.symmetric(
+                                horizontal: kTabletBoardTableSidePadding,
+                              )
+                            : EdgeInsets.zero,
+                        children: [
+                          AnalysisBoard(
                             pgn,
                             options,
                             boardSize,
-                            borderRadius: isTablet ? _kTabletBoardRadius : null,
+                            disableDraggingPieces: true,
                           ),
-                        ),
-                        Flexible(
-                          fit: FlexFit.loose,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                child: PlatformCard(
-                                  clipBehavior: Clip.hardEdge,
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(4.0),
-                                  ),
-                                  margin: const EdgeInsets.all(
-                                    kTabletBoardTableSidePadding,
-                                  ),
-                                  semanticContainer: false,
-                                  child: Stack(
-                                    children: [
-                                      ListView(
-                                        padding: EdgeInsets.zero,
-                                        children: children,
-                                      ),
-                                      loadingOverlay,
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    );
-                  } else {
-                    return Stack(
-                      children: [
-                        ListView(
-                          padding: isTablet
-                              ? const EdgeInsets.symmetric(
-                                  horizontal: kTabletBoardTableSidePadding,
-                                )
-                              : EdgeInsets.zero,
-                          children: [
-                            AnalysisBoard(
-                              pgn,
-                              options,
-                              boardSize,
-                              disableDraggingPieces: true,
-                            ),
-                            ...children,
-                          ],
-                        ),
-                        loadingOverlay,
-                      ],
-                    );
-                  }
-                },
-              ),
+                          ...children,
+                        ],
+                      ),
+                      loadingOverlay,
+                    ],
+                  );
+                }
+              },
             ),
-            _BottomBar(pgn: pgn, options: options),
-          ],
+          ),
+          _BottomBar(pgn: pgn, options: options),
+        ],
+      ),
+    );
+
+    return PlatformWidget(
+      androidBuilder: (_) => Scaffold(
+        body: body,
+        appBar: AppBar(
+          title: Text(context.l10n.openingExplorer),
+          bottom: _MoveList(pgn: pgn, options: options),
         ),
+      ),
+      iosBuilder: (_) => CupertinoPageScaffold(
+        navigationBar: CupertinoNavigationBar(
+          middle: Text(context.l10n.openingExplorer),
+          automaticBackgroundVisibility: false,
+          border: null,
+        ),
+        child: body,
       ),
     );
   }
@@ -962,7 +973,7 @@ class _WinPercentageChart extends StatelessWidget {
   }
 }
 
-class _MoveList extends ConsumerWidget {
+class _MoveList extends ConsumerWidget implements PreferredSizeWidget {
   const _MoveList({
     required this.pgn,
     required this.options,
@@ -970,6 +981,9 @@ class _MoveList extends ConsumerWidget {
 
   final String pgn;
   final AnalysisOptions options;
+
+  @override
+  Size get preferredSize => const Size.fromHeight(40.0);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -984,8 +998,17 @@ class _MoveList extends ConsumerWidget {
     final currentMoveIndex = state.currentNode.position.ply;
 
     return MoveList(
-      inlineBackgroundColor: Theme.of(context).colorScheme.surfaceContainer,
-      inlineColor: Theme.of(context).colorScheme.onSurface,
+      inlineDecoration: Theme.of(context).platform == TargetPlatform.iOS
+          ? BoxDecoration(
+              color: Styles.cupertinoAppBarColor.resolveFrom(context),
+              border: const Border(
+                bottom: BorderSide(
+                  color: Color(0x4D000000),
+                  width: 0.0,
+                ),
+              ),
+            )
+          : null,
       type: MoveListType.inline,
       slicedMoves: slicedMoves,
       currentMoveIndex: currentMoveIndex,
