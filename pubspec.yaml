@@ -41,7 +41,7 @@ dependencies:
   flutter_slidable:
     git:
       url: https://github.com/letsar/flutter_slidable.git
-      ref: master
+      ref: 3280106581fc8d54eae45f4a446f92cae36d7837
   flutter_spinkit: ^5.2.0
   flutter_svg: ^2.0.10+1
   freezed_annotation: ^2.2.0
@@ -67,7 +67,7 @@ dependencies:
   stockfish:
     git:
       url: https://github.com/lichess-org/dart-stockfish.git
-      ref: 0965a99ea143db00ec495eecbd54dfe10acf70ea
+      ref: 0b4d8f20f72beb43c853230dd18063bee242487d
   stream_transform: ^2.1.0
   timeago: ^3.6.0
   url_launcher: ^6.1.9
