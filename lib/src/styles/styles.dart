@@ -220,18 +220,12 @@ Color? dividerColor(BuildContext context) =>
 
 Color darken(Color c, [double amount = .1]) {
   assert(amount >= 0 && amount <= 1);
-  final f = 1 - amount;
-  return Color.from(alpha: c.a, red: c.r * f, green: c.g * f, blue: c.b * f);
+  return Color.lerp(c, Colors.black, amount) ?? c;
 }
 
 Color lighten(Color c, [double amount = .1]) {
   assert(amount >= 0 && amount <= 1);
-  return Color.from(
-    alpha: c.a,
-    red: c.r + ((255 - c.r) * amount),
-    green: c.g + ((255 - c.g) * amount),
-    blue: c.b + ((255 - c.b) * amount),
-  );
+  return Color.lerp(c, Colors.white, amount) ?? c;
 }
 
 @immutable
