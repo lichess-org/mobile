@@ -175,7 +175,7 @@ void showCupertinoSnackBar({
                   : type == SnackBarType.success
                       ? context.lichessColors.good
                       : CupertinoColors.systemGrey.resolveFrom(context))
-              .withOpacity(0.6),
+              .withValues(alpha: 0.6),
           textStyle: const TextStyle(color: Colors.white),
         ),
         duration: duration,

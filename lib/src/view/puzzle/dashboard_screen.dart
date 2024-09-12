@@ -189,7 +189,8 @@ class PuzzleChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final radarColor = Theme.of(context).colorScheme.onSurface.withOpacity(0.5);
+    final radarColor =
+        Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5);
     final chartColor = Theme.of(context).colorScheme.tertiary;
     return RadarChart(
       RadarChartData(
@@ -199,7 +200,7 @@ class PuzzleChart extends StatelessWidget {
         radarShape: RadarShape.polygon,
         dataSets: [
           RadarDataSet(
-            fillColor: chartColor.withOpacity(0.2),
+            fillColor: chartColor.withValues(alpha: 0.2),
             borderColor: chartColor,
             dataEntries: puzzleData
                 .map((theme) => RadarEntry(value: theme.performance.toDouble()))

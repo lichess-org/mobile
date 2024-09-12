@@ -71,8 +71,8 @@ class BoardCarouselItem extends ConsumerWidget {
                       begin: Alignment.center,
                       end: Alignment.bottomCenter,
                       colors: [
-                        backgroundColor.withOpacity(0.25),
-                        backgroundColor.withOpacity(1.0),
+                        backgroundColor.withValues(alpha: 0.25),
+                        backgroundColor.withValues(alpha: 1.0),
                       ],
                       stops: const [0.3, 1.00],
                       tileMode: TileMode.clamp,
@@ -120,7 +120,7 @@ class BoardCarouselItem extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(8.0),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.05),
+                        color: Colors.black.withValues(alpha: 0.05),
                         blurRadius: 6.0,
                       ),
                     ],

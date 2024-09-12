@@ -246,8 +246,8 @@ class _PuzzleResult extends StatelessWidget {
   Widget build(BuildContext context) {
     return ColoredBox(
       color: entry.win
-          ? context.lichessColors.good.withOpacity(0.7)
-          : context.lichessColors.error.withOpacity(0.7),
+          ? context.lichessColors.good.withValues(alpha: 0.7)
+          : context.lichessColors.error.withValues(alpha: 0.7),
       child: Padding(
         padding: const EdgeInsets.symmetric(
           vertical: 1,

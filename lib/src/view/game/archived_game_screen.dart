@@ -135,7 +135,7 @@ class _Body extends StatelessWidget {
         actions: [
           if (gameData == null && error == null)
             const PlatformAppBarLoadingIndicator(),
-          ToggleSoundButton(),
+          const ToggleSoundButton(),
         ],
       ),
       body: SafeArea(

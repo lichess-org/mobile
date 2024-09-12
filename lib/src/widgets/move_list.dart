@@ -194,7 +194,7 @@ class InlineMoveCount extends StatelessWidget {
         '$count.',
         style: TextStyle(
           fontWeight: FontWeight.w500,
-          color: color?.withOpacity(_moveListOpacity) ??
+          color: color?.withValues(alpha: _moveListOpacity) ??
               textShade(context, _moveListOpacity),
           fontFamily:
               pieceNotation == PieceNotation.symbol ? 'ChessFont' : null,
@@ -235,7 +235,7 @@ class InlineMoveItem extends StatelessWidget {
             fontWeight: current == true ? FontWeight.bold : FontWeight.w500,
             color: current != true
                 ? color != null
-                    ? color!.withOpacity(_moveListOpacity)
+                    ? color!.withValues(alpha: _moveListOpacity)
                     : textShade(context, _moveListOpacity)
                 : Theme.of(context).colorScheme.primary,
           ),

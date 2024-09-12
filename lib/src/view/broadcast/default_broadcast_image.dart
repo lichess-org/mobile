@@ -24,8 +24,8 @@ class DefaultBroadcastImage extends StatelessWidget {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                LichessColors.primary.withOpacity(0.7),
-                LichessColors.brag.withOpacity(0.7),
+                LichessColors.primary.withValues(alpha: 0.7),
+                LichessColors.brag.withValues(alpha: 0.7),
               ],
             ),
           ),

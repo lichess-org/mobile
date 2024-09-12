@@ -89,18 +89,14 @@ class _BodyState extends ConsumerState<_Body> {
                 solidColor: (trainingState.lastGuess == Guess.correct
                         ? LichessColors.good
                         : LichessColors.error)
-                    .withOpacity(
-                  0.5,
-                ),
+                    .withValues(alpha: 0.5),
               ),
             ),
           },
         } else ...{
           trainingState.currentCoord!: SquareHighlight(
             details: HighlightDetails(
-              solidColor: LichessColors.good.withOpacity(
-                0.5,
-              ),
+              solidColor: LichessColors.good.withValues(alpha: 0.5),
             ),
           ),
         },

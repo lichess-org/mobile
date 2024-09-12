@@ -113,7 +113,7 @@ class _CupertinoNavBarWrapper extends StatelessWidget
   @override
   bool shouldFullyObstruct(BuildContext context) {
     final Color backgroundColor = CupertinoTheme.of(context).barBackgroundColor;
-    return backgroundColor.alpha == 0xFF;
+    return backgroundColor.a == 0xFF;
   }
 }
 

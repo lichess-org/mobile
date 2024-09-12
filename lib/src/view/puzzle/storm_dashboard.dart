@@ -129,7 +129,7 @@ class _Body extends ConsumerWidget {
                         // Date row
                         final entryIndex = index ~/ 2;
                         return ColoredBox(
-                          color: LichessColors.grey.withOpacity(0.23),
+                          color: LichessColors.grey.withValues(alpha: 0.23),
                           child: Padding(
                             padding: Styles.horizontalBodyPadding,
                             child: Text(

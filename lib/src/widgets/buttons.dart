@@ -115,7 +115,7 @@ class _SecondaryButtonState extends State<SecondaryButton>
               color: widget.glowing
                   ? CupertinoTheme.of(context)
                       .primaryColor
-                      .withOpacity(_animation.value)
+                      .withValues(alpha: _animation.value)
                   : null,
               onPressed: widget.onPressed,
               child: widget.child,
@@ -128,7 +128,7 @@ class _SecondaryButtonState extends State<SecondaryButton>
                     ? Theme.of(context)
                         .colorScheme
                         .primary
-                        .withOpacity(_animation.value)
+                        .withValues(alpha: _animation.value)
                     : null,
               ),
               child: widget.child,

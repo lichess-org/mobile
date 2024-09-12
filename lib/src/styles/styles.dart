@@ -211,7 +211,7 @@ abstract class Styles {
 
 /// Retrieve the default text color and apply an opacity to it.
 Color? textShade(BuildContext context, double opacity) =>
-    DefaultTextStyle.of(context).style.color?.withOpacity(opacity);
+    DefaultTextStyle.of(context).style.color?.withValues(alpha: opacity);
 
 Color? dividerColor(BuildContext context) =>
     defaultTargetPlatform == TargetPlatform.iOS
@@ -221,21 +221,16 @@ Color? dividerColor(BuildContext context) =>
 Color darken(Color c, [double amount = .1]) {
   assert(amount >= 0 && amount <= 1);
   final f = 1 - amount;
-  return Color.fromARGB(
-    c.alpha,
-    (c.red * f).round(),
-    (c.green * f).round(),
-    (c.blue * f).round(),
-  );
+  return Color.from(alpha: c.a, red: c.r * f, green: c.g * f, blue: c.b * f);
 }
 
 Color lighten(Color c, [double amount = .1]) {
   assert(amount >= 0 && amount <= 1);
-  return Color.fromARGB(
-    c.alpha,
-    c.red + ((255 - c.red) * amount).round(),
-    c.green + ((255 - c.green) * amount).round(),
-    c.blue + ((255 - c.blue) * amount).round(),
+  return Color.from(
+    alpha: c.a,
+    red: c.r + ((255 - c.r) * amount),
+    green: c.g + ((255 - c.g) * amount),
+    blue: c.b + ((255 - c.b) * amount),
   );
 }
 

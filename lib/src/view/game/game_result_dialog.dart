@@ -262,7 +262,7 @@ class _AcplChart extends StatelessWidget {
               LineChartBarData(
                 spots: spots,
                 isCurved: true,
-                color: mainLineColor.withOpacity(0.3),
+                color: mainLineColor.withValues(alpha: 0.3),
                 barWidth: 1,
                 aboveBarData: BarAreaData(
                   show: true,

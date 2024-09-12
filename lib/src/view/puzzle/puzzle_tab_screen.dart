@@ -455,8 +455,10 @@ class _DailyPuzzle extends ConsumerWidget {
               Icon(
                 Icons.today,
                 size: 34,
-                color:
-                    DefaultTextStyle.of(context).style.color?.withOpacity(0.6),
+                color: DefaultTextStyle.of(context)
+                    .style
+                    .color
+                    ?.withValues(alpha: 0.6),
               ),
               Text(
                 data.puzzle.initialPly.isOdd

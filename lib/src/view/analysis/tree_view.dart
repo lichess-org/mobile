@@ -283,12 +283,12 @@ Color? _textColor(
   int? nag,
 }) {
   final defaultColor = Theme.of(context).platform == TargetPlatform.android
-      ? Theme.of(context).textTheme.bodyLarge?.color?.withOpacity(opacity)
+      ? Theme.of(context).textTheme.bodyLarge?.color?.withValues(alpha: opacity)
       : CupertinoTheme.of(context)
           .textTheme
           .textStyle
           .color
-          ?.withOpacity(opacity);
+          ?.withValues(alpha: opacity);
 
   return nag != null && nag > 0 ? nagColor(nag) : defaultColor;
 }

@@ -38,12 +38,12 @@ const _kTabletBoardRadius = BorderRadius.all(Radius.circular(4.0));
 
 Color _whiteBoxColor(BuildContext context) =>
     Theme.of(context).brightness == Brightness.dark
-        ? Colors.white.withOpacity(0.8)
+        ? Colors.white.withValues(alpha: 0.8)
         : Colors.white;
 
 Color _blackBoxColor(BuildContext context) =>
     Theme.of(context).brightness == Brightness.light
-        ? Colors.black.withOpacity(0.7)
+        ? Colors.black.withValues(alpha: 0.7)
         : Colors.black;
 
 class OpeningExplorerScreen extends ConsumerStatefulWidget {
