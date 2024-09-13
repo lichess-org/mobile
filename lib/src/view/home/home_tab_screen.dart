@@ -242,7 +242,7 @@ class _HomeBody extends ConsumerWidget {
                   widget: EnabledWidget.perfCards,
                   isEditing: isEditing,
                   shouldShow: session != null,
-                  child: AccountPerfCards(padding: Styles.bodySectionPadding),
+                  child: const AccountPerfCards(padding: Styles.bodySectionPadding),
                 ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -294,9 +294,9 @@ class _HomeBody extends ConsumerWidget {
                   widget: EnabledWidget.quickPairing,
                   isEditing: isEditing,
                   shouldShow: status.isOnline,
-                  child: Padding(
+                  child: const Padding(
                     padding: Styles.bodySectionPadding,
-                    child: const QuickGameMatrix(),
+                    child: QuickGameMatrix(),
                   ),
                 ),
                 if (status.isOnline)
@@ -461,9 +461,9 @@ class _WelcomeScreen extends StatelessWidget {
             widget: EnabledWidget.quickPairing,
             isEditing: isEditing,
             shouldShow: true,
-            child: Padding(
+            child: const Padding(
               padding: Styles.bodySectionPadding,
-              child: const QuickGameMatrix(),
+              child: QuickGameMatrix(),
             ),
           ),
         ...welcomeWidgets,
@@ -562,14 +562,14 @@ class _TabletCreateAGameSection extends StatelessWidget {
           widget: EnabledWidget.quickPairing,
           isEditing: isEditing,
           shouldShow: true,
-          child: Padding(
+          child: const Padding(
             padding: Styles.bodySectionPadding,
-            child: const QuickGameMatrix(),
+            child: QuickGameMatrix(),
           ),
         ),
-        Padding(
+        const Padding(
           padding: Styles.bodySectionPadding,
-          child: const QuickGameButton(),
+          child: QuickGameButton(),
         ),
         const CreateGameOptions(),
       ],

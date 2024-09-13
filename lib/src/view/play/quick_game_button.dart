@@ -6,6 +6,7 @@ import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
@@ -20,6 +21,8 @@ class QuickGameButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final playPrefs = ref.watch(gameSetupPreferencesProvider);
     final session = ref.watch(authSessionProvider);
+    final isOnline =
+        ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
 
     return Row(
       children: [
@@ -75,33 +78,37 @@ class QuickGameButton extends ConsumerWidget {
                     horizontal: 8.0,
                     vertical: 16.0,
                   ),
-                  onPressed: () {
-                    pushPlatformRoute(
-                      context,
-                      rootNavigator: true,
-                      builder: (_) => GameScreen(
-                        seek: GameSeek.fastPairing(
-                          playPrefs.quickPairingTimeIncrement,
-                          session,
-                        ),
-                      ),
-                    );
-                  },
+                  onPressed: isOnline
+                      ? () {
+                          pushPlatformRoute(
+                            context,
+                            rootNavigator: true,
+                            builder: (_) => GameScreen(
+                              seek: GameSeek.fastPairing(
+                                playPrefs.quickPairingTimeIncrement,
+                                session,
+                              ),
+                            ),
+                          );
+                        }
+                      : null,
                   child: Text(context.l10n.play, style: Styles.bold),
                 )
               : FilledButton(
-                  onPressed: () {
-                    pushPlatformRoute(
-                      context,
-                      rootNavigator: true,
-                      builder: (_) => GameScreen(
-                        seek: GameSeek.fastPairing(
-                          playPrefs.quickPairingTimeIncrement,
-                          session,
-                        ),
-                      ),
-                    );
-                  },
+                  onPressed: isOnline
+                      ? () {
+                          pushPlatformRoute(
+                            context,
+                            rootNavigator: true,
+                            builder: (_) => GameScreen(
+                              seek: GameSeek.fastPairing(
+                                playPrefs.quickPairingTimeIncrement,
+                                session,
+                              ),
+                            ),
+                          );
+                        }
+                      : null,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: Text(context.l10n.play, style: Styles.bold),

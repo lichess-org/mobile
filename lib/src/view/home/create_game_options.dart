@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
+import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/over_the_board/over_the_board_screen.dart';
@@ -16,54 +17,82 @@ class CreateGameOptions extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final buttons = [
-      _CreateGamePlatformButton(
-        onTap: () {
-          ref.invalidate(accountProvider);
-          pushPlatformRoute(
-            context,
-            title: context.l10n.custom,
-            builder: (_) => const CreateCustomGameScreen(),
-          );
-        },
-        icon: Icons.tune,
-        label: context.l10n.custom,
-      ),
-      _CreateGamePlatformButton(
-        onTap: () {
-          pushPlatformRoute(
-            context,
-            title: context.l10n.onlineBots,
-            builder: (_) => const OnlineBotsScreen(),
-          );
-        },
-        icon: Icons.computer,
-        label: context.l10n.onlineBots,
-      ),
-      _CreateGamePlatformButton(
-        onTap: () {
-          pushPlatformRoute(
-            context,
-            title: 'Over the Board',
-            rootNavigator: true,
-            builder: (_) => const OverTheBoardScreen(),
-          );
-        },
-        icon: LichessIcons.chess_board,
-        label: 'Over the board',
-      ),
-    ];
+    final isOnline =
+        ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
 
+    return Column(
+      children: [
+        _Section(
+          children: [
+            _CreateGamePlatformButton(
+              onTap: isOnline
+                  ? () {
+                      ref.invalidate(accountProvider);
+                      pushPlatformRoute(
+                        context,
+                        title: context.l10n.custom,
+                        builder: (_) => const CreateCustomGameScreen(),
+                      );
+                    }
+                  : null,
+              icon: Icons.tune,
+              label: context.l10n.custom,
+            ),
+            _CreateGamePlatformButton(
+              onTap: isOnline
+                  ? () {
+                      pushPlatformRoute(
+                        context,
+                        title: context.l10n.onlineBots,
+                        builder: (_) => const OnlineBotsScreen(),
+                      );
+                    }
+                  : null,
+              icon: Icons.computer,
+              label: context.l10n.onlineBots,
+            ),
+          ],
+        ),
+        _Section(
+          children: [
+            _CreateGamePlatformButton(
+              onTap: () {
+                pushPlatformRoute(
+                  context,
+                  title: 'Over the Board',
+                  rootNavigator: true,
+                  builder: (_) => const OverTheBoardScreen(),
+                );
+              },
+              icon: LichessIcons.chess_board,
+              label: 'Over the board',
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _Section extends StatelessWidget {
+  const _Section({
+    required this.children,
+  });
+
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
     return Theme.of(context).platform == TargetPlatform.iOS
         ? ListSection(
             hasLeading: true,
-            children: buttons,
+            children: children,
           )
         : Padding(
-            padding: Styles.bodySectionPadding,
+            padding: Styles.horizontalBodyPadding.add(Styles.sectionTopPadding),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: buttons,
+              children: children,
             ),
           );
   }
@@ -80,7 +109,7 @@ class _CreateGamePlatformButton extends StatelessWidget {
 
   final String label;
 
-  final void Function() onTap;
+  final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {

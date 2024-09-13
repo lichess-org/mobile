@@ -15,15 +15,15 @@ class PlayScreen extends StatelessWidget {
       appBar: PlatformAppBar(
         title: Text(context.l10n.play),
       ),
-      body: SafeArea(
+      body: const SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Padding(
-              padding: Styles.bodySectionPadding,
-              child: const QuickGameButton(),
+              padding: Styles.horizontalBodyPadding,
+              child: QuickGameButton(),
             ),
-            const CreateGameOptions(),
+            CreateGameOptions(),
           ],
         ),
       ),

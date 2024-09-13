@@ -49,7 +49,7 @@ Future<T?> showAdaptiveBottomSheet<T>({
 class BottomSheetScrollableContainer extends StatelessWidget {
   const BottomSheetScrollableContainer({
     required this.children,
-    this.padding = const EdgeInsets.only(bottom: 8.0),
+    this.padding = const EdgeInsets.only(bottom: 16.0),
   });
 
   final List<Widget> children;

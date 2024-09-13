@@ -10,7 +10,9 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 const _iconSize = 38.0;
 
 class ClockSettings extends ConsumerWidget {
-  const ClockSettings({super.key});
+  const ClockSettings({required this.orientation, super.key});
+
+  final Orientation orientation;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -22,8 +24,10 @@ class ClockSettings extends ConsumerWidget {
     );
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
+      padding: orientation == Orientation.portrait
+          ? const EdgeInsets.symmetric(vertical: 10.0)
+          : const EdgeInsets.symmetric(horizontal: 10.0),
+      child: (orientation == Orientation.portrait ? Row.new : Column.new)(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           const _PlayResumeButton(_iconSize),

@@ -10,7 +10,6 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/coordinate_training/coordinate_training_controller.dart';
 import 'package:lichess_mobile/src/model/coordinate_training/coordinate_training_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
@@ -87,8 +86,8 @@ class _BodyState extends ConsumerState<_Body> {
             highlightLastGuess!: SquareHighlight(
               details: HighlightDetails(
                 solidColor: (trainingState.lastGuess == Guess.correct
-                        ? LichessColors.good
-                        : LichessColors.error)
+                        ? context.lichessColors.good
+                        : context.lichessColors.error)
                     .withValues(alpha: 0.5),
               ),
             ),
@@ -96,7 +95,7 @@ class _BodyState extends ConsumerState<_Body> {
         } else ...{
           trainingState.currentCoord!: SquareHighlight(
             details: HighlightDetails(
-              solidColor: LichessColors.good.withValues(alpha: 0.5),
+              solidColor: context.lichessColors.good.withValues(alpha: 0.5),
             ),
           ),
         },
@@ -136,8 +135,8 @@ class _BodyState extends ConsumerState<_Body> {
                           timeFractionElapsed:
                               trainingState.timeFractionElapsed,
                           color: trainingState.lastGuess == Guess.incorrect
-                              ? LichessColors.error
-                              : LichessColors.good,
+                              ? context.lichessColors.error
+                              : context.lichessColors.good,
                         ),
                         _TrainingBoard(
                           boardSize: boardSize,
@@ -157,8 +156,8 @@ class _BodyState extends ConsumerState<_Body> {
                               score: trainingState.score,
                               size: boardSize / 8,
                               color: trainingState.lastGuess == Guess.incorrect
-                                  ? LichessColors.error
-                                  : LichessColors.good,
+                                  ? context.lichessColors.error
+                                  : context.lichessColors.good,
                             ),
                             FatButton(
                               semanticsLabel: 'Abort Training',

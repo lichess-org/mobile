@@ -73,9 +73,9 @@ class BoardEditorMenu extends ConsumerWidget {
           );
         }),
         if (editorState.enPassantOptions.isNotEmpty) ...[
-          Padding(
+          const Padding(
             padding: Styles.bodySectionPadding,
-            child: const Text('En passant', style: Styles.subtitle),
+            child: Text('En passant', style: Styles.subtitle),
           ),
           Wrap(
             spacing: 8.0,

@@ -56,6 +56,17 @@ abstract class Styles {
   static const bodyPadding =
       EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0);
   static const verticalBodyPadding = EdgeInsets.symmetric(vertical: 16.0);
+  static const horizontalBodyPadding = EdgeInsets.symmetric(horizontal: 16.0);
+  static const sectionBottomPadding = EdgeInsets.only(bottom: 16.0);
+  static const sectionTopPadding = EdgeInsets.only(top: 16.0);
+  static const bodySectionPadding = EdgeInsets.all(16.0);
+
+  /// Horizontal and bottom padding for the body section.
+  static const bodySectionBottomPadding = EdgeInsets.only(
+    bottom: 16.0,
+    left: 16.0,
+    right: 16.0,
+  );
 
   // colors
   static Color? expansionTileColor(BuildContext context) =>
@@ -187,18 +198,6 @@ abstract class Styles {
       decoration: TextDecoration.none,
     ),
   );
-
-  /// Gets horizontal padding according to platform.
-  static const horizontalBodyPadding = EdgeInsets.symmetric(horizontal: 16.0);
-  static const sectionBottomPadding = EdgeInsets.only(bottom: 16);
-  static const sectionTopPadding = EdgeInsets.only(top: 16);
-
-  /// Horizontal and bottom padding for a body section
-  static EdgeInsetsGeometry get bodySectionPadding =>
-      horizontalBodyPadding.add(sectionBottomPadding).add(sectionTopPadding);
-
-  static EdgeInsetsGeometry get bodySectionBottomPadding =>
-      horizontalBodyPadding.add(sectionBottomPadding);
 
   // from:
   // https://github.com/flutter/flutter/blob/796c8ef79279f9c774545b3771238c3098dbefab/packages/flutter/lib/src/cupertino/bottom_tab_bar.dart#L17

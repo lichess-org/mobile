@@ -376,9 +376,9 @@ class PuzzleHistoryWidget extends ConsumerWidget {
         debugPrint(
           'SEVERE: [PuzzleHistoryWidget] could not load puzzle history',
         );
-        return Padding(
+        return const Padding(
           padding: Styles.bodySectionPadding,
-          child: const Text('Could not load Puzzle history.'),
+          child: Text('Could not load Puzzle history.'),
         );
       },
       loading: () => Shimmer(
@@ -495,9 +495,9 @@ class _DailyPuzzle extends ConsumerWidget {
           ],
         ),
       ),
-      error: (error, stack) => Padding(
+      error: (error, stack) => const Padding(
         padding: Styles.bodySectionPadding,
-        child: const Text('Could not load the daily puzzle.'),
+        child: Text('Could not load the daily puzzle.'),
       ),
     );
   }

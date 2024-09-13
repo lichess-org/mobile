@@ -70,6 +70,7 @@ class CoordinateDisplayState extends ConsumerState<CoordinateDisplay>
     final textStyle = DefaultTextStyle.of(context).style.copyWith(
       fontSize: 110.0,
       fontFamily: 'monospace',
+      color: Colors.white.withValues(alpha: 0.9),
       fontWeight: FontWeight.bold,
       fontFeatures: [const FontFeature.tabularFigures()],
       shadows: const [
