@@ -40,6 +40,7 @@ final _logger = Logger('Socket');
 const _globalSocketStreamAllowedTopics = {
   'n',
   'message',
+  'challenges',
 };
 
 final _globalStreamController = StreamController<SocketEvent>.broadcast();
@@ -49,6 +50,7 @@ final _globalStreamController = StreamController<SocketEvent>.broadcast();
 /// Only a subset of topics are allowed to be broadcasted to the global stream:
 /// - 'n' (number of players and games currently on the server)
 /// - 'message'
+/// - 'challenges'
 final socketGlobalStream = _globalStreamController.stream;
 
 /// Creates a WebSocket URI for the lichess server.
