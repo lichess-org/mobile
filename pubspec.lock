@@ -21,7 +21,7 @@ packages:
     dependency: transitive
     description: dart
     source: sdk
-    version: "0.1.5"
+    version: "0.3.2"
   analyzer:
     dependency: transitive
     description:
@@ -887,10 +887,10 @@ packages:
     dependency: transitive
     description:
       name: macros
-      sha256: a8403c89b36483b4cbf9f1fcd24562f483cb34a5c9bf101cf2b0d8a083cf1239
+      sha256: "0acaed5d6b7eab89f63350bccd82119e6c602df0f391260d0e32b5e23db79536"
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.0-main.5"
+    version: "0.1.2-main.4"
   matcher:
     dependency: transitive
     description:
@@ -911,10 +911,10 @@ packages:
     dependency: "direct main"
     description:
       name: meta
-      sha256: "25dfcaf170a0190f47ca6355bdd4552cb8924b430512ff0cafb8db9bd41fe33b"
+      sha256: bdb68674043280c3428e9ec998512fb681678676b3c54e773629ffe74419f8c7
       url: "https://pub.dev"
     source: hosted
-    version: "1.14.0"
+    version: "1.15.0"
   mime:
     dependency: transitive
     description:

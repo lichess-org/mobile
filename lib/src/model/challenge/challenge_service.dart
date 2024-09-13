@@ -22,9 +22,13 @@ ChallengeService challengeService(ChallengeServiceRef ref) {
   return ChallengeService(ref);
 }
 
-final challengeStreamController = StreamController<ChallengesList>.broadcast();
-final challengeStream = challengeStreamController.stream;
+final _challengeStreamController = StreamController<ChallengesList>.broadcast();
 
+/// The stream of challenge events that are received from the server.
+final Stream<ChallengesList> challengeStream =
+    _challengeStreamController.stream;
+
+/// A service that listens to challenge events and shows notifications.
 class ChallengeService {
   ChallengeService(this.ref);
 
@@ -43,7 +47,7 @@ class ChallengeService {
 
       _previous = _current;
       _current = (inward: inward.lock, outward: outward.lock);
-      challengeStreamController.add(_current!);
+      _challengeStreamController.add(_current!);
 
       if (_previous == null) return;
       final prevIds = _previous!.inward.map((challenge) => challenge.id);

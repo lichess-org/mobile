@@ -47,7 +47,6 @@ class ChallengeRequestsScreen extends ConsumerWidget {
 class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final challengeRepo = ref.read(challengeRepositoryProvider);
     final challenges = ref.watch(challengesProvider);
     final session = ref.watch(authSessionProvider);
 
@@ -86,6 +85,8 @@ class _Body extends ConsumerWidget {
                                   title: Text(context.l10n.accept),
                                   isDestructiveAction: true,
                                   onConfirm: (_) async {
+                                    final challengeRepo =
+                                        ref.read(challengeRepositoryProvider);
                                     await challengeRepo.accept(challenge.id);
                                     final fullId = await challengeRepo
                                         .show(challenge.id)
@@ -107,9 +108,13 @@ class _Body extends ConsumerWidget {
                                 );
                               },
                     onCancel: challenge.direction == ChallengeDirection.outward
-                        ? () => challengeRepo.cancel(challenge.id)
+                        ? () => ref
+                            .read(challengeRepositoryProvider)
+                            .cancel(challenge.id)
                         : () {
-                            challengeRepo.decline(challenge.id);
+                            ref
+                                .read(challengeRepositoryProvider)
+                                .decline(challenge.id);
                             ref
                                 .read(localNotificationServiceProvider)
                                 .cancel(challenge.id.value.hashCode);
