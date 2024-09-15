@@ -1,10 +1,12 @@
 import 'dart:async';
 
+import 'package:collection/collection.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/notifications/challenge_notification.dart';
 import 'package:lichess_mobile/src/model/notifications/local_notification_service.dart';
@@ -19,7 +21,9 @@ part 'challenge_service.g.dart';
 
 @Riverpod(keepAlive: true)
 ChallengeService challengeService(ChallengeServiceRef ref) {
-  return ChallengeService(ref);
+  final service = ChallengeService(ref);
+  ref.onDispose(() => service.dispose());
+  return service;
 }
 
 final _challengeStreamController = StreamController<ChallengesList>.broadcast();
@@ -37,40 +41,56 @@ class ChallengeService {
   ChallengesList? _current;
   ChallengesList? _previous;
 
-  void init() {
-    socketGlobalStream.listen((event) {
-      if (event.topic != 'challenges') return;
+  StreamSubscription<SocketEvent>? _socketSubscription;
 
-      final listPick = pick(event.data).required();
-      final inward = listPick('in').asListOrEmpty(Challenge.fromPick);
-      final outward = listPick('out').asListOrEmpty(Challenge.fromPick);
-
-      _previous = _current;
-      _current = (inward: inward.lock, outward: outward.lock);
-      _challengeStreamController.add(_current!);
-
-      if (_previous == null) return;
-      final prevIds = _previous!.inward.map((challenge) => challenge.id);
-      final l10n = ref.read(l10nProvider).strings;
-
-      // if a challenge was cancelled by the challenger
-      prevIds
-          .where((id) => !inward.map((challenge) => challenge.id).contains(id))
-          .forEach(
-            (id) => ref
-                .read(localNotificationServiceProvider)
-                .cancel(id.value.hashCode),
-          );
-
-      // if there is a new challenge
-      inward.where((challenge) => !prevIds.contains(challenge.id)).forEach(
-            (challenge) => ref
-                .read(localNotificationServiceProvider)
-                .show(ChallengeNotification(challenge, l10n)),
-          );
-    });
+  /// Start listening to challenge events from the server.
+  void initialize() {
+    _socketSubscription = socketGlobalStream.listen(_onSocketEvent);
   }
 
+  void _onSocketEvent(SocketEvent event) {
+    if (event.topic != 'challenges') return;
+
+    final listPick = pick(event.data).required();
+    final inward = listPick('in').asListOrEmpty(Challenge.fromPick);
+    final outward = listPick('out').asListOrEmpty(Challenge.fromPick);
+
+    _previous = _current;
+    _current = (inward: inward.lock, outward: outward.lock);
+    _challengeStreamController.add(_current!);
+
+    final Iterable<ChallengeId> prevInwardIds =
+        _previous?.inward.map((challenge) => challenge.id) ?? [];
+    final Iterable<ChallengeId> currentInwardIds =
+        inward.map((challenge) => challenge.id);
+
+    final l10n = ref.read(l10nProvider).strings;
+
+    // if a challenge was cancelled by the challenger
+    prevInwardIds
+        .whereNot((challengeId) => currentInwardIds.contains(challengeId))
+        .forEach(
+          (id) => ref
+              .read(localNotificationServiceProvider)
+              .cancel(id.value.hashCode),
+        );
+
+    // if there is a new challenge
+    inward
+        .whereNot((challenge) => prevInwardIds.contains(challenge.id))
+        .forEach(
+          (challenge) => ref
+              .read(localNotificationServiceProvider)
+              .show(ChallengeNotification(challenge, l10n)),
+        );
+  }
+
+  /// Stop listening to challenge events from the server.
+  void dispose() {
+    _socketSubscription?.cancel();
+  }
+
+  /// Handle a local notification response.
   Future<void> onNotificationResponse(
     int id,
     String? actionid,
@@ -99,6 +119,10 @@ class ChallengeService {
           builder: (BuildContext context) => GameScreen(initialGameId: fullId),
         );
 
+      case 'decline':
+        final repo = ref.read(challengeRepositoryProvider);
+        repo.decline(payload.id);
+
       case null:
         final context = ref.read(currentNavigatorKeyProvider).currentContext!;
         final navState = Navigator.of(context);
@@ -109,9 +133,6 @@ class ChallengeService {
           context,
           builder: (BuildContext context) => const ChallengeRequestsScreen(),
         );
-      case 'decline':
-        final repo = ref.read(challengeRepositoryProvider);
-        repo.decline(payload.id);
     }
   }
 }

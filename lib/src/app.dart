@@ -12,6 +12,7 @@ import 'package:lichess_mobile/main.dart';
 import 'package:lichess_mobile/src/app_initialization.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
+import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
@@ -99,7 +100,8 @@ class Application extends ConsumerStatefulWidget {
 }
 
 class _AppState extends ConsumerState<Application> {
-  bool _correspondenceSynced = false;
+  /// Whether the app has checked for online status for the first time.
+  bool _firstTimeOnlineCheck = false;
 
   @override
   void initState() {
@@ -107,13 +109,16 @@ class _AppState extends ConsumerState<Application> {
       setOptimalDisplayMode();
     }
 
+    // Initialize services
+    ref.read(challengeServiceProvider).initialize();
+
+    // Listen for connectivity changes and perform actions accordingly.
     ref.listenManual(connectivityChangesProvider, (prev, current) async {
+      final prevWasOffline = prev?.value?.isOnline == false;
+      final currentIsOnline = current.value?.isOnline == true;
+
       // Play registered moves whenever the app comes back online.
-      if (prev?.hasValue == true &&
-          !prev!.value!.isOnline &&
-          !current.isRefreshing &&
-          current.hasValue &&
-          current.value!.isOnline) {
+      if (prevWasOffline && currentIsOnline) {
         final nbMovesPlayed =
             await ref.read(correspondenceServiceProvider).playRegisteredMoves();
         if (nbMovesPlayed > 0) {
@@ -121,8 +126,9 @@ class _AppState extends ConsumerState<Application> {
         }
       }
 
-      if (current.value?.isOnline == true && !_correspondenceSynced) {
-        _correspondenceSynced = true;
+      // Perform actions once when the app comes online.
+      if (current.value?.isOnline == true && !_firstTimeOnlineCheck) {
+        _firstTimeOnlineCheck = true;
         ref.read(correspondenceServiceProvider).syncGames();
       }
 

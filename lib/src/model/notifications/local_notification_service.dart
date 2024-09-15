@@ -38,8 +38,6 @@ class LocalNotificationService {
       _updateLocalisations();
     });
 
-    _initServices();
-
     await _notificationPlugin.initialize(
       InitializationSettings(
         android: const AndroidInitializationSettings('logo_black'),
@@ -59,10 +57,6 @@ class LocalNotificationService {
     _log.info('initialized');
   }
 
-  void _initServices() {
-    _ref.read(challengeServiceProvider).init();
-  }
-
   void _updateLocalisations() {
     final l10n = _ref.read(l10nProvider);
     InfoNotificationDetails(l10n.strings);
@@ -73,7 +67,7 @@ class LocalNotificationService {
     final id = notification.id;
     final payload = notification.payload != null
         ? jsonEncode(notification.payload!.toJson())
-        : '';
+        : null;
 
     await _notificationPlugin.show(
       id,
@@ -140,10 +134,12 @@ class LocalNotificationService {
           ref
               .read(localNotificationServiceProvider)
               ._handleResponse(response.id!, response.actionId, payload);
+          ref.dispose();
         } catch (e) {
           debugPrint(
             'failed to parse notification payload: $e',
           ); // loggers dont work from the background isolate
+          ref.dispose();
         }
       },
     );
