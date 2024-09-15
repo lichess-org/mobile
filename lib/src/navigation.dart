@@ -63,6 +63,15 @@ enum BottomTab {
         return Icons.settings;
     }
   }
+
+  bool enabled({required bool isOnline}) {
+    switch (this) {
+      case BottomTab.watch:
+        return isOnline;
+      default:
+        return true;
+    }
+  }
 }
 
 final currentBottomTabProvider =
@@ -151,6 +160,7 @@ class BottomNavScaffold extends ConsumerWidget {
                     NavigationDestination(
                       icon: Icon(tab == currentTab ? tab.activeIcon : tab.icon),
                       label: tab.label(context.l10n),
+                      enabled: tab.enabled(isOnline: isOnline),
                     ),
                 ],
                 onDestinationSelected: (i) =>
