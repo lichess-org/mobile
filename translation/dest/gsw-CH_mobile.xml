@@ -13,7 +13,7 @@
   <string name="settingsImmersiveMode" comment="Title in the settings. When enabled, the app will hide the navigation bar and status bar.">Ibettete Modus</string>
   <string name="settingsImmersiveModeSubtitle" comment="Subtitle for the 'Immersive Mode' setting. Gives an explanation of what the button does.">UI-Syschtem während em schpille usblände. Benutz die Option, wänn dich d\'Navigationsgeschte, vum Sysychtem, am Bildschirmrand störed. Das gilt für Schpiel- und Puzzle Storm-Bildschirm.</string>
   <string name="notFollowingAnyUser" comment="This is shown in the list that contains user followed by the user. Displayed if the user does not follow any users.">Du folgsch keim Schpiller.</string>
-  <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">Alli Partie</string>
+  <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">All Schpiel</string>
   <string name="recentSearches" comment="Title of the recent searches section in the search screen.">Kürzlich Gsuechts</string>
   <string name="clearButton" comment="Buttons that clear things, e.g. recent searches. Should be short.">Leere</string>
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Schpiller mit \"%s%</string>
@@ -35,7 +35,7 @@
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Warte bis en Gegner erschint...</string>
   <string name="blindfoldMode" comment="This button toggles blindfold mode. This mean the user can only see the board, but not the pieces.">Blind schpille</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Live Streamer</string>
-  <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Bi ere Partie mitschpille</string>
+  <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Es Schpiel mitschpille</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Lösch die gschpeicherete Züg</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Es isch öppis schief gange.</string>
   <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">Resultat zeige</string>
