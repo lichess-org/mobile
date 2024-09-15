@@ -87,7 +87,8 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
             onPressed: () {
               ref.read(editModeProvider.notifier).state = !isEditing;
             },
-            icon: Icon(isEditing ? Icons.save : Icons.app_registration),
+            icon:
+                Icon(isEditing ? Icons.save_outlined : Icons.app_registration),
             tooltip: isEditing ? 'Save' : 'Edit',
           ),
           const _ChallengeScreenButton(),
@@ -145,6 +146,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
                 trailing: const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    _ChallengeScreenButton(),
                     _PlayerScreenButton(),
                   ],
                 ),
@@ -934,7 +936,7 @@ class _PlayerScreenButton extends ConsumerWidget {
 
     return connectivity.maybeWhen(
       data: (connectivity) => AppBarIconButton(
-        icon: const Icon(Icons.group),
+        icon: const Icon(Icons.group_outlined),
         semanticsLabel: context.l10n.players,
         onPressed: !connectivity.isOnline
             ? null
@@ -947,7 +949,7 @@ class _PlayerScreenButton extends ConsumerWidget {
               },
       ),
       orElse: () => AppBarIconButton(
-        icon: const Icon(Icons.group),
+        icon: const Icon(Icons.group_outlined),
         semanticsLabel: context.l10n.players,
         onPressed: null,
       ),
@@ -960,13 +962,18 @@ class _ChallengeScreenButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final session = ref.watch(authSessionProvider);
     final connectivity = ref.watch(connectivityChangesProvider);
     final challenges = ref.watch(challengesProvider);
     final count = challenges.valueOrNull?.inward.length;
 
+    if (session == null) {
+      return const SizedBox.shrink();
+    }
+
     return connectivity.maybeWhen(
       data: (connectivity) => AppBarNotificationIconButton(
-        icon: const Icon(LichessIcons.crossed_swords),
+        icon: const Icon(LichessIcons.crossed_swords, size: 18.0),
         semanticsLabel: context.l10n.preferencesNotifyChallenge,
         onPressed: !connectivity.isOnline
             ? null
@@ -980,7 +987,7 @@ class _ChallengeScreenButton extends ConsumerWidget {
         count: count ?? 0,
       ),
       orElse: () => AppBarIconButton(
-        icon: const Icon(LichessIcons.crossed_swords),
+        icon: const Icon(LichessIcons.crossed_swords, size: 18.0),
         semanticsLabel: context.l10n.preferencesNotifyChallenge,
         onPressed: null,
       ),

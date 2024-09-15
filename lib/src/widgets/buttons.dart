@@ -212,36 +212,19 @@ class AppBarNotificationIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: AlignmentDirectional.center,
-      children: [
-        AppBarIconButton(
-          icon: icon,
-          onPressed: onPressed,
-          semanticsLabel: semanticsLabel,
+    return AppBarIconButton(
+      icon: Badge.count(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        textStyle: TextStyle(
+          color: Theme.of(context).colorScheme.onPrimary,
+          fontWeight: FontWeight.bold,
         ),
-        if (count > 0)
-          Positioned(
-            top: 0,
-            right: 5,
-            child: Container(
-              padding: const EdgeInsets.fromLTRB(4, 1, 4, 1),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: color ?? Colors.red,
-              ),
-              child: Text(
-                count.toString(),
-                style: const TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          )
-        else
-          Container(),
-      ],
+        count: count,
+        isLabelVisible: count > 0,
+        child: icon,
+      ),
+      onPressed: onPressed,
+      semanticsLabel: semanticsLabel,
     );
   }
 }
