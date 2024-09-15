@@ -25,6 +25,8 @@ Note that this application is not meant to be run on web platform.
 
 If you want to use FVM to manage your Flutter versions effectively, please consult the [FVM (Flutter Version Management) guide](https://fvm.app/documentation/getting-started/installation) for comprehensive instructions on installing Flutter on your specific operating system.
 
+This project is currently using FVM 3.x.
+
 **Pro Tip:** Remember to prepend the 'flutter' prefix when using FVM commands, like this: `fvm flutter [command]`.
 
 ## Lila Server
