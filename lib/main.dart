@@ -7,8 +7,10 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/intl.dart';
 import 'package:lichess_mobile/src/log.dart';
@@ -16,6 +18,8 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
 import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_game.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
+import 'package:lichess_mobile/src/model/notifications/challenge_notification.dart';
+import 'package:lichess_mobile/src/model/notifications/local_notification.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/utils/badge_service.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
@@ -27,8 +31,12 @@ import 'firebase_options.dart';
 import 'src/app.dart';
 import 'src/utils/color_palette.dart';
 
+final _notificationPlugin = FlutterLocalNotificationsPlugin();
+
 Future<void> main() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+
+  final systemLocale = widgetsBinding.platformDispatcher.locale;
 
   // logging setup
   setupLogger();
@@ -41,10 +49,28 @@ Future<void> main() async {
   final generalPref = json != null
       ? GeneralPrefsState.fromJson(jsonDecode(json) as Map<String, dynamic>)
       : GeneralPrefsState.defaults;
-  final locale = generalPref.locale;
+  final prefsLocale = generalPref.locale;
+
+  final locale = prefsLocale ?? systemLocale;
 
   // Intl and timeago setup
   await setupIntl(locale);
+
+  // Local notifications setup
+  final l10n = await AppLocalizations.delegate.load(locale);
+
+  await _notificationPlugin.initialize(
+    InitializationSettings(
+      android: const AndroidInitializationSettings('logo_black'),
+      iOS: DarwinInitializationSettings(
+        requestBadgePermission: false,
+        notificationCategories: <DarwinNotificationCategory>[
+          ChallengeNotification.darwinNotificationCategory(l10n),
+        ],
+      ),
+    ),
+    onDidReceiveNotificationResponse: onDidReceiveNotificationResponse,
+  );
 
   // Firebase setup
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);

@@ -1,16 +1,11 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
-import 'package:lichess_mobile/l10n/l10n_en.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/notifications/local_notification_service.dart';
+import 'package:lichess_mobile/src/model/notifications/local_notification.dart';
 
-class ChallengeNotification extends LocalNotification {
-  ChallengeNotification(this._challenge, this._l10n)
-      : super(
-          '${_challenge.challenger!.user.name} challenges you!',
-          ChallengeNotificationDetails.instance.notificationDetails,
-        );
+class ChallengeNotification implements LocalNotification {
+  ChallengeNotification(this._challenge, this._l10n);
 
   final Challenge _challenge;
   final AppLocalizations _l10n;
@@ -47,40 +42,8 @@ class ChallengeNotification extends LocalNotification {
         ? '${_l10n.rated} • $time'
         : '${_l10n.casual} • $time';
   }
-}
 
-class ChallengePayload {
-  const ChallengePayload(this.id);
-
-  final ChallengeId id;
-
-  NotificationPayload get notificationPayload => NotificationPayload(
-        type: PayloadType.challenge,
-        data: {
-          'id': id.value,
-        },
-      );
-
-  factory ChallengePayload.fromNotificationPayload(
-    NotificationPayload payload,
-  ) {
-    assert(payload.type == PayloadType.challenge);
-    final id = payload.data['id'] as String;
-    return ChallengePayload(ChallengeId(id));
-  }
-}
-
-class ChallengeNotificationDetails {
-  ChallengeNotificationDetails(this._l10n) {
-    ChallengeNotificationDetails.instance = this;
-  }
-
-  // the default instance is set to english but this is overridden in LocalNotificationService.init()
-  static ChallengeNotificationDetails instance =
-      ChallengeNotificationDetails(AppLocalizationsEn());
-
-  final AppLocalizations _l10n;
-
+  @override
   NotificationDetails get notificationDetails => NotificationDetails(
         android: AndroidNotificationDetails(
           'challenges',
@@ -109,20 +72,27 @@ class ChallengeNotificationDetails {
         ),
       );
 
-  DarwinNotificationCategory get darwinNotificationCategory =>
+  @override
+  String get title => '${_challenge.challenger!.user.name} challenges you!';
+
+  static const darwinCategoryId = 'challenge-notification-category';
+
+  static DarwinNotificationCategory darwinNotificationCategory(
+    AppLocalizations l10n,
+  ) =>
       DarwinNotificationCategory(
-        'challenge-notification',
+        darwinCategoryId,
         actions: <DarwinNotificationAction>[
           DarwinNotificationAction.plain(
             'accept',
-            _l10n.accept,
+            l10n.accept,
             options: <DarwinNotificationActionOption>{
               DarwinNotificationActionOption.foreground,
             },
           ),
           DarwinNotificationAction.plain(
             'decline',
-            _l10n.decline,
+            l10n.decline,
             options: <DarwinNotificationActionOption>{
               DarwinNotificationActionOption.destructive,
             },
@@ -132,4 +102,25 @@ class ChallengeNotificationDetails {
           DarwinNotificationCategoryOption.hiddenPreviewShowTitle,
         },
       );
+}
+
+class ChallengePayload {
+  const ChallengePayload(this.id);
+
+  final ChallengeId id;
+
+  NotificationPayload get notificationPayload => NotificationPayload(
+        type: PayloadType.challenge,
+        data: {
+          'id': id.value,
+        },
+      );
+
+  factory ChallengePayload.fromNotificationPayload(
+    NotificationPayload payload,
+  ) {
+    assert(payload.type == PayloadType.challenge);
+    final id = payload.data['id'] as String;
+    return ChallengePayload(ChallengeId(id));
+  }
 }

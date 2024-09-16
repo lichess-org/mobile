@@ -1,18 +1,11 @@
 import 'dart:ui';
 
 import 'package:intl/intl.dart';
-import 'package:intl/intl_standalone.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 /// Setup [Intl.defaultLocale] and timeago locale and messages.
-Future<void> setupIntl(Locale? locale) async {
-  if (locale != null) {
-    Intl.defaultLocale = locale.toLanguageTag();
-  } else {
-    // we need call this because it is not setup automatically
-    final systemLocale = await findSystemLocale();
-    Intl.defaultLocale = systemLocale;
-  }
+Future<void> setupIntl(Locale locale) async {
+  Intl.defaultLocale = locale.toLanguageTag();
 
   // we need to setup timeago locale manually
   final currentLocale = Intl.getCurrentLocale();

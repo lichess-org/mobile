@@ -70,17 +70,14 @@ class ChallengeService {
     prevInwardIds
         .whereNot((challengeId) => currentInwardIds.contains(challengeId))
         .forEach(
-          (id) => ref
-              .read(localNotificationServiceProvider)
-              .cancel(id.value.hashCode),
+          (id) => LocalNotificationService.instance.cancel(id.value.hashCode),
         );
 
     // if there is a new challenge
     inward
         .whereNot((challenge) => prevInwardIds.contains(challenge.id))
         .forEach(
-          (challenge) => ref
-              .read(localNotificationServiceProvider)
+          (challenge) => LocalNotificationService.instance
               .show(ChallengeNotification(challenge, l10n)),
         );
   }
