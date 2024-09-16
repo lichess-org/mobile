@@ -30,6 +30,7 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_share_screen.dart';
+import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
@@ -662,6 +663,7 @@ class _BottomBar extends ConsumerWidget {
       .userPrevious();
 
   Future<void> _showAnalysisMenu(BuildContext context, WidgetRef ref) {
+    final analysisState = ref.read(analysisControllerProvider(pgn, options));
     return showAdaptiveActionSheet(
       context: context,
       actions: [
@@ -671,6 +673,19 @@ class _BottomBar extends ConsumerWidget {
             ref
                 .read(analysisControllerProvider(pgn, options).notifier)
                 .toggleBoard();
+          },
+        ),
+        BottomSheetAction(
+          makeLabel: (context) => Text(context.l10n.boardEditor),
+          onPressed: (context) {
+            final boardFen = analysisState.position.fen;
+            pushPlatformRoute(
+              context,
+              title: context.l10n.boardEditor,
+              builder: (_) => BoardEditorScreen(
+                initialFen: boardFen,
+              ),
+            );
           },
         ),
         BottomSheetAction(
@@ -688,10 +703,7 @@ class _BottomBar extends ConsumerWidget {
           onPressed: (_) {
             launchShareDialog(
               context,
-              text: ref
-                  .read(analysisControllerProvider(pgn, options))
-                  .position
-                  .fen,
+              text: analysisState.position.fen,
             );
           },
         ),
@@ -701,14 +713,13 @@ class _BottomBar extends ConsumerWidget {
                 Text(context.l10n.screenshotCurrentPosition),
             onPressed: (_) async {
               final gameId = options.gameAnyId!.gameId;
-              final state = ref.read(analysisControllerProvider(pgn, options));
               try {
                 final image =
                     await ref.read(gameShareServiceProvider).screenshotPosition(
                           gameId,
                           options.orientation,
-                          state.position.fen,
-                          state.lastMove,
+                          analysisState.position.fen,
+                          analysisState.lastMove,
                         );
                 if (context.mounted) {
                   launchShareDialog(
