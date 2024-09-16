@@ -17,11 +17,11 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
 import 'package:lichess_mobile/src/model/notifications/local_notification_service.dart';
+import 'package:lichess_mobile/src/model/notifications/push_notification_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/navigation.dart';
-import 'package:lichess_mobile/src/notification_service.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -333,7 +333,7 @@ class _EntryPointState extends ConsumerState<_EntryPointWidget> {
   Future<void> _setupPushNotifications() async {
     // Listen for incoming messages while the app is in the foreground.
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      ref.read(notificationServiceProvider).processDataMessage(message);
+      ref.read(pushNotificationServiceProvider).processDataMessage(message);
     });
 
     // Listen for incoming messages while the app is in the background.
@@ -354,11 +354,11 @@ class _EntryPointState extends ConsumerState<_EntryPointWidget> {
     // Listen for token refresh and update the token on the server accordingly.
     _fcmTokenRefreshSubscription =
         FirebaseMessaging.instance.onTokenRefresh.listen((String token) {
-      ref.read(notificationServiceProvider).registerToken(token);
+      ref.read(pushNotificationServiceProvider).registerToken(token);
     });
 
     // Register the device with the server.
-    await ref.read(notificationServiceProvider).registerDevice();
+    await ref.read(pushNotificationServiceProvider).registerDevice();
 
     // Get any messages which caused the application to open from
     // a terminated state.

@@ -20,8 +20,8 @@ import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/game/game_storage.dart';
+import 'package:lichess_mobile/src/model/notifications/push_notification_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
-import 'package:lichess_mobile/src/notification_service.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:logging/logging.dart';
 import 'package:mocktail/mocktail.dart';
@@ -121,7 +121,8 @@ Future<Widget> buildTestApp(
         return true;
       }),
       // ignore: scoped_providers_should_specify_dependencies
-      notificationServiceProvider.overrideWithValue(FakeNotificationService()),
+      pushNotificationServiceProvider
+          .overrideWithValue(FakeNotificationService()),
       // ignore: scoped_providers_should_specify_dependencies
       crashlyticsProvider.overrideWithValue(FakeCrashlytics()),
       // ignore: scoped_providers_should_specify_dependencies

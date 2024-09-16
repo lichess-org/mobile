@@ -14,7 +14,7 @@ import 'package:lichess_mobile/src/model/auth/session_storage.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
-import 'package:lichess_mobile/src/notification_service.dart';
+import 'package:lichess_mobile/src/model/notifications/push_notification_service.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:logging/logging.dart';
 import 'package:mocktail/mocktail.dart';
@@ -86,7 +86,8 @@ Future<ProviderContainer> makeContainer({
       }),
       defaultClientProvider.overrideWithValue(MockHttpClient()),
       crashlyticsProvider.overrideWithValue(FakeCrashlytics()),
-      notificationServiceProvider.overrideWithValue(FakeNotificationService()),
+      pushNotificationServiceProvider
+          .overrideWithValue(FakeNotificationService()),
       soundServiceProvider.overrideWithValue(FakeSoundService()),
       sharedPreferencesProvider.overrideWithValue(sharedPreferences),
       sessionStorageProvider.overrideWithValue(FakeSessionStorage()),

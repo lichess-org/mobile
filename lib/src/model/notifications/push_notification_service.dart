@@ -11,22 +11,22 @@ import 'package:lichess_mobile/src/utils/badge_service.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'notification_service.g.dart';
+part 'push_notification_service.g.dart';
 
 @Riverpod(keepAlive: true)
-NotificationService notificationService(
-  NotificationServiceRef ref,
+PushNotificationService pushNotificationService(
+  PushNotificationServiceRef ref,
 ) {
-  return NotificationService(
-    Logger('NotificationServiceService'),
+  return PushNotificationService(
+    Logger('PushNotificationService'),
     ref: ref,
   );
 }
 
-class NotificationService {
-  NotificationService(this._log, {required this.ref});
+class PushNotificationService {
+  PushNotificationService(this._log, {required this.ref});
 
-  final NotificationServiceRef ref;
+  final PushNotificationServiceRef ref;
   final Logger _log;
 
   Future<void> registerDevice() async {
