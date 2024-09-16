@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
 import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_game.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
+import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/utils/badge_service.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:path/path.dart' as path;
@@ -32,15 +33,21 @@ Future<void> main() async {
   // logging setup
   setupLogger();
 
-  // Intl and timeago setup
-  await setupIntl();
-
   SharedPreferences.setPrefix('lichess.');
 
+  // Get locale from shared preferences, if any
+  final prefs = await SharedPreferences.getInstance();
+  final json = prefs.getString(kGeneralPreferencesKey);
+  final generalPref = json != null
+      ? GeneralPrefsState.fromJson(jsonDecode(json) as Map<String, dynamic>)
+      : GeneralPrefsState.defaults;
+  final locale = generalPref.locale;
+
+  // Intl and timeago setup
+  await setupIntl(locale);
+
   // Firebase setup
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   // Crashlytics
   if (kReleaseMode) {

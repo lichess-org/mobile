@@ -42,9 +42,7 @@ class LocalNotificationService {
       InitializationSettings(
         android: const AndroidInitializationSettings('logo_black'),
         iOS: DarwinInitializationSettings(
-          requestAlertPermission: false,
           requestBadgePermission: false,
-          requestSoundPermission: false,
           notificationCategories: <DarwinNotificationCategory>[
             ChallengeNotificationDetails.instance.darwinNotificationCategory,
           ],
@@ -164,6 +162,7 @@ class NotificationPayload with _$NotificationPayload {
       _$NotificationPayloadFromJson(json);
 }
 
+/// A local notification that can be shown to the user.
 abstract class LocalNotification {
   LocalNotification(
     this.title,

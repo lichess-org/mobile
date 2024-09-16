@@ -12,16 +12,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 part 'general_preferences.freezed.dart';
 part 'general_preferences.g.dart';
 
-const _prefKey = 'preferences.general';
+const kGeneralPreferencesKey = 'preferences.general';
 
 @Riverpod(keepAlive: true)
 class GeneralPreferences extends _$GeneralPreferences {
   static GeneralPrefsState fetchFromStorage(SharedPreferences prefs) {
-    final stored = prefs.getString(_prefKey);
+    final stored = prefs.getString(kGeneralPreferencesKey);
     return stored != null
-        ? GeneralPrefsState.fromJson(
-            jsonDecode(stored) as Map<String, dynamic>,
-          )
+        ? GeneralPrefsState.fromJson(jsonDecode(stored) as Map<String, dynamic>)
         : GeneralPrefsState.defaults;
   }
 
@@ -73,7 +71,7 @@ class GeneralPreferences extends _$GeneralPreferences {
   Future<void> _save(GeneralPrefsState newState) async {
     final prefs = ref.read(sharedPreferencesProvider);
     await prefs.setString(
-      _prefKey,
+      kGeneralPreferencesKey,
       jsonEncode(newState.toJson()),
     );
     state = newState;
