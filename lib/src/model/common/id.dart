@@ -53,6 +53,14 @@ extension type const BroadcastRoundId(String value) implements StringId {}
 
 extension type const BroadcastGameId(String value) implements StringId {}
 
+extension type const StudyId(String value) implements StringId {
+  StudyId.fromJson(dynamic json) : this(json as String);
+}
+
+extension type const StudyChapterId(String value) implements StringId {
+  StudyChapterId.fromJson(dynamic json) : this(json as String);
+}
+
 extension IDPick on Pick {
   UserId asUserIdOrThrow() {
     final value = required().value;
