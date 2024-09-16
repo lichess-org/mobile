@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
@@ -287,7 +288,7 @@ class _FilterGamesState extends ConsumerState<_FilterGames> {
         const SizedBox(height: 12.0),
         const PlatformDivider(thickness: 1, indent: 0),
         filterGroupSpace,
-        _Filter<Side>(
+        Filter<Side>(
           filterName: context.l10n.side,
           filterType: FilterType.singleChoice,
           choices: Side.values,
@@ -332,7 +333,7 @@ class _FilterGamesState extends ConsumerState<_FilterGames> {
     return perfs;
   }
 
-  Widget perfFilter(List<Perf> choices) => _Filter<Perf>(
+  Widget perfFilter(List<Perf> choices) => Filter<Perf>(
         filterName: context.l10n.variant,
         filterType: FilterType.multipleChoice,
         choices: choices,
@@ -348,60 +349,4 @@ class _FilterGamesState extends ConsumerState<_FilterGames> {
           },
         ),
       );
-}
-
-enum FilterType {
-  singleChoice,
-  multipleChoice,
-}
-
-class _Filter<T extends Enum> extends StatelessWidget {
-  const _Filter({
-    required this.filterName,
-    required this.filterType,
-    required this.choices,
-    required this.choiceSelected,
-    required this.choiceLabel,
-    required this.onSelected,
-  });
-
-  final String filterName;
-  final FilterType filterType;
-  final Iterable<T> choices;
-  final bool Function(T choice) choiceSelected;
-  final String Function(T choice) choiceLabel;
-  final void Function(T value, bool selected) onSelected;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(filterName, style: const TextStyle(fontSize: 18)),
-        const SizedBox(height: 10),
-        SizedBox(
-          width: double.infinity,
-          child: Wrap(
-            spacing: 8.0,
-            children: choices
-                .map(
-                  (choice) => switch (filterType) {
-                    FilterType.singleChoice => ChoiceChip(
-                        label: Text(choiceLabel(choice)),
-                        selected: choiceSelected(choice),
-                        onSelected: (value) => onSelected(choice, value),
-                      ),
-                    FilterType.multipleChoice => FilterChip(
-                        label: Text(choiceLabel(choice)),
-                        selected: choiceSelected(choice),
-                        onSelected: (value) => onSelected(choice, value),
-                      ),
-                  },
-                )
-                .toList(growable: false),
-          ),
-        ),
-      ],
-    );
-  }
 }
