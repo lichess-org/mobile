@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/notifications/challenge_notification.dart';
+import 'package:lichess_mobile/src/model/notifications/local_notification.dart';
 import 'package:lichess_mobile/src/model/notifications/local_notification_service.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
@@ -87,19 +88,21 @@ class ChallengeService {
     _socketSubscription?.cancel();
   }
 
-  /// Handle a local notification response.
+  /// Handle a local notification response when the app is in the foreground.
   Future<void> onNotificationResponse(
     int id,
     String? actionid,
-    ChallengePayload payload,
+    NotificationPayload payload,
   ) async {
+    final challengeId = ChallengePayload.fromNotification(payload).id;
+
     switch (actionid) {
       case 'accept':
         final repo = ref.read(challengeRepositoryProvider);
-        await repo.accept(payload.id);
+        await repo.accept(challengeId);
 
         final fullId = await repo
-            .show(payload.id)
+            .show(challengeId)
             .then((challenge) => challenge.gameFullId);
 
         final context = ref.read(currentNavigatorKeyProvider).currentContext!;
@@ -118,7 +121,7 @@ class ChallengeService {
 
       case 'decline':
         final repo = ref.read(challengeRepositoryProvider);
-        repo.decline(payload.id);
+        repo.decline(challengeId);
 
       case null:
         final context = ref.read(currentNavigatorKeyProvider).currentContext!;

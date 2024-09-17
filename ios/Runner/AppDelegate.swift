@@ -42,7 +42,7 @@ import flutter_local_notifications
       result(self.getPhysicalMemory())
     })
 
-    // Taken from: https://github.com/MaikuB/flutter_local_notifications/blob/master/flutter_local_notifications/example/ios/Runner/AppDelegate.swift
+    // Cf: https://github.com/MaikuB/flutter_local_notifications/tree/master/flutter_local_notifications#notification-actions
     // This is required to make any communication available in the action isolate.
     FlutterLocalNotificationsPlugin.setPluginRegistrantCallback { (registry) in
         GeneratedPluginRegistrant.register(with: registry)

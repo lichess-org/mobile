@@ -18,9 +18,10 @@ class ChallengeNotification implements LocalNotification {
       ChallengePayload(_challenge.id).notificationPayload;
 
   @override
-  String get body => _body();
+  String get title => '${_challenge.challenger!.user.name} challenges you!';
 
-  String _body() {
+  @override
+  String get body {
     final time = switch (_challenge.timeControl) {
       ChallengeTimeControlType.clock => () {
           final clock = _challenge.clock!;
@@ -44,7 +45,7 @@ class ChallengeNotification implements LocalNotification {
   }
 
   @override
-  NotificationDetails get notificationDetails => NotificationDetails(
+  NotificationDetails get details => NotificationDetails(
         android: AndroidNotificationDetails(
           'challenges',
           _l10n.preferencesNotifyChallenge,
@@ -68,12 +69,9 @@ class ChallengeNotification implements LocalNotification {
           ],
         ),
         iOS: const DarwinNotificationDetails(
-          categoryIdentifier: 'challenge-notification',
+          categoryIdentifier: darwinCategoryId,
         ),
       );
-
-  @override
-  String get title => '${_challenge.challenger!.user.name} challenges you!';
 
   static const darwinCategoryId = 'challenge-notification-category';
 
@@ -110,16 +108,16 @@ class ChallengePayload {
   final ChallengeId id;
 
   NotificationPayload get notificationPayload => NotificationPayload(
-        type: PayloadType.challenge,
+        type: NotificationType.challenge,
         data: {
           'id': id.value,
         },
       );
 
-  factory ChallengePayload.fromNotificationPayload(
+  factory ChallengePayload.fromNotification(
     NotificationPayload payload,
   ) {
-    assert(payload.type == PayloadType.challenge);
+    assert(payload.type == NotificationType.challenge);
     final id = payload.data['id'] as String;
     return ChallengePayload(ChallengeId(id));
   }

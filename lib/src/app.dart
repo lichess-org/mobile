@@ -14,6 +14,7 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
 import 'package:lichess_mobile/src/model/notifications/local_notification_service.dart';
@@ -109,8 +110,7 @@ class _AppState extends ConsumerState<Application> {
       setOptimalDisplayMode();
     }
 
-    // Initialize services
-    ref.read(challengeServiceProvider).initialize();
+    preloadSoundAssets();
 
     // Listen for connectivity changes and perform actions accordingly.
     ref.listenManual(connectivityChangesProvider, (prev, current) async {
@@ -250,6 +250,17 @@ class _AppState extends ConsumerState<Application> {
     );
   }
 
+  /// Preload sounds to avoid delays when playing them.
+  Future<void> preloadSoundAssets() async {
+    final soundTheme = ref.read(generalPreferencesProvider).soundTheme;
+    final soundService = ref.read(soundServiceProvider);
+    try {
+      await soundService.initialize(soundTheme);
+    } catch (e) {
+      debugPrint('Cannot initialize SoundService: $e');
+    }
+  }
+
   // Code taken from https://stackoverflow.com/questions/63631522/flutter-120fps-issue
   /// Enables high refresh rate for devices where it was previously disabled
   Future<void> setOptimalDisplayMode() async {
@@ -307,6 +318,10 @@ class _EntryPointState extends ConsumerState<_EntryPointWidget> {
   void initState() {
     super.initState();
 
+    // Initialize services
+    ref.read(localNotificationDispatcherProvider).initialize();
+    ref.read(challengeServiceProvider).initialize();
+
     _connectivitySubscription =
         ref.listenManual(connectivityChangesProvider, (prev, current) async {
       // setup push notifications once when the app comes online
@@ -315,12 +330,10 @@ class _EntryPointState extends ConsumerState<_EntryPointWidget> {
           await _setupPushNotifications();
           _pushNotificationsSetup = true;
         } catch (e, st) {
-          debugPrint('Could not sync correspondence games; $e\n$st');
+          debugPrint('Could not setup push notifications; $e\n$st');
         }
       }
     });
-
-    ref.read(localNotificationServiceProvider).init();
   }
 
   @override

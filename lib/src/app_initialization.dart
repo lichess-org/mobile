@@ -10,10 +10,8 @@ import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
 import 'package:lichess_mobile/src/model/auth/session_storage.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
-import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
-import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/utils/color_palette.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/utils/system.dart';
@@ -48,15 +46,6 @@ Future<AppInitializationData> appInitialization(
   if (installedVersion == null ||
       Version.parse(installedVersion) != appVersion) {
     prefs.setString('installed_version', appVersion.canonicalizedVersion);
-  }
-
-  // preload sounds
-  final soundTheme = GeneralPreferences.fetchFromStorage(prefs).soundTheme;
-  final soundService = ref.read(soundServiceProvider);
-  try {
-    await soundService.initialize(soundTheme);
-  } catch (e) {
-    _logger.warning('Cannot initialize SoundService: $e');
   }
 
   final db = await openDb(databaseFactory, dbPath);

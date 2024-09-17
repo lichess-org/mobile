@@ -11,9 +11,11 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
+import 'package:lichess_mobile/src/app_initialization.dart';
 import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/intl.dart';
 import 'package:lichess_mobile/src/log.dart';
+import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
 import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_game.dart';
@@ -58,7 +60,6 @@ Future<void> main() async {
 
   // Local notifications setup
   final l10n = await AppLocalizations.delegate.load(locale);
-
   await _notificationPlugin.initialize(
     InitializationSettings(
       android: const AndroidInitializationSettings('logo_black'),
@@ -70,6 +71,7 @@ Future<void> main() async {
       ),
     ),
     onDidReceiveNotificationResponse: onDidReceiveNotificationResponse,
+    onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
   );
 
   // Firebase setup
@@ -127,6 +129,44 @@ Future<void> main() async {
       child: const AppInitializationScreen(),
     ),
   );
+}
+
+@pragma('vm:entry-point')
+void notificationTapBackground(NotificationResponse response) {
+  // create a new provider container for the background isolate
+  final ref = ProviderContainer();
+
+  ref.listen(
+    appInitializationProvider,
+    (prev, now) {
+      if (!now.hasValue) return;
+
+      if (response.id == null || response.payload == null) return;
+
+      try {
+        final payload = NotificationPayload.fromJson(
+          jsonDecode(response.payload!) as Map<String, dynamic>,
+        );
+        switch (payload.type) {
+          case NotificationType.challenge:
+            // only decline action is supported in the background
+            if (response.actionId == 'decline') {
+              final challengeId = ChallengePayload.fromNotification(payload).id;
+              ref.read(challengeRepositoryProvider).decline(challengeId);
+            }
+          default:
+            debugPrint('Unknown notification type: $payload');
+        }
+
+        ref.dispose();
+      } catch (e) {
+        debugPrint('Failed to handle notification background response: $e');
+        ref.dispose();
+      }
+    },
+  );
+
+  ref.read(appInitializationProvider);
 }
 
 @pragma('vm:entry-point')

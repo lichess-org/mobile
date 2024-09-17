@@ -115,8 +115,7 @@ class _Body extends ConsumerWidget {
                             ref
                                 .read(challengeRepositoryProvider)
                                 .decline(challenge.id);
-                            ref
-                                .read(localNotificationServiceProvider)
+                            LocalNotificationService.instance
                                 .cancel(challenge.id.value.hashCode);
                           },
                   );
