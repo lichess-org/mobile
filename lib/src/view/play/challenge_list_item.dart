@@ -9,7 +9,6 @@ import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/lobby/correspondence_challenge.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
-import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -34,29 +33,8 @@ class ChallengeListItem extends ConsumerWidget {
     final me = ref.watch(authSessionProvider)?.user;
     final isMyChallenge = me != null && me.id == user.id;
 
-    final time = switch (challenge.timeControl) {
-      ChallengeTimeControlType.clock => () {
-          final clock = challenge.clock!;
-          final minutes = switch (clock.time.inSeconds) {
-            15 => '¼',
-            30 => '½',
-            45 => '¾',
-            90 => '1.5',
-            _ => clock.time.inMinutes,
-          };
-          return '$minutes+${clock.increment.inSeconds}';
-        }(),
-      ChallengeTimeControlType.correspondence =>
-        '${context.l10n.daysPerTurn}: ${challenge.days}',
-      ChallengeTimeControlType.unlimited => '∞',
-    };
-
-    final subtitle = challenge.rated
-        ? '${context.l10n.rated} • $time'
-        : '${context.l10n.casual} • $time';
-
     final color =
-        isMyChallenge ? null : LichessColors.green.withValues(alpha: 0.2);
+        isMyChallenge ? LichessColors.green.withValues(alpha: 0.2) : null;
 
     return Container(
       color: color,
@@ -70,7 +48,6 @@ class ChallengeListItem extends ConsumerWidget {
                     onPressed: (BuildContext context) => onCancel!(),
                     backgroundColor: context.lichessColors.error,
                     foregroundColor: Colors.white,
-                    icon: Icons.cancel,
                     label: isMyChallenge
                         ? context.l10n.cancel
                         : context.l10n.decline,
@@ -80,14 +57,7 @@ class ChallengeListItem extends ConsumerWidget {
             : null,
         child: PlatformListTile(
           padding: Styles.bodyPadding,
-          leading: Icon(challenge.perf.icon),
-          trailing: Icon(
-            challenge.sideChoice == SideChoice.random
-                ? LichessIcons.adjust
-                : challenge.sideChoice == SideChoice.white
-                    ? LichessIcons.circle
-                    : LichessIcons.circle_empty,
-          ),
+          trailing: Icon(challenge.perf.icon, size: 36),
           title: isMyChallenge
               ? UserFullNameWidget(
                   user: challenge.destUser != null
@@ -95,7 +65,7 @@ class ChallengeListItem extends ConsumerWidget {
                       : user,
                 )
               : UserFullNameWidget(user: user),
-          subtitle: Text(subtitle),
+          subtitle: Text(challenge.description(context.l10n)),
           onTap: onPressed,
         ),
       ),

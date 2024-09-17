@@ -64,6 +64,42 @@ class Challenge with _$Challenge, BaseChallenge implements BaseChallenge {
   }
 
   factory Challenge.fromPick(RequiredPick pick) => _challengeFromPick(pick);
+
+  /// The description of the challenge.
+  String description(AppLocalizations l10n) {
+    final time = switch (timeControl) {
+      ChallengeTimeControlType.clock => () {
+          final minutes = switch (clock!.time.inSeconds) {
+            15 => '¼',
+            30 => '½',
+            45 => '¾',
+            90 => '1.5',
+            _ => clock!.time.inMinutes,
+          };
+          return '$minutes+${clock!.increment.inSeconds}';
+        }(),
+      ChallengeTimeControlType.correspondence => '${l10n.daysPerTurn}: $days',
+      ChallengeTimeControlType.unlimited => '∞',
+    };
+
+    final variantStr = variant == Variant.standard ? '' : ' • ${variant.label}';
+
+    final sidePiece = sideChoice == SideChoice.black
+        ? '♔ '
+        : sideChoice == SideChoice.white
+            ? '♚ '
+            : '';
+
+    final side = sideChoice == SideChoice.black
+        ? l10n.white
+        : sideChoice == SideChoice.white
+            ? l10n.black
+            : l10n.randomColor;
+
+    final mode = rated ? l10n.rated : l10n.casual;
+
+    return '$sidePiece$side • $mode • $time$variantStr';
+  }
 }
 
 /// A challenge request to play a game with another user.

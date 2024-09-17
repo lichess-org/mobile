@@ -21,28 +21,7 @@ class ChallengeNotification implements LocalNotification {
   String get title => '${_challenge.challenger!.user.name} challenges you!';
 
   @override
-  String get body {
-    final time = switch (_challenge.timeControl) {
-      ChallengeTimeControlType.clock => () {
-          final clock = _challenge.clock!;
-          final minutes = switch (clock.time.inSeconds) {
-            15 => '¼',
-            30 => '½',
-            45 => '¾',
-            90 => '1.5',
-            _ => clock.time.inMinutes,
-          };
-          return '$minutes+${clock.increment.inSeconds}';
-        }(),
-      ChallengeTimeControlType.correspondence =>
-        '${_l10n.daysPerTurn}: ${_challenge.days}',
-      ChallengeTimeControlType.unlimited => '∞',
-    };
-
-    return _challenge.rated
-        ? '${_l10n.rated} • $time'
-        : '${_l10n.casual} • $time';
-  }
+  String get body => _challenge.description(_l10n);
 
   @override
   NotificationDetails get details => NotificationDetails(
