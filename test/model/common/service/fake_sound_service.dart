@@ -12,8 +12,5 @@ class FakeSoundService implements SoundService {
   }) async {}
 
   @override
-  Future<void> initialize(SoundTheme theme) async {}
-
-  @override
   Future<void> release() async {}
 }

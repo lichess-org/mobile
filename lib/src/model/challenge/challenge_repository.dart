@@ -68,9 +68,12 @@ class ChallengeRepository {
     }
   }
 
-  Future<void> decline(ChallengeId id) async {
+  Future<void> decline(ChallengeId id, {DeclineReason? reason}) async {
     final uri = Uri(path: '/api/challenge/$id/decline');
-    final response = await client.post(uri);
+    final response = await client.post(
+      uri,
+      body: reason != null ? {'reason': reason.name} : null,
+    );
 
     if (response.statusCode >= 400) {
       throw http.ClientException(

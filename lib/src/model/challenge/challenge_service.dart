@@ -6,6 +6,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/notifications/challenge_notification.dart';
@@ -67,20 +68,28 @@ class ChallengeService {
 
     final l10n = ref.read(l10nProvider).strings;
 
-    // if a challenge was cancelled by the challenger
+    // challenges that were canceled by challenger or expired
     prevInwardIds
         .whereNot((challengeId) => currentInwardIds.contains(challengeId))
         .forEach(
           (id) => LocalNotificationService.instance.cancel(id.value.hashCode),
         );
 
-    // if there is a new challenge
+    // new incoming challenges
     inward
         .whereNot((challenge) => prevInwardIds.contains(challenge.id))
         .forEach(
-          (challenge) => LocalNotificationService.instance
-              .show(ChallengeNotification(challenge, l10n)),
-        );
+      (challenge) {
+        if (playSupportedVariants.contains(challenge.variant)) {
+          LocalNotificationService.instance
+              .show(ChallengeNotification(challenge, l10n));
+        } else {
+          ref
+              .read(challengeRepositoryProvider)
+              .decline(challenge.id, reason: DeclineReason.variant);
+        }
+      },
+    );
   }
 
   /// Stop listening to challenge events from the server.
