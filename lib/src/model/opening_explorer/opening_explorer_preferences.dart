@@ -138,7 +138,12 @@ class OpeningExplorerPrefState with _$OpeningExplorerPrefState {
     LightUser? user,
   }) {
     try {
-      return _$OpeningExplorerPrefStateFromJson(json);
+      final prefs = _$OpeningExplorerPrefStateFromJson(json);
+      return prefs.copyWith(
+        playerDb: user != null
+            ? prefs.playerDb.copyWith(username: user.name)
+            : prefs.playerDb,
+      );
     } catch (_) {
       return OpeningExplorerPrefState.defaults(user: user);
     }
@@ -261,14 +266,11 @@ class PlayerDbPrefState with _$PlayerDbPrefState {
         since: earliestDate,
       );
 
-  factory PlayerDbPrefState.fromJson(
-    Map<String, dynamic> json, {
-    LightUser? user,
-  }) {
+  factory PlayerDbPrefState.fromJson(Map<String, dynamic> json) {
     try {
       return _$PlayerDbPrefStateFromJson(json);
     } catch (_) {
-      return PlayerDbPrefState.defaults(user: user);
+      return PlayerDbPrefState.defaults();
     }
   }
 }

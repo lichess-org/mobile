@@ -215,7 +215,7 @@ class BroadcastGridItem extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: LichessColors.grey.withOpacity(0.5),
+              color: LichessColors.grey.withValues(alpha: 0.5),
               blurRadius: 5,
               spreadRadius: 1,
             ),

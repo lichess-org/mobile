@@ -37,13 +37,13 @@ void setCorePalette(CorePalette? palette) {
         orientation: Side.black,
       ),
       lastMove: HighlightDetails(
-        solidColor: Color(palette.tertiary.get(80)).withOpacity(0.6),
+        solidColor: Color(palette.tertiary.get(80)).withValues(alpha: 0.6),
       ),
       selected: HighlightDetails(
-        solidColor: Color(palette.neutral.get(40)).withOpacity(0.80),
+        solidColor: Color(palette.neutral.get(40)).withValues(alpha: 0.80),
       ),
-      validMoves: Color(palette.neutral.get(40)).withOpacity(0.40),
-      validPremoves: Color(palette.error.get(40)).withOpacity(0.30),
+      validMoves: Color(palette.neutral.get(40)).withValues(alpha: 0.40),
+      validPremoves: Color(palette.error.get(40)).withValues(alpha: 0.30),
     );
   }
 }

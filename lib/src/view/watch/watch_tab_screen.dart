@@ -220,9 +220,9 @@ class _BroadcastWidget extends ConsumerWidget {
         debugPrint(
           'SEVERE: [BroadcastWidget] could not load broadcast data; $error\n $stackTrace',
         );
-        return Padding(
+        return const Padding(
           padding: Styles.bodySectionPadding,
-          child: const Text('Could not load broadcasts'),
+          child: Text('Could not load broadcasts'),
         );
       },
       loading: () => Shimmer(
@@ -284,9 +284,9 @@ class _WatchTvWidget extends ConsumerWidget {
         debugPrint(
           'SEVERE: [StreamerWidget] could not load channels data; $error\n $stackTrace',
         );
-        return Padding(
+        return const Padding(
           padding: Styles.bodySectionPadding,
-          child: const Text('Could not load TV channels'),
+          child: Text('Could not load TV channels'),
         );
       },
       loading: () => Shimmer(
@@ -339,9 +339,9 @@ class _StreamerWidget extends ConsumerWidget {
         debugPrint(
           'SEVERE: [StreamerWidget] could not load streamer data; $error\n $stackTrace',
         );
-        return Padding(
+        return const Padding(
           padding: Styles.bodySectionPadding,
-          child: const Text('Could not load live streamers'),
+          child: Text('Could not load live streamers'),
         );
       },
       loading: () => Shimmer(

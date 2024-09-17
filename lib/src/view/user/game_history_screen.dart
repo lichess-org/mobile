@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
+import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
@@ -280,50 +281,43 @@ class _FilterGamesState extends ConsumerState<_FilterGames> {
             )
         : perfFilter(gamePerfs);
 
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
+    return BottomSheetScrollableContainer(
+      padding: const EdgeInsets.all(16.0),
+      children: [
+        filters,
+        const SizedBox(height: 12.0),
+        const PlatformDivider(thickness: 1, indent: 0),
+        filterGroupSpace,
+        Filter<Side>(
+          filterName: context.l10n.side,
+          filterType: FilterType.singleChoice,
+          choices: Side.values,
+          choiceSelected: (choice) => filter.side == choice,
+          choiceLabel: (t) => switch (t) {
+            Side.white => context.l10n.white,
+            Side.black => context.l10n.black,
+          },
+          onSelected: (value, selected) => setState(
+            () {
+              filter = filter.copyWith(side: selected ? value : null);
+            },
+          ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            filters,
-            const SizedBox(height: 12.0),
-            const PlatformDivider(thickness: 1, indent: 0),
-            filterGroupSpace,
-            _Filter<Side>(
-              filterName: context.l10n.side,
-              filterType: FilterType.singleChoice,
-              choices: Side.values,
-              choiceSelected: (choice) => filter.side == choice,
-              choiceLabel: (t) => switch (t) {
-                Side.white => context.l10n.white,
-                Side.black => context.l10n.black,
-              },
-              onSelected: (value, selected) => setState(
-                () {
-                  filter = filter.copyWith(side: selected ? value : null);
-                },
-              ),
+            AdaptiveTextButton(
+              onPressed: () => setState(() => filter = const GameFilterState()),
+              child: Text(context.l10n.reset),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                AdaptiveTextButton(
-                  onPressed: () =>
-                      setState(() => filter = const GameFilterState()),
-                  child: Text(context.l10n.reset),
-                ),
-                AdaptiveTextButton(
-                  onPressed: () => Navigator.of(context).pop(filter),
-                  child: Text(context.l10n.apply),
-                ),
-              ],
+            AdaptiveTextButton(
+              onPressed: () => Navigator.of(context).pop(filter),
+              child: Text(context.l10n.apply),
             ),
           ],
         ),
-      ),
+      ],
     );
   }
 
@@ -339,7 +333,7 @@ class _FilterGamesState extends ConsumerState<_FilterGames> {
     return perfs;
   }
 
-  Widget perfFilter(List<Perf> choices) => _Filter<Perf>(
+  Widget perfFilter(List<Perf> choices) => Filter<Perf>(
         filterName: context.l10n.variant,
         filterType: FilterType.multipleChoice,
         choices: choices,
@@ -355,60 +349,4 @@ class _FilterGamesState extends ConsumerState<_FilterGames> {
           },
         ),
       );
-}
-
-enum FilterType {
-  singleChoice,
-  multipleChoice,
-}
-
-class _Filter<T extends Enum> extends StatelessWidget {
-  const _Filter({
-    required this.filterName,
-    required this.filterType,
-    required this.choices,
-    required this.choiceSelected,
-    required this.choiceLabel,
-    required this.onSelected,
-  });
-
-  final String filterName;
-  final FilterType filterType;
-  final Iterable<T> choices;
-  final bool Function(T choice) choiceSelected;
-  final String Function(T choice) choiceLabel;
-  final void Function(T value, bool selected) onSelected;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(filterName, style: const TextStyle(fontSize: 18)),
-        const SizedBox(height: 10),
-        SizedBox(
-          width: double.infinity,
-          child: Wrap(
-            spacing: 8.0,
-            children: choices
-                .map(
-                  (choice) => switch (filterType) {
-                    FilterType.singleChoice => ChoiceChip(
-                        label: Text(choiceLabel(choice)),
-                        selected: choiceSelected(choice),
-                        onSelected: (value) => onSelected(choice, value),
-                      ),
-                    FilterType.multipleChoice => FilterChip(
-                        label: Text(choiceLabel(choice)),
-                        selected: choiceSelected(choice),
-                        onSelected: (value) => onSelected(choice, value),
-                      ),
-                  },
-                )
-                .toList(growable: false),
-          ),
-        ),
-      ],
-    );
-  }
 }

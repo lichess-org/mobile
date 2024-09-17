@@ -40,6 +40,34 @@ Future<T?> showAdaptiveBottomSheet<T>({
   );
 }
 
+/// A modal bottom sheet container that adapts to the content size.
+///
+/// This is typically used with [showAdaptiveBottomSheet] to display a
+/// context menu.
+///
+/// This is meant for content that mostly fits on the screen, not for long lists.
+class BottomSheetScrollableContainer extends StatelessWidget {
+  const BottomSheetScrollableContainer({
+    required this.children,
+    this.padding = const EdgeInsets.only(bottom: 16.0),
+  });
+
+  final List<Widget> children;
+  final EdgeInsetsGeometry? padding;
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: SingleChildScrollView(
+        padding: padding,
+        child: ListBody(
+          children: children,
+        ),
+      ),
+    );
+  }
+}
+
 class BottomSheetContextMenuAction extends StatelessWidget {
   const BottomSheetContextMenuAction({
     required this.child,

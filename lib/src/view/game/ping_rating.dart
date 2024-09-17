@@ -68,8 +68,8 @@ class PingRating extends ConsumerWidget {
                 ? CupertinoDynamicColor.resolve(
                     CupertinoColors.systemGrey,
                     context,
-                  ).withOpacity(0.2)
-                : Colors.grey.withOpacity(0.2),
+                  ).withValues(alpha: 0.2)
+                : Colors.grey.withValues(alpha: 0.2),
             levels: Theme.of(context).platform == TargetPlatform.iOS
                 ? cupertinoLevels
                 : materialLevels,

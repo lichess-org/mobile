@@ -50,9 +50,9 @@ class LeaderboardWidget extends ConsumerWidget {
         debugPrint(
           'SEVERE: [LeaderboardWidget] could not lead leaderboard data; $error\n $stackTrace',
         );
-        return Padding(
+        return const Padding(
           padding: Styles.bodySectionPadding,
-          child: const Text('Could not load leaderboard.'),
+          child: Text('Could not load leaderboard.'),
         );
       },
       loading: () => Shimmer(

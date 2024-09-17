@@ -243,7 +243,8 @@ class _ChallengesBodyState extends ConsumerState<_ChallengesBody> {
                 UserId.fromUserName(challenge.username) == session?.user.id;
 
             return Container(
-              color: isMySeek ? LichessColors.green.withOpacity(0.2) : null,
+              color:
+                  isMySeek ? LichessColors.green.withValues(alpha: 0.2) : null,
               child: Slidable(
                 endActionPane: isMySeek
                     ? ActionPane(

@@ -844,7 +844,7 @@ class _EloChartState extends ConsumerState<_EloChart> {
   @override
   Widget build(BuildContext context) {
     final borderColor =
-        Theme.of(context).colorScheme.onSurface.withOpacity(0.5);
+        Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5);
     final chartColor = Theme.of(context).colorScheme.tertiary;
     final currentLocale = ref.watch(currentLocaleProvider);
     final chartDateFormatter = switch (_selectedRange) {
@@ -929,7 +929,7 @@ class _EloChartState extends ConsumerState<_EloChart> {
                   dotData: const FlDotData(show: false),
                   color: chartColor,
                   belowBarData: BarAreaData(
-                    color: chartColor.withOpacity(0.2),
+                    color: chartColor.withValues(alpha: 0.2),
                     show: true,
                   ),
                   barWidth: 1.5,
@@ -953,7 +953,7 @@ class _EloChartState extends ConsumerState<_EloChart> {
               lineTouchData: LineTouchData(
                 touchSpotThreshold: double.infinity,
                 touchTooltipData: LineTouchTooltipData(
-                  getTooltipColor: (_) => chartColor.withOpacity(0.5),
+                  getTooltipColor: (_) => chartColor.withValues(alpha: 0.5),
                   fitInsideHorizontally: true,
                   fitInsideVertically: true,
                   getTooltipItems: (touchedSpots) {
@@ -1046,7 +1046,7 @@ class _RangeButton extends StatelessWidget {
     final chartColor = Theme.of(context).colorScheme.tertiary;
 
     return PlatformCard(
-      color: selected ? chartColor.withOpacity(0.2) : null,
+      color: selected ? chartColor.withValues(alpha: 0.2) : null,
       shadowColor: selected ? Colors.transparent : null,
       child: AdaptiveInkWell(
         borderRadius: const BorderRadius.all(Radius.circular(8.0)),

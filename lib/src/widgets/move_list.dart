@@ -1,5 +1,4 @@
 import 'package:collection/collection.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
@@ -9,7 +8,9 @@ import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'platform.dart';
 
 const _scrollAnimationDuration = Duration(milliseconds: 200);
-const _moveListOpacity = 0.6;
+const _moveListOpacity = 0.8;
+
+const _kMoveListHeight = 40.0;
 
 enum MoveListType { inline, stacked }
 
@@ -18,10 +19,16 @@ class MoveList extends ConsumerStatefulWidget {
     required this.type,
     required this.slicedMoves,
     required this.currentMoveIndex,
+    this.inlineColor,
+    this.inlineDecoration,
     this.onSelectMove,
   });
 
   final MoveListType type;
+
+  final Color? inlineColor;
+
+  final BoxDecoration? inlineDecoration;
 
   final Iterable<List<MapEntry<int, String>>> slicedMoves;
 
@@ -79,8 +86,9 @@ class _MoveListState extends ConsumerState<MoveList> {
 
     return widget.type == MoveListType.inline
         ? Container(
+            decoration: widget.inlineDecoration,
             padding: const EdgeInsets.only(left: 5),
-            height: 40,
+            height: _kMoveListHeight,
             width: double.infinity,
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
@@ -91,7 +99,11 @@ class _MoveListState extends ConsumerState<MoveList> {
                         margin: const EdgeInsets.only(right: 10),
                         child: Row(
                           children: [
-                            InlineMoveCount(count: index + 1),
+                            InlineMoveCount(
+                              pieceNotation: pieceNotation,
+                              count: index + 1,
+                              color: widget.inlineColor,
+                            ),
                             ...moves.map(
                               (move) {
                                 // cursor index starts at 0, move index starts at 1
@@ -100,6 +112,7 @@ class _MoveListState extends ConsumerState<MoveList> {
                                 return InlineMoveItem(
                                   key: isCurrentMove ? currentMoveKey : null,
                                   move: move,
+                                  color: widget.inlineColor,
                                   pieceNotation: pieceNotation,
                                   current: isCurrentMove,
                                   onSelectMove: widget.onSelectMove,
@@ -162,9 +175,16 @@ class _MoveListState extends ConsumerState<MoveList> {
 }
 
 class InlineMoveCount extends StatelessWidget {
-  const InlineMoveCount({required this.count});
+  const InlineMoveCount({
+    required this.count,
+    required this.pieceNotation,
+    this.color,
+  });
 
+  final PieceNotation pieceNotation;
   final int count;
+
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -173,8 +193,11 @@ class InlineMoveCount extends StatelessWidget {
       child: Text(
         '$count.',
         style: TextStyle(
-          fontWeight: FontWeight.w600,
-          color: textShade(context, _moveListOpacity),
+          fontWeight: FontWeight.w500,
+          color: color?.withValues(alpha: _moveListOpacity) ??
+              textShade(context, _moveListOpacity),
+          fontFamily:
+              pieceNotation == PieceNotation.symbol ? 'ChessFont' : null,
         ),
       ),
     );
@@ -185,10 +208,13 @@ class InlineMoveItem extends StatelessWidget {
   const InlineMoveItem({
     required this.move,
     required this.pieceNotation,
+    this.color,
     this.current,
     this.onSelectMove,
     super.key,
   });
+
+  final Color? color;
 
   final MapEntry<int, String> move;
   final PieceNotation pieceNotation;
@@ -201,28 +227,16 @@ class InlineMoveItem extends StatelessWidget {
       onTap: onSelectMove != null ? () => onSelectMove!(move.key + 1) : null,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 4),
-        decoration: ShapeDecoration(
-          color: current == true
-              ? Theme.of(context).platform == TargetPlatform.iOS
-                  ? CupertinoDynamicColor.resolve(
-                      CupertinoColors.secondarySystemBackground,
-                      context,
-                    )
-                  : null
-              // TODO add bg color on android
-              : null,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(4.0)),
-          ),
-        ),
         child: Text(
           move.value,
           style: TextStyle(
             fontFamily:
                 pieceNotation == PieceNotation.symbol ? 'ChessFont' : null,
-            fontWeight: FontWeight.w600,
+            fontWeight: current == true ? FontWeight.bold : FontWeight.w500,
             color: current != true
-                ? textShade(context, _moveListOpacity)
+                ? color != null
+                    ? color!.withValues(alpha: _moveListOpacity)
+                    : textShade(context, _moveListOpacity)
                 : Theme.of(context).colorScheme.primary,
           ),
         ),
@@ -239,7 +253,7 @@ class StackedMoveCount extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 40,
+      width: 40.0,
       child: Text(
         '$count.',
         style: TextStyle(

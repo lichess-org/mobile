@@ -56,6 +56,17 @@ abstract class Styles {
   static const bodyPadding =
       EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0);
   static const verticalBodyPadding = EdgeInsets.symmetric(vertical: 16.0);
+  static const horizontalBodyPadding = EdgeInsets.symmetric(horizontal: 16.0);
+  static const sectionBottomPadding = EdgeInsets.only(bottom: 16.0);
+  static const sectionTopPadding = EdgeInsets.only(top: 16.0);
+  static const bodySectionPadding = EdgeInsets.all(16.0);
+
+  /// Horizontal and bottom padding for the body section.
+  static const bodySectionBottomPadding = EdgeInsets.only(
+    bottom: 16.0,
+    left: 16.0,
+    right: 16.0,
+  );
 
   // colors
   static Color? expansionTileColor(BuildContext context) =>
@@ -188,18 +199,6 @@ abstract class Styles {
     ),
   );
 
-  /// Gets horizontal padding according to platform.
-  static const horizontalBodyPadding = EdgeInsets.symmetric(horizontal: 16.0);
-  static const sectionBottomPadding = EdgeInsets.only(bottom: 16);
-  static const sectionTopPadding = EdgeInsets.only(top: 16);
-
-  /// Horizontal and bottom padding for a body section
-  static EdgeInsetsGeometry get bodySectionPadding =>
-      horizontalBodyPadding.add(sectionBottomPadding).add(sectionTopPadding);
-
-  static EdgeInsetsGeometry get bodySectionBottomPadding =>
-      horizontalBodyPadding.add(sectionBottomPadding);
-
   // from:
   // https://github.com/flutter/flutter/blob/796c8ef79279f9c774545b3771238c3098dbefab/packages/flutter/lib/src/cupertino/bottom_tab_bar.dart#L17
   static const CupertinoDynamicColor cupertinoDefaultTabBarBorderColor =
@@ -211,7 +210,7 @@ abstract class Styles {
 
 /// Retrieve the default text color and apply an opacity to it.
 Color? textShade(BuildContext context, double opacity) =>
-    DefaultTextStyle.of(context).style.color?.withOpacity(opacity);
+    DefaultTextStyle.of(context).style.color?.withValues(alpha: opacity);
 
 Color? dividerColor(BuildContext context) =>
     defaultTargetPlatform == TargetPlatform.iOS
@@ -220,23 +219,12 @@ Color? dividerColor(BuildContext context) =>
 
 Color darken(Color c, [double amount = .1]) {
   assert(amount >= 0 && amount <= 1);
-  final f = 1 - amount;
-  return Color.fromARGB(
-    c.alpha,
-    (c.red * f).round(),
-    (c.green * f).round(),
-    (c.blue * f).round(),
-  );
+  return Color.lerp(c, Colors.black, amount) ?? c;
 }
 
 Color lighten(Color c, [double amount = .1]) {
   assert(amount >= 0 && amount <= 1);
-  return Color.fromARGB(
-    c.alpha,
-    c.red + ((255 - c.red) * amount).round(),
-    c.green + ((255 - c.green) * amount).round(),
-    c.blue + ((255 - c.blue) * amount).round(),
-  );
+  return Color.lerp(c, Colors.white, amount) ?? c;
 }
 
 @immutable

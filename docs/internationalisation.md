@@ -1,7 +1,7 @@
 # Internationalisation
 
 We're using the standard way of internationalising our app, as desbribed in the
-[official documentation)(https://docs.flutter.dev/ui/accessibility-and-internationalization/internationalization#setting-up).
+[official documentation](https://docs.flutter.dev/ui/accessibility-and-internationalization/internationalization#setting-up).
 
 What is specific to this project is the way we produce the template `lib/l10n/app_en.arb` file.
 

@@ -3,15 +3,29 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
-import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
+
+part 'countdown_clock.freezed.dart';
 
 /// A simple countdown clock.
 ///
 /// The clock starts only when [active] is `true`.
 class CountdownClock extends ConsumerStatefulWidget {
+  const CountdownClock({
+    required this.duration,
+    required this.active,
+    this.emergencyThreshold,
+    this.emergencySoundEnabled = true,
+    this.onFlag,
+    this.onStop,
+    this.clockStyle,
+    this.padLeft = false,
+    super.key,
+  });
+
   /// The duration left on the clock.
   final Duration duration;
 
@@ -32,27 +46,11 @@ class CountdownClock extends ConsumerStatefulWidget {
   /// Callback with the remaining duration when the clock stops
   final ValueSetter<Duration>? onStop;
 
-  /// Custom light color style
-  final ClockStyle? lightColorStyle;
-
-  /// Custom dark color style
-  final ClockStyle? darkColorStyle;
+  /// Custom color style
+  final ClockStyle? clockStyle;
 
   /// Whether to pad with a leading zero (default is `false`).
   final bool padLeft;
-
-  const CountdownClock({
-    required this.duration,
-    required this.active,
-    this.emergencyThreshold,
-    this.emergencySoundEnabled = true,
-    this.onFlag,
-    this.onStop,
-    this.lightColorStyle,
-    this.darkColorStyle,
-    this.padLeft = false,
-    super.key,
-  });
 
   @override
   ConsumerState<CountdownClock> createState() => _CountdownClockState();
@@ -118,14 +116,6 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
     }
   }
 
-  ClockStyle getStyle(Brightness brightness) {
-    if (brightness == Brightness.dark) {
-      return widget.darkColorStyle ?? ClockStyle.darkThemeStyle;
-    }
-
-    return widget.lightColorStyle ?? ClockStyle.lightThemeStyle;
-  }
-
   @override
   void initState() {
     super.initState();
@@ -155,70 +145,114 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
 
   @override
   Widget build(BuildContext context) {
+    return RepaintBoundary(
+      child: Clock(
+        padLeft: widget.padLeft,
+        timeLeft: timeLeft,
+        active: widget.active,
+        emergencyThreshold: widget.emergencyThreshold,
+        clockStyle: widget.clockStyle,
+      ),
+    );
+  }
+}
+
+/// A stateless widget that displays the time left on the clock.
+///
+/// For a clock widget that automatically counts down, see [CountdownClock].
+class Clock extends StatelessWidget {
+  const Clock({
+    required this.timeLeft,
+    required this.active,
+    this.clockStyle,
+    this.emergencyThreshold,
+    this.padLeft = false,
+    super.key,
+  });
+
+  /// The time left to be displayed on the clock.
+  final Duration timeLeft;
+
+  /// If `true`, [ClockStyle.activeBackgroundColor] will be used, otherwise [ClockStyle.backgroundColor].
+  final bool active;
+
+  /// If [timeLeft] is less than [emergencyThreshold], the clock will set
+  /// its background color to [ClockStyle.emergencyBackgroundColor].
+  final Duration? emergencyThreshold;
+
+  /// Clock style to use.
+  final ClockStyle? clockStyle;
+
+  /// Whether to pad with a leading zero (default is `false`).
+  final bool padLeft;
+
+  @override
+  Widget build(BuildContext context) {
     final hours = timeLeft.inHours;
     final mins = timeLeft.inMinutes.remainder(60);
     final secs = timeLeft.inSeconds.remainder(60).toString().padLeft(2, '0');
     final showTenths = timeLeft < const Duration(seconds: 10);
-    final isEmergency = widget.emergencyThreshold != null &&
-        timeLeft <= widget.emergencyThreshold!;
-    final brightness = ref.watch(currentBrightnessProvider);
-    final clockStyle = getStyle(brightness);
+    final isEmergency =
+        emergencyThreshold != null && timeLeft <= emergencyThreshold!;
     final remainingHeight = estimateRemainingHeightLeftBoard(context);
 
     final hoursDisplay =
-        widget.padLeft ? hours.toString().padLeft(2, '0') : hours.toString();
+        padLeft ? hours.toString().padLeft(2, '0') : hours.toString();
     final minsDisplay =
-        widget.padLeft ? mins.toString().padLeft(2, '0') : mins.toString();
+        padLeft ? mins.toString().padLeft(2, '0') : mins.toString();
 
-    return RepaintBoundary(
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-          color: widget.active
-              ? isEmergency
-                  ? clockStyle.emergencyBackgroundColor
-                  : clockStyle.activeBackgroundColor
-              : clockStyle.backgroundColor,
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 5.0),
-          child: MediaQuery.withClampedTextScaling(
-            maxScaleFactor: kMaxClockTextScaleFactor,
-            child: RichText(
-              text: TextSpan(
-                text: hours > 0
-                    ? '$hoursDisplay:${mins.toString().padLeft(2, '0')}:$secs'
-                    : '$minsDisplay:$secs',
-                style: TextStyle(
-                  color: widget.active
-                      ? isEmergency
-                          ? clockStyle.emergencyTextColor
-                          : clockStyle.activeTextColor
-                      : clockStyle.textColor,
-                  fontSize: 26,
-                  height:
-                      remainingHeight < kSmallRemainingHeightLeftBoardThreshold
-                          ? 1.0
-                          : null,
-                  fontFeatures: const [
-                    FontFeature.tabularFigures(),
-                  ],
-                ),
-                children: [
-                  if (showTenths)
-                    TextSpan(
-                      text:
-                          '.${timeLeft.inMilliseconds.remainder(1000) ~/ 100}',
-                      style: const TextStyle(fontSize: 20),
-                    ),
-                  if (!widget.active && timeLeft < const Duration(seconds: 1))
-                    TextSpan(
-                      text:
-                          '${timeLeft.inMilliseconds.remainder(1000) ~/ 10 % 10}',
-                      style: const TextStyle(fontSize: 18),
-                    ),
+    final brightness = Theme.of(context).brightness;
+    final activeClockStyle = clockStyle ??
+        (brightness == Brightness.dark
+            ? ClockStyle.darkThemeStyle
+            : ClockStyle.lightThemeStyle);
+
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+        color: active
+            ? isEmergency
+                ? activeClockStyle.emergencyBackgroundColor
+                : activeClockStyle.activeBackgroundColor
+            : activeClockStyle.backgroundColor,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 5.0),
+        child: MediaQuery.withClampedTextScaling(
+          maxScaleFactor: kMaxClockTextScaleFactor,
+          child: RichText(
+            text: TextSpan(
+              text: hours > 0
+                  ? '$hoursDisplay:${mins.toString().padLeft(2, '0')}:$secs'
+                  : '$minsDisplay:$secs',
+              style: TextStyle(
+                color: active
+                    ? isEmergency
+                        ? activeClockStyle.emergencyTextColor
+                        : activeClockStyle.activeTextColor
+                    : activeClockStyle.textColor,
+                fontSize: 26,
+                height:
+                    remainingHeight < kSmallRemainingHeightLeftBoardThreshold
+                        ? 1.0
+                        : null,
+                fontFeatures: const [
+                  FontFeature.tabularFigures(),
                 ],
               ),
+              children: [
+                if (showTenths)
+                  TextSpan(
+                    text: '.${timeLeft.inMilliseconds.remainder(1000) ~/ 100}',
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                if (!active && timeLeft < const Duration(seconds: 1))
+                  TextSpan(
+                    text:
+                        '${timeLeft.inMilliseconds.remainder(1000) ~/ 10 % 10}',
+                    style: const TextStyle(fontSize: 18),
+                  ),
+              ],
             ),
           ),
         ),
@@ -227,16 +261,16 @@ class _CountdownClockState extends ConsumerState<CountdownClock> {
   }
 }
 
-@immutable
-class ClockStyle {
-  const ClockStyle({
-    required this.textColor,
-    required this.activeTextColor,
-    required this.emergencyTextColor,
-    required this.backgroundColor,
-    required this.activeBackgroundColor,
-    required this.emergencyBackgroundColor,
-  });
+@freezed
+class ClockStyle with _$ClockStyle {
+  const factory ClockStyle({
+    required Color textColor,
+    required Color activeTextColor,
+    required Color emergencyTextColor,
+    required Color backgroundColor,
+    required Color activeBackgroundColor,
+    required Color emergencyBackgroundColor,
+  }) = _ClockStyle;
 
   static const darkThemeStyle = ClockStyle(
     textColor: Colors.grey,
@@ -255,11 +289,4 @@ class ClockStyle {
     activeBackgroundColor: Color(0xFFD0E0BD),
     emergencyBackgroundColor: Color(0xFFF2CCCC),
   );
-
-  final Color textColor;
-  final Color activeTextColor;
-  final Color emergencyTextColor;
-  final Color backgroundColor;
-  final Color activeBackgroundColor;
-  final Color emergencyBackgroundColor;
 }

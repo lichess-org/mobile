@@ -112,8 +112,7 @@ class _ContextMenu extends ConsumerWidget {
     final dateFormatter =
         ref.withLocale((locale) => DateFormat.yMMMd(locale).add_Hm());
 
-    return ListView(
-      shrinkWrap: true,
+    return BottomSheetScrollableContainer(
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0).add(

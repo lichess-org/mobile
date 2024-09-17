@@ -18,7 +18,6 @@ extension AsyncValueUI on AsyncValue<Object?> {
           );
         default:
           assert(false, 'Unexpected platform ${Theme.of(context).platform}');
-          break;
       }
     }
   }

@@ -48,7 +48,7 @@ class _StormScreenState extends ConsumerState<StormScreen> {
     return WakelockWidget(
       child: PlatformScaffold(
         appBar: PlatformAppBar(
-          actions: [_StormDashboardButton(), ToggleSoundButton()],
+          actions: [_StormDashboardButton(), const ToggleSoundButton()],
           title: const Text('Puzzle Storm'),
         ),
         body: _Load(_boardKey),
@@ -470,7 +470,8 @@ class _ComboState extends ConsumerState<_Combo>
                           boxShadow: _controller.value == 1.0
                               ? [
                                   BoxShadow(
-                                    color: indicatorColor.withOpacity(0.3),
+                                    color:
+                                        indicatorColor.withValues(alpha: 0.3),
                                     blurRadius: 10.0,
                                     spreadRadius: 2.0,
                                   ),
@@ -538,26 +539,30 @@ class _ComboState extends ConsumerState<_Combo>
   List<Color> generateShades(Color baseColor, bool light) {
     final shades = <Color>[];
 
-    final int r = baseColor.red;
-    final int g = baseColor.green;
-    final int b = baseColor.blue;
+    final double r = baseColor.r;
+    final double g = baseColor.g;
+    final double b = baseColor.b;
 
     const int step = 20;
 
     // Generate darker shades
     for (int i = 4; i >= 2; i = i - 2) {
-      final int newR = (r - i * step).clamp(0, 255);
-      final int newG = (g - i * step).clamp(0, 255);
-      final int newB = (b - i * step).clamp(0, 255);
-      shades.add(Color.fromARGB(baseColor.alpha, newR, newG, newB));
+      final double newR = (r - i * step).clamp(0, 255);
+      final double newG = (g - i * step).clamp(0, 255);
+      final double newB = (b - i * step).clamp(0, 255);
+      shades.add(
+        Color.from(alpha: baseColor.a, red: newR, green: newG, blue: newB),
+      );
     }
 
     // Generate lighter shades
     for (int i = 2; i <= 3; i++) {
-      final int newR = (r + i * step).clamp(0, 255);
-      final int newG = (g + i * step).clamp(0, 255);
-      final int newB = (b + i * step).clamp(0, 255);
-      shades.add(Color.fromARGB(baseColor.alpha, newR, newG, newB));
+      final double newR = (r + i * step).clamp(0, 255);
+      final double newG = (g + i * step).clamp(0, 255);
+      final double newB = (b + i * step).clamp(0, 255);
+      shades.add(
+        Color.from(alpha: baseColor.a, red: newR, green: newG, blue: newB),
+      );
     }
 
     if (light) {

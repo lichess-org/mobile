@@ -53,9 +53,9 @@ class _Body extends ConsumerWidget {
     return SafeArea(
       child: ListView(
         children: [
-          Padding(
+          const Padding(
             padding: Styles.bodySectionPadding,
-            child: const _SearchButton(),
+            child: _SearchButton(),
           ),
           if (session != null) _OnlineFriendsWidget(),
           RatingPrefAware(child: LeaderboardWidget()),

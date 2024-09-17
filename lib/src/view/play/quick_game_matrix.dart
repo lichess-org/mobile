@@ -162,8 +162,8 @@ class _ChoiceChipState extends State<_ChoiceChip> {
   @override
   Widget build(BuildContext context) {
     final cardColor = Theme.of(context).platform == TargetPlatform.iOS
-        ? Styles.cupertinoCardColor.resolveFrom(context).withOpacity(0.7)
-        : Theme.of(context).colorScheme.surfaceContainer.withOpacity(0.7);
+        ? Styles.cupertinoCardColor.resolveFrom(context).withValues(alpha: 0.7)
+        : Theme.of(context).colorScheme.surfaceContainer.withValues(alpha: 0.7);
 
     return Container(
       decoration: BoxDecoration(
@@ -173,7 +173,7 @@ class _ChoiceChipState extends State<_ChoiceChip> {
       child: AdaptiveInkWell(
         borderRadius: const BorderRadius.all(Radius.circular(5.0)),
         onTap: () => widget.onSelected(true),
-        splashColor: Theme.of(context).primaryColor.withOpacity(0.2),
+        splashColor: Theme.of(context).primaryColor.withValues(alpha: 0.2),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 16.0),
           child: Center(child: widget.label),

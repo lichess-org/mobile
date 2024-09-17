@@ -22,14 +22,14 @@ PODS:
   - Firebase/Messaging (11.0.0):
     - Firebase/CoreOnly
     - FirebaseMessaging (~> 11.0.0)
-  - firebase_core (3.4.0):
+  - firebase_core (3.4.1):
     - Firebase/CoreOnly (= 11.0.0)
     - Flutter
-  - firebase_crashlytics (4.1.0):
+  - firebase_crashlytics (4.1.1):
     - Firebase/Crashlytics (= 11.0.0)
     - firebase_core
     - Flutter
-  - firebase_messaging (15.1.0):
+  - firebase_messaging (15.1.1):
     - Firebase/Messaging (= 11.0.0)
     - firebase_core
     - Flutter
@@ -132,7 +132,7 @@ PODS:
   - sqflite (0.0.3):
     - Flutter
     - FlutterMacOS
-  - stockfish (1.6.1):
+  - stockfish (1.6.2):
     - Flutter
   - url_launcher_ios (0.0.1):
     - Flutter
@@ -228,9 +228,9 @@ SPEC CHECKSUMS:
   cupertino_http: 1a3a0f163c1b26e7f1a293b33d476e0fde7a64ec
   device_info_plus: 97af1d7e84681a90d0693e63169a5d50e0839a0d
   Firebase: 9f574c08c2396885b5e7e100ed4293d956218af9
-  firebase_core: ceec591a66629daaee82d3321551692c4a871493
-  firebase_crashlytics: e4f04180f443d5a8b56fbc0685bdbd7d90dd26f0
-  firebase_messaging: 15d8b557010f3bb7b98d0302e1c7c8fbcd244425
+  firebase_core: ba84e940cf5cbbc601095f86556560937419195c
+  firebase_crashlytics: 4111f8198b78c99471c955af488cecd8224967e6
+  firebase_messaging: c40f84e7a98da956d5262fada373b5c458edcf13
   FirebaseCore: 3cf438f431f18c12cdf2aaf64434648b63f7e383
   FirebaseCoreExtension: aa5c9779c2d0d39d83f1ceb3fdbafe80c4feecfa
   FirebaseCoreInternal: adefedc9a88dbe393c4884640a73ec9e8e790f8c
@@ -254,7 +254,7 @@ SPEC CHECKSUMS:
   shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
   sound_effect: 5280cfa89d4a576032186f15600dc948ca6d39ce
   sqflite: 673a0e54cc04b7d6dba8d24fb8095b31c3a99eec
-  stockfish: 9e398e73bfb36580f16b79e8b9b45568b9e1dcd9
+  stockfish: d00cf6b95579f1d7032cbfd8e4fe874972fe2ff9
   url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
   wakelock_plus: 78ec7c5b202cab7761af8e2b2b3d0671be6c4ae1
 

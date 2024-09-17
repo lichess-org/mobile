@@ -12,8 +12,10 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
 import 'package:lichess_mobile/src/view/clock/clock_screen.dart';
+import 'package:lichess_mobile/src/view/coordinate_training/coordinate_training_screen.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_screen.dart';
 import 'package:lichess_mobile/src/view/tools/load_position_screen.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
@@ -41,7 +43,12 @@ class ToolsTabScreen extends ConsumerWidget {
         appBar: AppBar(
           title: Text(context.l10n.tools),
         ),
-        body: const Center(child: _Body()),
+        body: const Column(
+          children: [
+            ConnectivityBanner(),
+            Expanded(child: _Body()),
+          ],
+        ),
       ),
     );
   }
@@ -52,6 +59,7 @@ class ToolsTabScreen extends ConsumerWidget {
         controller: puzzlesScrollController,
         slivers: [
           CupertinoSliverNavigationBar(largeTitle: Text(context.l10n.tools)),
+          const SliverToBoxAdapter(child: ConnectivityBanner()),
           const SliverSafeArea(
             top: false,
             sliver: _Body(),
@@ -62,15 +70,58 @@ class ToolsTabScreen extends ConsumerWidget {
   }
 }
 
+class _ToolsButton extends StatelessWidget {
+  const _ToolsButton({
+    required this.icon,
+    required this.title,
+    required this.onTap,
+  });
+
+  final IconData icon;
+
+  final String title;
+
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final tilePadding = Theme.of(context).platform == TargetPlatform.iOS
+        ? const EdgeInsets.symmetric(vertical: 8.0)
+        : EdgeInsets.zero;
+
+    return Padding(
+      padding: Theme.of(context).platform == TargetPlatform.android
+          ? const EdgeInsets.only(bottom: 16.0)
+          : EdgeInsets.zero,
+      child: Opacity(
+        opacity: onTap == null ? 0.5 : 1.0,
+        child: PlatformListTile(
+          leading: Icon(
+            icon,
+            size: Styles.mainListTileIconSize,
+            color: Theme.of(context).platform == TargetPlatform.iOS
+                ? CupertinoTheme.of(context).primaryColor
+                : Theme.of(context).colorScheme.primary,
+          ),
+          title: Padding(
+            padding: tilePadding,
+            child: Text(title, style: Styles.callout),
+          ),
+          trailing: Theme.of(context).platform == TargetPlatform.iOS
+              ? const CupertinoListTileChevron()
+              : null,
+          onTap: onTap,
+        ),
+      ),
+    );
+  }
+}
+
 class _Body extends ConsumerWidget {
   const _Body();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final tilePadding = Theme.of(context).platform == TargetPlatform.iOS
-        ? const EdgeInsets.symmetric(vertical: 8.0)
-        : EdgeInsets.zero;
-
     final isOnline =
         ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
 
@@ -79,142 +130,71 @@ class _Body extends ConsumerWidget {
       ListSection(
         hasLeading: true,
         children: [
-          Padding(
-            padding: Theme.of(context).platform == TargetPlatform.android
-                ? const EdgeInsets.only(bottom: 16.0)
-                : EdgeInsets.zero,
-            child: PlatformListTile(
-              leading: Icon(
-                Icons.upload_file,
-                size: Styles.mainListTileIconSize,
-                color: Theme.of(context).platform == TargetPlatform.iOS
-                    ? CupertinoTheme.of(context).primaryColor
-                    : Theme.of(context).colorScheme.primary,
-              ),
-              title: Padding(
-                padding: tilePadding,
-                child: Text(context.l10n.loadPosition, style: Styles.callout),
-              ),
-              trailing: Theme.of(context).platform == TargetPlatform.iOS
-                  ? const CupertinoListTileChevron()
-                  : null,
-              onTap: () => pushPlatformRoute(
-                context,
-                builder: (context) => const LoadPositionScreen(),
-              ),
+          _ToolsButton(
+            icon: Icons.upload_file,
+            title: context.l10n.loadPosition,
+            onTap: () => pushPlatformRoute(
+              context,
+              builder: (context) => const LoadPositionScreen(),
             ),
           ),
-          Padding(
-            padding: Theme.of(context).platform == TargetPlatform.android
-                ? const EdgeInsets.only(bottom: 16.0)
-                : EdgeInsets.zero,
-            child: PlatformListTile(
-              leading: Icon(
-                Icons.biotech,
-                size: Styles.mainListTileIconSize,
-                color: Theme.of(context).platform == TargetPlatform.iOS
-                    ? CupertinoTheme.of(context).primaryColor
-                    : Theme.of(context).colorScheme.primary,
-              ),
-              title: Padding(
-                padding: tilePadding,
-                child: Text(context.l10n.analysis, style: Styles.callout),
-              ),
-              trailing: Theme.of(context).platform == TargetPlatform.iOS
-                  ? const CupertinoListTileChevron()
-                  : null,
-              onTap: () => pushPlatformRoute(
-                context,
-                rootNavigator: true,
-                builder: (context) => const AnalysisScreen(
-                  pgnOrId: '',
-                  options: AnalysisOptions(
-                    isLocalEvaluationAllowed: true,
-                    variant: Variant.standard,
-                    orientation: Side.white,
-                    id: standaloneAnalysisId,
-                  ),
+          _ToolsButton(
+            icon: Icons.biotech,
+            title: context.l10n.analysis,
+            onTap: () => pushPlatformRoute(
+              context,
+              rootNavigator: true,
+              builder: (context) => const AnalysisScreen(
+                pgnOrId: '',
+                options: AnalysisOptions(
+                  isLocalEvaluationAllowed: true,
+                  variant: Variant.standard,
+                  orientation: Side.white,
+                  id: standaloneAnalysisId,
                 ),
               ),
             ),
           ),
-          if (isOnline)
-            Padding(
-              padding: Theme.of(context).platform == TargetPlatform.android
-                  ? const EdgeInsets.only(bottom: 16.0)
-                  : EdgeInsets.zero,
-              child: PlatformListTile(
-                leading: Icon(
-                  Icons.explore,
-                  size: Styles.mainListTileIconSize,
-                  color: Theme.of(context).platform == TargetPlatform.iOS
-                      ? CupertinoTheme.of(context).primaryColor
-                      : Theme.of(context).colorScheme.primary,
-                ),
-                title: Padding(
-                  padding: tilePadding,
-                  child:
-                      Text(context.l10n.openingExplorer, style: Styles.callout),
-                ),
-                trailing: Theme.of(context).platform == TargetPlatform.iOS
-                    ? const CupertinoListTileChevron()
-                    : null,
-                onTap: () => pushPlatformRoute(
-                  context,
-                  rootNavigator: true,
-                  builder: (context) => const OpeningExplorerScreen(
-                    pgn: '',
-                    options: AnalysisOptions(
-                      isLocalEvaluationAllowed: false,
-                      variant: Variant.standard,
-                      orientation: Side.white,
-                      id: standaloneOpeningExplorerId,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          Padding(
-            padding: Theme.of(context).platform == TargetPlatform.android
-                ? const EdgeInsets.only(bottom: 16.0)
-                : EdgeInsets.zero,
-            child: PlatformListTile(
-              leading: Icon(
-                Icons.edit,
-                size: Styles.mainListTileIconSize,
-                color: Theme.of(context).platform == TargetPlatform.iOS
-                    ? CupertinoTheme.of(context).primaryColor
-                    : Theme.of(context).colorScheme.primary,
-              ),
-              title: Padding(
-                padding: tilePadding,
-                child: Text(context.l10n.boardEditor, style: Styles.callout),
-              ),
-              trailing: Theme.of(context).platform == TargetPlatform.iOS
-                  ? const CupertinoListTileChevron()
-                  : null,
-              onTap: () => pushPlatformRoute(
-                context,
-                builder: (context) => const BoardEditorScreen(),
-                rootNavigator: true,
-              ),
-            ),
-          ),
-          PlatformListTile(
-            leading: Icon(
-              Icons.alarm,
-              size: Styles.mainListTileIconSize,
-              color: Theme.of(context).platform == TargetPlatform.iOS
-                  ? CupertinoTheme.of(context).primaryColor
-                  : Theme.of(context).colorScheme.primary,
-            ),
-            title: Padding(
-              padding: tilePadding,
-              child: Text(context.l10n.clock, style: Styles.callout),
-            ),
-            trailing: Theme.of(context).platform == TargetPlatform.iOS
-                ? const CupertinoListTileChevron()
+          _ToolsButton(
+            icon: Icons.explore,
+            title: context.l10n.openingExplorer,
+            onTap: isOnline
+                ? () => pushPlatformRoute(
+                      context,
+                      rootNavigator: true,
+                      builder: (context) => const OpeningExplorerScreen(
+                        pgn: '',
+                        options: AnalysisOptions(
+                          isLocalEvaluationAllowed: false,
+                          variant: Variant.standard,
+                          orientation: Side.white,
+                          id: standaloneOpeningExplorerId,
+                        ),
+                      ),
+                    )
                 : null,
+          ),
+          _ToolsButton(
+            icon: Icons.edit,
+            title: context.l10n.boardEditor,
+            onTap: () => pushPlatformRoute(
+              context,
+              builder: (context) => const BoardEditorScreen(),
+              rootNavigator: true,
+            ),
+          ),
+          _ToolsButton(
+            icon: Icons.where_to_vote_outlined,
+            title: 'Coordinate Training', // TODO l10n
+            onTap: () => pushPlatformRoute(
+              context,
+              rootNavigator: true,
+              builder: (context) => const CoordinateTrainingScreen(),
+            ),
+          ),
+          _ToolsButton(
+            icon: Icons.alarm,
+            title: context.l10n.clock,
             onTap: () => pushPlatformRoute(
               context,
               builder: (context) => const ClockScreen(),

@@ -149,7 +149,7 @@ class _CorrespondenceClockState extends ConsumerState<CorrespondenceClock> {
                       style: TextStyle(
                         color: widget.active &&
                                 timeLeft.inSeconds.remainder(2) == 0
-                            ? clockStyle.activeTextColor.withOpacity(0.5)
+                            ? clockStyle.activeTextColor.withValues(alpha: 0.5)
                             : null,
                       ),
                     ),

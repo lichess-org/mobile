@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 
@@ -30,184 +31,177 @@ class TimeControlModal extends ConsumerWidget {
       this.onSelected(choice);
     }
 
-    return SafeArea(
-      child: Padding(
-        padding: Styles.bodyPadding,
-        child: ListView(
-          shrinkWrap: true,
-          children: [
-            Text(
-              context.l10n.timeControl,
-              style: Styles.title,
+    return BottomSheetScrollableContainer(
+      padding: Styles.bodyPadding,
+      children: [
+        Text(
+          context.l10n.timeControl,
+          style: Styles.title,
+        ),
+        const SizedBox(height: 26.0),
+        _SectionChoices(
+          value,
+          choices: [
+            if (!excludeUltraBullet) const TimeIncrement(0, 1),
+            const TimeIncrement(60, 0),
+            const TimeIncrement(60, 1),
+            const TimeIncrement(120, 1),
+          ],
+          title: const _SectionTitle(
+            title: 'Bullet',
+            icon: LichessIcons.bullet,
+          ),
+          onSelected: onSelected,
+        ),
+        const SizedBox(height: 20.0),
+        _SectionChoices(
+          value,
+          choices: const [
+            TimeIncrement(180, 0),
+            TimeIncrement(180, 2),
+            TimeIncrement(300, 0),
+            TimeIncrement(300, 3),
+          ],
+          title: const _SectionTitle(
+            title: 'Blitz',
+            icon: LichessIcons.blitz,
+          ),
+          onSelected: onSelected,
+        ),
+        const SizedBox(height: 20.0),
+        _SectionChoices(
+          value,
+          choices: const [
+            TimeIncrement(600, 0),
+            TimeIncrement(600, 5),
+            TimeIncrement(900, 0),
+            TimeIncrement(900, 10),
+          ],
+          title: const _SectionTitle(
+            title: 'Rapid',
+            icon: LichessIcons.rapid,
+          ),
+          onSelected: onSelected,
+        ),
+        const SizedBox(height: 20.0),
+        _SectionChoices(
+          value,
+          choices: const [
+            TimeIncrement(1500, 0),
+            TimeIncrement(1800, 0),
+            TimeIncrement(1800, 20),
+            TimeIncrement(3600, 0),
+          ],
+          title: const _SectionTitle(
+            title: 'Classical',
+            icon: LichessIcons.classical,
+          ),
+          onSelected: onSelected,
+        ),
+        const SizedBox(height: 20.0),
+        Theme(
+          data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+          child: ExpansionTile(
+            title: _SectionTitle(
+              title: context.l10n.custom,
+              icon: Icons.tune,
             ),
-            const SizedBox(height: 26.0),
-            _SectionChoices(
-              value,
-              choices: [
-                if (!excludeUltraBullet) const TimeIncrement(0, 1),
-                const TimeIncrement(60, 0),
-                const TimeIncrement(60, 1),
-                const TimeIncrement(120, 1),
-              ],
-              title: const _SectionTitle(
-                title: 'Bullet',
-                icon: LichessIcons.bullet,
-              ),
-              onSelected: onSelected,
-            ),
-            const SizedBox(height: 20.0),
-            _SectionChoices(
-              value,
-              choices: const [
-                TimeIncrement(180, 0),
-                TimeIncrement(180, 2),
-                TimeIncrement(300, 0),
-                TimeIncrement(300, 3),
-              ],
-              title: const _SectionTitle(
-                title: 'Blitz',
-                icon: LichessIcons.blitz,
-              ),
-              onSelected: onSelected,
-            ),
-            const SizedBox(height: 20.0),
-            _SectionChoices(
-              value,
-              choices: const [
-                TimeIncrement(600, 0),
-                TimeIncrement(600, 5),
-                TimeIncrement(900, 0),
-                TimeIncrement(900, 10),
-              ],
-              title: const _SectionTitle(
-                title: 'Rapid',
-                icon: LichessIcons.rapid,
-              ),
-              onSelected: onSelected,
-            ),
-            const SizedBox(height: 20.0),
-            _SectionChoices(
-              value,
-              choices: const [
-                TimeIncrement(1500, 0),
-                TimeIncrement(1800, 0),
-                TimeIncrement(1800, 20),
-                TimeIncrement(3600, 0),
-              ],
-              title: const _SectionTitle(
-                title: 'Classical',
-                icon: LichessIcons.classical,
-              ),
-              onSelected: onSelected,
-            ),
-            const SizedBox(height: 20.0),
-            Theme(
-              data:
-                  Theme.of(context).copyWith(dividerColor: Colors.transparent),
-              child: ExpansionTile(
-                title: _SectionTitle(
-                  title: context.l10n.custom,
-                  icon: Icons.tune,
-                ),
-                tilePadding: EdgeInsets.zero,
-                minTileHeight: 0,
-                children: [
-                  Builder(
-                    builder: (context) {
-                      TimeIncrement custom = value;
-                      return StatefulBuilder(
-                        builder: (context, setState) {
-                          return Column(
+            tilePadding: EdgeInsets.zero,
+            minTileHeight: 0,
+            children: [
+              Builder(
+                builder: (context) {
+                  TimeIncrement custom = value;
+                  return StatefulBuilder(
+                    builder: (context, setState) {
+                      return Column(
+                        children: [
+                          Row(
+                            mainAxisSize: MainAxisSize.max,
                             children: [
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Expanded(
-                                    child: NonLinearSlider(
-                                      value: custom.time,
-                                      values: kAvailableTimesInSeconds,
-                                      labelBuilder: clockLabelInMinutes,
-                                      onChange: Theme.of(context).platform ==
-                                              TargetPlatform.iOS
-                                          ? (num value) {
-                                              setState(() {
-                                                custom = TimeIncrement(
-                                                  value.toInt(),
-                                                  custom.increment,
-                                                );
-                                              });
-                                            }
-                                          : null,
-                                      onChangeEnd: (num value) {
-                                        setState(() {
-                                          custom = TimeIncrement(
-                                            value.toInt(),
-                                            custom.increment,
-                                          );
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 80,
-                                    child: Center(
-                                      child: Text(
-                                        custom.display,
-                                        style: Styles.timeControl
-                                            .merge(Styles.bold),
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: NonLinearSlider(
-                                      value: custom.increment,
-                                      values: kAvailableIncrementsInSeconds,
-                                      onChange: Theme.of(context).platform ==
-                                              TargetPlatform.iOS
-                                          ? (num value) {
-                                              setState(() {
-                                                custom = TimeIncrement(
-                                                  custom.time,
-                                                  value.toInt(),
-                                                );
-                                              });
-                                            }
-                                          : null,
-                                      onChangeEnd: (num value) {
-                                        setState(() {
-                                          custom = TimeIncrement(
-                                            custom.time,
-                                            value.toInt(),
-                                          );
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                ],
+                              Expanded(
+                                child: NonLinearSlider(
+                                  value: custom.time,
+                                  values: kAvailableTimesInSeconds,
+                                  labelBuilder: clockLabelInMinutes,
+                                  onChange: Theme.of(context).platform ==
+                                          TargetPlatform.iOS
+                                      ? (num value) {
+                                          setState(() {
+                                            custom = TimeIncrement(
+                                              value.toInt(),
+                                              custom.increment,
+                                            );
+                                          });
+                                        }
+                                      : null,
+                                  onChangeEnd: (num value) {
+                                    setState(() {
+                                      custom = TimeIncrement(
+                                        value.toInt(),
+                                        custom.increment,
+                                      );
+                                    });
+                                  },
+                                ),
                               ),
-                              SecondaryButton(
-                                onPressed: custom.isInfinite
-                                    ? null
-                                    : () => onSelected(custom),
-                                semanticsLabel: 'OK',
-                                child: Text(
-                                  context.l10n.mobileOkButton,
-                                  style: Styles.bold,
+                              SizedBox(
+                                width: 80,
+                                child: Center(
+                                  child: Text(
+                                    custom.display,
+                                    style:
+                                        Styles.timeControl.merge(Styles.bold),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: NonLinearSlider(
+                                  value: custom.increment,
+                                  values: kAvailableIncrementsInSeconds,
+                                  onChange: Theme.of(context).platform ==
+                                          TargetPlatform.iOS
+                                      ? (num value) {
+                                          setState(() {
+                                            custom = TimeIncrement(
+                                              custom.time,
+                                              value.toInt(),
+                                            );
+                                          });
+                                        }
+                                      : null,
+                                  onChangeEnd: (num value) {
+                                    setState(() {
+                                      custom = TimeIncrement(
+                                        custom.time,
+                                        value.toInt(),
+                                      );
+                                    });
+                                  },
                                 ),
                               ),
                             ],
-                          );
-                        },
+                          ),
+                          SecondaryButton(
+                            onPressed: custom.isInfinite
+                                ? null
+                                : () => onSelected(custom),
+                            semanticsLabel: 'OK',
+                            child: Text(
+                              context.l10n.mobileOkButton,
+                              style: Styles.bold,
+                            ),
+                          ),
+                        ],
                       );
                     },
-                  ),
-                ],
+                  );
+                },
               ),
-            ),
-            const SizedBox(height: 40.0),
-          ],
+            ],
+          ),
         ),
-      ),
+      ],
     );
   }
 }
