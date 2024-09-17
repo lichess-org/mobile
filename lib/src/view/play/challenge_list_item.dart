@@ -8,9 +8,9 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/lobby/correspondence_challenge.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
@@ -33,8 +33,9 @@ class ChallengeListItem extends ConsumerWidget {
     final me = ref.watch(authSessionProvider)?.user;
     final isMyChallenge = me != null && me.id == user.id;
 
-    final color =
-        isMyChallenge ? LichessColors.green.withValues(alpha: 0.2) : null;
+    final color = isMyChallenge
+        ? context.lichessColors.good.withValues(alpha: 0.2)
+        : null;
 
     return Container(
       color: color,
@@ -57,14 +58,20 @@ class ChallengeListItem extends ConsumerWidget {
             : null,
         child: PlatformListTile(
           padding: Styles.bodyPadding,
-          trailing: Icon(challenge.perf.icon, size: 36),
+          leading: Icon(challenge.perf.icon, size: 36),
+          trailing: challenge.challenger?.lagRating != null
+              ? LagIndicator(lagRating: challenge.challenger!.lagRating!)
+              : null,
           title: isMyChallenge
               ? UserFullNameWidget(
                   user: challenge.destUser != null
                       ? challenge.destUser!.user
                       : user,
                 )
-              : UserFullNameWidget(user: user),
+              : UserFullNameWidget(
+                  user: user,
+                  rating: challenge.challenger?.rating,
+                ),
           subtitle: Text(challenge.description(context.l10n)),
           onTap: onPressed,
         ),

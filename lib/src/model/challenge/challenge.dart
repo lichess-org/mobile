@@ -206,6 +206,7 @@ String declineReasonMessage(BuildContext context, DeclineReason key) {
 
 typedef ChallengeUser = ({
   LightUser user,
+  int? rating,
   bool? provisionalRating,
   int? lagRating,
 });
@@ -439,6 +440,7 @@ Challenge _challengeFromPick(RequiredPick pick) {
         final challengerUser = pick('challenger').asLightUserOrThrow();
         return (
           user: challengerUser,
+          rating: challengerPick('rating').asIntOrNull(),
           provisionalRating: challengerPick('provisional').asBoolOrNull(),
           lagRating: challengerPick('lag').asIntOrNull(),
         );
@@ -449,6 +451,7 @@ Challenge _challengeFromPick(RequiredPick pick) {
         final destUser = pick('destUser').asLightUserOrThrow();
         return (
           user: destUser,
+          rating: destPick('rating').asIntOrNull(),
           provisionalRating: destPick('provisional').asBoolOrNull(),
           lagRating: destPick('lag').asIntOrNull(),
         );
