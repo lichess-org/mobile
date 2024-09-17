@@ -27,7 +27,9 @@ class BoardEditorMenu extends ConsumerWidget {
               ChoiceChip(
                 onSelected: (_) {
                   ref.read(editorController.notifier).loadFen(
-                        'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1',
+                        'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq',
+                        loadCastling: true,
+                        loadSideToPlay: true,
                       );
                 },
                 selected: false,
@@ -35,9 +37,11 @@ class BoardEditorMenu extends ConsumerWidget {
               ),
               ChoiceChip(
                 onSelected: (_) {
-                  ref
-                      .read(editorController.notifier)
-                      .loadFen('8/8/8/8/8/8/8/8 b KQkq - 0 1');
+                  ref.read(editorController.notifier).loadFen(
+                        '8/8/8/8/8/8/8/8',
+                        loadCastling: true,
+                        loadSideToPlay: true,
+                      );
                 },
                 label: const Text('Clear Board'),
                 selected: false,

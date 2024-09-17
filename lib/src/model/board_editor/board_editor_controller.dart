@@ -64,8 +64,25 @@ class BoardEditorController extends _$BoardEditorController {
     );
   }
 
-  void loadFen(String fen) {
-    _updatePosition(readFen(fen).lock);
+  void loadFen(
+    String fen, {
+    bool loadSideToPlay = false,
+    bool loadCastling = false,
+  }) {
+    final splits = fen.split(' ');
+    _updatePosition(readFen(splits[0]).lock);
+
+    if (loadSideToPlay && splits.length >= 2) {
+      setSideToPlay(splits[1].toLowerCase() == 'w' ? Side.white : Side.black);
+    }
+
+    if(loadCastling && splits.length >= 3) {
+      final castling = splits[2];
+      setCastling(Side.white, CastlingSide.king, castling.contains('K'));
+      setCastling(Side.white, CastlingSide.queen, castling.contains('Q'));
+      setCastling(Side.black, CastlingSide.king, castling.contains('k'));
+      setCastling(Side.black, CastlingSide.queen, castling.contains('q'));
+    }
   }
 
   /// Calculates the squares where an en passant capture could be possible.
