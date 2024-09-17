@@ -19,7 +19,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'user_activity.g.dart';
 
-final _dateFormatter = DateFormat.yMMMd(Intl.getCurrentLocale());
+final _dateFormatter = DateFormat.yMMMd();
 
 @riverpod
 Future<IList<UserActivity>> _userActivity(

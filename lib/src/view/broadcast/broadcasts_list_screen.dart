@@ -15,9 +15,8 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
-final _dateFormatter = DateFormat.MMMd(Intl.getCurrentLocale()).add_Hm();
-final _dateFormatterWithYear =
-    DateFormat.yMMMd(Intl.getCurrentLocale()).add_Hm();
+final _dateFormatter = DateFormat.MMMd().add_Hm();
+final _dateFormatterWithYear = DateFormat.yMMMd().add_Hm();
 
 /// A screen that displays a paginated list of broadcasts.
 class BroadcastsListScreen extends StatelessWidget {

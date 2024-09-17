@@ -18,7 +18,7 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-final _dateFormatter = DateFormat.yMMMd(Intl.getCurrentLocale());
+final _dateFormatter = DateFormat.yMMMd();
 
 class PuzzleHistoryScreen extends StatelessWidget {
   @override
