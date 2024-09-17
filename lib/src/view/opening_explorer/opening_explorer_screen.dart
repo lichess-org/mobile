@@ -407,11 +407,14 @@ class _OpeningExplorerView extends StatelessWidget {
                               )
                             : EdgeInsets.zero,
                         children: [
-                          AnalysisBoard(
-                            pgn,
-                            options,
-                            boardSize,
-                            disableDraggingPieces: true,
+                          GestureDetector(
+                            // disable scrolling when dragging the board
+                            onVerticalDragStart: (_) {},
+                            child: AnalysisBoard(
+                              pgn,
+                              options,
+                              boardSize,
+                            ),
                           ),
                           ...children,
                         ],
