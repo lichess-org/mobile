@@ -23,6 +23,32 @@ class BoardEditorMenu extends ConsumerWidget {
           padding: Styles.horizontalBodyPadding,
           child: Wrap(
             spacing: 8.0,
+            children: [
+              ChoiceChip(
+                onSelected: (_) {
+                  ref.read(editorController.notifier).loadFen(
+                        'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1',
+                      );
+                },
+                selected: false,
+                label: const Text('Starting Position'),
+              ),
+              ChoiceChip(
+                onSelected: (_) {
+                  ref
+                      .read(editorController.notifier)
+                      .loadFen('8/8/8/8/8/8/8/8 b KQkq - 0 1');
+                },
+                label: const Text('Clear Board'),
+                selected: false,
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: Styles.horizontalBodyPadding,
+          child: Wrap(
+            spacing: 8.0,
             children: Side.values.map((side) {
               return ChoiceChip(
                 label: Text(
