@@ -32,6 +32,14 @@ final _extension = defaultTargetPlatform == TargetPlatform.iOS ? 'aifc' : 'mp3';
 
 const Set<Sound> _emtpySet = {};
 
+/// Initialize the sound service with the given sound theme.
+///
+/// This will load the sounds from assets and make them ready to be played.
+Future<void> preloadSounds(SoundTheme theme) async {
+  await _soundEffectPlugin.initialize();
+  await _loadAllSounds(theme);
+}
+
 /// Loads all sounds of the given [SoundTheme].
 Future<void> _loadAllSounds(
   SoundTheme soundTheme, {
@@ -65,14 +73,6 @@ class SoundService {
   SoundService(this._ref);
 
   final SoundServiceRef _ref;
-
-  /// Initialize the sound service with the given sound theme.
-  ///
-  /// This will load the sounds from assets and make them ready to be played.
-  Future<void> initialize(SoundTheme theme) async {
-    await _soundEffectPlugin.initialize();
-    await _loadAllSounds(theme);
-  }
 
   /// Play the given sound if sound is enabled.
   Future<void> play(Sound sound) async {

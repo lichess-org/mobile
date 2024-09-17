@@ -12,9 +12,10 @@ import 'package:lichess_mobile/main.dart';
 import 'package:lichess_mobile/src/app_initialization.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
 import 'package:lichess_mobile/src/model/notifications/local_notification_service.dart';
@@ -110,7 +111,8 @@ class _AppState extends ConsumerState<Application> {
       setOptimalDisplayMode();
     }
 
-    preloadSoundAssets();
+    // check if session is still active
+    checkSession();
 
     // Listen for connectivity changes and perform actions accordingly.
     ref.listenManual(connectivityChangesProvider, (prev, current) async {
@@ -250,14 +252,22 @@ class _AppState extends ConsumerState<Application> {
     );
   }
 
-  /// Preload sounds to avoid delays when playing them.
-  Future<void> preloadSoundAssets() async {
-    final soundTheme = ref.read(generalPreferencesProvider).soundTheme;
-    final soundService = ref.read(soundServiceProvider);
-    try {
-      await soundService.initialize(soundTheme);
-    } catch (e) {
-      debugPrint('Cannot initialize SoundService: $e');
+  /// Check if the session is still active and delete it if it is not.
+  Future<void> checkSession() async {
+    // check if session is still active
+    final session = ref.read(authSessionProvider);
+    if (session != null) {
+      try {
+        final client = ref.read(lichessClientProvider);
+        final response = await client
+            .get(Uri(path: '/api/account'))
+            .timeout(const Duration(seconds: 3));
+        if (response.statusCode == 401) {
+          await ref.read(authSessionProvider.notifier).delete();
+        }
+      } catch (e) {
+        debugPrint('Could not check session: $e');
+      }
     }
   }
 

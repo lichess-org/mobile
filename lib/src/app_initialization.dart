@@ -6,9 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/db/secure_storage.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/auth/bearer.dart';
 import 'package:lichess_mobile/src/model/auth/session_storage.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/utils/color_palette.dart';
@@ -81,26 +79,6 @@ Future<AppInitializationData> appInitialization(
   final sri = storedSri ??
       await secureStorage.read(key: kSRIStorageKey) ??
       genRandomString(12);
-
-  final storedSession = await sessionStorage.read();
-  if (storedSession != null) {
-    try {
-      final client = ref.read(defaultClientProvider);
-      final response = await client.get(
-        lichessUri('/api/account'),
-        headers: {
-          'Authorization': 'Bearer ${signBearerToken(storedSession.token)}',
-          'User-Agent':
-              makeUserAgent(pInfo, deviceInfo, sri, storedSession.user),
-        },
-      ).timeout(const Duration(seconds: 3));
-      if (response.statusCode == 401) {
-        await sessionStorage.delete();
-      }
-    } catch (e) {
-      _logger.warning('Could not while checking session: $e');
-    }
-  }
 
   final physicalMemory = await System.instance.getTotalRam() ?? 256.0;
   final engineMaxMemory = (physicalMemory / 10).ceil();
