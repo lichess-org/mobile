@@ -1,0 +1,1 @@
+issue "Add the option to remove the shadow for dragged pieces #977" being worked on.
