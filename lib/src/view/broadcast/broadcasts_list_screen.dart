@@ -7,7 +7,6 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/styles/transparent_image.dart';
-import 'package:lichess_mobile/src/utils/current_locale.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcast_screen.dart';
@@ -15,6 +14,10 @@ import 'package:lichess_mobile/src/view/broadcast/default_broadcast_image.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
+
+final _dateFormatter = DateFormat.MMMd(Intl.getCurrentLocale()).add_Hm();
+final _dateFormatterWithYear =
+    DateFormat.yMMMd(Intl.getCurrentLocale()).add_Hm();
 
 /// A screen that displays a paginated list of broadcasts.
 class BroadcastsListScreen extends StatelessWidget {
@@ -305,10 +308,6 @@ class StartsRoundDate extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final dateFormatter =
-        ref.withLocale((locale) => DateFormat.MMMd(locale).add_Hm());
-    final dateFormatterWithYear =
-        ref.withLocale((locale) => DateFormat.yMMMd(locale).add_Hm());
     final timeBeforeRound = startsAt.difference(DateTime.now());
 
     return Text(
@@ -317,8 +316,8 @@ class StartsRoundDate extends ConsumerWidget {
               ? 'In ${timeBeforeRound.inMinutes} minutes' // TODO translate with https://github.com/lichess-org/lila/blob/65b28ea8e43e0133df6c7ed40e03c2954f247d1e/translation/source/timeago.xml#L8
               : 'In ${timeBeforeRound.inHours} hours' // TODO translate with https://github.com/lichess-org/lila/blob/65b28ea8e43e0133df6c7ed40e03c2954f247d1e/translation/source/timeago.xml#L12
           : timeBeforeRound.inDays < 365
-              ? dateFormatter.format(startsAt)
-              : dateFormatterWithYear.format(startsAt),
+              ? _dateFormatter.format(startsAt)
+              : _dateFormatterWithYear.format(startsAt),
       style: Theme.of(context).textTheme.labelSmall?.copyWith(
             color: textShade(context, 0.5),
           ),

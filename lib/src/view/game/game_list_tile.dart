@@ -11,7 +11,6 @@ import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/current_locale.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
@@ -25,6 +24,8 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:timeago/timeago.dart' as timeago;
+
+final _dateFormatter = DateFormat.yMMMd().add_Hm();
 
 /// A list tile that shows game info.
 class GameListTile extends StatelessWidget {
@@ -109,8 +110,6 @@ class _ContextMenu extends ConsumerWidget {
     final orientation = mySide;
 
     final customColors = Theme.of(context).extension<CustomColors>();
-    final dateFormatter =
-        ref.withLocale((locale) => DateFormat.yMMMd(locale).add_Hm());
 
     return BottomSheetScrollableContainer(
       children: [
@@ -166,7 +165,7 @@ class _ContextMenu extends ConsumerWidget {
                                   ),
                                 ),
                                 Text(
-                                  dateFormatter.format(game.lastMoveAt),
+                                  _dateFormatter.format(game.lastMoveAt),
                                   style: TextStyle(
                                     color: textShade(
                                       context,

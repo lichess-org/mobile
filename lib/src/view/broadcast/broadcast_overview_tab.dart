@@ -6,8 +6,9 @@ import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/current_locale.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+final _dateFormatter = DateFormat.MMMd(Intl.getCurrentLocale());
 
 /// A tab that displays the overview of a broadcast.
 class BroadcastOverviewTab extends ConsumerWidget {
@@ -18,7 +19,6 @@ class BroadcastOverviewTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tournament = ref.watch(broadcastTournamentProvider(tournamentId));
-    final dateFormatter = ref.withLocale((locale) => DateFormat.MMMd(locale));
 
     return SafeArea(
       bottom: false,
@@ -38,8 +38,8 @@ class BroadcastOverviewTab extends ConsumerWidget {
                       BroadcastOverviewCard(
                         CupertinoIcons.calendar,
                         information.dates!.endsAt == null
-                            ? dateFormatter.format(information.dates!.startsAt)
-                            : '${dateFormatter.format(information.dates!.startsAt)} - ${dateFormatter.format(information.dates!.endsAt!)}',
+                            ? _dateFormatter.format(information.dates!.startsAt)
+                            : '${_dateFormatter.format(information.dates!.startsAt)} - ${_dateFormatter.format(information.dates!.endsAt!)}',
                       ),
                     if (information.format != null)
                       BroadcastOverviewCard(

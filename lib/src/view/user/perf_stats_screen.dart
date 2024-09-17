@@ -19,7 +19,6 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/current_locale.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -35,6 +34,9 @@ import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/rating.dart';
 import 'package:lichess_mobile/src/widgets/stat_card.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
+
+final _currentLocale = Intl.getCurrentLocale();
+final _dateFormatter = DateFormat.yMMMd(_currentLocale);
 
 const _customOpacity = 0.6;
 const _defaultStatFontSize = 12.0;
@@ -147,7 +149,6 @@ class _Body extends ConsumerWidget {
     final loggedInUser = ref.watch(authSessionProvider);
     const statGroupSpace = SizedBox(height: 15.0);
     const subStatSpace = SizedBox(height: 10);
-    final currentLocale = ref.watch(currentLocaleProvider);
 
     return perfStats.when(
       data: (data) {
@@ -222,8 +223,9 @@ class _Body extends ConsumerWidget {
                       context.l10n.rank,
                       value: data.rank == null
                           ? '?'
-                          : NumberFormat.decimalPattern(currentLocale)
-                              .format(data.rank),
+                          : NumberFormat.decimalPattern(
+                              Intl.getCurrentLocale(),
+                            ).format(data.rank),
                     ),
                   StatCard(
                     context.l10n
@@ -468,13 +470,13 @@ class _ProgressionWidget extends StatelessWidget {
   }
 }
 
-class _UserGameWidget extends ConsumerWidget {
+class _UserGameWidget extends StatelessWidget {
   final UserPerfGame? game;
 
   const _UserGameWidget(this.game);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     // TODO: Implement functionality to view game on tap.
     // (Return a button? Wrap with InkWell?)
     const defaultDateFontSize = 16.0;
@@ -482,12 +484,11 @@ class _UserGameWidget extends ConsumerWidget {
       color: Theme.of(context).colorScheme.tertiary,
       fontSize: defaultDateFontSize,
     );
-    final dateFormatter = ref.withLocale((locale) => DateFormat.yMMMd(locale));
 
     return game == null
         ? Text('?', style: defaultDateStyle)
         : Text(
-            dateFormatter.format(game!.finishedAt),
+            _dateFormatter.format(game!.finishedAt),
             style: defaultDateStyle,
           );
   }
@@ -670,8 +671,6 @@ class _GameListWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final dateFormatter = ref.withLocale((locale) => DateFormat.yMMMd(locale));
-
     return ListSection(
       header: header,
       margin: const EdgeInsets.only(top: 10.0),
@@ -711,7 +710,7 @@ class _GameListWidget extends ConsumerWidget {
               rating: game.opponentRating,
             ),
             subtitle: Text(
-              dateFormatter.format(game.finishedAt),
+              _dateFormatter.format(game.finishedAt),
             ),
           ),
       ],
@@ -747,16 +746,16 @@ class _GameListTile extends StatelessWidget {
   }
 }
 
-class _EloChart extends ConsumerStatefulWidget {
+class _EloChart extends StatefulWidget {
   final UserRatingHistoryPerf value;
 
   const _EloChart(this.value);
 
   @override
-  ConsumerState<_EloChart> createState() => _EloChartState();
+  State<_EloChart> createState() => _EloChartState();
 }
 
-class _EloChartState extends ConsumerState<_EloChart> {
+class _EloChartState extends State<_EloChart> {
   late DateRange _selectedRange;
 
   late List<FlSpot> _allFlSpot;
@@ -846,13 +845,12 @@ class _EloChartState extends ConsumerState<_EloChart> {
     final borderColor =
         Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5);
     final chartColor = Theme.of(context).colorScheme.tertiary;
-    final currentLocale = ref.watch(currentLocaleProvider);
     final chartDateFormatter = switch (_selectedRange) {
-      DateRange.oneWeek => DateFormat.MMMd(currentLocale),
-      DateRange.oneMonth => DateFormat.MMMd(currentLocale),
-      DateRange.threeMonths => DateFormat.yMMM(currentLocale),
-      DateRange.oneYear => DateFormat.yMMM(currentLocale),
-      DateRange.allTime => DateFormat.yMMM(currentLocale),
+      DateRange.oneWeek => DateFormat.MMMd(_currentLocale),
+      DateRange.oneMonth => DateFormat.MMMd(_currentLocale),
+      DateRange.threeMonths => DateFormat.yMMM(_currentLocale),
+      DateRange.oneYear => DateFormat.yMMM(_currentLocale),
+      DateRange.allTime => DateFormat.yMMM(_currentLocale),
     };
 
     String formatDateFromTimestamp(double nbDays) => chartDateFormatter.format(
@@ -860,7 +858,7 @@ class _EloChartState extends ConsumerState<_EloChart> {
         );
 
     String formatDateFromTimestampForTooltip(double nbDays) =>
-        DateFormat.yMMMd(currentLocale).format(
+        DateFormat.yMMMd(_currentLocale).format(
           _firstDate.add(Duration(days: nbDays.toInt())),
         );
 
