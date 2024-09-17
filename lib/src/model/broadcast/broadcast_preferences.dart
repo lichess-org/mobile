@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/db/shared_preferences.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
@@ -45,6 +46,14 @@ class BroadcastPrefState with _$BroadcastPrefState {
         showEvaluationBar: true,
       );
 
-  factory BroadcastPrefState.fromJson(Map<String, dynamic> json) =>
-      _$BroadcastPrefStateFromJson(json);
+  factory BroadcastPrefState.fromJson(Map<String, dynamic> json) {
+    try {
+      return _$BroadcastPrefStateFromJson(json);
+    } catch (e) {
+      debugPrint(
+        '[BroadcastPreferences] Error getting broadcast preferences: $e',
+      );
+      return BroadcastPrefState.defaults();
+    }
+  }
 }
