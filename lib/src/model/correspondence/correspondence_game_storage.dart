@@ -12,10 +12,10 @@ import 'offline_correspondence_game.dart';
 part 'correspondence_game_storage.g.dart';
 
 @Riverpod(keepAlive: true)
-CorrespondenceGameStorage correspondenceGameStorage(
+Future<CorrespondenceGameStorage> correspondenceGameStorage(
   CorrespondenceGameStorageRef ref,
-) {
-  final db = ref.watch(databaseProvider);
+) async {
+  final db = await ref.watch(databaseProvider.future);
   return CorrespondenceGameStorage(db, ref);
 }
 
@@ -27,7 +27,7 @@ Future<IList<(DateTime, OfflineCorrespondenceGame)>>
   final session = ref.watch(authSessionProvider);
   // cannot use ref.watch because it would create a circular dependency
   // as we invalidate this provider in the storage save and delete methods
-  final storage = ref.read(correspondenceGameStorageProvider);
+  final storage = await ref.read(correspondenceGameStorageProvider.future);
   final data = await storage.fetchOngoingGames(session?.user.id);
   return data.sort(
     (a, b) {

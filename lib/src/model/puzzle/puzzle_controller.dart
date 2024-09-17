@@ -41,9 +41,9 @@ class PuzzleController extends _$PuzzleController {
 
   final _engineEvalDebounce = Debouncer(const Duration(milliseconds: 100));
 
-  late final _service = ref.read(puzzleServiceFactoryProvider)(
-    queueLength: kPuzzleLocalQueueLength,
-  );
+  Future<PuzzleService> get _service => ref.read(puzzleServiceFactoryProvider)(
+        queueLength: kPuzzleLocalQueueLength,
+      );
   @override
   PuzzleState build(
     PuzzleContext initialContext, {
@@ -237,7 +237,7 @@ class PuzzleController extends _$PuzzleController {
         )
         .setDifficulty(difficulty);
 
-    final nextPuzzle = _service.resetBatch(
+    final nextPuzzle = (await _service).resetBatch(
       userId: initialContext.userId,
       angle: initialContext.angle,
     );
@@ -348,7 +348,7 @@ class PuzzleController extends _$PuzzleController {
     final soundService = ref.read(soundServiceProvider);
 
     if (state.streak == null) {
-      final next = await _service.solve(
+      final next = await (await _service).solve(
         userId: initialContext.userId,
         angle: initialContext.angle,
         puzzle: state.puzzle,

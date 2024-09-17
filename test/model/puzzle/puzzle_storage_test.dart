@@ -27,7 +27,7 @@ void main() {
         ],
       );
 
-      final storage = container.read(puzzleStorageProvider);
+      final storage = await container.read(puzzleStorageProvider.future);
 
       await storage.save(
         puzzle: puzzle,

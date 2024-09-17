@@ -20,7 +20,6 @@ import 'package:logging/logging.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sqflite/sqflite.dart';
 
 import './fake_crashlytics.dart';
 import './model/auth/fake_session_storage.dart';
@@ -28,8 +27,6 @@ import './model/common/service/fake_sound_service.dart';
 import 'fake_notification_service.dart';
 import 'model/common/fake_websocket_channel.dart';
 import 'utils/fake_connectivity_changes.dart';
-
-class MockDatabase extends Mock implements Database {}
 
 class MockHttpClient extends Mock implements http.Client {}
 
@@ -110,7 +107,6 @@ Future<ProviderContainer> makeContainer({
           }),
           sharedPreferences: sharedPreferences,
           userSession: userSession,
-          database: MockDatabase(),
           sri: 'test',
           engineMaxMemoryInMb: 16,
         );

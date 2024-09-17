@@ -51,8 +51,8 @@ void main() {
       });
 
       final container = await makeTestContainer(mockClient);
-      final storage = container.read(puzzleBatchStorageProvider);
-      final service = container.read(puzzleServiceFactoryProvider)(
+      final storage = await container.read(puzzleBatchStorageProvider.future);
+      final service = await container.read(puzzleServiceFactoryProvider)(
         queueLength: 3,
       );
 
@@ -79,8 +79,8 @@ void main() {
       });
 
       final container = await makeTestContainer(mockClient);
-      final storage = container.read(puzzleBatchStorageProvider);
-      final service = container.read(puzzleServiceFactoryProvider)(
+      final storage = await container.read(puzzleBatchStorageProvider.future);
+      final service = await container.read(puzzleServiceFactoryProvider)(
         queueLength: 1,
       );
 
@@ -110,8 +110,8 @@ void main() {
       });
 
       final container = await makeTestContainer(mockClient);
-      final storage = container.read(puzzleBatchStorageProvider);
-      final service = container.read(puzzleServiceFactoryProvider)(
+      final storage = await container.read(puzzleBatchStorageProvider.future);
+      final service = await container.read(puzzleServiceFactoryProvider)(
         queueLength: 2,
       );
       await storage.save(
@@ -137,8 +137,8 @@ void main() {
       });
 
       final container = await makeTestContainer(mockClient);
-      final storage = container.read(puzzleBatchStorageProvider);
-      final service = container.read(puzzleServiceFactoryProvider)(
+      final storage = await container.read(puzzleBatchStorageProvider.future);
+      final service = await container.read(puzzleServiceFactoryProvider)(
         queueLength: 1,
       );
       await storage.save(
@@ -169,7 +169,7 @@ void main() {
       });
 
       final container = await makeTestContainer(mockClient);
-      final service = container.read(puzzleServiceFactoryProvider)(
+      final service = await container.read(puzzleServiceFactoryProvider)(
         queueLength: 1,
       );
 
@@ -191,8 +191,8 @@ void main() {
       });
 
       final container = await makeTestContainer(mockClient);
-      final storage = container.read(puzzleBatchStorageProvider);
-      final service = container.read(puzzleServiceFactoryProvider)(
+      final storage = await container.read(puzzleBatchStorageProvider.future);
+      final service = await container.read(puzzleServiceFactoryProvider)(
         queueLength: 1,
       );
       await storage.save(
@@ -224,8 +224,8 @@ void main() {
       });
 
       final container = await makeTestContainer(mockClient);
-      final storage = container.read(puzzleBatchStorageProvider);
-      final service = container.read(puzzleServiceFactoryProvider)(
+      final storage = await container.read(puzzleBatchStorageProvider.future);
+      final service = await container.read(puzzleServiceFactoryProvider)(
         queueLength: 1,
       );
       await storage.save(
@@ -261,8 +261,8 @@ void main() {
       });
 
       final container = await makeTestContainer(mockClient);
-      final storage = container.read(puzzleBatchStorageProvider);
-      final service = container.read(puzzleServiceFactoryProvider)(
+      final storage = await container.read(puzzleBatchStorageProvider.future);
+      final service = await container.read(puzzleServiceFactoryProvider)(
         queueLength: 1,
       );
       await storage.save(
@@ -307,8 +307,8 @@ void main() {
       });
 
       final container = await makeTestContainer(mockClient);
-      final storage = container.read(puzzleBatchStorageProvider);
-      final service = container.read(puzzleServiceFactoryProvider)(
+      final storage = await container.read(puzzleBatchStorageProvider.future);
+      final service = await container.read(puzzleServiceFactoryProvider)(
         queueLength: 1,
       );
       await storage.save(
@@ -356,8 +356,8 @@ void main() {
       });
 
       final container = await makeTestContainer(mockClient);
-      final storage = container.read(puzzleBatchStorageProvider);
-      final service = container.read(puzzleServiceFactoryProvider)(
+      final storage = await container.read(puzzleBatchStorageProvider.future);
+      final service = await container.read(puzzleServiceFactoryProvider)(
         queueLength: 2,
       );
       await storage.save(
@@ -396,8 +396,8 @@ void main() {
       });
 
       final container = await makeTestContainer(mockClient);
-      final storage = container.read(puzzleBatchStorageProvider);
-      final service = container.read(puzzleServiceFactoryProvider)(
+      final storage = await container.read(puzzleBatchStorageProvider.future);
+      final service = await container.read(puzzleServiceFactoryProvider)(
         queueLength: 2,
       );
 

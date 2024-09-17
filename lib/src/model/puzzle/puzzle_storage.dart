@@ -9,8 +9,8 @@ import 'package:sqflite/sqflite.dart';
 part 'puzzle_storage.g.dart';
 
 @Riverpod(keepAlive: true)
-PuzzleStorage puzzleStorage(PuzzleStorageRef ref) {
-  final db = ref.watch(databaseProvider);
+Future<PuzzleStorage> puzzleStorage(PuzzleStorageRef ref) async {
+  final db = await ref.watch(databaseProvider.future);
   return PuzzleStorage(db);
 }
 

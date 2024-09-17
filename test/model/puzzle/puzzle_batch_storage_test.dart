@@ -29,7 +29,7 @@ void main() {
         ],
       );
 
-      final storage = container.read(puzzleBatchStorageProvider);
+      final storage = await container.read(puzzleBatchStorageProvider.future);
 
       await storage.save(
         userId: null,
@@ -58,7 +58,7 @@ void main() {
         ],
       );
 
-      final storage = container.read(puzzleBatchStorageProvider);
+      final storage = await container.read(puzzleBatchStorageProvider.future);
 
       await storage.save(
         userId: null,

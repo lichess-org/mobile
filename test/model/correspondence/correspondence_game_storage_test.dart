@@ -34,7 +34,8 @@ void main() {
         ],
       );
 
-      final storage = container.read(correspondenceGameStorageProvider);
+      final storage =
+          await container.read(correspondenceGameStorageProvider.future);
 
       await storage.save(corresGame);
       expect(

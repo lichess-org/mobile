@@ -4,7 +4,6 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/db/secure_storage.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
@@ -17,11 +16,9 @@ import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/utils/system.dart';
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:path/path.dart' as p;
 import 'package:pub_semver/pub_semver.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sqflite/sqflite.dart';
 
 part 'app_initialization.freezed.dart';
 part 'app_initialization.g.dart';
@@ -38,8 +35,6 @@ Future<AppInitializationData> appInitialization(
   final deviceInfo = await DeviceInfoPlugin().deviceInfo;
   final prefs = await SharedPreferences.getInstance();
 
-  final dbPath = p.join(await getDatabasesPath(), kLichessDatabaseName);
-
   final appVersion = Version.parse(pInfo.version);
   final installedVersion = prefs.getString('installed_version');
 
@@ -47,8 +42,6 @@ Future<AppInitializationData> appInitialization(
       Version.parse(installedVersion) != appVersion) {
     prefs.setString('installed_version', appVersion.canonicalizedVersion);
   }
-
-  final db = await openDb(databaseFactory, dbPath);
 
   if (prefs.getBool('first_run') ?? true) {
     // Clear secure storage on first run because it is not deleted on app uninstall
@@ -117,7 +110,6 @@ Future<AppInitializationData> appInitialization(
     deviceInfo: deviceInfo,
     sharedPreferences: prefs,
     userSession: await sessionStorage.read(),
-    database: db,
     sri: sri,
     engineMaxMemoryInMb: engineMaxMemory,
   );
@@ -130,7 +122,6 @@ class AppInitializationData with _$AppInitializationData {
     required BaseDeviceInfo deviceInfo,
     required SharedPreferences sharedPreferences,
     required AuthSessionState? userSession,
-    required Database database,
     required String sri,
     required int engineMaxMemoryInMb,
   }) = _AppInitializationData;

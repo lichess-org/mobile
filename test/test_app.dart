@@ -24,10 +24,8 @@ import 'package:lichess_mobile/src/model/notifications/push_notification_service
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:logging/logging.dart';
-import 'package:mocktail/mocktail.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 import './fake_crashlytics.dart';
@@ -37,8 +35,6 @@ import 'fake_notification_service.dart';
 import 'model/common/fake_websocket_channel.dart';
 import 'model/game/mock_game_storage.dart';
 import 'utils/fake_connectivity_changes.dart';
-
-class MockDatabase extends Mock implements Database {}
 
 final mockClient = MockClient((request) async {
   return http.Response('', 200);
@@ -132,7 +128,9 @@ Future<Widget> buildTestApp(
       // ignore: scoped_providers_should_specify_dependencies
       sessionStorageProvider.overrideWithValue(FakeSessionStorage(userSession)),
       // ignore: scoped_providers_should_specify_dependencies
-      gameStorageProvider.overrideWithValue(MockGameStorage()),
+      gameStorageProvider.overrideWith((_) async {
+        return MockGameStorage();
+      }),
       // ignore: scoped_providers_should_specify_dependencies
       appInitializationProvider.overrideWith((ref) {
         return AppInitializationData(
@@ -153,7 +151,6 @@ Future<Widget> buildTestApp(
           }),
           sharedPreferences: sharedPreferences,
           userSession: userSession,
-          database: MockDatabase(),
           sri: 'test',
           engineMaxMemoryInMb: 16,
         );

@@ -700,10 +700,7 @@ class GameController extends _$GameController {
               state = AsyncValue.data(
                 state.requireValue.copyWith(game: game),
               );
-
-              ref
-                  .read(gameStorageProvider)
-                  .save(game.toArchivedGame(finishedAt: DateTime.now()));
+              _storeGame(game);
             }, (e, s) {
               _logger.warning('Could not get post game data', e, s);
             });
@@ -907,6 +904,13 @@ class GameController extends _$GameController {
             evals: data.evals,
           ),
         );
+    }
+  }
+
+  Future<void> _storeGame(PlayableGame game) async {
+    if (game.finished) {
+      (await ref.read(gameStorageProvider.future))
+          .save(game.toArchivedGame(finishedAt: DateTime.now()));
     }
   }
 

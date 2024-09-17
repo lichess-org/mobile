@@ -388,7 +388,7 @@ class _BodyState extends ConsumerState<_Body> {
     }
   }
 
-  void confirmMove() {
+  Future<void> confirmMove() async {
     setState(() {
       game = game.copyWith(
         registeredMoveAtPgn: (moveToConfirm!.$1, moveToConfirm!.$2),
@@ -396,7 +396,8 @@ class _BodyState extends ConsumerState<_Body> {
       moveToConfirm = null;
     });
 
-    ref.read(correspondenceGameStorageProvider).save(game);
+    final storage = await ref.read(correspondenceGameStorageProvider.future);
+    storage.save(game);
   }
 
   void cancelMove() {
@@ -409,7 +410,7 @@ class _BodyState extends ConsumerState<_Body> {
     });
   }
 
-  void deleteRegisteredMove() {
+  Future<void> deleteRegisteredMove() async {
     setState(() {
       stepCursor = stepCursor - 1;
       game = game.copyWith(
@@ -418,7 +419,8 @@ class _BodyState extends ConsumerState<_Body> {
       );
     });
 
-    ref.read(correspondenceGameStorageProvider).save(game);
+    final storage = await ref.read(correspondenceGameStorageProvider.future);
+    storage.save(game);
   }
 
   Side? get activeClockSide {

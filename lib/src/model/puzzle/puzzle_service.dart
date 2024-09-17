@@ -33,11 +33,11 @@ class PuzzleServiceFactory {
 
   final PuzzleServiceFactoryRef _ref;
 
-  PuzzleService call({required int queueLength}) {
+  Future<PuzzleService> call({required int queueLength}) async {
     return PuzzleService(
       _ref,
-      batchStorage: _ref.read(puzzleBatchStorageProvider),
-      puzzleStorage: _ref.read(puzzleStorageProvider),
+      batchStorage: await _ref.read(puzzleBatchStorageProvider.future),
+      puzzleStorage: await _ref.read(puzzleStorageProvider.future),
       queueLength: queueLength,
     );
   }

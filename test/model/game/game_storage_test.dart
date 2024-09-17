@@ -34,7 +34,7 @@ void main() {
         ],
       );
 
-      final storage = container.read(gameStorageProvider);
+      final storage = await container.read(gameStorageProvider.future);
 
       await storage.save(game);
       expect(
@@ -57,7 +57,7 @@ void main() {
         ],
       );
 
-      final storage = container.read(gameStorageProvider);
+      final storage = await container.read(gameStorageProvider.future);
 
       for (final game in games) {
         await storage.save(game);
