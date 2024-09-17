@@ -311,7 +311,7 @@ Widget _wrapWithBackground({
     child: result,
   );
 
-  if (backgroundColor.alpha == 0xFF) {
+  if (backgroundColor.a == 0xFF) {
     return childWithBackground;
   }
 

@@ -1449,7 +1449,7 @@ class AcplChart extends ConsumerWidget {
                   .textTheme
                   .labelMedium
                   ?.color
-                  ?.withOpacity(0.3),
+                  ?.withValues(alpha: 0.3),
             ),
             labelResolver: (line) => label,
             padding: const EdgeInsets.only(right: 1),
@@ -1563,7 +1563,7 @@ class AcplChart extends ConsumerWidget {
                   spots: spots,
                   isCurved: false,
                   barWidth: 1,
-                  color: mainLineColor.withOpacity(0.7),
+                  color: mainLineColor.withValues(alpha: 0.7),
                   aboveBarData: BarAreaData(
                     show: true,
                     color: aboveLineColor,

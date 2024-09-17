@@ -132,8 +132,9 @@ class _BoardThumbnailState extends ConsumerState<BoardThumbnail> {
                       : SizedBox(
                           height: widget.size,
                           width: widget.size * evaluationBarAspectRatio,
-                          child:
-                              ColoredBox(color: Colors.grey.withOpacity(0.6)),
+                          child: ColoredBox(
+                            color: Colors.grey.withValues(alpha: 0.6),
+                          ),
                         ),
                 ),
               ],

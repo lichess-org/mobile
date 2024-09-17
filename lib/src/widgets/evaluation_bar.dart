@@ -29,12 +29,12 @@ class EvaluationBar extends StatelessWidget {
             SizedBox(
               height: height - whiteBarHeight,
               width: height * evaluationBarAspectRatio,
-              child: ColoredBox(color: Colors.black.withOpacity(0.6)),
+              child: ColoredBox(color: Colors.black.withValues(alpha: 0.6)),
             ),
             SizedBox(
               height: whiteBarHeight,
               width: height * evaluationBarAspectRatio,
-              child: ColoredBox(color: Colors.white.withOpacity(0.6)),
+              child: ColoredBox(color: Colors.white.withValues(alpha: 0.6)),
             ),
           ],
         ),
