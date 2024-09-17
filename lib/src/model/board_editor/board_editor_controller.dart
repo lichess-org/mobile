@@ -76,7 +76,7 @@ class BoardEditorController extends _$BoardEditorController {
       setSideToPlay(splits[1].toLowerCase() == 'w' ? Side.white : Side.black);
     }
 
-    if(loadCastling && splits.length >= 3) {
+    if (loadCastling && splits.length >= 3) {
       final castling = splits[2];
       setCastling(Side.white, CastlingSide.king, castling.contains('K'));
       setCastling(Side.white, CastlingSide.queen, castling.contains('Q'));
