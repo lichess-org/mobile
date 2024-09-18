@@ -9,7 +9,6 @@ import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_preferences.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/lobby/create_game_service.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
@@ -54,7 +53,7 @@ class _ChallengeBody extends ConsumerStatefulWidget {
 }
 
 class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
-  Future<(GameFullId?, ChallengeDeclineReason?)>? _pendingCreateChallenge;
+  Future<ChallengeResponse>? _pendingCreateChallenge;
   final _controller = TextEditingController();
 
   String? fromPositionFenInput;
@@ -421,7 +420,11 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                                   _pendingCreateChallenge!.then((value) {
                                     if (!context.mounted) return;
 
-                                    final (fullId, declineReason) = value;
+                                    final (
+                                      gameFullId: fullId,
+                                      challenge: _,
+                                      :declineReason
+                                    ) = value;
 
                                     if (fullId != null) {
                                       pushPlatformRoute(

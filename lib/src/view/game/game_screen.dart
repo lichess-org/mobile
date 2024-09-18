@@ -22,47 +22,14 @@ import 'game_common_widgets.dart';
 
 part 'game_screen.g.dart';
 
-@riverpod
-class _LoadGame extends _$LoadGame {
-  @override
-  Future<(GameFullId?, ChallengeDeclineReason?)> build(
-    GameSeek? seek,
-    ChallengeRequest? challenge,
-    GameFullId? gameId,
-  ) {
-    assert(
-      gameId != null || seek != null || challenge != null,
-      'Either a seek, challenge or a game id must be provided.',
-    );
-
-    final service = ref.watch(createGameServiceProvider);
-
-    if (seek != null) {
-      return service.newLobbyGame(seek).then((id) => (id, null));
-    } else if (challenge != null) {
-      return service.newChallenge(challenge).then((c) => (c.$1, c.$2));
-    }
-
-    return Future.value((gameId!, null));
-  }
-
-  /// Search for a new opponent (lobby only).
-  Future<void> newOpponent() async {
-    if (seek != null) {
-      final service = ref.read(createGameServiceProvider);
-      state = const AsyncValue.loading();
-      state = AsyncValue.data(
-        await service.newLobbyGame(seek!).then((id) => (id, null)),
-      );
-    }
-  }
-
-  /// Load a game from its id.
-  void loadGame(GameFullId id) {
-    state = AsyncValue.data((id, null));
-  }
-}
-
+/// Screen to play a game, or to show a challenge or to show current user's past games.
+///
+/// The screen can be created in three ways:
+/// - From the lobby, to play a game with a random opponent: using a [GameSeek] as [seek].
+/// - From a challenge, to accept or decline a challenge: using a [ChallengeRequest] as [challenge].
+/// - From a game id, to show a game that is already in progress: using a [GameFullId] as [initialGameId].
+///
+/// The screen will show a loading board while the game is being created.
 class GameScreen extends ConsumerStatefulWidget {
   const GameScreen({
     this.seek,
@@ -145,7 +112,11 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
 
     return ref.watch(gameProvider).when(
       data: (data) {
-        final (gameId, declineReason) = data;
+        final (
+          gameFullId: gameId,
+          challenge: challenge,
+          declineReason: declineReason
+        ) = data;
         final body = gameId != null
             ? GameBody(
                 id: gameId,
@@ -175,12 +146,12 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
                   }
                 },
               )
-            : widget.challenge != null
+            : widget.challenge != null && challenge != null
                 ? ChallengeDeclinedBoard(
+                    challenge: challenge,
                     declineReason: declineReason != null
                         ? declineReason.label(context.l10n)
                         : ChallengeDeclineReason.generic.label(context.l10n),
-                    destUser: widget.challenge?.destUser,
                   )
                 : const LoadGameError('Could not create the game.');
         return PlatformScaffold(
@@ -233,5 +204,53 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
         );
       },
     );
+  }
+}
+
+@riverpod
+class _LoadGame extends _$LoadGame {
+  @override
+  Future<ChallengeResponse> build(
+    GameSeek? seek,
+    ChallengeRequest? challenge,
+    GameFullId? gameId,
+  ) {
+    assert(
+      gameId != null || seek != null || challenge != null,
+      'Either a seek, challenge or a game id must be provided.',
+    );
+
+    final service = ref.watch(createGameServiceProvider);
+
+    if (seek != null) {
+      return service
+          .newLobbyGame(seek)
+          .then((id) => (gameFullId: id, challenge: null, declineReason: null));
+    } else if (challenge != null) {
+      return service.newChallenge(challenge);
+    }
+
+    return Future.value(
+      (gameFullId: gameId!, challenge: null, declineReason: null),
+    );
+  }
+
+  /// Search for a new opponent (lobby only).
+  Future<void> newOpponent() async {
+    if (seek != null) {
+      final service = ref.read(createGameServiceProvider);
+      state = const AsyncValue.loading();
+      state = AsyncValue.data(
+        await service.newLobbyGame(seek!).then(
+              (id) => (gameFullId: id, challenge: null, declineReason: null),
+            ),
+      );
+    }
+  }
+
+  /// Load a game from its id.
+  void loadGame(GameFullId id) {
+    state =
+        AsyncValue.data((gameFullId: id, challenge: null, declineReason: null));
   }
 }

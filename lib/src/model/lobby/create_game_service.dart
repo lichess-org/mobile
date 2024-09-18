@@ -14,6 +14,12 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'create_game_service.g.dart';
 
+typedef ChallengeResponse = ({
+  GameFullId? gameFullId,
+  Challenge? challenge,
+  ChallengeDeclineReason? declineReason,
+});
+
 @riverpod
 CreateGameService createGameService(CreateGameServiceRef ref) {
   final service = CreateGameService(Logger('CreateGameService'), ref: ref);
@@ -107,15 +113,13 @@ class CreateGameService {
   /// Create a new challenge game.
   ///
   /// Returns the game id or the decline reason if the challenge was declined.
-  Future<(GameFullId?, ChallengeDeclineReason?)> newChallenge(
-    ChallengeRequest challengeReq,
-  ) async {
+  Future<ChallengeResponse> newChallenge(ChallengeRequest challengeReq) async {
     if (_challengeConnection != null) {
       throw StateError('Already creating a game.');
     }
 
     // ensure the pending connection is closed in any case
-    final completer = Completer<(GameFullId?, ChallengeDeclineReason?)>()
+    final completer = Completer<ChallengeResponse>()
       ..future.whenComplete(dispose);
 
     try {
@@ -147,9 +151,21 @@ class CreateGameService {
             try {
               final updatedChallenge = await repo.show(challenge.id);
               if (updatedChallenge.gameFullId != null) {
-                completer.complete((updatedChallenge.gameFullId, null));
+                completer.complete(
+                  (
+                    gameFullId: updatedChallenge.gameFullId,
+                    challenge: null,
+                    declineReason: null,
+                  ),
+                );
               } else if (updatedChallenge.status == ChallengeStatus.declined) {
-                completer.complete((null, updatedChallenge.declineReason));
+                completer.complete(
+                  (
+                    gameFullId: null,
+                    challenge: challenge,
+                    declineReason: updatedChallenge.declineReason,
+                  ),
+                );
               }
             } catch (e) {
               _log.warning('Failed to reload challenge', e);

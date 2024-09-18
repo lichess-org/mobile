@@ -359,34 +359,12 @@ extension ChallengeExtension on Pick {
       return value;
     }
     if (value is String) {
-      switch (value) {
-        case 'generic':
-          return ChallengeDeclineReason.generic;
-        case 'later':
-          return ChallengeDeclineReason.later;
-        case 'tooFast':
-          return ChallengeDeclineReason.tooFast;
-        case 'tooSlow':
-          return ChallengeDeclineReason.tooSlow;
-        case 'timeControl':
-          return ChallengeDeclineReason.timeControl;
-        case 'rated':
-          return ChallengeDeclineReason.rated;
-        case 'casual':
-          return ChallengeDeclineReason.casual;
-        case 'standard':
-          return ChallengeDeclineReason.standard;
-        case 'variant':
-          return ChallengeDeclineReason.variant;
-        case 'noBot':
-          return ChallengeDeclineReason.noBot;
-        case 'onlyBot':
-          return ChallengeDeclineReason.onlyBot;
-        default:
-          throw PickException(
-            "value $value at $debugParsingExit can't be casted to ChallengeDeclineReason: invalid string.",
-          );
-      }
+      return ChallengeDeclineReason.values.firstWhere(
+        (element) => element.name.toLowerCase() == value,
+        orElse: () => throw PickException(
+          "value $value at $debugParsingExit can't be casted to ChallengeDeclineReason: invalid string.",
+        ),
+      );
     }
     throw PickException(
       "value $value at $debugParsingExit can't be casted to ChallengeDeclineReason",
