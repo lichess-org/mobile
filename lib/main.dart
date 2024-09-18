@@ -17,7 +17,6 @@ import 'package:lichess_mobile/src/intl.dart';
 import 'package:lichess_mobile/src/log.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
 import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_game.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
@@ -87,10 +86,6 @@ Future<void> main() async {
       return true;
     };
   }
-
-  // preload sounds
-  final soundTheme = GeneralPreferences.fetchFromStorage(prefs).soundTheme;
-  await preloadSounds(soundTheme);
 
   // Get android 12+ core palette
   try {

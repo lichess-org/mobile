@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
@@ -14,32 +13,18 @@ import 'package:lichess_mobile/src/view/play/challenge_list_item.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
-class ChallengeRequestsScreen extends ConsumerWidget {
+class ChallengeRequestsScreen extends StatelessWidget {
   const ChallengeRequestsScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return PlatformWidget(
-      androidBuilder: _androidBuilder,
-      iosBuilder: _iosBuilder,
-    );
-  }
-
-  Widget _androidBuilder(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
+  Widget build(BuildContext context) {
+    return PlatformScaffold(
+      appBar: PlatformAppBar(
         title: Text(context.l10n.preferencesNotifyChallenge),
       ),
       body: _Body(),
-    );
-  }
-
-  Widget _iosBuilder(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(),
-      child: _Body(),
     );
   }
 }
@@ -70,7 +55,9 @@ class _Body extends ConsumerWidget {
                   return ChallengeListItem(
                     challenge: challenge,
                     user: user,
-                    onPressed: challenge.direction == ChallengeDirection.outward
+                    onAccept: challenge.direction ==
+                                ChallengeDirection.outward ||
+                            !challenge.variant.isPlaySupported
                         ? null
                         : session == null
                             ? () {
@@ -111,13 +98,16 @@ class _Body extends ConsumerWidget {
                         ? () => ref
                             .read(challengeRepositoryProvider)
                             .cancel(challenge.id)
-                        : () {
+                        : null,
+                    onDecline: challenge.direction == ChallengeDirection.inward
+                        ? (ChallengeDeclineReason reason) {
                             ref
                                 .read(challengeRepositoryProvider)
-                                .decline(challenge.id);
+                                .decline(challenge.id, reason: reason);
                             LocalNotificationService.instance
                                 .cancel(challenge.id.value.hashCode);
-                          },
+                          }
+                        : null,
                   );
                 },
               );

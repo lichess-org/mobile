@@ -10,7 +10,7 @@ import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/view/play/challenge_screen.dart';
+import 'package:lichess_mobile/src/view/play/create_challenge_screen.dart';
 import 'package:lichess_mobile/src/view/user/recent_games.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
@@ -127,7 +127,8 @@ class _UserProfileListView extends ConsumerWidget {
                   onTap: () {
                     pushPlatformRoute(
                       context,
-                      builder: (context) => ChallengeScreen(user.lightUser),
+                      builder: (context) =>
+                          CreateChallengeScreen(user.lightUser),
                     );
                   },
                 ),

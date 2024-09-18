@@ -28,8 +28,8 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
-class ChallengeScreen extends StatelessWidget {
-  const ChallengeScreen(this.user);
+class CreateChallengeScreen extends StatelessWidget {
+  const CreateChallengeScreen(this.user);
 
   final LightUser user;
 
@@ -54,7 +54,7 @@ class _ChallengeBody extends ConsumerStatefulWidget {
 }
 
 class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
-  Future<(GameFullId?, DeclineReason?)>? _pendingCreateChallenge;
+  Future<(GameFullId?, ChallengeDeclineReason?)>? _pendingCreateChallenge;
   final _controller = TextEditingController();
 
   String? fromPositionFenInput;
@@ -436,7 +436,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                                     } else {
                                       showPlatformSnackbar(
                                         context,
-                                        '${widget.user.name}: ${declineReasonMessage(context, declineReason!)}',
+                                        '${widget.user.name}: ${declineReason!.label(context.l10n)}',
                                       );
                                     }
                                   });

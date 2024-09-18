@@ -11,6 +11,7 @@ import 'package:lichess_mobile/src/model/lobby/create_game_service.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
 import 'package:lichess_mobile/src/navigation.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_loading_board.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
@@ -24,7 +25,7 @@ part 'game_screen.g.dart';
 @riverpod
 class _LoadGame extends _$LoadGame {
   @override
-  Future<(GameFullId?, DeclineReason?)> build(
+  Future<(GameFullId?, ChallengeDeclineReason?)> build(
     GameSeek? seek,
     ChallengeRequest? challenge,
     GameFullId? gameId,
@@ -177,8 +178,8 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
             : widget.challenge != null
                 ? ChallengeDeclinedBoard(
                     declineReason: declineReason != null
-                        ? declineReasonMessage(context, declineReason)
-                        : declineReasonMessage(context, DeclineReason.generic),
+                        ? declineReason.label(context.l10n)
+                        : ChallengeDeclineReason.generic.label(context.l10n),
                     destUser: widget.challenge?.destUser,
                   )
                 : const LoadGameError('Could not create the game.');

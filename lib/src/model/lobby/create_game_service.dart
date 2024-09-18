@@ -107,7 +107,7 @@ class CreateGameService {
   /// Create a new challenge game.
   ///
   /// Returns the game id or the decline reason if the challenge was declined.
-  Future<(GameFullId?, DeclineReason?)> newChallenge(
+  Future<(GameFullId?, ChallengeDeclineReason?)> newChallenge(
     ChallengeRequest challengeReq,
   ) async {
     if (_challengeConnection != null) {
@@ -115,7 +115,7 @@ class CreateGameService {
     }
 
     // ensure the pending connection is closed in any case
-    final completer = Completer<(GameFullId?, DeclineReason?)>()
+    final completer = Completer<(GameFullId?, ChallengeDeclineReason?)>()
       ..future.whenComplete(dispose);
 
     try {

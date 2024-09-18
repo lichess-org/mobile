@@ -660,9 +660,9 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "3280106581fc8d54eae45f4a446f92cae36d7837"
-      resolved-ref: "3280106581fc8d54eae45f4a446f92cae36d7837"
-      url: "https://github.com/letsar/flutter_slidable.git"
+      ref: "89b8384667d3b6c1c2967a8ff10846bcf0a170c7"
+      resolved-ref: "89b8384667d3b6c1c2967a8ff10846bcf0a170c7"
+      url: "https://github.com/veloce/flutter_slidable.git"
     source: git
     version: "3.1.1"
   flutter_spinkit:

@@ -32,13 +32,14 @@ class ChallengeNotification implements LocalNotification {
           priority: Priority.high,
           autoCancel: false,
           actions: <AndroidNotificationAction>[
-            AndroidNotificationAction(
-              'accept',
-              _l10n.accept,
-              icon: const DrawableResourceAndroidBitmap('tick'),
-              showsUserInterface: true,
-              contextual: true,
-            ),
+            if (_challenge.variant.isPlaySupported)
+              AndroidNotificationAction(
+                'accept',
+                _l10n.accept,
+                icon: const DrawableResourceAndroidBitmap('tick'),
+                showsUserInterface: true,
+                contextual: true,
+              ),
             AndroidNotificationAction(
               'decline',
               _l10n.decline,

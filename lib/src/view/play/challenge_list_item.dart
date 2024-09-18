@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/model/lobby/correspondence_challenge.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
@@ -20,13 +21,17 @@ class ChallengeListItem extends ConsumerWidget {
     required this.challenge,
     required this.user,
     this.onPressed,
+    this.onAccept,
+    this.onDecline,
     this.onCancel,
   });
 
   final Challenge challenge;
   final LightUser user;
   final VoidCallback? onPressed;
+  final VoidCallback? onAccept;
   final VoidCallback? onCancel;
+  final void Function(ChallengeDeclineReason reason)? onDecline;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -40,22 +45,32 @@ class ChallengeListItem extends ConsumerWidget {
     return Container(
       color: color,
       child: Slidable(
-        endActionPane: onCancel != null
-            ? ActionPane(
-                motion: const ScrollMotion(),
-                extentRatio: 0.3,
-                children: [
-                  SlidableAction(
-                    onPressed: (BuildContext context) => onCancel!(),
-                    backgroundColor: context.lichessColors.error,
-                    foregroundColor: Colors.white,
-                    label: isMyChallenge
-                        ? context.l10n.cancel
-                        : context.l10n.decline,
-                  ),
-                ],
-              )
-            : null,
+        endActionPane: ActionPane(
+          motion: const ScrollMotion(),
+          extentRatio: 0.6,
+          children: [
+            if (onAccept != null)
+              SlidableAction(
+                icon: Icons.check,
+                onPressed: (_) => onAccept!(),
+                spacing: 8.0,
+                backgroundColor: context.lichessColors.good,
+                foregroundColor: Colors.white,
+                label: context.l10n.accept,
+              ),
+            if (onDecline != null || (isMyChallenge && onCancel != null))
+              SlidableAction(
+                icon: Icons.close,
+                onPressed:
+                    isMyChallenge ? (_) => onCancel!() : _showDeclineReasons,
+                spacing: 8.0,
+                backgroundColor: context.lichessColors.error,
+                foregroundColor: Colors.white,
+                label:
+                    isMyChallenge ? context.l10n.cancel : context.l10n.decline,
+              ),
+          ],
+        ),
         child: PlatformListTile(
           padding: Styles.bodyPadding,
           leading: Icon(challenge.perf.icon, size: 36),
@@ -76,6 +91,22 @@ class ChallengeListItem extends ConsumerWidget {
           onTap: onPressed,
         ),
       ),
+    );
+  }
+
+  void _showDeclineReasons(BuildContext context) {
+    showAdaptiveActionSheet<void>(
+      context: context,
+      actions: ChallengeDeclineReason.values
+          .map(
+            (reason) => BottomSheetAction(
+              makeLabel: (context) => Text(reason.label(context.l10n)),
+              onPressed: (_) {
+                onDecline?.call(reason);
+              },
+            ),
+          )
+          .toList(),
     );
   }
 }

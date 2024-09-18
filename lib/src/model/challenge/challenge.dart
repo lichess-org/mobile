@@ -1,5 +1,4 @@
 import 'package:deep_pick/deep_pick.dart';
-import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -9,7 +8,6 @@ import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
-import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
 part 'challenge.freezed.dart';
 
@@ -54,7 +52,7 @@ class Challenge with _$Challenge, BaseChallenge implements BaseChallenge {
     required SideChoice sideChoice,
     ChallengeUser? challenger,
     ChallengeUser? destUser,
-    DeclineReason? declineReason,
+    ChallengeDeclineReason? declineReason,
     String? initialFen,
     ChallengeDirection? direction,
   }) = _Challenge;
@@ -67,6 +65,11 @@ class Challenge with _$Challenge, BaseChallenge implements BaseChallenge {
 
   /// The description of the challenge.
   String description(AppLocalizations l10n) {
+    if (!variant.isPlaySupported) {
+      // TODO: l10n
+      return 'This variant is not yet supported on the app.';
+    }
+
     final time = switch (timeControl) {
       ChallengeTimeControlType.clock => () {
           final minutes = switch (clock!.time.inSeconds) {
@@ -163,7 +166,7 @@ enum ChallengeTimeControlType {
   correspondence,
 }
 
-enum DeclineReason {
+enum ChallengeDeclineReason {
   generic,
   later,
   tooFast,
@@ -174,34 +177,21 @@ enum DeclineReason {
   standard,
   variant,
   noBot,
-  onlyBot,
-}
+  onlyBot;
 
-String declineReasonMessage(BuildContext context, DeclineReason key) {
-  switch (key) {
-    case DeclineReason.generic:
-      return context.l10n.challengeDeclineGeneric;
-    case DeclineReason.later:
-      return context.l10n.challengeDeclineLater;
-    case DeclineReason.tooFast:
-      return context.l10n.challengeDeclineTooFast;
-    case DeclineReason.tooSlow:
-      return context.l10n.challengeDeclineTooSlow;
-    case DeclineReason.timeControl:
-      return context.l10n.challengeDeclineTimeControl;
-    case DeclineReason.rated:
-      return context.l10n.challengeDeclineRated;
-    case DeclineReason.casual:
-      return context.l10n.challengeDeclineCasual;
-    case DeclineReason.standard:
-      return context.l10n.challengeDeclineStandard;
-    case DeclineReason.variant:
-      return context.l10n.challengeDeclineVariant;
-    case DeclineReason.noBot:
-      return context.l10n.challengeDeclineNoBot;
-    case DeclineReason.onlyBot:
-      return context.l10n.challengeDeclineOnlyBot;
-  }
+  String label(AppLocalizations l10n) => switch (this) {
+        ChallengeDeclineReason.generic => l10n.challengeDeclineGeneric,
+        ChallengeDeclineReason.later => l10n.challengeDeclineLater,
+        ChallengeDeclineReason.tooFast => l10n.challengeDeclineTooFast,
+        ChallengeDeclineReason.tooSlow => l10n.challengeDeclineTooSlow,
+        ChallengeDeclineReason.timeControl => l10n.challengeDeclineTimeControl,
+        ChallengeDeclineReason.rated => l10n.challengeDeclineRated,
+        ChallengeDeclineReason.casual => l10n.challengeDeclineCasual,
+        ChallengeDeclineReason.standard => l10n.challengeDeclineStandard,
+        ChallengeDeclineReason.variant => l10n.challengeDeclineVariant,
+        ChallengeDeclineReason.noBot => l10n.challengeDeclineNoBot,
+        ChallengeDeclineReason.onlyBot => l10n.challengeDeclineOnlyBot,
+      };
 }
 
 typedef ChallengeUser = ({
@@ -363,47 +353,47 @@ extension ChallengeExtension on Pick {
     }
   }
 
-  DeclineReason asDeclineReasonOrThrow() {
+  ChallengeDeclineReason asDeclineReasonOrThrow() {
     final value = this.required().value;
-    if (value is DeclineReason) {
+    if (value is ChallengeDeclineReason) {
       return value;
     }
     if (value is String) {
       switch (value) {
         case 'generic':
-          return DeclineReason.generic;
+          return ChallengeDeclineReason.generic;
         case 'later':
-          return DeclineReason.later;
+          return ChallengeDeclineReason.later;
         case 'tooFast':
-          return DeclineReason.tooFast;
+          return ChallengeDeclineReason.tooFast;
         case 'tooSlow':
-          return DeclineReason.tooSlow;
+          return ChallengeDeclineReason.tooSlow;
         case 'timeControl':
-          return DeclineReason.timeControl;
+          return ChallengeDeclineReason.timeControl;
         case 'rated':
-          return DeclineReason.rated;
+          return ChallengeDeclineReason.rated;
         case 'casual':
-          return DeclineReason.casual;
+          return ChallengeDeclineReason.casual;
         case 'standard':
-          return DeclineReason.standard;
+          return ChallengeDeclineReason.standard;
         case 'variant':
-          return DeclineReason.variant;
+          return ChallengeDeclineReason.variant;
         case 'noBot':
-          return DeclineReason.noBot;
+          return ChallengeDeclineReason.noBot;
         case 'onlyBot':
-          return DeclineReason.onlyBot;
+          return ChallengeDeclineReason.onlyBot;
         default:
           throw PickException(
-            "value $value at $debugParsingExit can't be casted to DeclineReason: invalid string.",
+            "value $value at $debugParsingExit can't be casted to ChallengeDeclineReason: invalid string.",
           );
       }
     }
     throw PickException(
-      "value $value at $debugParsingExit can't be casted to DeclineReason",
+      "value $value at $debugParsingExit can't be casted to ChallengeDeclineReason",
     );
   }
 
-  DeclineReason? asDeclineReasonOrNull() {
+  ChallengeDeclineReason? asDeclineReasonOrNull() {
     if (value == null) return null;
     try {
       return asDeclineReasonOrThrow();

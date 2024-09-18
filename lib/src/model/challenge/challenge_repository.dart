@@ -68,7 +68,7 @@ class ChallengeRepository {
     }
   }
 
-  Future<void> decline(ChallengeId id, {DeclineReason? reason}) async {
+  Future<void> decline(ChallengeId id, {ChallengeDeclineReason? reason}) async {
     final uri = Uri(path: '/api/challenge/$id/decline');
     final response = await client.post(
       uri,

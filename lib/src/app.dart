@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
 import 'package:lichess_mobile/src/model/notifications/local_notification_service.dart';
@@ -110,6 +111,10 @@ class _AppState extends ConsumerState<Application> {
     if (Theme.of(context).platform == TargetPlatform.android) {
       setOptimalDisplayMode();
     }
+
+    // preload sounds
+    final soundTheme = ref.read(generalPreferencesProvider).soundTheme;
+    preloadSounds(soundTheme);
 
     // check if session is still active
     checkSession();
