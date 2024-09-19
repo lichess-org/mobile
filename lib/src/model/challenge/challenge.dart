@@ -204,18 +204,13 @@ typedef ChallengeUser = ({
 enum SideChoice {
   random,
   white,
-  black,
-}
+  black;
 
-String sideChoiceL10n(AppLocalizations l10n, SideChoice side) {
-  switch (side) {
-    case SideChoice.white:
-      return l10n.white;
-    case SideChoice.black:
-      return l10n.black;
-    case SideChoice.random:
-      return l10n.randomColor;
-  }
+  String label(AppLocalizations l10n) => switch (this) {
+        SideChoice.random => l10n.randomColor,
+        SideChoice.white => l10n.white,
+        SideChoice.black => l10n.black,
+      };
 }
 
 extension ChallengeExtension on Pick {

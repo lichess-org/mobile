@@ -6,7 +6,6 @@ import 'package:http/http.dart' show ClientException;
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
@@ -208,7 +207,7 @@ class PuzzleChart extends StatelessWidget {
           ),
         ],
         getTitle: (index, angle) => RadarChartTitle(
-          text: puzzleThemeL10n(context, puzzleData[index].theme).name,
+          text: puzzleData[index].theme.l10n(context.l10n).name,
         ),
         titleTextStyle: const TextStyle(fontSize: 10),
         titlePositionPercentageOffset: 0.09,

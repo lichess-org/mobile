@@ -338,7 +338,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                         choices: SideChoice.values,
                         selectedItem: preferences.sideChoice,
                         labelBuilder: (SideChoice side) =>
-                            Text(sideChoiceL10n(context.l10n, side)),
+                            Text(side.label(context.l10n)),
                         onSelectedItemChanged: (SideChoice side) {
                           ref
                               .read(challengePreferencesProvider.notifier)
@@ -347,7 +347,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                       );
                     },
                     child: Text(
-                      sideChoiceL10n(context.l10n, preferences.sideChoice),
+                      preferences.sideChoice.label(context.l10n),
                     ),
                   ),
                 ),
