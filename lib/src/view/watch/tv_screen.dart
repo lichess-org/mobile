@@ -116,9 +116,7 @@ class _Body extends ConsumerWidget {
 
                 final gameAtCursor = game.positionAt(gameState.stepCursor);
 
-                print('MOVE NO: ${gameState.stepCursor}');
-
-                final gameData = GameData(
+                final gameDataAtCursor = GameData(
                   playerSide: gameState.orientation == Side.white
                       ? PlayerSide.white
                       : PlayerSide.black,
@@ -148,7 +146,7 @@ class _Body extends ConsumerWidget {
                       .toList(growable: false),
                   currentMoveIndex: gameState.stepCursor,
                   lastMove: game.moveAt(gameState.stepCursor),
-                  gameData: gameData,
+                  gameData: gameDataAtCursor,
                 );
               },
               loading: () => const BoardTable(
