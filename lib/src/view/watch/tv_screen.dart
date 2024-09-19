@@ -114,12 +114,16 @@ class _Body extends ConsumerWidget {
                   materialDiff: game.lastMaterialDiffAt(Side.white),
                 );
 
+                final gameAtCursor = game.positionAt(gameState.stepCursor);
+
+                print('MOVE NO: ${gameState.stepCursor}');
+
                 final gameData = GameData(
                   playerSide: gameState.orientation == Side.white
                       ? PlayerSide.white
                       : PlayerSide.black,
-                  isCheck: game.positionAt(gameState.stepCursor).isCheck,
-                  sideToMove: game.sideToMove,
+                  isCheck: gameAtCursor.isCheck,
+                  sideToMove: gameAtCursor.turn,
                   validMoves: IMap<Square, ISet<Square>>(),
                   promotionMove: null,
                   onMove: (NormalMove n, {bool? isDrop}) => {},
