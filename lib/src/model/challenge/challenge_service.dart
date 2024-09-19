@@ -13,9 +13,11 @@ import 'package:lichess_mobile/src/model/notifications/local_notification.dart';
 import 'package:lichess_mobile/src/model/notifications/local_notification_service.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
+import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/user/challenge_requests_screen.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'challenge_service.g.dart';
@@ -107,8 +109,8 @@ class ChallengeService {
             .show(challengeId)
             .then((challenge) => challenge.gameFullId);
 
-        final context = ref.read(currentNavigatorKeyProvider).currentContext!;
-        if (!context.mounted) break;
+        final context = ref.read(currentNavigatorKeyProvider).currentContext;
+        if (context == null || !context.mounted) break;
 
         final navState = Navigator.of(context);
         if (navState.canPop()) {
@@ -122,11 +124,26 @@ class ChallengeService {
         );
 
       case 'decline':
-        final repo = ref.read(challengeRepositoryProvider);
-        repo.decline(challengeId);
+        final context = ref.read(currentNavigatorKeyProvider).currentContext;
+        if (context == null || !context.mounted) break;
+        showAdaptiveActionSheet<void>(
+          context: context,
+          actions: ChallengeDeclineReason.values
+              .map(
+                (reason) => BottomSheetAction(
+                  makeLabel: (context) => Text(reason.label(context.l10n)),
+                  onPressed: (_) {
+                    final repo = ref.read(challengeRepositoryProvider);
+                    repo.decline(challengeId, reason: reason);
+                  },
+                ),
+              )
+              .toList(),
+        );
 
       case null:
-        final context = ref.read(currentNavigatorKeyProvider).currentContext!;
+        final context = ref.read(currentNavigatorKeyProvider).currentContext;
+        if (context == null || !context.mounted) break;
         final navState = Navigator.of(context);
         if (navState.canPop()) {
           navState.popUntil((route) => route.isFirst);

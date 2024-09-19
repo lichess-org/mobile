@@ -5,7 +5,7 @@ import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
 import 'package:lichess_mobile/src/model/challenge/challenges.dart';
 import 'package:lichess_mobile/src/model/notifications/local_notification_service.dart';
-import 'package:lichess_mobile/src/navigation.dart';
+import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
@@ -39,78 +39,109 @@ class _Body extends ConsumerWidget {
       data: (challenges) {
         final list = challenges.inward.addAll(challenges.outward);
 
-        return list.isEmpty
-            ? Center(child: Text(context.l10n.nothingToSeeHere))
-            : ListView.separated(
-                itemCount: list.length,
-                separatorBuilder: (context, index) =>
-                    const PlatformDivider(height: 1, cupertinoHasLeading: true),
-                itemBuilder: (context, index) {
-                  final challenge = list[index];
+        if (list.isEmpty) {
+          return Center(child: Text(context.l10n.nothingToSeeHere));
+        }
 
-                  // not sure why there wouldn't be a challenger
-                  final user = challenge.challenger?.user;
-                  if (user == null) return null;
+        return ListView.separated(
+          itemCount: list.length,
+          separatorBuilder: (context, index) =>
+              const PlatformDivider(height: 1, cupertinoHasLeading: true),
+          itemBuilder: (context, index) {
+            final challenge = list[index];
+            final user = challenge.challenger?.user;
 
-                  return ChallengeListItem(
-                    challenge: challenge,
-                    user: user,
-                    onAccept: challenge.direction ==
-                                ChallengeDirection.outward ||
-                            !challenge.variant.isPlaySupported
-                        ? null
-                        : session == null
-                            ? () {
-                                showPlatformSnackbar(
-                                  context,
-                                  context.l10n.youNeedAnAccountToDoThat,
-                                );
-                              }
-                            : () {
-                                showConfirmDialog<void>(
-                                  context,
-                                  title: Text(context.l10n.accept),
-                                  isDestructiveAction: true,
-                                  onConfirm: (_) async {
-                                    final challengeRepo =
-                                        ref.read(challengeRepositoryProvider);
-                                    await challengeRepo.accept(challenge.id);
-                                    final fullId = await challengeRepo
-                                        .show(challenge.id)
-                                        .then(
-                                          (challenge) => challenge.gameFullId,
-                                        );
-                                    pushPlatformRoute(
-                                      ref
-                                          .read(currentNavigatorKeyProvider)
-                                          .currentContext!,
-                                      rootNavigator: true,
-                                      builder: (BuildContext context) {
-                                        return GameScreen(
-                                          initialGameId: fullId,
-                                        );
-                                      },
-                                    );
-                                  },
-                                );
-                              },
-                    onCancel: challenge.direction == ChallengeDirection.outward
-                        ? () => ref
-                            .read(challengeRepositoryProvider)
-                            .cancel(challenge.id)
-                        : null,
-                    onDecline: challenge.direction == ChallengeDirection.inward
-                        ? (ChallengeDeclineReason reason) {
-                            ref
-                                .read(challengeRepositoryProvider)
-                                .decline(challenge.id, reason: reason);
-                            LocalNotificationService.instance
-                                .cancel(challenge.id.value.hashCode);
-                          }
-                        : null,
+            if (user == null) return null;
+
+            Future<void> acceptChallenge(BuildContext context) async {
+              final challengeRepo = ref.read(challengeRepositoryProvider);
+              await challengeRepo.accept(challenge.id);
+              final fullId = await challengeRepo.show(challenge.id).then(
+                    (challenge) => challenge.gameFullId,
+                  );
+              if (!context.mounted) return;
+              pushPlatformRoute(
+                context,
+                rootNavigator: true,
+                builder: (BuildContext context) {
+                  return GameScreen(
+                    initialGameId: fullId,
                   );
                 },
               );
+            }
+
+            Future<void> declineChallenge(
+              ChallengeDeclineReason? reason,
+            ) async {
+              ref
+                  .read(challengeRepositoryProvider)
+                  .decline(challenge.id, reason: reason);
+              LocalNotificationService.instance
+                  .cancel(challenge.id.value.hashCode);
+            }
+
+            void confirmDialog() {
+              showAdaptiveActionSheet<void>(
+                context: context,
+                title: challenge.variant.isPlaySupported
+                    ? const Text('Do you accept the challenge?')
+                    : null,
+                actions: [
+                  if (challenge.variant.isPlaySupported)
+                    BottomSheetAction(
+                      makeLabel: (context) => Text(context.l10n.accept),
+                      leading:
+                          Icon(Icons.check, color: context.lichessColors.good),
+                      isDefaultAction: true,
+                      onPressed: (context) => acceptChallenge(context),
+                    ),
+                  ...ChallengeDeclineReason.values.map(
+                    (reason) => BottomSheetAction(
+                      makeLabel: (context) => Text(reason.label(context.l10n)),
+                      leading:
+                          Icon(Icons.close, color: context.lichessColors.error),
+                      isDestructiveAction: true,
+                      onPressed: (_) {
+                        declineChallenge(reason);
+                      },
+                    ),
+                  ),
+                ],
+              );
+            }
+
+            void showMissingAccountMessage() {
+              showPlatformSnackbar(
+                context,
+                context.l10n.youNeedAnAccountToDoThat,
+              );
+            }
+
+            return ChallengeListItem(
+              challenge: challenge,
+              user: user,
+              onPressed: challenge.direction == ChallengeDirection.inward
+                  ? session == null
+                      ? showMissingAccountMessage
+                      : confirmDialog
+                  : null,
+              onAccept: challenge.direction == ChallengeDirection.outward ||
+                      !challenge.variant.isPlaySupported
+                  ? null
+                  : session == null
+                      ? showMissingAccountMessage
+                      : () => acceptChallenge(context),
+              onCancel: challenge.direction == ChallengeDirection.outward
+                  ? () =>
+                      ref.read(challengeRepositoryProvider).cancel(challenge.id)
+                  : null,
+              onDecline: challenge.direction == ChallengeDirection.inward
+                  ? declineChallenge
+                  : null,
+            );
+          },
+        );
       },
       loading: () {
         return const Center(child: CircularProgressIndicator.adaptive());

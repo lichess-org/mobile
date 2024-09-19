@@ -44,22 +44,29 @@ class ChallengeNotification implements LocalNotification {
               'decline',
               _l10n.decline,
               icon: const DrawableResourceAndroidBitmap('cross'),
+              showsUserInterface: true,
               contextual: true,
             ),
           ],
         ),
-        iOS: const DarwinNotificationDetails(
-          categoryIdentifier: darwinCategoryId,
+        iOS: DarwinNotificationDetails(
+          categoryIdentifier: _challenge.variant.isPlaySupported
+              ? darwinPlayableVariantCategoryId
+              : darwinUnplayableVariantCategoryId,
         ),
       );
 
-  static const darwinCategoryId = 'challenge-notification-category';
+  static const darwinPlayableVariantCategoryId =
+      'challenge-notification-playable-variant';
 
-  static DarwinNotificationCategory darwinNotificationCategory(
+  static const darwinUnplayableVariantCategoryId =
+      'challenge-notification-unplayable-variant';
+
+  static DarwinNotificationCategory darwinPlayableVariantCategory(
     AppLocalizations l10n,
   ) =>
       DarwinNotificationCategory(
-        darwinCategoryId,
+        darwinPlayableVariantCategoryId,
         actions: <DarwinNotificationAction>[
           DarwinNotificationAction.plain(
             'accept',
@@ -72,7 +79,26 @@ class ChallengeNotification implements LocalNotification {
             'decline',
             l10n.decline,
             options: <DarwinNotificationActionOption>{
-              DarwinNotificationActionOption.destructive,
+              DarwinNotificationActionOption.foreground,
+            },
+          ),
+        ],
+        options: <DarwinNotificationCategoryOption>{
+          DarwinNotificationCategoryOption.hiddenPreviewShowTitle,
+        },
+      );
+
+  static DarwinNotificationCategory darwinUnplayableVariantCategory(
+    AppLocalizations l10n,
+  ) =>
+      DarwinNotificationCategory(
+        darwinUnplayableVariantCategoryId,
+        actions: <DarwinNotificationAction>[
+          DarwinNotificationAction.plain(
+            'decline',
+            l10n.decline,
+            options: <DarwinNotificationActionOption>{
+              DarwinNotificationActionOption.foreground,
             },
           ),
         ],

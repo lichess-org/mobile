@@ -10,7 +10,6 @@ import 'package:lichess_mobile/src/model/lobby/correspondence_challenge.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
@@ -31,7 +30,7 @@ class ChallengeListItem extends ConsumerWidget {
   final VoidCallback? onPressed;
   final VoidCallback? onAccept;
   final VoidCallback? onCancel;
-  final void Function(ChallengeDeclineReason reason)? onDecline;
+  final void Function(ChallengeDeclineReason? reason)? onDecline;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -46,7 +45,7 @@ class ChallengeListItem extends ConsumerWidget {
       color: color,
       child: Slidable(
         endActionPane: ActionPane(
-          motion: const ScrollMotion(),
+          motion: const StretchMotion(),
           extentRatio: 0.6,
           children: [
             if (onAccept != null)
@@ -61,8 +60,11 @@ class ChallengeListItem extends ConsumerWidget {
             if (onDecline != null || (isMyChallenge && onCancel != null))
               SlidableAction(
                 icon: Icons.close,
-                onPressed:
-                    isMyChallenge ? (_) => onCancel!() : _showDeclineReasons,
+                onPressed: isMyChallenge
+                    ? (_) => onCancel!()
+                    : onDecline != null
+                        ? (_) => onDecline!(null)
+                        : null,
                 spacing: 8.0,
                 backgroundColor: context.lichessColors.error,
                 foregroundColor: Colors.white,
@@ -91,22 +93,6 @@ class ChallengeListItem extends ConsumerWidget {
           onTap: onPressed,
         ),
       ),
-    );
-  }
-
-  void _showDeclineReasons(BuildContext context) {
-    showAdaptiveActionSheet<void>(
-      context: context,
-      actions: ChallengeDeclineReason.values
-          .map(
-            (reason) => BottomSheetAction(
-              makeLabel: (context) => Text(reason.label(context.l10n)),
-              onPressed: (_) {
-                onDecline?.call(reason);
-              },
-            ),
-          )
-          .toList(),
     );
   }
 }
