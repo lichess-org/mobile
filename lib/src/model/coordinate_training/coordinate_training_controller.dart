@@ -54,11 +54,19 @@ class CoordinateTrainingController extends _$CoordinateTrainingController {
   void _finishTraining() {
     // TODO save score in local storage here (and display high score and/or average score in UI)
 
-    stopTraining();
+    _updateTimer?.cancel();
+    state = CoordinateTrainingState(
+      lastGuess: state.lastGuess,
+      lastScore: state.score,
+    );
   }
 
   void stopTraining() {
     _updateTimer?.cancel();
+    state = const CoordinateTrainingState();
+  }
+
+  void newTraining() {
     state = const CoordinateTrainingState();
   }
 
@@ -100,6 +108,7 @@ class CoordinateTrainingState with _$CoordinateTrainingState {
     @Default(null) Duration? timeLimit,
     @Default(null) Duration? elapsed,
     @Default(null) Guess? lastGuess,
+    @Default(null) int? lastScore,
   }) = _CoordinateTrainingState;
 
   bool get trainingActive => elapsed != null;

@@ -47,17 +47,31 @@ class _Body extends ConsumerStatefulWidget {
 class _BodyState extends ConsumerState<_Body> {
   late Side orientation;
 
+  late bool computeRandomOrientation;
+
   Square? highlightLastGuess;
 
   Timer? highlightTimer;
+
+  Side _randomSide() => Side.values[Random().nextInt(Side.values.length)];
 
   void _setOrientation(SideChoice choice) {
     setState(() {
       orientation = switch (choice) {
         SideChoice.white => Side.white,
         SideChoice.black => Side.black,
-        SideChoice.random => Side.values[Random().nextInt(Side.values.length)],
+        SideChoice.random => _randomSide(),
       };
+      computeRandomOrientation = false;
+    });
+  }
+
+  void _maybeSetOrientation() {
+    setState(() {
+      if (computeRandomOrientation) {
+        orientation = _randomSide();
+      }
+      computeRandomOrientation = true;
     });
   }
 
@@ -148,37 +162,32 @@ class _BodyState extends ConsumerState<_Body> {
                       ],
                     ),
                     if (trainingState.trainingActive)
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            _Score(
-                              score: trainingState.score,
-                              size: boardSize / 8,
-                              color: trainingState.lastGuess == Guess.incorrect
-                                  ? context.lichessColors.error
-                                  : context.lichessColors.good,
-                            ),
-                            FatButton(
-                              semanticsLabel: 'Abort Training',
-                              onPressed: ref
-                                  .read(
-                                    coordinateTrainingControllerProvider
-                                        .notifier,
-                                  )
-                                  .stopTraining,
-                              child: const Text(
-                                'Abort Training',
-                                style: Styles.bold,
-                              ),
-                            ),
-                          ],
-                        ),
+                      _ScoreAndTrainingButton(
+                        scoreSize: boardSize / 8,
+                        score: trainingState.score,
+                        onPressed: ref
+                            .read(
+                              coordinateTrainingControllerProvider.notifier,
+                            )
+                            .stopTraining,
+                        label: 'Abort Training',
+                      )
+                    else if (trainingState.lastScore != null)
+                      _ScoreAndTrainingButton(
+                        scoreSize: boardSize / 8,
+                        score: trainingState.lastScore!,
+                        onPressed: ref
+                            .read(
+                              coordinateTrainingControllerProvider.notifier,
+                            )
+                            .newTraining,
+                        label: 'New Training',
                       )
                     else
                       Expanded(
                         child: _Settings(
                           onSideChoiceSelected: _setOrientation,
+                          maybeSetOrientation: _maybeSetOrientation,
                         ),
                       ),
                   ],
@@ -241,7 +250,7 @@ class _TimeBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Align(
-      alignment: Alignment.center,
+      alignment: Alignment.centerLeft,
       child: SizedBox(
         width: maxWidth * (timeFractionElapsed ?? 0.0),
         height: 15.0,
@@ -286,6 +295,48 @@ class _CoordinateTrainingMenu extends ConsumerWidget {
           ],
         ),
       ],
+    );
+  }
+}
+
+class _ScoreAndTrainingButton extends ConsumerWidget {
+  const _ScoreAndTrainingButton({
+    required this.scoreSize,
+    required this.score,
+    required this.onPressed,
+    required this.label,
+  });
+
+  final double scoreSize;
+  final int score;
+  final VoidCallback onPressed;
+  final String label;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final trainingState = ref.watch(coordinateTrainingControllerProvider);
+
+    return Expanded(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          _Score(
+            score: score,
+            size: scoreSize,
+            color: trainingState.lastGuess == Guess.incorrect
+                ? context.lichessColors.error
+                : context.lichessColors.good,
+          ),
+          FatButton(
+            semanticsLabel: label,
+            onPressed: onPressed,
+            child: Text(
+              label,
+              style: Styles.bold,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -337,9 +388,11 @@ class _Score extends StatelessWidget {
 class _Settings extends ConsumerStatefulWidget {
   const _Settings({
     required this.onSideChoiceSelected,
+    required this.maybeSetOrientation,
   });
 
   final void Function(SideChoice) onSideChoiceSelected;
+  final VoidCallback maybeSetOrientation;
 
   @override
   ConsumerState<_Settings> createState() => _SettingsState();
@@ -351,61 +404,54 @@ class _SettingsState extends ConsumerState<_Settings> {
     final trainingPrefs = ref.watch(coordinateTrainingPreferencesProvider);
 
     return Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        PlatformListTile(
-          title: Text(context.l10n.side),
-          trailing: Padding(
-            padding: Styles.horizontalBodyPadding,
-            child: Wrap(
-              spacing: 8.0,
-              children: SideChoice.values.map((choice) {
-                return ChoiceChip(
-                  label: Text(sideChoiceL10n(context, choice)),
-                  selected: trainingPrefs.sideChoice == choice,
-                  showCheckmark: false,
-                  onSelected: (selected) {
-                    widget.onSideChoiceSelected(choice);
-                    ref
-                        .read(coordinateTrainingPreferencesProvider.notifier)
-                        .setSideChoice(choice);
-                  },
-                );
-              }).toList(),
-            ),
-          ),
+        Wrap(
+          spacing: 8.0,
+          children: SideChoice.values.map((choice) {
+            return ChoiceChip(
+              label: Text(sideChoiceL10n(context, choice)),
+              selected: trainingPrefs.sideChoice == choice,
+              showCheckmark: false,
+              onSelected: (selected) {
+                widget.onSideChoiceSelected(choice);
+                ref
+                    .read(coordinateTrainingPreferencesProvider.notifier)
+                    .setSideChoice(choice);
+              },
+            );
+          }).toList(),
         ),
-        PlatformListTile(
-          title: Text(context.l10n.time),
-          trailing: Padding(
-            padding: Styles.horizontalBodyPadding,
-            child: Wrap(
-              spacing: 8.0,
-              children: TimeChoice.values.map((choice) {
-                return ChoiceChip(
-                  label: timeChoiceL10n(context, choice),
-                  selected: trainingPrefs.timeChoice == choice,
-                  showCheckmark: false,
-                  onSelected: (selected) {
-                    if (selected) {
-                      ref
-                          .read(
-                            coordinateTrainingPreferencesProvider.notifier,
-                          )
-                          .setTimeChoice(choice);
-                    }
-                  },
-                );
-              }).toList(),
-            ),
-          ),
+        Wrap(
+          spacing: 8.0,
+          children: TimeChoice.values.map((choice) {
+            return ChoiceChip(
+              label: timeChoiceL10n(context, choice),
+              selected: trainingPrefs.timeChoice == choice,
+              showCheckmark: false,
+              onSelected: (selected) {
+                if (selected) {
+                  ref
+                      .read(
+                        coordinateTrainingPreferencesProvider.notifier,
+                      )
+                      .setTimeChoice(choice);
+                }
+              },
+            );
+          }).toList(),
         ),
         FatButton(
           semanticsLabel: 'Start Training',
-          onPressed: () => ref
-              .read(coordinateTrainingControllerProvider.notifier)
-              .startTraining(trainingPrefs.timeChoice.duration),
+          onPressed: () {
+            if (trainingPrefs.sideChoice == SideChoice.random) {
+              widget.maybeSetOrientation();
+            }
+            ref
+                .read(coordinateTrainingControllerProvider.notifier)
+                .startTraining(trainingPrefs.timeChoice.duration);
+          },
           child: const Text(
             // TODO l10n once script works
             'Start Training',
