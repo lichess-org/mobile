@@ -582,7 +582,8 @@ class _PlayerWidget extends StatelessWidget {
               ),
             ),
           ),
-          if (clock != null)
+          if (((side == playingSide && playClock) && game.timeLeft != null) ||
+              (!(side == playingSide && playClock) && clock != null))
             Card(
               color: (side == playingSide)
                   ? playClock
