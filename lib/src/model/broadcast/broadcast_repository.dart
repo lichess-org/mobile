@@ -96,8 +96,8 @@ BroadcastTournamentData _tournamentDataFromPick(
         players: pick('info', 'players').asStringOrNull(),
         dates: pick('dates').letOrNull(
           (pick) => (
-            startsAt: pick(0).asDateTimeFromMillisecondsOrThrow().toLocal(),
-            endsAt: pick(1).asDateTimeFromMillisecondsOrNull()?.toLocal(),
+            startsAt: pick(0).asDateTimeFromMillisecondsOrThrow(),
+            endsAt: pick(1).asDateTimeFromMillisecondsOrNull(),
           ),
         ),
       ),
@@ -136,7 +136,7 @@ BroadcastRound _roundFromPick(RequiredPick pick) {
     id: pick('id').asBroadcastRoundIdOrThrow(),
     name: pick('name').asStringOrThrow(),
     status: status,
-    startsAt: pick('startsAt').asDateTimeFromMillisecondsOrNull()?.toLocal(),
+    startsAt: pick('startsAt').asDateTimeFromMillisecondsOrNull(),
   );
 }
 
