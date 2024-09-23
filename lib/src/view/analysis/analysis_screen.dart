@@ -663,7 +663,6 @@ class _BottomBar extends ConsumerWidget {
       .userPrevious();
 
   Future<void> _showAnalysisMenu(BuildContext context, WidgetRef ref) {
-    final analysisState = ref.read(analysisControllerProvider(pgn, options));
     return showAdaptiveActionSheet(
       context: context,
       actions: [
@@ -678,6 +677,8 @@ class _BottomBar extends ConsumerWidget {
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.boardEditor),
           onPressed: (context) {
+            final analysisState =
+                ref.read(analysisControllerProvider(pgn, options));
             final boardFen = analysisState.position.fen;
             pushPlatformRoute(
               context,
@@ -701,6 +702,8 @@ class _BottomBar extends ConsumerWidget {
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.mobileSharePositionAsFEN),
           onPressed: (_) {
+            final analysisState =
+                ref.read(analysisControllerProvider(pgn, options));
             launchShareDialog(
               context,
               text: analysisState.position.fen,
@@ -713,6 +716,8 @@ class _BottomBar extends ConsumerWidget {
                 Text(context.l10n.screenshotCurrentPosition),
             onPressed: (_) async {
               final gameId = options.gameAnyId!.gameId;
+              final analysisState =
+                  ref.read(analysisControllerProvider(pgn, options));
               try {
                 final image =
                     await ref.read(gameShareServiceProvider).screenshotPosition(
