@@ -323,6 +323,7 @@ class _BottomBar extends ConsumerWidget {
       children: [
         BottomBarButton(
           label: context.l10n.menu,
+          key: const Key('board-editor-menu-button'),
           onTap: () {
             final editorProviderData =
                 ref.read(boardEditorControllerProvider(initialFen).notifier);
@@ -333,7 +334,7 @@ class _BottomBar extends ConsumerWidget {
                   makeLabel: (context) => Text(context.l10n.startPosition),
                   onPressed: (context) {
                     editorProviderData.loadFen(
-                      'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq',
+                      kInitialFEN,
                       loadCastling: true,
                       loadSideToPlay: true,
                     );
@@ -342,7 +343,7 @@ class _BottomBar extends ConsumerWidget {
                 BottomSheetAction(
                   makeLabel: (context) => Text(context.l10n.clearBoard),
                   onPressed: (context) {
-                    editorProviderData.loadFen('8/8/8/8/8/8/8/8');
+                    editorProviderData.loadFen(kEmptyBoardFEN);
                   },
                 ),
                 BottomSheetAction(

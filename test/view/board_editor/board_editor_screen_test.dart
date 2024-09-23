@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/board_editor/board_editor_controller.dart';
 import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 
 import '../../test_app.dart';
@@ -36,24 +37,62 @@ void main() {
       );
     });
 
-    testWidgets('Flip board', (tester) async {
-      final app = await buildTestApp(
-        tester,
-        home: const BoardEditorScreen(),
-      );
-      await tester.pumpWidget(app);
+    group('Board editor menu', () {
+      Future<void> loadWidgetAndOpenMenu(WidgetTester tester) async {
+        final app = await buildTestApp(
+          tester,
+          home: const BoardEditorScreen(),
+        );
+        await tester.pumpWidget(app);
 
-      await tester.tap(find.byKey(const Key('flip-button')));
-      await tester.pump();
+        await tester.tap(find.byKey(const Key('board-editor-menu-button')));
+        await tester.pump();
+      }
 
-      expect(
-        tester
-            .widget<ChessboardEditor>(
-              find.byType(ChessboardEditor),
-            )
-            .orientation,
-        Side.black,
-      );
+      testWidgets('Flip board', (tester) async {
+        await loadWidgetAndOpenMenu(tester);
+        await tester.tap(find.text('Flip board'));
+        await tester.pump();
+
+        expect(
+          tester
+              .widget<ChessboardEditor>(
+                find.byType(ChessboardEditor),
+              )
+              .orientation,
+          Side.black,
+        );
+      });
+
+      testWidgets('Reset to Starting Position', (tester) async {
+        await loadWidgetAndOpenMenu(tester);
+        await tester.tap(find.text('Starting position'));
+        await tester.pump();
+
+        expect(
+          tester
+              .widget<ChessboardEditor>(
+                find.byType(ChessboardEditor),
+              )
+              .pieces,
+          readFen(kInitialFEN),
+        );
+      });
+
+      testWidgets('Clear board', (tester) async {
+        await loadWidgetAndOpenMenu(tester);
+        await tester.tap(find.text('Clear board'));
+        await tester.pump();
+
+        expect(
+          tester
+              .widget<ChessboardEditor>(
+                find.byType(ChessboardEditor),
+              )
+              .pieces,
+          readFen(kEmptyBoardFEN),
+        );
+      });
     });
 
     testWidgets('Side to play and castling rights', (tester) async {
@@ -63,7 +102,6 @@ void main() {
       );
       await tester.pumpWidget(app);
 
-      await tester.tap(find.byKey(const Key('flip-button')));
       await tester.pump();
 
       final container = ProviderScope.containerOf(
