@@ -1,6 +1,4 @@
-import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -114,20 +112,6 @@ class _Body extends ConsumerWidget {
                   materialDiff: game.lastMaterialDiffAt(Side.white),
                 );
 
-                final gameAtCursor = game.positionAt(gameState.stepCursor);
-
-                final gameDataAtCursor = GameData(
-                  playerSide: gameState.orientation == Side.white
-                      ? PlayerSide.white
-                      : PlayerSide.black,
-                  isCheck: gameAtCursor.isCheck,
-                  sideToMove: gameAtCursor.turn,
-                  validMoves: IMap<Square, ISet<Square>>(),
-                  promotionMove: null,
-                  onMove: (NormalMove n, {bool? isDrop}) => {},
-                  onPromotionSelection: (role) => {},
-                );
-
                 return BoardTable(
                   orientation: gameState.orientation,
                   fen: position.fen,
@@ -146,7 +130,6 @@ class _Body extends ConsumerWidget {
                       .toList(growable: false),
                   currentMoveIndex: gameState.stepCursor,
                   lastMove: game.moveAt(gameState.stepCursor),
-                  gameData: gameDataAtCursor,
                 );
               },
               loading: () => const BoardTable(
