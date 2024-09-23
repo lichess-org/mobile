@@ -128,7 +128,7 @@ class _Body extends ConsumerWidget {
         children: [
           if (userSession != null) ...[
             PlatformListTile(
-              leading: const Icon(Icons.person),
+              leading: const Icon(Icons.person_outline),
               title: Text(context.l10n.profile),
               trailing: Theme.of(context).platform == TargetPlatform.iOS
                   ? const CupertinoListTileChevron()
@@ -142,7 +142,7 @@ class _Body extends ConsumerWidget {
               },
             ),
             PlatformListTile(
-              leading: const Icon(Icons.manage_accounts),
+              leading: const Icon(Icons.manage_accounts_outlined),
               title: Text(context.l10n.preferencesPreferences),
               trailing: Theme.of(context).platform == TargetPlatform.iOS
                   ? const CupertinoListTileChevron()
@@ -157,12 +157,12 @@ class _Body extends ConsumerWidget {
             ),
             if (authController.isLoading)
               const PlatformListTile(
-                leading: Icon(Icons.logout),
+                leading: Icon(Icons.logout_outlined),
                 title: Center(child: ButtonLoadingIndicator()),
               )
             else
               PlatformListTile(
-                leading: const Icon(Icons.logout),
+                leading: const Icon(Icons.logout_outlined),
                 title: Text(context.l10n.logOut),
                 onTap: () {
                   _showSignOutConfirmDialog(context, ref);
@@ -171,12 +171,12 @@ class _Body extends ConsumerWidget {
           ] else ...[
             if (authController.isLoading)
               const PlatformListTile(
-                leading: Icon(Icons.login),
+                leading: Icon(Icons.login_outlined),
                 title: Center(child: ButtonLoadingIndicator()),
               )
             else
               PlatformListTile(
-                leading: const Icon(Icons.login),
+                leading: const Icon(Icons.login_outlined),
                 title: Text(context.l10n.signIn),
                 onTap: () {
                   ref.read(authControllerProvider.notifier).signIn();
@@ -193,7 +193,7 @@ class _Body extends ConsumerWidget {
         showDivider: true,
         children: [
           SettingsListTile(
-            icon: const Icon(Icons.music_note),
+            icon: const Icon(Icons.music_note_outlined),
             settingsLabel: Text(context.l10n.sound),
             settingsValue:
                 '${soundThemeL10n(context, generalPrefs.soundTheme)} (${volumeLabel(generalPrefs.masterVolume)})',
@@ -209,7 +209,7 @@ class _Body extends ConsumerWidget {
             androidVersionAsync.maybeWhen(
               data: (version) => version != null && version.sdkInt >= 31
                   ? SwitchSettingTile(
-                      leading: const Icon(Icons.colorize),
+                      leading: const Icon(Icons.colorize_outlined),
                       title: Text(context.l10n.mobileSystemColors),
                       value: generalPrefs.systemColors,
                       onChanged: (value) {
@@ -222,7 +222,7 @@ class _Body extends ConsumerWidget {
               orElse: () => const SizedBox.shrink(),
             ),
           SettingsListTile(
-            icon: const Icon(Icons.brightness_medium),
+            icon: const Icon(Icons.brightness_medium_outlined),
             settingsLabel: Text(context.l10n.background),
             settingsValue: AppBackgroundModeScreen.themeTitle(
               context,
@@ -250,7 +250,7 @@ class _Body extends ConsumerWidget {
             },
           ),
           SettingsListTile(
-            icon: const Icon(Icons.palette),
+            icon: const Icon(Icons.palette_outlined),
             settingsLabel: const Text('Theme'),
             settingsValue:
                 '${boardPrefs.boardTheme.label} / ${boardPrefs.pieceSet.label}',
@@ -277,7 +277,7 @@ class _Body extends ConsumerWidget {
             },
           ),
           SettingsListTile(
-            icon: const Icon(Icons.language),
+            icon: const Icon(Icons.language_outlined),
             settingsLabel: Text(context.l10n.language),
             settingsValue: localeToLocalizedName(
               generalPrefs.locale ?? Localizations.localeOf(context),
@@ -306,7 +306,7 @@ class _Body extends ConsumerWidget {
         showDivider: true,
         children: [
           PlatformListTile(
-            leading: const Icon(Icons.info),
+            leading: const Icon(Icons.info_outlined),
             title: Text(context.l10n.aboutX('Lichess')),
             trailing: const _OpenInNewIcon(),
             onTap: () {
@@ -314,7 +314,7 @@ class _Body extends ConsumerWidget {
             },
           ),
           PlatformListTile(
-            leading: const Icon(Icons.feedback),
+            leading: const Icon(Icons.feedback_outlined),
             title: Text(context.l10n.mobileFeedbackButton),
             trailing: const _OpenInNewIcon(),
             onTap: () {
@@ -322,7 +322,7 @@ class _Body extends ConsumerWidget {
             },
           ),
           PlatformListTile(
-            leading: const Icon(Icons.article),
+            leading: const Icon(Icons.article_outlined),
             title: Text(context.l10n.termsOfService),
             trailing: const _OpenInNewIcon(),
             onTap: () {
@@ -330,7 +330,7 @@ class _Body extends ConsumerWidget {
             },
           ),
           PlatformListTile(
-            leading: const Icon(Icons.privacy_tip),
+            leading: const Icon(Icons.privacy_tip_outlined),
             title: Text(context.l10n.privacyPolicy),
             trailing: const _OpenInNewIcon(),
             onTap: () {
@@ -344,7 +344,7 @@ class _Body extends ConsumerWidget {
         showDivider: true,
         children: [
           PlatformListTile(
-            leading: const Icon(Icons.code),
+            leading: const Icon(Icons.code_outlined),
             title: Text(context.l10n.sourceCode),
             trailing: const _OpenInNewIcon(),
             onTap: () {
@@ -352,7 +352,7 @@ class _Body extends ConsumerWidget {
             },
           ),
           PlatformListTile(
-            leading: const Icon(Icons.bug_report),
+            leading: const Icon(Icons.bug_report_outlined),
             title: Text(context.l10n.contribute),
             trailing: const _OpenInNewIcon(),
             onTap: () {
@@ -360,7 +360,7 @@ class _Body extends ConsumerWidget {
             },
           ),
           PlatformListTile(
-            leading: const Icon(Icons.star),
+            leading: const Icon(Icons.star_border_outlined),
             title: Text(context.l10n.thankYou),
             trailing: const _OpenInNewIcon(),
             onTap: () {
@@ -374,7 +374,7 @@ class _Body extends ConsumerWidget {
         showDivider: true,
         children: [
           PlatformListTile(
-            leading: const Icon(Icons.storage),
+            leading: const Icon(Icons.storage_outlined),
             title: const Text('Local database size'),
             subtitle: Theme.of(context).platform == TargetPlatform.iOS
                 ? null
@@ -469,6 +469,7 @@ class _OpenInNewIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return Icon(
       Icons.open_in_new,
+      size: 18,
       color: Theme.of(context).platform == TargetPlatform.iOS
           ? CupertinoColors.systemGrey2.resolveFrom(context)
           : null,

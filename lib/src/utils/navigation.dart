@@ -11,10 +11,7 @@ Future<void> pushPlatformRoute(
   bool fullscreenDialog = false,
   String? title,
 }) {
-  return Navigator.of(
-    context,
-    rootNavigator: rootNavigator,
-  ).push<void>(
+  return Navigator.of(context, rootNavigator: rootNavigator).push<void>(
     Theme.of(context).platform == TargetPlatform.iOS
         ? CupertinoPageRoute(
             builder: builder,
