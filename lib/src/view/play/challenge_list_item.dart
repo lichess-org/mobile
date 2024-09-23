@@ -1,15 +1,19 @@
+import 'dart:math';
+
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/lobby/correspondence_challenge.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
+import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
@@ -40,6 +44,24 @@ class ChallengeListItem extends ConsumerWidget {
     final color = isMyChallenge
         ? context.lichessColors.good.withValues(alpha: 0.2)
         : null;
+
+    final isFromPosition = challenge.variant == Variant.fromPosition;
+
+    final leading = Icon(challenge.perf.icon, size: 36);
+    final trailing = challenge.challenger?.lagRating != null
+        ? LagIndicator(lagRating: challenge.challenger!.lagRating!)
+        : null;
+    final title = isMyChallenge
+        ? UserFullNameWidget(
+            user: challenge.destUser != null ? challenge.destUser!.user : user,
+          )
+        : UserFullNameWidget(
+            user: user,
+            rating: challenge.challenger?.rating,
+          );
+    final subtitle = Text(challenge.description(context.l10n));
+
+    final screenWidth = MediaQuery.sizeOf(context).width;
 
     return Container(
       color: color,
@@ -73,25 +95,37 @@ class ChallengeListItem extends ConsumerWidget {
               ),
           ],
         ),
-        child: PlatformListTile(
-          padding: Styles.bodyPadding,
-          leading: Icon(challenge.perf.icon, size: 36),
-          trailing: challenge.challenger?.lagRating != null
-              ? LagIndicator(lagRating: challenge.challenger!.lagRating!)
-              : null,
-          title: isMyChallenge
-              ? UserFullNameWidget(
-                  user: challenge.destUser != null
-                      ? challenge.destUser!.user
-                      : user,
-                )
-              : UserFullNameWidget(
-                  user: user,
-                  rating: challenge.challenger?.rating,
-                ),
-          subtitle: Text(challenge.description(context.l10n)),
-          onTap: onPressed,
-        ),
+        child: isFromPosition
+            ? ExpansionTile(
+                childrenPadding: Styles.bodyPadding
+                    .subtract(const EdgeInsets.only(top: 8.0)),
+                leading: leading,
+                title: title,
+                subtitle: subtitle,
+                children: [
+                  if (challenge.variant == Variant.fromPosition &&
+                      challenge.initialFen != null)
+                    BoardThumbnail(
+                      size: min(
+                        400,
+                        screenWidth - 2 * Styles.bodyPadding.horizontal,
+                      ),
+                      orientation: challenge.sideChoice == SideChoice.white
+                          ? Side.white
+                          : Side.black,
+                      fen: challenge.initialFen!,
+                      onTap: onPressed,
+                    ),
+                ],
+                // onTap: onPressed,
+              )
+            : AdaptiveListTile(
+                leading: leading,
+                title: title,
+                subtitle: subtitle,
+                trailing: trailing,
+                onTap: onPressed,
+              ),
       ),
     );
   }
