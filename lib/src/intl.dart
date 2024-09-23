@@ -1,10 +1,24 @@
-import 'dart:ui';
+import 'dart:convert';
 
+import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
+import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 /// Setup [Intl.defaultLocale] and timeago locale and messages.
-Future<void> setupIntl(Locale locale) async {
+Future<Locale> setupIntl(WidgetsBinding widgetsBinding) async {
+  final systemLocale = widgetsBinding.platformDispatcher.locale;
+
+  // Get locale from shared preferences, if any
+  final prefs = await SharedPreferences.getInstance();
+  final json = prefs.getString(kGeneralPreferencesKey);
+  final generalPref = json != null
+      ? GeneralPrefsState.fromJson(jsonDecode(json) as Map<String, dynamic>)
+      : GeneralPrefsState.defaults;
+  final prefsLocale = generalPref.locale;
+  final locale = prefsLocale ?? systemLocale;
+
   Intl.defaultLocale = locale.toLanguageTag();
 
   // we need to setup timeago locale manually
@@ -22,6 +36,8 @@ Future<void> setupIntl(Locale locale) async {
       timeago.setDefaultLocale(shortLocale);
     }
   }
+
+  return locale;
 }
 
 final Map<String, timeago.LookupMessages> _timeagoLocales = {

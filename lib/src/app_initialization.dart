@@ -1,8 +1,11 @@
 import 'dart:convert';
 
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/db/secure_storage.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
@@ -10,6 +13,7 @@ import 'package:lichess_mobile/src/model/auth/session_storage.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/utils/color_palette.dart';
+import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/utils/system.dart';
 import 'package:logging/logging.dart';
@@ -103,4 +107,57 @@ class AppInitializationData with _$AppInitializationData {
     required String sri,
     required int engineMaxMemoryInMb,
   }) = _AppInitializationData;
+}
+
+/// Display setup on Android.
+///
+/// This is meant to be called once during app initialization.
+Future<void> androidDisplayInitialization(WidgetsBinding widgetsBinding) async {
+  // Get android 12+ core palette
+  try {
+    await DynamicColorPlugin.getCorePalette().then((value) {
+      setCorePalette(value);
+    });
+  } catch (e) {
+    debugPrint('Could not get core palette: $e');
+  }
+
+  // lock orientation to portrait on android phones
+  final view = widgetsBinding.platformDispatcher.views.first;
+  final data = MediaQueryData.fromView(view);
+  if (data.size.shortestSide < FormFactor.tablet) {
+    await SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp],
+    );
+  }
+
+  // Sets edge-to-edge system UI mode on Android 12+
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      systemNavigationBarColor: Colors.transparent,
+      systemNavigationBarDividerColor: Colors.transparent,
+      systemNavigationBarContrastEnforced: true,
+    ),
+  );
+
+  /// Enables high refresh rate for devices where it was previously disabled
+
+  final List<DisplayMode> supported = await FlutterDisplayMode.supported;
+  final DisplayMode active = await FlutterDisplayMode.active;
+
+  final List<DisplayMode> sameResolution = supported
+      .where(
+        (DisplayMode m) => m.width == active.width && m.height == active.height,
+      )
+      .toList()
+    ..sort(
+      (DisplayMode a, DisplayMode b) => b.refreshRate.compareTo(a.refreshRate),
+    );
+
+  final DisplayMode mostOptimalMode =
+      sameResolution.isNotEmpty ? sameResolution.first : active;
+
+  // This setting is per session.
+  await FlutterDisplayMode.setPreferredMode(mostOptimalMode);
 }

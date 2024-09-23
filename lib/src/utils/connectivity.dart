@@ -20,7 +20,7 @@ final _logger = Logger('Connectivity');
 ///
 /// - Uses the [Connectivity] plugin to listen to connectivity changes
 /// - Uses [AppLifecycleListener] to check connectivity on app resume
-@riverpod
+@Riverpod(keepAlive: true)
 class ConnectivityChanges extends _$ConnectivityChanges {
   StreamSubscription<List<ConnectivityResult>>? _socketSubscription;
   AppLifecycleListener? _appLifecycleListener;

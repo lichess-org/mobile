@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/widgets.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
@@ -15,6 +16,9 @@ import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_g
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
+import 'package:lichess_mobile/src/navigation.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -28,11 +32,28 @@ CorrespondenceService correspondenceService(CorrespondenceServiceRef ref) {
   );
 }
 
+/// Services that manages correspondence games.
 class CorrespondenceService {
   CorrespondenceService(this._log, {required this.ref});
 
   final CorrespondenceServiceRef ref;
   final Logger _log;
+
+  /// Handles a fcm notification response that caused the app to open.
+  Future<void> onNotificationResponse(GameFullId fullId) async {
+    final context = ref.read(currentNavigatorKeyProvider).currentContext;
+    if (context == null || !context.mounted) return;
+
+    final navState = Navigator.of(context);
+    if (navState.canPop()) {
+      navState.popUntil((route) => route.isFirst);
+    }
+    pushPlatformRoute(
+      context,
+      rootNavigator: true,
+      builder: (_) => GameScreen(initialGameId: fullId),
+    );
+  }
 
   /// Syncs offline correspondence games with the server.
   Future<void> syncGames() async {
@@ -184,6 +205,7 @@ class CorrespondenceService {
     return movesPlayed;
   }
 
+  /// Updates a stored correspondence game.
   Future<void> updateGame(GameFullId fullId, PlayableGame game) async {
     return (await ref.read(correspondenceGameStorageProvider.future)).save(
       OfflineCorrespondenceGame(

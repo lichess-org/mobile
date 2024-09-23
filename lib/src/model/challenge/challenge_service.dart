@@ -10,7 +10,6 @@ import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/notifications/challenge_notification.dart';
 import 'package:lichess_mobile/src/model/notifications/local_notification.dart';
-import 'package:lichess_mobile/src/model/notifications/local_notification_service.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';

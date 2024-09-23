@@ -1,36 +1,29 @@
 import 'dart:async';
 
 import 'package:dynamic_color/dynamic_color.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
-import 'package:lichess_mobile/main.dart';
 import 'package:lichess_mobile/src/app_initialization.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
-import 'package:lichess_mobile/src/model/notifications/local_notification_service.dart';
-import 'package:lichess_mobile/src/model/notifications/push_notification_service.dart';
+import 'package:lichess_mobile/src/model/notifications/local_notification.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/system.dart';
-import 'package:lichess_mobile/src/view/game/game_screen.dart';
 
 /// Application initialization and main entry point.
 class AppInitializationScreen extends ConsumerWidget {
@@ -108,16 +101,16 @@ class _AppState extends ConsumerState<Application> {
 
   @override
   void initState() {
-    if (Theme.of(context).platform == TargetPlatform.android) {
-      setOptimalDisplayMode();
-    }
-
     // preload sounds
     final soundTheme = ref.read(generalPreferencesProvider).soundTheme;
     preloadSounds(soundTheme);
 
     // check if session is still active
     checkSession();
+
+    // Initialize services
+    ref.read(localNotificationDispatcherProvider).initialize();
+    ref.read(challengeServiceProvider).initialize();
 
     // Listen for connectivity changes and perform actions accordingly.
     ref.listenManual(connectivityChangesProvider, (prev, current) async {
@@ -275,30 +268,6 @@ class _AppState extends ConsumerState<Application> {
       }
     }
   }
-
-  // Code taken from https://stackoverflow.com/questions/63631522/flutter-120fps-issue
-  /// Enables high refresh rate for devices where it was previously disabled
-  Future<void> setOptimalDisplayMode() async {
-    final List<DisplayMode> supported = await FlutterDisplayMode.supported;
-    final DisplayMode active = await FlutterDisplayMode.active;
-
-    final List<DisplayMode> sameResolution = supported
-        .where(
-          (DisplayMode m) =>
-              m.width == active.width && m.height == active.height,
-        )
-        .toList()
-      ..sort(
-        (DisplayMode a, DisplayMode b) =>
-            b.refreshRate.compareTo(a.refreshRate),
-      );
-
-    final DisplayMode mostOptimalMode =
-        sameResolution.isNotEmpty ? sameResolution.first : active;
-
-    // This setting is per session.
-    await FlutterDisplayMode.setPreferredMode(mostOptimalMode);
-  }
 }
 
 /// The entry point widget for the application.
@@ -318,12 +287,6 @@ class _EntryPointWidget extends ConsumerStatefulWidget {
 }
 
 class _EntryPointState extends ConsumerState<_EntryPointWidget> {
-  StreamSubscription<String>? _fcmTokenRefreshSubscription;
-  ProviderSubscription<AsyncValue<ConnectivityStatus>>?
-      _connectivitySubscription;
-
-  bool _pushNotificationsSetup = false;
-
   @override
   Widget build(BuildContext context) {
     return const BottomNavScaffold();
@@ -332,105 +295,11 @@ class _EntryPointState extends ConsumerState<_EntryPointWidget> {
   @override
   void initState() {
     super.initState();
-
-    // Initialize services
-    ref.read(localNotificationDispatcherProvider).initialize();
-    ref.read(challengeServiceProvider).initialize();
-
-    _connectivitySubscription =
-        ref.listenManual(connectivityChangesProvider, (prev, current) async {
-      // setup push notifications once when the app comes online
-      if (current.value?.isOnline == true && !_pushNotificationsSetup) {
-        try {
-          await _setupPushNotifications();
-          _pushNotificationsSetup = true;
-        } catch (e, st) {
-          debugPrint('Could not setup push notifications; $e\n$st');
-        }
-      }
-    });
   }
 
   @override
   void dispose() {
-    _fcmTokenRefreshSubscription?.cancel();
-    _connectivitySubscription?.close();
     super.dispose();
-  }
-
-  Future<void> _setupPushNotifications() async {
-    // Listen for incoming messages while the app is in the foreground.
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      ref.read(pushNotificationServiceProvider).processDataMessage(message);
-    });
-
-    // Listen for incoming messages while the app is in the background.
-    FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-
-    // Request permission to receive notifications. Pop-up will appear only
-    // once.
-    await FirebaseMessaging.instance.requestPermission(
-      alert: true,
-      badge: true,
-      sound: true,
-      announcement: false,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false,
-    );
-
-    // Listen for token refresh and update the token on the server accordingly.
-    _fcmTokenRefreshSubscription =
-        FirebaseMessaging.instance.onTokenRefresh.listen((String token) {
-      ref.read(pushNotificationServiceProvider).registerToken(token);
-    });
-
-    // Register the device with the server.
-    await ref.read(pushNotificationServiceProvider).registerDevice();
-
-    // Get any messages which caused the application to open from
-    // a terminated state.
-    final RemoteMessage? initialMessage =
-        await FirebaseMessaging.instance.getInitialMessage();
-
-    if (initialMessage != null) {
-      _handleMessage(initialMessage);
-    }
-
-    // Also handle any interaction when the app is in the background via a
-    // Stream listener
-    FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
-  }
-
-  /// Handle a message that caused the application to open
-  ///
-  /// This method must be part of a State object which is a child of [MaterialApp]
-  /// otherwise the [Navigator] will not be accessible.
-  void _handleMessage(RemoteMessage message) {
-    switch (message.data['lichess.type']) {
-      // correspondence game message types
-      case 'corresAlarm':
-      case 'gameTakebackOffer':
-      case 'gameDrawOffer':
-      case 'gameMove':
-      case 'gameFinish':
-        final gameFullId = message.data['lichess.fullId'] as String?;
-        if (gameFullId != null) {
-          // remove any existing routes before navigating to the game
-          // screen to avoid stacking multiple game screens
-          final navState = Navigator.of(context);
-          if (navState.canPop()) {
-            navState.popUntil((route) => route.isFirst);
-          }
-          pushPlatformRoute(
-            context,
-            rootNavigator: true,
-            builder: (_) => GameScreen(
-              initialGameId: GameFullId(gameFullId),
-            ),
-          );
-        }
-    }
   }
 }
 
