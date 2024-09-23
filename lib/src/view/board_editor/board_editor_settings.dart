@@ -6,8 +6,8 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 
-class BoardEditorMenu extends ConsumerWidget {
-  const BoardEditorMenu({required this.initialFen, super.key});
+class BoardEditorPositionSettings extends ConsumerWidget {
+  const BoardEditorPositionSettings({required this.initialFen, super.key});
 
   final String? initialFen;
 
@@ -19,36 +19,6 @@ class BoardEditorMenu extends ConsumerWidget {
     return BottomSheetScrollableContainer(
       padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
       children: [
-        Padding(
-          padding: Styles.horizontalBodyPadding,
-          child: Wrap(
-            spacing: 8.0,
-            children: [
-              ChoiceChip(
-                onSelected: (_) {
-                  ref.read(editorController.notifier).loadFen(
-                        'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq',
-                        loadCastling: true,
-                        loadSideToPlay: true,
-                      );
-                },
-                selected: false,
-                label: const Text('Starting Position'),
-              ),
-              ChoiceChip(
-                onSelected: (_) {
-                  ref.read(editorController.notifier).loadFen(
-                        '8/8/8/8/8/8/8/8',
-                        loadCastling: true,
-                        loadSideToPlay: true,
-                      );
-                },
-                label: const Text('Clear Board'),
-                selected: false,
-              ),
-            ],
-          ),
-        ),
         Padding(
           padding: Styles.horizontalBodyPadding,
           child: Wrap(

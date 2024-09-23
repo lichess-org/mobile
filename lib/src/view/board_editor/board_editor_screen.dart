@@ -14,10 +14,12 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
-import 'package:lichess_mobile/src/view/board_editor/board_editor_menu.dart';
+import 'package:lichess_mobile/src/view/board_editor/board_editor_settings.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
+import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
 class BoardEditorScreen extends StatelessWidget {
@@ -30,6 +32,21 @@ class BoardEditorScreen extends StatelessWidget {
     return PlatformScaffold(
       appBar: PlatformAppBar(
         title: Text(context.l10n.boardEditor),
+        actions: [
+          AppBarIconButton(
+            onPressed: () => showAdaptiveBottomSheet<void>(
+              context: context,
+              isScrollControlled: true,
+              showDragHandle: true,
+              isDismissible: true,
+              builder: (context) => BoardEditorPositionSettings(
+                initialFen: initialFen,
+              ),
+            ),
+            semanticsLabel: context.l10n.settingsSettings,
+            icon: const Icon(Icons.settings),
+          ),
+        ],
       ),
       body: _Body(initialFen),
     );
@@ -306,21 +323,38 @@ class _BottomBar extends ConsumerWidget {
       children: [
         BottomBarButton(
           label: context.l10n.menu,
-          onTap: () => showAdaptiveBottomSheet<void>(
-            context: context,
-            builder: (BuildContext context) => BoardEditorMenu(
-              initialFen: initialFen,
-            ),
-          ),
-          icon: Icons.tune,
-        ),
-        BottomBarButton(
-          key: const Key('flip-button'),
-          label: context.l10n.flipBoard,
-          onTap: ref
-              .read(boardEditorControllerProvider(initialFen).notifier)
-              .flipBoard,
-          icon: CupertinoIcons.arrow_2_squarepath,
+          onTap: () {
+            final editorProviderData =
+                ref.read(boardEditorControllerProvider(initialFen).notifier);
+            showAdaptiveActionSheet<void>(
+              context: context,
+              actions: [
+                BottomSheetAction(
+                  makeLabel: (context) => Text(context.l10n.startPosition),
+                  onPressed: (context) {
+                    editorProviderData.loadFen(
+                      'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq',
+                      loadCastling: true,
+                      loadSideToPlay: true,
+                    );
+                  },
+                ),
+                BottomSheetAction(
+                  makeLabel: (context) => Text(context.l10n.clearBoard),
+                  onPressed: (context) {
+                    editorProviderData.loadFen('8/8/8/8/8/8/8/8');
+                  },
+                ),
+                BottomSheetAction(
+                  makeLabel: (context) => Text(context.l10n.flipBoard),
+                  onPressed: (context) {
+                    editorProviderData.flipBoard();
+                  },
+                ),
+              ],
+            );
+          },
+          icon: Icons.menu,
         ),
         BottomBarButton(
           label: context.l10n.analysis,
