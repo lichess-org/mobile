@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/crashlytics.dart';
+import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/db/shared_preferences.dart';
 import 'package:lichess_mobile/src/init.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
@@ -19,6 +20,7 @@ import 'package:logging/logging.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import './fake_crashlytics.dart';
 import './model/common/service/fake_sound_service.dart';
@@ -65,6 +67,12 @@ Future<ProviderContainer> makeContainer({
 
   final container = ProviderContainer(
     overrides: [
+      databaseProvider.overrideWith((ref) async {
+        final db =
+            await openAppDatabase(databaseFactoryFfi, inMemoryDatabasePath);
+        ref.onDispose(db.close);
+        return db;
+      }),
       webSocketChannelFactoryProvider.overrideWith((ref) {
         return FakeWebSocketChannelFactory(() => FakeWebSocketChannel());
       }),

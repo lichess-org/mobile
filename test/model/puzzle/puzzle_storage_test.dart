@@ -16,7 +16,7 @@ void main() {
 
   group('PuzzleHistoryStorage', () {
     test('save and fetch data', () async {
-      final db = await openDb(dbFactory, inMemoryDatabasePath);
+      final db = await openAppDatabase(dbFactory, inMemoryDatabasePath);
 
       final container = await makeContainer(
         overrides: [

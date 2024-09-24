@@ -95,8 +95,21 @@ class _AppState extends ConsumerState<Application> {
   /// Whether the app has checked for online status for the first time.
   bool _firstTimeOnlineCheck = false;
 
+  AppLifecycleListener? _appLifecycleListener;
+
   @override
   void initState() {
+    debugPrint('AppState init');
+
+    _appLifecycleListener = AppLifecycleListener(
+      onResume: () async {
+        final online = await isOnline(ref.read(defaultClientProvider));
+        if (online) {
+          ref.invalidate(ongoingGamesProvider);
+        }
+      },
+    );
+
     // check if session is still active and delete it if it is not
     checkSession();
 
@@ -135,6 +148,12 @@ class _AppState extends ConsumerState<Application> {
     });
 
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _appLifecycleListener?.dispose();
+    super.dispose();
   }
 
   @override

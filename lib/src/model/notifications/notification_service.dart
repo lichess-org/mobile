@@ -10,7 +10,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/firebase_options.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/init.dart';
-import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
@@ -30,6 +29,9 @@ final _localNotificationPlugin = FlutterLocalNotificationsPlugin();
 final _logger = Logger('NotificationService');
 
 /// A notification response with its ID and payload.
+///
+/// A notification response is the user's interaction with a notification shown
+/// by the app.
 typedef NotificationResponseData = ({
   /// The notification id.
   int id,
@@ -45,15 +47,56 @@ typedef NotificationResponseData = ({
   NotificationPayload? payload,
 });
 
-enum NotificationType {
+/// The type of notification handled by the app.
+enum AppNotificationType {
   corresGameUpdate,
   challenge,
+}
+
+/// Notification types defined by the server.
+///
+/// This corresponds to the 'lichess.type' field in the FCM message's data.
+enum ServerNotificationType {
+  /// There is not much time left to make a move in a correspondence game.
+  corresAlarm,
+
+  /// A takeback offer has been made in a correspondence game.
+  gameTakebackOffer,
+
+  /// A draw offer has been made in a correspondence game.
+  gameDrawOffer,
+
+  /// A move has been made in a correspondence game.
+  gameMove,
+
+  /// A correspondence game just finished.
+  gameFinish,
+
+  /// Server notification type not handled by the app.
+  unhandled;
+
+  static ServerNotificationType fromString(String type) {
+    switch (type) {
+      case 'corresAlarm':
+        return corresAlarm;
+      case 'gameTakebackOffer':
+        return gameTakebackOffer;
+      case 'gameDrawOffer':
+        return gameDrawOffer;
+      case 'gameMove':
+        return gameMove;
+      case 'gameFinish':
+        return gameFinish;
+      default:
+        return unhandled;
+    }
+  }
 }
 
 @Freezed(fromJson: true, toJson: true)
 class NotificationPayload with _$NotificationPayload {
   factory NotificationPayload({
-    required NotificationType type,
+    required AppNotificationType type,
     required Map<String, dynamic> data,
   }) = _NotificationPayload;
 
@@ -82,25 +125,30 @@ NotificationService notificationService(NotificationServiceRef ref) {
 /// A service that manages notifications.
 ///
 /// This service is responsible for handling incoming messages from the Firebase
-/// Cloud Messaging service and updating the application state accordingly.
+/// Cloud Messaging service and showing notifications.
+///
+/// It also listens for notification interaction responses and dispatches them to the
+/// appropriate services.
 class NotificationService {
   NotificationService(this._ref);
 
   final NotificationServiceRef _ref;
 
+  /// The Firebase Cloud Messaging token refresh subscription.
   StreamSubscription<String>? _fcmTokenRefreshSubscription;
+
+  /// The connectivity changes stream subscription.
   ProviderSubscription<AsyncValue<ConnectivityStatus>>?
       _connectivitySubscription;
 
+  /// The stream controller for notification responses.
   static final StreamController<NotificationResponseData>
       _responseStreamController = StreamController.broadcast();
 
-  /// Stream of locale notification responses (when the user interacts with a notification).
-  static final Stream<NotificationResponseData> responseStream =
-      _responseStreamController.stream;
-
+  /// The stream subscription for notification responses.
   StreamSubscription<NotificationResponseData>? _responseStreamSubscription;
 
+  /// Whether the device has been registered for push notifications.
   bool _registeredDevice = false;
 
   /// Initialize the notification service.
@@ -130,7 +178,7 @@ class NotificationService {
     );
   }
 
-  /// Starts the remote notification service.
+  /// Starts the notification service.
   ///
   /// This method listens for incoming messages and updates the application state
   /// accordingly.
@@ -146,14 +194,13 @@ class NotificationService {
           await registerDevice();
           _registeredDevice = true;
         } catch (e, st) {
-          debugPrint('Could not setup push notifications; $e\n$st');
+          _logger.severe('Could not setup push notifications; $e\n$st');
         }
       }
     });
 
     // Listen for incoming messages while the app is in the foreground.
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      _logger.fine('processing FCM message received in foreground: $message');
       _processFcmMessage(message, fromBackground: false);
     });
 
@@ -191,7 +238,7 @@ class NotificationService {
     FirebaseMessaging.onMessageOpenedApp.listen(_handleFcmMessageOpenedApp);
 
     // start listening for notification responses
-    _responseStreamSubscription = responseStream.listen(
+    _responseStreamSubscription = _responseStreamController.stream.listen(
       (data) => _dispatchNotificationResponse(data),
     );
   }
@@ -235,13 +282,13 @@ class NotificationService {
     if (payload == null) return;
 
     switch (payload.type) {
-      case NotificationType.challenge:
+      case AppNotificationType.challenge:
         _ref.read(challengeServiceProvider).onNotificationResponse(
               id,
               actionId,
               payload,
             );
-      case NotificationType.corresGameUpdate:
+      case AppNotificationType.corresGameUpdate:
         // TODO handle corres game update notifs
         break;
     }
@@ -274,20 +321,79 @@ class NotificationService {
 
   /// Handle an FCM message that caused the application to open
   void _handleFcmMessageOpenedApp(RemoteMessage message) {
-    switch (message.data['lichess.type']) {
-      // correspondence game message types
-      // TODO: handle other message types
-      case 'corresAlarm':
-      case 'gameTakebackOffer':
-      case 'gameDrawOffer':
-      case 'gameMove':
-      case 'gameFinish':
+    final messageType = message.data['lichess.type'] as String?;
+    if (messageType == null) return;
+
+    switch (ServerNotificationType.fromString(messageType)) {
+      case ServerNotificationType.corresAlarm:
+      case ServerNotificationType.gameTakebackOffer:
+      case ServerNotificationType.gameDrawOffer:
+      case ServerNotificationType.gameMove:
+      case ServerNotificationType.gameFinish:
         final gameFullId = message.data['lichess.fullId'] as String?;
         if (gameFullId != null) {
           _ref.read(correspondenceServiceProvider).onNotificationResponse(
                 GameFullId(gameFullId),
               );
         }
+      case ServerNotificationType.unhandled:
+        _logger
+            .warning('Received unhandled FCM notification type: $messageType');
+    }
+  }
+
+  /// Process a message received from the Firebase Cloud Messaging service.
+  ///
+  /// If the message contains a [RemoteMessage.notification] field, it will show
+  /// a local notification to the user.
+  ///
+  /// Some messages (whether or not they have an associated notification), have
+  /// a [RemoteMessage.data] field used to update the application state.
+  Future<void> _processFcmMessage(
+    RemoteMessage message, {
+    required bool fromBackground,
+  }) async {
+    _logger.fine(
+      'Processing a FCM message from ${fromBackground ? 'background' : 'foreground'}: ${message.data}',
+    );
+
+    final messageType = message.data['lichess.type'] as String?;
+    if (messageType != null) {
+      switch (ServerNotificationType.fromString(messageType)) {
+        case ServerNotificationType.corresAlarm:
+        case ServerNotificationType.gameTakebackOffer:
+        case ServerNotificationType.gameDrawOffer:
+        case ServerNotificationType.gameMove:
+        case ServerNotificationType.gameFinish:
+          final gameFullId = message.data['lichess.fullId'] as String?;
+          final round = message.data['lichess.round'] as String?;
+          if (gameFullId != null && round != null) {
+            final fullId = GameFullId(gameFullId);
+            final game = PlayableGame.fromServerJson(
+              jsonDecode(round) as Map<String, dynamic>,
+            );
+            await _ref.read(correspondenceServiceProvider).onServerUpdateEvent(
+                  fullId,
+                  game,
+                  fromBackground: fromBackground,
+                );
+          }
+
+        case ServerNotificationType.unhandled:
+          _logger.warning(
+            'Received unhandled FCM notification type: $messageType',
+          );
+      }
+    }
+
+    // update badge
+    final badge = message.data['lichess.iosBadge'] as String?;
+    if (badge != null) {
+      try {
+        await BadgeService.instance.setBadge(int.parse(badge));
+      } catch (e) {
+        _logger.severe('Could not parse badge: $badge');
+      }
     }
   }
 
@@ -296,6 +402,22 @@ class NotificationService {
     final token = await FirebaseMessaging.instance.getToken();
     if (token != null) {
       await _registerToken(token);
+    }
+  }
+
+  /// Unregister the device from push notifications.
+  Future<void> unregister() async {
+    _logger.info('will unregister');
+    final session = _ref.read(authSessionProvider);
+    if (session == null) {
+      return;
+    }
+    try {
+      await _ref.withClient(
+        (client) => client.post(Uri(path: '/mobile/unregister')),
+      );
+    } catch (e, st) {
+      _logger.severe('could not unregister device; $e', e, st);
     }
   }
 
@@ -318,80 +440,27 @@ class NotificationService {
     }
   }
 
-  /// Unregister the device from push notifications.
-  Future<void> unregister() async {
-    _logger.info('will unregister');
-    final session = _ref.read(authSessionProvider);
-    if (session == null) {
-      return;
-    }
-    try {
-      await _ref.withClient(
-        (client) => client.post(Uri(path: '/mobile/unregister')),
-      );
-    } catch (e, st) {
-      _logger.severe('could not unregister device; $e', e, st);
-    }
-  }
-
-  /// Process a message received from the Firebase Cloud Messaging service.
-  Future<void> _processFcmMessage(
-    RemoteMessage message, {
-    required bool fromBackground,
-  }) async {
-    final gameFullId = message.data['lichess.fullId'] as String?;
-    final round = message.data['lichess.round'] as String?;
-
-    // update correspondence game
-    if (gameFullId != null && round != null) {
-      final fullId = GameFullId(gameFullId);
-      final game = PlayableGame.fromServerJson(
-        jsonDecode(round) as Map<String, dynamic>,
-      );
-      _ref.read(correspondenceServiceProvider).updateGame(fullId, game);
-
-      if (!fromBackground) {
-        // opponent just played, invalidate ongoing games
-        if (game.sideToMove == game.youAre) {
-          _ref.invalidate(ongoingGamesProvider);
-        }
-      }
-    }
-
-    // update badge
-    final badge = message.data['lichess.iosBadge'] as String?;
-    if (badge != null) {
-      try {
-        BadgeService.instance.setBadge(int.parse(badge));
-      } catch (e) {
-        _logger.severe('Could not parse badge: $badge');
-      }
-    }
-  }
-
   @pragma('vm:entry-point')
   static Future<void> _firebaseMessagingBackgroundHandler(
     RemoteMessage message,
   ) async {
-    debugPrint('Handling a FCM background message: ${message.data}');
-
     // create a new provider scope for the background isolate
     final ref = ProviderContainer();
 
     ref.listen(
       cachedDataProvider,
-      (prev, now) {
+      (prev, now) async {
         if (!now.hasValue) return;
 
         try {
-          ref.read(notificationServiceProvider)._processFcmMessage(
+          await ref.read(notificationServiceProvider)._processFcmMessage(
                 message,
                 fromBackground: true,
               );
 
           ref.dispose();
         } catch (e) {
-          debugPrint('Error when processing an FCM background message: $e');
+          _logger.severe('Error when processing an FCM background message: $e');
           ref.dispose();
         }
       },

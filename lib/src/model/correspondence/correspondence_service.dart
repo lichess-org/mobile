@@ -39,15 +39,16 @@ class CorrespondenceService {
   final CorrespondenceServiceRef ref;
   final Logger _log;
 
-  /// Handles a fcm notification response that caused the app to open.
+  /// Handles a notification response that caused the app to open.
   Future<void> onNotificationResponse(GameFullId fullId) async {
     final context = ref.read(currentNavigatorKeyProvider).currentContext;
     if (context == null || !context.mounted) return;
 
-    final navState = Navigator.of(context);
-    if (navState.canPop()) {
-      navState.popUntil((route) => route.isFirst);
+    final rootNavState = Navigator.of(context, rootNavigator: true);
+    if (rootNavState.canPop()) {
+      rootNavState.popUntil((route) => route.isFirst);
     }
+
     pushPlatformRoute(
       context,
       rootNavigator: true,
@@ -203,6 +204,22 @@ class CorrespondenceService {
     }
 
     return movesPlayed;
+  }
+
+  /// Handles a game update event from the server.
+  Future<void> onServerUpdateEvent(
+    GameFullId fullId,
+    PlayableGame game, {
+    required bool fromBackground,
+  }) async {
+    if (!fromBackground) {
+      // opponent just played, invalidate ongoing games
+      if (game.sideToMove == game.youAre) {
+        ref.invalidate(ongoingGamesProvider);
+      }
+    }
+
+    await updateGame(fullId, game);
   }
 
   /// Updates a stored correspondence game.

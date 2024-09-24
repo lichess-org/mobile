@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:path/path.dart';
@@ -18,9 +19,7 @@ const kStorageAnonId = '**anonymous**';
 @Riverpod(keepAlive: true)
 Future<Database> database(DatabaseRef ref) async {
   final dbPath = join(await getDatabasesPath(), kLichessDatabaseName);
-  final db = await openDb(databaseFactory, dbPath);
-  ref.onDispose(db.close);
-  return db;
+  return openAppDatabase(databaseFactory, dbPath);
 }
 
 /// Returns the sqlite version as an integer.
@@ -49,7 +48,8 @@ Future<int> getDbSizeInBytes(GetDbSizeInBytesRef ref) async {
   return dbFile.length();
 }
 
-Future<Database> openDb(DatabaseFactory dbFactory, String path) async {
+/// Opens the app database.
+Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) async {
   return dbFactory.openDatabase(
     path,
     options: OpenDatabaseOptions(

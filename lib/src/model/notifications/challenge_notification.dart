@@ -114,7 +114,7 @@ class ChallengePayload {
   final ChallengeId id;
 
   NotificationPayload get notificationPayload => NotificationPayload(
-        type: NotificationType.challenge,
+        type: AppNotificationType.challenge,
         data: {
           'id': id.value,
         },
@@ -123,7 +123,7 @@ class ChallengePayload {
   factory ChallengePayload.fromNotification(
     NotificationPayload payload,
   ) {
-    assert(payload.type == NotificationType.challenge);
+    assert(payload.type == AppNotificationType.challenge);
     final id = payload.data['id'] as String;
     return ChallengePayload(ChallengeId(id));
   }

@@ -94,6 +94,13 @@ class GameController extends _$GameController {
         PlayableGame game = fullEvent.game;
 
         if (fullEvent.game.finished) {
+          if (fullEvent.game.meta.speed == Speed.correspondence) {
+            ref.invalidate(ongoingGamesProvider);
+            ref
+                .read(correspondenceServiceProvider)
+                .updateGame(gameFullId, fullEvent.game);
+          }
+
           final result = await _getPostGameData();
           game = result.fold(
               (data) => _mergePostGameData(game, data, rewriteSteps: true),

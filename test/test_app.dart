@@ -11,6 +11,7 @@ import 'package:http/testing.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/crashlytics.dart';
+import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/db/shared_preferences.dart';
 import 'package:lichess_mobile/src/init.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
@@ -26,6 +27,7 @@ import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 import './fake_crashlytics.dart';
@@ -90,6 +92,13 @@ Future<Widget> buildTestApp(
 
   return ProviderScope(
     overrides: [
+      // ignore: scoped_providers_should_specify_dependencies
+      databaseProvider.overrideWith((ref) async {
+        final db =
+            await openAppDatabase(databaseFactoryFfi, inMemoryDatabasePath);
+        ref.onDispose(db.close);
+        return db;
+      }),
       // ignore: scoped_providers_should_specify_dependencies
       lichessClientProvider.overrideWith((ref) {
         return LichessClient(mockClient, ref);

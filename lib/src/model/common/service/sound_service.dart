@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/sound_theme.dart';
+import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sound_effect/sound_effect.dart';
@@ -11,6 +12,8 @@ import 'package:sound_effect/sound_effect.dart';
 part 'sound_service.g.dart';
 
 final _soundEffectPlugin = SoundEffect();
+
+final _logger = Logger('SoundService');
 
 // Must match name of files in assets/sounds/standard
 enum Sound {
@@ -83,8 +86,13 @@ class SoundService {
               )
             : GeneralPrefsState.defaults)
         .soundTheme;
-    await _soundEffectPlugin.initialize();
-    await _loadAllSounds(theme);
+
+    try {
+      await _soundEffectPlugin.initialize();
+      await _loadAllSounds(theme);
+    } catch (e) {
+      _logger.warning('Failed to initialize sound service: $e');
+    }
   }
 
   /// Play the given sound if sound is enabled.
