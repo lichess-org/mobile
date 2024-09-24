@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
@@ -45,41 +44,9 @@ class _Body extends ConsumerStatefulWidget {
 }
 
 class _BodyState extends ConsumerState<_Body> {
-  late Side orientation;
-
-  late bool computeRandomOrientation;
-
   Square? highlightLastGuess;
 
   Timer? highlightTimer;
-
-  Side _randomSide() => Side.values[Random().nextInt(Side.values.length)];
-
-  void _setOrientation(SideChoice choice) {
-    setState(() {
-      orientation = switch (choice) {
-        SideChoice.white => Side.white,
-        SideChoice.black => Side.black,
-        SideChoice.random => _randomSide(),
-      };
-      computeRandomOrientation = false;
-    });
-  }
-
-  void _maybeSetOrientation() {
-    setState(() {
-      if (computeRandomOrientation) {
-        orientation = _randomSide();
-      }
-      computeRandomOrientation = true;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _setOrientation(ref.read(coordinateTrainingPreferencesProvider).sideChoice);
-  }
 
   @override
   void dispose() {
@@ -155,7 +122,7 @@ class _BodyState extends ConsumerState<_Body> {
                         _TrainingBoard(
                           boardSize: boardSize,
                           isTablet: isTablet,
-                          orientation: orientation,
+                          orientation: trainingState.orientation,
                           squareHighlights: squareHighlights,
                           onGuess: _onGuess,
                         ),
@@ -169,7 +136,7 @@ class _BodyState extends ConsumerState<_Body> {
                             .read(
                               coordinateTrainingControllerProvider.notifier,
                             )
-                            .stopTraining,
+                            .abortTraining,
                         label: 'Abort Training',
                       )
                     else if (trainingState.lastScore != null)
@@ -185,10 +152,7 @@ class _BodyState extends ConsumerState<_Body> {
                       )
                     else
                       Expanded(
-                        child: _Settings(
-                          onSideChoiceSelected: _setOrientation,
-                          maybeSetOrientation: _maybeSetOrientation,
-                        ),
+                        child: _Settings(),
                       ),
                   ],
                 );
@@ -386,14 +350,6 @@ class _Score extends StatelessWidget {
 }
 
 class _Settings extends ConsumerStatefulWidget {
-  const _Settings({
-    required this.onSideChoiceSelected,
-    required this.maybeSetOrientation,
-  });
-
-  final void Function(SideChoice) onSideChoiceSelected;
-  final VoidCallback maybeSetOrientation;
-
   @override
   ConsumerState<_Settings> createState() => _SettingsState();
 }
@@ -415,7 +371,6 @@ class _SettingsState extends ConsumerState<_Settings> {
               selected: trainingPrefs.sideChoice == choice,
               showCheckmark: false,
               onSelected: (selected) {
-                widget.onSideChoiceSelected(choice);
                 ref
                     .read(coordinateTrainingPreferencesProvider.notifier)
                     .setSideChoice(choice);
@@ -445,9 +400,6 @@ class _SettingsState extends ConsumerState<_Settings> {
         FatButton(
           semanticsLabel: 'Start Training',
           onPressed: () {
-            if (trainingPrefs.sideChoice == SideChoice.random) {
-              widget.maybeSetOrientation();
-            }
             ref
                 .read(coordinateTrainingControllerProvider.notifier)
                 .startTraining(trainingPrefs.timeChoice.duration);
