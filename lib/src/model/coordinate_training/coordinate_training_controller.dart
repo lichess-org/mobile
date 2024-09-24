@@ -21,12 +21,14 @@ class CoordinateTrainingController extends _$CoordinateTrainingController {
 
   @override
   CoordinateTrainingState build() {
-    final trainingPrefs = ref.watch(coordinateTrainingPreferencesProvider);
     ref.onDispose(() {
       _updateTimer?.cancel();
     });
+    final sideChoice = ref.watch(
+      coordinateTrainingPreferencesProvider.select((value) => value.sideChoice),
+    );
     return CoordinateTrainingState(
-      orientation: _getOrientation(trainingPrefs.sideChoice),
+      orientation: _getOrientation(sideChoice),
     );
   }
 
