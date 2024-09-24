@@ -12,10 +12,9 @@ import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
-import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
-import 'package:lichess_mobile/src/model/notifications/local_notification.dart';
+import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
@@ -98,14 +97,11 @@ class _AppState extends ConsumerState<Application> {
 
   @override
   void initState() {
-    final soundTheme = ref.read(generalPreferencesProvider).soundTheme;
-    preloadSounds(soundTheme);
-
-    // check if session is still active
+    // check if session is still active and delete it if it is not
     checkSession();
 
     // Start services
-    ref.read(localNotificationDispatcherProvider).start();
+    ref.read(notificationServiceProvider).start();
     ref.read(challengeServiceProvider).start();
 
     // Listen for connectivity changes and perform actions accordingly.

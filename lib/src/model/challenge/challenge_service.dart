@@ -9,7 +9,7 @@ import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/notifications/challenge_notification.dart';
-import 'package:lichess_mobile/src/model/notifications/local_notification.dart';
+import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -72,7 +72,8 @@ class ChallengeService {
     prevInwardIds
         .whereNot((challengeId) => currentInwardIds.contains(challengeId))
         .forEach(
-          (id) => LocalNotificationService.instance.cancel(id.value.hashCode),
+          (id) =>
+              ref.read(notificationServiceProvider).cancel(id.value.hashCode),
         );
 
     // new incoming challenges
@@ -80,7 +81,8 @@ class ChallengeService {
         .whereNot((challenge) => prevInwardIds.contains(challenge.id))
         .forEach(
       (challenge) {
-        LocalNotificationService.instance
+        ref
+            .read(notificationServiceProvider)
             .show(ChallengeNotification(challenge, l10n));
       },
     );

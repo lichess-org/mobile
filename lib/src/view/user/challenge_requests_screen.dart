@@ -4,7 +4,7 @@ import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
 import 'package:lichess_mobile/src/model/challenge/challenges.dart';
-import 'package:lichess_mobile/src/model/notifications/local_notification.dart';
+import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
@@ -77,7 +77,8 @@ class _Body extends ConsumerWidget {
               ref
                   .read(challengeRepositoryProvider)
                   .decline(challenge.id, reason: reason);
-              LocalNotificationService.instance
+              ref
+                  .read(notificationServiceProvider)
                   .cancel(challenge.id.value.hashCode);
             }
 

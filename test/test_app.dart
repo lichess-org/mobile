@@ -20,7 +20,7 @@ import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/game/game_storage.dart';
-import 'package:lichess_mobile/src/model/notifications/push_notification_service.dart';
+import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:logging/logging.dart';
@@ -31,9 +31,9 @@ import 'package:visibility_detector/visibility_detector.dart';
 import './fake_crashlytics.dart';
 import './model/auth/fake_session_storage.dart';
 import './model/common/service/fake_sound_service.dart';
-import 'fake_notification_service.dart';
 import 'model/common/fake_websocket_channel.dart';
 import 'model/game/mock_game_storage.dart';
+import 'model/notifications/fake_notification_service.dart';
 import 'utils/fake_connectivity_changes.dart';
 
 final mockClient = MockClient((request) async {
@@ -117,8 +117,7 @@ Future<Widget> buildTestApp(
         return true;
       }),
       // ignore: scoped_providers_should_specify_dependencies
-      pushNotificationServiceProvider
-          .overrideWithValue(FakeNotificationService()),
+      notificationServiceProvider.overrideWithValue(FakeNotificationService()),
       // ignore: scoped_providers_should_specify_dependencies
       crashlyticsProvider.overrideWithValue(FakeCrashlytics()),
       // ignore: scoped_providers_should_specify_dependencies

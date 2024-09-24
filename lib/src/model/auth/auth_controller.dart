@@ -1,7 +1,7 @@
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
-import 'package:lichess_mobile/src/model/notifications/push_notification_service.dart';
+import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'auth_repository.dart';
@@ -28,7 +28,7 @@ class AuthController extends _$AuthController {
 
       // register device and reconnect to the current socket once the session token is updated
       await Future.wait([
-        ref.read(pushNotificationServiceProvider).registerDevice(),
+        ref.read(notificationServiceProvider).registerDevice(),
         // force reconnect to the current socket with the new token
         ref.read(socketPoolProvider).currentClient.connect(),
       ]);
@@ -49,7 +49,7 @@ class AuthController extends _$AuthController {
       await ref.withClient(
         (client) => AuthRepository(client, appAuth).signOut(),
       );
-      ref.read(pushNotificationServiceProvider).unregister();
+      ref.read(notificationServiceProvider).unregister();
       // force reconnect to the current socket
       ref.read(socketPoolProvider).currentClient.connect();
       await ref.read(authSessionProvider.notifier).delete();

@@ -13,7 +13,7 @@ import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
-import 'package:lichess_mobile/src/model/notifications/push_notification_service.dart';
+import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:logging/logging.dart';
 import 'package:mocktail/mocktail.dart';
@@ -22,8 +22,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import './fake_crashlytics.dart';
 import './model/common/service/fake_sound_service.dart';
-import 'fake_notification_service.dart';
 import 'model/common/fake_websocket_channel.dart';
+import 'model/notifications/fake_notification_service.dart';
 import 'utils/fake_connectivity_changes.dart';
 
 class MockHttpClient extends Mock implements http.Client {}
@@ -81,8 +81,7 @@ Future<ProviderContainer> makeContainer({
       }),
       defaultClientProvider.overrideWithValue(MockHttpClient()),
       crashlyticsProvider.overrideWithValue(FakeCrashlytics()),
-      pushNotificationServiceProvider
-          .overrideWithValue(FakeNotificationService()),
+      notificationServiceProvider.overrideWithValue(FakeNotificationService()),
       soundServiceProvider.overrideWithValue(FakeSoundService()),
       sharedPreferencesProvider.overrideWithValue(sharedPreferences),
       cachedDataProvider.overrideWith((ref) {

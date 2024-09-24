@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/sound_theme.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sound_effect/sound_effect.dart';
 
 part 'sound_service.g.dart';
@@ -31,14 +34,6 @@ SoundService soundService(SoundServiceRef ref) {
 final _extension = defaultTargetPlatform == TargetPlatform.iOS ? 'aifc' : 'mp3';
 
 const Set<Sound> _emtpySet = {};
-
-/// Initialize the sound service with the given sound theme.
-///
-/// This will load the sounds from assets and make them ready to be played.
-Future<void> preloadSounds(SoundTheme theme) async {
-  await _soundEffectPlugin.initialize();
-  await _loadAllSounds(theme);
-}
 
 /// Loads all sounds of the given [SoundTheme].
 Future<void> _loadAllSounds(
@@ -73,6 +68,24 @@ class SoundService {
   SoundService(this._ref);
 
   final SoundServiceRef _ref;
+
+  /// Initialize the sound service.
+  ///
+  /// This will load the sounds from assets and make them ready to be played.
+  /// This should be called once when the app starts.
+  static Future<void> initialize() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    final stored = prefs.getString(kGeneralPreferencesKey);
+    final theme = (stored != null
+            ? GeneralPrefsState.fromJson(
+                jsonDecode(stored) as Map<String, dynamic>,
+              )
+            : GeneralPrefsState.defaults)
+        .soundTheme;
+    await _soundEffectPlugin.initialize();
+    await _loadAllSounds(theme);
+  }
 
   /// Play the given sound if sound is enabled.
   Future<void> play(Sound sound) async {

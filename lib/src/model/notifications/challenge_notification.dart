@@ -2,7 +2,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/notifications/local_notification.dart';
+import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 
 class ChallengeNotification implements LocalNotification {
   ChallengeNotification(this._challenge, this._l10n);
