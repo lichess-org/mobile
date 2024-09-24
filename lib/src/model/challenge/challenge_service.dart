@@ -46,7 +46,7 @@ class ChallengeService {
   StreamSubscription<SocketEvent>? _socketSubscription;
 
   /// Start listening to challenge events from the server.
-  void initialize() {
+  void start() {
     _socketSubscription = socketGlobalStream.listen(_onSocketEvent);
   }
 

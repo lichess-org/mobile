@@ -10,9 +10,9 @@ import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
-import 'package:lichess_mobile/src/app_initialization.dart';
 import 'package:lichess_mobile/src/crashlytics.dart';
 import 'package:lichess_mobile/src/db/shared_preferences.dart';
+import 'package:lichess_mobile/src/init.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/session_storage.dart';
@@ -132,8 +132,8 @@ Future<Widget> buildTestApp(
         return MockGameStorage();
       }),
       // ignore: scoped_providers_should_specify_dependencies
-      appInitializationProvider.overrideWith((ref) {
-        return AppInitializationData(
+      cachedDataProvider.overrideWith((ref) {
+        return CachedData(
           packageInfo: PackageInfo(
             appName: 'lichess_mobile_test',
             version: 'test',
@@ -150,7 +150,7 @@ Future<Widget> buildTestApp(
             'isPhysicalDevice': true,
           }),
           sharedPreferences: sharedPreferences,
-          userSession: userSession,
+          initialUserSession: userSession,
           sri: 'test',
           engineMaxMemoryInMb: 16,
         );

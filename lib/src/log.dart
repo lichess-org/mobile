@@ -11,7 +11,8 @@ const _loggersToShowInTerminal = {
   'Socket',
 };
 
-void setupLogging() {
+/// Setup logging and crash reporting.
+void setupLoggingAndCrashReporting() {
   if (kDebugMode) {
     Logger.root.level = Level.FINE;
     Logger.root.onRecord.listen((record) {

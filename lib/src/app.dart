@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
-import 'package:lichess_mobile/src/app_initialization.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/init.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
@@ -31,8 +31,8 @@ class AppInitializationScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen<AsyncValue<AppInitializationData>>(
-      appInitializationProvider,
+    ref.listen<AsyncValue<CachedData>>(
+      cachedDataProvider,
       (_, state) {
         if (state.hasValue || state.hasError) {
           FlutterNativeSplash.remove();
@@ -40,47 +40,44 @@ class AppInitializationScreen extends ConsumerWidget {
       },
     );
 
-    return ref.watch(appInitializationProvider).when(
-          data: (_) => const Application(),
-          // loading screen is handled by the native splash screen
-          loading: () => const SizedBox.shrink(),
-          error: (err, st) {
-            debugPrint(
-              'SEVERE: [App] could not initialize app; $err\n$st',
-            );
-            // We should really do everything we can to avoid this screen
-            // but in last resort, let's show an error message and invite the
-            // user to clear app data.
-            // TODO implement it on iOS
-            return Theme.of(context).platform == TargetPlatform.android
-                ? MaterialApp(
-                    home: Scaffold(
-                      body: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.all(16.0),
-                            child: Text(
-                              "Something went wrong :'(\n\nIf the problem persists, you can try to clear the storage and restart the application.\n\nSorry for the inconvenience.",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 18.0),
-                            ),
-                          ),
-                          const SizedBox(height: 16.0),
-                          ElevatedButton(
-                            onPressed: () {
-                              System.instance.clearUserData();
-                            },
-                            child: const Text('Clear storage'),
-                          ),
-                        ],
-                      ),
-                    ),
-                  )
-                : const SizedBox.shrink();
-          },
-        );
+    final result = ref.watch(cachedDataProvider);
+
+    if (result.isLoading) {
+      // loading screen is handled by the native splash screen
+      return const SizedBox.shrink();
+    } else if (result.hasError) {
+      // We should really do everything we can to avoid this screen
+      // but in last resort, let's show an error message and invite the
+      // user to clear app data.
+      return MaterialApp(
+        home: Scaffold(
+          body: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Text(
+                  "Something went wrong :'(\n\nIf the problem persists, you can try to clear the storage and restart the application.\n\nSorry for the inconvenience.",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 18.0),
+                ),
+              ),
+              const SizedBox(height: 16.0),
+              if (Theme.of(context).platform == TargetPlatform.android)
+                ElevatedButton(
+                  onPressed: () {
+                    System.instance.clearUserData();
+                  },
+                  child: const Text('Clear storage'),
+                ),
+            ],
+          ),
+        ),
+      );
+    } else {
+      return const Application();
+    }
   }
 }
 
@@ -101,16 +98,15 @@ class _AppState extends ConsumerState<Application> {
 
   @override
   void initState() {
-    // preload sounds
     final soundTheme = ref.read(generalPreferencesProvider).soundTheme;
     preloadSounds(soundTheme);
 
     // check if session is still active
     checkSession();
 
-    // Initialize services
-    ref.read(localNotificationDispatcherProvider).initialize();
-    ref.read(challengeServiceProvider).initialize();
+    // Start services
+    ref.read(localNotificationDispatcherProvider).start();
+    ref.read(challengeServiceProvider).start();
 
     // Listen for connectivity changes and perform actions accordingly.
     ref.listenManual(connectivityChangesProvider, (prev, current) async {
@@ -241,7 +237,7 @@ class _AppState extends ConsumerState<Application> {
                   );
                 }
               : null,
-          home: const _EntryPointWidget(),
+          home: const BottomNavScaffold(),
           navigatorObservers: [
             rootNavPageRouteObserver,
           ],
@@ -267,39 +263,6 @@ class _AppState extends ConsumerState<Application> {
         debugPrint('Could not check session: $e');
       }
     }
-  }
-}
-
-/// The entry point widget for the application.
-///
-/// This widget needs to be a desendant of [MaterialApp] to be able to handle
-/// the [Navigator] properly.
-///
-/// This widget is responsible for setting up the bottom navigation scaffold and
-/// the main navigation routes.
-///
-/// It also sets up the push notifications and handles incoming messages.
-class _EntryPointWidget extends ConsumerStatefulWidget {
-  const _EntryPointWidget();
-
-  @override
-  ConsumerState<_EntryPointWidget> createState() => _EntryPointState();
-}
-
-class _EntryPointState extends ConsumerState<_EntryPointWidget> {
-  @override
-  Widget build(BuildContext context) {
-    return const BottomNavScaffold();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 }
 

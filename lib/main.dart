@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/app_initialization.dart';
+import 'package:lichess_mobile/src/init.dart';
 import 'package:lichess_mobile/src/intl.dart';
 import 'package:lichess_mobile/src/log.dart';
 import 'package:lichess_mobile/src/model/notifications/local_notification.dart';
@@ -15,25 +15,24 @@ import 'src/app.dart';
 Future<void> main() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
 
+  SharedPreferences.setPrefix('lichess.');
+
   // Show splash screen until app is ready
   // See src/app.dart for splash screen removal
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
-  setupLogging();
+  setupLoggingAndCrashReporting();
 
-  SharedPreferences.setPrefix('lichess.');
+  await setupFirstLaunch();
 
-  // Locale, Intl and timeago setup
   final locale = await setupIntl(widgetsBinding);
 
-  // local notifications service setup
   await LocalNotificationService.initialize(locale);
 
-  // Firebase setup
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   if (defaultTargetPlatform == TargetPlatform.android) {
-    androidDisplayInitialization(widgetsBinding);
+    await androidDisplayInitialization(widgetsBinding);
   }
 
   runApp(

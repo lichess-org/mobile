@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/app_initialization.dart';
+import 'package:lichess_mobile/src/init.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
@@ -214,7 +214,7 @@ class PushNotificationService {
     final ref = ProviderContainer();
 
     ref.listen(
-      appInitializationProvider,
+      cachedDataProvider,
       (prev, now) {
         if (!now.hasValue) return;
         try {
@@ -231,6 +231,6 @@ class PushNotificationService {
       },
     );
 
-    ref.read(appInitializationProvider);
+    ref.read(cachedDataProvider);
   }
 }

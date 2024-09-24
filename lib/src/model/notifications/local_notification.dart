@@ -117,7 +117,7 @@ class LocalNotificationDispatcher {
   StreamSubscription<ParsedNotificationResponse>? _responseSubscription;
 
   /// Start listening for notification responses.
-  void initialize() {
+  void start() {
     _responseSubscription = localNotificationResponseStream.listen(
       (data) {
         final (notifId, response, payload) = data;

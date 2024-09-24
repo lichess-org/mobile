@@ -6,11 +6,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:intl/intl.dart';
-import 'package:lichess_mobile/src/app_initialization.dart';
 import 'package:lichess_mobile/src/crashlytics.dart';
 import 'package:lichess_mobile/src/db/shared_preferences.dart';
+import 'package:lichess_mobile/src/init.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/auth/session_storage.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
@@ -22,7 +21,6 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import './fake_crashlytics.dart';
-import './model/auth/fake_session_storage.dart';
 import './model/common/service/fake_sound_service.dart';
 import 'fake_notification_service.dart';
 import 'model/common/fake_websocket_channel.dart';
@@ -87,9 +85,8 @@ Future<ProviderContainer> makeContainer({
           .overrideWithValue(FakeNotificationService()),
       soundServiceProvider.overrideWithValue(FakeSoundService()),
       sharedPreferencesProvider.overrideWithValue(sharedPreferences),
-      sessionStorageProvider.overrideWithValue(FakeSessionStorage()),
-      appInitializationProvider.overrideWith((ref) {
-        return AppInitializationData(
+      cachedDataProvider.overrideWith((ref) {
+        return CachedData(
           packageInfo: PackageInfo(
             appName: 'lichess_mobile_test',
             version: 'test',
@@ -106,7 +103,7 @@ Future<ProviderContainer> makeContainer({
             'isPhysicalDevice': true,
           }),
           sharedPreferences: sharedPreferences,
-          userSession: userSession,
+          initialUserSession: userSession,
           sri: 'test',
           engineMaxMemoryInMb: 16,
         );
