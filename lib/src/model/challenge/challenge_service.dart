@@ -8,10 +8,9 @@ import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
-import 'package:lichess_mobile/src/model/notifications/challenge_notification.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
+import 'package:lichess_mobile/src/model/notifications/notifications.dart';
 import 'package:lichess_mobile/src/navigation.dart';
-import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
@@ -66,8 +65,6 @@ class ChallengeService {
     final Iterable<ChallengeId> currentInwardIds =
         inward.map((challenge) => challenge.id);
 
-    final l10n = ref.read(l10nProvider).strings;
-
     // challenges that were canceled by challenger or expired
     prevInwardIds
         .whereNot((challengeId) => currentInwardIds.contains(challengeId))
@@ -83,7 +80,7 @@ class ChallengeService {
       (challenge) {
         ref
             .read(notificationServiceProvider)
-            .show(ChallengeNotification(challenge, l10n));
+            .show(ChallengeNotification(challenge));
       },
     );
   }
@@ -95,11 +92,10 @@ class ChallengeService {
 
   /// Handle a local notification response when the app is in the foreground.
   Future<void> onNotificationResponse(
-    int id,
     String? actionid,
-    NotificationPayload payload,
+    Challenge challenge,
   ) async {
-    final challengeId = ChallengePayload.fromNotification(payload).id;
+    final challengeId = challenge.id;
 
     switch (actionid) {
       case 'accept':
@@ -113,9 +109,9 @@ class ChallengeService {
         final context = ref.read(currentNavigatorKeyProvider).currentContext;
         if (context == null || !context.mounted) break;
 
-        final navState = Navigator.of(context);
-        if (navState.canPop()) {
-          navState.popUntil((route) => route.isFirst);
+        final rootNavState = Navigator.of(context, rootNavigator: true);
+        if (rootNavState.canPop()) {
+          rootNavState.popUntil((route) => route.isFirst);
         }
 
         pushPlatformRoute(

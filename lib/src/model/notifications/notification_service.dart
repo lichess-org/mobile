@@ -6,7 +6,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/firebase_options.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/init.dart';
@@ -16,42 +15,17 @@ import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
-import 'package:lichess_mobile/src/model/notifications/challenge_notification.dart';
+import 'package:lichess_mobile/src/model/notifications/notifications.dart';
 import 'package:lichess_mobile/src/utils/badge_service.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
+import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'notification_service.g.dart';
-part 'notification_service.freezed.dart';
 
 final _localNotificationPlugin = FlutterLocalNotificationsPlugin();
 final _logger = Logger('NotificationService');
-
-/// A notification response with its ID and payload.
-///
-/// A notification response is the user's interaction with a notification shown
-/// by the app.
-typedef NotificationResponseData = ({
-  /// The notification id.
-  int id,
-
-  /// The id of the action that was triggered.
-  String? actionId,
-
-  /// The value of the input field if the notification action had an input
-  /// field.
-  String? input,
-
-  /// The parsed notification payload.
-  NotificationPayload? payload,
-});
-
-/// The type of notification handled by the app.
-enum AppNotificationType {
-  corresGameUpdate,
-  challenge,
-}
 
 /// Notification types defined by the server.
 ///
@@ -93,26 +67,7 @@ enum ServerNotificationType {
   }
 }
 
-@Freezed(fromJson: true, toJson: true)
-class NotificationPayload with _$NotificationPayload {
-  factory NotificationPayload({
-    required AppNotificationType type,
-    required Map<String, dynamic> data,
-  }) = _NotificationPayload;
-
-  factory NotificationPayload.fromJson(Map<String, dynamic> json) =>
-      _$NotificationPayloadFromJson(json);
-}
-
-/// A local notification that can be shown to the user.
-abstract class LocalNotification {
-  int get id;
-  String get title;
-  String? get body;
-  NotificationPayload? get payload;
-  NotificationDetails get details;
-}
-
+/// A provider instance of the [NotificationService].
 @Riverpod(keepAlive: true)
 NotificationService notificationService(NotificationServiceRef ref) {
   final service = NotificationService(ref);
@@ -142,14 +97,16 @@ class NotificationService {
       _connectivitySubscription;
 
   /// The stream controller for notification responses.
-  static final StreamController<NotificationResponseData>
+  static final StreamController<NotificationResponse>
       _responseStreamController = StreamController.broadcast();
 
   /// The stream subscription for notification responses.
-  StreamSubscription<NotificationResponseData>? _responseStreamSubscription;
+  StreamSubscription<NotificationResponse>? _responseStreamSubscription;
 
   /// Whether the device has been registered for push notifications.
   bool _registeredDevice = false;
+
+  AppLocalizations get _l10n => _ref.read(l10nProvider).strings;
 
   /// Initialize the notification service.
   ///
@@ -238,23 +195,21 @@ class NotificationService {
     FirebaseMessaging.onMessageOpenedApp.listen(_handleFcmMessageOpenedApp);
 
     // start listening for notification responses
-    _responseStreamSubscription = _responseStreamController.stream.listen(
-      (data) => _dispatchNotificationResponse(data),
-    );
+    _responseStreamSubscription =
+        _responseStreamController.stream.listen(_dispatchNotificationResponse);
   }
 
   /// Shows a notification.
   Future<int> show(LocalNotification notification) async {
     final id = notification.id;
-    final payload = notification.payload != null
-        ? jsonEncode(notification.payload!.toJson())
-        : null;
+    final payload =
+        notification.payload != null ? jsonEncode(notification.payload) : null;
 
     await _localNotificationPlugin.show(
       id,
-      notification.title,
-      notification.body,
-      notification.details,
+      notification.title(_l10n),
+      notification.body(_l10n),
+      notification.details(_l10n),
       payload: payload,
     );
     _logger.info(
@@ -276,47 +231,34 @@ class NotificationService {
     _responseStreamSubscription?.cancel();
   }
 
-  void _dispatchNotificationResponse(NotificationResponseData data) {
-    final (id: id, payload: payload, actionId: actionId, input: _) = data;
+  /// Dispatch a notification response to the appropriate service according to the notification type.
+  void _dispatchNotificationResponse(NotificationResponse response) {
+    final rawPayload = response.payload;
 
-    if (payload == null) return;
+    if (rawPayload == null) return;
 
-    switch (payload.type) {
-      case AppNotificationType.challenge:
+    final json = jsonDecode(rawPayload) as Map<String, dynamic>;
+
+    final notification = LocalNotification.fromJson(json);
+
+    switch (notification) {
+      case CorresGameUpdateNotification(fullId: final gameFullId):
+        _ref
+            .read(correspondenceServiceProvider)
+            .onNotificationResponse(gameFullId);
+      case ChallengeNotification(challenge: final challenge):
         _ref.read(challengeServiceProvider).onNotificationResponse(
-              id,
-              actionId,
-              payload,
+              response.actionId,
+              challenge,
             );
-      case AppNotificationType.corresGameUpdate:
-        // TODO handle corres game update notifs
-        break;
     }
   }
 
   /// Function called by the flutter_local_notifications plugin when the user interacts with a notification that causes the app to open.
   static void _onDidReceiveNotificationResponse(NotificationResponse response) {
-    _logger.info('processing response in foreground. id [${response.id}]');
+    _logger.fine('received response in foreground. id [${response.id}]');
 
-    if (response.id == null) return;
-
-    try {
-      final payload = response.payload != null
-          ? NotificationPayload.fromJson(
-              jsonDecode(response.payload!) as Map<String, dynamic>,
-            )
-          : null;
-      _responseStreamController.add(
-        (
-          id: response.id!,
-          actionId: response.actionId,
-          input: response.input,
-          payload: payload,
-        ),
-      );
-    } catch (e) {
-      _logger.warning('Failed to parse notification payload: $e');
-    }
+    _responseStreamController.add(response);
   }
 
   /// Handle an FCM message that caused the application to open
@@ -336,6 +278,7 @@ class NotificationService {
                 GameFullId(gameFullId),
               );
         }
+
       case ServerNotificationType.unhandled:
         _logger
             .warning('Received unhandled FCM notification type: $messageType');
@@ -344,11 +287,15 @@ class NotificationService {
 
   /// Process a message received from the Firebase Cloud Messaging service.
   ///
-  /// If the message contains a [RemoteMessage.notification] field, it will show
-  /// a local notification to the user.
+  /// If the message contains a [RemoteMessage.notification] field, it may show
+  /// a local notification to the user, depending on the message type.
   ///
   /// Some messages (whether or not they have an associated notification), have
-  /// a [RemoteMessage.data] field used to update the application state.
+  /// a [RemoteMessage.data] field used to update the application state according
+  /// to the message type.
+  ///
+  /// A special data field, 'lichess.iosBadge', is used to update the iOS app's
+  /// badge count according to the value held by the server.
   Future<void> _processFcmMessage(
     RemoteMessage message, {
     required bool fromBackground,
@@ -357,7 +304,9 @@ class NotificationService {
       'Processing a FCM message from ${fromBackground ? 'background' : 'foreground'}: ${message.data}',
     );
 
+    final RemoteNotification? notification = message.notification;
     final messageType = message.data['lichess.type'] as String?;
+
     if (messageType != null) {
       switch (ServerNotificationType.fromString(messageType)) {
         case ServerNotificationType.corresAlarm:
@@ -367,6 +316,7 @@ class NotificationService {
         case ServerNotificationType.gameFinish:
           final gameFullId = message.data['lichess.fullId'] as String?;
           final round = message.data['lichess.round'] as String?;
+
           if (gameFullId != null && round != null) {
             final fullId = GameFullId(gameFullId);
             final game = PlayableGame.fromServerJson(
@@ -378,6 +328,18 @@ class NotificationService {
                   fromBackground: fromBackground,
                 );
           }
+
+          if (gameFullId != null && notification != null) {
+            await show(
+              CorresGameUpdateNotification(
+                GameFullId(gameFullId),
+                notification.title!,
+                notification.body!,
+              ),
+            );
+          }
+
+        // TODO: handle other notification types
 
         case ServerNotificationType.unhandled:
           _logger.warning(

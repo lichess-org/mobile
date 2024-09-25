@@ -47,7 +47,9 @@ extension type const UserId(String value) implements StringId {
   UserId.fromJson(dynamic json) : this(json as String);
 }
 
-extension type const ChallengeId(String value) implements StringId {}
+extension type const ChallengeId(String value) implements StringId {
+  ChallengeId.fromJson(dynamic json) : this(json as String);
+}
 
 extension type const BroadcastRoundId(String value) implements StringId {}
 

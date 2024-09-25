@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 
 part 'challenge.freezed.dart';
+part 'challenge.g.dart';
 
 abstract mixin class BaseChallenge {
   Variant get variant;
@@ -34,7 +35,7 @@ abstract mixin class BaseChallenge {
 }
 
 /// A challenge already created server-side.
-@freezed
+@Freezed(fromJson: true, toJson: true)
 class Challenge with _$Challenge, BaseChallenge implements BaseChallenge {
   const Challenge._();
 
@@ -56,6 +57,9 @@ class Challenge with _$Challenge, BaseChallenge implements BaseChallenge {
     String? initialFen,
     ChallengeDirection? direction,
   }) = _Challenge;
+
+  factory Challenge.fromJson(Map<String, dynamic> json) =>
+      _$ChallengeFromJson(json);
 
   factory Challenge.fromServerJson(Map<String, dynamic> json) {
     return _challengeFromPick(pick(json).required());
