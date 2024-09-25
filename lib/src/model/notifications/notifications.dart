@@ -9,6 +9,14 @@ sealed class LocalNotification {
   /// The unique identifier of the notification.
   int get id;
 
+  /// The channel identifier of the notification.
+  ///
+  /// Corresponds to [AndroidNotificationDetails.channelId] for android and
+  /// [DarwinNotificationDetails.threadIdentifier] for iOS.
+  ///
+  /// It must match the channel identifier of the notification details.
+  String get channelId;
+
   /// The localized title of the notification.
   String title(AppLocalizations l10n);
 
@@ -17,7 +25,7 @@ sealed class LocalNotification {
 
   /// The payload of the notification.
   ///
-  /// It must contain a field named 'type' (of type [String]) to identify the
+  /// It must contain a field named 'channel' (of type [String]) to identify the
   /// notification.
   Map<String, dynamic>? get payload;
 
@@ -26,14 +34,14 @@ sealed class LocalNotification {
 
   /// Retrives a local notification from a JSON payload.
   factory LocalNotification.fromJson(Map<String, dynamic> json) {
-    final type = json['type'] as String;
-    switch (type) {
+    final channel = json['channel'] as String;
+    switch (channel) {
       case 'corresGameUpdate':
         return CorresGameUpdateNotification.fromJson(json);
       case 'challenge':
         return ChallengeNotification.fromJson(json);
       default:
-        throw ArgumentError('Unknown notification type: $type');
+        throw ArgumentError('Unknown notification channel: $channel');
     }
   }
 }
@@ -63,11 +71,14 @@ class CorresGameUpdateNotification implements LocalNotification {
   }
 
   @override
+  String get channelId => 'corresGameUpdate';
+
+  @override
   int get id => fullId.hashCode;
 
   @override
   Map<String, dynamic> get payload => {
-        'type': 'corresGameUpdate',
+        'channel': channelId,
         'fullId': fullId.toJson(),
         'title': _title,
         'body': _body,
@@ -82,12 +93,13 @@ class CorresGameUpdateNotification implements LocalNotification {
   @override
   NotificationDetails details(AppLocalizations l10n) => NotificationDetails(
         android: AndroidNotificationDetails(
-          'corresGameUpdate',
+          channelId,
           l10n.preferencesNotifyGameEvent,
-          importance: Importance.defaultImportance,
+          importance: Importance.high,
           priority: Priority.defaultPriority,
           autoCancel: true,
         ),
+        iOS: DarwinNotificationDetails(threadIdentifier: channelId),
       );
 }
 
@@ -107,11 +119,14 @@ class ChallengeNotification implements LocalNotification {
   }
 
   @override
+  String get channelId => 'challenge';
+
+  @override
   int get id => challenge.id.value.hashCode;
 
   @override
   Map<String, dynamic> get payload => {
-        'type': 'challenge',
+        'channel': channelId,
         'challenge': challenge.toJson(),
       };
 
@@ -125,7 +140,7 @@ class ChallengeNotification implements LocalNotification {
   @override
   NotificationDetails details(AppLocalizations l10n) => NotificationDetails(
         android: AndroidNotificationDetails(
-          'challenges',
+          channelId,
           l10n.preferencesNotifyChallenge,
           importance: Importance.max,
           priority: Priority.high,
@@ -149,6 +164,7 @@ class ChallengeNotification implements LocalNotification {
           ],
         ),
         iOS: DarwinNotificationDetails(
+          threadIdentifier: channelId,
           categoryIdentifier: challenge.variant.isPlaySupported
               ? darwinPlayableVariantCategoryId
               : darwinUnplayableVariantCategoryId,

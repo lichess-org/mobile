@@ -238,7 +238,6 @@ class NotificationService {
     if (rawPayload == null) return;
 
     final json = jsonDecode(rawPayload) as Map<String, dynamic>;
-
     final notification = LocalNotification.fromJson(json);
 
     switch (notification) {
@@ -254,9 +253,11 @@ class NotificationService {
     }
   }
 
-  /// Function called by the flutter_local_notifications plugin when the user interacts with a notification that causes the app to open.
+  /// Function called when a notification has been interacted with and the app is in the foreground.
   static void _onDidReceiveNotificationResponse(NotificationResponse response) {
-    _logger.fine('received response in foreground. id [${response.id}]');
+    _logger.fine(
+      'received local notification ${response.id} response in foreground.',
+    );
 
     _responseStreamController.add(response);
   }
