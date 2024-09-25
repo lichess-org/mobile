@@ -46,7 +46,7 @@ sealed class LocalNotification {
   }
 }
 
-/// A local notification for a correspondence game update.
+/// A notification for a correspondence game update.
 ///
 /// This notification is shown when a correspondence game is updated on the server
 /// and a FCM message is received and contains itself a notification.
@@ -103,7 +103,7 @@ class CorresGameUpdateNotification implements LocalNotification {
       );
 }
 
-/// A local notification for a challenge.
+/// A notification for a received challenge.
 ///
 /// This notification is shown when a challenge is received from the server through
 /// the web socket.

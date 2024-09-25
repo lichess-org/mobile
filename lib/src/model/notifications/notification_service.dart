@@ -288,8 +288,10 @@ class NotificationService {
 
   /// Process a message received from the Firebase Cloud Messaging service.
   ///
-  /// If the message contains a [RemoteMessage.notification] field, it may show
-  /// a local notification to the user, depending on the message type.
+  /// If the message contains a [RemoteMessage.notification] field and if it is
+  /// received while the app was in foreground, the notification is by default not
+  /// shown to the user.
+  /// Depending on the message type, we may as well show a local notification.
   ///
   /// Some messages (whether or not they have an associated notification), have
   /// a [RemoteMessage.data] field used to update the application state according
@@ -299,6 +301,7 @@ class NotificationService {
   /// badge count according to the value held by the server.
   Future<void> _processFcmMessage(
     RemoteMessage message, {
+    /// Whether the message was received while the app was in the background.
     required bool fromBackground,
   }) async {
     _logger.fine(
@@ -330,7 +333,9 @@ class NotificationService {
                 );
           }
 
-          if (gameFullId != null && notification != null) {
+          if (fromBackground == false &&
+              gameFullId != null &&
+              notification != null) {
             await show(
               CorresGameUpdateNotification(
                 GameFullId(gameFullId),
