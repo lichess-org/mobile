@@ -3,9 +3,13 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:meta/meta.dart';
 
 /// A notification shown to the user from the platform's notification system.
+@immutable
 sealed class LocalNotification {
+  const LocalNotification();
+
   /// The unique identifier of the notification.
   int get id;
 
@@ -25,9 +29,19 @@ sealed class LocalNotification {
 
   /// The payload of the notification.
   ///
-  /// It must contain a field named 'channel' (of type [String]) to identify the
-  /// notification.
-  Map<String, dynamic>? get payload;
+  /// Implementations must not override this getter, but [_concretePayload] instead.
+  ///
+  /// See [LocalNotification.fromJson] where the [channelId] is used to determine the
+  /// concrete type of the notification, to be able to deserialize it.
+  Map<String, dynamic> get payload => {
+        'channel': channelId,
+        ..._concretePayload,
+      };
+
+  /// The actual payload of the notification.
+  ///
+  /// Will be merged with the channel:[channelId] entry to form the final payload.
+  Map<String, dynamic> get _concretePayload;
 
   /// The localized details of the notification for each platform.
   NotificationDetails details(AppLocalizations l10n);
@@ -53,7 +67,7 @@ sealed class LocalNotification {
 ///
 /// Fields [title] and [body] are dynamic and part of the payload because they
 /// are generated server side and are included in the FCM message's [RemoteMessage.notification] field.
-class CorresGameUpdateNotification implements LocalNotification {
+class CorresGameUpdateNotification extends LocalNotification {
   const CorresGameUpdateNotification(this.fullId, String title, String body)
       : _title = title,
         _body = body;
@@ -77,8 +91,7 @@ class CorresGameUpdateNotification implements LocalNotification {
   int get id => fullId.hashCode;
 
   @override
-  Map<String, dynamic> get payload => {
-        'channel': channelId,
+  Map<String, dynamic> get _concretePayload => {
         'fullId': fullId.toJson(),
         'title': _title,
         'body': _body,
@@ -107,7 +120,7 @@ class CorresGameUpdateNotification implements LocalNotification {
 ///
 /// This notification is shown when a challenge is received from the server through
 /// the web socket.
-class ChallengeNotification implements LocalNotification {
+class ChallengeNotification extends LocalNotification {
   const ChallengeNotification(this.challenge);
 
   final Challenge challenge;
@@ -125,8 +138,7 @@ class ChallengeNotification implements LocalNotification {
   int get id => challenge.id.value.hashCode;
 
   @override
-  Map<String, dynamic> get payload => {
-        'channel': channelId,
+  Map<String, dynamic> get _concretePayload => {
         'challenge': challenge.toJson(),
       };
 

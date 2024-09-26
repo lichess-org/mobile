@@ -202,8 +202,7 @@ class NotificationService {
   /// Shows a notification.
   Future<int> show(LocalNotification notification) async {
     final id = notification.id;
-    final payload =
-        notification.payload != null ? jsonEncode(notification.payload) : null;
+    final payload = jsonEncode(notification.payload);
 
     await _localNotificationPlugin.show(
       id,
