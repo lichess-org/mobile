@@ -1,13 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/firebase_options.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
+import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/init.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
@@ -24,48 +22,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'notification_service.g.dart';
 
-final _localNotificationPlugin = FlutterLocalNotificationsPlugin();
 final _logger = Logger('NotificationService');
-
-/// Notification types defined by the server.
-///
-/// This corresponds to the 'lichess.type' field in the FCM message's data.
-enum ServerNotificationType {
-  /// There is not much time left to make a move in a correspondence game.
-  corresAlarm,
-
-  /// A takeback offer has been made in a correspondence game.
-  gameTakebackOffer,
-
-  /// A draw offer has been made in a correspondence game.
-  gameDrawOffer,
-
-  /// A move has been made in a correspondence game.
-  gameMove,
-
-  /// A correspondence game just finished.
-  gameFinish,
-
-  /// Server notification type not handled by the app.
-  unhandled;
-
-  static ServerNotificationType fromString(String type) {
-    switch (type) {
-      case 'corresAlarm':
-        return corresAlarm;
-      case 'gameTakebackOffer':
-        return gameTakebackOffer;
-      case 'gameDrawOffer':
-        return gameDrawOffer;
-      case 'gameMove':
-        return gameMove;
-      case 'gameFinish':
-        return gameFinish;
-      default:
-        return unhandled;
-    }
-  }
-}
 
 /// A provider instance of the [NotificationService].
 @Riverpod(keepAlive: true)
@@ -108,40 +65,14 @@ class NotificationService {
 
   AppLocalizations get _l10n => _ref.read(l10nProvider).strings;
 
-  /// Initialize the notification service.
-  ///
-  /// It will initialize the Firebase and the local notification plugins.
-  ///
-  /// This should be called once when the app starts.
-  static Future<void> initialize(Locale locale) async {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-
-    final l10n = await AppLocalizations.delegate.load(locale);
-    await _localNotificationPlugin.initialize(
-      InitializationSettings(
-        android: const AndroidInitializationSettings('logo_black'),
-        iOS: DarwinInitializationSettings(
-          requestBadgePermission: false,
-          notificationCategories: <DarwinNotificationCategory>[
-            ChallengeNotification.darwinPlayableVariantCategory(l10n),
-            ChallengeNotification.darwinUnplayableVariantCategory(l10n),
-          ],
-        ),
-      ),
-      onDidReceiveNotificationResponse: _onDidReceiveNotificationResponse,
-      // onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
-    );
-  }
-
   /// Starts the notification service.
   ///
   /// This method listens for incoming messages and updates the application state
   /// accordingly.
   /// It also registers the device for push notifications once the app is online.
   ///
-  /// This method should be called once the app is ready to receive notifications and after [initialize].
+  /// This method should be called once the app is ready to receive notifications,
+  /// and after [LichessBinding.initializeNotifications] has been called.
   Future<void> start() async {
     _connectivitySubscription =
         _ref.listen(connectivityChangesProvider, (prev, current) async {
@@ -157,16 +88,19 @@ class NotificationService {
     });
 
     // Listen for incoming messages while the app is in the foreground.
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    LichessBinding.instance.firebaseMessagingOnMessage
+        .listen((RemoteMessage message) {
       _processFcmMessage(message, fromBackground: false);
     });
 
     // Listen for incoming messages while the app is in the background.
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+    LichessBinding.instance.firebaseMessagingOnBackgroundMessage(
+      _firebaseMessagingBackgroundHandler,
+    );
 
     // Request permission to receive notifications. Pop-up will appear only
     // once.
-    await FirebaseMessaging.instance.requestPermission(
+    await LichessBinding.instance.firebaseMessaging.requestPermission(
       alert: true,
       badge: true,
       sound: true,
@@ -177,22 +111,24 @@ class NotificationService {
     );
 
     // Listen for token refresh and update the token on the server accordingly.
-    _fcmTokenRefreshSubscription =
-        FirebaseMessaging.instance.onTokenRefresh.listen((String token) {
+    _fcmTokenRefreshSubscription = LichessBinding
+        .instance.firebaseMessaging.onTokenRefresh
+        .listen((String token) {
       _registerToken(token);
     });
 
     // Get any messages which caused the application to open from
     // a terminated state.
     final RemoteMessage? initialMessage =
-        await FirebaseMessaging.instance.getInitialMessage();
+        await LichessBinding.instance.firebaseMessaging.getInitialMessage();
 
     if (initialMessage != null) {
       _handleFcmMessageOpenedApp(initialMessage);
     }
 
     // Handle any other interaction that caused the app to open when in background.
-    FirebaseMessaging.onMessageOpenedApp.listen(_handleFcmMessageOpenedApp);
+    LichessBinding.instance.firebaseMessagingOnMessageOpenedApp
+        .listen(_handleFcmMessageOpenedApp);
 
     // start listening for notification responses
     _responseStreamSubscription =
@@ -204,7 +140,7 @@ class NotificationService {
     final id = notification.id;
     final payload = jsonEncode(notification.payload);
 
-    await _localNotificationPlugin.show(
+    await LichessBinding.instance.notifications.show(
       id,
       notification.title(_l10n),
       notification.body(_l10n),
@@ -221,7 +157,7 @@ class NotificationService {
   /// Cancels/removes a notification.
   Future<void> cancel(int id) async {
     _logger.info('canceled notification id: [$id]');
-    return _localNotificationPlugin.cancel(id);
+    return LichessBinding.instance.notifications.cancel(id);
   }
 
   void _dispose() {
@@ -253,7 +189,7 @@ class NotificationService {
   }
 
   /// Function called when a notification has been interacted with and the app is in the foreground.
-  static void _onDidReceiveNotificationResponse(NotificationResponse response) {
+  static void onDidReceiveNotificationResponse(NotificationResponse response) {
     _logger.fine(
       'received local notification ${response.id} response in foreground.',
     );
@@ -366,7 +302,7 @@ class NotificationService {
 
   /// Register the device for push notifications.
   Future<void> registerDevice() async {
-    final token = await FirebaseMessaging.instance.getToken();
+    final token = await LichessBinding.instance.firebaseMessaging.getToken();
     if (token != null) {
       await _registerToken(token);
     }
@@ -389,7 +325,8 @@ class NotificationService {
   }
 
   Future<void> _registerToken(String token) async {
-    final settings = await FirebaseMessaging.instance.getNotificationSettings();
+    final settings = await LichessBinding.instance.firebaseMessaging
+        .getNotificationSettings();
     if (settings.authorizationStatus == AuthorizationStatus.denied) {
       return;
     }

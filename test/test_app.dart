@@ -34,7 +34,7 @@ import './fake_crashlytics.dart';
 import './model/auth/fake_session_storage.dart';
 import './model/common/service/fake_sound_service.dart';
 import 'model/common/fake_websocket_channel.dart';
-import 'model/game/mock_game_storage.dart';
+import 'model/game/fake_game_storage.dart';
 import 'model/notifications/fake_notification_service.dart';
 import 'utils/fake_connectivity_changes.dart';
 
@@ -137,7 +137,7 @@ Future<Widget> buildTestApp(
       sessionStorageProvider.overrideWithValue(FakeSessionStorage(userSession)),
       // ignore: scoped_providers_should_specify_dependencies
       gameStorageProvider.overrideWith((_) async {
-        return MockGameStorage();
+        return FakeGameStorage();
       }),
       // ignore: scoped_providers_should_specify_dependencies
       cachedDataProvider.overrideWith((ref) {

@@ -4,7 +4,7 @@ import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/game_storage.dart';
 
-class MockGameStorage implements GameStorage {
+class FakeGameStorage implements GameStorage {
   @override
   Future<void> delete(GameId gameId) {
     return Future.value();

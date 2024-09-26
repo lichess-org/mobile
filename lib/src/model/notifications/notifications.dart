@@ -5,6 +5,46 @@ import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:meta/meta.dart';
 
+/// Notification types defined by the server.
+///
+/// This corresponds to the 'lichess.type' field in the FCM message's data.
+enum ServerNotificationType {
+  /// There is not much time left to make a move in a correspondence game.
+  corresAlarm,
+
+  /// A takeback offer has been made in a correspondence game.
+  gameTakebackOffer,
+
+  /// A draw offer has been made in a correspondence game.
+  gameDrawOffer,
+
+  /// A move has been made in a correspondence game.
+  gameMove,
+
+  /// A correspondence game just finished.
+  gameFinish,
+
+  /// Server notification type not handled by the app.
+  unhandled;
+
+  static ServerNotificationType fromString(String type) {
+    switch (type) {
+      case 'corresAlarm':
+        return corresAlarm;
+      case 'gameTakebackOffer':
+        return gameTakebackOffer;
+      case 'gameDrawOffer':
+        return gameDrawOffer;
+      case 'gameMove':
+        return gameMove;
+      case 'gameFinish':
+        return gameFinish;
+      default:
+        return unhandled;
+    }
+  }
+}
+
 /// A notification shown to the user from the platform's notification system.
 @immutable
 sealed class LocalNotification {
