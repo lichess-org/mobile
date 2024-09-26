@@ -533,14 +533,28 @@ void main() {
 
   group('ViewNode', () {
     test('mainline', () {
-      final root = Root.fromPgnMoves('e4 e5');
+      const pgn = '1. e4 e5 (1... d5 2. a4) 2. a4';
+      final root = Root.fromPgnGame(PgnGame.parsePgn(pgn));
       final viewRoot = root.view;
-      final mainline = viewRoot.mainline;
 
-      expect(mainline.length, equals(2));
-      final list = mainline.toList();
-      expect(list[0].sanMove, equals(SanMove('e4', Move.parse('e2e4')!)));
-      expect(list[1].sanMove, equals(SanMove('e5', Move.parse('e7e5')!)));
+      {
+        final mainline = viewRoot.mainline;
+
+        expect(mainline.length, equals(3));
+        final list = mainline.toList();
+        expect(list[0].sanMove, equals(SanMove('e4', Move.parse('e2e4')!)));
+        expect(list[1].sanMove, equals(SanMove('e5', Move.parse('e7e5')!)));
+        expect(list[2].sanMove, equals(SanMove('a4', Move.parse('a2a4')!)));
+      }
+
+      {
+        final childMainline = viewRoot.children.first.mainline;
+
+        expect(childMainline.length, equals(2));
+        final list = childMainline.toList();
+        expect(list[0].sanMove, equals(SanMove('e5', Move.parse('e7e5')!)));
+        expect(list[1].sanMove, equals(SanMove('a4', Move.parse('a2a4')!)));
+      }
     });
   });
 }

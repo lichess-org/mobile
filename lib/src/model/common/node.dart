@@ -528,6 +528,8 @@ class Root extends Node {
 
 /// An immutable view of a [Node].
 abstract class ViewNode {
+  const ViewNode();
+
   UciCharPair? get id;
   SanMove? get sanMove;
   Position get position;
@@ -538,12 +540,20 @@ abstract class ViewNode {
   IList<PgnComment>? get comments;
   IList<PgnComment>? get lichessAnalysisComments;
   IList<int>? get nags;
-  Iterable<ViewBranch> get mainline;
+
+  Iterable<ViewBranch> get mainline sync* {
+    ViewNode current = this;
+    while (current.children.isNotEmpty) {
+      final child = current.children.first;
+      yield child;
+      current = child;
+    }
+  }
 }
 
 /// An immutable view of a [Root] node.
 @freezed
-class ViewRoot with _$ViewRoot implements ViewNode {
+class ViewRoot extends ViewNode with _$ViewRoot {
   const ViewRoot._();
   const factory ViewRoot({
     required Position position,
@@ -571,19 +581,11 @@ class ViewRoot with _$ViewRoot implements ViewNode {
 
   @override
   IList<int>? get nags => null;
-
-  @override
-  Iterable<ViewBranch> get mainline sync* {
-    for (final child in children) {
-      yield child;
-      yield* child.mainline;
-    }
-  }
 }
 
 /// An immutable view of a [Branch] node.
 @freezed
-class ViewBranch with _$ViewBranch implements ViewNode {
+class ViewBranch extends ViewNode with _$ViewBranch {
   const ViewBranch._();
 
   const factory ViewBranch({
@@ -625,12 +627,4 @@ class ViewBranch with _$ViewBranch implements ViewNode {
 
   @override
   UciCharPair get id => UciCharPair.fromMove(sanMove.move);
-
-  @override
-  Iterable<ViewBranch> get mainline sync* {
-    for (final child in children) {
-      yield child;
-      yield* child.mainline;
-    }
-  }
 }
