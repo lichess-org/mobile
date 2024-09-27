@@ -7,6 +7,7 @@ import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
+import 'package:lichess_mobile/src/model/game/message_presets.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -18,6 +19,22 @@ String _storeKey(GameFullId id) => 'game.$id';
 
 @riverpod
 class ChatController extends _$ChatController {
+  static const Map<PresetMessageGroup, List<PresetMessage>> _presetMessages = {
+    PresetMessageGroup.start: [
+      (label: 'HI', value: 'Hello'),
+      (label: 'GL', value: 'Good luck'),
+      (label: 'HF', value: 'Have fun!'),
+      (label: 'U2', value: 'You too!'),
+    ],
+    PresetMessageGroup.end: [
+      (label: 'GG', value: 'Good game'),
+      (label: 'WP', value: 'Well played'),
+      (label: 'TY', value: 'Thank you'),
+      (label: 'GTG', value: "I've got to go"),
+      (label: 'BYE', value: 'Bye!'),
+    ],
+  };
+
   StreamSubscription<SocketEvent>? _subscription;
 
   late SocketClient _socketClient;
@@ -34,20 +51,45 @@ class ChatController extends _$ChatController {
       _subscription?.cancel();
     });
 
-    final messages = await _socketClient.stream
-        .firstWhere((event) => event.topic == 'full')
-        .then(
-          (event) => pick(event.data, 'chat', 'lines')
-              .asListOrNull(_messageFromPick)
-              ?.toIList(),
-        );
-
     final readMessagesCount = await _getReadMessagesCount();
+    final messages = await _getMessages();
+
+    final presetMessageGroup = await ref.watch(
+      gameControllerProvider(id).selectAsync(
+        (gameState) => PresetMessageGroup.fromGame(gameState.game),
+      ),
+    );
 
     return ChatState(
+      alreadySynced: true,
       messages: messages ?? IList(),
       unreadMessages: (messages?.length ?? 0) - readMessagesCount,
+      chatPresets: (
+        presets: _presetMessages,
+        alreadySaid: [],
+        currentPresetMessageGroup: presetMessageGroup
+      ),
     );
+  }
+
+  Future<IList<({String? colour, String message, String? username})>?>
+      _getMessages() {
+    // Once underlying socket has been opened the 'full' sync message will only be received once
+    // so when the provider state is rebuilt we should use the existing state
+    final alreadySynced = state.value?.alreadySynced == true;
+    final IList<Message>? existingMessages = state.value?.messages;
+
+    if (alreadySynced) {
+      return Future.value(existingMessages);
+    } else {
+      return _socketClient.stream.firstWhere((event) {
+        return event.topic == 'full';
+      }).then(
+        (event) => pick(event.data, 'chat', 'lines')
+            .asListOrNull(_messageFromPick)
+            ?.toIList(),
+      );
+    }
   }
 
   /// Sends a message to the chat.
@@ -56,6 +98,22 @@ class ChatController extends _$ChatController {
       'talk',
       message,
     );
+  }
+
+  // Sends a chat preset to the chat and marks it as sent
+  void sendPreset(PresetMessage message) {
+    sendMessage(message.value);
+
+    state = state.whenData((s) {
+      final state = s.copyWith(
+        chatPresets: (
+          alreadySaid: [...s.chatPresets.alreadySaid, message],
+          currentPresetMessageGroup: s.chatPresets.currentPresetMessageGroup,
+          presets: s.chatPresets.presets
+        ),
+      );
+      return state;
+    });
   }
 
   /// Resets the unread messages count to 0 and saves the number of read messages.
@@ -126,11 +184,9 @@ class ChatController extends _$ChatController {
       final data = event.data as Map<String, dynamic>;
       final message = data['t'] as String;
       final username = data['u'] as String?;
+      final colour = data['c'] as String?;
       _addMessage(
-        (
-          message: message,
-          username: username,
-        ),
+        (message: message, username: username, colour: colour),
       );
     }
   }
@@ -141,16 +197,25 @@ class ChatState with _$ChatState {
   const ChatState._();
 
   const factory ChatState({
+    required bool alreadySynced,
     required IList<Message> messages,
     required int unreadMessages,
+    required ChatPresets chatPresets,
   }) = _ChatState;
 }
 
-typedef Message = ({String? username, String message});
+typedef ChatPresets = ({
+  Map<PresetMessageGroup, List<PresetMessage>> presets,
+  List<PresetMessage> alreadySaid,
+  PresetMessageGroup? currentPresetMessageGroup
+});
+
+typedef Message = ({String? username, String? colour, String message});
 
 Message _messageFromPick(RequiredPick pick) {
   return (
     message: pick('t').asStringOrThrow(),
     username: pick('u').asStringOrNull(),
+    colour: pick('c').asStringOrNull(),
   );
 }
