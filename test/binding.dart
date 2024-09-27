@@ -8,7 +8,7 @@ import 'package:lichess_mobile/src/binding.dart';
 /// The binding instance used in tests.
 TestLichessBinding get testBinding => TestLichessBinding.instance;
 
-/// Binding instance for testing.
+/// Lichess binding for testing.
 class TestLichessBinding extends LichessBinding {
   TestLichessBinding();
 

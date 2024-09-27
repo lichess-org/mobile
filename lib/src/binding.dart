@@ -18,7 +18,7 @@ import 'package:lichess_mobile/src/model/notifications/notifications.dart';
 /// provider with riverpod because it gives more flexibility and control over
 /// the behavior of the fake.
 /// However, if the plugin is used in a way that doesn't allow for easy mocking
-///with riverpod, a binding can be used to provide a fake implementation.
+/// with riverpod, a test binding can be used to provide a fake implementation.
 abstract class LichessBinding {
   LichessBinding() : assert(_instance == null) {
     initInstance();
