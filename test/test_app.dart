@@ -12,7 +12,6 @@ import 'package:intl/intl.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/crashlytics.dart';
 import 'package:lichess_mobile/src/db/database.dart';
-import 'package:lichess_mobile/src/db/shared_preferences.dart';
 import 'package:lichess_mobile/src/init.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
@@ -20,7 +19,6 @@ import 'package:lichess_mobile/src/model/auth/session_storage.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
-import 'package:lichess_mobile/src/model/game/game_storage.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
@@ -31,11 +29,9 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 import './fake_crashlytics.dart';
-import './model/auth/fake_session_storage.dart';
 import './model/common/service/fake_sound_service.dart';
 import 'binding.dart';
 import 'model/common/fake_websocket_channel.dart';
-import 'model/game/fake_game_storage.dart';
 import 'model/notifications/fake_notification_display.dart';
 import 'utils/fake_connectivity.dart';
 
@@ -81,6 +77,8 @@ Future<Widget> buildTestApp(
 
   FlutterSecureStorage.setMockInitialValues({
     kSRIStorageKey: 'test',
+    if (userSession != null)
+      kSessionStorageKey: jsonEncode(userSession.toJson()),
   });
 
   // TODO consider loading true fonts as well
@@ -103,19 +101,19 @@ Future<Widget> buildTestApp(
       }),
       // ignore: scoped_providers_should_specify_dependencies
       databaseProvider.overrideWith((ref) async {
-        final db =
-            await openAppDatabase(databaseFactoryFfi, inMemoryDatabasePath);
-        ref.onDispose(db.close);
-        return db;
+        final testDb = await openAppDatabase(
+          databaseFactoryFfiNoIsolate,
+          inMemoryDatabasePath,
+        );
+        ref.onDispose(testDb.close);
+        return testDb;
       }),
       // ignore: scoped_providers_should_specify_dependencies
       lichessClientProvider.overrideWith((ref) {
         return LichessClient(mockClient, ref);
       }),
       // ignore: scoped_providers_should_specify_dependencies
-      defaultClientProvider.overrideWith((_) {
-        return mockClient;
-      }),
+      defaultClientProvider.overrideWith((_) => mockClient),
       // ignore: scoped_providers_should_specify_dependencies
       webSocketChannelFactoryProvider.overrideWith((ref) {
         return FakeWebSocketChannelFactory(() => FakeWebSocketChannel());
@@ -127,25 +125,13 @@ Future<Widget> buildTestApp(
         return pool;
       }),
       // ignore: scoped_providers_should_specify_dependencies
-      connectivityPluginProvider.overrideWith((_) {
-        return FakeConnectivity();
-      }),
+      connectivityPluginProvider.overrideWith((_) => FakeConnectivity()),
       // ignore: scoped_providers_should_specify_dependencies
-      showRatingsPrefProvider.overrideWith((ref) {
-        return true;
-      }),
+      showRatingsPrefProvider.overrideWith((ref) => true),
       // ignore: scoped_providers_should_specify_dependencies
       crashlyticsProvider.overrideWithValue(FakeCrashlytics()),
       // ignore: scoped_providers_should_specify_dependencies
       soundServiceProvider.overrideWithValue(FakeSoundService()),
-      // ignore: scoped_providers_should_specify_dependencies
-      sharedPreferencesProvider.overrideWithValue(sharedPreferences),
-      // ignore: scoped_providers_should_specify_dependencies
-      sessionStorageProvider.overrideWithValue(FakeSessionStorage(userSession)),
-      // ignore: scoped_providers_should_specify_dependencies
-      gameStorageProvider.overrideWith((_) async {
-        return FakeGameStorage();
-      }),
       // ignore: scoped_providers_should_specify_dependencies
       cachedDataProvider.overrideWith((ref) {
         return CachedData(

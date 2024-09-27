@@ -7,7 +7,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'session_storage.g.dart';
 
-const _kSessionStorageKey = '$kLichessHost.userSession';
+const kSessionStorageKey = '$kLichessHost.userSession';
 
 @Riverpod(keepAlive: true)
 SessionStorage sessionStorage(SessionStorageRef ref) {
@@ -18,7 +18,7 @@ class SessionStorage {
   const SessionStorage();
 
   Future<AuthSessionState?> read() async {
-    final string = await SecureStorage.instance.read(key: _kSessionStorageKey);
+    final string = await SecureStorage.instance.read(key: kSessionStorageKey);
     if (string != null) {
       return AuthSessionState.fromJson(
         jsonDecode(string) as Map<String, dynamic>,
@@ -29,12 +29,12 @@ class SessionStorage {
 
   Future<void> write(AuthSessionState session) async {
     await SecureStorage.instance.write(
-      key: _kSessionStorageKey,
+      key: kSessionStorageKey,
       value: jsonEncode(session.toJson()),
     );
   }
 
   Future<void> delete() async {
-    await SecureStorage.instance.delete(key: _kSessionStorageKey);
+    await SecureStorage.instance.delete(key: kSessionStorageKey);
   }
 }
