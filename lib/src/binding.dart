@@ -7,12 +7,18 @@ import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notifications.dart';
 
-/// The glue between the platform-specific plugins and the app.
+/// The glue between some platform-specific plugins and the app.
 ///
 /// Only one instance of this class will be created during the app's lifetime.
 /// See [AppLichessBinding] for the concrete implementation.
 ///
 /// Modeled after the Flutter framework's [WidgetsBinding] class.
+///
+/// The preferred way to mock or fake a plugin or external API is to create a
+/// provider with riverpod because it gives more flexibility and control over
+/// the behavior of the fake.
+/// However, if the plugin is used in a way that doesn't allow for easy mocking
+///with riverpod, a binding can be used to provide a fake implementation.
 abstract class LichessBinding {
   LichessBinding() : assert(_instance == null) {
     initInstance();
@@ -66,9 +72,6 @@ abstract class LichessBinding {
 
   /// Wraps [FirebaseMessaging.onBackgroundMessage].
   void firebaseMessagingOnBackgroundMessage(BackgroundMessageHandler handler);
-
-  /// Wraps the [FlutterLocalNotificationsPlugin] singleton constructor.
-  FlutterLocalNotificationsPlugin get notifications;
 }
 
 /// A concrete implementation of [LichessBinding] for the app.
@@ -125,8 +128,4 @@ class AppLichessBinding extends LichessBinding {
   @override
   Stream<RemoteMessage> get firebaseMessagingOnMessageOpenedApp =>
       FirebaseMessaging.onMessageOpenedApp;
-
-  @override
-  FlutterLocalNotificationsPlugin get notifications =>
-      FlutterLocalNotificationsPlugin();
 }

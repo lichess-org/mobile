@@ -33,10 +33,11 @@ import 'package:visibility_detector/visibility_detector.dart';
 import './fake_crashlytics.dart';
 import './model/auth/fake_session_storage.dart';
 import './model/common/service/fake_sound_service.dart';
+import 'binding.dart';
 import 'model/common/fake_websocket_channel.dart';
 import 'model/game/fake_game_storage.dart';
-import 'model/notifications/fake_notification_service.dart';
-import 'utils/fake_connectivity_changes.dart';
+import 'model/notifications/fake_notification_display.dart';
+import 'utils/fake_connectivity.dart';
 
 final mockClient = MockClient((request) async {
   return http.Response('', 200);
@@ -54,6 +55,10 @@ Future<Widget> buildTestApp(
   AuthSessionState? userSession,
   Map<String, Object>? defaultPreferences,
 }) async {
+  final binding = TestLichessBinding.ensureInitialized();
+
+  addTearDown(binding.reset);
+
   await tester.binding.setSurfaceSize(kTestSurfaceSize);
 
   VisibilityDetectorController.instance.updateInterval = Duration.zero;
@@ -93,6 +98,10 @@ Future<Widget> buildTestApp(
   return ProviderScope(
     overrides: [
       // ignore: scoped_providers_should_specify_dependencies
+      notificationDisplayProvider.overrideWith((ref) {
+        return FakeNotificationDisplay();
+      }),
+      // ignore: scoped_providers_should_specify_dependencies
       databaseProvider.overrideWith((ref) async {
         final db =
             await openAppDatabase(databaseFactoryFfi, inMemoryDatabasePath);
@@ -118,15 +127,13 @@ Future<Widget> buildTestApp(
         return pool;
       }),
       // ignore: scoped_providers_should_specify_dependencies
-      connectivityChangesProvider.overrideWith(() {
-        return FakeConnectivityChanges();
+      connectivityPluginProvider.overrideWith((_) {
+        return FakeConnectivity();
       }),
       // ignore: scoped_providers_should_specify_dependencies
       showRatingsPrefProvider.overrideWith((ref) {
         return true;
       }),
-      // ignore: scoped_providers_should_specify_dependencies
-      notificationServiceProvider.overrideWithValue(FakeNotificationService()),
       // ignore: scoped_providers_should_specify_dependencies
       crashlyticsProvider.overrideWithValue(FakeCrashlytics()),
       // ignore: scoped_providers_should_specify_dependencies

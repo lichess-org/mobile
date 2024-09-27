@@ -10,9 +10,7 @@ import 'package:lichess_mobile/src/init.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
-import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/notifications/notifications.dart';
 import 'package:lichess_mobile/src/utils/badge_service.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
@@ -23,6 +21,11 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'notification_service.g.dart';
 
 final _logger = Logger('NotificationService');
+
+/// A provider instance of the [FlutterLocalNotificationsPlugin].
+@Riverpod(keepAlive: true)
+FlutterLocalNotificationsPlugin notificationDisplay(NotificationDisplayRef _) =>
+    FlutterLocalNotificationsPlugin();
 
 /// A provider instance of the [NotificationService].
 @Riverpod(keepAlive: true)
@@ -65,6 +68,9 @@ class NotificationService {
 
   AppLocalizations get _l10n => _ref.read(l10nProvider).strings;
 
+  FlutterLocalNotificationsPlugin get _notificationDisplay =>
+      _ref.read(notificationDisplayProvider);
+
   /// Starts the notification service.
   ///
   /// This method listens for incoming messages and updates the application state
@@ -74,9 +80,9 @@ class NotificationService {
   /// This method should be called once the app is ready to receive notifications,
   /// and after [LichessBinding.initializeNotifications] has been called.
   Future<void> start() async {
+    // listen for connectivity changes to register device once the app is online
     _connectivitySubscription =
         _ref.listen(connectivityChangesProvider, (prev, current) async {
-      // register device once the app is online
       if (current.value?.isOnline == true && !_registeredDevice) {
         try {
           await registerDevice();
@@ -140,7 +146,7 @@ class NotificationService {
     final id = notification.id;
     final payload = jsonEncode(notification.payload);
 
-    await LichessBinding.instance.notifications.show(
+    await _notificationDisplay.show(
       id,
       notification.title(_l10n),
       notification.body(_l10n),
@@ -157,7 +163,7 @@ class NotificationService {
   /// Cancels/removes a notification.
   Future<void> cancel(int id) async {
     _logger.info('canceled notification id: [$id]');
-    return LichessBinding.instance.notifications.cancel(id);
+    return _notificationDisplay.cancel(id);
   }
 
   void _dispose() {
@@ -188,7 +194,7 @@ class NotificationService {
     }
   }
 
-  /// Function called when a notification has been interacted with and the app is in the foreground.
+  /// Function called by the notification plugin when a notification has been tapped on.
   static void onDidReceiveNotificationResponse(NotificationResponse response) {
     _logger.fine(
       'received local notification ${response.id} response in foreground.',
@@ -199,25 +205,20 @@ class NotificationService {
 
   /// Handle an FCM message that caused the application to open
   void _handleFcmMessageOpenedApp(RemoteMessage message) {
-    final messageType = message.data['lichess.type'] as String?;
-    if (messageType == null) return;
+    final parsedMessage = FcmMessage.fromRemoteMessage(message);
 
-    switch (ServerNotificationType.fromString(messageType)) {
-      case ServerNotificationType.corresAlarm:
-      case ServerNotificationType.gameTakebackOffer:
-      case ServerNotificationType.gameDrawOffer:
-      case ServerNotificationType.gameMove:
-      case ServerNotificationType.gameFinish:
-        final gameFullId = message.data['lichess.fullId'] as String?;
-        if (gameFullId != null) {
-          _ref.read(correspondenceServiceProvider).onNotificationResponse(
-                GameFullId(gameFullId),
-              );
-        }
+    switch (parsedMessage) {
+      case CorresGameUpdateFcmMessage(fullId: final fullId):
+        _ref.read(correspondenceServiceProvider).onNotificationResponse(fullId);
 
-      case ServerNotificationType.unhandled:
-        _logger
-            .warning('Received unhandled FCM notification type: $messageType');
+      // TODO: handle other notification types
+      case UnhandledFcmMessage(data: final data):
+        _logger.warning(
+          'Received unhandled FCM notification type: ${data['lichess.type']}',
+        );
+
+      case MalformedFcmMessage(data: final data):
+        _logger.severe('Received malformed FCM message: $data');
     }
   }
 
@@ -243,50 +244,41 @@ class NotificationService {
       'Processing a FCM message from ${fromBackground ? 'background' : 'foreground'}: ${message.data}',
     );
 
-    final RemoteNotification? notification = message.notification;
-    final messageType = message.data['lichess.type'] as String?;
+    final parsedMessage = FcmMessage.fromRemoteMessage(message);
 
-    if (messageType != null) {
-      switch (ServerNotificationType.fromString(messageType)) {
-        case ServerNotificationType.corresAlarm:
-        case ServerNotificationType.gameTakebackOffer:
-        case ServerNotificationType.gameDrawOffer:
-        case ServerNotificationType.gameMove:
-        case ServerNotificationType.gameFinish:
-          final gameFullId = message.data['lichess.fullId'] as String?;
-          final round = message.data['lichess.round'] as String?;
+    switch (parsedMessage) {
+      case CorresGameUpdateFcmMessage(
+          fullId: final fullId,
+          game: final game,
+          notification: final notification
+        ):
+        if (game != null) {
+          await _ref.read(correspondenceServiceProvider).onServerUpdateEvent(
+                fullId,
+                game,
+                fromBackground: fromBackground,
+              );
+        }
 
-          if (gameFullId != null && round != null) {
-            final fullId = GameFullId(gameFullId);
-            final game = PlayableGame.fromServerJson(
-              jsonDecode(round) as Map<String, dynamic>,
-            );
-            await _ref.read(correspondenceServiceProvider).onServerUpdateEvent(
-                  fullId,
-                  game,
-                  fromBackground: fromBackground,
-                );
-          }
-
-          if (fromBackground == false &&
-              gameFullId != null &&
-              notification != null) {
-            await show(
-              CorresGameUpdateNotification(
-                GameFullId(gameFullId),
-                notification.title!,
-                notification.body!,
-              ),
-            );
-          }
-
-        // TODO: handle other notification types
-
-        case ServerNotificationType.unhandled:
-          _logger.warning(
-            'Received unhandled FCM notification type: $messageType',
+        if (fromBackground == false && notification != null) {
+          await show(
+            CorresGameUpdateNotification(
+              fullId,
+              notification.title!,
+              notification.body!,
+            ),
           );
-      }
+        }
+
+      // TODO: handle other notification types
+
+      case UnhandledFcmMessage(data: final data):
+        _logger.warning(
+          'Received unhandled FCM notification type: ${data['lichess.type']}',
+        );
+
+      case MalformedFcmMessage(data: final data):
+        _logger.severe('Received malformed FCM message: $data');
     }
 
     // update badge

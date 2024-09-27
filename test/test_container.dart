@@ -17,18 +17,21 @@ import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:logging/logging.dart';
-import 'package:mocktail/mocktail.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import './fake_crashlytics.dart';
 import './model/common/service/fake_sound_service.dart';
+import 'binding.dart';
 import 'model/common/fake_websocket_channel.dart';
-import 'model/notifications/fake_notification_service.dart';
-import 'utils/fake_connectivity_changes.dart';
+import 'model/notifications/fake_notification_display.dart';
+import 'utils/fake_connectivity.dart';
 
-class MockHttpClient extends Mock implements http.Client {}
+/// A mock client that always returns a 200 empty response.
+final testContainerMockClient = MockClient((request) async {
+  return http.Response('', 200);
+});
 
 const shouldLog = false;
 
@@ -49,6 +52,8 @@ Future<ProviderContainer> makeContainer({
   List<Override>? overrides,
   AuthSessionState? userSession,
 }) async {
+  final binding = TestLichessBinding.ensureInitialized();
+
   SharedPreferences.setMockInitialValues({});
   final sharedPreferences = await SharedPreferences.getInstance();
 
@@ -67,6 +72,12 @@ Future<ProviderContainer> makeContainer({
 
   final container = ProviderContainer(
     overrides: [
+      connectivityPluginProvider.overrideWith((_) {
+        return FakeConnectivity();
+      }),
+      notificationDisplayProvider.overrideWith((ref) {
+        return FakeNotificationDisplay();
+      }),
       databaseProvider.overrideWith((ref) async {
         final db =
             await openAppDatabase(databaseFactoryFfi, inMemoryDatabasePath);
@@ -82,44 +93,47 @@ Future<ProviderContainer> makeContainer({
         return pool;
       }),
       lichessClientProvider.overrideWith((ref) {
-        return LichessClient(MockHttpClient(), ref);
+        return LichessClient(testContainerMockClient, ref);
       }),
-      connectivityChangesProvider.overrideWith(() {
-        return FakeConnectivityChanges();
-      }),
-      defaultClientProvider.overrideWithValue(MockHttpClient()),
+      defaultClientProvider.overrideWithValue(testContainerMockClient),
       crashlyticsProvider.overrideWithValue(FakeCrashlytics()),
-      notificationServiceProvider.overrideWithValue(FakeNotificationService()),
       soundServiceProvider.overrideWithValue(FakeSoundService()),
       sharedPreferencesProvider.overrideWithValue(sharedPreferences),
       cachedDataProvider.overrideWith((ref) {
-        return CachedData(
-          packageInfo: PackageInfo(
-            appName: 'lichess_mobile_test',
-            version: 'test',
-            buildNumber: '0.0.0',
-            packageName: 'lichess_mobile_test',
+        return Future.value(
+          CachedData(
+            packageInfo: PackageInfo(
+              appName: 'lichess_mobile_test',
+              version: 'test',
+              buildNumber: '0.0.0',
+              packageName: 'lichess_mobile_test',
+            ),
+            deviceInfo: BaseDeviceInfo({
+              'name': 'test',
+              'model': 'test',
+              'manufacturer': 'test',
+              'systemName': 'test',
+              'systemVersion': 'test',
+              'identifierForVendor': 'test',
+              'isPhysicalDevice': true,
+            }),
+            sharedPreferences: sharedPreferences,
+            initialUserSession: userSession,
+            sri: 'test',
+            engineMaxMemoryInMb: 16,
           ),
-          deviceInfo: BaseDeviceInfo({
-            'name': 'test',
-            'model': 'test',
-            'manufacturer': 'test',
-            'systemName': 'test',
-            'systemVersion': 'test',
-            'identifierForVendor': 'test',
-            'isPhysicalDevice': true,
-          }),
-          sharedPreferences: sharedPreferences,
-          initialUserSession: userSession,
-          sri: 'test',
-          engineMaxMemoryInMb: 16,
         );
       }),
       ...overrides ?? [],
     ],
   );
 
+  addTearDown(binding.reset);
   addTearDown(container.dispose);
+  addTearDown(sharedPreferences.clear);
+
+  // initialize the cached data provider
+  await container.read(cachedDataProvider.future);
 
   return container;
 }

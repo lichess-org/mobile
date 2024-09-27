@@ -8,7 +8,7 @@ void main() {
   group('PlayableGame', () {
     test('makePgn, unfinished game', () {
       final game = PlayableGame.fromServerJson(
-        jsonDecode(_unfishinedPlayableGameJson) as Map<String, dynamic>,
+        jsonDecode(_unfinishedGameJson) as Map<String, dynamic>,
       );
 
       expect(
@@ -113,7 +113,7 @@ void main() {
   });
 }
 
-const _unfishinedPlayableGameJson = '''
+const _unfinishedGameJson = '''
 {"game":{"id":"Fn9UvVKF","variant":{"key":"standard","name":"Standard","short":"Std"},"speed":"bullet","perf":"bullet","rated":true,"fen":"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1","turns":0,"source":"lobby","status":{"id":20,"name":"started"},"createdAt":1706204482969,"pgn":""},"white":{"user":{"name":"chabrot","id":"chabrot"},"rating":1801},"black":{"user":{"name":"veloce","id":"veloce"},"rating":1798},"socket":0,"expiration":{"idleMillis":67,"millisToMove":20000},"clock":{"running":false,"initial":120,"increment":1,"white":120,"black":120,"emerg":15,"moretime":15},"takebackable":true,"youAre":"black","prefs":{"autoQueen":2,"zen":2,"confirmResign":true,"enablePremove":true},"chat":{"lines":[]}}
 ''';
 

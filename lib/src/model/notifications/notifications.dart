@@ -1,49 +1,113 @@
+import 'dart:convert';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:meta/meta.dart';
 
-/// Notification types defined by the server.
+/// FCM Messages
+///////////////
+
+/// Parsed data from an FCM message.
 ///
-/// This corresponds to the 'lichess.type' field in the FCM message's data.
-enum ServerNotificationType {
-  /// There is not much time left to make a move in a correspondence game.
-  corresAlarm,
+/// Messages received from Firebase Cloud Messaging (FCM) service support different
+/// kind of use cases, depending on the message content:
+///
+/// * when no [RemoteMessage.notification] is present, the message is a data message,
+///   and the application can handle it in the foreground or background; It typically
+///   serves to update the application state silently.
+///
+/// * when a [RemoteMessage.notification] is present, the message is a notification message.
+///   If the application is in the background, the system displays the notification to the user.
+///   If the application is in the foreground, the system does not display the notification
+///   automatically, but we might want to display it ourselves.
+///   A notification message can contain additional data in the [RemoteMessage.data] field,
+///   which can also be used to update the application state.
+@immutable
+sealed class FcmMessage {
+  const FcmMessage();
 
-  /// A takeback offer has been made in a correspondence game.
-  gameTakebackOffer,
+  RemoteNotification? get notification;
 
-  /// A draw offer has been made in a correspondence game.
-  gameDrawOffer,
+  factory FcmMessage.fromRemoteMessage(RemoteMessage message) {
+    final messageType = message.data['lichess.type'] as String?;
 
-  /// A move has been made in a correspondence game.
-  gameMove,
-
-  /// A correspondence game just finished.
-  gameFinish,
-
-  /// Server notification type not handled by the app.
-  unhandled;
-
-  static ServerNotificationType fromString(String type) {
-    switch (type) {
-      case 'corresAlarm':
-        return corresAlarm;
-      case 'gameTakebackOffer':
-        return gameTakebackOffer;
-      case 'gameDrawOffer':
-        return gameDrawOffer;
-      case 'gameMove':
-        return gameMove;
-      case 'gameFinish':
-        return gameFinish;
-      default:
-        return unhandled;
+    if (messageType == null) {
+      return UnhandledFcmMessage(message.data);
+    } else {
+      switch (messageType) {
+        case 'corresAlarm':
+        case 'gameTakebackOffer':
+        case 'gameDrawOffer':
+        case 'gameMove':
+        case 'gameFinish':
+          final gameFullId = message.data['lichess.fullId'] as String?;
+          final round = message.data['lichess.round'] as String?;
+          if (gameFullId != null) {
+            final fullId = GameFullId(gameFullId);
+            final game = round != null
+                ? PlayableGame.fromServerJson(
+                    jsonDecode(round) as Map<String, dynamic>,
+                  )
+                : null;
+            return CorresGameUpdateFcmMessage(
+              fullId,
+              game: game,
+              notification: message.notification,
+            );
+          } else {
+            return MalformedFcmMessage(message.data);
+          }
+        default:
+          return UnhandledFcmMessage(message.data);
+      }
     }
   }
 }
+
+/// An [FcmMessage] that represents a correspondence game update.
+@immutable
+class CorresGameUpdateFcmMessage extends FcmMessage {
+  const CorresGameUpdateFcmMessage(
+    this.fullId, {
+    required this.game,
+    required this.notification,
+  });
+
+  final GameFullId fullId;
+  final PlayableGame? game;
+
+  @override
+  final RemoteNotification? notification;
+}
+
+/// An [FcmMessage] that could not be parsed.
+@immutable
+class MalformedFcmMessage extends FcmMessage {
+  const MalformedFcmMessage(this.data);
+
+  final Map<String, dynamic> data;
+
+  @override
+  RemoteNotification? get notification => null;
+}
+
+/// An [FcmMessage] that is not handled by the application.
+@immutable
+class UnhandledFcmMessage extends FcmMessage {
+  const UnhandledFcmMessage(this.data);
+
+  final Map<String, dynamic> data;
+
+  @override
+  RemoteNotification? get notification => null;
+}
+
+/// Local Notifications
+///////////////////////
 
 /// A notification shown to the user from the platform's notification system.
 @immutable
