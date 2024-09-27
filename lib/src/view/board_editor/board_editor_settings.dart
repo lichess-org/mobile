@@ -6,8 +6,8 @@ import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 
-class BoardEditorMenu extends ConsumerWidget {
-  const BoardEditorMenu({required this.initialFen, super.key});
+class BoardEditorPositionSettings extends ConsumerWidget {
+  const BoardEditorPositionSettings({required this.initialFen, super.key});
 
   final String? initialFen;
 
