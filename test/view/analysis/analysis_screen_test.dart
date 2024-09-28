@@ -47,10 +47,17 @@ void main() {
 
       expect(find.byType(Chessboard), findsOneWidget);
       expect(find.byType(PieceWidget), findsNWidgets(25));
-      final currentMove = find.widgetWithText(InlineMove, 'Qe1#');
+      final currentMove = find.textContaining('Qe1#');
       expect(currentMove, findsOneWidget);
       expect(
-        tester.widgetList<InlineMove>(currentMove).any((e) => e.isCurrentMove),
+        tester
+            .widget<InlineMove>(
+              find.ancestor(
+                of: currentMove,
+                matching: find.byType(InlineMove),
+              ),
+            )
+            .isCurrentMove,
         isTrue,
       );
     });
@@ -92,10 +99,17 @@ void main() {
       await tester.tap(find.byKey(const Key('goto-previous')));
       await tester.pumpAndSettle();
 
-      final currentMove = find.widgetWithText(InlineMove, 'Kc1');
+      final currentMove = find.textContaining('Kc1');
       expect(currentMove, findsOneWidget);
       expect(
-        tester.widgetList<InlineMove>(currentMove).any((e) => e.isCurrentMove),
+        tester
+            .widget<InlineMove>(
+              find.ancestor(
+                of: currentMove,
+                matching: find.byType(InlineMove),
+              ),
+            )
+            .isCurrentMove,
         isTrue,
       );
     });

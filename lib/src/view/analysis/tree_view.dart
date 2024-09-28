@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
@@ -119,38 +120,6 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
       analysisPreferencesProvider.select((value) => value.showAnnotations),
     );
 
-    final List<Widget> moveWidgets = _buildTreeWidget(
-      widget.pgn,
-      widget.options,
-      parent: root,
-      nodes: root.children,
-      shouldShowAnnotations: shouldShowAnnotations,
-      shouldShowComments: shouldShowComments,
-      inMainline: true,
-      startMainline: true,
-      startSideline: false,
-      initialPath: UciPath.empty,
-    );
-
-    // trick to make auto-scroll work when returning to the root position
-    moveWidgets.insert(
-      0,
-      currentPath.isEmpty
-          ? SizedBox.shrink(key: currentMoveKey)
-          : const SizedBox.shrink(),
-    );
-
-    if (shouldShowComments &&
-        rootComments?.any((c) => c.text?.isNotEmpty == true) == true) {
-      moveWidgets.insert(
-        0,
-        Padding(
-          padding: const EdgeInsets.only(bottom: 8.0),
-          child: _Comments(rootComments!),
-        ),
-      );
-    }
-
     return CustomScrollView(
       slivers: [
         if (kOpeningAllowedVariants.contains(widget.options.variant))
@@ -162,124 +131,533 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
           ),
         SliverFillRemaining(
           hasScrollBody: false,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-            child: Wrap(
-              spacing: kInlineMoveSpacing,
-              children: moveWidgets,
+          child: _PgnTreeView(
+            root: root,
+            rootComments: rootComments,
+            params: (
+              shouldShowAnnotations: shouldShowAnnotations,
+              shouldShowComments: shouldShowComments,
+              currentMoveKey: currentMoveKey,
+              currentPath: currentPath,
+              notifier: () => ref.read(ctrlProvider.notifier),
             ),
           ),
         ),
       ],
     );
   }
+}
 
-  List<Widget> _buildTreeWidget(
-    String pgn,
-    AnalysisOptions options, {
-    required ViewNode parent,
-    required IList<ViewBranch> nodes,
-    required bool inMainline,
-    required bool startMainline,
-    required bool startSideline,
-    required bool shouldShowAnnotations,
-    required bool shouldShowComments,
-    required UciPath initialPath,
-  }) {
-    if (nodes.isEmpty) return [];
-    final List<Widget> widgets = [];
+// A group of parameters that are passed through various parts of the tree view
+// and ultimately evaluated in the InlineMove widget. Grouped in this record to improve readability.
+typedef _PgnTreeViewParams = ({
+  UciPath currentPath,
+  bool shouldShowAnnotations,
+  bool shouldShowComments,
+  GlobalKey currentMoveKey,
+  AnalysisController Function() notifier,
+});
 
-    final firstChild = nodes.first;
-    final newPath = initialPath + firstChild.id;
-    final currentMove = newPath == currentPath;
+/// True if the side line has no branching and is less than 6 moves deep.
+bool _displaySideLineAsInline(ViewBranch node, [int depth = 0]) {
+  if (depth == 6) return false;
+  if (node.children.isEmpty) return true;
+  if (node.children.length > 1) return false;
+  return _displaySideLineAsInline(node.children.first, depth + 1);
+}
 
-    // add the first child
-    widgets.add(
-      InlineMove(
-        pgn,
-        options,
-        path: newPath,
-        parent: parent,
-        branch: firstChild,
-        isCurrentMove: currentMove,
-        key: currentMove ? currentMoveKey : null,
-        shouldShowAnnotations: shouldShowAnnotations,
-        shouldShowComments: shouldShowComments,
-        isSideline: !inMainline,
-        startMainline: startMainline,
-        startSideline: startSideline,
-        endSideline: !inMainline && firstChild.children.isEmpty,
-      ),
-    );
+bool _hasNonInlineSideLine(ViewNode node) =>
+    node.children.length > 2 ||
+    (node.children.length == 2 && !_displaySideLineAsInline(node.children[1]));
 
-    // add the sidelines if present
-    for (var i = 1; i < nodes.length; i++) {
-      final node = nodes[i];
-      if (node.isHidden) continue;
-      // start new sideline from mainline on a new line
-      if (inMainline) {
-        widgets.add(
-          SizedBox(
-            width: double.infinity,
-            child: Wrap(
-              spacing: kInlineMoveSpacing,
-              children: _buildTreeWidget(
-                pgn,
-                options,
-                parent: parent,
-                nodes: [nodes[i]].lockUnsafe,
-                shouldShowAnnotations: shouldShowAnnotations,
-                shouldShowComments: shouldShowComments,
-                inMainline: false,
-                startMainline: false,
-                startSideline: true,
-                initialPath: initialPath,
+Iterable<List<ViewNode>> _mainlineParts(ViewRoot root) =>
+    [root, ...root.mainline].splitAfter(_hasNonInlineSideLine);
+
+class _PgnTreeView extends StatelessWidget {
+  const _PgnTreeView({
+    required this.root,
+    required this.rootComments,
+    required this.params,
+  });
+
+  final ViewRoot root;
+
+  final IList<PgnComment>? rootComments;
+
+  final _PgnTreeViewParams params;
+
+  @override
+  Widget build(BuildContext context) {
+    var path = UciPath.empty;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // trick to make auto-scroll work when returning to the root position
+          if (params.currentPath.isEmpty)
+            SizedBox.shrink(key: params.currentMoveKey),
+
+          if (params.shouldShowComments &&
+              rootComments?.any((c) => c.text?.isNotEmpty == true) == true)
+            Text.rich(
+              TextSpan(
+                children: comments(rootComments!, textStyle: _baseTextStyle),
               ),
             ),
-          ),
-        );
-      } else {
-        widgets.addAll(
-          _buildTreeWidget(
-            pgn,
-            options,
-            parent: parent,
-            nodes: [nodes[i]].lockUnsafe,
-            shouldShowAnnotations: shouldShowAnnotations,
-            shouldShowComments: shouldShowComments,
-            inMainline: false,
-            startMainline: false,
-            startSideline: true,
-            initialPath: initialPath,
-          ),
-        );
-      }
-    }
+          ..._mainlineParts(root).map(
+            (nodes) {
+              final mainlineInitialPath = path;
 
-    // add the children of the first child
-    widgets.addAll(
-      _buildTreeWidget(
-        pgn,
-        options,
-        parent: firstChild,
-        nodes: firstChild.children,
-        shouldShowAnnotations: shouldShowAnnotations,
-        shouldShowComments: shouldShowComments,
-        inMainline: inMainline,
-        startMainline: false,
-        startSideline: false,
-        initialPath: newPath,
+              final sidelineInitialPath = UciPath.join(
+                path,
+                UciPath.fromIds(
+                  nodes.take(nodes.length - 1).map((n) => n.children.first.id),
+                ),
+              );
+
+              path = sidelineInitialPath;
+              if (nodes.last.children.isNotEmpty) {
+                path = path + nodes.last.children.first.id;
+              }
+
+              return [
+                _MainLinePart(
+                  params: params,
+                  initialPath: mainlineInitialPath,
+                  nodes: nodes,
+                ),
+                if (nodes.last.children.length > 1)
+                  _IndentedSideLines(
+                    nodes.last.children.skip(1),
+                    parent: nodes.last,
+                    params: params,
+                    initialPath: sidelineInitialPath,
+                  ),
+              ];
+            },
+          ).flattened,
+        ],
       ),
     );
+  }
+}
 
-    return widgets;
+List<InlineSpan> _buildInlineSideLine({
+  required ViewBranch firstNode,
+  required ViewNode parent,
+  required UciPath initialPath,
+  required TextStyle textStyle,
+  required bool followsComment,
+  required _PgnTreeViewParams params,
+}) {
+  textStyle = textStyle.copyWith(
+    fontStyle: FontStyle.italic,
+    fontSize: textStyle.fontSize != null ? textStyle.fontSize! - 2.0 : null,
+  );
+
+  final sidelineNodes = [firstNode, ...firstNode.mainline];
+
+  var path = initialPath;
+  return [
+    if (followsComment) const WidgetSpan(child: SizedBox(width: 4.0)),
+    ...sidelineNodes.mapIndexedAndLast(
+      (i, node, last) {
+        final pathToNode = path;
+        path = path + node.id;
+
+        return [
+          if (i == 0) ...[
+            if (followsComment) const WidgetSpan(child: SizedBox(width: 4.0)),
+            TextSpan(
+              text: '(',
+              style: textStyle,
+            ),
+          ],
+          ...moveWithComment(
+            node,
+            parent: i == 0 ? parent : sidelineNodes[i - 1],
+            lineInfo: (
+              type: LineType.inlineSideline,
+              startLine: i == 0 || sidelineNodes[i - 1].hasTextComment
+            ),
+            pathToNode: pathToNode,
+            textStyle: textStyle,
+            params: params,
+          ),
+          if (last)
+            TextSpan(
+              text: ')',
+              style: textStyle,
+            ),
+        ];
+      },
+    ).flattened,
+    const WidgetSpan(child: SizedBox(width: 4.0)),
+  ];
+}
+
+const _baseTextStyle = TextStyle(
+  fontSize: 16.0,
+  height: 1.5,
+);
+
+enum LineType {
+  mainline,
+  sideline,
+  inlineSideline,
+}
+
+typedef LineInfo = ({LineType type, bool startLine});
+
+List<InlineSpan> moveWithComment(
+  ViewBranch branch, {
+  required ViewNode parent,
+  required TextStyle textStyle,
+  required LineInfo lineInfo,
+  required UciPath pathToNode,
+  required _PgnTreeViewParams params,
+  GlobalKey? moveKey,
+}) {
+  return [
+    WidgetSpan(
+      alignment: PlaceholderAlignment.middle,
+      child: InlineMove(
+        branch: branch,
+        parent: parent,
+        lineInfo: lineInfo,
+        path: pathToNode + branch.id,
+        key: moveKey,
+        textStyle: textStyle,
+        params: params,
+      ),
+    ),
+    if (params.shouldShowComments && branch.hasTextComment)
+      ...comments(branch.comments!, textStyle: textStyle),
+  ];
+}
+
+class _SideLinePart extends ConsumerWidget {
+  _SideLinePart(
+    this.nodes, {
+    required this.parent,
+    required this.initialPath,
+    required this.firstMoveKey,
+    required this.params,
+  }) : assert(nodes.isNotEmpty);
+
+  final List<ViewBranch> nodes;
+
+  final ViewNode parent;
+
+  final UciPath initialPath;
+
+  final GlobalKey firstMoveKey;
+
+  final _PgnTreeViewParams params;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final textStyle = _baseTextStyle.copyWith(
+      color: _textColor(context, 0.6),
+      fontSize: _baseTextStyle.fontSize! - 1.0,
+    );
+
+    var path = initialPath + nodes.first.id;
+    final moves = [
+      ...moveWithComment(
+        nodes.first,
+        parent: parent,
+        lineInfo: (
+          type: LineType.sideline,
+          startLine: true,
+        ),
+        moveKey: firstMoveKey,
+        pathToNode: initialPath,
+        textStyle: textStyle,
+        params: params,
+      ),
+      ...nodes.take(nodes.length - 1).map(
+        (node) {
+          final moves = [
+            ...moveWithComment(
+              node.children.first,
+              parent: node,
+              lineInfo: (
+                type: LineType.sideline,
+                startLine: node.hasTextComment,
+              ),
+              pathToNode: path,
+              textStyle: textStyle,
+              params: params,
+            ),
+            if (node.children.length == 2 &&
+                _displaySideLineAsInline(node.children[1]))
+              ..._buildInlineSideLine(
+                followsComment: node.children.first.hasTextComment,
+                firstNode: node.children[1],
+                parent: node,
+                initialPath: path,
+                textStyle: textStyle,
+                params: params,
+              ),
+          ];
+          path = path + node.children.first.id;
+          return moves;
+        },
+      ).flattened,
+    ];
+
+    return Text.rich(
+      TextSpan(
+        children: moves,
+      ),
+    );
+  }
+}
+
+class _MainLinePart extends ConsumerWidget {
+  const _MainLinePart({
+    required this.initialPath,
+    required this.params,
+    required this.nodes,
+  });
+
+  final UciPath initialPath;
+
+  final List<ViewNode> nodes;
+
+  final _PgnTreeViewParams params;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final textStyle = _baseTextStyle.copyWith(
+      color: _textColor(context, 0.9),
+    );
+
+    var path = initialPath;
+    return Text.rich(
+      TextSpan(
+        children: nodes
+            .takeWhile((node) => node.children.isNotEmpty)
+            .mapIndexed(
+              (i, node) {
+                final mainlineNode = node.children.first;
+                final moves = [
+                  moveWithComment(
+                    mainlineNode,
+                    parent: node,
+                    lineInfo: (
+                      type: LineType.mainline,
+                      startLine: i == 0 || (node as ViewBranch).hasTextComment,
+                    ),
+                    pathToNode: path,
+                    textStyle: textStyle,
+                    params: params,
+                  ),
+                  if (node.children.length == 2 &&
+                      _displaySideLineAsInline(node.children[1])) ...[
+                    _buildInlineSideLine(
+                      followsComment: mainlineNode.hasTextComment,
+                      firstNode: node.children[1],
+                      parent: node,
+                      initialPath: path,
+                      textStyle: textStyle,
+                      params: params,
+                    ),
+                  ],
+                ];
+                path = path + mainlineNode.id;
+                return moves.flattened;
+              },
+            )
+            .flattened
+            .toList(),
+      ),
+    );
+  }
+}
+
+class _SideLines extends StatelessWidget {
+  const _SideLines({
+    required this.firstNode,
+    required this.parent,
+    required this.firstMoveKey,
+    required this.initialPath,
+    required this.params,
+  });
+
+  final ViewBranch firstNode;
+  final ViewNode parent;
+  final GlobalKey firstMoveKey;
+  final UciPath initialPath;
+  final _PgnTreeViewParams params;
+
+  @override
+  Widget build(BuildContext context) {
+    final sidelineNodes = [
+      firstNode,
+      if (!_hasNonInlineSideLine(firstNode))
+        ...firstNode.mainline.takeWhile((node) => !_hasNonInlineSideLine(node)),
+    ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _SideLinePart(
+          sidelineNodes.toList(),
+          parent: parent,
+          firstMoveKey: firstMoveKey,
+          initialPath: initialPath,
+          params: params,
+        ),
+        if (sidelineNodes.last.children.isNotEmpty)
+          _IndentedSideLines(
+            sidelineNodes.last.children,
+            parent: sidelineNodes.last,
+            initialPath: UciPath.join(
+              initialPath,
+              UciPath.fromIds(sidelineNodes.map((node) => node.id)),
+            ),
+            params: params,
+          ),
+      ],
+    );
+  }
+}
+
+class _IndentPainter extends CustomPainter {
+  const _IndentPainter({
+    required this.sideLineStartPositions,
+    required this.color,
+    required this.padding,
+  });
+
+  final List<Offset> sideLineStartPositions;
+
+  final Color color;
+
+  final double padding;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (sideLineStartPositions.isNotEmpty) {
+      final paint = Paint()
+        ..strokeWidth = 1.5
+        ..color = color
+        ..strokeCap = StrokeCap.round
+        ..style = PaintingStyle.stroke;
+
+      final origin = Offset(-padding, 0);
+
+      final path = Path()..moveTo(origin.dx, origin.dy);
+      path.lineTo(origin.dx, sideLineStartPositions.last.dy);
+      for (final position in sideLineStartPositions) {
+        path.moveTo(origin.dx, position.dy);
+        path.lineTo(origin.dx + padding / 2, position.dy);
+      }
+      canvas.drawPath(path, paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(_IndentPainter oldDelegate) {
+    return oldDelegate.sideLineStartPositions != sideLineStartPositions ||
+        oldDelegate.color != color;
+  }
+}
+
+class _IndentedSideLines extends StatefulWidget {
+  const _IndentedSideLines(
+    this.sideLines, {
+    required this.parent,
+    required this.initialPath,
+    required this.params,
+  });
+
+  final Iterable<ViewBranch> sideLines;
+
+  final ViewNode parent;
+
+  final UciPath initialPath;
+
+  final _PgnTreeViewParams params;
+
+  @override
+  State<_IndentedSideLines> createState() => _IndentedSideLinesState();
+}
+
+class _IndentedSideLinesState extends State<_IndentedSideLines> {
+  late List<GlobalKey> _keys;
+
+  List<Offset> _sideLineStartPositions = [];
+
+  final GlobalKey _columnKey = GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+    _keys = List.generate(widget.sideLines.length, (_) => GlobalKey());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final RenderBox? columnBox =
+          _columnKey.currentContext?.findRenderObject() as RenderBox?;
+      final Offset rowOffset =
+          columnBox?.localToGlobal(Offset.zero) ?? Offset.zero;
+
+      final positions = _keys.map((key) {
+        final context = key.currentContext;
+        final renderBox = context?.findRenderObject() as RenderBox?;
+        final height = renderBox?.size.height ?? 0;
+        final offset = renderBox?.localToGlobal(Offset.zero) ?? Offset.zero;
+        return Offset(offset.dx, offset.dy + height / 2) - rowOffset;
+      }).toList();
+
+      setState(() {
+        _sideLineStartPositions = positions;
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final sideLineWidgets = widget.sideLines
+        .mapIndexed(
+          (i, firstSidelineNode) => _SideLines(
+            firstNode: firstSidelineNode,
+            parent: widget.parent,
+            firstMoveKey: _keys[i],
+            initialPath: widget.initialPath,
+            params: widget.params,
+          ),
+        )
+        .toList();
+
+    const padding = 12.0;
+    return RepaintBoundary(
+      child: Padding(
+        padding: const EdgeInsets.only(left: padding),
+        child: CustomPaint(
+          painter: _IndentPainter(
+            sideLineStartPositions: _sideLineStartPositions,
+            color: _textColor(context, 0.6)!,
+            padding: padding,
+          ),
+          child: Column(
+            key: _columnKey,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: sideLineWidgets,
+          ),
+        ),
+      ),
+    );
   }
 }
 
 Color? _textColor(
   BuildContext context,
   double opacity, {
-  bool isLichessGameAnalysis = true,
   int? nag,
 }) {
   final defaultColor = Theme.of(context).platform == TargetPlatform.android
@@ -294,200 +672,149 @@ Color? _textColor(
 }
 
 class InlineMove extends ConsumerWidget {
-  const InlineMove(
-    this.pgn,
-    this.options, {
-    required this.path,
-    required this.parent,
+  const InlineMove({
     required this.branch,
-    required this.shouldShowAnnotations,
-    required this.shouldShowComments,
-    required this.isCurrentMove,
-    required this.isSideline,
+    required this.parent,
+    required this.path,
+    required this.textStyle,
+    required this.lineInfo,
     super.key,
-    this.startMainline = false,
-    this.startSideline = false,
-    this.endSideline = false,
+    required this.params,
   });
 
-  final String pgn;
-  final AnalysisOptions options;
-  final UciPath path;
   final ViewNode parent;
   final ViewBranch branch;
-  final bool shouldShowAnnotations;
-  final bool shouldShowComments;
-  final bool isCurrentMove;
-  final bool isSideline;
-  final bool startMainline;
-  final bool startSideline;
-  final bool endSideline;
+  final UciPath path;
+
+  final TextStyle textStyle;
+
+  final LineInfo lineInfo;
+
+  final _PgnTreeViewParams params;
 
   static const borderRadius = BorderRadius.all(Radius.circular(4.0));
-  static const baseTextStyle = TextStyle(
-    fontSize: 16.0,
-    height: 1.5,
-  );
+
+  bool get isCurrentMove => params.currentPath == path;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = analysisControllerProvider(pgn, options);
-    final move = branch.sanMove;
-    final ply = branch.position.ply;
-
     final pieceNotation = ref.watch(pieceNotationProvider).maybeWhen(
           data: (value) => value,
           orElse: () => defaultAccountPreferences.pieceNotation,
         );
-    final fontFamily =
+    final moveFontFamily =
         pieceNotation == PieceNotation.symbol ? 'ChessFont' : null;
 
-    final textStyle = isSideline
-        ? TextStyle(
-            fontFamily: fontFamily,
-            color: _textColor(context, 0.6),
-          )
-        : baseTextStyle.copyWith(
-            fontFamily: fontFamily,
-            color: _textColor(context, 0.9),
-            fontWeight: FontWeight.w600,
-          );
+    final moveTextStyle = textStyle.copyWith(
+      fontFamily: moveFontFamily,
+      fontWeight: isCurrentMove
+          ? FontWeight.bold
+          : lineInfo.type == LineType.inlineSideline
+              ? FontWeight.normal
+              : FontWeight.w600,
+    );
 
-    final indexTextStyle = baseTextStyle.copyWith(
+    final indexTextStyle = textStyle.copyWith(
       color: _textColor(context, 0.6),
     );
 
-    final indexWidget = ply.isOdd
-        ? Text(
-            '${(ply / 2).ceil()}.',
+    final indexText = branch.position.ply.isOdd
+        ? TextSpan(
+            text: '${(branch.position.ply / 2).ceil()}.',
             style: indexTextStyle,
           )
-        : ((startMainline || startSideline)
-            ? Text(
-                '${(ply / 2).ceil()}...',
+        : (lineInfo.startLine
+            ? TextSpan(
+                text: '${(branch.position.ply / 2).ceil()}…',
                 style: indexTextStyle,
               )
             : null);
 
-    final moveWithNag = move.san +
-        (branch.nags != null && shouldShowAnnotations
+    final moveWithNag = branch.sanMove.san +
+        (branch.nags != null && params.shouldShowAnnotations
             ? moveAnnotationChar(branch.nags!)
             : '');
 
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        if (startSideline)
-          Padding(
-            padding: const EdgeInsets.only(right: 4.0),
-            child: Text('(', style: textStyle),
+    final nag = params.shouldShowAnnotations ? branch.nags?.firstOrNull : null;
+
+    final ply = branch.position.ply;
+    return AdaptiveInkWell(
+      key: isCurrentMove ? params.currentMoveKey : null,
+      borderRadius: borderRadius,
+      onTap: () => params.notifier().userJump(path),
+      onLongPress: () {
+        showAdaptiveBottomSheet<void>(
+          context: context,
+          isDismissible: true,
+          isScrollControlled: true,
+          showDragHandle: true,
+          builder: (context) => _MoveContextMenu(
+            notifier: params.notifier,
+            title: ply.isOdd
+                ? '${(ply / 2).ceil()}. $moveWithNag'
+                : '${(ply / 2).ceil()}... $moveWithNag',
+            path: path,
+            parent: parent,
+            branch: branch,
+            isSideline: lineInfo.type != LineType.mainline,
           ),
-        if (shouldShowComments && branch.hasStartingTextComment)
-          Flexible(
-            child: Padding(
-              padding: const EdgeInsets.only(right: 8.0),
-              child:
-                  _Comments(branch.startingComments!, isSideline: isSideline),
-            ),
-          ),
-        if (indexWidget != null) indexWidget,
-        if (indexWidget != null) const SizedBox(width: 1),
-        AdaptiveInkWell(
-          borderRadius: borderRadius,
-          onTap: () => ref.read(ctrlProvider.notifier).userJump(path),
-          onLongPress: () {
-            showAdaptiveBottomSheet<void>(
-              context: context,
-              isDismissible: true,
-              isScrollControlled: true,
-              showDragHandle: true,
-              builder: (context) => _MoveContextMenu(
-                pgn,
-                options,
-                title: ply.isOdd
-                    ? '${(ply / 2).ceil()}. $moveWithNag'
-                    : '${(ply / 2).ceil()}... $moveWithNag',
-                path: path,
-                parent: parent,
-                branch: branch,
-                isSideline: isSideline,
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 2.0),
+        decoration: isCurrentMove
+            ? BoxDecoration(
+                color: Theme.of(context).platform == TargetPlatform.iOS
+                    ? CupertinoColors.systemGrey3.resolveFrom(context)
+                    : Theme.of(context).focusColor,
+                shape: BoxShape.rectangle,
+                borderRadius: borderRadius,
+              )
+            : null,
+        child: Text.rich(
+          TextSpan(
+            children: [
+              if (indexText != null) ...[
+                indexText,
+                const WidgetSpan(child: SizedBox(width: 3)),
+              ],
+              TextSpan(
+                text: moveWithNag,
+                style: moveTextStyle.copyWith(
+                  color: _textColor(
+                    context,
+                    isCurrentMove ? 1 : 0.9,
+                    nag: nag,
+                  ),
+                ),
               ),
-            );
-          },
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 2.0),
-            decoration: isCurrentMove
-                ? BoxDecoration(
-                    color: Theme.of(context).platform == TargetPlatform.iOS
-                        ? CupertinoColors.systemGrey3.resolveFrom(context)
-                        : Theme.of(context).focusColor,
-                    shape: BoxShape.rectangle,
-                    borderRadius: borderRadius,
-                  )
-                : null,
-            child: Text(
-              moveWithNag,
-              style: isCurrentMove
-                  ? textStyle.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: _textColor(
-                        context,
-                        1,
-                        isLichessGameAnalysis: options.isLichessGameAnalysis,
-                        nag: shouldShowAnnotations
-                            ? branch.nags?.firstOrNull
-                            : null,
-                      ),
-                    )
-                  : textStyle.copyWith(
-                      color: _textColor(
-                        context,
-                        0.9,
-                        isLichessGameAnalysis: options.isLichessGameAnalysis,
-                        nag: shouldShowAnnotations
-                            ? branch.nags?.firstOrNull
-                            : null,
-                      ),
-                    ),
-            ),
+            ],
           ),
         ),
-        if (shouldShowComments && branch.hasTextComment)
-          Flexible(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: _Comments(branch.comments!, isSideline: isSideline),
-            ),
-          ),
-        if (endSideline) Text(')', style: textStyle),
-      ],
+      ),
     );
   }
 }
 
 class _MoveContextMenu extends ConsumerWidget {
-  const _MoveContextMenu(
-    this.pgn,
-    this.options, {
+  const _MoveContextMenu({
     required this.title,
     required this.path,
     required this.parent,
     required this.branch,
     required this.isSideline,
+    required this.notifier,
   });
 
   final String title;
-  final String pgn;
-  final AnalysisOptions options;
   final UciPath path;
   final ViewNode parent;
   final ViewBranch branch;
   final bool isSideline;
+  final AnalysisController Function() notifier;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ctrlProvider = analysisControllerProvider(pgn, options);
-
     return BottomSheetScrollableContainer(
       children: [
         Padding(
@@ -567,94 +894,47 @@ class _MoveContextMenu extends ConsumerWidget {
           BottomSheetContextMenuAction(
             icon: Icons.subtitles,
             child: Text(context.l10n.mobileShowVariations),
-            onPressed: () {
-              ref.read(ctrlProvider.notifier).showAllVariations(path);
-            },
+            onPressed: () => notifier().showAllVariations(path),
           ),
-        if (isSideline)
+        if (isSideline) ...[
           BottomSheetContextMenuAction(
             icon: Icons.subtitles_off,
             child: Text(context.l10n.mobileHideVariation),
-            onPressed: () {
-              ref.read(ctrlProvider.notifier).hideVariation(path);
-            },
+            onPressed: () => notifier().hideVariation(path),
           ),
-        if (isSideline)
           BottomSheetContextMenuAction(
             icon: Icons.expand_less,
             child: Text(context.l10n.promoteVariation),
-            onPressed: () {
-              ref.read(ctrlProvider.notifier).promoteVariation(path, false);
-            },
+            onPressed: () => notifier().promoteVariation(path, false),
           ),
-        if (isSideline)
           BottomSheetContextMenuAction(
             icon: Icons.check,
             child: Text(context.l10n.makeMainLine),
-            onPressed: () {
-              ref.read(ctrlProvider.notifier).promoteVariation(path, true);
-            },
+            onPressed: () => notifier().promoteVariation(path, true),
           ),
+        ],
         BottomSheetContextMenuAction(
           icon: Icons.delete,
           child: Text(context.l10n.deleteFromHere),
-          onPressed: () {
-            ref.read(ctrlProvider.notifier).deleteFromHere(path);
-          },
+          onPressed: () => notifier().deleteFromHere(path),
         ),
       ],
     );
   }
 }
 
-class _Comments extends StatelessWidget {
-  _Comments(this.comments, {this.isSideline = false})
-      : assert(comments.any((c) => c.text?.isNotEmpty == true));
-
-  final Iterable<PgnComment> comments;
-  final bool isSideline;
-
-  @override
-  Widget build(BuildContext context) {
-    return AdaptiveInkWell(
-      onTap: () {
-        showAdaptiveBottomSheet<void>(
-          context: context,
-          isDismissible: true,
-          showDragHandle: true,
-          isScrollControlled: true,
-          builder: (context) => BottomSheetScrollableContainer(
-            padding: const EdgeInsets.symmetric(
-              vertical: 8.0,
-              horizontal: 16.0,
-            ),
-            children: comments.map(
-              (comment) {
-                if (comment.text == null || comment.text!.isEmpty) {
-                  return const SizedBox.shrink();
-                }
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 16.0),
-                  child: Text(comment.text!.replaceAll('\n', ' ')),
-                );
-              },
-            ).toList(),
+List<TextSpan> comments(
+  IList<PgnComment> comments, {
+  required TextStyle textStyle,
+}) =>
+    comments
+        .map(
+          (comment) => TextSpan(
+            text: comment.text,
+            style: textStyle.copyWith(fontSize: textStyle.fontSize! - 2.0),
           ),
-        );
-      },
-      child: Text(
-        comments.map((c) => c.text ?? '').join(' ').replaceAll('\n', ' '),
-        maxLines: 3,
-        overflow: TextOverflow.ellipsis,
-        style: TextStyle(
-          fontStyle: FontStyle.italic,
-          color:
-              isSideline ? _textColor(context, 0.6) : _textColor(context, 0.7),
-        ),
-      ),
-    );
-  }
-}
+        )
+        .toList();
 
 class _OpeningHeaderDelegate extends SliverPersistentHeaderDelegate {
   const _OpeningHeaderDelegate(
