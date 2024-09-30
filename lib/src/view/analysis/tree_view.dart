@@ -253,7 +253,6 @@ List<InlineSpan> _buildInlineSideLine({
   required _PgnTreeViewParams params,
 }) {
   textStyle = textStyle.copyWith(
-    fontStyle: FontStyle.italic,
     fontSize: textStyle.fontSize != null ? textStyle.fontSize! - 2.0 : null,
   );
 
@@ -931,7 +930,10 @@ List<TextSpan> comments(
         .map(
           (comment) => TextSpan(
             text: comment.text,
-            style: textStyle.copyWith(fontSize: textStyle.fontSize! - 2.0),
+            style: textStyle.copyWith(
+              fontSize: textStyle.fontSize! - 2.0,
+              fontStyle: FontStyle.italic,
+            ),
           ),
         )
         .toList();
