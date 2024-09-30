@@ -145,8 +145,9 @@ void main() {
     });
   });
 
-  group('Receive and show notifications:', () {
-    test('FCM message will show a notification in foreground', () async {
+  group('Correspondence game update notifications', () {
+    test('FCM message with associated notification will show it in foreground',
+        () async {
       final container = await makeContainer(
         userSession: fakeSession,
         overrides: [

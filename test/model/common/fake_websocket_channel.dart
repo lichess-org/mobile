@@ -74,10 +74,11 @@ class FakeWebSocketChannel implements WebSocketChannel {
       _outcomingController.stream.where((message) => !isPing(message));
 
   /// Simulates incoming messages from the server.
-  Future<void> addIncomingMessages(Iterable<dynamic> messages) async {
-    await Future<void>.delayed(const Duration(milliseconds: 5));
-    return _incomingController
-        .addStream(Stream<dynamic>.fromIterable(messages));
+  void addIncomingMessages(Iterable<dynamic> messages) {
+    for (final message in messages) {
+      _incomingController.add(message);
+    }
+    // await _incomingController.addStream(Stream<dynamic>.fromIterable(messages));
   }
 
   @override

@@ -17,6 +17,7 @@ import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:lichess_mobile/src/view/user/challenge_requests_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:stream_transform/stream_transform.dart';
 
 part 'challenge_service.g.dart';
 
@@ -27,12 +28,6 @@ ChallengeService challengeService(ChallengeServiceRef ref) {
   return service;
 }
 
-final _challengeStreamController = StreamController<ChallengesList>.broadcast();
-
-/// The stream of challenge events that are received from the server.
-final Stream<ChallengesList> challengeStream =
-    _challengeStreamController.stream;
-
 /// A service that listens to challenge events and shows notifications.
 class ChallengeService {
   ChallengeService(this.ref);
@@ -42,46 +37,59 @@ class ChallengeService {
   ChallengesList? _current;
   ChallengesList? _previous;
 
-  StreamSubscription<SocketEvent>? _socketSubscription;
+  StreamSubscription<ChallengesList>? _socketSubscription;
+
+  /// The stream of challenge events that are received from the server.
+  static Stream<ChallengesList> get stream => socketGlobalStream.map(
+        (event) {
+          if (event.topic != 'challenges') return null;
+          final listPick = pick(event.data).required();
+          final inward = listPick('in').asListOrEmpty(Challenge.fromPick);
+          final outward = listPick('out').asListOrEmpty(Challenge.fromPick);
+          return (inward: inward.lock, outward: outward.lock);
+        },
+      ).whereNotNull();
 
   /// Start listening to challenge events from the server.
   void start() {
-    _socketSubscription = socketGlobalStream.listen(_onSocketEvent);
+    _socketSubscription = stream.listen(_onSocketEvent);
   }
 
-  void _onSocketEvent(SocketEvent event) {
-    if (event.topic != 'challenges') return;
-
-    final listPick = pick(event.data).required();
-    final inward = listPick('in').asListOrEmpty(Challenge.fromPick);
-    final outward = listPick('out').asListOrEmpty(Challenge.fromPick);
-
+  void _onSocketEvent(ChallengesList current) {
     _previous = _current;
-    _current = (inward: inward.lock, outward: outward.lock);
-    _challengeStreamController.add(_current!);
+    _current = current;
+
+    _sendNotifications();
+  }
+
+  Future<void> _sendNotifications() async {
+    final notificationService = ref.read(notificationServiceProvider);
 
     final Iterable<ChallengeId> prevInwardIds =
         _previous?.inward.map((challenge) => challenge.id) ?? [];
     final Iterable<ChallengeId> currentInwardIds =
-        inward.map((challenge) => challenge.id);
+        _current?.inward.map((challenge) => challenge.id) ?? [];
 
     // challenges that were canceled by challenger or expired
-    prevInwardIds
-        .whereNot((challengeId) => currentInwardIds.contains(challengeId))
-        .forEach(
-          (id) =>
-              ref.read(notificationServiceProvider).cancel(id.value.hashCode),
-        );
+    await Future.wait(
+      prevInwardIds
+          .whereNot((challengeId) => currentInwardIds.contains(challengeId))
+          .map(
+            (id) async => await notificationService.cancel(id.value.hashCode),
+          ),
+    );
 
     // new incoming challenges
-    inward
-        .whereNot((challenge) => prevInwardIds.contains(challenge.id))
-        .forEach(
-      (challenge) {
-        ref
-            .read(notificationServiceProvider)
-            .show(ChallengeNotification(challenge));
-      },
+    await Future.wait(
+      _current?.inward
+              .whereNot((challenge) => prevInwardIds.contains(challenge.id))
+              .map(
+            (challenge) async {
+              return await notificationService
+                  .show(ChallengeNotification(challenge));
+            },
+          ) ??
+          <Future<int>>[],
     );
   }
 
