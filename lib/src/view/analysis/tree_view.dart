@@ -222,15 +222,20 @@ class _PgnTreeView extends StatelessWidget {
                 path = path + nodes.last.children.first.id;
               }
 
+              // Skip the first node which is the continuation of the mainline
+              final sidelineNodes = nodes.last.children.skip(1).whereNot(
+                    (node) => node.isHidden,
+                  );
+
               return [
                 _MainLinePart(
                   params: params,
                   initialPath: mainlineInitialPath,
                   nodes: nodes,
                 ),
-                if (nodes.last.children.length > 1)
+                if (sidelineNodes.isNotEmpty)
                   _IndentedSideLines(
-                    nodes.last.children.skip(1),
+                    sidelineNodes,
                     parent: nodes.last,
                     params: params,
                     initialPath: sidelineInitialPath,
@@ -501,6 +506,9 @@ class _SideLines extends StatelessWidget {
         ...firstNode.mainline.takeWhile((node) => !_hasNonInlineSideLine(node)),
     ];
 
+    final children =
+        sidelineNodes.last.children.whereNot((node) => node.isHidden);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -511,9 +519,9 @@ class _SideLines extends StatelessWidget {
           initialPath: initialPath,
           params: params,
         ),
-        if (sidelineNodes.last.children.isNotEmpty)
+        if (children.isNotEmpty)
           _IndentedSideLines(
-            sidelineNodes.last.children,
+            children,
             parent: sidelineNodes.last,
             initialPath: UciPath.join(
               initialPath,
@@ -594,11 +602,7 @@ class _IndentedSideLinesState extends State<_IndentedSideLines> {
 
   final GlobalKey _columnKey = GlobalKey();
 
-  @override
-  void initState() {
-    super.initState();
-    _keys = List.generate(widget.sideLines.length, (_) => GlobalKey());
-
+  void _redrawIndents() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final RenderBox? columnBox =
           _columnKey.currentContext?.findRenderObject() as RenderBox?;
@@ -620,7 +624,23 @@ class _IndentedSideLinesState extends State<_IndentedSideLines> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _redrawIndents();
+  }
+
+  @override
+  void didUpdateWidget(covariant _IndentedSideLines oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.sideLines != widget.sideLines) {
+      _redrawIndents();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    _keys = List.generate(widget.sideLines.length, (_) => GlobalKey());
+
     final sideLineWidgets = widget.sideLines
         .mapIndexed(
           (i, firstSidelineNode) => _SideLines(
