@@ -5,6 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
+import 'package:lichess_mobile/src/styles/lichess_colors.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_common_widgets.dart';
@@ -101,13 +103,9 @@ class GameListDetailTile extends StatelessWidget {
                               ],
                             ),
                           ),
-                          UserFullNameWidget(
-                            user: opponent.user,
-                            rating: opponent.rating,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
+                          _UsersAndRatings(
+                            me: me,
+                            opponent: opponent,
                           ),
                           if (game.lastFen != null)
                             Text(
@@ -147,6 +145,102 @@ class GameListDetailTile extends StatelessWidget {
           },
         ),
       ),
+    );
+  }
+}
+
+class _RatingAndDiff extends StatelessWidget {
+  const _RatingAndDiff({
+    required this.player,
+    required this.style,
+  });
+
+  final Player player;
+
+  final TextStyle style;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text.rich(
+      TextSpan(
+        children: [
+          if (player.rating != null)
+            TextSpan(
+              text: player.rating.toString(),
+              style: style,
+            ),
+          if (player.ratingDiff != null)
+            TextSpan(
+              text:
+                  ' ${player.ratingDiff == 0 ? '±' : player.ratingDiff! > 0 ? '+' : ''}${player.ratingDiff}',
+              style: style.copyWith(
+                color: player.ratingDiff! > 0
+                    ? LichessColors.green
+                    : player.ratingDiff! < 0
+                        ? LichessColors.error
+                        : style.color,
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _UsersAndRatings extends StatelessWidget {
+  const _UsersAndRatings({
+    required this.me,
+    required this.opponent,
+  });
+
+  final Player me;
+
+  final Player opponent;
+
+  @override
+  Widget build(BuildContext context) {
+    const userStyle = TextStyle(
+      fontSize: 15,
+      fontWeight: FontWeight.w600,
+    );
+
+    const ratingStyle = TextStyle(
+      fontSize: 13,
+    );
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            UserFullNameWidget(
+              user: me.user,
+              showPatron: false,
+              style: userStyle,
+            ),
+            _RatingAndDiff(player: me, style: ratingStyle),
+          ],
+        ),
+        const Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Icon(
+            LichessIcons.crossed_swords,
+            size: 18,
+          ),
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            UserFullNameWidget(
+              user: opponent.user,
+              showPatron: false,
+              style: userStyle,
+            ),
+            _RatingAndDiff(player: opponent, style: ratingStyle),
+          ],
+        ),
+      ],
     );
   }
 }
