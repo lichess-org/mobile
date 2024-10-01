@@ -1,7 +1,6 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
@@ -15,8 +14,7 @@ import 'package:lichess_mobile/src/view/game/status_l10n.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/board_thumbnail.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
-
-final _dateFormatter = DateFormat.yMMMd(Intl.getCurrentLocale()).add_Hm();
+import 'package:timeago/timeago.dart' as timeago;
 
 /// A list tile that shows more detailed game info than [GameListTile].
 class GameListDetailTile extends StatelessWidget {
@@ -32,7 +30,6 @@ class GameListDetailTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final (game: game, pov: youAre) = item;
     final me = youAre == Side.white ? game.white : game.black;
-    final opponent = youAre == Side.white ? game.black : game.white;
 
     final customColors = Theme.of(context).extension<CustomColors>();
 
@@ -96,8 +93,7 @@ class GameListDetailTile extends StatelessWidget {
                                   ),
                                 ),
                                 TextSpan(
-                                  text:
-                                      ' ${_dateFormatter.format(game.lastMoveAt)}',
+                                  text: ' ${timeago.format(game.lastMoveAt)}',
                                   style: dateStyle,
                                 ),
                               ],
@@ -120,7 +116,7 @@ class GameListDetailTile extends StatelessWidget {
                                 winner: game.winner,
                               ),
                               style: TextStyle(
-                                fontSize: 12,
+                                fontSize: 13,
                                 color: game.winner == null
                                     ? customColors?.brag
                                     : game.winner == mySide
