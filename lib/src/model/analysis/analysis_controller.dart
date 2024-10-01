@@ -763,7 +763,7 @@ class AnalysisCurrentNode with _$AnalysisCurrentNode {
 
   const factory AnalysisCurrentNode({
     required Position position,
-    required bool hasChild,
+    required List<Move> children,
     required bool isRoot,
     SanMove? sanMove,
     Opening? opening,
@@ -774,13 +774,16 @@ class AnalysisCurrentNode with _$AnalysisCurrentNode {
     IList<int>? nags,
   }) = _AnalysisCurrentNode;
 
+  bool get hasChild => children.isNotEmpty;
+
   factory AnalysisCurrentNode.fromNode(Node node) {
+    final children = node.children.map((n) => n.sanMove.move).toList();
     if (node is Branch) {
       return AnalysisCurrentNode(
         sanMove: node.sanMove,
         position: node.position,
         isRoot: node is Root,
-        hasChild: node.children.isNotEmpty,
+        children: children,
         opening: node.opening,
         eval: node.eval,
         lichessAnalysisComments: IList(node.lichessAnalysisComments),
@@ -791,7 +794,7 @@ class AnalysisCurrentNode with _$AnalysisCurrentNode {
     } else {
       return AnalysisCurrentNode(
         position: node.position,
-        hasChild: node.children.isNotEmpty,
+        children: children,
         isRoot: node is Root,
         opening: node.opening,
         eval: node.eval,

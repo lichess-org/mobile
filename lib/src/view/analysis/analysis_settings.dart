@@ -108,6 +108,13 @@ class AnalysisSettings extends ConsumerWidget {
               : null,
         ),
         SwitchSettingTile(
+          title: Text(context.l10n.showVariationArrows),
+          value: prefs.showVariationArrows,
+          onChanged: (value) => ref
+              .read(analysisPreferencesProvider.notifier)
+              .toggleShowVariationArrows(),
+        ),
+        SwitchSettingTile(
           title: Text(context.l10n.evaluationGauge),
           value: prefs.showEvaluationGauge,
           onChanged: (value) => ref

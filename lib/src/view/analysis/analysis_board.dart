@@ -5,7 +5,6 @@ import 'package:chessground/chessground.dart';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
@@ -50,6 +49,11 @@ class AnalysisBoardState extends ConsumerState<AnalysisBoard> {
     final showAnnotationsOnBoard = ref.watch(
       analysisPreferencesProvider.select((value) => value.showAnnotations),
     );
+    final showVariationArrows = ref.watch(
+      analysisPreferencesProvider.select(
+        (prefs) => prefs.showVariationArrows,
+      ),
+    );
 
     final evalBestMoves = ref.watch(
       engineEvaluationProvider.select((s) => s.eval?.bestMoves),
@@ -72,6 +76,29 @@ class AnalysisBoardState extends ConsumerState<AnalysisBoard> {
           )
         : ISet();
 
+    final ISet<Shape> variationArrows =
+        (showVariationArrows && analysisState.currentNode.children.length > 1)
+            ? ISet(
+                analysisState.currentNode.children.mapIndexed(
+                  (i, move) {
+                    if (move is! NormalMove) return null;
+                    if (bestMoves?.any((m) => m.move == move) == true) {
+                      return null;
+                    }
+
+                    final mainline = i == 0;
+                    final color =
+                        Colors.white.withValues(alpha: mainline ? 0.9 : 0.5);
+                    return Arrow(
+                      color: color,
+                      orig: move.from,
+                      dest: move.to,
+                    );
+                  },
+                ).nonNulls,
+              )
+            : ISet();
+
     return Chessboard(
       size: widget.boardSize,
       fen: analysisState.position.fen,
@@ -92,7 +119,7 @@ class AnalysisBoardState extends ConsumerState<AnalysisBoard> {
         onPromotionSelection: (role) =>
             ref.read(ctrlProvider.notifier).onPromotionSelection(role),
       ),
-      shapes: userShapes.union(bestMoveShapes),
+      shapes: userShapes.union(variationArrows).union(bestMoveShapes),
       annotations:
           showAnnotationsOnBoard && sanMove != null && annotation != null
               ? altCastles.containsKey(sanMove.move.uci)
