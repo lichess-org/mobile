@@ -15,7 +15,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 
 import '../../test_container.dart';
-import '../../test_utils.dart';
+import '../../test_helpers.dart';
 
 void main() {
   Future<ProviderContainer> makeTestContainer(MockClient mockClient) async {

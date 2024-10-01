@@ -11,8 +11,8 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 import 'package:lichess_mobile/src/view/puzzle/storm_screen.dart';
 
-import '../../test_app.dart';
-import '../../test_utils.dart';
+import '../../test_helpers.dart';
+import '../../test_provider_scope.dart';
 
 final client = MockClient((request) {
   if (request.url.path == '/storm') {
@@ -28,7 +28,7 @@ void main() {
       (tester) async {
         final SemanticsHandle handle = tester.ensureSemantics();
 
-        final app = await buildTestApp(
+        final app = await makeProviderScopeApp(
           tester,
           home: const StormScreen(),
           overrides: [
@@ -49,7 +49,7 @@ void main() {
     testWidgets(
       'Load puzzle and play white pieces',
       (tester) async {
-        final app = await buildTestApp(
+        final app = await makeProviderScopeApp(
           tester,
           home: const StormScreen(),
           overrides: [
@@ -73,7 +73,7 @@ void main() {
     testWidgets(
       'Play one puzzle',
       (tester) async {
-        final app = await buildTestApp(
+        final app = await makeProviderScopeApp(
           tester,
           home: const StormScreen(),
           overrides: [
@@ -128,7 +128,7 @@ void main() {
     );
 
     testWidgets('shows end run result', (tester) async {
-      final app = await buildTestApp(
+      final app = await makeProviderScopeApp(
         tester,
         home: const StormScreen(),
         overrides: [
@@ -173,7 +173,7 @@ void main() {
     });
 
     testWidgets('play wrong move', (tester) async {
-      final app = await buildTestApp(
+      final app = await makeProviderScopeApp(
         tester,
         home: const StormScreen(),
         overrides: [

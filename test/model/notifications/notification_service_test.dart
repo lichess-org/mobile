@@ -14,7 +14,7 @@ import 'package:lichess_mobile/src/model/notifications/notifications.dart';
 import 'package:mocktail/mocktail.dart';
 import '../../binding.dart';
 import '../../test_container.dart';
-import '../../test_utils.dart';
+import '../../test_helpers.dart';
 import '../auth/fake_session_storage.dart';
 
 class NotificationDisplayMock extends Mock

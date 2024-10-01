@@ -7,13 +7,13 @@ import 'package:lichess_mobile/src/model/coordinate_training/coordinate_training
 import 'package:lichess_mobile/src/model/coordinate_training/coordinate_training_preferences.dart';
 import 'package:lichess_mobile/src/view/coordinate_training/coordinate_training_screen.dart';
 
-import '../../test_app.dart';
+import '../../test_provider_scope.dart';
 
 void main() {
   group('Coordinate Training', () {
     testWidgets('Initial state when started in FindSquare mode',
         (tester) async {
-      final app = await buildTestApp(
+      final app = await makeProviderScopeApp(
         tester,
         home: const CoordinateTrainingScreen(),
       );
@@ -52,7 +52,7 @@ void main() {
     });
 
     testWidgets('Tap wrong square', (tester) async {
-      final app = await buildTestApp(
+      final app = await makeProviderScopeApp(
         tester,
         home: const CoordinateTrainingScreen(),
       );
@@ -101,7 +101,7 @@ void main() {
     });
 
     testWidgets('Tap correct square', (tester) async {
-      final app = await buildTestApp(
+      final app = await makeProviderScopeApp(
         tester,
         home: const CoordinateTrainingScreen(),
       );

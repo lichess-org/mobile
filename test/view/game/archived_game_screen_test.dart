@@ -17,8 +17,8 @@ import 'package:lichess_mobile/src/view/game/game_player.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/move_list.dart';
 
-import '../../test_app.dart';
-import '../../test_utils.dart';
+import '../../test_helpers.dart';
+import '../../test_provider_scope.dart';
 
 final client = MockClient((request) {
   if (request.url.path == '/game/export/qVChCOTc') {
@@ -32,7 +32,7 @@ void main() {
     testWidgets(
       'loads game data if only game id is provided',
       (tester) async {
-        final app = await buildTestApp(
+        final app = await makeProviderScopeApp(
           tester,
           home: const ArchivedGameScreen(
             gameId: GameId('qVChCOTc'),
@@ -65,7 +65,7 @@ void main() {
     testWidgets(
       'displays game data and last fen immediately, then moves',
       (tester) async {
-        final app = await buildTestApp(
+        final app = await makeProviderScopeApp(
           tester,
           home: ArchivedGameScreen(
             gameData: gameData,
@@ -138,7 +138,7 @@ void main() {
     );
 
     testWidgets('navigate game positions', (tester) async {
-      final app = await buildTestApp(
+      final app = await makeProviderScopeApp(
         tester,
         home: ArchivedGameScreen(
           gameData: gameData,

@@ -19,8 +19,8 @@ import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:mocktail/mocktail.dart';
 
-import '../../test_app.dart';
-import '../../test_utils.dart';
+import '../../test_helpers.dart';
+import '../../test_provider_scope.dart';
 
 class MockPuzzleBatchStorage extends Mock implements PuzzleBatchStorage {}
 
@@ -47,7 +47,7 @@ void main() {
       (WidgetTester tester) async {
         final SemanticsHandle handle = tester.ensureSemantics();
 
-        final app = await buildTestApp(
+        final app = await makeProviderScopeApp(
           tester,
           home: PuzzleScreen(
             angle: const PuzzleTheme(PuzzleThemeKey.mix),
@@ -78,7 +78,7 @@ void main() {
       'Loads puzzle directly by passing a puzzleId',
       variant: kPlatformVariant,
       (tester) async {
-        final app = await buildTestApp(
+        final app = await makeProviderScopeApp(
           tester,
           home: PuzzleScreen(
             angle: const PuzzleTheme(PuzzleThemeKey.mix),
@@ -104,7 +104,7 @@ void main() {
     );
 
     testWidgets('Loads next puzzle when no puzzleId is passed', (tester) async {
-      final app = await buildTestApp(
+      final app = await makeProviderScopeApp(
         tester,
         home: const PuzzleScreen(
           angle: PuzzleTheme(PuzzleThemeKey.mix),
@@ -151,7 +151,7 @@ void main() {
         when(() => mockHistoryStorage.fetch(puzzleId: puzzle2.puzzle.id))
             .thenAnswer((_) async => puzzle2);
 
-        final app = await buildTestApp(
+        final app = await makeProviderScopeApp(
           tester,
           home: PuzzleScreen(
             angle: const PuzzleTheme(PuzzleThemeKey.mix),
@@ -264,7 +264,7 @@ void main() {
         when(() => mockHistoryStorage.fetch(puzzleId: puzzle2.puzzle.id))
             .thenAnswer((_) async => puzzle2);
 
-        final app = await buildTestApp(
+        final app = await makeProviderScopeApp(
           tester,
           home: PuzzleScreen(
             angle: const PuzzleTheme(PuzzleThemeKey.mix),
@@ -377,7 +377,7 @@ void main() {
           return mockResponse('', 404);
         });
 
-        final app = await buildTestApp(
+        final app = await makeProviderScopeApp(
           tester,
           home: PuzzleScreen(
             angle: const PuzzleTheme(PuzzleThemeKey.mix),

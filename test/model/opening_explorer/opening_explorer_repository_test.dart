@@ -8,7 +8,7 @@ import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer.dart'
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer_repository.dart';
 
 import '../../test_container.dart';
-import '../../test_utils.dart';
+import '../../test_helpers.dart';
 
 void main() {
   group('OpeningExplorerRepository.getMasterDatabase', () {

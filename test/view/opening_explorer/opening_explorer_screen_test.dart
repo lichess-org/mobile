@@ -12,8 +12,8 @@ import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer_prefe
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_screen.dart';
 
-import '../../test_app.dart';
-import '../../test_utils.dart';
+import '../../test_helpers.dart';
+import '../../test_provider_scope.dart';
 
 void main() {
   final explorerViewFinder = find.descendant(
@@ -53,7 +53,7 @@ void main() {
     testWidgets(
       'master opening explorer loads',
       (WidgetTester tester) async {
-        final app = await buildTestApp(
+        final app = await makeProviderScopeApp(
           tester,
           home: const OpeningExplorerScreen(
             pgn: '',
@@ -106,7 +106,7 @@ void main() {
     testWidgets(
       'lichess opening explorer loads',
       (WidgetTester tester) async {
-        final app = await buildTestApp(
+        final app = await makeProviderScopeApp(
           tester,
           home: const OpeningExplorerScreen(
             pgn: '',
@@ -157,7 +157,7 @@ void main() {
     testWidgets(
       'player opening explorer loads',
       (WidgetTester tester) async {
-        final app = await buildTestApp(
+        final app = await makeProviderScopeApp(
           tester,
           home: const OpeningExplorerScreen(
             pgn: '',

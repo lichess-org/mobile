@@ -7,7 +7,7 @@ import 'package:lichess_mobile/src/model/lobby/correspondence_challenge.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_repository.dart';
 
 import '../../test_container.dart';
-import '../../test_utils.dart';
+import '../../test_helpers.dart';
 
 void main() {
   final mockClient = MockClient((request) {

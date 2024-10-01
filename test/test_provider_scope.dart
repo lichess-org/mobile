@@ -33,18 +33,22 @@ import './model/common/service/fake_sound_service.dart';
 import 'binding.dart';
 import 'model/common/fake_websocket_channel.dart';
 import 'model/notifications/fake_notification_display.dart';
+import 'test_helpers.dart';
 import 'utils/fake_connectivity.dart';
 
 final mockClient = MockClient((request) async {
   return http.Response('', 200);
 });
 
-// iPhone 14 screen size
-const double _kTestScreenWidth = 390.0;
-const double _kTestScreenHeight = 844.0;
-const kTestSurfaceSize = Size(_kTestScreenWidth, _kTestScreenHeight);
-
-Future<Widget> buildTestApp(
+/// Returns a [MaterialApp] wrapped with a [ProviderScope] and default mocks, ready for testing.
+///
+/// The [home] widget is the widget we want to test. It is wrapped in a [MediaQuery]
+/// and [MaterialApp] widgets to simulate a simple app.
+///
+/// The [overrides] parameter can be used to override any provider in the app.
+/// The [userSession] parameter can be used to set the initial user session state.
+/// The [defaultPreferences] parameter can be used to set the initial shared preferences.
+Future<Widget> makeProviderScopeApp(
   WidgetTester tester, {
   required Widget home,
   List<Override>? overrides,
@@ -158,15 +162,14 @@ Future<Widget> buildTestApp(
       }),
       ...overrides ?? [],
     ],
-    // simplified version of class [App] in lib/src/app.dart
     child: Consumer(
       builder: (context, ref, child) {
         return MediaQuery(
           data: const MediaQueryData(size: kTestSurfaceSize),
           child: Center(
             child: SizedBox(
-              width: _kTestScreenWidth,
-              height: _kTestScreenHeight,
+              width: kTestSurfaceSize.width,
+              height: kTestSurfaceSize.height,
               child: MaterialApp(
                 localizationsDelegates: AppLocalizations.localizationsDelegates,
                 home: home,
