@@ -40,10 +40,11 @@ final mockClient = MockClient((request) async {
   return http.Response('', 200);
 });
 
-/// Returns a [MaterialApp] wrapped with a [ProviderScope] and default mocks, ready for testing.
+/// Returns a [MaterialApp] wrapped in a [ProviderScope] and default mocks, ready for testing.
 ///
-/// The [home] widget is the widget we want to test. It is wrapped in a [MediaQuery]
-/// and [MaterialApp] widgets to simulate a simple app.
+/// The [home] widget is the widget we want to test. Typically a screen widget, to
+/// perform end-to-end tests.
+/// It will be wrapped in a [MaterialApp] to simulate a simple app.
 ///
 /// The [overrides] parameter can be used to override any provider in the app.
 /// The [userSession] parameter can be used to set the initial user session state.
@@ -51,6 +52,40 @@ final mockClient = MockClient((request) async {
 Future<Widget> makeProviderScopeApp(
   WidgetTester tester, {
   required Widget home,
+  List<Override>? overrides,
+  AuthSessionState? userSession,
+  Map<String, Object>? defaultPreferences,
+}) async {
+  return makeProviderScope(
+    tester,
+    child: MaterialApp(
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      home: home,
+      builder: (context, child) {
+        return CupertinoTheme(
+          data: const CupertinoThemeData(),
+          child: Material(child: child),
+        );
+      },
+    ),
+    overrides: overrides,
+    userSession: userSession,
+    defaultPreferences: defaultPreferences,
+  );
+}
+
+/// Returns a [ProviderScope] and default mocks, ready for testing.
+///
+/// The [child] widget is the widget we want to test. It will be wrapped in a
+/// [MediaQuery.new] widget, to simulate a device with a specific size, controlled
+/// by [kTestSurfaceSize].
+///
+/// The [overrides] parameter can be used to override any provider in the app.
+/// The [userSession] parameter can be used to set the initial user session state.
+/// The [defaultPreferences] parameter can be used to set the initial shared preferences.
+Future<Widget> makeProviderScope(
+  WidgetTester tester, {
+  required Widget child,
   List<Override>? overrides,
   AuthSessionState? userSession,
   Map<String, Object>? defaultPreferences,
@@ -162,28 +197,15 @@ Future<Widget> makeProviderScopeApp(
       }),
       ...overrides ?? [],
     ],
-    child: Consumer(
-      builder: (context, ref, child) {
-        return MediaQuery(
-          data: const MediaQueryData(size: kTestSurfaceSize),
-          child: Center(
-            child: SizedBox(
-              width: kTestSurfaceSize.width,
-              height: kTestSurfaceSize.height,
-              child: MaterialApp(
-                localizationsDelegates: AppLocalizations.localizationsDelegates,
-                home: home,
-                builder: (context, child) {
-                  return CupertinoTheme(
-                    data: const CupertinoThemeData(),
-                    child: Material(child: child),
-                  );
-                },
-              ),
-            ),
-          ),
-        );
-      },
+    child: MediaQuery(
+      data: const MediaQueryData(size: kTestSurfaceSize),
+      child: Center(
+        child: SizedBox(
+          width: kTestSurfaceSize.width,
+          height: kTestSurfaceSize.height,
+          child: child,
+        ),
+      ),
     ),
   );
 }

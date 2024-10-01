@@ -43,7 +43,7 @@ class AppInitializationScreen extends ConsumerWidget {
 
     if (result.isLoading) {
       // loading screen is handled by the native splash screen
-      return const SizedBox.shrink();
+      return const SizedBox.shrink(key: Key('app_splash_screen'));
     } else if (result.hasError) {
       // We should really do everything we can to avoid this screen
       // but in last resort, let's show an error message and invite the

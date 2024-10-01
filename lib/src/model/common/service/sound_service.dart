@@ -2,11 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
+import 'package:lichess_mobile/src/model/settings/preferences.dart' as pref;
 import 'package:lichess_mobile/src/model/settings/sound_theme.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sound_effect/sound_effect.dart';
 
 part 'sound_service.g.dart';
@@ -77,14 +78,13 @@ class SoundService {
   /// This will load the sounds from assets and make them ready to be played.
   /// This should be called once when the app starts.
   static Future<void> initialize() async {
-    final prefs = await SharedPreferences.getInstance();
-
-    final stored = prefs.getString(kGeneralPreferencesKey);
+    final stored = LichessBinding.instance.sharedPreferences
+        .getString(pref.Category.general.storageKey);
     final theme = (stored != null
-            ? GeneralPrefsState.fromJson(
+            ? pref.General.fromJson(
                 jsonDecode(stored) as Map<String, dynamic>,
               )
-            : GeneralPrefsState.defaults)
+            : pref.General.defaults)
         .soundTheme;
 
     try {

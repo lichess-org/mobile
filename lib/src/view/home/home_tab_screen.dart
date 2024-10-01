@@ -10,6 +10,7 @@ import 'package:lichess_mobile/src/model/challenge/challenges.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/settings/home_preferences.dart';
+import 'package:lichess_mobile/src/model/settings/preferences.dart' as pref;
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
@@ -239,13 +240,13 @@ class _HomeBody extends ConsumerWidget {
         final widgets = isTablet
             ? [
                 _EditableWidget(
-                  widget: EnabledWidget.hello,
+                  widget: pref.EnabledWidget.hello,
                   isEditing: isEditing,
                   shouldShow: true,
                   child: const _HelloWidget(),
                 ),
                 _EditableWidget(
-                  widget: EnabledWidget.perfCards,
+                  widget: pref.EnabledWidget.perfCards,
                   isEditing: isEditing,
                   shouldShow: session != null,
                   child: const AccountPerfCards(
@@ -285,13 +286,13 @@ class _HomeBody extends ConsumerWidget {
               ]
             : [
                 _EditableWidget(
-                  widget: EnabledWidget.hello,
+                  widget: pref.EnabledWidget.hello,
                   isEditing: isEditing,
                   shouldShow: true,
                   child: const _HelloWidget(),
                 ),
                 _EditableWidget(
-                  widget: EnabledWidget.perfCards,
+                  widget: pref.EnabledWidget.perfCards,
                   isEditing: isEditing,
                   shouldShow: session != null,
                   child: const AccountPerfCards(
@@ -299,7 +300,7 @@ class _HomeBody extends ConsumerWidget {
                   ),
                 ),
                 _EditableWidget(
-                  widget: EnabledWidget.quickPairing,
+                  widget: pref.EnabledWidget.quickPairing,
                   isEditing: isEditing,
                   shouldShow: status.isOnline,
                   child: const Padding(
@@ -352,7 +353,7 @@ class _EditableWidget extends ConsumerWidget {
   });
 
   final Widget child;
-  final EnabledWidget widget;
+  final pref.EnabledWidget widget;
   final bool isEditing;
   final bool shouldShow;
 
@@ -466,7 +467,7 @@ class _WelcomeScreen extends StatelessWidget {
       else ...[
         if (status.isOnline)
           _EditableWidget(
-            widget: EnabledWidget.quickPairing,
+            widget: pref.EnabledWidget.quickPairing,
             isEditing: isEditing,
             shouldShow: true,
             child: const Padding(
@@ -567,7 +568,7 @@ class _TabletCreateAGameSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         _EditableWidget(
-          widget: EnabledWidget.quickPairing,
+          widget: pref.EnabledWidget.quickPairing,
           isEditing: isEditing,
           shouldShow: true,
           child: const Padding(

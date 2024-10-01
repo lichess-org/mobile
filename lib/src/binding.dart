@@ -6,8 +6,9 @@ import 'package:lichess_mobile/firebase_options.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notifications.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-/// The glue between some platform-specific plugins and the app.
+/// A singleton class that provides access to plugins and external APIs.
 ///
 /// Only one instance of this class will be created during the app's lifetime.
 /// See [AppLichessBinding] for the concrete implementation.
@@ -54,6 +55,12 @@ abstract class LichessBinding {
     return instance!;
   }
 
+  /// The shared preferences instance. Must be preloaded before use.
+  ///
+  /// This is a synchronous getter that throws an error if shared preferences
+  /// have not yet been initialized.
+  SharedPreferencesWithCache get sharedPreferences;
+
   /// Initialize notifications.
   ///
   /// This wraps [Firebase.initializeApp] and [FlutterLocalNotificationsPlugin.initialize].
@@ -87,6 +94,38 @@ class AppLichessBinding extends LichessBinding {
       AppLichessBinding();
     }
     return LichessBinding.instance as AppLichessBinding;
+  }
+
+  late Future<SharedPreferencesWithCache> _sharedPreferencesWithCache;
+  SharedPreferencesWithCache? _syncSharedPreferencesWithCache;
+
+  @override
+  SharedPreferencesWithCache get sharedPreferences {
+    if (_syncSharedPreferencesWithCache == null) {
+      throw FlutterError.fromParts([
+        ErrorSummary('Shared preferences have not yet been preloaded.'),
+        ErrorHint(
+          'In the app, this is done by the `await AppLichessBinding.preloadSharedPreferences()` call '
+          'in the `Future<void> main()` method.',
+        ),
+        ErrorHint(
+          'In a test, one can call `TestLichessBinding.setInitialSharedPreferencesValues({})` as the '
+          "first line in the test's `main()` method.",
+        ),
+      ]);
+    }
+    return _syncSharedPreferencesWithCache!;
+  }
+
+  /// Preload shared preferences.
+  ///
+  /// This should be called only once before the app starts. Must be called before
+  /// [sharedPreferences] is accessed.
+  Future<void> preloadSharedPreferences() async {
+    _sharedPreferencesWithCache = SharedPreferencesWithCache.create(
+      cacheOptions: const SharedPreferencesWithCacheOptions(),
+    );
+    _syncSharedPreferencesWithCache = await _sharedPreferencesWithCache;
   }
 
   @override

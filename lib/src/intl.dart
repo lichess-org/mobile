@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
-import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:lichess_mobile/src/binding.dart';
+import 'package:lichess_mobile/src/model/settings/preferences.dart' as pref;
 import 'package:timeago/timeago.dart' as timeago;
 
 /// Setup [Intl.defaultLocale] and timeago locale and messages.
@@ -11,11 +11,11 @@ Future<Locale> setupIntl(WidgetsBinding widgetsBinding) async {
   final systemLocale = widgetsBinding.platformDispatcher.locale;
 
   // Get locale from shared preferences, if any
-  final prefs = await SharedPreferences.getInstance();
-  final json = prefs.getString(kGeneralPreferencesKey);
+  final json = LichessBinding.instance.sharedPreferences
+      .getString(pref.Category.general.storageKey);
   final generalPref = json != null
-      ? GeneralPrefsState.fromJson(jsonDecode(json) as Map<String, dynamic>)
-      : GeneralPrefsState.defaults;
+      ? pref.General.fromJson(jsonDecode(json) as Map<String, dynamic>)
+      : pref.General.defaults;
   final prefsLocale = generalPref.locale;
   final locale = prefsLocale ?? systemLocale;
 

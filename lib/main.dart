@@ -16,7 +16,13 @@ Future<void> main() async {
 
   final lichessBinding = AppLichessBinding.ensureInitialized();
 
+  // Old API.
+  // TODO: Remove this once all SharedPreferences usage is migrated to SharedPreferencesAsync.
   SharedPreferences.setPrefix('lichess.');
+
+  await migrateSharedPreferences();
+
+  await lichessBinding.preloadSharedPreferences();
 
   // Show splash screen until app is ready
   // See src/app.dart for splash screen removal
@@ -44,4 +50,28 @@ Future<void> main() async {
       child: const AppInitializationScreen(),
     ),
   );
+}
+
+Future<void> migrateSharedPreferences() async {
+  final prefs = await SharedPreferences.getInstance();
+  final didMigrate = prefs.getBool('shared_preferences_did_migrate') ?? false;
+  if (didMigrate) {
+    return;
+  }
+  final newPrefs = SharedPreferencesAsync();
+  for (final key in prefs.getKeys()) {
+    final value = prefs.get(key);
+    if (value is String) {
+      await newPrefs.setString(key, value);
+    } else if (value is int) {
+      await newPrefs.setInt(key, value);
+    } else if (value is double) {
+      await newPrefs.setDouble(key, value);
+    } else if (value is bool) {
+      await newPrefs.setBool(key, value);
+    } else if (value is List<String>) {
+      await newPrefs.setStringList(key, value);
+    }
+  }
+  await prefs.setBool('shared_preferences_did_migrate', true);
 }
