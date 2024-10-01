@@ -104,8 +104,8 @@ class GameListDetailTile extends StatelessWidget {
                             ),
                           ),
                           _UsersAndRatings(
-                            me: me,
-                            opponent: opponent,
+                            white: game.white,
+                            black: game.black,
                           ),
                           if (game.lastFen != null)
                             Text(
@@ -189,13 +189,13 @@ class _RatingAndDiff extends StatelessWidget {
 
 class _UsersAndRatings extends StatelessWidget {
   const _UsersAndRatings({
-    required this.me,
-    required this.opponent,
+    required this.white,
+    required this.black,
   });
 
-  final Player me;
+  final Player white;
 
-  final Player opponent;
+  final Player black;
 
   @override
   Widget build(BuildContext context) {
@@ -215,11 +215,11 @@ class _UsersAndRatings extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             UserFullNameWidget(
-              user: me.user,
+              user: white.user,
               showPatron: false,
               style: userStyle,
             ),
-            _RatingAndDiff(player: me, style: ratingStyle),
+            _RatingAndDiff(player: white, style: ratingStyle),
           ],
         ),
         const Padding(
@@ -233,11 +233,11 @@ class _UsersAndRatings extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             UserFullNameWidget(
-              user: opponent.user,
+              user: black.user,
               showPatron: false,
               style: userStyle,
             ),
-            _RatingAndDiff(player: opponent, style: ratingStyle),
+            _RatingAndDiff(player: black, style: ratingStyle),
           ],
         ),
       ],
