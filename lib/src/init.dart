@@ -7,11 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/db/secure_storage.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/session_storage.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
-import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/model/settings/preferences.dart' as pref;
 import 'package:lichess_mobile/src/utils/color_palette.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
@@ -115,7 +116,7 @@ Future<void> setupFirstLaunch() async {
 ///
 /// This is meant to be called once during app initialization.
 Future<void> androidDisplayInitialization(WidgetsBinding widgetsBinding) async {
-  final prefs = await SharedPreferences.getInstance();
+  final prefs = LichessBinding.instance.sharedPreferences;
 
   // On android 12+ get core palette and set the board theme to system if it is not set
   try {
@@ -123,11 +124,11 @@ Future<void> androidDisplayInitialization(WidgetsBinding widgetsBinding) async {
       setCorePalette(value);
 
       if (getCorePalette() != null &&
-          prefs.getString(BoardPreferences.prefKey) == null) {
+          prefs.getString(pref.Category.board.storageKey) == null) {
         prefs.setString(
-          BoardPreferences.prefKey,
+          pref.Category.board.storageKey,
           jsonEncode(
-            BoardPrefs.defaults.copyWith(boardTheme: BoardTheme.system),
+            pref.Board.defaults.copyWith(boardTheme: pref.BoardTheme.system),
           ),
         );
       }

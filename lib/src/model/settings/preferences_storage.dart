@@ -29,10 +29,14 @@ mixin PreferencesStorage<T extends SerializablePreferences> {
     if (stored == null) {
       return categoryKey.defaults;
     }
-    return SerializablePreferences.fromJson(
-      categoryKey,
-      jsonDecode(stored) as Map<String, dynamic>,
-    ) as T;
+    try {
+      return SerializablePreferences.fromJson(
+        categoryKey,
+        jsonDecode(stored) as Map<String, dynamic>,
+      ) as T;
+    } catch (e) {
+      return categoryKey.defaults;
+    }
   }
 }
 
@@ -65,10 +69,14 @@ mixin SessionPreferencesStorage<T extends SerializablePreferences> {
     if (stored == null) {
       return categoryKey.defaults;
     }
-    return SerializablePreferences.fromJson(
-      categoryKey,
-      jsonDecode(stored) as Map<String, dynamic>,
-    ) as T;
+    try {
+      return SerializablePreferences.fromJson(
+        categoryKey,
+        jsonDecode(stored) as Map<String, dynamic>,
+      ) as T;
+    } catch (e) {
+      return categoryKey.defaults;
+    }
   }
 
   String _prefKey(String key, AuthSessionState? session) =>

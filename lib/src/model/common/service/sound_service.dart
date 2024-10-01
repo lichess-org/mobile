@@ -5,7 +5,6 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences.dart' as pref;
-import 'package:lichess_mobile/src/model/settings/sound_theme.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sound_effect/sound_effect.dart';
@@ -41,7 +40,7 @@ const Set<Sound> _emtpySet = {};
 
 /// Loads all sounds of the given [SoundTheme].
 Future<void> _loadAllSounds(
-  SoundTheme soundTheme, {
+  pref.SoundTheme soundTheme, {
   Set<Sound> excluded = _emtpySet,
 }) async {
   await Future.wait(
@@ -52,7 +51,7 @@ Future<void> _loadAllSounds(
 }
 
 /// Loads a single sound from the given [SoundTheme].
-Future<void> _loadSound(SoundTheme theme, Sound sound) async {
+Future<void> _loadSound(pref.SoundTheme theme, Sound sound) async {
   final themePath = 'assets/sounds/${theme.name}';
   const standardPath = 'assets/sounds/standard';
   final soundId = sound.name;
@@ -111,7 +110,7 @@ class SoundService {
   ///
   /// If [playSound] is true, a move sound will be played.
   Future<void> changeTheme(
-    SoundTheme theme, {
+    pref.SoundTheme theme, {
     bool playSound = false,
   }) async {
     await _soundEffectPlugin.release();

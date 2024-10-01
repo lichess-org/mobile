@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences.dart' as pref;
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
-import 'package:lichess_mobile/src/model/settings/sound_theme.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'general_preferences.g.dart';
@@ -32,7 +31,7 @@ class GeneralPreferences extends _$GeneralPreferences
     return save(state.copyWith(locale: locale));
   }
 
-  Future<void> setSoundTheme(SoundTheme soundTheme) {
+  Future<void> setSoundTheme(pref.SoundTheme soundTheme) {
     return save(state.copyWith(soundTheme: soundTheme));
   }
 
@@ -47,15 +46,15 @@ class GeneralPreferences extends _$GeneralPreferences
     await save(state.copyWith(systemColors: !state.systemColors));
     if (state.systemColors == false) {
       final boardTheme = ref.read(boardPreferencesProvider).boardTheme;
-      if (boardTheme == BoardTheme.system) {
+      if (boardTheme == pref.BoardTheme.system) {
         await ref
             .read(boardPreferencesProvider.notifier)
-            .setBoardTheme(BoardTheme.brown);
+            .setBoardTheme(pref.BoardTheme.brown);
       }
     } else {
       await ref
           .read(boardPreferencesProvider.notifier)
-          .setBoardTheme(BoardTheme.system);
+          .setBoardTheme(pref.BoardTheme.system);
     }
   }
 }
