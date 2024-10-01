@@ -18,8 +18,6 @@ import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
-final _isDetailView = StateProvider<bool>((ref) => true);
-
 class GameHistoryScreen extends ConsumerWidget {
   const GameHistoryScreen({
     required this.user,
@@ -66,22 +64,10 @@ class GameHistoryScreen extends ConsumerWidget {
       }),
     );
 
-    final bool isDetailView = ref.watch(_isDetailView);
-    final actions = [
-      AppBarIconButton(
-        icon: ref.watch(_isDetailView)
-            ? const Icon(CupertinoIcons.square_grid_2x2)
-            : const Icon(CupertinoIcons.rectangle_grid_1x2),
-        semanticsLabel: 'Switch view',
-        onPressed: () => ref.read(_isDetailView.notifier).state = !isDetailView,
-      ),
-      filterBtn,
-    ];
-
     return PlatformScaffold(
       appBar: PlatformAppBar(
         title: title,
-        actions: actions,
+        actions: [filterBtn],
       ),
       body: _Body(user: user, isOnline: isOnline, gameFilter: gameFilter),
     );
@@ -210,20 +196,7 @@ class _BodyState extends ConsumerState<_Body> {
                       );
                     }
 
-                    return ref.watch(_isDetailView)
-                        ? GameListDetailTile(item: list[index])
-                        : ExtendedGameListTile(
-                            item: list[index],
-                            userId: widget.user?.id,
-                            // see: https://github.com/flutter/flutter/blob/master/packages/flutter/lib/src/cupertino/list_tile.dart#L30 for horizontal padding value
-                            padding:
-                                Theme.of(context).platform == TargetPlatform.iOS
-                                    ? const EdgeInsets.symmetric(
-                                        horizontal: 14.0,
-                                        vertical: 12.0,
-                                      )
-                                    : null,
-                          );
+                    return GameListDetailTile(item: list[index]);
                   },
                 ),
         );
