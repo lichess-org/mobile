@@ -39,7 +39,7 @@ class GameListDetailTile extends StatelessWidget {
         context,
         Styles.subtitleOpacity,
       ),
-      fontSize: 13,
+      fontSize: 12,
     );
 
     return GestureDetector(
@@ -189,9 +189,9 @@ class _ComputerAnalysisResult extends StatelessWidget {
     final textStyle = TextStyle(
       color: textShade(
         context,
-        Styles.subtitleOpacity,
+        0.6,
       ),
-      fontSize: 10,
+      fontSize: 9,
     );
 
     return analysis != null
@@ -199,7 +199,7 @@ class _ComputerAnalysisResult extends StatelessWidget {
             children: [
               Icon(
                 CupertinoIcons.chart_bar_alt_fill,
-                size: 14,
+                size: 8,
                 color: textShade(context, 0.5),
               ),
               const SizedBox(width: 5),
