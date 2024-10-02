@@ -13,7 +13,6 @@ import 'src/app.dart';
 
 Future<void> main() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-
   final lichessBinding = AppLichessBinding.ensureInitialized();
 
   // Old API.

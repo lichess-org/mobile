@@ -35,23 +35,12 @@ Future<void> setupFirstLaunch() async {
     // Clear secure storage on first run because it is not deleted on app uninstall
     await SecureStorage.instance.deleteAll();
 
-    await prefs.setBool('first_run', false);
-  }
+    // Generate a socket random identifier and store it for the app lifetime
+    final sri = genRandomString(12);
+    _logger.info('Generated new SRI: $sri');
+    await SecureStorage.instance.write(key: kSRIStorageKey, value: sri);
 
-  // Generate a socket random identifier and store it for the app lifetime
-  String? storedSri;
-  try {
-    storedSri = await SecureStorage.instance.read(key: kSRIStorageKey);
-    if (storedSri == null) {
-      final sri = genRandomString(12);
-      _logger.info('Generated new SRI: $sri');
-      await SecureStorage.instance.write(key: kSRIStorageKey, value: sri);
-    }
-  } on PlatformException catch (e) {
-    _logger.severe('Could not get SRI from storage: $e');
-    // Clear all secure storage if an error occurs because it probably means the key has
-    // been lost
-    await SecureStorage.instance.deleteAll();
+    await prefs.setBool('first_run', false);
   }
 }
 

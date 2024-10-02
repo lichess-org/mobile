@@ -77,16 +77,15 @@ class SoundService {
   /// This will load the sounds from assets and make them ready to be played.
   /// This should be called once when the app starts.
   static Future<void> initialize() async {
-    final stored = LichessBinding.instance.sharedPreferences
-        .getString(PrefCategory.general.storageKey);
-    final theme = (stored != null
-            ? GeneralPrefs.fromJson(
-                jsonDecode(stored) as Map<String, dynamic>,
-              )
-            : GeneralPrefs.defaults)
-        .soundTheme;
-
     try {
+      final stored = LichessBinding.instance.sharedPreferences
+          .getString(PrefCategory.general.storageKey);
+      final theme = (stored != null
+              ? GeneralPrefs.fromJson(
+                  jsonDecode(stored) as Map<String, dynamic>,
+                )
+              : GeneralPrefs.defaults)
+          .soundTheme;
       await _soundEffectPlugin.initialize();
       await _loadAllSounds(theme);
     } catch (e) {

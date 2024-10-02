@@ -15,8 +15,11 @@ import 'package:lichess_mobile/src/model/notifications/notification_service.dart
 import 'package:lichess_mobile/src/model/notifications/notifications.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/utils/system.dart';
+import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+final _logger = Logger('LichessBinding');
 
 /// A singleton class that provides access to plugins and external APIs.
 ///
@@ -190,8 +193,13 @@ class AppLichessBinding extends LichessBinding {
       );
     }
 
-    _syncSri = await SecureStorage.instance.read(key: kSRIStorageKey) ??
-        genRandomString(12);
+    final storedSri = await SecureStorage.instance.read(key: kSRIStorageKey);
+
+    if (storedSri == null) {
+      _logger.warning('SRI not found in secure storage');
+    }
+
+    _syncSri = storedSri ?? genRandomString(12);
 
     final physicalMemory = await System.instance.getTotalRam() ?? 256.0;
     final engineMaxMemory = (physicalMemory / 10).ceil();
