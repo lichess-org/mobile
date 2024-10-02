@@ -21,9 +21,9 @@ part 'puzzle_providers.g.dart';
 Future<PuzzleContext?> nextPuzzle(
   NextPuzzleRef ref,
   PuzzleAngle angle,
-) {
+) async {
   final session = ref.watch(authSessionProvider);
-  final puzzleService = ref.read(puzzleServiceFactoryProvider)(
+  final puzzleService = await ref.read(puzzleServiceFactoryProvider)(
     queueLength: kPuzzleLocalQueueLength,
   );
 
@@ -46,7 +46,7 @@ Future<PuzzleStormResponse> storm(StormRef ref) {
 /// Fetches a puzzle from the local storage if available, otherwise fetches it from the server.
 @riverpod
 Future<Puzzle> puzzle(PuzzleRef ref, PuzzleId id) async {
-  final puzzleStorage = ref.watch(puzzleStorageProvider);
+  final puzzleStorage = await ref.watch(puzzleStorageProvider.future);
   final puzzle = await puzzleStorage.fetch(puzzleId: id);
   if (puzzle != null) return puzzle;
   return ref.withClient((client) => PuzzleRepository(client).fetch(id));
@@ -61,9 +61,11 @@ Future<Puzzle> dailyPuzzle(DailyPuzzleRef ref) {
 }
 
 @riverpod
-Future<IMap<PuzzleThemeKey, int>> savedThemeBatches(SavedThemeBatchesRef ref) {
+Future<IMap<PuzzleThemeKey, int>> savedThemeBatches(
+  SavedThemeBatchesRef ref,
+) async {
   final session = ref.watch(authSessionProvider);
-  final storage = ref.watch(puzzleBatchStorageProvider);
+  final storage = await ref.watch(puzzleBatchStorageProvider.future);
   return storage.fetchSavedThemes(userId: session?.user.id);
 }
 
@@ -72,7 +74,7 @@ Future<IMap<String, int>> savedOpeningBatches(
   SavedOpeningBatchesRef ref,
 ) async {
   final session = ref.watch(authSessionProvider);
-  final storage = ref.watch(puzzleBatchStorageProvider);
+  final storage = await ref.watch(puzzleBatchStorageProvider.future);
   return storage.fetchSavedOpenings(userId: session?.user.id);
 }
 

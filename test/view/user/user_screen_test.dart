@@ -6,8 +6,8 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
 
 import '../../model/user/user_repository_test.dart';
-import '../../test_app.dart';
-import '../../test_utils.dart';
+import '../../test_helpers.dart';
+import '../../test_provider_scope.dart';
 
 final client = MockClient((request) {
   if (request.url.path == '/api/games/user/$testUserId') {
@@ -38,7 +38,7 @@ void main() {
     testWidgets(
       'should see activity and recent games',
       (WidgetTester tester) async {
-        final app = await buildTestApp(
+        final app = await makeProviderScopeApp(
           tester,
           home: const UserScreen(user: testUser),
           overrides: [

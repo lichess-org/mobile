@@ -42,7 +42,7 @@ class GameAppBar extends ConsumerWidget {
 
   static const pingRating = Padding(
     padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 18.0),
-    child: PingRating(size: 24.0),
+    child: SocketPingRating(size: 24.0),
   );
 
   @override

@@ -54,7 +54,7 @@ class PlayableGame
     /// The side that the current player is playing as. This is null if viewing
     /// the game as a spectator.
     Side? youAre,
-    GamePrefs? prefs,
+    ServerGamePrefs? prefs,
     PlayableClockData? clock,
     CorrespondenceClockData? correspondenceClock,
     bool? boosted,
@@ -265,8 +265,8 @@ GameMeta _playableGameMetaFromPick(RequiredPick pick) {
   );
 }
 
-GamePrefs _gamePrefsFromPick(RequiredPick pick) {
-  return GamePrefs(
+ServerGamePrefs _gamePrefsFromPick(RequiredPick pick) {
+  return ServerGamePrefs(
     showRatings: pick('showRatings').asBoolOrFalse(),
     enablePremove: pick('enablePremove').asBoolOrFalse(),
     autoQueen: AutoQueen.fromInt(pick('autoQueen').asIntOrThrow()),

@@ -1,7 +1,7 @@
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
-import 'package:lichess_mobile/src/notification_service.dart';
+import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'auth_repository.dart';

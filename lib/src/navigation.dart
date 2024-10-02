@@ -18,7 +18,6 @@ enum BottomTab {
   watch,
   settings;
 
-  // TODO use translations when short strings are available
   String label(AppLocalizations strings) {
     switch (this) {
       case BottomTab.home:

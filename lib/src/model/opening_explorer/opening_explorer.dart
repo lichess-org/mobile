@@ -9,6 +9,12 @@ import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer_prefe
 part 'opening_explorer.freezed.dart';
 part 'opening_explorer.g.dart';
 
+enum OpeningDatabase {
+  master,
+  lichess,
+  player,
+}
+
 @Freezed(fromJson: true)
 class OpeningExplorerEntry with _$OpeningExplorerEntry {
   const OpeningExplorerEntry._();
@@ -114,6 +120,6 @@ enum GameMode {
 class OpeningExplorerCacheKey with _$OpeningExplorerCacheKey {
   const factory OpeningExplorerCacheKey({
     required String fen,
-    required OpeningExplorerPrefState prefs,
+    required OpeningExplorerPrefs prefs,
   }) = _OpeningExplorerCacheKey;
 }

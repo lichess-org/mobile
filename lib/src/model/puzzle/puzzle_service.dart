@@ -33,11 +33,11 @@ class PuzzleServiceFactory {
 
   final PuzzleServiceFactoryRef _ref;
 
-  PuzzleService call({required int queueLength}) {
+  Future<PuzzleService> call({required int queueLength}) async {
     return PuzzleService(
       _ref,
-      batchStorage: _ref.read(puzzleBatchStorageProvider),
-      puzzleStorage: _ref.read(puzzleStorageProvider),
+      batchStorage: await _ref.read(puzzleBatchStorageProvider.future),
+      puzzleStorage: await _ref.read(puzzleStorageProvider.future),
       queueLength: queueLength,
     );
   }
@@ -158,7 +158,7 @@ class PuzzleService {
 
     _log.fine('Have a puzzle deficit of $deficit, will sync with lichess');
 
-    final difficulty = _ref.read(puzzlePreferencesProvider(userId)).difficulty;
+    final difficulty = _ref.read(puzzlePreferencesProvider).difficulty;
 
     // anonymous users can't solve puzzles so we just download the deficit
     // we send the request even if the deficit is 0 to get the glicko rating

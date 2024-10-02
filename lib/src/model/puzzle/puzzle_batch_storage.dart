@@ -16,8 +16,8 @@ part 'puzzle_batch_storage.freezed.dart';
 part 'puzzle_batch_storage.g.dart';
 
 @Riverpod(keepAlive: true)
-PuzzleBatchStorage puzzleBatchStorage(PuzzleBatchStorageRef ref) {
-  final database = ref.watch(databaseProvider);
+Future<PuzzleBatchStorage> puzzleBatchStorage(PuzzleBatchStorageRef ref) async {
+  final database = await ref.watch(databaseProvider.future);
   return PuzzleBatchStorage(database);
 }
 

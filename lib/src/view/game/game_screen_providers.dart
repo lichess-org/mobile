@@ -35,7 +35,7 @@ Future<bool> shouldPreventGoingBack(
 @riverpod
 Future<
     ({
-      GamePrefs? prefs,
+      ServerGamePrefs? prefs,
       bool shouldConfirmMove,
       bool isZenModeEnabled,
       bool canAutoQueen

@@ -1,17 +1,17 @@
 import 'package:deep_pick/deep_pick.dart';
-import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/game.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
-import 'package:lichess_mobile/src/utils/l10n_context.dart';
 
 part 'challenge.freezed.dart';
+part 'challenge.g.dart';
 
 abstract mixin class BaseChallenge {
   Variant get variant;
@@ -36,16 +36,12 @@ abstract mixin class BaseChallenge {
 }
 
 /// A challenge already created server-side.
-@freezed
+@Freezed(fromJson: true, toJson: true)
 class Challenge with _$Challenge, BaseChallenge implements BaseChallenge {
   const Challenge._();
 
-  @Assert(
-    'clock != null || days != null',
-    'Either clock or days must be set but not both.',
-  )
   const factory Challenge({
-    required int socketVersion,
+    int? socketVersion,
     required ChallengeId id,
     GameFullId? gameFullId,
     required ChallengeStatus status,
@@ -58,16 +54,60 @@ class Challenge with _$Challenge, BaseChallenge implements BaseChallenge {
     required SideChoice sideChoice,
     ChallengeUser? challenger,
     ChallengeUser? destUser,
-    DeclineReason? declineReason,
+    ChallengeDeclineReason? declineReason,
     String? initialFen,
     ChallengeDirection? direction,
   }) = _Challenge;
+
+  factory Challenge.fromJson(Map<String, dynamic> json) =>
+      _$ChallengeFromJson(json);
 
   factory Challenge.fromServerJson(Map<String, dynamic> json) {
     return _challengeFromPick(pick(json).required());
   }
 
   factory Challenge.fromPick(RequiredPick pick) => _challengeFromPick(pick);
+
+  /// The description of the challenge.
+  String description(AppLocalizations l10n) {
+    if (!variant.isPlaySupported) {
+      // TODO: l10n
+      return 'This variant is not yet supported on the app.';
+    }
+
+    final time = switch (timeControl) {
+      ChallengeTimeControlType.clock => () {
+          final minutes = switch (clock!.time.inSeconds) {
+            15 => '¼',
+            30 => '½',
+            45 => '¾',
+            90 => '1.5',
+            _ => clock!.time.inMinutes,
+          };
+          return '$minutes+${clock!.increment.inSeconds}';
+        }(),
+      ChallengeTimeControlType.correspondence => '${l10n.daysPerTurn}: $days',
+      ChallengeTimeControlType.unlimited => '∞',
+    };
+
+    final variantStr = variant == Variant.standard ? '' : ' • ${variant.label}';
+
+    final sidePiece = sideChoice == SideChoice.black
+        ? '♔ '
+        : sideChoice == SideChoice.white
+            ? '♚ '
+            : '';
+
+    final side = sideChoice == SideChoice.black
+        ? l10n.white
+        : sideChoice == SideChoice.white
+            ? l10n.black
+            : l10n.randomColor;
+
+    final mode = rated ? l10n.rated : l10n.casual;
+
+    return '$sidePiece$side • $mode • $time$variantStr';
+  }
 }
 
 /// A challenge request to play a game with another user.
@@ -131,7 +171,7 @@ enum ChallengeTimeControlType {
   correspondence,
 }
 
-enum DeclineReason {
+enum ChallengeDeclineReason {
   generic,
   later,
   tooFast,
@@ -142,58 +182,29 @@ enum DeclineReason {
   standard,
   variant,
   noBot,
-  onlyBot,
-}
+  onlyBot;
 
-String declineReasonMessage(BuildContext context, DeclineReason key) {
-  switch (key) {
-    case DeclineReason.generic:
-      return context.l10n.challengeDeclineGeneric;
-    case DeclineReason.later:
-      return context.l10n.challengeDeclineLater;
-    case DeclineReason.tooFast:
-      return context.l10n.challengeDeclineTooFast;
-    case DeclineReason.tooSlow:
-      return context.l10n.challengeDeclineTooSlow;
-    case DeclineReason.timeControl:
-      return context.l10n.challengeDeclineTimeControl;
-    case DeclineReason.rated:
-      return context.l10n.challengeDeclineRated;
-    case DeclineReason.casual:
-      return context.l10n.challengeDeclineCasual;
-    case DeclineReason.standard:
-      return context.l10n.challengeDeclineStandard;
-    case DeclineReason.variant:
-      return context.l10n.challengeDeclineVariant;
-    case DeclineReason.noBot:
-      return context.l10n.challengeDeclineNoBot;
-    case DeclineReason.onlyBot:
-      return context.l10n.challengeDeclineOnlyBot;
-  }
+  String label(AppLocalizations l10n) => switch (this) {
+        ChallengeDeclineReason.generic => l10n.challengeDeclineGeneric,
+        ChallengeDeclineReason.later => l10n.challengeDeclineLater,
+        ChallengeDeclineReason.tooFast => l10n.challengeDeclineTooFast,
+        ChallengeDeclineReason.tooSlow => l10n.challengeDeclineTooSlow,
+        ChallengeDeclineReason.timeControl => l10n.challengeDeclineTimeControl,
+        ChallengeDeclineReason.rated => l10n.challengeDeclineRated,
+        ChallengeDeclineReason.casual => l10n.challengeDeclineCasual,
+        ChallengeDeclineReason.standard => l10n.challengeDeclineStandard,
+        ChallengeDeclineReason.variant => l10n.challengeDeclineVariant,
+        ChallengeDeclineReason.noBot => l10n.challengeDeclineNoBot,
+        ChallengeDeclineReason.onlyBot => l10n.challengeDeclineOnlyBot,
+      };
 }
 
 typedef ChallengeUser = ({
   LightUser user,
+  int? rating,
   bool? provisionalRating,
   int? lagRating,
 });
-
-enum SideChoice {
-  random,
-  white,
-  black,
-}
-
-String sideChoiceL10n(AppLocalizations l10n, SideChoice side) {
-  switch (side) {
-    case SideChoice.white:
-      return l10n.white;
-    case SideChoice.black:
-      return l10n.black;
-    case SideChoice.random:
-      return l10n.randomColor;
-  }
-}
 
 extension ChallengeExtension on Pick {
   ChallengeDirection asChallengeDirectionOrThrow() {
@@ -203,9 +214,9 @@ extension ChallengeExtension on Pick {
     }
     if (value is String) {
       switch (value) {
-        case 'outward':
+        case 'outward' || 'out':
           return ChallengeDirection.outward;
-        case 'inward':
+        case 'inward' || 'in':
           return ChallengeDirection.inward;
         default:
           throw PickException(
@@ -330,47 +341,25 @@ extension ChallengeExtension on Pick {
     }
   }
 
-  DeclineReason asDeclineReasonOrThrow() {
+  ChallengeDeclineReason asDeclineReasonOrThrow() {
     final value = this.required().value;
-    if (value is DeclineReason) {
+    if (value is ChallengeDeclineReason) {
       return value;
     }
     if (value is String) {
-      switch (value) {
-        case 'generic':
-          return DeclineReason.generic;
-        case 'later':
-          return DeclineReason.later;
-        case 'tooFast':
-          return DeclineReason.tooFast;
-        case 'tooSlow':
-          return DeclineReason.tooSlow;
-        case 'timeControl':
-          return DeclineReason.timeControl;
-        case 'rated':
-          return DeclineReason.rated;
-        case 'casual':
-          return DeclineReason.casual;
-        case 'standard':
-          return DeclineReason.standard;
-        case 'variant':
-          return DeclineReason.variant;
-        case 'noBot':
-          return DeclineReason.noBot;
-        case 'onlyBot':
-          return DeclineReason.onlyBot;
-        default:
-          throw PickException(
-            "value $value at $debugParsingExit can't be casted to DeclineReason: invalid string.",
-          );
-      }
+      return ChallengeDeclineReason.values.firstWhere(
+        (element) => element.name.toLowerCase() == value,
+        orElse: () => throw PickException(
+          "value $value at $debugParsingExit can't be casted to ChallengeDeclineReason: invalid string.",
+        ),
+      );
     }
     throw PickException(
-      "value $value at $debugParsingExit can't be casted to DeclineReason",
+      "value $value at $debugParsingExit can't be casted to ChallengeDeclineReason",
     );
   }
 
-  DeclineReason? asDeclineReasonOrNull() {
+  ChallengeDeclineReason? asDeclineReasonOrNull() {
     if (value == null) return null;
     try {
       return asDeclineReasonOrThrow();
@@ -382,7 +371,7 @@ extension ChallengeExtension on Pick {
 
 Challenge _challengeFromPick(RequiredPick pick) {
   return Challenge(
-    socketVersion: pick('socketVersion').asIntOrThrow(),
+    socketVersion: pick('socketVersion').asIntOrNull(),
     id: pick('id').asChallengeIdOrThrow(),
     gameFullId: pick('fullId').asGameFullIdOrNull(),
     status: pick('status').asChallengeStatusOrThrow(),
@@ -407,6 +396,7 @@ Challenge _challengeFromPick(RequiredPick pick) {
         final challengerUser = pick('challenger').asLightUserOrThrow();
         return (
           user: challengerUser,
+          rating: challengerPick('rating').asIntOrNull(),
           provisionalRating: challengerPick('provisional').asBoolOrNull(),
           lagRating: challengerPick('lag').asIntOrNull(),
         );
@@ -417,6 +407,7 @@ Challenge _challengeFromPick(RequiredPick pick) {
         final destUser = pick('destUser').asLightUserOrThrow();
         return (
           user: destUser,
+          rating: destPick('rating').asIntOrNull(),
           provisionalRating: destPick('provisional').asBoolOrNull(),
           lagRating: destPick('lag').asIntOrNull(),
         );

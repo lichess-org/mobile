@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/db/shared_preferences.dart';
+import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
@@ -76,8 +76,10 @@ class PuzzleSession extends _$PuzzleSession {
     );
   }
 
-  SharedPreferences get _store => ref.read(sharedPreferencesProvider);
-  String get _storageKey => 'puzzle_session.${userId ?? 'anon'}';
+  SharedPreferencesWithCache get _store =>
+      LichessBinding.instance.sharedPreferences;
+
+  String get _storageKey => 'puzzle_session.${userId ?? '**anon**'}';
 }
 
 @Freezed(fromJson: true, toJson: true)

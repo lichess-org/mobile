@@ -117,7 +117,7 @@ class _Title extends ConsumerWidget {
     return switch (angle) {
       PuzzleTheme(themeKey: final key) => key == PuzzleThemeKey.mix
           ? Text(context.l10n.puzzleDesc)
-          : Text(puzzleThemeL10n(context, key).name),
+          : Text(key.l10n(context.l10n).name),
       PuzzleOpening(key: final key) => ref
           .watch(
             puzzleOpeningNameProvider(key),
@@ -541,8 +541,7 @@ class _DifficultySelector extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final difficulty = ref.watch(
-      puzzlePreferencesProvider(initialPuzzleContext.userId)
-          .select((state) => state.difficulty),
+      puzzlePreferencesProvider.select((state) => state.difficulty),
     );
     final state = ref.watch(ctrlProvider);
     final connectivity = ref.watch(connectivityChangesProvider);

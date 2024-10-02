@@ -1,44 +1,36 @@
-import 'dart:convert';
-
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/db/shared_preferences.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer.dart';
+import 'package:lichess_mobile/src/model/settings/preferences.dart';
+import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'opening_explorer_preferences.freezed.dart';
 part 'opening_explorer_preferences.g.dart';
 
-@Riverpod(keepAlive: true)
-class OpeningExplorerPreferences extends _$OpeningExplorerPreferences {
-  static const prefKey = 'preferences.opening_explorer';
+@riverpod
+class OpeningExplorerPreferences extends _$OpeningExplorerPreferences
+    with SessionPreferencesStorage<OpeningExplorerPrefs> {
+  // ignore: avoid_public_notifier_properties
+  @override
+  final prefCategory = PrefCategory.openingExplorer;
 
   @override
-  OpeningExplorerPrefState build() {
-    final prefs = ref.watch(sharedPreferencesProvider);
-    final session = ref.watch(authSessionProvider);
-
-    final stored = prefs.getString(prefKey);
-    return stored != null
-        ? OpeningExplorerPrefState.fromJson(
-            jsonDecode(stored) as Map<String, dynamic>,
-            user: session?.user,
-          )
-        : OpeningExplorerPrefState.defaults(user: session?.user);
+  OpeningExplorerPrefs build() {
+    return fetch();
   }
 
-  Future<void> setDatabase(OpeningDatabase db) => _save(
+  Future<void> setDatabase(OpeningDatabase db) => save(
         state.copyWith(db: db),
       );
 
   Future<void> setMasterDbSince(int year) =>
-      _save(state.copyWith(masterDb: state.masterDb.copyWith(sinceYear: year)));
+      save(state.copyWith(masterDb: state.masterDb.copyWith(sinceYear: year)));
 
-  Future<void> toggleLichessDbSpeed(Speed speed) => _save(
+  Future<void> toggleLichessDbSpeed(Speed speed) => save(
         state.copyWith(
           lichessDb: state.lichessDb.copyWith(
             speeds: state.lichessDb.speeds.contains(speed)
@@ -48,7 +40,7 @@ class OpeningExplorerPreferences extends _$OpeningExplorerPreferences {
         ),
       );
 
-  Future<void> toggleLichessDbRating(int rating) => _save(
+  Future<void> toggleLichessDbRating(int rating) => save(
         state.copyWith(
           lichessDb: state.lichessDb.copyWith(
             ratings: state.lichessDb.ratings.contains(rating)
@@ -58,11 +50,11 @@ class OpeningExplorerPreferences extends _$OpeningExplorerPreferences {
         ),
       );
 
-  Future<void> setLichessDbSince(DateTime since) => _save(
+  Future<void> setLichessDbSince(DateTime since) => save(
         state.copyWith(lichessDb: state.lichessDb.copyWith(since: since)),
       );
 
-  Future<void> setPlayerDbUsernameOrId(String username) => _save(
+  Future<void> setPlayerDbUsernameOrId(String username) => save(
         state.copyWith(
           playerDb: state.playerDb.copyWith(
             username: username,
@@ -70,11 +62,11 @@ class OpeningExplorerPreferences extends _$OpeningExplorerPreferences {
         ),
       );
 
-  Future<void> setPlayerDbSide(Side side) => _save(
+  Future<void> setPlayerDbSide(Side side) => save(
         state.copyWith(playerDb: state.playerDb.copyWith(side: side)),
       );
 
-  Future<void> togglePlayerDbSpeed(Speed speed) => _save(
+  Future<void> togglePlayerDbSpeed(Speed speed) => save(
         state.copyWith(
           playerDb: state.playerDb.copyWith(
             speeds: state.playerDb.speeds.contains(speed)
@@ -84,7 +76,7 @@ class OpeningExplorerPreferences extends _$OpeningExplorerPreferences {
         ),
       );
 
-  Future<void> togglePlayerDbGameMode(GameMode gameMode) => _save(
+  Future<void> togglePlayerDbGameMode(GameMode gameMode) => save(
         state.copyWith(
           playerDb: state.playerDb.copyWith(
             gameModes: state.playerDb.gameModes.contains(gameMode)
@@ -94,69 +86,44 @@ class OpeningExplorerPreferences extends _$OpeningExplorerPreferences {
         ),
       );
 
-  Future<void> setPlayerDbSince(DateTime since) => _save(
+  Future<void> setPlayerDbSince(DateTime since) => save(
         state.copyWith(playerDb: state.playerDb.copyWith(since: since)),
       );
-
-  Future<void> _save(OpeningExplorerPrefState newState) async {
-    final prefs = ref.read(sharedPreferencesProvider);
-    await prefs.setString(
-      prefKey,
-      jsonEncode(newState.toJson()),
-    );
-    state = newState;
-  }
-}
-
-enum OpeningDatabase {
-  master,
-  lichess,
-  player,
 }
 
 @Freezed(fromJson: true, toJson: true)
-class OpeningExplorerPrefState with _$OpeningExplorerPrefState {
-  const OpeningExplorerPrefState._();
+class OpeningExplorerPrefs
+    with _$OpeningExplorerPrefs
+    implements SerializablePreferences {
+  const OpeningExplorerPrefs._();
 
-  const factory OpeningExplorerPrefState({
+  const factory OpeningExplorerPrefs({
     required OpeningDatabase db,
-    required MasterDbPrefState masterDb,
-    required LichessDbPrefState lichessDb,
-    required PlayerDbPrefState playerDb,
-  }) = _OpeningExplorerPrefState;
+    required MasterDb masterDb,
+    required LichessDb lichessDb,
+    required PlayerDb playerDb,
+  }) = _OpeningExplorerPrefs;
 
-  factory OpeningExplorerPrefState.defaults({LightUser? user}) =>
-      OpeningExplorerPrefState(
+  factory OpeningExplorerPrefs.defaults({LightUser? user}) =>
+      OpeningExplorerPrefs(
         db: OpeningDatabase.master,
-        masterDb: MasterDbPrefState.defaults,
-        lichessDb: LichessDbPrefState.defaults,
-        playerDb: PlayerDbPrefState.defaults(user: user),
+        masterDb: MasterDb.defaults,
+        lichessDb: LichessDb.defaults,
+        playerDb: PlayerDb.defaults(user: user),
       );
 
-  factory OpeningExplorerPrefState.fromJson(
-    Map<String, dynamic> json, {
-    LightUser? user,
-  }) {
-    try {
-      final prefs = _$OpeningExplorerPrefStateFromJson(json);
-      return prefs.copyWith(
-        playerDb: user != null
-            ? prefs.playerDb.copyWith(username: user.name)
-            : prefs.playerDb,
-      );
-    } catch (_) {
-      return OpeningExplorerPrefState.defaults(user: user);
-    }
+  factory OpeningExplorerPrefs.fromJson(Map<String, dynamic> json) {
+    return _$OpeningExplorerPrefsFromJson(json);
   }
 }
 
 @Freezed(fromJson: true, toJson: true)
-class MasterDbPrefState with _$MasterDbPrefState {
-  const MasterDbPrefState._();
+class MasterDb with _$MasterDb {
+  const MasterDb._();
 
-  const factory MasterDbPrefState({
+  const factory MasterDb({
     required int sinceYear,
-  }) = _MasterDbPrefState;
+  }) = _MasterDb;
 
   static const kEarliestYear = 1952;
   static final now = DateTime.now();
@@ -166,26 +133,22 @@ class MasterDbPrefState with _$MasterDbPrefState {
     'Last 20 years': now.year - 20,
     'All time': kEarliestYear,
   };
-  static const defaults = MasterDbPrefState(sinceYear: kEarliestYear);
+  static const defaults = MasterDb(sinceYear: kEarliestYear);
 
-  factory MasterDbPrefState.fromJson(Map<String, dynamic> json) {
-    try {
-      return _$MasterDbPrefStateFromJson(json);
-    } catch (_) {
-      return defaults;
-    }
+  factory MasterDb.fromJson(Map<String, dynamic> json) {
+    return _$MasterDbFromJson(json);
   }
 }
 
 @Freezed(fromJson: true, toJson: true)
-class LichessDbPrefState with _$LichessDbPrefState {
-  const LichessDbPrefState._();
+class LichessDb with _$LichessDb {
+  const LichessDb._();
 
-  const factory LichessDbPrefState({
+  const factory LichessDb({
     required ISet<Speed> speeds,
     required ISet<int> ratings,
     required DateTime since,
-  }) = _LichessDbPrefState;
+  }) = _LichessDb;
 
   static const kAvailableSpeeds = ISetConst({
     Speed.ultraBullet,
@@ -214,32 +177,28 @@ class LichessDbPrefState with _$LichessDbPrefState {
     'Last 5 years': now.subtract(const Duration(days: kDaysInAYear * 5)),
     'All time': earliestDate,
   };
-  static final defaults = LichessDbPrefState(
+  static final defaults = LichessDb(
     speeds: kAvailableSpeeds.remove(Speed.ultraBullet),
     ratings: kAvailableRatings.remove(400),
     since: earliestDate,
   );
 
-  factory LichessDbPrefState.fromJson(Map<String, dynamic> json) {
-    try {
-      return _$LichessDbPrefStateFromJson(json);
-    } catch (_) {
-      return defaults;
-    }
+  factory LichessDb.fromJson(Map<String, dynamic> json) {
+    return _$LichessDbFromJson(json);
   }
 }
 
 @Freezed(fromJson: true, toJson: true)
-class PlayerDbPrefState with _$PlayerDbPrefState {
-  const PlayerDbPrefState._();
+class PlayerDb with _$PlayerDb {
+  const PlayerDb._();
 
-  const factory PlayerDbPrefState({
+  const factory PlayerDb({
     String? username,
     required Side side,
     required ISet<Speed> speeds,
     required ISet<GameMode> gameModes,
     required DateTime since,
-  }) = _PlayerDbPrefState;
+  }) = _PlayerDb;
 
   static const kAvailableSpeeds = ISetConst({
     Speed.ultraBullet,
@@ -258,7 +217,7 @@ class PlayerDbPrefState with _$PlayerDbPrefState {
     'Last year': now.subtract(const Duration(days: 365)),
     'All time': earliestDate,
   };
-  factory PlayerDbPrefState.defaults({LightUser? user}) => PlayerDbPrefState(
+  factory PlayerDb.defaults({LightUser? user}) => PlayerDb(
         username: user?.name,
         side: Side.white,
         speeds: kAvailableSpeeds,
@@ -266,11 +225,7 @@ class PlayerDbPrefState with _$PlayerDbPrefState {
         since: earliestDate,
       );
 
-  factory PlayerDbPrefState.fromJson(Map<String, dynamic> json) {
-    try {
-      return _$PlayerDbPrefStateFromJson(json);
-    } catch (_) {
-      return PlayerDbPrefState.defaults();
-    }
+  factory PlayerDb.fromJson(Map<String, dynamic> json) {
+    return _$PlayerDbFromJson(json);
   }
 }

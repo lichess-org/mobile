@@ -1,48 +1,44 @@
-import 'dart:convert';
-
 import 'package:chessground/chessground.dart';
 import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/db/shared_preferences.dart';
+import 'package:lichess_mobile/src/model/settings/preferences.dart';
+import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/utils/color_palette.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'board_preferences.freezed.dart';
 part 'board_preferences.g.dart';
 
-@Riverpod(keepAlive: true)
-class BoardPreferences extends _$BoardPreferences {
-  static const String prefKey = 'preferences.board';
+@riverpod
+class BoardPreferences extends _$BoardPreferences
+    with PreferencesStorage<BoardPrefs> {
+  // ignore: avoid_public_notifier_properties
+  @override
+  PrefCategory<BoardPrefs> get prefCategory => PrefCategory.board;
 
   @override
   BoardPrefs build() {
-    final prefs = ref.watch(sharedPreferencesProvider);
-    final stored = prefs.getString(prefKey);
-    return stored != null
-        ? BoardPrefs.fromJson(
-            jsonDecode(stored) as Map<String, dynamic>,
-          )
-        : BoardPrefs.defaults;
+    return fetch();
   }
 
   Future<void> setPieceSet(PieceSet pieceSet) {
-    return _save(state.copyWith(pieceSet: pieceSet));
+    return save(state.copyWith(pieceSet: pieceSet));
   }
 
   Future<void> setBoardTheme(BoardTheme boardTheme) async {
-    await _save(state.copyWith(boardTheme: boardTheme));
+    await save(state.copyWith(boardTheme: boardTheme));
   }
 
   Future<void> setPieceShiftMethod(PieceShiftMethod pieceShiftMethod) async {
-    await _save(state.copyWith(pieceShiftMethod: pieceShiftMethod));
+    await save(state.copyWith(pieceShiftMethod: pieceShiftMethod));
   }
 
   Future<void> toggleHapticFeedback() {
-    return _save(state.copyWith(hapticFeedback: !state.hapticFeedback));
+    return save(state.copyWith(hapticFeedback: !state.hapticFeedback));
   }
 
   Future<void> toggleImmersiveModeWhilePlaying() {
-    return _save(
+    return save(
       state.copyWith(
         immersiveModeWhilePlaying: !(state.immersiveModeWhilePlaying ?? false),
       ),
@@ -50,23 +46,23 @@ class BoardPreferences extends _$BoardPreferences {
   }
 
   Future<void> toggleShowLegalMoves() {
-    return _save(state.copyWith(showLegalMoves: !state.showLegalMoves));
+    return save(state.copyWith(showLegalMoves: !state.showLegalMoves));
   }
 
   Future<void> toggleBoardHighlights() {
-    return _save(state.copyWith(boardHighlights: !state.boardHighlights));
+    return save(state.copyWith(boardHighlights: !state.boardHighlights));
   }
 
   Future<void> toggleCoordinates() {
-    return _save(state.copyWith(coordinates: !state.coordinates));
+    return save(state.copyWith(coordinates: !state.coordinates));
   }
 
   Future<void> togglePieceAnimation() {
-    return _save(state.copyWith(pieceAnimation: !state.pieceAnimation));
+    return save(state.copyWith(pieceAnimation: !state.pieceAnimation));
   }
 
   Future<void> toggleMagnifyDraggedPiece() {
-    return _save(
+    return save(
       state.copyWith(
         magnifyDraggedPiece: !state.magnifyDraggedPiece,
       ),
@@ -74,33 +70,24 @@ class BoardPreferences extends _$BoardPreferences {
   }
 
   Future<void> toggleShowMaterialDifference() {
-    return _save(
+    return save(
       state.copyWith(showMaterialDifference: !state.showMaterialDifference),
     );
   }
 
   Future<void> toggleEnableShapeDrawings() {
-    return _save(
+    return save(
       state.copyWith(enableShapeDrawings: !state.enableShapeDrawings),
     );
   }
 
   Future<void> setShapeColor(ShapeColor shapeColor) {
-    return _save(state.copyWith(shapeColor: shapeColor));
-  }
-
-  Future<void> _save(BoardPrefs newState) async {
-    final prefs = ref.read(sharedPreferencesProvider);
-    await prefs.setString(
-      prefKey,
-      jsonEncode(newState.toJson()),
-    );
-    state = newState;
+    return save(state.copyWith(shapeColor: shapeColor));
   }
 }
 
 @Freezed(fromJson: true, toJson: true)
-class BoardPrefs with _$BoardPrefs {
+class BoardPrefs with _$BoardPrefs implements SerializablePreferences {
   const BoardPrefs._();
 
   const factory BoardPrefs({
