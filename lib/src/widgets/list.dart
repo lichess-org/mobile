@@ -401,7 +401,7 @@ class AdaptiveListTile extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: Theme(
-        data: ThemeData(
+        data: Theme.of(context).copyWith(
           splashFactory: Theme.of(context).platform == TargetPlatform.iOS
               ? NoSplash.splashFactory
               : null,
