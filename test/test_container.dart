@@ -8,7 +8,6 @@ import 'package:http/testing.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/crashlytics.dart';
 import 'package:lichess_mobile/src/db/database.dart';
-import 'package:lichess_mobile/src/db/shared_preferences.dart';
 import 'package:lichess_mobile/src/init.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
@@ -18,7 +17,6 @@ import 'package:lichess_mobile/src/model/notifications/notification_service.dart
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import './fake_crashlytics.dart';
@@ -53,9 +51,6 @@ Future<ProviderContainer> makeContainer({
   AuthSessionState? userSession,
 }) async {
   final binding = TestLichessBinding.ensureInitialized();
-
-  SharedPreferences.setMockInitialValues({});
-  final sharedPreferences = await SharedPreferences.getInstance();
 
   FlutterSecureStorage.setMockInitialValues({
     kSRIStorageKey: 'test',
@@ -98,7 +93,6 @@ Future<ProviderContainer> makeContainer({
       defaultClientProvider.overrideWithValue(testContainerMockClient),
       crashlyticsProvider.overrideWithValue(FakeCrashlytics()),
       soundServiceProvider.overrideWithValue(FakeSoundService()),
-      sharedPreferencesProvider.overrideWithValue(sharedPreferences),
       cachedDataProvider.overrideWith((ref) {
         return Future.value(
           CachedData(
@@ -117,7 +111,6 @@ Future<ProviderContainer> makeContainer({
               'identifierForVendor': 'test',
               'isPhysicalDevice': true,
             }),
-            sharedPreferences: sharedPreferences,
             initialUserSession: userSession,
             sri: 'test',
             engineMaxMemoryInMb: 16,
@@ -130,7 +123,6 @@ Future<ProviderContainer> makeContainer({
 
   addTearDown(binding.reset);
   addTearDown(container.dispose);
-  addTearDown(sharedPreferences.clear);
 
   // initialize the cached data provider
   await container.read(cachedDataProvider.future);

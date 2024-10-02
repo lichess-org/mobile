@@ -24,7 +24,6 @@ import 'package:lichess_mobile/src/model/settings/preferences.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -98,20 +97,6 @@ Future<Widget> makeProviderScope(
 
   VisibilityDetectorController.instance.updateInterval = Duration.zero;
 
-  SharedPreferences.setMockInitialValues(
-    defaultPreferences ??
-        {
-          // disable piece animation to simplify tests
-          'preferences.board': jsonEncode(
-            Board.defaults
-                .copyWith(
-                  pieceAnimation: false,
-                )
-                .toJson(),
-          ),
-        },
-  );
-
   await binding.setInitialSharedPreferencesValues(
     defaultPreferences ??
         {
@@ -125,8 +110,6 @@ Future<Widget> makeProviderScope(
           ),
         },
   );
-
-  final sharedPreferences = await SharedPreferences.getInstance();
 
   FlutterSecureStorage.setMockInitialValues({
     kSRIStorageKey: 'test',
@@ -186,7 +169,7 @@ Future<Widget> makeProviderScope(
       // ignore: scoped_providers_should_specify_dependencies
       soundServiceProvider.overrideWithValue(FakeSoundService()),
       // ignore: scoped_providers_should_specify_dependencies
-      cachedDataProvider.overrideWith((ref) {
+      cachedDataProvider.overrideWith((ref) async {
         return CachedData(
           packageInfo: PackageInfo(
             appName: 'lichess_mobile_test',
@@ -203,7 +186,6 @@ Future<Widget> makeProviderScope(
             'identifierForVendor': 'test',
             'isPhysicalDevice': true,
           }),
-          sharedPreferences: sharedPreferences,
           initialUserSession: userSession,
           sri: 'test',
           engineMaxMemoryInMb: 16,

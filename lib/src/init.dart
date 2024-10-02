@@ -21,7 +21,6 @@ import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pub_semver/pub_semver.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 part 'init.freezed.dart';
 part 'init.g.dart';
@@ -37,7 +36,6 @@ Future<CachedData> cachedData(CachedDataRef ref) async {
   final sessionStorage = ref.watch(sessionStorageProvider);
   final pInfo = await PackageInfo.fromPlatform();
   final deviceInfo = await DeviceInfoPlugin().deviceInfo;
-  final prefs = await SharedPreferences.getInstance();
 
   final sri = await SecureStorage.instance.read(key: kSRIStorageKey) ??
       genRandomString(12);
@@ -48,7 +46,6 @@ Future<CachedData> cachedData(CachedDataRef ref) async {
   return CachedData(
     packageInfo: pInfo,
     deviceInfo: deviceInfo,
-    sharedPreferences: prefs,
     initialUserSession: await sessionStorage.read(),
     sri: sri,
     engineMaxMemoryInMb: engineMaxMemory,
@@ -60,7 +57,6 @@ class CachedData with _$CachedData {
   const factory CachedData({
     required PackageInfo packageInfo,
     required BaseDeviceInfo deviceInfo,
-    required SharedPreferences sharedPreferences,
 
     /// The user session read during app initialization.
     required AuthSessionState? initialUserSession,
@@ -77,7 +73,7 @@ class CachedData with _$CachedData {
 
 /// Run initialization tasks only once on first app launch or after an update.
 Future<void> setupFirstLaunch() async {
-  final prefs = await SharedPreferences.getInstance();
+  final prefs = LichessBinding.instance.sharedPreferences;
   final pInfo = await PackageInfo.fromPlatform();
 
   final appVersion = Version.parse(pInfo.version);
