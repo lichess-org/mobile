@@ -1,4 +1,3 @@
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -8,7 +7,6 @@ import 'package:http/testing.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/crashlytics.dart';
 import 'package:lichess_mobile/src/db/database.dart';
-import 'package:lichess_mobile/src/init.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
@@ -16,7 +14,6 @@ import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:logging/logging.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import './fake_crashlytics.dart';
@@ -56,6 +53,8 @@ Future<ProviderContainer> makeContainer({
     kSRIStorageKey: 'test',
   });
 
+  await binding.preloadData(userSession);
+
   Logger.root.onRecord.listen((record) {
     if (shouldLog && record.level >= Level.FINE) {
       final time = DateFormat.Hms().format(record.time);
@@ -93,39 +92,12 @@ Future<ProviderContainer> makeContainer({
       defaultClientProvider.overrideWithValue(testContainerMockClient),
       crashlyticsProvider.overrideWithValue(FakeCrashlytics()),
       soundServiceProvider.overrideWithValue(FakeSoundService()),
-      cachedDataProvider.overrideWith((ref) {
-        return Future.value(
-          CachedData(
-            packageInfo: PackageInfo(
-              appName: 'lichess_mobile_test',
-              version: 'test',
-              buildNumber: '0.0.0',
-              packageName: 'lichess_mobile_test',
-            ),
-            deviceInfo: BaseDeviceInfo({
-              'name': 'test',
-              'model': 'test',
-              'manufacturer': 'test',
-              'systemName': 'test',
-              'systemVersion': 'test',
-              'identifierForVendor': 'test',
-              'isPhysicalDevice': true,
-            }),
-            initialUserSession: userSession,
-            sri: 'test',
-            engineMaxMemoryInMb: 16,
-          ),
-        );
-      }),
       ...overrides ?? [],
     ],
   );
 
   addTearDown(binding.reset);
   addTearDown(container.dispose);
-
-  // initialize the cached data provider
-  await container.read(cachedDataProvider.future);
 
   return container;
 }

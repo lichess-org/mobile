@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/init.dart';
+import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -12,11 +12,7 @@ part 'auth_session.g.dart';
 class AuthSession extends _$AuthSession {
   @override
   AuthSessionState? build() {
-    // requireValue is possible because cachedDataProvider is loaded before
-    // anything. See: lib/src/app.dart
-    return ref.watch(
-      cachedDataProvider.select((data) => data.requireValue.initialUserSession),
-    );
+    return LichessBinding.instance.initialUserSession;
   }
 
   Future<void> update(AuthSessionState session) async {

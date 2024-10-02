@@ -1,11 +1,21 @@
+import 'dart:convert';
+
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:lichess_mobile/firebase_options.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
+import 'package:lichess_mobile/src/db/secure_storage.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/session_storage.dart';
+import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notifications.dart';
+import 'package:lichess_mobile/src/utils/string.dart';
+import 'package:lichess_mobile/src/utils/system.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// A singleton class that provides access to plugins and external APIs.
@@ -60,6 +70,23 @@ abstract class LichessBinding {
   /// This is a synchronous getter that throws an error if shared preferences
   /// have not yet been initialized.
   SharedPreferencesWithCache get sharedPreferences;
+
+  /// Application package information.
+  PackageInfo get packageInfo;
+
+  /// Device information.
+  BaseDeviceInfo get deviceInfo;
+
+  /// The user session read during app initialization.
+  AuthSessionState? get initialUserSession;
+
+  /// Socket Random Identifier.
+  String get sri;
+
+  /// Maximum memory in MB that the engine can use.
+  ///
+  /// This is 10% of the total physical memory.
+  int get engineMaxMemoryInMb;
 
   /// Initialize notifications.
   ///
@@ -126,6 +153,49 @@ class AppLichessBinding extends LichessBinding {
       cacheOptions: const SharedPreferencesWithCacheOptions(),
     );
     _syncSharedPreferencesWithCache = await _sharedPreferencesWithCache;
+  }
+
+  late PackageInfo _syncPackageInfo;
+  late BaseDeviceInfo _syncDeviceInfo;
+  AuthSessionState? _syncInitialUserSession;
+  late String _syncSri;
+  late int _syncEngineMaxMemoryInMb;
+
+  @override
+  PackageInfo get packageInfo => _syncPackageInfo;
+
+  @override
+  BaseDeviceInfo get deviceInfo => _syncDeviceInfo;
+
+  @override
+  AuthSessionState? get initialUserSession => _syncInitialUserSession;
+
+  @override
+  String get sri => _syncSri;
+
+  @override
+  int get engineMaxMemoryInMb => _syncEngineMaxMemoryInMb;
+
+  /// Preload useful data.
+  ///
+  /// This must be called only once before the app starts.
+  Future<void> preloadData() async {
+    _syncPackageInfo = await PackageInfo.fromPlatform();
+    _syncDeviceInfo = await DeviceInfoPlugin().deviceInfo;
+
+    final string = await SecureStorage.instance.read(key: kSessionStorageKey);
+    if (string != null) {
+      _syncInitialUserSession = AuthSessionState.fromJson(
+        jsonDecode(string) as Map<String, dynamic>,
+      );
+    }
+
+    _syncSri = await SecureStorage.instance.read(key: kSRIStorageKey) ??
+        genRandomString(12);
+
+    final physicalMemory = await System.instance.getTotalRam() ?? 256.0;
+    final engineMaxMemory = (physicalMemory / 10).ceil();
+    _syncEngineMaxMemoryInMb = engineMaxMemory;
   }
 
   @override

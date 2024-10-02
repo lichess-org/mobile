@@ -15,7 +15,7 @@ void main() {
         game.makePgn(),
         '''
 [Event "Rated Bullet game"]
-[Site "http://localhost:9663/Fn9UvVKF"]
+[Site "https://lichess.dev/Fn9UvVKF"]
 [Date "2024.01.25"]
 [White "chabrot"]
 [Black "veloce"]
@@ -38,7 +38,7 @@ void main() {
         game.makePgn(),
         '''
 [Event "Rated Bullet game"]
-[Site "http://localhost:9663/CCW6EEru"]
+[Site "https://lichess.dev/CCW6EEru"]
 [Date "2024.01.25"]
 [White "veloce"]
 [Black "chabrot"]
@@ -65,7 +65,7 @@ void main() {
         game.makePgn(),
         '''
 [Event "Rated Bullet game"]
-[Site "http://localhost:9663/CCW6EEru"]
+[Site "https://lichess.dev/CCW6EEru"]
 [Date "2024.01.25"]
 [White "veloce"]
 [Black "chabrot"]
@@ -92,7 +92,7 @@ void main() {
         game.makePgn(),
         '''
 [Event "Rated Bullet game"]
-[Site "http://localhost:9663/CCW6EEru"]
+[Site "https://lichess.dev/CCW6EEru"]
 [Date "2024.01.25"]
 [White "veloce"]
 [Black "chabrot"]

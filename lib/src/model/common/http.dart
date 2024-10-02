@@ -21,13 +21,11 @@ import 'package:http/http.dart'
         StreamedResponse;
 import 'package:http/io_client.dart';
 import 'package:http/retry.dart';
+import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
-import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/utils/device_info.dart';
-import 'package:lichess_mobile/src/utils/package_info.dart';
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -107,9 +105,9 @@ String userAgent(UserAgentRef ref) {
   final session = ref.watch(authSessionProvider);
 
   return makeUserAgent(
-    ref.read(packageInfoProvider),
-    ref.read(deviceInfoProvider),
-    ref.read(sriProvider),
+    LichessBinding.instance.packageInfo,
+    LichessBinding.instance.deviceInfo,
+    LichessBinding.instance.sri,
     session?.user,
   );
 }
@@ -167,9 +165,9 @@ class LichessClient implements Client {
       request.headers['Authorization'] = 'Bearer $bearer';
     }
     request.headers['User-Agent'] = makeUserAgent(
-      _ref.read(packageInfoProvider),
-      _ref.read(deviceInfoProvider),
-      _ref.read(sriProvider),
+      LichessBinding.instance.packageInfo,
+      LichessBinding.instance.deviceInfo,
+      LichessBinding.instance.sri,
       session?.user,
     );
 

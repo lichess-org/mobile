@@ -1,75 +1,21 @@
 import 'dart:convert';
 
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dynamic_color/dynamic_color.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/db/secure_storage.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/auth/session_storage.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/settings/preferences.dart' as pref;
 import 'package:lichess_mobile/src/utils/color_palette.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
-import 'package:lichess_mobile/src/utils/system.dart';
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:pub_semver/pub_semver.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-part 'init.freezed.dart';
-part 'init.g.dart';
 
 final _logger = Logger('Init');
-
-/// A provider that caches useful data.
-///
-/// This provider is meant to be called once during app initialization, after
-/// the provider scope has been created.
-@Riverpod(keepAlive: true)
-Future<CachedData> cachedData(CachedDataRef ref) async {
-  final sessionStorage = ref.watch(sessionStorageProvider);
-  final pInfo = await PackageInfo.fromPlatform();
-  final deviceInfo = await DeviceInfoPlugin().deviceInfo;
-
-  final sri = await SecureStorage.instance.read(key: kSRIStorageKey) ??
-      genRandomString(12);
-
-  final physicalMemory = await System.instance.getTotalRam() ?? 256.0;
-  final engineMaxMemory = (physicalMemory / 10).ceil();
-
-  return CachedData(
-    packageInfo: pInfo,
-    deviceInfo: deviceInfo,
-    initialUserSession: await sessionStorage.read(),
-    sri: sri,
-    engineMaxMemoryInMb: engineMaxMemory,
-  );
-}
-
-@freezed
-class CachedData with _$CachedData {
-  const factory CachedData({
-    required PackageInfo packageInfo,
-    required BaseDeviceInfo deviceInfo,
-
-    /// The user session read during app initialization.
-    required AuthSessionState? initialUserSession,
-
-    /// Socket Random Identifier.
-    required String sri,
-
-    /// Maximum memory in MB that the engine can use.
-    ///
-    /// This is 10% of the total physical memory.
-    required int engineMaxMemoryInMb,
-  }) = _CachedData;
-}
 
 /// Run initialization tasks only once on first app launch or after an update.
 Future<void> setupFirstLaunch() async {

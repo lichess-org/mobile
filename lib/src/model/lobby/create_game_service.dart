@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:deep_pick/deep_pick.dart';
+import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
@@ -105,7 +106,7 @@ class CreateGameService {
     await ref.withClient(
       (client) => LobbyRepository(client).createSeek(
         seek,
-        sri: ref.read(sriProvider),
+        sri: LichessBinding.instance.sri,
       ),
     );
   }
@@ -187,7 +188,7 @@ class CreateGameService {
   /// Cancel the current game creation.
   Future<void> cancelSeek() async {
     _log.info('Cancelling game creation');
-    final sri = ref.read(sriProvider);
+    final sri = LichessBinding.instance.sri;
     try {
       await LobbyRepository(lichessClient).cancelSeek(sri: sri);
     } catch (e) {

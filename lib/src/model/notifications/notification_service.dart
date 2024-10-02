@@ -6,7 +6,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/binding.dart';
-import 'package:lichess_mobile/src/init.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
@@ -343,25 +342,20 @@ class NotificationService {
     // create a new provider scope for the background isolate
     final ref = ProviderContainer();
 
-    ref.listen(
-      cachedDataProvider,
-      (prev, now) async {
-        if (!now.hasValue) return;
+    final lichessBinding = AppLichessBinding.ensureInitialized();
+    await lichessBinding.preloadSharedPreferences();
+    await lichessBinding.preloadData();
 
-        try {
-          await ref.read(notificationServiceProvider)._processFcmMessage(
-                message,
-                fromBackground: true,
-              );
+    try {
+      await ref.read(notificationServiceProvider)._processFcmMessage(
+            message,
+            fromBackground: true,
+          );
 
-          ref.dispose();
-        } catch (e) {
-          _logger.severe('Error when processing an FCM background message: $e');
-          ref.dispose();
-        }
-      },
-    );
-
-    ref.read(cachedDataProvider);
+      ref.dispose();
+    } catch (e) {
+      _logger.severe('Error when processing an FCM background message: $e');
+      ref.dispose();
+    }
   }
 }

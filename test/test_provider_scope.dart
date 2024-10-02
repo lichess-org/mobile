@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,7 +11,6 @@ import 'package:intl/intl.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/crashlytics.dart';
 import 'package:lichess_mobile/src/db/database.dart';
-import 'package:lichess_mobile/src/init.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/session_storage.dart';
@@ -23,7 +21,6 @@ import 'package:lichess_mobile/src/model/notifications/notification_service.dart
 import 'package:lichess_mobile/src/model/settings/preferences.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:logging/logging.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -111,6 +108,8 @@ Future<Widget> makeProviderScope(
         },
   );
 
+  await binding.preloadData(userSession);
+
   FlutterSecureStorage.setMockInitialValues({
     kSRIStorageKey: 'test',
     if (userSession != null)
@@ -168,29 +167,6 @@ Future<Widget> makeProviderScope(
       crashlyticsProvider.overrideWithValue(FakeCrashlytics()),
       // ignore: scoped_providers_should_specify_dependencies
       soundServiceProvider.overrideWithValue(FakeSoundService()),
-      // ignore: scoped_providers_should_specify_dependencies
-      cachedDataProvider.overrideWith((ref) async {
-        return CachedData(
-          packageInfo: PackageInfo(
-            appName: 'lichess_mobile_test',
-            version: 'test',
-            buildNumber: '0.0.0',
-            packageName: 'lichess_mobile_test',
-          ),
-          deviceInfo: BaseDeviceInfo({
-            'name': 'test',
-            'model': 'test',
-            'manufacturer': 'test',
-            'systemName': 'test',
-            'systemVersion': 'test',
-            'identifierForVendor': 'test',
-            'isPhysicalDevice': true,
-          }),
-          initialUserSession: userSession,
-          sri: 'test',
-          engineMaxMemoryInMb: 16,
-        );
-      }),
       ...overrides ?? [],
     ],
     child: MediaQuery(

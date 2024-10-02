@@ -7,7 +7,6 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/init.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
@@ -22,63 +21,6 @@ import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
-import 'package:lichess_mobile/src/utils/system.dart';
-
-/// Application initialization and main entry point.
-class AppInitializationScreen extends ConsumerWidget {
-  const AppInitializationScreen({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen<AsyncValue<CachedData>>(
-      cachedDataProvider,
-      (_, state) {
-        if (state.hasValue || state.hasError) {
-          FlutterNativeSplash.remove();
-        }
-      },
-    );
-
-    final result = ref.watch(cachedDataProvider);
-
-    if (result.isLoading) {
-      // loading screen is handled by the native splash screen
-      return const SizedBox.shrink(key: Key('app_splash_screen'));
-    } else if (result.hasError) {
-      // We should really do everything we can to avoid this screen
-      // but in last resort, let's show an error message and invite the
-      // user to clear app data.
-      return MaterialApp(
-        home: Scaffold(
-          body: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Text(
-                  "Something went wrong :'(\n\nIf the problem persists, you can try to clear the storage and restart the application.\n\nSorry for the inconvenience.",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 18.0),
-                ),
-              ),
-              const SizedBox(height: 16.0),
-              if (Theme.of(context).platform == TargetPlatform.android)
-                ElevatedButton(
-                  onPressed: () {
-                    System.instance.clearUserData();
-                  },
-                  child: const Text('Clear storage'),
-                ),
-            ],
-          ),
-        ),
-      );
-    } else {
-      return const Application();
-    }
-  }
-}
 
 /// The main application widget.
 ///
@@ -99,7 +41,7 @@ class _AppState extends ConsumerState<Application> {
 
   @override
   void initState() {
-    debugPrint('AppState init');
+    FlutterNativeSplash.remove();
 
     _appLifecycleListener = AppLifecycleListener(
       onResume: () async {

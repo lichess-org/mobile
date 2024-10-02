@@ -24,6 +24,8 @@ Future<void> main() async {
 
   await lichessBinding.preloadSharedPreferences();
 
+  await lichessBinding.preloadData();
+
   // Show splash screen until app is ready
   // See src/app.dart for splash screen removal
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
@@ -47,7 +49,7 @@ Future<void> main() async {
       observers: [
         ProviderLogger(),
       ],
-      child: const AppInitializationScreen(),
+      child: const Application(),
     ),
   );
 }
