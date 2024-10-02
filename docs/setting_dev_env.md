@@ -6,16 +6,16 @@ If you get stuck during the installation process the most suitable place to seek
 
 ## Installing Flutter
 
-This project uses Flutter. 
+This project uses Flutter.
 
 1. Follow [the flutter install guide](https://docs.flutter.dev/get-started/install).
    This project is meant to run on iOS and Android, so you need to follow the "Platform setup" section of that guide to
    install the iOS and/or Android platform.
-> [!WARNING] 
-> Installing on Linux using `snapd` might cause some [problems](../../issues/123) building stockfish. 
+> [!WARNING]
+> Installing on Linux using `snapd` might cause some [problems](../../issues/123) building stockfish.
 > Installing flutter manually is a known workaround.
 2. Switch to the beta channel by running `flutter channel beta` and `flutter upgrade`
-> [!NOTE] 
+> [!NOTE]
 > We'll use Flutter's `beta` channel while the app itself is in Beta.
 3. Ensure Flutter is correctly configured by running `flutter doctor`
 
@@ -29,9 +29,13 @@ If you want to use FVM to manage your Flutter versions effectively, please consu
 
 ## Lila Server
 
-During development, you will need a local [lila](https://github.com/lichess-org/lila) (lichess server scala app)
-instance to work on this project. You will also need to setup [lila-ws](https://github.com/lichess-org/lila-ws)
-(websocket server).
+By default, the app will target the [Lichess dev server](https://lichess.dev/),
+so you can start developing without setting up a local server.
+
+During development, you may need a local [lila](https://github.com/lichess-org/lila) (lichess server scala app)
+instance to work on this project.
+
+If you work with a local lila, you will also need to setup [lila-ws](https://github.com/lichess-org/lila-ws) (websocket server).
 
 ### lila-docker
 
@@ -43,16 +47,17 @@ Instructions to install both `lila` and `lila-ws` locally can be found in [the l
 
 The mobile application is configured by default to target `http://127.0.0.1:9663` and `ws://127.0.0.1:9664`, so keep these when installing lila.
 
-### Using Lichess dev server
+**Do not use any scheme (https:// or ws://) in url in host, since it's already handled by URI helper methods**
 
-To use the [Lichess dev](https://lichess.dev/) to run this app, run the following command to set up the Lichess host
-URLs in the app.
+To run the application with a local server, you can use the following command:
 
+```bash
+flutter run --dart-define=LICHESS_HOST=localhost.9663 --dart-define=LICHESS_WS_HOST=localhost:9664
 ```
-flutter run --dart-define=LICHESS_HOST=lichess.dev --dart-define=LICHESS_WS_HOST=socket.lichess.dev
-```
 
-**Note : Do not use any scheme (https:// or ws://) in url in host, since it's already handled by URI helper methods**
+> [!NOTE]
+> The hosts above are the default ports for lila, if you have changed them, you
+will need to adjust the command accordingly.
 
 ## Setting up the emulators
 
