@@ -9,7 +9,7 @@ class OverTheBoardPreferences extends _$OverTheBoardPreferences
     with PreferencesStorage<pref.OverTheBoard> {
   // ignore: avoid_public_notifier_properties
   @override
-  pref.Category<pref.OverTheBoard> get categoryKey =>
+  pref.Category<pref.OverTheBoard> get prefCategory =>
       pref.Category.overTheBoard;
 
   @override

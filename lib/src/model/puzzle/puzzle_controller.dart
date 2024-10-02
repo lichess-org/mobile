@@ -232,9 +232,7 @@ class PuzzleController extends _$PuzzleController {
     );
 
     await ref
-        .read(
-          puzzlePreferencesProvider(initialContext.userId).notifier,
-        )
+        .read(puzzlePreferencesProvider.notifier)
         .setDifficulty(difficulty);
 
     final nextPuzzle = (await _service).resetBatch(
@@ -385,7 +383,7 @@ class PuzzleController extends _$PuzzleController {
 
       if (next != null &&
           result == PuzzleResult.win &&
-          ref.read(puzzlePreferencesProvider(initialContext.userId)).autoNext) {
+          ref.read(puzzlePreferencesProvider).autoNext) {
         loadPuzzle(next);
       }
     } else {

@@ -10,7 +10,7 @@ class AnalysisPreferences extends _$AnalysisPreferences
     with PreferencesStorage<pref.Analysis> {
   // ignore: avoid_public_notifier_properties
   @override
-  pref.Category<pref.Analysis> get categoryKey => pref.Category.analysis;
+  final prefCategory = pref.Category.analysis;
 
   @override
   pref.Analysis build() {

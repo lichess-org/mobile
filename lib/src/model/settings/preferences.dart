@@ -1,10 +1,63 @@
-import 'package:chessground/chessground.dart' as cg;
+import 'dart:math' as math;
+import 'package:chessground/chessground.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/l10n/l10n.dart';
+import 'package:lichess_mobile/src/model/challenge/challenge.dart';
+import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/game.dart';
+import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/perf.dart';
+import 'package:lichess_mobile/src/model/common/speed.dart';
+import 'package:lichess_mobile/src/model/common/time_increment.dart';
+import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer_preferences.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/color_palette.dart';
 
 part 'preferences.freezed.dart';
 part 'preferences.g.dart';
+
+/// A preference category with its storage key and default values.
+enum Category<T extends SerializablePreferences> {
+  general('preferences.general', General.defaults),
+  home('preferences.home', Home.defaults),
+  board('preferences.board', Board.defaults),
+  analysis('preferences.analysis', Analysis.defaults),
+  overTheBoard('preferences.overTheBoard', OverTheBoard.defaults),
+  challenge('preferences.challenge', Challenge.defaults),
+  gameSetup('preferences.gameSetup', GameSetup.defaults),
+  game('preferences.game', Game.defaults),
+  coordinateTraining(
+    'preferences.coordinateTraining',
+    CoordinateTraining.defaults,
+  ),
+  openingExplorer(
+    'preferences.opening_explorer',
+    null as OpeningExplorerPrefs?,
+  ),
+  puzzle('preferences.puzzle', null as PuzzlePrefs?);
+
+  const Category(this.storageKey, this._defaults);
+
+  final String storageKey;
+  final T? _defaults;
+
+  T defaults({LightUser? user}) => switch (this) {
+        Category.general => _defaults!,
+        Category.home => _defaults!,
+        Category.board => _defaults!,
+        Category.analysis => _defaults!,
+        Category.overTheBoard => _defaults!,
+        Category.challenge => _defaults!,
+        Category.gameSetup => _defaults!,
+        Category.game => _defaults!,
+        Category.coordinateTraining => _defaults!,
+        Category.openingExplorer =>
+          OpeningExplorerPrefs.defaults(user: user) as T,
+        Category.puzzle => PuzzlePrefs.defaults(id: user?.id) as T,
+      };
+}
 
 /// Interface for serializable preferences.
 abstract class SerializablePreferences {
@@ -25,22 +78,20 @@ abstract class SerializablePreferences {
         return Analysis.fromJson(json);
       case Category.overTheBoard:
         return OverTheBoard.fromJson(json);
+      case Category.challenge:
+        return Challenge.fromJson(json);
+      case Category.gameSetup:
+        return GameSetup.fromJson(json);
+      case Category.game:
+        return Game.fromJson(json);
+      case Category.coordinateTraining:
+        return CoordinateTraining.fromJson(json);
+      case Category.openingExplorer:
+        return OpeningExplorerPrefs.fromJson(json);
+      case Category.puzzle:
+        return PuzzlePrefs.fromJson(json);
     }
   }
-}
-
-/// A preference category with its storage key and default values.
-enum Category<T extends SerializablePreferences> {
-  general('preferences.general', General.defaults),
-  home('preferences.home', Home.defaults),
-  board('preferences.board', Board.defaults),
-  analysis('preferences.analysis', Analysis.defaults),
-  overTheBoard('preferences.overTheBoard', OverTheBoard.defaults);
-
-  const Category(this.storageKey, this.defaults);
-
-  final String storageKey;
-  final T defaults;
 }
 
 Map<String, dynamic>? _localeToJson(Locale? locale) {
@@ -144,7 +195,7 @@ class Board with _$Board implements SerializablePreferences {
   const Board._();
 
   const factory Board({
-    required cg.PieceSet pieceSet,
+    required PieceSet pieceSet,
     required BoardTheme boardTheme,
     bool? immersiveModeWhilePlaying,
     required bool hapticFeedback,
@@ -154,10 +205,10 @@ class Board with _$Board implements SerializablePreferences {
     required bool pieceAnimation,
     required bool showMaterialDifference,
     @JsonKey(
-      defaultValue: cg.PieceShiftMethod.either,
-      unknownEnumValue: cg.PieceShiftMethod.either,
+      defaultValue: PieceShiftMethod.either,
+      unknownEnumValue: PieceShiftMethod.either,
     )
-    required cg.PieceShiftMethod pieceShiftMethod,
+    required PieceShiftMethod pieceShiftMethod,
 
     /// Whether to enable shape drawings on the board for games and puzzles.
     @JsonKey(defaultValue: true) required bool enableShapeDrawings,
@@ -170,7 +221,7 @@ class Board with _$Board implements SerializablePreferences {
   }) = _Board;
 
   static const defaults = Board(
-    pieceSet: cg.PieceSet.staunty,
+    pieceSet: PieceSet.staunty,
     boardTheme: BoardTheme.brown,
     immersiveModeWhilePlaying: false,
     hapticFeedback: true,
@@ -179,14 +230,14 @@ class Board with _$Board implements SerializablePreferences {
     coordinates: true,
     pieceAnimation: true,
     showMaterialDifference: true,
-    pieceShiftMethod: cg.PieceShiftMethod.either,
+    pieceShiftMethod: PieceShiftMethod.either,
     enableShapeDrawings: true,
     magnifyDraggedPiece: true,
     shapeColor: ShapeColor.green,
   );
 
-  cg.ChessboardSettings toBoardSettings() {
-    return cg.ChessboardSettings(
+  ChessboardSettings toBoardSettings() {
+    return ChessboardSettings(
       pieceAssets: pieceSet.assets,
       colorScheme: boardTheme.colors,
       showValidMoves: showLegalMoves,
@@ -196,7 +247,7 @@ class Board with _$Board implements SerializablePreferences {
       dragFeedbackScale: magnifyDraggedPiece ? 2.0 : 1.0,
       dragFeedbackOffset: Offset(0.0, magnifyDraggedPiece ? -1.0 : 0.0),
       pieceShiftMethod: pieceShiftMethod,
-      drawShape: cg.DrawShapeOptions(
+      drawShape: DrawShapeOptions(
         enable: enableShapeDrawings,
         newShapeColor: shapeColor.color,
       ),
@@ -263,56 +314,56 @@ enum BoardTheme {
 
   const BoardTheme(this.label);
 
-  cg.ChessboardColorScheme get colors {
+  ChessboardColorScheme get colors {
     switch (this) {
       case BoardTheme.system:
-        return getBoardColorScheme() ?? cg.ChessboardColorScheme.brown;
+        return getBoardColorScheme() ?? ChessboardColorScheme.brown;
       case BoardTheme.blue:
-        return cg.ChessboardColorScheme.blue;
+        return ChessboardColorScheme.blue;
       case BoardTheme.blue2:
-        return cg.ChessboardColorScheme.blue2;
+        return ChessboardColorScheme.blue2;
       case BoardTheme.blue3:
-        return cg.ChessboardColorScheme.blue3;
+        return ChessboardColorScheme.blue3;
       case BoardTheme.blueMarble:
-        return cg.ChessboardColorScheme.blueMarble;
+        return ChessboardColorScheme.blueMarble;
       case BoardTheme.canvas:
-        return cg.ChessboardColorScheme.canvas;
+        return ChessboardColorScheme.canvas;
       case BoardTheme.wood:
-        return cg.ChessboardColorScheme.wood;
+        return ChessboardColorScheme.wood;
       case BoardTheme.wood2:
-        return cg.ChessboardColorScheme.wood2;
+        return ChessboardColorScheme.wood2;
       case BoardTheme.wood3:
-        return cg.ChessboardColorScheme.wood3;
+        return ChessboardColorScheme.wood3;
       case BoardTheme.wood4:
-        return cg.ChessboardColorScheme.wood4;
+        return ChessboardColorScheme.wood4;
       case BoardTheme.maple:
-        return cg.ChessboardColorScheme.maple;
+        return ChessboardColorScheme.maple;
       case BoardTheme.maple2:
-        return cg.ChessboardColorScheme.maple2;
+        return ChessboardColorScheme.maple2;
       case BoardTheme.brown:
-        return cg.ChessboardColorScheme.brown;
+        return ChessboardColorScheme.brown;
       case BoardTheme.leather:
-        return cg.ChessboardColorScheme.leather;
+        return ChessboardColorScheme.leather;
       case BoardTheme.green:
-        return cg.ChessboardColorScheme.green;
+        return ChessboardColorScheme.green;
       case BoardTheme.marble:
-        return cg.ChessboardColorScheme.marble;
+        return ChessboardColorScheme.marble;
       case BoardTheme.greenPlastic:
-        return cg.ChessboardColorScheme.greenPlastic;
+        return ChessboardColorScheme.greenPlastic;
       case BoardTheme.grey:
-        return cg.ChessboardColorScheme.grey;
+        return ChessboardColorScheme.grey;
       case BoardTheme.metal:
-        return cg.ChessboardColorScheme.metal;
+        return ChessboardColorScheme.metal;
       case BoardTheme.olive:
-        return cg.ChessboardColorScheme.olive;
+        return ChessboardColorScheme.olive;
       case BoardTheme.newspaper:
-        return cg.ChessboardColorScheme.newspaper;
+        return ChessboardColorScheme.newspaper;
       case BoardTheme.purpleDiag:
-        return cg.ChessboardColorScheme.purpleDiag;
+        return ChessboardColorScheme.purpleDiag;
       case BoardTheme.pinkPyramid:
-        return cg.ChessboardColorScheme.pinkPyramid;
+        return ChessboardColorScheme.pinkPyramid;
       case BoardTheme.horsey:
-        return cg.ChessboardColorScheme.horsey;
+        return ChessboardColorScheme.horsey;
     }
   }
 
@@ -394,4 +445,216 @@ class OverTheBoard with _$OverTheBoard implements SerializablePreferences {
       return defaults;
     }
   }
+}
+
+@Freezed(fromJson: true, toJson: true)
+class Challenge with _$Challenge implements SerializablePreferences {
+  const Challenge._();
+
+  const factory Challenge({
+    required Variant variant,
+    required ChallengeTimeControlType timeControl,
+    required ({Duration time, Duration increment}) clock,
+    required int days,
+    required bool rated,
+    required SideChoice sideChoice,
+  }) = _Challenge;
+
+  static const defaults = Challenge(
+    variant: Variant.standard,
+    timeControl: ChallengeTimeControlType.clock,
+    clock: (time: Duration(minutes: 10), increment: Duration.zero),
+    days: 3,
+    rated: false,
+    sideChoice: SideChoice.random,
+  );
+
+  Speed get speed => timeControl == ChallengeTimeControlType.clock
+      ? Speed.fromTimeIncrement(
+          TimeIncrement(
+            clock.time.inSeconds,
+            clock.increment.inSeconds,
+          ),
+        )
+      : Speed.correspondence;
+
+  ChallengeRequest makeRequest(LightUser destUser, [String? initialFen]) {
+    return ChallengeRequest(
+      destUser: destUser,
+      variant: variant,
+      timeControl: timeControl,
+      clock: clock,
+      days: days,
+      rated: rated,
+      sideChoice: sideChoice,
+      initialFen: initialFen,
+    );
+  }
+
+  factory Challenge.fromJson(Map<String, dynamic> json) {
+    try {
+      return _$ChallengeFromJson(json);
+    } catch (_) {
+      return Challenge.defaults;
+    }
+  }
+}
+
+enum TimeControl { realTime, correspondence }
+
+@Freezed(fromJson: true, toJson: true)
+class GameSetup with _$GameSetup implements SerializablePreferences {
+  const GameSetup._();
+
+  const factory GameSetup({
+    required TimeIncrement quickPairingTimeIncrement,
+    required TimeControl customTimeControl,
+    required int customTimeSeconds,
+    required int customIncrementSeconds,
+    required int customDaysPerTurn,
+    required Variant customVariant,
+    required bool customRated,
+    required SideChoice customSide,
+    required (int, int) customRatingDelta,
+  }) = _GameSetup;
+
+  static const defaults = GameSetup(
+    quickPairingTimeIncrement: TimeIncrement(600, 0),
+    customTimeControl: TimeControl.realTime,
+    customTimeSeconds: 180,
+    customIncrementSeconds: 0,
+    customVariant: Variant.standard,
+    customRated: false,
+    customSide: SideChoice.random,
+    customRatingDelta: (-500, 500),
+    customDaysPerTurn: 3,
+  );
+
+  Speed get speedFromCustom => Speed.fromTimeIncrement(
+        TimeIncrement(
+          customTimeSeconds,
+          customIncrementSeconds,
+        ),
+      );
+
+  Perf get perfFromCustom => Perf.fromVariantAndSpeed(
+        customVariant,
+        speedFromCustom,
+      );
+
+  /// Returns the rating range for the custom setup, or null if the user
+  /// doesn't have a rating for the custom setup perf.
+  (int, int)? ratingRangeFromCustom(User user) {
+    final perf = user.perfs[perfFromCustom];
+    if (perf == null) return null;
+    if (perf.provisional == true) return null;
+    final min = math.max(0, perf.rating + customRatingDelta.$1);
+    final max = perf.rating + customRatingDelta.$2;
+    return (min, max);
+  }
+
+  factory GameSetup.fromJson(Map<String, dynamic> json) {
+    try {
+      return _$GameSetupFromJson(json);
+    } catch (_) {
+      return defaults;
+    }
+  }
+}
+
+@Freezed(fromJson: true, toJson: true)
+class Game with _$Game implements SerializablePreferences {
+  const factory Game({
+    bool? enableChat,
+    bool? blindfoldMode,
+  }) = _Game;
+
+  static const defaults = Game(
+    enableChat: true,
+  );
+
+  factory Game.fromJson(Map<String, dynamic> json) => _$GameFromJson(json);
+}
+
+enum TimeChoice {
+  thirtySeconds(Duration(seconds: 30)),
+  unlimited(null);
+
+  const TimeChoice(this.duration);
+
+  final Duration? duration;
+
+  // TODO l10n
+  Widget label(AppLocalizations l10n) {
+    switch (this) {
+      case TimeChoice.thirtySeconds:
+        return const Text('30s');
+      case TimeChoice.unlimited:
+        return const Icon(Icons.all_inclusive);
+    }
+  }
+}
+
+enum TrainingMode {
+  findSquare,
+  nameSquare;
+
+  // TODO l10n
+  String label(AppLocalizations l10n) {
+    switch (this) {
+      case TrainingMode.findSquare:
+        return 'Find Square';
+      case TrainingMode.nameSquare:
+        return 'Name Square';
+    }
+  }
+}
+
+@Freezed(fromJson: true, toJson: true)
+class CoordinateTraining
+    with _$CoordinateTraining
+    implements SerializablePreferences {
+  const CoordinateTraining._();
+
+  const factory CoordinateTraining({
+    required bool showCoordinates,
+    required bool showPieces,
+    required TrainingMode mode,
+    required TimeChoice timeChoice,
+    required SideChoice sideChoice,
+  }) = _CoordinateTraining;
+
+  static const defaults = CoordinateTraining(
+    showCoordinates: false,
+    showPieces: true,
+    mode: TrainingMode.findSquare,
+    timeChoice: TimeChoice.thirtySeconds,
+    sideChoice: SideChoice.random,
+  );
+
+  factory CoordinateTraining.fromJson(Map<String, dynamic> json) {
+    return _$CoordinateTrainingFromJson(json);
+  }
+}
+
+@Freezed(fromJson: true, toJson: true)
+class PuzzlePrefs with _$PuzzlePrefs implements SerializablePreferences {
+  const factory PuzzlePrefs({
+    required UserId? id,
+    required PuzzleDifficulty difficulty,
+
+    /// If `true`, will show next puzzle after successful completion. This has
+    /// no effect on puzzle streaks, which always show next puzzle. Defaults to
+    /// `false`.
+    @Default(false) bool autoNext,
+  }) = _PuzzlePrefs;
+
+  factory PuzzlePrefs.defaults({UserId? id}) => PuzzlePrefs(
+        id: id,
+        difficulty: PuzzleDifficulty.normal,
+        autoNext: false,
+      );
+
+  factory PuzzlePrefs.fromJson(Map<String, dynamic> json) =>
+      _$PuzzlePrefsFromJson(json);
 }

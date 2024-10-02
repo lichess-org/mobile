@@ -7,14 +7,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/game.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/lobby/create_game_service.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
-import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
+import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_repository.dart';
+import 'package:lichess_mobile/src/model/settings/preferences.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -523,13 +525,13 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                   title: Text(context.l10n.side),
                   trailing: AdaptiveTextButton(
                     onPressed: () {
-                      showChoicePicker<PlayableSide>(
+                      showChoicePicker<SideChoice>(
                         context,
-                        choices: PlayableSide.values,
+                        choices: SideChoice.values,
                         selectedItem: preferences.customSide,
-                        labelBuilder: (PlayableSide side) =>
-                            Text(playableSideL10n(context.l10n, side)),
-                        onSelectedItemChanged: (PlayableSide side) {
+                        labelBuilder: (SideChoice side) =>
+                            Text(side.label(context.l10n)),
+                        onSelectedItemChanged: (SideChoice side) {
                           ref
                               .read(gameSetupPreferencesProvider.notifier)
                               .setCustomSide(side);
@@ -537,7 +539,7 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                       );
                     },
                     child: Text(
-                      playableSideL10n(context.l10n, preferences.customSide),
+                      preferences.customSide.label(context.l10n),
                     ),
                   ),
                 ),

@@ -4,12 +4,13 @@ import 'package:dartchess/dartchess.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/game.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
-import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
+import 'package:lichess_mobile/src/model/settings/preferences.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 
 part 'game_seek.freezed.dart';
@@ -65,9 +66,9 @@ class GameSeek with _$GameSeek {
       ),
       rated: account != null && setup.customRated,
       variant: setup.customVariant,
-      side: setup.customRated == true || setup.customSide == PlayableSide.random
+      side: setup.customRated == true || setup.customSide == SideChoice.random
           ? null
-          : setup.customSide == PlayableSide.white
+          : setup.customSide == SideChoice.white
               ? Side.white
               : Side.black,
       ratingRange:
@@ -81,9 +82,9 @@ class GameSeek with _$GameSeek {
       days: setup.customDaysPerTurn,
       rated: account != null && setup.customRated,
       variant: setup.customVariant,
-      side: setup.customRated == true || setup.customSide == PlayableSide.random
+      side: setup.customRated == true || setup.customSide == SideChoice.random
           ? null
-          : setup.customSide == PlayableSide.white
+          : setup.customSide == SideChoice.white
               ? Side.white
               : Side.black,
       ratingRange:

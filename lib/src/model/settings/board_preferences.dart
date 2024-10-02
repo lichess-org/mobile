@@ -11,7 +11,7 @@ class BoardPreferences extends _$BoardPreferences
     with PreferencesStorage<pref.Board> {
   // ignore: avoid_public_notifier_properties
   @override
-  pref.Category<pref.Board> get categoryKey => pref.Category.board;
+  pref.Category<pref.Board> get prefCategory => pref.Category.board;
 
   @override
   pref.Board build() {

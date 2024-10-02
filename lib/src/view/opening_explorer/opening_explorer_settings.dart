@@ -28,15 +28,14 @@ class OpeningExplorerSettings extends ConsumerWidget {
         title: const Text('Timespan'),
         subtitle: Wrap(
           spacing: 5,
-          children: MasterDbPrefState.datesMap.keys
+          children: MasterDb.datesMap.keys
               .map(
                 (key) => ChoiceChip(
                   label: Text(key),
-                  selected: prefs.masterDb.sinceYear ==
-                      MasterDbPrefState.datesMap[key],
+                  selected: prefs.masterDb.sinceYear == MasterDb.datesMap[key],
                   onSelected: (_) => ref
                       .read(openingExplorerPreferencesProvider.notifier)
-                      .setMasterDbSince(MasterDbPrefState.datesMap[key]!),
+                      .setMasterDbSince(MasterDb.datesMap[key]!),
                 ),
               )
               .toList(growable: false),
@@ -49,7 +48,7 @@ class OpeningExplorerSettings extends ConsumerWidget {
         title: Text(context.l10n.timeControl),
         subtitle: Wrap(
           spacing: 5,
-          children: LichessDbPrefState.kAvailableSpeeds
+          children: LichessDb.kAvailableSpeeds
               .map(
                 (speed) => FilterChip(
                   label: Text(
@@ -76,7 +75,7 @@ class OpeningExplorerSettings extends ConsumerWidget {
         title: Text(context.l10n.rating),
         subtitle: Wrap(
           spacing: 5,
-          children: LichessDbPrefState.kAvailableRatings
+          children: LichessDb.kAvailableRatings
               .map(
                 (rating) => FilterChip(
                   label: Text(rating.toString()),
@@ -98,15 +97,15 @@ class OpeningExplorerSettings extends ConsumerWidget {
         title: const Text('Timespan'),
         subtitle: Wrap(
           spacing: 5,
-          children: LichessDbPrefState.datesMap.keys
+          children: LichessDb.datesMap.keys
               .map(
                 (key) => ChoiceChip(
                   label: Text(key),
                   selected:
-                      prefs.lichessDb.since == LichessDbPrefState.datesMap[key],
+                      prefs.lichessDb.since == LichessDb.datesMap[key],
                   onSelected: (_) => ref
                       .read(openingExplorerPreferencesProvider.notifier)
-                      .setLichessDbSince(LichessDbPrefState.datesMap[key]!),
+                      .setLichessDbSince(LichessDb.datesMap[key]!),
                 ),
               )
               .toList(growable: false),
@@ -173,7 +172,7 @@ class OpeningExplorerSettings extends ConsumerWidget {
         title: Text(context.l10n.timeControl),
         subtitle: Wrap(
           spacing: 5,
-          children: PlayerDbPrefState.kAvailableSpeeds
+          children: PlayerDb.kAvailableSpeeds
               .map(
                 (speed) => FilterChip(
                   label: Text(
@@ -222,15 +221,14 @@ class OpeningExplorerSettings extends ConsumerWidget {
         title: const Text('Timespan'),
         subtitle: Wrap(
           spacing: 5,
-          children: PlayerDbPrefState.datesMap.keys
+          children: PlayerDb.datesMap.keys
               .map(
                 (key) => ChoiceChip(
                   label: Text(key),
-                  selected:
-                      prefs.playerDb.since == PlayerDbPrefState.datesMap[key],
+                  selected: prefs.playerDb.since == PlayerDb.datesMap[key],
                   onSelected: (_) => ref
                       .read(openingExplorerPreferencesProvider.notifier)
-                      .setPlayerDbSince(PlayerDbPrefState.datesMap[key]!),
+                      .setPlayerDbSince(PlayerDb.datesMap[key]!),
                 ),
               )
               .toList(growable: false),

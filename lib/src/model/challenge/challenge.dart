@@ -2,6 +2,7 @@ import 'package:deep_pick/deep_pick.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/game.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
@@ -204,18 +205,6 @@ typedef ChallengeUser = ({
   bool? provisionalRating,
   int? lagRating,
 });
-
-enum SideChoice {
-  random,
-  white,
-  black;
-
-  String label(AppLocalizations l10n) => switch (this) {
-        SideChoice.random => l10n.randomColor,
-        SideChoice.white => l10n.white,
-        SideChoice.black => l10n.black,
-      };
-}
 
 extension ChallengeExtension on Pick {
   ChallengeDirection asChallengeDirectionOrThrow() {

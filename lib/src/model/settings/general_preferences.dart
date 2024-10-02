@@ -12,7 +12,7 @@ class GeneralPreferences extends _$GeneralPreferences
     with PreferencesStorage<pref.General> {
   // ignore: avoid_public_notifier_properties
   @override
-  pref.Category<pref.General> get categoryKey => pref.Category.general;
+  final prefCategory = pref.Category.general;
 
   @override
   pref.General build() {

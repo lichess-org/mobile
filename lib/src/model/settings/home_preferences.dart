@@ -9,7 +9,7 @@ class HomePreferences extends _$HomePreferences
     with PreferencesStorage<pref.Home> {
   // ignore: avoid_public_notifier_properties
   @override
-  pref.Category<pref.Home> get categoryKey => pref.Category.home;
+  pref.Category<pref.Home> get prefCategory => pref.Category.home;
 
   @override
   pref.Home build() {

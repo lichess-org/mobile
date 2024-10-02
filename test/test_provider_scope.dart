@@ -112,6 +112,20 @@ Future<Widget> makeProviderScope(
         },
   );
 
+  await binding.setInitialSharedPreferencesValues(
+    defaultPreferences ??
+        {
+          // disable piece animation to simplify tests
+          'preferences.board': jsonEncode(
+            Board.defaults
+                .copyWith(
+                  pieceAnimation: false,
+                )
+                .toJson(),
+          ),
+        },
+  );
+
   final sharedPreferences = await SharedPreferences.getInstance();
 
   FlutterSecureStorage.setMockInitialValues({
