@@ -1,19 +1,21 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
-import 'package:lichess_mobile/src/model/settings/preferences.dart' as pref;
+import 'package:lichess_mobile/src/model/settings/preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+part 'analysis_preferences.freezed.dart';
 part 'analysis_preferences.g.dart';
 
 @riverpod
 class AnalysisPreferences extends _$AnalysisPreferences
-    with PreferencesStorage<pref.Analysis> {
+    with PreferencesStorage<AnalysisPrefs> {
   // ignore: avoid_public_notifier_properties
   @override
-  final prefCategory = pref.Category.analysis;
+  final prefCategory = PrefCategory.analysis;
 
   @override
-  pref.Analysis build() {
+  AnalysisPrefs build() {
     return fetch();
   }
 
@@ -73,5 +75,35 @@ class AnalysisPreferences extends _$AnalysisPreferences
         numEngineCores: numEngineCores,
       ),
     );
+  }
+}
+
+@Freezed(fromJson: true, toJson: true)
+class AnalysisPrefs with _$AnalysisPrefs implements SerializablePreferences {
+  const AnalysisPrefs._();
+
+  const factory AnalysisPrefs({
+    required bool enableLocalEvaluation,
+    required bool showEvaluationGauge,
+    required bool showBestMoveArrow,
+    required bool showAnnotations,
+    required bool showPgnComments,
+    @Assert('numEvalLines >= 1 && numEvalLines <= 3') required int numEvalLines,
+    @Assert('numEngineCores >= 1 && numEngineCores <= maxEngineCores')
+    required int numEngineCores,
+  }) = _AnalysisPrefs;
+
+  static const defaults = AnalysisPrefs(
+    enableLocalEvaluation: true,
+    showEvaluationGauge: true,
+    showBestMoveArrow: true,
+    showAnnotations: true,
+    showPgnComments: true,
+    numEvalLines: 2,
+    numEngineCores: 1,
+  );
+
+  factory AnalysisPrefs.fromJson(Map<String, dynamic> json) {
+    return _$AnalysisPrefsFromJson(json);
   }
 }

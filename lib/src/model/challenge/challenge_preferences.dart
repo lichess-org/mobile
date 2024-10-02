@@ -1,21 +1,26 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/game.dart';
-import 'package:lichess_mobile/src/model/settings/preferences.dart' as pref;
+import 'package:lichess_mobile/src/model/common/speed.dart';
+import 'package:lichess_mobile/src/model/common/time_increment.dart';
+import 'package:lichess_mobile/src/model/settings/preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+part 'challenge_preferences.freezed.dart';
 part 'challenge_preferences.g.dart';
 
 @riverpod
 class ChallengePreferences extends _$ChallengePreferences
-    with SessionPreferencesStorage<pref.Challenge> {
+    with SessionPreferencesStorage<ChallengePrefs> {
   // ignore: avoid_public_notifier_properties
   @override
-  pref.Category<pref.Challenge> get prefCategory => pref.Category.challenge;
+  PrefCategory<ChallengePrefs> get prefCategory => PrefCategory.challenge;
 
   @override
-  pref.Challenge build() {
+  ChallengePrefs build() {
     return fetch();
   }
 
@@ -41,5 +46,58 @@ class ChallengePreferences extends _$ChallengePreferences
 
   Future<void> setRated(bool rated) {
     return save(state.copyWith(rated: rated));
+  }
+}
+
+@Freezed(fromJson: true, toJson: true)
+class ChallengePrefs with _$ChallengePrefs implements SerializablePreferences {
+  const ChallengePrefs._();
+
+  const factory ChallengePrefs({
+    required Variant variant,
+    required ChallengeTimeControlType timeControl,
+    required ({Duration time, Duration increment}) clock,
+    required int days,
+    required bool rated,
+    required SideChoice sideChoice,
+  }) = _ChallengePrefs;
+
+  static const defaults = ChallengePrefs(
+    variant: Variant.standard,
+    timeControl: ChallengeTimeControlType.clock,
+    clock: (time: Duration(minutes: 10), increment: Duration.zero),
+    days: 3,
+    rated: false,
+    sideChoice: SideChoice.random,
+  );
+
+  Speed get speed => timeControl == ChallengeTimeControlType.clock
+      ? Speed.fromTimeIncrement(
+          TimeIncrement(
+            clock.time.inSeconds,
+            clock.increment.inSeconds,
+          ),
+        )
+      : Speed.correspondence;
+
+  ChallengeRequest makeRequest(LightUser destUser, [String? initialFen]) {
+    return ChallengeRequest(
+      destUser: destUser,
+      variant: variant,
+      timeControl: timeControl,
+      clock: clock,
+      days: days,
+      rated: rated,
+      sideChoice: sideChoice,
+      initialFen: initialFen,
+    );
+  }
+
+  factory ChallengePrefs.fromJson(Map<String, dynamic> json) {
+    try {
+      return _$ChallengePrefsFromJson(json);
+    } catch (_) {
+      return ChallengePrefs.defaults;
+    }
   }
 }

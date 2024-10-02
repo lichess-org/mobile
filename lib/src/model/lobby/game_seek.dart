@@ -10,7 +10,7 @@ import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
-import 'package:lichess_mobile/src/model/settings/preferences.dart';
+import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 
 part 'game_seek.freezed.dart';
@@ -57,8 +57,8 @@ class GameSeek with _$GameSeek {
     );
   }
 
-  /// Construct a game seek from saved [GameSetup], using all the custom params.
-  factory GameSeek.custom(GameSetup setup, User? account) {
+  /// Construct a game seek from saved [GameSetupPrefs], using all the custom params.
+  factory GameSeek.custom(GameSetupPrefs setup, User? account) {
     return GameSeek(
       clock: (
         Duration(seconds: setup.customTimeSeconds),
@@ -76,8 +76,8 @@ class GameSeek with _$GameSeek {
     );
   }
 
-  /// Construct a correspondence seek from saved [GameSetup].
-  factory GameSeek.correspondence(GameSetup setup, User? account) {
+  /// Construct a correspondence seek from saved [GameSetupPrefs].
+  factory GameSeek.correspondence(GameSetupPrefs setup, User? account) {
     return GameSeek(
       days: setup.customDaysPerTurn,
       rated: account != null && setup.customRated,
@@ -94,7 +94,10 @@ class GameSeek with _$GameSeek {
 
   /// Construct a game seek from a playable game to find a new opponent, using
   /// the same time control, variant and rated status.
-  factory GameSeek.newOpponentFromGame(PlayableGame game, GameSetup setup) {
+  factory GameSeek.newOpponentFromGame(
+    PlayableGame game,
+    GameSetupPrefs setup,
+  ) {
     return GameSeek(
       clock: game.meta.clock != null
           ? (game.meta.clock!.initial, game.meta.clock!.increment)

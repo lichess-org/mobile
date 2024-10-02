@@ -1,20 +1,23 @@
 import 'package:chessground/chessground.dart';
-import 'package:lichess_mobile/src/model/settings/preferences.dart' as pref;
+import 'package:flutter/widgets.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/settings/preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
+import 'package:lichess_mobile/src/utils/color_palette.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+part 'board_preferences.freezed.dart';
 part 'board_preferences.g.dart';
 
 @riverpod
 class BoardPreferences extends _$BoardPreferences
-    with PreferencesStorage<pref.Board> {
+    with PreferencesStorage<BoardPrefs> {
   // ignore: avoid_public_notifier_properties
   @override
-  pref.Category<pref.Board> get prefCategory => pref.Category.board;
+  PrefCategory<BoardPrefs> get prefCategory => PrefCategory.board;
 
   @override
-  pref.Board build() {
+  BoardPrefs build() {
     return fetch();
   }
 
@@ -81,4 +84,204 @@ class BoardPreferences extends _$BoardPreferences
   Future<void> setShapeColor(ShapeColor shapeColor) {
     return save(state.copyWith(shapeColor: shapeColor));
   }
+}
+
+@Freezed(fromJson: true, toJson: true)
+class BoardPrefs with _$BoardPrefs implements SerializablePreferences {
+  const BoardPrefs._();
+
+  const factory BoardPrefs({
+    required PieceSet pieceSet,
+    required BoardTheme boardTheme,
+    bool? immersiveModeWhilePlaying,
+    required bool hapticFeedback,
+    required bool showLegalMoves,
+    required bool boardHighlights,
+    required bool coordinates,
+    required bool pieceAnimation,
+    required bool showMaterialDifference,
+    @JsonKey(
+      defaultValue: PieceShiftMethod.either,
+      unknownEnumValue: PieceShiftMethod.either,
+    )
+    required PieceShiftMethod pieceShiftMethod,
+
+    /// Whether to enable shape drawings on the board for games and puzzles.
+    @JsonKey(defaultValue: true) required bool enableShapeDrawings,
+    @JsonKey(defaultValue: true) required bool magnifyDraggedPiece,
+    @JsonKey(
+      defaultValue: ShapeColor.green,
+      unknownEnumValue: ShapeColor.green,
+    )
+    required ShapeColor shapeColor,
+  }) = _BoardPrefs;
+
+  static const defaults = BoardPrefs(
+    pieceSet: PieceSet.staunty,
+    boardTheme: BoardTheme.brown,
+    immersiveModeWhilePlaying: false,
+    hapticFeedback: true,
+    showLegalMoves: true,
+    boardHighlights: true,
+    coordinates: true,
+    pieceAnimation: true,
+    showMaterialDifference: true,
+    pieceShiftMethod: PieceShiftMethod.either,
+    enableShapeDrawings: true,
+    magnifyDraggedPiece: true,
+    shapeColor: ShapeColor.green,
+  );
+
+  ChessboardSettings toBoardSettings() {
+    return ChessboardSettings(
+      pieceAssets: pieceSet.assets,
+      colorScheme: boardTheme.colors,
+      showValidMoves: showLegalMoves,
+      showLastMove: boardHighlights,
+      enableCoordinates: coordinates,
+      animationDuration: pieceAnimationDuration,
+      dragFeedbackScale: magnifyDraggedPiece ? 2.0 : 1.0,
+      dragFeedbackOffset: Offset(0.0, magnifyDraggedPiece ? -1.0 : 0.0),
+      pieceShiftMethod: pieceShiftMethod,
+      drawShape: DrawShapeOptions(
+        enable: enableShapeDrawings,
+        newShapeColor: shapeColor.color,
+      ),
+    );
+  }
+
+  factory BoardPrefs.fromJson(Map<String, dynamic> json) {
+    try {
+      return _$BoardPrefsFromJson(json);
+    } catch (_) {
+      return defaults;
+    }
+  }
+
+  Duration get pieceAnimationDuration =>
+      pieceAnimation ? const Duration(milliseconds: 150) : Duration.zero;
+}
+
+/// Colors taken from lila: https://github.com/lichess-org/chessground/blob/54a7e71bf88701c1109d3b9b8106b464012b94cf/src/state.ts#L178
+enum ShapeColor {
+  green,
+  red,
+  blue,
+  yellow;
+
+  Color get color => Color(
+        switch (this) {
+          ShapeColor.green => 0x15781B,
+          ShapeColor.red => 0x882020,
+          ShapeColor.blue => 0x003088,
+          ShapeColor.yellow => 0xe68f00,
+        },
+      ).withAlpha(0xAA);
+}
+
+/// The chessboard theme.
+enum BoardTheme {
+  system('System'),
+  blue('Blue'),
+  blue2('Blue2'),
+  blue3('Blue3'),
+  blueMarble('Blue Marble'),
+  canvas('Canvas'),
+  wood('Wood'),
+  wood2('Wood2'),
+  wood3('Wood3'),
+  wood4('Wood4'),
+  maple('Maple'),
+  maple2('Maple 2'),
+  brown('Brown'),
+  leather('Leather'),
+  green('Green'),
+  marble('Marble'),
+  greenPlastic('Green Plastic'),
+  grey('Grey'),
+  metal('Metal'),
+  olive('Olive'),
+  newspaper('Newspaper'),
+  purpleDiag('Purple-Diag'),
+  pinkPyramid('Pink'),
+  horsey('Horsey');
+
+  final String label;
+
+  const BoardTheme(this.label);
+
+  ChessboardColorScheme get colors {
+    switch (this) {
+      case BoardTheme.system:
+        return getBoardColorScheme() ?? ChessboardColorScheme.brown;
+      case BoardTheme.blue:
+        return ChessboardColorScheme.blue;
+      case BoardTheme.blue2:
+        return ChessboardColorScheme.blue2;
+      case BoardTheme.blue3:
+        return ChessboardColorScheme.blue3;
+      case BoardTheme.blueMarble:
+        return ChessboardColorScheme.blueMarble;
+      case BoardTheme.canvas:
+        return ChessboardColorScheme.canvas;
+      case BoardTheme.wood:
+        return ChessboardColorScheme.wood;
+      case BoardTheme.wood2:
+        return ChessboardColorScheme.wood2;
+      case BoardTheme.wood3:
+        return ChessboardColorScheme.wood3;
+      case BoardTheme.wood4:
+        return ChessboardColorScheme.wood4;
+      case BoardTheme.maple:
+        return ChessboardColorScheme.maple;
+      case BoardTheme.maple2:
+        return ChessboardColorScheme.maple2;
+      case BoardTheme.brown:
+        return ChessboardColorScheme.brown;
+      case BoardTheme.leather:
+        return ChessboardColorScheme.leather;
+      case BoardTheme.green:
+        return ChessboardColorScheme.green;
+      case BoardTheme.marble:
+        return ChessboardColorScheme.marble;
+      case BoardTheme.greenPlastic:
+        return ChessboardColorScheme.greenPlastic;
+      case BoardTheme.grey:
+        return ChessboardColorScheme.grey;
+      case BoardTheme.metal:
+        return ChessboardColorScheme.metal;
+      case BoardTheme.olive:
+        return ChessboardColorScheme.olive;
+      case BoardTheme.newspaper:
+        return ChessboardColorScheme.newspaper;
+      case BoardTheme.purpleDiag:
+        return ChessboardColorScheme.purpleDiag;
+      case BoardTheme.pinkPyramid:
+        return ChessboardColorScheme.pinkPyramid;
+      case BoardTheme.horsey:
+        return ChessboardColorScheme.horsey;
+    }
+  }
+
+  Widget get thumbnail => this == BoardTheme.system
+      ? SizedBox(
+          height: 44,
+          width: 44 * 6,
+          child: Row(
+            children: [
+              for (final c in const [1, 2, 3, 4, 5, 6])
+                Container(
+                  width: 44,
+                  color: c.isEven
+                      ? BoardTheme.system.colors.darkSquare
+                      : BoardTheme.system.colors.lightSquare,
+                ),
+            ],
+          ),
+        )
+      : Image.asset(
+          'assets/board-thumbnails/$name.jpg',
+          height: 44,
+          errorBuilder: (context, o, st) => const SizedBox.shrink(),
+        );
 }

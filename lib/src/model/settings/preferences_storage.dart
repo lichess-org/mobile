@@ -16,7 +16,7 @@ mixin PreferencesStorage<T extends SerializablePreferences> {
   AutoDisposeNotifierProviderRef<T> get ref;
   abstract T state;
 
-  Category<T> get prefCategory;
+  PrefCategory<T> get prefCategory;
 
   Future<void> save(T value) async {
     await LichessBinding.instance.sharedPreferences
@@ -53,7 +53,7 @@ mixin SessionPreferencesStorage<T extends SerializablePreferences> {
   AutoDisposeNotifierProviderRef<T> get ref;
   abstract T state;
 
-  Category<T> get prefCategory;
+  PrefCategory<T> get prefCategory;
 
   Future<void> save(T value) async {
     final session = ref.read(authSessionProvider);

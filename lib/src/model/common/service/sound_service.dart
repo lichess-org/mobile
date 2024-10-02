@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
-import 'package:lichess_mobile/src/model/settings/preferences.dart' as pref;
+import 'package:lichess_mobile/src/model/settings/preferences.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sound_effect/sound_effect.dart';
@@ -40,7 +40,7 @@ const Set<Sound> _emtpySet = {};
 
 /// Loads all sounds of the given [SoundTheme].
 Future<void> _loadAllSounds(
-  pref.SoundTheme soundTheme, {
+  SoundTheme soundTheme, {
   Set<Sound> excluded = _emtpySet,
 }) async {
   await Future.wait(
@@ -51,7 +51,7 @@ Future<void> _loadAllSounds(
 }
 
 /// Loads a single sound from the given [SoundTheme].
-Future<void> _loadSound(pref.SoundTheme theme, Sound sound) async {
+Future<void> _loadSound(SoundTheme theme, Sound sound) async {
   final themePath = 'assets/sounds/${theme.name}';
   const standardPath = 'assets/sounds/standard';
   final soundId = sound.name;
@@ -78,12 +78,12 @@ class SoundService {
   /// This should be called once when the app starts.
   static Future<void> initialize() async {
     final stored = LichessBinding.instance.sharedPreferences
-        .getString(pref.Category.general.storageKey);
+        .getString(PrefCategory.general.storageKey);
     final theme = (stored != null
-            ? pref.General.fromJson(
+            ? GeneralPrefs.fromJson(
                 jsonDecode(stored) as Map<String, dynamic>,
               )
-            : pref.General.defaults)
+            : GeneralPrefs.defaults)
         .soundTheme;
 
     try {
@@ -110,7 +110,7 @@ class SoundService {
   ///
   /// If [playSound] is true, a move sound will be played.
   Future<void> changeTheme(
-    pref.SoundTheme theme, {
+    SoundTheme theme, {
     bool playSound = false,
   }) async {
     await _soundEffectPlugin.release();

@@ -18,7 +18,7 @@ import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
-import 'package:lichess_mobile/src/model/settings/preferences.dart';
+import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:logging/logging.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -99,7 +99,7 @@ Future<Widget> makeProviderScope(
         {
           // disable piece animation to simplify tests
           'preferences.board': jsonEncode(
-            Board.defaults
+            BoardPrefs.defaults
                 .copyWith(
                   pieceAnimation: false,
                 )

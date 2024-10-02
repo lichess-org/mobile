@@ -3,7 +3,6 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer.dart';
-import 'package:lichess_mobile/src/model/settings/preferences.dart' as pref;
 import 'package:lichess_mobile/src/model/settings/preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
@@ -17,7 +16,7 @@ class OpeningExplorerPreferences extends _$OpeningExplorerPreferences
     with SessionPreferencesStorage<OpeningExplorerPrefs> {
   // ignore: avoid_public_notifier_properties
   @override
-  final prefCategory = pref.Category.openingExplorer;
+  final prefCategory = PrefCategory.openingExplorer;
 
   @override
   OpeningExplorerPrefs build() {

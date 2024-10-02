@@ -11,7 +11,7 @@ import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer_preferences.dart';
-import 'package:lichess_mobile/src/model/settings/preferences.dart' as pref;
+import 'package:lichess_mobile/src/model/settings/preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_screen.dart';
@@ -120,7 +120,7 @@ void main() {
           ],
           defaultPreferences: {
             SessionPreferencesStorage.key(
-              pref.Category.openingExplorer.storageKey,
+              PrefCategory.openingExplorer.storageKey,
               null,
             ): jsonEncode(
               OpeningExplorerPrefs.defaults()
@@ -175,7 +175,7 @@ void main() {
           userSession: session,
           defaultPreferences: {
             SessionPreferencesStorage.key(
-              pref.Category.openingExplorer.storageKey,
+              PrefCategory.openingExplorer.storageKey,
               session,
             ): jsonEncode(
               OpeningExplorerPrefs.defaults(user: user)

@@ -11,7 +11,6 @@ import 'package:lichess_mobile/src/model/common/game.dart';
 import 'package:lichess_mobile/src/model/coordinate_training/coordinate_training_controller.dart';
 import 'package:lichess_mobile/src/model/coordinate_training/coordinate_training_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
-import 'package:lichess_mobile/src/model/settings/preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';

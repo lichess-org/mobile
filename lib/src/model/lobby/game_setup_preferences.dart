@@ -1,21 +1,27 @@
+import 'dart:math' as math;
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/game.dart';
+import 'package:lichess_mobile/src/model/common/perf.dart';
+import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/settings/preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+part 'game_setup_preferences.freezed.dart';
 part 'game_setup_preferences.g.dart';
 
 @riverpod
 class GameSetupPreferences extends _$GameSetupPreferences
-    with SessionPreferencesStorage<GameSetup> {
+    with SessionPreferencesStorage<GameSetupPrefs> {
   // ignore: avoid_public_notifier_properties
   @override
-  Category<GameSetup> get prefCategory => Category.gameSetup;
+  final prefCategory = PrefCategory.gameSetup;
 
   @override
-  GameSetup build() {
+  GameSetupPrefs build() {
     return fetch();
   }
 
@@ -53,6 +59,68 @@ class GameSetupPreferences extends _$GameSetupPreferences
 
   Future<void> setCustomDaysPerTurn(int days) {
     return save(state.copyWith(customDaysPerTurn: days));
+  }
+}
+
+enum TimeControl { realTime, correspondence }
+
+@Freezed(fromJson: true, toJson: true)
+class GameSetupPrefs with _$GameSetupPrefs implements SerializablePreferences {
+  const GameSetupPrefs._();
+
+  const factory GameSetupPrefs({
+    required TimeIncrement quickPairingTimeIncrement,
+    required TimeControl customTimeControl,
+    required int customTimeSeconds,
+    required int customIncrementSeconds,
+    required int customDaysPerTurn,
+    required Variant customVariant,
+    required bool customRated,
+    required SideChoice customSide,
+    required (int, int) customRatingDelta,
+  }) = _GameSetupPrefs;
+
+  static const defaults = GameSetupPrefs(
+    quickPairingTimeIncrement: TimeIncrement(600, 0),
+    customTimeControl: TimeControl.realTime,
+    customTimeSeconds: 180,
+    customIncrementSeconds: 0,
+    customVariant: Variant.standard,
+    customRated: false,
+    customSide: SideChoice.random,
+    customRatingDelta: (-500, 500),
+    customDaysPerTurn: 3,
+  );
+
+  Speed get speedFromCustom => Speed.fromTimeIncrement(
+        TimeIncrement(
+          customTimeSeconds,
+          customIncrementSeconds,
+        ),
+      );
+
+  Perf get perfFromCustom => Perf.fromVariantAndSpeed(
+        customVariant,
+        speedFromCustom,
+      );
+
+  /// Returns the rating range for the custom setup, or null if the user
+  /// doesn't have a rating for the custom setup perf.
+  (int, int)? ratingRangeFromCustom(User user) {
+    final perf = user.perfs[perfFromCustom];
+    if (perf == null) return null;
+    if (perf.provisional == true) return null;
+    final min = math.max(0, perf.rating + customRatingDelta.$1);
+    final max = perf.rating + customRatingDelta.$2;
+    return (min, max);
+  }
+
+  factory GameSetupPrefs.fromJson(Map<String, dynamic> json) {
+    try {
+      return _$GameSetupPrefsFromJson(json);
+    } catch (_) {
+      return defaults;
+    }
   }
 }
 
