@@ -500,11 +500,11 @@ class _SideLines extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sidelineNodes = [
-      firstNode,
-      if (!_hasNonInlineSideLine(firstNode))
-        ...firstNode.mainline.takeWhile((node) => !_hasNonInlineSideLine(node)),
-    ];
+    final sidelineNodes = [firstNode];
+    while (sidelineNodes.last.children.isNotEmpty &&
+        !_hasNonInlineSideLine(sidelineNodes.last)) {
+      sidelineNodes.add(sidelineNodes.last.children.first);
+    }
 
     final children =
         sidelineNodes.last.children.whereNot((node) => node.isHidden);
