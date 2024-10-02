@@ -101,8 +101,7 @@ class OpeningExplorerSettings extends ConsumerWidget {
               .map(
                 (key) => ChoiceChip(
                   label: Text(key),
-                  selected:
-                      prefs.lichessDb.since == LichessDb.datesMap[key],
+                  selected: prefs.lichessDb.since == LichessDb.datesMap[key],
                   onSelected: (_) => ref
                       .read(openingExplorerPreferencesProvider.notifier)
                       .setLichessDbSince(LichessDb.datesMap[key]!),
