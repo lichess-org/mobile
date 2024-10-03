@@ -234,22 +234,6 @@ abstract class Node {
     parentAt(path).children.removeWhere((child) => child.id == path.last);
   }
 
-  /// Hides the variation from the node at the given path.
-  void hideVariationAt(UciPath path) {
-    final nodes = nodesOn(path).toList();
-    for (int i = nodes.length - 2; i >= 0; i--) {
-      final node = nodes[i + 1];
-      final parent = nodes[i];
-      if (node is Branch && parent.children.length > 1) {
-        for (final child in parent.children) {
-          if (child.id == node.id) {
-            child.isHidden = true;
-          }
-        }
-      }
-    }
-  }
-
   /// Promotes the node at the given path.
   void promoteAt(UciPath path, {required bool toMainline}) {
     final nodes = nodesOn(path).toList();

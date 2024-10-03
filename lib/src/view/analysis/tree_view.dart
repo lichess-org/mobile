@@ -223,9 +223,7 @@ class _PgnTreeView extends StatelessWidget {
               }
 
               // Skip the first node which is the continuation of the mainline
-              final sidelineNodes = nodes.last.children.skip(1).whereNot(
-                    (node) => node.isHidden,
-                  );
+              final sidelineNodes = nodes.last.children.skip(1);
 
               return [
                 _MainLinePart(
@@ -509,8 +507,7 @@ class _SideLines extends StatelessWidget {
       sidelineNodes.add(sidelineNodes.last.children.first);
     }
 
-    final children =
-        sidelineNodes.last.children.whereNot((node) => node.isHidden);
+    final children = sidelineNodes.last.children;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -646,9 +643,16 @@ class _IndentedSideLinesState extends State<_IndentedSideLines> {
 
   @override
   Widget build(BuildContext context) {
-    _keys = List.generate(widget.sideLines.length, (_) => GlobalKey());
+    final hasHiddenLines = widget.sideLines.any((node) => node.isHidden);
 
-    final sideLineWidgets = widget.sideLines
+    final visibleSideLines = widget.sideLines.whereNot((node) => node.isHidden);
+
+    _keys = List.generate(
+      visibleSideLines.length + (hasHiddenLines ? 1 : 0),
+      (_) => GlobalKey(),
+    );
+
+    final sideLineWidgets = visibleSideLines
         .mapIndexed(
           (i, firstSidelineNode) => _SideLines(
             firstNode: firstSidelineNode,
@@ -674,7 +678,23 @@ class _IndentedSideLinesState extends State<_IndentedSideLines> {
           child: Column(
             key: _columnKey,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: sideLineWidgets,
+            children: [
+              ...sideLineWidgets,
+              if (hasHiddenLines)
+                GestureDetector(
+                  child: Icon(
+                    Icons.add_box,
+                    color: _textColor(context, 0.6),
+                    key: _keys.last,
+                    size: _baseTextStyle.fontSize,
+                  ),
+                  onTap: () {
+                    widget.params
+                        .notifier()
+                        .expandVariations(widget.initialPath);
+                  },
+                ),
+            ],
           ),
         ),
       ),
@@ -917,17 +937,11 @@ class _MoveContextMenu extends ConsumerWidget {
             ),
           ),
         const PlatformDivider(indent: 0),
-        if (parent.children.any((c) => c.isHidden))
-          BottomSheetContextMenuAction(
-            icon: Icons.subtitles,
-            child: Text(context.l10n.mobileShowVariations),
-            onPressed: () => notifier().showAllVariations(path),
-          ),
         if (isSideline) ...[
           BottomSheetContextMenuAction(
             icon: Icons.subtitles_off,
-            child: Text(context.l10n.mobileHideVariation),
-            onPressed: () => notifier().hideVariation(path),
+            child: Text(context.l10n.collapseVariations),
+            onPressed: () => notifier().collapseVariations(path),
           ),
           BottomSheetContextMenuAction(
             icon: Icons.expand_less,
