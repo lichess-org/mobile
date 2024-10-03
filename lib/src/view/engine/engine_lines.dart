@@ -8,7 +8,6 @@ import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
-import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 
@@ -115,7 +114,7 @@ class Engineline extends ConsumerWidget {
       ply += 1;
     });
 
-    final brightness = ref.watch(currentBrightnessProvider);
+    final brightness = Theme.of(context).brightness;
 
     final evalString = pvData.evalString;
     return AdaptiveInkWell(
