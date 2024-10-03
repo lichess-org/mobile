@@ -484,8 +484,8 @@ class Root extends Node {
       position: PgnGame.startingPosition(game.headers),
     );
 
-    final List<({PgnNode<PgnNodeData> from, Node to})> stack = [
-      (from: game.moves, to: root),
+    final List<({PgnNode<PgnNodeData> from, Node to, int nesting})> stack = [
+      (from: game.moves, to: root, nesting: 1),
     ];
 
     while (stack.isNotEmpty) {
@@ -503,7 +503,7 @@ class Root extends Node {
           final branch = Branch(
             sanMove: SanMove(childFrom.data.san, move),
             position: newPos,
-            isHidden: hideVariations && childIdx > 0,
+            isHidden: frame.nesting > 2 || hideVariations && childIdx > 0,
             lichessAnalysisComments:
                 isLichessAnalysis ? comments?.toList() : null,
             startingComments: isLichessAnalysis
@@ -516,7 +516,17 @@ class Root extends Node {
           );
 
           frame.to.addChild(branch);
-          stack.add((from: childFrom, to: branch));
+          stack.add(
+            (
+              from: childFrom,
+              to: branch,
+              nesting: frame.from.children.length == 1 ||
+                      // mainline continuation
+                      (childIdx == 0 && frame.nesting == 1)
+                  ? frame.nesting
+                  : frame.nesting + 1,
+            ),
+          );
 
           onVisitNode?.call(root, branch, isMainline);
         }
