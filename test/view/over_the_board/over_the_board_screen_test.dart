@@ -203,7 +203,7 @@ Future<Rect> initOverTheBoardGame(
   WidgetTester tester,
   TimeIncrement timeIncrement,
 ) async {
-  final app = await makeProviderScopeApp(
+  final app = await makeTestProviderScopeApp(
     tester,
     home: const OverTheBoardScreen(),
   );

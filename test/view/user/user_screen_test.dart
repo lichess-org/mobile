@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
 
 import '../../model/user/user_repository_test.dart';
@@ -38,7 +38,7 @@ void main() {
     testWidgets(
       'should see activity and recent games',
       (WidgetTester tester) async {
-        final app = await makeProviderScopeApp(
+        final app = await makeTestProviderScopeApp(
           tester,
           home: const UserScreen(user: testUser),
           overrides: [

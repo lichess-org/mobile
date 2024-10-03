@@ -4,11 +4,11 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/puzzle/storm_screen.dart';
 
 import '../../test_helpers.dart';
@@ -28,7 +28,7 @@ void main() {
       (tester) async {
         final SemanticsHandle handle = tester.ensureSemantics();
 
-        final app = await makeProviderScopeApp(
+        final app = await makeTestProviderScopeApp(
           tester,
           home: const StormScreen(),
           overrides: [
@@ -49,7 +49,7 @@ void main() {
     testWidgets(
       'Load puzzle and play white pieces',
       (tester) async {
-        final app = await makeProviderScopeApp(
+        final app = await makeTestProviderScopeApp(
           tester,
           home: const StormScreen(),
           overrides: [
@@ -73,7 +73,7 @@ void main() {
     testWidgets(
       'Play one puzzle',
       (tester) async {
-        final app = await makeProviderScopeApp(
+        final app = await makeTestProviderScopeApp(
           tester,
           home: const StormScreen(),
           overrides: [
@@ -128,7 +128,7 @@ void main() {
     );
 
     testWidgets('shows end run result', (tester) async {
-      final app = await makeProviderScopeApp(
+      final app = await makeTestProviderScopeApp(
         tester,
         home: const StormScreen(),
         overrides: [
@@ -173,7 +173,7 @@ void main() {
     });
 
     testWidgets('play wrong move', (tester) async {
-      final app = await makeProviderScopeApp(
+      final app = await makeTestProviderScopeApp(
         tester,
         home: const StormScreen(),
         overrides: [

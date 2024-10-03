@@ -146,10 +146,14 @@ class LoggingClient extends BaseClient {
 
 /// Lichess HTTP client.
 ///
-/// - All requests go to the lichess server, defined in [kLichessHost].
-/// - Sets the Authorization header when a token has been stored.
-/// - Sets the user-agent header with the app version, build number, and device info. If the user is logged in, it also includes the user's id.
-/// - Logs all requests and responses with status code >= 400.
+/// * All requests made with [head], [get], [post], [put], [patch], [delete] target
+/// the lichess server, defined in [kLichessHost]. It does not apply to the low-level
+/// [send] method.
+/// * Sets the Authorization header when a token has been stored.
+/// * Sets the user-agent header with the app version, build number, and device info. If the user is logged in, it also includes the user's id.
+/// * Logs all requests and responses with status code >= 400.
+/// * When a response has the 401 status, checks if the session token is still valid,
+/// and deletes the session if it's not.
 class LichessClient implements Client {
   LichessClient(this._inner, this._ref);
 
@@ -180,10 +184,26 @@ class LichessClient implements Client {
 
       _logIfError(response);
 
+      if (response.statusCode == 401 && session != null) {
+        _checkSessionToken(session);
+      }
+
       return response;
     } catch (e, st) {
       _logger.warning('Request to ${request.url} failed: $e', e, st);
       rethrow;
+    }
+  }
+
+  /// Checks if the session token is still valid, and delete session if it's not.
+  Future<void> _checkSessionToken(AuthSessionState session) async {
+    final data = await postReadJson(
+      Uri(path: '/api/token/test'),
+      mapper: (json) => json,
+    ).timeout(const Duration(seconds: 5));
+    if (data[session.token] == null) {
+      _logger.fine('Session is not active. Deleting it.');
+      await _ref.read(authSessionProvider.notifier).delete();
     }
   }
 

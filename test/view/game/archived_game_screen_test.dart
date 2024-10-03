@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
@@ -12,6 +11,7 @@ import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/game/archived_game_screen.dart';
 import 'package:lichess_mobile/src/view/game/game_player.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
@@ -32,7 +32,7 @@ void main() {
     testWidgets(
       'loads game data if only game id is provided',
       (tester) async {
-        final app = await makeProviderScopeApp(
+        final app = await makeTestProviderScopeApp(
           tester,
           home: const ArchivedGameScreen(
             gameId: GameId('qVChCOTc'),
@@ -65,7 +65,7 @@ void main() {
     testWidgets(
       'displays game data and last fen immediately, then moves',
       (tester) async {
-        final app = await makeProviderScopeApp(
+        final app = await makeTestProviderScopeApp(
           tester,
           home: ArchivedGameScreen(
             gameData: gameData,
@@ -138,7 +138,7 @@ void main() {
     );
 
     testWidgets('navigate game positions', (tester) async {
-      final app = await makeProviderScopeApp(
+      final app = await makeTestProviderScopeApp(
         tester,
         home: ArchivedGameScreen(
           gameData: gameData,

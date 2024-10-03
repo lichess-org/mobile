@@ -7,13 +7,13 @@ import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_screen.dart';
 
 import '../../test_helpers.dart';
@@ -63,7 +63,7 @@ void main() {
     testWidgets(
       'master opening explorer loads',
       (WidgetTester tester) async {
-        final app = await makeProviderScopeApp(
+        final app = await makeTestProviderScopeApp(
           tester,
           home: const OpeningExplorerScreen(
             pgn: '',
@@ -112,7 +112,7 @@ void main() {
     testWidgets(
       'lichess opening explorer loads',
       (WidgetTester tester) async {
-        final app = await makeProviderScopeApp(
+        final app = await makeTestProviderScopeApp(
           tester,
           home: const OpeningExplorerScreen(
             pgn: '',
@@ -167,7 +167,7 @@ void main() {
     testWidgets(
       'player opening explorer loads',
       (WidgetTester tester) async {
-        final app = await makeProviderScopeApp(
+        final app = await makeTestProviderScopeApp(
           tester,
           home: const OpeningExplorerScreen(
             pgn: '',
