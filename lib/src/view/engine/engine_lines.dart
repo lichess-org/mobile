@@ -3,7 +3,6 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
@@ -16,12 +15,10 @@ class EngineLines extends ConsumerWidget {
     required this.onTapMove,
     required this.clientEval,
     required this.isGameOver,
-    required this.isLandscape,
   });
   final void Function(NormalMove move) onTapMove;
   final ClientEval? clientEval;
   final bool isGameOver;
-  final bool isLandscape;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -57,16 +54,10 @@ class EngineLines extends ConsumerWidget {
       content.addAll(padding);
     }
 
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        vertical: isLandscape ? kTabletBoardTableSidePadding : 0.0,
-        horizontal: isLandscape ? kTabletBoardTableSidePadding : 0.0,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: content,
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: content,
     );
   }
 }

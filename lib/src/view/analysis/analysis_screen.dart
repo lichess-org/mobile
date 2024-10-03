@@ -295,12 +295,17 @@ class _Body extends ConsumerWidget {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             if (isEngineAvailable)
-                              EngineLines(
-                                onTapMove:
-                                    ref.read(ctrlProvider.notifier).onUserMove,
-                                clientEval: currentNode.eval,
-                                isGameOver: currentNode.position.isGameOver,
-                                isLandscape: true,
+                              Padding(
+                                padding: const EdgeInsets.all(
+                                  kTabletBoardTableSidePadding,
+                                ),
+                                child: EngineLines(
+                                  onTapMove: ref
+                                      .read(ctrlProvider.notifier)
+                                      .onUserMove,
+                                  clientEval: currentNode.eval,
+                                  isGameOver: currentNode.position.isGameOver,
+                                ),
                               ),
                             Expanded(
                               child: PlatformCard(
@@ -420,7 +425,6 @@ class _ColumnTopTable extends ConsumerWidget {
                   clientEval: analysisState.currentNode.eval,
                   isGameOver: analysisState.currentNode.position.isGameOver,
                   onTapMove: ref.read(ctrlProvider.notifier).onUserMove,
-                  isLandscape: false,
                 ),
             ],
           )
