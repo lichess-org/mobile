@@ -239,6 +239,7 @@ class _PgnTreeView extends StatelessWidget {
                     parent: nodes.last,
                     params: params,
                     initialPath: sidelineInitialPath,
+                    nesting: 1,
                   ),
               ];
             },
@@ -490,6 +491,7 @@ class _SideLines extends StatelessWidget {
     required this.firstMoveKey,
     required this.initialPath,
     required this.params,
+    required this.nesting,
   });
 
   final ViewBranch firstNode;
@@ -497,6 +499,7 @@ class _SideLines extends StatelessWidget {
   final GlobalKey firstMoveKey;
   final UciPath initialPath;
   final _PgnTreeViewParams params;
+  final int nesting;
 
   @override
   Widget build(BuildContext context) {
@@ -528,6 +531,7 @@ class _SideLines extends StatelessWidget {
               UciPath.fromIds(sidelineNodes.map((node) => node.id)),
             ),
             params: params,
+            nesting: nesting + 1,
           ),
       ],
     );
@@ -581,6 +585,7 @@ class _IndentedSideLines extends StatefulWidget {
     required this.parent,
     required this.initialPath,
     required this.params,
+    required this.nesting,
   });
 
   final Iterable<ViewBranch> sideLines;
@@ -590,6 +595,8 @@ class _IndentedSideLines extends StatefulWidget {
   final UciPath initialPath;
 
   final _PgnTreeViewParams params;
+
+  final int nesting;
 
   @override
   State<_IndentedSideLines> createState() => _IndentedSideLinesState();
@@ -649,14 +656,15 @@ class _IndentedSideLinesState extends State<_IndentedSideLines> {
             firstMoveKey: _keys[i],
             initialPath: widget.initialPath,
             params: widget.params,
+            nesting: widget.nesting,
           ),
         )
         .toList();
 
-    const padding = 12.0;
+    final padding = widget.nesting < 6 ? 12.0 : 0.0;
     return RepaintBoundary(
       child: Padding(
-        padding: const EdgeInsets.only(left: padding),
+        padding: EdgeInsets.only(left: padding),
         child: CustomPaint(
           painter: _IndentPainter(
             sideLineStartPositions: _sideLineStartPositions,
