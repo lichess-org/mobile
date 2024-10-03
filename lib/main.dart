@@ -15,21 +15,17 @@ Future<void> main() async {
   final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   final lichessBinding = AppLichessBinding.ensureInitialized();
 
-  // Old API.
-  // TODO: Remove this once all SharedPreferences usage is migrated to SharedPreferencesAsync.
-  SharedPreferences.setPrefix('lichess.');
-
-  await migrateSharedPreferences();
-
-  await lichessBinding.preloadSharedPreferences();
-
-  await lichessBinding.preloadData();
-
   // Show splash screen until app is ready
   // See src/app.dart for splash screen removal
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
-  setupLoggingAndCrashReporting();
+  // Old API.
+  // TODO: Remove this once all SharedPreferences usage is migrated to SharedPreferencesAsync.
+  SharedPreferences.setPrefix('lichess.');
+  await migrateSharedPreferences();
+
+  await lichessBinding.preloadSharedPreferences();
+  await lichessBinding.preloadData();
 
   await setupFirstLaunch();
 

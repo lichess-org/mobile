@@ -1,6 +1,5 @@
 import 'dart:developer' as developer;
 
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logging/logging.dart';
@@ -11,8 +10,8 @@ const _loggersToShowInTerminal = {
   'Socket',
 };
 
-/// Setup logging and crash reporting.
-void setupLoggingAndCrashReporting() {
+/// Setup logging
+void setupLogging() {
   if (kDebugMode) {
     Logger.root.level = Level.FINE;
     Logger.root.onRecord.listen((record) {
@@ -35,16 +34,6 @@ void setupLoggingAndCrashReporting() {
         debugPrint('[${record.loggerName}] ${record.message}');
       }
     });
-  }
-
-  // Crashlytics
-  if (kReleaseMode) {
-    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
-    // Pass all uncaught asynchronous errors that aren't handled by the Flutter framework to Crashlytics
-    PlatformDispatcher.instance.onError = (error, stack) {
-      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-      return true;
-    };
   }
 }
 

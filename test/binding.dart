@@ -4,8 +4,10 @@ import 'dart:ui';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -14,7 +16,17 @@ TestLichessBinding get testBinding => TestLichessBinding.instance;
 
 /// Lichess binding for testing.
 class TestLichessBinding extends LichessBinding {
-  TestLichessBinding();
+  TestLichessBinding() {
+    Logger.root.level = Level.FINE;
+    Logger.root.onRecord.listen((record) {
+      if (record.level >= Level.WARNING) {
+        // ignore: avoid_print
+        print(
+          '${DateFormat('H:m:s.S').format(record.time)} [${record.level}] ${record.loggerName}: ${record.message}',
+        );
+      }
+    });
+  }
 
   /// Initialize the binding if necessary, and ensure it is a [TestLichessBinding].
   ///
