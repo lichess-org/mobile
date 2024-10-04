@@ -207,7 +207,7 @@ class LichessClient implements Client {
     final defaultClient = _ref.read(defaultClientProvider);
     final data = await defaultClient
         .postReadJson(
-          Uri(path: '/api/token/test'),
+          lichessUri('/api/token/test'),
           mapper: (json) => json,
         )
         .timeout(const Duration(seconds: 5));

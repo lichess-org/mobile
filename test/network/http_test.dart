@@ -321,6 +321,11 @@ void main() {
           requests.last,
           isA<http.BaseRequest>()
               .having(
+                (r) => r.url.host,
+                'host',
+                'lichess.dev',
+              )
+              .having(
                 (r) => r.url.path,
                 'path',
                 '/api/token/test',

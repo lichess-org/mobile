@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
@@ -21,9 +18,6 @@ import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
-import 'package:logging/logging.dart';
-
-final _logger = Logger('Application');
 
 /// The main application widget.
 ///
@@ -76,9 +70,6 @@ class _AppState extends ConsumerState<Application> {
       // Perform actions once when the app comes online.
       if (current.value?.isOnline == true && !_firstTimeOnlineCheck) {
         _firstTimeOnlineCheck = true;
-        // check if session is still active and delete it if it is not
-        checkSession();
-
         ref.read(correspondenceServiceProvider).syncGames();
       }
 
@@ -204,33 +195,6 @@ class _AppState extends ConsumerState<Application> {
         );
       },
     );
-  }
-
-  /// Check if the session is still active and delete it if it is not.
-  Future<void> checkSession() async {
-    // check if session is still active
-    final session = ref.read(authSessionProvider);
-    if (session != null) {
-      _logger.fine(
-        'Found a stored session: ${session.user.id}. Checking if it is still active.',
-      );
-      try {
-        final client = ref.read(lichessClientProvider);
-        final data = await client
-            .postReadJson(
-              Uri(path: '/api/token/test'),
-              body: session.token,
-              mapper: (json) => json,
-            )
-            .timeout(const Duration(seconds: 3));
-        if (data[session.token] == null) {
-          _logger.fine('Session is not active. Deleting it.');
-          await ref.read(authSessionProvider.notifier).delete();
-        }
-      } catch (e) {
-        _logger.warning('Could not check session: $e');
-      }
-    }
   }
 }
 
