@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/broadcast/broadcasts_list_screen.dart';
 import 'package:network_image_mock/network_image_mock.dart';
 
@@ -24,7 +24,7 @@ void main() {
       'Displays broadcast tournament screen',
       variant: kPlatformVariant,
       (tester) async {
-        final app = await makeProviderScopeApp(
+        final app = await makeTestProviderScopeApp(
           tester,
           home: const BroadcastsListScreen(),
           overrides: [
@@ -48,7 +48,7 @@ void main() {
       'Scroll broadcast tournament screen',
       variant: kPlatformVariant,
       (tester) async {
-        final app = await makeProviderScopeApp(
+        final app = await makeTestProviderScopeApp(
           tester,
           home: const BroadcastsListScreen(),
           overrides: [

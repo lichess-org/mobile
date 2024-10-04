@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/user/perf_stats_screen.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
@@ -27,7 +27,7 @@ void main() {
       (WidgetTester tester) async {
         final SemanticsHandle handle = tester.ensureSemantics();
 
-        final app = await makeProviderScopeApp(
+        final app = await makeTestProviderScopeApp(
           tester,
           home: PerfStatsScreen(
             user: fakeUser,
@@ -59,7 +59,7 @@ void main() {
     testWidgets(
       'screen loads, required stats are shown',
       (WidgetTester tester) async {
-        final app = await makeProviderScopeApp(
+        final app = await makeTestProviderScopeApp(
           tester,
           home: PerfStatsScreen(
             user: fakeUser,

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,16 +6,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
-import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/navigation.dart';
+import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
@@ -51,9 +48,6 @@ class _AppState extends ConsumerState<Application> {
         }
       },
     );
-
-    // check if session is still active and delete it if it is not
-    checkSession();
 
     // Start services
     ref.read(notificationServiceProvider).start();
@@ -201,25 +195,6 @@ class _AppState extends ConsumerState<Application> {
         );
       },
     );
-  }
-
-  /// Check if the session is still active and delete it if it is not.
-  Future<void> checkSession() async {
-    // check if session is still active
-    final session = ref.read(authSessionProvider);
-    if (session != null) {
-      try {
-        final client = ref.read(lichessClientProvider);
-        final response = await client
-            .get(Uri(path: '/api/account'))
-            .timeout(const Duration(seconds: 3));
-        if (response.statusCode == 401) {
-          await ref.read(authSessionProvider.notifier).delete();
-        }
-      } catch (e) {
-        debugPrint('Could not check session: $e');
-      }
-    }
   }
 }
 

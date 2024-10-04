@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
@@ -14,6 +13,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_batch_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/puzzle/puzzle_screen.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
@@ -47,7 +47,7 @@ void main() {
       (WidgetTester tester) async {
         final SemanticsHandle handle = tester.ensureSemantics();
 
-        final app = await makeProviderScopeApp(
+        final app = await makeTestProviderScopeApp(
           tester,
           home: PuzzleScreen(
             angle: const PuzzleTheme(PuzzleThemeKey.mix),
@@ -78,7 +78,7 @@ void main() {
       'Loads puzzle directly by passing a puzzleId',
       variant: kPlatformVariant,
       (tester) async {
-        final app = await makeProviderScopeApp(
+        final app = await makeTestProviderScopeApp(
           tester,
           home: PuzzleScreen(
             angle: const PuzzleTheme(PuzzleThemeKey.mix),
@@ -104,7 +104,7 @@ void main() {
     );
 
     testWidgets('Loads next puzzle when no puzzleId is passed', (tester) async {
-      final app = await makeProviderScopeApp(
+      final app = await makeTestProviderScopeApp(
         tester,
         home: const PuzzleScreen(
           angle: PuzzleTheme(PuzzleThemeKey.mix),
@@ -151,7 +151,7 @@ void main() {
         when(() => mockHistoryStorage.fetch(puzzleId: puzzle2.puzzle.id))
             .thenAnswer((_) async => puzzle2);
 
-        final app = await makeProviderScopeApp(
+        final app = await makeTestProviderScopeApp(
           tester,
           home: PuzzleScreen(
             angle: const PuzzleTheme(PuzzleThemeKey.mix),
@@ -264,7 +264,7 @@ void main() {
         when(() => mockHistoryStorage.fetch(puzzleId: puzzle2.puzzle.id))
             .thenAnswer((_) async => puzzle2);
 
-        final app = await makeProviderScopeApp(
+        final app = await makeTestProviderScopeApp(
           tester,
           home: PuzzleScreen(
             angle: const PuzzleTheme(PuzzleThemeKey.mix),
@@ -377,7 +377,7 @@ void main() {
           return mockResponse('', 404);
         });
 
-        final app = await makeProviderScopeApp(
+        final app = await makeTestProviderScopeApp(
           tester,
           home: PuzzleScreen(
             angle: const PuzzleTheme(PuzzleThemeKey.mix),

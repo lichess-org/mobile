@@ -79,8 +79,8 @@ class TestLichessBinding extends LichessBinding {
   @override
   PackageInfo get packageInfo => PackageInfo(
         appName: 'lichess_mobile_test',
-        version: 'test',
-        buildNumber: '0.0.0',
+        version: '0.0.0',
+        buildNumber: '0',
         packageName: 'lichess_mobile_test',
       );
 

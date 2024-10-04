@@ -8,10 +8,10 @@ import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/crashlytics.dart';
 import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
-import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
+import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:logging/logging.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -19,8 +19,9 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import './fake_crashlytics.dart';
 import './model/common/service/fake_sound_service.dart';
 import 'binding.dart';
-import 'model/common/fake_websocket_channel.dart';
 import 'model/notifications/fake_notification_display.dart';
+import 'network/fake_http_client_factory.dart';
+import 'network/fake_websocket_channel.dart';
 import 'utils/fake_connectivity.dart';
 
 /// A mock client that always returns a 200 empty response.
@@ -30,13 +31,13 @@ final testContainerMockClient = MockClient((request) async {
 
 const shouldLog = false;
 
-/// Returns a [ProviderContainer] with a mocked [LichessClient] configured with
-/// the given [mockClient].
+/// Returns a [ProviderContainer] with the [httpClientFactoryProvider] configured
+/// with the given [mockClient].
 Future<ProviderContainer> lichessClientContainer(MockClient mockClient) async {
   return makeContainer(
     overrides: [
-      lichessClientProvider.overrideWith((ref) {
-        return LichessClient(mockClient, ref);
+      httpClientFactoryProvider.overrideWith((ref) {
+        return FakeHttpClientFactory(() => mockClient);
       }),
     ],
   );
@@ -86,10 +87,9 @@ Future<ProviderContainer> makeContainer({
         ref.onDispose(pool.dispose);
         return pool;
       }),
-      lichessClientProvider.overrideWith((ref) {
-        return LichessClient(testContainerMockClient, ref);
+      httpClientFactoryProvider.overrideWith((ref) {
+        return FakeHttpClientFactory(() => testContainerMockClient);
       }),
-      defaultClientProvider.overrideWithValue(testContainerMockClient),
       crashlyticsProvider.overrideWithValue(FakeCrashlytics()),
       soundServiceProvider.overrideWithValue(FakeSoundService()),
       ...overrides ?? [],

@@ -13,7 +13,7 @@ void main() {
   group('Coordinate Training', () {
     testWidgets('Initial state when started in FindSquare mode',
         (tester) async {
-      final app = await makeProviderScopeApp(
+      final app = await makeTestProviderScopeApp(
         tester,
         home: const CoordinateTrainingScreen(),
       );
@@ -52,7 +52,7 @@ void main() {
     });
 
     testWidgets('Tap wrong square', (tester) async {
-      final app = await makeProviderScopeApp(
+      final app = await makeTestProviderScopeApp(
         tester,
         home: const CoordinateTrainingScreen(),
       );
@@ -101,7 +101,7 @@ void main() {
     });
 
     testWidgets('Tap correct square', (tester) async {
-      final app = await makeProviderScopeApp(
+      final app = await makeTestProviderScopeApp(
         tester,
         home: const CoordinateTrainingScreen(),
       );

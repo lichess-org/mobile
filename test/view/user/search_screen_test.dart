@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/user/search_screen.dart';
 import 'package:lichess_mobile/src/widgets/user_list_tile.dart';
 
@@ -25,7 +25,7 @@ void main() {
     testWidgets(
       'should see search results',
       (WidgetTester tester) async {
-        final app = await makeProviderScopeApp(
+        final app = await makeTestProviderScopeApp(
           tester,
           home: const SearchScreen(),
           overrides: [
@@ -66,7 +66,7 @@ void main() {
     testWidgets(
       'should see "no result" when search finds nothing',
       (WidgetTester tester) async {
-        final app = await makeProviderScopeApp(
+        final app = await makeTestProviderScopeApp(
           tester,
           home: const SearchScreen(),
           overrides: [

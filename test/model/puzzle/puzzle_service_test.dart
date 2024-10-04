@@ -5,7 +5,6 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
@@ -13,6 +12,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_batch_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 
 import '../../test_container.dart';
 import '../../test_helpers.dart';
@@ -318,7 +318,7 @@ void main() {
       expect(nbReq, equals(1));
 
       final data = await storage.fetch(userId: const UserId('testUserId'));
-      expect(data?.solved, equals(IList(const [])));
+      expect(data?.solved, equals(IList<PuzzleSolution>(const [])));
       expect(data?.unsolved[0].puzzle.id, equals(const PuzzleId('20yWT')));
       expect(next?.puzzle.puzzle.id, equals(const PuzzleId('20yWT')));
       expect(next?.glicko?.rating, equals(1834.54));

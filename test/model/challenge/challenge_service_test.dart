@@ -12,10 +12,10 @@ import 'package:lichess_mobile/src/model/notifications/notification_service.dart
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:mocktail/mocktail.dart';
 
+import '../../network/fake_websocket_channel.dart';
+import '../../network/socket_test.dart';
 import '../../test_container.dart';
 import '../auth/fake_session_storage.dart';
-import '../common/fake_websocket_channel.dart';
-import '../common/socket_test.dart';
 
 class NotificationDisplayMock extends Mock
     implements FlutterLocalNotificationsPlugin {}

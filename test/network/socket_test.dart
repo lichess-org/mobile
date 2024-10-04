@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lichess_mobile/src/model/common/socket.dart';
+import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import 'fake_websocket_channel.dart';

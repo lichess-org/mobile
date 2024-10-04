@@ -14,11 +14,11 @@ import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/session_storage.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
-import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:logging/logging.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -27,8 +27,9 @@ import 'package:visibility_detector/visibility_detector.dart';
 import './fake_crashlytics.dart';
 import './model/common/service/fake_sound_service.dart';
 import 'binding.dart';
-import 'model/common/fake_websocket_channel.dart';
 import 'model/notifications/fake_notification_display.dart';
+import 'network/fake_http_client_factory.dart';
+import 'network/fake_websocket_channel.dart';
 import 'test_helpers.dart';
 import 'utils/fake_connectivity.dart';
 
@@ -45,14 +46,14 @@ final mockClient = MockClient((request) async {
 /// The [overrides] parameter can be used to override any provider in the app.
 /// The [userSession] parameter can be used to set the initial user session state.
 /// The [defaultPreferences] parameter can be used to set the initial shared preferences.
-Future<Widget> makeProviderScopeApp(
+Future<Widget> makeTestProviderScopeApp(
   WidgetTester tester, {
   required Widget home,
   List<Override>? overrides,
   AuthSessionState? userSession,
   Map<String, Object>? defaultPreferences,
 }) async {
-  return makeProviderScope(
+  return makeTestProviderScope(
     tester,
     child: MaterialApp(
       localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -79,7 +80,7 @@ Future<Widget> makeProviderScopeApp(
 /// The [overrides] parameter can be used to override any provider in the app.
 /// The [userSession] parameter can be used to set the initial user session state.
 /// The [defaultPreferences] parameter can be used to set the initial shared preferences.
-Future<Widget> makeProviderScope(
+Future<Widget> makeTestProviderScope(
   WidgetTester tester, {
   required Widget child,
   List<Override>? overrides,
@@ -144,11 +145,9 @@ Future<Widget> makeProviderScope(
         return testDb;
       }),
       // ignore: scoped_providers_should_specify_dependencies
-      lichessClientProvider.overrideWith((ref) {
-        return LichessClient(mockClient, ref);
+      httpClientFactoryProvider.overrideWith((ref) {
+        return FakeHttpClientFactory(() => mockClient);
       }),
-      // ignore: scoped_providers_should_specify_dependencies
-      defaultClientProvider.overrideWith((_) => mockClient),
       // ignore: scoped_providers_should_specify_dependencies
       webSocketChannelFactoryProvider.overrideWith((ref) {
         return FakeWebSocketChannelFactory(() => FakeWebSocketChannel());
