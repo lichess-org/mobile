@@ -1,2 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+  <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">കാണുക</string>
+  <string name="feedbackButton" comment="Shown in the settings, pressing this button will redirect to the lichess contact site.">പ്രതികരണം</string>
+  <string name="okButton" comment="This is used in varius confirmations dialogs. Translation should be short.">ശരി</string>
+  <string name="allGames" comment="This is shown instead of 'Number of Games' if the number could not be loaded">എല്ലാം കളികൾ</string>
+  <string name="areYouSure" comment="This is shown in confirmation dialogs.">താങ്ങൾക്ക് ഉറപ്പാണോ?</string>
+  <string name="shareGameURL" comment="Menu action that shares the URL of the current game">കളി വിലാസം (URL) പങ്കിടുക</string>
+  <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">PGN പങ്കിടുക</string>
+  <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">മറ്റെ കളിക്കാര്‍ക്കായി കാത്തുനിൽക്കുന്നു...</string>
+  <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">കളിയിൽ പങ്കെടുക്കുക</string>
+  <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">ഫലം കാണിക്കുക</string>
+  <string name="greeting" comment="A greeting that is shown on the app's home page, e.g. 'Hello, GM Magnus'. %s is substituted with the user's name">നമസ്കാരം, %s</string>
+  <string name="greetingWithoutName" comment="Greeing that is shown on the app's home page when the user is not logged in.">നമസ്കാരം</string>
+</resources>
