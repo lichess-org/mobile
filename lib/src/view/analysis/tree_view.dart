@@ -686,7 +686,7 @@ class _IndentedSideLinesState extends State<_IndentedSideLines> {
                     Icons.add_box,
                     color: _textColor(context, 0.6),
                     key: _keys.last,
-                    size: _baseTextStyle.fontSize,
+                    size: _baseTextStyle.fontSize! + 5,
                   ),
                   onTap: () {
                     widget.params
