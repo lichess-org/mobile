@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:fake_async/fake_async.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/auth/bearer.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -245,6 +247,94 @@ void main() {
         ),
       );
     });
+
+    test('adds a signed bearer token when a session is available the request',
+        () async {
+      final container = await makeContainer(
+        overrides: [
+          httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => FakeClient());
+          }),
+        ],
+        userSession: const AuthSessionState(
+          token: 'test-token',
+          user: LightUser(id: UserId('test-user-id'), name: 'test-username'),
+        ),
+      );
+
+      final session = container.read(authSessionProvider);
+      expect(session, isNotNull);
+
+      final client = container.read(lichessClientProvider);
+      await client.get(Uri(path: '/test'));
+
+      final requests = FakeClient.verifyRequests();
+      expect(requests.length, 1);
+      expect(
+        requests.first,
+        isA<http.BaseRequest>().having(
+          (r) => r.headers['Authorization'],
+          'Authorization',
+          'Bearer ${signBearerToken('test-token')}',
+        ),
+      );
+    });
+
+    test(
+        'when receiving a 401, will test session token and delete session if not valid anymore',
+        () async {
+      final container = await makeContainer(
+        overrides: [
+          httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => FakeClient());
+          }),
+        ],
+        userSession: const AuthSessionState(
+          token: 'test-token',
+          user: LightUser(id: UserId('test-user-id'), name: 'test-username'),
+        ),
+      );
+
+      fakeAsync((async) {
+        final session = container.read(authSessionProvider);
+        expect(session, isNotNull);
+
+        final client = container.read(lichessClientProvider);
+        try {
+          client.get(Uri(path: '/will/return/401'));
+        } on ServerException catch (_) {}
+
+        async.flushMicrotasks();
+
+        final requests = FakeClient.verifyRequests();
+        expect(requests.length, 2);
+        expect(
+          requests.first,
+          isA<http.BaseRequest>().having(
+            (r) => r.headers['Authorization'],
+            'Authorization',
+            'Bearer ${signBearerToken('test-token')}',
+          ),
+        );
+
+        expect(
+          requests.last,
+          isA<http.BaseRequest>()
+              .having(
+                (r) => r.url.path,
+                'path',
+                '/api/token/test',
+              )
+              .having(
+                (r) => r.headers['Authorization'],
+                'Authorization',
+                null,
+              ),
+        );
+
+        expect(container.read(authSessionProvider), isNull);
+      });
+    });
   });
 }
 
@@ -264,11 +354,11 @@ class FakeClient extends http.BaseClient {
   @override
   Future<http.StreamedResponse> send(http.BaseRequest request) {
     _requests.add(request);
-    return Future.value(_responseBasedOnPath(request.url.path));
+    return Future.value(_responseBasedOnPath(request));
   }
 
-  http.StreamedResponse _responseBasedOnPath(String path) {
-    switch (path) {
+  http.StreamedResponse _responseBasedOnPath(http.BaseRequest request) {
+    switch (request.url.path) {
       case '/will/throw/socket/exception':
         throw const SocketException('no internet');
       case '/will/throw/tls/exception':
@@ -289,6 +379,14 @@ class FakeClient extends http.BaseClient {
         return http.StreamedResponse(_streamBody('204'), 204);
       case '/will/return/301':
         return http.StreamedResponse(_streamBody('301'), 301);
+      case '/api/token/test':
+        final token = request.headers['Authorization'];
+        final response = '''
+      {
+        "$token": null
+      }
+''';
+        return http.StreamedResponse(_streamBody(response), 200);
       default:
         return http.StreamedResponse(_streamBody('200'), 200);
     }

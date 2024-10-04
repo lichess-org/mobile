@@ -204,10 +204,13 @@ class LichessClient implements Client {
 
   /// Checks if the session token is still valid, and delete session if it's not.
   Future<void> _checkSessionToken(AuthSessionState session) async {
-    final data = await postReadJson(
-      Uri(path: '/api/token/test'),
-      mapper: (json) => json,
-    ).timeout(const Duration(seconds: 5));
+    final defaultClient = _ref.read(defaultClientProvider);
+    final data = await defaultClient
+        .postReadJson(
+          Uri(path: '/api/token/test'),
+          mapper: (json) => json,
+        )
+        .timeout(const Duration(seconds: 5));
     if (data[session.token] == null) {
       _logger.fine('Session is not active. Deleting it.');
       await _ref.read(authSessionProvider.notifier).delete();
