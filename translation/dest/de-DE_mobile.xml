@@ -39,7 +39,7 @@
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Gespeicherten Zug löschen</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Etwas ist schiefgelaufen.</string>
   <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">Ergebnis anzeigen</string>
-  <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">Spiele Aufgaben aus deinen Lieblingseröffnungen oder wähle ein Thema.</string>
+  <string name="puzzleThemesSubtitle" comment="Shown as a description for the 'Puzzle themes' mode">Spiele Aufgaben aus deinen Lieblings-Öffnungen oder wähle ein Theme.</string>
   <string name="puzzleStormSubtitle" comment="Shown as a description for the 'Puzzle Storm' mode">Löse so viele Aufgaben wie möglich in 3 Minuten.</string>
   <string name="greeting" comment="A greeting that is shown on the app's home page, e.g. 'Hello, GM Magnus'. %s is substituted with the user's name">Hallo, %s</string>
   <string name="greetingWithoutName" comment="Greeing that is shown on the app's home page when the user is not logged in.">Hallo</string>
