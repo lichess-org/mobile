@@ -20,6 +20,7 @@ import './fake_crashlytics.dart';
 import './model/common/service/fake_sound_service.dart';
 import 'binding.dart';
 import 'model/notifications/fake_notification_display.dart';
+import 'network/fake_http_client_factory.dart';
 import 'network/fake_websocket_channel.dart';
 import 'utils/fake_connectivity.dart';
 
@@ -30,13 +31,13 @@ final testContainerMockClient = MockClient((request) async {
 
 const shouldLog = false;
 
-/// Returns a [ProviderContainer] with a mocked [LichessClient] configured with
-/// the given [mockClient].
+/// Returns a [ProviderContainer] with the [httpClientFactoryProvider] configured
+/// with the given [mockClient].
 Future<ProviderContainer> lichessClientContainer(MockClient mockClient) async {
   return makeContainer(
     overrides: [
-      lichessClientProvider.overrideWith((ref) {
-        return LichessClient(mockClient, ref);
+      httpClientFactoryProvider.overrideWith((ref) {
+        return FakeHttpClientFactory(() => mockClient);
       }),
     ],
   );
@@ -86,10 +87,9 @@ Future<ProviderContainer> makeContainer({
         ref.onDispose(pool.dispose);
         return pool;
       }),
-      lichessClientProvider.overrideWith((ref) {
-        return LichessClient(testContainerMockClient, ref);
+      httpClientFactoryProvider.overrideWith((ref) {
+        return FakeHttpClientFactory(() => testContainerMockClient);
       }),
-      defaultClientProvider.overrideWithValue(testContainerMockClient),
       crashlyticsProvider.overrideWithValue(FakeCrashlytics()),
       soundServiceProvider.overrideWithValue(FakeSoundService()),
       ...overrides ?? [],

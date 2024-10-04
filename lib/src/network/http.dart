@@ -45,26 +45,33 @@ Uri lichessUri(String unencodedPath, [Map<String, dynamic>? queryParameters]) =>
 /// Creates the appropriate http client for the platform.
 ///
 /// Do not use directly, use [defaultClient] or [lichessClient] instead.
-Client httpClientFactory() {
-  const userAgent = 'Lichess Mobile';
-  if (Platform.isAndroid) {
-    final engine = CronetEngine.build(
-      cacheMode: CacheMode.memory,
-      cacheMaxSize: _maxCacheSize,
-      userAgent: userAgent,
-    );
-    return CronetClient.fromCronetEngine(engine);
-  }
+class HttpClientFactory {
+  Client call() {
+    final packageInfo = LichessBinding.instance.packageInfo;
+    final userAgent = 'Lichess Mobile/${packageInfo.version}';
+    if (Platform.isAndroid) {
+      final engine = CronetEngine.build(
+        cacheMode: CacheMode.memory,
+        cacheMaxSize: _maxCacheSize,
+        userAgent: userAgent,
+      );
+      return CronetClient.fromCronetEngine(engine);
+    }
 
-  if (Platform.isIOS || Platform.isMacOS) {
-    final config = URLSessionConfiguration.ephemeralSessionConfiguration()
-      ..cache = URLCache.withCapacity(memoryCapacity: _maxCacheSize)
-      ..httpAdditionalHeaders = {'User-Agent': userAgent};
-    return CupertinoClient.fromSessionConfiguration(config);
-  }
+    if (Platform.isIOS || Platform.isMacOS) {
+      final config = URLSessionConfiguration.ephemeralSessionConfiguration()
+        ..cache = URLCache.withCapacity(memoryCapacity: _maxCacheSize)
+        ..httpAdditionalHeaders = {'User-Agent': userAgent};
+      return CupertinoClient.fromSessionConfiguration(config);
+    }
 
-  return IOClient(HttpClient()..userAgent = userAgent);
+    return IOClient(HttpClient()..userAgent = userAgent);
+  }
 }
+
+@Riverpod(keepAlive: true)
+HttpClientFactory httpClientFactory(HttpClientFactoryRef _) =>
+    HttpClientFactory();
 
 /// The default http client.
 ///
@@ -73,7 +80,7 @@ Client httpClientFactory() {
 /// Only one instance of this client is created and kept alive for the whole app.
 @Riverpod(keepAlive: true)
 Client defaultClient(DefaultClientRef ref) {
-  final client = LoggingClient(httpClientFactory());
+  final client = LoggingClient(ref.read(httpClientFactoryProvider)());
   ref.onDispose(() => client.close());
   return client;
 }
@@ -86,7 +93,7 @@ LichessClient lichessClient(LichessClientRef ref) {
   final client = LichessClient(
     // Retry just once, after 500ms, on 429 Too Many Requests.
     RetryClient(
-      httpClientFactory(),
+      ref.read(httpClientFactoryProvider)(),
       retries: 1,
       delay: _defaultDelay,
       when: (response) => response.statusCode == 429,
@@ -377,18 +384,18 @@ extension ClientExtension on Client {
     _checkResponseSuccess(url, response);
     final json = jsonUtf8Decoder.convert(response.bodyBytes);
     if (json is! Map<String, dynamic>) {
-      _logger.severe('Could not read json object as $T: expected an object.');
+      _logger.severe('Could not read JSON object as $T: expected an object.');
       throw ClientException(
-        'Could not read json object as $T: expected an object.',
+        'Could not read JSON object as $T: expected an object.',
         url,
       );
     }
     try {
       return mapper(json);
     } catch (e, st) {
-      _logger.severe('Could not read json object as $T: $e', e, st);
+      _logger.severe('Could not read JSON object as $T: $e', e, st);
       throw ClientException(
-        'Could not read json object as $T: $e\n$st',
+        'Could not read JSON object as $T: $e\n$st',
         url,
       );
     }
@@ -409,9 +416,9 @@ extension ClientExtension on Client {
     _checkResponseSuccess(url, response);
     final json = jsonUtf8Decoder.convert(response.bodyBytes);
     if (json is! List<dynamic>) {
-      _logger.severe('Could not read json object as List: expected a list.');
+      _logger.severe('Could not read JSON object as List: expected a list.');
       throw ClientException(
-        'Could not read json object as List: expected a list.',
+        'Could not read JSON object as List: expected a list.',
         url,
       );
     }
@@ -419,9 +426,9 @@ extension ClientExtension on Client {
     final List<T> list = [];
     for (final e in json) {
       if (e is! Map<String, dynamic>) {
-        _logger.severe('Could not read json object as $T: expected an object.');
+        _logger.severe('Could not read JSON object as $T: expected an object.');
         throw ClientException(
-          'Could not read json object as $T: expected an object.',
+          'Could not read JSON object as $T: expected an object.',
           url,
         );
       }
@@ -431,8 +438,8 @@ extension ClientExtension on Client {
           list.add(mapped);
         }
       } catch (e, st) {
-        _logger.severe('Could not read json object as $T: $e', e, st);
-        throw ClientException('Could not read json object as $T: $e', url);
+        _logger.severe('Could not read JSON object as $T: $e', e, st);
+        throw ClientException('Could not read JSON object as $T: $e', url);
       }
     }
     return IList(list);
@@ -469,7 +476,7 @@ extension ClientExtension on Client {
     final request = Request('GET', url);
     if (headers != null) request.headers.addAll(headers);
     final response = await send(request);
-    if (response.statusCode > 400) {
+    if (response.statusCode >= 400) {
       var message = 'Request to $url failed with status ${response.statusCode}';
       if (response.reasonPhrase != null) {
         message = '$message: ${response.reasonPhrase}';

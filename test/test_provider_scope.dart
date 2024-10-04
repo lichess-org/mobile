@@ -28,6 +28,7 @@ import './fake_crashlytics.dart';
 import './model/common/service/fake_sound_service.dart';
 import 'binding.dart';
 import 'model/notifications/fake_notification_display.dart';
+import 'network/fake_http_client_factory.dart';
 import 'network/fake_websocket_channel.dart';
 import 'test_helpers.dart';
 import 'utils/fake_connectivity.dart';
@@ -144,11 +145,9 @@ Future<Widget> makeTestProviderScope(
         return testDb;
       }),
       // ignore: scoped_providers_should_specify_dependencies
-      lichessClientProvider.overrideWith((ref) {
-        return LichessClient(mockClient, ref);
+      httpClientFactoryProvider.overrideWith((ref) {
+        return FakeHttpClientFactory(() => mockClient);
       }),
-      // ignore: scoped_providers_should_specify_dependencies
-      defaultClientProvider.overrideWith((_) => mockClient),
       // ignore: scoped_providers_should_specify_dependencies
       webSocketChannelFactoryProvider.overrideWith((ref) {
         return FakeWebSocketChannelFactory(() => FakeWebSocketChannel());
