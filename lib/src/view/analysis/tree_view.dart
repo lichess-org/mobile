@@ -674,6 +674,8 @@ class _IndentedSideLinesState extends State<_IndentedSideLines> {
         .toList();
 
     final padding = widget.nesting < 6 ? 12.0 : 0.0;
+
+    // Without the RepaintBoundary, the CustomPaint would continuously repaint when the view is scrolled
     return RepaintBoundary(
       child: Padding(
         padding: EdgeInsets.only(left: padding),
