@@ -615,6 +615,10 @@ class _IndentedSideLinesState extends State<_IndentedSideLines> {
   final GlobalKey _columnKey = GlobalKey();
 
   void _redrawIndents() {
+    _keys = List.generate(
+      _visibleSideLines().length + (_hasHiddenLines() ? 1 : 0),
+      (_) => GlobalKey(),
+    );
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final RenderBox? columnBox =
           _columnKey.currentContext?.findRenderObject() as RenderBox?;
@@ -635,6 +639,11 @@ class _IndentedSideLinesState extends State<_IndentedSideLines> {
     });
   }
 
+  bool _hasHiddenLines() => widget.sideLines.any((node) => node.isHidden);
+
+  Iterable<ViewBranch> _visibleSideLines() =>
+      widget.sideLines.whereNot((node) => node.isHidden);
+
   @override
   void initState() {
     super.initState();
@@ -651,16 +660,7 @@ class _IndentedSideLinesState extends State<_IndentedSideLines> {
 
   @override
   Widget build(BuildContext context) {
-    final hasHiddenLines = widget.sideLines.any((node) => node.isHidden);
-
-    final visibleSideLines = widget.sideLines.whereNot((node) => node.isHidden);
-
-    _keys = List.generate(
-      visibleSideLines.length + (hasHiddenLines ? 1 : 0),
-      (_) => GlobalKey(),
-    );
-
-    final sideLineWidgets = visibleSideLines
+    final sideLineWidgets = _visibleSideLines()
         .mapIndexed(
           (i, firstSidelineNode) => _SideLines(
             firstNode: firstSidelineNode,
@@ -688,7 +688,7 @@ class _IndentedSideLinesState extends State<_IndentedSideLines> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ...sideLineWidgets,
-              if (hasHiddenLines)
+              if (_hasHiddenLines())
                 GestureDetector(
                   child: Icon(
                     Icons.add_box,
