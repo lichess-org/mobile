@@ -203,7 +203,7 @@ class _PgnTreeView extends StatelessWidget {
               rootComments?.any((c) => c.text?.isNotEmpty == true) == true)
             Text.rich(
               TextSpan(
-                children: comments(rootComments!, textStyle: _baseTextStyle),
+                children: _comments(rootComments!, textStyle: _baseTextStyle),
               ),
             ),
           ..._mainlineParts(root).map(
@@ -278,7 +278,7 @@ List<InlineSpan> _buildInlineSideLine({
               style: textStyle,
             ),
           ],
-          ...moveWithComment(
+          ..._moveWithComment(
             node,
             parent: i == 0 ? parent : sidelineNodes[i - 1],
             lineInfo: (
@@ -322,7 +322,7 @@ enum _LineType {
 /// Metadata about a move's role in the tree view.
 typedef _LineInfo = ({_LineType type, bool startLine});
 
-List<InlineSpan> moveWithComment(
+List<InlineSpan> _moveWithComment(
   ViewBranch branch, {
   required ViewNode parent,
   required TextStyle textStyle,
@@ -345,7 +345,7 @@ List<InlineSpan> moveWithComment(
       ),
     ),
     if (params.shouldShowComments && branch.hasTextComment)
-      ...comments(branch.comments!, textStyle: textStyle),
+      ..._comments(branch.comments!, textStyle: textStyle),
   ];
 }
 
@@ -377,7 +377,7 @@ class _SideLinePart extends ConsumerWidget {
 
     var path = initialPath + nodes.first.id;
     final moves = [
-      ...moveWithComment(
+      ..._moveWithComment(
         nodes.first,
         parent: parent,
         lineInfo: (
@@ -392,7 +392,7 @@ class _SideLinePart extends ConsumerWidget {
       ...nodes.take(nodes.length - 1).map(
         (node) {
           final moves = [
-            ...moveWithComment(
+            ..._moveWithComment(
               node.children.first,
               parent: node,
               lineInfo: (
@@ -456,7 +456,7 @@ class _MainLinePart extends ConsumerWidget {
               (i, node) {
                 final mainlineNode = node.children.first;
                 final moves = [
-                  moveWithComment(
+                  _moveWithComment(
                     mainlineNode,
                     parent: node,
                     lineInfo: (
@@ -972,7 +972,7 @@ class _MoveContextMenu extends ConsumerWidget {
   }
 }
 
-List<TextSpan> comments(
+List<TextSpan> _comments(
   IList<PgnComment> comments, {
   required TextStyle textStyle,
 }) =>
