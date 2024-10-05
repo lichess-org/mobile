@@ -173,7 +173,7 @@ bool _hasNonInlineSideLine(ViewNode node) =>
 Iterable<List<ViewNode>> _mainlineParts(ViewRoot root) =>
     [root, ...root.mainline].splitAfter(_hasNonInlineSideLine);
 
-class _PgnTreeView extends StatelessWidget {
+class _PgnTreeView extends StatefulWidget {
   const _PgnTreeView({
     required this.root,
     required this.rootComments,
@@ -187,61 +187,125 @@ class _PgnTreeView extends StatelessWidget {
   final _PgnTreeViewParams params;
 
   @override
-  Widget build(BuildContext context) {
-    var path = UciPath.empty;
+  State<_PgnTreeView> createState() => _PgnTreeViewState();
+}
 
+typedef _TreeViewPart = ({
+  List<Widget> lines,
+  bool containsCurrentMove,
+});
+
+class _PgnTreeViewState extends State<_PgnTreeView> {
+  List<List<ViewNode>> mainlineParts = [];
+  List<_TreeViewPart> treeParts = [];
+
+  UciPath _mainlinePartOfCurrentPath() {
+    var path = UciPath.empty;
+    for (final node in widget.root.mainline) {
+      if (!widget.params.currentPath.contains(path + node.id)) {
+        break;
+      }
+      path = path + node.id;
+    }
+    return path;
+  }
+
+  void _updateLines({required bool fullRebuild}) {
+    setState(() {
+      if (fullRebuild) {
+        mainlineParts = _mainlineParts(widget.root).toList();
+      }
+
+      var path = UciPath.empty;
+
+      treeParts = mainlineParts.mapIndexed(
+        (i, mainlineNodes) {
+          final mainlineInitialPath = path;
+
+          final sidelineInitialPath = UciPath.join(
+            path,
+            UciPath.fromIds(
+              mainlineNodes
+                  .take(mainlineNodes.length - 1)
+                  .map((n) => n.children.first.id),
+            ),
+          );
+
+          path = sidelineInitialPath;
+          if (mainlineNodes.last.children.isNotEmpty) {
+            path = path + mainlineNodes.last.children.first.id;
+          }
+
+          final mainlinePartOfCurrentPath = _mainlinePartOfCurrentPath();
+          final containsCurrentMove =
+              mainlinePartOfCurrentPath.size > mainlineInitialPath.size &&
+                  mainlinePartOfCurrentPath.size <= path.size;
+
+          if (fullRebuild ||
+              treeParts[i].containsCurrentMove ||
+              containsCurrentMove) {
+            // Skip the first node which is the continuation of the mainline
+            final sidelineNodes = mainlineNodes.last.children.skip(1);
+            return (
+              lines: <Widget>[
+                _MainLinePart(
+                  params: widget.params,
+                  initialPath: mainlineInitialPath,
+                  nodes: mainlineNodes,
+                ),
+                if (sidelineNodes.isNotEmpty)
+                  _IndentedSideLines(
+                    sidelineNodes,
+                    parent: mainlineNodes.last,
+                    params: widget.params,
+                    initialPath: sidelineInitialPath,
+                    nesting: 1,
+                  ),
+              ],
+              containsCurrentMove: containsCurrentMove,
+            );
+          } else {
+            // Avoid expensive rebuilds by caching parts of the tree that did not change across a path change
+            return treeParts[i];
+          }
+        },
+      ).toList();
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _updateLines(fullRebuild: true);
+  }
+
+  @override
+  void didUpdateWidget(covariant _PgnTreeView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _updateLines(fullRebuild: oldWidget.root != widget.root);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // trick to make auto-scroll work when returning to the root position
-          if (params.currentPath.isEmpty)
-            SizedBox.shrink(key: params.currentMoveKey),
+          if (widget.params.currentPath.isEmpty)
+            SizedBox.shrink(key: widget.params.currentMoveKey),
 
-          if (params.shouldShowComments &&
-              rootComments?.any((c) => c.text?.isNotEmpty == true) == true)
+          if (widget.params.shouldShowComments &&
+              widget.rootComments?.any((c) => c.text?.isNotEmpty == true) ==
+                  true)
             Text.rich(
               TextSpan(
-                children: _comments(rootComments!, textStyle: _baseTextStyle),
+                children:
+                    _comments(widget.rootComments!, textStyle: _baseTextStyle),
               ),
             ),
-          ..._mainlineParts(root).map(
-            (nodes) {
-              final mainlineInitialPath = path;
-
-              final sidelineInitialPath = UciPath.join(
-                path,
-                UciPath.fromIds(
-                  nodes.take(nodes.length - 1).map((n) => n.children.first.id),
-                ),
-              );
-
-              path = sidelineInitialPath;
-              if (nodes.last.children.isNotEmpty) {
-                path = path + nodes.last.children.first.id;
-              }
-
-              // Skip the first node which is the continuation of the mainline
-              final sidelineNodes = nodes.last.children.skip(1);
-
-              return [
-                _MainLinePart(
-                  params: params,
-                  initialPath: mainlineInitialPath,
-                  nodes: nodes,
-                ),
-                if (sidelineNodes.isNotEmpty)
-                  _IndentedSideLines(
-                    sidelineNodes,
-                    parent: nodes.last,
-                    params: params,
-                    initialPath: sidelineInitialPath,
-                    nesting: 1,
-                  ),
-              ];
-            },
-          ).flattened,
+          ...treeParts.map((part) => part.lines).flattened,
         ],
       ),
     );
