@@ -841,12 +841,12 @@ class InlineMove extends ConsumerWidget {
 
     final indexText = branch.position.ply.isOdd
         ? TextSpan(
-            text: '${(branch.position.ply / 2).ceil()}.',
+            text: '${(branch.position.ply / 2).ceil()}. ',
             style: indexTextStyle,
           )
         : (lineInfo.startLine
             ? TextSpan(
-                text: '${(branch.position.ply / 2).ceil()}…',
+                text: '${(branch.position.ply / 2).ceil()}… ',
                 style: indexTextStyle,
               )
             : null);
@@ -897,7 +897,6 @@ class InlineMove extends ConsumerWidget {
             children: [
               if (indexText != null) ...[
                 indexText,
-                const WidgetSpan(child: SizedBox(width: 3)),
               ],
               TextSpan(
                 text: moveWithNag,
