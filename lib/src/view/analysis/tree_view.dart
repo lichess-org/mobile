@@ -171,7 +171,9 @@ bool _hasNonInlineSideLine(ViewNode node) =>
     (node.children.length == 2 && !_displaySideLineAsInline(node.children[1]));
 
 Iterable<List<ViewNode>> _mainlineParts(ViewRoot root) =>
-    [root, ...root.mainline].splitAfter(_hasNonInlineSideLine);
+    [root, ...root.mainline]
+        .splitAfter(_hasNonInlineSideLine)
+        .takeWhile((nodes) => nodes.firstOrNull?.children.isNotEmpty == true);
 
 class _PgnTreeView extends StatefulWidget {
   const _PgnTreeView({
