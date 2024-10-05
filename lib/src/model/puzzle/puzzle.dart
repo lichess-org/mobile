@@ -54,6 +54,8 @@ class PuzzleData with _$PuzzleData {
     required ISet<String> themes,
   }) = _PuzzleData;
 
+  Side get sideToMove => initialPly.isEven ? Side.black : Side.white;
+
   factory PuzzleData.fromJson(Map<String, dynamic> json) =>
       _$PuzzleDataFromJson(json);
 }
