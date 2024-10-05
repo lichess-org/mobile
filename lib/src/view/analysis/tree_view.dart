@@ -139,7 +139,7 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
               shouldShowComments: shouldShowComments,
               currentMoveKey: currentMoveKey,
               currentPath: currentPath,
-              notifier: () => ref.read(ctrlProvider.notifier),
+              notifier: ref.read(ctrlProvider.notifier),
             ),
           ),
         ),
@@ -155,7 +155,7 @@ typedef _PgnTreeViewParams = ({
   bool shouldShowAnnotations,
   bool shouldShowComments,
   GlobalKey currentMoveKey,
-  AnalysisController Function() notifier,
+  AnalysisController notifier,
 });
 
 /// True if the side line has no branching and is less than 6 moves deep.
@@ -699,9 +699,7 @@ class _IndentedSideLinesState extends State<_IndentedSideLines> {
                     size: _baseTextStyle.fontSize! + 5,
                   ),
                   onTap: () {
-                    widget.params
-                        .notifier()
-                        .expandVariations(widget.initialPath);
+                    widget.params.notifier.expandVariations(widget.initialPath);
                   },
                 ),
             ],
@@ -798,7 +796,7 @@ class InlineMove extends ConsumerWidget {
     return AdaptiveInkWell(
       key: isCurrentMove ? params.currentMoveKey : null,
       borderRadius: borderRadius,
-      onTap: () => params.notifier().userJump(path),
+      onTap: () => params.notifier.userJump(path),
       onLongPress: () {
         showAdaptiveBottomSheet<void>(
           context: context,
@@ -868,7 +866,7 @@ class _MoveContextMenu extends ConsumerWidget {
   final ViewNode parent;
   final ViewBranch branch;
   final bool isSideline;
-  final AnalysisController Function() notifier;
+  final AnalysisController notifier;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -951,23 +949,23 @@ class _MoveContextMenu extends ConsumerWidget {
           BottomSheetContextMenuAction(
             icon: Icons.subtitles_off,
             child: Text(context.l10n.collapseVariations),
-            onPressed: () => notifier().collapseVariations(path),
+            onPressed: () => notifier.collapseVariations(path),
           ),
           BottomSheetContextMenuAction(
             icon: Icons.expand_less,
             child: Text(context.l10n.promoteVariation),
-            onPressed: () => notifier().promoteVariation(path, false),
+            onPressed: () => notifier.promoteVariation(path, false),
           ),
           BottomSheetContextMenuAction(
             icon: Icons.check,
             child: Text(context.l10n.makeMainLine),
-            onPressed: () => notifier().promoteVariation(path, true),
+            onPressed: () => notifier.promoteVariation(path, true),
           ),
         ],
         BottomSheetContextMenuAction(
           icon: Icons.delete,
           child: Text(context.l10n.deleteFromHere),
-          onPressed: () => notifier().deleteFromHere(path),
+          onPressed: () => notifier.deleteFromHere(path),
         ),
       ],
     );
