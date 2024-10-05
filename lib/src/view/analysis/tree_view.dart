@@ -282,7 +282,7 @@ List<InlineSpan> _buildInlineSideLine({
             node,
             parent: i == 0 ? parent : sidelineNodes[i - 1],
             lineInfo: (
-              type: LineType.inlineSideline,
+              type: _LineType.inlineSideline,
               startLine: i == 0 || sidelineNodes[i - 1].hasTextComment
             ),
             pathToNode: pathToNode,
@@ -306,19 +306,27 @@ const _baseTextStyle = TextStyle(
   height: 1.5,
 );
 
-enum LineType {
+/// The different types of lines (move sequences) that are displayed in the tree view.
+enum _LineType {
+  /// (A part of) the game's main line.
   mainline,
+
+  /// A sideline branching off the main line or a parent sideline.
+  /// Each sideline is rendered on a new line and indented.
   sideline,
+
+  /// A short sideline without any branching, displayed in parantheses inline with it's parent line.
   inlineSideline,
 }
 
-typedef LineInfo = ({LineType type, bool startLine});
+/// Metadata about a move's role in the tree view.
+typedef _LineInfo = ({_LineType type, bool startLine});
 
 List<InlineSpan> moveWithComment(
   ViewBranch branch, {
   required ViewNode parent,
   required TextStyle textStyle,
-  required LineInfo lineInfo,
+  required _LineInfo lineInfo,
   required UciPath pathToNode,
   required _PgnTreeViewParams params,
   GlobalKey? moveKey,
@@ -373,7 +381,7 @@ class _SideLinePart extends ConsumerWidget {
         nodes.first,
         parent: parent,
         lineInfo: (
-          type: LineType.sideline,
+          type: _LineType.sideline,
           startLine: true,
         ),
         moveKey: firstMoveKey,
@@ -388,7 +396,7 @@ class _SideLinePart extends ConsumerWidget {
               node.children.first,
               parent: node,
               lineInfo: (
-                type: LineType.sideline,
+                type: _LineType.sideline,
                 startLine: node.hasTextComment,
               ),
               pathToNode: path,
@@ -452,7 +460,7 @@ class _MainLinePart extends ConsumerWidget {
                     mainlineNode,
                     parent: node,
                     lineInfo: (
-                      type: LineType.mainline,
+                      type: _LineType.mainline,
                       startLine: i == 0 || (node as ViewBranch).hasTextComment,
                     ),
                     pathToNode: path,
@@ -735,7 +743,7 @@ class InlineMove extends ConsumerWidget {
 
   final TextStyle textStyle;
 
-  final LineInfo lineInfo;
+  final _LineInfo lineInfo;
 
   final _PgnTreeViewParams params;
 
@@ -756,7 +764,7 @@ class InlineMove extends ConsumerWidget {
       fontFamily: moveFontFamily,
       fontWeight: isCurrentMove
           ? FontWeight.bold
-          : lineInfo.type == LineType.inlineSideline
+          : lineInfo.type == _LineType.inlineSideline
               ? FontWeight.normal
               : FontWeight.w600,
     );
@@ -803,7 +811,7 @@ class InlineMove extends ConsumerWidget {
             path: path,
             parent: parent,
             branch: branch,
-            isSideline: lineInfo.type != LineType.mainline,
+            isSideline: lineInfo.type != _LineType.mainline,
           ),
         );
       },
