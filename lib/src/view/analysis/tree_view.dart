@@ -148,8 +148,8 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
   }
 }
 
-// A group of parameters that are passed through various parts of the tree view
-// and ultimately evaluated in the InlineMove widget. Grouped in this record to improve readability.
+/// A group of parameters that are passed through various parts of the tree view
+/// and ultimately evaluated in the InlineMove widget. Grouped in this record to improve readability.
 typedef _PgnTreeViewParams = ({
   UciPath currentPath,
   bool shouldShowAnnotations,
