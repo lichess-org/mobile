@@ -246,65 +246,68 @@ class _PgnTreeViewState extends State<_PgnTreeView> {
     return path;
   }
 
+  void _rebuildChangedSubtrees({required bool fullRebuild}) {
+    var path = UciPath.empty;
+    subtrees = mainlineParts.mapIndexed(
+      (i, mainlineNodes) {
+        final mainlineInitialPath = path;
+
+        final sidelineInitialPath = UciPath.join(
+          path,
+          UciPath.fromIds(
+            mainlineNodes
+                .take(mainlineNodes.length - 1)
+                .map((n) => n.children.first.id),
+          ),
+        );
+
+        path = sidelineInitialPath;
+        if (mainlineNodes.last.children.isNotEmpty) {
+          path = path + mainlineNodes.last.children.first.id;
+        }
+
+        final mainlinePartOfCurrentPath = _mainlinePartOfCurrentPath();
+        final containsCurrentMove =
+            mainlinePartOfCurrentPath.size > mainlineInitialPath.size &&
+                mainlinePartOfCurrentPath.size <= path.size;
+
+        if (fullRebuild ||
+            subtrees[i].containsCurrentMove ||
+            containsCurrentMove) {
+          // Skip the first node which is the continuation of the mainline
+          final sidelineNodes = mainlineNodes.last.children.skip(1);
+          return (
+            mainLinePart: _MainLinePart(
+              params: widget.params,
+              initialPath: mainlineInitialPath,
+              nodes: mainlineNodes,
+            ),
+            sidelines: sidelineNodes.isNotEmpty
+                ? _IndentedSideLines(
+                    sidelineNodes,
+                    parent: mainlineNodes.last,
+                    params: widget.params,
+                    initialPath: sidelineInitialPath,
+                    nesting: 1,
+                  )
+                : null,
+            containsCurrentMove: containsCurrentMove,
+          );
+        } else {
+          // Avoid expensive rebuilds by caching parts of the tree that did not change across a path change
+          return subtrees[i];
+        }
+      },
+    ).toList();
+  }
+
   void _updateLines({required bool fullRebuild}) {
     setState(() {
       if (fullRebuild) {
         mainlineParts = _mainlineParts(widget.root).toList();
       }
 
-      var path = UciPath.empty;
-
-      subtrees = mainlineParts.mapIndexed(
-        (i, mainlineNodes) {
-          final mainlineInitialPath = path;
-
-          final sidelineInitialPath = UciPath.join(
-            path,
-            UciPath.fromIds(
-              mainlineNodes
-                  .take(mainlineNodes.length - 1)
-                  .map((n) => n.children.first.id),
-            ),
-          );
-
-          path = sidelineInitialPath;
-          if (mainlineNodes.last.children.isNotEmpty) {
-            path = path + mainlineNodes.last.children.first.id;
-          }
-
-          final mainlinePartOfCurrentPath = _mainlinePartOfCurrentPath();
-          final containsCurrentMove =
-              mainlinePartOfCurrentPath.size > mainlineInitialPath.size &&
-                  mainlinePartOfCurrentPath.size <= path.size;
-
-          if (fullRebuild ||
-              subtrees[i].containsCurrentMove ||
-              containsCurrentMove) {
-            // Skip the first node which is the continuation of the mainline
-            final sidelineNodes = mainlineNodes.last.children.skip(1);
-            return (
-              mainLinePart: _MainLinePart(
-                params: widget.params,
-                initialPath: mainlineInitialPath,
-                nodes: mainlineNodes,
-              ),
-              sidelines: sidelineNodes.isNotEmpty
-                  ? _IndentedSideLines(
-                      sidelineNodes,
-                      parent: mainlineNodes.last,
-                      params: widget.params,
-                      initialPath: sidelineInitialPath,
-                      nesting: 1,
-                    )
-                  : null,
-              containsCurrentMove: containsCurrentMove,
-            );
-          } else {
-            // Avoid expensive rebuilds by caching parts of the tree that did not change across a path change
-            return subtrees[i];
-          }
-        },
-      ).toList();
+      _rebuildChangedSubtrees(fullRebuild: fullRebuild);
     });
   }
 
