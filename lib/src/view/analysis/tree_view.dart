@@ -741,35 +741,32 @@ class _IndentedSideLinesState extends State<_IndentedSideLines> {
 
     final padding = widget.nesting < 6 ? 12.0 : 0.0;
 
-    // Without the RepaintBoundary, the CustomPaint would continuously repaint when the view is scrolled
-    return RepaintBoundary(
-      child: Padding(
-        padding: EdgeInsets.only(left: padding),
-        child: CustomPaint(
-          painter: _IndentPainter(
-            sideLineStartPositions: _sideLineStartPositions,
-            color: _textColor(context, 0.6)!,
-            padding: padding,
-          ),
-          child: Column(
-            key: _columnKey,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ...sideLineWidgets,
-              if (_hasHiddenLines())
-                GestureDetector(
-                  child: Icon(
-                    Icons.add_box,
-                    color: _textColor(context, 0.6),
-                    key: _keys.last,
-                    size: _baseTextStyle.fontSize! + 5,
-                  ),
-                  onTap: () {
-                    widget.params.notifier.expandVariations(widget.initialPath);
-                  },
+    return Padding(
+      padding: EdgeInsets.only(left: padding),
+      child: CustomPaint(
+        painter: _IndentPainter(
+          sideLineStartPositions: _sideLineStartPositions,
+          color: _textColor(context, 0.6)!,
+          padding: padding,
+        ),
+        child: Column(
+          key: _columnKey,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ...sideLineWidgets,
+            if (_hasHiddenLines())
+              GestureDetector(
+                child: Icon(
+                  Icons.add_box,
+                  color: _textColor(context, 0.6),
+                  key: _keys.last,
+                  size: _baseTextStyle.fontSize! + 5,
                 ),
-            ],
-          ),
+                onTap: () {
+                  widget.params.notifier.expandVariations(widget.initialPath);
+                },
+              ),
+          ],
         ),
       ),
     );
