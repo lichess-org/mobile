@@ -433,6 +433,9 @@ List<InlineSpan> _moveWithComment(
   required _LineInfo lineInfo,
   required UciPath pathToNode,
   required _PgnTreeViewParams params,
+
+  /// Key that will be assigned to the move text. We use this to track the position of the first move of
+  /// a sideline, see [_SideLinePart.firstMoveKey]
   GlobalKey? moveKey,
 }) {
   return [
@@ -466,6 +469,8 @@ class _SideLinePart extends ConsumerWidget {
 
   final UciPath initialPath;
 
+  /// The key that will be assigned to the first move in this sideline.
+  /// This is needed so that the indent guidelines can be drawn correctly.
   final GlobalKey firstMoveKey;
 
   final _PgnTreeViewParams params;
@@ -528,6 +533,7 @@ class _SideLinePart extends ConsumerWidget {
   }
 }
 
+/// A part of the mainline that will be rendered on the same line. See [_mainlineParts].
 class _MainLinePart extends ConsumerWidget {
   const _MainLinePart({
     required this.initialPath,
@@ -589,8 +595,10 @@ class _MainLinePart extends ConsumerWidget {
   }
 }
 
-class _SideLines extends StatelessWidget {
-  const _SideLines({
+/// A sideline where the moves are rendered on the same line (see [_SideLinePart]) until further branching is encountered,
+/// at which point the children sidelines are rendered on new lines and indented (see [_IndentedSideLines]).
+class _SideLine extends StatelessWidget {
+  const _SideLine({
     required this.firstNode,
     required this.parent,
     required this.firstMoveKey,
@@ -682,6 +690,8 @@ class _IndentPainter extends CustomPainter {
   }
 }
 
+/// Displays one ore more sidelines indented on their own line and adds indent guides.
+/// If there are hidden lines, a button is displayed to expand them.
 class _IndentedSideLines extends StatefulWidget {
   const _IndentedSideLines(
     this.sideLines, {
@@ -760,7 +770,7 @@ class _IndentedSideLinesState extends State<_IndentedSideLines> {
   Widget build(BuildContext context) {
     final sideLineWidgets = _visibleSideLines()
         .mapIndexed(
-          (i, firstSidelineNode) => _SideLines(
+          (i, firstSidelineNode) => _SideLine(
             firstNode: firstSidelineNode,
             parent: widget.parent,
             firstMoveKey: _keys[i],
