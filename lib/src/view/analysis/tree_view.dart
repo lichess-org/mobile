@@ -44,12 +44,12 @@ class AnalysisTreeView extends ConsumerStatefulWidget {
 class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
   final currentMoveKey = GlobalKey();
   final _debounce = Debouncer(kFastReplayDebounceDelay);
-  late UciPath currentPath;
+  late UciPath pathToCurrentMove;
 
   @override
   void initState() {
     super.initState();
-    currentPath = ref.read(
+    pathToCurrentMove = ref.read(
       analysisControllerProvider(widget.pgn, widget.options).select(
         (value) => value.currentPath,
       ),
@@ -88,7 +88,7 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
           // the fast replay buttons
           _debounce(() {
             setState(() {
-              currentPath = state.currentPath;
+              pathToCurrentMove = state.currentPath;
             });
             WidgetsBinding.instance.addPostFrameCallback((_) {
               if (currentMoveKey.currentContext != null) {
@@ -138,7 +138,7 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
               shouldShowAnnotations: shouldShowAnnotations,
               shouldShowComments: shouldShowComments,
               currentMoveKey: currentMoveKey,
-              currentPath: currentPath,
+              pathToCurrentMove: pathToCurrentMove,
               notifier: ref.read(ctrlProvider.notifier),
             ),
           ),
@@ -151,14 +151,25 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
 /// A group of parameters that are passed through various parts of the tree view
 /// and ultimately evaluated in the InlineMove widget. Grouped in this record to improve readability.
 typedef _PgnTreeViewParams = ({
-  UciPath currentPath,
+  /// Path to the currently selected move in the tree.
+  UciPath pathToCurrentMove,
+
+  /// Whether to show NAG annotations like '!' and '??'.
   bool shouldShowAnnotations,
+
+  /// Whether to show comments associated with the moves.
   bool shouldShowComments,
+
+  /// Key that will we assigned to the widget corresponding to [pathToCurrentMove].
+  /// Can be used e.g. to ensure that the current move is visible on the screen.
   GlobalKey currentMoveKey,
+
+  /// Callbacks for when the user interacts with the tree view, e.g. selecting a different move.
   AnalysisController notifier,
 });
 
-/// True if the side line has no branching and is less than 6 moves deep.
+/// Sidelines are usually rendered on a new line and indented.
+/// However sidelines are rendered inline (in parantheses) if the side line has no branching and is less than 6 moves deep.
 bool _displaySideLineAsInline(ViewBranch node, [int depth = 0]) {
   if (depth == 6) return false;
   if (node.children.isEmpty) return true;
@@ -166,15 +177,29 @@ bool _displaySideLineAsInline(ViewBranch node, [int depth = 0]) {
   return _displaySideLineAsInline(node.children.first, depth + 1);
 }
 
+/// Returns whether this node has a sideline that should not be displayed inline.
 bool _hasNonInlineSideLine(ViewNode node) =>
     node.children.length > 2 ||
     (node.children.length == 2 && !_displaySideLineAsInline(node.children[1]));
 
+/// Splits the mainline into parts, where each part is a sequence of moves that are displayed on the same line.
+/// A part ends when a mainline node has a sideline that should not be displayed inline.
 Iterable<List<ViewNode>> _mainlineParts(ViewRoot root) =>
     [root, ...root.mainline]
         .splitAfter(_hasNonInlineSideLine)
         .takeWhile((nodes) => nodes.firstOrNull?.children.isNotEmpty == true);
 
+/// Displays a tree-like view of a PGN game's moves.
+///
+/// For example, the PGN 1. e4 e5 (1... d5) (1... Nc6) 2. Nf3 Nc6 (2... a5) 3. Bc4 * will be displayed as:
+/// 1. e4 e5                      // [_MainLinePart]
+/// |- 1... d5                    // [_SideLinePart]
+/// |- 1... Nc6                   // [_SideLinePart]
+/// 2. Nf3 Nc6 (2... a5) 3. Bc4   // [_MainLinePart], with inline sideline
+/// Short sidelines without any branching are displayed inline with their parent line.
+/// Longer sidelines are displayed on a new line and indented.
+/// The mainline is split into parts whenever a move has a non-inline sideline, this corresponds to the [_MainLinePart] widget.
+/// Similarly, a [_SideLinePart] contains the moves sequence of a sideline where each node has only one child.
 class _PgnTreeView extends StatefulWidget {
   const _PgnTreeView({
     required this.root,
@@ -182,8 +207,10 @@ class _PgnTreeView extends StatefulWidget {
     required this.params,
   });
 
+  /// Root of the PGN tree
   final ViewRoot root;
 
+  /// Comments associated with the root node
   final IList<PgnComment>? rootComments;
 
   final _PgnTreeViewParams params;
@@ -192,19 +219,26 @@ class _PgnTreeView extends StatefulWidget {
   State<_PgnTreeView> createState() => _PgnTreeViewState();
 }
 
-typedef _TreeViewPart = ({
-  List<Widget> lines,
+typedef _Subtree = ({
+  _MainLinePart mainLinePart,
+
+  /// This is nullable since the very last mainline part might not have any sidelines.
+  _IndentedSideLines? sidelines,
   bool containsCurrentMove,
 });
 
 class _PgnTreeViewState extends State<_PgnTreeView> {
+  /// Caches the result of [_mainlineParts] to avoid recalculating it on every rebuild.
   List<List<ViewNode>> mainlineParts = [];
-  List<_TreeViewPart> treeParts = [];
+
+  /// Caches the top-level subtrees, where each subtree is a [_MainLinePart] and its sidelines.
+  /// Building the whole tree is expensive, so we cache the subtrees that did not change when the current move changes.
+  List<_Subtree> subtrees = [];
 
   UciPath _mainlinePartOfCurrentPath() {
     var path = UciPath.empty;
     for (final node in widget.root.mainline) {
-      if (!widget.params.currentPath.contains(path + node.id)) {
+      if (!widget.params.pathToCurrentMove.contains(path + node.id)) {
         break;
       }
       path = path + node.id;
@@ -220,7 +254,7 @@ class _PgnTreeViewState extends State<_PgnTreeView> {
 
       var path = UciPath.empty;
 
-      treeParts = mainlineParts.mapIndexed(
+      subtrees = mainlineParts.mapIndexed(
         (i, mainlineNodes) {
           final mainlineInitialPath = path;
 
@@ -244,31 +278,30 @@ class _PgnTreeViewState extends State<_PgnTreeView> {
                   mainlinePartOfCurrentPath.size <= path.size;
 
           if (fullRebuild ||
-              treeParts[i].containsCurrentMove ||
+              subtrees[i].containsCurrentMove ||
               containsCurrentMove) {
             // Skip the first node which is the continuation of the mainline
             final sidelineNodes = mainlineNodes.last.children.skip(1);
             return (
-              lines: <Widget>[
-                _MainLinePart(
-                  params: widget.params,
-                  initialPath: mainlineInitialPath,
-                  nodes: mainlineNodes,
-                ),
-                if (sidelineNodes.isNotEmpty)
-                  _IndentedSideLines(
-                    sidelineNodes,
-                    parent: mainlineNodes.last,
-                    params: widget.params,
-                    initialPath: sidelineInitialPath,
-                    nesting: 1,
-                  ),
-              ],
+              mainLinePart: _MainLinePart(
+                params: widget.params,
+                initialPath: mainlineInitialPath,
+                nodes: mainlineNodes,
+              ),
+              sidelines: sidelineNodes.isNotEmpty
+                  ? _IndentedSideLines(
+                      sidelineNodes,
+                      parent: mainlineNodes.last,
+                      params: widget.params,
+                      initialPath: sidelineInitialPath,
+                      nesting: 1,
+                    )
+                  : null,
               containsCurrentMove: containsCurrentMove,
             );
           } else {
             // Avoid expensive rebuilds by caching parts of the tree that did not change across a path change
-            return treeParts[i];
+            return subtrees[i];
           }
         },
       ).toList();
@@ -295,7 +328,7 @@ class _PgnTreeViewState extends State<_PgnTreeView> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // trick to make auto-scroll work when returning to the root position
-          if (widget.params.currentPath.isEmpty)
+          if (widget.params.pathToCurrentMove.isEmpty)
             SizedBox.shrink(key: widget.params.currentMoveKey),
 
           if (widget.params.shouldShowComments &&
@@ -307,7 +340,14 @@ class _PgnTreeViewState extends State<_PgnTreeView> {
                     _comments(widget.rootComments!, textStyle: _baseTextStyle),
               ),
             ),
-          ...treeParts.map((part) => part.lines).flattened,
+          ...subtrees
+              .map(
+                (part) => [
+                  part.mainLinePart,
+                  if (part.sidelines != null) part.sidelines!,
+                ],
+              )
+              .flattened,
         ],
       ),
     );
@@ -415,6 +455,8 @@ List<InlineSpan> _moveWithComment(
   ];
 }
 
+/// A part of a sideline where each node only has one child
+/// (or two children where the second child is rendered as an inline sideline
 class _SideLinePart extends ConsumerWidget {
   _SideLinePart(
     this.nodes, {
@@ -812,7 +854,7 @@ class InlineMove extends ConsumerWidget {
 
   static const borderRadius = BorderRadius.all(Radius.circular(4.0));
 
-  bool get isCurrentMove => params.currentPath == path;
+  bool get isCurrentMove => params.pathToCurrentMove == path;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
