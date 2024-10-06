@@ -386,7 +386,6 @@ List<InlineSpan> _buildInlineSideLine({
           ],
           ..._moveWithComment(
             node,
-            parent: i == 0 ? parent : sidelineNodes[i - 1],
             lineInfo: (
               type: _LineType.inlineSideline,
               startLine: i == 0 || sidelineNodes[i - 1].hasTextComment
@@ -430,7 +429,6 @@ typedef _LineInfo = ({_LineType type, bool startLine});
 
 List<InlineSpan> _moveWithComment(
   ViewBranch branch, {
-  required ViewNode parent,
   required TextStyle textStyle,
   required _LineInfo lineInfo,
   required UciPath pathToNode,
@@ -442,7 +440,6 @@ List<InlineSpan> _moveWithComment(
       alignment: PlaceholderAlignment.middle,
       child: InlineMove(
         branch: branch,
-        parent: parent,
         lineInfo: lineInfo,
         path: pathToNode + branch.id,
         key: moveKey,
@@ -460,15 +457,12 @@ List<InlineSpan> _moveWithComment(
 class _SideLinePart extends ConsumerWidget {
   _SideLinePart(
     this.nodes, {
-    required this.parent,
     required this.initialPath,
     required this.firstMoveKey,
     required this.params,
   }) : assert(nodes.isNotEmpty);
 
   final List<ViewBranch> nodes;
-
-  final ViewNode parent;
 
   final UciPath initialPath;
 
@@ -487,7 +481,6 @@ class _SideLinePart extends ConsumerWidget {
     final moves = [
       ..._moveWithComment(
         nodes.first,
-        parent: parent,
         lineInfo: (
           type: _LineType.sideline,
           startLine: true,
@@ -502,7 +495,6 @@ class _SideLinePart extends ConsumerWidget {
           final moves = [
             ..._moveWithComment(
               node.children.first,
-              parent: node,
               lineInfo: (
                 type: _LineType.sideline,
                 startLine: node.hasTextComment,
@@ -566,7 +558,6 @@ class _MainLinePart extends ConsumerWidget {
                 final moves = [
                   _moveWithComment(
                     mainlineNode,
-                    parent: node,
                     lineInfo: (
                       type: _LineType.mainline,
                       startLine: i == 0 || (node as ViewBranch).hasTextComment,
@@ -630,7 +621,6 @@ class _SideLines extends StatelessWidget {
       children: [
         _SideLinePart(
           sidelineNodes.toList(),
-          parent: parent,
           firstMoveKey: firstMoveKey,
           initialPath: initialPath,
           params: params,
@@ -834,7 +824,6 @@ Color? _textColor(
 class InlineMove extends ConsumerWidget {
   const InlineMove({
     required this.branch,
-    required this.parent,
     required this.path,
     required this.textStyle,
     required this.lineInfo,
@@ -842,7 +831,6 @@ class InlineMove extends ConsumerWidget {
     required this.params,
   });
 
-  final ViewNode parent;
   final ViewBranch branch;
   final UciPath path;
 
@@ -914,7 +902,6 @@ class InlineMove extends ConsumerWidget {
                 ? '${(ply / 2).ceil()}. $moveWithNag'
                 : '${(ply / 2).ceil()}... $moveWithNag',
             path: path,
-            parent: parent,
             branch: branch,
             isSideline: lineInfo.type != _LineType.mainline,
           ),
@@ -959,7 +946,6 @@ class _MoveContextMenu extends ConsumerWidget {
   const _MoveContextMenu({
     required this.title,
     required this.path,
-    required this.parent,
     required this.branch,
     required this.isSideline,
     required this.notifier,
@@ -967,7 +953,6 @@ class _MoveContextMenu extends ConsumerWidget {
 
   final String title;
   final UciPath path;
-  final ViewNode parent;
   final ViewBranch branch;
   final bool isSideline;
   final AnalysisController notifier;
