@@ -31,6 +31,7 @@
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Ακυρώστε την προσφορά αναίρεσης της κίνησης</string>
   <string name="cancelDrawOffer" comment="Menu action that cancels a previous draw offer">Ακυρώστε την προσφορά ισοπαλίας</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Αναμονή για αντίπαλο...</string>
+  <string name="blindfoldMode" comment="This button toggles blindfold mode. This mean the user can only see the board, but not the pieces.">Τυφλό</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Streamers ζωντανά αυτή τη στιγμή</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Συμμετοχή σε παιχνίδι</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">Εκκαθάριση αποθηκευμένης κίνησης</string>
