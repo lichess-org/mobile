@@ -595,17 +595,20 @@ class ViewBranch extends ViewNode with _$ViewBranch {
     IList<int>? nags,
   }) = _ViewBranch;
 
+  /// The text comments of this branch.
+  Iterable<String> get textComments {
+    return [
+      ...lichessAnalysisComments ?? IList(const []),
+      ...comments ?? IList(const []),
+    ].where((t) => t.text?.isNotEmpty == true).map((c) => c.text!);
+  }
+
   /// Has at least one non empty starting comment text.
   bool get hasStartingTextComment =>
       startingComments?.any((c) => c.text?.isNotEmpty == true) == true;
 
   /// Has at least one non empty comment text.
-  bool get hasTextComment =>
-      comments?.any((c) => c.text?.isNotEmpty == true) == true;
-
-  /// Has at least one non empty lichess analysis comment text.
-  bool get hasLichessAnalysisTextComment =>
-      lichessAnalysisComments?.any((c) => c.text?.isNotEmpty == true) == true;
+  bool get hasTextComment => textComments.isNotEmpty;
 
   Duration? get clock {
     final clockComment = (lichessAnalysisComments ?? comments)

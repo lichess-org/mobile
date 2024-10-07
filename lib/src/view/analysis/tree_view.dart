@@ -353,8 +353,10 @@ class _PgnTreeViewState extends State<_PgnTreeView> {
                   true)
             Text.rich(
               TextSpan(
-                children:
-                    _comments(widget.rootComments!, textStyle: _baseTextStyle),
+                children: _comments(
+                  widget.rootComments!.map((c) => c.text!),
+                  textStyle: _baseTextStyle,
+                ),
               ),
             ),
           ...subtrees
@@ -471,7 +473,7 @@ List<InlineSpan> _moveWithComment(
       ),
     ),
     if (params.shouldShowComments && branch.hasTextComment)
-      ..._comments(branch.comments!, textStyle: textStyle),
+      ..._comments(branch.textComments, textStyle: textStyle),
   ];
 }
 
@@ -1056,18 +1058,6 @@ class _MoveContextMenu extends ConsumerWidget {
             ],
           ),
         ),
-        if (branch.hasLichessAnalysisTextComment)
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16.0,
-              vertical: 8.0,
-            ),
-            child: Text(
-              branch.lichessAnalysisComments!
-                  .map((c) => c.text ?? '')
-                  .join(' '),
-            ),
-          ),
         if (branch.hasTextComment)
           Padding(
             padding: const EdgeInsets.symmetric(
@@ -1075,7 +1065,7 @@ class _MoveContextMenu extends ConsumerWidget {
               vertical: 8.0,
             ),
             child: Text(
-              branch.comments!.map((c) => c.text ?? '').join(' '),
+              branch.textComments.join(' '),
             ),
           ),
         const PlatformDivider(indent: 0),
@@ -1107,20 +1097,20 @@ class _MoveContextMenu extends ConsumerWidget {
 }
 
 List<TextSpan> _comments(
-  IList<PgnComment> comments, {
+  Iterable<String> comments, {
   required TextStyle textStyle,
 }) =>
     comments
         .map(
           (comment) => TextSpan(
-            text: comment.text,
+            text: comment,
             style: textStyle.copyWith(
               fontSize: textStyle.fontSize! - 2.0,
               fontStyle: FontStyle.italic,
             ),
           ),
         )
-        .toList();
+        .toList(growable: false);
 
 class _OpeningHeaderDelegate extends SliverPersistentHeaderDelegate {
   const _OpeningHeaderDelegate(
