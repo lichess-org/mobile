@@ -119,6 +119,12 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
       analysisPreferencesProvider.select((value) => value.showAnnotations),
     );
 
+    final broadcastPath = ref.watch(
+      analysisControllerProvider(widget.pgn, widget.options).select(
+        (value) => value.livePath,
+      ),
+    );
+
     final List<Widget> moveWidgets = _buildTreeWidget(
       widget.pgn,
       widget.options,
@@ -130,6 +136,7 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
       startMainline: true,
       startSideline: false,
       initialPath: UciPath.empty,
+      broadcastPath: broadcastPath,
     );
 
     // trick to make auto-scroll work when returning to the root position
@@ -151,23 +158,19 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
       );
     }
 
-    return CustomScrollView(
-      slivers: [
+    return ListView(
+      padding: EdgeInsets.zero,
+      children: [
         if (kOpeningAllowedVariants.contains(widget.options.variant))
-          SliverPersistentHeader(
-            delegate: _OpeningHeaderDelegate(
-              ctrlProvider,
-              displayMode: widget.displayMode,
-            ),
+          _OpeningHeader(
+            ctrlProvider,
+            displayMode: widget.displayMode,
           ),
-        SliverFillRemaining(
-          hasScrollBody: false,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-            child: Wrap(
-              spacing: kInlineMoveSpacing,
-              children: moveWidgets,
-            ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+          child: Wrap(
+            spacing: kInlineMoveSpacing,
+            children: moveWidgets,
           ),
         ),
       ],
@@ -185,6 +188,7 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
     required bool shouldShowAnnotations,
     required bool shouldShowComments,
     required UciPath initialPath,
+    required UciPath? broadcastPath,
   }) {
     if (nodes.isEmpty) return [];
     final List<Widget> widgets = [];
@@ -192,6 +196,7 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
     final firstChild = nodes.first;
     final newPath = initialPath + firstChild.id;
     final currentMove = newPath == currentPath;
+    final broadcastMove = newPath == broadcastPath;
 
     // add the first child
     widgets.add(
@@ -209,6 +214,7 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
         startMainline: startMainline,
         startSideline: startSideline,
         endSideline: !inMainline && firstChild.children.isEmpty,
+        isLiveMove: broadcastMove,
       ),
     );
 
@@ -234,6 +240,7 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
                 startMainline: false,
                 startSideline: true,
                 initialPath: initialPath,
+                broadcastPath: broadcastPath,
               ),
             ),
           ),
@@ -251,6 +258,7 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
             startMainline: false,
             startSideline: true,
             initialPath: initialPath,
+            broadcastPath: broadcastPath,
           ),
         );
       }
@@ -269,6 +277,7 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
         startMainline: false,
         startSideline: false,
         initialPath: newPath,
+        broadcastPath: broadcastPath,
       ),
     );
 
@@ -308,6 +317,7 @@ class InlineMove extends ConsumerWidget {
     this.startMainline = false,
     this.startSideline = false,
     this.endSideline = false,
+    this.isLiveMove = false,
   });
 
   final String pgn;
@@ -322,6 +332,7 @@ class InlineMove extends ConsumerWidget {
   final bool startMainline;
   final bool startSideline;
   final bool endSideline;
+  final bool isLiveMove;
 
   static const borderRadius = BorderRadius.all(Radius.circular(4.0));
   static const baseTextStyle = TextStyle(
@@ -423,8 +434,17 @@ class InlineMove extends ConsumerWidget {
                         : Theme.of(context).focusColor,
                     shape: BoxShape.rectangle,
                     borderRadius: borderRadius,
+                    border: isLiveMove
+                        ? Border.all(width: 2, color: Colors.orange)
+                        : null,
                   )
-                : null,
+                : BoxDecoration(
+                    shape: BoxShape.rectangle,
+                    borderRadius: borderRadius,
+                    border: isLiveMove
+                        ? Border.all(width: 2, color: Colors.orange)
+                        : null,
+                  ),
             child: Text(
               moveWithNag,
               style: isCurrentMove
@@ -656,37 +676,11 @@ class _Comments extends StatelessWidget {
   }
 }
 
-class _OpeningHeaderDelegate extends SliverPersistentHeaderDelegate {
-  const _OpeningHeaderDelegate(
+class _OpeningHeader extends ConsumerWidget {
+  const _OpeningHeader(
     this.ctrlProvider, {
     required this.displayMode,
   });
-
-  final AnalysisControllerProvider ctrlProvider;
-  final Orientation displayMode;
-
-  @override
-  Widget build(
-    BuildContext context,
-    double shrinkOffset,
-    bool overlapsContent,
-  ) {
-    return _Opening(ctrlProvider, displayMode);
-  }
-
-  @override
-  double get minExtent => kOpeningHeaderHeight;
-
-  @override
-  double get maxExtent => kOpeningHeaderHeight;
-
-  @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
-      true;
-}
-
-class _Opening extends ConsumerWidget {
-  const _Opening(this.ctrlProvider, this.displayMode);
 
   final AnalysisControllerProvider ctrlProvider;
   final Orientation displayMode;

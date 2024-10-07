@@ -23,7 +23,7 @@ extension TimeExtension on Pick {
       return value;
     }
     if (value is int) {
-      return DateTime.fromMillisecondsSinceEpoch(value, isUtc: true);
+      return DateTime.fromMillisecondsSinceEpoch(value);
     }
     throw PickException(
       "value $value at $debugParsingExit can't be casted to DateTime",
