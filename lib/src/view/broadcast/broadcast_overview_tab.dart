@@ -22,62 +22,66 @@ class BroadcastOverviewTab extends ConsumerWidget {
 
     return SafeArea(
       bottom: false,
-      child: Padding(
-        padding: Styles.bodyPadding,
-        child: tournament.when(
-          data: (tournament) {
-            final information = tournament.data.information;
-            final description = tournament.data.description;
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: Styles.bodyPadding,
+          child: tournament.when(
+            data: (tournament) {
+              final information = tournament.data.information;
+              final description = tournament.data.description;
 
-            return Column(
-              children: [
-                Wrap(
-                  alignment: WrapAlignment.center,
-                  children: [
-                    if (information.dates != null)
-                      BroadcastOverviewCard(
-                        CupertinoIcons.calendar,
-                        information.dates!.endsAt == null
-                            ? _dateFormatter.format(information.dates!.startsAt)
-                            : '${_dateFormatter.format(information.dates!.startsAt)} - ${_dateFormatter.format(information.dates!.endsAt!)}',
-                      ),
-                    if (information.format != null)
-                      BroadcastOverviewCard(
-                        Icons.emoji_events,
-                        '${information.format}',
-                      ),
-                    if (information.timeControl != null)
-                      BroadcastOverviewCard(
-                        CupertinoIcons.stopwatch_fill,
-                        '${information.timeControl}',
-                      ),
-                    if (information.players != null)
-                      BroadcastOverviewCard(
-                        Icons.person,
-                        '${information.players}',
-                      ),
-                  ],
-                ),
-                if (description != null)
-                  Expanded(
-                    child: Markdown(
-                      data: description,
-                      onTapLink: (text, url, title) {
-                        if (url == null) return;
-                        launchUrl(Uri.parse(url));
-                      },
-                    ),
+              return Column(
+                children: [
+                  Wrap(
+                    alignment: WrapAlignment.center,
+                    children: [
+                      if (information.dates != null)
+                        BroadcastOverviewCard(
+                          CupertinoIcons.calendar,
+                          information.dates!.endsAt == null
+                              ? _dateFormatter
+                                  .format(information.dates!.startsAt)
+                              : '${_dateFormatter.format(information.dates!.startsAt)} - ${_dateFormatter.format(information.dates!.endsAt!)}',
+                        ),
+                      if (information.format != null)
+                        BroadcastOverviewCard(
+                          Icons.emoji_events,
+                          '${information.format}',
+                        ),
+                      if (information.timeControl != null)
+                        BroadcastOverviewCard(
+                          CupertinoIcons.stopwatch_fill,
+                          '${information.timeControl}',
+                        ),
+                      if (information.players != null)
+                        BroadcastOverviewCard(
+                          Icons.person,
+                          '${information.players}',
+                        ),
+                    ],
                   ),
-              ],
-            );
-          },
-          loading: () =>
-              const Center(child: CircularProgressIndicator.adaptive()),
-          error: (error, _) {
-            return Center(
-              child: Text('Cannot load game analysis: $error'),
-            );
-          },
+                  if (description != null)
+                    Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: MarkdownBody(
+                        data: description,
+                        onTapLink: (text, url, title) {
+                          if (url == null) return;
+                          launchUrl(Uri.parse(url));
+                        },
+                      ),
+                    ),
+                ],
+              );
+            },
+            loading: () =>
+                const Center(child: CircularProgressIndicator.adaptive()),
+            error: (error, _) {
+              return Center(
+                child: Text('Cannot load game analysis: $error'),
+              );
+            },
+          ),
         ),
       ),
     );
