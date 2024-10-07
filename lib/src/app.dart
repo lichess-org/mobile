@@ -1,90 +1,26 @@
 import 'dart:async';
 
 import 'package:dynamic_color/dynamic_color.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
-import 'package:lichess_mobile/main.dart';
-import 'package:lichess_mobile/src/app_initialization.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
+import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
+import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/navigation.dart';
-import 'package:lichess_mobile/src/notification_service.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
-import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
-import 'package:lichess_mobile/src/utils/system.dart';
-import 'package:lichess_mobile/src/view/game/game_screen.dart';
-
-/// Application initialization and main entry point.
-class AppInitializationScreen extends ConsumerWidget {
-  const AppInitializationScreen({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen<AsyncValue<AppInitializationData>>(
-      appInitializationProvider,
-      (_, state) {
-        if (state.hasValue || state.hasError) {
-          FlutterNativeSplash.remove();
-        }
-      },
-    );
-
-    return ref.watch(appInitializationProvider).when(
-          data: (_) => const Application(),
-          // loading screen is handled by the native splash screen
-          loading: () => const SizedBox.shrink(),
-          error: (err, st) {
-            debugPrint(
-              'SEVERE: [App] could not initialize app; $err\n$st',
-            );
-            // We should really do everything we can to avoid this screen
-            // but in last resort, let's show an error message and invite the
-            // user to clear app data.
-            // TODO implement it on iOS
-            return Theme.of(context).platform == TargetPlatform.android
-                ? MaterialApp(
-                    home: Scaffold(
-                      body: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.all(16.0),
-                            child: Text(
-                              "Something went wrong :'(\n\nIf the problem persists, you can try to clear the storage and restart the application.\n\nSorry for the inconvenience.",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 18.0),
-                            ),
-                          ),
-                          const SizedBox(height: 16.0),
-                          ElevatedButton(
-                            onPressed: () {
-                              System.instance.clearUserData();
-                            },
-                            child: const Text('Clear storage'),
-                          ),
-                        ],
-                      ),
-                    ),
-                  )
-                : const SizedBox.shrink();
-          },
-        );
-  }
-}
 
 /// The main application widget.
 ///
@@ -98,21 +34,38 @@ class Application extends ConsumerStatefulWidget {
 }
 
 class _AppState extends ConsumerState<Application> {
-  bool _correspondenceSynced = false;
+  /// Whether the app has checked for online status for the first time.
+  bool _firstTimeOnlineCheck = false;
+
+  AppLifecycleListener? _appLifecycleListener;
 
   @override
   void initState() {
-    if (Theme.of(context).platform == TargetPlatform.android) {
-      setOptimalDisplayMode();
-    }
+    FlutterNativeSplash.remove();
 
+    _appLifecycleListener = AppLifecycleListener(
+      onResume: () async {
+        final online = await isOnline(ref.read(defaultClientProvider));
+        if (online) {
+          ref.invalidate(ongoingGamesProvider);
+        }
+      },
+    );
+
+    // check if session is still active and delete it if it is not
+    checkSession();
+
+    // Start services
+    ref.read(notificationServiceProvider).start();
+    ref.read(challengeServiceProvider).start();
+
+    // Listen for connectivity changes and perform actions accordingly.
     ref.listenManual(connectivityChangesProvider, (prev, current) async {
+      final prevWasOffline = prev?.value?.isOnline == false;
+      final currentIsOnline = current.value?.isOnline == true;
+
       // Play registered moves whenever the app comes back online.
-      if (prev?.hasValue == true &&
-          !prev!.value!.isOnline &&
-          !current.isRefreshing &&
-          current.hasValue &&
-          current.value!.isOnline) {
+      if (prevWasOffline && currentIsOnline) {
         final nbMovesPlayed =
             await ref.read(correspondenceServiceProvider).playRegisteredMoves();
         if (nbMovesPlayed > 0) {
@@ -120,8 +73,9 @@ class _AppState extends ConsumerState<Application> {
         }
       }
 
-      if (current.value?.isOnline == true && !_correspondenceSynced) {
-        _correspondenceSynced = true;
+      // Perform actions once when the app comes online.
+      if (current.value?.isOnline == true && !_firstTimeOnlineCheck) {
+        _firstTimeOnlineCheck = true;
         ref.read(correspondenceServiceProvider).syncGames();
       }
 
@@ -136,6 +90,12 @@ class _AppState extends ConsumerState<Application> {
     });
 
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _appLifecycleListener?.dispose();
+    super.dispose();
   }
 
   @override
@@ -234,7 +194,7 @@ class _AppState extends ConsumerState<Application> {
                   );
                 }
               : null,
-          home: const _EntryPointWidget(),
+          home: const BottomNavScaffold(),
           navigatorObservers: [
             rootNavPageRouteObserver,
           ],
@@ -243,156 +203,22 @@ class _AppState extends ConsumerState<Application> {
     );
   }
 
-  // Code taken from https://stackoverflow.com/questions/63631522/flutter-120fps-issue
-  /// Enables high refresh rate for devices where it was previously disabled
-  Future<void> setOptimalDisplayMode() async {
-    final List<DisplayMode> supported = await FlutterDisplayMode.supported;
-    final DisplayMode active = await FlutterDisplayMode.active;
-
-    final List<DisplayMode> sameResolution = supported
-        .where(
-          (DisplayMode m) =>
-              m.width == active.width && m.height == active.height,
-        )
-        .toList()
-      ..sort(
-        (DisplayMode a, DisplayMode b) =>
-            b.refreshRate.compareTo(a.refreshRate),
-      );
-
-    final DisplayMode mostOptimalMode =
-        sameResolution.isNotEmpty ? sameResolution.first : active;
-
-    // This setting is per session.
-    await FlutterDisplayMode.setPreferredMode(mostOptimalMode);
-  }
-}
-
-/// The entry point widget for the application.
-///
-/// This widget needs to be a desendant of [MaterialApp] to be able to handle
-/// the [Navigator] properly.
-///
-/// This widget is responsible for setting up the bottom navigation scaffold and
-/// the main navigation routes.
-///
-/// It also sets up the push notifications and handles incoming messages.
-class _EntryPointWidget extends ConsumerStatefulWidget {
-  const _EntryPointWidget();
-
-  @override
-  ConsumerState<_EntryPointWidget> createState() => _EntryPointState();
-}
-
-class _EntryPointState extends ConsumerState<_EntryPointWidget> {
-  StreamSubscription<String>? _fcmTokenRefreshSubscription;
-  ProviderSubscription<AsyncValue<ConnectivityStatus>>?
-      _connectivitySubscription;
-
-  bool _pushNotificationsSetup = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return const BottomNavScaffold();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    _connectivitySubscription =
-        ref.listenManual(connectivityChangesProvider, (prev, current) async {
-      // setup push notifications once when the app comes online
-      if (current.value?.isOnline == true && !_pushNotificationsSetup) {
-        try {
-          await _setupPushNotifications();
-          _pushNotificationsSetup = true;
-        } catch (e, st) {
-          debugPrint('Could not sync correspondence games; $e\n$st');
+  /// Check if the session is still active and delete it if it is not.
+  Future<void> checkSession() async {
+    // check if session is still active
+    final session = ref.read(authSessionProvider);
+    if (session != null) {
+      try {
+        final client = ref.read(lichessClientProvider);
+        final response = await client
+            .get(Uri(path: '/api/account'))
+            .timeout(const Duration(seconds: 3));
+        if (response.statusCode == 401) {
+          await ref.read(authSessionProvider.notifier).delete();
         }
+      } catch (e) {
+        debugPrint('Could not check session: $e');
       }
-    });
-  }
-
-  @override
-  void dispose() {
-    _fcmTokenRefreshSubscription?.cancel();
-    _connectivitySubscription?.close();
-    super.dispose();
-  }
-
-  Future<void> _setupPushNotifications() async {
-    // Listen for incoming messages while the app is in the foreground.
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      ref.read(notificationServiceProvider).processDataMessage(message);
-    });
-
-    // Listen for incoming messages while the app is in the background.
-    FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-
-    // Request permission to receive notifications. Pop-up will appear only
-    // once.
-    await FirebaseMessaging.instance.requestPermission(
-      alert: true,
-      badge: true,
-      sound: true,
-      announcement: false,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false,
-    );
-
-    // Listen for token refresh and update the token on the server accordingly.
-    _fcmTokenRefreshSubscription =
-        FirebaseMessaging.instance.onTokenRefresh.listen((String token) {
-      ref.read(notificationServiceProvider).registerToken(token);
-    });
-
-    // Register the device with the server.
-    await ref.read(notificationServiceProvider).registerDevice();
-
-    // Get any messages which caused the application to open from
-    // a terminated state.
-    final RemoteMessage? initialMessage =
-        await FirebaseMessaging.instance.getInitialMessage();
-
-    if (initialMessage != null) {
-      _handleMessage(initialMessage);
-    }
-
-    // Also handle any interaction when the app is in the background via a
-    // Stream listener
-    FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
-  }
-
-  /// Handle a message that caused the application to open
-  ///
-  /// This method must be part of a State object which is a child of [MaterialApp]
-  /// otherwise the [Navigator] will not be accessible.
-  void _handleMessage(RemoteMessage message) {
-    switch (message.data['lichess.type']) {
-      // correspondence game message types
-      case 'corresAlarm':
-      case 'gameTakebackOffer':
-      case 'gameDrawOffer':
-      case 'gameMove':
-      case 'gameFinish':
-        final gameFullId = message.data['lichess.fullId'] as String?;
-        if (gameFullId != null) {
-          // remove any existing routes before navigating to the game
-          // screen to avoid stacking multiple game screens
-          final navState = Navigator.of(context);
-          if (navState.canPop()) {
-            navState.popUntil((route) => route.isFirst);
-          }
-          pushPlatformRoute(
-            context,
-            rootNavigator: true,
-            builder: (_) => GameScreen(
-              initialGameId: GameFullId(gameFullId),
-            ),
-          );
-        }
     }
   }
 }

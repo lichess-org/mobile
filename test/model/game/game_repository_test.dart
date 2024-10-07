@@ -8,7 +8,7 @@ import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 
 import '../../test_container.dart';
-import '../../test_utils.dart';
+import '../../test_helpers.dart';
 
 void main() {
   group('GameRepository.getRecentGames', () {

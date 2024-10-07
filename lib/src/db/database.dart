@@ -1,6 +1,6 @@
+import 'dart:async';
 import 'dart:io';
 
-import 'package:lichess_mobile/src/app_initialization.dart';
 import 'package:path/path.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sqflite/sqflite.dart';
@@ -17,18 +17,15 @@ const chatReadMessagesTTL = Duration(days: 60);
 const kStorageAnonId = '**anonymous**';
 
 @Riverpod(keepAlive: true)
-Database database(DatabaseRef ref) {
-  // requireValue is possible because appInitializationProvider is loaded before
-  // anything. See: lib/src/app.dart
-  final db = ref.read(appInitializationProvider).requireValue.database;
-  ref.onDispose(db.close);
-  return db;
+Future<Database> database(DatabaseRef ref) async {
+  final dbPath = join(await getDatabasesPath(), kLichessDatabaseName);
+  return openAppDatabase(databaseFactory, dbPath);
 }
 
 /// Returns the sqlite version as an integer.
 @Riverpod(keepAlive: true)
 Future<int?> sqliteVersion(SqliteVersionRef ref) async {
-  final db = ref.read(databaseProvider);
+  final db = await ref.read(databaseProvider.future);
   try {
     final versionStr = (await db.rawQuery('SELECT sqlite_version()'))
         .first
@@ -51,7 +48,8 @@ Future<int> getDbSizeInBytes(GetDbSizeInBytesRef ref) async {
   return dbFile.length();
 }
 
-Future<Database> openDb(DatabaseFactory dbFactory, String path) async {
+/// Opens the app database.
+Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) async {
   return dbFactory.openDatabase(
     path,
     options: OpenDatabaseOptions(

@@ -300,6 +300,7 @@ class _BottomBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final editorState = ref.watch(boardEditorControllerProvider(initialFen));
+    final pieceCount = editorState.pieces.length;
 
     return BottomBar(
       children: [
@@ -324,7 +325,10 @@ class _BottomBar extends ConsumerWidget {
         BottomBarButton(
           label: context.l10n.analysis,
           key: const Key('analysis-board-button'),
-          onTap: editorState.pgn != null
+          onTap: editorState.pgn != null &&
+                  // 1 condition (of many) where stockfish segfaults
+                  pieceCount > 0 &&
+                  pieceCount <= 32
               ? () {
                   pushPlatformRoute(
                     context,

@@ -1,35 +1,21 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_batch_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import '../../test_container.dart';
 
 void main() {
-  final dbFactory = databaseFactoryFfi;
-  sqfliteFfiInit();
-
   group('PuzzleBatchStorage', () {
     test('save and fetch data', () async {
-      final db = await openDb(dbFactory, inMemoryDatabasePath);
+      final container = await makeContainer();
 
-      final container = await makeContainer(
-        overrides: [
-          databaseProvider.overrideWith((ref) {
-            ref.onDispose(db.close);
-            return db;
-          }),
-        ],
-      );
-
-      final storage = container.read(puzzleBatchStorageProvider);
+      final storage = await container.read(puzzleBatchStorageProvider.future);
 
       await storage.save(
         userId: null,
@@ -47,18 +33,9 @@ void main() {
     });
 
     test('fetchSavedThemes', () async {
-      final db = await openDb(dbFactory, inMemoryDatabasePath);
+      final container = await makeContainer();
 
-      final container = await makeContainer(
-        overrides: [
-          databaseProvider.overrideWith((ref) {
-            ref.onDispose(db.close);
-            return db;
-          }),
-        ],
-      );
-
-      final storage = container.read(puzzleBatchStorageProvider);
+      final storage = await container.read(puzzleBatchStorageProvider.future);
 
       await storage.save(
         userId: null,

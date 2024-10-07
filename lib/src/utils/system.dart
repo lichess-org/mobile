@@ -20,6 +20,8 @@ class System {
     } on PlatformException catch (e) {
       debugPrint('Failed to get total RAM: ${e.message}');
       return null;
+    } on MissingPluginException catch (_) {
+      return null;
     }
   }
 

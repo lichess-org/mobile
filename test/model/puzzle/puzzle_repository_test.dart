@@ -5,7 +5,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_repository.dart';
 
 import '../../test_container.dart';
-import '../../test_utils.dart';
+import '../../test_helpers.dart';
 
 void main() {
   group('PuzzleRepository', () {

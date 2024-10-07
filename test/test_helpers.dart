@@ -7,6 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 
+const double _kTestScreenWidth = 390.0;
+const double _kTestScreenHeight = 844.0;
+
+/// iPhone 14 screen size as default test surface size
+const kTestSurfaceSize = Size(_kTestScreenWidth, _kTestScreenHeight);
+
 const kPlatformVariant =
     TargetPlatformVariant({TargetPlatform.android, TargetPlatform.iOS});
 
@@ -16,6 +22,7 @@ Matcher sameHeaders(Map<String, String> headers) => _SameHeaders(headers);
 Future<T> delayedAnswer<T>(T value) =>
     Future<void>.delayed(const Duration(milliseconds: 5)).then((_) => value);
 
+/// Mocks an http response with a delay of 20ms.
 Future<http.Response> mockResponse(
   String body,
   int code, {
@@ -64,6 +71,7 @@ Future<void> meetsTapTargetGuideline(WidgetTester tester) async {
   }
 }
 
+/// Returns the offset of a square on a board defined by [Rect].
 Offset squareOffset(
   Square square,
   Rect boardRect, {
@@ -84,6 +92,7 @@ Offset squareOffset(
   );
 }
 
+/// Plays a move on the board.
 Future<void> playMove(
   WidgetTester tester,
   Rect boardRect,

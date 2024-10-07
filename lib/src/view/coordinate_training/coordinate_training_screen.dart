@@ -6,6 +6,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/common/game.dart';
 import 'package:lichess_mobile/src/model/coordinate_training/coordinate_training_controller.dart';
 import 'package:lichess_mobile/src/model/coordinate_training/coordinate_training_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -17,6 +18,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
@@ -27,11 +29,21 @@ class CoordinateTrainingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const PlatformScaffold(
+    return PlatformScaffold(
       appBar: PlatformAppBar(
-        title: Text('Coordinate Training'), // TODO l10n once script works
+        title: const Text('Coordinate Training'), // TODO l10n once script works
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () => showAdaptiveBottomSheet<void>(
+              context: context,
+              builder: (BuildContext context) =>
+                  const _CoordinateTrainingMenu(),
+            ),
+          ),
+        ],
       ),
-      body: _Body(),
+      body: const _Body(),
     );
   }
 }
@@ -152,31 +164,47 @@ class _BodyState extends ConsumerState<_Body> {
                       )
                     else
                       Expanded(
-                        child: _Settings(),
+                        child: Center(
+                          child: FatButton(
+                            semanticsLabel: 'Start Training',
+                            onPressed: () {
+                              ref
+                                  .read(
+                                    coordinateTrainingControllerProvider
+                                        .notifier,
+                                  )
+                                  .startTraining(
+                                    trainingPrefs.timeChoice.duration,
+                                  );
+                            },
+                            child: const Text(
+                              // TODO l10n once script works
+                              'Start Training',
+                              style: Styles.bold,
+                            ),
+                          ),
+                        ),
                       ),
                   ],
                 );
               },
             ),
           ),
-          BottomBar(
-            children: [
-              BottomBarButton(
-                label: context.l10n.menu,
-                onTap: () => showAdaptiveBottomSheet<void>(
-                  context: context,
-                  builder: (BuildContext context) =>
-                      const _CoordinateTrainingMenu(),
+          if (!trainingState.trainingActive)
+            BottomBar(
+              children: [
+                BottomBarButton(
+                  label: context.l10n.menu,
+                  onTap: () => _coordinateTrainingSettingsBuilder(context),
+                  icon: Icons.tune,
                 ),
-                icon: Icons.tune,
-              ),
-              BottomBarButton(
-                icon: Icons.info_outline,
-                label: context.l10n.aboutX('Coordinate Training'),
-                onTap: () => _coordinateTrainingInfoDialogBuilder(context),
-              ),
-            ],
-          ),
+                BottomBarButton(
+                  icon: Icons.info_outline,
+                  label: context.l10n.aboutX('Coordinate Training'),
+                  onTap: () => _coordinateTrainingInfoDialogBuilder(context),
+                ),
+              ],
+            ),
         ],
       ),
     );
@@ -349,68 +377,56 @@ class _Score extends StatelessWidget {
   }
 }
 
-class _Settings extends ConsumerStatefulWidget {
-  @override
-  ConsumerState<_Settings> createState() => _SettingsState();
-}
+class Settings extends ConsumerWidget {
+  const Settings();
 
-class _SettingsState extends ConsumerState<_Settings> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final trainingPrefs = ref.watch(coordinateTrainingPreferencesProvider);
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Wrap(
-          spacing: 8.0,
-          children: SideChoice.values.map((choice) {
-            return ChoiceChip(
-              label: Text(sideChoiceL10n(context, choice)),
-              selected: trainingPrefs.sideChoice == choice,
-              showCheckmark: false,
-              onSelected: (selected) {
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Column(
+        children: [
+          Filter(
+            filterName: context.l10n.time,
+            filterType: FilterType.singleChoice,
+            choices: SideChoice.values,
+            showCheckmark: false,
+            choiceSelected: (choice) => trainingPrefs.sideChoice == choice,
+            choiceLabel: (choice) => Text(choice.label(context.l10n)),
+            onSelected: (choice, selected) {
+              if (selected) {
                 ref
-                    .read(coordinateTrainingPreferencesProvider.notifier)
+                    .read(
+                      coordinateTrainingPreferencesProvider.notifier,
+                    )
                     .setSideChoice(choice);
-              },
-            );
-          }).toList(),
-        ),
-        Wrap(
-          spacing: 8.0,
-          children: TimeChoice.values.map((choice) {
-            return ChoiceChip(
-              label: timeChoiceL10n(context, choice),
-              selected: trainingPrefs.timeChoice == choice,
-              showCheckmark: false,
-              onSelected: (selected) {
-                if (selected) {
-                  ref
-                      .read(
-                        coordinateTrainingPreferencesProvider.notifier,
-                      )
-                      .setTimeChoice(choice);
-                }
-              },
-            );
-          }).toList(),
-        ),
-        FatButton(
-          semanticsLabel: 'Start Training',
-          onPressed: () {
-            ref
-                .read(coordinateTrainingControllerProvider.notifier)
-                .startTraining(trainingPrefs.timeChoice.duration);
-          },
-          child: const Text(
-            // TODO l10n once script works
-            'Start Training',
-            style: Styles.bold,
+              }
+            },
           ),
-        ),
-      ],
+          const SizedBox(height: 12.0),
+          const PlatformDivider(thickness: 1, indent: 0),
+          const SizedBox(height: 12.0),
+          Filter(
+            filterName: context.l10n.side,
+            filterType: FilterType.singleChoice,
+            choices: TimeChoice.values,
+            showCheckmark: false,
+            choiceSelected: (choice) => trainingPrefs.timeChoice == choice,
+            choiceLabel: (choice) => choice.label(context.l10n),
+            onSelected: (choice, selected) {
+              if (selected) {
+                ref
+                    .read(
+                      coordinateTrainingPreferencesProvider.notifier,
+                    )
+                    .setTimeChoice(choice);
+              }
+            },
+          ),
+        ],
+      ),
     );
   }
 }
@@ -485,6 +501,13 @@ class _TrainingBoardState extends ConsumerState<_TrainingBoard> {
       ],
     );
   }
+}
+
+Future<void> _coordinateTrainingSettingsBuilder(BuildContext context) {
+  return showAdaptiveBottomSheet<void>(
+    context: context,
+    builder: (BuildContext context) => const Settings(),
+  );
 }
 
 Future<void> _coordinateTrainingInfoDialogBuilder(BuildContext context) {

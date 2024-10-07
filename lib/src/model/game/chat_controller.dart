@@ -69,7 +69,7 @@ class ChatController extends _$ChatController {
   }
 
   Future<int> _getReadMessagesCount() async {
-    final db = ref.read(databaseProvider);
+    final db = await ref.read(databaseProvider.future);
     final result = await db.query(
       _tableName,
       columns: ['nbRead'],
@@ -80,7 +80,7 @@ class ChatController extends _$ChatController {
   }
 
   Future<void> _setReadMessagesCount(int count) async {
-    final db = ref.read(databaseProvider);
+    final db = await ref.read(databaseProvider.future);
     await db.insert(
       _tableName,
       {

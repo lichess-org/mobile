@@ -12,7 +12,7 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../test_container.dart';
-import '../../test_utils.dart';
+import '../../test_helpers.dart';
 
 class MockFlutterAppAuth extends Mock implements FlutterAppAuth {}
 

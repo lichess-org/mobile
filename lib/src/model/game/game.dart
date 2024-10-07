@@ -270,17 +270,17 @@ enum GameRule {
 }
 
 @freezed
-class GamePrefs with _$GamePrefs {
-  const GamePrefs._();
+class ServerGamePrefs with _$ServerGamePrefs {
+  const ServerGamePrefs._();
 
-  const factory GamePrefs({
+  const factory ServerGamePrefs({
     required bool showRatings,
     required bool enablePremove,
     required AutoQueen autoQueen,
     required bool confirmResign,
     required bool submitMove,
     required Zen zenMode,
-  }) = _GamePrefs;
+  }) = _ServerGamePrefs;
 }
 
 @Freezed(fromJson: true, toJson: true)

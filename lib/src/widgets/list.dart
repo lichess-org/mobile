@@ -372,3 +372,48 @@ class PlatformListTile extends StatelessWidget {
     }
   }
 }
+
+/// A [ListTile] that adapts to the platform.
+///
+/// Contrary to [PlatformListTile], this widget uses a [ListTile] on both iOS and
+/// Android.
+/// On Android the list tile will be displayed without modifications.
+/// On iOS the list tile will have a custom splash factory to remove the splash
+/// effect.
+class AdaptiveListTile extends StatelessWidget {
+  const AdaptiveListTile({
+    this.leading,
+    required this.title,
+    this.subtitle,
+    this.trailing,
+    this.onTap,
+    super.key,
+  });
+
+  final Widget? leading;
+  final Widget title;
+  final Widget? subtitle;
+  final Widget? trailing;
+  final GestureTapCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: Theme(
+        data: Theme.of(context).copyWith(
+          splashFactory: Theme.of(context).platform == TargetPlatform.iOS
+              ? NoSplash.splashFactory
+              : null,
+        ),
+        child: ListTile(
+          leading: leading,
+          title: title,
+          subtitle: subtitle,
+          trailing: trailing,
+          onTap: onTap,
+        ),
+      ),
+    );
+  }
+}

@@ -6,11 +6,11 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_numbers.dart';
-import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/board_table.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
+import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 
@@ -232,18 +232,20 @@ class LoadGameError extends StatelessWidget {
   }
 }
 
+/// A board that shows a message that a challenge has been declined.
 class ChallengeDeclinedBoard extends StatelessWidget {
   const ChallengeDeclinedBoard({
     required this.declineReason,
-    this.destUser,
+    required this.challenge,
   });
 
   final String declineReason;
-
-  final LightUser? destUser;
+  final Challenge challenge;
 
   @override
   Widget build(BuildContext context) {
+    final textColor = DefaultTextStyle.of(context).style.color;
+
     return Column(
       children: [
         Expanded(
@@ -258,7 +260,7 @@ class ChallengeDeclinedBoard extends StatelessWidget {
               boardOverlay: PlatformCard(
                 elevation: 2.0,
                 child: Padding(
-                  padding: const EdgeInsets.all(12.0),
+                  padding: const EdgeInsets.all(16.0),
                   child: Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -268,18 +270,34 @@ class ChallengeDeclinedBoard extends StatelessWidget {
                           context.l10n.challengeChallengeDeclined,
                           style: Theme.of(context).textTheme.titleMedium,
                         ),
-                        const SizedBox(height: 16.0),
+                        const SizedBox(height: 8.0),
+                        Divider(height: 26.0, thickness: 0.0, color: textColor),
                         Text(
                           declineReason,
                           style: const TextStyle(fontStyle: FontStyle.italic),
                         ),
-                        if (destUser != null) ...[
-                          const SizedBox(height: 8.0),
+                        Divider(height: 26.0, thickness: 0.0, color: textColor),
+                        if (challenge.destUser != null)
                           Align(
                             alignment: Alignment.centerRight,
-                            child: UserFullNameWidget(user: destUser),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Text(' — '),
+                                UserFullNameWidget(
+                                  user: challenge.destUser?.user,
+                                ),
+                                if (challenge.destUser?.lagRating != null) ...[
+                                  const SizedBox(width: 6.0),
+                                  LagIndicator(
+                                    lagRating: challenge.destUser!.lagRating!,
+                                    size: 13.0,
+                                    showLoadingIndicator: false,
+                                  ),
+                                ],
+                              ],
+                            ),
                           ),
-                        ],
                       ],
                     ),
                   ),

@@ -12,7 +12,7 @@ import 'package:lichess_mobile/src/model/user/user_repository.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
-import 'package:lichess_mobile/src/view/play/challenge_screen.dart';
+import 'package:lichess_mobile/src/view/play/create_challenge_screen.dart';
 import 'package:lichess_mobile/src/view/user/user_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
@@ -159,7 +159,7 @@ class _Body extends ConsumerWidget {
               pushPlatformRoute(
                 context,
                 title: context.l10n.challengeChallengesX(bot.lightUser.name),
-                builder: (context) => ChallengeScreen(bot.lightUser),
+                builder: (context) => CreateChallengeScreen(bot.lightUser),
               );
             },
             onLongPress: () {

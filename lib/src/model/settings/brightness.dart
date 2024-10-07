@@ -4,7 +4,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'brightness.g.dart';
 
-@Riverpod(keepAlive: true)
+@riverpod
 class CurrentBrightness extends _$CurrentBrightness {
   @override
   Brightness build() {

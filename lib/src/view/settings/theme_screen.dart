@@ -14,7 +14,7 @@ import 'package:lichess_mobile/src/view/settings/board_theme_screen.dart';
 import 'package:lichess_mobile/src/view/settings/piece_set_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
+import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/settings.dart';
 
 class ThemeScreen extends StatelessWidget {
@@ -22,23 +22,9 @@ class ThemeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformWidget(
-      androidBuilder: _androidBuilder,
-      iosBuilder: _iosBuilder,
-    );
-  }
-
-  Widget _androidBuilder(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Theme')),
+    return PlatformScaffold(
+      appBar: const PlatformAppBar(title: Text('Theme')),
       body: _Body(),
-    );
-  }
-
-  Widget _iosBuilder(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(),
-      child: _Body(),
     );
   }
 }

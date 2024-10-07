@@ -1,4 +1,3 @@
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -6,32 +5,28 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:intl/intl.dart';
-import 'package:lichess_mobile/src/app_initialization.dart';
 import 'package:lichess_mobile/src/crashlytics.dart';
-import 'package:lichess_mobile/src/db/shared_preferences.dart';
+import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/auth/session_storage.dart';
 import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
-import 'package:lichess_mobile/src/notification_service.dart';
+import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:logging/logging.dart';
-import 'package:mocktail/mocktail.dart';
-import 'package:package_info_plus/package_info_plus.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import './fake_crashlytics.dart';
-import './model/auth/fake_session_storage.dart';
 import './model/common/service/fake_sound_service.dart';
-import 'fake_notification_service.dart';
+import 'binding.dart';
 import 'model/common/fake_websocket_channel.dart';
-import 'utils/fake_connectivity_changes.dart';
+import 'model/notifications/fake_notification_display.dart';
+import 'utils/fake_connectivity.dart';
 
-class MockDatabase extends Mock implements Database {}
-
-class MockHttpClient extends Mock implements http.Client {}
+/// A mock client that always returns a 200 empty response.
+final testContainerMockClient = MockClient((request) async {
+  return http.Response('', 200);
+});
 
 const shouldLog = false;
 
@@ -52,12 +47,13 @@ Future<ProviderContainer> makeContainer({
   List<Override>? overrides,
   AuthSessionState? userSession,
 }) async {
-  SharedPreferences.setMockInitialValues({});
-  final sharedPreferences = await SharedPreferences.getInstance();
+  final binding = TestLichessBinding.ensureInitialized();
 
   FlutterSecureStorage.setMockInitialValues({
     kSRIStorageKey: 'test',
   });
+
+  await binding.preloadData(userSession);
 
   Logger.root.onRecord.listen((record) {
     if (shouldLog && record.level >= Level.FINE) {
@@ -70,6 +66,18 @@ Future<ProviderContainer> makeContainer({
 
   final container = ProviderContainer(
     overrides: [
+      connectivityPluginProvider.overrideWith((_) {
+        return FakeConnectivity();
+      }),
+      notificationDisplayProvider.overrideWith((ref) {
+        return FakeNotificationDisplay();
+      }),
+      databaseProvider.overrideWith((ref) async {
+        final db =
+            await openAppDatabase(databaseFactoryFfi, inMemoryDatabasePath);
+        ref.onDispose(db.close);
+        return db;
+      }),
       webSocketChannelFactoryProvider.overrideWith((ref) {
         return FakeWebSocketChannelFactory(() => FakeWebSocketChannel());
       }),
@@ -79,45 +87,16 @@ Future<ProviderContainer> makeContainer({
         return pool;
       }),
       lichessClientProvider.overrideWith((ref) {
-        return LichessClient(MockHttpClient(), ref);
+        return LichessClient(testContainerMockClient, ref);
       }),
-      connectivityChangesProvider.overrideWith(() {
-        return FakeConnectivityChanges();
-      }),
-      defaultClientProvider.overrideWithValue(MockHttpClient()),
+      defaultClientProvider.overrideWithValue(testContainerMockClient),
       crashlyticsProvider.overrideWithValue(FakeCrashlytics()),
-      notificationServiceProvider.overrideWithValue(FakeNotificationService()),
       soundServiceProvider.overrideWithValue(FakeSoundService()),
-      sharedPreferencesProvider.overrideWithValue(sharedPreferences),
-      sessionStorageProvider.overrideWithValue(FakeSessionStorage()),
-      appInitializationProvider.overrideWith((ref) {
-        return AppInitializationData(
-          packageInfo: PackageInfo(
-            appName: 'lichess_mobile_test',
-            version: 'test',
-            buildNumber: '0.0.0',
-            packageName: 'lichess_mobile_test',
-          ),
-          deviceInfo: BaseDeviceInfo({
-            'name': 'test',
-            'model': 'test',
-            'manufacturer': 'test',
-            'systemName': 'test',
-            'systemVersion': 'test',
-            'identifierForVendor': 'test',
-            'isPhysicalDevice': true,
-          }),
-          sharedPreferences: sharedPreferences,
-          userSession: userSession,
-          database: MockDatabase(),
-          sri: 'test',
-          engineMaxMemoryInMb: 16,
-        );
-      }),
       ...overrides ?? [],
     ],
   );
 
+  addTearDown(binding.reset);
   addTearDown(container.dispose);
 
   return container;

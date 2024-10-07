@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 
-import '../test_utils.dart';
+import '../test_helpers.dart';
 
 enum TestEnumLarge {
   one,

@@ -9,8 +9,10 @@ import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_preferences.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/game.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
-import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
+import 'package:lichess_mobile/src/model/lobby/create_game_service.dart';
+import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -26,8 +28,8 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/non_linear_slider.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 
-class ChallengeScreen extends StatelessWidget {
-  const ChallengeScreen(this.user);
+class CreateChallengeScreen extends StatelessWidget {
+  const CreateChallengeScreen(this.user);
 
   final LightUser user;
 
@@ -52,7 +54,7 @@ class _ChallengeBody extends ConsumerStatefulWidget {
 }
 
 class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
-  Future<void>? _pendingCreateGame;
+  Future<ChallengeResponse>? _pendingCreateChallenge;
   final _controller = TextEditingController();
 
   String? fromPositionFenInput;
@@ -337,7 +339,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                         choices: SideChoice.values,
                         selectedItem: preferences.sideChoice,
                         labelBuilder: (SideChoice side) =>
-                            Text(sideChoiceL10n(context.l10n, side)),
+                            Text(side.label(context.l10n)),
                         onSelectedItemChanged: (SideChoice side) {
                           ref
                               .read(challengePreferencesProvider.notifier)
@@ -346,7 +348,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                       );
                     },
                     child: Text(
-                      sideChoiceL10n(context.l10n, preferences.sideChoice),
+                      preferences.sideChoice.label(context.l10n),
                     ),
                   ),
                 ),
@@ -370,7 +372,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                 ),
               const SizedBox(height: 20),
               FutureBuilder(
-                future: _pendingCreateGame,
+                future: _pendingCreateChallenge,
                 builder: (context, snapshot) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -396,15 +398,54 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                                   );
                                 }
                               : null
-                          : snapshot.connectionState == ConnectionState.waiting
-                              ? null
-                              // TODO handle correspondence time control
-                              : () async {
+                          : timeControl ==
+                                  ChallengeTimeControlType.correspondence
+                              ? () async {
+                                  final createGameService =
+                                      ref.read(createGameServiceProvider);
                                   showPlatformSnackbar(
                                     context,
-                                    'Correspondence time control is not supported yet',
+                                    'Sent challenge to ${widget.user.name}',
                                   );
-                                },
+                                  _pendingCreateChallenge =
+                                      createGameService.newChallenge(
+                                    preferences.makeRequest(
+                                      widget.user,
+                                      preferences.variant !=
+                                              Variant.fromPosition
+                                          ? null
+                                          : fromPositionFenInput,
+                                    ),
+                                  );
+
+                                  _pendingCreateChallenge!.then((value) {
+                                    if (!context.mounted) return;
+
+                                    final (
+                                      gameFullId: fullId,
+                                      challenge: _,
+                                      :declineReason
+                                    ) = value;
+
+                                    if (fullId != null) {
+                                      pushPlatformRoute(
+                                        context,
+                                        rootNavigator: true,
+                                        builder: (BuildContext context) {
+                                          return GameScreen(
+                                            initialGameId: fullId,
+                                          );
+                                        },
+                                      );
+                                    } else {
+                                      showPlatformSnackbar(
+                                        context,
+                                        '${widget.user.name}: ${declineReason!.label(context.l10n)}',
+                                      );
+                                    }
+                                  });
+                                }
+                              : null,
                       child: Text(
                         context.l10n.challengeChallengeToPlay,
                         style: Styles.bold,

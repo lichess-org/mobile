@@ -15,30 +15,36 @@ part 'connectivity.g.dart';
 
 final _logger = Logger('Connectivity');
 
+/// A provider that exposes a [Connectivity] instance.
+@Riverpod(keepAlive: true)
+Connectivity connectivityPlugin(ConnectivityPluginRef _) => Connectivity();
+
 /// This provider is used to check the device's connectivity status, reacting to
 /// changes in connectivity and app lifecycle events.
 ///
 /// - Uses the [Connectivity] plugin to listen to connectivity changes
 /// - Uses [AppLifecycleListener] to check connectivity on app resume
-@riverpod
+@Riverpod(keepAlive: true)
 class ConnectivityChanges extends _$ConnectivityChanges {
-  StreamSubscription<List<ConnectivityResult>>? _socketSubscription;
+  StreamSubscription<List<ConnectivityResult>>? _connectivitySubscription;
   AppLifecycleListener? _appLifecycleListener;
 
   final _connectivityChangesDebouncer = Debouncer(const Duration(seconds: 5));
 
   Client get _defaultClient => ref.read(defaultClientProvider);
+  Connectivity get _connectivity => ref.read(connectivityPluginProvider);
 
   @override
   Future<ConnectivityStatus> build() {
     ref.onDispose(() {
-      _socketSubscription?.cancel();
+      _connectivitySubscription?.cancel();
       _appLifecycleListener?.dispose();
       _connectivityChangesDebouncer.dispose();
     });
 
-    _socketSubscription?.cancel();
-    _socketSubscription = Connectivity().onConnectivityChanged.listen((result) {
+    _connectivitySubscription?.cancel();
+    _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen((result) {
       _connectivityChangesDebouncer(() => _onConnectivityChange(result));
     });
 
@@ -48,7 +54,7 @@ class ConnectivityChanges extends _$ConnectivityChanges {
       onStateChange: _onAppLifecycleChange,
     );
 
-    return Connectivity()
+    return _connectivity
         .checkConnectivity()
         .then((r) => _getConnectivityStatus(r, appState));
   }
@@ -59,7 +65,7 @@ class ConnectivityChanges extends _$ConnectivityChanges {
     }
 
     if (appState == AppLifecycleState.resumed) {
-      final newConn = await Connectivity()
+      final newConn = await _connectivity
           .checkConnectivity()
           .then((r) => _getConnectivityStatus(r, appState));
 

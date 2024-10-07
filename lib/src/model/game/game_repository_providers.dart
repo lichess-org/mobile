@@ -15,7 +15,7 @@ Future<ArchivedGame> archivedGame(
   ArchivedGameRef ref, {
   required GameId id,
 }) async {
-  final gameStorage = ref.watch(gameStorageProvider);
+  final gameStorage = await ref.watch(gameStorageProvider.future);
   final game = await gameStorage.fetch(gameId: id);
   if (game != null) return game;
   return ref.withClientCacheFor(
