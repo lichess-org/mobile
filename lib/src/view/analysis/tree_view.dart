@@ -149,7 +149,9 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
 }
 
 /// A group of parameters that are passed through various parts of the tree view
-/// and ultimately evaluated in the InlineMove widget. Grouped in this record to improve readability.
+/// and ultimately evaluated in the [InlineMove] widget.
+///
+/// Grouped in this record to improve readability.
 typedef _PgnTreeViewParams = ({
   /// Path to the currently selected move in the tree.
   UciPath pathToCurrentMove,
@@ -168,6 +170,8 @@ typedef _PgnTreeViewParams = ({
   AnalysisController notifier,
 });
 
+/// Whether to display the sideline inline.
+///
 /// Sidelines are usually rendered on a new line and indented.
 /// However sidelines are rendered inline (in parantheses) if the side line has no branching and is less than 6 moves deep.
 bool _displaySideLineAsInline(ViewBranch node, [int depth = 0]) {
@@ -183,6 +187,7 @@ bool _hasNonInlineSideLine(ViewNode node) =>
     (node.children.length == 2 && !_displaySideLineAsInline(node.children[1]));
 
 /// Splits the mainline into parts, where each part is a sequence of moves that are displayed on the same line.
+///
 /// A part ends when a mainline node has a sideline that should not be displayed inline.
 Iterable<List<ViewNode>> _mainlineParts(ViewRoot root) =>
     [root, ...root.mainline]
@@ -219,11 +224,17 @@ class _PgnTreeView extends StatefulWidget {
   State<_PgnTreeView> createState() => _PgnTreeViewState();
 }
 
-typedef _Subtree = ({
+/// A record that holds the rendered parts of a subtree.
+typedef _RenderedSubtreeCache = ({
+  /// The mainline part of the subtree.
   _MainLinePart mainLinePart,
 
+  /// The sidelines part of the subtree.
+  ///
   /// This is nullable since the very last mainline part might not have any sidelines.
   _IndentedSideLines? sidelines,
+
+  /// Whether the subtree contains the current move.
   bool containsCurrentMove,
 });
 
@@ -232,10 +243,11 @@ class _PgnTreeViewState extends State<_PgnTreeView> {
   /// but not when `params.pathToCurrentMove` changes.
   List<List<ViewNode>> mainlineParts = [];
 
-  /// Caches the top-level subtrees obtained from the last `build()` method, where each subtree is a [_MainLinePart] and its sidelines.
-  /// Building the whole tree is expensive, so we cache the subtrees that did not change when the current move changes,
-  /// the framework will then skip the `build()` of each subtree since the widget reference is the same.
-  List<_Subtree> subtrees = [];
+  /// Cache of the top-level subtrees obtained from the last `build()` method.
+  ///
+  /// Building the whole tree is expensive, so we cache the subtrees that did not change when the current move changes.
+  /// The framework will skip the `build()` of each subtree since the widget reference is the same.
+  List<_RenderedSubtreeCache> subtrees = [];
 
   UciPath _mainlinePartOfCurrentPath() {
     var path = UciPath.empty;
@@ -422,6 +434,7 @@ enum _LineType {
   mainline,
 
   /// A sideline branching off the main line or a parent sideline.
+  ///
   /// Each sideline is rendered on a new line and indented.
   sideline,
 
@@ -439,18 +452,20 @@ List<InlineSpan> _moveWithComment(
   required UciPath pathToNode,
   required _PgnTreeViewParams params,
 
-  /// Key that will be assigned to the move text. We use this to track the position of the first move of
-  /// a sideline, see [_SideLinePart.firstMoveKey]
-  GlobalKey? moveKey,
+  /// Optional [GlobalKey] that will be assigned to the [InlineMove] widget.
+  ///
+  /// It should only be set if it is the first move of a sideline.
+  /// We use this to track the position of the first move widget. See [_SideLinePart.firstMoveKey].
+  GlobalKey? firstMoveKey,
 }) {
   return [
     WidgetSpan(
       alignment: PlaceholderAlignment.middle,
       child: InlineMove(
+        key: firstMoveKey,
         branch: branch,
         lineInfo: lineInfo,
         path: pathToNode + branch.id,
-        key: moveKey,
         textStyle: textStyle,
         params: params,
       ),
@@ -475,6 +490,7 @@ class _SideLinePart extends ConsumerWidget {
   final UciPath initialPath;
 
   /// The key that will be assigned to the first move in this sideline.
+  ///
   /// This is needed so that the indent guidelines can be drawn correctly.
   final GlobalKey firstMoveKey;
 
@@ -495,7 +511,7 @@ class _SideLinePart extends ConsumerWidget {
           type: _LineType.sideline,
           startLine: true,
         ),
-        moveKey: firstMoveKey,
+        firstMoveKey: firstMoveKey,
         pathToNode: initialPath,
         textStyle: textStyle,
         params: params,
@@ -538,7 +554,9 @@ class _SideLinePart extends ConsumerWidget {
   }
 }
 
-/// A part of the mainline that will be rendered on the same line. See [_mainlineParts].
+/// A widget that renders part of the mainline.
+///
+/// A part of the mainline is rendered on a single line. See [_mainlineParts].
 class _MainLinePart extends ConsumerWidget {
   const _MainLinePart({
     required this.initialPath,
@@ -600,8 +618,11 @@ class _MainLinePart extends ConsumerWidget {
   }
 }
 
-/// A sideline where the moves are rendered on the same line (see [_SideLinePart]) until further branching is encountered,
-/// at which point the children sidelines are rendered on new lines and indented (see [_IndentedSideLines]).
+/// A widget that renders a sideline.
+///
+/// The moves are rendered on the same line (see [_SideLinePart]) until further
+/// branching is encountered, at which point the children sidelines are rendered
+/// on new lines and indented (see [_IndentedSideLines]).
 class _SideLine extends StatelessWidget {
   const _SideLine({
     required this.firstNode,
@@ -695,8 +716,11 @@ class _IndentPainter extends CustomPainter {
   }
 }
 
-/// Displays one ore more sidelines indented on their own line and adds indent guides.
-/// If there are hidden lines, a button is displayed to expand them.
+/// A widget that displays indented sidelines.
+///
+/// Will show one ore more sidelines indented on their own line and add indent
+/// guides.
+/// If there are hidden lines, a "+" button is displayed to expand them.
 class _IndentedSideLines extends StatefulWidget {
   const _IndentedSideLines(
     this.sideLines, {
@@ -836,14 +860,20 @@ Color? _textColor(
   return nag != null && nag > 0 ? nagColor(nag) : defaultColor;
 }
 
+/// A widget that displays a single move in the tree view.
+///
+/// The move can optionnally be preceded by an index, and followed by a nag annotation.
+/// The move is displayed as a clickable button that will jump to the move when pressed.
+/// The move is highlighted if it is the current move.
+/// A long press on the move will display a context menu with options to promote the move to the main line, collapse variations, etc.
 class InlineMove extends ConsumerWidget {
   const InlineMove({
     required this.branch,
     required this.path,
     required this.textStyle,
     required this.lineInfo,
-    super.key,
     required this.params,
+    super.key,
   });
 
   final ViewBranch branch;
