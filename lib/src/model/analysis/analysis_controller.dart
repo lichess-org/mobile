@@ -19,6 +19,7 @@ import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
+import 'package:lichess_mobile/src/view/analysis/tree_view.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -60,7 +61,8 @@ class AnalysisOptions with _$AnalysisOptions {
 }
 
 @riverpod
-class AnalysisController extends _$AnalysisController {
+class AnalysisController extends _$AnalysisController
+    implements PgnTreeNotifier {
   late Root _root;
 
   final _engineEvalDebounce = Debouncer(const Duration(milliseconds: 150));
@@ -261,10 +263,12 @@ class AnalysisController extends _$AnalysisController {
     _setPath(state.currentPath.penultimate, replaying: true);
   }
 
+  @override
   void userJump(UciPath path) {
     _setPath(path);
   }
 
+  @override
   void expandVariations(UciPath path) {
     final node = _root.nodeAt(path);
     for (final child in node.children) {
@@ -276,6 +280,7 @@ class AnalysisController extends _$AnalysisController {
     state = state.copyWith(root: _root.view);
   }
 
+  @override
   void collapseVariations(UciPath path) {
     final node = _root.parentAt(path);
 
@@ -286,6 +291,7 @@ class AnalysisController extends _$AnalysisController {
     state = state.copyWith(root: _root.view);
   }
 
+  @override
   void promoteVariation(UciPath path, bool toMainline) {
     _root.promoteAt(path, toMainline: toMainline);
     state = state.copyWith(
@@ -294,6 +300,7 @@ class AnalysisController extends _$AnalysisController {
     );
   }
 
+  @override
   void deleteFromHere(UciPath path) {
     _root.deleteAt(path);
     _setPath(path.penultimate, shouldRecomputeRootView: true);
