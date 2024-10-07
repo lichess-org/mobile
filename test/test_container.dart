@@ -1,10 +1,8 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
-import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/crashlytics.dart';
 import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
@@ -13,7 +11,6 @@ import 'package:lichess_mobile/src/model/notifications/notification_service.dart
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
-import 'package:logging/logging.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import './fake_crashlytics.dart';
@@ -28,8 +25,6 @@ import 'utils/fake_connectivity.dart';
 final testContainerMockClient = MockClient((request) async {
   return http.Response('', 200);
 });
-
-const shouldLog = false;
 
 /// Returns a [ProviderContainer] with the [httpClientFactoryProvider] configured
 /// with the given [mockClient].
@@ -55,15 +50,6 @@ Future<ProviderContainer> makeContainer({
   });
 
   await binding.preloadData(userSession);
-
-  Logger.root.onRecord.listen((record) {
-    if (shouldLog && record.level >= Level.FINE) {
-      final time = DateFormat.Hms().format(record.time);
-      debugPrint(
-        '${record.level.name} at $time [${record.loggerName}] ${record.message}${record.error != null ? '\n${record.error}' : ''}',
-      );
-    }
-  });
 
   final container = ProviderContainer(
     overrides: [

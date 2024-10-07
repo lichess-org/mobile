@@ -72,12 +72,12 @@ void main() {
   group('AuthController', () {
     test('sign in', () async {
       when(() => mockSessionStorage.read())
-          .thenAnswer((_) => delayedAnswer(null));
+          .thenAnswer((_) => Future.value(null));
       when(() => mockFlutterAppAuth.authorizeAndExchangeCode(any()))
-          .thenAnswer((_) => delayedAnswer(signInResponse));
+          .thenAnswer((_) => Future.value(signInResponse));
       when(
         () => mockSessionStorage.write(any()),
-      ).thenAnswer((_) => delayedAnswer(null));
+      ).thenAnswer((_) => Future.value(null));
 
       final container = await makeContainer(
         overrides: [
@@ -117,10 +117,10 @@ void main() {
 
     test('sign out', () async {
       when(() => mockSessionStorage.read())
-          .thenAnswer((_) => delayedAnswer(testUserSession));
+          .thenAnswer((_) => Future.value(testUserSession));
       when(
         () => mockSessionStorage.delete(),
-      ).thenAnswer((_) => delayedAnswer(null));
+      ).thenAnswer((_) => Future.value(null));
 
       final container = await makeContainer(
         overrides: [

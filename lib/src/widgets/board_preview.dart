@@ -16,7 +16,16 @@ class SmallBoardPreview extends ConsumerStatefulWidget {
     this.padding,
     this.lastMove,
     this.onTap,
-  });
+  }) : _showLoadingPlaceholder = false;
+
+  const SmallBoardPreview.loading({
+    this.padding,
+  })  : orientation = Side.white,
+        fen = kEmptyFEN,
+        lastMove = null,
+        description = const SizedBox.shrink(),
+        onTap = null,
+        _showLoadingPlaceholder = true;
 
   /// Side by which the board is oriented.
   final Side orientation;
@@ -32,6 +41,8 @@ class SmallBoardPreview extends ConsumerStatefulWidget {
   final GestureTapCallback? onTap;
 
   final EdgeInsetsGeometry? padding;
+
+  final bool _showLoadingPlaceholder;
 
   @override
   ConsumerState<SmallBoardPreview> createState() => _SmallBoardPreviewState();
@@ -65,23 +76,85 @@ class _SmallBoardPreviewState extends ConsumerState<SmallBoardPreview> {
               height: boardSize,
               child: Row(
                 children: [
-                  Chessboard.fixed(
-                    size: boardSize,
-                    fen: widget.fen,
-                    orientation: widget.orientation,
-                    lastMove: widget.lastMove as NormalMove?,
-                    settings: ChessboardSettings(
-                      enableCoordinates: false,
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(4.0)),
-                      boxShadow: boardShadows,
-                      animationDuration: const Duration(milliseconds: 150),
-                      pieceAssets: boardPrefs.pieceSet.assets,
-                      colorScheme: boardPrefs.boardTheme.colors,
+                  if (widget._showLoadingPlaceholder)
+                    Container(
+                      width: boardSize,
+                      height: boardSize,
+                      decoration: const BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                      ),
+                    )
+                  else
+                    Chessboard.fixed(
+                      size: boardSize,
+                      fen: widget.fen,
+                      orientation: widget.orientation,
+                      lastMove: widget.lastMove as NormalMove?,
+                      settings: ChessboardSettings(
+                        enableCoordinates: false,
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(4.0)),
+                        boxShadow: boardShadows,
+                        animationDuration: const Duration(milliseconds: 150),
+                        pieceAssets: boardPrefs.pieceSet.assets,
+                        colorScheme: boardPrefs.boardTheme.colors,
+                      ),
                     ),
-                  ),
                   const SizedBox(width: 10.0),
-                  Expanded(child: widget.description),
+                  if (widget._showLoadingPlaceholder)
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                height: 16.0,
+                                width: double.infinity,
+                                decoration: const BoxDecoration(
+                                  color: Colors.black,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(4.0)),
+                                ),
+                              ),
+                              const SizedBox(height: 4.0),
+                              Container(
+                                height: 16.0,
+                                width: MediaQuery.sizeOf(context).width / 3,
+                                decoration: const BoxDecoration(
+                                  color: Colors.black,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(4.0)),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Container(
+                            height: 44.0,
+                            width: 44.0,
+                            decoration: const BoxDecoration(
+                              color: Colors.black,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(4.0)),
+                            ),
+                          ),
+                          Container(
+                            height: 16.0,
+                            width: double.infinity,
+                            decoration: const BoxDecoration(
+                              color: Colors.black,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(4.0)),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  else
+                    Expanded(child: widget.description),
                 ],
               ),
             ),

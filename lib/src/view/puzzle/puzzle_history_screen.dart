@@ -21,6 +21,8 @@ import 'package:timeago/timeago.dart' as timeago;
 final _dateFormatter = DateFormat.yMMMd();
 
 class PuzzleHistoryScreen extends StatelessWidget {
+  const PuzzleHistoryScreen();
+
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
