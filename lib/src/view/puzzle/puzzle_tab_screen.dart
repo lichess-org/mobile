@@ -8,7 +8,6 @@ import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
-import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
@@ -118,11 +117,11 @@ class _Body extends ConsumerWidget {
 
     final handsetChildren = [
       connectivity.whenIs(
-        online: () => const _DailyPuzzle(),
+        online: () => const DailyPuzzle(),
         offline: () => const SizedBox.shrink(),
       ),
       const SizedBox(height: 4.0),
-      const _PuzzlePreview(),
+      const TacticalTrainingPreview(),
       if (Theme.of(context).platform == TargetPlatform.android)
         const SizedBox(height: 8.0),
       _PuzzleMenu(connectivity: connectivity),
@@ -139,7 +138,7 @@ class _Body extends ConsumerWidget {
               children: [
                 const SizedBox(height: 8.0),
                 connectivity.whenIs(
-                  online: () => const _DailyPuzzle(),
+                  online: () => const DailyPuzzle(),
                   offline: () => const SizedBox.shrink(),
                 ),
                 _PuzzleMenu(connectivity: connectivity),
@@ -413,8 +412,9 @@ TextStyle _puzzlePreviewSubtitleStyle(BuildContext context) {
   );
 }
 
-class _DailyPuzzle extends ConsumerWidget {
-  const _DailyPuzzle();
+/// A widget that displays the daily puzzle.
+class DailyPuzzle extends ConsumerWidget {
+  const DailyPuzzle();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -479,16 +479,19 @@ class _DailyPuzzle extends ConsumerWidget {
           child: SmallBoardPreview.loading(),
         ),
       ),
-      error: (error, stack) => const Padding(
-        padding: Styles.bodySectionPadding,
-        child: Text('Could not load the daily puzzle.'),
-      ),
+      error: (error, _) {
+        return const Padding(
+          padding: Styles.bodySectionPadding,
+          child: Text('Could not load the daily puzzle.'),
+        );
+      },
     );
   }
 }
 
-class _PuzzlePreview extends ConsumerWidget {
-  const _PuzzlePreview();
+/// A widget that displays a preview of the tactical training screen.
+class TacticalTrainingPreview extends ConsumerWidget {
+  const TacticalTrainingPreview();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -569,7 +572,8 @@ class _PuzzlePreview extends ConsumerWidget {
                         if (context.mounted) {
                           ref.invalidate(
                             nextPuzzleProvider(
-                                const PuzzleTheme(PuzzleThemeKey.mix)),
+                              const PuzzleTheme(PuzzleThemeKey.mix),
+                            ),
                           );
                         }
                       });
