@@ -21,13 +21,11 @@ import 'package:http/http.dart'
         StreamedResponse;
 import 'package:http/io_client.dart';
 import 'package:http/retry.dart';
+import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
-import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:lichess_mobile/src/utils/device_info.dart';
-import 'package:lichess_mobile/src/utils/package_info.dart';
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -47,26 +45,33 @@ Uri lichessUri(String unencodedPath, [Map<String, dynamic>? queryParameters]) =>
 /// Creates the appropriate http client for the platform.
 ///
 /// Do not use directly, use [defaultClient] or [lichessClient] instead.
-Client httpClientFactory() {
-  const userAgent = 'Lichess Mobile';
-  if (Platform.isAndroid) {
-    final engine = CronetEngine.build(
-      cacheMode: CacheMode.memory,
-      cacheMaxSize: _maxCacheSize,
-      userAgent: userAgent,
-    );
-    return CronetClient.fromCronetEngine(engine);
-  }
+class HttpClientFactory {
+  Client call() {
+    final packageInfo = LichessBinding.instance.packageInfo;
+    final userAgent = 'Lichess Mobile/${packageInfo.version}';
+    if (Platform.isAndroid) {
+      final engine = CronetEngine.build(
+        cacheMode: CacheMode.memory,
+        cacheMaxSize: _maxCacheSize,
+        userAgent: userAgent,
+      );
+      return CronetClient.fromCronetEngine(engine);
+    }
 
-  if (Platform.isIOS || Platform.isMacOS) {
-    final config = URLSessionConfiguration.ephemeralSessionConfiguration()
-      ..cache = URLCache.withCapacity(memoryCapacity: _maxCacheSize)
-      ..httpAdditionalHeaders = {'User-Agent': userAgent};
-    return CupertinoClient.fromSessionConfiguration(config);
-  }
+    if (Platform.isIOS || Platform.isMacOS) {
+      final config = URLSessionConfiguration.ephemeralSessionConfiguration()
+        ..cache = URLCache.withCapacity(memoryCapacity: _maxCacheSize)
+        ..httpAdditionalHeaders = {'User-Agent': userAgent};
+      return CupertinoClient.fromSessionConfiguration(config);
+    }
 
-  return IOClient(HttpClient()..userAgent = userAgent);
+    return IOClient(HttpClient()..userAgent = userAgent);
+  }
 }
+
+@Riverpod(keepAlive: true)
+HttpClientFactory httpClientFactory(HttpClientFactoryRef _) =>
+    HttpClientFactory();
 
 /// The default http client.
 ///
@@ -75,7 +80,7 @@ Client httpClientFactory() {
 /// Only one instance of this client is created and kept alive for the whole app.
 @Riverpod(keepAlive: true)
 Client defaultClient(DefaultClientRef ref) {
-  final client = LoggingClient(httpClientFactory());
+  final client = LoggingClient(ref.read(httpClientFactoryProvider)());
   ref.onDispose(() => client.close());
   return client;
 }
@@ -88,7 +93,7 @@ LichessClient lichessClient(LichessClientRef ref) {
   final client = LichessClient(
     // Retry just once, after 500ms, on 429 Too Many Requests.
     RetryClient(
-      httpClientFactory(),
+      ref.read(httpClientFactoryProvider)(),
       retries: 1,
       delay: _defaultDelay,
       when: (response) => response.statusCode == 429,
@@ -107,9 +112,9 @@ String userAgent(UserAgentRef ref) {
   final session = ref.watch(authSessionProvider);
 
   return makeUserAgent(
-    ref.read(packageInfoProvider),
-    ref.read(deviceInfoProvider),
-    ref.read(sriProvider),
+    LichessBinding.instance.packageInfo,
+    LichessBinding.instance.deviceInfo,
+    LichessBinding.instance.sri,
     session?.user,
   );
 }
@@ -148,10 +153,14 @@ class LoggingClient extends BaseClient {
 
 /// Lichess HTTP client.
 ///
-/// - All requests go to the lichess server, defined in [kLichessHost].
-/// - Sets the Authorization header when a token has been stored.
-/// - Sets the user-agent header with the app version, build number, and device info. If the user is logged in, it also includes the user's id.
-/// - Logs all requests and responses with status code >= 400.
+/// * All requests made with [head], [get], [post], [put], [patch], [delete] target
+/// the lichess server, defined in [kLichessHost]. It does not apply to the low-level
+/// [send] method.
+/// * Sets the Authorization header when a token has been stored.
+/// * Sets the user-agent header with the app version, build number, and device info. If the user is logged in, it also includes the user's id.
+/// * Logs all requests and responses with status code >= 400.
+/// * When a response has the 401 status, checks if the session token is still valid,
+/// and deletes the session if it's not.
 class LichessClient implements Client {
   LichessClient(this._inner, this._ref);
 
@@ -167,9 +176,9 @@ class LichessClient implements Client {
       request.headers['Authorization'] = 'Bearer $bearer';
     }
     request.headers['User-Agent'] = makeUserAgent(
-      _ref.read(packageInfoProvider),
-      _ref.read(deviceInfoProvider),
-      _ref.read(sriProvider),
+      LichessBinding.instance.packageInfo,
+      LichessBinding.instance.deviceInfo,
+      LichessBinding.instance.sri,
       session?.user,
     );
 
@@ -182,10 +191,29 @@ class LichessClient implements Client {
 
       _logIfError(response);
 
+      if (response.statusCode == 401 && session != null) {
+        _checkSessionToken(session);
+      }
+
       return response;
     } catch (e, st) {
       _logger.warning('Request to ${request.url} failed: $e', e, st);
       rethrow;
+    }
+  }
+
+  /// Checks if the session token is still valid, and delete session if it's not.
+  Future<void> _checkSessionToken(AuthSessionState session) async {
+    final defaultClient = _ref.read(defaultClientProvider);
+    final data = await defaultClient
+        .postReadJson(
+          lichessUri('/api/token/test'),
+          mapper: (json) => json,
+        )
+        .timeout(const Duration(seconds: 5));
+    if (data[session.token] == null) {
+      _logger.fine('Session is not active. Deleting it.');
+      await _ref.read(authSessionProvider.notifier).delete();
     }
   }
 
@@ -359,18 +387,18 @@ extension ClientExtension on Client {
     _checkResponseSuccess(url, response);
     final json = jsonUtf8Decoder.convert(response.bodyBytes);
     if (json is! Map<String, dynamic>) {
-      _logger.severe('Could not read json object as $T: expected an object.');
+      _logger.severe('Could not read JSON object as $T: expected an object.');
       throw ClientException(
-        'Could not read json object as $T: expected an object.',
+        'Could not read JSON object as $T: expected an object.',
         url,
       );
     }
     try {
       return mapper(json);
     } catch (e, st) {
-      _logger.severe('Could not read json object as $T: $e', e, st);
+      _logger.severe('Could not read JSON object as $T: $e', e, st);
       throw ClientException(
-        'Could not read json object as $T: $e\n$st',
+        'Could not read JSON object as $T: $e\n$st',
         url,
       );
     }
@@ -391,9 +419,9 @@ extension ClientExtension on Client {
     _checkResponseSuccess(url, response);
     final json = jsonUtf8Decoder.convert(response.bodyBytes);
     if (json is! List<dynamic>) {
-      _logger.severe('Could not read json object as List: expected a list.');
+      _logger.severe('Could not read JSON object as List: expected a list.');
       throw ClientException(
-        'Could not read json object as List: expected a list.',
+        'Could not read JSON object as List: expected a list.',
         url,
       );
     }
@@ -401,9 +429,9 @@ extension ClientExtension on Client {
     final List<T> list = [];
     for (final e in json) {
       if (e is! Map<String, dynamic>) {
-        _logger.severe('Could not read json object as $T: expected an object.');
+        _logger.severe('Could not read JSON object as $T: expected an object.');
         throw ClientException(
-          'Could not read json object as $T: expected an object.',
+          'Could not read JSON object as $T: expected an object.',
           url,
         );
       }
@@ -413,8 +441,8 @@ extension ClientExtension on Client {
           list.add(mapped);
         }
       } catch (e, st) {
-        _logger.severe('Could not read json object as $T: $e', e, st);
-        throw ClientException('Could not read json object as $T: $e', url);
+        _logger.severe('Could not read JSON object as $T: $e', e, st);
+        throw ClientException('Could not read JSON object as $T: $e', url);
       }
     }
     return IList(list);
@@ -451,7 +479,7 @@ extension ClientExtension on Client {
     final request = Request('GET', url);
     if (headers != null) request.headers.addAll(headers);
     final response = await send(request);
-    if (response.statusCode > 400) {
+    if (response.statusCode >= 400) {
       var message = 'Request to $url failed with status ${response.statusCode}';
       if (response.reasonPhrase != null) {
         message = '$message: ${response.reasonPhrase}';

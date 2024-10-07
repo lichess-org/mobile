@@ -7,6 +7,7 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
+import 'package:lichess_mobile/src/model/common/game.dart';
 import 'package:lichess_mobile/src/model/coordinate_training/coordinate_training_controller.dart';
 import 'package:lichess_mobile/src/model/coordinate_training/coordinate_training_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -362,7 +363,7 @@ class _SettingsState extends ConsumerState<_Settings> {
               spacing: 8.0,
               children: SideChoice.values.map((choice) {
                 return ChoiceChip(
-                  label: Text(sideChoiceL10n(context, choice)),
+                  label: Text(choice.label(context.l10n)),
                   selected: trainingPrefs.sideChoice == choice,
                   showCheckmark: false,
                   onSelected: (selected) {
@@ -384,7 +385,7 @@ class _SettingsState extends ConsumerState<_Settings> {
               spacing: 8.0,
               children: TimeChoice.values.map((choice) {
                 return ChoiceChip(
-                  label: timeChoiceL10n(context, choice),
+                  label: choice.label(context.l10n),
                   selected: trainingPrefs.timeChoice == choice,
                   showCheckmark: false,
                   onSelected: (selected) {

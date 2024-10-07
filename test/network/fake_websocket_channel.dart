@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:async/src/stream_sink_transformer.dart';
-import 'package:lichess_mobile/src/model/common/socket.dart';
+import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:stream_channel/stream_channel.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -74,10 +74,11 @@ class FakeWebSocketChannel implements WebSocketChannel {
       _outcomingController.stream.where((message) => !isPing(message));
 
   /// Simulates incoming messages from the server.
-  Future<void> addIncomingMessages(Iterable<dynamic> messages) async {
-    await Future<void>.delayed(const Duration(milliseconds: 5));
-    return _incomingController
-        .addStream(Stream<dynamic>.fromIterable(messages));
+  void addIncomingMessages(Iterable<dynamic> messages) {
+    for (final message in messages) {
+      _incomingController.add(message);
+    }
+    // await _incomingController.addStream(Stream<dynamic>.fromIterable(messages));
   }
 
   @override

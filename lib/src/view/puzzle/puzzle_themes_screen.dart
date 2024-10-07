@@ -184,7 +184,7 @@ class _Category extends ConsumerWidget {
                           ? const EdgeInsets.only(top: 6.0)
                           : EdgeInsets.zero,
                       child: Text(
-                        puzzleThemeL10n(context, theme).name,
+                        theme.l10n(context.l10n).name,
                         style: Theme.of(context).platform == TargetPlatform.iOS
                             ? TextStyle(
                                 color: CupertinoTheme.of(context)
@@ -198,7 +198,7 @@ class _Category extends ConsumerWidget {
                     subtitle: Padding(
                       padding: const EdgeInsets.only(bottom: 6.0),
                       child: Text(
-                        puzzleThemeL10n(context, theme).description,
+                        theme.l10n(context.l10n).description,
                         maxLines: 10,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(

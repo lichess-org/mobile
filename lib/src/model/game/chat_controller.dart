@@ -5,8 +5,8 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/game/game_controller.dart';
+import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -69,7 +69,7 @@ class ChatController extends _$ChatController {
   }
 
   Future<int> _getReadMessagesCount() async {
-    final db = ref.read(databaseProvider);
+    final db = await ref.read(databaseProvider.future);
     final result = await db.query(
       _tableName,
       columns: ['nbRead'],
@@ -80,7 +80,7 @@ class ChatController extends _$ChatController {
   }
 
   Future<void> _setReadMessagesCount(int count) async {
-    final db = ref.read(databaseProvider);
+    final db = await ref.read(databaseProvider.future);
     await db.insert(
       _tableName,
       {

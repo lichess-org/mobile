@@ -116,6 +116,7 @@ Future<T?> showCupertinoActionSheet<T>({
                       action.onPressed(context);
                     },
                     isDestructiveAction: action.isDestructiveAction,
+                    isDefaultAction: action.isDefaultAction,
                     child: action.makeLabel(context),
                   );
                 },
@@ -140,8 +141,8 @@ Future<T?> showMaterialActionSheet<T>({
   required List<BottomSheetAction> actions,
   bool isDismissible = true,
 }) {
-  final defaultTextStyle =
-      Theme.of(context).textTheme.titleMedium ?? const TextStyle(fontSize: 20);
+  final actionTextStyle =
+      Theme.of(context).textTheme.titleMedium ?? const TextStyle(fontSize: 18);
 
   final screenWidth = MediaQuery.of(context).size.width;
   return showDialog<T>(
@@ -188,7 +189,7 @@ Future<T?> showMaterialActionSheet<T>({
                           ],
                           Expanded(
                             child: DefaultTextStyle(
-                              style: defaultTextStyle,
+                              style: actionTextStyle,
                               textAlign: action.leading != null
                                   ? TextAlign.start
                                   : TextAlign.center,
@@ -233,15 +234,19 @@ class BottomSheetAction {
 
   /// A widget to display after the label.
   ///
-  /// Typically an [Icon] widget. Only for android.
+  /// Typically an [Icon] widget. (Android only).
   final Widget? trailing;
 
   /// A widget to display before the label.
   ///
-  /// Typically an [Icon] or a [CircleAvatar] widget. Only for android.
+  /// Typically an [Icon] or a [CircleAvatar] widget. (Android only).
   final Widget? leading;
 
+  /// Whether the action is destructive. (iOS only).
   final bool isDestructiveAction;
+
+  /// Whether the action is the default action. (iOS only).
+  final bool isDefaultAction;
 
   BottomSheetAction({
     required this.makeLabel,
@@ -250,5 +255,6 @@ class BottomSheetAction {
     this.trailing,
     this.leading,
     this.isDestructiveAction = false,
+    this.isDefaultAction = false,
   });
 }

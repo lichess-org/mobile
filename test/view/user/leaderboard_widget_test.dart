@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/user/leaderboard_screen.dart';
 import 'package:lichess_mobile/src/view/user/leaderboard_widget.dart';
 
-import '../../test_app.dart';
-import '../../test_utils.dart';
+import '../../test_helpers.dart';
+import '../../test_provider_scope.dart';
 
 final client = MockClient((request) {
   if (request.url.path == '/api/player/top/1/standard') {
@@ -21,7 +21,7 @@ void main() {
       'accessibility and basic info showing test',
       (WidgetTester tester) async {
         final SemanticsHandle handle = tester.ensureSemantics();
-        final app = await buildTestApp(
+        final app = await makeTestProviderScopeApp(
           tester,
           home: Column(children: [LeaderboardWidget()]),
           overrides: [

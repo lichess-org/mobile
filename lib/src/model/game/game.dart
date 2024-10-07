@@ -8,11 +8,11 @@ import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 
 import 'game_status.dart';
 import 'material_diff.dart';
@@ -270,17 +270,17 @@ enum GameRule {
 }
 
 @freezed
-class GamePrefs with _$GamePrefs {
-  const GamePrefs._();
+class ServerGamePrefs with _$ServerGamePrefs {
+  const ServerGamePrefs._();
 
-  const factory GamePrefs({
+  const factory ServerGamePrefs({
     required bool showRatings,
     required bool enablePremove,
     required AutoQueen autoQueen,
     required bool confirmResign,
     required bool submitMove,
     required Zen zenMode,
-  }) = _GamePrefs;
+  }) = _ServerGamePrefs;
 }
 
 @Freezed(fromJson: true, toJson: true)

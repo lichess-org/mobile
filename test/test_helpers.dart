@@ -7,22 +7,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 
+const double _kTestScreenWidth = 390.0;
+const double _kTestScreenHeight = 844.0;
+
+/// iPhone 14 screen size as default test surface size
+const kTestSurfaceSize = Size(_kTestScreenWidth, _kTestScreenHeight);
+
 const kPlatformVariant =
     TargetPlatformVariant({TargetPlatform.android, TargetPlatform.iOS});
 
 Matcher sameRequest(http.BaseRequest request) => _SameRequest(request);
 Matcher sameHeaders(Map<String, String> headers) => _SameHeaders(headers);
 
-Future<T> delayedAnswer<T>(T value) =>
-    Future<void>.delayed(const Duration(milliseconds: 5)).then((_) => value);
-
+/// Mocks an http response with a delay of 20ms.
 Future<http.Response> mockResponse(
   String body,
   int code, {
   Map<String, String> headers = const {},
 }) =>
-    Future<void>.delayed(const Duration(milliseconds: 20)).then(
-      (_) => http.Response(
+    Future.value(
+      http.Response(
         body,
         code,
         headers: headers,
@@ -30,23 +34,21 @@ Future<http.Response> mockResponse(
     );
 
 Future<http.StreamedResponse> mockStreamedResponse(String body, int code) =>
-    Future<void>.delayed(const Duration(milliseconds: 20)).then(
-      (_) => http.StreamedResponse(Stream.value(body).map(utf8.encode), code),
+    Future.value(
+      http.StreamedResponse(Stream.value(body).map(utf8.encode), code),
     );
 
 Future<http.StreamedResponse> mockHttpStreamFromIterable(
   Iterable<String> events,
 ) async {
-  await Future<void>.delayed(const Duration(milliseconds: 20));
   return http.StreamedResponse(
-    _streamFromFutures(events.map((e) => _withDelay(utf8.encode(e)))),
+    _streamFromFutures(events.map((e) => Future.value(utf8.encode(e)))),
     200,
   );
 }
 
 Future<http.StreamedResponse> mockHttpStream(Stream<String> stream) =>
-    Future<void>.delayed(const Duration(milliseconds: 20))
-        .then((_) => http.StreamedResponse(stream.map(utf8.encode), 200));
+    Future.value(http.StreamedResponse(stream.map(utf8.encode), 200));
 
 Future<void> tapBackButton(WidgetTester tester) async {
   if (debugDefaultTargetPlatformOverride == TargetPlatform.iOS) {
@@ -64,6 +66,7 @@ Future<void> meetsTapTargetGuideline(WidgetTester tester) async {
   }
 }
 
+/// Returns the offset of a square on a board defined by [Rect].
 Offset squareOffset(
   Square square,
   Rect boardRect, {
@@ -84,6 +87,7 @@ Offset squareOffset(
   );
 }
 
+/// Plays a move on the board.
 Future<void> playMove(
   WidgetTester tester,
   Rect boardRect,
@@ -139,9 +143,3 @@ Stream<T> _streamFromFutures<T>(Iterable<Future<T>> futures) async* {
     yield result;
   }
 }
-
-Future<T> _withDelay<T>(
-  T value, {
-  Duration delay = const Duration(milliseconds: 10),
-}) =>
-    Future<void>.delayed(delay).then((_) => value);

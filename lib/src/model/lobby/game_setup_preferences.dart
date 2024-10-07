@@ -1,41 +1,74 @@
-import 'dart:convert';
 import 'dart:math' as math;
-
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/l10n/l10n.dart';
-import 'package:lichess_mobile/src/db/shared_preferences.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/game.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
+import 'package:lichess_mobile/src/model/settings/preferences.dart';
+import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'game_setup.freezed.dart';
-part 'game_setup.g.dart';
+part 'game_setup_preferences.freezed.dart';
+part 'game_setup_preferences.g.dart';
 
-enum PlayableSide { random, white, black }
+@riverpod
+class GameSetupPreferences extends _$GameSetupPreferences
+    with SessionPreferencesStorage<GameSetupPrefs> {
+  // ignore: avoid_public_notifier_properties
+  @override
+  final prefCategory = PrefCategory.gameSetup;
 
-String playableSideL10n(AppLocalizations l10n, PlayableSide side) {
-  switch (side) {
-    case PlayableSide.white:
-      return l10n.white;
-    case PlayableSide.black:
-      return l10n.black;
-    case PlayableSide.random:
-      return l10n.randomColor;
+  @override
+  GameSetupPrefs build() {
+    return fetch();
+  }
+
+  Future<void> setQuickPairingTimeIncrement(TimeIncrement timeInc) {
+    return save(state.copyWith(quickPairingTimeIncrement: timeInc));
+  }
+
+  Future<void> setCustomTimeControl(TimeControl control) {
+    return save(state.copyWith(customTimeControl: control));
+  }
+
+  Future<void> setCustomTimeSeconds(int seconds) {
+    return save(state.copyWith(customTimeSeconds: seconds));
+  }
+
+  Future<void> setCustomIncrementSeconds(int seconds) {
+    return save(state.copyWith(customIncrementSeconds: seconds));
+  }
+
+  Future<void> setCustomVariant(Variant variant) {
+    return save(state.copyWith(customVariant: variant));
+  }
+
+  Future<void> setCustomRated(bool rated) {
+    return save(state.copyWith(customRated: rated));
+  }
+
+  Future<void> setCustomSide(SideChoice side) {
+    return save(state.copyWith(customSide: side));
+  }
+
+  Future<void> setCustomRatingRange(int min, int max) {
+    return save(state.copyWith(customRatingDelta: (min, max)));
+  }
+
+  Future<void> setCustomDaysPerTurn(int days) {
+    return save(state.copyWith(customDaysPerTurn: days));
   }
 }
 
 enum TimeControl { realTime, correspondence }
 
-/// Saved custom game setup preferences.
 @Freezed(fromJson: true, toJson: true)
-class GameSetup with _$GameSetup {
-  const GameSetup._();
+class GameSetupPrefs with _$GameSetupPrefs implements SerializablePreferences {
+  const GameSetupPrefs._();
 
-  const factory GameSetup({
+  const factory GameSetupPrefs({
     required TimeIncrement quickPairingTimeIncrement,
     required TimeControl customTimeControl,
     required int customTimeSeconds,
@@ -43,18 +76,18 @@ class GameSetup with _$GameSetup {
     required int customDaysPerTurn,
     required Variant customVariant,
     required bool customRated,
-    required PlayableSide customSide,
+    required SideChoice customSide,
     required (int, int) customRatingDelta,
-  }) = _GameSetup;
+  }) = _GameSetupPrefs;
 
-  static const defaults = GameSetup(
+  static const defaults = GameSetupPrefs(
     quickPairingTimeIncrement: TimeIncrement(600, 0),
     customTimeControl: TimeControl.realTime,
     customTimeSeconds: 180,
     customIncrementSeconds: 0,
     customVariant: Variant.standard,
     customRated: false,
-    customSide: PlayableSide.random,
+    customSide: SideChoice.random,
     customRatingDelta: (-500, 500),
     customDaysPerTurn: 3,
   );
@@ -82,76 +115,12 @@ class GameSetup with _$GameSetup {
     return (min, max);
   }
 
-  factory GameSetup.fromJson(Map<String, dynamic> json) {
+  factory GameSetupPrefs.fromJson(Map<String, dynamic> json) {
     try {
-      return _$GameSetupFromJson(json);
+      return _$GameSetupPrefsFromJson(json);
     } catch (_) {
       return defaults;
     }
-  }
-}
-
-@Riverpod(keepAlive: true)
-class GameSetupPreferences extends _$GameSetupPreferences {
-  static String _prefKey(AuthSessionState? session) =>
-      'preferences.game_setup.${session?.user.id ?? '**anon**'}';
-
-  @override
-  GameSetup build() {
-    final session = ref.watch(authSessionProvider);
-    final prefs = ref.watch(sharedPreferencesProvider);
-    final stored = prefs.getString(_prefKey(session));
-    return stored != null
-        ? GameSetup.fromJson(
-            jsonDecode(stored) as Map<String, dynamic>,
-          )
-        : GameSetup.defaults;
-  }
-
-  Future<void> setQuickPairingTimeIncrement(TimeIncrement timeInc) {
-    return _save(state.copyWith(quickPairingTimeIncrement: timeInc));
-  }
-
-  Future<void> setCustomTimeControl(TimeControl control) {
-    return _save(state.copyWith(customTimeControl: control));
-  }
-
-  Future<void> setCustomTimeSeconds(int seconds) {
-    return _save(state.copyWith(customTimeSeconds: seconds));
-  }
-
-  Future<void> setCustomIncrementSeconds(int seconds) {
-    return _save(state.copyWith(customIncrementSeconds: seconds));
-  }
-
-  Future<void> setCustomVariant(Variant variant) {
-    return _save(state.copyWith(customVariant: variant));
-  }
-
-  Future<void> setCustomRated(bool rated) {
-    return _save(state.copyWith(customRated: rated));
-  }
-
-  Future<void> setCustomSide(PlayableSide side) {
-    return _save(state.copyWith(customSide: side));
-  }
-
-  Future<void> setCustomRatingRange(int min, int max) {
-    return _save(state.copyWith(customRatingDelta: (min, max)));
-  }
-
-  Future<void> setCustomDaysPerTurn(int days) {
-    return _save(state.copyWith(customDaysPerTurn: days));
-  }
-
-  Future<void> _save(GameSetup newState) async {
-    final prefs = ref.read(sharedPreferencesProvider);
-    final session = ref.read(authSessionProvider);
-    await prefs.setString(
-      _prefKey(session),
-      jsonEncode(newState.toJson()),
-    );
-    state = newState;
   }
 }
 

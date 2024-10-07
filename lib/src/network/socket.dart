@@ -7,13 +7,11 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/app_initialization.dart';
+import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
-import 'package:lichess_mobile/src/utils/device_info.dart';
-import 'package:lichess_mobile/src/utils/package_info.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -40,6 +38,7 @@ final _logger = Logger('Socket');
 const _globalSocketStreamAllowedTopics = {
   'n',
   'message',
+  'challenges',
 };
 
 final _globalStreamController = StreamController<SocketEvent>.broadcast();
@@ -49,6 +48,7 @@ final _globalStreamController = StreamController<SocketEvent>.broadcast();
 /// Only a subset of topics are allowed to be broadcasted to the global stream:
 /// - 'n' (number of players and games currently on the server)
 /// - 'message'
+/// - 'challenges'
 final socketGlobalStream = _globalStreamController.stream;
 
 /// Creates a WebSocket URI for the lichess server.
@@ -454,11 +454,11 @@ class SocketPool {
     // Create a default socket client. This one is never disposed.
     final client = SocketClient(
       _currentRoute,
-      sri: _ref.read(sriProvider),
+      sri: LichessBinding.instance.sri,
       channelFactory: _ref.read(webSocketChannelFactoryProvider),
       getSession: () => _ref.read(authSessionProvider),
-      packageInfo: _ref.read(packageInfoProvider),
-      deviceInfo: _ref.read(deviceInfoProvider),
+      packageInfo: LichessBinding.instance.packageInfo,
+      deviceInfo: LichessBinding.instance.deviceInfo,
       pingDelay: const Duration(seconds: 25),
     );
 
@@ -509,9 +509,9 @@ class SocketPool {
         route,
         channelFactory: _ref.read(webSocketChannelFactoryProvider),
         getSession: () => _ref.read(authSessionProvider),
-        packageInfo: _ref.read(packageInfoProvider),
-        deviceInfo: _ref.read(deviceInfoProvider),
-        sri: _ref.read(sriProvider),
+        packageInfo: LichessBinding.instance.packageInfo,
+        deviceInfo: LichessBinding.instance.deviceInfo,
+        sri: LichessBinding.instance.sri,
         onStreamListen: () {
           _disposeTimers[route]?.cancel();
         },
@@ -598,14 +598,6 @@ SocketPool socketPool(SocketPoolRef ref) {
   });
 
   return pool;
-}
-
-/// Socket Random Identifier.
-@Riverpod(keepAlive: true)
-String sri(SriRef ref) {
-  // requireValue is possible because appInitializationProvider is loaded before
-  // anything. See: lib/src/app.dart
-  return ref.read(appInitializationProvider).requireValue.sri;
 }
 
 /// Average lag computed from WebSocket ping/pong protocol.

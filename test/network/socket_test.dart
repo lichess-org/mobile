@@ -2,12 +2,14 @@ import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lichess_mobile/src/model/common/socket.dart';
+import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import 'fake_websocket_channel.dart';
 
-SocketClient _makeSocketClient(FakeWebSocketChannelFactory fakeChannelFactory) {
+SocketClient makeTestSocketClient(
+  FakeWebSocketChannelFactory fakeChannelFactory,
+) {
   final client = SocketClient(
     Uri(path: kDefaultSocketRoute),
     channelFactory: fakeChannelFactory,
@@ -43,7 +45,7 @@ void main() {
       final fakeChannel = FakeWebSocketChannel();
 
       final socketClient =
-          _makeSocketClient(FakeWebSocketChannelFactory(() => fakeChannel));
+          makeTestSocketClient(FakeWebSocketChannelFactory(() => fakeChannel));
       socketClient.connect();
 
       int sentPingCount = 0;
@@ -75,7 +77,7 @@ void main() {
         return FakeWebSocketChannel();
       });
 
-      final socketClient = _makeSocketClient(fakeChannelFactory);
+      final socketClient = makeTestSocketClient(fakeChannelFactory);
       socketClient.connect();
 
       // The first connection attempt will fail, but the second one will succeed
@@ -111,7 +113,7 @@ void main() {
         return channel;
       });
 
-      final socketClient = _makeSocketClient(fakeChannelFactory);
+      final socketClient = makeTestSocketClient(fakeChannelFactory);
       socketClient.connect();
 
       await socketClient.firstConnection;
@@ -134,7 +136,7 @@ void main() {
       final fakeChannel = FakeWebSocketChannel();
 
       final socketClient =
-          _makeSocketClient(FakeWebSocketChannelFactory(() => fakeChannel));
+          makeTestSocketClient(FakeWebSocketChannelFactory(() => fakeChannel));
       socketClient.connect();
 
       // before the connection is ready the average lag is zero
@@ -186,7 +188,7 @@ void main() {
       final fakeChannel = FakeWebSocketChannel();
 
       final socketClient =
-          _makeSocketClient(FakeWebSocketChannelFactory(() => fakeChannel));
+          makeTestSocketClient(FakeWebSocketChannelFactory(() => fakeChannel));
       socketClient.connect();
 
       await socketClient.firstConnection;
@@ -205,7 +207,7 @@ void main() {
       );
 
       // server acks the message
-      await fakeChannel.addIncomingMessages(['{"t":"ack","d":1}']);
+      fakeChannel.addIncomingMessages(['{"t":"ack","d":1}']);
 
       // no more messages are expected
       await expectLater(

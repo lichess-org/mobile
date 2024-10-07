@@ -4,12 +4,13 @@ import 'package:dartchess/dartchess.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
+import 'package:lichess_mobile/src/model/common/game.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
-import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
+import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 
 part 'game_seek.freezed.dart';
@@ -56,8 +57,8 @@ class GameSeek with _$GameSeek {
     );
   }
 
-  /// Construct a game seek from saved [GameSetup], using all the custom params.
-  factory GameSeek.custom(GameSetup setup, User? account) {
+  /// Construct a game seek from saved [GameSetupPrefs], using all the custom params.
+  factory GameSeek.custom(GameSetupPrefs setup, User? account) {
     return GameSeek(
       clock: (
         Duration(seconds: setup.customTimeSeconds),
@@ -65,9 +66,9 @@ class GameSeek with _$GameSeek {
       ),
       rated: account != null && setup.customRated,
       variant: setup.customVariant,
-      side: setup.customRated == true || setup.customSide == PlayableSide.random
+      side: setup.customRated == true || setup.customSide == SideChoice.random
           ? null
-          : setup.customSide == PlayableSide.white
+          : setup.customSide == SideChoice.white
               ? Side.white
               : Side.black,
       ratingRange:
@@ -75,15 +76,15 @@ class GameSeek with _$GameSeek {
     );
   }
 
-  /// Construct a correspondence seek from saved [GameSetup].
-  factory GameSeek.correspondence(GameSetup setup, User? account) {
+  /// Construct a correspondence seek from saved [GameSetupPrefs].
+  factory GameSeek.correspondence(GameSetupPrefs setup, User? account) {
     return GameSeek(
       days: setup.customDaysPerTurn,
       rated: account != null && setup.customRated,
       variant: setup.customVariant,
-      side: setup.customRated == true || setup.customSide == PlayableSide.random
+      side: setup.customRated == true || setup.customSide == SideChoice.random
           ? null
-          : setup.customSide == PlayableSide.white
+          : setup.customSide == SideChoice.white
               ? Side.white
               : Side.black,
       ratingRange:
@@ -93,7 +94,10 @@ class GameSeek with _$GameSeek {
 
   /// Construct a game seek from a playable game to find a new opponent, using
   /// the same time control, variant and rated status.
-  factory GameSeek.newOpponentFromGame(PlayableGame game, GameSetup setup) {
+  factory GameSeek.newOpponentFromGame(
+    PlayableGame game,
+    GameSetupPrefs setup,
+  ) {
     return GameSeek(
       clock: game.meta.clock != null
           ? (game.meta.clock!.initial, game.meta.clock!.increment)

@@ -126,7 +126,8 @@ class _Body extends ConsumerWidget {
         ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
 
     final content = [
-      const SizedBox(height: 16.0),
+      if (Theme.of(context).platform == TargetPlatform.android)
+        const SizedBox(height: 16.0),
       ListSection(
         hasLeading: true,
         children: [
@@ -156,7 +157,7 @@ class _Body extends ConsumerWidget {
             ),
           ),
           _ToolsButton(
-            icon: Icons.explore,
+            icon: Icons.explore_outlined,
             title: context.l10n.openingExplorer,
             onTap: isOnline
                 ? () => pushPlatformRoute(
@@ -175,7 +176,7 @@ class _Body extends ConsumerWidget {
                 : null,
           ),
           _ToolsButton(
-            icon: Icons.edit,
+            icon: Icons.edit_outlined,
             title: context.l10n.boardEditor,
             onTap: () => pushPlatformRoute(
               context,

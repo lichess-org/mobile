@@ -35,35 +35,19 @@ import 'streak_screen.dart';
 const _kNumberOfHistoryItemsOnHandset = 8;
 const _kNumberOfHistoryItemsOnTablet = 16;
 
-class PuzzleTabScreen extends ConsumerStatefulWidget {
+class PuzzleTabScreen extends ConsumerWidget {
   const PuzzleTabScreen({super.key});
 
   @override
-  ConsumerState<PuzzleTabScreen> createState() => _PuzzleTabScreenState();
-}
-
-class _PuzzleTabScreenState extends ConsumerState<PuzzleTabScreen> {
-  final _androidRefreshKey = GlobalKey<RefreshIndicatorState>();
-
-  @override
-  Widget build(BuildContext context) {
-    final session = ref.watch(authSessionProvider);
-    return PlatformWidget(
-      androidBuilder: (context) => _androidBuilder(context, session),
-      iosBuilder: (context) => _iosBuilder(context, session),
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ConsumerPlatformWidget(
+      ref: ref,
+      androidBuilder: _androidBuilder,
+      iosBuilder: _iosBuilder,
     );
   }
 
-  Widget _androidBuilder(BuildContext context, AuthSessionState? userSession) {
-    final body = Column(
-      children: [
-        const ConnectivityBanner(),
-        Expanded(
-          child: _Body(userSession),
-        ),
-      ],
-    );
-
+  Widget _androidBuilder(BuildContext context, WidgetRef ref) {
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, _) {
@@ -76,20 +60,22 @@ class _PuzzleTabScreenState extends ConsumerState<PuzzleTabScreen> {
           title: Text(context.l10n.puzzles),
           actions: const [
             _DashboardButton(),
+            _HistoryButton(),
           ],
         ),
-        body: userSession != null
-            ? RefreshIndicator(
-                key: _androidRefreshKey,
-                onRefresh: _refreshData,
-                child: body,
-              )
-            : body,
+        body: const Column(
+          children: [
+            ConnectivityBanner(),
+            Expanded(
+              child: _Body(),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _iosBuilder(BuildContext context, AuthSessionState? userSession) {
+  Widget _iosBuilder(BuildContext context, WidgetRef ref) {
     return CupertinoPageScaffold(
       child: CustomScrollView(
         controller: puzzlesScrollController,
@@ -104,34 +90,24 @@ class _PuzzleTabScreenState extends ConsumerState<PuzzleTabScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 _DashboardButton(),
+                SizedBox(width: 6.0),
+                _HistoryButton(),
               ],
             ),
           ),
-          if (userSession != null)
-            CupertinoSliverRefreshControl(
-              onRefresh: _refreshData,
-            ),
           const SliverToBoxAdapter(child: ConnectivityBanner()),
-          SliverSafeArea(
+          const SliverSafeArea(
             top: false,
-            sliver: _Body(userSession),
+            sliver: _Body(),
           ),
         ],
       ),
     );
   }
-
-  Future<void> _refreshData() {
-    return Future.wait([
-      ref.refresh(puzzleRecentActivityProvider.future),
-    ]);
-  }
 }
 
 class _Body extends ConsumerWidget {
-  const _Body(this.session);
-
-  final AuthSessionState? session;
+  const _Body();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -140,17 +116,15 @@ class _Body extends ConsumerWidget {
     final isTablet = isTabletOrLarger(context);
 
     final handsetChildren = [
-      connectivity.when(
-        data: (data) => data.isOnline
-            ? const _DailyPuzzle()
-            : const _OfflinePuzzlePreview(),
-        loading: () => const SizedBox.shrink(),
-        error: (_, __) => const SizedBox.shrink(),
+      connectivity.whenIs(
+        online: () => const DailyPuzzle(),
+        offline: () => const SizedBox.shrink(),
       ),
+      const SizedBox(height: 4.0),
+      const TacticalTrainingPreview(),
       if (Theme.of(context).platform == TargetPlatform.android)
         const SizedBox(height: 8.0),
       _PuzzleMenu(connectivity: connectivity),
-      PuzzleHistoryWidget(),
     ];
 
     final tabletChildren = [
@@ -163,12 +137,9 @@ class _Body extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 const SizedBox(height: 8.0),
-                connectivity.when(
-                  data: (data) => data.isOnline
-                      ? const _DailyPuzzle()
-                      : const _OfflinePuzzlePreview(),
-                  loading: () => const SizedBox.shrink(),
-                  error: (_, __) => const SizedBox.shrink(),
+                connectivity.whenIs(
+                  online: () => const DailyPuzzle(),
+                  offline: () => const SizedBox.shrink(),
                 ),
                 _PuzzleMenu(connectivity: connectivity),
               ],
@@ -244,21 +215,6 @@ class _PuzzleMenu extends StatelessWidget {
     return ListSection(
       hasLeading: true,
       children: [
-        _PuzzleMenuListTile(
-          icon: PuzzleIcons.mix,
-          title: context.l10n.puzzlePuzzles,
-          subtitle: context.l10n.puzzleDesc,
-          onTap: () {
-            pushPlatformRoute(
-              context,
-              title: context.l10n.puzzleDesc,
-              rootNavigator: true,
-              builder: (context) => const PuzzleScreen(
-                angle: PuzzleTheme(PuzzleThemeKey.mix),
-              ),
-            );
-          },
-        ),
         _PuzzleMenuListTile(
           icon: PuzzleIcons.opening,
           title: context.l10n.puzzlePuzzleThemes,
@@ -353,7 +309,7 @@ class PuzzleHistoryWidget extends ConsumerWidget {
           headerTrailing: NoPaddingTextButton(
             onPressed: () => pushPlatformRoute(
               context,
-              builder: (context) => PuzzleHistoryScreen(),
+              builder: (context) => const PuzzleHistoryScreen(),
             ),
             child: Text(
               context.l10n.more,
@@ -400,29 +356,65 @@ class _DashboardButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final session = ref.watch(authSessionProvider);
-    if (session != null) {
-      return AppBarIconButton(
-        icon: const Icon(Icons.history),
-        semanticsLabel: context.l10n.puzzlePuzzleDashboard,
-        onPressed: () {
-          ref.invalidate(puzzleDashboardProvider);
-          _showDashboard(context, session);
-        },
-      );
+    if (session == null) {
+      return const SizedBox.shrink();
     }
-    return const SizedBox.shrink();
-  }
+    final onPressed = ref.watch(connectivityChangesProvider).whenIs(
+          online: () => () {
+            pushPlatformRoute(
+              context,
+              title: context.l10n.puzzlePuzzleDashboard,
+              builder: (_) => const PuzzleDashboardScreen(),
+            );
+          },
+          offline: () => null,
+        );
 
-  void _showDashboard(BuildContext context, AuthSessionState session) =>
-      pushPlatformRoute(
-        context,
-        title: context.l10n.puzzlePuzzleDashboard,
-        builder: (_) => const PuzzleDashboardScreen(),
-      );
+    return AppBarIconButton(
+      icon: const Icon(Icons.assessment_outlined),
+      semanticsLabel: context.l10n.puzzlePuzzleDashboard,
+      onPressed: onPressed,
+    );
+  }
 }
 
-class _DailyPuzzle extends ConsumerWidget {
-  const _DailyPuzzle();
+class _HistoryButton extends ConsumerWidget {
+  const _HistoryButton();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final session = ref.watch(authSessionProvider);
+    if (session == null) {
+      return const SizedBox.shrink();
+    }
+    final onPressed = ref.watch(connectivityChangesProvider).whenIs(
+          online: () => () {
+            pushPlatformRoute(
+              context,
+              title: context.l10n.puzzleHistory,
+              builder: (_) => const PuzzleHistoryScreen(),
+            );
+          },
+          offline: () => null,
+        );
+    return AppBarIconButton(
+      icon: const Icon(Icons.history_outlined),
+      semanticsLabel: context.l10n.puzzleHistory,
+      onPressed: onPressed,
+    );
+  }
+}
+
+TextStyle _puzzlePreviewSubtitleStyle(BuildContext context) {
+  return TextStyle(
+    fontSize: 14.0,
+    color: DefaultTextStyle.of(context).style.color?.withValues(alpha: 0.6),
+  );
+}
+
+/// A widget that displays the daily puzzle.
+class DailyPuzzle extends ConsumerWidget {
+  const DailyPuzzle();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -449,6 +441,7 @@ class _DailyPuzzle extends ConsumerWidget {
                     context.l10n
                         .puzzlePlayedXTimes(data.puzzle.plays)
                         .localizeNumbers(),
+                    style: _puzzlePreviewSubtitleStyle(context),
                   ),
                 ],
               ),
@@ -461,7 +454,7 @@ class _DailyPuzzle extends ConsumerWidget {
                     ?.withValues(alpha: 0.6),
               ),
               Text(
-                data.puzzle.initialPly.isOdd
+                data.puzzle.sideToMove == Side.white
                     ? context.l10n.whitePlays
                     : context.l10n.blackPlays,
               ),
@@ -480,82 +473,118 @@ class _DailyPuzzle extends ConsumerWidget {
           },
         );
       },
-      loading: () => SmallBoardPreview(
-        orientation: Side.white,
-        fen: kEmptyFen,
-        description: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Text(
-              context.l10n.puzzlePuzzleOfTheDay,
-              style: Styles.boardPreviewTitle,
-            ),
-            const Text(''),
-          ],
+      loading: () => const Shimmer(
+        child: ShimmerLoading(
+          isLoading: true,
+          child: SmallBoardPreview.loading(),
         ),
       ),
-      error: (error, stack) => const Padding(
-        padding: Styles.bodySectionPadding,
-        child: Text('Could not load the daily puzzle.'),
-      ),
+      error: (error, _) {
+        return const Padding(
+          padding: Styles.bodySectionPadding,
+          child: Text('Could not load the daily puzzle.'),
+        );
+      },
     );
   }
 }
 
-class _OfflinePuzzlePreview extends ConsumerWidget {
-  const _OfflinePuzzlePreview();
+/// A widget that displays a preview of the tactical training screen.
+class TacticalTrainingPreview extends ConsumerWidget {
+  const TacticalTrainingPreview();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final puzzle =
         ref.watch(nextPuzzleProvider(const PuzzleTheme(PuzzleThemeKey.mix)));
-    return puzzle.maybeWhen(
-      data: (data) {
-        final preview =
-            data != null ? PuzzlePreview.fromPuzzle(data.puzzle) : null;
-        return SmallBoardPreview(
-          orientation: preview?.orientation ?? Side.white,
-          fen: preview?.initialFen ?? kEmptyFen,
-          lastMove: preview?.initialMove,
-          description: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Text(
-                context.l10n.puzzleDesc,
-                style: Styles.boardPreviewTitle,
+
+    Widget buildPuzzlePreview(Puzzle? puzzle, {bool loading = false}) {
+      final preview = puzzle != null ? PuzzlePreview.fromPuzzle(puzzle) : null;
+      return loading
+          ? const Shimmer(
+              child: ShimmerLoading(
+                isLoading: true,
+                child: SmallBoardPreview.loading(),
               ),
-              Text(
-                context.l10n
-                    .puzzlePlayedXTimes(data?.puzzle.puzzle.plays ?? 0)
-                    .localizeNumbers(),
-              ),
-            ],
-          ),
-          onTap: data != null
-              ? () {
-                  pushPlatformRoute(
-                    context,
-                    rootNavigator: true,
-                    builder: (context) => const PuzzleScreen(
-                      angle: PuzzleTheme(PuzzleThemeKey.mix),
-                    ),
-                  ).then((_) {
-                    if (context.mounted) {
-                      ref.invalidate(
-                        nextPuzzleProvider(
-                          const PuzzleTheme(PuzzleThemeKey.mix),
+            )
+          : SmallBoardPreview(
+              orientation: preview?.orientation ?? Side.white,
+              fen: preview?.initialFen ?? kEmptyFen,
+              lastMove: preview?.initialMove,
+              description: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        context.l10n.puzzleDesc,
+                        style: Styles.boardPreviewTitle,
+                      ),
+                      Text(
+                        // TODO change this to a better description when
+                        // translation tool is again available (#945)
+                        context.l10n.puzzleThemeHealthyMixDescription,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          height: 1.2,
+                          fontSize: 12.0,
+                          color: DefaultTextStyle.of(context)
+                              .style
+                              .color
+                              ?.withValues(alpha: 0.6),
                         ),
-                      );
+                      ),
+                    ],
+                  ),
+                  Icon(
+                    PuzzleIcons.mix,
+                    size: 34,
+                    color: DefaultTextStyle.of(context)
+                        .style
+                        .color
+                        ?.withValues(alpha: 0.6),
+                  ),
+                  if (puzzle != null)
+                    Text(
+                      puzzle.puzzle.sideToMove == Side.white
+                          ? context.l10n.whitePlays
+                          : context.l10n.blackPlays,
+                    )
+                  else
+                    const Text(
+                      'No puzzles available, please go online to fetch them.',
+                    ),
+                ],
+              ),
+              onTap: puzzle != null
+                  ? () {
+                      pushPlatformRoute(
+                        context,
+                        rootNavigator: true,
+                        builder: (context) => const PuzzleScreen(
+                          angle: PuzzleTheme(PuzzleThemeKey.mix),
+                        ),
+                      ).then((_) {
+                        if (context.mounted) {
+                          ref.invalidate(
+                            nextPuzzleProvider(
+                              const PuzzleTheme(PuzzleThemeKey.mix),
+                            ),
+                          );
+                        }
+                      });
                     }
-                  });
-                }
-              : null,
-        );
-      },
-      orElse: () => const SizedBox.shrink(),
+                  : null,
+            );
+    }
+
+    return puzzle.maybeWhen(
+      data: (data) => buildPuzzlePreview(data?.puzzle),
+      orElse: () => buildPuzzlePreview(null, loading: true),
     );
   }
 }

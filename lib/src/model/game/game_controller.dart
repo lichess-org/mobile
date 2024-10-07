@@ -13,11 +13,9 @@ import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
-import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
@@ -29,6 +27,8 @@ import 'package:lichess_mobile/src/model/game/game_storage.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
+import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:logging/logging.dart';
 import 'package:result_extensions/result_extensions.dart';
@@ -94,6 +94,13 @@ class GameController extends _$GameController {
         PlayableGame game = fullEvent.game;
 
         if (fullEvent.game.finished) {
+          if (fullEvent.game.meta.speed == Speed.correspondence) {
+            ref.invalidate(ongoingGamesProvider);
+            ref
+                .read(correspondenceServiceProvider)
+                .updateGame(gameFullId, fullEvent.game);
+          }
+
           final result = await _getPostGameData();
           game = result.fold(
               (data) => _mergePostGameData(game, data, rewriteSteps: true),
@@ -700,10 +707,7 @@ class GameController extends _$GameController {
               state = AsyncValue.data(
                 state.requireValue.copyWith(game: game),
               );
-
-              ref
-                  .read(gameStorageProvider)
-                  .save(game.toArchivedGame(finishedAt: DateTime.now()));
+              _storeGame(game);
             }, (e, s) {
               _logger.warning('Could not get post game data', e, s);
             });
@@ -907,6 +911,13 @@ class GameController extends _$GameController {
             evals: data.evals,
           ),
         );
+    }
+  }
+
+  Future<void> _storeGame(PlayableGame game) async {
+    if (game.finished) {
+      (await ref.read(gameStorageProvider.future))
+          .save(game.toArchivedGame(finishedAt: DateTime.now()));
     }
   }
 

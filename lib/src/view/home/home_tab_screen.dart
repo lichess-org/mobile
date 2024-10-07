@@ -6,10 +6,12 @@ import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/account/ongoing_game.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/challenge/challenges.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
 import 'package:lichess_mobile/src/model/settings/home_preferences.dart';
 import 'package:lichess_mobile/src/navigation.dart';
+import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n.dart';
@@ -25,6 +27,7 @@ import 'package:lichess_mobile/src/view/play/ongoing_games_screen.dart';
 import 'package:lichess_mobile/src/view/play/play_screen.dart';
 import 'package:lichess_mobile/src/view/play/quick_game_button.dart';
 import 'package:lichess_mobile/src/view/play/quick_game_matrix.dart';
+import 'package:lichess_mobile/src/view/user/challenge_requests_screen.dart';
 import 'package:lichess_mobile/src/view/user/player_screen.dart';
 import 'package:lichess_mobile/src/view/user/recent_games.dart';
 import 'package:lichess_mobile/src/widgets/board_carousel_item.dart';
@@ -84,9 +87,11 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
             onPressed: () {
               ref.read(editModeProvider.notifier).state = !isEditing;
             },
-            icon: Icon(isEditing ? Icons.save : Icons.app_registration),
+            icon:
+                Icon(isEditing ? Icons.save_outlined : Icons.app_registration),
             tooltip: isEditing ? 'Save' : 'Edit',
           ),
+          const _ChallengeScreenButton(),
           const _PlayerScreenButton(),
         ],
       ),
@@ -141,6 +146,7 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
                 trailing: const Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    _ChallengeScreenButton(),
                     _PlayerScreenButton(),
                   ],
                 ),
@@ -930,7 +936,7 @@ class _PlayerScreenButton extends ConsumerWidget {
 
     return connectivity.maybeWhen(
       data: (connectivity) => AppBarIconButton(
-        icon: const Icon(Icons.group),
+        icon: const Icon(Icons.group_outlined),
         semanticsLabel: context.l10n.players,
         onPressed: !connectivity.isOnline
             ? null
@@ -943,8 +949,46 @@ class _PlayerScreenButton extends ConsumerWidget {
               },
       ),
       orElse: () => AppBarIconButton(
-        icon: const Icon(Icons.group),
+        icon: const Icon(Icons.group_outlined),
         semanticsLabel: context.l10n.players,
+        onPressed: null,
+      ),
+    );
+  }
+}
+
+class _ChallengeScreenButton extends ConsumerWidget {
+  const _ChallengeScreenButton();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final session = ref.watch(authSessionProvider);
+    final connectivity = ref.watch(connectivityChangesProvider);
+    final challenges = ref.watch(challengesProvider);
+    final count = challenges.valueOrNull?.inward.length;
+
+    if (session == null) {
+      return const SizedBox.shrink();
+    }
+
+    return connectivity.maybeWhen(
+      data: (connectivity) => AppBarNotificationIconButton(
+        icon: const Icon(LichessIcons.crossed_swords, size: 18.0),
+        semanticsLabel: context.l10n.preferencesNotifyChallenge,
+        onPressed: !connectivity.isOnline
+            ? null
+            : () {
+                pushPlatformRoute(
+                  context,
+                  title: context.l10n.preferencesNotifyChallenge,
+                  builder: (_) => const ChallengeRequestsScreen(),
+                );
+              },
+        count: count ?? 0,
+      ),
+      orElse: () => AppBarIconButton(
+        icon: const Icon(LichessIcons.crossed_swords, size: 18.0),
+        semanticsLabel: context.l10n.preferencesNotifyChallenge,
         onPressed: null,
       ),
     );

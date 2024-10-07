@@ -8,7 +8,6 @@ import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
@@ -22,6 +21,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/navigation.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/immersive_mode.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
@@ -117,7 +117,7 @@ class _Title extends ConsumerWidget {
     return switch (angle) {
       PuzzleTheme(themeKey: final key) => key == PuzzleThemeKey.mix
           ? Text(context.l10n.puzzleDesc)
-          : Text(puzzleThemeL10n(context, key).name),
+          : Text(key.l10n(context.l10n).name),
       PuzzleOpening(key: final key) => ref
           .watch(
             puzzleOpeningNameProvider(key),
@@ -541,8 +541,7 @@ class _DifficultySelector extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final difficulty = ref.watch(
-      puzzlePreferencesProvider(initialPuzzleContext.userId)
-          .select((state) => state.difficulty),
+      puzzlePreferencesProvider.select((state) => state.difficulty),
     );
     final state = ref.watch(ctrlProvider);
     final connectivity = ref.watch(connectivityChangesProvider);

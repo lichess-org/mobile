@@ -3,12 +3,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/user/search_screen.dart';
 import 'package:lichess_mobile/src/widgets/user_list_tile.dart';
 
-import '../../test_app.dart';
-import '../../test_utils.dart';
+import '../../test_helpers.dart';
+import '../../test_provider_scope.dart';
 
 final client = MockClient((request) {
   if (request.url.path == '/api/player/autocomplete') {
@@ -25,7 +25,7 @@ void main() {
     testWidgets(
       'should see search results',
       (WidgetTester tester) async {
-        final app = await buildTestApp(
+        final app = await makeTestProviderScopeApp(
           tester,
           home: const SearchScreen(),
           overrides: [
@@ -66,7 +66,7 @@ void main() {
     testWidgets(
       'should see "no result" when search finds nothing',
       (WidgetTester tester) async {
-        final app = await buildTestApp(
+        final app = await makeTestProviderScopeApp(
           tester,
           home: const SearchScreen(),
           overrides: [

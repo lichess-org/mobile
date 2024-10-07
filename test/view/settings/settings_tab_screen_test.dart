@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/db/database.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/settings/settings_tab_screen.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 
 import '../../model/auth/fake_session_storage.dart';
-import '../../test_app.dart';
-import '../../test_utils.dart';
+import '../../test_helpers.dart';
+import '../../test_provider_scope.dart';
 
 final client = MockClient((request) {
   if (request.method == 'DELETE' && request.url.path == '/api/token') {
@@ -26,7 +26,7 @@ void main() {
       (WidgetTester tester) async {
         final SemanticsHandle handle = tester.ensureSemantics();
 
-        final app = await buildTestApp(
+        final app = await makeTestProviderScopeApp(
           tester,
           home: const SettingsTabScreen(),
         );
@@ -46,7 +46,7 @@ void main() {
     testWidgets(
       "don't show signOut if no session",
       (WidgetTester tester) async {
-        final app = await buildTestApp(
+        final app = await makeTestProviderScopeApp(
           tester,
           home: const SettingsTabScreen(),
         );
@@ -61,7 +61,7 @@ void main() {
     testWidgets(
       'signout',
       (WidgetTester tester) async {
-        final app = await buildTestApp(
+        final app = await makeTestProviderScopeApp(
           tester,
           home: const SettingsTabScreen(),
           userSession: fakeSession,

@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
@@ -14,13 +13,11 @@ class PuzzleSettingsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userId = ref.watch(authSessionProvider)?.user.id;
-
     final isSoundEnabled = ref.watch(
       generalPreferencesProvider.select((pref) => pref.isSoundEnabled),
     );
     final autoNext = ref.watch(
-      PuzzlePreferencesProvider(userId).select((value) => value.autoNext),
+      puzzlePreferencesProvider.select((value) => value.autoNext),
     );
     final boardPrefs = ref.watch(boardPreferencesProvider);
 
@@ -37,9 +34,7 @@ class PuzzleSettingsScreen extends ConsumerWidget {
           title: Text(context.l10n.puzzleJumpToNextPuzzleImmediately),
           value: autoNext,
           onChanged: (value) {
-            ref
-                .read(puzzlePreferencesProvider(userId).notifier)
-                .setAutoNext(value);
+            ref.read(puzzlePreferencesProvider.notifier).setAutoNext(value);
           },
         ),
         SwitchSettingTile(
