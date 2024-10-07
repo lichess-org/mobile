@@ -19,7 +19,7 @@
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">لاعبين مع \"%s\"</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">لا توجد نتائج</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">هل أنت متأكد؟</string>
-  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">سوف تفقد تسلقك الحالي وسيتم حفظ نتيجتك.</string>
+  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak.&#10;&#10;Please note that unlike on the website, on the mobile app, exiting the 'Streak' view will completely end your run. See issue https://github.com/lichess-org/mobile/issues/324">سوف تفقد تسلقك الحالي وسيتم حفظ نتيجتك.</string>
   <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">لا شيء لإظهاره. العب بعض الألغاز.</string>
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">شارك هذا اللغز</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">شارك رابط المباراة</string>
@@ -38,6 +38,7 @@
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">الانضمام إلى لعبة</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">مسح النقل المحفوظ</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">لقد حدث خطأ ما.</string>
+  <string name="showResult" comment="This is the label of a button in the bottom bar shown when viewing a game from your history. Pressing the button will open a dialog showing the game's result (e.g 'White resigned') and displaying button such as 'new opponent'">إظهار النتيجة</string>
   <string name="greeting" comment="A greeting that is shown on the app's home page, e.g. 'Hello, GM Magnus'. %s is substituted with the user's name">مرحبا، %s</string>
   <string name="greetingWithoutName" comment="Greeing that is shown on the app's home page when the user is not logged in.">مرحبا</string>
 </resources>
