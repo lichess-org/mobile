@@ -389,7 +389,7 @@ class Settings extends ConsumerWidget {
       child: Column(
         children: [
           Filter(
-            filterName: context.l10n.time,
+            filterName: context.l10n.side,
             filterType: FilterType.singleChoice,
             choices: SideChoice.values,
             showCheckmark: false,
@@ -409,7 +409,7 @@ class Settings extends ConsumerWidget {
           const PlatformDivider(thickness: 1, indent: 0),
           const SizedBox(height: 12.0),
           Filter(
-            filterName: context.l10n.side,
+            filterName: context.l10n.time,
             filterType: FilterType.singleChoice,
             choices: TimeChoice.values,
             showCheckmark: false,
