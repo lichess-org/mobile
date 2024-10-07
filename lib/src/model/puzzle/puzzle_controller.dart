@@ -6,7 +6,6 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
@@ -22,6 +21,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_streak.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:result_extensions/result_extensions.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -41,9 +41,9 @@ class PuzzleController extends _$PuzzleController {
 
   final _engineEvalDebounce = Debouncer(const Duration(milliseconds: 100));
 
-  late final _service = ref.read(puzzleServiceFactoryProvider)(
-    queueLength: kPuzzleLocalQueueLength,
-  );
+  Future<PuzzleService> get _service => ref.read(puzzleServiceFactoryProvider)(
+        queueLength: kPuzzleLocalQueueLength,
+      );
   @override
   PuzzleState build(
     PuzzleContext initialContext, {
@@ -232,12 +232,10 @@ class PuzzleController extends _$PuzzleController {
     );
 
     await ref
-        .read(
-          puzzlePreferencesProvider(initialContext.userId).notifier,
-        )
+        .read(puzzlePreferencesProvider.notifier)
         .setDifficulty(difficulty);
 
-    final nextPuzzle = _service.resetBatch(
+    final nextPuzzle = (await _service).resetBatch(
       userId: initialContext.userId,
       angle: initialContext.angle,
     );
@@ -348,7 +346,7 @@ class PuzzleController extends _$PuzzleController {
     final soundService = ref.read(soundServiceProvider);
 
     if (state.streak == null) {
-      final next = await _service.solve(
+      final next = await (await _service).solve(
         userId: initialContext.userId,
         angle: initialContext.angle,
         puzzle: state.puzzle,
@@ -385,7 +383,7 @@ class PuzzleController extends _$PuzzleController {
 
       if (next != null &&
           result == PuzzleResult.win &&
-          ref.read(puzzlePreferencesProvider(initialContext.userId)).autoNext) {
+          ref.read(puzzlePreferencesProvider).autoNext) {
         loadPuzzle(next);
       }
     } else {

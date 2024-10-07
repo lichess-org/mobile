@@ -17,7 +17,7 @@ import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/tree_view.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 
-import '../../test_app.dart';
+import '../../test_provider_scope.dart';
 
 void main() {
   // ignore: avoid_dynamic_calls
@@ -29,7 +29,7 @@ void main() {
 
   group('Analysis Screen', () {
     testWidgets('displays correct move and position', (tester) async {
-      final app = await buildTestApp(
+      final app = await makeTestProviderScopeApp(
         tester,
         home: AnalysisScreen(
           pgnOrId: sanMoves,
@@ -56,7 +56,7 @@ void main() {
     });
 
     testWidgets('move backwards and forward', (tester) async {
-      final app = await buildTestApp(
+      final app = await makeTestProviderScopeApp(
         tester,
         home: AnalysisScreen(
           pgnOrId: sanMoves,

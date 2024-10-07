@@ -1,14 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/view/user/perf_stats_screen.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 
 import '../../model/auth/fake_auth_repository.dart';
-import '../../test_app.dart';
-import '../../test_utils.dart';
+import '../../test_helpers.dart';
+import '../../test_provider_scope.dart';
 
 final client = MockClient((request) {
   if (request.url.path == '/api/user/${fakeUser.id}/perf/${testPerf.name}') {
@@ -27,7 +27,7 @@ void main() {
       (WidgetTester tester) async {
         final SemanticsHandle handle = tester.ensureSemantics();
 
-        final app = await buildTestApp(
+        final app = await makeTestProviderScopeApp(
           tester,
           home: PerfStatsScreen(
             user: fakeUser,
@@ -59,7 +59,7 @@ void main() {
     testWidgets(
       'screen loads, required stats are shown',
       (WidgetTester tester) async {
-        final app = await buildTestApp(
+        final app = await makeTestProviderScopeApp(
           tester,
           home: PerfStatsScreen(
             user: fakeUser,

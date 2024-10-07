@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lichess_mobile/src/model/clock/clock_controller.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
-import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
+import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';

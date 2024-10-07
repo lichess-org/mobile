@@ -11,8 +11,8 @@ import 'package:lichess_mobile/src/model/over_the_board/over_the_board_game_cont
 import 'package:lichess_mobile/src/view/over_the_board/over_the_board_screen.dart';
 import 'package:lichess_mobile/src/widgets/countdown_clock.dart';
 
-import '../../test_app.dart';
-import '../../test_utils.dart';
+import '../../test_helpers.dart';
+import '../../test_provider_scope.dart';
 
 void main() {
   group('Playing over the board (offline)', () {
@@ -203,7 +203,7 @@ Future<Rect> initOverTheBoardGame(
   WidgetTester tester,
   TimeIncrement timeIncrement,
 ) async {
-  final app = await buildTestApp(
+  final app = await makeTestProviderScopeApp(
     tester,
     home: const OverTheBoardScreen(),
   );

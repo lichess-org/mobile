@@ -2,9 +2,9 @@ import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:http/http.dart' as http;
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'correspondence_challenge.dart';

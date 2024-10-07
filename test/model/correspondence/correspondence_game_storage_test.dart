@@ -1,7 +1,6 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
@@ -13,28 +12,16 @@ import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/material_diff.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import '../../test_container.dart';
 
 void main() {
-  final dbFactory = databaseFactoryFfi;
-  sqfliteFfiInit();
-
   group('CorrespondenceGameStorage', () {
     test('save and fetch data', () async {
-      final db = await openDb(dbFactory, inMemoryDatabasePath);
+      final container = await makeContainer();
 
-      final container = await makeContainer(
-        overrides: [
-          databaseProvider.overrideWith((ref) {
-            ref.onDispose(db.close);
-            return db;
-          }),
-        ],
-      );
-
-      final storage = container.read(correspondenceGameStorageProvider);
+      final storage =
+          await container.read(correspondenceGameStorageProvider.future);
 
       await storage.save(corresGame);
       expect(

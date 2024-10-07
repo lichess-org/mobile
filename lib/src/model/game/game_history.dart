@@ -6,7 +6,6 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
@@ -14,6 +13,7 @@ import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/riverpod.dart';
 import 'package:result_extensions/result_extensions.dart';
@@ -45,7 +45,7 @@ Future<IList<LightArchivedGameWithPov>> myRecentGames(
       const Duration(hours: 1),
     );
   } else {
-    final storage = ref.watch(gameStorageProvider);
+    final storage = await ref.watch(gameStorageProvider.future);
     ref.cacheFor(const Duration(hours: 1));
     return storage
         .page(userId: session?.user.id, max: kNumberOfRecentGames)
@@ -94,7 +94,8 @@ Future<int> userNumberOfGames(
         )
       : session != null && isOnline
           ? ref.watch(accountProvider.selectAsync((u) => u?.count?.all ?? 0))
-          : ref.watch(gameStorageProvider).count(userId: user?.id);
+          : (await ref.watch(gameStorageProvider.future))
+              .count(userId: user?.id);
 }
 
 /// A provider that paginates the game history for a given user, or the current app user if no user is provided.
@@ -125,7 +126,7 @@ class UserGameHistory extends _$UserGameHistory {
     final session = ref.watch(authSessionProvider);
     final online = await ref
         .watch(connectivityChangesProvider.selectAsync((c) => c.isOnline));
-    final storage = ref.watch(gameStorageProvider);
+    final storage = await ref.watch(gameStorageProvider.future);
 
     final id = userId ?? session?.user.id;
     final recentGames = id != null && online
@@ -157,7 +158,7 @@ class UserGameHistory extends _$UserGameHistory {
   }
 
   /// Fetches the next page of games.
-  void getNext() {
+  Future<void> getNext() async {
     if (!state.hasValue) return;
 
     final currentVal = state.requireValue;
@@ -181,8 +182,7 @@ class UserGameHistory extends _$UserGameHistory {
                     filter: currentVal.filter,
                   ),
                 )
-              : ref
-                  .watch(gameStorageProvider)
+              : (await ref.watch(gameStorageProvider.future))
                   .page(max: _nbPerPage, until: _list.last.game.createdAt)
                   .then(
                     (value) => value

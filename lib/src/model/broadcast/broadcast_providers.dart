@@ -1,7 +1,7 @@
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'broadcast_providers.g.dart';

@@ -1,10 +1,77 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:signal_strength_indicator/signal_strength_indicator.dart';
+
+class LagIndicator extends StatelessWidget {
+  const LagIndicator({
+    required this.lagRating,
+    this.size = 20.0,
+    this.showLoadingIndicator = false,
+    super.key,
+  }) : assert(lagRating >= 0 && lagRating <= 4);
+
+  /// The lag rating from 0 to 4.
+  final int lagRating;
+
+  /// Visual size of the indicator.
+  final double size;
+
+  /// Whether to show a loading indicator when the lag rating is 0.
+  final bool showLoadingIndicator;
+
+  static const spinKit = SpinKitThreeBounce(
+    color: Colors.grey,
+    size: 15,
+  );
+
+  static const cupertinoLevels = {
+    0: CupertinoColors.systemRed,
+    1: CupertinoColors.systemYellow,
+    2: CupertinoColors.systemGreen,
+    3: CupertinoColors.systemGreen,
+  };
+
+  static const materialLevels = {
+    0: Colors.red,
+    1: Colors.yellow,
+    2: Colors.green,
+    3: Colors.green,
+  };
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox.square(
+      dimension: size,
+      child: Stack(
+        children: [
+          SignalStrengthIndicator.bars(
+            barCount: 4,
+            minValue: 1,
+            maxValue: 4,
+            value: lagRating,
+            size: size,
+            inactiveColor: Theme.of(context).platform == TargetPlatform.iOS
+                ? CupertinoDynamicColor.resolve(
+                    CupertinoColors.systemGrey,
+                    context,
+                  ).withValues(alpha: 0.2)
+                : Colors.grey.withValues(alpha: 0.2),
+            levels: Theme.of(context).platform == TargetPlatform.iOS
+                ? cupertinoLevels
+                : materialLevels,
+          ),
+          if (showLoadingIndicator && lagRating == 0) spinKit,
+        ],
+      ),
+    );
+  }
+}
 
 class ConnectivityBanner extends ConsumerWidget {
   const ConnectivityBanner();

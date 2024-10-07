@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
-import 'package:lichess_mobile/src/model/lobby/game_setup.dart';
+import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_clock.dart';
 import 'package:lichess_mobile/src/model/over_the_board/over_the_board_game_controller.dart';
 import 'package:lichess_mobile/src/model/settings/over_the_board_preferences.dart';

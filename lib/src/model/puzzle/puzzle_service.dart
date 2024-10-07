@@ -3,9 +3,9 @@ import 'dart:math' show max;
 import 'package:async/async.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:logging/logging.dart';
 import 'package:result_extensions/result_extensions.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -33,11 +33,11 @@ class PuzzleServiceFactory {
 
   final PuzzleServiceFactoryRef _ref;
 
-  PuzzleService call({required int queueLength}) {
+  Future<PuzzleService> call({required int queueLength}) async {
     return PuzzleService(
       _ref,
-      batchStorage: _ref.read(puzzleBatchStorageProvider),
-      puzzleStorage: _ref.read(puzzleStorageProvider),
+      batchStorage: await _ref.read(puzzleBatchStorageProvider.future),
+      puzzleStorage: await _ref.read(puzzleStorageProvider.future),
       queueLength: queueLength,
     );
   }
@@ -158,7 +158,7 @@ class PuzzleService {
 
     _log.fine('Have a puzzle deficit of $deficit, will sync with lichess');
 
-    final difficulty = _ref.read(puzzlePreferencesProvider(userId)).difficulty;
+    final difficulty = _ref.read(puzzlePreferencesProvider).difficulty;
 
     // anonymous users can't solve puzzles so we just download the deficit
     // we send the request even if the deficit is 0 to get the glicko rating

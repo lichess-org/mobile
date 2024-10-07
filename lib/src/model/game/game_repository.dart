@@ -1,12 +1,12 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:http/http.dart' as http;
-import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 
 class GameRepository {
   const GameRepository(this.client);

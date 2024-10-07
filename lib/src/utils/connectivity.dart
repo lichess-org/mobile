@@ -5,7 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:http/http.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -15,30 +15,36 @@ part 'connectivity.g.dart';
 
 final _logger = Logger('Connectivity');
 
+/// A provider that exposes a [Connectivity] instance.
+@Riverpod(keepAlive: true)
+Connectivity connectivityPlugin(ConnectivityPluginRef _) => Connectivity();
+
 /// This provider is used to check the device's connectivity status, reacting to
 /// changes in connectivity and app lifecycle events.
 ///
 /// - Uses the [Connectivity] plugin to listen to connectivity changes
 /// - Uses [AppLifecycleListener] to check connectivity on app resume
-@riverpod
+@Riverpod(keepAlive: true)
 class ConnectivityChanges extends _$ConnectivityChanges {
-  StreamSubscription<List<ConnectivityResult>>? _socketSubscription;
+  StreamSubscription<List<ConnectivityResult>>? _connectivitySubscription;
   AppLifecycleListener? _appLifecycleListener;
 
   final _connectivityChangesDebouncer = Debouncer(const Duration(seconds: 5));
 
   Client get _defaultClient => ref.read(defaultClientProvider);
+  Connectivity get _connectivity => ref.read(connectivityPluginProvider);
 
   @override
   Future<ConnectivityStatus> build() {
     ref.onDispose(() {
-      _socketSubscription?.cancel();
+      _connectivitySubscription?.cancel();
       _appLifecycleListener?.dispose();
       _connectivityChangesDebouncer.dispose();
     });
 
-    _socketSubscription?.cancel();
-    _socketSubscription = Connectivity().onConnectivityChanged.listen((result) {
+    _connectivitySubscription?.cancel();
+    _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen((result) {
       _connectivityChangesDebouncer(() => _onConnectivityChange(result));
     });
 
@@ -48,7 +54,7 @@ class ConnectivityChanges extends _$ConnectivityChanges {
       onStateChange: _onAppLifecycleChange,
     );
 
-    return Connectivity()
+    return _connectivity
         .checkConnectivity()
         .then((r) => _getConnectivityStatus(r, appState));
   }
@@ -59,7 +65,7 @@ class ConnectivityChanges extends _$ConnectivityChanges {
     }
 
     if (appState == AppLifecycleState.resumed) {
-      final newConn = await Connectivity()
+      final newConn = await _connectivity
           .checkConnectivity()
           .then((r) => _getConnectivityStatus(r, appState));
 
@@ -144,4 +150,62 @@ Future<bool> isOnline(Client client) {
     completer.complete(false);
   }
   return completer.future;
+}
+
+extension AsyncValueConnectivity on AsyncValue<ConnectivityStatus> {
+  /// Switches between device's connectivity status.
+  ///
+  /// Using this method assumes the the device is offline when the status is
+  /// not yet available (i.e. [AsyncValue.isLoading].
+  /// If you want to handle the loading state separately, use
+  /// [whenIsLoading] instead.
+  ///
+  /// This method is similar to [AsyncValueX.maybeWhen], but it takes two
+  /// functions, one for when the device is online and another for when it is
+  /// offline.
+  ///
+  /// Example:
+  /// ```dart
+  /// final status = ref.watch(connectivityChangesProvider);
+  /// final result = status.whenIs(
+  ///   online: () => 'Online',
+  ///   offline: () => 'Offline',
+  /// );
+  /// ```
+  R whenIs<R>({
+    required R Function() online,
+    required R Function() offline,
+  }) {
+    return maybeWhen(
+      data: (status) => status.isOnline ? online() : offline(),
+      orElse: offline,
+    );
+  }
+
+  /// Switches between device's connectivity status, but handling the loading state.
+  ///
+  /// This method is similar to [AsyncValueX.when], but it takes three
+  /// functions, one for when the device is online, another for when it is
+  /// offline, and the last for when the status is still loading.
+  ///
+  /// Example:
+  /// ```dart
+  /// final status = ref.watch(connectivityChangesProvider);
+  /// final result = status.whenIsLoading(
+  ///   online: () => 'Online',
+  ///   offline: () => 'Offline',
+  ///   loading: () => 'Loading',
+  /// );
+  /// ```
+  R whenIsLoading<R>({
+    required R Function() online,
+    required R Function() offline,
+    required R Function() loading,
+  }) {
+    return when(
+      data: (status) => status.isOnline ? online() : offline(),
+      loading: loading,
+      error: (error, stack) => offline(),
+    );
+  }
 }

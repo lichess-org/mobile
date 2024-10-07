@@ -1,8 +1,8 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/game_storage.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'game_repository.dart';
@@ -15,7 +15,7 @@ Future<ArchivedGame> archivedGame(
   ArchivedGameRef ref, {
   required GameId id,
 }) async {
-  final gameStorage = ref.watch(gameStorageProvider);
+  final gameStorage = await ref.watch(gameStorageProvider.future);
   final game = await gameStorage.fetch(gameId: id);
   if (game != null) return game;
   return ref.withClientCacheFor(

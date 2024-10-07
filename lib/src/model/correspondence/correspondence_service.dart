@@ -4,17 +4,21 @@ import 'dart:io';
 
 import 'package:collection/collection.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/widgets.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
-import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_game_storage.dart';
 import 'package:lichess_mobile/src/model/correspondence/offline_correspondence_game.dart';
 import 'package:lichess_mobile/src/model/game/game_repository.dart';
 import 'package:lichess_mobile/src/model/game/game_socket_events.dart';
 import 'package:lichess_mobile/src/model/game/playable_game.dart';
+import 'package:lichess_mobile/src/navigation.dart';
+import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/network/socket.dart';
+import 'package:lichess_mobile/src/utils/navigation.dart';
+import 'package:lichess_mobile/src/view/game/game_screen.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -28,11 +32,29 @@ CorrespondenceService correspondenceService(CorrespondenceServiceRef ref) {
   );
 }
 
+/// Services that manages correspondence games.
 class CorrespondenceService {
   CorrespondenceService(this._log, {required this.ref});
 
   final CorrespondenceServiceRef ref;
   final Logger _log;
+
+  /// Handles a notification response that caused the app to open.
+  Future<void> onNotificationResponse(GameFullId fullId) async {
+    final context = ref.read(currentNavigatorKeyProvider).currentContext;
+    if (context == null || !context.mounted) return;
+
+    final rootNavState = Navigator.of(context, rootNavigator: true);
+    if (rootNavState.canPop()) {
+      rootNavState.popUntil((route) => route.isFirst);
+    }
+
+    pushPlatformRoute(
+      context,
+      rootNavigator: true,
+      builder: (_) => GameScreen(initialGameId: fullId),
+    );
+  }
 
   /// Syncs offline correspondence games with the server.
   Future<void> syncGames() async {
@@ -45,7 +67,7 @@ class CorrespondenceService {
     await playRegisteredMoves();
 
     final storedOngoingGames =
-        await _storage.fetchOngoingGames(_session?.user.id);
+        await (await _storage).fetchOngoingGames(_session?.user.id);
 
     ref.withClient((client) async {
       try {
@@ -60,7 +82,7 @@ class CorrespondenceService {
             _log.info(
               'Deleting correspondence game ${sg.$2.id} because it is not present on the server anymore',
             );
-            _storage.delete(sg.$2.id);
+            (await _storage).delete(sg.$2.id);
           }
         }
 
@@ -87,10 +109,11 @@ class CorrespondenceService {
   Future<int> playRegisteredMoves() async {
     _log.info('Playing registered correspondence moves...');
 
-    final games =
-        await _storage.fetchGamesWithRegisteredMove(_session?.user.id).then(
-              (games) => games.map((e) => e.$2).toList(),
-            );
+    final games = await (await _storage)
+        .fetchGamesWithRegisteredMove(_session?.user.id)
+        .then(
+          (games) => games.map((e) => e.$2).toList(),
+        );
 
     WebSocket.userAgent = ref.read(userAgentProvider);
     final Map<String, String> wsHeaders = _session != null
@@ -157,11 +180,11 @@ class CorrespondenceService {
 
           await movePlayedCompleter.future.timeout(const Duration(seconds: 3));
 
-          ref.read(correspondenceGameStorageProvider).save(
-                gameToSync.copyWith(
-                  registeredMoveAtPgn: null,
-                ),
-              );
+          (await ref.read(correspondenceGameStorageProvider.future)).save(
+            gameToSync.copyWith(
+              registeredMoveAtPgn: null,
+            ),
+          );
         } else {
           _log.info(
             'Cannot play game ${gameToSync.id} move because its state has changed',
@@ -183,32 +206,49 @@ class CorrespondenceService {
     return movesPlayed;
   }
 
+  /// Handles a game update event from the server.
+  Future<void> onServerUpdateEvent(
+    GameFullId fullId,
+    PlayableGame game, {
+    required bool fromBackground,
+  }) async {
+    if (!fromBackground) {
+      // opponent just played, invalidate ongoing games
+      if (game.sideToMove == game.youAre) {
+        ref.invalidate(ongoingGamesProvider);
+      }
+    }
+
+    await updateGame(fullId, game);
+  }
+
+  /// Updates a stored correspondence game.
   Future<void> updateGame(GameFullId fullId, PlayableGame game) async {
-    return ref.read(correspondenceGameStorageProvider).save(
-          OfflineCorrespondenceGame(
-            id: game.id,
-            fullId: fullId,
-            meta: game.meta,
-            rated: game.meta.rated,
-            steps: game.steps,
-            initialFen: game.initialFen,
-            status: game.status,
-            variant: game.meta.variant,
-            speed: game.meta.speed,
-            perf: game.meta.perf,
-            white: game.white,
-            black: game.black,
-            youAre: game.youAre!,
-            daysPerTurn: game.meta.daysPerTurn,
-            clock: game.correspondenceClock,
-            winner: game.winner,
-            isThreefoldRepetition: game.isThreefoldRepetition,
-          ),
-        );
+    return (await ref.read(correspondenceGameStorageProvider.future)).save(
+      OfflineCorrespondenceGame(
+        id: game.id,
+        fullId: fullId,
+        meta: game.meta,
+        rated: game.meta.rated,
+        steps: game.steps,
+        initialFen: game.initialFen,
+        status: game.status,
+        variant: game.meta.variant,
+        speed: game.meta.speed,
+        perf: game.meta.perf,
+        white: game.white,
+        black: game.black,
+        youAre: game.youAre!,
+        daysPerTurn: game.meta.daysPerTurn,
+        clock: game.correspondenceClock,
+        winner: game.winner,
+        isThreefoldRepetition: game.isThreefoldRepetition,
+      ),
+    );
   }
 
   AuthSessionState? get _session => ref.read(authSessionProvider);
 
-  CorrespondenceGameStorage get _storage =>
-      ref.read(correspondenceGameStorageProvider);
+  Future<CorrespondenceGameStorage> get _storage =>
+      ref.read(correspondenceGameStorageProvider.future);
 }

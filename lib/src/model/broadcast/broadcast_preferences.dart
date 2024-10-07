@@ -1,59 +1,38 @@
-import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/db/shared_preferences.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/settings/preferences.dart';
+import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'broadcast_preferences.freezed.dart';
 part 'broadcast_preferences.g.dart';
 
-const _prefKey = 'broadcast.preferences';
-
 @riverpod
-class BroadcastPreferences extends _$BroadcastPreferences {
+class BroadcastPreferences extends _$BroadcastPreferences with PreferencesStorage<BroadcastPrefs> {
+  // ignore: avoid_public_notifier_properties
   @override
-  BroadcastPrefState build() {
-    final id = ref.watch(authSessionProvider)?.user.id;
-    final prefs = ref.watch(sharedPreferencesProvider);
-    final stored = prefs.getString(_makeKey(id));
-    return stored != null
-        ? BroadcastPrefState.fromJson(
-            jsonDecode(stored) as Map<String, dynamic>,
-          )
-        : BroadcastPrefState.defaults();
+  final prefCategory = PrefCategory.broadcast;
+
+  @override
+  BroadcastPrefs build() {
+    return fetch();
   }
 
   Future<void> toggleEvaluationBar() async {
-    final id = ref.read(authSessionProvider)?.user.id;
-    final prefs = ref.read(sharedPreferencesProvider);
-    state = state.copyWith(showEvaluationBar: !state.showEvaluationBar);
-    await prefs.setString(_makeKey(id), jsonEncode(state.toJson()));
+    return save(state.copyWith(showEvaluationBar: !state.showEvaluationBar));
   }
-
-  String _makeKey(UserId? id) => '$_prefKey.${id ?? ''}';
 }
 
 @Freezed(fromJson: true, toJson: true)
-class BroadcastPrefState with _$BroadcastPrefState {
-  const factory BroadcastPrefState({
+class BroadcastPrefs with _$BroadcastPrefs implements SerializablePreferences {
+  const factory BroadcastPrefs({
     required bool showEvaluationBar,
-  }) = _BroadcastPrefState;
+  }) = _BroadcastPrefs;
 
-  factory BroadcastPrefState.defaults() => const BroadcastPrefState(
+  static const defaults = BroadcastPrefs(
         showEvaluationBar: true,
       );
 
-  factory BroadcastPrefState.fromJson(Map<String, dynamic> json) {
-    try {
-      return _$BroadcastPrefStateFromJson(json);
-    } catch (e) {
-      debugPrint(
-        '[BroadcastPreferences] Error getting broadcast preferences: $e',
-      );
-      return BroadcastPrefState.defaults();
-    }
-  }
+  factory BroadcastPrefs.fromJson(Map<String, dynamic> json) =>
+      _$BroadcastPrefsFromJson(json);
 }

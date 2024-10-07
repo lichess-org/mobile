@@ -11,10 +11,10 @@ import 'package:sqflite/sqflite.dart';
 part 'game_storage.g.dart';
 
 @Riverpod(keepAlive: true)
-GameStorage gameStorage(
+Future<GameStorage> gameStorage(
   GameStorageRef ref,
-) {
-  final db = ref.watch(databaseProvider);
+) async {
+  final db = await ref.watch(databaseProvider.future);
   return GameStorage(db);
 }
 

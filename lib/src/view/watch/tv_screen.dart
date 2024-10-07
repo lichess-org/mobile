@@ -111,6 +111,7 @@ class _Body extends ConsumerWidget {
                       : null,
                   materialDiff: game.lastMaterialDiffAt(Side.white),
                 );
+
                 return BoardTable(
                   orientation: gameState.orientation,
                   fen: position.fen,
@@ -128,6 +129,7 @@ class _Body extends ConsumerWidget {
                       .map((e) => e.sanMove!.san)
                       .toList(growable: false),
                   currentMoveIndex: gameState.stepCursor,
+                  lastMove: game.moveAt(gameState.stepCursor),
                 );
               },
               loading: () => const BoardTable(

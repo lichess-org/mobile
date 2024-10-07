@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/game/game.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/share.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
@@ -42,7 +42,7 @@ class GameAppBar extends ConsumerWidget {
 
   static const pingRating = Padding(
     padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 18.0),
-    child: PingRating(size: 24.0),
+    child: SocketPingRating(size: 24.0),
   );
 
   @override

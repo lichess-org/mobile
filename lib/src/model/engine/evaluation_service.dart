@@ -6,7 +6,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/app_initialization.dart';
+import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
@@ -176,10 +176,9 @@ class EvaluationService {
 
 @Riverpod(keepAlive: true)
 EvaluationService evaluationService(EvaluationServiceRef ref) {
-  // requireValue is possible because appInitializationProvider is loaded before
+  // requireValue is possible because cachedDataProvider is loaded before
   // anything. See: lib/src/app.dart
-  final maxMemory =
-      ref.read(appInitializationProvider).requireValue.engineMaxMemoryInMb;
+  final maxMemory = LichessBinding.instance.engineMaxMemoryInMb;
 
   final service = EvaluationService(ref, maxMemory: maxMemory);
   ref.onDispose(() {

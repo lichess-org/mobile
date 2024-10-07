@@ -8,20 +8,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/server_analysis_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/common/eval.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/engine/engine.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/game/game_repository_providers.dart';
 import 'package:lichess_mobile/src/model/game/game_share_service.dart';
-import 'package:lichess_mobile/src/model/settings/brightness.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/connectivity.dart';
@@ -30,7 +27,9 @@ import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_share_screen.dart';
+import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
+import 'package:lichess_mobile/src/view/engine/engine_lines.dart';
 import 'package:lichess_mobile/src/view/opening_explorer/opening_explorer_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_action_sheet.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
@@ -228,6 +227,10 @@ class _Body extends ConsumerWidget {
     final displayMode =
         ref.watch(ctrlProvider.select((value) => value.displayMode));
 
+    final currentNode = ref.watch(
+      ctrlProvider.select((value) => value.currentNode),
+    );
+
     return Column(
       children: [
         Expanded(
@@ -292,9 +295,17 @@ class _Body extends ConsumerWidget {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             if (isEngineAvailable)
-                              _EngineLines(
-                                ctrlProvider,
-                                isLandscape: true,
+                              Padding(
+                                padding: const EdgeInsets.all(
+                                  kTabletBoardTableSidePadding,
+                                ),
+                                child: EngineLines(
+                                  onTapMove: ref
+                                      .read(ctrlProvider.notifier)
+                                      .onUserMove,
+                                  clientEval: currentNode.eval,
+                                  isGameOver: currentNode.position.isGameOver,
+                                ),
                               ),
                             Expanded(
                               child: PlatformCard(
@@ -410,166 +421,14 @@ class _ColumnTopTable extends ConsumerWidget {
                   params: analysisState.engineGaugeParams,
                 ),
               if (analysisState.isEngineAvailable)
-                _EngineLines(ctrlProvider, isLandscape: false),
+                EngineLines(
+                  clientEval: analysisState.currentNode.eval,
+                  isGameOver: analysisState.currentNode.position.isGameOver,
+                  onTapMove: ref.read(ctrlProvider.notifier).onUserMove,
+                ),
             ],
           )
         : kEmptyWidget;
-  }
-}
-
-class _EngineLines extends ConsumerWidget {
-  const _EngineLines(this.ctrlProvider, {required this.isLandscape});
-  final AnalysisControllerProvider ctrlProvider;
-  final bool isLandscape;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final analysisState = ref.watch(ctrlProvider);
-    final numEvalLines = ref.watch(
-      analysisPreferencesProvider.select(
-        (p) => p.numEvalLines,
-      ),
-    );
-    final engineEval = ref.watch(engineEvaluationProvider).eval;
-    final eval = engineEval ?? analysisState.currentNode.eval;
-
-    final emptyLines = List.filled(
-      numEvalLines,
-      _Engineline.empty(ctrlProvider),
-    );
-
-    final content = !analysisState.position.isGameOver
-        ? (eval != null
-            ? eval.pvs
-                .take(numEvalLines)
-                .map(
-                  (pv) => _Engineline(ctrlProvider, eval.position, pv),
-                )
-                .toList()
-            : emptyLines)
-        : emptyLines;
-
-    if (content.length < numEvalLines) {
-      final padding = List.filled(
-        numEvalLines - content.length,
-        _Engineline.empty(ctrlProvider),
-      );
-      content.addAll(padding);
-    }
-
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        vertical: isLandscape ? kTabletBoardTableSidePadding : 0.0,
-        horizontal: isLandscape ? kTabletBoardTableSidePadding : 0.0,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: content,
-      ),
-    );
-  }
-}
-
-class _Engineline extends ConsumerWidget {
-  const _Engineline(
-    this.ctrlProvider,
-    this.fromPosition,
-    this.pvData,
-  );
-
-  const _Engineline.empty(this.ctrlProvider)
-      : pvData = const PvData(moves: IListConst([])),
-        fromPosition = Chess.initial;
-
-  final AnalysisControllerProvider ctrlProvider;
-  final Position fromPosition;
-  final PvData pvData;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    if (pvData.moves.isEmpty) {
-      return const SizedBox(
-        height: kEvalGaugeSize,
-        child: SizedBox.shrink(),
-      );
-    }
-
-    final pieceNotation = ref.watch(pieceNotationProvider).maybeWhen(
-          data: (value) => value,
-          orElse: () => defaultAccountPreferences.pieceNotation,
-        );
-
-    final lineBuffer = StringBuffer();
-    int ply = fromPosition.ply + 1;
-    pvData.sanMoves(fromPosition).forEachIndexed((i, s) {
-      lineBuffer.write(
-        ply.isOdd
-            ? '${(ply / 2).ceil()}. $s '
-            : i == 0
-                ? '${(ply / 2).ceil()}... $s '
-                : '$s ',
-      );
-      ply += 1;
-    });
-
-    final brightness = ref.watch(currentBrightnessProvider);
-
-    final evalString = pvData.evalString;
-    return AdaptiveInkWell(
-      onTap: () => ref
-          .read(ctrlProvider.notifier)
-          .onUserMove(NormalMove.fromUci(pvData.moves[0])),
-      child: SizedBox(
-        height: kEvalGaugeSize,
-        child: Padding(
-          padding: const EdgeInsets.all(2.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: pvData.winningSide == Side.black
-                      ? EngineGauge.backgroundColor(context, brightness)
-                      : EngineGauge.valueColor(context, brightness),
-                  borderRadius: BorderRadius.circular(4.0),
-                ),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 4.0,
-                  vertical: 2.0,
-                ),
-                child: Text(
-                  evalString,
-                  style: TextStyle(
-                    color: pvData.winningSide == Side.black
-                        ? Colors.white
-                        : Colors.black,
-                    fontSize: kEvalGaugeFontSize,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 8.0),
-              Expanded(
-                child: Text(
-                  lineBuffer.toString(),
-                  maxLines: 1,
-                  softWrap: false,
-                  style: TextStyle(
-                    fontFamily: pieceNotation == PieceNotation.symbol
-                        ? 'ChessFont'
-                        : null,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
   }
 }
 
@@ -674,6 +533,21 @@ class _BottomBar extends ConsumerWidget {
           },
         ),
         BottomSheetAction(
+          makeLabel: (context) => Text(context.l10n.boardEditor),
+          onPressed: (context) {
+            final analysisState =
+                ref.read(analysisControllerProvider(pgn, options));
+            final boardFen = analysisState.position.fen;
+            pushPlatformRoute(
+              context,
+              title: context.l10n.boardEditor,
+              builder: (_) => BoardEditorScreen(
+                initialFen: boardFen,
+              ),
+            );
+          },
+        ),
+        BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.mobileShareGamePGN),
           onPressed: (_) {
             pushPlatformRoute(
@@ -686,12 +560,11 @@ class _BottomBar extends ConsumerWidget {
         BottomSheetAction(
           makeLabel: (context) => Text(context.l10n.mobileSharePositionAsFEN),
           onPressed: (_) {
+            final analysisState =
+                ref.read(analysisControllerProvider(pgn, options));
             launchShareDialog(
               context,
-              text: ref
-                  .read(analysisControllerProvider(pgn, options))
-                  .position
-                  .fen,
+              text: analysisState.position.fen,
             );
           },
         ),
@@ -701,14 +574,15 @@ class _BottomBar extends ConsumerWidget {
                 Text(context.l10n.screenshotCurrentPosition),
             onPressed: (_) async {
               final gameId = options.gameAnyId!.gameId;
-              final state = ref.read(analysisControllerProvider(pgn, options));
+              final analysisState =
+                  ref.read(analysisControllerProvider(pgn, options));
               try {
                 final image =
                     await ref.read(gameShareServiceProvider).screenshotPosition(
                           gameId,
                           options.orientation,
-                          state.position.fen,
-                          state.lastMove,
+                          analysisState.position.fen,
+                          analysisState.lastMove,
                         );
                 if (context.mounted) {
                   launchShareDialog(

@@ -7,12 +7,12 @@ import 'package:lichess_mobile/src/model/board_editor/board_editor_controller.da
 import 'package:lichess_mobile/src/view/board_editor/board_editor_screen.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 
-import '../../test_app.dart';
+import '../../test_provider_scope.dart';
 
 void main() {
   group('Board Editor', () {
     testWidgets('Displays initial FEN on start', (tester) async {
-      final app = await buildTestApp(
+      final app = await makeTestProviderScopeApp(
         tester,
         home: const BoardEditorScreen(),
       );
@@ -37,7 +37,7 @@ void main() {
     });
 
     testWidgets('Flip board', (tester) async {
-      final app = await buildTestApp(
+      final app = await makeTestProviderScopeApp(
         tester,
         home: const BoardEditorScreen(),
       );
@@ -57,7 +57,7 @@ void main() {
     });
 
     testWidgets('Side to play and castling rights', (tester) async {
-      final app = await buildTestApp(
+      final app = await makeTestProviderScopeApp(
         tester,
         home: const BoardEditorScreen(),
       );
@@ -120,7 +120,7 @@ void main() {
     });
 
     testWidgets('Castling rights ignored when rook is missing', (tester) async {
-      final app = await buildTestApp(
+      final app = await makeTestProviderScopeApp(
         tester,
         home: const BoardEditorScreen(),
       );
@@ -145,7 +145,7 @@ void main() {
 
     testWidgets('Possible en passant squares are calculated correctly',
         (tester) async {
-      final app = await buildTestApp(
+      final app = await makeTestProviderScopeApp(
         tester,
         home: const BoardEditorScreen(),
       );
@@ -182,7 +182,7 @@ void main() {
     });
 
     testWidgets('Can drag pieces to new squares', (tester) async {
-      final app = await buildTestApp(
+      final app = await makeTestProviderScopeApp(
         tester,
         home: const BoardEditorScreen(),
       );
@@ -211,7 +211,7 @@ void main() {
     });
 
     testWidgets('illegal position cannot be analyzed', (tester) async {
-      final app = await buildTestApp(
+      final app = await makeTestProviderScopeApp(
         tester,
         home: const BoardEditorScreen(),
       );
@@ -231,7 +231,7 @@ void main() {
     });
 
     testWidgets('Delete pieces via bin button', (tester) async {
-      final app = await buildTestApp(
+      final app = await makeTestProviderScopeApp(
         tester,
         home: const BoardEditorScreen(),
       );
@@ -273,7 +273,7 @@ void main() {
     });
 
     testWidgets('Add pieces via tap and pan', (tester) async {
-      final app = await buildTestApp(
+      final app = await makeTestProviderScopeApp(
         tester,
         home: const BoardEditorScreen(),
       );
@@ -297,7 +297,7 @@ void main() {
     });
 
     testWidgets('Drag pieces onto the board', (tester) async {
-      final app = await buildTestApp(
+      final app = await makeTestProviderScopeApp(
         tester,
         home: const BoardEditorScreen(),
       );

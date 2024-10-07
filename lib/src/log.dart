@@ -10,7 +10,8 @@ const _loggersToShowInTerminal = {
   'Socket',
 };
 
-void setupLogger() {
+/// Setup logging
+void setupLogging() {
   if (kDebugMode) {
     Logger.root.level = Level.FINE;
     Logger.root.onRecord.listen((record) {

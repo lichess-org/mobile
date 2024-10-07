@@ -8,8 +8,8 @@ import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
 // ignore: unused_import
 import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_round_controller.dart';
-import 'package:lichess_mobile/src/model/common/http.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/lichess_assets.dart';
