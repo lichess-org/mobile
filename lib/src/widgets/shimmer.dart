@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Shimmer extends StatefulWidget {
@@ -21,26 +20,12 @@ class ShimmerState extends State<Shimmer> with SingleTickerProviderStateMixin {
   late AnimationController _shimmerController;
 
   LinearGradient get _defaultGradient {
-    switch (Theme.of(context).platform) {
-      case TargetPlatform.android:
-        final brightness = Theme.of(context).brightness;
-        switch (brightness) {
-          case Brightness.light:
-            return androidLightShimmerGradient;
-          case Brightness.dark:
-            return androidDarkShimmerGradient;
-        }
-      case TargetPlatform.iOS:
-        final brightness =
-            CupertinoTheme.maybeBrightnessOf(context) ?? Brightness.light;
-        switch (brightness) {
-          case Brightness.light:
-            return iOSLightShimmerGradient;
-          case Brightness.dark:
-            return iOSDarkShimmerGradient;
-        }
-      default:
-        throw 'Unexpected platform $Theme.of(context).platform';
+    final brightness = Theme.of(context).brightness;
+    switch (brightness) {
+      case Brightness.light:
+        return lightShimmerGradient;
+      case Brightness.dark:
+        return darkShimmerGradient;
     }
   }
 
@@ -167,7 +152,7 @@ class _ShimmerLoadingState extends State<ShimmerLoading> {
   }
 }
 
-const iOSLightShimmerGradient = LinearGradient(
+const lightShimmerGradient = LinearGradient(
   colors: [
     Color(0xFFE3E3E6),
     Color(0xFFECECEE),
@@ -183,39 +168,7 @@ const iOSLightShimmerGradient = LinearGradient(
   tileMode: TileMode.clamp,
 );
 
-const iOSDarkShimmerGradient = LinearGradient(
-  colors: [
-    Color(0xFF111111),
-    Color(0xFF1a1a1a),
-    Color(0xFF111111),
-  ],
-  stops: [
-    0.1,
-    0.3,
-    0.4,
-  ],
-  begin: Alignment(-1.0, -0.3),
-  end: Alignment(1.0, 0.3),
-  tileMode: TileMode.clamp,
-);
-
-const androidLightShimmerGradient = LinearGradient(
-  colors: [
-    Color(0xFFE6E6E6),
-    Color(0xFFEFEFEF),
-    Color(0xFFE6E6E6),
-  ],
-  stops: [
-    0.1,
-    0.3,
-    0.4,
-  ],
-  begin: Alignment(-1.0, -0.3),
-  end: Alignment(1.0, 0.3),
-  tileMode: TileMode.clamp,
-);
-
-const androidDarkShimmerGradient = LinearGradient(
+const darkShimmerGradient = LinearGradient(
   colors: [
     Color(0xFF333333),
     Color(0xFF3c3c3c),
