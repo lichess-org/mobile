@@ -187,7 +187,7 @@ void main() {
       testWidgets('displays long sideline on its own line', (tester) async {
         await buildTree(
           tester,
-          '1. e4 e5 (1... d5 2. exd5 Qxd5 3. Nc3 Qd8 4. d4 Nf6) Nc3 *',
+          '1. e4 e5 (1... d5 2. exd5 Qxd5 3. Nc3 Qd8 4. d4 Nf6) 2. Nc3 *',
         );
 
         expectSameLine(tester, ['1. e4', 'e5']);
