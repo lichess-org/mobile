@@ -228,11 +228,13 @@ typedef _Subtree = ({
 });
 
 class _PgnTreeViewState extends State<_PgnTreeView> {
-  /// Caches the result of [_mainlineParts] to avoid recalculating it on every rebuild.
+  /// Caches the result of [_mainlineParts], it only needs to be recalculated when the root changes,
+  /// but not when `params.pathToCurrentMove` changes.
   List<List<ViewNode>> mainlineParts = [];
 
-  /// Caches the top-level subtrees, where each subtree is a [_MainLinePart] and its sidelines.
-  /// Building the whole tree is expensive, so we cache the subtrees that did not change when the current move changes.
+  /// Caches the top-level subtrees obtained from the last `build()` method, where each subtree is a [_MainLinePart] and its sidelines.
+  /// Building the whole tree is expensive, so we cache the subtrees that did not change when the current move changes,
+  /// the framework will then skip the `build()` of each subtree since the widget reference is the same.
   List<_Subtree> subtrees = [];
 
   UciPath _mainlinePartOfCurrentPath() {
