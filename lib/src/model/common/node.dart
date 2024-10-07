@@ -234,22 +234,6 @@ abstract class Node {
     parentAt(path).children.removeWhere((child) => child.id == path.last);
   }
 
-  /// Hides the variation from the node at the given path.
-  void hideVariationAt(UciPath path) {
-    final nodes = nodesOn(path).toList();
-    for (int i = nodes.length - 2; i >= 0; i--) {
-      final node = nodes[i + 1];
-      final parent = nodes[i];
-      if (node is Branch && parent.children.length > 1) {
-        for (final child in parent.children) {
-          if (child.id == node.id) {
-            child.isHidden = true;
-          }
-        }
-      }
-    }
-  }
-
   /// Promotes the node at the given path.
   void promoteAt(UciPath path, {required bool toMainline}) {
     final nodes = nodesOn(path).toList();
@@ -484,8 +468,8 @@ class Root extends Node {
       position: PgnGame.startingPosition(game.headers),
     );
 
-    final List<({PgnNode<PgnNodeData> from, Node to})> stack = [
-      (from: game.moves, to: root),
+    final List<({PgnNode<PgnNodeData> from, Node to, int nesting})> stack = [
+      (from: game.moves, to: root, nesting: 1),
     ];
 
     while (stack.isNotEmpty) {
@@ -503,7 +487,7 @@ class Root extends Node {
           final branch = Branch(
             sanMove: SanMove(childFrom.data.san, move),
             position: newPos,
-            isHidden: hideVariations && childIdx > 0,
+            isHidden: frame.nesting > 2 || hideVariations && childIdx > 0,
             lichessAnalysisComments:
                 isLichessAnalysis ? comments?.toList() : null,
             startingComments: isLichessAnalysis
@@ -516,7 +500,17 @@ class Root extends Node {
           );
 
           frame.to.addChild(branch);
-          stack.add((from: childFrom, to: branch));
+          stack.add(
+            (
+              from: childFrom,
+              to: branch,
+              nesting: frame.from.children.length == 1 ||
+                      // mainline continuation
+                      (childIdx == 0 && frame.nesting == 1)
+                  ? frame.nesting
+                  : frame.nesting + 1,
+            ),
+          );
 
           onVisitNode?.call(root, branch, isMainline);
         }

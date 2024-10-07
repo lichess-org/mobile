@@ -90,6 +90,8 @@ class UciPath with _$UciPath {
     return UciPath(path.toString());
   }
 
+  factory UciPath.join(UciPath a, UciPath b) => UciPath(a.value + b.value);
+
   /// Creates a UciPath from a list of UCI moves.
   ///
   /// Throws an [ArgumentError] if any of the moves is invalid.

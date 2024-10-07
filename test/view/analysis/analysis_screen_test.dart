@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -47,10 +47,17 @@ void main() {
 
       expect(find.byType(Chessboard), findsOneWidget);
       expect(find.byType(PieceWidget), findsNWidgets(25));
-      final currentMove = find.widgetWithText(InlineMove, 'Qe1#');
+      final currentMove = find.textContaining('Qe1#');
       expect(currentMove, findsOneWidget);
       expect(
-        tester.widgetList<InlineMove>(currentMove).any((e) => e.isCurrentMove),
+        tester
+            .widget<InlineMove>(
+              find.ancestor(
+                of: currentMove,
+                matching: find.byType(InlineMove),
+              ),
+            )
+            .isCurrentMove,
         isTrue,
       );
     });
@@ -92,12 +99,159 @@ void main() {
       await tester.tap(find.byKey(const Key('goto-previous')));
       await tester.pumpAndSettle();
 
-      final currentMove = find.widgetWithText(InlineMove, 'Kc1');
+      final currentMove = find.textContaining('Kc1');
       expect(currentMove, findsOneWidget);
       expect(
-        tester.widgetList<InlineMove>(currentMove).any((e) => e.isCurrentMove),
+        tester
+            .widget<InlineMove>(
+              find.ancestor(
+                of: currentMove,
+                matching: find.byType(InlineMove),
+              ),
+            )
+            .isCurrentMove,
         isTrue,
       );
+    });
+
+    group('Analysis Tree View', () {
+      Future<void> buildTree(
+        WidgetTester tester,
+        String pgn,
+      ) async {
+        final app = await makeTestProviderScopeApp(
+          tester,
+          home: AnalysisScreen(
+            pgnOrId: pgn,
+            options: const AnalysisOptions(
+              isLocalEvaluationAllowed: false,
+              variant: Variant.standard,
+              orientation: Side.white,
+              opening: opening,
+              id: standaloneAnalysisId,
+            ),
+          ),
+        );
+
+        await tester.pumpWidget(app);
+      }
+
+      Text parentText(WidgetTester tester, String move) {
+        return tester.widget<Text>(
+          find.ancestor(
+            of: find.text(move),
+            matching: find.byType(Text),
+          ),
+        );
+      }
+
+      void expectSameLine(WidgetTester tester, Iterable<String> moves) {
+        final line = parentText(tester, moves.first);
+
+        for (final move in moves.skip(1)) {
+          final moveText = find.text(move);
+          expect(moveText, findsOneWidget);
+          expect(
+            parentText(tester, move),
+            line,
+          );
+        }
+      }
+
+      void expectDifferentLines(
+        WidgetTester tester,
+        List<String> moves,
+      ) {
+        for (int i = 0; i < moves.length; i++) {
+          for (int j = i + 1; j < moves.length; j++) {
+            expect(
+              parentText(tester, moves[i]),
+              isNot(parentText(tester, moves[j])),
+            );
+          }
+        }
+      }
+
+      testWidgets('displays short sideline as inline', (tester) async {
+        await buildTree(tester, '1. e4 e5 (1... d5 2. exd5) 2. Nf3 *');
+
+        final mainline = find.ancestor(
+          of: find.text('1. e4'),
+          matching: find.byType(Text),
+        );
+        expect(mainline, findsOneWidget);
+
+        expectSameLine(tester, ['1. e4', 'e5', '1… d5', '2. exd5', '2. Nf3']);
+      });
+
+      testWidgets('displays long sideline on its own line', (tester) async {
+        await buildTree(
+          tester,
+          '1. e4 e5 (1... d5 2. exd5 Qxd5 3. Nc3 Qd8 4. d4 Nf6) 2. Nc3 *',
+        );
+
+        expectSameLine(tester, ['1. e4', 'e5']);
+        expectSameLine(
+          tester,
+          ['1… d5', '2. exd5', 'Qxd5', '3. Nc3', 'Qd8', '4. d4', 'Nf6'],
+        );
+        expectSameLine(tester, ['2. Nc3']);
+
+        expectDifferentLines(tester, ['1. e4', '1… d5', '2. Nc3']);
+      });
+
+      testWidgets('displays sideline with branching on its own line',
+          (tester) async {
+        await buildTree(tester, '1. e4 e5 (1... d5 2. exd5 (2. Nc3)) *');
+
+        expectSameLine(tester, ['1. e4', 'e5']);
+
+        // 2nd branch is rendered inline again
+        expectSameLine(tester, ['1… d5', '2. exd5', '2. Nc3']);
+
+        expectDifferentLines(tester, ['1. e4', '1… d5']);
+      });
+
+      testWidgets('multiple sidelines', (tester) async {
+        await buildTree(
+          tester,
+          '1. e4 e5 (1... d5 2. exd5) (1... Nf6 2. e5) 2. Nf3 Nc6 (2... a5) *',
+        );
+
+        expectSameLine(tester, ['1. e4', 'e5']);
+        expectSameLine(tester, ['1… d5', '2. exd5']);
+        expectSameLine(tester, ['1… Nf6', '2. e5']);
+        expectSameLine(tester, ['2. Nf3', 'Nc6', '2… a5']);
+
+        expectDifferentLines(tester, ['1. e4', '1… d5', '1… Nf6', '2. Nf3']);
+      });
+
+      testWidgets('collapses lines with nesting > 2', (tester) async {
+        await buildTree(
+          tester,
+          '1. e4 e5 (1... d5 2. Nc3 (2. h4 h5 (2... Nc6 3. d3) (2... Qd7))) *',
+        );
+
+        expectSameLine(tester, ['1. e4', 'e5']);
+        expectSameLine(tester, ['1… d5']);
+        expectSameLine(tester, ['2. Nc3']);
+        expectSameLine(tester, ['2. h4']);
+
+        expect(find.text('2… h5'), findsNothing);
+        expect(find.text('2… Nc6'), findsNothing);
+        expect(find.text('3. d3'), findsNothing);
+        expect(find.text('2… Qd7'), findsNothing);
+
+        // sidelines with nesting > 2 are collapsed -> expand them
+        expect(find.byIcon(Icons.add_box), findsOneWidget);
+
+        await tester.tap(find.byIcon(Icons.add_box));
+        await tester.pumpAndSettle();
+
+        expectSameLine(tester, ['2… h5']);
+        expectSameLine(tester, ['2… Nc6', '3. d3']);
+        expectSameLine(tester, ['2… Qd7']);
+      });
     });
   });
 }
