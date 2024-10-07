@@ -35,37 +35,19 @@ import 'streak_screen.dart';
 const _kNumberOfHistoryItemsOnHandset = 8;
 const _kNumberOfHistoryItemsOnTablet = 16;
 
-class PuzzleTabScreen extends ConsumerStatefulWidget {
+class PuzzleTabScreen extends ConsumerWidget {
   const PuzzleTabScreen({super.key});
 
   @override
-  ConsumerState<PuzzleTabScreen> createState() => _PuzzleTabScreenState();
-}
-
-class _PuzzleTabScreenState extends ConsumerState<PuzzleTabScreen> {
-  final _androidRefreshKey = GlobalKey<RefreshIndicatorState>();
-
-  @override
-  Widget build(BuildContext context) {
-    final session = ref.watch(authSessionProvider);
-    return PlatformWidget(
-      androidBuilder: (context) => _androidBuilder(context, session),
-      iosBuilder: (context) => _iosBuilder(context, session),
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ConsumerPlatformWidget(
+      ref: ref,
+      androidBuilder: _androidBuilder,
+      iosBuilder: _iosBuilder,
     );
   }
 
-  Widget _androidBuilder(BuildContext context, AuthSessionState? userSession) {
-    final body = Column(
-      children: [
-        const ConnectivityBanner(),
-        Expanded(
-          child: _Body(userSession),
-        ),
-      ],
-    );
-
-    final isTablet = isTabletOrLarger(context);
-
+  Widget _androidBuilder(BuildContext context, WidgetRef ref) {
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, _) {
@@ -76,25 +58,24 @@ class _PuzzleTabScreenState extends ConsumerState<PuzzleTabScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(context.l10n.puzzles),
-          actions: [
-            const _DashboardButton(),
-            if (!isTablet) const _HistoryButton(),
+          actions: const [
+            _DashboardButton(),
+            _HistoryButton(),
           ],
         ),
-        body: userSession != null
-            ? RefreshIndicator(
-                key: _androidRefreshKey,
-                onRefresh: _refreshData,
-                child: body,
-              )
-            : body,
+        body: const Column(
+          children: [
+            ConnectivityBanner(),
+            Expanded(
+              child: _Body(),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _iosBuilder(BuildContext context, AuthSessionState? userSession) {
-    final isTablet = isTabletOrLarger(context);
-
+  Widget _iosBuilder(BuildContext context, WidgetRef ref) {
     return CupertinoPageScaffold(
       child: CustomScrollView(
         controller: puzzlesScrollController,
@@ -105,42 +86,28 @@ class _PuzzleTabScreenState extends ConsumerState<PuzzleTabScreen> {
               end: 8.0,
             ),
             largeTitle: Text(context.l10n.puzzles),
-            trailing: Row(
+            trailing: const Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const _DashboardButton(),
-                if (!isTablet) ...[
-                  const SizedBox(width: 6.0),
-                  const _HistoryButton(),
-                ],
+                _DashboardButton(),
+                SizedBox(width: 6.0),
+                _HistoryButton(),
               ],
             ),
           ),
-          if (userSession != null)
-            CupertinoSliverRefreshControl(
-              onRefresh: _refreshData,
-            ),
           const SliverToBoxAdapter(child: ConnectivityBanner()),
-          SliverSafeArea(
+          const SliverSafeArea(
             top: false,
-            sliver: _Body(userSession),
+            sliver: _Body(),
           ),
         ],
       ),
     );
   }
-
-  Future<void> _refreshData() {
-    return Future.wait([
-      ref.refresh(puzzleRecentActivityProvider.future),
-    ]);
-  }
 }
 
 class _Body extends ConsumerWidget {
-  const _Body(this.session);
-
-  final AuthSessionState? session;
+  const _Body();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -149,7 +116,7 @@ class _Body extends ConsumerWidget {
     final isTablet = isTabletOrLarger(context);
 
     final handsetChildren = [
-      connectivity.whenOnline(
+      connectivity.whenIs(
         online: () => const _DailyPuzzle(),
         offline: () => const SizedBox.shrink(),
       ),
@@ -170,7 +137,7 @@ class _Body extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 const SizedBox(height: 8.0),
-                connectivity.whenOnline(
+                connectivity.whenIs(
                   online: () => const _DailyPuzzle(),
                   offline: () => const SizedBox.shrink(),
                 ),
@@ -389,21 +356,25 @@ class _DashboardButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final session = ref.watch(authSessionProvider);
-    if (session != null) {
-      return AppBarIconButton(
-        icon: const Icon(Icons.assessment_outlined),
-        semanticsLabel: context.l10n.puzzlePuzzleDashboard,
-        onPressed: () {
-          ref.invalidate(puzzleDashboardProvider);
-          pushPlatformRoute(
-            context,
-            title: context.l10n.puzzlePuzzleDashboard,
-            builder: (_) => const PuzzleDashboardScreen(),
-          );
-        },
-      );
+    if (session == null) {
+      return const SizedBox.shrink();
     }
-    return const SizedBox.shrink();
+    final onPressed = ref.watch(connectivityChangesProvider).whenIs(
+          online: () => () {
+            pushPlatformRoute(
+              context,
+              title: context.l10n.puzzlePuzzleDashboard,
+              builder: (_) => const PuzzleDashboardScreen(),
+            );
+          },
+          offline: () => null,
+        );
+
+    return AppBarIconButton(
+      icon: const Icon(Icons.assessment_outlined),
+      semanticsLabel: context.l10n.puzzlePuzzleDashboard,
+      onPressed: onPressed,
+    );
   }
 }
 
@@ -412,20 +383,24 @@ class _HistoryButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final asyncData = ref.watch(puzzleRecentActivityProvider);
+    final session = ref.watch(authSessionProvider);
+    if (session == null) {
+      return const SizedBox.shrink();
+    }
+    final onPressed = ref.watch(connectivityChangesProvider).whenIs(
+          online: () => () {
+            pushPlatformRoute(
+              context,
+              title: context.l10n.puzzleHistory,
+              builder: (_) => const PuzzleHistoryScreen(),
+            );
+          },
+          offline: () => null,
+        );
     return AppBarIconButton(
       icon: const Icon(Icons.history_outlined),
       semanticsLabel: context.l10n.puzzleHistory,
-      onPressed: asyncData.maybeWhen(
-        data: (_) => () {
-          pushPlatformRoute(
-            context,
-            title: context.l10n.puzzleHistory,
-            builder: (_) => const PuzzleHistoryScreen(),
-          );
-        },
-        orElse: () => null,
-      ),
+      onPressed: onPressed,
     );
   }
 }
@@ -547,6 +522,8 @@ class _PuzzlePreview extends ConsumerWidget {
                   style: Styles.boardPreviewTitle,
                 ),
                 Text(
+                  // TODO change this to a better description when
+                  // translation tool is again available (#945)
                   context.l10n.puzzleThemeHealthyMixDescription,
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis,

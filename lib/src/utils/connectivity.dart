@@ -153,12 +153,12 @@ Future<bool> isOnline(Client client) {
 }
 
 extension AsyncValueConnectivity on AsyncValue<ConnectivityStatus> {
-  /// Switches between two functions based on the device's connectivity status.
+  /// Switches between device's connectivity status.
   ///
   /// Using this method assumes the the device is offline when the status is
   /// not yet available (i.e. [AsyncValue.isLoading].
   /// If you want to handle the loading state separately, use
-  /// [whenOnlineLoading] instead.
+  /// [whenIsLoading] instead.
   ///
   /// This method is similar to [AsyncValueX.maybeWhen], but it takes two
   /// functions, one for when the device is online and another for when it is
@@ -167,12 +167,12 @@ extension AsyncValueConnectivity on AsyncValue<ConnectivityStatus> {
   /// Example:
   /// ```dart
   /// final status = ref.watch(connectivityChangesProvider);
-  /// final result = status.whenOnline(
+  /// final result = status.whenIs(
   ///   online: () => 'Online',
   ///   offline: () => 'Offline',
   /// );
   /// ```
-  R whenOnline<R>({
+  R whenIs<R>({
     required R Function() online,
     required R Function() offline,
   }) {
@@ -182,7 +182,7 @@ extension AsyncValueConnectivity on AsyncValue<ConnectivityStatus> {
     );
   }
 
-  /// Switches between three functions based on the device's connectivity status.
+  /// Switches between device's connectivity status, but handling the loading state.
   ///
   /// This method is similar to [AsyncValueX.when], but it takes three
   /// functions, one for when the device is online, another for when it is
@@ -191,13 +191,13 @@ extension AsyncValueConnectivity on AsyncValue<ConnectivityStatus> {
   /// Example:
   /// ```dart
   /// final status = ref.watch(connectivityChangesProvider);
-  /// final result = status.whenOnlineLoading(
+  /// final result = status.whenIsLoading(
   ///   online: () => 'Online',
   ///   offline: () => 'Offline',
   ///   loading: () => 'Loading',
   /// );
   /// ```
-  R whenOnlineLoading<R>({
+  R whenIsLoading<R>({
     required R Function() online,
     required R Function() offline,
     required R Function() loading,
