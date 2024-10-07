@@ -8,7 +8,8 @@ part 'broadcast_preferences.freezed.dart';
 part 'broadcast_preferences.g.dart';
 
 @riverpod
-class BroadcastPreferences extends _$BroadcastPreferences with PreferencesStorage<BroadcastPrefs> {
+class BroadcastPreferences extends _$BroadcastPreferences
+    with PreferencesStorage<BroadcastPrefs> {
   // ignore: avoid_public_notifier_properties
   @override
   final prefCategory = PrefCategory.broadcast;
@@ -30,8 +31,8 @@ class BroadcastPrefs with _$BroadcastPrefs implements SerializablePreferences {
   }) = _BroadcastPrefs;
 
   static const defaults = BroadcastPrefs(
-        showEvaluationBar: true,
-      );
+    showEvaluationBar: true,
+  );
 
   factory BroadcastPrefs.fromJson(Map<String, dynamic> json) =>
       _$BroadcastPrefsFromJson(json);

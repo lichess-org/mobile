@@ -33,7 +33,6 @@ enum PrefCategory<T extends SerializablePreferences> {
   puzzle('preferences.puzzle', null as PuzzlePrefs?),
   broadcast('preferences.broadcast', BroadcastPrefs.defaults);
 
-
   const PrefCategory(this.storageKey, this._defaults);
 
   final String storageKey;
