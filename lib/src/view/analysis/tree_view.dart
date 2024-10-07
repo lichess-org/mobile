@@ -294,7 +294,7 @@ class _PgnTreeViewState extends State<_PgnTreeView> {
             containsCurrentMove: containsCurrentMove,
           );
         } else {
-          // Avoid expensive rebuilds by caching parts of the tree that did not change across a path change
+          // Avoid expensive rebuilds ([State.build]) of the entire PGN tree by caching parts of the tree that did not change across a path change
           return subtrees[i];
         }
       },
