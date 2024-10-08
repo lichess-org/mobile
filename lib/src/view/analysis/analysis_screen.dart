@@ -51,6 +51,7 @@ class AnalysisScreen extends StatelessWidget {
   const AnalysisScreen({
     required this.options,
     required this.pgnOrId,
+    this.enableDrawingShapes = true,
   });
 
   /// The analysis options.
@@ -59,22 +60,35 @@ class AnalysisScreen extends StatelessWidget {
   /// The PGN or game ID to load.
   final String pgnOrId;
 
+  final bool enableDrawingShapes;
+
   @override
   Widget build(BuildContext context) {
     return pgnOrId.length == 8 && GameId(pgnOrId).isValid
-        ? _LoadGame(GameId(pgnOrId), options)
+        ? _LoadGame(
+            GameId(pgnOrId),
+            options,
+            enableDrawingShapes: enableDrawingShapes,
+          )
         : _LoadedAnalysisScreen(
             options: options,
             pgn: pgnOrId,
+            enableDrawingShapes: enableDrawingShapes,
           );
   }
 }
 
 class _LoadGame extends ConsumerWidget {
-  const _LoadGame(this.gameId, this.options);
+  const _LoadGame(
+    this.gameId,
+    this.options, {
+    required this.enableDrawingShapes,
+  });
 
   final AnalysisOptions options;
   final GameId gameId;
+
+  final bool enableDrawingShapes;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -94,6 +108,7 @@ class _LoadGame extends ConsumerWidget {
             serverAnalysis: serverAnalysis,
           ),
           pgn: game.makePgn(),
+          enableDrawingShapes: enableDrawingShapes,
         );
       },
       loading: () => const Center(child: CircularProgressIndicator.adaptive()),
@@ -110,10 +125,13 @@ class _LoadedAnalysisScreen extends ConsumerWidget {
   const _LoadedAnalysisScreen({
     required this.options,
     required this.pgn,
+    required this.enableDrawingShapes,
   });
 
   final AnalysisOptions options;
   final String pgn;
+
+  final bool enableDrawingShapes;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -146,7 +164,11 @@ class _LoadedAnalysisScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: _Body(pgn: pgn, options: options),
+      body: _Body(
+        pgn: pgn,
+        options: options,
+        enableDrawingShapes: enableDrawingShapes,
+      ),
     );
   }
 
@@ -176,7 +198,11 @@ class _LoadedAnalysisScreen extends ConsumerWidget {
           ],
         ),
       ),
-      child: _Body(pgn: pgn, options: options),
+      child: _Body(
+        pgn: pgn,
+        options: options,
+        enableDrawingShapes: enableDrawingShapes,
+      ),
     );
   }
 }
@@ -203,10 +229,15 @@ class _Title extends StatelessWidget {
 }
 
 class _Body extends ConsumerWidget {
-  const _Body({required this.pgn, required this.options});
+  const _Body({
+    required this.pgn,
+    required this.options,
+    required this.enableDrawingShapes,
+  });
 
   final String pgn;
   final AnalysisOptions options;
+  final bool enableDrawingShapes;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -281,6 +312,7 @@ class _Body extends ConsumerWidget {
                               options,
                               boardSize,
                               borderRadius: isTablet ? tabletBoardRadius : null,
+                              enableDrawingShapes: enableDrawingShapes,
                             ),
                             if (hasEval && showEvaluationGauge) ...[
                               const SizedBox(width: 4.0),
@@ -344,6 +376,7 @@ class _Body extends ConsumerWidget {
                             options,
                             boardSize,
                             borderRadius: isTablet ? tabletBoardRadius : null,
+                            enableDrawingShapes: enableDrawingShapes,
                           ),
                         )
                       else
@@ -352,6 +385,7 @@ class _Body extends ConsumerWidget {
                           options,
                           boardSize,
                           borderRadius: isTablet ? tabletBoardRadius : null,
+                          enableDrawingShapes: enableDrawingShapes,
                         ),
                       Expanded(
                         child: Padding(

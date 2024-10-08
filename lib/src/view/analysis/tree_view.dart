@@ -225,7 +225,7 @@ class _PgnTreeView extends StatefulWidget {
 }
 
 /// A record that holds the rendered parts of a subtree.
-typedef _RenderedSubtreeCache = ({
+typedef _CachedRenderedSubtree = ({
   /// The mainline part of the subtree.
   _MainLinePart mainLinePart,
 
@@ -247,7 +247,7 @@ class _PgnTreeViewState extends State<_PgnTreeView> {
   ///
   /// Building the whole tree is expensive, so we cache the subtrees that did not change when the current move changes.
   /// The framework will skip the `build()` of each subtree since the widget reference is the same.
-  List<_RenderedSubtreeCache> subtrees = [];
+  List<_CachedRenderedSubtree> subtrees = [];
 
   UciPath _mainlinePartOfCurrentPath() {
     var path = UciPath.empty;
@@ -260,9 +260,11 @@ class _PgnTreeViewState extends State<_PgnTreeView> {
     return path;
   }
 
-  void _rebuildChangedSubtrees({required bool fullRebuild}) {
+  List<_CachedRenderedSubtree> _buildChangedSubtrees({
+    required bool fullRebuild,
+  }) {
     var path = UciPath.empty;
-    subtrees = mainlineParts.mapIndexed(
+    return mainlineParts.mapIndexed(
       (i, mainlineNodes) {
         final mainlineInitialPath = path;
 
@@ -312,16 +314,16 @@ class _PgnTreeViewState extends State<_PgnTreeView> {
           return subtrees[i];
         }
       },
-    ).toList();
+    ).toList(growable: false);
   }
 
   void _updateLines({required bool fullRebuild}) {
     setState(() {
       if (fullRebuild) {
-        mainlineParts = _mainlineParts(widget.root).toList();
+        mainlineParts = _mainlineParts(widget.root).toList(growable: false);
       }
 
-      _rebuildChangedSubtrees(fullRebuild: fullRebuild);
+      subtrees = _buildChangedSubtrees(fullRebuild: fullRebuild);
     });
   }
 
@@ -477,8 +479,9 @@ List<InlineSpan> _moveWithComment(
   ];
 }
 
-/// A part of a sideline where each node only has one child
-/// (or two children where the second child is rendered as an inline sideline
+/// A widget that renders part of a sideline, where each move is displayed on the same line without branching.
+///
+/// Each node in the sideline has only one child (or two children where the second child is rendered as an inline sideline).
 class _SideLinePart extends ConsumerWidget {
   _SideLinePart(
     this.nodes, {
@@ -614,7 +617,7 @@ class _MainLinePart extends ConsumerWidget {
               },
             )
             .flattened
-            .toList(),
+            .toList(growable: false),
       ),
     );
   }
@@ -642,32 +645,37 @@ class _SideLine extends StatelessWidget {
   final _PgnTreeViewParams params;
   final int nesting;
 
-  @override
-  Widget build(BuildContext context) {
+  List<ViewBranch> _getSidelinePartNodes() {
     final sidelineNodes = [firstNode];
     while (sidelineNodes.last.children.isNotEmpty &&
         !_hasNonInlineSideLine(sidelineNodes.last)) {
       sidelineNodes.add(sidelineNodes.last.children.first);
     }
+    return sidelineNodes.toList(growable: false);
+  }
 
-    final children = sidelineNodes.last.children;
+  @override
+  Widget build(BuildContext context) {
+    final sidelinePartNodes = _getSidelinePartNodes();
+
+    final lastNodeChildren = sidelinePartNodes.last.children;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _SideLinePart(
-          sidelineNodes.toList(),
+          sidelinePartNodes,
           firstMoveKey: firstMoveKey,
           initialPath: initialPath,
           params: params,
         ),
-        if (children.isNotEmpty)
+        if (lastNodeChildren.isNotEmpty)
           _IndentedSideLines(
-            children,
-            parent: sidelineNodes.last,
+            lastNodeChildren,
+            parent: sidelinePartNodes.last,
             initialPath: UciPath.join(
               initialPath,
-              UciPath.fromIds(sidelineNodes.map((node) => node.id)),
+              UciPath.fromIds(sidelinePartNodes.map((node) => node.id)),
             ),
             params: params,
             nesting: nesting + 1,
@@ -747,15 +755,29 @@ class _IndentedSideLines extends StatefulWidget {
 }
 
 class _IndentedSideLinesState extends State<_IndentedSideLines> {
-  late List<GlobalKey> _keys;
+  /// Keys for the first move of each sideline.
+  ///
+  /// Used to calculate the position of the indent guidelines. The keys are
+  /// assigned to the first move of each sideline. The position of the keys is
+  /// used to calculate the position of the indent guidelines. A [GlobalKey] is
+  /// necessary because the exact position of the first move is not known until the
+  /// widget is rendered, as the vertical space can vary depending on the length of
+  /// the line, and if the line is wrapped.
+  late List<GlobalKey> _sideLinesStartKeys;
 
+  /// The position of the first move of each sideline computed relative to the column and derived from the [GlobalKey] found in [_sideLinesStartKeys].
   List<Offset> _sideLineStartPositions = [];
 
+  /// The [GlobalKey] for the column that contains the side lines.
   final GlobalKey _columnKey = GlobalKey();
 
+  /// Redraws the indents on demand.
+  ///
+  /// Will re-generate the [GlobalKey]s for the first move of each sideline and
+  /// calculate the position of the indents in a post-frame callback.
   void _redrawIndents() {
-    _keys = List.generate(
-      _visibleSideLines().length + (_hasHiddenLines() ? 1 : 0),
+    _sideLinesStartKeys = List.generate(
+      _visibleSideLines.length + (_hasHiddenLines ? 1 : 0),
       (_) => GlobalKey(),
     );
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -764,13 +786,13 @@ class _IndentedSideLinesState extends State<_IndentedSideLines> {
       final Offset rowOffset =
           columnBox?.localToGlobal(Offset.zero) ?? Offset.zero;
 
-      final positions = _keys.map((key) {
+      final positions = _sideLinesStartKeys.map((key) {
         final context = key.currentContext;
         final renderBox = context?.findRenderObject() as RenderBox?;
         final height = renderBox?.size.height ?? 0;
         final offset = renderBox?.localToGlobal(Offset.zero) ?? Offset.zero;
         return Offset(offset.dx, offset.dy + height / 2) - rowOffset;
-      }).toList();
+      }).toList(growable: false);
 
       setState(() {
         _sideLineStartPositions = positions;
@@ -778,9 +800,9 @@ class _IndentedSideLinesState extends State<_IndentedSideLines> {
     });
   }
 
-  bool _hasHiddenLines() => widget.sideLines.any((node) => node.isHidden);
+  bool get _hasHiddenLines => widget.sideLines.any((node) => node.isHidden);
 
-  Iterable<ViewBranch> _visibleSideLines() =>
+  Iterable<ViewBranch> get _visibleSideLines =>
       widget.sideLines.whereNot((node) => node.isHidden);
 
   @override
@@ -799,18 +821,18 @@ class _IndentedSideLinesState extends State<_IndentedSideLines> {
 
   @override
   Widget build(BuildContext context) {
-    final sideLineWidgets = _visibleSideLines()
+    final sideLineWidgets = _visibleSideLines
         .mapIndexed(
           (i, firstSidelineNode) => _SideLine(
             firstNode: firstSidelineNode,
             parent: widget.parent,
-            firstMoveKey: _keys[i],
+            firstMoveKey: _sideLinesStartKeys[i],
             initialPath: widget.initialPath,
             params: widget.params,
             nesting: widget.nesting,
           ),
         )
-        .toList();
+        .toList(growable: false);
 
     final padding = widget.nesting < 6 ? 12.0 : 0.0;
 
@@ -827,12 +849,12 @@ class _IndentedSideLinesState extends State<_IndentedSideLines> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ...sideLineWidgets,
-            if (_hasHiddenLines())
+            if (_hasHiddenLines)
               GestureDetector(
                 child: Icon(
                   Icons.add_box,
                   color: _textColor(context, 0.6),
-                  key: _keys.last,
+                  key: _sideLinesStartKeys.last,
                   size: _baseTextStyle.fontSize! + 5,
                 ),
                 onTap: () {

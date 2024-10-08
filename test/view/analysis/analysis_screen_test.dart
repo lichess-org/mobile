@@ -5,6 +5,7 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
+import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
@@ -12,6 +13,7 @@ import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
 import 'package:lichess_mobile/src/model/game/game_status.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
+import 'package:lichess_mobile/src/model/settings/preferences.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
 import 'package:lichess_mobile/src/view/analysis/tree_view.dart';
@@ -121,6 +123,15 @@ void main() {
       ) async {
         final app = await makeTestProviderScopeApp(
           tester,
+          defaultPreferences: {
+            PrefCategory.analysis.storageKey: jsonEncode(
+              AnalysisPrefs.defaults
+                  .copyWith(
+                    enableLocalEvaluation: false,
+                  )
+                  .toJson(),
+            ),
+          },
           home: AnalysisScreen(
             pgnOrId: pgn,
             options: const AnalysisOptions(
@@ -130,6 +141,7 @@ void main() {
               opening: opening,
               id: standaloneAnalysisId,
             ),
+            enableDrawingShapes: false,
           ),
         );
 
@@ -251,6 +263,136 @@ void main() {
         expectSameLine(tester, ['2… h5']);
         expectSameLine(tester, ['2… Nc6', '3. d3']);
         expectSameLine(tester, ['2… Qd7']);
+      });
+
+      testWidgets('subtrees not part of the current mainline part are cached',
+          (tester) async {
+        await buildTree(
+          tester,
+          '1. e4 e5 (1... d5 2. exd5) (1... Nf6 2. e5) 2. Nf3 Nc6 (2... a5) *',
+        );
+
+        // will be rendered as:
+        // -------------------
+        // 1. e4 e5              <-- first mainline part
+        // |- 1... d5 2. exd5
+        // |- 1... Nf6 2. e5
+        // 2. Nf3 Nc6 (2... a5)  <-- second mainline part
+        //         ^
+        //         |
+        //         current move
+
+        final firstMainlinePart = parentText(tester, '1. e4');
+        final secondMainlinePart = parentText(tester, '2. Nf3');
+
+        expect(
+          tester
+              .widgetList<InlineMove>(
+                find.ancestor(
+                  of: find.textContaining('Nc6'),
+                  matching: find.byType(InlineMove),
+                ),
+              )
+              .last
+              .isCurrentMove,
+          isTrue,
+        );
+
+        await tester.tap(find.byKey(const Key('goto-previous')));
+        // need to wait for current move change debounce delay
+        await tester.pump(const Duration(milliseconds: 200));
+
+        expect(
+          tester
+              .widgetList<InlineMove>(
+                find.ancestor(
+                  of: find.textContaining('Nf3'),
+                  matching: find.byType(InlineMove),
+                ),
+              )
+              .last
+              .isCurrentMove,
+          isTrue,
+        );
+
+        // first mainline part has not changed since the current move is
+        // not part of it
+        expect(
+          identical(firstMainlinePart, parentText(tester, '1. e4')),
+          isTrue,
+        );
+
+        final secondMainlinePartOnMoveNf3 = parentText(tester, '2. Nf3');
+
+        // second mainline part has changed since the current move is part of it
+        expect(
+          secondMainlinePart,
+          isNot(secondMainlinePartOnMoveNf3),
+        );
+
+        await tester.tap(find.byKey(const Key('goto-previous')));
+        // need to wait for current move change debounce delay
+        await tester.pump(const Duration(milliseconds: 200));
+
+        expect(
+          tester
+              .widgetList<InlineMove>(
+                find.ancestor(
+                  of: find.textContaining('e5'),
+                  matching: find.byType(InlineMove),
+                ),
+              )
+              .first
+              .isCurrentMove,
+          isTrue,
+        );
+
+        final firstMainlinePartOnMoveE5 = parentText(tester, '1. e4');
+        final secondMainlinePartOnMoveE5 = parentText(tester, '2. Nf3');
+
+        // first mainline part has changed since the current move is part of it
+        expect(
+          firstMainlinePart,
+          isNot(firstMainlinePartOnMoveE5),
+        );
+
+        // second mainline part has changed since the current move is not part of it
+        // anymore
+        expect(
+          secondMainlinePartOnMoveNf3,
+          isNot(secondMainlinePartOnMoveE5),
+        );
+
+        await tester.tap(find.byKey(const Key('goto-previous')));
+        // need to wait for current move change debounce delay
+        await tester.pump(const Duration(milliseconds: 200));
+
+        expect(
+          tester
+              .firstWidget<InlineMove>(
+                find.ancestor(
+                  of: find.textContaining('e4'),
+                  matching: find.byType(InlineMove),
+                ),
+              )
+              .isCurrentMove,
+          isTrue,
+        );
+
+        final firstMainlinePartOnMoveE4 = parentText(tester, '1. e4');
+        final secondMainlinePartOnMoveE4 = parentText(tester, '2. Nf3');
+
+        // first mainline part has changed since the current move is part of it
+        expect(
+          firstMainlinePartOnMoveE4,
+          isNot(firstMainlinePartOnMoveE5),
+        );
+
+        // second mainline part has not changed since the current move is not part of it
+        expect(
+          identical(secondMainlinePartOnMoveE5, secondMainlinePartOnMoveE4),
+          isTrue,
+        );
       });
     });
   });

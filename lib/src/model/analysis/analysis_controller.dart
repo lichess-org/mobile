@@ -475,7 +475,7 @@ class AnalysisController extends _$AnalysisController {
       );
     }
 
-    if (pathChange) {
+    if (pathChange && state.isEngineAvailable) {
       _debouncedStartEngineEval();
     }
   }
