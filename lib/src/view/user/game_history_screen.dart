@@ -294,8 +294,8 @@ class _FilterGamesState extends ConsumerState<_FilterGames> {
           choices: Side.values,
           choiceSelected: (choice) => filter.side == choice,
           choiceLabel: (t) => switch (t) {
-            Side.white => context.l10n.white,
-            Side.black => context.l10n.black,
+            Side.white => Text(context.l10n.white),
+            Side.black => Text(context.l10n.black),
           },
           onSelected: (value, selected) => setState(
             () {
@@ -338,7 +338,7 @@ class _FilterGamesState extends ConsumerState<_FilterGames> {
         filterType: FilterType.multipleChoice,
         choices: choices,
         choiceSelected: (choice) => filter.perfs.contains(choice),
-        choiceLabel: (t) => t.shortTitle,
+        choiceLabel: (t) => Text(t.shortTitle),
         onSelected: (value, selected) => setState(
           () {
             filter = filter.copyWith(
