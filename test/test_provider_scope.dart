@@ -11,6 +11,7 @@ import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/crashlytics.dart';
 import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
+import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/session_storage.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
@@ -25,6 +26,7 @@ import 'package:visibility_detector/visibility_detector.dart';
 import './fake_crashlytics.dart';
 import './model/common/service/fake_sound_service.dart';
 import 'binding.dart';
+import 'model/analysis/fake_opening_service.dart';
 import 'model/notifications/fake_notification_display.dart';
 import 'network/fake_http_client_factory.dart';
 import 'network/fake_websocket_channel.dart';
@@ -93,18 +95,25 @@ Future<Widget> makeTestProviderScope(
 
   VisibilityDetectorController.instance.updateInterval = Duration.zero;
 
+  // disable piece animation and drawing shapes to simplify tests
+  final defaultBoardPref = {
+    'preferences.board': jsonEncode(
+      BoardPrefs.defaults
+          .copyWith(
+            pieceAnimation: false,
+            enableShapeDrawings: false,
+          )
+          .toJson(),
+    ),
+  };
+
   await binding.setInitialSharedPreferencesValues(
-    defaultPreferences ??
-        {
-          // disable piece animation to simplify tests
-          'preferences.board': jsonEncode(
-            BoardPrefs.defaults
-                .copyWith(
-                  pieceAnimation: false,
-                )
-                .toJson(),
-          ),
-        },
+    defaultPreferences != null
+        ? {
+            ...defaultBoardPref,
+            ...defaultPreferences,
+          }
+        : defaultBoardPref,
   );
 
   await binding.preloadData(userSession);
@@ -155,6 +164,8 @@ Future<Widget> makeTestProviderScope(
       crashlyticsProvider.overrideWithValue(FakeCrashlytics()),
       // ignore: scoped_providers_should_specify_dependencies
       soundServiceProvider.overrideWithValue(FakeSoundService()),
+      // ignore: scoped_providers_should_specify_dependencies
+      openingServiceProvider.overrideWithValue(FakeOpeningService()),
       ...overrides ?? [],
     ],
     child: MediaQuery(

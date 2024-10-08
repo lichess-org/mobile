@@ -20,11 +20,11 @@ OpeningService openingService(OpeningServiceRef ref) {
 }
 
 class OpeningService {
-  OpeningService(this.ref);
+  OpeningService(this._ref);
 
-  final OpeningServiceRef ref;
+  final OpeningServiceRef _ref;
 
-  Future<Database> get _db => ref.read(openingsDatabaseProvider.future);
+  Future<Database> get _db => _ref.read(openingsDatabaseProvider.future);
 
   Future<FullOpening?> fetchFromMoves(Iterable<Move> moves) async {
     final db = await _db;

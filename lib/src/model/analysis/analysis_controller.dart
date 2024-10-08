@@ -265,16 +265,24 @@ class AnalysisController extends _$AnalysisController {
     _setPath(path);
   }
 
-  void showAllVariations(UciPath path) {
-    final parent = _root.parentAt(path);
-    for (final node in parent.children) {
-      node.isHidden = false;
+  void expandVariations(UciPath path) {
+    final node = _root.nodeAt(path);
+    for (final child in node.children) {
+      child.isHidden = false;
+      for (final grandChild in child.children) {
+        grandChild.isHidden = false;
+      }
     }
     state = state.copyWith(root: _root.view);
   }
 
-  void hideVariation(UciPath path) {
-    _root.hideVariationAt(path);
+  void collapseVariations(UciPath path) {
+    final node = _root.parentAt(path);
+
+    for (final child in node.children) {
+      child.isHidden = true;
+    }
+
     state = state.copyWith(root: _root.view);
   }
 
@@ -467,7 +475,7 @@ class AnalysisController extends _$AnalysisController {
       );
     }
 
-    if (pathChange) {
+    if (pathChange && state.isEngineAvailable) {
       _debouncedStartEngineEval();
     }
   }
