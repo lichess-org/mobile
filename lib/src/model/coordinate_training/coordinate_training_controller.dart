@@ -60,12 +60,14 @@ class CoordinateTrainingController extends _$CoordinateTrainingController {
 
   void _finishTraining() {
     // TODO save score in local storage here (and display high score and/or average score in UI)
-
+    final orientation = _getOrientation(
+      ref.read(coordinateTrainingPreferencesProvider).sideChoice,
+    );
     _updateTimer?.cancel();
     state = CoordinateTrainingState(
       lastGuess: state.lastGuess,
       lastScore: state.score,
-      orientation: state.orientation,
+      orientation: orientation,
     );
   }
 
@@ -74,13 +76,6 @@ class CoordinateTrainingController extends _$CoordinateTrainingController {
       ref.read(coordinateTrainingPreferencesProvider).sideChoice,
     );
     _updateTimer?.cancel();
-    state = CoordinateTrainingState(orientation: orientation);
-  }
-
-  void newTraining() {
-    final orientation = _getOrientation(
-      ref.read(coordinateTrainingPreferencesProvider).sideChoice,
-    );
     state = CoordinateTrainingState(orientation: orientation);
   }
 

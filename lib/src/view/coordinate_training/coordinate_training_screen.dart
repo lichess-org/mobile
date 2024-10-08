@@ -155,18 +155,21 @@ class _BodyState extends ConsumerState<_Body> {
                       _ScoreAndTrainingButton(
                         scoreSize: boardSize / 8,
                         score: trainingState.lastScore!,
-                        onPressed: ref
-                            .read(
-                              coordinateTrainingControllerProvider.notifier,
-                            )
-                            .newTraining,
+                        onPressed: () {
+                          ref
+                              .read(
+                                coordinateTrainingControllerProvider.notifier,
+                              )
+                              .startTraining(
+                                trainingPrefs.timeChoice.duration,
+                              );
+                        },
                         label: 'New Training',
                       )
                     else
                       Expanded(
                         child: Center(
-                          child: FatButton(
-                            semanticsLabel: 'Start Training',
+                          child: _Button(
                             onPressed: () {
                               ref
                                   .read(
@@ -177,11 +180,7 @@ class _BodyState extends ConsumerState<_Body> {
                                     trainingPrefs.timeChoice.duration,
                                   );
                             },
-                            child: const Text(
-                              // TODO l10n once script works
-                              'Start Training',
-                              style: Styles.bold,
-                            ),
+                            label: 'Start Training',
                           ),
                         ),
                       ),
@@ -319,13 +318,9 @@ class _ScoreAndTrainingButton extends ConsumerWidget {
                 ? context.lichessColors.error
                 : context.lichessColors.good,
           ),
-          FatButton(
-            semanticsLabel: label,
+          _Button(
+            label: label,
             onPressed: onPressed,
-            child: Text(
-              label,
-              style: Styles.bold,
-            ),
           ),
         ],
       ),
@@ -372,6 +367,28 @@ class _Score extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _Button extends StatelessWidget {
+  const _Button({
+    required this.onPressed,
+    required this.label,
+  });
+
+  final VoidCallback onPressed;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return FatButton(
+      semanticsLabel: label,
+      onPressed: onPressed,
+      child: Text(
+        label,
+        style: Styles.bold,
       ),
     );
   }
