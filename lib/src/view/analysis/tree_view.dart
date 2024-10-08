@@ -26,7 +26,7 @@ const kFastReplayDebounceDelay = Duration(milliseconds: 150);
 const kOpeningHeaderHeight = 32.0;
 const kInlineMoveSpacing = 3.0;
 
-class AnalysisTreeView extends ConsumerStatefulWidget {
+class AnalysisTreeView extends ConsumerWidget {
   const AnalysisTreeView(
     this.pgn,
     this.options,
@@ -38,22 +38,94 @@ class AnalysisTreeView extends ConsumerStatefulWidget {
   final Orientation displayMode;
 
   @override
-  ConsumerState<AnalysisTreeView> createState() => _InlineTreeViewState();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final ctrlProvider = analysisControllerProvider(pgn, options);
+
+    final root = ref.watch(ctrlProvider.select((value) => value.root));
+    final currentPath =
+        ref.watch(ctrlProvider.select((value) => value.currentPath));
+    final pgnRootComments =
+        ref.watch(ctrlProvider.select((value) => value.pgnRootComments));
+
+    return CustomScrollView(
+      slivers: [
+        if (kOpeningAllowedVariants.contains(options.variant))
+          SliverPersistentHeader(
+            delegate: _OpeningHeaderDelegate(
+              ctrlProvider,
+              displayMode: displayMode,
+            ),
+          ),
+        SliverFillRemaining(
+          hasScrollBody: false,
+          child: DebouncedPgnTreeView(
+            root: root,
+            currentPath: currentPath,
+            pgnRootComments: pgnRootComments,
+            notifier: ref.read(ctrlProvider.notifier),
+          ),
+        ),
+      ],
+    );
+  }
 }
 
-class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
+/// Callbacks for interaction with [DebouncedPgnTreeView]
+abstract class PgnTreeNotifier {
+  void expandVariations(UciPath path);
+  void collapseVariations(UciPath path);
+  void promoteVariation(UciPath path, bool toMainLine);
+  void deleteFromHere(UciPath path);
+  void userJump(UciPath path);
+}
+
+/// Displays a tree-like view of a PGN game's moves. Path changes are debounced to avoid rebuilding the whole tree on every move.
+///
+/// For example, the PGN 1. e4 e5 (1... d5) (1... Nc6) 2. Nf3 Nc6 (2... a5) 3. Bc4 * will be displayed as:
+/// 1. e4 e5                      // [_MainLinePart]
+/// |- 1... d5                    // [_SideLinePart]
+/// |- 1... Nc6                   // [_SideLinePart]
+/// 2. Nf3 Nc6 (2... a5) 3. Bc4   // [_MainLinePart], with inline sideline
+/// Short sidelines without any branching are displayed inline with their parent line.
+/// Longer sidelines are displayed on a new line and indented.
+/// The mainline is split into parts whenever a move has a non-inline sideline, this corresponds to the [_MainLinePart] widget.
+/// Similarly, a [_SideLinePart] contains the moves sequence of a sideline where each node has only one child.
+class DebouncedPgnTreeView extends ConsumerStatefulWidget {
+  const DebouncedPgnTreeView({
+    required this.root,
+    required this.currentPath,
+    required this.pgnRootComments,
+    required this.notifier,
+  });
+
+  /// Root of the PGN tree to display
+  final ViewRoot root;
+
+  /// Path to the currently selected move in the tree
+  final UciPath currentPath;
+
+  /// Comments associated with the root node
+  final IList<PgnComment>? pgnRootComments;
+
+  /// Callbacks for when the user interacts with the tree view, e.g. selecting a different move or collapsing variations
+  final PgnTreeNotifier notifier;
+
+  @override
+  ConsumerState<DebouncedPgnTreeView> createState() =>
+      _DebouncedPgnTreeViewState();
+}
+
+class _DebouncedPgnTreeViewState extends ConsumerState<DebouncedPgnTreeView> {
   final currentMoveKey = GlobalKey();
   final _debounce = Debouncer(kFastReplayDebounceDelay);
+
+  /// Path to the currently selected move in the tree. When widget.currentPath changes rapidly, we debounce the change to avoid rebuilding the whole tree on every move.
   late UciPath pathToCurrentMove;
 
   @override
   void initState() {
     super.initState();
-    pathToCurrentMove = ref.read(
-      analysisControllerProvider(widget.pgn, widget.options).select(
-        (value) => value.currentPath,
-      ),
-    );
+    pathToCurrentMove = widget.currentPath;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (currentMoveKey.currentContext != null) {
         Scrollable.ensureVisible(
@@ -71,7 +143,33 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
     super.dispose();
   }
 
-  // This is the most expensive part of the analysis view because of the tree
+  @override
+  void didUpdateWidget(covariant DebouncedPgnTreeView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.currentPath != widget.currentPath) {
+      // debouncing the current path change to avoid rebuilding when using
+      // the fast replay buttons
+      _debounce(() {
+        setState(() {
+          pathToCurrentMove = widget.currentPath;
+        });
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (currentMoveKey.currentContext != null) {
+            Scrollable.ensureVisible(
+              currentMoveKey.currentContext!,
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.easeIn,
+              alignment: 0.5,
+              alignmentPolicy: ScrollPositionAlignmentPolicy.explicit,
+            );
+          }
+        });
+      });
+    }
+  }
+
+  // This is the most expensive part of the pgn tree view because of the tree
   // that may be very large.
   // Great care must be taken to avoid unnecessary rebuilds.
   // This should actually rebuild only when the current path changes or a new node
@@ -80,38 +178,6 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
   // using the fast replay buttons.
   @override
   Widget build(BuildContext context) {
-    ref.listen(
-      analysisControllerProvider(widget.pgn, widget.options),
-      (prev, state) {
-        if (prev?.currentPath != state.currentPath) {
-          // debouncing the current path change to avoid rebuilding when using
-          // the fast replay buttons
-          _debounce(() {
-            setState(() {
-              pathToCurrentMove = state.currentPath;
-            });
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (currentMoveKey.currentContext != null) {
-                Scrollable.ensureVisible(
-                  currentMoveKey.currentContext!,
-                  duration: const Duration(milliseconds: 200),
-                  curve: Curves.easeIn,
-                  alignment: 0.5,
-                  alignmentPolicy: ScrollPositionAlignmentPolicy.explicit,
-                );
-              }
-            });
-          });
-        }
-      },
-    );
-
-    final ctrlProvider = analysisControllerProvider(widget.pgn, widget.options);
-    final root = ref.watch(ctrlProvider.select((value) => value.root));
-    final rootComments = ref.watch(
-      ctrlProvider.select((value) => value.pgnRootComments),
-    );
-
     final shouldShowComments = ref.watch(
       analysisPreferencesProvider.select((value) => value.showPgnComments),
     );
@@ -120,30 +186,16 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
       analysisPreferencesProvider.select((value) => value.showAnnotations),
     );
 
-    return CustomScrollView(
-      slivers: [
-        if (kOpeningAllowedVariants.contains(widget.options.variant))
-          SliverPersistentHeader(
-            delegate: _OpeningHeaderDelegate(
-              ctrlProvider,
-              displayMode: widget.displayMode,
-            ),
-          ),
-        SliverFillRemaining(
-          hasScrollBody: false,
-          child: _PgnTreeView(
-            root: root,
-            rootComments: rootComments,
-            params: (
-              shouldShowAnnotations: shouldShowAnnotations,
-              shouldShowComments: shouldShowComments,
-              currentMoveKey: currentMoveKey,
-              pathToCurrentMove: pathToCurrentMove,
-              notifier: ref.read(ctrlProvider.notifier),
-            ),
-          ),
-        ),
-      ],
+    return _PgnTreeView(
+      root: widget.root,
+      rootComments: widget.pgnRootComments,
+      params: (
+        shouldShowAnnotations: shouldShowAnnotations,
+        shouldShowComments: shouldShowComments,
+        currentMoveKey: currentMoveKey,
+        pathToCurrentMove: pathToCurrentMove,
+        notifier: widget.notifier,
+      ),
     );
   }
 }
@@ -167,7 +219,7 @@ typedef _PgnTreeViewParams = ({
   GlobalKey currentMoveKey,
 
   /// Callbacks for when the user interacts with the tree view, e.g. selecting a different move.
-  AnalysisController notifier,
+  PgnTreeNotifier notifier,
 });
 
 /// Whether to display the sideline inline.
@@ -194,17 +246,6 @@ Iterable<List<ViewNode>> _mainlineParts(ViewRoot root) =>
         .splitAfter(_hasNonInlineSideLine)
         .takeWhile((nodes) => nodes.firstOrNull?.children.isNotEmpty == true);
 
-/// Displays a tree-like view of a PGN game's moves.
-///
-/// For example, the PGN 1. e4 e5 (1... d5) (1... Nc6) 2. Nf3 Nc6 (2... a5) 3. Bc4 * will be displayed as:
-/// 1. e4 e5                      // [_MainLinePart]
-/// |- 1... d5                    // [_SideLinePart]
-/// |- 1... Nc6                   // [_SideLinePart]
-/// 2. Nf3 Nc6 (2... a5) 3. Bc4   // [_MainLinePart], with inline sideline
-/// Short sidelines without any branching are displayed inline with their parent line.
-/// Longer sidelines are displayed on a new line and indented.
-/// The mainline is split into parts whenever a move has a non-inline sideline, this corresponds to the [_MainLinePart] widget.
-/// Similarly, a [_SideLinePart] contains the moves sequence of a sideline where each node has only one child.
 class _PgnTreeView extends StatefulWidget {
   const _PgnTreeView({
     required this.root,
@@ -1024,7 +1065,7 @@ class _MoveContextMenu extends ConsumerWidget {
   final UciPath path;
   final ViewBranch branch;
   final bool isSideline;
-  final AnalysisController notifier;
+  final PgnTreeNotifier notifier;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

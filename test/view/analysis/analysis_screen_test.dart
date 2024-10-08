@@ -300,7 +300,7 @@ void main() {
 
         await tester.tap(find.byKey(const Key('goto-previous')));
         // need to wait for current move change debounce delay
-        await tester.pump(const Duration(milliseconds: 200));
+        await tester.pumpAndSettle(const Duration(milliseconds: 200));
 
         expect(
           tester
@@ -332,7 +332,7 @@ void main() {
 
         await tester.tap(find.byKey(const Key('goto-previous')));
         // need to wait for current move change debounce delay
-        await tester.pump(const Duration(milliseconds: 200));
+        await tester.pumpAndSettle(const Duration(milliseconds: 200));
 
         expect(
           tester
@@ -365,7 +365,7 @@ void main() {
 
         await tester.tap(find.byKey(const Key('goto-previous')));
         // need to wait for current move change debounce delay
-        await tester.pump(const Duration(milliseconds: 200));
+        await tester.pumpAndSettle(const Duration(milliseconds: 200));
 
         expect(
           tester
