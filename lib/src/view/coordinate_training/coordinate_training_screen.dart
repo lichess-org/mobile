@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:chessground/chessground.dart';
 import 'package:dartchess/dartchess.dart';
@@ -19,6 +18,7 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
+import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_alert_dialog.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
@@ -29,11 +29,22 @@ class CoordinateTrainingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const PlatformScaffold(
+    return PlatformScaffold(
       appBar: PlatformAppBar(
-        title: Text('Coordinate Training'), // TODO l10n once script works
+        title: const Text('Coordinate Training'), // TODO l10n once script works
+        actions: [
+          AppBarIconButton(
+            icon: const Icon(Icons.settings),
+            semanticsLabel: context.l10n.settingsSettings,
+            onPressed: () => showAdaptiveBottomSheet<void>(
+              context: context,
+              builder: (BuildContext context) =>
+                  const _CoordinateTrainingMenu(),
+            ),
+          ),
+        ],
       ),
-      body: _Body(),
+      body: const _Body(),
     );
   }
 }
@@ -46,27 +57,9 @@ class _Body extends ConsumerStatefulWidget {
 }
 
 class _BodyState extends ConsumerState<_Body> {
-  late Side orientation;
-
   Square? highlightLastGuess;
 
   Timer? highlightTimer;
-
-  void _setOrientation(SideChoice choice) {
-    setState(() {
-      orientation = switch (choice) {
-        SideChoice.white => Side.white,
-        SideChoice.black => Side.black,
-        SideChoice.random => Side.values[Random().nextInt(Side.values.length)],
-      };
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _setOrientation(ref.read(coordinateTrainingPreferencesProvider).sideChoice);
-  }
 
   @override
   void dispose() {
@@ -103,6 +96,7 @@ class _BodyState extends ConsumerState<_Body> {
     }.lock;
 
     return SafeArea(
+      bottom: false,
       child: Column(
         children: [
           Expanded(
@@ -142,44 +136,54 @@ class _BodyState extends ConsumerState<_Body> {
                         _TrainingBoard(
                           boardSize: boardSize,
                           isTablet: isTablet,
-                          orientation: orientation,
+                          orientation: trainingState.orientation,
                           squareHighlights: squareHighlights,
                           onGuess: _onGuess,
                         ),
                       ],
                     ),
                     if (trainingState.trainingActive)
+                      _ScoreAndTrainingButton(
+                        scoreSize: boardSize / 8,
+                        score: trainingState.score,
+                        onPressed: ref
+                            .read(
+                              coordinateTrainingControllerProvider.notifier,
+                            )
+                            .abortTraining,
+                        label: 'Abort Training',
+                      )
+                    else if (trainingState.lastScore != null)
+                      _ScoreAndTrainingButton(
+                        scoreSize: boardSize / 8,
+                        score: trainingState.lastScore!,
+                        onPressed: () {
+                          ref
+                              .read(
+                                coordinateTrainingControllerProvider.notifier,
+                              )
+                              .startTraining(
+                                trainingPrefs.timeChoice.duration,
+                              );
+                        },
+                        label: 'New Training',
+                      )
+                    else
                       Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            _Score(
-                              score: trainingState.score,
-                              size: boardSize / 8,
-                              color: trainingState.lastGuess == Guess.incorrect
-                                  ? context.lichessColors.error
-                                  : context.lichessColors.good,
-                            ),
-                            FatButton(
-                              semanticsLabel: 'Abort Training',
-                              onPressed: ref
+                        child: Center(
+                          child: _Button(
+                            onPressed: () {
+                              ref
                                   .read(
                                     coordinateTrainingControllerProvider
                                         .notifier,
                                   )
-                                  .stopTraining,
-                              child: const Text(
-                                'Abort Training',
-                                style: Styles.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                    else
-                      Expanded(
-                        child: _Settings(
-                          onSideChoiceSelected: _setOrientation,
+                                  .startTraining(
+                                    trainingPrefs.timeChoice.duration,
+                                  );
+                            },
+                            label: 'Start Training',
+                          ),
                         ),
                       ),
                   ],
@@ -187,24 +191,21 @@ class _BodyState extends ConsumerState<_Body> {
               },
             ),
           ),
-          BottomBar(
-            children: [
-              BottomBarButton(
-                label: context.l10n.menu,
-                onTap: () => showAdaptiveBottomSheet<void>(
-                  context: context,
-                  builder: (BuildContext context) =>
-                      const _CoordinateTrainingMenu(),
+          if (!trainingState.trainingActive)
+            BottomBar(
+              children: [
+                BottomBarButton(
+                  label: context.l10n.menu,
+                  onTap: () => _coordinateTrainingSettingsBuilder(context),
+                  icon: Icons.tune,
                 ),
-                icon: Icons.tune,
-              ),
-              BottomBarButton(
-                icon: Icons.info_outline,
-                label: context.l10n.aboutX('Coordinate Training'),
-                onTap: () => _coordinateTrainingInfoDialogBuilder(context),
-              ),
-            ],
-          ),
+                BottomBarButton(
+                  icon: Icons.info_outline,
+                  label: context.l10n.aboutX('Coordinate Training'),
+                  onTap: () => _coordinateTrainingInfoDialogBuilder(context),
+                ),
+              ],
+            ),
         ],
       ),
     );
@@ -242,7 +243,7 @@ class _TimeBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Align(
-      alignment: Alignment.center,
+      alignment: Alignment.centerLeft,
       child: SizedBox(
         width: maxWidth * (timeFractionElapsed ?? 0.0),
         height: 15.0,
@@ -264,12 +265,17 @@ class _CoordinateTrainingMenu extends ConsumerWidget {
     return BottomSheetScrollableContainer(
       padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
       children: [
-        ListSection(
-          header: Text(
-            context.l10n.preferencesDisplay,
-            style: Styles.sectionTitle,
-          ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                context.l10n.preferencesDisplay,
+                style: Styles.sectionTitle,
+              ),
+            ),
             SwitchSettingTile(
               title: const Text('Show Coordinates'),
               value: trainingPrefs.showCoordinates,
@@ -287,6 +293,44 @@ class _CoordinateTrainingMenu extends ConsumerWidget {
           ],
         ),
       ],
+    );
+  }
+}
+
+class _ScoreAndTrainingButton extends ConsumerWidget {
+  const _ScoreAndTrainingButton({
+    required this.scoreSize,
+    required this.score,
+    required this.onPressed,
+    required this.label,
+  });
+
+  final double scoreSize;
+  final int score;
+  final VoidCallback onPressed;
+  final String label;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final trainingState = ref.watch(coordinateTrainingControllerProvider);
+
+    return Expanded(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          _Score(
+            score: score,
+            size: scoreSize,
+            color: trainingState.lastGuess == Guess.incorrect
+                ? context.lichessColors.error
+                : context.lichessColors.good,
+          ),
+          _Button(
+            label: label,
+            onPressed: onPressed,
+          ),
+        ],
+      ),
     );
   }
 }
@@ -335,83 +379,74 @@ class _Score extends StatelessWidget {
   }
 }
 
-class _Settings extends ConsumerStatefulWidget {
-  const _Settings({
-    required this.onSideChoiceSelected,
+class _Button extends StatelessWidget {
+  const _Button({
+    required this.onPressed,
+    required this.label,
   });
 
-  final void Function(SideChoice) onSideChoiceSelected;
+  final VoidCallback onPressed;
+  final String label;
 
-  @override
-  ConsumerState<_Settings> createState() => _SettingsState();
-}
-
-class _SettingsState extends ConsumerState<_Settings> {
   @override
   Widget build(BuildContext context) {
+    return FatButton(
+      semanticsLabel: label,
+      onPressed: onPressed,
+      child: Text(
+        label,
+        style: Styles.bold,
+      ),
+    );
+  }
+}
+
+class SettingsBottomSheet extends ConsumerWidget {
+  const SettingsBottomSheet();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
     final trainingPrefs = ref.watch(coordinateTrainingPreferencesProvider);
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
+    return BottomSheetScrollableContainer(
+      padding: const EdgeInsets.all(16.0),
       children: [
-        PlatformListTile(
-          title: Text(context.l10n.side),
-          trailing: Padding(
-            padding: Styles.horizontalBodyPadding,
-            child: Wrap(
-              spacing: 8.0,
-              children: SideChoice.values.map((choice) {
-                return ChoiceChip(
-                  label: Text(choice.label(context.l10n)),
-                  selected: trainingPrefs.sideChoice == choice,
-                  showCheckmark: false,
-                  onSelected: (selected) {
-                    widget.onSideChoiceSelected(choice);
-                    ref
-                        .read(coordinateTrainingPreferencesProvider.notifier)
-                        .setSideChoice(choice);
-                  },
-                );
-              }).toList(),
-            ),
-          ),
+        Filter(
+          filterName: context.l10n.side,
+          filterType: FilterType.singleChoice,
+          choices: SideChoice.values,
+          showCheckmark: false,
+          choiceSelected: (choice) => trainingPrefs.sideChoice == choice,
+          choiceLabel: (choice) => Text(choice.label(context.l10n)),
+          onSelected: (choice, selected) {
+            if (selected) {
+              ref
+                  .read(
+                    coordinateTrainingPreferencesProvider.notifier,
+                  )
+                  .setSideChoice(choice);
+            }
+          },
         ),
-        PlatformListTile(
-          title: Text(context.l10n.time),
-          trailing: Padding(
-            padding: Styles.horizontalBodyPadding,
-            child: Wrap(
-              spacing: 8.0,
-              children: TimeChoice.values.map((choice) {
-                return ChoiceChip(
-                  label: choice.label(context.l10n),
-                  selected: trainingPrefs.timeChoice == choice,
-                  showCheckmark: false,
-                  onSelected: (selected) {
-                    if (selected) {
-                      ref
-                          .read(
-                            coordinateTrainingPreferencesProvider.notifier,
-                          )
-                          .setTimeChoice(choice);
-                    }
-                  },
-                );
-              }).toList(),
-            ),
-          ),
-        ),
-        FatButton(
-          semanticsLabel: 'Start Training',
-          onPressed: () => ref
-              .read(coordinateTrainingControllerProvider.notifier)
-              .startTraining(trainingPrefs.timeChoice.duration),
-          child: const Text(
-            // TODO l10n once script works
-            'Start Training',
-            style: Styles.bold,
-          ),
+        const SizedBox(height: 12.0),
+        const PlatformDivider(thickness: 1, indent: 0),
+        const SizedBox(height: 12.0),
+        Filter(
+          filterName: context.l10n.time,
+          filterType: FilterType.singleChoice,
+          choices: TimeChoice.values,
+          showCheckmark: false,
+          choiceSelected: (choice) => trainingPrefs.timeChoice == choice,
+          choiceLabel: (choice) => choice.label(context.l10n),
+          onSelected: (choice, selected) {
+            if (selected) {
+              ref
+                  .read(
+                    coordinateTrainingPreferencesProvider.notifier,
+                  )
+                  .setTimeChoice(choice);
+            }
+          },
         ),
       ],
     );
@@ -488,6 +523,13 @@ class _TrainingBoardState extends ConsumerState<_TrainingBoard> {
       ],
     );
   }
+}
+
+Future<void> _coordinateTrainingSettingsBuilder(BuildContext context) {
+  return showAdaptiveBottomSheet<void>(
+    context: context,
+    builder: (BuildContext context) => const SettingsBottomSheet(),
+  );
 }
 
 Future<void> _coordinateTrainingInfoDialogBuilder(BuildContext context) {
