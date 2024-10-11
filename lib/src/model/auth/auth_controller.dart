@@ -46,13 +46,13 @@ class AuthController extends _$AuthController {
     final appAuth = ref.read(appAuthProvider);
 
     try {
+      await ref.read(notificationServiceProvider).unregister();
       await ref.withClient(
         (client) => AuthRepository(client, appAuth).signOut(),
       );
-      ref.read(notificationServiceProvider).unregister();
-      // force reconnect to the current socket
-      ref.read(socketPoolProvider).currentClient.connect();
       await ref.read(authSessionProvider.notifier).delete();
+      // force reconnect to the current socket
+      await ref.read(socketPoolProvider).currentClient.connect();
       state = const AsyncValue.data(null);
     } catch (e, st) {
       state = AsyncValue.error(e, st);
