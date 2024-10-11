@@ -151,11 +151,7 @@ class BoardPrefs with _$BoardPrefs implements SerializablePreferences {
   }
 
   factory BoardPrefs.fromJson(Map<String, dynamic> json) {
-    try {
-      return _$BoardPrefsFromJson(json);
-    } catch (_) {
-      return defaults;
-    }
+    return _$BoardPrefsFromJson(json);
   }
 
   Duration get pieceAnimationDuration =>

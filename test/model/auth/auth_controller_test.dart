@@ -12,6 +12,7 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../mock_server_responses.dart';
+import '../../network/fake_http_client_factory.dart';
 import '../../test_container.dart';
 import '../../test_helpers.dart';
 
@@ -46,6 +47,9 @@ void main() {
         200,
       );
     } else if (request.method == 'DELETE' && request.url.path == '/api/token') {
+      return mockResponse('ok', 200);
+    } else if (request.method == 'POST' &&
+        request.url.path == '/mobile/unregister') {
       return mockResponse('ok', 200);
     }
     return mockResponse('', 404);
@@ -83,8 +87,8 @@ void main() {
         overrides: [
           appAuthProvider.overrideWithValue(mockFlutterAppAuth),
           sessionStorageProvider.overrideWithValue(mockSessionStorage),
-          lichessClientProvider
-              .overrideWith((ref) => LichessClient(client, ref)),
+          httpClientFactoryProvider
+              .overrideWith((_) => FakeHttpClientFactory(() => client)),
         ],
       );
 
@@ -122,13 +126,29 @@ void main() {
         () => mockSessionStorage.delete(),
       ).thenAnswer((_) => Future.value(null));
 
+      int tokenDeleteCount = 0;
+      int unregisterCount = 0;
+
+      final client = MockClient((request) {
+        if (request.method == 'DELETE' && request.url.path == '/api/token') {
+          tokenDeleteCount++;
+          return mockResponse('ok', 200);
+        } else if (request.method == 'POST' &&
+            request.url.path == '/mobile/unregister') {
+          unregisterCount++;
+          return mockResponse('ok', 200);
+        }
+        return mockResponse('', 404);
+      });
+
       final container = await makeContainer(
         overrides: [
           appAuthProvider.overrideWithValue(mockFlutterAppAuth),
           sessionStorageProvider.overrideWithValue(mockSessionStorage),
-          lichessClientProvider
-              .overrideWith((ref) => LichessClient(client, ref)),
+          httpClientFactoryProvider
+              .overrideWith((_) => FakeHttpClientFactory(() => client)),
         ],
+        userSession: testUserSession,
       );
 
       final listener = Listener<AsyncValue<void>>();
@@ -151,6 +171,9 @@ void main() {
         () => listener(loading, nullData),
       ]);
       verifyNoMoreInteractions(listener);
+
+      expect(tokenDeleteCount, 1, reason: 'token should be deleted');
+      expect(unregisterCount, 1, reason: 'device should be unregistered');
 
       // session should be deleted
       verify(

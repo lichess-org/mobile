@@ -27,6 +27,8 @@ Future<void> main() async {
   await lichessBinding.preloadSharedPreferences();
   await lichessBinding.preloadData();
 
+  await preloadPieceImages();
+
   await setupFirstLaunch();
 
   await SoundService.initialize();

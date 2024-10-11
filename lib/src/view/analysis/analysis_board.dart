@@ -23,12 +23,15 @@ class AnalysisBoard extends ConsumerStatefulWidget {
     this.options,
     this.boardSize, {
     this.borderRadius,
+    this.enableDrawingShapes = true,
   });
 
   final String pgn;
   final AnalysisOptions options;
   final double boardSize;
   final BorderRadiusGeometry? borderRadius;
+
+  final bool enableDrawingShapes;
 
   @override
   ConsumerState<AnalysisBoard> createState() => AnalysisBoardState();
@@ -107,7 +110,7 @@ class AnalysisBoardState extends ConsumerState<AnalysisBoard> {
                 ? boardShadows
                 : const <BoxShadow>[],
             drawShape: DrawShapeOptions(
-              enable: true,
+              enable: widget.enableDrawingShapes,
               onCompleteShape: _onCompleteShape,
               onClearShapes: _onClearShapes,
               newShapeColor: boardPrefs.shapeColor.color,
