@@ -111,10 +111,16 @@ class CreateGameService {
     );
   }
 
-  /// Create a new challenge game.
+  /// Create a new real time challenge.
   ///
-  /// Returns the game id or the decline reason if the challenge was declined.
-  Future<ChallengeResponse> newChallenge(ChallengeRequest challengeReq) async {
+  /// Will listen to the challenge socket and await the response from the destinated user.
+  /// Returns the challenge, along with [GameFullId] if the challenge was accepted,
+  /// or the [ChallengeDeclineReason] if the challenge was declined.
+  Future<ChallengeResponse> newRealTimeChallenge(
+    ChallengeRequest challengeReq,
+  ) async {
+    assert(challengeReq.timeControl == ChallengeTimeControlType.clock);
+
     if (_challengeConnection != null) {
       throw StateError('Already creating a game.');
     }
@@ -183,6 +189,22 @@ class CreateGameService {
     }
 
     return completer.future;
+  }
+
+  /// Create a new correspondence challenge.
+  ///
+  /// Returns the created challenge immediately. If the challenge is accepted,
+  /// a notification will be sent to the user when the game starts.
+  Future<Challenge> newCorrespondenceChallenge(
+    ChallengeRequest challenge,
+  ) async {
+    assert(challenge.timeControl == ChallengeTimeControlType.correspondence);
+
+    _log.info('Creating new correspondence challenge');
+
+    return ref.withClient(
+      (client) => ChallengeRepository(client).create(challenge),
+    );
   }
 
   /// Cancel the current game creation.
