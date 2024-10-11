@@ -9,6 +9,7 @@ import 'package:lichess_mobile/src/db/secure_storage.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
+import 'package:lichess_mobile/src/utils/chessboard.dart';
 import 'package:lichess_mobile/src/utils/color_palette.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
 import 'package:lichess_mobile/src/utils/string.dart';
@@ -42,6 +43,22 @@ Future<void> setupFirstLaunch() async {
 
     await prefs.setBool('first_run', false);
   }
+}
+
+Future<void> preloadPieceImages() async {
+  final prefs = LichessBinding.instance.sharedPreferences;
+  final storedPrefs = prefs.getString(PrefCategory.board.storageKey);
+  BoardPrefs boardPrefs = BoardPrefs.defaults;
+  if (storedPrefs != null) {
+    try {
+      boardPrefs =
+          BoardPrefs.fromJson(jsonDecode(storedPrefs) as Map<String, dynamic>);
+    } catch (e) {
+      _logger.warning('Failed to decode board preferences: $e');
+    }
+  }
+
+  await precachePieceImages(boardPrefs.pieceSet);
 }
 
 /// Display setup on Android.

@@ -29,7 +29,8 @@ class PuzzleFeedbackWidget extends ConsumerWidget {
         ref.watch(boardPreferencesProvider.select((state) => state.boardTheme));
     final brightness = ref.watch(currentBrightnessProvider);
 
-    final piece = state.pov == Side.white ? kWhiteKingKind : kBlackKingKind;
+    final piece =
+        state.pov == Side.white ? PieceKind.whiteKing : PieceKind.blackKing;
     final asset = pieceSet.assets[piece]!;
 
     switch (state.mode) {
