@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
@@ -112,19 +113,126 @@ class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final connectivity = ref.watch(connectivityChangesProvider);
+    final savedThemes = ref.watch(savedThemeBatchesProvider);
+    final savedOpenings = ref.watch(savedOpeningBatchesProvider);
 
     final isTablet = isTabletOrLarger(context);
 
-    final handsetChildren = [
-      connectivity.whenIs(
-        online: () => const DailyPuzzle(),
-        offline: () => const SizedBox.shrink(),
+    final dailyWidgets = connectivity.whenIs(
+      online: () => const [
+        DailyPuzzle(),
+        SizedBox(height: 4.0),
+      ],
+      offline: () => <Widget>[],
+    );
+
+    final previewDescriptionStyle = TextStyle(
+      height: 1.2,
+      fontSize: 12.0,
+      color: DefaultTextStyle.of(context).style.color?.withValues(alpha: 0.6),
+    );
+
+    // we always show the healthy mix theme
+    final healthyMixPreview = PuzzleAnglePreview(
+      angle: const PuzzleTheme(PuzzleThemeKey.mix),
+      icon: PuzzleIcons.mix,
+      description: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            PuzzleThemeKey.mix.l10n(context.l10n).name,
+            style: Styles.boardPreviewTitle,
+          ),
+          Text(
+            PuzzleThemeKey.mix.l10n(context.l10n).description,
+            style: previewDescriptionStyle,
+          ),
+        ],
       ),
-      const SizedBox(height: 4.0),
-      const TacticalTrainingPreview(),
-      if (Theme.of(context).platform == TargetPlatform.android)
-        const SizedBox(height: 8.0),
+    );
+
+    final savedThemesPreview = savedThemes.maybeWhen(
+      data: (themes) {
+        return themes.entries
+            .whereNot((e) => e.key == PuzzleThemeKey.mix)
+            .map((entry) {
+          final theme = entry.key;
+          return PuzzleAnglePreview(
+            angle: PuzzleTheme(theme),
+            icon: theme.icon,
+            description: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  theme.l10n(context.l10n).name,
+                  style: Styles.boardPreviewTitle,
+                ),
+                Text(
+                  theme.l10n(context.l10n).description,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    height: 1.2,
+                    fontSize: 12.0,
+                    color: DefaultTextStyle.of(context)
+                        .style
+                        .color
+                        ?.withValues(alpha: 0.6),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }).toList();
+      },
+      orElse: () => <Widget>[],
+    );
+
+    final savedOpeningsPreview = savedOpenings.maybeWhen(
+      data: (openings) {
+        return openings.entries.map((entry) {
+          final opening = entry.key;
+          return PuzzleAnglePreview(
+            angle: PuzzleOpening(opening),
+            icon: PuzzleIcons.opening,
+            description: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  opening,
+                  style: Styles.boardPreviewTitle,
+                ),
+              ],
+            ),
+          );
+        }).toList();
+      },
+      orElse: () => <Widget>[],
+    );
+
+    final tacticalTrainerTitle = Padding(
+      padding: Styles.horizontalBodyPadding.add(
+        Theme.of(context).platform == TargetPlatform.iOS
+            ? Styles.sectionTopPadding
+            : EdgeInsets.zero,
+      ),
+      child: Text(
+        context.l10n.puzzleDesc,
+        style: Styles.sectionTitle,
+      ),
+    );
+
+    final handsetChildren = [
       _PuzzleMenu(connectivity: connectivity),
+      tacticalTrainerTitle,
+      ...dailyWidgets,
+      healthyMixPreview,
+      ...savedThemesPreview,
+      ...savedOpeningsPreview,
+      const SizedBox(height: 8.0),
     ];
 
     final tabletChildren = [
@@ -136,12 +244,13 @@ class _Body extends ConsumerWidget {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const SizedBox(height: 8.0),
-                connectivity.whenIs(
-                  online: () => const DailyPuzzle(),
-                  offline: () => const SizedBox.shrink(),
-                ),
                 _PuzzleMenu(connectivity: connectivity),
+                tacticalTrainerTitle,
+                ...dailyWidgets,
+                healthyMixPreview,
+                ...savedThemesPreview,
+                ...savedOpeningsPreview,
+                const SizedBox(height: 8.0),
               ],
             ),
           ),
@@ -489,14 +598,21 @@ class DailyPuzzle extends ConsumerWidget {
   }
 }
 
-/// A widget that displays a preview of the tactical training screen.
-class TacticalTrainingPreview extends ConsumerWidget {
-  const TacticalTrainingPreview();
+/// A widget that displays a preview of a puzzle angle.
+class PuzzleAnglePreview extends ConsumerWidget {
+  const PuzzleAnglePreview({
+    required this.angle,
+    required this.icon,
+    required this.description,
+  });
+
+  final PuzzleAngle angle;
+  final IconData icon;
+  final Widget description;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final puzzle =
-        ref.watch(nextPuzzleProvider(const PuzzleTheme(PuzzleThemeKey.mix)));
+    final puzzle = ref.watch(nextPuzzleProvider(angle));
 
     Widget buildPuzzlePreview(Puzzle? puzzle, {bool loading = false}) {
       final preview = puzzle != null ? PuzzlePreview.fromPuzzle(puzzle) : null;
@@ -515,33 +631,9 @@ class TacticalTrainingPreview extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        context.l10n.puzzleDesc,
-                        style: Styles.boardPreviewTitle,
-                      ),
-                      Text(
-                        // TODO change this to a better description when
-                        // translation tool is again available (#945)
-                        context.l10n.puzzleThemeHealthyMixDescription,
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          height: 1.2,
-                          fontSize: 12.0,
-                          color: DefaultTextStyle.of(context)
-                              .style
-                              .color
-                              ?.withValues(alpha: 0.6),
-                        ),
-                      ),
-                    ],
-                  ),
+                  description,
                   Icon(
-                    PuzzleIcons.mix,
+                    icon,
                     size: 34,
                     color: DefaultTextStyle.of(context)
                         .style
@@ -565,16 +657,12 @@ class TacticalTrainingPreview extends ConsumerWidget {
                       pushPlatformRoute(
                         context,
                         rootNavigator: true,
-                        builder: (context) => const PuzzleScreen(
-                          angle: PuzzleTheme(PuzzleThemeKey.mix),
-                        ),
+                        builder: (context) => PuzzleScreen(angle: angle),
                       ).then((_) {
                         if (context.mounted) {
-                          ref.invalidate(
-                            nextPuzzleProvider(
-                              const PuzzleTheme(PuzzleThemeKey.mix),
-                            ),
-                          );
+                          ref.invalidate(nextPuzzleProvider(angle));
+                          ref.invalidate(savedThemeBatchesProvider);
+                          ref.invalidate(savedOpeningBatchesProvider);
                         }
                       });
                     }

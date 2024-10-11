@@ -164,14 +164,14 @@ void main() {
       // wait for the puzzle to load
       await tester.pump(const Duration(milliseconds: 100));
 
-      expect(find.byType(TacticalTrainingPreview), findsOneWidget);
+      expect(find.byType(PuzzleAnglePreview), findsOneWidget);
       expect(
-        find.widgetWithText(TacticalTrainingPreview, 'Chess tactics trainer'),
+        find.widgetWithText(PuzzleAnglePreview, 'Healthy mix'),
         findsOneWidget,
       );
       final chessboard = find
           .descendant(
-            of: find.byType(TacticalTrainingPreview),
+            of: find.byType(PuzzleAnglePreview),
             matching: find.byType(Chessboard),
           )
           .evaluate()

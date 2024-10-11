@@ -160,7 +160,7 @@ class _Category extends ConsumerWidget {
                 return Opacity(
                   opacity: isThemeAvailable ? 1 : 0.5,
                   child: PlatformListTile(
-                    leading: Icon(puzzleThemeIcon(theme)),
+                    leading: Icon(theme.icon),
                     trailing: hasConnectivity &&
                             onlineThemes?.containsKey(theme) == true
                         ? Padding(
@@ -218,7 +218,11 @@ class _Category extends ConsumerWidget {
                               builder: (context) => PuzzleScreen(
                                 angle: PuzzleTheme(theme),
                               ),
-                            );
+                            ).then((_) {
+                              if (context.mounted) {
+                                ref.invalidate(savedThemeBatchesProvider);
+                              }
+                            });
                           }
                         : null,
                   ),

@@ -77,7 +77,7 @@ class ListSection extends StatelessWidget {
       case TargetPlatform.android:
         return _isLoading
             ? Padding(
-                padding: margin ?? Styles.bodySectionBottomPadding,
+                padding: margin ?? Styles.sectionBottomPadding,
                 child: Column(
                   children: [
                     if (header != null)
