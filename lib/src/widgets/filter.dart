@@ -14,6 +14,7 @@ class Filter<T extends Enum> extends StatelessWidget {
     required this.filterName,
     required this.filterType,
     required this.choices,
+    this.showCheckmark = true,
     required this.choiceSelected,
     required this.choiceLabel,
     required this.onSelected,
@@ -28,11 +29,14 @@ class Filter<T extends Enum> extends StatelessWidget {
   /// The choices that will be displayed.
   final Iterable<T> choices;
 
+  /// Whether to show a checkmark next to selected choices.
+  final bool showCheckmark;
+
   /// Called to determine whether a choice is currently selected.
   final bool Function(T choice) choiceSelected;
 
-  /// Determines  label to display for the given choice.
-  final String Function(T choice) choiceLabel;
+  /// Determines label to display for the given choice.
+  final Widget Function(T choice) choiceLabel;
 
   /// Called when a choice is selected or deselected.
   final void Function(T value, bool selected) onSelected;
@@ -52,14 +56,16 @@ class Filter<T extends Enum> extends StatelessWidget {
                 .map(
                   (choice) => switch (filterType) {
                     FilterType.singleChoice => ChoiceChip(
-                        label: Text(choiceLabel(choice)),
+                        label: choiceLabel(choice),
                         selected: choiceSelected(choice),
                         onSelected: (value) => onSelected(choice, value),
+                        showCheckmark: showCheckmark,
                       ),
                     FilterType.multipleChoice => FilterChip(
-                        label: Text(choiceLabel(choice)),
+                        label: choiceLabel(choice),
                         selected: choiceSelected(choice),
                         onSelected: (value) => onSelected(choice, value),
+                        showCheckmark: showCheckmark,
                       ),
                   },
                 )

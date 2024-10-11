@@ -3,6 +3,8 @@ import 'dart:math';
 
 import 'package:dartchess/dartchess.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:lichess_mobile/src/model/common/game.dart';
+import 'package:lichess_mobile/src/model/coordinate_training/coordinate_training_preferences.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'coordinate_training_controller.freezed.dart';
@@ -23,7 +25,12 @@ class CoordinateTrainingController extends _$CoordinateTrainingController {
     ref.onDispose(() {
       _updateTimer?.cancel();
     });
-    return const CoordinateTrainingState();
+    final sideChoice = ref.watch(
+      coordinateTrainingPreferencesProvider.select((value) => value.sideChoice),
+    );
+    return CoordinateTrainingState(
+      orientation: _getOrientation(sideChoice),
+    );
   }
 
   void startTraining(Duration? timeLimit) {
@@ -53,14 +60,33 @@ class CoordinateTrainingController extends _$CoordinateTrainingController {
 
   void _finishTraining() {
     // TODO save score in local storage here (and display high score and/or average score in UI)
-
-    stopTraining();
-  }
-
-  void stopTraining() {
+    final orientation = _getOrientation(
+      ref.read(coordinateTrainingPreferencesProvider).sideChoice,
+    );
     _updateTimer?.cancel();
-    state = const CoordinateTrainingState();
+    state = CoordinateTrainingState(
+      lastGuess: state.lastGuess,
+      lastScore: state.score,
+      orientation: orientation,
+    );
   }
+
+  void abortTraining() {
+    final orientation = _getOrientation(
+      ref.read(coordinateTrainingPreferencesProvider).sideChoice,
+    );
+    _updateTimer?.cancel();
+    state = CoordinateTrainingState(orientation: orientation);
+  }
+
+  Side _getOrientation(SideChoice choice) => switch (choice) {
+        SideChoice.white => Side.white,
+        SideChoice.black => Side.black,
+        SideChoice.random => _randomSide(),
+      };
+
+  /// Generate a random side
+  Side _randomSide() => Side.values[Random().nextInt(Side.values.length)];
 
   /// Generate a random square that is not the same as the [previous] square
   Square _randomCoord({Square? previous}) {
@@ -100,6 +126,8 @@ class CoordinateTrainingState with _$CoordinateTrainingState {
     @Default(null) Duration? timeLimit,
     @Default(null) Duration? elapsed,
     @Default(null) Guess? lastGuess,
+    required Side orientation,
+    @Default(null) int? lastScore,
   }) = _CoordinateTrainingState;
 
   bool get trainingActive => elapsed != null;
