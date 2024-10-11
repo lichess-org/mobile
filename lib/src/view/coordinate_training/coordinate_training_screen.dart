@@ -33,8 +33,9 @@ class CoordinateTrainingScreen extends StatelessWidget {
       appBar: PlatformAppBar(
         title: const Text('Coordinate Training'), // TODO l10n once script works
         actions: [
-          IconButton(
+          AppBarIconButton(
             icon: const Icon(Icons.settings),
+            semanticsLabel: context.l10n.settingsSettings,
             onPressed: () => showAdaptiveBottomSheet<void>(
               context: context,
               builder: (BuildContext context) =>
@@ -95,6 +96,7 @@ class _BodyState extends ConsumerState<_Body> {
     }.lock;
 
     return SafeArea(
+      bottom: false,
       child: Column(
         children: [
           Expanded(
@@ -263,12 +265,17 @@ class _CoordinateTrainingMenu extends ConsumerWidget {
     return BottomSheetScrollableContainer(
       padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
       children: [
-        ListSection(
-          header: Text(
-            context.l10n.preferencesDisplay,
-            style: Styles.sectionTitle,
-          ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                context.l10n.preferencesDisplay,
+                style: Styles.sectionTitle,
+              ),
+            ),
             SwitchSettingTile(
               title: const Text('Show Coordinates'),
               value: trainingPrefs.showCoordinates,
@@ -394,56 +401,54 @@ class _Button extends StatelessWidget {
   }
 }
 
-class Settings extends ConsumerWidget {
-  const Settings();
+class SettingsBottomSheet extends ConsumerWidget {
+  const SettingsBottomSheet();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final trainingPrefs = ref.watch(coordinateTrainingPreferencesProvider);
 
-    return Padding(
-      padding: const EdgeInsets.all(20.0),
-      child: Column(
-        children: [
-          Filter(
-            filterName: context.l10n.side,
-            filterType: FilterType.singleChoice,
-            choices: SideChoice.values,
-            showCheckmark: false,
-            choiceSelected: (choice) => trainingPrefs.sideChoice == choice,
-            choiceLabel: (choice) => Text(choice.label(context.l10n)),
-            onSelected: (choice, selected) {
-              if (selected) {
-                ref
-                    .read(
-                      coordinateTrainingPreferencesProvider.notifier,
-                    )
-                    .setSideChoice(choice);
-              }
-            },
-          ),
-          const SizedBox(height: 12.0),
-          const PlatformDivider(thickness: 1, indent: 0),
-          const SizedBox(height: 12.0),
-          Filter(
-            filterName: context.l10n.time,
-            filterType: FilterType.singleChoice,
-            choices: TimeChoice.values,
-            showCheckmark: false,
-            choiceSelected: (choice) => trainingPrefs.timeChoice == choice,
-            choiceLabel: (choice) => choice.label(context.l10n),
-            onSelected: (choice, selected) {
-              if (selected) {
-                ref
-                    .read(
-                      coordinateTrainingPreferencesProvider.notifier,
-                    )
-                    .setTimeChoice(choice);
-              }
-            },
-          ),
-        ],
-      ),
+    return BottomSheetScrollableContainer(
+      padding: const EdgeInsets.all(16.0),
+      children: [
+        Filter(
+          filterName: context.l10n.side,
+          filterType: FilterType.singleChoice,
+          choices: SideChoice.values,
+          showCheckmark: false,
+          choiceSelected: (choice) => trainingPrefs.sideChoice == choice,
+          choiceLabel: (choice) => Text(choice.label(context.l10n)),
+          onSelected: (choice, selected) {
+            if (selected) {
+              ref
+                  .read(
+                    coordinateTrainingPreferencesProvider.notifier,
+                  )
+                  .setSideChoice(choice);
+            }
+          },
+        ),
+        const SizedBox(height: 12.0),
+        const PlatformDivider(thickness: 1, indent: 0),
+        const SizedBox(height: 12.0),
+        Filter(
+          filterName: context.l10n.time,
+          filterType: FilterType.singleChoice,
+          choices: TimeChoice.values,
+          showCheckmark: false,
+          choiceSelected: (choice) => trainingPrefs.timeChoice == choice,
+          choiceLabel: (choice) => choice.label(context.l10n),
+          onSelected: (choice, selected) {
+            if (selected) {
+              ref
+                  .read(
+                    coordinateTrainingPreferencesProvider.notifier,
+                  )
+                  .setTimeChoice(choice);
+            }
+          },
+        ),
+      ],
     );
   }
 }
@@ -523,7 +528,7 @@ class _TrainingBoardState extends ConsumerState<_TrainingBoard> {
 Future<void> _coordinateTrainingSettingsBuilder(BuildContext context) {
   return showAdaptiveBottomSheet<void>(
     context: context,
-    builder: (BuildContext context) => const Settings(),
+    builder: (BuildContext context) => const SettingsBottomSheet(),
   );
 }
 
