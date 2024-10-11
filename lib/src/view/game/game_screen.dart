@@ -227,7 +227,7 @@ class _LoadGame extends _$LoadGame {
           .newLobbyGame(seek)
           .then((id) => (gameFullId: id, challenge: null, declineReason: null));
     } else if (challenge != null) {
-      return service.newChallenge(challenge);
+      return service.newRealTimeChallenge(challenge);
     }
 
     return Future.value(

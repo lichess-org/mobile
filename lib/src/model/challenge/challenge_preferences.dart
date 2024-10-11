@@ -85,8 +85,9 @@ class ChallengePrefs with _$ChallengePrefs implements SerializablePreferences {
       destUser: destUser,
       variant: variant,
       timeControl: timeControl,
-      clock: clock,
-      days: days,
+      clock: timeControl == ChallengeTimeControlType.clock ? clock : null,
+      days:
+          timeControl == ChallengeTimeControlType.correspondence ? days : null,
       rated: rated,
       sideChoice: sideChoice,
       initialFen: initialFen,

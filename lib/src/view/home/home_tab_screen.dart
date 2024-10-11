@@ -963,13 +963,14 @@ class _ChallengeScreenButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final session = ref.watch(authSessionProvider);
-    final connectivity = ref.watch(connectivityChangesProvider);
-    final challenges = ref.watch(challengesProvider);
-    final count = challenges.valueOrNull?.inward.length;
 
     if (session == null) {
       return const SizedBox.shrink();
     }
+
+    final connectivity = ref.watch(connectivityChangesProvider);
+    final challenges = ref.watch(challengesProvider);
+    final count = challenges.valueOrNull?.inward.length;
 
     return connectivity.maybeWhen(
       data: (connectivity) => AppBarNotificationIconButton(
@@ -978,6 +979,7 @@ class _ChallengeScreenButton extends ConsumerWidget {
         onPressed: !connectivity.isOnline
             ? null
             : () {
+                ref.invalidate(challengesProvider);
                 pushPlatformRoute(
                   context,
                   title: context.l10n.preferencesNotifyChallenge,
