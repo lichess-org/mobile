@@ -382,6 +382,7 @@ class _PgnTreeViewState extends State<_PgnTreeView> {
 
   @override
   Widget build(BuildContext context) {
+    final rootComments = widget.rootComments?.map((c) => c.text).nonNulls ?? [];
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       child: Column(
@@ -391,13 +392,11 @@ class _PgnTreeViewState extends State<_PgnTreeView> {
           if (widget.params.pathToCurrentMove.isEmpty)
             SizedBox.shrink(key: widget.params.currentMoveKey),
 
-          if (widget.params.shouldShowComments &&
-              widget.rootComments?.any((c) => c.text?.isNotEmpty == true) ==
-                  true)
+          if (widget.params.shouldShowComments && rootComments.isNotEmpty)
             Text.rich(
               TextSpan(
                 children: _comments(
-                  widget.rootComments!.map((c) => c.text!),
+                  rootComments,
                   textStyle: _baseTextStyle,
                 ),
               ),
