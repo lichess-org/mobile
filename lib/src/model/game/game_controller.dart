@@ -1023,7 +1023,10 @@ class GameState with _$GameState {
       (game.prefs?.enablePremove ?? true);
   bool get canAutoQueen =>
       autoQueenSettingOverride ?? (game.prefs?.autoQueen == AutoQueen.always);
-  bool get canAutoQueenOnPremove => game.prefs?.autoQueen == AutoQueen.premove;
+  bool get canAutoQueenOnPremove =>
+      autoQueenSettingOverride ??
+      (game.prefs?.autoQueen == AutoQueen.always ||
+          game.prefs?.autoQueen == AutoQueen.premove);
   bool get shouldConfirmResignAndDrawOffer => game.prefs?.confirmResign ?? true;
   bool get shouldConfirmMove =>
       moveConfirmSettingOverride ?? game.prefs?.submitMove ?? false;
