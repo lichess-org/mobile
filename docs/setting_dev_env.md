@@ -47,14 +47,12 @@ The fastest and most straight-forward way to get started is using [lila-docker](
 
 Instructions to install both `lila` and `lila-ws` locally can be found in [the lila wiki](https://github.com/lichess-org/lila/wiki/Lichess-Development-Onboarding).
 
-The mobile application is configured by default to target `http://127.0.0.1:9663` and `ws://127.0.0.1:9664`, so keep these when installing lila.
-
 **Do not use any scheme (https:// or ws://) in url in host, since it's already handled by URI helper methods**
 
 To run the application with a local server, you can use the following command:
 
 ```bash
-flutter run --dart-define=LICHESS_HOST=localhost.9663 --dart-define=LICHESS_WS_HOST=localhost:9664
+flutter run --dart-define=LICHESS_HOST=localhost:9663 --dart-define=LICHESS_WS_HOST=localhost:9664
 ```
 
 > [!NOTE]
