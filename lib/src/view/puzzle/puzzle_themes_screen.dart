@@ -218,11 +218,7 @@ class _Category extends ConsumerWidget {
                               builder: (context) => PuzzleScreen(
                                 angle: PuzzleTheme(theme),
                               ),
-                            ).then((_) {
-                              if (context.mounted) {
-                                ref.invalidate(savedThemeBatchesProvider);
-                              }
-                            });
+                            );
                           }
                         : null,
                   ),

@@ -1,14 +1,16 @@
-import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_opening.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
+import 'package:lichess_mobile/src/model/puzzle/puzzle_service.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/lichess_icons.dart';
@@ -35,6 +37,21 @@ import 'streak_screen.dart';
 
 const _kNumberOfHistoryItemsOnHandset = 8;
 const _kNumberOfHistoryItemsOnTablet = 16;
+
+final savedAnglesProvider =
+    FutureProvider.autoDispose<IMap<PuzzleAngle, int>>((ref) async {
+  final savedThemes = await ref.watch(savedThemeBatchesProvider.future);
+  final savedOpenings = await ref.watch(savedOpeningBatchesProvider.future);
+  return IMap<PuzzleAngle, int>.fromEntries([
+    ...savedThemes
+        .remove(PuzzleThemeKey.mix)
+        .map((themeKey, v) => MapEntry(PuzzleTheme(themeKey), v))
+        .entries,
+    ...savedOpenings
+        .map((openingKey, v) => MapEntry(PuzzleOpening(openingKey), v))
+        .entries,
+  ]);
+});
 
 class PuzzleTabScreen extends ConsumerWidget {
   const PuzzleTabScreen({super.key});
@@ -113,105 +130,32 @@ class _Body extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final connectivity = ref.watch(connectivityChangesProvider);
-    final savedThemes = ref.watch(savedThemeBatchesProvider);
-    final savedOpenings = ref.watch(savedOpeningBatchesProvider);
+    final savedAnglesAsync = ref.watch(savedAnglesProvider);
 
     final isTablet = isTabletOrLarger(context);
 
-    final dailyWidgets = connectivity.whenIs(
+    final dailyPuzzleWidget = connectivity.whenIs(
       online: () => const [
         DailyPuzzle(),
-        SizedBox(height: 4.0),
       ],
       offline: () => <Widget>[],
-    );
-
-    final previewDescriptionStyle = TextStyle(
-      height: 1.2,
-      fontSize: 12.0,
-      color: DefaultTextStyle.of(context).style.color?.withValues(alpha: 0.6),
     );
 
     // we always show the healthy mix theme
     final healthyMixPreview = PuzzleAnglePreview(
       angle: const PuzzleTheme(PuzzleThemeKey.mix),
-      icon: PuzzleIcons.mix,
-      description: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            PuzzleThemeKey.mix.l10n(context.l10n).name,
-            style: Styles.boardPreviewTitle,
+      onTap: () {
+        pushPlatformRoute(
+          context,
+          rootNavigator: true,
+          builder: (context) => const PuzzleScreen(
+            angle: PuzzleTheme(PuzzleThemeKey.mix),
           ),
-          Text(
-            PuzzleThemeKey.mix.l10n(context.l10n).description,
-            style: previewDescriptionStyle,
-          ),
-        ],
-      ),
+        );
+      },
     );
 
-    final savedThemesPreview = savedThemes.maybeWhen(
-      data: (themes) {
-        return themes.entries
-            .whereNot((e) => e.key == PuzzleThemeKey.mix)
-            .map((entry) {
-          final theme = entry.key;
-          return PuzzleAnglePreview(
-            angle: PuzzleTheme(theme),
-            icon: theme.icon,
-            description: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  theme.l10n(context.l10n).name,
-                  style: Styles.boardPreviewTitle,
-                ),
-                Text(
-                  theme.l10n(context.l10n).description,
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    height: 1.2,
-                    fontSize: 12.0,
-                    color: DefaultTextStyle.of(context)
-                        .style
-                        .color
-                        ?.withValues(alpha: 0.6),
-                  ),
-                ),
-              ],
-            ),
-          );
-        }).toList();
-      },
-      orElse: () => <Widget>[],
-    );
-
-    final savedOpeningsPreview = savedOpenings.maybeWhen(
-      data: (openings) {
-        return openings.entries.map((entry) {
-          final opening = entry.key;
-          return PuzzleAnglePreview(
-            angle: PuzzleOpening(opening),
-            icon: PuzzleIcons.opening,
-            description: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  opening,
-                  style: Styles.boardPreviewTitle,
-                ),
-              ],
-            ),
-          );
-        }).toList();
-      },
-      orElse: () => <Widget>[],
-    );
+    final savedAngles = savedAnglesAsync.valueOrNull;
 
     final tacticalTrainerTitle = Padding(
       padding: Styles.horizontalBodyPadding.add(
@@ -228,10 +172,9 @@ class _Body extends ConsumerWidget {
     final handsetChildren = [
       _PuzzleMenu(connectivity: connectivity),
       tacticalTrainerTitle,
-      ...dailyWidgets,
+      ...dailyPuzzleWidget,
       healthyMixPreview,
-      ...savedThemesPreview,
-      ...savedOpeningsPreview,
+      if (savedAngles != null) _SavedAnglesPreviewList(savedAngles),
       const SizedBox(height: 8.0),
     ];
 
@@ -246,10 +189,9 @@ class _Body extends ConsumerWidget {
               children: [
                 _PuzzleMenu(connectivity: connectivity),
                 tacticalTrainerTitle,
-                ...dailyWidgets,
+                ...dailyPuzzleWidget,
                 healthyMixPreview,
-                ...savedThemesPreview,
-                ...savedOpeningsPreview,
+                if (savedAngles != null) _SavedAnglesPreviewList(savedAngles),
                 const SizedBox(height: 8.0),
               ],
             ),
@@ -273,6 +215,99 @@ class _Body extends ConsumerWidget {
             controller: puzzlesScrollController,
             children: children,
           );
+  }
+}
+
+class _SavedAnglesPreviewList extends StatefulWidget {
+  const _SavedAnglesPreviewList(this.savedAngles);
+
+  final IMap<PuzzleAngle, int> savedAngles;
+
+  @override
+  State<_SavedAnglesPreviewList> createState() =>
+      _SavedAnglesPreviewListState();
+}
+
+class _SavedAnglesPreviewListState extends State<_SavedAnglesPreviewList> {
+  final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
+  late final AnimatedListModel<PuzzleAngle> _angles;
+
+  @override
+  void initState() {
+    super.initState();
+    _angles = AnimatedListModel<PuzzleAngle>(
+      listKey: _listKey,
+      removedItemBuilder: _buildRemovedItem,
+      initialItems: widget.savedAngles.keys,
+    );
+  }
+
+  @override
+  void didUpdateWidget(covariant _SavedAnglesPreviewList oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final oldKeys = oldWidget.savedAngles.toKeyISet();
+    final newKeys = widget.savedAngles.toKeyISet();
+
+    if (oldKeys != newKeys) {
+      final missings = oldKeys.difference(newKeys);
+      if (missings.isNotEmpty) {
+        for (final missing in missings) {
+          final index = _angles.indexOf(missing);
+          if (index != -1) {
+            _angles.removeAt(index);
+          }
+        }
+      }
+
+      final additions = newKeys.difference(oldKeys);
+      if (additions.isNotEmpty) {
+        for (final addition in additions) {
+          final index = _angles.length;
+          _angles.insert(index, addition);
+        }
+      }
+    }
+  }
+
+  Widget _buildItem(
+    BuildContext context,
+    int index,
+    Animation<double> animation,
+  ) {
+    final angle = _angles[index];
+    return PuzzleAnglePreview(
+      angle: angle,
+      onTap: () {
+        pushPlatformRoute(
+          context,
+          rootNavigator: true,
+          builder: (context) => PuzzleScreen(angle: angle),
+        );
+      },
+    );
+  }
+
+  Widget _buildRemovedItem(
+    PuzzleAngle angle,
+    BuildContext context,
+    Animation<double> animation,
+  ) {
+    return SizeTransition(
+      sizeFactor: animation,
+      child: PuzzleAnglePreview(angle: angle),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedList(
+      shrinkWrap: true,
+      padding: EdgeInsets.zero,
+      physics: const ClampingScrollPhysics(),
+      key: _listKey,
+      initialItemCount: _angles.length,
+      itemBuilder: _buildItem,
+    );
   }
 }
 
@@ -312,13 +347,13 @@ class _PuzzleMenuListTile extends StatelessWidget {
   }
 }
 
-class _PuzzleMenu extends StatelessWidget {
+class _PuzzleMenu extends ConsumerWidget {
   const _PuzzleMenu({required this.connectivity});
 
   final AsyncValue<ConnectivityStatus> connectivity;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final bool isOnline = connectivity.value?.isOnline ?? false;
 
     return ListSection(
@@ -598,24 +633,21 @@ class DailyPuzzle extends ConsumerWidget {
   }
 }
 
-/// A widget that displays a preview of a puzzle angle.
+/// A widget that displays a preview of a puzzle angle batch.
 class PuzzleAnglePreview extends ConsumerWidget {
-  const PuzzleAnglePreview({
-    required this.angle,
-    required this.icon,
-    required this.description,
-  });
+  const PuzzleAnglePreview({required this.angle, this.onTap});
 
   final PuzzleAngle angle;
-  final IconData icon;
-  final Widget description;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final puzzle = ref.watch(nextPuzzleProvider(angle));
+    final flatOpenings = ref.watch(flatOpeningsListProvider);
 
     Widget buildPuzzlePreview(Puzzle? puzzle, {bool loading = false}) {
       final preview = puzzle != null ? PuzzlePreview.fromPuzzle(puzzle) : null;
+
       return loading
           ? const Shimmer(
               child: ShimmerLoading(
@@ -623,50 +655,101 @@ class PuzzleAnglePreview extends ConsumerWidget {
                 child: SmallBoardPreview.loading(),
               ),
             )
-          : SmallBoardPreview(
-              orientation: preview?.orientation ?? Side.white,
-              fen: preview?.initialFen ?? kEmptyFen,
-              lastMove: preview?.initialMove,
-              description: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          : Slidable(
+              enabled: angle != const PuzzleTheme(PuzzleThemeKey.mix),
+              endActionPane: ActionPane(
+                motion: const StretchMotion(),
                 children: [
-                  description,
-                  Icon(
-                    icon,
-                    size: 34,
-                    color: DefaultTextStyle.of(context)
-                        .style
-                        .color
-                        ?.withValues(alpha: 0.6),
+                  SlidableAction(
+                    icon: Icons.delete,
+                    onPressed: (context) async {
+                      final service =
+                          await ref.read(puzzleServiceProvider.future);
+                      if (context.mounted) {
+                        service.deleteBatch(
+                          userId: ref.read(authSessionProvider)?.user.id,
+                          angle: angle,
+                        );
+                      }
+                    },
+                    spacing: 8.0,
+                    backgroundColor: context.lichessColors.error,
+                    foregroundColor: Colors.white,
+                    label: context.l10n.delete,
                   ),
-                  if (puzzle != null)
-                    Text(
-                      puzzle.puzzle.sideToMove == Side.white
-                          ? context.l10n.whitePlays
-                          : context.l10n.blackPlays,
-                    )
-                  else
-                    const Text(
-                      'No puzzles available, please go online to fetch them.',
-                    ),
                 ],
               ),
-              onTap: puzzle != null
-                  ? () {
-                      pushPlatformRoute(
-                        context,
-                        rootNavigator: true,
-                        builder: (context) => PuzzleScreen(angle: angle),
-                      ).then((_) {
-                        if (context.mounted) {
-                          ref.invalidate(nextPuzzleProvider(angle));
-                          ref.invalidate(savedThemeBatchesProvider);
-                          ref.invalidate(savedOpeningBatchesProvider);
-                        }
-                      });
-                    }
-                  : null,
+              child: SmallBoardPreview(
+                orientation: preview?.orientation ?? Side.white,
+                fen: preview?.initialFen ?? kEmptyFen,
+                lastMove: preview?.initialMove,
+                description: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: switch (angle) {
+                        PuzzleTheme(themeKey: final themeKey) => [
+                            Text(
+                              themeKey.l10n(context.l10n).name,
+                              style: Styles.boardPreviewTitle,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            Text(
+                              themeKey.l10n(context.l10n).description,
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                height: 1.2,
+                                fontSize: 12.0,
+                                color: DefaultTextStyle.of(context)
+                                    .style
+                                    .color
+                                    ?.withValues(alpha: 0.6),
+                              ),
+                            ),
+                          ],
+                        PuzzleOpening(key: final openingKey) => [
+                            Text(
+                              flatOpenings.valueOrNull
+                                      ?.firstWhere((o) => o.key == openingKey)
+                                      .name ??
+                                  openingKey.replaceAll('_', ' '),
+                              style: Styles.boardPreviewTitle,
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                      },
+                    ),
+                    Icon(
+                      switch (angle) {
+                        PuzzleTheme(themeKey: final themeKey) => themeKey.icon,
+                        PuzzleOpening() => PuzzleIcons.opening,
+                      },
+                      size: 34,
+                      color: DefaultTextStyle.of(context)
+                          .style
+                          .color
+                          ?.withValues(alpha: 0.6),
+                    ),
+                    if (puzzle != null)
+                      Text(
+                        puzzle.puzzle.sideToMove == Side.white
+                            ? context.l10n.whitePlays
+                            : context.l10n.blackPlays,
+                      )
+                    else
+                      const Text(
+                        'No puzzles available, please go online to fetch them.',
+                      ),
+                  ],
+                ),
+                onTap: puzzle != null ? onTap : null,
+              ),
             );
     }
 

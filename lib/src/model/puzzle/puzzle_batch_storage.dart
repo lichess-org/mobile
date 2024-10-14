@@ -18,7 +18,7 @@ part 'puzzle_batch_storage.g.dart';
 @Riverpod(keepAlive: true)
 Future<PuzzleBatchStorage> puzzleBatchStorage(PuzzleBatchStorageRef ref) async {
   final database = await ref.watch(databaseProvider.future);
-  return PuzzleBatchStorage(database);
+  return PuzzleBatchStorage(database, ref);
 }
 
 const _anonUserKey = '**anon**';
@@ -26,9 +26,10 @@ const _tableName = 'puzzle_batchs';
 
 /// Local storage for puzzles.
 class PuzzleBatchStorage {
-  const PuzzleBatchStorage(this._db);
+  const PuzzleBatchStorage(this._db, this._ref);
 
   final Database _db;
+  final PuzzleBatchStorageRef _ref;
 
   Future<PuzzleBatch?> fetch({
     required UserId? userId,
@@ -74,6 +75,7 @@ class PuzzleBatchStorage {
       },
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+    _ref.invalidateSelf();
   }
 
   Future<void> delete({
@@ -91,6 +93,7 @@ class PuzzleBatchStorage {
         angle.key,
       ],
     );
+    _ref.invalidateSelf();
   }
 
   Future<IMap<PuzzleThemeKey, int>> fetchSavedThemes({

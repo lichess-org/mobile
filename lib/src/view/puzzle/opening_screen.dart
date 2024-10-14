@@ -162,11 +162,7 @@ class _OpeningFamily extends ConsumerWidget {
                   builder: (context) => PuzzleScreen(
                     angle: PuzzleOpening(openingFamily.key),
                   ),
-                ).then((_) {
-                  if (context.mounted) {
-                    ref.invalidate(savedOpeningBatchesProvider);
-                  }
-                });
+                );
               },
             ),
     );
