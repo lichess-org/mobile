@@ -59,11 +59,31 @@ class PuzzleController extends _$PuzzleController {
       evaluationService.disposeEngine();
     });
 
+    // we might not have the user rating yet so let's update it now
+    // then it will be updated on each puzzle completion
+    if (initialContext.userId != null) {
+      _updateUserRating();
+    }
+
     return _loadNewContext(initialContext, initialStreak);
   }
 
   PuzzleRepository _repository(LichessClient client) =>
       PuzzleRepository(client);
+
+  Future<void> _updateUserRating() async {
+    try {
+      final data = await ref.withClient(
+        (client) => _repository(client).selectBatch(nb: 0),
+      );
+      final glicko = data.glicko;
+      if (glicko != null) {
+        state = state.copyWith(
+          glicko: glicko,
+        );
+      }
+    } catch (_) {}
+  }
 
   PuzzleState _loadNewContext(
     PuzzleContext context,

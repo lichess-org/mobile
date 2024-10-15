@@ -24,6 +24,13 @@ part 'puzzle_service.g.dart';
 const kPuzzleLocalQueueLength = 50;
 
 @Riverpod(keepAlive: true)
+Future<PuzzleService> puzzleService(PuzzleServiceRef ref) {
+  return ref.read(puzzleServiceFactoryProvider)(
+    queueLength: kPuzzleLocalQueueLength,
+  );
+}
+
+@Riverpod(keepAlive: true)
 PuzzleServiceFactory puzzleServiceFactory(PuzzleServiceFactoryRef ref) {
   return PuzzleServiceFactory(ref);
 }
@@ -133,6 +140,14 @@ class PuzzleService {
     return nextPuzzle(userId: userId, angle: angle);
   }
 
+  /// Deletes the puzzle batch of [angle] from the local storage.
+  Future<void> deleteBatch({
+    required UserId? userId,
+    required PuzzleAngle angle,
+  }) async {
+    await batchStorage.delete(userId: userId, angle: angle);
+  }
+
   /// Synchronize offline puzzle queue with server and gets latest data.
   ///
   /// This task will fetch missing puzzles so the queue length is always equal to
@@ -156,56 +171,60 @@ class PuzzleService {
 
     final deficit = max(0, queueLength - unsolved.length);
 
-    _log.fine('Have a puzzle deficit of $deficit, will sync with lichess');
+    if (deficit > 0) {
+      _log.fine('Have a puzzle deficit of $deficit, will sync with lichess');
 
-    final difficulty = _ref.read(puzzlePreferencesProvider).difficulty;
+      final difficulty = _ref.read(puzzlePreferencesProvider).difficulty;
 
-    // anonymous users can't solve puzzles so we just download the deficit
-    // we send the request even if the deficit is 0 to get the glicko rating
-    final batchResponse = _ref.withClient(
-      (client) => Result.capture(
-        solved.isNotEmpty && userId != null
-            ? PuzzleRepository(client).solveBatch(
-                nb: deficit,
-                solved: solved,
-                angle: angle,
-                difficulty: difficulty,
-              )
-            : PuzzleRepository(client).selectBatch(
-                nb: deficit,
-                angle: angle,
-                difficulty: difficulty,
-              ),
-      ),
-    );
-
-    return batchResponse
-        .fold(
-      (value) => Result.value(
-        (
-          PuzzleBatch(
-            solved: IList(const []),
-            unsolved: IList([...unsolved, ...value.puzzles]),
-          ),
-          value.glicko,
-          value.rounds,
-          true, // should save the batch
+      // anonymous users can't solve puzzles so we just download the deficit
+      // we send the request even if the deficit is 0 to get the glicko rating
+      final batchResponse = _ref.withClient(
+        (client) => Result.capture(
+          solved.isNotEmpty && userId != null
+              ? PuzzleRepository(client).solveBatch(
+                  nb: deficit,
+                  solved: solved,
+                  angle: angle,
+                  difficulty: difficulty,
+                )
+              : PuzzleRepository(client).selectBatch(
+                  nb: deficit,
+                  angle: angle,
+                  difficulty: difficulty,
+                ),
         ),
-      ),
+      );
 
-      // we don't need to save the batch if the request failed
-      (_, __) => Result.value((data, null, null, false)),
-    )
-        .flatMap((tuple) async {
-      final (newBatch, glicko, rounds, shouldSave) = tuple;
-      if (newBatch != null && shouldSave) {
-        await batchStorage.save(
-          userId: userId,
-          angle: angle,
-          data: newBatch,
-        );
-      }
-      return Result.value((newBatch, glicko, rounds));
-    });
+      return batchResponse
+          .fold(
+        (value) => Result.value(
+          (
+            PuzzleBatch(
+              solved: IList(const []),
+              unsolved: IList([...unsolved, ...value.puzzles]),
+            ),
+            value.glicko,
+            value.rounds,
+            true, // should save the batch
+          ),
+        ),
+
+        // we don't need to save the batch if the request failed
+        (_, __) => Result.value((data, null, null, false)),
+      )
+          .flatMap((tuple) async {
+        final (newBatch, glicko, rounds, shouldSave) = tuple;
+        if (newBatch != null && shouldSave) {
+          await batchStorage.save(
+            userId: userId,
+            angle: angle,
+            data: newBatch,
+          );
+        }
+        return Result.value((newBatch, glicko, rounds));
+      });
+    }
+
+    return Result.value((data, null, null));
   }
 }
