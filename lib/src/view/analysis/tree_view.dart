@@ -45,6 +45,7 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
   final currentMoveKey = GlobalKey();
   final _debounce = Debouncer(kFastReplayDebounceDelay);
   late UciPath pathToCurrentMove;
+  late UciPath? pathToLiveMove;
 
   @override
   void initState() {
@@ -52,6 +53,11 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
     pathToCurrentMove = ref.read(
       analysisControllerProvider(widget.pgn, widget.options).select(
         (value) => value.currentPath,
+      ),
+    );
+    pathToLiveMove = ref.read(
+      analysisControllerProvider(widget.pgn, widget.options).select(
+        (value) => value.livePath,
       ),
     );
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -120,27 +126,24 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
       analysisPreferencesProvider.select((value) => value.showAnnotations),
     );
 
-    return CustomScrollView(
-      slivers: [
+    return ListView(
+      padding: EdgeInsets.zero,
+      children: [
         if (kOpeningAllowedVariants.contains(widget.options.variant))
-          SliverPersistentHeader(
-            delegate: _OpeningHeaderDelegate(
-              ctrlProvider,
-              displayMode: widget.displayMode,
-            ),
+          _OpeningHeader(
+            ctrlProvider,
+            displayMode: widget.displayMode,
           ),
-        SliverFillRemaining(
-          hasScrollBody: false,
-          child: _PgnTreeView(
-            root: root,
-            rootComments: rootComments,
-            params: (
-              shouldShowAnnotations: shouldShowAnnotations,
-              shouldShowComments: shouldShowComments,
-              currentMoveKey: currentMoveKey,
-              pathToCurrentMove: pathToCurrentMove,
-              notifier: ref.read(ctrlProvider.notifier),
-            ),
+        _PgnTreeView(
+          root: root,
+          rootComments: rootComments,
+          params: (
+            shouldShowAnnotations: shouldShowAnnotations,
+            shouldShowComments: shouldShowComments,
+            currentMoveKey: currentMoveKey,
+            pathToCurrentMove: pathToCurrentMove,
+            pathToLiveMove: pathToLiveMove,
+            notifier: ref.read(ctrlProvider.notifier),
           ),
         ),
       ],
@@ -155,6 +158,9 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
 typedef _PgnTreeViewParams = ({
   /// Path to the currently selected move in the tree.
   UciPath pathToCurrentMove,
+
+  /// Path to the broadast move that is currently live if it exists.
+  UciPath? pathToLiveMove,
 
   /// Whether to show NAG annotations like '!' and '??'.
   bool shouldShowAnnotations,
@@ -913,6 +919,28 @@ class InlineMove extends ConsumerWidget {
 
   bool get isCurrentMove => params.pathToCurrentMove == path;
 
+  bool get isLiveMove => params.pathToLiveMove == path;
+
+  BoxDecoration? _boxDecoration(
+    BuildContext context,
+    bool isCurrentMove,
+    bool isLiveMove,
+  ) {
+    return (isCurrentMove || isLiveMove)
+        ? BoxDecoration(
+            color: isCurrentMove
+                ? Theme.of(context).platform == TargetPlatform.iOS
+                    ? CupertinoColors.systemGrey3.resolveFrom(context)
+                    : Theme.of(context).focusColor
+                : null,
+            shape: BoxShape.rectangle,
+            borderRadius: borderRadius,
+            border:
+                isLiveMove ? Border.all(width: 2, color: Colors.orange) : null,
+          )
+        : null;
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pieceNotation = ref.watch(pieceNotationProvider).maybeWhen(
@@ -978,15 +1006,7 @@ class InlineMove extends ConsumerWidget {
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 2.0),
-        decoration: isCurrentMove
-            ? BoxDecoration(
-                color: Theme.of(context).platform == TargetPlatform.iOS
-                    ? CupertinoColors.systemGrey3.resolveFrom(context)
-                    : Theme.of(context).focusColor,
-                shape: BoxShape.rectangle,
-                borderRadius: borderRadius,
-              )
-            : null,
+        decoration: _boxDecoration(context, isCurrentMove, isLiveMove),
         child: Text.rich(
           TextSpan(
             children: [
@@ -1134,37 +1154,11 @@ List<TextSpan> _comments(
         )
         .toList(growable: false);
 
-class _OpeningHeaderDelegate extends SliverPersistentHeaderDelegate {
-  const _OpeningHeaderDelegate(
+class _OpeningHeader extends ConsumerWidget {
+  const _OpeningHeader(
     this.ctrlProvider, {
     required this.displayMode,
   });
-
-  final AnalysisControllerProvider ctrlProvider;
-  final Orientation displayMode;
-
-  @override
-  Widget build(
-    BuildContext context,
-    double shrinkOffset,
-    bool overlapsContent,
-  ) {
-    return _Opening(ctrlProvider, displayMode);
-  }
-
-  @override
-  double get minExtent => kOpeningHeaderHeight;
-
-  @override
-  double get maxExtent => kOpeningHeaderHeight;
-
-  @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
-      true;
-}
-
-class _Opening extends ConsumerWidget {
-  const _Opening(this.ctrlProvider, this.displayMode);
 
   final AnalysisControllerProvider ctrlProvider;
   final Orientation displayMode;

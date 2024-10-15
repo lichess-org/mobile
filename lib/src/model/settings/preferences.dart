@@ -1,4 +1,5 @@
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast_preferences.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_preferences.dart';
 import 'package:lichess_mobile/src/model/coordinate_training/coordinate_training_preferences.dart';
 import 'package:lichess_mobile/src/model/game/game_preferences.dart';
@@ -29,7 +30,8 @@ enum PrefCategory<T extends SerializablePreferences> {
     'preferences.opening_explorer',
     null as OpeningExplorerPrefs?,
   ),
-  puzzle('preferences.puzzle', null as PuzzlePrefs?);
+  puzzle('preferences.puzzle', null as PuzzlePrefs?),
+  broadcast('preferences.broadcast', BroadcastPrefs.defaults);
 
   const PrefCategory(this.storageKey, this._defaults);
 
@@ -49,6 +51,7 @@ enum PrefCategory<T extends SerializablePreferences> {
         PrefCategory.openingExplorer =>
           OpeningExplorerPrefs.defaults(user: user) as T,
         PrefCategory.puzzle => PuzzlePrefs.defaults(id: user?.id) as T,
+        PrefCategory.broadcast => _defaults!
       };
 }
 
@@ -83,6 +86,8 @@ abstract class SerializablePreferences {
         return OpeningExplorerPrefs.fromJson(json);
       case PrefCategory.puzzle:
         return PuzzlePrefs.fromJson(json);
+      case PrefCategory.broadcast:
+        return BroadcastPrefs.fromJson(json);
     }
   }
 }
