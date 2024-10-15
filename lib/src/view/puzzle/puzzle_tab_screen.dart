@@ -27,7 +27,6 @@ import 'package:lichess_mobile/src/widgets/board_preview.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 
 import 'puzzle_screen.dart';
@@ -58,192 +57,111 @@ class PuzzleTabScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ConsumerPlatformWidget(
-      ref: ref,
-      androidBuilder: _androidBuilder,
-      iosBuilder: _iosBuilder,
-    );
-  }
+    final savedAngles = ref.watch(savedAnglesProvider).valueOrNull;
 
-  Widget _androidBuilder(BuildContext context, WidgetRef ref) {
-    return PopScope(
-      canPop: false,
-      onPopInvokedWithResult: (bool didPop, _) {
-        if (!didPop) {
-          ref.read(currentBottomTabProvider.notifier).state = BottomTab.home;
-        }
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(context.l10n.puzzles),
-          actions: const [
-            _DashboardButton(),
-            _HistoryButton(),
-          ],
-        ),
-        body: const Column(
-          children: [
-            ConnectivityBanner(),
-            Expanded(
-              child: _Body(),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+    if (savedAngles == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
 
-  Widget _iosBuilder(BuildContext context, WidgetRef ref) {
-    return CupertinoPageScaffold(
-      child: CustomScrollView(
-        controller: puzzlesScrollController,
-        slivers: [
-          CupertinoSliverNavigationBar(
-            padding: const EdgeInsetsDirectional.only(
-              start: 16.0,
-              end: 8.0,
-            ),
-            largeTitle: Text(context.l10n.puzzles),
-            trailing: const Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _DashboardButton(),
-                SizedBox(width: 6.0),
-                _HistoryButton(),
-              ],
-            ),
-          ),
-          const SliverToBoxAdapter(child: ConnectivityBanner()),
-          const SliverSafeArea(
-            top: false,
-            sliver: _Body(),
-          ),
-        ],
-      ),
-    );
+    if (Theme.of(context).platform == TargetPlatform.iOS) {
+      return _CupertinoTabBody(savedAngles);
+    } else {
+      return _MaterialTabBody(savedAngles);
+    }
   }
 }
 
-class _Body extends ConsumerWidget {
-  const _Body();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final connectivity = ref.watch(connectivityChangesProvider);
-    final savedAnglesAsync = ref.watch(savedAnglesProvider);
-
-    final isTablet = isTabletOrLarger(context);
-
-    final dailyPuzzleWidget = connectivity.whenIs(
-      online: () => const [
-        DailyPuzzle(),
-      ],
-      offline: () => <Widget>[],
-    );
-
-    // we always show the healthy mix theme
-    final healthyMixPreview = PuzzleAnglePreview(
-      angle: const PuzzleTheme(PuzzleThemeKey.mix),
-      onTap: () {
-        pushPlatformRoute(
-          context,
-          rootNavigator: true,
-          builder: (context) => const PuzzleScreen(
-            angle: PuzzleTheme(PuzzleThemeKey.mix),
-          ),
-        );
-      },
-    );
-
-    final savedAngles = savedAnglesAsync.valueOrNull;
-
-    final tacticalTrainerTitle = Padding(
-      padding: Styles.horizontalBodyPadding.add(
-        Theme.of(context).platform == TargetPlatform.iOS
-            ? Styles.sectionTopPadding
-            : EdgeInsets.zero,
-      ),
-      child: Text(
-        context.l10n.puzzleDesc,
-        style: Styles.sectionTitle,
-      ),
-    );
-
-    final handsetChildren = [
-      _PuzzleMenu(connectivity: connectivity),
-      tacticalTrainerTitle,
-      ...dailyPuzzleWidget,
-      healthyMixPreview,
-      if (savedAngles != null) _SavedAnglesPreviewList(savedAngles),
-      const SizedBox(height: 8.0),
-    ];
-
-    final tabletChildren = [
-      Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                _PuzzleMenu(connectivity: connectivity),
-                tacticalTrainerTitle,
-                ...dailyPuzzleWidget,
-                healthyMixPreview,
-                if (savedAngles != null) _SavedAnglesPreviewList(savedAngles),
-                const SizedBox(height: 8.0),
-              ],
+Widget _buildMainListItem(
+  BuildContext context,
+  int index,
+  Animation<double> animation,
+  PuzzleAngle Function(int index) getAngle,
+) {
+  switch (index) {
+    case 0:
+      return const _PuzzleMenu();
+    case 1:
+      return Padding(
+        padding: Styles.horizontalBodyPadding.add(
+          Theme.of(context).platform == TargetPlatform.iOS
+              ? Styles.sectionTopPadding
+              : EdgeInsets.zero,
+        ),
+        child: Text(
+          context.l10n.puzzleDesc,
+          style: Styles.sectionTitle,
+        ),
+      );
+    case 2:
+      return const DailyPuzzle();
+    case 3:
+      return PuzzleAnglePreview(
+        angle: const PuzzleTheme(PuzzleThemeKey.mix),
+        onTap: () {
+          pushPlatformRoute(
+            context,
+            rootNavigator: true,
+            builder: (context) => const PuzzleScreen(
+              angle: PuzzleTheme(PuzzleThemeKey.mix),
             ),
-          ),
-          Expanded(
-            child: Column(
-              children: [
-                PuzzleHistoryWidget(),
-              ],
-            ),
-          ),
-        ],
-      ),
-    ];
-
-    final children = isTablet ? tabletChildren : handsetChildren;
-
-    return Theme.of(context).platform == TargetPlatform.iOS
-        ? SliverList(delegate: SliverChildListDelegate.fixed(children))
-        : ListView(
-            controller: puzzlesScrollController,
-            children: children,
           );
+        },
+      );
+    default:
+      final angle = getAngle(index);
+      return PuzzleAnglePreview(
+        angle: angle,
+        onTap: () {
+          pushPlatformRoute(
+            context,
+            rootNavigator: true,
+            builder: (context) => PuzzleScreen(angle: angle),
+          );
+        },
+      );
   }
 }
 
-class _SavedAnglesPreviewList extends StatefulWidget {
-  const _SavedAnglesPreviewList(this.savedAngles);
+Widget _buildMainListRemovedItem(
+  PuzzleAngle angle,
+  BuildContext context,
+  Animation<double> animation,
+) {
+  return SizeTransition(
+    sizeFactor: animation,
+    child: PuzzleAnglePreview(angle: angle),
+  );
+}
+
+// display the main body list for cupertino devices, as a workaround
+// for missing type to handle both [SliverAnimatedList] and [AnimatedList].
+class _CupertinoTabBody extends ConsumerStatefulWidget {
+  const _CupertinoTabBody(this.savedAngles);
 
   final IMap<PuzzleAngle, int> savedAngles;
 
   @override
-  State<_SavedAnglesPreviewList> createState() =>
-      _SavedAnglesPreviewListState();
+  ConsumerState<_CupertinoTabBody> createState() => _CupertinoTabBodyState();
 }
 
-class _SavedAnglesPreviewListState extends State<_SavedAnglesPreviewList> {
-  final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
-  late final AnimatedListModel<PuzzleAngle> _angles;
+class _CupertinoTabBodyState extends ConsumerState<_CupertinoTabBody> {
+  final GlobalKey<SliverAnimatedListState> _listKey =
+      GlobalKey<SliverAnimatedListState>();
+  late SliverAnimatedListModel<PuzzleAngle> _angles;
 
   @override
   void initState() {
     super.initState();
-    _angles = AnimatedListModel<PuzzleAngle>(
+    _angles = SliverAnimatedListModel<PuzzleAngle>(
       listKey: _listKey,
-      removedItemBuilder: _buildRemovedItem,
+      removedItemBuilder: _buildMainListRemovedItem,
       initialItems: widget.savedAngles.keys,
+      itemsOffset: 4,
     );
   }
 
   @override
-  void didUpdateWidget(covariant _SavedAnglesPreviewList oldWidget) {
+  void didUpdateWidget(covariant _CupertinoTabBody oldWidget) {
     super.didUpdateWidget(oldWidget);
     final oldKeys = oldWidget.savedAngles.toKeyISet();
     final newKeys = widget.savedAngles.toKeyISet();
@@ -274,39 +192,231 @@ class _SavedAnglesPreviewListState extends State<_SavedAnglesPreviewList> {
     int index,
     Animation<double> animation,
   ) {
-    final angle = _angles[index];
-    return PuzzleAnglePreview(
-      angle: angle,
-      onTap: () {
-        pushPlatformRoute(
-          context,
-          rootNavigator: true,
-          builder: (context) => PuzzleScreen(angle: angle),
-        );
-      },
-    );
-  }
-
-  Widget _buildRemovedItem(
-    PuzzleAngle angle,
-    BuildContext context,
-    Animation<double> animation,
-  ) {
-    return SizeTransition(
-      sizeFactor: animation,
-      child: PuzzleAnglePreview(angle: angle),
+    return _buildMainListItem(
+      context,
+      index,
+      animation,
+      (index) => _angles[index],
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedList(
-      shrinkWrap: true,
-      padding: EdgeInsets.zero,
-      physics: const ClampingScrollPhysics(),
-      key: _listKey,
-      initialItemCount: _angles.length,
-      itemBuilder: _buildItem,
+    final isTablet = isTabletOrLarger(context);
+
+    if (isTablet) {
+      return Row(
+        children: [
+          Expanded(
+            child: CupertinoPageScaffold(
+              child: CustomScrollView(
+                controller: puzzlesScrollController,
+                slivers: [
+                  CupertinoSliverNavigationBar(
+                    padding: const EdgeInsetsDirectional.only(
+                      start: 16.0,
+                      end: 8.0,
+                    ),
+                    largeTitle: Text(context.l10n.puzzles),
+                    trailing: const Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        _DashboardButton(),
+                      ],
+                    ),
+                  ),
+                  const SliverToBoxAdapter(child: ConnectivityBanner()),
+                  SliverSafeArea(
+                    top: false,
+                    sliver: SliverAnimatedList(
+                      key: _listKey,
+                      initialItemCount: _angles.length,
+                      itemBuilder: _buildItem,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          VerticalDivider(
+            width: 1.0,
+            thickness: 1.0,
+            color: CupertinoColors.opaqueSeparator.resolveFrom(context),
+          ),
+          Expanded(
+            child: CupertinoPageScaffold(
+              backgroundColor:
+                  CupertinoColors.systemBackground.resolveFrom(context),
+              navigationBar: CupertinoNavigationBar(
+                transitionBetweenRoutes: false,
+                middle: Text(context.l10n.puzzleHistory),
+                trailing: const _HistoryButton(),
+              ),
+              child: ListView(
+                children: const [
+                  PuzzleHistoryWidget(showHeader: false),
+                ],
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+
+    return CupertinoPageScaffold(
+      child: CustomScrollView(
+        controller: puzzlesScrollController,
+        slivers: [
+          CupertinoSliverNavigationBar(
+            padding: const EdgeInsetsDirectional.only(
+              start: 16.0,
+              end: 8.0,
+            ),
+            largeTitle: Text(context.l10n.puzzles),
+            trailing: const Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _DashboardButton(),
+                SizedBox(width: 6.0),
+                _HistoryButton(),
+              ],
+            ),
+          ),
+          const SliverToBoxAdapter(child: ConnectivityBanner()),
+          SliverSafeArea(
+            top: false,
+            sliver: SliverAnimatedList(
+              key: _listKey,
+              initialItemCount: _angles.length,
+              itemBuilder: _buildItem,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _MaterialTabBody extends ConsumerStatefulWidget {
+  const _MaterialTabBody(this.savedAngles);
+
+  final IMap<PuzzleAngle, int> savedAngles;
+
+  @override
+  ConsumerState<_MaterialTabBody> createState() => _MaterialTabBodyState();
+}
+
+class _MaterialTabBodyState extends ConsumerState<_MaterialTabBody> {
+  final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
+  late AnimatedListModel<PuzzleAngle> _angles;
+
+  @override
+  void initState() {
+    super.initState();
+    _angles = AnimatedListModel<PuzzleAngle>(
+      listKey: _listKey,
+      removedItemBuilder: _buildMainListRemovedItem,
+      initialItems: widget.savedAngles.keys,
+      itemsOffset: 4,
+    );
+  }
+
+  @override
+  void didUpdateWidget(covariant _MaterialTabBody oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final oldKeys = oldWidget.savedAngles.toKeyISet();
+    final newKeys = widget.savedAngles.toKeyISet();
+
+    if (oldKeys != newKeys) {
+      final missings = oldKeys.difference(newKeys);
+      if (missings.isNotEmpty) {
+        for (final missing in missings) {
+          final index = _angles.indexOf(missing);
+          if (index != -1) {
+            _angles.removeAt(index);
+          }
+        }
+      }
+
+      final additions = newKeys.difference(oldKeys);
+      if (additions.isNotEmpty) {
+        for (final addition in additions) {
+          final index = _angles.length;
+          _angles.insert(index, addition);
+        }
+      }
+    }
+  }
+
+  Widget _buildItem(
+    BuildContext context,
+    int index,
+    Animation<double> animation,
+  ) {
+    return _buildMainListItem(
+      context,
+      index,
+      animation,
+      (index) => _angles[index],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isTablet = isTabletOrLarger(context);
+
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, _) {
+        if (!didPop) {
+          ref.read(currentBottomTabProvider.notifier).state = BottomTab.home;
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(context.l10n.puzzles),
+          actions: const [
+            _DashboardButton(),
+            _HistoryButton(),
+          ],
+        ),
+        body: isTablet
+            ? Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: AnimatedList(
+                      shrinkWrap: true,
+                      physics: const ClampingScrollPhysics(),
+                      key: _listKey,
+                      initialItemCount: _angles.length,
+                      controller: puzzlesScrollController,
+                      itemBuilder: _buildItem,
+                    ),
+                  ),
+                  Expanded(
+                    child: ListView(
+                      children: const [
+                        PuzzleHistoryWidget(),
+                      ],
+                    ),
+                  ),
+                ],
+              )
+            : Column(
+                children: [
+                  const ConnectivityBanner(),
+                  Expanded(
+                    child: AnimatedList(
+                      key: _listKey,
+                      controller: puzzlesScrollController,
+                      initialItemCount: _angles.length,
+                      itemBuilder: _buildItem,
+                    ),
+                  ),
+                ],
+              ),
+      ),
     );
   }
 }
@@ -348,12 +458,11 @@ class _PuzzleMenuListTile extends StatelessWidget {
 }
 
 class _PuzzleMenu extends ConsumerWidget {
-  const _PuzzleMenu({required this.connectivity});
-
-  final AsyncValue<ConnectivityStatus> connectivity;
+  const _PuzzleMenu();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final connectivity = ref.watch(connectivityChangesProvider);
     final bool isOnline = connectivity.value?.isOnline ?? false;
 
     return ListSection(
@@ -415,6 +524,10 @@ class _PuzzleMenu extends ConsumerWidget {
 }
 
 class PuzzleHistoryWidget extends ConsumerWidget {
+  const PuzzleHistoryWidget({this.showHeader = true});
+
+  final bool showHeader;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncData = ref.watch(puzzleRecentActivityProvider);
@@ -426,7 +539,7 @@ class PuzzleHistoryWidget extends ConsumerWidget {
         }
         if (recentActivity.isEmpty) {
           return ListSection(
-            header: Text(context.l10n.puzzleHistory),
+            header: showHeader ? Text(context.l10n.puzzleHistory) : null,
             children: [
               Center(
                 child: Padding(
@@ -447,18 +560,20 @@ class PuzzleHistoryWidget extends ConsumerWidget {
 
         return ListSection(
           cupertinoBackgroundColor:
-              CupertinoTheme.of(context).scaffoldBackgroundColor,
+              CupertinoPageScaffoldBackgroundColor.maybeOf(context),
           cupertinoClipBehavior: Clip.none,
-          header: Text(context.l10n.puzzleHistory),
-          headerTrailing: NoPaddingTextButton(
-            onPressed: () => pushPlatformRoute(
-              context,
-              builder: (context) => const PuzzleHistoryScreen(),
-            ),
-            child: Text(
-              context.l10n.more,
-            ),
-          ),
+          header: showHeader ? Text(context.l10n.puzzleHistory) : null,
+          headerTrailing: showHeader
+              ? NoPaddingTextButton(
+                  onPressed: () => pushPlatformRoute(
+                    context,
+                    builder: (context) => const PuzzleHistoryScreen(),
+                  ),
+                  child: Text(
+                    context.l10n.more,
+                  ),
+                )
+              : null,
           children: [
             Padding(
               padding: Theme.of(context).platform == TargetPlatform.iOS
@@ -558,11 +673,14 @@ TextStyle _puzzlePreviewSubtitleStyle(BuildContext context) {
 
 /// A widget that displays the daily puzzle.
 class DailyPuzzle extends ConsumerWidget {
-  const DailyPuzzle();
+  const DailyPuzzle({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isOnline =
+        ref.watch(connectivityChangesProvider).valueOrNull?.isOnline ?? false;
     final puzzle = ref.watch(dailyPuzzleProvider);
+
     return puzzle.when(
       data: (data) {
         final preview = PuzzlePreview.fromPuzzle(data);
@@ -617,17 +735,21 @@ class DailyPuzzle extends ConsumerWidget {
           },
         );
       },
-      loading: () => const Shimmer(
-        child: ShimmerLoading(
-          isLoading: true,
-          child: SmallBoardPreview.loading(),
-        ),
-      ),
+      loading: () => isOnline
+          ? const Shimmer(
+              child: ShimmerLoading(
+                isLoading: true,
+                child: SmallBoardPreview.loading(),
+              ),
+            )
+          : const SizedBox.shrink(),
       error: (error, _) {
-        return const Padding(
-          padding: Styles.bodySectionPadding,
-          child: Text('Could not load the daily puzzle.'),
-        );
+        return isOnline
+            ? const Padding(
+                padding: Styles.bodySectionPadding,
+                child: Text('Could not load the daily puzzle.'),
+              )
+            : const SizedBox.shrink();
       },
     );
   }
@@ -635,7 +757,7 @@ class DailyPuzzle extends ConsumerWidget {
 
 /// A widget that displays a preview of a puzzle angle batch.
 class PuzzleAnglePreview extends ConsumerWidget {
-  const PuzzleAnglePreview({required this.angle, this.onTap});
+  const PuzzleAnglePreview({required this.angle, this.onTap, super.key});
 
   final PuzzleAngle angle;
   final VoidCallback? onTap;

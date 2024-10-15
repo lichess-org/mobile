@@ -18,6 +18,7 @@ class PlatformAppBar extends StatelessWidget {
     this.leading,
     this.actions = const [],
     this.androidTitleSpacing,
+    this.cupertinoTransitionBetweenRoutes,
   });
 
   /// Widget to place at the start of the navigation bar
@@ -42,6 +43,9 @@ class PlatformAppBar extends StatelessWidget {
   /// Will be passed to [AppBar.titleSpacing] on Android. Has no effect on iOS.
   final double? androidTitleSpacing;
 
+  /// Whether to animate the transition between routes on iOS.
+  final bool? cupertinoTransitionBetweenRoutes;
+
   AppBar _androidBuilder(BuildContext context) {
     return AppBar(
       titleSpacing: androidTitleSpacing,
@@ -60,6 +64,7 @@ class PlatformAppBar extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: actions,
       ),
+      transitionBetweenRoutes: cupertinoTransitionBetweenRoutes ?? true,
     );
   }
 

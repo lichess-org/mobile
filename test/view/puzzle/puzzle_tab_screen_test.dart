@@ -46,6 +46,17 @@ void main() {
       ),
     ).thenAnswer((_) async => batch);
 
+    when(
+      () => mockBatchStorage.fetchSavedThemes(
+        userId: null,
+      ),
+    ).thenAnswer((_) async => const IMapConst<PuzzleThemeKey, int>({}));
+    when(
+      () => mockBatchStorage.fetchSavedOpenings(
+        userId: null,
+      ),
+    ).thenAnswer((_) async => const IMapConst<String, int>({}));
+
     final app = await makeTestProviderScopeApp(
       tester,
       home: const PuzzleTabScreen(),
@@ -56,7 +67,7 @@ void main() {
 
     await tester.pumpWidget(app);
 
-    // wait for connectivity
+    // wait for connectivity and storage
     await tester.pump(const Duration(milliseconds: 100));
 
     // wait for the puzzles to load
@@ -78,6 +89,16 @@ void main() {
         angle: const PuzzleTheme(PuzzleThemeKey.mix),
       ),
     ).thenAnswer((_) async => batch);
+    when(
+      () => mockBatchStorage.fetchSavedThemes(
+        userId: null,
+      ),
+    ).thenAnswer((_) async => const IMapConst<PuzzleThemeKey, int>({}));
+    when(
+      () => mockBatchStorage.fetchSavedOpenings(
+        userId: null,
+      ),
+    ).thenAnswer((_) async => const IMapConst<String, int>({}));
     final app = await makeTestProviderScopeApp(
       tester,
       home: const PuzzleTabScreen(),
@@ -91,7 +112,7 @@ void main() {
 
     await tester.pumpWidget(app);
 
-    // wait for connectivity
+    // wait for connectivity and storage
     await tester.pumpAndSettle(const Duration(milliseconds: 100));
 
     expect(find.text('Puzzle Themes'), findsOneWidget);
@@ -106,6 +127,16 @@ void main() {
         angle: const PuzzleTheme(PuzzleThemeKey.mix),
       ),
     ).thenAnswer((_) async => batch);
+    when(
+      () => mockBatchStorage.fetchSavedThemes(
+        userId: null,
+      ),
+    ).thenAnswer((_) async => const IMapConst<PuzzleThemeKey, int>({}));
+    when(
+      () => mockBatchStorage.fetchSavedOpenings(
+        userId: null,
+      ),
+    ).thenAnswer((_) async => const IMapConst<String, int>({}));
 
     final app = await makeTestProviderScopeApp(
       tester,
@@ -120,7 +151,7 @@ void main() {
 
     await tester.pumpWidget(app);
 
-    // wait for connectivity
+    // wait for connectivity and storage
     await tester.pump(const Duration(milliseconds: 100));
 
     // wait for the puzzles to load
@@ -147,6 +178,16 @@ void main() {
           angle: const PuzzleTheme(PuzzleThemeKey.mix),
         ),
       ).thenAnswer((_) async => batch);
+      when(
+        () => mockBatchStorage.fetchSavedThemes(
+          userId: null,
+        ),
+      ).thenAnswer((_) async => const IMapConst<PuzzleThemeKey, int>({}));
+      when(
+        () => mockBatchStorage.fetchSavedOpenings(
+          userId: null,
+        ),
+      ).thenAnswer((_) async => const IMapConst<String, int>({}));
 
       final app = await makeTestProviderScopeApp(
         tester,
@@ -160,6 +201,9 @@ void main() {
       );
 
       await tester.pumpWidget(app);
+
+      // wait for connectivity and storage
+      await tester.pump(const Duration(milliseconds: 100));
 
       // wait for the puzzle to load
       await tester.pump(const Duration(milliseconds: 100));
@@ -181,6 +225,128 @@ void main() {
       expect(
         chessboard.fen,
         equals('4k2r/Q5pp/3bp3/4n3/1r5q/8/PP2B1PP/R1B2R1K b k - 0 21'),
+      );
+    });
+
+    testWidgets('shows saved puzzle theme batches',
+        (WidgetTester tester) async {
+      when(
+        () => mockBatchStorage.fetch(
+          userId: null,
+          angle: const PuzzleTheme(PuzzleThemeKey.mix),
+        ),
+      ).thenAnswer((_) async => batch);
+      when(
+        () => mockBatchStorage.fetch(
+          userId: null,
+          angle: const PuzzleTheme(PuzzleThemeKey.advancedPawn),
+        ),
+      ).thenAnswer((_) async => batch);
+      when(
+        () => mockBatchStorage.fetchSavedThemes(
+          userId: null,
+        ),
+      ).thenAnswer(
+        (_) async => const IMapConst<PuzzleThemeKey, int>({
+          PuzzleThemeKey.advancedPawn: 50,
+        }),
+      );
+      when(
+        () => mockBatchStorage.fetchSavedOpenings(
+          userId: null,
+        ),
+      ).thenAnswer((_) async => const IMapConst<String, int>({}));
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const PuzzleTabScreen(),
+        overrides: [
+          puzzleBatchStorageProvider.overrideWith((ref) => mockBatchStorage),
+          httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => mockClient);
+          }),
+        ],
+      );
+
+      await tester.pumpWidget(app);
+
+      // wait for connectivity and storage
+      await tester.pump(const Duration(milliseconds: 100));
+
+      // wait for the puzzles to load
+      await tester.pump(const Duration(milliseconds: 100));
+
+      expect(find.byType(PuzzleAnglePreview), findsNWidgets(2));
+      expect(
+        find.widgetWithText(PuzzleAnglePreview, 'Healthy mix'),
+        findsOneWidget,
+      );
+
+      expect(
+        find.widgetWithText(PuzzleAnglePreview, 'Advanced pawn'),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('shows saved puzzle openings batches',
+        (WidgetTester tester) async {
+      when(
+        () => mockBatchStorage.fetch(
+          userId: null,
+          angle: const PuzzleTheme(PuzzleThemeKey.mix),
+        ),
+      ).thenAnswer((_) async => batch);
+      when(
+        () => mockBatchStorage.fetch(
+          userId: null,
+          angle: const PuzzleOpening('A00'),
+        ),
+      ).thenAnswer((_) async => batch);
+      when(
+        () => mockBatchStorage.fetchSavedThemes(
+          userId: null,
+        ),
+      ).thenAnswer(
+        (_) async => const IMapConst<PuzzleThemeKey, int>({}),
+      );
+      when(
+        () => mockBatchStorage.fetchSavedOpenings(
+          userId: null,
+        ),
+      ).thenAnswer(
+        (_) async => const IMapConst<String, int>({
+          'A00': 50,
+        }),
+      );
+
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const PuzzleTabScreen(),
+        overrides: [
+          puzzleBatchStorageProvider.overrideWith((ref) => mockBatchStorage),
+          httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => mockClient);
+          }),
+        ],
+      );
+
+      await tester.pumpWidget(app);
+
+      // wait for connectivity and storage
+      await tester.pump(const Duration(milliseconds: 100));
+
+      // wait for the puzzles to load
+      await tester.pump(const Duration(milliseconds: 100));
+
+      expect(find.byType(PuzzleAnglePreview), findsNWidgets(2));
+      expect(
+        find.widgetWithText(PuzzleAnglePreview, 'Healthy mix'),
+        findsOneWidget,
+      );
+
+      expect(
+        find.widgetWithText(PuzzleAnglePreview, 'A00'),
+        findsOneWidget,
       );
     });
   });
