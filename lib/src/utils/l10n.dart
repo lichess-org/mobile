@@ -1,20 +1,13 @@
-import 'dart:ui' as ui;
-
 import 'package:flutter/material.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'l10n.freezed.dart';
 part 'l10n.g.dart';
 
-@freezed
-class L10nState with _$L10nState {
-  const factory L10nState({
-    required Locale locale,
-    required AppLocalizations strings,
-  }) = _L10nState;
-}
+typedef L10nState = ({
+  Locale locale,
+  AppLocalizations strings,
+});
 
 @Riverpod(keepAlive: true)
 class L10n extends _$L10n {
@@ -36,7 +29,7 @@ class L10n extends _$L10n {
 
   L10nState _getLocale() {
     final locale = WidgetsBinding.instance.platformDispatcher.locale;
-    return L10nState(
+    return (
       locale: locale,
       strings: lookupAppLocalizations(locale),
     );

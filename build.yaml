@@ -2,6 +2,8 @@ targets:
   $default:
     builders:
       freezed:
+        generate_for:
+          - lib/src/model/**/*.dart
         options:
           from_json: false
           to_json: false

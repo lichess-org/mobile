@@ -6,11 +6,11 @@ import 'dart:math' as math;
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
+import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -18,7 +18,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-part 'socket.freezed.dart';
 part 'socket.g.dart';
 
 const kSRIStorageKey = 'socket_random_identifier';
@@ -650,51 +649,5 @@ class WebSocketChannelFactory {
         await WebSocket.connect(url, headers: headers).timeout(timeout);
 
     return IOWebSocketChannel(socket);
-  }
-}
-
-/// A socket event.
-@freezed
-class SocketEvent with _$SocketEvent {
-  const SocketEvent._();
-
-  const factory SocketEvent({
-    required String topic,
-    dynamic data,
-
-    /// Version of the socket event, only for versioned socket routes.
-    int? version,
-  }) = _SocketEvent;
-
-  /// A special internal pong event that should never be accessible to the subscribers.
-  static const pong = SocketEvent(topic: '_pong');
-
-  factory SocketEvent.fromJson(Map<String, dynamic> json) {
-    if (json['t'] == null) {
-      if (json['v'] != null) {
-        return SocketEvent(
-          topic: '_version',
-          version: json['v'] as int,
-        );
-      } else {
-        assert(false, 'Unsupported socket event json: $json');
-        return pong;
-      }
-    }
-    final topic = json['t'] as String;
-    if (topic == 'n') {
-      return SocketEvent(
-        topic: topic,
-        data: {
-          'nbPlayers': json['d'] as int,
-          'nbGames': json['r'] as int,
-        },
-      );
-    }
-    return SocketEvent(
-      topic: topic,
-      data: json['d'],
-      version: json['v'] as int?,
-    );
   }
 }
