@@ -16,7 +16,7 @@ import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/settings/preferences.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
-import 'package:lichess_mobile/src/view/analysis/tree_view.dart';
+import 'package:lichess_mobile/src/view/pgn/pgn_tree_view.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 
 import '../../test_provider_scope.dart';
