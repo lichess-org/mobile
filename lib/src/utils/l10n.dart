@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'l10n.g.dart';
-
-typedef L10nState = ({
+typedef ActiveLocalizations = ({
   Locale locale,
   AppLocalizations strings,
 });
 
-@Riverpod(keepAlive: true)
-class L10n extends _$L10n {
+/// A provider that exposes the current locale and localized strings.
+final l10nProvider =
+    NotifierProvider<L10nNotifier, ActiveLocalizations>(L10nNotifier.new);
+
+class L10nNotifier extends Notifier<ActiveLocalizations> {
   @override
-  L10nState build() {
+  ActiveLocalizations build() {
     final observer = _LocaleObserver((locales) {
       _update();
     });
@@ -27,7 +28,7 @@ class L10n extends _$L10n {
     state = _getLocale();
   }
 
-  L10nState _getLocale() {
+  ActiveLocalizations _getLocale() {
     final locale = WidgetsBinding.instance.platformDispatcher.locale;
     return (
       locale: locale,

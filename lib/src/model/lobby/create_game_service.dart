@@ -22,6 +22,7 @@ typedef ChallengeResponse = ({
   ChallengeDeclineReason? declineReason,
 });
 
+/// A provider for the [CreateGameService].
 @riverpod
 CreateGameService createGameService(CreateGameServiceRef ref) {
   final service = CreateGameService(Logger('CreateGameService'), ref: ref);
@@ -31,6 +32,7 @@ CreateGameService createGameService(CreateGameServiceRef ref) {
   return service;
 }
 
+/// A service to create a new game from the lobby or from a challenge.
 class CreateGameService {
   CreateGameService(this._log, {required this.ref});
 

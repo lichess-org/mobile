@@ -5,8 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
+import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/puzzle/opening_screen.dart';
@@ -16,18 +16,14 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'puzzle_screen.dart';
 
-part 'puzzle_themes_screen.g.dart';
-
 @riverpod
-Future<
+final _themesProvider = FutureProvider.autoDispose<
     (
       bool,
       IMap<PuzzleThemeKey, int>,
       IMap<PuzzleThemeKey, PuzzleThemeData>?,
       bool,
-    )> _themes(
-  _ThemesRef ref,
-) async {
+    )>((ref) async {
   final connectivity = await ref.watch(connectivityChangesProvider.future);
   final savedThemes = await ref.watch(savedThemeBatchesProvider.future);
   IMap<PuzzleThemeKey, PuzzleThemeData>? onlineThemes;
@@ -43,7 +39,7 @@ Future<
     onlineThemes,
     savedOpenings.isNotEmpty
   );
-}
+});
 
 class PuzzleThemesScreen extends StatelessWidget {
   const PuzzleThemesScreen({super.key});

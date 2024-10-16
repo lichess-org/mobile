@@ -7,3 +7,9 @@ targets:
         options:
           from_json: false
           to_json: false
+      riverpod_generator:
+        generate_for:
+          - lib/src/model/**/*.dart
+          - lib/src/network/*.dart
+          - lib/src/db/*.dart
+          - lib/src/**/*_providers.dart
