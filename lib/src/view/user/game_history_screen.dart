@@ -5,16 +5,29 @@ import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/game/game_filter.dart';
 import 'package:lichess_mobile/src/model/game/game_history.dart';
+import 'package:lichess_mobile/src/model/user/game_history_preferences.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/model/user/user_repository_providers.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/view/game/game_list_detail_tile.dart';
+import 'package:lichess_mobile/src/view/game/game_list_tile.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
+import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/filter.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
+
+// TODO l10n
+String displayModeL10n(BuildContext context, GameHistoryDisplayMode mode) {
+  switch (mode) {
+    case GameHistoryDisplayMode.compact:
+      return 'Compact';
+    case GameHistoryDisplayMode.detail:
+      return 'Detailed';
+  }
+}
 
 class GameHistoryScreen extends ConsumerWidget {
   const GameHistoryScreen({
@@ -62,10 +75,27 @@ class GameHistoryScreen extends ConsumerWidget {
       }),
     );
 
+    final displayMode = ref.watch(
+      gameHistoryPreferencesProvider.select((value) => value.displayMode),
+    );
+    final displayModeButton = AppBarIconButton(
+      icon: const Icon(Icons.view_list),
+      semanticsLabel: 'Switch view',
+      onPressed: () => showChoicePicker<GameHistoryDisplayMode>(
+        context,
+        choices: GameHistoryDisplayMode.values,
+        selectedItem: displayMode,
+        labelBuilder: (choice) => Text(displayModeL10n(context, choice)),
+        onSelectedItemChanged: (choice) => ref
+            .read(gameHistoryPreferencesProvider.notifier)
+            .setDisplayMode(choice),
+      ),
+    );
+
     return PlatformScaffold(
       appBar: PlatformAppBar(
         title: title,
-        actions: [filterBtn],
+        actions: [filterBtn, displayModeButton],
       ),
       body: _Body(user: user, isOnline: isOnline, gameFilter: gameFilter),
     );
@@ -194,7 +224,18 @@ class _BodyState extends ConsumerState<_Body> {
                       );
                     }
 
-                    return GameListDetailTile(item: list[index]);
+                    final displayMode = ref.watch(
+                      gameHistoryPreferencesProvider
+                          .select((value) => value.displayMode),
+                    );
+
+                    final item = list[index];
+                    return switch (displayMode) {
+                      GameHistoryDisplayMode.compact =>
+                        ExtendedGameListTile(item: item),
+                      GameHistoryDisplayMode.detail =>
+                        GameListDetailTile(item: item),
+                    };
                   },
                 ),
         );
