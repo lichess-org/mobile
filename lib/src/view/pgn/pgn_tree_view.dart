@@ -328,7 +328,13 @@ class _PgnTreeViewState extends State<_PgnTreeView> {
   @override
   void didUpdateWidget(covariant _PgnTreeView oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _updateLines(fullRebuild: oldWidget.root != widget.root);
+    _updateLines(
+      fullRebuild: oldWidget.root != widget.root ||
+          oldWidget.params.shouldShowComments !=
+              widget.params.shouldShowComments ||
+          oldWidget.params.shouldShowAnnotations !=
+              widget.params.shouldShowAnnotations,
+    );
   }
 
   @override
