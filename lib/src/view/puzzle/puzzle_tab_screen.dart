@@ -476,7 +476,6 @@ class _PuzzleMenu extends ConsumerWidget {
             pushPlatformRoute(
               context,
               title: context.l10n.puzzlePuzzleThemes,
-              rootNavigator: true,
               builder: (context) => const PuzzleThemesScreen(),
             );
           },

@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/db/database.dart';
+import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
@@ -134,6 +135,7 @@ class _Body extends ConsumerWidget {
                   ? const CupertinoListTileChevron()
                   : null,
               onTap: () {
+                ref.invalidate(accountActivityProvider);
                 pushPlatformRoute(
                   context,
                   title: context.l10n.profile,
