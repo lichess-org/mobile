@@ -527,6 +527,7 @@ class _HelloWidget extends ConsumerWidget {
               ),
       child: GestureDetector(
         onTap: () {
+          ref.invalidate(accountActivityProvider);
           pushPlatformRoute(
             context,
             builder: (context) => const ProfileScreen(),
