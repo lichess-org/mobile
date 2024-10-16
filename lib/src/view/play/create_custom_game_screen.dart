@@ -523,23 +523,8 @@ class _CreateGameBodyState extends ConsumerState<_CreateGameBody> {
                   harmonizeCupertinoTitleStyle: true,
                   title: Text(context.l10n.side),
                   trailing: AdaptiveTextButton(
-                    onPressed: () {
-                      showChoicePicker<SideChoice>(
-                        context,
-                        choices: SideChoice.values,
-                        selectedItem: preferences.customSide,
-                        labelBuilder: (SideChoice side) =>
-                            Text(side.label(context.l10n)),
-                        onSelectedItemChanged: (SideChoice side) {
-                          ref
-                              .read(gameSetupPreferencesProvider.notifier)
-                              .setCustomSide(side);
-                        },
-                      );
-                    },
-                    child: Text(
-                      preferences.customSide.label(context.l10n),
-                    ),
+                    onPressed: null,
+                    child: Text(SideChoice.random.label(context.l10n)),
                   ),
                 ),
               ),

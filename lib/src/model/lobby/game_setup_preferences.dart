@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/common/game.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
@@ -49,10 +48,6 @@ class GameSetupPreferences extends _$GameSetupPreferences
     return save(state.copyWith(customRated: rated));
   }
 
-  Future<void> setCustomSide(SideChoice side) {
-    return save(state.copyWith(customSide: side));
-  }
-
   Future<void> setCustomRatingRange(int min, int max) {
     return save(state.copyWith(customRatingDelta: (min, max)));
   }
@@ -76,7 +71,6 @@ class GameSetupPrefs with _$GameSetupPrefs implements SerializablePreferences {
     required int customDaysPerTurn,
     required Variant customVariant,
     required bool customRated,
-    required SideChoice customSide,
     required (int, int) customRatingDelta,
   }) = _GameSetupPrefs;
 
@@ -87,7 +81,6 @@ class GameSetupPrefs with _$GameSetupPrefs implements SerializablePreferences {
     customIncrementSeconds: 0,
     customVariant: Variant.standard,
     customRated: false,
-    customSide: SideChoice.random,
     customRatingDelta: (-500, 500),
     customDaysPerTurn: 3,
   );
