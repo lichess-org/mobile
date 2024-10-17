@@ -2,7 +2,6 @@ import 'dart:ui' show Locale;
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
-import 'package:lichess_mobile/src/model/settings/preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -15,6 +14,14 @@ class GeneralPreferences extends _$GeneralPreferences
   // ignore: avoid_public_notifier_properties
   @override
   final prefCategory = PrefCategory.general;
+
+  // ignore: avoid_public_notifier_properties
+  @override
+  GeneralPrefs get defaults => GeneralPrefs.defaults;
+
+  @override
+  GeneralPrefs fromJson(Map<String, dynamic> json) =>
+      GeneralPrefs.fromJson(json);
 
   @override
   GeneralPrefs build() {
@@ -80,7 +87,7 @@ Locale? _localeFromJson(Map<String, dynamic>? json) {
 }
 
 @Freezed(fromJson: true, toJson: true)
-class GeneralPrefs with _$GeneralPrefs implements SerializablePreferences {
+class GeneralPrefs with _$GeneralPrefs implements Serializable {
   const factory GeneralPrefs({
     @JsonKey(
       unknownEnumValue: BackgroundThemeMode.system,

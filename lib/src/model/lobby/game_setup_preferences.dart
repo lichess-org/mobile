@@ -4,7 +4,6 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
-import 'package:lichess_mobile/src/model/settings/preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -18,6 +17,13 @@ class GameSetupPreferences extends _$GameSetupPreferences
   // ignore: avoid_public_notifier_properties
   @override
   final prefCategory = PrefCategory.gameSetup;
+
+  @override
+  GameSetupPrefs defaults({LightUser? user}) => GameSetupPrefs.defaults;
+
+  @override
+  GameSetupPrefs fromJson(Map<String, dynamic> json) =>
+      GameSetupPrefs.fromJson(json);
 
   @override
   GameSetupPrefs build() {
@@ -60,7 +66,7 @@ class GameSetupPreferences extends _$GameSetupPreferences
 enum TimeControl { realTime, correspondence }
 
 @Freezed(fromJson: true, toJson: true)
-class GameSetupPrefs with _$GameSetupPrefs implements SerializablePreferences {
+class GameSetupPrefs with _$GameSetupPrefs implements Serializable {
   const GameSetupPrefs._();
 
   const factory GameSetupPrefs({
