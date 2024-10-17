@@ -2,12 +2,12 @@ import 'package:app_settings/app_settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/auth/auth_controller.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/navigation.dart';
@@ -93,7 +93,8 @@ class _Body extends ConsumerWidget {
     final boardPrefs = ref.watch(boardPreferencesProvider);
     final authController = ref.watch(authControllerProvider);
     final userSession = ref.watch(authSessionProvider);
-    final packageInfo = LichessBinding.instance.packageInfo;
+    final packageInfo =
+        ref.read(preloadedDataProvider).requireValue.packageInfo;
     final dbSize = ref.watch(getDbSizeInBytesProvider);
 
     final androidVersionAsync = ref.watch(androidVersionProvider);

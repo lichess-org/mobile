@@ -8,6 +8,7 @@ import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
+import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notifications.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
@@ -344,7 +345,7 @@ class NotificationService {
 
     final lichessBinding = AppLichessBinding.ensureInitialized();
     await lichessBinding.preloadSharedPreferences();
-    await lichessBinding.preloadData();
+    await ref.read(preloadedDataProvider.future);
 
     try {
       await ref.read(notificationServiceProvider)._processFcmMessage(

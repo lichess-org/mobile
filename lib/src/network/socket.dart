@@ -6,10 +6,10 @@ import 'dart:math' as math;
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
+import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:logging/logging.dart';
@@ -452,11 +452,11 @@ class SocketPool {
     // Create a default socket client. This one is never disposed.
     final client = SocketClient(
       _currentRoute,
-      sri: LichessBinding.instance.sri,
+      sri: _ref.read(preloadedDataProvider).requireValue.sri,
       channelFactory: _ref.read(webSocketChannelFactoryProvider),
       getSession: () => _ref.read(authSessionProvider),
-      packageInfo: LichessBinding.instance.packageInfo,
-      deviceInfo: LichessBinding.instance.deviceInfo,
+      packageInfo: _ref.read(preloadedDataProvider).requireValue.packageInfo,
+      deviceInfo: _ref.read(preloadedDataProvider).requireValue.deviceInfo,
       pingDelay: const Duration(seconds: 25),
     );
 
@@ -507,9 +507,9 @@ class SocketPool {
         route,
         channelFactory: _ref.read(webSocketChannelFactoryProvider),
         getSession: () => _ref.read(authSessionProvider),
-        packageInfo: LichessBinding.instance.packageInfo,
-        deviceInfo: LichessBinding.instance.deviceInfo,
-        sri: LichessBinding.instance.sri,
+        packageInfo: _ref.read(preloadedDataProvider).requireValue.packageInfo,
+        deviceInfo: _ref.read(preloadedDataProvider).requireValue.deviceInfo,
+        sri: _ref.read(preloadedDataProvider).requireValue.sri,
         onStreamListen: () {
           _disposeTimers[route]?.cancel();
         },

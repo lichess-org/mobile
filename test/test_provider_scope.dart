@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,18 +9,21 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/crashlytics.dart';
 import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/session_storage.dart';
+import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -116,8 +120,6 @@ Future<Widget> makeTestProviderScope(
         : defaultBoardPref,
   );
 
-  await binding.preloadData(userSession);
-
   FlutterSecureStorage.setMockInitialValues({
     kSRIStorageKey: 'test',
     if (userSession != null)
@@ -166,6 +168,28 @@ Future<Widget> makeTestProviderScope(
       soundServiceProvider.overrideWithValue(FakeSoundService()),
       // ignore: scoped_providers_should_specify_dependencies
       openingServiceProvider.overrideWithValue(FakeOpeningService()),
+      preloadedDataProvider.overrideWith((ref) {
+        return (
+          sri: 'test-sri',
+          packageInfo: PackageInfo(
+            appName: 'lichess_mobile_test',
+            version: 'test',
+            buildNumber: '0.0.0',
+            packageName: 'lichess_mobile_test',
+          ),
+          deviceInfo: BaseDeviceInfo({
+            'name': 'test',
+            'model': 'test',
+            'manufacturer': 'test',
+            'systemName': 'test',
+            'systemVersion': 'test',
+            'identifierForVendor': 'test',
+            'isPhysicalDevice': true,
+          }),
+          userSession: userSession,
+          engineMaxMemoryInMb: 256,
+        );
+      }),
       ...overrides ?? [],
     ],
     child: MediaQuery(

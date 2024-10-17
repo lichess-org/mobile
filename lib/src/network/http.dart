@@ -21,10 +21,10 @@ import 'package:http/http.dart'
         StreamedResponse;
 import 'package:http/io_client.dart';
 import 'package:http/retry.dart';
-import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
+import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:logging/logging.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -47,8 +47,7 @@ Uri lichessUri(String unencodedPath, [Map<String, dynamic>? queryParameters]) =>
 /// Do not use directly, use [defaultClient] or [lichessClient] instead.
 class HttpClientFactory {
   Client call() {
-    final packageInfo = LichessBinding.instance.packageInfo;
-    final userAgent = 'Lichess Mobile/${packageInfo.version}';
+    const userAgent = 'Lichess Mobile';
     if (Platform.isAndroid) {
       final engine = CronetEngine.build(
         cacheMode: CacheMode.memory,
@@ -112,9 +111,9 @@ String userAgent(UserAgentRef ref) {
   final session = ref.watch(authSessionProvider);
 
   return makeUserAgent(
-    LichessBinding.instance.packageInfo,
-    LichessBinding.instance.deviceInfo,
-    LichessBinding.instance.sri,
+    ref.read(preloadedDataProvider).requireValue.packageInfo,
+    ref.read(preloadedDataProvider).requireValue.deviceInfo,
+    ref.read(preloadedDataProvider).requireValue.sri,
     session?.user,
   );
 }
@@ -176,9 +175,9 @@ class LichessClient implements Client {
       request.headers['Authorization'] = 'Bearer $bearer';
     }
     request.headers['User-Agent'] = makeUserAgent(
-      LichessBinding.instance.packageInfo,
-      LichessBinding.instance.deviceInfo,
-      LichessBinding.instance.sri,
+      _ref.read(preloadedDataProvider).requireValue.packageInfo,
+      _ref.read(preloadedDataProvider).requireValue.deviceInfo,
+      _ref.read(preloadedDataProvider).requireValue.sri,
       session?.user,
     );
 

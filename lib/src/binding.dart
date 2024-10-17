@@ -1,28 +1,11 @@
-import 'dart:convert';
-
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:lichess_mobile/firebase_options.dart';
-import 'package:lichess_mobile/l10n/l10n.dart';
-import 'package:lichess_mobile/src/constants.dart';
-import 'package:lichess_mobile/src/db/secure_storage.dart';
 import 'package:lichess_mobile/src/log.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/auth/session_storage.dart';
-import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
-import 'package:lichess_mobile/src/model/notifications/notifications.dart';
-import 'package:lichess_mobile/src/utils/string.dart';
-import 'package:lichess_mobile/src/utils/system.dart';
-import 'package:logging/logging.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-final _logger = Logger('LichessBinding');
 
 /// A singleton class that provides access to plugins and external APIs.
 ///
@@ -77,29 +60,12 @@ abstract class LichessBinding {
   /// have not yet been initialized.
   SharedPreferencesWithCache get sharedPreferences;
 
-  /// Application package information.
-  PackageInfo get packageInfo;
-
-  /// Device information.
-  BaseDeviceInfo get deviceInfo;
-
-  /// The user session read during app initialization.
-  AuthSessionState? get initialUserSession;
-
-  /// Socket Random Identifier.
-  String get sri;
-
-  /// Maximum memory in MB that the engine can use.
+  /// Initialize Firebase.
   ///
-  /// This is 10% of the total physical memory.
-  int get engineMaxMemoryInMb;
-
-  /// Initialize notifications.
-  ///
-  /// This wraps [Firebase.initializeApp] and [FlutterLocalNotificationsPlugin.initialize].
+  /// This wraps [Firebase.initializeApp].
   ///
   /// This should be called only once before the app starts.
-  Future<void> initializeNotifications(Locale locale);
+  Future<void> initializeFirebase();
 
   /// Wraps [FirebaseMessaging.instance].
   FirebaseMessaging get firebaseMessaging;
@@ -163,56 +129,8 @@ class AppLichessBinding extends LichessBinding {
     _syncSharedPreferencesWithCache = await _sharedPreferencesWithCache;
   }
 
-  late PackageInfo _syncPackageInfo;
-  late BaseDeviceInfo _syncDeviceInfo;
-  AuthSessionState? _syncInitialUserSession;
-  late String _syncSri;
-  late int _syncEngineMaxMemoryInMb;
-
   @override
-  PackageInfo get packageInfo => _syncPackageInfo;
-
-  @override
-  BaseDeviceInfo get deviceInfo => _syncDeviceInfo;
-
-  @override
-  AuthSessionState? get initialUserSession => _syncInitialUserSession;
-
-  @override
-  String get sri => _syncSri;
-
-  @override
-  int get engineMaxMemoryInMb => _syncEngineMaxMemoryInMb;
-
-  /// Preload useful data.
-  ///
-  /// This must be called only once before the app starts.
-  Future<void> preloadData() async {
-    _syncPackageInfo = await PackageInfo.fromPlatform();
-    _syncDeviceInfo = await DeviceInfoPlugin().deviceInfo;
-
-    final string = await SecureStorage.instance.read(key: kSessionStorageKey);
-    if (string != null) {
-      _syncInitialUserSession = AuthSessionState.fromJson(
-        jsonDecode(string) as Map<String, dynamic>,
-      );
-    }
-
-    final storedSri = await SecureStorage.instance.read(key: kSRIStorageKey);
-
-    if (storedSri == null) {
-      _logger.warning('SRI not found in secure storage');
-    }
-
-    _syncSri = storedSri ?? genRandomString(12);
-
-    final physicalMemory = await System.instance.getTotalRam() ?? 256.0;
-    final engineMaxMemory = (physicalMemory / 10).ceil();
-    _syncEngineMaxMemoryInMb = engineMaxMemory;
-  }
-
-  @override
-  Future<void> initializeNotifications(Locale locale) async {
+  Future<void> initializeFirebase() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
@@ -225,23 +143,6 @@ class AppLichessBinding extends LichessBinding {
         return true;
       };
     }
-
-    final l10n = await AppLocalizations.delegate.load(locale);
-    await FlutterLocalNotificationsPlugin().initialize(
-      InitializationSettings(
-        android: const AndroidInitializationSettings('logo_black'),
-        iOS: DarwinInitializationSettings(
-          requestBadgePermission: false,
-          notificationCategories: <DarwinNotificationCategory>[
-            ChallengeNotification.darwinPlayableVariantCategory(l10n),
-            ChallengeNotification.darwinUnplayableVariantCategory(l10n),
-          ],
-        ),
-      ),
-      onDidReceiveNotificationResponse:
-          NotificationService.onDidReceiveNotificationResponse,
-      // onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
-    );
   }
 
   @override
