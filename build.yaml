@@ -1,6 +1,9 @@
 targets:
   $default:
     builders:
+      json_serializable:
+        generate_for:
+          - lib/src/model/**/*.dart
       freezed:
         generate_for:
           - lib/src/model/**/*.dart

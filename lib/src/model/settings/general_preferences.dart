@@ -1,5 +1,5 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'dart:ui' show Locale;
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences.dart';
@@ -21,7 +21,7 @@ class GeneralPreferences extends _$GeneralPreferences
     return fetch();
   }
 
-  Future<void> setThemeMode(ThemeMode themeMode) {
+  Future<void> setThemeMode(BackgroundThemeMode themeMode) {
     return save(state.copyWith(themeMode: themeMode));
   }
 
@@ -42,9 +42,6 @@ class GeneralPreferences extends _$GeneralPreferences
   }
 
   Future<void> toggleSystemColors() async {
-    if (defaultTargetPlatform != TargetPlatform.android) {
-      return;
-    }
     await save(state.copyWith(systemColors: !state.systemColors));
     if (state.systemColors == false) {
       final boardTheme = ref.read(boardPreferencesProvider).boardTheme;
@@ -85,8 +82,11 @@ Locale? _localeFromJson(Map<String, dynamic>? json) {
 @Freezed(fromJson: true, toJson: true)
 class GeneralPrefs with _$GeneralPrefs implements SerializablePreferences {
   const factory GeneralPrefs({
-    @JsonKey(unknownEnumValue: ThemeMode.system, defaultValue: ThemeMode.system)
-    required ThemeMode themeMode,
+    @JsonKey(
+      unknownEnumValue: BackgroundThemeMode.system,
+      defaultValue: BackgroundThemeMode.system,
+    )
+    required BackgroundThemeMode themeMode,
     required bool isSoundEnabled,
     @JsonKey(unknownEnumValue: SoundTheme.standard)
     required SoundTheme soundTheme,
@@ -100,7 +100,7 @@ class GeneralPrefs with _$GeneralPrefs implements SerializablePreferences {
   }) = _GeneralPrefs;
 
   static const defaults = GeneralPrefs(
-    themeMode: ThemeMode.system,
+    themeMode: BackgroundThemeMode.system,
     isSoundEnabled: true,
     soundTheme: SoundTheme.standard,
     masterVolume: 0.8,
@@ -110,6 +110,19 @@ class GeneralPrefs with _$GeneralPrefs implements SerializablePreferences {
   factory GeneralPrefs.fromJson(Map<String, dynamic> json) {
     return _$GeneralPrefsFromJson(json);
   }
+}
+
+/// Describes the background theme of the app.
+enum BackgroundThemeMode {
+  /// Use either the light or dark theme based on what the user has selected in
+  /// the system settings.
+  system,
+
+  /// Always use the light mode regardless of system preference.
+  light,
+
+  /// Always use the dark mode (if available) regardless of system preference.
+  dark,
 }
 
 enum SoundTheme {

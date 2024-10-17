@@ -234,13 +234,13 @@ class _Body extends ConsumerWidget {
               if (Theme.of(context).platform == TargetPlatform.android) {
                 showChoicePicker(
                   context,
-                  choices: ThemeMode.values,
+                  choices: BackgroundThemeMode.values,
                   selectedItem: generalPrefs.themeMode,
                   labelBuilder: (t) =>
                       Text(AppBackgroundModeScreen.themeTitle(context, t)),
-                  onSelectedItemChanged: (ThemeMode? value) => ref
+                  onSelectedItemChanged: (BackgroundThemeMode? value) => ref
                       .read(generalPreferencesProvider.notifier)
-                      .setThemeMode(value ?? ThemeMode.system),
+                      .setThemeMode(value ?? BackgroundThemeMode.system),
                 );
               } else {
                 pushPlatformRoute(

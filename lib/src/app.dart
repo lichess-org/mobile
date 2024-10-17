@@ -171,7 +171,11 @@ class _AppState extends ConsumerState<Application> {
               lichessCustomColors.harmonized(colorScheme),
             ],
           ),
-          themeMode: generalPrefs.themeMode,
+          themeMode: switch (generalPrefs.themeMode) {
+            BackgroundThemeMode.light => ThemeMode.light,
+            BackgroundThemeMode.dark => ThemeMode.dark,
+            BackgroundThemeMode.system => ThemeMode.system,
+          },
           builder: Theme.of(context).platform == TargetPlatform.iOS
               ? (context, child) {
                   return CupertinoTheme(
