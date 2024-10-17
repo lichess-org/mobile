@@ -16,18 +16,13 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/user_list_tile.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'following_screen.g.dart';
-
-@riverpod
-Future<(IList<User>, IList<LightUser>)> _getFollowingAndOnlines(
-  _GetFollowingAndOnlinesRef ref,
-) async {
+final _getFollowingAndOnlinesProvider =
+    FutureProvider.autoDispose<(IList<User>, IList<LightUser>)>((ref) async {
   final following = await ref.watch(followingProvider.future);
   final onlines = await ref.watch(onlineFriendsProvider.future);
   return (following, onlines);
-}
+});
 
 class FollowingScreen extends StatelessWidget {
   const FollowingScreen({super.key});

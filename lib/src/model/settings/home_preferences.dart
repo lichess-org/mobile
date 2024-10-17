@@ -1,5 +1,4 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/model/settings/preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -11,7 +10,14 @@ class HomePreferences extends _$HomePreferences
     with PreferencesStorage<HomePrefs> {
   // ignore: avoid_public_notifier_properties
   @override
-  PrefCategory<HomePrefs> get prefCategory => PrefCategory.home;
+  PrefCategory get prefCategory => PrefCategory.home;
+
+  // ignore: avoid_public_notifier_properties
+  @override
+  HomePrefs get defaults => HomePrefs.defaults;
+
+  @override
+  HomePrefs fromJson(Map<String, dynamic> json) => HomePrefs.fromJson(json);
 
   @override
   HomePrefs build() {
@@ -35,7 +41,7 @@ enum EnabledWidget {
 }
 
 @Freezed(fromJson: true, toJson: true)
-class HomePrefs with _$HomePrefs implements SerializablePreferences {
+class HomePrefs with _$HomePrefs implements Serializable {
   const factory HomePrefs({
     required Set<EnabledWidget> enabledWidgets,
   }) = _HomePrefs;

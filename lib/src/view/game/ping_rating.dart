@@ -5,10 +5,8 @@ import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'ping_rating.g.dart';
-
 @riverpod
-int pingRating(PingRatingRef ref) {
+final pingRatingProvider = Provider.autoDispose<int>((ref) {
   final ping = ref.watch(averageLagProvider).inMicroseconds / 1000;
 
   return ping == 0
@@ -20,7 +18,7 @@ int pingRating(PingRatingRef ref) {
               : ping < 500
                   ? 2
                   : 1;
-}
+});
 
 class SocketPingRating extends ConsumerWidget {
   const SocketPingRating({

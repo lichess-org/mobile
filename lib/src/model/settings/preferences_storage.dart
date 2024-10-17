@@ -3,20 +3,43 @@ import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
-import 'package:lichess_mobile/src/model/settings/preferences.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:logging/logging.dart';
 
 final _logger = Logger('PreferencesStorage');
 
+abstract class Serializable {
+  Map<String, dynamic> toJson();
+}
+
+/// A preference category with its storage key
+enum PrefCategory {
+  general('preferences.general'),
+  home('preferences.home'),
+  board('preferences.board'),
+  analysis('preferences.analysis'),
+  overTheBoard('preferences.overTheBoard'),
+  challenge('preferences.challenge'),
+  gameSetup('preferences.gameSetup'),
+  game('preferences.game'),
+  coordinateTraining('preferences.coordinateTraining'),
+  openingExplorer('preferences.opening_explorer'),
+  puzzle('preferences.puzzle');
+
+  const PrefCategory(this.storageKey);
+
+  final String storageKey;
+}
+
 /// A [Notifier] mixin to provide a way to store and retrieve preferences.
-///
-/// This mixin is intended to be used with a [Notifier] that holds a
-/// [SerializablePreferences] object.
-mixin PreferencesStorage<T extends SerializablePreferences> {
+mixin PreferencesStorage<T extends Serializable> {
   AutoDisposeNotifierProviderRef<T> get ref;
   abstract T state;
 
-  PrefCategory<T> get prefCategory;
+  T fromJson(Map<String, dynamic> json);
+  T get defaults;
+
+  PrefCategory get prefCategory;
 
   Future<void> save(T value) async {
     await LichessBinding.instance.sharedPreferences
@@ -29,31 +52,28 @@ mixin PreferencesStorage<T extends SerializablePreferences> {
     final stored = LichessBinding.instance.sharedPreferences
         .getString(prefCategory.storageKey);
     if (stored == null) {
-      return prefCategory.defaults();
+      return defaults;
     }
     try {
-      return SerializablePreferences.fromJson(
-        prefCategory,
+      return fromJson(
         jsonDecode(stored) as Map<String, dynamic>,
-      ) as T;
+      );
     } catch (e) {
       _logger.warning('Failed to decode $prefCategory preferences: $e');
-      return prefCategory.defaults();
+      return defaults;
     }
   }
 }
 
-/// A mixin to provide a way to store and retrieve preferences per session.
-///
-/// This mixin is intended to be used with a [Notifier] that holds a
-/// [SerializablePreferences] object. It provides a way to save and fetch the
-/// preferences from the shared preferences, using the current session to
-/// differentiate between different users.
-mixin SessionPreferencesStorage<T extends SerializablePreferences> {
+/// A [Notifier] mixin to provide a way to store and retrieve preferences per session.
+mixin SessionPreferencesStorage<T extends Serializable> {
   AutoDisposeNotifierProviderRef<T> get ref;
   abstract T state;
 
-  PrefCategory<T> get prefCategory;
+  T fromJson(Map<String, dynamic> json);
+  T defaults({LightUser? user});
+
+  PrefCategory get prefCategory;
 
   Future<void> save(T value) async {
     final session = ref.read(authSessionProvider);
@@ -70,16 +90,15 @@ mixin SessionPreferencesStorage<T extends SerializablePreferences> {
     final stored = LichessBinding.instance.sharedPreferences
         .getString(key(prefCategory.storageKey, session));
     if (stored == null) {
-      return prefCategory.defaults(user: session?.user);
+      return defaults(user: session?.user);
     }
     try {
-      return SerializablePreferences.fromJson(
-        prefCategory,
+      return fromJson(
         jsonDecode(stored) as Map<String, dynamic>,
-      ) as T;
+      );
     } catch (e) {
       _logger.warning('Failed to decode $prefCategory preferences: $e');
-      return prefCategory.defaults(user: session?.user);
+      return defaults(user: session?.user);
     }
   }
 

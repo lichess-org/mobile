@@ -25,9 +25,6 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/shimmer.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-part 'watch_tab_screen.g.dart';
 
 const _featuredChannelsSet = ISetConst({
   TvChannel.best,
@@ -36,8 +33,8 @@ const _featuredChannelsSet = ISetConst({
   TvChannel.rapid,
 });
 
-@riverpod
-Future<IList<TvGameSnapshot>> featuredChannels(FeaturedChannelsRef ref) async {
+final featuredChannelsProvider =
+    FutureProvider.autoDispose<IList<TvGameSnapshot>>((ref) async {
   return ref.withClientCacheFor(
     (client) async {
       final channels = await TvRepository(client).channels();
@@ -60,7 +57,7 @@ Future<IList<TvGameSnapshot>> featuredChannels(FeaturedChannelsRef ref) async {
     },
     const Duration(minutes: 5),
   );
-}
+});
 
 class WatchTabScreen extends ConsumerStatefulWidget {
   const WatchTabScreen({super.key});

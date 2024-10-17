@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/binding.dart';
+import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -12,7 +12,7 @@ part 'auth_session.g.dart';
 class AuthSession extends _$AuthSession {
   @override
   AuthSessionState? build() {
-    return LichessBinding.instance.initialUserSession;
+    return ref.read(preloadedDataProvider).requireValue.userSession;
   }
 
   Future<void> update(AuthSessionState session) async {

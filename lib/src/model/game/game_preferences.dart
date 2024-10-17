@@ -1,5 +1,4 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/model/settings/preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -13,6 +12,13 @@ class GamePreferences extends _$GamePreferences
   // ignore: avoid_public_notifier_properties
   @override
   final prefCategory = PrefCategory.game;
+
+  // ignore: avoid_public_notifier_properties
+  @override
+  GamePrefs get defaults => GamePrefs.defaults;
+
+  @override
+  GamePrefs fromJson(Map<String, dynamic> json) => GamePrefs.fromJson(json);
 
   @override
   GamePrefs build() {
@@ -32,7 +38,7 @@ class GamePreferences extends _$GamePreferences
 }
 
 @Freezed(fromJson: true, toJson: true)
-class GamePrefs with _$GamePrefs implements SerializablePreferences {
+class GamePrefs with _$GamePrefs implements Serializable {
   const factory GamePrefs({
     bool? enableChat,
     bool? blindfoldMode,

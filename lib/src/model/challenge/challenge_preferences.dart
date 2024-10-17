@@ -4,7 +4,6 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/game.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
-import 'package:lichess_mobile/src/model/settings/preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -17,7 +16,14 @@ class ChallengePreferences extends _$ChallengePreferences
     with SessionPreferencesStorage<ChallengePrefs> {
   // ignore: avoid_public_notifier_properties
   @override
-  PrefCategory<ChallengePrefs> get prefCategory => PrefCategory.challenge;
+  PrefCategory get prefCategory => PrefCategory.challenge;
+
+  @override
+  ChallengePrefs defaults({LightUser? user}) => ChallengePrefs.defaults;
+
+  @override
+  ChallengePrefs fromJson(Map<String, dynamic> json) =>
+      ChallengePrefs.fromJson(json);
 
   @override
   ChallengePrefs build() {
@@ -50,7 +56,7 @@ class ChallengePreferences extends _$ChallengePreferences
 }
 
 @Freezed(fromJson: true, toJson: true)
-class ChallengePrefs with _$ChallengePrefs implements SerializablePreferences {
+class ChallengePrefs with _$ChallengePrefs implements Serializable {
   const ChallengePrefs._();
 
   const factory ChallengePrefs({

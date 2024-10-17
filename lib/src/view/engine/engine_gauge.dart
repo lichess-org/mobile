@@ -2,14 +2,11 @@ import 'package:dartchess/dartchess.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
 import 'package:lichess_mobile/src/model/settings/brightness.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-
-part 'engine_gauge.freezed.dart';
 
 const double kEvalGaugeSize = 26.0;
 const double kEvalGaugeFontSize = 11.0;
@@ -22,21 +19,18 @@ enum EngineGaugeDisplayMode {
   horizontal,
 }
 
-@freezed
-class EngineGaugeParams with _$EngineGaugeParams {
-  const factory EngineGaugeParams({
-    required bool isLocalEngineAvailable,
+typedef EngineGaugeParams = ({
+  bool isLocalEngineAvailable,
 
-    /// Only used for vertical display mode.
-    required Side orientation,
+  /// Only used for vertical display mode.
+  Side orientation,
 
-    /// Position to evaluate.
-    required Position position,
+  /// Position to evaluate.
+  Position position,
 
-    /// Saved evaluation to display when the current evaluation is not available.
-    Eval? savedEval,
-  }) = _EngineGaugeParams;
-}
+  /// Saved evaluation to display when the current evaluation is not available.
+  Eval? savedEval,
+});
 
 class EngineGauge extends ConsumerWidget {
   const EngineGauge({

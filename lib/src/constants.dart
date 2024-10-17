@@ -32,6 +32,8 @@ const kLichessDevPassword = String.fromEnvironment('LICHESS_DEV_PASSWORD');
 
 const kLichessClientId = 'lichess_mobile';
 
+const kSRIStorageKey = 'socket_random_identifier';
+
 // lichess
 // https://github.com/lichess-org/lila/blob/4562a83cdb263c3ebf7e148c0f666f0ff92b91c7/modules/rating/src/main/Glicko.scala#L71
 const kProvisionalDeviation = 110;

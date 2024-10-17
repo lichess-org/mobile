@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/rating.dart';
 
+/// A widget that displays the performance cards of a user.
 class PerfCards extends StatelessWidget {
   const PerfCards({
     required this.user,

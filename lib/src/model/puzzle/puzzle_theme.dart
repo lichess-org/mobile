@@ -2,8 +2,8 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
+import 'package:lichess_mobile/src/localizations.dart';
 import 'package:lichess_mobile/src/styles/puzzle_icons.dart';
-import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'puzzle_theme.freezed.dart';
@@ -410,7 +410,7 @@ typedef PuzzleThemeCategory = (String, List<PuzzleThemeKey>);
 IList<PuzzleThemeCategory> puzzleThemeCategories(
   PuzzleThemeCategoriesRef ref,
 ) {
-  final l10n = ref.watch(l10nProvider);
+  final l10n = ref.watch(localizationsProvider);
 
   return IList([
     (

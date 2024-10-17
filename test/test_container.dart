@@ -1,16 +1,20 @@
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/crashlytics.dart';
 import 'package:lichess_mobile/src/db/database.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
+import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
+import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
-import 'package:lichess_mobile/src/utils/connectivity.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import './fake_crashlytics.dart';
@@ -49,8 +53,6 @@ Future<ProviderContainer> makeContainer({
     kSRIStorageKey: 'test',
   });
 
-  await binding.preloadData(userSession);
-
   final container = ProviderContainer(
     overrides: [
       connectivityPluginProvider.overrideWith((_) {
@@ -78,6 +80,28 @@ Future<ProviderContainer> makeContainer({
       }),
       crashlyticsProvider.overrideWithValue(FakeCrashlytics()),
       soundServiceProvider.overrideWithValue(FakeSoundService()),
+      preloadedDataProvider.overrideWith((ref) {
+        return (
+          sri: 'test-sri',
+          packageInfo: PackageInfo(
+            appName: 'lichess_mobile_test',
+            version: '0.0.0',
+            buildNumber: '0',
+            packageName: 'lichess_mobile_test',
+          ),
+          deviceInfo: BaseDeviceInfo({
+            'name': 'test',
+            'model': 'test',
+            'manufacturer': 'test',
+            'systemName': 'test',
+            'systemVersion': 'test',
+            'identifierForVendor': 'test',
+            'isPhysicalDevice': true,
+          }),
+          userSession: userSession,
+          engineMaxMemoryInMb: 256,
+        );
+      }),
       ...overrides ?? [],
     ],
   );

@@ -25,7 +25,6 @@ Future<void> main() async {
   await migrateSharedPreferences();
 
   await lichessBinding.preloadSharedPreferences();
-  await lichessBinding.preloadData();
 
   await preloadPieceImages();
 
@@ -35,7 +34,9 @@ Future<void> main() async {
 
   final locale = await setupIntl(widgetsBinding);
 
-  await lichessBinding.initializeNotifications(locale);
+  await initializeLocalNotifications(locale);
+
+  await lichessBinding.initializeFirebase();
 
   if (defaultTargetPlatform == TargetPlatform.android) {
     await androidDisplayInitialization(widgetsBinding);
@@ -46,7 +47,7 @@ Future<void> main() async {
       observers: [
         ProviderLogger(),
       ],
-      child: const Application(),
+      child: const AppInitializationScreen(),
     ),
   );
 }

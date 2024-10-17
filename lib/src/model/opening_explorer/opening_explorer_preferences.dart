@@ -3,7 +3,6 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/opening_explorer/opening_explorer.dart';
-import 'package:lichess_mobile/src/model/settings/preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -17,6 +16,14 @@ class OpeningExplorerPreferences extends _$OpeningExplorerPreferences
   // ignore: avoid_public_notifier_properties
   @override
   final prefCategory = PrefCategory.openingExplorer;
+
+  @override
+  OpeningExplorerPrefs defaults({LightUser? user}) =>
+      OpeningExplorerPrefs.defaults(user: user);
+
+  @override
+  OpeningExplorerPrefs fromJson(Map<String, dynamic> json) =>
+      OpeningExplorerPrefs.fromJson(json);
 
   @override
   OpeningExplorerPrefs build() {
@@ -92,9 +99,7 @@ class OpeningExplorerPreferences extends _$OpeningExplorerPreferences
 }
 
 @Freezed(fromJson: true, toJson: true)
-class OpeningExplorerPrefs
-    with _$OpeningExplorerPrefs
-    implements SerializablePreferences {
+class OpeningExplorerPrefs with _$OpeningExplorerPrefs implements Serializable {
   const OpeningExplorerPrefs._();
 
   const factory OpeningExplorerPrefs({
