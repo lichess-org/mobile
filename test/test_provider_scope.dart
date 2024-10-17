@@ -168,6 +168,7 @@ Future<Widget> makeTestProviderScope(
       soundServiceProvider.overrideWithValue(FakeSoundService()),
       // ignore: scoped_providers_should_specify_dependencies
       openingServiceProvider.overrideWithValue(FakeOpeningService()),
+      // ignore: scoped_providers_should_specify_dependencies
       preloadedDataProvider.overrideWith((ref) {
         return (
           sri: 'test-sri',
