@@ -30,6 +30,7 @@ const engineSupportedVariants = {
   Variant.fromPosition,
 };
 
+/// A service to evaluate chess positions using an engine.
 class EvaluationService {
   EvaluationService(this.ref, {required this.maxMemory});
 

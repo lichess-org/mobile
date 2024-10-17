@@ -20,7 +20,6 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 
 part 'socket.g.dart';
 
-const kSRIStorageKey = 'socket_random_identifier';
 const kDefaultSocketRoute = '/socket/v5';
 
 const _kDefaultConnectTimeout = Duration(seconds: 10);
