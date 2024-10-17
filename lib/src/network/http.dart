@@ -208,6 +208,7 @@ class LichessClient implements Client {
         .postReadJson(
           lichessUri('/api/token/test'),
           mapper: (json) => json,
+          body: session.token,
         )
         .timeout(const Duration(seconds: 5));
     if (data[session.token] == null) {
