@@ -16,7 +16,7 @@ import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
-import 'package:lichess_mobile/src/view/analysis/tree_view.dart';
+import 'package:lichess_mobile/src/view/pgn/pgn_tree_view.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 
 import '../../test_provider_scope.dart';
@@ -300,7 +300,7 @@ void main() {
 
         await tester.tap(find.byKey(const Key('goto-previous')));
         // need to wait for current move change debounce delay
-        await tester.pump(const Duration(milliseconds: 200));
+        await tester.pumpAndSettle(const Duration(milliseconds: 200));
 
         expect(
           tester
@@ -332,7 +332,7 @@ void main() {
 
         await tester.tap(find.byKey(const Key('goto-previous')));
         // need to wait for current move change debounce delay
-        await tester.pump(const Duration(milliseconds: 200));
+        await tester.pumpAndSettle(const Duration(milliseconds: 200));
 
         expect(
           tester
@@ -365,7 +365,7 @@ void main() {
 
         await tester.tap(find.byKey(const Key('goto-previous')));
         // need to wait for current move change debounce delay
-        await tester.pump(const Duration(milliseconds: 200));
+        await tester.pumpAndSettle(const Duration(milliseconds: 200));
 
         expect(
           tester
