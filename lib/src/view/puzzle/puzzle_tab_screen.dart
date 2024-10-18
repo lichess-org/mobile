@@ -1,6 +1,7 @@
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -777,6 +778,7 @@ class PuzzleAnglePreview extends ConsumerWidget {
               ),
             )
           : Slidable(
+              dragStartBehavior: DragStartBehavior.start,
               enabled: angle != const PuzzleTheme(PuzzleThemeKey.mix),
               endActionPane: ActionPane(
                 motion: const StretchMotion(),
