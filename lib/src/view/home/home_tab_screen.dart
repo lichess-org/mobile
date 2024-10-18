@@ -34,7 +34,6 @@ import 'package:lichess_mobile/src/widgets/board_carousel_item.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/misc.dart';
-import 'package:lichess_mobile/src/widgets/platform.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:url_launcher/url_launcher.dart';
@@ -63,130 +62,263 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
 
         if (!hasRefreshed && !wasOnline && isNowOnline) {
           hasRefreshed = true;
-          _refreshData();
+          _refreshData(isOnline: isNowOnline);
         }
 
         wasOnline = isNowOnline;
       }
     });
 
-    return PlatformWidget(
-      androidBuilder: _androidBuilder,
-      iosBuilder: _iosBuilder,
-    );
-  }
-
-  Widget _androidBuilder(BuildContext context) {
-    final isTablet = isTabletOrLarger(context);
+    final connectivity = ref.watch(connectivityChangesProvider);
     final isEditing = ref.watch(editModeProvider);
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('lichess.org'),
-        actions: [
-          IconButton(
-            onPressed: () {
-              ref.read(editModeProvider.notifier).state = !isEditing;
-            },
-            icon:
-                Icon(isEditing ? Icons.save_outlined : Icons.app_registration),
-            tooltip: isEditing ? 'Save' : 'Edit',
-          ),
-          const _ChallengeScreenButton(),
-          const _PlayerScreenButton(),
-        ],
-      ),
-      body: RefreshIndicator(
-        key: _androidRefreshKey,
-        onRefresh: () => _refreshData(),
-        child: const Column(
-          children: [
-            ConnectivityBanner(),
-            Expanded(child: _HomeBody()),
-          ],
-        ),
-      ),
-      floatingActionButton: isTablet
-          ? null
-          : FloatingActionButton.extended(
-              onPressed: () {
-                pushPlatformRoute(
-                  context,
-                  builder: (_) => const PlayScreen(),
-                );
-              },
-              icon: const Icon(Icons.add),
-              label: Text(context.l10n.play),
-            ),
-    );
-  }
 
-  Widget _iosBuilder(BuildContext context) {
-    final isEditing = ref.watch(editModeProvider);
-    return CupertinoPageScaffold(
-      child: Stack(
-        alignment: Alignment.bottomCenter,
-        children: [
-          CustomScrollView(
-            controller: homeScrollController,
-            slivers: [
-              CupertinoSliverNavigationBar(
-                padding: const EdgeInsetsDirectional.only(
-                  start: 16.0,
-                  end: 8.0,
+    return connectivity.when(
+      skipLoadingOnReload: true,
+      data: (status) {
+        final session = ref.watch(authSessionProvider);
+        final ongoingGames = ref.watch(ongoingGamesProvider);
+        final emptyRecent = ref.watch(myRecentGamesProvider).maybeWhen(
+              data: (data) => data.isEmpty,
+              orElse: () => false,
+            );
+        final isTablet = isTabletOrLarger(context);
+
+        // Show the welcome screen if there are no recent games and no stored games
+        // (i.e. first installation, or the user has never played a game)
+        if (emptyRecent) {
+          return _WelcomeScreen(
+            session: session,
+            status: status,
+            isTablet: isTablet,
+          );
+        }
+
+        final widgets = isTablet
+            ? _tabletWidgets(
+                session: session,
+                status: status,
+                ongoingGames: ongoingGames,
+              )
+            : _handsetWidgets(
+                session: session,
+                status: status,
+                ongoingGames: ongoingGames,
+              );
+
+        if (Theme.of(context).platform == TargetPlatform.iOS) {
+          return CupertinoPageScaffold(
+            child: Stack(
+              alignment: Alignment.bottomCenter,
+              children: [
+                CustomScrollView(
+                  controller: homeScrollController,
+                  slivers: [
+                    CupertinoSliverNavigationBar(
+                      padding: const EdgeInsetsDirectional.only(
+                        start: 16.0,
+                        end: 8.0,
+                      ),
+                      largeTitle: Text(context.l10n.mobileHomeTab),
+                      leading: CupertinoButton(
+                        alignment: Alignment.centerLeft,
+                        padding: EdgeInsets.zero,
+                        onPressed: () {
+                          ref.read(editModeProvider.notifier).state =
+                              !isEditing;
+                        },
+                        child: Text(isEditing ? 'Done' : 'Edit'),
+                      ),
+                      trailing: const Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          _ChallengeScreenButton(),
+                          _PlayerScreenButton(),
+                        ],
+                      ),
+                    ),
+                    CupertinoSliverRefreshControl(
+                      onRefresh: () => _refreshData(isOnline: status.isOnline),
+                    ),
+                    const SliverToBoxAdapter(child: ConnectivityBanner()),
+                    SliverSafeArea(
+                      top: false,
+                      sliver: SliverList(
+                        delegate: SliverChildListDelegate(widgets),
+                      ),
+                    ),
+                  ],
                 ),
-                largeTitle: Text(context.l10n.mobileHomeTab),
-                leading: CupertinoButton(
-                  alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.zero,
+                if (getScreenType(context) == ScreenType.handset)
+                  Positioned(
+                    bottom: MediaQuery.paddingOf(context).bottom + 16.0,
+                    right: 8.0,
+                    child: FloatingActionButton.extended(
+                      backgroundColor: CupertinoTheme.of(context).primaryColor,
+                      foregroundColor:
+                          CupertinoTheme.of(context).primaryContrastingColor,
+                      onPressed: () {
+                        pushPlatformRoute(
+                          context,
+                          title: context.l10n.play,
+                          builder: (_) => const PlayScreen(),
+                        );
+                      },
+                      icon: const Icon(Icons.add),
+                      label: Text(context.l10n.play),
+                    ),
+                  ),
+              ],
+            ),
+          );
+        } else {
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text('lichess.org'),
+              actions: [
+                IconButton(
                   onPressed: () {
                     ref.read(editModeProvider.notifier).state = !isEditing;
                   },
-                  child: Text(isEditing ? 'Done' : 'Edit'),
+                  icon: Icon(
+                    isEditing ? Icons.save_outlined : Icons.app_registration,
+                  ),
+                  tooltip: isEditing ? 'Save' : 'Edit',
                 ),
-                trailing: const Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _ChallengeScreenButton(),
-                    _PlayerScreenButton(),
-                  ],
-                ),
-              ),
-              CupertinoSliverRefreshControl(
-                onRefresh: () => _refreshData(),
-              ),
-              const SliverToBoxAdapter(child: ConnectivityBanner()),
-              const SliverSafeArea(top: false, sliver: _HomeBody()),
-            ],
-          ),
-          if (getScreenType(context) == ScreenType.handset)
-            Positioned(
-              bottom: MediaQuery.paddingOf(context).bottom + 16.0,
-              right: 8.0,
-              child: FloatingActionButton.extended(
-                backgroundColor: CupertinoTheme.of(context).primaryColor,
-                foregroundColor:
-                    CupertinoTheme.of(context).primaryContrastingColor,
-                onPressed: () {
-                  pushPlatformRoute(
-                    context,
-                    title: context.l10n.play,
-                    builder: (_) => const PlayScreen(),
-                  );
-                },
-                icon: const Icon(Icons.add),
-                label: Text(context.l10n.play),
+                const _ChallengeScreenButton(),
+                const _PlayerScreenButton(),
+              ],
+            ),
+            body: RefreshIndicator(
+              key: _androidRefreshKey,
+              onRefresh: () => _refreshData(isOnline: status.isOnline),
+              child: Column(
+                children: [
+                  const ConnectivityBanner(),
+                  Expanded(
+                    child: ListView(
+                      controller: homeScrollController,
+                      children: widgets,
+                    ),
+                  ),
+                ],
               ),
             ),
-        ],
-      ),
+            floatingActionButton: isTablet
+                ? null
+                : FloatingActionButton.extended(
+                    onPressed: () {
+                      pushPlatformRoute(
+                        context,
+                        builder: (_) => const PlayScreen(),
+                      );
+                    },
+                    icon: const Icon(Icons.add),
+                    label: Text(context.l10n.play),
+                  ),
+          );
+        }
+      },
+      error: (_, __) => const CenterLoadingIndicator(),
+      loading: () => const CenterLoadingIndicator(),
     );
   }
 
-  Future<void> _refreshData() {
+  List<Widget> _handsetWidgets({
+    required AuthSessionState? session,
+    required ConnectivityStatus status,
+    required AsyncValue<IList<OngoingGame>> ongoingGames,
+  }) {
+    return [
+      const _EditableWidget(
+        widget: EnabledWidget.hello,
+        shouldShow: true,
+        child: _HelloWidget(),
+      ),
+      _EditableWidget(
+        widget: EnabledWidget.perfCards,
+        shouldShow: session != null,
+        child: const AccountPerfCards(
+          padding: Styles.horizontalBodyPadding,
+        ),
+      ),
+      _EditableWidget(
+        widget: EnabledWidget.quickPairing,
+        shouldShow: status.isOnline,
+        child: const Padding(
+          padding: Styles.bodySectionPadding,
+          child: QuickGameMatrix(),
+        ),
+      ),
+      if (status.isOnline)
+        _OngoingGamesCarousel(ongoingGames, maxGamesToShow: 20)
+      else
+        const _OfflineCorrespondenceCarousel(maxGamesToShow: 20),
+      const RecentGamesWidget(),
+      if (Theme.of(context).platform == TargetPlatform.iOS)
+        const SizedBox(height: 70.0)
+      else
+        const SizedBox(height: 54.0),
+    ];
+  }
+
+  List<Widget> _tabletWidgets({
+    required AuthSessionState? session,
+    required ConnectivityStatus status,
+    required AsyncValue<IList<OngoingGame>> ongoingGames,
+  }) {
+    return [
+      const _EditableWidget(
+        widget: EnabledWidget.hello,
+        shouldShow: true,
+        child: _HelloWidget(),
+      ),
+      _EditableWidget(
+        widget: EnabledWidget.perfCards,
+        shouldShow: session != null,
+        child: const AccountPerfCards(
+          padding: Styles.bodySectionPadding,
+        ),
+      ),
+      Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Flexible(
+            child: Column(
+              children: [
+                const SizedBox(height: 8.0),
+                if (status.isOnline) const _TabletCreateAGameSection(),
+                if (status.isOnline)
+                  _OngoingGamesPreview(
+                    ongoingGames,
+                    maxGamesToShow: 5,
+                  )
+                else
+                  const _OfflineCorrespondencePreview(
+                    maxGamesToShow: 5,
+                  ),
+              ],
+            ),
+          ),
+          const Flexible(
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                SizedBox(height: 8.0),
+                RecentGamesWidget(),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ];
+  }
+
+  Future<void> _refreshData({required bool isOnline}) {
     return Future.wait([
-      ref.refresh(accountProvider.future),
       ref.refresh(myRecentGamesProvider.future),
-      ref.refresh(ongoingGamesProvider.future),
+      if (isOnline) ref.refresh(accountProvider.future),
+      if (isOnline) ref.refresh(ongoingGamesProvider.future),
     ]);
   }
 }
@@ -208,157 +340,34 @@ class _SignInWidget extends ConsumerWidget {
   }
 }
 
-class _HomeBody extends ConsumerWidget {
-  const _HomeBody();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final isOnlineAsync = ref.watch(connectivityChangesProvider);
-    final isEditing = ref.watch(editModeProvider);
-
-    return isOnlineAsync.when(
-      data: (status) {
-        final session = ref.watch(authSessionProvider);
-        final isTablet = isTabletOrLarger(context);
-        final emptyRecent = ref.watch(myRecentGamesProvider).maybeWhen(
-              data: (data) => data.isEmpty,
-              orElse: () => false,
-            );
-
-        // Show the welcome screen if there are no recent games and no stored games
-        // (i.e. first installation, or the user has never played a game)
-        if (emptyRecent) {
-          return _WelcomeScreen(
-            session: session,
-            status: status,
-            isTablet: isTablet,
-            isEditing: isEditing,
-          );
-        }
-
-        final widgets = isTablet
-            ? [
-                _EditableWidget(
-                  widget: EnabledWidget.hello,
-                  isEditing: isEditing,
-                  shouldShow: true,
-                  child: const _HelloWidget(),
-                ),
-                _EditableWidget(
-                  widget: EnabledWidget.perfCards,
-                  isEditing: isEditing,
-                  shouldShow: session != null,
-                  child: const AccountPerfCards(
-                    padding: Styles.bodySectionPadding,
-                  ),
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Flexible(
-                      child: Column(
-                        children: [
-                          const SizedBox(height: 8.0),
-                          if (status.isOnline)
-                            _TabletCreateAGameSection(isEditing: isEditing),
-                          if (status.isOnline)
-                            const _OngoingGamesPreview(maxGamesToShow: 5)
-                          else
-                            const _OfflineCorrespondencePreview(
-                              maxGamesToShow: 5,
-                            ),
-                        ],
-                      ),
-                    ),
-                    const Flexible(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          SizedBox(height: 8.0),
-                          RecentGamesWidget(),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ]
-            : [
-                _EditableWidget(
-                  widget: EnabledWidget.hello,
-                  isEditing: isEditing,
-                  shouldShow: true,
-                  child: const _HelloWidget(),
-                ),
-                _EditableWidget(
-                  widget: EnabledWidget.perfCards,
-                  isEditing: isEditing,
-                  shouldShow: session != null,
-                  child: const AccountPerfCards(
-                    padding: Styles.horizontalBodyPadding,
-                  ),
-                ),
-                _EditableWidget(
-                  widget: EnabledWidget.quickPairing,
-                  isEditing: isEditing,
-                  shouldShow: status.isOnline,
-                  child: const Padding(
-                    padding: Styles.bodySectionPadding,
-                    child: QuickGameMatrix(),
-                  ),
-                ),
-                if (status.isOnline)
-                  const _OngoingGamesCarousel(maxGamesToShow: 20)
-                else
-                  const _OfflineCorrespondenceCarousel(maxGamesToShow: 20),
-                const RecentGamesWidget(),
-                if (Theme.of(context).platform == TargetPlatform.iOS)
-                  const SizedBox(height: 70.0)
-                else
-                  const SizedBox(height: 54.0),
-              ];
-
-        return Theme.of(context).platform == TargetPlatform.android
-            ? ListView(
-                controller: homeScrollController,
-                children: widgets,
-              )
-            : SliverList(
-                delegate: SliverChildListDelegate(widgets),
-              );
-      },
-      loading: () {
-        const child = CenterLoadingIndicator();
-        return Theme.of(context).platform == TargetPlatform.android
-            ? child
-            : const SliverFillRemaining(child: child);
-      },
-      error: (error, stack) {
-        const child = SizedBox.shrink();
-        return Theme.of(context).platform == TargetPlatform.android
-            ? child
-            : const SliverFillRemaining(child: child);
-      },
-    );
-  }
-}
-
+/// A widget that can be enabled or disabled by the user.
+///
+/// This widget is used to show or hide certain sections of the home screen.
+///
+/// The [homePreferencesProvider] provides a list of enabled widgets.
+///
+/// * The [widget] parameter is the widget that can be enabled or disabled.
+///
+/// * The [shouldShow] parameter is useful when the widget should be shown only
+///   when certain conditions are met. For example, we only want to show the quick
+///   pairing matrix when the user is online.
+///   This parameter is only active when the user is not in edit mode, as we
+///   always want to display the widget in edit mode.
 class _EditableWidget extends ConsumerWidget {
   const _EditableWidget({
     required this.child,
     required this.widget,
-    required this.isEditing,
     required this.shouldShow,
   });
 
   final Widget child;
   final EnabledWidget widget;
-  final bool isEditing;
   final bool shouldShow;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final enabledWidgets = ref.watch(homePreferencesProvider).enabledWidgets;
+    final isEditing = ref.watch(editModeProvider);
     final isEnabled = enabledWidgets.contains(widget);
 
     if (!shouldShow) {
@@ -399,13 +408,11 @@ class _WelcomeScreen extends StatelessWidget {
     required this.session,
     required this.status,
     required this.isTablet,
-    required this.isEditing,
   });
 
   final AuthSessionState? session;
   final ConnectivityStatus status;
   final bool isTablet;
-  final bool isEditing;
 
   @override
   Widget build(BuildContext context) {
@@ -453,8 +460,8 @@ class _WelcomeScreen extends StatelessWidget {
         Row(
           children: [
             if (status.isOnline)
-              Flexible(
-                child: _TabletCreateAGameSection(isEditing: isEditing),
+              const Flexible(
+                child: _TabletCreateAGameSection(),
               ),
             Flexible(
               child: Column(
@@ -465,11 +472,10 @@ class _WelcomeScreen extends StatelessWidget {
         )
       else ...[
         if (status.isOnline)
-          _EditableWidget(
+          const _EditableWidget(
             widget: EnabledWidget.quickPairing,
-            isEditing: isEditing,
             shouldShow: true,
-            child: const Padding(
+            child: Padding(
               padding: Styles.bodySectionPadding,
               child: QuickGameMatrix(),
             ),
@@ -558,43 +564,41 @@ class _HelloWidget extends ConsumerWidget {
 }
 
 class _TabletCreateAGameSection extends StatelessWidget {
-  const _TabletCreateAGameSection({required this.isEditing});
-
-  final bool isEditing;
+  const _TabletCreateAGameSection();
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         _EditableWidget(
           widget: EnabledWidget.quickPairing,
-          isEditing: isEditing,
           shouldShow: true,
-          child: const Padding(
+          child: Padding(
             padding: Styles.bodySectionPadding,
             child: QuickGameMatrix(),
           ),
         ),
-        const Padding(
+        Padding(
           padding: Styles.bodySectionPadding,
           child: QuickGameButton(),
         ),
-        const CreateGameOptions(),
+        CreateGameOptions(),
       ],
     );
   }
 }
 
 class _OngoingGamesCarousel extends ConsumerWidget {
-  const _OngoingGamesCarousel({required this.maxGamesToShow});
+  const _OngoingGamesCarousel(this.games, {required this.maxGamesToShow});
+
+  final AsyncValue<IList<OngoingGame>> games;
 
   final int maxGamesToShow;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ongoingGames = ref.watch(ongoingGamesProvider);
-    return ongoingGames.maybeWhen(
+    return games.maybeWhen(
       data: (data) {
         if (data.isEmpty) {
           return const SizedBox.shrink();
@@ -823,14 +827,14 @@ class _GamePreviewCarouselItem extends StatelessWidget {
 }
 
 class _OngoingGamesPreview extends ConsumerWidget {
-  const _OngoingGamesPreview({required this.maxGamesToShow});
+  const _OngoingGamesPreview(this.games, {required this.maxGamesToShow});
 
+  final AsyncValue<IList<OngoingGame>> games;
   final int maxGamesToShow;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final ongoingGames = ref.watch(ongoingGamesProvider);
-    return ongoingGames.maybeWhen(
+    return games.maybeWhen(
       data: (data) {
         return PreviewGameList(
           list: data,

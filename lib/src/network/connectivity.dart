@@ -173,6 +173,7 @@ extension AsyncValueConnectivity on AsyncValue<ConnectivityStatus> {
     required R Function() offline,
   }) {
     return maybeWhen(
+      skipLoadingOnReload: true,
       data: (status) => status.isOnline ? online() : offline(),
       orElse: offline,
     );
@@ -199,6 +200,7 @@ extension AsyncValueConnectivity on AsyncValue<ConnectivityStatus> {
     required R Function() loading,
   }) {
     return when(
+      skipLoadingOnReload: true,
       data: (status) => status.isOnline ? online() : offline(),
       loading: loading,
       error: (error, stack) => offline(),
