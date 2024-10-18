@@ -838,7 +838,17 @@ class PuzzleAnglePreview extends ConsumerWidget {
                         PuzzleOpening(key: final openingKey) => [
                             Text(
                               flatOpenings.valueOrNull
-                                      ?.firstWhere((o) => o.key == openingKey)
+                                      ?.firstWhere(
+                                        (o) => o.key == openingKey,
+                                        orElse: () => (
+                                          key: openingKey,
+                                          name: openingKey.replaceAll(
+                                            '_',
+                                            '',
+                                          ),
+                                          count: 0
+                                        ),
+                                      )
                                       .name ??
                                   openingKey.replaceAll('_', ' '),
                               style: Styles.boardPreviewTitle,
