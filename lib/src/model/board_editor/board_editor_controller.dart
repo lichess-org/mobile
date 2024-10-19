@@ -15,7 +15,7 @@ class BoardEditorController extends _$BoardEditorController {
       orientation: Side.white,
       sideToPlay: Side.white,
       pieces: readFen(initialFen ?? kInitialFEN).lock,
-      unmovedRooks: SquareSet.corners,
+      castlingRights: SquareSet.corners,
       editorPointerMode: EditorPointerMode.drag,
       enPassantOptions: SquareSet.empty,
       enPassantSquare: null,
@@ -142,9 +142,9 @@ class BoardEditorController extends _$BoardEditorController {
 
   void _setRookUnmoved(Square square, bool unmoved) {
     state = state.copyWith(
-      unmovedRooks: unmoved
-          ? state.unmovedRooks.withSquare(square)
-          : state.unmovedRooks.withoutSquare(square),
+      castlingRights: unmoved
+          ? state.castlingRights.withSquare(square)
+          : state.castlingRights.withoutSquare(square),
     );
   }
 }
@@ -157,7 +157,7 @@ class BoardEditorState with _$BoardEditorState {
     required Side orientation,
     required Side sideToPlay,
     required IMap<Square, Piece> pieces,
-    required SquareSet unmovedRooks,
+    required SquareSet castlingRights,
     required EditorPointerMode editorPointerMode,
     required SquareSet enPassantOptions,
     required Square? enPassantSquare,
@@ -169,12 +169,12 @@ class BoardEditorState with _$BoardEditorState {
   bool isCastlingAllowed(Side side, CastlingSide castlingSide) =>
       switch (side) {
         Side.white => switch (castlingSide) {
-            CastlingSide.king => unmovedRooks.has(Square.h1),
-            CastlingSide.queen => unmovedRooks.has(Square.a1),
+            CastlingSide.king => castlingRights.has(Square.h1),
+            CastlingSide.queen => castlingRights.has(Square.a1),
           },
         Side.black => switch (castlingSide) {
-            CastlingSide.king => unmovedRooks.has(Square.h8),
-            CastlingSide.queen => unmovedRooks.has(Square.a8),
+            CastlingSide.king => castlingRights.has(Square.h8),
+            CastlingSide.queen => castlingRights.has(Square.a8),
           },
       };
 
@@ -183,7 +183,7 @@ class BoardEditorState with _$BoardEditorState {
     final board = Board.parseFen(boardFen);
     return Setup(
       board: board,
-      unmovedRooks: unmovedRooks,
+      castlingRights: castlingRights,
       turn: sideToPlay == Side.white ? Side.white : Side.black,
       epSquare: enPassantSquare,
       halfmoves: 0,
