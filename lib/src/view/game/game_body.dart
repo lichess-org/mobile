@@ -119,7 +119,7 @@ class GameBody extends ConsumerWidget {
 
     return gameStateAsync.when(
       data: (gameState) {
-        final position = gameState.game.positionAt(gameState.stepCursor);
+        final (position, legalMoves) = gameState.currentPosition;
         final youAre = gameState.game.youAre ?? Side.white;
         final archivedBlackClock =
             gameState.game.archivedBlackClockAt(gameState.stepCursor);
@@ -253,7 +253,7 @@ class GameBody extends ConsumerWidget {
                         isCheck: boardPreferences.boardHighlights &&
                             position.isCheck,
                         sideToMove: position.turn,
-                        validMoves: makeLegalMoves(position),
+                        validMoves: legalMoves,
                         promotionMove: gameState.promotionMove,
                         onMove: (move, {isDrop}) {
                           ref.read(ctrlProvider.notifier).userMove(

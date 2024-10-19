@@ -143,7 +143,7 @@ class _BodyState extends ConsumerState<_Body> {
                             ? PlayerSide.white
                             : PlayerSide.black,
                     sideToMove: gameState.turn,
-                    validMoves: makeLegalMoves(gameState.currentPosition),
+                    validMoves: gameState.legalMoves,
                     onPromotionSelection: ref
                         .read(overTheBoardGameControllerProvider.notifier)
                         .onPromotionSelection,
