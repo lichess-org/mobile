@@ -19,7 +19,7 @@
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">\"%s\" duten jokalariak</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Emaitzarik ez</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Ziur zaude?</string>
-  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">Zure uneko bolada galduko duzu eta zure puntuazioa gorde egingo da.</string>
+  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak.&#10;&#10;Please note that unlike on the website, on the mobile app, exiting the 'Streak' view will completely end your run. See issue https://github.com/lichess-org/mobile/issues/324">Zure uneko bolada galduko duzu eta zure puntuazioa gorde egingo da.</string>
   <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Ez dago ezer erakusteko. Jokatu Ariketa zaparrada batzuk.</string>
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Partekatu ariketa hau</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Partekatu partidaren URLa</string>
