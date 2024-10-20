@@ -406,7 +406,8 @@ List<InlineSpan> _buildInlineSideLine({
             node,
             lineInfo: (
               type: _LineType.inlineSideline,
-              startLine: i == 0 || sidelineNodes[i - 1].hasTextComment
+              startLine: i == 0 || sidelineNodes[i - 1].hasTextComment,
+              pathToLine: initialPath,
             ),
             pathToNode: pathToNode,
             textStyle: textStyle,
@@ -444,7 +445,7 @@ enum _LineType {
 }
 
 /// Metadata about a move's role in the tree view.
-typedef _LineInfo = ({_LineType type, bool startLine});
+typedef _LineInfo = ({_LineType type, bool startLine, UciPath pathToLine});
 
 List<InlineSpan> _moveWithComment(
   ViewBranch branch, {
@@ -512,6 +513,7 @@ class _SideLinePart extends ConsumerWidget {
         lineInfo: (
           type: _LineType.sideline,
           startLine: true,
+          pathToLine: initialPath,
         ),
         firstMoveKey: firstMoveKey,
         pathToNode: initialPath,
@@ -526,6 +528,7 @@ class _SideLinePart extends ConsumerWidget {
               lineInfo: (
                 type: _LineType.sideline,
                 startLine: node.hasTextComment,
+                pathToLine: initialPath,
               ),
               pathToNode: path,
               textStyle: textStyle,
@@ -592,6 +595,7 @@ class _MainLinePart extends ConsumerWidget {
                     lineInfo: (
                       type: _LineType.mainline,
                       startLine: i == 0 || (node as ViewBranch).hasTextComment,
+                      pathToLine: initialPath,
                     ),
                     pathToNode: path,
                     textStyle: textStyle,
@@ -969,7 +973,7 @@ class InlineMove extends ConsumerWidget {
                 : '${(ply / 2).ceil()}... $moveWithNag',
             path: path,
             branch: branch,
-            isSideline: lineInfo.type != _LineType.mainline,
+            lineInfo: lineInfo,
           ),
         );
       },
@@ -1013,14 +1017,14 @@ class _MoveContextMenu extends ConsumerWidget {
     required this.title,
     required this.path,
     required this.branch,
-    required this.isSideline,
+    required this.lineInfo,
     required this.notifier,
   });
 
   final String title;
   final UciPath path;
   final ViewBranch branch;
-  final bool isSideline;
+  final _LineInfo lineInfo;
   final PgnTreeNotifier notifier;
 
   @override
@@ -1088,11 +1092,11 @@ class _MoveContextMenu extends ConsumerWidget {
             ),
           ),
         const PlatformDivider(indent: 0),
-        if (isSideline) ...[
+        if (lineInfo.type != _LineType.mainline) ...[
           BottomSheetContextMenuAction(
             icon: Icons.subtitles_off,
             child: Text(context.l10n.collapseVariations),
-            onPressed: () => notifier.collapseVariations(path),
+            onPressed: () => notifier.collapseVariations(lineInfo.pathToLine),
           ),
           BottomSheetContextMenuAction(
             icon: Icons.expand_less,

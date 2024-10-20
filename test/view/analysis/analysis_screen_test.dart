@@ -263,6 +263,23 @@ void main() {
         expectSameLine(tester, ['2… h5']);
         expectSameLine(tester, ['2… Nc6', '3. d3']);
         expectSameLine(tester, ['2… Qd7']);
+
+        final d3 = find.text('3. d3');
+        await tester.longPress(d3);
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text('Collapse variations'));
+
+        // need to wait for current move change debounce delay
+        await tester.pumpAndSettle(const Duration(milliseconds: 200));
+
+        // Sidelines should be collapsed again
+        expect(find.byIcon(Icons.add_box), findsOneWidget);
+
+        expect(find.text('2… h5'), findsNothing);
+        expect(find.text('2… Nc6'), findsNothing);
+        expect(find.text('3. d3'), findsNothing);
+        expect(find.text('2… Qd7'), findsNothing);
       });
 
       testWidgets('subtrees not part of the current mainline part are cached',
