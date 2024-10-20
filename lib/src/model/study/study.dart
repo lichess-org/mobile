@@ -24,6 +24,13 @@ class Study with _$Study {
     required IList<String> topics,
     required IList<StudyChapterMeta> chapters,
     required StudyChapter chapter,
+    // Hints to display in "gamebook"/"interactive" mode
+    // Index corresponds to the current ply.
+    required IList<String?> hints,
+    // Comment to display when deviating from the mainline in "gamebook" mode
+    // (i.e. when making a wrong move).
+    // Index corresponds to the current ply.
+    required IList<String?> deviationComments,
   }) = _Study;
 
   StudyChapterMeta get currentChapterMeta =>
@@ -34,6 +41,16 @@ class Study with _$Study {
 }
 
 Study _studyFromPick(RequiredPick pick) {
+  final treeParts = pick('analysis', 'treeParts').asListOrThrow((part) => part);
+
+  final hints = <String?>[];
+  final deviationComments = <String?>[];
+
+  for (final part in treeParts) {
+    hints.add(part('gamebook', 'hint').asStringOrNull());
+    deviationComments.add(part('gamebook', 'deviation').asStringOrNull());
+  }
+
   final study = pick('study');
   return Study(
     id: study('id').asStudyIdOrThrow(),
@@ -52,6 +69,8 @@ Study _studyFromPick(RequiredPick pick) {
         .asListOrThrow((pick) => StudyChapterMeta.fromJson(pick.asMapOrThrow()))
         .lock,
     chapter: StudyChapter.fromJson(study('chapter').asMapOrThrow()),
+    hints: hints.lock,
+    deviationComments: deviationComments.lock,
   );
 }
 
