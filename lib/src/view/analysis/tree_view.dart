@@ -89,29 +89,32 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
     ref.listen(
       analysisControllerProvider(widget.pgn, widget.options),
       (prev, state) {
-        if (prev?.currentPath != state.currentPath) {
-          // debouncing the current path change to avoid rebuilding when using
-          // the fast replay buttons
+        if (prev?.currentPath != state.currentPath ||
+            prev?.livePath != state.livePath) {
+          // debouncing the current and live path change to avoid rebuilding when using
+          // the fast replay buttons or when receiving a lot of moves in a short time
           _debounce(() {
             setState(() {
-              pathToCurrentMove = state.currentPath;
-            });
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (currentMoveKey.currentContext != null) {
-                Scrollable.ensureVisible(
-                  currentMoveKey.currentContext!,
-                  duration: const Duration(milliseconds: 200),
-                  curve: Curves.easeIn,
-                  alignment: 0.5,
-                  alignmentPolicy: ScrollPositionAlignmentPolicy.explicit,
-                );
+              if (prev?.currentPath != state.currentPath) {
+                pathToCurrentMove = state.currentPath;
+              }
+              if (prev?.livePath != state.livePath) {
+                pathToLiveMove = state.livePath;
               }
             });
-          });
-        }
-        if (prev?.livePath != state.livePath) {
-          setState(() {
-            pathToLiveMove = state.livePath;
+            if (prev?.currentPath != state.currentPath) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (currentMoveKey.currentContext != null) {
+                  Scrollable.ensureVisible(
+                    currentMoveKey.currentContext!,
+                    duration: const Duration(milliseconds: 200),
+                    curve: Curves.easeIn,
+                    alignment: 0.5,
+                    alignmentPolicy: ScrollPositionAlignmentPolicy.explicit,
+                  );
+                }
+              });
+            }
           });
         }
       },
