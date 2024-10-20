@@ -109,6 +109,11 @@ class _InlineTreeViewState extends ConsumerState<AnalysisTreeView> {
             });
           });
         }
+        if (prev?.livePath != state.livePath) {
+          setState(() {
+            pathToLiveMove = state.livePath;
+          });
+        }
       },
     );
 
