@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
+import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
@@ -9,18 +10,17 @@ import 'package:lichess_mobile/src/model/user/user.dart';
 part 'study.freezed.dart';
 part 'study.g.dart';
 
-@Freezed(fromJson: true)
+@freezed
 class Study with _$Study {
   const Study._();
 
   const factory Study({
     required StudyId id,
     required String name,
-    required ({StudyChapterId chapterId, String path}) position,
     required bool liked,
     required int likes,
     required UserId? ownerId,
-    @JsonKey(fromJson: studyFeaturesFromJson) required StudyFeatures features,
+    required StudyFeatures features,
     required IList<String> topics,
     required IList<StudyChapterMeta> chapters,
     required StudyChapter chapter,
@@ -29,7 +29,30 @@ class Study with _$Study {
   StudyChapterMeta get currentChapterMeta =>
       chapters.firstWhere((c) => c.id == chapter.id);
 
-  factory Study.fromJson(Map<String, Object?> json) => _$StudyFromJson(json);
+  factory Study.fromServerJson(Map<String, Object?> json) =>
+      _studyFromPick(pick(json).required());
+}
+
+Study _studyFromPick(RequiredPick pick) {
+  final study = pick('study');
+  return Study(
+    id: study('id').asStudyIdOrThrow(),
+    name: study('name').asStringOrThrow(),
+    liked: study('liked').asBoolOrThrow(),
+    likes: study('likes').asIntOrThrow(),
+    ownerId: study('ownerId').asUserIdOrNull(),
+    features: (
+      cloneable: study('features', 'cloneable').asBoolOrFalse(),
+      chat: study('features', 'chat').asBoolOrFalse(),
+      sticky: study('features', 'sticky').asBoolOrFalse(),
+    ),
+    topics:
+        study('topics').asListOrThrow((pick) => pick.asStringOrThrow()).lock,
+    chapters: study('chapters')
+        .asListOrThrow((pick) => StudyChapterMeta.fromJson(pick.asMapOrThrow()))
+        .lock,
+    chapter: StudyChapter.fromJson(study('chapter').asMapOrThrow()),
+  );
 }
 
 typedef StudyFeatures = ({

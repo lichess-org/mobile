@@ -340,10 +340,6 @@ void main() {
         Study(
           id: const StudyId('JbWtuaeK'),
           name: 'How to Solve Puzzles Correctly',
-          position: const (
-            chapterId: StudyChapterId('EgqyeQIp'),
-            path: '',
-          ),
           liked: false,
           likes: 29,
           ownerId: const UserId('kyle-and-jess'),

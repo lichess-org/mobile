@@ -69,11 +69,7 @@ class StudyRepository {
         },
       ),
       headers: {'Accept': 'application/json'},
-      mapper: (Map<String, dynamic> json) {
-        return Study.fromJson(
-          pick(json, 'study').asMapOrThrow(),
-        );
-      },
+      mapper: Study.fromServerJson,
     );
 
     final pgnBytes = await client.readBytes(
