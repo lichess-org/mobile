@@ -19,7 +19,7 @@
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Usuários com \"%s\"</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Sem Resultados</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Você tem certeza?</string>
-  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">Você perderá a sua sequência atual e sua pontuação será salva.</string>
+  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak.&#10;&#10;Please note that unlike on the website, on the mobile app, exiting the 'Streak' view will completely end your run. See issue https://github.com/lichess-org/mobile/issues/324">Você perderá a sua sequência atual e sua pontuação será salva.</string>
   <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Nada para mostrar aqui. Jogue algumas rodadas da Puzzle Storm.</string>
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Compartilhar este quebra-cabeça</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Compartilhar URL do jogo</string>
