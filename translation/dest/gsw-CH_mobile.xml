@@ -19,7 +19,7 @@
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Schpiller mit \"%s%</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Nüt g\'funde</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Bisch sicher?</string>
-  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">Du verlürsch din aktuelle Lauf und din Rekord wird g\'schpeicheret.</string>
+  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak.&#10;&#10;Please note that unlike on the website, on the mobile app, exiting the 'Streak' view will completely end your run. See issue https://github.com/lichess-org/mobile/issues/324">Du verlürsch din aktuelle Lauf und din Rekord wird g\'schpeicheret.</string>
   <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Es git nüt zum Zeige. Schpill zerscht ochli Puzzle Storm.</string>
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Teil die Ufgab</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Teil d\'Schpiel-URL</string>
