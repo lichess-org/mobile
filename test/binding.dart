@@ -1,14 +1,10 @@
 import 'dart:async';
-import 'dart:ui';
 
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/intl.dart';
 import 'package:lichess_mobile/src/binding.dart';
-import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:logging/logging.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// The binding instance used in tests.
@@ -49,43 +45,6 @@ class TestLichessBinding extends LichessBinding {
     super.initInstance();
     _instance = this;
   }
-
-  /// Preload useful data.
-  ///
-  /// This should be called only once before the app starts.
-  Future<void> preloadData(AuthSessionState? initialUserSession) async {
-    _initialUserSession = initialUserSession;
-  }
-
-  AuthSessionState? _initialUserSession;
-
-  @override
-  BaseDeviceInfo get deviceInfo => BaseDeviceInfo({
-        'name': 'test',
-        'model': 'test',
-        'manufacturer': 'test',
-        'systemName': 'test',
-        'systemVersion': 'test',
-        'identifierForVendor': 'test',
-        'isPhysicalDevice': true,
-      });
-
-  @override
-  int get engineMaxMemoryInMb => 256;
-
-  @override
-  AuthSessionState? get initialUserSession => _initialUserSession;
-
-  @override
-  PackageInfo get packageInfo => PackageInfo(
-        appName: 'lichess_mobile_test',
-        version: '0.0.0',
-        buildNumber: '0',
-        packageName: 'lichess_mobile_test',
-      );
-
-  @override
-  String get sri => 'test-sri';
 
   /// Set the initial values for shared preferences.
   Future<void> setInitialSharedPreferencesValues(
@@ -128,13 +87,12 @@ class TestLichessBinding extends LichessBinding {
   void reset() {
     _firebaseMessaging = null;
     _sharedPreferences = null;
-    _initialUserSession = null;
   }
 
   FakeFirebaseMessaging? _firebaseMessaging;
 
   @override
-  Future<void> initializeNotifications(Locale locale) async {}
+  Future<void> initializeFirebase() async {}
 
   @override
   FakeFirebaseMessaging get firebaseMessaging {

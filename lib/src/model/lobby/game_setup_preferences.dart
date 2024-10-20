@@ -1,11 +1,9 @@
 import 'dart:math' as math;
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
-import 'package:lichess_mobile/src/model/common/game.dart';
 import 'package:lichess_mobile/src/model/common/perf.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/common/time_increment.dart';
-import 'package:lichess_mobile/src/model/settings/preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -19,6 +17,13 @@ class GameSetupPreferences extends _$GameSetupPreferences
   // ignore: avoid_public_notifier_properties
   @override
   final prefCategory = PrefCategory.gameSetup;
+
+  @override
+  GameSetupPrefs defaults({LightUser? user}) => GameSetupPrefs.defaults;
+
+  @override
+  GameSetupPrefs fromJson(Map<String, dynamic> json) =>
+      GameSetupPrefs.fromJson(json);
 
   @override
   GameSetupPrefs build() {
@@ -49,10 +54,6 @@ class GameSetupPreferences extends _$GameSetupPreferences
     return save(state.copyWith(customRated: rated));
   }
 
-  Future<void> setCustomSide(SideChoice side) {
-    return save(state.copyWith(customSide: side));
-  }
-
   Future<void> setCustomRatingRange(int min, int max) {
     return save(state.copyWith(customRatingDelta: (min, max)));
   }
@@ -65,7 +66,7 @@ class GameSetupPreferences extends _$GameSetupPreferences
 enum TimeControl { realTime, correspondence }
 
 @Freezed(fromJson: true, toJson: true)
-class GameSetupPrefs with _$GameSetupPrefs implements SerializablePreferences {
+class GameSetupPrefs with _$GameSetupPrefs implements Serializable {
   const GameSetupPrefs._();
 
   const factory GameSetupPrefs({
@@ -76,7 +77,6 @@ class GameSetupPrefs with _$GameSetupPrefs implements SerializablePreferences {
     required int customDaysPerTurn,
     required Variant customVariant,
     required bool customRated,
-    required SideChoice customSide,
     required (int, int) customRatingDelta,
   }) = _GameSetupPrefs;
 
@@ -87,7 +87,6 @@ class GameSetupPrefs with _$GameSetupPrefs implements SerializablePreferences {
     customIncrementSeconds: 0,
     customVariant: Variant.standard,
     customRated: false,
-    customSide: SideChoice.random,
     customRatingDelta: (-500, 500),
     customDaysPerTurn: 3,
   );

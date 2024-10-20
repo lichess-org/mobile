@@ -1,9 +1,6 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-part 'crashlytics.g.dart';
-
-@Riverpod(keepAlive: true)
-FirebaseCrashlytics crashlytics(CrashlyticsRef ref) {
+final crashlyticsProvider = Provider<FirebaseCrashlytics>((ref) {
   return FirebaseCrashlytics.instance;
-}
+});

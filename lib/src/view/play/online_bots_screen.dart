@@ -20,10 +20,7 @@ import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/user_full_name.dart';
 import 'package:linkify/linkify.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-part 'online_bots_screen.g.dart';
 
 // TODO(#796): remove when Leela featured bots special challenges are ready
 // https://github.com/lichess-org/mobile/issues/796
@@ -34,8 +31,8 @@ const _disabledBots = {
   'leelarookodds',
 };
 
-@riverpod
-Future<IList<User>> _onlineBots(_OnlineBotsRef ref) async {
+final _onlineBotsProvider =
+    FutureProvider.autoDispose<IList<User>>((ref) async {
   return ref.withClientCacheFor(
     (client) => UserRepository(client).getOnlineBots().then(
           (bots) => bots
@@ -46,7 +43,7 @@ Future<IList<User>> _onlineBots(_OnlineBotsRef ref) async {
         ),
     const Duration(hours: 5),
   );
-}
+});
 
 class OnlineBotsScreen extends StatelessWidget {
   const OnlineBotsScreen();

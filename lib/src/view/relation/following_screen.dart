@@ -1,5 +1,6 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -16,18 +17,13 @@ import 'package:lichess_mobile/src/widgets/feedback.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
 import 'package:lichess_mobile/src/widgets/user_list_tile.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'following_screen.g.dart';
-
-@riverpod
-Future<(IList<User>, IList<LightUser>)> _getFollowingAndOnlines(
-  _GetFollowingAndOnlinesRef ref,
-) async {
+final _getFollowingAndOnlinesProvider =
+    FutureProvider.autoDispose<(IList<User>, IList<LightUser>)>((ref) async {
   final following = await ref.watch(followingProvider.future);
   final onlines = await ref.watch(onlineFriendsProvider.future);
   return (following, onlines);
-}
+});
 
 class FollowingScreen extends StatelessWidget {
   const FollowingScreen({super.key});
@@ -75,8 +71,9 @@ class _Body extends ConsumerWidget {
                   itemBuilder: (context, index) {
                     final user = following[index];
                     return Slidable(
+                      dragStartBehavior: DragStartBehavior.start,
                       endActionPane: ActionPane(
-                        motion: const ScrollMotion(),
+                        motion: const StretchMotion(),
                         extentRatio: 0.3,
                         children: [
                           SlidableAction(

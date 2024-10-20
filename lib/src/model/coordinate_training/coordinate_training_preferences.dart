@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/model/common/game.dart';
-import 'package:lichess_mobile/src/model/settings/preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -15,6 +14,15 @@ class CoordinateTrainingPreferences extends _$CoordinateTrainingPreferences
   // ignore: avoid_public_notifier_properties
   @override
   final prefCategory = PrefCategory.coordinateTraining;
+
+  // ignore: avoid_public_notifier_properties
+  @override
+  CoordinateTrainingPrefs get defaults => CoordinateTrainingPrefs.defaults;
+
+  @override
+  CoordinateTrainingPrefs fromJson(Map<String, dynamic> json) {
+    return CoordinateTrainingPrefs.fromJson(json);
+  }
 
   @override
   CoordinateTrainingPrefs build() {
@@ -79,7 +87,7 @@ enum TrainingMode {
 @Freezed(fromJson: true, toJson: true)
 class CoordinateTrainingPrefs
     with _$CoordinateTrainingPrefs
-    implements SerializablePreferences {
+    implements Serializable {
   const CoordinateTrainingPrefs._();
 
   const factory CoordinateTrainingPrefs({

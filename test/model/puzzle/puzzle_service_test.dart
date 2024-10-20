@@ -55,9 +55,7 @@ void main() {
       expect(data?.unsolved.length, equals(3));
     });
 
-    test(
-        'if local queue is full, it will not download data but still try to fetch rating',
-        () async {
+    test('will not download data if local queue is full', () async {
       int nbReq = 0;
       final mockClient = MockClient((request) {
         nbReq++;
@@ -81,7 +79,7 @@ void main() {
       final next = await service.nextPuzzle(
         userId: null,
       );
-      expect(nbReq, equals(1));
+      expect(nbReq, equals(0));
       expect(next?.puzzle.puzzle.id, equals(const PuzzleId('pId3')));
       final data = await storage.fetch(userId: null);
       expect(data?.unsolved.length, equals(1));

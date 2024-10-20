@@ -2,8 +2,8 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
+import 'package:lichess_mobile/src/localizations.dart';
 import 'package:lichess_mobile/src/styles/puzzle_icons.dart';
-import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'puzzle_theme.freezed.dart';
@@ -20,71 +20,74 @@ class PuzzleThemeData with _$PuzzleThemeData {
 }
 
 enum PuzzleThemeKey {
-  mix,
-  advancedPawn,
-  advantage,
-  anastasiaMate,
-  arabianMate,
-  attackingF2F7,
-  attraction,
-  backRankMate,
-  bishopEndgame,
-  bodenMate,
-  capturingDefender,
-  castling,
-  clearance,
-  crushing,
-  defensiveMove,
-  deflection,
-  discoveredAttack,
-  doubleBishopMate,
-  doubleCheck,
-  dovetailMate,
-  equality,
-  endgame,
-  enPassant,
-  exposedKing,
-  fork,
-  hangingPiece,
-  hookMate,
-  interference,
-  intermezzo,
-  kingsideAttack,
-  knightEndgame,
-  long,
-  master,
-  masterVsMaster,
-  mate,
-  mateIn1,
-  mateIn2,
-  mateIn3,
-  mateIn4,
-  mateIn5,
-  smotheredMate,
-  middlegame,
-  oneMove,
-  opening,
-  pawnEndgame,
-  pin,
-  promotion,
-  queenEndgame,
-  queenRookEndgame,
-  queensideAttack,
-  quietMove,
-  rookEndgame,
-  sacrifice,
-  short,
-  skewer,
-  superGM,
-  trappedPiece,
-  underPromotion,
-  veryLong,
-  xRayAttack,
-  zugzwang,
-  // checkFirst,
+  mix(PuzzleIcons.mix),
+  advancedPawn(PuzzleIcons.advancedPawn),
+  advantage(PuzzleIcons.advantage),
+  anastasiaMate(PuzzleIcons.anastasiaMate),
+  arabianMate(PuzzleIcons.arabianMate),
+  attackingF2F7(PuzzleIcons.attackingF2F7),
+  attraction(PuzzleIcons.attraction),
+  backRankMate(PuzzleIcons.backRankMate),
+  bishopEndgame(PuzzleIcons.bishopEndgame),
+  bodenMate(PuzzleIcons.bodenMate),
+  capturingDefender(PuzzleIcons.capturingDefender),
+  castling(PuzzleIcons.castling),
+  clearance(PuzzleIcons.clearance),
+  crushing(PuzzleIcons.crushing),
+  defensiveMove(PuzzleIcons.defensiveMove),
+  deflection(PuzzleIcons.deflection),
+  discoveredAttack(PuzzleIcons.discoveredAttack),
+  doubleBishopMate(PuzzleIcons.doubleBishopMate),
+  doubleCheck(PuzzleIcons.doubleCheck),
+  dovetailMate(PuzzleIcons.dovetailMate),
+  equality(PuzzleIcons.equality),
+  endgame(PuzzleIcons.endgame),
+  enPassant(PuzzleIcons.enPassant),
+  exposedKing(PuzzleIcons.exposedKing),
+  fork(PuzzleIcons.fork),
+  hangingPiece(PuzzleIcons.hangingPiece),
+  hookMate(PuzzleIcons.hookMate),
+  interference(PuzzleIcons.interference),
+  intermezzo(PuzzleIcons.intermezzo),
+  kingsideAttack(PuzzleIcons.kingsideAttack),
+  knightEndgame(PuzzleIcons.knightEndgame),
+  long(PuzzleIcons.long),
+  master(PuzzleIcons.master),
+  masterVsMaster(PuzzleIcons.masterVsMaster),
+  mate(PuzzleIcons.mate),
+  mateIn1(PuzzleIcons.mate),
+  mateIn2(PuzzleIcons.mate),
+  mateIn3(PuzzleIcons.mate),
+  mateIn4(PuzzleIcons.mate),
+  mateIn5(PuzzleIcons.mate),
+  smotheredMate(PuzzleIcons.smotheredMate),
+  middlegame(PuzzleIcons.middlegame),
+  oneMove(PuzzleIcons.oneMove),
+  opening(PuzzleIcons.opening),
+  pawnEndgame(PuzzleIcons.pawnEndgame),
+  pin(PuzzleIcons.pin),
+  promotion(PuzzleIcons.promotion),
+  queenEndgame(PuzzleIcons.queenEndgame),
+  queenRookEndgame(PuzzleIcons.queenRookEndgame),
+  queensideAttack(PuzzleIcons.queensideAttack),
+  quietMove(PuzzleIcons.quietMove),
+  rookEndgame(PuzzleIcons.rookEndgame),
+  sacrifice(PuzzleIcons.sacrifice),
+  short(PuzzleIcons.short),
+  skewer(PuzzleIcons.skewer),
+  superGM(PuzzleIcons.superGM),
+  trappedPiece(PuzzleIcons.trappedPiece),
+  underPromotion(PuzzleIcons.underPromotion),
+  veryLong(PuzzleIcons.veryLong),
+  xRayAttack(PuzzleIcons.xRayAttack),
+  zugzwang(PuzzleIcons.zugzwang),
 
   // used internally to filter out unsupported keys
-  unsupported;
+  unsupported(PuzzleIcons.mix);
+
+  const PuzzleThemeKey(this.icon);
+
+  final IconData icon;
 
   PuzzleThemeL10n l10n(AppLocalizations l10n) {
     switch (this) {
@@ -407,7 +410,7 @@ typedef PuzzleThemeCategory = (String, List<PuzzleThemeKey>);
 IList<PuzzleThemeCategory> puzzleThemeCategories(
   PuzzleThemeCategoriesRef ref,
 ) {
-  final l10n = ref.watch(l10nProvider);
+  final l10n = ref.watch(localizationsProvider);
 
   return IList([
     (
@@ -524,132 +527,4 @@ class PuzzleThemeL10n {
   const PuzzleThemeL10n({required this.name, required this.description});
   final String name;
   final String description;
-}
-
-IconData puzzleThemeIcon(PuzzleThemeKey theme) {
-  switch (theme) {
-    case PuzzleThemeKey.mix:
-    case PuzzleThemeKey.unsupported:
-      return PuzzleIcons.mix;
-    case PuzzleThemeKey.advancedPawn:
-      return PuzzleIcons.advancedPawn;
-    case PuzzleThemeKey.advantage:
-      return PuzzleIcons.advantage;
-    case PuzzleThemeKey.anastasiaMate:
-      return PuzzleIcons.anastasiaMate;
-    case PuzzleThemeKey.arabianMate:
-      return PuzzleIcons.arabianMate;
-    case PuzzleThemeKey.attackingF2F7:
-      return PuzzleIcons.attackingF2F7;
-    case PuzzleThemeKey.attraction:
-      return PuzzleIcons.attraction;
-    case PuzzleThemeKey.backRankMate:
-      return PuzzleIcons.backRankMate;
-    case PuzzleThemeKey.bishopEndgame:
-      return PuzzleIcons.bishopEndgame;
-    case PuzzleThemeKey.bodenMate:
-      return PuzzleIcons.bodenMate;
-    case PuzzleThemeKey.capturingDefender:
-      return PuzzleIcons.capturingDefender;
-    case PuzzleThemeKey.castling:
-      return PuzzleIcons.castling;
-    case PuzzleThemeKey.clearance:
-      return PuzzleIcons.clearance;
-    case PuzzleThemeKey.crushing:
-      return PuzzleIcons.crushing;
-    case PuzzleThemeKey.defensiveMove:
-      return PuzzleIcons.defensiveMove;
-    case PuzzleThemeKey.deflection:
-      return PuzzleIcons.deflection;
-    case PuzzleThemeKey.discoveredAttack:
-      return PuzzleIcons.discoveredAttack;
-    case PuzzleThemeKey.doubleBishopMate:
-      return PuzzleIcons.doubleBishopMate;
-    case PuzzleThemeKey.doubleCheck:
-      return PuzzleIcons.doubleCheck;
-    case PuzzleThemeKey.dovetailMate:
-      return PuzzleIcons.dovetailMate;
-    case PuzzleThemeKey.equality:
-      return PuzzleIcons.equality;
-    case PuzzleThemeKey.endgame:
-      return PuzzleIcons.endgame;
-    case PuzzleThemeKey.enPassant:
-      return PuzzleIcons.enPassant;
-    case PuzzleThemeKey.exposedKing:
-      return PuzzleIcons.exposedKing;
-    case PuzzleThemeKey.fork:
-      return PuzzleIcons.fork;
-    case PuzzleThemeKey.hangingPiece:
-      return PuzzleIcons.hangingPiece;
-    case PuzzleThemeKey.hookMate:
-      return PuzzleIcons.hookMate;
-    case PuzzleThemeKey.interference:
-      return PuzzleIcons.interference;
-    case PuzzleThemeKey.intermezzo:
-      return PuzzleIcons.intermezzo;
-    case PuzzleThemeKey.kingsideAttack:
-      return PuzzleIcons.kingsideAttack;
-    case PuzzleThemeKey.knightEndgame:
-      return PuzzleIcons.knightEndgame;
-    case PuzzleThemeKey.long:
-      return PuzzleIcons.long;
-    case PuzzleThemeKey.master:
-      return PuzzleIcons.master;
-    case PuzzleThemeKey.masterVsMaster:
-      return PuzzleIcons.masterVsMaster;
-    case PuzzleThemeKey.mate:
-      return PuzzleIcons.mate;
-    case PuzzleThemeKey.mateIn1:
-      return PuzzleIcons.mate;
-    case PuzzleThemeKey.mateIn2:
-      return PuzzleIcons.mate;
-    case PuzzleThemeKey.mateIn3:
-      return PuzzleIcons.mate;
-    case PuzzleThemeKey.mateIn4:
-      return PuzzleIcons.mate;
-    case PuzzleThemeKey.mateIn5:
-      return PuzzleIcons.mate;
-    case PuzzleThemeKey.smotheredMate:
-      return PuzzleIcons.smotheredMate;
-    case PuzzleThemeKey.middlegame:
-      return PuzzleIcons.middlegame;
-    case PuzzleThemeKey.oneMove:
-      return PuzzleIcons.oneMove;
-    case PuzzleThemeKey.opening:
-      return PuzzleIcons.opening;
-    case PuzzleThemeKey.pawnEndgame:
-      return PuzzleIcons.pawnEndgame;
-    case PuzzleThemeKey.pin:
-      return PuzzleIcons.pin;
-    case PuzzleThemeKey.promotion:
-      return PuzzleIcons.promotion;
-    case PuzzleThemeKey.queenEndgame:
-      return PuzzleIcons.queenEndgame;
-    case PuzzleThemeKey.queenRookEndgame:
-      return PuzzleIcons.queenRookEndgame;
-    case PuzzleThemeKey.queensideAttack:
-      return PuzzleIcons.queensideAttack;
-    case PuzzleThemeKey.quietMove:
-      return PuzzleIcons.quietMove;
-    case PuzzleThemeKey.rookEndgame:
-      return PuzzleIcons.rookEndgame;
-    case PuzzleThemeKey.sacrifice:
-      return PuzzleIcons.sacrifice;
-    case PuzzleThemeKey.short:
-      return PuzzleIcons.short;
-    case PuzzleThemeKey.skewer:
-      return PuzzleIcons.skewer;
-    case PuzzleThemeKey.superGM:
-      return PuzzleIcons.superGM;
-    case PuzzleThemeKey.trappedPiece:
-      return PuzzleIcons.trappedPiece;
-    case PuzzleThemeKey.underPromotion:
-      return PuzzleIcons.underPromotion;
-    case PuzzleThemeKey.veryLong:
-      return PuzzleIcons.veryLong;
-    case PuzzleThemeKey.xRayAttack:
-      return PuzzleIcons.xRayAttack;
-    case PuzzleThemeKey.zugzwang:
-      return PuzzleIcons.zugzwang;
-  }
 }

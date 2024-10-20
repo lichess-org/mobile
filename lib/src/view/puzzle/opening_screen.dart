@@ -5,22 +5,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_angle.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_opening.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_providers.dart';
+import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
-import 'package:lichess_mobile/src/utils/connectivity.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'puzzle_screen.dart';
 
-part 'opening_screen.g.dart';
-
-@riverpod
-Future<(bool, IMap<String, int>, IList<PuzzleOpeningFamily>?)> _openings(
-  _OpeningsRef ref,
-) async {
+final _openingsProvider = FutureProvider.autoDispose<
+    (bool, IMap<String, int>, IList<PuzzleOpeningFamily>?)>((ref) async {
   final connectivity = await ref.watch(connectivityChangesProvider.future);
   final savedOpenings = await ref.watch(savedOpeningBatchesProvider.future);
   IList<PuzzleOpeningFamily>? onlineOpenings;
@@ -30,7 +25,7 @@ Future<(bool, IMap<String, int>, IList<PuzzleOpeningFamily>?)> _openings(
     onlineOpenings = null;
   }
   return (connectivity.isOnline, savedOpenings, onlineOpenings);
-}
+});
 
 class OpeningThemeScreen extends StatelessWidget {
   const OpeningThemeScreen({super.key});

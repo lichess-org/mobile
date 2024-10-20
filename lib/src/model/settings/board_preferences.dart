@@ -1,7 +1,6 @@
 import 'package:chessground/chessground.dart';
 import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/model/settings/preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/utils/color_palette.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -14,7 +13,14 @@ class BoardPreferences extends _$BoardPreferences
     with PreferencesStorage<BoardPrefs> {
   // ignore: avoid_public_notifier_properties
   @override
-  PrefCategory<BoardPrefs> get prefCategory => PrefCategory.board;
+  PrefCategory get prefCategory => PrefCategory.board;
+
+  // ignore: avoid_public_notifier_properties
+  @override
+  BoardPrefs get defaults => BoardPrefs.defaults;
+
+  @override
+  BoardPrefs fromJson(Map<String, dynamic> json) => BoardPrefs.fromJson(json);
 
   @override
   BoardPrefs build() {
@@ -87,7 +93,7 @@ class BoardPreferences extends _$BoardPreferences
 }
 
 @Freezed(fromJson: true, toJson: true)
-class BoardPrefs with _$BoardPrefs implements SerializablePreferences {
+class BoardPrefs with _$BoardPrefs implements Serializable {
   const BoardPrefs._();
 
   const factory BoardPrefs({

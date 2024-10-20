@@ -21,6 +21,22 @@ Future<User> user(UserRef ref, {required UserId id}) async {
 }
 
 @riverpod
+Future<IList<UserActivity>> userActivity(
+  UserActivityRef ref, {
+  required UserId id,
+}) async {
+  return ref.withClientCacheFor(
+    (client) => UserRepository(client).getActivity(id),
+    // cache is important because the associated widget is in a [ListView] and
+    // the provider may be instanciated multiple times in a short period of time
+    // (e.g. when scrolling)
+    // TODO: consider debouncing the request instead of caching it, or make the
+    // request in the parent widget and pass the result to the child
+    const Duration(minutes: 1),
+  );
+}
+
+@riverpod
 Future<(User, UserStatus)> userAndStatus(
   UserAndStatusRef ref, {
   required UserId id,

@@ -6,9 +6,9 @@ import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/eval.dart';
+import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:stream_transform/stream_transform.dart';
@@ -30,6 +30,7 @@ const engineSupportedVariants = {
   Variant.fromPosition,
 };
 
+/// A service to evaluate chess positions using an engine.
 class EvaluationService {
   EvaluationService(this.ref, {required this.maxMemory});
 
@@ -176,9 +177,8 @@ class EvaluationService {
 
 @Riverpod(keepAlive: true)
 EvaluationService evaluationService(EvaluationServiceRef ref) {
-  // requireValue is possible because cachedDataProvider is loaded before
-  // anything. See: lib/src/app.dart
-  final maxMemory = LichessBinding.instance.engineMaxMemoryInMb;
+  final maxMemory =
+      ref.read(preloadedDataProvider).requireValue.engineMaxMemoryInMb;
 
   final service = EvaluationService(ref, maxMemory: maxMemory);
   ref.onDispose(() {

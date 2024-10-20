@@ -1,11 +1,12 @@
 import 'dart:async';
 
 import 'package:deep_pick/deep_pick.dart';
-import 'package:lichess_mobile/src/binding.dart';
 import 'package:lichess_mobile/src/model/account/account_repository.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_repository.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
+import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
+import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/lobby/game_seek.dart';
 import 'package:lichess_mobile/src/model/lobby/lobby_repository.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -21,6 +22,7 @@ typedef ChallengeResponse = ({
   ChallengeDeclineReason? declineReason,
 });
 
+/// A provider for the [CreateGameService].
 @riverpod
 CreateGameService createGameService(CreateGameServiceRef ref) {
   final service = CreateGameService(Logger('CreateGameService'), ref: ref);
@@ -30,6 +32,7 @@ CreateGameService createGameService(CreateGameServiceRef ref) {
   return service;
 }
 
+/// A service to create a new game from the lobby or from a challenge.
 class CreateGameService {
   CreateGameService(this._log, {required this.ref});
 
@@ -106,15 +109,21 @@ class CreateGameService {
     await ref.withClient(
       (client) => LobbyRepository(client).createSeek(
         seek,
-        sri: LichessBinding.instance.sri,
+        sri: ref.read(preloadedDataProvider).requireValue.sri,
       ),
     );
   }
 
-  /// Create a new challenge game.
+  /// Create a new real time challenge.
   ///
-  /// Returns the game id or the decline reason if the challenge was declined.
-  Future<ChallengeResponse> newChallenge(ChallengeRequest challengeReq) async {
+  /// Will listen to the challenge socket and await the response from the destinated user.
+  /// Returns the challenge, along with [GameFullId] if the challenge was accepted,
+  /// or the [ChallengeDeclineReason] if the challenge was declined.
+  Future<ChallengeResponse> newRealTimeChallenge(
+    ChallengeRequest challengeReq,
+  ) async {
+    assert(challengeReq.timeControl == ChallengeTimeControlType.clock);
+
     if (_challengeConnection != null) {
       throw StateError('Already creating a game.');
     }
@@ -185,10 +194,26 @@ class CreateGameService {
     return completer.future;
   }
 
+  /// Create a new correspondence challenge.
+  ///
+  /// Returns the created challenge immediately. If the challenge is accepted,
+  /// a notification will be sent to the user when the game starts.
+  Future<Challenge> newCorrespondenceChallenge(
+    ChallengeRequest challenge,
+  ) async {
+    assert(challenge.timeControl == ChallengeTimeControlType.correspondence);
+
+    _log.info('Creating new correspondence challenge');
+
+    return ref.withClient(
+      (client) => ChallengeRepository(client).create(challenge),
+    );
+  }
+
   /// Cancel the current game creation.
   Future<void> cancelSeek() async {
     _log.info('Cancelling game creation');
-    final sri = LichessBinding.instance.sri;
+    final sri = ref.read(preloadedDataProvider).requireValue.sri;
     try {
       await LobbyRepository(lichessClient).cancelSeek(sri: sri);
     } catch (e) {

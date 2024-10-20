@@ -1,5 +1,4 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:lichess_mobile/src/model/settings/preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -11,7 +10,15 @@ class OverTheBoardPreferences extends _$OverTheBoardPreferences
     with PreferencesStorage<OverTheBoardPrefs> {
   // ignore: avoid_public_notifier_properties
   @override
-  PrefCategory<OverTheBoardPrefs> get prefCategory => PrefCategory.overTheBoard;
+  PrefCategory get prefCategory => PrefCategory.overTheBoard;
+
+  // ignore: avoid_public_notifier_properties
+  @override
+  OverTheBoardPrefs get defaults => OverTheBoardPrefs.defaults;
+
+  @override
+  OverTheBoardPrefs fromJson(Map<String, dynamic> json) =>
+      OverTheBoardPrefs.fromJson(json);
 
   @override
   OverTheBoardPrefs build() {
@@ -32,9 +39,7 @@ class OverTheBoardPreferences extends _$OverTheBoardPreferences
 }
 
 @Freezed(fromJson: true, toJson: true)
-class OverTheBoardPrefs
-    with _$OverTheBoardPrefs
-    implements SerializablePreferences {
+class OverTheBoardPrefs with _$OverTheBoardPrefs implements Serializable {
   const OverTheBoardPrefs._();
 
   const factory OverTheBoardPrefs({

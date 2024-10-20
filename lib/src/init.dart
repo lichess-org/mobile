@@ -4,11 +4,15 @@ import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/binding.dart';
+import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/db/secure_storage.dart';
+import 'package:lichess_mobile/src/model/notifications/notification_service.dart';
+import 'package:lichess_mobile/src/model/notifications/notifications.dart';
 import 'package:lichess_mobile/src/model/settings/board_preferences.dart';
-import 'package:lichess_mobile/src/model/settings/preferences.dart';
-import 'package:lichess_mobile/src/network/socket.dart';
+import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/utils/chessboard.dart';
 import 'package:lichess_mobile/src/utils/color_palette.dart';
 import 'package:lichess_mobile/src/utils/screen.dart';
@@ -43,6 +47,25 @@ Future<void> setupFirstLaunch() async {
 
     await prefs.setBool('first_run', false);
   }
+}
+
+Future<void> initializeLocalNotifications(Locale locale) async {
+  final l10n = await AppLocalizations.delegate.load(locale);
+  await FlutterLocalNotificationsPlugin().initialize(
+    InitializationSettings(
+      android: const AndroidInitializationSettings('logo_black'),
+      iOS: DarwinInitializationSettings(
+        requestBadgePermission: false,
+        notificationCategories: <DarwinNotificationCategory>[
+          ChallengeNotification.darwinPlayableVariantCategory(l10n),
+          ChallengeNotification.darwinUnplayableVariantCategory(l10n),
+        ],
+      ),
+    ),
+    onDidReceiveNotificationResponse:
+        NotificationService.onDidReceiveNotificationResponse,
+    // onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
+  );
 }
 
 Future<void> preloadPieceImages() async {

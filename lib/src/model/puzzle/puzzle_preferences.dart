@@ -1,8 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_difficulty.dart';
-import 'package:lichess_mobile/src/model/settings/preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
+import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'puzzle_preferences.freezed.dart';
@@ -14,6 +14,12 @@ class PuzzlePreferences extends _$PuzzlePreferences
   // ignore: avoid_public_notifier_properties
   @override
   final prefCategory = PrefCategory.puzzle;
+
+  @override
+  PuzzlePrefs defaults({LightUser? user}) => PuzzlePrefs.defaults(id: user?.id);
+
+  @override
+  PuzzlePrefs fromJson(Map<String, dynamic> json) => PuzzlePrefs.fromJson(json);
 
   @override
   PuzzlePrefs build() {
@@ -30,7 +36,7 @@ class PuzzlePreferences extends _$PuzzlePreferences
 }
 
 @Freezed(fromJson: true, toJson: true)
-class PuzzlePrefs with _$PuzzlePrefs implements SerializablePreferences {
+class PuzzlePrefs with _$PuzzlePrefs implements Serializable {
   const factory PuzzlePrefs({
     required UserId? id,
     required PuzzleDifficulty difficulty,

@@ -14,10 +14,12 @@ import 'package:lichess_mobile/src/model/common/time_increment.dart';
 import 'package:lichess_mobile/src/model/lobby/create_game_service.dart';
 import 'package:lichess_mobile/src/model/lobby/game_setup_preferences.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
+import 'package:lichess_mobile/src/navigation.dart';
 import 'package:lichess_mobile/src/styles/styles.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_screen.dart';
+import 'package:lichess_mobile/src/view/user/challenge_requests_screen.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_choice_picker.dart';
 import 'package:lichess_mobile/src/widgets/adaptive_text_field.dart';
 import 'package:lichess_mobile/src/widgets/board_preview.dart';
@@ -54,7 +56,7 @@ class _ChallengeBody extends ConsumerStatefulWidget {
 }
 
 class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
-  Future<ChallengeResponse>? _pendingCreateChallenge;
+  Future<Challenge>? _pendingCorrespondenceChallenge;
   final _controller = TextEditingController();
 
   String? fromPositionFenInput;
@@ -110,17 +112,18 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                       choices: [
                         ChallengeTimeControlType.clock,
                         ChallengeTimeControlType.correspondence,
-                        ChallengeTimeControlType.unlimited,
                       ],
                       selectedItem: preferences.timeControl,
                       labelBuilder: (ChallengeTimeControlType timeControl) =>
                           Text(
-                        timeControl == ChallengeTimeControlType.clock
-                            ? context.l10n.realTime
-                            : timeControl ==
-                                    ChallengeTimeControlType.correspondence
-                                ? context.l10n.correspondence
-                                : context.l10n.unlimited,
+                        switch (timeControl) {
+                          ChallengeTimeControlType.clock =>
+                            context.l10n.realTime,
+                          ChallengeTimeControlType.correspondence =>
+                            context.l10n.correspondence,
+                          ChallengeTimeControlType.unlimited =>
+                            context.l10n.unlimited,
+                        },
                       ),
                       onSelectedItemChanged: (ChallengeTimeControlType value) {
                         ref
@@ -372,7 +375,7 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                 ),
               const SizedBox(height: 20),
               FutureBuilder(
-                future: _pendingCreateChallenge,
+                future: _pendingCorrespondenceChallenge,
                 builder: (context, snapshot) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -399,16 +402,15 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                                 }
                               : null
                           : timeControl ==
-                                  ChallengeTimeControlType.correspondence
+                                      ChallengeTimeControlType.correspondence &&
+                                  snapshot.connectionState !=
+                                      ConnectionState.waiting
                               ? () async {
                                   final createGameService =
                                       ref.read(createGameServiceProvider);
-                                  showPlatformSnackbar(
-                                    context,
-                                    'Sent challenge to ${widget.user.name}',
-                                  );
-                                  _pendingCreateChallenge =
-                                      createGameService.newChallenge(
+                                  _pendingCorrespondenceChallenge =
+                                      createGameService
+                                          .newCorrespondenceChallenge(
                                     preferences.makeRequest(
                                       widget.user,
                                       preferences.variant !=
@@ -418,32 +420,24 @@ class _ChallengeBodyState extends ConsumerState<_ChallengeBody> {
                                     ),
                                   );
 
-                                  _pendingCreateChallenge!.then((value) {
-                                    if (!context.mounted) return;
+                                  await _pendingCorrespondenceChallenge!;
 
-                                    final (
-                                      gameFullId: fullId,
-                                      challenge: _,
-                                      :declineReason
-                                    ) = value;
+                                  if (!context.mounted) return;
 
-                                    if (fullId != null) {
-                                      pushPlatformRoute(
-                                        context,
-                                        rootNavigator: true,
-                                        builder: (BuildContext context) {
-                                          return GameScreen(
-                                            initialGameId: fullId,
-                                          );
-                                        },
-                                      );
-                                    } else {
-                                      showPlatformSnackbar(
-                                        context,
-                                        '${widget.user.name}: ${declineReason!.label(context.l10n)}',
-                                      );
-                                    }
-                                  });
+                                  Navigator.of(context).pop();
+
+                                  // Switch to the home tab
+                                  ref
+                                      .read(currentBottomTabProvider.notifier)
+                                      .state = BottomTab.home;
+
+                                  // Navigate to the challenges screen where
+                                  // the new correspondence challenge will be
+                                  // displayed
+                                  pushPlatformRoute(
+                                    context,
+                                    screen: const ChallengeRequestsScreen(),
+                                  );
                                 }
                               : null,
                       child: Text(

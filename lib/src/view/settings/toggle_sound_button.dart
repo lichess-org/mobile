@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/src/model/settings/general_preferences.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 
+/// A button that toggles the sound on and off.
 class ToggleSoundButton extends ConsumerWidget {
   const ToggleSoundButton({this.iconSize, super.key});
 

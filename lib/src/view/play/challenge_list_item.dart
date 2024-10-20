@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:dartchess/dartchess.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -67,6 +68,7 @@ class ChallengeListItem extends ConsumerWidget {
     return Container(
       color: color,
       child: Slidable(
+        dragStartBehavior: DragStartBehavior.start,
         endActionPane: ActionPane(
           motion: const StretchMotion(),
           extentRatio: 0.6,

@@ -130,7 +130,7 @@ class ChallengeRequest
     required bool rated,
     required SideChoice sideChoice,
     String? initialFen,
-  }) = _ChallengeSetup;
+  }) = _ChallengeRequest;
 
   @override
   Speed get speed => Speed.fromTimeIncrement(
@@ -140,16 +140,18 @@ class ChallengeRequest
         ),
       );
 
-  Map<String, dynamic> get toRequestBody => {
-        if (clock != null) 'clock.limit': clock!.time.inSeconds.toString(),
-        if (clock != null)
-          'clock.increment': clock!.increment.inSeconds.toString(),
-        if (days != null) 'days': days.toString(),
-        'rated': variant == Variant.fromPosition ? 'false' : rated.toString(),
-        'variant': variant.name,
-        if (variant == Variant.fromPosition) 'fen': initialFen,
-        if (sideChoice != SideChoice.random) 'color': sideChoice.name,
-      };
+  Map<String, dynamic> get toRequestBody {
+    return {
+      if (clock != null) 'clock.limit': clock!.time.inSeconds.toString(),
+      if (clock != null)
+        'clock.increment': clock!.increment.inSeconds.toString(),
+      if (days != null) 'days': days.toString(),
+      'rated': variant == Variant.fromPosition ? 'false' : rated.toString(),
+      'variant': variant.name,
+      if (variant == Variant.fromPosition) 'fen': initialFen,
+      if (sideChoice != SideChoice.random) 'color': sideChoice.name,
+    };
+  }
 }
 
 enum ChallengeDirection {

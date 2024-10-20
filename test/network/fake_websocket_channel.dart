@@ -17,9 +17,6 @@ class FakeWebSocketChannelFactory implements WebSocketChannelFactory {
     Map<String, dynamic>? headers,
     Duration timeout = const Duration(seconds: 1),
   }) async {
-    // in the real implementation the channel is returned after the [WebSocket]
-    // is connected, so we need to simulate this delay
-    await Future<void>.delayed(const Duration(milliseconds: 5));
     return createFunction();
   }
 }

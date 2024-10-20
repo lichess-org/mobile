@@ -14,13 +14,11 @@ import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/navigation.dart';
 import 'package:lichess_mobile/src/view/game/game_loading_board.dart';
+import 'package:lichess_mobile/src/view/game/game_screen_providers.dart';
 import 'package:lichess_mobile/src/widgets/platform_scaffold.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'game_body.dart';
 import 'game_common_widgets.dart';
-
-part 'game_screen.g.dart';
 
 /// Screen to play a game, or to show a challenge or to show current user's past games.
 ///
@@ -45,6 +43,7 @@ class GameScreen extends ConsumerStatefulWidget {
           'Either a seek, a challenge or an initial game id must be provided.',
         );
 
+  // tweak
   final GameSeek? seek;
 
   final GameFullId? initialGameId;
@@ -107,10 +106,13 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
 
   @override
   Widget build(BuildContext context) {
-    final gameProvider =
-        _loadGameProvider(widget.seek, widget.challenge, widget.initialGameId);
+    final provider = currentGameProvider(
+      widget.seek,
+      widget.challenge,
+      widget.initialGameId,
+    );
 
-    return ref.watch(gameProvider).when(
+    return ref.watch(provider).when(
       data: (data) {
         final (
           gameFullId: gameId,
@@ -129,11 +131,11 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
                 blackClockKey: _blackClockKey,
                 boardKey: _boardKey,
                 onLoadGameCallback: (id) {
-                  ref.read(gameProvider.notifier).loadGame(id);
+                  ref.read(provider.notifier).loadGame(id);
                 },
                 onNewOpponentCallback: (game) {
                   if (widget.source == _GameSource.lobby) {
-                    ref.read(gameProvider.notifier).newOpponent();
+                    ref.read(provider.notifier).newOpponent();
                   } else {
                     final savedSetup = ref.read(gameSetupPreferencesProvider);
                     pushReplacementPlatformRoute(
@@ -204,53 +206,5 @@ class _GameScreenState extends ConsumerState<GameScreen> with RouteAware {
         );
       },
     );
-  }
-}
-
-@riverpod
-class _LoadGame extends _$LoadGame {
-  @override
-  Future<ChallengeResponse> build(
-    GameSeek? seek,
-    ChallengeRequest? challenge,
-    GameFullId? gameId,
-  ) {
-    assert(
-      gameId != null || seek != null || challenge != null,
-      'Either a seek, challenge or a game id must be provided.',
-    );
-
-    final service = ref.watch(createGameServiceProvider);
-
-    if (seek != null) {
-      return service
-          .newLobbyGame(seek)
-          .then((id) => (gameFullId: id, challenge: null, declineReason: null));
-    } else if (challenge != null) {
-      return service.newChallenge(challenge);
-    }
-
-    return Future.value(
-      (gameFullId: gameId!, challenge: null, declineReason: null),
-    );
-  }
-
-  /// Search for a new opponent (lobby only).
-  Future<void> newOpponent() async {
-    if (seek != null) {
-      final service = ref.read(createGameServiceProvider);
-      state = const AsyncValue.loading();
-      state = AsyncValue.data(
-        await service.newLobbyGame(seek!).then(
-              (id) => (gameFullId: id, challenge: null, declineReason: null),
-            ),
-      );
-    }
-  }
-
-  /// Load a game from its id.
-  void loadGame(GameFullId id) {
-    state =
-        AsyncValue.data((gameFullId: id, challenge: null, declineReason: null));
   }
 }

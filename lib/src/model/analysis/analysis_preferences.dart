@@ -1,6 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:lichess_mobile/src/model/engine/evaluation_service.dart';
-import 'package:lichess_mobile/src/model/settings/preferences.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -13,6 +12,14 @@ class AnalysisPreferences extends _$AnalysisPreferences
   // ignore: avoid_public_notifier_properties
   @override
   final prefCategory = PrefCategory.analysis;
+
+  // ignore: avoid_public_notifier_properties
+  @override
+  AnalysisPrefs get defaults => AnalysisPrefs.defaults;
+
+  @override
+  AnalysisPrefs fromJson(Map<String, dynamic> json) =>
+      AnalysisPrefs.fromJson(json);
 
   @override
   AnalysisPrefs build() {
@@ -79,7 +86,7 @@ class AnalysisPreferences extends _$AnalysisPreferences
 }
 
 @Freezed(fromJson: true, toJson: true)
-class AnalysisPrefs with _$AnalysisPrefs implements SerializablePreferences {
+class AnalysisPrefs with _$AnalysisPrefs implements Serializable {
   const AnalysisPrefs._();
 
   const factory AnalysisPrefs({

@@ -31,13 +31,13 @@ class AppBackgroundModeScreen extends StatelessWidget {
     );
   }
 
-  static String themeTitle(BuildContext context, ThemeMode theme) {
+  static String themeTitle(BuildContext context, BackgroundThemeMode theme) {
     switch (theme) {
-      case ThemeMode.system:
+      case BackgroundThemeMode.system:
         return context.l10n.deviceTheme;
-      case ThemeMode.dark:
+      case BackgroundThemeMode.dark:
         return context.l10n.dark;
-      case ThemeMode.light:
+      case BackgroundThemeMode.light:
         return context.l10n.light;
     }
   }
@@ -50,15 +50,15 @@ class _Body extends ConsumerWidget {
       generalPreferencesProvider.select((state) => state.themeMode),
     );
 
-    void onChanged(ThemeMode? value) => ref
+    void onChanged(BackgroundThemeMode? value) => ref
         .read(generalPreferencesProvider.notifier)
-        .setThemeMode(value ?? ThemeMode.system);
+        .setThemeMode(value ?? BackgroundThemeMode.system);
 
     return SafeArea(
       child: ListView(
         children: [
           ChoicePicker(
-            choices: ThemeMode.values,
+            choices: BackgroundThemeMode.values,
             selectedItem: themeMode,
             titleBuilder: (t) =>
                 Text(AppBackgroundModeScreen.themeTitle(context, t)),

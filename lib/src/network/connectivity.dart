@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/widgets.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:http/http.dart';
 import 'package:lichess_mobile/src/constants.dart';
 import 'package:lichess_mobile/src/network/http.dart';
@@ -10,7 +9,6 @@ import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'connectivity.freezed.dart';
 part 'connectivity.g.dart';
 
 final _logger = Logger('Connectivity');
@@ -71,7 +69,8 @@ class ConnectivityChanges extends _$ConnectivityChanges {
 
       state = AsyncValue.data(newConn);
     } else {
-      state = AsyncValue.data(state.requireValue.copyWith(appState: appState));
+      final (:isOnline, appState: _) = state.requireValue;
+      state = AsyncValue.data((isOnline: isOnline, appState: appState));
     }
   }
 
@@ -89,7 +88,7 @@ class ConnectivityChanges extends _$ConnectivityChanges {
     if (newIsOnline != wasOnline) {
       _logger.info('Connectivity status: $result, isOnline: $isOnline');
       state = AsyncValue.data(
-        ConnectivityStatus(
+        (
           isOnline: newIsOnline,
           appState: state.valueOrNull?.appState,
         ),
@@ -101,7 +100,7 @@ class ConnectivityChanges extends _$ConnectivityChanges {
     List<ConnectivityResult> result,
     AppLifecycleState? appState,
   ) async {
-    final status = ConnectivityStatus(
+    final status = (
       isOnline: await isOnline(_defaultClient),
       appState: appState,
     );
@@ -110,13 +109,10 @@ class ConnectivityChanges extends _$ConnectivityChanges {
   }
 }
 
-@freezed
-class ConnectivityStatus with _$ConnectivityStatus {
-  const factory ConnectivityStatus({
-    required bool isOnline,
-    AppLifecycleState? appState,
-  }) = _ConnectivityStatus;
-}
+typedef ConnectivityStatus = ({
+  bool isOnline,
+  AppLifecycleState? appState,
+});
 
 final _internetCheckUris = [
   Uri.parse('https://www.gstatic.com/generate_204'),
@@ -177,6 +173,7 @@ extension AsyncValueConnectivity on AsyncValue<ConnectivityStatus> {
     required R Function() offline,
   }) {
     return maybeWhen(
+      skipLoadingOnReload: true,
       data: (status) => status.isOnline ? online() : offline(),
       orElse: offline,
     );
@@ -203,6 +200,7 @@ extension AsyncValueConnectivity on AsyncValue<ConnectivityStatus> {
     required R Function() loading,
   }) {
     return when(
+      skipLoadingOnReload: true,
       data: (status) => status.isOnline ? online() : offline(),
       loading: loading,
       error: (error, stack) => offline(),

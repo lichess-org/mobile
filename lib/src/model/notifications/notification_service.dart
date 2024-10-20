@@ -6,14 +6,15 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lichess_mobile/l10n/l10n.dart';
 import 'package:lichess_mobile/src/binding.dart';
+import 'package:lichess_mobile/src/localizations.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/challenge/challenge_service.dart';
+import 'package:lichess_mobile/src/model/common/preloaded_data.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
 import 'package:lichess_mobile/src/model/notifications/notifications.dart';
+import 'package:lichess_mobile/src/network/connectivity.dart';
 import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/utils/badge_service.dart';
-import 'package:lichess_mobile/src/utils/connectivity.dart';
-import 'package:lichess_mobile/src/utils/l10n.dart';
 import 'package:logging/logging.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -65,7 +66,7 @@ class NotificationService {
   /// Whether the device has been registered for push notifications.
   bool _registeredDevice = false;
 
-  AppLocalizations get _l10n => _ref.read(l10nProvider).strings;
+  AppLocalizations get _l10n => _ref.read(localizationsProvider).strings;
 
   FlutterLocalNotificationsPlugin get _notificationDisplay =>
       _ref.read(notificationDisplayProvider);
@@ -344,7 +345,7 @@ class NotificationService {
 
     final lichessBinding = AppLichessBinding.ensureInitialized();
     await lichessBinding.preloadSharedPreferences();
-    await lichessBinding.preloadData();
+    await ref.read(preloadedDataProvider.future);
 
     try {
       await ref.read(notificationServiceProvider)._processFcmMessage(

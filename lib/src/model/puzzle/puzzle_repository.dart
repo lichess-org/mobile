@@ -475,18 +475,20 @@ IList<PuzzleOpeningFamily> _puzzleOpeningFromPick(RequiredPick pick) {
   return pick('openings').asListOrThrow((openingPick) {
     final familyPick = openingPick('family');
     final openings = openingPick('openings').asListOrNull(
-      (openPick) => PuzzleOpeningData(
+      (openPick) => (
         key: openPick('key').asStringOrThrow(),
         name: openPick('name').asStringOrThrow(),
         count: openPick('count').asIntOrThrow(),
       ),
     );
 
-    return PuzzleOpeningFamily(
+    return (
       key: familyPick('key').asStringOrThrow(),
       name: familyPick('name').asStringOrThrow(),
       count: familyPick('count').asIntOrThrow(),
-      openings: openings != null ? openings.toIList() : IList(const []),
+      openings: openings != null
+          ? openings.toIList()
+          : IList<PuzzleOpeningData>(const []),
     );
   }).toIList();
 }

@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:fake_async/fake_async.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/testing.dart';
 import 'package:lichess_mobile/src/model/auth/auth_session.dart';
 import 'package:lichess_mobile/src/model/auth/bearer.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
@@ -283,10 +284,22 @@ void main() {
     test(
         'when receiving a 401, will test session token and delete session if not valid anymore',
         () async {
+      int nbTokenTestRequests = 0;
       final container = await makeContainer(
         overrides: [
           httpClientFactoryProvider.overrideWith((ref) {
             return FakeHttpClientFactory(() => FakeClient());
+          }),
+          defaultClientProvider.overrideWith((ref) {
+            return MockClient((request) async {
+              if (request.url.path == '/api/token/test') {
+                nbTokenTestRequests++;
+                final token = request.body.split(',')[0];
+                final response = '{"$token": null}';
+                return http.Response(response, 200);
+              }
+              return http.Response('', 404);
+            });
           }),
         ],
         userSession: const AuthSessionState(
@@ -307,7 +320,7 @@ void main() {
         async.flushMicrotasks();
 
         final requests = FakeClient.verifyRequests();
-        expect(requests.length, 2);
+        expect(requests.length, 1);
         expect(
           requests.first,
           isA<http.BaseRequest>().having(
@@ -317,27 +330,65 @@ void main() {
           ),
         );
 
-        expect(
-          requests.last,
-          isA<http.BaseRequest>()
-              .having(
-                (r) => r.url.host,
-                'host',
-                'lichess.dev',
-              )
-              .having(
-                (r) => r.url.path,
-                'path',
-                '/api/token/test',
-              )
-              .having(
-                (r) => r.headers['Authorization'],
-                'Authorization',
-                null,
-              ),
-        );
+        expect(nbTokenTestRequests, 1);
 
         expect(container.read(authSessionProvider), isNull);
+      });
+    });
+
+    test(
+        'when receiving a 401, will test session token and keep session if still valid',
+        () async {
+      int nbTokenTestRequests = 0;
+      final container = await makeContainer(
+        overrides: [
+          httpClientFactoryProvider.overrideWith((ref) {
+            return FakeHttpClientFactory(() => FakeClient());
+          }),
+          defaultClientProvider.overrideWith((ref) {
+            return MockClient((request) async {
+              if (request.url.path == '/api/token/test') {
+                nbTokenTestRequests++;
+                final token = request.body.split(',')[0];
+                final response =
+                    '{"$token": {"userId": "test-user-id","scope": "web:mobile", "expires":1760704968038}}';
+                return http.Response(response, 200);
+              }
+              return http.Response('', 404);
+            });
+          }),
+        ],
+        userSession: const AuthSessionState(
+          token: 'test-token',
+          user: LightUser(id: UserId('test-user-id'), name: 'test-username'),
+        ),
+      );
+
+      fakeAsync((async) {
+        final session = container.read(authSessionProvider);
+        expect(session, isNotNull);
+
+        final client = container.read(lichessClientProvider);
+        try {
+          client.get(Uri(path: '/will/return/401'));
+        } on ServerException catch (_) {}
+
+        async.flushMicrotasks();
+
+        final requests = FakeClient.verifyRequests();
+        expect(requests.length, 1);
+        expect(
+          requests.first,
+          isA<http.BaseRequest>().having(
+            (r) => r.headers['Authorization'],
+            'Authorization',
+            'Bearer ${signBearerToken('test-token')}',
+          ),
+        );
+
+        expect(nbTokenTestRequests, 1);
+
+        expect(container.read(authSessionProvider), equals(session));
       });
     });
   });
@@ -359,10 +410,14 @@ class FakeClient extends http.BaseClient {
   @override
   Future<http.StreamedResponse> send(http.BaseRequest request) {
     _requests.add(request);
-    return Future.value(_responseBasedOnPath(request));
+
+    return _responseBasedOnPath(request, request.finalize());
   }
 
-  http.StreamedResponse _responseBasedOnPath(http.BaseRequest request) {
+  Future<http.StreamedResponse> _responseBasedOnPath(
+    http.BaseRequest request,
+    http.ByteStream bodyStream,
+  ) async {
     switch (request.url.path) {
       case '/will/throw/socket/exception':
         throw const SocketException('no internet');
@@ -384,14 +439,6 @@ class FakeClient extends http.BaseClient {
         return http.StreamedResponse(_streamBody('204'), 204);
       case '/will/return/301':
         return http.StreamedResponse(_streamBody('301'), 301);
-      case '/api/token/test':
-        final token = request.headers['Authorization'];
-        final response = '''
-      {
-        "$token": null
-      }
-''';
-        return http.StreamedResponse(_streamBody(response), 200);
       default:
         return http.StreamedResponse(_streamBody('200'), 200);
     }

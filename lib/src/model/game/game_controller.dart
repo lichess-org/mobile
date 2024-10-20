@@ -16,6 +16,7 @@ import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/service/move_feedback.dart';
 import 'package:lichess_mobile/src/model/common/service/sound_service.dart';
+import 'package:lichess_mobile/src/model/common/socket.dart';
 import 'package:lichess_mobile/src/model/common/speed.dart';
 import 'package:lichess_mobile/src/model/correspondence/correspondence_service.dart';
 import 'package:lichess_mobile/src/model/game/archived_game.dart';
@@ -1023,7 +1024,10 @@ class GameState with _$GameState {
       (game.prefs?.enablePremove ?? true);
   bool get canAutoQueen =>
       autoQueenSettingOverride ?? (game.prefs?.autoQueen == AutoQueen.always);
-  bool get canAutoQueenOnPremove => game.prefs?.autoQueen == AutoQueen.premove;
+  bool get canAutoQueenOnPremove =>
+      autoQueenSettingOverride ??
+      (game.prefs?.autoQueen == AutoQueen.always ||
+          game.prefs?.autoQueen == AutoQueen.premove);
   bool get shouldConfirmResignAndDrawOffer => game.prefs?.confirmResign ?? true;
   bool get shouldConfirmMove =>
       moveConfirmSettingOverride ?? game.prefs?.submitMove ?? false;
