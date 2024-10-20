@@ -80,14 +80,6 @@ typedef StudyFeatures = ({
   bool sticky,
 });
 
-StudyFeatures studyFeaturesFromJson(Map<String, Object?> json) {
-  return (
-    cloneable: json['cloneable'] as bool? ?? false,
-    chat: json['chat'] as bool? ?? false,
-    sticky: json['sticky'] as bool? ?? false,
-  );
-}
-
 @Freezed(fromJson: true)
 class StudyChapter with _$StudyChapter {
   const StudyChapter._();
