@@ -68,6 +68,9 @@ class ChallengeListItem extends ConsumerWidget {
     return Container(
       color: color,
       child: Slidable(
+        enabled: onAccept != null ||
+            onDecline != null ||
+            (isMyChallenge && onCancel != null),
         dragStartBehavior: DragStartBehavior.start,
         endActionPane: ActionPane(
           motion: const StretchMotion(),

@@ -219,7 +219,10 @@ class _BodyState extends ConsumerState<_Body> {
                     : PlayerSide.none,
                 isCheck: position.isCheck,
                 sideToMove: sideToMove,
-                validMoves: makeLegalMoves(position),
+                validMoves: makeLegalMoves(
+                  position,
+                  isChess960: game.variant == Variant.chess960,
+                ),
                 promotionMove: promotionMove,
                 onMove: (move, {isDrop, captured}) {
                   onUserMove(move);

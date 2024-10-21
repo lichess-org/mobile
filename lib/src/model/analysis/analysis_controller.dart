@@ -20,6 +20,7 @@ import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
+import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'analysis_controller.freezed.dart';
@@ -64,7 +65,8 @@ class AnalysisOptions with _$AnalysisOptions {
 }
 
 @riverpod
-class AnalysisController extends _$AnalysisController {
+class AnalysisController extends _$AnalysisController
+    implements PgnTreeNotifier {
   late Root _root;
 
   final _engineEvalDebounce = Debouncer(const Duration(milliseconds: 150));
@@ -287,10 +289,12 @@ class AnalysisController extends _$AnalysisController {
     _setPath(state.currentPath.penultimate, replaying: true);
   }
 
+  @override
   void userJump(UciPath path) {
     _setPath(path);
   }
 
+  @override
   void expandVariations(UciPath path) {
     final node = _root.nodeAt(path);
     for (final child in node.children) {
@@ -302,8 +306,9 @@ class AnalysisController extends _$AnalysisController {
     state = state.copyWith(root: _root.view);
   }
 
+  @override
   void collapseVariations(UciPath path) {
-    final node = _root.parentAt(path);
+    final node = _root.nodeAt(path);
 
     for (final child in node.children) {
       child.isHidden = true;
@@ -312,6 +317,7 @@ class AnalysisController extends _$AnalysisController {
     state = state.copyWith(root: _root.view);
   }
 
+  @override
   void promoteVariation(UciPath path, bool toMainline) {
     _root.promoteAt(path, toMainline: toMainline);
     state = state.copyWith(
@@ -320,6 +326,7 @@ class AnalysisController extends _$AnalysisController {
     );
   }
 
+  @override
   void deleteFromHere(UciPath path) {
     _root.deleteAt(path);
     _setPath(path.penultimate, shouldRecomputeRootView: true);
@@ -762,8 +769,10 @@ class AnalysisState with _$AnalysisState {
   /// Whether the analysis is for a lichess game.
   bool get isLichessGameAnalysis => gameAnyId != null;
 
-  IMap<Square, ISet<Square>> get validMoves =>
-      makeLegalMoves(currentNode.position);
+  IMap<Square, ISet<Square>> get validMoves => makeLegalMoves(
+        currentNode.position,
+        isChess960: variant == Variant.chess960,
+      );
 
   /// Whether the user can request server analysis.
   ///

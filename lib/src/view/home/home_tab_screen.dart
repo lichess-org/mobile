@@ -85,25 +85,23 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
 
         // Show the welcome screen if there are no recent games and no stored games
         // (i.e. first installation, or the user has never played a game)
-        if (emptyRecent) {
-          return _WelcomeScreen(
-            session: session,
-            status: status,
-            isTablet: isTablet,
-          );
-        }
-
-        final widgets = isTablet
-            ? _tabletWidgets(
+        final widgets = emptyRecent
+            ? _welcomeScreenWidgets(
                 session: session,
                 status: status,
-                ongoingGames: ongoingGames,
+                isTablet: isTablet,
               )
-            : _handsetWidgets(
-                session: session,
-                status: status,
-                ongoingGames: ongoingGames,
-              );
+            : isTablet
+                ? _tabletWidgets(
+                    session: session,
+                    status: status,
+                    ongoingGames: ongoingGames,
+                  )
+                : _handsetWidgets(
+                    session: session,
+                    status: status,
+                    ongoingGames: ongoingGames,
+                  );
 
         if (Theme.of(context).platform == TargetPlatform.iOS) {
           return CupertinoPageScaffold(
@@ -261,6 +259,80 @@ class _HomeScreenState extends ConsumerState<HomeTabScreen> with RouteAware {
     ];
   }
 
+  List<Widget> _welcomeScreenWidgets({
+    required AuthSessionState? session,
+    required ConnectivityStatus status,
+    required bool isTablet,
+  }) {
+    final welcomeWidgets = [
+      Padding(
+        padding: Styles.horizontalBodyPadding,
+        child: LichessMessage(
+          style: Theme.of(context).platform == TargetPlatform.iOS
+              ? const TextStyle(fontSize: 18)
+              : Theme.of(context).textTheme.bodyLarge,
+          textAlign: TextAlign.center,
+        ),
+      ),
+      const SizedBox(height: 24.0),
+      if (session == null) ...[
+        const Center(child: _SignInWidget()),
+        const SizedBox(height: 16.0),
+      ],
+      if (Theme.of(context).platform != TargetPlatform.iOS &&
+          (session == null || session.user.isPatron != true)) ...[
+        Center(
+          child: SecondaryButton(
+            semanticsLabel: context.l10n.patronDonate,
+            onPressed: () {
+              launchUrl(Uri.parse('https://lichess.org/patron'));
+            },
+            child: Text(context.l10n.patronDonate),
+          ),
+        ),
+        const SizedBox(height: 16.0),
+      ],
+      Center(
+        child: SecondaryButton(
+          semanticsLabel: context.l10n.aboutX('Lichess...'),
+          onPressed: () {
+            launchUrl(Uri.parse('https://lichess.org/about'));
+          },
+          child: Text(context.l10n.aboutX('Lichess...')),
+        ),
+      ),
+    ];
+
+    return [
+      if (isTablet)
+        Row(
+          children: [
+            if (status.isOnline)
+              const Flexible(
+                child: _TabletCreateAGameSection(),
+              ),
+            Flexible(
+              child: Column(
+                children: welcomeWidgets,
+              ),
+            ),
+          ],
+        )
+      else ...[
+        if (status.isOnline)
+          const _EditableWidget(
+            widget: EnabledWidget.quickPairing,
+            shouldShow: true,
+            child: Padding(
+              padding: Styles.bodySectionPadding,
+              child: QuickGameMatrix(),
+            ),
+          ),
+        ...welcomeWidgets,
+      ],
+    ];
+  }
+
   List<Widget> _tabletWidgets({
     required AuthSessionState? session,
     required ConnectivityStatus status,
@@ -400,108 +472,6 @@ class _EditableWidget extends ConsumerWidget {
         : isEnabled
             ? child
             : const SizedBox.shrink();
-  }
-}
-
-class _WelcomeScreen extends StatelessWidget {
-  const _WelcomeScreen({
-    required this.session,
-    required this.status,
-    required this.isTablet,
-  });
-
-  final AuthSessionState? session;
-  final ConnectivityStatus status;
-  final bool isTablet;
-
-  @override
-  Widget build(BuildContext context) {
-    final welcomeWidgets = [
-      Padding(
-        padding: Styles.horizontalBodyPadding,
-        child: LichessMessage(
-          style: Theme.of(context).platform == TargetPlatform.iOS
-              ? const TextStyle(fontSize: 18)
-              : Theme.of(context).textTheme.bodyLarge,
-          textAlign: TextAlign.center,
-        ),
-      ),
-      const SizedBox(height: 24.0),
-      if (session == null) ...[
-        const Center(child: _SignInWidget()),
-        const SizedBox(height: 16.0),
-      ],
-      if (Theme.of(context).platform != TargetPlatform.iOS &&
-          (session == null || session!.user.isPatron != true)) ...[
-        Center(
-          child: SecondaryButton(
-            semanticsLabel: context.l10n.patronDonate,
-            onPressed: () {
-              launchUrl(Uri.parse('https://lichess.org/patron'));
-            },
-            child: Text(context.l10n.patronDonate),
-          ),
-        ),
-        const SizedBox(height: 16.0),
-      ],
-      Center(
-        child: SecondaryButton(
-          semanticsLabel: context.l10n.aboutX('Lichess...'),
-          onPressed: () {
-            launchUrl(Uri.parse('https://lichess.org/about'));
-          },
-          child: Text(context.l10n.aboutX('Lichess...')),
-        ),
-      ),
-    ];
-
-    final emptyScreenWidgets = [
-      if (isTablet)
-        Row(
-          children: [
-            if (status.isOnline)
-              const Flexible(
-                child: _TabletCreateAGameSection(),
-              ),
-            Flexible(
-              child: Column(
-                children: welcomeWidgets,
-              ),
-            ),
-          ],
-        )
-      else ...[
-        if (status.isOnline)
-          const _EditableWidget(
-            widget: EnabledWidget.quickPairing,
-            shouldShow: true,
-            child: Padding(
-              padding: Styles.bodySectionPadding,
-              child: QuickGameMatrix(),
-            ),
-          ),
-        ...welcomeWidgets,
-      ],
-    ];
-
-    return Theme.of(context).platform == TargetPlatform.android
-        ? Center(
-            child: ListView(shrinkWrap: true, children: emptyScreenWidgets),
-          )
-        : SliverFillRemaining(
-            child: Padding(
-              padding: EdgeInsets.only(
-                bottom: MediaQuery.viewPaddingOf(context).vertical + 50.0,
-              ),
-              child: Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: emptyScreenWidgets,
-                ),
-              ),
-            ),
-          );
   }
 }
 

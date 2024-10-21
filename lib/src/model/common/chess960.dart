@@ -7,14 +7,10 @@ final _random = Random.secure();
 Position randomChess960Position() {
   final rank8 = _positions[_random.nextInt(_positions.length)];
 
-  return Chess(
-    board: Board.parseFen(
-      '$rank8/pppppppp/8/8/8/8/PPPPPPPP/${rank8.toUpperCase()}',
+  return Chess.fromSetup(
+    Setup.parseFen(
+      '$rank8/pppppppp/8/8/8/8/PPPPPPPP/${rank8.toUpperCase()} w KQkq - 0 1',
     ),
-    turn: Side.white,
-    castles: Castles.standard,
-    halfmoves: 0,
-    fullmoves: 1,
   );
 }
 

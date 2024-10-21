@@ -143,6 +143,51 @@ void main() {
       );
     });
 
+    testWidgets('support chess960 castling rights', (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const BoardEditorScreen(),
+      );
+      await tester.pumpWidget(app);
+
+      final container = ProviderScope.containerOf(
+        tester.element(find.byType(ChessboardEditor)),
+      );
+      final controllerProvider = boardEditorControllerProvider(null);
+
+      container
+          .read(controllerProvider.notifier)
+          .loadFen('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/4RK1R');
+
+      expect(
+        container.read(controllerProvider).fen,
+        'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/4RK1R w KQkq - 0 1',
+      );
+    });
+
+    testWidgets('Castling rights ignored when king is not in backrank',
+        (tester) async {
+      final app = await makeTestProviderScopeApp(
+        tester,
+        home: const BoardEditorScreen(),
+      );
+      await tester.pumpWidget(app);
+
+      final container = ProviderScope.containerOf(
+        tester.element(find.byType(ChessboardEditor)),
+      );
+      final controllerProvider = boardEditorControllerProvider(null);
+
+      container
+          .read(controllerProvider.notifier)
+          .loadFen('rnbqkbnr/pppppppp/8/8/8/5K2/PPPPPPPP/4R2R');
+
+      expect(
+        container.read(controllerProvider).fen,
+        'rnbqkbnr/pppppppp/8/8/8/5K2/PPPPPPPP/4R2R w kq - 0 1',
+      );
+    });
+
     testWidgets('Possible en passant squares are calculated correctly',
         (tester) async {
       final app = await makeTestProviderScopeApp(

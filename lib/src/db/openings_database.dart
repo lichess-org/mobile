@@ -53,5 +53,8 @@ Future<Database> _openDb(String path) async {
     await File(path).writeAsBytes(bytes, flush: true);
   }
 
-  return openDatabase(path, readOnly: true);
+  return databaseFactory.openDatabase(
+    path,
+    options: OpenDatabaseOptions(readOnly: true),
+  );
 }

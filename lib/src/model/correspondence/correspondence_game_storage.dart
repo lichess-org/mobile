@@ -79,29 +79,27 @@ class CorrespondenceGameStorage {
   /// Fetches all correspondence games with a registered move.
   Future<IList<(DateTime, OfflineCorrespondenceGame)>>
       fetchGamesWithRegisteredMove(UserId? userId) async {
-    final sqlVersion = await ref.read(sqliteVersionProvider.future);
-    if (sqlVersion != null && sqlVersion >= 338000) {
+    try {
       final list = await _db.query(
         kCorrespondenceStorageTable,
         where: "json_extract(data, '\$.registeredMoveAtPgn') IS NOT NULL",
       );
       return _decodeGames(list);
+    } catch (e) {
+      final list = await _db.query(
+        kCorrespondenceStorageTable,
+        where: 'userId = ? AND data LIKE ?',
+        whereArgs: [
+          '${userId ?? kCorrespondenceStorageAnonId}',
+          '%status":"started"%',
+        ],
+      );
+
+      return _decodeGames(list).where((e) {
+        final (_, game) = e;
+        return game.registeredMoveAtPgn != null;
+      }).toIList();
     }
-
-    final list = await _db.query(
-      kCorrespondenceStorageTable,
-      // where: "json_extract(data, '\$.registeredMoveAtPgn') IS NOT NULL",
-      where: 'userId = ? AND data LIKE ?',
-      whereArgs: [
-        '${userId ?? kCorrespondenceStorageAnonId}',
-        '%status":"started"%',
-      ],
-    );
-
-    return _decodeGames(list).where((e) {
-      final (_, game) = e;
-      return game.registeredMoveAtPgn != null;
-    }).toIList();
   }
 
   Future<OfflineCorrespondenceGame?> fetch({

@@ -12,7 +12,6 @@ import '../../test_container.dart';
 
 void main() {
   final dbFactory = databaseFactoryFfi;
-  sqfliteFfiInit();
 
   group('PuzzleHistoryStorage', () {
     test('save and fetch data', () async {
