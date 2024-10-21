@@ -16,7 +16,7 @@ import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/model/settings/preferences_storage.dart';
 import 'package:lichess_mobile/src/model/user/user.dart';
 import 'package:lichess_mobile/src/view/analysis/analysis_screen.dart';
-import 'package:lichess_mobile/src/view/analysis/tree_view.dart';
+import 'package:lichess_mobile/src/view/pgn/pgn_tree_view.dart';
 import 'package:lichess_mobile/src/widgets/bottom_bar_button.dart';
 
 import '../../test_provider_scope.dart';
@@ -263,6 +263,23 @@ void main() {
         expectSameLine(tester, ['2… h5']);
         expectSameLine(tester, ['2… Nc6', '3. d3']);
         expectSameLine(tester, ['2… Qd7']);
+
+        final d3 = find.text('3. d3');
+        await tester.longPress(d3);
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text('Collapse variations'));
+
+        // need to wait for current move change debounce delay
+        await tester.pumpAndSettle(const Duration(milliseconds: 200));
+
+        // Sidelines should be collapsed again
+        expect(find.byIcon(Icons.add_box), findsOneWidget);
+
+        expect(find.text('2… h5'), findsNothing);
+        expect(find.text('2… Nc6'), findsNothing);
+        expect(find.text('3. d3'), findsNothing);
+        expect(find.text('2… Qd7'), findsNothing);
       });
 
       testWidgets('subtrees not part of the current mainline part are cached',
@@ -300,7 +317,7 @@ void main() {
 
         await tester.tap(find.byKey(const Key('goto-previous')));
         // need to wait for current move change debounce delay
-        await tester.pump(const Duration(milliseconds: 200));
+        await tester.pumpAndSettle(const Duration(milliseconds: 200));
 
         expect(
           tester
@@ -332,7 +349,7 @@ void main() {
 
         await tester.tap(find.byKey(const Key('goto-previous')));
         // need to wait for current move change debounce delay
-        await tester.pump(const Duration(milliseconds: 200));
+        await tester.pumpAndSettle(const Duration(milliseconds: 200));
 
         expect(
           tester
@@ -365,7 +382,7 @@ void main() {
 
         await tester.tap(find.byKey(const Key('goto-previous')));
         // need to wait for current move change debounce delay
-        await tester.pump(const Duration(milliseconds: 200));
+        await tester.pumpAndSettle(const Duration(milliseconds: 200));
 
         expect(
           tester
