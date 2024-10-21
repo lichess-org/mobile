@@ -24,12 +24,14 @@ class Study with _$Study {
     required IList<String> topics,
     required IList<StudyChapterMeta> chapters,
     required StudyChapter chapter,
-    // Hints to display in "gamebook"/"interactive" mode
-    // Index corresponds to the current ply.
+
+    /// Hints to display in "gamebook"/"interactive" mode
+    /// Index corresponds to the current ply.
     required IList<String?> hints,
-    // Comment to display when deviating from the mainline in "gamebook" mode
-    // (i.e. when making a wrong move).
-    // Index corresponds to the current ply.
+
+    /// Comment to display when deviating from the mainline in "gamebook" mode
+    /// (i.e. when making a wrong move).
+    /// Index corresponds to the current ply.
     required IList<String?> deviationComments,
   }) = _Study;
 
