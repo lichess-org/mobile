@@ -85,8 +85,7 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
   }
 
   List<Widget> get watchTabWidgets => const [
-        // TODO: show widget when broadcasts feature is ready
-        //_BroadcastWidget(),
+        _BroadcastWidget(),
         _WatchTvWidget(),
         _StreamerWidget(),
       ];
@@ -176,15 +175,12 @@ class _WatchScreenState extends ConsumerState<WatchTabScreen> {
 
 Future<void> _refreshData(WidgetRef ref) {
   return Future.wait([
-    // TODO uncomment when broadcasts feature is ready
-    // ref.refresh(broadcastsPaginatorProvider.future),
+    ref.refresh(broadcastsPaginatorProvider.future),
     ref.refresh(featuredChannelsProvider.future),
     ref.refresh(liveStreamersProvider.future),
   ]);
 }
 
-// TODO remove this ignore comment when broadcasts feature is ready
-// ignore: unused_element
 class _BroadcastWidget extends ConsumerWidget {
   const _BroadcastWidget();
 
