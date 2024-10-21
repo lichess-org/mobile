@@ -11,7 +11,6 @@
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Nullus eventus</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Certus es?</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">Praebe PGN</string>
-  <string name="cancelDrawOffer" comment="Menu action that cancels a previous draw offer">Cancel stativus oblatio</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Adversarius expectatur...</string>
   <string name="blindfoldMode" comment="This button toggles blindfold mode. This mean the user can only see the board, but not the pieces.">Occule</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Circulatores</string>
