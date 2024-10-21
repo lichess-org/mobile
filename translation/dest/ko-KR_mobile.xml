@@ -19,7 +19,7 @@
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">닉네임에 \"%s\"가 포함된 플레이어</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">결과 없음</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">확실하십니까?</string>
-  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak.&#10;&#10;Please note that unlike on the website, on the mobile app, exiting the 'Streak' view will completely end your run. See issue https://github.com/lichess-org/mobile/issues/324">현재 연속 해결 기록을 잃고 점수는 저장됩니다.</string>
+  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">현재 연속 해결 기록을 잃고 점수는 저장됩니다.</string>
   <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">표시할 것이 없습니다. 먼저 퍼즐 스톰을 플레이하세요.</string>
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">이 퍼즐 공유</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">게임 URL 공유</string>
@@ -31,7 +31,6 @@
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">이 도전을 종료하시겠습니까?</string>
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">표시할 것이 없습니다. 필터를 변경해 주세요</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">무르기 요청 취소</string>
-  <string name="cancelDrawOffer" comment="Menu action that cancels a previous draw offer">무승부 요청 취소</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">상대 참가를 기다리는 중...</string>
   <string name="blindfoldMode" comment="This button toggles blindfold mode. This mean the user can only see the board, but not the pieces.">기물 가리기</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">방송 중인 스트리머</string>
