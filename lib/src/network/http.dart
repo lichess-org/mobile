@@ -594,9 +594,7 @@ extension ClientRefExtension on Ref {
     final client = read(lichessClientProvider);
     return await fn(client);
   }
-}
 
-extension ClientAutoDisposeRefExtension<T> on AutoDisposeRef<T> {
   /// Runs [fn] with a [LichessClient] and keeps the provider alive for [duration].
   ///
   /// This is primarily used for caching network requests in a [FutureProvider].
