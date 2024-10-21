@@ -728,17 +728,7 @@ class _GameBottomBar extends ConsumerWidget {
                   .cancelOrDeclineTakeback();
             },
           ),
-        if (gameState.game.me?.offeringDraw == true)
-          BottomSheetAction(
-            makeLabel: (context) => Text(context.l10n.mobileCancelDrawOffer),
-            isDestructiveAction: true,
-            onPressed: (context) {
-              ref
-                  .read(gameControllerProvider(id).notifier)
-                  .cancelOrDeclineDraw();
-            },
-          )
-        else if (gameState.canOfferDraw)
+        if (gameState.canOfferDraw)
           BottomSheetAction(
             makeLabel: (context) => Text(context.l10n.offerDraw),
             onPressed: gameState.shouldConfirmResignAndDrawOffer
