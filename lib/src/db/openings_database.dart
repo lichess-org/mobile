@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart' as p;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:sqflite/sqflite.dart';
 
 part 'openings_database.g.dart';
 
@@ -18,8 +18,6 @@ part 'openings_database.g.dart';
 
 const _kDatabaseVersion = 2;
 const _kDatabaseName = 'chess_openings$_kDatabaseVersion.db';
-
-final databaseFactory = databaseFactoryFfi;
 
 @Riverpod(keepAlive: true)
 Future<Database> openingsDatabase(OpeningsDatabaseRef ref) async {
@@ -57,9 +55,6 @@ Future<Database> _openDb(String path) async {
 
   return databaseFactory.openDatabase(
     path,
-    options: OpenDatabaseOptions(
-      version: _kDatabaseVersion,
-      readOnly: true,
-    ),
+    options: OpenDatabaseOptions(readOnly: true),
   );
 }

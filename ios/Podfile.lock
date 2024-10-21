@@ -134,24 +134,6 @@ PODS:
   - sqflite_darwin (0.0.4):
     - Flutter
     - FlutterMacOS
-  - "sqlite3 (3.46.1+1)":
-    - "sqlite3/common (= 3.46.1+1)"
-  - "sqlite3/common (3.46.1+1)"
-  - "sqlite3/dbstatvtab (3.46.1+1)":
-    - sqlite3/common
-  - "sqlite3/fts5 (3.46.1+1)":
-    - sqlite3/common
-  - "sqlite3/perf-threadsafe (3.46.1+1)":
-    - sqlite3/common
-  - "sqlite3/rtree (3.46.1+1)":
-    - sqlite3/common
-  - sqlite3_flutter_libs (0.0.1):
-    - Flutter
-    - "sqlite3 (~> 3.46.0+1)"
-    - sqlite3/dbstatvtab
-    - sqlite3/fts5
-    - sqlite3/perf-threadsafe
-    - sqlite3/rtree
   - stockfish (1.6.2):
     - Flutter
   - url_launcher_ios (0.0.1):
@@ -178,7 +160,6 @@ DEPENDENCIES:
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - sound_effect (from `.symlinks/plugins/sound_effect/ios`)
   - sqflite_darwin (from `.symlinks/plugins/sqflite_darwin/darwin`)
-  - sqlite3_flutter_libs (from `.symlinks/plugins/sqlite3_flutter_libs/ios`)
   - stockfish (from `.symlinks/plugins/stockfish/ios`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
   - wakelock_plus (from `.symlinks/plugins/wakelock_plus/ios`)
@@ -200,7 +181,6 @@ SPEC REPOS:
     - nanopb
     - PromisesObjC
     - PromisesSwift
-    - sqlite3
 
 EXTERNAL SOURCES:
   app_settings:
@@ -239,8 +219,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sound_effect/ios"
   sqflite_darwin:
     :path: ".symlinks/plugins/sqflite_darwin/darwin"
-  sqlite3_flutter_libs:
-    :path: ".symlinks/plugins/sqlite3_flutter_libs/ios"
   stockfish:
     :path: ".symlinks/plugins/stockfish/ios"
   url_launcher_ios:
@@ -282,8 +260,6 @@ SPEC CHECKSUMS:
   shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
   sound_effect: 5280cfa89d4a576032186f15600dc948ca6d39ce
   sqflite_darwin: a553b1fd6fe66f53bbb0fe5b4f5bab93f08d7a13
-  sqlite3: 0bb0e6389d824e40296f531b858a2a0b71c0d2fb
-  sqlite3_flutter_libs: c00457ebd31e59fa6bb830380ddba24d44fbcd3b
   stockfish: d00cf6b95579f1d7032cbfd8e4fe874972fe2ff9
   url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
   wakelock_plus: 78ec7c5b202cab7761af8e2b2b3d0671be6c4ae1
