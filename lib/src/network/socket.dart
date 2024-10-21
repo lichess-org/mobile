@@ -408,8 +408,14 @@ class SocketClient {
     _reconnectTimer?.cancel();
     _reconnectTimer = Timer(delay, () {
       _averageLag.value = Duration.zero;
-      _logger.fine('Reconnecting WebSocket.');
-      connect();
+      if (!isDisposed) {
+        _logger.fine('Reconnecting WebSocket.');
+        connect();
+      } else {
+        _logger.warning(
+          'Scheduled reconnect after $delay failed since client is disposed.',
+        );
+      }
     });
   }
 
