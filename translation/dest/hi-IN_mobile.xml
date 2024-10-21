@@ -21,6 +21,5 @@
   <string name="hideVariation" comment="Shown in the analysis screen.">वेरिएशन छुपाए</string>
   <string name="showComments" comment="Shown in the analysis screen.">कमेंट्स देखें</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Takeback प्रस्ताव रद्द करें</string>
-  <string name="cancelDrawOffer" comment="Menu action that cancels a previous draw offer">Draw प्रस्ताव रद्द करें</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">लाइव स्ट्रीमर्स</string>
 </resources>
