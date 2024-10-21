@@ -311,6 +311,10 @@ class _BottomBar extends ConsumerWidget {
             builder: (BuildContext context) => BoardEditorMenu(
               initialFen: initialFen,
             ),
+            showDragHandle: true,
+            constraints: BoxConstraints(
+              minHeight: MediaQuery.sizeOf(context).height * 0.5,
+            ),
           ),
           icon: Icons.tune,
         ),

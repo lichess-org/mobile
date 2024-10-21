@@ -42,33 +42,40 @@ class BoardEditorMenu extends ConsumerWidget {
         ),
         Padding(
           padding: Styles.bodySectionPadding,
-          child: Text(context.l10n.castling, style: Styles.subtitle),
+          child: Text(context.l10n.castling, style: Styles.title),
         ),
         ...Side.values.map((side) {
           return Padding(
             padding: Styles.horizontalBodyPadding,
-            child: Wrap(
+            child: Row(
               spacing: 8.0,
-              children:
-                  [CastlingSide.king, CastlingSide.queen].map((castlingSide) {
-                return ChoiceChip(
-                  label: Text(
-                    castlingSide == CastlingSide.king
-                        ? side == Side.white
-                            ? context.l10n.whiteCastlingKingside
-                            : context.l10n.blackCastlingKingside
-                        : 'O-O-O',
+              children: [
+                SizedBox(
+                  width: 100.0,
+                  child: Text(
+                    side == Side.white
+                        ? context.l10n.white
+                        : context.l10n.black,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  selected: editorState.isCastlingAllowed(side, castlingSide),
-                  onSelected: (selected) {
-                    ref.read(editorController.notifier).setCastling(
-                          side,
-                          castlingSide,
-                          selected,
-                        );
-                  },
-                );
-              }).toList(),
+                ),
+                ...[CastlingSide.king, CastlingSide.queen].map((castlingSide) {
+                  return ChoiceChip(
+                    label: Text(
+                      castlingSide == CastlingSide.king ? 'O-O' : 'O-O-O',
+                    ),
+                    selected: editorState.isCastlingAllowed(side, castlingSide),
+                    onSelected: (selected) {
+                      ref.read(editorController.notifier).setCastling(
+                            side,
+                            castlingSide,
+                            selected,
+                          );
+                    },
+                  );
+                }),
+              ],
             ),
           );
         }),

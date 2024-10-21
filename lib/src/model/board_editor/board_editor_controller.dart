@@ -11,15 +11,23 @@ part 'board_editor_controller.g.dart';
 class BoardEditorController extends _$BoardEditorController {
   @override
   BoardEditorState build(String? initialFen) {
+    final setup = Setup.parseFen(initialFen ?? kInitialFEN);
     return BoardEditorState(
       orientation: Side.white,
       sideToPlay: Side.white,
       pieces: readFen(initialFen ?? kInitialFEN).lock,
-      unmovedRooks: SquareSet.corners,
+      castlingRights: IMap(const {
+        CastlingRight.whiteKing: true,
+        CastlingRight.whiteQueen: true,
+        CastlingRight.blackKing: true,
+        CastlingRight.blackQueen: true,
+      }),
       editorPointerMode: EditorPointerMode.drag,
       enPassantOptions: SquareSet.empty,
       enPassantSquare: null,
       pieceToAddOnEdit: null,
+      halfmoves: setup.halfmoves,
+      fullmoves: setup.fullmoves,
     );
   }
 
@@ -126,27 +134,40 @@ class BoardEditorController extends _$BoardEditorController {
   void setCastling(Side side, CastlingSide castlingSide, bool allowed) {
     switch (side) {
       case Side.white:
-        if (castlingSide == CastlingSide.king) {
-          _setRookUnmoved(Square.h1, allowed);
-        } else {
-          _setRookUnmoved(Square.a1, allowed);
+        switch (castlingSide) {
+          case CastlingSide.king:
+            state = state.copyWith(
+              castlingRights:
+                  state.castlingRights.add(CastlingRight.whiteKing, allowed),
+            );
+          case CastlingSide.queen:
+            state = state.copyWith(
+              castlingRights:
+                  state.castlingRights.add(CastlingRight.whiteQueen, allowed),
+            );
         }
       case Side.black:
-        if (castlingSide == CastlingSide.king) {
-          _setRookUnmoved(Square.h8, allowed);
-        } else {
-          _setRookUnmoved(Square.a8, allowed);
+        switch (castlingSide) {
+          case CastlingSide.king:
+            state = state.copyWith(
+              castlingRights:
+                  state.castlingRights.add(CastlingRight.blackKing, allowed),
+            );
+          case CastlingSide.queen:
+            state = state.copyWith(
+              castlingRights:
+                  state.castlingRights.add(CastlingRight.blackQueen, allowed),
+            );
         }
     }
   }
+}
 
-  void _setRookUnmoved(Square square, bool unmoved) {
-    state = state.copyWith(
-      unmovedRooks: unmoved
-          ? state.unmovedRooks.withSquare(square)
-          : state.unmovedRooks.withoutSquare(square),
-    );
-  }
+enum CastlingRight {
+  whiteKing,
+  whiteQueen,
+  blackKing,
+  blackQueen,
 }
 
 @freezed
@@ -157,10 +178,12 @@ class BoardEditorState with _$BoardEditorState {
     required Side orientation,
     required Side sideToPlay,
     required IMap<Square, Piece> pieces,
-    required SquareSet unmovedRooks,
+    required IMap<CastlingRight, bool> castlingRights,
     required EditorPointerMode editorPointerMode,
     required SquareSet enPassantOptions,
     required Square? enPassantSquare,
+    required int halfmoves,
+    required int fullmoves,
 
     /// When null, clears squares when in edit mode. Has no effect in drag mode.
     required Piece? pieceToAddOnEdit,
@@ -169,26 +192,61 @@ class BoardEditorState with _$BoardEditorState {
   bool isCastlingAllowed(Side side, CastlingSide castlingSide) =>
       switch (side) {
         Side.white => switch (castlingSide) {
-            CastlingSide.king => unmovedRooks.has(Square.h1),
-            CastlingSide.queen => unmovedRooks.has(Square.a1),
+            CastlingSide.king => castlingRights[CastlingRight.whiteKing]!,
+            CastlingSide.queen => castlingRights[CastlingRight.whiteQueen]!,
           },
         Side.black => switch (castlingSide) {
-            CastlingSide.king => unmovedRooks.has(Square.h8),
-            CastlingSide.queen => unmovedRooks.has(Square.a8),
+            CastlingSide.king => castlingRights[CastlingRight.blackKing]!,
+            CastlingSide.queen => castlingRights[CastlingRight.blackQueen]!,
           },
       };
 
-  Setup get _setup {
-    final boardFen = writeFen(pieces.unlock);
-    final board = Board.parseFen(boardFen);
-    return Setup(
-      board: board,
-      unmovedRooks: unmovedRooks,
-      turn: sideToPlay == Side.white ? Side.white : Side.black,
-      epSquare: enPassantSquare,
-      halfmoves: 0,
-      fullmoves: 1,
-    );
+  /// Returns the castling rights part of the FEN string.
+  ///
+  /// If the rook is missing on one side of the king, or the king is missing on the
+  /// backrank, the castling right is removed.
+  String get _castlingRightsPart {
+    final parts = <String>[];
+    final Map<CastlingRight, bool> hasRook = {};
+    final Board board = Board.parseFen(writeFen(pieces.unlock));
+    for (final side in Side.values) {
+      final backrankKing = SquareSet.backrankOf(side) & board.kings;
+      final rooksAndKings = (board.bySide(side) & SquareSet.backrankOf(side)) &
+          (board.rooks | board.kings);
+      for (final castlingSide in CastlingSide.values) {
+        final candidate = castlingSide == CastlingSide.king
+            ? rooksAndKings.squares.lastOrNull
+            : rooksAndKings.squares.firstOrNull;
+        final isCastlingPossible = candidate != null &&
+            board.rooks.has(candidate) &&
+            backrankKing.singleSquare != null;
+        switch ((side, castlingSide)) {
+          case (Side.white, CastlingSide.king):
+            hasRook[CastlingRight.whiteKing] = isCastlingPossible;
+          case (Side.white, CastlingSide.queen):
+            hasRook[CastlingRight.whiteQueen] = isCastlingPossible;
+          case (Side.black, CastlingSide.king):
+            hasRook[CastlingRight.blackKing] = isCastlingPossible;
+          case (Side.black, CastlingSide.queen):
+            hasRook[CastlingRight.blackQueen] = isCastlingPossible;
+        }
+      }
+    }
+    for (final right in CastlingRight.values) {
+      if (hasRook[right]! && castlingRights[right]!) {
+        switch (right) {
+          case CastlingRight.whiteKing:
+            parts.add('K');
+          case CastlingRight.whiteQueen:
+            parts.add('Q');
+          case CastlingRight.blackKing:
+            parts.add('k');
+          case CastlingRight.blackQueen:
+            parts.add('q');
+        }
+      }
+    }
+    return parts.isEmpty ? '-' : parts.join('');
   }
 
   Piece? get activePieceOnEdit =>
@@ -197,14 +255,17 @@ class BoardEditorState with _$BoardEditorState {
   bool get deletePiecesActive =>
       editorPointerMode == EditorPointerMode.edit && pieceToAddOnEdit == null;
 
-  String get fen => _setup.fen;
+  String get fen {
+    final boardFen = writeFen(pieces.unlock);
+    return '$boardFen ${sideToPlay == Side.white ? 'w' : 'b'} $_castlingRightsPart ${enPassantSquare?.name ?? '-'} $halfmoves $fullmoves';
+  }
 
   /// Returns the PGN representation of the current position if it is valid.
   ///
   /// Returns `null` if the position is invalid.
   String? get pgn {
     try {
-      final position = Chess.fromSetup(_setup);
+      final position = Chess.fromSetup(Setup.parseFen(fen));
       return PgnGame(
         headers: {'FEN': position.fen},
         moves: PgnNode<PgnNodeData>(),

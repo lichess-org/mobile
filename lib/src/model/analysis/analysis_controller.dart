@@ -715,8 +715,10 @@ class AnalysisState with _$AnalysisState {
   /// Whether the analysis is for a lichess game.
   bool get isLichessGameAnalysis => gameAnyId != null;
 
-  IMap<Square, ISet<Square>> get validMoves =>
-      makeLegalMoves(currentNode.position);
+  IMap<Square, ISet<Square>> get validMoves => makeLegalMoves(
+        currentNode.position,
+        isChess960: variant == Variant.chess960,
+      );
 
   /// Whether the user can request server analysis.
   ///
