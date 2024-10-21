@@ -19,6 +19,6 @@
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">یاریزانان بە \"%s\"</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">هیچ ئەنجامێک نییە</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">تۆ دڵنیای?</string>
-  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak.&#10;&#10;Please note that unlike on the website, on the mobile app, exiting the 'Streak' view will completely end your run. See issue https://github.com/lichess-org/mobile/issues/324">ڕیزبەندی ئێستات لەدەست دەدەیت و نمرەکەت پاشەکەوت دەکرێت.</string>
+  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">ڕیزبەندی ئێستات لەدەست دەدەیت و نمرەکەت پاشەکەوت دەکرێت.</string>
   <string name="prefMagnifyDraggedPiece" comment="Title of a setting the settings screen. When enabled, the piece being dragged around the board will be magnified.">داشی ڕاکێشراو گەورە بکە</string>
 </resources>
