@@ -26,7 +26,8 @@ class AnalysisTreeView extends ConsumerWidget {
     final root = ref.watch(ctrlProvider.select((value) => value.root));
     final currentPath =
         ref.watch(ctrlProvider.select((value) => value.currentPath));
-    final livePath = ref.watch(ctrlProvider.select((value) => value.livePath));
+    final broadcastLivePath =
+        ref.watch(ctrlProvider.select((value) => value.broadcastLivePath));
     final pgnRootComments =
         ref.watch(ctrlProvider.select((value) => value.pgnRootComments));
 
@@ -41,7 +42,7 @@ class AnalysisTreeView extends ConsumerWidget {
         DebouncedPgnTreeView(
           root: root,
           currentPath: currentPath,
-          livePath: livePath,
+          broadcastLivePath: broadcastLivePath,
           pgnRootComments: pgnRootComments,
           notifier: ref.read(ctrlProvider.notifier),
         ),

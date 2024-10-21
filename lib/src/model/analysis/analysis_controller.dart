@@ -154,7 +154,7 @@ class AnalysisController extends _$AnalysisController
       variant: options.variant,
       id: options.id,
       currentPath: currentPath,
-      livePath: options.isBroadcast && pgnHeaders['Result'] == '*'
+      broadcastLivePath: options.isBroadcast && pgnHeaders['Result'] == '*'
           ? currentPath
           : null,
       isOnMainline: _root.isOnMainline(currentPath),
@@ -224,7 +224,7 @@ class AnalysisController extends _$AnalysisController
     final (newPath, isNewNode) = _root.addMoveAt(path, move, clock: clock);
 
     if (newPath != null) {
-      if (state.livePath == state.currentPath) {
+      if (state.broadcastLivePath == state.currentPath) {
         _setPath(
           newPath,
           shouldRecomputeRootView: isNewNode,
@@ -233,7 +233,7 @@ class AnalysisController extends _$AnalysisController
         );
       } else {
         _root.promoteAt(newPath, toMainline: true);
-        state = state.copyWith(livePath: newPath, root: _root.view);
+        state = state.copyWith(broadcastLivePath: newPath, root: _root.view);
       }
     }
   }
@@ -490,7 +490,7 @@ class AnalysisController extends _$AnalysisController
 
       state = state.copyWith(
         currentPath: path,
-        livePath: isBroadcastMove ? path : state.livePath,
+        broadcastLivePath: isBroadcastMove ? path : state.broadcastLivePath,
         isOnMainline: _root.isOnMainline(path),
         currentNode: AnalysisCurrentNode.fromNode(currentNode),
         currentBranchOpening: opening,
@@ -502,7 +502,7 @@ class AnalysisController extends _$AnalysisController
     } else {
       state = state.copyWith(
         currentPath: path,
-        livePath: isBroadcastMove ? path : state.livePath,
+        broadcastLivePath: isBroadcastMove ? path : state.broadcastLivePath,
         isOnMainline: _root.isOnMainline(path),
         currentNode: AnalysisCurrentNode.fromNode(currentNode),
         currentBranchOpening: opening,
@@ -713,7 +713,7 @@ class AnalysisState with _$AnalysisState {
     required UciPath currentPath,
 
     // The path to the current broadcast live move.
-    required UciPath? livePath,
+    required UciPath? broadcastLivePath,
 
     /// Whether the current path is on the mainline.
     required bool isOnMainline,

@@ -394,8 +394,8 @@ class _AnalysisBoardPlayersAndClocks extends ConsumerWidget {
     final currentPath = ref.watch(
       ctrlProvider.select((value) => value.currentPath),
     );
-    final livePath = ref.watch(
-      ctrlProvider.select((value) => value.livePath),
+    final broadcastLivePath = ref.watch(
+      ctrlProvider.select((value) => value.broadcastLivePath),
     );
     final playingSide =
         ref.watch(ctrlProvider.select((value) => value.position.turn));
@@ -416,7 +416,7 @@ class _AnalysisBoardPlayersAndClocks extends ConsumerWidget {
             side: pov.opposite,
             boardSide: _PlayerWidgetSide.top,
             playingSide: playingSide,
-            playClock: currentPath == livePath,
+            playClock: currentPath == broadcastLivePath,
           ),
         AnalysisBoard(
           pgn,
@@ -432,7 +432,7 @@ class _AnalysisBoardPlayersAndClocks extends ConsumerWidget {
             side: pov,
             boardSide: _PlayerWidgetSide.bottom,
             playingSide: playingSide,
-            playClock: currentPath == livePath,
+            playClock: currentPath == broadcastLivePath,
           ),
       ],
     );

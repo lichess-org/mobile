@@ -111,7 +111,7 @@ class DebouncedPgnTreeView extends ConsumerStatefulWidget {
   const DebouncedPgnTreeView({
     required this.root,
     required this.currentPath,
-    required this.livePath,
+    required this.broadcastLivePath,
     required this.pgnRootComments,
     required this.notifier,
   });
@@ -123,7 +123,7 @@ class DebouncedPgnTreeView extends ConsumerStatefulWidget {
   final UciPath currentPath;
 
   /// Path to the last live move in the tree if it is a broadcast game
-  final UciPath? livePath;
+  final UciPath? broadcastLivePath;
 
   /// Comments associated with the root node
   final IList<PgnComment>? pgnRootComments;
@@ -143,14 +143,14 @@ class _DebouncedPgnTreeViewState extends ConsumerState<DebouncedPgnTreeView> {
   /// Path to the currently selected move in the tree. When widget.currentPath changes rapidly, we debounce the change to avoid rebuilding the whole tree on every played move.
   late UciPath pathToCurrentMove;
 
-  /// Path to the last live move in the tree if it is a broadcast game. When widget.livePath changes rapidly, we debounce the change to avoid rebuilding the whole tree on every received move.
-  late UciPath? pathToLiveMove;
+  /// Path to the last live move in the tree if it is a broadcast game. When widget.broadcastLivePath changes rapidly, we debounce the change to avoid rebuilding the whole tree on every received move.
+  late UciPath? pathToBroadcastLiveMove;
 
   @override
   void initState() {
     super.initState();
     pathToCurrentMove = widget.currentPath;
-    pathToLiveMove = widget.livePath;
+    pathToBroadcastLiveMove = widget.broadcastLivePath;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (currentMoveKey.currentContext != null) {
         Scrollable.ensureVisible(
@@ -173,16 +173,16 @@ class _DebouncedPgnTreeViewState extends ConsumerState<DebouncedPgnTreeView> {
     super.didUpdateWidget(oldWidget);
 
     if (oldWidget.currentPath != widget.currentPath ||
-        oldWidget.livePath != widget.livePath) {
-      // debouncing the current and live path changes to avoid rebuilding when using the
-      // fast replay buttons or when receiving a lot of broadcast moves in a short time
+        oldWidget.broadcastLivePath != widget.broadcastLivePath) {
+      // debouncing the current and broadcast live path changes to avoid rebuilding when using
+      // the fast replay buttons or when receiving a lot of broadcast moves in a short time
       _debounce(() {
         setState(() {
           if (oldWidget.currentPath != widget.currentPath) {
             pathToCurrentMove = widget.currentPath;
           }
-          if (oldWidget.livePath != widget.livePath) {
-            pathToLiveMove = widget.livePath;
+          if (oldWidget.broadcastLivePath != widget.broadcastLivePath) {
+            pathToBroadcastLiveMove = widget.broadcastLivePath;
           }
         });
         if (oldWidget.currentPath != widget.currentPath) {
@@ -225,7 +225,7 @@ class _DebouncedPgnTreeViewState extends ConsumerState<DebouncedPgnTreeView> {
         shouldShowComments: shouldShowComments,
         currentMoveKey: currentMoveKey,
         pathToCurrentMove: pathToCurrentMove,
-        pathToLiveMove: pathToLiveMove,
+        pathToLiveMove: pathToBroadcastLiveMove,
         notifier: widget.notifier,
       ),
     );
