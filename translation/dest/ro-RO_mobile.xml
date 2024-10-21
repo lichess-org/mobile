@@ -19,7 +19,7 @@
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Jucători cu \"%s\"</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Niciun rezultat</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Ești sigur?</string>
-  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak.&#10;&#10;Please note that unlike on the website, on the mobile app, exiting the 'Streak' view will completely end your run. See issue https://github.com/lichess-org/mobile/issues/324">Îți vei pierde streak-ul actual iar scorul va fi salvat.</string>
+  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">Îți vei pierde streak-ul actual iar scorul va fi salvat.</string>
   <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Nimic de arătat. Jucați câteva partide de Puzzle Storm.</string>
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Distribuie acest puzzle</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Distribuie URL-ul jocului</string>
@@ -31,7 +31,6 @@
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Vrei să termini acest run?</string>
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Nimic de afișat, vă rugăm să schimbați filtrele</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Anulați propunerea de revanșă</string>
-  <string name="cancelDrawOffer" comment="Menu action that cancels a previous draw offer">Anulați propunerea de remiză</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">În așteptarea unui jucător...</string>
   <string name="blindfoldMode" comment="This button toggles blindfold mode. This mean the user can only see the board, but not the pieces.">Legat la ochi</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Fluxuri live</string>
