@@ -4,7 +4,7 @@
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Hráči s \"%s\"</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Žádné výsledky</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Jste si jistý?</string>
-  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak.&#10;&#10;Please note that unlike on the website, on the mobile app, exiting the 'Streak' view will completely end your run. See issue https://github.com/lichess-org/mobile/issues/324">Ztratíte aktuální sérii a vaše skóre bude uloženo.</string>
+  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">Ztratíte aktuální sérii a vaše skóre bude uloženo.</string>
   <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Nic k zobrazení. Zahrajte si nějaké běhy Bouřky úloh.</string>
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Sdílej tuto úlohu</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Sdílet URL hry</string>
@@ -16,7 +16,6 @@
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Chceš ukončit tento běh?</string>
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Nic k zobrazení, prosím změn filtry</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Zrušit nabídnutí vrácení tahu</string>
-  <string name="cancelDrawOffer" comment="Menu action that cancels a previous draw offer">Zrušit nabídnutí remízy</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Čeká se na připojení protihráče...</string>
   <string name="blindfoldMode" comment="This button toggles blindfold mode. This mean the user can only see the board, but not the pieces.">Páska přes oči</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Živé vysílání</string>
