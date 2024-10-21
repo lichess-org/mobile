@@ -19,7 +19,7 @@
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">chơi với \"%s\"</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Không có kết quả</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Bạn chắc chứ?</string>
-  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak.&#10;&#10;Please note that unlike on the website, on the mobile app, exiting the 'Streak' view will completely end your run. See issue https://github.com/lichess-org/mobile/issues/324">Bạn sẽ mất chuỗi hiện tại và điểm của bạn sẽ được lưu.</string>
+  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">Bạn sẽ mất chuỗi hiện tại và điểm của bạn sẽ được lưu.</string>
   <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Không có gì để xem. Chơi một vài ván Puzzle Storm.</string>
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Chia sẻ câu đố này</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Chia sẻ URL ván cờ</string>
@@ -31,7 +31,6 @@
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Bạn có muốn kết thúc lượt chạy này không?</string>
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Không có gì để hiển thị, vui lòng thay đổi bộ lọc</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Hủy đề nghị đi lại</string>
-  <string name="cancelDrawOffer" comment="Menu action that cancels a previous draw offer">Hủy đề nghị hòa</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Đang chờ đối thủ tham gia...</string>
   <string name="blindfoldMode" comment="This button toggles blindfold mode. This mean the user can only see the board, but not the pieces.">Bịt mắt</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Các Streamer phát trực tiếp</string>
