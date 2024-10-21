@@ -19,7 +19,7 @@
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Jugadores con \"%s\"</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">No hay resultados</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">¿Estás seguro?</string>
-  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak.&#10;&#10;Please note that unlike on the website, on the mobile app, exiting the 'Streak' view will completely end your run. See issue https://github.com/lichess-org/mobile/issues/324">Perderás tu racha actual y tu puntuación será guardada.</string>
+  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">Perderás tu racha actual y tu puntuación será guardada.</string>
   <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Nada que mostrar. Juega algunas rondas de Puzzle Storm.</string>
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Compartir este ejercicio</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Compartir enlace de la partida</string>
@@ -31,7 +31,6 @@
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">¿Quieres finalizar esta ronda?</string>
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Nada que mostrar, por favor cambia los filtros</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Cancelar oferta de deshacer movimiento</string>
-  <string name="cancelDrawOffer" comment="Menu action that cancels a previous draw offer">Cancelar ofertas de tablas</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Esperando a que se una un oponente...</string>
   <string name="blindfoldMode" comment="This button toggles blindfold mode. This mean the user can only see the board, but not the pieces.">A ciegas</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Presentadores en vivo</string>
