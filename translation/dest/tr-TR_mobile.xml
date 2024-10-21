@@ -19,7 +19,7 @@
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">\"%s\" ile başlayan oyuncularla</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Sonuç bulunamadı</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Emin misiniz?</string>
-  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak.&#10;&#10;Please note that unlike on the website, on the mobile app, exiting the 'Streak' view will completely end your run. See issue https://github.com/lichess-org/mobile/issues/324">Mevcut serinizi kaybedeceksiniz ve puanınız kaydedilecektir.</string>
+  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">Mevcut serinizi kaybedeceksiniz ve puanınız kaydedilecektir.</string>
   <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Gösterilcek bir şey yok. Birkaç kez Bulmaca Fırtınası oyunu oynayın.</string>
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Bulmacayı paylaş</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Oyun linkini paylaş</string>
@@ -31,7 +31,6 @@
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Bu oyunu bitirmek istiyor musun?</string>
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Gösterilecek bir şey yok, lütfen filtreleri değiştirin</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Geri alma teklifini iptal et</string>
-  <string name="cancelDrawOffer" comment="Menu action that cancels a previous draw offer">Berabere teklifini iptal et</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Rakip bekleniyor...</string>
   <string name="blindfoldMode" comment="This button toggles blindfold mode. This mean the user can only see the board, but not the pieces.">Körleme modu</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Canlı yayıncılar</string>
