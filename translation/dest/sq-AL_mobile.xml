@@ -28,7 +28,6 @@
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Doni të përfundohen ku raund?</string>
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">S’ka gjë për t’u shfaqur, ju lutemi, ndryshoni filtrat</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Anulojeni ofertën për prapakthim</string>
-  <string name="cancelDrawOffer" comment="Menu action that cancels a previous draw offer">Anulojeni ofertën për barazim</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Po pritet që të vijë kundërshtari…</string>
   <string name="blindfoldMode" comment="This button toggles blindfold mode. This mean the user can only see the board, but not the pieces.">Me sytë lidhur</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Transmetues drejtpërsëdrejti</string>
