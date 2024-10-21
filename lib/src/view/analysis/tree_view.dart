@@ -4,7 +4,7 @@ import 'package:lichess_mobile/src/model/analysis/analysis_controller.dart';
 import 'package:lichess_mobile/src/model/analysis/opening_service.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
-import 'package:lichess_mobile/src/view/pgn/pgn_tree_view.dart';
+import 'package:lichess_mobile/src/widgets/pgn.dart';
 
 const kOpeningHeaderHeight = 32.0;
 

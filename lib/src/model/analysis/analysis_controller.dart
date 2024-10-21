@@ -20,7 +20,7 @@ import 'package:lichess_mobile/src/model/engine/work.dart';
 import 'package:lichess_mobile/src/model/game/player.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
 import 'package:lichess_mobile/src/view/engine/engine_gauge.dart';
-import 'package:lichess_mobile/src/view/pgn/pgn_tree_view.dart';
+import 'package:lichess_mobile/src/widgets/pgn.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'analysis_controller.freezed.dart';

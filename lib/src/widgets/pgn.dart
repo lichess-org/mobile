@@ -1,3 +1,4 @@
+import 'package:chessground/chessground.dart';
 import 'package:collection/collection.dart';
 import 'package:dartchess/dartchess.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
@@ -8,6 +9,7 @@ import 'package:lichess_mobile/src/model/account/account_preferences.dart';
 import 'package:lichess_mobile/src/model/analysis/analysis_preferences.dart';
 import 'package:lichess_mobile/src/model/common/node.dart';
 import 'package:lichess_mobile/src/model/common/uci.dart';
+import 'package:lichess_mobile/src/styles/lichess_colors.dart';
 import 'package:lichess_mobile/src/utils/duration.dart';
 import 'package:lichess_mobile/src/utils/l10n_context.dart';
 import 'package:lichess_mobile/src/utils/rate_limit.dart';
@@ -15,7 +17,71 @@ import 'package:lichess_mobile/src/widgets/adaptive_bottom_sheet.dart';
 import 'package:lichess_mobile/src/widgets/buttons.dart';
 import 'package:lichess_mobile/src/widgets/list.dart';
 
-import 'annotations.dart';
+const innacuracyColor = LichessColors.cyan;
+const mistakeColor = Color(0xFFe69f00);
+const blunderColor = Color(0xFFdf5353);
+
+Color? nagColor(int nag) {
+  return switch (nag) {
+    1 => Colors.lightGreen,
+    2 => mistakeColor,
+    3 => Colors.teal,
+    4 => blunderColor,
+    5 => LichessColors.purple,
+    6 => LichessColors.cyan,
+    int() => null,
+  };
+}
+
+String moveAnnotationChar(Iterable<int> nags) {
+  return nags
+      .map(
+        (nag) => switch (nag) {
+          1 => '!',
+          2 => '?',
+          3 => '!!',
+          4 => '??',
+          5 => '!?',
+          6 => '?!',
+          int() => '',
+        },
+      )
+      .join('');
+}
+
+Annotation? makeAnnotation(Iterable<int>? nags) {
+  final nag = nags?.firstOrNull;
+  if (nag == null) {
+    return null;
+  }
+  return switch (nag) {
+    1 => const Annotation(
+        symbol: '!',
+        color: Colors.lightGreen,
+      ),
+    3 => const Annotation(
+        symbol: '!!',
+        color: Colors.teal,
+      ),
+    5 => const Annotation(
+        symbol: '!?',
+        color: Colors.purple,
+      ),
+    6 => const Annotation(
+        symbol: '?!',
+        color: LichessColors.cyan,
+      ),
+    2 => const Annotation(
+        symbol: '?',
+        color: mistakeColor,
+      ),
+    4 => const Annotation(
+        symbol: '??',
+        color: blunderColor,
+      ),
+    int() => null,
+  };
+}
 
 // fast replay debounce delay, same as piece animation duration, to avoid piece
 // animation jank at the end of the replay
