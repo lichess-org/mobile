@@ -19,7 +19,7 @@
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">Spieler mit \"%s\"</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">Keine Ergebnisse</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">Bist du sicher?</string>
-  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak.&#10;&#10;Please note that unlike on the website, on the mobile app, exiting the 'Streak' view will completely end your run. See issue https://github.com/lichess-org/mobile/issues/324">Du verlierst deine aktuelle Serie und dein Ergebnis wird gespeichert.</string>
+  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">Du verlierst deine aktuelle Serie und dein Ergebnis wird gespeichert.</string>
   <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">Nichts anzuzeigen. Spiele ein paar Runden Puzzle Storm.</string>
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">Teile diese Aufgabe</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">Link der Partie teilen</string>
@@ -31,7 +31,6 @@
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">Möchtest du diesen Durchlauf beenden?</string>
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">Nichts anzuzeigen, bitte passe deine Filter an</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">Zugzurücknahme-Angebot abbrechen</string>
-  <string name="cancelDrawOffer" comment="Menu action that cancels a previous draw offer">Remisangebot zurücknehmen</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">Warte auf Beitritt eines Gegners...</string>
   <string name="blindfoldMode" comment="This button toggles blindfold mode. This mean the user can only see the board, but not the pieces.">Blind spielen</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Livestreamer</string>
