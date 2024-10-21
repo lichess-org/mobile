@@ -1,9 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:logging/logging.dart';
 import 'package:path/path.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 part 'database.g.dart';
 
@@ -16,6 +17,10 @@ const chatReadMessagesTTL = Duration(days: 60);
 
 const kStorageAnonId = '**anonymous**';
 
+final databaseFactory = databaseFactoryFfi;
+
+final _logger = Logger('Database');
+
 @Riverpod(keepAlive: true)
 Future<Database> database(DatabaseRef ref) async {
   final dbPath = join(await getDatabasesPath(), kLichessDatabaseName);
@@ -26,6 +31,10 @@ Future<Database> database(DatabaseRef ref) async {
 @Riverpod(keepAlive: true)
 Future<int?> sqliteVersion(SqliteVersionRef ref) async {
   final db = await ref.read(databaseProvider.future);
+  return _getDatabaseVersion(db);
+}
+
+Future<int?> _getDatabaseVersion(Database db) async {
   try {
     final versionStr = (await db.rawQuery('SELECT sqlite_version()'))
         .first
@@ -54,6 +63,10 @@ Future<Database> openAppDatabase(DatabaseFactory dbFactory, String path) async {
     path,
     options: OpenDatabaseOptions(
       version: 2,
+      onConfigure: (db) async {
+        final version = await _getDatabaseVersion(db);
+        _logger.info('SQLite version: $version');
+      },
       onOpen: (db) async {
         await Future.wait([
           _deleteOldEntries(db, 'puzzle', puzzleTTL),
