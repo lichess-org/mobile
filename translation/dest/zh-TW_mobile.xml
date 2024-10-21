@@ -19,7 +19,7 @@
   <string name="playersMatchingSearchTerm" comment="This is shown when searching for a player. %s is the string that user entered in the search bar">符合「%s」的使用者</string>
   <string name="noSearchResults" comment="This is shown when the search did not return any results.">無結果</string>
   <string name="areYouSure" comment="This is shown in confirmation dialogs.">你確定嗎？</string>
-  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak.&#10;&#10;Please note that unlike on the website, on the mobile app, exiting the 'Streak' view will completely end your run. See issue https://github.com/lichess-org/mobile/issues/324">這將失去目前的連勝並且將儲存目前成績。</string>
+  <string name="puzzleStreakAbortWarning" comment="Shown as a subtitle in the confirmation dialog for aborting puzzle streak. Prefer to not translate Puzzle Streak">這將失去目前的連勝並且將儲存目前成績。</string>
   <string name="puzzleStormNothingToShow" comment="Shown when the user has not played any puzzle storm runs yet. Prefer to not translate Puzzle Storm.">目前沒有東西可以顯示。你可以訓練一些謎題風暴讓這裡有趣一些。</string>
   <string name="sharePuzzle" comment="This is shown in the puzzle screen. When pressed, the user can share the puzzle.">分享謎題</string>
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">分享對局網址</string>
@@ -31,7 +31,6 @@
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">是否中斷於此？</string>
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">沒有東西可以顯示，請更換過濾元素</string>
   <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">取消悔棋請求</string>
-  <string name="cancelDrawOffer" comment="Menu action that cancels a previous draw offer">取消和棋請求</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">等待對方加入...</string>
   <string name="blindfoldMode" comment="This button toggles blindfold mode. This mean the user can only see the board, but not the pieces.">眼罩模式</string>
   <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">Lichess 實況主</string>
