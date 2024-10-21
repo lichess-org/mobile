@@ -17,7 +17,6 @@
   <string name="showVariations" comment="Shown in the analysis screen.">Visa variationer</string>
   <string name="hideVariation" comment="Shown in the analysis screen.">Dölj variationer</string>
   <string name="showComments" comment="Shown in the analysis screen.">Visa kommentarer</string>
-  <string name="cancelDrawOffer" comment="Menu action that cancels a previous draw offer">Dra tillbaka förfrågan om remi</string>
   <string name="blindfoldMode" comment="This button toggles blindfold mode. This mean the user can only see the board, but not the pieces.">I blindo</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">Gå med i spel</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">Något gick fel.</string>
