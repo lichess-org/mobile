@@ -490,8 +490,8 @@ class _MaterialTabViewState extends ConsumerState<_MaterialTabView> {
     final currentTab = ref.watch(currentBottomTabProvider);
     final enablePopHandler = currentTab == widget.tab;
     return NavigatorPopHandler(
-      onPop: enablePopHandler
-          ? () {
+      onPopWithResult: enablePopHandler
+          ? (_) {
               widget.navigatorKey?.currentState?.maybePop();
             }
           : null,
