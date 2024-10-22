@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="homeTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">ആമുഖം</string>
+  <string name="puzzlesTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">സമസ്യകൾ</string>
   <string name="toolsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues. Currently this includes the analysis board, the chess clock, and importing a position by PGN/FEN" maxLength="10">ഉപകരണങ്ങൾ</string>
   <string name="watchTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">കാണുക</string>
   <string name="settingsTab" comment="The tab in bottom navigation bar. Must be very short (10 characters max) to avoid ugly text shifting issues." maxLength="10">ക്രമീകരണം</string>
@@ -19,9 +20,13 @@
   <string name="shareGameURL" comment="Menu action that shares the URL of the current game">കളി വിലാസം (URL) പങ്കിടുക</string>
   <string name="shareGamePGN" comment="Menu action that shares the PGN of a game">PGN പങ്കിടുക</string>
   <string name="sharePositionAsFEN" comment="Menu action that shares the current position as a FEN string">കരുനില FEN ആയി പങ്കിടുക</string>
+  <string name="showComments" comment="Shown in the analysis screen.">അഭിപ്രായങ്ങൾ കാണിക്കുക</string>
   <string name="puzzleStormConfirmEndRun" comment="Text of the confirmation dialog when ending a puzzle storm run">താങ്ങൾക്കു് ഈ ഓട്ടം നിരുത്തണോ?</string>
   <string name="puzzleStormFilterNothingToShow" comment="Shown when the user has no puzzles matching the filter criteria">ഒന്നും കാണിക്കുകാനില്ല, ദയവായി അരിപ്പുകൾ മാറ്റുക</string>
+  <string name="cancelTakebackOffer" comment="Menu action that cancels a previous takeback offer">തിരിച്ചെടുക്കൽ നിർദേശം കളയുക</string>
   <string name="waitingForOpponentToJoin" comment="This is after the user has created a game and is waiting for an opponent to join.">മറ്റെ കളിക്കാര്‍ക്കായി കാത്തുനിൽക്കുന്നു...</string>
+  <string name="blindfoldMode" comment="This button toggles blindfold mode. This mean the user can only see the board, but not the pieces.">കണ്ണുകെട്ട</string>
+  <string name="liveStreamers" comment="This is shown as a heading in the streamer screen">തൽസമയ പ്രവാഹക്കാർ</string>
   <string name="customGameJoinAGame" comment="This is shown in the custom game screen. Will open the game lobby.">കളിയിൽ പങ്കെടുക്കുക</string>
   <string name="correspondenceClearSavedMove" comment="This is shown in the correspondence game screen. Will clear the saved move.">കരുതിവച്ച നീക്കം മായ്ക്കുക</string>
   <string name="somethingWentWrong" comment="This is a generic text to be shown when something unexpected happens, e.g. failing to load data from the server.">എന്തോ കുഴപ്പം സംഭവിച്ചു.</string>
