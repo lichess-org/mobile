@@ -13,6 +13,7 @@ import 'package:lichess_mobile/src/model/puzzle/puzzle_storage.dart';
 import 'package:lichess_mobile/src/model/puzzle/puzzle_theme.dart';
 import 'package:lichess_mobile/src/model/puzzle/storm.dart';
 import 'package:lichess_mobile/src/network/http.dart';
+import 'package:lichess_mobile/src/utils/riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'puzzle_providers.g.dart';
@@ -26,6 +27,9 @@ Future<PuzzleContext?> nextPuzzle(
   final puzzleService = await ref.read(puzzleServiceFactoryProvider)(
     queueLength: kPuzzleLocalQueueLength,
   );
+  // useful for for preview puzzle list in puzzle tab (providers in a list can
+  // be invalidated multiple times when the user scrolls the list)
+  ref.cacheFor(const Duration(minutes: 1));
 
   return puzzleService.nextPuzzle(
     userId: session?.user.id,
@@ -58,6 +62,13 @@ Future<Puzzle> dailyPuzzle(DailyPuzzleRef ref) {
     (client) => PuzzleRepository(client).daily(),
     const Duration(hours: 6),
   );
+}
+
+@riverpod
+Future<IList<(PuzzleAngle, int)>> savedBatches(SavedBatchesRef ref) async {
+  final session = ref.watch(authSessionProvider);
+  final storage = await ref.watch(puzzleBatchStorageProvider.future);
+  return storage.fetchAll(userId: session?.user.id);
 }
 
 @riverpod

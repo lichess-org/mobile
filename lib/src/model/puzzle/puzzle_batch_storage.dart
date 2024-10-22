@@ -96,6 +96,43 @@ class PuzzleBatchStorage {
     _ref.invalidateSelf();
   }
 
+  /// Fetches all saved puzzles batches (except mix) for the given user.
+  Future<IList<(PuzzleAngle, int)>> fetchAll({
+    required UserId? userId,
+  }) async {
+    final list = await _db.query(
+      _tableName,
+      where: 'userId = ?',
+      whereArgs: [
+        userId ?? _anonUserKey,
+      ],
+      orderBy: 'lastModified DESC',
+    );
+    return list
+        .map((entry) {
+          final angleStr = entry['angle'] as String?;
+          final raw = entry['data'] as String?;
+
+          if (angleStr == null || raw == null) return null;
+
+          final angle = PuzzleAngle.fromKey(angleStr);
+
+          if (angle == const PuzzleTheme(PuzzleThemeKey.mix)) return null;
+
+          final json = jsonDecode(raw);
+          if (json is! Map<String, dynamic>) {
+            throw const FormatException(
+              '[PuzzleBatchStorage] cannot fetch puzzles: expected an object',
+            );
+          }
+          final data = PuzzleBatch.fromJson(json);
+          final count = data.unsolved.length;
+          return (angle, count);
+        })
+        .nonNulls
+        .toIList();
+  }
+
   Future<IMap<PuzzleThemeKey, int>> fetchSavedThemes({
     required UserId? userId,
   }) async {

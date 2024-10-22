@@ -444,6 +444,11 @@ class AnimatedListModel<E> {
 
   AnimatedListState? get _animatedList => listKey.currentState;
 
+  void prepend(E item) {
+    _items.insert(0, item);
+    _animatedList!.insertItem(itemsOffset);
+  }
+
   void insert(int index, E item) {
     _items.insert(index - itemsOffset, item);
     _animatedList!.insertItem(index);
@@ -488,6 +493,11 @@ class SliverAnimatedListModel<E> {
   final int itemsOffset;
 
   SliverAnimatedListState? get _animatedList => listKey.currentState;
+
+  void prepend(E item) {
+    _items.insert(0, item);
+    _animatedList!.insertItem(itemsOffset);
+  }
 
   void insert(int index, E item) {
     _items.insert(index - itemsOffset, item);

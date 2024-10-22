@@ -38,36 +38,21 @@ import 'streak_screen.dart';
 const _kNumberOfHistoryItemsOnHandset = 8;
 const _kNumberOfHistoryItemsOnTablet = 16;
 
-final savedAnglesProvider =
-    FutureProvider.autoDispose<IMap<PuzzleAngle, int>>((ref) async {
-  final savedThemes = await ref.watch(savedThemeBatchesProvider.future);
-  final savedOpenings = await ref.watch(savedOpeningBatchesProvider.future);
-  return IMap<PuzzleAngle, int>.fromEntries([
-    ...savedThemes
-        .remove(PuzzleThemeKey.mix)
-        .map((themeKey, v) => MapEntry(PuzzleTheme(themeKey), v))
-        .entries,
-    ...savedOpenings
-        .map((openingKey, v) => MapEntry(PuzzleOpening(openingKey), v))
-        .entries,
-  ]);
-});
-
 class PuzzleTabScreen extends ConsumerWidget {
   const PuzzleTabScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final savedAngles = ref.watch(savedAnglesProvider).valueOrNull;
+    final savedBatches = ref.watch(savedBatchesProvider).valueOrNull;
 
-    if (savedAngles == null) {
+    if (savedBatches == null) {
       return const Center(child: CircularProgressIndicator());
     }
 
     if (Theme.of(context).platform == TargetPlatform.iOS) {
-      return _CupertinoTabBody(savedAngles);
+      return _CupertinoTabBody(savedBatches);
     } else {
-      return _MaterialTabBody(savedAngles);
+      return _MaterialTabBody(savedBatches);
     }
   }
 }
@@ -137,9 +122,9 @@ Widget _buildMainListRemovedItem(
 // display the main body list for cupertino devices, as a workaround
 // for missing type to handle both [SliverAnimatedList] and [AnimatedList].
 class _CupertinoTabBody extends ConsumerStatefulWidget {
-  const _CupertinoTabBody(this.savedAngles);
+  const _CupertinoTabBody(this.savedBatches);
 
-  final IMap<PuzzleAngle, int> savedAngles;
+  final IList<(PuzzleAngle, int)> savedBatches;
 
   @override
   ConsumerState<_CupertinoTabBody> createState() => _CupertinoTabBodyState();
@@ -156,7 +141,7 @@ class _CupertinoTabBodyState extends ConsumerState<_CupertinoTabBody> {
     _angles = SliverAnimatedListModel<PuzzleAngle>(
       listKey: _listKey,
       removedItemBuilder: _buildMainListRemovedItem,
-      initialItems: widget.savedAngles.keys,
+      initialItems: widget.savedBatches.map((e) => e.$1),
       itemsOffset: 4,
     );
   }
@@ -164,8 +149,8 @@ class _CupertinoTabBodyState extends ConsumerState<_CupertinoTabBody> {
   @override
   void didUpdateWidget(covariant _CupertinoTabBody oldWidget) {
     super.didUpdateWidget(oldWidget);
-    final oldKeys = oldWidget.savedAngles.toKeyISet();
-    final newKeys = widget.savedAngles.toKeyISet();
+    final oldKeys = ISet(oldWidget.savedBatches.map((e) => e.$1));
+    final newKeys = ISet(widget.savedBatches.map((e) => e.$1));
 
     if (oldKeys != newKeys) {
       final missings = oldKeys.difference(newKeys);
@@ -181,8 +166,7 @@ class _CupertinoTabBodyState extends ConsumerState<_CupertinoTabBody> {
       final additions = newKeys.difference(oldKeys);
       if (additions.isNotEmpty) {
         for (final addition in additions) {
-          final index = _angles.length;
-          _angles.insert(index, addition);
+          _angles.prepend(addition);
         }
       }
     }
@@ -299,9 +283,9 @@ class _CupertinoTabBodyState extends ConsumerState<_CupertinoTabBody> {
 }
 
 class _MaterialTabBody extends ConsumerStatefulWidget {
-  const _MaterialTabBody(this.savedAngles);
+  const _MaterialTabBody(this.savedBatches);
 
-  final IMap<PuzzleAngle, int> savedAngles;
+  final IList<(PuzzleAngle, int)> savedBatches;
 
   @override
   ConsumerState<_MaterialTabBody> createState() => _MaterialTabBodyState();
@@ -317,7 +301,7 @@ class _MaterialTabBodyState extends ConsumerState<_MaterialTabBody> {
     _angles = AnimatedListModel<PuzzleAngle>(
       listKey: _listKey,
       removedItemBuilder: _buildMainListRemovedItem,
-      initialItems: widget.savedAngles.keys,
+      initialItems: widget.savedBatches.map((e) => e.$1),
       itemsOffset: 4,
     );
   }
@@ -325,8 +309,8 @@ class _MaterialTabBodyState extends ConsumerState<_MaterialTabBody> {
   @override
   void didUpdateWidget(covariant _MaterialTabBody oldWidget) {
     super.didUpdateWidget(oldWidget);
-    final oldKeys = oldWidget.savedAngles.toKeyISet();
-    final newKeys = widget.savedAngles.toKeyISet();
+    final oldKeys = ISet(oldWidget.savedBatches.map((e) => e.$1));
+    final newKeys = ISet(widget.savedBatches.map((e) => e.$1));
 
     if (oldKeys != newKeys) {
       final missings = oldKeys.difference(newKeys);
@@ -342,8 +326,7 @@ class _MaterialTabBodyState extends ConsumerState<_MaterialTabBody> {
       final additions = newKeys.difference(oldKeys);
       if (additions.isNotEmpty) {
         for (final addition in additions) {
-          final index = _angles.length;
-          _angles.insert(index, addition);
+          _angles.prepend(addition);
         }
       }
     }
