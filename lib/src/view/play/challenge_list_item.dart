@@ -24,7 +24,7 @@ class ChallengeListItem extends ConsumerWidget {
   const ChallengeListItem({
     super.key,
     required this.challenge,
-    required this.user,
+    required this.challengerUser,
     this.onPressed,
     this.onAccept,
     this.onDecline,
@@ -32,7 +32,7 @@ class ChallengeListItem extends ConsumerWidget {
   });
 
   final Challenge challenge;
-  final LightUser user;
+  final LightUser challengerUser;
   final VoidCallback? onPressed;
   final VoidCallback? onAccept;
   final VoidCallback? onCancel;
@@ -41,7 +41,7 @@ class ChallengeListItem extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final me = ref.watch(authSessionProvider)?.user;
-    final isMyChallenge = me != null && me.id == user.id;
+    final isMyChallenge = me != null && me.id == challengerUser.id;
 
     final color = isMyChallenge
         ? context.lichessColors.good.withValues(alpha: 0.2)
@@ -54,11 +54,16 @@ class ChallengeListItem extends ConsumerWidget {
         ? LagIndicator(lagRating: challenge.challenger!.lagRating!)
         : null;
     final title = isMyChallenge
+        // shows destUser if it exists, otherwise shows the challenger (me)
+        // if no destUser, it's an open challenge I sent
         ? UserFullNameWidget(
-            user: challenge.destUser != null ? challenge.destUser!.user : user,
+            user: challenge.destUser != null
+                ? challenge.destUser!.user
+                : challengerUser,
+            rating: challenge.destUser?.rating ?? challenge.challenger?.rating,
           )
         : UserFullNameWidget(
-            user: user,
+            user: challengerUser,
             rating: challenge.challenger?.rating,
           );
     final subtitle = Text(challenge.description(context.l10n));
@@ -141,13 +146,13 @@ class CorrespondenceChallengeListItem extends StatelessWidget {
   const CorrespondenceChallengeListItem({
     super.key,
     required this.challenge,
-    required this.user,
+    required this.challengerUser,
     this.onPressed,
     this.onCancel,
   });
 
   final CorrespondenceChallenge challenge;
-  final LightUser user;
+  final LightUser challengerUser;
   final VoidCallback? onPressed;
   final VoidCallback? onCancel;
 
@@ -169,8 +174,14 @@ class CorrespondenceChallengeListItem extends StatelessWidget {
                 ? SideChoice.white
                 : SideChoice.black,
         days: challenge.days,
+        challenger: (
+          user: challengerUser,
+          rating: challenge.rating,
+          provisionalRating: challenge.provisional,
+          lagRating: null,
+        ),
       ),
-      user: user,
+      challengerUser: challengerUser,
       onPressed: onPressed,
       onCancel: onCancel,
     );
