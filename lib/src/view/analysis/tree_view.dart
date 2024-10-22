@@ -26,63 +26,33 @@ class AnalysisTreeView extends ConsumerWidget {
     final root = ref.watch(ctrlProvider.select((value) => value.root));
     final currentPath =
         ref.watch(ctrlProvider.select((value) => value.currentPath));
+    final broadcastLivePath =
+        ref.watch(ctrlProvider.select((value) => value.broadcastLivePath));
     final pgnRootComments =
         ref.watch(ctrlProvider.select((value) => value.pgnRootComments));
 
-    return CustomScrollView(
-      slivers: [
+    return ListView(
+      padding: EdgeInsets.zero,
+      children: [
         if (kOpeningAllowedVariants.contains(options.variant))
-          SliverPersistentHeader(
-            delegate: _OpeningHeaderDelegate(
-              ctrlProvider,
-              displayMode: displayMode,
-            ),
+          _OpeningHeader(
+            ctrlProvider,
+            displayMode: displayMode,
           ),
-        SliverFillRemaining(
-          hasScrollBody: false,
-          child: DebouncedPgnTreeView(
-            root: root,
-            currentPath: currentPath,
-            pgnRootComments: pgnRootComments,
-            notifier: ref.read(ctrlProvider.notifier),
-          ),
+        DebouncedPgnTreeView(
+          root: root,
+          currentPath: currentPath,
+          broadcastLivePath: broadcastLivePath,
+          pgnRootComments: pgnRootComments,
+          notifier: ref.read(ctrlProvider.notifier),
         ),
       ],
     );
   }
 }
 
-class _OpeningHeaderDelegate extends SliverPersistentHeaderDelegate {
-  const _OpeningHeaderDelegate(
-    this.ctrlProvider, {
-    required this.displayMode,
-  });
-
-  final AnalysisControllerProvider ctrlProvider;
-  final Orientation displayMode;
-
-  @override
-  Widget build(
-    BuildContext context,
-    double shrinkOffset,
-    bool overlapsContent,
-  ) {
-    return _Opening(ctrlProvider, displayMode);
-  }
-
-  @override
-  double get minExtent => kOpeningHeaderHeight;
-
-  @override
-  double get maxExtent => kOpeningHeaderHeight;
-
-  @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
-      true;
-}
-
-class _Opening extends ConsumerWidget {
-  const _Opening(this.ctrlProvider, this.displayMode);
+class _OpeningHeader extends ConsumerWidget {
+  const _OpeningHeader(this.ctrlProvider, {required this.displayMode});
 
   final AnalysisControllerProvider ctrlProvider;
   final Orientation displayMode;

@@ -4,11 +4,11 @@ import 'package:dartchess/dartchess.dart';
 import 'package:deep_pick/deep_pick.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast.dart';
+import 'package:lichess_mobile/src/model/broadcast/broadcast_providers.dart';
 import 'package:lichess_mobile/src/model/broadcast/broadcast_repository.dart';
 import 'package:lichess_mobile/src/model/common/chess.dart';
 import 'package:lichess_mobile/src/model/common/id.dart';
 import 'package:lichess_mobile/src/model/common/socket.dart';
-import 'package:lichess_mobile/src/network/http.dart';
 import 'package:lichess_mobile/src/network/socket.dart';
 import 'package:lichess_mobile/src/utils/json.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -22,22 +22,42 @@ class BroadcastRoundController extends _$BroadcastRoundController {
 
   StreamSubscription<SocketEvent>? _subscription;
 
+  Timer? _timer;
+
   late SocketClient _socketClient;
 
   @override
   Future<BroadcastRoundGames> build(BroadcastRoundId broadcastRoundId) async {
     _socketClient = ref
-        .read(socketPoolProvider)
+        .watch(socketPoolProvider)
         .open(BroadcastRoundController.broadcastSocketUri(broadcastRoundId));
 
     _subscription = _socketClient.stream.listen(_handleSocketEvent);
 
     ref.onDispose(() {
       _subscription?.cancel();
+      _timer?.cancel();
     });
 
-    return await ref.withClient(
-      (client) => BroadcastRepository(client).getRound(broadcastRoundId),
+    final games =
+        await ref.watch(broadcastRoundProvider(broadcastRoundId).future);
+
+    _timer = Timer.periodic(
+      const Duration(seconds: 1),
+      (_) => _updateClocks(),
+    );
+
+    return games;
+  }
+
+  void _updateClocks() {
+    state = AsyncData(
+      state.requireValue.map((gameId, game) {
+        if (!game.isPlaying) return MapEntry(gameId, game);
+        final thinkTime = game.thinkTime;
+        final newThinkTime = thinkTime + const Duration(seconds: 1);
+        return MapEntry(gameId, game.copyWith(thinkTime: newThinkTime));
+      }),
     );
   }
 
@@ -48,7 +68,7 @@ class BroadcastRoundController extends _$BroadcastRoundController {
       // Sent when a node is recevied from the broadcast
       case 'addNode':
         _handleAddNodeEvent(event);
-      // Sent when a game ends
+      // Sent when the state of games changes
       case 'chapters':
         _handleChaptersEvent(event);
       // Sent when clocks are updated from the broadcast
@@ -59,38 +79,36 @@ class BroadcastRoundController extends _$BroadcastRoundController {
 
   void _handleAddNodeEvent(SocketEvent event) {
     // The path of the last and current move of the broadcasted game
+    // Its value is "!" if the path is identical to one of the node that was received
     final currentPath = pick(event.data, 'relayPath').asUciPathOrThrow();
-    // The path for the node that was received
-    final path = pick(event.data, 'p', 'path').asUciPathOrThrow();
-    final nodeId = pick(event.data, 'n', 'id').asUciCharPairOrThrow();
 
     // We check that the event we received is for the last move of the game
-    if (currentPath != path + nodeId) return;
+    if (currentPath.value != '!') return;
 
     final broadcastGameId =
         pick(event.data, 'p', 'chapterId').asBroadcastGameIdOrThrow();
 
     final fen = pick(event.data, 'n', 'fen').asStringOrThrow();
 
-    final playingSide = Setup.parseFen(fen).turn.opposite;
+    final playingSide = Setup.parseFen(fen).turn;
 
     state = AsyncData(
       state.requireValue.update(
         broadcastGameId,
-        (broadcastGameSnapshot) => broadcastGameSnapshot.copyWith(
+        (broadcastGame) => broadcastGame.copyWith(
           players: IMap(
             {
-              playingSide: broadcastGameSnapshot.players[playingSide]!.copyWith(
+              playingSide: broadcastGame.players[playingSide]!,
+              playingSide.opposite:
+                  broadcastGame.players[playingSide.opposite]!.copyWith(
                 clock: pick(event.data, 'n', 'clock')
                     .asDurationFromCentiSecondsOrNull(),
               ),
-              playingSide.opposite:
-                  broadcastGameSnapshot.players[playingSide.opposite]!,
             },
           ),
           fen: fen,
           lastMove: pick(event.data, 'n', 'uci').asUciMoveOrThrow(),
-          thinkTime: null,
+          thinkTime: Duration.zero,
         ),
       ),
     );
@@ -111,13 +129,13 @@ class BroadcastRoundController extends _$BroadcastRoundController {
     state = AsyncData(
       state.requireValue.update(
         broadcastGameId,
-        (broadcastGameSnapshot) => broadcastGameSnapshot.copyWith(
+        (broadcastsGame) => broadcastsGame.copyWith(
           players: IMap(
             {
-              Side.white: broadcastGameSnapshot.players[Side.white]!.copyWith(
+              Side.white: broadcastsGame.players[Side.white]!.copyWith(
                 clock: whiteClock,
               ),
-              Side.black: broadcastGameSnapshot.players[Side.black]!.copyWith(
+              Side.black: broadcastsGame.players[Side.black]!.copyWith(
                 clock: blackClock,
               ),
             },

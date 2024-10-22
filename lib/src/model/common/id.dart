@@ -51,6 +51,8 @@ extension type const ChallengeId(String value) implements StringId {
   ChallengeId.fromJson(dynamic json) : this(json as String);
 }
 
+extension type const BroadcastTournamentId(String value) implements StringId {}
+
 extension type const BroadcastRoundId(String value) implements StringId {}
 
 extension type const BroadcastGameId(String value) implements StringId {}
@@ -154,6 +156,25 @@ extension IDPick on Pick {
     if (value == null) return null;
     try {
       return asChallengeIdOrThrow();
+    } catch (_) {
+      return null;
+    }
+  }
+
+  BroadcastTournamentId asBroadcastTournamentIdOrThrow() {
+    final value = required().value;
+    if (value is String) {
+      return BroadcastTournamentId(value);
+    }
+    throw PickException(
+      "value $value at $debugParsingExit can't be casted to BroadcastRoundId",
+    );
+  }
+
+  BroadcastTournamentId? asBroadcastTournamentIdOrNull() {
+    if (value == null) return null;
+    try {
+      return asBroadcastTournamentIdOrThrow();
     } catch (_) {
       return null;
     }
